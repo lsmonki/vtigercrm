@@ -24,7 +24,7 @@ require_once('modules/Users/User.php');
 
 
 // Recording Logout Info
-	$usip=$_SERVER['SERVER_ADDR'];
+	$usip=$_SERVER['REMOTE_ADDR'];
         $outtime=date("Y/m/d H:i:s");
         $loghistory=new LoginHistory();
         $loghistory->user_logout($current_user->user_name,$usip,$outtime);
