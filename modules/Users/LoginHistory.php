@@ -56,8 +56,6 @@ class LoginHistory extends SugarBean {
 		
 	var $default_order_by = "login_id";
 
-	var $new_schema = true;
-
 	function create_tables () {
 		$query = 'CREATE TABLE '.$this->table_name.' ( ';
 		$query .='login_id int(11) NOT NULL default 0 auto_increment';

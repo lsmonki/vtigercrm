@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/language/en_us.lang.php,v 1.4 2004/10/29 09:55:09 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/language/en_us.lang.php,v 1.5 2004/12/24 11:23:42 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -54,6 +54,10 @@ $mod_strings = Array(
 'LNK_NEW_TASK'=>'New Task',
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
 'LBL_LIST_FILENAME'=>"File",
+
+// Added for Note(3.2-patch 3) 
+
+'LBL_FILENAME'=>'Attachment:',
 );
 
 ?>
