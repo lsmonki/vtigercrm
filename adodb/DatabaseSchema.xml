@@ -1,0 +1,3465 @@
+<?xml version="1.0"?>
+<schema version="0.2">
+
+	<table name="users">
+		<field name="id" type="I" >
+			<KEY/>
+		<AUTOINCREMENT/>
+
+		</field>
+		<field name="user_name" type="C" size="20"></field>
+		<field name="user_password" type="C" size="30"></field>
+		<field name="user_hash" type="C" size="32"></field>
+		<field name="first_name" type="C" size="30"></field>
+		<field name="last_name" type="C" size="30"></field>
+		<field name="reports_to_id" type="C" size="36"></field>
+		<field name="is_admin" type="C" size="3">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="description" type="X"></field>
+		<field name="date_entered" type="T">
+			<NOTNULL/>
+			<DEFTIMESTAMP/>
+		</field>
+		<field name="date_modified" type="T">
+			<NOTNULL/>
+			<DEFTIMESTAMP/>
+		</field>
+		<field name="modified_user_id" type="C" size="36">
+		</field>
+		<field name="title" type="C" size="50"></field>
+		<field name="department" type="C" size="50"></field>
+		<field name="phone_home" type="C" size="50"></field>
+		<field name="phone_mobile" type="C" size="50"></field>
+		<field name="phone_work" type="C" size="50"></field>
+		<field name="phone_other" type="C" size="50"></field>
+		<field name="phone_fax" type="C" size="50"></field>
+		<field name="email1" type="C" size="100"></field>
+		<field name="email2" type="C" size="100"></field>
+		<field name="yahoo_id" type="C" size="100"></field>
+		<field name="status" type="C" size="25"></field>
+		<field name="address_street" type="C" size="150"></field>
+		<field name="address_city" type="C" size="100"></field>
+		<field name="address_state" type="C" size="100"></field>
+		<field name="address_country" type="C" size="25"></field>
+		<field name="address_postalcode" type="C" size="9"></field>
+		<field name="user_preferences" type="X"></field>
+		<field name="tz" type="C" size="30"></field>
+		<field name="holidays" type="C" size="60"></field>
+		<field name="namedays" type="C" size="60"></field>
+		<field name="workdays" type="C" size="30"></field>
+	 	<field name="weekstart" type="I" size="11"></field>
+		<field name="deleted" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+	<opt>Type=InnoDB</opt>
+		<index name="idx_user_name">
+			<col>user_name</col>
+		</index>
+		<index name="user_password">
+			<col>user_password</col>
+		</index>
+		<data>
+		
+		</data>
+	</table>
+
+
+	<table name="crmentity">
+		<field name="crmid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="smcreatorid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="smownerid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="modifiedby" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="setype" type="C" size="30">
+			<NOTNULL/>
+		</field>
+		<field name="description" type="X"></field>
+		<field name="createdtime" type="T" >
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="modifiedtime" type="T">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="viewedtime" type="T"></field>
+		<field name="status" type="C" size="50"></field>
+		<field name="version" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<DEFAULT value="1"/>
+		</field>
+
+	<field name="deleted" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+
+		<opt>Type=InnoDB</opt>
+                  <index name="crmentity_IDX0">
+			<col>smcreatorid</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+                    <index name="crmentity_IDX1">
+			<col>smownerid</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+                     <index name="crmentity_IDX2">
+			<col>modifiedby</col>
+		</index>
+		<data>
+			
+		</data>
+	</table>
+
+	<table name="tab">
+		<field name="tabid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="name" type="C" size="25">
+			<NOTNULL/>
+		</field>
+		<field name="presence" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<field name="tabsequence" type="I" size="10"></field>
+		<field name="tablabel" type="C" size="25">
+			<NOTNULL/>
+		</field>
+		<field name="modifiedby" type="I" size="19"></field>
+		<field name="modifiedtime" type="I" size="19"></field>
+		<field name="customized" type="I" size="1"></field>
+		<opt>Type=InnoDB</opt> <index name="Tab_UK0">
+			<UNIQUE/>
+			<col>name</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="Tab_IDX0">
+			<col>modifiedby</col>
+		</index>
+		<data>
+		
+		</data>
+	</table>
+
+
+              <table name="field">
+		<field name="tabid" type="I" size="19">
+        			<NOTNULL/>
+			</field>
+		<field name="fieldid" type="I" size="19">
+                    <KEY/>
+                     <AUTOINCREMENT/></field>
+						
+             <field name="columnname" type="C" size="30">
+			<NOTNULL/>
+		</field>
+		<field name="tablename" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="generatedtype" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="uitype" type="C" size="30">
+			<NOTNULL/>
+		</field>
+		<field name="fieldname" type="C" size="50">
+			<NOTNULL/>
+		</field>
+                
+		<field name="fieldlabel" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="readonly" type="I" size="1">
+			<NOTNULL/>
+		</field>
+
+		<field name="presence" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<field name="selected" type="I" size="1">
+			<NOTNULL/>
+		</field>
+		<field name="maximumlength" type="I" size="19">
+			</field>
+		<field name="sequence" type="I" size="19">
+                    </field>
+		<field name="block" type="I" size="19">
+			</field>
+		<field name="displaytype" type="I" size="19">
+			</field>
+
+		 <index name="Field_IDX0">
+			<col>tabid</col>
+			</index>
+                <opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="field" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_pi FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="account">
+		<field name="accountid" type="I" size="19">
+			<KEY/>
+                    <NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="accountname" type="C" size="100">
+			<UNIQUE/>
+			<NOTNULL/>
+		</field>
+		<field name="parentid" type="I" size="19">
+                        <DEFAULT value="0"/>
+                </field>
+		<field name="account_type" type="C" size="50"></field>
+		<field name="industry" type="C" size="50"></field>
+		<field name="annualrevenue" type="I" size="19">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="rating" type="C" size="50"></field>
+		<field name="ownership" type="C" size="50"></field>
+		<field name="siccode" type="I" size="10">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="tickersymbol" type="C" size="30"></field>
+		<field name="phone" type="C" size="30"></field>
+		<field name="otherphone" type="C" size="30"></field>
+		<field name="email1" type="C" size="30"></field>
+		<field name="email2" type="C" size="30"></field>
+		<field name="website" type="C" size="30"></field>
+		<field name="fax" type="C" size="30"></field>
+		<field name="employees" type="I" size="10">
+			<DEFAULT value="0"/>
+		</field>
+		
+                  <index name="Account_IDX0">
+			<col>accountid</col>
+		</index>
+<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="account" alter="true">
+	<constraint>ADD CONSTRAINT fk_Account FOREIGN KEY (accountid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="accountbillads">
+		<field name="accountaddressid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="city" type="C" size="30"></field>
+		<field name="code" type="C" size="30"></field>
+		<field name="country" type="C" size="30"></field>
+		<field name="state" type="C" size="30"></field>
+		<field name="street" type="C" size="250"></field>
+		<opt>Type=InnoDB</opt> <index name="AccountBillAds_IDX0">
+			<col>accountaddressid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="accountbillads" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_AccountBillAds FOREIGN KEY (accountaddressid) REFERENCES account(accountid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="accountshipads">
+		<field name="accountaddressid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="city" type="C" size="30"></field>
+		<field name="code" type="C" size="30"></field>
+		<field name="country" type="C" size="30"></field>
+		<field name="state" type="C" size="30"></field>
+		<field name="street" type="C" size="250"></field>
+		<opt>Type=InnoDB</opt> <index name="AccountShipAds_IDX0">
+			<col>accountaddressid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="accountshipads" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_AccountShipAds FOREIGN KEY (accountaddressid) REFERENCES account(accountid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="accountscf">
+		<field name="accountid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="AccountsCF_IDX0">
+			<col>accountid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="accountscf" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_AccountsCF FOREIGN KEY (accountid) REFERENCES account(accountid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="contactdetails">
+		<field name="contactid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="accountid" type="I" size="19"></field>
+		<field name="salutation" type="C" size="50">
+			<DEFAULT value="Mr"/>
+		</field>
+		<field name="firstname" type="C" size="40"></field>
+		<field name="lastname" type="C" size="80">
+			<NOTNULL/>
+		</field>
+		<field name="email" type="C" size="100"></field>
+		<field name="phone" type="C" size="50"></field>
+		<field name="mobile" type="C" size="50"></field>
+		<field name="title" type="C" size="50"></field>
+		<field name="department" type="C" size="30"></field>
+		<field name="fax" type="C" size="50"></field>
+		<field name="reportsto" type="C" size="30"></field>
+		<field name="training" type="C" size="50"></field>
+		<field name="usertype" type="C" size="50"></field>
+		<field name="contacttype" type="C" size="50"></field>
+                <field name="otheremail" type="C" size="100"></field>
+                <field name="yahooid" type="C" size="100"></field>
+                <field name="donotcall" type="C" size="3"></field>
+                <field name="emailoptout" type="C" size="3"></field>
+		<field name="currency" type="C" size="20">
+			<DEFAULT value="Dollars"/>
+		</field>
+
+             		 <index name="ContactDetails_IDX0">
+			<col>contactid</col>
+		</index>
+		 <index name="ContactDetails_IDX1">
+			<col>accountid</col>
+		</index>
+<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="contactdetails" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_ContactDetails FOREIGN KEY (contactid) REFERENCES crmentity(crmid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="contactdetails" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_ContactDetails2 FOREIGN KEY (accountid) REFERENCES account(accountid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="contactsubdetails">
+		<field name="contactsubscriptionid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="homephone" type="C" size="50"></field>
+		<field name="otherphone" type="C" size="50"></field>
+		<field name="assistant" type="C" size="30"></field>
+		<field name="assistantphone" type="C" size="50"></field>
+		<field name="birthday" type="D"></field>
+		<field name="laststayintouchrequest" type="I" size="30">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="laststayintouchsavedate" type="I" size="19">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="leadsource" type="C" size="50"></field>
+		<opt>Type=InnoDB</opt> <index name="ContactSubDetails_IDX0">
+			<col>contactsubscriptionid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="contactsubdetails" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_ContactSubDetails FOREIGN KEY (contactsubscriptionid) REFERENCES contactdetails(contactid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="contactaddress">
+		<field name="contactaddressid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="mailingcity" type="C" size="40"></field>
+		<field name="mailingstreet" type="C" size="250"></field>
+		<field name="mailingcountry" type="C" size="40"></field>
+		<field name="othercountry" type="C" size="30"></field>
+		<field name="mailingstate" type="C" size="30"></field>
+		<field name="othercity" type="C" size="40"></field>
+		<field name="otherstate" type="C" size="50"></field>
+		<field name="mailingzip" type="C" size="30"></field>
+		<field name="otherzip" type="C" size="30"></field>
+		<field name="otherstreet" type="C" size="250"></field>
+		<opt>Type=InnoDB</opt> <index name="ContactAddress_IDX0">
+			<col>contactaddressid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="contactaddress" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_ContactAddress FOREIGN KEY (contactaddressid) REFERENCES contactdetails(contactid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="contactscf">
+		<field name="contactid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="ContactsCF_IDX0">
+			<col>contactid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="contactscf" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_ContactsCF FOREIGN KEY (contactid) REFERENCES contactdetails(contactid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="leaddetails">
+		<field name="leadid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="email" type="C" size="100"></field>
+		<field name="interest" type="C" size="50"></field>
+		<field name="firstname" type="C" size="40"></field>
+		<field name="salutation" type="C" size="10"></field>
+		<field name="lastname" type="C" size="80">
+			<NOTNULL/>
+		</field>
+		<field name="company" type="C" size="100">
+			<NOTNULL/>
+		</field>
+		<field name="annualrevenue" type="I" size="19">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="industry" type="C" size="50"></field>
+		<field name="campaign" type="C" size="30"></field>
+		<field name="rating" type="C" size="50"></field>
+		<field name="leadstatus" type="C" size="50"></field>
+		<field name="leadsource" type="C" size="50"></field>
+		<field name="converted" type="I" size="1">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="designation" type="C" size="50">
+			<DEFAULT value="SalesMan"/>
+		</field>
+		<field name="licencekeystatus" type="C" size="50"></field>
+		<field name="region" type="C" size="50"></field>
+		<field name="stage" type="C" size="50"></field>
+		<field name="space" type="C" size="250"></field>
+		<field name="comments" type="X"></field>
+		<field name="priority" type="C" size="50"></field>
+		<field name="demorequest" type="C" size="50"></field>
+		<field name="partnercontact" type="C" size="50"></field>
+		<field name="productversion" type="C" size="20"></field>
+		<field name="product" type="C" size="50"></field>
+		<field name="maildate" type="D"></field>
+		<field name="nextstepdate" type="D"></field>
+		<field name="fundingsituation" type="C" size="50"></field>
+		<field name="purpose" type="C" size="50"></field>
+		<field name="evaluationstatus" type="C" size="50"></field>
+		<field name="transferdate" type="D"></field>
+		<field name="revenuetype" type="C" size="50"></field>
+		<field name="noofemployees" type="C" size="50"></field>
+                <field name="yahooid" type="C" size="100"></field>
+		<field name="assignleadchk" type="I" size="1">
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="LeadDetails_IDX0">
+			<col>leadid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+	<table name="leaddetails" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_LeadDetails FOREIGN KEY (leadid) REFERENCES crmentity(crmid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="leadsubdetails">
+		<field name="leadsubscriptionid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="currency" type="C" size="20">
+			<DEFAULT value="Dollars"/>
+		</field>
+		<field name="website" type="C" size="30"></field>
+		<field name="callornot" type="I" size="1">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="readornot" type="I" size="1">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="empct" type="I" size="10">
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="LeadSubDetails_IDX0">
+			<col>leadsubscriptionid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="leadsubdetails" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_LeadSubDetails FOREIGN KEY (leadsubscriptionid) REFERENCES leaddetails(leadid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="leadaddress">
+		<field name="leadaddressid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="city" type="C" size="30"></field>
+		<field name="code" type="C" size="30"></field>
+		<field name="state" type="C" size="30"></field>
+		<field name="country" type="C" size="30"></field>
+		<field name="phone" type="C" size="50"></field>
+		<field name="mobile" type="C" size="50"></field>
+		<field name="fax" type="C" size="50"></field>
+		<field name="lane" type="C" size="30"></field>
+		<field name="leadaddresstype" type="C" size="30">
+			<DEFAULT value="Billing"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="LeadAddress_IDX0">
+			<col>leadaddressid</col>
+		</index>
+		<data>
+		</data>
+
+	</table>
+
+
+	<table name="leadaddress" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_LeadAddress FOREIGN KEY (leadaddressid) REFERENCES leaddetails(leadid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="leadscf">
+		<field name="leadid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="LeadsCF_IDX0">
+			<col>leadid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="leadscf" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_LeadsCF FOREIGN KEY (leadid) REFERENCES leaddetails(leadid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+<table name="notes">
+		<field name="notesid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="contact_id" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+	
+                 <field name="title" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="filename" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="notecontent" type="X"></field>
+		<opt>Type=InnoDB</opt> <index name="Notes_UK0">
+			<UNIQUE/>
+			<col>title</col>
+		</index>
+	 <index name="Notes_IDX0">
+			<col>notesid</col>
+		</index>
+ <index name="Notes_IDX1">
+			<col>crmid</col>
+		</index>
+	<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="notes" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_Notes FOREIGN KEY (NOTESID) REFERENCES crmentity(crmid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+<table name="potential">
+		<field name="potentialid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="accountid" type="I" size="19"></field>
+		<field name="potentialname" type="C" size="120">
+			<NOTNULL/>
+		</field>
+		<field name="amount" type="N">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="currency" type="C" size="20"></field>
+
+		<field name="closingdate" type="D"></field>
+		<field name="typeofrevenue" type="C" size="50"></field>
+		<field name="campaignsource" type="C" size="30"></field>
+		<field name="nextstep" type="C" size="100"></field>
+		<field name="private" type="I" size="1">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="probability" type="I" size="19">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="sales_stage" type="C" size="50"></field>
+		<field name="potentialtype" type="C" size="50"></field>
+		<field name="leadsource" type="C" size="50"></field>
+		<field name="productid" type="I" size="50"></field>
+		<field name="productversion" type="C" size="50"></field>
+		<field name="quotationref" type="C" size="50"></field>
+		<field name="partnercontact" type="C" size="50"></field>
+		<field name="remarks" type="C" size="50"></field>
+		<field name="runtimefee" type="I" size="19">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="followupdate" type="D"></field>
+		<field name="evaluationstatus" type="C" size="50"></field>
+		<field name="description" type="X"></field>
+		<field name="forecastcategory" type="I" size="19">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="outcomeanalysis" type="I" size="19">
+			<DEFAULT value="0"/>
+		</field>
+			<opt>Type=InnoDB</opt> <index name="Potential_IDX0">
+			<col>accountid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="Potential_IDX1">
+			<col>potentialid</col>
+		</index>
+		<data>
+		</data>
+
+	</table>
+
+
+
+	<table name="potential" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_Potential FOREIGN KEY (potentialid) REFERENCES crmentity(crmid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+
+      <table name="potstagehistory">
+		<field name="potentialstagehistoryid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="potentialid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="amount" type="N"></field>
+		<field name="stage" type="C" size="50"></field>
+		<field name="probability" type="I" size="19"></field>
+		<field name="expectedrevenue" type="N"></field>
+		<field name="closedate" type="D"></field>
+		<field name="lastmodified" type="I" size="19"></field>
+		<field name="lastmodifiedtime" type="I" size="19"></field>
+		<opt>Type=InnoDB</opt> <index name="PotStageHistory_IDX0">
+			<col>potentialid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+		<table name="potstagehistory" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_PotStageHistory FOREIGN KEY (potentialstagehistoryid) REFERENCES crmentity(crmid)  ON DELETE CASCADE  </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="potentialscf">
+		<field name="potentialid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="PotentialsCF_IDX0">
+			<col>potentialid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="potentialscf" alter="true">
+                     		<constraint>ADD CONSTRAINT fk_PotentialsCF1 FOREIGN KEY (potentialid) REFERENCES potential(potentialid)</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="potentialscf" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_PotentialsCF2 FOREIGN KEY (potentialid) REFERENCES potential(potentialid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="activity">
+		<field name="activityid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+
+		<field name="subject" type="C" size="100">
+			<NOTNULL/>
+		</field>
+		<field name="semodule" type="C" size="20">
+			<NOTNULL/>
+		</field>
+
+		<field name="activitytype" type="C" size="50">
+			<NOTNULL/>
+		</field>
+         	<field name="description" type="X">
+		</field>
+
+       		<field name="date_start" type="D">      
+			<NOTNULL/>
+			<DEFAULT value="0000-00-00"/>
+                        </field>                        
+
+		<field name="time_start" type="C" size="50">
+			<NOTNULL/>
+		</field>
+
+		<field name="sendnotification" type="C" size="50">
+			<NOTNULL/>
+			<DEFAULT value="false"/>
+		</field>
+                <field name="duration_hours" type="C" size="2"></field> 
+                <field name="duration_minutes" type="C" size="2"></field> 
+		<field name="status" type="C" size="100">
+			<NOTNULL/>
+			<DEFAULT value="Not Started"/>
+		</field>
+		<field name="priority" type="C" size="150"></field>     
+                <field name="location" type="C" size="150"></field>     
+
+                
+			<opt>Type=InnoDB</opt> <index name="Activity_IDX0">
+			<col>activityid</col>
+			<col>subject</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="activity" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_Activity FOREIGN KEY (activityid) REFERENCES crmentity(crmid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+
+
+	<table name="attachments">
+	<field name="attachmentsid" type="I" size="19">
+			<KEY/>
+		</field>
+
+		<field name="name" type="C" size="100">
+			<NOTNULL/>
+		</field>
+		<field name="description" type="C" size="100">
+		</field>
+		<field name="type" type="C" size="100">
+		</field>
+
+		<field name="attachmentsize" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="attachmentcontents" type="B">
+			<NOTNULL/>
+		</field>
+
+		<opt>Type=InnoDB</opt> <index name="Attachments_IDX0">
+			<col>attachmentsid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="attachments" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_Attachments FOREIGN KEY (attachmentsid) REFERENCES crmentity(crmid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="seattachmentsrel">
+		<field name="crmid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="attachmentsid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="SeAttachmentsRel_IDX0">
+			<col>attachmentsid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="SeAttachmentsRel_IDX1">
+			<col>crmid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="seattachmentsrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SeAttachmentsRel FOREIGN KEY (attachmentsid) REFERENCES attachments(attachmentsid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="seattachmentsrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SeAttachmentsRel2 FOREIGN KEY (crmid) REFERENCES crmentity(crmid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	 <table name="tracker">	 
+                 <field name="id" type="I" size="11">	 
+                         <KEY/>	 
+                         <AUTOINCREMENT/>	 
+                 </field>	 
+                 <field name="user_id" type="C" size="36"></field>	 
+                 <field name="module_name" type="C" size="25"></field>	 
+                 <field name="item_id" type="C" size="36"></field>	 
+                 <field name="item_summary" type="C" size="255"></field>	 
+                 <data>	 
+                 </data>	 
+         </table>
+
+	<table name="competitor">
+	<field name="competitorid" type="I" size="19">
+			<KEY/>
+		</field>
+
+		<field name="competitorname" type="C" size="100">
+			<NOTNULL/>
+		</field>
+		<field name="website" type="C" size="100"></field>
+		<field name="strength" type="C" size="250"></field>
+		<field name="weakness" type="C" size="250"></field>
+	
+		 <index name="Competitor_IDX0">
+			<col>competitorid</col>
+		</index>
+		 <index name="Competitor_IDX1">
+			<col>crmid</col>
+		</index>
+
+<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="competitor" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_Competitor FOREIGN KEY (competitorid) REFERENCES crmentity(crmid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="potcompetitorrel">
+		<field name="potentialid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="competitorid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="PotCompetitorRel_IDX0">
+			<col>potentialid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="PotCompetitorRel_IDX1">
+			<col>competitorid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="potcompetitorrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_PotCompetitorRel FOREIGN KEY (potentialid) REFERENCES potential(potentialid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="potcompetitorrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_PotCompetitorRel2 FOREIGN KEY (competitorid) REFERENCES competitor(competitorid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="products">
+		<field name="productid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="productname" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="productcode" type="C" size="40"></field>
+		<field name="productcategory" type="C" size="40"></field>
+		<field name="manufacturer" type="C" size="40"></field>
+		<field name="product_description" type="X"></field>
+		<field name="qty_per_unit" type="I" size="11">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="unit_price" type="N"></field>
+		<field name="weight" type="N"></field>
+		<field name="pack_size" type="I" size="11"></field>
+		<field name="start_date" type="D">
+                        <NOTNULL/>
+                        <DEFAULT value="0000-00-00"/>	
+		</field>
+		<field name="expiry_date" type="D">
+                        <NOTNULL/>
+                        <DEFAULT value="0000-00-00"/>	
+		</field>
+		<field name="purchase_date" type="D">
+                        <NOTNULL/>
+                        <DEFAULT value="0000-00-00"/>
+		</field>
+		<field name="cost_factor" type="I" size="11"></field>
+		<field name="commissionrate" type="N"></field>
+		<field name="commissionmethod" type="C" size="50"></field>
+		<field name="discontinued" type="I" size="1"></field>
+	
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+	
+
+	<table name="currency">
+		<field name="currencyid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="currency" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="Currency_CRY">
+			<UNIQUE/>
+			<col>currency</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="manufacturer">
+		<field name="manufacturerid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="manufacturer" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="Manufacturer_MFR">
+			<UNIQUE/>
+			<col>manufacturer</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="productcollaterals">
+		<field name="productid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="date_entered" type="T">
+			<NOTNULL/>
+			<DEFTIMESTAMP/>
+		</field>
+	
+		<field name="data" type="B">
+			<NOTNULL/>
+		</field>
+		<field name="description" type="X"></field>
+		<field name="filename" type="C" size="50">
+		</field>
+		<field name="filesize" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="filetype" type="C" size="20">
+			<NOTNULL/>
+		</field>
+		<index name="idx_collaterals_name">
+			<col>productid</col>
+			<col>filename</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	<table name="productcollaterals" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_productcollaterals FOREIGN KEY (productid) REFERENCES products(productid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="role">
+                <field name="roleid" type="I" size="11">
+                        <KEY/>
+                        <AUTOINCREMENT/></field>
+                <field name="name" type="C" size="60">
+                </field>
+                <field name="description" type="C" size="100"></field>
+
+                <data>
+
+                </data>
+        </table>
+
+
+	<table name="user2role">
+		<field name="userid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="roleid" type="I" size="11">
+			<NOTNULL/>
+		</field>
+		
+		<data>
+		
+		</data>
+	</table>
+
+
+	<table name="user2role" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_user2role1 FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="user2role" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_user2role2 FOREIGN KEY (roleid) REFERENCES role(roleid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="groups">
+		<field name="name" type="C" size="100">
+			<KEY/>
+		</field>
+		<field name="description" type="X"></field>
+		
+		<opt>Type=InnoDB</opt> <index name="groups_UK0">
+			<UNIQUE/>
+			<col>name</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="users2group">
+		<field name="groupname" type="C" size="100">
+		</field>
+		<field name="userid" type="C" size="50">
+		</field>
+		<index name="idx_users2group">
+			<col>groupname</col>
+			<col>userid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="users2group" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_users2group FOREIGN KEY (groupname) REFERENCES groups(name) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="leadpotrel">
+		<field name="leadid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="potentialid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="LeadPotRel_UK0">
+			<UNIQUE/>
+			<col>leadid</col>
+		</index>
+		<index name="LeadPotRel_IDX0">
+			<col>leadid</col>
+		</index>
+		 <index name="LeadPotRel_IDX1">
+			<col>potentialid</col>
+		</index>
+           <opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="leadpotrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_LeadPotRel1 FOREIGN KEY (leadid) REFERENCES leaddetails(leadid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="leadpotrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_LeadPotRel2 FOREIGN KEY (potentialid) REFERENCES potential(potentialid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="leadcontrel">
+		<field name="leadid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="contactid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<index name="LeadContRel_IDX0">
+			<col>leadid</col>
+		</index>
+		<index name="LeadContRel_IDX1">
+			<col>contactid</col>
+		</index>
+<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="leadcontrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_LeadContRel1 FOREIGN KEY (leadid) REFERENCES leaddetails(leadid)  ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="leadcontrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_LeadContRel2 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid)  ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="leadacctrel">
+		<field name="leadid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="accountid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="LeadAcctRel_IDX0">
+			<col>leadid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="LeadAcctRel_IDX1">
+			<col>accountid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="leadacctrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_LeadAcctRel1 FOREIGN KEY (leadid) REFERENCES leaddetails(leadid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="leadacctrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_LeadAcctRel2 FOREIGN KEY (accountid) REFERENCES account(accountid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="contpotentialrel">
+		<field name="contactid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="potentialid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="ContPotentialRel_IDX0">
+			<col>potentialid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="ContPotentialRel_IDX1">
+			<col>contactid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="contpotentialrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_ContPotentialRel1 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="contpotentialrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_ContPotentialRel FOREIGN KEY (potentialid) REFERENCES potential(potentialid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="dealintimation">
+		<field name="dealintimationid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="dealname" type="C" size="100">
+			<NOTNULL/>
+		</field>
+		<field name="intimationamount" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="dealprobability" type="I" size="10">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="dealintimationactive" type="I" size="1"></field>
+		<field name="fromname" type="C" size="120">
+			<NOTNULL/>
+		</field>
+		<field name="fromemailid" type="C" size="100">
+			<NOTNULL/>
+		</field>
+		<field name="notifyemails" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="notifybccemails" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="notifyccmails" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="notifypotentialowner" type="I" size="1"></field>
+		<opt>Type=InnoDB</opt> <index name="DealIntimation_UK0">
+			<UNIQUE/>
+			<col>dealname</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="cntactivityrel">
+		<field name="contactid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="activityid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="CntActivityRel_IDX0">
+			<col>contactid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="CntActivityRel_IDX1">
+			<col>activityid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="cntactivityrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_CntActivityRel FOREIGN KEY (contactid) REFERENCES contactdetails(contactid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="cntactivityrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_CntActivityRel2 FOREIGN KEY (activityid) REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+        <!-- Lead Assignment Rule -->
+	<table name="lar">
+		<field name="larid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="name" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="createdby" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="createdon" type="D">
+			<NOTNULL/>
+			<DEFAULT value="0000-00-00"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="LAR_UK0">
+			<UNIQUE/>
+			<col>name</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="LAR_IDX0">
+			<col>createdby</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+ 	<table name="lar" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_LAR FOREIGN KEY (createdby) REFERENCES users(id)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="crmentitynotesrel">
+		<field name="crmid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="notesid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		 <index name="crmentityNotesRel_IDX0">
+			<col>notesid</col>
+		</index>
+		 <index name="crmentityNotesRel_IDX1">
+			<col>crmid</col>
+		</index>
+<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="crmentitynotesrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_crmentityNotes FOREIGN KEY (crmid) REFERENCES crmentity(crmid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="crmentitynotesrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_crmentityNotes2 FOREIGN KEY (notesid) REFERENCES notes(notesid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="troubletickets">
+		<field name="ticketid" type="I" size="19">
+		<KEY/>
+		<DEFAULT value="0"/>
+			
+		</field>
+		<field name="groupname" type="C" size="100"></field>
+<field name="contact_id" type="C" size="100"></field>
+		<field name="priority" type="C" size="150"></field>
+		<field name="status" type="C" size="150"></field>
+       		<field name="category" type="C" size="150"></field>
+		<field name="title" type="C" size="255">
+			<NOTNULL/>
+		</field>
+		<field name="description" type="X"></field>
+		<field name="update_log" type="X"></field>
+		<field name="version_id" type="I" size="11">
+			<NOTNULL/>
+		</field>
+		 	
+		<opt>Type=InnoDB</opt>
+	 	
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="salesmanactivityrel">
+		<field name="smid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="activityid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="SalesmanActivityRel_IDX0">
+			<col>activityid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="SalesmanActivityRel_IDX1">
+			<col>smid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="salesmanactivityrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SalesmanActivityRel FOREIGN KEY (smid) REFERENCES users(id) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="salesmanactivityrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SalesmanActivityRel2 FOREIGN KEY (activityid) REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+
+
+	<table name="salesmanticketrel">
+		<field name="smid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="SalesmanTicketRel_IDX1">
+			<col>smid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="SalesmanTicketRel_IDX0">
+			<col>id</col>
+		</index>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="salesmanticketrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SalesmanTicketRel FOREIGN KEY (smid) REFERENCES users(id) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="salesmanticketrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SalesmanTicketRel2 FOREIGN KEY (id) REFERENCES troubletickets(ticketid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="seactivityrel">
+		<field name="crmid" type="I" size="19"></field>
+		<field name="activityid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="SeActivityRel_IDX0">
+			<col>activityid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="SeActivityRel_IDX1">
+			<col>crmid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="seactivityrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SeActivityRel1 FOREIGN KEY (crmid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="seactivityrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SeActivityRel2 FOREIGN KEY (activityid) REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="seproductsrel">
+		<field name="crmid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="productid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="SeProductsRel_IDX0">
+			<col>productid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="SeProductRel_IDX1">
+			<col>crmid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="seproductsrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SeProductsRel1 FOREIGN KEY (crmid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="seproductsrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SeProductsRel2 FOREIGN KEY (productid) REFERENCES products(productid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+
+
+
+
+
+
+	<table name="seticketsrel">
+		<field name="crmid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="ticketid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="SeProductRel_IDX1">
+			<col>crmid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="SeTicketsRel_IDX0">
+			<col>ticketid</col>
+		</index>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="seticketsrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SeTicketsRel1 FOREIGN KEY (crmid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="seticketsrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SeTicketsRel2 FOREIGN KEY (ticketid) REFERENCES troubletickets(ticketid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="headers">
+		<field name="fileid" type="I" size="3">
+			<KEY/>
+			<AUTOINCREMENT/>
+		</field>
+		<field name="headernames" type="C" size="30">
+			<NOTNULL/>
+		</field>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="import_maps">
+		<field name="id" type="I" size="19">
+			<KEY/>
+			<AUTOINCREMENT/>
+		</field>
+		<field name="name" type="C" size="36">
+			<NOTNULL/>
+		</field>
+		<field name="module" type="C" size="36">
+			<NOTNULL/>
+		</field>
+		<field name="content" type="B"></field>
+		<field name="has_header" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<field name="deleted" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="date_entered" type="T">
+			<NOTNULL/>
+			<DEFTIMESTAMP/>
+		</field>
+		<field name="date_modified" type="T">
+			<NOTNULL/>
+			<DEFTIMESTAMP/>
+		</field>
+		<field name="assigned_user_id" type="C" size="36"></field>
+		<field name="is_published" type="C" size="3">
+			<NOTNULL/>
+			<DEFAULT value="no"/>
+		</field>
+		<index name="idx_import_maps">
+			<col>assigned_user_id</col>
+			<col>module</col>
+			<col>name</col>
+			<col>deleted</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="leadgrouprelation">
+		<field name="leadid" type="I" size="19">
+		</field>
+		<field name="groupname" type="C" size="100">
+		</field>		
+		<opt>Type=InnoDB</opt> 		<data>		
+		</data>
+	</table>
+
+
+	<table name="leadgrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_leadgrouprelation FOREIGN KEY (leadid) REFERENCES leaddetails(leadid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="leadgrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_leadgrouprelation2 FOREIGN KEY (groupname) REFERENCES groups(name) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="activitygrouprelation">
+		<field name="activityid" type="I" size="19">
+		</field>
+		<field name="groupname" type="I" size="19">
+		</field>		
+		<data>		
+		</data>
+	</table>
+
+
+	<table name="activitygrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_activitygrouprelation1 FOREIGN KEY (activityid) REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="activitygrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_activitygrouprelation2 FOREIGN KEY (groupname) REFERENCES groups(name) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+        <table name="systems">
+                <field name="id" type="I" size="19">
+                        <KEY/>
+                </field>
+                <field name="mail_server" type="C" size="30"> </field>
+                <field name="mail_server_username" type="C" size="30"> </field>
+                <field name="mail_server_password" type="C" size="30"> </field>
+                <data>
+                </data>
+        </table>
+
+	<table name="defaultcv">
+		<field name="tabid" type="I" size="19">
+			<KEY/>
+		</field>
+			<field name="defaultviewname" type="C" size="50">
+                        <NOTNULL/>
+                </field>
+		<field name="query" type="X"></field>
+		<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="defaultcv" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_defaultcv FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="emails">
+		<field name="emailid" type="I" size="19">
+			<KEY/>
+		</field>
+			<field name="filename" type="C" size="50">
+                        <NOTNULL/>
+                </field>
+		<field name="description" type="X"></field>
+		<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="emails" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_emails FOREIGN KEY (emailid) REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="emailtemplates">
+		<field name="foldername" type="C" size="100">
+		</field>
+		<field name="templatename" type="C" size="100">
+		</field>
+		<field name="subject" type="C" size="100">
+		</field>
+		<field name="description" type="X"></field>
+		<field name="body" type="X"></field>
+		<field name="deleted" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<index name="idx_emailtemplates">
+			<col>foldername</col>
+			<col>templatename</col>
+			<col>subject</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	 <table name="faq">
+		<field name="id" type="I" size="11">
+			<KEY/>
+			<AUTOINCREMENT/>
+		</field>
+		<field name="question" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="answer" type="X"></field>
+		<field name="category" type="C" size="100">
+			<NOTNULL/>
+		</field>
+		<field name="comments" type="X"></field>
+		<opt>Type=InnoDB</opt>
+				
+		<data>
+		</data>
+	</table>
+<table name="sefaqrel">
+		<field name="crmid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="faqid" type="I" size="11">
+			<KEY/>
+		</field>
+	<opt>Type=InnoDB</opt> <index name="SeFaqRel_IDX0">
+			<col>crmid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="SeFaqRel_IDX1">
+			<col>faqid</col>
+		</index>
+			<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="sefaqrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SeFaqRel FOREIGN KEY (crmid) REFERENCES crmentity(crmid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="sefaqrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SeFaqRel2 FOREIGN KEY (faqid) REFERENCES faq(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+
+
+	<table name="files">
+		<field name="id" type="C" size="36">
+			<KEY/>
+		</field>
+		<field name="name" type="C" size="36"></field>
+		<field name="content" type="B"></field>
+		<field name="deleted" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="date_entered" type="T">
+			<NOTNULL/>
+			<DEFTIMESTAMP/>
+		</field>
+		<field name="assigned_user_id" type="C" size="36"></field>
+		<index name="idx_cont_owner_id_and_name">
+			<col>assigned_user_id</col>
+			<col>name</col>
+			<col>deleted</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="loginhistory">
+		<field name="login_id" type="I" size="11">
+			<KEY/>
+			<AUTOINCREMENT/>
+		</field>
+		<field name="user_name" type="C" size="25">
+			<NOTNULL/>
+		</field>
+		<field name="user_ip" type="C" size="25">
+			<NOTNULL/>
+		</field>
+		<field name="login_time" type="T">
+			<DEFTIMESTAMP/>
+		</field>
+		<field name="logout_time" type="T">
+			<DEFTIMESTAMP/>
+		</field>
+		<field name="status" type="C" size="25">			
+		</field>
+		<data>
+		
+		</data>
+	</table>
+
+
+	<table name="senotesrel">
+		<field name="crmid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="notesid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="SeNotesRel_IDX0">
+			<col>notesid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="SeNotesRel_IDX1">
+			<col>crmid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="senotesrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SeNotesRel FOREIGN KEY (notesid) REFERENCES notes(notesid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="senotesrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SeNotesRel2 FOREIGN KEY (crmid) REFERENCES crmentity(crmid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+
+
+
+
+	<table name="role2action">
+		<field name="rolename" type="C" size="50">
+		</field>
+		<field name="tabid" type="I" size="11">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="actionname" type="C" size="100">
+		</field>
+		<field name="action_permission" type="I" size="4">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="description" type="C" size="100">
+		</field>
+		<index name="idx_role2action_name">
+			<col>rolename</col>
+			<col>tabid</col>
+			<col>actionname</col>
+		</index>
+		<data>
+		
+		</data>
+	</table>
+	<table name="role2tab">
+		<field name="rolename" type="C" size="100">
+		</field>
+		<field name="tabid" type="I" size="11">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="module_permission" type="I" size="4">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="description" type="C" size="100">
+		</field>
+		<index name="idx_role2tab_name">
+			<col>rolename</col>
+			<col>tabid</col>
+		</index>
+		<data>
+		
+		</data>
+	</table>
+
+<table name="troubleticketstracktime">
+		<field name="ticket_id" type="I" size="11">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="supporter_id" type="I" size="11">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="minutes" type="I" size="11">
+			<DEFAULT value="0"/>
+		</field>
+		<field name="date_logged" type="I" size="11">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<index name="idx_troubleticketstracktime">
+			<col>ticket_id</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="ticketcf">
+		<field name="ticketid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="HelpDeskCF_IDX0">
+			<col>ticketid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="ticketcf" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_HelpDeskCF FOREIGN KEY (ticketid) REFERENCES troubletickets(ticketid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+	
+	<table name="productcf">
+		<field name="productid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="ProductsCF_IDX0">
+			<col>productid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="productcf" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_ProductsCF FOREIGN KEY (productid) REFERENCES products(productid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="users_last_import">
+		<field name="id" type="I" size="36">
+			<AUTOINCREMENT/>
+			<KEY/>
+		</field>
+		<field name="assigned_user_id" type="C" size="36"></field>
+		<field name="bean_type" type="C" size="36"></field>
+		<field name="bean_id" type="C" size="36"></field>
+		<field name="deleted" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<index name="idx_user_id">
+			<col>assigned_user_id</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="wordtemplates">
+		<field name="filename" type="C" size="100">
+			<KEY/>
+		</field>
+		<field name="module" type="C" size="30">
+			<NOTNULL/>
+		</field>
+		<field name="date_entered" type="T">
+			<NOTNULL/>
+			<DEFTIMESTAMP/>
+		</field>
+		<field name="parent_type" type="C" size="50">
+			<NOTNULL/>
+		</field>
+			<field name="data" type="B">
+			<NOTNULL/>
+		</field>
+		<field name="description" type="X"></field>
+		<field name="filesize" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<field name="filetype" type="C" size="20">
+			<NOTNULL/>
+		</field>
+		
+		<field name="deleted" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<data>
+		</data>
+	</table>
+
+
+
+
+
+
+
+
+<!-- Dropdown fields -->	
+	<table name="accountdepstatus">
+		<field name="deploymentstatusid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+			
+		</field>
+		<field name="deploymentstatus" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="AccountDepStatus_UK0">
+			<UNIQUE/>
+			<col>deploymentstatus</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+
+
+
+
+
+
+
+	<table name="accountownership">
+		<field name="acctownershipid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		</field>
+		<field name="ownership" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="AccountOwnership_UK0">
+			<UNIQUE/>
+			<col>ownership</col>
+		</index>
+		<data>
+		</data>
+	</table>
+	<table name="accountrating">
+		<field name="accountratingid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+			
+		</field>
+		<field name="rating" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="AccountRating_UK0">
+			<UNIQUE/>
+			<col>rating</col>
+		</index>
+		<data>
+		</data>
+	</table>
+	<table name="accountregion">
+		<field name="accountregionid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+				</field>
+		<field name="region" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="AccountRegion_UK0">
+			<UNIQUE/>
+			<col>region</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="accounttype">
+		<field name="accounttypeid" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+		
+		</field>
+		<field name="accounttype" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="AccountType_UK0">
+			<UNIQUE/>
+			<col>accounttype</col>
+		</index>
+		<data>
+
+		</data>
+	</table>
+
+
+	<table name="contacttype">
+		<field name="contacttypeid" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+		
+		</field>
+		<field name="contacttype" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="ContactType_UK0">
+			<UNIQUE/>
+			<col>contacttype</col>
+		</index>
+		<data>
+
+		</data>
+	</table>
+
+	<table name="leadsource">
+		<field name="leadsourceid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="leadsource" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="LeadSource_UK0">
+			<UNIQUE/>
+			<col>source</col>
+		</index>
+		<data>
+		</data>
+	</table>
+	
+	<table name="opportunity_type">
+               <field name="opptypeid" type="I" size="19">
+                       <KEY/>
+       <AUTOINCREMENT/>
+
+               </field>
+               <field name="opportunity_type" type="C" size="200">
+                       <NOTNULL/>
+               </field>
+               <field name="sortorderid" type="I" size="19">
+                       <NOTNULL/>
+                       <DEFAULT value="0"/>
+               </field>
+               <field name="presence" type="I" size="1">
+                       <NOTNULL/>
+                       <DEFAULT value="1"/>
+               </field>
+               <opt>Type=InnoDB</opt> <index name="Opportunity_UK0">
+                       <UNIQUE/>
+                       <col>opportunity_type</col>
+               </index>
+               <data>
+               </data>
+       </table>
+
+	<table name="leadstage">
+		<field name="leadstageid" type="I" size="19">
+			<KEY/><AUTOINCREMENT/>
+
+		
+		</field>
+		<field name="stage" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="LeadStage_UK0">
+			<UNIQUE/>
+			<col>stage</col>
+		</index>
+		<data>
+		</data>
+	</table>
+	<table name="leadstatus">
+		<field name="leadstatusid" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+		
+		</field>
+		<field name="leadstatus" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="LeadStatus_UK0">
+			<UNIQUE/>
+			<col>status</col>
+		</index>
+		<data>
+			
+		</data>
+	</table>
+
+	<table name="eventstatus">
+                <field name="eventstatusid" type="I" size="19">
+                        <KEY/>
+        <AUTOINCREMENT/>
+
+                </field>
+                <field name="eventstatus" type="C" size="200">
+                        <NOTNULL/>
+                </field>
+                <field name="sortorderid" type="I" size="19">
+                        <NOTNULL/>
+                        <DEFAULT value="0"/>
+                </field>
+                <field name="presence" type="I" size="1">
+                        <NOTNULL/>
+                        <DEFAULT value="1"/>
+                </field>
+                <opt>Type=InnoDB</opt> <index name="EventStatus_UK0">
+                        <UNIQUE/>
+                        <col>status</col>
+                </index>
+                <data>
+
+                </data>
+        </table>
+
+	<table name="duration_minutes">
+                <field name="minutesid" type="I" size="19">
+                        <KEY/>
+        <AUTOINCREMENT/>
+
+                </field>
+                <field name="duration_minutes" type="C" size="200">
+                        <NOTNULL/>
+                </field>
+                <field name="sortorderid" type="I" size="19">
+                        <NOTNULL/>
+                        <DEFAULT value="0"/>
+                </field>
+                <field name="presence" type="I" size="1">
+                        <NOTNULL/>
+                        <DEFAULT value="1"/>
+                </field>
+                <opt>Type=InnoDB</opt> <index name="DurationMinutes_UK0">
+                        <UNIQUE/>
+                        <col>status</col>
+                </index>
+                <data>
+
+                </data>
+        </table>
+
+	<table name="licencekeystatus">
+		<field name="licencekeystatusid" type="I" size="19">
+			<KEY/><AUTOINCREMENT/>
+
+		
+		</field>
+		<field name="licencekeystatus" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="LicenceKeyStatus_UK0">
+			<UNIQUE/>
+			<col>status</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="opportunitystage">
+		<field name="potstageid" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+		
+		</field>
+		<field name="stage" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<field name="probability" type="I" size="19">
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="OpportunityStage_UK0">
+			<UNIQUE/>
+			<col>stage</col>
+		</index>
+		<data>
+		</data>
+	</table>
+	
+
+
+
+	<table name="priority">
+		<field name="priorityid" type="I" size="19">
+			<KEY/><AUTOINCREMENT/>
+
+		
+		</field>
+		<field name="priority" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="Priority_UK0">
+			<UNIQUE/>
+			<col>priority</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="businesstype">
+		<field name="businesstypeid" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+		
+		</field>
+		<field name="businesstype" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="BusinessType_UK0">
+			<UNIQUE/>
+			<col>businesstype</col>
+		</index>
+		<data>
+		</data>
+	</table>
+	
+
+	<table name="industry">
+		<field name="industryid" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+		
+		</field>
+		<field name="industry" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="Industry_UK0">
+			<UNIQUE/>
+			<col>industry</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="revenuetype">
+		<field name="revenuetypeid" type="I" size="19">
+			<KEY/><AUTOINCREMENT/>
+
+		
+		</field>
+		<field name="revenuetype" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="RevenueType_UK0">
+			<UNIQUE/>
+			<col>revenuetype</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="salutationtype">
+		<field name="salutationid" type="I" size="19">
+			<KEY/><AUTOINCREMENT/>
+
+					</field>
+		<field name="salutationtype" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<data>
+		</data>
+	</table>
+ 
+
+
+	<table name="taskpriority">
+		<field name="taskpriorityid" type="I" size="19">
+			<KEY/><AUTOINCREMENT/>
+
+		
+		</field>
+		<field name="taskpriority" type="C" size="100"></field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<data>
+		</data>
+            
+	</table>
+	<table name="taskstatus">
+		<field name="taskstatusid" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+		
+		</field>
+		<field name="taskstatus" type="C" size="100"></field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<data>
+		</data>
+	</table>
+
+	<table name="activitytype">
+		<field name="activitytypeid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="activitytype" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="ActivityType_UK0">
+			<UNIQUE/>
+			<col>activitytype</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="usertype">
+		<field name="usertypeid" type="I" size="19">
+			<KEY/><AUTOINCREMENT/>
+
+		
+		</field>
+		<field name="usertype" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="UserType_UK0">
+			<UNIQUE/>
+			<col>usertype</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="sales_stage">
+<field name="sales_stage_id" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+			</field>
+	<field name="sales_stage" type="C" size="200">
+			</field>
+	<field name="SORTORDERID" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="PRESENCE" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+	
+		<data>
+		
+		</data>
+	</table>
+
+	<table name="faqcategories">
+<field name="faqcategories_id" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+			</field>
+		<field name="faqcategories" type="C" size="60">
+	
+		</field>
+	<field name="SORTORDERID" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="PRESENCE" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+	
+		<data>
+		
+		</data>
+	</table>
+
+
+
+	<table name="rating">
+<field name="rating_id" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+		
+		</field>
+
+		<field name="rating" type="C" size="200">
+		</field>
+	<field name="SORTORDERID" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="PRESENCE" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+	
+		<data>
+		
+		</data>
+	</table>
+
+
+	<table name="troubleticketcategories">
+<field name="troubleticketcategories_id" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+		
+		</field>
+	<field name="troubleticketcategories" type="C" size="100">
+		</field>
+	<field name="SORTORDERID" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="PRESENCE" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+	
+		<data>
+		
+		</data>
+	</table>
+
+	<table name="troubleticketpriorities">
+<field name="troubleticketpriorities_id" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+				</field>
+		<field name="troubleticketpriorities" type="C" size="100">
+				</field>
+
+	<field name="SORTORDERID" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="PRESENCE" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+	
+		<data>
+		
+		</data>
+	</table>
+	<table name="troubleticketstatus">
+<field name="troubleticketstatus_id" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+		
+		</field>
+		<field name="troubleticketstatus" type="C" size="60">
+			</field>
+	<field name="SORTORDERID" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="PRESENCE" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+	
+		<data>
+		
+		</data>
+
+	</table>
+
+
+
+
+
+
+
+	<table name="activsubtype">
+		<field name="activesubtypeid" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+		</field>
+		<field name="activsubtype" type="C" size="100"></field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<data>
+
+		</data>
+	</table>
+
+
+
+
+
+	<table name="downloadpurpose">
+		<field name="downloadpurposeid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		</field>
+		<field name="purpose" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="DownloadPurpose_UK0">
+			<UNIQUE/>
+			<col>purpose</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="durationhrs">
+		<field name="hrsid" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+
+		</field>
+		<field name="hrs" type="C" size="50"></field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<data>
+		</data>
+	</table>
+	<table name="durationmins">
+		<field name="minsid" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+		
+		</field>
+		<field name="mins" type="C" size="50"></field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<data>
+		</data>
+	</table>
+	
+	<table name="evaluationstatus">
+		<field name="evalstatusid" type="I" size="19">
+			<KEY/>
+<AUTOINCREMENT/>
+			</field>
+		<field name="status" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="EvaluationStatus_UK0">
+			<UNIQUE/>
+			<col>status</col>
+		</index>
+		<data>
+		</data>
+	</table>
+	
+	<table name="profile">
+		<field name="profileid" type="I" size="10">
+			<KEY/>
+			<AUTOINCREMENT/>
+		</field>
+		<field name="profilename" type="C" size="50">
+			<NOTNULL/>
+		</field>
+		<data>		
+		</data>
+	</table>
+
+	<table name="profile2tab">
+		<field name="profileid" type="I" size="11"></field>
+		<field name="tabid" type="I" size="10"></field>
+		<field name="permissions" type="I" size="10">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<index name="idx_profile2tab">
+			<col>profileid</col>	
+			<col>tabid</col>
+		</index>
+
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="profile2standardpermissions">
+		<field name="profileid" type="I" size="11"></field>
+		<field name="tabid" type="I" size="10"></field>
+		<field name="Operation" type="I" size="10"></field>
+		<field name="permissions" type="I" size="1"></field>
+		<index name="idx_prof2stad">
+			<col>profileid</col>
+			<col>tabid</col>
+			<col>Operation</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="profile2field">
+			<field name="profileid" type="I" size="11"></field>
+                	<field name="tabid" type="I" size="10"></field>
+                	<field name="fieldid" type="I" size="19"></field>
+	                <field name="visible" type="I" size="19"></field>
+        	        <field name="readonly" type="I" size="19"></field>
+			<index name="idx_prof2fileid">
+			<col>profileid</col>
+			<col>tabid</col>
+			<col>fieldname</col>
+		</index>
+		<data>
+		</data>
+	</table>
+	
+	<table name="role2profile">
+		<field name="roleid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="profileid" type="I" size="11">
+		</field>
+		
+		<data>
+		
+		</data>
+	</table>
+	
+
+	<table name="default_org_sharingrule">
+		<field name="ruleid" type="I" size="11">
+			<KEY/>
+                        <AUTOINCREMENT/>
+		</field>
+		<field name="tabid" type="I" size="11">
+			<NOTNULL/>
+		</field>
+		<field name="permission" type="I" size="10">
+		</field>
+
+		<data>
+		
+		</data>
+	</table>
+
+	<table name="profile2utility">
+		<field name="profileid" type="I" size="11"></field>
+		<field name="tabid" type="I" size="11"></field>
+		<field name="activityid" type="I" size="11"></field>
+		<field name="permission" type="I" size="1"></field>
+
+		<index name="idx_prof2utility">
+                        <col>profileid</col>
+                        <col>tabid</col>
+                        <col>activityid</col>
+                </index>
+		<data>
+		
+		</data>
+	</table>
+
+
+
+	<table name="productcategory">
+		<field name="productcategoryid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+			
+		</field>
+		<field name="productcategory" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="ProductCategory_UK0">
+			<UNIQUE/>
+			<col>productcategory</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+
+//Notification Scheduler Creation
+
+	<table name="notificationscheduler">
+		<field name="schedulednotificationid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+			
+		</field>
+		<field name="schedulednotificationname" type="C" size="200">
+		</field>
+		<field name="description" type="X">
+		</field>
+		<field name="active" type="I" size="1">
+		</field>
+	<field name="notificationsubject" type="C" size="200">
+		</field>
+	<field name="notificationbody" type="X" >
+		</field>
+		<opt>Type=InnoDB</opt>
+                <index name="notificationscheduler_UK0">
+			<UNIQUE/>
+			<col>schedulednotificationname</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	
+</schema>
