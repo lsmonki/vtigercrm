@@ -12,42 +12,38 @@
 
 <!-- BEGIN: main -->
 
-<form method="post" action="index.php?module=Users&action=saveemailtemplate">  
+<form method="post" action="index.php" name="etemplatedetailview">  
+<input type="hidden" name="action" >
+<input type="hidden" name="module" value="Users">
+<input type="hidden" name="templatename" value="{TEMPLATENAME}">
+<input type="hidden" name="foldername" value="{FOLDERNAME}">
 <TABLE WIDTH="100%" CELLPADDING=0 CELLSPACING=0 BORDER=0>
 <TR><TD>
     <TABLE WIDTH="100%" CELLPADDING=0 CELLSPACING=0 BORDER=0>
 
     <TR>
-    <TD ALIGN=LEFT CLASS="moduleTitle hline" NOWRAP> Detail View of Email Template: </TD>
+    <TD ALIGN=LEFT CLASS="moduleTitle hline" NOWRAP> {MOD.LBL_EMAIL_TEMPLATE_INFORMATION} </TD>
     </TR>
     </TABLE>
 </TD></TR>
 </table>
-
 <br>	
 <TABLE WIDTH="90%" CELLPADDING="0" CELLSPACING="5" BORDER="0">
-                <TD NOWRAP>&nbsp;<input type="submit" name="save" value=" Save " class="button" >&nbsp;<input type="submit" name="cancel" value="Cancel" class="button" >&nbsp;<input type="submit" name="edit" value=" Edit " class="button" ></TD>
+                <TD NOWRAP>&nbsp;<input type="submit" name="cancel" value="Cancel" class="button" onclick="this.form.action.value='listemailtemplates'">&nbsp;<input type="submit" name="edit" value=" Edit " class="button" onclick="this.form.action.value='editemailtemplate'" >&nbsp;<input type="submit" name="delete" value=" Delete " class="button" onclick="this.form.action.value='deleteemailtemplate'" ></TD>
               </TR>
-	</TABLE> 
-           
-    <TABLE WIDTH="90%" BORDER=0 CELLSPACING=0 CELLPADDING=1 class="formOuterBorder">
-        <TR>
-
-            <TD>
-
-<br>
-<table width="90%" border=0 cellspacing=1 cellpadding=0 class="formOuterBorder">
-<td class="formSecHeader" colspan=4 nowrap>Email Template Information:</td>
-<tr><td nowrap class="dataLabel">Folder:
-</td><td colspan=4>{FOLDERNAME}</tr>
-<tr ><td nowrap class="dataLabel">Template Name:</td><td colspan=4>{TEMPLATENAME}</td></tr>
-<tr ><td nowrap class="dataLabel">Description:
-</td><td colspan=4>{DESCRIPTION} </td></tr>
-<tr ><td nowrap class="dataLabel">Subject:</td><td colspan=4>{SUBJECT}</td></tr>
-<tr ><td nowrap valign=top class="dataLabel">Email Body:</td><td valign=top colspan=4>{BODY}</td></tr>
+</TABLE>
+<table width="50%" border=0 cellspacing=1 cellpadding=2 class="formOuterBorder">
+<td class="formSecHeader" colspan=2 nowrap>{MOD.LBL_EMAIL_TEMPLATE_INFORMATION}</td>
+<tr><td nowrap class="dataLabel" width="50%">{MOD.LBL_FOLDER}
+</td><td>{FOLDERNAME}</td></tr>
+<tr ><td nowrap class="dataLabel">{MOD.LBL_TEMPLATE_NAME}</td><td>{TEMPLATENAME}</td></tr>
+<tr ><td nowrap class="dataLabel">{MOD.LBL_DESCRIPTION}{MOD.LBL_COLON}
+</td><td>{DESCRIPTION} </td></tr>
+<tr ><td nowrap class="dataLabel">{MOD.LBL_SUBJECT}{MOD.LBL_COLON}</td><td>{SUBJECT}</td></tr>
+<tr ><td nowrap valign=top class="dataLabel">{MOD.LBL_BODY}{MOD.LBL_COLON}</td><td valign=top>{BODY}</td></tr>
 </table>
-<TABLE WIDTH="90%" CELLPADDING="0" CELLSPACING="5" BORDER="0">
-                <TD NOWRAP>&nbsp;<input type="submit" name="save" value=" Save " class="button" >&nbsp;<input type="submit" name="cancel" value="Cancel" class="button" >&nbsp;<input type="submit" name="edit" value=" Edit " class="button" ></TD>
+<TABLE WIDTH="50%" CELLPADDING="0" CELLSPACING="5" BORDER="0">
+                <TD NOWRAP>&nbsp;<input type="submit" name="cancel" value="Cancel" class="button" onclick="this.form.action.value='listemailtemplates'">&nbsp;<input type="submit" name="edit" value=" Edit " class="button" onclick="this.form.action.value='editemailtemplate'">&nbsp;<input type="submit" name="delete" value=" Delete " class="button" onclick="this.form.action.value='deleteemailtemplate'" ></TD>
               </TR>
         </TABLE>
 </form>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Meetings/DeleteMeetingContactRelationship.php,v 1.1 2004/08/17 15:05:22 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Meetings/DeleteMeetingContactRelationship.php,v 1.2 2005/01/08 07:44:16 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -27,7 +27,7 @@ $focus = new Meeting();
 if(!isset($_REQUEST['contact_id']) || !isset($_REQUEST['meeting_id']))
 	die("A record number must be specified to delete the contact to meeting relationship.");
 
-$focus->mark_meeting_contact_relationship_deleted($_REQUEST['contact_id'],$_REQUEST['meeting_id']);
+$focus->mark_meeting_contact_relationship_deleted($_REQUEST['contact_id'],$_REQUEST['return_id']);
 
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
 ?>

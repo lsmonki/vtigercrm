@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Meetings/Meeting.php,v 1.3 2004/10/29 09:55:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Meetings/Meeting.php,v 1.4 2005/01/07 11:33:30 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -272,14 +272,19 @@ class Meeting extends SugarBean {
 		}
 		else
 		{
-			$query = 'SELECT id, assigned_user_id, status, name, parent_type, parent_id, date_start, time_start FROM meetings ';
-			$where_auto = "deleted=0";
+			$query = 'SELECT meetings.id, assigned_user_id, status, name, parent_type, parent_id, date_start, time_start FROM meetings left join meetings_users on meetings_users.meeting_id=meetings.id ';
+			$where_auto = "meetings.deleted=0";
 		}
 
+
 		if($where != "")
-			$query .= "where $where AND ".$where_auto;
+			{
+				$query .= "where $where AND ".$where_auto;
+			}
 		else
-			$query .= "where ".$where_auto;
+			{
+				$query .= "where ".$where_auto;
+			}
 
 		if($order_by != "")
 			$query .= " ORDER BY $order_by";

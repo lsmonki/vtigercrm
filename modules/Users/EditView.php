@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.9 2004/12/30 15:37:22 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.10 2005/01/07 06:52:29 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -138,9 +138,9 @@ if (is_admin($current_user)) {
                    do
                    {
                     $groupname=$temprow["name"];
-                    $GROUP_SELECT_OPTION .= '<option value=';
+                    $GROUP_SELECT_OPTION .= '<option value="';
                     $GROUP_SELECT_OPTION .=  $groupname;
-                    $GROUP_SELECT_OPTION .=  '>';
+                    $GROUP_SELECT_OPTION .=  '">';
                     $GROUP_SELECT_OPTION .= $temprow["name"];
                     $GROUP_SELECT_OPTION .= '</option>';
                    }while($temprow = mysql_fetch_array($result));

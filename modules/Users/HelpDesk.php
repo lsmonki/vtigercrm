@@ -49,14 +49,14 @@ class HelpDesk extends SugarBean {
                             
                 $query = 'CREATE TABLE '.$table_name.' ( ';
 		$query .='   id int(11) NOT NULL auto_increment,
-                                question varchar(255) NOT NULL default "",
+                                question text NOT NULL default "",
                                 answer text,
-                                category_id int(11) NOT NULL default 0,
-                                author_id int(11) NOT NULL,
-                                date_modified int(11) NOT NULL default 0,
+                                category varchar(100) NOT NULL,
+                                author_id varchar(100) NOT NULL,
+                                date_modified datetime NOT NULL,
                                 comments text,
-                                PRIMARY KEY  (id),
-                                UNIQUE KEY (question))';
+				deleted tinyint(1) NOT NULL default 0,
+                                PRIMARY KEY  (id))';
 
 		$this->log->info($query);
 		mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());	
@@ -67,15 +67,12 @@ class HelpDesk extends SugarBean {
                 
                 //primary key will be rolename,tabid and actionname
                 $query = 'CREATE TABLE '.$table_name.' ( ';
-		$query .='   id int(11) NOT NULL auto_increment,
-                                category_name varchar(60) NOT NULL default "",
-                                rank int(4) NOT NULL default 0,
-                                PRIMARY KEY  (id),
-                                UNIQUE KEY (category_name))';
+		$query .='      category_name varchar(60) NOT NULL,
+                                PRIMARY KEY  (category_name))';
 		$this->log->info($query);
 		mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());	
-		$this->create_index("create index idx_faqcategories on faqcategories (id)");
-               
+              
+		mysql_query("insert into faqcategories values('General')"); 
 
 
 

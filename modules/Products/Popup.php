@@ -83,6 +83,8 @@ else
 global $app_strings;
 global $mod_strings;
 
+$popuptype= $_REQUEST['popuptype'];
+
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -98,9 +100,18 @@ $tkList = '';
 for ($i=$start; $i<=$end; $i++)
 {
 	$tkList .= '<tr  height=20>';
+	$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 	//$productname = '<a href="index.php?action=ProductDetailView&module=Products&record='.mysql_result($tktresult,$i-1,"id").'">'.mysql_result($tktresult,$i-1,"productname").'</a>';
-	$productname = '<a href="a" LANGUAGE=javascript onclick=\'set_return("'.mysql_result($tktresult,$i-1,"id").'", "'.mysql_result($tktresult,$i-1,"productname").'"); window.close()\'>'.mysql_result($tktresult,$i-1,"productname").'</a>';
-	$tkList .= '<td style="padding:0px 3px 0px 3px;">'.$productname.'</td>';
+	if(isset($popuptype) && $popuptype == 'product')
+	{
+		
+		$productname = '<a href="a" LANGUAGE=javascript onclick=\'set_return_product("'.mysql_result($tktresult,$i-1,"id").'", "'.mysql_result($tktresult,$i-1,"productname").'"); window.close()\'>'.mysql_result($tktresult,$i-1,"productname").'</a>';
+	}
+	else
+	{
+		$productname = '<a href="a" LANGUAGE=javascript onclick=\'set_return("'.mysql_result($tktresult,$i-1,"id").'", "'.mysql_result($tktresult,$i-1,"productname").'"); window.close()\'>'.mysql_result($tktresult,$i-1,"productname").'</a>';
+	}
+	$tkList .= '<td class="oddListRow" style="padding:0px 3px 0px 3px;">'.$productname.'</td>';
         $tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 
        	$tkList .= '</tr>';

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.14 2004/12/29 05:22:27 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.16 2005/01/08 14:07:20 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -164,7 +164,7 @@ class Contact extends SugarBean {
 		$query .=', first_name char(25)';
 		$query .=', last_name char(25)';
 		$query .=', lead_source char(100)';
-		$query .=', title char(25)';
+		$query .=', title char(45)';
 		$query .=', department char(100)';
 		$query .=', reports_to_id char(36)';
 		$query .=', birthdate date';
@@ -264,12 +264,17 @@ class Contact extends SugarBean {
 
     function get_contacts($user_name,$from_index,$offset)
     {   
-         $query = "select contacts.* from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."' and contacts.deleted=0 limit " .$from_index ."," .$offset;
-    // $query = "select * from contacts limit " .$from_index ."," .$offset;
-//    echo $query;
+       // $query = "select contacts.*, accounts.name accountname,accounts.id accountid from contacts inner join users on users.id=contacts.assigned_user_id  left join accounts_contacts on accounts_contacts.contact_id=contacts.id left join accounts on accounts.id=accounts_contacts.account_id where user_name='" .$user_name ."' and contacts.deleted=0 and accounts_contacts.deleted=0 limit " .$from_index ."," .$offset;
+
+ $query = "select contacts.* from contacts inner join users on users.id=contacts.assigned_user_id   where user_name='" .$user_name ."' and contacts.deleted=0 limit " .$from_index ."," .$offset;
+
+
+   //  $query = "select * from contacts limit " .$from_index ."," .$offset;
+ //   echo $query;
     return $this->process_list_query1($query);
     
     }
+
 
 
     function process_list_query1($query)
@@ -294,7 +299,12 @@ class Contact extends SugarBean {
                     }   
                 }   
     
+// TODO OPTIMIZE THE QUERY ACCOUNT NAME AND ID are set separetly for every contacts and hence 
+// account query goes for ecery single account row
+
                 $this->fill_in_additional_list_fields();
+		//$this->account_name = $row['accountname'];
+		//$this->account_id = $row['accountid'];
     
                     $list[] = $this;
                 }
@@ -310,6 +320,7 @@ class Contact extends SugarBean {
 
         return $response;
     }
+
 
 	function get_summary_text()
 	{
@@ -601,6 +612,11 @@ return $exists;
     	{
     		$this->set_account_contact_relationship($this->id, $this->account_id);    	
     	}
+        if($this->reports_to_id == "")
+    	{
+              $this->clear_contact_direct_report_relationship($this->id);
+    	}
+	
     	if($this->opportunity_id != "")
     	{
     		$this->set_opportunity_contact_relationship($this->id, $this->opportunity_id);    	

@@ -81,6 +81,29 @@ if($entityDel)
 	{
 		$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
 	}
+
+$xtpl->assign("SENDMAILBUTTON","<td><input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.module.value='Emails';this.form.email_directing_module.value='leads';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\"></td>");
+
+//$browser = getenv("HTTP_USER_AGENT");
+//$pos1 = strrpos($testString,'Windows');
+//$local=explode(';',$browser);
+//$test=strrpos($local[2],"Windows");
+//if($test == true) 
+{
+	$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+}
+require_once('modules/Users/UserInfoUtil.php');
+$wordTemplateResult = fetchWordTemplateList("Leads");
+$tempCount = mysql_num_rows($wordTemplateResult);
+$tempVal = mysql_fetch_array($wordTemplateResult);
+for($templateCount=0;$templateCount<$tempCount;$templateCount++)
+{
+$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
+$tempVal = mysql_fetch_array($wordTemplateResult);
+}
+$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;Select template to Mail Merge:<select name=\"mergefile\">".$optionString."</select>");
+
+
 //Assigning Custom Field Values
 $custfld = CustomFieldDetailView($focus->id, "Leads", "leadcf", "leadid");
 $xtpl->assign("CUSTOMFIELD", $custfld);

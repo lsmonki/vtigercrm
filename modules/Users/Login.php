@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Login.php,v 1.5 2004/11/02 10:22:19 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Login.php,v 1.6 2005/01/08 13:15:03 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -30,14 +30,14 @@ $current_module_strings = return_module_language($current_language, 'Users');
  define("IN_LOGIN", true);
 
  define('IN_PHPBB', true);
- include($phpbb_root_path . 'extension.inc');
- include($phpbb_root_path . 'common.'.$phpEx);
+// include($phpbb_root_path . 'extension.inc');
+// include($phpbb_root_path . 'common.'.$phpEx);
 
  //
  // Set page ID for session management
  //
- $userdata = session_pagestart($user_ip, PAGE_LOGIN);
- init_userprefs($userdata);
+ //$userdata = session_pagestart($user_ip, PAGE_LOGIN);
+ //init_userprefs($userdata);
  //
  // End session management
  //

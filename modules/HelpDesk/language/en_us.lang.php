@@ -27,13 +27,39 @@ $mod_strings = Array(
 'LBL_ACCOUNT_NAME'=>'Account Name',
 'LBL_CONTACT_NAME'=>'Contact Name',
 'LBL_SUBJECT'=>'Subject',
-'LBL_DESCRIPTION'=>'DESCRIPTION',
+'LBL_DESCRIPTION'=>'Description',
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
 'LBL_CUSTOM_FIELD_SETTINGS'=>'Custom Field Settings:',
 'LBL_PICKLIST_FIELD_SETTINGS'=>'Picklist Field Settings:',
 'Leads'=>'Lead',
 'Accounts'=>'Account',
 'Contacts'=>'Contact',
-'Opportunities'=>'Opportunity'
+'Opportunities'=>'Opportunity',
+
+'LBL_ACCOUNT'=>'Account',
+'LBL_OPPURTUNITY'=>'Oppurtunity',
+'LBL_PRODUCT'=>'Product',
+
+'LBL_COLON'=>':',
+'LBL_TICKET'=>'Ticket',
+'LBL_CONTACT'=>'Contact',
+'LBL_STATUS'=>'Status',
+'LBL_ASSIGNED_TO'=>'Assigned To',
+'LBL_FAQ'=>'FAQ',
+'LBL_VIEW_FAQS'=>'View FAQs',
+'LBL_ADD_FAQS'=>'Add FAQs',
+'LBL_FAQ_CATEGORIES'=>'FAQ Categories',
+
+'LBL_PRIORITY'=>'Priority',
+'LBL_STATUS'=>'Status',
+'LBL_CATEGORY'=>'Category',
+
+'LBL_QUESTION'=>'Question',
+'LBL_ANSWER'=>'Answer',
+'LBL_COMMENTS'=>'Comments',
+
+'LBL_AUTHOR'=>'Author',
+'LBL_QUESTION'=>'Question',
+
 );
 

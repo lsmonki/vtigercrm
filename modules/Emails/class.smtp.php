@@ -98,11 +98,16 @@ class SMTP
         }
 
         #connect to the smtp server
-        $this->smtp_conn = fsockopen($host,    # the host of the server
+	if(!@ $this->smtp_conn = fsockopen($host,    # the host of the server
                                      $port,    # the port to use
                                      $errno,   # error number if any
                                      $errstr,  # error message if any
-                                     $tval);   # give up after ? secs
+                                     $tval))   # give up after ? secs
+	{
+//		echo '<b><center>Could Not connect to Mail Server</b><br><br>';
+		return false;
+	}
+
         # verify we connected properly
         if(empty($this->smtp_conn)) {
             $this->error = array("error" => "Failed to connect to server",

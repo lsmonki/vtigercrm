@@ -44,6 +44,17 @@ $mod_strings = Array(
 
 //New entry
 'LBL_UPLOAD'=>'Upload File',
+
+'LBL_PRODUCT'=>'Product',
+'LBL_NEW_PRODUCT'=>'New Product',
+'LBL_COLON'=>':',
+
+'LBL_ATTACHMENTS'=>'Attachments',
+'LBL_NEW_ATTACHMENT'=>'New Attachment',
+'LBL_ATTACH_FILE'=>'File Attachment',
+'LBL_DESCRIPTION'=>'Description',
+'LBL_FILE'=>'File Name',
+
 );
 
 ?>

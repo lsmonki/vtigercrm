@@ -24,10 +24,11 @@ require_once('database/DatabaseConnection.php');
 </head>
 <body>
 
-            <script language="javascript">
+            <script language="javascript" src="include/general.js"></script>
+    <script language="javascript">
     function validate()
     {
-        if( !emptyCheck( "roleName", "Role Name" ) )
+        if( !emptyCheck( "groupName", "Group Name" ) )
             return false;    
             
         return true;
@@ -40,7 +41,7 @@ require_once('database/DatabaseConnection.php');
     
              </script>
             <div class="bodyText mandatory"> </div>
-            <form name="newRoleForm" action="index.php">
+            <form name="newRoleForm" action="index.php" onSubmit="return validate()">
                     <input type="hidden" name="module" value="Users">
                     <input type="hidden" name="action" value="UserInfoUtil">
              <input type="hidden" name="actiontype" value="createnewgroup">
@@ -48,7 +49,7 @@ require_once('database/DatabaseConnection.php');
  cellspacing="0">
                 <tbody>
                   <tr>
-                    <td class="moduleTitle hline">Create New Group</td>
+                    <td class="moduleTitle hline"><?php echo $mod_strings['LBL_CREATE_NEW_GROUP']; ?></td>
                   </tr>
                 </tbody>
               </table>
@@ -58,7 +59,7 @@ require_once('database/DatabaseConnection.php');
                 <tbody>
                   <tr>
                     <td>
-                    <div align="right"><font class="required">*</font> Indicates required field</div>
+                    <div align="right"><font class="required">*</font><?php echo $mod_strings['LBL_INDICATES_REQUIRED_FIELD']; ?></div>
                     </td>
                   </tr>
                 </tbody>
@@ -67,14 +68,14 @@ require_once('database/DatabaseConnection.php');
  cellspacing="1" class="formOuterBorder">
                 <tbody>
                   <tr>
-                    <td class="formSecHeader" colspan="2">New Group</td>
+                    <td class="formSecHeader" colspan="2"><?php echo $mod_strings['LBL_NEW_GROUP']; ?></td>
                   </tr>
                   <tr>
-                    <td class="dataLabel mandatory">* Group Name</td>
+                    <td class="dataLabel mandatory"><font class="required">*</font>  <?php echo $mod_strings['LBL_GROUP_NAME']; ?></td>
                     <td class="value"><input class="textField" type="text" name="groupName"></td>
                   </tr>
  <tr>
-                    <td class="dataLabel mandatory">Description</td>
+                    <td class="dataLabel mandatory"><?php echo $mod_strings['LBL_DESCRIPTION']; ?></td>
                     <td class="value"><input class="textArea" type="text" name="groupDescription"></td>
                   </tr>
              <?php

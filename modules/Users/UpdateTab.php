@@ -71,8 +71,8 @@ foreach($_POST as $name=>$value)
 ?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
-      <td class="formHeader">Customize Tabs </td>
+      <td class="formHeader"><?php echo $mod_strings['LBL_CUSTOMISE_TABS']; ?> </td>
     </tr>
   </table>
-<br><b><center>Tab Menu Updated! kindly go to '<a href="index.php?module=Users&action=DetailView&record=<?php echo $focus->id ?>">My Account</a> to view the changes'</center></b><br><br>
+<br><b><center><?php echo $mod_strings['LBL_TAB_MENU_UPDATED']; ?><a href="index.php?module=Users&action=DetailView&record=<?php echo $focus->id ?>">My Account</a><?php echo $mod_strings['LBL_TO_VIEW_CHANGES']; ?></center></b><br><br>
 

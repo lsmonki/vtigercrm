@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/DetailView.php,v 1.8 2004/12/16 10:28:54 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/DetailView.php,v 1.14 2005/01/08 12:30:03 jack Exp $
  * Description:  TODO To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -93,7 +93,29 @@ $xtpl->assign("CUSTOMFIELD", $custfld);
        {
               $xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Accounts'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
        }
+//$browser = getenv("HTTP_USER_AGENT");
+//$pos1 = strrpos($testString,'Windows');
+//$local=explode(';',$browser);
+//$test=strrpos($local[2],"Windows");
+//if($test == true)
+{
+	$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+}
+require_once('modules/Users/UserInfoUtil.php');
+$wordTemplateResult = fetchWordTemplateList("Accounts");
+$tempCount = mysql_num_rows($wordTemplateResult);
+$tempVal = mysql_fetch_array($wordTemplateResult);
+for($templateCount=0;$templateCount<$tempCount;$templateCount++)
+{
+$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
+$tempVal = mysql_fetch_array($wordTemplateResult);
+}
+$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;Select template to Mail Merge:<select name=\"mergefile\">".$optionString."</select>");
 
+if($_ENV['HOME'] == '')
+{
+	$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+}
 $xtpl->parse("main");
 $xtpl->out("main");
 
@@ -141,6 +163,13 @@ $focus_notes_list = & $focus->get_notes();
 
 include('modules/Activities/SubPanelView.php');
 
-echo "</td></tr>\n";
+//echo "</td></tr>\n";
+echo "<BR>\n";
+echo "<BR>\n";
+
+require_once('include/RelatedTicketListUtil.php');
+$list = getTicketList($focus->id, "Accounts", $image_path,$theme);
+echo $list;
+
 
 ?>

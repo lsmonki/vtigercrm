@@ -111,7 +111,7 @@ elseif ($currentModule == 'Opportunities') $button .= "<input type='hidden' name
 		
 		if($currentModule=='Emails')
 		{
-			$button .= "<td><input title='".$mod_strings['LBL_BULK_MAILS']."' class='button' value='".$mod_strings['LBL_BULK_MAILS']."' name='button' onclick=\"this.form.action.value='../Emails/sendmail';this.form.record.value='".$this->focus->id."'\" type='submit''></td>\n";
+                      $button .= "<td><input title='".$mod_strings['LBL_BULK_MAILS']."' class='button' value='".$mod_strings['LBL_BULK_MAILS']."' name='button' onclick=\"this.form.module.value='Emails';this.form.action.value='sendmail';this.form.return_module.value='Emails';this.form.return_action.value='ListView';this.form.record.value='".$this->focus->id."'\" type='submit''></td>\n";
 		}
 
 		$button .= "<td><input title='".$app_strings['LBL_SELECT_USER_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_SELECT_USER_BUTTON_KEY']."' type='button' class='button' value='".$app_strings['LBL_SELECT_USER_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Users&action=Popup&html=Popup_picker&form=DetailView&form_submit=true\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";

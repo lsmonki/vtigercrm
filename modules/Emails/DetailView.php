@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/DetailView.php,v 1.6 2004/12/29 06:01:23 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/DetailView.php,v 1.7 2005/01/05 05:42:46 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -111,23 +111,11 @@ $xtpl->assign("DESCRIPTION", $focus->description);
 
 $xtpl->assign("DURATION_HOURS", $focus->duration_hours);
 $xtpl->assign("DURATION_MINUTES", $focus->duration_minutes);
-$xtpl->assign("FILENAME",$focus->filename);
-
-if ( empty($focus->filename))
-{
-        $xtpl->assign("FILENAME_TEXT", "");
-        $xtpl->assign("FILENAME", "");
-}
-else
-{
-        $xtpl->assign("FILENAME_TEXT", "(".$focus->filename.")");
-        $xtpl->assign("FILENAME", $focus->filename);
-}
-
-//echo '<br>id : '.$focus->id;
-//echo '<br>name : '.$focus->name;
-//echo '<br>filename : '.$focus->filename;
-//echo '<br>description : '.$focus->description;
+$sql = "select * from email_attachments where parent_id ='".$_REQUEST['record'] ."'";
+$value = mysql_query($sql);
+$valueArray = mysql_fetch_array($value);
+$filename= $valueArray["filename"];
+$xtpl->assign("FILENAME",$filename);
   if($entityDel)
         {
                $xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");

@@ -40,10 +40,13 @@
 			<input type="hidden" name="meeting_id">			
 			<input type="hidden" name="call_id">
 			<input type="hidden" name="email_id">
+		        <input type="hidden" name="email_directing_module">
+
 		<tr>
 		<td><input title="{APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{APP.LBL_EDIT_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Leads'; this.form.return_action.value='DetailView'; this.form.return_id.value='{ID}'; this.form.action.value='EditView'" type="submit" name="Edit" value="  {APP.LBL_EDIT_BUTTON_LABEL}  "></td>
 		<td><input title="{APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{APP.LBL_DUPLICATE_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Leads'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.action.value='EditView'" type="submit" name="Duplicate" value=" {APP.LBL_DUPLICATE_BUTTON_LABEL} "></td>
 		{DELETEBUTTON}
+		 {SENDMAILBUTTON}
 		<td><input title="{APP.LBL_CONVERT_BUTTON_TITLE}" accessKey="{APP.LBL_CONVERT_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Leads'; this.form.action.value='ConvertLead'" type="submit" name="Delete" value=" {APP.LBL_CONVERT_BUTTON_LABEL} "></td>
 		</tr></table>
 	</td>

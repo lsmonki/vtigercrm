@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/EditView.php,v 1.4 2004/12/07 11:29:28 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/EditView.php,v 1.5 2005/01/08 14:59:29 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -94,6 +94,8 @@ $xtpl->assign("DATE_ENTERED", $focus->date_entered);
 $xtpl->assign("DATE_CLOSED", $focus->date_closed);
 $xtpl->assign("NEXT_STEP", $focus->next_step);
 $xtpl->assign("PROBABILITY", $focus->probability);
+$xtpl->assign("PRODUCTID", $focus->product_id);
+$xtpl->assign("PRODUCTNAME", $focus->product_name);
 $xtpl->assign("DESCRIPTION", $focus->description);
 
 if ($focus->assigned_user_id == '' && (!isset($focus->id) || $focus->id=0)) $focus->assigned_user_id = $current_user->id;

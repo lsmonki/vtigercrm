@@ -18,7 +18,7 @@
 
 	?>
 <B>
-<?php echo $mod_strings['LBL_ATTACH_FILE']; ?>
+<?php echo $ret_module.' : '.$mod_strings['LBL_ATTACH_FILE']; ?>
 </B>
 <hr>
 <br>
@@ -26,13 +26,13 @@
  <INPUT TYPE="hidden" NAME="return_module" VALUE="<?php echo $ret_module ?>">
  <INPUT TYPE="hidden" NAME="return_id" VALUE="<?php echo $ret_id ?>">
  <TABLE BORDER="0" cellspacing="2" cellpadding="2">
-  <TR>
-   <TD width="25%" valign="top"><div align="right"><?php echo $mod_strings['LBL_DESCRIPTION']; ?> </div></TD>
-   <TD width="75%"><TEXTAREA NAME="txtDescription" ROWS="3" COLS="50"></TEXTAREA></TD>
-  </TR>
-  <TR>
+ <TR>
    <TD><div align="right"><?php echo $mod_strings['LBL_FILE']; ?> </TD>
    <TD><INPUT TYPE="file" NAME="binFile"></TD>
+ </TR>
+ <TR>
+   <TD width="25%" valign="top"><div align="right"><?php echo $mod_strings['LBL_DESCRIPTION']; ?> </div></TD>
+   <TD width="75%"><TEXTAREA NAME="txtDescription" ROWS="3" COLS="50"></TEXTAREA></TD>
   </TR>
   <TR>
    <TD></TD>	

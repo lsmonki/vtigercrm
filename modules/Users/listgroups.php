@@ -23,16 +23,16 @@ require_once('database/DatabaseConnection.php');
 <!--c:out value="${locale}"/-->
 <!--fmt:setLocale value="ja_JP"/-->
             <form action="index.php">
-	     <div class="moduleTitle hline">Groups</div>
+	     <div class="moduleTitle hline"><?php echo $mod_strings['LBL_MODULE_NAME'].' : '.$mod_strings['LBL_GROUPS']; ?></div>
 	<br>
              <input type="hidden" name="module" value="Users">
              <input type="hidden" name="action" value="createnewgroup">
-             <input type="submit" class="button" name="Submit" value="Create New Group">
+             <input type="submit" class="button" name="Submit" value="<? echo $mod_strings['LBL_CREATE_NEW_GROUP']; ?>">
 <br><br>
 		<table width="30%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
 		<tr>
-		<td class="moduleListTitle" height="25"><b>Group Name</b></td>
-                <td class="moduleListTitle"><b>Description</b></td>
+		<td class="moduleListTitle" height="25"><b><?php echo $mod_strings['LBL_GROUP_NAME']; ?></b></td>
+                <td class="moduleListTitle"><b><?php echo $mod_strings['LBL_DESCRIPTION']; ?></b></td>
                 </tr>
 <?php
    $sql = "select * from groups";

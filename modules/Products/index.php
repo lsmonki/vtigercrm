@@ -91,17 +91,32 @@ require_once($theme_path.'layout_utils.php');
 $xtpl=new XTemplate ('modules/Products/ProductsList.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
+$xtpl->assign("IMAGE_PATH",$image_path);
+
 echo get_module_title("Products", $mod_strings['LBL_MODULE_NAME'].": Home" , true);
+echo "<br>";
+echo get_form_header("Product List", "", false);
+
 $tkList = '';
 for ($i=$start; $i<=$end; $i++)
 {
-	$tkList .= '<tr  height=20>';
+	if (($i%2)==0)
+		$tkList .= '<tr height=20 class=evenListRow>';
+	else
+		$tkList .= '<tr height=20 class=oddListRow>';
+	
 	$productname = '<a href="index.php?action=ProductDetailView&module=Products&record='.mysql_result($tktresult,$i-1,"id").'">'.mysql_result($tktresult,$i-1,"productname").'</a>';
-       $tkList .= '<td width="15%">'.$productname.'</td>';
-        $tkList .= '<td width="15%">'.mysql_result($tktresult,$i-1,"category").'</td>';
-        $tkList .= '<td width="15%">'.mysql_result($tktresult,$i-1,"commissionrate").'</td>';
-        $tkList .= '<td width="15%">'.mysql_result($tktresult,$i-1,"qty_per_unit").'</td>';
-        $tkList .= '<td width="15%">'.mysql_result($tktresult,$i-1,"unit_price").'</td>';
+		$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+       	$tkList .= '<td style="padding:0px 3px 0px 3px;">'.$productname.'</td>';
+		$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $tkList .= '<td style="padding:0px 3px 0px 3px;">'.mysql_result($tktresult,$i-1,"category").'</td>';
+		$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $tkList .= '<td style="padding:0px 3px 0px 3px;">'.mysql_result($tktresult,$i-1,"commissionrate").'</td>';
+		$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $tkList .= '<td style="padding:0px 3px 0px 3px;">'.mysql_result($tktresult,$i-1,"qty_per_unit").'</td>';
+		$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $tkList .= '<td style="padding:0px 3px 0px 3px;">'.mysql_result($tktresult,$i-1,"unit_price").'</td>';
+		$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 	$tkList .= '</tr>';
 	
 
@@ -113,7 +128,7 @@ if(isset($startvalue))
 }
 else
 {
-	$startoutput = 'start';
+	$startoutput = '[Start]';
 }
 if(isset($endval))
 {
@@ -121,7 +136,7 @@ if(isset($endval))
 }
 else
 {
-	$endoutput = 'end';
+	$endoutput = '[End]';
 }
 if(isset($nextstartvalue))
 {
@@ -129,7 +144,7 @@ if(isset($nextstartvalue))
 }
 else
 {
-	$nextoutput = 'next';
+	$nextoutput = '[Next]';
 }
 if(isset($prevstartvalue))
 {
@@ -137,7 +152,7 @@ if(isset($prevstartvalue))
 }
 else
 {
-	$prevoutput = 'prev';
+	$prevoutput = '[Prev]';
 }
 $xtpl->assign("Start", $startoutput);
 $xtpl->assign("End", $endoutput);

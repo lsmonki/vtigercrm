@@ -85,7 +85,7 @@ if ( isset($_REQUEST['creator']) ) {
  # Subject
  #
  if ( !isset($_REQUEST['subject']) || $_REQUEST['subject'] == "") {
-   $msg .= "Missing Subject<br>";
+   $msg .= $mod_strings['LBL_APP_ERR004'] ."<br>";
  }
  else {
       $gotourl= addUrlParameter($gotourl,"subject=".$_REQUEST['subject'],true);
@@ -93,7 +93,7 @@ if ( isset($_REQUEST['creator']) ) {
  #
  # Contact
  #
- if ( !isset($_REQUEST['contact_name']) || $_REQUEST['contact_name'] == "") {
+ if ((!isset($_REQUEST['contact_name'])) || ($_REQUEST['contact_name'] == " ")) {
    $msg .= $mod_strings['LBL_APP_ERR003']."<br>";
  }
  else

@@ -510,8 +510,19 @@ class Lead extends SugarBean {
 
         }
 
+
+
+function getColumnNames_Lead()
+ {
+ $result = $this->db->query("SHOW COLUMNS FROM Leads");
+ $i=0;
+ while ($myrow = mysql_fetch_row($result))
+ {
+         $copy[$i]=$myrow;
+         $i++;
+ }
+ return $copy;
 }
-
-
+}
 
 ?>

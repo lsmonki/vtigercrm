@@ -21,13 +21,12 @@ require_once('database/DatabaseConnection.php');
 </head>
 <body>
             <form action="index.php">
-	     <div class="moduleTitle hline">Word Templates</div>
+	     <div class="moduleTitle hline"><?php echo $mod_strings['LBL_MODULE_NAME'].' : '.$mod_strings['LBL_WORD_TEMPLATES']; ?></div>
 	<br>
              <input type="hidden" name="module" value="Users">
              <input type="hidden" name="action" value="upload">
-             <input type="submit" class="button" name="Submit" value="New Word Template">
+             <input type="submit" class="button" name="Submit" value="<?php echo $mod_strings['LBL_NEW_WORD_TEMPLATE']; ?>">
 <br><br>
-		<table width="50%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
 		
 <?php
 
@@ -61,6 +60,5 @@ do
 */
 
 ?>
-</table>
 </body>
 </html>

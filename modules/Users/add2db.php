@@ -56,10 +56,10 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
     }		
 
     $parent_id = $_REQUEST['return_id'];	 			
-
+	$module = $_REQUEST['target_module'];
     $sql = "INSERT INTO wordtemplatestorage ";
-    $sql .= "(date_entered,parent_type,parent_id,data,description,filename,filesize,filetype) ";
-    $sql .= "VALUES ('$date_entered','$parent_type','$parent_id','$data','$strDescription',";
+    $sql .= "(module,date_entered,parent_type,parent_id,data,description,filename,filesize,filetype) ";
+    $sql .= "VALUES ('$module','$date_entered','$parent_type','$parent_id','$data','$strDescription',";
     $sql .= "'$filename', '$filesize', '$filetype')";
     //echo $sql;
     $result = mysql_query($sql);

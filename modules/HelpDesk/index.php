@@ -12,6 +12,7 @@ require_once('database/DatabaseConnection.php');
 require_once('XTemplate/xtpl.php');
 require_once('include/utils.php');
 require_once('modules/HelpDesk/HelpDeskUtil.php');
+require_once('themes/'.$theme.'/layout_utils.php');
 
 
 //Retreive the list from Database
@@ -20,8 +21,6 @@ $tktresult = getTicketList();
 //Retreiving the no of rows
 $noofrows = mysql_num_rows($tktresult);
 
-
-echo $list_max_entries_per_page;
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
@@ -29,6 +28,7 @@ if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 }
 else
 {
+	
 	$start = 1;
 }
 //Setting the start value
@@ -38,6 +38,10 @@ $starttoendvaluecounter = $list_max_entries_per_page - 1;
 if($noofrows > $list_max_entries_per_page)
 {
 	$end = $start + $starttoendvaluecounter;
+	if($end > $noofrows)
+	{
+		$end = $noofrows;
+	}
 	$startvalue = 1;
 	$remainder = $noofrows % $list_max_entries_per_page;
 	if($remainder > 0)
@@ -47,16 +51,14 @@ if($noofrows > $list_max_entries_per_page)
 	elseif($remainder == 0)
 	{
 		$endval = $noofrows - $starttoendvaluecounter;
-	} 
+	}
 }
-echo '<BR>';
-echo 'end value is '.$endval;
-echo '         ';
-echo 'remainder is '.$tempendval;
+else
+{
+	$end = $noofrows;
+}
 
 
-echo '<BR>';
-echo 'start to endvalue counter is '.$starttoendvaluecounter;
 //Setting the next and previous value
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
@@ -67,7 +69,7 @@ if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 		$nextstartvalue = $tempnextstartvalue;
 	}
 	$tempprevvalue = $_REQUEST['start'] - $list_max_entries_per_page;
-	if($tempnextstartvalue  > 1)
+	if($tempprevvalue  > 0)
 	{
 		$prevstartvalue = $tempprevvalue;
 	}
@@ -77,12 +79,8 @@ else
 	if($noofrows > $list_max_entries_per_page)
 	{
 		$nextstartvalue = $list_max_entries_per_page + 1;
-	} 
+	}
 }
-echo '<BR>';
-echo 'next startvalue counter is '.$nextstartvalue;
-echo '<BR>';
-echo 'next previousvalue counter is '.$prevstartvalue;
 
 global $app_strings;
 global $mod_strings;
@@ -95,53 +93,66 @@ require_once($theme_path.'layout_utils.php');
 $xtpl=new XTemplate ('modules/HelpDesk/TicketsList.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
+$xtpl->assign("IMAGE_PATH",$image_path);
+
 echo get_module_title("HelpDesk", $mod_strings['LBL_MODULE_NAME'].": Home" , true);
+echo "<br>";
+echo get_form_header("Ticket List", "", false);
+
 $tkList = '';
 for ($i=$start; $i<=$end; $i++)
 {
-	$tkList .= '<tr  height=20>';
-	$subject = '<a href="index.php?action=TicketInfoView&module=HelpDesk&record='.mysql_result($tktresult,$i,"id").'">'.mysql_result($tktresult,$i,"title").'</a>';
-       $tkList .= '<td width="15%">'.$subject.'</td>';
-	$contact_name = '<a href="index.php?action=DetailView&module=Contacts&record='.mysql_result($tktresult,$i,"contact_id").'">'.mysql_result($tktresult,$i,"first_name").' '.mysql_result($tktresult,$i,"last_name").'</a>';  
-        $tkList .= '<td width="15%">'.$contact_name.'</td>';
-        $tkList .= '<td width="15%">'.mysql_result($tktresult,$i,"status").'</td>';
-        $tkList .= '<td width="15%">'.mysql_result($tktresult,$i,"groupname").'</td>';
-        $tkList .= '<td width="15%">'.mysql_result($tktresult,$i,"user_name").'</td>';
+	if (($i%2)==0)
+		$tkList .= '<tr height=20 class=evenListRow>';
+	else
+		$tkList .= '<tr height=20 class=oddListRow>';
+   		$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';	
+	$subject = '<a href="index.php?action=TicketInfoView&module=HelpDesk&record='.mysql_result($tktresult,$i-1,"id").'">'.mysql_result($tktresult,$i-1,"title").'</a>';
+       $tkList .= '<td style="padding:0px 3px 0px 3px;">'.$subject.'</td>';
+   		$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+	$contact_name = '<a href="index.php?action=DetailView&module=Contacts&record='.mysql_result($tktresult,$i-1,"contact_id").'">'.mysql_result($tktresult,$i-1,"first_name").' '.mysql_result($tktresult,$i-1,"last_name").'</a>';  
+        $tkList .= '<td style="padding:0px 3px 0px 3px;">'.$contact_name.'</td>';
+		$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $tkList .= '<td style="padding:0px 3px 0px 3px;">'.mysql_result($tktresult,$i-1,"status").'</td>';
+		$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $tkList .= '<td style="padding:0px 3px 0px 3px;">'.mysql_result($tktresult,$i-1,"groupname").'</td>';
+		$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $tkList .= '<td style="padding:0px 3px 0px 3px;">'.mysql_result($tktresult,$i-1,"user_name").'</td>';
+   		$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 	$tkList .= '</tr>';
-
 }
 $xtpl->assign("TICKETLIST", $tkList);
 if(isset($startvalue))
 {
-	$startoutput = '<a href="index.php?action=index&module=HelpDesk&start='.$startvalue.'">start</a>';
+	$startoutput = '<a href="index.php?action=index&module=HelpDesk&start='.$startvalue.'"><b>Start</b></a>';
 }
 else
 {
-	$startoutput = 'start';
+	$startoutput = '[ Start ]';
 }
 if(isset($endval))
 {
-	$endoutput = '<a href="index.php?action=index&module=HelpDesk&start='.$endval.'">end</a>';
+	$endoutput = '<a href="index.php?action=index&module=HelpDesk&start='.$endval.'"><b>End</b></a>';
 }
 else
 {
-	$endoutput = 'end';
+	$endoutput = '[ End ]';
 }
 if(isset($nextstartvalue))
 {
-	$nextoutput = '<a href="index.php?action=index&module=HelpDesk&start='.$nextstartvalue.'">next</a>';
+	$nextoutput = '<a href="index.php?action=index&module=HelpDesk&start='.$nextstartvalue.'"><b>Next</b></a>';
 }
 else
 {
-	$nextoutput = 'next';
+	$nextoutput = '[ Next ]';
 }
 if(isset($prevstartvalue))
 {
-	$prevoutput = '<a href="index.php?action=index&module=HelpDesk&start='.$prevstartvalue.'">prev</a>';
+	$prevoutput = '<a href="index.php?action=index&module=HelpDesk&start='.$prevstartvalue.'"><b>Prev</b></a>';
 }
 else
 {
-	$prevoutput = 'next';
+	$prevoutput = '[ Prev ]';
 }
 $xtpl->assign("Start", $startoutput);
 $xtpl->assign("End", $endoutput);
@@ -153,3 +164,4 @@ $xtpl->parse("main");
 $xtpl->out("main");
 
 ?>
+

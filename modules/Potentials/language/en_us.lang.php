@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/language/en_us.lang.php,v 1.4 2004/11/25 11:33:31 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/language/en_us.lang.php,v 1.5 2005/01/08 15:00:04 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -31,6 +31,7 @@ $mod_strings = Array(
 'LBL_INVITEE'=>'Contacts',
 'LBL_LIST_OPPORTUNITY_NAME'=>'Opportunity',
 'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
+'LBL_PRODUCT_NAME'=>'Product Name',
 'LBL_LIST_AMOUNT'=>'Amount',
 'LBL_LIST_DATE_CLOSED'=>'Expected Close',
 'LBL_LIST_SALES_STAGE'=>'Sales Stage',

@@ -58,7 +58,7 @@ class LoginHistory extends SugarBean {
 
 	function create_tables () {
 		$query = 'CREATE TABLE '.$this->table_name.' ( ';
-		$query .='login_id int(11) NOT NULL default 0 auto_increment';
+		$query .='login_id int(11) NOT NULL auto_increment';
 		$query .=', user_name varchar(25) NOT NULL';
 		$query .=', user_ip varchar(25) NOT NULL';
 		$query .=', login_time datetime NOT NULL default 0';

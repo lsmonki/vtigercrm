@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/language/en_us.lang.php,v 1.6 2005/01/04 12:09:45 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/language/en_us.lang.php,v 1.7 2005/01/06 16:08:03 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -64,6 +64,12 @@ $mod_strings = Array(
 'LBL_UPLOAD'=>'Upload',
 'LBL_FILE_NAME'=>'File Name',
 'LBL_SEND'=>'Send',
+
+'LBL_EMAIL_TEMPLATES'=>'Email Templates',
+'LBL_TEMPLATE_NAME'=>'Template Name',
+'LBL_DESCRIPTION'=>'Description',
+'LBL_EMAIL_TEMPLATES_LIST'=>'Email Templates  List',
+
 );
 
 ?>

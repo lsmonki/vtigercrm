@@ -70,6 +70,7 @@ $mod_strings = Array(
 'LBL_APP_ERR001' =>'Invalid Date in field %s!',
 'LBL_APP_ERR002' =>'start after end !',
 'LBL_APP_ERR003' =>'Missing Contact !',
+'LBL_APP_ERR004' =>'Missing Subject !',
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the appointment.",
 'DELETE_CONFIRMATION'=>"Are you sure you want to delete this appointment?",
 

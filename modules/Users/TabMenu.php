@@ -93,7 +93,7 @@ class Tab extends SugarBean {
 		global $app_strings;
 		
 		$query = 'CREATE TABLE '.$this->table_name.' ( ';
-		$query .='id int(10) NOT NULL default \'0\' auto_increment';
+		$query .='id int(10) NOT NULL auto_increment';
 		$query .=', name varchar(30) NOT NULL';
 		$query .=', presence tinyint(1) NOT NULL default \'0\'';
 		$query .=', sequence int(10) default NULL';
@@ -123,7 +123,7 @@ class Tab extends SugarBean {
 		mysql_query("insert into tabmenu values('','Emails',1,10,'Emails','','',0)");
 		mysql_query("insert into tabmenu values('','Meetings',1,11,'Meetings','','',0)");
 		mysql_query("insert into tabmenu values('','Tasks',1,12,'Tasks','','',0)");
-		mysql_query("insert into tabmenu values('','MessageBoard',1,13,'MessageBoard','','',0)");
+		//mysql_query("insert into tabmenu values('','MessageBoard',1,13,'MessageBoard','','',0)");
 		mysql_query("insert into tabmenu values('','HelpDesk',1,14,'HelpDesk','','',0)");
 		mysql_query("insert into tabmenu values('','Products',1,15,'Products','','',0)");
 		mysql_query("insert into tabmenu values('','Calendar',1,16,'Calendar','','',0)");

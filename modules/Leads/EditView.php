@@ -107,9 +107,9 @@ $GROUP_SELECT_OPTION = '<select name="assigned_group_name">';
                    do
                    {
                     $groupname=$nameArray["name"];
-                    $GROUP_SELECT_OPTION .= '<option value=';
+                    $GROUP_SELECT_OPTION .= '<option value="';
                     $GROUP_SELECT_OPTION .=  $groupname;
-                    $GROUP_SELECT_OPTION .=  '>';
+                    $GROUP_SELECT_OPTION .=  '">';
                     $GROUP_SELECT_OPTION .= $nameArray["name"];
                     $GROUP_SELECT_OPTION .= '</option>';
                    }while($nameArray = mysql_fetch_array($result));

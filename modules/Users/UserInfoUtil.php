@@ -46,7 +46,7 @@ function fetchUserGroups($userid)
         $result = mysql_query($sql);
         //store the groupnames in a comma separated string
         //echo 'count is ' .count($result);
-	$groupname=  mysql_result($result,0,"groupname");
+	if(mysql_num_rows($result)!=0)	$groupname=  mysql_result($result,0,"groupname");
 	return $groupname;
 }
 
@@ -213,10 +213,10 @@ if(isset($_REQUEST['actiontype']))
   }
 }
 
-function fetchWordTemplateList()
+function fetchWordTemplateList($module)
 {
   
-  $sql_word = "select filename from wordtemplatestorage"; 
+  $sql_word = "select filename from wordtemplatestorage where module ='".$module."'" ; 
   $result=mysql_query($sql_word);
   return $result;
 }
@@ -231,9 +231,40 @@ function fetchEmailTemplateInfo($templateName)
         return $result;
 }
 
+//template file 
+function substituteTokens($filename,$globals)
+{
+	//$globals = implode(",\\$",$tokens);
+    
+	if (!$filename)
+	 {
+		 $filename = $this->filename;
+	 }
+	
+    if (!$dump = file ($filename))
+	 {
+     		 return 0;
+    	 }	
 
-
-
+      require_once($_SERVER['DOCUMENT_ROOT'] .'/modules/Emails/templates/testemailtemplateusage.php');
+      eval ("global $globals; ");
+    while (list($key,$val) = each($dump))
+    {
+	$replacedString ;
+      if (ereg( "\$",$val)) 
+	{
+        $val = addslashes ($val);      
+//	echo 'initial value ' .$val;
+//	echo "<br>";
+        eval(  "\$val = \"$val\";");
+        $val = stripslashes ($val);
+//	echo 'replaced value '.$val;
+//	echo "<br>";
+	$replacedString .= $val;
+      }
+    }
+	return $replacedString;
+}
 
 
 

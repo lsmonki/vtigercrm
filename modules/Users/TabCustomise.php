@@ -178,13 +178,13 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
-      <td class="formHeader">Customize Tabs </td>
+      <td class="formHeader"><?php echo $mod_strings['LBL_CUSTOMISE_TABS']; ?> </td>
     </tr>
   </table>
   <br>
   <table width="85%" border=0 cellPadding=0 cellSpacing=0>
     <tr>
-      <td class="formSecHeader">1. Choose Tabs:</td>
+      <td class="formSecHeader">1.<?php echo $mod_strings['LBL_CHOOSE_TABS']; ?>:</td>
     </tr>
     <tr>
       <td><table width="100%" border=0 cellpadding=2 cellspacing=0 class="secContent">
@@ -193,7 +193,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
               </div></td>
             <td> <br><table width="98%" border="0" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td class="formSecHeader">Available Tabs</td>
+                  <td class="formSecHeader"><?php echo $mod_strings['LBL_AVAILABLE_TABS']; ?></td>
                 </tr>
                 <tr>
                   <td> <table id="fieldlist" width="100%" border="0" cellpadding="2" cellspacing="2" onMouseOver="itemMouseOver(this.id)" onMouseOut="itemMouseOut(this.id)">
@@ -258,7 +258,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
                     </td>
                 </tr>
                 <tr>
-                  <td class="formSecHeader">Selected Tabs</td>
+                  <td class="formSecHeader"><?php echo $mod_strings['LBL_SELECTED_TABS']; ?></td>
                 </tr>
                 <tr>
                   <td><table border="0" width="100%" cellspacing="0" cellpadding="0">

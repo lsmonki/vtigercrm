@@ -48,10 +48,10 @@ $mod_strings = Array(
 'ACCOUNTCUSTOMFIELDS'=>'Account Custom Fields',
 'CONTACTCUSTOMFIELDS'=>'Contact Custom Fields',
 'OPPORTUNITYCUSTOMFIELDS'=>'Opportunity Custom Fields',
-'EDITLEADPICKLISTVALUES'=>'Edit Lead PickList Values',
-'EDITACCOUNTPICKLISTVALUES'=>'Edit Account PickList Values',
-'EDITCONTACTPICKLISTVALUES'=>'Edit Contact PickList Values',
-'EDITOPPORTUNITYPICKLISTVALUES'=>'Edit Opportunity PickList Values',
+'EDITLEADPICKLISTVALUES'=>'Edit Lead PickList ',
+'EDITACCOUNTPICKLISTVALUES'=>'Edit Account PickList ',
+'EDITCONTACTPICKLISTVALUES'=>'Edit Contact PickList ',
+'EDITOPPORTUNITYPICKLISTVALUES'=>'Edit Opportunity PickList ',
 
 // Added for Release vtigerCRM 3.2 PATCH 1.0
 //Settings/index.php
@@ -86,7 +86,7 @@ $mod_strings = Array(
 'LBL_PICK_LIST_VALUES'=>'* Pick List Values: ',
 
 //Settings/EditComboField.php
-'EditPickListValues'=>'Edit Pick List Values',
+'EditPickListValues'=>'Edit Pick List ',
 
 //Settings/EditField.html
 'LBL_FIELD_INFORMATION'=>'Field Information:',
@@ -105,7 +105,7 @@ $mod_strings = Array(
 
 //added for patch2
 'USERGROUPLIST'=>'Groups',
-'EMAILTEMPLATES'=>'EmailTemplates',
+'EMAILTEMPLATES'=>'Email Templates',
 'WORDINTEGRATION'=>'Word Templates'
 );
 

@@ -59,10 +59,11 @@
        echo $this->error($lang['ReadOnlyAppoint']);
      }
      
-     echo "<form name=\"appnew\" action=\"". $callink ."Save\" method=\"post\">\n";
+     echo "<form name=\"appnew\" action=\"index.php\" method=\"post\">\n";
      echo "<input type=\"hidden\" name=\"module\" value=\"Calendar\">\n";
      echo "<input type=\"hidden\" name=\"return_module\" value=\"Calendar\">\n";
      echo "<input type=\"hidden\" name=\"return_action\" value=\"calendar\">\n";
+     echo "<input type=\"hidden\" name=\"action\">\n";
      $this->addHidden("repeat","0");
      $this->addHidden("r_ignore","0");
      $this->addHidden("a_start","");
@@ -73,6 +74,7 @@
      }
      if ( isset($this->obj->id) && isset($this->obj->id) != "" ) {
        $this->addHidden("record",$this->obj->id);
+       $this->addHidden("id",$this->obj->id);
      }
 
 
@@ -206,7 +208,6 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      echo "<input type=\"text\" name=\"contact_name\" value=\"".$this->obj->getContactName($this->obj->contact_id)."\" size=\"20\" maxlength=\"40\" readonly>";
 
 	echo "<input type=\"hidden\" name=\"contact_id\" value=\"".$this->obj->contact_id."\">";
-	echo "<input type=\"hidden\" name=\"id\" value=\"".$this->obj->id."\">";
      //echo " </td>\n";
      echo " &nbsp;<input title='".$app_strings['LBL_SELECT_CONTACT_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_SELECT_CONTACT_BUTTON_KEY']."' type='button' class='button' value='  ".$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=appnew&form_submit=false\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
      //echo " </td>\n";

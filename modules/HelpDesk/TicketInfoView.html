@@ -12,7 +12,8 @@
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <tr>
     <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Tickets.gif" border="0"></td>
-    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">Ticket:  {NAME}</td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_TICKET}{MOD.LBL_COLON}  {NAME}</td>
+	 <td nowrap class='bodySmall' align='right'>[ <A href={PRINT_URL}>{APP.LNK_PRINT}</A> ]</td>
 	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
 </tr>
 <tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
@@ -31,6 +32,7 @@
 			<input type="hidden" name="return_action" value="">						
 		<td><input title="{APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{APP.LBL_EDIT_BUTTON_KEY}" class="button" onclick="this.form.action.value='EditTicket'" type="submit" name="button" value="  {APP.LBL_EDIT_BUTTON_LABEL}  " ></td>
 		<td><input title="{APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{APP.LBL_DELETE_BUTTON_KEY}" class="button" onclick="this.form.action.value='DeleteTicket'; this.form.return_action.value='index'; this.form.return_id.value=''; this.form.return_module.value='HelpDesk'" type="submit" name="button" value="  {APP.LBL_DELETE_BUTTON_LABEL}  "></td>
+		<td><input title="History" accessKey="History" class="button" onclick="this.form.action.value='TicketHistory'" type="submit" name="button" value="  History  " ></td>
 		</tr></table>
 	</td>
 	<td></td>
@@ -52,12 +54,12 @@
 	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_CONTACT_NAME}</td>
         <td width="30%">{CONTACTNAME}</td>
 	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">Priority</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_PRIORITY}</td>
 	<td width="30%">{PRIORITYOPTIONS}</td>
-	<td width="20%" valign="top" class="dataLabel">Status</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_STATUS}</td>
 	<td width="30%">{STATUSOPTIONS}</td>
 	</tr><tr>
-	<td width="20%" class="dataLabel">Category</td>
+	<td width="20%" class="dataLabel">{MOD.LBL_CATEGORY}</td>
 	<td width="30%">{CATEGORYOPTIONS}</td>
 	</tr><tr>
 	<td width="20%" valign="top" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_SUBJECT}</td>
@@ -67,9 +69,6 @@
 	<td colspan="4">{DESCRIPTION}</td>
 </tr></table>
 </td></tr></table>
-      </td>
-    <td align="left"></td>
- </tr></table>
 </form>
 {JAVASCRIPT}
 <!-- END: main -->

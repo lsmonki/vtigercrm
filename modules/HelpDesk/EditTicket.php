@@ -120,7 +120,12 @@ elseif($parent_type == 'Products')
 {
 	$pt_type = "Product Name";
 	$xtpl->assign("PRODUCTSELECTED", "selected");
-	$xtpl->assign("PARENT_ID", $parent_id);
+	if(isset($parent_id) && $parent_id != '')
+	{
+		$pt_rst=mysql_query("select productname from products where id='".$parent_id."'");
+		$xtpl->assign("ENTITYNAME", mysql_result($pt_rst,0,'productname'));
+		$xtpl->assign("PARENT_ID", $parent_id);
+	}
 }
 
 //Assigining the contact Name

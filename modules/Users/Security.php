@@ -431,13 +431,13 @@ class Security extends SugarBean {
 
 
 	 $table_name="email_attachments";
-                $query = "create table " .$table_name ." (id int(11) NOT NULL auto_increment,date_entered datetime NOT NULL,parent_type varchar(100), parent_id varchar(100) NOT NULL,data longblob NOT NULL,filename varchar(50) NOT NULL,filesize varchar(50) NOT NULL,filetype varchar(20) NOT NULL,PRIMARY KEY (id,filename ) )";
+                $query = "create table " .$table_name ." (date_entered datetime NOT NULL,parent_type varchar(100), parent_id varchar(100) NOT NULL,data longblob NOT NULL,filename varchar(50) NOT NULL,filesize varchar(50) NOT NULL,filetype varchar(20) NOT NULL,PRIMARY KEY (parent_id,filename ) )";
                 $this->log->info($query);
                 mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
-                $this->create_index("create index idx_email_attachments_name on email_attachments (id,filename)");
+                $this->create_index("create index idx_email_attachments_name on email_attachments (parent_id,filename)");
 
 
-		$query = "create table wordtemplatestorage(filename varchar(100) NOT NULL,`date_entered` datetime NOT NULL default '0000-00-00 00:00:00',`parent_type` varchar(50) NOT NULL default '',`parent_id` varchar(100) NOT NULL default '',`data` longblob NOT NULL,`description` TEXT,`filesize` varchar(50) NOT NULL default '',`filetype` varchar(20) NOT NULL default '',PRIMARY KEY(filename))";
+		$query = "create table wordtemplatestorage(filename varchar(100) NOT NULL,`module` varchar(30) NOT NULL,`date_entered` datetime NOT NULL default '0000-00-00 00:00:00',`parent_type` varchar(50) NOT NULL default '',`parent_id` varchar(100) NOT NULL default '',`data` longblob NOT NULL,`description` TEXT,`filesize` varchar(50) NOT NULL default '',`filetype` varchar(20) NOT NULL default '',PRIMARY KEY(filename))";
 	 	$this->log->info($query);
                 mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
                 $this->create_index("create index idx_wordtemplatestorage on wordtemplatestorage (filename)");

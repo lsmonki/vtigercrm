@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.8 2004/12/30 06:52:49 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.12 2005/01/10 10:40:43 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -126,7 +126,7 @@ $mod_strings = Array(
 'LBL_CREATE_NEW_ROLE'=>'Create New Role',
 
 'LBL_CREATE_NEW_ROLE'=>'Create New Role',
-'LBL_INDICATES_REQUIRED_FIELD'=>'Indicates required field',
+'LBL_INDICATES_REQUIRED_FIELD'=>'Indicates Required Field',
 'LBL_NEW_ROLE'=>'New Role',
 'LBL_PARENT_ROLE'=>'Parent Role',
 
@@ -157,6 +157,54 @@ $mod_strings = Array(
 'LBL_FILE'=> 'File Name',
 'LBL_UPLOAD'=>'Upload File',
 'LBL_ATTACH_FILE'=>'Attach Word Template ',
+'LBL_EMAIL_TEMPLATES'=>'Email Templates',
+'LBL_TEMPLATE_NAME'=>'Template Name',
+'LBL_DESCRIPTION'=>'Description',
+'LBL_EMAIL_TEMPLATES_LIST'=>'Email Templates  List',
+
+'LBL_COLON'=>':',
+'LBL_EMAIL_TEMPLATE'=>'Email Template',
+'LBL_NEW_TEMPLATE'=>'New Template',
+'LBL_USE_MERGE_FIELDS_TO_EMAIL_CONTENT'=>'Use merge fields to personalize your email content. You can add substitute text to any merge field.',
+'LBL_AVAILABLE_MERGE_FIELDS'=>'Available Merge Fields',
+'LBL_SELECT_FIELD_TYPE'=>'Select Field Type',
+'LBL_SELECT_FIELD'=>'Select Field',
+'LBL_MERGE_FIELD_VALUE'=>'Copy Merge Field Value',
+'LBL_CONTACT_FIELDS'=>'Contact Fields',
+'LBL_LEAD_FIELDS'=>'Lead Fields',
+'LBL_COPY_AND_PASTE_MERGE_FIELD'=>'Copy and paste the merge field value into your template below.',
+'LBL_EMAIL_TEMPLATE_INFORMATION'=>'Email Template Information:',
+'LBL_FOLDER'=>'Folder:',
+'LBL_PERSONAL'=>'Personal',
+'LBL_PUBLIC'=>'Public',
+'LBL_TEMPLATE_NAME'=>'Template Name:',
+'LBL_SUBJECT'=>'Subject',
+'LBL_BODY'=>'Email Body',
+
+// Added fields in createnewgroup.php
+'LBL_CREATE_NEW_GROUP'=>'Create New Group',
+'LBL_NEW_GROUP'=>'New Group',
+'LBL_GROUP_NAME'=>'Group Name',
+'LBL_DESCRIPTION'=>'Description',
+
+// Added fields in detailViewmailtemplate.html,listgroupmembers.php,listgroups.php
+'LBL_DETAIL_VIEW_OF_EMAIL_TEMPLATE'=>'Detail View of Email Template',
+'LBL_GROUP_MEMBERS_LIST'=>'Group members list',
+'LBL_GROUPS'=>'Groups',
+'LBL_WORD_TEMPLATES'=>'Word Template',
+'LBL_NEW_WORD_TEMPLATE'=>'New Word Template',
+
+// Added fields in TabCustomise.php,html and UpdateTab.php,html
+'LBL_CUSTOMISE_TABS'=>'Customize Tabs',
+'LBL_CHOOSE_TABS'=>'Choose Tabs',
+'LBL_AVAILABLE_TABS'=>'Available Tabs',
+'LBL_SELECTED_TABS'=>'Selected Tabs',
+'LBL_USER'=>'User',
+'LBL_TAB_MENU_UPDATED'=>'Tab Menu Updated! kindly go to ',
+'LBL_TO_VIEW_CHANGES'=>' to view the changes',
+
+// Added fields in binaryfilelist.php
+'LBL_OERATION'=>'Operation',
 
 );
 

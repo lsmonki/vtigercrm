@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.8 2004/12/29 05:21:55 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.10 2005/01/06 08:58:00 jack Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -674,8 +674,20 @@ return $exists;
                 return $query;
         }
 
+
+
+function getColumnNames_Acnt()
+ {
+ $result = $this->db->query("SHOW COLUMNS FROM Accounts");
+ $i=0;
+ while ($myrow = mysql_fetch_row($result))
+ {
+         $copy[$i]=$myrow;
+         $i++;
+ }
+ return $copy;
 }
 
-
+}
 
 ?>

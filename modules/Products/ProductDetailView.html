@@ -19,8 +19,9 @@
 <!-- BEGIN: main -->
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <tr>
-    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Tickets.gif" border="0"></td>
-    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">Product:  {NAME}</td>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}product.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_PRODUCT}{MOD.LBL_COLON} {NAME}</td>
+        <td nowrap class='bodySmall' align='right'>[ <A href={PRINT_URL}>{APP.LNK_PRINT}</A> ]</td>
 	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
 </tr>
 <tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
@@ -33,6 +34,7 @@
 			<form name="DetailView" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Products">
 			<input type="hidden" name="action">
+			<input type="hidden" name="mode">
 			<input type="hidden" name="id" value={PRODUCTID}>
 			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
 			<input type="hidden" name="return_id" value="{RETURN_ID}">
@@ -73,9 +75,6 @@
 	<td colspan="4">{DESCRIPTION}</td>
 </tr></table>
 </td></tr></table>
-      </td>
-    <td align="left"></td>
- </tr></table>
 </form>
 {JAVASCRIPT}
 <!-- END: main -->

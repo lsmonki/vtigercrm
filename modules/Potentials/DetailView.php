@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/DetailView.php,v 1.8 2004/12/16 10:28:55 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/DetailView.php,v 1.10 2005/01/08 14:59:29 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -65,6 +65,8 @@ $xtpl->assign("DATE_CLOSED", $focus->date_closed);
 $xtpl->assign("NEXT_STEP", $focus->next_step);
 $xtpl->assign("SALES_STAGE", $focus->sales_stage);
 $xtpl->assign("PROBABILITY", $focus->probability);
+$xtpl->assign("PRODUCT_NAME", $focus->product_name);
+$xtpl->assign("PRODUCT_ID", $focus->product_id);
 $xtpl->assign("DESCRIPTION", nl2br($focus->description));
 $xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
 $xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
@@ -106,6 +108,13 @@ $focus_notes_list = & $focus->get_notes();
 
 include('modules/Activities/SubPanelView.php');
 
-echo "</td></tr>\n";
+//echo "</td></tr>\n";
+
+echo "<BR>\n";
+echo "<BR>\n";
+
+require_once('include/RelatedTicketListUtil.php');
+$list = getTicketList($focus->id, "Opportunities", $image_path,$theme);
+echo $list;
 
 ?>

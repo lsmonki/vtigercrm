@@ -1696,16 +1696,16 @@ Function asEmail($adr,$email,$name,$subject = "TUTOS") {
      echo " <td class=\"desc\" colspan=\"". abs($t1) ."\"><label for=\"OK\">". $lang['InputOk'] ."</label>&nbsp;</td>\n";
    }
    if ( $f1 > 0 ) {
-     echo " <td colspan=\"".$f1."\">&nbsp;<input id=\"OK\" name=\"OK\" class=\"button\" type=\"submit\" value=\"". $mod_strings['LBL_SAVE'] ."\" title=\"". $mod_strings['LBL_SAVE'] ."\" /></td>\n";
+     echo " <td colspan=\"".$f1."\">&nbsp;<input id=\"OK\" name=\"OK\" class=\"button\" type=\"submit\" value=\"". $mod_strings['LBL_SAVE'] ."\" onclick=\"this.form.action.value='Save'\" name=\"button\" title=\"". $mod_strings['LBL_SAVE'] ."\" /></td>\n";
    }
    if ( $t2 > 0 ) {
      echo " <td class=\"desc\" colspan=\"".$t2."\" align=\"right\">&nbsp;<label for=\"RESET\">". $lang['Reset'] ."</label>&nbsp;</td>\n";
    }
    if ( $f2 > 0 ) {
-     echo " <td colspan=\"".$f2."\">&nbsp;<input id=\"RESET\" name=\"RESET\" class=\"button\" type=\"reset\" value=\"". $mod_strings['LBL_RESET'] ."\" title=\"". $mod_strings['LBL_RESET']."\" /></td>\n";
+     echo " <td colspan=\"".$f2."\">&nbsp;<input id=\"RESET\" name=\"RESET\" class=\"button\" type=\"reset\" value=\"". $mod_strings['LBL_RESET'] ."\" onclick=\"this.form.module.value='Calendar'; this.form.action.value='calendar'\" title=\"". $mod_strings['LBL_RESET']."\" /></td>\n";
    }
    if ( $f3 > 0 ) {
-     echo " <td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Calendar'; this.form.return_action.value='calendar'; this.form.action.value='Delete'; return confirm('$mod_strings[DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>";
+     echo " <td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Calendar'; this.form.return_action.value='calendar'; this.form.action.value='Delete'; return confirm('$mod_strings[DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>\n";
    }
 
    if ( $post > 0 ) {

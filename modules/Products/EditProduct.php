@@ -24,7 +24,7 @@ require_once($theme_path.'layout_utils.php');
 
 //Retreiving the ticket id
 $productid = $_REQUEST['id'];
-echo $productid;
+//echo $productid;
 
 //Retreiving the ticket info from database
 $query = "select * from products where id='".$productid."'";

@@ -1,4 +1,13 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
 require_once('database/DatabaseConnection.php');
 require_once('include/utils.php');
 $product_name;
@@ -57,7 +66,7 @@ if(isset($mode) && $mode != '' && $mode == 'Edit')
 {
 	$productid = $_REQUEST['id'];
 	$sql = "update products set productname='".$product_name."',category='".$product_code."',product_description='".$product_description."',qty_per_unit='".$product_qtyperunit."',unit_price='".$product_unitprice."',commissionrate='".$product_commissionrate."',discontinued='".$product_active."' where id=".$productid;
- 
+	mysql_query($sql);
 }
 else
 {

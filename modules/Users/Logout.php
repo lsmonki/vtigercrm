@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Logout.php,v 1.5 2004/12/30 06:57:47 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Logout.php,v 1.6 2005/01/08 13:15:17 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -40,20 +40,21 @@ session_destroy();
 
 define("IN_LOGIN", true);
 	
- define('IN_PHPBB', true);
- include($phpbb_root_path . 'extension.inc');
- include($phpbb_root_path . 'common.'.$phpEx);
+// define('IN_PHPBB', true);
+// include($phpbb_root_path . 'extension.inc');
+// include($phpbb_root_path . 'common.'.$phpEx);
 
 //
 // Set page ID for session management
 //
-$userdata = session_pagestart($user_ip, PAGE_LOGIN);
-init_userprefs($userdata);
+//$userdata = session_pagestart($user_ip, PAGE_LOGIN);
+//init_userprefs($userdata);
 //
 // End session management
 //
 
 // session id check
+/*
 if (!empty($HTTP_POST_VARS['sid']) || !empty($HTTP_GET_VARS['sid']))
 {
         $sid = (!empty($HTTP_POST_VARS['sid'])) ? $HTTP_POST_VARS['sid'] : $HTTP_GET_VARS['sid'];
@@ -70,7 +71,7 @@ if( $userdata['session_logged_in'] )
 		}
 
 	}
-
+*/
 // go to the login screen.
 header("Location: index.php?action=Login&module=Users");
 ?>

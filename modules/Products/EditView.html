@@ -17,10 +17,11 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
+<form name="EditView" method="POST" action="index.php" onSubmit="return check4null(EditView);">
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <tr>
-    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Tickets.gif" border="0"></td>
-    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">New Product:  {NAME}</td>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}product.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_NEW_PRODUCT}{MOD.LBL_COLON}  {NAME}</td>
 	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
 </tr>
 <tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
@@ -30,15 +31,17 @@
 	<td>
 		<table cellpadding="0" cellspacing="5" border="0">
 		<tr>
-			<form name="EditView" method="POST" action="index.php">
+        <form name="EditView" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Products">
+			<input type="hidden" name="record" value="">
 			<input type="hidden" name="action">
+			<input type="hidden" name="mode" value="{MODE}">
 			<input type="hidden" name="id" value={PRODUCTID}>
 			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
 			<input type="hidden" name="return_id" value="{RETURN_ID}">
 			<input type="hidden" name="return_action" value="{RETURN_ACTION}">						
 		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
-		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
+		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}';cancelForm(this.form)" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
 		</tr></table>
 	</td>
 	<td></td>
@@ -51,7 +54,7 @@
 <td>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2">
 	<tr>
-	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_NAME}</td>
+	<td width="20%" class="dataLabel"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_PRODUCT_NAME}</td>
 	<td width="30%"><input name='productname' type="text" tabindex='1' size='35' maxlength='40' value="{PRODUCT_NAME}"></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_CODE}</td>
 	<td width="30%"><input name='productcode' type="text" tabindex='2' size='15' maxlength='10' value="{PRODUCT_CODE}"></td>
@@ -73,8 +76,42 @@
 	<td colspan="4"><textarea name='description' tabindex='7' cols="80" rows="8">{DESCRIPTION}</textarea></td>
 </tr></table>
 </td></tr></table>
-<!--a href="javascript:productImg();">Attach Product Image</a>
 </form>
+<script language="JavaScript" type="text/javascript" src="include/general.js"></script>
+<script language="JavaScript" type="text/javascript">
+function set_focus()
+{
+}
+function cancelForm(frm)
+{
+	window.history.back();
+}
+	
+function trim(s) 
+{                                                                                                                     
+while (s.substring(0,1) == " ") {
+s = s.substring(1, s.length);
+}
+return s;
+} 
+
+function check4null(form)
+{
+  var isError = false;
+  var errorMessage = "";
+  if (trim(form.productname.value) =='') {
+			 isError = true;
+			 errorMessage += "\n Product Name";
+			 form.productname.focus();
+  }
+  if (isError == true) {
+			 alert("Missing required fields: " + errorMessage);
+			 return false;
+  }
+  return true;
+}
+</script>
+<!--a href="javascript:productImg();">Attach Product Image</a>
 <script>
 function productImg()
 {

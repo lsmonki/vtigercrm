@@ -1087,7 +1087,11 @@ class PHPMailer
             $this->SetError($this->Lang("file_open") . $path);
             return "";
         }
-        $file_buffer = fread($fd, filesize($path));
+        if(!@$file_buffer = fread($fd, filesize($path)))
+	{
+//            $this->SetError($this->Lang("file_open") . $path);
+//            return "";
+	}
         $file_buffer = $this->EncodeString($file_buffer, $encoding);
         fclose($fd);
 

@@ -41,6 +41,16 @@
    <TD></TD>	
    <TD><INPUT TYPE="submit" VALUE="<?php echo $mod_strings['LBL_UPLOAD']; ?>"></TD>
   </TR>
+  <TR>
+   <TD><div align="right"><?php echo $mod_strings['LBL_MODULENAMES']; ?> </TD>
+   <TD><SELECT name="target_module">
+	<option>Leads</option>
+	<option>Accounts</option>
+	<option>Contacts</option>
+	</SELECT>
+	</TD> 
+  </TR>
+ 
  </TABLE>
 		
 </FORM>

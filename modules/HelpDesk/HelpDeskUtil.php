@@ -31,7 +31,15 @@ return $output;
 
 function getTicketList()
 {
-	$query = "select troubletickets.id,groupname,contact_id,priority,troubletickets.status,parent_id,parent_type,category,troubletickets.title,troubletickets.description,update_log,version_id,troubletickets.date_created,troubletickets.date_modified,troubletickets.assigned_user_id,contacts.first_name,contacts.last_name,users.user_name from troubletickets left join contacts on troubletickets.contact_id=contacts.id  left join users on troubletickets.id=users.id where troubletickets.deleted=0 and troubletickets.status !='Closed'";
+	$query = "select troubletickets.id,groupname,contact_id,priority,troubletickets.status,parent_id,parent_type,category,troubletickets.title,troubletickets.description,update_log,version_id,troubletickets.date_created,troubletickets.date_modified,troubletickets.assigned_user_id,contacts.first_name,contacts.last_name,users.user_name from troubletickets left join contacts on troubletickets.contact_id=contacts.id  left join users on troubletickets.assigned_user_id=users.id where troubletickets.deleted=0 and troubletickets.status !='Closed'";
+	$result = mysql_query($query);
+	return $result;
+
+}
+
+function getFaqList()
+{
+	$query = "select faq.id,question,answer,category,author_id,users.id,users.user_name from faq left join users on faq.author_id=users.id where faq.deleted ='0'";
 	$result = mysql_query($query);
 	return $result;
 

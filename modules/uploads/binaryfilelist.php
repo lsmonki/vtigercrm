@@ -34,10 +34,9 @@ global $app_strings;
 //$list .= '<td vAlign="middle" class="formHeader" align="left" noWrap width="100%" height="15">Attachment</td></tr></tbody></table>';
 
 $list = '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
-
 $list .= '<tr class="ModuleListTitle" height=20>';
-
-$list .= '';
+$list .= '<td>'.$app_strings['LBL_OPERATION'].'</td>';
+$list .= '    ';
 
 $list .= '<td class="moduleListTitle" height="21">';
 
@@ -77,7 +76,7 @@ if ($i%2==0)
 $trowclass = 'evenListRow';
 else
 $trowclass = 'oddListRow';
-	$list .= '<tr class="'. $trowclass.'"><td width="34%" height="21" style="padding:0px 3px 0px 3px;"><p style="margin-left: 10; margin-right: 10">';
+	$list .= '<tr class="'. $trowclass.'"><td><a href="index.php?module=uploads&action=deleteattachments&filename='.$row["filename"] .'&record='.$_REQUEST["record"] .'">Del</td> <td width="34%" height="21" style="padding:0px 3px 0px 3px;"><p style="margin-left: 10; margin-right: 10">';
 
 	 $list .= $row["filename"]; 
 

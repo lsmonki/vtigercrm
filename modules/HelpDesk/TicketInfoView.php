@@ -39,6 +39,9 @@ require_once($theme_path.'layout_utils.php');
 $xtpl=new XTemplate ('modules/HelpDesk/TicketInfoView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
+$xtpl->assign("THEME", $theme);
+$xtpl->assign("IMAGE_PATH", $image_path);
+$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
 $xtpl->assign("NAME", mysql_result($ticketresult,0,'title'));
 $xtpl->assign("RETURN_MODULE", $_REQUEST['HelpDesk']);
@@ -70,6 +73,11 @@ elseif($parent_type == 'Opportunities')
 elseif($parent_type == 'Products')
 {
 	$pt_type = "Product Name";
+	if(isset($parent_id) && $parent_id != '')
+	{
+		$pt_rst=mysql_query("select productname from products where id='".$parent_id."'");
+		$xtpl->assign("ENTITYNAME", mysql_result($pt_rst,0,'productname'));
+	}
 }
 $xtpl->assign("ENTITY", $pt_type);
 $last_name = mysql_result($ticketresult,0,'last_name');

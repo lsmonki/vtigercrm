@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Tasks/Task.php,v 1.6 2004/11/17 11:49:42 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Tasks/Task.php,v 1.8 2005/01/10 08:18:55 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -283,6 +283,93 @@ class Task extends SugarBean {
           mysql_query("update tasks set deleted=1 where id = '" . $id . "'");
         }
 
+    function getCount($user_name) 
+    {
+        $query = "select count(*) from tasks inner join users on users.id=tasks.assigned_user_id where user_name='" .$user_name ."' and tasks.deleted=0";
+
+//       echo "\n Query is " .$query ."\n";
+        $result = $this->db->query($query,true,"Error retrieving contacts count");
+        $rows_found =  $this->db->getRowCount($result);
+        $row = $this->db->fetchByAssoc($result, 0);
+
+    
+        return $row["count(*)"];
+    }       
+
+    function get_tasks($user_name,$from_index,$offset)
+    {   
+         $query = "select tasks.*, contacts.first_name cfn, contacts.last_name cln from tasks inner join users on users.id=tasks.assigned_user_id left join contacts on contacts.id=tasks.contact_id  where user_name='" .$user_name ."' and tasks.deleted=0 limit " .$from_index ."," .$offset;
+
+    return $this->process_list_query1($query);
+    
+    }
+
+
+    function process_list_query1($query)
+    {
+        $result =& $this->db->query($query,true,"Error retrieving $this->object_name list: ");
+        $list = Array();
+        $rows_found =  $this->db->getRowCount($result);
+        if($rows_found != 0)
+        {
+               for($index = 0 , $row = $this->db->fetchByAssoc($result, $index); $row && $index <$rows_found;$index++, $row = $this->db->fetchByAssoc($result, $index))
+            
+            {
+                foreach($this->list_fields as $field)
+                {
+                    if (isset($row[$field])) {
+                        $this->$field = $row[$field];
+                    }   
+                    else     
+                    {   
+                            $this->$field = "";
+                    }   
+                }   
+    
+    // TODO OPTIMIZE THE QUERY ACCOUNT NAME AND ID are set separetly for every contacts and hence 
+    // account query goes for ecery single account row
+
+       //         $this->fill_in_additional_list_fields();
+		//$this->account_name = $row['accountname'];
+		//$this->account_id = $row['accountid'];
+        $this->contact_name = return_name($row, 'cfn', 'cln');
+        
+    
+                    $list[] = $this;
+                }
+        }   
+
+        $response = Array();
+        $response['list'] = $list;
+        $response['row_count'] = $rows_found;
+        $response['next_offset'] = $next_offset;
+        $response['previous_offset'] = $previous_offset;
+
+
+
+        return $response;
+    }
+	
+
+function save_relationship_changes($is_update)
+    {
+
+		$query = "UPDATE tasks  set contact_id=null where id='". $this->id ."' and deleted=0";
+		$this->db->query($query,true,"Error clearing contact to task relationship: ");
+
+     //  echo "\n Quwry is " .$query; 
+      // echo "\ncontact_id is " .$this->contact_id; 
+
+    	
+    	if($this->contact_id != "")
+    	{
+          $query = "UPDATE tasks  set contact_id='" .$this->contact_id ."' where id='" .$this->id ."' and deleted=0";
+          //echo $query;  
+	      $this->db->query($query,true,"Error setting contact to task relationship: "."<BR>$query");
+    	}
+
+    }
+    
 
 
 	function get_list_view_data(){
