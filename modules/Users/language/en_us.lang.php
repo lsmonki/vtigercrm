@@ -81,6 +81,10 @@ $mod_strings = Array(
 'LBL_LOGIN_BUTTON_TITLE'=>'Login [Alt+L]',
 'LBL_LOGIN_BUTTON_KEY'=>'L',
 'LBL_LOGIN_BUTTON_LABEL'=>'Login',
+'LBL_LOGIN_HISTORY_BUTTON_TITLE'=>'Login History [Alt+H]',
+'LBL_LOGIN_HISTORY_BUTTON_KEY'=>'H',
+'LBL_LOGIN_HISTORY_BUTTON_LABEL'=>'Login History',
+
 
 'LBL_CHANGE_PASSWORD'=>'Change Password',
 'LBL_OLD_PASSWORD'=>'Old Password:',

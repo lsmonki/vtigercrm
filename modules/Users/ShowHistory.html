@@ -1,0 +1,54 @@
+<!--
+
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Users.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_USER}  {FIRST_NAME} {LAST_NAME} ({USER_NAME})</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href={PRINT_URL}>{APP.LNK_PRINT}</A> ]</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="hline"><img height='2' src='include/images/blank.gif'></div></td></tr></table>
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<form name="DetailView" method="POST" action="index.php">
+<tbody><tr>
+	  <td>
+       <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+		<td class="formHeader" vAlign="top" align="left" height="20"> 
+         <img height="5" src="{IMAGE_PATH}/left_arc.gif" width="5" border="0"></td>
+
+        <td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_LOGIN_HISTORY_BUTTON_LABEL}</td>
+        <td  class="formHeader" vAlign="top" align="right" height="20">
+	  	  <img height="5" src="{IMAGE_PATH}/right_arc.gif" width="5" border="0"></td>
+		</tr></tbody></table>
+      </td>	
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td>
+			<input type="hidden" name="module" value="Users">
+			<input type="hidden" name="record" value="{ID}">
+			<input type="hidden" name="action">
+			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+			<input type="hidden" name="return_id" value="{RETURN_ID}">
+
+     		       <input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
+<td width='100%'><img height='1' src='include/images/blank.gif'></td>
+
+	  </tr><tr>
+ 	  <td colspan="5" width="100%" class="formHeader"><img width="100%" height="2" src="themes/Amazon/images//blank.gif"></td>
+	  </tr>
+</form>
+</tbody></table>
+
+<!-- END: main -->
+

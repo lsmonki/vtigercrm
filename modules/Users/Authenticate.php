@@ -34,6 +34,13 @@ $focus->load_user($user_password);
 
 if($focus->is_authenticated())
 {
+	//Recording the login info	
+	$usip=$_SERVER['SERVER_ADDR'];
+	$intime=date("Y/m/d H:i:s"); 
+	require_once('modules/Users/LoginHistory.php');
+	$loghistory=new LoginHistory();
+	$Signin = $loghistory->user_login($focus->user_name,$usip,$intime);
+
 	// save the user information into the session
 	// go to the home screen
 	header("Location: index.php?action=index&module=Home");

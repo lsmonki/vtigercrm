@@ -18,6 +18,16 @@
  ********************************************************************************/
 
 require_once('include/logging.php');
+require_once('database/DatabaseConnection.php');
+require_once('modules/Users/LoginHistory.php');
+require_once('modules/Users/User.php');
+
+
+// Recording Logout Info
+	$usip=$_SERVER['SERVER_ADDR'];
+        $outtime=date("Y/m/d H:i:s");
+        $loghistory=new LoginHistory();
+        $loghistory->user_logout($current_user->user_name,$usip,$outtime);
 
 $local_log =& LoggerManager::getLogger('Logout');
 
@@ -26,5 +36,4 @@ session_destroy();
 
 // go to the login screen.
 header("Location: index.php?action=Login&module=Users");
-
 ?>

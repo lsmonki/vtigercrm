@@ -39,6 +39,7 @@ require_once('modules/Calls/Call.php');
 require_once('modules/Emails/Email.php'); 
 require_once('modules/Users/User.php'); 
 require_once('modules/Users/TabMenu.php');
+require_once('modules/Users/LoginHistory.php');
 require_once('data/Tracker.php'); 
 require_once('include/utils.php');
 
@@ -155,6 +156,7 @@ $meeting	= new Meeting();
 $call		= new Call();
 $email		= new Email();
 $tab            = new Tab();
+$loghistory     = new LoginHistory();
 $headers        = new Headers();
 $startTime = microtime();
 
@@ -337,6 +339,18 @@ if ($db_drop_tables == true &&
 }
 else {
         $log->info("Did not need to drop old ".$tab->table_name." table.  It doesn't exist.");
+}
+
+//Dropping loginhistory table
+if ($db_drop_tables == true &&
+        mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$loghistory->table_name."'"))==1) {
+        echo "Dropping existing ".$loghistory->table_name." table...";
+        $loghistory->drop_tables();
+        $log->info("Dropped old ".$loghistory->table_name." table.");
+    echo "<font color=green>dropped existing ".$loghistory->table_name." table</font><BR>\n";
+}
+else {
+        $log->info("Did not need to drop old ".$loghistory->table_name." table.  It doesn't exist.");
 }
 
 // Creating new tables if they don't exist.
@@ -530,6 +544,17 @@ if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$tab->table_name."'"))!=1) {
 }
 else {
         echo "Not creating new ".$tab->table_name." table.  It already exists.<BR>\n";
+}
+
+// Creating loginhistory table.
+if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$loghistory->table_name."'"))!=1) {
+        echo "Creating new ".$loghistory->table_name." table...";
+    $loghistory->create_tables();
+        $log->info("Created ".$loghistory->table_name." table.");
+    echo "<font color=green>created ".$loghistory->table_name." table</font><BR>\n";
+}
+else {
+        echo "Not creating new ".$loghistory->table_name." table.  It already exists.<BR>\n";
 }
 
 //populating the db with seed data 
