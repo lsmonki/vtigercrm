@@ -9,24 +9,26 @@
 * 
  ********************************************************************************/
 
+require_once('data/SugarBean.php');
 
-
-class Headers
+class Headers extends SugarBean
 {
+var $log;
 var $table_name = "headers";
-
-	function FileStorage() {
+var $object_name = "Headers";
+	function Headers() {
 		$this->log = LoggerManager::getLogger('headers');
 	}
 
 
 function create_tables () 
 {
+		global $app_strings;
 		$query = 'CREATE TABLE '.$this->table_name.' ( ';
 		$query .='fileid tinyint(3) unsigned NOT NULL auto_increment';
 		$query .=', headernames varchar(30) NOT NULL';
 	        $query .=', PRIMARY KEY ( fileid ) )';
-		//$this->log->info($query);
+		$this->log->info($query);
 
 		mysql_query($query);
 	// exception handling logic here if the table can't be created.
@@ -44,3 +46,4 @@ function create_tables ()
 
 	}
 }
+?>
