@@ -9,10 +9,7 @@
  * All Rights Reserved.
  ********************************************************************************/
 
-
-
 include_once('config.php');
-require_once('database/DatabaseConnection.php');
 require_once('database/DatabaseConnection.php');
 require_once('data/SugarBean.php');
 
