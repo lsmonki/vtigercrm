@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Home/index.php,v 1.1 2004/08/17 15:05:06 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Home/index.php,v 1.2 2004/09/16 12:13:57 jack Exp $
  * Description:  Main file for the Home module.
  ********************************************************************************/
 
@@ -40,7 +40,7 @@ if (isset($opp_list)) {
 			// Strip all non numbers from this string.
 			$amount = ereg_replace('[^0-9]', '', $record->amount);
 			$sum[$record->sales_stage] = $sum[$record->sales_stage] + $amount;  
-			$total = $total + ($amount/1000);
+			if (($record->sales_stage != 'Closed Won') && ($record->sales_stage != 'Closed Lost')) $total = $total + ($amount/1000);
 		}
 		$log->debug("record->amount is '$record->amount' and record->sales_stage is '$record->sales_stage' and sum[$record->sales_stage] is ".$sum[$record->sales_stage]); 
 	}

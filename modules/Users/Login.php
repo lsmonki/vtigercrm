@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Login.php,v 1.2 2004/08/19 10:17:00 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Login.php,v 1.3 2004/09/15 12:06:00 jack Exp $
  * Description: TODO:  To be written.
  ********************************************************************************/
 $theme_path="themes/".$theme."/";
@@ -80,7 +80,7 @@ function set_focus() {
 <P>&nbsp;</P>
 <?php echo $app_strings['NTC_LOGIN_MESSAGE']; ?>
 <table cellpadding="2" cellspacing="0" border="0">
-<form action="index.php" method="get" name="DetailView" id="form">
+<form action="index.php" method="post" name="DetailView" id="form">
 <tr>
 	<td style="padding-top:10;">
 		<table cellpadding="0" cellspacing="5" border="0">

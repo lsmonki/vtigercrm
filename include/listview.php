@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/listview.php,v 1.1.2.2 2004/09/09 10:32:15 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/listview.php,v 1.5 2004/09/14 13:57:59 jack Exp $
  * Description:  Includes generic helper functions used throughout the application.
  ********************************************************************************/
 require_once('include/logging.php');
@@ -31,8 +31,16 @@ function listView($display_title, $html_varName, $xtemplate , $seed, $orderby){
 	$current_offset = 0;
 	if(isset($_REQUEST['current_offset']))
 	    $current_offset = $_REQUEST['current_offset'];
-	
-	$response = $seed->get_list($orderby, $where, $current_offset);
+
+	$response;
+	if($currentModule == "Leads")
+	{
+		$response = $seed->get_lead_list($orderby, $where, $current_offset);
+	}
+	else
+	{	
+		$response = $seed->get_list($orderby, $where, $current_offset);
+	}
 	
 	$aList = $response['list'];
 	$row_count = $response['row_count'];
@@ -132,7 +140,7 @@ function listView($display_title, $html_varName, $xtemplate , $seed, $orderby){
 	if( $display_title == 'Lead List')
 	{
 
-//	include 'modules/imports/ImportButton.html';
+	//include 'modules/imports/ImportButton.html';
 //	$importTitle = "&nbsp;&nbsp; [ <A href='index.php?module=imports&action=import'><Blink><B>".$app_strings['LNK_IMPORT_LEADS']."</Blink></B></A> ]";
 //	$display_title = $display_title .$importTitle;
 	}

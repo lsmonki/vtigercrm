@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.14 2004/09/03 11:13:47 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.15 2004/09/13 14:37:24 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -165,7 +165,7 @@ $startTime = microtime();
 if ($db_drop_tables == true &&
         mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$lead->table_name."'"))==1) {
         echo "Dropping existing ".$lead->table_name." table...";
-        $contact->drop_tables();
+        $lead->drop_tables();
         $log->info("Dropped old ".$lead->table_name." table.");
     echo "<font color=green>dropped existing ".$lead->table_name." table</font><BR>\n";
 }

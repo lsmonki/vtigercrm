@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Tasks/DetailView.php,v 1.1 2004/08/17 15:06:23 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Tasks/DetailView.php,v 1.2 2004/09/16 12:13:57 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -85,7 +85,7 @@ if ($focus->date_due == '0000-00-00') $xtpl->assign("DATE_DUE", '');
 else $xtpl->assign("DATE_DUE", $focus->date_due);
 if ($focus->time_due == '00:00:00') $xtpl->assign("TIME_DUE", ''); 
 else $xtpl->assign("TIME_DUE", substr($focus->time_due, 0, 5));
-$xtpl->assign("DESCRIPTION", $focus->description);
+$xtpl->assign("DESCRIPTION", nl2br($focus->description));
 
 if(isset($focus->priority)) $xtpl->assign("PRIORITY", $app_list_strings['task_priority_dom'][$focus->priority]);
 $xtpl->assign("TYPE", $app_list_strings['record_type_display'][$focus->parent_type]);

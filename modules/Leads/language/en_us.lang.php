@@ -64,6 +64,16 @@ $mod_strings = Array(
 'LBL_DESCRIPTION_INFORMATION'=>'Description Information',
 'LBL_DESCRIPTION'=>'Description:',
 
+'LBL_CONVERT_LEAD'=>'Convert Lead:',
+'LBL_CONVERT_LEAD_INFORMATION'=>'Convert Lead Information',
+'LBL_ACCOUNT_NAME'=>'Account Name',
+'LBL_POTENTIAL_NAME'=>'Potential Name',
+'LBL_POTENTIAL_CLOSE_DATE'=>'Potential Close Date',
+'LBL_ACCOUNT_NAME'=>'Account Name',
+'LBL_ACCOUNT_NAME'=>'Account Name',
+'LBL_POTENTIAL_NAME'=>'Opportunity Name',
+'LBL_POTENTIAL_CLOSE_DATE'=>'Opportunity Close Date',
+
 'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_CONTACT'=>'New Contact',
 'LNK_NEW_ACCOUNT'=>'New Account',

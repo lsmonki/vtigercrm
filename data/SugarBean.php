@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/data/SugarBean.php,v 1.1 2004/08/17 13:18:39 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/data/SugarBean.php,v 1.2 2004/09/13 14:33:19 jack Exp $
  * Description:  Defines the base class for all data entities used throughout the 
  * application.  The base class including its methods and variables is designed to 
  * be overloaded with module-specific methods and variables particular to the 
@@ -162,6 +162,10 @@ class SugarBean
 	 * hopping back and forth through pages of data.  It only retrieves what is on the current page.
 	 * This method must be called on a new instance.  It trashes the values of all the fields in the current one.
 	 */
+	function get_lead_list($order_by = "", $where = "", $row_offset = 0) {
+		$query = $this->create_lead_list_query($order_by, $where);
+		return $this->process_list_query($query, $row_offset);
+	}
 	function get_list($order_by = "", $where = "", $row_offset = 0) {
 		$query = $this->create_list_query($order_by, $where);
 		return $this->process_list_query($query, $row_offset);
@@ -184,6 +188,21 @@ class SugarBean
 			$query .= "where ($where) AND deleted=0";
 		else
 			$query .= "where deleted=0";
+
+		if($order_by != "")
+			$query .= " ORDER BY $order_by";
+
+		return $query;
+	}
+
+	function create_lead_list_query($order_by, $where)
+	{
+		$query = "SELECT * FROM $this->table_name ";
+
+		if($where != "")
+			$query .= "where ($where) AND deleted=0 AND converted=0";
+		else
+			$query .= "where deleted=0 AND converted=0";
 
 		if($order_by != "")
 			$query .= " ORDER BY $order_by";

@@ -24,7 +24,7 @@
 <form action="index.php?module=imports&action=import" method=post enctype="multipart/form-data">
 Leads File List :</td><td> <input type=file name="userfile"><br> </td></tr>
 <tr><td></td>
-<td><input type=submit value="Submit" align="center"><br></td></tr>
+<td><input type="submit" name="submit" value="submit" align="center"><br></td></tr>
 </table>
 </form>
 <br>

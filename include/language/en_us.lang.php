@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.10 2004/09/06 15:22:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.11 2004/09/09 14:04:51 jack Exp $
  * Description:  Defines the English language pack for the base application.
  ********************************************************************************/
  
@@ -38,6 +38,9 @@ $app_strings = Array(
 'LBL_TABCUSTOMISE_BUTTON_TITLE'=>'Customise [Alt+C]',
 'LBL_TABCUSTOMISE_BUTTON'=>'Customise',
 'LBL_DELETE_BUTTON_TITLE'=>'Delete [Alt+D]',
+'LBL_CONVERT_BUTTON_TITLE'=>'Convert [Alt+C]',
+'LBL_CONVERT_BUTTON_KEY'=>'C',
+'LBL_CONVERT_BUTTON_LABEL'=>'Convert Lead',
 'LBL_DELETE_BUTTON'=>'Delete',
 'LBL_NEW_BUTTON_TITLE'=>'New [Alt+N]',
 'LBL_CHANGE_BUTTON_TITLE'=>'Change [Alt+G]',

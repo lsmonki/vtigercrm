@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/orange/layout_utils.php,v 1.11.2.2 2004/09/09 10:35:15 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/orange/layout_utils.php,v 1.13 2004/09/09 10:36:06 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -73,7 +73,7 @@ if($form_title == "Lead List")
 $the_form .= " <form action='index.php?module=imports&action=fetchfile' method=post target=''><input class='button' type='submit' name='Import' value='Import Leads'/></form>";
 //include 'modules/imports/ImportButton.html';
 }
-        $the_form .="</td></tr></tbody></table></td>";
+	$the_form .="</td></tr></tbody></table> </td>";
 
 if ($other_text) {
 	$the_form .= "<td width='20'><IMG height='1' src='include/images/blank.gif'></td>\n";

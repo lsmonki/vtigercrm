@@ -158,6 +158,7 @@ class Lead extends SugarBean {
 		$query .=', address_country char(100)';
 		$query .=', description text';
 		$query .=', deleted bool NOT NULL default 0';
+		$query .=', converted bool NOT NULL default 0';
 		$query .=', PRIMARY KEY ( id ) )';
 
 		$this->log->info($query);

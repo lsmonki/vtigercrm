@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Meetings/DetailView.php,v 1.1 2004/08/17 15:05:22 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Meetings/DetailView.php,v 1.2 2004/09/16 12:13:57 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -69,7 +69,7 @@ $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
 $xtpl->assign("ID", $focus->id);
 $xtpl->assign("PARENT_NAME", $focus->parent_name);	
-if (isset($focus->parent_type)) $xtpl->assign("PARENT_MODULE", $focus->parent_type);
+if (isset($focus->parent_type)) $xtpl->assign("PARENT_MODULE", $app_list_strings['record_type_module'][$focus->parent_type]);
 $xtpl->assign("PARENT_TYPE", $app_list_strings['record_type_display'][$focus->parent_type]);
 $xtpl->assign("PARENT_ID", $focus->parent_id);	
 $xtpl->assign("NAME", $focus->name);
@@ -78,7 +78,7 @@ $xtpl->assign("ASSIGNED_TO", $focus->assigned_user_name);
 $xtpl->assign("LOCATION", $focus->location);
 $xtpl->assign("DATE_START", $focus->date_start);
 $xtpl->assign("TIME_START", substr($focus->time_start, 0 ,5));
-$xtpl->assign("DESCRIPTION", $focus->description);
+$xtpl->assign("DESCRIPTION", nl2br($focus->description));
 
 $xtpl->assign("DURATION_HOURS", $focus->duration_hours);
 $xtpl->assign("STATUS", $app_list_strings['meeting_status_dom'][$focus->status]);
