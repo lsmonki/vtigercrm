@@ -557,6 +557,7 @@ function create_contact($user_name, $first_name, $last_name, $email_address ,$ac
         $contact->alt_address_state = $alt_address_state;
         $contact->alt_address_street = $alt_address_street;
 	$contact->alt_address_city = $alt_address_city; 
+	$contact->assigned_user_id=$user_id;
 	
 		$contact->save();
 	

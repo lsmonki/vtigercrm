@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.7 2004/12/13 09:28:11 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.7.2.1 2004/12/20 14:22:06 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -247,7 +247,7 @@ class Contact extends SugarBean {
     
     function getCount($user_name) 
     {
-        $query = "select count(*) from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."'";
+        $query = "select count(*) from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."' and contacts.deleted=0";
 
 //        echo "\n Query is " .$query ."\n";
         $result = $this->db->query($query,true,"Error retrieving contacts count");
@@ -264,7 +264,7 @@ class Contact extends SugarBean {
 
     function get_contacts($user_name,$from_index,$offset)
     {   
-         $query = "select contacts.* from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."' limit " .$from_index ."," .$offset;
+         $query = "select contacts.* from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."' and contacts.deleted=0 limit " .$from_index ."," .$offset;
     // $query = "select * from contacts limit " .$from_index ."," .$offset;
 //    echo $query;
     return $this->process_list_query1($query);
