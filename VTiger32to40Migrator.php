@@ -65,6 +65,7 @@ function getV4TablesList()
   function dropDataFromTables()
   {
     $v4tables_list = $this->getV4TablesList();
+    $dropdownarray = Array("accountdepstatus","accountownership","accountrating","accountregion","accounttype","contacttype","leadstage","event_status","duration_minutes","opportunitystage","priority","businesstype","revenuetype","taskpriority","taskstatus","activitytype","usertype","faqcategories","ticketcategories","ticketpriorities","ticketstatus","activsubtype","downloadpurpose","durationhrs","durationmins","evaluationstatus","productcategory");
     foreach($v4tables_list as $key)
     {
       //if the table name has _seq, the let it pass
@@ -73,6 +74,12 @@ function getV4TablesList()
         echo '<br> skipping table '.$key .' for truncation ';
         continue;
       }
+      elseif(in_array($key,$dropdownarray))
+      {
+        echo '<br> skipping table '.$key .' as drop down  ';
+        continue;
+      }
+
       $sql = "delete from ".$key;
       echo '<br> deletion query is ..........'.$sql;
       $this->newconn->query($sql);
@@ -526,7 +533,7 @@ function getAssociatedDataAndSave($object,$fldmaparray,$result)
     foreach($object->column_fields as $field=>$value)
     {
       
-      //echo '<br> incoming field '.$field .' module     ' .$module;
+      echo '<br> incoming field '.$field .' module     ' .$module;
       if(array_key_exists($field,$fldmaparray))
       {
         $mappedField = $fldmaparray[$field];
@@ -588,6 +595,17 @@ function getAssociatedDataAndSave($object,$fldmaparray,$result)
         }
         $object->column_fields[$field] = $retrieved_data["newid"];
       }
+      elseif($module == 'Notes' && $field == 'parent_id' )
+      {
+             //echo '<br>the module is ----------------> ' .$module;
+             $retrieved_data = $this->fetchOldData($old_data["id"]);
+             $tempid = $retrieved_data["parent_id"];
+             if($tempid != '')
+             {
+             $retrieved_data = $this->fetchOldData($tempid);
+             }
+             $object->column_fields['parent_id'] = $retrieved_data["newid"];
+      }
       elseif($module == 'Events' && $field == 'contact_id' )
       {
         //echo '<br>the module is ----------------> ' .$module;
@@ -600,7 +618,6 @@ function getAssociatedDataAndSave($object,$fldmaparray,$result)
         }
         $object->column_fields[$field] = $retrieved_data["newid"];
       }
-
       elseif($module == 'Accounts' && $field == 'account_id' )
       {
         //this is to retrieve the parentid of an account
@@ -662,11 +679,11 @@ function getAssociatedDataAndSave($object,$fldmaparray,$result)
         			$object->column_fields['activitytype'] = 'Meeting';
 			}	
 		}
-        //echo '<br> unmodified cases ===== '.$field .'  value >>>>> BE CAREFUL WILL SET NULL DATA IF NO MATCH!' .$old_data[$field] . ' <br> ';
+        echo '<br> unmodified cases ===== '.$field .'  value >>>>> BE CAREFUL WILL SET NULL DATA IF NO MATCH!' .$old_data[$field] . ' <br> ';
       }
     }
-    //echo '<br> <br> FINAL DATA BEING SENT TO THE SERVER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  <BR>';
-    //print_r($object->column_fields);
+    echo '<br> <br> FINAL DATA BEING SENT TO THE SERVER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  <BR>';
+    print_r($object->column_fields);
     $migration="true";
     
     if($module == 'Tasks')
@@ -790,7 +807,7 @@ function notes()
 {
   echo '<br> Note <br>';
   
-  $fieldmap_array=Array("title"=>"name");
+  $fieldmap_array=Array("title"=>"name","notecontent"=>"description");
 
   $query = "select * from notes ";
   $result = $this->oldconn->query($query);
@@ -942,705 +959,771 @@ function proceedRelationalMigration()
     echo '<br>############ CONSTANTS DATA MIGRATION ENDS ############ <BR> ';
     echo '<br><br>';
     echo '<br><br>';
-    echo '<br><br>';
-    echo '<br><br>';
+    echo '<br>+++++++++++++++++++++++++++<br>';
     echo '<br> DATA MIGRATION FROM vtiger CRM 3.2 TO vtiger CRM4 GA COMPLETED SUCCESSFULLY!! :-) <BR> ';
+
     
   }
 
-
-
-
-function tracker()
-{
-  $sql = "select * from tracker";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo '<br> tracker  count is ' .$count;
-  if($count > 0)
+/*
+  function proceedSpecialHandling()
   {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
+    echo '<br><br>';
+    echo '<br><br>';
+    echo '<br>+++++++++++++++++++++++++++<br>';
+    echo '<br>SPECIAL CASES HANDLING STARTS<br>';
+    echo '<br><br>';
+    echo '<br>+++++++++++++++++++++++++++<br>';
+    echo '<br> DATA MIGRATION FROM vtiger CRM 3.2 TO vtiger CRM4 GA COMPLETED SUCCESSFULLY!! :-) <BR> ';
+ 
+    $specialhandlingarray=Array("notes1");
+    
+    foreach($specialhandlingarray as $specialcases)
     {
+      $this->$specialcases();      
+    }
 
-      $retrieve_data = $this->fetchOldData($old_data["user_id"]);
-      $retrieve_data2 = $this->fetchOldData($old_data["item_id"]);
-      //echo '<br> >>>>>>>>>>> item _id is ' .$retrieve_data2["newid"];
-      $sql = "insert into tracker(id,user_id,module_name,item_id,item_summary) values (".$old_data["id"].",'".$retrieve_data["newid"]."','".$old_data["module_name"]."','".$retrieve_data2["newid"]."','".$old_data["item_summary"]."')";
-      //echo '<br> tracker insert query is ........... '.$sql;
-      $this->newconn->query($sql);
+
+  }	  
+
+
+  function notes1()
+  {
+    $sql = "select * from notes";
+    $result = $this->oldconn->query($sql);
+    $count = $this->oldconn->num_rows($result);
+    echo '<br> notes   count is ' .$count;
+
+    if($count > 0)
+    {
+      while($old_data = $this->oldconn->fetchByAssoc($result))
+      {
+        $retrieve_data = $this->fetchOldData($old_data["id"]);
+        $sql = "select * from Migrator where oldid='".$retrieve_data["oldid"] ."'";
+        $result1 = $this->newconn->query($sql);
+        //this is the notes id
+        $id = $this->newconn->query_result($result1,0,"newid");
+        
+        $newattachmententityid = $this->newconn->getUniqueID("crmentity");
+        
+        //i need to create a crmentity for the case where we have a file present as attachment.
+        //then the above id is the attachmentid and an entry is put in the seattachmentsrel table
+
+
+        $creatorid = $this->newconn->query_result($result1,0,"assigned_user_id");
+        $modifierid =$this->newconn->query_result($result1,0,"modified_user_id");
+        $createdtime = $this->newconn->query_result($result1,0,"createdtime");
+        $modifiedtime = $this->newconn->query_result($result1,0,"modifiedtime");
+        $modulename = "NoteAttachments";
+        //get the values from this and set to the query below and then relax!
+        $sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime,deleted) values('".$newattachmententityid."','".$creatorid."','".$modifierid."','".$modulename."','Attachments','".$createdtime."','".$modifiedtime ."',0)";
+        $this->newconn->query($sql1);
+
+        //ISSUE POSSIBLE FOR BLOB
+        $sql2 = "insert into attachments(attachmentsid,name,description,type,attachmentsize,attachmentcontents) values (".$newattachmentsid.",'".$old_data["filename"]."','','','','".$old_data["data"]."')";
+        $this->newconn->query($sql2);
+
+      }
+
     }
   }
-}
+*/	  
+    function tracker()
+      {
+        $sql = "select * from tracker";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo '<br> tracker  count is ' .$count;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
 
-function filestorage()
-{
+            $retrieve_data = $this->fetchOldData($old_data["user_id"]);
+            $retrieve_data2 = $this->fetchOldData($old_data["item_id"]);
+            //echo '<br> >>>>>>>>>>> item _id is ' .$retrieve_data2["newid"];
+            $sql = "insert into tracker(id,user_id,module_name,item_id,item_summary) values (".$old_data["id"].",'".$retrieve_data["newid"]."','".$old_data["module_name"]."','".$retrieve_data2["newid"]."','".$old_data["item_summary"]."')";
+            //echo '<br> tracker insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
 
-  $sql = "select * from filestorage";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo '<br> filestorage   count is ' .$count;
+    function filestorage()
+      {
+
+        $sql = "select * from filestorage";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo '<br> filestorage   count is ' .$count;
   
-  if($count > 0)
-  {
-    $i=0;
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $retrieve_data = $this->fetchOldData($old_data["fileid"]);
-	//for attachments, the entry is put in the Migrator table but  not in the crmentity table anywhere as there is no saveentity called for attachments. Hence, one has to do the same manually
-	$sql = "select * from Migrator where oldid='".$retrieve_data["oldid"] ."'";
-      	$result = $this->newconn->query($sql);
-	$id = $this->newconn->query_result($result,0,"newid");
-	$creatorid = $this->newconn->query_result($result,0,"assigned_user_id");
-	$modifierid =$this->newconn->query_result($result,0,"modified_user_id");
-	$createdtime = $this->newconn->query_result($result,0,"createdtime");
-	$modifiedtime = $this->newconn->query_result($result,0,"modifiedtime");
-	$modulename = "Attachments";
-	//get the values from this and set to the query below and then relax!
-      $sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime,deleted) values('".$id."','".$creatorid."','".$modifierid."','".$modulename."','Attachments','".$createdtime."','".$modifiedtime ."',0)";
-      $this->newconn->query($sql);
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $retrieve_data = $this->fetchOldData($old_data["fileid"]);
+            //for attachments, the entry is put in the Migrator table but  not in the crmentity table anywhere as there is no saveentity called for attachments. Hence, one has to do the same manually
+            $sql = "select * from Migrator where oldid='".$retrieve_data["oldid"] ."'";
+            $result1 = $this->newconn->query($sql);
+            $id = $this->newconn->query_result($result1,0,"newid");
+            $creatorid = $this->newconn->query_result($result1,0,"assigned_user_id");
+            $modifierid =$this->newconn->query_result($result1,0,"modified_user_id");
+            $createdtime = $this->newconn->query_result($result1,0,"createdtime");
+            $modifiedtime = $this->newconn->query_result($result1,0,"modifiedtime");
+            $modulename = "Attachments";
+            //get the values from this and set to the query below and then relax!
+            $sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime,deleted) values('".$id."','".$creatorid."','".$modifierid."','".$modulename."','Attachments','".$createdtime."','".$modifiedtime ."',0)";
+            $this->newconn->query($sql1);
 
-      //ISSUE POSSIBLE FOR BLOB
-      $sql = "insert into attachments(attachmentsid,name,description,type,attachmentsize,attachmentcontents) values (".$retrieve_data["newid"].",'".$retrieve_data["filename"]."','".$retrieve_data["description"]."','".$retrieve_data["filetype"]."','".$retrieve_data["filesize"]."','".$old_data["data"]."')";
-      $this->newconn->query($sql);
-    }
-  }
+            //ISSUE POSSIBLE FOR BLOB
+            $sql2 = "insert into attachments(attachmentsid,name,description,type,attachmentsize,attachmentcontents) values (".$retrieve_data["newid"].",'".$old_data["filename"]."','".$old_data["description"]."','".$old_data["filetype"]."','".$old_data["filesize"]."','".$old_data["data"]."')";
+            $this->newconn->query($sql2);
+
+
+            //retrieve the input from the old table and populate the relational table seattachmentsrel
+            $sql_old = "select * from Migrator where oldid='".$old_data["parent_id"] ."'";
+            echo "<br><font color='red'> getting the old attachment data >>>>>>> <br>" .$sql_old;
+            $result2 = $this->newconn->query($sql_old);
+            $seid = $this->newconn->query_result($result2,0,"newid");
+            $sql_rel = "insert into seattachmentsrel values (".$seid.",".$retrieve_data["newid"].")";
+            echo '<br>>>>>>>>>>>>>>>>>  <br>'.$sql_rel;
+            $this->newconn->query($sql_rel);
+
+          }
+        }
   
 
-}
+      }
 
-function users_last_import()
-{
-  $sql = "select * from users_last_import";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo '<br> users last import  count is ' .$count;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
+    function users_last_import()
+      {
+        $sql = "select * from users_last_import";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo '<br> users last import  count is ' .$count;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
 
-      $retrieve_data = $this->fetchOldData($old_data["id"]);
-      $retrieve_data2 = $this->fetchOldData($old_data["assigned_user_id"]);
-      $retrieve_data3 = $this->fetchOldData($old_data["bean_id"]);
+            $retrieve_data = $this->fetchOldData($old_data["id"]);
+            $retrieve_data2 = $this->fetchOldData($old_data["assigned_user_id"]);
+            $retrieve_data3 = $this->fetchOldData($old_data["bean_id"]);
 
       
-      $sql = "insert into users_last_import(id,assigned_user_id,bean_type,bean_id,deleted) values (".$retrieve_data["newid"].",'".$retrieve_data2["newid"]."','".$old_data["bean_type"]."','".$retrieve_data3["newid"]."',".$old_data["deleted"].")";
-      //echo '<br> users_last_import insert query is BLOB........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
+            $sql = "insert into users_last_import(id,assigned_user_id,bean_type,bean_id,deleted) values (".$retrieve_data["newid"].",'".$retrieve_data2["newid"]."','".$old_data["bean_type"]."','".$retrieve_data3["newid"]."',".$old_data["deleted"].")";
+            //echo '<br> users_last_import insert query is BLOB........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
 
 
-}
+      }
 
 
-function sales_stage()
-{
-  $sql = "select * from sales_stage";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  $i=0;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $sql = "insert into sales_stage(sales_stage_id,sales_stage,SORTORDERID,PRESENCE) values (".$i.",'".$old_data["sales_stage"]."',".$i.",".$i.")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
+    function sales_stage()
+      {
+        $sql = "select * from sales_stage";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        $i=0;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $i++;
+            $sql = "insert into sales_stage(sales_stage_id,sales_stage,SORTORDERID,PRESENCE) values (".$i.",'".$old_data["sales_stage"]."',".$i.",".$i.")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
 
 
-function account_type()
-{
-  $sql = "select * from account_type";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  $i=0;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $sql = "insert into accounttype(accounttypeid,accounttype,sortorderid,presence) values (".$i.",'".$old_data["account_type"]."',".$i.",".$i.")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
+    function account_type()
+      {
+        $sql = "select * from account_type";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        $i=0;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $i++;
+            $sql = "insert into accounttype(accounttypeid,accounttype,sortorderid,presence) values (".$i.",'".$old_data["account_type"]."',".$i.",".$i.")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
 
-function industry()
-{
-  $sql = "select * from industry";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  $i=0;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $sql = "insert into industry(industryid,industry,sortorderid,presence) values (".$i.",'".$old_data["industry"]."',".$i.",".$i.")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
+    function industry()
+      {
+        $sql = "select * from industry";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        $i=0;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $i++;
+            $sql = "insert into industry(industryid,industry,sortorderid,presence) values (".$i.",'".$old_data["industry"]."',".$i.",".$i.")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
   
-}
-
-
-function lead_source()
-{
-  $sql = "select * from lead_source";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  $i=0;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $sql = "insert into leadsource(leadsourceid,leadsource,sortorderid,presence) values (".$i.",'".$old_data["lead_source"]."',".$i.",".$i.")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-
-
-
-function lead_status()
-{
-  $sql = "select * from lead_status";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  $i=0;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $sql = "insert into leadstatus(leadstatusid,leadstatus,sortorderid,presence) values (".$i.",'".$old_data["lead_status"]."',".$i.",".$i.")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-
-
-
-
-
-function license_key()
-{
-  $sql = "select * from license_key";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  $i=0;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $sql = "insert into licencekeystatus(licencekeystatusid,licencekeystatus,sortorderid,presence) values (".$i.",'".$old_data["license_key"]."',".$i.",".$i.")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-
-function opportunity_type()
-{
-  $sql = "select * from opportunity_type";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  $i=0;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $sql = "insert into opportunity_type(opptypeid,opportunity_type,sortorderid,presence) values (".$i.",'".$old_data["opportunity_type"]."',".$i.",".$i.")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-function rating()
-{
-  $sql = "select * from rating";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  $i=0;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $sql = "insert into rating(rating_id,rating,sortorderid,presence) values (".$i.",'".$old_data["rating"]."',".$i.",".$i.")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-function salutation()
-{
-  $sql = "select * from salutation";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  $i=0;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $sql = "insert into salutationtype(salutationid,salutationtype,sortorderid,presence) values (".$i.",'".$old_data["salutation"]."',".$i.",".$i.")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-function loginhistory()
-{
-  $sql = "select * from loginhistory";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  $i=0;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $sql = "insert into loginhistory(login_id,user_name,user_ip,login_time,logout_time,status) values (".$old_data["login_id"].",'".$old_data["user_name"]."','".$old_data["user_ip"]."','".$old_data["login_time"]."','".$old_data["logout_time"]."','".$old_data["status"]."')";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-//BLOB HANDLING ISSUE
-
-function files()
-{
-  $sql = "select * from files";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  $i=0;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $retrieve_data = $this->fetchOldData($old_data["assigned_user_id"]);
-      $sql = "insert into files(id,name,content,deleted,date_entered,assigned_user_id) values (".$i.",".$old_data["content"].",".$old_data["deleted"].",".$old_data["date_entered"].",".$retrieved_data["newid"].")";
-      // echo '<br> insert query is ......BLOB..... '.$sql;
-      $this->newconn->query($sql);
-     }
-  }
-}
-
-//BLOB HANDLING ISSUE
-
-function import_maps()
-{
-  $sql = "select * from import_maps";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  $i=0;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      $i++;
-      $retrieve_data = $this->fetchOldData($old_data["assigned_user_id"]);
-      $sql = "insert into import_maps(id,name,module,content,has_header,deleted,date_entered,date_modified,assigned_user_id,is_published) values (".$i.",".$old_data["name"].",".$old_data["content"].",".$old_data["has_header"].",".$old_data["deleted"].",".$old_data["date_entered"].",".$old_data["date_modified"].",".$retrieved_data["newid"].",".$old_data["is_published"].")";
-      // echo '<br> insert query is ...BLOB ........ '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-
-
-
-
-function opportunities_contacts()
-{
-  $sql = "select * from opportunities_contacts where deleted !=1";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo '<br> opportunities_contacts  count is ' .$count;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-
-      $retrieve_data = $this->fetchOldData($old_data["opportunity_id"]);
-      $retrieve_data2 = $this->fetchOldData($old_data["contact_id"]);
-      $sql = "insert into contpotentialrel(contactid,potentialid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
-      //echo '<br> insert query is ...BLOB ........ '.$sql;
-        $this->newconn->query($sql);
-    }
-  }
-}
-
-
-function meetings_contacts()
-{
-  $sql = "select * from meetings_contacts where deleted !=1";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo '<br> meetings_contacts  count is ' .$count;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-
-      $retrieve_data = $this->fetchOldData($old_data["meeting_id"]);
-      $retrieve_data2 = $this->fetchOldData($old_data["contact_id"]);
-      $sql = "insert into cntactivityrel(contactid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-function calls_contacts()
-{
-  $sql = "select * from calls_contacts where deleted !=1";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo '<br> calls_contacts  count is ' .$count;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-
-      $retrieve_data = $this->fetchOldData($old_data["call_id"]);
-      $retrieve_data2 = $this->fetchOldData($old_data["contact_id"]);
-      $sql = "insert into cntactivityrel(contactid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-
-function meetings_users()
-{
-  $sql = "select * from meetings_users where deleted !=1";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo '<br> meetings_users  count is ' .$count;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-
-      $retrieve_data = $this->fetchOldData($old_data["meeting_id"]);
-      $retrieve_data2 = $this->fetchOldData($old_data["user_id"]);
-      $sql = "insert into salesmanactivityrel(smid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-
-function calls_users()
-{
-  $sql = "select * from calls_users where deleted !=1";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo '<br> calls_users  count is ' .$count;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-
-      $retrieve_data = $this->fetchOldData($old_data["call_id"]);
-      $retrieve_data2 = $this->fetchOldData($old_data["user_id"]);
-      $sql = "insert into salesmanactivityrel(smid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function emails_accounts()
-{
-  $sql = "select * from emails_accounts where deleted !=1";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo '<br> emails_accounts  count is ' .$count;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-
-      $retrieve_data = $this->fetchOldData($old_data["email_id"]);
-      $retrieve_data2 = $this->fetchOldData($old_data["account_id"]);
-      $sql = "insert into seactivityrel(crmid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
-      //echo '<br> insert query is ........... '.$sql;
-        $this->newconn->query($sql);
-    }
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-function emails_contacts()
-{
-  $sql = "select * from emails_contacts where deleted !=1";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo '<br> emails_contacts  count is ' .$count;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-
-      $retrieve_data = $this->fetchOldData($old_data["email_id"]);
-      $retrieve_data2 = $this->fetchOldData($old_data["contact_id"]);
-      $sql = "insert into cntactivityrel(contactid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function emails_opportunities()
-{
-  $sql = "select * from emails_opportunities where deleted !=1";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo '<br> emails_opportunities  count is ' .$count;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-
-      $retrieve_data = $this->fetchOldData($old_data["email_id"]);
-      $retrieve_data2 = $this->fetchOldData($old_data["opportunity_id"]);
-      $sql = "insert into seactivityrel(seid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-
-
-function emails_users()
-{
-  $sql = "select * from emails_users where deleted !=1";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo '<br> emails_users  count is ' .$count;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-
-      $retrieve_data = $this->fetchOldData($old_data["email_id"]);
-      $retrieve_data2 = $this->fetchOldData($old_data["user_id"]);
-      $sql = "insert into salesmanactivityrel(smid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
-      //echo '<br> insert query is ........... '.$sql;
-      $this->newconn->query($sql);
-    }
-  }
-}
-
-
-
-
-function user2role()
-{
-  //echo '>>>>>>>>>>>>>> user2role starts >>>>>>>>>>>';
-  $sql1 = "select * from users ";
-  $sql2 = "select * from role ";
-  $result_users = $this->newconn->query($sql1);
-  $result_roles = $this->newconn->query($sql2);
-  $count = $this->newconn->num_rows($result_users); 
-  echo 'count for users is       ' .$count;
-  $count2 = $this->newconn->num_rows($result_roles); 
-  echo 'count for roles is       ' .$count2;
-  if($count > 0)
-  {
-    while($old_data = $this->newconn->fetchByAssoc($result_users))
-    {
-      $role_data = $this->newconn->fetchByAssoc($result_roles);
-      $sql_insert = "insert into user2role(userid,roleid) values (".$old_data["id"].",".$role_data["roleid"].")";
-      //echo $sql_insert;
-      $this->newconn->query($sql_insert);
-    }
-  }
-}
-
-
-
-function customfields()
-{
-  echo '>>>>>>>>>>>>>> customfields starts >>>>>>>>>>>';
-  $sql = "select * from customfields ";
-  $result = $this->oldconn->query($sql);
-  $count = $this->oldconn->num_rows($result); 
-  echo 'count for customfields     ' .$count;
-  if($count > 0)
-  {
-    while($old_data = $this->oldconn->fetchByAssoc($result))
-    {
-      
-      $tabmodule = $old_data["module"]; //now get the tabid
-      $tabid = $this->fetchTabIDVal($tabmodule);
-      $columnName = $old_data["column_name"]; //now get the tabid
-      $tableName = $old_data["table_name"]; //now get the tabid
-      $uitype = $old_data["uitype"]; //now get the tabid
-      $fldlabel = $old_data["fieldlabel"]; //now get the tabid
-      
-      
-      $custfld_fieldid=$this->newconn->getUniqueID("field");
-      $custfld_sequece=$this->newconn->getUniqueId("customfield_sequence");
-
-      //echo '++++++++          '.$tabmodule . "------".$tabid."-------".$columnName."---------".$tableName."-------".$uitype."-------".$fldlabel;
-      
-      $uichekdata='';
-      $fldlength=10;
-      if($uitype == '1')
-      {
-        $uichekdata='V~O~LE~'.$fldlength;
-        $type = "C(".$fldlength.")"; // adodb type
       }
-      elseif($uitype == 7)
+
+
+    function lead_source()
       {
-        $type="N(".$fldlength.",".$decimal.")";	// adodb type
-        $uichekdata='N~O~'.$fldlength .','.$decimal;
+        $sql = "select * from lead_source";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        $i=0;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $i++;
+            $sql = "insert into leadsource(leadsourceid,leadsource,sortorderid,presence) values (".$i.",'".$old_data["lead_source"]."',".$i.",".$i.")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
       }
-      elseif($uitype == 9)
+
+
+
+
+
+    function lead_status()
       {
-        $type="N(".$fldlength.",".$decimal.")"; //adodb type
-        $uichekdata='N~O~'.$fldlength .','.$decimal;
+        $sql = "select * from lead_status";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        $i=0;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $i++;
+            $sql = "insert into leadstatus(leadstatusid,leadstatus,sortorderid,presence) values (".$i.",'".$old_data["lead_status"]."',".$i.",".$i.")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
       }
-      elseif($uitype == 3)
+
+
+
+
+
+
+
+    function license_key()
       {
-        $type="N(".$fldlength.",".$decimal.")"; //adodb type
-        $uichekdata='N~O~'.$fldlength .','.$decimal;
+        $sql = "select * from license_key";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        $i=0;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $i++;
+            $sql = "insert into licencekeystatus(licencekeystatusid,licencekeystatus,sortorderid,presence) values (".$i.",'".$old_data["license_key"]."',".$i.",".$i.")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
       }
-      elseif($fldType == 5)
+
+
+
+    function opportunity_type()
       {
-        $uichekdata='D~O';
-        $type = "T"; // adodb type
+        $sql = "select * from opportunity_type";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        $i=0;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $i++;
+            $sql = "insert into opportunity_type(opptypeid,opportunity_type,sortorderid,presence) values (".$i.",'".$old_data["opportunity_type"]."',".$i.",".$i.")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+    function rating()
+      {
+        $sql = "select * from rating";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        $i=0;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $i++;
+            $sql = "insert into rating(rating_id,rating,sortorderid,presence) values (".$i.",'".$old_data["rating"]."',".$i.",".$i.")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+    function salutation()
+      {
+        $sql = "select * from salutation";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        $i=0;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $i++;
+            $sql = "insert into salutationtype(salutationid,salutationtype,sortorderid,presence) values (".$i.",'".$old_data["salutation"]."',".$i.",".$i.")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+    function loginhistory()
+      {
+        $sql = "select * from loginhistory";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        $i=0;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $i++;
+            $sql = "insert into loginhistory(login_id,user_name,user_ip,login_time,logout_time,status) values (".$old_data["login_id"].",'".$old_data["user_name"]."','".$old_data["user_ip"]."','".$old_data["login_time"]."','".$old_data["logout_time"]."','".$old_data["status"]."')";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+    //BLOB HANDLING ISSUE
+
+    function files()
+      {
+        $sql = "select * from files";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        $i=0;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $i++;
+            $retrieve_data = $this->fetchOldData($old_data["assigned_user_id"]);
+            $sql = "insert into files(id,name,content,deleted,date_entered,assigned_user_id) values (".$i.",".$old_data["content"].",".$old_data["deleted"].",".$old_data["date_entered"].",".$retrieved_data["newid"].")";
+            // echo '<br> insert query is ......BLOB..... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+    //BLOB HANDLING ISSUE
+
+    function import_maps()
+      {
+        $sql = "select * from import_maps";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        $i=0;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+            $i++;
+            $retrieve_data = $this->fetchOldData($old_data["assigned_user_id"]);
+            $sql = "insert into import_maps(id,name,module,content,has_header,deleted,date_entered,date_modified,assigned_user_id,is_published) values (".$i.",".$old_data["name"].",".$old_data["content"].",".$old_data["has_header"].",".$old_data["deleted"].",".$old_data["date_entered"].",".$old_data["date_modified"].",".$retrieved_data["newid"].",".$old_data["is_published"].")";
+            // echo '<br> insert query is ...BLOB ........ '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+
+
+
+
+    function opportunities_contacts()
+      {
+        $sql = "select * from opportunities_contacts where deleted !=1";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo '<br> opportunities_contacts  count is ' .$count;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+
+            $retrieve_data = $this->fetchOldData($old_data["opportunity_id"]);
+            $retrieve_data2 = $this->fetchOldData($old_data["contact_id"]);
+            $sql = "insert into contpotentialrel(contactid,potentialid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
+            //echo '<br> insert query is ...BLOB ........ '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+    function meetings_contacts()
+      {
+        $sql = "select * from meetings_contacts where deleted !=1";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo '<br> meetings_contacts  count is ' .$count;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+
+            $retrieve_data = $this->fetchOldData($old_data["meeting_id"]);
+            $retrieve_data2 = $this->fetchOldData($old_data["contact_id"]);
+            $sql = "insert into cntactivityrel(contactid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+    function calls_contacts()
+      {
+        $sql = "select * from calls_contacts where deleted !=1";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo '<br> calls_contacts  count is ' .$count;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+
+            $retrieve_data = $this->fetchOldData($old_data["call_id"]);
+            $retrieve_data2 = $this->fetchOldData($old_data["contact_id"]);
+            $sql = "insert into cntactivityrel(contactid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+
+    function meetings_users()
+      {
+        $sql = "select * from meetings_users where deleted !=1";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo '<br> meetings_users  count is ' .$count;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+
+            $retrieve_data = $this->fetchOldData($old_data["meeting_id"]);
+            $retrieve_data2 = $this->fetchOldData($old_data["user_id"]);
+            $sql = "insert into salesmanactivityrel(smid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+
+    function calls_users()
+      {
+        $sql = "select * from calls_users where deleted !=1";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo '<br> calls_users  count is ' .$count;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+
+            $retrieve_data = $this->fetchOldData($old_data["call_id"]);
+            $retrieve_data2 = $this->fetchOldData($old_data["user_id"]);
+            $sql = "insert into salesmanactivityrel(smid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function emails_accounts()
+      {
+        $sql = "select * from emails_accounts where deleted !=1";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo '<br> emails_accounts  count is ' .$count;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+
+            $retrieve_data = $this->fetchOldData($old_data["email_id"]);
+            $retrieve_data2 = $this->fetchOldData($old_data["account_id"]);
+            $sql = "insert into seactivityrel(crmid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+
+
+
+
+
+
+
+
+
+    function emails_contacts()
+      {
+        $sql = "select * from emails_contacts where deleted !=1";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo '<br> emails_contacts  count is ' .$count;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+
+            $retrieve_data = $this->fetchOldData($old_data["email_id"]);
+            $retrieve_data2 = $this->fetchOldData($old_data["contact_id"]);
+            $sql = "insert into cntactivityrel(contactid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function emails_opportunities()
+      {
+        $sql = "select * from emails_opportunities where deleted !=1";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo '<br> emails_opportunities  count is ' .$count;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+
+            $retrieve_data = $this->fetchOldData($old_data["email_id"]);
+            $retrieve_data2 = $this->fetchOldData($old_data["opportunity_id"]);
+            $sql = "insert into seactivityrel(seid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+
+
+    function emails_users()
+      {
+        $sql = "select * from emails_users where deleted !=1";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo '<br> emails_users  count is ' .$count;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+
+            $retrieve_data = $this->fetchOldData($old_data["email_id"]);
+            $retrieve_data2 = $this->fetchOldData($old_data["user_id"]);
+            $sql = "insert into salesmanactivityrel(smid,activityid) values (".$retrieve_data2["newid"].",".$retrieve_data["newid"].")";
+            //echo '<br> insert query is ........... '.$sql;
+            $this->newconn->query($sql);
+          }
+        }
+      }
+
+
+
+
+    function user2role()
+      {
+        echo '>>>>>>>>>>>>>> user2role starts >>>>>>>>>>>';
+        $sql1 = "select * from users ";
+        $sql2 = "select * from role ";
+        $result_users = $this->newconn->query($sql1);
+        $result_roles = $this->newconn->query($sql2);
+        $count = $this->newconn->num_rows($result_users); 
+        echo 'count for users is       ' .$count;
+        $count2 = $this->newconn->num_rows($result_roles); 
+        echo 'count for roles is       ' .$count2;
+        if($count > 0)
+        {
+          $role_data = $this->newconn->fetchByAssoc($result_roles);
+          while($old_data = $this->newconn->fetchByAssoc($result_users))
+          {
+            $sql_insert = "insert into user2role(userid,roleid) values (".$old_data["id"].",".$role_data["roleid"].")";
+            echo $sql_insert;
+            $this->newconn->query($sql_insert);
+          }
+        }
+      }
+
+
+
+    function customfields()
+      {
+        echo '>>>>>>>>>>>>>> customfields starts >>>>>>>>>>>';
+        $sql = "select * from customfields ";
+        $result = $this->oldconn->query($sql);
+        $count = $this->oldconn->num_rows($result); 
+        echo 'count for customfields     ' .$count;
+        if($count > 0)
+        {
+          while($old_data = $this->oldconn->fetchByAssoc($result))
+          {
+      
+            $tabmodule = $old_data["module"]; //now get the tabid
+            $tabid = $this->fetchTabIDVal($tabmodule);
+            $columnName = $old_data["column_name"]; //now get the tabid
+            $tableName = $old_data["table_name"]; //now get the tabid
+            $uitype = $old_data["uitype"]; //now get the tabid
+            $fldlabel = $old_data["fieldlabel"]; //now get the tabid
+      
+      
+            $custfld_fieldid=$this->newconn->getUniqueID("field");
+            $custfld_sequece=$this->newconn->getUniqueId("customfield_sequence");
+
+            //echo '++++++++          '.$tabmodule . "------".$tabid."-------".$columnName."---------".$tableName."-------".$uitype."-------".$fldlabel;
+      
+            $uichekdata='';
+            $fldlength=10;
+            if($uitype == '1')
+            {
+              $uichekdata='V~O~LE~'.$fldlength;
+              $type = "C(".$fldlength.")"; // adodb type
+            }
+            elseif($uitype == 7)
+            {
+              $type="N(".$fldlength.",".$decimal.")";	// adodb type
+              $uichekdata='N~O~'.$fldlength .','.$decimal;
+            }
+            elseif($uitype == 9)
+            {
+              $type="N(".$fldlength.",".$decimal.")"; //adodb type
+              $uichekdata='N~O~'.$fldlength .','.$decimal;
+            }
+            elseif($uitype == 3)
+            {
+              $type="N(".$fldlength.",".$decimal.")"; //adodb type
+              $uichekdata='N~O~'.$fldlength .','.$decimal;
+            }
+            elseif($fldType == 5)
+            {
+              $uichekdata='D~O';
+              $type = "T"; // adodb type
                   
-      }
-      elseif($uitype == 13)
-      {
-        $type = "C(50)"; //adodb type
-        $uichekdata='V~O';
-      }
-      elseif($uitype == 11)
-      {
-        $type = "C(30)"; //adodb type
-        $uichekdata='V~O';
-      }
-      elseif($uitype == 15)
-      {
-        $type = "C(255)"; //adodb type
-        $uichekdata='V~O';
-      }
+            }
+            elseif($uitype == 13)
+            {
+              $type = "C(50)"; //adodb type
+              $uichekdata='V~O';
+            }
+            elseif($uitype == 11)
+            {
+              $type = "C(30)"; //adodb type
+              $uichekdata='V~O';
+            }
+            elseif($uitype == 15)
+            {
+              $type = "C(255)"; //adodb type
+              $uichekdata='V~O';
+            }
       
-      if($tableName == 'leadcf')
-      {
-        $tableName='leadscf';
-      }
-      elseif($tableName == 'accountcf')
-      {
-        $tableName='accountscf';
-      }
-      elseif($tableName == 'potentialcf')
-      {
-        $tableName='potentialscf';
-      }
-      elseif($tableName == 'contactcf')
-      {
-        $tableName='contactscf';
-      }
+            if($tableName == 'leadcf')
+            {
+              $tableName='leadscf';
+            }
+            elseif($tableName == 'accountcf')
+            {
+              $tableName='accountscf';
+            }
+            elseif($tableName == 'potentialcf')
+            {
+              $tableName='potentialscf';
+            }
+            elseif($tableName == 'contactcf')
+            {
+              $tableName='contactscf';
+            }
       
 
-      //get the data from the old custom fields table and then populate into the concerned tables
-      $sql_insert = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",5,1,'".$uichekdata."')";
-      //echo 'custom field insert query is '.$sql_insert;
-      $this->newconn->query($sql_insert);
-    }
-  }
-}
+            //get the data from the old custom fields table and then populate into the concerned tables
+            $sql_insert = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",5,1,'".$uichekdata."')";
+            //echo 'custom field insert query is '.$sql_insert;
+            $this->newconn->query($sql_insert);
+          }
+        }
+      }
 
 
-function fetchTabIDVal($fldmodule)
-{
+    function fetchTabIDVal($fldmodule)
+      {
 
-  global $adb;
-  $query = "select tabid from tab where tablabel='" .$fldmodule ."'";
-  $tabidresult = $adb->query($query);
-  return $adb->query_result($tabidresult,0,"tabid");
-}
-
-
-
+        global $adb;
+        $query = "select tabid from tab where tablabel='" .$fldmodule ."'";
+        $tabidresult = $adb->query($query);
+        return $adb->query_result($tabidresult,0,"tabid");
+      }
 
 
 
@@ -1651,9 +1734,12 @@ function fetchTabIDVal($fldmodule)
 
 
 
-  function VTiger32to40Migrator()
-  {
-  }
+
+
+
+    function VTiger32to40Migrator()
+      {
+      }
   
-}
+  }
 ?>
