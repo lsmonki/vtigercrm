@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/orange/header.php,v 1.14 2004/12/20 06:23:51 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/orange/header.php,v 1.15 2005/01/08 11:53:37 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -157,6 +157,10 @@ $xtpl->parse("main.left_form");
 //check for the presence of the currentModule and  also for EditView permission
 
 
+
+$permissionData = $_SESSION['action_permission_set'];
+$testaction='EditView';
+
 if($currentModule == 'Leads')
   {
     $tabid=3;
@@ -211,11 +215,6 @@ if($currentModule == 'Leads')
   }
 
 
-
-
-
-$permissionData = $_SESSION['permission_set'];
-$testaction='EditView';
       $i=0;
 
         while($i<count($permissionData))

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/orange/footer.php,v 1.6 2004/11/06 14:23:31 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/orange/footer.php,v 1.8 2005/01/10 08:29:28 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -31,14 +31,17 @@ global $app_strings;
 	  <A href="index.php?module=Contacts&action=index"><?php echo $app_list_strings['moduleList']['Contacts']; ?></A> |
 	  <A href="index.php?module=Accounts&action=index"><?php echo $app_list_strings['moduleList']['Accounts']; ?></A> |
 	  <A href="index.php?module=Opportunities&action=index"><?php echo $app_list_strings['moduleList']['Opportunities']; ?></A> |
-	  <A href="index.php?module=Cases&action=index"><?php echo $app_list_strings['moduleList']['Cases']; ?></A>
-	  <BR>
 	  <A href="index.php?module=Notes&action=index"><?php echo $app_list_strings['moduleList']['Notes']; ?></A> |
-	  <A href="index.php?module=Calls&action=index"><?php echo $app_list_strings['moduleList']['Calls']; ?></A> |
+	  <A href="index.php?module=Calls&action=index"><?php echo $app_list_strings['moduleList']['Calls']; ?></A> 
+	  <BR>
 	  <A href="index.php?module=Emails&action=index"><?php echo $app_list_strings['moduleList']['Emails']; ?></A> |
 	  <A href="index.php?module=Meetings&action=index"><?php echo $app_list_strings['moduleList']['Meetings']; ?></A> |
 	  <A href="index.php?module=Tasks&action=index"><?php echo $app_list_strings['moduleList']['Tasks']; ?></A> |
-	  <A href="index.php?module=MessageBoard&action=index"><?php echo $app_list_strings['moduleList']['MessageBoard']; ?></A> 
+	  <A href="index.php?module=HelpDesk&action=index"><?php echo $app_list_strings['moduleList']['HelpDesk']; ?></A> |
+          <A href="index.php?module=Products&action=index"><?php echo $app_list_strings['moduleList']['Products']; ?></A> |
+          <A href="index.php?module=Calendar&action=index"><?php echo $app_list_strings['moduleList']['Calendar']; ?></A> 
+
+ 
 
 	  </td>
     </tr></table>

@@ -144,6 +144,12 @@ $xtpl->parse("main.left_form");
 
 //check for the presence of the currentModule and  also for EditView permission
 
+
+
+$permissionData = $_SESSION['action_permission_set'];
+$testaction='EditView';
+
+
 if($currentModule == 'Leads')
   {
     $tabid=3;
@@ -197,9 +203,6 @@ else if($currentModule == 'MessageBoard')
     $tabid=13;
   }
 
-
-$permissionData = $_SESSION['permission_set'];
-$testaction='EditView';
       $i=0;
 
         while($i<count($permissionData))
