@@ -216,6 +216,95 @@ $server->register(
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
+$server->register(
+    'contact_by_range',
+    array('user_name'=>'xsd:string','from_index'=>'xsd:int','offset'=>'xsd:int'),
+    array('return'=>'tns:contact_detail_array'),
+    $NAMESPACE);
+
+$server->register(
+    'get_contacts_count',
+    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('return'=>'xsd:int'),
+    $NAMESPACE);
+
+function get_contacts_count($user_name, $password)
+{
+
+    require_once('modules/Users/User.php');
+    $seed_user = new User();
+    $user_id = $seed_user->retrieve_user_id($user_name);
+    $current_user = $seed_user;
+   
+    require_once('modules/Contacts/Contact.php');
+    $contact = new Contact();
+   
+    return $contact->getCount($user_name);
+
+  // echo $query;
+  // $this->db->query($query, true, "Error querying contacts for count");
+//   return 1001;
+}
+
+
+function contact_by_range($user_name,$from_index,$offset)
+{
+
+        $seed_contact = new Contact();
+        $output_list = Array();
+   
+         {  
+            $response = $seed_contact->get_contacts($user_name,$from_index,$offset);
+            $contactList = $response['list'];
+    
+//          echo "contact list is  --------  > " .$contactList;
+       // create a return array of names and email addresses.
+    foreach($contactList as $contact)
+    {
+        //$log->fatal("Adding another contact to the list: $contact-first_name");
+    //ho "\ncontact->id is " .$contact->id;
+   
+        $output_list[] = Array("first_name"    => $contact->first_name,
+            "last_name" => $contact->last_name,
+                        "primary_address_city" => $contact->primary_address_city,
+                        "account_name" => $contact->account_name,
+
+            "id" => $contact->id,
+                        "email_address" => $contact->email1,
+                       "salutation"=>$contact->salutation,
+                       "title"=>$contact->title,
+                       "phone_mobile"=>$contact->phone_mobile,
+                      "reports_to_id"=>$contact->reports_to_id,
+                      "primary_address_street"=>$contact->primary_address_street,
+                     "primary_address_city"=>$contact->primary_address_city,
+                     "primary_address_state"=>$contact->primary_address_state ,
+                     "primary_address_postalcode"=>$contact->primary_address_postalcode,
+                     "primary_address_country"=>$contact->primary_address_country,
+                     "alt_address_city"=>$contact->alt_address_city,
+                    "alt_address_street"=>$contact->alt_address_street,
+                    "alt_address_city"=>$contact->alt_address_city,
+                   "alt_address_state"=>$contact->alt_address_state,
+                   "alt_address_postalcode"=>$contact->alt_address_postalcode,
+                   "alt_address_country"=>$contact->alt_address_country,
+);
+        }
+}
+
+
+
+           
+
+
+    //to remove an erroneous compiler warning
+    $seed_contact = $seed_contact;
+   
+    //$log->debug("Contact by email returning");
+    //echo '------------------------ >>>>>>>>>>>>>>>>>>   ' .$output_list .' END .......';
+
+    return $output_list;
+}
+
+
 
 function create_session($user_name, $password)
 {

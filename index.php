@@ -13,12 +13,13 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/index.php,v 1.46 2004/12/08 15:07:11 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/index.php,v 1.50 2004/12/10 13:57:57 jack Exp $
  * Description: Main file and starting point for the application.  Calls the 
  * theme header and footer files defined for the user as well as the module as 
  * defined by the input parameters.
  ********************************************************************************/
 
+global $entityDel;
 global $display;
 $phpbb_root_path='./modules/MessageBoard/';
 if (substr(phpversion(), 0, 1) == "5") {
@@ -38,10 +39,8 @@ function fetchPermissionDataForTabList()
   return $modulesPermitted;
 }
 
-
 function fetchPermissionData($module,$action)
 {
-
   global $theme,$display;
   $permissionData = $_SESSION['action_permission_set'];
   $i=0;
@@ -100,8 +99,8 @@ function fetchPermissionData($module,$action)
   {
     $tabid=13;
   }
-
   $accessFlag = false;
+  checkDeletePermission($tabid);
   //if the tabid is not present in the array then he is not permitted
   //if the tabid is present, then check for the values of the action_permissions
   while($i<count($permissionData))
@@ -125,7 +124,6 @@ function fetchPermissionData($module,$action)
       
     }
     $i++;
-
   }
    
   if(!$accessFlag)
@@ -135,6 +133,33 @@ function fetchPermissionData($module,$action)
   }
 }
 
+//we have to do this as there is no UI page for Delete. Hence, when the user clicks delete, it gets stuck halfway and the page looks ugly because the theme is not set
+function checkDeletePermission($tabid)
+{
+	global $entityDel;
+  $action ="Delete";
+  $permissionData = $_SESSION['action_permission_set'];
+  $i = 0;
+  //keep searching till Delete method is found in the array
+  while($i<count($permissionData))
+  {
+    if($permissionData[$i][0] == $tabid  &&  $permissionData[$i][1]==$action)
+    {
+      
+      $actionpermissionvalue=$permissionData[$i][2];
+      if($actionpermissionvalue == 1)
+      {
+        $entityDel = true;
+      }
+      else
+      {
+        $entityDel = false;
+      }
+    }
+    $i++;
+  }
+
+}
  function stripslashes_checkstrings($value){
         if(is_string($value)){
                 return stripslashes($value);
@@ -277,19 +302,24 @@ else
 $log->debug($_REQUEST);
 $skipHeaders=false;
 $skipFooters=false;
-
+$viewAttachment = false;
 //echo $module;
-//echo $action;
+// echo $action;
 if(isset($action) && isset($module))
 {
 	$log->info("About to take action ".$action);
 	$log->debug("in $action");
-	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action))
+	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action))
 	{
 		$skipHeaders=true;
-		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action))
+		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action) || ereg("^downloadfile", $action))
 			$skipFooters=true;
+			if(ereg("^downloadfile", $action))
+				{
+					$viewAttachment = true;
+				}
 	}
+	
 	if($action == 'BusinessCard' || $action == 'Save')
 	{
  	         header( "Expires: Mon, 20 Dec 1998 01:00:00 GMT" );
@@ -536,7 +566,11 @@ else
 {
 	include($currentModuleFile);
 }
-echo "<!-- stopscrmprint -->";
+
+	if(!$viewAttachment)
+	{
+		echo "<!-- stopscrmprint -->";
+	}
 
 //added to get the theme . This is a bad fix as we need to know where the problem lies yet
 if(isset($_SESSION['authenticated_user_theme']) && $_SESSION['authenticated_user_theme'] != '')
@@ -554,8 +588,9 @@ else
 
 
 if(!$skipFooters)
-     include('themes/'.$theme.'/footer.php');
-
+	     include('themes/'.$theme.'/footer.php');
+if(!$viewAttachment)
+{
 // Under the SPL you do not have the right to remove this copyright statement.	
 $copyrightstatement="<style>
         .bggray
@@ -615,7 +650,7 @@ if($calculate_response_time)
     echo('&nbsp;Server response time: '.$deltaTime.' seconds.');
 }
 echo "</td></tr></table>\n";
-
+}
 
 
 
