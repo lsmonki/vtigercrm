@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.8 2004/12/21 20:01:38 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.9 2004/12/30 15:37:22 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -67,7 +67,7 @@ if (isset($_REQUEST['return_id']))
         $RETURN_ID = $_REQUEST['return_id'];
 }
 
-#$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $focus->id);
 $xtpl->assign("USER_NAME", $focus->user_name);
@@ -170,7 +170,7 @@ else $xtpl->assign("IS_ADMIN", "disabled");
 
 $xtpl->parse("main");
 $xtpl->out("main");
-
+/*
 echo "<br>";
 if(is_admin($current_user) && ! isset($focus->id))
 {
@@ -199,5 +199,5 @@ echo " </tr></table>\n";
 echo "</form>";
 echo get_set_focus_js();
 echo get_validate_record_js();
-
+*/
 ?>

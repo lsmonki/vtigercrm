@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.26 2004/12/30 14:22:16 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.28 2005/01/03 13:35:00 jack Exp $
  * Description:  Defines the English language pack for the base application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -167,11 +167,22 @@ $app_strings = Array(
 //3.2 release
 'NTC_MERGE_CONFIRMATION'=>'Are you sure you want to merge this record?',
 'LBL_MERGE_BUTTON_TITLE'=>'Merge',
-'LBL_MERGE_BUTTON_KEY'=>'Merge',
+'LBL_MERGE_BUTTON_KEY'=> 'Merge',
+'LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE'=>'Select Email Template',
+'LBL_SELECTEMAILTEMPLATE_BUTTON_KEY'=>'Select Email Template',
+'LBL_SELECTEMAILTEMPLATE_BUTTON_LABEL'=>'Select Email Template',
 'LBL_MERGE_BUTTON_LABEL'=>'Merge',
-'LBL_SENDMAIL_BUTTON_LABEL'=>'SendMail',
+'LBL_SENDMAIL_BUTTON_TITLE'=>'SendMail',
 'LBL_SENDMAIL_BUTTON_KEY'=> 'SendMail',
-'LBL_SENDMAIL_BUTTON_LABEL'=>'SendMail',
+'LBL_SENDMAIL_BUTTON_LABEL'=>'Send Mail',
+
+//Added fields for upload file as attachment -- 4 Beta
+'LBL_UPD_DESC'=>'Description',
+'LBL_FILENAME'=>'File Name',
+'LBL_FILE'=>'File',
+'LBL_TYPE'=>'File Type',
+'LBL_DOWNLOAD'=>'Download Now',
+
 );
 
 //the left value is the key stored in the db and the right value is the display value

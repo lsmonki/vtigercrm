@@ -39,6 +39,11 @@
 			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
 			<input type="hidden" name="return_id" value="{RETURN_ID}">
 			<input type="hidden" name="return_action" value="{RETURN_ACTION}">			
+			<input type="hidden" name="tz" value="Europe/Berlin">			
+			<input type="hidden" name="holidays" value="de,en_uk,fr,it,us,">			
+			<input type="hidden" name="workdays" value="0,1,2,3,4,5,6,">			
+			<input type="hidden" name="namedays" value="">			
+			<input type="hidden" name="weekstart" value="1">			
 		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
 		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
 		</tr></table>
@@ -78,18 +83,18 @@
 	</tr>
 
         <tr><td width="20%" class="dataLabel">{MOD.LBL_USER_ROLE}</td>
-        <td>{USER_ROLE} </td>
+        <td width="30%">{USER_ROLE} </td>
 
-        <td width="10%" class="dataLabel">{MOD.LBL_GROUP_NAME}</td>
-        <td>{GROUP_NAME} </td>
+        <td width="20%" class="dataLabel">{MOD.LBL_GROUP_NAME}</td>
+        <td width="30%">{GROUP_NAME} </td>
  
       </tr>
         
      <tr>   
-	<td width="20%" class="dataLabel">{MOD.LBL_ADMIN}</td>
-	<td width="80%"><input name='is_admin' type="checkbox" tabindex='3' {DISABLED} {IS_ADMIN}></td>
-	<td class="dataLabel">&nbsp;</td>
-	<td class="dataLabel">&nbsp;</td>
+	<td class="dataLabel">{MOD.LBL_ADMIN}</td>
+	<td><input name='is_admin' type="checkbox" tabindex='3' {DISABLED} {IS_ADMIN}></td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
 </tr></table>
 </td></tr></table>
 <BR>
@@ -155,7 +160,7 @@
 	<td width="30%"><input name='address_country' tabindex='8' size='10' maxlength='20' value='{ADDRESS_COUNTRY}'></td>
 </tr></table>
 </td></tr></table>
-<!--table width="100%" cellpadding="2" cellspacing="0" border="0"><tr>
+<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr>
     <td align="left"></td>
       <td align="left">
              <table cellpadding="0" cellspacing="5" border="0">
@@ -167,7 +172,7 @@
     <td align="left"></td>
  </tr></table>
 
-	</form-->
+	</form>
 
 {JAVASCRIPT}
 

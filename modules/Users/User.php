@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/User.php,v 1.4 2004/12/21 20:01:38 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/User.php,v 1.5 2005/01/03 13:54:30 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -51,6 +51,11 @@ class User extends SugarBean {
 	var $address_state;
 	var $address_postalcode;
 	var $address_country;
+	var $tz;
+	var $holidays;
+	var $namedays;
+	var $workdays;
+	var $weekstart;
 	var $status;
 	var $title;
 	var $department;
@@ -91,6 +96,11 @@ class User extends SugarBean {
 		,"address_postalcode"
 		,"address_country"
 		,"reports_to_id"
+		,"tz"
+		,"holidays"
+		,"namedays"
+		,"workdays"
+		,"weekstart"
 		,"status"
 		);
 
@@ -201,6 +211,11 @@ class User extends SugarBean {
 		$query .= ', address_country varchar(25)';
 		$query .= ', address_postalcode varchar(9)';
 		$query .= ', user_preferences TEXT';
+		$query .= ', tz varchar(30)';
+		$query .= ', holidays varchar(60)';
+		$query .= ', namedays varchar(60)';
+		$query .= ', workdays varchar(30)';
+		$query .= ', weekstart int(11)';
 		$query .= ', deleted bool NOT NULL default 0';
 		$query .= ', PRIMARY KEY ( ID )';
 		$query .= ', KEY ( user_name )';

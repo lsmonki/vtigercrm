@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.3 2004/10/29 09:55:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.4 2004/12/30 16:52:27 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -88,7 +88,7 @@ class Email extends SugarBean {
 	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'contact_id', 'user_id', 'contact_name');		
 
 	// This is the list of fields that are in the lists.
-	var $list_fields = Array('id', 'name', 'parent_type', 'parent_name', 'parent_id', 'date_start', 'assigned_user_name', 'assigned_user_id', 'contact_name');
+	var $list_fields = Array('id', 'name', 'parent_type', 'parent_name', 'parent_id', 'date_start', 'assigned_user_name', 'assigned_user_id', 'contact_name','filename');
 		
 	function Email() {
 		$this->log = LoggerManager::getLogger('email');
@@ -326,8 +326,11 @@ class Email extends SugarBean {
 		}
 		else 
 		{
-			$query = 'SELECT id, name, assigned_user_id, parent_type, parent_id, date_start, time_start FROM emails ';
-			$where_auto = "deleted=0";
+//			$query = 'SELECT id, name, assigned_user_id, parent_type, parent_id, date_start, time_start FROM emails ';
+//			$where_auto = "deleted=0";
+			$query = 'SELECT emails.id, emails.name, emails.assigned_user_id, emails.parent_type, emails.parent_id, emails.date_start, emails.time_start , email_attachments.filename , email_attachments.parent_id FROM emails left join  email_attachments on emails.id=email_attachments.parent_id ';
+			$where_auto = " deleted=0 ";
+
 		}
 		
 		if($where != "")
@@ -339,7 +342,6 @@ class Email extends SugarBean {
 			$query .= " ORDER BY $order_by";
 		else 
 			$query .= " ORDER BY emails.name";			
-	
 		return $query;
 	}
 

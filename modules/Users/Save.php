@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Save.php,v 1.7 2004/12/22 07:07:46 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Save.php,v 1.8 2004/12/30 15:37:21 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -61,7 +61,7 @@ if (isset($_POST['user_name']) && isset($_POST['old_password']) && isset($_POST[
 			message_die(GENERAL_ERROR, 'Could not update user password', '', __LINE__, __FILE__, $sql);
 		}
 		//
-		$temp_user = $current_user;
+/*		$temp_user = $current_user;
                 //
                 // Changing Calendar Password
 		require_once("modules/Calendar/user_ins.php");
@@ -70,7 +70,7 @@ if (isset($_POST['user_name']) && isset($_POST['old_password']) && isset($_POST[
                 $focus->db->query($q1, true, "Error setting new password for $this->user_name: ");
                 //
                 $current_user = $temp_user;
-
+*/
 		if (!$focus->change_password($_POST['old_password'], $_POST['new_password'])) {
 		
 			header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
@@ -107,7 +107,7 @@ else {
 	}
 	else {	
 		$focus->save();
-		include('modules/Calendar/user_ins.php');
+//		include('modules/Calendar/user_ins.php');
 		include("modules/Users/forum_register.php");	
 		$return_id = $focus->id;
 	}

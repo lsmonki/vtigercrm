@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.13 2004/12/30 09:37:23 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.14 2004/12/30 16:52:27 jack Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -51,6 +51,7 @@ if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
 
 $focus->filename = $_REQUEST['file_name'];
 $focus->parent_id = $_REQUEST['parent_id'];
+$focus->parent_type = $_REQUEST['parent_type'];
 
 //echo 'file name : '.$_REQUEST['file_name'].'..'.$focus->filename;
 $focus->save();
@@ -130,16 +131,20 @@ if(move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$uploaddir.$_FILES["uplo
     {
 	    $parent_type = 'Opportunity';
     }
-   elseif($_REQUEST['return_module'] == 'Cases')
+    elseif($_REQUEST['return_module'] == 'Cases')
     {
 	    $parent_type = 'Case';
+    }
+    elseif($_REQUEST['return_module'] == 'Emails')
+    {
+	    $parent_type = 'Emails';
     }		
 
-    $parent_id = $_REQUEST['return_id'];	 			
+    $parent_id = $_REQUEST['parent_id'];	 			
 
     $sql = "INSERT INTO email_attachments ";
     $sql .= "(date_entered,parent_type,parent_id,data, filename, filesize, filetype) ";
-    $sql .= "VALUES ('$date_entered','$parent_type','$parent_id','$data',";
+    $sql .= "VALUES ('$date_entered','$parent_type','$return_id','$data',";
     $sql .= "'$filename', '$filesize', '$filetype')";
     $result = mysql_query($sql);
      mysql_close();
@@ -162,7 +167,7 @@ if(move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$uploaddir.$_FILES["uplo
 else 
 {
   $errorCode =  $_FILES['uploadfile']['error'];
-  echo "Problems in file upload. Please try again! <br>" .$errorCode;
+//  echo "Problems in file upload. Please try again! <br>" .$errorCode;
 }
 
 function deleteFile($dir,$filename)
@@ -170,6 +175,6 @@ function deleteFile($dir,$filename)
    unlink($dir.$filename);	
 }
 
-//echo 'return ..'.$return_module.' / '.$return_action.' / '.$return_id.'...'.$filename;
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&filename=$filename");
+//echo 'return..'.$return_module.'/'.$return_action.'<br>parent id='.$parent_id.'<br>return id = '.$return_id.'/'.$filename;
+header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
 ?>

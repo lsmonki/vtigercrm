@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.34 2004/12/30 06:57:47 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.36 2005/01/03 13:54:30 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -158,12 +158,17 @@ function create_default_users()
         global $default_user_is_admin;
 
         //Create default admin user
-    $user = new User();
+    	$user = new User();
         $user->last_name = 'Administrator';
         $user->user_name = 'admin';
         $user->status = 'Active';
         $user->is_admin = 'on';
         $user->user_password = $user->encrypt_password($admin_password);
+        $user->tz = 'Europe/Berlin';
+        $user->holidays = 'de,en_uk,fr,it,us,';
+        $user->workdays = '0,1,2,3,4,5,6,';
+        $user->weekstart = '1';
+        $user->namedays = '';
         $user->email = $admin_email;
         $user->save();
 
@@ -181,9 +186,12 @@ function create_default_users()
                 $default_user->status = 'Active';
 			if (isset($default_user_is_admin) && $default_user_is_admin) $default_user->is_admin = 'on';
                 $default_user->user_password = $default_user->encrypt_password($default_password);
+        	$default_user->tz = 'Europe/Berlin';
+	        $default_user->holidays = 'de,en_uk,fr,it,us,';
+        	$default_user->workdays = '0,1,2,3,4,5,6,';
+	        $default_user->weekstart = '1';
+        	$default_user->namedays = '';
                 $default_user->save();
-
-
 	
         }
 }
@@ -399,11 +407,11 @@ mysql_query("insert into role2permission(roleid,permissionid,module,module_actio
 }
 
 //populate Calendar data
-//include("modules/Calendar/admin/scheme.php");
+include("modules/Calendar/admin/scheme.php");
 
 ?>
 The database tables are now set up.<HR></HR>
-otal time: <?php echo "$deltaTime"; ?> seconds.<BR />
+total time: <?php echo "$deltaTime"; ?> seconds.<BR />
 </td></tr>
 <tr><td><hr></td></tr>
 <tr><td align=left><font color=green>Your system is now installed and configured for use.  You will need to log in for the first time using the "admin"

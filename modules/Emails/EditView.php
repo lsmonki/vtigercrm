@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/EditView.php,v 1.7 2004/12/30 09:16:17 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/EditView.php,v 1.8 2004/12/31 11:15:06 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -92,6 +92,9 @@ $xtpl->assign("APP", $app_strings);
 
 // Unimplemented until jscalendar language files are fixed
 // $xtpl->assign("CALENDAR_LANG", ((empty($cal_codes[$current_language])) ? $cal_codes[$default_language] : $cal_codes[$current_language]));
+
+$xtpl->assign("ENTITY_TYPE",$_REQUEST['email_directing_module']);
+$xtpl->assign("ENTITY_ID",$_REQUEST['record']);
 $xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 if (!isset($focus->id)) $xtpl->assign("USER_ID", $current_user->id);
