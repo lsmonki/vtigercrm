@@ -1,0 +1,270 @@
+/*********************************************************************************
+ * The contents of this file are subject to the Mozilla Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.mozilla.org/MPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * $Id$
+ * Description:  Contains a variety of utility functions used to display UI 
+ * components such as form headers and footers.  Intended to be modified on a per 
+ * theme basis.
+ ********************************************************************************/
+
+body {
+	font-size: 10px;
+	background-color: #FFFFFF;
+	color: #000000;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+table        { 
+	font-size: 10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+a { 
+	font-size: 11px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #333366; 
+	text-decoration: none;
+}
+a:hover { 
+	text-decoration: underline;
+}
+
+.welcome     { 
+	color: #FFFFFF; 
+	font-weight: bold 
+}
+.welcome a:link   { 
+	color: #FFFFFF
+}
+.welcome a:active { 
+	color: #FFFFFF 
+}
+.welcome a:visited{ 
+	color: #FFFFFF 
+}
+.welcome a:hover  { 
+	color: #FFFFFF 
+}
+.sitename    { 
+	color: #FFFFFF; 
+	font-size: 24px; 
+	font-weight: bold 
+}
+.siteslogan  { color: #FFFFFF; font-size: 14px; font-weight: bold }
+
+TD { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+UL { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+OL { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+LI { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+TEXTAREA { FONT-SIZE: 8pt; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif}
+INPUT { FONT-SIZE: 8pt; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif}
+INPUT.button { 
+border:none;
+	BORDER-top: 1px solid #999; 
+	BORDER-left: 1px solid #999;
+	BORDER-right: 1px solid #000; 
+	BORDER-bottom: 1px solid #000;
+	FONT-WEIGHT: bold; FONT-SIZE: 8pt;
+	CURSOR: hand; 
+	CURSOR: pointer; 
+	COLOR: #000; 
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 
+	BACKGROUND: url(images/buttonbg.gif);
+}
+SELECT { FONT-SIZE: 8pt; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif}
+
+.tabOffBorder {
+	border-bottom: 1px solid #000195;
+}
+.tabOnBorder {
+	border-bottom: 1px solid #A1DDFF;
+}
+
+A.currentTab {
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 11px;
+	FONT-WEIGHT: bold;
+	TEXT-DECORATION: none;
+}
+A.currentTab:link {FONT-WEIGHT: bold;COLOR:#000;}
+A.currentTab:active {FONT-WEIGHT: bold;COLOR:#000;}
+A.currentTab:visited {FONT-WEIGHT: bold;COLOR:#000;}
+A.currentTab:hover {FONT-WEIGHT: bold;COLOR:#000;TEXT-DECORATION: underline;}
+
+A.otherTab {
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-SIZE: 11px;
+	FONT-WEIGHT: bold;
+	TEXT-DECORATION: none;
+}
+A.otherTab:link {FONT-WEIGHT: bold;COLOR:#000;}
+A.otherTab:active {FONT-WEIGHT: bold;COLOR:#000;}
+A.otherTab:visited {FONT-WEIGHT: bold;COLOR:#000;}
+A.otherTab:hover {FONT-WEIGHT: bold;COLOR:#000;TEXT-DECORATION: underline;}
+
+.topBand {
+	background-image: url(images/topband.gif);
+}
+.topBar {
+	height: 18;
+	background-image: url(images/topbar.gif);
+}
+.moduleMenuBg {
+	height: 20;
+	background: #F5F5F5;
+	border-bottom: 1px solid #CCC;
+}
+.moduleMenu {
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	FONT-WEIGHT: normal;
+	FONT-SIZE: 10px;
+	COLOR: #CCC;
+	TEXT-DECORATION: none;
+}
+A.moduleMenu:link {
+	COLOR: #000;
+}
+A.moduleMenu:visited {
+	COLOR: #000;
+}
+A.moduleMenu:hover {
+	COLOR: #000;
+	TEXT-DECORATION: underline 
+}
+.moduleTitle {
+	FONT-WEIGHT: bold;
+	FONT-SIZE: 11pt;
+	COLOR: #000000;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	TEXT-DECORATION: none;
+}
+.hline {
+	border-bottom: 1px solid #A1A5A9;
+}
+
+.formHeader {
+	FONT-WEIGHT: bold;
+	FONT-SIZE: 11px;
+/*	BACKGROUND-COLOR: #0057AE; */
+	COLOR: #000;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	TEXT-DECORATION: none;
+}
+.formFooter {
+	FONT-WEIGHT: normal;
+	COLOR: #FFFFFF;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	TEXT-DECORATION: none;
+	background-color: #E2E2E2;
+}
+.formBorder {
+	border: 1px solid #000;
+	background: url(images/formborder.gif);
+}
+.formOuterBorder {
+	border: 1px solid #A1A5A9;
+}
+.formSecHeader {
+	padding-left: 2px;
+	height: 20px;
+	font-size: 11px; 
+	font-weight: bold ;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	BACKGROUND-COLOR: #E2E2E2;
+}
+.leftFormHeader { 
+	border: 1px solid #A1A5A9;
+	background-color: #E2E2E2;
+	padding: 2;
+	color: #000;
+	font-size: 11px;
+	font-weight: bold;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+}
+.leftFormFooter { 
+	color: #000; 
+	font-size: 11px; 
+	font-weight: bold;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	BACKGROUND-COLOR: #FF8200;
+}
+.leftFormBorder1 {
+	border-left: 1px solid #A1A5A9;
+	border-right: 1px solid #A1A5A9;
+	border-bottom: 1px solid #A1A5A9;
+}
+.leftFormBorder2 {
+	border-left: 1px solid #A1A5A9;
+	border-right: 1px solid #A1A5A9;
+	border-bottom: 1px solid #A1A5A9;
+}
+
+.moduleListTitle {
+	FONT-WEIGHT: normal;
+	FONT-SIZE: 7pt;
+	COLOR: #000000;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	TEXT-DECORATION: none;
+	background-color: #E2E2E2;
+}
+.moduleName	{ font-weight: normal; font-size: 14pt; color: #ffffff; BACKGROUND-COLOR: #336699 }
+.moduleLine { BACKGROUND-COLOR: #336699}
+
+.bodyBold { FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.bodyBold:link { FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+.bodySmall { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.bodySmall:link { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+.bodySmallBold { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.bodySmallBold:link { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+.dataLabel {FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; LINE-HEIGHT: 16px; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #F0F0F0; TEXT-ALIGN: right }
+.dataField { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; LINE-HEIGHT: 16px; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #FFFFFF; TEXT-ALIGN: left }
+.requiredInput { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #ffffff; LINE-HEIGHT: 16px; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #990000; TEXT-ALIGN: right }
+
+.calMotif { COLOR: #ffffff; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #336699 }
+.calView { FONT-WEIGHT: normal; FONT-SIZE: 7pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+.calTitle { FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #ffffff; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: center; TEXT-DECORATION: none }
+.calDays { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: center; TEXT-DECORATION: none }
+.calActive { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }
+.calInactive { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #999999; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }
+.calToday {FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }
+.calAddEvent { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: right; TEXT-DECORATION: underline }
+
+.blackLine { BACKGROUND-COLOR: #A1A5A9}
+.columnHeadInactiveWhite { FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #ffffff; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif }
+
+.notyetdueTask { FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #006600; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+.notyetdueTask:link { FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #006600; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+.overdueTask { FONT-WEIGHT: bold; COLOR: #990000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+.overdueTask:link { FONT-WEIGHT: bold; COLOR: #990000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+
+.evenListRow { FONT-SIZE: 8pt; background-color: #F0F0F0 }
+.oddListRow { FONT-SIZE: 8pt; background-color: #FFFFFF }
+
+.required {
+	color: #FF0000;
+	font-weight: bold;
+}
+
+.error{
+	color: #FF0000;
+	font-weight: bold;
+}
+
+.listFormLinks 			{ FONT-WEIGHT: lighter; FONT-SIZE: 8pt; COLOR: #333366; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none; }
+A.listFormLinks:link 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #333366; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.listFormLinks:visited { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #333366; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.listFormLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #333366; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }
+
+.listFormHeaderLinks 			{ FONT-WEIGHT: lighter; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none; }
+A.listFormHeaderLinks:link 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }
+A.listFormHeaderLinks:visited { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }
+A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }
