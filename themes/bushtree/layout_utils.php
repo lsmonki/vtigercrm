@@ -21,6 +21,9 @@
 
 require_once('include/logging.php');
 global $app_strings;
+global $theme;
+global $image_path;
+$image_path = 'themes/'.$theme.'/images/';
 
 $log = LoggerManager::getLogger('layout_utils');	
 
