@@ -13,14 +13,43 @@
 
 require_once('database/DatabaseConnection.php');
 
+if(isset($_REQUEST['groupname']))
+{
+  $groupname = $_REQUEST['groupname'];
+  $sql= "select user_name from users2group inner join users on users.id= users2group.userid where groupname='" .$_REQUEST['groupname'] ."'";
+  $result = mysql_query($sql);
+  $groupnameList = "";
+  
+  while($groupList=mysql_fetch_array($result))
+  {
+    $groupnameList = $groupnameList .$groupList['user_name'] .",";
+  }
+  //echo 'final group list is ' .$groupnameList;
+  
+  header("Location: index.php?module=Users&action=listgroupmembers&groupname=$groupname&groupmembers=$groupnameList");
+}
+
 function fetchUserRole($userid)
 {
 	$sql= "select rolename from user2role where userid='" .$userid ."'";
-        //echo $sql;
-	$result = mysql_query($sql);
+        $result = mysql_query($sql);
 	$rolename=  mysql_result($result,0,"rolename");
 	return $rolename;
 }
+
+
+
+function fetchUserGroups($userid)
+{
+	$sql= "select groupname from users2group where userid='" .$userid ."'";
+        //echo $sql;
+        $result = mysql_query($sql);
+        //store the groupnames in a comma separated string
+        //echo 'count is ' .count($result);
+	$groupname=  mysql_result($result,0,"groupname");
+	return $groupname;
+}
+
 
 function setPermittedTabs2Session($rolename)
 {
@@ -77,11 +106,20 @@ function createNewRole($roleName,$parentRoleName)
   header("Location: index.php?module=Users&action=listroles");
 }
 
+
+function createNewGroup($groupName,$groupDescription)
+{
+  $sql = "insert into groups(name,description) values('" .$groupName ."','". $groupDescription ."')";
+  $result = mysql_query($sql); 
+  header("Location: index.php?module=Users&action=listgroups");
+}
+
+
+
 function fetchTabId($moduleName)
 {
 
   $sql = "select id from tabmenu where name ='" .$moduleName ."'";
-  echo $sql;
   $result = mysql_query($sql); 
   $tabid =  mysql_result($result,0,"id");
   return $tabid;
@@ -138,8 +176,7 @@ function fetchTabReferenceEntityValues($parentrolename)
 function fetchActionReferenceEntityValues($parentrolename)
 {
   $sql = "select tabid,actionname,action_permission,description from role2action where rolename='" .$parentrolename ."'"; 
-  //echo $sql;
-  $result=mysql_query($sql);
+    $result=mysql_query($sql);
   return $result;
 }
 
@@ -148,9 +185,38 @@ function updateUser2RoleMapping($roleid,$userid)
 {
 
   $sql = "insert into user2role(userid,rolename) values('" .$userid ."','" .$roleid ."')";
-  //  echo $sql;
   $result = mysql_query($sql);
 
 }
+
+
+function updateUsers2GroupMapping($groupname,$userid)
+{
+
+  $sql = "insert into users2group(groupname,userid) values('" .$groupname ."','" .$userid ."')";
+  $result = mysql_query($sql);
+}
+
+
+
+
+
+if(isset($_REQUEST['actiontype']))
+{
+  if($_REQUEST['actiontype'] == 'createnewgroup')
+  {
+    $groupname = $_REQUEST['groupName'];
+    $description = $_REQUEST['groupDescription'];
+    //get the new group name
+    createNewGroup($groupname,$description);
+    
+  }
+}
+
+
+
+
+
+
 
 ?>

@@ -64,6 +64,7 @@ function SubPanelViewContactsAndUsers(){
 
 function getHeaderText($action, $currentModule){
 	global $app_strings;
+	global $mod_strings;
 	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
 	$button .= "<input type='hidden' name='module' value='Contacts'>\n";
 if ($currentModule == 'Contacts') {
@@ -107,19 +108,33 @@ elseif ($currentModule == 'Opportunities') $button .= "<input type='hidden' name
 		else$button .= "<td><input title='".$app_strings['LBL_NEW_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_NEW_BUTTON_KEY']."' class='button' onclick=\"this.form.action.value='EditView'\" type='submit' name='button' value='  ".$app_strings['LBL_NEW_BUTTON_LABEL']."  '></td>\n";
 	}
 	if(!$this->hideUsers){
+		
+		if($currentModule=='Emails')
+		{
+			$button .= "<td><input title='".$mod_strings['LBL_BULK_MAILS']."' class='button' value='".$mod_strings['LBL_BULK_MAILS']."' name='button' onclick=\"this.form.action.value='../Emails/sendmail';this.form.record.value='".$this->focus->id."'\" type='submit''></td>\n";
+		}
+
 		$button .= "<td><input title='".$app_strings['LBL_SELECT_USER_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_SELECT_USER_BUTTON_KEY']."' type='button' class='button' value='".$app_strings['LBL_SELECT_USER_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Users&action=Popup&html=Popup_picker&form=DetailView&form_submit=true\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
 	}
-	if(!$this->hideContacts){
+	if(!$this->hideContacts)
+	{
 		$selectName = 'LBL_SELECT_BUTTON';
-		if(!$this->hideUsers){
+		if(!$this->hideUsers)
+		{
 			$selectName = 'LBL_SELECT_CONTACT_BUTTON';
 		}
 		
-		if (isset($this->focus->parent_type) && $this->focus->parent_type == "Accounts") $button .= "<td><input title='".$app_strings[$selectName.'_TITLE']."' accessyKey='".$app_strings[$selectName.'_KEY']."' type='button' class='button' value='".$app_strings[$selectName.'_LABEL']."' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=DetailView&form_submit=true&query=true&account_id=".$this->focus->parent_id."&account_name=".urlencode($this->focus->parent_name)."\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
-		elseif($currentModule == 'Contacts') $button.= "<td><input title='".$app_strings[$selectName.'_TITLE']."' accessKey='".$app_strings[$selectName.'_KEY']."' type='button' class='button' value=' ".$app_strings[$selectName.'_LABEL']." ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=ContactDetailView&form_submit=true&query=true&account_id=".$this->focus->account_id."&account_name=".urlencode($this->focus->account_name)."\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
+		if (isset($this->focus->parent_type) && $this->focus->parent_type == "Accounts") 
+			$button .= "<td><input title='".$app_strings[$selectName.'_TITLE']."' accessyKey='".$app_strings[$selectName.'_KEY']."' type='button' class='button' value='".$app_strings[$selectName.'_LABEL']."' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=DetailView&form_submit=true&query=true&account_id=".$this->focus->parent_id."&account_name=".urlencode($this->focus->parent_name)."\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
+
+		elseif($currentModule == 'Contacts') 
+			$button.= "<td><input title='".$app_strings[$selectName.'_TITLE']."' accessKey='".$app_strings[$selectName.'_KEY']."' type='button' class='button' value=' ".$app_strings[$selectName.'_LABEL']." ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=ContactDetailView&form_submit=true&query=true&account_id=".$this->focus->account_id."&account_name=".urlencode($this->focus->account_name)."\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
+
 		else if(isset($this->focus->account_id) && isset($this->focus->account_name))
-		 $button .= "<td><input title='".$app_strings[$selectName.'_TITLE']."' accessyKey='".$app_strings[$selectName.'_KEY']."' type='button' class='button' value='  ".$app_strings[$selectName.'_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=DetailView&form_submit=true&query=true&account_id=".$this->focus->account_id."&account_name=".urlencode($this->focus->account_name)."\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
-		else$button .= "<td><input title='".$app_strings[$selectName.'_TITLE']."' accessyKey='".$app_strings[$selectName.'_KEY']."' type='button' class='button' value='  ".$app_strings[$selectName.'_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=DetailView&form_submit=true&query=true\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
+			 $button .= "<td><input title='".$app_strings[$selectName.'_TITLE']."' accessyKey='".$app_strings[$selectName.'_KEY']."' type='button' class='button' value='  ".$app_strings[$selectName.'_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=DetailView&form_submit=true&query=true&account_id=".$this->focus->account_id."&account_name=".urlencode($this->focus->account_name)."\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
+
+		else
+			$button .= "<td><input title='".$app_strings[$selectName.'_TITLE']."' accessyKey='".$app_strings[$selectName.'_KEY']."' type='button' class='button' value='  ".$app_strings[$selectName.'_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=DetailView&form_submit=true&query=true\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
 	}
 
 	$button .= "</tr></form></table>\n";

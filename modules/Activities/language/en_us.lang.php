@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Activities/language/en_us.lang.php,v 1.3 2004/09/06 10:54:57 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Activities/language/en_us.lang.php,v 1.4 2004/12/24 15:18:15 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -63,6 +63,10 @@ $mod_strings = Array(
 'LNK_NEW_TASK'=>'New Task',
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
 'NTC_NONE_SCHEDULED'=>'None scheduled.',
+
+// Added fields for Attachments in Activities/SubPanelView.php
+'LBL_ATTACHMENTS'=>'Attachments',
+'LBL_NEW_ATTACHMENT'=>'New Attachment',
 );
 
 ?>

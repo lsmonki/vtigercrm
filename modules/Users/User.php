@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/User.php,v 1.3 2004/10/29 09:55:10 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/User.php,v 1.4 2004/12/21 20:01:38 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -494,8 +494,6 @@ class User extends SugarBean {
 		elseif ($list_form->exists($xTemplateSection.".row.no_yahoo_id"))
 				$list_form->parse($xTemplateSection.".row.no_yahoo_id");
 		return $list_form;
-		
-		
 		
 	}
 	

@@ -662,22 +662,15 @@ class appointment extends tutos_base {
     } else {
       $q->addFV("visitor","null","");
     }
+    
     if ( is_object($this->product) && ( $this->product->id != -1) ) {
       $q->addFV("product",$this->product,"OBJ");
     } else {
       $q->addFV("product","null","");
     }
 	$this->save_custom_fields($q);
-    
-    //Add appointment to CRM Calendar
-    $q = new query($this->dbconn);
-    $q->setTable($this->crm_calinfo);
-    $q->addFV("subject",$this->subject,"STRING",$table['crmcalendar']['subject'][size]);
-    $q->addFV("account_name",$this->account_name,"STRING",$table['crmcalendar']['account_name'][size]);
-    $q->addFV("contact_name",$this->contact_name,"STRING",$table['crmcalendar']['contact_name'][size]);
-
-    //
-    $msg = "";
+  
+        $msg = "";
     if ( $this->trace == 0 ) {
       /* YES */
       $def_state = 1;
@@ -717,7 +710,29 @@ class appointment extends tutos_base {
       $q->addFV("creator",$this->creator,"OBJ");
       $q->addFV("creation",$this->creation,"DATETIME");
 
-      $this->dbconn->Exec($q->getInsert());
+     $this->dbconn->Exec($q->getInsert());
+
+    //Add appointment to CRM Calendar
+      $stmt = "SELECT max(id) as max_id  FROM ". $this->dbconn->prefix .$table['appointment1'][name];
+	
+ 	$rset = $this->dbconn->Exec($stmt);
+        $nrow = $rset->numrows();
+        $j = 0;
+	if($j < $nrow)
+	{
+		$cat = $rset->get($j, "max_id");
+	}
+	$this->calid = $cat;
+    $cq = new query($this->dbconn);
+    $cq->setTable($this->crm_calinfo);
+    $cq->addFV("id",$this->calid,"INT");
+    $cq->addFV("subject",$this->subject,"STRING",$table['crmcalendar']['subject'][size]);
+    $cq->addFV("account_name",$this->account_name,"STRING",$table['crmcalendar']['account_name'][size]);
+    $cq->addFV("contact_name",$this->contact_name,"STRING",$table['crmcalendar']['contact_name'][size]);
+
+     $this->dbconn->Exec($cq->getInsert());
+    //
+
 
     }
 

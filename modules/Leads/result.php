@@ -149,7 +149,36 @@ for($i=2;$i<=$data->sheets[0]['numRows']; $i++)
 			//echo 'description ' .$value_description;
 			$value_stage = $data->sheets[0]['cells'][$i][$stage];
 			//echo 'stage ' .$value_stage;
-			insert2DB($value_salutation,$value_firstname,$value_lastname,$value_company,$value_designation,$value_leadsource,$value_industry,$value_annualrevenue,$value_licensekey,$value_phone,$value_mobile,$value_fax,$value_email,$value_yahooid,$value_website,$value_leadstatus,$value_rating,$value_employeecount);
+			$id = insert2DB($value_salutation,$value_firstname,$value_lastname,$value_company,$value_designation,$value_leadsource,$value_industry,$value_annualrevenue,$value_licensekey,$value_phone,$value_mobile,$value_fax,$value_email,$value_yahooid,$value_website,$value_leadstatus,$value_rating,$value_employeecount);
+			//Inserting Custom Field Values
+			$dbquery="select * from customfields where module='Leads'";
+			$custresult = mysql_query($dbquery);
+			if(mysql_num_rows($custresult) != 0)
+			{
+				$noofrows = mysql_num_rows($custresult);
+				$columns='';
+				$values='';
+				for($j=0; $j<$noofrows; $j++)
+				{
+					$fldLabel=mysql_result($custresult,$j,"fieldlabel");
+					$colName=mysql_result($custresult,$j,"column_name");
+					$colNameMapping = $HTTP_POST_VARS[$colName];
+					$value_colName = $data->sheets[0]['cells'][$i][$colNameMapping];
+
+					if($j == 0)
+					{
+						$columns='leadid, '.$colName;
+						$values='"'.$id.'", "'.$value_colName.'"';
+					}
+					else
+					{
+						$columns .= ', '.$colName;
+						$values .= ', "'.$value_colName.'"';
+					} 
+				}
+				$insert_custfld_query = 'insert into leadcf ('.$columns.') values('.$values.')';
+				mysql_query($insert_custfld_query);
+			}
 
 }
 
@@ -167,6 +196,7 @@ function insert2DB($salutation,$firstname,$lastname,$company,$designation,$leads
   $sql = "INSERT INTO leads (id,date_entered,date_modified,modified_user_id,assigned_user_id,salutation,first_name,last_name,company,designation,lead_source,industry,annual_revenue,license_key,phone,mobile,fax,email,yahoo_id,website,lead_status,rating,employees) VALUES ('$id','$date_entered','$date_modified','$modified_user_id','$assigned_user_id','$salutation','$firstname','$lastname','$company','$designation','$leadsrc','$industry','$annualrevenue','$licensekey','$phone','$mobile','$fax','$email','$yahooid','$website','$leadstatus','$rating','$empcount')";
 
   $result = mysql_query($sql);
+  return $id;	
 
 }
 

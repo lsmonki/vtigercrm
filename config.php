@@ -39,7 +39,7 @@ $H_NAME=gethostbyaddr($_SERVER['SERVER_ADDR']);
 // This is the full path to the include directory including the trailing slash
 //$includeDirectory = $root_directory.'include/';
 
-$list_max_entries_per_page = '50';
+$list_max_entries_per_page = '10';
 
 $history_max_viewed = '10';
 

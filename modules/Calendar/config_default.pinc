@@ -201,7 +201,7 @@ $tutos[maxshort]  = 3;
 # until a new login is required
 # 240 minutes (default) = 4 hours
 #
-$tutos[timetolive]  = 240;
+$tutos[timetolive]  = 5760;
 #
 # How long a bug may be open before a remember mail will be sent
 # 0 = disabled
@@ -638,7 +638,7 @@ $tutos[defaultrole] = 1;
 #
 $tutos[usetaskmanagement] = 1;
 $tutos[usemaplink]        = 1;
-$tutos[useprojects]       = 1;
+#$tutos[useprojects]       = 1;
 $tutos[usecalendar]       = 1;
 $tutos[usetimetrack]      = 1;
 $tutos[usefax]            = 1;

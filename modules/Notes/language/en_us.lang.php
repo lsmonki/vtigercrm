@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/language/en_us.lang.php,v 1.5 2004/12/24 11:23:42 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Notes/language/en_us.lang.php,v 1.5 2004/12/24 11:23:42 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.

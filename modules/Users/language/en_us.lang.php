@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.5 2004/11/25 10:41:17 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.7 2004/12/16 15:58:40 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -33,6 +33,8 @@ $mod_strings = Array(
 'LBL_LIST_EMAIL'=>'Email',
 'LBL_LIST_PRIMARY_PHONE'=>'Primary Phone',
 'LBL_LIST_ADMIN'=>'Admin',
+//added for patch2
+'LBL_GROUP_NAME'=>'Group',
 
 'LBL_NEW_USER_BUTTON_TITLE'=>'New User [Alt+N]',
 'LBL_NEW_USER_BUTTON_LABEL'=>'New User',
@@ -115,6 +117,43 @@ $mod_strings = Array(
 'LNK_NEW_MEETING'=>'New Meeting',
 'LNK_NEW_TASK'=>'New Task',
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
+
+// Additional Fields for i18n --- Release vtigerCRM 3.2 Patch 2
+// Users--listroles.php , createrole.php , ListPermissions.php , editpermissions.php
+
+'LBL_ROLES'=>'Roles',
+'LBL_ROLE_NAME'=>'Role Name',
+'LBL_CREATE_NEW_ROLE'=>'Create New Role',
+
+'LBL_CREATE_NEW_ROLE'=>'Create New Role',
+'LBL_INDICATES_REQUIRED_FIELD'=>'Indicates required field',
+'LBL_NEW_ROLE'=>'New Role',
+'LBL_PARENT_ROLE'=>'Parent Role',
+
+'LBL_LIST_ROLES'=>'List Roles',
+'LBL_ENTITY_LEVEL_PERMISSIONS'=>'Entity Level Permissions',
+'LBL_ENTITY'=>'Entity',
+'LBL_CREATE_EDIT'=>'Create/Edit',
+'LBL_DELETE'=>'Delete',
+'LBL_ALLOW'=>'Allow',
+'LBL_LEADS'=>'Leads',
+'LBL_ACCOUNTS'=>'Accounts',
+'LBL_CONTACTS'=>'Contacts',
+'LBL_OPPURTUNITIES'=>'Opportunities',
+'LBL_TASKS'=>'Tasks',
+'LBL_CASES'=>'Cases',
+'LBL_EMAILS'=>'Emails',
+'LBL_NOTES'=>'Notes',
+'LBL_MEETINGS'=>'Meetings',
+'LBL_CALLS'=>'Calls',
+'LBL_IMPORT_PERMISSIONS'=>'Import Permissions',
+'LBL_IMPORT_LEADS'=>'Import Leads',
+'LBL_IMPORT_ACCOUNTS'=>'Import Accounts',
+'LBL_IMPORT_CONTACTS'=>'Import Contacts',
+'LBL_IMPORT_OPPURTUNITIES'=>'Import Opportunities',
+
+'LBL_ROLE_DETAILS'=>'Role Details',
+
 );
 
 ?>

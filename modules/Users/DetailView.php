@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/DetailView.php,v 1.14 2004/12/09 05:45:32 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/DetailView.php,v 1.16 2004/12/17 10:22:58 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -52,6 +52,11 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $role = fetchUserRole($focus->id);
+//the user might belong to multiple groups
+if($focus->id != 1)
+{
+ $group = fetchUserGroups($focus->id);
+}
 $log->info("User detail view");
 
 $xtpl=new XTemplate ('modules/Users/DetailView.html');
@@ -119,6 +124,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 
 $xtpl->assign("DESCRIPTION", nl2br($focus->description));
 $xtpl->assign("ROLEASSIGNED","<a href=index.php?module=Users&action=ListPermissions&rolename=".$role .">" .$role ."</a>");
+$xtpl->assign("GROUPASSIGNED","<a href=index.php?module=Users&action=UserInfoUtil&groupname=".$group .">" .$group ."</a>");
 $xtpl->assign("TITLE", $focus->title);
 $xtpl->assign("DEPARTMENT", $focus->department);
 $xtpl->assign("REPORTS_TO_ID", $focus->reports_to_id);

@@ -10,6 +10,13 @@
 *
  ********************************************************************************/
 -->
+<?php
+
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+
+?>
 
 <html lang="en">
 <head>
@@ -19,7 +26,7 @@
 <body>
 <!--c:out value="${locale}"/-->
 <!--fmt:setLocale value="ja_JP"/-->
-                  <div class="moduleTitle hline">Role Details: <?php echo $_REQUEST["rolename"] ?></div>
+                  <div class="moduleTitle hline"><?php echo $mod_strings['LBL_ROLE_DETAILS']; ?> : <?php echo $_REQUEST["rolename"] ?></div>
                 <br>
             <form name="editperm" action="index.php" method="post">
               <input type="hidden" name="action" value="updateRole">
@@ -28,28 +35,30 @@
               <input type="hidden" name="return_module" value="Users">
               <input type="hidden" name="return_action" value="ListPermission">
 
-                    <b>Entity Level Permissions</b>
                     <table border="0" width="100%" cellspacing="0" cellpadding="0" class="FormBorder">
+
+        <th class="formHeader" background="<?php echo $image_path ?>header_tile.gif" vAlign="middle" align="left" noWrap width="20%" height="22"><b><?php echo $mod_strings['LBL_ENTITY_LEVEL_PERMISSIONS']; ?></b></th>
+
                       <tbody>
-                        <tr height="25">
-                          <td width="15%" class="moduleListTitle">
-                          <div align="left"><b>Entity</b></div>
+                        <tr class="moduleListTitle" height="25">
+                          <td nowrap="nowrap">
+                          <div align="left"><b><?php echo $mod_strings['LBL_ENTITY']; ?></b></div>
                           </td>
-                          <td nowrap="nowrap" class="moduleListTitle">
-                          <div align="center"><b>Create/Edit</b></div>
+                          <td nowrap="nowrap">
+                          <div align="center"><b><?php echo $mod_strings['LBL_CREATE_EDIT']; ?></b></div>
                           </td>
                           <!--td nowrap="nowrap" class="bodyText bold">
                           <div align="center">Edit</div>
                           </td -->
-                          <td nowrap="nowrap" class="moduleListTitle">
-                          <div align="center"><b>Delete</b></div>
+                          <td nowrap="nowrap">
+                          <div align="center"><b><?php echo $mod_strings['LBL_DELETE']; ?></b></div>
                           </td>
-                          <td nowrap="nowrap" class="moduleListTitle">
-                          <div align="center"><b>Allow</b></div>
+                          <td nowrap="nowrap">
+                          <div align="center"><b><?php echo $mod_strings['LBL_ALLOW']; ?></b></div>
                           </td>
                         </tr>
                         <tr class="oddListRow">
-                         <td nowrap="nowrap">Leads</td>
+                         <td nowrap="nowrap"><?php echo $mod_strings['LBL_LEADS']; ?></td>
 	<?php
 
 $sql = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=3";
@@ -124,7 +133,7 @@ $sql = "select actionname,action_permission,module_permission from role2action i
                         </tr>
                         </tr>
                         <tr class="evenListRow">
-                          <td nowrap="nowrap">Accounts</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_ACCOUNTS']; ?></td>
 
 <?php
                         $sql_accounts = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=5";
@@ -203,7 +212,7 @@ else
 
 
                         <tr class="oddListRow">
-                          <td nowrap="nowrap">Contacts</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_CONTACTS']; ?></td>
 
  	  <?php
                         $sql_contacts = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=4";
@@ -273,7 +282,7 @@ $result_contacts = mysql_query($sql_contacts);
                         </tr>
 
                         <tr class="evenListRow">
-                          <td nowrap="nowrap">Opportunities</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_OPPURTUNITIES']; ?></td>
 
  	  <?php
                         $sql_opportunities = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=6";
@@ -343,7 +352,7 @@ if(@mysql_result($result_opportunities,2,"module_permission") == 1)
 
                         </tr>
                         <tr class="oddListRow">
-                          <td nowrap="nowrap">Tasks</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_TASKS']; ?></td>
 
  	  <?php
                         $sql_activities = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=12";
@@ -412,7 +421,7 @@ if(@mysql_result($result_opportunities,2,"module_permission") == 1)
 
                         </tr>
                         <tr class="evenListRow">
-                          <td nowrap="nowrap">Cases</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_CASES']; ?></td>
 
  	  <?php
                         $sql_cases = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=7";
@@ -481,7 +490,7 @@ if(@mysql_result($result_opportunities,2,"module_permission") == 1)
 
                         </tr>
                         <tr class="oddListRow">
-                          <td nowrap="nowrap">Emails</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_EMAILS']; ?></td>
 
  	  <?php
                         $sql_emails = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=10";
@@ -549,7 +558,7 @@ if(@mysql_result($result_opportunities,2,"module_permission") == 1)
 
                         </tr>
                         <tr class="evenListRow">
-                          <td nowrap="nowrap">Notes</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_NOTES']; ?></td>
 
  	  <?php
                         $sql_notes = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=8";
@@ -618,7 +627,7 @@ if(@mysql_result($result_opportunities,2,"module_permission") == 1)
                         </tr>
 
                         <tr class="oddListRow">
-                          <td nowrap="nowrap">Meetings</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_MEETINGS']; ?></td>
 
  	  <?php
                         $sql_meetings = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=11";
@@ -696,7 +705,7 @@ if(@mysql_result($result_opportunities,2,"module_permission") == 1)
 
 
                         <tr class="oddListRow">
-                          <td nowrap="nowrap">Calls</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_CALLS']; ?></td>
 
  	  <?php
                         $sql_calls = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=9";
@@ -780,14 +789,17 @@ if(@mysql_result($result_opportunities,2,"module_permission") == 1)
 
 	</table>
 	<br>
-	<b>Import Permissions</b>	
+	<b><?php //echo $mod_strings['LBL_IMPORT_PERMISSIONS']; ?></b>	
 	<table class="FormBorder" cellspacing="0" cellpadding="0" width="100%">
 
+        <th class="formHeader" background="<?php echo $image_path ?>header_tile.gif"  vAlign="middle" align="left" noWrap width="20%" height="22"><b><?php echo $mod_strings['LBL_IMPORT_PERMISSIONS']; ?></b></th>
+
+
                         <tr class="moduleListTitle" height="25">
-                         <td nowrap="nowrap"><div align="center"><b>Import Leads</b></div></td> 
-			 <td nowrap="nowrap"><div align="center"><b>Import Accounts</b></div></td>
-			 <td nowrap="nowrap"><div align="center"<b>Import Contacts</b></div></td>
-			 <td nowrap="nowrap"><div align="center"<b>Import Opportunities</b></div></td>
+                         <td nowrap="nowrap"><div align="center"><b><?php echo $mod_strings['LBL_IMPORT_LEADS']; ?></b></div></td> 
+			 <td nowrap="nowrap"><div align="center"><b><?php echo $mod_strings['LBL_IMPORT_ACCOUNTS']; ?></b></div></td>
+			 <td nowrap="nowrap"><div align="center"<b><?php echo $mod_strings['LBL_IMPORT_CONTACTS']; ?></b></div></td>
+			 <td nowrap="nowrap"><div align="center"<b><?php echo $mod_strings['LBL_IMPORT_OPPURTUNITIES']; ?></b></div></td>
 			</tr>
 				
 			  
@@ -922,8 +934,8 @@ $sql_import_opportunities = "select actionname,action_permission,module_permissi
                   <tr>
                     <td>
                     <div align="center">
- <input type="submit" name="save" value="Save" class="button">
- <input name="cancel" class="button" type="button" value="Cancel" onclick="window.history.back()" >
+ <input type="submit" name="save" value="<?php echo $app_strings['LBL_SAVE_BUTTON_LABEL'] ?>" class="button">
+ <input name="cancel" class="button" type="button" value="<?php echo $app_strings['LBL_CANCEL_BUTTON_LABEL'] ?>" onclick="window.history.back()" >
                     </div>
                     </td>
                   </tr>

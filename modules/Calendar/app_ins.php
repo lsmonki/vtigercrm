@@ -263,7 +263,7 @@
 
    /* Go back to calendar */
    $gotourl = $callink ."calendar";
-   $gotourl= addUrlParameter($gotourl,"&id=".$a->id,true);
+   $gotourl= addUrlParameter($gotourl,"id=".$a->id,true);
  }
 
  $gotourl = addMessage($gotourl,$msg,true);
@@ -272,7 +272,6 @@
  Header("Status: 302 Moved Temporarily");
  Header("Location: ". getBaseUrl() . $gotourl);
  $dbconn->Close();
- echo getBaseUrl() . $gotourl;
 /*
  *
  *   CVS Info:  $Id$

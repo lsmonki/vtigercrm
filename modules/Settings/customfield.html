@@ -271,27 +271,27 @@ function resetFieldTypeHilite() {
 <input type="hidden" name="action" value="AddCustomFieldToDB">
 <table width="90%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
 <tr>
-<th class="formSecHeader"><div align="left">Provide Field Information:</div></th>
+<th class="formSecHeader"><div align="left">{MOD.LBL_PROVIDE_FIELD_INFORMATION}</div></th>
 </tr>
 <tr>
 <td>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:10">
   <tr> 
-    <td width="160">Select Field Type:</td>
-    <td>Provide Field Details:</td>
+    <td width="160">{MOD.LBL_SELECT_FIELD_TYPE}</td>
+    <td>{MOD.LBL_PROVIDE_FIELD_DETAILS}</td>
   </tr>
   <tr> 
-    <td height="180" valign="top"><iframe name="fieldLayer" src="modules/Settings/fieldtypes.html" scrolling="yes" height="170" width="150"></iframe></td>
+    <td height="180" valign="top"><iframe name="fieldLayer" src="index.php?module=Settings&action=fieldtypes" scrolling="yes" height="170" width="150"></iframe></td>
     <td valign="top"><table border="0" cellspacing="1" cellpadding="0">
         <tr> 
-          <td class="dataLabel" nowrap width="100"><div align="right">* Label:</div></td>
+          <td class="dataLabel" nowrap width="100"><div align="right">{MOD.LBL_LABEL}</div></td>
           <td width="150"><input type="text" name="fldLabel" value="{LABELVALUE}" style="width:100%"></td>
         </tr>
 	</table>
 	<div id="lengthdetails">
 	<table border="0" cellspacing="1" cellpadding="0">
 	<tr>
-	  <td class="dataLabel" nowrap width="100"><div align="right">* Length:</div></td>
+	  <td class="dataLabel" nowrap width="100"><div align="right">{MOD.LBL_LENGTH}</div></td>
           <td width="150"><input type="text" name="fldLength" value="{LENGTHVALUE}" style="width:100%"></td>
 	</tr>
 	</table>
@@ -299,7 +299,7 @@ function resetFieldTypeHilite() {
 	<div id="decimaldetails">
 	<table border="0" cellspacing="1" cellpadding="0">
 	<tr>
-	  <td class="dataLabel" nowrap width="100"><div align="right">Decimal Places:</div></td>
+	  <td class="dataLabel" nowrap width="100"><div align="right">{MOD.LBL_DECIMAL_PLACES}</div></td>
           <td width="150"><input type="text" name="fldDecimal" value="{DECIMALVALUE}" style="width:100%"></td>
 	</tr>
 	</table>
@@ -307,7 +307,7 @@ function resetFieldTypeHilite() {
 	<div id="picklist">
 	<table border="0" cellspacing="1" cellpadding="0">
 	<tr>
-          <td class="dataLabel" nowrap width="100" valign="top"><div align="right">* Pick List Values:</div></td>
+          <td class="dataLabel" nowrap width="100" valign="top"><div align="right">{MOD.LBL_PICK_LIST_VALUES}</div></td>
           <td width="150" valign="top"><textarea name="fldPickList" rows="10" style="width:100%">{PICKLISTVALUE}</textarea></td>
 	  <td style="padding-left:10px"><img src="themes/Aqua/images/picklist_hint.gif"/></td>
         </tr>
@@ -323,8 +323,8 @@ function resetFieldTypeHilite() {
 <table width="90%" border="0" cellpadding="0" cellspacing="0">
   <tr> 
     <td> <div align="center"> 
-        <input type="submit" name="Submit" value="Save" class="button">
-        <input type="button" name="Submit2" value="Cancel" class="button" onclick="testing()">
+        <input type="submit" name="Submit" value="{APP.LBL_SAVE_BUTTON_LABEL}" class="button" >
+        <input type="button" name="Submit2" value="{APP.LBL_CANCEL_BUTTON_LABEL}" class="button" onclick="testing()">
       </div></td>
   </tr>
 </table>

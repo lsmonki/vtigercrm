@@ -290,15 +290,14 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 	{
 		$suggest = $field_map[$field_count];	
 	}
-
-
-
+	
 	$xtpl->assign("SELECTFIELD", 
 		getFieldSelect(	$focus->importable_fields,
 				$field_count,
 				$focus->required_fields,
 				$suggest,
-				$translated_column_fields
+				$translated_column_fields,
+				$_REQUEST['module']
 				));
 
 	$xtpl->parse("main.table.row.headcell");

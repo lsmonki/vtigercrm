@@ -14,27 +14,19 @@
 
 
 require_once('database/DatabaseConnection.php');
+global $mod_strings;
 ?>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="en">
-<head>
-  <title>Roles List</title>
-<!--meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
-</head>
-<body>
-<!--c:out value="${locale}"/-->
-<!--fmt:setLocale value="ja_JP"/-->
             <form action="index.php">
-	     <div class="moduleTitle hline">Roles</div>
+	     <div class="moduleTitle hline"><?php echo $mod_strings['LBL_ROLES'] ?></div>
 	<br>
              <input type="hidden" name="module" value="Users">
              <input type="hidden" name="action" value="createrole">
-             <input type="submit" class="button" name="Submit" value="Create New Role">
+             <input type="submit" class="button" name="Submit" value="<?php echo $mod_strings['LBL_CREATE_NEW_ROLE'] ?>">
 <br><br>
 		<table width="30%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
 		<tr>
-		<td class="moduleListTitle" height="25"><b>Role Name</b></td>
+		<td class="leftFormHeader" valign="middle" align="left"><b><?echo $mod_strings['LBL_ROLE_NAME']?></b></td>
                 </tr>
 <!-- Query the db and get the roles dynamically -->
 <?php

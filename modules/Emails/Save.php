@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.7 2004/12/13 06:40:27 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.10 2004/12/23 13:59:37 jack Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -75,12 +75,15 @@ else
 $_REQUEST['name'] = $focus->name;
 $_REQUEST['description'] = $focus->description;
 
-
-
-send_mail($module,$_REQUEST['assigned_user_id'],$current_user->user_name,$_REQUEST['name'],$_REQUEST['description'],$mail_server,$mail_server_username,$mail_server_password);
-
-
 $return_id = $focus->id;
+
+
+function deleteFile($dir,$filename)
+{
+   unlink($dir.$filename);	
+}
+
+
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Emails";
@@ -89,6 +92,77 @@ else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
 $local_log->debug("Saved record with id of ".$return_id);
+
+$uploaddir = $_SERVER['DOCUMENT_ROOT'] ."/test/upload/" ;// set this to wherever
+if($_FILES["uploadfile"])
+{
+if(move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$uploaddir.$_FILES["uploadfile"]["name"])) 
+{
+  $binFile = $_FILES['uploadfile']['name'];
+  $filename = basename($binFile);
+  $filetype= $_FILES['uploadfile']['type'];
+    $filesize = $_FILES['uploadfile']['size'];
+    if($filesize != 0)	
+    {
+    $data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+    $date_entered = date('YmdHis');
+    //Retreiving the return module and setting the parent type
+    $ret_module = $_REQUEST['return_module'];
+    $parent_type;		
+    if($_REQUEST['return_module'] == 'Leads')
+    {
+	    $parent_type = 'Lead';
+    }
+    elseif($_REQUEST['return_module'] == 'Accounts')
+    {
+	    $parent_type = 'Account';
+    }
+    elseif($_REQUEST['return_module'] == 'Contacts')
+    {
+	    $parent_type = 'Contact';
+    }
+    elseif($_REQUEST['return_module'] == 'Opportunities')
+    {
+	    $parent_type = 'Opportunity';
+    }
+   elseif($_REQUEST['return_module'] == 'Cases')
+    {
+	    $parent_type = 'Case';
+    }		
+   elseif($_REQUEST['return_module'] == 'Emails')
+    {
+	    $parent_type = 'Emails';
+    }	
+    $parent_id = $_REQUEST['return_id'];	 			
+
+    $sql = "INSERT INTO email_attachments ";
+    $sql .= "(date_entered,parent_type,parent_id,data, filename, filesize, filetype) ";
+    $sql .= "VALUES ('$date_entered','$parent_type','$parent_id','$data',";
+    $sql .= "'$filename', '$filesize', '$filetype')";
+    $result = mysql_query($sql);
+     mysql_close();
+     deleteFile($uploaddir,$filename);
+     header("Location: index.php?action=DetailView&module=$ret_module&record=$parent_id");	
+      }
+    else
+      {
+    include('themes/'.$theme.'/header.php');
+   $errormessage = "<font color='red'><B>Error Message<ul>
+			<li><font color='red'>Invalid file OR</font>
+			<li><font color='red'>File has no data</font>
+			</ul></B></font> <br>" ;
+   echo $errormessage;
+       deleteFile($uploaddir,$filename);
+   //include "upload.php";
+     }			
+   
+} 
+else 
+{
+  $errorCode =  $_FILES['uploadfile']['error'];
+  echo "Problems in file upload. Please try again! <br>" .$errorCode;
+}
+}
 
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 ?>

@@ -214,4 +214,19 @@ function CustomFieldDetailView($id, $fldModule, $tableName, $colidName)
 	}
 	return $custfld;
 }
+
+function getCustomFieldArray($module)
+{
+	$custquery = "select * from customfields where module='".$module."'";
+	$custresult = mysql_query($custquery);
+	$custFldArray = Array();
+	$noofrows = mysql_num_rows($custresult);
+	for($i=0; $i<$noofrows; $i++)
+	{
+		$colName=mysql_result($custresult,$i,"column_name");
+		$custFldArray[$colName] = $i;
+	}
+	return $custFldArray;
+	
+}
 ?>

@@ -6,9 +6,14 @@
  * @module user_ins
  * @package user
  */
- include_once 'webelements.p3';
- include_once 'permission.p3';
- include_once 'appointment.pinc';
+ 
+ global $calpth,$callink;
+ $callink = "index.php?module=Calendar&action=";
+ $calpath = "modules/Calendar/";
+
+ include_once $calpath .'webelements.p3';
+ include_once $calpath .'permission.p3';
+ include_once $calpath .'appointment.pinc';
 
  /* Check if user is allowed to use it */
  check_user();
@@ -18,7 +23,7 @@
  $saveadr = false;
  $saveloc = false;
  $u = new tutos_user($dbconn);
- $gotourl = "user_new.php";
+ #$gotourl = "user_new.php";
 
  if ( ! isset($_POST['uid']) || empty($_POST['uid']) ) {
    $msg .= "Please enter a id<br>";
@@ -26,35 +31,35 @@
    # existing entry
    $u = $u->read($_POST['uid'],$u,1);
    $u->read_permissions();
-   $gotourl= addUrlParameter($gotourl,"uid=". $_POST['uid'],true);
- } else if ( isset($_POST['id']) && ($_POST['id'] != -1) )  {
+   #$gotourl= addUrlParameter($gotourl,"uid=". $_POST['uid'],true);
+ } else if ( isset($_POST['nid']) && ($_POST['nid'] != -1) )  {
    # new entry
-   $u = $u->read($_POST['id'],$u,0);
+   $u = $u->read($_POST['nid'],$u,0);
    $u->read_permissions();
-   $gotourl= addUrlParameter($gotourl,"id=". $_POST['id'],true);
- } else if ( ($_POST['id'] == -1) && ($_POST['uid'] == -1) ) {
+   #$gotourl= addUrlParameter($gotourl,"id=". $_POST['nid'],true);
+ } else if ( ($_POST['nid'] == -1) && ($_POST['uid'] == -1) ) {
    $saveadr = true;
    $adr = new tutos_address($dbconn);
    $loc = new location($dbconn);
    $loc->setLName("default");
-   if ( !isset($_POST['fname']) || empty($_POST['fname']) ) {
+   if ( !isset($_POST['first_name']) || empty($_POST['first_name']) ) {
      $msg .= sprintf($lang['Err0009'],$lang['AdrFirstName']) ."<br>";
    } else {
-     $adr->setFName(trim(StripSlashes($_POST['fname'])));
-     $gotourl= addUrlParameter($gotourl,"fname=". UrlEncode(StripSlashes($_POST['fname'])),true);
+     $adr->setFName(trim(StripSlashes($_POST['first_name'])));
+     #$gotourl= addUrlParameter($gotourl,"first_name=". UrlEncode(StripSlashes($_POST['first_name'])),true);
    }
-   if ( !isset($_POST['lname']) || empty($_POST['lname']) ) {
+   if ( !isset($_POST['last_name']) || empty($_POST['last_name']) ) {
      $msg .= sprintf($lang['Err0009'],$lang['AdrLastName']) ."<br>";
    } else {
-     $adr->setLName(trim(StripSlashes($_POST['lname'])));
-     $gotourl= addUrlParameter($gotourl,"lname=". UrlEncode(StripSlashes($_POST['lname'])),true);
+     $adr->setLName(trim(StripSlashes($_POST['last_name'])));
+     #$gotourl= addUrlParameter($gotourl,"last_name=". UrlEncode(StripSlashes($_POST['last_name'])),true);
    }
-   if ( !isset($_POST['email']) || empty($_POST['email']) ) {
+   if ( !isset($_POST['email1']) || empty($_POST['email1']) ) {
      $msg .= sprintf($lang['Err0009'],$lang['AdrEmail']) ."<br>";
    } else {
      $saveloc = true;
-     $loc->setField("email_1",trim(StripSlashes($_POST['email'])));
-     $gotourl= addUrlParameter($gotourl,"email=". UrlEncode(StripSlashes($_POST['email'])),true);
+     $loc->setField("email_1",trim(StripSlashes($_POST['email1'])));
+     #$gotourl= addUrlParameter($gotourl,"email=". UrlEncode(StripSlashes($_POST['email1'])),true);
    }
  }
      
@@ -65,11 +70,11 @@
    $msg .= sprintf($lang['Err0024'],$lang[$u->getType()]);
  }
 
- if ( !isset($_POST['login']) || empty($_POST['login']) ) {
+ if ( !isset($_POST['user_name']) || empty($_POST['user_name']) ) {
    $msg .= sprintf($lang['Err0009'],$lang['Username']) ."<br>";
  } else {
-   $u->setLogin($_POST['login']);
-   $gotourl= addUrlParameter($gotourl,"login=". UrlEncode($u->login),true);
+   $u->setLogin($_POST['user_name']);
+   #$gotourl= addUrlParameter($gotourl,"user_name=". UrlEncode($u->user_name),true);
  }
 
  # This does not work for mysql !!!
@@ -91,7 +96,7 @@
  $u->holiday = array();
  if (isset($_POST['h']) ) {
    foreach (array_unique($_POST['h']) as $i => $f) {
-     $gotourl= addUrlParameter($gotourl,"h[]=". UrlEncode($f),true);
+     #$gotourl= addUrlParameter($gotourl,"h[]=". UrlEncode($f),true);
      $u->holiday[$f] = 1;
    }
  }
@@ -99,7 +104,7 @@
  $u->nameday = array();
  if (isset($_POST['nd']) ) {
    foreach (array_unique($_POST['nd']) as $i => $f) {
-     $gotourl= addUrlParameter($gotourl,"nd[]=". UrlEncode($f),true);
+     #$gotourl= addUrlParameter($gotourl,"nd[]=". UrlEncode($f),true);
      $u->nameday[$f] = 1;
    }
  }
@@ -107,14 +112,14 @@
  if (isset($_POST['wd']) ) {
    $u->workday = array();
    foreach (array_unique($_POST['wd']) as $i => $f) {
-     $gotourl= addUrlParameter($gotourl,"wd[]=". UrlEncode($f),true);
+     #$gotourl= addUrlParameter($gotourl,"wd[]=". UrlEncode($f),true);
      $u->workday[] = $f;
    }
  }
  # Weekstart
  if (isset($_POST['ws']) ) {
    $u->weekstart = $_POST['ws'];
-   $gotourl= addUrlParameter($gotourl,"ws=". UrlEncode($u->weekstart),true);
+   #$gotourl= addUrlParameter($gotourl,"ws=". UrlEncode($u->weekstart),true);
  }
  if ( ! $u->mod_ok() ) {
    $msg .= sprintf($lang['Err0024'],$lang[$u->getType()]) ."<br>";
@@ -124,14 +129,14 @@
  $u->rowiconsbefore = array();
  if ( isset($_POST['rib']) ) {
    foreach (array_unique($_POST['rib']) as $i => $f) {
-     $gotourl= addUrlParameter($gotourl,"rib[]=". UrlEncode($f),true);
+     #$gotourl= addUrlParameter($gotourl,"rib[]=". UrlEncode($f),true);
      $u->rowiconsbefore[$f] = 1;
    }
  } 
  $u->rowiconsafter = array();
  if ( isset($_POST['ria']) ) {
    foreach (array_unique($_POST['ria']) as $i => $f) {
-     $gotourl= addUrlParameter($gotourl,"ria[]=". UrlEncode($f),true);
+     #$gotourl= addUrlParameter($gotourl,"ria[]=". UrlEncode($f),true);
      $u->rowiconsafter[$f] = 1;
    }
  }
@@ -197,7 +202,7 @@
 
  # other modules
  $msg .= module_parseforms($current_user,$u,$gotourl);
-
+ 
  if ( $msg == "" ) {
    $u->setAdmin($_POST['admin']);
    $u->setLanguage($_POST['lng']);
@@ -232,8 +237,8 @@
  $gotourl = addSessionKey($gotourl,true);
 
  /* Go back to user mask */
- Header("Status: 302 Moved Temporarily");
- Header("Location: ". getBaseUrl() . $gotourl);
+ #Header("Status: 302 Moved Temporarily");
+ #Header("Location: ". getBaseUrl() . $gotourl);
  $dbconn->Close();
  /*
   *  CVS Info:  $Id$

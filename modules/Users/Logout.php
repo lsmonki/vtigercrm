@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Logout.php,v 1.3 2004/11/05 04:40:51 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Logout.php,v 1.4 2004/12/21 20:01:38 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -31,6 +31,9 @@ require_once('modules/Users/User.php');
 
 
 $local_log =& LoggerManager::getLogger('Logout');
+
+//Calendar Logout
+include('modules/Calendar/logout.php');
 
 // clear out the autthenticating flag
 session_destroy();

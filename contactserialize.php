@@ -93,23 +93,6 @@ $server->wsdl->addComplexType(
     )
 );
 
-/*
-// create array to be serialized
-$xml = array ( "contacts" => array (
-    "name" => "Oliver Twist",
-    "author" => "Nehru"));
-
-// perform serialization
-$result = $serializer->serialize($xml);
-
-// check result code and display XML if success
-if($result === true)
-{
-//echo $serializer->getSerializedData();
-}
-*/
-
-    
 $server->wsdl->addComplexType(
     'contact_detail_array',
     'complexType',
@@ -123,7 +106,53 @@ $server->wsdl->addComplexType(
     'tns:contact_detail'
 );
 
+  
 
+
+$server->wsdl->addComplexType(
+    'contact_column_detail',
+    'complexType',
+    'array',
+    '',
+    array(
+        'email_address' => array('name'=>'email_address','type'=>'xsd:string'),
+        'first_name' => array('name'=>'first_name','type'=>'xsd:string'),
+        'last_name' => array('name'=>'last_name','type'=>'xsd:string'),
+        'primary_address_city' => array('name'=>'primary_address_city','type'=>'xsd:string'),
+        'account_name' => array('name'=>'account_name','type'=>'xsd:string'),
+        'id' => array('name'=>'id','type'=>'xsd:string'),
+        'salutation' => array('name'=>'salutation','type'=>'xsd:string'),
+        'title'=> array('name'=>'title','type'=>'xsd:string'),
+        'phone_mobile'=> array('name'=>'phone_mobile','type'=>'xsd:string'),
+        'reports_to_id'=> array('name'=>'reports_to_id','type'=>'xsd:string'),
+        'primary_address_city'=> array('name'=>'primary_address_city','type'=>'xsd:string'),
+        'primary_address_street'=> array('name'=>'primary_address_street','type'=>'xsd:string'),
+        'primary_address_state'=> array('name'=>'primary_address_state','type'=>'xsd:string'),
+        'primary_address_postalcode'=> array('name'=>'primary_address_postalcode','type'=>'xsd:string'),
+        'primary_address_country'=> array('name'=>'primary_address_country','type'=>'xsd:string'),
+        'alt_address_city'=> array('name'=>'alt_address_city','type'=>'xsd:string'),
+        'alt_address_street'=> array('name'=>'alt_address_street','type'=>'xsd:string'),
+        'alt_address_state'=> array('name'=>'alt_address_state','type'=>'xsd:string'),
+        'alt_address_postalcode'=> array('name'=>'alt_address_postalcode','type'=>'xsd:string'),
+        'alt_address_country'=> array('name'=>'alt_address_country','type'=>'xsd:string'),
+    )
+);
+
+
+$server->wsdl->addComplexType(
+    'contact_column_array',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(
+        array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType'=>'tns:contact_column_detail[]')
+    ),
+    'tns:contact_column_detail'
+);
+
+ 
 
 $server->register(
     'create_session',
@@ -227,6 +256,21 @@ $server->register(
     array('user_name'=>'xsd:string','password'=>'xsd:string'),
     array('return'=>'xsd:int'),
     $NAMESPACE);
+
+$server->register(
+    'get_contacts_columns',
+    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('return'=>'tns:contact_column_array'),
+    $NAMESPACE);
+
+
+function get_contacts_columns($user_name, $password)
+{
+    require_once('modules/Contacts/Contact.php');
+    $contact = new Contact();
+    return $contact->getColumnNames();
+}
+
 
 function get_contacts_count($user_name, $password)
 {
@@ -693,11 +737,6 @@ function retrieve_task($name)
 	
 	return $output_list;
 }  
-
-
-
-
-
 
 
 

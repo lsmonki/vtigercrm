@@ -1,3 +1,74 @@
+vtiger CRM 3.2.1
+December 21, 2004
+
+We are pleased to announce the latest version of vtiger CRM.
+
+New Features:
+
+1. Basic Calendar support.
+2. German and Dutch Languages Support.
+3. Custom field support for import and export utilities.
+
+Issues Fixed:
+
+a) Duration minutes in calls not getting saved when a new call is created is fixed. 
+ 
+b) On deleting any entity, the Leads List View page getting displayed is fixed. 
+ 
+c) Internationalisation support for Custom Fields provided. 
+ 
+d) Internationalistaion support for Pick List Value Customization provided. 
+ 
+e) Quick create form is getting displayed now. 
+ 
+f) Empty Line Space appearing between the heading and List view table in module Lead and MessageBoard is fixed 
+ 
+g) Proper Message display is done when a user with no delete privileges tries to delete the entity.
+
+h) vtiger Outlook Plug-in in server side fixes related to performance improvement.
+
+
+---------------------------
+vtiger CRM 3.2
+December 13, 2004
+
+We are pleased to announce the latest version of vtiger CRM.
+
+New Features:
+
+a) Custom Field Support 
+
+b) Security Support 
+
+c) Migration from 3.0 to 3.2 
+
+----------------------------
+
+vtiger CRM 3
+November 8, 2004
+
+We are pleased to announce the latest version of vtiger CRM.
+
+New features:
+
+a) Support for accessing vtiger CRM server from Microsoft Outlook behind Proxy settings
+
+b) Synchronize customer specific tasks in between Microsft Outlook and vtiger CRM.
+
+c) Integrated Message Boards with vtiger CRM, which can be used to share customer knowledge among CRM service users.
+
+---------------------
+
+vtiger CRM 3.0 Beta
+October 7, 2004
+
+We are pleased to announce the latest version of vtiger CRM.
+
+The new features are:
+
+a) Released vtiger Outlook Plug-in, business productivity enhancement utility for Microsoft Outlook users. It is an open source project covered under vtiger Public License 1.0 based on Mozilla Public License 1.1. 
+
+---------------------
 vtiger CRM 2.0
 September 6, 2004
 
@@ -30,7 +101,6 @@ price quotes, and others, so that they can instantly access the related document
 dealing with leads/opportunities, accounts, and contacts.
 
 Send your feedback, which is vital for our understanding your needs.
-
 
 -------------------------------------------------------------------------------------------------------------
 vtiger CRM 1.0

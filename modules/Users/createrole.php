@@ -47,7 +47,7 @@ require_once('database/DatabaseConnection.php');
  cellspacing="0">
                 <tbody>
                   <tr>
-                    <td class="moduleTitle hline">Create New Role</td>
+                    <td class="moduleTitle hline"><?php echo $mod_strings['LBL_CREATE_NEW_ROLE']; ?></td>
                   </tr>
                 </tbody>
               </table>
@@ -57,7 +57,7 @@ require_once('database/DatabaseConnection.php');
                 <tbody>
                   <tr>
                     <td>
-                    <div align="right"><font class="required">*</font> Indicates required field</div>
+                    <div align="right"><font class="required">*</font><?php echo $mod_strings['LBL_INDICATES_REQUIRED_FIELD']; ?> </div>
                     </td>
                   </tr>
                 </tbody>
@@ -66,14 +66,14 @@ require_once('database/DatabaseConnection.php');
  cellspacing="1" class="formOuterBorder">
                 <tbody>
                   <tr>
-                    <td class="formSecHeader" colspan="2">New Role</td>
+                    <td class="formSecHeader" colspan="2"><?php echo $mod_strings['LBL_NEW_ROLE']; ?></td>
                   </tr>
                   <tr>
-                    <td class="dataLabel mandatory">* Role Name</td>
+                    <td class="dataLabel mandatory">* <?php echo $mod_strings['LBL_ROLE_NAME']; ?></td>
                     <td class="value"><input class="textField" type="text" name="roleName"></td>
                   </tr>
                   <tr>
-                    <td class="dataLabel mandatory">* Parent Role</td>
+                    <td class="dataLabel mandatory">*<?php echo $mod_strings['LBL_PARENT_ROLE']; ?></td>
                     <td class="value">
                     <select class="select" name="parentRoleName">
             <?php
@@ -103,8 +103,8 @@ require_once('database/DatabaseConnection.php');
                     <td>
                      <div align="center">
                    
- <input type="submit" class="button" name="save" value="Save" tabindex="2">
-  <input name="cancel" class="button" type="button" value="Cancel" onclick="window.history.back()">
+ <input type="submit" class="button" name="save" value="<?php echo $app_strings['LBL_SAVE_BUTTON_LABEL'] ?>" tabindex="2">
+  <input name="cancel" class="button" type="button" value="<?php echo $app_strings['LBL_CANCEL_BUTTON_LABEL'] ?>" onclick="window.history.back()">
 </form> </div>
                     </td>
                   </tr>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Popup.php,v 1.3 2004/12/09 10:22:57 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Popup.php,v 1.5 2004/12/21 21:19:56 jack Exp $
  * Description:  This file is used for all popups on this module
  * The popup_picker.html file is used for generating a list from which to find and 
  * choose one instance.
@@ -88,6 +88,7 @@ if(isset($_REQUEST['form_submit']) && $_REQUEST['form'] == 'DetailView' && $_REQ
 {
 	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
 	$the_javascript .= "function set_return(contact_id, contact_name) {\n";
+	$the_javascript .= "    window.opener.document.DetailView.contact_id.value = contact_id; \n";
 	$the_javascript .= "	window.opener.document.DetailView.return_module.value = window.opener.document.DetailView.module.value; \n";
 	$the_javascript .= "	window.opener.document.DetailView.return_action.value = 'DetailView'; \n";
 	$the_javascript .= "	window.opener.document.DetailView.source_module.value = 'contacts'; \n";
@@ -170,7 +171,17 @@ elseif ($_REQUEST['form'] == 'ContactEditView')
 	$button .= "<td><input title='".$app_strings['LBL_CLEAR_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CLEAR_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.opener.document.EditView.reports_to_name.value = '';window.opener.document.EditView.reports_to_id.value = ''; window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CLEAR_BUTTON_LABEL']."  '></td>\n";
 	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '></td>\n";
 	$button .= "</tr></form></table>\n";
-}	
+}
+elseif ($_REQUEST['form'] == 'appnew')
+{                                                                                                                                   $the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
+        $the_javascript .= "function set_return(contact_id, contact_name, account_name) {\n";                                       $the_javascript .= "    window.opener.document.appnew.contact_name.value = contact_name;\n";
+        $the_javascript .= "    window.opener.document.appnew.account_name.value = account_name;\n";                                $the_javascript .= "}\n";
+        $the_javascript .= "</script>\n";                                                                                           $button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name
+='form' id='form'>\n";                                                                                                              $button .= "<tr><td>&nbsp;</td>";
+        $button .= "<td><input title='".$app_strings['LBL_CLEAR_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CLEAR_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.opener.document.appnew.contact_name.value = '';window.opener.document.appnew.contact_id.value = ''; window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CLEAR_BUTTON_LABEL']."  '></td>\n";
+        $button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '></td>\n";
+        $button .= "</tr></form></table>\n";
+}
 else 
 {
 	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";

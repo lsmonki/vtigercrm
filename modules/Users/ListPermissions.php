@@ -12,7 +12,11 @@
 
 
 require_once('database/DatabaseConnection.php');
-$roleid = $_SESSION['authenticated_user_roleid'];
+
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
@@ -30,7 +34,7 @@ function delRole()
 <!--div class="bodyText" style="margin-top:10">Lead Assignment Rules allow you to automatically route leads, that are added via Import Leads Wizard, to the appropriate users. A Lead Assignment Rule consists of multiple rule entries that define the conditions and order for assigning leads.</div-->
             
             <form action="index.php" name="editRole">
-	    <div class="moduleTitle hline">Role Details : <?php echo $_REQUEST["rolename"] ?> </div>
+	    <div class="moduleTitle hline"><?php echo $mod_strings['LBL_LIST_ROLES']; ?> : <?php echo $_REQUEST["rolename"] ?> </div>
 		<br>
             <input type="hidden" name="action" value="editpermissions">
             <input type="hidden" name="module" value="Users">
@@ -38,46 +42,48 @@ function delRole()
             <input type="hidden" name="currentLoggedRole" value="<?php echo $_REQUEST["currentLoggedRole"] ?>">
 
 
-			<?php
-	if(	$_SESSION['authenticated_user_roleid']  != 'administrator')
+	<?php
+        	if(	$_SESSION['authenticated_user_roleid']  != 'administrator')
+		{
+                }
+		else
+		{
+			if ($_REQUEST["rolename"]!="administrator" && $_REQUEST["rolename"]!="standard_user")
 			{
-                        }
-			else
-			{
-				if ($_REQUEST["rolename"]!="administrator" && $_REQUEST["rolename"]!="standard_user")
-				{
-			?>
-   <input type="submit" name="edit" value="Edit" class="button" >
-<input type="button" name="delete" value="Delete" class="button" onclick="delRole()">
-<br><br>
-			<?
-				}
+	?>
+                           <input type="submit" name="edit" value="Edit" class="button" >
+                           <input type="button" name="delete" value="Delete" class="button" onclick="delRole()">
+                           <br><br>
+		<?
 			}
+		}
                         
 		?>
-                    <b>Entity Level Permissions</b>
                     <table border="0" width="100%" cellspacing="0" cellpadding="0" class="FormBorder">
                       <tbody>
-                        <tr height="25">
-                          <td class="moduleListTitle" width="15%">
-                          <div align="left"><b>Entity</b></div>
+
+                        <th class="formHeader" background="<?php echo $image_path ?>header_tile.gif" vAlign="middle" align="left"  nowrap width="20%" height="22"><b><?php echo $mod_strings['LBL_ENTITY_LEVEL_PERMISSIONS']; ?></b></th>
+
+                      <tr class="moduleListTitle" height="25">
+                          <td nowrap="nowrap">
+                             <div align="left"><b><?php echo $mod_strings['LBL_ENTITY']; ?></b></div>
                           </td>
-                          <td nowrap="nowrap" class="moduleListTitle">
-                          <div align="center"><b>Create/Edit</b></div>
+                          <td  nowrap="nowrap">
+                             <div align="center"><b><?php echo $mod_strings['LBL_CREATE_EDIT']; ?></b></div>
                           </td>
                           <!-- td nowrap="nowrap" class="moduleListTitle">
                           <div align="center">Edit</div>
                           </td -->
-                          <td nowrap="nowrap" class="moduleListTitle">
-                          <div align="center"><b>Delete</b></div>
+                          <td nowrap="nowrap">
+                             <div align="center"><b><?php echo $mod_strings['LBL_DELETE']; ?></b></div>
                           </td>
-                          <td nowrap="nowrap" class="moduleListTitle">
-                          <div align="center"><b>Allow</b></div>
+                          <td nowrap="nowrap">
+                             <div align="center"><b><?php echo $mod_strings['LBL_ALLOW']; ?></b></div>
                           </td>
  
-                        </tr>
-                        <tr class="oddListRow">
-                          <td nowrap="nowrap">Leads</td>
+                      </tr>
+                      <tr class="oddListRow">
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_LEADS']; ?></td>
 	<?php
 
               $sql = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=3";
@@ -85,9 +91,9 @@ function delRole()
 $result = mysql_query($sql);
 	if(@mysql_result($result,1,"action_permission") == 1)
 	{
-	?>
+        ?>
                           <td>
-                          <div align="center"> <img src="themes/Aqua/images/yes.gif"> </div>
+                             <div align="center"> <img src="themes/Aqua/images/yes.gif"> </div>
                           </td>
                           
 	<?php
@@ -141,7 +147,7 @@ $result = mysql_query($sql);
 
                         </tr>
                         <tr class="evenListRow">
-                          <td nowrap="nowrap">Accounts</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_ACCOUNTS']; ?></td>
   <?php
                         $sql_accounts = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=5";
 
@@ -159,11 +165,11 @@ if(@mysql_result($result_accounts,1,"action_permission") == 1)
                           </td -->
 <?php
 }
-  else
-        {
-          ?>
-  <td>
-                          <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
+else
+{
+?>
+                          <td>
+                             <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
                           <!-- td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
@@ -171,7 +177,7 @@ if(@mysql_result($result_accounts,1,"action_permission") == 1)
 
 <?php
 
-        }
+}
 if(@mysql_result($result_accounts,0,"action_permission") == 1)
 {
 ?>
@@ -211,7 +217,7 @@ else
 
 		</tr>
 		<tr class="oddListRow">
-		  <td nowrap="nowrap">Contacts</td>
+		  <td nowrap="nowrap"><?php echo $mod_strings['LBL_CONTACTS']; ?></td>
  	  <?php
                 $sql_contacts = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=4";
 $result_contacts = mysql_query($sql_contacts);
@@ -278,7 +284,7 @@ $result_contacts = mysql_query($sql_contacts);
 
                         </tr>
                         <tr class="evenListRow">
-                          <td nowrap="nowrap">Opportunities</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_OPPURTUNITIES']; ?></td>
   <?php
                         $sql_opportunities = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=6";
 $result_opportunities = mysql_query($sql_opportunities);
@@ -296,8 +302,8 @@ $result_opportunities = mysql_query($sql_opportunities);
        else
         {
           ?>
-  <td>
-                          <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
+                          <td>
+                             <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
                           <!-- td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
@@ -323,7 +329,7 @@ $result_opportunities = mysql_query($sql_opportunities);
                           </td>
         <?php
 	}
-    if(@mysql_result($result_opportunities,2,"module_permission") == 1)
+       if(@mysql_result($result_opportunities,2,"module_permission") == 1)
         {
         ?>
 
@@ -335,8 +341,8 @@ $result_opportunities = mysql_query($sql_opportunities);
         else
         {
         ?>
-                 <td>
-                          <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
+                          <td>
+                             <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
         <?php
         }
@@ -345,7 +351,7 @@ $result_opportunities = mysql_query($sql_opportunities);
 	?>
                         </tr>
                         <tr class="oddListRow">
-                          <td nowrap="nowrap">Tasks</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_TASKS']; ?></td>
 
 
 
@@ -366,7 +372,7 @@ $result_activities = mysql_query($sql_activities);
        else
         {
           ?>
-  <td>
+                          <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
                           <!-- td>
@@ -388,13 +394,13 @@ $result_activities = mysql_query($sql_activities);
 	else
 	{
 	?>
-		 <td>
-                          <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
+                          <td>
+                              <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
         <?php
 	}
 
- if(@mysql_result($result_activities,2,"module_permission") == 1)
+        if(@mysql_result($result_activities,2,"module_permission") == 1)
         {
         ?>
 
@@ -406,7 +412,7 @@ $result_activities = mysql_query($sql_activities);
         else
         {
         ?>
-                 <td>
+                          <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
         <?php
@@ -421,7 +427,7 @@ $result_activities = mysql_query($sql_activities);
 
                         </tr>
                         <tr class="evenListRow">
-                          <td nowrap="nowrap">Cases</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_CASES']; ?></td>
 
 
 
@@ -441,11 +447,11 @@ $result_activities = mysql_query($sql_activities);
                           </td -->
 	<?php
 	}
-       else
+        else
         {
           ?>
-  <td>
-                          <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
+                          <td>
+                             <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
                           <!-- td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
@@ -466,7 +472,7 @@ $result_activities = mysql_query($sql_activities);
 	else
 	{
 	?>
-		 <td>
+          		  <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
         <?php
@@ -485,7 +491,7 @@ $result_activities = mysql_query($sql_activities);
         else
         {
         ?>
-                 <td>
+                          <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
         <?php
@@ -497,10 +503,7 @@ $result_activities = mysql_query($sql_activities);
 
                         </tr>
                          <tr class="oddListRow">
-                          <td nowrap="nowrap">Emails</td>
-
-
-
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_EMAILS']; ?></td>
 
 
   <?php
@@ -518,10 +521,10 @@ $result_activities = mysql_query($sql_activities);
                           </td -->
 	<?php
 	}
-       else
+        else
         {
           ?>
-  <td>
+                          <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
                           <!-- td>
@@ -543,12 +546,12 @@ $result_activities = mysql_query($sql_activities);
 	else
 	{
 	?>
-		 <td>
+            		  <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
         <?php
 	}
-	 if(@mysql_result($result_emails,2,"module_permission") == 1)
+        if(@mysql_result($result_emails,2,"module_permission") == 1)
         {
         ?>
 
@@ -560,7 +563,7 @@ $result_activities = mysql_query($sql_activities);
         else
         {
         ?>
-                 <td>
+                          <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
         <?php
@@ -571,10 +574,7 @@ $result_activities = mysql_query($sql_activities);
 
 
                          <tr class="evenListRow">
-                          <td nowrap="nowrap">Notes</td>
-
-
-
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_NOTES']; ?></td>
 
 
   <?php
@@ -591,14 +591,14 @@ $result_notes = mysql_query($sql_notes);
                           </td -->
 	<?php
 	}
-       else
+        else
         {
           ?>
-  <td>
+                          <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
 
-     <?php
+        <?php
         }
 	if(@mysql_result($result_notes,0,"action_permission") == 1)
         {
@@ -612,7 +612,7 @@ $result_notes = mysql_query($sql_notes);
 	else
 	{
 	?>
-		 <td>
+          		  <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
         <?php
@@ -629,7 +629,7 @@ $result_notes = mysql_query($sql_notes);
         else
         {
         ?>
-                 <td>
+                          <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
         <?php
@@ -638,10 +638,10 @@ $result_notes = mysql_query($sql_notes);
 
                         </tr>
                          <tr class="oddListRow">
-                          <td nowrap="nowrap">Meetings</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_MEETINGS']; ?></td>
 
 
-  <?php
+         <?php
            $sql_meetings = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=11";
            $result_meetings = mysql_query($sql_meetings);
         if(@mysql_result($result_meetings,1,"action_permission") == 1)
@@ -655,10 +655,10 @@ $result_notes = mysql_query($sql_notes);
                           </td -->
 	<?php
 	}
-       else
+        else
         {
           ?>
-  <td>
+                          <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
                           <!-- td>
@@ -666,7 +666,7 @@ $result_notes = mysql_query($sql_notes);
                           </td -->
 
 
-     <?php
+       <?php
         }
 	if(@mysql_result($result_meetings,0,"action_permission") == 1)
         {
@@ -680,14 +680,14 @@ $result_notes = mysql_query($sql_notes);
 	else
 	{
 	?>
-		 <td>
+               		  <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
         <?php
 	}
 
 
-  if(@mysql_result($result_meetings,2,"module_permission") == 1)
+       if(@mysql_result($result_meetings,2,"module_permission") == 1)
         {
         ?>
 
@@ -699,7 +699,7 @@ $result_notes = mysql_query($sql_notes);
         else
         {
         ?>
-                 <td>
+                          <td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
         <?php
@@ -707,15 +707,13 @@ $result_notes = mysql_query($sql_notes);
 
 	?>
 
-
                         </tr>
 
-
                          <tr class="oddListRow">
-                          <td nowrap="nowrap">Calls</td>
+                          <td nowrap="nowrap"><?php echo $mod_strings['LBL_CALLS']; ?></td>
 
 
-  <?php
+        <?php
            $sql_calls = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=9";
            $result_calls = mysql_query($sql_calls);
         if(@mysql_result($result_calls,1,"action_permission") == 1)
@@ -732,15 +730,15 @@ $result_notes = mysql_query($sql_notes);
        else
         {
           ?>
-  <td>
-                          <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
+                          <td>
+                              <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
                           <!-- td>
                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td -->
 
 
-     <?php
+        <?php
         }
 	if(@mysql_result($result_calls,0,"action_permission") == 1)
         {
@@ -761,7 +759,7 @@ $result_notes = mysql_query($sql_notes);
 	}
 
 
-  if(@mysql_result($result_calls,2,"module_permission") == 1)
+       if(@mysql_result($result_calls,2,"module_permission") == 1)
         {
         ?>
 
@@ -773,45 +771,29 @@ $result_notes = mysql_query($sql_notes);
         else
         {
         ?>
-                 <td>
-                          <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
+                          <td>
+                           <div align="center"> <img src="themes/Aqua/images/no.gif"> </div>
                           </td>
         <?php
         }
 
 	?>
-
-
-                        </tr>
-       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ </tr>
        
 
 	</table>
 	<br>
-	<b>Import Permissions:</b>	
 	<table class="FormBorder" cellspacing="0" cellpadding="0" width="100%" border="0">
 
-                         <tr class="moduleListTitle" height="25">
-                          <td nowrap="nowrap"><div align="center">Import Leads</div></td> 
-			  <td nowrap="nowrap"><div align="center">Import Accounts</div></td>
-			  <td nowrap="nowrap"><div align="center">Import Contacts</div></td>
-			  <td nowrap="nowrap"><div align="center">Import Opportunities</div></td>
-			</tr>
-			<tr class="oddListRow" height="25">
+               <th class="formHeader" background="<?php echo $image_path ?>header_tile.gif" vAlign="middle" align="left" noWrap width="20%" height="22"><b><?php echo $mod_strings['LBL_IMPORT_PERMISSIONS']; ?></b></th>
+
+               <tr class="moduleListTitle" height="25">
+                 <td nowrap="nowrap"><div align="center"><?php echo $mod_strings['LBL_IMPORT_LEADS']; ?></div></td> 
+          	 <td nowrap="nowrap"><div align="center"><?php echo $mod_strings['LBL_IMPORT_ACCOUNTS']; ?></div></td>
+		 <td nowrap="nowrap"><div align="center"><?php echo $mod_strings['LBL_IMPORT_CONTACTS']; ?></div></td>
+		 <td nowrap="nowrap"><div align="center"><?php echo $mod_strings['LBL_IMPORT_OPPURTUNITIES']; ?></div></td>
+	       </tr>
+	       <tr class="oddListRow" height="25">
 		
 
   <?php
@@ -844,7 +826,7 @@ $sql_import_leads = "select actionname,action_permission,module_permission from 
            $result_import_accounts = mysql_query($sql_import_accounts);
 
 	if(@mysql_result($result_import_accounts,2,"action_permission") == 1)
-        {
+        {	
         ?>
 
                           <td>
@@ -913,17 +895,6 @@ $sql_import_leads = "select actionname,action_permission,module_permission from 
         <?php
         }
         ?>
-
-
-
-
-
-
-
-
-
-
-
 
 
                 </tbody>

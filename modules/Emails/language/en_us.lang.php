@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/language/en_us.lang.php,v 1.2 2004/08/31 05:14:48 rakeebk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/language/en_us.lang.php,v 1.3 2004/12/21 10:01:26 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -55,6 +55,10 @@ $mod_strings = Array(
 'LNK_NEW_TASK'=>'New Task',
 'NTC_REMOVE_INVITEE'=>'Are you sure you want to remove this recipient from the email?',
 'LBL_INVITEE'=>'Recipients',
+
+// Added Fields
+// Contacts-SubPanelViewContactsAndUsers.php
+'LBL_BULK_MAILS'=>'Bulk Mails',
 );
 
 ?>

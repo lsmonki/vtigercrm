@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.31 2004/12/10 06:02:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.33 2004/12/21 20:01:38 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -49,6 +49,7 @@ require_once('modules/Settings/FileStorage.php');
 require_once('data/Tracker.php'); 
 require_once('include/utils.php');
 require_once('modules/Users/Security.php');
+require_once('modules/Users/HelpDesk.php');
 // load up the config_override.php file.  This is used to provide default user settings
 if (is_file("config_override.php")) {
 	require_once("config_override.php");
@@ -232,6 +233,7 @@ $modules = array(
 ,"Lead"
 ,"Tab"
 ,"Security"
+,"HelpDesk"
 ,"LoginHistory"
 ,"FileStorage"
 ,"Headers"
@@ -396,6 +398,8 @@ mysql_query("insert into role2permission(roleid,permissionid,module,module_actio
 
 }
 
+//populate Calendar data
+include("modules/Calendar/admin/scheme.php");
 
 ?>
 The database tables are now set up.<HR></HR>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Activities/SubPanelView.php,v 1.8 2004/12/13 10:35:26 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Activities/SubPanelView.php,v 1.9 2004/12/24 15:11:21 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -343,14 +343,14 @@ echo '<table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
                 <td class="formHeader" vAlign="top" align="left" height="20">
          <img src="' .$image_path. '/left_arc.gif" border="0"></td>
 
-        <td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap width="100%" height="20">Attachments</td>
+        <td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap width="100%" height="20">'.$current_module_strings['LBL_ATTACHMENTS'].'</td>
         <td  class="formHeader" vAlign="top" align="right" height="20">
                   <img src="' .$image_path. '/right_arc.gif" border="0"></td>
                 </tr></tbody></table>
       </td>';
 echo '<td>&nbsp;</td>';
 echo '<td>&nbsp;</td>';
-echo '<td valign="bottom"><input title="Attach File" accessyKey="F" class="button" onclick="this.form.action.value=\'upload\';this.form.module.value=\'uploads\'" type="submit" name="button" value="New Attachment"></td>';
+echo '<td valign="bottom"><input title="Attach File" accessyKey="F" class="button" onclick="this.form.action.value=\'upload\';this.form.module.value=\'uploads\'" type="submit" name="button" value="'. $current_module_strings['LBL_NEW_ATTACHMENT'].'"></td>';
 echo '<td width="100%"></td>';
 
 echo '</td></tr></form></tbody></table>';

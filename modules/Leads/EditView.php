@@ -98,7 +98,25 @@ $xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
 $xtpl->assign("DESCRIPTION", $focus->description);
 
 if ($focus->assigned_user_id == '' && (!isset($focus->id) || $focus->id=0)) $focus->assigned_user_id = $current_user->id; 
+//get_user_array() returns an arry containing the id and the user_name as of now
 $xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(), $focus->assigned_user_id));
+//create the html select code here and assign it
+$result = get_group_options();
+$nameArray = mysql_fetch_array($result);
+$GROUP_SELECT_OPTION = '<select name="assigned_group_name">';
+                   do
+                   {
+                    $groupname=$nameArray["name"];
+                    $GROUP_SELECT_OPTION .= '<option value=';
+                    $GROUP_SELECT_OPTION .=  $groupname;
+                    $GROUP_SELECT_OPTION .=  '>';
+                    $GROUP_SELECT_OPTION .= $nameArray["name"];
+                    $GROUP_SELECT_OPTION .= '</option>';
+                   }while($nameArray = mysql_fetch_array($result));
+                   $GROUP_SELECT_OPTION .='<option value=none>none</option>';               
+                   $GROUP_SELECT_OPTION .= ' </select>';
+
+$xtpl->assign("ASSIGNED_USER_GROUP_OPTIONS",$GROUP_SELECT_OPTION);
 $xtpl->assign("LEAD_SOURCE_OPTIONS", get_select_options_with_id($comboFieldArray['lead_source_dom'], $focus->lead_source));
 $xtpl->assign("SALUTATION_OPTIONS", get_select_options_with_id($comboFieldArray['salutation_dom'], $focus->salutation));
 $xtpl->assign("INDUSTRY_OPTIONS", get_select_options_with_id($comboFieldArray['industry_dom'], $focus->industry));

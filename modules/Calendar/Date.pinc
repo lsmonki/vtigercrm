@@ -737,7 +737,7 @@ class DateTime {
     } else {
       echo "<a href=\"JavaScript:
 var d = document.forms[0];
-mywindow = window.open('', 'calendar', 'resizable=yes,width=200,height=200,top=100,left=100');
+mywindow = window.open('', 'calendar', 'resizable=yes,width=250,height=180,top=100,left=100');
 mywindow.location.href = '". $callink ."minical&f=".$name."&amp;n=".$none."&amp;d=".
 $this->day ."&amp;m=". $this->month ."&amp;y=". $this->year
 ."&amp;". SID ."';
@@ -893,6 +893,15 @@ mywindow.focus();
     return sprintf ("%04d%02d%02d%02d%02d",$this->year,$this->month,$this->day,$this->hour,$this->min);
   }
   /* ---------------------------------------------------------------------------
+   */
+  function getYYYYMMDDHHMMSS_crm() {
+    if ( $this->notime == 1) {
+      return "------------";
+    }
+    return sprintf ("%04d-%02d-%02d %02d:%02d:%02d",$this->year,$this->month,$this->day,$this->hour,$this->min,$this->sec);
+  }
+  /* ---------------------------------------------------------------------------
+
    */
   function getYYYYMMDDHHMMSS() {
     if ( $this->notime == 1) {

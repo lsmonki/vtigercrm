@@ -14,11 +14,17 @@ include_once $calpath .'permission.p3';
 check_user();
 loadlayout();
 
+global $theme;
+$theme_path="themes/".$theme."/";
+require_once ($theme_path."layout_utils.php");
+
 $l = new layout($current_user);
 echo $l->PrintHeader("MiniTimer");
 
 $f = $_GET['f'];
 
+echo "<html>\n";
+echo "<style type=\"text/css\">@import url(\"". $theme_path ."/style.css\");</style>";
 echo "<script language='JavaScript'>\n";
 echo " function closeandaway (H, M) { \n";
 echo "  var x = opener.document.appnew; \n";
@@ -33,7 +39,8 @@ echo "  window.close(); \n";
 echo " } //closeandaway\n";
 echo "</script>\n\n";
 
-echo "<table class=single border=0 cellpadding=2 cellspacing=0 width=100%>\n";
+echo "<body leftmargin=\"0\" topmargin=\"0\">\n";
+echo "<table class=\"single\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" width=100%>\n";
 
 for($hour=0; $hour<12; $hour++) {
   for($minutes=0; $minutes<=30; $minutes+=30) {

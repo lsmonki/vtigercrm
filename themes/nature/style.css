@@ -211,6 +211,7 @@ A.moduleMenu:hover {
 	font-weight: bold ;
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
 	BACKGROUND-COLOR: #E7E7CF;
+	COLOR: #000000;
 }
 .leftFormHeader { 
 	border: 1px solid #E1E1C4;
@@ -283,7 +284,6 @@ A.bodySmallBold:link { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-F
 .error{
 	color: #FF0000;
 	font-weight: bold;
-	font-size: 11;
 }
 
 .listFormLinks 			{ FONT-WEIGHT: lighter; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none; }
@@ -567,3 +567,402 @@ a.bodylink:hover{ text-decoration:underline;} */
 /* Import the fancy styles for IE only (NS4.x doesn't use the @import function) */
 @import url("formIE.css");
 
+/* TUTOS Calendaring related CSS */
+
+/*
+ * Copyright 2002 by Antonio Romero
+ * antonio.romero@mailpersonal.com
+ *
+ * Nuke Theme for TUTOS
+ *
+ * CVS Info: $Id$
+ * $Author$
+ *
+ */
+
+a:hover{
+        text-decoration: underline;
+        }
+
+a.tickerlink:visited {
+        color: #1e9ca0;
+}
+
+.nodeco {
+        text-decoration: none;
+        color: #282c28;
+}
+
+div.message {
+	margin-top: 20px;
+	text-align: center;
+}
+
+.warn {
+        font-weight: bold;
+        color: red;
+}
+
+/* preformatted text */
+.pre {
+        background: #F0F0F0;
+        color: black;
+}
+
+/* text found by search */
+.found {
+        color: #00F000;
+}
+
+.dinfo {
+	font-weight: normal;
+	font-size: 10px;
+	color: black;
+}
+
+.desc {
+		background: #F4F4F1;
+		text-align: right;
+/*      font-weight: bold; 
+        color: black; */
+}
+
+.pagetitle {
+        color: black;
+        font-weight: bold;
+        font-size: 20px;
+}
+
+.navigate {
+		height: 25px;
+        text-decoration: none;
+     	background-color: #FBFBF4; 
+        border: 1px solid #CCCC99;
+        font-size: 12px;
+}
+
+.state0 {
+        background: #F0F000;
+}
+
+.text0 {
+        color: #d8842b;
+        font-size: 10px;
+}
+
+.state1 {
+        background: #00BB00;
+}
+
+.text1 {
+        color: #00FF00;
+        font-size: 10px;
+}
+
+.state2 {
+        background: #FF0000;
+}
+
+.text2 {
+        color: #FF0000;
+        font-size: 10px;
+}
+
+.headline {
+        background: #cfcfbb;
+        color: black;
+}
+
+/* line color 1 in overviews */
+.line1 {
+        background-color: #f4f4f1;
+}
+
+/* line color 2 in overviews */
+.line2 {
+/*        background-color: #dedebb; */
+        background-color: #ffffff;
+}
+
+/* not started task */
+.task0 {
+        background: #efefef;
+        color: black;
+        font-size: 10px;
+}
+
+/* ongoing task */
+.task1 {
+        background: #a0e0a0;
+        color: black;
+        font-size: 10px;
+}
+
+/* finished task */
+.task2 {
+        background: #DDFFDD;
+        color: black;
+        font-size: 10px;
+}
+
+/* overdue task */
+.task3 {
+        background: #e07777;
+        color: black;
+        font-size: 10px;
+}
+
+/* task done */
+.taskdone {
+        background: green;
+        color: black;
+        font-size: 10px;
+}
+
+/* task to do */
+.tasktodo {
+        background: #E00000;
+        color: black;
+        font-size: 10px;
+}
+
+/* task too much time */
+.taskmuch {
+        background: red;
+        color: black;
+        font-size: 10px;
+}
+
+/* office */
+.apploc0 {
+        font-family: tahoma, verdana, arial, sans-serif;
+        color: black;
+        font-size: 11px;
+}
+
+/* out */
+.apploc1 {
+        font-family: tahoma, verdana, arial, sans-serif;
+        color: black;
+        font-size: 11px;
+}
+
+/* vacation */
+.apploc2 {
+        font-family: tahoma, verdana, arial, sans-serif;
+        color: green;
+}
+
+/* sick */
+.apploc3 {
+        color: red;
+}
+/* Postponed */
+.apploc4 {
+        font-family: tahoma, verdana, arial, sans-serif;
+        color: black;
+        font-size: 11px;
+}
+
+/* option */
+.apploc5 {
+        font-family: tahoma, verdana, arial, sans-serif;
+        color: black;
+        font-size: 11px;
+}
+/* private */
+.apploc6 {
+        font-family: tahoma, verdana, arial, sans-serif;
+        color: black;
+        font-size: 11px;
+}
+/* Manager */
+.prodrole1 {
+        background: #e07777;
+        color: black;
+        font-family: tahoma, verdana, arial, sans-serif;
+        font-size: 11px;
+}
+/* 2.Manager */
+.prodrole3 {
+        background: #d07777;
+        color: black;
+        font-family: tahoma, verdana, arial, sans-serif;
+        font-size: 11px;
+}
+/* Developer */
+.prodrole5 {
+        background: #a099a0;
+        color: black;
+        font-family: tahoma, verdana, arial, sans-serif;
+        font-size: 11px;
+}
+
+.holiday {
+		background: url(images/holidaybg.gif);
+        vertical-align: top;
+        color: black;
+        font-size: 12px;
+}
+
+.freeday {
+		background: #FFFFFF;
+        vertical-align: top;
+        color: black;
+        font-size: 12px;
+}
+
+.appday {
+		background: #FFF;
+        vertical-align: top;
+        color: black;
+        font-size: 12px;
+}
+
+.otherday {
+		background: #CCC;
+        vertical-align: top;
+        color: #666;
+        font-size: 12px;
+}
+
+.today {
+		background: url(images/todaybg.gif);
+        vertical-align: top;
+        color: black;
+        font-size: 12px;
+}
+
+.week {
+        color: black;
+        background: #F4F4F1;
+        width: 4%;
+        vertical-align: top;
+}
+
+.app {
+        background: #e8ece8 ;
+        color: black;
+        font-size: 11px;
+}
+
+.app0 {
+        background: #f8fcf8 ;
+        color: black;
+        font-size: 10px;
+}
+/* out */
+.app1 {
+        background: #e8ece8 ;
+        color: black;
+        font-size: 10px;
+}
+/* vacation */
+.app2 {
+ 	background: #e8dcd8 ;
+        color: black;
+        font-size: 10px;
+}
+/* sick */
+.app3 {
+	background: #d8ecd8 ;
+        color: black;
+        font-size: 10px;
+}
+/* Postponed */
+.app4 {
+	background: #d8dce8 ;
+        color: black;
+        font-size: 10px;
+}
+/* Option */
+.app5 {
+	background: #d8dce8 ;
+        color: black;
+        font-size: 10px;
+}
+/* Private */
+.app6 {
+        background: #e8ece8 ;
+        color: black;
+        font-size: 10px;
+}
+/* Birthday in Calendar*/
+.birthday {
+        background: #f0ece8 ;
+        color: black;
+        font-size: 10px;
+}
+/* not in calendar */
+.note {
+        background: yellow ;
+        color: black;
+        font-size: 10px;
+}
+
+.privapp {
+	background: #ffdcd8;
+	color: black;
+	font-size: 10px;
+}
+
+/* one of 31 days in a horizontal list res_cal */
+.monthday {
+	font-size: 12px;
+	font-weight: bold;
+	width: 3%;
+	text-align: center;
+}
+
+ADDRESS {
+        font-size: x-small;
+}
+
+TABLE.single {
+        background: #E1E1C4;
+}
+
+.inner {
+        background: #ffffff;
+}
+
+TABLE.outer {
+		background: #006666;
+}
+
+TABLE.formatted {
+        margin: 0px;
+        padding-left: 2px;
+        padding-right: 3px;
+}
+
+TH.viewhead {
+        color: #000000;
+        background: #E7E7CF;
+        font-weight: bold;
+}
+
+SPAN.warn {
+        font-family: tahoma, verdana, arial, sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        color: red;
+}
+
+IMG.menu {
+	border: 0;
+	width: 23;
+	height: 17;
+}
+
+IMG.list {
+	border: 0;
+}
+
+#maintable {
+   width: 100%;
+   height: 100%;
+   border: 0px solid;
+   padding: 0px;
+   margin: 0px;
+}

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Popup_picker.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Popup_picker.php,v 1.3 2004/12/20 16:29:23 jack Exp $
  * Description:  This file is used for all popups on this module
  * The popup_picker.html file is used for generating a list from which to find and 
  * choose one instance.
@@ -97,6 +97,20 @@ if(!isset($_REQUEST['form']))
 // This code should always return an answer.
 // The form name should be made into a parameter and not be hard coded in this file.
 if($_REQUEST['form'] == 'TasksEditView')
+{
+	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
+	$the_javascript .= "function set_return(account_id, account_name) {\n";
+	$the_javascript .= "	window.opener.document.EditView.parent_name.value = account_name;\n";
+	$the_javascript .= "	window.opener.document.EditView.parent_id.value = account_id;\n";
+	$the_javascript .= "}\n";
+	$the_javascript .= "</script>\n";
+	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
+	$button .= "<tr><td>&nbsp;</td>";
+	$button .= "<td><input title='".$app_strings['LBL_CLEAR_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_CLEAR_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.opener.document.EditView.parent_name.value = '';window.opener.document.EditView.parent_id.value = ''; window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CLEAR_BUTTON_LABEL']."  '>\n";
+	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '>\n";
+	$button .= "</td></tr></form></table>\n";
+}
+elseif($_REQUEST['form'] == 'HelpDeskEditView')
 {
 	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
 	$the_javascript .= "function set_return(account_id, account_name) {\n";

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/utils.php,v 1.5 2004/11/04 05:54:41 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/utils.php,v 1.10 2004/12/21 21:19:56 jack Exp $
  * Description:  Includes generic helper functions used throughout the application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -523,7 +523,7 @@ function get_theme_display($theme) {
 function get_themes() {
    if ($dir = @opendir("./themes")) {
 		while (($file = readdir($dir)) !== false) {
-           if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic" && $file != "akodarkgem" && $file != "bushtree" && $file != "coolblue") {
+           if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic" && $file != "akodarkgem" && $file != "bushtree" && $file != "coolblue" && $file != "Amazon") {
 			   if(is_dir("./themes/".$file)) {
 				   if(!($file[0] == '.')) {
 				   	// set the initial theme name to the filename
@@ -746,17 +746,56 @@ function set_default_config(&$defaults)
 		}
 	}
 }
+
+$toHtml = array(
+        '"' => '&quot;',
+        '<' => '&lt;',
+        '>' => '&gt;',
+        '& ' => '&amp; ',
+        "'" =>  '&#039;',
+);
+
 function to_html($string, $encode=true){
-	
-	if($encode && is_string($string))$string = htmlentities($string, ENT_QUOTES);
-	return $string;	
+        global $toHtml;
+        if($encode && is_string($string)){//$string = htmlentities($string, ENT_QUOTES);
+        $string = str_replace(array_keys($toHtml), array_values($toHtml), $string);
+        }
+        return $string;
 }
 
 function from_html($string, $encode=true){
-	
-	if($encode && is_string($string))$string = html_entity_decode($string, ENT_QUOTES);
-	return $string;	
+        global $toHtml;
+        //if($encode && is_string($string))$string = html_entity_decode($string, ENT_QUOTES);
+        if($encode && is_string($string)){
+                $string = str_replace(array_values($toHtml), array_keys($toHtml), $string);
+        }
+        return $string;
 }
+
+
+function get_group_options()
+{
+	$sql = "select name from groups";
+	$result = mysql_query($sql);
+	return $result;
+}
+
+
+function get_assigned_user_or_group_name($id)
+{
+	$sql = "select assigned_user_id from leads where id='" .$id ."'";
+	$result = mysql_query($sql);
+	$tempval = mysql_fetch_row($result);
+	return $tempval[0];
+}
+
+
+
+
+
+
+
+
 
 
 ?>

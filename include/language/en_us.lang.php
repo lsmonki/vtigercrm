@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.18 2004/11/25 10:43:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.24 2004/12/28 06:08:42 jack Exp $
  * Description:  Defines the English language pack for the base application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -119,6 +119,18 @@ $app_strings = Array(
 'LNK_HELP'=>'Help',
 'LNK_ABOUT'=>'About',
 'LNK_OUTLOOK'=>'./include/images/outlook_download.gif',
+'LNK_NEW_HDESK'=>'New Ticket',
+'LNK_NEW_PRODUCT'=>'New Product',
+'LNK_NEW_CONTACT'=>'New Contact',
+'LNK_NEW_LEAD'=>'New Lead',
+'LNK_NEW_ACCOUNT'=>'New Account',
+'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
+'LNK_NEW_CASE'=>'New Case',
+'LNK_NEW_NOTE'=>'New Note',
+'LNK_NEW_CALL'=>'New Call',
+'LNK_NEW_EMAIL'=>'New Email',
+'LNK_NEW_MEETING'=>'New Meeting',
+'LNK_NEW_TASK'=>'New Task',
 
 'NTC_REQUIRED'=>'Indicates required field',
 'LBL_REQUIRED_SYMBOL'=>'*',
@@ -152,6 +164,11 @@ $app_strings = Array(
 'LBL_IMPORT'=>'Import',
 'LBL_EXPORT'=>'Export',
 'LBL_EXPORT_ALL'=>'Export All',
+//3.2 release
+'NTC_MERGE_CONFIRMATION'=>'Are you sure you want to merge this record?',
+'LBL_MERGE_BUTTON_TITLE'=>'Merge',
+'LBL_MERGE_BUTTON_KEY'=> 'Merge',
+'LBL_MERGE_BUTTON_LABEL'=>'Merge',
 );
 
 //the left value is the key stored in the db and the right value is the display value
@@ -170,7 +187,10 @@ $app_list_strings = Array(
 				, 'Emails'=>'Emails'
 				, 'Meetings'=>'Meetings'
 				, 'Tasks'=>'Tasks'
-				, 'MessageBoard'=>'MessageBoard'),
+				, 'MessageBoard'=>'MessageBoard'
+				, 'Products'=>'Products'
+				, 'HeldDesk'=>'HelpDesk'
+				, 'Calendar'=>'Calendar'),
 
 //e.g. en français 'Analyst'=>'Analyste',
 'account_type_dom' => Array(''=>''

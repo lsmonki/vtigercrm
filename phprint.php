@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/phprint.php,v 1.3 2004/10/29 09:55:08 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/phprint.php,v 1.4 2004/12/21 20:01:38 jack Exp $
  * Description: Main file and starting point for the application.  Calls the
  * theme header and footer files defined for the user as well as the module as
  * defined by the input parameters.
@@ -51,8 +51,8 @@ if (!isset($_GET['action']) || !isset($_GET['module'])) {
 }
 $record = (isset($_GET['record'])) ? $_GET['record'] : "";
 $url = $site_URL . "/index.php?module={$_GET['module']}&action={$_GET['action']}&record=$record";
-$lang = (empty($_GET['lang'])) ? $default_language : $_GET['lang'];
-$app_strings = return_application_language($lang);
+$lang_crm = (empty($_GET['lang_crm'])) ? $default_language : $_GET['lang_crm'];
+$app_strings = return_application_language($lang_crm);
 insert_charset_header();
 
 $fp = @fopen($url . "&PHPSESSID=" . $_GET['jt'], "rb") or die("Error opening $url<br><br>Is your \$site_URL correct in config.php?");

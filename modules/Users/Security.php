@@ -64,7 +64,6 @@ class Security extends SugarBean {
                 $this->log->info($query);
                 mysql_query($query);
                 
-                
                 //primary key will be rolename and tabid
                 $table_name="role2tab";
                             
@@ -96,7 +95,11 @@ class Security extends SugarBean {
                 mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('administrator',11,1,'')");
 		mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('administrator',12,1,'')");
                 mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('administrator',13,1,'')");
+		
+                mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('administrator',14,1,'')");
+                mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('administrator',15,1,'')");
 
+                mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('administrator',16,1,'')");
 
 
 
@@ -114,6 +117,9 @@ class Security extends SugarBean {
                 mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('standard_user',11,1,'')");
                 mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('standard_user',12,1,'')");
                 mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('standard_user',13,1,'')");
+                mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('standard_user',14,1,'')");
+                mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('standard_user',15,1,'')");
+                mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('standard_user',16,1,'')");
 
 
 
@@ -126,7 +132,6 @@ class Security extends SugarBean {
 
 
 
-                //shouldn't this be tab2action instead????????????????
                 $table_name="role2action";
                 
                 //primary key will be rolename,tabid and actionname
@@ -239,6 +244,23 @@ class Security extends SugarBean {
                 mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('administrator',13,'Delete',1,'')");
                 mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('administrator',13,'Save',1,'')");
 
+ 
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('administrator',14,'index',1,'')");
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('administrator',14,'CreateTicket',1,'')");
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('administrator',14,'SaveTicket',1,'')");
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('administrator',14,'DeleteTicket',1,'')");
+
+
+
+ 
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('administrator',15,'index',1,'')");
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('administrator',15,'EditView',1,'')");
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('administrator',15,'Delete',1,'')");
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('administrator',15,'Save',1,'')");
+
+
+
+
                //entries for the import features 
                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('administrator',3,'fetchfile',1,'')");
                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('administrator',4,'BusinessCard',1,'')");
@@ -342,7 +364,21 @@ class Security extends SugarBean {
                 mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('standard_user',13,'Delete',1,'')");
                 mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('standard_user',13,'Save',1,'')");
 
+                  
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('standard_user',14,'index',1,'')");
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('standard_user',14,'CreateTicket',1,'')");
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('standard_user',14,'SaveTicket',1,'')");
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('standard_user',14,'DeleteTicket',1,'')");
+
                 
+
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('standard_user',15,'index',1,'')");
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('standard_user',15,'EditView',1,'')");
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('standard_user',15,'Delete',1,'')");
+                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('standard_user',15,'Save',1,'')");
+
+                
+
 
   //entries for the import features
                mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('standard_user',3,'fetchfile',0,'')");
@@ -353,12 +389,60 @@ class Security extends SugarBean {
 
 
 
+                //GROUPS TABLE
+                $table_name="groups";
+                            
+                $query = 'CREATE TABLE '.$table_name.' ( ';
+		$query .='name varchar(100) NOT NULL';
+                $query .=', primary key(name)';
+		$query .=', description TEXT';
+		$query .=' )'; 
+
+
+		$this->log->info($query);
+		mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());	
+		// Create the indexes
+		$this->create_index("create index idx_groups_name on groups (name)");
+
+
+		//users2group table 
+                $table_name="users2group";
+                            
+                $query = 'CREATE TABLE '.$table_name.' ( ';
+		$query .='groupname varchar(100) NOT NULL';
+                $query .=', userid varchar(50)';
+		$query .=', primary key(groupname,userid)';
+		$query .=')'; 
+
+
+		$this->log->info($query);
+		mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());	
+		// Create the indexes
+		$this->create_index("create index idx_users2group on users2group (groupname,userid)");
+
+
+ $table_name="productcollaterals";
+                $query = "create table " .$table_name ." ( productid int(11) NOT NULL ";
+                $query .=",date_entered datetime NOT NULL default '0000-00-00 00:00:00'";
+                $query .= ",parent_type varchar(50) NOT NULL default '',parent_id varchar(100) NOT NULL default '',data longblob NOT NULL,description tinytext,filename varchar(50) NOT NULL default '',filesize varchar(50) NOT NULL default '',filetype varchar(20) NOT NULL default '',PRIMARY KEY  (productid,filename))";
+                $this->log->info($query);
+                mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+                $this->create_index("create index idx_collaterals_name on productcollaterals (productid,filename)");
+
+
+	 $table_name="email_attachments";
+                $query = "create table " .$table_name ." (id int(11) NOT NULL auto_increment,date_entered datetime NOT NULL,parent_type varchar(100), parent_id varchar(100) NOT NULL,data longblob NOT NULL,filename varchar(50) NOT NULL,filesize varchar(50) NOT NULL,filetype varchar(20) NOT NULL,PRIMARY KEY (id,filename ) )";
+	echo $query;
+                $this->log->info($query);
+                mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+                $this->create_index("create index idx_email_attachments_name on email_attachments (id,filename)");
 
 
 
 
-                
-                
+
+
+
 	       	}
 
 	function drop_tables () {
@@ -389,7 +473,31 @@ class Security extends SugarBean {
 		$this->log->info($query);
                 mysql_query($query);
 
+		$table_name="groups";
+                $query = 'DROP TABLE IF EXISTS '.$table_name;
+                                
+		$this->log->info($query);
+                mysql_query($query);
+	
+		$table_name="users2group";
+                $query = 'DROP TABLE IF EXISTS '.$table_name;
+                                
+		$this->log->info($query);
+                mysql_query($query);
+		
+		$table_name="productcollaterals";
+                $query = 'DROP TABLE IF EXISTS '.$table_name;
+                                
+		$this->log->info($query);
+                mysql_query($query);
+	
+		$table_name="email_attachments";
+                $query = 'DROP TABLE IF EXISTS '.$table_name;
+                                
+		$this->log->info($query);
+                mysql_query($query);
 
+	
 	}
 	
 	function get_summary_text()

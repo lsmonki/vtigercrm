@@ -23,24 +23,56 @@ $focus = new Lead();
 
 $focus->retrieve($_REQUEST['record']);
 
+	
 foreach($focus->column_fields as $field)
 {
-	if(isset($_REQUEST[$field]))
-	{
-		$value = $_REQUEST[$field];
+	$tempvalue;
+		if($field == 'assigned_user_id')
+		{
+		//check which radio button the user has chosen
+			if($_REQUEST['assigntype'] == 'T')
+			{
+				$tempvalue = $_REQUEST['assigned_group_name'];
+				$value=$tempvalue;
+			}
+			else
+			{
+				$tempvalue = $_REQUEST['assigned_user_id'];
+				$value = $tempvalue;
+			}
+	        }
+		else if(isset($_REQUEST[$field]))
+		{
+			$value=$_REQUEST[$field];
+		}
 		$focus->$field = $value;
 		if(get_magic_quotes_gpc() == 1)
 		{
 			$focus->$field = stripslashes($focus->$field);
 		}
 	}
-}
 
 foreach($focus->additional_column_fields as $field)
 {
 	if(isset($_REQUEST[$field]))
 	{
+	if($field == 'assigned_user_id')
+		{
+		//check which radio button the user has chosen
+			if($_REQUEST['assigntype'] == 'T')
+			{
+				$value = $_REQUEST['assigned_group_name'];
+			}
+			else
+			{
+				$value = $_REQUEST['assigned_user_id'];
+			}
+		}
+	else
+	{
+			
 		$value = $_REQUEST[$field];
+	}
 		$focus->$field = $value;
 		if(get_magic_quotes_gpc() == 1)
 		{

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/EditView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/EditView.php,v 1.5 2004/12/23 14:04:10 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,16 +24,12 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/Emails/Forms.php');
+require_once('modules/Emails/Forms.php');
 
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
 global $current_user;
-// Unimplemented until jscalendar language files are fixed
-// global $current_language;
-// global $default_language;
-// global $cal_codes;
-
 $focus = new Email();
 
 if(isset($_REQUEST['record'])) {
@@ -42,9 +38,8 @@ if(isset($_REQUEST['record'])) {
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 }
-
 //setting default date and time
-if (!isset($focus->date_start)) $focus->date_start = date('Y-m-d');
+ if (!isset($focus->date_start)) $focus->date_start = date('Y-m-d');
 if (!isset($focus->time_start)) $focus->time_start = date('H:i');
 if (!isset($focus->duration_hours)) $focus->duration_hours = "1";
 
@@ -63,6 +58,9 @@ if (isset($_REQUEST['parent_id'])) {
 }
 if (isset($_REQUEST['parent_type'])) {
 	$focus->parent_type = $_REQUEST['parent_type'];
+}
+if (isset($_REQUEST['filename']) && $_REQUEST['isDuplicate'] != 'true') {
+        $focus->filename = $_REQUEST['filename'];
 }
 elseif (is_null($focus->parent_type)) {
 	$focus->parent_type = $app_list_strings['record_type_default_key'];
@@ -109,10 +107,27 @@ $xtpl->assign("DURATION_HOURS", $focus->duration_hours);
 $xtpl->assign("TYPE_OPTIONS", get_select_options_with_id($app_list_strings['record_type_display'], $focus->parent_type));
 if (isset($focus->duration_minutes)) $xtpl->assign("DURATION_MINUTES_OPTIONS", get_select_options_with_id($focus->minutes_values,$focus->duration_minutes));
 
+if ( empty($focus->filename))
+{
+        $xtpl->assign("FILENAME_TEXT", "");
+        $xtpl->assign("FILENAME", "");
+}
+else
+{
+        $xtpl->assign("FILENAME_TEXT", "(".$focus->filename.")");
+        $xtpl->assign("FILENAME", $focus->filename);
+}
+
 if (isset($focus->parent_type) && $focus->parent_type != "") {
 	$change_parent_button = "<input title='".$app_strings['LBL_CHANGE_BUTTON_TITLE']."' tabindex='2' accessKey='".$app_strings['LBL_CHANGE_BUTTON_KEY']."' type='button' class='button' value='".$app_strings['LBL_CHANGE_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=\"+ document.EditView.parent_type.value + \"&action=Popup&html=Popup_picker&form=TasksEditView\",\"test\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
 	$xtpl->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
 }
+
+if ($focus->parent_type == "Account") $xtpl->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=".urlencode($focus->parent_name));
+
+$xtpl->assign("DESCRIPTION", $focus->description);
+$xtpl->assign("TYPE_OPTIONS", get_select_options_with_id($app_list_strings['record_type_display'], $focus->parent_type));
+
 
 $xtpl->parse("main");
 

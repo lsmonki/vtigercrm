@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.7 2004/12/13 09:28:11 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.13 2004/12/28 09:22:47 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -247,7 +247,7 @@ class Contact extends SugarBean {
     
     function getCount($user_name) 
     {
-        $query = "select count(*) from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."'";
+        $query = "select count(*) from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."' and contacts.deleted=0";
 
 //        echo "\n Query is " .$query ."\n";
         $result = $this->db->query($query,true,"Error retrieving contacts count");
@@ -264,7 +264,7 @@ class Contact extends SugarBean {
 
     function get_contacts($user_name,$from_index,$offset)
     {   
-         $query = "select contacts.* from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."' limit " .$from_index ."," .$offset;
+         $query = "select contacts.* from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."' and contacts.deleted=0 limit " .$from_index ."," .$offset;
     // $query = "select * from contacts limit " .$from_index ."," .$offset;
 //    echo $query;
     return $this->process_list_query1($query);
@@ -463,10 +463,109 @@ class Contact extends SugarBean {
 	}
 
 
+//method added to construct the query to fetch the custom fields 
+	function constructCustomQueryAddendum()
+	{
+		$result = mysql_query("SHOW COLUMNS FROM contactcf");
+		$i=0;
+		while ($myrow = mysql_fetch_row($result))
+		{
+		        $columnName[$i] = $myrow[0];
+		        $i++;
+		}
+
+		$sql1 = "select column_name,fieldlabel from customfields where column_name in (";
+		$colName = 0;
+		$addTag;
+		while($colName < count($columnName))
+		{
+		        if ($columnName[$colName] == "contactid")
+        		{
+        		}
+        		else
+        		{
+		                if($colName == 1)
+                		{
+
+		                        $addTag .= "'" .$columnName[$colName] ."'";
+                		}
+		                else
+                		{
+		                        $addTag .= ",'" .$columnName[$colName] ."'";
+                		}
+        		}
+		        $colName++;
+		}
+		$sql2 = $sql1.$addTag .")";
+		$result_sql2 = mysql_query($sql2);
+		$resultCount = mysql_num_rows($result_sql2);
+		$rs=mysql_fetch_array($result_sql2);
+		 $j=0;
+		while($j<mysql_num_rows($result_sql2))
+  		{
+			    for($i=0;$i<=$resultCount;$i++)
+    				{
+				      $copy[$j][$i]=$rs[$i];
+    				}
+			    $rs=mysql_fetch_array($result_sql2);
+			    $j++;
+		}
+		$sql3 = "select ";
+		$k=0;
+		$l=0;
+		while($k< $resultCount)
+		{	
+
+		        if($k == 0)
+        		{
+		        $sql3.= "contactcf.".$copy[$k][$l]." ".$copy[$k][$l+1];
+        		}
+		        else
+        		{
+		        $sql3.= ",contactcf.".$copy[$k][$l]." ".$copy[$k][$l+1];
+        		}
+		        $k++;
+		}
+	return $sql3;
+
+	}
+
+//check if the custom table exists or not in the first place
+function checkIfCustomTableExists()
+{
+ $result = mysql_query("SHOW tables like 'contactcf'");
+ $testrow = mysql_num_fields($result);
+	if(count($testrow) > 1)
+	{
+		$exists=true;
+	}
+	else
+	{
+		$exists=false;
+	}
+return $exists;
+}
 
         function create_export_query(&$order_by, &$where)
         {
-                         $query = "SELECT
+		if($this->checkIfCustomTableExists())
+		{
+	
+                         $query =  $this->constructCustomQueryAddendum() .",
+                                contacts.*,
+                                accounts.name as account_name,
+                                users.user_name as assigned_user_name
+                                FROM contacts
+                                LEFT JOIN users
+                                ON contacts.assigned_user_id=users.id
+                                LEFT JOIN accounts_contacts
+                                ON contacts.id=accounts_contacts.contact_id
+                                LEFT JOIN accounts
+                                ON accounts_contacts.account_id=accounts.id left join contactcf on contactcf.contactid=contacts.id ";
+		}
+		else
+		{
+			 $query = "SELECT
                                 contacts.*,
                                 accounts.name as account_name,
                                 users.user_name as assigned_user_name
@@ -477,11 +576,10 @@ class Contact extends SugarBean {
                                 ON contacts.id=accounts_contacts.contact_id
                                 LEFT JOIN accounts
                                 ON accounts_contacts.account_id=accounts.id ";
+		}
 
-
-                        $where_auto = " accounts_contacts.deleted=0
-                        AND users.status='ACTIVE'
-                        AND accounts.deleted=0 AND contacts.deleted=0 ";
+                        $where_auto = " (accounts_contacts.deleted=0 or accounts_contacts.deleted is null) 
+                        AND users.status='ACTIVE' AND (accounts.deleted=0 or accounts.deleted is null) AND contacts.deleted=0 ";
 
                 if($where != "")
                         $query .= "where ($where) AND ".$where_auto;
@@ -490,7 +588,6 @@ class Contact extends SugarBean {
 
                 if(!empty($order_by))
                         $query .= " ORDER BY $order_by";
-
                 return $query;
         }
 
@@ -749,6 +846,19 @@ class Contact extends SugarBean {
 	return $the_where;
 }
 
+
+
+ function getColumnNames()
+ {
+ $result = $this->db->query("SHOW COLUMNS FROM contacts");
+ $i=0;
+ while ($myrow = mysql_fetch_row($result))
+ {
+         $copy[$i]=$myrow;
+         $i++;
+ }
+ return $copy;
+}
 
 }
 
