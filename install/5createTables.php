@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.36 2005/01/03 13:54:30 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.39 2005/01/08 13:21:56 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -31,6 +31,7 @@ require_once('modules/Leads/Lead.php');
 require_once('modules/Settings/FileStorage.php'); 
 require_once('modules/imports/Headers.php'); 
 require_once('modules/Contacts/Contact.php'); 
+require_once('modules/Calendar/UserCalendar.php'); 
 require_once('modules/Accounts/Account.php'); 
 require_once('modules/Opportunities/Opportunity.php'); 
 require_once('modules/Cases/Case.php'); 
@@ -236,6 +237,7 @@ $startTime = microtime();
 
 $modules = array(
  "Contact"
+,"UserCalendar"
 ,"Account"
 ,"Opportunity"
 ,"Lead"
@@ -317,8 +319,8 @@ require_once('include/PopulateCustomFieldTables.php');
 create_custom_field_tables();
 
 //Creating and Populating PHPBB tables and data
-require_once('include/PopulatePhpBBtables.php');
-create_populate_phpbb();
+//require_once('include/PopulatePhpBBtables.php');
+//create_populate_phpbb();
 
 // populating the db with seed data
 if ($db_populate)
@@ -330,6 +332,7 @@ if ($db_populate)
 
 //populating forums data
 global $log, $db;
+/*
 $db->query("update phpbb_config set config_value='".$admin_email."' where config_name='board_email'");
 
 $db->query("update phpbb_config set config_value='modules/MessageBoard/images/smiles' where config_name='smilies_path'");
@@ -346,6 +349,7 @@ $db->query("insert phpbb_config values('board_startdate','".$curr_time."')");
 
 $db->query("insert phpbb_config values('default_lang', 'english')");
 
+*/
 $endTime = microtime();
 
 $deltaTime = microtime_diff($startTime, $endTime);
@@ -407,7 +411,7 @@ mysql_query("insert into role2permission(roleid,permissionid,module,module_actio
 }
 
 //populate Calendar data
-include("modules/Calendar/admin/scheme.php");
+//include("modules/Calendar/admin/scheme.php");
 
 ?>
 The database tables are now set up.<HR></HR>

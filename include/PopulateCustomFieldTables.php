@@ -38,7 +38,7 @@ function create_custom_field_tables ()
 			
 
 		$query = 'CREATE TABLE customfields ( ';
-		$query .='fieldid int(10) NOT NULL default \'0\' auto_increment';
+		$query .='fieldid int(10) NOT NULL auto_increment';
 		$query .=', column_name varchar(100) NOT NULL';
 		$query .=', table_name varchar(50) NOT NULL';
 		$query .=', generatedtype int(10) NOT NULL';

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.28 2005/01/03 13:35:00 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.29 2005/01/10 10:42:26 jack Exp $
  * Description:  Defines the English language pack for the base application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -182,7 +182,7 @@ $app_strings = Array(
 'LBL_FILE'=>'File',
 'LBL_TYPE'=>'File Type',
 'LBL_DOWNLOAD'=>'Download Now',
-
+'LBL_OPERATION'=>'Operation',
 );
 
 //the left value is the key stored in the db and the right value is the display value

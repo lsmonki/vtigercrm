@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.18 2004/11/06 08:12:04 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.19 2005/01/08 13:20:52 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -195,7 +195,7 @@ $config .= "\$dbhost = '".$db_host_name."';\n\n";
 $config .= "\$dbuser = '".$db_user_name."';\n\n";
 $config .= "\$dbpasswd = '".$db_password."';\n\n";
 $config .= "\$dbname= '".$db_name."';\n\n";
-$config .= "\$table_prefix = 'phpbb_';\n";
+//$config .= "\$table_prefix = 'phpbb_';\n";
 $config .= "define('PHPBB_INSTALLED', true);\n";
 $config .= "?>";
 

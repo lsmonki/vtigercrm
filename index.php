@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/index.php,v 1.58 2005/01/04 12:02:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/index.php,v 1.65 2005/01/10 14:51:59 jack Exp $
  * Description: Main file and starting point for the application.  Calls the 
  * theme header and footer files defined for the user as well as the module as 
  * defined by the input parameters.
@@ -21,7 +21,7 @@
 
 global $entityDel;
 global $display;
-$phpbb_root_path='./modules/MessageBoard/';
+//$phpbb_root_path='./modules/MessageBoard/';
 if (substr(phpversion(), 0, 1) == "5") {
         ini_set("zend.ze1_compatibility_mode", "1");
 }
@@ -192,14 +192,16 @@ function checkDeletePermission($tabid)
 //This needs to be called only once. This check has been put so that common.php does not get invoked time and again
 	if(isset($HTTP_POST_VARS['Login']) || isset($HTTP_GET_VARS['Login']) || isset($HTTP_POST_VARS['Logout']) || isset($HTTP_GET_VARS['Logout']))
 	{
+	/*
 		if((isset($HTTP_POST_VARS['Login']) || isset($HTTP_GET_VARS['Login'])) && !$userdata['session_logged_in'])
 		{
 			//now log in to the Forums for the current user
+		/*
 			include($phpbb_root_path . 'common.php');
 
-		 	$sql = "SELECT user_id, username, user_password, user_active, user_level
-                        	FROM " . USERS_TABLE . "
-	                        WHERE username = '" . $HTTP_POST_VARS['user_name'] . "'";
+		 	//$sql = "SELECT user_id, username, user_password, user_active, user_level
+                        //	FROM " . USERS_TABLE . "
+	                  //      WHERE username = '" . $HTTP_POST_VARS['user_name'] . "'";
         	        if ( !($result = $db->sql_query($sql)) )
                 	{
                         	message_die(GENERAL_ERROR, 'Error in obtaining userdata', '', __LINE__, __FILE__, $sql);
@@ -223,6 +225,7 @@ function checkDeletePermission($tabid)
                 	}
 
 		}
+	*/
 	}
 
 
@@ -323,10 +326,10 @@ if(isset($action) && isset($module))
 {
 	$log->info("About to take action ".$action);
 	$log->debug("in $action");
-	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action) || ereg("^app_ins",$action) || ereg("^minical",$action) || ereg("^minitimer",$action) || ereg("^app_del",$action) || ereg("^send_mail",$action))
+	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action) || ereg("^app_ins",$action) || ereg("^minical",$action) || ereg("^minitimer",$action) || ereg("^app_del",$action) || ereg("^send_mail",$action) || ereg("^populatetemplate",$action) || ereg("^TemplateMerge",$action) || ereg("^testemailtemplateusage",$action) || ereg("^saveemailtemplate",$action) || ereg("^lookupemailtemplate",$action) || ereg("^deletewordtemplate",$action) || ereg("^deleteemailtemplate",$action) || ereg("^deleteattachments",$action))
 	{
 		$skipHeaders=true;
-		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action) || ereg("^downloadfile", $action) || ereg("^fieldtypes",$action))
+		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action) || ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^lookupemailtemplate",$action))
 			$skipFooters=true;
 		if(ereg("^downloadfile", $action) || ereg("^fieldtypes",$action))
 		{

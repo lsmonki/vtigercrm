@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/utils.php,v 1.10 2004/12/21 21:19:56 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/utils.php,v 1.11 2005/01/07 10:41:59 jack Exp $
  * Description:  Includes generic helper functions used throughout the application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -783,7 +783,10 @@ function get_group_options()
 
 function get_assigned_user_or_group_name($id)
 {
-	$sql = "select assigned_user_id from leads where id='" .$id ."'";
+	//this will return the name of the group or the name of the individual member 
+	//$sql = "select assigned_user_id from leads where id='" .$id ."'";
+	 $sql = "select (case when (user_name is null) then  (users2group.groupname) else (user_name) end) as name from leads left join users on users.id= assigned_user_id left join users2group on users2group.groupname=leads.assigned_user_id where leads.id='" .$id ."'";
+
 	$result = mysql_query($sql);
 	$tempval = mysql_fetch_row($result);
 	return $tempval[0];

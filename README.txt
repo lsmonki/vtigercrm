@@ -1,3 +1,74 @@
+vtiger CRM 4 Beta
+January 10, 2005
+
+We are pleased to announce the latest version of vtiger CRM.
+
+New Features:
+
+1. Help Desk module to handle trouble tickets, Frequently Asked Questions and Support Statistics
+
+2. Products module to add company wide products related information at a centralized location
+
+3. Mail merge Templates
+
+4. Sending Mass E-mails to contacts
+
+5. Delete attachments
+
+6. Add/Sync Email attachments using vtiger Outlook Plug-in from Microsoft(R) Outlook(R) to vtiger CRM
+
+7. Add/Sync tasks using vtiger Outlook Plug-in from Microsoft(R) Outlook(R) to vtiger CRM
+
+8. Creating Groups and assigning users to groups
+
+9. Assigning leads/tickets to groups/individuals
+
+10. New theme 'Blue' has been added
+
+
+Issues Fixed:
+
+We have fixed the following issues reported in Sourceforge.net:
+
+1. 1093648 - Attachment contains extra footer
+
+2. 1097245 - Email Field in Leads - 25 chars
+
+3. 1093120 - User name doesn't appear in meetings
+
+4. 1090718 - Meeting User - Unable to remove
+
+5. 1092763 - Meeting attendee list does not list user's Name
+
+6. 1094922 - New Attachment - Error Message
+
+7. 1089207 - problem in emails
+
+8. 1089136 - need attachment
+
+9. 1037521 - Attachment/Import - Error message
+
+10. 1032707 - Unable to view/Save the Attachments
+
+11. 1019074 - handle mysql data
+
+12. 1028989 - Print Problem
+
+13. 1085617 - Wrong focus after deleting cases/contacts/opportunities
+
+14. 1089627 - Problem with vtiger. 25 Character email limit
+
+15. 1090721 - Meeting Contact - Unable to remove
+
+16. 1090279 - Export Custom Fields - Not working
+
+17. 1098475: Contacts: Field TITLE is too short
+
+18. 1093669 - Delete attachments
+
+19. Support for Latest versions of Apache and MySQL in installation wizard (Both Linux and Windows).
+
+----------------------------
 vtiger CRM 3.2.1
 December 21, 2004
 
@@ -5,9 +76,8 @@ We are pleased to announce the latest version of vtiger CRM.
 
 New Features:
 
-1. Basic Calendar support.
-2. German and Dutch Languages Support.
-3. Custom field support for import and export utilities.
+1. Basic Calendar support
+2. German and Dutch Languages Support
 
 Issues Fixed:
 

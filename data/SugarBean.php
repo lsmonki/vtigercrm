@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/data/SugarBean.php,v 1.10 2004/11/08 10:01:11 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/data/SugarBean.php,v 1.11 2005/01/08 13:22:52 jack Exp $
  * Description:  Defines the base class for all data entities used throughout the 
  * application.  The base class including its methods and variables is designed to 
  * be overloaded with module-specific methods and variables particular to the 
@@ -594,7 +594,7 @@ class SugarBean
 		return $where_clause;
 	}
 
-	
+/*	
 	function get_msgboard_data($orderby = "" , $where = "" ,$row_offset = 0)
  	{
  	         $response = $this->get_messageboard_list($order_by, $where , $row_offset,$limit= -1,$max_per_page = -1);
@@ -662,9 +662,9 @@ $sql='select distinct(t.topic_id), t.topic_title, c.cat_title, first.username as
  	                                                $this->log->debug("process_full_list: $this->object_name({$row['id']}): ".$field." = ".$this->$field);
  	                                        }
  	                                }
-                         */
  	                 return $response;
   }
+	*/
 }
 
 
