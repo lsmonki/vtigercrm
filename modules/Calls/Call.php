@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Calls/Call.php,v 1.4 2004/11/19 11:23:41 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Calls/Call.php,v 1.4.2.1 2004/12/15 14:11:13 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -60,7 +60,7 @@ class Call extends SugarBean {
 	var $required_fields =  array("name"=>1, "date_start"=>2, "time_start"=>3,);
 	
 	var $default_call_name_values = array('Assemble catalogs', 'Make travel arrangements', 'Send a letter', 'Send contract', 'Send fax', 'Send a follow-up letter', 'Send literature', 'Send proposal', 'Send quote');
-	var $minutes_values = array('00', '15', '30', '45');
+	var $minutes_values = array('00'=>'00', '15'=>'15', '30'=>'30', '45'=>'45');
 
 	var $table_name = "calls";
 	var $rel_users_table = "calls_users";
