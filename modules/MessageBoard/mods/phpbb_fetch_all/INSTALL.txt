@@ -1,0 +1,187 @@
+##############################################################
+## MOD Title: phpBB Fetch All
+## MOD Author: Ca5ey < ca5ey@clanunity.net > (Volker Rattel) http://clanunity.net
+## MOD Description: displays phpBB on any page
+## MOD Version: 2.0.3
+##
+## Installation Level: (Easy)
+## Installation Time: 15 Minutes
+## Files To Edit: none
+## Included Files: common.php, forums.php, index.html,
+## INSTALL.txt, polls.php, posts.php, README.txt
+## stats.php, users.php, examples/index.html,
+## examples/portal.php, examples/simple.php,
+## examples/subSilver.css, examples/top_poster.php,
+## examples/top_poster_body.tpl
+##############################################################
+## For Security Purposes, Please Check:
+## http://www.phpbb.com/mods/ for the latest version of this
+## MOD. Downloading this MOD from other sites could cause
+## malicious code to enter into your phpBB Forum. As such,
+## phpBB will not offer support for MOD's not offered in our
+## MOD-Database, located at: http://www.phpbb.com/mods/
+##############################################################
+## Author Notes:
+##
+## This mod lets you display data from the phpBB forum on
+## any page of your website. It uses phpBB to connect
+## to the forum database and should therefor work if phpBB
+## works.
+##
+## You can integrate the mod on any (non phpBB) page of your
+## homepage using your layout and design. You can also use
+## phpBB templates and make the script become a part of your
+## forum.
+##
+## Manual install:
+##
+## Be sure to backup all files if you have an older version of
+## this mod installed.
+##
+## 1. Create a directory 'mods' within your phpBB2 directory if
+##    it does not already exists.
+##
+## 2. Upload the complete 'phpbb_fetch_all' folder into the
+##    'mods' directory.
+##
+## 3. Open the following file in your browser:
+##    phpBB2/mods/phpbb_fetch_all/examples/portal.php
+##
+## Done. :-)
+##############################################################
+## MOD History:
+##
+## 2003-10-09 - 2.0.3
+##     - reorganizing the readme files
+##     - portal example changed to not use the
+##       phpbb_fetch_users() function by default due to memory
+##       issues on large (over 500 users maybe) boards
+##     - also changed the copyright line to use the board
+##       config value in the portal example
+##
+## 2003-09-30 - 2.0.2
+##     - bugfix in the trim post by character function for
+##       phpbb_fetch_topics() (thanks to chap)
+##
+## 2003-09-27 - 2.0.1
+##     - 'post_edit_time' wasn't preprocessed in
+##       phpbb_fetch_posts() and phpbb_fetch_topics()
+##
+## 2002-09-10 - 2.0.0
+##     - new name 'phpBB Fetch All' for the project
+##     - complete code rewrite
+##     - many, many changes
+##
+## 2002-07-14 - 1.3.2
+##     - added top_poster() function (thanks to napy8gen)
+##     - added random_user() function (thanks to napy8gen)
+##
+## 2002-07-10 - 1.3.1
+##     - added phpbb_fetch_group() to display users from a
+##       specific group
+##     - added phpbb_fetch_info() to display user online,
+##       total posts and so on
+##     - added topic trim option
+##
+## 2002-07-09 - 1.3.0
+##     - added auth check
+##
+## 2002-07-08 - 1.2.1
+##     - bugfix poll ordering
+##
+## 2002-06-29 - 1.2.0
+##     - polishing code
+##
+## 2002-06-26 - 1.1.9
+##     - polishing code
+##     - added poll support
+##
+## 2002-06-23 - 1.1.8
+##     - added avatar and rank query (thanks to radmanics)
+##     - added a span page option (thanks to Kali)
+##     - added a span page example
+##     - modified '!=' to '<>' in SQL for MS ACCESS
+##       compatibility (thanks to Kali)
+##     - added a reference example
+##
+## 2002-06-20 - 1.1.7
+##     - redesigned the archive architecture
+##     - added phpbb_fetch_recent to pull out recent replies
+##     - tested search query option
+##     - rewritten examples and README
+##
+## 2002-06-16 - 1.1.6
+##     - secured the search query with brackets
+##     - added phpbb_fetch_topics() which can fetch
+##       topics/postings by given topic ID's
+##
+## 2002-06-13 - 1.1.5
+##     - option for closing the DB connection
+##     - added some fields to the output array
+##
+## 2002-06-09 - 1.1.4
+##     - build in search string which can be used to only fetch
+##       posts that contain a specific word (for example)
+##
+## 2002-06-08 - 1.1.3
+##     - fetching between two dates
+##
+## 2002-06-07 - 1.1.2
+##     - trigger output of normal topics (you could now output
+##       only announcements or sticky postings for example)
+##
+## 2002-05-31 - 1.1.1
+##     - polishing source code
+##     - trim postings after a specific amount of characters
+##     - created a trigger indicating if a post has been
+##       truncated
+##     - added more examples
+##     - using CVS for version control now
+##     - trigger use of phpBB sessions (on/off)
+##     - phpBB template integration (not shown in demo)
+##     - trigger output of sticky, announcements, polls, locked
+##       and moved topics (on - off)
+##     - improved example part - now using $phpbb_root_path
+##     - fetches also user_email from the poster
+##     - show one specific posting from the list of fetched
+##       postings i.e. like on www.phpbb.com
+##     - fetch posts from multiple forums
+##     - trim postings after a specific character combination
+##     - $phpbb_root_path is verified (hopefully reduces
+##       questions) 
+##
+## 2002-06-13 - 1.0.3
+##     - uses phpBB database layer (not only MySQL!!!)
+##     - read more from the phpBB config (i.e. table prefix)
+##     - added more comments in the code
+##     - made example more fancy
+##     - could fetch an infinite amount of posts
+##     - if BBCode is disabled --> don't parse it
+##     - if smilies are disabled --> don't parse them
+##     - censored words will not be shown
+##
+## 2002-06-12 - 1.0.2
+##     - added full BBCode support (thanks to a mod from mds,
+##       which I came along too lately - part of the code is
+##       from his script)
+##     - code polishing
+##
+## 2002-06-11 - 1.0.1
+##     - added smilie support (code is mainly from phpBB2)
+##
+## 2002-06-10 - 1.0.0
+##     - initial release
+##############################################################
+## Before Adding This MOD To Your Forum, You Should Back Up
+## All Files Related To This MOD
+##############################################################
+
+#
+#-----[ COPY ]--------------------------------------
+#
+copy *.* to mods/phpbb_fetch_all
+
+#
+#-----[ SAVE/CLOSE ALL FILES ]----------------------
+#
+# EoM
