@@ -41,6 +41,8 @@ $mod_strings = Array(
 'LBL_DAY6' => 'Saturday',
 'LBL_DAY0' => 'Sunday',
 
+'LBL_DATE_TITLE' => '%A, %d. %B %Y',
+
 'LBL_WEEK' => 'Week',
 'LBL_WEEKS' => 'Weeks',
 'LBL_NEXT_WEEK' => 'next week',
@@ -68,6 +70,8 @@ $mod_strings = Array(
 'LBL_APP_ERR001' =>'Invalid Date in field %s!',
 'LBL_APP_ERR002' =>'start after end !',
 'LBL_APP_ERR003' =>'Missing Contact !',
+'ERR_DELETE_RECORD'=>"A record number must be specified to delete the appointment.",
+'DELETE_CONFIRMATION'=>"Are you sure you want to delete this appointment?",
 
 'AppLoc'=> Array('0' => 'Office'
 			, '1' => 'Out'

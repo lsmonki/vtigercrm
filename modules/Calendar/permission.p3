@@ -43,7 +43,7 @@ ini_set("session.gc_probability",50);
 @session_cache_limiter('public');
 #session_cache_limiter('private, must-revalidate');
 #session_cache_limiter('private_no_expire');
-@session_start();
+#@session_start();
 
 # this will register some session variables
 include_once $calpath .'mail.pinc';

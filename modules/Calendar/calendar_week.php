@@ -28,6 +28,9 @@
  #include_once $calpath .'timetrack.pinc';
 
  require_once('modules/Calendar/preference.pinc');
+ require_once('include/database/PearDatabase.php');
+require_once('modules/Calendar/UserCalendar.php');
+
  
  /* Check if user is allowed to use it */
  #check_user();
@@ -44,15 +47,20 @@
    Function calendar_week()
    {
    	$this->pref = new preference();
+	$this->db = new PearDatabase();
+$calobj = new UserCalendar();
+		$this->tablename = $calobj->table_name;
+
    }
    Function info() {
-     global $lang,$tutos,$calpath,$callink,$image_path;
+     global $lang,$tutos,$calpath,$callink,$image_path,$mod_strings;
 
-     $adr = $this->user;
+     //$adr = $this->user;
+     $adr = $this->pref;
      $ts = mktime(12,0,0,substr($this->t,4,2),substr($this->t,6,2),substr($this->t,0,4));
 
      /* Back to last Monday or Sunday before ts */
-     while ( Date("w",$ts) != $this->user->weekstart ) {
+     while ( Date("w",$ts) != $this->pref->weekstart ) {
        $ts -= 86400;
      }
 
@@ -75,7 +83,7 @@
      //
      //echo " </tr>\n";
      echo " <tr>\n";
-     echo "  <td colspan=\"2\" width=\"100%\" align=\"center\">".menulink($callink ."calendar_week&t=".$last_week,$this->theme->getImage(left,'list'),$lang['lastweek']) ."&nbsp;". $lang['week'] ."&nbsp;" . $wn . "/". $yy ."&nbsp;". menulink($callink ."calendar_week&t=".$next_week,$this->theme->getImage(right,'list') ,$lang['nextweek']) ."</td>\n";
+     echo "  <td colspan=\"2\" width=\"100%\" align=\"center\">".$this->pref->menulink($callink ."calendar_week&t=".$last_week,$this->pref->getImage(left,'list'),$mod_strings['LBL_LAST_WEEK']) ."&nbsp;". $mod_strings['LBL_WEEK'] ."&nbsp;" . $wn . "/". $yy ."&nbsp;". $this->pref->menulink($callink ."calendar_week&t=".$next_week,$this->pref->getImage(right,'list') ,$mod_strings['LBL_NEXT_WEEK']) ."</td>\n";
      echo " </tr>\n";
 	 echo "</table>\n";
 	 echo "<br><table class=\"outer\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%\">\n";
@@ -86,15 +94,16 @@
      $to->setDateTimeTS($ts - 12 * 3600);
      $to->addDays(7);
 
-     $this->user->callist = array();
+     $this->pref->callist = array();
      appointment::readCal($this->pref,$from,$to);
+     //print_r($this->pref->callist);
      #task::readCal($this->user,$from,$to);
 
-     foreach($tutos[activemodules] as $i => $f) {
+     /*foreach($tutos[activemodules] as $i => $f) {
        $x = &new $tutos[modules][$f][name]($this->dbconn);
        $x->readCal($this->pref,$from,$to);
      }
-
+    */
      $day = 0;
      $col = 1;
      $dd = new DateTime();
@@ -116,11 +125,11 @@
 		   echo "<table border=\"0\" cellpadding=\"3\" cellspacing=\"1\" width=\"100%\">\n";
 		   echo " <tr>\n";
 		   echo "  <th class=\"viewhead\">\n";
-		   echo menulink($callink ."calendar_day&t=". $tref,$lang['Day'. Date("w",$ts)],strftime($lang['DateFormatTitle'],$ts));
+		   echo $this->pref->menulink($callink ."calendar_day&t=". $tref,$mod_strings['LBL_DAY'. Date("w",$ts)],strftime($mod_strings['LBL_DATE_TITLE'],$ts));
 		   if ( isset($dinfo[Desc]) ) {
-			 echo " " . menulink($callink ."app_new&t=". $tref,$d,$lang['NewAppointInfo'],$dinfo[popinfo]) ."\n";
+			 echo " " . $this->pref->menulink($callink ."app_new&t=". $tref,$d,$mod_strings['LBL_NEW_APPNT_INFO'],$dinfo[popinfo]) ."\n";
 		   } else {
-			 echo " " . menulink($callink ."app_new&t=". $tref,$d,$lang['NewAppointInfo']) ."\n";
+			 echo " " . $this->pref->menulink($callink ."app_new&t=". $tref,$d,$mod_strings['LBL_NEW_APPNT_INFO']) ."\n";
 		   }
 		   echo "  </th>\n";
 		   echo " </tr>\n";
@@ -131,16 +140,17 @@
 		   }
 		   
 		   $hastable = false;
-		   foreach ($this->user->callist as $idx => $x) {
+		   foreach ($this->pref->callist as $idx => $x) {
 			 /* the correct day */
-			 if ( ! $this->user->callist[$idx]->inside($dd) ) {
+			 if ( ! $this->pref->callist[$idx]->inside($dd) ) {
 			   continue;
 			 }
-			 if (!cal_check_against_list($this->user->callist[$idx],$this->uids)) {
+			 /*if (!cal_check_against_list($this->pref->callist[$idx],$this->uids)) {
 			   continue;
-			 }
+			 }*/
 			 // Do not show finished tasks
-			 if ( ($this->user->callist[$idx]->gettype() == "task") && ($this->user->callist[$idx]->state == 2) ) {
+			 if ( ($this->pref->callist[$idx]->gettype() == "task") && ($this->pref->callist[$idx]->state == 2) ) {
+
 			   continue;
 			 }
 			 if ( !$hastable ) {
@@ -150,7 +160,8 @@
 			   echo "  <tr><td class=\"". $dinfo[color] ."\" colspan=\"3\"><img src=\"". $image_path ."black.png\" width=\"100%\" height=\"1\" alt=\"--------\"></td></tr>\n";
 			 }
 			 // Show appointments or task or whatever
-			 $this->user->callist[$idx]->formatted();
+			 $this->pref->callist[$idx]->formatted();
+
 		   }
 	
 		   if ( $hastable ) {
@@ -198,7 +209,7 @@
    Function prepare() {
      global $tutos, $lang;
 
-     $this->name = $lang['Calendar'];
+     $this->name = $mod_strings['LBL_MODULE_NAME'];
      #if ( ! $this->user->feature_ok(usecalendar,PERM_SEE) ) {
      #  $msg .= sprintf($lang['Err0022'],"'". $this->name ."'");
      #  $this->stop = true;
@@ -209,11 +220,11 @@
      #$this->uids = cal_parse_options($this->user,$this->teamname);
      $this->t = $_GET['t'];
      # menu
-     $m = appointment::getSelectLink($this->user);
-     $m[category][] = "obj";
-     $this->addmenu($m);
-     $m = appointment::getAddLink($this->user,$this->user);
-     $this->addMenu($m);
+     #$m = appointment::getSelectLink($this->user);
+     #$m[category][] = "obj";
+     #$this->addmenu($m);
+     #$m = appointment::getAddLink($this->user,$this->user);
+     #$this->addMenu($m);
    }
  }
 
@@ -221,9 +232,9 @@
 
  $l = new calendar_week($current_user);
  $l->display();
- $dbconn->Close();
+ #$dbconn->Close();
 ?>
 <!--
     CVS Info:  $Id$
     $Author$
--->
+-->	

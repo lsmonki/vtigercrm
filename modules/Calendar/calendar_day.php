@@ -23,12 +23,14 @@ echo "\n<BR>\n";
 
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
- include_once $calpath .'task.pinc';
+ include_once $calpath .'preference.pinc';
+ #include_once $calpath .'task.pinc';
  include_once $calpath .'appointment.pinc';
- include_once $calpath .'product.pinc';
+require_once('modules/Calendar/UserCalendar.php');
+ #include_once $calpath .'product.pinc';
 
  /* Check if user is allowed to use it */
- check_user();
+ #check_user();
  loadmodules("appointment","show");
  loadlayout();
 
@@ -36,11 +38,21 @@ echo "\n<BR>\n";
   * display a calendar for one single day
   */
  class calendar_day extends layout {
+	
+   Function calendar_day()
+   {
+   	$this->pref = new preference();
+	$this->db = new PearDatabase();
+$calobj = new UserCalendar();
+		$this->tablename = $calobj->table_name;
+
+   }
+
    /**
     * the data display part
     */
    Function info() {
-     global $lang,$tutos,$callink,$calpath,$image_path;
+     global $lang,$tutos,$callink,$calpath,$image_path,$mod_strings;
 
      $ts = mktime(12,0,0,substr($this->t,4,2),substr($this->t,6,2),substr($this->t,0,4));
      $from = new DateTime();
@@ -61,7 +73,7 @@ echo "\n<BR>\n";
      $this->user->callist = array();
      appointment::readCal($this->user,$from,$next_day);
 #    echo strftime($lang['DateFormatTitle'],$from->ts)." ".$from->ts ."<br />";
-     task::readCal($this->user,$from,$next_day);
+     #task::readCal($this->user,$from,$next_day);
 
 
      foreach($tutos[activemodules] as $i => $f) {
@@ -155,9 +167,9 @@ echo "\n<BR>\n";
      //echo " </tr>\n";
      echo " <tr>\n";
      echo " <td class=\"viewhead\" nowrap=\"nowrap\" width=\"100%\" align=\"center\">";
-     echo menulink($callink ."calendar_day&t=".$last_day->getYYYYMMDD(),$this->theme->getImage(left,'list'),$last_day->getDate());
-     echo "&nbsp;". strftime($lang['DateFormatTitle'],$from->ts) ."&nbsp;(". $lang['week']." ". menulink($callink ."calendar_week&t=".Date("Ymd",$from->ts), $wn ."/". $yy, $wn ."/". $yy ) .")&nbsp;";
-     echo menulink($callink ."calendar_day&t=".$next_day->getYYYYMMDD(),$this->theme->getImage(right,'list'),$next_day->getDate());
+     echo $this->pref->menulink($callink ."calendar_day&t=".$last_day->getYYYYMMDD(),$this->pref->getImage(left,'list'),$last_day->getDate());
+     echo "&nbsp;". strftime($mod_strings['LBL_DATE_TITLE'],$from->ts) ."&nbsp;(". $mod_strings['LBL_WEEK']." ". $this->pref->menulink($callink ."calendar_week&t=".Date("Ymd",$from->ts), $wn ."/". $yy, $wn ."/". $yy ) .")&nbsp;";
+     echo $this->pref->menulink($callink ."calendar_day&t=".$next_day->getYYYYMMDD(),$this->pref->getImage(right,'list'),$next_day->getDate());
      echo "</td></tr>\n";
 	 echo "</table>\n";
 	 echo "<br><table class=\"outer\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" width=\"90%\"><tr><td class=\"inner\">\n";
@@ -167,9 +179,9 @@ echo "\n<BR>\n";
 
        echo " <th class=\"viewhead\" width=\"10%\" align=\"right\" valign=\"top\">\n";
        if ( $i == -1 ) {
-         echo  menulink($callink . "app_new&t=".$this->t, "NOTIME",$lang['NewAppointInfo']);
+         echo  $this->pref->menulink($callink . "app_new&t=".$this->t, "NOTIME",$mod_strings['LBL_NEW_APPNT_INFO']);
        } else {
-         echo  menulink($callink . "app_new&start=". $this->t.sprintf("%02d",$i)."00&amp;end=".$this->t.sprintf("%02d",$i)."59" ,sprintf("%02d", $i).":00",$lang['NewAppointInfo']);
+         echo  $this->pref->menulink($callink . "app_new&start=". $this->t.sprintf("%02d",$i)."00&amp;end=".$this->t.sprintf("%02d",$i)."59" ,sprintf("%02d", $i).":00",$mod_strings['LBL_NEW_APPNT_INFO']);
        }
        echo "&nbsp;</th>\n";
 
@@ -194,7 +206,7 @@ echo "\n<BR>\n";
      }
 	 echo " </table>\n";
 	 echo "</td></tr></table>\n";
-     echo $this->DataTableEnd();
+     #echo $this->DataTableEnd();
      hiddenFormElements();
      echo $this->getHidden();
      echo "</form>\n";
@@ -210,11 +222,11 @@ echo "\n<BR>\n";
    Function prepare() {
      global $tutos, $lang,$msg;
 
-     $this->name = $lang['Calendar'];
-     if ( ! $this->user->feature_ok(usecalendar,PERM_SEE) ) {
-       $msg .= sprintf($lang['Err0022'],"'". $this->name ."'");
-       $this->stop = true;
-     }
+     $this->name = $mod_strings['LBL_MODULE_NAME'];
+     #if ( ! $this->user->feature_ok(usecalendar,PERM_SEE) ) {
+     #  $msg .= sprintf($lang['Err0022'],"'". $this->name ."'");
+     #  $this->stop = true;
+     #}
      $this->teamname = "";
      $this->t = Date("Ymd");
 
@@ -222,14 +234,14 @@ echo "\n<BR>\n";
        $this->t = $_GET['t'];
      }
      $this->addHidden("t", $this->t);
-     $this->uids = cal_parse_options($this->user,$this->teamname);
-     $this->team = $this->user->get_prefteam();
+     $this->uids = cal_parse_options($this->pref,$this->teamname);
+     #$this->team = $this->user->get_prefteam();
      # menu
-     $m = appointment::getSelectLink($this->user);
-     $m[category][] = "obj";
-     $this->addmenu($m);
-     $m = appointment::getAddLink($this->user,$this->user);
-     $this->addMenu($m);
+     #$m = appointment::getSelectLink($this->user);
+     #$m[category][] = "obj";
+     #$this->addmenu($m);
+     #$m = appointment::getAddLink($this->user,$this->user);
+     #$this->addMenu($m);
    }
  }
 
@@ -238,7 +250,7 @@ echo "\n<BR>\n";
 
  $l = new calendar_day($current_user);
  $l->display();
- $dbconn->Close();
+ #$dbconn->Close();
 ?>
 <!--
     CVS Info:  $Id$

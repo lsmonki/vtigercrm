@@ -48,13 +48,13 @@
     */
    Function info() {
      global $tutos, $lang,$table,$callink,$app_strings,$mod_strings,$apmt_location,$current_user;
-
      $a_checked[0] = "";
      $a_checked[1] = "";
      $a_checked[2] = "";
      $a_checked[3] = "";
      $a_checked[$this->obj->mod_allow] = " checked=\"checked\"";
 
+	//print("GS --> info allowed=".$this->obj->allowed);
      if ( $this->obj->allowed == 0 ) {
        echo $this->error($lang['ReadOnlyAppoint']);
      }
@@ -67,9 +67,14 @@
      $this->addHidden("r_ignore","0");
      $this->addHidden("a_start","");
      $this->addHidden("a_end","");
+     //print("GS --> current user id=".$current_user->id);
      if ( $current_user->id !="" ) {
        $this->addHidden("creator",$current_user->id);
      }
+     if ( isset($this->obj->id) && isset($this->obj->id) != "" ) {
+       $this->addHidden("record",$this->obj->id);
+     }
+
 
 	 //echo $this->DataTableStart();
 	 
@@ -92,16 +97,18 @@
      echo "</tr>\n";
 	 echo "</table>\n";
 	 */
-     $this->addHidden("creator",$this->obj->creator->id);
+// srini commented creator duplicate
+     //$this->addHidden("creator",$this->obj->creator->id);
 	 
 	 if ( $this->obj->allowed != 0 ) {
        echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"5\"><tr>\n";
-       if ( $this->obj->id > 0 ) {
+	if ( isset($this->obj->id) && isset($this->obj->id) != "" ) {
+       //if ( $this->obj->id > 0 ) {
          //submit_reset(0,1,2,1,2,0);
-		 submit_reset(0,0,2,0,2,0);
+		 submit_reset(0,0,2,0,2,2,0);
        } else {
          //submit_reset(0,-1,2,1,2,0);
-		 submit_reset(0,0,2,0,2,0);
+		 submit_reset(0,0,2,0,2,0,0);
        }
        echo "</tr></table>\n";
      }
@@ -109,10 +116,12 @@
 	 echo "<table class=\"single\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\" width=\"90%\">\n";
 	 echo "<tr><td class=\"inner\">\n";
 	 echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"1\" width=\"100%\">\n";
-	 if ( $this->obj->id > 0 ) {
+	 if ( $this->obj->id != "" ) {
        echo "<tr>\n";
        echo "<td class=\"desc\">". $mod_strings['LBL_APPCREATED_BY'] .":</td>\n";
-       echo "<td colspan=\"5\">". $this->obj->creator->getLink() . "&nbsp;" . $mod_strings['LBL_AT_DATE_TIME'] ."&nbsp;". $this->obj->creation->getDateTime()."</td>";
+       #echo "<td colspan=\"5\">". $this->obj->creator->getLink() . "&nbsp;" . $mod_strings['LBL_AT_DATE_TIME'] ."&nbsp;". $this->obj->creation->getDateTime()."</td>";
+//print("GS --> appid=".$this->obj->id);
+echo "<td colspan=\"5\"><b>". $this->obj->getUserName($this->obj->creator) . "&nbsp;" . $mod_strings['LBL_AT_DATE_TIME'] ."&nbsp;". $this->obj->creation->getDateTime()."</b></td>";
        //echo "<td align=\"right\">" .acl_link($this->obj) ."</td>\n";
        echo "</tr>\n";
      }
@@ -193,8 +202,11 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      //Added to get vtigerCRM contacts
      echo $this->showfieldc($mod_strings['LBL_CONTACT'],1,"contact_name");
      echo " <td colspan=\"2\">";
-     echo "<input type=\"text\" name=\"contact_name\" value=\"".$this->obj->contact_name."\" size=\"20\" maxlength=\"40\" readonly>";
-     echo "<input type=\"hidden\" name=\"contact_id\" value=\"".$this->obj->contact_id."\">";
+     #echo "<input type=\"text\" name=\"contact_name\" value=\"".$this->obj->contact_name."\" size=\"20\" maxlength=\"40\" readonly>";
+     echo "<input type=\"text\" name=\"contact_name\" value=\"".$this->obj->getContactName($this->obj->contact_id)."\" size=\"20\" maxlength=\"40\" readonly>";
+
+	echo "<input type=\"hidden\" name=\"contact_id\" value=\"".$this->obj->contact_id."\">";
+	echo "<input type=\"hidden\" name=\"id\" value=\"".$this->obj->id."\">";
      //echo " </td>\n";
      echo " &nbsp;<input title='".$app_strings['LBL_SELECT_CONTACT_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_SELECT_CONTACT_BUTTON_KEY']."' type='button' class='button' value='  ".$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=appnew&form_submit=false\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
      //echo " </td>\n";
@@ -275,12 +287,13 @@ onmouseover=\"self.status='minitimer' ;return true\">";
 
      if ( $this->obj->allowed != 0 ) {
        echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"5\"><tr>\n";
-       if ( $this->obj->id > 0 ) {
+	if ( isset($this->obj->id) && isset($this->obj->id) != "" ) {
+       //if ( $this->obj->id > 0 ) {
          //submit_reset(0,1,2,1,2,0);
-		 submit_reset(0,0,2,0,2,0);
+		 submit_reset(0,0,2,0,2,2,0);
        } else {
          //submit_reset(0,-1,2,1,2,0);
-		 submit_reset(0,0,2,0,2,0);
+		 submit_reset(0,0,2,0,2,0,0);
        }
        echo "</tr></table>\n";
      }
@@ -308,6 +321,7 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      }
      $p = array();
      $this->obj = new appointment($this->dbconn);
+     //print("GS --> prepare id=".$_GET['id']);
      if ( isset($_GET['id']) ) {
        $this->name =  $mod_strings['AppointModify'];
        $this->obj = $this->obj->read($_GET['id'],$this->obj);
@@ -315,12 +329,12 @@ onmouseover=\"self.status='minitimer' ;return true\">";
          $msg .= sprintf($lang['Err0040'],$lang[$this->obj->getType()]);
          $this->stop = true;
        }
-       $this->obj->read_participants();
+       //$this->obj->read_participants();
        /* only the owner may change */
        if ( $this->user->id == $this->obj->creator->id )  {
          $this->obj->allowed = 2;
        }
-       if ( $this->obj->visitor != -1 ) {
+    /*   if ( $this->obj->visitor != -1 ) {
          $this->obj->xfn['v'] = $this->obj->visitor->getFullName();
        }
        if ( $this->obj->product != -1 ) {
@@ -328,7 +342,7 @@ onmouseover=\"self.status='minitimer' ;return true\">";
        }
        foreach($this->obj->participant as $i => $f) {
          $p[$i] = 2;
-       }
+       }*/
      } else {
        $this->name = $mod_strings['AppointCreate'];
        /* New event */
@@ -361,7 +375,10 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      }
      if ( isset($_GET['contact_id']) ) {
        $this->obj->contact_id = $_GET['contact_id'];
-     } else {
+     }
+     if ( isset($_GET['creator']) ) {
+       $this->obj->creator->id = $_GET['creator'];
+     }  else {
        $this->obj->check = 0;
      }
 
@@ -379,7 +396,7 @@ onmouseover=\"self.status='minitimer' ;return true\">";
        $msg .= sprintf($lang['Err0024'],$lang[$this->obj->getType()]);
        $this->stop = true;
      }*/
-     # menu
+  /*   # menu
      $m = appointment::getSelectLink($this->user);
      $m[category][] = "obj";
      $this->addmenu($m);
@@ -410,7 +427,7 @@ onmouseover=\"self.status='minitimer' ;return true\">";
                  );
        $this->addMenu($m);
      }
-     add_module_addlinks($this,$this->obj);
+     add_module_addlinks($this,$this->obj);*/
    }
  }
 

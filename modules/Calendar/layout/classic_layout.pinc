@@ -164,17 +164,17 @@ if ( isset($_GET['mark']) && isset($_GET['action']) && ($_GET['action'] != -1) )
 $this->action = $this->action();
 }
 $this->prepare();
-if ( $this->redirect != "" ) {
-Header("Status: 302 Moved Temporarily");
-Header("Location: ". getBaseUrl(). addSessionKey($this->redirect,true));
-return;
-}
+//if ( $this->redirect != "" ) {
+//Header("Status: 302 Moved Temporarily");
+//Header("Location: ". getBaseUrl(). addSessionKey($this->redirect,true));
+//return;
+//}
 
 $this->buildmenu();
 
-//     if ( $msg != "" ) {
-//       $this->format = "html";
-//     }
+     if ( $msg != "" ) {
+       $this->format = "html";
+     }
     if ( ($this->format == "html") || ($this->format == "stat") || ($this->format == "checklist")) {
       if(!$sch)	
       $this->PageHeader();
@@ -254,8 +254,6 @@ $this->buildmenu();
     } else if ( $this->format == "paper" ) {
       $this->PrintHeader($this->name);
       $this->info();
-	//if(!$sch)
-      #$this->HTML_Close();
     } else {
       $this->info();
     }

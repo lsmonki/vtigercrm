@@ -243,7 +243,6 @@ Function acl_ok(&$obj,$level) {
  */
 Function acl_see_ok(&$obj) {
   global $tutos;
-
   # if no permissions are defined the see is ok
   if (isset($obj->acl) && (count($obj->acl)  > 0) ) {
     return acl_ok($obj,$tutos[seeok] -1);

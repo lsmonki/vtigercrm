@@ -18,7 +18,7 @@
  include_once $calpath .'permission.p3';
  include_once $calpath .'preference.pinc';
  require_once('include/database/PearDatabase.php');
- require_once('modules/Calendar/Calendar.php');
+ require_once('modules/Calendar/UserCalendar.php');
  require_once ($theme_path."layout_utils.php");
  if ( $tutos[tasksincalendar] == 1 ) {
    #include_once $calpath .'task.pinc';
@@ -41,7 +41,7 @@
 	{
 		$this->db = new PearDatabase();
  		$this->pref = new preference();
-		$calobj = new Calender();
+		$calobj = new UserCalendar();
 		$this->tablename = $calobj->table_name;
 	}
    /**
@@ -72,15 +72,17 @@
      $to->setDateTimeTS($ts - 12 * 3600);
      $to->addDays(7);
      
-     $this->user->callink = array();
+     $this->pref->callist = array();
 	     appointment::readCal($this->pref,$from,$to);
-     //if ( $tutos[tasksincalendar] == 1 ) {
-     //  task::readCal($this->pref,$from,$to);
-     //}
+	//print_r($this->pref->callist);
+	//print_r($this->user->callist);
+     /*if ( $tutos[tasksincalendar] == 1 ) {
+       task::readCal($this->pref,$from,$to);
+     }
      foreach($tutos[activemodules] as $i => $f) {
        $x = @new $tutos[modules][$f][name]($this->dbconn);
        $x->readCal($this->user,$from,$to);
-     }
+     }*/
 
      $dd = new DateTime();
      $day = 0;
@@ -96,7 +98,9 @@
          $day++;
          continue;
        }
+	//print("GS --> L1");
        $dinfo = GetDaysInfo($ts);
+	//print("GS --> L2");
 
        echo "<td class=\"". $dinfo[color] ."\" width=\"10%\">\n";
 
@@ -117,14 +121,20 @@
        $hastable = 0;
        $a = 0;
 
-       foreach ($this->user->callist as $idx => $x) {
+	//print("GS --> L3");
+	//print_r($this->user->callist);
+       foreach ($this->pref->callist as $idx => $x) {
          /* the correct day */
-         if ( ! $this->user->callist[$idx]->inside($dd) ) {
+         if ( ! $this->pref->callist[$idx]->inside($dd) ) {
+  	//	print("GS --> not inside");
            continue;
          }
-         if (!cal_check_against_list($this->user->callist[$idx],$this->uids)) {
+	 /*print("GS --> inside");
+         /*if (!cal_check_against_list($this->pref->callist[$idx],$this->uids)) {
+	     print("GS --> not in list");
            continue;
          }
+	 print("GS --> list");*/
 
          if ( $hastable == 0 ) {
            echo "\n <table class=\"formatted\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">\n";
@@ -133,7 +143,7 @@
            echo "  <tr><td class=\"". $dinfo[color] ."\" colspan=\"3\"><img src=\"". $image_path ."black.png\" width=\"100%\" height=\"1\" alt=\"--------\"></td></tr>\n";
          }
 #echo "1 ".$this->user->weekstart ."<br />";
-         $this->user->callist[$idx]->formatted();
+         $this->pref->callist[$idx]->formatted();
 #echo "2 ".$this->user->weekstart ."<br />";
          $a++;
        }
@@ -260,7 +270,7 @@
     *
     */
    Function prepare() {
-     global $lang,$msg,$db;
+     global $lang,$msg,$db,$mod_strings;
 
      $this->name = $mod_strings['LBL_MODULE_NAME'];
 
@@ -279,7 +289,7 @@
      /* Show a calendar containing Appointment id */
      if ( isset($_GET['id']) ) {
        $this->id = $_GET['id'];
-       $query = "SELECT id,a_start FROM ". $this->dbconn->prefix ."calendar where id =". $current_user->id;
+       $query = "SELECT id,a_start FROM calendar where id =". $this->id;
        check_dbacl( $query, $this->user->id);
        $result = $this->db->query($query);
        if ( 1 != $this->db->getRowCount($result)) {
@@ -289,7 +299,7 @@
          $d = $result->getDateTime(0, "a_start");
          $this->t = $d->getYYYYMMDD();
        }
-       $result->free();
+       //$result->free();
      }
 
      #$this->uids = cal_parse_options($this->user,$this->teamname);

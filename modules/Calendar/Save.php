@@ -21,7 +21,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Calendar/Calendar.php');
+require_once('modules/Calendar/UserCalendar.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Calendar/webelements.p3');
@@ -31,14 +31,16 @@ require_once('modules/Calendar/Date.pinc');
 //Added for Appointment Validation
  global $callink,$mod_strings;
  $callink = "index.php?module=Calendar&action=";
+
+  //$pref = new preference();
 if ( ! isset($_REQUEST['gotourl']) ) {
    $gotourl= $callink ."app_new";
  } else {
    $gotourl=$_REQUEST['gotourl'] ;
  }
  $msg = "";
-if ( isset($_REQUEST['creator_id']) ) {
-   $gotourl= addUrlParameter($gotourl,"creator_id=".$_REQUEST['creator_id'],true);
+if ( isset($_REQUEST['creator']) ) {
+   $gotourl= addUrlParameter($gotourl,"creator=".$_REQUEST['creator'],true);
  }
  if ( isset($_REQUEST['t_ignore']) ) {
    $_REQUEST['t_ignore'] = 1;
@@ -57,7 +59,7 @@ if ( isset($_REQUEST['creator_id']) ) {
    $msg .= sprintf($mod_strings['LBL_APP_ERR001'],$mod_strings['LBL_APP_START_DATE']) ."<br>";
  } else {
    $gotourl= addUrlParameter($gotourl,"start=".$start->getYYYYMMDDHHMM(),true);
-   $_REQUEST['a_start'] = $start->getYYYYMMDDHHMM();
+   $_REQUEST['a_start'] = sprintf ("'%04d-%02d-%02d %02d:%02d:%02d'",$start->year,$start->month,$start->day,$start->hour,$start->min,$start->sec);
    $start_ts = $start->getYYYYMMDDHHMM();
  }
 
@@ -67,7 +69,7 @@ if ( isset($_REQUEST['creator_id']) ) {
    $msg .= sprintf($mod_strings['LBL_APP_ERR001'],$mod_strings['LBL_APP_END_DATE']) ."<br>";
  } else {
    $gotourl= addUrlParameter($gotourl,"end=".$end->getYYYYMMDDHHMM(),true);
-   $_REQUEST['a_end'] = $end->getYYYYMMDDHHMM();
+   $_REQUEST['a_end'] = sprintf ("'%04d-%02d-%02d %02d:%02d:%02d'",$end->year,$end->month,$end->day,$end->hour,$end->min,$end->sec);
    $end_ts = $end->getYYYYMMDDHHMM();
  }
 
@@ -119,12 +121,19 @@ if ( isset($_REQUEST['creator_id']) ) {
 
    /* Save and Go back to calendar */
   $local_log =& LoggerManager::getLogger('index');
-  $focus = new Calender();
 
+  $focus = new UserCalendar();
   #$focus->retrieve($_REQUEST['creator']);
+
+  $update = isset($_REQUEST['id']);
 
   foreach($focus->column_fields as $field)
   {
+   	if($update && $field=='creator')
+	{
+		continue;
+	}
+
 	if(isset($_REQUEST[$field]))
 	{
 		$value = $_REQUEST[$field];

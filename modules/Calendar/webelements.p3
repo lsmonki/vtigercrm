@@ -1683,8 +1683,8 @@ Function asEmail($adr,$email,$name,$subject = "TUTOS") {
   * Make some submit reset table entries
   *
   */
- Function submit_reset($pre,$t1,$f1,$t2,$f2,$post) {
-   global $lang,$mod_strings;
+ Function submit_reset($pre,$t1,$f1,$t2,$f2,$f3,$post) {
+   global $lang,$mod_strings,$app_strings;
 
    if ( $pre > 0 ) {
      echo " <td colspan=\"".$pre."\">&nbsp;</td>\n";
@@ -1704,6 +1704,10 @@ Function asEmail($adr,$email,$name,$subject = "TUTOS") {
    if ( $f2 > 0 ) {
      echo " <td colspan=\"".$f2."\">&nbsp;<input id=\"RESET\" name=\"RESET\" class=\"button\" type=\"reset\" value=\"". $mod_strings['LBL_RESET'] ."\" title=\"". $mod_strings['LBL_RESET']."\" /></td>\n";
    }
+   if ( $f3 > 0 ) {
+     echo " <td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Calendar'; this.form.return_action.value='calendar'; this.form.action.value='Delete'; return confirm('$mod_strings[DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>";
+   }
+
    if ( $post > 0 ) {
      echo " <td colspan=\"".$post."\">&nbsp;</td>\n";
    }

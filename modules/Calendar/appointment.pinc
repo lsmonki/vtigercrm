@@ -28,6 +28,7 @@ define ('APP_STATE_UNKNOWN',0);
 define ('APP_STATE_YES',1);
 
  include_once 'modules/Calendar/base.pinc';
+ require_once('include/database/PearDatabase.php');
 /**
  * options for calendar selection
  */
@@ -155,21 +156,21 @@ function cal_setDefault(&$user,&$uids) {
  * parse the calendar options 
  */
 function cal_parse_options(&$user,&$teamname) {
-  global $lang;
+  global $lang,$current_user;
 
   $uids = array();
   if ( isset($_GET['team']) ) {
     $team = $_GET['team'];
     $x = $user->set_prefteam($team);
-  } else {
+  } //else {
     /* Get the last used team */
-    $team = $user->get_prefteam();
-  }
-  $user->readKnownParties();
+    //$team = $user->get_prefteam();
+  //}
+  //$user->readKnownParties();
 
   /* Get group or user whose calendar should be displayed */
   /* default to current checked in user                   */
-  if ( ($team == CAL_EVERYTHING) && ! $user->isadmin() ) {
+  if ( ($team == CAL_EVERYTHING) && ! is_admin($current_user) ) {
     $team = CAL_MYOWN;
   }
   if ( $team == CAL_EVERYTHING ) {
@@ -337,10 +338,12 @@ class appointment extends tutos_base {
 
   /* ---------------------------------------------------------------------------
    */
-  function appointment(&$dbconn) {
-    global $table;
+   var $db;
+  function appointment() {
+    global $table,$current_user;
 
-    $this->init($dbconn);
+    #$this->init($dbconn);
+    $this->db = new PearDatabase();
 
    # if ( ! class_exists ("product") ) {
    #   require_once 'product.pinc';
@@ -382,30 +385,41 @@ class appointment extends tutos_base {
    * @param Object $r    a result set object 
    * @param int    $pos  a index in the resultset
    */
-  function read_result (&$r, $pos ) {
-    $this->trace       = $r->get($pos, "trace");
-    $this->mod_allow   = $r->get($pos, "mod_allow");
-    $this->t_ignore    = $r->get($pos, "t_ignore");
-    $this->descr       = $r->get($pos, "description");
-    $this->start       = $r->getDateTime($pos, "a_start");
-    $this->end         = $r->getDateTime($pos, "a_end");
 
-    $this->creator = getObject($this->dbconn,$r->get($pos, "creator"));
+  function getUserName($userid)
+  {
+	//require_once("modules/Users/User.php");
+	$user = new User();
+	$user->retrieve($userid);
+	return $user->first_name." ".$user->last_name;	
+  }
 
-    $vid = $r->get($pos, "visitor");
-    if ( $vid > 0 ) {
-      $this->visitor = getObject($this->dbconn,$vid);
-    }
+  function getContactName($contactid)
+  {
+	require_once("modules/Contacts/Contact.php");
+	$contact = new Contact();
+	$contact->retrieve($contactid);
+	return $contact->first_name." ".$contact->last_name;
+  }
 
-    $this->product = getObject($this->dbconn,$r->get($pos, "product"));
+// srini read_result
+  function read_result ($val_array, $pos=-1 ) {
+    if($pos!=-1) return;
+    //print_r($val_array);
+    $this->t_ignore    = $val_array["t_ignore"];
+    $this->descr       = $val_array["descr"];
+    $this->start       = new DateTime($val_array["a_start"]);
+    $this->end         = new DateTime($val_array["a_end"]);
+    $this->subject     = $val_array["subject"];
+    $this->contact_name= $val_array["contact_name"];
+    $this->contact_id  = $val_array["contact_id"];
 
-    $this->remember    = $r->get($pos, "remember");
-    $this->remembered  = $r->get($pos, "remembered");
-    $this->outside     = $r->get($pos, "outside");
+    #$this->creator = getObject($this->dbconn,$r->get($pos, "creator"));
+    $obj->creator->id = $val_array["creator"];
+    $this->creator = $val_array["creator"];
 
-    $this->repeat      = $r->get($pos, "repeat");
-    $this->r_arg       = $r->get($pos, "r_arg");
-    $this->r_ignore    = $r->get($pos, "r_ignore");
+
+    $this->outside     = $val_array["outside"];
 
     # Checks
     if ( $this->remembered == "" ) {
@@ -431,9 +445,10 @@ class appointment extends tutos_base {
         $this->t_ignore = 0;
       }
     }
-	$this->read_custom_result($r,$pos,"appointment1");
+	/*$this->read_custom_result($r,$pos,"appointment1");
     parent::read_result($r,$pos);
-    $this->read_participants();
+    $this->read_participants();*/
+    parent::read_result($val_array);
     return;
   }
   /**
@@ -446,7 +461,6 @@ class appointment extends tutos_base {
     if ( $this->participants_is_read ) {
       return;
     };
-
     /* Get the list of participants */
     $query = "SELECT * FROM ". $this->tablename2 ." WHERE app_id = ". $this->id;
     $result = $this->dbconn->Exec($query);
@@ -882,13 +896,14 @@ class appointment extends tutos_base {
   function getLink($text = -1) {
     global $lang;
 
-    if ( ($this->mod_ok()) && ($this->end->getTimestamp() - time() > 0 ) ) {
+	// commented temporary srini
+    /*if ( ($this->mod_ok()) && ($this->end->getTimestamp() - time() > 0 ) ) {*/
       $url = $this->getModURL();
       $info = $lang['changeapp'];
-    } else {
+    /*} else {
       $url = $this->getURL();
       $info = $lang['seeapp'];
-    }
+    }*/
     if ( $this->repeat == APP_NOREP ) {
       if ( $this->t_ignore == 0) {
         $info = sprintf ($info,$this->start->getDateTimeShort(),$this->end->getDateTimeShort());
@@ -1349,11 +1364,11 @@ class appointment extends tutos_base {
         echo "<br />". $this->visitor->getLink() ."</td></tr>\n";
       }
 
-      product::small_infolist($current_user,$this,3,$class);
+      /*product::small_infolist($current_user,$this,3,$class);
       foreach($tutos[activemodules] as $i => $f) {
         $x = new $tutos[modules][$f][name]($this->dbconn);
         $x->small_infolist($current_user,$this,3,$class);
-      }
+      }*/
     }
     return;
   }
@@ -1709,13 +1724,21 @@ class appointment extends tutos_base {
      $r->free();
      return $msg;
   }
+
+  function DateTime1($dt)
+  {
+    return sprintf ("'%04d-%02d-%02d %02d:%02d:%02d'",$dt->year,$dt->month,$dt->day,$dt->hour,$dt->min,$dt->sec);
+
+  }
+
+
   /**
    * Read a list of appointments for one day and make it a array in the
    * given object
    * from and to are TUTOS DateTime objects
    */
   function readCal(&$obj, &$from, &$to) {
-    global $msg,$current_user,$table;
+    global $msg,$current_user,$table,$db;
 
     //if ( ! $current_user->feature_ok(usecalendar,PERM_SEE) ) {
     //  return;
@@ -1727,8 +1750,15 @@ class appointment extends tutos_base {
     if ($from->getDate() == $to->getDate()) {
       $to->addDays(1);
     }
-    $x1 = $obj->dbconn->DateTime($from);
-    $x2 = $obj->dbconn->DateTime($to);
+/*
+    $x1 = DateTime1($from);
+    $x2 = DateTime1($to);
+*/
+    $x1 = sprintf ("'%04d-%02d-%02d %02d:%02d:%02d'",$from->year,$from->month,$from->day,$from->hour,$from->min,$from->sec);
+
+    $x2 = sprintf ("'%04d-%02d-%02d %02d:%02d:%02d'",$to->year,$to->month,$to->day,$to->hour,$to->min,$to->sec);
+
+
 
     $from->ts_def -= $current_user->offset;
     $to->ts_def -= $current_user->offset;
@@ -1739,30 +1769,44 @@ class appointment extends tutos_base {
     #
     $q = "SELECT * FROM ". $this->tablename." WHERE ";
     $q .= " (";
+    if(!is_admin($current_user))
+    {
+	$q .= " ( ";
+    }
     $q .= "  (a_start < ". $x2 ." AND a_start >= ". $x1 .")";
     $q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
     $q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
+    if(!is_admin($current_user))
+    {
+	$q .= " ) AND ( creator = '".$current_user->id."' ) ";
+    }
     $q .= " )";
     $q .= " ORDER by a_start";
 
+	//print("GS --> allowed ".is_admin($current_user)." q=".$q);
     # always at the end of query
-    check_dbacl( $q, $current_user->id);
-
-    $r = $obj->dbconn->Exec($q);
-    $n = $r->numrows();
+   # check_dbacl( $q, $current_user->id);
+   
+	// srini cal appoint 
+    $r = $this->db->query($q);
+    $n = $this->db->getRowCount($r);
     $a = 0;
+    //print("GS --> ".$n." q=".$q);
     while ( $a < $n ) {
-      $o = &new appointment($obj->dbconn);
-      $o->read_result($r,$a);
+      $o = &new appointment();
+      $result = mysql_fetch_assoc($r);
+      //$o->read_result($r,$a);
+	$o->read_result($result);
       $a++;
       if ( $o->see_ok() ) { 
         /* Get all participants */
-        $o->read_participants();
+        //$o->read_participants();
+        //print("GS --> see");
         $obj->callist[$o->id] = &$o;
       }
       unset($o);
     }
-    $r->free();
+    //$r->free();
 
 
     $x = new DateTime();
@@ -1782,7 +1826,7 @@ class appointment extends tutos_base {
     #
     # Second query ( repeating appointments w/o end )
     #
-    $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
+/*    $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
     $q .= " r_ignore = 1 AND (";
     $q .= "   ( repeat = 1 AND  r_arg in (". $wd .") )";
     $q .= " OR ( repeat = 2 AND  r_arg in (". $md .") )";
@@ -1792,7 +1836,7 @@ class appointment extends tutos_base {
     $q .= "";
     $q .= " ORDER by a_start";
 
-
+*/
     # always at the end of query
  #   check_dbacl( $q, $current_user->id);
 
@@ -1815,7 +1859,7 @@ class appointment extends tutos_base {
     #
     # Third query ( repeating appointments with end )
     #
-    $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
+ /*   $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
     $q .= " r_ignore = 0 AND (";
     $q .= "   ( repeat = 1 AND  r_arg in (". $wd .") )";
     $q .= " OR ( repeat = 2 AND  r_arg in (". $md .") )";
@@ -1826,7 +1870,7 @@ class appointment extends tutos_base {
     $q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
     $q .= ")";
     $q .= " ORDER by a_start";
-
+*/
  #   $r = $obj->dbconn->Exec($q);
  #   $n = $r->numrows();
  #   $a = 0;
