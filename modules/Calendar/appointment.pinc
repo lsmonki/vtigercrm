@@ -1,0 +1,1872 @@
+<?php
+/*
+ * Copyright 1999 - 2004 by Gero Kohnert
+ *
+ *  CVS Info:  $Id$
+ *  $Author$
+ */
+
+global $callink;
+$callink = '../../index.php?module=Calendar&action=';
+define ('APP_NOREP',0);
+define ('APP_REP_WEEK',1);
+define ('APP_REP_MONTH',2);
+define ('APP_REP_YEAR',3);
+define ('APP_REP_DAY',4);
+
+define ('CAL_EVERYTHING',0);
+define ('CAL_MYOWN',1);
+define ('CAL_OWNTEAMS',2);
+define ('CAL_ALLTOSEE',3);
+
+define ('CAL_MODALL',0);
+define ('CAL_MODPART',1);
+define ('CAL_MODUSER',2);
+define ('CAL_MODPRIV',3);
+
+define ('APP_STATE_UNKNOWN',0);
+define ('APP_STATE_YES',1);
+
+/**
+ * options for calendar selection
+ */
+function cal_options($team,$teamname) {
+  global $lang,$current_user;
+
+  echo "<select name=\"team\">\n";
+  $showed = 0;
+
+  $useOPTGROUP = true;
+  if (!isset ($_SERVER['HTTP_USER_AGENT'])) {
+    $useOPTGROUP = false;
+  }
+  if ($useOPTGROUP && ereg("Opera",$_SERVER['HTTP_USER_AGENT'])) {
+    $useOPTGROUP = false;
+  }
+  if ($useOPTGROUP && ereg ("MSIE.*Mac",$_SERVER['HTTP_USER_AGENT'])) {
+    $useOPTGROUP = false;
+  }
+  if ($useOPTGROUP) {
+    echo " <optgroup label=\"". $lang['Teams'] ."\">\n";
+  }
+  foreach ( $current_user->t_parties as $i => $f ) {
+    echo "  <option value=\"". $i ."\"". ($team == $i ? " selected=\"selected\"" : "")  .">". myentities($f) ."</option>\n";
+    if ( $team == $i ) {
+      $showed = 1;
+    }
+  }
+  if ($useOPTGROUP) {
+    echo " </optgroup>\n";
+  }
+  echo "  <option value=\"". CAL_MYOWN ."\"". ($team == CAL_MYOWN ? " selected=\"selected\"" : "") .">". $lang['User'] ." ". $current_user->getFullname() ."</option>\n";
+  if ( $team == CAL_MYOWN ) {
+    $showed = 1;
+  }
+  echo "  <option value=\"". CAL_OWNTEAMS ."\"". ($team == CAL_OWNTEAMS ? " selected=\"selected\"" : "") .">". $lang['AppAllTeams'] ."</option>\n";
+  if ( $team == CAL_OWNTEAMS ) {
+    $showed = 1;
+  }
+  echo "  <option value=\"". CAL_ALLTOSEE ."\"". ($team == CAL_ALLTOSEE ? " selected=\"selected\"" : "") .">". $lang['AppAllSee'] ."</option>\n";
+  if ( $team == CAL_ALLTOSEE ) {
+    $showed = 1;
+  }
+  if ( $current_user->isadmin() ) {
+    echo "  <option value=\"". CAL_EVERYTHING ."\"". ($team == CAL_EVERYTHING ? " selected=\"selected\"" : "") .">". $lang['AppEverything'] ."</option>\n";
+    if ( $team == CAL_EVERYTHING ) {
+      $showed = 1;
+    }
+  }
+  if ( $showed != 1 ) {
+    echo "  <option value=\"". $team ."\" selected=\"selected\">".  $teamname ."</option>\n";
+  }
+  echo " </select>\n";
+  echo " <input type=\"submit\" value=\"GO\" />";
+}
+
+/**
+ * check a date against a list of objects
+ * returns boolean
+ */
+function cal_check_against_list(&$obj,&$uids) {
+
+  if ( isset($uids[0]) ) {
+    return true;
+  }
+  if ( ! $obj->see_ok() ){
+    return false;
+  }
+
+  /* if user is not interessted in - show nothing */
+  if ( $obj->gettype() == "appointment" ) {
+    # Check Participants
+    foreach ( $obj->participant as $f) {
+      if ( array_key_exists($f->id,$uids)) {
+        return true;
+      }
+      unset($f);
+    }
+    # Check Project
+    if ( array_key_exists($obj->product->id,$uids)) {
+        return true;
+    }
+    # Visitor
+    if ( ($obj->visitor != -1) && array_key_exists($obj->visitor->id,$uids)) {
+        return true;
+    }
+    # Check Resources
+    if ( class_exists ("resource") ) {
+      resource::obj_read($obj);
+      foreach ($obj->resuselist as $i =>$f) {
+        if ( array_key_exists($f->id,$uids)) {
+          return true;
+        }
+        unset($f);
+      }
+    }
+    return false;
+  }
+  if ( $obj->gettype() == "note" ) {
+    return true;
+  }
+  if ( $obj->gettype() == "task" ) {
+    return true;
+  }
+  if ( $obj->gettype() == "watchlist" ) {
+    return true;
+  }
+  if ( $obj->gettype() == "reminder" ) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * set some defaults for calendar display
+ */
+function cal_setDefault(&$user,&$uids) {
+  /* show apps for current user */
+  $uids[$user->id] = 1;
+  foreach ($user->teamlist as $i => $f) {
+    $uids[$i] = 1;
+  }
+}
+/**
+ * parse the calendar options 
+ */
+function cal_parse_options(&$user,&$teamname) {
+  global $lang;
+
+  $uids = array();
+  if ( isset($_GET['team']) ) {
+    $team = $_GET['team'];
+    $x = $user->set_prefteam($team);
+  } else {
+    /* Get the last used team */
+    $team = $user->get_prefteam();
+  }
+  $user->readKnownParties();
+
+  /* Get group or user whose calendar should be displayed */
+  /* default to current checked in user                   */
+  if ( ($team == CAL_EVERYTHING) && ! $user->isadmin() ) {
+    $team = CAL_MYOWN;
+  }
+  if ( $team == CAL_EVERYTHING ) {
+    $uids[0] =  1;
+  } elseif ( $team == CAL_MYOWN) {
+    cal_setDefault($user,$uids);
+  } elseif ( $team == CAL_OWNTEAMS) {
+    /* show apps for all teams members of current users teams  */
+    $uids[$user->id] =  1;
+    foreach($user->teamlist as $i => $f ) {
+      $uids[$i] = 1;
+      $tt = new team($user->dbconn);
+      $tt = $tt->read($i,$tt);
+      $tt->read_member();
+      foreach($tt->member as $i1 => $f1 ) {
+        $uids[$i1] = 1;
+        # Add all teams where this member is also a member
+        # so you can see if this one is occupied by a team event
+        # of one of his/her teams
+        if (!isset($tt->member[$i1]->teamlist)) {
+          team::obj_read($tt->member[$i1]);
+        }
+        foreach($tt->member[$i1]->teamlist as $i2 => $f2 ) {
+          $uids[$i2] = 1;
+        }
+      }
+      unset($tt);
+    }
+  } elseif ( $team == CAL_ALLTOSEE) {
+    /* show apps for all teams members of current users teams  */
+    /* and all users and teams we are allowed to see  (ACL)    */
+    $uids[$user->id] =  1;
+    foreach($user->a_parties as $ip => $fn ) {
+      $uids[$ip] = 1;
+    }
+    foreach($user->t_parties as $ip => $fn ) {
+      $uids[$ip] = 1;
+      $tt = new team($user->dbconn);
+      $tt = $tt->read($ip,$tt);
+      foreach($tt->ids as $i1 => $f1 ) {
+        $uids[$i1] = 1;
+      }
+      unset($tt);
+    }
+  } else {
+    $tt = getObject($user->dbconn,$team);
+    if ( $tt == -1 ) {
+    } else if ( $tt->getType() == "team" ) {
+      if ( $tt->see_ok() ) {
+        # Team
+        $uids[$team] = 1;
+        $teamname = $tt->name;
+        $tt->read_member();
+        foreach($tt->member as $i1 => $f1 ) {
+          $uids[$i1] =  1;
+          # Check the teams where this user is also a member
+          if (!isset($tt->member[$i1]->teamlist)) {
+            team::obj_read($tt->member[$i1]);
+          }
+          foreach($tt->member[$i1]->teamlist as $i2 => $f2 ) {
+            $uids[$i2] =  1;
+          }
+        }
+      } else {
+        $msg .= sprintf($lang['Err0022'],$lang['Calendar']."(". $lang['Team']." ".$tt->getFullName().")");
+        cal_setDefault($user,$uids);
+      }
+    } else if ( $tt->getType() == "user" ) {
+      if ( $tt->see_ok() ) {
+        $uids[$team] = 1;
+        $teamname = $lang['User'] ." ". $tt->getFullname();
+        # All Teams where the user is a member
+        foreach($tt->teamlist as $i => $f ) {
+          $uids[$i] = 1;
+        }
+      } else {
+        $msg .= sprintf($lang['Err0022'],$lang['Calendar']."(". $lang['User']." ".$tt->getFullName().")");
+        cal_setDefault($user,$uids);
+      }
+    } else if ( $tt->getType() == "product" ) {
+      if ( $tt->see_ok() ) {
+        $teamname = $lang[$tt->getType()] ." ". $tt->getFullname();
+        # put all the team members on the list
+        $tt->readroles();
+        $uids[$tt->id] = 1;
+        foreach ($lang['ProdRole'] as $role => $x ) {
+          foreach ($tt->role[$role] as $i => $r) {
+            $uids[$i] = 1;
+          }
+        }
+      } else {
+        $msg .= sprintf($lang['Err0022'],$lang['Calendar']."(". $lang[$tt->getType()]." ".$tt->getFullName().")");
+        cal_setDefault($user,$uids);
+      }
+    } else {
+      if ( $tt->see_ok() ) {
+        $teamname = $lang[$tt->getType()] ." ". $tt->getFullname();
+        $uids[$team] = 1;
+      } else {
+        $msg .= sprintf($lang['Err0022'],$lang['Calendar']."(". $lang[$tt->getType()]." ".$tt->getFullName().")");
+        cal_setDefault($user,$uids);
+      }
+    }
+  }
+  return $uids;
+}
+/**
+ * List all appointments
+ * cols > 0  make sperate rows with cols columns for each appointment
+ */
+function showApps(&$user,&$obj,$cols,$ext = 0,$rows = 0) {
+  global $tutos, $lang;
+
+  $n = 1;
+  $xx = $obj->applist;
+  $x = count($xx);
+
+  if ( $rows == 0 ) {
+    $rows = $tutos[maxshort];
+  }
+  if ( $rows == -1 ) {
+    $rows = count($obj->applist);
+  }
+
+  @reset ($xx);
+  while ( list ($i,$f) = @each ($xx) ) {
+    if ( $cols > 0 ) {
+      echo "<tr><td colspan=\"". $cols ."\">\n";
+    }
+    if ( ($n >= $rows) && ( $x > $rows ) ) {
+      echo  "  ". $user->layout->theme->getImage(folder,'list') ." ". makelink("app_overview.php?link_id=". $obj->id,sprintf($lang['AllEntries'], count($obj->applist)));
+      if ( $cols > 0 ) {
+        echo "</td></tr>\n";
+      }
+      break;
+    }
+    echo $f->getLink();
+    if ( ($ext == 1) && ($f->product->id != -1) ) {
+      echo "&nbsp;&#8594;&nbsp;". $f->product->getLink();
+    }
+    if ( ($ext == 2) && ($f->visitor != -1) ) {
+      echo "&nbsp;";
+      if ( $f->outside ) {
+        echo $lang['VisitAt'] .":&nbsp;";
+      } else {
+        echo $lang['VisitFrom'] .":&nbsp;";
+      }
+      echo $f->visitor->getLink();
+    }
+    echo "<br />\n";
+    if ( $cols > 0 ) {
+      echo "</td></tr>\n";
+    }
+    $n++;
+  }
+}
+
+
+/**
+ * a appointment (meeting etc.)
+ *
+ * @package appointment
+ */
+class appointment extends tutos_base {
+
+  /* ---------------------------------------------------------------------------
+   */
+  function appointment(&$dbconn) {
+    global $table;
+
+    $this->init($dbconn);
+
+    if ( ! class_exists ("product") ) {
+      require_once 'product.pinc';
+    }
+    $this->descr = "";
+    $this->trace = 0;
+    $this->outside = 0;
+    $this->mod_allow = 1;
+    $this->start    = new DateTime();
+    $this->end      = new DateTime();
+    $this->t_ignore = 0;
+    $this->visitor  = -1;
+    $this->product  = new product($this->dbconn);
+    $this->remember = 0;
+    $this->remembered = 0;
+    $this->email = 0;
+    $this->participant = array();
+    $this->participant_state = array();
+   
+    $this->subject = "";
+    $this->account_name = "";
+    $this->contact_name = "";
+
+	$this->init_custom("appointment1");
+
+    # Repeat stuff
+    $this->repeat = APP_NOREP;
+    $this->r_arg = 0;
+    $this->r_ignore = 0;
+
+    $this->participants_is_read = false;
+    $this->res = array();
+    $this->tablename  = $this->dbconn->prefix .$table['appointment1'][name];
+    $this->tablename2 = $this->dbconn->prefix .$table['appointment2'][name];
+    $this->crm_calinfo = $this->dbconn->prefix .$table['crmcalendar'][name];
+  }
+
+  /**
+   * fill the object data with a given resultset
+   *
+   * @param Object $r    a result set object 
+   * @param int    $pos  a index in the resultset
+   */
+  function read_result (&$r, $pos ) {
+    $this->trace       = $r->get($pos, "trace");
+    $this->mod_allow   = $r->get($pos, "mod_allow");
+    $this->t_ignore    = $r->get($pos, "t_ignore");
+    $this->descr       = $r->get($pos, "description");
+    $this->start       = $r->getDateTime($pos, "a_start");
+    $this->end         = $r->getDateTime($pos, "a_end");
+
+    $this->creator = getObject($this->dbconn,$r->get($pos, "creator"));
+
+    $vid = $r->get($pos, "visitor");
+    if ( $vid > 0 ) {
+      $this->visitor = getObject($this->dbconn,$vid);
+    }
+
+    $this->product = getObject($this->dbconn,$r->get($pos, "product"));
+
+    $this->remember    = $r->get($pos, "remember");
+    $this->remembered  = $r->get($pos, "remembered");
+    $this->outside     = $r->get($pos, "outside");
+
+    $this->repeat      = $r->get($pos, "repeat");
+    $this->r_arg       = $r->get($pos, "r_arg");
+    $this->r_ignore    = $r->get($pos, "r_ignore");
+
+    # Checks
+    if ( $this->remembered == "" ) {
+      $this->remembered  = 0;
+    }
+    if ( ($this->repeat == "") || ( $this->repeat > 4 ) ) {
+      $this->repeat = APP_NOREP;
+    }
+    # This should work with different timezones ????
+    # but we do not exactly know what date !!
+    $x1 = new DateTime();
+    $x2 = new DateTime();
+    $x1->setDateTimeTS($this->start->ts_def);
+    $x2->setDateTimeTS($this->end->ts_def);
+    if ( $this->t_ignore   == "0" ) {
+      if ( ( $x1->hour == $x2->hour )
+        && ( $x1->min  == $x2->min  )
+        && ( $x1->min    == "00" )
+        && ( $x1->hour   == "00" )
+      ) {
+        $this->t_ignore = 1;
+      } else {
+        $this->t_ignore = 0;
+      }
+    }
+	$this->read_custom_result($r,$pos,"appointment1");
+    parent::read_result($r,$pos);
+    $this->read_participants();
+    return;
+  }
+  /**
+   * read a list of the participants of this app
+   */
+  function read_participants () {
+    if ( empty($this->id) ) return;
+    if ( -1 == $this->id ) return;
+
+    if ( $this->participants_is_read ) {
+      return;
+    };
+
+    /* Get the list of participants */
+    $query = "SELECT * FROM ". $this->tablename2 ." WHERE app_id = ". $this->id;
+    $result = $this->dbconn->Exec($query);
+
+    $n = $result->numrows();
+    $a = 0;
+    while ($a < $n) {
+      $xx = $result->get($a, "adr_id");
+      $p = getObject($this->dbconn,$xx);
+
+      $this->participant[$xx] = &$p;
+      $this->participant_state[$xx] = $result->get($a, "state");
+
+      $a++;
+      unset($p);
+    }
+    $result->free();
+    $this->participants_is_read = true;
+  }
+  /**
+   * fill the internal neighbour list with possible objects where a object
+   * currently attached/referencing to THIS could be reattached
+   */
+  function getNeighbours () {
+    global $lang;
+
+    if (count ($this->neighbours) > 0 ) return;
+
+    parent::getNeighbours();
+
+    if ( $this->visitor != -1 ) {
+      $this->neighbours[$this->visitor->id] = &$this->visitor;
+    }
+    if ( $this->product != -1 ) {
+      $this->neighbours[$this->product->id] = &$this->product;
+    }
+
+    return $this->neighbours;
+  }
+  /**
+   * delete the appointment in the database
+   */
+  function delete() {
+    global $current_user;
+
+    $msg = "";
+
+    $q = "DELETE FROM ". $this->tablename ." WHERE id = ". $this->id;
+    $this->dbconn->Exec($q);
+
+    $q = "DELETE FROM ". $this->tablename2 ." WHERE app_id = ". $this->id;
+    $this->dbconn->Exec($q);
+
+    $msg .= parent::delete();
+    return $msg;
+  }
+  /**
+   * Replaces the strings in the mail body
+   */
+  function make_mail_body(&$body,&$to) {
+    global $lang;
+
+    
+    $url = getBaseURL(true). $this->getURL();
+        
+    $body = eregi_replace("@CREATOR@",$this->creator->getFullName(),$body);
+    $body = eregi_replace("@DESC@",$this->descr,$body);
+    $body = eregi_replace("@URL@",$url,$body);
+
+    if ( $to->gettype() == "team" ) {
+      $body = eregi_replace("@TO@",$lang[$to->gettype()] ." ". $to->getFullName(),$body);
+      $body = eregi_replace("<TEAM>","",$body);
+      $body = eregi_replace("</TEAM>","",$body);
+    } else  {
+      $body = eregi_replace("@TO@",$to->getFullName(),$body);
+      # Remove the TEAM part
+      $body = eregi_replace("<TEAM>.*</TEAM>","",$body);
+    }
+
+    if ( $this->t_ignore == 0) {
+      $body = eregi_replace("@START@",$this->start->getDateTime(),$body);
+      $body = eregi_replace("@END@",$this->end->getDateTime(),$body);
+    } else {
+      $body = eregi_replace("@START@",$this->start->getDate(),$body);
+      $body = eregi_replace("@END@",$this->end->getDate(),$body);
+    }
+
+    if ( ($this->trace == 1) && ($to->gettype() != "team") ) {
+      $urlv = getBaseURL(true) ."app_vote.php?id=". $this->id ."&adr_id=".$to->id;
+      
+      $body = eregi_replace("@URLV@",$urlv,$body);
+      $body = eregi_replace("<VOTE>","",$body);
+      $body = eregi_replace("</VOTE>","",$body);
+    } else {
+      # Remove the VOTE part
+      $body = eregi_replace("<VOTE>.*</VOTE>","",$body);
+    }
+  }
+  /**
+   * set the start time
+   */
+  function setStartTime(&$value) {
+    return $this->setDateTimeField("start",$value,"StartTime");
+  }
+  /**
+   * set the end time
+   */
+  function setEndTime(&$value) {
+    return $this->setDateTimeField("end",$value,"EndTime");
+  }
+  /**
+   * set the description
+   */
+  function setDescription($value) {
+    return $this->setStrField("descr",$value,"Description");
+  }
+  /**
+   * set the location
+   */
+  function setLocation($value) {
+    return $this->setIntField("outside",$value,"Location2");
+  }
+  /**
+   * set the trace status
+   */
+  function setTrace($value) {
+    return $this->setIntField("trace",$value,"tracestate");
+  }
+  /**
+   * set the reminder
+   */
+  function setRemember($value) {
+    $this->setIntField("remember",$value,"AppEmailRemind");
+    $this->remembered = 0;
+  }
+  /**
+   * set the Product
+   */
+  function setProduct($new) {
+    if ( $new == -1 ) {
+      $id = -1;
+    } else {
+      $id = $new->id;
+    }
+    if (   (($this->product != -1) && ($this->product->id != $id) ) 
+        || (($this->product == -1) && ($id != -1) ) ) {
+      $this->modified[] = array ( "field" => "ProductP" , "old" => $this->product->id , "new" => $id  );
+      $this->product = $new;
+    }
+    return;
+  }
+  /**
+   * set the Visitor
+   */
+  function setVisitor($new) {
+    if ( $new == -1 ) {
+      $id = -1;
+    } else {
+      $id = $new->id;
+    }
+    if (   (($this->visitor != -1) && ($this->visitor->id != $id) ) 
+        || (($this->visitor == -1) && ($id != -1) ) ) {
+      $this->modified[] = array ( "field" => "VisitAt" , "old" => $this->visitor->id , "new" => $id  );
+      $this->visitor = $new;
+    }
+    return;
+  }
+  /**
+   * add a participant
+   */
+  function addParticipant(&$obj) {
+    if (!isset($this->participant[$obj->id])) {
+      $this->participant[$obj->id] = &$obj;
+      $this->participant_state[$obj->id] = APP_STATE_UNKNOWN;
+      $this->modified[] = array ( "field" => "Participant" , "old" => 0 , "new" => $obj->id  );
+    }
+    return;
+  }
+  /**
+   * delete a participant
+   */
+  function delParticipant($id) {
+    if (isset($this->participant[$id])) {
+      unset($this->participant[$id]);
+      unset($this->participant_state[$id]);
+      $this->modified[] = array ( "field" => "Participant" , "old" => $id , "new" => 0  );
+    }
+  }
+
+  /**
+   * save the object to the database and sent mails if neccessary
+   */
+  function save() {
+    global $table,$lang , $current_user, $tutos;
+
+    $q = new query($this->dbconn);
+    $q->setTable($this->tablename);
+    $q->addFV("a_start",$this->start,"DATETIME");
+    $q->addFV("a_end",$this->end,"DATETIME");
+    $q->addFV("description",$this->descr,"STRING",$table['appointment1']['description'][size]);
+    $q->addFV("t_ignore",$this->t_ignore,"INT");
+    $q->addFV("outside",$this->outside,"INT");
+    $q->addFV("r_arg",$this->r_arg,"STRING",5);
+    $q->addFV("r_ignore",$this->r_ignore,"INT");
+    $q->addFV("trace",$this->trace,"INT");
+    $q->addFV("remember",$this->remember,"INT");
+    $q->addFV("remembered",$this->remembered,"");
+    $q->addFV("mod_allow",$this->mod_allow,"");
+    $q->addFV("repeat",$this->repeat,"INT");
+    if ( is_object($this->visitor) && ($this->visitor->id != -1) ) {
+      $q->addFV("visitor",$this->visitor,"OBJ");
+    } else {
+      $q->addFV("visitor","null","");
+    }
+    
+    if ( is_object($this->product) && ( $this->product->id != -1) ) {
+      $q->addFV("product",$this->product,"OBJ");
+    } else {
+      $q->addFV("product","null","");
+    }
+	$this->save_custom_fields($q);
+  
+    $starttime = $this->start->getYYYYMMDDHHMMSS_crm();
+    $endttime = $this->end->getYYYYMMDDHHMMSS_crm();
+    $creatime = $this->creation->getYYYYMMDDHHMMSS_crm();
+
+    //Add appointment to CRM Calendar
+      $stmt = "SELECT id FROM ". $this->dbconn->prefix .$table['appointment1'][name];
+      $stmt .= " WHERE a_start = '". $starttime;
+      $stmt .= "' and a_end = '". $endttime;
+      $stmt .= "' and description = '". $this->descr;
+      $stmt .= "' and outside = ". $this->outside;
+      $stmt .= " and creator = ". $this->creator->id;
+      $stmt .= " and creation = '". $creatime;
+      $stmt .= "' and t_ignore = ". $this->t_ignore;
+	
+ 	$rset = $this->dbconn->Exec($stmt);
+        $nrow = $rset->numrows();
+        $j = 0;
+	if($j < $nrow)
+	{
+		$cat = $rset->get($j, "id");
+                $cat1 = getObject($this->dbconn,$cat);
+	}
+
+    $cq = new query($this->dbconn);
+    $cq->setTable($this->crm_calinfo);
+    $cq->addFV("cal_id",$this->calid,"INT");
+    $cq->addFV("subject",$this->subject,"STRING",$table['crmcalendar']['subject'][size]);
+    $cq->addFV("account_name",$this->account_name,"STRING",$table['crmcalendar']['account_name'][size]);
+    $cq->addFV("contact_name",$this->contact_name,"STRING",$table['crmcalendar']['contact_name'][size]);
+
+	$this->save_custom_fields($cq);
+    //
+    $msg = "";
+    if ( $this->trace == 0 ) {
+      /* YES */
+      $def_state = 1;
+    } else {
+      /* UNDECIDED */
+      $def_state = 0;
+    }
+
+    if ( $this->id > -1 ) {
+      /* We have to modify an existing appointment */
+      $new = 0;
+
+      $q->addWC("id",$this->id,"");
+
+      $this->dbconn->Exec($q->getUpdate());
+
+      /* Remove the old list of participants */
+      $q = "DELETE FROM ". $this->tablename2 ." WHERE app_id = ". $this->id;
+      $this->dbconn->Exec($q);
+
+    } else {
+      $new = 1;
+      $this->modified = array();
+      if ( isset($this->newid) ) {
+        $this->id = $this->newid;
+        $q->addFV("id",$this->id,"");
+      } else {
+        /* Get an new appointment ID */
+        $this->id = $q->addFV("id",-1,"NEXTID");
+ 
+        $this->modified[] = array ( "field" => "created" ,
+                                    "old" => $this->getType() ,
+                                    "new" => $this->id,
+                                    "obj_id" => $this->id
+                                  );
+      }
+      $q->addFV("creator",$this->creator,"OBJ");
+      $q->addFV("creation",$this->creation,"DATETIME");
+
+      $this->dbconn->Exec($q->getInsert());
+
+    }
+
+    # Manage the permissions
+    $this->acl = array();
+    if ( $this->mod_allow == CAL_MODPRIV ) {
+      acl_raise($this,$this->creator->id,$tutos[delok]);
+      foreach($this->participant as $i => $f) {
+        acl_raise($this,$i,$tutos[delok]);
+      }
+    } else if ( $this->mod_allow == CAL_MODUSER ) {
+      acl_default($this,$current_user);
+      acl_raise($this,$current_user->id,$tutos[delok]);
+    } else if ( $this->mod_allow == CAL_MODPART ) {
+      acl_default($this,$current_user);
+      foreach($this->participant as $i => $f) {
+        acl_raise($this,$i,$tutos[delok]);
+      }
+    } else if ( $this->mod_allow == CAL_MODALL ) {
+      acl_default($this,$current_user);
+      foreach($this->participant as $i => $f) {
+        acl_raise($this,$i,$tutos[delok]);
+      }
+      acl_raise($this,0,$tutos[delok]);
+    }
+    # Participants can (at least) SEE
+    foreach($this->participant as $i => $f) {
+      acl_raise($this,$i,$tutos[seeok]);
+    }
+
+
+    /* Now we add all references to the participants  */
+    /* The creator always says yes to the appointment */
+    foreach($this->participant as $i => $f) {
+      $state = $def_state;
+      if ( (count($this->modified) == 0) && isset($this->participant_state[$i])) {
+        $state = $this->participant_state[$i];
+      } else if ( $i == $this->creator->id ) {
+        /* The creator says yes */
+        $state = APP_STATE_YES;
+      }
+      $flds = "app_id";
+      $vals = $this->id;
+
+      $flds .= ",adr_id";
+      $vals .= ",".$i;
+
+      $flds .= ",state";
+      $vals .= ",".$state;
+
+      $q = "INSERT INTO ". $this->tablename2 ." (". $flds .") VALUES (". $vals .")";
+      $this->dbconn->Exec($q);
+      
+      $this->participant_state[$i] = $state;
+    }
+    $msg .= parent::save();
+
+
+    # Mail things come here !
+
+    if ( $this->email == 1 ) {
+      $m = new mail($current_user);
+      $m->setFrom($this->creator);
+
+      $pl = $this->participant;
+
+      @reset($pl);
+      while ( list ($i,$f) = @each ($pl) ) {
+        $m->addTo($pl[$i]);
+        $body = "";
+        
+        if ( ! findMailTemplate("app_new.proto",$f,$body) ) {
+          $msg .= sprintf($lang['Err0037'],$m->subject,$body) ."<br />\n";
+          continue;
+        }
+
+        $m->setSubject($f->lg['Invitation']);
+        $this->make_mail_body($body,$f);
+
+        $m->addBody($body,"text/plain",$f->lg['NewAppoint'],"",$f->lg['content_encoding']);
+        if ( $tutos[useical] == 1 ) {
+          $m->addBody($this->getIcal(),"text/calendar; method=REQUEST; name=ICalEntry.ics","ICalEntry.vcs","attachment; filename=ICalEntry.vcs");
+        }
+        if ( $current_user->feature_ok(usevcard,PERM_SEE) ) {
+          $m->addBody($this->creator->getVcard(),"text/x-vcard",sprintf($lang['MailCard'], $this->creator->getFullName()),"attachment; filename=\"". $this->creator->l_name .".vcf\"" );
+        }
+
+        $msg .= $m->send();
+        $m->resetBody();
+        $m->resetTo();
+      }
+    }
+
+
+    return $msg;
+  }
+  /**
+   * save the voting for an object
+   */
+  function save_vote($vote,$adr_id) {
+    global $lang , $current_user, $tutos;
+    $msg = "";
+    $q = "UPDATE ". $this->tablename2 ." SET state = ". $vote ." WHERE app_id = ". $this->id ." AND adr_id = ". $adr_id;
+    $this->dbconn->Exec($q);
+    $this->modified[] = array ( "field" => "AppointCommit" ,
+                                "old" => $this->participant_state[$adr_id] ,
+                                "new" => $vote,
+                                "obj_id" => $this->id
+                              );
+    $msg .= history_save($this);
+    return $msg;
+  }
+  /**
+   * Return a URL to this appointment
+   */
+  function getURL() {
+    global $callink;
+    return $callink ."app_show&id=" . $this->id;
+  }
+  /**
+   * Return a URL to delete this appointment
+   */
+  function getDelURL() {
+    global $callink;
+    return $callink ."app_del&id=" . $this->id;
+  }
+  /**
+   * Return a URL to delete this appointment
+   */
+  function getModURL() {
+    global $callink;
+    if ( $this->repeat == APP_NOREP ) {
+      return $callink ."app_new&id=" . $this->id;
+	} else {
+      return $callink ."app_new_r&id=" . $this->id;
+	}
+  }
+  /**
+   * Return a link to this appointment
+   */
+  function getFullName() {
+    $ts = $this->getTimespan();
+    return sprintf ("%s %s",$this->descr,$ts['desc']);
+  }
+  /**
+   * Return a link to this appointment
+   */
+  function getLink($text = -1) {
+    global $lang;
+
+    if ( ($this->mod_ok()) && ($this->end->getTimestamp() - time() > 0 ) ) {
+      $url = $this->getModURL();
+      $info = $lang['changeapp'];
+    } else {
+      $url = $this->getURL();
+      $info = $lang['seeapp'];
+    }
+    if ( $this->repeat == APP_NOREP ) {
+      if ( $this->t_ignore == 0) {
+        $info = sprintf ($info,$this->start->getDateTimeShort(),$this->end->getDateTimeShort());
+      } else {
+        $info = sprintf ($info,$this->start->getDate(),$this->end->getDate());
+      }
+    } else {
+      if ($this->r_ignore == 1) {
+        if ( $this->t_ignore == 0) {
+          $info = sprintf ($info,$this->start->getDateTimeShort(),$lang['AppNoLastDate']);
+        } else {
+          $info = sprintf ($info,$this->start->getDate(),$lang['AppNoLastDate']);
+        }
+      } else {
+        if ( $this->t_ignore == 0) {
+          $info = sprintf ($info,$this->start->getDateTimeShort(),$this->end->getDateTimeShort());
+        } else {
+          $info = sprintf ($info,$this->start->getDate(),$this->end->getDate());
+        }
+      }
+    }
+
+    if ( $text != -1 ) {
+      if ( $this->see_ok() ) {
+        return makelink($url,$text,$info);
+      } else {
+        return myentities($text);
+      }
+    }
+    if ( $this->see_ok() ) {
+      if ( $this->repeat == APP_NOREP ) {
+        return makelink($url , $this->start->GetDate() ,$info) . "&nbsp;" . $this->descr;
+      } else {
+        return makelink($url , "®". $this->start->GetDate() ,$info) . "&nbsp;" . $this->descr;
+      }
+    } else {
+      if ( $this->repeat == APP_NOREP ) {
+        return myentities($this->start->GetDate());
+      } else {
+        return myentities("®". $this->start->GetDate());
+      }
+    }
+  }
+  /**
+   * Data of XML export
+   */
+  function exportXML_body ($only_ids = false) {
+    global $lang, $current_user;
+    $r = parent::exportXML_body();
+    if (!$only_ids) {
+      $r .=  "<description>". utf8_encode(htmlspecialchars($this->descr)) ."</description>\n";
+      if ( $this->start->notime != 1 ) {
+        $r .=  "<start>". $this->start->exportXML_body() ."</start>\n";
+    }
+      if ( $this->end->notime != 1 ) {
+        $r .=  "<end>". $this->end->exportXML_body() ."</end>\n";
+    }
+      $r .=  "<t_ignore>". utf8_encode(htmlspecialchars($this->t_ignore)) ."</t_ignore>\n";
+      $r .=  "<remember>". utf8_encode(htmlspecialchars($this->remember)) ."</remember>\n";
+      $r .=  "<remembered>". utf8_encode(htmlspecialchars($this->remembered)) ."</remembered>\n";
+      $r .=  "<visitor>". utf8_encode(htmlspecialchars($this->visitor->id)) ."</visitor>\n";
+      if ( $this->visitor->id != null ) {
+        $r .=  "<visitorname>". utf8_encode(htmlspecialchars($this->visitor->getFullName())) ."</visitorname>\n";
+        }
+      $r .=  "<repeat>". utf8_encode(htmlspecialchars($this->repeat)) ."</repeat>\n";
+      $r .=  "<r_arg>". utf8_encode(htmlspecialchars($this->r_arg)) ."</r_arg>\n";
+      $r .=  "<r_ignore>". utf8_encode(htmlspecialchars($this->r_ignore)) ."</r_ignore>\n";
+    $r .=  "<outside>".$this->outside."</outside>"; 
+    $r .=  "<apploc>".utf8_encode(htmlspecialchars($lang['AppLoc'][$this->outside]))."</apploc>"; 
+    }      
+    unset($self_id);
+    foreach ($this->participant as $i => $f) {
+      if ($f->gettype() == "team") {
+        $f->read_member();
+        if ($f->is_member($current_user) == 1) {
+           $self_id = $current_user->id; 
+        }   
+      } else {
+       if ($f->id == $current_user->id) {
+          $self_id = $current_user->id;
+        }  
+      }    
+      $r .=  "<participant>\n";
+      $r .=  "<id>".$f->id."</id>\n";
+      $r .=  "<fullname>". utf8_encode(htmlspecialchars($f->getFullName())) ."</fullname>\n";
+      $r .=  "</participant>\n";
+    }
+    $r .=  "<self>".$self_id."</self>\n"; 
+    return $r;
+  }
+  /**
+   * parse XML import
+   */
+  function parseXML ($fld,$data,$attrs) {
+    parent::parseXML($fld,$data,$attrs);
+    if ($fld == "description") {
+      $this->setDescription($data);
+    } else if ($fld == "start") {
+      $d = new DateTime($data);
+      $this->setStartTime($d);
+    } else if ($fld == "end") {
+      $d = new DateTime($data);
+      $this->setEndTime($d);
+#    } else if ($fld == "participant") {
+#      $this->setLName($data);
+    } else if ($fld == "t_ignore") {
+      $this->t_ignore = $data;
+    } else if ($fld == "r_ignore") {
+      $this->r_ignore = $data;
+    } else if ($fld == "repeat") {
+      $this->repeat = $data;
+    } else if ($fld == "r_arg") {
+      $this->r_arg = $data;
+    } else if ($fld == "remember") {
+      $this->remember = $data;
+    }else if ($fld == "remembered") {
+      $this->remembered = $data;
+    }
+    return;
+  }
+  /**
+   * Return a ical description of this appointment as described in rfc2445
+   * see http://www.imc.org/rfc2445
+   */
+  function getIcal() {
+    global $lang;
+
+    if ( $this->trace == 1 ) {
+      $rsvp = "TRUE";
+    } else {
+      $rsvp = "FALSE";
+    }
+    $url = getBaseURL(true) . $this->getURL();
+    $ical = "";
+    $ical .= "BEGIN:VCALENDAR\n";
+    $ical .= "METHOD:REQUEST\n"; 
+    $ical .= "VERSION:2.0\n";
+    $ical .= "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\n";
+    $ical .= "BEGIN:VEVENT\n";
+    $ical .= "UID\n :TUTOS_ID-". $this->id ."\n";
+    $ical .= "DTSTART\n";
+    if ( $this->t_ignore ) {
+      $ical .= " ;VALUE=DATE\n";
+      $ical .= " :". $this->start->getYYYYMMDD() ."\n";
+    } else {
+      $ical .= " :". $this->start->getIcal() ."\n";
+    }
+    $ical .= "DTEND\n";
+    if ( $this->repeat != APP_NOREP ) {
+      if ( $this->t_ignore ) {
+        $ical .= " ;VALUE=DATE\n";
+        $ical .= " :". $this->start->getYYYYMMDD() ."\n";
+      } else {
+        $ical .= " :". $this->start->getIcal() ."\n";
+      }
+    } else  if ( $this->t_ignore ) {
+      $ical .= " ;VALUE=DATE\n";
+      $ical .= " :". $this->end->getYYYYMMDD() ."\n";
+    } else {
+      $ical .= " :". $this->end->getIcal() ."\n";
+    }
+
+    $dtstamp = new DateTime();
+    $ical .= "DTSTAMP\n :". $dtstamp->getIcal() ."\n";
+    @reset($this->participant);
+    while ( list ($i,$f) = @each ($this->participant) ) {
+      if ( $i == $this->creator->id ) {
+        $ical .= "ORGANIZER\n :MAILTO:". $f->default_email() ."\n";
+      }
+    }
+
+    $ical .= "STATUS\n :". "TENTATIVE" ."\n";
+    $ical .= "DESCRIPTION\n :". utf8_encode(ereg_replace("\r*\n","\\n",$this->descr)) ."\n";
+    $ical .= "SUMMARY\n :". utf8_encode(ereg_replace("\r*\n","\\n", $this->descr)) ."\n";
+    $ical .= "LOCATION\n :". utf8_encode($lang['AppLoc'][$this->outside]) ."\n";
+    $ical .= "CREATED\n :". $this->creation->getIcal() ."\n";
+    @reset($this->participant);
+    $p = array();
+    while ( list ($i,$f) = @each ($this->participant) ) {
+      if ( isset($p[$f->id]) ) {
+        continue;
+      }
+      if ( $i == $this->creator->id ) {
+        $ical .= "ATTENDEE\n ;CN=\"". utf8_encode($f->getFullName()) ."\"\n ;RSVP=". $rsvp ."\n ;ROLE=CHAIR";
+        if ( ($this->trace == 1) && ($this->participant_state[$i] == 0) ) {
+          $ical .= "\n ;PARTSTAT=NEEDS-ACTION";
+        } else if ( ($this->trace == 1) && ($this->participant_state[$i] == 2) ) {
+          $ical .= "\n ;PARTSTAT=DECLINED";
+        } else {
+          $ical .= "\n ;PARTSTAT=ACCEPTED";
+        }
+        $ical .= "\n :MAILTO:". utf8_encode($f->getFullName()) ." <". $f->default_Email() .">";
+        $ical .= "\n";
+        $p[$f->id] = 1;
+      } else if ( ($f->gettype() == "address") || ($f->gettype() == "user") ) {
+        $ical .= "ATTENDEE\n ;CN=\"". utf8_encode($f->getFullName()) ."\"\n ;RSVP=". $rsvp ."\n ;ROLE=REQ-PARTICIPANT";
+        if ( ($this->trace == 1) && ($this->participant_state[$i] == 1) ) {
+          $ical .= "\n ;PARTSTAT=ACCEPTED";
+        } else if ( ($this->trace == 1) && ($this->participant_state[$i] == 2) ) {
+          $ical .= "\n ;PARTSTAT=DECLINED";
+        } else {
+          $ical .= "\n ;PARTSTAT=NEEDS-ACTION";
+        }
+        $ical .= "\n :MAILTO:". utf8_encode($f->getFullName()) ." <". $f->default_Email() .">";
+        $ical .= "\n";
+        $p[$f->id] = 1;
+      } else if ( $f->gettype() == "team" ) {
+        $f->read_member();
+        foreach($f->member as $it => $ft) {
+          if ( ! isset($p[$ft->id]) ) {
+            $ical .= "ATTENDEE\n ;CN=\"". utf8_encode($ft->getFullName()) ."\"\n ;RSVP=". $rsvp ."\n ;ROLE=REQ-PARTICIPANT\n :MAILTO:". utf8_encode($ft->getFullName()) ." <". $ft->default_email() .">\n";
+            $p[$ft->id] = 1;
+          }
+        }
+      }
+    }
+    if ( $this->repeat != APP_NOREP ) {
+      $wd = array("SU","MO","TU","WE","TH","FR","SA","SU");
+      # We currently only know repeat by one events
+#      $ical .= "SEQUENCE\n :1\n";
+      $ical .= "RRULE\n :";
+      if ( $this->repeat == APP_REP_DAY ) {
+        $ical .= "FREQ=DAILY;INTERVAL=1";
+      } else if ( $this->repeat == APP_REP_YEAR ) {
+        $ical .= "FREQ=YEARLY;INTERVAL=1;BYMONTH=". Date("n",$this->start->getTimeStamp()) .";BYMONTHDAY=". Date("j",$this->start->getTimeStamp());
+      } else if ( $this->repeat == APP_REP_MONTH ) {
+        $ical .= "FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=".$this->r_arg;
+      } else if ( $this->repeat == APP_REP_WEEK ) {
+        $ical .= "FREQ=WEEKLY;INTERVAL=1;BYDAY=".$wd[$this->r_arg];
+      } else {
+        $ical .= "FREQ=DAILY;INTERVAL=0";
+      }
+      if ( $this->r_ignore == 0 ) {
+        $ical .= ";UNTIL=". $this->end->getYYYYMMDD();
+      }
+      # FIX ME !!
+      $ical .= "\n";
+    }
+    $ical .= "ATTACH;FMTTYPE=text/html:". $url ."\n";
+    if ( $this->remember > 0 ) {
+      $ical .= "BEGIN:VALARM\n";
+      $ical .= "ACTION\n : DISPLAY\n";
+      $ical .= "TRIGGER\n ;VALUE=DURATION\n :-PT". $this->remember ."M\n";
+      $ical .= "END:VALARM\n";
+    }
+    $ical .= "END:VEVENT\n";
+    $ical .= "END:VCALENDAR\n";
+    return $ical;
+  }
+
+  /**
+   * return true if the given app overlap with this
+   */
+  function overlap(&$app) {
+    if ( $this->t_ignore != 0 ) {
+      $start = $this->start;
+      $end = $this->end;
+      $start->setDateTime($this->start->getYYYYMMDD());
+      $end->setDateTime($this->end->getYYYYMMDD());
+      if ( $start->getDate() == $end->GetDate() ) {
+        $end->addDays(1);
+      }
+      $start_ts1 = $start->getTimestamp();
+      $end_ts1 = $end->getTimestamp();
+    } else {
+      $start_ts1 = $this->start->getTimestamp();
+      $end_ts1 = $this->end->getTimestamp();
+    }
+    if ( $app->t_ignore != 0 ) {
+      $start = $app->start;
+      $end = $app->end;
+      $start->setDateTime($app->start->getYYYYMMDD());
+      $end->setDateTime($app->end->getYYYYMMDD());
+#     if ( $start->getDate() == $end->GetDate() ) {
+        $end->addDays(1);
+#     }
+      $start_ts2 = $start->getTimestamp();
+      $end_ts2 = $end->getTimestamp();
+    } else {
+      $start_ts2 = $app->start->getTimestamp();
+      $end_ts2 = $app->end->getTimestamp();
+    }
+
+    # app before this
+    if ($end_ts2 <= $start_ts1 ) return false;
+    # this before app
+    if ($end_ts1 <= $start_ts2 ) return false;
+
+    return true;
+  }
+  /**
+   * check the availablility of all participants and resources
+   * return true on conflicts
+   */
+  function check_participants(&$msg) {
+    global $lang;
+
+    # read the calendar for all participants
+    # with the given dates
+    $r = false;
+    $this->callist = array();
+    $start = $this->start;
+    $end = $this->end;
+    if ($this->t_ignore) {
+      $end = $this->start;
+    }
+    if ( $this->t_ignore != 0 ) {
+      $start->setDateTime($this->start->getYYYYMMDD());
+      $end->setDateTime($this->end->getYYYYMMDD());
+    }
+
+
+    # read the calendar for the relevant days
+    $start2 = $start;
+    $end2 = $end;
+    $this->readCal($this,$start,$end);
+
+    #$msg .= " ". $start->getDateTime() ." ". $end->getDateTime() ."<br />\n";
+    #$msg .= " ". count($this->callist) ."<br />\n";
+
+    foreach ($this->callist as $i => $f) {
+      if ($f->id == $this->id) {
+        #self
+        continue;
+      }
+      foreach ($this->participant as $i2 => $f2) {
+        $uids = array();
+        $uids[$i2] = $this->participant[$i2];
+        $chk =  cal_check_against_list($f,$uids) ;
+        if (! $chk ) { 
+          continue; 
+        }
+        if ( $this->overlap($f) ) {
+          $msg .= sprintf($lang['AppConflict'], $f2->getFullName(),$lang[$f->getType()] ." ".$f->getLink()) ."<br />\n";
+          $r = true;
+          continue;
+        }
+      }
+    }
+    if ( class_exists ("resource") ) {
+      if ( resource::check_available($this,$start2,$end2) ) {
+        $r = true;
+      }
+    }
+    return $r;
+  }
+  /**
+   * Return a Location of Appointment
+   */
+  function getLocation() {
+    global $lang;
+    return "<span class=\"apploc". $this->outside ."\">". $lang['AppLoc'][$this->outside] ."</span>";
+  }
+  /**
+   * put aout the formatted appointment
+   */
+  function formatted () {
+    global $lang,$tutos,$current_user;
+
+    if ( $this->mod_allow == 3 ) {
+      $class = "privapp";
+    } else {
+      $class = "app".$this->outside;
+    }
+
+    if ( $this->repeat != APP_NOREP ) {
+      $start = $this->start->getTime();
+      $end = $this->end->getTime();
+    } else {
+      if ( $this->s_out == 1 ) {
+        $start = "&lt;&lt;";
+      } else {
+        $start = $this->start->getTime();
+      }
+      if ( $this->e_out == 1 ) {
+        $end = "&gt;&gt;";
+      } else {
+        $end = $this->end->getTime();
+      }
+    }
+    if ($start == $end) {
+      if ( $this->t_ignore != 0 ) {
+        $duration = "&gt;&gt;%s&lt;&lt;";
+      } else {
+        $duration = "%s ". $start;
+      }
+    } else {
+      if ( $this->t_ignore != 0 ) {
+        $duration = "&lt;&lt;%s&gt;&gt;";
+      } else {
+        $duration = "%s ". $start ." - ". $end;
+      }
+    }
+    if ( $this->repeat != APP_NOREP ) {
+      $duration = sprintf($duration,"®");
+    } else {
+      $duration = sprintf($duration," ");
+    }
+
+    echo "  <tr>\n";
+    echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" colspan=\"2\"><b> ". $this->getLink($duration) ."</b></td>\n";
+    echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"right\"><b>". $this->getLocation() ."</b></td>\n";
+    echo "  </tr>\n";
+
+    $myself = false;
+    foreach ( $this->participant as $i => $fp) {
+      $fp = &$this->participant[$i];
+      echo "  <tr>\n";
+      if ( ($this->trace == 1) && ( ($fp->gettype() == "address") || ($fp->gettype() == "user") )) {
+        $cols = 2;
+      } else {
+        $cols = 3;
+      }
+      if ( ($fp->gettype() == "address") || ($fp->gettype() == "user") ) {
+        echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" width=\"100%\" colspan=\"". $cols ."\">";
+        /* for adresses show link with first + last name */
+        echo $fp->getLink( $fp->getShortName());
+        if ($fp->id == $current_user->id) {
+          $myself = true;
+        }
+      } else if ( $fp->gettype() == "team" ) {
+        echo "   <td class=\"". $class ."\" width=\"100%\" colspan=\"". $cols ."\">";
+        /* for teams show link name */
+        echo $fp->getLink();
+      } else {
+        echo "   <td class=\"". $class ."\" width=\"100%\" colspan=\"". $cols ."\">";
+        echo gettype($fp);
+      }
+      echo "</td>\n";
+      if ( ($this->trace == 1) && ( ($fp->gettype() == "address") || ($fp->gettype() == "user") ) ) {
+        $s = sprintf("text%d",$this->participant_state[$i]);
+        echo "   <td class=\"". $class ."\" align=\"right\"><span class=\"". $s ."\">";
+        if ( $fp->id == $current_user->id ) {
+          echo makelink("app_vote.php?id=". $this->id ."&adr_id=". $fp->id,$lang['AppState'][$this->participant_state[$i]],$lang['AppVoteInfo']);
+        } else {
+          echo $lang['AppState'][$this->participant_state[$i]];
+        }
+        echo "</span></td>\n";
+      }
+      echo "  </tr>\n";
+      unset($fp);
+    }
+
+    if ( ($tutos[applocdesc][$this->outside] == 1) 
+         || ( ($myself == true) && ($tutos[applocdesc][$this->outside] == 2))
+       ) {
+      $descr = eregi_replace("\n","<br />",$this->descr);
+      if ($descr != "" ) {
+        echo "  <tr><td class=\"". $class ."\" colspan=\"3\">". urlReplace($descr) ."</td></tr>\n";
+      }
+      if ( $this->visitor != -1 ) {
+        echo "  <tr><td class=\"". $class ."\" colspan=\"3\">";
+        if ( $this->outside ) {
+          echo $lang['VisitAt'] .":";
+        } else {
+          echo $lang['VisitFrom'] .":";
+        }
+        echo "<br />". $this->visitor->getLink() ."</td></tr>\n";
+      }
+
+      product::small_infolist($current_user,$this,3,$class);
+      foreach($tutos[activemodules] as $i => $f) {
+        $x = new $tutos[modules][$f][name]($this->dbconn);
+        $x->small_infolist($current_user,$this,3,$class);
+      }
+    }
+    return;
+  }
+  /**
+   * get the timespan
+   */
+  function getTimespan () {
+    global $lang;
+
+    $r = array();
+    $r['start'] = 0;
+    $r['end'] = 0;
+    $r['desc'] = "";
+    if ( $this->repeat == APP_NOREP) {
+      if ( $this->t_ignore == 0) {
+        $r['start'] = $this->start->getYYYYMMDDHHMM();
+        $r['end'] = $this->end->getYYYYMMDDHHMM();
+        $r['desc'] = sprintf ("%s - %s",$this->start->getDateTimeShort(),$this->end->getDateTimeShort());
+      } else {
+        $r['start'] = $this->start->getYYYYMMDD()."0000";
+        $r['end'] = $this->end->getYYYYMMDD()."2359";
+        $r['desc'] = sprintf ("%s - %s",$this->start->getDate(),$this->end->getDate());
+      }
+    } else {
+      if ($this->r_ignore == 1) {
+        $r['end'] = -1;
+        if ( $this->t_ignore == 0) {
+          $r['desc'] = sprintf ("%s - %s",$this->start->getDateTimeShort(),$lang['AppNoLastDate']);
+        } else {
+          $r['desc'] = sprintf ("%s - %s",$this->start->getDate(),$lang['AppNoLastDate']);
+        }
+      } else {
+        if ( $this->t_ignore == 0) {
+          $r['desc'] = sprintf ("%s - %s",$this->start->getDateTimeShort(),$this->end->getDateTimeShort());
+        } else {
+          $r['desc'] = sprintf ("%s - %s",$this->start->getDate(),$this->end->getDate());
+        }
+      }
+    }
+    return $r;
+  }
+  /**
+   * checks if the appointment happens that day
+   * Date d   true if appointment happens that day
+   */
+  function inside (&$o) {
+    $o->setDateTime($o->getYYYYMMDD());
+    $d = new DateTime(0);
+    $d->setDateTimeTS($o->ts_def);
+
+    $x = $d->getYYYYMMDD();
+
+    if ( $x < $this->start->getYYYYMMDD()  ) return false;
+
+    $this->s_out  = 0;
+    $this->e_out  = 0;
+    switch ( $this->repeat ) {
+      case APP_NOREP:
+        if ( $x > $this->end->getYYYYMMDD()  ) return false;
+        if ( $this->start->getTimeStamp() < $d->getTimeStamp() ) {
+          $this->s_out  = 1;
+        } else {
+          $this->s_out  = 0;
+        }
+        if ( $this->end->getTimeStamp() > ($d->getTimeStamp() + 86400) ) {
+          $this->e_out  = 1;
+        } else {
+          $this->e_out  = 0;
+        }
+        break;
+      case APP_REP_WEEK:
+        if ($this->r_arg  != Date("w",$d->getTimeStamp())) return false;
+        if ( $this->r_ignore == 0 ) {
+          # Check end
+          if ( $x > $this->end->getYYYYMMDD()  ) return false;
+        }
+        break;
+      case APP_REP_MONTH:
+        if ($this->r_arg  != Date("j",$d->getTimeStamp())) return false;
+        if ( $this->r_ignore == 0 ) {
+          # Check end
+          if ( $x > $this->end->getYYYYMMDD()  ) return false;
+        }
+        break;
+      case APP_REP_YEAR:
+        if ($this->r_arg  != Date("j/n",$d->getTimeStamp())) return false;
+        if ( $this->r_ignore == 0 ) {
+          # Check end
+          if ( $x > $this->end->getYYYYMMDD()  ) return false;
+        }
+        break;
+      case APP_REP_DAY:
+        if ( $this->r_ignore == 0 ) {
+          # Check end
+          if ( $x > $this->end->getYYYYMMDD()  ) return false;
+        }
+        break;
+      default:
+        break;
+    }
+    return true;
+  }
+  /**
+   * Transfer reference ids according to given table
+   */
+  function transfer_ids (&$trans) {
+    parent::transfer_ids ($trans);
+
+    if ( $this->visitor->id != -1 ) {
+      if (isset($trans[$this->visitor->id])) {
+        $this->visitor->id = $trans[$this->visitor->id];
+      }
+    }
+    if ( $this->product->id != -1 ) {
+      if (isset($trans[$this->product->id])) {
+        $this->product->id = $trans[$this->product->id];
+      }
+    }
+    if (isset($trans[$this->creator->id])) {
+      $this->creator->id = $trans[$this->creator->id];
+    }
+    return;
+  }
+  /**
+   * get the type of object
+   */
+  function gettype () {
+    return "appointment";
+  }
+  /**
+   * get the type id of object
+   */
+  function gettypeid () {
+    return usecalendar;
+  }
+  /**
+   * get the type id of object
+   */
+  function getHtmlIcon () {
+    return "appointments";
+  }
+  /* ---------------------------------------------------------------------------
+   * The following methods are abstract factory functions for groups
+   * which handle the membership list of an object
+   * --------------------------------------------------------------------------- */
+  /**
+   * create a link where a appointment for the given object could be added
+   * obj is ignored here
+   */
+  function getaddlink (&$user,&$obj,$text = "") {
+    global $lang;
+    if ( $obj == -1 ) return ""; 
+    if (! is_object($obj) ) return "";
+    if ( $obj->id == -1 ) return "";
+    if (! $user->feature_ok(usecalendar,PERM_NEW) ) return "";
+    
+    $x[0] = array( url => "app_new.php",
+                   text => $lang['NewEntry'],
+                   info => $lang['NewAppointInfo'],
+                   category => array("app","new","obj")
+                 );
+    if ( ($obj->getType() == "company") ||
+         ($obj->getType() == "department")
+       ) {
+      $x[0][url] = addUrlParameter($x[0][url],"vid=".$obj->id);
+      $x[0][category] = array("app","new","module");
+      $x[0][text] = $lang['NewAppoint'];
+    } else if ( ($obj->getType() == "product") ) {
+      $x[0][url] = addUrlParameter($x[0][url],"pid=".$obj->id);
+      $x[0][category] = array("app","new","module");
+      $x[0][text] = $lang['NewAppoint'];
+    } else {
+      $x[1] = array( url => "app_new_r.php",
+                     text => $lang['NewAppointR'],
+                     info => $lang['NewAppointInfoR'],
+                     category => array("app","new","obj")
+                   );
+    }
+    return $x;
+  }
+  /**
+   * create a link to a search page
+   */
+  function getSelectLink (&$user,$text = "") {
+    global $lang,$tutos;
+    if ( ! $user->feature_ok(usecalendar,PERM_SEL) ) {
+      return;
+    }
+    return array( url => "app_select.php",
+                  image => $user->layout->theme->getImage(appointment::getHtmlIcon(),'menu'),
+                  text => ($text == "" ?  $lang['Search']: $text),
+                  info => $lang['SearchForApp'],
+                  category => array("search","app")
+                );
+  }
+  /**
+   * Read a list of appointments
+   */
+  function obj_read(&$obj) {
+    global $current_user,$table;
+
+    if ( $obj == -1 ) return; 
+    if (! is_object($obj) ) return;
+
+    if ( isset($obj->applist) ) {
+      return;
+    }
+    $obj->applist = array();
+
+    $q = "SELECT * FROM ". $obj->dbconn->prefix .$table['appointment1'][name];
+    if ( $obj->getType() == "product" ) {
+      $q .= " WHERE product = ". $obj->id;
+    } else if ( ($obj->getType() == "address") || ($obj->getType() == "user") ) {
+      $q .= " WHERE visitor = ". $obj->id;
+    } else if ( $obj->getType() == "company" ) {
+      $obj->read_members();
+      $q .= " WHERE visitor in (". $obj->id;
+      while ( list ($i,$f) = @each ($obj->member) ) {
+        $q .= ",". $i;
+      }
+      $q .= " )";
+    } else if ( $obj->getType() == "department" ) {
+      $obj->read_members();
+      $q .= " WHERE visitor in (". $obj->id;
+      while ( list ($i,$f) = @each ($obj->member) ) {
+        $q .= ",". $i;
+      }
+      $q .= " )";
+    } else {
+      return;
+    }
+    $q .= " ORDER BY a_start DESC";
+
+    # always at the end of query
+    check_dbacl( $q, $current_user->id);
+
+    $r = $obj->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ($a < $n) {
+      $p = new appointment($obj->dbconn);
+      $p->read_result($r,$a);
+      if ( $p->see_ok() ) {
+        $obj->applist[$p->id] = &$p;
+      }
+      $a++;
+      unset($p);
+    }
+    $r->free();
+    return;
+  }
+  /**
+   * a object that uses appointments is deleted
+   */
+  Function obj_delete(&$user,&$obj) {
+    global $table;
+
+    $msg = "";
+    $obj->dbconn->Exec("DELETE FROM ". $obj->dbconn->prefix .$table['appointment2'][name]." WHERE adr_id =" .$obj->id);
+    $obj->dbconn->Exec("UPDATE ". $obj->dbconn->prefix .$table['appointment1'][name]." set visitor = null WHERE visitor =" .$obj->id);
+    $obj->dbconn->Exec("UPDATE ". $obj->dbconn->prefix .$table['appointment1'][name]." set product = null WHERE product =" .$obj->id);
+    return $msg;
+  }
+  /**
+   * create a list of invoices for the given object
+   */
+  function infolist (&$user,&$obj,$cols,$format = "html") {
+    global $lang;
+
+    if ( ! $user->feature_ok(usecalendar,PERM_SEE) ) {
+      return;
+    }
+    appointment::obj_read($obj);
+    if ( count($obj->applist) > 0 ) {
+       @reset($obj->applist);
+       echo "<tr>\n";
+       echo $user->layout->showfield($lang['Appointments']);
+       echo " <td valign=\"top\" Colspan=\"".($cols-1)."\">\n";
+       $ext = 0;
+       if ($obj->getType() == "product") {
+         $ext = 2;
+       } 
+       if ( $format == "paper" ) {
+         showApps($user,$obj,0,$ext,-1);
+       } else {
+         showApps($user,$obj,0,$ext);
+       }
+       echo " </td>\n";
+       echo "</tr>\n";
+    }
+  }
+  /**
+   * method called from check service
+   * Check for appointments to remember
+   */
+  function checkservice (&$user) {
+    global $tutos,$lang,$table;
+
+    $msg = "";
+    $d = new DateTime();
+    $q = "SELECT * FROM ". $user->dbconn->prefix .$table['appointment1'][name]." WHERE remember > 0 AND remembered = 0";
+    $r = $user->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ($a < $n) {
+      $app = new appointment($user->dbconn);
+      $app->read_result($r,$a);
+      $a++;
+
+      $diff = $app->start->getTimestamp() - $d->getTimeStamp() - ($app->remember * 60);
+
+      if ( $diff > 0 ) {
+        continue;
+      }
+      # Sent mails
+      $url = getBaseURL(true) . $app->getURL();
+      $app->read_participants();
+      $m = new mail($user);
+      $m->setFrom($app->creator);
+      $m->addHeader("X-PRIORITY","2");
+      $m->addHeader("priority","urgent");
+
+      $pl = $app->participant;
+      @reset($pl);
+      while ( list ($i,$f) = @each ($pl) ) {
+        $m->addTo($f);
+        $body = "";
+        if ( ! findMailTemplate("app_remember.proto",$f,$body) ) {
+          $msg .= sprintf($lang['Err0037'],$m->subject,$body) ."<br />\n";
+          continue;
+        }
+        $ts = $app->getTimespan();
+        $m->setSubject(sprintf($f->lg['EmailRememberApp'], $ts['desc']));
+        $app->make_mail_body($body,$f);
+        $m->addBody($body,"text/plain",$f->lg['NewAppoint'],"",$f->lg['content_encoding']);
+
+        if ( $tutos[useical] == 1 ) {
+          $m->addBody($app->getIcal(),"text/calendar","ICalEntry.vcs","attachment; filename=ICalEntry.vcs");
+        }
+        if ( $tutos[usevcard] == 1 ) {
+          $m->addBody($app->creator->getVcard(),"text/x-vcard",sprintf($f->lg['MailCard'], $app->creator->getFullName()) );
+        }
+        $msg .= $m->send();
+        $m->resetBody();
+        $m->resetTo();
+      }
+
+      # Update the remembered field
+      $q = "UPDATE ". $user->dbconn->prefix .$table['appointment1'][name]." SET remembered = ". ($app->remembered + 1) .",remember = 0 WHERE ID = ". $app->id;
+      $r2 = $user->dbconn->Exec($q);
+     }
+     $r->free();
+     return $msg;
+  }
+  /**
+   * Read a list of appointments for one day and make it a array in the
+   * given object
+   * from and to are TUTOS DateTime objects
+   */
+  function readCal(&$obj, &$from, &$to) {
+    global $msg,$current_user,$table;
+
+    if ( ! $current_user->feature_ok(usecalendar,PERM_SEE) ) {
+      return;
+    }
+
+    $from->setDateTime($from->getYYYYMMDD());
+    $to->setDateTime($to->getYYYYMMDD());
+
+    if ($from->getDate() == $to->getDate()) {
+      $to->addDays(1);
+    }
+    $x1 =  $obj->dbconn->DateTime($from);
+    $x2 =  $obj->dbconn->DateTime($to);
+
+    $from->ts_def -= $current_user->offset;
+    $to->ts_def -= $current_user->offset;
+
+
+    #
+    # First query ( non repeating appointments )
+    #
+    $q = "SELECT * FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." WHERE ";
+    $q .= " (repeat = 0) AND (";
+    $q .= "  (a_start < ". $x2 ." AND a_start >= ". $x1 .")";
+    $q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
+    $q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
+    $q .= " )";
+    $q .= " ORDER by a_start";
+
+    # always at the end of query
+    check_dbacl( $q, $current_user->id);
+
+    $r = $obj->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $o = &new appointment($obj->dbconn);
+      $o->read_result($r,$a);
+      $a++;
+      if ( $o->see_ok() ) { 
+        /* Get all participants */
+        $o->read_participants();
+        $obj->callist[$o->id] = &$o;
+      }
+      unset($o);
+    }
+    $r->free();
+
+
+    $x = new DateTime();
+    $x->setDateTimeTS($from->ts);
+
+    $wd =  "'". Date("w",$x->getTimeStamp()) ."'";
+    $md =  "'". Date("j",$x->getTimeStamp()) ."'";
+    $ymd = "'". Date("j/n",$x->getTimeStamp()) ."'";
+    $x->addDays(1);
+    $pre = ",";
+    while ( $x->getTimeStamp() < $to->getTimeStamp() ) {
+      $wd .=  $pre ."'". Date("w",$x->getTimeStamp()) ."'";
+      $md .=  $pre ."'". Date("j",$x->getTimeStamp()) ."'";
+      $ymd .= $pre ."'". Date("j/n",$x->getTimeStamp()) ."'";
+      $x->addDays(1);
+    }
+    #
+    # Second query ( repeating appointments w/o end )
+    #
+    $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
+    $q .= " r_ignore = 1 AND (";
+    $q .= "   ( repeat = 1 AND  r_arg in (". $wd .") )";
+    $q .= " OR ( repeat = 2 AND  r_arg in (". $md .") )";
+    $q .= " OR ( repeat = 3 AND  r_arg in (". $ymd .") )";
+    $q .= " OR ( repeat = 4 )";
+    $q .= " ) AND ( a_start <= ". $x2 ." )";
+    $q .= "";
+    $q .= " ORDER by a_start";
+
+
+    # always at the end of query
+    check_dbacl( $q, $current_user->id);
+
+    $r = $obj->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $o = &new appointment($obj->dbconn);
+      $o->read_result($r,$a);
+      $a++;
+      if ( $o->see_ok() ) { 
+        /* Get all participants */
+        $o->read_participants();
+        $obj->callist[$o->id] = &$o;
+      }
+      unset($o);
+    }
+    $r->free();
+
+    #
+    # Third query ( repeating appointments with end )
+    #
+    $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
+    $q .= " r_ignore = 0 AND (";
+    $q .= "   ( repeat = 1 AND  r_arg in (". $wd .") )";
+    $q .= " OR ( repeat = 2 AND  r_arg in (". $md .") )";
+    $q .= " OR ( repeat = 3 AND  r_arg in (". $ymd .") )";
+    $q .= " OR ( repeat = 4 )";
+    $q .= ") AND ( (a_start < ". $x2 ." AND a_start >= ". $x1 .")";
+    $q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
+    $q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
+    $q .= ")";
+    $q .= " ORDER by a_start";
+
+    $r = $obj->dbconn->Exec($q);
+    $n = $r->numrows();
+    $a = 0;
+    while ( $a < $n ) {
+      $o = &new appointment($obj->dbconn);
+      $o->read_result($r,$a);
+      $a++;
+      if ( $o->see_ok() ) { 
+        /* Get all participants */
+        $o->read_participants();
+        $obj->callist[$o->id] = &$o;
+      }
+      unset($o);
+    }
+    $r->free();
+
+    return;
+  }
+  /**
+   * get the help index
+   */
+  function getHelpIndex () {
+    global $lang;
+
+    $r = "";
+    $r .= "<h3>". makelink("help.php?p=glossary#appointment",$lang["Calendar"],$lang["Calendar"]) ."</h3><ul>\n";
+    $r .= "<li>". makelink("help.php?p=app_new",$lang["NewEntry"]."/". $lang["Modify"],$lang["NewEntry"]."/". $lang["Modify"]) ."</li>\n";
+    $r .= "<li>". makelink("help.php?p=calendar",$lang["show"],$lang["show"]) ."</li>\n";
+    $r .= "</ul>\n";
+    echo $r;
+  }
+}
+?>

@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright 1999 - 2003 by Gero Kohnert
+ *
+ *  CVS Info:  $Id$
+ *  $Author$
+ */
+
+class admin extends tutos_module {
+}
+?>
