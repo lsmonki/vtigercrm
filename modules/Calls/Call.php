@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Calls/Call.php,v 1.3 2004/10/29 09:55:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Calls/Call.php,v 1.3.2.1 2004/11/27 06:50:51 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -225,7 +225,8 @@ class Call extends SugarBean {
 	
 	function set_calls_account_relationship($call_id, $account_id)
 	{
-		$query = "update $this->table_name set parent_id='$account_id', parent_type='Accounts' where _id='$call_id'";
+		//changed the _id to id. Fixes the issue in business card creation
+		$query = "update $this->table_name set parent_id='$account_id', parent_type='Accounts' where id='$call_id'";
 		$this->db->query($query,true,"Error setting account to call relationship: "."<BR>$query");
 	}
 

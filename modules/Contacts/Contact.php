@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.5 2004/11/08 09:11:42 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.5.2.1 2004/11/27 06:51:42 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -374,7 +374,7 @@ class Contact extends SugarBean {
 		
 		if($account_required)
 		{
-			$query = "SELECT * FROM contacts, accounts_contacts a_c, accounts ";
+			$query = "SELECT * FROM accounts, accounts_contacts a_c, contacts ";
 			//$query = "SELECT contacts.id, contacts.assigned_user_id, contacts.yahoo_id, contacts.first_name, contacts.last_name, contacts.phone_work, contacts.title, contacts.email1 FROM contacts, accounts_contacts a_c, accounts ";
 			$where_auto = "a_c.contact_id = contacts.id AND a_c.account_id = accounts.id AND a_c.deleted=0 AND accounts.deleted=0 AND contacts.deleted=0";
 		}
