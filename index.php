@@ -13,12 +13,12 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/index.php,v 1.20 2004/10/06 09:02:02 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/index.php,v 1.29 2004/11/08 11:41:49 jack Exp $
  * Description: Main file and starting point for the application.  Calls the 
  * theme header and footer files defined for the user as well as the module as 
  * defined by the input parameters.
  ********************************************************************************/
-
+$phpbb_root_path='./modules/MessageBoard/';
 if (substr(phpversion(), 0, 1) == "5") {
         ini_set("zend.ze1_compatibility_mode", "1");
 }
@@ -37,12 +37,64 @@ if (substr(phpversion(), 0, 1) == "5") {
 
 }
 
+// Simulating the login process of forums here 
+//This needs to be called only once. This check has been put so that common.php does not get invoked time and again
+	if(isset($HTTP_POST_VARS['Login']) || isset($HTTP_GET_VARS['Login']) || isset($HTTP_POST_VARS['Logout']) || isset($HTTP_GET_VARS['Logout']))
+	{
+		if((isset($HTTP_POST_VARS['Login']) || isset($HTTP_GET_VARS['Login'])) && !$userdata['session_logged_in'])
+		{
+			//now log in to the Forums for the current user
+			include($phpbb_root_path . 'common.php');
+
+		 	$sql = "SELECT user_id, username, user_password, user_active, user_level
+                        	FROM " . USERS_TABLE . "
+	                        WHERE username = '" . $HTTP_POST_VARS['user_name'] . "'";
+        	        if ( !($result = $db->sql_query($sql)) )
+                	{
+                        	message_die(GENERAL_ERROR, 'Error in obtaining userdata', '', __LINE__, __FILE__, $sql);
+                	}
+			$password=$HTTP_POST_VARS['user_password'];
+			$username=$HTTP_POST_VARS['user_name'];
+                	if( $row = $db->sql_fetchrow($result) )
+                	{
+                        	if( $row['user_level'] != ADMIN && $board_config['board_disable'] )
+                        	{
+                        	}
+                        	else
+                        	{
+		                         if( md5($password) == $row['user_password'] && $row['user_active'] )
+                	                {	
+						$autologin = 0;
+
+                                	        $session_id = session_begin($row['user_id'], $user_ip, PAGE_INDEX, FALSE, $autologin);
+                                	}
+                        	}
+                	}
+
+		}
+	}
+
+
 // Allow for the session information to be passed via the URL for printing.
 if(isset($_REQUEST['PHPSESSID']))
 {
 	session_id($_REQUEST['PHPSESSID']);
+	//Setting the same session id to Forums as in CRM
+        $sid=$_REQUEST['PHPSESSID'];
 }	
-
+function insert_charset_header()
+{
+ 	global $app_strings, $default_charset;
+ 	$charset = $default_charset;
+ 	
+ 	if(isset($app_strings['LBL_CHARSET']))
+ 	{
+ 	        $charset = $app_strings['LBL_CHARSET'];
+ 	}
+ 	header('Content-Type: text/html; charset='. $charset);
+}
+ 	
+insert_charset_header();
 // Create or reestablish the current session
 session_start();
 
@@ -62,7 +114,10 @@ if (is_file('config_override.php'))
 {
 	require_once('config_override.php');
 }
-
+require_once('include/utils.php');
+$default_config_values = Array( "allow_exports"=>"all","upload_maxsize"=>"3000000" );
+ 	
+set_default_config($default_config_values);
 require_once('include/logging.php');
 require_once('modules/Users/User.php');
 
@@ -115,12 +170,19 @@ if(isset($action) && isset($module))
 {
 	$log->info("About to take action ".$action);
 	$log->debug("in $action");
-	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action))
+	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action))
 	{
 		$skipHeaders=true;
 		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action))
 			$skipFooters=true;
 	}
+	if($action == 'BusinessCard' || $action == 'Save')
+	{
+ 	         header( "Expires: Mon, 20 Dec 1998 01:00:00 GMT" );
+ 	         header( "Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );
+ 	         header( "Cache-Control: no-cache, must-revalidate" );
+ 	         header( "Pragma: no-cache" );        
+ 	}
 
 	if ( $action == "Import" &&
                 isset($_REQUEST['step']) &&
@@ -308,6 +370,15 @@ else {
 
 include($currentModuleFile);
 
+if(isset($_SESSION['authenticated_user_theme']) && $_SESSION['authenticated_user_theme'] != '')
+{
+	$theme = $_SESSION['authenticated_user_theme'];
+}
+else 
+{
+	$theme = $default_theme;
+}
+
 echo "<!-- stopprint -->";
 
 if(!$skipFooters)
@@ -351,12 +422,12 @@ echo "<style>
                          w.close();
                  }
          }
-         window.onunload=LogOut
+         //window.onunload=LogOut
        </script>
 ";
 echo "<table width=60% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n";
 echo "<table width=100% border=0 cellspacing=1 cellpadding=0 class=\"bgwhite\" align=center><tr><td align=center class=\"copy\">\n";
-echo("&copy; This software is a collective work consisting of the following Open  Source components : Apache Software, MySQL Server, PHP and SugarCRM , each licensed under a separate Open Source License. vtiger is not affiliated with nor endorsed by any of the above providers. See <a href='http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt' class=\"copy\" target=\"_blank\">Copyrights </a> for details.<br>\n");
+echo("&copy; This software is a collective work consisting of the following major Open Source components : Apache Software, MySQL Server, PHP, SugarCRM, phpBB, and PHPMailer each licensed under a separate Open Source License. vtiger is not affiliated with nor endorsed by any of the above providers. See <a href='http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt' class=\"copy\" target=\"_blank\">Copyrights </a> for details.<br>\n");
 echo "</td></tr></table></td></tr></table>\n";
 
 echo "<table align='center'><tr><td align='center'>";
