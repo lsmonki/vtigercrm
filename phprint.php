@@ -1,98 +1,90 @@
-<?php 
+<?php
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * $Header: vtiger_crm/sugarcrm/phprint.php,v 1.2 2004/10/06 09:02:02 jack Exp $
+ * Description: Main file and starting point for the application.  Calls the
+ * theme header and footer files defined for the user as well as the module as
+ * defined by the input parameters.
+ ********************************************************************************/
+
+if (substr(phpversion(), 0, 1) == "5") {
+	ini_set("zend.ze1_compatibility_mode", "1");
+}
+
+if (ini_get("allow_url_fopen") != 1) {
+        die("You must have the allow_url_fopen directive in your php.ini file enabled");
+}
+
+$config['start_tag'] = "<!-- startscrmprint -->";
+$config['stop_tag'] = "<!-- stopscrmprint -->";
+$config['default_charset'] = "utf-8";
+
 require_once("config.php");
-global $site_URL;
+require_once("include/utils.php");
 
-/*PHPrint - This file is phprint.php
-Make any Page Printer Friendly! Version 2.0 - With error handling
-Copyright by MikeNew.Net, Notice must stay intact
-Any improvements to this script are welcome: www.mikenew.net/contact.asp 
-************
-Legal: MikeNew.Net is not responsible for any damages caused
-by use of this script. (Not likely that it will. Hasn't yet.)
-This script will make your pages printer friendly. 
-Optionally, it will strip images as well. (Instructions for that below)
-
-// After installation, you can remove text from here down to the next: 8< ---->
-// Back up/copy this file first.
-
-1. Save this script in the root of the site for simplicity.
-2. Place <!-- startprint --> somewhere in your HTML page where you consider 
-it to be the start of printer friendly content, and <!-- stopprint --> goes at the end
-of that same content.
-3. You place a link to phprint.php anywhere on the HTML page (preferably outside the printed content,
-like this: <a href="/phprint.php">Print this page</a>
-- or however you like, just as long as you link to this script. */
-
-// If you've already tested, you can remove the text from here up to the other: 8< ---->
-
-//Do you want to strip images from the printable output?
-// If no, change to "no". Otherwise, images are stripped by default.
-$stripImages = "yes";
-
-//what's the base domain name of your site, without trailing slash? 
-// Just the domain itself, so we can fix any relative image and link problems.
-
-$baseURL=$site_URL;
-
-//"http://www.sugarcrm.com"; 
-
-// That's it! No need to go below here. Upload it and test by going to yoursite.com/page.php
-// (The page containing the two tags and a link to this script)
-// -----------------------------------------------------
-
-$startingpoint = "<!-- startprint -->";
-$endingpoint = "<!-- stopprint -->";
-
-// Restore the session in order to get the session id.
-//session_start();
-
-// let's turn off any ugly errors for a sec so we can use our own if necessary...
-error_reporting(0);
-
-
-
-//$url = $_SERVER['HTTP_REFERER']."&".session_name()."=".session_id();
-$url = $_SERVER['HTTP_REFERER']."&PHPSESSID=".$_REQUEST['jt'];
-
-//echo "URL IS: $url";
-
-
-// $read = fopen($HTTP_REFERER, "rb") ... this line may work better if you're using NT, or even FreeBSD
-$read = fopen($url, "r"); //... this line may work better if you're using NT, or even FreeBSD
-//$read = fopen("http://www.sugarcrm.com/sugarcrm/index.php?action=index&module=Contacts", "r") or die("<br /><font face=\"Verdana\">Sorry! There is no access to this file directly. You must follow a link. <br /><br />Please click your browser's back button. </font><br><br><a href=\"http://miracle2.net/\"><img src=\"http://miracle2.net/i.gif\" alt=\"miracle 2\" border=\"0\"></a>");
-// let's turn errors back on so we can debug if necessary
-error_reporting(1);
-
-$value = "";
-while(!feof($read)){
-$value .= fread($read, 10000); // reduce number to save server load
+if (!isset($_GET['action']) || !isset($_GET['module'])) {
+	die("Error: invalid print link");
 }
-fclose($read);
-$start= strpos($value, "$startingpoint"); 
-$finish= strpos($value, "$endingpoint"); 
-$length= $finish-$start;
-$value=substr($value, $start, $length);
+$record = (isset($_GET['record'])) ? $_GET['record'] : "";
+$url = $site_URL . "/index.php?module={$_GET['module']}&action={$_GET['action']}&record=$record";
+$lang = (empty($_GET['lang'])) ? $default_language : $_GET['lang'];
+$app_strings = return_application_language($lang);
 
-function i_denude($variable) {
-return(eregi_replace("<img src=[^>]*>", "", $variable));
-}
-function i_denudef($variable) {
-return(eregi_replace("<font[^>]*>", "", $variable));
+$fp = @fopen($url . "&PHPSESSID=" . $_GET['jt'], "rb") or die("Error opening $url<br><br>Is your \$site_URL correct in config.php?");
+
+$get = $page_str = FALSE;
+while ($data = fgets($fp, 4096)) {
+		if (strpos($data, "<meta http-equiv=\"Content-Type") !== FALSE) {
+			// Found character set to use
+			$charset = $data;
+		}
+        if (strpos($data, $config['start_tag']) !== FALSE) {
+        	// Found start tag, begin collecting data
+        	$get = TRUE;
+        }
+        if ($get) {
+        	// Collect data into $page_str to be later processed
+        	$page_str .= $data;
+        }
+        if (strpos($data, $config['stop_tag']) !== FALSE) {
+        	// Found stop tag, stop collecting data
+        	$get = FALSE;
+        }
 }
 
-$PHPrint = ("$value");
-if ($stripImages == "yes") {
-$PHPrint = i_denude("$PHPrint");
-}
-
-$PHPrint = i_denudef("$PHPrint");
-$PHPrint = str_replace( "</font>", "", $PHPrint );
-$PHPrint = stripslashes("$PHPrint"); 
-
-echo $PHPrint; 
-// Next line is invisible except to SE crawlers, please don't remove. Thanks! :)
-echo "<br><a href=\"http://miracle2.net/\"><img src=\"http://miracle2.net/i.gif\" ";
-echo "alt=\"miracle 2\" border=\"0\"></a>";
-echo "<br/><br/>This page printed from: ".$_SERVER['HTTP_REFERER'];
-flush (); 
+fclose($fp);
 ?>
+<html>
+<head>
+<?php
+if (isset($charset)) {
+	echo $charset . "\n";
+}
+else {
+	echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $config['default_charset'] . "\">\n";
+}
+?>
+<style type="text/css" media="all">
+IMG { display: none; }
+</style>
+</head>
+<body>
+<a href="<?php echo $url; ?>"><< <?php echo $app_strings['LBL_BACK']; ?></a><br><br>
+<?php
+echo $page_str;
+?>
+<br><br><a href="<?php echo $url; ?>"><< <?php echo $app_strings['LBL_BACK']; ?></a>
+</body>
+</html>
