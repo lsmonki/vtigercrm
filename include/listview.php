@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/listview.php,v 1.1 2004/08/17 13:23:37 gjayakrishnan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/listview.php,v 1.1.2.2 2004/09/09 10:32:15 jack Exp $
  * Description:  Includes generic helper functions used throughout the application.
  ********************************************************************************/
 require_once('include/logging.php');
@@ -128,7 +128,14 @@ function listView($display_title, $html_varName, $xtemplate , $seed, $orderby){
 		$list_form->parse("main.row");
 	}
 	$list_form->parse("main");
+	
+	if( $display_title == 'Lead List')
+	{
 
+//	include 'modules/imports/ImportButton.html';
+//	$importTitle = "&nbsp;&nbsp; [ <A href='index.php?module=imports&action=import'><Blink><B>".$app_strings['LNK_IMPORT_LEADS']."</Blink></B></A> ]";
+//	$display_title = $display_title .$importTitle;
+	}
 	echo get_form_header( $display_title, "", false);
 	$list_form->out("main");
 	echo get_form_footer();

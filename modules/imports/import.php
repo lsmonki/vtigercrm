@@ -27,20 +27,18 @@ if (move_uploaded_file($_FILES["userfile"]["tmp_name"],$uploaddir.$_FILES["userf
   $binFile = $_FILES['userfile']['name'];
   $filename = $uploaddir.basename($binFile);
  
-//if(file_exists($_FILES['userfile']['tmp_name']))
-//{
 $data->read($filename);
 
-$countval=0;
 function checkForExistingValues()
 {
-$sql3 = "select count(*) from headers";
+$sql3 = "select * from headers";
 $result4 = mysql_query($sql3);
 $countval = mysql_num_rows($result4);
+return $countval;
 }
 
-checkForExistingValues();
-if($countval == 0)
+$testval = checkForExistingValues();
+if($testval == 0)
 {
 for ($i = 1; $i<2; $i++) 
 {
@@ -156,7 +154,7 @@ while ($row=mysql_fetch_array($result))
     <tr> 
       <td nowrap>
 <div align="right">Annual Revenue:</div></td>
-      <td><SELECT NAME="Annual Revenue">
+      <td><SELECT NAME="Annual_Revenue">
           <OPTION>None 
           <?=$options?>
         </SELECT></td>
@@ -225,14 +223,14 @@ while ($row=mysql_fetch_array($result))
     </tr>
     <tr> 
       <td nowrap>
-<div align="right">State:</div></td>
-      <td><SELECT NAME="Description">
+<div align="right">Stage:</div></td>
+      <td><SELECT NAME="Stage">
           <OPTION>None 
           <?=$options?>
         </SELECT></td>
       <td nowrap>
 <div align="right">Description:</div></td>
-      <td><SELECT NAME="select">
+      <td><SELECT NAME="Description">
           <OPTION>None 
           <?=$options?>
         </SELECT> </td>
@@ -260,7 +258,7 @@ while ($row=mysql_fetch_array($result))
 else
 {
     $errormessage = "<B><font color='red'>Kindly provide at least 1 file</font></B> <br>";
-    echo $errormessage;
+    //echo $errormessage;
     include "fetchfile.php";
 
 }

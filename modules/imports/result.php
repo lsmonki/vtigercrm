@@ -12,6 +12,7 @@
 
 require_once('include/utils.php');
 require_once 'Excel/reader.php';
+require_once('modules/Users/User.php');
 
 $data = new Spreadsheet_Excel_Reader();
 $data->setOutputEncoding('CP1251');
@@ -23,44 +24,28 @@ $data->read($filename);
 //echo 'First Name';
 
 $firstname = $HTTP_POST_VARS['First_Name'];
-//echo $firstname;
 
-////echo 'Last Name';
 $lastname = $HTTP_POST_VARS['Last_Name'];
-//echo $lastname;
 
-//echo 'Email';
-$email = $HTTP_POST_VARS['Email'];
-//echo $email;
+$phone = $HTTP_POST_VARS['Phone'];
+$mobile = $HTTP_POST_VARS['Mobile'];
 
-//echo 'Company';
 $company = $HTTP_POST_VARS['Company'];
 //echo $company;
 
-//echo 'Phone';
-$phone = $HTTP_POST_VARS['Phone'];
-//echo $phone;
-
-//echo 'Fax';
 $fax = $HTTP_POST_VARS['Fax'];
-//echo $fax;
 
-//echo 'Mobile';
-$mobile = $HTTP_POST_VARS['Mobile'];
-//echo $mobile;
-
-//echo 'Designation';
 $designation = $HTTP_POST_VARS['Designation'];
-//echo $designation;
 
-//echo 'Website';
-$website = $HTTP_POST_VARS['Website'];
-//echo $website;
+$email = $HTTP_POST_VARS['Email'];
+
+$salutation = $HTTP_POST_VARS['Salutation'];
+//not being used
 
 //echo 'LeadSource';
 $leadsource = $HTTP_POST_VARS['LeadSource'];
-//echo $leadsource;
 
+$website = $HTTP_POST_VARS['Website'];
 //echo 'Industry';
 $industry = $HTTP_POST_VARS['Industry'];
 //echo $industry;
@@ -93,7 +78,7 @@ $assignedto = $HTTP_POST_VARS['Assigned_To'];
 
 
 //echo 'yahooid';
-$yahooid = $HTTP_POST_VARS['Yahoo_Id'];
+$yahooid = $HTTP_POST_VARS['Yahoo_ID'];
 //echo $yahooid;
 
 
@@ -110,15 +95,17 @@ $city = $HTTP_POST_VARS['City'];
 //echo 'COuntry';
 $country = $HTTP_POST_VARS['Country'];
 //echo $country;
-//echo 'Descri';
 $description = $HTTP_POST_VARS['Description'];
 //echo $description;
+$stage = $HTTP_POST_VARS['Stage'];
+//echo $description;
+function deleteFile($filename)
+{
+   unlink($filename);	
+}
 
 
-//echo $filereferer->sheets[0]['numRows'];
-
-//for($i=1;$i<$data->sheets[0]['numRows']; $i++) 
-for($i=1;$i<$data->sheets[0]['numRows']; $i++) 
+for($i=2;$i<=$data->sheets[0]['numRows']; $i++) 
 {
 
 			$value_firstname = $data->sheets[0]['cells'][$i][$firstname];
@@ -129,43 +116,61 @@ for($i=1;$i<$data->sheets[0]['numRows']; $i++)
 			$value_phone = $data->sheets[0]['cells'][$i][$phone];
 			$value_fax = $data->sheets[0]['cells'][$i][$fax];
 			$value_mobile = $data->sheets[0]['cells'][$i][$mobile];
+			//echo 'mobile ' .$value_mobile;
 			$value_designation = $data->sheets[0]['cells'][$i][$designation];
+			//echo 'designation ' .$value_designation;
 			$value_website= $data->sheets[0]['cells'][$i][$website];
+			//echo 'websiteval ' .$value_website;
 			$value_leadsource = $data->sheets[0]['cells'][$i][$leadsource];
 			$value_industry = $data->sheets[0]['cells'][$i][$industry];
+			//echo 'industry ' .$value_industry;
 			$value_leadstatus = $data->sheets[0]['cells'][$i][$leadstatus];
+			//echo 'leadstatus ' .$value_leadstatus;
 			$value_annualrevenue = $data->sheets[0]['cells'][$i][$annualrevenue];
+			//echo 'annualrevenue ' .$value_annualrevenue;
 			$value_rating = $data->sheets[0]['cells'][$i][$rating];
+			//echo 'rating ' .$value_rating;
 			$value_licensekey = $data->sheets[0]['cells'][$i][$licensekey];
+			//echo 'licensekey ' .$value_licensekey;
 			$value_employeecount = $data->sheets[0]['cells'][$i][$employeecount];
+			//echo 'employees ' .$value_employeecount;
 			$value_assignedto = $data->sheets[0]['cells'][$i][$assignedto];
 			$value_yahooid = $data->sheets[0]['cells'][$i][$yahooid];
+			//echo 'yahooid ' .$value_yahooid;
 			$value_street = $data->sheets[0]['cells'][$i][$street];
+			//echo 'street ' .$value_street;
 			$value_postalcode = $data->sheets[0]['cells'][$i][$postalcode];
+			//echo 'postalcode ' .$value_postalcode;
 			$value_city = $data->sheets[0]['cells'][$i][$city];
+			//echo 'city ' .$value_city;
 			$value_country = $data->sheets[0]['cells'][$i][$country];
+			//echo 'country ' .$value_country;
 			$value_description = $data->sheets[0]['cells'][$i][$description];
-                        
-			insert2DB($value_saluation,$value_firstname,$value_lastname,$value_company,$value_designation,$value_leadsource,$value_industry,$value_annualrevenue,$value_licensekey,$value_phone,$value_mobile,$value_fax,$value_email,$value_yahooid,$value_website,$value_leadstatus,$value_rating,$value_employees);
+			//echo 'description ' .$value_description;
+			$value_stage = $data->sheets[0]['cells'][$i][$stage];
+			//echo 'stage ' .$value_stage;
+			insert2DB($value_salutation,$value_firstname,$value_lastname,$value_company,$value_designation,$value_leadsource,$value_industry,$value_annualrevenue,$value_licensekey,$value_phone,$value_mobile,$value_fax,$value_email,$value_yahooid,$value_website,$value_leadstatus,$value_rating,$value_employeecount);
+
 }
 
+deleteFile($filename);
 
-function insert2DB($saluation,$firstname,$lastname,$company,$designation,$leadsrc,$industry,$annualrevenue,$licensekey,$phone,$mobile,$fax,$email,$yahooid,$website,$leadstatus,$rating,$empct)
+function insert2DB($salutation,$firstname,$lastname,$company,$designation,$leadsrc,$industry,$annualrevenue,$licensekey,$phone,$mobile,$fax,$email,$yahooid,$website,$leadstatus,$rating,$empct)
 {
   $id = create_guid();
   $date_entered = date('YmdHis');
   $date_modified = date('YmdHis');
-  if (isset($current_user))
-  {
-	 $modified_user_id = $current_user->id;
-	 $assigned_user_id = $current_user->id;
-   }	
-  $sql = "INSERT INTO leads (id,date_entered,date_modified,modified_user_id,assigned_user_id,salutation,first_name,last_name,company,designation,lead_source,industry,annual_revenue,license_key,phone,mobile,fax,email,yahoo_id,website,lead_status,rating,employees) VALUES ('$id','$date_entered','$date_modified','$modified_user_id','$assigned_user_id','$salutation','$firstname','$lastname','$company','$designation','$leadsource','$industry','$annualrevenue','$licensekey','$phone','$mobile','$fax','$email','$website','$leadstatus','$rating','$empcount','')";
+  global $current_user;	
+
+  $modified_user_id = $current_user->id;
+  $assigned_user_id = $current_user->id;
+  $sql = "INSERT INTO leads (id,date_entered,date_modified,modified_user_id,assigned_user_id,salutation,first_name,last_name,company,designation,lead_source,industry,annual_revenue,license_key,phone,mobile,fax,email,yahoo_id,website,lead_status,rating,employees) VALUES ('$id','$date_entered','$date_modified','$modified_user_id','$assigned_user_id','$salutation','$firstname','$lastname','$company','$designation','$leadsrc','$industry','$annualrevenue','$licensekey','$phone','$mobile','$fax','$email','$yahooid','$website','$leadstatus','$rating','$empcount')";
+
   $result = mysql_query($sql);
 
 }
 
-  echo "Thank you! Information entered.\n";
+header("Location: index.php?module=Leads&action=index");
+//	echo 'Thank You! Your data has been stored! <br>
+//  <a href="index.php?module=Leads&action=index">Continue</a>';
 ?>
-
-

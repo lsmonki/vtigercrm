@@ -22,7 +22,9 @@
 		//echo 'Ret module is' .$ret_module;
 		//echo 'Ret id is' .$ret_id;
 	?>
+<B>
 Attach File:
+</B>
 <hr>
 <br>
  <INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="1000000">

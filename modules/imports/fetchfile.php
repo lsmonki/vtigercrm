@@ -13,14 +13,29 @@
 
 
 <html>
-<table border="2">
-<tr>
-<td>
+<head>
 
+<h3>Import Leads</h3>
+</head>
+
+<table border="0" width="60%" cellspacing="0" cellpadding="2">
+<tr>
+<td width="20%" nowrap>
 <form action="index.php?module=imports&action=import" method=post enctype="multipart/form-data">
-Lead File : <input type=file name="userfile"><br> </td></tr>
-<tr><td>
-<input type=submit><br> </td></tr>
+Leads File List :</td><td> <input type=file name="userfile"><br> </td></tr>
+<tr><td></td>
+<td><input type=submit value="Submit" align="center"><br></td></tr>
 </table>
 </form>
+<br>
+Instructions:
+<ul>
+<li>
+Kindly provide an .xls file alone as input 
+</li>
+
+<li>
+Please provide at least one file as input
+</li>
+</ul>
 </html>

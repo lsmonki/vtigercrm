@@ -43,11 +43,18 @@ $list .= '<td class="moduleListTitle" height="21">';
 
 $list .= '<p style="margin-left: 10">';
 
+$list .= 'File Name</td>';
+$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+$list .= '<td width="15%" class="moduleListTitle">';
+
+$list .= '<p style="margin-left: 10">';
+
 $list .= 'Description</td>';
 $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 $list .= '<td width="15%" class="moduleListTitle">';
 
 $list .= '<p style="margin-left: 10">';
+
 
 $list .= 'Type</td>';
 $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
@@ -79,10 +86,16 @@ $trowclass = 'oddListRow';
 
 	$list .= '<td></td><td width="33%" height="21" style="padding:0px 3px 0px 3px;">	<p style="margin-left: 10">';
 
-	 $list .= $row["filetype"]; 
+	 $list .= $row["description"]; 
 
 	$list .= '</td>';
 
+
+	$list .= '<td></td><td width="33%" height="21" style="padding:0px 3px 0px 3px;">	<p style="margin-left: 10">';
+
+	 $list .= $row["filetype"]; 
+
+	$list .= '</td>';
 
 
 	$list .= '<td></td><td width="33%" height="21" style="padding:0px 3px 0px 3px;"><p style="margin-left: 10">';

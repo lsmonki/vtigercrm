@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/orange/layout_utils.php,v 1.11 2004/09/06 16:20:54 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/orange/layout_utils.php,v 1.11.2.2 2004/09/09 10:35:15 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -66,10 +66,14 @@ $the_form = <<<EOQ
 <table width="100%" cellpadding="0" cellspacing="0" border="0" class="formHeaderULine"><tbody><tr>
 	  <td valign="bottom">
        <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-		<td vAlign="middle" class="formHeader" align="left" noWrap width="100%" height="15">$form_title</td>
-		</tr></tbody></table>
-      </td>
+		<td vAlign="middle" class="formHeader" align="left" noWrap width="100%" height="15">$form_title&nbsp;</td><td>
 EOQ;
+if($form_title == "Lead List")
+{
+$the_form .= " <form action='index.php?module=imports&action=fetchfile' method=post target=''><input class='button' type='submit' name='Import' value='Import Leads'/></form>";
+//include 'modules/imports/ImportButton.html';
+}
+        $the_form .="</td></tr></tbody></table></td>";
 
 if ($other_text) {
 	$the_form .= "<td width='20'><IMG height='1' src='include/images/blank.gif'></td>\n";
@@ -123,11 +127,12 @@ $the_title .= "<td width='100%'><IMG height='1' src='include/images/blank.gif'><
 
 if ($show_help) {
 //test
+/*
 if($module == 'Leads')
         {
  $the_title .= "<td color='red' class='bodySmall' nowrap align='right'>[ <A href='index.php?module=imports&action=import'><Blink><B>".$app_strings['LNK_IMPORT_LEADS']."</Blink></B></A> ]</td>\n";
         }
-
+*/
 
 	$the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='phprint.php?jt=".session_id()."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
     $the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";

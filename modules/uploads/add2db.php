@@ -15,17 +15,18 @@
 require_once('database/DatabaseConnection.php');
 require_once('include/utils.php');
 $uploaddir = $_SERVER['DOCUMENT_ROOT'] ."/test/upload/" ;// set this to wherever
-//copy the file to some permanent location
-if (move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
+if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
   $binFile = $_FILES['binFile']['name'];
   $filename = basename($binFile);
-    $filetype= $_FILES['binFile']['type'];
+  $filetype= $_FILES['binFile']['type'];
 
     $filesize = $_FILES['binFile']['size'];
+    if($filesize != 0)	
+    {
     //$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
     $data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-    $textDesc = $_REQUEST['txtDescription'];	
+   $textDesc = $_REQUEST['txtDescription'];	
     $strDescription = addslashes($textDesc);
     $fileid = create_guid();
     $date_entered = date('YmdHis');
@@ -63,9 +64,22 @@ if (move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFil
     //mysql_free_result($result); 
     //echo "Thank you. The new file was successfully added to our database.<br><br>";
     //echo "<a href='index.php'>Continue</a>";
-  mysql_close();
-    header("Location: index.php?action=DetailView&module=$ret_module&record=$parent_id");	
-
+       mysql_close();
+       deleteFile($uploaddir,$filename);
+       header("Location: index.php?action=DetailView&module=$ret_module&record=$parent_id");	
+      }
+    else
+      {
+    include('themes/'.$theme.'/header.php');
+   $errormessage = "<font color='red'><B>Error Message<ul>
+			<li><font color='red'>Invalid file OR</font>
+			<li><font color='red'>File has no data</font>
+			</ul></B></font> <br>" ;
+   echo $errormessage;
+       deleteFile($uploaddir,$filename);
+   include "upload.php";
+     }			
+   
 } 
 else 
 {
@@ -93,6 +107,11 @@ else
     include "upload.php";
   }
   
+}
+
+function deleteFile($dir,$filename)
+{
+   unlink($dir.$filename);	
 }
 ?>
 
