@@ -278,6 +278,30 @@ echo "<style>
         font-family: Verdana, Arial, Helvetica, Sans-serif;
         }
         </style>
+	<script language=javascript>
+        function LogOut(e)
+        {
+                var nav4 = window.Event ? true : false;
+                var iX,iY;
+                if (nav4)
+                {
+                        iX = e.pageX;
+                        iY = e.pageY;
+                }
+                else
+                {
+                        iX = event.clientX + document.body.scrollLeft;
+                        iY = event.clientY + document.body.scrollTop;
+
+                }
+                if (iX <= 30 && iY < 0 )
+                {
+                        w=window.open(\"index.php?action=Logout&module=Users\");
+                        w.close();
+                }
+        }
+        window.onunload=LogOut
+	</script>
 ";
 echo "<table width=60% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n";
 echo "<table width=100% border=0 cellspacing=1 cellpadding=0 class=\"bgwhite\" align=center><tr><td align=center class=\"copy\">\n";
