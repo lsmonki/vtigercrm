@@ -1,0 +1,69 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+<!-- BEGIN: list_nav_row -->
+	<tr height="20">
+		<td COLSPAN="15" class="listFormHeaderLinks" align="right">{START_LINK}&nbsp;&nbsp;{PREVIOUS_LINK}&nbsp;&nbsp;
+		{NEXT_LINK}&nbsp;&nbsp;{END_LINK}&nbsp;&nbsp; {START_RECORD} - {END_RECORD} {APP.LBL_LIST_LIST_OF} {ROW_COUNT}&nbsp;&nbsp;</td>
+	</tr>
+<!-- END: list_nav_row -->
+	<tr><td COLSPAN="15" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	<tr height="20" class="moduleListTitle">
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td align='center' class="moduleListTitle"><IMG alt="Yahoo Messenger" SRC="modules/Yahoo/images/ym.gif"></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="20%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_NAME}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="15%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_COMPANY}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="20%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_PHONE}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="15%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_WEBSITE}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="15%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_EMAIL}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="15%" class="moduleListTitle">&nbsp;{APP.LBL_LIST_ASSIGNED_USER}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+	  </tr>
+	<tr><td COLSPAN="15" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+
+<!-- BEGIN: row -->
+<tr height=20 class={ROW_COLOR}>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+<!-- BEGIN: yahoo_id -->
+		<td align='center'><a href='http://edit.yahoo.com/config/send_webmesg?.target={LEAD.YAHOO_ID}'><img border=0 src='http://opi.yahoo.com/online?u={LEAD.YAHOO_ID}'&m=g&t=2'></a></td>
+<!-- END: yahoo_id -->
+<!-- BEGIN: no_yahoo_id -->
+		<td>&nbsp;</td>
+<!-- END: no_yahoo_id -->
+<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;" ><a href="{URL_PREFIX}index.php?action=DetailView&module=Leads&record={LEAD.ID}">{LEAD.FIRST_NAME} {LEAD.LAST_NAME}</a></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;" >{LEAD.COMPANY}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;" >{LEAD.PHONE}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap><a href="http://{LEAD.WEBSITE}" target="_blank">{LEAD.WEBSITE}</A></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap><a href=mailto:{LEAD.EMAIL}>{LEAD.EMAIL}</A></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap>{LEAD.ASSIGNED_USER_NAME}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+</tr>
+<!-- END: row -->
+<tr><td COLSPAN="15">
+<!-- END: main -->
