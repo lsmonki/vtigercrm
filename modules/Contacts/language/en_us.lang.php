@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/language/en_us.lang.php,v 1.3 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/language/en_us.lang.php,v 1.4 2004/10/29 09:55:09 jack Exp $
  * Description:  Defines the English language pack
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -32,12 +32,32 @@ $mod_strings = Array(
 
 'LBL_LIST_NAME'=>'Name',
 'LBL_LIST_LAST_NAME'=>'Last Name',
+'LBL_LIST_FIRST_NAME'=>'First Name',
 'LBL_LIST_CONTACT_NAME'=>'Contact Name',
 'LBL_LIST_TITLE'=>'Title',
 'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
 'LBL_LIST_EMAIL_ADDRESS'=>'Email',
 'LBL_LIST_PHONE'=>'Phone',
 'LBL_LIST_CONTACT_ROLE'=>'Role',
+
+//DON'T CONVERT THESE THEY ARE MAPPINGS
+'db_last_name' => 'LBL_LIST_LAST_NAME',
+'db_first_name' => 'LBL_LIST_FIRST_NAME',
+'db_title' => 'LBL_LIST_TITLE',
+'db_email1' => 'LBL_LIST_EMAIL_ADDRESS',
+'db_email2' => 'LBL_LIST_EMAIL_ADDRESS',
+//END DON'T CONVERT
+	
+'LBL_EXISTING_CONTACT' => 'Used an existing contact',
+'LBL_CREATED_CONTACT' => 'Created a new contact',
+'LBL_EXISTING_ACCOUNT' => 'Used an existing account',
+'LBL_CREATED_ACCOUNT' => 'Created a new account',
+'LBL_CREATED_CALL' => 'Created a new call',
+'LBL_CREATED_MEETING' => 'Created a new meeting',
+'LBL_ADDMORE_BUSINESSCARD' =>'Add another business card',
+'LBL_ADD_BUSINESSCARD' => 'Add Business Card',
+
+'LBL_BUSINESSCARD' => 'Business Card',
 
 'LBL_NAME'=>'Name:',
 'LBL_CONTACT_NAME'=>'Contact Name:',
@@ -77,6 +97,8 @@ $mod_strings = Array(
 'LBL_DESCRIPTION'=>'Description:',
 'LBL_CONTACT_ROLE'=>'Role:',
 'LBL_OPP_NAME'=>'Opportunity Name:',
+'LBL_DUPLICATE'=>'Potential Duplicate Contacts',
+'MSG_DUPLICATE' => 'Creating this contact may potentialy create a duplicate contact. You may either select a contact from the list below or you may click on Create New Contact to continue creating a new contact with the previously entered data.',
 
 'LNK_NEW_CONTACT'=>'New Contact',
 'LNK_NEW_LEAD'=>'New Lead',
@@ -88,6 +110,8 @@ $mod_strings = Array(
 'LNK_NEW_EMAIL'=>'New Email',
 'LNK_NEW_MEETING'=>'New Meeting',
 'LNK_NEW_TASK'=>'New Task',
+'LNK_NEW_APPOINTMENT' => 'New Appointment',
+'LBL_ADD_BUSINESSCARD' => 'Add Business Card',
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
 'NTC_REMOVE_CONFIRMATION'=>'Are you sure you want to remove this contact from this case?',
 'NTC_REMOVE_DIRECT_REPORT_CONFIRMATION'=>'Are you sure you want to remove this record as a direct report?',

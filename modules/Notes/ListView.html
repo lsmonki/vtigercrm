@@ -10,7 +10,7 @@
  * The Initial Developer of the Original Code is SugarCRM, Inc.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
- * Contributor(s): Xavier DUTOIT.
+ * Contributor(s): _________________________________.
  ********************************************************************************/
 /*********************************************************************************
  * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Notes/ListView.html,v 1.1 2004/07/01 08:31:12 sugarclint Exp {APP.LBL_CURRENCY_SYM}
@@ -35,18 +35,8 @@
 		<td width="25%" class="moduleListTitle" NOWRAP>&nbsp;{MOD.LBL_LIST_CONTACT_NAME}</td>
 	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
 		<td width="30%" class="moduleListTitle" NOWRAP>&nbsp;{MOD.LBL_LIST_RELATED_TO}</td>
-	<!--
-	* BEGIN CONTRIBUTION
-	* Date: 09/07/04
-	* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-	* All Rights Reserved.
-	* Contributor(s): Xavier DUTOIT
-	-->
 	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="10%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_FILENAME}</td>
-	<!--
-	* END CONTRIBUTION
-	-->
+		<td width="30%" class="moduleListTitle" NOWRAP>&nbsp;{MOD.LBL_LIST_FILENAME}</td>
 	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
 		<td width="10%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}date_modified" class="listFormHeaderLinks">{MOD.LBL_LIST_DATE_MODIFIED}{date_modified_arrow}</a></td>
 	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
@@ -62,18 +52,8 @@
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
     			<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module={NOTE.PARENT_MODULE}&record={NOTE.PARENT_ID}">{NOTE.PARENT_NAME}</a></td>
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    	<!--
-		* BEGIN CONTRIBUTION
-		* Date: 09/07/04
-		* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-		* All Rights Reserved.
-		* Contributor(s): Xavier DUTOIT
-		-->
-    	    	<td class="{ROW_COLOR}" nowrap valign=TOP style="padding:0px 3px 0px 3px;"><a href="{NOTE.FILEURL}" target="_blank">{NOTE.FILENAME}</a></td>
+    			<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;"><a href="{NOTE.FILE_URL}" target="_blank">{NOTE.FILENAME}</a></td>
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    	<!--
-		* END CONTRIBUTION
-		-->
     			<td class="{ROW_COLOR}" nowrap valign=TOP style="padding:0px 3px 0px 3px;">{NOTE.DATE_MODIFIED}</td>
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
 </tr>

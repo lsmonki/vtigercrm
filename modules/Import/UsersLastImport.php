@@ -103,7 +103,7 @@ class UsersLastImport extends SugarBean
 
 		if ($this->bean_type == 'Contacts')
 		{
-			$query = "SELECT
+			$query = "SELECT distinct
 				accounts.name as account_name,
 				accounts.id as account_id,
 				contacts.id,
@@ -113,8 +113,11 @@ class UsersLastImport extends SugarBean
 				contacts.last_name,
 				contacts.phone_work,
 				contacts.title,
-				contacts.email1
+				contacts.email1,
+                                users.user_name as assigned_user_name
 				FROM contacts, users_last_import
+                                LEFT JOIN users
+                                ON contacts.assigned_user_id=users.id
 				LEFT JOIN accounts_contacts
 				ON contacts.id=accounts_contacts.contact_id
 				LEFT JOIN accounts
@@ -124,22 +127,55 @@ class UsersLastImport extends SugarBean
 					'{$current_user->id}'
 				AND users_last_import.bean_type='Contacts'
 				AND users_last_import.bean_id=contacts.id
+				AND users_last_import.deleted=0
 				AND contacts.deleted=0 
-				AND users_last_import.deleted=0";
+				AND users.status='ACTIVE'";
 
 		} 
 		else if ($this->bean_type == 'Accounts')
 		{
-			$query = "SELECT distinct accounts.*
+			$query = "SELECT distinct accounts.*,
+                                users.user_name as assigned_user_name
 				FROM accounts, users_last_import
+                                LEFT JOIN users
+                                ON accounts.assigned_user_id=users.id
 				WHERE 
 				users_last_import.assigned_user_id=
 					'{$current_user->id}'
 				AND users_last_import.bean_type='Accounts'
 				AND users_last_import.bean_id=accounts.id
 				AND users_last_import.deleted=0
-				AND accounts.deleted=0";
+				AND accounts.deleted=0
+				AND users.status='ACTIVE'";
 		} 
+		else if ($this->bean_type == 'Opportunities')
+		{
+		
+			$query = "SELECT distinct
+                                accounts.id as account_id,
+                                accounts.name as account_name,
+                                users.user_name as assigned_user_name,
+                                opportunities.*
+                                FROM opportunities, users_last_import
+                                LEFT JOIN users
+                                ON opportunities.assigned_user_id=users.id
+                                LEFT JOIN accounts_opportunities
+                                ON opportunities.id=accounts_opportunities.opportunity_id
+                                LEFT JOIN accounts
+                                ON accounts_opportunities.account_id=accounts.id 
+                        	WHERE 
+				users_last_import.assigned_user_id=
+					'{$current_user->id}'
+				AND users_last_import.bean_type='Opportunities'
+				AND users_last_import.bean_id=opportunities.id
+				AND users_last_import.deleted=0
+				AND accounts_opportunities.deleted=0 
+				AND accounts.deleted=0 
+				AND opportunities.deleted=0 
+				AND users.status='ACTIVE'";
+
+	
+		}
 
 		if(! empty($order_by))
 		{
@@ -169,6 +205,17 @@ class UsersLastImport extends SugarBean
 	function undo($user_id)
 	{
 		$count = 0;
+
+		$count += $this->undo_contacts($user_id);
+		$count += $this->undo_accounts($user_id);
+		$count += $this->undo_opportunities($user_id);
+
+		return $count;
+	}
+
+	function undo_contacts($user_id)
+	{
+		$count = 0;
 		$query1 = "select bean_id from users_last_import 
 		where assigned_user_id='$user_id' 
 		AND bean_type='Contacts' AND deleted=0";
@@ -188,34 +235,125 @@ class UsersLastImport extends SugarBean
 			$result2 = mysql_query($query2) 
 				or die("Error undoing last import: ".mysql_error()); 
 
-			$count = $this->db->getAffectedRowCount($result2); 
-		}
+			$count = $this->db->getAffectedRowCount($result2);
 
+			$query3 = "update accounts_contacts set accounts_contacts.deleted=1 
+					where accounts_contacts.contact_id='{$row1['bean_id']}'
+					AND accounts_contacts.deleted=0";
 
-		$query3 = "select bean_id from users_last_import 
-				where assigned_user_id='$user_id' 
-				AND bean_type='Accounts' 
-				AND deleted=0";
+			$this->log->info($query3); 
 
-		$this->log->info($query3); 
-		
-		$result3 = mysql_query($query3) 
-			or die("Error getting last import for undo: ".mysql_error());
+			$result3 = mysql_query($query3) 
+				or die("Error undoing last import: ".mysql_error()); 
 
-		while ( $row2 = mysql_fetch_assoc($result3))
-		{
-			$query4 = "update accounts set accounts.deleted=1 
-				where accounts.id='{$row2['bean_id']}'";
+			$query4 = "update opportunities_contacts set opportunities_contacts.deleted=1 
+					where opportunities_contacts.contact_id='{$row1['bean_id']}'
+					AND opportunities_contacts.deleted=0";
 
-			$this->log->info($query4);	
+			$this->log->info($query4); 
 
 			$result4 = mysql_query($query4) 
-				or die("Error undoing last import: ".mysql_error());
-			$count += $this->db->getAffectedRowCount($result4); 
-		}
+				or die("Error undoing last import: ".mysql_error()); 
 
+		}
 		return $count;
 	}
+
+	function undo_accounts($user_id)
+	{
+		// this should just be a loop foreach module type
+		$count = 0;
+		$query1 = "select bean_id from users_last_import 
+		where assigned_user_id='$user_id' 
+		AND bean_type='Accounts' AND deleted=0";
+
+		$this->log->info($query1); 
+
+		$result1 = mysql_query($query1) 
+			or die("Error getting last import for undo: ".mysql_error()); 
+
+		while ( $row1 = mysql_fetch_assoc($result1))
+		{
+			$query2 = "update accounts set accounts.deleted=1 
+					where accounts.id='{$row1['bean_id']}'";
+
+			$this->log->info($query2); 
+
+			$result2 = mysql_query($query2) 
+				or die("Error undoing last import: ".mysql_error()); 
+
+			$count = $this->db->getAffectedRowCount($result2);
+
+			$query3 = "update accounts_contacts set accounts_contacts.deleted=1 
+					where accounts_contacts.account_id='{$row1['bean_id']}'
+					AND accounts_contacts.deleted=0";
+
+			$this->log->info($query3); 
+
+			$result3 = mysql_query($query3) 
+				or die("Error undoing last import: ".mysql_error()); 
+
+			$query4 = "update accounts_opportunities set accounts_opportunities.deleted=1 
+					where accounts_opportunities.account_id='{$row1['bean_id']}'
+					AND accounts_opportunities.deleted=0";
+
+			$this->log->info($query4); 
+
+			$result4 = mysql_query($query4) 
+				or die("Error undoing last import: ".mysql_error()); 
+
+		}
+		return $count;
+	}
+
+	function undo_opportunities($user_id)
+	{
+		// this should just be a loop foreach module type
+		$count = 0;
+		$query1 = "select bean_id from users_last_import 
+		where assigned_user_id='$user_id' 
+		AND bean_type='Opportunities' AND deleted=0";
+
+		$this->log->info($query1); 
+
+		$result1 = mysql_query($query1) 
+			or die("Error getting last import for undo: ".mysql_error()); 
+
+		while ( $row1 = mysql_fetch_assoc($result1))
+		{
+			$query2 = "update opportunities set opportunities.deleted=1 
+					where opportunities.id='{$row1['bean_id']}'";
+
+			$this->log->info($query2); 
+
+			$result2 = mysql_query($query2) 
+				or die("Error undoing last import: ".mysql_error()); 
+
+			$count = $this->db->getAffectedRowCount($result2);
+
+			$query3 = "update opportunities_contacts set opportunities_contacts.deleted=1 
+					where opportunities_contacts.opportunity_id='{$row1['bean_id']}'
+					AND opportunities_contacts.deleted=0";
+
+			$this->log->info($query3); 
+
+			$result3 = mysql_query($query3) 
+				or die("Error undoing last import: ".mysql_error()); 
+
+
+			$query4 = "update accounts_opportunities set accounts_opportunities.deleted=1 
+					where accounts_opportunities.opportunity_id='{$row1['bean_id']}'
+					AND accounts_opportunities.deleted=0";
+
+			$this->log->info($query4); 
+
+			$result4 = mysql_query($query4) 
+				or die("Error undoing last import: ".mysql_error()); 
+
+		}
+		return $count;
+	}
+
 }
 
 

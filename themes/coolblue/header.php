@@ -34,6 +34,16 @@ require_once($module_path.'Menu.php');
 global $module_menu;
 
 $xtpl=new XTemplate ($theme_path."header.html");
+
+/* Forum Display
+$displayForums = $_REQUEST['forumDisplay'];
+if($displayForums == "")
+{
+	$displayForums = true;
+}
+if($displayForums == "true")
+$xtpl->assign("FORUM", "<script language=\"JavaScript\" type=\"text/javascript\" src=\"http://www.vtiger.com/forums/vtcrm_topicsanywhere.php?mode=show&f=uMSwyLDMsNyw5&n=5&jlp=y&a=y&s=y&l=y&m=y&h='a\'s\'m\&b=non&lpd=0&lpi=y&ch=30&cl=style.css\"></script><br>");
+*/
 $xtpl->assign("APP", $app_strings);
 if(isset($app_strings['LBL_CHARSET']))
 {

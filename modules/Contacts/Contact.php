@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.5 2004/11/08 09:11:42 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -143,7 +143,7 @@ class Contact extends SugarBean {
 	var $additional_column_fields = Array('assigned_user_name', 'account_name', 'account_id', 'opportunity_id', 'case_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id');		
 	
 	// This is the list of fields that are in the lists.
-	var $list_fields = Array('id', 'first_name', 'last_name', 'account_name', 'account_id', 'title', 'yahoo_id', 'email1', 'phone_work', 'assigned_user_name', 'assigned_user_id', "case_role", 'case_rel_id', 'opportunity_role', 'opportunity_rel_id');	
+	var $list_fields = Array('id', 'first_name', 'last_name','salutation', 'account_name', 'account_id', 'title', 'yahoo_id', 'email1','primary_address_city','phone_mobile','reports_to_id','primary_address_street', 'phone_work','primary_address_state','primary_address_postalcode','primary_address_country','alt_address_city','alt_address_street','alt_address_state','alt_address_postalcode','alt_address_country','assigned_user_name', 'assigned_user_id', "case_role", 'case_rel_id', 'opportunity_role', 'opportunity_rel_id');	
 	// This is the list of fields that are required
 	var $required_fields =  array("last_name"=>1);
 
@@ -240,6 +240,11 @@ class Contact extends SugarBean {
 
 	}
 	
+	function delete($id)
+        {
+          mysql_query('update contacts set deleted=1 where id = \'' .$id . '\'');
+        }
+
 	function get_summary_text()
 	{
 		return "$this->first_name $this->last_name";
@@ -369,12 +374,14 @@ class Contact extends SugarBean {
 		
 		if($account_required)
 		{
-			$query = "SELECT contacts.id, contacts.assigned_user_id, contacts.yahoo_id, contacts.first_name, contacts.last_name, contacts.phone_work, contacts.title, contacts.email1 FROM contacts, accounts_contacts a_c, accounts ";
+			$query = "SELECT * FROM contacts, accounts_contacts a_c, accounts ";
+			//$query = "SELECT contacts.id, contacts.assigned_user_id, contacts.yahoo_id, contacts.first_name, contacts.last_name, contacts.phone_work, contacts.title, contacts.email1 FROM contacts, accounts_contacts a_c, accounts ";
 			$where_auto = "a_c.contact_id = contacts.id AND a_c.account_id = accounts.id AND a_c.deleted=0 AND accounts.deleted=0 AND contacts.deleted=0";
 		}
 		else 
 		{
-			$query = "SELECT id, yahoo_id, contacts.assigned_user_id, first_name, last_name, phone_work, title, email1 FROM contacts ";
+			$query = "SELECT * FROM contacts ";
+			//$query = "SELECT id, yahoo_id, contacts.assigned_user_id, first_name, last_name, phone_work, title, email1 FROM contacts ";
 			$where_auto = "deleted=0";
 		}
 		

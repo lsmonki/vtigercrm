@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: vtiger_crm/sugarcrm/phprint.php,v 1.2 2004/10/06 09:02:02 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/phprint.php,v 1.3 2004/10/29 09:55:08 jack Exp $
  * Description: Main file and starting point for the application.  Calls the
  * theme header and footer files defined for the user as well as the module as
  * defined by the input parameters.
@@ -34,6 +34,18 @@ $config['default_charset'] = "utf-8";
 require_once("config.php");
 require_once("include/utils.php");
 
+  function insert_charset_header()
+ 	{
+ 	global $app_strings, $default_charset;
+ 	$charset = $default_charset;
+ 	
+ 	if(isset($app_strings['LBL_CHARSET']))
+ 	{
+ 	        $charset = $app_strings['LBL_CHARSET'];
+ 	}
+ 	header('Content-Type: text/html; charset='. $charset);
+ 	}
+ 	
 if (!isset($_GET['action']) || !isset($_GET['module'])) {
 	die("Error: invalid print link");
 }
@@ -41,6 +53,7 @@ $record = (isset($_GET['record'])) ? $_GET['record'] : "";
 $url = $site_URL . "/index.php?module={$_GET['module']}&action={$_GET['action']}&record=$record";
 $lang = (empty($_GET['lang'])) ? $default_language : $_GET['lang'];
 $app_strings = return_application_language($lang);
+insert_charset_header();
 
 $fp = @fopen($url . "&PHPSESSID=" . $_GET['jt'], "rb") or die("Error opening $url<br><br>Is your \$site_URL correct in config.php?");
 

@@ -38,9 +38,14 @@ function parse_import($file_name,$delimiter,$max_lines,$has_header)
 		return -1;
 	}
 
-	while ( (( $fields = fgetcsv($fh, 4096, $delimiter) ) !== FALSE) && $line_count < $max_lines) 
+	while ( (( $fields = fgetcsv($fh, 4096, $delimiter) ) !== FALSE) 
+		&& ( $max_lines == -1 || $line_count < $max_lines)) 
 	{
 
+		if ( count($fields) == 1 && isset($fields[0]) && $fields[0] == '')
+		{
+			break;
+		}
 		$this_field_count = count($fields);
 
 		if ( $this_field_count > $field_count)
@@ -89,7 +94,9 @@ function parse_import_act($file_name,$delimiter,$max_lines,$has_header)
 		return -1;
 	}
 
-	while ( ($line = fgets($fh, 4096)) && $line_count < $max_lines ) 
+	while ( ($line = fgets($fh, 4096))
+                && ( $max_lines == -1 || $line_count < $max_lines) )
+
 	{
 		
 		$line = trim($line);

@@ -170,6 +170,7 @@ $salesforce_contacts_field_map = array(
 "Email Opt Out"=>"email_opt_out",
 "Do Not Call"=>"do_not_call",
 "Account Name"=>"account_name",
+"Account ID"=>"account_id",
 );
 
 
@@ -217,6 +218,25 @@ $salesforce_accounts_field_map = array(
 "Phone"=>"phone_office",
 "Fax"=>"phone_fax",
 "Website"=>"website"
+);
+
+/*
+"Fiscal Quarter"=>"",
+"Age"=>"",
+"Expected Revenue"=>"",
+*/
+$salesforce_opportunities_field_map = array(
+
+"Opportunity Name"=>"name" ,
+"Type"=>"opportunity_type",
+"Lead Source"=>"lead_source",
+"Amount"=>"amount",
+"Created Date"=>"date_entered",
+"Close Date"=>"date_closed",
+"Next Step"=>"next_step",
+"Stage"=>"sales_stage",
+"Probability (%)"=>"probability",
+"Account Name"=>"account_name"
 );
 
 if (! isset($_REQUEST['step'] ) )

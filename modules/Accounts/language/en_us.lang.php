@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/language/en_us.lang.php,v 1.3 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/language/en_us.lang.php,v 1.4 2004/10/29 09:55:09 jack Exp $
  * Description:  Defines the English language pack 
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -35,6 +35,13 @@ $mod_strings = Array(
 'LBL_LIST_PHONE'=>'Phone',
 'LBL_LIST_EMAIL_ADDRESS'=>'Email Address',
 'LBL_LIST_CONTACT_NAME'=>'Contact Name',
+
+//DON'T CONVERT THESE THEY ARE MAPPINGS
+'db_name' => 'LBL_LIST_ACCOUNT_NAME',
+'db_website' => 'LBL_LIST_WEBSITE',
+'db_billing_address_city' => 'LBL_LIST_CITY',
+
+//END DON'T CONVERT
 
 'LBL_ACCOUNT'=>'Account:',
 'LBL_ACCOUNT_NAME'=>'Account Name:',
@@ -68,6 +75,8 @@ $mod_strings = Array(
 'NTC_COPY_BILLING_ADDRESS'=>'Copy billing address to shipping address',
 'NTC_COPY_SHIPPING_ADDRESS'=>'Copy shipping address to billing address',
 'NTC_REMOVE_MEMBER_ORG_CONFIRMATION'=>'Are you sure you want to remove this record as a member organization?',
+'LBL_DUPLICATE'=>'Potential Duplicate Accounts',
+'MSG_DUPLICATE' => 'Creating this account may potentialy create a duplicate account. You may either select an account from the list below or you may click on Create New Account to continue creating a new account with the previously entered data.',
 
 'LNK_NEW_CONTACT'=>'New Contact',
 'LNK_NEW_LEAD'=>'New Lead',

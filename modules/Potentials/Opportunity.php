@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Opportunity.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Opportunity.php,v 1.3 2004/10/29 09:55:09 jack Exp $ 
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -52,7 +52,7 @@ class Opportunity extends SugarBean {
 	var $probability;
 
 	// These are related
-	var $account_name;	
+	var $account_name;
 	var $account_id;
 	var $contact_id;
 	var $task_id;
@@ -61,7 +61,7 @@ class Opportunity extends SugarBean {
 	var $call_id;
 	var $email_id;
 	var $assigned_user_name;
-		
+
 	var $table_name = "opportunities";
 	var $rel_account_table = "accounts_opportunities";
 	var $rel_opportunity_table = "opportunities_contacts";
@@ -85,12 +85,12 @@ class Opportunity extends SugarBean {
 		);
 
 	// This is used to retrieve related fields from form posts.
-	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'account_name', 'account_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id');		
+	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'account_name', 'account_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id');
 
 	// This is the list of fields that are in the lists.
 	var $list_fields = Array('id', 'name', 'account_name', 'date_closed', 'amount', 'assigned_user_name', 'assigned_user_id');
-	
-	
+
+
 	function Opportunity() {
 		$this->log = LoggerManager::getLogger('opportunity');
 		$this->db = new PearDatabase();
@@ -110,26 +110,26 @@ class Opportunity extends SugarBean {
 		$query .=', opportunity_type char(25)';
 		$query .=', lead_source char(25)';
 		$query .=', amount char(25)';
-		$query .=', date_closed date'; 
+		$query .=', date_closed date';
 		$query .=', next_step char(25)';
 		$query .=', sales_stage char(25)';
-		$query .=', probability char(3)';  
-		$query .=', description char(255)';
+		$query .=', probability char(3)';
+		$query .=', description TEXT';
 		$query .=', PRIMARY KEY ( ID ) )';
 
 		$this->db->query($query, true, "Error creating table:" );
-		
-		
+
+
 
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
-		
+
 		$query = "CREATE TABLE $this->rel_account_table (";
 		$query .='id char(36) NOT NULL';
 		$query .=', opportunity_id char(36)';
 		$query .=', account_id char(36)';
 		$query .=', deleted bool NOT NULL default 0';
 		$query .=', PRIMARY KEY ( ID ) )';
-	
+
 		$this->db->query($query, true, "Error creating account/opportunity relationship table: " );
 
 
@@ -166,7 +166,7 @@ class Opportunity extends SugarBean {
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
 
 	}
-	
+
 	function get_summary_text()
 	{
 		return "$this->name";
@@ -182,23 +182,23 @@ class Opportunity extends SugarBean {
 			$query = "SELECT opportunities.id, opportunities.assigned_user_id, opportunities.name, opportunities.date_closed FROM opportunities, accounts_opportunities a_o, accounts ";
 			$where_auto = "a_o.opportunity_id = opportunities.id AND a_o.account_id = accounts.id AND a_o.deleted=0 AND accounts.deleted=0 AND opportunities.deleted=0";
 		}
-		else 
+		else
 		{
 			$query = 'SELECT id, name, assigned_user_id, date_closed FROM opportunities ';
 			$where_auto = 'opportunities.deleted=0';
 		}
-		
+
 		if($where != "")
 			$query .= "where $where AND ".$where_auto;
-		else 
-			$query .= "where ".$where_auto;		
+		else
+			$query .= "where ".$where_auto;
 
 		if($order_by != "")
 			$query .= " ORDER BY opportunities.$order_by";
-		else 
-			$query .= " ORDER BY opportunities.name";			
+		else
+			$query .= " ORDER BY opportunities.name";
 
-		
+
 
 		return $query;
 	}
@@ -237,34 +237,34 @@ class Opportunity extends SugarBean {
 	function save_relationship_changes($is_update)
     {
     	$this->clear_opportunity_account_relationship($this->id);
-    	
+
 		if($this->account_id != "")
     	{
-    		$this->set_opportunity_account_relationship($this->id, $this->account_id);    	
+    		$this->set_opportunity_account_relationship($this->id, $this->account_id);
     	}
     	if($this->contact_id != "")
     	{
-    		$this->set_opportunity_contact_relationship($this->id, $this->contact_id);    	
+    		$this->set_opportunity_contact_relationship($this->id, $this->contact_id);
     	}
     	if($this->task_id != "")
     	{
-    		$this->set_opportunity_task_relationship($this->id, $this->task_id);    	
+    		$this->set_opportunity_task_relationship($this->id, $this->task_id);
     	}
     	if($this->note_id != "")
     	{
-    		$this->set_opportunity_note_relationship($this->id, $this->note_id);    	
+    		$this->set_opportunity_note_relationship($this->id, $this->note_id);
     	}
     	if($this->meeting_id != "")
     	{
-    		$this->set_opportunity_meeting_relationship($this->id, $this->meeting_id);    	
+    		$this->set_opportunity_meeting_relationship($this->id, $this->meeting_id);
     	}
     	if($this->call_id != "")
     	{
-    		$this->set_opportunity_call_relationship($this->id, $this->call_id);    	
+    		$this->set_opportunity_call_relationship($this->id, $this->call_id);
     	}
     	if($this->email_id != "")
     	{
-    		$this->set_opportunity_email_relationship($this->id, $this->email_id);    	
+    		$this->set_opportunity_email_relationship($this->id, $this->email_id);
     	}
     }
 
@@ -280,7 +280,7 @@ class Opportunity extends SugarBean {
 		$query = "UPDATE accounts_opportunities set deleted=1 where opportunity_id='$opportunity_id' and deleted=0";
 		$this->db->query($query, true, "Error clearing account to opportunity relationship: ");
 	}
-    
+
 	function set_opportunity_contact_relationship($opportunity_id, $contact_id)
 	{
 		global $app_list_strings;
@@ -288,14 +288,14 @@ class Opportunity extends SugarBean {
 		$query = "insert into opportunities_contacts set id='".create_guid()."', opportunity_id='$opportunity_id', contact_id='$contact_id', contact_role='$default'";
 		$this->db->query($query, true, "Error setting opportunity to contact relationship: ");
 	}
-	
+
 	function clear_opportunity_contact_relationship($opportunity_id)
 	{
 		$query = "UPDATE opportunities_contacts set deleted=1 where opportunity_id='$opportunity_id' and deleted=0";
 		$this->db->query($query, true, "Error marking record deleted: ");
 
 	}
-		
+
 	function set_opportunity_task_relationship($opportunity_id, $task_id)
 	{
 		$query = "UPDATE tasks set parent_id='$opportunity_id', parent_type='Opportunities' where id='$task_id'";
@@ -307,7 +307,7 @@ class Opportunity extends SugarBean {
 	{
 		$query = "UPDATE tasks set parent_id='', parent_type='' where parent_id='$opportunity_id'";
 		$this->db->query($query, true, "Error clearing opportunity to task relationship: ");
-		
+
 	}
 
 	function set_opportunity_note_relationship($opportunity_id, $note_id)
@@ -368,7 +368,7 @@ class Opportunity extends SugarBean {
 		$this->clear_opportunity_call_relationship($id);
 		$this->clear_opportunity_email_relationship($id);
 	}
-	
+
 	function fill_in_additional_list_fields()
 	{
 		// Fill in the assigned_user_name
@@ -388,7 +388,7 @@ class Opportunity extends SugarBean {
 		}
 		$this->fill_in_additional_detail_fields();
 	}
-	
+
 	function fill_in_additional_detail_fields()
 	{
 		// Fill in the assigned_user_name
@@ -405,15 +405,15 @@ class Opportunity extends SugarBean {
 			$this->account_name = stripslashes($row['name']);
 			$this->account_id 	= stripslashes($row['id']);
 		}
-		else 
+		else
 		{
 			$this->account_name = '';
 			$this->account_id = '';
-		}		
+		}
 
 	}
-	
-	
+
+
 	/** Returns a list of the associated contacts
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
@@ -425,11 +425,11 @@ class Opportunity extends SugarBean {
 		$query = "SELECT c.id, c.first_name, c.last_name, c.title, c.yahoo_id, c.email1, c.phone_work, o_c.contact_role as opportunity_role, o_c.id as opportunity_rel_id ".
 				 "from opportunities_contacts o_c, contacts c ".
 				 "where o_c.opportunity_id = '$this->id' and o_c.deleted=0 and c.id = o_c.contact_id AND c.deleted=0 order by c.last_name";
-		
+
 	    $temp = Array('id', 'first_name', 'last_name', 'title', 'yahoo_id', 'email1', 'phone_work', 'opportunity_role', 'opportunity_rel_id');
 		return $this->build_related_list2($query, new Contact(), $temp);
 	}
-	
+
 	/** Returns a list of the associated tasks
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
@@ -439,10 +439,10 @@ class Opportunity extends SugarBean {
 	{
 		// First, get the list of IDs.
 		$query = "SELECT id from tasks where parent_id='$this->id' AND deleted=0";
-		
+
 		return $this->build_related_list($query, new Task());
 	}
-	
+
 	/** Returns a list of the associated notes
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
@@ -452,10 +452,10 @@ class Opportunity extends SugarBean {
 	{
 		// First, get the list of IDs.
 		$query = "SELECT id from notes where parent_id='$this->id' AND deleted=0";
-		
+
 		return $this->build_related_list($query, new Note());
 	}
-	
+
 	/** Returns a list of the associated meetings
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
@@ -465,10 +465,10 @@ class Opportunity extends SugarBean {
 	{
 		// First, get the list of IDs.
 		$query = "SELECT id from meetings where parent_id='$this->id' AND deleted=0";
-		
+
 		return $this->build_related_list($query, new Meeting());
 	}
-	
+
 	/** Returns a list of the associated calls
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
@@ -478,7 +478,7 @@ class Opportunity extends SugarBean {
 	{
 		// First, get the list of IDs.
 		$query = "SELECT id from calls where parent_id='$this->id' AND deleted=0";
-		
+
 		return $this->build_related_list($query, new Call());
 	}
 
@@ -491,14 +491,14 @@ class Opportunity extends SugarBean {
 	{
 		// First, get the list of IDs.
 		$query = "SELECT id from emails where parent_id='$this->id' AND deleted=0";
-		
+
 		return $this->build_related_list($query, new Email());
 	}
-	
+
 	function get_list_view_data(){
 		global $current_language;
 		$app_strings = return_application_language($current_language);
-		return  Array( 
+		return  Array(
 					'ID' => $this->id,
 					'NAME' => (($this->name == "") ? "<em>blank</em>" : $this->name),
 					'AMOUNT' => $app_strings['LBL_CURRENCY_SYMBOL'].$this->amount,
@@ -525,13 +525,13 @@ class Opportunity extends SugarBean {
 		$the_where .= $clause;
 	}
 
-	
+
 	return $the_where;
 }
 
 
-	
-	
+
+
 
 }
 

@@ -120,7 +120,7 @@ class Lead extends SugarBean {
 
 	// This is the list of fields that are in the lists.
 	
-	var $list_fields = Array('id', 'first_name', 'last_name', 'company' , 'phone','website', 'email', 'yahoo_id', 'assigned_user_name', 'assigned_user_id');
+	var $list_fields = Array('id', 'first_name', 'last_name', 'company' , 'phone','website', 'email', 'yahoo_id', 'assigned_user_name', 'assigned_user_id','lead_status');
 	
 
 	function Lead() {

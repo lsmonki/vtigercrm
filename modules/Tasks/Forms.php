@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Tasks/Forms.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Tasks/Forms.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -228,7 +228,7 @@ $the_form .= <<<EOQ
 			<input type="hidden" name="date_due_flag">
 		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>${mod_strings['LBL_NEW_FORM_SUBJECT']}<br>
 		<input name='name' type="text" value=""><br>
-		${mod_strings['LBL_NEW_FORM_DUE_DATE']}&nbsp;<font size="1"><em>${app_strings['NTC_DATE_FORMAT']}</em></font><br>
+		${mod_strings['LBL_NEW_FORM_DUE_DATE']}&nbsp;<font size="1"><em old="{app_strings['NTC_DATE_FORMAT']}">(yyyy-mm-dd)</em></font><br>
 		<input name='date_due' maxlength="10" id='jscal_field' type="text" value=""> <img src="themes/$theme/images/calendar.gif" id="jscal_trigger"><br>
 		${mod_strings['LBL_NEW_FORM_DUE_TIME']}&nbsp;<font size="1"><em>${mod_strings['LBL_NEW_TIME_FORMAT']}</em></font><br>
 		<input name='time_due' maxlength='5' type="text"><br><br>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Save.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Save.php,v 1.3 2004/11/05 04:40:51 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -43,8 +43,26 @@ if(strtolower($current_user->is_admin) == 'off'  && isset($_POST['is_admin']) &&
 	}
 	
 if (isset($_POST['user_name']) && isset($_POST['old_password']) && isset($_POST['new_password'])) {
-	if (!$focus->change_password($_POST['old_password'], $_POST['new_password'])) {
-		header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
+		
+		//changing fourm password	
+		define('IN_PHPBB', 1);
+		
+		$phpbb_root_path = "modules/MessageBoard/";
+		require($phpbb_root_path . 'extension.inc');
+		include($phpbb_root_path . 'common.php');
+		
+		$new_pass = $_POST['new_password'];
+		$new_pass = md5($new_pass);
+		$uname = $_POST['user_name'];
+		$sql = "UPDATE " . USERS_TABLE . " SET user_password = '$new_pass' WHERE username = '$uname'";
+		if (!($result = $db->sql_query($sql)) )
+		{
+			message_die(GENERAL_ERROR, 'Could not update user password', '', __LINE__, __FILE__, $sql);
+		}
+		//
+		if (!$focus->change_password($_POST['old_password'], $_POST['new_password'])) {
+		
+			header("Location: index.php?action=Error&module=Users&error_string=".urlencode($focus->error_string));
 		exit;
 	}
 }  
@@ -78,6 +96,7 @@ else {
 	}
 	else {	
 		$focus->save();
+		include("modules/Users/forum_register.php");	
 		$return_id = $focus->id;
 	}
 }
@@ -88,6 +107,5 @@ else $return_action = "DetailView";
 if(isset($_POST['return_id']) && $_POST['return_id'] != "") $return_id = $_POST['return_id'];
 
 $log->debug("Saved record with id of ".$return_id);
-
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 ?>

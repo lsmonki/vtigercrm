@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/2setConfig.php,v 1.23 2004/10/06 09:02:03 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/2setConfig.php,v 1.29 2004/11/05 16:14:35 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 require_once("connection.php");
@@ -22,7 +22,7 @@ $web_root = $_SERVER['SERVER_NAME']. ":" .$_SERVER['SERVER_PORT'].$_SERVER['PHP_
 $web_root = str_replace("/install.php", "", $web_root);
 $web_root = "http://$web_root";
 $current_dir = pathinfo(dirname(__FILE__));
-$current_dir=$current_dir['dirname'];
+$current_dir=$current_dir['dirname']."/";
 $cache_dir = "cache/";
 
 // To make MySQL run in desired port  
@@ -33,6 +33,10 @@ if (is_file("config.php")) {
 	require_once("config.php");
 	
 	session_start();
+	if(isset($upload_maxsize))
+                 $_SESSION['upload_maxsize'] = $upload_maxsize;
+         if(isset($allow_exports))
+                 $_SESSION['allow_exports'] = $allow_exports;
 	if(isset($disable_persistent_connections))
 		$_SESSION['disable_persistent_connections'] = $disable_persistent_connections;
 	if(isset($default_language))
@@ -95,7 +99,7 @@ if (is_file("config.php")) {
 		$db_name = $dbconfig['db_name'];
 	}
 	else {
-		$db_name = 'vtigercrm';
+		$db_name = 'vtigercrm3_0';
 	}
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	
@@ -106,6 +110,9 @@ if (is_file("config.php")) {
 	if (isset($_REQUEST['root_directory'])) $root_directory = stripslashes($_REQUEST['root_directory']);
 	else $root_directory = $current_dir;
 	if (isset($_REQUEST['cache_dir'])) $cache_dir= $_REQUEST['cache_dir'];
+	if (isset($_REQUEST['mail_server'])) $mail_server= $_REQUEST['mail_server'];
+	if (isset($_REQUEST['mail_server_username'])) $mail_server_username= $_REQUEST['mail_server_username'];
+	if (isset($_REQUEST['mail_server_password'])) $mail_server_password= $_REQUEST['mail_server_password'];
 	if (isset($_REQUEST['admin_email'])) $admin_email = $_REQUEST['admin_email'];
 	if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
 }
@@ -113,12 +120,16 @@ else {
 	!isset($_REQUEST['db_host_name']) ? $db_host_name = $H_NAME.$sock_path : $db_host_name = $_REQUEST['db_host_name'];
 	!isset($_REQUEST['db_user_name']) ? $db_user_name = $mysql_username : $db_user_name = $_REQUEST['db_user_name'];
 	!isset($_REQUEST['db_password']) ? $db_password= $mysql_password : $db_password = $_REQUEST['db_password'];
-	!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm" : $db_name = $_REQUEST['db_name'];
+	!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm3_0" : $db_name = $_REQUEST['db_name'];
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	!isset($_REQUEST['host_name']) ? $host_name= $_SERVER['SERVER_NAME'] : $host_name= $_REQUEST['host_name'];
 	!isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];
 	!isset($_REQUEST['root_directory']) ? $root_directory = $current_dir : $root_directory = stripslashes($_REQUEST['root_directory']);
 	!isset($_REQUEST['cache_dir']) ? $cache_dir = $cache_dir : $cache_dir = stripslashes($_REQUEST['cache_dir']);
+	
+	!isset($_REQUEST['mail_server']) ? $mail_server = $mail_server : $mail_server = stripslashes($_REQUEST['mail_server']);
+	!isset($_REQUEST['mail_server_username']) ? $mail_server_username = $mail_server_username : $mail_server_username = stripslashes($_REQUEST['mail_server_username']);
+	!isset($_REQUEST['mail_server_password']) ? $mail_server_password = $mail_server_password : $mail_server_password = stripslashes($_REQUEST['mail_server_password']);
 	!isset($_REQUEST['admin_email']) ? $admin_email = "" : $admin_email = $_REQUEST['admin_email'];
 }
 
@@ -175,6 +186,13 @@ function verify_data(form) {
 		errorMessage += "\n path";
 		form.root_directory.focus(); 
 	}
+
+	 if (trim(form.admin_email.value) =='') {
+                isError = true;
+                errorMessage += "\n admin email";
+                form.admin_email.focus();
+        }
+
 	if (trim(form.admin_password.value) =='') {
 		isError = true;
 		errorMessage += "\n admin password";
@@ -185,6 +203,30 @@ function verify_data(form) {
                 errorMessage += "\n temp directory path";
                 form.root_directory.focus();
         }
+	if (trim(form.mail_server.value) =='') {
+                isError = true;
+                errorMessage += "\n mail server name";
+                form.mail_server.focus();
+        }
+
+
+ if (trim(form.mail_server_username.value) =='') {
+                isError = true;
+                errorMessage += "\n mail server username";
+                form.mail_server_username.focus();
+        }
+
+
+ if (trim(form.mail_server_password.value) =='') {
+                isError = true;
+                errorMessage += "\n mail server password";
+                form.mail_server_password.focus();
+        }
+
+
+
+
+
 
 	// Here we decide whether to submit the form.
 	if (isError == true) {
@@ -260,11 +302,11 @@ function verify_data(form) {
                <td><font color=red>*</font></td><td nowrap><strong>MySQL Database Name</strong></td>
                <td align="left"><input type="text" class="dataInput" name="db_name" readonly value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
               </tr>
-              <tr>
+              <!-- tr>
                <td></td><td nowrap><strong>Drop Existing Tables?</strong></td>
                <td align="left"><input type="checkbox" name="db_drop_tables" 
 			   <?php if (isset($db_drop_tables) && $db_drop_tables==true) echo "checked "; ?> value="$db_drop_tables"/></td> 
-              </tr>
+              </tr -->
 			<tr><td>&nbsp;</td></tr>
               <tr>
 			<td colspan="3" class="moduleTitle" noWrap>Site Configuration</td>
@@ -297,9 +339,28 @@ function verify_data(form) {
             <td colspan=3><font color=blue>( the default password is 'admin'. You can change the password if necessary now or else you can change it from the Admin page inside the vtiger CRM )</font></td>
         </tr>
           <tr>
-            <td></td><td nowrap><strong>email address<strong></td>
+            <td><font color=red>*</font></td><td nowrap><strong>email address<strong></td>
             <td align="left"><input class="dataInput" type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" size="40" /></td>
-   	      </tr></tbody>
+   	      </tr>
+	     <tr>
+            	<td><font color=red>*</font></td><td nowrap><strong>OutGoing Mail Server</strong></td>
+            	<td align="left"><input class="dataInput" type="text" name="mail_server" size='14' value="<?php if (isset($mail_server)) echo $mail_server; ?>" size="40" />
+             </tr>
+
+	 <tr>
+                <td><font color=red>*</font></td><td nowrap><strong>OutGoing Mail Server Login User Name</strong></td>
+                <td align="left"><input class="dataInput" type="text" name="mail_server_username" size='14' value="<?php if (isset($mail_server_username)) echo $mail_server_username; ?>" size="40" />
+             </tr>
+
+
+ <tr>
+                <td><font color=red>*</font></td><td nowrap><strong>OutGoing Mail Server Password</strong></td>
+                <td align="left"><input class="dataInput" type="text" name="mail_server_password" size='14' value="<?php if (isset($mail_server_password)) echo $mail_server_password; ?>" size="40" />
+             </tr>
+
+
+
+		</tbody>
 			</table>
 		  </td></tr>
           <tr>

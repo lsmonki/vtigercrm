@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -468,12 +468,14 @@ class Email extends SugarBean {
 
 		$query = "UPDATE $this->rel_contacts_table set deleted=1 where email_id='$id'";
 		$this->db->query($query,true,"Error marking record deleted: ");
+		/*
 		$query = "UPDATE $this->rel_cases_table set deleted=1 where email_id='$id'";
 		$this->db->query($query,true,"Error marking record deleted: ");
 		$query = "UPDATE $this->rel_accounts_table set deleted=1 where email_id='$id'";
 		$this->db->query($query,true,"Error marking record deleted: ");
 		$query = "UPDATE $this->rel_opportunities_table set deleted=1 where email_id='$id'";
 		$this->db->query($query,true,"Error marking record deleted: ");
+		*/
 		
 	}
 	
@@ -490,18 +492,24 @@ class Email extends SugarBean {
 	}
 	function mark_email_case_relationship_deleted($id, $email_id)
 	{
+	/*
 		$query = "UPDATE $this->rel_cases_table set deleted=1 where case_id='$id' and email_id='$email_id' and deleted=0";
 		$this->db->query($query,true,"Error clearing email to user relationship: ");
+	*/
 	}
 	function mark_email_account_relationship_deleted($id, $email_id)
 	{
+	/*
 		$query = "UPDATE $this->rel_accounts_table set deleted=1 where account_id='$id' and email_id='$email_id' and deleted=0";
 		$this->db->query($query,true,"Error clearing email to user relationship: ");
+	*/
 	}
 	function mark_email_opportunity_relationship_deleted($id, $email_id)
 	{
+	/*
 		$query = "UPDATE $this->rel_opportunities_table set deleted=1 where opportunity_id='$id' and email_id='$email_id' and deleted=0";
 		$this->db->query($query,true,"Error clearing email to user relationship: ");
+	*/
 	}
 	function get_list_view_data(){
 		$email_fields = $this->get_list_view_array();

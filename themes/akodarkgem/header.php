@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/akodarkgem/header.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/akodarkgem/header.php,v 1.6 2004/11/08 12:29:59 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -37,6 +37,16 @@ require_once($module_path.'Menu.php');
 global $module_menu;
 
 $xtpl=new XTemplate ($theme_path."header.html");
+
+/* Forum Display
+$displayForums = $_REQUEST['forumDisplay'];
+if($displayForums == "")
+{
+	$displayForums = true;
+}
+if($displayForums == "true")
+$xtpl->assign("FORUM", "<script language=\"JavaScript\" type=\"text/javascript\" src=\"http://www.vtiger.com/forums/vtcrm_topicsanywhere.php?mode=show&f=uMSwyLDMsNyw5&n=5&jlp=y&a=y&s=y&l=y&m=y&h='a\'s\'m\&b=non&lpd=0&lpi=y&ch=30&cl=style.css\"></script><br>");
+*/
 $xtpl->assign("APP", $app_strings);
 
 if(isset($app_strings['LBL_CHARSET']))
@@ -135,6 +145,12 @@ if ($currentModule && $action == "index" && function_exists('get_new_record_form
 	$xtpl->assign("NEW_RECORD", get_new_record_form());
 	$xtpl->parse("main.left_form_new_record");
 }
+//added for shoutbox feature
+//require_once("modules/MessageBoard/shoutbox_pre.php");
+//require_once("../../../modules/MessageBoard/shoutbox_pre.php");
+//        $howmanychat = howmanyChat();
+ //       $chatters = chattersMain();
+
 
 $xtpl->parse("main");
 $xtpl->out("main");

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Calls/ListView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Calls/ListView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -85,18 +85,18 @@ if(isset($_REQUEST['query']))
 
 	if(isset($name) && $name != '')
 	{
-		array_push($where_clauses, "calls.name like '$name%'");
+		array_push($where_clauses, "calls.name like '".PearDatabase::quote($name)."%'");
 	}
 	if(isset($contact_name) && $contact_name != '')
 	{
 		$contact_names = explode(" ", $contact_name);
 		foreach ($contact_names as $name) {
-			array_push($where_clauses, "(contacts.first_name like '$name%' OR contacts.last_name like '$name%')");
+			array_push($where_clauses, "(contacts.first_name like '".PearDatabase::quote($name)."%' OR contacts.last_name like '".PearDatabase::quote($name)."%')");
 		}
 	}
 	if(isset($date_start) && $date_start != '')
 	{
-		array_push($where_clauses, "calls.date_start like '$date_start%'");
+		array_push($where_clauses, "calls.date_start like '".PearDatabase::quote($date_start)."%'");
 	}
 
 	$where = "";

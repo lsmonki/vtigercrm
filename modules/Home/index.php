@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Home/index.php,v 1.3 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Home/index.php,v 1.4 2004/11/02 10:22:19 jack Exp $
  * Description:  Main file for the Home module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -51,3 +51,6 @@ $task_title = $mod_strings['LBL_OPEN_TASKS'];
 <td valign="top"><?php include("modules/Tasks/ListView.php") ;?></td>
 </tr>
 </table>
+<?
+ include($phpbb_root_path .'login.php');
+?>

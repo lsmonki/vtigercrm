@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.8 2004/10/06 09:02:03 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.10 2004/11/03 09:32:27 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -26,6 +26,9 @@ if (isset($_REQUEST['site_URL'])) $site_URL 			= $_REQUEST['site_URL'];
 if (isset($_REQUEST['admin_email'])) $admin_email 		= $_REQUEST['admin_email'];
 if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
 if (isset($_REQUEST['cache_dir'])) $cache_dir           = $_REQUEST['cache_dir'];
+if (isset($_REQUEST['mail_server'])) $mail_server           = $_REQUEST['mail_server'];
+if (isset($_REQUEST['mail_server_username'])) $mail_server_username           = $_REQUEST['mail_server_username'];
+if (isset($_REQUEST['mail_server_password'])) $mail_server_password           = $_REQUEST['mail_server_password'];
 if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_directory']; 
 
 ?>
@@ -111,6 +114,27 @@ if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_direct
                <td noWrap>Cache Path</td>
                <td align="left" nowrap>: <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.'\\'.$cache_dir; ?></font></td>
               </tr>
+
+	  <tr>
+               <td noWrap>Mail Server Name</td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($mail_server)) echo $mail_server; ?></font></td>
+              </tr>
+
+
+	 <tr>
+               <td noWrap>Mail Server Login User Name</td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($mail_server_username)) echo $mail_server_username; ?></font></td>
+              </tr>
+
+
+ <tr>
+               <td noWrap>Mail Server Name Login Password</td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($mail_server_password)) echo $mail_server_password; ?></font></td>
+              </tr>
+
+
+
+
               <tr>
                <td noWrap>Admin Password</td>
                <td align="left" nowrap>: <font class="dataInput"><?php if (isset($admin_password)) echo ereg_replace('.', '*', $admin_password); ?></font></td>
@@ -136,6 +160,13 @@ if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_direct
              <input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
              <input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
 			 <input type="hidden" class="dataInput" name="cache_dir" value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" />
+			 <input type="hidden" class="dataInput" name="mail_server" value="<?php if (isset($maill_server)) echo $mail_server; ?>" />
+
+			<input type="hidden" class="dataInput" name="mail_server_username" value="<?php if (isset($maill_server_username)) echo $mail_server_username; ?>" />
+
+<input type="hidden" class="dataInput" name="mail_server_password" value="<?php if (isset($maill_server_password)) echo $mail_server_password; ?>" />
+
+
 			 <input class="button" type="submit" name="next" value="Change" /></td>
 			</form>
 		 </td></tr>
@@ -162,6 +193,13 @@ if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_direct
              <input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
              <input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
 			 <input type="hidden" class="dataInput" name="cache_dir" value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" />
+			 <input type="hidden" class="dataInput" name="mail_server" value="<?php if (isset($mail_server)) echo $mail_server; ?>" />
+
+		  <input type="hidden" class="dataInput" name="mail_server_username" value="<?php if (isset($mail_server_username)) echo $mail_server_username; ?>" />
+
+
+	  <input type="hidden" class="dataInput" name="mail_server_password" value="<?php if (isset($mail_server_password)) echo $mail_server_password; ?>" />
+
 			 <input class="button" type="submit" name="next" value="Create" />
 			</td>
           </tr>

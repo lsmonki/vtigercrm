@@ -30,16 +30,9 @@ function get_validate_import_fields_js (&$req_fields,&$all_fields)
 	$err_required = $mod_strings['ERR_MISSING_REQUIRED_FIELDS']; 
 	$err_select_full_name = $mod_strings['ERR_SELECT_FULL_NAME']; 
 	$print_required_array = "";
-	$first = 1;
 
 	foreach ($req_fields as $required=>$unused)
 	{
-		if ($first == 0)
-		{
-			$print_required_array .= ",";
-		}
-
-		$first = 0;
 		$print_required_array .= "required['$required'] = '". $all_fields[$required] . "';\n";
 		
 	}
@@ -262,7 +255,7 @@ function set_readonly(form)
 // end hiding contents from old browsers  -->
 </script>
 
-<?
+<?php
 }
 
 

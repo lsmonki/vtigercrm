@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/utils.php,v 1.3 2004/10/06 09:02:02 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/utils.php,v 1.5 2004/11/04 05:54:41 jack Exp $
  * Description:  Includes generic helper functions used throughout the application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -109,7 +109,7 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="")
 		if (!empty($assigned_user)) {
 			 $query .= " OR id='$assigned_user'";
 		}
-		$log->debug("get_user_array query: $query");
+		//$log->debug("get_user_array query: $query");
 		$result = $db->query($query, true, "Error filling in user array: ");
 
 		if ($add_blank==true){
@@ -523,7 +523,7 @@ function get_theme_display($theme) {
 function get_themes() {
    if ($dir = @opendir("./themes")) {
 		while (($file = readdir($dir)) !== false) {
-		if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic" && $file != "akodarkgem" && $file != "bushtree" && $file != "coolblue") {
+           if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic" && $file != "akodarkgem" && $file != "bushtree" && $file != "coolblue") {
 			   if(is_dir("./themes/".$file)) {
 				   if(!($file[0] == '.')) {
 				   	// set the initial theme name to the filename
@@ -552,6 +552,7 @@ function get_themes() {
 }
 
 /**
+ * THIS FUNCTION IS DEPRECATED AND SHOULD NOT BE USED; USE get_select_options_with_id()
  * Create HTML to display select options in a dropdown list.  To be used inside
  * of a select statement in a form.
  * param $option_list - the array of strings to that contains the option list
@@ -561,21 +562,7 @@ function get_themes() {
  * Contributor(s): ______________________________________..
  */
 function get_select_options (&$option_list, $selected) {
-	global $app_strings;
-	$select_options = "";
-
-	//for setting null selection values to human readable --None--
-	$pattern = "/''></";
-	$replacement = "''>".$app_strings['LBL_NONE']."<";
-
-	//create the type dropdown domain and set the selected value if $opp value already exists
-	foreach ($option_list as $option) {
-		if ($selected == $option) $select_options .= "\n<OPTION selected value='$option'>$option</OPTION>";
-		else $select_options .= "\n<OPTION value='$option'>$option</OPTION>";
-	}
-	$select_options = preg_replace($pattern, $replacement, $select_options);
-
-	return $select_options;
+	return get_select_options_with_id(&$option_list, $selected);
 }
 
 /**
@@ -609,14 +596,14 @@ function get_select_options_with_id_separate_key (&$label_list, &$key_list, $sel
 	//for setting null selection values to human readable --None--
 	$pattern = "/'0?'></";
 	$replacement = "''>".$app_strings['LBL_NONE']."<";
+	if (!is_array($selected_key)) $selected_key = array($selected_key);
 
 	//create the type dropdown domain and set the selected value if $opp value already exists
 	foreach ($key_list as $option_key=>$option_value) {
-
 		$selected_string = '';
 		// the system is evaluating $selected_key == 0 || '' to true.  Be very careful when changing this.  Test all cases.
 		// The reported bug was only happening with one of the users in the drop down.  It was being replaced by none.
-		if (($option_key != '' && $selected_key == $option_key) || ($selected_key == '' && $option_key == '') || (@in_array($option_key, $selected_key)))
+		if (($option_key != '' && $selected_key == $option_key) || ($selected_key == '' && $option_key == '') || (in_array($option_key, $selected_key)))
 		{
 			$selected_string = 'selected ';
 		}
@@ -735,9 +722,41 @@ function array_csort() {
  * Contributor(s): ______________________________________..
  */
 function parse_calendardate($local_format) {
+	/* temporarily disabled until international date formats are fixed
 	preg_match("/\(?([^-]{1})[^-]*-([^-]{1})[^-]*-([^-]{1})[^-]*\)/", $local_format, $matches);
-	$calendar_format = "%" . $matches[1] . "-%" . $matches[2] . "-%" . $matches[3];
-	return str_replace(array("y", "å", "a", "j"), array("Y", "Y", "Y", "d"), $calendar_format);
+	if (isset($matches[1]) && isset($matches[2]) && isset($matches[3])) {
+		$calendar_format = "%" . $matches[1] . "-%" . $matches[2] . "-%" . $matches[3];
+		return str_replace(array("y", "å", "a", "j"), array("Y", "Y", "Y", "d"), $calendar_format);
+	}
+	else {
+		return "%Y-%m-%d";
+	} */
+
+	return "%Y-%m-%d";
 }
+
+function set_default_config(&$defaults)
+{
+
+	foreach ($defaults as $name=>$value)
+	{
+		if ( ! isset($GLOBALS[$name]) )
+		{
+			$GLOBALS[$name] = $value;
+		}
+	}
+}
+function to_html($string, $encode=true){
+	
+	if($encode && is_string($string))$string = htmlentities($string, ENT_QUOTES);
+	return $string;	
+}
+
+function from_html($string, $encode=true){
+	
+	if($encode && is_string($string))$string = html_entity_decode($string, ENT_QUOTES);
+	return $string;	
+}
+
 
 ?>

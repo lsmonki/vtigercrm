@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.19 2004/10/07 09:33:14 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.22 2004/11/04 11:38:18 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -295,6 +295,24 @@ if ($db_populate)
         include("install/populateSeedData.php");
         echo "...<font color=\"00CC00\">done</font><BR><P>\n";
 }
+
+//populating forums data
+global $log, $db;
+$db->query("update phpbb_config set config_value='".$admin_email."' where config_name='board_email'");
+
+$db->query("update phpbb_config set config_value='modules/MessageBoard/images/smiles' where config_name='smilies_path'");
+
+$db->query("update phpbb_config set config_value='".$server_name."' where config_name='server_name'");
+
+$db->query("update phpbb_config set config_value='".$server_port."' where config_name='server_port'");
+
+
+$db->query("update phpbb_config set config_value='modules/MessageBoard' where config_name='script_path'");
+
+$curr_time=time();
+$db->query("insert phpbb_config values('board_startdate','".$curr_time."')");
+
+$db->query("insert phpbb_config values('default_lang', 'english')");
 
 $endTime = microtime();
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/ListViewTop.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/ListViewTop.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -35,7 +35,7 @@ $where = "opportunities.sales_stage <> 'Closed Won' AND opportunities.sales_stag
 $ListView = new ListView();
 $ListView->initNewXTemplate( 'modules/Opportunities/ListViewTop.html',$current_module_strings);
 $ListView->setHeaderTitle($current_module_strings['LBL_TOP_OPPORTUNITIES'] );
-$ListView->setQuery($where, 5, "amount * 1 DESC", "OPPORTUNITY");
+$ListView->setQuery($where, 5, "amount * 1 DESC", "OPPORTUNITY", false);
 $ListView->processListView($seedOpportunity, "main", "OPPORTUNITY");
 
 ?>

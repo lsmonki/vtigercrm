@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Charts.php,v 1.4 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Charts.php,v 1.5 2004/10/29 09:55:09 jack Exp $
  * Description:  Includes the functions for Customer module specific charts.
  ********************************************************************************/
 
@@ -42,16 +42,25 @@ DEFINE("FF_CHINESE",31);
 DEFINE("FF_BIG5",31);
 */
 
-function calculate_font_family($charset)
+function calculate_font_family($locale)
+
 {
-	switch($charset)
+
+	switch($locale)
 	{
-		case 'gb2312':
+		case 'cn_zh':
 			return FF_SIMSUN;
+		case 'tw_zh':
+			if(!function_exists('iconv')){
+				echo " Unable to display traditional Chinese on the graphs.<BR>The function iconv does not exists please read more about <a href='http://us4.php.net/iconv'>iconv here</a><BR>";
+				return FF_FONT1;
+
+			}
+			else return FF_CHINESE;
 		default:
 			return FF_FONT1;
 	}
-	
+
 	return FF_FONT1;
 }
 
@@ -65,29 +74,29 @@ class jpgraph {
 	 * Contributor(s): ______________________________________..
 	 */
 	function outcome_by_month($date_start='1971-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
-		global $app_strings, $app_list_strings, $current_module_strings, $log, $charset, $tmp_dir;
+		global $app_strings,$lang, $app_list_strings, $current_module_strings, $log, $charset, $tmp_dir;
 		include_once ("jpgraph/src/jpgraph_bar.php");
-		
+
 		// Size of graph
-		$width=600; 
+		$width=600;
 		$height=400;
-		
+
 		$log =& LoggerManager::getLogger('outcome_by_month chart');
-		// Set the basic parameters of the graph 
+		// Set the basic parameters of the graph
 		$graph = new Graph($width,$height,$cache_file_name);
 		$log->debug("graph object created");
 
 		$graph->SetScale("textlin");
 
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
-			$font = calculate_font_family($charset);
-	
+			$font = calculate_font_family($lang);
+
 			$log->debug("date_start is: $date_start");
 			$log->debug("date_end is: $date_end");
 			$log->debug("user_id is: ");
 			$log->debug($user_id);
 			$log->debug("cache_file_name is: $cache_file_name");
-			
+
 			//build the where clause for the query that matches $user
 			$where = "(";
 			$first = true;
@@ -98,16 +107,16 @@ class jpgraph {
 				$where .= "assigned_user_id='$the_id' ";
 			}
 			$where .= ") ";
-		
+
 			//build the where clause for the query that matches $date_start and $date_end
 			$where .= "AND date_closed >= '$date_start' AND date_closed <= '$date_end'";
 			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".$date_start." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".$date_end."\n";
-						
+
 			//Now do the db queries
 			//query for opportunity data that matches $datay and $user
 			$opp = new Opportunity();
 			$opp_list = $opp->get_full_list("amount DESC, date_closed DESC", $where);
-			
+
 			//build pipeline by sales stage data
 			$total = 0;
 			$count = array();
@@ -124,14 +133,14 @@ class jpgraph {
 					else {
 						$sales_stage=$other;
 					}
-					
+
 					if (!isset($sum[$month][$sales_stage])) {
 						$sum[$month][$sales_stage] = 0;
 					}
 					if (isset($record->amount))	{
 						// Strip all non numbers from this string.
 						$amount = ereg_replace('[^0-9]', '', $record->amount);
-						$sum[$month][$sales_stage] = $sum[$month][$sales_stage] + $amount;  
+						$sum[$month][$sales_stage] = $sum[$month][$sales_stage] + $amount;
 						if (isset($count[$month][$sales_stage])) {
 							$count[$month][$sales_stage]++;
 						}
@@ -142,7 +151,7 @@ class jpgraph {
 					}
 				}
 			}
-			
+
 			$legend = array();
 			$datax = array();
 			$aTargets = array();
@@ -167,7 +176,7 @@ class jpgraph {
 				if (!isset($aTargets[$stage])) {
 					$aTargets[$stage] = array();
 				}
-	
+
 				if (isset($sum[$month][$stage])) {
 					array_push($datax[$stage], $sum[$month][$stage]/1000);
 					array_push($aAlts[$stage], $count[$month][$stage]." ".$current_module_strings['LBL_OPPS_OUTCOME']." $stage");
@@ -180,7 +189,7 @@ class jpgraph {
 			  }
 		  	  array_push($legend,$month);
 			}
-	
+
 			$log->debug("datax is:");
 			$log->debug($datax);
 			$log->debug("aAlts is:");
@@ -191,7 +200,7 @@ class jpgraph {
 			$log->debug($sum);
 			$log->debug("count is:");
 			$log->debug($count);
-		
+
 			//now build the bar plots for each user across the sales stages
 			$bplot = array();
 			$color = array('Closed Lost'=>'993366','Closed Won'=>'009933', $other=>'336699');
@@ -199,13 +208,13 @@ class jpgraph {
 			foreach($stages as $stage) {
 				// Now create a bar pot
 				$bplot[$index] = new BarPlot($datax[$stage]);
-				
+
 				//You can change the width of the bars if you like
 				$bplot[$index]->SetWidth(5);
-				
+
 				// Set fill colors for bars
 				$bplot[$index]->SetFillColor("#".$color[$stage]);
-				
+
 				// We want to display the value of each bar at the top
 				$bplot[$index]->value->Show();
 				$bplot[$index]->value->SetFont($font,FS_NORMAL,8);
@@ -213,95 +222,98 @@ class jpgraph {
 				$bplot[$index]->value->SetColor("white");
 				$bplot[$index]->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
 				$bplot[$index]->SetValuePos('max');
-				
+
 				//set client side image map URL's
-				$bplot[$index]->SetCSIMTargets($aTargets[$stage],$aAlts[$stage]); 
+				$bplot[$index]->SetCSIMTargets($aTargets[$stage],$aAlts[$stage]);
 				$log->debug("bplot[$index] is: ");
 				$log->debug($bplot[$index]);
 				$index++;
 			}
-			
+
 			// Create the grouped bar plot
 			$gbplot = new AccBarPlot($bplot);
-	
+
 			// Add the bar to the graph
 			$graph->Add($gbplot);
-			
+
 			// No frame around the image
 			$graph->SetFrame(false);
-			
+
 			// Rotate graph 90 degrees and set margin
 			$top = 20;
 			$bottom = 50;
 			$left = 20;
 			$right = 50;
 			$graph->SetMargin($left,$right,$top,$bottom);
-			
+
 			// Set white margin color
 			$graph->SetMarginColor('white');
-			
+
 			// Use a box around the plot area
 			$graph->SetBox();
-			
+
 			// Use a gradient to fill the plot area
 			$graph->SetBackgroundGradient('white','gray',GRAD_HOR,BGRAD_PLOT);
-			
+
 			// Setup title
 			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].$app_strings['LBL_CURRENCY_SYMBOL'].$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$graph->title->Set($title);
 			$graph->title->SetFont($font,FS_BOLD,11);
-			
+
 			// Setup X-axis
 			$graph->xaxis->SetTickLabels($legend);
 			$graph->xaxis->SetFont($font,FS_NORMAL,8);
-			
+
 			// Some extra margin looks nicer
 			$graph->xaxis->SetLabelMargin(10);
-			
+
 			// Label align for X-axis
 			$graph->xaxis->SetLabelAlign('center','center');
 			$graph->yaxis->SetLabelSide(SIDE_LEFT);
-			
+
 			// The fix the tick marks
 			$graph->yaxis->SetTickSide(SIDE_RIGHT);
-			
+
 			// Add some grace to y-axis so the bars doesn't go
 			// all the way to the end of the plot area
 			$graph->yaxis->scale->SetGrace(10);
-			
-			// Setup the Y-axis to be displayed in the bottom of the 
+
+			// Setup the Y-axis to be displayed in the bottom of the
 			// graph. We also finetune the exact layout of the title,
 			// ticks and labels to make them look nice.
 			$graph->yaxis->SetPos('max');
-			
+
 			// First make the labels look right
 			$graph->yaxis->SetLabelAlign('left','top');
 			$graph->yaxis->SetLabelFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
 			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
-			
+
 			// The fix the tick marks
 			$graph->yaxis->SetTickSide(SIDE_LEFT);
-			
+
 			// Finally setup the title
 			$graph->yaxis->SetTitleSide(SIDE_RIGHT);
 			$graph->yaxis->SetTitleMargin(35);
-			
+
 			$subtitle .= $current_module_strings['LBL_OPP_SIZE'];
-			$graph->footer->right->Set($subtitle); 
+			$graph->footer->right->Set($subtitle);
 			$graph->footer->right->SetFont($font,FS_NORMAL,8);
-			
+
 			$graph->yaxis->SetFont($font,FS_NORMAL, 8);
-	
+
 			// .. and stroke the graph
 			$graph->Stroke($cache_file_name);
 			$imgMap = $graph->GetHTMLImageMap('outcome_by_month');
 			save_image_map($cache_file_name.'.map', $imgMap);
 		}
 		else {
-			$imgMap = file_get_contents($cache_file_name.'.map');
+			$imgMap_fp = fopen($cache_file_name.'.map', "rb");
+			$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
+			fclose($imgMap_fp);
 		}
+		$fileModTime = filemtime($cache_file_name.'.map');
 		$return = "\n$imgMap\n";
-		$return .= "<img src='$cache_file_name'\n";
+		$return .= "<img src='$cache_file_name?modTime=$fileModTime'\n";
 		$return .= "ismap usemap='#outcome_by_month' border='0'>\n";
 		return $return;
 	}
@@ -319,29 +331,29 @@ class jpgraph {
 	 * Contributor(s): ______________________________________..
 	 */
 	function lead_source_by_outcome($datay=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
-		global $app_strings, $current_module_strings, $log, $charset, $tmp_dir;
+		global $app_strings,$lang, $current_module_strings, $log, $charset, $tmp_dir;
 		include_once ("jpgraph/src/jpgraph_bar.php");
-		
+
 		// Size of graph
-		$width=300; 
+		$width=300;
 		$height=400;
-		
+
 		$log =& LoggerManager::getLogger('lead_source_by_outcome chart');
-		// Set the basic parameters of the graph 
+		// Set the basic parameters of the graph
 		$graph = new Graph($width,$height,$cache_file_name);
 		$log->debug("graph object created");
 
 		$graph->SetScale("textlin");
 
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
-			$font = calculate_font_family($charset);
-	
+			$font = calculate_font_family($lang);
+
 			$log->debug("datay is:");
 			$log->debug($datay);
 			$log->debug("user_id is: ");
 			$log->debug($user_id);
 			$log->debug("cache_file_name is: $cache_file_name");
-			
+
 			$where="";
 			//build the where clause for the query that matches $user
 			$count = count($user_id);
@@ -356,7 +368,7 @@ class jpgraph {
 				}
 				$where .= ") ";
 			}
-		
+
 			//build the where clause for the query that matches $datay
 			$count = count($datay);
 			if ($count>0) {
@@ -370,12 +382,12 @@ class jpgraph {
 				}
 				$where .= ")";
 			}
-						
+
 			//Now do the db queries
 			//query for opportunity data that matches $datay and $user
 			$opp = new Opportunity();
 			$opp_list = $opp->get_full_list("amount DESC, date_closed DESC", $where);
-			
+
 			//build pipeline by sales stage data
 			$total = 0;
 			$count = array();
@@ -384,11 +396,11 @@ class jpgraph {
 			if (isset($opp_list)) {
 				foreach ($opp_list as $record) {
 					//if lead source is blank, set it to the language's "none" value
-					if (isset($record->lead_source) && $record->lead_source != '') { 
-						$lead_source = $record->lead_source; 
+					if (isset($record->lead_source) && $record->lead_source != '') {
+						$lead_source = $record->lead_source;
 					}
-					else { 
-						$lead_source = $current_module_strings['NTC_NO_LEGENDS']; 
+					else {
+						$lead_source = $current_module_strings['NTC_NO_LEGENDS'];
 					}
 
 					if ($record->sales_stage == 'Closed Won' || $record->sales_stage == 'Closed Lost') {
@@ -397,14 +409,14 @@ class jpgraph {
 					else {
 						$sales_stage=$other;
 					}
-					
+
 					if (!isset($sum[$lead_source][$sales_stage])) {
 						$sum[$lead_source][$sales_stage] = 0;
 					}
 					if (isset($record->amount))	{
 						// Strip all non numbers from this string.
 						$amount = ereg_replace('[^0-9]', '', $record->amount);
-						$sum[$lead_source][$sales_stage] = $sum[$lead_source][$sales_stage] + $amount;  
+						$sum[$lead_source][$sales_stage] = $sum[$lead_source][$sales_stage] + $amount;
 						if (isset($count[$lead_source][$sales_stage])) {
 							$count[$lead_source][$sales_stage]++;
 						}
@@ -415,16 +427,16 @@ class jpgraph {
 					}
 				}
 			}
-			
+
 			$legend = array();
 			$datax = array();
 			$aTargets = array();
 			$aAlts = array();
 			$stages = array($other,'Closed Lost', 'Closed Won');
 			foreach($datay as $lead=>$translation) {
-			  if ($lead == '') { 
-					$lead = $current_module_strings['NTC_NO_LEGENDS']; 
-					$translation = $current_module_strings['NTC_NO_LEGENDS']; 
+			  if ($lead == '') {
+					$lead = $current_module_strings['NTC_NO_LEGENDS'];
+					$translation = $current_module_strings['NTC_NO_LEGENDS'];
 			  }
 			  foreach($stages as $stage) {
 				$log->debug("stage_key is $stage");
@@ -437,7 +449,7 @@ class jpgraph {
 				if (!isset($aTargets[$stage])) {
 					$aTargets[$stage] = array();
 				}
-	
+
 				if (isset($sum[$lead][$stage])) {
 					array_push($datax[$stage], $sum[$lead][$stage]/1000);
 					array_push($aAlts[$stage], $count[$lead][$stage]." ".$current_module_strings['LBL_OPPS_OUTCOME']." $stage");
@@ -450,7 +462,7 @@ class jpgraph {
 			  }
 			  array_push($legend,$translation);
 			}
-	
+
 			$log->debug("datax is:");
 			$log->debug($datax);
 			$log->debug("aAlts is:");
@@ -461,7 +473,7 @@ class jpgraph {
 			$log->debug($sum);
 			$log->debug("count is:");
 			$log->debug($count);
-		
+
 			//now build the bar plots for each user across the sales stages
 			$bplot = array();
 			$color = array('Closed Lost'=>'993366','Closed Won'=>'009933', $other=>'336699');
@@ -469,13 +481,13 @@ class jpgraph {
 			foreach($stages as $stage) {
 				// Now create a bar pot
 				$bplot[$index] = new BarPlot($datax[$stage]);
-				
+
 				//You can change the width of the bars if you like
 				$bplot[$index]->SetWidth(5);
-				
+
 				// Set fill colors for bars
 				$bplot[$index]->SetFillColor("#".$color[$stage]);
-				
+
 				// We want to display the value of each bar at the top
 				$bplot[$index]->value->Show();
 				$bplot[$index]->value->SetFont($font,FS_NORMAL,8);
@@ -483,97 +495,100 @@ class jpgraph {
 				$bplot[$index]->value->SetColor("white");
 				$bplot[$index]->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
 				$bplot[$index]->SetValuePos('max');
-				
+
 				//set client side image map URL's
-				$bplot[$index]->SetCSIMTargets($aTargets[$stage],$aAlts[$stage]); 
+				$bplot[$index]->SetCSIMTargets($aTargets[$stage],$aAlts[$stage]);
 				$log->debug("bplot[$index] is: ");
 				$log->debug($bplot[$index]);
 				$log->debug("datax[$stage] is: ");
 				$log->debug($datax[$stage]);
 				$index++;
 			}
-			
+
 			// Create the grouped bar plot
 			$gbplot = new AccBarPlot($bplot);
-	
+
 			// Add the bar to the graph
 			$graph->Add($gbplot);
-			
+
 			// No frame around the image
 			$graph->SetFrame(false);
-			
+
 			// Rotate graph 90 degrees and set margin
 			$top = 20;
 			$bottom = 50;
 			$left = 130;
 			$right = 40;
 			$graph->Set90AndMargin($left,$right,$top,$bottom);
-			
+
 			// Set white margin color
 			$graph->SetMarginColor('white');
-			
+
 			// Use a box around the plot area
 			$graph->SetBox();
-			
+
 			// Use a gradient to fill the plot area
 			$graph->SetBackgroundGradient('#F0F0F0','#FFFFFF',GRAD_HOR,BGRAD_PLOT);
-			
+
 			// Setup title
 			$title = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$app_strings['LBL_CURRENCY_SYMBOL'].$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$graph->title->Set($title);
 			$graph->title->SetFont($font,FS_BOLD,11);
-			
+
 			// Setup X-axis
 			$graph->xaxis->SetTickLabels($legend);
 			$graph->xaxis->SetFont($font,FS_NORMAL,8);
-			
+
 			// Some extra margin looks nicer
 			$graph->xaxis->SetLabelMargin(10);
-			
+
 			// Label align for X-axis
 			$graph->xaxis->SetLabelAlign('right','center');
 			$graph->yaxis->SetLabelSide(SIDE_LEFT);
-			
+
 			// The fix the tick marks
 			$graph->yaxis->SetTickSide(SIDE_RIGHT);
-			
+
 			// Add some grace to y-axis so the bars doesn't go
 			// all the way to the end of the plot area
 			$graph->yaxis->scale->SetGrace(10);
-			
-			// Setup the Y-axis to be displayed in the bottom of the 
+
+			// Setup the Y-axis to be displayed in the bottom of the
 			// graph. We also finetune the exact layout of the title,
 			// ticks and labels to make them look nice.
 			$graph->yaxis->SetPos('max');
-			
+
 			// First make the labels look right
 			$graph->yaxis->SetLabelAlign('left','top');
 			$graph->yaxis->SetLabelFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
 			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
-			
+
 			// The fix the tick marks
 			$graph->yaxis->SetTickSide(SIDE_LEFT);
-			
+
 			// Finally setup the title
 			$graph->yaxis->SetTitleSide(SIDE_RIGHT);
 			$graph->yaxis->SetTitleMargin(35);
-			
+
 			$subtitle = $current_module_strings['LBL_OPP_SIZE'];
-			$graph->footer->right->Set($subtitle); 
+			$graph->footer->right->Set($subtitle);
 			$graph->footer->right->SetFont($font,FS_NORMAL,8);
-			
+
 			$graph->yaxis->SetFont($font,FS_NORMAL, 8);
-	
+
 			// .. and stroke the graph
 			$graph->Stroke($cache_file_name);
 			$imgMap = $graph->GetHTMLImageMap('lead_source_by_outcome');
 			save_image_map($cache_file_name.'.map', $imgMap);
 		}
 		else {
-			$imgMap = file_get_contents($cache_file_name.'.map');
+			$imgMap_fp = fopen($cache_file_name.'.map', "rb");
+			$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
+			fclose($imgMap_fp);
 		}
+		$fileModTime = filemtime($cache_file_name.'.map');
 		$return = "\n$imgMap\n";
-		$return .= "<img src='$cache_file_name'\n";
+		$return .= "<img src='$cache_file_name?modTime=$fileModTime'\n";
 		$return .= "ismap usemap='#lead_source_by_outcome' border='0'>\n";
 		return $return;
 	}
@@ -586,30 +601,30 @@ class jpgraph {
 	 * Contributor(s): ______________________________________..
 	 */
 	function pipeline_by_sales_stage($datax=array('foo','bar'), $date_start='2071-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
-		global $app_strings, $current_module_strings, $log, $charset, $tmp_dir;
+		global $app_strings,$lang, $current_module_strings, $log, $charset, $tmp_dir;
 		include_once ("jpgraph/src/jpgraph_bar.php");
-		
+
 		// Size of graph
-		$width=300; 
+		$width=300;
 		$height=400;
-		
+
 		$log =& LoggerManager::getLogger('opportunity charts');
-		// Set the basic parameters of the graph 
+		// Set the basic parameters of the graph
 		$graph = new Graph($width,$height,$cache_file_name);
 		$log->debug("graph object created");
 
 		$graph->SetScale("textlin");
 
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
-			$font = calculate_font_family($charset);
-		
+			$font = calculate_font_family($lang);
+
 			$log->debug("starting pipeline chart");
 			$log->debug("datax is:");
 			$log->debug($datax);
 			$log->debug("user_id is: ");
 			$log->debug($user_id);
 			$log->debug("cache_file_name is: $cache_file_name");
-			
+
 			$where="";
 			//build the where clause for the query that matches $user
 			$count = count($user_id);
@@ -624,7 +639,7 @@ class jpgraph {
 				}
 				$where .= ") ";
 			}
-		
+
 			//build the where clause for the query that matches $datax
 			$count = count($datax);
 			if ($count>0) {
@@ -638,7 +653,7 @@ class jpgraph {
 				}
 				$where .= ")";
 			}
-						
+
 			//build the where clause for the query that matches $date_start and $date_end
 			$where .= "AND date_closed >= '$date_start' AND date_closed <= '$date_end'";
 			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".$date_start." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".$date_end."\n";
@@ -647,7 +662,7 @@ class jpgraph {
 			//query for opportunity data that matches $datax and $user
 			$opp = new Opportunity();
 			$opp_list = $opp->get_full_list("amount DESC, date_closed DESC", $where);
-			
+
 			//build pipeline by sales stage data
 			$total = 0;
 			$count = array();
@@ -660,7 +675,7 @@ class jpgraph {
 					if (isset($record->amount))	{
 						// Strip all non numbers from this string.
 						$amount = ereg_replace('[^0-9]', '', $record->amount);
-						$sum[$record->sales_stage][$record->assigned_user_id] = $sum[$record->sales_stage][$record->assigned_user_id] + $amount;  
+						$sum[$record->sales_stage][$record->assigned_user_id] = $sum[$record->sales_stage][$record->assigned_user_id] + $amount;
 						if (isset($count[$record->sales_stage][$record->assigned_user_id])) {
 							$count[$record->sales_stage][$record->assigned_user_id]++;
 						}
@@ -671,7 +686,7 @@ class jpgraph {
 					}
 				}
 			}
-			
+
 			$legend = array();
 			$datay = array();
 			$aTargets = array();
@@ -688,7 +703,7 @@ class jpgraph {
 				if (!isset($aTargets[$the_id])) {
 					$aTargets[$the_id] = array();
 				}
-	
+
 				if (isset($sum[$stage_key][$the_id])) {
 					array_push($datay[$the_id], $sum[$stage_key][$the_id]/1000);
 					array_push($aAlts[$the_id], $the_user.' - '.$count[$stage_key][$the_id]." ".$current_module_strings['LBL_OPPS_IN_STAGE']." $stage_translation");
@@ -701,7 +716,7 @@ class jpgraph {
 			  }
 			  array_push($legend,$stage_translation);
 			}
-	
+
 			$log->debug("datay is:");
 			$log->debug($datay);
 			$log->debug("aAlts is:");
@@ -712,7 +727,7 @@ class jpgraph {
 			$log->debug($sum);
 			$log->debug("count is:");
 			$log->debug($count);
-		
+
 			//now build the bar plots for each user across the sales stages
 			$bplot = array();
 			$color = '336699';
@@ -721,14 +736,14 @@ class jpgraph {
 				// Now create a bar pot
 				$bplot[$index] = new BarPlot($datay[$the_id]);
 				$bplot[$index]->SetShadow();
-				
+
 				//You can change the width of the bars if you like
 				$bplot[$index]->SetWidth(0.5);
-				
+
 				// Set fill colors for bars
 				$bplot[$index]->SetFillColor("#$color");
 				$color = $color + 220022;
-				
+
 				// We want to display the value of each bar at the top
 				$bplot[$index]->value->Show();
 				$bplot[$index]->value->SetFont($font,FS_NORMAL,8);
@@ -736,112 +751,115 @@ class jpgraph {
 				$bplot[$index]->value->SetColor("white");
 				$bplot[$index]->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
 				$bplot[$index]->SetValuePos('max');
-				
+
 				//set client side image map URL's
-				$bplot[$index]->SetCSIMTargets($aTargets[$the_id],$aAlts[$the_id]); 
+				$bplot[$index]->SetCSIMTargets($aTargets[$the_id],$aAlts[$the_id]);
 				$log->debug("bplot[$index] is: ");
 				$log->debug($bplot[$index]);
 				$log->debug("datay[$the_id] is: ");
 				$log->debug($datay[$the_id]);
 				$index++;
 			}
-			
+
 			// Create the grouped bar plot
 			$gbplot = new AccBarPlot($bplot);
-	
+
 			// Add the bar to the graph
 			$graph->Add($gbplot);
-			
+
 			// No frame around the image
 			$graph->SetFrame(false);
-			
+
 			// Rotate graph 90 degrees and set margin
 			$top = 20;
 			$bottom = 70;
 			$left = 130;
 			$right = 40;
 			$graph->Set90AndMargin($left,$right,$top,$bottom);
-			
+
 			// Set white margin color
 			$graph->SetMarginColor('white');
-			
+
 			// Use a box around the plot area
 			$graph->SetBox();
-			
+
 			// Use a gradient to fill the plot area
 			$graph->SetBackgroundGradient('white','gray',GRAD_HOR,BGRAD_PLOT);
-			
+
 			// Setup title
 			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].$app_strings['LBL_CURRENCY_SYMBOL'].$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$graph->title->Set($title);
 			$graph->title->SetFont($font,FS_BOLD,11);
-			
+
 			// Setup X-axis
 			$graph->xaxis->SetTickLabels($legend);
 			$graph->xaxis->SetFont($font,FS_NORMAL,8);
-			
+
 			// Some extra margin looks nicer
 			$graph->xaxis->SetLabelMargin(10);
-			
+
 			// Label align for X-axis
 			$graph->xaxis->SetLabelAlign('right','center');
-			
+
 			// Add some grace to y-axis so the bars doesn't go
 			// all the way to the end of the plot area
 			$graph->yaxis->scale->SetGrace(10);
-			
-			// Setup the Y-axis to be displayed in the bottom of the 
+
+			// Setup the Y-axis to be displayed in the bottom of the
 			// graph. We also finetune the exact layout of the title,
 			// ticks and labels to make them look nice.
 			$graph->yaxis->SetPos('max');
-			
+
 			// First make the labels look right
 			$graph->yaxis->SetLabelAlign('center','top');
 			$graph->yaxis->SetLabelFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
 			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
-			
+
 			// The fix the tick marks
 			$graph->yaxis->SetTickSide(SIDE_LEFT);
-			
+
 			// Finally setup the title
 			$graph->yaxis->SetTitleSide(SIDE_RIGHT);
 			$graph->yaxis->SetTitleMargin(35);
-			
+
 			$subtitle .= $current_module_strings['LBL_OPP_SIZE'];
-			$graph->footer->right->Set($subtitle); 
+			$graph->footer->right->Set($subtitle);
 			$graph->footer->right->SetFont($font,FS_NORMAL,8);
-			
+
 			$graph->yaxis->SetFont($font,FS_NORMAL, 8);
-	
+
 			// .. and stroke the graph
 			$graph->Stroke($cache_file_name);
 			$imgMap = $graph->GetHTMLImageMap('pipeline');
 			save_image_map($cache_file_name.'.map', $imgMap);
 		}
 		else {
-			$imgMap = file_get_contents($cache_file_name.'.map');
+			$imgMap_fp = fopen($cache_file_name.'.map', "rb");
+			$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
+			fclose($imgMap_fp);
 		}
+		$fileModTime = filemtime($cache_file_name.'.map');
 		$return = "\n$imgMap\n";
-		$return .= "<img src='$cache_file_name'\n";
+		$return .= "<img src='$cache_file_name?modTime=$fileModTime'\n";
 		$return .= "ismap usemap='#pipeline' border='0'>\n";
 		return $return;
 	}
-	
+
 	/**
 	 * Creates pie chart image of opportunities by lead_source.
 	 * param $datax- the sales stage data to display in the x-axis
-	 * param $datay- the sum of opportunity amounts for each opportunity in each sales stage 
+	 * param $datay- the sum of opportunity amounts for each opportunity in each sales stage
 	 * to display in the y-axis
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
 	function pipeline_by_lead_source($legends=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=true) {
-		global $app_strings, $current_module_strings, $log, $charset, $tmp_dir;
+		global $app_strings,$lang, $current_module_strings, $log, $charset, $tmp_dir;
 		include_once ("jpgraph/src/jpgraph_pie.php");
 		include_once ("jpgraph/src/jpgraph_pie3d.php");
-		
-		$font = calculate_font_family($charset);
+
+		$font = calculate_font_family($lang);
 
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
 			$log =& LoggerManager::getLogger('opportunity charts');
@@ -851,7 +869,7 @@ class jpgraph {
 			$log->debug("user_id is: ");
 			$log->debug($user_id);
 			$log->debug("cache_file_name is: $cache_file_name");
-	
+
 			//Now do the db queries
 			//query for opportunity data that matches $legends and $user
 			$where="";
@@ -867,7 +885,7 @@ class jpgraph {
 				}
 				$where .= ") ";
 			}
-	
+
 			//build the where clause for the query that matches $datax
 			$count = count($legends);
 			if ($count>0) {
@@ -880,10 +898,10 @@ class jpgraph {
 				}
 				$where .= ")";
 			}
-						
+
 			$opp = new Opportunity();
 			$opp_list = $opp->get_full_list("amount DESC, date_closed DESC", $where);
-	
+
 			//build pipeline by lead source data
 			$total = 0;
 			$count = array();
@@ -894,20 +912,20 @@ class jpgraph {
 					if (isset($record->amount) && isset($record->lead_source))	{
 						// Strip all non numbers from this string.
 						$amount = ereg_replace('[^0-9]', '', $record->amount);
-						$sum[$record->lead_source] = $sum[$record->lead_source] + ($amount/1000);  
+						$sum[$record->lead_source] = $sum[$record->lead_source] + ($amount/1000);
 						if (isset($count[$record->lead_source])) $count[$record->lead_source]++;
 						else $count[$record->lead_source] = 1;
 						$total = $total + ($amount/1000);
 					}
 				}
 			}
-			
+
 			$visible_legends = array();
 			$data= array();
 			$aTargets = array();
 			$aAlts = array();
 			foreach ($legends as $lead_source_key=>$lead_source_translation) {
-				if (isset($sum[$lead_source_key])) 
+				if (isset($sum[$lead_source_key]))
 				{
 					array_push($data, $sum[$lead_source_key]);
 					if($lead_source_key != '')
@@ -922,8 +940,8 @@ class jpgraph {
 					array_push($aTargets, "index.php?module=Opportunities&action=ListView&lead_source=".urlencode($lead_source_key)."&query=true");
 					array_push($aAlts, $count[$lead_source_key]." ".$current_module_strings['LBL_OPPS_IN_LEAD_SOURCE']." $lead_source_translation	");
 				}
-			}					
-			
+			}
+
 			$log->debug("sum is:");
 			$log->debug($sum);
 			$log->debug("count is:");
@@ -932,27 +950,27 @@ class jpgraph {
 			if ($total == 0) {
 				return ($current_module_strings['ERR_NO_OPPS']);
 			}
-			
+
 			// Create the Pie Graph.
 			$graph = new PieGraph(490,260,$cache_file_name);
-	
+
 			$graph->SetShadow();
-		
+
 			// Setup title
 			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].$app_strings['LBL_CURRENCY_SYMBOL'].$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$graph->title->Set($title);
 			$graph->title->SetFont($font,FS_BOLD,11);
-		
+
 			// No frame around the image
 			$graph->SetFrame(false);
-		
+
 			$graph->legend->Pos(0.01,0.10);
 			$graph->legend->SetFont($font,FS_NORMAL,12);
-			
+
 			$subtitle = $current_module_strings['LBL_OPP_SIZE'];
-			$graph->footer->left->Set($subtitle); 
+			$graph->footer->left->Set($subtitle);
 			$graph->footer->left->SetFont($font,FS_NORMAL,8);
-	
+
 			// Create pie plot
 			$p1 = new PiePlot3d($data);
 			$p1->SetSize(0.30);
@@ -962,25 +980,28 @@ class jpgraph {
 			$p1->value->SetFont($font,FS_NORMAL,12);
 			$p1->SetLegends($visible_legends);
 			$p1->SetLabelType(PIE_VALUE_ABS);
-			$p1->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d'); 
-			
+			$p1->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+
 			//set client side image map URL's
-			$p1->SetCSIMTargets($aTargets,$aAlts); 
-			
+			$p1->SetCSIMTargets($aTargets,$aAlts);
+
 			$graph->Add($p1);
-			
+
 			$graph->Stroke($cache_file_name);
 			$imgMap = $graph->GetHTMLImageMap('pipeline_by_lead_source');
 			save_image_map($cache_file_name.'.map', $imgMap);
 		}
 		else {
-			$imgMap = file_get_contents($cache_file_name.'.map');
+			$imgMap_fp = fopen($cache_file_name.'.map', "rb");
+			$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
+			fclose($imgMap_fp);
 		}
+		$fileModTime = filemtime($cache_file_name.'.map');
 		$return = "\n$imgMap\n";
-		$return .= "<img src='$cache_file_name'\n";
+		$return .= "<img src='$cache_file_name?modTime=$fileModTime'\n";
 		$return .= "ismap usemap='#pipeline_by_lead_source' border='0'>\n";
 		return $return;
-	
+
 	}
 
 }
@@ -989,31 +1010,31 @@ class jpgraph {
 /**
  * Creates a file with the image map
  * param $filename - file name to save to
- * param $image_map - image map string to save 
+ * param $image_map - image map string to save
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  */
 function save_image_map($filename,$image_map) {
-	// save the image map to file 
+	// save the image map to file
 	$log =& LoggerManager::getLogger('save_image_file');
-	
+
 	if (!$handle = fopen($filename, 'w')) {
 		$log->debug("Cannot open file ($filename)");
 		return;
 	}
-	
+
 	// Write $somecontent to our opened file.
 	if (fwrite($handle, $image_map) === FALSE) {
 	   $log->debug("Cannot write to file ($filename)");
 	   return false;
 	}
-	
+
 	$log->debug("Success, wrote ($image_map) to file ($filename)");
-	
+
 	fclose($handle);
 	return true;
-	
+
 }
 
 // retrieve the translated strings.
@@ -1025,7 +1046,7 @@ if(isset($app_strings['LBL_CHARSET']))
 }
 else
 {
-	$charset = $default_charset;	
+	$charset = $default_charset;
 }
 
 

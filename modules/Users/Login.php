@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Login.php,v 1.4 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Login.php,v 1.5 2004/11/02 10:22:19 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -26,6 +26,22 @@ global $app_language;
 //we don't want the parent module's string file, but rather the string file specifc to this subpanel
 global $current_language;
 $current_module_strings = return_module_language($current_language, 'Users');
+
+ define("IN_LOGIN", true);
+
+ define('IN_PHPBB', true);
+ include($phpbb_root_path . 'extension.inc');
+ include($phpbb_root_path . 'common.'.$phpEx);
+
+ //
+ // Set page ID for session management
+ //
+ $userdata = session_pagestart($user_ip, PAGE_LOGIN);
+ init_userprefs($userdata);
+ //
+ // End session management
+ //
+
 
 // Retrieve username and password from the session if possible.
 if(isset($_SESSION["login_user_name"]))

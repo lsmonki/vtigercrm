@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -13,8 +13,8 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/data/Tracker.php,v 1.2 2004/10/06 09:02:02 jack Exp $
- * Description:  Updates entries for the Last Viewed functionality tracking the 
+ * $Header:  vtiger_crm/sugarcrm/data/Tracker.php,v 1.3 2004/10/29 09:55:08 jack Exp $
+ * Description:  Updates entries for the Last Viewed functionality tracking the
  * last viewed records on a per user basis.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -62,18 +62,18 @@ class Tracker {
     function track_view($user_id, $module_name, $item_id, $item_summary)
     {
         $this->delete_history($user_id, $item_id);
-        
+
         // Add a new item to the user's list
 
         $esc_item_id = addslashes($item_id);
         $esc_item_summary = addslashes($item_summary);
-        
+
         $query = "INSERT into $this->table_name (user_id, module_name, item_id, item_summary) values ('$user_id', '$module_name', '$esc_item_id', '$esc_item_summary')";
 
         $this->log->info("Track Item View: ".$query);
 
        $this->db->query($query, true);
-          
+
 
 		$this->prune_history($user_id);
     }
@@ -88,15 +88,19 @@ class Tracker {
      */
     function get_recently_viewed($user_id, $module_name = "")
     {
+    	if (empty($user_id)) {
+    		return;
+    	}
+
         $query = "SELECT * from $this->table_name WHERE user_id='$user_id' ORDER BY id DESC";
         $this->log->debug("About to retrieve list: $query");
         $result = $this->db->query($query, true);
 
         $list = Array();
-        while($row = $this->db->fetchByAssoc($result))
+        while($row = $this->db->fetchByAssoc($result, -1, false))
         {
-            
-            
+
+
             // If the module was not specified or the module matches the module of the row, add the row to the list
             if($module_name == "" || $row[module_name] == $module_name)
             {
@@ -107,8 +111,8 @@ class Tracker {
         return $list;
     }
 
-    
-    
+
+
     /**
      * INTERNAL -- This method cleans out any entry for a record for a user.
      * It is used to remove old occurances of previously viewed items.
@@ -121,7 +125,7 @@ class Tracker {
         $query = "DELETE from $this->table_name WHERE user_id='$user_id' and item_id='$item_id'";
        $this->db->query($query, true);
     }
-    
+
     /**
      * INTERNAL -- This method cleans out any entry for a record.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -132,9 +136,9 @@ class Tracker {
     {
         $query = "DELETE from $this->table_name WHERE item_id='$item_id'";
        $this->db->query($query, true);
-            
+
     }
-    
+
     /**
      * INTERNAL -- This function will clean out old history records for this user if necessary.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -151,7 +155,7 @@ class Tracker {
         $this->log->debug("About to verify history size: $query");
 
         $count = $this->db->getOne($query);
-	
+
 
         $this->log->debug("history size: (current, max)($count, $history_max_viewed)");
         while($count > $history_max_viewed)
@@ -162,17 +166,17 @@ class Tracker {
             $this->log->debug("About to try and find oldest item: $query");
             $result =  $this->db->query($query);
 
-            $oldest_item = $this->db->fetchByAssoc($result);
+            $oldest_item = $this->db->fetchByAssoc($result, -1, false);
             $query = "DELETE from $this->table_name WHERE id='{$oldest_item['id']}'";
             $this->log->debug("About to delete oldest item: ");
 
             $result = $this->db->query($query, true);
-       
-                
-            $count--;    
+
+
+            $count--;
         }
     }
-    
+
 	function create_tables() {
 		$query = 'CREATE TABLE '.$this->table_name.' (';
 		$query = $query.'id int( 11 ) NOT NULL auto_increment';
@@ -181,11 +185,11 @@ class Tracker {
 		$query = $query.', item_id char(36)';
 		$query = $query.', item_summary char(255)';
 		$query = $query.', PRIMARY KEY ( ID ) )';
-	
-		
-	
+
+
+
 		$this->db->query($query);
-	
+
 	}
 
 	function drop_tables () {

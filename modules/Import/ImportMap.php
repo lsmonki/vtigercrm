@@ -109,7 +109,7 @@ class ImportMap extends SugarBean
 		$query_arr = array(
 			'assigned_user_id'=>$owner_id,'name'=>$name);
 
-		$this->retrieve_by_string_fields($query_arr);
+		$this->retrieve_by_string_fields($query_arr, false);
 
                 $result = 1;
                 $this->assigned_user_id = $owner_id;
@@ -143,7 +143,7 @@ class ImportMap extends SugarBean
 					'assigned_user_id'=>$user_id,
 					'is_published'=>'no');
 		}
-		$other_map->retrieve_by_string_fields($query_arr);
+		$other_map->retrieve_by_string_fields($query_arr, false);
 
 		if ( isset($other_map->id) )
 		{
@@ -165,8 +165,8 @@ class ImportMap extends SugarBean
 		$result = & $this->db->query($query,true," Error: ");
 		$obj_arr = array();
 
-		while ($row = $this->db->fetchByAssoc($result) )
-		{
+		while ($row = $this->db->fetchByAssoc($result,-1,FALSE) )
+		{	
 			$focus = new ImportMap();
 
 			foreach($this->column_fields as $field) 

@@ -32,7 +32,7 @@ header("Content-type: $fileType");
 //header("Cache-Control: private");
 header("Content-Disposition: attachment; filename=$name");
 //header("Content-Description: PHP Generated Data");
-echo $fileContent;
+echo base64_decode($fileContent);
 }
 else
 {

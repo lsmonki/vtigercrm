@@ -10,10 +10,10 @@
  * The Initial Developer of the Original Code is SugarCRM, Inc.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
- * Contributor(s): Xavier DUTOIT.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/Note.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Notes/Note.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,6 +24,7 @@ include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
+require_once('include/upload_file.php');
 
 // Note is used to store customer information.
 class Note extends SugarBean {
@@ -35,14 +36,8 @@ class Note extends SugarBean {
 	var $date_entered;
 	var $date_modified;
 	var $description;
-	/** BEGIN CONTRIBUTION
-	* Date: 09/07/04
-	* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-	* All Rights Reserved.
-	* Contributor(s): Xavier DUTOIT */
-	var $filename;
-	/** END CONTRIBUTION */
 	var $name;
+	var $filename;
 	var $parent_type;
 	var $parent_id;
 	var $contact_id;
@@ -51,41 +46,29 @@ class Note extends SugarBean {
 	var $contact_name;
 	var $contact_phone;
 	var $contact_email;
-
+	var $required_fields =  array("name"=>1);
 	var $default_note_name_dom = array('Meeting notes', 'Reminder');
 
 	var $table_name = "notes";
 
 	var $object_name = "Note";
 
-	/** BEGIN CONTRIBUTION
-	* Date: 09/07/04
-	* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-	* All Rights Reserved.
-	* Contributor(s): Xavier DUTOIT */
 	var $column_fields = Array("id"
 		, "date_entered"
 		, "date_modified"
 		, "description"
-		, "filename"
 		, "name"
+		, "filename"
 		, "parent_type"
 		, "parent_id"
 		, "contact_id"
 		);
-	/** END CONTRIBUTION */
 
 	// This is used to retrieve related fields from form posts.
 	var $additional_column_fields = Array('contact_name', 'contact_phone', 'contact_email', 'parent_name');
 
 	// This is the list of fields that are in the lists.
-	/** BEGIN CONTRIBUTION
-	* Date: 09/07/04
-	* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-	* All Rights Reserved.
-	* Contributor(s): Xavier DUTOIT */
-	var $list_fields = Array('id', 'name', 'parent_type', 'parent_name', 'parent_id', 'filename', 'date_modified', 'contact_id', 'contact_name');
-	/** END CONTRIBUTION */
+	var $list_fields = Array('id', 'name', 'parent_type', 'parent_name', 'parent_id', 'date_modified', 'contact_id', 'contact_name','filename');
 
 	function Note() {
 		$this->log = LoggerManager::getLogger('note');
@@ -100,17 +83,11 @@ class Note extends SugarBean {
 		$query .=', date_entered datetime NOT NULL';
 		$query .=', date_modified datetime NOT NULL';
 		$query .=', name char(255)';
+		$query .=', filename char(255)';
 		$query .=', parent_type char(25)';
 		$query .=', parent_id char(36)';
 		$query .=', contact_id char(36)';
 		$query .=', description text';
-		/** BEGIN CONTRIBUTION
-		* Date: 09/07/04
-		* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-		* All Rights Reserved.
-		* Contributor(s): Xavier DUTOIT */
-		$query .=', filename char(255)';
-		/** END CONTRIBUTION */
 		$query .=', deleted bool NOT NULL default 0';
 		$query .=', PRIMARY KEY ( ID ) )';
 
@@ -146,24 +123,12 @@ class Note extends SugarBean {
 
 		if($contact_required)
 		{
-			/** BEGIN CONTRIBUTION
-			* Date: 09/07/04
-			* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-			* All Rights Reserved.
-			* Contributor(s): Xavier DUTOIT */
-			$query = "SELECT notes.id, notes.name, notes.parent_type, notes.parent_id, notes.contact_id, notes.filename, notes.date_modified, contacts.first_name, contacts.last_name FROM contacts, notes ";
-			/** END CONTRIBUTION */
+			$query = "SELECT notes.id, notes.name, notes.filename, notes.parent_type, notes.parent_id, notes.contact_id, notes.date_modified, contacts.first_name, contacts.last_name FROM contacts, notes ";
 			$where_auto = "notes.contact_id = contacts.id AND notes.deleted=0 AND contacts.deleted=0";
 		}
 		else
 		{
-			/** BEGIN CONTRIBUTION
-			* Date: 09/07/04
-			* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-			* All Rights Reserved.
-			* Contributor(s): Xavier DUTOIT */
-			$query = 'SELECT id, name, parent_type, parent_id, contact_id, filename, date_modified FROM notes ';
-			/** END CONTRIBUTION */
+			$query = 'SELECT id, name, filename, parent_type, parent_id, contact_id, date_modified FROM notes ';
 			$where_auto = "deleted=0";
 		}
 
@@ -293,17 +258,13 @@ class Note extends SugarBean {
 		if (isset($this->parent_type)) {
 			$note_fields['PARENT_MODULE'] = $this->parent_type;
 		}
-		/** BEGIN CONTRIBUTION
-		* Date: 09/07/04
-		* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-		* All Rights Reserved.
-		* Contributor(s): Xavier DUTOIT */
-		if (!empty($this->filename)) {
-			$file = new File($this->id, $this->filename);
-			$note_fields['FILENAME'] = $this->filename;
-			$note_fields['FILEURL'] = $file->URL();
-		}
-		/** END CONTRIBUTION */
+
+		if (! isset($this->filename) || $this->filename != '') 
+		{
+                        $note_fields['FILENAME'] = $this->filename;
+                        $note_fields['FILE_URL'] = UploadFile::get_url($this->filename,$this->id);
+                }
+
 
 		return $note_fields;
 	}

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/EditView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/EditView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -62,7 +62,7 @@ $xtpl->assign("BILLING_ADDRESS_CITY", $focus->billing_address_city);
 $xtpl->assign("BILLING_ADDRESS_STATE", $focus->billing_address_state);
 $xtpl->assign("BILLING_ADDRESS_POSTALCODE", $focus->billing_address_postalcode);
 $xtpl->assign("BILLING_ADDRESS_COUNTRY", $focus->billing_address_country);
-$xtpl->assign("DATE_ENTERED", $focus->date_entered); 
+$xtpl->assign("DATE_ENTERED", $focus->date_entered);
 $xtpl->assign("DESCRIPTION", $focus->description);
 $xtpl->assign("EMAIL1", $focus->email1);
 $xtpl->assign("EMAIL2", $focus->email2);
@@ -91,8 +91,8 @@ $xtpl->assign("WEBSITE", $focus->website);
 
 if ($focus->assigned_user_id == '' && (!isset($focus->id) || $focus->id=0)) $focus->assigned_user_id = $current_user->id; 
 $xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active", $focus->assigned_user_id), $focus->assigned_user_id));
-$xtpl->assign("ACCOUNT_TYPE_OPTIONS", get_select_options($app_list_strings['account_type_dom'], $focus->account_type));
-$xtpl->assign("INDUSTRY_OPTIONS", get_select_options($app_list_strings['industry_dom'], $focus->industry));
+$xtpl->assign("ACCOUNT_TYPE_OPTIONS", get_select_options_with_id($app_list_strings['account_type_dom'], $focus->account_type));
+$xtpl->assign("INDUSTRY_OPTIONS", get_select_options_with_id($app_list_strings['industry_dom'], $focus->industry));
 
 if(isset($_REQUEST['parent_id'])) $xtpl->assign("PARENT_ID", $_REQUEST['parent_id']);
 if(isset($_REQUEST['parent_name'])) $xtpl->assign("PARENT_NAME", urldecode($_REQUEST['parent_name']));
@@ -103,8 +103,8 @@ if(isset($_REQUEST['billing_address_postalcode'])) $xtpl->assign("BILLING_ADDRES
 if(isset($_REQUEST['billing_address_country'])) $xtpl->assign("BILLING_ADDRESS_COUNTRY", urldecode($_REQUEST['billing_address_country']));
 if(isset($_REQUEST['ownership'])) $xtpl->assign("OWNERSHIP", urldecode($_REQUEST['ownership']));
 if(isset($_REQUEST['website'])) $xtpl->assign("WEBSITE", urldecode($_REQUEST['website']));
-if(isset($_REQUEST['industry'])) $xtpl->assign("INDUSTRY_OPTIONS", get_select_options($app_list_strings['industry_dom'], urldecode($_REQUEST['industry'])));
-if(isset($_REQUEST['account_type'])) $xtpl->assign("ACCOUNT_TYPE_OPTIONS", get_select_options($app_list_strings['account_type_dom'], urldecode($_REQUEST['account_type'])));
+if(isset($_REQUEST['industry'])) $xtpl->assign("INDUSTRY_OPTIONS", get_select_options_with_id($app_list_strings['industry_dom'], urldecode($_REQUEST['industry'])));
+if(isset($_REQUEST['account_type'])) $xtpl->assign("ACCOUNT_TYPE_OPTIONS", get_select_options_with_id($app_list_strings['account_type_dom'], urldecode($_REQUEST['account_type'])));
 
 $xtpl->parse("main");
 

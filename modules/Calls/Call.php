@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Calls/Call.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Calls/Call.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -57,6 +57,7 @@ class Call extends SugarBean {
 	var $opportunity_id;
 	var $case_id;
 	var $assigned_user_name;
+	var $required_fields =  array("name"=>1, "date_start"=>2, "time_start"=>3,);
 	
 	var $default_call_name_values = array('Assemble catalogs', 'Make travel arrangements', 'Send a letter', 'Send contract', 'Send fax', 'Send a follow-up letter', 'Send literature', 'Send proposal', 'Send quote');
 	var $minutes_values = array('00', '15', '30', '45');
@@ -109,7 +110,7 @@ class Call extends SugarBean {
 		$query .=', parent_type char(25)';  
 		$query .=', status char(25)';  
 		$query .=', parent_id char(36)';
-		$query .=', description char(255)';
+		$query .=', description TEXT';
 		$query .=', deleted bool NOT NULL default 0';
 		$query .=', PRIMARY KEY ( ID ) )';
 

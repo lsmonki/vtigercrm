@@ -64,23 +64,23 @@ if(isset($_REQUEST['query']))
 	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
 
 	$where_clauses = Array();
-
-	if(isset($name) && $name != "") array_push($where_clauses, "accounts.name like '$name%'");
-	if(isset($website) && $website != "") array_push($where_clauses, "accounts.website like '$website%'");
-	if(isset($phone) && $phone != "") array_push($where_clauses, "(accounts.phone_office like '%$phone%' OR accounts.phone_alternate like '%$phone%' OR accounts.phone_fax like '%$phone%')");
-	if(isset($annual_revenue) && $annual_revenue != "") array_push($where_clauses, "accounts.annual_revenue like '$annual_revenue%'");
-	if(isset($address_street) && $address_street != "") array_push($where_clauses, "(accounts.billing_address_street like '$address_street%' OR accounts.shipping_address_street like '$address_street%')");
-	if(isset($address_city) && $address_city != "") array_push($where_clauses, "(accounts.billing_address_city like '$address_city%' OR accounts.shipping_address_city like '$address_city%')");
-	if(isset($address_state) && $address_state != "") array_push($where_clauses, "(accounts.billing_address_state like '$address_state%' OR accounts.shipping_address_state like '$address_state%')");
-	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "(accounts.billing_address_postalcode like '$address_postalcode%' OR accounts.shipping_address_postalcode like '$address_postalcode%')");
-	if(isset($address_country) && $address_country != "") array_push($where_clauses, "(accounts.billing_address_country like '$address_country%' OR accounts.shipping_address_country like '$address_country%')");
-	if(isset($email) && $email != "") array_push($where_clauses, "(contacts.email1 like '$email%' OR contacts.email2 like '$email%')");
-	if(isset($industry) && $industry != "") array_push($where_clauses, "accounts.industry = '$industry'");
-	if(isset($ownership) && $ownership != "") array_push($where_clauses, "accounts.ownership like '$ownership%'");
-	if(isset($rating) && $rating != "") array_push($where_clauses, "accounts.rating like '$rating%'");
-	if(isset($sic_code) && $sic_code != "") array_push($where_clauses, "accounts.sic_code like '$sic_code%'");
-	if(isset($ticker_symbol) && $ticker_symbol != "") array_push($where_clauses, "accounts.ticker_symbol like '$ticker_symbol%'");
-	if(isset($account_type) && $account_type != "") array_push($where_clauses, "accounts.account_type = '$account_type'");
+	
+	if(isset($name) && $name != "") array_push($where_clauses, "accounts.name like '".PearDatabase::quote($name)."%'");
+	if(isset($website) && $website != "") array_push($where_clauses, "accounts.website like '".PearDatabase::quote($website)."%'");
+	if(isset($phone) && $phone != "") array_push($where_clauses, "(accounts.phone_office like '%".PearDatabase::quote($phone)."%' OR accounts.phone_alternate like '%".PearDatabase::quote($phone)."%' OR accounts.phone_fax like '%".PearDatabase::quote($phone)."%')");
+	if(isset($annual_revenue) && $annual_revenue != "") array_push($where_clauses, "accounts.annual_revenue like '".PearDatabase::quote($annual_revenue)."%'");
+	if(isset($address_street) && $address_street != "") array_push($where_clauses, "(accounts.billing_address_street like '".PearDatabase::quote($address_street)."%' OR accounts.shipping_address_street like '".PearDatabase::quote($address_street)."%')");
+	if(isset($address_city) && $address_city != "") array_push($where_clauses, "(accounts.billing_address_city like '".PearDatabase::quote($address_city)."%' OR accounts.shipping_address_city like '".PearDatabase::quote($address_city)."%')");
+	if(isset($address_state) && $address_state != "") array_push($where_clauses, "(accounts.billing_address_state like '".PearDatabase::quote($address_state)."%' OR accounts.shipping_address_state like '".PearDatabase::quote($address_state)."%')");
+	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "(accounts.billing_address_postalcode like '".PearDatabase::quote($address_postalcode)."%' OR accounts.shipping_address_postalcode like '".PearDatabase::quote($address_postalcode)."%')");
+	if(isset($address_country) && $address_country != "") array_push($where_clauses, "(accounts.billing_address_country like '".PearDatabase::quote($address_country)."%' OR accounts.shipping_address_country like '".PearDatabase::quote($address_country)."%')");
+	if(isset($email) && $email != "") array_push($where_clauses, "(contacts.email1 like '".PearDatabase::quote($email)."%' OR contacts.email2 like '".PearDatabase::quote($email)."%')");
+	if(isset($industry) && $industry != "") array_push($where_clauses, "accounts.industry = '".PearDatabase::quote($industry)."'");
+	if(isset($ownership) && $ownership != "") array_push($where_clauses, "accounts.ownership like '".PearDatabase::quote($ownership)."%'");
+	if(isset($rating) && $rating != "") array_push($where_clauses, "accounts.rating like '".PearDatabase::quote($rating)."%'");
+	if(isset($sic_code) && $sic_code != "") array_push($where_clauses, "accounts.sic_code like '".PearDatabase::quote($sic_code)."%'");
+	if(isset($ticker_symbol) && $ticker_symbol != "") array_push($where_clauses, "accounts.ticker_symbol like '".PearDatabase::quote($ticker_symbol)."%'");
+	if(isset($account_type) && $account_type != "") array_push($where_clauses, "accounts.account_type = '".PearDatabase::quote($account_type)."'");
 	if(isset($current_user_only) && $current_user_only != "") array_push($where_clauses, "accounts.assigned_user_id='$current_user->id'");
 
 	$where = "";
@@ -97,7 +97,7 @@ if(isset($_REQUEST['query']))
 		}
 		$where .= "accounts.assigned_user_id IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= "'$val'";
+			$where .= "'".PearDatabase::quote($val)."'";
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 		}
 	}

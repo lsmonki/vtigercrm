@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/SubPanelView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/SubPanelView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -63,6 +63,7 @@ $button .= "<td><input title='".$app_strings['LBL_SELECT_BUTTON_TITLE']."' acces
 $button .= "</tr></form></table>\n";
 $ListView = new ListView();
 $ListView->initNewXTemplate( 'modules/Accounts/SubPanelViewMemberAccount.html',$current_module_strings);
+$ListView->xTemplateAssign("RETURN_URL", "&return_module=".$currentModule."&return_action=DetailView&return_id=".$focus->id);
 $ListView->setHeaderTitle($current_module_strings['LBL_MEMBER_ORG_FORM_TITLE'] );
 $ListView->setHeaderText($button);
 $ListView->processListView($focus_list, "main", "ACCOUNT");

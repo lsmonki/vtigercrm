@@ -10,35 +10,25 @@
  * The Initial Developer of the Original Code is SugarCRM, Inc.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
- * Contributor(s): Xavier DUTOIT.
+ * Contributor(s): 
  ********************************************************************************/
 /*********************************************************************************
  * Header: /cvsroot/sugarcrm/sugarcrm/modules/Notes/EditView.html,v 1.9 2004/07/16 03:56:04 sugarclint Exp {APP.LBL_CURRENCY_SYM}
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
-<!--
-* BEGIN CONTRIBUTION
-* Date: 09/07/04
-* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-* All Rights Reserved.
-* Contributor(s): Xavier DUTOIT
--->
 <script type="text/javascript" language="Javascript">
-function FileToName(thisvalue) {
-  if (thisvalue.form.name.value == '')
-	  thisvalue.form.name.value = thisvalue.form.filename.value.toString();
-  return true;
-}
-</script>
-<!--
-* END CONTRIBUTION
--->
+ function FileToName(thisvalue) {
+   if (thisvalue.form.name.value == '')
+           thisvalue.form.name.value = thisvalue.form.filename.value.toString();
+   return true;
+ }
+ </script>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <tr>
     <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Notes.gif" border="0"></td>
     <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_NOTE}  {NAME}</td>
-	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.sugarcrm.com/home/component/option,com_docman' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
 </tr>
 <tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
 
@@ -46,18 +36,8 @@ function FileToName(thisvalue) {
 <tr>
 	<td>
 		<table cellpadding="0" cellspacing="5" border="0"><tr>
-			<!--
-			* BEGIN CONTRIBUTION
-			* Date: 09/07/04
-			* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-			* All Rights Reserved.
-			* Contributor(s): Xavier DUTOIT
-			-->
 			<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
-			<input type="hidden" name="max_file_size" value="{MAX_FILE_SIZE}">
-			<!--
-			* END CONTRIBUTION
-			-->
+                         <input type="hidden" name="max_file_size" value="{MAX_FILE_SIZE}">
 			<input type="hidden" name="module" value="Notes">
 			<input type="hidden" name="record" value="{ID}">
 			<input type="hidden" name="action">
@@ -88,22 +68,14 @@ function FileToName(thisvalue) {
 	</tr><tr>
 	<td width="20%" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_SUBJECT}</td>
 	<td colspan="3"><input name='name' tabindex="1" type="text" size='100' maxlength="255" value="{NAME}"></td>
-	</tr><tr>
-	<!--
-	* BEGIN CONTRIBUTION
-	* Date: 09/07/04
-	* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-	* All Rights Reserved.
-	* Contributor(s): Xavier DUTOIT
-	-->
-	<td width="20%" class="dataLabel">{MOD.LBL_FILENAME}</td>
-	<td colspan="3"><input name='filename' tabindex="1" type="file" class='button_file' size='50' maxlength="255" value="" onchange='return FileToName(this)'> ({FILENAME})<input type='hidden' name='previous_filename' value='{FILENAME}'/></td>
-	<!--
-	* END CONTRIBUTION
-	-->
-	</tr><tr>
+	</tr>
+	<tr>
+		<td width="20%" class="dataLabel">{MOD.LBL_FILENAME}</td>
+		<td colspan="3"><input name="uploadfile" tabindex="2" type="file" size="60"/> {FILENAME_TEXT}<input type='hidden' name='old_filename' value='{FILENAME}'/><input type='hidden' name='old_id' value='{OLD_ID}'/></td>
+	</tr>
+	<tr>
 	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_NOTE}</td>
-	<td colspan="3"><textarea name='description' tabindex="2" cols="100" rows="30">{DESCRIPTION}</textarea></td>
+	<td colspan="3"><textarea name='description' tabindex="3" cols="100" rows="30">{DESCRIPTION}</textarea></td>
 </tr>
 </table>
 </td></tr></table>

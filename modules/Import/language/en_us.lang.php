@@ -19,26 +19,14 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
-/* 
-'LBL_GO_TO_BUTTON_TITLE'=>'Go To Step 2',
-'LBL_IMPORT_MODULE_SELECT_DELIMITER'=>'Select Delimiter',
-'LBL_IMPORT_MODULE_COMMA_CSV'=>'Comma (CSV)',
-'LBL_IMPORT_MODULE_TAB'=>'Tab',
-'LBL_IMPORT_MODULE_CUSTOM'=>'Custom:',
-'LBL_IMPORT_MODULE_ERROR_NO_UPLOAD'=>'File was not uploaded successfully, try again',
-'LBL_IMPORT_MODULE_ERROR_LARGE_FILE'=>'File is too large. Max:',
-'LBL_IMPORT_MODULE_ERROR_LARGE_FILE_END'=>'Bytes',
-'LBL_IMPORT_MODULE_ERROR'=>'Error:',
-'LBL_IMPORT_MODULE_ERROR_MULTIPLE'=>'Multiple columns have been defined with the same field name.',
-'LBL_IMPORT_MODULE_ERROR_DELIMITER_NOT'=>'Delimiter was not defined.',
-'LBL_IMPORT_MODULE_ERROR_CANT_OPEN'=>'File could not be opened.',
-'LBL_IMPORT_MODULE_STEP_1_TITLE'=>'Step 1: File Upload',
-'LBL_IMPORT_MODULE_STEP_2_TITLE'=>'Step 2: Choose Field Mappings',
-*/
-
 
 
 $mod_strings = Array(
+'LBL_IMPORT_MODULE_NO_DIRECTORY'=>'The directory ',
+'LBL_IMPORT_MODULE_NO_DIRECTORY_END'=>' does not exist or is not writable',
+'LBL_IMPORT_MODULE_ERROR_NO_UPLOAD'=>'File was not uploaded successfully, try again',
+'LBL_IMPORT_MODULE_ERROR_LARGE_FILE'=>'File is too large. Max:',
+'LBL_IMPORT_MODULE_ERROR_LARGE_FILE_END'=>'Bytes. Change $upload_maxsize in config.php',
 'LBL_MODULE_NAME'=>'Import',
 'LBL_TRY_AGAIN'=>'Try Again',
 'LBL_ERROR'=>'Error:',
@@ -128,6 +116,7 @@ $mod_strings = Array(
 'LBL_CONTACTS_NOTE_4'=>'Fields ending in Address Street 2 and Address Street 3 are concatenated together with the main Address Street Field when inserted into the database.',
 'LBL_ACCOUNTS_NOTE_1'=>'Account Name must be mapped.',
 'LBL_ACCOUNTS_NOTE_2'=>'Fields ending in Address Street 2 and Address Street 3 are concatenated together with the main Address Street Field when inserted into the database.',
+'LBL_OPPORTUNITIES_NOTE_1'=>'Opportunity Name, Account Name, Date Closed, and Sales Stage are required fields.',
 'LBL_IMPORT_NOW'=>'Import Now',
 'LBL_'=>'',
 'LBL_'=>'',
@@ -140,8 +129,8 @@ $mod_strings = Array(
 'LBL_LAST_IMPORT_UNDONE'=>'Your last import was undone',
 'LBL_NO_IMPORT_TO_UNDO'=>'There was no import to undo.',
 'LBL_FAIL'=>'Fail:',
-'LBL_RECORDS_SKIPPED'=>'records skipped',
-'LBL_IDS_EXISTED_OR_LONGER'=>'id\'s that either existed or where longer than 36 characters',
+'LBL_RECORDS_SKIPPED'=>'records skipped because they were missing one or more required fields',
+'LBL_IDS_EXISTED_OR_LONGER'=>'records skipped because the id\'s either existed or where longer than 36 characters',
 'LBL_RESULTS'=>'Results',
 'LBL_IMPORT_MORE'=>'Import More',
 'LBL_FINISHED'=>'Finished',
@@ -231,7 +220,21 @@ $mod_list_strings = Array(
 	"shipping_address_postalcode"=>"Shipping Address Postalcode",
 	"shipping_address_country"=>"Shipping Address Country",
 	"description"=>"Description"
-	)
+	),
+
+'opportunities_import_fields' => Array(
+		"id"=>"Account ID"
+                , "name"=>"Opportunity Name"
+                , "account_name"=>"Account Name"
+                , "opportunity_type"=>"Opportunity Type"
+                , "lead_source"=>"Lead Source"
+                , "amount"=>"Amount"
+                , "date_closed"=>"Date Closed"
+                , "next_step"=>"Next Step"
+                , "sales_stage"=>"Sales Stage"
+                , "probability"=>"Probability"
+                , "description"=>"Description"
+                )
 
 );
 

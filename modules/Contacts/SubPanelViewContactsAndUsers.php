@@ -80,6 +80,8 @@ if ($currentModule == 'Contacts') {
 	
 }
 elseif ($currentModule == 'Accounts') {
+	$button .= "<input type='hidden' name='account_id' value='".$this->focus->id."'>\n";
+        $button .= "<input type='hidden' name='account_name' value='".$this->focus->name."'>\n";
 	if (isset($this->focus->billing_address_street)) $button .= "<input type='hidden' name='primary_address_street' value='".$this->focus->billing_address_street."'>\n";
 	if (isset($this->focus->billing_address_city)) $button .= "<input type='hidden' name='primary_address_city' value='".$this->focus->billing_address_city."'>\n";
 	if (isset($this->focus->billing_address_state)) $button .= "<input type='hidden' name='primary_address_state' value='".$this->focus->billing_address_state."'>\n";

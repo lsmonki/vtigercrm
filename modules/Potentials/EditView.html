@@ -64,7 +64,7 @@
 	<td width="20%" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_ACCOUNT_NAME}</td>
 	<td width="30%"><input name='account_name' type='text' readonly value="{ACCOUNT_NAME}"><input name='account_id' type="hidden" value='{ACCOUNT_ID}'>&nbsp;<input title="{APP.LBL_CHANGE_BUTTON_TITLE}" accessKey="{APP.LBL_CHANGE_BUTTON_KEY}" type="button" tabindex='1' class="button" value='{APP.LBL_CHANGE_BUTTON_LABEL}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&html=Popup_picker&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'></td>
 	<td width="20%" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_DATE_CLOSED}</td>
-	<td width="30%"><input name='date_closed' id='jscal_field' type="text" tabindex='2' size='11' maxlength='10' value="{DATE_CLOSED}"> <img src="themes/{THEME}/images/calendar.gif" id="jscal_trigger"> <font size=1><em>{APP.NTC_DATE_FORMAT}</em></font></td>
+	<td width="30%"><input name='date_closed' id='jscal_field' type="text" tabindex='2' size='11' maxlength='10' value="{DATE_CLOSED}"> <img src="themes/{THEME}/images/calendar.gif" id="jscal_trigger"> <font size=1><em old="{APP.NTC_DATE_FORMAT}">(yyyy-mm-dd)</em></font></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_TYPE}</td>
 	<td width="30%"><select tabindex='1' name='opportunity_type'>{TYPE_OPTIONS}</select></td>

@@ -50,11 +50,11 @@
                 <tr> 
                   <td class="tabOffBorder"><img src='{IMAGE_PATH}/blank.gif' width='1' height='1'></td>
                   <!-- BEGIN: tab -->
-				  <td width="5" class="{CLASS_TABBORDER}"><img src='{IMAGE_PATH}/{IMAGE_TABSTART}'></td>
-                  <td class="{CLASS_TABBORDER}" background="{IMAGE_PATH}/{IMAGE_TABTILE}"><div align="center"><a class='{TAB_CLASS}' href='index.php?module={MODULE_KEY}&action=index'>{MODULE_NAME}</a></div></td>
-                  <td width="5" class="{CLASS_TABBORDER}"><img src='{IMAGE_PATH}/{IMAGE_TABEND}'></td>
+				  <td width="5" class="{CLASS_TABBORDER}"><img src='{IMAGE_PATH}/{IMAGE_TABSTART}' width="5" height="28"></td>
+                  <td class="{CLASS_TABBORDER}" background="{IMAGE_PATH}/{IMAGE_TABTILE}" nowrap><div align="center" style="padding: 0 2 0 2"><a class='{TAB_CLASS}' href='index.php?module={MODULE_KEY}&action=index'>{MODULE_NAME}</a></div></td>
+                  <td width="5" class="{CLASS_TABBORDER}"><img src='{IMAGE_PATH}/{IMAGE_TABEND}' width="5" height="28"></td>
                   <!-- END: tab -->
-				  <td class="tabOffBorder">&nbsp;</td>
+				  <td class="tabOffBorder" width="50%">&nbsp;</td>
                 </tr>
               </tbody>
             </table></td>
@@ -68,7 +68,7 @@
 		<td class="topBar" colspan="2">&nbsp;</td>
 	</tr>
   	<!-- BEGIN: sub_menu -->
-	<tr class="topBar"> 
+	<tr> 
 		<td width="190" class="moduleMenuBg">&nbsp;</td>
 		<td class="moduleMenuBg">
 		<table cellspacing="0" cellpadding="2" border="0">
@@ -87,9 +87,10 @@
 <!--<a class="moduleMenu" href="{DELETED_ITEMS_URL}">{DELETED_ITEMS_LABEL}&nbsp;</a>-->
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:2">
   <tr>
-    <td width="180" valign="top" style="padding:5 10 0 5;">
+    <td width="180" valign="top" style="padding:5 10 0 5;">	
 	<A HREF="http://www.sourceforge.net/project/showfiles.php?group_id=117522" target="_blank"><img align="absmiddle" src="{APP.LNK_OUTLOOK}" border="0"></A><br><br>
-<!-- Between submenu and left form -->
+	{FORUM}
+	<!-- Between submenu and left form -->
     <!-- BEGIN: left_form -->
 	<form>
      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
@@ -110,6 +111,7 @@
       </tr>
     </table>
     <br> 
+
     <!-- END: left_form_search -->
     <!-- BEGIN: left_form_recent_view -->
     <table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" class="leftFormBorder2">

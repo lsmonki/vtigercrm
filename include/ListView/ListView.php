@@ -121,7 +121,7 @@ function setDisplayHeaderAndFooter($bool){
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
 */
- function setQuery($where, $limit, $orderBy, $varName){
+ function setQuery($where, $limit, $orderBy, $varName, $allowOrderByOveride= true){
 	$this->query_where = $where;
 	if($this->getSessionVariable("query", "where") != $where){
 		$this->querey_where_has_changed = true;
@@ -129,6 +129,10 @@ function setDisplayHeaderAndFooter($bool){
 	}
 	
 	$this->query_limit = $limit;
+	if(!$allowOrderByOveride){
+		$this->query_orderby = $orderBy;
+		return;
+ 	}
 	$sortBy = $this->getSessionVariable($varName, "ORDER_BY") ;
 
 	if(empty($sortBy)){
@@ -397,6 +401,8 @@ function getSessionVariableName($localVarName,$varName){
  * Contributor(s): ______________________________________..
  */
  function processListNavigation( $xtemplateSection, $html_varName, $current_offset, $next_offset, $previous_offset, $row_count ){
+	global $current_user;
+	global $allow_exports;
 	$start_record = $current_offset + 1;
 	if($row_count == 0)
 		$start_record = 0;
@@ -466,7 +472,9 @@ function getSessionVariableName($localVarName,$varName){
 
 		$export_link = "<a target=\"_blank\" href=\"export.php?module=".$this->local_current_module."\" class=\"listFormHeaderLinks\">".$this->local_app_strings['LBL_EXPORT']."</a>";
 
-		if ($_REQUEST['module']== 'Home')
+		if ($_REQUEST['module']== 'Home' || 
+			$this->local_current_module == 'Import' ||
+			($allow_exports=='none' || ( $allow_exports=='admin' && ! is_admin($current_user) ) ) )
 		{
 			$this->xTemplate->assign("EXPORT_LINK", "");
 		}
@@ -547,8 +555,8 @@ function getSessionVariableName($localVarName,$varName){
 	if($isSugarBean )
 		echo "</td></tr>\n</table>\n";
 		
-//	if(isset($_SESSION['validation'])){
-//		print base64_decode('PGEgaHJlZj0naHR0cDovL3d3dy5zdWdhcmNybS5jb20nPlBPV0VSRUQmbmJzcDtCWSZuYnNwO1NVR0FSQ1JNPC9hPg==');
+	//if(isset($_SESSION['validation'])){
+	//	print base64_decode('PGEgaHJlZj0naHR0cDovL3d3dy5zdWdhcmNybS5jb20nPlBPV0VSRUQmbmJzcDtCWSZuYnNwO1NVR0FSQ1JNPC9hPg==');
 //}
 		
 }
@@ -560,7 +568,11 @@ function processSortArrows($html_varName){
 	if($desc){
 		$imgArrow = "&nbsp;<img border='0' src='".$this->local_image_path."/arrow_up.gif' >";
 	}	
-	$this->xTemplateAssign($orderBy.'_arrow', $imgArrow);		
+	if($orderBy == 'amount*1')	
+		$this->xTemplateAssign('amount_arrow', $imgArrow);		
+	else{
+		$this->xTemplateAssign($orderBy.'_arrow', $imgArrow);
+	}	
 }
 
 }

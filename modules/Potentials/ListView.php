@@ -57,18 +57,18 @@ if(isset($_REQUEST['query']))
 
 	$where_clauses = array();
 
-	if(isset($name) && $name != "") array_push($where_clauses, "opportunities.name like '$name%'");
-	if(isset($account_name) && $account_name != "") array_push($where_clauses, "accounts.name like '$account_name%'");
+	if(isset($name) && $name != "") array_push($where_clauses, "opportunities.name like '".PearDatabase::quote($name)."%'");
+	if(isset($account_name) && $account_name != "") array_push($where_clauses, "accounts.name like '".PearDatabase::quote($account_name)."%'");
 	if(isset($lead_source) && $lead_source == "None") array_push($where_clauses, "opportunities.lead_source = ''");
-	elseif(isset($lead_source) && $lead_source != "") array_push($where_clauses, "opportunities.lead_source = '$lead_source'");
-	if(isset($opportunity_type) && $opportunity_type != "") array_push($where_clauses, "opportunities.opportunity_type = '$opportunity_type'");
-	if(isset($amount) && $amount != "") array_push($where_clauses, "opportunities.amount like '$amount%%'");
-	if(isset($next_step) && $next_step != "") array_push($where_clauses, "opportunities.next_step like '$next_step%'");
+	elseif(isset($lead_source) && $lead_source != "") array_push($where_clauses, "opportunities.lead_source = '".PearDatabase::quote($lead_source)."'");
+	if(isset($opportunity_type) && $opportunity_type != "") array_push($where_clauses, "opportunities.opportunity_type = '".PearDatabase::quote($opportunity_type)."'");
+	if(isset($amount) && $amount != "") array_push($where_clauses, "opportunities.amount like '".PearDatabase::quote($amount)."%%'");
+	if(isset($next_step) && $next_step != "") array_push($where_clauses, "opportunities.next_step like '".PearDatabase::quote($next_step)."%'");
 	if(isset($sales_stage) && $sales_stage == "Other") array_push($where_clauses, "(opportunities.sales_stage <> 'Closed Won' || opportunities.sales_stage <> 'Closed Lost')");
-	elseif(isset($sales_stage) && $sales_stage != "") array_push($where_clauses, "opportunities.sales_stage = '$sales_stage'");
-	if(isset($probability) && $probability != "") array_push($where_clauses, "opportunities.probability like '$probability%'");
+	elseif(isset($sales_stage) && $sales_stage != "") array_push($where_clauses, "opportunities.sales_stage = '".PearDatabase::quote($sales_stage)."'");
+	if(isset($probability) && $probability != "") array_push($where_clauses, "opportunities.probability like '".PearDatabase::quote($probability)."%'");
 	if(isset($current_user_only) && $current_user_only != "") array_push($where_clauses, "opportunities.assigned_user_id='$current_user->id'");
-	if(isset($date_closed) && $date_closed != "") array_push($where_clauses, "opportunities.date_closed like '$date_closed%'");
+	if(isset($date_closed) && $date_closed != "") array_push($where_clauses, "opportunities.date_closed like '".PearDatabase::quote($date_closed)."%'");
 
 	$where = "";
 	foreach($where_clauses as $clause)
@@ -84,7 +84,7 @@ if(isset($_REQUEST['query']))
 		}
 		$where .= "opportunities.assigned_user_id IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= "'$val'";
+			$where .= "'".PearDatabase::quote($val)."'";
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 		}
 	}

@@ -22,7 +22,7 @@
     <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
     <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_MODULE_NAME} {MOD.LBL_STEP_1_TITLE}</td>
 
-	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.sugarcrm.com/home/component/option,com_docman' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
 </tr>
 <tr><td colspan="4"><div class="formBorder"><img height='2' src='include/images/blank.gif'></div></td></tr></table>
 
@@ -55,18 +55,24 @@
 	<tr>
 	<th align="left" class="dataField" colspan="4">{MOD.LBL_WHAT_IS}</th>
 	</tr>
+<!-- BEGIN: show_salesforce -->
 	<tr>
-	<td><input type="radio" name="source" value="outlook" CHECKED="true"/></td><td>{MOD.LBL_MICROSOFT_OUTLOOK}</td>
+	<td><input type="radio" name="source" value="salesforce" CHECKED="true"/></td><td>{MOD.LBL_SALESFORCE}</td>
 	<td></td>
 	</tr>
+<!-- END: show_salesforce -->
+<!-- BEGIN: show_outlook -->
+	<tr>
+	<td><input type="radio" name="source" value="outlook"/></td><td>{MOD.LBL_MICROSOFT_OUTLOOK}</td>
+	<td></td>
+	</tr>
+<!-- END: show_outlook -->
+<!-- BEGIN: show_act -->
 	<tr>
 	<td><input type="radio" name="source" value="act"/></td><td>{MOD.LBL_ACT}</td>
 	<td></td>
 	</tr>
-	<tr>
-	<td><input type="radio" name="source" value="salesforce"/></td><td>{MOD.LBL_SALESFORCE}</td>
-	<td></td>
-	</tr>
+<!-- END: show_act -->
 	<tr>
 	<td><input type="radio" name="source" value="other"/></td><td>{MOD.LBL_CUSTOM}</td>
 	<td></td>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Meetings/Forms.php,v 1.3 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Meetings/Forms.php,v 1.4 2004/10/29 09:55:09 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -251,7 +251,7 @@ $the_form .= <<<EOQ
 			<input type="hidden" name="action" value="Save">
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_subject<br>
 		<input name='name' maxlength='255' type="text"><br>
-		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date&nbsp;<font size="1"><em>$ntc_date_format</em></font><br>
+		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date&nbsp;<font size="1"><em old='ntc_date_format'>(yyyy-mm-dd)</em></font><br>
 		<input name='date_start' id='jscal_field' type="text" maxlength="10" value="${default_date_start}"> <img src="themes/$theme/images/calendar.gif" id="jscal_trigger"><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_time&nbsp;<font size="1"><em>$ntc_time_format</em></font><br>
 		<input name='time_start' type="text" maxlength='5' value="${default_time_start}"><br><br>

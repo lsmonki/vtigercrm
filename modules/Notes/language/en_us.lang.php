@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/language/en_us.lang.php,v 1.3 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Notes/language/en_us.lang.php,v 1.4 2004/10/29 09:55:09 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -31,14 +31,12 @@ $mod_strings = Array(
 'LBL_LIST_CONTACT_NAME'=>'Contact Name',
 'LBL_LIST_RELATED_TO'=>'Related To',
 'LBL_LIST_DATE_MODIFIED'=>'Last Modified',
-'LBL_LIST_FILENAME'=>'Attachment',
 
 'LBL_NOTE'=>'Note:',
 'LBL_NOTE_SUBJECT'=>'Note Subject:',
 'LBL_CONTACT_NAME'=>'Contact Name:',
 'LBL_PHONE'=>'Phone:',
 'LBL_SUBJECT'=>'Subject:',
-'LBL_FILENAME'=>'Attachment:',
 'LBL_CLOSE'=>'Close:',
 'LBL_RELATED_TO'=>'Related To:',
 'LBL_EMAIL_ADDRESS'=>'Email Address:',
@@ -55,6 +53,7 @@ $mod_strings = Array(
 'LNK_NEW_MEETING'=>'New Meeting',
 'LNK_NEW_TASK'=>'New Task',
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
+'LBL_LIST_FILENAME'=>"File",
 );
 
 ?>

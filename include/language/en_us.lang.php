@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.13 2004/10/07 12:52:32 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.16 2004/10/29 09:55:08 jack Exp $
  * Description:  Defines the English language pack for the base application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -39,6 +39,10 @@ $app_strings = Array(
 'LBL_DUPLICATE_BUTTON_TITLE'=>'Duplicate [Alt+U]',
 'LBL_DUPLICATE_BUTTON'=>'Duplicate',
 'LBL_TABCUSTOMISE_BUTTON_TITLE'=>'Customise [Alt+C]',
+'LBL_FORUM_HIDE_BUTTON_TITLE'=>'Hide Forum [Alt+I]',
+'LBL_FORUM_HIDE_BUTTON_KEY'=>'H',
+'LBL_FORUM_SHOW_BUTTON_TITLE'=>'Show Forum [Alt+W]',
+'LBL_FORUM_SHOW_BUTTON_KEY'=>'W',
 'LBL_TABCUSTOMISE_BUTTON'=>'Customise',
 'LBL_DELETE_BUTTON_TITLE'=>'Delete [Alt+D]',
 'LBL_DELETE_BUTTON'=>'Delete',
@@ -47,12 +51,15 @@ $app_strings = Array(
 'LBL_CONVERT_BUTTON_LABEL'=>'Convert Lead',
 'LBL_TABCUSTOMISE_BUTTON_KEY'=>'C',
 'LBL_TABCUSTOMISE_BUTTON_LABEL'=>'Customize Tab',
+'LBL_FORUM_HIDE_BUTTON_LABEL'=>'Hide Forums',
+'LBL_FORUM_SHOW_BUTTON_LABEL'=>'Show Forums',
 'LBL_NEW_BUTTON_TITLE'=>'New [Alt+N]',
 'LBL_CHANGE_BUTTON_TITLE'=>'Change [Alt+G]',
 'LBL_CANCEL_BUTTON_TITLE'=>'Cancel [Alt+X]',
 'LBL_SEARCH_BUTTON_TITLE'=>'Search [Alt+Q]',
 'LBL_CLEAR_BUTTON_TITLE'=>'Clear [Alt+C]',
 'LBL_SELECT_BUTTON_TITLE'=>'Select [Alt+T]',
+'LBL_CREATE_BUTTON_LABEL' =>'Create',
 'LBL_SAVE_BUTTON_KEY'=>'S',
 'LBL_EDIT_BUTTON_KEY'=>'E',
 'LBL_DUPLICATE_BUTTON_KEY'=>'U',
@@ -156,11 +163,12 @@ $app_list_strings = Array(
 				, 'Accounts'=>'Accounts'
 				, 'Opportunities'=>'Opportunities'
 				, 'Cases'=>'Cases'
-				, 'Notes'=>'Notes & Attachments'
+				, 'Notes'=>'Notes'
 				, 'Calls'=>'Calls'
 				, 'Emails'=>'Emails'
 				, 'Meetings'=>'Meetings'
-				, 'Tasks'=>'Tasks'),
+				, 'Tasks'=>'Tasks'
+				, 'MessageBoard'=>'MessageBoard'),
 
 //e.g. en français 'Analyst'=>'Analyste',
 'account_type_dom' => Array(''=>''

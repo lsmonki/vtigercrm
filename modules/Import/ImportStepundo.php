@@ -77,7 +77,7 @@ else
 ?>
 <?php echo $mod_strings['LBL_FAIL'] ?><br>
 <?php echo $mod_strings['LBL_NO_IMPORT_TO_UNDO'] ?>
-<?
+<?php
 } 
 ?>
 <br>

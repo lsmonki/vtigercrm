@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Cases/DetailView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Cases/DetailView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -58,7 +58,7 @@ $xtpl->assign("NAME", $focus->name);
 $xtpl->assign("DATE_ENTERED", $focus->date_entered);
 $xtpl->assign("NUMBER", $focus->number);
 $xtpl->assign("STATUS", $app_list_strings['case_status_dom'][$focus->status]);
-$xtpl->assign("DESCRIPTION", $focus->description);
+$xtpl->assign("DESCRIPTION", nl2br($focus->description));
 $xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
 $xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
 $xtpl->parse("main");

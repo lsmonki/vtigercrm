@@ -57,7 +57,7 @@
 	<table width="100%" border="0" cellspacing="1" cellpadding="0">
 	<tr valign="top">
 	<td width="20%" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_DATE_AND_TIME}</td>
-	<td width="30%"><input name='date_start' id='jscal_field' tabindex='1' maxlength='10' size='11' type="text" value="{DATE_START}"> <img src="themes/{THEME}/images/calendar.gif" id="jscal_trigger"> &nbsp; <input name='time_start' tabindex='1' maxlength='5' size='5' type="text" value='{TIME_START}'><br><font size="1"><em>{APP.NTC_DATE_TIME_FORMAT}</em></font></td>
+	<td width="30%"><input name='date_start' id='jscal_field' tabindex='1' maxlength='10' size='11' type="text" value="{DATE_START}"> <img src="themes/{THEME}/images/calendar.gif" id="jscal_trigger"> &nbsp; <input name='time_start' tabindex='1' maxlength='5' size='5' type="text" value='{TIME_START}'><br><font size="1"><em old="{APP.NTC_DATE_TIME_FORMAT}">(yyyy-mm-dd 24:00)</em></font></td>
 	<td width="20%" class="dataLabel" valign="top"><select tabindex='2' name='parent_type' onChange="document.EditView.parent_name.value='';">{TYPE_OPTIONS}</select></td>
 	<td width="30%"><input name='parent_id' type="hidden" value='{PARENT_ID}'><input name='parent_name' tabindex='0' readonly type='text' value="{PARENT_NAME}"> {CHANGE_PARENT_BUTTON}</td>
 	</tr><tr>

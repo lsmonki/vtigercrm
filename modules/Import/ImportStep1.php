@@ -23,6 +23,7 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
+require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/Forms.php');
 require_once('modules/Import/ImportMap.php');
 
@@ -65,7 +66,7 @@ if (isset($_REQUEST['publish']) )
 	$import_map = new ImportMap();
 	$result = 0;
 
-	$import_map = $import_map->retrieve($_REQUEST['import_map_id']);
+	$import_map = $import_map->retrieve($_REQUEST['import_map_id'], false);
 
 	if ($_REQUEST['publish'] == 'yes')
 	{
@@ -104,7 +105,12 @@ if ( $_REQUEST['module'] == 'Contacts')
 else if ( $_REQUEST['module'] == 'Accounts')
 {
 	$focus = new ImportAccount();
-} else
+} 
+else if ( $_REQUEST['module'] == 'Opportunities')
+{
+	$focus = new ImportOpportunity();
+} 
+else
 {
  echo "Imports aren't set up for this module type\n";
  exit;
@@ -123,6 +129,22 @@ $xtpl->assign("HEADER", $app_strings['LBL_IMPORT']." ". $mod_strings['LBL_MODULE
 $xtpl->assign("MODULE", $_REQUEST['module']);
 
 $xtpl->assign("JAVASCRIPT", get_validate_upload_js());
+
+if ( $_REQUEST['module'] == 'Contacts')
+{
+$xtpl->parse("main.show_salesforce");
+$xtpl->parse("main.show_outlook");
+$xtpl->parse("main.show_act");
+}
+else if ( $_REQUEST['module'] == 'Accounts')
+{
+$xtpl->parse("main.show_salesforce");
+$xtpl->parse("main.show_act");
+} 
+else if ( $_REQUEST['module'] == 'Opportunities')
+{
+$xtpl->parse("main.show_salesforce");
+} 
 
 if ( is_admin($current_user)) 
 {

@@ -26,6 +26,7 @@ require_once("data/Tracker.php");
 global $currentModule;
 global $moduleList;
 global $theme;
+
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -37,9 +38,17 @@ require_once($module_path.'Menu.php');
 global $module_menu;
 
 $xtpl=new XTemplate ($theme_path."header.html");
+
+/* Forum Display
+$displayForums = $_REQUEST['forumDisplay'];
+if($displayForums == "")
+{
+	$displayForums = true;
+}
+if($displayForums == "true")
+$xtpl->assign("FORUM", "<script language=\"JavaScript\" type=\"text/javascript\" src=\"http://www.vtiger.com/forums/vtcrm_topicsanywhere.php?mode=show&f=uMSwyLDMsNyw5&n=5&jlp=y&a=y&s=y&l=y&m=y&h='a\'s\'m\&b=non&lpd=0&lpi=y&ch=30&cl=style.css\"></script><br>");
+*/
 $xtpl->assign("APP", $app_strings);
-
-
 if(isset($app_strings['LBL_CHARSET']))
 {
 	$xtpl->assign("LBL_CHARSET", $app_strings['LBL_CHARSET']);
@@ -147,6 +156,11 @@ if ($currentModule && $action == "index" && function_exists('get_new_record_form
 	$xtpl->assign("NEW_RECORD", get_new_record_form());
 	$xtpl->parse("main.left_form_new_record");
 }
+//added for shoutbox feature
+//require_once("modules/MessageBoard/shoutbox_pre.php");
+//require_once("../../../modules/MessageBoard/shoutbox_pre.php");
+//	$howmanychat = howmanyChat();
+//	$chatters = chattersMain();
 
 $xtpl->parse("main");
 $xtpl->out("main");

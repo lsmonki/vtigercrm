@@ -14,11 +14,13 @@
  ********************************************************************************/
 
 global $mod_strings;
+global $allow_exports;
 ?>
-<table width="100%">
+<table width="100%" cellpadding="6">
 <tr>
 <?php 
 if ($_REQUEST['module'] == 'Contacts' ||
+	$_REQUEST['module'] == 'Opportunities' ||
 	$_REQUEST['module'] == 'Accounts')
 {
 ?>
@@ -28,17 +30,23 @@ if ($_REQUEST['module'] == 'Contacts' ||
 <input type="hidden" name="step" value="1">
 <input type="hidden" name="return_module" value="<?php echo $_REQUEST['module']; ?>">
 <input type="hidden" name="return_action" value="index">
-<td align="right" width="99%"><input title="<?php echo $app_strings['LBL_IMPORT']; ?> <?php echo $mod_strings['LBL_MODULE_NAME']?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $app_strings['LBL_IMPORT']; ?> <?php echo $mod_strings['LBL_MODULE_NAME']?>  " >&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="middle" align="right" width="99%"><input title="<?php echo $app_strings['LBL_IMPORT']; ?> <?php echo $mod_strings['LBL_MODULE_NAME']?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $app_strings['LBL_IMPORT']; ?> <?php echo $mod_strings['LBL_MODULE_NAME']?>  " ></td>
 </form>
 <?php
 }
 
+if  ( $allow_exports=='all' || 
+	(  $allow_exports=='admin' &&  is_admin($current_user))  ) 
+{
 ?>
 <form name="EXPORT" method="get" action="export.php">
 <input type="hidden" name="module" value="<?php echo $_REQUEST['module']; ?>">
 <input type="hidden" name="all" value="1">
 <input type="hidden" name="action" value="Export">
-<td align="right" width="1%"><input title="<?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?>  " >&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td valign="middle" align="right" width="1%"><input title="<?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?>  " ></td>
 </form>
+<?php
+}
+?>
 </tr>
 </table>

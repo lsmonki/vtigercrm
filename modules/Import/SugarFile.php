@@ -127,7 +127,7 @@ class SugarFile extends SugarBean
 				'assigned_user_id' => $owner_id
 				,'name' => $name
 				);
-		$this->retrieve_by_string_fields($fields_array);
+		$this->retrieve_by_string_fields($fields_array, false);
 		return $this->content;
 	}
 
@@ -147,7 +147,7 @@ class SugarFile extends SugarBean
 	*/
 
 
-	function retrieve_by_string_fields($fields_array) 
+	function retrieve_by_string_fields($fields_array, $encode=true) 
 	{ 
 		$where_clause = $this->get_where($fields_array); 
 
@@ -162,7 +162,7 @@ class SugarFile extends SugarBean
 			
 			return null; 
 		} 
-		$row = $this->db->fetchByAssoc($result); 
+		$row = $this->db->fetchByAssoc($result,-1, $encode); 
 		foreach($this->column_fields as $field) 
 		{ 
 			if(isset($row[$field])) 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.4 2004/11/08 13:48:29 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -104,6 +104,9 @@ if (isset($default_user_name)
 	$status .= " disabled ";
 	$xtpl->assign("DISABLED", "disabled");
 }
+
+if ($_REQUEST['Edit'] == ' Edit ')
+$xtpl->assign("READONLY", "readonly");
 
 if (is_admin($current_user) && $focus->is_admin == 'on') $xtpl->assign("IS_ADMIN", "checked");
 elseif (is_admin($current_user) && $focus->is_admin != 'on') ;

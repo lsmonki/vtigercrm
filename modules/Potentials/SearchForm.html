@@ -27,13 +27,13 @@
 		<td class="dataField"><input type=text size="10" name="name" class=dataField  value="{NAME}" />
 		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_ACCOUNT_NAME}&nbsp;</td>
 		<td class="dataField"><input type=text size="10" name="account_name" class=dataField  value="{ACCOUNT_NAME}" />
-		<td rowspan='2' align="center"><input type="hidden" name="action" value="ListView"/>
+		<td rowspan='2' align="center"><input type="hidden" name="action" value="index"/>
 			<input type="hidden" name="query" value="true"/>
 			<input type="hidden" name="module" value="Opportunities" />
 		<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
 		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
 		<br>
-		<font size='1'>[<a href='index.php?module=Opportunities&action=ListView&advanced=true'>{APP.LNK_ADVANCED_SEARCH}</a>]</font>
+		<font size='1'>[<a href='index.php?module=Opportunities&action=index&advanced=true'>{APP.LNK_ADVANCED_SEARCH}</a>]</font>
 		</td>
 	</tr><tr>
 		<td class="dataLabel">{APP.LBL_CURRENT_USER_FILTER}</td>
@@ -44,32 +44,32 @@
 </td></tr>
 <tr><td>
 <table cellpadding="0" cellspacing="2" border="0" align="center"><tr>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=A">A</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=B">B</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=C">C</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=D">D</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=E">E</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=F">F</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=G">G</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=H">H</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=I">I</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=J">J</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=K">K</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=L">L</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=M">M</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=N">N</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=O">O</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=P">P</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=Q">Q</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=R">R</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=S">S</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=T">T</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=U">U</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=V">V</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=W">W</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=X">X</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=Y">Y</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=ListView&query=true&name=Z">Z</a></td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=A">A</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=B">B</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=C">C</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=D">D</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=E">E</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=F">F</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=G">G</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=H">H</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=I">I</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=J">J</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=K">K</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=L">L</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=M">M</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=N">N</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=O">O</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=P">P</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=Q">Q</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=R">R</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=S">S</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=T">T</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=U">U</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=V">V</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=W">W</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=X">X</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=Y">Y</a></td><td>|</td>
+<td><a href="index.php?module=Opportunities&action=index&query=true&name=Z">Z</a></td>
 </tr></table>
 </td>
 </tr></table>
@@ -80,14 +80,14 @@
 <table width="100%" cellpadding="2" cellspacing="0" border="0"><tr>
 			<form>
 			<input type="hidden" name="module" value="Opportunities">
-			<input type="hidden" name="action" value='ListView'>
+			<input type="hidden" name="action" value='index'>
 			<input type="hidden" name="query" value="true"/>
 			<input type="hidden" name="advanced" value="true"/>
 		<td width="100%"></td>
 		<td align='center' nowrap><input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
 		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
 		<br>
-		<font size='1'>[<a href='index.php?module=Opportunities&action=ListView'>{APP.LNK_BASIC_SEARCH}</a>]</font>
+		<font size='1'>[<a href='index.php?module=Opportunities&action=index'>{APP.LNK_BASIC_SEARCH}</a>]</font>
 	</td>
 </tr></table>
 

@@ -23,6 +23,7 @@
 require_once('data/Tracker.php');
 require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
+require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/ImportMap.php');
 require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Import/parse_utils.php');
@@ -46,6 +47,7 @@ global $app_strings;
 global $current_user;
 global $import_file_name;
 global $theme;
+global $upload_maxsize;
 global $site_URL;
 
 $theme_path="themes/".$theme."/";
@@ -55,7 +57,6 @@ require_once($theme_path.'layout_utils.php');
 $log->info("Upload Step 2");
 
 
-$maxfilesize = 300000;
 $delimiter = ',';
 // file handle
 $count = 0;
@@ -65,6 +66,7 @@ $header_to_field = array();
 $field_to_pos = array();
 $focus = 0;
 $current_bean_type = "";
+$id_exists_count = 0;
 $broken_ids = 0;
 
 $has_header = 0;
@@ -81,6 +83,10 @@ if (! isset( $_REQUEST['module'] ) || $_REQUEST['module'] == 'Contacts')
 else if ( $_REQUEST['module'] == 'Accounts')
 {
 	$current_bean_type = "ImportAccount";
+}
+else if ( $_REQUEST['module'] == 'Opportunities')
+{
+	$current_bean_type = "ImportOpportunity";
 }
 $focus = new $current_bean_type();
 
@@ -125,7 +131,7 @@ foreach ($_REQUEST as $name=>$value)
 
 
 // Now parse the file and look for errors
-$max_lines = 10000;
+$max_lines = -1;
 
 $ret_value = 0;
 
@@ -199,31 +205,50 @@ foreach ($rows as $row)
 	{
 		// check if it already exists
 		$check_bean = new $current_bean_type();
-		$check_bean->retrieve($focus->id);
-	
-		if (isset($check_bean->id) && $check_bean->id != -1)
+
+		$query = "select * from {$check_bean->table_name} WHERE id='{$focus->id}'";
+
+                $log->info($query);
+
+                $result = mysql_query($query)
+                       or die("Error selecting sugarbean: ".mysql_error());
+
+		$row = $check_bean->db->fetchByAssoc($result);
+
+		if (isset($row['id']) && $row['id'] != -1)
 		{
-			$do_save = 0;
+			// if it exists but was deleted, just remove it
+			if ( isset($row['deleted']) && $row['deleted'] == 1)
+			{
+				$query2 = "delete from {$check_bean->table_name} WHERE id='{$focus->id}'";
+
+                		$log->info($query2);
+
+                		$result2 = mysql_query($query2)
+                       			or die("Error deleting existing sugarbean: ".mysql_error());
+			
+			}
+			else
+			{
+				$id_exists_count++;
+				$do_save = 0;
+			}
 		}
+
 		// check if the id is too long
 		else if ( strlen($focus->id) > 36)
 		{
+			$broken_ids++;
 			$do_save = 0;
 		}
-		if ($do_save == 0)
-		{
-                        $skip_required_count++;
-			$broken_ids++;
-		} 
-		else
+
+		if ($do_save != 0)
 		{
 			// set the flag to force an insert
 			$focus->new_with_id = true;
 		}
 	}
 
-	// now do any special processing
-	$focus->process_special_fields();
 
 	foreach ($focus->required_fields as $field=>$notused) 
 	{ 
@@ -238,8 +263,18 @@ foreach ($rows as $row)
 
 	if ($do_save)
 	{
-		// TODO: create account relationship and create if not exists
-		// TODO: make generic relationship function for other modules
+		if ( ! isset($focus->assigned_user_id) || $focus->assigned_user_id=='')
+		{
+			$focus->assigned_user_id = $current_user->id;
+		}	
+		if ( ! isset($focus->modified_user_id) || $focus->modified_user_id=='')
+		{
+			$focus->modified_user_id = $current_user->id;
+		}	
+
+		// now do any special processing
+		$focus->process_special_fields();
+
 		$focus->save();	
 		$last_import = new UsersLastImport();
 		$last_import->assigned_user_id = $current_user->id;
@@ -287,7 +322,7 @@ if ( isset($_REQUEST['save_map']) && $_REQUEST['save_map'] == 'on'
 	$query_arr = array('assigned_user_id'=>$current_user->id,'name'=>$mapping_file_name);
 
 	
-	$mapping_file->retrieve_by_string_fields($query_arr);
+	$mapping_file->retrieve_by_string_fields($query_arr, false);
 
 	$result = $mapping_file->save_map( $current_user->id,
 					$mapping_file_name,
@@ -303,9 +338,9 @@ if ($error != "")
 }
 else 
 {
-	$message= urlencode($mod_strings['LBL_SUCCESS']."<BR>$count ". $mod_strings['LBL_MODULE_NAME']." ".$mod_strings['LBL_SUCCESSFULLY']."<br>$skip_required_count  ". $mod_strings['LBL_IDS_EXISTED_OR_LONGER']. "<br>$broken_ids " .  $mod_strings['LBL_RECORDS_SKIPPED'] );
+	$message= urlencode($mod_strings['LBL_SUCCESS']."<BR>$count ". $mod_strings['LBL_MODULE_NAME']." ".$mod_strings['LBL_SUCCESSFULLY']."<br>".($broken_ids+$id_exists_count) ." ". $mod_strings['LBL_IDS_EXISTED_OR_LONGER']. "<br>$skip_required_count " .  $mod_strings['LBL_RECORDS_SKIPPED'] );
 
-	header("Location: $site_URL/index.php?module={$_REQUEST['module']}&action=Import&step=last&return_module={$_REQUEST['return_module']}&return_action={$_REQUEST['return_action']}&message=$message");
+	header("Location: index.php?module={$_REQUEST['module']}&action=Import&step=last&return_module={$_REQUEST['return_module']}&return_action={$_REQUEST['return_action']}&message=$message");
 exit;
 }
 

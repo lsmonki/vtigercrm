@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Cases/Case.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Cases/Case.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -163,9 +163,18 @@ class aCase extends SugarBean {
 		// Fill in the assigned_user_name
 		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
 
-		$query = "SELECT cases.id, cases.assigned_user_id, cases.status, cases.name, cases.number, accounts.name as account_name, cases.account_id FROM cases, accounts ";
-		$where_auto = "cases.account_id=accounts.id AND accounts.deleted=0 AND cases.deleted=0";
-		
+		$query = "SELECT 
+			cases.id, 
+			cases.assigned_user_id, 
+ 	                cases.status, 
+ 	                cases.name, 
+ 	                cases.number, 
+ 	                accounts.name as account_name, 
+ 	                cases.account_id 
+ 	                FROM cases LEFT JOIN accounts 
+ 	                ON cases.account_id=accounts.id ";
+                $where_auto = " (accounts.deleted IS NULL OR accounts.deleted=0 ) 
+ 	                                AND cases.deleted=0";
 		if($where != "")
 			$query .= "where $where AND ".$where_auto;
 		else 
@@ -191,7 +200,7 @@ class aCase extends SugarBean {
                                 ON cases.assigned_user_id=users.id
                                 LEFT JOIN accounts
                                 ON cases.account_id=accounts.id ";
-                $where_auto = " accounts.deleted=0
+                $where_auto = " (accounts.deleted IS NULL OR accounts.deleted=0)
                                 AND cases.deleted=0
                                 AND users.status='ACTIVE' ";
 

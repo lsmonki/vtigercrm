@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/1checkSystem.php,v 1.9 2004/10/06 09:02:02 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/1checkSystem.php,v 1.10 2004/10/29 09:55:08 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -46,91 +46,81 @@ foreach($pieces as $val)
 
 $gd_info_alternate = 'function gd_info() {
 $array = Array(
-"GD Version" => "",
-"FreeType Support" => 0,
-"FreeType Support" => 0,
-"FreeType Linkage" => "",
-"T1Lib Support" => 0,
-"GIF Read Support" => 0,
-"GIF Create Support" => 0,
-"JPG Support" => 0,
-"PNG Support" => 0,
-"WBMP Support" => 0,
-"XBM Support" => 0
-);
-$gif_support = 0;
+                       "GD Version" => "",
+                       "FreeType Support" => 0,
+                       "FreeType Support" => 0,
+                       "FreeType Linkage" => "",
+                       "T1Lib Support" => 0,
+                       "GIF Read Support" => 0,
+                       "GIF Create Support" => 0,
+                       "JPG Support" => 0,
+                       "PNG Support" => 0,
+                       "WBMP Support" => 0,
+                       "XBM Support" => 0
+                     );
+       $gif_support = 0;
 
-ob_start();
-eval("phpinfo();");
-$info = ob_get_contents();
-ob_end_clean();
+       ob_start();
+       eval("phpinfo();");
+       $info = ob_get_contents();
+       ob_end_clean();
+     
+       foreach(explode("\n", $info) as $line) {
+           if(strpos($line, "GD Version")!==false)
+               $array["GD Version"] = trim(str_replace("GD Version", "", strip_tags($line)));
+           if(strpos($line, "FreeType Support")!==false)
+               $array["FreeType Support"] = trim(str_replace("FreeType Support", "", strip_tags($line)));
+           if(strpos($line, "FreeType Linkage")!==false)
+               $array["FreeType Linkage"] = trim(str_replace("FreeType Linkage", "", strip_tags($line)));
+           if(strpos($line, "T1Lib Support")!==false)
+               $array["T1Lib Support"] = trim(str_replace("T1Lib Support", "", strip_tags($line)));
+           if(strpos($line, "GIF Read Support")!==false)
+               $array["GIF Read Support"] = trim(str_replace("GIF Read Support", "", strip_tags($line)));
+           if(strpos($line, "GIF Create Support")!==false)
+               $array["GIF Create Support"] = trim(str_replace("GIF Create Support", "", strip_tags($line)));
+           if(strpos($line, "GIF Support")!==false)
+               $gif_support = trim(str_replace("GIF Support", "", strip_tags($line)));
+           if(strpos($line, "JPG Support")!==false)
+               $array["JPG Support"] = trim(str_replace("JPG Support", "", strip_tags($line)));
+           if(strpos($line, "PNG Support")!==false)
+               $array["PNG Support"] = trim(str_replace("PNG Support", "", strip_tags($line)));
+           if(strpos($line, "WBMP Support")!==false)
+               $array["WBMP Support"] = trim(str_replace("WBMP Support", "", strip_tags($line)));
+           if(strpos($line, "XBM Support")!==false)
+               $array["XBM Support"] = trim(str_replace("XBM Support", "", strip_tags($line)));
+       }
+       
+       if($gif_support==="enabled") {
+           $array["GIF Read Support"]  = 1;
+           $array["GIF Create Support"] = 1;
+       }
 
-foreach(explode("\n", $info) as $line) {
-if(strpos($line, "GD Version")!==false)
-$array["GD Version"] = trim(str_replace("GD 
-Version", "", strip_tags($line)));
-if(strpos($line, "FreeType Support")!==false)
-$array["FreeType Support"] = trim(str_replace
-("FreeType Support", "", strip_tags($line)));
-if(strpos($line, "FreeType Linkage")!==false)
-$array["FreeType Linkage"] = trim(str_replace
-("FreeType Linkage", "", strip_tags($line)));
-if(strpos($line, "T1Lib Support")!==false)
-$array["T1Lib Support"] = trim(str_replace
-("T1Lib Support", "", strip_tags($line)));
-if(strpos($line, "GIF Read Support")!==false)
-$array["GIF Read Support"] = trim(str_replace
-("GIF Read Support", "", strip_tags($line)));
-if(strpos($line, "GIF Create Support")!==false)
-$array["GIF Create Support"] = trim
-(str_replace("GIF Create Support", "", strip_tags($line)));
-if(strpos($line, "GIF Support")!==false)
-$gif_support = trim(str_replace("GIF 
-Support", "", strip_tags($line)));
-if(strpos($line, "JPG Support")!==false)
-$array["JPG Support"] = trim(str_replace("JPG 
-Support", "", strip_tags($line)));
-if(strpos($line, "PNG Support")!==false)
-$array["PNG Support"] = trim(str_replace
-("PNG Support", "", strip_tags($line)));
-if(strpos($line, "WBMP Support")!==false)
-$array["WBMP Support"] = trim(str_replace
-("WBMP Support", "", strip_tags($line)));
-if(strpos($line, "XBM Support")!==false)
-$array["XBM Support"] = trim(str_replace
-("XBM Support", "", strip_tags($line)));
-}
+       if($array["FreeType Support"]==="enabled"){
+           $array["FreeType Support"] = 1;    }
+ 
+       if($array["T1Lib Support"]==="enabled")
+           $array["T1Lib Support"] = 1;    
+       
+       if($array["GIF Read Support"]==="enabled"){
+           $array["GIF Read Support"] = 1;    }
+ 
+       if($array["GIF Create Support"]==="enabled")
+           $array["GIF Create Support"] = 1;    
 
-if($gif_support==="enabled") {
-$array["GIF Read Support"] = 1;
-$array["GIF Create Support"] = 1;
-}
+       if($array["JPG Support"]==="enabled")
+           $array["JPG Support"] = 1;
+           
+       if($array["PNG Support"]==="enabled")
+           $array["PNG Support"] = 1;
+           
+       if($array["WBMP Support"]==="enabled")
+           $array["WBMP Support"] = 1;
+           
+       if($array["XBM Support"]==="enabled")
+           $array["XBM Support"] = 1;
+       
+       return $array;
 
-if($array["FreeType Support"]==="enabled"){
-$array["FreeType Support"] = 1; }
-
-if($array["T1Lib Support"]==="enabled")
-$array["T1Lib Support"] = 1; 
-
-if($array["GIF Read Support"]==="enabled"){
-$array["GIF Read Support"] = 1; }
-
-if($array["GIF Create Support"]==="enabled")
-$array["GIF Create Support"] = 1; 
-
-if($array["JPG Support"]==="enabled")
-$array["JPG Support"] = 1;
-
-if($array["PNG Support"]==="enabled")
-$array["PNG Support"] = 1;
-
-if($array["WBMP Support"]==="enabled")
-$array["WBMP Support"] = 1;
-
-if($array["XBM Support"]==="enabled")
-$array["XBM Support"] = 1;
-
-return $array;
 }';
 
 ?> 
@@ -200,10 +190,12 @@ return $array;
 									echo "<strong><font size=-1 color=\"#FF0000\">GD Library not configured in your PHP installation.<br>Check out our <a href='http://sourceforge.net/docman/?group_id=107819'>online documentation</a> for tips on enabling this library. You can ignore this error and continue your vtiger CRM installation, however the chart images simply won't work.</font></strong>";
 								}
 								else {
-									if (function_exists('gd_info')) 
-										$gd_info = gd_info();							 
-									else
+									if (!function_exists('gd_info')) 
+									{
 										eval($gd_info_alternate);
+									}
+									
+									$gd_info = gd_info();
 									
 									if (isset($gd_info['GD Version'])) {
 										$gd_version = $gd_info['GD Version'];

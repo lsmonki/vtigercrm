@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Tasks/Task.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Tasks/Task.php,v 1.5 2004/11/02 07:59:35 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -78,7 +78,7 @@ class Task extends SugarBean {
 	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'contact_name', 'contact_phone', 'contact_email', 'parent_name');
 
 	// This is the list of fields that are in the lists.
-	var $list_fields = Array('id', 'status', 'name', 'parent_type', 'parent_name', 'parent_id', 'date_due', 'contact_id', 'contact_name', 'assigned_user_name', 'assigned_user_id');
+	var $list_fields = Array('id', 'status', 'name', 'parent_type', 'parent_name', 'parent_id', 'date_due', 'contact_id', 'contact_name', 'assigned_user_name', 'assigned_user_id','priority','description');
 
 	function Task() {
 		$this->log = LoggerManager::getLogger('task');
@@ -138,12 +138,12 @@ class Task extends SugarBean {
 
 		if($contact_required)
 		{
-			$query = "SELECT tasks.id, tasks.assigned_user_id, tasks.status, tasks.name, tasks.parent_type, tasks.parent_id, tasks.contact_id, tasks.date_due, contacts.first_name, contacts.last_name FROM contacts, tasks ";
+			$query = "SELECT tasks.id, tasks.assigned_user_id, tasks.status, tasks.name, tasks.parent_type, tasks.parent_id, tasks.contact_id, tasks.date_due, contacts.first_name, contacts.last_name ,tasks.priority,tasks.description FROM contacts, tasks ";
 			$where_auto = "tasks.contact_id = contacts.id AND tasks.deleted=0 AND contacts.deleted=0";
 		}
 		else
 		{
-			$query = 'SELECT id, assigned_user_id, status, name, parent_type, parent_id, contact_id, date_due FROM tasks ';
+			$query = 'SELECT id, assigned_user_id, status, name, parent_type, parent_id, contact_id, date_due ,priority,description FROM tasks ';
 			$where_auto = "deleted=0";
 		}
 
@@ -277,7 +277,11 @@ class Task extends SugarBean {
 		}
 	}
 
-
+   function delete($id)
+        {
+		
+          mysql_query("update tasks set deleted=1 where id = '" . $id . "'");
+        }
 
 
 

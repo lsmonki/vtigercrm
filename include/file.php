@@ -107,8 +107,16 @@ class File {
 
 	function URL ()
 	{
-		global $site_URL;
-		return $site_URL.$this->folder.$this->id.rawurlencode($this->name);
+		/** VTIGER CRM CONTRIBUTION BEGINS
+		*/
+		$web_root = $_SERVER['SERVER_NAME']. ":" .$_SERVER['SERVER_PORT'];
+		$web_root = "http://$web_root";
+		/*
+		   VTIGER CRM CONTRIBUTION ENDS	
+		*/		
+
+		//global $site_URL;
+		return $web_root.$this->folder.$this->id.rawurlencode($this->name);
 	}
 
 	/** BEGIN CONTRIBUTION

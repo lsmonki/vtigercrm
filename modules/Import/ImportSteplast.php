@@ -21,6 +21,7 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
+require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Import/parse_utils.php');
 require_once('include/ListView/ListView.php');
@@ -109,8 +110,9 @@ echo $_REQUEST['message']; ?>
 
         </form>
 
-<?
+<?php
 
+$currentModule = "Import";
 global $limit;
 global $list_max_entries_per_page;
 $newForm = null;
@@ -119,8 +121,7 @@ $seedUsersLastImport->bean_type = "Contacts";
 $current_module_strings = return_module_language($current_language, 'Contacts');
 $seedUsersLastImport->list_fields = Array('id', 'first_name', 'last_name', 'account_name', 'account_id', 'title', 'yahoo_id', 'email1', 'phone_work', 'assigned_user_name', 'assigned_user_id');
 
-$where = "users_last_import.assigned_user_id='{$current_user->id}' AND users_last_import.bean_type='Contacts' and users_last_import.bean_id=contacts.id";
-
+$where = "users_last_import.assigned_user_id='{$current_user->id}' AND users_last_import.bean_type='Contacts' and users_last_import.bean_id=contacts.id AND users_last_import.deleted=0";
 
 $ListView = new ListView();
 $ListView->initNewXTemplate( 'modules/Contacts/ListView.html',$current_module_strings);
@@ -137,7 +138,7 @@ $seedUsersLastImport->list_fields = Array('id', 'name', 'website', 'phone_office
 
 $current_module_strings = return_module_language($current_language, 'Accounts');
 
-$where = "users_last_import.assigned_user_id='{$current_user->id}' AND users_last_import.bean_type='Accounts' and users_last_import.bean_id=accounts.id";
+$where = "users_last_import.assigned_user_id='{$current_user->id}' AND users_last_import.bean_type='Accounts' and users_last_import.bean_id=accounts.id AND users_last_import.deleted=0";
 
 $ListView = new ListView();
 $ListView->initNewXTemplate( 'modules/Accounts/ListView.html',$current_module_strings);
@@ -145,5 +146,23 @@ $ListView->setHeaderTitle("Last Imported Accounts" );
 //$ListView->setQuery($where, "", "name");
 $ListView->setQuery($where, "", "","ACCOUNT");
 $ListView->processListView($seedUsersLastImport, "main", "ACCOUNT");
+
+echo "<BR>";
+
+//opps list
+$newForm = null;
+$seedUsersLastImport = new UsersLastImport();
+$seedUsersLastImport->bean_type = "Opportunities";
+$seedUsersLastImport->list_fields = Array('id', 'name','account_id','account_name','amount','date_closed','assigned_user_name', 'assigned_user_id');
+
+$current_module_strings = return_module_language($current_language, 'Opportunities');
+
+$where = "users_last_import.assigned_user_id='{$current_user->id}' AND users_last_import.bean_type='Opportunities' and users_last_import.bean_id=opportunities.id AND users_last_import.deleted=0";
+
+$ListView = new ListView();
+$ListView->initNewXTemplate( 'modules/Opportunities/ListView.html',$current_module_strings);
+$ListView->setHeaderTitle("Last Imported Opportunities" );
+$ListView->setQuery($where, "", "","OPPORTUNITY");
+$ListView->processListView($seedUsersLastImport, "main", "OPPORTUNITY");
 
 ?>

@@ -164,37 +164,89 @@ class ImportContact extends Contact {
 		global $imported_ids;
                 global $current_user;
 
-		if (! isset($this->account_name) || 
-			$this->account_name == '')
+		if ( (! isset($this->account_name) || $this->account_name == '') &&
+			(! isset($this->account_id) || $this->account_id == '') )
 		{
 			return; 
 		}
 
                 $arr = array();
 
-                // first check if this name exists:
+		// check if it already exists
                 $focus = new Account();
-                $query_arr = array('name'=>$this->account_name);
-                $focus->retrieve_by_string_fields($query_arr);
 
+		$query = '';
+
+		// if user is defining the account id to be associated with this contact..
+		if ( isset($this->account_id) && $this->account_id != '')
+		{
+                	$query = "select * from {$focus->table_name} WHERE id='{$this->account_id}'";
+		}	
+		// else user is defining the account name to be associated with this contact..
+		else 
+		{
+                	$query = "select * from {$focus->table_name} WHERE name='{$this->account_name}'";
+		}
+
+                $this->log->info($query);
+
+                $result = mysql_query($query)
+                       or die("Error selecting sugarbean: ".mysql_error());
+
+                $row = $this->db->fetchByAssoc($result, -1, false);
+
+		// we found a row with that id
+                if (isset($row['id']) && $row['id'] != -1)
+                {
+                        // if it exists but was deleted, just remove it entirely
+                        if ( isset($row['deleted']) && $row['deleted'] == 1)
+                        {
+                                $query2 = "delete from {$focus->table_name} WHERE id='". $row['id']."'";
+
+                                $this->log->info($query2);
+
+                                $result2 = mysql_query($query2)
+                                        or die("Error deleting existing sugarbean: ".mysql_error());
+
+                        }
+			// else just use this id to link the contact to the account
+                        else
+                        {
+                                $focus->id = $row['id'];
+                        }
+                }
+
+		// if we didnt find the account, so create it
                 if (! isset($focus->id) || $focus->id == '')
                 {
                         $focus->name = $this->account_name;
+                        $focus->assigned_user_id = $current_user->id;
+                        $focus->modified_user_id = $current_user->id;
+
+			if ( isset($this->account_id)  &&
+                                $this->account_id != '')
+                        {
+				$focus->new_with_id = true;
+                                $focus->id = $this->account_id;
+                        }
+
                         $focus->save();
+			// avoid duplicate mappings:
+			if (! isset( $imported_ids[$this->account_id]) )
+			{
+				// save the new account as a users_last_import
+                		$last_import = new UsersLastImport();
+                		$last_import->assigned_user_id = $current_user->id;
+                		$last_import->bean_type = "Accounts";
+                		$last_import->bean_id = $focus->id;
+                		$last_import->save();
+				$imported_ids[$this->account_id] = 1;
+			}
                 }
 
+		// now just link the account
                 $this->account_id = $focus->id;
 
-		// avoid duplicate mappings:
-		if (! isset( $imported_ids[$this->account_id]) )
-		{
-                	$last_import = new UsersLastImport();
-                	$last_import->assigned_user_id = $current_user->id;
-                	$last_import->bean_type = "Accounts";
-                	$last_import->bean_id = $focus->id;
-                	$last_import->save();
-			$imported_ids[$this->account_id] = 1;
-		}
         }
 
 	// This is the list of fields that can be imported

@@ -10,10 +10,10 @@
  * The Initial Developer of the Original Code is SugarCRM, Inc.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
- * Contributor(s): Xavier DUTOIT.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/ListView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Notes/ListView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -26,13 +26,6 @@ require_once('modules/Notes/Note.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
-/** BEGIN CONTRIBUTION
-* Date: 09/07/04
-* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-* All Rights Reserved.
-* Contributor(s): Xavier DUTOIT */
-require_once('include/file.php');
-/** END CONTRIBUTION */
 
 global $app_strings;
 global $app_list_strings;
@@ -89,13 +82,13 @@ if(isset($_REQUEST['query']))
 
 	if(isset($name) && $name != '')
 	{
-		array_push($where_clauses, "notes.name like '$name%'");
+		array_push($where_clauses, "notes.name like '".PearDatabase::quote($name)."%'");
 	}
 	if(isset($contact_name) && $contact_name != '')
 	{
 		$contact_names = explode(" ", $contact_name);
 		foreach ($contact_names as $name) {
-			array_push($where_clauses, "(contacts.first_name like '$name%' OR contacts.last_name like '$name%')");
+			array_push($where_clauses, "(contacts.first_name like '".PearDatabase::quote($name)."%' OR contacts.last_name like '".PearDatabase::quote($name)."%')");
 		}
 	}
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.12 2004/10/06 09:02:03 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.18 2004/11/06 08:12:04 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -35,6 +35,9 @@ if (isset($_REQUEST['db_populate']))	$db_populate = 		$_REQUEST['db_populate'];
 if (isset($_REQUEST['site_URL'])) 		$site_URL = 		$_REQUEST['site_URL'];
 if (isset($_REQUEST['admin_email'])) 	$admin_email = 		$_REQUEST['admin_email'];
 if (isset($_REQUEST['admin_password'])) $admin_password = 	$_REQUEST['admin_password'];
+if (isset($_REQUEST['mail_server'])) $mail_server = 	$_REQUEST['mail_server'];
+if (isset($_REQUEST['mail_server_username'])) $mail_server_username = 	$_REQUEST['mail_server_username'];
+if (isset($_REQUEST['mail_server_password'])) $mail_server_password = 	$_REQUEST['mail_server_password'];
 
 $cache_dir = 'cache/';
 
@@ -121,10 +124,19 @@ $config .= "\$host_name = '".$db_host_name."';\n\n";
 $config .= "\$site_URL = '".$site_URL."';\n\n";
 $config .= "\$root_directory = '".$root_directory."';\n\n";
 $config .= "\$cache_dir = '$cache_dir';\n";
+$config .= "\$mail_server = '$mail_server';\n";
+$config .= "\$mail_server_username = '$mail_server_username';\n";
+$config .= "\$mail_server_password = '$mail_server_password';\n";
 $config .= "\$tmp_dir = '" . ($cache_dir . "images/") . "';\n";
 $config .= "\$import_dir = '" . ($cache_dir . "import/") . "';\n\n";
 $config .= "// Maximum file size for uploaded files (in bytes)\n";
-$config .= "\$upload_maxsize = 3000000;\n";
+$config .= "// also used when uploading import files\n";
+$config .= "\$upload_maxsize = ".return_session_value_or_default('upload_maxsize', '3000000').";\n";
+$config .= "// Flag to allow export functionality\n";
+$config .= "// use 'all' to allow anyone to use exports \n";
+$config .= "// use 'admin' to only allow admins to export \n";
+$config .= "// use 'none' to block exports completely \n";
+$config .= "\$allow_exports = '".return_session_value_or_default('allow_exports', 'all')."';\n";
 $config .= "\$upload_dir = '" . ($cache_dir . "upload/") . "';\n";
 $config .= "// Files with one of these extensions will have '.txt' appended to their filename on upload\n";
 $config .= "\$upload_badext = array('php', 'php3', 'php4', 'php5', 'pl', 'cgi', 'py', 'asp', 'cfm', 'js', 'vbs', 'html', 'htm');\n\n";
@@ -133,7 +145,7 @@ $config .= "\$includeDirectory = \$root_directory.'include/';\n\n";
 $config .= "\$list_max_entries_per_page = '40';\n\n";
 $config .= "\$history_max_viewed = '10';\n\n";
 $config .= "//define list of menu tabs\n";
-$config .= "//\$moduleList = Array('Home', 'Dashboard', 'Contacts', 'Accounts', 'Opportunities', 'Cases', 'Notes', 'Calls', 'Emails', 'Meetings', 'Tasks');\n\n";
+$config .= "//\$moduleList = Array('Home', 'Dashboard', 'Contacts', 'Accounts', 'Opportunities', 'Cases', 'Notes', 'Calls', 'Emails', 'Meetings', 'Tasks','MessageBoard');\n\n";
 $config .= "// Map Sugar language codes to jscalendar language codes\n";
 $config .= "// Unimplemented until jscalendar language files are fixed\n";
 $config .= "// \$cal_codes = array('en_us'=>'en', 'ja'=>'jp', 'sp_ve'=>'sp', 'it_it'=>'it', 'tw_zh'=>'zh', 'pt_br'=>'pt', 'se'=>'sv', 'cn_zh'=>'zh', 'ge_ge'=>'de', 'ge_ch'=>'de', 'fr'=>'fr');\n\n";
@@ -177,6 +189,14 @@ $config .= "// Default language in case all or part of the user's language pack 
 $config .= "\$default_language = '".return_session_value_or_default('default_language','en_us')."';\n";
 $config .= "// Translation String Prefix - This will add the language pack name to every translation string in the display.\n";
 $config .= "\$translation_string_prefix = ".return_session_value_or_default('translation_string_prefix','false').";\n";
+$config .= "// Forum Configurations\n";
+$config .= "\$dbms = 'mysql';\n";
+$config .= "\$dbhost = '".$db_host_name."';\n\n";
+$config .= "\$dbuser = '".$db_user_name."';\n\n";
+$config .= "\$dbpasswd = '".$db_password."';\n\n";
+$config .= "\$dbname= '".$db_name."';\n\n";
+$config .= "\$table_prefix = 'phpbb_';\n";
+$config .= "define('PHPBB_INSTALLED', true);\n";
 $config .= "?>";
 
 if ($is_writable && ($config_file = @ fopen("config.php", "w"))) {

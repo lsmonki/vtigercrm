@@ -11,10 +11,11 @@
  ********************************************************************************/
 
 
-
 require_once('database/DatabaseConnection.php');
 require_once('include/utils.php');
-$uploaddir = $_SERVER['DOCUMENT_ROOT'] ."/test/upload/" ;// set this to wherever
+$vtigerpath = $_SERVER['REQUEST_URI'];
+$vtigerpath = str_replace("/index.php?module=uploads&action=add2db", "", $vtigerpath);
+$uploaddir = $_SERVER['DOCUMENT_ROOT'] .$vtigerpath ."/test/upload/" ;// set this to wherever
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
   $binFile = $_FILES['binFile']['name'];

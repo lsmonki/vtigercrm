@@ -1,4 +1,5 @@
 <?php
+
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
  * ("License"); You may not use this file except in compliance with the
@@ -176,13 +177,13 @@ $server->register(
 
 $server->register(
 	'create_task',
-        array('user_name'=>'xsd:string', 'date_entered'=>'xsd:datetime', 'date_modified'=>'xsd:datetime','name'=>'xsd:string'),
+        array('user_name'=>'xsd:string', 'date_entered'=>'xsd:datetime', 'date_modified'=>'xsd:datetime','name'=>'xsd:string','status'=>'xsd:string','priority'=>'xsd:string','description'=>'xsd:string','date_due'=>'xsd:date'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
 $server->register(
 	'update_task',
-        array('user_name'=>'xsd:string', 'id'=>'xsd:string', 'date_modified'=>'xsd:datetime','name'=>'xsd:string','status'=>'xsd:string'),
+        array('user_name'=>'xsd:string', 'id'=>'xsd:string', 'date_modified'=>'xsd:datetime','name'=>'xsd:string','status'=>'xsd:string','priority'=>'xsd:string','description'=>'xsd:string','date_due'=>'xsd:date'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
@@ -283,6 +284,7 @@ function delete_contact($user_name,$id)
         $contact = new Contact();
         $contact->id = $id;
         $contact->delete($contact->id);
+//	$contact->delete();
         return "Suceeded in deleting contact";
 }
 
@@ -433,7 +435,7 @@ function sync_task($user_name)
 
 
 
-function create_contact($user_name, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to_id,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_city,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country)
+function create_contact($user_name, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to_id,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country)
 {
 	//global $log;
 	
@@ -455,6 +457,8 @@ function create_contact($user_name, $first_name, $last_name, $email_address ,$ac
         $contact->title = $title;
         $contact->phone_mobile = $phone_mobile;
         $contact->reports_to_id = $reports_to_id; 
+	
+	$contact->primary_address_country = $primary_address_country;
 	$contact->primary_address_city = $primary_address_city;
         $contact->primary_address_postalcode = $primary_address_postalcode;
         $contact->primary_address_state = $primary_address_state;
@@ -463,13 +467,14 @@ function create_contact($user_name, $first_name, $last_name, $email_address ,$ac
         $contact->alt_address_postalcode = $alt_address_postalcode;
         $contact->alt_address_state = $alt_address_state;
         $contact->alt_address_street = $alt_address_street;
-        
-	$contact->save();
+	$contact->alt_address_city = $alt_address_city; 
+	
+		$contact->save();
 	
 	return $contact->id;
 }
 
-function create_task($user_name, $date_entered, $date_modified,$name)
+function create_task($user_name, $date_entered, $date_modified,$name,$status,$priority,$description,$date_due)
 {
 	//global $log;
 	
@@ -483,17 +488,21 @@ function create_task($user_name, $date_entered, $date_modified,$name)
 	
 	require_once('modules/Contacts/Contact.php');
 	$task = new Task();
-	$task->date_entered = $date_entered;
-	$task->date_modified = $date_modified;
+	//$task->date_entered = $date_entered;
+	//$task->date_modified = $date_modified;
 	$task->assigned_user_id = $assigned_user_id;
         $task->name = $name;
+	$task->status=$status;
+	$task->priority=$priority;
+	$task->description=$description;
+	$task->date_due=$date_due;
         $task->save();
 	
-	return "Suceeded in task creation";
+	return $task->id;
 }
 
 
-function update_contact($user_name,$id, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to_id,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_city,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country)
+function update_contact($user_name,$id, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to_id,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country)
 {
 	require_once('modules/Users/User.php');
 	$seed_user = new User();
@@ -514,10 +523,17 @@ function update_contact($user_name,$id, $first_name, $last_name, $email_address 
         $contact->primary_address_postalcode = $primary_address_postalcode;
         $contact->primary_address_state = $primary_address_state;
         $contact->primary_address_street = $primary_address_street;
+   $contact->primary_address_country = $primary_address_country; 
         $contact->alt_address_country = $alt_address_country;
         $contact->alt_address_postalcode = $alt_address_postalcode;
         $contact->alt_address_state = $alt_address_state;
         $contact->alt_address_street = $alt_address_street;
+
+  $contact->alt_address_city = $alt_address_city;
+
+	$contact->id=$id;
+
+	
 
 	$contact->save();
 	
@@ -525,7 +541,7 @@ function update_contact($user_name,$id, $first_name, $last_name, $email_address 
 }
 
 
-function update_task($user_name, $id,$date_modified, $name, $status)
+function update_task($user_name, $id,$date_modified, $name, $status,$priority,$description,$date_due)
 {
 	require_once('modules/Users/User.php');
 	$seed_user = new User();
@@ -536,9 +552,12 @@ function update_task($user_name, $id,$date_modified, $name, $status)
 	$task = new Task();
 	$task->user_name = $user_name;
 	$task->id = $id;
-	$task->date_modified = $date_modified;
+//	$task->date_modified = $date_modified;
 	$task->name = $name;
         $task->status = $status;
+	$task->priority = $priority;
+	$task->description = $description;
+	$task->date_due = $date_due;
         $task->save();
         return "Suceeded in updating task";
 }
@@ -576,6 +595,10 @@ function retrieve_task($name)
 			"date_modified" => $temptask->date_modified,
 			"date_entered" => $temptask->date_entered,
 			"id" => $temptask->id,
+
+			"status" => $temptask->status,
+		        "date_due" => $temptask->date_due,	
+			"description" => $temptask->description,		
 			"priority" => $temptask->priority);
 	}
 	

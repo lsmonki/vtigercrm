@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/DetailView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/DetailView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -64,7 +64,7 @@ $xtpl->assign("DATE_CLOSED", $focus->date_closed);
 $xtpl->assign("NEXT_STEP", $focus->next_step);
 $xtpl->assign("SALES_STAGE", $app_list_strings['sales_stage_dom'][$focus->sales_stage]);
 $xtpl->assign("PROBABILITY", $focus->probability);
-$xtpl->assign("DESCRIPTION", $focus->description);
+$xtpl->assign("DESCRIPTION", nl2br($focus->description));
 $xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
 $xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
 $xtpl->parse("main");

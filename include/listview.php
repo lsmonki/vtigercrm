@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/listview.php,v 1.6 2004/09/17 10:40:47 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/listview.php,v 1.10 2004/11/05 09:58:28 jack Exp $
  * Description:  Includes generic helper functions used throughout the application.
  ********************************************************************************/
 require_once('include/logging.php');
@@ -22,6 +22,7 @@ function listView($display_title, $html_varName, $xtemplate , $seed, $orderby){
 	global $theme,$image_path, $currentModule, $list_max_entries_per_page, $where, $mod_strings, $app_strings;
 	$log = LoggerManager::getLogger('listView_'.$html_varName);
 	$list_form=new XTemplate ($xtemplate);
+        $list_form->assign("ID",$mod_strings);
 	$list_form->assign("MOD", $mod_strings);
 	$list_form->assign("APP", $app_strings);
 	$list_form->assign("THEME", $theme);
@@ -37,6 +38,14 @@ function listView($display_title, $html_varName, $xtemplate , $seed, $orderby){
 	{
 		$response = $seed->get_lead_list($orderby, $where, $current_offset);
 	}
+	elseif($currentModule == "MessageBoard")
+        {
+		if(isset($_REQUEST['query']))
+		{
+			$_REQUEST['query']= 'query';
+		}
+                $response = $seed->get_msgboard_data($orderby, $where, $current_offset);
+        }
 	else
 	{	
 		$response = $seed->get_list($orderby, $where, $current_offset);
@@ -117,10 +126,35 @@ function listView($display_title, $html_varName, $xtemplate , $seed, $orderby){
 	if ($previous_link !== "") $list_form->assign("PREVIOUS_LINK", "[ ".$previous_link." ]");
 	$list_form->parse("main.list_nav_row");
 	$oddRow = true;
+
+        if($currentModule == "MessageBoard")
+        {
+               foreach($aList as $aItem)
+                {
+                        $fields = $aItem->get_list_view_data();
+			$list_form->assign($html_varName, $fields);
+                        $list_form->assign("MASS_DELETE_CHANGESTATUS", "");
+
+                if($oddRow)
+                    {
+                                $list_form->assign("ROW_COLOR", 'oddListRow');
+                    }
+                    else
+                    {
+                                $list_form->assign("ROW_COLOR", 'evenListRow');
+                    }
+                                $oddRow = !$oddRow;
+                                $list_form->parse("main.row");
+                }
+        }
+	else
+	{
+
 	foreach($aList as $aItem)
 	{
 		$fields = $aItem->get_list_view_data();
 		$list_form->assign($html_varName, $fields);
+                $list_form->assign("MASS_DELETE_CHANGESTATUS", "<input class='button' type='submit' value='Mass Delete' onclick=\"return massDelete()\"/><br><input class='button' type='submit' value='Change Status' onclick=\"return changeStatus()\"/>");
 		
 		if($oddRow)
 	    {
@@ -135,12 +169,12 @@ function listView($display_title, $html_varName, $xtemplate , $seed, $orderby){
 	    $aItem->list_view_pare_additional_sections($list_form);
 		$list_form->parse("main.row");
 	}
+	}
 	$list_form->parse("main");
 	
 	if( $display_title == 'Lead List')
 	{
-	
-	$button="<table cellspacing='0' cellpadding='1' border='0'><form action='index.php?module=imports&action=fetchfile' method=post target=''><tr><td>&nbsp;</td><td><input class='button' type='submit' name='Import' value='Import Leads'/></td></tr></form></table>";
+	$button ="<table cellspacing='0' cellpadding='1' border='0'><form action='index.php?module=imports&action=fetchfile' method=post target=''><tr><td>&nbsp;</td><td><input class='button' type='submit' name='Import' value='Import Leads'/></td></form></tr></table>";
 
 	//include 'modules/imports/ImportButton.html';
 //	$importTitle = "&nbsp;&nbsp; [ <A href='index.php?module=imports&action=import'><Blink><B>".$app_strings['LNK_IMPORT_LEADS']."</Blink></B></A> ]";

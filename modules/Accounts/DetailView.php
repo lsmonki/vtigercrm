@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/DetailView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/DetailView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -60,7 +60,7 @@ $xtpl->assign("BILLING_ADDRESS_POSTALCODE", $focus->billing_address_postalcode);
 $xtpl->assign("BILLING_ADDRESS_COUNTRY", $focus->billing_address_country);
 $xtpl->assign("DATE_ENTERED", $focus->date_entered); 
 $xtpl->assign("ASSIGNED_TO", $focus->assigned_user_name);
-$xtpl->assign("DESCRIPTION", $focus->description);
+$xtpl->assign("DESCRIPTION", nl2br($focus->description));
 $xtpl->assign("EMAIL1", $focus->email1);
 $xtpl->assign("EMAIL2", $focus->email2);
 $xtpl->assign("EMPLOYEES", $focus->employees);

@@ -10,10 +10,10 @@
  * The Initial Developer of the Original Code is SugarCRM, Inc.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
- * Contributor(s): Xavier DUTOIT.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/DetailView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Notes/DetailView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,13 +24,7 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Notes/Forms.php');
-/** BEGIN CONTRIBUTION
-* Date: 09/07/04
-* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-* All Rights Reserved.
-* Contributor(s): Xavier DUTOIT */
-require_once('include/file.php');
-/** END CONTRIBUTION */
+require_once('include/upload_file.php');
 
 global $app_strings;
 global $mod_strings;
@@ -99,18 +93,11 @@ $xtpl->assign("NAME", $focus->name);
 $xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
 $xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
 
-/** BEGIN CONTRIBUTION
-* Date: 09/07/04
-* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-* All Rights Reserved.
-* Contributor(s): Xavier DUTOIT */
-if (!empty ($focus->filename))
+if ( isset($focus->filename) && $focus->filename != '')
 {
-	$file = new File($focus->id,$focus->filename);
-	$downloadfile = "<a href='".$file->URL()."' target='_blank'>$focus->filename</a>";
-	$xtpl->assign("FILENAME", $downloadfile);
+        $fileurl = "<a href=\"".UploadFile::get_url($focus->filename,$focus->id)."\" target=\"_blank\">". $focus->filename ."</a>";
+        $xtpl->assign("FILELINK", $fileurl);
 }
-/** END CONTRIBUTION */
 
 $xtpl->assign("DESCRIPTION", $focus->description);
 

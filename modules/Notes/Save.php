@@ -10,10 +10,10 @@
  * The Initial Developer of the Original Code is SugarCRM, Inc.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
- * Contributor(s): Xavier DUTOIT.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/Save.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Notes/Save.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  Saves an Account record and then redirects the browser to the
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -23,13 +23,7 @@
 
 require_once('modules/Notes/Note.php');
 require_once('include/logging.php');
-/** BEGIN CONTRIBUTION
-* Date: 09/07/04
-* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-* All Rights Reserved.
-* Contributor(s): Xavier DUTOIT */
-require_once('include/file.php');
-/** END CONTRIBUTION */
+require_once('include/upload_file.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
@@ -44,7 +38,7 @@ foreach($focus->column_fields as $field)
 		$value = $_REQUEST[$field];
 		$focus->$field = $value;
 		$local_log->debug("saving note: $field is $value");
-		
+
 	}
 }
 
@@ -54,48 +48,47 @@ foreach($focus->additional_column_fields as $field)
 	{
 		$value = $_REQUEST[$field];
 		$focus->$field = $value;
-		
+
 	}
 }
-
-/** BEGIN CONTRIBUTION
-* Date: 09/07/04
-* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-* All Rights Reserved.
-* Contributor(s): Xavier DUTOIT */
-$file = new File();
-
-if ($file->Upload('filename')) {
-	$focus->filename = $file->name;
-	if (!empty($_REQUEST['previous_filename']) && !empty($focus->filename)) {
-		$file->Delete($focus->id.$_REQUEST['previous_filename']);
-	}
-}
-/** END CONTRIBUTION */
-if (empty($file->name) && !empty($_REQUEST['previous_filename'])) {
-/** BEGIN CONTRIBUTION
-* Date: 09/07/04
-* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-* All Rights Reserved.
-* Contributor(s): Xavier DUTOIT */
-	// file is too large
-	$focus->filename = $_REQUEST['previous_filename'];
-}
-/** END CONTRIBUTION */
 
 if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
 
+$upload_file = new UploadFile('uploadfile');
+
+$do_final_move = 0;
+
+if ($upload_file->confirm_upload()) 
+{
+
+        if (!empty($focus->id) && !empty($_REQUEST['old_filename']) )
+	{
+                $upload_file->unlink_file($focus->id,$_REQUEST['old_filename']);
+        }
+
+        $focus->filename = $upload_file->get_stored_file_name();
+
+	$do_final_move = 1;
+}
+else
+{
+        $focus->filename = $_REQUEST['old_filename'];
+}
+
+
 $focus->save();
+
+if ($do_final_move)
+{
+	$upload_file->final_move($focus->id);
+}
+else if ( ! empty($_REQUEST['old_id']))
+{
+	$upload_file->duplicate_file($_REQUEST['old_id'], $focus->id, $focus->filename);
+}
 
 $return_id = $focus->id;
 
-/** BEGIN CONTRIBUTION
-* Date: 09/07/04
-* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-* All Rights Reserved.
-* Contributor(s): Xavier DUTOIT */
-$file->Setid ($return_id);
-/** END CONTRIBUTION */
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Notes";

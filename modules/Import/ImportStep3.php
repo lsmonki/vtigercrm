@@ -24,6 +24,7 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
+require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/Forms.php');
 require_once('modules/Import/parse_utils.php');
 require_once('modules/Import/ImportMap.php');
@@ -34,6 +35,7 @@ global $app_list_strings;
 global $app_strings;
 global $current_user;
 global $import_file_name;
+global $upload_maxsize;
 
 global $theme;
 global $outlook_contacts_field_map;
@@ -42,9 +44,9 @@ global $salesforce_contacts_field_map;
 global $outlook_accounts_field_map;
 global $act_accounts_field_map;
 global $salesforce_accounts_field_map;
+global $salesforce_opportunities_field_map;
 global $import_dir;
 $focus = 0;
-$maxfilesize = 300000;
 $delimiter = ',';
 $max_lines = 3;
 
@@ -63,15 +65,19 @@ require_once($theme_path.'layout_utils.php');
 
 $log->info($mod_strings['LBL_MODULE_NAME']." Upload Step 3");
 
-if (!is_uploaded_file($_FILES['userfile']['tmp_name'])
-    || !file_exists( $_FILES['userfile']['tmp_name'] ) )
+if (!is_uploaded_file($_FILES['userfile']['tmp_name']) )
 {
-	show_error_import($app_strings['LBL_IMPORT_MODULE_ERROR_NO_UPLOAD']);
+	show_error_import($mod_strings['LBL_IMPORT_MODULE_ERROR_NO_UPLOAD']);
 	exit;
 }
-else if ($_FILES['userfile']['size'] > $maxfilesize)
+else if ($_FILES['userfile']['size'] > $upload_maxsize)
 {
-	show_error_import( $app_strings['LBL_IMPORT_MODULE_ERROR_LARGE_FILE'] . " ". $maxfilesize. " ". $app_strings['LBL_IMPORT_MODULE_ERROR_LARGE_FILE_END']);
+	show_error_import( $mod_strings['LBL_IMPORT_MODULE_ERROR_LARGE_FILE'] . " ". $upload_maxsize. " ". $mod_strings['LBL_IMPORT_MODULE_ERROR_LARGE_FILE_END']);
+	exit;
+}
+if( !is_writable( $import_dir ))
+{
+	show_error_import($mod_strings['LBL_IMPORT_MODULE_NO_DIRECTORY'].$import_dir.$mod_strings['LBL_IMPORT_MODULE_NO_DIRECTORY_END']);
 	exit;
 }
 
@@ -149,6 +155,10 @@ else if ( $_REQUEST['module'] == 'Accounts')
 {
 	$focus = new ImportAccount();
 }
+else if ( $_REQUEST['module'] == 'Opportunities')
+{
+	$focus = new ImportOpportunity();
+}
 
 
 //if ($has_header)
@@ -165,8 +175,8 @@ $field_map = $outlook_contacts_field_map;
 if ( isset( $_REQUEST['source_id']))
 {
 	$mapping_file = new ImportMap();
-
-	$mapping_file->retrieve( $_REQUEST['source_id']);
+	
+	$mapping_file->retrieve( $_REQUEST['source_id'],false);
 
 	$mapping_content = $mapping_file->content;
 
@@ -198,6 +208,10 @@ else if ($_REQUEST['source'] == 'other')
 	{
 		$field_map = $outlook_accounts_field_map;
 	}
+	else if ($_REQUEST['module'] == 'Opportunities')
+	{
+		$field_map = $salesforce_opportunities_field_map;
+	}
 } 
 else if ($_REQUEST['source'] == 'act')
 {
@@ -219,6 +233,10 @@ else if ($_REQUEST['source'] == 'salesforce')
 	else if ($_REQUEST['module'] == 'Accounts')
 	{
 		$field_map = $salesforce_accounts_field_map;
+	}
+	else if ($_REQUEST['module'] == 'Opportunities')
+	{
+		$field_map = $salesforce_opportunities_field_map;
 	}
 }
 else if ($_REQUEST['source'] == 'outlook')

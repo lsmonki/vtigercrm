@@ -13,12 +13,13 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/populateSeedData.php,v 1.6 2004/10/06 09:02:03 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/populateSeedData.php,v 1.7 2004/10/12 10:00:13 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
 require_once('config.php');
 
+require_once('modules/Leads/Lead.php');
 require_once('modules/Contacts/contactSeedData.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Accounts/Account.php');
@@ -226,6 +227,56 @@ for($i=0; $i<1000; $i++)
 		$task->parent_type = 'Accounts';
 		$task->save();
 	}
+
+}
+
+for($i=0; $i<100; $i++)
+{
+	$lead = new Lead();
+	$lead->first_name = ucfirst(strtolower($first_name_array[$i]));
+	$lead->last_name = ucfirst(strtolower($last_name_array[$i]));
+	$lead->company = ucfirst(strtolower($company_name_array[$i]));
+	$lead->assigned_user_id = $assigned_user_id;
+	
+	$lead->email = strtolower($lead->first_name)."_".strtolower($lead->last_name)."@company.com";
+
+	$lead->phone = create_phone_number();
+	$lead->mobile = create_phone_number();
+	
+	// Fill in a bogus address
+	$key = array_rand($street_address_array);
+	$lead->address_street = $street_address_array[$key];
+	$key = array_rand($city_array);
+	$lead->address_city = $city_array[$key];
+	$lead->address_state = "CA";
+	$lead->address_postalcode = '99999';
+	$lead->address_country = 'USA';	
+	if ($lead->address_city == "San Mateo") 
+		$lead->yahoo_id = "clint_oram";
+	elseif ($lead->address_city == "San Francisco") 
+		$lead->yahoo_id = "not_a_real_id";
+
+	$key = array_rand($app_list_strings['lead_source_dom']);
+	$lead->lead_source = $app_list_strings['lead_source_dom'][$key];
+
+	$key = array_rand($app_list_strings['lead_status_dom']);
+	$lead->lead_status = $app_list_strings['lead_status_dom'][$key];
+
+	$key = array_rand($app_list_strings['rating_dom']);
+	$lead->rating = $app_list_strings['rating_dom'][$key];	
+
+	$titles = array("President", 
+					"VP Operations", 
+					"VP Sales", 
+					"Director Operations", 
+					"Director Sales", 
+					"Mgr Operations", 
+					"IT Developer", 
+					"");
+	$key = array_rand($titles);
+	$lead->designation = $titles[$key];
+
+	$lead->save();
 
 }
 

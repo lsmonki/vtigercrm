@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Logout.php,v 1.2 2004/09/25 09:56:26 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Logout.php,v 1.3 2004/11/05 04:40:51 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -29,10 +29,44 @@ require_once('modules/Users/User.php');
         $loghistory=new LoginHistory();
         $loghistory->user_logout($current_user->user_name,$usip,$outtime);
 
+
 $local_log =& LoggerManager::getLogger('Logout');
 
 // clear out the autthenticating flag
 session_destroy();
+
+define("IN_LOGIN", true);
+	
+ define('IN_PHPBB', true);
+ include($phpbb_root_path . 'extension.inc');
+ include($phpbb_root_path . 'common.'.$phpEx);
+
+//
+// Set page ID for session management
+//
+$userdata = session_pagestart($user_ip, PAGE_LOGIN);
+init_userprefs($userdata);
+//
+// End session management
+//
+
+// session id check
+if (!empty($HTTP_POST_VARS['sid']) || !empty($HTTP_GET_VARS['sid']))
+{
+        $sid = (!empty($HTTP_POST_VARS['sid'])) ? $HTTP_POST_VARS['sid'] : $HTTP_GET_VARS['sid'];
+}
+else
+{
+        $sid = '';
+}
+if( $userdata['session_logged_in'] )
+	{
+		if( $userdata['session_logged_in'] )
+		{
+			session_end($userdata['session_id'], $userdata['user_id']);
+		}
+
+	}
 
 // go to the login screen.
 header("Location: index.php?action=Login&module=Users");

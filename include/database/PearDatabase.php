@@ -217,21 +217,26 @@ class PearDatabase{
 		return 0;
 			
 	}
-	function requireSingleResult($sql, $dieOnError=false,$msg=''){
+	function requireSingleResult($sql, $dieOnError=false,$msg='', $encode=true){
 			$result = $this->query($sql, $dieOnError, $msg);
 		
 			if($this->getRowCount($result ) == 1)
-				return $result;
+				return to_html($result, $encode);
 			$this->log->error('Rows Returned:'. $this->getRowCount($result) .' More than 1 row returned for '. $sql);
 			return '';
 	}
 	
-	function fetchByAssoc(&$result, $rowNum = -1){
+	
+	
+	function fetchByAssoc(&$result, $rowNum = -1, $encode=true){
 		if(isset($result) && $rowNum < 0){
 			if($this->dbType == "mysql"){
-				return mysql_fetch_assoc($result);
+				$row = mysql_fetch_assoc($result);
+				
+				if($encode&& is_array($row))return array_map('to_html', $row);	
+				return $row;
 			}
-			return $result->fetchRow(DB_FETCHMODE_ASSOC);	
+			$row = $result->fetchRow(DB_FETCHMODE_ASSOC);	
 		}
 		if($this->dbType == "mysql"){
 				if($this->getRowCount($result) > $rowNum){
@@ -240,14 +245,24 @@ class PearDatabase{
 				}
 				$this->lastmysqlrow = $rowNum;
 			
-				return mysql_fetch_assoc($result);
+				$row = mysql_fetch_assoc($result);
+				
+				if($encode&& is_array($row))return array_map('to_html', $row);	
+				return $row;
+				
 		}
-		return $result->fetchRow(DB_FETCHMODE_ASSOC, $rowNum);	
+		$row = $result->fetchRow(DB_FETCHMODE_ASSOC, $rowNum);
+		if($encode)return array_map('to_html', $row);	
+		return $row;
 	}
 	
-	function getNextRow(&$result){
-		if(isset($result))
-			return $result->fetchRow();	
+	function getNextRow(&$result, $encode=true){
+		if(isset($result)){
+			$row = $result->fetchRow();
+			if($encode&& is_array($row))return array_map('to_html', $row);	
+				return $row;
+			
+		}
 		return null;
 	}
 	
@@ -308,7 +323,16 @@ class PearDatabase{
 		
 	}
 	
-	
+function quote($string){
+	global $dbconfig;
+	if($dbconfig['db_type'] == 'mysql'){
+		$string = mysql_escape_string($string);
+	}else {$string = quoteSmart($string);}
+	//$string = strtr($string, array('_' => '\_', '%'=>'\%'));
+	return $string;
+}
+
+
 function disconnect() {
 		if(isset($this->database)){
 			if($this->dbType == "mysql"){
@@ -322,7 +346,6 @@ function disconnect() {
 }
 	
 }
-
 	
 
 ?>

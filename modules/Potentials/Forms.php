@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Forms.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Forms.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -229,12 +229,12 @@ $the_form .= <<<EOQ
 			<input type="hidden" name="action" value="Save">
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_opportunity_name<br>
 		<input name='name' type="text" value=""><br>
-		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date_closed <br><font size="1"><em>$ntc_date_format</em></font><br>
+		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date_closed <br><font size="1"><em old='ntc_date_format'>(yyyy-mm-dd)</em></font><br>
 		<input name='date_closed' size='12' maxlength='10' id='jscal_field' type="text" value=""> <img src="themes/$theme/images/calendar.gif" id="jscal_trigger"><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_sales_stage<br>
 		<select name='sales_stage'>
 EOQ;
-$the_form .= get_select_options($app_list_strings['sales_stage_dom'], "");
+$the_form .= get_select_options_with_id($app_list_strings['sales_stage_dom'], "");
 $the_form .= <<<EOQ
 		</select><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_amount<br>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/ContactOpportunityRelationshipEdit.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/ContactOpportunityRelationshipEdit.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -67,10 +67,7 @@ $xtpl->assign("ID", $focus->id);
 $xtpl->assign("CONTACT", Array("NAME" => $focus->contact_name, "ID" => $focus->contact_id));
 $xtpl->assign("OPPORTUNITY", Array("NAME" => $focus->opportunity_name, "ID" => $focus->opportunity_id));
 
-$xtpl->assign("CONTACT_ROLE_OPTIONS", get_select_options($app_list_strings['opportunity_relationship_type_dom'], $focus->contact_role));
-
-
-
+$xtpl->assign("CONTACT_ROLE_OPTIONS", get_select_options_with_id($app_list_strings['opportunity_relationship_type_dom'], $focus->contact_role));
 
 $xtpl->parse("main");
 

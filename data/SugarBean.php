@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/data/SugarBean.php,v 1.3 2004/10/06 09:02:02 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/data/SugarBean.php,v 1.10 2004/11/08 10:01:11 jack Exp $
  * Description:  Defines the base class for all data entities used throughout the 
  * application.  The base class including its methods and variables is designed to 
  * be overloaded with module-specific methods and variables particular to the 
@@ -43,6 +43,7 @@ class SugarBean
 
 	function save() 
 	{
+		global $current_user;
 		$isUpdate = true;
 
 		if(!isset($this->id) || $this->id == "")
@@ -96,7 +97,7 @@ class SugarBean
 				else
 					$query = $query.", ";
 	
-				$query = $query.$field."='".(addslashes($this->$field))."'";
+				$query = $query.$field."='".PearDatabase::quote(from_html($this->$field,$isUpdate))."'";
 			}
 		}
 
@@ -146,7 +147,7 @@ class SugarBean
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
      */
-	function retrieve($id = -1) {
+	 function retrieve($id = -1, $encodeThis=true) {
 		if ($id == -1) {
 			$id = $this->id;
 		}
@@ -161,7 +162,7 @@ class SugarBean
 			return null;
 		}
 				
-		$row = $this->db->fetchByAssoc($result);
+		$row = $this->db->fetchByAssoc($result, -1, $encodeThis);
 
 		foreach($this->column_fields as $field)
 		{
@@ -185,13 +186,13 @@ class SugarBean
 		$query = $this->create_lead_list_query($order_by, $where);
 		return $this->process_list_query($query, $row_offset);
 	}
-
-	function get_list($order_by = "", $where = "", $row_offset = 0, $limit=-1) {
+		
+	function get_list($order_by = "", $where = "", $row_offset = 0, $limit=-1, $max=-1) {
 		$this->log->debug("get_list:  order_by = '$order_by' and where = '$where' and limit = '$limit'");
 		
 		$query = $this->create_list_query($order_by, $where);
 		
-		return $this->process_list_query($query, $row_offset, $limit);
+		return $this->process_list_query($query, $row_offset, $limit, $max);
 	}
 
 	/**
@@ -256,7 +257,7 @@ class SugarBean
 		$rows_found =  $this->db->getRowCount($result);
 
 		$this->log->debug("Found $rows_found ".$this->object_name."s");
-
+                
 		$previous_offset = $row_offset - $max_per_page;
 		$next_offset = $row_offset + $max_per_page;
 
@@ -264,8 +265,8 @@ class SugarBean
 		{
 
 			// We have some data.
-			
-			for($index = $row_offset , $row = $this->db->fetchByAssoc($result, $index); $row && $index < $row_offset + $max_per_page ;$index++, $row = $this->db->fetchByAssoc($result, $index)){
+
+			for($index = $row_offset , $row = $this->db->fetchByAssoc($result, $index); $row && ($index < $row_offset + $max_per_page || $max_per_page == -99) ;$index++, $row = $this->db->fetchByAssoc($result, $index)){
 				foreach($this->list_fields as $field)
 				{
 					if (isset($row[$field])) {
@@ -311,6 +312,9 @@ class SugarBean
 						$this->$field = $row[$field];
 						
 						$this->log->debug("process_full_list: $this->object_name({$row['id']}): ".$field." = ".$this->$field);
+					}
+					else {
+ 	                                                $this->$field = '';   
 					}
 				}
 
@@ -516,7 +520,7 @@ class SugarBean
 				$where_clause .= " AND ";
 			} 
 
-			$where_clause .= "$name = '".addslashes($value)."'";
+			$where_clause .= "$name = '".PearDatabase::quote($value)."'";
 		} 
 
 		$where_clause .= " AND deleted=0";
@@ -524,7 +528,7 @@ class SugarBean
 	}
 
 
-	function retrieve_by_string_fields($fields_array) 
+	function retrieve_by_string_fields($fields_array, $encode=true) 
 	{ 
 		$where_clause = $this->get_where($fields_array);
 		
@@ -536,7 +540,7 @@ class SugarBean
 		 	return null; 
 		} 
 
-		$row = $this->db->fetchByAssoc($result);
+		 $row = $this->db->fetchByAssoc($result,-1, $encode);
 
 		foreach($this->column_fields as $field) 
 		{ 
@@ -583,7 +587,7 @@ class SugarBean
 				$where_clause .= " or";
 			} 
 
-			$where_clause .= "$name = '".addslashes($value)."'";
+			$where_clause .= "$name = '".PearDatabase::quote($value)."'";
 		} 
 
 		$where_clause .= " AND deleted=0";
@@ -591,6 +595,77 @@ class SugarBean
 	}
 
 	
+	function get_msgboard_data($orderby = "" , $where = "" ,$row_offset = 0)
+ 	{
+ 	         $response = $this->get_messageboard_list($order_by, $where , $row_offset,$limit= -1,$max_per_page = -1);
+ 	         return $response;
+ 	}
+ 	
+  function get_messageboard_list($orderby, $where, $row_offset,$limit= -1, $max_per_page = -1)
+  {
+    global $list_max_entries_per_page;
+
+		if(isset($_REQUEST['query']))
+			{
+$sql='select distinct(t.topic_id), t.topic_title, c.cat_title, first.username as author, t.topic_replies,FROM_UNIXTIME(p.post_time) as post_time from phpbb_posts p, phpbb_topics t, phpbb_forums f, phpbb_categories c, phpbb_users first where t.topic_id = p.topic_id and p.post_id=t.topic_last_post_id and t.topic_poster=first.user_id and t.forum_id=f.forum_id and f.cat_id=c.cat_id and ' .$where;
+	
+//				$sql='select distinct(t.topic_title),c.cat_title,t.topic_poster, t.topic_replies,FROM_UNIXTIME(p.post_time) as post_time, t.topic_replies from phpbb_posts p, phpbb_topics t, phpbb_forums f, phpbb_categories c,phpbb_users u where t.forum_id=f.forum_id and f.cat_id=c.cat_id and ' .$where ;
+			}
+			else
+			{
+				$sql='select t.topic_id,p.post_id,t.topic_title,FROM_UNIXTIME(p.post_time) as post_time, f.forum_name , u.username , t.topic_replies from phpbb_posts p, phpbb_topics t, phpbb_forums f, phpbb_users u where p.topic_id=t.topic_id and t.forum_id=f.forum_id and u.user_id=t.topic_poster ORDER BY p.post_time ';
+ 	 		}
+ 	                 $result = mysql_query($sql);
+ 	                 $list = Array();
+                        
+                         if($max_per_page == -1)
+                         {
+                           $max_per_page 	= $list_max_entries_per_page;
+                         }
+	
+ 	                 $rows_found =  $this->db->getRowCount($result);
+ 	                 $previous_offset = $row_offset - $max_per_page;
+ 	                 $next_offset = $row_offset + $max_per_page;
+ 	                 if($rows_found != 0)
+ 	                 {
+                           //$max_per_page=15;
+ 	                    for($index = $row_offset , $row = $this->db->fetchByAssoc($result, $index); $row && ($index < $row_offset + $max_per_page ||  $max_per_page == -99) ;$index++, $row = $this->db->fetchByAssoc($result, $index))
+ 	                         {
+ 	                                 foreach($this->list_fields as $field)
+ 	                                 {
+ 	                                         //print_r($this->list_fields);
+ 	                                         if (isset($row[$field]))
+ 	                                         {
+ 	                                                 $this->$field = $row[$field];
+ 	                                         }
+ 	                                         else
+ 	                                         {
+ 	                                                 $this->$field = "";
+ 	                                         }
+ 	                                 }
+ 	 
+ 	                    $list[] = $this;
+ 	                         }
+ 	                 }
+ 	 
+ 	           $response = Array();
+ 	                 $response['list'] = $list;
+ 	                 $response['row_count'] = $rows_found;
+ 	                 $response['next_offset'] = $next_offset;
+ 	                 $response['previous_offset'] = $previous_offset;
+                         /*
+ 	                 foreach($this->list_fields as $field)
+ 	                                {
+ 	                                        if (isset($row[$field]))
+ 	                                         {
+ 	                                                $this->$field = $row[$field];
+ 	                                                $this->log->debug("process_full_list: $this->object_name({$row['id']}): ".$field." = ".$this->$field);
+ 	                                        }
+ 	                                }
+                         */
+ 	                 return $response;
+  }
 }
+
 
 ?>

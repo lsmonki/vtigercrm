@@ -4,7 +4,7 @@
 // Description:	PHP4 Graph Plotting library. Base module.
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph.php,v 1.3 2004/10/06 09:02:03 jack Exp $
+// Ver:		$Id: jpgraph.php,v 1.4 2004/10/29 09:55:08 jack Exp $
 //
 // License:	This code is released under QPL 1.0
 // Copyright (C) 2001,2002,2003,2004 Johan Persson Aditus Consulting
@@ -2618,7 +2618,7 @@ class TTF {
 //---------------
 // PUBLIC METHODS	
     // Create the TTF file from the font specification
-    function File($family,$style=FS_NORMAL) {
+    function File($family,$style=FS_NORMAL, $loops = 0) {
 	
 	if( $family == FF_HANDWRT || $family==FF_BOOK ) {
 	    JpGraphError::Raise('Font families FF_HANDWRT and FF_BOOK are no longer available due to copyright problem with these fonts. Fonts can no longer be distributed with JpGraph. Please download fonts from http://corefonts.sourceforge.net/');
@@ -2634,8 +2634,11 @@ class TTF {
 	}
 	$f = @$fam[$style];
 
-	if( $f==='' )
-	    JpGraphError::Raise('Style "'.$this->style_names[$style].'" is not available for font family '.$this->font_files[$family][FS_NORMAL].'.');
+	if( $f==='' ) {
+		if($loops > 0)
+			JpGraphError::Raise('Style "'.$this->style_names[$style].'" is not available for font family '.$this->font_files[$family][FS_NORMAL].'.');
+	else return        $this->File($family, FS_NORMAL, 1);
+ 	}
 	if( !$f )
 	    JpGraphError::Raise("Unknown font style specification [$fam].");
 	$f = TTF_DIR.$f;

@@ -17,7 +17,7 @@ if (substr(phpversion(), 0, 1) == "5") {
         ini_set("zend.ze1_compatibility_mode", "1");
 }
 
-include_once('config.php');
+require_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Accounts/Account.php');
@@ -30,8 +30,29 @@ require_once('modules/Meetings/Meeting.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Opportunities/Opportunity.php');
 require_once('modules/Tasks/Task.php');
+require_once('modules/Users/User.php');
 
+global $allow_exports;
 session_start();
+
+$current_user = new User();
+
+if(isset($_SESSION['authenticated_user_id']))
+{
+        $result = $current_user->retrieve($_SESSION['authenticated_user_id']);
+        if($result == null)
+        {
+                session_destroy();
+            header("Location: index.php?action=Login&module=Users");
+        }
+
+}
+if ($allow_exports=='none' || ( $allow_exports=='admin' && ! is_admin($current_user) ) )
+{
+die("you can't export!");
+}
+
+
 
 $contact_fields = array(
 "id"=>"Contact ID"

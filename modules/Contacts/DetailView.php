@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -88,7 +88,7 @@ $xtpl->assign("ALT_ADDRESS_CITY", $focus->alt_address_city);
 $xtpl->assign("ALT_ADDRESS_STATE", $focus->alt_address_state);
 $xtpl->assign("ALT_ADDRESS_POSTALCODE", $focus->alt_address_postalcode);
 $xtpl->assign("ALT_ADDRESS_COUNTRY", $focus->alt_address_country);
-$xtpl->assign("DESCRIPTION", $focus->description);
+$xtpl->assign("DESCRIPTION", nl2br($focus->description));
 $xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
 $xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
 $xtpl->parse("main");

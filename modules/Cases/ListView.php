@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Cases/ListView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Cases/ListView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -56,12 +56,11 @@ if(isset($_REQUEST['query']))
 
 	$where_clauses = Array();
 
-	if(isset($name) && $name != "") array_push($where_clauses, "cases.name like '$name%'");
-	if(isset($account_name) && $account_name != "") array_push($where_clauses, "accounts.name like '$account_name%'");
-	if(isset($status) && $status != "") array_push($where_clauses, "cases.status = '$status'");
-	if(isset($number) && $number != "") array_push($where_clauses, "cases.number like '$number%'");
+	if(isset($name) && $name != "") array_push($where_clauses, "cases.name like '".PearDatabase::quote($name)."%'");
+	if(isset($account_name) && $account_name != "") array_push($where_clauses, "accounts.name like '".PearDatabase::quote($account_name)."%'");
+	if(isset($status) && $status != "") array_push($where_clauses, "cases.status = '".PearDatabase::quote($status)."'");
+	if(isset($number) && $number != "") array_push($where_clauses, "cases.number like '".PearDatabase::quote($number)."%'");
 	if(isset($current_user_only) && $current_user_only != "") array_push($where_clauses, "cases.assigned_user_id='$current_user->id'");
-
 	$where = "";
 	foreach($where_clauses as $clause)
 	{
@@ -76,7 +75,7 @@ if(isset($_REQUEST['query']))
 		}
 		$where .= "cases.assigned_user_id IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= "'$val'";
+			$where .= "'".PearDatabase::quote($val)."'";
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 		}
 	}

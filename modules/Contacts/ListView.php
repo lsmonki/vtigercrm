@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/ListView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/ListView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -68,22 +68,22 @@ if(isset($_REQUEST['query']))
 
 	$where_clauses = Array();
 
+	if(isset($last_name) && $last_name != "") array_push($where_clauses, "contacts.last_name like '".PearDatabase::quote($last_name)."%'");
+	if(isset($first_name) && $first_name != "")	array_push($where_clauses, "contacts.first_name like '".PearDatabase::quote($first_name)."%'");
+	if(isset($account_name) && $account_name != "")	array_push($where_clauses, "accounts.name like '".PearDatabase::quote($account_name)."%'");
+	if(isset($lead_source) && $lead_source != "") array_push($where_clauses, "contacts.lead_source = '".PearDatabase::quote($lead_source)."'");
+	if(isset($do_not_call) && $do_not_call != "") array_push($where_clauses, "contacts.do_not_call = '".PearDatabase::quote($do_not_call)."'");
+	if(isset($phone) && $phone != "") array_push($where_clauses, "(contacts.phone_home like '%".PearDatabase::quote($phone)."%' OR contacts.phone_mobile like '%".PearDatabase::quote($phone)."%' OR contacts.phone_work like '%".PearDatabase::quote($phone)."%' OR contacts.phone_other like '%".PearDatabase::quote($phone)."%' OR contacts.phone_fax like '%".PearDatabase::quote($phone)."%' OR contacts.assistant_phone like '%".PearDatabase::quote($phone)."%')");
+	if(isset($email) && $email != "") array_push($where_clauses, "(contacts.email1 like '".PearDatabase::quote($email)."%' OR contacts.email2 like '".PearDatabase::quote($email)."%')");
+	if(isset($yahoo_id) && $yahoo_id != "") array_push($where_clauses, "contacts.yahoo_id like '".PearDatabase::quote($yahoo_id)."%'");
+	if(isset($assistant) && $assistant != "") array_push($where_clauses, "contacts.assistant like '".PearDatabase::quote($assistant)."%'");
+	if(isset($email_opt_out) && $email_opt_out != "") array_push($where_clauses, "contacts.email_opt_out = '".PearDatabase::quote($email_opt_out)."'");
+	if(isset($address_street) && $address_street != "") array_push($where_clauses, "(contacts.primary_address_street like '".PearDatabase::quote($address_street)."%' OR contacts.alt_address_street like '".PearDatabase::quote($address_street)."%')");
+	if(isset($address_city) && $address_city != "") array_push($where_clauses, "(contacts.primary_address_city like '".PearDatabase::quote($address_city)."%' OR contacts.alt_address_city like '".PearDatabase::quote($address_city)."%')");
+	if(isset($address_state) && $address_state != "") array_push($where_clauses, "(contacts.primary_address_state like '".PearDatabase::quote($address_state)."%' OR contacts.alt_address_state like '".PearDatabase::quote($address_state)."%')");
+	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "(contacts.primary_address_postalcode like '".PearDatabase::quote($address_postalcode)."%' OR contacts.alt_address_postalcode like '".PearDatabase::quote($address_postalcode)."%')");
+	if(isset($address_country) && $address_country != "") array_push($where_clauses, "(contacts.primary_address_country like '".PearDatabase::quote($address_country)."%' OR contacts.alt_address_country like '".PearDatabase::quote($address_country)."%')");
 
-	if(isset($last_name) && $last_name != "") array_push($where_clauses, "contacts.last_name like '$last_name%'");
-	if(isset($first_name) && $first_name != "")	array_push($where_clauses, "contacts.first_name like '$first_name%'");
-	if(isset($account_name) && $account_name != "")	array_push($where_clauses, "accounts.name like '$account_name%'");
-	if(isset($lead_source) && $lead_source != "") array_push($where_clauses, "contacts.lead_source = '$lead_source'");
-	if(isset($do_not_call) && $do_not_call != "") array_push($where_clauses, "contacts.do_not_call = '$do_not_call'");
-	if(isset($phone) && $phone != "") array_push($where_clauses, "(contacts.phone_home like '%$phone%' OR contacts.phone_mobile like '%$phone%' OR contacts.phone_work like '%$phone%' OR contacts.phone_other like '%$phone%' OR contacts.phone_fax like '%$phone%' OR contacts.assistant_phone like '%$phone%')");
-	if(isset($email) && $email != "") array_push($where_clauses, "(contacts.email1 like '$email%' OR contacts.email2 like '$email%')");
-	if(isset($yahoo_id) && $yahoo_id != "") array_push($where_clauses, "contacts.yahoo_id like '$yahoo_id%'");
-	if(isset($assistant) && $assistant != "") array_push($where_clauses, "contacts.assistant like '$assistant%'");
-	if(isset($email_opt_out) && $email_opt_out != "") array_push($where_clauses, "contacts.email_opt_out = '$email_opt_out'");
-	if(isset($address_street) && $address_street != "") array_push($where_clauses, "(contacts.primary_address_street like '$address_street%' OR contacts.alt_address_street like '$address_street%')");
-	if(isset($address_city) && $address_city != "") array_push($where_clauses, "(contacts.primary_address_city like '$address_city%' OR contacts.alt_address_city like '$address_city%')");
-	if(isset($address_state) && $address_state != "") array_push($where_clauses, "(contacts.primary_address_state like '$address_state%' OR contacts.alt_address_state like '$address_state%')");
-	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "(contacts.primary_address_postalcode like '$address_postalcode%' OR contacts.alt_address_postalcode like '$address_postalcode%')");
-	if(isset($address_country) && $address_country != "") array_push($where_clauses, "(contacts.primary_address_country like '$address_country%' OR contacts.alt_address_country like '$address_country%')");
 	if(isset($current_user_only) && $current_user_only != "") array_push($where_clauses, "contacts.assigned_user_id='$current_user->id'");
 
 	$where = "";
@@ -100,7 +100,7 @@ if(isset($_REQUEST['query']))
 		}
 		$where .= "contacts.assigned_user_id IN(";
 		foreach ($assigned_user_id as $key => $val) {
-			$where .= "'$val'";
+			$where .= "'".PearDatabase::quote($val)."'";
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
 		}
 	}
@@ -160,6 +160,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 $ListView = new ListView();
 $ListView->initNewXTemplate( 'modules/Contacts/ListView.html',$current_module_strings);
+$ListView->setHeaderText("<table cellspacing='0' cellpadding='0'><tr><td><input type='button' class='button' onClick='document.location=\"index.php?module=Contacts&action=BusinessCard\"' name='addbusinesscard' value='{$current_module_strings['LBL_ADD_BUSINESSCARD']}'></td></tr></table>");
 $ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE'] );
 $ListView->setQuery($where, "", "first_name, last_name", "CONTACT");
 $ListView->processListView($seedContact, "main", "CONTACT");
