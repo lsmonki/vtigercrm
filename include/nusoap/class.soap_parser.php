@@ -8,7 +8,7 @@
 * soap_parser class parses SOAP XML messages into native PHP values
 *
 * @author   Dietrich Ayala <dietrich@ganx4.com>
-* @version  $Id: class.soap_parser.php,v 1.1 2004/08/17 13:27:46 gjk Exp $
+* @version  $Id: class.soap_parser.php,v 1.1 2004/08/17 13:27:46 gjayakrishnan Exp $
 * @access   public
 */
 class soap_parser extends nusoap_base {

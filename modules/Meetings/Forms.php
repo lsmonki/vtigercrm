@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Meetings/Forms.php,v 1.2 2004/08/18 14:15:29 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Meetings/Forms.php,v 1.2 2004/08/18 14:15:29 gjayakrishnan Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.

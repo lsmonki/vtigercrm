@@ -13,12 +13,13 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Home/Menu.php,v 1.1 2004/08/17 15:05:06 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Home/Menu.php,v 1.4 2004/09/02 10:33:51 rakeebk Exp $
  * Description:  TODO To be written.
  ********************************************************************************/
 
 global $mod_strings;
 $module_menu = Array(
+	Array("index.php?module=Leads&action=EditView&return_module=Leads&return_action=index", $mod_strings['LNK_NEW_LEAD']),
 	Array("index.php?module=Contacts&action=EditView&return_module=Contacts&return_action=index", $mod_strings['LNK_NEW_CONTACT']),
 	Array("index.php?module=Accounts&action=EditView&return_module=Accounts&return_action=index", $mod_strings['LNK_NEW_ACCOUNT']),
 	Array("index.php?module=Opportunities&action=EditView&return_module=Opportunities&return_action=index", $mod_strings['LNK_NEW_OPPORTUNITY']),

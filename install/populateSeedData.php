@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/install/populateSeedData.php,v 1.5 2004/08/26 11:44:30 srk Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/populateSeedData.php,v 1.5 2004/08/26 11:44:30 sarajkumar Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 

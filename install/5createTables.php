@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/install/5createTables.php,v 1.8 2004/08/26 11:44:30 srk Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.14 2004/09/03 11:13:47 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -25,6 +25,9 @@ if (isset($_REQUEST['admin_email'])) $admin_email		= $_REQUEST['admin_email'];
 if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_password'];
 
 require_once('include/logging.php');
+require_once('modules/Leads/Lead.php'); 
+require_once('modules/Settings/FileStorage.php'); 
+require_once('modules/imports/Headers.php'); 
 require_once('modules/Contacts/Contact.php'); 
 require_once('modules/Accounts/Account.php'); 
 require_once('modules/Opportunities/Opportunity.php'); 
@@ -35,6 +38,7 @@ require_once('modules/Meetings/Meeting.php');
 require_once('modules/Calls/Call.php'); 
 require_once('modules/Emails/Email.php'); 
 require_once('modules/Users/User.php'); 
+require_once('modules/Users/TabMenu.php');
 require_once('data/Tracker.php'); 
 require_once('include/utils.php');
 
@@ -137,9 +141,11 @@ function createLabelsTable () {
             <td>
 <?php
 
+$lead 	        = new Lead();
+$filestorage    = new FileStorage();
 $contact 	= new Contact();
 $account 	= new Account();
-$opportunity= new Opportunity();
+$opportunity	= new Opportunity();
 $case 		= new aCase();
 $user 		= new User();
 $tracker 	= new Tracker();
@@ -148,12 +154,47 @@ $note		= new Note();
 $meeting	= new Meeting();
 $call		= new Call();
 $email		= new Email();
-
+$tab            = new Tab();
+$headers        = new Headers();
 $startTime = microtime();
 
 //TODO Clint 4/28 - Add logic for creating database as part of the script
 
 //Dropping old tables if table exists and told to drop it
+//Dropping leads table
+if ($db_drop_tables == true &&
+        mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$lead->table_name."'"))==1) {
+        echo "Dropping existing ".$lead->table_name." table...";
+        $contact->drop_tables();
+        $log->info("Dropped old ".$lead->table_name." table.");
+    echo "<font color=green>dropped existing ".$lead->table_name." table</font><BR>\n";
+}
+else {
+        $log->info("Did not need to drop old ".$lead->table_name." table.  It doesn't exist.");
+}
+//Dropping filestorage table
+if ($db_drop_tables == true &&
+        mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$filestorage->table_name."'"))==1) {
+        echo "Dropping existing ".$filestorage->table_name." table...";
+        $filestorage->drop_tables();
+        $log->info("Dropped old ".$filestorage->table_name." table.");
+    echo "<font color=green>dropped existing ".$filestorage->table_name." table</font><BR>\n";
+}
+else {
+        $log->info("Did not need to drop old ".$filestorage->table_name." table.  It doesn't exist.");
+}
+//Dropping headers table
+if ($db_drop_tables == true &&
+        mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$headers->table_name."'"))==1) {
+        echo "Dropping existing ".$headers->table_name." table...";
+        $headers->drop_tables();
+        $log->info("Dropped old ".$headers->table_name." table.");
+    echo "<font color=green>dropped existing ".$headers->table_name." table</font><BR>\n";
+}
+else {
+        $log->info("Did not need to drop old ".$headers->table_name." table.  It doesn't exist.");
+}
+
 //Dropping contacts table
 if ($db_drop_tables == true &&
 	mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$contact->table_name."'"))==1) {
@@ -286,7 +327,55 @@ else {
 	$log->info("Did not need to drop old ".$email->table_name." table.  It doesn't exist.");
 }
 
+//Dropping tabmenu table
+if ($db_drop_tables == true &&
+        mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$tab->table_name."'"))==1) {
+        echo "Dropping existing ".$tab->table_name." table...";
+        $tab->drop_tables();
+        $log->info("Dropped old ".$tab->table_name." table.");
+    echo "<font color=green>dropped existing ".$tab->table_name." table</font><BR>\n";
+}
+else {
+        $log->info("Did not need to drop old ".$tab->table_name." table.  It doesn't exist.");
+}
+
 // Creating new tables if they don't exist.
+// Creating leads table.
+if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$lead->table_name."'"))!=1) {
+        echo "Creating new ".$lead->table_name." table...";
+        $lead->create_tables();
+        $log->info("Created ".$lead->table_name." table.");
+        echo "<font color=green>created ".$lead->table_name." table</font><BR>\n";
+}
+else {
+        echo "Not creating new ".$lead->table_name." table.  It already exists.<BR>\n";
+}
+
+// Creating new tables if they don't exist.
+// Creating filestorage table.
+if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$filestorage->table_name."'"))!=1) {
+        echo "Creating new filestorage table...";
+	$filestorage->create_tables();
+        $log->info("Created ".$filestorage->table_name." table.");
+        echo "<font color=green>created ".$filestorage->table_name." table</font><BR>\n";
+}
+else {
+        echo "Not creating new ".$filestorage->table_name." table.  It already exists.<BR>\n";
+}
+// Creating new tables if they don't exist.
+// Creating headers table.
+if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$headers->table_name."'"))!=1) {
+        echo "Creating new headers table...";
+	$headers->create_tables();
+        $log->info("Created ".$headers->table_name." table.");
+        echo "<font color=green>created ".$headers->table_name." table</font><BR>\n";
+}
+else {
+        echo "Not creating new ".$headers->table_name." table.  It already exists.<BR>\n";
+}
+
+
+
 // Creating contacts table.
 if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$contact->table_name."'"))!=1) {
 	echo "Creating new ".$contact->table_name." table...";
@@ -430,6 +519,17 @@ if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$email->table_name."'"))!=1)
 }
 else {
 	echo "Not creating new ".$email->table_name." table.  It already exists.<BR>\n";
+}
+
+// Creating tabmenu table.
+if (mysql_num_rows(mysql_query("SHOW TABLES LIKE '".$tab->table_name."'"))!=1) {
+        echo "Creating new ".$tab->table_name." table...";
+    $tab->create_tables();
+        $log->info("Created ".$tab->table_name." table.");
+    echo "<font color=green>created ".$tab->table_name." table</font><BR>\n";
+}
+else {
+        echo "Not creating new ".$tab->table_name." table.  It already exists.<BR>\n";
 }
 
 //populating the db with seed data 

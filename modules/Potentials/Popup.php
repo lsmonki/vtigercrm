@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Opportunities/Popup.php,v 1.1 2004/08/17 15:06:09 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Popup.php,v 1.1 2004/08/17 15:06:09 gjayakrishnan Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 // This file is used for all popups on this module

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/data/SugarBean.php,v 1.1 2004/08/17 13:18:39 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/data/SugarBean.php,v 1.1 2004/08/17 13:18:39 gjayakrishnan Exp $
  * Description:  Defines the base class for all data entities used throughout the 
  * application.  The base class including its methods and variables is designed to 
  * be overloaded with module-specific methods and variables particular to the 

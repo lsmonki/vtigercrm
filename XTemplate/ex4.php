@@ -4,7 +4,7 @@
 		example 4
 		demonstrates recursive parse
 
-		$Id: ex4.php,v 1.1 2004/08/18 15:27:17 gjk Exp $
+		$Id: ex4.php,v 1.1 2004/08/18 15:27:17 gjayakrishnan Exp $
 
 	*/
 
@@ -16,7 +16,7 @@
 
 /*
 		$Log: ex4.php,v $
-		Revision 1.1  2004/08/18 15:27:17  gjk
+		Revision 1.1  2004/08/18 15:27:17  gjayakrishnan
 		XTemplate files added
 		
 		Revision 1.1  2004/05/27 05:30:47  sugarjacob

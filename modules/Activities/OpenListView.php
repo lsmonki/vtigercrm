@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Activities/OpenListView.php,v 1.1 2004/08/18 16:10:43 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Activities/OpenListView.php,v 1.1 2004/08/18 16:10:43 gjayakrishnan Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 

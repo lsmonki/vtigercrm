@@ -1,3 +1,38 @@
+vtiger CRM 2.0
+September 6, 2004
+
+We are pleased to announce the latest version of vtiger CRM.
+
+The new features are:
+
+a) DRAG and DROP of the tabs!!
+This was achieved after working for quite a long time in the labs, not to
+mention many sleepless nights!.
+By using this feature, you can customize the tabs that you want to work with.
+Do let us know what you feel about it.
+
+b) Lead Management
+
+Sales reps can create leads and initiate the CRM cycle.
+We have tried to incorporate all the required features during this short period.
+Do let us know if you would like to see some more features.
+
+c) Import Leads from External Sources
+
+Sales reps can import leads to vtiger CRM from external sources, such as Microsoft Outlook, 
+ACT, GoldMine, and others in *.XLS file format. This feature eliminates the manual
+data entry and enhances the Sales rep's productivity.
+
+d) Attach Files
+
+Sales reps can attach sales-related materials, such as marketing collaterals, presentations,
+price quotes, and others, so that they can instantly access the related documents while 
+dealing with leads/opportunities, accounts, and contacts.
+
+Send your feedback, which is vital for our understanding your needs.
+
+
+-------------------------------------------------------------------------------------------------------------
 vtiger CRM 1.0
 August 26, 2004
 
@@ -9,7 +44,9 @@ We gratefully acknowledge the contribution made by SugarCRM, and we intend to ac
 
 The team at vtiger CRM is pleased to announce the v1.0 the first release of vtiger CRM Open Source project.
 
-This first release of vtiger.Sales is best suited for small sales forces.  If you're looking to manage the basics of sales deals where every user can see all of the data in the system, then vtiger.Sales v1.0 is right for you.  Over the next few months, we will be building out vtiger.Sales to meet the needs of larger, multi-national sales forces that need features like forecasting, data access permissions and internationalization.
+This first release of vtiger.Sales is best suited for small sales forces.  If
+you're looking to manage the basics of sales deals where every user can see
+all of the data in the system, then vtiger.Sales v1.0 is right for you.  Over the next few months, we will be building out vtiger.Sales to meet the needs of larger, multi-national sales forces that need features like forecasting, data access permissions and internationalization.
 
 Please feel free to send your valuable comments to contact@vtiger.com so that we can have a better CRM product at free of cost. Check out our website at http://www.vtiger.com for support forums, detailed product information, our future plan and much more.  
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Contacts/DeleteContactOpportunityRelationship.php,v 1.1 2004/08/17 15:04:13 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/DeleteContactOpportunityRelationship.php,v 1.1 2004/08/17 15:04:13 gjayakrishnan Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 

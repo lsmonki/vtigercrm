@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Home/language/en_us.lang.php,v 1.1 2004/08/17 15:12:55 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Home/language/en_us.lang.php,v 1.2 2004/08/31 05:19:13 rakeebk Exp $
  * Description:  Defines the English language pack 
  ********************************************************************************/
  
@@ -29,6 +29,7 @@ $mod_strings = Array(
 'LBL_TOTAL_PIPELINE'=>'Total Pipeline is ',
 'LBL_OPP_SIZE'=>'Opportunity size in $1K',
 
+'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_CONTACT'=>'New Contact',
 'LNK_NEW_ACCOUNT'=>'New Account',
 'LNK_NEW_OPPORTUNITY'=>'New Opportunity',

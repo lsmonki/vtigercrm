@@ -4,7 +4,7 @@
 // Description:	Configuration file for JpGraph library
 // Created: 	2004-03-27
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpg-config.inc,v 1.2 2004/08/19 06:48:29 gjk Exp $
+// Ver:		$Id: jpg-config.inc,v 1.2 2004/08/19 06:48:29 gjayakrishnan Exp $
 //
 // License:	This code is released under QPL 1.0
 // Copyright (C) 2004 Johan Persson

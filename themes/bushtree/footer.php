@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/themes/bushtree/footer.php,v 1.1 2004/08/17 14:56:12 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/bushtree/footer.php,v 1.2 2004/09/02 09:50:25 rakeebk Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -25,7 +25,8 @@ global $app_strings;
 <tr><td colspan="2" align="center">
 	<table CELLSPACING="3" border="0"><tr>
       <td align=center noWrap colSpan="4">
-	  <A href="index.php?module=Home&action=index"><?php echo $app_list_strings['moduleList']['Home']; ?></A> | 
+	  <A href="index.php?module=Home&action=index"><?php echo $app_list_strings['moduleList']['Home']; ?></A> |
+	  <A href="index.php?module=Leads&action=index"><?php echo $app_list_strings['moduleList']['Leads']; ?></A> | 
 	  <A href="index.php?module=Contacts&action=index"><?php echo $app_list_strings['moduleList']['Contacts']; ?></A> | 
 	  <A href="index.php?module=Accounts&action=index"><?php echo $app_list_strings['moduleList']['Accounts']; ?></A> | 
 	  <A href="index.php?module=Opportunities&action=index"><?php echo $app_list_strings['moduleList']['Opportunities']; ?></A> | 

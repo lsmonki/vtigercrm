@@ -7,7 +7,7 @@
 * NOTE: this is only really used when WSDL is not available.
 *
 * @author   Dietrich Ayala <dietrich@ganx4.com>
-* @version  $Id: class.soap_val.php,v 1.1 2004/08/17 13:27:46 gjk Exp $
+* @version  $Id: class.soap_val.php,v 1.1 2004/08/17 13:27:46 gjayakrishnan Exp $
 * @access   public
 */
 class soapval extends nusoap_base {

@@ -4,7 +4,7 @@
 // Description:	Line plot extension for JpGraph
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_line.php,v 1.2 2004/08/19 06:48:29 gjk Exp $
+// Ver:		$Id: jpgraph_line.php,v 1.2 2004/08/19 06:48:29 gjayakrishnan Exp $
 //
 // License:	This code is released under QPL
 // Copyright (C) 2001,2002 Johan Persson

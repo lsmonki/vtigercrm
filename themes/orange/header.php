@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/themes/orange/header.php,v 1.3 2004/08/19 05:31:59 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/orange/header.php,v 1.3 2004/08/19 05:31:59 gjayakrishnan Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/themes/akodarkgem/header.php,v 1.1 2004/08/17 14:55:39 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/akodarkgem/header.php,v 1.1 2004/08/17 14:55:39 gjayakrishnan Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.

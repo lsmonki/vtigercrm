@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/themes/akodarkgem/layout_utils.php,v 1.3 2004/08/22 10:42:06 don Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/akodarkgem/layout_utils.php,v 1.3 2004/08/22 10:42:06 rakeebk Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.

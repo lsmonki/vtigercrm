@@ -7,7 +7,7 @@
 * parses a WSDL file, allows access to it's data, other utility methods
 * 
 * @author   Dietrich Ayala <dietrich@ganx4.com>
-* @version  $Id: class.wsdl.php,v 1.1 2004/08/17 13:27:46 gjk Exp $
+* @version  $Id: class.wsdl.php,v 1.1 2004/08/17 13:27:46 gjayakrishnan Exp $
 * @access public 
 */
 class wsdl extends nusoap_base {

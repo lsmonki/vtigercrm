@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/data/Tracker.php,v 1.1 2004/08/17 13:18:39 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/data/Tracker.php,v 1.1 2004/08/17 13:18:39 gjayakrishnan Exp $
  * Description:  Updates entries for the Last Viewed functionality tracking the 
  * last viewed records on a per user basis.
  ********************************************************************************/

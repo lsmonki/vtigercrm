@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/themes/bushtree/header.php,v 1.1 2004/08/17 14:56:12 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/bushtree/header.php,v 1.1 2004/08/17 14:56:12 gjayakrishnan Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.

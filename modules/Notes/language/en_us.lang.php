@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Notes/language/en_us.lang.php,v 1.1 2004/08/17 15:13:19 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Notes/language/en_us.lang.php,v 1.2 2004/08/31 05:22:32 rakeebk Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -40,6 +40,7 @@ $mod_strings = Array(
 'LBL_EMAIL_ADDRESS'=>'Email Address:',
 'LBL_COLON'=>':',
 
+'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_CONTACT'=>'New Contact',
 'LNK_NEW_ACCOUNT'=>'New Account',
 'LNK_NEW_OPPORTUNITY'=>'New Opportunity',

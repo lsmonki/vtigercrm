@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/install/4createConfigFile.php,v 1.9 2004/08/26 11:44:30 srk Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.10 2004/09/03 15:14:37 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -113,7 +113,7 @@ $config .= "\$includeDirectory = \$root_directory.'include/';\n\n";
 $config .= "\$list_max_entries_per_page = '20';\n\n";
 $config .= "\$history_max_viewed = '10';\n\n";
 $config .= "//define list of menu tabs\n";
-$config .= "\$moduleList = Array('Home', 'Dashboard', 'Contacts', 'Accounts', 'Opportunities', 'Cases', 'Notes', 'Calls', 'Emails', 'Meetings', 'Tasks');\n\n";
+$config .= "//\$moduleList = Array('Home', 'Dashboard', 'Leads', 'Contacts', 'Accounts', 'Opportunities', 'Cases', 'Notes', 'Calls', 'Emails', 'Meetings', 'Tasks');\n\n";
 $config .= "\$default_module = 'Home';\n";
 $config .= "\$default_action = 'index';\n\n";
 $config .= "//set default theme\n";

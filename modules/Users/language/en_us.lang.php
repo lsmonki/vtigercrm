@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Users/language/en_us.lang.php,v 1.1 2004/08/17 15:13:55 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.2 2004/08/31 05:27:34 rakeebk Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -99,6 +99,7 @@ $mod_strings = Array(
 'ERR_LAST_ADMIN_1'=>'The user name ',
 'ERR_LAST_ADMIN_2'=>' is the last Admin user.  At least one user must be an Admin user.<br>Check the Admin user setting.',
 
+'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_CONTACT'=>'New Contact',
 'LNK_NEW_ACCOUNT'=>'New Account',
 'LNK_NEW_OPPORTUNITY'=>'New Opportunity',

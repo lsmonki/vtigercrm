@@ -25,7 +25,7 @@ class XTemplate {
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-	$Id: xtpl.php,v 1.1 2004/08/18 15:27:17 gjk Exp $
+	$Id: xtpl.php,v 1.1 2004/08/18 15:27:17 gjayakrishnan Exp $
 */
 
 /***[ variables ]***********************************************************/
@@ -414,7 +414,7 @@ function r_getfile($file) {
 
 /*
   	$Log: xtpl.php,v $
-  	Revision 1.1  2004/08/18 15:27:17  gjk
+  	Revision 1.1  2004/08/18 15:27:17  gjayakrishnan
   	XTemplate files added
   	
   	Revision 1.7  2004/08/08 09:28:36  sugarjacob

@@ -43,7 +43,7 @@ $list_max_entries_per_page = '20';
 $history_max_viewed = '10';
 
 //define list of menu tabs
-$moduleList = Array('Home', 'Dashboard', 'Contacts', 'Accounts', 'Opportunities', 'Cases', 'Notes', 'Calls', 'Emails', 'Meetings', 'Tasks');
+//$moduleList = Array('Home', 'Dashboard', 'Leads', 'Contacts', 'Accounts', 'Opportunities', 'Cases', 'Notes', 'Calls', 'Emails', 'Meetings', 'Tasks');
 
 $default_module = 'Home';
 $default_action = 'index';

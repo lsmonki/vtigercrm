@@ -6,7 +6,7 @@
 		-simple replaces ( {VARIABLE1}, and {DATA.ID} {DATA.NAME} {DATA.AGE} )
 		-dynamic blocks
 
-		$Id: ex1.php,v 1.1 2004/08/18 15:27:17 gjk Exp $
+		$Id: ex1.php,v 1.1 2004/08/18 15:27:17 gjayakrishnan Exp $
 	*/
 
 	require "xtpl.p";
@@ -38,7 +38,7 @@
 
 /*
 		$Log: ex1.php,v $
-		Revision 1.1  2004/08/18 15:27:17  gjk
+		Revision 1.1  2004/08/18 15:27:17  gjayakrishnan
 		XTemplate files added
 		
 		Revision 1.1  2004/05/27 05:30:47  sugarjacob

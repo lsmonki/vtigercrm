@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Emails/Save.php,v 1.1 2004/08/17 15:04:39 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.1 2004/08/17 15:04:39 gjayakrishnan Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  ********************************************************************************/

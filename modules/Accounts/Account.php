@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Accounts/Account.php,v 1.1 2004/08/17 15:02:56 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.1 2004/08/17 15:02:56 gjayakrishnan Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
  ********************************************************************************/

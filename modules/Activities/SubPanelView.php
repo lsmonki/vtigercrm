@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Activities/SubPanelView.php,v 1.2 2004/08/18 16:10:52 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Activities/SubPanelView.php,v 1.6 2004/09/06 16:30:47 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -169,7 +169,7 @@ foreach ($focus_notes_list as $note) {
 									 );
 }
 
-if ($currentModule == 'Contacts') {
+if ($currentModule == 'Contacts' || $currentModule == 'Leads') {
 	$xtpl=new XTemplate ('modules/Activities/SubPanelViewContacts.html'); 
 	$xtpl->assign("CONTACT_ID", $focus->id);
 }
@@ -268,6 +268,10 @@ if ($currentModule == 'Contacts') {
 	$button .= "<input type='hidden' name='contact_id' value='$focus->id'>\n<input type='hidden' name='contact_name' value='$focus->first_name $focus->last_name'>\n";
 	$button .= "<input type='hidden' name='parent_type' value='Account'>\n<input type='hidden' name='parent_id' value='$focus->account_id'>\n<input type='hidden' name='parent_name' value='$focus->account_name'>\n";
 }
+if ($currentModule == 'Leads') {
+	$button .= "<input type='hidden' name='lead_id' value='$focus->id'>\n<input type='hidden' name='lead_name' value='$focus->first_name $focus->last_name'>\n";
+	$button .= "<input type='hidden' name='parent_type' value='Lead'>\n";
+}
 $button .= "<input type='hidden' name='return_module' value='".$currentModule."'>\n";
 $button .= "<input type='hidden' name='return_action' value='".$action."'>\n";
 $button .= "<input type='hidden' name='return_id' value='".$focus->id."'>\n";
@@ -324,6 +328,21 @@ foreach($history_list as $activity)
 $xtpl->parse("history");
 $xtpl->out("history");
 
+require_once('modules/uploads/binaryfilelist.php');
+echo '<br><br>';
+echo '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
+echo '<form border="0" action="index.php" method="post" name="form" id="form">';
+
+echo '<input type="hidden" name="module">';
+echo '<input type="hidden" name="return_module" value="'.$currentModule.'">';
+echo '<input type="hidden" name="return_id" value="'.$focus->id.'">';
+echo '<input type="hidden" name="action">';
+
+echo '<td vAlign="middle" class="formHeader" align="left" noWrap width="100%" height="15">Attachment&nbsp;';
+echo '<input title="Attach File" accessyKey="F" class="button" onclick="this.form.action.value=\'upload\';this.form.module.value=\'uploads\'" type="submit" name="button" value="New Attachment">';
+
+echo '</td></tr></form></tbody></table>';
+echo getAttachmentsList($focus->id, $theme);
 // Stick on the form footer
 echo get_form_footer();
  

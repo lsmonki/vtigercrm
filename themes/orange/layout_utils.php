@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/themes/orange/layout_utils.php,v 1.8 2004/08/22 10:42:07 don Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/orange/layout_utils.php,v 1.11 2004/09/06 16:20:54 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -122,6 +122,13 @@ $the_title .= $module_title."</td></tr></tbody></table></td>\n";
 $the_title .= "<td width='100%'><IMG height='1' src='include/images/blank.gif'></td>";
 
 if ($show_help) {
+//test
+if($module == 'Leads')
+        {
+ $the_title .= "<td color='red' class='bodySmall' nowrap align='right'>[ <A href='index.php?module=imports&action=import'><Blink><B>".$app_strings['LNK_IMPORT_LEADS']."</Blink></B></A> ]</td>\n";
+        }
+
+
 	$the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='phprint.php?jt=".session_id()."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
     $the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";
 }

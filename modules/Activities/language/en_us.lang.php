@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Activities/language/en_us.lang.php,v 1.1 2004/08/17 15:11:11 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Activities/language/en_us.lang.php,v 1.3 2004/09/06 10:54:57 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -33,8 +33,11 @@ $mod_strings = Array(
 'LBL_SCHEDULE_CALL_BUTTON_KEY'=>'C',
 'LBL_SCHEDULE_CALL_BUTTON_LABEL'=>'Schedule Call',
 'LBL_NEW_NOTE_BUTTON_TITLE'=>'New Note [Alt+T]',
+'LBL_NEW_ATTACH_BUTTON_TITLE'=>'Attach File [Alt+F]',
 'LBL_NEW_NOTE_BUTTON_KEY'=>'T',
+'LBL_NEW_ATTACH_BUTTON_KEY'=>'F',
 'LBL_NEW_NOTE_BUTTON_LABEL'=>'New Note',
+'LBL_NEW_ATTACH_BUTTON_LABEL'=>'Attach File',
 'LBL_TRACK_EMAIL_BUTTON_TITLE'=>'Track Email [Alt+K]',
 'LBL_TRACK_EMAIL_BUTTON_KEY'=>'K',
 'LBL_TRACK_EMAIL_BUTTON_LABEL'=>'Track Email',
@@ -48,6 +51,7 @@ $mod_strings = Array(
 'LBL_LIST_SUBJECT'=>'Subject',
 'LBL_LIST_LAST_MODIFIED'=>'Last Modified',
 
+'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_CONTACT'=>'New Contact',
 'LNK_NEW_ACCOUNT'=>'New Account',
 'LNK_NEW_OPPORTUNITY'=>'New Opportunity',

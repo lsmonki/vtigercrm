@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Opportunities/Charts.php,v 1.3 2004/08/24 11:03:24 don Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Charts.php,v 1.3 2004/08/24 11:03:24 rakeebk Exp $
  * Description:  Includes the functions for Customer module specific charts.
  ********************************************************************************/
 

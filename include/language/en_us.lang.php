@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/include/language/en_us.lang.php,v 1.4 2004/08/26 08:02:54 srk Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.10 2004/09/06 15:22:09 jack Exp $
  * Description:  Defines the English language pack for the base application.
  ********************************************************************************/
  
@@ -35,6 +35,8 @@ $app_strings = Array(
 'LBL_EDIT_BUTTON'=>'Edit',
 'LBL_DUPLICATE_BUTTON_TITLE'=>'Duplicate [Alt+U]',
 'LBL_DUPLICATE_BUTTON'=>'Duplicate',
+'LBL_TABCUSTOMISE_BUTTON_TITLE'=>'Customise [Alt+C]',
+'LBL_TABCUSTOMISE_BUTTON'=>'Customise',
 'LBL_DELETE_BUTTON_TITLE'=>'Delete [Alt+D]',
 'LBL_DELETE_BUTTON'=>'Delete',
 'LBL_NEW_BUTTON_TITLE'=>'New [Alt+N]',
@@ -46,6 +48,7 @@ $app_strings = Array(
 'LBL_SAVE_BUTTON_KEY'=>'S',
 'LBL_EDIT_BUTTON_KEY'=>'E',
 'LBL_DUPLICATE_BUTTON_KEY'=>'U',
+'LBL_TABCUSTOMISE_BUTTON_KEY'=>'C',
 'LBL_DELETE_BUTTON_KEY'=>'D',
 'LBL_NEW_BUTTON_KEY'=>'N',
 'LBL_CHANGE_BUTTON_KEY'=>'G',
@@ -56,6 +59,7 @@ $app_strings = Array(
 'LBL_SAVE_BUTTON_LABEL'=>'Save',
 'LBL_EDIT_BUTTON_LABEL'=>'Edit',
 'LBL_DUPLICATE_BUTTON_LABEL'=>'Duplicate',
+'LBL_TABCUSTOMISE_BUTTON_LABEL'=>'Customize Tab',
 'LBL_DELETE_BUTTON_LABEL'=>'Delete',
 'LBL_NEW_BUTTON_LABEL'=>'New',
 'LBL_CHANGE_BUTTON_LABEL'=>'Change',
@@ -69,7 +73,7 @@ $app_strings = Array(
 'LBL_SELECT_USER_BUTTON_TITLE'=>'Select User [Alt+U]',
 'LBL_SELECT_USER_BUTTON_KEY'=>'U',
 'LBL_SELECT_USER_BUTTON_LABEL'=>'Select User',
-
+'LBL_LNK_SETTINGS'=> 'Settings',
 'LBL_LIST_NAME'=>'Name',
 'LBL_LIST_USER_NAME'=>'User Name',
 'LBL_LIST_EMAIL'=>'Email',
@@ -90,6 +94,7 @@ $app_strings = Array(
 'LNK_LIST_END'=>'End',
 'LBL_LIST_OF'=>'of',
 'LNK_PRINT'=>'Print',
+'LNK_IMPORT_LEADS'=>'Import Leads',
 'LNK_HELP'=>'Help',
 
 'NTC_REQUIRED'=>'Indicates required field',
@@ -125,7 +130,8 @@ $app_strings = Array(
 $app_list_strings = Array(
 //e.g. auf Deutsch 'Contacts'=>'Contakten', 
 'moduleList' => Array('Home'=>'Home' 
-				, 'Dashboard'=>'Dashboard' 
+				, 'Dashboard'=>'Dashboard'
+				, 'Leads'=>'Leads' 
 				, 'Contacts'=>'Contacts' 
 				, 'Accounts'=>'Accounts'
 				, 'Opportunities'=>'Opportunities' 
@@ -199,6 +205,33 @@ $app_list_strings = Array(
 		, 'Word of mouth'=>'Word of mouth'
 		, 'Other'=>'Other'
 		),
+
+'lead_status_dom' => Array(''=>''
+                , 'Attempted to Contact'=>'Attempted to Contact'
+                , 'Cold'=>'Cold'
+                , 'Contact in Future'=>'Contact in Future'
+                , 'Contacted'=>'Contacted'
+                , 'Host'=>'Host'
+                , 'Junk Lead'=>'Junk Lead'
+                , 'Lost Lead'=>'Lost Lead'
+                , 'Not Contacted'=>'Not Contacted'
+                , 'Pre Qualified'=>'Pre Qualified'
+                , 'Qualified'=>'Qualified'
+                , 'Warm'=>'Warm'
+                ),
+
+'rating_dom' => Array(''=>''
+                , 'Acquired'=>'Acquired'
+                , 'Active'=>'Active'
+                , 'Market Failed'=>'Market Failed'
+                , 'Project Cancelled'=>'Project Cancelled'
+                , 'Shutdown'=>'Shutdown'
+                ),
+
+'license_key_dom' => Array(''=>''
+                , 'Sent'=>'Sent'
+                , 'Not Sent'=>'Not Sent'
+                ),
 
 'opportunity_type_dom' => Array(''=>''
 		, 'Existing Business'=>'Existing Business'

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/modules/Opportunities/SubPanelView.php,v 1.1 2004/08/17 15:06:08 gjk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/SubPanelView.php,v 1.1 2004/08/17 15:06:08 gjayakrishnan Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
