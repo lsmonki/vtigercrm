@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/Amazon/layout_utils.php,v 1.5 2004/10/06 09:02:05 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/Amazon/layout_utils.php,v 1.5 2004/10/06 09:02:05 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.

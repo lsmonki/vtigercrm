@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/coolblue/language/en_us.lang.php,v 1.1 2004/08/17 14:56:56 gjayakrishnan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/coolblue/language/en_us.lang.php,v 1.1 2004/08/17 14:56:56 gjayakrishnan Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  

@@ -8,8 +8,12 @@
  * @module user_new
  * @package user
  */
- include_once 'webelements.p3';
- include_once 'permission.p3';
+ global $calpth,$callink;
+ $callink = "index.php?module=Calendar&action=";
+ $calpath = "modules/Calendar/";
+ 
+ include_once $calpath .'webelements.p3';
+ include_once $calpath .'permission.p3';
 
  /* Check if user is allowed to use it */
  check_user();
@@ -24,7 +28,7 @@
     * helpfunction to generate an option-field
     */
    Function acldefault_select($min,$max,$name) {
-     global $lang,$tutos;
+     global $lang,$tutos,$callink,$calpath;
 
      $nr["r"] = 0;
      $nr["u"] = 1;
@@ -74,7 +78,7 @@
    Function info() {
      global $lang,$tutos,$table;
 
-     echo "<script language='JavaScript'>\n";
+ /*    echo "<script language='JavaScript'>\n";
      echo " function deselect (obj,nr) { \n";
      echo " for(var j = 0; j <= obj.length ; j++) {\n";
      echo "   if ( obj.elements[j].name == \"r[]\" ) {\n";
@@ -110,53 +114,66 @@
      echo "  }\n";  
      echo " }\n";   
      echo "</script>\n";
+*/
+     //echo "<form name=\"useradd\" action=\"user_ins.php\" method=\"post\">\n";
 
-     echo "<form name=\"useradd\" action=\"user_ins.php\" method=\"post\">\n";
+    // echo $this->DataTableStart();
+     echo "<table width=\"100%\" class=\"outer\" cellpadding=0 cellspacing=1>";
+     echo "<tr><td>";
+     echo "<table cellpadding=0 cellspacing=1 class=\"inner\">";
+     #echo "<tr>\n";
+     #echo " <th colspan=\"9\">". $lang['UserInfo'] ."</th>\n";
+     #echo "</tr>\n";
 
-     echo $this->DataTableStart();
      echo "<tr>\n";
-     echo " <th colspan=\"9\">". $lang['UserInfo'] ."</th>\n";
+     echo " <td class=\"formSecHeader\" colspan=\"9\">Calendar Information</td>\n";
      echo "</tr>\n";
+     
+//     echo "<tr>\n";
+//     echo " <td align=\"right\" colspan=\"9\">". acl_link($this->obj) ."</td>\n";
+//     echo "</tr>\n"; 
 
-     echo "<tr>\n";
-     echo " <td align=\"right\" colspan=\"9\">". acl_link($this->obj) ."</td>\n";
-     echo "</tr>\n";
+     #echo "<tr>\n";
+     #if ( $this->user->isAdmin() ) {
+       #echo $this->showfieldc($lang['Username'],1,"login");
+       #echo " <input type=hidden id=\"login\" size=\"".min($table['people']['login'][size],20) ."\" maxlength=\"". $table['people']['login'][size] ."\" name=\"login\" value=\"". $this->obj->login ."\">\n";
+       #echo $this->showfieldc($lang['UserDisabled'],0,"disabled");
+       #echo " <td colspan=\"2\"><input id=\"disabled\" type=\"checkbox\" name=\"disabled\" value=\"1\"". ($this->obj->disabled == 1 ? " checked":"") ."></td>\n";
+     #} else {
+     #  echo $this->showfieldc($lang['Username'],0,"login");
+     #  echo $this->showdata($this->obj->login,5);
+     #  $this->addHidden("login", $this->obj->login );
+     #}
+     #echo "<td colspan=\"3\">&nbsp;</td>\n";
+     #echo "</tr>\n";
 
-     echo "<tr>\n";
-     if ( $this->user->isAdmin() ) {
-       echo $this->showfieldc($lang['Username'],1,"login");
-       echo " <td colspan=\"2\"><input id=\"login\" size=\"".min($table['people']['login'][size],20) ."\" maxlength=\"". $table['people']['login'][size] ."\" name=\"login\" value=\"". $this->obj->login ."\"></td>\n";
-       echo $this->showfieldc($lang['UserDisabled'],0,"disabled");
-       echo " <td colspan=\"2\"><input id=\"disabled\" type=\"checkbox\" name=\"disabled\" value=\"1\"". ($this->obj->disabled == 1 ? " checked":"") ."></td>\n";
-     } else {
-       echo $this->showfieldc($lang['Username'],0,"login");
-       echo $this->showdata($this->obj->login,5);
-       $this->addHidden("login", $this->obj->login );
-     }
-     echo "<td colspan=\"3\">&nbsp;</td>\n";
-     echo "</tr>\n";
-
-     if ($this->obj->id == -1) {
+     #if ($this->obj->id == -1) {
        # new entry
-       echo "<tr>\n";
-       echo $this->showfieldc($lang['AdrFirstName'],1,"fname");
-       echo " <td colspan=\"8\"><input id=\"fname\" size=\"".min($table['address']['f_name'][size],40) ."\" maxlength=\"". $table['address']['f_name'][size] ."\" name=\"fname\" value=\"". $this->obj->f_name ."\"></td>\n";
-       echo "</tr>\n";
-       echo "<tr>\n";
-       echo $this->showfieldc($lang['AdrLastName'],1,"lname");
-       echo " <td colspan=\"8\"><input id=\"lname\" size=\"".min($table['address']['l_name'][size],40) ."\" maxlength=\"". $table['address']['l_name'][size] ."\" name=\"lname\" value=\"". $this->obj->l_name ."\"></td>\n";
-       echo "</tr>\n";
-       echo "<tr>\n";
-       echo $this->showfieldc($lang['AdrEmail'],1,"email");
-       echo " <td colspan=\"8\"><input id=\"email\" size=\"".min($table['location']['email_1'][size],40) ."\" maxlength=\"". $table['location']['email_1'][size] ."\" name=\"email\" value=\"". $this->obj->email_1 ."\"></td>\n";
-       echo "</tr>\n";
-     } else {
-       echo "<tr>\n";
-       echo $this->showfieldc($lang['User']);
-       echo $this->showdata($this->obj->getLink(),8);
-       echo "</tr>\n";
-     }
-     echo "<tr>\n";
+       #echo "<tr>\n";
+       #echo $this->showfieldc($lang['AdrFirstName'],1,"fname");
+       #echo " <td colspan=\"8\">
+	#echo "<input type=hidden id=\"fname\" size=\"".min($table['address']['f_name'][size],40) ."\" maxlength=\"". $table['address']['f_name'][size] ."\" name=\"fname\" value=\"". $this->obj->f_name ."\">";
+	#</td>\n";
+       #echo "</tr>\n";
+       #	echo "<tr>\n";
+       #echo $this->showfieldc($lang['AdrLastName'],1,"lname");
+       #echo " <td colspan=\"8\">
+       #echo "<input id=\"lname\" type=hidden size=\"".min($table['address']['l_name'][size],40) ."\" maxlength=\"". $table['address']['l_name'][size] ."\" name=\"lname\" value=\"". $this->obj->l_name ."\">";
+	#</td>\n";
+       #echo "</tr>\n";
+       #echo "<tr>\n";
+       #echo $this->showfieldc($lang['AdrEmail'],1,"email");
+       #echo " <td colspan=\"8\">
+       #echo "<input id=\"email\" type=hidden size=\"".min($table['location']['email_1'][size],40) ."\" maxlength=\"". $table['location']['email_1'][size] ."\" name=\"email\" value=\"". $this->obj->email_1 ."\">";
+	#</td>\n";
+       #echo "</tr>\n";
+     #} else {
+     #  echo "<tr>\n";
+     #  echo $this->showfieldc($lang['User']);
+     #  echo $this->showdata($this->obj->getLink(),8);
+      # echo "</tr>\n";
+     #}
+     /*echo "<tr>\n";
      echo $this->showfieldc($lang['UserLastSeen']);
      echo $this->showdata($this->obj->last_seen->getDateTime(),2);
      echo $this->showfieldc($lang['UserLastHost']);
@@ -182,7 +199,7 @@
      }
      echo "<td colspan=\"3\">&nbsp;</td>\n";
      echo "</tr>\n";
-
+    
      if ( ($tutos[authtype] != "pam") && ($tutos[authtype] != "ldap") ) {
        if ( $this->dbconn->Password("a") == "'a'" ) {
          echo "<tr>\n";
@@ -197,16 +214,21 @@
            echo "</tr>\n";
          }
        }
-       echo "<tr>\n";
-       echo $this->showfieldc($lang['Password'] ." (new)",0,"p1");
-       echo " <td colspan=\"8\"><input id=\"p1\" type=\"password\" size=\"20\" maxlength=\"20\" name=\"p1\" value=\"\"></td>\n";
-       echo "</tr>\n";
+	*/
+       #echo "<tr>\n";
+       #echo $this->showfieldc($lang['Password'] ." (new)",0,"p1");
+       #echo " <td colspan=\"8\">
+	echo "<input id=\"p1\" type=hidden size=\"20\" maxlength=\"20\" name=\"p1\" value=\"\">";
+       # echo "</td>\n";
+       # echo "</tr>\n";
 
-       echo "<tr>\n";
-       echo $this->showfieldc($lang['Password'] ." (repeat)",0,"p2");
-       echo " <td colspan=\"8\"><input id=\"p2\" type=\"password\" size=\"20\" maxlength=\"20\" name=\"p2\" value=\"\"></td>\n";
-       echo "</tr>\n";
-     }
+       #echo "<tr>\n";
+       #echo $this->showfieldc($lang['Password'] ." (repeat)",0,"p2");
+       #echo " <td colspan=\"8\">
+	echo "<input id=\"p2\" type=hidden size=\"20\" maxlength=\"20\" name=\"p2\" value=\"\">";
+	#echo "</td>\n";
+       #echo "</tr>\n";
+     #}
      #
      # Feature Permissions
      permission_form($this,$this->user,$this->obj);
@@ -214,7 +236,7 @@
      #
      # Default-Groups for new objects
      #
-     if ( ($tutos[defaultacl] == 2) &&
+     /*if ( ($tutos[defaultacl] == 2) &&
         ( ($this->user->isAdmin())  || (count($this->user->teamlist) > 0) ) 
        ) {
        # read a list of all teams;
@@ -233,10 +255,10 @@
        $r->free();
        echo "<tr>\n";
        echo $this->showfieldc($lang['UserDefaultGrp'],0,"acldefault");
-       echo " <th width=\"30%\" colspan=\"2\">". $lang['ACLread'] ."</th>\n";
-       echo " <th width=\"30%\" colspan=\"2\">". $lang['ACLread'] ."<br>". $lang['ACLuse'] ."</th>\n";
-       echo " <th width=\"30%\" colspan=\"2\">". $lang['ACLread'] ."<br>". $lang['ACLuse'] ."<br>". $lang['ACLmodify'] ."</th>\n";
-       echo " <th width=\"30%\" colspan=\"2\">". $lang['ACLread'] ."<br>". $lang['ACLuse'] ."<br>". $lang['ACLmodify'] ."<br>". $lang['ACLdelete'] ."</th>\n";
+       echo " <th class=\"viewhead\" width=\"30%\" colspan=\"2\">". $lang['ACLread'] ."</th>\n";
+       echo " <th class=\"viewhead\" width=\"30%\" colspan=\"2\">". $lang['ACLread'] ."<br>". $lang['ACLuse'] ."</th>\n";
+       echo " <th class=\"viewhead\" width=\"30%\" colspan=\"2\">". $lang['ACLread'] ."<br>". $lang['ACLuse'] ."<br>". $lang['ACLmodify'] ."</th>\n";
+       echo " <th class=\"viewhead\" width=\"30%\" colspan=\"2\">". $lang['ACLread'] ."<br>". $lang['ACLuse'] ."<br>". $lang['ACLmodify'] ."<br>". $lang['ACLdelete'] ."</th>\n";
        echo "</tr>\n";
        echo "<tr>\n"; 
        echo " <td colspan=\"1\">&nbsp;</td>\n";
@@ -253,7 +275,7 @@
        $this->acldefault_select($tutos[delok], 99, "d");
        echo " </td>\n";
        echo "</tr>\n";
-     }
+     }*/
      #
      # LANGUAGE
      #
@@ -261,9 +283,12 @@
      echo $this->showfieldc($lang['UserLanguage'],1,"lng");
      echo " <td colspan=\"2\">\n";
      echo "  <select id=\"lng\" name=\"lng\">\n";
-     foreach($lang['lang'] as $i => $f) {
-       echo "   <option value=\"". $i ."\"". ( !strcasecmp($i,$this->obj->lang) ? " selected":"") .">". myentities($f) ."</option>\n";
-     }
+    // Added for integration
+     echo "<option value=\"auto\" selected>automatic (by browser)</option>";
+    //
+     #foreach($lang['lang'] as $i => $f) {
+     #  echo "   <option value=\"". $i ."\"". ( !strcasecmp($i,$this->obj->lang) ? " selected":"") .">". myentities($f) ."</option>\n";
+     #}
      echo "  </select>\n";
      echo " </td>\n";
 
@@ -346,7 +371,7 @@
 
      echo "<tr>\n";
      
-     # RowIcons
+/*     # RowIcons
      echo $this->showfieldc($lang['RowIconsBefore'],0,"rib[]");
      echo " <td nowrap colspan=\"3\">\n";
      foreach($tutos[rowiconsbefore] as $f) {
@@ -376,17 +401,22 @@
      } 
      echo " </td>\n";
      echo "</tr>\n";
-     
-     echo "<tr>\n";
+*/     
+     #echo "<tr>\n";
+     //Added for integration
+     echo "<input type=hidden name=\"theme\" value=\"nuke\">";
+     echo "<input type=hidden name=\"layout\" value=\"new_layout\">";
+     //
+/*
      # THEME
-     echo $this->showfieldc($lang['UserTheme'],1,"theme");
-     echo " <td colspan=\"2\">\n";
-     echo " <select id=\"theme\" name=\"theme\">\n";
-     foreach($tutos[themes] as $f) {
-       echo "  <option value=\"". $f ."\" ". ($f == $this->obj->theme ? " selected":"") .">". $f ."</option>\n";
-     }
-     echo " </select>\n";
-     echo " </td>\n";
+     #echo $this->showfieldc($lang['UserTheme'],1,"theme");
+     #echo " <td colspan=\"2\">\n";
+     #echo " <select id=\"theme\" name=\"theme\">\n";
+     #foreach($tutos[themes] as $f) {
+       #echo "  <option value=\"". $f ."\" ". ($f == $this->obj->theme ? " selected":"") .">". $f ."</option>\n";
+     #}
+     #echo " </select>\n";
+     #echo " </td>\n";
 
      # Layout Engine
      echo $this->showfieldc($lang['UserLayout'],1,"layout");
@@ -401,7 +431,6 @@
      echo "<td colspan=\"3\">&nbsp;</td>\n";
 
      echo "</tr>\n";
-
      #
      # Edit additional custom fields
      #
@@ -415,18 +444,21 @@
      } else {
        submit_reset(0,-1,3,1,3,0);
      }
+*/
      echo "</tr>\n";
-     if ( ($this->obj->uid != -1) && ($this->user->feature_ok(usehistory,PERM_SEE)) ) {
-       echo "<tr>\n";
-       echo " <td colspan=\"8\">". makelink("history_show.php?id=". $this->obj->uid,$lang['HistoryLink'],sprintf($lang['HistoryLinkI'],$this->obj->getFullname())) ."</td>\n";
-       echo "</tr>\n";
-     }
-     echo $this->DataTableEnd();
+     #if ( ($this->obj->uid != -1) && ($this->user->feature_ok(usehistory,PERM_SEE)) ) {
+     #  echo "<tr>\n";
+     #  echo " <td colspan=\"8\">". makelink("history_show.php?id=". $this->obj->uid,$lang['HistoryLink'],sprintf($lang['HistoryLinkI'],$this->obj->getFullname())) ."</td>\n";
+     #  echo "</tr>\n";
+     #}
+//     echo $this->DataTableEnd();
+     echo "</table>";
+     echo "</td></tr></table>";
      echo $this->getHidden();
      hiddenFormElements();
-     echo "</form>\n";
-     echo $lang['FldsRequired'] ."\n";
-     echo $this->setfocus("useradd.login");
+     #echo "</form>\n";
+     #echo $lang['FldsRequired'] ."\n";
+     #echo $this->setfocus("useradd.login");
    }
    /**
     * navigate
@@ -462,7 +494,7 @@
      }
 
      $this->addHidden("uid",$this->obj->uid);
-     $this->addHidden("id",$this->obj->id);
+     $this->addHidden("nid",$this->obj->id);
 
      if ( ($this->obj->uid == -1) && !$this->user->feature_ok(useuser,PERM_NEW) ) {
        $msg .= sprintf($lang['Err0054'],$lang[$this->obj->getType()]);

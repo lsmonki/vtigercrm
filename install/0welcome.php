@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/0welcome.php,v 1.10 2004/08/26 11:44:30 sarajkumar Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/0welcome.php,v 1.10 2004/08/26 11:44:30 sarajkumar Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 

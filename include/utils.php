@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/utils.php,v 1.5.2.1 2004/12/15 14:11:13 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/utils.php,v 1.5.2.1 2004/12/15 14:11:13 jack Exp $
  * Description:  Includes generic helper functions used throughout the application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Meetings/DeleteMeetingContactRelationship.php,v 1.1 2004/08/17 15:05:22 gjayakrishnan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Meetings/DeleteMeetingContactRelationship.php,v 1.1 2004/08/17 15:05:22 gjayakrishnan Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 

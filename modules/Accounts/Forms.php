@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Forms.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Forms.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  Contains a variety of utility functions specific to this module.
  ********************************************************************************/
 

@@ -670,39 +670,7 @@ class appointment extends tutos_base {
     }
 	$this->save_custom_fields($q);
   
-    $starttime = $this->start->getYYYYMMDDHHMMSS_crm();
-    $endttime = $this->end->getYYYYMMDDHHMMSS_crm();
-    $creatime = $this->creation->getYYYYMMDDHHMMSS_crm();
-
-    //Add appointment to CRM Calendar
-      $stmt = "SELECT id FROM ". $this->dbconn->prefix .$table['appointment1'][name];
-      $stmt .= " WHERE a_start = '". $starttime;
-      $stmt .= "' and a_end = '". $endttime;
-      $stmt .= "' and description = '". $this->descr;
-      $stmt .= "' and outside = ". $this->outside;
-      $stmt .= " and creator = ". $this->creator->id;
-      $stmt .= " and creation = '". $creatime;
-      $stmt .= "' and t_ignore = ". $this->t_ignore;
-	
- 	$rset = $this->dbconn->Exec($stmt);
-        $nrow = $rset->numrows();
-        $j = 0;
-	if($j < $nrow)
-	{
-		$cat = $rset->get($j, "id");
-                $cat1 = getObject($this->dbconn,$cat);
-	}
-
-    $cq = new query($this->dbconn);
-    $cq->setTable($this->crm_calinfo);
-    $cq->addFV("cal_id",$this->calid,"INT");
-    $cq->addFV("subject",$this->subject,"STRING",$table['crmcalendar']['subject'][size]);
-    $cq->addFV("account_name",$this->account_name,"STRING",$table['crmcalendar']['account_name'][size]);
-    $cq->addFV("contact_name",$this->contact_name,"STRING",$table['crmcalendar']['contact_name'][size]);
-
-	$this->save_custom_fields($cq);
-    //
-    $msg = "";
+        $msg = "";
     if ( $this->trace == 0 ) {
       /* YES */
       $def_state = 1;
@@ -742,7 +710,29 @@ class appointment extends tutos_base {
       $q->addFV("creator",$this->creator,"OBJ");
       $q->addFV("creation",$this->creation,"DATETIME");
 
-      $this->dbconn->Exec($q->getInsert());
+     $this->dbconn->Exec($q->getInsert());
+
+    //Add appointment to CRM Calendar
+      $stmt = "SELECT max(id) as max_id  FROM ". $this->dbconn->prefix .$table['appointment1'][name];
+	
+ 	$rset = $this->dbconn->Exec($stmt);
+        $nrow = $rset->numrows();
+        $j = 0;
+	if($j < $nrow)
+	{
+		$cat = $rset->get($j, "max_id");
+	}
+	$this->calid = $cat;
+    $cq = new query($this->dbconn);
+    $cq->setTable($this->crm_calinfo);
+    $cq->addFV("id",$this->calid,"INT");
+    $cq->addFV("subject",$this->subject,"STRING",$table['crmcalendar']['subject'][size]);
+    $cq->addFV("account_name",$this->account_name,"STRING",$table['crmcalendar']['account_name'][size]);
+    $cq->addFV("contact_name",$this->contact_name,"STRING",$table['crmcalendar']['contact_name'][size]);
+
+     $this->dbconn->Exec($cq->getInsert());
+    //
+
 
     }
 

@@ -33,10 +33,12 @@ if($_REQUEST['lead_create'] == 'on' )
 
    mysql_query("insert into role2tab(rolename,tabid,module_permission) values('" .$_REQUEST["rolename"]."',1,1)");
    mysql_query("insert into role2tab(rolename,tabid,module_permission) values('" .$_REQUEST["rolename"]."',13,1)");
+   mysql_query("insert into role2tab(rolename,tabid,module_permission) values('" .$_REQUEST["rolename"]."',14,1)");
    mysql_query("insert into role2tab(rolename,tabid,module_permission) values('" .$_REQUEST["rolename"]."',2,1)");
    mysql_query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',13,'index',1)");
    mysql_query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',1,'index',1)");
    mysql_query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',2,'index',1)");
+   mysql_query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',14,'index',1)");
 
  $sql_leads_tab_permission = "insert into role2tab(rolename,tabid,module_permission) values ('" .$_REQUEST["rolename"]."',3," .$lead_access_flag.")";
 

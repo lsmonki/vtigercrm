@@ -207,7 +207,7 @@ $table['appointment1'] = array(
 $table['crmcalendar'] = array(
   name => "crm_calendar",
   Desc => "TUTOS CRM calendar",
-  "cal_id"          => array(type => "ID_TYPE",      constraints => "PK",  Desc => "Object ID"),
+  "id"          => array(type => "ID_TYPE",      constraints => "PK",  Desc => "Object ID"),
   "subject"     => array(type => "VARCHAR", size => 255, constraints => "NN",  Desc => "subject of the appointment"),
   "account_name"=> array(type => "VARCHAR", size => 100, constraints => "",  Desc => "company account name"),
   "contact_name"=> array(type => "VARCHAR", size => 100, constraints => "NN",  Desc => "contact person name")

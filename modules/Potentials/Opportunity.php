@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Opportunity.php,v 1.3 2004/10/29 09:55:09 jack Exp $ 
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Opportunities/Opportunity.php,v 1.3.2.1 2004/12/22 15:08:34 jack Exp $ 
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -202,13 +202,76 @@ class Opportunity extends SugarBean {
 
 		return $query;
 	}
+//method added to construct the query to fetch the custom fields 
+	function constructCustomQueryAddendum()
+	{
+		$result = mysql_query("SHOW COLUMNS FROM opportunitycf");
+		$i=0;
+		while ($myrow = mysql_fetch_row($result))
+		{
+		        $columnName[$i] = $myrow[0];
+		        $i++;
+		}
 
+		$sql1 = "select column_name,fieldlabel from customfields where column_name in (";
+		$colName = 0;
+		$addTag;
+		while($colName < count($columnName))
+		{
+		        if ($columnName[$colName] == "opportunityid")
+        		{
+        		}
+        		else
+        		{
+		                if($colName == 1)
+                		{
+
+		                        $addTag .= "'" .$columnName[$colName] ."'";
+                		}
+		                else
+                		{
+		                        $addTag .= ",'" .$columnName[$colName] ."'";
+                		}
+        		}
+		        $colName++;
+		}
+		$sql2 = $sql1.$addTag .")";
+		$result_sql2 = mysql_query($sql2);
+		$resultCount = mysql_num_rows($result_sql2);
+		$rs=mysql_fetch_array($result_sql2);
+		 $j=0;
+		while($j<mysql_num_rows($result_sql2))
+  		{
+			    for($i=0;$i<$resultCount;$i++)
+    				{
+				      $copy[$j][$i]=$rs[$i];
+    				}
+			    $rs=mysql_fetch_array($result_sql2);
+			    $j++;
+		}
+		$sql3 = "select ";
+		$k=0;
+		$l=0;
+	 while($k< $resultCount)
+                {
+
+                        if($k == 0)
+                        {
+                        $sql3.= "opportunitycf.".$copy[$k][$l]." ".$copy[$k][$l+1];
+                        }
+                        else
+                        {
+                        $sql3.= ",opportunitycf.".$copy[$k][$l]." ".$copy[$k][$l+1];
+                        }
+                        $k++;
+                }
+        return $sql3;
+		}
 
         function create_export_query($order_by, $where)
         {
 
-                                $query = "SELECT
-                                opportunities.*,
+                                $query = $this->constructCustomQueryAddendum() .",                                opportunities.*,
                                 accounts.name as account_name,
                                 users.user_name as assigned_user_name
                                 FROM opportunities
@@ -217,7 +280,7 @@ class Opportunity extends SugarBean {
                                 LEFT JOIN accounts_opportunities
                                 ON opportunities.id=accounts_opportunities.opportunity_id
                                 LEFT JOIN accounts
-                                ON accounts_opportunities.account_id=accounts.id ";
+                                ON accounts_opportunities.account_id=accounts.id left join opportunitycf on opportunitycf.opportunityid=opportunities.id ";
                         $where_auto = "accounts_opportunities.deleted=0 AND accounts.deleted=0 AND opportunities.deleted=0 AND users.status='ACTIVE'";
 
                 if($where != "")

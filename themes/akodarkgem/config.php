@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/akodarkgem/config.php,v 1.1 2004/08/17 14:55:39 gjayakrishnan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/akodarkgem/config.php,v 1.1 2004/08/17 14:55:39 gjayakrishnan Exp $
  * Description:  Theme configuration file.
  ********************************************************************************/
 

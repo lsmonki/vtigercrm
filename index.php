@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/index.php,v 1.50.2.2 2004/12/15 17:29:11 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/index.php,v 1.50.2.3 2004/12/22 17:07:09 jack Exp $
  * Description: Main file and starting point for the application.  Calls the 
  * theme header and footer files defined for the user as well as the module as 
  * defined by the input parameters.
@@ -99,6 +99,11 @@ function fetchPermissionData($module,$action)
   {
     $tabid=13;
   }
+  else if($module == 'Calendar')
+  {
+    $tabid=14;
+  }
+
   $accessFlag = false;
   checkDeletePermission($tabid);
   //if the tabid is not present in the array then he is not permitted
@@ -309,7 +314,7 @@ if(isset($action) && isset($module))
 {
 	$log->info("About to take action ".$action);
 	$log->debug("in $action");
-	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action))
+	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action) || ereg("^app_ins",$action) || ereg("^minical",$action) || ereg("^minitimer",$action) || ereg("^app_del",$action))
 	{
 		$skipHeaders=true;
 		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action) || ereg("^downloadfile", $action) || ereg("^fieldtypes",$action))
@@ -339,7 +344,7 @@ if(isset($action) && isset($module))
                 $skipHeaders=true;
                 $skipFooters=true;
         }
-        if($module == 'Users' || $module == 'Home' || $module == 'Administration' || $module == 'uploads' ||  $module == 'Settings')
+        if($module == 'Users' || $module == 'Home' || $module == 'Administration' || $module == 'uploads' ||  $module == 'Settings' || $module == 'Calendar')
         {
           $skipSecurityCheck=true;
         }
@@ -401,8 +406,8 @@ foreach ($moduleList as $mod) {
 $module = (isset($_REQUEST['module'])) ? $_REQUEST['module'] : "";
 $action = (isset($_REQUEST['action'])) ? $_REQUEST['action'] : "";
 $record = (isset($_REQUEST['record'])) ? $_REQUEST['record'] : "";
-$lang = (isset($_SESSION['authenticated_user_language'])) ? $_SESSION['authenticated_user_language'] : "";
-$GLOBALS['request_string'] = "&module=$module&action=$action&record=$record&lang=$lang";
+$lang_crm = (isset($_SESSION['authenticated_user_language'])) ? $_SESSION['authenticated_user_language'] : "";
+$GLOBALS['request_string'] = "&module=$module&action=$action&record=$record&lang_crm=$lang_crm";
 
 $current_user = new User();
 if(isset($_SESSION['authenticated_user_id']))

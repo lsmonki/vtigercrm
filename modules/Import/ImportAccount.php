@@ -49,8 +49,6 @@ class ImportAccount extends Account {
 	"add_billing_address_streets"
 	,"add_shipping_address_streets"
 	,"fix_website"
-	,"add_industry"
-	,"add_type"
 	 );
 
 
@@ -131,7 +129,7 @@ class ImportAccount extends Account {
 		,"name"=>1
 		,"website"=>1
 		,"industry"=>1
-		,"type"=>1
+		,"account_type"=>1
 		,"ticker_symbol"=>1
 		,"parent_name"=>1
 		,"employees"=>1

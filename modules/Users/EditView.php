@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.6 2004/12/05 11:23:26 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.6.2.1 2004/12/22 17:07:09 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -51,10 +51,23 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
 if (isset($_REQUEST['error_string'])) $xtpl->assign("ERROR_STRING", "<font class='error'>Error: ".$_REQUEST['error_string']."</font>");
-if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
-$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+if (isset($_REQUEST['return_module']))
+{
+        $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
+        $RETURN_MODULE=$_REQUEST['return_module'];
+}
+if (isset($_REQUEST['return_action']))
+{
+        $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
+        $RETURN_ACTION = $_REQUEST['return_action'];
+}
+if (isset($_REQUEST['return_id']))
+{
+        $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
+        $RETURN_ID = $_REQUEST['return_id'];
+}
+
+#$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $focus->id);
 $xtpl->assign("USER_NAME", $focus->user_name);
@@ -138,5 +151,39 @@ else $xtpl->assign("IS_ADMIN", "disabled");
 
 $xtpl->parse("main");
 $xtpl->out("main");
+
+echo "<br>";
+if(is_admin($current_user) && ! isset($focus->id))
+{
+        include ('modules/Calendar/user_new.php');
+}
+else
+{
+        #require_once('modules/Calendar/Authenticate.php');
+        #$a = $current_user->uid;
+        #echo $a;
+        #include ('modules/Calendar/user_new.php?id=$a');
+
+}
+echo "<table width=\"100%\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\"><tr>\n";
+echo "    <td align=\"left\"></td>\n";
+echo "      <td align=\"left\">\n";
+echo "             <table cellpadding=\"0\" cellspacing=\"5\" border=\"0\">";
+echo "            <tr>";
+echo "                 <td><input title=\"$app_strings[LBL_SAVE_BUTTON_TITLE]\" tabindex=\'5\' accessKey=\"$app_strings[LBL_
+SAVE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Save'; return verify_data(EditView)\" type=\"submit\"
+name=\"button\" value=\"  $app_strings[LBL_SAVE_BUTTON_LABEL]  \" ></td>\n";
+echo "              <td><input title=\"$app_strings[LBL_CANCEL_BUTTON_TITLE]\" tabindex='5' accessKey=\"$app_strings[LBL_CAN
+CEL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='$RETURN_ACTION'; this.form.module.value='$RETURN_MODULE
+'; this.form.record.value='$RETURN_ID'\" type=\"submit\" name=\"button\" value=\"  $app_strings[LBL_CANCEL_BUTTON_LABEL]  \"
+></td>\n";
+echo "          </tr></table>\n";
+echo "     </td>\n";
+echo "    <td align=\"left\"></td>\n";
+echo " </tr></table>\n";
+
+echo "</form>";
+echo get_set_focus_js();
+echo get_validate_record_js();
 
 ?>

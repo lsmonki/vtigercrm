@@ -5,8 +5,12 @@
  *  CVS Info:  $Id$
  *  $Author$
  */
-include_once 'address.pinc';
-include_once 'team.pinc';
+
+ global $calpth,$callink;
+ $callink = "index.php?module=Calendar&action=";
+ $calpath = "modules/Calendar/";
+ include_once $calpath .'address.pinc';
+ include_once $calpath .'team.pinc';
 /*
  * a user of this system
  */
@@ -816,6 +820,27 @@ class tutos_user extends tutos_address {
     $msg .= acl_savedefault($this);
     $msg .= history_save($this);
     return $msg;
+  }
+  
+  /**
+  * Update Password function added for vtigerCRM
+  */
+  function update_password($new_passwd,$uname)
+  {
+    $this->pw = $new_passwd;
+    $this->login = $uname;
+    $pq = new query($this->dbconn);
+    $pq->setTable($this->tablename);
+    $pq->addFV("login",$this->login,"STRING",20);
+    $pq->addFV("pw",$this->pw,"PASSWORD");
+    $pq->addWC("login",$this->login,"STRING");
+
+      $query1 = $pq->getUpdate();
+    return $query1;
+     #$db->query($query1,true);
+    #$this->dbconn->Exec($query1);
+
+	
   }
   /**
    * Delete entry (that is easy as long as the address still exists !)

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.18 2004/11/25 10:43:05 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.18.2.1 2004/12/22 16:59:14 jack Exp $
  * Description:  Defines the English language pack for the base application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -170,6 +170,7 @@ $app_list_strings = Array(
 				, 'Emails'=>'Emails'
 				, 'Meetings'=>'Meetings'
 				, 'Tasks'=>'Tasks'
+				, 'Calendar'=>'Calendar'
 				, 'MessageBoard'=>'MessageBoard'),
 
 //e.g. en français 'Analyst'=>'Analyste',

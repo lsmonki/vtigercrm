@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/1checkSystem.php,v 1.10 2004/10/29 09:55:08 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/1checkSystem.php,v 1.10 2004/10/29 09:55:08 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 

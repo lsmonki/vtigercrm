@@ -538,6 +538,8 @@ Function Fatal_Error ($text1,$text2 = "") {
       $dbconn->Abort("WORK");
     }
   }
+  if(!is_object($dbconn))
+  echo "dfdf" ;
   if ( isset($dbconn) && is_object($dbconn) ) {
     $dbconn->Close();
   }
