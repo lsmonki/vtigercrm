@@ -13,14 +13,126 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/index.php,v 1.29 2004/11/08 11:41:49 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/index.php,v 1.46 2004/12/08 15:07:11 jack Exp $
  * Description: Main file and starting point for the application.  Calls the 
  * theme header and footer files defined for the user as well as the module as 
  * defined by the input parameters.
  ********************************************************************************/
+
+global $display;
 $phpbb_root_path='./modules/MessageBoard/';
 if (substr(phpversion(), 0, 1) == "5") {
         ini_set("zend.ze1_compatibility_mode", "1");
+}
+
+function fetchPermissionDataForTabList()
+{
+  $permittedTabs = $_SESSION['tab_permission_set'];
+  $i=0;$j=0;
+  
+  while($i<count($permittedTabs))
+  {
+    $modulesPermitted[$j++]=  $permittedTabs[$i];
+    $i++;
+  }
+  return $modulesPermitted;
+}
+
+
+function fetchPermissionData($module,$action)
+{
+
+  global $theme,$display;
+  $permissionData = $_SESSION['action_permission_set'];
+  $i=0;
+
+  require_once('modules/Users/UserInfoUtil.php');
+
+  if($module == 'Leads')
+  {
+    $tabid=3;
+  }
+  else if($module == 'Home')
+  {
+    $tabid=1;
+  }
+  else if($module == 'Dashboard')
+  {
+    $tabid=2;
+  }
+  else if($module == 'Accounts')
+  {
+    $tabid=5;
+  }
+  else if($module == 'Contacts')
+  {
+    $tabid=4;
+  }
+  else if($module == 'Opportunities')
+  {
+    $tabid=6;
+  }
+  else if($module == 'Cases')
+  {
+    $tabid=7;
+  }
+  else if($module == 'Notes')
+  {
+    $tabid=8;
+  }
+  else if($module == 'Calls')
+  {
+    $tabid=9;
+  }
+  else if($module == 'Emails')
+  {
+    $tabid=10;
+  }
+  else if($module == 'Meetings')
+  {
+    $tabid=11;
+  }
+  else if($module == 'Tasks')
+  {
+    $tabid=12;
+  }
+ else if($module == 'MessageBoard')
+  {
+    $tabid=13;
+  }
+
+  $accessFlag = false;
+  //if the tabid is not present in the array then he is not permitted
+  //if the tabid is present, then check for the values of the action_permissions
+  while($i<count($permissionData))
+  {
+    if($permissionData[$i][0] == $tabid )
+    {
+      $accessFlag=true;
+      if($permissionData[$i][1]==$action)
+      {
+        $actionpermissionvalue=$permissionData[$i][2];
+        if($actionpermissionvalue == 0)
+        {
+          echo "You are not permitted to execute this operation";
+          $display = "No";
+        }
+        else
+        {
+          return;
+        }
+      }
+      
+    }
+    $i++;
+
+  }
+   
+  if(!$accessFlag)
+  {
+    echo "You are not permitted to execute this operation";
+       $display = "No";
+  }
 }
 
  function stripslashes_checkstrings($value){
@@ -163,14 +275,16 @@ else
 
 
 $log->debug($_REQUEST);
-
 $skipHeaders=false;
 $skipFooters=false;
+
+//echo $module;
+//echo $action;
 if(isset($action) && isset($module))
 {
 	$log->info("About to take action ".$action);
 	$log->debug("in $action");
-	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action))
+	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action))
 	{
 		$skipHeaders=true;
 		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action))
@@ -191,7 +305,11 @@ if(isset($action) && isset($module))
                 $skipHeaders=true;
                 $skipFooters=true;
         }
-	
+        if($module == 'Users' || $module == 'Home' || $module == 'Administration' || $module == 'uploads' ||  $module == 'Settings')
+        {
+          $skipSecurityCheck=true;
+        }
+
 	$currentModuleFile = 'modules/'.$module.'/'.$action.'.php';
 	$currentModule = $module;
 }
@@ -203,7 +321,9 @@ elseif(isset($module))
 else {
     // use $default_module and $default_action as set in config.php
     // Redirect to the correct module with the correct action.  We need the URI to include these fields.
-    header("Location: index.php?action=$default_action&module=$default_module");
+  
+
+        header("Location: index.php?action=$default_action&module=$default_module");
     exit();
 }
 
@@ -213,7 +333,31 @@ $log->info("current module is $currentModule ");
 //define default home pages for each module
 require_once("modules/Users/TabMenu.php");
 $tabData = new TabMenu();
-$moduleList = $tabData->getTabNames();
+
+global $permittedModulesList;
+
+$permittedModulesList = fetchPermissionDataForTabList();
+//print_r($permittedModulesList);
+$templist="";
+if(!$permittedModulesList == "")
+{
+     
+     foreach ($permittedModulesList as $list) 
+     {
+       if($tempList=="")
+       {
+         $tempList = "'".$list."'" ;  
+       }
+       else
+       {
+         $tempList .= ",'" . $list."'" ;
+       }
+       $list="";
+     }
+}
+
+
+$moduleList = $tabData->getTabNames($tempList);
 
 foreach ($moduleList as $mod) {
 	$moduleDefaultFile[$mod] = "modules/".$currentModule."/index.php";
@@ -362,13 +506,15 @@ if(!$skipHeaders) {
 		unset($_SESSION['administrator_error']);
 	}
 	
-	echo "<!-- startcrmprint -->";
+	echo "<!-- startscrmprint -->";
 }
 else {
 		$log->debug("skipping headers");
 }
 
-include($currentModuleFile);
+
+
+//fetch the permission set from session and search it for the requisite data
 
 if(isset($_SESSION['authenticated_user_theme']) && $_SESSION['authenticated_user_theme'] != '')
 {
@@ -378,14 +524,40 @@ else
 {
 	$theme = $default_theme;
 }
+if(!$skipSecurityCheck)
+{
+  fetchPermissionData($module,$action);
+}
+if ($display == "No")
+{
+	$display == "";
+}
+else
+{
+	include($currentModuleFile);
+}
+echo "<!-- stopscrmprint -->";
 
-echo "<!-- stopprint -->";
+//added to get the theme . This is a bad fix as we need to know where the problem lies yet
+if(isset($_SESSION['authenticated_user_theme']) && $_SESSION['authenticated_user_theme'] != '')
+{
+        $theme = $_SESSION['authenticated_user_theme'];
+}
+else
+{
+        $theme = $default_theme;
+}
+
+
+
+
+
 
 if(!$skipFooters)
-	include('themes/'.$theme.'/footer.php');
+     include('themes/'.$theme.'/footer.php');
 
 // Under the SPL you do not have the right to remove this copyright statement.	
-echo "<style>
+$copyrightstatement="<style>
         .bggray
         {
         background-color: #dfdfdf;
@@ -425,6 +597,7 @@ echo "<style>
          //window.onunload=LogOut
        </script>
 ";
+echo $copyrightstatement;
 echo "<table width=60% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n";
 echo "<table width=100% border=0 cellspacing=1 cellpadding=0 class=\"bgwhite\" align=center><tr><td align=center class=\"copy\">\n";
 echo("&copy; This software is a collective work consisting of the following major Open Source components : Apache Software, MySQL Server, PHP, SugarCRM, phpBB, and PHPMailer each licensed under a separate Open Source License. vtiger is not affiliated with nor endorsed by any of the above providers. See <a href='http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt' class=\"copy\" target=\"_blank\">Copyrights </a> for details.<br>\n");
@@ -441,5 +614,13 @@ if($calculate_response_time)
     $deltaTime = microtime_diff($startTime, $endTime);
     echo('&nbsp;Server response time: '.$deltaTime.' seconds.');
 }
-echo "</td></tr></table>\n"
+echo "</td></tr></table>\n";
+
+
+
+
+
+
+
+
 ?>

@@ -210,7 +210,7 @@ function export_all($type)
 
 	$column_list = implode(",",array_values($fields_array));
 
-	while($val = $db->fetchByAssoc($result))		
+        while($val = $db->fetchByAssoc($result, -1, false))
 	{
 		$new_arr = array();
 

@@ -312,7 +312,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
   <table width="80%" border="0" cellspacing="0" cellpadding="0">
     <tr>
       <td><div align="center">
-          <input type="button" class="button" value="Save" onClick="formSubmit(<?php echo $focus->id ?>)">
+          <input type="button" class="button" value="Save" onClick="formSubmit('<?php echo $focus->id ?>')">
                   <input type="button" class="button" value="Cancel" onClick="window.history.back()">
         </div></td>
     </tr>
