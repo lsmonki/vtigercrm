@@ -13,11 +13,29 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/index.php,v 1.16 2004/09/14 14:00:07 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/index.php,v 1.20 2004/10/06 09:02:02 jack Exp $
  * Description: Main file and starting point for the application.  Calls the 
  * theme header and footer files defined for the user as well as the module as 
  * defined by the input parameters.
  ********************************************************************************/
+
+if (substr(phpversion(), 0, 1) == "5") {
+        ini_set("zend.ze1_compatibility_mode", "1");
+}
+
+ function stripslashes_checkstrings($value){
+        if(is_string($value)){
+                return stripslashes($value);
+        }
+        return $value;
+
+ }
+ if(get_magic_quotes_gpc() == 1){
+        $_REQUEST = array_map("stripslashes_checkstrings", $_REQUEST);
+        $_POST = array_map("stripslashes_checkstrings", $_POST);
+        $_GET = array_map("stripslashes_checkstrings", $_GET);
+
+}
 
 // Allow for the session information to be passed via the URL for printing.
 if(isset($_REQUEST['PHPSESSID']))
@@ -53,6 +71,8 @@ global $currentModule;
 if($calculate_response_time) $startTime = microtime();
 
 $log =& LoggerManager::getLogger('index');
+if (isset($_REQUEST['PHPSESSID'])) $log->debug("****Starting for session ".$_REQUEST['PHPSESSID']);
+else $log->debug("****Starting for new session");
 
 // We use the REQUEST_URI later to construct dynamic URLs.  IIS does not pass this field
 // to prevent an error, if it is not set, we will assign it to ''
@@ -95,12 +115,20 @@ if(isset($action) && isset($module))
 {
 	$log->info("About to take action ".$action);
 	$log->debug("in $action");
-	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action))
+	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action))
 	{
 		$skipHeaders=true;
-		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action))
+		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action))
 			$skipFooters=true;
 	}
+
+	if ( $action == "Import" &&
+                isset($_REQUEST['step']) &&
+                $_REQUEST['step'] == '4'  )
+        {
+                $skipHeaders=true;
+                $skipFooters=true;
+        }
 	
 	$currentModuleFile = 'modules/'.$module.'/'.$action.'.php';
 	$currentModule = $module;
@@ -128,6 +156,13 @@ $moduleList = $tabData->getTabNames();
 foreach ($moduleList as $mod) {
 	$moduleDefaultFile[$mod] = "modules/".$currentModule."/index.php";
 }
+
+// for printing
+$module = (isset($_REQUEST['module'])) ? $_REQUEST['module'] : "";
+$action = (isset($_REQUEST['action'])) ? $_REQUEST['action'] : "";
+$record = (isset($_REQUEST['record'])) ? $_REQUEST['record'] : "";
+$lang = (isset($_SESSION['authenticated_user_language'])) ? $_SESSION['authenticated_user_language'] : "";
+$GLOBALS['request_string'] = "&module=$module&action=$action&record=$record&lang=$lang";
 
 $current_user = new User();
 if(isset($_SESSION['authenticated_user_id']))
@@ -237,7 +272,23 @@ if($action == "DetailView")
 	$focus->track_view($current_user->id, $currentModule);
 }	
 
+// set user, theme and language cookies so that login screen defaults to last values
+if (isset($_SESSION['authenticated_user_id'])) {
+        $log->debug("setting cookie ck_login_id to ".$_SESSION['authenticated_user_id']);
+        setcookie('ck_login_id', $_SESSION['authenticated_user_id']);
+}
+if (isset($_SESSION['authenticated_user_theme'])) {
+        $log->debug("setting cookie ck_login_theme to ".$_SESSION['authenticated_user_theme']);
+        setcookie('ck_login_theme', $_SESSION['authenticated_user_theme']);
+}
+if (isset($_SESSION['authenticated_user_language'])) {
+        $log->debug("setting cookie ck_login_language to ".$_SESSION['authenticated_user_language']);
+        setcookie('ck_login_language', $_SESSION['authenticated_user_language']);
+}
+
+//skip headers for popups, deleting, saving, importing and other actions
 if(!$skipHeaders) {
+	$log->debug("including headers");
 	include('themes/'.$theme.'/header.php');
 	
 	if(isset($_SESSION['administrator_error']))
@@ -249,7 +300,7 @@ if(!$skipHeaders) {
 		unset($_SESSION['administrator_error']);
 	}
 	
-	echo "<!-- startprint -->";
+	echo "<!-- startcrmprint -->";
 }
 else {
 		$log->debug("skipping headers");
@@ -279,40 +330,45 @@ echo "<style>
         }
         </style>
 	<script language=javascript>
-        function LogOut(e)
-        {
-                var nav4 = window.Event ? true : false;
-                var iX,iY;
-                if (nav4)
-                {
-                        iX = e.pageX;
-                        iY = e.pageY;
-                }
-                else
-                {
-                        iX = event.clientX + document.body.scrollLeft;
-                        iY = event.clientY + document.body.scrollTop;
+         function LogOut(e)
+         {
+                 var nav4 = window.Event ? true : false;
+                 var iX,iY;
+                 if (nav4)
+                 {
+                         iX = e.pageX;
+                         iY = e.pageY;
+                 }
+                 else
+                 {
+                         iX = event.clientX + document.body.scrollLeft;
+                         iY = event.clientY + document.body.scrollTop;
 
-                }
-                if (iX <= 30 && iY < 0 )
-                {
-                        w=window.open(\"index.php?action=Logout&module=Users\");
-                        w.close();
-                }
-        }
-        window.onunload=LogOut
-	</script>
+                 }
+                 if (iX <= 30 && iY < 0 )
+                 {
+                         w=window.open(\"index.php?action=Logout&module=Users\");
+                         w.close();
+                 }
+         }
+         window.onunload=LogOut
+       </script>
 ";
 echo "<table width=60% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n";
 echo "<table width=100% border=0 cellspacing=1 cellpadding=0 class=\"bgwhite\" align=center><tr><td align=center class=\"copy\">\n";
 echo("&copy; This software is a collective work consisting of the following Open  Source components : Apache Software, MySQL Server, PHP and SugarCRM , each licensed under a separate Open Source License. vtiger is not affiliated with nor endorsed by any of the above providers. See <a href='http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt' class=\"copy\" target=\"_blank\">Copyrights </a> for details.<br>\n");
 echo "</td></tr></table></td></tr></table>\n";
-	
+
+echo "<table align='center'><tr><td align='center'>";
+// Under the Sugar Public License referenced above, you are required to leave in all copyright statements in both
+// the code and end-user application.
+//echo("<br>&copy; 2004 <a href='http://www.sugarcrm.com' target='_blank'>SugarCRM Inc.</a> All Rights Reserved.<BR />");	
 if($calculate_response_time)
 {
     $endTime = microtime();
 
     $deltaTime = microtime_diff($startTime, $endTime);
-    echo("<center><font style='font-family: Verdana, Arial, Helvetica, Sans-serif;font-size:9px'>&nbsp;Server response time: ".$deltaTime." seconds.</font></center>");
+    echo('&nbsp;Server response time: '.$deltaTime.' seconds.');
 }
+echo "</td></tr></table>\n"
 ?>
