@@ -95,7 +95,7 @@ $the_form .= <<<EOQ
 		<input name='firstname' type="text" value=""><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_last_name<br>
 		<input name='lastname' type="text" value=""><br>
-		$lbl_company<br>
+		<FONT class="required">$lbl_required_symbol</FONT>$lbl_company<br>
 		<input name='company' type="text" value=""><br>
 		$lbl_phone<br>
 		<input name='phone' type="text" value=""><br>

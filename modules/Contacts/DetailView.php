@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.33 2005/03/02 18:35:43 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.36 2005/03/17 11:12:06 ray Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -77,13 +77,21 @@ $xtpl->assign("BLOCK2", $block_2);
 $block_3 = getDetailBlockInformation("Contacts",3,$focus->column_fields);
 $xtpl->assign("BLOCK3", $block_3);
 
+$block_1_header = getBlockTableHeader("LBL_CONTACT_INFORMATION");
+$block_2_header = getBlockTableHeader("LBL_ADDRESS_INFORMATION");
+$block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
+$xtpl->assign("BLOCK1_HEADER", $block_1_header);
+$xtpl->assign("BLOCK2_HEADER", $block_2_header);
+$xtpl->assign("BLOCK3_HEADER", $block_3_header);
+
 $block_5 = getDetailBlockInformation("Contacts",5,$focus->column_fields);
 if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
         $cust_fld .=  '<tr><td>';
+	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
+        $cust_fld .= $block_5_header;
         $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= '<tr><th align="left" class="formSecHeader" colspan="2">Custom Information</th></tr>';
         $cust_fld .= $block_5;
         $cust_fld .= '</table>';
         $cust_fld .= '</td></tr></table>';
@@ -96,7 +104,7 @@ $xtpl->assign("CUSTOMFIELD", $cust_fld);
 $xtpl->assign("ID", $_REQUEST['record']);
 
 $permissionData = $_SESSION['action_permission_set'];
-if($permissionData[$tabid]['1'] == 0)
+if(isPermitted("Contacts",1,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
 
@@ -105,33 +113,35 @@ if($permissionData[$tabid]['1'] == 0)
 }
 
 
-if($permissionData[$tabid]['2'] == 0)
+if(isPermitted("Contacts",2,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
 }
-
-$xtpl->assign("SENDMAILBUTTON","<td><input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.module.value='Emails';this.form.email_directing_module.value='contacts';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\"></td>");
+if(isPermitted("Emails",1,'') == 'yes')
+{
+	$xtpl->assign("SENDMAILBUTTON","<td><input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.module.value='Emails';this.form.email_directing_module.value='contacts';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\"></td>");
+}
 
 //$browser = getenv("HTTP_USER_AGENT");
 //$pos1 = strrpos($testString,'Windows');
 //$local=explode(';',$browser);
 //$test=strrpos($local[2],"Windows");
 //if($test == true)
+if(isPermitted("Contacts",8,'') == 'yes')
 {
 	$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
-}
 
-require_once('modules/Users/UserInfoUtil.php');
-$wordTemplateResult = fetchWordTemplateList("Contacts");
-$tempCount = $adb->num_rows($wordTemplateResult);
-$tempVal = $adb->fetch_array($wordTemplateResult);
-for($templateCount=0;$templateCount<$tempCount;$templateCount++)
-{
-$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
-$tempVal = $adb->fetch_array($wordTemplateResult);
+	require_once('modules/Users/UserInfoUtil.php');
+	$wordTemplateResult = fetchWordTemplateList("Contacts");
+	$tempCount = $adb->num_rows($wordTemplateResult);
+	$tempVal = $adb->fetch_array($wordTemplateResult);
+	for($templateCount=0;$templateCount<$tempCount;$templateCount++)
+	{
+		$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
+		$tempVal = $adb->fetch_array($wordTemplateResult);
+	}
+	$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;Select template to Mail Merge:<select name=\"mergefile\">".$optionString."</select>");
 }
-$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;Select template to Mail Merge:<select name=\"mergefile\">".$optionString."</select>");
-
 $xtpl->parse("main");
 $xtpl->out("main");
 

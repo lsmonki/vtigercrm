@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/EditView.php,v 1.9 2005/02/21 11:32:59 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/EditView.php,v 1.12 2005/03/24 14:08:32 rank Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -105,6 +105,8 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("BLOCK3", $block_3);
+$block_1_header = getBlockTableHeader("LBL_NOTE_INFORMATION");
+$xtpl->assign("BLOCK1_HEADER", $block_1_header);
 
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
@@ -119,6 +121,9 @@ else $xtpl->assign("RETURN_MODULE","Notes");
 if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
 else $xtpl->assign("RETURN_ACTION","index");
 if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
+if (isset($_REQUEST['email_id'])) $xtpl->assign("EMAILID", $_REQUEST['email_id']);
+if (isset($_REQUEST['ticket_id'])) $xtpl->assign("TICKETID", $_REQUEST['ticket_id']);
+if (isset($_REQUEST['fileid'])) $xtpl->assign("FILEID", $_REQUEST['fileid']);
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());

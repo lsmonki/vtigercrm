@@ -88,11 +88,9 @@
 		<field name="description" type="X"></field>
 		<field name="createdtime" type="T" >
 			<NOTNULL/>
-			<DEFAULT value="0"/>
 		</field>
 		<field name="modifiedtime" type="T">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
 		</field>
 		<field name="viewedtime" type="T"></field>
 		<field name="status" type="C" size="50"></field>
@@ -206,6 +204,8 @@
 		<field name="displaytype" type="I" size="19">
 			</field>
 
+		<field name="typeofdata" type="C" size="100">
+		</field>
 		 <index name="Field_IDX0">
 			<col>tabid</col>
 			</index>
@@ -260,9 +260,7 @@
 			<DEFAULT value="0"/>
 		</field>
 		
-                  <index name="Account_IDX0">
-			<col>accountid</col>
-		</index>
+                  
 <opt>Type=InnoDB</opt>
 		<data>
 		</data>
@@ -290,9 +288,7 @@
 		<field name="country" type="C" size="30"></field>
 		<field name="state" type="C" size="30"></field>
 		<field name="street" type="C" size="250"></field>
-		<opt>Type=InnoDB</opt> <index name="AccountBillAds_IDX0">
-			<col>accountaddressid</col>
-		</index>
+		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
 	</table>
@@ -319,9 +315,7 @@
 		<field name="country" type="C" size="30"></field>
 		<field name="state" type="C" size="30"></field>
 		<field name="street" type="C" size="250"></field>
-		<opt>Type=InnoDB</opt> <index name="AccountShipAds_IDX0">
-			<col>accountaddressid</col>
-		</index>
+		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
 	</table>
@@ -341,9 +335,7 @@
 			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<opt>Type=InnoDB</opt> <index name="AccountsCF_IDX0">
-			<col>accountid</col>
-		</index>
+		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
 	</table>
@@ -392,9 +384,7 @@
 			<DEFAULT value="Dollars"/>
 		</field>
 
-             		 <index name="ContactDetails_IDX0">
-			<col>contactid</col>
-		</index>
+             		 
 		 <index name="ContactDetails_IDX1">
 			<col>accountid</col>
 		</index>
@@ -442,9 +432,7 @@
 			<DEFAULT value="0"/>
 		</field>
 		<field name="leadsource" type="C" size="50"></field>
-		<opt>Type=InnoDB</opt> <index name="ContactSubDetails_IDX0">
-			<col>contactsubscriptionid</col>
-		</index>
+		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
 	</table>
@@ -476,9 +464,7 @@
 		<field name="mailingzip" type="C" size="30"></field>
 		<field name="otherzip" type="C" size="30"></field>
 		<field name="otherstreet" type="C" size="250"></field>
-		<opt>Type=InnoDB</opt> <index name="ContactAddress_IDX0">
-			<col>contactaddressid</col>
-		</index>
+		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
 	</table>
@@ -498,9 +484,7 @@
 			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<opt>Type=InnoDB</opt> <index name="ContactsCF_IDX0">
-			<col>contactid</col>
-		</index>
+		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
 	</table>
@@ -521,7 +505,6 @@
 	<table name="leaddetails">
 		<field name="leadid" type="I" size="19">
 			<KEY/>
-			<DEFAULT value="0"/>
 		</field>
 		<field name="email" type="C" size="100"></field>
 		<field name="interest" type="C" size="50"></field>
@@ -548,8 +531,6 @@
 			<DEFAULT value="SalesMan"/>
 		</field>
 		<field name="licencekeystatus" type="C" size="50"></field>
-		<field name="region" type="C" size="50"></field>
-		<field name="stage" type="C" size="50"></field>
 		<field name="space" type="C" size="250"></field>
 		<field name="comments" type="X"></field>
 		<field name="priority" type="C" size="50"></field>
@@ -569,9 +550,7 @@
 		<field name="assignleadchk" type="I" size="1">
 			<DEFAULT value="0"/>
 		</field>
-		<opt>Type=InnoDB</opt> <index name="LeadDetails_IDX0">
-			<col>leadid</col>
-		</index>
+		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
@@ -604,9 +583,7 @@
 		<field name="empct" type="I" size="10">
 			<DEFAULT value="0"/>
 		</field>
-		<opt>Type=InnoDB</opt> <index name="LeadSubDetails_IDX0">
-			<col>leadsubscriptionid</col>
-		</index>
+		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
@@ -639,9 +616,7 @@
 		<field name="leadaddresstype" type="C" size="30">
 			<DEFAULT value="Billing"/>
 		</field>
-		<opt>Type=InnoDB</opt> <index name="LeadAddress_IDX0">
-			<col>leadaddressid</col>
-		</index>
+		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 
@@ -663,9 +638,7 @@
 			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<opt>Type=InnoDB</opt> <index name="LeadsCF_IDX0">
-			<col>leadid</col>
-		</index>
+		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
@@ -697,7 +670,7 @@
 			<NOTNULL/>
 		</field>
 		<field name="filename" type="C" size="50">
-			<NOTNULL/>
+			
 		</field>
 		<field name="notecontent" type="X"></field>
 		<opt>Type=InnoDB</opt> <index name="Notes_UK0">
@@ -717,7 +690,7 @@
 
 	<table name="notes" alter="true">
 		
-		<constraint>ADD CONSTRAINT fk_Notes FOREIGN KEY (NOTESID) REFERENCES crmentity(crmid)  ON DELETE CASCADE </constraint>
+		<constraint>ADD CONSTRAINT fk_Notes FOREIGN KEY (notesid) REFERENCES crmentity(crmid)  ON DELETE CASCADE </constraint>
 		
 		<opt>Type=InnoDB</opt>
 		
@@ -746,7 +719,7 @@
 		<field name="private" type="I" size="1">
 			<DEFAULT value="0"/>
 		</field>
-		<field name="probability" type="I" size="19">
+		<field name="probability" type="N" size="3.2">
 			<DEFAULT value="0"/>
 		</field>
 		<field name="sales_stage" type="C" size="50"></field>
@@ -772,9 +745,7 @@
 			<opt>Type=InnoDB</opt> <index name="Potential_IDX0">
 			<col>accountid</col>
 		</index>
-		<opt>Type=InnoDB</opt> <index name="Potential_IDX1">
-			<col>potentialid</col>
-		</index>
+		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 
@@ -793,25 +764,27 @@
 	</table>
 
 
-
-
       <table name="potstagehistory">
-		<field name="potentialstagehistoryid" type="I" size="19">
-			<KEY/>
-			<DEFAULT value="0"/>
+		<field name="historyid" type="I" size="19">
+                         <KEY/>	 
+                         <AUTOINCREMENT/>	 
 		</field>
+
 		<field name="potentialid" type="I" size="19">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
 		</field>
 		<field name="amount" type="N"></field>
-		<field name="stage" type="C" size="50"></field>
-		<field name="probability" type="I" size="19"></field>
+		<field name="stage" type="C" size="100"></field>
+
+		<field name="probability" type="N" size="3.2"></field>
 		<field name="expectedrevenue" type="N"></field>
 		<field name="closedate" type="D"></field>
-		<field name="lastmodified" type="I" size="19"></field>
-		<field name="lastmodifiedtime" type="I" size="19"></field>
-		<opt>Type=InnoDB</opt> <index name="PotStageHistory_IDX0">
+		<field name="lastmodified" type="T">
+                        <NOTNULL/>
+                </field>
+		<opt>Type=InnoDB</opt>
+	       	
+	       	<index name="PotStageHistory_IDX1">
 			<col>potentialid</col>
 		</index>
 		<data>
@@ -821,7 +794,7 @@
 
 		<table name="potstagehistory" alter="true">
 		
-		<constraint>ADD CONSTRAINT fk_PotStageHistory FOREIGN KEY (potentialstagehistoryid) REFERENCES crmentity(crmid)  ON DELETE CASCADE  </constraint>
+		<constraint>ADD CONSTRAINT fk_PotStageHistory FOREIGN KEY (potentialid) REFERENCES potential(potentialid) ON DELETE CASCADE  </constraint>
 		
 		<opt>Type=InnoDB</opt>
 		
@@ -836,21 +809,11 @@
 			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<opt>Type=InnoDB</opt> <index name="PotentialsCF_IDX0">
-			<col>potentialid</col>
-		</index>
+		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
 	</table>
 
-	<table name="potentialscf" alter="true">
-                     		<constraint>ADD CONSTRAINT fk_PotentialsCF1 FOREIGN KEY (potentialid) REFERENCES potential(potentialid)</constraint>
-		
-		<opt>Type=InnoDB</opt>
-		
-		<data>
-		</data>
-	</table>
 
 	<table name="potentialscf" alter="true">
 		
@@ -874,7 +837,7 @@
 			<NOTNULL/>
 		</field>
 		<field name="semodule" type="C" size="20">
-			<NOTNULL/>
+			
 		</field>
 
 		<field name="activitytype" type="C" size="50">
@@ -885,11 +848,8 @@
 
        		<field name="date_start" type="D">      
 			<NOTNULL/>
-			<DEFAULT value="0000-00-00"/>
                         </field>                        
 		<field name="due_date" type="D">      
-			<NOTNULL/>
-			<DEFAULT value="0000-00-00"/>
                         </field>                        
 
 
@@ -904,8 +864,7 @@
                 <field name="duration_hours" type="C" size="2"></field> 
                 <field name="duration_minutes" type="C" size="2"></field> 
 		<field name="status" type="C" size="100">
-			<NOTNULL/>
-			<DEFAULT value="Not Started"/>
+
 		</field>
 		<field name="priority" type="C" size="150"></field>     
                 <field name="location" type="C" size="150"></field>     
@@ -953,9 +912,7 @@
 			<NOTNULL/>
 		</field>
 
-		<opt>Type=InnoDB</opt> <index name="Attachments_IDX0">
-			<col>attachmentsid</col>
-		</index>
+		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
 	</table>
@@ -1040,14 +997,8 @@
 		<field name="strength" type="C" size="250"></field>
 		<field name="weakness" type="C" size="250"></field>
 	
-		 <index name="Competitor_IDX0">
-			<col>competitorid</col>
-		</index>
-		 <index name="Competitor_IDX1">
-			<col>crmid</col>
-		</index>
-
-<opt>Type=InnoDB</opt>
+		 
+		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
@@ -1066,11 +1017,9 @@
 	<table name="potcompetitorrel">
 		<field name="potentialid" type="I" size="19">
 			<KEY/>
-			<DEFAULT value="0"/>
 		</field>
 		<field name="competitorid" type="I" size="19">
 			<KEY/>
-			<DEFAULT value="0"/>
 		</field>
 		<opt>Type=InnoDB</opt> <index name="PotCompetitorRel_IDX0">
 			<col>potentialid</col>
@@ -1116,26 +1065,23 @@
 		<field name="productcategory" type="C" size="40"></field>
 		<field name="manufacturer" type="C" size="40"></field>
 		<field name="product_description" type="X"></field>
-		<field name="qty_per_unit" type="I" size="11">
+		<field name="qty_per_unit" type="N" size="5.2">
 			<DEFAULT value="0"/>
 		</field>
-		<field name="unit_price" type="N"></field>
+		<field name="unit_price" type="N" size="5.2"></field>
 		<field name="weight" type="N"></field>
 		<field name="pack_size" type="I" size="11"></field>
 		<field name="start_date" type="D">
                         <NOTNULL/>
-                        <DEFAULT value="0000-00-00"/>	
 		</field>
 		<field name="expiry_date" type="D">
                         <NOTNULL/>
-                        <DEFAULT value="0000-00-00"/>	
 		</field>
 		<field name="purchase_date" type="D">
                         <NOTNULL/>
-                        <DEFAULT value="0000-00-00"/>
 		</field>
 		<field name="cost_factor" type="I" size="11"></field>
-		<field name="commissionrate" type="N"></field>
+		<field name="commissionrate" type="N" size="4.2"></field>
 		<field name="commissionmethod" type="C" size="50"></field>
 		<field name="discontinued" type="I" size="1"></field>
 	
@@ -1246,7 +1192,7 @@
                 <field name="name" type="C" size="60">
                 </field>
                 <field name="description" type="C" size="100"></field>
-
+		<opt>Type=InnoDB</opt>
                 <data>
 
                 </data>
@@ -1260,7 +1206,10 @@
 		<field name="roleid" type="I" size="11">
 			<NOTNULL/>
 		</field>
-		
+	        <opt>Type=InnoDB</opt>	
+	       	<index name="user2role_IDX1">
+			<col>roleid</col>
+		</index>
 		<data>
 		
 		</data>
@@ -1295,10 +1244,7 @@
 		</field>
 		<field name="description" type="X"></field>
 		
-		<opt>Type=InnoDB</opt> <index name="groups_UK0">
-			<UNIQUE/>
-			<col>name</col>
-		</index>
+		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
 	</table>
@@ -1344,12 +1290,8 @@
 			<UNIQUE/>
 			<col>leadid</col>
 		</index>
-		<index name="LeadPotRel_IDX0">
-			<col>leadid</col>
-		</index>
-		 <index name="LeadPotRel_IDX1">
-			<col>potentialid</col>
-		</index>
+		
+		 
            <opt>Type=InnoDB</opt>
 		<data>
 		</data>
@@ -1387,9 +1329,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<index name="LeadContRel_IDX0">
-			<col>leadid</col>
-		</index>
+		
 		<index name="LeadContRel_IDX1">
 			<col>contactid</col>
 		</index>
@@ -1433,9 +1373,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<opt>Type=InnoDB</opt> <index name="LeadAcctRel_IDX0">
-			<col>leadid</col>
-		</index>
+		
 		<opt>Type=InnoDB</opt> <index name="LeadAcctRel_IDX1">
 			<col>accountid</col>
 		</index>
@@ -1469,6 +1407,7 @@
 
 	<table name="contpotentialrel">
 		<field name="contactid" type="I" size="19">
+			<KEY/>
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
@@ -1519,7 +1458,8 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="dealprobability" type="I" size="10">
+
+		<field name="dealprobability" type="N" size="3.2">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
@@ -1561,9 +1501,7 @@
 		<opt>Type=InnoDB</opt> <index name="CntActivityRel_IDX0">
 			<col>contactid</col>
 		</index>
-		<opt>Type=InnoDB</opt> <index name="CntActivityRel_IDX1">
-			<col>activityid</col>
-		</index>
+		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
@@ -1607,7 +1545,6 @@
 		</field>
 		<field name="createdon" type="D">
 			<NOTNULL/>
-			<DEFAULT value="0000-00-00"/>
 		</field>
 		<opt>Type=InnoDB</opt> <index name="LAR_UK0">
 			<UNIQUE/>
@@ -1690,7 +1627,6 @@
 		<field name="description" type="X"></field>
 		<field name="update_log" type="X"></field>
 		<field name="version_id" type="I" size="11">
-			<NOTNULL/>
 		</field>
 		 	
 		<opt>Type=InnoDB</opt>
@@ -1888,7 +1824,7 @@
 			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<opt>Type=InnoDB</opt> <index name="SeProductRel_IDX1">
+		<opt>Type=InnoDB</opt> <index name="SeTicketsRel_IDX1">
 			<col>crmid</col>
 		</index>
 		<opt>Type=InnoDB</opt> <index name="SeTicketsRel_IDX0">
@@ -1986,7 +1922,16 @@
 		</field>
 		<field name="groupname" type="C" size="100">
 		</field>		
-		<opt>Type=InnoDB</opt> 		<data>		
+		<opt>Type=InnoDB</opt>
+
+	       	<index name="leadgrouprelation_IDX0">
+			<col>leadid</col>
+		</index>
+
+		<index name="leadgrouprelation_IDX1">
+			<col>groupname</col>
+		</index>
+		<data>		
 		</data>
 	</table>
 
@@ -2019,6 +1964,14 @@
 		</field>
 		<field name="groupname" type="C" size="100">
 		</field>		
+
+	       	<index name="activitygrouprelation_IDX0">
+			<col>activityid</col>
+		</index>
+
+		<index name="activitygrouprelation_IDX1">
+			<col>groupname</col>
+		</index>
 		<data>		
 		</data>
 
@@ -2047,14 +2000,56 @@
 		</data>
 	</table>
 
+        <table name="ticketgrouprelation">
+                <field name="ticketid" type="I" size="19">
+                </field>
+                <field name="groupname" type="C" size="100">
+		</field>
+
+		<index name="ticketgrouprelation_IDX0">
+			<col>ticketid</col>
+		</index>
+
+		<index name="ticketgrouprelation_IDX1">
+			<col>groupname</col>
+		</index>
+		<data>
+
+                </data>
+
+                <opt>Type=InnoDB</opt>
+        </table>
+
+
+        <table name="ticketgrouprelation" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_ticketgrouprelation1 FOREIGN KEY (ticketid) REFERENCES troubletickets(ticketid) ON DELETE CASCADE</constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
+
+        <table name="ticketgrouprelation" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_ticketgrouprelation2 FOREIGN KEY (groupname) REFERENCES groups(name) ON DELETE CASCADE</constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
+
 
         <table name="systems">
                 <field name="id" type="I" size="19">
                         <KEY/>
                 </field>
-                <field name="mail_server" type="C" size="30"> </field>
-                <field name="mail_server_username" type="C" size="30"> </field>
-                <field name="mail_server_password" type="C" size="30"> </field>
+                <field name="server" type="C" size="30"> </field>
+                <field name="server_username" type="C" size="30"> </field>
+                <field name="server_password" type="C" size="30"> </field>
+                <field name="server_type" type="C" size="20"> </field>
                 <data>
                 </data>
         </table>
@@ -2089,7 +2084,6 @@
 			<KEY/>
 		</field>
 			<field name="filename" type="C" size="50">
-                        <NOTNULL/>
                 </field>
 		<field name="description" type="X"></field>
 		<data>
@@ -2338,7 +2332,7 @@
 		</data>
 	</table>
 
-<table name="troubleticketstracktime">
+<table name="ticketstracktime">
 		<field name="ticket_id" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
@@ -2354,7 +2348,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<index name="idx_troubleticketstracktime">
+		<index name="idx_ticketstracktime">
 			<col>ticket_id</col>
 		</index>
 		<data>
@@ -2367,9 +2361,7 @@
 			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<opt>Type=InnoDB</opt> <index name="HelpDeskCF_IDX0">
-			<col>ticketid</col>
-		</index>
+		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
 	</table>
@@ -2390,9 +2382,7 @@
 			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<opt>Type=InnoDB</opt> <index name="ProductsCF_IDX0">
-			<col>productid</col>
-		</index>
+		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
@@ -2827,7 +2817,8 @@
 			<NOTNULL/>
 			<DEFAULT value="1"/>
 		</field>
-		<field name="probability" type="I" size="19">
+
+		<field name="probability" type="N" size="3.2">
 			<DEFAULT value="0"/>
 		</field>
 		<opt>Type=InnoDB</opt> <index name="OpportunityStage_UK0">
@@ -3126,13 +3117,13 @@
 	</table>
 
 
-	<table name="troubleticketcategories">
-<field name="troubleticketcategories_id" type="I" size="19">
+	<table name="ticketcategories">
+<field name="ticketcategories_id" type="I" size="19">
 			<KEY/>
 <AUTOINCREMENT/>
 		
 		</field>
-	<field name="troubleticketcategories" type="C" size="100">
+	<field name="ticketcategories" type="C" size="100">
 		</field>
 	<field name="SORTORDERID" type="I" size="19">
 			<NOTNULL/>
@@ -3148,12 +3139,12 @@
 		</data>
 	</table>
 
-	<table name="troubleticketpriorities">
-<field name="troubleticketpriorities_id" type="I" size="19">
+	<table name="ticketpriorities">
+<field name="ticketpriorities_id" type="I" size="19">
 			<KEY/>
 <AUTOINCREMENT/>
 				</field>
-		<field name="troubleticketpriorities" type="C" size="100">
+		<field name="ticketpriorities" type="C" size="100">
 				</field>
 
 	<field name="SORTORDERID" type="I" size="19">
@@ -3169,13 +3160,13 @@
 		
 		</data>
 	</table>
-	<table name="troubleticketstatus">
-<field name="troubleticketstatus_id" type="I" size="19">
+	<table name="ticketstatus">
+<field name="ticketstatus_id" type="I" size="19">
 			<KEY/>
 <AUTOINCREMENT/>
 		
 		</field>
-		<field name="troubleticketstatus" type="C" size="60">
+		<field name="ticketstatus" type="C" size="60">
 			</field>
 	<field name="SORTORDERID" type="I" size="19">
 			<NOTNULL/>
@@ -3377,7 +3368,7 @@
 	</table>
 	
 
-	<table name="default_org_sharingrule">
+	<table name="def_org_share">
 		<field name="ruleid" type="I" size="11">
 			<KEY/>
                         <AUTOINCREMENT/>
@@ -3439,7 +3430,6 @@
 
 
 
-//Notification Scheduler Creation
 
 	<table name="notificationscheduler">
 		<field name="schedulednotificationid" type="I" size="19">
@@ -3468,4 +3458,46 @@
 
 
 	
+	<table name="activityproductrel">
+		<field name="activityid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="productid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="activityproductrel_IDX0">
+			<col>activityid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="activityproductRel_IDX1">
+			<col>productid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="activityproductrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_activityproductRel FOREIGN KEY (activityid) REFERENCES activity(activityid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="activityproductrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_activityproductrel1 FOREIGN KEY (productid) REFERENCES products(productid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
 </schema>

@@ -14,28 +14,20 @@
 <input type="hidden" name="action">
 <input type="hidden" name="mode" value="{MODE}">
 <input type="hidden" name="module" value="Users">
-<TABLE WIDTH="100%" CELLPADDING=0 CELLSPACING=0 BORDER=0>
-<TR><TD>
     <TABLE WIDTH="100%" CELLPADDING=0 CELLSPACING=0 BORDER=0>
-
     <TR>
     <TD ALIGN=LEFT CLASS="moduleTitle hline" NOWRAP> {MOD.LBL_EMAIL_TEMPLATE}{MOD.LBL_COLON}{MOD.LBL_NEW_TEMPLATE}</TD>
     </TR>
     </TABLE>
-</TD></TR>
-</table>
 
-            <TABLE WIDTH="100%" CELLPADDING="0" CELLSPACING="2" BORDER="0">
+<br>
+            <TABLE WIDTH="100%" CELLPADDING="0" CELLSPACING="0" BORDER="0">
               <TR VALIGN="TOP">
                 <TD>{MOD.LBL_USE_MERGE_FIELDS_TO_EMAIL_CONTENT}</TD>
 		</TR>
 	</TABLE>
 <br>	
-<TABLE WIDTH="90%" CELLPADDING="0" CELLSPACING="5" BORDER="0">
-                <TD NOWRAP>&nbsp;<input type="submit" name="save" value=" Save " class="button" onclick="this.form.action.value='saveemailtemplate'">&nbsp;<input type="button" name="cancel" value="Cancel" class="button" onclick="cancelForm(this.form)"></TD>
-		<TD ALIGN='right'><font class='required'>*</font>{MOD.LBL_INDICATES_REQUIRED_FIELD}</TD>
-              </TR>
-	</TABLE> 
+<div align="right" style="width:90%"><font class='required'>{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_INDICATES_REQUIRED_FIELD}</div>
 <SCRIPT>
     var allOptions = null;
     function setAllOptions(inputOptions) {
@@ -115,12 +107,12 @@
 
             <TD>
 
-            <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=1>
+            <TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>
 
                 <TR>
-                    <TD style="font-family:arial;font-size=8pt;">{MOD.LBL_SELECT_FIELD_TYPE}</TD>
-                    <TD style="font-family:arial;font-size=8pt;">{MOD.LBL_SELECT_FIELD}</TD>
-                    <TD style="font-family:arial;font-size=8pt;">{MOD.LBL_MERGE_FIELD_VALUE}</TD>
+                    <TD style="font-family:arial;font-size=8pt;">{MOD.LBL_SELECT_FIELD_TYPE}:</TD>
+                    <TD style="font-family:arial;font-size=8pt;">{MOD.LBL_SELECT_FIELD}:</TD>
+                    <TD style="font-family:arial;font-size=8pt;">{MOD.LBL_MERGE_FIELD_VALUE}:</TD>
                 <tr>
 
                     <TD>
@@ -157,24 +149,28 @@
     </TABLE>
 <br>
 <table width="90%" border=0 cellspacing=1 cellpadding=0 class="formOuterBorder">
-<td class="formSecHeader" colspan=4 nowrap>{MOD.LBL_EMAIL_TEMPLATE_INFORMATION}</td>
-<tr><td nowrap class="dataLabel"><font class="required">*</font>{MOD.LBL_FOLDER}
+<td class="formSecHeader" colspan=5 nowrap>{MOD.LBL_EMAIL_TEMPLATE_INFORMATION}</td>
+<tr><td nowrap class="dataLabel"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_FOLDER}
 </td><td colspan=4><select name="foldername" tabindex="1" value="{FOLDERNAME}"><option value="Personal">{MOD.LBL_PERSONAL}</option>
 <option value="Public" selected>{MOD.LBL_PUBLIC}</option>
 </select></td></tr>
-<tr ><td nowrap class="dataLabel"><font class="required">*</font>{MOD.LBL_TEMPLATE_NAME}
+<tr ><td nowrap class="dataLabel"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_TEMPLATE_NAME}
 </td><td colspan=4><input name="templatename"  type="text" size=20 maxlength=80 tabindex="3" value="{TEMPLATENAME}"></td></tr>
 <tr ><td nowrap class="dataLabel">{MOD.LBL_DESCRIPTION}{MOD.LBL_COLON}
 </td><td colspan=4><input name="description" "p8" type="text" size=65 maxlength=255 tabindex="5" value="{DESCRIPTION}"></td></tr>
-<tr ><td nowrap class="dataLabel"><font class="required">*</font>{MOD.LBL_SUBJECT}{MOD.LBL_COLON}
+<tr ><td nowrap class="dataLabel"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_SUBJECT}{MOD.LBL_COLON}
 </td><td colspan=4><input name="subject"  type="text" size=65 maxlength=100 tabindex="6" value="{SUBJECT}"></td></tr>
 <tr ><td nowrap valign=top class="dataLabel">{MOD.LBL_BODY}{MOD.LBL_COLON}
 </td><td valign=top colspan=4><TEXTAREA wrap="SOFT" NAME="body" ROWS="10" COLS="70" tabindex="7">{BODY}</TEXTAREA></td></tr>
 </table>
-<TABLE WIDTH="90%" CELLPADDING="0" CELLSPACING="5" BORDER="0">
-                <TD NOWRAP>&nbsp;<input type="submit" name="save" value=" Save " class="button" >&nbsp;<input type="button" name="cancel" value="Cancel" class="button" onclick="cancelForm(this.form)"></TD>
-              </TR>
-        </TABLE>
+<br>
+  <TABLE WIDTH="90%" CELLPADDING="0" CELLSPACING="0" BORDER="0">
+    <TD NOWRAP><div align="center">
+        <input type="submit" name="save" value="{APP.LBL_SAVE_BUTTON_LABEL}" class="button" onclick="this.form.action.value='saveemailtemplate'">
+		<input type="button" name="cancel" value="{APP.LBL_CANCEL_BUTTON_LABEL}" class="button" onclick="cancelForm(this.form)">
+      </div></TD>
+    </TR>
+  </TABLE>
 </form>
 </body>
 </html>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Delete.php,v 1.3 2005/03/04 06:54:27 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Delete.php,v 1.5 2005/03/10 09:28:34 shaw Exp $
  * Description:  Deletes an Account record and then redirects the browser to the 
  * defined return URL.
  ********************************************************************************/
@@ -32,6 +32,8 @@ if(!isset($_REQUEST['record']))
 $sql ='delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
 $adb->query($sql);
 
+$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
+$adb->query($sql_recentviewed);
 if($_REQUEST['return_module'] == $_REQUEST['module'])
 	$focus->mark_deleted($_REQUEST['record']);
 

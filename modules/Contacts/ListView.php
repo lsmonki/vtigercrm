@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/ListView.php,v 1.14 2005/02/24 19:58:11 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/ListView.php,v 1.23 2005/03/28 15:30:12 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -26,6 +26,7 @@ require_once('modules/Contacts/Contact.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ComboUtil.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $current_language;
@@ -47,10 +48,17 @@ if (!isset($where)) $where = "";
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
+$url_string = ''; // assigning http url string
+$sorder = 'ASC';  // Default sort order
+if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
+$sorder = $_REQUEST['sorder'];
+
 $focus = new Contact();
+
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
+	$url_string .="&query=true";
 	if (isset($_REQUEST['firstname'])) $firstname = $_REQUEST['firstname'];
 	if (isset($_REQUEST['lastname'])) $lastname = $_REQUEST['lastname'];
 	if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
@@ -63,7 +71,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	if (isset($_REQUEST['emailoptout'])) $emailoptout = $_REQUEST['emailoptout'];
 	if (isset($_REQUEST['mailingstreet'])) $mailingstreet = $_REQUEST['mailingstreet'];
 	if (isset($_REQUEST['mailingcity'])) $mailingcity = $_REQUEST['mailingcity'];
-	if (isset($_REQUEST['mailingstreet'])) $mailingstreet = $_REQUEST['mailingstreet'];
+	if (isset($_REQUEST['mailingstate'])) $mailingstate = $_REQUEST['mailingstate'];
 	if (isset($_REQUEST['mailingzip'])) $mailingzip = $_REQUEST['mailingzip'];
 	if (isset($_REQUEST['mailingcountry'])) $mailingcountry = $_REQUEST['mailingcountry'];
 	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
@@ -85,6 +93,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
         {
                 $str=" contactscf.".$column[$i]." like '$customfield[$i]%'";
                 array_push($where_clauses, $str);
+		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
 }
 //upto this added for Custom Field
@@ -92,67 +101,67 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 
 	if(isset($lastname) && $lastname != "") {
 			array_push($where_clauses, "contactdetails.lastname like ".PearDatabase::quote($lastname.'%')."");
-			$query_val .= "&lastname=".$lastname;
+			$url_string .= "&lastname=".$lastname;
 	}
 	if(isset($firstname) && $firstname != "") {
 			array_push($where_clauses, "contactdetails.firstname like ".PearDatabase::quote($firstname.'%')."");
-			$query_val .= "&firstname=".$firstname;
+			$url_string .= "&firstname=".$firstname;
 	}
 	if(isset($accountname) && $accountname != "")	{
 			array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%')."");
-			$query_val .= "&accountname=".$accountname;
+			$url_string .= "&accountname=".$accountname;
 	}
 	if(isset($leadsource) && $leadsource != "") {
 			array_push($where_clauses, "contactsubdetails.leadsource = ".PearDatabase::quote($leadsource)."");
-			$query_val .= "&leadsource=".$leadsource;
+			$url_string .= "&leadsource=".$leadsource;
 	}
 	if(isset($donotcall) && $donotcall != "") {
 			array_push($where_clauses, "contactdetails.donotcall = ".PearDatabase::quote($donotcall)."");
-			$query_val .= "&donotcall=".$donotcall;
+			$url_string .= "&donotcall=".$donotcall;
 	}
 	if(isset($phone) && $phone != "") {
 			array_push($where_clauses, "(contactdetails.phone like ".PearDatabase::quote('%'.$phone.'%')." OR contactdetails.mobile like ".PearDatabase::quote('%'.$phone.'%')." OR contactdetails.fax like ".PearDatabase::quote('%'.$phone.'%').")");
-			$query_val .= "&phone=".$phone;
+			$url_string .= "&phone=".$phone;
 	}
 	if(isset($email) && $email != "") {
 			array_push($where_clauses, "(contactdetails.email like ".PearDatabase::quote($email.'%').")");
-			$query_val .= "&email=".$email;
+			$url_string .= "&email=".$email;
 	}
 	if(isset($yahooid) && $yahooid != "") {
 			array_push($where_clauses, "contactdetails.yahooid like ".PearDatabase::quote($yahooid.'%')."");
-			$query_val .= "&yahooid=".$yahooid;
+			$url_string .= "&yahooid=".$yahooid;
 	}
 	if(isset($assistant) && $assistant != "") {
 			array_push($where_clauses, "contactsubdetails.assistant like ".PearDatabase::quote($assistant.'%')."");
-			$query_val .= "&yahooid=".$yahooid;
+			$url_string .= "&yahooid=".$yahooid;
 	}
 	if(isset($emailoptout) && $emailoptout != "") {
 			array_push($where_clauses, "contactdetails.emailoptout = ".PearDatabase::quote($emailoptout)."");
-			$query_val .= "&emailoptout=".$emailoptout;
+			$url_string .= "&emailoptout=".$emailoptout;
 	}
 	if(isset($mailingstreet) && $mailingstreet != "") {
 			array_push($where_clauses, "(contactaddress.mailingstreet like ".PearDatabase::quote($mailingstreet.'%')." OR contactaddress.otherstreet like ".PearDatabase::quote($mailingstreet.'%').")");
-			$query_val .= "&mailingstreet=".$mailingstreet;
+			$url_string .= "&mailingstreet=".$mailingstreet;
 	}
 	if(isset($mailingcity) && $mailingcity != "") {
 			array_push($where_clauses, "(contactaddress.mailingcity like ".PearDatabase::quote($mailingcity.'%')." OR contactaddress.othercity like ".PearDatabase::quote($mailingcity.'%').")");
-			$query_val .= "&mailingcity=".$mailingcity;
+			$url_string .= "&mailingcity=".$mailingcity;
 	}
 	if(isset($mailingstate) && $mailingstate != "") {
 			array_push($where_clauses, "(contactaddress.mailingstate like ".PearDatabase::quote($mailingstate.'%')." OR contactaddress.otherstate like ".PearDatabase::quote($mailingstate.'%').")");
-			$query_val .= "&mailingstate=".$mailingstate;
+			$url_string .= "&mailingstate=".$mailingstate;
 	}
 	if(isset($mailingzip) && $mailingzip != "") {
 			array_push($where_clauses, "(contactaddress.mailingzip like ".PearDatabase::quote($mailingzip.'%')." OR contactaddress.otherzip like ".PearDatabase::quote($mailingzip.'%').")");
-			$query_val .= "&mailingzip=".$mailingzip;
+			$url_string .= "&mailingzip=".$mailingzip;
 	}
 	if(isset($mailingcountry) && $mailingcountry != "") {
 			array_push($where_clauses, "(contactaddress.mailingcountry like ".PearDatabase::quote($mailingcountry.'%')." OR contactaddress.othercountry like ".PearDatabase::quote($mailingcountry.'%').")");
-			$query_val .= "&mailingcountry=".$mailingcountry;
+			$url_string .= "&mailingcountry=".$mailingcountry;
 	}
 	if(isset($current_user_only) && $current_user_only != "") {
 			array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-			$query_val .= "&current_user_only=on";
+			$url_string .= "&current_user_only=".$current_user_only;
 	}
 
 	$where = "";
@@ -183,6 +192,19 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form=new XTemplate ('modules/Contacts/SearchForm.html');
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
+	
+	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
+	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+	$search_form->assign("JAVASCRIPT", get_clear_form_js());
+	if($order_by != '') {
+		$ordby = "&order_by=".$order_by;
+	}
+	else
+	{
+		$ordby ='';
+	}
+	$search_form->assign("BASIC_LINK", "index.php?module=Contacts".$ordby."&action=index".$url_string."&sorder=".$sorder);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Contacts&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
 
 	if (isset($firstname)) $search_form->assign("FIRST_NAME", $_REQUEST['firstname']);
 	if (isset($lastname)) $search_form->assign("LAST_NAME", $_REQUEST['lastname']);
@@ -191,14 +213,19 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 
+
 	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
 
 	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
+
+		$url_string .="&advanced=true";
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Contacts','index','lastname','true','advanced'));
+
 		if(isset($accountname)) $search_form->assign("ACCOUNT_NAME", $accountname);
-		if(isset($createdtime)) $search_form->assign("DATE_ENTERED", $createdtime);
-		if(isset($modifiedtime)) $search_form->assign("DATE_MODIFIED", $modifiedtime);
-		if(isset($modified_user_id)) $search_form->assign("MODIFIED_USER_ID", $modified_user_id);
-		if(isset($donotcall)) $search_form->assign("DO_NOT_CALL", $donotcall);
+		//if(isset($createdtime)) $search_form->assign("DATE_ENTERED", $createdtime);
+		//if(isset($modifiedtime)) $search_form->assign("DATE_MODIFIED", $modifiedtime);
+		//if(isset($modified_user_id)) $search_form->assign("MODIFIED_USER_ID", $modified_user_id);
+		//if(isset($donotcall)) $search_form->assign("DO_NOT_CALL", $donotcall);
 		if(isset($phone)) $search_form->assign("PHONE", $phone);
 		if(isset($email)) $search_form->assign("EMAIL", $email);
 		if(isset($yahooid)) $search_form->assign("YAHOO_ID", $yahooid);
@@ -210,7 +237,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		if(isset($mailingzip)) $search_form->assign("ADDRESS_POSTALCODE", $mailingzip);
 		if(isset($mailingcountry)) $search_form->assign("ADDRESS_COUNTRY", $mailingcountry);
 
-		if (isset($leadsource)) $search_form->assign("LEAD_SOURCE_OPTIONS", get_select_options($comboFieldArray['leadsource_dom'], $lead_source, $_REQUEST['advanced']));
+		if (isset($leadsource)) $search_form->assign("LEAD_SOURCE_OPTIONS", get_select_options($comboFieldArray['leadsource_dom'], $leadsource, $_REQUEST['advanced']));
 		else $search_form->assign("LEAD_SOURCE_OPTIONS", get_select_options($comboFieldArray['leadsource_dom'], '', $_REQUEST['advanced']));
 
 		if (!empty($assigned_user_id)) $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), $assigned_user_id));
@@ -234,6 +261,7 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 		$search_form->out("advanced");
 	}
 	else {
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Contacts','index','lastname','true','basic'));
 		$search_form->parse("main");
 		$search_form->out("main");
 	}
@@ -241,26 +269,41 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 	echo "\n<BR>\n";
 }
 
+// Buttons and View options
+$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
+	<form name="massdelete" method="POST">
+	<tr>
+	<input name="idlist" type="hidden">
+	<input name="change_status" type="hidden">';
+
+if(isPermitted('Contacts',2,'') == 'yes')
+{
+        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+}
+            $other_text .='</td>
+		<td align="right">&nbsp;</td>
+	</tr>
+	</table>';
+//
+
 //Retreive the list from Database
 $list_query = getListQuery("Contacts");
+
 if(isset($where) && $where != '')
 {
 	$list_query .= " AND ".$where;
 }
 
-$url_qry = getURLstring($focus);
-
 if(isset($order_by) && $order_by != '')
 {
-        $list_query .= ' ORDER BY '.$order_by;
-        $url_qry .="&order_by=".$order_by;
+        $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
 
 $list_result = $adb->query($list_query);
 
 //Constructing the list view 
 
-echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],'', false);
+echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Contacts/ListView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
@@ -282,65 +325,57 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
+// Setting the record count string
+if ($navigation_array['start'] == 1)
+{
+	if($noofrows != 0)
+	$start_rec = $navigation_array['start'];
+	else
+	$start_rec = 0;
+	if($noofrows > $list_max_entries_per_page)
+	{
+		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
+	}
+	else
+	{
+		$end_rec = $noofrows;
+	}
+	
+}
+else
+{
+	if($navigation_array['next'] > $list_max_entries_per_page)
+	{
+		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
+		$end_rec = $navigation_array['next'] - 1;
+	}
+	else
+	{
+		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
+		$end_rec = $noofrows;
+	}
+}
+$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"Contacts");
+$listview_header = getListViewHeader($focus,"Contacts",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
-
-
 
 $listview_entries = getListViewEntries($focus,"Contacts",$list_result,$navigation_array);
-$xtpl->assign("LISTHEADER", $listview_header);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
+if($order_by !='')
+$url_string .="&order_by=".$order_by;
+if($sorder !='')
+$url_string .="&sorder=".$sorder;
 
-if(isset($navigation_array['start']))
-{
-	$startoutput = '<a href="index.php?action=index&module=Contacts'.$url_qry.'&start=1"><b>Start</b></a>';
-}
-else
-{
-	$startoutput = '[ Start ]';
-}
-if(isset($navigation_array['end']))
-{
-	$endoutput = '<a href="index.php?action=index&module=Contacts'.$url_qry.'&start='.$navigation_array['end'].'"><b>End</b></a>';
-}
-else
-{
-	$endoutput = '[ End ]';
-}
-if(isset($navigation_array['next']))
-{
-	$nextoutput = '<a href="index.php?action=index&module=Contacts'.$url_qry.'&start='.$navigation_array['next'].'"><b>Next</b></a>';
-}
-else
-{
-	$nextoutput = '[ Next ]';
-}
-if(isset($navigation_array['prev']))
-{
-	$prevoutput = '<a href="index.php?action=index&module=Contacts'.$url_qry.'&start='.$navigation_array['prev'].'"><b>Prev</b></a>';
-}
-else
-{
-	$prevoutput = '[ Prev ]';
-}
-$xtpl->assign("Start", $startoutput);
-$xtpl->assign("End", $endoutput);
-$xtpl->assign("Next", $nextoutput);
-$xtpl->assign("Prev", $prevoutput);
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Contacts");
+$xtpl->assign("NAVIGATION", $navigationOutput);
+$xtpl->assign("RECORD_COUNTS", $record_string);
 
 $xtpl->parse("main");
 
 $xtpl->out("main");
 
-/*
-$ListView = new ListView();
-$ListView->initNewXTemplate( 'modules/Contacts/ListView.html',$current_module_strings);
-$ListView->setHeaderText("<table cellspacing='0' cellpadding='0'><tr><td><input type='button' class='button' onClick='document.location=\"index.php?module=Contacts&action=BusinessCard\"' name='addbusinesscard' value='{$current_module_strings['LBL_ADD_BUSINESSCARD']}'></td></tr></table>");
-$ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE'] );
-$ListView->setQuery($where, "", "firstname, lastname", "CONTACT");
-$ListView->processListView($seedContact, "main", "CONTACT");
-*/
 ?>

@@ -26,7 +26,7 @@
 
 /*********************************************************************************
 
- * $Id: style.css,v 1.17 2005/03/03 15:27:51 jack Exp $
+ * $Id: style.css,v 1.18 2005/03/17 05:59:33 gjay Exp $
 
  * Description:  Contains a variety of utility functions used to display UI 
 
@@ -278,6 +278,13 @@ A.moduleMenu:hover {
 
 	border-bottom: 1px solid #FFB062;
 
+}
+
+.alphaBg {
+	text-align: center;
+	padding: 1px 5px 1px 5px;
+	border: 1px solid #FFBE7D;
+	background-color: #FFF9F0;
 }
 
 .formHeaderULine {
@@ -1153,9 +1160,9 @@ a.bodylink:hover{ text-decoration:underline;} */
 
  *
 
- * CVS Info: $Id: style.css,v 1.17 2005/03/03 15:27:51 jack Exp $
+ * CVS Info: $Id: style.css,v 1.18 2005/03/17 05:59:33 gjay Exp $
 
- * $Author: jack $
+ * $Author: gjay $
 
  *
 

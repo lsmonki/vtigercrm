@@ -52,6 +52,10 @@ function getCustomFieldTypeName($uitype)
 	{
 		$fldname = 'Url';
 	}
+	elseif($uitype == 56)
+	{
+		$fldname = 'Checkbox';
+	}
 	return $fldname;
 }
 
@@ -279,6 +283,23 @@ function getCustomFieldArray($module)
 	return $custFldArray;
 	
 }
+
+function getCustomFieldTrans($module, $trans_array)
+{
+	global $adb;
+	$tab_id = getTabid($module);	
+	$custquery = "select columnname,fieldlabel from field where generatedtype=2 and tabid=".$tab_id;
+	$custresult = $adb->query($custquery);
+	$custFldArray = Array();
+	$noofrows = $adb->num_rows($custresult);
+	for($i=0; $i<$noofrows; $i++)
+	{
+		$colName=$adb->query_result($custresult,$i,"columnname");
+		$fldLbl = $adb->query_result($custresult,$i,"fieldlabel");
+		$trans_array[$colName] = $fldLbl;
+	}	
+}
+
 
 function CustomFieldSearch($customfieldarray, $fldModule, $tableName,$colidName,$app_strings,$theme,$fieldlabel,$column)
 {

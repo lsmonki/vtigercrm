@@ -11,14 +11,14 @@
 <html>
 <body>
 <br>
-<br>
 <table width="60%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
-<tr height="25">
-<td class="moduleListTitle"><b><?php echo $mod_strings['LBL_GROUP_NAME']; ?></b></td><td class="moduleListTitle"><div align="center"><b><?php echo $mod_strings['LBL_GROUP_MEMBERS_LIST']; ?></b></div></td> 
+<tr height="20">
+<td class="moduleListTitle" style='padding:0px 3px 0px 3px;'><?php echo $mod_strings['LBL_GROUP_NAME']; ?></td>
+<td class="moduleListTitle" style='padding:0px 3px 0px 3px;'><?php echo $mod_strings['LBL_GROUP_MEMBERS_LIST']; ?></td> 
 </tr>
 <tr class="oddListRow">
-<td><?php echo $_REQUEST['groupname'] ?></td>
-<td><div align="center"><?php echo $_REQUEST['groupmembers'] ?></div></td>
+<td style='padding:0px 3px 0px 3px;' height='21'><?php echo $_REQUEST['nameofgroup'] ?></td>
+<td style='padding:0px 3px 0px 3px;' height='21'><?php echo $_REQUEST['groupmembers'] ?></td>
 </tr>
 </table>
 

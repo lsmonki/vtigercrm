@@ -105,6 +105,8 @@ $focus = new $current_bean_type();
 //Constructing the custom field Array
 require_once('include/CustomFieldUtil.php');
 $custFldArray = getCustomFieldArray($_REQUEST['module']);
+p("IMP 4: custFldArray");
+p($custFldArray);
 //Initializing  an empty Array to store the custom field Column Name and Value
 $resCustFldArray = Array();
 
@@ -336,8 +338,8 @@ foreach ($rows as $row)
 		// now do any special processing
 		$focus->process_special_fields(); 
 
-		//$focus->save();
-		$focus->saveentity($module);
+		$focus->save($module);
+		//$focus->saveentity($module);
 		$return_id = $focus->id;
 
 		if(count($resCustFldArray)>0)

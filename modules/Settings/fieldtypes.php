@@ -72,7 +72,11 @@ $image_path=$theme_path."images/";
   </tr>
   <tr>
     <td width="20"><div align="center"><img src="<?php echo $image_path."url.gif" ?>" width="20" height="20"></div></td>
-    <td nowrap id="field8" class="fieldType" onClick="parent.selFieldType(8)"><?php echo "URL"; ?></td>
+    <td nowrap id="field8" class="fieldType" onClick="parent.selFieldType(8)"><?php echo $mod_strings['LBL_URL']; ?></td>
+  </tr>
+  <tr>
+    <td width="20"><div align="center"><img src="<?php echo $image_path."checkbox.gif" ?>" width="20" height="20"></div></td>
+    <td nowrap id="field9" class="fieldType" onClick="parent.selFieldType(9)"><?php echo $mod_strings['LBL_CHECK_BOX']; ?></td>
   </tr>
 </table>
 </body>

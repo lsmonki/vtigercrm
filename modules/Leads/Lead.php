@@ -17,13 +17,14 @@ include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
+require_once('data/CRMEntity.php');
 require_once('modules/Activities/Activity.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils.php');
 
-class Lead extends SugarBean {
+class Lead extends CRMEntity {
 	var $log;
 	var $db;
 
@@ -210,7 +211,7 @@ return $exists;
 		{
           
   $query = $this->constructCustomQueryAddendum() . ", 
-			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.city as city, leadaddress.state as state,leadaddress.code as code,leadaddress.country as country,users.user_name, users.status as user_status
+			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.city city, leadaddress.state state,leadaddress.code code,leadaddress.country country,users.user_name, users.status user_status
                         FROM ".$this->entity_table."
                         LEFT JOIN leaddetails
                         ON crmentity.crmid=leaddetails.leadid
@@ -227,7 +228,7 @@ return $exists;
 		else
 		{
                   $query = "SELECT 
-			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.*,users.user_name, users.status as user_status FROM ".$this->entity_table."
+			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.*,users.user_name, users.status user_status FROM ".$this->entity_table."
                         LEFT JOIN leaddetails
                         ON crmentity.crmid=leaddetails.leadid
                         LEFT JOIN leadsubdetails
@@ -259,7 +260,7 @@ return $exists;
 	function get_activities($id)
 	{
           // First, get the list of IDs.
-	    $query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
+	    $query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
           include('modules/Leads/RenderRelatedListUI.php');
           renderRelatedTasks($query,$id);
         }
@@ -303,9 +304,9 @@ return $exists;
 
   function get_attachments($id)
   {
-		$query = 'select notes.title,"Notes      " as ActivityType, notes.filename, attachments.type as "FileType",crm2.modifiedtime as "lastmodified", notes.notesid as noteattachmentid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$id;
+		$query = "select notes.title,'Notes      ' ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
-                $query .= 'select "          " as Title ,"Attachments" as ActivityType, attachments.name as "filename", attachments.type as "FileType",crm2.modifiedtime as "lastmodified", attachments.attachmentsid as noteattachmentid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid='.$id;
+                $query .= "select '          ' title ,'Attachments' ActivityType, attachments.name filename, attachments.type FileType,crm2.modifiedtime lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
 
     renderRelatedAttachments($query,$id);
   }
@@ -457,7 +458,14 @@ function getColumnNames_Lead()
  	$table1flds = $this->db->getColumnNames("leaddetails");
 	$table2flds = $this->db->getColumnNames("leadsubdetails");
 	$table3flds = $this->db->getColumnNames("leadaddress");
-	$mergeflds = array_merge($table1flds,$table2flds,$table3flds);
+	$sql1 = "select fieldlabel from field where generatedtype=2 and tabid=7";
+	$result = $this->db->query($sql1);
+	$numRows = $this->db->num_rows($result);
+	for($i=0; $i < $numRows;$i++)
+	{
+   	$custom_fields[$i] = $this->db->query_result($result,$i,"fieldlabel");
+	}
+	$mergeflds = array_merge($table1flds,$table2flds,$table3flds,$custom_fields);
 	return $mergeflds;
  }
 }

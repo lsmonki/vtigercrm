@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/index.php,v 1.3 2005/02/15 09:21:32 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/index.php,v 1.5 2005/03/25 13:37:45 samk Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -26,6 +26,15 @@ global $mod_strings;
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_TITLE'], true); 
 echo "\n<BR>\n";
 include ('modules/Contacts/ListView.php'); 
-include ('modules/Import/ImportButton.php');
+
+echo "<br><table width='250' cellpadding=0 cellspacing=0><tr><td>";
+echo get_form_header($mod_strings['LBL_TOOL_FORM_TITLE'], "", false);
+echo "</td></tr>";
+echo "<tr><td class='formOuterBorder' style='padding: 10px'>";
+echo "<ul>";
+include('modules/Import/ImportButton.php');
+echo "<li><a href='index.php?module=Contacts&action=AddBusinessCard&return_module=Contacts&return_action=ListView'>".$mod_strings[LBL_ADD_BUSINESSCARD]."</a></li>";
+echo "</ul>";
+echo "</td></tr></table>";
 
 ?>

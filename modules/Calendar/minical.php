@@ -85,7 +85,7 @@ echo "</script>\n";
 
 $yoff =  Date("Y") + 10;
 echo "<body leftmargin=\"0\" topmargin=\"5\">\n";
-echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"250\" class=\"outer\">\n";
+echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" class=\"outer\">\n";
 echo "<tr><td>";
 echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\" class=\"navigate\">\n";
 echo "<tr>\n";
@@ -103,10 +103,17 @@ if ( $lm == 0 ) {
   $ly = $y -1;
 }
 $m_name = $current_module_strings['cal_month_long'][$m];
-
-echo "<td align=\"left\"><a class=\"nodeco\" href=\"".$callink."calendar_month&f=".$f."&n=".$n."&m=".$lm."&d=".$d."&y=".$ly."\" title=\"Previous Month\"><img border=\"0\" src=\"".$image_path."left.gif\"></a></td>\n";
+if($currentModule == 'Home')
+{
+	$path_name = "index.php?module=Home&action=index";
+}
+else
+{
+	$path_name = "index.php?module=Calendar&action=calendar_day";
+}
+echo "<td align=\"left\"><a class=\"nodeco\" href=\"".$path_name."&f=".$f."&n=".$n."&m=".$lm."&d=".$d."&y=".$ly."\" title=\"Previous Month\"><img border=\"0\" src=\"".$image_path."left.gif\"></a></td>\n";
 echo "<td align=\"center\"><b>". $m_name ." ". $y ."</b></td>\n";
-echo "<td align=\"right\"><a class=\"nodeco\" href=\"". $callink ."calendar_month&f=".$f."&n=".$n."&m=".$nm."&d=".$d."&y=".$ny."\" title=\"Next Month\"><img border=\"0\" src=\"".$image_path."right.gif\"></a></td>\n";
+echo "<td align=\"right\"><a class=\"nodeco\" href=\"". $path_name ."&f=".$f."&n=".$n."&m=".$nm."&d=".$d."&y=".$ny."\" title=\"Next Month\"><img border=\"0\" src=\"".$image_path."right.gif\"></a></td>\n";
 echo "</tr>\n";
 echo "</table>\n";
 echo "</td></tr>\n";

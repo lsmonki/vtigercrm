@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/modules/Products/Delete.php,v 1.3 2005/03/04 06:47:44 rajeshkannan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/modules/Products/Delete.php,v 1.4 2005/03/22 13:53:55 rajeshkannan Exp $
  * Description:  Deletes an Account record and then redirects the browser to the 
  * defined return URL.
  ********************************************************************************/
@@ -29,11 +29,22 @@ $focus = new Product();
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
-$sql = 'delete from seproductsrel where crmid = '.$_REQUEST['return_id'].' and productid = '.$_REQUEST['record'];
-$adb->query($sql);
+if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
+{
+	if($_REQUEST['return_module'] == 'Activities')
+        	$sql = 'delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
+
+	if($_REQUEST['return_module'] == 'Potentials')
+		$sql = 'delete from seproductsrel where crmid = '.$_REQUEST['return_id'].' and productid = '.$_REQUEST['record'];
+
+	$adb->query($sql);
+}
 
 if($_REQUEST['module'] == $_REQUEST['return_module'])
 	$focus->mark_deleted($_REQUEST['record']);
 
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
+if(isset($_REQUEST['activity_mode']))
+	$activitymode = '&activity_mode='.$_REQUEST['activity_mode'];
+
+header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id'].$activitymode);
 ?>

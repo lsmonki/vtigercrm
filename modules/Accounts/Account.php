@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.44 2005/03/04 08:49:12 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.51 2005/03/25 11:33:54 rank Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -25,6 +25,7 @@ include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
+require_once('data/CRMEntity.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Activities/Activity.php');
@@ -33,7 +34,7 @@ require_once('modules/Emails/Email.php');
 require_once('include/utils.php');
 
 // Account is used to store account information.
-class Account extends SugarBean {
+class Account extends CRMEntity {
 	var $log;
 	var $db;
 
@@ -101,7 +102,7 @@ class Account extends SugarBean {
 
 	var $search_fields = Array(
 				'Account Name'=>Array('account'=>'accountname'),
-				'City'=>Array('accountbillads'=>'bill_city'), 
+				'City'=>Array('accountbillads'=>'city'), 
 				);
 	
 	var $search_fields_name = Array(
@@ -202,7 +203,7 @@ class Account extends SugarBean {
 	*/
 	function get_contacts($id)
 	{
-		$query = 'SELECT contactdetails.* from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  where crmentity.deleted=0 and contactdetails.accountid = '.$id;
+		$query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  where crmentity.deleted=0 and contactdetails.accountid = '.$id;
           renderRelatedContacts($query,$id);
         }
 
@@ -214,7 +215,7 @@ class Account extends SugarBean {
   function get_opportunities($id)
   {
 //	$query = "select products.productid, products.productname, products.productcode, potential.potentialid, potential.accountid, potential.potentialname, potential.amount, potential.closingdate, potential.potentialtype, crmentity.crmid from products,potential inner join seproductsrel on seproductsrel.crmid = potential.accountid and seproductsrel.productid=products.productid inner join crmentity on crmentity.crmid=potential.potentialid";
-	$query = 'select potential.potentialid, potential.accountid, potential.potentialname, potential.potentialtype, potential.amount, potential.closingdate, potential.potentialtype, crmentity.crmid from potential inner join crmentity on crmentity.crmid= potential.potentialid where crmentity.deleted=0 and potential.accountid= '.$id ;
+	$query = 'select potential.potentialid, potential.accountid, potential.potentialname, potential.potentialtype, potential.amount, potential.closingdate, potential.potentialtype, users.user_name, crmentity.crmid, crmentity.smownerid from potential inner join crmentity on crmentity.crmid= potential.potentialid left join users on crmentity.smownerid = users.id where crmentity.deleted=0 and potential.accountid= '.$id ;
     //include('modules/Accounts/RenderRelatedListUI.php');
     renderRelatedPotentials($query,$id);
     // return $this->build_related_list($query, new potential());
@@ -229,7 +230,7 @@ class Account extends SugarBean {
 	{
           // First, get the list of IDs.
 //          $query = "SELECT activity.subject,semodule,activitytype,date_start,status,priority from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid where seactivityrel.crmid=".$id;
-	  $query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
+	  $query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0";
           renderRelatedTasks($query,$id);
 
           //return $this->build_related_list($query, new Task());
@@ -285,8 +286,9 @@ class Account extends SugarBean {
 	}
 	function get_attachments($id)
 	{
-		$query = 'select notes.title,"Notes      " as ActivityType, notes.filename, attachments.type as "FileType",crm2.modifiedtime as "lastmodified", notes.notesid as noteattachmentid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$id;
-		$query .= ' union all ';                                                                                                    $query .= 'select "          " as Title ,"Attachments" as ActivityType, attachments.name as "filename", attachments.type as "FileType",crm2.modifiedtime as "lastmodified", attachments.attachmentsid as noteattachmentid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid='.$id;
+		$query = "select notes.title,'Notes      '  ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
+		$query .= ' union all ';
+		$query .= "select '          '  title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType, crm2.modifiedtime  lastmodified, attachments.attachmentsid  attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
 		renderRelatedAttachments($query,$id);
 	}
 	function get_tickets($id)
@@ -592,8 +594,8 @@ return $exists;
 		{
           
   $query = $this->constructCustomQueryAddendum() . ", 
-			account.*, ".$this->entity_table.".*, accountbillads.city as billing_city, accountbillads.country as billing_country, accountbillads.code as billing_code, accountbillads.state as billing_state, accountbillads.street as billing_street, accountshipads.city as shipping_city, accountshipads.country as shipping_country, accountshipads.code as shipping_code, accountshipads.state as shipping_state,  accountshipads.street as shipping_street,
-                        users.user_name, users.status as user_status
+			account.*, ".$this->entity_table.".*, accountbillads.city  billing_city, accountbillads.country  billing_country, accountbillads.code  billing_code, accountbillads.state  billing_state, accountbillads.street  billing_street, accountshipads.city  shipping_city, accountshipads.country  shipping_country, accountshipads.code  shipping_code, accountshipads.state  shipping_state,  accountshipads.street  shipping_street,
+                        users.user_name, users.status  user_status
                         FROM ".$this->entity_table."
                         LEFT JOIN account
                         ON crmentity.crmid=account.accountid
@@ -610,8 +612,8 @@ return $exists;
 		else
 		{
                   $query = "SELECT 
-			account.*, ".$this->entity_table.".*, accountbillads.city as billing_city, accountbillads.country as billing_country, accountbillads.code as billing_code, accountbillads.state as billing_state, accountbillads.street as billing_street, accountshipads.city as shipping_city, accountshipads.country as shipping_country, accountshipads.code as shipping_code, accountshipads.state as shipping_state,  accountshipads.street as shipping_street,
-                        users.user_name, users.status as user_status
+			account.*, ".$this->entity_table.".*, accountbillads.city  billing_city, accountbillads.country  billing_country, accountbillads.code  billing_code, accountbillads.state billing_state, accountbillads.street billing_street, accountshipads.city shipping_city, accountshipads.country shipping_country, accountshipads.code shipping_code, accountshipads.state shipping_state,  accountshipads.street shipping_street,
+                        users.user_name, users.status user_status
                         FROM ".$this->entity_table."
                         LEFT JOIN account
                         ON crmentity.crmid=account.accountid
@@ -644,7 +646,15 @@ function getColumnNames_Acnt()
 	$table1flds = $this->db->getColumnNames("account");
 	$table2flds = $this->db->getColumnNames("accountbillads");
 	$table3flds = $this->db->getColumnNames("accountshipads");
-	$mergeflds = array_merge($table1flds,$table2flds,$table3flds);
+	$sql1 = "select fieldlabel from field where generatedtype=2 and tabid=6";
+	$result = $this->db->query($sql1);
+	$numRows = $this->db->num_rows($result);
+	for($i=0; $i < $numRows;$i++)
+	{
+   	$custom_fields[$i] = $this->db->query_result($result,$i,"fieldlabel");
+	}
+    
+	$mergeflds = array_merge($table1flds,$table2flds,$table3flds,$custom_fields);
 	return $mergeflds;
 }
 

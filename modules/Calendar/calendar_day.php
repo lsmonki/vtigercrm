@@ -138,8 +138,14 @@ function check_form()
   <br>
 </div>
 <?
-
-     $ts = mktime(12,0,0,substr($this->t,4,2),substr($this->t,6,2),substr($this->t,0,4));
+     if(isset($this->m) && isset($this->d) && isset($this->y))
+     {	
+	$ts = mktime(12,0,0,$this->m,$this->d,$this->y);
+     }
+     else
+     {
+     	$ts = mktime(12,0,0,substr($this->t,4,2),substr($this->t,6,2),substr($this->t,0,4));
+     }
      $from = new DateTime();
      $last_day = new DateTime();
      $next_day = new DateTime();
@@ -246,7 +252,7 @@ function check_form()
 
      echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">";
      echo "<form action=\"". $callink ."calendar_day\" method=\"get\">\n";
-     echo "<tr><td width=\"70%\">";
+     echo "<tr><td width=\"65%\">";
 	 echo "<table class=\"outer\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr><td>\n";
      echo "<table class=\"navigate\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
      //echo " <tr>\n";
@@ -323,8 +329,8 @@ function check_form()
 	 echo " <td align=\"center\" nowrap=\"nowrap\">&nbsp;\n";
  	 echo " </td>\n";
 	 echo " <td nowrap=\"nowrap\" width=\"30\" align=\"center\">\n";
-     echo $this->pref->menulink($callink ."calendar_day&t=".$next_day->getYYYYMMDD(),$this->pref->getImage(right,'list'),$next_day->getDate());
-     echo "</td></tr>\n";
+     	 echo $this->pref->menulink($callink ."calendar_day&t=".$next_day->getYYYYMMDD(),$this->pref->getImage(right,'list'),$next_day->getDate());
+     	 echo "</td></tr>\n";
 	 echo "</table>\n";
 	 echo "</td></tr></table>\n";
 
@@ -363,6 +369,15 @@ function check_form()
 
      if ( isset ($_GET['t']) ) {
        $this->t = $_GET['t'];
+     }
+     if ( isset ($_GET['m']) ) {
+       $this->m = $_GET['m'];
+     }
+     if ( isset ($_GET['d']) ) {
+       $this->d = $_GET['d'];
+     }
+     if ( isset ($_GET['y']) ) {
+       $this->y = $_GET['y'];
      }
      $this->addHidden("t", $this->t);
      $this->uids = cal_parse_options($this->pref,$this->teamname);

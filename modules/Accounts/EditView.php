@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/EditView.php,v 1.14 2005/02/19 12:07:19 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/EditView.php,v 1.19 2005/03/24 16:18:38 samk Exp $
  * Description:  TODO To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -27,6 +27,7 @@ require_once('modules/Accounts/Forms.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/uifromdbutil.php');
+require_once('include/FormValidationUtil.php');
 
 global $app_strings;
 global $mod_strings;
@@ -47,17 +48,19 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 } 
 
 //get Block 1 Information
-
+$block_1_header = getBlockTableHeader("LBL_ACCOUNT_INFORMATION");
 $block_1 = getBlockInformation("Accounts",1,$focus->mode,$focus->column_fields);
 
 
 
 //get Address Information
 
+$block_2_header = getBlockTableHeader("LBL_ADDRESS_INFORMATION");
 $block_2 = getBlockInformation("Accounts",2,$focus->mode,$focus->column_fields);
 
 //get Description Information
 
+$block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
 $block_3 = getBlockInformation("Accounts",3,$focus->mode,$focus->column_fields);
 
 //get Custom Field Information
@@ -66,8 +69,9 @@ if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
         $cust_fld .=  '<tr><td>';
+	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
+        $cust_fld .= $block_5_header;
         $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= '<tr><th align="left" class="formSecHeader" colspan="2">Custom Information</th></tr>';
         $cust_fld .= $block_5;
         $cust_fld .= '</table>';
         $cust_fld .= '</td></tr></table>';
@@ -92,8 +96,11 @@ $xtpl=new XTemplate ('modules/Accounts/EditView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("BLOCK1", $block_1);
+$xtpl->assign("BLOCK1_HEADER", $block_1_header);
 $xtpl->assign("BLOCK2", $block_2);
+$xtpl->assign("BLOCK2_HEADER", $block_2_header);
 $xtpl->assign("BLOCK3", $block_3);
+$xtpl->assign("BLOCK3_HEADER", $block_3_header);
 
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
@@ -118,6 +125,63 @@ $xtpl->assign("ID", $focus->id);
 
 
  $xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+
+
+
+
+
+$account_tables = Array('account','crmentity','accountbillads','accountshipads','accountscf'); 
+ $tabid = getTabid("Accounts");
+ $validationData = getDBValidationData($account_tables,$tabid);
+ $fieldName = '';
+ $fieldLabel = '';
+ $fldDataType = '';
+
+ $rows = count($validationData);
+ foreach($validationData as $fldName => $fldLabel_array)
+ {
+   if($fieldName == '')
+   {
+     $fieldName="'".$fldName."'";
+   }
+   else
+   {
+     $fieldName .= ",'".$fldName ."'";
+   }
+   foreach($fldLabel_array as $fldLabel => $datatype)
+   {
+	if($fieldLabel == '')
+	{
+			
+     		$fieldLabel = "'".$fldLabel ."'";
+	}		
+      else
+       {
+      $fieldLabel .= ",'".$fldLabel ."'";
+        }
+ 	if($fldDataType == '')
+         {
+      		$fldDataType = "'".$datatype ."'";
+    	}
+	 else
+        {
+       		$fldDataType .= ",'".$datatype ."'";
+     	}
+   }
+ }
+
+$xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
+$xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
+$xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
+
+
+
+
+
+
+
+
+
 
 //CustomField
 //$date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);

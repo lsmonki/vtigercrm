@@ -51,13 +51,19 @@ $xtpl->assign("BLOCK2", $block_2);
 $block_3 = getDetailBlockInformation("HelpDesk",3,$focus->column_fields);
 $xtpl->assign("BLOCK3", $block_3);
 
+$block_1_header = getBlockTableHeader("LBL_TICKET_INFORMATION");
+$block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
+$xtpl->assign("BLOCK1_HEADER", $block_1_header);
+$xtpl->assign("BLOCK3_HEADER", $block_3_header);
+
 $block_5 = getDetailBlockInformation("HelpDesk",5,$focus->column_fields);
 if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
         $cust_fld .=  '<tr><td>';
+	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
+        $cust_fld .= $block_5_header;
         $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= '<tr><th align="left" class="formSecHeader" colspan="2">Custom Information</th></tr>';
         $cust_fld .= $block_5;
         $cust_fld .= '</table>';
         $cust_fld .= '</td></tr></table>';
@@ -68,7 +74,7 @@ if(trim($block_5) != '')
 $xtpl->assign("CUSTOMFIELD", $cust_fld);
 
 $permissionData = $_SESSION['action_permission_set'];
-if($permissionData[$tabid]['1'] == 0)
+if(isPermitted("HelpDesk",1,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='HelpDesk'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
 
@@ -77,7 +83,7 @@ if($permissionData[$tabid]['1'] == 0)
 }
 
 
-if($permissionData[$tabid]['2'] == 0)
+if(isPermitted("HelpDesk",2,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='HelpDesk'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
 }
@@ -96,10 +102,10 @@ global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
 
-/*
+
 //Constructing the Related Lists from here
 include('modules/HelpDesk/RenderRelatedListUI.php');
-
+/*
 if($tab_per_Data[2] == 0)
 {
         if($permissionData[2][3] == 0)
@@ -107,6 +113,8 @@ if($tab_per_Data[2] == 0)
 		$focus->get_opportunities($_REQUEST['record']);
 	}
 }
+*/
+$focus->get_activities($_REQUEST['record']);
 if($tab_per_Data[8] == 0)
 {
         if($permissionData[8][3] == 0)
@@ -114,7 +122,7 @@ if($tab_per_Data[8] == 0)
 		$focus->get_attachments($_REQUEST['record']);
 	}
 }
-*/
+
 /*
 require_once('modules/Products/binaryfilelist.php');
 echo '<br><br>';

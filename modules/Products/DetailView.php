@@ -46,13 +46,19 @@ $block_1 = getDetailBlockInformation("Products",1,$focus->column_fields);
 $xtpl->assign("BLOCK1", $block_1);
 $block_2 = getDetailBlockInformation("Products",2,$focus->column_fields);
 $xtpl->assign("BLOCK2", $block_2);
+$block_1_header = getBlockTableHeader("LBL_PRODUCT_INFORMATION");
+$block_2_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
+$xtpl->assign("BLOCK1_HEADER", $block_1_header);
+$xtpl->assign("BLOCK2_HEADER", $block_2_header);
+
 $block_5 = getDetailBlockInformation("Products",5,$focus->column_fields);
 if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
         $cust_fld .=  '<tr><td>';
+	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
+        $cust_fld .= $block_5_header;
         $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= '<tr><th align="left" class="formSecHeader" colspan="2">Custom Information</th></tr>';
         $cust_fld .= $block_5;
         $cust_fld .= '</table>';
         $cust_fld .= '</td></tr></table>';
@@ -64,7 +70,7 @@ $xtpl->assign("CUSTOMFIELD", $cust_fld);
 
 
 $permissionData = $_SESSION['action_permission_set'];
-if($permissionData[$tabid]['1'] == 0)
+if(isPermitted("Products",1,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Products'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
 
@@ -73,7 +79,7 @@ if($permissionData[$tabid]['1'] == 0)
 }
 
 
-if($permissionData[$tabid]['2'] == 0)
+if(isPermitted("Products",2,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Products'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
 }

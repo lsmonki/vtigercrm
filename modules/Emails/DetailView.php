@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/DetailView.php,v 1.18 2005/03/05 05:37:47 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/DetailView.php,v 1.22 2005/03/24 19:09:21 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -103,6 +103,13 @@ $xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_stri
 //get Email Information
 $block_1 = getDetailBlockInformation("Emails",1,$focus->column_fields);
 $xtpl->assign("BLOCK1", $block_1);
+$block_2 = getDetailBlockInformation("Emails",2,$focus->column_fields);
+$xtpl->assign("BLOCK2", $block_2);
+$block_3 = getDetailBlockInformation("Emails",4,$focus->column_fields);
+$xtpl->assign("BLOCK4", $block_3);
+
+$block_1_header = getBlockTableHeader("LBL_EMAIL_INFORMATION");
+$xtpl->assign("BLOCK1_HEADER", $block_1_header);
 
 $xtpl->assign("ID", $focus->id);
 
@@ -115,7 +122,7 @@ $xtpl->assign("FILENAME",$filename);
 */
  
 $permissionData = $_SESSION['action_permission_set'];
-if($permissionData[$tabid]['1'] == 0)
+if(isPermitted("Emails",1,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
 
@@ -124,7 +131,7 @@ if($permissionData[$tabid]['1'] == 0)
 }
 
 
-if($permissionData[$tabid]['2'] == 0)
+if(isPermitted("Emails",2,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
 }
@@ -176,7 +183,7 @@ if($tab_per_Data[2] == 0)
 	}
 }
 */
-//$focus->get_users($focus->id);
+$focus->get_users($focus->id);
 if($tab_per_Data[8] == 0)
 {
         if($permissionData[8][3] == 0)

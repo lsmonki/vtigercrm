@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/phprint.php,v 1.4 2004/12/21 20:01:38 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/phprint.php,v 1.5 2005/03/14 07:50:04 samk Exp $
  * Description: Main file and starting point for the application.  Calls the
  * theme header and footer files defined for the user as well as the module as
  * defined by the input parameters.
@@ -27,9 +27,9 @@ if (ini_get("allow_url_fopen") != 1) {
         die("You must have the allow_url_fopen directive in your php.ini file enabled");
 }
 
-$config['start_tag'] = "<!-- startscrmprint -->";
-$config['stop_tag'] = "<!-- stopscrmprint -->";
-$config['default_charset'] = "utf-8";
+$data_print['start_tag'] = "<!-- startscrmprint -->";
+$data_print['stop_tag'] = "<!-- stopscrmprint -->";
+$data_print['default_charset'] = "utf-8";
 
 require_once("config.php");
 require_once("include/utils.php");
@@ -63,7 +63,7 @@ while ($data = fgets($fp, 4096)) {
 			// Found character set to use
 			$charset = $data;
 		}
-        if (strpos($data, $config['start_tag']) !== FALSE) {
+        if (strpos($data, $data_print['start_tag']) !== FALSE) {
         	// Found start tag, begin collecting data
         	$get = TRUE;
         }
@@ -71,7 +71,7 @@ while ($data = fgets($fp, 4096)) {
         	// Collect data into $page_str to be later processed
         	$page_str .= $data;
         }
-        if (strpos($data, $config['stop_tag']) !== FALSE) {
+        if (strpos($data, $data_print['stop_tag']) !== FALSE) {
         	// Found stop tag, stop collecting data
         	$get = FALSE;
         }
@@ -86,7 +86,7 @@ if (isset($charset)) {
 	echo $charset . "\n";
 }
 else {
-	echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $config['default_charset'] . "\">\n";
+	echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $data_print['default_charset'] . "\">\n";
 }
 ?>
 <style type="text/css" media="all">

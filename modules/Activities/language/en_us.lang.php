@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/language/en_us.lang.php,v 1.7 2005/03/02 13:56:52 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/language/en_us.lang.php,v 1.11 2005/03/28 06:34:23 rank Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -23,6 +23,8 @@ $mod_strings = Array(
 'LBL_SEARCH_FORM_TITLE'=>'Activity Search',
 'LBL_LIST_FORM_TITLE'=>'Activity List',
 'LBL_NEW_FORM_TITLE'=>'New Activity',
+'LBL_TASK_INFORMATION'=>'Task Information',
+'LBL_EVENT_INFORMATION'=>'Event Information',
 
 'LBL_NAME'=>'Subject:',
 'LBL_CONTACT_NAME'=>'Contact Name:',
@@ -66,6 +68,32 @@ $mod_strings = Array(
 // Added fields for Attachments in Activities/SubPanelView.php
 'LBL_ATTACHMENTS'=>'Attachments',
 'LBL_NEW_ATTACHMENT'=>'New Attachment',
+
+//Added fields after RC1 - Release
+'LBL_ALL'=>'All',
+'LBL_CALL'=>'Call',
+'LBL_MEETING'=>'Meeting',
+'LBL_TASK'=>'Task',
+
+//Added for 4GA Release
+'Subject'=>'Subject',
+'Assigned To'=>'Assigned To',
+'Start Date & Time'=>'Start Date & Time',
+'Time Start'=>'Time Start',
+'Due Date'=>'Due Date',
+'Related To'=>'Related To',
+'Contact Name'=>'Contact Name',
+'Status'=>'Status',
+'Priority'=>'Priority',
+'Send Notification'=>'Send Notification',
+'Created Time'=>'Created Time',
+'Modified Time'=>'Modified Time',
+'Activity Type'=>'Activity Type',
+'Description'=>'Description',
+'Duration'=>'Duration',
+'Duration Minutes'=>'Duration Minutes',
+'Location'=>'Location',
+
 );
 
 ?>

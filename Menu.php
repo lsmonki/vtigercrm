@@ -22,6 +22,56 @@
 
 global $mod_strings;
 global $app_strings;
+global $moduleList;
+require_once('include/utils.php');
+$permissionData = $_SESSION['action_permission_set'];
+
+$module_menu_array = Array('Contacts' => $app_strings['LNK_NEW_CONTACT'],
+	                   'Leads'=> $app_strings['LNK_NEW_LEAD'],
+	                   'Accounts' => $app_strings['LNK_NEW_ACCOUNT'],
+	                   'Potentials' => $app_strings['LNK_NEW_OPPORTUNITY'],
+	                   'HelpDesk' => $app_strings['LNK_NEW_HDESK'],
+	                   'Products' => $app_strings['LNK_NEW_PRODUCT'],
+	                   'Notes' => $app_strings['LNK_NEW_NOTE'],
+	                   'Emails' => $app_strings['LNK_NEW_EMAIL'],
+			   'Events' => $app_strings['LNK_NEW_EVENT'],
+	                   'Tasks' => $app_strings['LNK_NEW_TASK']
+	                    );
+$module_menu = Array();
+$i= 0;
+foreach($module_menu_array as $module1 => $label)
+{
+	if($module1 == 'Events')
+	{
+		$module_display = 'Activities';
+		$add_url = "&activity_mode=Events";
+		$tabid = getTabid($module1);
+	}
+	elseif($module1 == 'Tasks')
+	{
+		$module_display = 'Activities';
+                $add_url = "&activity_mode=Task";
+		$tabid = getTabid("Activities");
+	}
+	else
+	{
+		$module_display = $module1;
+		$tabid = getTabid($module1);
+	}	
+
+	if(in_array($module_display, $moduleList))
+	{
+		if($permissionData[$tabid][1] ==0)
+		{
+			$tempArray = Array("index.php?module=".$module_display."&action=EditView&return_module=".$module_display."&return_action=DetailView".$add_url, $label);
+			$module_menu[$i] = $tempArray;
+			$i++;
+		}
+	}
+}
+
+
+/*
 $module_menu = Array(
 	Array("index.php?module=Contacts&action=EditView&return_module=Contacts&return_action=DetailView", $app_strings['LNK_NEW_CONTACT']),
 	Array("index.php?module=Leads&action=EditView&return_module=Leads&return_action=DetailView", $app_strings['LNK_NEW_LEAD']),
@@ -34,5 +84,6 @@ $module_menu = Array(
 	Array("index.php?module=Activities&action=EditView&return_module=Activities&activity_mode=Events&return_action=DetailView", $app_strings['LNK_NEW_EVENT']),
 	Array("index.php?module=Activities&action=EditView&return_module=Activities&activity_mode=Task&return_action=DetailView", $app_strings['LNK_NEW_TASK'])
 	);
+*/
 
 ?>

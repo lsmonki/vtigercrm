@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Popup.php,v 1.10 2005/03/05 05:20:11 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Popup.php,v 1.12 2005/03/23 14:19:48 samk Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -26,6 +26,7 @@ require_once('modules/Contacts/Contact.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ComboUtil.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $current_language;
@@ -49,14 +50,23 @@ $comboFieldArray = getComboArray($comboFieldNames);
 if (!isset($where)) $where = "";
 
 $focus = new Contact();
-$query_val = 'false';
-if(isset($_REQUEST['query']))
+
+if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+
+$url_string = '';
+$sorder = 'ASC';
+if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
+$sorder = $_REQUEST['sorder'];
+
+if($popuptype!='') $url_string .= "&popuptype=".$popuptype;
+
+if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
-	$query_val = 'true';
 	// we have a query
+	$url_string .="&query=true";
 	if (isset($_REQUEST['firstname'])) $firstname = $_REQUEST['firstname'];
 	if (isset($_REQUEST['lastname'])) $lastname = $_REQUEST['lastname'];
-	if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
+	if (isset($_REQUEST['title'])) $title = $_REQUEST['title'];
 	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
 
@@ -64,19 +74,19 @@ if(isset($_REQUEST['query']))
 
 	if(isset($lastname) && $lastname != "") {
 			array_push($where_clauses, "contactdetails.lastname like ".PearDatabase::quote($lastname.'%')."");
-			$query_val .= "&lastname=".$lastname;
+			$url_string .= "&lastname=".$lastname;
 	}
 	if(isset($firstname) && $firstname != "") {
 			array_push($where_clauses, "contactdetails.firstname like ".PearDatabase::quote($firstname.'%')."");
-			$query_val .= "&firstname=".$firstname;
+			$url_string .= "&firstname=".$firstname;
 	}
-	if(isset($accountname) && $accountname != "")	{
-			array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%')."");
-			$query_val .= "&accountname=".$accountname;
+	if(isset($title) && $title != "")	{
+			array_push($where_clauses, "contactdetails.title like ".PearDatabase::quote("%".$title.'%')."");
+			$url_string .= "&title=".$title;
 	}
 	if(isset($current_user_only) && $current_user_only != "") {
 			array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-			$query_val .= "&current_user_only=on";
+			$url_string .= "&current_user_only=on";
 	}
 
 	$where = "";
@@ -107,14 +117,18 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
 	$search_form->assign("POPUPTYPE",$popuptype);
+	
+	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
+	if ($sorder !='') $search_form->assign("SORDER", $sorder);
 
 	if (isset($firstname)) $search_form->assign("FIRST_NAME", $_REQUEST['firstname']);
 	if (isset($lastname)) $search_form->assign("LAST_NAME", $_REQUEST['lastname']);
-	if (isset($accountname)) $search_form->assign("COMPANY_NAME", $_REQUEST['accountname']);
+	if (isset($title)) $search_form->assign("TITLE", $_REQUEST['title']);
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Contacts','Popup','lastname','true','basic'));
 	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
 
 	$search_form->parse("main");
@@ -148,6 +162,11 @@ if(isset($where) && $where != '')
 {
 	$list_query .= " AND ".$where;
 }
+if(isset($order_by) && $order_by != '')
+{
+        $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
+}
+
 $list_result = $adb->query($list_query);
 
 //Retreiving the no of rows
@@ -166,57 +185,56 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
+// Setting the record count string
+if ($navigation_array['start'] == 1)
+{
+	if($noofrows != 0)
+	$start_rec = $navigation_array['start'];
+	else
+	$start_rec = 0;
+	if($noofrows > $list_max_entries_per_page)
+	{
+		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
+	}
+	else
+	{
+		$end_rec = $noofrows;
+	}
+	
+}
+else
+{
+	if($navigation_array['next'] > $list_max_entries_per_page)
+	{
+		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
+		$end_rec = $navigation_array['next'] - 1;
+	}
+	else
+	{
+		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
+		$end_rec = $noofrows;
+	}
+}
+$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+
 //Retreive the List View Table Header
-
-
 $focus->list_mode="search";
 $focus->popup_type=$popuptype;
 
-$listview_header = getSearchListViewHeader($focus,"Contacts");
+$listview_header = getSearchListViewHeader($focus,"Contacts",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
-
-
 
 $listview_entries = getSearchListViewEntries($focus,"Contacts",$list_result,$navigation_array);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
+if($order_by !='')
+$url_string .="&order_by=".$order_by;
+if($sorder !='')
+$url_string .="&sorder=".$sorder;
 
-if(isset($navigation_array['start']))
-{
-	$startoutput = '<a href="index.php?action=Popup&module=Contacts&start='.$navigation_array['start'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Start</b></a>';
-}
-else
-{
-	$startoutput = '[ Start ]';
-}
-if(isset($navigation_array['end']))
-{
-	$endoutput = '<a href="index.php?action=Popup&module=Contacts&start='.$navigation_array['end'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>End</b></a>';
-}
-else
-{
-	$endoutput = '[ End ]';
-}
-if(isset($navigation_array['next']))
-{
-	$nextoutput = '<a href="index.php?action=Popup&module=Contacts&start='.$navigation_array['next'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Next</b></a>';
-}
-else
-{
-	$nextoutput = '[ Next ]';
-}
-if(isset($navigation_array['prev']))
-{
-	$prevoutput = '<a href="index.php?action=Popup&module=Contacts&start='.$navigation_array['prev'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Prev</b></a>';
-}
-else
-{
-	$prevoutput = '[ Prev ]';
-}
-$xtpl->assign("Start", $startoutput);
-$xtpl->assign("End", $endoutput);
-$xtpl->assign("Next", $nextoutput);
-$xtpl->assign("Prev", $prevoutput);
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Contacts","Popup");
+$xtpl->assign("NAVIGATION", $navigationOutput);
+$xtpl->assign("RECORD_COUNTS", $record_string);
 
 $xtpl->parse("main");
 

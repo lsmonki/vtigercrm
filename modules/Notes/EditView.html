@@ -1,83 +1,96 @@
 <!--
+
 /*********************************************************************************
+
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+
  * ("License"); You may not use this file except in compliance with the
+
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+
  * Software distributed under the License is distributed on an  "AS IS"  basis,
+
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+
  * the specific language governing rights and limitations under the License.
+
  * The Original Code is:  SugarCRM Open Source
+
  * The Initial Developer of the Original Code is SugarCRM, Inc.
+
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+
  * All Rights Reserved.
+
  * Contributor(s): 
+
  ********************************************************************************/
+
 /*********************************************************************************
+
  * Header: /cvsroot/sugarcrm/sugarcrm/modules/Notes/EditView.html,v 1.9 2004/07/16 03:56:04 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+
  ********************************************************************************/
+
 -->
 <!-- BEGIN: main -->
 <script type="text/javascript" language="Javascript">
+
  function FileToName(thisvalue) {
+
    if (thisvalue.form.name.value == '')
+
            thisvalue.form.name.value = thisvalue.form.filename.value.toString();
+
    return true;
+
  }
+
  </script>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-<tr>
-    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Notes.gif" border="0"></td>
-    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_NOTE}  {NAME}</td>
-	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
-</tr>
-<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
-
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-<tr>
-	<td>
-		<table cellpadding="0" cellspacing="5" border="0"><tr>
-			<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
-                         <input type="hidden" name="max_file_size" value="{MAX_FILE_SIZE}">
-			<input type="hidden" name="module" value="Notes">
-			<input type="hidden" name="record" value="{ID}">
-			<input type="hidden" name="mode" value="{MODE}">
-			<input type="hidden" name="filename" value="{FILENAME}">
-			<input type="hidden" name="action">
-			<input type="hidden" name="form">
-			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
-			<input type="hidden" name="return_id" value="{RETURN_ID}">
-			<input type="hidden" name="return_action" value="{RETURN_ACTION}">
-		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
-		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
-		</tr></table>
-	</td>
-	<td></td>
-	<td align="right" nowrap><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</td>
-</tr>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
-<tr>
-<td>
-	<table width="100%" border="0" cellspacing="1" cellpadding="0">
-	<tr><th align="left" class="formSecHeader" colspan="4">{MOD.LBL_NOTE_INFORMATION}</th></tr>
-	<tr>
-        {BLOCK1}
-        {BLOCK2}
-        {BLOCK3}
-        </table>
-</td></tr></table>
-<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr>
-      <td align="left"></td>
-      <td align="left">
-             <table cellpadding="0" cellspacing="5" border="0">
-             <tr>
-                 <td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" tabindex='5' accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
-               <td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" tabindex='5' accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
-          </tr></table>
-     </td>
-    <td align="left"></td>
- </tr></table>
+<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
+  <input type="hidden" name="max_file_size" value="{MAX_FILE_SIZE}">
+  <input type="hidden" name="module" value="Notes">
+  <input type="hidden" name="record" value="{ID}">
+  <input type="hidden" name="mode" value="{MODE}">
+  <input type="hidden" name="filename" value="{FILENAME}">
+  <input type="hidden" name="action">
+  <input type="hidden" name="form">
+  <input type="hidden" name="return_module" value="{RETURN_MODULE}">
+  <input type="hidden" name="return_id" value="{RETURN_ID}">
+  <input type="hidden" name="return_action" value="{RETURN_ACTION}">
+  <input type="hidden" name="email_id" value="{EMAILID}">
+  <input type="hidden" name="ticket_id" value="{TICKETID}">
+  <input type="hidden" name="fileid" value="{FILEID}">
+  <table width="100%" cellpadding="2" cellspacing="0" border="0">
+    <tr> 
+      <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Notes.gif" border="0"></td>
+      <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_NOTE} 
+        {NAME}</td>
+      <td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> 
+        ]</td>
+    </tr>
+    <tr> 
+      <td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td>
+    </tr>
+  </table>
+  <br>
+  <div align="right"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</div>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+    <tr> 
+      <td> {BLOCK1_HEADER} 
+        <table width="100%" border="0" cellspacing="1" cellpadding="0">
+          {BLOCK1} {BLOCK2} {BLOCK3} </table></td>
+    </tr>
+  </table>
+  <br>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr> 
+      <td> <div align="center">
+          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" tabindex='5' accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
+          <input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
+        </div></td>
+    </tr>
+  </table>
 </form>
-{JAVASCRIPT}
+{JAVASCRIPT} 
 <!-- END: main -->

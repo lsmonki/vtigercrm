@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Logout.php,v 1.7 2005/01/28 10:38:03 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Logout.php,v 1.8 2005/03/21 04:51:21 ray Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -24,6 +24,22 @@ require_once('modules/Users/User.php');
 require_once('config.php');
 require_once('include/backup.php');
 require_once('include/ftp.php');
+require_once('include/database/PearDatabase.php');
+
+$ftpserver = '';
+$ftpuser = '';
+$ftppassword = '';
+global $adb;
+$query = "select * from systems where server_type='backup'";
+$result = $adb->query($query);
+$num_rows = $adb->num_rows($result);
+if($num_rows > 0)
+{
+	$ftpserver = $adb->query_result($result,0,'server');
+	$ftpuser = $adb->query_result($result,0,'server_username');
+	$ftppassword = $adb->query_result($result,0,'server_password');
+}
+
 
 //Taking the Backup of DB
 	$currenttime=date("Ymd_his");

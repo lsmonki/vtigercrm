@@ -1,4 +1,14 @@
-<?
+<?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
 require_once('include/utils.php');
 require_once('include/database/PearDatabase.php');
 function getBlockInformation($module, $block, $mode, $col_fields)
@@ -8,17 +18,8 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 	$tabid = getTabid($module);
 	global $profile_id;
 
-	//retreive the fields from database
-	if($block == 5)
-	{
+	$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
 	
-	 	$sql = "select * from field where tabid=".$tabid." and block=".$block ." and displaytype=1 order by sequence";
-	}
-	else
-	{	
-
-		$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
-	}
 
         $result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
@@ -26,8 +27,8 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 	if (($module == 'Accounts' || $module == 'Contacts') && $block == 2)
 	{
 			$mvAdd_flag = true;
-			$moveAddress = "<td rowspan='5' valign='middle' align='center'><input title='Copy billing address to shipping address'  class='button' onclick='return copyAddressRight(EditView)'  type='button' name='copyright' value='>>' ><br><br>
-				<input title='Copy shipping address to billing address'  class='button' onclick='return copyAddressLeft(EditView)'  type='button' name='copyleft' value='<<' ></td>";
+			$moveAddress = "<td rowspan='5' valign='middle' align='center'><input title='Copy billing address to shipping address'  class='button' onclick='return copyAddressRight(EditView)'  type='button' name='copyright' value='&raquo;' style='padding:0px 2px 0px 2px;font-size:12px'><br><br>
+				<input title='Copy shipping address to billing address'  class='button' onclick='return copyAddressLeft(EditView)'  type='button' name='copyleft' value='&laquo;' style='padding:0px 2px 0px 2px;font-size:12px'></td>";
 	}
 	
 
@@ -39,9 +40,10 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 		$fieldname = $adb->query_result($result,$i,"fieldname");	
 		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 		$maxlength = $adb->query_result($result,$i,"maxlength");
-				
+		$generatedtype = $adb->query_result($result,$i,"generatedtype");				
+
 		$output .= '<tr>';
-		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields);
+		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype);
 		$output .= $custfld;	
 		if ($mvAdd_flag == true)
 		$output .= $moveAddress;
@@ -55,8 +57,9 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 			$fieldname = $adb->query_result($result,$i,"fieldname");	
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$maxlength = $adb->query_result($result,$i,"maxlength");
+			$generatedtype = $adb->query_result($result,$i,"generatedtype");
 			$output .= '';
-			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields);
+			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype);
 			$output .= $custfld;	
 		}
 		$output .= '</tr>';
@@ -75,15 +78,9 @@ function getDetailBlockInformation($module, $block, $col_fields)
         global $profile_id;
 
 	//retreive the fields from database
-	if($block == 5)
-	{
 	
-	 	$sql = "select * from field where tabid=".$tabid." and block=".$block ." and displaytype in (1,2) order by sequence";
-	}
-	else
-	{
-		$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
-	}
+	$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
+	
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	$output='';
@@ -95,8 +92,9 @@ function getDetailBlockInformation($module, $block, $col_fields)
 		$fieldname = $adb->query_result($result,$i,"fieldname");	
 		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 		$maxlength = $adb->query_result($result,$i,"maxlength");
+		$generatedtype = $adb->query_result($result,$i,"generatedtype");
 		$output .= '<tr>';
-		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields);
+		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype);
 		$output .= $custfld;
 		$i++;
 		if($i<$noofrows)
@@ -107,8 +105,10 @@ function getDetailBlockInformation($module, $block, $col_fields)
 			$fieldname = $adb->query_result($result,$i,"fieldname");	
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$maxlength = $adb->query_result($result,$i,"maxlength");
+			$generatedtype = $adb->query_result($result,$i,"generatedtype");
+
 			$output .= '';
-			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields);
+			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype);
 			$output .= $custfld;	
 		}
 		$output .= '</tr>';
@@ -117,4 +117,47 @@ function getDetailBlockInformation($module, $block, $col_fields)
 	return $output;
 
 }
+
+function getBlockTableHeader($header_label)
+{
+	global $mod_strings;
+	$label = $mod_strings[$header_label];
+	$output = '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
+	$output .= '<tr><th align="left" class="formSecHeader">'.$label.'</th></tr>';
+	$output .= '</table>';
+	return $output;
+
+}
+
+function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='index')
+{
+	global $theme;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+	$output = '<td align="right">';
+	if(isset($navigation_array['prev']))
+	{
+		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+
+	}
+	else
+	{
+		$output .= '<img src="'.$image_path.'start_disabled.gif" border="0" align="absmiddle">&nbsp;';
+		$output .= '<img src="'.$image_path.'previous_disabled.gif" border="0" align="absmiddle">&nbsp;';
+	}
+	if(isset($navigation_array['next']))
+	{
+		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['end'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+	}
+	else
+	{
+		$output .= '<img src="'.$image_path.'next_disabled.gif" border="0" align="absmiddle">&nbsp;';
+		$output .= '<img src="'.$image_path.'end_disabled.gif" border="0" align="absmiddle">&nbsp;';
+	}
+	$output .= '</td>';
+	return $output;	
+}
+
 ?>

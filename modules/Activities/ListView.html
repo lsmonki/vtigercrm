@@ -52,74 +52,70 @@ document.massdelete.viewname.value=viewName;
 
 
 
-document.massdelete.action="index.php?module=Activities&action=ListView&return_module=Activities&return_action=ListView&viewname="+viewName;
+document.massdelete.action="index.php?module=Activities&action=index&return_module=Activities&return_action=ListView&viewname="+viewName;
 
 document.massdelete.submit();
 
 }
+function massDelete()
+{
 
+        x = document.massdelete.selected_id.length;
+        idstring = "";
 
+        if ( x == undefined)
+        {
+
+                if (document.massdelete.selected_id.checked)
+                {
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
+                        //alert(document.massdelete.idlist.value);
+                }
+                else
+                {
+                        alert("Please select atleast one entity");
+                        return false;
+                }
+        }
+        else
+        {
+                xx = 0;
+                for(i = 0; i < x ; i++)
+                {
+                        if(document.massdelete.selected_id[i].checked)
+                        {
+                                idstring = document.massdelete.selected_id[i].value +";"+idstring
+                        xx++
+                        }
+                }
+                if (xx != 0)
+                {
+                        document.massdelete.idlist.value=idstring;
+                        //alert(document.massdelete.idlist.value);
+                }
+                else
+                {
+                        alert("Please select atleast one entity");
+                        return false;
+                }
+        }
+        document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Activities&return_action=ListView"
+}
 
 </script>
-
-
 
 <table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>	
 
 	<tr height="20">
 
-		<td COLSPAN="15" class="listFormHeaderLinks">
+		<td COLSPAN="18" class="listFormHeaderLinks">
 
 			<table border="0" cellpadding="0" cellspacing="0" width="100%">
 
 			<tr>
 
-				<form name="massdelete" method="POST">
-
-				<input name='change_owner' type='hidden'>
-
-				<input name='change_status' type='hidden'>
-
-				<input name='return_action' type='hidden' value="ListView">
-
-				<input name='return_module' type='hidden' value="Activities">
-
-				<input name='idlist' type='hidden' >
-
-				<!--input name='action' type='hidden' value="index"-->
-
-				<input name='viewname' type='hidden'>
-
-				<input name='module' type='hidden' value='Activities'>
-
-			   <td>Select View : 
-
-                                   <SELECT NAME="view" onchange="showDefaultCustomView(this)">
-
-                                   <OPTION VALUE="All">All</option>
-
-                                   <OPTION VALUE="Call">Call</option>
-
-                                   <OPTION VALUE="Meeting">Meeting</option>
-
-                                   <OPTION VALUE="Task">Task</option>
-
-                                   </SELECT>
-
-
-
-<!--
-
-<input class='button' type='submit' value='{APP.LBL_CHANGE_OWNER}' onclick="this.form.change_owner.value='true'; return changeStatus()"/>
-
-			       <input class='button' type='submit' value='{APP.LBL_CHANGE_STATUS}' onclick="this.form.change_status.value='true'; return changeStatus()"/>
-				   -->
-
-			   </td>
-
-			
-
-			   <td align="right">{Start}&nbsp;&nbsp;{Prev}&nbsp;&nbsp;{Next}&nbsp;&nbsp;{End}&nbsp;&nbsp;</td>
+			   <td>&nbsp;{RECORD_COUNTS}</td>
+			   {NAVIGATION}
 
 			</tr>
 

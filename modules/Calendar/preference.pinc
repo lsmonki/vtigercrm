@@ -98,7 +98,8 @@ Function menulink ( $href , $text , $info = "" ,$plus = "", $attr = "") {
    }
    $href = addSessionKey($href,false);
    if ( ! eregi("^(JavaScript:|http:|https:|mailto:|ftp:|gopher:|\./)",$href) ) {
-     $href = $tutos['base'] ."/". $href;
+     #$href = $tutos['base'] ."/". $href;
+     $href = $href;
    }
 
    if ( ($plus != "") ) {

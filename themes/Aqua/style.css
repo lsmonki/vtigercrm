@@ -152,6 +152,13 @@ A.moduleMenu:hover {
 	border-bottom: 1px solid #A1A5A9;
 }
 
+.alphaBg {
+	text-align: center;
+	padding: 1px 5px 1px 5px;
+	border: 1px solid #A1A5A9;
+	background-color: #F5F5F5;
+}
+
 .formHeader {
 	FONT-WEIGHT: bold;
 	FONT-SIZE: 11px;

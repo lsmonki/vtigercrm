@@ -1,20 +1,31 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
 require_once("include/database/PearDatabase.php");
 
-$mail_server=$_REQUEST['mail_server'];
-$mail_server_username=$_REQUEST['mail_server_username'];
-$mail_server_password=$_REQUEST['mail_server_password'];
+$server=$_REQUEST['server'];
+$server_username=$_REQUEST['server_username'];
+$server_password=$_REQUEST['server_password'];
+$server_type = $_REQUEST['server_type'];
 
-$sql="select * from systems";
+$sql="select * from systems where server_type = '".$server_type."'";
 $id=$adb->query_result($adb->query($sql),0,"id");
 
 if($id=='')
 {
 	$id = $adb->getUniqueID("systems");
-	$sql="insert into systems values(" .$id .",'".$_REQUEST['mail_server']."','".$_REQUEST['mail_server_username']."','".$_REQUEST['mail_server_password']."')";
+	$sql="insert into systems values(" .$id .",'".$server."','".$server_username."','".$server_password."','".$server_type."')";
 }
 else
-	$sql="update systems set mail_server = '".$_REQUEST['mail_server']."', mail_server_username = '".$_REQUEST['mail_server_username']."', mail_server_password = '".$_REQUEST['mail_server_password']."'";
+	$sql="update systems set server = '".$server."', server_username = '".$server_username."', server_password = '".$server_password."', server_type = '".$server_type."' where id = ".$id;
 
 $adb->query($sql);
 

@@ -13,10 +13,10 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/5createTables.php,v 1.49 2005/03/04 20:24:24 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/5createTables.php,v 1.57 2005/03/28 07:37:23 samk Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
-
+set_time_limit(600);
 if (isset($_REQUEST['db_name'])) $db_name  				= $_REQUEST['db_name'];
 if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables 	= $_REQUEST['db_drop_tables'];
 if (isset($_REQUEST['db_create'])) $db_create 			= $_REQUEST['db_create'];
@@ -32,7 +32,6 @@ require_once('modules/Leads/Lead.php');
 require_once('modules/Settings/FileStorage.php'); 
 require_once('modules/imports/Headers.php'); 
 require_once('modules/Contacts/Contact.php'); 
-require_once('modules/Calendar/UserCalendar.php'); 
 require_once('modules/Accounts/Account.php'); 
 require_once('modules/Potentials/Opportunity.php'); 
 require_once('modules/Activities/Activity.php'); 
@@ -48,7 +47,6 @@ require_once('modules/Settings/FileStorage.php');
 require_once('data/Tracker.php'); 
 require_once('include/utils.php');
 require_once('modules/Users/Security.php');
-require_once('modules/Users/HelpDesk.php');
 // load up the config_override.php file.  This is used to provide default user settings
 if (is_file("config_override.php")) {
 	require_once("config_override.php");
@@ -193,6 +191,16 @@ function create_default_users()
                 $default_user->save();
 	
         }
+
+	//Inserting values into user2role table
+	$role_query = "select roleid from role where name='administrator'";
+	$db->database->SetFetchMode(ADODB_FETCH_ASSOC); 
+	$role_result = $db->query($role_query);
+	$role_id = $db->query_result($role_result,0,"roleid");
+
+	$sql_stmt1 = "insert into user2role values(".$user->id.",".$role_id.")";
+	$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+
 }
 ?>
 
@@ -235,13 +243,11 @@ $startTime = microtime();
 
 $modules = array(
  "Contact"
-,"UserCalendar"
 ,"Account"
 ,"potential"
 ,"Lead"
 ,"Tab"
 ,"Security"
-,"HelpDesk"
 ,"LoginHistory"
 ,"FileStorage"
 ,"Headers"
@@ -327,15 +333,22 @@ if ($new_tables)
 //}
 
 //Populating users table
-$sql_stmt1 = "insert into users(user_name,user_password,last_name,email1) values('standarduser','stX/AHHNK/Gkw','standarduser','standarduser@standard.user.com')";
+$uid = $db->getUniqueID("users");
+$sql_stmt1 = "insert into users(id,user_name,user_password,last_name,email1) values(".$uid.",'standarduser','stX/AHHNK/Gkw','standarduser','standarduser@standard.user.com')";
 $db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error()); 
 
 
-$sql_stmt1 = "insert into user2role values(1,1)";
-$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+//$sql_stmt1 = "insert into user2role values(1,1)";
+//$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+
+
+$role_query = "select roleid from role where name='standard_user'";
+$db->database->SetFetchMode(ADODB_FETCH_ASSOC); 
+$role_result = $db->query($role_query);
+$role_id = $db->query_result($role_result,0,"roleid");
 
 	
-$sql_stmt2 = "insert into user2role values(2,2)";
+$sql_stmt2 = "insert into user2role values(".$uid.",".$role_id.")";
 $db->query($sql_stmt2) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
 

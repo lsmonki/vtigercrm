@@ -18,8 +18,9 @@ function getAttachmentsList()
 {
 	global $theme,$adb;
 	global $app_strings;
+	global $mod_strings;
 
-	$dbQuery = "SELECT filename,filesize,filetype,description ";
+	$dbQuery = "SELECT filename,filesize,filetype,description,module ";
 
 	$dbQuery .= "FROM wordtemplates" ;
 
@@ -31,22 +32,22 @@ function getAttachmentsList()
 
 $list = '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="90%">';
 
-$list .= '<tr class="moduleListTitle" height=20>';
-$list .='<td> '.$app_strings['LBL_OPERATION'].'</td>';
+$list .= '<tr height=20>';
+$list .='<td width="20%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">'.$app_strings['LBL_OPERATION'].'</div></td>';
 $list .= '';
 
-$list .= '<td width="30%" class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">';
-
-$list .= $app_strings['LBL_FILENAME'].'</td>';
-$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-$list .= '<td width="35%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
-
-$list .= $app_strings['LBL_UPD_DESC'].'</td>';
-$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 $list .= '<td width="20%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
+$list .= $app_strings['LBL_FILENAME'].'</td>';
 
+$list .= '<td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
+$list .= $mod_strings['LBL_MODULENAMES'].'</td>';
+
+$list .= '<td width="20%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
+$list .= $app_strings['LBL_UPD_DESC'].'</td>';
+
+$list .= '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 $list .= $app_strings['LBL_TYPE'].'</td>';
-$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+
 $list .= '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 $list .= $app_strings['LBL_FILE'].'</td>';
 
@@ -63,29 +64,24 @@ if ($i%2==0)
 $trowclass = 'evenListRow';
 else
 $trowclass = 'oddListRow';
-	$list .= '<tr class="'. $trowclass.'"><td><a href="index.php?module=Users&action=deletewordtemplate&filename='.$row["filename"].'"> Del </a> </td><td height="21" style="padding:0px 3px 0px 3px;">';
+	$list .= '<tr class="'. $trowclass.'"><td style="padding:0px 3px 0px 3px;" align="center"><a href="index.php?module=Users&action=deletewordtemplate&filename='.$row["filename"].'"> Del </a> </td><td height="21" style="padding:0px 3px 0px 3px;">';
 
 	 $list .= $row["filename"]; 
 
 	$list .= '</td>';
 	
-	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-
+	$list .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$row["module"].'</td>';
 	$list .= '<td height="21" style="padding:0px 3px 0px 3px;">';
 
 	 $list .= $row["description"]; 
 
 	$list .= '</td>';
 	
-	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-
 	$list .= '<td height="21" style="padding:0px 3px 0px 3px;">';
 
-	 $list .= $row["filetype"]; 
+	$list .= $row["filetype"]; 
 
 	$list .= '</td>';
-
-	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 
 	$list .= '<td height="21" style="padding:0px 3px 0px 3px;">';
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/populateSeedData.php,v 1.15 2005/03/05 08:10:08 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/populateSeedData.php,v 1.17 2005/03/25 20:13:52 simian Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -95,6 +95,12 @@ $seed_user = new User();
 
 $assigned_user_id = $seed_user->retrieve_user_id($assigned_user_name);
 
+global $current_user;
+
+$current_user = new User();
+$result = $current_user->retrieve($assigned_user_id);
+
+
 // Get _dom arrays
 $comboFieldNames = Array('leadsource'=>'leadsource_dom'
 		      ,'leadstatus'=>'lead_status_dom'
@@ -142,7 +148,8 @@ for($i = 0; $i < $company_name_count; $i++)
 
 	$account->column_fields["account_type"] = "Customer";
 
-	$account->saveentity("Accounts");
+	//$account->saveentity("Accounts");
+	$account->save("Accounts");
 	
 	$account_ids[] = $account->id;
 
@@ -175,7 +182,8 @@ for($i = 0; $i < $company_name_count; $i++)
 	$opp->column_fields["amount"] = $amount[$key];
 	$opp->column_fields["account_id"] = $account->id;
 
-	$opp->saveentity("Potentials");
+	//$opp->saveentity("Potentials");
+	$opp->save("Potentials");
 	
 	$opportunity_ids[] = $opp->id;
 
@@ -229,7 +237,8 @@ for($i=0; $i<10; $i++)
 	$account_key = array_rand($account_ids);
 	$contact->column_fields["account_id"] = $account_ids[$account_key];
 
-	$contact->saveentity("Contacts");
+	//$contact->saveentity("Contacts");
+	$contact->save("Contacts");
 
 	
 	// This assumes that there will be one opportunity per company in the seed data.
@@ -315,7 +324,8 @@ for($i=0; $i<10; $i++)
 	$key = array_rand($titles);
 	$lead->column_fields["designation"] = $titles[$key];
 
-	$lead->saveentity("Leads");
+	//$lead->saveentity("Leads");
+	$lead->save("Leads");
 
 //	$adb->println("PSD Lead [".$lead->id."] - name=".$lead->column_fields["lastname"]);
 

@@ -20,9 +20,8 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
+echo '<form action="index.php" method="post" name="new" id="form">';
 echo get_module_title("Users",' Role Information', true);
-echo '<BR>';
-//echo get_form_header("Standard Fields", "", false );
 
 global $adb;
 global $theme;
@@ -52,35 +51,41 @@ function getStdOutput($roleResult, $roleid)
 	global $adb;
 	//echo get_form_header("Profiles", "", false );
 	$standCustFld= '';
-	$standCustFld .= '<table width="25%" cellpadding="2" cellspacing="0" border="0">';
-        $standCustFld .= '<form action="index.php" method="post" name="new" id="form">';
         $standCustFld .= '<input type="hidden" name="module" value="Users">';
         $standCustFld .= '<input type="hidden" name="mode" value="edit">';
         $standCustFld .= '<input type="hidden" name="roleid" value="'.$roleid.'">';
         $standCustFld .= '<input type="hidden" name="action" value="createrole">';
-        $standCustFld .= '<tr><br>';
-	$standCustFld .= '<td><input title="Edit" accessKey="C" class="button" onclick="this.form.action.value=\'createrole\'" type="submit" name="Edit" value="Edit Role">&nbsp;&nbsp;';
-        //$standCustFld .= '<input title="Delete" accessKey="D" class="button" onclick="this.form.action.value=\'DeleteRole\'"  type="submit" name="Delete" value="Delete Role"></td>';
-        $standCustFld .= '</tr></form></table>';
-        $standCustFld .= '<BR>'; 
-	$standCustFld .= '<table border="0" cellpadding="1" cellspacing="0" width="30%">';
-	$standCustFld .=  '<tr height=20>';
-	$standCustFld .=   '<td class="dataLabel mandatory" height="21">Role Name: </td>';
-	$standCustFld .=   '<td align="center" class="value">'.$rolename.'</td>';
+
+	$standCustFld .= '<br><input title="Edit" accessKey="C" class="button" onclick="this.form.action.value=\'createrole\'" type="submit" name="Edit" value="Edit Role">&nbsp;&nbsp;';
+	//Check for Current User
+	global $current_user;
+	$current_role = fetchUserRole($current_user->id);
+	if($roleid != 1 && $roleid != 2 && $roleid != $current_role)
+	{
+        	$standCustFld .= '<input title="Delete" accessKey="D" class="button" onclick="this.form.action.value=\'RoleDeleteStep1\'"  type="submit" name="Delete" value="Delete Role">';
+	}
+        
+        $standCustFld .= '<br><br>'; 
+	$standCustFld .= '<table border="0" cellpadding="1" cellspacing="1" width="50%" class="formOuterBorder">';
+	$standCustFld .=  '<tr colspan="2">';
+	$standCustFld .=   '<td class="formSecHeader" colspan="2">Role Information</td>';
+	$standCustFld .=  '</tr>';	
+	$standCustFld .=  '<tr>';
+	$standCustFld .=   '<td width="40%" nowrap class="dataLabel" height="21">Role Name: </td>';
+	$standCustFld .=   '<td class="dataField">'.$rolename.'</td>';
 	$standCustFld .=  '</tr>';
-	$standCustFld .=  '<tr height=20>';
-	$standCustFld .=   '<td class="dataLabel mandatory" height="21">Associated Profile Name: </td>';
-	$standCustFld .=   '<td align="center" class="value">'.$profilename.'</td>';
+	$standCustFld .=  '<tr>';
+	$standCustFld .=   '<td class="dataLabel" nowrap height="21">Associated Profile Name: </td>';
+	$standCustFld .=   '<td class="dataField">'.$profilename.'</td>';
 	$standCustFld .=  '</tr>';
 	$standCustFld .='</table>';
+	$standCustFld .= '</form>';
 	//echo $standCustFld;	
 	return $standCustFld;
 }
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("ROLEINFO", $standCustFld);
 
-
 $xtpl->parse("main");
 $xtpl->out("main");
-
 ?>

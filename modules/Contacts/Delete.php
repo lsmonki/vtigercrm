@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Delete.php,v 1.4 2005/03/05 04:17:18 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Delete.php,v 1.8 2005/03/16 10:29:55 rank Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -28,14 +28,22 @@ $focus = new Contact();
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
+if($_REQUEST['return_module'] == 'Accounts')
+{
+        $sql = 'update crmentity set deleted = 1 where crmid = '.$_REQUEST['record'];
+        $adb->query($sql);
+}
+
 if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
 {
 	$sql = 'delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
 	$adb->query($sql);
+$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
+$adb->query($sql_recentviewed);
 }
 
 if($_REQUEST['return_module'] == $_REQUEST['module'])
 	$focus->mark_deleted($_REQUEST['record']);
 
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
+header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&activity_mode=".$_REQUEST['activity_mode']."&record=".$_REQUEST['return_id']);
 ?>

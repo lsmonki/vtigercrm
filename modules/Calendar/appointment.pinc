@@ -7,7 +7,7 @@
  */
 
 global $callink;
-$callink = '../../index.php?module=Calendar&action=';
+$callink = 'index.php?module=Calendar&action=';
 define ('APP_NOREP',0);
 define ('APP_REP_WEEK',1);
 define ('APP_REP_MONTH',2);

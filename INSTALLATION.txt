@@ -1,10 +1,19 @@
-To install SugarCRM you need to have a web server (Apache and IIS have been tested), PHP 4 configured, and MySQL installed and configured.
-We also rely on the GD graphics library 2.0 or later for php to be configured.
+--------------------------------
+vtiger CRM 4 Installation Manual
+--------------------------------
+Please refer to the following URLs for installation procedure in various operations systems.
 
-Create a new Database in MySQL for your installation.
-Uncompress our source code in your web application folder and launch a browser to index.php.  
-Fill in all the questions, and you will have a new installation.
+(A) vtiger CRM 4: 
 
-If you would like some sample data to play with, check the generate seed data option during the installation.
+1. Windows: http://vtiger.com/products/crm/help/vtiger_CRM_Installation_Guide_Windows.pdf
 
-If you are deploying this system, it is recommended that you remove the install.php file when you are done to prevent someone from changing the settings.
+2. Linux: http://vtiger.com/products/crm/help/vtiger_CRM_Installation_Guide_Linux.pdf
+
+3. LAMP/WAMP: Please refer to the "Installing  Only vtiger CRM" section in vtiger CRM 4 Windows and Linux Installation Guides.
+
+(B) vtiger Outlook Plug-in 4: http://vtiger.com/products/crm/help/vtiger_Outlook_Plugin_User_Guide.pdf
+
+(C) vitger Office Plug-in 4: http://vtiger.com/products/crm/help/vtiger_Office_Plugin_User_Guide.pdf
+
+(D) vtiger Thunderbird Extension 4: http://vtiger.com/products/crm/help/vtiger_Thunderbird_Extension_User_Guide.pdf
+ 

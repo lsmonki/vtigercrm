@@ -24,8 +24,23 @@ $xtpl=new XTemplate ('modules/Users/detailviewemailtemplate.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("THEME", $theme);
-$result = fetchEmailTemplateInfo($_REQUEST['templatename']);
 
+$sql = "select * from emailtemplates order by templatename";
+$result = $adb->query($sql);
+$temprow = $adb->fetch_array($result);
+$cnt=1;
+$selcount = $_REQUEST['templatename'];	
+do
+{
+  if ($cnt == $selcount)
+  {
+      $templatename = $temprow["templatename"]; 
+  }
+  $cnt++;
+}while($temprow = $adb->fetch_array($result));
+
+$result = fetchEmailTemplateInfo($templatename);
+//
 $emailtemplateResult = $adb->fetch_array($result);
 
 $xtpl->assign("FOLDERNAME", $emailtemplateResult["foldername"]);

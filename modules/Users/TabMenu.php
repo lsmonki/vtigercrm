@@ -13,6 +13,7 @@ include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
+require_once('data/CRMEntity.php');
 
 class TabMenu
 {
@@ -20,7 +21,8 @@ class TabMenu
   function getTabNames($permittedModuleList="")
   {
     
-    $conn= new PearDatabase();
+     global $adb;
+     $conn= $adb;
     if($permittedModuleList=="")
     {
       $sql="SELECT name from tab where presence = 0 order by tabsequence";
@@ -46,7 +48,7 @@ class TabMenu
 
 }
 // TabMenu shown in the header page.
-class Tab extends SugarBean {
+class Tab extends CRMEntity {
 	var $log;
 	var $db;
 

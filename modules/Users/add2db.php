@@ -13,9 +13,13 @@
 
 require_once('include/database/PearDatabase.php');
 require_once('include/utils.php');
-$vtigerpath = $_SERVER['REQUEST_URI'];
-$vtigerpath = str_replace("/index.php?module=Users&action=add2db", "", $vtigerpath);
-$uploaddir = $root_directory .$vtigerpath ."/test/upload/" ;// set this to wherever
+
+#Commented $vtigerpath, showing wrong upload path in source installation
+//$vtigerpath = $_SERVER['REQUEST_URI'];
+//$vtigerpath = str_replace("/index.php?module=Users&action=add2db", "", $vtigerpath);
+//$uploaddir = $root_directory .$vtigerpath ."/test/upload/" ;// set this to wherever
+#Comment ends
+$uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
   $binFile = $_FILES['binFile']['name'];

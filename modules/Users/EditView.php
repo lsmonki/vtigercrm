@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.14 2005/02/23 11:25:07 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.15 2005/03/17 06:34:28 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -61,6 +61,10 @@ if (isset($_REQUEST['return_action']))
 {
         $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
         $RETURN_ACTION = $_REQUEST['return_action'];
+}
+if(isset($_REQUEST['activity_mode']))
+{
+	$xtpl->assign("ACTIVITYMODE",$_REQUEST['activity_mode']);
 }
 if (isset($_REQUEST['return_id']))
 {

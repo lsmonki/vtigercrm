@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.28 2005/03/05 04:15:47 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.37 2005/03/28 19:57:53 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,6 +24,7 @@ include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
+require_once('data/CRMEntity.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Accounts/Account.php');
 require_once('modules/Potentials/Opportunity.php');
@@ -31,7 +32,7 @@ require_once('modules/Users/User.php');
 
 
 // Email is used to store customer information.
-class Email extends SugarBean {
+class Email extends CRMEntity {
 	var $log;
 	var $db;
 
@@ -75,6 +76,7 @@ class Email extends SugarBean {
 	var $rel_cases_table = "emails_cases";
 	var $rel_accounts_table = "emails_accounts";
 	var $rel_opportunities_table = "emails_opportunities";
+	var $rel_serel_table = "seactivityrel";
 
 	var $object_name = "Email";
 
@@ -104,8 +106,8 @@ class Email extends SugarBean {
   function get_contacts($id)
   {
     // First, get the list of IDs.
-	$query = 'select contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.email, contactdetails.phone, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
-    renderRelatedContacts($query);
+	$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
+    renderRelatedContacts($query,$id);
   }
 	
 	/** Returns a list of the associated users
@@ -116,7 +118,7 @@ class Email extends SugarBean {
   function get_users($id)
   {
     // First, get the list of IDs.
-	$query = 'SELECT users.first_name,users.last_name,users.department,users.phone_work from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
+	$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
     //include_once('modules/Emails/RenderRelatedListUI.php');
     renderRelatedUsers($query);
   }
@@ -137,9 +139,9 @@ class Email extends SugarBean {
   }
   function get_attachments($id)
   {
-		$query = 'select notes.title,"Notes      " as ActivityType, notes.filename, attachments.type as "FileType",crm2.modifiedtime as "lastmodified", notes.notesid as noteattachmentid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$id;
+		$query = "select notes.title,'Notes      '  ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
-                $query .= 'select "          " as Title ,"Attachments" as ActivityType, attachments.name as "filename", attachments.type as "FileType",crm2.modifiedtime as "lastmodified", attachments.attachmentsid as noteattachmentid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid='.$id;
+                $query .= "select '          '  title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid  attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
 
     renderRelatedAttachments($query,$id);
   }
@@ -170,7 +172,8 @@ class Email extends SugarBean {
     	}
 		if($this->contact_id != "")
     	{
-    		$this->set_emails_contact_invitee_relationship($this->id, $this->contact_id);    	
+    		$this->set_emails_contact_invitee_relationship($this->id, $this->contact_id);
+			$this->set_emails_se_invitee_relationship($this->id, $this->contact_id);    				
     	}
 		if($this->user_id != "")
     	{
@@ -200,6 +203,13 @@ class Email extends SugarBean {
         {
         //      $query = "insert into $this->rel_contacts_table (id,contact_id,email_id) values('".create_guid()."','$contact_id','$email_id')";
                 $query = "insert into $this->rel_contacts_table (contactid,activityid) values('$contact_id','$email_id')";
+                $this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
+        }
+		  
+		  function set_emails_se_invitee_relationship($email_id, $contact_id)
+        {
+        //      $query = "insert into $this->rel_contacts_table (id,contact_id,email_id) values('".create_guid()."','$contact_id','$email_id')";
+                $query = "insert into $this->rel_serel_table (crmid,activityid) values('$contact_id','$email_id')";
                 $this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
         }
 
@@ -249,11 +259,12 @@ class Email extends SugarBean {
 
                 if($contact_required)
                 {
-                   $query = "SELECT emails.*, contactdetails.firstname, contactdetails.lastname FROM emails inner join seactivityrel on seactivityrel.activityid = emails.emailid inner join crmentity on crmentity.crmid=emails.emailid and crmentity.deleted=0 ";
+			$query = 'SELECT emails.*,activity.*,contactdetails.firstname, contactdetails.lastname FROM emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid=crmentity.crmid left join seactivityrel on seactivityrel.activityid = emails.emailid inner join contactdetails on contactdetails.contactid=seactivityrel.crmid where crmentity.deleted=0 ';
                 }
                 else
                 {
-                   $query = 'SELECT * FROM emails  inner join seactivityrel on seactivityrel.activityid = emails.emailid inner join crmentity on crmentity.crmid=emails.emailid and crmentity.deleted=0 ';
+			$query = 'SELECT emails.*,activity.* FROM emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid=crmentity.crmid left join seactivityrel on seactivityrel.activityid = emails.emailid where crmentity.deleted=0 ';
+
                 }
 
                 return $query;

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Leads/Popup.php,v 1.4 2005/03/04 08:25:49 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Leads/Popup.php,v 1.7 2005/03/23 14:19:48 samk Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -24,8 +24,8 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
-#require_once('include/listview.php');
 require_once('include/ComboUtil.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $current_language;
@@ -50,11 +50,21 @@ $comboFieldArray = getComboArray($comboFieldNames);
 
 if (!isset($where)) $where = "";
 
+if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+
+$url_string = '';
+$sorder = 'ASC';
+if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
+$sorder = $_REQUEST['sorder'];
+
+if($popuptype!='') $url_string .= "&popuptype=".$popuptype;
+
 $seedLead = new Lead();
 
-if(isset($_REQUEST['query']))
+if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
+	$url_string .="&query=true";
 	if (isset($_REQUEST['first_name'])) $first_name = $_REQUEST['first_name'];
 	if (isset($_REQUEST['last_name'])) $last_name = $_REQUEST['last_name'];
 	if (isset($_REQUEST['company'])) $company = $_REQUEST['company'];
@@ -64,10 +74,22 @@ if(isset($_REQUEST['query']))
 	
 	$where_clauses = Array();
 
-	if(isset($last_name) && $last_name != "") array_push($where_clauses, "leaddetails.lastname like '$last_name%'");
-	if(isset($first_name) && $first_name != "")	array_push($where_clauses, "leaddetails.firstname like '$first_name%'");
-	if(isset($company) && $company != "")	array_push($where_clauses, "leaddetails.company like '$company%'");
-	if(isset($current_user_only) && $current_user_only != "") array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
+	if(isset($last_name) && $last_name != ""){
+		array_push($where_clauses, "leaddetails.lastname like '$last_name%'");
+		$url_string .= "&last_name=".$last_name;
+	}
+	if(isset($first_name) && $first_name != ""){
+		array_push($where_clauses, "leaddetails.firstname like '%$first_name%'");
+		$url_string .= "&first_name=".$first_name;
+	}
+	if(isset($company) && $company != ""){
+		array_push($where_clauses, "leaddetails.company like '%$company%'");
+		$url_string .= "&company=".$company;
+	}
+	if(isset($current_user_only) && $current_user_only != ""){
+	 	array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
+		$url_string .= "&current_user_only=".$current_user_only;
+	}
 	if(isset($assigned_user_id) && $assigned_user_id != "") array_push($where_clauses, "crmentity.smownerid = '$assigned_user_id'");
 	
 	$where = "";
@@ -89,6 +111,9 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("APP", $app_strings);
 	$search_form->assign("POPUPTYPE",$popuptype);
 
+	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
+	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+	
 	if (isset($first_name)) $search_form->assign("FIRST_NAME", $_REQUEST['first_name']);
 	if (isset($last_name)) $search_form->assign("LAST_NAME", $_REQUEST['last_name']);
 	if (isset($company)) $search_form->assign("COMPANY", $_REQUEST['company']);
@@ -98,21 +123,13 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
 	
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Leads','Popup','last_name','true','basic'));
 	$search_form->parse("main");
 	$search_form->out("main");
 
 	echo get_form_footer();
 	echo "\n<BR>\n";
 }
-/*
-$ListView = new ListView();
-$ListView->initNewXTemplate('modules/Leads/ListView.html',$current_module_strings);
-$ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE']);
-$ListView->setQuery($where, "", "first_name, last_name", "LEAD");
-$ListView->processListView($seedLead, "main", "LEAD");
-
-#listView($current_module_strings['LBL_LIST_FORM_TITLE'] , "LEAD", 'modules/Leads/ListView.html', $seedLead, "first_name, last_name");
-*/
 
 $focus = new Lead();
 
@@ -134,6 +151,11 @@ if(isset($where) && $where != '')
         $query .= ' and '.$where;
 }
 
+if(isset($order_by) && $order_by != '')
+{
+        $query .= ' ORDER BY '.$order_by.' '.$sorder;
+}
+
 $list_result = $adb->query($query);
 
 //Retreiving the no of rows
@@ -151,11 +173,43 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
+// Setting the record count string
+if ($navigation_array['start'] == 1)
+{
+	if($noofrows != 0)
+	$start_rec = $navigation_array['start'];
+	else
+	$start_rec = 0;
+	if($noofrows > $list_max_entries_per_page)
+	{
+		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
+	}
+	else
+	{
+		$end_rec = $noofrows;
+	}
+	
+}
+else
+{
+	if($navigation_array['next'] > $list_max_entries_per_page)
+	{
+		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
+		$end_rec = $navigation_array['next'] - 1;
+	}
+	else
+	{
+		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
+		$end_rec = $noofrows;
+	}
+}
+$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+
 //Retreive the List View Table Header
 $focus->list_mode="search";
 $focus->popup_type=$popuptype;
 
-$listview_header = getSearchListViewHeader($focus,"Leads");
+$listview_header = getSearchListViewHeader($focus,"Leads",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
 
 //creating a variable to store the relationship requesting record id 
@@ -163,44 +217,15 @@ $record_id = $_REQUEST['recordid'];
 $focus->record_id = $record_id;
 $listview_entries = getSearchListViewEntries($focus,"Leads",$list_result,$navigation_array);
 $xtpl->assign("LISTENTITY", $listview_entries);
-$query_val = 'false';
 
-if(isset($navigation_array['start']))
-{
-        $startoutput = '<a href="index.php?action=Popup&module=Leads&start='.$navigation_array['start'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Start</b></a>';
-}
-else
-{
-        $startoutput = '[ Start ]';
-}
-if(isset($navigation_array['end']))
-{
-        $endoutput = '<a href="index.php?action=Popup&module=Leads&start='.$navigation_array['end'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>End</b></a>';
-}
-else
-{
-        $endoutput = '[ End ]';
-}
-if(isset($navigation_array['next']))
-{
-        $nextoutput = '<a href="index.php?action=Popup&module=Leads&start='.$navigation_array['next'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Next</b></a>';
-}
-else
-{
-        $nextoutput = '[ Next ]';
-}
-if(isset($navigation_array['prev']))
-{
-        $prevoutput = '<a href="index.php?action=Popup&module=Leads&start='.$navigation_array['prev'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Prev</b></a>';
-}
-else
-{
-        $prevoutput = '[ Prev ]';
-}
-$xtpl->assign("Start", $startoutput);
-$xtpl->assign("End", $endoutput);
-$xtpl->assign("Next", $nextoutput);
-$xtpl->assign("Prev", $prevoutput);
+if($order_by !='')
+$url_string .="&order_by=".$order_by;
+if($sorder !='')
+$url_string .="&sorder=".$sorder;
+
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Leads","Popup");
+$xtpl->assign("NAVIGATION", $navigationOutput);
+$xtpl->assign("RECORD_COUNTS", $record_string);
 
 $xtpl->parse("main");
 $xtpl->out("main");

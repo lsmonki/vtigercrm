@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Save.php,v 1.12 2005/02/16 11:14:08 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Save.php,v 1.14 2005/03/17 06:37:39 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -97,7 +97,7 @@ else {
 		exit;
 	}
 	else {	
-		$focus->save();
+		$focus->save("Users");
 //		include('modules/Calendar/user_ins.php');
 //		include("modules/Users/forum_register.php");	
 		$return_id = $focus->id;
@@ -132,7 +132,8 @@ else $return_module = "Users";
 if(isset($_POST['return_action']) && $_POST['return_action'] != "") $return_action = $_POST['return_action'];
 else $return_action = "DetailView";
 if(isset($_POST['return_id']) && $_POST['return_id'] != "") $return_id = $_POST['return_id'];
+if(isset($_REQUEST['activity_mode']))   $activitymode = '&activity_mode='.$_REQUEST['activity_mode'];
 
 $log->debug("Saved record with id of ".$return_id);
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id$activitymode");
 ?>

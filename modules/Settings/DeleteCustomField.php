@@ -21,6 +21,11 @@ $uitype = $_REQUEST["uitype"];
 //Deleting the CustomField from the Custom Field Table
 $query='delete from field where fieldid="'.$id.'"';
 $adb->query($query);
+
+//Deleting from profile2field table
+$query='delete from profile2field where fieldid="'.$id.'"';
+$adb->query($query);
+
 //Dropping the column in the module table
 if($fld_module == "Leads")
 {

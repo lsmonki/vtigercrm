@@ -16,8 +16,10 @@
 global $mod_strings;
 global $allow_exports;
 ?>
+<!--
 <table width="100%" cellpadding="6">
 <tr>
+-->
 <?php 
 if ($_REQUEST['module'] == 'Contacts' ||
 	$_REQUEST['module'] == 'Potentials' ||
@@ -28,6 +30,7 @@ if ($_REQUEST['module'] == 'Contacts' ||
 	if($permissionData[$tabid]['5'] == 0)
 	{
 ?>
+<!--
 <form name="Import" method="get" action="index.php">
 <input type="hidden" name="module" value="<?php echo $_REQUEST['module']; ?>">
 <input type="hidden" name="action" value="Import">
@@ -36,6 +39,10 @@ if ($_REQUEST['module'] == 'Contacts' ||
 <input type="hidden" name="return_action" value="index">
 <td valign="middle" align="right" width="99%"><input title="<?php echo $app_strings['LBL_IMPORT']; ?> <?php echo $mod_strings['LBL_MODULE_NAME']?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $app_strings['LBL_IMPORT']; ?> <?php echo $mod_strings['LBL_MODULE_NAME']?>  " ></td>
 </form>
+-->
+<li>
+	<a href="index.php?module=<?php echo $_REQUEST['module']; ?>&action=Import&step=1&return_module=<?php echo $_REQUEST['module']; ?>&return_action=index"><?php echo $app_strings['LBL_IMPORT']; ?> <?php echo $mod_strings['LBL_MODULE_NAME']?></a>
+</li>
 <?php
 	}
 }
@@ -49,16 +56,23 @@ if  ( $allow_exports=='all' ||
 			if($permissionData[$tabid]['6'] == 0)
 			{
 ?>
+<!--
 <form name="EXPORT" method="get" action="export.php">
 <input type="hidden" name="module" value="<?php echo $_REQUEST['module']; ?>">
 <input type="hidden" name="all" value="1">
 <input type="hidden" name="action" value="Export">
 <td valign="middle" align="right" width="1%"><input title="<?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?>  " ></td>
 </form>
+-->
+<li>
+	<a href="export.php?module=<?php echo $_REQUEST['module']; ?>&action=Export&all=1"><?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?></a>
+</li>
 <?php
 			}
 		}
 	}
 ?>
+<!--
 </tr>
 </table>
+-->

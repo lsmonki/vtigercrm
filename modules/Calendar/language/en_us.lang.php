@@ -48,13 +48,13 @@ $mod_strings = Array(
 'LBL_DAY6' => 'Saturday',
 'LBL_DAY0' => 'Sunday',
 
-'LBL_SM_MON' => 'Mo',
-'LBL_SM_TUE' => 'Tu',
-'LBL_SM_WED' => 'We',
-'LBL_SM_THU' => 'Th',
-'LBL_SM_FRI' => 'Fr',
-'LBL_SM_SAT' => 'Sa',
-'LBL_SM_SUN' => 'Su',
+'LBL_SM_MON' => 'Mon',
+'LBL_SM_TUE' => 'Tue',
+'LBL_SM_WED' => 'Wed',
+'LBL_SM_THU' => 'Thu',
+'LBL_SM_FRI' => 'Fri',
+'LBL_SM_SAT' => 'Sat',
+'LBL_SM_SUN' => 'Sun',
 
 'LBL_DATE_TITLE' => '%A, %d. %B %Y',
 

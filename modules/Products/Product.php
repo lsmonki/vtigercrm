@@ -1,12 +1,23 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
 include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
+require_once('data/CRMEntity.php');
 require_once('include/utils.php');
 
 
-class Product extends SugarBean {
+class Product extends CRMEntity {
 	var $log;
 	var $db;
 
@@ -44,11 +55,13 @@ class Product extends SugarBean {
 
 	var $search_fields = Array(
                                 'Product Name'=>Array('products'=>'productname'),
-                                'Product Code'=>Array('products'=>'category')
+                                'Product Code'=>Array('products'=>'productcode'),
+                                'Unit Price'=>Array('products'=>'unit_price')
                                 );
         var $search_fields_name = Array(
                                         'Product Name'=>'productname',
-                                        'Product Code'=>'category'
+                                        'Product Code'=>'productcode',
+                                        'Unit Price'=>'unit_price'
                                      );
 	
 	var $combofieldNames = Array('manufacturer'=>'manufacturer_dom'
@@ -67,43 +80,39 @@ class Product extends SugarBean {
         }
 
   		
-  function get_attachments($id)
+	function get_attachments($id)
         {
-		$query = 'select notes.title,"Notes      " as ActivityType, notes.filename, attachments.type as "FileType",crm2.modifiedtime as "lastmodified", notes.notesid as noteattachmentid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$id;
+	
+		$query = "select notes.title,'Notes      ' ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
-                $query .= 'select "          " as Title ,"Attachments" as ActivityType, attachments.name as "filename", attachments.type as "FileType",crm2.modifiedtime as "lastmodified", attachments.attachmentsid as noteattachmentid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid='.$id;
-		renderRelatedAttachments($query);
+                $query .= "select '          '  title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;	
+		renderRelatedAttachments($query,$id);
         }
 
-
-  function get_opportunities($id)
+	function get_opportunities($id)
         {
-          //include('modules/Products/RenderRelatedListUI.php');
-           //$query = "SELECT potentialname,account.accountname,closingdate from potential inner join account on account.accountid=potential.accountid inner join seproductsrel on seproductsrel.crmid=potential.potentialid and seproductsrel.productid=".$id." inner join crmentity on crmentity.crmid=potential.potentialid and crmentity.deleted=0";
 		$query = 'select potential.potentialid, potential.potentialname, potential.potentialtype,  products.productid, products.productname, products.qty_per_unit, products.unit_price, products.expiry_date from potential inner join products on potential.productid = products.productid where products.productid='.$id;
           renderRelatedPotentials($query);
         }
 
-
-  function get_tickets($id)
+	function get_tickets($id)
         {
-          //$query = "SELECT troubletickets.priority,troubletickets.ticketid,troubletickets.status,troubletickets.category from troubletickets inner join seticketsrel on seticketsrel.ticketid=troubletickets.ticketid and seticketsrel.crmid=".$id."";
-		$query = 'select users.user_name, users.id, products.productid,products.productname, troubletickets.ticketid,troubletickets.title, troubletickets.status, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join products on products.productid=seticketsrel.crmid inner join crmentity on crmentity.crmid = products.productid inner join users on users.id=crmentity.smownerid where products.productid='.$id;
-          renderRelatedTickets($query);
+		$query = 'select users.user_name, users.id, products.productid,products.productname, troubletickets.ticketid,troubletickets.title, troubletickets.status, troubletickets.priority, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from products  inner join seticketsrel on seticketsrel.crmid = products.productid inner join troubletickets on troubletickets.ticketid = seticketsrel.ticketid inner join crmentity on crmentity.crmid = troubletickets.ticketid left join users on users.id=crmentity.smownerid where products.productid= '.$id.' and crmentity.deleted=0';
+          renderRelatedTickets($query,$id);
         }
-  function get_meetings($id)
-  {
-     $query = "SELECT meetings.name,meetings.location,meetings.date_start from meetings inner join seactivityrel on seactivityrel.activityid=meetings.meetingid and seactivityrel.crmid=".$id."";
-    renderRelatedMeetings($query);
-  }
-  function get_activities($id)
-  {
-    //$query = "SELECT activity.subject,semodule,activitytype,date_start,status,priority from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid where seactivityrel.crmid=".$id;
-		$query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
-		renderRelatedActivities($query);
-  }
 
-  
+	function get_meetings($id)
+	{
+		$query = "SELECT meetings.name,meetings.location,meetings.date_start from meetings inner join seactivityrel on seactivityrel.activityid=meetings.meetingid and seactivityrel.crmid=".$id."";
+		renderRelatedMeetings($query);
+	}
+
+	function get_activities($id)
+	{
+		//$query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
+		$query = "SELECT contactdetails.lastname, contactdetails.firstname, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
+		renderRelatedActivities($query,$id);
+	}
 
 }
 ?>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/index.php,v 1.84 2005/03/05 10:10:05 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/index.php,v 1.88 2005/03/26 12:07:58 samk Exp $
  * Description: Main file and starting point for the application.  Calls the 
  * theme header and footer files defined for the user as well as the module as 
  * defined by the input parameters.
@@ -77,6 +77,10 @@ function fetchPermissionData($module,$action)
 	
 
 	$accessFlag = false;
+	if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq')
+	{
+		$rec_owner_id = getUserId($_REQUEST['record']);
+	}
 	if($tab_per_Data[$tabid] !=0)
 	{
 		echo "You are not permitted to execute this operation";
@@ -88,9 +92,9 @@ function fetchPermissionData($module,$action)
 		echo "You are not permitted to execute this operation";
 		$display = "No";
 	}
-	elseif(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $others_permission_id != '')
+	elseif(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $others_permission_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $rec_owner_id != 0)
 	{
-		$rec_owner_id = getUserId($_REQUEST['record']);
+		//$rec_owner_id = getUserId($_REQUEST['record']);
 		if($rec_owner_id != $current_user->id)
 		{
 			if($others_permission_id == 0)
@@ -403,7 +407,7 @@ if(isset($action) && isset($module))
 {
 	$log->info("About to take action ".$action);
 	$log->debug("in $action");
-	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action) || ereg("^app_ins",$action) || ereg("^minical",$action) || ereg("^minitimer",$action) || ereg("^app_del",$action) || ereg("^send_mail",$action) || ereg("^populatetemplate",$action) || ereg("^TemplateMerge",$action) || ereg("^testemailtemplateusage",$action) || ereg("^saveemailtemplate",$action) || ereg("^lookupemailtemplate",$action) || ereg("^deletewordtemplate",$action) || ereg("^deleteemailtemplate",$action) || ereg("^deleteattachments",$action) || ereg("^MassDeleteUsers",$action) || ereg("^UpdateFieldLevelAccess",$action) || ereg("^UpdateProfile",$action)  || ereg("^updateRelations",$action))
+	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action) || ereg("^app_ins",$action) || ereg("^minical",$action) || ereg("^minitimer",$action) || ereg("^app_del",$action) || ereg("^send_mail",$action) || ereg("^populatetemplate",$action) || ereg("^TemplateMerge",$action) || ereg("^testemailtemplateusage",$action) || ereg("^saveemailtemplate",$action) || ereg("^lookupemailtemplate",$action) || ereg("^deletewordtemplate",$action) || ereg("^deleteemailtemplate",$action) || ereg("^deleteattachments",$action) || ereg("^MassDeleteUsers",$action) || ereg("^UpdateFieldLevelAccess",$action) || ereg("^UpdateProfile",$action)  || ereg("^updateRelations",$action) || ereg("^updateNotificationSchedulers",$action))
 	{
 		$skipHeaders=true;
 		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action) || ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^lookupemailtemplate",$action))
@@ -731,7 +735,7 @@ $copyrightstatement="<style>
 echo $copyrightstatement;
 echo "<table width=60% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n";
 echo "<table width=100% border=0 cellspacing=1 cellpadding=0 class=\"bgwhite\" align=center><tr><td align=center class=\"copy\">\n";
-echo("&copy; This software is a collective work consisting of the following major Open Source components : Apache Software, MySQL Server, PHP, SugarCRM, ADOdb, TUTOS, phpBB, and PHPMailer each licensed under a separate Open Source License. vtiger is not affiliated with nor endorsed by any of the above providers. See <a href='http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt' class=\"copy\" target=\"_blank\">Copyrights </a> for details.<br>\n");
+echo("&copy; This software is a collective work consisting of the following major Open Source components : Apache Software, MySQL Server, PHP, SugarCRM, ADOdb, TUTOS, phpSysinfo, phpBB, and PHPMailer each licensed under a separate Open Source License. vtiger is not affiliated with nor endorsed by any of the above providers. See <a href='http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt' class=\"copy\" target=\"_blank\">Copyrights </a> for details.<br>\n");
 echo "</td></tr></table></td></tr></table>\n";
 
 echo "<table align='center'><tr><td align='center'>";

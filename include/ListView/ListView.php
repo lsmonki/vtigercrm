@@ -158,7 +158,7 @@ function setDisplayHeaderAndFooter($bool){
 			$this->setSessionVariable($varName, "ORDER_BY_LAST", $sortBy);	
 		}	
 	$this->setSessionVariable($varName, $sortBy."_desc", $desc);
-	if(empty($sortBy)){
+	if(!empty($sortBy)){
 	if(substr_count(strtolower($sortBy), ' desc') == 0 && substr_count(strtolower($sortBy), ' asc') == 0){
 		if($desc){
 			$this->query_orderby = $sortBy.' desc';

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/Activity.php,v 1.14 2005/03/04 13:34:55 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/Activity.php,v 1.26 2005/03/26 10:42:13 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,9 +24,10 @@ include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
+require_once('data/CRMEntity.php');
 
 // Task is used to store customer information.
-class Activity extends SugarBean {
+class Activity extends CRMEntity {
 	var $log;
 	var $db;
 
@@ -76,9 +77,13 @@ class Activity extends SugarBean {
 	'id',
 	'status',
 	'date_due',
+	'time_start',
 	'description',
 	'contact_name',
-	'priority'
+	'priority',
+	'duehours',
+	'dueminutes',
+	'location'
 	);
        
 
@@ -113,15 +118,22 @@ class Activity extends SugarBean {
 //Function Call for Related List -- Start
         function get_contacts($id)
         {
-                $query="select contactdetails.firstname,contactdetails.lastname,contactdetails.phone,contactdetails.email  from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid and seactivityrel.activityid=".$id."";
-                renderRelatedContacts($query);
+                //$query="select contactdetails.firstname,contactdetails.lastname,contactdetails.phone,contactdetails.email  from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid and seactivityrel.activityid=".$id."";
+		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
+                renderRelatedContacts($query,$id);
         }
 
         function get_users($id)
         {
-                $query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id,  users.phone_home, users.phone_work, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
-                renderRelatedUsers($query);
+                $query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id,  users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
+                renderRelatedUsers($query,$id);
         }
+
+	function get_products($id)
+	{
+		$query = 'select activity.activityid, products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, products.purchase_date, crmentity.crmid, crmentity.smownerid from activity inner join seactivityrel on activity.activityid = seactivityrel.activityid inner join products on seactivityrel.crmid = products.productid inner join crmentity on crmentity.crmid = products.productid where activity.activityid = '.$id.' and crmentity.deleted = 0';
+		renderRelatedProducts($query,$id);
+	}
 //Function Call for Related List -- End
 
 
@@ -296,6 +308,25 @@ class Activity extends SugarBean {
 		
           $this->db->query("update tasks set deleted=1 where id = '" . $id . "'");
         }
+		  
+//calendarsync
+    function getCount_Meeting($user_name) 
+	{
+      $query = "select count(*) from activity inner join crmentity on crmentity.crmid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Meeting'";
+
+      $result = $this->db->query($query,true,"Error retrieving contacts count");
+      $rows_found =  $this->db->getRowCount($result);
+      $row = $this->db->fetchByAssoc($result, 0);
+
+      return $row["count(*)"];
+    }
+   
+    function get_calendars($user_name,$from_index,$offset)
+    {   
+		$query = "select activity.location as location,activity.duration_hours as duehours, activity.duration_minutes as dueminutes,activity.time_start as time_start, activity.subject as name,crmentity.modifiedtime as date_modified, activity.date_start start_date,activity.activityid as id,activity.status as status,activity.description as description, activity.priority as priority, activity.due_date as date_due ,contactdetails.firstname cfn, contactdetails.lastname cln from activity inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid left join cntactivityrel on cntactivityrel.activityid=activity.activityid left join contactdetails on contactdetails.contactid=cntactivityrel.contactid inner join crmentity on crmentity.crmid=activity.activityid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Meeting' limit " .$from_index ."," .$offset;
+	    return $this->process_list_query1($query);   
+    }       
+//calendarsync
 
     function getCount($user_name) 
     {

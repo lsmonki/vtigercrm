@@ -17,41 +17,37 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-<tr>
-    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
-    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{APP.LBL_IMPORT_MODULE_NAME} {MOD.LBL_MODULE_NAME} {MOD.LBL_ERROR}</td>
-
-	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
-</tr>
-<tr><td colspan="4"><div class="formBorder"><img height='2' src='include/images/blank.gif'></div></td></tr></table>
-
-<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr> 
-	<td></td>
-	<td align="right">
-		<table cellpadding="0" cellspacing="5" border="0">
-		<tr>
-			<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
-			<input type="hidden" name="module" value="{MODULE}">
-			<input type="hidden" name="step" value="1">
-			<input type="hidden" name="action" value="Import">
-		</tr></table>
-	</td>
-	<td></td>
-</tr>
-</table> 
-<br>
-{MESSAGE}
-<br>
-<br>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-        <tr>
-        <td align="right">
-<input title="{MOD.LBL_TRY_AGAIN}" accessKey="" class="button" type="submit" name="button" value="{MOD.LBL_TRY_AGAIN}" ></td>
- <td></td>
-</tr>
-</table>
-        </form>
-
-
+<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
+  <input type="hidden" name="module" value="{MODULE}">
+  <input type="hidden" name="step" value="1">
+  <input type="hidden" name="action" value="Import">
+  <table width="100%" cellpadding="2" cellspacing="0" border="0">
+    <tr> 
+      <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
+      <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{APP.LBL_IMPORT_MODULE_NAME}</td>
+      <td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> 
+        ]</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="hline"><img height='2' src='include/images/blank.gif'></td>
+    </tr>
+  </table>
+  <br>
+  <table width="100%" cellpadding="0" cellspacing="1" border="0" class="formOuterBorder">
+    <tr> 
+      <td class="formSecHeader">{MOD.LBL_MODULE_NAME} {MOD.LBL_ERROR}</td>
+    </tr>
+    <tr> 
+      <td> <br>
+        {MESSAGE} <br> </td>
+    </tr>
+    <tr> 
+      <td><table width="100%" cellpadding="2" cellspacing="0" border="0" class="formSecHeader">
+          <tr> 
+            <td align="right"> <input title="{MOD.LBL_TRY_AGAIN}" accessKey="" class="button" type="submit" name="button" value="{MOD.LBL_TRY_AGAIN}" ></td>
+          </tr>
+        </table></td>
+    </tr>
+  </table>
+</form>
 <!-- END: main -->

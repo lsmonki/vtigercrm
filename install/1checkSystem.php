@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/1checkSystem.php,v 1.15 2005/03/05 11:34:02 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/1checkSystem.php,v 1.16 2005/03/08 12:01:36 samk Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -186,7 +186,7 @@ $array = Array(
 		 <tr>
 		    <td><strong>Mail Merge Template Directory (test/wordtemplatedownload/)</strong></td>
                     <td width="100">&nbsp;</td>
-                    <td align="right"><?php echo (is_writable('./test/wordtemplatestorage/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable<br> You might experience issues with the word template feature. You might visit the link for more details : <a href=\"http://www.vtiger.com/discussions/viewtopic.php?p=2200#2200\" target=\"_blank\">forums</a> </font></strong>"; ?></td>
+                    <td align="right"><?php echo (is_writable('./test/wordtemplatedownload/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable<br> You might experience issues with the word template feature. You might visit the link for more details : <a href=\"http://www.vtiger.com/discussions/viewtopic.php?p=2200#2200\" target=\"_blank\">forums</a> </font></strong>"; ?></td>
                  </tr>
 		<tr> 
 		 <tr>

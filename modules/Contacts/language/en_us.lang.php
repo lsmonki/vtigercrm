@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/language/en_us.lang.php,v 1.10 2005/02/15 09:21:32 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/language/en_us.lang.php,v 1.14 2005/03/24 17:47:43 rank Exp $
  * Description:  Defines the English language pack
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -62,6 +62,7 @@ $mod_strings = Array(
 'LBL_NAME'=>'Name:',
 'LBL_CONTACT_NAME'=>'Contact Name:',
 'LBL_CONTACT_INFORMATION'=>'Contact Information',
+'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 'LBL_FIRST_NAME'=>'First Name:',
 'LBL_OFFICE_PHONE'=>'Office Phone:',
 'LBL_ACCOUNT_NAME'=>'Account Name:',
@@ -130,7 +131,50 @@ $mod_strings = Array(
 'LBL_NEW_NOTE'=>'New Note',
 'LBL_NOTE_TITLE'=>'Notes',
 
+// Added for 4GA
+'LBL_TOOL_FORM_TITLE'=>'Contact Tools',
 
+'Salutation'=>'Salutation',
+'First Name'=>'First Name',
+'Office Phone'=>'Office Phone',
+'Last Name'=>'Last Name',
+'Mobile'=>'Mobile',
+'Account Name'=>'Account Name',
+'Home Phone'=>'Home Phone',
+'Lead Source'=>'Lead Source',
+'Phone'=>'Phone',
+'Title'=>'Title',
+'Fax'=>'Fax',
+'Department'=>'Department',
+'Birthdate'=>'Birthdate',
+'Email'=>'Email',
+'Reports To'=>'Reports To',
+'Assistant'=>'Assistant',
+'Yahoo Id'=>'Yahoo Id',
+'Assistant Phone'=>'Assistant Phone',
+'Do Not Call'=>'Do Not Call',
+'Email Opt Out'=>'Email Opt Out',
+'Assigned To'=>'Assigned To',
+'Created Time'=>'Created Time',
+'Modified Time'=>'Modified Time',
+'Mailing Street'=>'Mailing Street',
+'Other Street'=>'Other Street',
+'City'=>'City',
+'State'=>'State',
+'Zip'=>'Zip',
+'Country'=>'Country',
+'Description'=>'Description',
+
+// Added fields for Add Business Card
+'LBL_NEW_CONTACT'=>'New Contact',
+'LBL_NEW_ACCOUNT'=>'New Account',
+'LBL_NOTE_SUBJECT'=>'Note Subject:',
+'LBL_NOTE'=>'Note:',
+'LBL_WEBSITE'=>'Website:',
+'LBL_NEW_APPOINTMENT'=>'New Appointment',
+'LBL_SUBJECT'=>'Subject:',
+'LBL_START_DATE'=>'Start Date:',
+'LBL_START_TIME'=>'Start Time:'
 
 );
 

@@ -82,11 +82,21 @@ require_once('modules/Calendar/UserCalendar.php');
 
      $w0 =  (( 1 + Date("w",mktime(12,0,0,1,1, Date("Y",$ts) ) )) % 7) > 3;
      $wn = sprintf("%02d", Round( (Date("z",$ts)+7 ) / 7) );
-     $yy = Date("y",$ts);
-
+     #$yy = Date("y",$ts);
+     $yy = Date("Y",$ts);
+     $day_from = Date("d",$ts);
+     $day_to = Date("d",$ts + 7 * 86400);
+     $mon = Date("n",$ts);
+     $m_name = $mod_strings['cal_month_long'][$mon];
+     $mon_next = Date("n",$ts + 7 * 86400);
+     $mn_name =  $mod_strings['cal_month_long'][$mon_next]."&nbsp;";
      $last_week = Date("Ymd",$ts -  7 * 86400);
      $next_week = Date("Ymd",$ts +  7 * 86400);
 
+     if ($mn_name == $m_name)
+     {
+	$mn_name ="";
+     }
 	 echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"90%\" class=\"outer\">\n";
      echo "<form action=\"". $callink ."calendar_week\" method=\"get\">\n";
 	 echo "<tr><td>";
@@ -101,7 +111,7 @@ require_once('modules/Calendar/UserCalendar.php');
      //echo " </tr>\n";
      echo " <tr height=\"35\">\n";
      echo "  <td align=\"left\">".$this->pref->menulink($callink ."calendar_week&t=".$last_week,$this->pref->getImage(left,'list'),$mod_strings['LBL_LAST_WEEK']) ."</td>";
-	 echo "  <td align=\"center\" class=\"calhead\">". $mod_strings['LBL_WEEK'] ."&nbsp;" . $wn . "/". $yy ."&nbsp;</td>";
+	 echo "  <td align=\"center\" class=\"calhead\">". $mod_strings['LBL_WEEK'] ."&nbsp;of&nbsp;" . $m_name . "&nbsp;".$day_from."&nbsp;to&nbsp;".$mn_name.$day_to."&nbsp;". $yy ."&nbsp;</td>";
 	 echo "  <td align=\"right\">".$this->pref->menulink($callink ."calendar_week&t=".$next_week,$this->pref->getImage(right,'list') ,$mod_strings['LBL_NEXT_WEEK']) ."</td>\n";
      echo " </tr></table>\n";
 	 echo " <tr><td class=\"inner\">\n";

@@ -58,7 +58,8 @@ function outBar($val,$image_path,$singleUnit) {
 function showPriorities($image_path, $singleUnit)
 {
 	global $adb;
-	$prresult = getFromDB("troubleticketpriorities");
+	global $mod_strings;
+	$prresult = getFromDB("ticketpriorities");
 	$noofrows = $adb->num_rows($prresult);
 	$prOut = '';
 
@@ -68,7 +69,7 @@ function showPriorities($image_path, $singleUnit)
 		$prOut .= '<tr>';
 		if($i == 0)
 		{
-	        	$prOut .=  '<td class="dataLabel" width="10%" noWrap><div align="left">Priorities</div></td>';
+	        	$prOut .=  '<td class="dataLabel" width="10%" noWrap><div align="left">'.$mod_strings['LBL_PRIORITIES'].'</div></td>';
 		}
 		else
 		{
@@ -96,7 +97,8 @@ function showPriorities($image_path, $singleUnit)
 function showCategories($image_path, $singleUnit)
 {
 	global $adb;
-	$prresult = getFromDB("troubleticketcategories");
+	global $mod_strings;
+	$prresult = getFromDB("ticketcategories");
 	$noofrows = $adb->num_rows($prresult);
 	$prOut = '';
 
@@ -106,7 +108,7 @@ function showCategories($image_path, $singleUnit)
 		$prOut .= '<tr>';
 		if($i == 0)
 		{
-	        	$prOut .=  '<td class="dataLabel" width="10%" noWrap><div align="left">Categories</div></td>';
+	        	$prOut .=  '<td class="dataLabel" width="10%" noWrap><div align="left">'.$mod_strings['LBL_CATEGORIES'].'</div></td>';
 		}
 		else
 		{
@@ -134,6 +136,7 @@ function showCategories($image_path, $singleUnit)
 function showUserBased($image_path, $singleUnit)
 {
 	global $adb;
+	global $mod_strings;
 	$prresult = getFromDB("users");
 	$noofrows = $adb->num_rows($prresult);
 	$prOut = '';
@@ -145,7 +148,7 @@ function showUserBased($image_path, $singleUnit)
 		$prOut .= '<tr>';
 		if($i == 0)
 		{
-	        	$prOut .=  '<td class="dataLabel" width="10%" noWrap><div align="left">Supporters</div></td>';
+	        	$prOut .=  '<td class="dataLabel" width="10%" noWrap><div align="left">'.$mod_strings['LBL_SUPPORTERS'].'</div></td>';
 		}
 		else
 		{

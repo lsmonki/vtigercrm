@@ -21,10 +21,13 @@
 global $app_strings;
 ?>
 <!--end body panes-->
-</td></tr>
+</td>
+  </tr>
+</table>
+</td>
+</tr>
 <tr>
-<td align="center" class="contentBorder">
-	<br>
+<td align="center" class="contentBorder" height="20">
 	<table CELLSPACING=3 border=0><tr>
       <td align=center nowrap> 
 	  <A href="index.php?module=Home&action=index"><?php echo $app_list_strings['moduleList']['Home']; ?></A> |
@@ -41,7 +44,7 @@ global $app_strings;
           <A href="index.php?module=Calendar&action=index"><?php echo $app_list_strings['moduleList']['Calendar']; ?></A> 
 
 	  </td>
-    </tr></table><br>
+    </tr></table>
 </td></tr></table>
 <br>
 </body>

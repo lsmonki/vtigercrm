@@ -17,50 +17,62 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
-<form name="EditView" method="POST" action="index.php" onSubmit="return check4null(EditView);">
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-<tr>
-    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Tickets.gif" border="0"></td>
-    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_TICKET}{MOD.LBL_COLON} {NAME}</td>
-	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
-</tr>
-<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
-
-<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr> 
-	<td align="left"></td>
-	<td>
-		<table cellpadding="0" cellspacing="5" border="0">
-		<tr>
-        <form name="EditView" method="POST" action="index.php">
-			<input type="hidden" name="module" value="HelpDesk">
-			<input type="hidden" name="action">
-			<input type="hidden" name="record" value="{ID}">
-                        <input type="hidden" name="mode" value="{MODE}">
-			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
-			<input type="hidden" name="return_id" value="{RETURN_ID}">
-			<input type="hidden" name="return_action" value="{RETURN_ACTION}">						
-		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
-		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
-		</tr></table>
-	</td>
-	<td></td>
-	<td align="right" nowrap><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</td>
-</tr>
-</table> 
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
-<tr>
-<td>
-	<table width="100%" border="0" cellspacing="1" cellpadding="2">
-	<tr><th align="left" class="formSecHeader" colspan="4">{MOD.LBL_TICKET_INFORMATION}</th></tr>
-        <tr>
-	{BLOCK1}
-	{BLOCK2}
-	{BLOCK3}	
-	</table>
-</td></tr></table>
-<BR>
-{CUSTOMFIELD}
+<form name="EditView" method="POST" action="index.php">
+  <input type="hidden" name="module" value="HelpDesk">
+  <input type="hidden" name="action">
+  <input type="hidden" name="record" value="{ID}">
+  <input type="hidden" name="mode" value="{MODE}">
+  <input type="hidden" name="return_module" value="{RETURN_MODULE}">
+  <input type="hidden" name="return_id" value="{RETURN_ID}">
+  <input type="hidden" name="product_id" value="{PRODUCTID}">
+  <input type="hidden" name="return_action" value="{RETURN_ACTION}">
+  <table width="100%" cellpadding="2" cellspacing="0" border="0">
+    <tr> 
+      <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Tickets.gif" border="0"></td>
+      <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_TICKET}{MOD.LBL_COLON} 
+        {NAME}</td>
+      <td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> 
+        ]</td>
+    </tr>
+    <tr> 
+      <td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td>
+    </tr>
+  </table>
+  <br>
+   <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr> 
+      <td> <div align="center"> 
+          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';  return formValidate()" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  ">
+          <input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
+        </div></td>
+    </tr>
+  </table>
+  <div align="right"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</div>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+    <tr> 
+      <td> {BLOCK1_HEADER} 
+        <table width="100%" border="0" cellspacing="1" cellpadding="2">
+          {BLOCK1} {BLOCK2} </table></td>
+    </tr>
+  </table>
+  <BR>
+  {CUSTOMFIELD} <BR>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+    <tr> 
+      <td> {BLOCK3_HEADER} 
+        <table width="100%" border="0" cellspacing="1" cellpadding="2">
+          {BLOCK3} </table></td>
+    </tr>
+  </table>
+  <BR>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr> 
+      <td> <div align="center"> 
+          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';  return formValidate()" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  ">
+          <input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
+        </div></td>
+    </tr>
+  </table>
 </form>
 <!--a href="javascript:productImg();">Attach Product Image</a>
 <script>
@@ -71,5 +83,28 @@ function productImg()
 	window.open(vtigerPath+"/uploads/upload.php","productImg","top=100,left=100,height=300,width=200")	
 }
 </script -->
-{JAVASCRIPT}
+{JAVASCRIPT} 
+<script language="javascript" type="text/javascript" src="include/general.js"></script>
+<script language="javascript" type="text/javascript">
+
+function toggleAssignType(currType)
+{
+        if (currType=="U")
+        {
+                getObj("assign_user").style.display="block"
+                getObj("assign_team").style.display="none"
+        }
+        else
+        {
+                getObj("assign_user").style.display="none"
+                getObj("assign_team").style.display="block"
+        }
+}
+</script>
+<script>
+	
+	var fieldname = new Array({VALIDATION_DATA_FIELDNAME})
+	var fieldlabel = new Array({VALIDATION_DATA_FIELDLABEL})
+	var fielddatatype = new Array({VALIDATION_DATA_FIELDDATATYPE})
+</script>
 <!-- END: main -->

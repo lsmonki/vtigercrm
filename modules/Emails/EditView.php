@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/EditView.php,v 1.17 2005/03/05 05:33:21 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/EditView.php,v 1.24 2005/03/24 16:18:38 samk Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -25,6 +25,7 @@ require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/Emails/Forms.php');
 require_once('include/uifromdbutil.php');
+require_once('include/FormValidationUtil.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -37,10 +38,11 @@ global $current_user;
 
 $focus = new Email();
 
+$message = substr($_REQUEST['message'],0,49);
 if(isset($_REQUEST['message']) && $_REQUEST['message']== 'Language string failed to load: connect_host')
-	echo '<h3><b><font color=red>Please Check the Mail Server Name...</font></b></h3>';
-if(isset($_REQUEST['message']) && $_REQUEST['message']=='Language string failed to load: recipients_failed')
-	echo '<h3><b><font color=red>Please Check the Email Id of "Assigned To" User...</font></b></h3>';
+	echo '<h3><b><font color=red>'.$mod_strings['MESSAGE_CHECK_MAIL_SERVER_NAME'].'</font></b></h3>';
+if(isset($_REQUEST['message']) && (($_REQUEST['message']=='Language string failed to load: recipients_failed') || ($message == 'Language string failed to load: recipients_failed')) )
+	echo '<h3><b><font color=red>'.$mod_strings['MESSAGE_CHECK_MAIL_ID'].'</font></b></h3>';
 
 if(isset($_REQUEST['record'])) {
 	$focus->id = $_REQUEST['record'];
@@ -110,6 +112,9 @@ $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("BLOCK3", $block_3);
 $xtpl->assign("BLOCK4", $block_4);
+$block_1_header = getBlockTableHeader("LBL_EMAIL_INFORMATION");
+$xtpl->assign("BLOCK1_HEADER", $block_1_header);
+
 if($focus->mode == 'edit')
 {
         $xtpl->assign("MODE", $focus->mode);
@@ -125,6 +130,11 @@ else $xtpl->assign("RETURN_MODULE",'Emails');
 if(isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
 else $xtpl->assign("RETURN_ACTION",'index');
 if(isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
+//if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
+//{
+//	$xtpl->assign("PARENTID", $_REQUEST['parent_id']);
+//}
+
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
@@ -151,6 +161,58 @@ if (isset($focus->parent_type) && $focus->parent_type != "") {
 }
 
 if ($focus->parent_type == "Account") $xtpl->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=".urlencode($focus->parent_name));
+
+
+ $email_tables = Array('emails','crmentity','activity'); 
+ $tabid = getTabid("Emails");
+ $validationData = getDBValidationData($email_tables,$tabid);
+ $fieldName = '';
+ $fieldLabel = '';
+ $fldDataType = '';
+
+ $rows = count($validationData);
+ foreach($validationData as $fldName => $fldLabel_array)
+ {
+   if($fieldName == '')
+   {
+     $fieldName="'".$fldName."'";
+   }
+   else
+   {
+     $fieldName .= ",'".$fldName ."'";
+   }
+   foreach($fldLabel_array as $fldLabel => $datatype)
+   {
+	if($fieldLabel == '')
+	{
+			
+     		$fieldLabel = "'".$fldLabel ."'";
+	}		
+      else
+       {
+      $fieldLabel .= ",'".$fldLabel ."'";
+        }
+ 	if($fldDataType == '')
+         {
+      		$fldDataType = "'".$datatype ."'";
+    	}
+	 else
+        {
+       		$fldDataType .= ",'".$datatype ."'";
+     	}
+   }
+ }
+
+$xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
+$xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
+$xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
+
+
+
+
+
+
+
 
 $xtpl->parse("main");
 

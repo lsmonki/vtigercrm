@@ -21,12 +21,14 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-echo get_module_title("Users", $_REQUEST['fld_module'].'Field Level Access', true);
+echo '<form action="index.php" method="post" name="new" id="form">';
+echo get_module_title("Users", $_REQUEST['fld_module'].': '.$mod_strings['LBL_FIELD_LEVEL_ACCESS'], true);
 echo '<BR>';
-//echo get_form_header("Standard Fields", "", false );
 
 global $adb;
 global $theme;
+global $theme_path;
+global $image_path;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -45,29 +47,29 @@ $standCustFld = getStdOutput($fieldListResult, $noofrows, $mod_strings,$profilei
 //Standard PickList Fields
 function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 {
+	global $image_path;
 	global $adb;
-	$standCustFld= '';
-	$standCustFld .= '<BR>';
-	$standCustFld .= '<table width="25%" cellpadding="2" cellspacing="0" border="0">';
-	$standCustFld .= '<form action="index.php" method="post" name="new" id="form">';
+	global $app_strings;
+	$standCustFld = '';
 	$standCustFld .= '<input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">';
 	$standCustFld .= '<input type="hidden" name="module" value="Users">';
 	$standCustFld .= '<input type="hidden" name="profileid" value="'.$profileid.'">';
 	$standCustFld .= '<input type="hidden" name="action" value="EditFieldLevelAccess">';
-	$standCustFld .= '<tr><br>';
-	$standCustFld .= '<td><input title="Edit" accessKey="C" class="button" type="submit" name="Edit" value="Edit"></td>';
-	$standCustFld .= '</tr></form></table>';
-	$standCustFld .= '<BR>';
-	$standCustFld .=  get_form_header("Standard Fields", "", false );
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="80%">';
+	$standCustFld .= '<input title="Edit" accessKey="C" class="button" type="submit" name="Edit" value="'.$app_strings['LBL_EDIT_BUTTON'].'">';
+	$standCustFld .= '<BR><BR>';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" width="40%"><tr><td>';
+	$standCustFld .=  get_form_header($mod_strings['LBL_FIELD_PERMISSIOM_TABLE_HEADER'], "", false );
+	$standCustFld .= '</td></tr><table>';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="40%">';
 	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
-	$standCustFld .=   '<td class="moduleListTitle" height="21"><p style="margin-left: 10">Field Name</td>';
-	$standCustFld .=  '<td width="33%" class="moduleListTitle">Visible</td>';
+	$standCustFld .=   '<td width="50%" nowrap class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_FIELD_PERMISSION_FIELD_NAME'].'</td>';
+	$standCustFld .=  '<td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">'.$mod_strings['LBL_FIELD_PERMISSION_VISIBLE'].'</div></td>';
 	$standCustFld .=  '</tr>';
 	
-	for($i=0; $i<$noofrows; $i++)
+	$row=1;
+	for($i=0; $i<$noofrows; $i++,$row++)
 	{
-		if ($i%2==0)
+		if ($row%2==0)
 		{
 			$trowclass = 'evenListRow';
 		}
@@ -82,19 +84,19 @@ function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 		$mandatory = '';
 		if($uitype == 2 || $uitype == 51 || $uitype == 6 || $uitype == 22)	
 		{
-			$mandatory = '<font color="red">*</font>';
+			//$mandatory = '<font color="red">'.$app_strings['LBL_REQUIRED_SYMBOL'].'</font>';
 		}
 
-		$standCustFld .= '<td width="34%" height="21"><p style="margin-left: 10;">'.$mandatory.' '.$adb->query_result($fieldListResult,$i,"fieldlabel").'</td>';
+		$standCustFld .= '<td height="21" nowrap style="padding:0px 3px 0px 3px;">'.$mandatory.' '.$adb->query_result($fieldListResult,$i,"fieldlabel").'</td>';
 		if($adb->query_result($fieldListResult,$i,"visible") == 0)
 		{
-			$visible = "Yes";
+			$visible = "<img src=".$image_path."/yes.gif>";
 		}
 		else
 		{
-			$visible = "No";
+			$visible = "<img src=".$image_path."/no.gif>";
 		}	
-		$standCustFld .= '<td width="33%" height="21"><p style="margin-left: 10;">'.$visible.'</td>';
+		$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;"><div align="center">'.$visible.'</div></td>';
 	}
 	$standCustFld .='</table>';
 	//echo $standCustFld;	

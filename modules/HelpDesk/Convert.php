@@ -77,7 +77,7 @@ if($_REQUEST['change_owner'])
 if($_REQUEST['change_status'])
 {
 	$change .= '<input type="hidden" name="change_status" value="true"/><td width="20%" valign="top" class="dataLabel">'.$mod_strings['LBL_STATUS'].'</td>';
-	$xtpl->assign("STATUSOPTIONS",getComboValues("status","troubleticketstatus","status","1",'Open'));
+	$xtpl->assign("STATUSOPTIONS",getComboValues("status","ticketstatus","status","1",'Open'));
 }
 $xtpl->assign("CHANGE",$change);
 $xtpl->assign("IDLIST",$idlist);

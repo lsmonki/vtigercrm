@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/language/en_us.lang.php,v 1.11 2005/03/02 11:50:51 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/language/en_us.lang.php,v 1.17 2005/03/28 06:31:38 rank Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -79,6 +79,28 @@ $mod_strings = Array(
 'LBL_USER_TITLE'=>'Users',
 'LBL_NEW_USER'=>'New User',
 
+// Added for 4 GA
+'LBL_TOOL_FORM_TITLE'=>'Email Tools',
+//Added for 4GA
+'Date & Time Sent'=>'Date & Time Sent',
+'Sales Enity Module'=>'Sales Enity Module',
+'Activtiy Type'=>'Activtiy Type',
+'Related To'=>'Related To',
+'Assigned To'=>'Assigned To',
+'Subject'=>'Subject',
+'Attachment'=>'Attachment',
+'Description'=>'Description',
+'Time Start'=>'Time Start',
+'Created Time'=>'Created Time',
+'Modified Time'=>'Modified Time',
+
+'MESSAGE_CHECK_MAIL_SERVER_NAME'=>'Please Check the Mail Server Name...',
+'MESSAGE_CHECK_MAIL_ID'=>'Please Check the Email Id of "Assigned To" User...',
+'MESSAGE_MAIL_HAS_SENT_TO_USERS'=>'Mail has been sent to the following User(s) :',
+'MESSAGE_MAIL_HAS_SENT_TO_CONTACTS'=>'Mail has been sent to the following Contact(s) :',
+'MESSAGE_MAIL_ID_IS_INCORRECT'=>'Mail Id is incorrect. Please Check this Mail Id...',
+'MESSAGE_ADD_USER_OR_CONTACT'=>'Please Add any User(s) or Contact(s)...',
+'MESSAGE_MAIL_SENT_SUCCESSFULLY'=>' Mail(s) sent successfully!',
 
 );
 

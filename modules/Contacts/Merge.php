@@ -24,7 +24,7 @@ else if (document.layers || (!document.all && document.getElementById))
 }
 else if(document.all)
 {
-	document.write("<OBJECT Name='vtigerCRM' codebase='../modules/Settings/vtigerCRM.CAB#Version1,0,0,1' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
+	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,2,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
 }
 </script>
 <?php
@@ -57,6 +57,47 @@ $handle = fopen($wordtemplatedownloadpath .$temparray['filename'],"wb");
 fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);
 
+//for mass merge
+$mass_merge = $_REQUEST['idlist'];
+
+if($mass_merge != "")
+{
+  $mass_merge = explode(";",$mass_merge);
+  
+  for($i=0;$i < count($mass_merge) - 1;$i++)
+  {
+  	$query = "SELECT * FROM contactdetails inner join contactsubdetails on contactsubdetails.contactsubscriptionid=contactdetails.contactid inner join contactaddress on contactaddress.contactaddressid=contactdetails.contactid and contactdetails.contactid = '".$mass_merge[$i]."'";
+    
+    $result = $adb->query($query);
+    $y=$adb->num_fields($result); 
+    $columnValues = $adb->fetch_array($result);
+    
+    for ($x=0; $x<$y; $x++)
+    {
+        $columnValString[$x] = $columnValues[$x];
+    }
+    //for custom fields
+  	$sql2 = "select contactscf.* from contactscf inner join contactdetails on contactdetails.contactid = contactscf.contactid where contactdetails.contactid = '".$mass_merge[$i]."'";
+    $result2 = $adb->query($sql2);
+    $numRows2 = $adb->num_fields($result2);
+    $custom_field_values = $adb->fetch_array($result2);
+    for ($z=1; $z<$numRows2; $z++)
+    {
+      $custom_values_str[$z] = $custom_field_values[$z];
+    }
+    //end custom fields
+    $merged_columnValString = array_merge($columnValString,$custom_values_str);
+    
+		$mass_columnString = implode(",",$merged_columnValString);
+    $mass_columnValString = $mass_columnValString.$mass_columnString;
+    if($i < count($mass_merge) - 2)
+    {
+    	$mass_columnValString = $mass_columnValString."###";
+    }
+  }
+$columnValString = $mass_columnValString;
+}
+//end for mass merge
 $query = "SELECT * FROM contactdetails inner join contactsubdetails on contactsubdetails.contactsubscriptionid=contactdetails.contactid inner join contactaddress on contactaddress.contactaddressid=contactdetails.contactid and contactdetails.contactid = '".$_REQUEST['record'] ."'";
 
 //$query = "SELECT * FROM contactdetails,contactsubdetails,contactaddress where contactid = '".$_REQUEST['record'] ."'";
@@ -69,17 +110,45 @@ for ($x=0; $x<$y; $x++)
 {
 		$fld = $adb->field_name($result, $x);
     $columnNames[$x] = "CONTACT_".strtoupper($fld->name);
-} 
-
-$columnValues = $adb->fetch_array($result);
-for ($x=0; $x<$y; $x++)
-{
-    $columnValString[$x] = $columnValues[$x];
 }
 
-$columnString = implode(",",$columnNames);
-$columnValString = implode(",",$columnValString);
+//condition added for mass merge		 
+if($mass_merge == "")
+{
+  $columnValues = $adb->fetch_array($result);
+  for ($x=0; $x<$y; $x++)
+  {
+      $columnValString[$x] = str_replace(","," ",$columnValues[$x]);
+  }
+	//$columnValString = implode(",",$columnValString);
 
+  //<<<<<<<<<<<<<<<<to fetch values of custom fields>>>>>>>>>>>>>>>>>>>>>>
+  $sql2 = "select contactscf.* from contactscf inner join contactdetails on contactdetails.contactid = contactscf.contactid where contactdetails.contactid = '".$_REQUEST['record'] ."'";
+  $result2 = $adb->query($sql2);
+  $numRows2 = $adb->num_fields($result2);
+  $custom_field_values = $adb->fetch_array($result2);
+  for ($i=1; $i<$numRows2; $i++)
+  {
+    $custom_values_str[$i] = $custom_field_values[$i];
+  }
+  //<<<<<<<<<<<<<<<<end fetch values of custom fields>>>>>>>>>>>>>>>>>>>>>>
+  $columnValString = array_merge($columnValString,$custom_values_str);
+  $columnValString = implode(",",$columnValString);
+}
+//end condition added for mass merge
+
+//start custom fields
+$sql1 = "select fieldlabel from field where generatedtype=2 and tabid=4";
+$result = $adb->query($sql1);
+$numRows = $adb->num_rows($result);
+for($i=0; $i < $numRows;$i++)
+{
+$custom_fields[$i] = "CONTACT_".strtoupper(str_replace(" ","",$adb->query_result($result,$i,"fieldlabel")));
+}
+$column_string = array_merge($columnNames,$custom_fields);
+//end custom fields
+
+$columnString = implode(",",$column_string);
 //echo $columnString;
 //echo $columnValString;
 
@@ -88,6 +157,7 @@ var dHdr = '$columnString';
 var dSrc = '$columnValString';
 </script>";
 //echo $site_URL."/test/wordtemplatedownload/".$filename;
+
 ?>
 <script>
 if (window.ActiveXObject){

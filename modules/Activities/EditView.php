@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/EditView.php,v 1.5 2005/03/02 13:56:52 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/EditView.php,v 1.11 2005/03/24 16:18:38 samk Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -28,7 +28,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/uifromdbutil.php');
-
+require_once('include/FormValidationUtil.php');
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
@@ -37,14 +37,17 @@ global $current_user;
 // global $current_language;
 // global $default_language;
 // global $cal_codes;
+$activity_lbl='';
 $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
 {
 	$tab_type = 'Activities';
+	$activity_lbl = $mod_strings['LBL_TASK_INFORMATION'];
 }
 elseif($activity_mode == 'Events')
 {
 	$tab_type = 'Events';
+	$activity_lbl = $mod_strings['LBL_EVENT_INFORMATION'];
 }
 
 $focus = new Activity();
@@ -86,6 +89,7 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("ACTIVITY_MODE", $activity_mode);
+$xtpl->assign("ACTIVITY_INFORMATION",$activity_lbl);
 
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
@@ -103,6 +107,8 @@ $xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_
 if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
 if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
+if (isset($_REQUEST['ticket_id'])) $xtpl->assign("TICKETID", $_REQUEST['ticket_id']);
+if (isset($_REQUEST['product_id'])) $xtpl->assign("PRODUCTID", $_REQUEST['product_id']);
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
@@ -160,6 +166,71 @@ $xtpl->assign("TYPE_OPTIONS", get_select_options_with_id($app_list_strings['reco
 
 $xtpl->assign("STATUS_OPTIONS", get_select_options_with_id($app_list_strings['task_status_dom'], $focus->status));
 */
+
+
+
+
+
+
+
+ $activities_tables = Array('activity','crmentity'); 
+ $tabid = getTabid($tab_type);
+ $validationData = getDBValidationData($activities_tables,$tabid);
+ $fieldName = '';
+ $fieldLabel = '';
+ $fldDataType = '';
+
+ $rows = count($validationData);
+ foreach($validationData as $fldName => $fldLabel_array)
+ {
+   if($fieldName == '')
+   {
+     $fieldName="'".$fldName."'";
+   }
+   else
+   {
+     $fieldName .= ",'".$fldName ."'";
+   }
+   foreach($fldLabel_array as $fldLabel => $datatype)
+   {
+	if($fieldLabel == '')
+	{
+			
+     		$fieldLabel = "'".$fldLabel ."'";
+	}		
+      else
+       {
+      $fieldLabel .= ",'".$fldLabel ."'";
+        }
+ 	if($fldDataType == '')
+         {
+      		$fldDataType = "'".$datatype ."'";
+    	}
+	 else
+        {
+       		$fldDataType .= ",'".$datatype ."'";
+     	}
+   }
+ }
+
+
+
+
+
+
+
+$xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
+$xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
+$xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
+
+
+
+
+
+
+
+
+
 $xtpl->parse("main");
 
 $xtpl->out("main");

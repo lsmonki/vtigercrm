@@ -23,6 +23,7 @@ $mod_strings = Array(
 'LBL_LEAD_OPP_FORM_TITLE'=>'Contact-Opportunity:',
 'LBL_LEAD'=>'Lead:',
 'LBL_ADDRESS_INFORMATION'=>'Address Information',
+'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 
 'LBL_LIST_NAME'=>'Name',
 'LBL_LIST_LAST_NAME'=>'Last Name',
@@ -69,10 +70,6 @@ $mod_strings = Array(
 'LBL_ACCOUNT_NAME'=>'Account Name',
 'LBL_POTENTIAL_NAME'=>'Potential Name',
 'LBL_POTENTIAL_CLOSE_DATE'=>'Potential Close Date',
-'LBL_ACCOUNT_NAME'=>'Account Name',
-'LBL_ACCOUNT_NAME'=>'Account Name',
-'LBL_POTENTIAL_NAME'=>'Opportunity Name',
-'LBL_POTENTIAL_CLOSE_DATE'=>'Opportunity Close Date',
 
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
 'NTC_REMOVE_CONFIRMATION'=>'Are you sure you want to remove this contact from this case?',
@@ -94,7 +91,7 @@ $mod_strings = Array(
 'LBL_ASSIGNED_TO'=>'Assigned To:',
 'LBL_SELECT_LEAD'=>'Select Lead',
 'LBL_GENERAL_INFORMATION'=>'General Information',
-'LBL_DO_NOT_CREATE_NEW_OPPORTUNITY'=>'Do not create a New Opportunity upon Conversion',
+'LBL_DO_NOT_CREATE_NEW_POTENTIAL'=>'Do not create a New Potential upon Conversion',
 
 //for v4 release added
 'LBL_NEW_POTENTIAL'=>'New Potential',
@@ -114,8 +111,45 @@ $mod_strings = Array(
 'LBL_ATTACHMENT_TITLE'=>'Attachments',
 
 
+//Added fields after RC1 - Release 
+'LBL_ALL'=>'All',
+'LBL_CONTACTED'=>'Contacted',
+'LBL_LOST'=>'Lost',
+'LBL_HOT'=>'Hot',
+'LBL_COLD'=>'Cold',
 
+// Added for 4GA
+'LBL_TOOL_FORM_TITLE'=>'Lead Tools',
 
+'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
+
+//Added for 4GA
+'Salutation'=>'Salutation',
+'First Name'=>'First Name',
+'Phone'=>'Phone',
+'Last Name'=>'Last Name',
+'Mobile'=>'Mobile',
+'Company'=>'Company',
+'Fax'=>'Fax',
+'Designation'=>'Designation',
+'Email'=>'Email',
+'Lead Source'=>'Lead Source',
+'Website'=>'Website',
+'Annual Revenue'=>'Annual Revenue',
+'Lead Status'=>'Lead Status',
+'Industry'=>'Industry',
+'Rating'=>'Rating',
+'No Of Employees'=>'No Of Employees',
+'Assigned To'=>'Assigned To',
+'Yahoo Id'=>'Yahoo Id',
+'Created Time'=>'Created Time',
+'Modified Time'=>'Modified Time',
+'Street'=>'Street',
+'Postal Code'=>'Postal Code',
+'City'=>'City',
+'Country'=>'Country',
+'State'=>'State',
+'Description'=>'Description',
 
 );
 

@@ -25,10 +25,11 @@ include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
+require_once('data/CRMEntity.php');
 require_once('include/utils.php');
 
 // Faq is used to store faq information.
-class Faq extends SugarBean {
+class Faq extends CRMEntity {
 	var $log;
 	var $db;
 
@@ -43,6 +44,7 @@ class Faq extends SugarBean {
 	
 	var $column_fields = Array();
 		
+	var $sortby_fields = Array('question','category');		
 
 	// This is the list of fields that are in the lists.
 	var $list_fields = Array(

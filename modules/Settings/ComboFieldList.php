@@ -36,35 +36,58 @@ $xtpl=new XTemplate ('modules/Settings/ComboFieldList.html');
 if($fld_module == 'Leads')
 {
 	$custFldArray = Array
-		     ('Lead Source'=>'leadsource'
-                      ,'Salutation'=>'salutation'
-                      ,'Lead Status'=>'leadstatus'
-                      ,'Industry'=>'industry'
-                      ,'Rating'=>'rating'
-                      ,'License Key'=>'licencekeystatus');
+		     ($mod_strings['LBL_LEAD_SOURCE']=>'leadsource'
+                      ,$mod_strings['LBL_SALUTATION']=>'salutationtype'
+                      ,$mod_strings['LBL_LEAD_STATUS']=>'leadstatus'
+                      ,$mod_strings['LBL_INDUSTRY']=>'industry'
+                      ,$mod_strings['LBL_RATING']=>'rating');
 	$standCustFld = getStdOutput($custFldArray, $mod_strings);
 		 
 }
 elseif($fld_module == 'Accounts')
 {
-	$custFldArray =	Array('Account Type'=>'accounttype'
-                      ,'Industry'=>'industry');
+	$custFldArray =	Array($mod_strings['LBL_ACCOUNT_TYPE']=>'accounttype'
+                      ,$mod_strings['LBL_INDUSTRY']=>'industry');
 	$standCustFld = getStdOutput($custFldArray, $mod_strings);
 }
 elseif($fld_module == 'Contacts')
 {
-	$custFldArray = Array('Type'=>'usertype'
-                      ,'Salutation'=>'salutationtype');
+	$custFldArray = Array($mod_strings['LBL_SALUTATION']=>'salutationtype');
 	$standCustFld = getStdOutput($custFldArray, $mod_strings);
 }
 elseif($fld_module == 'Potentials')
 {
-	$custFldArray = Array('Lead Source'=>'leadsource'
-                      ,'Business Type'=>'businesstype'
-                      ,'Sales Stage'=>'sales_stage');
+	$custFldArray = Array($mod_strings['LBL_LEAD_SOURCE']=>'leadsource'
+                      ,$mod_strings['LBL_BUSINESS_TYPE']=>'opportunity_type'
+                      ,$mod_strings['LBL_CURRENCY_TYPE']=>'currency'
+                      ,$mod_strings['LBL_SALES_STAGE']=>'sales_stage');
 	$standCustFld = getStdOutput($custFldArray, $mod_strings);
 }
-
+elseif($fld_module == 'HelpDesk')
+{
+	$custFldArray = Array($mod_strings['LBL_PRIORITY']=>'ticketpriorities'
+			,$mod_strings['LBL_STATUS']=>'ticketstatus'
+			,$mod_strings['LBL_CATEGORY']=>'ticketcategories');
+	$standCustFld = getStdOutput($custFldArray, $mod_strings);
+}
+elseif($fld_module == 'Products')
+{
+	$custFldArray = Array($mod_strings['LBL_MANUFACTURER']=>'manufacturer'
+			,$mod_strings['LBL_PRODUCT_CATEGORY']=>'productcategory');
+	$standCustFld = getStdOutput($custFldArray, $mod_strings);
+}
+elseif($fld_module == 'Events')
+{
+	$custFldArray = Array($mod_strings['LBL_STATUS']=>'taskstatus'
+			,$mod_strings['LBL_PRIORITY']=>'taskpriority');
+	$standCustFld = getStdOutput($custFldArray, $mod_strings);
+}
+elseif($fld_module == 'Activities')
+{
+	$custFldArray = Array($mod_strings['LBL_STATUS']=>'taskstatus'
+			,$mod_strings['LBL_PRIORITY']=>'taskpriority');
+	$standCustFld = getStdOutput($custFldArray, $mod_strings);
+}
 
  
 function fetchTabIDVal($fldmodule)
@@ -85,12 +108,15 @@ $tabid = fetchTabIDVal($fldmodule);
 //Standard PickList Fields
 function getStdOutput($custFldArray, $mod_strings)
 {
-	echo get_form_header("Standard Fields", "", false );
-	$standCustFld= ''; 
+	$standCustFld = ''; 
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" width="80%"><tr><td>';
+	$standCustFld .= get_form_header($mod_strings['LBL_STANDARD_FIELDS'], "", false );
+	$standCustFld .= '</td></tr></table>';
 	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="80%">';
-	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
-	$standCustFld .=   '<td class="moduleListTitle" height="21"><p style="margin-left: 10">'.$mod_strings['FieldName'].'</td>';
-	$standCustFld .=  '<td width="15%" class="moduleListTitle"></td></tr>';
+	$standCustFld .= '<tr height=20>';
+	$standCustFld .= '<td class="ModuleListTitle" width="12%" style="padding:0px 3px 0px 3px;"><div align="center">Operation</div></td>';
+	$standCustFld .= '<td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;">'.$mod_strings['FieldName'].'</td>';
+	$standCustFld .= '</tr>';
 	$i=1;
 	foreach($custFldArray as $custFldName => $custFldTableName)
 	{
@@ -104,8 +130,9 @@ function getStdOutput($custFldArray, $mod_strings)
 		}
 
 		$standCustFld .= '<tr class="'.$trowclass.'">';
-		$standCustFld .= '<td width="34%" height="21"><p style="margin-left: 10;">'.$custFldName.'</td>';
-		$standCustFld .= '<td width="33%" height="21"><p style="margin-left: 10"><a href="index.php?module=Settings&action=EditComboField&fld_module='.$fld_module.'&fld_name='.$custFldName.'&table_name='.$custFldTableName.'&column_name='.$custFldTableName.'">'.$mod_strings['Edit'].'</a></td></tr>';
+		$standCustFld .= '<td width="12%" height="21" style="padding:0px 3px 0px 3px;"><div align="center"><a href="index.php?module=Settings&action=EditComboField&fld_module='.$fld_module.'&fld_name='.$custFldName.'&table_name='.$custFldTableName.'&column_name='.$custFldTableName.'">'.$mod_strings['Edit'].'</a></div></td>';
+		$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$custFldName.'</td>';
+		$standCustFld .= '</tr>';
 		$i++; 
 	}
 	$standCustFld .='</table>';
@@ -129,11 +156,11 @@ foreach($usrFldArray as $custFldName => $custFldColName)
 	}
 	$custFldTableName = $fld_module.'_'.$custFldColName;
 	$userCustFld .= '<tr class="'.$trowclass.'">';
-	$userCustFld .= '<td width="34%" height="21"><p style="margin-left: 10;">'.$custFldName.'</td>';
-	$userCustFld .= '<td width="33%" height="21"><p style="margin-left: 10"><a href="index.php?module=Settings&action=EditComboField&fld_module='.$fld_module.'&fld_name='.$custFldName.'&table_name='.$custFldColName.'&column_name='.$custFldColName.'">'.$mod_strings['Edit'].'</a></td></tr>';
+	$userCustFld .= '<td width="12%" height="21"><a href="index.php?module=Settings&action=EditComboField&fld_module='.$fld_module.'&fld_name='.$custFldName.'&table_name='.$custFldColName.'&column_name='.$custFldColName.'">'.$mod_strings['Edit'].'</a></td>';
+	$userCustFld .= '<td height="21">'.$custFldName.'</td></tr>';
 	$i++; 
 }
-$cust_fld_header = get_form_header("Custom Fields", "", false );
+$cust_fld_header = get_form_header($mod_strings['CustomFields'], "", false );
 $xtpl->assign("CUSTOMHEADER", $cust_fld_header);
 $xtpl->assign("CUSTOM_COMBO_FIELDS", $userCustFld);
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Delete.php,v 1.4 2005/03/04 05:56:56 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Delete.php,v 1.6 2005/03/10 09:29:42 shaw Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -30,6 +30,8 @@ if(!isset($_REQUEST['record']))
 $sql='delete from seactivityrel where activityid="'.$_REQUEST['record'].'" and "'.$_REQUEST['record'].'"';
 $adb->query($sql);
 
+$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
+$adb->query($sql_recentviewed);
 if($_REQUEST['module'] == $_REQUEST['return_module'])
 	$focus->mark_deleted($_REQUEST['record']);
 

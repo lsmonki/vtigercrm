@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Save.php,v 1.6 2005/02/09 06:33:54 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Save.php,v 1.7 2005/03/15 09:55:31 shaw Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -66,7 +66,8 @@ foreach($focus->column_fields as $fieldname => $val)
 	}
 }*/
 
-$focus->saveentity("Accounts");
+//$focus->saveentity("Accounts");
+$focus->save("Accounts");
 //echo '<BR>';
 //echo $focus->id;
 $return_id = $focus->id;

@@ -14,7 +14,8 @@
 function showDefaultCustomView(selectView)
 {
 viewName = selectView.options[selectView.options.selectedIndex].value;
-document.massdelete.action="index.php?module=HelpDesk&action=ListView&return_module=HelpDesk&return_action=ListView&viewname="+viewName;
+document.massdelete.viewname.value=viewName;
+document.massdelete.action="index.php?module=HelpDesk&action=index&return_module=HelpDesk&return_action=ListView&viewname="+viewName;
  document.massdelete.submit();
 }
 
@@ -79,27 +80,12 @@ function clear_form(form) {
 		<td COLSPAN="15" class="listFormHeaderLinks">
 			<table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<form name="massdelete" method="POST">
-				<input name='idlist' type='hidden' >
-			   <td>Status Views : 
-                                   <SELECT NAME="view" onchange="showDefaultCustomView(this)">
-                                   <OPTION VALUE="">Choose a View...</option>
-                                   <OPTION VALUE="All">All</option>
-                                   <OPTION VALUE="Low">Low</option>
-                                   <OPTION VALUE="Medium">Medium</option>
-                                   <OPTION VALUE="High">High</option>
-                                   <OPTION VALUE="Critical">Critical</option>
-                                   </SELECT>
-
-<input class='button' type='submit' value='{APP.LBL_MASS_DELETE}' onclick="return massDelete()"/>	
-			   </td>
-			
-			   <td align="right">{Start}&nbsp;&nbsp;{Prev}&nbsp;&nbsp;{Next}&nbsp;&nbsp;{End}&nbsp;&nbsp;</td>
+				<td>&nbsp;{RECORD_COUNTS}</td>
+			   	{NAVIGATION}
 			</tr>
 			</table>
 		</td>
 	</tr>
-	<form action="index.php" method="post" name="CustomFieldUpdate" id="form">
 	<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
 	{LISTHEADER}
 		<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
@@ -107,6 +93,7 @@ function clear_form(form) {
 	</form>
 </table>
 <br>
+{SELECT_SCRIPT}
 <br>
 <TABLE width="60%" border=0 cellPadding=0 cellSpacing=1>
 <tr>

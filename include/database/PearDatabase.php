@@ -88,6 +88,24 @@ class PearDatabase{
 		return 	$this->dbType. "://".$this->userName.":".$this->userPassword."@". $this->dbHostName . "/". $this->dbName;
 	}
 
+	function startTransaction()
+	{
+		$this->println("TRANS Started");
+		$this->checkConnection();
+		$this->database->StartTrans();
+	}
+
+	function completeTransaction()
+	{		
+		if($this->database->HasFailedTrans()) 
+			$this->println("TRANS  Rolled Back");
+		else
+			$this->println("TRANS  Commited");
+		
+		$this->database->CompleteTrans();
+		$this->println("TRANS  Completed");
+	}
+
 	/* ADODB converted	
 	function checkError($msg='', $dieOnError=false){
 		if($this->dbType == "mysql"){
@@ -155,6 +173,9 @@ class PearDatabase{
 	{
 		return is_array($arr)?array_change_key_case($arr):$arr;
 	}
+
+	var $req_flist;	
+	
 	
 	/**
 	* @return void
@@ -165,7 +186,22 @@ class PearDatabase{
 	*/
 	function checkConnection(){
 			if(!isset($this->database))
+			{
+				$this->println("TRANS creating new connection");
+				/*$flist=get_included_files();
+				foreach($flist as $key=>$value)
+				{
+					if(!strstr($value,'\\modules') && !strstr($value,'\\data'))
+					unset($flist[$key]);
+					
+				}
+				$this->println($flist);*/
 				$this->connect(false);
+			}
+			else
+			{
+				$this->println("checkconnect using old connection");
+			}
 	}
 
 	/* ADODB converted	
@@ -189,7 +225,7 @@ class PearDatabase{
 
 	function query($sql, $dieOnError=false, $msg='')
 	{
-		$this->println("ADODB query ".$sql);
+		$this->println("ADODB query ".$sql);		
 		$this->checkConnection();
 		$result = & $this->database->Execute($sql);
 		$this->lastmysqlrow = -1;
@@ -382,10 +418,11 @@ class PearDatabase{
 	/* ADODB newly added. replacement for mysql_result() */
 
 	function query_result(&$result, $row, $col=0)
-	{
+	{		
 		//$this->println("ADODB query_result r=".$row." c=".$col);
 		$result->Move($row);
 		$rowdata = $this->change_key_case($result->FetchRow());
+		//$this->println($rowdata);
 		$coldata = $rowdata[$col];
 		//$this->println("ADODB query_result ". $coldata);
 		return $coldata;
@@ -424,10 +461,14 @@ class PearDatabase{
 	}*/
 
 	function requireSingleResult($sql, $dieOnError=false,$msg='', $encode=true){
-			$result = &$this->query($sql, $dieOnError, $msg);
+			$result = $this->query($sql, $dieOnError, $msg);
 		
-			if($this->getRowCount($result ) == 1)
-				return to_html($result, $encode); // srini - just think $result compatability
+			/*$row = $this->change_key_case($result->GetRowAssoc(false));
+			$this->println("rsr ");
+			$this->println($row);*/
+			if($this->getRowCount($result ) == 1)				
+				//return to_html($result, $encode); // srini - just think $result compatability
+				return $result;
 			$this->log->error('Rows Returned:'. $this->getRowCount($result) .' More than 1 row returned for '. $sql);
 			return '';
 	}
@@ -483,7 +524,7 @@ class PearDatabase{
 			return $row;			
 		}
 	
-		$this->println("ADODB fetchByAssoc after if ".$rowNum);	
+		//$this->println("ADODB fetchByAssoc after if ".$rowNum);	
 		
 		if($this->getRowCount($result) > $rowNum)
 		{
@@ -602,9 +643,12 @@ class PearDatabase{
 		//$this->database->debug = true;
 		
 		$this->database->PConnect($this->dbHostName, $this->userName, $this->userPassword, $this->dbName);
-		$this->database->LogSQL($this->enableSQLlog);		
+		$this->database->LogSQL($this->enableSQLlog);
+		//$this->database->SetFetchMode(ADODB_FETCH_ASSOC); 
+		//$this->println("ADODB type=".$this->dbType." host=".$this->dbHostName." dbname=".$this->dbName." user=".$this->userName." password=".$this->userPassword);		
 
 	}
+/*
 	function PearDatabase(){			
 			//$this->println("PearDatabase");
 			global $currentModule;
@@ -630,7 +674,50 @@ class PearDatabase{
 		}*/
 			
 		
+
+	function PearDatabase($dbtype='',$host='',$dbname='',$username='',$passwd=''){			
+        //$this->println("PearDatabase");
+			global $currentModule;
+			$this->log =& LoggerManager::getLogger('PearDatabase_'. $currentModule);
+			$this->resetSettings($dbtype,$host,$dbname,$username,$passwd);
+			
+			
 	}
+    
+   
+    function resetSettings($dbtype,$host,$dbname,$username,$passwd)
+    {
+       
+		global $dbconfig, $dbconfigoption;
+		
+        if($host == '')
+        {
+            $this->disconnect();
+            $this->setDatabaseType($dbconfig['db_type']);
+            $this->setUserName($dbconfig['db_user_name']);
+            $this->setUserPassword($dbconfig['db_password']);
+            $this->setDatabaseHost( $dbconfig['db_host_name']);
+            $this->setDatabaseName($dbconfig['db_name']);
+            $this->dbOptions = $dbconfigoption;
+            $this->enableSQLlog = ($dbconfig['log_sql'] == true);
+            //$this->println("resetSettings log=".$this->enableSQLlog);
+            //$this->println($dbconfig);
+            /*if($this->dbType != "mysql"){
+			require_once( 'DB.php' );	
+		}*/
+        }
+        else
+        {
+            
+            $this->disconnect();
+            $this->setDatabaseType($dbtype);
+            $this->setDatabaseName($dbname);
+            $this->setUserName($username);
+            $this->setUserPassword($passwd);
+            $this->setDatabaseHost( $host);
+            
+        }
+}
 
 /* ADODB converted	
 function quote($string){
@@ -735,6 +822,9 @@ function alterTable($tablename, $flds, $oper)
 		$sqlarray = $dict->DropColumnSQL($tablename, $flds);
 	}
 
+	$this->println("sqlarray");
+	$this->println($sqlarray);
+
 	$result = $dict->ExecuteSQLArray($sqlarray);
 
 	$this->println("ADODB alterTableTable table=".$tablename." flds=".$flds." oper=".$oper." status=".$result);
@@ -801,10 +891,25 @@ function formatDate($datetime)
 	return $date;
 }
 
+function getDBDateString($datecolname)
+{
+	$this->checkConnection();
+	$db = &$this->database;
+	$datestr = $db->SQLDate("Y-m-d, H:i:s" ,$datecolname);
+	return $datestr;	
+}
+
 function getUniqueID($seqname)
 {
 	$this->checkConnection();
 	return $this->database->GenID($seqname."_seq",1);
+}
+function get_tables()
+{
+    $this->checkConnection();
+    $result = & $this->database->MetaTables('TABLES');
+    $this->println($result);
+    return $result;		
 }
 
 	
@@ -812,6 +917,7 @@ function getUniqueID($seqname)
 
 $adb = new PearDatabase();
 $adb->connect();
+
 //$adb->database->setFetchMode(ADODB_FETCH_NUM);
 
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Delete.php,v 1.4 2005/03/04 06:58:22 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Delete.php,v 1.6 2005/03/10 09:30:13 shaw Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -35,6 +35,8 @@ if($_REQUEST['return_module']== 'Contacts')
 $sql = 'delete from senotesrel where notesid = '.$_REQUEST['record']. ' and crmid = '.$_REQUEST['return_id'];
 $adb->query($sql);
 
+$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
+$adb->query($sql_recentviewed);
 if($_REQUEST['return_module'] == $_REQUEST['module'])
         $focus->mark_deleted($_REQUEST['record']);
 

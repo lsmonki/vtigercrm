@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/orange/header.php,v 1.18 2005/03/02 10:19:30 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/orange/header.php,v 1.22 2005/03/25 15:37:39 rank Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -72,7 +72,7 @@ else $xtpl->assign("CURRENT_USER", $current_user->user_name);
  	
 $xtpl->assign("CURRENT_USER_ID", $current_user->id);
 
-if (is_admin($current_user)) $xtpl->assign("ADMIN_LINK", "<a href='index.php?module=Administration&action=index'><img src='".$image_path."/admin.gif' hspace='3' align='absmiddle' border='0'>".$app_strings['LBL_ADMIN']."</a>&nbsp;<a href='index.php?module=Settings&action=index'><img src='".$image_path."/settings.gif' hspace='3' align='absmiddle' border='0'>".$app_strings['LBL_SETTINGS']."</a>");
+if (is_admin($current_user)) $xtpl->assign("ADMIN_LINK", "<a href='index.php?module=Settings&action=index'><img src='".$image_path."/settings_top.gif' hspace='3' align='absmiddle' border='0'>".$app_strings['LBL_SETTINGS']."</a>");
 
 if (isset($_REQUEST['query_string'])) $xtpl->assign("SEARCH", $_REQUEST['query_string']);
 
@@ -141,8 +141,19 @@ if (count($history) > 0) {
 		$xtpl->assign("MODULE_NAME",$row['module_name']);
 		$xtpl->assign("ROW_NUMBER",$current_row);
 		$xtpl->assign("RECENT_LABEL",$row['item_summary']);
-		$xtpl->assign("RECENT_URL","index.php?module=$row[module_name]&action=DetailView&record=$row[item_id]");
-	
+
+                if($row['module_name']=='Activities')
+                {
+                        $sql = 'select activitytype from activity where activityid = '.$row['item_id'];
+                        $activitytype = $adb->query_result($adb->query($sql),0,'activitytype');
+                        if($activitytype == 'Task')
+                                $activity_mode = '&activity_mode=Task';
+                        elseif($activitytype == 'Call' || $activitytype == 'Meeting')
+                                $activity_mode = '&activity_mode=Events';
+                }
+
+		$xtpl->assign("RECENT_URL","index.php?module=$row[module_name]&action=DetailView&record=$row[item_id]$activity_mode");
+		$activity_mode = '';
 		$xtpl->parse("main.left_form.left_form_recent_view.left_form_recent_view_row");
 		$current_row++;
 	}
@@ -184,10 +195,10 @@ if(isset($QuickCreateForm) && $QuickCreateForm == 'true')
 
 
 
-$xtpl->assign("CLOCK_TITLE", "World Clock");
+$xtpl->assign("CLOCK_TITLE", $app_strings['LBL_WORLD_CLOCK']);
 $xtpl->assign("WORLD_CLOCK", get_world_clock($image_path));
 
-$xtpl->assign("CALC_TITLE", "Calculator");
+$xtpl->assign("CALC_TITLE", $app_strings['LBL_CALCULATOR']);
 $xtpl->assign("CALC", get_calc($image_path));
 
 $xtpl->parse("main");

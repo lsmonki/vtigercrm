@@ -20,16 +20,14 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
+echo '<form action="index.php" method="post" name="new" id="form">';
 echo get_module_title("Users",' Profiles', true);
-echo '<BR>';
-//echo get_form_header("Standard Fields", "", false );
 
 global $adb;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-
 
 $xtpl=new XTemplate ('modules/Users/ListProfiles.html');
 
@@ -45,23 +43,20 @@ function getStdOutput($profileListResult, $noofrows, $mod_strings)
 	global $adb;
 	//echo get_form_header("Profiles", "", false );
 	$standCustFld= '';
-	$standCustFld .= '<table width="25%" cellpadding="2" cellspacing="0" border="0">';
-        $standCustFld .= '<form action="index.php" method="post" name="new" id="form">';
-        $standCustFld .= '<input type="hidden" name="module" value="Users">';
-        $standCustFld .= '<input type="hidden" name="action" value="CreateProfile">';
-        $standCustFld .= '<tr><br>';
-        $standCustFld .= '<td><input title="New" accessKey="C" class="button" type="submit" name="New" value="New Profile"></td>';
-        $standCustFld .= '</tr></form></table>';
-        $standCustFld .= '<BR>'; 
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="80%">';
-	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
-	$standCustFld .=   '<td class="moduleListTitle" height="21"><p style="margin-left: 10"></td>';
-	$standCustFld .=   '<td class="moduleListTitle" height="21"><p style="margin-left: 10">Profile Name</td>';
+	$standCustFld .= '<input type="hidden" name="module" value="Users">';
+	$standCustFld .= '<input type="hidden" name="action" value="CreateProfile">';
+	$standCustFld .= '<br><input title="New" accessKey="C" class="button" type="submit" name="New" value="New Profile">';
+	$standCustFld .= '<br><BR>'; 
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="50%">';
+	$standCustFld .=  '<tr height=20>';
+	$standCustFld .=   '<td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;"><div align="center">Operation</div></td>';
+	$standCustFld .=   '<td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;">Profile Name</td>';
 	$standCustFld .=  '</tr>';
 	
-	for($i=0; $i<$noofrows; $i++)
+	$row=1;
+	for($i=0; $i<$noofrows; $i++,$row++)
 	{
-		if ($i%2==0)
+		if ($row%2==0)
 		{
 			$trowclass = 'evenListRow';
 		}
@@ -73,8 +68,16 @@ function getStdOutput($profileListResult, $noofrows, $mod_strings)
 		$standCustFld .= '<tr class="'.$trowclass.'">';
 		$profile_name = $adb->query_result($profileListResult,$i,"profilename");
 		$profile_id = $adb->query_result($profileListResult,$i,"profileid");
-		$standCustFld .= '<td width="34%" height="21"><a href="index.php?module=Users&action=ProfileEditView&profileid='.$profile_id.'">edit</a> | <a href="#">del</a></td>';	
-		$standCustFld .= '<td width="34%" height="21"><p style="margin-left: 10;"><a href="index.php?module=Users&action=ProfileDetailView&profileid='.$profile_id.'">'.$profile_name.'</a></td></tr>';
+		$standCustFld .= '<td width="18%" height="21" style="padding:0px 3px 0px 3px;"><div align="center"><a href="index.php?module=Users&action=ProfileEditView&profileid='.$profile_id.'">edit</a>';
+		global $current_user;
+                $current_profile = fetchUserProfileId($current_user->id);
+                if($profile_id != 1 && $profile_id != 2 && $profile_id != 3 && $profile_id != 4 && $profile_id != $current_profile)
+                {
+
+			$standCustFld .= ' | <a href="index.php?module=Users&action=ProfileDeleteStep1&profileid='.$profile_id.'">del</a>';	
+		}
+		$standCustFld .= '</div></td>';
+		$standCustFld .= '<td wheight="21" style="padding:0px 3px 0px 3px;"><a href="index.php?module=Users&action=ProfileDetailView&profileid='.$profile_id.'">'.$profile_name.'</a></td></tr>';
 		
 	}
 	$standCustFld .='</table>';

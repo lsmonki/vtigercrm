@@ -12,6 +12,7 @@ require_once('include/database/PearDatabase.php');
 require_once('XTemplate/xtpl.php');
 require_once('include/uifromdbutil.php');
 require_once('modules/Products/Product.php');
+require_once('include/FormValidationUtil.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -48,8 +49,9 @@ if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
         $cust_fld .=  '<tr><td>';
+	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
+        $cust_fld .= $block_5_header;
         $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= '<tr><th align="left" class="formSecHeader" colspan="2">Custom Information</th></tr>';
         $cust_fld .= $block_5;
         $cust_fld .= '</table>';
         $cust_fld .= '</td></tr></table>';
@@ -66,6 +68,10 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
+$block_1_header = getBlockTableHeader("LBL_PRODUCT_INFORMATION");
+$block_2_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
+$xtpl->assign("BLOCK1_HEADER", $block_1_header);
+$xtpl->assign("BLOCK2_HEADER", $block_2_header);
 
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
@@ -85,8 +91,63 @@ if($focus->mode == 'edit')
 if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if(isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
 if(isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
+if(isset($_REQUEST['activity_mode'])) $xtpl->assign("ACTIVITYMODE", $_REQUEST['activity_mode']);
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+
+
+
+
+$product_tables = Array('products','productcf','productcollaterals'); 
+
+ $validationData = getDBValidationData($product_tables);
+ $fieldName = '';
+ $fieldLabel = '';
+ $fldDataType = '';
+
+ $rows = count($validationData);
+ foreach($validationData as $fldName => $fldLabel_array)
+ {
+   if($fieldName == '')
+   {
+     $fieldName="'".$fldName."'";
+   }
+   else
+   {
+     $fieldName .= ",'".$fldName ."'";
+   }
+   foreach($fldLabel_array as $fldLabel => $datatype)
+   {
+	if($fieldLabel == '')
+	{
+			
+     		$fieldLabel = "'".$fldLabel ."'";
+	}		
+      else
+       {
+      $fieldLabel .= ",'".$fldLabel ."'";
+        }
+ 	if($fldDataType == '')
+         {
+      		$fldDataType = "'".$datatype ."'";
+    	}
+	 else
+        {
+       		$fldDataType .= ",'".$datatype ."'";
+     	}
+   }
+ }
+
+
+
+$xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
+$xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
+$xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
+
+
+
+
+
 
 $xtpl->parse("main");
 

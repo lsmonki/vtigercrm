@@ -17,9 +17,9 @@ global $fileId;
 
 $fileid = $_REQUEST['fileid'];
 
-$dbQuery = "SELECT * from seattachmentsrel where crmid = '" .$fileid ."'";
-
-$attachmentsid = $adb->query_result($adb->query($dbQuery),0,'attachmentsid');
+//$dbQuery = "SELECT * from seattachmentsrel where crmid = '" .$fileid ."'";
+//$attachmentsid = $adb->query_result($adb->query($dbQuery),0,'attachmentsid');
+$attachmentsid = $fileid;
 
 $returnmodule=$_REQUEST['return_module'];
 
@@ -27,7 +27,7 @@ if($_REQUEST['activity_type']=='Attachments')
 	$attachmentsid=$fileid;
 
 $dbQuery = "SELECT * FROM attachments ";
-$dbQuery .= "WHERE attachmentsid = '" .$attachmentsid ."'";
+$dbQuery .= "WHERE attachmentsid = " .$attachmentsid ;
 
 $result = $adb->query($dbQuery) or die("Couldn't get file list");
 if($adb->num_rows($result) == 1)

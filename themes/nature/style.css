@@ -291,7 +291,7 @@ a.toplink:hover {
 }
 
 .contentBorder {
-
+	border-top: 1px solid #E1E1C4;
 	border-bottom: 1px solid #E1E1C4;
 
 }
@@ -362,7 +362,12 @@ A.moduleMenu:hover {
 
 }
 
-
+.alphaBg {
+	text-align: center;
+	padding: 1px 5px 1px 5px;
+	border: 1px solid #E1E1C4;
+	background-color: #F4F4F1;
+}
 
 .formHeader {
 
@@ -397,8 +402,7 @@ A.moduleMenu:hover {
 .formBorder {
 
 	border: 1px solid #006666;
-
-	background-color: #006666; 
+	background-color: #D8D8B1; 
 
 }
 

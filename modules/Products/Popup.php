@@ -12,6 +12,7 @@ require_once('include/database/PearDatabase.php');
 require_once('XTemplate/xtpl.php');
 require_once('modules/Products/Product.php');
 require_once('include/utils.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $mod_strings;
@@ -27,65 +28,55 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH",$image_path);
 $xtpl->assign("THEME_PATH",$theme_path);
 
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
+        $xtpl->assign("RETURN_MODULE",$_REQUEST['return_module']);
+
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
 $xtpl->assign("POPUPTYPE",$popuptype);
 
+if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+
+$url_string = '';
+$sorder = 'ASC';
+if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
+$sorder = $_REQUEST['sorder'];
+
+if($popuptype!='') $url_string .= "&popuptype=".$popuptype;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
-	
-	$query_val = "true";
+	$url_string .="&query=true";
 	if (isset($_REQUEST['productname'])) $productname = $_REQUEST['productname'];
         if (isset($_REQUEST['productcode'])) $productcode = $_REQUEST['productcode'];
-        if (isset($_REQUEST['commissionrate'])) $commissionrate = $_REQUEST['commissionrate'];
-	if (isset($_REQUEST['qtyperunit'])) $qtyperunit = $_REQUEST['qtyperunit'];
         if (isset($_REQUEST['unitprice'])) $unitprice = $_REQUEST['unitprice'];
+	
+	if ($order_by !='') $xtpl->assign("ORDER_BY", $order_by);
+	if ($sorder !='') $xtpl->assign("SORDER", $sorder);
 
 //	$search_query="select * from products inner jon crmentity on crmentity.crmid=products.productid where crmentity.deleted =0";
 
 	if (isset($productname) && $productname !='')
 	{
 		$search_query .= " and productname like '".$productname."%'";
-		$query_val .= "&productname=".$productname;
+		$url_string .= "&productname=".$productname;
 		$xtpl->assign("PRODUCT_NAME", $productname);
 	}
 	
 	if (isset($productcode) && $productcode !='')
 	{
-		$search_query .= " and productcode like '".$productcode."%'";
-		$query_val .= "&productcode=".$productcode;
+		$search_query .= " and productcode like '%".$productcode."%'";
+		$url_string .= "&productcode=".$productcode;
 		$xtpl->assign("PRODUCT_CODE", $productcode);
 	}
-
-	if (isset($commissionrate) && $commissionrate !='')
-	{
-		 $search_query .= " and commissionrate like '".$commissionrate."%'";
-		 $query_val .= "&commissionrate=".$commissionrate;
-		 $xtpl->assign("COMMISSION_RATE", $commissionrate);
-	}
-	
-	if (isset($qtyperunit) && $qtyperunit !='')
-	{
-	 	$search_query .= " and qty_per_unit like '".$qtyperunit."%'";
-		$query_val .= "&qtyperunit=".$qtyperunit;
-		 $xtpl->assign("QTYPERUNIT", $qtyperunit);
-	}
-	
 	if (isset($unitprice) && $unitprice !='')
 	{
-	 	$search_query .= " and unit_price like '".$unitprice."%'";
-		$query_val .= "&unitprice=".$unitprice;
+	 	$search_query .= " and unit_price like '%".$unitprice."%'";
+		$url_string .= "&unitprice=".$unitprice;
 		$xtpl->assign("UNITPRICE", $unitprice);
 	}
 	 
-        //echo $search_query;
-	//echo '<BR>';
-	//echo $_REQUEST['query'];
-//	$tktresult = $adb->query($search_query);
 }
-echo get_module_title("Products", $mod_strings['LBL_MODULE_NAME'].": Home" , true);
-echo "<br>";
 echo get_form_header("Product Search", "", false);
 
 $xtpl->assign("PRODUCTLISTHEADER", get_form_header("Products List", "", false ));
@@ -98,6 +89,11 @@ $query = getListQuery("Products");
 if(isset($search_query) && $search_query!='')
 {
 	$query .= $search_query;
+}
+
+if(isset($order_by) && $order_by != '')
+{
+        $query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
 
 $list_result = $adb->query($query);
@@ -118,56 +114,59 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
+// Setting the record count string
+if ($navigation_array['start'] == 1)
+{
+	if($noofrows != 0)
+	$start_rec = $navigation_array['start'];
+	else
+	$start_rec = 0;
+	if($noofrows > $list_max_entries_per_page)
+	{
+		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
+	}
+	else
+	{
+		$end_rec = $noofrows;
+	}
+	
+}
+else
+{
+	if($navigation_array['next'] > $list_max_entries_per_page)
+	{
+		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
+		$end_rec = $navigation_array['next'] - 1;
+	}
+	else
+	{
+		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
+		$end_rec = $noofrows;
+	}
+}
+$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+
 //Retreive the List View Table Header
 
 $focus->list_mode="search";
 $focus->popup_type=$popuptype;
 
-$listview_header = getSearchListViewHeader($focus,"Products");
+$listview_header = getSearchListViewHeader($focus,"Products",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
-
 
 $listview_entries = getSearchListViewEntries($focus,"Products",$list_result,$navigation_array);
 $xtpl->assign("LISTENTITY", $listview_entries);
-$query_val = 'false';
 
-if(isset($navigation_array['start']))
-{
-	$startoutput = '<a href="index.php?action=Popup&module=Products&start='.$navigation_array['start'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Start</b></a>';
-}
-else
-{
-        $startoutput = '[ Start ]';
-}
-if(isset($navigation_array['end']))
-{
-        $endoutput = '<a href="index.php?action=Popup&module=Products&start='.$navigation_array['end'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>End</b></a>';
-}
-else
-{
-        $endoutput = '[ End ]';
-}
-if(isset($navigation_array['next']))
-{
-        $nextoutput = '<a href="index.php?action=Popup&module=Products&start='.$navigation_array['next'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Next</b></a>';
-}
-else
-{
-        $nextoutput = '[ Next ]';
-}
-if(isset($navigation_array['prev']))
-{
-        $prevoutput = '<a href="index.php?action=Popup&module=Products&start='.$navigation_array['prev'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Prev</b></a>';
-}
-else
-{
-        $prevoutput = '[ Prev ]';
-}
-$xtpl->assign("Start", $startoutput);
-$xtpl->assign("End", $endoutput);
-$xtpl->assign("Next", $nextoutput);
-$xtpl->assign("Prev", $prevoutput);
+if($order_by !='')
+$url_string .="&order_by=".$order_by;
+if($sorder !='')
+$url_string .="&sorder=".$sorder;
 
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Products","Popup");
+$xtpl->assign("NAVIGATION", $navigationOutput);
+$xtpl->assign("RECORD_COUNTS", $record_string);
+
+$xtpl->assign("ALPHABETICAL",AlphabeticalSearch('Products','Popup','productname','true','basic'));
 $xtpl->parse("main");
 $xtpl->out("main");
 

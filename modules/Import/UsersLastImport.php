@@ -147,13 +147,13 @@ class UsersLastImport extends SugarBean
 				users.id as assigned_user_id,
 				smownerid,
                                 users.user_name as assigned_user_name
-				FROM contactdetails, users_last_import 
+				FROM contactdetails
+				left join users_last_import on users_last_import.bean_id=contactdetails.contactid
 				LEFT JOIN users ON contactdetails.contactid=users.id 
 				LEFT JOIN account  ON account.accountid=contactdetails.accountid 
 				inner join crmentity on crmentity.crmid=contactdetails.contactid  
 				WHERE users_last_import.assigned_user_id= '{$current_user->id}'  
 				AND users_last_import.bean_type='Contacts' 
-				AND users_last_import.bean_id=contactdetails.contactid  
 				AND users_last_import.deleted=0  AND crmentity.deleted=0";
 			
 
@@ -176,16 +176,17 @@ class UsersLastImport extends SugarBean
 				$query = "SELECT distinct account.*,
                                 users.user_name assigned_user_name,
 				smownerid 
-				FROM account, users_last_import inner join crmentity on crmentity.crmid=account.accountid left join users
-                                ON crmentity.smownerid=users.id
+				FROM account
+				inner join crmentity on crmentity.crmid=account.accountid
+				left join users_last_import on users_last_import.bean_id=crmentity.crmid
+			       	left join users ON crmentity.smownerid=users.id
 				WHERE 
 				users_last_import.assigned_user_id=
 					'{$current_user->id}'
 				AND users_last_import.bean_type='Accounts'
-				AND users_last_import.bean_id=crmentity.crmid
 				AND users_last_import.deleted=0
 				AND crmentity.deleted=0
-				AND users.status='ACTIVE'";
+				AND users.status='Active'";
 		} 
 		else if ($this->bean_type == 'Potentials')
 		{
@@ -219,7 +220,8 @@ class UsersLastImport extends SugarBean
                                 users.user_name assigned_user_name,
 				smownerid,
 				potential.*
-                               FROM potential inner join account on account.accountid=potential.accountid 
+                               FROM potential 
+			       inner join account on account.accountid=potential.accountid 
 			       inner join  crmentity on crmentity.crmid=potential.potentialid 
 			       left join users ON crmentity.smownerid=users.id 
 			       left join users_last_import on users_last_import.assigned_user_id=users.id 
@@ -228,7 +230,7 @@ class UsersLastImport extends SugarBean
 				AND users_last_import.bean_id=crmentity.crmid
 				AND users_last_import.deleted=0
 				AND crmentity.deleted=0 
-				AND users.status='ACTIVE'";
+				AND users.status='Active'";
 
 	
 		}
@@ -237,16 +239,17 @@ class UsersLastImport extends SugarBean
 			$query = "SELECT distinct leaddetails.*,
                                 users.user_name assigned_user_name,
 				smownerid 
-				FROM leaddetails, users_last_import inner join crmentity on crmentity.crmid=leaddetails.leadid left join users
-                                ON crmentity.smownerid=users.id
+				FROM leaddetails 
+				inner join crmentity on crmentity.crmid=leaddetails.leadid 
+				left join users_last_import on users_last_import.bean_id=crmentity.crmid			       	
+				left join users ON crmentity.smownerid=users.id
 				WHERE 
 				users_last_import.assigned_user_id=
 					'{$current_user->id}'
 				AND users_last_import.bean_type='Leads'
-				AND users_last_import.bean_id=crmentity.crmid
 				AND users_last_import.deleted=0
 				AND crmentity.deleted=0
-				AND users.status='ACTIVE'";
+				AND users.status='Active'";
 		}
 
 		

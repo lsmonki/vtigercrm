@@ -16,12 +16,13 @@ $columnName=$_REQUEST["column_name"];
 $fldPickList =  $_REQUEST['listarea'];
 
 //Deleting the already existing values
-$delquery="truncate ".$tableName;
+//$delquery="truncate ".$tableName;
+$delquery="delete from ".$tableName;
 $adb->query($delquery);
 $pickArray = explode("\n",$fldPickList);
 $count = count($pickArray);
 
-$tabname=explode('_',$tableName);
+$tabname=explode('cf_',$tableName);
 
 if($tabname[1]!='')
        	$custom=true;

@@ -22,7 +22,6 @@ global $app_list_strings;
 
 echo get_module_title("Users", $_REQUEST['fld_module'].': Profiles', true);
 echo '<BR>';
-//echo get_form_header("Standard Fields", "", false );
 
 global $adb;
 global $theme;
@@ -45,16 +44,19 @@ $standCustFld = getStdOutput($profileListResult, $noofrows, $mod_strings, $fld_m
 function getStdOutput($profileListResult, $noofrows, $mod_strings, $fld_module)
 {
 	global $adb;
+	echo '<table border="0" cellpadding="0" cellspacing="0" width="40%"><tr><td>';
 	echo get_form_header("Profiles", "", false );
+	echo '</td></tr></table>';
 	$standCustFld= '';
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="80%">';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="40%">';
 	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
-	$standCustFld .=   '<td class="moduleListTitle" height="21"><p style="margin-left: 10">Profile Name</td>';
+	$standCustFld .=   '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_NEW_PROFILE_NAME'].'</td>';
 	$standCustFld .=  '</tr>';
 	
-	for($i=0; $i<$noofrows; $i++)
+	$row=1;
+	for($i=0; $i<$noofrows; $i++,$row++)
 	{
-		if ($i%2==0)
+		if ($row%2==0)
 		{
 			$trowclass = 'evenListRow';
 		}
@@ -67,7 +69,7 @@ function getStdOutput($profileListResult, $noofrows, $mod_strings, $fld_module)
 		$profile_name = $adb->query_result($profileListResult,$i,"profilename");
 		$profile_id = $adb->query_result($profileListResult,$i,"profileid");
 		
-		$standCustFld .= '<td width="34%" height="21"><p style="margin-left: 10;"><a href="index.php?module=Users&action=ListFieldPermissions&fld_module='.$fld_module.'&profileid='.$profile_id.'">'.$profile_name.'</a></td></tr>';
+		$standCustFld .= '<td height="21" height="20" style="padding:0px 3px 0px 3px;"><a href="index.php?module=Users&action=ListFieldPermissions&fld_module='.$fld_module.'&profileid='.$profile_id.'">'.$profile_name.'</a></td></tr>';
 		
 	}
 	$standCustFld .='</table>';

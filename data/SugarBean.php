@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/data/SugarBean.php,v 1.64 2005/03/04 19:13:35 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/data/SugarBean.php,v 1.70 2005/03/16 10:25:16 shaw Exp $
  * Description:  Defines the base class for all data entities used throughout the 
  * application.  The base class including its methods and variables is designed to 
  * be overloaded with module-specific methods and variables particular to the 
@@ -25,6 +25,7 @@ require_once('include/logging.php');
 require_once('data/Tracker.php');
 require_once('include/utils.php');
 require_once('modules/Users/UserInfoUtil.php');
+require_once('include/database/PearDatabase.php');
 
 class SugarBean
 {
@@ -42,462 +43,10 @@ class SugarBean
 	var $new_schema = false;
 	var $new_with_id = false;
 
-	function saveentity($module)
+	function save($module_name= '') 
 	{
-		global $current_user;
-		foreach($this->tab_name as $table_name)
-		{
-			if($table_name == "crmentity")
-			{
-				$this->insertIntoCrmEntity($module);
-			}
-			elseif($table_name == "salesmanactivityrel")
-                        {
-                                $this->insertIntoSmActivityRel($module);
-                        }
-			elseif($table_name == "seticketsrel" || $table_name == "seactivityrel" || $table_name ==  "seproductsrel" || $table_name ==  "senotesrel" || $table_name == "sefaqrel")
-                        {
-                                if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
-                                {
-                                        $this->insertIntoEntityTable($table_name, $module);
-                                }
-                        }
-			elseif($table_name ==  "cntactivityrel")
-                        {
-                               if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
-                                 {
-                                         $this->insertIntoEntityTable($table_name, $module);
-                                 }
-                        }
-			else
-			{
-                          $this->insertIntoEntityTable($table_name, $module);			
-			}
-		}
-		if($module == 'Emails' || $module == 'Notes')
-			if(isset($_FILES['filename']['name']) && $_FILES['filename']['name']!='')
-	                        $this->insertIntoAttachment($this->id,$module);
-	}
-
-
-	 function insertIntoAttachment1($id,$module,$filedata,$filename,$filesize,$filetype,$user_id)
-        {
-		$date_var = date('YmdHis');
-               // global $current_user;
-                global $adb;
-                //global $root_directory;
-
-                $ownerid = $user_id;
-		
-
-		if($filesize != 0)
-                    {
-                          $data = base64_encode(fread(fopen($filedata, "r"), $filesize));
-                    }
-		
-                $current_id = $adb->getUniqueID("crmentity");
-
-                if($module=='Emails') 
-		{ 
-			 $idname='emailid';      $tablename='emails';    $descname='description';}
-                else     
-    		{ 
-		   $idname='notesid';      $tablename='notes';     $descname='notecontent';}
-	           $sql='update '.$tablename.' set filename="'.$filename.'" where '.$idname.'='.$id;
-                $adb->query($sql);
-
-                $sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module." Attachment','"."','".$date_var."')";
-                $adb->query($sql1);
-
-                //$this->id = $current_id;
-
-                $sql2="insert into attachments(attachmentsid, name, description, type, attachmentsize, attachmentcontents) values('".$current_id."','".$filename."','"."','".$filetype."','".$filesize."','".$adb->getEmptyBlob()."')";
-                $result=$adb->query($sql2);
-
-                if($result!=false)
-                        $result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$current_id."' and name='".$filename."'",$data);
-
-                $sql3='insert into seattachmentsrel values('.$id.','.$current_id.')';
-                $adb->query($sql3);
-	}
-        
-
-
-
-        function insertIntoAttachment($id,$module)
-        {
-		$date_var = date('YmdHis');
-                global $current_user;
-                global $adb;
-                global $root_directory;
-
-                $ownerid = $this->column_fields['assigned_user_id'];
-
-                $uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
-                $binFile = $_FILES['filename']['name'];
-                $filename = basename($binFile);
-                $filetype= $_FILES['filename']['type'];
-                $filesize = $_FILES['filename']['size'];
-
-		if($binFile != '')
-		{
-                if(move_uploaded_file($_FILES["filename"]["tmp_name"],$uploaddir.$_FILES["filename"]["name"]))
-                {
-//                      $binFile = $_FILES['filename']['name'];
-//                      $filename = basename($binFile);
-//                      $filetype= $_FILES['filename']['type'];
-//                      $filesize = $_FILES['filename']['size'];
-                        if($filesize != 0)
-                        {
-                                $data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-                        }
-                }
-                $current_id = $adb->getUniqueID("crmentity");
-
-                if($module=='Emails') { $idname='emailid';      $tablename='emails';    $descname='description';}
-                else                  { $idname='notesid';      $tablename='notes';     $descname='notecontent';}
-
-                $sql='update '.$tablename.' set filename="'.$filename.'" where '.$idname.'='.$id;
-                $adb->query($sql);
-
-                $sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module." Attachment','".$this->column_fields['description']."','".$date_var."')";
-                $adb->query($sql1);
-
-                //$this->id = $current_id;
-
-                $sql2="insert into attachments(attachmentsid, name, description, type, attachmentsize, attachmentcontents) values('".$current_id."','".$filename."','".$this->column_fields[$descname]."','".$filetype."','".$filesize."','".$adb->getEmptyBlob()."')";
-                $result=$adb->query($sql2);
-
-                if($result!=false)
-                        $result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$current_id."' and name='".$filename."'",$data);
-
-                $sql3='insert into seattachmentsrel values('.$id.','.$current_id.')';
-                $adb->query($sql3);
-		}
-        }
-
-	function insertIntoCrmEntity($module)
-	{
-		global $adb;
-		global $current_user;
-                
-		$date_var = date('YmdHis');
-                if($_REQUEST['assigntype'] == 'T')
-                {
-                  $ownerid= 0;
-                }
-                else
-                {
-                  $ownerid = $this->column_fields['assigned_user_id'];
-                }
-                
-                //This check is done for products.
-		if($module == 'Products' || $module == 'Notes' || $module =='Faq')
-                {
-			$ownerid = $current_user->id;
-		}
-		if($module == 'Events')
-		{
-			$module = 'Activities';
-		}		
-		if($this->mode == 'edit')
-		{
-			$sql = "update crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description='".$this->column_fields['description']."', modifiedtime='".$date_var."' where crmid=".$this->id;
-			
-			$adb->query($sql);
-                }
-		else
-		{
-                  //if this is the create mode and the group allocation is chosen, then do the following
-                                 $current_id = $adb->getUniqueID("crmentity");
-                                               
-			
-			$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."','".$this->column_fields['description']."','".$date_var."')";
-			$adb->query($sql);
-			//echo $sql;
-			$this->id = $current_id;
-                       
-                        
-
-		}
-		
-	}
-
-	function insertIntoSmActivityRel($module)
-        {
-                global $adb;
-                global $current_user;
-                if($this->mode == 'edit')
-                {
-
-                        $sql = "delete from salesmanactivityrel where activityid=".$this->id." and smid = ".$this->column_fields['assigned_user_id']."";
-                        $adb->query($sql);
-
-                }
-                        $sql_qry = "insert into salesmanactivityrel (smid,activityid) values('".$this->column_fields['assigned_user_id']."','".$this->id."')";
-                        $adb->query($sql_qry);
-
-        }
- //code added by shankar starts
-	function constructUpdateLog($id)
-	{
-		global $adb;
-		global $current_user;
-		$ticketid = $id;
-		//Updating History
-		$tktresult = $adb->query("select * from troubletickets where ticketid='".$ticketid."'");
-		$crmresult = $adb->query("select * from crmentity where crmid='".$ticketid."'");
-		$updatelog = $adb->query_result($tktresult,0,"update_log");
-		$old_user_id = $adb->query_result($crmresult,0,"smownerid");
-		$old_status = $adb->query_result($tktresult,0,"status");
-		$old_priority = $adb->query_result($tktresult,0,"priority");
-		if($old_user_id != $this->column_fields['assigned_user_id'] || $old_status != $this->column_fields['troubleticketstatus'] || $old_priority != $this->column_fields['troubleticketpriorities'])
-		{
-			$updatelog .= date("l dS F Y h:i:s A").' by '.$current_user->user_name.'--//--';
-		}	
-		if($old_user_id != $this->column_fields['assigned_user_id'])
-		{
-			$user_name = getUserName($this->column_fields['assigned_user_id']);
-			$updatelog .= ' Transferred to '.$assigned_user_name.'\.';
-		}
-		if($old_status != $this->column_fields['troubleticketstatus'])
-		{
-			$updatelog .= ' Status Changed to '.$this->column_fields['troubleticketstatus'].'\.';
-		}
-		if($old_priority != $this->column_fields['troubleticketpriorities'])
-		{
-			$updatelog .= ' Priority Changed to '.$this->column_fields['troubleticketpriorities'].'\.';
-		}
-
-		if($old_user_id != $this->column_fields['assigned_user_id'] || $old_status != $this->column_fields['troubleticketstatus'] || $old_priority != $this->column_fields['troubleticketpriorities'])
-		{
-			$updatelog .= '--//--';
-		}
-		return $updatelog;
-	}
-  //code added by shankar ends
-	function insertIntoEntityTable($table_name, $module)
-	{
-		
-		global $adb;
-		$insertion_mode = $this->mode;
-		
-		//Checkin whether an entry is already is present in the table to update
-		if($insertion_mode == 'edit')
-		{
-			$check_query = "select * from ".$table_name." where ".$this->tab_name_index[$table_name]."=".$this->id;
-			$check_result=$adb->query($check_query);
-
-			$num_rows = $adb->num_rows($check_result);
-
-			if($num_rows <= 0)
-			{
-				$insertion_mode = '';
-			}	 
-		}
-
-		if($insertion_mode == 'edit')
-		{
-			$update = '';
-		}
-		else
-		{
-			$column = $this->tab_name_index[$table_name];
-			$value = $this->id;
-		}
-
-		$tabid= getTabid($module);	
-		$sql = "select * from field where tabid=".$tabid." and tablename='".$table_name."' and displaytype in (1,3)"; 
-		$result = $adb->query($sql);
-		$noofrows = $adb->num_rows($result);
-		for($i=0; $i<$noofrows; $i++)
-		{
-			$fieldname=$adb->query_result($result,$i,"fieldname");
-			$columname=$adb->query_result($result,$i,"columnname");
-			$uitype=$adb->query_result($result,$i,"uitype");
-			if(isset($this->column_fields[$fieldname]))
-			{
-				if($uitype == 56)
-				{
-					if($this->column_fields[$fieldname] == 'on')
-					{
-						$fldvalue = 1;
-					}
-					else
-					{
-						$fldvalue = 0;
-					}
-
-				}
-				else
-				{
-					$fldvalue = $this->column_fields[$fieldname]; 
-					$fldvalue = stripslashes($fldvalue);
-				}
-				$fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
-				
-
-
-			}
-			else
-			{
-				$fldvalue = '';
-			}
-			if($fldvalue=='') $fldvalue ="''";
-			if($insertion_mode == 'edit')
-			{
-				//code by shankar starts
-				if(($table_name == "troubletickets") && ($columname == "update_log"))
-				{
-					$fldvalue = $this->constructUpdateLog($this->id);
-					$fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
-				}
-				//code by shankar ends
-				if($i == 0)
-				{
-					$update = $columname."=".$fldvalue."";
-				}
-				else
-				{
-					$update .= ', '.$columname."=".$fldvalue."";
-				}
-
-			}
-			else
-			{
-				//code by shankar starts
-				if(($table_name == "troubletickets") && ($columname == "update_log"))
-				{
-					global $current_user;
-					$fldvalue = date("l dS F Y h:i:s A").' by '.$current_user->user_name;
-					if($this->column_fields['assigned_user_id'] != '')
-					{
-						$tkt_ownerid = $this->column_fields['assigned_user_id'];
-					}
-					else
-					{
-						$tkt_ownerid = $current_user->id;
-					}
-					$tkt_ownername = getUserName($tkt_ownerid);	
-					$fldvalue .= "--//--Ticket created. Assigned to ".$tkt_ownername."--//--";
-					$fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
-						//echo ' updatevalue is ............. ' .$fldvalue;
-				}
-				//code by shankar ends
-				$column .= ", ".$columname;
-				$value .= ", ".$fldvalue."";
-			}
-
-		}
-
-
-
-
-
-		if($insertion_mode == 'edit')
-		{
-
-			$sql1 = "update ".$table_name." set ".$update." where ".$this->tab_name_index[$table_name]."=".$this->id;
-                        
-                        $adb->query($sql1); 
-                        
-                        if($_REQUEST['assigntype'] == 'T')
-                        {
-                          $groupname = $_REQUEST['assigned_group_name'];
-                          //echo 'about to update lead group relation';
-	if($module == 'Leads')
-				{
-	                          updateLeadGroupRelation($this->id,$groupname);
-				}
-				else
-				{
-				  
-	                          updateActivityGroupRelation($this->id,$groupname);
-				}
-        
-                        }
-                        else
-                        {
-                          //echo 'about to update lead group relation again!';
-	if($module == 'Leads')
-				{
-	                          updateLeadGroupRelation($this->id,'');
-				}
-				else
-				{
-	                          updateActivityGroupRelation($this->id,'');
-				}
-
-                        }
-
-		}
-		else
-		{	
-			$sql1 = "insert into ".$table_name." (".$column.") values(".$value.")";
-                        $adb->query($sql1); 
-                        if($_REQUEST['assigntype'] == 'T' && $table_name == 'leaddetails')
-                        {
-$groupname = $_REQUEST['assigned_group_name'];
-				if($table_name == 'leaddetails')
-				{
-                          insert2LeadGroupRelation($this->id,$groupname);
-				}
-				elseif($table_name == 'activity') 
-				{
-                          insert2ActivityGroupRelation($this->id,$groupname);
-				}
-                         
-                        }
-		}
-
-		/*		
-				echo '<BR>';
-				echo $sql1;
-				echo '<BR>';
-		 */
-
-
-
-
-
-		
-	}
-
-
-	
-	function retrieve_entity_info($record, $module)
-	{
-		global $adb;
-		$result = Array();
-		foreach($this->tab_name_index as $table_name=>$index)
-		{
-			$result[$table_name] = $adb->query("select * from ".$table_name." where ".$index."=".$record);
-		}
-
-		$tabid = getTabid($module);
-		$sql1 =  "select * from field where tabid=".$tabid;
-		$result1 = $adb->query($sql1);
-		$noofrows = $adb->num_rows($result1);
-		for($i=0; $i<$noofrows; $i++)
-		{
-			$fieldcolname = $adb->query_result($result1,$i,"columnname");
-			$tablename = $adb->query_result($result1,$i,"tablename");
-			$fieldname = $adb->query_result($result1,$i,"fieldname");
-
-			$fld_value = $adb->query_result($result[$tablename],0,$fieldcolname);
-			$this->column_fields[$fieldname] = $fld_value;
-				
-		}
-		$this->column_fields["record_id"] = $record;
-                $this->column_fields["record_module"] = $module;
-		
-	//	print_r($this->column_fields);
-		
-	}
-
-	function save() 
-	{
-		global $current_user;
+         global $adb; 
+          global $current_user;
 		$isUpdate = true;
 
 		if(!isset($this->id) || $this->id == "")
@@ -526,9 +75,9 @@ $groupname = $_REQUEST['assigned_group_name'];
 			if($this->new_schema && 
 				$this->new_with_id == false)
 			{
-				//$this->id = create_guid();
+                          $this->id = $adb->getUniqueID("users");
 			}
-
+                        
 			$query = "INSERT into ".$this->table_name;
 		}
 		// todo - add date modified to the list.
@@ -598,7 +147,7 @@ $groupname = $_REQUEST['assigned_group_name'];
 		$this->db->query($query, true);
 
 		// If this is not an update then store the id for later.
-		if(!$isUpdate)
+		if(!$isUpdate && !$this->new_schema && !$this->new_with_id)
 		{
 			$this->db->println("Illegal Access - SugarBean");
 			//this is mysql specific
@@ -636,8 +185,9 @@ $groupname = $_REQUEST['assigned_group_name'];
 		if ($id == -1) {
 			$id = $this->id;
 		}
-
-		$query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
+// GS porting crmentity
+$query = "SELECT * FROM $this->table_name WHERE $this->module_id = '$id'";
+//		$query = "SELECT * FROM $this->table_name WHERE ID = '$id'";
 		$this->log->debug("Retrieve $this->object_name: ".$query);
 
 		$result =& $this->db->requireSingleResult($query, true, "Retrieving record by id $this->table_name:$id found ");
@@ -694,11 +244,18 @@ $groupname = $_REQUEST['assigned_group_name'];
 
 	function create_list_query($order_by, $where)
 	{
-		$adr_table = "";
-		$adr_where = "";
+		$query = "SELECT * FROM $this->table_name ";
 		
-		$query = "SELECT * FROM users ";
-		$query .= "where users.deleted=0";
+		if($where != "")
+			$query .= "where ($where) AND deleted=0";
+		else
+			$query .= "where deleted=0";
+
+		if(!empty($order_by))
+			$query .= " ORDER BY $order_by";
+
+		
+
 		return $query;
 	}
 	
@@ -746,49 +303,21 @@ $groupname = $_REQUEST['assigned_group_name'];
 			// We have some data.
 
 			for($index = $row_offset , $row = $this->db->fetchByAssoc($result, $index); $row && ($index < $row_offset + $max_per_page || $max_per_page == -99) ;$index++, $row = $this->db->fetchByAssoc($result, $index)){
-
-				//$this->db->println("modulename=".$this->module_name);
-				if($this->module_name=="Users")
-				{
 				foreach($this->list_fields as $field)
-                                {
-                                        if (isset($row[$field])) {
-                                                $this->$field = $row[$field];
-
-
-                                                $this->log->debug("$this->object_name({$row['id']}): ".$field." = ".$this->$field);
-                                        }
-                                        else
-                                        {
-                                                $this->$field = "";
-                                        }
-                                }
-					$this->fill_in_additional_list_fields();
-				}	
-				else
 				{
-				
-				foreach($this->list_fields as $entry)
-				{
-
-					foreach($entry as $key=>$field) // this will be cycled only once
-					{						
-						if (isset($row[$field])) {
-							$this->column_fields[$this->list_fields_names[$key]] = $row[$field];
+					if (isset($row[$field])) {
+						$this->$field = $row[$field];
 						
 						
-							$this->log->debug("$this->object_name({$row['id']}): ".$field." = ".$this->$field);
-						}
-						else 
-						{
-							$this->column_fields[$this->list_fields_names[$key]] = "";
-						}
+						$this->log->debug("$this->object_name({$row['id']}): ".$field." = ".$this->$field);
+					}
+					else 
+					{
+						$this->$field = "";
 					}
 				}
-				}
 
-				//$this->db->println("here is the bug");
-			
+				$this->fill_in_additional_list_fields();
 
 				$list[] = $this;
 			}
@@ -809,36 +338,23 @@ $groupname = $_REQUEST['assigned_group_name'];
 		$result =& $this->db->query($query, false);
 		$this->log->debug("process_full_list_query: result is ".$result);
 
-
 		if($this->db->getRowCount($result) > 0){
 		
-		//	$this->db->println("process_full mid=".$this->module_id." mname=".$this->module_name);
 			// We have some data.
-			while ($row = $this->db->fetchByAssoc($result)) {				
-				$rowid=$row[$this->module_id];
-
-				if(isset($rowid))
-			       		$this->retrieve_entity_info($rowid,$this->module_name);
-				else
-					$this->db->println("rowid not set unable to retrieve");
-				 
-				 
-				/*foreach($this->list_fields as $entry)
+			while ($row = $this->db->fetchByAssoc($result)) {
+				foreach($this->list_fields as $field)
 				{
-					foreach($entry as $key=>$field) // this will be cycled only once
-					{						
-						if (isset($row[$field])) {
-							$this->column_fields[$this->list_fields_names[$key]] = $row[$field];
+					if (isset($row[$field])) {
+						$this->$field = $row[$field];
 						
-							$this->log->debug("process_full_list: $this->object_name({$row['id']}): ".$field." = ".$this->$field);
-						}
-						else {
- 	                	                                $this->column_fields[$this->list_fields_names[$key]] = '';   
-						}
+						$this->log->debug("process_full_list: $this->object_name({$row['id']}): ".$field." = ".$this->$field);
+					}
+					else {
+ 	                                                $this->$field = '';   
 					}
 				}
 
-				$this->fill_in_additional_list_fields();*/
+				$this->fill_in_additional_list_fields();
 
 				$list[] = $this;
 			}
@@ -855,13 +371,22 @@ $groupname = $_REQUEST['assigned_group_name'];
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	 */
-	function track_view($user_id, $current_module,$id)
+/*	function track_view($user_id, $current_module)
+	{
+		$this->log->debug("About to call tracker (user_id, module_name, item_id)($user_id, $current_module, $this->id)");
+
+		$tracker = new Tracker();
+		$tracker->track_view($user_id, $current_module, $this->id, $this->get_summary_text());
+	}
+	*/
+	function track_view($user_id, $current_module,$id='')
 	{
 		$this->log->debug("About to call tracker (user_id, module_name, item_id)($user_id, $current_module, $this->id)");
 
 		$tracker = new Tracker();
 		$tracker->track_view($user_id, $current_module, $id, '');
 	}
+
 
 	/**
 	 * return the summary text that should show up in the recent history list for this object.
@@ -919,14 +444,14 @@ $groupname = $_REQUEST['assigned_group_name'];
 	*/
 	function mark_deleted($id)
 	{
-		$query = "UPDATE crmentity set deleted=1 where crmid='$id'";
+		$query = "UPDATE $this->table_name set deleted=1 where id='$id'";
 		$this->db->query($query, true,"Error marking record deleted: ");
 
-		//$this->mark_relationships_deleted($id);
+		$this->mark_relationships_deleted($id);
 
 		// Take the item off of the recently viewed lists.
-		//$tracker = new Tracker();
-		//$tracker->delete_item_history($id);
+		$tracker = new Tracker();
+		$tracker->delete_item_history($id);
 
 	}
 

@@ -32,6 +32,8 @@ if(!isset($_REQUEST['record']))
 $sql = 'delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
 $adb->query($sql);
 
+$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
+$adb->query($sql_recentviewed);
 if($_REQUEST['module'] == $_REQUEST['return_module'])
 	$focus->mark_deleted($_REQUEST['record']);
 

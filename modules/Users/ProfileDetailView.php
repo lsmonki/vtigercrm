@@ -21,12 +21,13 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
+echo '<form action="index.php" method="post" name="new" id="form">';
 echo get_module_title("Users", 'Profile Information', true);
-echo '<BR>';
-//echo get_form_header("Standard Fields", "", false );
 
 global $adb;
 global $theme;
+global $theme_path;
+global $image_path;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -47,29 +48,38 @@ $standCustFld = getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,
 function getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,$profileid)
 {
 	global $adb;
-	$standCustFld= '';
-	$standCustFld .= '<BR>';
-	$standCustFld .= '<table width="25%" cellpadding="2" cellspacing="0" border="0">';
-	$standCustFld .= '<form action="index.php" method="post" name="new" id="form">';
+	$standCustFld = '';
 	$standCustFld .= '<input type="hidden" name="module" value="Users">';
 	$standCustFld .= '<input type="hidden" name="profileid" value="'.$profileid.'">';
 	$standCustFld .= '<input type="hidden" name="action" value="ProfileEditView">';
-	$standCustFld .= '<tr><br>';
-	$standCustFld .= '<td><input title="Edit" accessKey="C" class="button" onclick="this.form.action.value=\'ProfileEditView\'" type="submit" name="Edit" value="Edit Profile">&nbsp;&nbsp;';
-	//$standCustFld .= '<input title="Delete" accessKey="D" class="button" onclick="this.form.action.value=\'DeleteProfile\'"  type="submit" name="Delete" value="Delete Profile"></td>';
-	$standCustFld .= '</tr></form></table>';
-	$standCustFld .= '<BR>';
+
+	//Check for Current Profile
+	global $current_user;
+	$current_profile = fetchUserProfileId($current_user->id);
+	
+	$standCustFld .= '<br><input title="Edit" accessKey="C" class="button" onclick="this.form.action.value=\'ProfileEditView\'" type="submit" name="Edit" value="Edit Profile">&nbsp;&nbsp;';
+
+	if($profileid != 1 && $profileid != 2 && $profileid != 3 && $profileid != 4 && $profileid != $current_profile)
+
+        {
+	
+		$standCustFld .= '<input title="Delete" accessKey="D" class="button" onclick="this.form.action.value=\'ProfileDeleteStep1\'"  type="submit" name="Delete" value="Delete Profile">';
+	}
+
+	$standCustFld .= '<BR><br>';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" width="60%"><tr><td>';
 	$standCustFld .=  get_form_header("Profile Standard Access Information", "", false );
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="80%">';
+	$standCustFld .= '</td></tr></table>';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="60%">';
 	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
-	$standCustFld .=   '<td class="moduleListTitle" height="21"><p style="margin-left: 10">Entity</td>';
-	$standCustFld .=  '<td class="moduleListTitle">Allow</td>';
-	$standCustFld .=  '<td class="moduleListTitle">Create/Edit</td>';
-	$standCustFld .=  '<td class="moduleListTitle">Delete</td>';
-	$standCustFld .=  '<td class="moduleListTitle">View</td>';
+	$standCustFld .=  '<td width="30%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Entity</td>';
+	$standCustFld .=  '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Allow</div></td>';
+	$standCustFld .=  '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Create/Edit</div></td>';
+	$standCustFld .=  '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Delete</div></td>';
+	$standCustFld .=  '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">View</div></td>';
 	$standCustFld .=  '</tr>';
 
-	$i = 0;	
+	$i = 1;	
 	foreach($act_perr_arry as $tabid=>$action_array)
 	{
 		$entity_name = getTabname($tabid);
@@ -97,11 +107,11 @@ function getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,$profil
 
 		$standCustFld .= '<tr class="'.$trowclass.'">';
 		
-		$standCustFld .= '<td height="21"><p style="margin-left: 10;">'.$entity_name.'</td>';
-		$standCustFld .= '<td >'.$tab_allow_per.'</td>';
-		$standCustFld .= '<td >'.$tab_create_per.'</td>';
-		$standCustFld .= '<td >'.$tab_delete_per.'</td>';
-		$standCustFld .= '<td >'.$tab_view_per.'</td>';
+		$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$entity_name.'</td>';
+		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_allow_per.'</div></td>';
+		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_create_per.'</div></td>';
+		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_delete_per.'</div></td>';
+		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_view_per.'</div></td>';
 			
 		$standCustFld .= '</tr>';
 		$i++;
@@ -110,15 +120,17 @@ function getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,$profil
 	//echo $standCustFld;
 
 	$standCustFld .= '<BR>';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" width="60%"><tr><td>';
 	$standCustFld .=  get_form_header("Profile Utility Access Information", "", false );
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="80%">';
+	$standCustFld .= '</td></tr></table>';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="60%">';
 	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
-	$standCustFld .=   '<td class="moduleListTitle" height="21"><p style="margin-left: 10">Entity</td>';
-	$standCustFld .=  '<td class="moduleListTitle">Import</td>';
-	$standCustFld .=  '<td class="moduleListTitle">Export</td>';
+	$standCustFld .=  '<td width="40%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Entity</td>';
+	$standCustFld .=  '<td width="30%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Import</div></td>';
+	$standCustFld .=  '<td width="30%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Export</div></td>';
 	$standCustFld .=  '</tr>';
 
-	$i = 0;	
+	$i = 1;	
 	foreach($act_utility_arry as $tabid=>$action_array)
 	{
 		$entity_name = getTabname($tabid);
@@ -140,9 +152,9 @@ function getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,$profil
 
 		$standCustFld .= '<tr class="'.$trowclass.'">';
 		
-		$standCustFld .= '<td height="21"><p style="margin-left: 10;">'.$entity_name.'</td>';
-		$standCustFld .= '<td >'.$tab_import_per.'</td>';
-		$standCustFld .= '<td >'.$tab_export_per.'</td>';
+		$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$entity_name.'</td>';
+		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_import_per.'</div></td>';
+		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_export_per.'</div></td>';
 			
 		$standCustFld .= '</tr>';
 		$i++;
@@ -159,21 +171,23 @@ $xtpl->out("main");
 
 function getDisplayValue($id)
 {
+	global $image_path;
+	
 	if($id == '')
 	{
-		$value = '';
+		$value = '&nbsp;';
 	}
 	elseif($id == 0)
 	{
-		$value = 'Yes';
+		$value = '<img src="'.$image_path.'yes.gif">';
 	}
 	elseif($id == 1)
 	{
-		$value = 'No';
+		$value = '<img src="'.$image_path.'no.gif">';
 	}
 	else
 	{
-		$value = '';
+		$value = '&nbsp;';
 	}
 	return $value;
 		

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.12 2005/02/22 13:57:18 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.13 2005/03/17 18:13:59 rank Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -117,31 +117,10 @@ if (isset($_REQUEST['ftppassword'])) $ftppassword	= $_REQUEST['ftppassword'];
                <td align="left" nowrap>: <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.'\\'.$cache_dir; ?></font></td>
               </tr>
 
-	<tr>
-               <td noWrap>Backup FTP Server Name</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($ftpserver)) echo $ftpserver; ?></font></td>
-              </tr>
-
-
-	 <tr>
-               <td noWrap>FTP Server Login User Name</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($ftpuser)) echo $ftpuser; ?></font></td>
-              </tr>
-
-
- <tr>
-               <td noWrap>FTP Server Login Password</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($ftppassword)) echo $ftppassword; ?></font></td>
-              </tr>
-
 
               <tr>
                <td noWrap>Admin Password</td>
                <td align="left" nowrap>: <font class="dataInput"><?php if (isset($admin_password)) echo ereg_replace('.', '*', $admin_password); ?></font></td>
-              </tr>
-              <tr>
-               <td noWrap>Admin Email Address</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($admin_email)) echo $admin_email; ?></font></td>
               </tr>
 
     	      </tbody>

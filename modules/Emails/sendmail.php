@@ -31,7 +31,7 @@ sendmail($_REQUEST['assigned_user_id'],$current_user->user_name,$_REQUEST['name'
 
 function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password)
 {
-global $adb,$root_directory;
+global $adb,$root_directory,$mod_strings;
 
 	$sql = $_REQUEST['query'];
 	$result= $adb->query($sql);
@@ -55,9 +55,9 @@ global $adb,$root_directory;
 
 if($mail_server=='')
 {
-        $mailserverresult=$adb->query("select * from systems");
-        $mail_server=$adb->query_result($mailserverresult,0,'mail_server');
-	$_REQUEST['mail_server']=$mail_server;
+        $mailserverresult=$adb->query("select * from systems where server_type = 'email'");
+        $mail_server=$adb->query_result($mailserverresult,0,'server');
+	$_REQUEST['server']=$mail_server;
 }
 		$mail->Host = $mail_server;
 		$mail->SMTPAuth = true;
@@ -111,34 +111,63 @@ for($i=0;$i< $adb->num_rows($result2);$i++)
 $mail->IsHTML(true);
 $mail->AltBody = "This is the body in plain text for non-HTML mail clients";
 echo '<table>';
+$count = 1;
 for($i=0;$i< $noofrows;$i++)
 {
 	$mail->ClearAddresses();
-	$to=$adb->query_result($result,$i,"email");
+	if($_REQUEST['mailto'] == 'users')
+	{
+		$to=$adb->query_result($result,$i,"email1");
+		if($to == '')
+			$to=$adb->query_result($result,$i,"email2");
+		if($to == '')
+			$to=$adb->query_result($result,$i,"yahoo_id");
+	}
+	else
+		$to=$adb->query_result($result,$i,"email");
 	$mail->AddAddress($to);
 	$j=$i+1;
 
+
 	if($mail->Send())
 	{
-	        if($i==0)
-			echo '<tr><b><h3>Mail has been sent to the following User(s) and Contact(s) : </h3></b></tr>';
-                        echo '<center><tr align="left"><b><h3>'.$j.' . '.$to.'</h3></b></tr></center>';
+		$flag = true;
+	        if($flag && $count == 1 && $noofrows >= 1)
+		{
+			$count = 0;
+			if($_REQUEST['mailto'] == 'users')
+				echo '<tr><b><h3>'.$mod_strings['MESSAGE_MAIL_HAS_SENT_TO_USERS'].' </h3></b></tr>';
+			else
+				echo '<tr><b><h3>'.$mod_strings['MESSAGE_MAIL_HAS_SENT_TO_CONTACTS'].' </h3></b></tr>';
+		}
+                echo '<center><tr align="left"><b><h3>'.$j.' . '.$to.'</h3></b></tr></center>';
 	}
 	else
 	{
-		if($mail->ErrorInfo=='Language string failed to load: connect_host')
+		$message = substr($mail->ErrorInfo,0,49);
+		$flag = false;
+		if($message=='Language string failed to load: connect_host')
 		{
-			echo "<br><b><h3> Please Check the Mail Server Name...</b></h3>";
+			if($i == 0)
+				echo "<br><b><h3>".$mod_strings['MESSAGE_CHECK_MAIL_SERVER_NAME']."</b></h3>";
 		}
-		elseif($mail->ErrorInfo=='Language string failed to load: recipients_failed')
+	        elseif( $count == 1 && $noofrows >= 1)
 		{
-			if($to=='')
-		                echo '<center><tr align="left"><font color="red"><b><h3>'.$j.' . Mail Id is incorrect. Please Check this Mail Id... </h3></b></font></tr></center>';
+			$count = 0;
+			if($_REQUEST['mailto'] == 'users')
+				echo '<tr><b><h3>'.$mod_strings['MESSAGE_MAIL_HAS_SENT_TO_USERS'].' </h3></b></tr>';
+			else
+				echo '<tr><b><h3>'.$mod_strings['MESSAGE_MAIL_HAS_SENT_TO_CONTACTS'].' </h3></b></tr>';
+		}
+		if($message=='Language string failed to load: recipients_failed')
+		{
+			//if($to=='')
+		                echo '<center><tr align="left"><font color="purple"<b><h3>'.$j.' . '.$mod_strings['MESSAGE_MAIL_ID_IS_INCORRECT'].' </h3></font></b></tr></center>';
 		}
 	}
 }
-if($i==0) echo '<br><td align="left"><font color="red"><b><center><h3>Please Add any User(s) or Contact(s)...</h3></b></font>';
-if($i>1)echo "<br><br><B><center><h3> Mail(s) sent successfully! </h3></B>";
+if($i==0) echo '<br><td align="left"><font color="red"><b><center><h3>'.$mod_strings['MESSAGE_ADD_USER_OR_CONTACT'].'</h3></b></font>';
+if($i>1 && $flag)echo "<br><br><B><center><h3>".$mod_strings['MESSAGE_MAIL_SENT_SUCCESSFULLY']." </h3></B>";
 echo '</table>';
 }
 ?>

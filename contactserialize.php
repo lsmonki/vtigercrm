@@ -40,11 +40,11 @@ $server->wsdl->addComplexType(
         'date_modified' => array('name'=>'date_modified','type'=>'xsd:datetime'),
         'name' => array('name'=>'name','type'=>'xsd:string'),
         'status' => array('name'=>'status','type'=>'xsd:string'),
-        'date_due' => array('name'=>'date_due','type'=>'xsd:date'),
+        'date_due' => array('name'=>'date_due','type'=>'xsd:string'),
         'time_due' => array('name'=>'time_due','type'=>'xsd:datetime'),
         'priority' => array('name'=>'priority','type'=>'xsd:string'),
         'description' => array('name'=>'description','type'=>'xsd:string'),
-	'contact_name' => array('name'=>'contact_name','type'=>'xsd:string'),
+	    'contact_name' => array('name'=>'contact_name','type'=>'xsd:string'),
         'id' => array('name'=>'id','type'=>'xsd:string'),
 
     )
@@ -62,6 +62,42 @@ $server->wsdl->addComplexType(
     ),
     'tns:task_detail'
 );
+
+//calendar
+$server->wsdl->addComplexType(
+    'calendar_detail',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'start_date' => array('name'=>'start_date','type'=>'xsd:string'),
+        'date_modified' => array('name'=>'date_modified','type'=>'xsd:string'),
+        'name' => array('name'=>'name','type'=>'xsd:string'),
+        'location' => array('name'=>'location','type'=>'xsd:string'),
+        'date_due' => array('name'=>'date_due','type'=>'xsd:string'),
+        'time_due' => array('name'=>'time_due','type'=>'xsd:string'),
+        //'priority' => array('name'=>'priority','type'=>'xsd:string'),
+        'description' => array('name'=>'description','type'=>'xsd:string'),
+		'contact_name' => array('name'=>'contact_name','type'=>'xsd:string'),
+        'id' => array('name'=>'id','type'=>'xsd:string'),
+
+    )
+);
+    
+$server->wsdl->addComplexType(
+    'calendar_detail_array',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(
+        array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType'=>'tns:calendar_detail[]')
+    ),
+    'tns:calendar_detail'
+);
+//calendar
 
 $server->wsdl->addComplexType(
     'contact_detail',
@@ -91,6 +127,15 @@ $server->wsdl->addComplexType(
         'alt_address_state'=> array('name'=>'alt_address_state','type'=>'xsd:string'),
         'alt_address_postalcode'=> array('name'=>'alt_address_postalcode','type'=>'xsd:string'),
         'alt_address_country'=> array('name'=>'alt_address_country','type'=>'xsd:string'),
+
+        'office_phone'=> array('name'=>'office_phone','type'=>'xsd:string'),
+        'home_phone'=> array('name'=>'home_phone','type'=>'xsd:string'),
+        'other_phone'=> array('name'=>'other_phone','type'=>'xsd:string'),
+        'fax'=> array('name'=>'fax','type'=>'xsd:string'),
+        'department'=> array('name'=>'fax','type'=>'xsd:string'),
+        'birthdate'=> array('name'=>'birthdate','type'=>'xsd:string'),
+        'assistant_name'=> array('name'=>'assistant_name','type'=>'xsd:string'),
+        'assistant_phone'=> array('name'=>'assistant_phone','type'=>'xsd:string')
 
     )
 );
@@ -299,7 +344,7 @@ $server->register(
 
 $server->register(
 	'update_contact',
-        array('user_name'=>'xsd:string', 'id'=>'xsd:string','first_name'=>'xsd:string', 'last_name'=>'xsd:string', 'email_address'=>'xsd:string' , 'account_name'=>'xsd:string', 'salutation'=>'xsd:string', 'title'=>'xsd:string', 'phone_mobile'=>'xsd:string' , 'reports_to'=>'xsd:string', 'primary_address_street'=>'xsd:string', 'primary_address_city'=>'xsd:string', 'primary_address_state'=>'xsd:string' , 'primary_address_postalcode'=>'xsd:string', 'primary_address_country'=>'xsd:string', 'alt_address_city'=>'xsd:string', 'alt_address_street'=>'xsd:string','alt_address_city'=>'xsd:string', 'alt_address_state'=>'xsd:string', 'alt_address_postalcode'=>'xsd:string', 'alt_address_country'=>'xsd:string'),
+        array('user_name'=>'xsd:string', 'id'=>'xsd:string','first_name'=>'xsd:string', 'last_name'=>'xsd:string', 'email_address'=>'xsd:string' , 'account_name'=>'xsd:string', 'salutation'=>'xsd:string', 'title'=>'xsd:string', 'phone_mobile'=>'xsd:string' , 'reports_to'=>'xsd:string', 'primary_address_street'=>'xsd:string', 'primary_address_city'=>'xsd:string', 'primary_address_state'=>'xsd:string' , 'primary_address_postalcode'=>'xsd:string', 'primary_address_country'=>'xsd:string', 'alt_address_city'=>'xsd:string', 'alt_address_street'=>'xsd:string','alt_address_city'=>'xsd:string', 'alt_address_state'=>'xsd:string', 'alt_address_postalcode'=>'xsd:string', 'alt_address_country'=>'xsd:string','office_phone'=>'xsd:string','home_phone'=>'xsd:string','other_phone'=>'xsd:string','fax'=>'xsd:string','department'=>'xsd:string','birthdate'=>'xsd:datetime','assistant_name'=>'xsd:string','assistant_phone'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 	    
@@ -319,9 +364,17 @@ $server->register(
 
 $server->register(
 	'create_task',
-        array('user_name'=>'xsd:string', 'start_date'=>'xsd:datetime', 'date_modified'=>'xsd:datetime','name'=>'xsd:string','status'=>'xsd:string','priority'=>'xsd:string','description'=>'xsd:string','date_due'=>'xsd:date','contact_name'=>'xsd:string'),
+        array('user_name'=>'xsd:string', 'start_date'=>'xsd:datetime', 'date_modified'=>'xsd:datetime','name'=>'xsd:string','status'=>'xsd:string','priority'=>'xsd:string','description'=>'xsd:string','date_due'=>'xsd:string','contact_name'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
+
+//security
+$server->register(
+	'authorize_module',
+        array('user_name'=>'xsd:string','module_name'=>'xsd:string', 'action'=>'xsd:string'),
+        array('return'=>'xsd:string'),
+        $NAMESPACE);
+//security    
 
 $server->register(
 	'update_task',
@@ -419,6 +472,51 @@ $server->register(
     array('user_name'=>'xsd:string','password'=>'xsd:string'),
     array('return'=>'tns:lead_column_detail'),
     $NAMESPACE);
+	 
+//calendar
+$server->register(
+    'get_calendar_count',
+    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('return'=>'xsd:int'),
+    $NAMESPACE);
+    
+$server->register(
+    'calendar_by_range',
+    array('user_name'=>'xsd:string','from_index'=>'xsd:int','offset'=>'xsd:int'),
+    array('return'=>'tns:calendar_detail_array'),
+    $NAMESPACE);
+
+$server->register(
+   'create_calendars',
+    array('user_name'=>'xsd:string','tasks'=>'tns:calendar_detail_array'),
+    array('return'=>'tns:calendar_detail_array'),
+    $NAMESPACE);
+
+$server->register(
+	'create_calendar',
+    array('user_name'=>'xsd:string', 'start_date'=>'xsd:string','name'=>'xsd:string','description'=>'xsd:string','date_due'=>'xsd:string','contact_name'=>'xsd:string','location'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
+$server->register(
+	'update_calendar',
+    array('user_name'=>'xsd:string', 'id'=>'xsd:string', 'start_date'=>'xsd:string','name'=>'xsd:string','description'=>'xsd:string','date_due'=>'xsd:string','contact_name'=>'xsd:string','location'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
+$server->register(
+    'retrieve_calendar',
+    array('name'=>'xsd:string'),
+    array('return'=>'tns:calendar_detail_array'),
+    $NAMESPACE);
+
+$server->register(
+	'delete_calendar',
+    array('user_name'=>'xsd:string', 'id'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+        
+//calendar   
 
 function get_contacts_columns($user_name, $password)
 {
@@ -427,6 +525,23 @@ function get_contacts_columns($user_name, $password)
     return $contact->getColumnNames();
 }
 
+function authorize_module($user_name,$module_name,$action)
+{
+	require_once('modules/Users/UserInfoUtil.php');
+	if($module_name == "Tasks")
+	{
+		$module_name = "Activities";
+	}
+	$user_id = getUserId_Ol($user_name);
+	if($user_id != 0)
+	{
+		$auth_val = isAllowed_Outlook($module_name,$action,$user_id,"");
+	}else
+	{
+	    $auth_val = "no";
+	}
+	return $auth_val;
+}
 /*require_once('modules/Accounts/Account.php');
 $account = new Account();
 foreach($account->getColumnNames_Acnt() as $flddetails)
@@ -453,11 +568,12 @@ function get_leads_columns($user_name, $password)
 
 function get_contacts_count($user_name, $password)
 {
-
-    require_once('modules/Users/User.php');
-    $seed_user = new User();
-    $user_id = $seed_user->retrieve_user_id($user_name);
-    $current_user = $seed_user;
+    global $current_user;
+	require_once('modules/Users/User.php');
+	$seed_user = new User();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
    
     require_once('modules/Contacts/Contact.php');
     $contact = new Contact();
@@ -471,7 +587,11 @@ function create_contacts($user_name,$output_list)
 	foreach($output_list as $contact)
 	{
    
-      $id = create_contact($user_name, $contact[first_name], $contact[last_name], $contact[email_address ],$contact[account_name ], $contact[salutation ], $contact[title], $contact[phone_mobile], $contact[reports_to],$contact[primary_address_street],$contact[primary_address_city],$contact[primary_address_state],$contact[primary_address_postalcode],$contact[primary_address_country],$contact[alt_address_city],$contact[alt_address_street],$contact[alt_address_state],$contact[alt_address_postalcode],$contact[alt_address_country]);
+        if($contact[birthdate]=="4501-01-01")
+        {
+	        $contact[birthdate] = "";
+        }
+		$id = create_contact1($user_name, $contact[first_name], $contact[last_name], $contact[email_address ],$contact[account_name ], $contact[salutation ], $contact[title], $contact[phone_mobile], $contact[reports_to],$contact[primary_address_street],$contact[primary_address_city],$contact[primary_address_state],$contact[primary_address_postalcode],$contact[primary_address_country],$contact[alt_address_city],$contact[alt_address_street],$contact[alt_address_state],$contact[alt_address_postalcode],$contact[alt_address_country],$contact[office_phone],$contact[home_phone],$contact[other_phone],$contact[fax],$contact[department],$contact[birthdate],$contact[assistant_name],$contact[assistant_phone]);
       
 	  $output_list[$counter] ['id']=$id;
 	   $counter++;
@@ -485,7 +605,11 @@ function create_tasks($user_name,$output_list)
 	foreach($output_list as $task)
 	{
   
-        $id= create_task($user_name, $task[start_date], $task[date_modified],$task[name],$task[status],$task[priority],$task[description],$task[date_due],$task[contact_name]);
+		if($task[date_due] == "4501-01-01")
+		{
+			$task[date_due] = "";
+		}
+		$id= create_task($user_name, $task[start_date], $task[date_modified],$task[name],$task[status],$task[priority],$task[description],$task[date_due],$task[contact_name]);
    
       
 	  $output_list[$counter] ['id']=$id;
@@ -552,8 +676,8 @@ function contact_by_email($user_name,$email_address)
 
 function contact_by_range($user_name,$from_index,$offset)
 {
-
-        $seed_contact = new Contact();
+    
+	   $seed_contact = new Contact();
         $output_list = Array();
    
          {  
@@ -564,11 +688,21 @@ function contact_by_range($user_name,$from_index,$offset)
        // create a return array of names and email addresses.
     foreach($contactList as $contact)
     {
-   
+        $account_name=$contact[account_name];
+        $birthdate = $contact[birthdate];
+        if($account_name=="Vtiger_Crm")
+        {
+            $account_name="";
+        }
+        if($birthdate == "")
+        {
+	        $birthdate = "4501-01-01";
+        }
+  
         $output_list[] = Array("first_name"    => $contact[first_name],
             "last_name" => $contact[last_name],
             "primary_address_city" => $contact[primary_address_city],
-            "account_name" => $contact[account_name],
+            "account_name" => $account_name,
 	    "account_id"=> $contact[account_id],
             "id" => $contact[id],
             "email_address" => $contact[email1],
@@ -587,6 +721,15 @@ function contact_by_range($user_name,$from_index,$offset)
             "alt_address_state"=>$contact[alt_address_state],
             "alt_address_postalcode"=>$contact[alt_address_postalcode],
             "alt_address_country"=>$contact[alt_address_country],
+    "office_phone"=>$contact[office_phone],
+    "home_phone"=>$contact[home_phone],
+    "other_phone"=>$contact[other_phone],
+    "fax"=>$contact[fax],
+    "department"=>$contact[department],
+    "birthdate"=>$birthdate,
+    "assistant_name"=>$contact[assistant_name],
+    "assistant_phone"=>$contact[assistant_phone],
+
  );
     }
 }
@@ -597,17 +740,18 @@ function contact_by_range($user_name,$from_index,$offset)
     //to remove an erroneous compiler warning
     $seed_contact = $seed_contact;
 
-
     return $output_list;
 }
 
 function get_tasks_count($user_name, $password)
 {   
     
-    require_once('modules/Users/User.php');
-    $seed_user = new User();
-    $user_id = $seed_user->retrieve_user_id($user_name);
-    $current_user = $seed_user;
+    global $current_user;
+	require_once('modules/Users/User.php');
+	$seed_user = new User();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
    
     require_once('modules/Activities/Activity.php');
     $task = new Activity();
@@ -630,7 +774,7 @@ function task_by_range($user_name,$from_index,$offset)
            {
 		 if($temptask[date_due]=="")
 		 {
-			 $temptask[date_due]=NULL;
+			 $temptask[date_due]="4501-01-01";
 		 }
 		 if($temptask[time_due]=="")
 		 {
@@ -720,10 +864,12 @@ function add_contacts_matching_email_address(&$output_list, $email_address, &$se
 
 function delete_contact($user_name,$id)
 {
-        require_once('modules/Users/User.php');
-        $seed_user = new User();
-        $user_id = $seed_user->retrieve_user_id($user_name);
-        $current_user = $seed_user;
+        global $current_user;
+	require_once('modules/Users/User.php');
+	$seed_user = new User();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
 
         require_once('modules/Contacts/Contact.php');
         $contact = new Contact();
@@ -848,14 +994,12 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	
 	
 	
+	global $current_user;
 	require_once('modules/Users/User.php');
 	$seed_user = new User();
-	
-	//$log->fatal("about to retrieve user id for $user_name");
 	$user_id = $seed_user->retrieve_user_id($user_name);
-	//$log->fatal("done retrieving user id for $user_id");
-	$seed_user->retrieve($user_id);
 	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
 	
 	require_once('modules/Emails/Email.php');
 	
@@ -871,7 +1015,8 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 
 	
 	// Save one copy of the email message
-	$email->saveentity("Emails");
+	//$email->saveentity("Emails");
+	$email->save("Emails");
 
 
 	
@@ -881,6 +1026,7 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	foreach( $contact_id_list as $contact_id)
 	{
 		$email->set_emails_contact_invitee_relationship($email->id, $contact_id);
+		$email->set_emails_se_invitee_relationship($email->id,$contact_id);
 	}
 	$email->set_emails_user_invitee_relationship($email->id, $user_id);
 	
@@ -903,23 +1049,32 @@ function sync_task($user_name)
 
 */
 
-
-
-
-
 function create_contact($user_name, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country)
 {
-	
+    if($birthdate == "4501-01-01")
+    {
+	    $birthdate = "";
+    }
+	return create_contact1($user_name, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country,"","","","","","","","");
+}
+
+
+function create_contact1($user_name, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country,$office_phone,$home_phone,$other_phone,$fax,$department,$birthdate,$assistant_name,$assistant_phone)
+{
+	global $adb;
+	global $current_user;
 	require_once('modules/Users/User.php');
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
+	$adb->println("OUTLOOK: The user id is ".$current_user->id);
 	
 	require_once('modules/Contacts/Contact.php');
 	$contact = new Contact();
 
 	$contact->column_fields[firstname]=$first_name;
-	$contact->column_fields['lastname']=$last_name;
+	$contact->column_fields[lastname]=$last_name;
 		
 	if($account_name=='')
 	{
@@ -954,39 +1109,19 @@ function create_contact($user_name, $first_name, $last_name, $email_address ,$ac
 
 	$contact->column_fields[assigned_user_id]=$user_id;
 
-	
-	
+    // new Fields
+    $contact->column_fields[phone]= $office_phone;
+    $contact->column_fields[homephone]= $home_phone;
+    $contact->column_fields[otherphone]= $other_phone;
+    $contact->column_fields[fax]= $fax;
+    $contact->column_fields[department]=$department;
+    $contact->column_fields[birthday]= $birthdate;
+    $contact->column_fields[assistant]= $assistant_name;
+    $contact->column_fields[assistantphone]= $assistant_phone;
 
-	$contact->saveentity("Contacts");
+	//$contact->saveentity("Contacts");
+	$contact->save("Contacts");
 
-	return $contact->id;
-	
-	$contact->first_name = $first_name;
-	$contact->last_name = $last_name;
-	$contact->email1 = $email_address;
-        $contact->account_name = $account_name;
-        $contact->salutation = $salutation;
-        $contact->title = $title;
-        $contact->phone_mobile = $phone_mobile;
-       // $contact->reports_to_id = $reports_to_id; 
-	
-	$contact->primary_address_country = $primary_address_country;
-	$contact->primary_address_city = $primary_address_city;
-        $contact->primary_address_postalcode = $primary_address_postalcode;
-        $contact->primary_address_state = $primary_address_state;
-        $contact->primary_address_street = $primary_address_street;
-        $contact->alt_address_country = $alt_address_country;
-        $contact->alt_address_postalcode = $alt_address_postalcode;
-        $contact->alt_address_state = $alt_address_state;
-        $contact->alt_address_street = $alt_address_street;
-	$contact->alt_address_city = $alt_address_city; 
-	$contact->assigned_user_id=$user_id;
-	
-	$account_id = retrieve_account_id($account_name,$user_id);
- 	$contact->account_id=$account_id;
-        $contact->reports_to_id = retrievereportsto($reports_to,$user_id,$account_id); 
-	$contact->save();
-	
 	return $contact->id;
 }
 
@@ -1046,7 +1181,8 @@ if($tok) {
         $contact->column_fields[lastname] = $last_name;
     	$contact->column_fields[assigned_user_id]=$user_id;
         $contact->column_fields[account_id]=$account_id;
-    	$contact->saveentity("Contacts");
+    	//$contact->saveentity("Contacts");
+    	$contact->save("Contacts");
         //mysql_close();
     	return $contact->id;
     }
@@ -1085,7 +1221,8 @@ function retrieve_account_id($account_name,$user_id)
 	    $account = new Account();
     	$account->column_fields[accountname] = $account_name;
     	$account->column_fields[assigned_user_id]=$user_id;
-    	$account->saveentity("Accounts");
+    	//$account->saveentity("Accounts");
+    	$account->save("Accounts");
         //mysql_close();
     	return $account->id;
     }
@@ -1112,10 +1249,12 @@ function create_task($user_name, $start_date, $date_modified,$name,$status,$prio
 	//todo make the activity body not be html encoded
 	//$log->fatal("In Create contact: username: $user_name first/last/email ($first_name, $last_name, $email_address)");
 	
+	global $current_user;
 	require_once('modules/Users/User.php');
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
 	
 	require_once('modules/Activities/Activity.php');
 	$task = new Activity();
@@ -1123,29 +1262,32 @@ function create_task($user_name, $start_date, $date_modified,$name,$status,$prio
 	//$task->date_entered = $date_entered;
 	//$task->date_modified = $date_modified;
 	//$task[assigned_user_id] = $assigned_user_id;
-    	$task->column_fields[subject] = $name;
+    $task->column_fields[subject] = $name;
 	$task->column_fields[taskstatus]=$status;
     $task->column_fields[date_start]=$start_date;
 	$task->column_fields[taskpriority]=$priority;
 	$task->column_fields[description]=$description;
    	$task->column_fields[activitytype]="Task";
     // NOT EXIST IN DATA MODEL
-    $task->column_fields[date_due]=$date_due;
+    $task->column_fields[due_date]=$date_due;
    	$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
 	$task->column_fields[assigned_user_id]=$user_id;
-    $task->saveentity("Activities");
+    //$task->saveentity("Activities");
+    $task->save("Activities");
 
 
 	return $task->id;
 }
 
 
-function update_contact($user_name,$id, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country)
+function update_contact($user_name,$id, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country,$office_phone,$home_phone,$other_phone,$fax,$department,$birthdate,$assistant_name,$assistant_phone)
 {
+	global $current_user;
 	require_once('modules/Users/User.php');
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
 	
 	require_once('modules/Contacts/Contact.php');
 	$contact = new Contact();
@@ -1183,11 +1325,11 @@ function update_contact($user_name,$id, $first_name, $last_name, $email_address 
 	
 	if($account_name=='')
 	{
-		$account_name="Vtiger_crm_soap";
+		$account_name="Vtiger_Crm";
 	}
 	else if($account_name==null)
 	{
-		$account_name="Vtiger_crm_soap";
+		$account_name="Vtiger_Crm";
 	}
 	
 	$contact->column_fields[account_id]=retrieve_account_id($account_name,$user_id);// NULL value is not supported NEED TO FIX
@@ -1215,8 +1357,22 @@ function update_contact($user_name,$id, $first_name, $last_name, $email_address 
 	$contact->column_fields[assigned_user_id]=$user_id;
 	$contact->id=$id;
 
+    $contact->column_fields[phone]= $office_phone;
+    $contact->column_fields[homephone]= $home_phone;
+    $contact->column_fields[otherphone]= $other_phone;
+    $contact->column_fields[fax]= $fax;
+    $contact->column_fields[department]=$department;
+    if($birthdate == "4501-01-01")
+    {
+	    $birthdate = "";
+    }
+    $contact->column_fields[birthday]= $birthdate;
+    $contact->column_fields[assistant]= $assistant_name;
+    $contact->column_fields[assistantphone]= $assistant_phone;
+
 	$contact->mode="edit";
-	$contact->saveentity("Contacts");
+	//$contact->saveentity("Contacts");
+	$contact->save("Contacts");
 	
 	return "Suceeded";
 }
@@ -1224,20 +1380,27 @@ function update_contact($user_name,$id, $first_name, $last_name, $email_address 
 
 function update_task($user_name, $id,$start_date, $name, $status,$priority,$description,$date_due,$contact_name)
 {
+	global $current_user;
 	require_once('modules/Users/User.php');
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
 	
     require_once('modules/Activities/Activity.php');
 	$task = new Activity();
 
+	if($date_due == "4501-01-01")
+	{
+	    $date_due = "";
+	}
+		
     $task->column_fields[subject] = $name;
 	$task->column_fields[taskstatus]=$status;
 	$task->column_fields[taskpriority]=$priority;
 	$task->column_fields[description]=$description;
     $task->column_fields[activitytype]="Task";
-    $task->column_fields[date_due]=$date_due;
+    $task->column_fields[due_date]=$date_due;
     $task->column_fields[date_start]=$start_date;
     $task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
 	$task->column_fields[assigned_user_id]=$user_id;
@@ -1245,7 +1408,8 @@ function update_task($user_name, $id,$start_date, $name, $status,$priority,$desc
     
 	$task->id = $id;
     $task->mode="edit";
-    $task->saveentity("Activities");
+    //$task->saveentity("Activities");
+    $task->save("Activities");
     return "Suceeded in updating task";
 }
 
@@ -1254,15 +1418,17 @@ function update_task($user_name, $id,$start_date, $name, $status,$priority,$desc
 
 function delete_task($user_name,$id)
 {
-        require_once('modules/Users/User.php');
-        $seed_user = new User();
-        $user_id = $seed_user->retrieve_user_id($user_name);
-        $current_user = $seed_user;
+        global $current_user;
+	require_once('modules/Users/User.php');
+	$seed_user = new User();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
 
      require_once('modules/Activities/Activity.php');
         $task = new Activity();
         $task->id = $id;
-        $task->mark_deleted($contact->id);
+        $task->mark_deleted($id);
         return "Suceeded in deleting task";
 }
 
@@ -1294,7 +1460,251 @@ function retrieve_task($name)
 	return $output_list;
 }  
 
+//calendar
+function get_calendar_count($user_name, $password)
+{   
+    global $current_user;
+	require_once('modules/Users/User.php');
+	$seed_user = new User();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
+   
+    require_once('modules/Activities/Activity.php');
+    $calObj = new Activity();
 
+    return $calObj->getCount_Meeting($user_name);
+}
+
+function calendar_by_range($user_name,$from_index,$offset)
+{
+	require_once('modules/Activities/Activity.php');
+	$seed_task = new Activity();
+	$output_list = Array(); 
+ 
+	$response = $seed_task->get_calendars($user_name,$from_index,$offset);
+	$taskList = $response['list'];
+	foreach($taskList as $temptask)
+	{
+		$starthour = explode(":",$temptask[time_start]);
+		
+		if($temptask[date_due]=="0000-00-00")
+		{
+			$temptask[date_due] = $temptask[start_date];
+		}
+		
+		if($temptask[duehours] == "0")
+		{
+			$temptask[duehours] = $starthour[0];
+			if(strlen($temptask[duehours]) == 1)
+			{
+				$temptask[duehours] = "0".$temptask[duehours];
+			}
+		}else if($temptask[duehours] == "00")
+		{
+		   $temptask[duehours] = $starthour[0];
+		   if(strlen($temptask[duehours]) == 1)
+		   {
+				$temptask[duehours] = "0".$temptask[duehours];
+		   }
+		}else
+		{
+			$temptask[duehours] = intval($starthour[0]) + intval($temptask[duehours]);
+			if(intval($temptask[duehours]) == 24)
+			{
+				$temptask[duehours] = "00";
+			}
+		    if(strlen($temptask[duehours]) == 1)
+		    {
+				$temptask[duehours] = "0".$temptask[duehours];
+		    }
+		}
+		
+		$startdate = $temptask[start_date]." ".$temptask[time_start];
+	    $duedate = $temptask[date_due]." ".$temptask[duehours].":".$temptask[dueminutes];
+		$output_list[] = Array(
+		"name"	=> $temptask[name],
+		"date_modified" => $temptask[date_modified],
+		"start_date" => $startdate,
+		"id" => $temptask[id],	
+		"date_due" => $duedate,	
+		"description" => $temptask[description],		
+		"contact_name" => $temptask[contact_name],
+		"location" => $temptask[location],);		
+	}   
+	//to remove an erroneous compiler warning
+	$seed_task = $seed_task;
+	return $output_list;
+}
+
+function create_calendars($user_name,$output_list)
+{
+	$counter=0;
+	foreach($output_list as $task)
+	{
+       $id= create_calendar($user_name, $task[start_date], $task[date_modified],$task[name],$task[description],$task[date_due],$task[contact_name],$task[location]);
+      
+	   $output_list[$counter] ['id']=$id;
+	   $counter++;
+	}
+	return array_reverse($output_list);
+}
+
+function create_calendar($user_name, $start_date, $date_modified,$name,$description,$date_due,$contact_name,$location)
+{
+	
+	global $current_user;
+	require_once('modules/Users/User.php');
+	$seed_user = new User();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
+	
+	require_once('modules/Activities/Activity.php');
+	$task = new Activity();
+	
+	$task->column_fields[subject] = $name;
+	
+	//<<<<<<<<<<<<<<<<<Date Time>>>>>>>>>>>>>>>
+	$startdate = explode(" ",$start_date);
+    $task->column_fields[date_start]=$startdate[0];
+    $task->column_fields[time_start]=$startdate[1];
+    
+    $starthourmin = explode(":",$startdate[1]);
+   	$task->column_fields[activitytype]="Meeting";
+
+    $duedate = explode(" ",$date_due);
+    $task->column_fields[due_date]=$duedate[0];
+    
+    $duetime = explode(":",$duedate[1]);
+
+    if(intval($starthourmin[0]) < 23)
+	{
+	  $due_hour = intval($duetime[0]) - intval($starthourmin[0]);
+	}else
+	{
+	  if($duetime[0] == "00")
+	  {
+	     $due_hour = 24 - intval($starthourmin[0]);
+  	  }else
+  	  {
+	  	 $due_hour = intval($duetime[0]) - intval($starthourmin[0]);
+  	  }
+	}
+    $task->column_fields[duration_hours] = $due_hour;
+    
+    $task->column_fields[duration_minutes] =$duetime[1];
+    //<<<<<<<<<<<<<<<<<Date Time>>>>>>>>>>>>>>>
+    
+    $task->column_fields[description] = $description;
+    $task->column_fields[location] = $location;
+        // NOT EXIST IN DATA MODEL    
+   	$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
+	$task->column_fields[assigned_user_id]=$user_id;
+    $task->saveentity("Activities");
+	return $task->id;
+}
+
+function update_calendar($user_name, $id,$start_date,$name,$description,$date_due,$contact_name,$location)
+{
+	global $current_user;
+	require_once('modules/Users/User.php');
+	$seed_user = new User();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
+	
+    require_once('modules/Activities/Activity.php');
+	$task = new Activity();
+
+    $task->column_fields[subject] = $name;
+	$task->column_fields[activitytype]="Meeting";
+    //$task->column_fields[date_due]=$date_due;
+    //$task->column_fields[date_start]=$start_date;
+    
+    //<<<<<<<<<<<<<<<<<Date Time>>>>>>>>>>>>>>>
+	$startdate = explode(" ",$start_date);
+    $task->column_fields[date_start]=$startdate[0];
+    $task->column_fields[time_start]=$startdate[1];
+    
+    $starthourmin = explode(":",$startdate[1]);
+   	$task->column_fields[activitytype]="Meeting";
+
+    $duedate = explode(" ",$date_due);
+    $task->column_fields[due_date]=$duedate[0];
+    
+    $duetime = explode(":",$duedate[1]);
+
+    if(intval($starthourmin[0]) < 23)
+	{
+	  $due_hour = intval($duetime[0]) - intval($starthourmin[0]);
+	}else
+	{
+	  if($duetime[0] == "00")
+	  {
+	     $due_hour = 24 - intval($starthourmin[0]);
+  	  }else
+  	  {
+	  	 $due_hour = intval($duetime[0]) - intval($starthourmin[0]);
+  	  }
+	}
+    $task->column_fields[duration_hours] = $due_hour;
+    
+    $task->column_fields[duration_minutes] =$duetime[1];
+    //<<<<<<<<<<<<<<<<<Date Time>>>>>>>>>>>>>>>
+    
+    $task->column_fields[description] = $description;
+    $task->column_fields[location] = $location;
+    
+    $task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
+	$task->column_fields[assigned_user_id]=$user_id;
+
+    
+	$task->id = $id;
+    $task->mode="edit";
+    $task->saveentity("Activities");
+    return "Suceeded in updating Calendar";
+}
+
+function delete_calendar($user_name,$id)
+{
+        global $current_user;
+	require_once('modules/Users/User.php');
+	$seed_user = new User();
+	$user_id = $seed_user->retrieve_user_id($user_name);
+	$current_user = $seed_user;
+	$current_user->retrieve($user_id);
+
+        require_once('modules/Activities/Activity.php');
+        $task = new Activity();
+        //$task->id = $id;
+        $task->mark_deleted($id);
+        return "Suceeded in deleting Calendar";
+}
+
+function retrieve_calendar($name) 
+{ 
+	$task = new Task();
+	$where = "name like '$name%'";
+	$response = $task->get_list("name", $where, 0);
+	$taskList = $response['list'];
+	$output_list = Array();
+	
+	foreach($taskList as $temptask)
+	{
+		$output_list[] = Array("name"	=> $temptask->name,
+			"date_modified" => $temptask->date_modified,
+			"start_date" => $temptask->start_date,
+			"id" => $temptask->id,
+			"status" => $temptask->status,
+	        "date_due" => $temptask->date_due,	
+			"description" => $temptask->description,		
+			"priority" => $temptask->priority);
+	}
+	
+	return $output_list;
+}
+//calendar
 
 //$log->fatal("In soap.php");
 

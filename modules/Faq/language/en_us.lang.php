@@ -100,6 +100,15 @@ $mod_strings = Array(
 'LBL_NEW_CONTACT'=>'New Contact',
 'LBL_CONTACT_TITLE'=>'Contacts',
 
+//Added for 4GA Release
+'Category'=>'Category',
+'Related To'=>'Related To',
+'Question'=>'Question',
+'Answer'=>'Answer',
+'Comments'=>'Comments',
+'Created Time'=>'Created Time',
+'Modified Time'=>'Modified Time',
+
 );
 
 ?>

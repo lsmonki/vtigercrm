@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/OpenListView.php,v 1.13 2005/03/05 13:44:33 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/OpenListView.php,v 1.19 2005/03/28 18:19:29 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -42,10 +42,11 @@ $today = date("Y-m-d", time());
 $later = date("Y-m-d", strtotime("$today + 7 days"));
 
 //$activity = new Activity();
-$where = "AND activity.status = 'Planned' AND date_start >= '$today' AND date_start < '$later' AND crmentity.smownerid ='{$current_user->id}' ORDER BY date_start DESC LIMIT 5";
+//change made as requested by community by shaw
+$where = "AND (activity.status != 'Completed' or activity.status is null) AND date_start >= '$today' AND date_start < '$later' AND crmentity.smownerid ='{$current_user->id}' ORDER BY date_start";
 
 $list_query = getListQuery("Activities",$where);
-$list_result = $adb->query($list_query);
+$list_result = $adb->limitQuery($list_query,0,5);
 $open_activity_list = array();
 $noofrows = $adb->num_rows($list_result);
 if (count($list_result)>0)
@@ -55,12 +56,12 @@ for($i=0;$i<$noofrows;$i++)
   $open_activity_list[] = Array('name' => $adb->query_result($list_result,$i,'subject'),
                                      'id' => $adb->query_result($list_result,$i,'activityid'),
                                      'type' => $adb->query_result($list_result,$i,'activitytype'),
-                                     'module' => $adb->query_result($list_result,$list_result_count,'setype'),
-                                     'status' => $adb->query_result($list_result,$list_result_count,'status'),
-                                     'firstname' => $adb->query_result($list_result,$list_result_count,'firstname'),
-                                     'lastname' => $adb->query_result($list_result,$list_result_count,'lastname'),
-                                     'contactid' => $adb->query_result($list_result,$list_result_count,'contactid'),
-                                     'date_start' => $adb->query_result($list_result,$list_result_count,'date_start'),
+                                     'module' => $adb->query_result($list_result,$i,'setype'),
+                                     'status' => $adb->query_result($list_result,$i,'status'),
+                                     'firstname' => $adb->query_result($list_result,$i,'firstname'),
+                                     'lastname' => $adb->query_result($list_result,$i,'lastname'),
+                                     'contactid' => $adb->query_result($list_result,$i,'contactid'),
+                                     'date_start' => $adb->query_result($list_result,$i,'date_start'),
 				     'parent'=> $parent_name,	
                                      );
 }
@@ -82,6 +83,7 @@ foreach($open_activity_list as $event)
 {
 	$activity_fields = array(
 		'ID' => $event['id'],
+		'CONTACT_ID' => $event['contactid'],
 		'NAME' => $event['name'],
 		'TYPE' => $event['type'],
 		'MODULE' => $event['module'],
@@ -91,15 +93,20 @@ foreach($open_activity_list as $event)
 		'PARENT_NAME' => $event['parent'],
 	);
 	switch ($event['type']) {
-		case 'Call':
-			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed'>X</a>";
-			break;
-		case 'Meeting':
-			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed'>X</a>";
+	//	case 'Call':
+	//		$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed'>X</a>";
+	//		break;
+	//	case 'Meeting':
+	//		$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed'>X</a>";
 		case 'Task':
 			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed'>X</a>";
 			break;
 	}
+
+        if($event['type'] == 'Call' || $event['type'] == 'Meeting')
+                $activity_fields['MODE'] = 'Events';
+	else
+		$activity_fields['MODE'] = 'Task';
 
 	$xtpl->assign("ACTIVITY", $activity_fields);
 

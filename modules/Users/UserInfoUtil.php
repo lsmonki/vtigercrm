@@ -12,6 +12,7 @@
 
 
 require_once('include/database/PearDatabase.php');
+require_once('include/utils.php');
 include('config.php');
 
 if(isset($_REQUEST['groupname']))
@@ -20,14 +21,18 @@ if(isset($_REQUEST['groupname']))
   $sql= "select user_name from users2group inner join users on users.id= users2group.userid where groupname='" .$_REQUEST['groupname'] ."'";
   $result = $adb->query($sql);
   $groupnameList = "";
-  
+$numRows=$adb->num_rows($result);
+  if($numRows == 0)
+    {
+     header("Location: index.php?module=Users&action=listgroupmembers&nameofgroup=$groupname&groupmembers=0");
+    }
+		
   while($groupList=$adb->fetch_array($result))
   {
     $groupnameList = $groupnameList .$groupList['user_name'] .",";
   }
-  //echo 'final group list is ' .$groupnameList;
-  
-  header("Location: index.php?module=Users&action=listgroupmembers&groupname=$groupname&groupmembers=$groupnameList");
+  //CAUTION: The url exceeded was happening because the variable names were the same and would have been set in session thereby getting into an infinite loop
+  header("Location: index.php?module=Users&action=listgroupmembers&nameofgroup=$groupname&groupmembers=$groupnameList");
 }
 
 function fetchUserRole($userid)
@@ -175,7 +180,7 @@ function getDefaultSharingAction()
 {
 	global $adb;
 	//retreiving the standard permissions	
-	$sql= "select * from default_org_sharingrule";
+	$sql= "select * from def_org_share";
 	$result = $adb->query($sql);
 	$permissionRow=$adb->fetch_array($result);
 	do
@@ -271,7 +276,7 @@ function setPermittedDefaultSharingAction2Session($profileid)
 	global $adb;
 	//retreiving the standard permissions	
 	//$sql= "select default_org_sharingrule.* from default_org_sharingrule inner join profile2tab on profile2tab.tabid = default_org_sharingrule.tabid where profile2tab.permissions =0 and profile2tab.profileid=".$profileid;
-	$sql = "select * from default_org_sharingrule";
+	$sql = "select * from def_org_share";
 	$result = $adb->query($sql);
 	$permissionRow=$adb->fetch_array($result);
 	do
@@ -512,18 +517,38 @@ function updateLeadGroupRelation($leadid,$groupname)
   $adb->query($sql);
 
 }
+function updateTicketGroupRelation($ticketid,$groupname)
+{
+ global $adb;
+  $sqldelete = "delete from ticketgrouprelation where ticketid=".$ticketid;
+  $adb->query($sqldelete);
+  $sql = "insert into ticketgrouprelation values (".$ticketid .",'" .$groupname ."')";  
+  $adb->query($sql);
+
+}
 
 function insert2ActivityGroupRelation($activityid,$groupname)
 {
 global $adb;
-  $sql = "insert into activitygrouprelation values (" .$activityid ."','".$groupname."')";
+  $sql = "insert into activitygrouprelation values (" .$activityid .",'".$groupname."')";
   $adb->query($sql);
 
 }
-function updateActivityGroupRelation($activityid,$groupname)
+
+function insert2TicketGroupRelation($ticketid,$groupname)
 {
 global $adb;
-  $sql = "update activityrouprelation set groupname='". $groupname ."' where activityid ='" .$activityid ."'";
+  $sql = "insert into ticketgrouprelation values (" .$ticketid .",'".$groupname."')";
+  $adb->query($sql);
+
+}
+
+function updateActivityGroupRelation($activityid,$groupname)
+{
+	global $adb;
+  $sqldelete = "delete from activitygrouprelation where activityid=".$activityid;
+  $adb->query($sqldelete);
+  $sql = "insert into activitygrouprelation values (".$activityid .",'" .$groupname ."')";  
   $adb->query($sql);
 
 }
@@ -619,4 +644,238 @@ function getRoleName($roleid)
 	return $rolename;	
 }
 
+function getProfileName($profileid)
+{
+	global $adb;
+	$sql1 = "select * from profile where profileid=".$profileid;
+	$result = $adb->query($sql1);
+	$profilename = $adb->query_result($result,0,"profilename");
+	return $profilename;	
+}
+
+function isPermitted($module,$actionid,$record_id)
+{
+
+	$permission = "no";
+	if($module == 'Users' || $module == 'Home' || $module == 'Administration' || $module == 'uploads' ||  $module == 'Settings' || $module == 'Calendar')
+	{
+		//These modules done have security
+		$permission = "yes";
+
+	}
+	else
+	{	
+		global $adb;
+		global $current_user;
+		$tabid = getTabid($module);
+		//echo "tab id is ".$tabid;
+		//echo '<BR>';
+		$action = getActionname($actionid);
+		$profile_id = $_SESSION['authenticated_user_profileid'];
+		$tab_per_Data = getAllTabsPermission($profile_id);
+
+		$permissionData = $_SESSION['action_permission_set'];
+		$defSharingPermissionData = $_SESSION['defaultaction_sharing_permission_set'];
+		$others_permission_id = $defSharingPermissionData[$tabid];
+
+		//Checking whether this tab is allowed
+		if($tab_per_Data[$tabid] == 0)
+		{
+			//echo "inside tab permission success";
+			//echo '<BR>';
+			$permission = 'yes';
+			//Checking whether this action is allowed
+			if($permissionData[$tabid][$actionid] == 0)
+			{
+				//echo "inside action permission success";
+	                        //echo '<BR>';	
+				$permission = 'yes';
+				$rec_owner_id = '';
+				if($record_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq')
+				{
+					$rec_owner_id = getUserId($record_id);
+				}
+
+				if($record_id != '' && $others_permission_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $rec_owner_id != 0)
+				{
+					//echo "inside other permission success";
+                                	//echo '<BR>';
+					//Checking for Default Sharing Permission
+					//$rec_owner_id = getUserId($record_id);
+					if($rec_owner_id != $current_user->id)
+					{
+						if($others_permission_id == 0)
+						{
+							if($action == 'EditView' || $action == 'Delete')
+							{
+								$permission = "no";	
+							}
+							else
+							{
+								$permission = "yes";
+							}
+						}
+						elseif($others_permission_id == 1)
+						{
+							if($action == 'Delete')
+							{
+								$permission = "no";
+							}
+							else
+							{
+								$permission = "yes";
+							}
+						}
+						elseif($others_permission_id == 2)
+						{
+
+							$permission = "yes";
+						}
+						elseif($others_permission_id == 3)
+						{
+							if($action == 'DetailView' || $action == 'EditView' || $action == 'Delete')
+							{
+								$permission = "no";
+							}
+							else
+							{
+								$permission = "yes";
+							}
+						}
+
+
+					}
+					else
+					{
+						$permission = "yes";	
+					}	
+				}
+			}
+			else
+			{
+				$permission = "no";
+			}		
+		}
+		else
+		{
+			$permission = "no";
+		}		
+	}
+	return $permission;
+
+}
+
+
+
+function isAllowed_Outlook($module,$action,$user_id,$record_id)
+{
+
+	$permission = "no";
+	if($module == 'Users' || $module == 'Home' || $module == 'Administration' || $module == 'uploads' ||  $module == 'Settings' || $module == 'Calendar')
+	{
+		//These modules done have security
+		$permission = "yes";
+
+	}
+	else
+	{	
+		global $adb;
+		global $current_user;
+		$tabid = getTabid($module);
+		//echo "tab id is ".$tabid;
+		//echo '<BR>';
+		$actionid = getActionid($action);
+		$profile_id = fetchUserProfileId($user_id);
+		$tab_per_Data = getAllTabsPermission($profile_id);
+
+		$permissionData = getTabsActionPermission($profile_id); 
+		$defSharingPermissionData = getDefaultSharingAction();
+		$others_permission_id = $defSharingPermissionData[$tabid];
+
+		//Checking whether this tab is allowed
+		if($tab_per_Data[$tabid] == 0)
+		{
+			//echo "inside tab permission success";
+			//echo '<BR>';
+			$permission = 'yes';
+			//Checking whether this action is allowed
+			if($permissionData[$tabid][$actionid] == 0)
+			{
+				//echo "inside action permission success";
+	                        //echo '<BR>';	
+				$permission = 'yes';
+				$rec_owner_id = '';
+				if($record_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq')
+				{
+					$rec_owner_id = getUserId($record_id);
+				}
+
+				if($record_id != '' && $others_permission_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $rec_owner_id != 0)
+				{
+					//echo "inside other permission success";
+                                	//echo '<BR>';
+					//Checking for Default Sharing Permission
+					//$rec_owner_id = getUserId($record_id);
+					if($rec_owner_id != $current_user->id)
+					{
+						if($others_permission_id == 0)
+						{
+							if($action == 'EditView' || $action == 'Delete')
+							{
+								$permission = "no";	
+							}
+							else
+							{
+								$permission = "yes";
+							}
+						}
+						elseif($others_permission_id == 1)
+						{
+							if($action == 'Delete')
+							{
+								$permission = "no";
+							}
+							else
+							{
+								$permission = "yes";
+							}
+						}
+						elseif($others_permission_id == 2)
+						{
+
+							$permission = "yes";
+						}
+						elseif($others_permission_id == 3)
+						{
+							if($action == 'DetailView' || $action == 'EditView' || $action == 'Delete')
+							{
+								$permission = "no";
+							}
+							else
+							{
+								$permission = "yes";
+							}
+						}
+
+
+					}
+					else
+					{
+						$permission = "yes";	
+					}	
+				}
+			}
+			else
+			{
+				$permission = "no";
+			}		
+		}
+		else
+		{
+			$permission = "no";
+		}		
+	}
+	return $permission;
+
+}
 ?>

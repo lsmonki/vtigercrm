@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/2setConfig.php,v 1.36 2005/02/22 13:52:27 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/2setConfig.php,v 1.40 2005/03/25 19:19:09 ray Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 require_once("connection.php");
@@ -99,7 +99,7 @@ if (is_file("config.php")) {
 		$db_name = $dbconfig['db_name'];
 	}
 	else {
-		$db_name = 'vtigercrm4_beta';
+		$db_name = 'vtigercrm4';
 	}
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	
@@ -120,7 +120,7 @@ else {
 	!isset($_REQUEST['db_host_name']) ? $db_host_name = $H_NAME.$sock_path : $db_host_name = $_REQUEST['db_host_name'];
 	!isset($_REQUEST['db_user_name']) ? $db_user_name = $mysql_username : $db_user_name = $_REQUEST['db_user_name'];
 	!isset($_REQUEST['db_password']) ? $db_password= $mysql_password : $db_password = $_REQUEST['db_password'];
-	!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm4_beta" : $db_name = $_REQUEST['db_name'];
+	!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm4" : $db_name = $_REQUEST['db_name'];
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	!isset($_REQUEST['host_name']) ? $host_name= $_SERVER['SERVER_NAME'] : $host_name= $_REQUEST['host_name'];
 	!isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];
@@ -328,7 +328,7 @@ function verify_data(form) {
               </tr>
 	<tr>
             <td></td><td nowrap><strong>username</strong></td>
-            <td align="left"><input class="dataInput" readonly value="admin" size="40" /></td>
+            <td align="left">admin</td>
           </tr>
 
 	<tr>
@@ -338,27 +338,6 @@ function verify_data(form) {
 	<tr>
             <td colspan=3><font color=blue>( the default password is 'admin'. You can change the password if necessary now or else you can change it from the Admin page inside the vtiger CRM )</font></td>
         </tr>
-          <tr>
-            <td></td><td nowrap><strong>email address<strong></td>
-            <td align="left"><input class="dataInput" type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" size="40" /></td>
-   	      </tr>
-		<tr>
-			<td colspan="3" class="moduleTitle" noWrap>Backup Server Configuration</td>
-              </tr>
-	<tr>
-            <td></td><td nowrap><strong>ftp server name</strong></td>
-            <td align="left"><input class="dataInput" type="text" name="ftpserver" size="20" /></td>
-          </tr>
-
-	<tr>
-            <td></td><td nowrap><strong>ftp user name</strong></td>
-            <td align="left"><input class="dataInput" type="text" name="ftpuser" size="20" /></td>
-          </tr>
-	<tr>
-            <td></font></td><td nowrap><strong>ftp password</strong></td>
-            <td align="left"><input class="dataInput" type="password" name="ftppassword" size="20" /></td>
-          </tr>
-
 		</tbody>
 			</table>
 		  </td></tr>

@@ -24,6 +24,7 @@ $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Products',
 'LBL_LIST_PRODUCT_NAME'=>'Product Name',
 'LBL_PRODUCT_NAME'=>'Product Name:',
+'LBL_LIST_FORM_TITLE'=>'Product List',
 'LBL_LIST_CATEGORY'=>'Product Category',
 'LBL_CATEGORY'=>'Product Category:',
 'LBL_PRODUCT_CODE'=>'Product Code',
@@ -35,6 +36,9 @@ $mod_strings = Array(
 'LBL_PRODUCT_DESCRIPTION'=>'Description',
 'LBL_PRODUCT_IMAGE'=>'Image',
 'LBL_NEW_FORM_TITLE'=>'New Product',
+'LBL_PRODUCT_INFORMATION'=>'Product Information',
+'LBL_CUSTOM_INFORMATION'=>'Custom Information',
+'LBL_DESCRIPTION_INFORMATION'=>'Description Information',
 
 //New entry
 'LBL_UPLOAD'=>'Upload File',
@@ -66,6 +70,29 @@ $mod_strings = Array(
 'LBL_NEW_ATTACHMENT'=>'New Attachment',
 'LBL_ATTACHMENT_TITLE'=>'Attachments',
 
+//Added fields after RC1 - Release
+'LBL_MANUFACTURER'=>'Manufacturer',
+'LBL_PRODUCTCATEGORY'=>'Product Category',
+'LBL_SUPPORT_START_DATE'=>'Support Start Date',
+'LBL_SUPPORT_EXPIRY_DATE'=>'Support Expiry Date',
+'LBL_PURCHASE_DATE'=>'Purchase Date',
+
+//Added for 4GA
+'Product Name'=>'Product Name',
+'Product Code'=>'Product Code',
+'Product Active'=>'Product Active',
+'Commission Rate'=>'Commission Rate',
+'Qty/Unit'=>'Qty/Unit',
+'Unit Price'=>'Unit Price',
+'Manufacturer'=>'Manufacturer',
+'Product Category'=>'Product Category',
+'Support Start Date'=>'Support Start Date',
+'Support Expiry Date'=>'Support Expiry Date',
+'Purchase Date'=>'Purchase Date',
+'Created Time'=>'Created Time',
+'Modified Time'=>'Modified Time',
+'Description'=>'Description',
+'Related To'=>'Related To',
 
 );
 

@@ -19,6 +19,7 @@ require_once('modules/Leads/Forms.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/uifromdbutil.php');
+require_once('modules/Users/UserInfoUtil.php');
 
 global $mod_strings;
 global $app_strings;
@@ -58,18 +59,22 @@ else $xtpl->assign("FIRST_NAME", "");
 $xtpl->assign("LAST_NAME", $focus->lastname);
 
 //get Block 1 Information
-
+$block_1_header = getBlockTableHeader("LBL_LEAD_INFORMATION");
 $block_1 = getDetailBlockInformation("Leads",1,$focus->column_fields);
 $xtpl->assign("BLOCK1", $block_1);
 
 //get Address Information
-
+$block_2_header = getBlockTableHeader("LBL_ADDRESS_INFORMATION");
 $block_2 = getDetailBlockInformation("Leads",2,$focus->column_fields);
 $xtpl->assign("BLOCK2", $block_2);
 //get Description Information
-
+$block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
 $block_3 = getDetailBlockInformation("Leads",3,$focus->column_fields);
 $xtpl->assign("BLOCK3", $block_3);
+
+$xtpl->assign("BLOCK1_HEADER", $block_1_header);
+$xtpl->assign("BLOCK2_HEADER", $block_2_header);
+$xtpl->assign("BLOCK3_HEADER", $block_3_header);
 
 
 $block_5 = getDetailBlockInformation("Leads",5,$focus->column_fields);
@@ -77,8 +82,9 @@ if(trim($block_5) != '')
 {
 	$cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
         $cust_fld .=  '<tr><td>';
+	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
+        $cust_fld .= $block_5_header;
         $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= '<tr><th align="left" class="formSecHeader" colspan="2">Custom Information</th></tr>';
         $cust_fld .= $block_5;
         $cust_fld .= '</table>';
         $cust_fld .= '</td></tr></table>';
@@ -87,9 +93,10 @@ if(trim($block_5) != '')
 
 $xtpl->assign("CUSTOMFIELD", $cust_fld);
 
+$val = isPermitted("Leads",1,$_REQUEST['record']);
 
 $permissionData = $_SESSION['action_permission_set'];
-if($permissionData[$tabid]['1'] == 0)
+if(isPermitted("Leads",1,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
 
@@ -98,31 +105,29 @@ if($permissionData[$tabid]['1'] == 0)
 }
 
 
-if($permissionData[$tabid]['2'] == 0)
+if(isPermitted("Leads",2,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
 }
 
-$xtpl->assign("SENDMAILBUTTON","<td><input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.module.value='Emails';this.form.email_directing_module.value='leads';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\"></td>");
+if(isPermitted("Emails",1,'') == 'yes')
+{
+	$xtpl->assign("SENDMAILBUTTON","<td><input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.module.value='Emails';this.form.email_directing_module.value='leads';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\"></td>");
+}
 
-//$browser = getenv("HTTP_USER_AGENT");
-//$pos1 = strrpos($testString,'Windows');
-//$local=explode(';',$browser);
-//$test=strrpos($local[2],"Windows");
-//if($test == true) 
+if(isPermitted("Leads",8,'') == 'yes') 
 {
 	$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+	$wordTemplateResult = fetchWordTemplateList("Leads");
+	$tempCount = $adb->num_rows($wordTemplateResult);
+	$tempVal = $adb->fetch_array($wordTemplateResult);
+	for($templateCount=0;$templateCount<$tempCount;$templateCount++)
+	{
+		$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
+		$tempVal = $adb->fetch_array($wordTemplateResult);
+	}
+	$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
 }
-require_once('modules/Users/UserInfoUtil.php');
-$wordTemplateResult = fetchWordTemplateList("Leads");
-$tempCount = $adb->num_rows($wordTemplateResult);
-$tempVal = $adb->fetch_array($wordTemplateResult);
-for($templateCount=0;$templateCount<$tempCount;$templateCount++)
-{
-$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
-$tempVal = $adb->fetch_array($wordTemplateResult);
-}
-$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;Select template to Mail Merge:<select name=\"mergefile\">".$optionString."</select>");
 
 
 //Assigning Custom Field Values
@@ -144,7 +149,7 @@ $focus_list = & $focus->get_direct_reports();
  $focus_activities_list = & $focus->get_activities($focus->id);
  $focus_emails_list = & $focus->get_emails($focus->id);
 // $focus_notes_list = & $focus->get_notes($focus->id);
- $focus_tickets_list = & $focus->get_tickets($focus->id);
+// $focus_tickets_list = & $focus->get_tickets($focus->id);
  $focus_attachments_list = & $focus->get_attachments($focus->id);
 
 ?>

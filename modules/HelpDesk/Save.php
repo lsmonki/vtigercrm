@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/modules/HelpDesk/Save.php,v 1.1 2005/02/11 07:42:41 rakeebk Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/modules/HelpDesk/Save.php,v 1.7 2005/03/22 13:56:54 rajeshkannan Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -45,7 +45,9 @@ foreach($focus->column_fields as $fieldname => $val)
 		
 }
 
-$focus->saveentity("HelpDesk");
+
+//$focus->saveentity("HelpDesk");
+$focus->save("HelpDesk");
 $return_id = $focus->id;
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
@@ -54,6 +56,18 @@ if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $retur
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+$_REQUEST['name'] = $_REQUEST['title'];
+$_REQUEST['parent_id'] = $_REQUEST['contact_id'];
+$_REQUEST['return_id'] = $return_id;
+
+if($_REQUEST['product_id'] != '' && $focus->id != '' && $_REQUEST['mode'] != 'edit')
+{
+        $sql = 'insert into seticketsrel values('.$_REQUEST['product_id'].' , '.$focus->id.')';
+        $adb->query($sql);
+        $return_id = $_REQUEST['product_id'];
+}
+
+require_once('modules/Emails/send_mail.php');
+//header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 
 ?>

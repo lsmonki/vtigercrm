@@ -1,3 +1,360 @@
+vtiger CRM 4
+March 29, 2005
+
+We are pleased to announce the latest version of vtiger CRM. This release includes several new features and numerous bug fixes!
+
+-------------
+New Features
+-------------
+
+A. General
+
+1. Database layer is redesigned for a better data integrity
+
+2. Multiple database support for MySQL, Oracle, MSSQL, and Postgres through ADOdb (We have tested in MySQL and Oracle only)   
+3. Microsoft Office Plug-in to create mail merge templates in Microsoft Word and create on-the-fly documents with customer specific data in vtiger CRM
+
+4. Mozilla Thunderbird Plug-in to add E-mail messages and addresses from Thunderbird to vtiger CRM
+
+5. E-mail notifications to vtiger CRM users as well as customers instantly as well as periodically
+
+6. Search enabled for all the fields (including custom fields) in various modules
+
+7. Database migration from version 3.2 to version 4
+
+8. Accessories, such as World Clock and Calculator
+
+B. Lead Management
+
+1. Filter leads list in Leads home page based on lead status
+
+2. Change leads owner in bulk
+
+3. Export Leads into Spreadsheet programs
+
+C. Account Management
+
+1. Filter accounts list in Accounts home page based on type of the account
+
+2. Delete accounts in bulk
+
+3. Change accounts owner in bulk
+
+D. Contact Management
+
+1. Delete contacts in bulk
+
+2. Change contacts owner in bulk
+
+3. Create mail merge documents for contacts   
+
+E. Opportunity Management
+
+1. Notification of Big deals to the specific users/non users
+
+2. Filter opportunities list in Opportunities home page based on the sales stage
+
+3. Delete opportunities in bulk
+
+F. Help desk
+
+1. Automatically generate ticket ID while creating trouble tickets
+
+2. Filter trouble tickets list in Help desk home page based on the priority of the ticket
+
+3. Add/Modify custom fields in Help desk
+
+G. Products
+
+1. Enhanced the standard fields based on users feedback
+
+2. Add/Modify custom fields in Products
+
+H. Activity Management
+
+1. All the activities (Tasks, Calls, and Meetings) can be managed in a Activities module 
+
+2. Calendar user interface is enhanced, with a small calendar in Home page
+
+3. Synchronize calendar records with Microsoft Outlook  
+
+I. Studio:
+
+1. Add custom fields in Helpdesk and Products modules
+
+2. Modify the custom pick list values in all the modules
+
+3. Custom objects for URL and boolean types
+
+4. Enhanced user interface for product customization 
+	
+J. Communication Templates:
+
+1. Mail Merge Templates to create on-the-fly Microsoft Word documents based on customer data
+
+2. Canned E-mail Notifications through Linux Cron Job/Window Scheduler:
+
+K. Security Management
+
+1. Manage Profiles and associate to the roles
+
+2. Module level access control list for profiles
+
+3. Field level access control list for profiles
+
+4. Organization level record sharing model
+
+5. User management from Settings module
+
+L. System Administration
+
+1. Outgoing Email server configuration
+
+2. Database backup server configuration
+
+We have also provided the following features requested in Sourceforge.net and vtiger Discussions:
+
+SourceForge
+
+1. 1157343: Custom fields for tickets
+
+2. 1108850:  Mozilla Thunderbird (Non-MS Outlook) Plugin
+
+3. 1069886: PostgreSQL Support
+
+4. 1050500: HelpDesk or Trouble ticketing
+
+
+vtiger Discussions
+
+1. RC1 - Leads : Sorting Lead List - by eberled
+
+2. Database management (database backup) - by eberled and ITPM
+
+3. Enable/Disable Import/Export features according to the user's profile - by bwoo and fredy
+
+4. Small Calendar in Home page
+
+5. Department instead of Account in Contact list - by joduba
+
+6. Delete contacts in bulk - by david and Bez
+
+7. Delete users - by Jim
+
+8. ACL on data - Stefano
+
+9. Groups and user level security - by Jay McDonald
+
+----------------
+Important Notes
+----------------
+
+* We have tested vtiger CRM 4 in MySQL and Oracle database software. Though we didn't tested in other database software, we feel it should work.
+
+* Cases Module is phased out (Help desk module take care of all the customer support related features)
+
+* Opportunities module is renamed as Potentials
+
+* Tasks, Calls and, Meetings modules are phased out (Activities module take care of all the tasks and events related features)
+----------
+Bug Fixes
+----------
+
+We have fixed the following issues reported in Sourceforge.net and vtiger Discussions:
+
+SourceForge.net
+----------------
+
+1. 1087474: suggestion
+
+2. 1169597: Tab Order in data entry is inconvenient
+
+3. 1158945: Cancel button behavior 2
+
+4. 1158943: Cancel button behavior
+
+5. 1161346: RC1 - Custom field Date not working
+
+6. 1157577: Account View -- Contact Name
+
+7. 1158932: RC1- Need "Select Product" on Potentials
+
+8. 1158934: RC1 - Need select multiple products on Activities
+
+9. 1158934:  RC1 - Need select multiple products on Activities - Richie Please check it is promised in sf.net
+
+10. 1160628: Deleted tickets are still visible in the account overview
+
+11. 1160522: minor issues in RC 1
+
+12. 1157581: BusinessCard.php
+
+13. 1158473: double $contact_id definition in modules/Calendar/UserCalend
+
+14. 1157587: website character needs to be longer
+
+15. 1157583: redirection limit for url exceeded
+16. 1156560: Single quotation mark not handled when creating new note
+
+17. 1069310: Time out during contact import
+
+18. 1156463: Outlook Plug-in Error: wrong encryption string
+
+19. 1111432: Meetings get duplicated views after editing
+
+20. 1152457: V3.2 Log-In Recognition
+
+21. 1151958: Leads "Change Status" button doesn't work
+
+22. 1151793: Editing lead errors
+
+23. 1145907: exporting xls to leads -
+
+24. 1087484: user deleted problem
+
+25. 1122448: export of opportunities
+
+26. 1122446: upload file size hardwired
+
+27. 1119621: PHP Error when cancelling editing of a ticket
+
+28. 1116923: Custom contacts import fails if no last name specified
+
+29. 1116919: CVS Import bombs when data contain single quote
+
+30. 1032651: New Attachment - Error message
+
+
+vtiger Discussions
+------------------
+ 
+1. Displaying the corresponding lead in Meeting/Call/Task modules
+
+2. Activity - missing confirmation on deleting activities - by fredy
+
+3. RC1 - Potentials "Only my items" not working - by eberled
+
+4. RC1 - Potentials sorting tables returns an error - by eberled
+
+5. RC1 Helpdesk - 'Assigned to' vs. 'Group' - by eberled
+
+6. RC1 - Helpdesk: Changing a ticket doesn't work - by eberled
+
+7. RC1- Homepage / Helpdesk : all tickets are listed - by eberled
+
+8. RC1 - Helpdesk : Account and Contact Name - by eberled
+
+9. RC1- Settings: Communication Templates - by eberled
+
+10. Unable to tab - by 829
+
+11. Email to Contacts and Mass Mail - by Jay
+
+12. blank.gif doesnt display - by timb
+
+13. RC1 - Product commission rate needs decimal field -by dchaffee
+
+14. RC1 - Potentials sorting tables returns an error - by eberled 
+
+15. Bugs in table insert statements during a new installation - by pab63
+
+16. RC1 - Selecting a contact shows only name and no firstname - by eberled
+
+17. Problem installing on subdomain - by cyberox
+
+18. help desk trouble ticket - by 829
+
+19. RC1 - Admin-Page: Empty Link in top right corner - by eberled
+
+20. RC1 - Admin Page: Wrong mail server password shown - by eberled
+
+21. RC1 - Admin : Creating User ( input field tab order) -by eberled 
+ 
+22. Accentuated characters - by bigtime
+
+23. Can't create new leads, contacts, accounts - by Peter - 
+
+24. RC1 - Admin : Show users related to a group not working - by eberled
+
+25. RC1 - Account : Description Information - by eberled
+
+26. RC1- Accounts : Searching for - by eberled
+
+27. RC1 - Leads : Input field tab order - by eberled
+
+28. RC1 - Leads : Input field for postalcode to large - by eberled
+
+29. vtiger DIscussions: RC1 - Accounts : Please show first name under contacts - by eberled
+
+30. RC1 - Contacts: Notes not created using 'Add buisness Card' - by eberled
+
+31. RC1 - Contacts : Advanced search - by eberled
+
+32. RC1 - Potentials: Expected Close Date - by eberled
+
+33. RC1 - Helpdesk : Searching - by eberled
+
+34. RC1 - Helpdesk : Searching II - by eberled
+
+35. RC1 - Accounts Detailview : empty 'Last modified date' - by eberled
+
+36. Problems with Thunderbird plugin - by mike
+
+37. vTiger CRM 4 (RC1) - Save Record Failure -
+
+38. User withread-only access to the contacts. However this user can easily 'mass delete' all contacts.
+  
+39. Unable to install Outlook plugin 4 RC 1 - by Christian
+
+40. RC1 Thunderbird plugin doesn\'t work
+
+41. Calculator bug - by 829
+
+42. Outlook Plugin Issues (outlook 2003) - by adrian
+
+43. vtiger Outlook Plugin 4.0.1 beta Release - by adrian
+
+44. CRM 4 RC1 problem or not? - 
+
+45. Problem installing RC1 - by stelaix
+
+46. Install Errors in step 5 - by pab
+
+47. Some Contact fields not synching - by Tareef
+
+48. vtiger v4 - How do you add a manufacturer? - 
+
+49. Contacts in vtiger Outlook related - Maarten
+
+50. RC1 - Product search to include Category, Manufacturer - by dchaffee
+
+51. RC1 - Products - No way to update product category field - by dchaffee
+
+52. Product commission rate needs decimal field - by dchaffee
+
+53. RC1 - New Notes for Tickets - by nuguid
+
+54. RC1 - Settings: Picklist - by eberled
+
+55. RC1- Settings : Helpdesk Picklist doesn't work - by eberled
+
+56. RC1 - Setting : Picklist values for Sales Stages - by eberled
+
+57. RC1 - Home : My Group Allocation - by eberled
+
+58. RC1 - Page Admin - by eberled
+
+
+
+Known Issues
+
+1. 1111896: Outlook raises a security alert when adding email with vtiger Outlook Plug-in
+
+2. In Windowos OS, System Inoformantion is not displayed
+
+3. While importing leads, accounts, contacts, and potentials the XLS file format can be browsed even though the allowed file format is CSV.
+ 
+----------------------------
 vtiger CRM 4 Beta
 January 10, 2005
 
@@ -69,6 +426,7 @@ We have fixed the following issues reported in Sourceforge.net:
 19. Support for Latest versions of Apache and MySQL in installation wizard (Both Linux and Windows).
 
 ----------------------------
+
 vtiger CRM 3.2.1
 December 21, 2004
 

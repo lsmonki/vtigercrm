@@ -21,7 +21,8 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-echo get_module_title("Users", $_REQUEST['fld_module'].': Field Level Access', true);
+echo '<form action="index.php" method="post" name="new" id="form">';
+echo get_module_title("Users", $_REQUEST['fld_module'].': '.$mod_strings['LBL_FIELD_LEVEL_ACCESS'], true);
 echo '<BR>';
 //echo get_form_header("Standard Fields", "", false );
 
@@ -47,26 +48,24 @@ function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 {
 	global $adb;
 	$standCustFld= '';
-	$standCustFld .= '<form action="index.php" method="post" name="new" id="form">';
-	$standCustFld .= '<table width="25%" cellpadding="2" cellspacing="0" border="0">';
 	$standCustFld .= '<input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'">';
 	$standCustFld .= '<input type="hidden" name="module" value="Users">';
 	$standCustFld .= '<input type="hidden" name="profileid" value="'.$profileid.'">';
 	$standCustFld .= '<input type="hidden" name="action" value="UpdateFieldLevelAccess">';
-	$standCustFld .= '<tr><br>';
-	$standCustFld .= '<td><input title="Update" accessKey="C" class="button" type="submit" name="Update" value="Update"></td>';
-	$standCustFld .= '</tr></table>';
 	$standCustFld .= '<BR>';
-	$standCustFld .= get_form_header("Standard Fields", "", false );
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="80%">';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" width="40%"><tr><td>';
+	$standCustFld .= get_form_header($mod_strings['LBL_FIELD_PERMISSIOM_TABLE_HEADER'], "", false );
+	$standCustFld .= '</td></tr></table>';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="40%">';
 	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
-	$standCustFld .=   '<td class="moduleListTitle" height="21"><p style="margin-left: 10">Field Name</td>';
-	$standCustFld .=  '<td width="33%" class="moduleListTitle">Visible</td>';
+	$standCustFld .=  '<td width="50%" nowrap class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_FIELD_PERMISSION_FIELD_NAME'].'</td>';
+	$standCustFld .=  '<td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">'.$mod_strings['LBL_FIELD_PERMISSION_VISIBLE'].'</div></td>';
 	$standCustFld .=  '</tr>';
 	
-	for($i=0; $i<$noofrows; $i++)
+	$row=1;
+	for($i=0; $i<$noofrows; $i++,$row++)
 	{
-		if ($i%2==0)
+		if ($row%2==0)
 		{
 			$trowclass = 'evenListRow';
 		}
@@ -86,7 +85,7 @@ function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 			$readonly = 'disabled';
                 }
 
-		$standCustFld .= '<td width="34%" height="21"><p style="margin-left: 10;">'.$mandatory.' '.$adb->query_result($fieldListResult,$i,"fieldlabel").'</td>';
+		$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$mandatory.' '.$adb->query_result($fieldListResult,$i,"fieldlabel").'</td>';
 		if($adb->query_result($fieldListResult,$i,"visible") == 0)
 		{
 			$visible = "checked";
@@ -95,10 +94,12 @@ function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 		{
 			$visible = "";
 		}	
-		$standCustFld .= '<td width="33%" height="21"><p style="margin-left: 10;"><input type="checkbox" name="'.$adb->query_result($fieldListResult,$i,"fieldid").'" '.$visible.' '.$readonly.'></td></tr>';
+		$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;"><div align="center"><input type="checkbox" name="'.$adb->query_result($fieldListResult,$i,"fieldid").'" '.$visible.' '.$readonly.'></div></td></tr>';
 		
 	}
-	$standCustFld .='</table></form>';
+	$standCustFld .= '</table>';
+	$standCustFld .= '<br><div align="center" style="width:40%"><input title="Update" accessKey="C" class="button" type="submit" name="Update" value="'.$mod_strings['LBL_BUTTON_UPDATE'].'"></div>';
+	$standCustFld .= '</form>';
 	//echo $standCustFld;
 	return $standCustFld;
 }

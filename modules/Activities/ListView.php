@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/ListView.php,v 1.7 2005/03/02 15:39:58 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/ListView.php,v 1.14 2005/03/26 09:45:00 samk Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -25,6 +25,7 @@ require_once("data/Tracker.php");
 require_once('modules/Activities/Activity.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -52,6 +53,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
 	
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Activities','index','name','true','basic'));
+
 	if(isset($_REQUEST['query'])) {
 		if (isset($_REQUEST['name'])) $search_form->assign("NAME", $_REQUEST['name']);
 		if (isset($_REQUEST['contactname'])) $search_form->assign("CONTACT_NAME", $_REQUEST['contactname']);
@@ -73,9 +76,15 @@ $focus = new Activity();
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
+$url_string = ''; // assigning http url string
+$sorder = 'ASC';  // Default sort order
+if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
+$sorder = $_REQUEST['sorder'];
+
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
+	$url_string .="&query=true";
 	if (isset($_REQUEST['name'])) $name = $_REQUEST['name'];
 	if (isset($_REQUEST['contactname'])) $contactname = $_REQUEST['contactname'];
 	if (isset($_REQUEST['date_due'])) $date_due = $_REQUEST['date_due'];
@@ -83,18 +92,21 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 	$where_clauses = Array();
 
-	if(isset($current_user_only) && $current_user_only != "") array_push($where_clauses, "crmentity.smcreatorid='$current_user->id'");
+	if(isset($current_user_only) && $current_user_only != ""){
+		array_push($where_clauses, "crmentity.smcreatorid='$current_user->id'");
+		$url_string .= "&current_user_only=".$current_user_only;		
+	}
 	if(isset($name) && $name != '')
 	{
 		array_push($where_clauses, "activity.subject like ".PearDatabase::quote($name.'%')."");
-		$query_val .= "&name=".$name;		
+		$url_string .= "&name=".$name;		
 	}
 	if(isset($contactname) && $contactname != '')
 	{
 		//$contactnames = explode(" ", $contactname);
 		//foreach ($contactnames as $name) {
 		array_push($where_clauses, "(contactdetails.firstname like ".PearDatabase::quote($contactname.'%')." OR contactdetails.lastname like ".PearDatabase::quote($contactname.'%').")");
-		$query_val .= "&contactname=".$contactname;		
+		$url_string .= "&contactname=".$contactname;		
 		//}
 	}
 	if(isset($duedate) && $duedate != '')
@@ -129,6 +141,28 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 }
 
+// Buttons and View options
+$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
+	<form name="massdelete" method="POST">
+	<tr>
+	<input name="idlist" type="hidden">
+	<input name="viewname" type="hidden">
+	<input name="change_owner" type="hidden">
+	<input name="change_status" type="hidden">
+		<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>
+   		<!--input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
+	       <input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_STATUS].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/--></td>
+		<td align="right">'.$app_strings[LBL_VIEW].' 
+			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
+				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_CALL].'">'.$mod_strings[LBL_CALL].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_MEETING].'">'.$mod_strings[LBL_MEETING].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_TASK].'">'.$mod_strings[LBL_TASK].'</option>
+			</SELECT>
+		</td>
+	</tr>
+	</table>';
+//
 
 global  $task_title;
 $title_display = $current_module_strings['LBL_LIST_FORM_TITLE'];
@@ -168,12 +202,9 @@ if(isset($_REQUEST['viewname']) && $_REQUEST['viewname']!='')
 		</script>";
 }
 
-$url_qry = getURLstring($focus);
-
 if(isset($order_by) && $order_by != '')
 {
-        $list_query .= ' ORDER BY '.$order_by;
-        $url_qry .="&order_by=".$order_by;
+        $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
 
 $list_result = $adb->query($list_query);
@@ -181,7 +212,7 @@ $list_result = $adb->query($list_query);
 //Constructing the list view 
 
 
-echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],'', false);
+echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Activities/ListView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
@@ -203,68 +234,58 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
-if($_REQUEST['query'])
-$query_val .="&query=true";
+// Setting the record count string
+if ($navigation_array['start'] == 1)
+{
+	if($noofrows != 0)
+	$start_rec = $navigation_array['start'];
+	else
+	$start_rec = 0;
+	if($noofrows > $list_max_entries_per_page)
+	{
+		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
+	}
+	else
+	{
+		$end_rec = $noofrows;
+	}
+	
+}
+else
+{
+	if($navigation_array['next'] > $list_max_entries_per_page)
+	{
+		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
+		$end_rec = $navigation_array['next'] - 1;
+	}
+	else
+	{
+		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
+		$end_rec = $noofrows;
+	}
+}
+$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"Activities",$query_val);
+$listview_header = getListViewHeader($focus,"Activities",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
-
-
 
 $listview_entries = getListViewEntries($focus,"Activities",$list_result,$navigation_array);
-$xtpl->assign("LISTHEADER", $listview_header);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 
-if(isset($navigation_array['start']))
-{
-	$startoutput = '<a href="index.php?action=index&module=Activities&start=1'.$query_val.'"><b>Start</b></a>';
-}
-else
-{
-	$startoutput = '[ Start ]';
-}
-if(isset($navigation_array['end']))
-{
-	$endoutput = '<a href="index.php?action=index&module=Activities'.$query_val.'&start='.$navigation_array['end'].'"><b>End</b></a>';
-}
-else
-{
-	$endoutput = '[ End ]';
-}
-if(isset($navigation_array['next']))
-{
-	$nextoutput = '<a href="index.php?action=index&module=Activities'.$query_val.'&start='.$navigation_array['next'].'"><b>Next</b></a>';
-}
-else
-{
-	$nextoutput = '[ Next ]';
-}
-if(isset($navigation_array['prev']))
-{
-	$prevoutput = '<a href="index.php?action=index&module=Activities'.$query_val.'&start='.$navigation_array['prev'].'"><b>Prev</b></a>';
-}
-else
-{
-	$prevoutput = '[ Prev ]';
-}
-$xtpl->assign("Start", $startoutput);
-$xtpl->assign("End", $endoutput);
-$xtpl->assign("Next", $nextoutput);
-$xtpl->assign("Prev", $prevoutput);
+if($order_by !='')
+$url_string .="&order_by=".$order_by;
+if($sorder !='')
+$url_string .="&sorder=".$sorder;
+
+$navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Activities");
+$xtpl->assign("NAVIGATION", $navigationOutput);
+$xtpl->assign("RECORD_COUNTS", $record_string);
 
 $xtpl->parse("main");
 
 $xtpl->out("main");
 
-/*
-$ListView = new ListView();
-$ListView->initNewXTemplate('modules/Activities/ListView.html',$current_module_strings);
-$ListView->setCurrentModule("Activities");
-$ListView->setHeaderTitle($title_display);
-$ListView->setQuery($where, "", "duedate desc", "TASK");
-$ListView->processListView($seedActivity, "main", "TASK");
-*/
 ?>

@@ -13,8 +13,6 @@ require_once ($theme_path."layout_utils.php");
 global $mod_strings;
 
 echo get_module_title("Settings", $mod_strings['LBL_MODULE_NAME'].": ".$mod_strings['NEW']." ".$mod_strings[$_REQUEST['fld_module']]." ".$mod_strings['CUSTOMFIELD'], true);
-echo "<br>";
-echo "<br>";
 require_once('XTemplate/xtpl.php');
 global $mod_strings;
 global $app_strings;

@@ -34,9 +34,9 @@ $date_modified;
 $date_entered = date('YmdHis');
 $date_modified = date('YmdHis');
 
-
 $crmid = $adb->getUniqueID("crmentity");
-$sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted) values(".$crmid.",".$current_user_id.",".$current_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0)";
+//$sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted) values(".$crmid.",".$current_user_id.",".$current_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0)";
+$sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(".$crmid.",".$current_user_id.",".$current_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0,'".$row['description']."')";
 
 $adb->query($sql_crmentity);
 
@@ -60,28 +60,27 @@ $sql_insert_accountcustomfield = "INSERT INTO accountscf (accountid) VALUES (".$
 
  $adb->query($sql_insert_accountcustomfield);
 
+ $date_entered = date('YmdHis');
+ $date_modified = date('YmdHis');
 
 $crmcontactid = $adb->getUniqueID("crmentity");
-$sql_crmentity1 = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted) values(".$crmcontactid.",".$current_user_id.",".$current_user_id.",'Contacts',0,0)";
+$sql_crmentity1 = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime) values(".$crmcontactid.",".$current_user_id.",".$current_user_id.",'Contacts',0,0,'".$row['description']."','".$date_entered."')";
 
 $adb->query($sql_crmentity1);
 
 
 $contact_id = $crmcontactid;
 
- $date_entered = date('YmdHis');
- $date_modified = date('YmdHis');
-
- $sql_insert_contact = "INSERT INTO contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax) VALUES (".$contact_id.",".$crmid.",'".$row["salutation"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["title"] ."','".$row["fax"] ."')";
+ $sql_insert_contact = "INSERT INTO contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (".$contact_id.",".$crmid.",'".$row["salutation"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["title"] ."','".$row["fax"] ."','".$row['yahooid']."')";
 
 $adb->query($sql_insert_contact);
 
 
- $sql_insert_contactsubdetails = "INSERT INTO contactsubdetails (contactsubscriptionid,homephone,otherphone) VALUES (".$contact_id.",'".$row["phone"] ."','" .$row["phone"] ."')";
+ $sql_insert_contactsubdetails = "INSERT INTO contactsubdetails (contactsubscriptionid,homephone,otherphone,leadsource) VALUES (".$contact_id.",'".$row["phone"] ."','" .$row["phone"] ."','".$row['leadsource']."')";
 
 $adb->query($sql_insert_contactsubdetails);
 
- $sql_insert_contactaddress = "INSERT INTO contactaddress (contactaddressid,mailingcity,mailingstreet,mailingcountry) VALUES (".$contact_id.",'".$row["city"] ."','" .$row["street"] ."','" .$row["country"] ."')";
+ $sql_insert_contactaddress = "INSERT INTO contactaddress (contactaddressid,mailingcity,mailingstreet,mailingstate,mailingcountry,mailingzip) VALUES (".$contact_id.",'".$row["city"] ."','" .$row["lane"] ."','".$row['state']."','" .$row["country"] ."','".$row['code']."')";
 
 $adb->query($sql_insert_contactaddress);
 
@@ -94,23 +93,22 @@ $adb->query($sql_insert_contactcustomfield);
 
 if(! isset($createpotential) || ! $createpotential == "on")
 {
-  $oppid = $adb->getUniqueID("crmentity");
-  $sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted) values(".$oppid.",".$current_user_id.",".$current_user_id.",'Potentials',0,0)";
-  
-  $adb->query($sql_crmentity);
-
-  
-
 	$date_entered = date('YmdHis');
 	$date_modified = date('YmdHis');
 
-	$sql_insert_opp = "INSERT INTO potential (potentialid,accountid,potentialname) VALUES (".$oppid.",".$crmid .",'".$potential_name."')";
+
+  $oppid = $adb->getUniqueID("crmentity");
+  $sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,description) values(".$oppid.",".$current_user_id.",".$current_user_id.",'Potentials',0,0,'".$date_entered."','".$row['description']."')";
+  
+  $adb->query($sql_crmentity);
+
+
+	$sql_insert_opp = "INSERT INTO potential (potentialid,accountid,potentialname,leadsource,closingdate) VALUES (".$oppid.",".$crmid .",'".$potential_name."','".$row['leadsource']."','".$close_date."')";
 
 	$adb->query($sql_insert_opp);
 
 
-
-        	$sql_insert_potentialcustomfield = "INSERT INTO potentialscf (potentialid) VALUES (".$oppid.")";
+       	$sql_insert_potentialcustomfield = "INSERT INTO potentialscf (potentialid) VALUES (".$oppid.")";
 
 	$adb->query($sql_insert_potentialcustomfield);
 

@@ -124,7 +124,8 @@ updateLeadGroupRelation($focus->id,'');
 
 }
 */
-$focus->saveentity("Leads");
+//$focus->saveentity("Leads");
+$focus->save("Leads");
 
 $return_id = $focus->id;
 /*

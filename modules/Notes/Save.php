@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Save.php,v 1.4 2005/02/11 07:18:42 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Save.php,v 1.6 2005/03/22 16:33:28 rank Exp $
  * Description:  Saves an Account record and then redirects the browser to the
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -84,7 +84,8 @@ else
 }
 
 
-$focus->saveentity("Notes");
+//$focus->saveentity("Notes");
+$focus->save("Notes");
 
 if ($do_final_move)
 {
@@ -103,6 +104,19 @@ else $return_module = "Notes";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+
+if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module']=='Emails') ||($_REQUEST['return_module']=='HelpDesk') ))
+{
+	if($_REQUEST['email_id'] != '')
+		$crmid = $_REQUEST['email_id'];
+	if($_REQUEST['ticket_id'] != '')
+		$crmid = $_REQUEST['ticket_id'];
+	if($crmid != $_REQUEST['parent_id'])
+	{
+		$sql = "insert into senotesrel (notesid, crmid) values('".$focus->id."','".$crmid."')";
+		$adb->query($sql);
+	}
+}
 
 $local_log->debug("Saved record with id of ".$return_id);
 

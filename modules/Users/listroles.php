@@ -20,9 +20,8 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-echo get_module_title("Users",' Roles', true);
-echo '<BR>';
-//echo get_form_header("Standard Fields", "", false );
+echo '<form action="index.php" method="post" name="new" id="form">';
+echo get_module_title("Users",'Roles', true);
 
 global $adb;
 global $theme;
@@ -43,25 +42,23 @@ $standCustFld = getStdOutput($roleListResult, $noofrows, $mod_strings);
 function getStdOutput($roleListResult, $noofrows, $mod_strings)
 {
 	global $adb;
+	global $app_strings;
 	//echo get_form_header("Profiles", "", false );
 	$standCustFld= '';
-	$standCustFld .= '<table width="25%" cellpadding="2" cellspacing="0" border="0">';
-        $standCustFld .= '<form action="index.php" method="post" name="new" id="form">';
-        $standCustFld .= '<input type="hidden" name="module" value="Users">';
-        $standCustFld .= '<input type="hidden" name="action" value="createrole">';
-        $standCustFld .= '<tr><br>';
-        $standCustFld .= '<td><input title="New" accessKey="C" class="button" type="submit" name="New" value="New Role"></td>';
-        $standCustFld .= '</tr></form></table>';
-        $standCustFld .= '<BR>'; 
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="80%">';
-	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
-	$standCustFld .=   '<td class="moduleListTitle" height="21"><p style="margin-left: 10"></td>';
-	$standCustFld .=   '<td class="moduleListTitle" height="21"><p style="margin-left: 10">Profile Name</td>';
+	$standCustFld .= '<input type="hidden" name="module" value="Users">';
+	$standCustFld .= '<input type="hidden" name="action" value="createrole">';
+	$standCustFld .= '<br><input title="New" accessKey="C" class="button" type="submit" name="New" value="'.$mod_strings['LBL_TITLE_ROLE_NAME'].'">';
+	$standCustFld .= '<br><BR>'; 
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="50%">';
+	$standCustFld .=  '<tr>';
+	$standCustFld .=   '<td class="ModuleListTitle" width="18%" height="21" style="padding:0px 3px 0px 3px;"><div align="center">Operation</div></td>';
+	$standCustFld .=   '<td class="ModuleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_ROLE_NAME'].'</td>';
 	$standCustFld .=  '</tr>';
 	
-	for($i=0; $i<$noofrows; $i++)
+	$row=1;
+	for($i=0; $i<$noofrows; $i++,$row++)
 	{
-		if ($i%2==0)
+		if ($row%2==0)
 		{
 			$trowclass = 'evenListRow';
 		}
@@ -73,8 +70,16 @@ function getStdOutput($roleListResult, $noofrows, $mod_strings)
 		$standCustFld .= '<tr class="'.$trowclass.'">';
 		$role_name = $adb->query_result($roleListResult,$i,"name");
 		$role_id = $adb->query_result($roleListResult,$i,"roleid");
-		$standCustFld .= '<td width="34%" height="21"><a href="index.php?module=Users&action=createrole&mode=edit&roleid='.$role_id.'">edit</a> | <a href="#">del</a></td>';	
-		$standCustFld .= '<td width="34%" height="21"><p style="margin-left: 10;"><a href="index.php?module=Users&action=RoleDetailView&roleid='.$role_id.'">'.$role_name.'</a></td></tr>';
+		$standCustFld .= '<td width="18%" height="21" style="padding:0px 3px 0px 3px;"><div align="center">';
+		$standCustFld .= '<a href="index.php?module=Users&action=createrole&mode=edit&roleid='.$role_id.'">'.$app_strings['LNK_EDIT'].'</a>';
+		global $current_user;
+        	$current_role = fetchUserRole($current_user->id);
+        	if($role_id != 1 && $role_id != 2 && $role_id != $current_role)
+        	{
+		$standCustFld .=' | <a href="index.php?module=Users&action=RoleDeleteStep1&roleid='.$role_id.'">'.$app_strings['LNK_DELETE'].'</a>';
+		}
+		$standCustFld .= '</div></td>';	
+		$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;"><a href="index.php?module=Users&action=RoleDetailView&roleid='.$role_id.'">'.$role_name.'</a></td></tr>';
 		
 	}
 	$standCustFld .='</table>';

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Home/index.php,v 1.21 2005/03/04 14:31:01 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Home/index.php,v 1.25 2005/03/21 17:42:47 ray Exp $
  * Description:  Main file for the Home module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -25,10 +25,15 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 require_once('include/database/PearDatabase.php');
-
+require_once('modules/Users/UserInfoUtil.php');
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
+
+//Security check for related list
+global $profile_id;
+$tab_per_Data = getAllTabsPermission($profile_id);
+$permissionData = $_SESSION['action_permission_set'];
 
 $_REQUEST['search_form'] = 'false';
 $_REQUEST['query'] = 'true';
@@ -40,13 +45,29 @@ $task_title = $mod_strings['LBL_OPEN_TASKS'];
 ?>
 <table width=100% cellpadding="5" cellspacing="5" border="0">
 <tr>
-<td valign="top"><?php include("modules/Potentials/ListViewTop.php"); ?>
+<td valign="top"><?php
+if($tab_per_Data[2] == 0)
+{
+	if($permissionData[2][3] == 0)
+        {
+		 include("modules/Potentials/ListViewTop.php");
+	}
+}
+ ?>
 <br>
-<?php include("modules/Activities/OpenListView.php") ;?>
+<?php
+if($tab_per_Data[9] == 0)
+{
+        if($permissionData[9][3] == 0)
+        {
+ 		include("modules/Activities/OpenListView.php") ;
+	}
+}
+?>
 <br>
 <?php
 //get all the group relation tasks
-$query = "select leaddetails.leadid as id,leaddetails.lastname as name,leadgrouprelation.groupname as groupname, 'Leads' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where  crmentity.deleted=0  and leadgrouprelation.groupname is not null and leadgrouprelation.groupname != '' union all select activity.activityid,activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid where  crmentity.deleted=0 and activitygrouprelation.groupname is not null and groupname != '' union all select troubletickets.ticketid,troubletickets.title,troubletickets.groupname,'Tickets' as Type from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.ticketid where troubletickets.groupname is not null and crmentity.deleted=0 and groupname != ''";
+$query = "select leaddetails.leadid as id,leaddetails.lastname as name,leadgrouprelation.groupname as groupname, 'Leads     ' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where  crmentity.deleted=0  and leadgrouprelation.groupname is not null and leadgrouprelation.groupname != '' union all select activity.activityid,activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid where  crmentity.deleted=0 and activitygrouprelation.groupname is not null and groupname != '' union all select troubletickets.ticketid,troubletickets.title,ticketgrouprelation.groupname,'Tickets   ' as Type from troubletickets inner join ticketgrouprelation on ticketgrouprelation.ticketid=troubletickets.ticketid inner join crmentity on crmentity.crmid = troubletickets.ticketid and crmentity.deleted=0 and ticketgrouprelation.groupname is not null and ticketgrouprelation.groupname != ''";
 
 
 //$query = "select leaddetails.lastname,leadgrouprelation.groupname, 'Leads' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where  crmentity.deleted=0 union all select activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid where  crmentity.deleted=0 union all select troubletickets.ticketid,troubletickets.groupname,'Tickets' as Type from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.ticketid where troubletickets.groupname is not null and crmentity.deleted=0";
@@ -80,13 +101,13 @@ while($row = $adb->fetch_array($result))
     $trowclass = 'oddListRow';
   $list .= '<tr class="'. $trowclass.'">';
   $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-  if($row["type"] == "Leads")
+  if($row["type"] == "Tickets")
   {
-    $list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module=Leads';
+    $list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module=HelpDesk';
   }
   else
   {
-    $list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module=Activities';
+    $list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module='.$row["type"];
   }
 
   $list .= '&action=DetailView&record=';
@@ -110,7 +131,13 @@ while($row = $adb->fetch_array($result))
 
 echo $list;
 $list='';
-require_once('modules/HelpDesk/ListTickets.php');
+if($tab_per_Data[13] == 0)
+{
+        if($permissionData[13][3] == 0)
+        {
+		require_once('modules/HelpDesk/ListTickets.php');
+	}
+}
 global $current_language;
 $current_module_strings = return_module_language($current_language, 'Calendar');
 

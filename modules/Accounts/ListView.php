@@ -22,6 +22,7 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $current_language;
@@ -47,9 +48,15 @@ if (!isset($where)) $where = "";
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
+$url_string = '';
+$sorder = 'ASC';
+if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
+$sorder = $_REQUEST['sorder'];
+
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
+	$url_string .="&query=true";
 	if (isset($_REQUEST['accountname'])) $name = $_REQUEST['accountname'];
 	if (isset($_REQUEST['website'])) $website = $_REQUEST['website'];
 	if (isset($_REQUEST['phone'])) $phone = $_REQUEST['phone'];
@@ -62,7 +69,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	if (isset($_REQUEST['siccode'])) $sic_code = $_REQUEST['siccode'];
 	if (isset($_REQUEST['tickersymbol'])) $ticker_symbol = $_REQUEST['tickersymbol'];
 	if (isset($_REQUEST['accounttype'])) $account_type = $_REQUEST['accounttype'];
-	if (isset($_REQUEST['bill_street'])) $address_street = $_REQUEST['bill_street'];
+	if (isset($_REQUEST['address_street'])) $address_street = $_REQUEST['address_street'];
 	if (isset($_REQUEST['bill_city'])) $address_city = $_REQUEST['bill_city'];
 	if (isset($_REQUEST['bill_state'])) $address_state = $_REQUEST['bill_state'];
 	if (isset($_REQUEST['bill_country'])) $address_country = $_REQUEST['bill_country'];
@@ -85,28 +92,97 @@ for($i=0;$i<$adb->num_rows($result);$i++)
         {
                 $str=" accountscf.".$column[$i]." like '$customfield[$i]%'";
                 array_push($where_clauses, $str);
+		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
 }
 //upto this added for Custom Field
 	
-	if(isset($name) && $name != "") array_push($where_clauses, "account.accountname like ".PearDatabase::quote($name."%"));
-	if(isset($website) && $website != "") array_push($where_clauses, "account.website like ".PearDatabase::quote("%".$website."%"));
-	if(isset($phone) && $phone != "") array_push($where_clauses, "(account.phone like ".PearDatabase::quote("%".$phone."%")." OR account.otherphone like ".PearDatabase::quote("%".$phone."%")." OR account.fax like ".PearDatabase::quote("%".$phone."%").")");
-	if(isset($annual_revenue) && $annual_revenue != "") array_push($where_clauses, "account.annualrevenue like ".PearDatabase::quote($annual_revenue."%"));
-	if(isset($address_street) && $address_street != "") array_push($where_clauses, "(accountbillads.street like ".PearDatabase::quote($address_street."%")." OR accountshipads.street like ".PearDatabase::quote($address_street."%").")");
-	if(isset($address_city) && $address_city != "") array_push($where_clauses, "(accountbillads.city like ".PearDatabase::quote($address_city."%")." OR accountshipads.city like ".PearDatabase::quote($address_city."%").")");
-	if(isset($address_state) && $address_state != "") array_push($where_clauses, "(accountbillads.state like ".PearDatabase::quote($address_state."%")." OR accountshipads.state like ".PearDatabase::quote($address_state."%").")");
-	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "(accountbillads.code like ".PearDatabase::quote($address_postalcode."%")." OR accountshipads.code like ".PearDatabase::quote($address_postalcode."%").")");
-	if(isset($address_country) && $address_country != "") array_push($where_clauses, "(accountbillads.country like ".PearDatabase::quote($address_country."%")." OR accountshipads.country like ".PearDatabase::quote($address_country."%").")");
-	if(isset($email) && $email != "") array_push($where_clauses, "(account.email1 like ".PearDatabase::quote($email."%")." OR account.email2 like ".PearDatabase::quote($email."%").")");
-	if(isset($industry) && $industry != "") array_push($where_clauses, "account.industry = ".PearDatabase::quote($industry));
-	if(isset($ownership) && $ownership != "") array_push($where_clauses, "account.ownership like ".PearDatabase::quote($ownership."%"));
+	if(isset($name) && $name != "") 
+	{
+		array_push($where_clauses, "account.accountname like ".PearDatabase::quote($name."%"));
+		$url_string .= "&accountname=".$name;
+	}
+	if(isset($website) && $website != "")
+	{
+		array_push($where_clauses, "account.website like ".PearDatabase::quote("%".$website."%"));
+		$url_string .= "&website=".$website;
+	}
+	if(isset($phone) && $phone != "")
+	{
+		array_push($where_clauses, "(account.phone like ".PearDatabase::quote("%".$phone."%")." OR account.otherphone like ".PearDatabase::quote("%".$phone."%")." OR account.fax like ".PearDatabase::quote("%".$phone."%").")");
+		$url_string .= "&phone=".$phone;
+	}
+	if(isset($annual_revenue) && $annual_revenue != "")
+	{ 
+		array_push($where_clauses, "account.annualrevenue like ".PearDatabase::quote($annual_revenue."%"));
+		$url_string .= "&annual_revenue=".$annual_revenue;
+	}
+	if(isset($employees) && $employees != "")
+	{ 
+		array_push($where_clauses, "account.employees like ".PearDatabase::quote($employees."%"));
+		$url_string .= "&employees=".$employees;
+	}
+	if(isset($address_street) && $address_street != "")
+	{
+		array_push($where_clauses, "(accountbillads.street like ".PearDatabase::quote($address_street."%")." OR accountshipads.street like ".PearDatabase::quote($address_street."%").")");
+		$url_string .= "&address_street=".$address_street;
+	}
+	if(isset($address_city) && $address_city != "")
+	{
+		array_push($where_clauses, "(accountbillads.city like ".PearDatabase::quote($address_city."%")." OR accountshipads.city like ".PearDatabase::quote($address_city."%").")");
+		$url_string .= "&bill_city=".$address_city;
+	}
+	if(isset($address_state) && $address_state != "")
+	{
+		array_push($where_clauses, "(accountbillads.state like ".PearDatabase::quote($address_state."%")." OR accountshipads.state like ".PearDatabase::quote($address_state."%").")");
+		$url_string .= "&address_street=".$address_street;
+	}
+	if(isset($address_postalcode) && $address_postalcode != "")
+	{
+		array_push($where_clauses, "(accountbillads.code like ".PearDatabase::quote($address_postalcode."%")." OR accountshipads.code like ".PearDatabase::quote($address_postalcode."%").")");
+		$url_string .= "&bill_code=".$address_postalcode;
+	}
+	if(isset($address_country) && $address_country != "")
+	{
+		array_push($where_clauses, "(accountbillads.country like ".PearDatabase::quote($address_country."%")." OR accountshipads.country like ".PearDatabase::quote($address_country."%").")");
+		$url_string .= "&bill_country=".$address_country;
+	}
+	if(isset($email) && $email != "")
+	{
+		array_push($where_clauses, "(account.email1 like ".PearDatabase::quote($email."%")." OR account.email2 like ".PearDatabase::quote($email."%").")");
+		$url_string .= "&email=".$email;
+	}
+	if(isset($industry) && $industry != "")
+	{
+		array_push($where_clauses, "account.industry = ".PearDatabase::quote($industry));
+		$url_string .= "&industry=".$industry;
+	}
+	if(isset($ownership) && $ownership != "")
+	{
+	 	array_push($where_clauses, "account.ownership like ".PearDatabase::quote($ownership."%"));
+		$url_string .= "&ownership=".$ownership;
+	}
 	if(isset($rating) && $rating != "") array_push($where_clauses, "account.rating like ".PearDatabase::quote($rating."%"));
-	if(isset($sic_code) && $sic_code != "") array_push($where_clauses, "account.siccode like ".PearDatabase::quote($sic_code."%"));
-	if(isset($ticker_symbol) && $ticker_symbol != "") array_push($where_clauses, "account.tickersymbol like ".PearDatabase::quote($ticker_symbol."%"));
-	if(isset($account_type) && $account_type != "") array_push($where_clauses, "account.account_type = ".PearDatabase::quote($account_type));
-	if(isset($current_user_only) && $current_user_only != "") array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-
+	if(isset($sic_code) && $sic_code != "")
+	{
+		array_push($where_clauses, "account.siccode like ".PearDatabase::quote($sic_code."%"));
+		$url_string .= "&siccode=".$sic_code;
+	}
+	if(isset($ticker_symbol) && $ticker_symbol != "")
+	{
+		array_push($where_clauses, "account.tickersymbol like ".PearDatabase::quote($ticker_symbol."%"));
+		$url_string .= "&tickersymbol=".$ticker_symbol;
+	}
+	if(isset($account_type) && $account_type != "")
+	{
+		array_push($where_clauses, "account.account_type = ".PearDatabase::quote($account_type));
+		$url_string .= "&accounttype=".$account_type;
+	}
+	if(isset($current_user_only) && $current_user_only != "")
+	{
+		array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
+		$url_string .= "&current_user_only=".$current_user_only;
+	}
 	$where = "";
 	foreach($where_clauses as $clause)
 	{
@@ -135,6 +211,20 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form=new XTemplate ('modules/Accounts/SearchForm.html');
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
+	
+	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
+	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+	$search_form->assign("JAVASCRIPT", get_clear_form_js());
+	if($order_by != '') {
+		$ordby = "&order_by=".$order_by;
+	}
+	else
+	{
+		$ordby ='';
+	}
+	$search_form->assign("BASIC_LINK", "index.php?module=Accounts".$ordby."&action=index".$url_string."&sorder=".$sorder);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Accounts&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
+
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if (isset($name)) $search_form->assign("NAME", $name);
@@ -143,10 +233,18 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if (isset($address_city)) $search_form->assign("ADDRESS_CITY", $address_city);
 
 	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
+	
+	
+	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], '', false);
 
-	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
+
 	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
+
+	$url_string .="&advanced=true";
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','advanced'));
+
 		if (isset($annual_revenue)) $search_form->assign("ANNUAL_REVENUE", $annual_revenue);
+		if (isset($employees)) $search_form->assign("EMPLOYEES", $employees);
 		if (isset($address_street)) $search_form->assign("ADDRESS_STREET", $address_street);
 		if (isset($address_state)) $search_form->assign("ADDRESS_STATE", $address_state);
 		if (isset($address_country)) $search_form->assign("ADDRESS_COUNTRY", $address_country);
@@ -183,6 +281,7 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 		$search_form->out("advanced");
 	}
 	else {
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','basic'));
 		$search_form->parse("main");
 		$search_form->out("main");
 	}
@@ -190,6 +289,26 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 	echo "\n<BR>\n";
 }
 
+$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
+	<form name="massdelete" method="POST">
+	<tr>
+	<input name="idlist" type="hidden">
+	<input name="viewname" type="hidden">';
+if(isPermitted('Accounts',2,'') == 'yes')
+{
+        $other_text .=	'<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+}
+	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].' 
+			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
+				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_PROSPECT].'">'.$mod_strings[LBL_PROSPECT].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_INVESTOR].'">'.$mod_strings[LBL_INVESTOR].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_RESELLER].'">'.$mod_strings[LBL_RESELLER].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_PARTNER].'">'.$mod_strings[LBL_PARTNER].'</option>
+			</SELECT>
+		</td>
+	</tr>
+	</table>';
 
 /*
 $ListView = new ListView();
@@ -202,7 +321,7 @@ $ListView->processListView($seedAccount, "main", "ACCOUNT");
 
 $focus = new Account();
 
-echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],'', false);
+echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Accounts/ListView.html');
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -230,16 +349,26 @@ if($_REQUEST['viewname'] == 'All')
      $defaultcv_criteria = $_REQUEST['viewname'];
           $query .= " and account_type like "."'%" .$defaultcv_criteria ."%'";          
    }
-
-
+	$viewname = $_REQUEST['viewname'];
+        $view_script = "<script language='javascript'>
+                function set_selected()
+                {
+                        len=document.massdelete.view.length;
+                        for(i=0;i<len;i++)
+                        {
+                                if(document.massdelete.view[i].value == '$viewname')
+                                        document.massdelete.view[i].selected = true;
+                        }
+                }
+                set_selected();
+                </script>";
 }
 
-$url_qry = getURLstring($focus);
+//$url_qry = getURLstring($focus);
 
 if(isset($order_by) && $order_by != '')
 {
-        $query .= ' ORDER BY '.$order_by;
-        $url_qry .="&order_by=".$order_by;
+        $query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
 
 $list_result = $adb->query($query);
@@ -257,54 +386,59 @@ else
 
         $start = 1;
 }
+
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
-//Retreive the List View Table Header
+// Setting the record count string
+if ($navigation_array['start'] == 1)
+{
+	if($noofrows != 0)
+	$start_rec = $navigation_array['start'];
+	else
+	$start_rec = 0;
+	if($noofrows > $list_max_entries_per_page)
+	{
+		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
+	}
+	else
+	{
+		$end_rec = $noofrows;
+	}
+	
+}
+else
+{
+	if($navigation_array['next'] > $list_max_entries_per_page)
+	{
+		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
+		$end_rec = $navigation_array['next'] - 1;
+	}
+	else
+	{
+		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
+		$end_rec = $noofrows;
+	}
+}
+$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
-$listview_header = getListViewHeader($focus,"Accounts");
+//Retreive the List View Table Header
+$listview_header = getListViewHeader($focus,"Accounts",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
 
 
 $listview_entries = getListViewEntries($focus,"Accounts",$list_result,$navigation_array);
 $xtpl->assign("LISTENTITY", $listview_entries);
+$xtpl->assign("SELECT_SCRIPT", $view_script);
 
-if(isset($navigation_array['start']))
-{
-	$startoutput = '<a href="index.php?action=index&module=Accounts'.$url_qry.'&start=1"><b>Start</b></a>';
-}
-else
-{
-        $startoutput = '[ Start ]';
-}
-if(isset($navigation_array['end']))
-{
-        $endoutput = '<a href="index.php?action=index&module=Accounts'.$url_qry.'&start='.$navigation_array['end'].'"><b>End</b></a>';
-}
-else
-{
-        $endoutput = '[ End ]';
-}
-if(isset($navigation_array['next']))
-{
-        $nextoutput = '<a href="index.php?action=index&module=Accounts'.$url_qry.'&start='.$navigation_array['next'].'"><b>Next</b></a>';
-}
-else
-{
-        $nextoutput = '[ Next ]';
-}
-if(isset($navigation_array['prev']))
-{
-        $prevoutput = '<a href="index.php?action=index&module=Accounts'.$url_qry.'&start='.$navigation_array['prev'].'"><b>Prev</b></a>';
-}
-else
-{
-        $prevoutput = '[ Prev ]';
-}
-$xtpl->assign("Start", $startoutput);
-$xtpl->assign("End", $endoutput);
-$xtpl->assign("Next", $nextoutput);
-$xtpl->assign("Prev", $prevoutput);
+if($order_by !='')
+$url_string .="&order_by=".$order_by;
+if($sorder !='')
+$url_string .="&sorder=".$sorder;
+
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Accounts");
+$xtpl->assign("NAVIGATION", $navigationOutput);
+$xtpl->assign("RECORD_COUNTS", $record_string);
 
 $xtpl->parse("main");
 $xtpl->out("main");

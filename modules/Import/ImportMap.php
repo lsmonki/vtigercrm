@@ -127,7 +127,7 @@ class ImportMap extends SugarBean
                 $this->name = $name;
                 $this->module = $module;
                 //$this->content = $content;
-		$this->content = "'".$this->db->getEmptyBlob()."'";
+		$this->content = "".$this->db->getEmptyBlob()."";
                 $this->has_header = $has_header;
                 $this->deleted = 0;
                 $returnid = $this->save();

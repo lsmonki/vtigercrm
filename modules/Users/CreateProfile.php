@@ -48,7 +48,7 @@ require_once('include/utils.php');
  cellspacing="0">
                 <tbody>
                   <tr>
-                    <td class="moduleTitle hline">Create New Profile:</td>
+                    <td class="moduleTitle hline"><?php echo $mod_strings['LBL_PROFILE_NAME']?></td>
                   </tr>
                 </tbody>
               </table>
@@ -58,7 +58,7 @@ require_once('include/utils.php');
                 <tbody>
                   <tr>
                     <td>
-                    <div align="right"><font class="required">*</font><?php echo $mod_strings['LBL_INDICATES_REQUIRED_FIELD']; ?> </div>
+                    <div align="right"><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL'];?></font><?php echo $mod_strings['LBL_INDICATES_REQUIRED_FIELD'];?></div>
                     </td>
                   </tr>
                 </tbody>
@@ -67,14 +67,14 @@ require_once('include/utils.php');
  cellspacing="1" class="formOuterBorder">
                 <tbody>
                   <tr>
-                    <td class="formSecHeader" colspan="2">New Profile</td>
+                    <td class="formSecHeader" colspan="2"><?php echo $mod_strings['LBL_NEW_PROFILE']; ?></td>
                   </tr>
                   <tr>
-                    <td class="dataLabel mandatory">* Profile Name</td>
+                    <td class="dataLabel mandatory"><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL'];?></font><?php echo $mod_strings['LBL_NEW_PROFILE_NAME']; ?></td>
                     <td class="value"><input class="textField" type="text" name="profileName"></td>
                   </tr>
                   <tr>
-                    <td class="dataLabel mandatory">* Parent Profile</td>
+                    <td class="dataLabel mandatory"><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL'];?></font><?php echo $mod_strings['LBL_PARENT_PROFILE']; ?></td>
                     <td class="value">
                     <select class="select" name="parentProfileId">
             <?php

@@ -12,24 +12,21 @@
 
 require_once('include/database/PearDatabase.php');
 ?>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="en">
 <head>
-  <title>Word Templates List</title>
+<title>Word Templates List</title>
 <!--meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
 </head>
-<body>
-            <form action="index.php">
-	     <div class="moduleTitle hline"><?php echo $mod_strings['LBL_MODULE_NAME'].' : '.$mod_strings['LBL_WORD_TEMPLATES']; ?></div>
-	<br>
-             <input type="hidden" name="module" value="Users">
-             <input type="hidden" name="action" value="upload">
-             <input type="submit" class="button" name="Submit" value="<?php echo $mod_strings['LBL_NEW_WORD_TEMPLATE']; ?>">
-<br><br>
-		
+<body><form action="index.php">
+<input type="hidden" name="module" value="Users">
+<input type="hidden" name="action" value="upload">
+<?php echo get_module_title($mod_strings['LBL_MODULE_NAME'],$mod_strings['LBL_WORD_TEMPLATES'],false);?>	
+<br>
+<input type="submit" class="button" name="Submit" value="<?php echo $mod_strings['LBL_NEW_WORD_TEMPLATE']; ?>">
+<br>
+<br>
 <?php
-
 require_once('modules/Users/binaryfilelist.php');
 echo getAttachmentsList();
 /*

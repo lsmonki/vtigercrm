@@ -45,7 +45,8 @@ foreach($focus->column_fields as $fieldname => $val)
 		
 }
 
-$focus->saveentity("Products");
+//$focus->saveentity("Products");
+$focus->save("Products");
 $return_id = $focus->id;
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
@@ -53,6 +54,7 @@ else $return_module = "Products";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+if(isset($_REQUEST['activity_mode'])) $return_action .= '&activity_mode='.$_REQUEST['activity_mode'];
 
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 

@@ -30,6 +30,7 @@ require_once('modules/Import/Forms.php');
 require_once('modules/Import/parse_utils.php');
 require_once('modules/Import/ImportMap.php');
 require_once('include/database/PearDatabase.php');
+require_once('include/CustomFieldUtil.php');
 
 global $mod_strings;
 global $mod_list_strings;
@@ -284,9 +285,18 @@ $list_string_key .= "_import_fields";
 
 $translated_column_fields = $mod_list_strings[$list_string_key];
 
+//$adb->println("IMP3 : trans before");
+//$adb->println($translated_column_fields);
+
+// adding custom fields translations
+
+getCustomFieldTrans($_REQUEST['module'],&$translated_column_fields);
+
 $adb->println("IMP3 : trans");
 $adb->println($translated_column_fields);
 
+
+$cnt=1;
 for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 {
 
@@ -357,10 +367,13 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 
 	foreach ( $rows as $row ) 
 	{
+		if ($cnt%2==0)
+			$xtpl->assign("ROWCLASS","evenListRow");
+		else
+			$xtpl->assign("ROWCLASS","oddListRow");
+		
 		if( isset($row[$field_count]) && $row[$field_count] != '')
 		{
-
-			
 			$xtpl->assign("CELL",htmlspecialchars($row[$field_count]));
 			$xtpl->parse("main.table.row.cell");
 		} 
@@ -368,6 +381,8 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 		{
 			$xtpl->parse("main.table.row.cellempty");
 		}
+		
+		$cnt++;
 	}
 
 	$xtpl->parse("main.table.row");

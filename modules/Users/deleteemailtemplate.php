@@ -8,7 +8,6 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-include('include/database/PearDatabase.php');
 
 $filename = $_REQUEST["templatename"];
 $sql = "delete from emailtemplates where templatename = '".$filename ."'";

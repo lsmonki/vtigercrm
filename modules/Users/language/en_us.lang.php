@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.14 2005/03/02 11:57:13 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.17 2005/03/28 03:56:00 rank Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -181,8 +181,8 @@ $mod_strings = Array(
 'LBL_DETAIL_VIEW_OF_EMAIL_TEMPLATE'=>'Detail View of Email Template',
 'LBL_GROUP_MEMBERS_LIST'=>'Group members list',
 'LBL_GROUPS'=>'Groups',
-'LBL_WORD_TEMPLATES'=>'Word Template',
-'LBL_NEW_WORD_TEMPLATE'=>'New Word Template',
+'LBL_WORD_TEMPLATES'=>'Mail Merge Templates',
+'LBL_NEW_WORD_TEMPLATE'=>'New Template',
 
 // Added fields in TabCustomise.php,html and UpdateTab.php,html
 'LBL_CUSTOMISE_TABS'=>'Customize Tabs',
@@ -196,6 +196,54 @@ $mod_strings = Array(
 // Added fields in binaryfilelist.php
 'LBL_OERATION'=>'Operation',
 
+// Added fields in CreateProfile.php
+'LBL_PROFILE_NAME'=>'Create New Profile:',
+'LBL_NEW_PROFILE'=>'New Profile',
+'LBL_NEW_PROFILE_NAME'=>'Profile Name',
+'LBL_PARENT_PROFILE'=>'Parent Profile',
+
+//Added fields in createrole.php
+'LBL_HDR_ROLE_NAME'=>'Create New Role:',
+'LBL_TITLE_ROLE_NAME'=>'New Role',
+'LBL_ROLE_NAME'=>'Role Name',
+'LBL_ROLE_PROFILE_NAME'=>'Associate With Profile',
+
+//Added fields in OrgSharingDetailsView.php
+'LBL_ORG_SHARING_PRIVILEGES'=>'Organisation Sharing  Privileges',
+'LBL_EDIT_PERMISSIONS'=>'Edit Permissions',
+'LBL_SAVE_PERMISSIONS'=>'Save Permissions',
+'LBL_READ_ONLY'=>'Public: Read Only',
+'LBL_EDIT_CREATE_ONLY'=>'Public: Read, Create/Edit',
+'LBL_READ_CREATE_EDIT_DEL'=>'Public: Read, Create/Edit, Delete',
+'LBL_PRIVATE'=>'Private',
+
+//Added fields in listnotificationschedulers.php
+'LBL_HDR_EMAIL_SCHDS'=>'Users : Email Notifications',
+'LBL_EMAIL_SCHDS_DESC'=>'The following is the list of notifications that are activated automatically when the corresponding event has happened.',
+'LBL_ACTIVE'=>'Active',
+'LBL_NOTIFICATION'=>'Notification',
+'LBL_DESCRIPTION'=>'Description',
+'LBL_TASK_NOTIFICATION'=>'Delayed Task Notification',
+'LBL_TASK_NOTIFICATION_DESCRITPION'=>'Notifying when a task is delayed beyond 24 hrs',
+'LBL_MANY_TICKETS'=>'Too many tickets  Notification',
+'LBL_MANY_TICKETS_DESCRIPTION'=>'Notification when a particular entity is allocated too many tickets, might reflect Service Level commitments',
+'LBL_PENDING_TICKETS'=>'Pending Tickets Notification',
+'LBL_TICKETS_DESCRIPTION'=>'Notification for getting attention to status of tickets which are pending',
+'LBL_START_NOTIFICATION'=>'Support Start Notification',
+'LBL_START_DESCRIPTION'=>'Notification stating the start of support/service',
+'LBL_BEG_DEAL'=>'Big Deal Notification',
+'LBL_BIG_DEAL_DESCRIPTION'=>'Notification for a big deal',
+'LBL_SUPPORT_NOTICIATION'=>'Support End Notification',
+'LBL_SUPPORT_DESCRIPTION'=>'Notification when support is about to end',
+'LBL_BUTTON_UPDATE'=>'Update',
+'LBL_MODULENAMES'=>'Module',
+
+//Added fields in ListFieldPermissions.html
+'LBL_FIELD_PERMISSION_FIELD_NAME'=>'Field Name',
+'LBL_FIELD_PERMISSION_VISIBLE'=>'Visible',
+'LBL_FIELD_PERMISSIOM_TABLE_HEADER'=>'Standard Fields',
+'LBL_FIELD_LEVEL_ACCESS'=>'Field Level Access',
+ 
 );
 
 ?>

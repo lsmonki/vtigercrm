@@ -15,7 +15,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/modules/HelpDesk/Forms.php,v 1.6 2005/03/04 19:11:04 rakeebk Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/modules/HelpDesk/Forms.php,v 1.9 2005/03/25 10:21:31 rajeshkannan Exp $
  * Description:  Contains a variety of utility functions specific to this module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -96,7 +96,7 @@ $lbl_save_button_key = $app_strings['LBL_SAVE_BUTTON_KEY'];
 $lbl_save_button_label = $app_strings['LBL_SAVE_BUTTON_LABEL'];
 $default_parent_type= $app_list_strings['record_type_default_key'];
 
-$comboFieldNames = Array('troubleticketpriorities'=>'troubleticketpriorities_dom');
+$comboFieldNames = Array('ticketpriorities'=>'ticketpriorities_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 $user_id = $current_user->id;
 
@@ -106,18 +106,20 @@ $the_form .= <<<EOQ
 
 		<form name="TicketSave" onSubmit="return verify_data(TicketSave)" method="POST" action="index.php">
 			<input type="hidden" name="module" value="HelpDesk">
+			<input type="hidden" name="return_module" value="HelpDesk">
 			<input type="hidden" name="record" value="">
 			<input type="hidden" name="parent_type" value="${default_parent_type}">
 			<input type="hidden" name="assigned_user_id" value='${user_id}'>
 			<input type="hidden" name="action" value="Save">
+			<input type="hidden" name="return_action" value="DetailView">
 		<FONT class="required">$lbl_required_symbol</FONT>
-               $lbl_ticket_title<br><input name='title' maxlength='255' type="text" value="">
-               $lbl_ticket_description<br><br><input name='description' maxlength='255' type="text" value="">
-              $lbl_ticket_priority<br><br>	<select name='troubleticketpriorities'>
+               $lbl_ticket_title<br><input name='title' maxlength='255' type="text" value=""><br>
+               $lbl_ticket_description<br><input name='description' maxlength='255' type="text" value=""><br>
+              $lbl_ticket_priority<br><select name='ticketpriorities'>
 EOQ;
 
 
-$the_form .= get_select_options_with_id($comboFieldArray['troubleticketpriorities_dom'], "");
+$the_form .= get_select_options_with_id($comboFieldArray['ticketpriorities_dom'], "");
 $the_form .= <<<EOQ
 		</select><br><br>
  <input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >

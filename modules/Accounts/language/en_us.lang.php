@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/language/en_us.lang.php,v 1.12 2005/02/14 06:15:51 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/language/en_us.lang.php,v 1.18 2005/03/19 08:59:20 rank Exp $
  * Description:  Defines the English language pack 
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -64,6 +64,7 @@ $mod_strings = Array(
 'LBL_ANNUAL_REVENUE'=>'Annual Revenue:',
 'LBL_ADDRESS_INFORMATION'=>'Address Information',
 'LBL_ACCOUNT_INFORMATION'=>'Account Information',
+'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 'LBL_BILLING_ADDRESS'=>'Billing Address:',
 'LBL_SHIPPING_ADDRESS'=>'Shipping Address:',
 'LBL_ANY_ADDRESS'=>'Any Address:',
@@ -100,6 +101,42 @@ $mod_strings = Array(
 'LBL_NEW_CONTACT'=>'New Contact',
 'LBL_CONTACT_TITLE'=>'Contacts',
 
+//Added fields after RC1 - Release
+'LBL_ALL'=>'All',
+'LBL_PROSPECT'=>'Prospect',
+'LBL_INVESTOR'=>'Investor',
+'LBL_RESELLER'=>'Reseller',
+'LBL_PARTNER'=>'Partner',
+
+// Added for 4GA
+'LBL_TOOL_FORM_TITLE'=>'Account Tools',
+//Added for 4GA
+'Account Name'=>'Account Name',
+'Phone'=>'Phone',
+'Website'=>'Website',
+'Fax'=>'Fax',
+'Ticker Symbol'=>'Ticker Symbol',
+'Other Phone'=>'Other Phone',
+'Member Of'=>'Member Of',
+'Email'=>'Email',
+'Employees'=>'Employees',
+'Other Email'=>'Other Email',
+'Ownership'=>'Ownership',
+'Rating'=>'Rating',
+'industry'=>'industry',
+'SIC Code'=>'SIC Code',
+'Type'=>'Type',
+'Annual Revenue'=>'Annual Revenue',
+'Assigned To'=>'Assigned To',
+'Billing Address'=>'Billing Address',
+'Shipping Address'=>'Shipping Address',
+'City'=>'City',
+'State'=>'State',
+'Code'=>'Code',
+'Country'=>'Country',
+'Created Time'=>'Created Time',
+'Modified Time'=>'Modified Time',
+'Description'=>'Description',
 );
 
 ?>

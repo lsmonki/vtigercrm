@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/language/en_us.lang.php,v 1.7 2005/02/11 08:03:20 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/language/en_us.lang.php,v 1.10 2005/03/28 06:33:37 rank Exp $
  * Description:  Defines the English language pack for the Account module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -49,6 +49,19 @@ $mod_strings = Array(
 
 'LBL_FILENAME'=>'Attachment:',
 'LBL_NOTE_INFORMATION'=>'Note Information',
+
+// Added for 4GA
+'LBL_TOOL_FORM_TITLE'=>'Note Tools',
+// Added for 4GA
+'Contact Name'=>'Contact Name',
+'Related To'=>'Related To',
+'Subject'=>'Subject',
+'Created Time'=>'Created Time',
+'Modified Time'=>'Modified Time',
+'Attachment'=>'Attachment',
+'Note'=>'Note',
+
+
 );
 
 ?>

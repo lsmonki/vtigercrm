@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.52 2005/03/05 11:37:00 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.66 2005/03/29 10:34:44 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -23,6 +23,7 @@ include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
+require_once('data/CRMEntity.php');
 require_once('include/utils.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Activities/Activity.php');
@@ -30,7 +31,7 @@ require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
 
 // Contact is used to store customer information.
-class Contact extends SugarBean {
+class Contact extends CRMEntity {
 	var $log;
 	var $db;
 
@@ -131,7 +132,17 @@ class Contact extends SugarBean {
 	'alt_address_city',
 	'alt_address_state',
 	'alt_address_postalcode',
-	'alt_address_country'
+	'alt_address_country',
+
+    'office_phone',
+    'home_phone',
+    'other_phone',
+    'fax',
+    'department',
+    'birthdate',
+    'assistant_name',
+    'assistant_phone'
+
 	
 	);
 
@@ -226,7 +237,7 @@ class Contact extends SugarBean {
 
     function get_contacts($user_name,$from_index,$offset)
     {   
-      $query = "select contactdetails.lastname last_name,contactdetails.firstname first_name,contactdetails.contactid as id, contactdetails.salutation as salutation, contactdetails.email as email1,contactdetails.title as title,contactdetails.mobile as phone_mobile,account.accountname as account_name,account.accountid as account_id, contactaddress.mailingcity as primary_address_city,contactaddress.mailingstreet as primary_address_street, contactaddress.mailingcountry as primary_address_country,contactaddress.mailingstate as primary_address_state, contactaddress.mailingzip as primary_address_postalcode,   contactaddress.othercity as alt_address_city,contactaddress.otherstreet as alt_address_street, contactaddress.othercountry as alt_address_country,contactaddress.otherstate as alt_address_state, contactaddress.otherzip as alt_address_postalcode  from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid inner join users on users.id=crmentity.smownerid  left join account on account.accountid=contactdetails.accountid left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid where user_name='" .$user_name ."' and crmentity.deleted=0 limit " .$from_index ."," .$offset;
+      $query = "select contactdetails.fax fax, contactsubdetails.assistant assistant_name, contactsubdetails.otherphone other_phone, contactsubdetails.homephone home_phone,contactsubdetails.birthday birthdate, contactdetails.lastname last_name,contactdetails.firstname first_name,contactdetails.contactid as id, contactdetails.salutation as salutation, contactdetails.email as email1,contactdetails.title as title,contactdetails.mobile as phone_mobile,account.accountname as account_name,account.accountid as account_id, contactaddress.mailingcity as primary_address_city,contactaddress.mailingstreet as primary_address_street, contactaddress.mailingcountry as primary_address_country,contactaddress.mailingstate as primary_address_state, contactaddress.mailingzip as primary_address_postalcode,   contactaddress.othercity as alt_address_city,contactaddress.otherstreet as alt_address_street, contactaddress.othercountry as alt_address_country,contactaddress.otherstate as alt_address_state, contactaddress.otherzip as alt_address_postalcode  from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid inner join users on users.id=crmentity.smownerid left join account on account.accountid=contactdetails.accountid left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid left join contactsubdetails on contactsubdetails.contactsubscriptionid = contactdetails.contactid where user_name='" .$user_name ."' and crmentity.deleted=0 limit " .$from_index ."," .$offset;
       return $this->process_list_query1($query);
     }
 
@@ -305,7 +316,7 @@ class Contact extends SugarBean {
 	{
           // First, get the list of IDs.
           //include('modules/Contacts/RenderRelatedListUI.php');
-	  $query = 'select contactdetails.accountid, contactdetails.contactid , potential.potentialid, potential.potentialname, potential.potentialtype, potential.amount, potential.closingdate from contactdetails inner join potential on contactdetails.accountid = potential.accountid inner join crmentity on crmentity.crmid = potential.potentialid where contactdetails.contactid = '.$id.' and crmentity.deleted=0';
+	  $query = 'select contactdetails.accountid, contactdetails.contactid , potential.potentialid, potential.potentialname, potential.potentialtype, potential.amount, potential.closingdate, crmentity.crmid, crmentity.smownerid from contactdetails inner join potential on contactdetails.accountid = potential.accountid inner join crmentity on crmentity.crmid = potential.potentialid where contactdetails.contactid = '.$id.' and crmentity.deleted=0';
           renderRelatedPotentials($query,$id);
           //return $this->build_related_list($query, new Opportunity());
 	}
@@ -332,8 +343,9 @@ class Contact extends SugarBean {
 	{
           // First, get the list of IDs.
 
-		$query = 'SELECT activity.*, cntactivityrel.*, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join cntactivityrel on cntactivityrel.activityid=activity.activityid  inner join users on users.id = crmentity.smownerid inner join crmentity on crmentity.crmid =cntactivityrel.contactid  where crmentity.crmid ='.$id.' and (activitytype="Task" or activitytype="Call" or activitytype="Meeting")';
-	renderRelatedTasks($query);		
+		//$query = 'SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid where contactdetails.contactid = '.$id.' and (activitytype="Task" or activitytype="Call" or activitytype="Meeting") and crmentity.deleted=0';
+		$query = "SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid where contactdetails.contactid = ".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0";
+		renderRelatedTasks($query,$id);		
 
           //return $this->build_related_list($query, new Task());
 	}
@@ -341,9 +353,9 @@ class Contact extends SugarBean {
         function get_attachments($id)
         {
 		//$query = 'select notes.title,"Notes      " as ActivityType, notes.filename, attachments.type as "FileType",crm2.modifiedtime as "lastmodified", notes.notesid as noteattachmentid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$id;
-		$query = 'select notes.title,"Notes " as ActivityType, notes.filename, attachments.type as "FileType",crm2.modifiedtime as "lastmodified", notes.notesid as noteattachmentid from notes inner join crmentity on crmentity.crmid= notes.contact_id inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$id;
+		$query = "select notes.title,'Notes      '  ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid  attachmentsid, notes.notesid crmid from notes inner join crmentity on crmentity.crmid= notes.contact_id inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
-	        $query .= 'select "          " as Title ,"Attachments" as ActivityType, attachments.name as "filename", attachments.type as "FileType",crm2.modifiedtime as "lastmodified", attachments.attachmentsid as noteattachmentid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid='.$id;
+		$query .= "select '          '  title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
                 renderRelatedAttachments($query,$id);
 	  }
 
@@ -354,8 +366,9 @@ class Contact extends SugarBean {
 	*/
   function get_emails($id)
   {
-	$query = 'select seactivityrel.crmid, emails.emailid, activity.subject, activity.activitytype,users.user_name, crmentity.modifiedtime from activity inner join seactivityrel on seactivityrel.activityid = activity.activityid inner join emails on emails.emailid = seactivityrel.activityid inner join contactdetails on contactdetails.accountid = seactivityrel.crmid inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid = emails.emailid  where contactdetails.contactid = '.$id;
-    renderRelatedEmails($query);
+	//$query = 'select seactivityrel.crmid, emails.emailid, activity.subject, activity.activitytype,users.user_name, crmentity.modifiedtime, crmentity.crmid, crmentity.smownerid, activity.date_start from activity inner join seactivityrel on seactivityrel.activityid = activity.activityid inner join emails on emails.emailid = seactivityrel.activityid inner join contactdetails on contactdetails.contactid = seactivityrel.crmid inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid = emails.emailid  where contactdetails.contactid = '.$id.'  and crmentity.deleted = 0';
+	$query = 'select seactivityrel.crmid, emails.emailid, activity.subject, activity.activitytype,users.user_name, crmentity.modifiedtime, crmentity.crmid, crmentity.smownerid, activity.date_start from activity,seactivityrel,emails,contactdetails,users,crmentity where seactivityrel.activityid = activity.activityid and emails.emailid = seactivityrel.activityid and contactdetails.contactid = seactivityrel.crmid and users.id=crmentity.smownerid and crmentity.crmid = emails.emailid  and contactdetails.contactid = '.$id.'  and crmentity.deleted = 0';
+    renderRelatedEmails($query,$id);
   }
   
 	function create_list_query(&$order_by, &$where)
@@ -443,9 +456,11 @@ return $exists;
                                 account.accountname account_name,
                                 users.user_name assigned_user_name
                                 FROM contactdetails
-                                LEFT JOIN users
-                                ON crmentity.smcreatorid=users.id
-                                LEFT JOIN account on contactdetails.accountid=account.accountid inner join crmentity on crmentity.crmid=contactdetails.contactid and crmentity.deleted=0 and users.status='ACTIVE' left join contactscf on contactscf.contactid=contactdetails.contactid";
+				inner join crmentity on crmentity.crmid=contactdetails.contactid
+                                LEFT JOIN users ON crmentity.smcreatorid=users.id
+                                LEFT JOIN account on contactdetails.accountid=account.accountid
+			        left join contactscf on contactscf.contactid=contactdetails.contactid
+				where crmentity.deleted=0 and users.status='Active' ";
 		}
 		else
 		{
@@ -454,9 +469,11 @@ return $exists;
                                 account.accountname account_name,
                                 users.user_name assigned_user_name
                                 FROM contactdetails
-                                LEFT JOIN users
-                                ON crmentity.smcreatorid=users.id
-                                LEFT JOIN account on contactdetails.accountid=account.accountid inner join crmentity on crmentity.crmid=contactdetails.contactid and crmentity.deleted=0 and users.status='ACTIVE'  left join contactscf on contactscf.contactid=contactdetails.contactid ";
+                                inner join crmentity on crmentity.crmid=contactdetails.contactid
+                                LEFT JOIN users ON crmentity.smcreatorid=users.id
+                                LEFT JOIN account on contactdetails.accountid=account.accountid
+			        left join contactscf on contactscf.contactid=contactdetails.contactid
+				where crmentity.deleted=0 and users.status='Active' ";
 		}
                 return $query;
         }
@@ -720,7 +737,7 @@ return $exists;
 	}
 
 	
-	return $the_where;
+	return "( ".$the_where." )";
 }
 
 
@@ -730,7 +747,15 @@ return $exists;
        $table1flds = $this->db->getColumnNames("contactdetails");
        $table2flds = $this->db->getColumnNames("contactsubdetails");
        $table3flds = $this->db->getColumnNames("contactaddress");
-       $mergeflds = array_merge($table1flds,$table2flds,$table3flds);
+       $sql1 = "select fieldlabel from field where generatedtype=2 and tabid=4";
+		 $result = $this->db->query($sql1);
+		 $numRows = $this->db->num_rows($result);
+		 for($i=0; $i < $numRows;$i++)
+		 {
+			$custom_fields[$i] = $this->db->query_result($result,$i,"fieldlabel");
+		 }
+		 
+		 $mergeflds = array_merge($table1flds,$table2flds,$table3flds,$custom_fields);
        return $mergeflds;
 }
 

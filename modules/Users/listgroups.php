@@ -23,7 +23,7 @@ require_once('include/database/PearDatabase.php');
 <!--c:out value="${locale}"/-->
 <!--fmt:setLocale value="ja_JP"/-->
             <form action="index.php">
-	     <div class="moduleTitle hline"><?php echo $mod_strings['LBL_MODULE_NAME'].' : '.$mod_strings['LBL_GROUPS']; ?></div>
+			<?php echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_GROUPS'], false); ?>
 	<br>
              <input type="hidden" name="module" value="Users">
              <input type="hidden" name="action" value="createnewgroup">
@@ -31,8 +31,8 @@ require_once('include/database/PearDatabase.php');
 <br><br>
 		<table width="30%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
 		<tr>
-		<td class="moduleListTitle" height="25"><b><?php echo $mod_strings['LBL_GROUP_NAME']; ?></b></td>
-                <td class="moduleListTitle"><b><?php echo $mod_strings['LBL_DESCRIPTION']; ?></b></td>
+		<td class="moduleListTitle" height="20" style='padding:0px 3px 0px 3px;'><?php echo $mod_strings['LBL_GROUP_NAME']; ?></td>
+                <td class="moduleListTitle" style='padding:0px 3px 0px 3px;'><?php echo $mod_strings['LBL_DESCRIPTION']; ?></td>
                 </tr>
 <?php
    $sql = "select * from groups";
@@ -48,15 +48,16 @@ do
 {
   $name=$temprow["name"];
   if ($cnt%2==0)
-  printf("<tr class='evenListRow'> <td height='25'>");
+  printf("<tr class='evenListRow'> <td height='21' style='padding:0px 3px 0px 3px;'>");
   else
-  printf("<tr class='oddListRow'> <td height='25'>");
+  printf("<tr class='oddListRow'> <td height='21' style='padding:0px 3px 0px 3px;'>");
   
-  printf(" <a href='index.php?module=Users&action=UserInfoUtil&groupname=$name'>%s</a></td>",$temprow["name"]);
-  printf("<td height='25'>%s</td>",$temprow["description"]);
+  printf("<a href='index.php?module=Users&action=UserInfoUtil&groupname=$name'>%s</a></td>",$temprow["name"]);
+  printf("<td height='21' style='padding:0px 3px 0px 3px;'>%s</td>",$temprow["description"]);
   $cnt++;
 }while($temprow = $adb->fetch_array($result));
 ?>
+</tr>
 </table>
 </body>
 </html>

@@ -20,6 +20,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/uifromdbutil.php');
+require_once('include/FormValidationUtil.php');
 
 global $mod_strings;
 global $app_list_strings;
@@ -40,17 +41,18 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
     	$focus->mode = ''; 	
 }
 //get Block 1 Information
-
+$block_1_header = getBlockTableHeader("LBL_LEAD_INFORMATION");
 $block_1 = getBlockInformation("Leads",1,$focus->mode,$focus->column_fields);
 
 
 
 //get Address Information
-
+$block_2_header = getBlockTableHeader("LBL_ADDRESS_INFORMATION");
 $block_2 = getBlockInformation("Leads",2,$focus->mode,$focus->column_fields);
 
 //get Description Information
 
+$block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
 $block_3 = getBlockInformation("Leads",3,$focus->mode,$focus->column_fields);
 
 
@@ -61,8 +63,9 @@ if(trim($block_5) != '')
 	$cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
 
         $cust_fld .=  '<tr><td>';
+	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
+        $cust_fld .= $block_5_header;
         $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= '<tr><th align="left" class="formSecHeader" colspan="2">Custom Information</th></tr>';
 	$cust_fld .= $block_5;
 	$cust_fld .= '</table>';
         $cust_fld .= '</td></tr></table>';
@@ -100,6 +103,10 @@ $xtpl->assign("LAST_NAME", $focus->lastname);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("BLOCK3", $block_3);
+$xtpl->assign("BLOCK1_HEADER", $block_1_header);
+$xtpl->assign("BLOCK2_HEADER", $block_2_header);
+$xtpl->assign("BLOCK3_HEADER", $block_3_header);
+
 if(isset($cust_fld))
 {
 	$xtpl->assign("CUSTOMFIELD", $cust_fld);
@@ -122,6 +129,52 @@ $xtpl->assign("ID", $focus->id);
 $xtpl->assign("HEADER", get_module_title("Leads", "{MOD.LBL_LEAD}  ".$focus->firstname." ".$focus->lastname, true));
 //create the html select code here and assign it
 $xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+
+
+ $lead_tables = Array('leaddetails','crmentity','leadsubdetails','leadaddress','leadscf'); 
+ $tabid = getTabid("Leads");
+ $validationData = getDBValidationData($lead_tables,$tabid);
+ $fieldName = '';
+ $fieldLabel = '';
+ $fldDataType = '';
+
+ $rows = count($validationData);
+ foreach($validationData as $fldName => $fldLabel_array)
+ {
+   if($fieldName == '')
+   {
+     $fieldName="'".$fldName."'";
+   }
+   else
+   {
+     $fieldName .= ",'".$fldName ."'";
+   }
+   foreach($fldLabel_array as $fldLabel => $datatype)
+   {
+	if($fieldLabel == '')
+	{
+			
+     		$fieldLabel = "'".$fldLabel ."'";
+	}		
+      else
+       {
+      $fieldLabel .= ",'".$fldLabel ."'";
+        }
+ 	if($fldDataType == '')
+         {
+      		$fldDataType = "'".$datatype ."'";
+    	}
+	 else
+        {
+       		$fldDataType .= ",'".$datatype ."'";
+     	}
+   }
+ }
+
+$xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
+$xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
+$xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
+
 
 //CustomField
 /*

@@ -28,6 +28,7 @@ $emailtemplateResult = $adb->fetch_array($result);
 
 $xtpl=new XTemplate ('modules/Users/createemailtemplate.html');
 $xtpl->assign("MOD", $mod_strings);
+$xtpl->assign("APP", $app_strings);
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("FOLDERNAME", $emailtemplateResult["foldername"]);
 $xtpl->assign("TEMPLATENAME", $emailtemplateResult["templatename"]);

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/DetailView.php,v 1.9 2005/03/04 11:29:36 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/DetailView.php,v 1.12 2005/03/17 11:26:49 ray Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -106,7 +106,7 @@ $xtpl->assign("BLOCK2", $block_2);
 //get Description Information
 
 $permissionData = $_SESSION['action_permission_set'];
-if($permissionData[$tab_id]['1'] == 0)
+if(isPermitted("Activities",1,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Activities'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
 
@@ -115,7 +115,7 @@ if($permissionData[$tab_id]['1'] == 0)
 }
 
 
-if($permissionData[$tab_id]['2'] == 0)
+if(isPermitted("Activities",2,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Activities'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
 }
@@ -123,11 +123,12 @@ if($permissionData[$tab_id]['2'] == 0)
 $xtpl->parse("main");
 
 $xtpl->out("main");
-if($_REQUEST['activity_mode'] == 'Call' || $_REQUEST['Meeting'])
+if($_REQUEST['activity_mode'] == 'Events')
 {
 	include('modules/Activities/RenderRelatedListUI.php');
 	$focus->get_users($focus->id);
 	$focus->get_contacts($focus->id);
+	$focus->get_products($focus->id);
 }
 
 ?>

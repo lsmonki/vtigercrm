@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/orange/layout_utils.php,v 1.16 2004/10/06 09:02:05 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/orange/layout_utils.php,v 1.19 2005/03/22 10:00:01 gjay Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -72,7 +72,7 @@ EOQ;
 
 if ($other_text) {
 	$the_form .= "<td width='20'><IMG height='1' src='include/images/blank.gif'></td>\n";
-	$the_form .= "<td valign='bottom' class='formHeader'><div align='right'>$other_text</div></td>\n";
+	$the_form .= "<td valign='bottom' width='100%' class='formHeader'>$other_text</td>\n";
 }
 else {
 	$the_form .= "<td><IMG height='1' src='include/images/blank.gif'></td>\n";
@@ -109,28 +109,20 @@ global $image_path;
 global $app_strings;
 
 $the_title = "<table width='100%' cellpadding='0' cellspacing='0' border='0'><tbody><tr><td>\n";
-$the_title .= "<table cellpadding='2' cellspacing='0' border='0'><tbody><tr>\n";
+$the_title .= "<table cellpadding='0' cellspacing='0' border='0'><tbody><tr>\n";
 $the_title .= "<td vAlign='middle' align='center'>\n";
 		
 if (is_file($image_path.$module.".gif")) {
 	$the_title .= "<IMG src='".$image_path.$module.".gif' border='0'>\n";
 }
 
-$the_title .= "</td><td class='moduleTitle' vAlign='middle' align='left' noWrap width='100% height='20'>";
+$the_title .= "</td><td class='moduleTitle' vAlign='middle' align='left' noWrap width='100%'>&nbsp;";
 $the_title .= $module_title."</td></tr></tbody></table></td>\n";
 $the_title .= "<td width='100%'><IMG height='1' src='include/images/blank.gif'></td>";
 
 if ($show_help) {
-//test
-/*
-if($module == 'Leads')
-        {
- $the_title .= "<td color='red' class='bodySmall' nowrap align='right'>[ <A href='index.php?module=imports&action=import'><Blink><B>".$app_strings['LNK_IMPORT_LEADS']."</Blink></B></A> ]</td>\n";
-        }
-*/
-
-    $the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='phprint.php?jt=".session_id().$GLOBALS['request_string']."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
-    $the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";
+//	$the_title .= "<td class='bodySmall' nowrap align='right'> <A href='phprint.php?jt=".session_id().$GLOBALS['request_string']."'><img align=absmiddle hspace=3 border=0 src='".$image_path."print.gif'>".$app_strings['LNK_PRINT']."</A> &nbsp;</td>\n";
+//	$the_title .= "<td class='bodySmall' nowrap align='right'> <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'><img align=absmiddle hspace=3 border=0 src='".$image_path."help_icon.gif'>".$app_strings['LNK_HELP']."</A></td>\n";
 }
 else {
 	$the_title .= "<td class='bodySmall' align='right'>&nbsp;</td>\n";

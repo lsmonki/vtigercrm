@@ -37,8 +37,8 @@ $mod_strings = Array(
 'LBL_SELECT_FILE'=>'Select file:',
 'LBL_CUSTOM'=>'Custom',
 'LBL_DONT_MAP'=>'-- Do not map this field --',
-'LBL_STEP_1_TITLE'=>'Step 1: Select the Source',
-'LBL_WHAT_IS'=>'What is the data source?',
+'LBL_STEP_1_TITLE'=>'Step 1 of 4: Select Data Source',
+'LBL_WHAT_IS'=>'Please select a data source from the following:',
 'LBL_MICROSOFT_OUTLOOK'=>'Microsoft Outlook',
 'LBL_ACT'=>'Act!',
 'LBL_SALESFORCE'=>'Salesforce.com',
@@ -47,9 +47,9 @@ $mod_strings = Array(
 'LBL_DELETE'=>'delete',
 'LBL_PUBLISHED_SOURCES'=>'Published Sources:',
 'LBL_UNPUBLISH'=>'un-publish',
-'LBL_NEXT'=>'Next >',
-'LBL_BACK'=>'< Back',
-'LBL_STEP_2_TITLE'=>'Step 2: Upload Export File',
+'LBL_NEXT'=>'Next',
+'LBL_BACK'=>'Back',
+'LBL_STEP_2_TITLE'=>'Step 2 of 4: Upload Export File',
 'LBL_HAS_HEADER'=>'Has Header:',
 
 'LBL_NUM_1'=>'1.',
@@ -102,9 +102,9 @@ $mod_strings = Array(
 'LBL_CUSTOM_NUM_2'=>'Select the <b>Save As...</b> or <b>Export...</b> menu option',
 'LBL_CUSTOM_NUM_3'=>'Save the file in a <b>CSV</b> or <b>Comma Separated Values</b> format',
 
-'LBL_STEP_3_TITLE'=>'Step 3: Confirm Fields and Import',
+'LBL_STEP_3_TITLE'=>'Step 3 of 4: Confirm Fields and Import',
 
-'LBL_SELECT_FIELDS_TO_MAP'=>'In the list below, select the fields in your import file that should be imported into each field in the system. When you are finished, click <b>Import Now</b>:',
+'LBL_SELECT_FIELDS_TO_MAP'=>'In the list below, select the fields in your import file that should be imported into each field in the system. When you are finished, click <b>Import Now</b>',
 
 'LBL_DATABASE_FIELD'=>'Database Field',
 'LBL_HEADER_ROW'=>'Header Row',

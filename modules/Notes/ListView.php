@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/ListView.php,v 1.7 2005/02/24 15:14:32 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/ListView.php,v 1.13 2005/03/21 18:15:04 ray Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -27,6 +27,7 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/utils.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -52,6 +53,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("MOD", $mod_strings);
 	$search_form->assign("APP", $app_strings);
 
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Notes','index','title','true','basic'));
+
 	if(isset($_REQUEST['query'])) {
 		if(isset($_REQUEST['title'])) $search_form->assign("NAME", $_REQUEST['title']);
 		if(isset($_REQUEST['contact_name'])) $search_form->assign("CONTACT_NAME", $_REQUEST['contact_name']);
@@ -59,18 +62,25 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->parse("main");
 
 	echo get_form_header($mod_strings['LBL_SEARCH_FORM_TITLE'], "", false);
+
 	$search_form->out("main");
 	echo get_form_footer();
 	echo "\n<BR>\n";
 }
 
-$where = "";
+if (!isset($where)) $where = "";
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+
+$url_string = ''; // assigning http url string
+$sorder = 'ASC';  // Default sort order
+if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
+$sorder = $_REQUEST['sorder'];
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
+	$url_string .="&query=true";
 	if (isset($_REQUEST['title'])) $name = $_REQUEST['title'];
 	if (isset($_REQUEST['contact_name'])) $contact_name = $_REQUEST['contact_name'];
 
@@ -79,6 +89,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	if(isset($name) && $name != '')
 	{
 		array_push($where_clauses, "notes.title like ".PearDatabase::quote($name.'%')."");
+		$url_string .= "&title=".$name;
 	}
 	if(isset($contact_name) && $contact_name != '')
 	{
@@ -86,6 +97,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		foreach ($contact_names as $name) {
 			array_push($where_clauses, "(contactdetails.firstname like ".PearDatabase::quote($name.'%')." OR contactdetails.lastname like ".PearDatabase::quote($name.'%').")");
 		}
+		$url_string .= "&contact_name=".$contact_name;
 	}
 
 	$where = "";
@@ -110,10 +122,24 @@ $ListView->setHeaderTitle($display_title );
 $ListView->setQuery($where, "", "notes.date_entered DESC", "NOTE");
 $ListView->processListView($seedNote, "main", "NOTE");
 */
+$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
+	<form name="massdelete" method="POST">
+	<tr>
+	<input name="idlist" type="hidden">
+	<input name="change_status" type="hidden">';
+if(isPermitted('Notes',2,'') == 'yes')
+{
+        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+}
+ $other_text .='</td>
+		<td align="right">&nbsp;</td>
+	</tr>
+	</table>';
+//
 
 $focus = new Note();
 
-echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],'', false);
+echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Notes/ListView.html');
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -130,12 +156,9 @@ if(isset($where) && $where != '')
         $query .= ' and '.$where;
 }
 
-$url_qry = getURLstring($focus);
-
 if(isset($order_by) && $order_by != '')
 {
-        $query .= ' ORDER BY '.$order_by;
-        $url_qry .="&order_by=".$order_by;
+        $query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
 
 $list_result = $adb->query($query);
@@ -156,52 +179,56 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
+// Setting the record count string
+if ($navigation_array['start'] == 1)
+{
+	if($noofrows != 0)
+	$start_rec = $navigation_array['start'];
+	else
+	$start_rec = 0;
+	if($noofrows > $list_max_entries_per_page)
+	{
+		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
+	}
+	else
+	{
+		$end_rec = $noofrows;
+	}
+	
+}
+else
+{
+	if($navigation_array['next'] > $list_max_entries_per_page)
+	{
+		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
+		$end_rec = $navigation_array['next'] - 1;
+	}
+	else
+	{
+		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
+		$end_rec = $noofrows;
+	}
+}
+$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+
+
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"Notes");
+$listview_header = getListViewHeader($focus,"Notes",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
 
 
 $listview_entries = getListViewEntries($focus,"Notes",$list_result,$navigation_array);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
-if(isset($navigation_array['start']))
-{
-	$startoutput = '<a href="index.php?action=index&module=Notes'.$url_qry.'&start=1"><b>Start</b></a>';
-}
-else
-{
-        $startoutput = '[ Start ]';
-}
-if(isset($navigation_array['end']))
-{
-        $endoutput = '<a href="index.php?action=index&module=Notes'.$url_qry.'&start='.$navigation_array['end'].'&query='.$query_val.
-'"><b>End</b></a>';
-}
-else
-{
-        $endoutput = '[ End ]';
-}
-if(isset($navigation_array['next']))
-{
-        $nextoutput = '<a href="index.php?action=index&module=Notes'.$url_qry.'&start='.$navigation_array['next'].'&query='.$query_val.'"><b>Next</b></a>';
-}
-else
-{
-        $nextoutput = '[ Next ]';
-}
-if(isset($navigation_array['prev']))
-{
-        $prevoutput = '<a href="index.php?action=index&module=Notes'.$url_qry.'&start='.$navigation_array['prev'].'&query='.$query_val.'"><b>Prev</b></a>';
-}
-else
-{
-        $prevoutput = '[ Prev ]';
-}
-$xtpl->assign("Start", $startoutput);
-$xtpl->assign("End", $endoutput);
-$xtpl->assign("Next", $nextoutput);
-$xtpl->assign("Prev", $prevoutput);
+if($order_by !='')
+$url_string .="&order_by=".$order_by;
+if($sorder !='')
+$url_string .="&sorder=".$sorder;
+
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Notes");
+$xtpl->assign("NAVIGATION", $navigationOutput);
+$xtpl->assign("RECORD_COUNTS", $record_string);
 
 $xtpl->parse("main");
 $xtpl->out("main");

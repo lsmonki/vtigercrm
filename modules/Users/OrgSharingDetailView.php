@@ -14,8 +14,8 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
+echo '<form action="index.php" method="post" name="new" id="form">';
 echo get_module_title("Security", "Default Organisation Sharing Privileges", true);
-echo '<br>';
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -25,39 +25,47 @@ require_once($theme_path.'layout_utils.php');
 $xtpl=new XTemplate ('modules/Users/OrgSharingDetailView.html');
 
 $defSharingPermissionData = getDefaultSharingAction();
-$output = '<BR>';
-$output .= '<form action="index.php" method="post" name="new" id="form">';
 $output .= '<input type="hidden" name="module" value="Users">';
 $output .= '<input type="hidden" name="action" value="OrgSharingEditView">';
-$output .= '<TABLE width="70%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">';
+$output .= '<br><input title="Edit" accessKey="C" class="button" type="submit" name="Edit" value="'.$mod_strings['LBL_EDIT_PERMISSIONS'].'"><br><br>';
+$output .= '<TABLE width="60%" border=0 cellPadding=0 cellSpacing=0 class="FormBorder">';
 $output .= '<tr>';
-$output .= '<td colspan="2" class="formSecHeader">Organisation Sharing  Privileges &nbsp;  <input title="Edit" accessKey="C" class="button" type="submit" name="Edit" value="Edit Permissions"></td>';
+$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_ORG_SHARING_PRIVILEGES'].'</td>';
+$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;">Access Privilege</td>';
 $output .=  '</tr>';
 
+$row=1;
 foreach($defSharingPermissionData as $tab_id => $def_perr)
 {
 	
 	$entity_name = getTabname($tab_id);
 	if($def_perr == 0)
 	{
-		$entity_perr = 'Public: Read Only';
+		$entity_perr = $mod_stings['LBL_READ_ONLY'];
 	}
 	elseif($def_perr == 1)
 	{
-		$entity_perr = 'Public: Read, Create/Edit ';
+		$entity_perr = $mod_strings['LBL_EDIT_CREATE_ONLY'];
 	}	
 	elseif($def_perr == 2)
 	{
-		$entity_perr = 'Public: Read, Create/Edit, Delete ';
+		$entity_perr = $mod_strings['LBL_READ_CREATE_EDIT_DEL'];
 	}
 	elseif($def_perr == 3)
 	{
-		$entity_perr = 'Private';
+		$entity_perr = $mod_strings['LBL_PRIVATE'];
 	}
-	$output .=   '<tr>';
-	$output .=   '<TD  class="dataLabel" width="50%" noWrap ><div align="left">'.$entity_name.'</div></TD>';
-	$output .=  '<TD  class="dataLabel" width="50%" noWrap ><div align="left">'.$entity_perr.'</div></TD>';
+	
+	if ($row%2==0)
+		$output .=   '<tr class="evenListRow">';
+	else
+		$output .=   '<tr class="oddListRow">';
+		
+	$output .=   '<TD width="40%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$entity_name.'</TD>';
+	$output .=  '<TD width="60%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$entity_perr.'</TD>';
 	$output .=  '</tr>';
+	
+	$row++;
 }
 
 

@@ -140,8 +140,10 @@ else
 		$decimal=0;
 	}
 	$type='';
+	$uichekdata='';
 	if($fldType == 'Text')
 	{
+	$uichekdata='V~O~LE~'.$fldlength;
 		$uitype = 1;
 		//$type = "varchar(".$fldlength.")";
 		$type = "C(".$fldlength.")"; // adodb type
@@ -151,25 +153,30 @@ else
 		$uitype = 7;
 
 		//$type="double(".$fldlength.",".$decimal.")";	
-		$type="N(".$fldlength.",".$decimal.")";	// adodb type
+		//this may sound ridiculous passing decimal but that is the way adodb wants 
+		$type="N(".$fldlength.".".$decimal.")";	// adodb type
+	$uichekdata='N~O~'.$fldlength .','.$decimal;
 	}
 	elseif($fldType == 'Percent')
 	{
 		$uitype = 9;
 		//$type="double(".$fldlength.",".$decimal.")";
 		$type="N(".$fldlength.",".$decimal.")"; //adodb type
+	$uichekdata='N~O~'.$fldlength .','.$decimal;
 	}
 	elseif($fldType == 'Currency')
 	{
 		$uitype = 3;
 		//$type="double(".$fldlength.",".$decimal.")";
 		$type="N(".$fldlength.",".$decimal.")"; //adodb type
+	$uichekdata='N~O~'.$fldlength .','.$decimal;
 	}
 	elseif($fldType == 'Date')
 	{
+	$uichekdata='D~O';
 		$uitype = 5;
 		//$type = "date";
-		$type = "T"; // adodb type
+		$type = "D"; // adodb type
 		
 	}
 	elseif($fldType == 'Email')
@@ -177,7 +184,7 @@ else
 		$uitype = 13;
 		//$type = "varchar(50)";
 		$type = "C(50)"; //adodb type
-		
+		$uichekdata='V~O';
 	}
 	elseif($fldType == 'Phone')
 	{
@@ -185,19 +192,29 @@ else
 		//$type = "varchar(30)";
 		$type = "C(30)"; //adodb type
 		
+		$uichekdata='V~O';
 	}
 	elseif($fldType == 'Picklist')
 	{
 		$uitype = 15;
 		//$type = "varchar(255)";
 		$type = "C(255)"; //adodb type
+		$uichekdata='V~O';
 	}
 	elseif($fldType == 'URL')
 	{
 		$uitype = 17;
 		//$type = "varchar(255)";
 		$type = "C(255)"; //adodb type
+		$uichekdata='V~O';
 	}
+	elseif($fldType == 'Checkbox')	 
+        {	 
+                 $uitype = 56;	 
+                 //$type = "varchar(255)";	 
+                 $type = "C(3)"; //adodb type	 
+                 $uichekdata='C~0';	 
+        }
 	// No Decimal Pleaces Handling
 
         
@@ -210,14 +227,25 @@ else
         
         //$query = "insert into customfields values('','".$columnName."','".$tableName."',2,".$uitype.",'".$fldlabel."','0','".$fldmodule."')";
 	//retreiving the sequence
+	$custfld_fieldid=$adb->getUniqueID("field");
 	$custfld_sequece=$adb->getUniqueId("customfield_sequence");
     
-        $query = "insert into field values(".$tabid.",".$adb->getUniqueID("field").",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",5,1)";
+        $query = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",5,1,'".$uichekdata."')";
 	
         $adb->query($query);
 	
         $adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
-        
+       
+	//Inserting values into profile2field tables
+	$sql1 = "select * from profile";
+	$sql1_result = $adb->query($sql1);
+	$sql1_num = $adb->num_rows($sql1_result);
+	for($i=0; $i<$sql1_num; $i++)
+	{
+		$profileid = $adb->query_result($sql1_result,$i,"profileid");
+		$sql2 = "insert into profile2field values(".$profileid.", ".$tabid.", ".$custfld_fieldid.", 0, 1)";
+		$adb->query($sql2);	 	
+	}	 
 
 
 

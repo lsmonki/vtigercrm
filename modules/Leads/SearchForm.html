@@ -23,58 +23,35 @@
 	<tr>
 <form>
 		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_FIRST_NAME}&nbsp;</td>
-		<td class="dataField"><input type=text size="10" name="firstname" class=dataField value="{FIRST_NAME}">
+		<td><input type=text size="10" name="firstname" value="{FIRST_NAME}">
 		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_LAST_NAME}&nbsp;</td>
-		<td class="dataField"><input type=text size="10" name="lastname" class=dataField  value="{LAST_NAME}">
+		<td><input type=text size="10" name="lastname" value="{LAST_NAME}">
 		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_COMPANY}&nbsp;</td>
-		<td class="dataField"><input type=text size="10" name="company" class=dataField  value="{COMPANY}">
+		<td><input type=text size="10" name="company" value="{COMPANY}">
 
 		
 		<td rowspan='2' align="center"><input type="hidden" name="action" value="index"/>
 			<input type="hidden" name="query" value="true"/>
 			<input type="hidden" name="module" value="Leads" />
+                	<input type="hidden" name="order_by" value="{ORDER_BY}" />
+                	<input type="hidden" name="sorder" value="{SORDER}" />
 		<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
 		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
 		<br>
-		<font size='1'>[<a href='index.php?module=Leads&action=index&advanced=true'>{APP.LNK_ADVANCED_SEARCH}</a>]</font>
+		<font size='1'>[<a href='{ADVANCE_LINK}'>{APP.LNK_ADVANCED_SEARCH}</a>]</font>
 		</td>
 	</tr>
 	<tr>
 		<td class="dataLabel">{APP.LBL_CURRENT_USER_FILTER}</td>
-		<td class="dataField"><input name='current_user_only' type="checkbox" {CURRENT_USER_ONLY}></td>
+		<td><input name='current_user_only' type="checkbox" {CURRENT_USER_ONLY}></td>
 	</tr>
 </form>
 	</table>
-	<br>
-<table cellpadding="2" cellspacing="2" border="0" align="center"><tr>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=A">A</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=B">B</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=C">C</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=D">D</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=E">E</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=F">F</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=G">G</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=H">H</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=I">I</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=J">J</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=K">K</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=L">L</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=M">M</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=N">N</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=O">O</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=P">P</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=Q">Q</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=R">R</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=S">S</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=T">T</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=U">U</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=V">V</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=W">W</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=X">X</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=Y">Y</a></td><td>|</td>
-<td><a href="index.php?module=Leads&action=index&query=true&last_name=Z">Z</a></td>
+</td></tr>
+</table>
+<table cellpadding="2" cellspacing="4" border="0" align="center" style="margin-top:5px;margin-bottom:5px"><tr>
+{ALPHABETICAL}
 </tr></table>
-<br>
 {JAVASCRIPT}
 <!-- END: main -->
 
@@ -83,14 +60,14 @@
 <tr>
 <!--form>
 	<td width="100%"></td>
-	<td align="center" nowrap><input type="hidden" name="action" value="ListView"/>
+	<td align="center" nowrap><input type="hidden" name="action" value="index"/>
 		<input type="hidden" name="query" value="true"/>
 		<input type="hidden" name="advanced" value="true"/>
 		<input type="hidden" name="module" value="Leads" />
 	<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
 	<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
 	<br>
-	<font size='1'>[<a href='index.php?module=Leads&action=ListView'>{APP.LNK_BASIC_SEARCH}</a>]</font>
+	<font size='1'>[<a href='index.php?module=Leads&action=index'>{APP.LNK_BASIC_SEARCH}</a>]</font>
 	</td-->
 </tr>
 <tr>
@@ -98,59 +75,61 @@
 	<table width="100%" border="0" cellspacing="1" cellpadding="0">
 	<tr><th align="left" class="formSecHeader" colspan="4">{MOD.LBL_GENERAL_INFORMATION}</th><td><form>
         <td width="100%"></td>
-        <td align="center" nowrap><input type="hidden" name="action" value="ListView"/>
+        <td align="center" nowrap><input type="hidden" name="action" value="index"/>
                 <input type="hidden" name="query" value="true"/>
                 <input type="hidden" name="advanced" value="true"/>
                 <input type="hidden" name="module" value="Leads" />
+                <input type="hidden" name="order_by" value="{ORDER_BY}" />
+                <input type="hidden" name="sorder" value="{SORDER}" />
         <input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" na
 me="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
         <input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);"
 class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
         <br>
-        <font size='1'>[<a href='index.php?module=Leads&action=ListView'>{APP.LNK_BASIC_SEARCH}</a>]</font>
+        <font size='1'>[<a href='{BASIC_LINK}'>{APP.LNK_BASIC_SEARCH}</a>]</font>
         </td>
 </td></tr>
 	<tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_FIRST_NAME}</td>
-	<td width="30%" class="dataField"><input name='firstname' tabindex='1' size='25' maxlength='25' type="text" value="{FIRST_NAME}"></td>
+	<td width="30%"><input name='firstname' tabindex='1' size='25' maxlength='25' type="text" value="{FIRST_NAME}"></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_PHONE}</td>
-	<td width="30%" class="dataField"><input name='phone' type="text" tabindex='2' size='20' maxlength='25' value='{PHONE}'></td>
+	<td width="30%"><input name='phone' type="text" tabindex='2' size='20' maxlength='25' value='{PHONE}'></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_LAST_NAME}</td>
-	<td width="30%" class="dataField"><input name='last_name' type="text" tabindex='1' size='25' maxlength='25' value="{LAST_NAME}"></td>
+	<td width="30%"><input name='lastname' type="text" tabindex='1' size='25' maxlength='25' value="{LAST_NAME}"></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_EMAIL}</td>
-	<td width="30%" class="dataField"><input name='email' type="text" tabindex='2' size='35' maxlength='100' value='{EMAIL}'></td>
+	<td width="30%"><input name='email' type="text" tabindex='2' size='35' maxlength='100' value='{EMAIL}'></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_COMPANY}</td>
-	<td width="30%" class="dataField"><input name='company' type="text" tabindex='1' size='25' maxlength='100' value='{COMPANY}'></td>
+	<td width="30%"><input name='company' type="text" tabindex='1' size='25' maxlength='100' value='{COMPANY}'></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_MOBILE}</td>
-	<td width="30%" class="dataField"><input name='mobile' type="text" tabindex='2' size='25' maxlength='100' value='{MOBILE}'></td>
+	<td width="30%"><input name='mobile' type="text" tabindex='2' size='25' maxlength='100' value='{MOBILE}'></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_LEAD_SOURCE}</td>
-	<td width="30%" class="dataField"><select name='leadsource' tabindex='1'>{LEAD_SOURCE_OPTIONS}</select></td>
+	<td width="30%"><select name='leadsource' tabindex='1'>{LEAD_SOURCE_OPTIONS}</select></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_RATING}</td>
-	<td width="30%" class="dataField"><select name='rating' tabindex='1'>{RATING_OPTIONS}</select></td>
+	<td width="30%"><select name='rating' tabindex='1'>{RATING_OPTIONS}</select></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_INDUSTRY}</td>
-	<td width="30%" class="dataField"><select name='industry' tabindex='1'>{INDUSTRY_OPTIONS}</select></td>
+	<td width="30%"><select name='industry' tabindex='1'>{INDUSTRY_OPTIONS}</select></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_LEAD_STATUS}</td>
-	<td width="30%" class="dataField"><select name='lead_status' tabindex='1'>{LEAD_STATUS_OPTIONS}</select></td>
+	<td width="30%"><select name='lead_status' tabindex='1'>{LEAD_STATUS_OPTIONS}</select></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_ADDRESS_STREET}</td>
-	<td width="30%" class="dataField"><input type="text" name='address_street' tabindex='3' value='{ADDRESS_STREET}'></td>
+	<td width="30%"><input type="text" name='address_street' tabindex='3' value='{ADDRESS_STREET}'></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_ADDRESS_CITY}</td>
-	<td width="30%" class="dataField"><input type="text"  name='address_city' tabindex='4' size='15' maxlength='100' value='{ADDRESS_CITY}'></td>
+	<td width="30%"><input type="text"  name='address_city' tabindex='4' size='15' maxlength='100' value='{ADDRESS_CITY}'></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_ADDRESS_STATE}</td>
-	<td width="30%" class="dataField"><input  type="text" name='address_state' tabindex='4' size='15' maxlength='100' value='{ADDRESS_STATE}'></td>
+	<td width="30%"><input  type="text" name='address_state' tabindex='4' size='15' maxlength='100' value='{ADDRESS_STATE}'></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_ADDRESS_POSTAL_CODE}</td>
-	<td width="30%" class="dataField"><input  type="text" name='address_postalcode' tabindex='4' size='10' maxlength='20' value='{ADDRESS_POSTALCODE}'></td>
-	</tr><tr>
+	<td width="30%"><input  type="text" name='address_postalcode' tabindex='4' size='10' maxlength='20' value='{ADDRESS_POSTALCODE}'></td>
+	</tr><!--tr>
 	<td width="20%" class="dataLabel">{APP.LBL_CURRENT_USER_FILTER}</td>
-	<td width="30%" class="dataField"><input name='current_user_only' type="checkbox" {CURRENT_USER_ONLY}></td>
+	<td width="30%"><input name='current_user_only' type="checkbox" {CURRENT_USER_ONLY}></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_ADDRESS_COUNTRY}</td>
-	<td width="30%" class="dataField"><input  type="text" name='address_country' tabindex='4' size='10' maxlength='20' value='{ADDRESS_COUNTRY}'></td>
-	</tr><tr>
+	<td width="30%"><input  type="text" name='address_country' tabindex='4' size='10' maxlength='20' value='{ADDRESS_COUNTRY}'></td>
+	</tr--><tr>
 	<td width="20%" class="dataLabel">{APP.LBL_ASSIGNED_TO}</td>
 	<td width="30%"><select tabindex='1' name="assigned_user_id">{ASSIGNED_USER_OPTIONS}</select></td>
 	<td width="20%" class="dataLabel">&nbsp;</td>
@@ -159,6 +138,9 @@ class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "
 
 <table><tr><td width="20%">{CUSTOMFIELD}</td></tr></table>
 
+</tr></table>
+<table cellpadding="2" cellspacing="4" border="0" align="center" style="margin-top:5px;margin-bottom:5px"><tr>
+{ALPHABETICAL}
 </tr></table>
 	</form>
 {JAVASCRIPT}

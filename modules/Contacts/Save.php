@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Save.php,v 1.7 2005/02/15 09:21:32 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Save.php,v 1.9 2005/03/15 09:58:21 shaw Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -69,8 +69,8 @@ foreach($focus->column_fields as $fieldname => $val)
 	if (!isset($_REQUEST['do_not_call'])) $focus->do_not_call = 'off';
 //}
 
-$focus->saveentity("Contacts");
-//$focus->save();
+//$focus->saveentity("Contacts");
+$focus->save("Contacts");
 $return_id = $focus->id;
 //save_customfields($focus->id);
 
@@ -80,9 +80,11 @@ if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $retur
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
+if(isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] != '') $activitymode = $_REQUEST['activity_mode'];
+
 $local_log->debug("Saved record with id of ".$return_id);
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&activity_mode=$activitymode");
 //Code to save the custom field info into database
 function save_customfields($entity_id)
 {

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/data/Tracker.php,v 1.11 2005/03/05 11:33:01 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/data/Tracker.php,v 1.14 2005/03/24 12:58:54 ray Exp $
  * Description:  Updates entries for the Last Viewed functionality tracking the
  * last viewed records on a per user basis.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -48,7 +48,9 @@ class Tracker {
     function Tracker()
     {
         $this->log = LoggerManager::getLogger('Tracker');
-	$this->db = new PearDatabase();
+	//$this->db = new PearDatabase();
+	global $adb;
+        $this->db = $adb;
     }
 
     /**
@@ -148,7 +150,10 @@ class Tracker {
             $lastname = $adb->query_result($result,0,'last_name');
             $item_summary = $firstname .' '. $lastname;
           }
-
+	 
+	 #if condition added to skip faq in last viewed history
+	  if ($current_module != 'Faq')
+	  {		
           $query = "INSERT into $this->table_name (user_id, module_name, item_id, item_summary) values ('$user_id', '$current_module', '$esc_item_id', ".$this->db->formatString($this->table_name,'item_summary',$item_summary).")";
           
           $this->log->info("Track Item View: ".$query);
@@ -157,6 +162,7 @@ class Tracker {
           
           
           $this->prune_history($user_id);
+	  }
     }
 
     /**
@@ -180,12 +186,41 @@ class Tracker {
         $list = Array();
         while($row = $this->db->fetchByAssoc($result, -1, false))
         {
+		//echo "while loppp";
+		//echo '<BR>';
 
 
             // If the module was not specified or the module matches the module of the row, add the row to the list
             if($module_name == "" || $row[module_name] == $module_name)
             {
-            	$list[] = $row;
+		//Adding Security check
+		require_once('include/utils.php');
+		require_once('modules/Users/UserInfoUtil.php');
+		$entity_id = $row['item_id'];
+		$module = $row['module_name'];
+		//echo "module is ".$module."  id is      ".$entity_id;
+		//echo '<BR>';
+		if($module == "Users")
+		{
+			global $current_user;
+			if(is_admin($current_user))
+			{
+				$per = 'yes';
+			}	
+		}
+		else
+		{
+			
+			$per = isPermitted($module,4,$entity_id);
+			//echo "permission is".$per;
+			//echo "<BR>";
+			//echo "<BR>";
+			
+		}
+		if($per == 'yes')
+		{
+            		$list[] = $row;
+		}
             }
         }
 

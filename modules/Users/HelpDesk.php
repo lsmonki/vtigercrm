@@ -85,9 +85,9 @@ class HelpDesk extends SugarBean {
 
 		$this->log->info($query); */
 
-	$this->db->query("insert into troubleticketcategories values('Big Problem')");
-	$this->db->query("insert into troubleticketcategories values('Small Problem')");
-	$this->db->query("insert into troubleticketcategories values('Other Problem')");
+	$this->db->query("insert into ticketcategories values('Big Problem')");
+	$this->db->query("insert into ticketcategories values('Small Problem')");
+	$this->db->query("insert into ticketcategories values('Other Problem')");
 	
                
 
@@ -98,10 +98,10 @@ class HelpDesk extends SugarBean {
 
 		$this->log->info($query);*/
 		
-	$this->db->query("insert into troubleticketpriorities values('Low')");
-	$this->db->query("insert into troubleticketpriorities values('Medium')");
-	$this->db->query("insert into troubleticketpriorities values('High')");
-	$this->db->query("insert into troubleticketpriorities values('Critical')");
+	$this->db->query("insert into ticketpriorities values('Low')");
+	$this->db->query("insert into ticketpriorities values('Medium')");
+	$this->db->query("insert into ticketpriorities values('High')");
+	$this->db->query("insert into ticketpriorities values('Critical')");
 
         /*mysql_query(" CREATE TABLE troubleticketstatus (
                           status varchar(60) NOT NULL default '',
@@ -110,10 +110,10 @@ class HelpDesk extends SugarBean {
 		$this->log->info($query);*/
 
 		
-	$this->db->query("insert into troubleticketstatus values('Open')");
-	$this->db->query("insert into troubleticketstatus values('In Progress')");
-	$this->db->query("insert into troubleticketstatus values('Wait For Response')");
-	$this->db->query("insert into troubleticketstatus values('Closed')");
+	$this->db->query("insert into ticketstatus values('Open')");
+	$this->db->query("insert into ticketstatus values('In Progress')");
+	$this->db->query("insert into ticketstatus values('Wait For Response')");
+	$this->db->query("insert into ticketstatus values('Closed')");
 	
 
     /*mysql_query(" CREATE TABLE troubleticketstracktime (

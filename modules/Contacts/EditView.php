@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/EditView.php,v 1.15 2005/02/21 15:39:40 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/EditView.php,v 1.21 2005/03/24 16:18:38 samk Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -27,7 +27,7 @@ require_once('modules/Contacts/Forms.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/uifromdbutil.php');
-
+require_once('include/FormValidationUtil.php');
 global $mod_strings;
 global $app_list_strings;
 global $app_strings;
@@ -67,13 +67,19 @@ $block_2 = getBlockInformation("Contacts",2,$focus->mode,$focus->column_fields);
 //get Description Information
 $block_3 = getBlockInformation("Contacts",3,$focus->mode,$focus->column_fields);
 
+$block_1_header = getBlockTableHeader("LBL_CONTACT_INFORMATION");
+$block_2_header = getBlockTableHeader("LBL_ADDRESS_INFORMATION");
+$block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
+
+
 $block_5 = getBlockInformation("Contacts",5,$focus->mode,$focus->column_fields);
 if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
         $cust_fld .=  '<tr><td>';
+        $block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
+	$cust_fld .= $block_5_header;
         $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= '<tr><th align="left" class="formSecHeader" colspan="2">Custom Information</th></tr>';
         $cust_fld .= $block_5;
         $cust_fld .= '</table>';
         $cust_fld .= '</td></tr></table>';
@@ -109,6 +115,9 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("BLOCK3", $block_3);
+$xtpl->assign("BLOCK1_HEADER", $block_1_header);
+$xtpl->assign("BLOCK2_HEADER", $block_2_header);
+$xtpl->assign("BLOCK3_HEADER", $block_3_header);
 
 if (isset($focus->firstname)) $xtpl->assign("FIRST_NAME", $focus->firstname);
 else $xtpl->assign("FIRST_NAME", "");
@@ -124,6 +133,9 @@ if($focus->mode == 'edit')
         $xtpl->assign("MODE", $focus->mode);
 }
 
+if(isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] !='')
+	$xtpl->assign("ACTIVITYMODE",$_REQUEST['activity_mode']);
+
 // Unimplemented until jscalendar language files are fixed
 // $xtpl->assign("CALENDAR_LANG", ((empty($cal_codes[$current_language])) ? $cal_codes[$default_language] : $cal_codes[$current_language]));
 $xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
@@ -134,6 +146,55 @@ if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_
 
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+
+
+
+
+$contact_tables = Array('contactdetails','crmentity','contactsubdetails','contactscf','contactaddress'); 
+
+ $tabid = getTabid("Contacts");
+ $validationData = getDBValidationData($contact_tables,$tabid);
+ $fieldName = '';
+ $fieldLabel = '';
+ $fldDataType = '';
+
+ $rows = count($validationData);
+ foreach($validationData as $fldName => $fldLabel_array)
+ {
+   if($fieldName == '')
+   {
+     $fieldName="'".$fldName."'";
+   }
+   else
+   {
+     $fieldName .= ",'".$fldName ."'";
+   }
+   foreach($fldLabel_array as $fldLabel => $datatype)
+   {
+	if($fieldLabel == '')
+	{
+			
+     		$fieldLabel = "'".$fldLabel ."'";
+	}		
+      else
+       {
+      $fieldLabel .= ",'".$fldLabel ."'";
+        }
+ 	if($fldDataType == '')
+         {
+      		$fldDataType = "'".$datatype ."'";
+    	}
+	 else
+        {
+       		$fldDataType .= ",'".$datatype ."'";
+     	}
+   }
+ }
+
+
+$xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
+$xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
+$xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
 
 
 $xtpl->parse("main");

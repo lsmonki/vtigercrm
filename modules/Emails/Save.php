@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.23 2005/02/20 11:11:09 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.25 2005/03/25 07:55:10 simian Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -63,9 +63,10 @@ if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
 $focus->filename = $_REQUEST['file_name'];
 $focus->parent_id = $_REQUEST['parent_id'];
 $focus->parent_type = $_REQUEST['parent_type'];
-
+$focus->column_fields["activitytype"]="Emails";
 //echo 'file name : '.$_REQUEST['file_name'].'..'.$focus->filename;
-$focus->saveentity("Emails");
+//$focus->saveentity("Emails");
+$focus->save("Emails");
 $return_id = $focus->id;
 
 $focus->retrieve_entity_info($return_id,"Emails");

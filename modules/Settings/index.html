@@ -9,88 +9,98 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
-<TABLE width="80%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+<TABLE width="100%" border=0 cellPadding=0 cellSpacing=0>
+<tr>
+<td width="80%">
+<TABLE width="100%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
   <tr> 
-    <td colspan="2" class="formSecHeader">User Management</td>
+    <td colspan="2" class="formSecHeader">{MOD.LBL_USER_MANAGEMENT}</td>
   </tr>
   <tr> 
     <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/user_mgmt.gif" align="absmiddle"></div></td>
     <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
+	<tr> 
+          <td><a href="index.php?module=Administration&action=index"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_USERS}</a><span class="dim"> 
+            {MOD.LBL_CREATE_AND_MANAGE_USERS}</span></td>
+        </tr>
+
         <tr> 
-          <td><a href="index.php?module=Users&action=listroles"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Roles</a><span class="dim"> 
-            - Create and Manage user roles (e.g., Administrator, Standard User, 
-            etc.)</span></td>
+          <td><a href="index.php?module=Users&action=listroles"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ROLES}</a><span class="dim"> 
+            {MOD.LBL_CREATE_AND_MANAGE_USER_ROLES} 
+            </span></td>
         </tr>
         <tr> 
-          <td><a href="index.php?module=Users&action=ListProfiles"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Profiles</a><span class="dim"> 
-            - Create and Manage user profiles (e.g., CEO, Sales Manager, etc.)</span></td>
+          <td><a href="index.php?module=Users&action=ListProfiles"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PROFILES}</a><span class="dim"> 
+            {MOD.LBL_CREATE_AND_MANAGE_USER_PROFILES}</span></td>
         </tr>
         <tr> 
           <td><a href="index.php?module=Users&action=listgroups"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.USERGROUPLIST}</a><span class="dim"> 
-            - Create and Manage user groups</span></td>
+            {MOD.LBL_CREATE_AND_MANAGE_USER_GROUPS}</span></td>
         </tr>
 	<tr> 
-          <td><a href="index.php?module=Users&action=OrgSharingDetailView"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Default Organization Sharing Access</a><span class="dim"> 
-            - Setting Default Sharing Access within the Organization </span></td>
+          <td><a href="index.php?module=Users&action=OrgSharingDetailView"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_DEFAULT_ORGANIZATION_SHARING_ACCESS}</a><span class="dim"> 
+            {MOD.LBL_SETTING_DEFAULT_SHARING_ACCESS}</span></td>
         </tr>
         <tr>
-          <td><a href="javascript:toggleSetting('fieldaccess');"><img id="fieldaccess_tgimg" src="{IMAGE_PATH}/plus.gif" align="absmiddle" border="0" hspace="5">Field 
-            Accessibility</a><span class="dim"> - Setting Field Accessibility 
-            for each profiles</span><br> <div id="fieldaccess" style="display:none;padding:3px 5px 5px 20px;"> 
+         <td><a href="javascript:toggleSetting('fieldaccess');"><img id="fieldaccess_tgimg" src="{IMAGE_PATH}/plus.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_FIELD_ACCESSIBILITY}</a><span class="dim">{MOD.LBL_SETTING_FIELD_ACCESSIBILITY}</span><br> <div id="fieldaccess" style="display:none;padding:3px 5px 5px 20px;"> 
               <table border="0" cellspacing="2" cellpadding="2">
                 <tr> 
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Lead 
-                    Field Access</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_LEAD_FIELD_ACCESS}
+                    </a></td>
                   <td width="30">&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Account 
-                    Field Access</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ACCOUNT_FIELD_ACCESS} 
+                    </a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Contact 
-                    Field Access</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_CONTACT_FIELD_ACCESS}
+                    </a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Opportunity 
-                    Field Access</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_OPPORTUNITY_FIELD_ACCESS} 
+                    </a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">HelpDesk 
-                    Field Access</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_HELPDESK_FIELD_ACCESS} 
+                    </a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Product 
-                    Field Access</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PRODUCT_FIELD_ACCESS} 
+                    </a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Notes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Note 
-                    Field Access</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Notes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_NOTE_FIELD_ACCESS} 
+                    </a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Emails"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Email 
-                    Field Access</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Emails"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_FIELD_ACCESS} 
+                    </a></td>
                 </tr>
                 <tr>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Activities"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Task 
-                    Field Access</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Activities"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_TASK_FIELD_ACCESS} 
+                    </a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Events"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Event 
-                    Field Access</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Events"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EVENT_FIELD_ACCESS} 
+                    </a></td>
                 </tr>
               </table>
             </div></td>
         </tr>
+        <!--tr>
+            <td><a href="index.php?module=Users&action=DeleteDemoData"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_DELETE_DEMO_DATA}</a></span>
+            {MOD.LBL_DELETE_DEMO_DATA_INFO}</span></td>
+        </tr-->
       </table></td>
   </tr>
 </table>
 <br>
-<TABLE width="80%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+<TABLE width="100%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
   <tr> 
-    <td colspan="2" class="formSecHeader">Studio</td>
+    <td colspan="2" class="formSecHeader">{MOD.LBL_STUDIO}</td>
   </tr>
   <tr>
     <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/studio.gif" align="absmiddle"></div></td>
     <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
         <tr> 
-          <td><a href="javascript:toggleSetting('customfield');"><img id="customfield_tgimg" hspace="5" src="{IMAGE_PATH}/plus.gif" border="0" align="absmiddle">Custom 
-            Field Settings</a> <span class="dim"> - Create and Manage user defined 
-            fields</span><br> <div id="customfield" style="display:none;padding:3px 5px 5px 20px;"> 
+          <td><a href="javascript:toggleSetting('customfield');"><img id="customfield_tgimg" hspace="5" src="{IMAGE_PATH}/plus.gif" border="0" align="absmiddle">{MOD.LBL_CUSTOM_FIELD_SETTINGS} 
+            </a> <span class="dim">{MOD.LBL_CREATE_AND_MANAGE_USER_DEFINED_FIELDS} 
+            </span><br> <div id="customfield" style="display:none;padding:3px 5px 5px 20px;"> 
               <table border="0" cellspacing="2" cellpadding="2">
                 <tr> 
                   <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LEADCUSTOMFIELDS}</a></td>
@@ -111,8 +121,8 @@
             </div></td>
         </tr>
         <tr> 
-          <td><a href="javascript:toggleSetting('picklist');"><img id="picklist_tgimg" hspace="5" src="{IMAGE_PATH}/plus.gif" border="0" align="absmiddle">Picklist 
-            Settings</a><span class="dim"> - Edit values of Picklist fields</span><br> 
+          <td><a href="javascript:toggleSetting('picklist');"><img id="picklist_tgimg" hspace="5" src="{IMAGE_PATH}/plus.gif" border="0" align="absmiddle">{MOD.LBL_PICKLIST_SETTINGS} 
+            </a><span class="dim">{MOD.LBL_EDIT_PICKLIST_VALUES}</span><br> 
             <div id="picklist" style="display:none;padding:3px 5px 5px 20px;">
               <table border="0" cellspacing="4" cellpadding="2">
                 <tr> 
@@ -128,7 +138,12 @@
                 <tr> 
                   <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITHELPDESKPICKLISTVALUES}</a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.PRODUCTCUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITPRODUCTPICKLISTVALUES}</a></td>
+                </tr>
+                <tr>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Events"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITEVENTPICKLISTVALUES}</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Activities"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITTASKPICKLISTVALUES}</a></td>
                 </tr>
               </table>
             </div></td>
@@ -138,46 +153,53 @@
   </tr>
 </table>
 <br>
-<TABLE width="80%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+<TABLE width="100%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
   <tr> 
-    <td colspan="2" class="formSecHeader">Communication Templates</td>
+    <td colspan="2" class="formSecHeader">{MOD.LBL_COMMUNICATION_TEMPLATES}</td>
   </tr>
   <tr> 
     <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/comm_temp.gif" align="absmiddle"></div></td>
     <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
         <tr> 
           <td><a href="index.php?module=Users&action=listemailtemplates"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EMAILTEMPLATES}</a><span class="dim"> 
-            - Create Email Templates</span></td>
+            {MOD.LBL_CREATE_EMAIL_TEMPLATES}</span></td>
         </tr>
         <tr> 
           <td><a href="index.php?module=Users&action=listwordtemplates"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.WORDINTEGRATION}</a><span class="dim"> 
-            - Upload MS Word Templates for Mail Merge</span></td>
+            {MOD.LBL_UPLOAD_MSWORD_TEMPLATES}</span></td>
         </tr>
         <tr> 
-          <td><a href=""><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.NOTIFICATIONSCHEDULERS}</a><span class="dim"> 
-            - Schedule Email Notifications</span></td>
+		<td><a href="index.php?module=Users&action=listnotificationschedulers"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.NOTIFICATIONSCHEDULERS}</a><span class="dim"> 
+            {MOD.LBL_SCHEDULE_EMAIL_NOTIFICATION}</span></td>
         </tr>
       </table></td>
   </tr>
 </table>
 <br>
-<TABLE width="80%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+<TABLE width="100%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
   <tr> 
-    <td colspan="2" class="formSecHeader">Configuration</td>
+    <td colspan="2" class="formSecHeader">{MOD.LBL_CONFIGURATION}</td>
   </tr>
   <tr> 
     <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/config.gif" align="absmiddle"></div></td>
     <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
         <tr> 
           <td><a href="index.php?module=Settings&action=EmailConfig"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_CONFIG}</a><span class="dim"> 
-            - Configure Mail Server</span></td>
+            {MOD.LBL_CONFIGURE_MAIL_SERVER}</span></td>
         </tr>
         <tr> 
-          <td><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Backup 
-            Server Configuration<span class="dim"> - Configure Backup Server</span></td>
-        </tr>
-      </table></td>
+          <td><a href="index.php?module=Settings&action=BackupServerConfig"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_BACKUP_SERVER_CONFIGURATION}</a><span class="dim">{MOD.LBL_CONFIGURE_BACKUP_SERVER}</span></td>
   </tr>
+     <tr>
+       <td><a href="index.php?module=System&action=systemconfig"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_SYSTEM_CONFIG}</a><span class="dim">
+            {MOD.LBL_SYSTEM_CONFIGURATION}</span></td>
+   </tr>
+      </table></td>
+</tr>
+</table>
+</td>
+<td width="20%">&nbsp;</td>
+</tr>
 </table>
 <br>
 <script language="JavaScript" src="include/general.js"></script>

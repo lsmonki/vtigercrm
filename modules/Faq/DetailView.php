@@ -21,7 +21,7 @@
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
-require_once('data/Tracker.php');
+#require_once('data/Tracker.php'); //Commented for tracker issue
 require_once('modules/Faq/Faq.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
@@ -76,9 +76,20 @@ $block_4 = getDetailBlockInformation("Faq",4,$focus->column_fields);
 $xtpl->assign("BLOCK4", $block_4);
 
 $xtpl->assign("ID", $_REQUEST['record']);
+if(isPermitted("Faq",1,$_REQUEST['record']) == 'yes')
+{
+        $xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
 
 
+        $xtpl->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
+}
+
+
+
+if(isPermitted("Faq",2,$_REQUEST['record']) == 'yes')
+{
               $xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+}
 
 $xtpl->parse("main");
 $xtpl->out("main");

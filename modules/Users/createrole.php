@@ -67,7 +67,7 @@ require_once('include/utils.php');
  cellspacing="0">
                 <tbody>
                   <tr>
-                    <td class="moduleTitle hline">Create New Role:</td>
+                    <td class="moduleTitle hline"><?php echo $mod_strings['LBL_HDR_ROLE_NAME'];?></td>
                   </tr>
                 </tbody>
               </table>
@@ -77,7 +77,7 @@ require_once('include/utils.php');
                 <tbody>
                   <tr>
                     <td>
-                    <div align="right"><font class="required">*</font><?php echo $mod_strings['LBL_INDICATES_REQUIRED_FIELD']; ?> </div>
+                    <div align="right"><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL']; ?></font><?php echo $mod_strings['LBL_INDICATES_REQUIRED_FIELD']; ?> </div>
                     </td>
                   </tr>
                 </tbody>
@@ -86,14 +86,14 @@ require_once('include/utils.php');
  cellspacing="1" class="formOuterBorder">
                 <tbody>
                   <tr>
-                    <td class="formSecHeader" colspan="2">New Role</td>
+                    <td class="formSecHeader" colspan="2"><?php echo $mod_strings['LBL_TITLE_ROLE_NAME'];?></td>
                   </tr>
                   <tr>
-                    <td class="dataLabel mandatory">* Role Name</td>
+                    <td class="dataLabel mandatory"><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL'];?></font><?php echo $mod_strings['LBL_ROLE_NAME']; ?></td>
                     <td class="value"><input class="textField" type="text" name="roleName" value="<?php echo $rolename;  ?>"></td>
                   </tr>
                   <tr>
-                    <td class="dataLabel mandatory">* Associate With Profile</td>
+                    <td class="dataLabel mandatory"><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL'];?></font><?php echo $mod_strings['LBL_ROLE_PROFILE_NAME'];?></td>
                     <td class="value">
                     <select class="select" name="profileId">
             <?php
@@ -129,7 +129,7 @@ require_once('include/utils.php');
                     <td>
                      <div align="center">
                    
- <input type="submit" class="button" name="save" value="<?php echo $app_strings['LBL_SAVE_BUTTON_LABEL'] ?>" tabindex="2">
+ <input type="submit" class="button" name="save" value="<?php echo $app_strings['LBL_SAVE_BUTTON_LABEL'] ?>" tabindex="2" onclick="return validate()">
   <input name="cancel" class="button" type="button" value="<?php echo $app_strings['LBL_CANCEL_BUTTON_LABEL'] ?>" onclick="window.history.back()">
 </form> </div>
                     </td>

@@ -331,7 +331,8 @@ class ImportContact extends Contact {
                         $focus->column_fields['assigned_user_id'] = $current_user->id;
                         $focus->column_fields['modified_user_id'] = $current_user->id;
 
-			$focus->saveentity("Accounts");
+			//$focus->saveentity("Accounts");
+			$focus->save("Accounts");
 			$acc_id = $focus->id;
 
 			$adb->println("New Account created id=".$focus->id);

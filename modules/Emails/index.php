@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/index.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/index.php,v 1.3 2005/03/17 20:01:10 samk Exp $
  * Description: TODO:  To be written.
  ********************************************************************************/
 
@@ -25,6 +25,14 @@ require_once ($theme_path."layout_utils.php");
 echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
 echo "\n<BR>\n";
 include ('modules/Emails/ListView.php'); 
-include ('modules/Import/ImportButton.php');
+
+echo "<br><table width='250' cellpadding=0 cellspacing=0><tr><td>";
+echo get_form_header($mod_strings['LBL_TOOL_FORM_TITLE'], "", false);
+echo "</td></tr>";
+echo "<tr><td class='formOuterBorder' style='padding: 10px'>";
+echo "<ul>";
+include('modules/Import/ImportButton.php');
+echo "</ul>";
+echo "</td></tr></table>";
 
 ?>

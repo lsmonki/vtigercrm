@@ -74,6 +74,7 @@ if(Number.indexOf(".") != -1) {
 answer = "";
    }
 }
+
 if(NewNumber == "yes") {
 Number2 += answer;
 Display(Number2);
@@ -133,10 +134,11 @@ Display(Number1);
 }
 function PercentButton() {
 if(NewNumber != "blank") {
-Number2 *= .01;
+Number2 = eval(Number1+opvalue+Number2);
+Number2 = Number2 * .01;
 NewNumber = "blank";
 Display(Number2);
-   }
+}
 }
 function RecipButton() {
 Number1 = 1/Number1;
@@ -153,8 +155,9 @@ if(opvalue == '+') AddButton(0);
 if(opvalue == '-') SubButton(0);
 if(opvalue == '*') MultButton(0);
 if(opvalue == '/') DivButton(0);
-if (typeof(x)!="undefined" && typeof(parentField)!="undefined") 
-	if (x==0) if (getOpenerObj(parentField)) getOpenerObj(parentField).value=Number1
+if (x==0) NewNumber="blank";
+//if (typeof(x)!="undefined" && typeof(parentField)!="undefined")
+//	if (x==0) if (getOpenerObj(parentField)) getOpenerObj(parentField).value=Number1;
 Number2 = "";
 opvalue = "";
 }

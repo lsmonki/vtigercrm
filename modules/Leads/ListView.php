@@ -24,8 +24,8 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
-#require_once('include/listview.php');
 require_once('include/ComboUtil.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $current_language;
@@ -50,11 +50,15 @@ if (!isset($where)) $where = "";
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
-$seedLead = new Lead();
+$url_string = ''; // assigning http url string
+$sorder = 'ASC';  // Default sort order
+if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
+$sorder = $_REQUEST['sorder'];
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
+	$url_string .="&query=true";
 	if (isset($_REQUEST['firstname'])) $firstname = $_REQUEST['firstname'];
 	if (isset($_REQUEST['lastname'])) $lastname = $_REQUEST['lastname'];
 	if (isset($_REQUEST['company'])) $company = $_REQUEST['company'];
@@ -89,28 +93,80 @@ for($i=0;$i<$adb->num_rows($result);$i++)
         {
                 $str=" leadscf.".$column[$i]." like '$customfield[$i]%'";
                 array_push($where_clauses, $str);
+		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
 }
 //upto this added for Custom Field
 
 
-	if(isset($lastname) && $lastname != "") array_push($where_clauses, "leaddetails.lastname like '$lastname%'");
-	if(isset($firstname) && $firstname != "")	array_push($where_clauses, "leaddetails.firstname like '$firstname%'");
-	if(isset($company) && $company != "")	array_push($where_clauses, "leaddetails.company like '$company%'");
-	if(isset($leadsource) && $leadsource != "") array_push($where_clauses, "leaddetails.leadsource = '$leadsource'");
-	if(isset($industry) && $industry != "") array_push($where_clauses, "leaddetails.industry = '$industry'");
-	if(isset($phone) && $phone != "") array_push($where_clauses, "leadaddress.phone like '%$phone%'");
-	if(isset($email) && $email != "") array_push($where_clauses, "leaddetails.email like '$email%'");
-	if(isset($mobile) && $mobile != "") array_push($where_clauses, "leadaddressmobile like '%$mobile%'");
-	if(isset($leadstatus) && $leadstatus != "") array_push($where_clauses, "leaddetails.leadstatus =  '$leadstatus'");
-	if(isset($rating) && $rating != "") array_push($where_clauses, "leaddetails.rating = '$rating'");
-	if(isset($address_street) && $address_street != "") array_push($where_clauses, "leadaddress.lane like '$address_street%'");
-	if(isset($address_city) && $address_city != "") array_push($where_clauses, "leadaddress.city like '$address_city%'");
-	if(isset($address_state) && $address_state != "") array_push($where_clauses, "leadaddress.state like '$address_state%'");
-	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "leadaddress.code like '$address_postalcode%'");
-	if(isset($address_country) && $address_country != "") array_push($where_clauses, "leadaddress.country like '$address_country%'");
-	if(isset($current_user_only) && $current_user_only != "") array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-	if(isset($assigned_user_id) && $assigned_user_id != "") array_push($where_clauses, "crmentity.smownerid = '$assigned_user_id'");
+	if(isset($lastname) && $lastname != ""){
+		array_push($where_clauses, "leaddetails.lastname like '$lastname%'");
+		$url_string .= "&lastname=".$lastname;
+	}
+	if(isset($firstname) && $firstname != ""){
+	 	array_push($where_clauses, "leaddetails.firstname like '$firstname%'");
+		$url_string .= "&firstname=".$firstname;
+	}
+	if(isset($company) && $company != ""){
+		array_push($where_clauses, "leaddetails.company like '$company%'");
+		$url_string .= "&company=".$company;
+	}
+	if(isset($leadsource) && $leadsource != ""){
+		array_push($where_clauses, "leaddetails.leadsource = '$leadsource'");
+		$url_string .= "&leadsource=".$leadsource;
+	}
+	if(isset($industry) && $industry != ""){
+	 	array_push($where_clauses, "leaddetails.industry = '$industry'");
+		$url_string .= "&industry=".$industry;
+	}
+	if(isset($phone) && $phone != ""){
+		array_push($where_clauses, "leadaddress.phone like '%$phone%'");
+		$url_string .= "&phone=".$phone;
+	}
+	if(isset($email) && $email != ""){
+		array_push($where_clauses, "leaddetails.email like '$email%'");
+		$url_string .= "&email=".$email;
+	}
+	if(isset($mobile) && $mobile != ""){
+		array_push($where_clauses, "leadaddress.mobile like '%$mobile%'");
+		$url_string .= "&mobile=".$mobile;
+	}
+	if(isset($leadstatus) && $leadstatus != ""){
+		array_push($where_clauses, "leaddetails.leadstatus =  '$leadstatus'");
+		$url_string .= "&lead_status=".$leadstatus;
+	}
+	if(isset($rating) && $rating != ""){
+		array_push($where_clauses, "leaddetails.rating = '$rating'");
+		$url_string .= "&rating=".$rating;
+	}
+	if(isset($address_street) && $address_street != ""){
+		array_push($where_clauses, "leadaddress.lane like '$address_street%'");
+		$url_string .= "&address_street=".$address_street;
+	}
+	if(isset($address_city) && $address_city != ""){
+		array_push($where_clauses, "leadaddress.city like '$address_city%'");
+		$url_string .= "&address_city=".$address_city;
+	}
+	if(isset($address_state) && $address_state != ""){
+		array_push($where_clauses, "leadaddress.state like '$address_state%'");
+		$url_string .= "&address_state=".$address_state;
+	}
+	if(isset($address_postalcode) && $address_postalcode != ""){
+		array_push($where_clauses, "leadaddress.code like '$address_postalcode%'");
+		$url_string .= "&address_postalcode=".$address_postalcode;
+	}
+	if(isset($address_country) && $address_country != ""){
+		array_push($where_clauses, "leadaddress.country like '$address_country%'");
+		$url_string .= "&address_country=".$address_country;
+	}
+	if(isset($current_user_only) && $current_user_only != ""){
+		array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
+		$url_string .= "&current_user_only=".$current_user_only;
+	}
+	if(isset($assigned_user_id) && $assigned_user_id != ""){
+		array_push($where_clauses, "crmentity.smownerid = '$assigned_user_id'");
+		$url_string .= "&assigned_user_id=".$assigned_user_id;
+	}
 	
 	$where = "";
 	foreach($where_clauses as $clause)
@@ -133,13 +189,26 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if (isset($firstname)) $search_form->assign("FIRST_NAME", $_REQUEST['firstname']);
 	if (isset($lastname)) $search_form->assign("LAST_NAME", $_REQUEST['lastname']);
 	if (isset($company)) $search_form->assign("COMPANY", $_REQUEST['company']);
+	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
+	if ($sorder !='') $search_form->assign("SORDER", $sorder);
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
+	if($order_by != '') {
+		$ordby = "&order_by=".$order_by;
+	}
+	else
+	{
+		$ordby ='';
+	}
+	$search_form->assign("BASIC_LINK", "index.php?module=Leads".$ordby."&action=index".$url_string."&sorder=".$sorder);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Leads&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
 	
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 
 	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
 	
 	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') { 
+		$url_string .="&advanced=true";
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Leads','index','lastname','true','advanced'));
 		$advsearch = 'true';
 		//if(isset($date_entered)) $search_form->assign("DATE_ENTERED", $date_entered);
 		//if(isset($date_modified)) $search_form->assign("DATE_MODIFIED", $date_modified);
@@ -186,6 +255,7 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 		$search_form->out("advanced");
 	}
 	else {
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Leads','index','lastname','true','basic'));
 		$search_form->parse("main");
 		$search_form->out("main");
 	}
@@ -193,10 +263,41 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 	echo "\n<BR>\n";
 }
 
+// Buttons and View options
+$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
+	<form name="massdelete" method="POST">
+	<tr>
+	<input name="idlist" type="hidden">
+	<input name="viewname" type="hidden">
+	<input name="change_owner" type="hidden">
+	<input name="change_status" type="hidden">
+	<td>';
+if(isPermitted('Leads',2,'') == 'yes')
+{
+	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>&nbsp;';
+}
+if(isPermitted('Leads',1,'') == 'yes')
+{
+   	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
+	       <input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_STATUS].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/>';
+}
+	$other_text .=	'</td>
+			<td align="right">'.$app_strings[LBL_VIEW].' 
+			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
+				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_CONTACTED].'">'.$mod_strings[LBL_CONTACTED].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_LOST].'">'.$mod_strings[LBL_LOST].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_HOT].'">'.$mod_strings[LBL_HOT].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_COLD].'">'.$mod_strings[LBL_COLD].'</option>
+			</SELECT>
+		</td>
+	</tr>
+	</table>';
+//
 
 $focus = new Lead();
 
-echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],'', false);
+echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Leads/ListView.html');
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -240,20 +341,17 @@ if(isset($_REQUEST['viewname']))
 
 }
 
-$url_qry = getURLstring($focus);
-
 if(isset($order_by) && $order_by != '')
 {
-	$query .= ' ORDER BY '.$order_by;
-	$url_qry .="&order_by=".$order_by;
+        $query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
+
 
 $list_result = $adb->query($query);
 
-//Append URL Strings 
-
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
+
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
@@ -267,51 +365,55 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
+// Setting the record count string
+if ($navigation_array['start'] == 1)
+{
+	if($noofrows != 0)
+	$start_rec = $navigation_array['start'];
+	else
+	$start_rec = 0;
+	if($noofrows > $list_max_entries_per_page)
+	{
+		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
+	}
+	else
+	{
+		$end_rec = $noofrows;
+	}
+	
+}
+else
+{
+	if($navigation_array['next'] > $list_max_entries_per_page)
+	{
+		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
+		$end_rec = $navigation_array['next'] - 1;
+	}
+	else
+	{
+		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
+		$end_rec = $noofrows;
+	}
+}
+$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"Leads");
+$listview_header = getListViewHeader($focus,"Leads",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"Leads",$list_result,$navigation_array);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 
-if(isset($navigation_array['start']))
-{
-        $startoutput = '<a href="index.php?action=index&module=Leads'.$url_qry.'&start=1"><b>Start</b></a>';
-}
-else
-{
-        $startoutput = '[ Start ]';
-}
-if(isset($navigation_array['end']))
-{
-        $endoutput = '<a href="index.php?action=index&module=Leads'.$url_qry.'&start='.$navigation_array['end'].'"><b>End</b></a>';
-}
-else
-{
-        $endoutput = '[ End ]';
-}
-if(isset($navigation_array['next']))
-{
-        $nextoutput = '<a href="index.php?action=index&module=Leads'.$url_qry.'&start='.$navigation_array['next'].'"><b>Next</b></a>';
-}
-else
-{
-        $nextoutput = '[ Next ]';
-}
-if(isset($navigation_array['prev']))
-{
-        $prevoutput = '<a href="index.php?action=index&module=Leads'.$url_qry.'&start='.$navigation_array['prev'].'"><b>Prev</b></a>';
-}
-else
-{
-        $prevoutput = '[ Prev ]';
-}
-$xtpl->assign("Start", $startoutput);
-$xtpl->assign("End", $endoutput);
-$xtpl->assign("Next", $nextoutput);
-$xtpl->assign("Prev", $prevoutput);
+if($order_by !='')
+$url_string .="&order_by=".$order_by;
+if($sorder !='')
+$url_string .="&sorder=".$sorder;
+
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Leads");
+$xtpl->assign("NAVIGATION", $navigationOutput);
+$xtpl->assign("RECORD_COUNTS", $record_string);
 
 $xtpl->parse("main");
 $xtpl->out("main");

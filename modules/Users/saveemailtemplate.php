@@ -16,7 +16,7 @@ $description = $_REQUEST["description"];
 $subject = $_REQUEST["subject"];
 $body = $_REQUEST["body"];
 
-$sql = "insert into emailtemplates values ('". $folderName. "','".$templateName."','".$description."','".$subject."','".$body."',0)";
+$sql = "insert into emailtemplates values ('". $folderName. "','".$templateName."','".$subject."','".$description."','".$body."',0)";
 $adb->query($sql);
 
 header("Location:index.php?module=Users&action=listemailtemplates");

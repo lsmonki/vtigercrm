@@ -1,12 +1,34 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
 function ftpBackupFile($source_file, $ftpserver, $ftpuser, $ftppassword)
 {
 	
 	// set up basic connection
-	$conn_id = ftp_connect($ftpserver);
+	$conn_id = @ftp_connect($ftpserver);
+	if(!$conn_id)
+	{
+		return;
+	}
+	
 
 	// login with username and password
-	$login_result = ftp_login($conn_id, $ftpuser, $ftppassword);
+
+	$login_result = @ftp_login($conn_id, $ftpuser, $ftppassword);	
+
+	if(!$login_result)
+	{
+		ftp_close($conn_id);
+		return;
+	}
 
 	// check connection
 	/*if ((!$conn_id) || (!$login_result)) {
@@ -20,13 +42,15 @@ function ftpBackupFile($source_file, $ftpserver, $ftpuser, $ftppassword)
 
 	// upload the file
 	$destination_file=$source_file;
-	$upload = ftp_put($conn_id, $destination_file, $source_file, FTP_BINARY);
+	$upload = @ftp_put($conn_id, $destination_file, $source_file, FTP_BINARY);
 
 	// check upload status
-	/*
 	if (!$upload) {
-		echo "FTP upload has failed!";
-	} else {
+		ftp_close($conn_id);
+		return;
+	}
+	/*
+	 else {
 		echo "Uploaded $source_file to $ftp_server as $destination_file";
 	}*/
 

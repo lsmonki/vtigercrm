@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Popup.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Popup.php,v 1.4 2005/03/23 10:46:26 samk Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -78,18 +78,20 @@ $form->assign("APP", $app_strings);
 // the form key is required
 if(!isset($_REQUEST['form']))
 	die("Missing 'form' parameter");
-	
+
+
 // This code should always return an answer.
 // The form name should be made into a parameter and not be hard coded in this file.
-if(isset($_REQUEST['form_submit']) && $_REQUEST['form'] == 'DetailView' && $_REQUEST['form_submit'] == 'true')
+if(isset($_REQUEST['form_submit']) && $_REQUEST['popuptype'] == 'detailview' && $_REQUEST['form_submit'] == 'true')
 {
 	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
 	$the_javascript .= "function set_return(user_id, user_name) {\n";
+	//$the_javascript .= 'opener.document.location.href="index.php?module='.$return_module.'&action=updateRelations&entityid="+user_id+"&parid='.$recordid.'"; \n';
 	$the_javascript .= "	window.opener.document.DetailView.user_id.value = user_id; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_module.value = window.opener.document.DetailView.module.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_action.value = 'DetailView'; \n";
+	$the_javascript .= "	window.opener.document.DetailView.return_module.value = window.opener.document.DetailView.return_module.value; \n";
+	//$the_javascript .= "	window.opener.document.DetailView.return_action.value = 'DetailView'; \n";
 	$the_javascript .= "	window.opener.document.DetailView.return_id.value = window.opener.document.DetailView.record.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.action.value = 'Save'; \n";
+	$the_javascript .= "	window.opener.document.DetailView.action.value = 'updateRelations'; \n";
 	$the_javascript .= "	window.opener.document.DetailView.submit(); \n";
 	$the_javascript .= "}\n";
 	$the_javascript .= "</script>\n";
@@ -147,14 +149,14 @@ $form->reset("main.SearchHeaderEnd");
 // start the form before the form header to avoid creating a gap in IE
 $button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
 $button .= "<tr><td>&nbsp;</td>";
-if ($_REQUEST['form_submit'] != 'true') $button .= "<td><input title='".$app_strings['LBL_CLEAR_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CLEAR_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.opener.document.EditView.account_name.value = '';window.opener.document.EditView.account_id.value = ''; window.close()\" type='submit' name='button' value='  Clear  '></td>\n";
+/*if ($_REQUEST['form_submit'] != 'true') $button .= "<td><input title='".$app_strings['LBL_CLEAR_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CLEAR_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.opener.document.EditView.account_name.value = '';window.opener.document.EditView.account_id.value = ''; window.close()\" type='submit' name='button' value='  Clear  '></td>\n";
 $button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '></td>\n";
 $button .= "</tr></form></table>\n";
-
+*/
 $ListView = new ListView();
 $ListView->setXTemplate($form);
 $ListView->setHeaderTitle($mod_strings['LBL_LIST_FORM_TITLE']);
-$ListView->setHeaderText($button);
+//$ListView->setHeaderText($button);
 $ListView->setQuery($where, "", "user_name", "USER");
 $ListView->setModStrings($mod_strings);
 $ListView->processListView($seed_object, "main", "USER");

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/utils.php,v 1.132 2005/03/05 13:42:50 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/utils.php,v 1.179 2005/03/28 15:01:29 rank Exp $
  * Description:  Includes generic helper functions used throughout the application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -842,25 +842,30 @@ function getTabid($module)
 
 }
 
-function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields)
+function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype)
 {
 	global $adb;
 	global $theme;
 	global $mod_strings;
+	global $app_strings;
 	$value = $col_fields[$fieldname];
 	$custfld = '';
-	if($uitype == 5 || $uitype == 6)
+
+	if($generatedtype == 2)
+		$mod_strings[$fieldlabel] = $fieldlabel;
+
+	if($uitype == 5 || $uitype == 6 || $uitype ==23)
 	{
 		if($value=='')
                 $value=date('Y-m-d');
 		$custfld .= '<td width="20%" class="dataLabel">';
 
-		if($uitype == 6)
+		if($uitype == 6 || $uitype == 23)
 			$custfld .= '<font color="red">*</font>';
 
-		$custfld .= $fieldlabel.':</td>';
+		$custfld .= $mod_strings[$fieldlabel].':</td>';
 		$date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
-		$custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field_'.$fieldname.'" type="text" tabindex="2" size="11" maxlength="10" value="'.$value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_'.$fieldname.'">';
+		$custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field_'.$fieldname.'" type="text" size="11" maxlength="10" value="'.$value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_'.$fieldname.'">';
 		if($uitype == 6)
                 {
 			if($col_fields['time_start']!='')
@@ -871,9 +876,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                         {
                                 $curr_time = date('H:i');
                         }
-                        $custfld .= '&nbsp; <input name="time_start" tabindex="1" size="5" maxlength="5" type="text" value="'.$curr_time.'">';
+                        $custfld .= '&nbsp; <input name="time_start" size="5" maxlength="5" type="text" value="'.$curr_time.'">';
                 }
-		$custfld .= '<br><font size=1><em old="(yyyy-mm-dd 24:00)">(yyyy-mm-dd 24:00)</em></font></td>';
+		if($uitype == 5 || $uitype == 23)
+			$custfld .= '<br><font size=1><em old="(yyyy-mm-dd)">'.$app_strings['NTC_DATE_FORMAT'].'</em></font></td>';
+		else
+			$custfld .= '<br><font size=1><em old="(yyyy-mm-dd 24:00)">'.$app_strings['YEAR_MONTH_DATE'].'</em></font></td>';
 		$custfld .= '<script type="text/javascript">';
 		$custfld .= 'Calendar.setup ({';
 				$custfld .= 'inputField : "jscal_field_'.$fieldname.'", ifFormat : "'.$date_format.'", showsTime : false, button : "jscal_trigger_'.$fieldname.'", singleClick : true, step : 1';
@@ -887,12 +895,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		if($uitype == 16)
 			$custfld .= '<font color="red">*</font>';
 
-		$custfld .= $fieldlabel.':</td>';
+		$custfld .= $mod_strings[$fieldlabel].':</td>';
 		//$pick_query="select * from ".$fieldname." order by sortorderid";
 		$pick_query="select * from ".$fieldname;
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
-		$custfld .= '<td width="30%"><select name="'.$fieldname.'" tabindex="1">';
+		$custfld .= '<td width="30%"><select name="'.$fieldname.'">';
 		for($j = 0; $j < $noofpickrows; $j++)
 		{
 			$pickListValue=$adb->query_result($pickListResult,$j,strtolower($fieldname));
@@ -912,22 +920,22 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 19)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
-        	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" tabindex="5" cols="60" rows="8">'.$value.'</textarea></td>';
+		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+        	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" cols="60" rows="8">'.$value.'</textarea></td>';
 	}
 	elseif($uitype == 21)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
-        	$custfld .= '<td><textarea name="'.$fieldname.'" tabindex="5" cols="30" rows="2">'.$value.'</textarea></td>';
+		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+        	$custfld .= '<td><textarea name="'.$fieldname.'" cols="30" rows="2">'.$value.'</textarea></td>';
 	}
 	elseif($uitype == 22)
 	{
-		$custfld .= '<td width="20%" class="dataLabel"><font color="red">*</font> '.$fieldlabel.':</td>';
-        	$custfld .= '<td><textarea name="'.$fieldname.'" tabindex="5" cols="30" rows="2">'.$value.'</textarea></td>';
+		$custfld .= '<td width="20%" class="dataLabel" valign="top"><font color="red">*</font> '.$mod_strings[$fieldlabel].':</td>';
+        	$custfld .= '<td><textarea name="'.$fieldname.'" cols="30" rows="2">'.$value.'</textarea></td>';
 	}
 	elseif($uitype == 52)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		global $current_user;
 		if($value != '')
 		{
@@ -937,12 +945,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$assigned_user_id = $current_user->id;
 		}
-		$users_combo = get_select_options_with_id(get_user_array(TRUE, "Active", $assigned_user_id), $assigned_user_id);
-                $custfld .= '<td width="30%"><select tabindex="1" name="assigned_user_id">'.$users_combo.'</select></td>';
+		$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+                $custfld .= '<td width="30%"><select name="assigned_user_id">'.$users_combo.'</select></td>';
 	}
 	elseif($uitype == 53)     
 	{  
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
           
           $result = get_group_options();
           $nameArray = $adb->fetch_array($result);
@@ -981,13 +989,13 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	  }
          
           
-          $users_combo = get_select_options_with_id(get_user_array(TRUE, "Active", $assigned_user_id), $assigned_user_id);
+          $users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
           
           $GROUP_SELECT_OPTION = '<td width=30%><input type="radio"
           name="assigntype" value="U" '.$user_checked.'
-          onclick="toggleAssignType(this.value)">User<input
+          onclick="toggleAssignType(this.value)">'.$app_strings['LBL_USER'].'<input
           type="radio" name="assigntype" value="T"'.$team_checked.'
-          onclick="toggleAssignType(this.value)">Team<br><span
+          onclick="toggleAssignType(this.value)">'.$app_strings['LBL_TEAM'].'<br><span
           id="assign_user" style="'.$user_style.'"><select name="assigned_user_id">';
           
           $GROUP_SELECT_OPTION .= $users_combo;
@@ -1011,7 +1019,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
             $GROUP_SELECT_OPTION .= $nameArray["name"];
             $GROUP_SELECT_OPTION .= '</option>';
           }while($nameArray = $adb->fetch_array($result));
-          $GROUP_SELECT_OPTION .='<option value=none>none</option>';
+//          $GROUP_SELECT_OPTION .='<option value=none>'.$app_strings['LBL_NONE_NO_LINE'].'</option>';
           $GROUP_SELECT_OPTION .= ' </select></td>';
           
           $custfld .= $GROUP_SELECT_OPTION;
@@ -1031,18 +1039,19 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<td width="20%" class="dataLabel">';
 		if($uitype==50)
 			$custfld .= '<font color="red">*</font>';
-		$custfld .= $fieldlabel.':</td>';
+		$custfld .= $mod_strings[$fieldlabel].':</td>';
 
 
-		$custfld .= '<td width="30%" valign="top"  class="dataField"><input readonly name="account_name" type="text" value="'.$account_name.'"><input name="account_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="Change" type="button" tabindex="1" class="button" value="Change" name="btn1" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
+		$custfld .= '<td width="30%" valign="top"  class="dataField"><input readonly name="account_name" type="text" value="'.$account_name.'"><input name="account_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="Change" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="btn1" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
 	}
 	elseif($uitype == 54)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$pick_query="select * from groups";
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
-		$custfld .= '<td width="30%"><select name="'.$fieldname.'" tabindex="1">';
+		$custfld .= '<td width="30%"><select name="'.$fieldname.'">';
+		$custfld .= '<OPTION value="selectagroup" selected>'.$app_strings['LBL_SELECT_GROUP'].'</OPTION>';
 		for($j = 0; $j < $noofpickrows; $j++)
 		{
 			$pickListValue=$adb->query_result($pickListResult,$j,"name");
@@ -1063,13 +1072,13 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 55)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 
 		$pick_query="select * from salutationtype order by sortorderid";
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
 		$salt_value = $col_fields["salutationtype"];
-		$custfld .= '<td width="30%"><select name="salutationtype" tabindex="1">';
+		$custfld .= '<td width="30%"><select name="salutationtype">';
 		for($j = 0; $j < $noofpickrows; $j++)
 		{
 			$pickListValue=$adb->query_result($pickListResult,$j,"salutationtype");
@@ -1085,7 +1094,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 			$custfld .= '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
 		}
-		$custfld .= '</select><input name="'.$fieldname.'" type="text" tabindex="'.$i.'" size="25" maxlength="'.$maxlength.'" value="'.$value.'"></td>';
+		$custfld .= '</select><input name="'.$fieldname.'" type="text" size="25" maxlength="'.$maxlength.'" value="'.$value.'"></td>';
 	}
 	elseif($uitype == 59)
 	{
@@ -1097,21 +1106,21 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$product_name = getProductName($value);	
 		}
                $custfld .= '<td width="20%" class="dataLabel">';
-               $custfld .= $fieldlabel.':</td>';
-	       $custfld .= '<td width="30%"><input name="product_id" type="hidden" value="'.$value.'"><input name="product_name" readonly type="text" value="'.$product_name.'"> <input title="Change [Alt+G]" accessKey="G" tabindex="2" type="button" class="button" value="Change" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific","test","width=500,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';		
+               $custfld .= $mod_strings[$fieldlabel].':</td>';
+	       $custfld .= '<td width="30%"><input name="product_id" type="hidden" value="'.$value.'"><input name="product_name" readonly type="text" value="'.$product_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';		
 
 	}
 	elseif($uitype == 63)
         {
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
                 if($value=='')
                 $value=1;
-                $custfld .= '<td width="30%"><input name="'.$fieldname.'" type="text" tabindex="'.$i.'" size="2" maxlength="'.$maxlength.'" value="'.$value.'">&nbsp;';
+                $custfld .= '<td width="30%"><input name="'.$fieldname.'" type="text" size="2" maxlength="'.$maxlength.'" value="'.$value.'">&nbsp;';
                 $pick_query="select * from duration_minutes order by sortorderid";
                 $pickListResult = $adb->query($pick_query);
                 $noofpickrows = $adb->num_rows($pickListResult);
                 $salt_value = $col_fields["duration_minutes"];
-                $custfld .= '<select name="duration_minutes" tabindex="1">';
+                $custfld .= '<select name="duration_minutes">';
                 for($j = 0; $j < $noofpickrows; $j++)
                 {
                         $pickListValue=$adb->query_result($pickListResult,$j,"duration_minutes");
@@ -1128,14 +1137,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                         $custfld .= '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
                 }
                 $custfld .= '</select>';
-                $custfld .='(hours/minutes)</td>';
+                $custfld .= $app_strings['LBL_HOUR_AND_MINUTE'].'</td>';
         }
 	elseif($uitype == 64)
         {
                 $custfld .= '<td width="20%" class="dataLabel">';
-                $custfld .= $fieldlabel.':</td>';
+                $custfld .= $mod_strings[$fieldlabel].':</td>';
                 $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
-                $custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field" type="text" tabindex="2" size="11" readonly maxlength="10" value="'.$value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger">&nbsp;<input name="duetime" size="5" maxlength="5" tabindex="1" readonly type="text" value=""> <input name="duedate_flag" type="checkbox" tabindex="1" language="javascript" onclick="set_values(this.form)" checked>'.$mod_strings["LBL_NONE"].'<br><font size="1"><em>'.$mod_strings["DATE_FORMAT"].'</em></font></td>';
+                $custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field" type="text" size="11" readonly maxlength="10" value="'.$value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger">&nbsp;<input name="duetime" size="5" maxlength="5" readonly type="text" value=""> <input name="duedate_flag" type="checkbox" language="javascript" onclick="set_values(this.form)" checked>'.$mod_strings["LBL_NONE"].'<br><font size="1"><em>'.$mod_strings["DATE_FORMAT"].'</em></font></td>';
                 $custfld .= '<script type="text/javascript">';
                 $custfld .= 'Calendar.setup ({';
                                 $custfld .= 'inputField : "jscal_field", ifFormat : "'.$date_format.'", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1';
@@ -1144,27 +1153,32 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         }
 	elseif($uitype == 56)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		if($value == 1)
 		{
-			$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox" tabindex="1"  checked></td>';
+			$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox"  checked></td>';
 		}
 		else
 		{
-			$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox" tabindex="1"></td>';
+			$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox"></td>';
 		}
 	}
 	elseif($uitype == 57)
 	{
-		if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != '')
-			$value = $_REQUEST['contact_id'];
+		//if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != '')
+		//	$value = $_REQUEST['contact_id'];
 
 		if($value != '')
                {
                        $contact_name = getContactName($value);
                }
-		$custfld .= '<td width="20%" valign="top" class="dataLabel">'.$fieldlabel.'</td>';
-        	$custfld .= '<td width="30%"><input name="contact_name" readonly type="text" value="'.$contact_name.'"><input name="contact_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="Change" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
+	       elseif(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != '')
+	       {
+			$value = $value = $_REQUEST['contact_id'];
+			$contact_name = getContactName($value);
+	       }		 	
+		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+        	$custfld .= '<td width="30%"><input name="contact_name" readonly type="text" value="'.$contact_name.'"><input name="contact_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
 	}
         elseif($uitype == 61)
         {
@@ -1179,8 +1193,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 }
                 if($value!='')
                         $filename=' [ '.$value. ' ]';
-		$custfld .= '<td width="20%" valign="top" class="dataLabel">'.$fieldlabel.'</td>';
-                $custfld .='<td colspan="3"><input name="'.$fieldname.'" tabindex="2" type="file" size="60" value="'.$value.
+		$custfld .= '<td width="20%" valign="top" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+                $custfld .='<td colspan="3"><input name="'.$fieldname.'" type="file" size="60" value="'.$value.
 '"/><input type="hidden" name="filename" value=""/><input type="hidden" name="id" value=""/>'.$filename.'</td>';
         }
         elseif($uitype == 62)
@@ -1226,25 +1240,106 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 			}
 		}
-		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" tabindex="2" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>';
-                $custfld .= '<OPTION value="Leads" '.$lead_selected.'>Leads</OPTION>';
-                $custfld .= '<OPTION value="Accounts" '.$account_selected.'>Accounts</OPTION>';
-                $custfld .= '<OPTION value="Potentials" '.$contact_selected.'>Potentials</OPTION>';
-                $custfld .= '<OPTION value="Products" '.$product_selected.'>Products</OPTION></select></td>';
+		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>';
+                $custfld .= '<OPTION value="Leads" '.$lead_selected.'>'.$app_strings['COMBO_LEADS'].'</OPTION>';
+                $custfld .= '<OPTION value="Accounts" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
+                $custfld .= '<OPTION value="Potentials" '.$contact_selected.'>'.$app_strings['COMBO_POTENTIALS'].'</OPTION>';
+                $custfld .= '<OPTION value="Products" '.$product_selected.'>'.$app_strings['COMBO_PRODUCTS'].'</OPTION></select></td>';
 
-	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" tabindex="2" type="button" class="button" value="Change" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=500,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
+	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
 
         }
+        elseif($uitype == 66)
+        {
+                if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
+                        $value = $_REQUEST['parent_id'];
+
+		if($value != '')
+		{
+			$parent_module = getSalesEntityType($value);
+			if($parent_module == "Leads")
+			{
+				$sql = "select * from leaddetails where leadid=".$value;
+				$result = $adb->query($sql);
+				$first_name = $adb->query_result($result,0,"firstname");
+				$last_name = $adb->query_result($result,0,"lastname");
+				$parent_name = $first_name.' '.$last_name;
+				$lead_selected = "selected";
+
+			}
+			elseif($parent_module == "Accounts")
+			{
+				$sql = "select * from  account where accountid=".$value;
+				$result = $adb->query($sql);
+				$parent_name = $adb->query_result($result,0,"accountname");
+				$account_selected = "selected";
+
+			}
+			elseif($parent_module == "Potentials")
+			{
+				$sql = "select * from  potential where potentialid=".$value;
+				$result = $adb->query($sql);
+				$parent_name = $adb->query_result($result,0,"potentialname");
+				$contact_selected = "selected";
+
+			}
+		
+		}
+		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>';
+                $custfld .= '<OPTION value="Leads" '.$lead_selected.'>'.$app_strings['COMBO_LEADS'].'</OPTION>';
+                $custfld .= '<OPTION value="Accounts" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
+                $custfld .= '<OPTION value="Potentials" '.$contact_selected.'>'.$app_strings['COMBO_POTENTIALS'].'</OPTION>';
+
+	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
+
+        }
+        elseif($uitype == 67)
+        {
+                if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
+                        $value = $_REQUEST['parent_id'];
+
+		if($value != '')
+		{
+			$parent_module = getSalesEntityType($value);
+			if($parent_module == "Leads")
+			{
+				$sql = "select * from leaddetails where leadid=".$value;
+				$result = $adb->query($sql);
+				$first_name = $adb->query_result($result,0,"firstname");
+				$last_name = $adb->query_result($result,0,"lastname");
+				$parent_name = $first_name.' '.$last_name;
+				$lead_selected = "selected";
+
+			}
+			elseif($parent_module == "Contacts")
+			{
+				$sql = "select * from  contactdetails where contactid=".$value;
+				$result = $adb->query($sql);
+				$first_name = $adb->query_result($result,0,"firstname");
+				$last_name = $adb->query_result($result,0,"lastname");
+				$parent_name = $first_name.' '.$last_name;
+				$contact_selected = "selected";
+
+			}
+		}
+		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>';
+                $custfld .= '<OPTION value="Leads" '.$lead_selected.'>'.$app_strings['COMBO_LEADS'].'</OPTION>';
+                $custfld .= '<OPTION value="Contacts" '.$contact_selected.'>'.$app_strings['COMBO_CONTACTS'].'</OPTION>';
+
+	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
+
+        }
+
 	elseif($uitype == 65)
 	{
 	
-		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" tabindex="2" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>
-                <OPTION value="Leads">Leads</OPTION>
-                <OPTION value="Accounts">Accounts</OPTION>
-                <OPTION value="Potentials">Potentials</OPTION>
-                <OPTION value="Products">Products</OPTION></select></td>';
+		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>
+                <OPTION value="Leads">'.$app_strings['COMBO_LEADS'].'</OPTION>
+                <OPTION value="Accounts">'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>
+                <OPTION value="Potentials">'.$app_strings['COMBO_POTENTIALS'].'</OPTION>
+                <OPTION value="Products">'.$app_strings['COMBO_PRODUCTS'].'</OPTION></select></td>';
 
-		$custfld .= '<td width="30%"><input name="parent_id" type="hidden" value=""><input name="parent_name" readonly type="text" value=""> <input title="Change [Alt+G]" accessKey="G" tabindex="2" type="button" class="button" value="Change" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value + "&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=500,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';	
+		$custfld .= '<td width="30%"><input name="parent_id" type="hidden" value=""><input name="parent_name" readonly type="text" value=""> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value + "&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';	
 	}
 	else
 	{
@@ -1253,38 +1348,44 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		if($uitype == 2)
 			$custfld .= '<font color="red">*</font>';
 
-		$custfld .= $fieldlabel.':</td>';
+		$custfld .= $mod_strings[$fieldlabel].':</td>';
 
-		$custfld .= '<td width="30%"><input name="'.$fieldname.'" type="text" tabindex="'.$i.'" size="25" maxlength="'.$maxlength.'" value="'.$value.'"></td>';
+		$custfld .= '<td width="30%"><input name="'.$fieldname.'" type="text" size="25" maxlength="'.$maxlength.'" value="'.$value.'"></td>';
 	}
 
 	return $custfld;
 }
 
-function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields)
+function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype)
 {
 	global $adb;
+	global $mod_strings;
+	global $app_strings;
+	global $current_user;
 	$custfld = '';
 	$value ='';
+
+	if($generatedtype == 2)
+		$mod_strings[$fieldlabel] = $fieldlabel;
 
         if($col_fields[$fieldname]=='--None--')
                 $col_fields[$fieldname]='';
 	
 	if($uitype == 13)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$custfld .= '<td width="30%" valign="top" class="dataField"><a href="mailto:'.$col_fields[$fieldname].'">'.$col_fields[$fieldname].'</a></td>';
 	}
 	elseif($uitype == 17)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
-		$custfld .= '<td width="30%" valign="top" class="dataField"><a href="http://'.$col_fields[$fieldname].'">'.$col_fields[$fieldname].'</a></td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$custfld .= '<td width="30%" valign="top" class="dataField"><a href="http://'.$col_fields[$fieldname].'" target="_blank">'.$col_fields[$fieldname].'</a></td>';
 	}
-        elseif($uitype == 19)
+        elseif($uitype == 19 || $uitype == 21 || $uitype == 22)
         {
                 $col_fields[$fieldname]=nl2br($col_fields[$fieldname]);
-                $custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
-                $custfld .= '<td width="30%" valign="top" class="dataField">'.$col_fields[$fieldname].'</td>';
+                $custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+                $custfld .= '<td valign="top" class="dataField">'.$col_fields[$fieldname].'</td>';
         }
 	elseif($uitype == 51 || $uitype == 50)
 	{
@@ -1294,40 +1395,72 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields)
 			$account_name = getAccountName($account_id);
 		}
 		//Account Name View	
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a></td>';
 		
 
 	}
 	elseif($uitype == 52)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$user_id = $col_fields[$fieldname];
 		$user_name = getUserName($user_id);
-		$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Users&action=DetailView&record='.$user_id.'">'.$user_name.'</a></td>';
+		if(is_admin($current_user))
+		{
+			$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Users&action=DetailView&record='.$user_id.'">'.$user_name.'</a></td>';
+		}
+		else
+		{
+			$custfld .= '<td width="30%" valign="top" class="dataField">'.$user_name.'</td>';
+		}
 	}
 	elseif($uitype == 53)
 	{
 		$user_id = $col_fields[$fieldname];
 		if($user_id != 0)
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.' User:</td>';
+			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].$app_strings['LBL_USER'].' :</td>';
 			$user_name = getUserName($user_id);
-			$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Users&action=DetailView&record='.$user_id.'">'.$user_name.'</a></td>';
+			if(is_admin($current_user))
+			{
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Users&action=DetailView&record='.$user_id.'">'.$user_name.'</a></td>';
+			}
+			else
+			{
+				$custfld .= '<td width="30%" valign="top" class="dataField">'.$user_name.'</td>';
+			}
 		}
 		elseif($user_id == 0)
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.' Group:</td>';
+			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].$app_strings['LBL_GROUP'].' :</td>';
 			$id = $col_fields["record_id"];	
 			$module = $col_fields["record_module"];
 			$groupname = getGroupName($id, $module);
-			$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Users&action=UserInfoUtil&groupname='.$groupname.'">'.$groupname.'</a></td>';		
+			if(is_admin($current_user))
+                        {
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Users&action=UserInfoUtil&groupname='.$groupname.'">'.$groupname.'</a></td>';
+			}
+			else
+			{
+				$custfld .= '<td width="30%" valign="top" class="dataField">'.$groupname.'</td>';
+			}			
 		}
 		
 	}
+	elseif($uitype == 55)
+        {
+                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+                $value = $col_fields[$fieldname];
+                $sal_value = $col_fields["salutationtype"];
+                if($sal_value == '--None--')
+                {
+                        $sal_value='';
+                }
+                $custfld .= '<td width="30%" valign="top" class="dataField">'.$sal_value.' '.$value.'</td>';
+        }
 	elseif($uitype == 56)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$value = $col_fields[$fieldname];
 		if($value == 1)
 		{
@@ -1341,7 +1474,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields)
 	}
 	elseif($uitype == 57)
         {
-                $custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
                 $contact_id = $col_fields[$fieldname];
                 if($contact_id != '')
                 {
@@ -1358,7 +1491,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields)
 			$product_name = getProductName($product_id);
 		}
 		//Account Name View	
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a></td>';
 		
 	}
@@ -1370,7 +1503,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields)
 
                 $custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&filename='.$col_fields[$fieldname].'">'.$col_fields[$fieldname].'</a>';
 
-                $custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
                 $custfld .= '<td width="30%" valign="top" class="dataField">'.$custfldval.'</td>';
         }
 	elseif($uitype == 62)
@@ -1381,7 +1514,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields)
 			$parent_module = getSalesEntityType($value);
 			if($parent_module == "Leads")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">Lead Name:</td>';
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_LEAD_NAME'].':</td>';
 				$sql = "select * from leaddetails where leadid=".$value;
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
@@ -1391,7 +1524,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields)
 			}
 			elseif($parent_module == "Accounts")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">Account Name:</td>';
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_ACCOUNT_NAME'].':</td>';
 				$sql = "select * from  account where accountid=".$value;
 				$result = $adb->query($sql);
 				$account_name = $adb->query_result($result,0,"accountname");
@@ -1400,7 +1533,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields)
 			}
 			elseif($parent_module == "Potentials")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">Potential Name:</td>';
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_POTENTIAL_NAME'].':</td>';
 				$sql = "select * from  potential where potentialid=".$value;
 				$result = $adb->query($sql);
 				$potentialname = $adb->query_result($result,0,"potentialname");
@@ -1409,7 +1542,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields)
 			}
 			elseif($parent_module == "Products")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">Product Name:</td>';
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_PRODUCT_NAME'].':</td>';
 				$sql = "select * from  products where productid=".$value;
 				$result = $adb->query($sql);
 				$productname= $adb->query_result($result,0,"productname");
@@ -1419,20 +1552,95 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields)
 		}
 		else
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 			$custfld .= '<td width="30%" valign="top" class="dataField">'.$value.'</td>';
 		}
 
 
 	}
+	elseif($uitype == 66)
+	{
+		$value = $col_fields[$fieldname];
+		if($value != '')
+		{
+			$parent_module = getSalesEntityType($value);
+			if($parent_module == "Leads")
+			{
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_LEAD_NAME'].':</td>';
+				$sql = "select * from leaddetails where leadid=".$value;
+				$result = $adb->query($sql);
+				$first_name = $adb->query_result($result,0,"firstname");
+				$last_name = $adb->query_result($result,0,"lastname");
+
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$first_name.' '.$last_name.'</a></td>';
+			}
+			elseif($parent_module == "Accounts")
+			{
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_ACCOUNT_NAME'].':</td>';
+				$sql = "select * from  account where accountid=".$value;
+				$result = $adb->query($sql);
+				$account_name = $adb->query_result($result,0,"accountname");
+
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$account_name.'</a></td>';
+			}
+			elseif($parent_module == "Potentials")
+			{
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_POTENTIAL_NAME'].':</td>';
+				$sql = "select * from  potential where potentialid=".$value;
+				$result = $adb->query($sql);
+				$potentialname = $adb->query_result($result,0,"potentialname");
+
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$potentialname.'</a></td>';
+			}
+		}
+		else
+		{
+			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+			$custfld .= '<td width="30%" valign="top" class="dataField">'.$value.'</td>';
+		}
+	}
+	elseif($uitype == 67)
+	{
+		$value = $col_fields[$fieldname];
+		if($value != '')
+		{
+			$parent_module = getSalesEntityType($value);
+			if($parent_module == "Leads")
+			{
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_LEAD_NAME'].':</td>';
+				$sql = "select * from leaddetails where leadid=".$value;
+				$result = $adb->query($sql);
+				$first_name = $adb->query_result($result,0,"firstname");
+				$last_name = $adb->query_result($result,0,"lastname");
+
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$first_name.' '.$last_name.'</a></td>';
+			}
+			elseif($parent_module == "Contacts")
+			{
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_CONTACT_NAME'].':</td>';
+				$sql = "select * from  contactdetails where contactid=".$value;
+				$result = $adb->query($sql);
+				$first_name = $adb->query_result($result,0,"firstname");
+                                $last_name = $adb->query_result($result,0,"lastname");
+
+                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$first_name.' '.$last_name.'</a></td>';
+			}
+		}
+		else
+		{
+			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+			$custfld .= '<td width="30%" valign="top" class="dataField">'.$value.'</td>';
+		}
+	}
+
 	elseif($uitype==63)
         {
-	   $custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';	
+	   $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';	
            $custfld .= '<td width="30%" valign="top" class="dataField">'.$col_fields[$fieldname].'h&nbsp; '.$col_fields['duration_minutes'].'m</td>';
         }
 	elseif($uitype == 6)
         {
-		$custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 	
           	if($col_fields[$fieldname]=='0')
                 $col_fields[$fieldname]='';
@@ -1445,7 +1653,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields)
 	}
 	else
 	{
-	  $custfld .= '<td width="20%" class="dataLabel">'.$fieldlabel.':</td>';
+	  $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 	
           if($col_fields[$fieldname]=='0')
                 $col_fields[$fieldname]='';
@@ -1499,9 +1707,13 @@ function getGroupName($id, $module)
 	{
 		$sql = "select * from leadgrouprelation where leadid=".$id;
 	}
+        elseif($module == 'HelpDesk')
+        {
+                $sql = "select * from ticketgrouprelation where ticketid=".$id;
+        }
 	elseif($module = 'Calls')
 	{
-		$sql = "select * from callgrouprelation where callid=".$id;
+		$sql = "select * from activitygrouprelation where activityid=".$id;
 	}
 	elseif($module = 'Tasks')
 	{
@@ -1537,7 +1749,24 @@ function getUserName($userid)
 	$user_name = $adb->query_result($result,0,"user_name");
 	return $user_name;	
 }		
-
+//outlook security
+function getUserId_Ol($username)
+{
+	global $adb;
+	$sql = "select id from users where user_name='".$username."'";
+	$result = $adb->query($sql);
+	$num_rows = $adb->num_rows($result);
+	if($num_rows > 0)
+	{
+		$user_id = $adb->query_result($result,0,"id");
+    }
+    else
+    {
+	    $user_id = 0;
+    }    	
+	return $user_id;
+}	
+//outlook security
 function getNavigationValues($start, $noofrows, $list_max_entries_per_page)
 {
 	$navigation_array = Array();	
@@ -1631,51 +1860,146 @@ function getURLstring($focus)
 	return $qry;
 
 }
-function getListViewHeader($focus, $module,$sort_qry='')
+function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='')
 {
+	global $adb;
 	global $theme;
+	global $app_strings;
+	global $mod_strings;
+	$arrow='';
 	$qry = getURLstring($focus);
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";		
-		$list_header = '<tr class="moduleListTitle" height=20>';
+	$list_header = '<tr class="moduleListTitle" height=20>';
 	$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Select</td>';
+	if($relatedlist == '')
+	{
+		$list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>';
 		$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+	}
+
+	//Get the tabid of the module
+	//require_once('modules/Users/UserInfoUtil.php')
+	$tabid = getTabid($module);
+	global $profile_id;		
+        if($profile_id == '')
+        {
+                global $current_user;
+                $profile_id = fetchUserProfileId($current_user->id);
+        }
+
 	foreach($focus->list_fields as $name=>$tableinfo)
 	{
-		if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
-                {
-                        foreach($focus->list_fields[$name] as $tab=>$col)
-                        {
-                                if(in_array($col,$focus->sortby_fields))
-                                {
-					$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."' class='listFormHeaderLinks'>".$name."</a>";
-                                }
-                        }
-                }
-		$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
-		$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+		$fieldname = $focus->list_fields_name[$name];
+
+		$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
+		$result = $adb->query($query);
+		if($adb->query_result($result,0,"visible") == 0)
+		{
+
+			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
+			{
+				foreach($focus->list_fields[$name] as $tab=>$col)
+				{
+					if(in_array($col,$focus->sortby_fields))
+					{
+						if($order_by == $col)
+                                        	{
+                                                	if($sorder == 'ASC')
+                                                	{
+                                                        	$sorder = "DESC";
+	                                                        $arrow = "<img src ='".$image_path."arrow_down.gif' border='0'>";
+        	 	                                 }
+                        	                        else
+                                	                {
+                                        	                $sorder = 'ASC';
+                                                	        $arrow = "<img src ='".$image_path."arrow_up.gif' border='0'>";
+                                                	}
+                                        	}
+						if($relatedlist !='')
+                                                {
+                                                        $name = $app_strings[$name];
+                                                }
+                                                else
+                                                {
+                                        		$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$app_strings[$name]."&nbsp;".$arrow."</a>";
+                                        		$arrow = '';
+						}
+					}
+					else
+						$name = $app_strings[$name];
+				}
+			}
+			//Added condition to hide the close column in Related Lists
+			if($name == 'Close' && $relatedlist != '')
+			{
+				$list_header .= '';
+			}
+			else
+			{
+				$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
+				$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+			}
+		}
 	}	
-	$list_header .='<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">Edit | Delete</td>';
+	$list_header .='<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">'.$app_strings['LBL_EDIT'].' | '.$app_strings['LBL_DELETE'].'</td>';
 	$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
 	$list_header .= '</tr>';
 	return $list_header;
 
 }
 
-function getSearchListViewHeader($focus, $module)
+function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='')
 {
-
+	global $adb;
 	global $theme;
+	global $app_strings;
+        global $mod_strings;
+        $arrow='';
+
 	//$theme = $focus->current_theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";		
-		$list_header = '<tr class="moduleListTitle" height=20>';
+	$list_header = '<tr class="moduleListTitle" height=20>';
 	$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 	foreach($focus->search_fields as $name=>$tableinfo)
 	{
-		$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
-		$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+		$fieldname = $focus->search_fields_name[$name];
+		global $profile_id;
+		$tabid = getTabid($module);
+		$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
+		$result = $adb->query($query);
+		if($adb->query_result($result,0,"visible") == 0)
+		{
+			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
+                        {
+                                foreach($focus->search_fields[$name] as $tab=>$col)
+                                {
+                                        if(in_array($col,$focus->sortby_fields))
+                                        {
+                                                if($order_by == $col)
+                                                {
+                                                        if($sorder == 'ASC')
+                                                        {
+                                                                $sorder = "DESC";
+                                                                $arrow = "<img src ='".$image_path."arrow_down.gif' border='0'>";
+                                                         }
+                                                        else
+                                                        {
+                                                                $sorder = 'ASC';
+                                                                $arrow = "<img src ='".$image_path."arrow_up.gif' border='0'>";
+                                                        }
+                                                }
+                                                $name = "<a href='index.php?module=".$module."&action=Popup".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$app_strings[$name]."&nbsp;".$arrow."</a>";
+                                                $arrow = '';
+                                        }
+                                        else
+                                                $name = $app_strings[$name];
+                                }
+                        }
+			$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
+			$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+		}
 	}	
 	$list_header .= '</tr>';
 	return $list_header;
@@ -1768,112 +2092,165 @@ function getRelatedTo($module,$list_result,$rset)
 
 }
 
-function getListViewEntries($focus, $module,$list_result,$navigation_array)
+function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='')
 {
 	global $adb;
 	global $app_strings;
 	$noofrows = $adb->num_rows($list_result);
-	$list_header = '';
+	$list_header = '<script>
+			function confirmdelete(url)
+			{
+				if(confirm("Are you sure?"))
+				{
+					document.location.href=url;
+				}
+			}
+		</script>';
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	
+
 	//getting the fieldtable entries from database
 	$tabid = getTabid($module);
 
 	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
-        	if (($i%2)==0)
-                	$list_header .= '<tr height=20 class=evenListRow>';
-        	else
-                	$list_header .= '<tr height=20 class=oddListRow>';
+		if (($i%2)==0)
+			$list_header .= '<tr height=20 class=evenListRow>';
+		else
+			$list_header .= '<tr height=20 class=oddListRow>';
 
 		//Getting the entityid
 		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
-	
+		$owner_id = $adb->query_result($list_result,$i-1,"smownerid");
+
+		if($relatedlist == '')
+		{		
+			$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+			$list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall")></td>';
+		}
 		$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-                $list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.'></td>';
-	$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 		foreach($focus->list_fields as $name=>$tableinfo)
 		{
 			$fieldname = $focus->list_fields_name[$name];
-			if($fieldname == '')
+			global $profile_id;
+			$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
+			$result = $adb->query($query);
+			if($adb->query_result($result,0,"visible") == 0)
 			{
-				$table_name = '';
-				$column_name = '';
-				foreach($tableinfo as $tablename=>$colname)
+				if($fieldname == '')
 				{
-					$table_name=$tablename;
-					$column_name = $colname;
+					$table_name = '';
+					$column_name = '';
+					foreach($tableinfo as $tablename=>$colname)
+					{
+						$table_name=$tablename;
+						$column_name = $colname;
+					}
+					$value = $adb->query_result($list_result,$i-1,$colname); 
 				}
-				$value = $adb->query_result($list_result,$i-1,$colname); 
-			}
-			else
-			{
-				if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
-                                {
- 					$status = $adb->query_result($list_result,$i-1,"status");
-					if ($name=='Related to')
-                                        $value=getRelatedTo($module,$list_result,$i-1);
-                                        if($name=='Contact Name')
-                                        {
-                                                $first_name = $adb->query_result($list_result,$i-1,"firstname");
-                                                $last_name = $adb->query_result($list_result,$i-1,"lastname");
-                                                $contact_id = $adb->query_result($list_result,$i-1,"contactid");
-                                                $contact_name = "";
-                                                $value="";
-                                                if($first_name != 'NULL')
-                                                $contact_name .= $first_name;
-                                                if($last_name != 'NULL')
-                                                $contact_name .= " ".$last_name;
-                                                if(($contact_name != "") && ($contact_id !='NULL'))
-                                                $value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
-                                        }
-					if ($name == 'Close') 
- 					{
- 						if($status =='Deferred' || $status == 'Completed')
- 						{
- 							$value="";
- 													}
-						else
- 						{
- 							$activityid = $adb->query_result($list_result,$i-1,"activityid");
- 							$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>";
- 						}
- 					}
-                                }
-				elseif(($module == 'Faq' || $module == 'Notes') && $name=='Related to')
-                                {
-                                        $value=getRelatedToEntity($module,$list_result,$i-1);
-                                }
-				elseif($name=='Account Name')
-                                {
-                                        $account_id = $adb->query_result($list_result,$i-1,"accountid");
-					$account_name = getAccountName($account_id);
-					$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
-                                }
+				else
+				{
+					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
+					{
+						$status = $adb->query_result($list_result,$i-1,"status");
+						if ($name=='Related to')
+							$value=getRelatedTo($module,$list_result,$i-1);
+						if($name=='Contact Name')
+						{
+							$first_name = $adb->query_result($list_result,$i-1,"firstname");
+							$last_name = $adb->query_result($list_result,$i-1,"lastname");
+							$contact_id = $adb->query_result($list_result,$i-1,"contactid");
+							$contact_name = "";
+							$value="";
+							if($first_name != 'NULL')
+								$contact_name .= $first_name;
+							if($last_name != 'NULL')
+								$contact_name .= " ".$last_name;
+							if(($contact_name != "") && ($contact_id !='NULL'))
+								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
+						}
+						if ($name == 'Close') 
+						{
+							if($status =='Deferred' || $status == 'Completed' || $status == '')
+							{
+								$value="";
+							}
+							else
+							{
+								$activityid = $adb->query_result($list_result,$i-1,"activityid");
+								$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>";
+							}
+						}
+					}
+					elseif(($module == 'Faq' || $module == 'Notes') && $name=='Related to')
+					{
+						$value=getRelatedToEntity($module,$list_result,$i-1);
+					}
+					elseif($name=='Account Name')
+					{
+						$account_id = $adb->query_result($list_result,$i-1,"accountid");
+						$account_name = getAccountName($account_id);
+						$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+					}
+					elseif($owner_id == 0 && $name == 'Assigned To')
+                                       {
+                                               $value = getGroupName($entity_id, $module);
+                                       }
+					else
+					{
+						$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
+						$field_result = $adb->query($query);
+						$list_result_count = $i-1;
 
-                                else
-                                {
-					$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
-				        $field_result = $adb->query($query);
-					$list_result_count = $i-1;
-
-					$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","");
+						$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset);
+					}
 				}
-			}
-			$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
-			$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-
-			if($fieldname=='filename')
-			{
-				$filename = $adb->query_result($list_result,$list_result_count,$fieldname);
+				//Added condition to hide the close symbol in Related Lists
+//				if($relatedlist != '' && $value == "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>")
+				if($name == 'Close' && $relatedlist != '')
+				{
+					$list_header .= '';
+				}
+				else
+				{
+					$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
+					$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';	
+				}
+				if($fieldname=='filename')
+				{
+					$filename = $adb->query_result($list_result,$list_result_count,$fieldname);
+				}
 			}
 
 		}	
-	$list_header .='<td style="padding:0px 3px 0px 3px;"><a href="index.php?action=EditView&module='.$module.'&record='.$entity_id.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;<a href="index.php?action=Delete&module='.$module.'&return_module='.$module.'&return_action=index&record='.$entity_id.'">'.$app_strings['LNK_DELETE'].'</a></td>';
-	$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-	$list_header .= '</tr>';
+
+		if($returnset=='')
+			$returnset = '&return_module='.$module.'&return_action=index';
+
+		if($module == 'Activities')
+		{
+			$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
+			if($actvity_type == 'Task')
+				$returnset .= '&activity_mode=Task';
+			else
+				$returnset .= '&activity_mode=Events';
+		}
+		$list_header .= '<td style="padding:0px 3px 0px 3px;">';
+		if(isPermitted($module,1,$entity_id) == 'yes')
+		{
+			
+			
+			$list_header .='<a href="index.php?action=EditView&module='.$module.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
+		}
+		if(isPermitted($module,2,$entity_id) == 'yes')
+		{
+			$del_param = 'index.php?action=Delete&module='.$module.'&record='.$entity_id.$returnset;
+			$list_header .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
+		}
+		$list_header .= '<td>';
+		$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$list_header .= '</tr>';
 	}
 	return $list_header;
 }
@@ -1888,78 +2265,92 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	//$theme = $focus->current_theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	
+
 	//getting the fieldtable entries from database
 	$tabid = getTabid($module);
 
 	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
-        	if (($i%2)==0)
-                	$list_header .= '<tr height=20 class=evenListRow>';
-        	else
-                	$list_header .= '<tr height=20 class=oddListRow>';
+		if (($i%2)==0)
+			$list_header .= '<tr height=20 class=evenListRow>';
+		else
+			$list_header .= '<tr height=20 class=oddListRow>';
 
 		//Getting the entityid
 		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
-	
+
 		$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 		foreach($focus->search_fields as $name=>$tableinfo)
 		{
 			$fieldname = $focus->search_fields_name[$name];
-			if($fieldname == '')
+			global $profile_id;
+			$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
+			$result = $adb->query($query);
+			if($adb->query_result($result,0,"visible") == 0)
 			{
-				$table_name = '';
-				$column_name = '';
-				foreach($tableinfo as $tablename=>$colname)
+
+				if($fieldname == '')
 				{
-					$table_name=$tablename;
-					$column_name = $colname;
+					$table_name = '';
+					$column_name = '';
+					foreach($tableinfo as $tablename=>$colname)
+					{
+						$table_name=$tablename;
+						$column_name = $colname;
+					}
+					$value = $adb->query_result($list_result,$i-1,$colname); 
 				}
-				$value = $adb->query_result($list_result,$i-1,$colname); 
-			}
-			else
-			{
-				if(($module == 'Calls' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails') && (($name=='Related to') || ($name=='Contact Name')))
-                                {
-					if ($name=='Related to')
-                                        $value=getRelatedTo($module,$list_result,$i-1);
-                                        if($name=='Contact Name')
+				else
+				{
+					if(($module == 'Calls' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails') && (($name=='Related to') || ($name=='Contact Name')))
+					{
+						if ($name=='Related to')
+							$value=getRelatedTo($module,$list_result,$i-1);
+						if($name=='Contact Name')
+						{
+							$first_name = $adb->query_result($list_result,$i-1,"firstname");
+							$last_name = $adb->query_result($list_result,$i-1,"lastname");
+							$contact_id = $adb->query_result($list_result,$i-1,"contactid");
+							$contact_name = "";
+							$value="";
+							if($first_name != 'NULL')
+								$contact_name .= $first_name;
+							if($last_name != 'NULL')
+								$contact_name .= " ".$last_name;
+							if(($contact_name != "") && ($contact_id !='NULL'))
+								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
+						}
+					}
+					elseif(($module == 'Faq' || $module == 'Notes') && $name=='Related to')
+					{
+						$value=getRelatedToEntity($module,$list_result,$i-1);
+					}
+					elseif($name=='Account Name' && $module == 'Potentials')
                                         {
-                                                $first_name = $adb->query_result($list_result,$i-1,"firstname");
-                                                $last_name = $adb->query_result($list_result,$i-1,"lastname");
-                                                $contact_id = $adb->query_result($list_result,$i-1,"contactid");
-                                                $contact_name = "";
-                                                $value="";
-                                                if($first_name != 'NULL')
-                                                $contact_name .= $first_name;
-                                                if($last_name != 'NULL')
-                                                $contact_name .= " ".$last_name;
-                                                if(($contact_name != "") && ($contact_id !='NULL'))
-                                                $value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
+                                                $account_id = $adb->query_result($list_result,$i-1,"accountid");
+                                                $account_name = getAccountName($account_id);
+                                                $value = $account_name;
                                         }
-                                }
-				elseif(($module == 'Faq' || $module == 'Notes') && $name=='Related to')
-                                {
-                                        $value=getRelatedToEntity($module,$list_result,$i-1);
-                                }
-                                else
-                                {
-					$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
-				        $field_result = $adb->query($query);
-					$list_result_count = $i-1;
-				
-					$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type);
+					else
+					{
+						$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
+						$field_result = $adb->query($query);
+						$list_result_count = $i-1;
+
+						$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type);
+					}
+
 				}
-			}
 			$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
 			$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+			}
 		}	
 		$list_header .= '</tr>';
 	}
 	return $list_header;
 }
 
-function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype)
+function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='')
 {
 	global $adb;
 	$uitype = $adb->query_result($field_result,0,"uitype");
@@ -1973,7 +2364,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 17)
 	{
-		$value = '<a href="http://'.$temp_val.'">'.$temp_val.'</a>';
+		$value = '<a href="http://'.$temp_val.'" target="_blank">'.$temp_val.'</a>';
 	}
 	elseif($uitype == 13)
         {
@@ -2043,6 +2434,65 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		else
 			$value='';
 	}
+	elseif($uitype == 66)
+	{
+		global $adb;
+
+		$parentid = $adb->query_result($list_result,$list_result_count,"parent_id");
+		$parenttype = $adb->query_result($list_result,$list_result_count,"parent_type");
+
+		if($parenttype == "Leads")	
+		{
+			$tablename = "leaddetails";	$fieldname = "lastname";	$idname="leadid";	
+		}
+		if($parenttype == "Accounts")	
+		{
+			$tablename = "account";		$fieldname = "accountname";     $idname="accountid";
+		}
+		if($parenttype == "HelpDesk")	
+		{
+			$tablename = "troubletickets";	$fieldname = "title";        	$idname="crmid";
+		}
+		if($parentid != '')
+                {
+			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
+			//echo '<br> query : .. '.$sql;
+			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
+			//echo '<br><br> val : '.$fieldvalue;
+
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'>'.$fieldvalue.'</a>';
+		}
+		else
+			$value='';
+	}
+	elseif($uitype == 67)
+	{
+		global $adb;
+
+		$parentid = $adb->query_result($list_result,$list_result_count,"parent_id");
+		$parenttype = $adb->query_result($list_result,$list_result_count,"parent_type");
+
+		if($parenttype == "Leads")	
+		{
+			$tablename = "leaddetails";	$fieldname = "lastname";	$idname="leadid";	
+		}
+		if($parenttype == "Contacts")	
+		{
+			$tablename = "contactdetails";		$fieldname = "contactname";     $idname="contactid";
+		}
+		if($parentid != '')
+                {
+			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
+			//echo '<br> query : .. '.$sql;
+			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
+			//echo '<br><br> val : '.$fieldvalue;
+
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'>'.$fieldvalue.'</a>';
+		}
+		else
+			$value='';
+	}
+
 	else
 	{
 	
@@ -2052,15 +2502,28 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			{
 				if($popuptype == "specific")
 				{
+					// Added for get the first name of contact in Popup window
+                                        if($colname == "lastname" && $module == 'Contacts')
+                                               $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
+                                        $temp_val =$firstname.' '.$temp_val;
+			
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
 				}
-	elseif($popuptype == "detailview")
+				elseif($popuptype == "detailview")
                                 {
+                                        if($colname == "lastname" && $module == 'Contacts')
+                                               $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
+                                        $temp_val =$firstname.' '.$temp_val;
+
 					$focus->record_id = $_REQUEST['recordid'];
                                         $value = '<a href="a" LANGUAGE=javascript onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
                                 }
 				else
-				{	
+				{
+					if($colname == "lastname")
+                                                $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
+                                        $temp_val =$firstname.' '.$temp_val;
+	
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return("'.$entity_id.'", "'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
 				}
 			}
@@ -2096,7 +2559,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$value = $temp_val;
 		}
 	}
-
+//	$value .= $returnset;
 	return $value; 
 }
 
@@ -2106,19 +2569,23 @@ function getListQuery($module,$where='')
 	if($module == "HelpDesk")
 	{
 		$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentity.deleted=0";
+		//$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid  left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id where crmentity.deleted=0";
 	}
 	if($module == "Accounts")
 	{
-		$query = "select crmentity.crmid, account.accountname,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.*  from account, accountbillads, accountshipads, accountscf  inner join crmentity on crmentity.crmid=account.accountid and account.accountid=accountbillads.accountaddressid and account.accountid = accountscf.accountid and account.accountid=accountshipads.accountaddressid where crmentity.deleted=0";
+		//$query = "select crmentity.crmid, account.accountname,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.*  from account, accountbillads, accountshipads, accountscf  inner join crmentity on crmentity.crmid=account.accountid and account.accountid=accountbillads.accountaddressid and account.accountid = accountscf.accountid and account.accountid=accountshipads.accountaddressid where crmentity.deleted=0";
+		$query = "select crmentity.crmid, account.accountname,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.*  from account inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid where crmentity.deleted=0";
 	}
 	if ($module == "Potentials")
 	{
-		 $query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.*, potentialscf.* from potential , account, potentialscf inner join crmentity on crmentity.crmid=potential.potentialid and potential.accountid = account.accountid and potentialscf.potentialid = potential.potentialid where crmentity.deleted=0 ".$where;
+		 //$query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.*, potentialscf.* from potential , account, potentialscf inner join crmentity on crmentity.crmid=potential.potentialid and potential.accountid = account.accountid and potentialscf.potentialid = potential.potentialid where crmentity.deleted=0 ".$where;
+		 $query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.accountid,potential.potentialname,potential.amount,potential.currency,potential.closingdate,potential.typeofrevenue, potentialscf.* from potential inner join crmentity on crmentity.crmid=potential.potentialid inner join account on potential.accountid = account.accountid inner join potentialscf on potentialscf.potentialid = potential.potentialid where crmentity.deleted=0 ".$where;
 
 	}
 	if($module == "Leads")
 	{
-		$query = "select crmentity.crmid, leaddetails.firstname, leaddetails.lastname, leaddetails.company, leadaddress.phone, leadsubdetails.website, leaddetails.email, crmentity.smownerid, leadscf.* from leaddetails, leadaddress, leadsubdetails, leadscf  inner join crmentity on crmentity.crmid=leaddetails.leadid and leaddetails.leadid=leadaddressid and leaddetails.leadid = leadscf.leadid and leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid where crmentity.deleted=0 and leaddetails.converted=0";
+		//$query = "select crmentity.crmid, leaddetails.firstname, leaddetails.lastname, leaddetails.company, leadaddress.phone, leadsubdetails.website, leaddetails.email, crmentity.smownerid, leadscf.* from leaddetails, leadaddress, leadsubdetails, leadscf  inner join crmentity on crmentity.crmid=leaddetails.leadid and leaddetails.leadid=leadaddressid and leaddetails.leadid = leadscf.leadid and leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid where crmentity.deleted=0 and leaddetails.converted=0";
+		$query = "select crmentity.crmid, leaddetails.firstname, leaddetails.lastname, leaddetails.company, leadaddress.phone, leadsubdetails.website, leaddetails.email, crmentity.smownerid, leadscf.* from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid where crmentity.deleted=0 and leaddetails.converted=0";
 	}
 	if($module == "Products")
 	{
@@ -2134,7 +2601,8 @@ function getListQuery($module,$where='')
         }
 	if($module == "Contacts")
         {
-                $query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.* from contactdetails, contactaddress, contactsubdetails, contactscf inner join crmentity on crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid where crmentity.deleted=0";
+                //$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf inner join crmentity on crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid inner join account on account.accountid = contactdetails.accountid where crmentity.deleted=0";
+		$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf,crmentity,account where crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid and account.accountid = contactdetails.accountid and crmentity.deleted=0";
         }
 	if($module == "Meetings")
         {
@@ -2142,6 +2610,7 @@ function getListQuery($module,$where='')
         }
 	if($module == "Activities")
         {
+		//$query = "select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') ".$where;
 		$query = "select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') ".$where;
         }
 	if($module == "Emails")
@@ -2154,10 +2623,10 @@ function getListQuery($module,$where='')
 	}
 	global $others_permission_id;
 	global $current_user;	
-	if($others_permission_id == 3)
+	if($others_permission_id == 3 && $module != 'Notes' && $module != 'Products' && $module != 'Faq')
 	{
-		$query .= " and crmentity.smownerid=".$current_user->id;
-	}	
+		$query .= " and crmentity.smownerid in(".$current_user->id .",0)";
+	}
 	return $query;
 }
 
@@ -2195,6 +2664,10 @@ function getActionid($action)
 	else if($action == 'BusinessCard')
 	{
 		$actionid= 7;
+	}
+	else if($action == 'Merge')
+	{
+		$actionid= 8;
 	}
 	return $actionid;
 }
@@ -2234,6 +2707,10 @@ function getActionname($actionid)
 	{
 		$actionname= 'BusinessCard';
 	}
+	else if($actionid == 8)
+	{
+		$actionname= 'Merge';
+	}
 	return $actionname;
 }
 
@@ -2248,6 +2725,7 @@ function getUserId($record)
 function insertProfile2field($profileid)
 {
 	global $adb;
+	$adb->database->SetFetchMode(ADODB_FETCH_ASSOC); 
 	$fld_result = $adb->query("select * from field where generatedtype=1 and displaytype in (1,2)");
         $num_rows = $adb->num_rows($fld_result);
         for($i=0; $i<$num_rows; $i++)
@@ -2297,5 +2775,16 @@ function ChangeStatus($status,$activityid)
  		$adb->query($query);
  	}
  }
+
+function AlphabeticalSearch($module,$action,$fieldname,$query,$type)
+{
+	if($type=='advanced')
+		$flag='&advanced=true';
+
+	for($var='A',$i =1;$i<=26;$i++,$var++)
+		$list .= '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&query='.$query.'&'.$fieldname.'='.$var.$flag.'">'.$var.'</a></td>';
+
+	return $list;
+}
 
 ?>

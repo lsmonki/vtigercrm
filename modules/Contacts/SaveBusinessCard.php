@@ -1,4 +1,13 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
 
 
 //check if the accountname field is set
@@ -34,7 +43,7 @@ $title = $_POST['title'];
 $department = $_POST['department'];
 $mailingcity = $_POST['mailingcity'];
 $mailingstate = $_POST['mailingstate'];
-$mailingcode = $_POST['mailingcode'];
+$mailingcode = $_POST['mailingzip'];
 $mailingcountry = $_POST['mailingcountry'];
 $phone = $_POST['phone'];
 $mobile = $_POST['mobile'];
@@ -94,12 +103,12 @@ if(($acctname != '') && ($lastname != ''))
   $adb->query($sql);
  
  
-  $sql_contactdetails = "insert into contactdetails(contactid,accountid,firstname,lastname,title,department,email,mobile,fax,otheremail) values(".$contact_id.",".$account_id.",'".$firstname."','".$lastname."','".$title."','".$department."','".$email."','".$mobile."','".$fax."','".$otheremail."')";
+  $sql_contactdetails = "insert into contactdetails(contactid,accountid,firstname,lastname,title,department,email,phone,mobile,fax,otheremail) values(".$contact_id.",".$account_id.",'".$firstname."','".$lastname."','".$title."','".$department."','".$email."','".$phone."','".$mobile."','".$fax."','".$otheremail."')";
   //echo $sql_contactdetails;
 
   $adb->query($sql_contactdetails);
 
-  $adb->query("insert into contactaddress (contactaddressid, mailingstreet, otherstreet, mailingcity, othercity, mailingstate, otherstate, mailingzip, otherzip, mailingcountry, othercountry) values(".$contact_id.", '', '', '', '', '', '', '', '', '', '')");
+  $adb->query("insert into contactaddress (contactaddressid, mailingstreet, otherstreet, mailingcity, othercity, mailingstate, otherstate, mailingzip, otherzip, mailingcountry, othercountry) values(".$contact_id.", '', '', '".$mailingcity."', '', '".$mailingstate."', '', '".$mailingcode."', '', '".$mailingcountry."', '')");
 
   $adb->query("insert into contactsubdetails (contactsubscriptionid, homephone, leadsource, otherphone, birthday, assistant, assistantphone) values(".$contact_id.", '', '--None--', '', '', '', '')");
 
@@ -112,7 +121,7 @@ if(($acctname != '') && ($lastname != ''))
     $sql = "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$contactnote_id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'notes','created from business card','','','',0,0".")";
     $adb->query($sql);
  
-    $sql_insertnote = "insert into notes(notesid,title,notecontent) values(".$contactnote_id.",'".$contactnotesname."','".$contactnotesdescription ."')";
+    $sql_insertnote = "insert into notes(notesid,contact_id,title,notecontent) values(".$contactnote_id.",".$contact_id.",'".$contactnotesname."','".$contactnotesdescription ."')";
  
     $adb->query($sql_insertnote);
   

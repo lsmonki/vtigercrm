@@ -1,4 +1,13 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
 global $mod_strings;
@@ -18,11 +27,11 @@ $xtpl=new XTemplate ('modules/Settings/EmailConfig.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
-$sql="select * from systems";
+$sql="select * from systems where server_type = 'email'";
 $result = $adb->query($sql);
-$mail_server = $adb->query_result($result,0,'mail_server');
-$mail_server_username = $adb->query_result($result,0,'mail_server_username');
-$mail_server_password = $adb->query_result($result,0,'mail_server_password');
+$mail_server = $adb->query_result($result,0,'server');
+$mail_server_username = $adb->query_result($result,0,'server_username');
+$mail_server_password = $adb->query_result($result,0,'server_password');
 
 $xtpl->assign("RETURN_MODULE","Settings");
 $xtpl->assign("RETURN_ACTION","index");

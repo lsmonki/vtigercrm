@@ -54,7 +54,8 @@ foreach($focus->column_fields as $fieldname => $val)
 }
 
 
-$focus->saveentity("Faq");
+//$focus->saveentity("Faq");
+$focus->save("Faq");
 $return_id = $focus->id;
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];

@@ -86,9 +86,9 @@ function massDelete()
 	<!-- END: list_nav_row -->
 	<tr><td COLSPAN="15" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
 	<tr height="20" class="moduleListTitle">
-	<td WIDTH="1" class="blackLine"><td>Operation</td><IMG SRC="{IMAGE_PATH}blank.gif">
+	<td WIDTH="1" class="blackLine"><!--td>Operation</td><IMG SRC="{IMAGE_PATH}blank.gif">
 		<td align='center' class="moduleListTitle"><IMG alt="Yahoo Messenger" SRC="modules/Yahoo/images/ym.gif"></td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"-->
 	
 		<td width="20%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}first_name" class="listFormHeaderLinks">{MOD.LBL_LIST_NAME}{first_name_arrow}</a></td>
 	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
@@ -107,13 +107,13 @@ function massDelete()
 
 <!-- BEGIN: row -->
 <tr height=20 class={ROW_COLOR}>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td><td><INPUT type=checkbox NAME="userselection" value={USER.ID}></td>
+    	<!--td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td><td><INPUT type=checkbox NAME="userselection" value={USER.ID}></td-->
  </td>
 <!-- BEGIN: yahoo_id -->
-		<td align='center'><a href='http://edit.yahoo.com/config/send_webmesg?.target={USER.YAHOO_ID}'><img border=0 src='http://opi.yahoo.com/online?u={USER.YAHOO_ID}'&m=g&t=2'></a></td>
+		<!--td align='center'><a href='http://edit.yahoo.com/config/send_webmesg?.target={USER.YAHOO_ID}'><img border=0 src='http://opi.yahoo.com/online?u={USER.YAHOO_ID}'&m=g&t=2'></a></td-->
 <!-- END: yahoo_id -->
 <!-- BEGIN: no_yahoo_id -->
-		<td>&nbsp;</td>
+		<!--td>&nbsp;</td-->
 <!-- END: no_yahoo_id -->
 <td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
     			<td valign=TOP style="padding:0px 3px 0px 3px;" ><a href="{URL_PREFIX}index.php?action=DetailView&module=Users&record={USER.ID}">{USER.FIRST_NAME} {USER.LAST_NAME}</a></td>

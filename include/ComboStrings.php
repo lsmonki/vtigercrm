@@ -1,4 +1,13 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
 
 global $combo_strings;
 
@@ -138,17 +147,17 @@ $combo_strings = Array(
                 , 'LexPon Inc.'=>'LexPon Inc.'
                 , 'MetBeat Corp'=>'MetBeat Corp'
                 ),
-'troubleticketcategories_dom' => Array('Big Problem'=>'Big Problem'
+'ticketcategories_dom' => Array('Big Problem'=>'Big Problem'
                                         ,'Small Problem'=>'Small Problem'
                                         ,'Other Problem'=>'Other Problem'
                                         ),
-'troubleticketpriorities_dom' => Array('Low'=>'Low'
+'ticketpriorities_dom' => Array('Low'=>'Low'
                                         ,'Medium'=>'Medium'
                                         ,'High'=>'High'
                                         ,'Critical'=>'Critical'
                                         ),
 
-'troubleticketstatus_dom' => Array('Open'=>'Open'
+'ticketstatus_dom' => Array('Open'=>'Open'
                                 ,'In Progress'=>'In Progress'
                                 ,'Wait For Response'=>'Wait For Response'
                                 ,'Closed'=>'Closed'
@@ -157,6 +166,9 @@ $combo_strings = Array(
 'activitytype_dom' => Array('Call'=>'Call'
 		            , 'Meeting'=>'Meeting'
 	        	   ),
+'faqcategories_dom' => Array('General'=>'General'
+				),
+
 
 'currency_dom' => Array('Rupees'=>'Rupees',
                         'Dollar'=>'Dollar',
