@@ -16,6 +16,9 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Leads/Lead.php');
 require_once('modules/Leads/Forms.php');
+require_once('database/DatabaseConnection.php');
+require_once('include/CustomFieldUtil.php');
+require_once('include/ComboUtil.php');
 
 global $mod_strings;
 global $app_list_strings;
@@ -48,6 +51,14 @@ if (isset($_REQUEST['account_id']) && is_null($focus->account_id)) {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
+//retreiving the combo values array
+$comboFieldNames = Array('lead_source'=>'lead_source_dom'
+                      ,'salutation'=>'salutation_dom'
+                      ,'lead_status'=>'lead_status_dom'
+                      ,'industry'=>'industry_dom'
+                      ,'rating'=>'rating_dom'
+                      ,'license_key'=>'license_key_dom');
+$comboFieldArray = getComboArray($comboFieldNames);
 require_once($theme_path.'layout_utils.php');
 
 $log->info("Lead detail view");
@@ -88,12 +99,17 @@ $xtpl->assign("DESCRIPTION", $focus->description);
 
 if ($focus->assigned_user_id == '' && (!isset($focus->id) || $focus->id=0)) $focus->assigned_user_id = $current_user->id; 
 $xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(), $focus->assigned_user_id));
-$xtpl->assign("LEAD_SOURCE_OPTIONS", get_select_options_with_id($app_list_strings['lead_source_dom'], $focus->lead_source));
-$xtpl->assign("SALUTATION_OPTIONS", get_select_options_with_id($app_list_strings['salutation_dom'], $focus->salutation));
-$xtpl->assign("INDUSTRY_OPTIONS", get_select_options_with_id($app_list_strings['industry_dom'], $focus->industry));
-$xtpl->assign("LEAD_STATUS_OPTIONS", get_select_options_with_id($app_list_strings['lead_status_dom'], $focus->lead_status));
-$xtpl->assign("RATING_OPTIONS", get_select_options_with_id($app_list_strings['rating_dom'], $focus->rating));
-$xtpl->assign("LICENSE_KEY_OPTIONS", get_select_options_with_id($app_list_strings['license_key_dom'], $focus->license_key));
+$xtpl->assign("LEAD_SOURCE_OPTIONS", get_select_options_with_id($comboFieldArray['lead_source_dom'], $focus->lead_source));
+$xtpl->assign("SALUTATION_OPTIONS", get_select_options_with_id($comboFieldArray['salutation_dom'], $focus->salutation));
+$xtpl->assign("INDUSTRY_OPTIONS", get_select_options_with_id($comboFieldArray['industry_dom'], $focus->industry));
+$xtpl->assign("LEAD_STATUS_OPTIONS", get_select_options_with_id($comboFieldArray['lead_status_dom'], $focus->lead_status));
+$xtpl->assign("RATING_OPTIONS", get_select_options_with_id($comboFieldArray['rating_dom'], $focus->rating));
+$xtpl->assign("LICENSE_KEY_OPTIONS", get_select_options_with_id($comboFieldArray['license_key_dom'], $focus->license_key));
+$xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+
+//CustomField
+$custfld = CustomFieldEditView($focus->id, "Leads", "leadcf", "leadid", $app_strings, $theme);
+$xtpl->assign("CUSTOMFIELD", $custfld);
 
 $xtpl->parse("main");
 

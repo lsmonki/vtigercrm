@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/EditView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/EditView.php,v 1.4 2004/12/07 11:24:12 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,6 +24,8 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Contacts/Forms.php');
+require_once('include/CustomFieldUtil.php');
+require_once('include/ComboUtil.php');
 
 global $mod_strings;
 global $app_list_strings;
@@ -56,6 +58,11 @@ if (isset($_REQUEST['account_id']) && is_null($focus->account_id)) {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
+//retreiving the combo values array
+$comboFieldNames = Array('lead_source'=>'lead_source_dom'
+                      ,'salutation'=>'salutation_dom');
+$comboFieldArray = getComboArray($comboFieldNames);
+
 require_once($theme_path.'layout_utils.php');
 
 $log->info("Contact detail view");
@@ -123,8 +130,13 @@ $xtpl->assign("DESCRIPTION", $focus->description);
 
 if ($focus->assigned_user_id == '' && (!isset($focus->id) || $focus->id=0)) $focus->assigned_user_id = $current_user->id;
 $xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active", $focus->assigned_user_id), $focus->assigned_user_id));
-$xtpl->assign("LEAD_SOURCE_OPTIONS", get_select_options_with_id($app_list_strings['lead_source_dom'], $focus->lead_source));
-$xtpl->assign("SALUTATION_OPTIONS", get_select_options_with_id($app_list_strings['salutation_dom'], $focus->salutation));
+$xtpl->assign("LEAD_SOURCE_OPTIONS", get_select_options_with_id($comboFieldArray['lead_source_dom'], $focus->lead_source));
+$xtpl->assign("SALUTATION_OPTIONS", get_select_options_with_id($comboFieldArray['salutation_dom'], $focus->salutation));
+
+//CustomField
+$custfld = CustomFieldEditView($focus->id, "Contacts", "contactcf", "contactid", $app_strings, $theme);
+$xtpl->assign("CUSTOMFIELD", $custfld);
+
 
 $xtpl->parse("main");
 

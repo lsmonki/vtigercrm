@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/DetailView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/DetailView.php,v 1.6 2004/12/10 07:44:23 jack Exp $
  * Description:  TODO To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -23,6 +23,7 @@
 require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Accounts/Account.php');
+require_once('include/CustomFieldUtil.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
@@ -65,7 +66,7 @@ $xtpl->assign("EMAIL1", $focus->email1);
 $xtpl->assign("EMAIL2", $focus->email2);
 $xtpl->assign("EMPLOYEES", $focus->employees);
 $xtpl->assign("ID", $focus->id);
-$xtpl->assign("INDUSTRY", $app_list_strings['industry_dom'][$focus->industry]);
+$xtpl->assign("INDUSTRY", $focus->industry);
 $xtpl->assign("NAME", $focus->name);
 $xtpl->assign("OWNERSHIP", $focus->ownership);
 $xtpl->assign("PARENT_ID", $focus->parent_id);
@@ -81,10 +82,17 @@ $xtpl->assign("SHIPPING_ADDRESS_COUNTRY", $focus->shipping_address_country);
 $xtpl->assign("SHIPPING_ADDRESS_POSTALCODE", $focus->shipping_address_postalcode);
 $xtpl->assign("SIC_CODE", $focus->sic_code);
 $xtpl->assign("TICKER_SYMBOL", $focus->ticker_symbol);
-$xtpl->assign("ACCOUNT_TYPE", $app_list_strings['account_type_dom'][$focus->account_type]);
+$xtpl->assign("ACCOUNT_TYPE", $focus->account_type);
 if ($focus->website != '') $xtpl->assign("WEBSITE", $focus->website);
 $xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
 $xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
+//Assigning Custom Field Values
+$custfld = CustomFieldDetailView($focus->id, "Accounts", "accountcf", "accountid");
+$xtpl->assign("CUSTOMFIELD", $custfld);
+ if($entityDel)
+       {
+              $xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+       }
 
 $xtpl->parse("main");
 $xtpl->out("main");

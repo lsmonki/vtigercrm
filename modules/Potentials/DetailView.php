@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/DetailView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/DetailView.php,v 1.6 2004/12/10 07:45:13 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,6 +24,7 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Opportunities/Opportunity.php');
 require_once('modules/Opportunities/Forms.php');
+require_once('include/CustomFieldUtil.php');
 
 global $mod_strings;
 global $app_strings;
@@ -55,18 +56,33 @@ $xtpl->assign("ID", $focus->id);
 $xtpl->assign("ACCOUNT_NAME", $focus->account_name);	
 $xtpl->assign("ACCOUNT_ID", $focus->account_id);	
 $xtpl->assign("ASSIGNED_TO", $focus->assigned_user_name);
-$xtpl->assign("LEAD_SOURCE", $app_list_strings['lead_source_dom'][$focus->lead_source]);
+$xtpl->assign("LEAD_SOURCE", $focus->lead_source);
 $xtpl->assign("NAME", $focus->name);
-$xtpl->assign("TYPE", $app_list_strings['opportunity_type_dom'][$focus->opportunity_type]);
+$xtpl->assign("TYPE", $focus->opportunity_type);
 if ($focus->amount != '') $xtpl->assign("AMOUNT", $app_strings['LBL_CURRENCY_SYMBOL'].$focus->amount);
 $xtpl->assign("DATE_ENTERED", $focus->date_entered);
 $xtpl->assign("DATE_CLOSED", $focus->date_closed);
 $xtpl->assign("NEXT_STEP", $focus->next_step);
-$xtpl->assign("SALES_STAGE", $app_list_strings['sales_stage_dom'][$focus->sales_stage]);
+$xtpl->assign("SALES_STAGE", $focus->sales_stage);
 $xtpl->assign("PROBABILITY", $focus->probability);
 $xtpl->assign("DESCRIPTION", nl2br($focus->description));
 $xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
 $xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
+//Assigning Custom Field Values
+$custfld = CustomFieldDetailView($focus->id, "Opportunities", "opportunitycf", "opportunityid");
+$xtpl->assign("CUSTOMFIELD", $custfld);
+
+
+
+  if($entityDel)
+        {
+               $xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+        }
+
+
+
+
+
 $xtpl->parse("main");
 $xtpl->out("main");
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Activities/SubPanelView.php,v 1.7 2004/09/25 09:56:26 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Activities/SubPanelView.php,v 1.8 2004/12/13 10:35:26 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -194,7 +194,7 @@ $button .= "<input type='hidden' name='action'>\n";
 $button .= "<tr><td>&nbsp;</td>";
 $button .= "<td><input title='".$current_module_strings['LBL_NEW_TASK_BUTTON_TITLE']."' accessyKey='".$current_module_strings['LBL_NEW_TASK_BUTTON_KEY']."' class='button' onclick=\"this.form.action.value='EditView';this.form.module.value='Tasks'\" type='submit' name='button' value='".$current_module_strings['LBL_NEW_TASK_BUTTON_LABEL']."'></td>\n";
 $button .= "<td><input title='".$current_module_strings['LBL_SCHEDULE_MEETING_BUTTON_TITLE']."' accessKey='".$current_module_strings['LBL_SCHEDULE_MEETING_BUTTON_KEY']."' class='button' onclick=\"this.form.action.value='EditView';this.form.module.value='Meetings'\" type='submit' name='button' value='".$current_module_strings['LBL_SCHEDULE_MEETING_BUTTON_LABEL']."'></td>\n";
-$button .= "<td><input title='".$current_module_strings['LBL_SCHEDULE_CALL_BUTTON_LABEL']."' accessyKey='".$current_module_strings['LBL_SCHEDULE_CALL_BUTTON_KEY']."' class='button' onclick=\"this.form.action.value='EditView';this.form.module.value='Calls'\" type='submit' name='button' value='".$current_module_strings['LBL_SCHEDULE_CALL_BUTTON_LABEL']."'></td>\n";
+$button .= "<td><input title='".$current_module_strings['LBL_SCHEDULE_CALL_BUTTON_TITLE']."' accessyKey='".$current_module_strings['LBL_SCHEDULE_CALL_BUTTON_KEY']."' class='button' onclick=\"this.form.action.value='EditView';this.form.module.value='Calls'\" type='submit' name='button' value='".$current_module_strings['LBL_SCHEDULE_CALL_BUTTON_LABEL']."'></td>\n";
 $button .= "</tr></form></table>\n";
 
 // Stick the form header out there.

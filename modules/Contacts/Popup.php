@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Popup.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Popup.php,v 1.3 2004/12/09 10:22:57 jack Exp $
  * Description:  This file is used for all popups on this module
  * The popup_picker.html file is used for generating a list from which to find and 
  * choose one instance.
@@ -88,9 +88,11 @@ if(isset($_REQUEST['form_submit']) && $_REQUEST['form'] == 'DetailView' && $_REQ
 {
 	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
 	$the_javascript .= "function set_return(contact_id, contact_name) {\n";
-	$the_javascript .= "	window.opener.document.DetailView.contact_id.value = contact_id; \n";
 	$the_javascript .= "	window.opener.document.DetailView.return_module.value = window.opener.document.DetailView.module.value; \n";
 	$the_javascript .= "	window.opener.document.DetailView.return_action.value = 'DetailView'; \n";
+	$the_javascript .= "	window.opener.document.DetailView.source_module.value = 'contacts'; \n";
+	$the_javascript .= "    window.opener.document.DetailView.contact_id.value = contact_id; \n";
+	$the_javascript .= "	window.opener.document.DetailView.entity_id.value = contact_id; \n";
 	$the_javascript .= "	window.opener.document.DetailView.return_id.value = window.opener.document.DetailView.record.value; \n";
 	$the_javascript .= "	window.opener.document.DetailView.action.value = 'Save'; \n";
 	$the_javascript .= "	window.opener.document.DetailView.submit(); \n";

@@ -75,7 +75,13 @@
 	<table width="100%" border="0" cellspacing="1" cellpadding="0">
 	<tr>
 	<th align="left" class="formSecHeader" colspan="4">{MOD.LBL_USER_SETTINGS}</th>
-	</tr><tr>
+	</tr>
+
+        <tr><td width="20%" class="dataLabel">{MOD.LBL_USER_ROLE}</td>
+        <td>{USER_ROLE} </td>
+      </tr>
+        
+     <tr>   
 	<td width="20%" class="dataLabel">{MOD.LBL_ADMIN}</td>
 	<td width="80%"><input name='is_admin' type="checkbox" tabindex='3' {DISABLED} {IS_ADMIN}></td>
 	<td class="dataLabel">&nbsp;</td>
@@ -109,7 +115,7 @@
 	<td width="20%" class="dataLabel">{MOD.LBL_FAX}</td>
 	<td width="30%"><input name='phone_fax' type="text" tabindex='6' size='20' maxlength='25' value='{PHONE_FAX}'></td>
 	</tr><tr>
-	<td width="20%" class="dataLabel">{MOD.LBL_EMAIL}</td>
+	<td width="20%" class="dataLabel" ><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT> {MOD.LBL_EMAIL}</td>
 	<td width="30%"><input name='email1' type="text" tabindex='5' size='35' maxlength='100' value='{EMAIL1}'></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_HOME_PHONE}</td>
 	<td width="30%"><input name='phone_home' type="text" tabindex='6' size='20' maxlength='25' value='{PHONE_HOME}'></td>

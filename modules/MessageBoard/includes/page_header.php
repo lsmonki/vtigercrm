@@ -483,7 +483,7 @@ $Select_time='<select name="search_time" size="1" onchange="SetLastVisit();" cla
 	else
 		$forward_page="$filename";
 
-	$s_hidden_fields = '<input type="hidden" name="redirect" value="' . $forward_page . '" />';
+	$f_hidden_fields = '<input type="hidden" name="redirect" value="' . $forward_page . '" />';
 
 function swapImage1($ocolumn,$orig_ocoloumn,$otype)
 {
@@ -522,7 +522,7 @@ $myEx="";
 $template->assign_vars(array(
 	'TERMS_OF_USE' => $lang['Terms_of_Use'],
     'SITENAME' => $board_config['sitename'],
-	'S_HIDDEN_FIELDS' => $s_hidden_fields,
+	'S_HIDDEN_FIELDS' => $f_hidden_fields,
 	'SITE_DESCRIPTION' => $board_config['site_desc'],
 	'PAGE_TITLE' => $page_title,
 	'SELECT_TIME' => $Select_time,

@@ -15,6 +15,7 @@
 
 require_once('modules/Leads/Lead.php');
 require_once('include/logging.php');
+require_once('database/DatabaseConnection.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
@@ -50,6 +51,7 @@ foreach($focus->additional_column_fields as $field)
 
 $focus->save();
 $return_id = $focus->id;
+save_customfields($focus->id);
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Leads";
@@ -60,4 +62,92 @@ if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $
 $local_log->debug("Saved record with id of ".$return_id);
 
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+
+//Code to save the custom field info into database
+function save_customfields($entity_id)
+{
+	$dbquery="select * from customfields where module='Leads'";
+	$result = mysql_query($dbquery);
+	$custquery = 'select * from leadcf where leadid="'.$entity_id.'"';
+        $cust_result = mysql_query($custquery);
+	if(mysql_num_rows($result) != 0)
+	{
+		
+		$columns='';
+		$values='';
+		$update='';
+		$noofrows = mysql_num_rows($result);
+		for($i=0; $i<$noofrows; $i++)
+		{
+			$fldName=mysql_result($result,$i,"fieldlabel");
+			$colName=mysql_result($result,$i,"column_name");
+			if(isset($_REQUEST[$colName]))
+			{
+				$fldvalue=$_REQUEST[$colName];
+				if(get_magic_quotes_gpc() == 1)
+                		{
+                        		$fldvalue = stripslashes($fldvalue);
+                		}
+			}
+			else
+			{
+				$fldvalue = '';
+			}
+			if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
+			{
+				//Update Block
+				if($i == 0)
+				{
+					$update = $colName.'="'.$fldvalue.'"';
+				}
+				else
+				{
+					$update .= ', '.$colName.'="'.$fldvalue.'"';
+				}
+			}
+			else
+			{
+				//Insert Block
+				if($i == 0)
+				{
+					$columns='leadid, '.$colName;
+					$values='"'.$entity_id.'", "'.$fldvalue.'"';
+				}
+				else
+				{
+					$columns .= ', '.$colName;
+					$values .= ', "'.$fldvalue.'"';
+				}
+			}
+			
+				
+		}
+		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
+		{
+			//Update Block
+			$query = 'update leadcf SET '.$update.' where leadid="'.$entity_id.'"'; 
+			mysql_query($query);
+		}
+		else
+		{
+			//Insert Block
+			$query = 'insert into leadcf ('.$columns.') values('.$values.')';
+			mysql_query($query);
+		}
+		
+	}
+	else
+	{
+		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
+		{
+			//Update Block
+		}
+		else
+		{
+			//Insert Block
+			$query = 'insert into leadcf ('.$columns.') values('.$values.')';
+			mysql_query($query);
+		}
+	}	
+}
 ?>

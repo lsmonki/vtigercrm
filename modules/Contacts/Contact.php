@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.5.2.1 2004/11/27 06:51:42 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.7 2004/12/13 09:28:11 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -244,6 +244,72 @@ class Contact extends SugarBean {
         {
           mysql_query('update contacts set deleted=1 where id = \'' .$id . '\'');
         }
+    
+    function getCount($user_name) 
+    {
+        $query = "select count(*) from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."'";
+
+//        echo "\n Query is " .$query ."\n";
+        $result = $this->db->query($query,true,"Error retrieving contacts count");
+        $rows_found =  $this->db->getRowCount($result);
+        $row = $this->db->fetchByAssoc($result, 0);
+
+  //      echo "ROW COUNT is " .$row["count(*)"];
+    //    echo "\nROWs FOUND is " .$rows_found;
+
+    
+    
+            return $row["count(*)"];
+    }       
+
+    function get_contacts($user_name,$from_index,$offset)
+    {   
+         $query = "select contacts.* from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."' limit " .$from_index ."," .$offset;
+    // $query = "select * from contacts limit " .$from_index ."," .$offset;
+//    echo $query;
+    return $this->process_list_query1($query);
+    
+    }
+
+
+    function process_list_query1($query)
+    {
+        $result =& $this->db->query($query,true,"Error retrieving $this->object_name list: ");
+        $list = Array();
+        $rows_found =  $this->db->getRowCount($result);
+        if($rows_found != 0)
+        {
+               for($index = 0 , $row = $this->db->fetchByAssoc($result, $index); $row && $index <$rows_found;$index++, $row = $this->db->fetchByAssoc($result, $index))
+            
+            {
+                foreach($this->list_fields as $field)
+                {
+                    if (isset($row[$field])) {
+                        $this->$field = $row[$field];
+                        //$this->log->debug("$this->object_name({$row['id']}): ".$field." = ".$this->$field);
+                    }   
+                    else     
+                    {   
+                            $this->$field = "";
+                    }   
+                }   
+    
+                $this->fill_in_additional_list_fields();
+    
+                    $list[] = $this;
+                }
+        }   
+
+        $response = Array();
+        $response['list'] = $list;
+        $response['row_count'] = $rows_found;
+        $response['next_offset'] = $next_offset;
+        $response['previous_offset'] = $previous_offset;
+
+
+
+        return $response;
+    }
 
 	function get_summary_text()
 	{

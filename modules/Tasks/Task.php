@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Tasks/Task.php,v 1.5 2004/11/02 07:59:35 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Tasks/Task.php,v 1.6 2004/11/17 11:49:42 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -104,7 +104,7 @@ class Task extends SugarBean {
 		$query .=', parent_id char(36)';
 		$query .=', contact_id char(36)';
 		$query .=', priority char(25)';
-		$query .=', description char(255)';
+		$query .=', description TEXT';
 		$query .=', deleted bool NOT NULL default 0';
 		$query .=', PRIMARY KEY ( ID ) )';
 

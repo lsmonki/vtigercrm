@@ -30,6 +30,10 @@
 	<td>
 		<table cellpadding="0" cellspacing="5" border="0">
 		<tr>
+	       <link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+	       <script type="text/javascript" src="jscalendar/calendar.js"></script>
+               <script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
+		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 			<form name="EditView" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Accounts">
 			<input type="hidden" name="record" value="{ID}">
@@ -50,7 +54,7 @@
 <tr>
 <td>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2">
-	<tr><th align="left" class="dataField" colspan="4">{MOD.LBL_ACCOUNT_INFORMATION}</th></tr>
+	<tr><th align="left" class="formSecHeader" colspan="4">{MOD.LBL_ACCOUNT_INFORMATION}</th></tr>
 	<tr>
 	<td width="20%" valign="top" class="dataLabel"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_ACCOUNT_NAME}</td>
 	<td width="30%" valign="top"  class="dataField"><input name='name' tabindex='1' size='35' maxlength='150' type="text" value="{NAME}"></td>
@@ -97,7 +101,8 @@
 	</tr></table>
 </td></tr></table>
 <BR>
-
+        {CUSTOMFIELD}
+<BR>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
 <tr><td>
 	<table width="100%" border="0" cellspacing="1" cellpadding="0">
@@ -127,9 +132,9 @@
 	<td width="30%"><input name='shipping_address_postalcode' tabindex='4' size='15' maxlength='20' value="{SHIPPING_ADDRESS_POSTALCODE}"></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_COUNTRY}</td>
-	<td width="30%"><input name='billing_address_country' tabindex='3' size='10' maxlength='20' value="{BILLING_ADDRESS_COUNTRY}"></td>
+	<td width="30%"><input name='billing_address_country' tabindex='3' size='10' maxlength='100' value="{BILLING_ADDRESS_COUNTRY}"></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_COUNTRY}</td>
-	<td width="30%"><input name='shipping_address_country' tabindex='4' size='10' maxlength='20' value="{SHIPPING_ADDRESS_COUNTRY}"></td>
+	<td width="30%"><input name='shipping_address_country' tabindex='4' size='10' maxlength='100' value="{SHIPPING_ADDRESS_COUNTRY}"></td>
 </tr></table>
 </td></tr></table>
 <BR>

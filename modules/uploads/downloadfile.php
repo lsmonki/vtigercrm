@@ -29,9 +29,9 @@ $fileContent = @mysql_result($result, 0, "data");
 $size = @mysql_result($result, 0, "filesize");
 header("Content-type: $fileType");
 //header("Content-length: $size");
-//header("Cache-Control: private");
+header("Cache-Control: private");
 header("Content-Disposition: attachment; filename=$name");
-//header("Content-Description: PHP Generated Data");
+header("Content-Description: PHP Generated Data");
 echo base64_decode($fileContent);
 }
 else

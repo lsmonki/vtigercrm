@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Save.php,v 1.3 2004/11/05 04:40:51 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Save.php,v 1.4 2004/11/25 10:54:14 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -22,7 +22,7 @@
 
 require_once('modules/Users/User.php');
 require_once('include/logging.php');
-
+require_once('modules/Users/UserInfoUtil.php');
 $log =& LoggerManager::getLogger('index');
 
 
@@ -100,6 +100,13 @@ else {
 		$return_id = $focus->id;
 	}
 }
+
+if(isset($_POST['user_role']))
+{
+   updateUser2RoleMapping($_POST['user_role'],$focus->id);
+}
+
+
 if(isset($_POST['return_module']) && $_POST['return_module'] != "") $return_module = $_POST['return_module'];
 else $return_module = "Users";
 if(isset($_POST['return_action']) && $_POST['return_action'] != "") $return_action = $_POST['return_action'];

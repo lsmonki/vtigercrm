@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/listview.php,v 1.10 2004/11/05 09:58:28 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/listview.php,v 1.11 2004/12/08 12:09:36 jack Exp $
  * Description:  Includes generic helper functions used throughout the application.
  ********************************************************************************/
 require_once('include/logging.php');
@@ -174,7 +174,7 @@ function listView($display_title, $html_varName, $xtemplate , $seed, $orderby){
 	
 	if( $display_title == 'Lead List')
 	{
-	$button ="<table cellspacing='0' cellpadding='1' border='0'><form action='index.php?module=imports&action=fetchfile' method=post target=''><tr><td>&nbsp;</td><td><input class='button' type='submit' name='Import' value='Import Leads'/></td></form></tr></table>";
+	$button ="<table cellspacing='0' cellpadding='1' border='0'><form action='index.php?module=Leads&action=fetchfile' method=post target=''><tr><td>&nbsp;</td><td><input class='button' type='submit' name='Import' value='Import Leads'/></td></form></tr></table>";
 
 	//include 'modules/imports/ImportButton.html';
 //	$importTitle = "&nbsp;&nbsp; [ <A href='index.php?module=imports&action=import'><Blink><B>".$app_strings['LNK_IMPORT_LEADS']."</Blink></B></A> ]";

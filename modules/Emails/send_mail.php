@@ -23,9 +23,10 @@
 
 require("class.phpmailer.php");
 
-function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password)
+function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password)
+//function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password)
 {
-	$sql="select email1 from users where id='" .$to ."'" ;
+	$sql="select email1 from ". $srcmodule ." where id='" .$to ."'" ;
         $result = mysql_query($sql);
 	$to = mysql_result($result,0,"email1");
 	$initialfrom = $from;

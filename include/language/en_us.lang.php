@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.16 2004/10/29 09:55:08 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.18 2004/11/25 10:43:05 jack Exp $
  * Description:  Defines the English language pack for the base application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -51,6 +51,8 @@ $app_strings = Array(
 'LBL_CONVERT_BUTTON_LABEL'=>'Convert Lead',
 'LBL_TABCUSTOMISE_BUTTON_KEY'=>'C',
 'LBL_TABCUSTOMISE_BUTTON_LABEL'=>'Customize Tab',
+'LBL_ROLES_BUTTON_LABEL'=>'Show Roles',
+'LBL_LISTROLES_BUTTON_LABEL'=>'List Roles',
 'LBL_FORUM_HIDE_BUTTON_LABEL'=>'Hide Forums',
 'LBL_FORUM_SHOW_BUTTON_LABEL'=>'Show Forums',
 'LBL_NEW_BUTTON_TITLE'=>'New [Alt+N]',
@@ -86,7 +88,7 @@ $app_strings = Array(
 'LBL_SELECT_USER_BUTTON_TITLE'=>'Select User [Alt+U]',
 'LBL_SELECT_USER_BUTTON_KEY'=>'U',
 'LBL_SELECT_USER_BUTTON_LABEL'=>'Select User',
-
+'LBL_SETTINGS'=>'Settings',
 'LBL_LIST_USERIP'=>'User IP',
 'LBL_LIST_SIGNIN'=>'Signin Time',
 'LBL_LIST_SIGNOUT'=>'Signout Time',

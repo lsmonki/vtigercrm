@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/language/en_us.lang.php,v 1.4 2004/10/29 09:55:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/language/en_us.lang.php,v 1.5 2004/11/25 09:55:12 jack Exp $
  * Description:  Defines the English language pack 
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -63,6 +63,7 @@ $mod_strings = Array(
 'LBL_TYPE'=>'Type:',
 'LBL_ANNUAL_REVENUE'=>'Annual Revenue:',
 'LBL_ADDRESS_INFORMATION'=>'Address Information',
+'LBL_ACCOUNT_INFORMATION'=>'Account Information',
 'LBL_BILLING_ADDRESS'=>'Billing Address:',
 'LBL_SHIPPING_ADDRESS'=>'Shipping Address:',
 'LBL_ANY_ADDRESS'=>'Any Address:',

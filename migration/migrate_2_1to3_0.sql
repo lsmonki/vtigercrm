@@ -8,11 +8,11 @@
 # All Rights Reserved.
 # Contributor(s): ____________________________________
 
-# Description:  Schema migration from 1.1x -> 1.5
+# Description:  Schema migration from 2.1 -> 3.0
 
 
-# This SQL script must be run on a Sugar Sales 1.1 database in order for that db
-# to function with the 1.5 application.
+# This SQL script must be run on a vtigerCRM 2.1 database in order for that db
+# to function with the 3.0 application.
 
 UPDATE calls SET parent_type = 'Accounts' WHERE parent_type = 'Account';
 

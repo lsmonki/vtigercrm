@@ -58,7 +58,7 @@
 <td>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
 	<tr>
-	<th align="left" class="dataField" colspan="4">{MOD.LBL_CONTACT_INFORMATION}</th>
+	<th align="left" class="formSecHeader" colspan="4">{MOD.LBL_CONTACT_INFORMATION}</th>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_FIRST_NAME}</td>
 	<td width="30%"><select name='salutation'>{SALUTATION_OPTIONS}</select><input name='first_name' tabindex='1' size='25' maxlength='25' type="text" value="{FIRST_NAME}"></td>
@@ -115,12 +115,14 @@
 	</tr></table>
 </td></tr></table>
 <BR>
+	{CUSTOMFIELD}
+<BR>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr><td>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
 	<tr>
-	<th align="left" class="dataField" colspan="4">{MOD.LBL_ADDRESS_INFORMATION}</th>
+	<th align="left" class="formSecHeader" colspan="4">{MOD.LBL_ADDRESS_INFORMATION}</th>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_PRIMARY_ADDRESS}</td>
 	<td width="30%"><textarea name='primary_address_street' rows="2" tabindex='3' cols="30">{PRIMARY_ADDRESS_STREET}</textarea></td>
@@ -145,9 +147,9 @@
 	<td width="30%"><input name='alt_address_postalcode' tabindex='4' size='15' maxlength='20' value='{ALT_ADDRESS_POSTALCODE}'></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_COUNTRY}</td>
-	<td width="30%"><input name='primary_address_country' tabindex='3' size='10' maxlength='20' value='{PRIMARY_ADDRESS_COUNTRY}'></td>
+	<td width="30%"><input name='primary_address_country' tabindex='3' size='10' maxlength='100' value='{PRIMARY_ADDRESS_COUNTRY}'></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_COUNTRY}</td>
-	<td width="30%"><input name='alt_address_country' tabindex='4' size='10' maxlength='20' value='{ALT_ADDRESS_COUNTRY}'></td>
+	<td width="30%"><input name='alt_address_country' tabindex='4' size='10' maxlength='100' value='{ALT_ADDRESS_COUNTRY}'></td>
 </tr></table>
 </td></tr></table>
 <BR>

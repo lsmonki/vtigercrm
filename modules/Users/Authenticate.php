@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Authenticate.php,v 1.3 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Authenticate.php,v 1.5 2004/12/05 11:23:41 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -46,6 +46,14 @@ if($focus->is_authenticated())
 
 	// save the user information into the session
 	// go to the home screen
+	require_once('modules/Users/UserInfoUtil.php');
+	$rolename = fetchUserRole($focus->id);
+	//setting the role into the session
+	$_SESSION['authenticated_user_roleid'] = $rolename;
+        
+        setPermittedTabs2Session($rolename);
+	setPermittedActions2Session($rolename);
+	
 	header("Location: index.php?action=index&module=Home");
 	session_unregister('login_password');
 	session_unregister('login_error');
@@ -101,7 +109,6 @@ if($focus->is_authenticated())
 	{
 		unlink($tmp_file_name);
 	}
-
 }
 else
 {

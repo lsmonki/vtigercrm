@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/orange/header.php,v 1.8 2004/11/09 07:42:56 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/orange/header.php,v 1.11 2004/12/13 11:50:32 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -68,7 +68,7 @@ else $xtpl->assign("CURRENT_USER", $current_user->user_name);
  	
 $xtpl->assign("CURRENT_USER_ID", $current_user->id);
 
-if (is_admin($current_user)) $xtpl->assign("ADMIN_LINK", "<a href='index.php?module=Administration&action=index'><img src='".$image_path."/admin.gif' hspace='3' align='absmiddle' border='0'>".$app_strings['LBL_ADMIN']."</a>");
+if (is_admin($current_user)) $xtpl->assign("ADMIN_LINK", "<a href='index.php?module=Administration&action=index'><img src='".$image_path."/admin.gif' hspace='3' align='absmiddle' border='0'>".$app_strings['LBL_ADMIN']."</a>&nbsp;<a href='index.php?module=Settings&action=index'><img src='".$image_path."/settings.gif' hspace='3' align='absmiddle' border='0'>".$app_strings['LBL_SETTINGS']."</a>");
 
 if (isset($_REQUEST['query_string'])) $xtpl->assign("SEARCH", $_REQUEST['query_string']);
 
@@ -150,13 +150,66 @@ else {
 $xtpl->parse("main.left_form.left_form_recent_view");
 $xtpl->parse("main.left_form");
 
+
+
+//check for the access for Create/Edit and enable or disable 
+
+//check for the presence of the currentModule and  also for EditView permission
+
+
+
+
+$permissionData = $_SESSION['permission_set'];
+//print_r($permissionData);
+$testaction='EditView';
+      $i=0;
+
+        while($i<count($permissionData))
+        {
+          if($permissionData[$i][0]==$currentModule && $permissionData[$i][1]==$testaction)
+          {
+            $actionpermissionvalue=$permissionData[$i][2];
+            if($actionpermissionvalue == 0)
+            {
+              //echo "You are not permitted this operation";
+              //exit();
+            }
+            else
+            {
+
+              require_once("modules/".$currentModule."/Forms.php");
+              if ($currentModule && $action == "index" && function_exists('get_new_record_form')) {
+                $xtpl->assign("NEW_RECORD", get_new_record_form());
+                $xtpl->parse("main.left_form_new_record");
+              }
+              
+            }
+            break;
+          }
+          $i++;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
 require_once("modules/".$currentModule."/Forms.php");
 if ($currentModule && $action == "index" && function_exists('get_new_record_form')) {
 	$xtpl->assign("NEW_RECORD", get_new_record_form());
 	$xtpl->parse("main.left_form_new_record");
 }
 
-
+*/
 
 $xtpl->parse("main");
 $xtpl->out("main");

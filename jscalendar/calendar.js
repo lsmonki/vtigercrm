@@ -1685,7 +1685,11 @@ Date.prototype.print = function (str) {
 
 	var re = /%./g;
 	if (!Calendar.is_ie5)
-		return str.replace(re, function (par) { return s[par] || par; });
+
+		//	return str.replace(re, function (par) { return s[par] || par; });
+		// fix provided by dtnadmin. Many thanks
+		for (var i in s) str=str.replace(i, s[i]);
+		return str;
 
 	var a = str.match(re);
 	for (var i = 0; i < a.length; i++) {

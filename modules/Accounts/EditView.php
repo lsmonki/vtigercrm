@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/EditView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/EditView.php,v 1.5 2004/12/07 11:22:51 jack Exp $
  * Description:  TODO To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,6 +24,8 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Accounts/Account.php');
 require_once('modules/Accounts/Forms.php');
+require_once('include/CustomFieldUtil.php');
+require_once('include/ComboUtil.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -42,6 +44,12 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
+//retreiving the combo values array
+$comboFieldNames = Array('account_type'=>'account_type_dom'
+                      ,'industry'=>'industry_dom');
+$comboFieldArray = getComboArray($comboFieldNames);
+
+
 require_once($theme_path.'layout_utils.php');
 
 $log->info("Account detail view");
@@ -91,8 +99,8 @@ $xtpl->assign("WEBSITE", $focus->website);
 
 if ($focus->assigned_user_id == '' && (!isset($focus->id) || $focus->id=0)) $focus->assigned_user_id = $current_user->id; 
 $xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active", $focus->assigned_user_id), $focus->assigned_user_id));
-$xtpl->assign("ACCOUNT_TYPE_OPTIONS", get_select_options_with_id($app_list_strings['account_type_dom'], $focus->account_type));
-$xtpl->assign("INDUSTRY_OPTIONS", get_select_options_with_id($app_list_strings['industry_dom'], $focus->industry));
+$xtpl->assign("ACCOUNT_TYPE_OPTIONS", get_select_options_with_id($comboFieldArray['account_type_dom'], $focus->account_type));
+$xtpl->assign("INDUSTRY_OPTIONS", get_select_options_with_id($comboFieldArray['industry_dom'], $focus->industry));
 
 if(isset($_REQUEST['parent_id'])) $xtpl->assign("PARENT_ID", $_REQUEST['parent_id']);
 if(isset($_REQUEST['parent_name'])) $xtpl->assign("PARENT_NAME", urldecode($_REQUEST['parent_name']));
@@ -105,6 +113,12 @@ if(isset($_REQUEST['ownership'])) $xtpl->assign("OWNERSHIP", urldecode($_REQUEST
 if(isset($_REQUEST['website'])) $xtpl->assign("WEBSITE", urldecode($_REQUEST['website']));
 if(isset($_REQUEST['industry'])) $xtpl->assign("INDUSTRY_OPTIONS", get_select_options_with_id($app_list_strings['industry_dom'], urldecode($_REQUEST['industry'])));
 if(isset($_REQUEST['account_type'])) $xtpl->assign("ACCOUNT_TYPE_OPTIONS", get_select_options_with_id($app_list_strings['account_type_dom'], urldecode($_REQUEST['account_type'])));
+ $xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+
+//CustomField
+//$date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
+$custfld = CustomFieldEditView($focus->id, "Accounts", "accountcf", "accountid", $app_strings, $theme);
+$xtpl->assign("CUSTOMFIELD", $custfld);
 
 $xtpl->parse("main");
 

@@ -16,21 +16,34 @@ require_once('data/SugarBean.php');
 
 class TabMenu
 {
+  
+  function getTabNames($permittedModuleList="")
+  {
+    
+    $conn= new PearDatabase();
+    if($permittedModuleList=="")
+    {
+      $sql="SELECT name from tabmenu where presence = 1 order by sequence";
+    }
+    else
+    {
+      $sql="SELECT name from tabmenu where id in (" .$permittedModuleList .") and presence = 1 order by sequence";
+      //echo $sql;
+    }
+   
+    $tabrow=$conn->query($sql);
+    if(mysql_num_rows($tabrow) != 0)
+    {
+      while ($result = mysql_fetch_array($tabrow))
+      {
+        $tabmenu[]=$result['name'];
+      }
+    }
+    return $tabmenu;
+  }
 
-	function getTabNames()
-	{
-		$conn= new PearDatabase();
-		$sql="SELECT name from tabmenu where presence = 1 order by sequence";
-		$tabrow=$conn->query($sql);
-		if(mysql_num_rows($tabrow) != 0)
-		{
-			while ($result = mysql_fetch_array($tabrow))
-			{
-				$tabmenu[]=$result['name'];
-			}
-		}
-		return $tabmenu;
-	}
+
+
 }
 // TabMenu shown in the header page.
 class Tab extends SugarBean {

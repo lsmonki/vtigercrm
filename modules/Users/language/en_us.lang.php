@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.4 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.5 2004/11/25 10:41:17 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -25,7 +25,7 @@ $mod_strings = Array(
 'LBL_NEW_FORM_TITLE'=>'New User',
 'LBL_USER'=>'Users:',
 'LBL_LOGIN'=>'Login',
-
+'LBL_USER_ROLE'=>'Role',
 'LBL_LIST_NAME'=>'Name',
 'LBL_LIST_LAST_NAME'=>'Last Name',
 'LBL_LIST_USER_NAME'=>'User Name',

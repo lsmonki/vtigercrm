@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Tasks/DetailView.php,v 1.3 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Tasks/DetailView.php,v 1.4 2004/12/10 07:47:47 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -98,6 +98,11 @@ $xtpl->assign("DESCRIPTION", nl2br($focus->description));
 if(isset($focus->priority)) $xtpl->assign("PRIORITY", $app_list_strings['task_priority_dom'][$focus->priority]);
 $xtpl->assign("TYPE", $app_list_strings['record_type_display'][$focus->parent_type]);
 $xtpl->assign("STATUS", $app_list_strings['task_status_dom'][$focus->status]);
+
+  if($entityDel)
+        {
+               $xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+        }
 
 $xtpl->parse("main");
 

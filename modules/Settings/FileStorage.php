@@ -35,9 +35,7 @@ function create_tables ()
 		$this->log->info($query);
 
 		mysql_query($query);
-	// exception handling logic here if the table can't be created.
-
-	}
+}
 
 	function drop_tables () {
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.22 2004/11/04 11:38:18 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.31 2004/12/10 06:02:09 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -48,7 +48,7 @@ require_once('modules/Users/LoginHistory.php');
 require_once('modules/Settings/FileStorage.php');
 require_once('data/Tracker.php'); 
 require_once('include/utils.php');
-
+require_once('modules/Users/Security.php');
 // load up the config_override.php file.  This is used to provide default user settings
 if (is_file("config_override.php")) {
 	require_once("config_override.php");
@@ -59,9 +59,7 @@ $log =& LoggerManager::getLogger('create_table');
 function createSchemaTable () {
 	global $log;
 	// create the schema tables
-	$query = "CREATE TABLE modules (id int(11) NOT NULL auto_increment,
-				name text,
-				PRIMARY KEY ( ID ))";
+	$query = "CREATE TABLE modules (id int(11) NOT NULL auto_increment, name text,PRIMARY KEY ( ID ))";
 
 	$this->query($query);
 }
@@ -183,6 +181,9 @@ function create_default_users()
 			if (isset($default_user_is_admin) && $default_user_is_admin) $default_user->is_admin = 'on';
                 $default_user->user_password = $default_user->encrypt_password($default_password);
                 $default_user->save();
+
+
+	
         }
 }
 ?>
@@ -230,6 +231,7 @@ $modules = array(
 ,"Opportunity"
 ,"Lead"
 ,"Tab"
+,"Security"
 ,"LoginHistory"
 ,"FileStorage"
 ,"Headers"
@@ -287,6 +289,26 @@ if ($new_tables)
 {
         create_default_users();
 }
+//Populating users table
+$sql_stmt1 = 'insert into users(id,user_name,user_password,last_name,email1) values("81db51d0-c67e-8604-699e-41a74a5a5c68","standarduser","stX/AHHNK/Gkw","standarduser","standarduser@standard.user.com")';
+mysql_query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error()); 
+	
+$sql_stmt2 = "insert into user2role(userid,rolename) values('81db51d0-c67e-8604-699e-41a74a5a5c68','standard_user')";
+mysql_query($sql_stmt2) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+
+
+//Create and populate combo tables
+require_once('include/PopulateComboValues.php');
+$combo = new PopulateComboValues();
+$combo->create_tables();
+
+//Create and populate Custom Field tables;
+require_once('include/PopulateCustomFieldTables.php');
+create_custom_field_tables();
+
+//Creating and Populating PHPBB tables and data
+require_once('include/PopulatePhpBBtables.php');
+create_populate_phpbb();
 
 // populating the db with seed data
 if ($db_populate)
@@ -318,7 +340,61 @@ $endTime = microtime();
 
 $deltaTime = microtime_diff($startTime, $endTime);
 
+function populatePermissions4StandardUser()
+{
+	
+  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Leads','EditView',1,1,'')");
+  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Leads','Delete',1,1,'')");
+  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Leads','index',1,1,'')");
 
+
+
+  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Accounts','EditView',1,1,'')");
+  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Accounts','Delete',1,1,'')");
+mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Accounts','index',1,1,'')");
+ 
+ mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Contacts','EditView',1,1,'')");
+ mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Contacts','Delete',1,1,'')");
+mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Contacts','index',1,1,'')");
+ 
+ mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Opportunities','EditView',1,1,'')");
+ mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Opportunities','Delete',1,1,'')");
+ mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Opportunities','index',1,1,'')");
+
+ mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Calls','EditView',1,1,'')");
+ mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Calls','Delete',1,1,'')");
+ mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Calls','index',1,1,'')");
+                            
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Emails','EditView',1,1,'')");
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Emails','Delete',1,1,'')");
+                mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Emails','index',1,1,'')");
+
+
+
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Tasks','EditView',1,1,'')");
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Tasks','Delete',1,1,'')");
+                mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Tasks','index',1,1,'')");
+
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Notes','EditView',1,1,'')");
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Notes','Delete',1,1,'')");
+                mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Notes','index',1,1,'')");
+
+
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Meetings','EditView',1,1,'')");
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Meetings','Delete',1,1,'')");
+
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Cases','EditView',1,1,'')");
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Cases','Delete',1,1,'')");
+                mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Cases','index',1,1,'')");
+                
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','imports','fetchfile',0,1,'')");
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Contacts','BusinessCard',0,1,'')");
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Contacts','Import',0,1,'')");
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Accounts','Import',0,1,'')");
+		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Opportunities','Import',0,1,'')");
+
+
+}
 
 
 ?>

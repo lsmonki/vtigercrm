@@ -189,5 +189,5 @@ else {
 [<a href="index.php?module=<?php echo $currentModule;?>&action=<?php echo $action;?>&pbss_edit=true"><?php echo $current_module_strings['LBL_EDIT'];?></a>]
 </FONT></div>
 <?php } 
-echo get_validate_chart_js();
+//echo get_validate_chart_js();
 }?>

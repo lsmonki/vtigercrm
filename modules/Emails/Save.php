@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.4 2004/11/03 10:26:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.7 2004/12/13 06:40:27 jack Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -27,9 +27,7 @@ require_once('send_mail.php');
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Email();
-
 $focus->retrieve($_REQUEST['record']);
-
 foreach($focus->column_fields as $field)
 {
 	if(isset($_REQUEST[$field]))
@@ -51,7 +49,35 @@ foreach($focus->additional_column_fields as $field)
 }
 
 $focus->save();
-send_mail($_REQUEST['assigned_user_id'],$current_user->user_name,$_REQUEST['name'],$_REQUEST['description'],$mail_server,$mail_server_username,$mail_server_password);
+
+//this is to receive the data from the Select Users button
+$_REQUEST['assigned_user_id']=$_REQUEST['user_id'];
+
+//this will be the case if the Select Contact button is chosen
+if($_REQUEST['assigned_user_id'] == null)
+{
+   $_REQUEST['assigned_user_id']=$_REQUEST['entity_id'];
+}
+
+//this is to receive the data from the Select Users button
+if($_REQUEST['source_module'] == null)
+{
+	$module = 'users';
+}
+//this will be the case if the Select Contact button is chosen
+else
+{
+	$module = $_REQUEST['source_module'];
+}
+
+//subject, contents
+
+$_REQUEST['name'] = $focus->name;
+$_REQUEST['description'] = $focus->description;
+
+
+
+send_mail($module,$_REQUEST['assigned_user_id'],$current_user->user_name,$_REQUEST['name'],$_REQUEST['description'],$mail_server,$mail_server_username,$mail_server_password);
 
 
 $return_id = $focus->id;

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.4 2004/11/08 13:48:29 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.6 2004/12/05 11:23:26 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -94,6 +94,29 @@ if (is_admin($current_user)) {
 	$status .= get_select_options_with_id($app_list_strings['user_status_dom'], $focus->status);
 	$status .= "</select></td>\n";
 	$xtpl->assign("USER_STATUS_OPTIONS", $status);
+
+
+        
+        $ROLE_SELECT_OPTION = '<select name="user_role">';
+               $sql = "select name from role";
+                  $result = mysql_query($sql);
+                  $temprow = mysql_fetch_array($result);
+                   do
+                   {
+                    $rolename=$temprow["name"];
+                    $ROLE_SELECT_OPTION .= '<option value=';
+                    $ROLE_SELECT_OPTION .=  $rolename;
+                    $ROLE_SELECT_OPTION .=  '>';
+                    $ROLE_SELECT_OPTION .= $temprow["name"];
+                    $ROLE_SELECT_OPTION .= '</option>';
+                   }while($temprow = mysql_fetch_array($result));
+                                  
+                   $ROLE_SELECT_OPTION .= ' </select>';
+                   
+                   $xtpl->assign("USER_ROLE", $ROLE_SELECT_OPTION);
+
+
+
 }
 
 if (isset($default_user_name)

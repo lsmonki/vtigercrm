@@ -16,6 +16,8 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Leads/Lead.php');
 require_once('modules/Leads/Forms.php');
+require_once('database/DatabaseConnection.php');
+require_once('include/CustomFieldUtil.php');
 
 global $mod_strings;
 global $app_strings;
@@ -46,8 +48,8 @@ $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php
 $xtpl->assign("ID", $focus->id);
 $xtpl->assign("ACCOUNT_NAME", $focus->account_name);	
 $xtpl->assign("ACCOUNT_ID", $focus->account_id);	
-$xtpl->assign("LEAD_SOURCE", $app_list_strings['lead_source_dom'][$focus->lead_source]);
-$xtpl->assign("SALUTATION", $app_list_strings['salutation_dom'][$focus->salutation]);
+$xtpl->assign("LEAD_SOURCE", $focus->lead_source);
+$xtpl->assign("SALUTATION", $focus->salutation);
 $xtpl->assign("FIRST_NAME", $focus->first_name);
 $xtpl->assign("LAST_NAME", $focus->last_name);
 $xtpl->assign("PHONE", $focus->phone);
@@ -56,13 +58,13 @@ $xtpl->assign("MOBILE", $focus->mobile);
 $xtpl->assign("DESIGNATION", $focus->designation);
 $xtpl->assign("FAX", $focus->fax);
 $xtpl->assign("EMAIL", $focus->email);
-$xtpl->assign("INDUSTRY", $app_list_strings['industry_dom'][$focus->industry]);
+$xtpl->assign("INDUSTRY", $focus->industry);
 $xtpl->assign("WEBSITE", $focus->website);
 $xtpl->assign("ANNUAL_REVENUE", $focus->annual_revenue);
-$xtpl->assign("LEAD_STATUS", $app_list_strings['lead_status_dom'][$focus->lead_status]);
-$xtpl->assign("LICENSE_KEY", $app_list_strings['license_key_dom'][$focus->license_key]);
-$xtpl->assign("RATING", $app_list_strings['rating_dom'][$focus->rating]);
-$xtpl->assign("ASSIGNED_TO", $focus->assigned_user_name);
+$xtpl->assign("LEAD_STATUS", $focus->lead_status);
+$xtpl->assign("LICENSE_KEY", $focus->license_key);
+$xtpl->assign("RATING", $focus->rating);
+$xtpl->assign("ASSIGNED_TO", get_assigned_user_name($focus->assigned_user_id));
 $xtpl->assign("EMPLOYEES", $focus->employees);
 $xtpl->assign("ADDRESS_STREET", $focus->address_street);
 $xtpl->assign("ADDRESS_CITY", $focus->address_city);
@@ -72,6 +74,14 @@ $xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
 $xtpl->assign("YAHOO_ID", $focus->yahoo_id);
 if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $xtpl->assign("YAHOO_MESSENGER", "<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$focus->yahoo_id."'><img border=0 src='http://opi.yahoo.com/online?u=".$focus->yahoo_id."'&m=g&t=2'></a>");
 $xtpl->assign("DESCRIPTION", $focus->description);
+
+if($entityDel)
+	{
+		$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+	}
+//Assigning Custom Field Values
+$custfld = CustomFieldDetailView($focus->id, "Leads", "leadcf", "leadid");
+$xtpl->assign("CUSTOMFIELD", $custfld);
 $xtpl->parse("main");
 $xtpl->out("main");
 

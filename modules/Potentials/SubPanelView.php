@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/SubPanelView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/SubPanelView.php,v 1.3 2004/12/09 09:00:28 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -23,6 +23,8 @@
 require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
 require_once('include/ListView/ListView.php');
+
+
 
 global $app_strings;
 //we don't want the parent module's string file, but rather the string file specifc to this subpanel
@@ -42,6 +44,11 @@ require_once($theme_path.'layout_utils.php');
 // focus_list is the means of passing data to a SubPanelView.
 global $focus_list;
 
+//$xtpl=new XTemplate ('modules/Opportunities/SubPanelView.html');
+//$xtpl->assign("RETURN_URL", "&return_module=$current_module&return_action=$action&return_id=$focus->id");
+//$xtpl->parse("main");
+//$xtpl->out("main");
+
 $button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
 $button .= "<input type='hidden' name='module' value='Opportunities'>\n";
 if ($currentModule == 'Accounts') $button .= "<input type='hidden' name='account_id' value='$focus->id'>\n<input type='hidden' name='account_name' value=\"$focus->name\">\n";
@@ -58,9 +65,10 @@ $button .= "<td><input title='".$app_strings['LBL_NEW_BUTTON_TITLE']."' accessyK
 if ($currentModule == 'Accounts') $button .= "<td><input title='".$app_strings['LBL_SELECT_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_SELECT_BUTTON_KEY']."' type='button' class='button' value='  ".$app_strings['LBL_SELECT_BUTTON_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Opportunities&action=Popup&html=Popup_picker&form=DetailView&form_submit=true\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
 else $button .= "<td><input title='".$app_strings['LBL_SELECT_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_SELECT_BUTTON_KEY']."' type='button' class='button' value='  ".$app_strings['LBL_SELECT_BUTTON_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Opportunities&action=Popup&html=Popup_picker&form=ContactDetailView&form_submit=true&query=true&account_id=$focus->account_id&account_name=$focus->account_name\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
 $button .= "</tr></form></table>\n";
-
+ 
 $ListView = new ListView();
 $ListView->initNewXTemplate( 'modules/Opportunities/SubPanelView.html',$current_module_strings);
+$ListView->xTemplateAssign("RETURN_URL", "&return_module=".$currentModule."&return_action=DetailView&return_id={$_REQUEST['record']}");
 $ListView->setHeaderTitle($current_module_strings['LBL_MODULE_NAME'] );
 $ListView->setHeaderText($button);
 $ListView->processListView($focus_list, "main", "OPPORTUNITY");
