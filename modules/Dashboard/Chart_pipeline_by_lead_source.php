@@ -22,9 +22,14 @@
 
 require_once('include/utils.php');
 require_once('include/logging.php');
-require_once("modules/Opportunities/Charts.php");
-global $app_list_strings, $current_language, $ids, $tmp_dir;
+require_once("modules/Potentials/Charts.php");
+require_once('include/ComboUtil.php');
+global $current_language, $ids, $tmp_dir;
 $current_module_strings = return_module_language($current_language, 'Dashboard');
+
+// Get _dom arrays from Database
+$comboFieldNames = Array('leadsource'=>'lead_source_dom');
+$comboFieldArray = getComboArray($comboFieldNames);
 
 $log = LoggerManager::getLogger('CSIM_pipeline_by_lead_source');
 
@@ -51,11 +56,11 @@ elseif (isset($_REQUEST['pbls_lead_sources']) && count($_REQUEST['pbls_lead_sour
 //set $datax using selected sales stage keys 
 if (count($tempx) > 0) {
 	foreach ($tempx as $key) {
-		$datax[$key] = $app_list_strings['lead_source_dom'][$key];
+		$datax[$key] = $comboFieldArray['lead_source_dom'][$key];
 	}
 }
 else {
-	$datax = $app_list_strings['lead_source_dom'];
+	$datax = $comboFieldArray['lead_source_dom'];
 }
 $log->debug("datax is:");
 $log->debug($datax);
@@ -108,7 +113,7 @@ if (isset($_REQUEST['pbls_edit']) && $_REQUEST['pbls_edit'] == 'true') {
 <table cellpadding="2" border="0"><tbody>
 <tr>
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_LEAD_SOURCES'];?></td>
-<td valign='top'><select name="pbls_lead_sources[]" multiple size='3'><?php echo get_select_options_with_id($app_list_strings['lead_source_dom'],$_SESSION['pbls_lead_sources']); ?></select></td>
+<td valign='top'><select name="pbls_lead_sources[]" multiple size='3'><?php echo get_select_options_with_id($comboFieldArray['lead_source_dom'],$_SESSION['pbls_lead_sources']); ?></select></td>
 </tr><tr>
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_USERS'];?></td>
 <td valign='top'><select name="pbls_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(false),$_SESSION['pbls_ids']); ?></select></td>

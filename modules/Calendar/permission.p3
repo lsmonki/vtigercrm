@@ -17,7 +17,7 @@ if ( ! isset($tutos['base']) ) {
 # Files noted here are included everywhere
 include_once $calpath .'base.pinc';
 include_once $calpath .'module_base.pinc';
-include_once $calpath .'handler.pinc';
+#include_once $calpath .'handler.pinc';
 include_once $calpath .'db.p3';
 include_once $calpath .'Date.pinc';
 include_once $calpath .'user.pinc';

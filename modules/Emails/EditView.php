@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/EditView.php,v 1.10 2005/01/13 09:18:56 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/EditView.php,v 1.17 2005/03/05 05:33:21 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,6 +24,7 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/Emails/Forms.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -36,12 +37,22 @@ global $current_user;
 
 $focus = new Email();
 
+if(isset($_REQUEST['message']) && $_REQUEST['message']== 'Language string failed to load: connect_host')
+	echo '<h3><b><font color=red>Please Check the Mail Server Name...</font></b></h3>';
+if(isset($_REQUEST['message']) && $_REQUEST['message']=='Language string failed to load: recipients_failed')
+	echo '<h3><b><font color=red>Please Check the Email Id of "Assigned To" User...</font></b></h3>';
 
 if(isset($_REQUEST['record'])) {
-    $focus->retrieve($_REQUEST['record']);
+	$focus->id = $_REQUEST['record'];
+	$focus->mode = 'edit';
+	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
+        $focus->name=$focus->column_fields['name'];		
 }
-$old_id = '';
-
+//$old_id = '';
+if(isset($_REQUEST['parent_id']))
+{
+        $focus->column_fields['parent_id'] = $_REQUEST['parent_id'];
+}
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
         if (! empty($focus->filename) )
@@ -49,12 +60,14 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
          $old_id = $focus->id;
         }
         $focus->id = "";
+	$focus->mode = "";
 }
 
-//setting default date and time
-if (!isset($focus->date_start)) $focus->date_start = date('Y-m-d');
-if (!isset($focus->time_start)) $focus->time_start = date('H:i');
-if (!isset($focus->duration_hours)) $focus->duration_hours = "1";
+//get Email Information
+$block_1 = getBlockInformation("Emails",1,$focus->mode,$focus->column_fields);
+$block_2 = getBlockInformation("Emails",2,$focus->mode,$focus->column_fields);
+$block_3 = getBlockInformation("Emails",3,$focus->mode,$focus->column_fields);
+$block_4 = getBlockInformation("Emails",4,$focus->mode,$focus->column_fields);
 
 //needed when creating a new email with default values passed in
 if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) {
@@ -90,39 +103,36 @@ $xtpl=new XTemplate ('modules/Emails/EditView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
+if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
+else $xtpl->assign("NAME", "");
+
+$xtpl->assign("BLOCK1", $block_1);
+$xtpl->assign("BLOCK2", $block_2);
+$xtpl->assign("BLOCK3", $block_3);
+$xtpl->assign("BLOCK4", $block_4);
+if($focus->mode == 'edit')
+{
+        $xtpl->assign("MODE", $focus->mode);
+}
+
 // Unimplemented until jscalendar language files are fixed
 // $xtpl->assign("CALENDAR_LANG", ((empty($cal_codes[$current_language])) ? $cal_codes[$default_language] : $cal_codes[$current_language]));
 
-$xtpl->assign("ENTITY_TYPE",$_REQUEST['email_directing_module']);
-$xtpl->assign("ENTITY_ID",$_REQUEST['record']);
 $xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
-if (!isset($focus->id)) $xtpl->assign("USER_ID", $current_user->id);
-if (!isset($focus->id) && isset($_REQUEST['contact_id'])) $xtpl->assign("CONTACT_ID", $_REQUEST['contact_id']);
-
 if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
+else $xtpl->assign("RETURN_MODULE",'Emails');
 if(isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
+else $xtpl->assign("RETURN_ACTION",'index');
 if(isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
 $xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$xtpl->assign("IMAGE_PATH", $image_path);
+$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("ID", $focus->id);
-$xtpl->assign("PARENT_NAME", $focus->parent_name);
-$xtpl->assign("PARENT_RECORD_TYPE", $focus->parent_type);
-$xtpl->assign("PARENT_ID", $focus->parent_id);
-if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
-else $xtpl->assign("NAME", "");
-$xtpl->assign("OLD_ID", $old_id );
+$xtpl->assign("ENTITY_ID", $_REQUEST["record"]);
+$xtpl->assign("ENTITY_TYPE",$_REQUEST["email_directing_module"]);
 
-$xtpl->assign("DATE_START", $focus->date_start);
-$xtpl->assign("TIME_START", substr($focus->time_start,0,5));
-$xtpl->assign("DESCRIPTION", $focus->description);
-
-if ($focus->assigned_user_id == '' && (!isset($focus->id) || $focus->id=0)) $focus->assigned_user_id = $current_user->id;
-$xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active", $focus->assigned_user_id), $focus->assigned_user_id));
-$xtpl->assign("DURATION_HOURS", $focus->duration_hours);
-$xtpl->assign("TYPE_OPTIONS", get_select_options_with_id($app_list_strings['record_type_display'], $focus->parent_type));
-if (isset($focus->duration_minutes)) $xtpl->assign("DURATION_MINUTES_OPTIONS", get_select_options_with_id($focus->minutes_values,$focus->duration_minutes));
 
 if ( empty($focus->filename))
 {
@@ -141,10 +151,6 @@ if (isset($focus->parent_type) && $focus->parent_type != "") {
 }
 
 if ($focus->parent_type == "Account") $xtpl->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=".urlencode($focus->parent_name));
-
-$xtpl->assign("DESCRIPTION", $focus->description);
-$xtpl->assign("TYPE_OPTIONS", get_select_options_with_id($app_list_strings['record_type_display'], $focus->parent_type));
-
 
 $xtpl->parse("main");
 

@@ -25,17 +25,6 @@ $mod_strings = Array(
 'LBL_MODULE_TITLE'=>'Settings: Home',
 'LBL_LIST_CONTACT_ROLE'=>'Role',
 
-'LNK_NEW_CONTACT'=>'New Contact',
-'LNK_NEW_LEAD'=>'New Lead',
-'LNK_NEW_ACCOUNT'=>'New Account',
-'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
-'LNK_NEW_CASE'=>'New Case',
-'LNK_NEW_NOTE'=>'New Note',
-'LNK_NEW_CALL'=>'New Call',
-'LNK_NEW_EMAIL'=>'New Email',
-'LNK_NEW_MEETING'=>'New Meeting',
-'LNK_NEW_TASK'=>'New Task',
-
 'LBL_LIST_LAST_NAME'=>'Last Name',
 'LBL_FIRST_NAME'=>'First Name:',
 'LBL_LAST_NAME'=>'Last Name:',
@@ -47,11 +36,16 @@ $mod_strings = Array(
 'LEADCUSTOMFIELDS'=>'Lead Custom Fields',
 'ACCOUNTCUSTOMFIELDS'=>'Account Custom Fields',
 'CONTACTCUSTOMFIELDS'=>'Contact Custom Fields',
-'OPPORTUNITYCUSTOMFIELDS'=>'Opportunity Custom Fields',
+'OPPORTUNITYCUSTOMFIELDS'=>'Potential Custom Fields',
+'HELPDESKCUSTOMFIELDS'=>'Helpdesk Custom Fields',
+'PRODUCTCUSTOMFIELDS'=>'Product Custom Fields',
+
 'EDITLEADPICKLISTVALUES'=>'Edit Lead PickList ',
 'EDITACCOUNTPICKLISTVALUES'=>'Edit Account PickList ',
 'EDITCONTACTPICKLISTVALUES'=>'Edit Contact PickList ',
-'EDITOPPORTUNITYPICKLISTVALUES'=>'Edit Opportunity PickList ',
+'EDITOPPORTUNITYPICKLISTVALUES'=>'Edit Potential PickList ',
+'EDITHELPDESKPICKLISTVALUES'=>'Edit HeldDesk PickList ',
+'EDITPRODUCTPICKLISTVALUES'=>'Edit Product PickList ',
 
 // Added for Release vtigerCRM 3.2 PATCH 1.0
 //Settings/index.php
@@ -106,6 +100,17 @@ $mod_strings = Array(
 //added for patch2
 'USERGROUPLIST'=>'Groups',
 'EMAILTEMPLATES'=>'Email Templates',
-'WORDINTEGRATION'=>'Word Templates'
+'WORDINTEGRATION'=>'Mail Merge Templates',
+'NOTIFICATIONSCHEDULERS'=>'Notification Schedulers',
+
+//Added fields for Title Informations -- after 4 Beta
+'LBL_EMAIL_CONFIG'=>'Email Configuration',
+'LBL_WORD_INTEGRATION'=>'Word Integration:',
+'LBL_GROUP_SETTINGS'=>'Group Settings:',
+'LBL_TEMPLATE_SETTINGS'=>'Template Settings:',
+'LBL_NOTIFICATION_SETTINGS'=>'Notification Settings:',
+'LBL_EMAIL_SETTINGS'=>'Email Settings:',
+'LBL_SECURITY_SETTINGS'=>'Security Settings:',
+
 );
 

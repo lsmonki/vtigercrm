@@ -205,7 +205,7 @@ $tutos[themes][] = "white";
 $tutos[themes][] = "sqli";
 $tutos[themes][] = "visual";
 
-$tutos[debug]=1;
+$tutos[debug]=0;
 $tutos[usemail]   = 1;
 $tutos[useacl]   = 1;
 $tutos[use_check_dbacl] = 1;
@@ -249,19 +249,19 @@ $tutos['typo3dbpasswd'] = $tutos[dbpasswd][1];
 # allows you to keep track of your product requirements
 # Modul by Gero Kohnert  tutos@tutos.de
 #
-@include("requirements/mconfig.pinc");
+#@include("requirements/mconfig.pinc");
 #
 # The riskmanagement module
 # Modul by Gero Kohnert tutos@tutos.de
 #
-@include("riskmanagement/mconfig.pinc");
+#@include("riskmanagement/mconfig.pinc");
 
-@include("search/mconfig.pinc");
+#@include("search/mconfig.pinc");
 #@include("palm/mconfig.pinc");
-@include("ticker/mconfig.pinc");
-@include("xml/mconfig.pinc");
-@include("stuff/mconfig.pinc");
-@include("ldap/mconfig.pinc");
+#@include("ticker/mconfig.pinc");
+#@include("xml/mconfig.pinc");
+#@include("stuff/mconfig.pinc");
+#@include("ldap/mconfig.pinc");
 
 $tutos[tasksincalendar]  = 1;
 

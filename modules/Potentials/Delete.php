@@ -13,21 +13,25 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Delete.php,v 1.1 2004/08/17 15:06:09 gjayakrishnan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Delete.php,v 1.5 2005/03/04 06:57:28 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('modules/Opportunities/Opportunity.php');
+require_once('modules/Potentials/Opportunity.php');
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('contact_delete');
 
-$focus = new Opportunity();
+$focus = new Potential();
 
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the opportunity.");
 
-$focus->mark_deleted($_REQUEST['record']);
+$sql ='delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
+$adb->query($sql);
+
+if($_REQUEST['return_module'] == $_REQUEST['module'])
+        $focus->mark_deleted($_REQUEST['record']);
 
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
 ?>

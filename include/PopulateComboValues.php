@@ -11,36 +11,41 @@
 include_once('config.php');
 require_once('include/logging.php');
 require_once('include/language/en_us.lang.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
+require_once('include/ComboStrings.php');
 
 class PopulateComboValues 
 {
-		
+  
 	//var $table_name="lead_source";
 	var $app_list_strings;	
 
-	function insertComboValues($values, $tableName)
+  function insertComboValues($values, $tableName)
 	{
-		foreach ($values as $val => $cal)
-		{
-			if($val != '')
-			{	
-				mysql_query("insert into ".$tableName. " values('".$val."')");
-			}
-			else
-			{
-				mysql_query("insert into ".$tableName. " values('--None--')");
-			}
-		}
+          global $adb;
+          $i=0;
+          foreach ($values as $val => $cal)
+          {
+            if($val != '')
+            {	
+              $adb->query("insert into ".$tableName. " values('','".$val."',".$i.",1)");
+            }
+            else
+            {
+              $adb->query("insert into ".$tableName. " values('','--None--',".$i.",1)");
+            }
+            $i++;
+          }
 	}
 
 	function create_tables () {
-		global $app_list_strings;
-		$comboTables = Array('lead_source','account_type','industry','lead_status','rating','license_key','opportunity_type','salutation','sales_stage');
+		global $app_list_strings,$adb;
+                global $combo_strings;
+		$comboTables = Array('leadsource','accounttype','industry','leadstatus','rating','licencekeystatus','opportunity_type','salutationtype','sales_stage','troubleticketstatus','troubleticketpriorities','troubleticketcategories','duration_minutes','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','activitytype','currency');
 
 		foreach ($comboTables as $comTab)
 		{
-			$result = mysql_query("show tables like '%".$comTab."%'");
+			/*$result = mysql_query("show tables like '%".$comTab."%'");
 			if(mysql_num_rows($result) == 0)
 			{
 				$query = 'CREATE TABLE '.$comTab.' (';
@@ -50,7 +55,7 @@ class PopulateComboValues
 				mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 				echo("Created table ".$comTab);
 				echo("<BR>");
-				$this->insertComboValues($app_list_strings[$comTab."_dom"],$comTab);
+				$this->insertComboValues($combo_strings[$comTab."_dom"],$comTab);
 			}
 			else
 			{
@@ -60,13 +65,12 @@ class PopulateComboValues
 				if(mysql_num_rows($tableRows) == 0)
 				{
 					
-					$this->insertComboValues($app_list_strings[$comTab."_dom"],$comTab);
+					$this->insertComboValues($combo_strings[$comTab."_dom"],$comTab);
 				}
-			}
-
-
-		}
-				
+			}*/
+			
+                  $this->insertComboValues($combo_strings[$comTab."_dom"],$comTab);
+		}			
 			
 	}
 

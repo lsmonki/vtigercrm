@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/1checkSystem.php,v 1.10 2004/10/29 09:55:08 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/1checkSystem.php,v 1.15 2005/03/05 11:34:02 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -177,10 +177,28 @@ $array = Array(
 			<td width="100">&nbsp;</td>
 			<td align="right"><?php echo (is_writable('./config.php') || is_writable('.'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</font></strong>"; ?></td>
 		</tr>
-		<tr>
+		 <tr>
 		    <td><strong>Cache Directory (cache/)</strong></td>
                     <td width="100">&nbsp;</td>
                     <td align="right"><?php echo (is_writable('./cache/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</font></strong>"; ?></td>
+                 </tr>
+		<tr> 
+		 <tr>
+		    <td><strong>Mail Merge Template Directory (test/wordtemplatedownload/)</strong></td>
+                    <td width="100">&nbsp;</td>
+                    <td align="right"><?php echo (is_writable('./test/wordtemplatestorage/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable<br> You might experience issues with the word template feature. You might visit the link for more details : <a href=\"http://www.vtiger.com/discussions/viewtopic.php?p=2200#2200\" target=\"_blank\">forums</a> </font></strong>"; ?></td>
+                 </tr>
+		<tr> 
+		 <tr>
+		    <td><strong>Uploads Directory (test/upload/)</strong></td>
+                    <td width="100">&nbsp;</td>
+                    <td align="right"><?php echo (is_writable('./test/upload/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable <br>You might experience problems with the file attachments feature. You might visit the following link for more details : <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>attachment issue</a></font></strong>"; ?></td>
+                 </tr>
+		<tr> 
+		 <tr>
+		    <td><strong>Email Templates Directory (modules/Emails/templates/)</strong></td>
+                    <td width="100">&nbsp;</td>
+                    <td align="right"><?php echo (is_writable('./modules/Emails/templates/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable. You might experience problems with the email templates feature. You might refer to the following link for more details :<a href= http://www.vtiger.com/forums/viewtopic.php?t=388&highlight=permission>email templates issue </a> </font></strong>"; ?></td>
                  </tr>
 		<tr> 
 			<td><strong>GD graphics library version 2.0 or later</strong></td>

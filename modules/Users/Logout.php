@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Logout.php,v 1.6 2005/01/08 13:15:17 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Logout.php,v 1.7 2005/01/28 10:38:03 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -21,7 +21,20 @@ require_once('include/logging.php');
 require_once('database/DatabaseConnection.php');
 require_once('modules/Users/LoginHistory.php');
 require_once('modules/Users/User.php');
+require_once('config.php');
+require_once('include/backup.php');
+require_once('include/ftp.php');
 
+//Taking the Backup of DB
+	$currenttime=date("Ymd_his");
+	if($ftpserver != '' && $ftpuser != '' && $ftppassword != '')
+	{	$backupFileName="backup_".$currenttime.".sql";
+		save_structure($backupFileName, $root_directory);
+		$source_file=$backupFileName;	
+		ftpBackupFile($source_file, $ftpserver, $ftpuser, $ftppassword);
+		if(file_exists($source_file)) unlink($source_file);	
+		
+	}
 
 // Recording Logout Info
 	$usip=$_SERVER['REMOTE_ADDR'];

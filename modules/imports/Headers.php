@@ -24,23 +24,24 @@ var $object_name = "Headers";
 function create_tables () 
 {
 		global $app_strings;
-		$query = 'CREATE TABLE '.$this->table_name.' ( ';
+		/*$query = 'CREATE TABLE '.$this->table_name.' ( ';
 		$query .='fileid tinyint(3) unsigned NOT NULL auto_increment';
 		$query .=', headernames varchar(30) NOT NULL';
 	        $query .=', PRIMARY KEY ( fileid ) )';
 		$this->log->info($query);
 
-		mysql_query($query);
+		mysql_query($query);*/
 	// exception handling logic here if the table can't be created.
 
 	}
 
 	function drop_tables () {
+		/*
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
 		$this->log->info($query);
 
-		mysql_query($query);
+		mysql_query($query);*/
 
 	// - add exception handling logic here if the table can't be dropped.
 

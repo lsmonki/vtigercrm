@@ -1,0 +1,404 @@
+<?php
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/Activity.php,v 1.14 2005/03/04 13:34:55 jack Exp $
+ * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
+ ********************************************************************************/
+
+include_once('config.php');
+require_once('include/logging.php');
+require_once('include/database/PearDatabase.php');
+require_once('data/SugarBean.php');
+
+// Task is used to store customer information.
+class Activity extends SugarBean {
+	var $log;
+	var $db;
+
+	// Stored fields
+  	var $eventid;
+	var $description;
+	var $firstname;
+	var $lastname;
+	var $setype;
+	var $status;
+	var $date_start;
+	var $time_start;
+	var $priority;
+   	var $sendnotification;
+	var $duration_hours;
+	var $duration_minutes;
+
+	var $table_name = "activity";
+
+	var $object_name = "activity";	
+	
+	var $tab_name = Array('crmentity','activity','seactivityrel','cntactivityrel','salesmanactivityrel');
+
+	var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid','salesmanactivityrel'=>'activityid');
+
+	var $column_fields = Array();
+	var $sortby_fields = Array('subject');		
+
+	// This is used to retrieve related fields from form posts.
+	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'contactname', 'contact_phone', 'contact_email', 'parent_name');
+
+	// This is the list of fields that are in the lists.
+	var $list_fields = Array(
+       'Close'=>Array('activity'=>'status'),
+       'Type'=>Array('activity'=>'activitytype'),
+       'Subject'=>Array('activity'=>'subject'),
+       'Contact Name'=>Array('contactdetails'=>'lastname'),
+       'Related to'=>Array('seactivityrel'=>'activityid'),
+       'Start Date/Due Date'=>Array('activity'=>'date_start'),
+       'Assigned To'=>Array('crmentity','smownerid')
+       );
+
+       var $range_fields = Array(
+	'name',
+	'date_modified',
+	'start_date',
+	'id',
+	'status',
+	'date_due',
+	'description',
+	'contact_name',
+	'priority'
+	);
+       
+
+       var $list_fields_name = Array(
+       'Close'=>'status',
+       'Type'=>'activitytype',
+       'Subject'=>'subject',
+       'Contact Name'=>'lastname',
+       'Related to'=>'activityid',
+       'Start Date/Due Date'=>'date_start',
+       'Assigned To'=>'assigned_user_id');
+
+       var $list_link_field= 'subject';
+	
+
+	function Activity() {
+		$this->log = LoggerManager::getLogger('Activities');
+		$this->db = new PearDatabase();
+		$this->column_fields = getColumnFields('Activities');
+	}
+
+	var $new_schema = true;
+
+	function create_tables () {
+		global $app_strings;
+	}
+
+	function drop_tables () {
+	}
+
+
+//Function Call for Related List -- Start
+        function get_contacts($id)
+        {
+                $query="select contactdetails.firstname,contactdetails.lastname,contactdetails.phone,contactdetails.email  from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid and seactivityrel.activityid=".$id."";
+                renderRelatedContacts($query);
+        }
+
+        function get_users($id)
+        {
+                $query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id,  users.phone_home, users.phone_work, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
+                renderRelatedUsers($query);
+        }
+//Function Call for Related List -- End
+
+
+	function get_summary_text()
+	{
+		return "$this->name";
+	}
+
+
+  function get_full_list($criteria)
+  {
+    $query = "select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid WHERE crmentity.deleted=0 ".$criteria;
+    $result =& $this->db->query($query);
+	echo $query;
+    $this->log->debug("process_full_list_query: result is ".$result);
+        
+    if($this->db->getRowCount($result) > 0){
+		
+      // We have some data.
+      while ($row = $this->db->fetchByAssoc($result)) {
+        foreach($this->list_fields_name as $field)
+        {
+          if (isset($row[$field])) {
+            $this->$field = $row[$field];
+          }
+          else {
+            $this->$field = '';   
+          }
+        }
+        $list[] = $this;
+      }
+    }
+    if (isset($list)) return $list;
+    else return null;
+  }
+ /* 
+	function create_list_query(&$order_by, &$where)
+	{
+		$contact_required = ereg("contacts", $where);
+                
+		if($contact_required)
+		{
+			$query = "SELECT task.taskid, tasks.assigned_user_id, task.status, task.name, task.parent_type, tasks.parent_id, tasks.contact_id, tasks.datedue, contactdetails.firstname, contactdetails.lastname ,task.priority,task.description FROM contactdetails, task ";
+			$where_auto = "task.contact_id = contactdetails.contactid AND task.deleted=0 AND contact.deleted=0";
+		}
+		else
+		{
+			$query = 'SELECT taskid, smcreatorid, task.status, duedate ,priority FROM task inner join crmentity on crmentity.crmid=task.taskid ';
+			$where_auto = " AND deleted=0";
+		}
+
+		if($where != "")
+                  $query .= "where $where ".$where_auto;
+		else
+			$query .= "where ".$where_auto;
+
+		if($order_by != "")
+			$query .= " ORDER BY $order_by";
+		else
+                  //$query .= " ORDER BY name";
+		return $query;
+
+	}
+*/
+        function create_export_query(&$order_by, &$where)
+        {
+                $contact_required = ereg("contacts", $where);
+
+                if($contact_required)
+                {
+                      $query = "SELECT task.*, contactdetailss.firstname, contactdetails.lastname FROM task inner join seactivityrel on seactivityrel.activityid=task.taskid inner join crmentity on crmentity.crmid=task.taskid and crmentity.deleted=0";
+                }
+                else
+                {
+                      $query = 'SELECT * FROM task inner join seactivityrel on seactivityrel.activityid=task.taskid inner join crmentity on crmentity.crmid=task.taskid and crmentity.deleted=0';
+                }
+                return $query;
+
+        }
+
+
+
+	function fill_in_additional_list_fields()
+	{
+		$this->fill_in_additional_detail_fields();
+	}
+
+	function fill_in_additional_detail_fields()
+	{
+		// Fill in the assigned_user_name
+		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
+
+		global $app_strings;
+
+		if (isset($this->contact_id)) {
+			require_once("modules/Contacts/Contact.php");
+			$contact = new Contact();
+			$query = "SELECT firstname, lastname, phone, email from $contact->table_name where contactid = '$this->contact_id'";
+
+			$result =$this->db->query($query,true,$app_strings['ERR_CREATING_FIELDS']);
+
+
+			// Get the id and the name.
+
+			$row = $this->db->fetchByAssoc($result);
+
+
+			if($row != null)
+			{
+				$this->contact_name = return_name($row, 'first_name', 'last_name');
+				if ($row['phone_work'] != '') $this->contact_phone = $row['phone_work'];
+				if ($row['email1'] != '') $this->contact_email = $row['email1'];
+			}
+		}
+		if ($this->parent_type == "Potentials") {
+			require_once("modules/Potentials/Opportunity.php");
+			$parent = new Potential();
+			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
+
+			$result =$this->db->query($query,true, $app_strings['ERR_CREATING_FIELDS']);
+
+			// Get the id and the name.
+
+			$row = $this->db->fetchByAssoc($result);
+
+
+			if($row != null)
+			{
+				if ($row['name'] != '') $this->parent_name = stripslashes($row['name']);
+			}
+		}
+		if ($this->parent_type == "Cases") {
+			require_once("modules/Cases/Case.php");
+			$parent = new aCase();
+			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
+
+			$result =$this->db->query($query,true,$app_strings['ERR_CREATING_FIELDS']);
+
+
+			// Get the id and the name.
+
+			$row = $this->db->fetchByAssoc($result);
+
+
+			if($row != null)
+			{
+				if ($row['name'] != '') $this->parent_name = stripslashes($row['name']);
+			}
+		}
+		if ($this->parent_type == "Accounts") {
+			require_once("modules/Accounts/Account.php");
+			$parent = new Account();
+			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
+
+			$result =$this->db->query($query,true, $app_strings['ERR_CREATING_FIELDS']);
+
+
+			// Get the id and the name.
+
+			$row = $this->db->fetchByAssoc($result);
+
+
+			if($row != null)
+			{
+				if ($row['name'] != '') $this->parent_name = stripslashes($row['name']);
+			}
+		}
+	}
+
+   function delete($id)
+        {
+		
+          $this->db->query("update tasks set deleted=1 where id = '" . $id . "'");
+        }
+
+    function getCount($user_name) 
+    {
+        $query = "select count(*) from activity inner join crmentity on crmentity.crmid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Task'";
+
+        $result = $this->db->query($query,true,"Error retrieving contacts count");
+        $rows_found =  $this->db->getRowCount($result);
+        $row = $this->db->fetchByAssoc($result, 0);
+
+    
+        return $row["count(*)"];
+    }       
+
+    function get_tasks($user_name,$from_index,$offset)
+    {   
+//         $query = "select tasks.*, contacts.first_name cfn, contacts.last_name cln from tasks inner join users on users.id=tasks.assigned_user_id left join contacts on contacts.id=tasks.contact_id  where user_name='" .$user_name ."' and tasks.deleted=0 limit " .$from_index ."," .$offset;
+
+	 $query = "select activity.subject as name,crmentity.modifiedtime as date_modified, activity.date_start start_date,activity.activityid as id,activity.status as status,activity.description as description, activity.priority as priority, activity.due_date as date_due ,contactdetails.firstname cfn, contactdetails.lastname cln from activity inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid left join cntactivityrel on cntactivityrel.activityid=activity.activityid left join contactdetails on contactdetails.contactid=cntactivityrel.contactid inner join crmentity on crmentity.crmid=activity.activityid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Task' limit " .$from_index ."," .$offset;
+
+    return $this->process_list_query1($query);
+    
+    }
+
+
+    function process_list_query1($query)
+    {
+        $result =& $this->db->query($query,true,"Error retrieving $this->object_name list: ");
+        $list = Array();
+        $rows_found =  $this->db->getRowCount($result);
+        if($rows_found != 0)
+        {
+            $task = Array();
+              for($index = 0 , $row = $this->db->fetchByAssoc($result, $index); $row && $index <$rows_found;$index++, $row = $this->db->fetchByAssoc($result, $index))
+            
+             {
+                foreach($this->range_fields as $columnName)
+                {
+                    if (isset($row[$columnName])) {
+			    
+                        $task[$columnName] = $row[$columnName];
+                    }   
+                    else     
+                    {   
+                            $task[$columnName] = "";
+                    }   
+	            }	
+    
+                $task[contact_name] = return_name($row, 'cfn', 'cln');    
+
+                    $list[] = $task;
+                }
+         }
+
+        $response = Array();
+        $response['list'] = $list;
+        $response['row_count'] = $rows_found;
+        $response['next_offset'] = $next_offset;
+        $response['previous_offset'] = $previous_offset;
+
+
+
+        return $response;
+    }
+
+	
+
+function save_relationship_changes($is_update)
+    {
+
+		$query = "UPDATE tasks  set contact_id=null where id='". $this->id ."' and deleted=0";
+		$this->db->query($query,true,"Error clearing contact to task relationship: ");
+
+     //  echo "\n Quwry is " .$query; 
+      // echo "\ncontact_id is " .$this->contact_id; 
+
+    	
+    	if($this->contact_id != "")
+    	{
+          $query = "UPDATE tasks  set contact_id='" .$this->contact_id ."' where id='" .$this->id ."' and deleted=0";
+          //echo $query;  
+	      $this->db->query($query,true,"Error setting contact to task relationship: "."<BR>$query");
+    	}
+
+    }
+    
+
+
+	function get_list_view_data(){
+		global $action, $currentModule, $focus, $app_list_strings;
+		$today = date("Y-m-d", time());
+		$task_fields =$this->get_list_view_array();
+		if (isset($this->parent_type))
+			$task_fields['PARENT_MODULE'] = $this->parent_type;
+		if ($this->status != "Completed" && $this->status != "Deferred" ) {
+			$task_fields['SET_COMPLETE'] = "<a href='index.php?return_module=$currentModule&return_action=$action&return_id=" . ((is_object($focus)) ? $focus->id : "") . "&action=Save&module=Tasks&record=$this->id&status=Completed'>X</a>";
+		}
+
+
+		if ($this->duedate	< $toDAy) {
+			$task_fields['DATE_DUE'] = "<font class='overdueTask'>".$task_fields['DATE_DUE']."</font>";
+		}
+		return $task_fields;
+	}
+
+}
+?>

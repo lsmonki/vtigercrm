@@ -18,6 +18,9 @@
 		$ret_action = $_REQUEST['return_action'];
 		$ret_module = $_REQUEST['return_module']; 
 		$ret_id = $_REQUEST['return_id'];
+		$filename = '';
+		if($_REQUEST['filename'] != '')
+			$filename = ' [ '.$_REQUEST['filename'].' ] ';
 		//echo 'Parent action is' .$ret_action;  
 		//echo 'Ret module is' .$ret_module;
 		//echo 'Ret id is' .$ret_id;
@@ -27,14 +30,15 @@
 </B>
 <hr>
 <br>
- <INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="100000">
+ <INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="1000000">
  <INPUT TYPE="hidden" NAME="return_module" VALUE="<?php echo $ret_module ?>">
+ <INPUT TYPE="hidden" NAME="return_action" VALUE="<?php echo $ret_action ?>">
  <INPUT TYPE="hidden" NAME="return_id" VALUE="<?php echo $ret_id ?>">
  <TABLE BORDER="0" cellspacing="2" cellpadding="2">
  <TR>
    <TD width="25%"><div align="right"><?php echo $mod_strings['LBL_FILENAME']; ?> </div></TD>
    <!--TD width="75%"><div align="right"><?php echo $mod_strings['LBL_FILE']; ?> </div></TD-->
-   <TD><INPUT TYPE="file" NAME="binFile"></TD>
+   <TD><INPUT TYPE="file" NAME="binFile"><?php echo $filename; ?></TD>
   </TR>
  <TR>
    <TD width="25%" valign="top"><div align="right"><?php echo $mod_strings['LBL_DESCRIPTION']; ?> </div></TD>

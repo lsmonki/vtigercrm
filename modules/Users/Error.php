@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Error.php,v 1.1 2004/08/17 15:06:40 gjayakrishnan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Error.php,v 1.1 2004/08/17 15:06:40 gjayakrishnan Exp $
  * Description: TODO:  To be written.
  ********************************************************************************/
 global $app_strings;

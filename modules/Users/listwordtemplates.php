@@ -10,7 +10,7 @@
 *
  ********************************************************************************/
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">

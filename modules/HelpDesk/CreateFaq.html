@@ -1,0 +1,94 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Tickets.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_FAQ}{MOD.LBL_COLON}</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
+
+<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr> 
+	<td align="left"></td>
+	<td>
+		<table cellpadding="0" cellspacing="5" border="0">
+		<tr>
+			<form name="EditView" method="POST" action="index.php" onsubmit="return check4null(EditView);">
+			<input type="hidden" name="module" value="HelpDesk">
+			<input type="hidden" name="action">
+			<input type="hidden" name="record">
+			<input type="hidden" name="mode" value="{MODE}">
+			<input type="hidden" name="id" value="{ID}">
+			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+			<input type="hidden" name="return_id" value="{RETURN_ID}">
+			<input type="hidden" name="return_action" value="{RETURN_ACTION}">						
+		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='SaveFaq'" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
+		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="javascript:cancelForm(EditView)" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
+		</tr></table>
+	</td>
+	<td></td>
+	<td align="right" nowrap><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</td>
+</tr>
+</table> 
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_CATEGORY}</td>
+	<td width="30%" colspan="4">{CATEGORYOPTIONS}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_QUESTION}{MOD.LBL_COLON}</td>
+	<td colspan="4"><textarea name='question' cols="70" tabindex='1' rows="1">{QUESTION}</textarea></td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_ANSWER}{MOD.LBL_COLON}</td>
+	<td colspan="4"><textarea name='answer' tabindex='2' cols="80" rows="8">{ANSWER}</textarea></td>
+        </tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_COMMENTS}{MOD.LBL_COLON}</td>
+	<td colspan="4"><textarea name='comment' tabindex='2' cols="80" rows="1">{COMMENTS}</textarea></td>
+	</tr></table>
+</td></tr></table>
+      </form>
+<script>
+
+function cancelForm(frm)
+{
+	window.history.back();
+}
+	
+function trim(s) 
+{                                                                                                                     
+while (s.substring(0,1) == " ") {
+s = s.substring(1, s.length);
+}
+return s;
+} 
+
+function check4null(form)
+{
+  var isError = false;
+  var errorMessage = "";
+  if (trim(form.question.value) =='') {
+			 isError = true;
+			 errorMessage += "\n Question";
+			 form.question.focus();
+  }
+  if (isError == true) {
+			 alert("Missing required fields: " + errorMessage);
+			 return false;
+  }
+  return true;
+}
+</script>
+{JAVASCRIPT}
+<!-- END: main -->

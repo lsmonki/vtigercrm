@@ -16,6 +16,8 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/User.php');
 require_once('include/utils.php');
+require_once('include/database/PearDatabase.php');
+
 global $current_user;
 global $theme;
 global $default_language;
@@ -152,20 +154,20 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 </style>
 </head>
 <?
-		$tabavail="SELECT id,name from tabmenu";
-		$tabrow=mysql_query($tabavail);
-		if(mysql_num_rows($tabrow) != 0)
+		$tabavail="SELECT tabid,name from tab where presence !=2";
+		$tabrow=$adb->query($tabavail);
+		if($adb->num_rows($tabrow) != 0)
 		{
-			while ($result = mysql_fetch_array($tabrow))
+			while ($result = $adb->fetch_array($tabrow))
 			{
 				$availabletab[]=$result;
 			}
 		}	
-		$tabsel="SELECT id,name from tabmenu where presence=1 order by sequence";
-		$tabrow=mysql_query($tabsel);
-		if(mysql_num_rows($tabrow) != 0)
+		$tabsel="SELECT tabid,name from tab where presence=0 order by tabsequence";
+		$tabrow=$adb->query($tabsel);
+		if($adb->num_rows($tabrow) != 0)
 		{
-			while ($result = mysql_fetch_array($tabrow))
+			while ($result = $adb->fetch_array($tabrow))
 			{
 				$selectedtab[]=$result;
 			}
@@ -212,8 +214,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 		     for ($i=0;$i<count($availabletab);$i++)
                      {
                         $id = "fdr"."$rowcount"."c"."$colcount";
-                        //System.out.println(" id = "+id);
-                        $tabID = $availabletab[$i]['id'];
+                        $tabID = $availabletab[$i]['tabid'];
                         $tabName = $availabletab[$i]['name'];
 			if(in_array($tabName,$selmenu))
                                 $classType = "field used";
@@ -277,10 +278,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
                                                 $keycolumncount++;
                                                 $hnid = "hn".$keycolumncount;
                                                 $clid = "cl".$keycolumncount;
-                                                //System.out.println("hnid = "+hnid);
-                                                //System.out.println("clid = "+clid);
-                                                $selectedTabID = $selectedtab[$j]['id'];
-                                                //System.out.println("keycolumnname = "+selectedTabID);
+                                                $selectedTabID = $selectedtab[$j]['tabid'];
                                                 $tabName = $selectedtab[$j]['name'];
                                                 if ($keycolumncount == 1)
                                                         $unchangable = $tabName;
@@ -605,9 +603,10 @@ function createColList() {
 
 function formSubmit(rec)
 {
-        createColList();
-        document.CustomizeTabForm.action="index.php?module=Users&action=UpdateTab&record="+rec
-        document.CustomizeTabForm.submit();
+  createColList();
+  
+  document.CustomizeTabForm.action="index.php?module=Users&action=UpdateTab&record="+rec;
+  document.CustomizeTabForm.submit();
 }
 </script>
 

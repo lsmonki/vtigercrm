@@ -27,7 +27,7 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Accounts/Account.php');
-require_once('modules/Tasks/Task.php');
+//require_once('modules/Tasks/Task.php');
 
 // Account is used to store account information.
 class UserCalendar extends SugarBean {

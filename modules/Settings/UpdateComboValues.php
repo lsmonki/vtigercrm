@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 $fld_module=$_REQUEST["field_module"];
 $fldName=$_REQUEST["field_name"];
 $tableName=$_REQUEST["table_name"];
@@ -17,16 +17,26 @@ $fldPickList =  $_REQUEST['listarea'];
 
 //Deleting the already existing values
 $delquery="truncate ".$tableName;
-mysql_query($delquery);
+$adb->query($delquery);
 $pickArray = explode("\n",$fldPickList);
 $count = count($pickArray);
+
+$tabname=explode('_',$tableName);
+
+if($tabname[1]!='')
+       	$custom=true;
+
 for($i = 0; $i < $count; $i++)
 {
 	$pickArray[$i] = trim($pickArray[$i]);
 	if($pickArray[$i] != '')
 	{
-		$query = "insert into ".$tableName." values('".$pickArray[$i]."')";
-		mysql_query($query);
+		if($custom)
+			$query = "insert into ".$tableName." values('".$pickArray[$i]."')";
+		else
+			$query = "insert into ".$tableName." values('','".$pickArray[$i]."',".$i.",1)";
+
+                $adb->query($query);
 	}
 }
 header("Location:index.php?module=Settings&action=EditComboField&fld_module=".$fld_module."&fld_name=".$fldName."&table_name=".$tableName."&column_name=".$columnName);

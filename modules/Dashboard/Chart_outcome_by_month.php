@@ -19,7 +19,7 @@
 
 require_once('include/utils.php');
 require_once('include/logging.php');
-require_once("modules/Opportunities/Charts.php");
+require_once("modules/Potentials/Charts.php");
 require_once("modules/Dashboard/Forms.php");
 global $app_list_strings, $current_language, $tmp_dir, $currentModule, $action, $theme;
 $current_module_strings = return_module_language($current_language, 'Dashboard');

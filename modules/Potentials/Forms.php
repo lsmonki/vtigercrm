@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Forms.php,v 1.3 2004/10/29 09:55:09 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Forms.php,v 1.8 2005/03/03 18:53:27 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -25,6 +25,7 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  */
+require_once('include/ComboUtil.php');
 function get_validate_record_js () {
 global $mod_strings;
 global $app_strings;
@@ -33,6 +34,7 @@ $lbl_name = $mod_strings['LBL_LIST_OPPORTUNITY_NAME'];
 $lbl_account_name = $mod_strings['LBL_LIST_ACCOUNT_NAME'];
 $lbl_date_closed = $mod_strings['LBL_LIST_DATE_CLOSED'];
 $lbl_sales_stage = $mod_strings['LBL_LIST_SALES_STAGE'];
+$lbl_amount = $mod_strings['LBL_AMOUNT'];
 $err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
 $err_invalid_email_address = $app_strings['ERR_INVALID_EMAIL_ADDRESS'];
 $err_invalid_date_format = $app_strings['ERR_INVALID_DATE_FORMAT'];
@@ -147,7 +149,7 @@ function trim(s) {
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (trim(form.name.value) == "") {
+	if (trim(form.potentialname.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_name";
 	}
@@ -159,7 +161,7 @@ function verify_data(form) {
 	if (form.account_name.value == "skip_me") {
 		form.account_name.value = '';
 	}
-	if (form.date_closed.value == false) {
+	if (form.closingdate.value == false) {
 		isError = true;
 		errorMessage += "\\n$lbl_date_closed";
 	}
@@ -167,6 +169,7 @@ function verify_data(form) {
 		isError = true;
 		errorMessage += "\\n$lbl_sales_stage";
 	}
+
 	// Here we decide whether to submit the form.
 	if (isError == true) {
 		alert("$err_missing_required_fields" + errorMessage);
@@ -214,6 +217,12 @@ $user_id = $current_user->id;
 $cal_lang = "en";
 $cal_dateformat = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 
+//retreiving the combo values array
+$comboFieldNames = Array('leadsource'=>'leadsource_dom'
+                      ,'opportunity_type'=>'opportunity_type_dom'
+                      ,'sales_stage'=>'sales_stage_dom');
+$comboFieldArray = getComboArray($comboFieldNames);
+
 $the_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 $the_form .= <<<EOQ
 
@@ -222,23 +231,23 @@ $the_form .= <<<EOQ
 		<script type="text/javascript" src="jscalendar/lang/calendar-{$cal_lang}.js"></script>
 		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 		<form name="OppSave" onSubmit="return verify_data(OppSave)" method="POST" action="index.php">
-			<input type="hidden" name="module" value="Opportunities">
+			<input type="hidden" name="module" value="Potentials">
 			<input type="hidden" name="record" value="">
 			<input type="hidden" name="account_name" value="skip_me">
 			<input type="hidden" name="assigned_user_id" value='${user_id}'>
 			<input type="hidden" name="action" value="Save">
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_opportunity_name<br>
-		<input name='name' type="text" value=""><br>
+		<input name='potentialname' type="text" value=""><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date_closed <br><font size="1"><em old='ntc_date_format'>(yyyy-mm-dd)</em></font><br>
-		<input name='date_closed' size='12' maxlength='10' id='jscal_field' type="text" value=""> <img src="themes/$theme/images/calendar.gif" id="jscal_trigger"><br>
+		<input name='closingdate' size='12' maxlength='10' id='jscal_field' type="text" value=""> <img src="themes/$theme/images/calendar.gif" id="jscal_trigger"><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_sales_stage<br>
 		<select name='sales_stage'>
 EOQ;
-$the_form .= get_select_options_with_id($app_list_strings['sales_stage_dom'], "");
+$the_form .= get_select_options_with_id($comboFieldArray['sales_stage_dom'], "");
 $the_form .= <<<EOQ
 		</select><br>
-		<FONT class="required">$lbl_required_symbol</FONT>$lbl_amount<br>
-		<input name='amount' type="text"><br><br>
+		$lbl_amount<br>
+		<input name='amount' type="text" value=''><br><br>
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >
 		</form>
 		<script type="text/javascript">

@@ -10,24 +10,24 @@
 * 
  ********************************************************************************/
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 
 //or die("Couldn't connect to database $dbDatabase");
 
 function getAttachmentsList()
 {
-	global $theme;
+	global $theme,$adb;
 	global $app_strings;
 
 	$dbQuery = "SELECT filename,filesize,filetype,description ";
 
-	$dbQuery .= "FROM wordtemplatestorage" ;
+	$dbQuery .= "FROM wordtemplates" ;
 
 	$dbQuery .= " ORDER BY filename ASC";
 
 	//echo $dbQuery;
 
-	$result = mysql_query($dbQuery) or die("Couldn't get file list");
+	$result = $adb->query($dbQuery) or die("Couldn't get file list");
 
 $list = '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="90%">';
 
@@ -55,7 +55,7 @@ $list .= '</tr>';
 //$list .= '<tr><td COLSPAN="7" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
 
 $i=1;
-while($row = mysql_fetch_array($result))
+while($row = $adb->fetch_array($result))
 {
 
 

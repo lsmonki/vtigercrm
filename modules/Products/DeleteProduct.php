@@ -8,13 +8,14 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 $return_action = $_REQUEST['return_action'];
 $return_module = $_REQUEST['return_module'];
 $return_id = $_REQUEST['return_id'];
-$productid = $_REQUEST['id'];
+if(isset($_REQUEST['id']))	$productid = $_REQUEST['id'];
+else                            $productid = $_REQUEST['record'];
 $query="update products set deleted='1' where id=".$productid;
-mysql_query($query); 
+$adb->query($query); 
 
 $loc = "Location: index.php?action=".$return_action."&module=".$return_module."&record=".$return_id;
 header($loc);

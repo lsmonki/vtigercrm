@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/language/en_us.lang.php,v 1.4 2004/10/29 09:55:09 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/language/en_us.lang.php,v 1.10 2005/02/15 09:21:32 jack Exp $
  * Description:  Defines the English language pack
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -100,16 +100,6 @@ $mod_strings = Array(
 'LBL_DUPLICATE'=>'Potential Duplicate Contacts',
 'MSG_DUPLICATE' => 'Creating this contact may potentialy create a duplicate contact. You may either select a contact from the list below or you may click on Create New Contact to continue creating a new contact with the previously entered data.',
 
-'LNK_NEW_CONTACT'=>'New Contact',
-'LNK_NEW_LEAD'=>'New Lead',
-'LNK_NEW_ACCOUNT'=>'New Account',
-'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
-'LNK_NEW_CASE'=>'New Case',
-'LNK_NEW_NOTE'=>'New Note',
-'LNK_NEW_CALL'=>'New Call',
-'LNK_NEW_EMAIL'=>'New Email',
-'LNK_NEW_MEETING'=>'New Meeting',
-'LNK_NEW_TASK'=>'New Task',
 'LNK_NEW_APPOINTMENT' => 'New Appointment',
 'LBL_ADD_BUSINESSCARD' => 'Add Business Card',
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
@@ -118,6 +108,30 @@ $mod_strings = Array(
 'ERR_DELETE_RECORD'=>"en_us A record number must be specified to delete the contact.",
 'NTC_COPY_PRIMARY_ADDRESS'=>'Copy primary address to alternate address',
 'NTC_COPY_ALTERNATE_ADDRESS'=>'Copy alternate address to primary address',
+
+'LBL_SELECT_CONTACT'=>'Select Contact',
+//Added for search heading
+'LBL_GENERAL_INFORMATION'=>'General Information',
+
+
+
+//for v4 release added
+'LBL_NEW_POTENTIAL'=>'New Potential',
+'LBL_POTENTIAL_TITLE'=>'Potentials',
+
+'LBL_NEW_TASK'=>'New Task',
+'LBL_TASK_TITLE'=>'Tasks',
+'LBL_NEW_CALL'=>'New Call',
+'LBL_CALL_TITLE'=>'Calls',
+'LBL_NEW_MEETING'=>'New Meeting',
+'LBL_MEETING_TITLE'=>'Meetings',
+'LBL_NEW_EMAIL'=>'New Email',
+'LBL_EMAIL_TITLE'=>'Emails',
+'LBL_NEW_NOTE'=>'New Note',
+'LBL_NOTE_TITLE'=>'Notes',
+
+
+
 );
 
 ?>

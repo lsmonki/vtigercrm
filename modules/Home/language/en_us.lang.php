@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Home/language/en_us.lang.php,v 1.3 2004/10/06 09:02:05 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Home/language/en_us.lang.php,v 1.5 2005/03/04 15:18:47 jack Exp $
  * Description:  Defines the English language pack 
  ********************************************************************************/
  
@@ -22,21 +22,12 @@ $mod_strings = Array(
 'LBL_FIRST_NAME'=>'First Name:',
 'LBL_LAST_NAME'=>'Last Name:',
 'LBL_LIST_LAST_NAME'=>'Last Name',
+'LBL_ACCOUNT_NAME'=>'Account Name:',
+'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
 'LBL_PHONE'=>'Phone:',
 'LBL_EMAIL_ADDRESS'=>'Email:',
 
 'LBL_PIPELINE_FORM_TITLE'=>'My Pipeline',
-
-'LNK_NEW_LEAD'=>'New Lead',
-'LNK_NEW_CONTACT'=>'New Contact',
-'LNK_NEW_ACCOUNT'=>'New Account',
-'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
-'LNK_NEW_CASE'=>'New Case',
-'LNK_NEW_NOTE'=>'New Note',
-'LNK_NEW_CALL'=>'New Call',
-'LNK_NEW_EMAIL'=>'New Email',
-'LNK_NEW_MEETING'=>'New Meeting',
-'LNK_NEW_TASK'=>'New Task',
 
 'ERR_ONE_CHAR'=>'Please enter at least one letter or number for your search ...',
 

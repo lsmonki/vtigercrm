@@ -11,6 +11,7 @@
 require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/UserInfoUtil.php');
+require_once('include/database/PearDatabase.php');
 
 global $mod_strings;
 global $app_strings;
@@ -25,7 +26,7 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("THEME", $theme);
 $result = fetchEmailTemplateInfo($_REQUEST['templatename']);
 
-$emailtemplateResult = mysql_fetch_array($result);
+$emailtemplateResult = $adb->fetch_array($result);
 
 $xtpl->assign("FOLDERNAME", $emailtemplateResult["foldername"]);
 

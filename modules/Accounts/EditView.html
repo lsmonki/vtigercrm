@@ -37,12 +37,13 @@
 			<form name="EditView" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Accounts">
 			<input type="hidden" name="record" value="{ID}">
+			<input type="hidden" name="mode" value="{MODE}">
 			<input type="hidden" name="action">
 			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
 			<input type="hidden" name="return_id" value="{RETURN_ID}">
 			<input type="hidden" name="return_action" value="{RETURN_ACTION}">
 		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
-		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
+		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
 		</tr></table>
 	</td>
 	<td></td>
@@ -56,97 +57,29 @@
 	<table width="100%" border="0" cellspacing="1" cellpadding="2">
 	<tr><th align="left" class="formSecHeader" colspan="4">{MOD.LBL_ACCOUNT_INFORMATION}</th></tr>
 	<tr>
-	<td width="20%" valign="top" class="dataLabel"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_ACCOUNT_NAME}</td>
-	<td width="30%" valign="top"  class="dataField"><input name='name' tabindex='1' size='35' maxlength='150' type="text" value="{NAME}"></td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_PHONE}</td>
-	<td width="30%" valign="top"  class="dataField"><input name='phone_office' type="text" tabindex='2' size='20' maxlength='25'  value="{PHONE_OFFICE}"></td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_WEBSITE}</td>
-	<td width="30%" valign="top"  class="dataField" nowrap>http://<input name='website' type="text" tabindex='1' size='28' maxlength='255' value="{WEBSITE}"></td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_FAX}</td>
-	<td width="30%" valign="top"  class="dataField"><input name='phone_fax' type="text" tabindex='2' size='20' maxlength='25' value="{PHONE_FAX}"></td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_TICKER_SYMBOL}</td>
-	<td width="30%" valign="top"  class="dataField"><input name='ticker_symbol' type="text" tabindex='1' size='10' maxlength='10' value="{TICKER_SYMBOL}"></td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_OTHER_PHONE}</td>
-	<td width="30%" valign="top"  class="dataField"><input name='phone_alternate' type="text" tabindex='2' size='20' maxlength='25' value="{PHONE_ALTERNATE}"></td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_MEMBER_OF}</td>
-	<td width="30%" valign="top"  class="dataField"><input readonly name='parent_name' type="text" value="{PARENT_NAME}"><input name='parent_id' type="hidden" value="{PARENT_ID}">&nbsp;<input title="{APP.LBL_CHANGE_BUTTON_TITLE}" accessKey="{APP.LBL_CHANGE_BUTTON_KEY}" type="button" tabindex='1' class="button" value='{APP.LBL_CHANGE_BUTTON_LABEL}' name=btn1 LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'></td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_EMAIL}</td>
-	<td width="30%" valign="top"  class="dataField"><input name='email1' type="text" tabindex='2' size='35' maxlength='100' value="{EMAIL1}"></td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_EMPLOYEES}</td>
-	<td width="30%" valign="top"  class="dataField"><input name='employees' type="text" tabindex='1' size='10' maxlength='10' value="{EMPLOYEES}"></td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_OTHER_EMAIL_ADDRESS}</td>
-	<td width="30%" valign="top"  class="dataField"><input name='email2' type="text" tabindex='2' size='35' maxlength='100' value="{EMAIL2}"></td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_OWNERSHIP}</td>
-	<td width="30%" valign="top"  class="dataField"><input name='ownership' type="text" tabindex='1' size='25' maxlength='100' value="{OWNERSHIP}"></td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_RATING}</td>
-	<td width="30%" valign="top"  class="dataField"><input name='rating' type="text" tabindex='2' size='25' maxlength='25' value="{RATING}"></td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_INDUSTRY}</td>
-	<td width="30%" valign="top"  class="dataField"><select tabindex='1' name='industry'>{INDUSTRY_OPTIONS}</select></td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_SIC_CODE}</td>
-	<td width="30%" valign="top"  class="dataField"><input name='sic_code' tabindex='2' size='10' maxlength='10' type="text" value="{SIC_CODE}"></td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_TYPE}</td>
-	<td width="30%" valign="top"  class="dataField"><select name='account_type' tabindex='1'>{ACCOUNT_TYPE_OPTIONS}</select></td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_ANNUAL_REVENUE}</td>
-	<td width="30%" valign="top"  class="dataField">{APP.LBL_CURRENCY_SYM}<input name='annual_revenue' tabindex='2' size='15' maxlength='25' type="text" value="{ANNUAL_REVENUE}"></td>
-	</tr><tr>
-	<td width="20%" class="dataLabel">{APP.LBL_ASSIGNED_TO}</td>
-	<td width="30%"><select tabindex='1' name="assigned_user_id">{ASSIGNED_USER_OPTIONS}</select></td>
-	</tr></table>
+	{BLOCK1}	
+	</table>
 </td></tr></table>
 <BR>
         {CUSTOMFIELD}
-<BR>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
 <tr><td>
 	<table width="100%" border="0" cellspacing="1" cellpadding="0">
 	<tr>
 	<th align="left" class="formSecHeader" colspan="5">{MOD.LBL_ADDRESS_INFORMATION}</th>
-	</tr><tr>
-	<td width="20%" class="dataLabel">{MOD.LBL_BILLING_ADDRESS}</td>
-	<td width="30%"><textarea name='billing_address_street' rows="2" tabindex='3' cols="30">{BILLING_ADDRESS_STREET}</textarea></td>
-	<td rowspan='5' valign='middle' align="center"><input title="{MOD.NTC_COPY_BILLING_ADDRESS}"  class="button" onclick="return copyAddressRight(EditView)"  type="button" name="copyright" value=">>" ><br><br>
-	<input title="{MOD.NTC_COPY_SHIPPING_ADDRESS}"  class="button" onclick="return copyAddressLeft(EditView)"  type="button" name="copyleft" value="<<" ></td>
-	<td width="20%" class="dataLabel">{MOD.LBL_SHIPPING_ADDRESS}</td>
-	<td width="30%"><textarea name='shipping_address_street' rows="2" tabindex='4'cols="30">{SHIPPING_ADDRESS_STREET}</textarea></td>
-	</tr><tr>
-	<td width="20%" class="dataLabel">{MOD.LBL_CITY}</td>
-	<td width="30%"><input name='billing_address_city' tabindex='3' size='25' maxlength='100' value="{BILLING_ADDRESS_CITY}"></td>
-	<td width="20%" class="dataLabel">{MOD.LBL_CITY}</td>
-	<td width="30%"><input name='shipping_address_city' tabindex='4' size='25' maxlength='100' value="{SHIPPING_ADDRESS_CITY}"></td>
-	</tr><tr>
-	<td width="20%" class="dataLabel">{MOD.LBL_STATE}</td>
-	<td width="30%"><input name='billing_address_state' tabindex='3' size='15' maxlength='100' value="{BILLING_ADDRESS_STATE}"></td>
-	<td width="20%" class="dataLabel">{MOD.LBL_STATE}</td>
-	<td width="30%"><input name='shipping_address_state' tabindex='4' size='15' maxlength='100' value="{SHIPPING_ADDRESS_STATE}"></td>
-	</tr><tr>
-	<td width="20%" class="dataLabel">{MOD.LBL_POSTAL_CODE}</td>
-	<td width="30%"><input name='billing_address_postalcode' tabindex='3' size='15' maxlength='20' value="{BILLING_ADDRESS_POSTALCODE}"></td>
-	<td width="20%" class="dataLabel">{MOD.LBL_POSTAL_CODE}</td>
-	<td width="30%"><input name='shipping_address_postalcode' tabindex='4' size='15' maxlength='20' value="{SHIPPING_ADDRESS_POSTALCODE}"></td>
-	</tr><tr>
-	<td width="20%" class="dataLabel">{MOD.LBL_COUNTRY}</td>
-	<td width="30%"><input name='billing_address_country' tabindex='3' size='10' maxlength='100' value="{BILLING_ADDRESS_COUNTRY}"></td>
-	<td width="20%" class="dataLabel">{MOD.LBL_COUNTRY}</td>
-	<td width="30%"><input name='shipping_address_country' tabindex='4' size='10' maxlength='100' value="{SHIPPING_ADDRESS_COUNTRY}"></td>
-</tr></table>
+	</tr>
+	{BLOCK2}
+	</table>
 </td></tr></table>
 <BR>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
 <tr><td>
 	<table width="100%" border="0" cellspacing="1" cellpadding="0">
 	<tr>
-	<th align="left" class="formSecHeader" colspan="2">{MOD.LBL_DESCRIPTION_INFORMATION}</th>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_DESCRIPTION}</td>
-	<td><textarea name='description' tabindex='5' cols="60" rows="8">{DESCRIPTION}</textarea></td>
-</tr></table>
+        <th align="left" class="formSecHeader" colspan="2">{MOD.LBL_DESCRIPTION_INFORMATION}</th>
+        </tr><tr>
+	{BLOCK3}
+	</table>
 </td></tr></table>
  <table width="100%" cellpadding="2" cellspacing="0" border="0"><tr>
     <td align="left"></td>
@@ -162,19 +95,19 @@
 </form>
 <script type="text/javascript" language="Javascript">
 function copyAddressRight(form) {
-	form.shipping_address_street.value = form.billing_address_street.value;
-	form.shipping_address_city.value = form.billing_address_city.value;
-	form.shipping_address_state.value = form.billing_address_state.value;
-	form.shipping_address_postalcode.value = form.billing_address_postalcode.value;
-	form.shipping_address_country.value = form.billing_address_country.value;
+	form.ship_street.value = form.bill_street.value;
+	form.ship_city.value = form.bill_city.value;
+	form.ship_state.value = form.bill_state.value;
+	form.ship_code.value = form.bill_code.value;
+	form.ship_country.value = form.bill_country.value;
 	return true;
 }
 function copyAddressLeft(form) {
-	form.billing_address_street.value =	form.shipping_address_street.value;
-	form.billing_address_city.value = form.shipping_address_city.value;
-	form.billing_address_state.value = form.shipping_address_state.value;
-	form.billing_address_postalcode.value =	form.shipping_address_postalcode.value;
-	form.billing_address_country.value = form.shipping_address_country.value;
+	form.bill_street.value = form.ship_street.value;
+	form.bill_city.value = form.ship_city.value;
+	form.bill_state.value = form.ship_state.value;
+	form.bill_code.value =	form.ship_code.value;
+	form.bill_country.value = form.ship_country.value;
 	return true;
 }
 </script>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Activities/SubPanelView.php,v 1.10 2005/01/16 11:54:04 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/SubPanelView.php,v 1.14 2005/03/02 13:56:52 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -49,7 +49,7 @@ foreach ($focus_tasks_list as $task) {
 		$history_list[] = Array('name' => $task->name,
 									 'id' => $task->id,
 									 'type' => "Task",
-									 'module' => "Tasks",
+									 'module' => "Activities",
 									 'status' => $task->status,
 									 'parent_id' => $task->parent_id,
 									 'parent_type' => $task->parent_type,
@@ -65,7 +65,7 @@ foreach ($focus_tasks_list as $task) {
 		$open_activity_list[] = Array('name' => $task->name,
 									 'id' => $task->id,
 									 'type' => "Task",
-									 'module' => "Tasks",
+									 'module' => "Activities",
 									 'status' => $task->status,
 									 'parent_id' => $task->parent_id,
 									 'parent_type' => $task->parent_type,
@@ -187,12 +187,17 @@ if ($currentModule == 'Contacts') {
 	$button .= "<input type='hidden' name='contact_id' value='$focus->id'>\n<input type='hidden' name='contact_name' value='$focus->first_name $focus->last_name'>\n";
 	$button .= "<input type='hidden' name='parent_type' value='Contacts'>\n<input type='hidden' name='parent_id' value='$focus->account_id'>\n<input type='hidden' name='parent_name' value='$focus->account_name'>\n";
 }
+if ($currentModule == 'Leads') {
+	$button .= "<input type='hidden' name='lead_id' value='$focus->id'>\n<input type='hidden' name='parent_name' value='$focus->first_name $focus->last_name'>\n";
+	$button .= "<input type='hidden' name='parent_type' value='Leads'>\n<input type='hidden' name='parent_id' value='$focus->id'>\n";
+}
+
 $button .= "<input type='hidden' name='return_module' value='".$currentModule."'>\n";
 $button .= "<input type='hidden' name='return_action' value='".$action."'>\n";
 $button .= "<input type='hidden' name='return_id' value='".$focus->id."'>\n";
 $button .= "<input type='hidden' name='action'>\n";
 $button .= "<tr><td>&nbsp;</td>";
-$button .= "<td><input title='".$current_module_strings['LBL_NEW_TASK_BUTTON_TITLE']."' accessyKey='".$current_module_strings['LBL_NEW_TASK_BUTTON_KEY']."' class='button' onclick=\"this.form.action.value='EditView';this.form.module.value='Tasks'\" type='submit' name='button' value='".$current_module_strings['LBL_NEW_TASK_BUTTON_LABEL']."'></td>\n";
+$button .= "<td><input title='".$current_module_strings['LBL_NEW_TASK_BUTTON_TITLE']."' accessyKey='".$current_module_strings['LBL_NEW_TASK_BUTTON_KEY']."' class='button' onclick=\"this.form.action.value='EditView';this.form.module.value='Activities'\" type='submit' name='button' value='".$current_module_strings['LBL_NEW_TASK_BUTTON_LABEL']."'></td>\n";
 $button .= "<td><input title='".$current_module_strings['LBL_SCHEDULE_MEETING_BUTTON_TITLE']."' accessKey='".$current_module_strings['LBL_SCHEDULE_MEETING_BUTTON_KEY']."' class='button' onclick=\"this.form.action.value='EditView';this.form.module.value='Meetings'\" type='submit' name='button' value='".$current_module_strings['LBL_SCHEDULE_MEETING_BUTTON_LABEL']."'></td>\n";
 $button .= "<td><input title='".$current_module_strings['LBL_SCHEDULE_CALL_BUTTON_TITLE']."' accessyKey='".$current_module_strings['LBL_SCHEDULE_CALL_BUTTON_KEY']."' class='button' onclick=\"this.form.action.value='EditView';this.form.module.value='Calls'\" type='submit' name='button' value='".$current_module_strings['LBL_SCHEDULE_CALL_BUTTON_LABEL']."'></td>\n";
 $button .= "</tr></form></table>\n";
@@ -229,7 +234,7 @@ foreach($open_activity_list as $activity)
 			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=$currentModule&return_action=$action&return_id=$focus->id&action=Save&module=Meetings&record=".$activity['id']."&status=Held'>X</a>";
 			break;
 		case 'Task':
-			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=$currentModule&return_action=$action&return_id=$focus->id&action=Save&module=Tasks&record=".$activity['id']."&status=Completed'>X</a>";
+			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=$currentModule&return_action=$action&return_id=$focus->id&action=Save&module=Activities&record=".$activity['id']."&status=Completed'>X</a>";
 			break;
 	}
 	
@@ -269,8 +274,8 @@ if ($currentModule == 'Contacts') {
 	$button .= "<input type='hidden' name='parent_type' value='Contacts'>\n<input type='hidden' name='parent_id' value='$focus->account_id'>\n<input type='hidden' name='parent_name' value='$focus->account_name'>\n";
 }
 if ($currentModule == 'Leads') {
-	$button .= "<input type='hidden' name='lead_id' value='$focus->id'>\n<input type='hidden' name='lead_name' value='$focus->first_name $focus->last_name'>\n";
-	$button .= "<input type='hidden' name='parent_type' value='Lead'>\n";
+	$button .= "<input type='hidden' name='lead_id' value='$focus->id'>\n<input type='hidden' name='parent_name' value='$focus->first_name $focus->last_name'>\n";
+	$button .= "<input type='hidden' name='parent_type' value='Leads'>\n<input type='hidden' name='parent_id' value='$focus->id'>\n";
 }
 $button .= "<input type='hidden' name='return_module' value='".$currentModule."'>\n";
 $button .= "<input type='hidden' name='return_action' value='".$action."'>\n";
@@ -354,7 +359,7 @@ echo '<td valign="bottom"><input title="Attach File" accessyKey="F" class="butto
 echo '<td width="100%"></td>';
 
 echo '</td></tr></form></tbody></table>';
-echo getAttachmentsList($focus->id, $theme);
+echo getAttachmentsList($focus->id, $theme,$currentModule,'');
 // Stick on the form footer
 echo get_form_footer();
  

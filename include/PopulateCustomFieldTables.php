@@ -7,10 +7,11 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  ********************************************************************************/
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 function create_custom_field_tables () 
 {
-		$query = 'CREATE TABLE customfieldtypemapping ( ';
+		global $adb;
+		/*$query = 'CREATE TABLE customfieldtypemapping ( ';
 		$query .='uitype int(10) NOT NULL';
 		$query .=', typdesc varchar(255) NOT NULL';
 	        $query .=', PRIMARY KEY ( uitype ) )';
@@ -18,25 +19,28 @@ function create_custom_field_tables ()
 		mysql_query($query);
 		echo ("Table customfieldtypemapping created");
 		echo ('<BR>');
+		*/
 
-		mysql_query("insert into customfieldtypemapping values(1,'Text Field not mandatory')");
-		mysql_query("insert into customfieldtypemapping values(2,'Text Field mandatory')");
-		mysql_query("insert into customfieldtypemapping values(3,'Currency not mandatory')");
-		mysql_query("insert into customfieldtypemapping values(4,'Currency mandatory')");
-		mysql_query("insert into customfieldtypemapping values(5,'Date not mandatory')");
-		mysql_query("insert into customfieldtypemapping values(6,'Date mandatory')");
-		mysql_query("insert into customfieldtypemapping values(7,'Number not mandatory')");
-		mysql_query("insert into customfieldtypemapping values(8,'Number mandatory')");
-		mysql_query("insert into customfieldtypemapping values(9,'Percent not mandatory')");
-		mysql_query("insert into customfieldtypemapping values(10,'Percent mandatory')");
-		mysql_query("insert into customfieldtypemapping values(11,'Phone not mandatory')");
-		mysql_query("insert into customfieldtypemapping values(12,'Phone mandatory')");
-		mysql_query("insert into customfieldtypemapping values(13,'email not mandatory')");
-		mysql_query("insert into customfieldtypemapping values(14,'email mandatory')");
-		mysql_query("insert into customfieldtypemapping values(15,'Picklist not mandatory')");
-		mysql_query("insert into customfieldtypemapping values(16,'Picklist mandatory')");
+		
+		$adb->query("insert into customfieldtypemapping values(1,'Text Field not mandatory')");
+		$adb->query("insert into customfieldtypemapping values(2,'Text Field mandatory')");
+		$adb->query("insert into customfieldtypemapping values(3,'Currency not mandatory')");
+		$adb->query("insert into customfieldtypemapping values(4,'Currency mandatory')");
+		$adb->query("insert into customfieldtypemapping values(5,'Date not mandatory')");
+		$adb->query("insert into customfieldtypemapping values(6,'Date mandatory')");
+		$adb->query("insert into customfieldtypemapping values(7,'Number not mandatory')");
+		$adb->query("insert into customfieldtypemapping values(8,'Number mandatory')");
+		$adb->query("insert into customfieldtypemapping values(9,'Percent not mandatory')");
+		$adb->query("insert into customfieldtypemapping values(10,'Percent mandatory')");
+		$adb->query("insert into customfieldtypemapping values(11,'Phone not mandatory')");
+		$adb->query("insert into customfieldtypemapping values(12,'Phone mandatory')");
+		$adb->query("insert into customfieldtypemapping values(13,'email not mandatory')");
+		$adb->query("insert into customfieldtypemapping values(14,'email mandatory')");
+		$adb->query("insert into customfieldtypemapping values(15,'Picklist not mandatory')");
+		$adb->query("insert into customfieldtypemapping values(16,'Picklist mandatory')");
 			
 
+		/*
 		$query = 'CREATE TABLE customfields ( ';
 		$query .='fieldid int(10) NOT NULL auto_increment';
 		$query .=', column_name varchar(100) NOT NULL';
@@ -55,6 +59,7 @@ function create_custom_field_tables ()
 
 		echo ("Table customfields created");
                 echo ('<BR>');
+		
 
 		$query = 'CREATE TABLE  leadcf( ';
 		$query .='leadid varchar(36) NOT NULL';
@@ -87,7 +92,7 @@ function create_custom_field_tables ()
 		mysql_query($query);
 		echo ("Table opportunitycf created");
                 echo ('<BR>');
-	
+		*/
 
 	// exception handling logic here if the table can't be created.
 

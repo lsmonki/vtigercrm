@@ -14,6 +14,7 @@
 require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/User.php');
+require_once('include/database/PearDatabase.php');
 global $current_user;
 global $theme;
 global $default_language;
@@ -59,15 +60,15 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 	$xtpl->out("user_settings");
 }
 
-$sql_set = "update tabmenu set presence=0";
-mysql_query($sql_set);
+$sql_set = "update tab set presence=1 where presence !=2";
+$adb->query($sql_set);
 $j=1;
 foreach($_POST as $name=>$value)
- {
-	$sql="update tabmenu set presence=1,sequence= " . $j . " where id = " .$value;
-	mysql_query($sql);
-	$j++;
- }
+{
+  $sql="update tab set presence=0,tabsequence= " . $j . " where tabid = " .$value;
+  $adb->query($sql);
+  $j++;
+}
 ?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>

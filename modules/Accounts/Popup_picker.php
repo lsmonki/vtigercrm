@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Popup_picker.php,v 1.3 2004/12/20 16:29:23 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Popup_picker.php,v 1.3 2004/12/20 16:29:23 jack Exp $
  * Description:  This file is used for all popups on this module
  * The popup_picker.html file is used for generating a list from which to find and 
  * choose one instance.

@@ -20,6 +20,7 @@ global $mod_strings;
 
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_TITLE'], true); 
 echo "\n<BR>\n";
-include ('modules/Leads/ListView.php'); 
+include ('modules/Leads/ListView.php');
+include ('modules/Import/ImportButton.php');
 
 ?>

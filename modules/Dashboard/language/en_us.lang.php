@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Dashboard/language/en_us.lang.php,v 1.3 2004/10/06 09:02:05 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Dashboard/language/en_us.lang.php,v 1.4 2005/01/25 06:01:38 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -50,16 +50,6 @@ $mod_strings = Array(
 'LBL_DATE_START'=>'Begin Date:',
 'LBL_DATE_END'=>'End Date:',
 
-'LNK_NEW_CONTACT'=>'New Contact',
-'LNK_NEW_LEAD'=>'New Lead',
-'LNK_NEW_ACCOUNT'=>'New Account',
-'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
-'LNK_NEW_CASE'=>'New Case',
-'LNK_NEW_NOTE'=>'New Note',
-'LNK_NEW_CALL'=>'New Call',
-'LNK_NEW_EMAIL'=>'New Email',
-'LNK_NEW_MEETING'=>'New Meeting',
-'LNK_NEW_TASK'=>'New Task',
 );
 
 ?>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.30 2005/01/11 14:26:54 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.52 2005/03/05 05:19:13 jack Exp $
  * Description:  Defines the English language pack for the base application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -115,7 +115,7 @@ $app_strings = Array(
 'LNK_LIST_PREVIOUS'=>'Previous',
 'LNK_LIST_END'=>'End',
 'LBL_LIST_OF'=>'of',
-'LNK_PRINT'=>'Print',
+'LNK_PRINT'=>'',
 'LNK_HELP'=>'Help',
 'LNK_ABOUT'=>'About',
 'LNK_OUTLOOK'=>'./include/images/outlook_download.gif',
@@ -124,13 +124,11 @@ $app_strings = Array(
 'LNK_NEW_CONTACT'=>'New Contact',
 'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_ACCOUNT'=>'New Account',
-'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
-'LNK_NEW_CASE'=>'New Case',
+'LNK_NEW_OPPORTUNITY'=>'New Potential',
 'LNK_NEW_NOTE'=>'New Note',
-'LNK_NEW_CALL'=>'New Call',
 'LNK_NEW_EMAIL'=>'New Email',
-'LNK_NEW_MEETING'=>'New Meeting',
 'LNK_NEW_TASK'=>'New Task',
+'LNK_NEW_EVENT'=>'New Event',
 
 'NTC_REQUIRED'=>'Indicates required field',
 'LBL_REQUIRED_SYMBOL'=>'*',
@@ -183,6 +181,66 @@ $app_strings = Array(
 'LBL_TYPE'=>'File Type',
 'LBL_DOWNLOAD'=>'Download Now',
 'LBL_OPERATION'=>'Operation',
+'LBL_GROUP_ALLOCATION_TITLE'=>'My Group Allocation ',
+'LBL_ENTITY_NAME'=>'Entity Name',
+'LBL_GROUP_NAME'=>'Group',
+'LBL_ENTITY_TYPE'=>'Type',
+
+//Added fields for Ticket Attachment in RelatedTicketListUtil
+'LBL_NEW_TICKET'=>'New Ticket',
+'LBL_TITLE'=>'Title',
+'LBL_PRIORITY'=>'Priority',
+'LBL_STATUS'=>'Status',
+
+//Added fields for Change Owner and Change Status in all modules -- after 4 Beta
+'LBL_CHANGE_OWNER'=>'Change Owner',
+'LBL_CHANGE_STATUS'=>'Change Status',
+'LBL_MASS_DELETE'=>'Mass Delete',
+
+// Added fields for Related Field Display Informations in Detail View of All Modules
+'LBL_OPEN_ACTIVITIES'=>'Open Activities',
+'LBL_HISTORY'=>'History',
+
+'LBL_ACTION'=>'Action',
+'LBL_SUBJECT'=>'Subject',
+'LBL_RELATED_TO'=>'Related To',
+'LBL_DUE_DATE'=>'Due Date',
+'LBL_LAST_MODIFIED'=>'Last Modified',
+'LBL_DESCRIPTION'=>'Description',
+
+'LBL_NEW_TASK'=>'New Task',
+'LBL_NEW_EVENT'=>'New Event',
+'LBL_ATTACHMENT_AND_NOTES'=>'Attachments & Notes',
+'LBL_POTENTIAL_NAME'=>'Potential Name',
+'LBL_CONTACT_NAME'=>'Contact Name',
+'LBL_DEPARTMENT'=>'Department',
+'LBL_ROLE'=>'Role',
+'LBL_EMAIL'=>'Email',
+'LBL_PHONE'=>'Phone',
+'LBL_PRODUCT'=>'Product',
+'LBL_AMOUNT'=>'Amount',
+'LBL_CLOSE_DATE'=>'Close Date',
+'LBL_NEW_ATTACHMENT'=>'New Attachment',
+'LBL_NEW_NOTE'=>'New Note',
+
+'LBL_PRODUCT_TITLE'=>'Products',
+'LBL_NEW_PRODUCT'=>'New Product',
+'LBL_PRODUCT_NAME'=>'Product Name',
+'LBL_QUANTITY'=>'Quantity',
+'LBL_SALES_PRICE'=>'Sale Price',
+'LBL_PURCHASE_DATE'=>'Purchase Date',
+'LBL_TICKET_ID'=>'Ticket Id',
+'LBL_NEW_TICKET'=>'New Ticket',
+'LBL_TICKETS'=>'Tickets',
+
+'LBL_POTENTIAL_TITLE'=>'Potentials',
+'LBL_NEW_POTENTIAL'=>'New Potential',
+'LBL_LEAD_NAME'=>'Lead Name',
+'LBL_ACCOUNT_NAME'=>'Account Name',
+'LBL_ACCOUNT_TYPE'=>'Account Type',
+'LBL_USER_TITLE'=>'Users',
+'LBL_CONTACT_TITLE'=>'Contacts',
+
 );
 
 //the left value is the key stored in the db and the right value is the display value
@@ -194,114 +252,14 @@ $app_list_strings = Array(
 				, 'Leads'=>'Leads'
 				, 'Contacts'=>'Contacts'
 				, 'Accounts'=>'Accounts'
-				, 'Opportunities'=>'Opportunities'
-				, 'Cases'=>'Cases'
+				, 'Potentials'=>'Potentials'
 				, 'Notes'=>'Notes'
-				, 'Calls'=>'Calls'
 				, 'Emails'=>'Emails'
-				, 'Meetings'=>'Meetings'
-				, 'Tasks'=>'Tasks'
+				, 'Activities'=>'Activities'
 				, 'MessageBoard'=>'MessageBoard'
 				, 'Products'=>'Products'
-				, 'HelpDesk'=>'HelpDesk'
+				, 'HelpDesk'=>'Helpdesk'
 				, 'Calendar'=>'Calendar'),
-
-//e.g. en français 'Analyst'=>'Analyste',
-'account_type_dom' => Array(''=>''
-		, 'Analyst'=>'Analyst'
-		, 'Competitor'=>'Competitor'
-		, 'Customer'=>'Customer'
-		, 'Integrator'=>'Integrator'
-		, 'Investor'=>'Investor'
-		, 'Partner'=>'Partner'
-		, 'Press'=>'Press'
-		, 'Prospect'=>'Prospect'
-		, 'Reseller'=>'Reseller'
-		, 'Other'=>'Other'
-		),
-
-//e.g. en español 'Apparel'=>'Ropa',
-'industry_dom' => Array(''=>''
-		, 'Apparel'=>'Apparel'
-		, 'Banking'=>'Banking'
-		, 'Biotechnology'=>'Biotechnology'
-		, 'Chemicals'=>'Chemicals'
-		, 'Communications'=>'Communications'
-		, 'Construction'=>'Construction'
-		, 'Consulting'=>'Consulting'
-		, 'Education'=>'Education'
-		, 'Electronics'=>'Electronics'
-		, 'Energy'=>'Energy'
-		, 'Engineering'=>'Engineering'
-		, 'Entertainment'=>'Entertainment'
-		, 'Environmental'=>'Environmental'
-		, 'Finance'=>'Finance'
-		, 'Food & Beverage'=>'Food & Beverage'
-		, 'Government'=>'Government'
-		, 'Healthcare'=>'Healthcare'
-		, 'Hospitality'=>'Hospitality'
-		, 'Insurance'=>'Insurance'
-		, 'Machinery'=>'Machinery'
-		, 'Manufacturing'=>'Manufacturing'
-		, 'Media'=>'Media'
-		, 'Not For Profit'=>'Not For Profit'
-		, 'Recreation'=>'Recreation'
-		, 'Retail'=>'Retail'
-		, 'Shipping'=>'Shipping'
-		, 'Technology'=>'Technology'
-		, 'Telecommunications'=>'Telecommunications'
-		, 'Transportation'=>'Transportation'
-		, 'Utilities'=>'Utilities'
-		, 'Other'=>'Other'
-		),
-
-'lead_source_dom' => Array(''=>''
-		, 'Cold Call'=>'Cold Call'
-		, 'Existing Customer'=>'Existing Customer'
-		, 'Self Generated'=>'Self Generated'
-		, 'Employee'=>'Employee'
-		, 'Partner'=>'Partner'
-		, 'Public Relations'=>'Public Relations'
-		, 'Direct Mail'=>'Direct Mail'
-		, 'Conference'=>'Conference'
-		, 'Trade Show'=>'Trade Show'
-		, 'Web Site'=>'Web Site'
-		, 'Word of mouth'=>'Word of mouth'
-		, 'Other'=>'Other'
-		),
-
-'lead_status_dom' => Array(''=>''
-                , 'Attempted to Contact'=>'Attempted to Contact'
-                , 'Cold'=>'Cold'
-                , 'Contact in Future'=>'Contact in Future'
-                , 'Contacted'=>'Contacted'
-                , 'Host'=>'Host'
-                , 'Junk Lead'=>'Junk Lead'
-                , 'Lost Lead'=>'Lost Lead'
-                , 'Not Contacted'=>'Not Contacted'
-                , 'Pre Qualified'=>'Pre Qualified'
-                , 'Qualified'=>'Qualified'
-                , 'Warm'=>'Warm'
-                ),
-
-'rating_dom' => Array(''=>''
-                , 'Acquired'=>'Acquired'
-                , 'Active'=>'Active'
-                , 'Market Failed'=>'Market Failed'
-                , 'Project Cancelled'=>'Project Cancelled'
-                , 'Shutdown'=>'Shutdown'
-                ),
-
-'license_key_dom' => Array(''=>''
-                , 'Sent'=>'Sent'
-                , 'Not Sent'=>'Not Sent'
-                ),
-  
-
-'opportunity_type_dom' => Array(''=>''
-		, 'Existing Business'=>'Existing Business'
-		, 'New Business'=>'New Business'
-		),
 
 //Note:  do not translate opportunity_relationship_type_default_key
 //       it is the key for the default opportunity_relationship_type_dom value
@@ -323,26 +281,6 @@ $app_list_strings = Array(
 'case_relationship_type_dom' => Array(''=>''
 		, 'Primary Contact'=>'Primary Contact'
 		, 'Alternate Contact'=>'Alternate Contact'
-		),
-
-'sales_stage_dom' => Array('Prospecting'=>'Prospecting'
-		, 'Qualification'=>'Qualification'
-		, 'Needs Analysis'=>'Needs Analysis'
-		, 'Value Proposition'=>'Value Proposition'
-		, 'Id. Decision Makers'=>'Id. Decision Makers'
-		, 'Perception Analysis'=>'Perception Analysis'
-		, 'Proposal/Price Quote'=>'Proposal/Price Quote'
-		, 'Negotiation/Review'=>'Negotiation/Review'
-		, 'Closed Won'=>'Closed Won'
-		, 'Closed Lost'=>'Closed Lost'
-		),
-
-'salutation_dom' => Array(''=>''
-		, 'Mr.'=>'Mr.'
-		, 'Ms.'=>'Ms.'
-		, 'Mrs.'=>'Mrs.'
-		, 'Dr.'=>'Dr.'
-		, 'Prof.'=>'Prof.'
 		),
 
 'task_priority_dom' => Array('High'=>'High'
@@ -385,6 +323,7 @@ $app_list_strings = Array(
 //       it is the key for the default record_type_module value
 'record_type_default_key' => 'Accounts',
 'record_type_display' => array('Accounts' => 'Account',
+		'Leads' => 'Lead',
 		'Opportunities' => 'Opportunity'),
 );
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.16 2005/01/08 14:07:20 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.52 2005/03/05 11:37:00 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,12 +24,9 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('include/utils.php');
-require_once('modules/Opportunities/Opportunity.php');
-require_once('modules/Cases/Case.php');
-require_once('modules/Tasks/Task.php');
+require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Activities/Activity.php');
 require_once('modules/Notes/Note.php');
-require_once('modules/Meetings/Meeting.php');
-require_once('modules/Calls/Call.php');
 require_once('modules/Emails/Email.php');
 
 // Contact is used to store customer information.
@@ -39,19 +36,18 @@ class Contact extends SugarBean {
 
 	// Stored fields
 	var $id;
-	var $lead_source;
-	var $date_entered;
-	var $date_modified;
-	var $modified_user_id;
-	var $assigned_user_id;
+	var $mode;
+
+	var $contactid;
+	var $leadsource;
 	var $description;
 	var $salutation;	
-	var $first_name;
-	var $last_name;
+	var $firstname;
+	var $lastname;
 	var $title;
 	var $department;
 	var $birthdate;
-	var $reports_to_id;
+	var $reportsto;
 	var $do_not_call;
 	var $phone_home;
 	var $phone_mobile;
@@ -64,20 +60,10 @@ class Contact extends SugarBean {
 	var $assistant;
 	var $assistant_phone;
 	var $email_opt_out;
-	var $primary_address_street;
-	var $primary_address_city;
-	var $primary_address_state;
-	var $primary_address_postalcode;
-	var $primary_address_country;
-	var $alt_address_street;
-	var $alt_address_city;
-	var $alt_address_state;
-	var $alt_address_postalcode;
-	var $alt_address_country;
 
 	// These are for related fields
-	var $account_name;
-	var $account_id;
+	var $accountname;
+	var $accountid;
 	var $reports_to_name;
 	var $opportunity_role;
 	var $opportunity_rel_id;
@@ -92,131 +78,104 @@ class Contact extends SugarBean {
 	var $email_id;
 	var $assigned_user_name;
 		
-	var $table_name = "contacts";
+	var $table_name = "contactdetails";
+	var $tab_name = Array('crmentity','contactdetails','contactaddress','contactsubdetails','contactscf');
+	var $tab_name_index = Array('crmentity'=>'crmid','contactdetails'=>'contactid','contactaddress'=>'contactaddressid','contactsubdetails'=>'contactsubscriptionid','contactscf'=>'contactid');
+
+
 	var $rel_account_table = "accounts_contacts";
 	//This is needed for upgrade.  This table definition moved to Opportunity module.
 	var $rel_opportunity_table = "opportunities_contacts";
 
+	var $module_id = "contactid";
 	var $object_name = "Contact";
 	
 	var $new_schema = true;
 
-	var $column_fields = Array("id"
-		,"date_entered"
-		,"date_modified"
-		,"modified_user_id"
-		,"assigned_user_id"
-		,"salutation"
-		,"first_name"
-		,"last_name"
-		,"lead_source"
-		,"title"
-		,"department"
-		,"birthdate"
-		,"reports_to_id"
-		,"do_not_call"
-		,"phone_home"
-		,"phone_mobile"
-		,"phone_work"
-		,"phone_other"
-		,"phone_fax"
-		,"email1"
-		,"email2"
-		,"yahoo_id"
-		,"assistant"
-		,"assistant_phone"
-		,"email_opt_out"
-		,"primary_address_street"
-		,"primary_address_city"
-		,"primary_address_state"
-		,"primary_address_postalcode"
-		,"primary_address_country"
-		,"alt_address_street"
-		,"alt_address_city"
-		,"alt_address_state"
-		,"alt_address_postalcode"
-		,"alt_address_country"
-		,"description"
-		);
+	var $column_fields = Array();
+	
+	var $sortby_fields = Array('lastname','title','email','phone');
 
 	// This is used to retrieve related fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'account_name', 'account_id', 'opportunity_id', 'case_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id');		
 	
 	// This is the list of fields that are in the lists.
-	var $list_fields = Array('id', 'first_name', 'last_name','salutation', 'account_name', 'account_id', 'title', 'yahoo_id', 'email1','primary_address_city','phone_mobile','reports_to_id','primary_address_street', 'phone_work','primary_address_state','primary_address_postalcode','primary_address_country','alt_address_city','alt_address_street','alt_address_state','alt_address_postalcode','alt_address_country','assigned_user_name', 'assigned_user_id', "case_role", 'case_rel_id', 'opportunity_role', 'opportunity_rel_id');	
+	var $list_fields = Array(
+	'Name' => Array('contactdetails'=>'lastname'),
+	'Title' => Array('contactdetails'=>'title'),
+	'Account Name' => Array('account'=>'accountname'),
+	'Email' => Array('contactdetails'=>'email'),
+	'Phone' => Array('contactdetails'=>'phone'),
+	'Assigned To' => Array('crmentity'=>'smownerid')
+	);
+	
+	var $range_fields = Array(
+	'first_name',
+	'last_name',
+	'primary_address_city',
+	'account_name',
+	'account_id',
+	'id',
+	'email1',
+	'salutation',
+	'title',
+	'phone_mobile',
+	'reports_to_name',
+	'primary_address_street',
+	'primary_address_city',
+	'primary_address_state',
+	'primary_address_postalcode',
+	'primary_address_country',
+	'alt_address_city',
+	'alt_address_street',
+	'alt_address_city',
+	'alt_address_state',
+	'alt_address_postalcode',
+	'alt_address_country'
+	
+	);
+
+	var $list_fields_name = Array(
+	'Name' => 'lastname',
+	'Title' => 'title',
+	'Account Name' => 'accountid',
+	'Email' => 'email',
+	'Phone' => 'phone',
+	'Assigned To' => 'assigned_user_id'
+	);
+
+	
+	var $list_link_field= 'lastname';
+
+	var $record_id;
+	var $list_mode;
+        var $popup_type;
+
+	var $search_fields = Array(
+	'Name' => Array('contactdetails'=>'lastname'),
+	'Title' => Array('contactdetails'=>'title')
+		);
+	
+	var $search_fields_name = Array(
+	'Name' => 'lastname',
+	'Title' => 'title'
+	);
+
 	// This is the list of fields that are required
-	var $required_fields =  array("last_name"=>1);
+	var $required_fields =  array("lastname"=>1, 'account_id'=>1);
 
 	function Contact() {
 		$this->log = LoggerManager::getLogger('contact');
 		$this->db = new PearDatabase();
+		$this->column_fields = getColumnFields('Contacts');
 	}
 
 	function create_tables () {
-		$query = 'CREATE TABLE '.$this->table_name.' ( ';
-		$query .='id char(36) NOT NULL';
-		$query .=', deleted bool NOT NULL default 0';
-		$query .=', date_entered datetime NOT NULL';
-		$query .=', date_modified datetime NOT NULL';
-		$query .=', modified_user_id char(36) NOT NULL';
-		$query .=', assigned_user_id char(36)';
-		$query .=', salutation char(5)';
-		$query .=', first_name char(25)';
-		$query .=', last_name char(25)';
-		$query .=', lead_source char(100)';
-		$query .=', title char(45)';
-		$query .=', department char(100)';
-		$query .=', reports_to_id char(36)';
-		$query .=', birthdate date';
-		$query .=', do_not_call char(3) default 0';
-		$query .=', phone_home char(25)';
-		$query .=', phone_mobile char(25)';
-		$query .=', phone_work char(25)';
-		$query .=', phone_other char(25)';
-		$query .=', phone_fax char(25)';
-		$query .=', email1 char(100)';
-		$query .=', email2 char(100)';
-		$query .=', yahoo_id char(75)';
-		$query .=', assistant char(75)';
-		$query .=', assistant_phone char(25)';
-		$query .=', email_opt_out char(3) default 0';
-		$query .=', primary_address_street char(150)';
-		$query .=', primary_address_city char(100)';
-		$query .=', primary_address_state char(100)';
-		$query .=', primary_address_postalcode char(20)';
-		$query .=', primary_address_country char(100)';
-		$query .=', alt_address_street char(150)';
-		$query .=', alt_address_city char(100)';
-		$query .=', alt_address_state char(100)';
-		$query .=', alt_address_postalcode char(20)';
-		$query .=', alt_address_country char(100)';
-		$query .=', description text';
-		$query .=', PRIMARY KEY ( ID ) )';
-		
-		
-		
-		$this->db->query($query,true,"Error creating table: ");
-
-		//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
-		
-		$query = "CREATE TABLE $this->rel_account_table (";
-		$query .='id char(36) NOT NULL';
-		$query .=', contact_id char(36)';
-		$query .=', account_id char(36)';
-		$query .=', deleted bool NOT NULL default 0';
-		$query .=', PRIMARY KEY ( ID ) )';
 	
-		
-		$this->db->query($query,true,"Error creating account/contact relationship table: ");
-
-		
-		// Create the indexes
-		$this->create_index("create index idx_cont_last_first on contacts (last_name, first_name, deleted)");
-		$this->create_index("create index idx_acc_cont_acc on accounts_contacts (account_id)");
-		$this->create_index("create index idx_acc_cont_cont on accounts_contacts (contact_id)");
 	}
 
 	function drop_tables () {
+		/*
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
 		
@@ -237,76 +196,74 @@ class Contact extends SugarBean {
 	
 		
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
+		*/
 
 	}
 	
 	function delete($id)
         {
-          mysql_query('update contacts set deleted=1 where id = \'' .$id . '\'');
+          $this->db->query('update crmentity set deleted=1 where crmid = \'' .$contactid . '\'');
         }
     
     function getCount($user_name) 
     {
-        $query = "select count(*) from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."' and contacts.deleted=0";
+        $query = "select count(*) from contactdetails  inner join crmentity on crmentity.crmid=contactdetails.contactid inner join users on users.id=crmentity.smownerid where user_name='" .$user_name ."' and crmentity.deleted=0";
 
-//        echo "\n Query is " .$query ."\n";
         $result = $this->db->query($query,true,"Error retrieving contacts count");
         $rows_found =  $this->db->getRowCount($result);
         $row = $this->db->fetchByAssoc($result, 0);
 
-  //      echo "ROW COUNT is " .$row["count(*)"];
-    //    echo "\nROWs FOUND is " .$rows_found;
-
-    
     
             return $row["count(*)"];
     }       
 
+        function get_contacts1($user_name,$email_address)
+    {   
+      $query = "select contactdetails.lastname last_name,contactdetails.firstname first_name,contactdetails.contactid as id, contactdetails.salutation as salutation, contactdetails.email as email1,contactdetails.title as title,contactdetails.mobile as phone_mobile,account.accountname as account_name,account.accountid as account_id   from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid inner join users on users.id=crmentity.smownerid  left join account on account.accountid=contactdetails.accountid left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid where user_name='" .$user_name ."' and crmentity.deleted=0  and contactdetails.email like '%" .$email_address ."%' limit 50";
+      //echo $query;
+      return $this->process_list_query1($query);
+    }
+
     function get_contacts($user_name,$from_index,$offset)
     {   
-       // $query = "select contacts.*, accounts.name accountname,accounts.id accountid from contacts inner join users on users.id=contacts.assigned_user_id  left join accounts_contacts on accounts_contacts.contact_id=contacts.id left join accounts on accounts.id=accounts_contacts.account_id where user_name='" .$user_name ."' and contacts.deleted=0 and accounts_contacts.deleted=0 limit " .$from_index ."," .$offset;
-
- $query = "select contacts.* from contacts inner join users on users.id=contacts.assigned_user_id   where user_name='" .$user_name ."' and contacts.deleted=0 limit " .$from_index ."," .$offset;
-
-
-   //  $query = "select * from contacts limit " .$from_index ."," .$offset;
- //   echo $query;
-    return $this->process_list_query1($query);
-    
+      $query = "select contactdetails.lastname last_name,contactdetails.firstname first_name,contactdetails.contactid as id, contactdetails.salutation as salutation, contactdetails.email as email1,contactdetails.title as title,contactdetails.mobile as phone_mobile,account.accountname as account_name,account.accountid as account_id, contactaddress.mailingcity as primary_address_city,contactaddress.mailingstreet as primary_address_street, contactaddress.mailingcountry as primary_address_country,contactaddress.mailingstate as primary_address_state, contactaddress.mailingzip as primary_address_postalcode,   contactaddress.othercity as alt_address_city,contactaddress.otherstreet as alt_address_street, contactaddress.othercountry as alt_address_country,contactaddress.otherstate as alt_address_state, contactaddress.otherzip as alt_address_postalcode  from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid inner join users on users.id=crmentity.smownerid  left join account on account.accountid=contactdetails.accountid left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid where user_name='" .$user_name ."' and crmentity.deleted=0 limit " .$from_index ."," .$offset;
+      return $this->process_list_query1($query);
     }
 
 
 
     function process_list_query1($query)
     {
+	  
         $result =& $this->db->query($query,true,"Error retrieving $this->object_name list: ");
         $list = Array();
         $rows_found =  $this->db->getRowCount($result);
         if($rows_found != 0)
         {
+		   $contact = Array();
                for($index = 0 , $row = $this->db->fetchByAssoc($result, $index); $row && $index <$rows_found;$index++, $row = $this->db->fetchByAssoc($result, $index))
             
-            {
-                foreach($this->list_fields as $field)
+             {
+                foreach($this->range_fields as $columnName)
                 {
-                    if (isset($row[$field])) {
-                        $this->$field = $row[$field];
-                        //$this->log->debug("$this->object_name({$row['id']}): ".$field." = ".$this->$field);
+                    if (isset($row[$columnName])) {
+			    
+                        $contact[$columnName] = $row[$columnName];
                     }   
                     else     
                     {   
-                            $this->$field = "";
+                            $contact[$columnName] = "";
                     }   
-                }   
+	     }	
     
-// TODO OPTIMIZE THE QUERY ACCOUNT NAME AND ID are set separetly for every contacts and hence 
+// TODO OPTIMIZE THE QUERY ACCOUNT NAME AND ID are set separetly for every contactdetails and hence 
 // account query goes for ecery single account row
 
-                $this->fill_in_additional_list_fields();
+                //$this->fill_in_additional_list_fields();
 		//$this->account_name = $row['accountname'];
 		//$this->account_id = $row['accountid'];
-    
-                    $list[] = $this;
+
+                    $list[] = $contact;
                 }
         }   
 
@@ -315,7 +272,6 @@ class Contact extends SugarBean {
         $response['row_count'] = $rows_found;
         $response['next_offset'] = $next_offset;
         $response['previous_offset'] = $previous_offset;
-
 
 
         return $response;
@@ -327,7 +283,7 @@ class Contact extends SugarBean {
 		return "$this->first_name $this->last_name";
 	}
 	
-	/** Returns a list of the associated contacts who are direct reports
+	/** Returns a list of the associated contactdetails who are direct reports
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
@@ -335,7 +291,7 @@ class Contact extends SugarBean {
 	function get_direct_reports()
 	{
 		// First, get the list of IDs.
-		$query = "SELECT c1.id from contacts as c1, contacts as c2 where c2.id=c1.reports_to_id AND c2.id='$this->id' AND c1.deleted=0 order by c1.last_name";
+		$query = "SELECT c1.contactid from contactdetails c1, contactdetails c2 where c2.contactid=c1.reports_to_id AND c2.contactid='$this->contactid' AND c1.deleted=0 order by c1.last_name";
 		
 		return $this->build_related_list($query, new Contact());
 	}
@@ -345,12 +301,13 @@ class Contact extends SugarBean {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-	function get_opportunities()
+	function get_opportunities($id)
 	{
-		// First, get the list of IDs.
-		$query = "SELECT opportunity_id as id from opportunities_contacts where contact_id='$this->id' AND deleted=0";
-		
-		return $this->build_related_list($query, new Opportunity());
+          // First, get the list of IDs.
+          //include('modules/Contacts/RenderRelatedListUI.php');
+	  $query = 'select contactdetails.accountid, contactdetails.contactid , potential.potentialid, potential.potentialname, potential.potentialtype, potential.amount, potential.closingdate from contactdetails inner join potential on contactdetails.accountid = potential.accountid inner join crmentity on crmentity.crmid = potential.potentialid where contactdetails.contactid = '.$id.' and crmentity.deleted=0';
+          renderRelatedPotentials($query,$id);
+          //return $this->build_related_list($query, new Opportunity());
 	}
 	
 		/** Returns a list of the associated opportunities
@@ -358,92 +315,49 @@ class Contact extends SugarBean {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-	function get_accounts()
+	function get_accounts($id)
 	{
-		// First, get the list of IDs.
-		$query = "SELECT account_id as id from accounts_contacts where contact_id='$this->id' AND deleted=0";
-		
-		return $this->build_related_list($query, new Account());
-	}
+          // First, get the list of IDs.
+          $query = "SELECT accountid from contactdetails where contactid=".$id." AND deleted=0";
+          renderRelatedAccounts($query,$id);
+        }
 	
-	/** Returns a list of the associated cases
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	*/
-	function get_cases()
-	{
-		// First, get the list of IDs.
-		$query = "SELECT case_id as id from contacts_cases where contact_id='$this->id' AND deleted=0";
-		
-		return $this->build_related_list($query, new aCase());
-	}
-	
+  
 	/** Returns a list of the associated tasks
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-	function get_tasks()
+	function get_activities($id)
 	{
-		// First, get the list of IDs.
-		$query = "SELECT id from tasks where contact_id='$this->id' AND deleted=0";
-		
-		return $this->build_related_list($query, new Task());
+          // First, get the list of IDs.
+
+		$query = 'SELECT activity.*, cntactivityrel.*, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join cntactivityrel on cntactivityrel.activityid=activity.activityid  inner join users on users.id = crmentity.smownerid inner join crmentity on crmentity.crmid =cntactivityrel.contactid  where crmentity.crmid ='.$id.' and (activitytype="Task" or activitytype="Call" or activitytype="Meeting")';
+	renderRelatedTasks($query);		
+
+          //return $this->build_related_list($query, new Task());
 	}
 
-	/** Returns a list of the associated notes
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	*/
-	function get_notes()
-	{
-		// First, get the list of IDs.
-		$query = "SELECT id from notes where contact_id='$this->id' AND deleted=0";
-		
-		return $this->build_related_list($query, new Note());
-	}
-
-	/** Returns a list of the associated meetings
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	*/
-	function get_meetings()
-	{
-		// First, get the list of IDs.
-		$query = "SELECT meeting_id as id from meetings_contacts where contact_id='$this->id' AND deleted=0";
-		
-		return $this->build_related_list($query, new Meeting());
-	}
-
-	/** Returns a list of the associated calls
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	*/
-	function get_calls()
-	{
-		// First, get the list of IDs.
-		$query = "SELECT call_id as id from calls_contacts where contact_id='$this->id' AND deleted=0";
-		
-		return $this->build_related_list($query, new Call());
-	}
+        function get_attachments($id)
+        {
+		//$query = 'select notes.title,"Notes      " as ActivityType, notes.filename, attachments.type as "FileType",crm2.modifiedtime as "lastmodified", notes.notesid as noteattachmentid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$id;
+		$query = 'select notes.title,"Notes " as ActivityType, notes.filename, attachments.type as "FileType",crm2.modifiedtime as "lastmodified", notes.notesid as noteattachmentid from notes inner join crmentity on crmentity.crmid= notes.contact_id inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$id;
+                $query .= ' union all ';
+	        $query .= 'select "          " as Title ,"Attachments" as ActivityType, attachments.name as "filename", attachments.type as "FileType",crm2.modifiedtime as "lastmodified", attachments.attachmentsid as noteattachmentid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid='.$id;
+                renderRelatedAttachments($query,$id);
+	  }
 
 	/** Returns a list of the associated emails
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-	function get_emails()
-	{
-		// First, get the list of IDs.
-		$query = "SELECT email_id as id from emails_contacts where contact_id='$this->id' AND deleted=0";
-		
-		return $this->build_related_list($query, new Email());
-	}
-
+  function get_emails($id)
+  {
+	$query = 'select seactivityrel.crmid, emails.emailid, activity.subject, activity.activitytype,users.user_name, crmentity.modifiedtime from activity inner join seactivityrel on seactivityrel.activityid = activity.activityid inner join emails on emails.emailid = seactivityrel.activityid inner join contactdetails on contactdetails.accountid = seactivityrel.crmid inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid = emails.emailid  where contactdetails.contactid = '.$id;
+    renderRelatedEmails($query);
+  }
+  
 	function create_list_query(&$order_by, &$where)
 	{
 		// Determine if the account name is present in the where clause.
@@ -451,14 +365,14 @@ class Contact extends SugarBean {
 		
 		if($account_required)
 		{
-			$query = "SELECT * FROM accounts, accounts_contacts a_c, contacts ";
-			//$query = "SELECT contacts.id, contacts.assigned_user_id, contacts.yahoo_id, contacts.first_name, contacts.last_name, contacts.phone_work, contacts.title, contacts.email1 FROM contacts, accounts_contacts a_c, accounts ";
-			$where_auto = "a_c.contact_id = contacts.id AND a_c.account_id = accounts.id AND a_c.deleted=0 AND accounts.deleted=0 AND contacts.deleted=0";
+			$query = "SELECT * FROM accounts, accounts_contacts a_c, contactdetails ";
+			$where_auto = "a_c.contact_id = contactdetails.contactid AND a_c.account_id = accounts.id AND a_c.deleted=0 AND accounts.deleted=0 AND contactdetails.deleted=0";
 		}
 		else 
 		{
-			$query = "SELECT * FROM contacts ";
-			//$query = "SELECT id, yahoo_id, contacts.assigned_user_id, first_name, last_name, phone_work, title, email1 FROM contacts ";
+			$query = "select * from $this->table_name left join contactscf on contactdetails.contactid=contactscf.contactid ";
+			//$query = "SELECT * FROM contactdetails ";
+			//$query = "SELECT id, yahoo_id, contactdetails.assigned_user_id, first_name, last_name, phone_work, title, email1 FROM contactdetails ";
 			$where_auto = "deleted=0";
 		}
 		
@@ -477,75 +391,38 @@ class Contact extends SugarBean {
 //method added to construct the query to fetch the custom fields 
 	function constructCustomQueryAddendum()
 	{
-		$result = mysql_query("SHOW COLUMNS FROM contactcf");
-		$i=0;
-		while ($myrow = mysql_fetch_row($result))
-		{
-		        $columnName[$i] = $myrow[0];
-		        $i++;
-		}
-
-		$sql1 = "select column_name,fieldlabel from customfields where column_name in (";
-		$colName = 0;
-		$addTag;
-		while($colName < count($columnName))
-		{
-		        if ($columnName[$colName] == "contactid")
-        		{
-        		}
-        		else
-        		{
-		                if($colName == 1)
-                		{
-
-		                        $addTag .= "'" .$columnName[$colName] ."'";
-                		}
-		                else
-                		{
-		                        $addTag .= ",'" .$columnName[$colName] ."'";
-                		}
-        		}
-		        $colName++;
-		}
-		$sql2 = $sql1.$addTag .")";
-		$result_sql2 = mysql_query($sql2);
-		$resultCount = mysql_num_rows($result_sql2);
-		$rs=mysql_fetch_array($result_sql2);
-		 $j=0;
-		while($j<mysql_num_rows($result_sql2))
-  		{
-			    for($i=0;$i<=$resultCount;$i++)
-    				{
-				      $copy[$j][$i]=$rs[$i];
-    				}
-			    $rs=mysql_fetch_array($result_sql2);
-			    $j++;
-		}
+        
+         global $adb;
+        	//get all the custom fields created 
+		$sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=4";
+        	$result = $adb->query($sql1);
+		$numRows = $adb->num_rows($result);
+	//select accountscf.columnname fieldlabel,contactscf.columnname fieldlabel	
 		$sql3 = "select ";
-		$k=0;
-		$l=0;
-		while($k< $resultCount)
-		{	
-
-		        if($k == 0)
-        		{
-		        $sql3.= "contactcf.".$copy[$k][$l]." ".$copy[$k][$l+1];
-        		}
-		        else
-        		{
-		        $sql3.= ",contactcf.".$copy[$k][$l]." ".$copy[$k][$l+1];
-        		}
-		        $k++;
-		}
+		for($i=0; $i < $numRows;$i++)
+		{
+			$columnName = $adb->query_result($result,$i,"columnname");
+			$fieldlable = $adb->query_result($result,$i,"fieldlabel");
+			//construct query as below
+		       if($i == 0)
+		      	{
+				$sql3 .= "contactscf.".$columnName. " " .$fieldlable;
+			}
+			else
+			{	
+		$sql3 .= ", contactscf.".$columnName. " " .$fieldlable;
+			}
+        
+        echo '  <<<<<<<<<<<<<< >>>>>>>>>>>>>>>  ' .$sql3;
+	         }
 	return $sql3;
-
-	}
+        	}
 
 //check if the custom table exists or not in the first place
 function checkIfCustomTableExists()
 {
- $result = mysql_query("select * from contactcf");
- $testrow = mysql_num_fields($result);
+ $result = $this->db->query("select * from contactscf");
+ $testrow = $this->db->num_fields($result);
 	if($testrow > 1)
 	{
 		$exists=true;
@@ -561,44 +438,26 @@ return $exists;
         {
 		if($this->checkIfCustomTableExists())
 		{
-	
-                         $query =  $this->constructCustomQueryAddendum() .",
-                                contacts.*,
-                                accounts.name as account_name,
-                                users.user_name as assigned_user_name
-                                FROM contacts
+	   $query =  $this->constructCustomQueryAddendum() .",
+                                contactdetails.*,
+                                account.accountname account_name,
+                                users.user_name assigned_user_name
+                                FROM contactdetails
                                 LEFT JOIN users
-                                ON contacts.assigned_user_id=users.id
-                                LEFT JOIN accounts_contacts
-                                ON contacts.id=accounts_contacts.contact_id
-                                LEFT JOIN accounts
-                                ON accounts_contacts.account_id=accounts.id left join contactcf on contactcf.contactid=contacts.id ";
+                                ON crmentity.smcreatorid=users.id
+                                LEFT JOIN account on contactdetails.accountid=account.accountid inner join crmentity on crmentity.crmid=contactdetails.contactid and crmentity.deleted=0 and users.status='ACTIVE' left join contactscf on contactscf.contactid=contactdetails.contactid";
 		}
 		else
 		{
-			 $query = "SELECT
-                                contacts.*,
-                                accounts.name as account_name,
-                                users.user_name as assigned_user_name
-                                FROM contacts
+                  	 $query = "SELECT
+                                contactdetails.*,
+                                account.accountname account_name,
+                                users.user_name assigned_user_name
+                                FROM contactdetails
                                 LEFT JOIN users
-                                ON contacts.assigned_user_id=users.id
-                                LEFT JOIN accounts_contacts
-                                ON contacts.id=accounts_contacts.contact_id
-                                LEFT JOIN accounts
-                                ON accounts_contacts.account_id=accounts.id ";
+                                ON crmentity.smcreatorid=users.id
+                                LEFT JOIN account on contactdetails.accountid=account.accountid inner join crmentity on crmentity.crmid=contactdetails.contactid and crmentity.deleted=0 and users.status='ACTIVE'  left join contactscf on contactscf.contactid=contactdetails.contactid ";
 		}
-
-                        $where_auto = " (accounts_contacts.deleted=0 or accounts_contacts.deleted is null) 
-                        AND users.status='ACTIVE' AND (accounts.deleted=0 or accounts.deleted is null) AND contacts.deleted=0 ";
-
-                if($where != "")
-                        $query .= "where ($where) AND ".$where_auto;
-                else
-                        $query .= "where ".$where_auto;
-
-                if(!empty($order_by))
-                        $query .= " ORDER BY $order_by";
                 return $query;
         }
 
@@ -655,7 +514,7 @@ return $exists;
     
 	function set_account_contact_relationship($contact_id, $account_id)
 	{
-		$query = "insert into accounts_contacts set id='".create_guid()."', contact_id='$contact_id', account_id='$account_id'";
+		$query = "insert into accounts_contacts (id,contact_id,account_id) values ('".create_guid()."','$contact_id','$account_id')";
 		$this->db->query($query,true,"Error setting account to contact relationship: "."<BR>$query");
 	}
 
@@ -663,7 +522,7 @@ return $exists;
 	{
 		global $app_list_strings;
 		$default = $app_list_strings['opportunity_relationship_type_default_key'];
-		$query = "insert into opportunities_contacts set id='".create_guid()."', opportunity_id='$opportunity_id', contact_id='$contact_id', contact_role='$default'";
+		$query = "insert into opportunities_contacts (id,opportunity_id,contact_id,contact_role) values('".create_guid()."','$opportunity_id','$contact_id','$default')";
 		$this->db->query($query,true,"Error setting account to contact relationship: "."<BR>$query");
 	}
 
@@ -677,7 +536,7 @@ return $exists;
 	{
 		global $app_list_strings;
 		$default = $app_list_strings['case_relationship_type_default_key'];
-		$query = "insert into contacts_cases set id='".create_guid()."', case_id='$case_id', contact_id='$contact_id', contact_role='$default'";
+		$query = "insert into contacts_cases (id,case_id,contact_id,contact_role) values ('".create_guid()."','$case_id','$contact_id','$default')";
 		$this->db->query($query,true,"Error setting account to contact relationship: "."<BR>$query");
 	}
 
@@ -713,7 +572,7 @@ return $exists;
 
 	function set_meeting_contact_relationship($contact_id, $meeting_id)
 	{
-		$query = "insert into meetings_contacts set id='".create_guid()."', meeting_id='$meeting_id', contact_id='$contact_id'";
+		$query = "insert into meetings_contacts (id,meeting_id,contact_id) values ('".create_guid()."','$meeting_id','$contact_id')";
 		$this->db->query($query,true,"Error setting meeting to contact relationship: "."<BR>$query");
 	}
 
@@ -725,7 +584,7 @@ return $exists;
 
 	function set_call_contact_relationship($contact_id, $call_id)
 	{
-		$query = "insert into calls_contacts set id='".create_guid()."', call_id='$call_id', contact_id='$contact_id'";
+		$query = "insert into calls_contacts (id,call_id,contact_id) values ('".create_guid()."','$call_id','$contact_id')";
 		$this->db->query($query,true,"Error setting meeting to contact relationship: "."<BR>$query");
 	}
 
@@ -737,7 +596,7 @@ return $exists;
 
 	function set_email_contact_relationship($contact_id, $email_id)
 	{
-		$query = "insert into emails_contacts set id='".create_guid()."', email_id='$email_id', contact_id='$contact_id'";
+		$query = "insert into emails_contacts (id,email_id,contact_id) values ('".create_guid()."','$email_id','$contact_id')";
 		$this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
 	}
 
@@ -749,13 +608,13 @@ return $exists;
 
 	function clear_contact_all_direct_report_relationship($contact_id)
 	{
-		$query = "UPDATE contacts set reports_to_id='' where reports_to_id='$contact_id' and deleted=0";
+		$query = "UPDATE contactdetails set reports_to_id='' where reports_to_id='$contact_id' and deleted=0";
 		$this->db->query($query,true,"Error clearing contact to direct report relationship: ");
 	}
 
 	function clear_contact_direct_report_relationship($contact_id)
 	{
-		$query = "UPDATE contacts set reports_to_id='' where id='$contact_id' and deleted=0";
+		$query = "UPDATE contactdetails set reports_to_id='' where id='$contact_id' and deleted=0";
 		$this->db->query($query,true,"Error clearing contact to direct report relationship: ");
 	}
 
@@ -782,7 +641,8 @@ return $exists;
 		// Fill in the assigned_user_name
 		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
 		
-		$query = "SELECT acc.id, acc.name from accounts as acc, accounts_contacts as a_c where acc.id = a_c.account_id and a_c.contact_id = '$this->id' and a_c.deleted=0";
+		//$query = "SELECT acc.id, acc.name from accounts acc, accounts_contacts  a_c where acc.id = a_c.account_id and a_c.contact_id = '$this->id' and a_c.deleted=0";
+		$query = "SELECT acc.accountid, acc.accountname from account acc, contactdetails  a_c where acc.accountid = a_c.contactid and a_c.contactid = '$this->id' and a_c.deleted=0";
 		$result = $this->db->query($query,true," Error filling in additional detail fields: ");
 
 		// Get the id and the name.
@@ -798,7 +658,8 @@ return $exists;
 			$this->account_name = '';
 			$this->account_id = '';
 		}		
-		$query = "SELECT c1.first_name, c1.last_name from contacts as c1, contacts as c2 where c1.id = c2.reports_to_id and c2.id = '$this->id' and c1.deleted=0";
+		//$query = "SELECT c1.first_name, c1.last_name from contactdetails c1, contactdetails c2 where c1.id = c2.reports_to_id and c2.id = '$this->id' and c1.deleted=0";
+		$query = "SELECT c1.firstname, c1.lastname from contactdetails c1, contactdetails c2 where c1.contactid = c2.reportsto and c2.contactid = '$this->id' and c1.deleted=0";
 		$result = $this->db->query($query,true," Error filling in additional detail fields: ");
 
 		// Get the id and the name.
@@ -836,19 +697,19 @@ return $exists;
 	function build_generic_where_clause ($the_query_string) {
 	$where_clauses = Array();
 	$the_query_string = addslashes($the_query_string);
-	array_push($where_clauses, "last_name like '$the_query_string%'");
-	array_push($where_clauses, "first_name like '$the_query_string%'");
-	array_push($where_clauses, "assistant like '$the_query_string%'");
-	array_push($where_clauses, "email1 like '$the_query_string%'");
-	array_push($where_clauses, "email2 like '$the_query_string%'");
-	array_push($where_clauses, "yahoo_id like '$the_query_string%'");
+	array_push($where_clauses, "lastname like '$the_query_string%'");
+	array_push($where_clauses, "firstname like '$the_query_string%'");
+	array_push($where_clauses, "contactsubdetails.assistant like '$the_query_string%'");
+	array_push($where_clauses, "email like '$the_query_string%'");
+	array_push($where_clauses, "otheremail like '$the_query_string%'");
+	array_push($where_clauses, "yahooid like '$the_query_string%'");
 	if (is_numeric($the_query_string)) {
-		array_push($where_clauses, "phone_home like '%$the_query_string%'");
-		array_push($where_clauses, "phone_mobile like '%$the_query_string%'");
-		array_push($where_clauses, "phone_work like '%$the_query_string%'");
-		array_push($where_clauses, "phone_other like '%$the_query_string%'");
-		array_push($where_clauses, "phone_fax like '%$the_query_string%'");
-		array_push($where_clauses, "assistant_phone like '%$the_query_string%'");
+		array_push($where_clauses, "phone like '%$the_query_string%'");
+		array_push($where_clauses, "mobile like '%$the_query_string%'");
+		array_push($where_clauses, "contactsubdetails.homephone like '%$the_query_string%'");
+		array_push($where_clauses, "contactsubdetails.otherphone like '%$the_query_string%'");
+		array_push($where_clauses, "fax like '%$the_query_string%'");
+		array_push($where_clauses, "contactsubdetails.assistantphone like '%$the_query_string%'");
 	}
 	
 	$the_where = "";
@@ -866,14 +727,11 @@ return $exists;
 
  function getColumnNames()
  {
- $result = $this->db->query("SHOW COLUMNS FROM contacts");
- $i=0;
- while ($myrow = mysql_fetch_row($result))
- {
-         $copy[$i]=$myrow;
-         $i++;
- }
- return $copy;
+       $table1flds = $this->db->getColumnNames("contactdetails");
+       $table2flds = $this->db->getColumnNames("contactsubdetails");
+       $table3flds = $this->db->getColumnNames("contactaddress");
+       $mergeflds = array_merge($table1flds,$table2flds,$table3flds);
+       return $mergeflds;
 }
 
 }

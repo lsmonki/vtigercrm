@@ -17,54 +17,27 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
-<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
-<!-- BEGIN: list_nav_row -->
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>	
 	<tr height="20">
-		<td COLSPAN="11" class="listFormHeaderLinks" align="right">
-<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>{EXPORT_LINK}</td>
-<td align="right">{START_LINK}&nbsp;&nbsp;{PREVIOUS_LINK}&nbsp;&nbsp;
-                {NEXT_LINK}&nbsp;&nbsp;{END_LINK}&nbsp;&nbsp; {START_RECORD} - {END_RECORD} {APP.LBL_LIST_OF} {ROW_COUNT}&nbsp;&nbsp;</td></table>
-	</td>
+		<td COLSPAN="15" class="listFormHeaderLinks">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<form name="massdelete" method="POST">
+				<input name='change_owner' type='hidden'>
+				<input name='change_status' type='hidden'>
+				<input name='idlist' type='hidden' >
+				<input name='action' type='hidden' value='Convert'>
+				<input name='module' type='hidden' value='Emails'>
+			
+			   <td align="right">{Start}&nbsp;&nbsp;{Prev}&nbsp;&nbsp;{Next}&nbsp;&nbsp;{End}&nbsp;&nbsp;</td>
+			</tr>
+			</table>
+		</td>
 	</tr>
-<!-- END: list_nav_row -->
-	<tr><td COLSPAN="11" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
-	<tr height="20" class="moduleListTitle">
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="35%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}name" class="listFormHeaderLinks">{MOD.LBL_LIST_SUBJECT}{name_arrow}</a></td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="20%" class="moduleListTitle" NOWRAP>&nbsp;{MOD.LBL_LIST_CONTACT}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="25%" class="moduleListTitle" NOWRAP>&nbsp;{MOD.LBL_LIST_RELATED_TO}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="25%" class="moduleListTitle" NOWRAP>&nbsp;{MOD.LBL_FILE_NAME}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="10%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}date_start" class="listFormHeaderLinks">{MOD.LBL_LIST_DATE}{date_start_arrow}</a></td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="10%" class="moduleListTitle" NOWRAP>&nbsp;{APP.LBL_LIST_ASSIGNED_USER}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-	  </tr>
-	<tr><td COLSPAN="11" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
-
-<!-- BEGIN: row -->
-<tr height=20 class={ROW_COLOR}>
-		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Emails&record={EMAIL.ID}">{EMAIL.NAME}</a></td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Contacts&record={EMAIL.CONTACT_ID}">{EMAIL.CONTACT_NAME}</a></td>
-     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module={EMAIL.PARENT_MODULE}&record={EMAIL.PARENT_ID}">{EMAIL.PARENT_NAME}</a></td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    		<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;">
-			<form name="ListView" method="POST" action="DetailView.php">
-			<input type="hidden" name="file_name" value="{EMAIL.FILENAME}">
-			<a href="index.php?module=Emails&action=downloadfile&filename={EMAIL.FILENAME}&record={EMAIL.ID}">{EMAIL.FILENAME}</a>
-		</td></form>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td class="{ROW_COLOR}" nowrap valign=TOP style="padding:0px 3px 0px 3px;">{EMAIL.DATE_START}</td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap>{EMAIL.ASSIGNED_USER_NAME}</td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-</tr>
-<!-- END: row -->
-<tr><td COLSPAN="7">
+	<form action="index.php" method="post" name="CustomFieldUpdate" id="form">
+	<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	{LISTHEADER}
+		<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	{LISTENTITY}
+	</form>
 <!-- END: main -->

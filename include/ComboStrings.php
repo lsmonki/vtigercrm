@@ -1,0 +1,170 @@
+<?php
+
+global $combo_strings;
+
+$combo_strings = Array(
+'accounttype_dom' => Array(''=>''
+                , 'Analyst'=>'Analyst'
+                , 'Competitor'=>'Competitor'
+                , 'Customer'=>'Customer'
+                , 'Integrator'=>'Integrator'
+                , 'Investor'=>'Investor'
+                , 'Partner'=>'Partner'
+                , 'Press'=>'Press'
+                , 'Prospect'=>'Prospect'
+                , 'Reseller'=>'Reseller'
+                , 'Other'=>'Other'
+                ),
+'industry_dom' => Array(''=>''
+                , 'Apparel'=>'Apparel'
+                , 'Banking'=>'Banking'
+                , 'Biotechnology'=>'Biotechnology'
+                , 'Chemicals'=>'Chemicals'
+                , 'Communications'=>'Communications'
+                , 'Construction'=>'Construction'
+                , 'Consulting'=>'Consulting'
+                , 'Education'=>'Education'
+                , 'Electronics'=>'Electronics'
+                , 'Energy'=>'Energy'
+                , 'Engineering'=>'Engineering'
+                , 'Entertainment'=>'Entertainment'
+                , 'Environmental'=>'Environmental'
+                , 'Finance'=>'Finance'
+                , 'Food & Beverage'=>'Food & Beverage'
+                , 'Government'=>'Government'
+                , 'Healthcare'=>'Healthcare'
+                , 'Hospitality'=>'Hospitality'
+                , 'Insurance'=>'Insurance'
+                , 'Machinery'=>'Machinery'
+                , 'Manufacturing'=>'Manufacturing'
+                , 'Media'=>'Media'
+                , 'Not For Profit'=>'Not For Profit'
+                , 'Recreation'=>'Recreation'
+                , 'Retail'=>'Retail'
+                , 'Shipping'=>'Shipping'
+                , 'Technology'=>'Technology'
+                , 'Telecommunications'=>'Telecommunications'
+                , 'Transportation'=>'Transportation'
+                , 'Utilities'=>'Utilities'
+                , 'Other'=>'Other'
+                ),
+'leadsource_dom' => Array(''=>''
+                , 'Cold Call'=>'Cold Call'
+                , 'Existing Customer'=>'Existing Customer'
+                , 'Self Generated'=>'Self Generated'
+                , 'Employee'=>'Employee'
+                , 'Partner'=>'Partner'
+                , 'Public Relations'=>'Public Relations'
+                , 'Direct Mail'=>'Direct Mail'
+                , 'Conference'=>'Conference'
+                , 'Trade Show'=>'Trade Show'
+                , 'Web Site'=>'Web Site'
+                , 'Word of mouth'=>'Word of mouth'
+                , 'Other'=>'Other'
+                ),
+'leadstatus_dom' => Array(''=>''
+                , 'Attempted to Contact'=>'Attempted to Contact'
+                , 'Cold'=>'Cold'
+                , 'Contact in Future'=>'Contact in Future'
+                , 'Contacted'=>'Contacted'
+                , 'Hot'=>'Hot'
+                , 'Junk Lead'=>'Junk Lead'
+                , 'Lost Lead'=>'Lost Lead'
+                , 'Not Contacted'=>'Not Contacted'
+                , 'Pre Qualified'=>'Pre Qualified'
+                , 'Qualified'=>'Qualified'
+                , 'Warm'=>'Warm'
+                ),
+'rating_dom' => Array(''=>''
+                , 'Acquired'=>'Acquired'
+                , 'Active'=>'Active'
+                , 'Market Failed'=>'Market Failed'
+                , 'Project Cancelled'=>'Project Cancelled'
+                , 'Shutdown'=>'Shutdown'
+                ),
+'licencekeystatus_dom' => Array(''=>''
+                , 'Sent'=>'Sent'
+                , 'Not Sent'=>'Not Sent'
+                ),
+'opportunity_type_dom' => Array(''=>''
+                , 'Existing Business'=>'Existing Business'
+                , 'New Business'=>'New Business'
+                ),
+'sales_stage_dom' => Array('Prospecting'=>'Prospecting'
+                , 'Qualification'=>'Qualification'
+                , 'Needs Analysis'=>'Needs Analysis'
+                , 'Value Proposition'=>'Value Proposition'
+                , 'Id. Decision Makers'=>'Id. Decision Makers'
+                , 'Perception Analysis'=>'Perception Analysis'
+                , 'Proposal/Price Quote'=>'Proposal/Price Quote'
+                , 'Negotiation/Review'=>'Negotiation/Review'
+                , 'Closed Won'=>'Closed Won'
+                , 'Closed Lost'=>'Closed Lost'
+                ),
+'salutationtype_dom' => Array(''=>''
+                , 'Mr.'=>'Mr.'
+                , 'Ms.'=>'Ms.'
+                , 'Mrs.'=>'Mrs.'
+                , 'Dr.'=>'Dr.'
+                , 'Prof.'=>'Prof.'
+                ),
+'eventstatus_dom' => Array('Planned'=>'Planned'
+                , 'Held'=>'Held'
+                , 'Not Held'=>'Not Held'
+                ),
+'taskstatus_dom' => Array('Not Started'=>'Not Started'
+                , 'In Progress'=>'In Progress'
+                , 'Completed'=>'Completed'
+                , 'Pending Input'=>'Pending Input'
+                , 'Deferred'=>'Deferred'
+                , 'Planned'=>'Planned'
+                ),
+'taskpriority_dom' => Array('High'=>'High'
+                ,'Medium'=>'Medium'
+                ,'Low'=>'Low'
+                ),
+'duration_minutes_dom' => Array('00'=>'00'
+                , '15'=>'15'
+                , '30'=>'30'
+                , '45'=>'45'
+                ),
+'productcategory_dom' => Array(''=>''
+                , 'Hardware'=>'Hardware'
+                , 'Software'=>'Software'
+                , 'CRM Applications'=>'CRM Applications'
+                ),
+'manufacturer_dom' => Array(''=>''
+                , 'AltvetPet Inc.'=>'AltvetPet Inc.'
+                , 'LexPon Inc.'=>'LexPon Inc.'
+                , 'MetBeat Corp'=>'MetBeat Corp'
+                ),
+'troubleticketcategories_dom' => Array('Big Problem'=>'Big Problem'
+                                        ,'Small Problem'=>'Small Problem'
+                                        ,'Other Problem'=>'Other Problem'
+                                        ),
+'troubleticketpriorities_dom' => Array('Low'=>'Low'
+                                        ,'Medium'=>'Medium'
+                                        ,'High'=>'High'
+                                        ,'Critical'=>'Critical'
+                                        ),
+
+'troubleticketstatus_dom' => Array('Open'=>'Open'
+                                ,'In Progress'=>'In Progress'
+                                ,'Wait For Response'=>'Wait For Response'
+                                ,'Closed'=>'Closed'
+				),
+
+'activitytype_dom' => Array('Call'=>'Call'
+		            , 'Meeting'=>'Meeting'
+	        	   ),
+
+'currency_dom' => Array('Rupees'=>'Rupees',
+                        'Dollar'=>'Dollar',
+                        'Euro'=>'Euro'
+                        )
+			
+);
+
+?>
+
+

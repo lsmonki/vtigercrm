@@ -22,8 +22,9 @@
 
 require_once('include/utils.php');
 require_once('include/logging.php');
-require_once("modules/Opportunities/Charts.php");
+require_once("modules/Potentials/Charts.php");
 require_once("modules/Dashboard/Forms.php");
+require_once('include/ComboUtil.php');
 global $app_list_strings, $current_language, $tmp_dir, $currentModule, $action, $current_user, $theme;
 $current_module_strings = return_module_language($current_language, 'Dashboard');
 
@@ -31,6 +32,10 @@ $log = LoggerManager::getLogger('my_pipeline_by_sales_stage');
 
 if (isset($_REQUEST['mypbss_refresh'])) { $refresh = $_REQUEST['mypbss_refresh']; }
 else { $refresh = false; }
+
+// Get _dom Arrays from Database
+$comboFieldNames = Array('sales_stage'=>'sales_stage_dom');
+$comboFieldArray = getComboArray($comboFieldNames);
 
 //get the dates to display
 if (isset($_SESSION['mypbss_date_start']) && $_SESSION['mypbss_date_start'] != '' && !isset($_REQUEST['mypbss_date_start'])) {
@@ -87,11 +92,11 @@ elseif (isset($_REQUEST['mypbss_sales_stages']) && count($_REQUEST['mypbss_sales
 //set $datax using selected sales stage keys 
 if (count($tempx) > 0) {
 	foreach ($tempx as $key) {
-		$datax[$key] = $app_list_strings['sales_stage_dom'][$key];
+		$datax[$key] = $comboFieldArray['sales_stage_dom'][$key];//$app_list_strings['sales_stage_dom'][$key];
 	}
 }
 else {
-	$datax = $app_list_strings['sales_stage_dom'];
+	$datax = $comboFieldArray['sales_stage_dom'];//app_list_strings['sales_stage_dom'];
 }
 $log->debug("datax is:");
 $log->debug($datax);
@@ -139,7 +144,7 @@ if (isset($_REQUEST['mypbss_edit']) && $_REQUEST['mypbss_edit'] == 'true') {
 <td valign='top' ><input class="text" name="mypbss_date_end" size='12' maxlength='10' id='date_end' value='<?php if (isset($_SESSION['mypbss_date_end'])) echo $_SESSION['mypbss_date_end']?>'>  <img src="themes/<?php echo $theme ?>/images/calendar.gif" id="date_end_trigger"> </td>
 </tr><tr>
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_SALES_STAGES'];?></td>
-<td valign='top' ><select name="mypbss_sales_stages[]" multiple size='3'><?php echo get_select_options_with_id($app_list_strings['sales_stage_dom'],$_SESSION['mypbss_sales_stages']); ?></select></td>
+<td valign='top' ><select name="mypbss_sales_stages[]" multiple size='3'><?php echo get_select_options_with_id($comboFieldArray['sales_stage_dom'],$_SESSION['mypbss_sales_stages']); ?></select></td>
 </tr><tr>
 <td align="right"><br /> <input class="button" onclick="return verify_chart_data(my_pipeline);" type="submit" title="<?php echo $app_strings['LBL_SELECT_BUTTON_TITLE']; ?>" accessKey="<?php echo $app_strings['LBL_SELECT_BUTTON_KEY']; ?>" value="<?php echo $app_strings['LBL_SELECT_BUTTON_LABEL']?>" /></td>
 </tr></table>

@@ -25,6 +25,7 @@ require_once('data/Tracker.php');
 require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
 require_once('modules/Import/ImportOpportunity.php');
+require_once('modules/Import/ImportLead.php');
 require_once('modules/Import/Forms.php');
 require_once('modules/Import/ImportMap.php');
 
@@ -58,10 +59,14 @@ else if ( $_REQUEST['module'] == 'Accounts')
 {
 	$focus = new ImportAccount();
 } 
-else if ( $_REQUEST['module'] == 'Opportunities')
+else if ( $_REQUEST['module'] == 'Potentials')
 {
 	$focus = new ImportOpportunity();
-} 
+}
+else if ( $_REQUEST['module'] == 'Leads')
+{
+	$focus = new ImportLead();
+}
 else
 {
  echo "Imports aren't set up for this module type\n";
@@ -100,6 +105,8 @@ else if ( strncasecmp("custom:",$_REQUEST['source'],7) == 0)
 	$import_map_seed = new ImportMap();
 
 	$import_map_seed->retrieve($id, false);
+
+	$adb->println($import_map_seed->toString());
 
 	$xtpl->assign("SOURCE_ID", $import_map_seed->id);
 	$xtpl->assign("SOURCE_NAME", $import_map_seed->name);

@@ -46,7 +46,8 @@ if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 	'Date'=>'4',
 	'Email'=>'5',
 	'Phone'=>'6',
-	'Picklist'=>'7');
+	'Picklist'=>'7',
+	'URL'=>'8');
 	$xtpl->assign("FLDTYPEVALUE", $typeVal[$_REQUEST["fldType"]]);
 }
 else

@@ -13,6 +13,7 @@
 require_once('include/utils.php');
 require_once 'Excel/reader.php';
 require_once('modules/Users/User.php');
+require_once('include/database/PearDatabase.php');
 
 $data = new Spreadsheet_Excel_Reader();
 $data->setOutputEncoding('CP1251');
@@ -152,16 +153,16 @@ for($i=2;$i<=$data->sheets[0]['numRows']; $i++)
 			$id = insert2DB($value_salutation,$value_firstname,$value_lastname,$value_company,$value_designation,$value_leadsource,$value_industry,$value_annualrevenue,$value_licensekey,$value_phone,$value_mobile,$value_fax,$value_email,$value_yahooid,$value_website,$value_leadstatus,$value_rating,$value_employeecount);
 			//Inserting Custom Field Values
 			$dbquery="select * from customfields where module='Leads'";
-			$custresult = mysql_query($dbquery);
-			if(mysql_num_rows($custresult) != 0)
+			$custresult = $adb->query($dbquery);
+			if($adb->num_rows($custresult) != 0)
 			{
-				$noofrows = mysql_num_rows($custresult);
+				$noofrows = $adb->num_rows($custresult);
 				$columns='';
 				$values='';
 				for($j=0; $j<$noofrows; $j++)
 				{
-					$fldLabel=mysql_result($custresult,$j,"fieldlabel");
-					$colName=mysql_result($custresult,$j,"column_name");
+					$fldLabel=$adb->query_result($custresult,$j,"fieldlabel");
+					$colName=$adb->query_result($custresult,$j,"column_name");
 					$colNameMapping = $HTTP_POST_VARS[$colName];
 					$value_colName = $data->sheets[0]['cells'][$i][$colNameMapping];
 
@@ -177,7 +178,7 @@ for($i=2;$i<=$data->sheets[0]['numRows']; $i++)
 					} 
 				}
 				$insert_custfld_query = 'insert into leadcf ('.$columns.') values('.$values.')';
-				mysql_query($insert_custfld_query);
+				$adb->query($insert_custfld_query);
 			}
 
 }
@@ -193,9 +194,9 @@ function insert2DB($salutation,$firstname,$lastname,$company,$designation,$leads
 
   $modified_user_id = $current_user->id;
   $assigned_user_id = $current_user->id;
-  $sql = "INSERT INTO leads (id,date_entered,date_modified,modified_user_id,assigned_user_id,salutation,first_name,last_name,company,designation,lead_source,industry,annual_revenue,license_key,phone,mobile,fax,email,yahoo_id,website,lead_status,rating,employees) VALUES ('$id','$date_entered','$date_modified','$modified_user_id','$assigned_user_id','$salutation','$firstname','$lastname','$company','$designation','$leadsrc','$industry','$annualrevenue','$licensekey','$phone','$mobile','$fax','$email','$yahooid','$website','$leadstatus','$rating','$empcount')";
+  $sql = "INSERT INTO leads (id,date_entered,date_modified,modified_user_id,assigned_user_id,salutation,first_name,last_name,company,designation,lead_source,industry,annual_revenue,license_key,phone,mobile,fax,email,yahoo_id,website,lead_status,rating,employees) VALUES ('$id',".$adb->formatString('leads','date_entered',$date_entered).",".$adb->formatString('leads','date_modified',$date_modified).",'$modified_user_id','$assigned_user_id','$salutation','$firstname','$lastname','$company','$designation','$leadsrc','$industry','$annualrevenue','$licensekey','$phone','$mobile','$fax','$email','$yahooid','$website','$leadstatus','$rating','$empcount')";
 
-  $result = mysql_query($sql);
+  $result = $adb->query($sql);
   return $id;	
 
 }

@@ -9,34 +9,79 @@
 *
  ********************************************************************************/
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('include/utils.php');
+
+function getCustomFieldTypeName($uitype)
+{
+	$fldname = '';
+	
+	if($uitype == 1)
+	{
+		$fldname = 'Text';
+	}
+	elseif($uitype == 7)
+	{
+		$fldname = 'Number';
+	}
+	elseif($uitype == 9)
+	{
+		$fldname = 'Percent';
+	}
+	elseif($uitype == 3)
+	{
+		$fldname = 'Currency';
+	}
+	elseif($uitype == 5)
+	{
+		$fldname = 'Date';
+	}
+	elseif($uitype == 13)
+	{
+		$fldname = 'Email';
+	}
+	elseif($uitype == 11)
+	{
+		$fldname = 'Phone';
+	}
+	elseif($uitype == 15)
+	{
+		$fldname = 'Pick';
+	}
+	elseif($uitype == 17)
+	{
+		$fldname = 'Url';
+	}
+	return $fldname;
+}
+
 
 function CustomFieldEditView($id, $fldModule, $tableName, $colidName, $app_strings, $theme)
 {
 
+	global $adb;
 	//Custom Field Addition
-	$dbquery = "select  * from customfields inner join customfieldtypemapping on customfields.uitype=customfieldtypemapping.uitype where module='".$fldModule."'";
-	$result = mysql_query($dbquery);
-	if(mysql_num_rows($result) != 0)
+	$dbquery = "select  * from field where tablename='".$fldModule."'";
+	$result = $adb->query($dbquery);
+	if($adb->num_rows($result) != 0)
 	{
 		if(isset($id))
 		{
-			$custquery = 'select * from '.$tableName.' where '.$colidName.'="'.$id.'"';
-			$cust_result = mysql_query($custquery);
+			$custquery = 'select * from '.$tableName.' where '.$colidName."='".$id."'";
+			$cust_result = $adb->query($custquery);
 		}
-		$noofrows = mysql_num_rows($result);
+		$noofrows = $adb->num_rows($result);
 
 		$custfld = '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
 		$custfld .= '<tr><th align="left" class="formSecHeader" colspan="4">Custom Information</th></tr>';
 		for($i=0; $i<$noofrows; $i++)
 		{
-			$colName=mysql_result($result,$i,"fieldlabel");
-			$setName=mysql_result($result,$i,"column_name");
-			$uitype=mysql_result($result,$i,"uitype");
-			if(isset($id) && mysql_num_rows($cust_result) != 0)
+			$colName=$adb->query_result($result,$i,"fieldlabel");
+			$setName=$adb->query_result($result,$i,"column_name");
+			$uitype=$adb->query_result($result,$i,"uitype");
+			if(isset($id) && $adb->num_rows($cust_result) != 0)
 			{
-				$value=mysql_result($cust_result,0,$setName);
+				$value=$adb->query_result($cust_result,0,strtolower($setName));
 			}
 			else
 			{
@@ -57,12 +102,12 @@ function CustomFieldEditView($id, $fldModule, $tableName, $colidName, $app_strin
 			elseif($uitype == 15)
 			{
 				$pick_query="select * from ".$fldModule."_".$setName;
-				$pickListResult = mysql_query($pick_query);
-				$noofpickrows = mysql_num_rows($pickListResult);
+				$pickListResult = $adb->query($pick_query);
+				$noofpickrows = $adb->num_rows($pickListResult);
 				$custfld .= '<td width="30%"><select name="'.$setName.'" tabindex="1">';
 				for($j = 0; $j < $noofpickrows; $j++)
 				{
-					$pickListValue=mysql_result($pickListResult,$j,$setName);
+					$pickListValue=$adb->query_result($pickListResult,$j,strtolower($setName));
 					
 					if($value == $pickListValue)
 					{
@@ -85,12 +130,12 @@ function CustomFieldEditView($id, $fldModule, $tableName, $colidName, $app_strin
 			$i++;
 			if($i<$noofrows)
 			{
-				$colName=mysql_result($result,$i,"fieldlabel");
-				$setName=mysql_result($result,$i,"column_name");
-				$uitype=mysql_result($result,$i,"uitype");
-				if(isset($id) && mysql_num_rows($cust_result) != 0)
+				$colName=$adb->query_result($result,$i,"fieldlabel");
+				$setName=$adb->query_result($result,$i,"column_name");
+				$uitype=$adb->query_result($result,$i,"uitype");
+				if(isset($id) && $adb->num_rows($cust_result) != 0)
 				{
-					$value=mysql_result($cust_result,0,$setName);
+					$value=$adb->query_result($cust_result,0,$setName);
 				}
 				else
 				{
@@ -111,12 +156,12 @@ function CustomFieldEditView($id, $fldModule, $tableName, $colidName, $app_strin
 				elseif($uitype == 15)
 				{
 					$pick_query="select * from ".$fldModule."_".$setName;
-					$pickListResult = mysql_query($pick_query);
-					$noofpickrows = mysql_num_rows($pickListResult);
+					$pickListResult = $adb->query($pick_query);
+					$noofpickrows = $adb->num_rows($pickListResult);
 					$custfld .= '<td width="30%"><select name="'.$setName.'" tabindex="1">';
 					for($j = 0; $j < $noofpickrows; $j++)
 					{
-						$pickListValue=mysql_result($pickListResult,$j,$setName);
+						$pickListValue=$adb->query_result($pickListResult,$j,strtolower($setName));
 
 						if($value == $pickListValue)
 						{
@@ -148,28 +193,32 @@ function CustomFieldEditView($id, $fldModule, $tableName, $colidName, $app_strin
 
 function CustomFieldDetailView($id, $fldModule, $tableName, $colidName)
 {
+	global $adb;
 	//Assigning custom field values
-	$dbquery = "select  * from customfields where module='".$fldModule."'";
-	$result = mysql_query($dbquery);
-	if(mysql_num_rows($result) != 0)
+	$dbquery = "select  * from field where tablename='".$fldModule."'";
+	$result = $adb->query($dbquery);
+	$adb->println($result);
+	if($adb->num_rows($result) != 0)
 	{
-		$custquery = 'select * from '.$tableName.' where '.$colidName.'="'.$id.'"';
-		$cust_result = mysql_query($custquery);
+		$custquery = 'select * from '.$tableName.' where '.$colidName."='".$id."'";
+		$cust_result = $adb->query($custquery);
+		$adb->println($cust_result);
 
-		$noofrows=mysql_num_rows($result);
+		$noofrows=$adb->num_rows($result);
 		$custfld = '';	
 		for($i=0; $i<$noofrows; $i++)
 		{
-			$fldName=mysql_result($result,$i,"fieldlabel");
-			$colName=mysql_result($result,$i,"column_name");
-			$uitype=mysql_result($result,$i,"uitype");
-			if(mysql_num_rows($cust_result) != 0)
+			$fldName=$adb->query_result($result,$i,"fieldlabel");
+			$colName=$adb->query_result($result,$i,"column_name");
+			$uitype=$adb->query_result($result,$i,"uitype");
+			if($adb->num_rows($cust_result) != 0)
 			{
-				$value=mysql_result($cust_result,0,$colName);
+				$value=$adb->query_result($cust_result,0,strtolower($colName));
 			}
 			else
 			{
 				$value='';
+				$adb->println("emply value ");
 			}
 			$custfld .= '<tr>';
 			$custfld .= '<td width="20%" valign="top" class="dataLabel">'.$fldName.':</td>';
@@ -184,12 +233,12 @@ function CustomFieldDetailView($id, $fldModule, $tableName, $colidName)
 			$i++;
 			if($i<$noofrows)
 			{
-				$fldName=mysql_result($result,$i,"fieldlabel");
-				$colName=mysql_result($result,$i,"column_name");
-				$uitype=mysql_result($result,$i,"uitype");
-				if(mysql_num_rows($cust_result) != 0)
+				$fldName=$adb->query_result($result,$i,"fieldlabel");
+				$colName=$adb->query_result($result,$i,"column_name");
+				$uitype=$adb->query_result($result,$i,"uitype");
+				if($adb->num_rows($cust_result) != 0)
 				{
-					$value=mysql_result($cust_result,0,$colName);
+					$value=$adb->query_result($cust_result,0,strtolower($colName));
 				}
 				else
 				{
@@ -217,16 +266,53 @@ function CustomFieldDetailView($id, $fldModule, $tableName, $colidName)
 
 function getCustomFieldArray($module)
 {
-	$custquery = "select * from customfields where module='".$module."'";
-	$custresult = mysql_query($custquery);
+	global $adb;
+	$custquery = "select * from field where tablename='".$module."'";
+	$custresult = $adb->query($custquery);
 	$custFldArray = Array();
-	$noofrows = mysql_num_rows($custresult);
+	$noofrows = $adb->num_rows($custresult);
 	for($i=0; $i<$noofrows; $i++)
 	{
-		$colName=mysql_result($custresult,$i,"column_name");
+		$colName=$adb->query_result($custresult,$i,"column_name");
 		$custFldArray[$colName] = $i;
 	}
 	return $custFldArray;
 	
 }
+
+function CustomFieldSearch($customfieldarray, $fldModule, $tableName,$colidName,$app_strings,$theme,$fieldlabel,$column)
+{
+global $adb;
+//for($i=0;$i<count($customfieldarray);$i++){echo '<br> Custom Field : '.$i.'...'.$customfieldarray[$i];}
+        //Custom Field Addition
+        $dbquery = "select  * from field  where tablename='".$fldModule."'";
+        $result = $adb->query($dbquery);
+        if($adb->num_rows($result) != 0)
+        {
+                $noofrows = $adb->num_rows($result);
+
+                $custfld = '<table width="85%" border="0" cellspacing="0" cellpadding="0">';
+                $custfld .= '<tr><th align="left" class="formSecHeader" colspan="4">Custom Information</th></tr>';
+                for($i=0; $i<$noofrows; $i++)
+                {
+                        $id=$customfieldarray[$i];
+                        $colName=$column[$i];
+                        $setName=$fieldlabel[$i];
+                        $custfld .= '<td width="20%" class="dataLabel">'.$colName.':</td>';
+
+                        $custfld .= '<td width="30%"><input name="'.$setName.'" type="text" tabindex="'.$i.'" size="25" maxl
+ength="25" value="'.$customfieldarray[$i].'"></td>';
+                        if($i%2==1)
+                        {
+                                $custfld .= '<tr>';
+                        }
+
+                }
+
+                $custfld .= '</table>';
+                return $custfld;
+
+        }
+}
+
 ?>

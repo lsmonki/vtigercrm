@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 //require_once('HelpDeskUtil.php');
 require_once('XTemplate/xtpl.php');
 require_once('include/utils.php');
@@ -18,7 +18,7 @@ $productid = $_REQUEST['record'];
 
 //Retreiving the product info from database
 $query = "select products.id,products.unit_price,products.productname,products.category,products.product_description,products.qty_per_unit,products.commissionrate,products.discontinued from products where products.id = ".$productid;
-$productresult = mysql_query($query);
+$productresult = $adb->query($query);
 
 //$user_id = mysql_result($productresult,0,'assigned_user_id');
 
@@ -42,17 +42,17 @@ $xtpl->assign("APP", $app_strings);
 
 $xtpl->assign("IMAGE_PATH", $image_path);
 //$xtpl->assign("NAME", mysql_result($productresult,0,'title'));
-$xtpl->assign("PRODUCTID", mysql_result($productresult,0,'id'));
+$xtpl->assign("PRODUCTID", $adb->query_result($productresult,0,'id'));
 //$productid =  mysql_result($productresult,0,'id');
 //$xtpl->assign("GROUPVALUE", mysql_result($productresult,0,'groupname'));
 //$xtpl->assign("USERNAME", $user_name);
 $xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-$xtpl->assign("NAME",mysql_result($productresult,0,'productname'));
-$xtpl->assign("DESCRIPTION",mysql_result($productresult,0,'product_description'));
-$xtpl->assign("QTY_PER_UNIT",mysql_result($productresult,0,'qty_per_unit'));
-$xtpl->assign("COMISSIONRATE",mysql_result($productresult,0,'commissionrate'));
-if(mysql_result($productresult,0,'discontinued') == 1)
+$xtpl->assign("NAME",$adb->query_result($productresult,0,'productname'));
+$xtpl->assign("DESCRIPTION",$adb->query_result($productresult,0,'product_description'));
+$xtpl->assign("QTY_PER_UNIT",$adb->query_result($productresult,0,'qty_per_unit'));
+$xtpl->assign("COMISSIONRATE",$adb->query_result($productresult,0,'commissionrate'));
+if($adb->query_result($productresult,0,'discontinued') == 1)
 {
 	$active = 'yes';
 }
@@ -61,8 +61,8 @@ else
 	$active = 'no';
 }
 $xtpl->assign("ACTIVE",$active);
-$xtpl->assign("CODE",mysql_result($productresult,0,'category'));
-$xtpl->assign("UNITPRICE",mysql_result($productresult,0,'unit_price'));
+$xtpl->assign("CODE",$adb->query_result($productresult,0,'category'));
+$xtpl->assign("UNITPRICE",$adb->query_result($productresult,0,'unit_price'));
 
 $xtpl->parse("main");
 $xtpl->out("main");

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.10 2005/01/06 08:58:00 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.44 2005/03/04 08:49:12 jack Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -26,11 +26,11 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('modules/Contacts/Contact.php');
-require_once('modules/Opportunities/Opportunity.php');
-require_once('modules/Cases/Case.php');
-require_once('modules/Calls/Call.php');
+require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Activities/Activity.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
+require_once('include/utils.php');
 
 // Account is used to store account information.
 class Account extends SugarBean {
@@ -39,39 +39,9 @@ class Account extends SugarBean {
 
 
 	// Stored fields
-	var $date_entered;
-	var $date_modified;
-	var $modified_user_id;
-	var $assigned_user_id;
-	var $annual_revenue;
-	var $billing_address_street;
-	var $billing_address_city;
-	var $billing_address_state;
-	var $billing_address_country;
-	var $billing_address_postalcode;
-	var $description;
-	var $email1;
-	var $email2;
-	var $employees;
 	var $id;
-	var $industry;
-	var $name;
-	var $ownership;
-	var $parent_id;
-	var $phone_alternate;
-	var $phone_fax;
-	var $phone_office;
-	var $rating;
-	var $shipping_address_street;
-	var $shipping_address_city;
-	var $shipping_address_state;
-	var $shipping_address_country;
-	var $shipping_address_postalcode;
-	var $sic_code;
-	var $ticker_symbol;
-	var $account_type;
-	var $website;
-
+	var $mode;
+	
 	// These are for related fields
 	var $opportunity_id;
 	var $case_id;
@@ -85,61 +55,71 @@ class Account extends SugarBean {
 	var $parent_name;
 	var $assigned_user_name;
 	
-	var $table_name = "accounts";
+	var $table_name = "account";
+	var $tab_name = Array('crmentity','account','accountbillads','accountshipads','accountscf');
+	var $tab_name_index = Array('crmentity'=>'crmid','account'=>'accountid','accountbillads'=>'accountaddressid','accountshipads'=>'accountaddressid','accountscf'=>'accountid');
+				
+	
+	var $entity_table = "crmentity";
+	
+	var $billadr_table = "accountbillads";
 
 	var $object_name = "Account";
 
 	var $new_schema = true;
+	
+	var $module_id = "accountid";
 
-	var $column_fields = Array(
-		"annual_revenue",
-		"billing_address_street",
-		"billing_address_city",
-		"billing_address_state",
-		"billing_address_postalcode",
-		"billing_address_country",
-		"date_entered",
-		"date_modified",
-		"modified_user_id",
-		"assigned_user_id",
-		"description",
-		"email1",
-		"email2",
-		"employees",
-		"id",
-		"industry",
-		"name",
-		"ownership",
-		"parent_id",
-		"phone_alternate",
-		"phone_fax",
-		"phone_office",
-		"rating",
-		"shipping_address_street",
-		"shipping_address_city",
-		"shipping_address_state",
-		"shipping_address_postalcode",
-		"shipping_address_country",
-		"sic_code",
-		"ticker_symbol",
-		"account_type",
-		"website");
+	var $column_fields = Array();
+
+	var $sortby_fields = Array('accountname','city','website','phone');		
 
 	// This is used to retrieve related fields from form posts.
-	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id' );
+	var $additional_column_fields = Array('assigned_user_name', 'smownerid', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id' );
 
 	// This is the list of fields that are in the lists.
-	var $list_fields = Array('id', 'name', 'website', 'phone_office', 'billing_address_city', 'assigned_user_name', 'assigned_user_id', 'billing_address_state');
+	var $list_fields = Array(
+				'Account Name'=>Array('account'=>'accountname'),
+				'City'=>Array('accountbillads'=>'city'), 
+				'Website'=>Array('account'=>'website'),
+				'Phone'=>Array('account'=> 'phone'),
+				'Assigned To'=>Array('crmentity'=>'smownerid')
+				);
+	
+	var $list_fields_name = Array(
+				        'Account Name'=>'accountname',
+				        'City'=>'bill_city',
+				        'Website'=>'website',
+					'Phone'=>'phone',
+				        'Assigned To'=>'assigned_user_id'
+				      );
+	var $list_link_field= 'accountname';
+
+	var $record_id;
+	var $list_mode;
+        var $popup_type;
+
+	var $search_fields = Array(
+				'Account Name'=>Array('account'=>'accountname'),
+				'City'=>Array('accountbillads'=>'bill_city'), 
+				);
+	
+	var $search_fields_name = Array(
+				        'Account Name'=>'accountname',
+				        'City'=>'bill_city',
+				      );
 
 	// This is the list of fields that are required.
-	var $required_fields =  array("name"=>1);
+	var $required_fields =  array("accountname"=>1);
 
 	function Account() {
 		$this->log =LoggerManager::getLogger('account');
 		$this->db = new PearDatabase();
+		$this->column_fields = getColumnFields('Accounts');
 	}
 
 	function create_tables () {
+          /*
 		$query = 'CREATE TABLE '.$this->table_name.' ( ';
 		$query .='id char(36) NOT NULL';
 		$query .=', date_entered datetime NOT NULL';
@@ -180,10 +160,12 @@ class Account extends SugarBean {
 
 		$this->db->query($query);
 	//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
+        */
 
 	}
 
 	function drop_tables () {
+          /*
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
 		
@@ -191,7 +173,7 @@ class Account extends SugarBean {
 		$this->db->query($query);
 
 	//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
-
+        */
 	}
 
 	function get_summary_text()
@@ -207,7 +189,8 @@ class Account extends SugarBean {
 	function get_member_accounts()
 	{
 		// First, get the list of IDs.
-		$query = "SELECT a1.id from accounts as a1, accounts as a2 where a2.id=a1.parent_id AND a2.id='$this->id' AND a1.deleted=0";
+          //$query = "SELECT a1.id from accounts as a1, accounts as a2 where a2.id=a1.parent_id AND a2.id='$this->id' AND a1.deleted=0";
+             	$query = "SELECT a1.id from account a1, accounts  a2 where a2.id=a1.parent_id AND a2.id='$this->id' AND a1.deleted=0";
 
 		return $this->build_related_list($query, new Account());
 	}
@@ -217,51 +200,39 @@ class Account extends SugarBean {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-	function get_contacts()
+	function get_contacts($id)
 	{
-		// First, get the list of IDs.
-		$query = "SELECT contact_id as id from accounts_contacts where account_id='$this->id' AND deleted=0";
-
-		return $this->build_related_list($query, new Contact());
-	}
+		$query = 'SELECT contactdetails.* from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  where crmentity.deleted=0 and contactdetails.accountid = '.$id;
+          renderRelatedContacts($query,$id);
+        }
 
 	/** Returns a list of the associated opportunities
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-	function get_opportunities()
-	{
-		// First, get the list of IDs.
-		$query = "SELECT opportunity_id as id from accounts_opportunities where account_id='$this->id' AND deleted=0";
-
-		return $this->build_related_list($query, new Opportunity());
-	}
-
-	/** Returns a list of the associated cases
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	*/
-	function get_cases()
-	{
-		// First, get the list of IDs.
-		$query = "SELECT id from cases where account_id='$this->id' AND deleted=0";
-
-		return $this->build_related_list($query, new aCase());
-	}
+  function get_opportunities($id)
+  {
+//	$query = "select products.productid, products.productname, products.productcode, potential.potentialid, potential.accountid, potential.potentialname, potential.amount, potential.closingdate, potential.potentialtype, crmentity.crmid from products,potential inner join seproductsrel on seproductsrel.crmid = potential.accountid and seproductsrel.productid=products.productid inner join crmentity on crmentity.crmid=potential.potentialid";
+	$query = 'select potential.potentialid, potential.accountid, potential.potentialname, potential.potentialtype, potential.amount, potential.closingdate, potential.potentialtype, crmentity.crmid from potential inner join crmentity on crmentity.crmid= potential.potentialid where crmentity.deleted=0 and potential.accountid= '.$id ;
+    //include('modules/Accounts/RenderRelatedListUI.php');
+    renderRelatedPotentials($query,$id);
+    // return $this->build_related_list($query, new potential());
+  }
 
 	/** Returns a list of the associated tasks
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-	function get_tasks()
+	function get_activities($id)
 	{
-		// First, get the list of IDs.
-		$query = "SELECT id from tasks where parent_id='$this->id' AND deleted=0";
+          // First, get the list of IDs.
+//          $query = "SELECT activity.subject,semodule,activitytype,date_start,status,priority from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid where seactivityrel.crmid=".$id;
+	  $query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
+          renderRelatedTasks($query,$id);
 
-		return $this->build_related_list($query, new Task());
+          //return $this->build_related_list($query, new Task());
 	}
 
 	/** Returns a list of the associated notes
@@ -282,39 +253,48 @@ class Account extends SugarBean {
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-	function get_meetings()
+	function get_meetings($id)
 	{
-		// First, get the list of IDs.
-		$query = "SELECT id from meetings where parent_id='$this->id' AND deleted=0";
-
-		return $this->build_related_list($query, new Meeting());
-	}
+          $query="select meetings.name,meetings.location,meetings.duration_hours,meetings.duration_minutes from meetings inner join activity on activity.activityid=meetings.meetingid inner join seactivityrel on seactivityrel.activityid=meetings.meetingid join crmentity on crmentity.crmid=activity.activityid and crmentity.deleted=0 and crmentity.crmid =".$id;
+          renderRelatedMeetings($query,$id);
+        }
 
 	/** Returns a list of the associated calls
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-	function get_calls()
+	function get_calls($id)
 	{
-		// First, get the list of IDs.
-		$query = "SELECT id from calls where parent_id='$this->id' AND deleted=0";
-
-		return $this->build_related_list($query, new Call());
-	}
+          
+          $query="select calls.name,calls.duration_hours,calls.date_start,calls.status from calls inner join activity on activity.activityid=calls.callid inner join seactivityrel on seactivityrel.activityid=calls.callid inner join crmentity on crmentity.crmid=calls.callid and crmentity.deleted=0 and crmentity.crmid=".$id;
+          renderRelatedCalls($query,$id);
+        }
 
 	/** Returns a list of the associated emails
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-	function get_emails()
+	function get_emails($id)
 	{
-		// First, get the list of IDs.
-		$query = "SELECT id from emails where parent_id='$this->id' AND deleted=0";
-
-		return $this->build_related_list($query, new Email());
+//          $query="select activity.subject,emails.description,emails.filename from emails inner join activity on activity.activityid=emails.emailid inner join seactivityrel on seactivityrel.activityid=emails.emailid inner join crmentity on crmentity.crmid=seactivityrel.crmid and crmentity.deleted=0 where crmentity.crmid=".$id."";
+	$query ="select activity.subject,emails.emailid, emails.filename,semodule,activitytype,date_start,activity.status,priority,crmentity.crmid,crmentity.smownerid,crmentity.modifiedtime, users.user_name  from emails inner join activity on activity.activityid=emails.emailid inner join seactivityrel on seactivityrel.activityid=emails.emailid inner join crmentity on crmentity.crmid=emails.emailid inner join users on  users.id=crmentity.smownerid where seactivityrel.crmid=".$id;
+          renderRelatedEmails($query,$id);
+          //return $this->build_related_list($query, new Email());
 	}
+	function get_attachments($id)
+	{
+		$query = 'select notes.title,"Notes      " as ActivityType, notes.filename, attachments.type as "FileType",crm2.modifiedtime as "lastmodified", notes.notesid as noteattachmentid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$id;
+		$query .= ' union all ';                                                                                                    $query .= 'select "          " as Title ,"Attachments" as ActivityType, attachments.name as "filename", attachments.type as "FileType",crm2.modifiedtime as "lastmodified", attachments.attachmentsid as noteattachmentid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid='.$id;
+		renderRelatedAttachments($query,$id);
+	}
+	function get_tickets($id)
+	{
+		$query = 'select users.user_name, users.id, seticketsrel.*, troubletickets.title, troubletickets.status, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime  from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.crmid inner join users on users.id=crmentity.smownerid where seticketsrel.crmid = '.$id; 
+		renderRelatedTickets($query);
+	}
+
 
 	function save_relationship_changes($is_update)
     {
@@ -358,7 +338,8 @@ class Account extends SugarBean {
 
 	function set_account_opportunity_relationship($account_id, $opportunity_id)
 	{
-		$query = "insert into accounts_opportunities set id='".create_guid()."', opportunity_id='$opportunity_id', account_id='$account_id'";
+          //$query = "insert into accounts_opportunities set id='".create_guid()."', opportunity_id='$opportunity_id', account_id='$account_id'";
+          	$query = "insert into accounts_opportunities (id, opportunity_id, account_id) values('".create_guid()."','$opportunity_id','$account_id')";
 		$this->db->query($query,true,"Error setting account to opportunity relationship: ");
 	}
 
@@ -382,7 +363,8 @@ class Account extends SugarBean {
 
 	function set_account_contact_relationship($account_id, $contact_id)
 	{
-		$query = "insert into accounts_contacts set id='".create_guid()."', contact_id='$contact_id', account_id='$account_id'";
+          //	$query = "insert into accounts_contacts set id='".create_guid()."', contact_id='$contact_id', account_id='$account_id'";
+	$query = "insert into accounts_contacts (id,contact_id,account_id) values ('".create_guid()."','$contact_id','$account_id')";
 		$this->db->query($query,true,"Error setting account to contact relationship: "."<BR>$query");
 	}
 
@@ -454,19 +436,19 @@ class Account extends SugarBean {
 
 	function set_account_member_account_relationship($account_id, $member_id)
 	{
-		$query = "update accounts set parent_id='$account_id' where id='$member_id' and deleted=0";
+		$query = "update account set parent_id='$account_id' where id='$member_id' and deleted=0";
 		$this->db->query($query,true,"Error setting account to member account relationship: ");
 	}
 
 	function clear_account_account_relationship($account_id)
 	{
-		$query = "update accounts set parent_id='' where parent_id='$account_id' and deleted=0";
+		$query = "update account set parent_id='' where parent_id='$account_id' and deleted=0";
 		$this->db->query($query,true,"Error clearing account to account relationship: ");
 	}
 
 	function clear_account_member_account_relationship($account_id)
 	{
-		$query = "update accounts set parent_id='' where id='$account_id' and deleted=0";
+		$query = "update account set parent_id='' where id='$account_id' and deleted=0";
 		$this->db->query($query,true,"Error clearing account to member account relationship: ");
 	}
 
@@ -496,7 +478,7 @@ class Account extends SugarBean {
 	function fill_in_additional_list_fields()
 	{
 		// Fill in the assigned_user_name
-		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
+		$this->assigned_user_name = get_assigned_user_name($this->smownerid);
 
 		$this->remove_redundant_http();
 	}
@@ -504,9 +486,10 @@ class Account extends SugarBean {
 	function fill_in_additional_detail_fields()
 	{
 		// Fill in the assigned_user_name
-		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
+		$this->assigned_user_name = get_assigned_user_name($this->smownerid);
 
-		$query = "SELECT a1.name from accounts as a1, accounts as a2 where a1.id = a2.parent_id and a2.id = '$this->id' and a1.deleted=0";
+		//$query = "SELECT a1.name from account as a1, accounts as a2 where a1.id = a2.parent_id and a2.id = '$this->id' and a1.deleted=0";
+                $query = "SELECT a1.name from account a1, account a2 where a1.id = a2.parent_id and a2.id = '$this->id' and a1.deleted=0";
 		$result = $this->db->query($query,true," Error filling in additional detail fields: ");
 
 		// Get the id and the name.
@@ -536,11 +519,11 @@ class Account extends SugarBean {
 	
 	$where_clauses = Array();
 	$the_query_string = addslashes($the_query_string);
-	array_push($where_clauses, "name like '$the_query_string%'");
+	array_push($where_clauses, "accountname like '$the_query_string%'");
 	if (is_numeric($the_query_string)) {
-		array_push($where_clauses, "phone_alternate like '%$the_query_string%'");
-		array_push($where_clauses, "phone_fax like '%$the_query_string%'");
-		array_push($where_clauses, "phone_office like '%$the_query_string%'");
+		array_push($where_clauses, "otherphone like '%$the_query_string%'");
+		array_push($where_clauses, "fax like '%$the_query_string%'");
+		array_push($where_clauses, "phone like '%$the_query_string%'");
 	}
 	
 	$the_where = "";
@@ -556,66 +539,28 @@ class Account extends SugarBean {
 //method added to construct the query to fetch the custom fields 
 	function constructCustomQueryAddendum()
 	{
-		$result = mysql_query("SHOW COLUMNS FROM accountcf");
-		$i=0;
-		while ($myrow = mysql_fetch_row($result))
-		{
-		        $columnName[$i] = $myrow[0];
-		        $i++;
-		}
-
-		$sql1 = "select column_name,fieldlabel from customfields where column_name in (";
-		$colName = 0;
-		$addTag;
-		while($colName < count($columnName))
-		{
-		        if ($columnName[$colName] == "accountid")
-        		{
-        		}
-        		else
-        		{
-		                if($colName == 1)
-                		{
-
-		                        $addTag .= "'" .$columnName[$colName] ."'";
-                		}
-		                else
-                		{
-		                        $addTag .= ",'" .$columnName[$colName] ."'";
-                		}
-        		}
-		        $colName++;
-		}
-		$sql2 = $sql1.$addTag .")";
-		$result_sql2 = mysql_query($sql2);
-		$resultCount = mysql_num_rows($result_sql2);
-		$rs=mysql_fetch_array($result_sql2);
-		 $j=0;
-		while($j<mysql_num_rows($result_sql2))
-  		{
-			    for($i=0;$i<=$resultCount;$i++)
-    				{
-				      $copy[$j][$i]=$rs[$i];
-    				}
-			    $rs=mysql_fetch_array($result_sql2);
-			    $j++;
-		}
+        global $adb;
+        	//get all the custom fields created 
+		$sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=6";
+        	$result = $adb->query($sql1);
+		$numRows = $adb->num_rows($result);
+	//select accountscf.columnname fieldlabel,accountscf.columnname fieldlabel	
 		$sql3 = "select ";
-		$k=0;
-		$l=0;
-		while($k< $resultCount)
-		{	
-
-		        if($k == 0)
-        		{
-		        $sql3.= "accountcf.".$copy[$k][$l]." ".$copy[$k][$l+1];
-        		}
-		        else
-        		{
-		        $sql3.= ",accountcf.".$copy[$k][$l]." ".$copy[$k][$l+1];
-        		}
-		        $k++;
-		}
+		for($i=0; $i < $numRows;$i++)
+		{
+			$columnName = $adb->query_result($result,$i,"columnname");
+			$fieldlable = $adb->query_result($result,$i,"fieldlabel");
+			//construct query as below
+		       if($i == 0)
+		      	{
+				$sql3 .= "accountscf.".$columnName. " " .$fieldlable;
+			}
+			else
+			{	
+		$sql3 .= ", accountscf.".$columnName. " " .$fieldlable;
+			}
+        
+	         }
 	return $sql3;
 
 	}
@@ -624,8 +569,10 @@ class Account extends SugarBean {
 //check if the custom table exists or not in the first place
 function checkIfCustomTableExists()
 {
- $result = mysql_query("select * from accountcf");
- $testrow = mysql_num_fields($result);
+  //$result = mysql_query("select * from accountcf");
+  //$testrow = mysql_num_fields($result);
+ $result = $this->db->query("select * from accountscf");
+ $testrow = $this->db->num_fields($result);
 	if($testrow > 1)
 	{
 		$exists=true;
@@ -643,25 +590,41 @@ return $exists;
         {
 		if($this->checkIfCustomTableExists())
 		{
-                         $query = $this->constructCustomQueryAddendum() . ",
-				accounts.*,
-                                users.user_name as assigned_user_name
-                                FROM accounts
-                                LEFT JOIN users
-                                ON accounts.assigned_user_id=users.id left join accountcf on accountcf.accountid=accounts.id ";
+          
+  $query = $this->constructCustomQueryAddendum() . ", 
+			account.*, ".$this->entity_table.".*, accountbillads.city as billing_city, accountbillads.country as billing_country, accountbillads.code as billing_code, accountbillads.state as billing_state, accountbillads.street as billing_street, accountshipads.city as shipping_city, accountshipads.country as shipping_country, accountshipads.code as shipping_code, accountshipads.state as shipping_state,  accountshipads.street as shipping_street,
+                        users.user_name, users.status as user_status
+                        FROM ".$this->entity_table."
+                        LEFT JOIN account
+                        ON crmentity.crmid=account.accountid
+                        LEFT JOIN accountbillads
+                        ON account.accountid=accountbillads.accountaddressid
+                        LEFT JOIN accountshipads
+                        ON account.accountid=accountshipads.accountaddressid
+                        LEFT JOIN accountscf 
+                        ON accountscf.accountid=account.accountid
+                        LEFT JOIN users
+                        ON crmentity.smownerid = users.id ";
+
 		}
 		else
 		{
-			   $query = "SELECT
-				accounts.*,
-                                users.user_name as assigned_user_name
-                                FROM accounts
-                                LEFT JOIN users
-                                ON accounts.assigned_user_id=users.id ";	
+                  $query = "SELECT 
+			account.*, ".$this->entity_table.".*, accountbillads.city as billing_city, accountbillads.country as billing_country, accountbillads.code as billing_code, accountbillads.state as billing_state, accountbillads.street as billing_street, accountshipads.city as shipping_city, accountshipads.country as shipping_country, accountshipads.code as shipping_code, accountshipads.state as shipping_state,  accountshipads.street as shipping_street,
+                        users.user_name, users.status as user_status
+                        FROM ".$this->entity_table."
+                        LEFT JOIN account
+                        ON crmentity.crmid=account.accountid
+                        LEFT JOIN accountbillads
+                        ON account.accountid=accountbillads.accountaddressid
+                        LEFT JOIN accountshipads
+                        ON account.accountid=accountshipads.accountaddressid
+                        LEFT JOIN users
+                        ON crmentity.smownerid = users.id ";
 		}
 
-                        $where_auto = " users.status='ACTIVE'
-                        AND accounts.deleted=0 ";
+                        $where_auto = " users.status='Active'
+                        AND crmentity.deleted=0 ";
 
                 if($where != "")
                         $query .= "where ($where) AND ".$where_auto;
@@ -677,15 +640,12 @@ return $exists;
 
 
 function getColumnNames_Acnt()
- {
- $result = $this->db->query("SHOW COLUMNS FROM Accounts");
- $i=0;
- while ($myrow = mysql_fetch_row($result))
- {
-         $copy[$i]=$myrow;
-         $i++;
- }
- return $copy;
+{
+	$table1flds = $this->db->getColumnNames("account");
+	$table2flds = $this->db->getColumnNames("accountbillads");
+	$table3flds = $this->db->getColumnNames("accountshipads");
+	$mergeflds = array_merge($table1flds,$table2flds,$table3flds);
+	return $mergeflds;
 }
 
 }

@@ -16,9 +16,10 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Leads/Lead.php');
 require_once('modules/Leads/Forms.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
+require_once('include/uifromdbutil.php');
 
 global $mod_strings;
 global $app_list_strings;
@@ -28,11 +29,45 @@ global $current_user;
 $focus = new Lead();
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
-    $focus->retrieve($_REQUEST['record']);
+    $focus->id = $_REQUEST['record'];
+    $focus->mode = 'edit'; 	
+    $focus->retrieve_entity_info($_REQUEST['record'],"Leads");		
+    $focus->firstname=$focus->column_fields['firstname'];
+    $focus->lastname=$focus->column_fields['lastname'];
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
+    	$focus->mode = ''; 	
 }
+//get Block 1 Information
+
+$block_1 = getBlockInformation("Leads",1,$focus->mode,$focus->column_fields);
+
+
+
+//get Address Information
+
+$block_2 = getBlockInformation("Leads",2,$focus->mode,$focus->column_fields);
+
+//get Description Information
+
+$block_3 = getBlockInformation("Leads",3,$focus->mode,$focus->column_fields);
+
+
+//get Custom Field Information
+$block_5 = getBlockInformation("Leads",5,$focus->mode,$focus->column_fields);
+if(trim($block_5) != '')
+{
+	$cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
+
+        $cust_fld .=  '<tr><td>';
+        $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
+        $cust_fld .= '<tr><th align="left" class="formSecHeader" colspan="2">Custom Information</th></tr>';
+	$cust_fld .= $block_5;
+	$cust_fld .= '</table>';
+        $cust_fld .= '</td></tr></table>';
+}
+
 
 /*
 //needed when creating a new contact with a default account value passed in 
@@ -53,83 +88,46 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 //retreiving the combo values array
-$comboFieldNames = Array('lead_source'=>'lead_source_dom'
-                      ,'salutation'=>'salutation_dom'
-                      ,'lead_status'=>'lead_status_dom'
-                      ,'industry'=>'industry_dom'
-                      ,'rating'=>'rating_dom'
-                      ,'license_key'=>'license_key_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-require_once($theme_path.'layout_utils.php');
-
-$log->info("Lead detail view");
 
 $xtpl=new XTemplate ('modules/Leads/EditView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
+ 
+if (isset($focus->firstname)) $xtpl->assign("FIRST_NAME", $focus->firstname);
+else $xtpl->assign("FIRST_NAME", "");
+$xtpl->assign("LAST_NAME", $focus->lastname);
+
+$xtpl->assign("BLOCK1", $block_1);
+$xtpl->assign("BLOCK2", $block_2);
+$xtpl->assign("BLOCK3", $block_3);
+if(isset($cust_fld))
+{
+	$xtpl->assign("CUSTOMFIELD", $cust_fld);
+}
+if($focus->mode == 'edit')
+{
+	$xtpl->assign("MODE", $focus->mode);
+}		
 
 if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
+else $xtpl->assign("RETURN_MODULE","Leads");
 if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
+else $xtpl->assign("RETURN_ACTION","index");
 if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
 
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
 $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("ID", $focus->id);
-$xtpl->assign("HEADER", get_module_title("Leads", "{MOD.LBL_LEAD}  ".$focus->first_name." ".$focus->last_name, true));
-if (isset($focus->first_name)) $xtpl->assign("FIRST_NAME", $focus->first_name);
-else $xtpl->assign("FIRST_NAME", "");
-$xtpl->assign("LAST_NAME", $focus->last_name);
-$xtpl->assign("MOBILE", $focus->mobile);
-$xtpl->assign("PHONE", $focus->phone);
-$xtpl->assign("FAX", $focus->fax);
-$xtpl->assign("EMAIL", $focus->email);
-$xtpl->assign("YAHOO_ID", $focus->yahoo_id);
-$xtpl->assign("COMPANY", $focus->company);
-$xtpl->assign("DESIGNATION", $focus->designation);
-$xtpl->assign("WEBSITE", $focus->website);
-$xtpl->assign("ANNUAL_REVENUE", $focus->annual_revenue);
-$xtpl->assign("EMPLOYEES", $focus->employees);
-
-$xtpl->assign("ADDRESS_STREET", $focus->address_street);
-$xtpl->assign("ADDRESS_CITY", $focus->address_city);
-$xtpl->assign("ADDRESS_STATE", $focus->address_state);
-$xtpl->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
-$xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
-$xtpl->assign("DESCRIPTION", $focus->description);
-
-if ($focus->assigned_user_id == '' && (!isset($focus->id) || $focus->id=0)) $focus->assigned_user_id = $current_user->id; 
-//get_user_array() returns an arry containing the id and the user_name as of now
-$xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(), $focus->assigned_user_id));
+$xtpl->assign("HEADER", get_module_title("Leads", "{MOD.LBL_LEAD}  ".$focus->firstname." ".$focus->lastname, true));
 //create the html select code here and assign it
-$result = get_group_options();
-$nameArray = mysql_fetch_array($result);
-$GROUP_SELECT_OPTION = '<select name="assigned_group_name">';
-                   do
-                   {
-                    $groupname=$nameArray["name"];
-                    $GROUP_SELECT_OPTION .= '<option value="';
-                    $GROUP_SELECT_OPTION .=  $groupname;
-                    $GROUP_SELECT_OPTION .=  '">';
-                    $GROUP_SELECT_OPTION .= $nameArray["name"];
-                    $GROUP_SELECT_OPTION .= '</option>';
-                   }while($nameArray = mysql_fetch_array($result));
-                   $GROUP_SELECT_OPTION .='<option value=none>none</option>';               
-                   $GROUP_SELECT_OPTION .= ' </select>';
-
-$xtpl->assign("ASSIGNED_USER_GROUP_OPTIONS",$GROUP_SELECT_OPTION);
-$xtpl->assign("LEAD_SOURCE_OPTIONS", get_select_options_with_id($comboFieldArray['lead_source_dom'], $focus->lead_source));
-$xtpl->assign("SALUTATION_OPTIONS", get_select_options_with_id($comboFieldArray['salutation_dom'], $focus->salutation));
-$xtpl->assign("INDUSTRY_OPTIONS", get_select_options_with_id($comboFieldArray['industry_dom'], $focus->industry));
-$xtpl->assign("LEAD_STATUS_OPTIONS", get_select_options_with_id($comboFieldArray['lead_status_dom'], $focus->lead_status));
-$xtpl->assign("RATING_OPTIONS", get_select_options_with_id($comboFieldArray['rating_dom'], $focus->rating));
-$xtpl->assign("LICENSE_KEY_OPTIONS", get_select_options_with_id($comboFieldArray['license_key_dom'], $focus->license_key));
 $xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 //CustomField
+/*
 $custfld = CustomFieldEditView($focus->id, "Leads", "leadcf", "leadid", $app_strings, $theme);
 $xtpl->assign("CUSTOMFIELD", $custfld);
-
+*/
 $xtpl->parse("main");
 
 $xtpl->out("main");

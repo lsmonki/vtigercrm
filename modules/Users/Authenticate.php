@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Authenticate.php,v 1.7 2004/12/30 06:57:47 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Authenticate.php,v 1.10 2005/02/28 05:25:22 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -22,6 +22,7 @@
 
 require_once('modules/Users/User.php');
 require_once('include/logging.php');
+//require_once('modules/Users/AccessControl.php');
 
 global $mod_strings;
 
@@ -49,14 +50,32 @@ if($focus->is_authenticated())
 
 	// save the user information into the session
 	// go to the home screen
+	//Security related entries start
 	require_once('modules/Users/UserInfoUtil.php');
-	$rolename = fetchUserRole($focus->id);
+	//$rolename = fetchUserRole($focus->id);
+	//$profilename = fetchUserProfile($focus->id);
+	$profileid = fetchUserProfileId($focus->id);	
 	//setting the role into the session
-	$_SESSION['authenticated_user_roleid'] = $rolename;
-        
-        setPermittedTabs2Session($rolename);
-	setPermittedActions2Session($rolename);
+	//$_SESSION['authenticated_user_roleid'] = $profilename;
+
+	//Setting the Object in Session
+	/*
+	$accessObj = new AccessControl();
+	$accessObj->authenticated_user_profileid = $profileid;
+	$accessObj->tab_permission_set = setPermittedTabs2Session($profileid);
 	
+	$accessObj->action_permission_set = setPermittedActions2Session($profileid);
+	$_SESSION['access_privileges'] = $accessObj; 
+	*/
+
+	
+	$_SESSION['authenticated_user_profileid'] = $profileid;
+        setPermittedTabs2Session($profileid);
+	setPermittedActions2Session($profileid);
+	setPermittedDefaultSharingAction2Session($profileid);
+	
+	
+	//Security related entries end
 	header("Location: index.php?action=index&module=Home");
 	session_unregister('login_password');
 	session_unregister('login_error');

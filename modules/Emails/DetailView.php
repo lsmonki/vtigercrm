@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/DetailView.php,v 1.7 2005/01/05 05:42:46 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/DetailView.php,v 1.18 2005/03/05 05:37:47 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -25,6 +25,8 @@ require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/Emails/Forms.php');
 require_once('include/upload_file.php');
+require_once('include/database/PearDatabase.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $mod_strings;
@@ -32,7 +34,9 @@ global $mod_strings;
 $focus = new Email();
 
 if(isset($_REQUEST['record'])) {
-    $focus->retrieve($_REQUEST['record']);
+	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
+	$focus->id = $_REQUEST['record'];
+        $focus->name=$focus->column_fields['name'];		
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
@@ -89,53 +93,96 @@ if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST[
 if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);
+
+if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
+else $xtpl->assign("NAME", "");
+
 $xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+//$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+
+//get Email Information
+$block_1 = getDetailBlockInformation("Emails",1,$focus->column_fields);
+$xtpl->assign("BLOCK1", $block_1);
+
 $xtpl->assign("ID", $focus->id);
-$xtpl->assign("PARENT_TYPE", $app_list_strings['record_type_display'][$focus->parent_type]);
-if (isset($focus->parent_type)) 
-{
-	$xtpl->assign("PARENT_MODULE", $focus->parent_type);
-//	$xtpl->assign("PARENT_TYPE", $app_list_strings['record_type_display'][$focus->parent_type]);
-}
-$xtpl->assign("PARENT_NAME", $focus->parent_name);
-$xtpl->assign("PARENT_ID", $focus->parent_id);           	
-$xtpl->assign("NAME", $focus->name);
-$xtpl->assign("ASSIGNED_TO", $focus->assigned_user_name);
 
-$xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
-$xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
-$xtpl->assign("DATE_START", $focus->date_start);
-$xtpl->assign("TIME_START", substr($focus->time_start,0,5));
-$xtpl->assign("DESCRIPTION", $focus->description);
-
-$xtpl->assign("DURATION_HOURS", $focus->duration_hours);
-$xtpl->assign("DURATION_MINUTES", $focus->duration_minutes);
+/*
 $sql = "select * from email_attachments where parent_id ='".$_REQUEST['record'] ."'";
-$value = mysql_query($sql);
-$valueArray = mysql_fetch_array($value);
+$value = $adb->query($sql);
+$valueArray = $adb->fetch_array($value);
 $filename= $valueArray["filename"];
 $xtpl->assign("FILENAME",$filename);
-  if($entityDel)
-        {
-               $xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
-        }
+*/
+ 
+$permissionData = $_SESSION['action_permission_set'];
+if($permissionData[$tabid]['1'] == 0)
+{
+	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
 
 
+	$xtpl->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
+}
+
+
+if($permissionData[$tabid]['2'] == 0)
+{
+	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+}
+ 
 $xtpl->parse("main");
 
 $xtpl->out("main");
 
 // Now get the list of invitees that match this one.
 
-
-include('modules/Contacts/SubPanelViewContactsAndUsers.php');
-$SubPanel = new SubPanelViewContactsAndUsers();
-$SubPanel->setFocus($focus);
-$SubPanel->setHideNewButton(true);
-$SubPanel->ProcessSubPanelListView('modules/Emails/SubPanelViewRecipients.html',$mod_strings, $action);
+//Security check for related list
+global $profile_id;
+$tab_per_Data = getAllTabsPermission($profile_id);
+$permissionData = $_SESSION['action_permission_set'];
 
 
-echo "</td></tr>\n";
+//Constructing the Related Lists from here
+include('modules/Emails/RenderRelatedListUI.php');
+/*
+if($tab_per_Data[7] == 0)
+{
+        if($permissionData[7][3] == 0)
+        {
+		$focus->get_leads($focus->id);
+	}
+}
+
+if($tab_per_Data[6] == 0)
+{
+        if($permissionData[6][3] == 0)
+        {
+		$focus->get_accounts($focus->id);
+	}
+}
+*/
+if($tab_per_Data[4] == 0)
+{
+        if($permissionData[4][3] == 0)
+        {
+		$focus->get_contacts($focus->id);
+	}
+}
+/*
+if($tab_per_Data[2] == 0)
+{
+        if($permissionData[2][3] == 0)
+        {
+		$focus->get_potentials($focus->id);
+	}
+}
+*/
+//$focus->get_users($focus->id);
+if($tab_per_Data[8] == 0)
+{
+        if($permissionData[8][3] == 0)
+        {
+		$focus->get_attachments($focus->id);
+	}
+}
 
 ?>

@@ -113,7 +113,10 @@
          echo "<br /><span class=\"dinfo\">". $dinfo[Desc] ."</span>\n";
        } else {
          #if ( $this->user->feature_ok(usecalendar,PERM_NEW) ) {
-           echo " " . makelink($callink ."app_new&t=". $tref,$d,$mod_strings['LBL_NEW_APPNT_INFO']) ."\n";
+	   //Comented - added by raj
+           #echo " " . makelink($callink ."app_new&t=". $tref,$d,$mod_strings['LBL_NEW_APPNT_INFO']) ."\n";
+           echo " " . makelink($callink ."calendar_day&t=". $tref,$d,$mod_strings['LBL_VIEW_DAY_APPNT_INFO']) ."\n";
+		
          #} else {
          #  echo " " . $d ."\n";
          #}
@@ -126,10 +129,10 @@
        foreach ($this->pref->callist as $idx => $x) {
          /* the correct day */
          if ( ! $this->pref->callist[$idx]->inside($dd) ) {
-  	//	print("GS --> not inside");
+  		//print("GS --> not inside");
            continue;
          }
-	 /*print("GS --> inside");
+	 //print("GS --> inside");
          /*if (!cal_check_against_list($this->pref->callist[$idx],$this->uids)) {
 	     print("GS --> not in list");
            continue;
@@ -139,7 +142,8 @@
          if ( $hastable == 0 ) {
            echo "\n <table class=\"formatted\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">\n";
            $hastable = 1;
-         } else {
+         } 
+        else {
            echo "  <tr><td class=\"". $dinfo[color] ."\" colspan=\"3\"><img src=\"". $image_path ."black.png\" width=\"100%\" height=\"1\" alt=\"--------\"></td></tr>\n";
          }
 #echo "1 ".$this->user->weekstart ."<br />";

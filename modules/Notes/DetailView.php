@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/DetailView.php,v 1.6 2004/12/16 10:28:55 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/DetailView.php,v 1.9 2005/02/24 20:26:37 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -25,14 +25,17 @@ require_once('data/Tracker.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Notes/Forms.php');
 require_once('include/upload_file.php');
-
+require_once('include/uifromdbutil.php');
 global $app_strings;
 global $mod_strings;
+global $app_list_strings;
 
 $focus = new Note();
 
 if(isset($_REQUEST['record'])) {
-    $focus->retrieve($_REQUEST['record']);
+   $focus->retrieve_entity_info($_REQUEST['record'],"Notes");
+   $focus->id = $_REQUEST['record'];
+   $focus->name=$focus->column_fields['title'];
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
@@ -69,29 +72,27 @@ $xtpl=new XTemplate ('modules/Notes/DetailView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
+//get Note Information
+$block_1 = getDetailBlockInformation("Notes",1,$focus->column_fields);
+$block_2 = getDetailBlockInformation("Notes",2,$focus->column_fields);
+$block_3 = getDetailBlockInformation("Notes",3,$focus->column_fields);
+
+$xtpl->assign("BLOCK1", $block_1);
+$xtpl->assign("BLOCK2", $block_2);
+$xtpl->assign("BLOCK3", $block_3);
+	
+if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
+else $xtpl->assign("NAME", "");
+
+
 if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
 if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
+
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("ID", $focus->id);
-$xtpl->assign("CONTACT_NAME", $focus->contact_name);
-$xtpl->assign("CONTACT_PHONE", $focus->contact_phone);
-$xtpl->assign("CONTACT_EMAIL", $focus->contact_email);
-$xtpl->assign("CONTACT_ID", $focus->contact_id);
-// While getting the parent module, translate it into the name of the module folder from the key
-$xtpl->assign("PARENT_TYPE", $app_list_strings['record_type_display'][$focus->parent_type]);
-if (isset($focus->parent_type))
-{
-	$xtpl->assign("PARENT_MODULE", $focus->parent_type);
-}
-
-$xtpl->assign("PARENT_NAME", $focus->parent_name);
-$xtpl->assign("PARENT_ID", $focus->parent_id);
-$xtpl->assign("NAME", $focus->name);
-$xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
-$xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
 
 if ( isset($focus->filename) && $focus->filename != '')
 {
@@ -99,12 +100,20 @@ if ( isset($focus->filename) && $focus->filename != '')
         $xtpl->assign("FILELINK", $fileurl);
 }
 
-$xtpl->assign("DESCRIPTION", $focus->description);
+$permissionData = $_SESSION['action_permission_set'];
+if($permissionData[$tabid]['1'] == 0)
+{
+	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
 
-  if($entityDel)
-        {
-               $xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
-        }
+
+	$xtpl->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
+}
+
+
+if($permissionData[$tabid]['2'] == 0)
+{
+	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+}
 
 $xtpl->parse("main");
 

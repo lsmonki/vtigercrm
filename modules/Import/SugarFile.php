@@ -59,6 +59,7 @@ class SugarFile extends SugarBean
 
 	function create_tables () 
 	{
+		/*
 		$query = 'CREATE TABLE '.$this->table_name.' ( ';
 		$query .='id char(36) NOT NULL';
 		$query .=', name char(36)';
@@ -78,10 +79,12 @@ class SugarFile extends SugarBean
 	
 		// Create the indexes
                 $this->create_index("create index idx_cont_owner_id_and_name on files (assigned_user_id, name, deleted)");
+		*/
 	}
 
 	function drop_tables () 
 	{
+		/*
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
 		
@@ -89,6 +92,7 @@ class SugarFile extends SugarBean
 		$this->db->query($query);
 
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
+		*/
 
 	}
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Activities/OpenListView.php,v 1.4 2005/01/07 11:32:28 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/OpenListView.php,v 1.13 2005/03/05 13:44:33 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -23,8 +23,6 @@
 require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
 require_once("include/utils.php");
-require_once("modules/Calls/Call.php");
-require_once("modules/Meetings/Meeting.php");
 
 global $currentModule;
 
@@ -33,7 +31,6 @@ global $focus;
 global $action;
 
 global $app_strings;
-//we don't want the parent module's string file, but rather the string file specifc to this subpanel
 global $current_language;
 $current_module_strings = return_module_language($current_language, 'Activities');
 
@@ -44,48 +41,28 @@ require_once($theme_path.'layout_utils.php');
 $today = date("Y-m-d", time());
 $later = date("Y-m-d", strtotime("$today + 7 days"));
 
-$meeting = new Meeting();
-$where = "status = 'Planned' AND date_start >= '$today' AND date_start < '$later' AND meetings_users.user_id ='{$current_user->id}'";
-$focus_meetings_list = $meeting->get_full_list("time_start", $where);
+//$activity = new Activity();
+$where = "AND activity.status = 'Planned' AND date_start >= '$today' AND date_start < '$later' AND crmentity.smownerid ='{$current_user->id}' ORDER BY date_start DESC LIMIT 5";
 
-$call = new Call();
-$where = "status = 'Planned' AND date_start >= '$today' AND date_start < '$later' and assigned_user_id='$current_user->id'";
-$focus_calls_list = $call->get_full_list("time_start", $where);
-
+$list_query = getListQuery("Activities",$where);
+$list_result = $adb->query($list_query);
 $open_activity_list = array();
-
-if (count($focus_meetings_list)>0)
-  foreach ($focus_meetings_list as $meeting) {
-	$open_activity_list[] = Array('name' => $meeting->name,
-								 'id' => $meeting->id,
-								 'type' => "Meeting",
-								 'module' => "Meetings",
-								 'status' => $meeting->status,
-								 'parent_id' => $meeting->parent_id,
-								 'parent_type' => $meeting->parent_type,
-								 'parent_name' => $meeting->parent_name,
-								 'contact_id' => $meeting->contact_id,
-								 'contact_name' => $meeting->contact_name,
-								 'date_start' => $meeting->date_start,
-								 'time_start' => $meeting->time_start
-								 );
-}
-
-if (count($focus_calls_list)>0)
-  foreach ($focus_calls_list as $call) {
-	$open_activity_list[] = Array('name' => $call->name,
-								 'id' => $call->id,
-								 'type' => "Call",
-								 'module' => "Calls",
-								 'status' => $call->status,
-								 'parent_id' => $call->parent_id,
-								 'parent_type' => $call->parent_type,
-								 'parent_name' => $call->parent_name,
-								 'contact_id' => $call->contact_id,
-								 'contact_name' => $call->contact_name,
-								 'date_start' => $call->date_start,
-								 'time_start' => $call->time_start
-								 );
+$noofrows = $adb->num_rows($list_result);
+if (count($list_result)>0)
+for($i=0;$i<$noofrows;$i++) 
+{
+  $parent_name=getRelatedTo("Activities",$list_result,$i);
+  $open_activity_list[] = Array('name' => $adb->query_result($list_result,$i,'subject'),
+                                     'id' => $adb->query_result($list_result,$i,'activityid'),
+                                     'type' => $adb->query_result($list_result,$i,'activitytype'),
+                                     'module' => $adb->query_result($list_result,$list_result_count,'setype'),
+                                     'status' => $adb->query_result($list_result,$list_result_count,'status'),
+                                     'firstname' => $adb->query_result($list_result,$list_result_count,'firstname'),
+                                     'lastname' => $adb->query_result($list_result,$list_result_count,'lastname'),
+                                     'contactid' => $adb->query_result($list_result,$list_result_count,'contactid'),
+                                     'date_start' => $adb->query_result($list_result,$list_result_count,'date_start'),
+				     'parent'=> $parent_name,	
+                                     );
 }
 
 $xtpl=new XTemplate ('modules/Activities/OpenListView.html');
@@ -100,42 +77,29 @@ $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=" . ((is_object($focus)) ? $focus->id : ""));
 
 $oddRow = true;
-if (count($open_activity_list) > 0) $open_activity_list = array_csort($open_activity_list, 'date_start', 'time_start', SORT_ASC);
-foreach($open_activity_list as $activity)
+#if (count($open_activity_list) > 0) $open_activity_list = array_csort($open_activity_list, 'date_start', 'time_start', SORT_ASC);
+foreach($open_activity_list as $event)
 {
 	$activity_fields = array(
-		'ID' => $activity['id'],
-		'NAME' => $activity['name'],
-		'TYPE' => $activity['type'],
-		'MODULE' => $activity['module'],
-		'STATUS' => $activity['status'],
-		'CONTACT_NAME' => $activity['contact_name'],
-		'CONTACT_ID' => $activity['contact_id'],
-		'PARENT_TYPE' => $activity['parent_type'],
-		'PARENT_NAME' => $activity['parent_name'],
-		'PARENT_ID' => $activity['parent_id'],
-		'TIME' => $activity['date_start'].' '.substr($activity['time_start'],0,5)
+		'ID' => $event['id'],
+		'NAME' => $event['name'],
+		'TYPE' => $event['type'],
+		'MODULE' => $event['module'],
+		'STATUS' => $event['status'],
+		'CONTACT_NAME' => $event['firstname'].' '.$event['lastname'],
+		'TIME' => $event['date_start'],
+		'PARENT_NAME' => $event['parent'],
 	);
-	switch ($activity['parent_type']) {
-		case 'Accounts':
-			$activity_fields['PARENT_MODULE'] = 'Accounts';
-			break;
-		case 'Cases':
-			$activity_fields['PARENT_MODULE'] = 'Cases';
-			break;
-		case 'Opportunities':
-			$activity_fields['PARENT_MODULE'] = 'Opportunities';
-			break;
-	}
-	switch ($activity['type']) {
+	switch ($event['type']) {
 		case 'Call':
-			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=$currentModule&return_action=$action&return_id=$focus->id&action=Save&module=Calls&record=".$activity['id']."&status=Held'>X</a>";
+			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed'>X</a>";
 			break;
 		case 'Meeting':
-			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=$currentModule&return_action=$action&return_id=$focus->id&action=Save&module=Meetings&record=".$activity['id']."&status=Held'>X</a>";
+			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed'>X</a>";
+		case 'Task':
+			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed'>X</a>";
 			break;
 	}
-
 
 	$xtpl->assign("ACTIVITY", $activity_fields);
 
@@ -149,10 +113,10 @@ foreach($open_activity_list as $activity)
         //todo move to themes
 		$xtpl->assign("ROW_COLOR", 'evenListRow');
     }
-    $oddRow = !$oddRow;
-
+        $oddRow = !$oddRow;
+        
 	$xtpl->parse("open_activity.row");
-// Put the rows in.
+        // Put the rows in.
 }
 
 $xtpl->parse("open_activity");

@@ -23,6 +23,10 @@
 	<td>
 		<table cellpadding="0" cellspacing="5" border="0">
 		<tr>
+			<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+                        <script type="text/javascript" src="jscalendar/calendar.js"></script>
+                        <script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
+                        <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 			<form name="ConvertLead" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Leads">
 			<input type="hidden" name="record" value="{ID}">
@@ -51,18 +55,25 @@
 	<td width="30%"><input name='account_name' value='{ACCOUNT_NAME}' readonly></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">&nbsp;</td>
-	<td width="30%"><input name='createpotential' type="checkbox" onclick="togglePotFields(ConvertLead)" tabindex='2' {CREATE_POTENTIAL}>&nbsp;Do not create a New Opportunity upon Conversion</td>
+	<td width="30%"><input name='createpotential' type="checkbox" onclick="togglePotFields(ConvertLead)" tabindex='2' {CREATE_POTENTIAL}>&nbsp;{MOD.LBL_DO_NOT_CREATE_NEW_OPPORTUNITY}</td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_POTENTIAL_NAME}</td>
 	<td width="30%"><input name='potential_name' value='{POTENTIAL_NAME}' tabindex='3'></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_POTENTIAL_CLOSE_DATE}</td>
- 	<td width="30%"><input name='closedate' type="text" tabindex='4' size='10' maxlength='10'>&nbsp;<font size="1"><em>{APP.NTC_DATE_FORMAT}</em></font></td>
+ 	<!--td width="30%"><input name='closedate' type="text" tabindex='4' size='10' maxlength='10'>&nbsp;<font size="1"><em>{APP.NTC_DATE_FORMAT}</em></font></td-->
+	<td width="30%"><input name='closedate' id='jscal_field' type="text" tabindex='4' size='10' maxlength='10' value="{DATE_CLOSED}"> <img src="themes/{THEME}/images/calendar.gif" id="jscal_trigger"> <font size=1><em old="{APP.NTC_DATE_FORMAT}">(yyyy-mm-dd)</em></font></td>
 	</tr>
 	</table>
 </td></tr></table>
 
 </form>
+        <script type="text/javascript">
+        Calendar.setup ({
+                inputField : "jscal_field", ifFormat : "{CALENDAR_DATEFORMAT}", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
+        });
+        </script>
+{JAVASCRIPT}
 
 <script type="text/javascript" language="Javascript" src="include/general.js"></script>
 <script type="text/javascript" language="Javascript">

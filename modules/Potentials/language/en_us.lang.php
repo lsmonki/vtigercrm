@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/language/en_us.lang.php,v 1.5 2005/01/08 15:00:04 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/language/en_us.lang.php,v 1.13 2005/02/12 13:55:52 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -21,22 +21,22 @@
  ********************************************************************************/
 
 $mod_strings = Array(
-'LBL_MODULE_NAME'=>'Opportunities',
-'LBL_MODULE_TITLE'=>'Opportunities: Home',
-'LBL_SEARCH_FORM_TITLE'=>'Opportunity Search',
-'LBL_LIST_FORM_TITLE'=>'Opportunity List',
-'LBL_OPPORTUNITY_NAME'=>'Opportunity Name:',
-'LBL_OPPORTUNITY'=>'Opportunity:',
-'LBL_NAME'=>'Opportunity Name',
+'LBL_MODULE_NAME'=>'Potentials',
+'LBL_MODULE_TITLE'=>'Potentials: Home',
+'LBL_SEARCH_FORM_TITLE'=>'Potential Search',
+'LBL_LIST_FORM_TITLE'=>'Potential List',
+'LBL_OPPORTUNITY_NAME'=>'Potential Name:',
+'LBL_OPPORTUNITY'=>'Potential:',
+'LBL_NAME'=>'Potential Name',
 'LBL_INVITEE'=>'Contacts',
-'LBL_LIST_OPPORTUNITY_NAME'=>'Opportunity',
+'LBL_LIST_OPPORTUNITY_NAME'=>'Potential',
 'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
 'LBL_PRODUCT_NAME'=>'Product Name',
 'LBL_LIST_AMOUNT'=>'Amount',
 'LBL_LIST_DATE_CLOSED'=>'Expected Close',
 'LBL_LIST_SALES_STAGE'=>'Sales Stage',
 
-'LBL_OPPORTUNITY_NAME'=>'Opportunity Name:',
+'LBL_OPPORTUNITY_NAME'=>'Potential Name:',
 'LBL_ACCOUNT_NAME'=>'Account Name:',
 'LBL_AMOUNT'=>'Amount:',
 'LBL_DATE_CLOSED'=>'Expected Close Date:',
@@ -46,25 +46,47 @@ $mod_strings = Array(
 'LBL_SALES_STAGE'=>'Sales Stage:',
 'LBL_PROBABILITY'=>'Probability (%):',
 'LBL_DESCRIPTION'=>'Description:',
-'LBL_OPPORTUNITY_INFORMATION'=>'Opportunity Information:',
+'LBL_OPPORTUNITY_INFORMATION'=>'Potential Information:',
 'LBL_DESCRIPTION_INFORMATION'=>'Description Information:',
 
-'LBL_NEW_FORM_TITLE'=>'New Opportunity',
-'LNK_NEW_CONTACT'=>'New Contact',
-'LNK_NEW_LEAD'=>'New Lead',
-'LNK_NEW_ACCOUNT'=>'New Account',
-'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
-'LNK_NEW_CASE'=>'New Case',
-'LNK_NEW_NOTE'=>'New Note',
-'LNK_NEW_CALL'=>'New Call',
-'LNK_NEW_EMAIL'=>'New Email',
-'LNK_NEW_MEETING'=>'New Meeting',
-'LNK_NEW_TASK'=>'New Task',
+'LBL_NEW_FORM_TITLE'=>'New Potential',
 
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the opportunity.",
-'LBL_TOP_OPPORTUNITIES'=>"My Top Open Opportunities",
+'LBL_TOP_OPPORTUNITIES'=>"My Top Open Potentials",
 
 'NTC_REMOVE_OPP_CONFIRMATION'=>'Are you sure you want to remove this contact from this opportunity?',
+
+'LBL_SELECT_OPPOPTUNITY'=>'Select Potential',
+'LBL_GENERAL_INFORMATION'=>'General Information',
+
+
+
+
+
+
+
+//for v4 release added
+'LBL_NEW_POTENTIAL'=>'New Potential',
+'LBL_POTENTIAL_TITLE'=>'Potentials',
+
+'LBL_NEW_TASK'=>'New Task',
+'LBL_TASK_TITLE'=>'Tasks',
+'LBL_NEW_CALL'=>'New Call',
+'LBL_CALL_TITLE'=>'Calls',
+'LBL_NEW_MEETING'=>'New Meeting',
+'LBL_MEETING_TITLE'=>'Meetings',
+'LBL_NEW_EMAIL'=>'New Email',
+'LBL_EMAIL_TITLE'=>'Emails',
+'LBL_NEW_NOTE'=>'New Note',
+'LBL_NOTE_TITLE'=>'Notes',
+
+'LBL_NEW_ATTACHMENT'=>'New Attachment',
+'LBL_ATTACHMENT_TITLE'=>'Attachments',
+
+'LBL_NEW_CONTACT'=>'New Contact',
+'LBL_CONTACT_TITLE'=>'Contacts',
+
+
 );
 
 ?>

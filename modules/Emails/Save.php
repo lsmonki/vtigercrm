@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.17 2005/01/08 07:00:48 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.23 2005/02/20 11:11:09 jack Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -23,21 +23,32 @@
 
 require_once('modules/Emails/Email.php');
 require_once('include/logging.php');
+require_once('include/database/PearDatabase.php');
 //require_once('send_mail.php');
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Email();
-$focus->retrieve($_REQUEST['record']);
-foreach($focus->column_fields as $field)
+if(isset($_REQUEST['record']))
 {
-	if(isset($_REQUEST[$field]))
-	{
-		$value = $_REQUEST[$field];
-		$focus->$field = $value;
-                $local_log->debug("saving note: $field is $value");
-	}
+        $focus->id = $_REQUEST['record'];
+}
+if(isset($_REQUEST['mode']))
+{
+        $focus->mode = $_REQUEST['mode'];
 }
 
+//$focus->retrieve($_REQUEST['record']);
+foreach($focus->column_fields as $fieldname => $val)
+{
+	if(isset($_REQUEST[$fieldname]))
+	{
+		$value = $_REQUEST[$fieldname];
+		//$focus->$field = $value;
+                //$local_log->debug("saving note: $field is $value");
+		$focus->column_fields[$fieldname] = $value;
+	}
+}
+/*
 foreach($focus->additional_column_fields as $field)
 {
 	if(isset($_REQUEST[$field]))
@@ -48,23 +59,26 @@ foreach($focus->additional_column_fields as $field)
 	}
 }
 if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
-
+*/
 $focus->filename = $_REQUEST['file_name'];
 $focus->parent_id = $_REQUEST['parent_id'];
 $focus->parent_type = $_REQUEST['parent_type'];
 
 //echo 'file name : '.$_REQUEST['file_name'].'..'.$focus->filename;
-$focus->save();
+$focus->saveentity("Emails");
 $return_id = $focus->id;
 
+$focus->retrieve_entity_info($return_id,"Emails");
+//print_r($focus->column_fields);
+
 //this is to receive the data from the Select Users button
-$_REQUEST['assigned_user_id']=$_REQUEST['user_id'];
+//$_REQUEST['assigned_user_id']=$_REQUEST['user_id'];
 
 //this will be the case if the Select Contact button is chosen
-if($_REQUEST['assigned_user_id'] == null)
-{
-   $_REQUEST['assigned_user_id']=$_REQUEST['entity_id'];
-}
+//if($_REQUEST['assigned_user_id'] == null)
+//{
+//   $_REQUEST['assigned_user_id']=$_REQUEST['entity_id'];
+//}
 
 //this is to receive the data from the Select Users button
 if($_REQUEST['source_module'] == null)
@@ -77,11 +91,12 @@ else
 	$module = $_REQUEST['source_module'];
 }
 
-$_REQUEST['filename']=$focus->filename;
+$_REQUEST['filename']=$focus->column_fields['filename'];
 
 //subject, contents
-$_REQUEST['name'] = $focus->name;
-$_REQUEST['description'] = $focus->description;
+$_REQUEST['name'] = $focus->column_fields['name'];
+$_REQUEST['description'] = $focus->column_fields['description'];
+
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Emails";
@@ -92,22 +107,22 @@ if(isset($_REQUEST['filename']) && $_REQUEST['filename'] != "") $filename = $_RE
 
 $local_log->debug("Saved record with id of ".$return_id);
 
-$uploaddir = $_SERVER['DOCUMENT_ROOT'] ."/test/upload/" ;// set this to wherever
+$uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
 
-$binFile = $_FILES['uploadfile']['name'];
+$binFile = $_FILES['filename']['name'];
 $filename = basename($binFile);
-$filetype= $_FILES['uploadfile']['type'];
-$filesize = $_FILES['uploadfile']['size'];
+$filetype= $_FILES['filename']['type'];
+$filesize = $_FILES['filename']['attachmentsize'];
 
 //echo 'In Save.php ==> file name,type,size : =>'.$filename.' .. '.$filetype.' .. '.$filesize;
 
 
-if(move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$uploaddir.$_FILES["uploadfile"]["name"])) 
+if(move_uploaded_file($_FILES["filename"]["tmp_name"],$uploaddir.$_FILES["filename"]["name"])) 
 {
-  $binFile = $_FILES['uploadfile']['name'];
+  $binFile = $_FILES['filename']['name'];
   $filename = basename($binFile);
-  $filetype= $_FILES['uploadfile']['type'];
-    $filesize = $_FILES['uploadfile']['size'];
+  $filetype= $_FILES['filename']['type'];
+    $filesize = $_FILES['filename']['attachmentsize'];
     if($filesize != 0)	
     {
     $data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
@@ -142,11 +157,8 @@ if(move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$uploaddir.$_FILES["uplo
 
     $parent_id = $_REQUEST['parent_id'];	 			
 
-    $sql = "INSERT INTO email_attachments ";
-    $sql .= "(date_entered,parent_type,parent_id,data, filename, filesize, filetype) ";
-    $sql .= "VALUES ('$date_entered','$parent_type','$return_id','$data',";
-    $sql .= "'$filename', '$filesize', '$filetype')";
-    $result = mysql_query($sql);
+    $adb->println("attachment");
+
 //     mysql_close();
      deleteFile($uploaddir,$filename);
 //     header("Location: index.php?action=DetailView&module=$ret_module&record=$parent_id&filename=$filename");	
@@ -174,7 +186,7 @@ function deleteFile($dir,$filename)
 {
    unlink($dir.$filename);	
 }
-
+$_REQUEST['return_id']=$return_id;
 //echo 'return..'.$return_module.'/'.$return_action.'<br>parent id='.$parent_id.'<br>return id = '.$return_id.'/'.$filename;
 if( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
 	include("modules/Emails/send_mail.php");

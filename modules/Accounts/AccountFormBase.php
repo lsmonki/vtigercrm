@@ -32,12 +32,14 @@ function checkForDuplicates($prefix){
 	}
 	$query = '';
 	$baseQuery = 'select id, name, website, billing_address_city  from accounts where deleted!=1 and (';
-	if(isset($_POST[$prefix.'name']) && !empty($_POST[$prefix.'name'])){	
-		$query = $baseQuery ."  name like '%".PearDatabase::quote($_POST[$prefix.'name'])."%'";
+	if(isset($_POST[$prefix.'name']) && !empty($_POST[$prefix.'name'])){
+	$query = $baseQuery ."  name like ".PearDatabase::quote('%'.$_POST[$prefix.'name'].'%');	
+        //$query = $baseQuery ."  name like '%".PearDatabase::quote($_POST[$prefix.'name'])."%'";
 	}
 	if(isset($_POST[$prefix.'website']) && !empty($_POST[$prefix.'website'])){	
 		if(empty($query)){
-			$query = $baseQuery ."  website like '".PearDatabase::quote($_POST[$prefix.'website'])."%'";
+                  //			$query = $baseQuery ."  website like '".PearDatabase::quote($_POST[$prefix.'website'])."%'";
+	$query = $baseQuery ."  website like ".PearDatabase::quote($_POST[$prefix.'website'].'%');
 		}else {
 			$query .= "or website like '".$_POST[$prefix.'website']."%'";
 		}

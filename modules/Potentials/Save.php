@@ -13,49 +13,45 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Save.php,v 1.3 2004/11/25 11:32:50 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Save.php,v 1.5 2005/02/11 10:54:22 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('modules/Opportunities/Opportunity.php');
+require_once('modules/Potentials/Opportunity.php');
 require_once('include/logging.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
-$focus = new Opportunity();
+$focus = new Potential();
 
-$focus->retrieve($_REQUEST['record']);
-
-foreach($focus->column_fields as $field)
+if(isset($_REQUEST['record']))
 {
-	if(isset($_REQUEST[$field]))
-	{
-		$value = $_REQUEST[$field];
-		$focus->$field = $value;
-		
-	}
+	$focus->id = $_REQUEST['record'];
+}
+if(isset($_REQUEST['mode']))
+{
+	$focus->mode = $_REQUEST['mode'];
 }
 
-foreach($focus->additional_column_fields as $field)
+foreach($focus->column_fields as $fieldname => $val)
 {
-	if(isset($_REQUEST[$field]))
+	if(isset($_REQUEST[$fieldname]))
 	{
-		$value = $_REQUEST[$field];
-		$focus->$field = $value;
-		
+		$value = $_REQUEST[$fieldname];
+		$focus->column_fields[$fieldname] = $value;
 	}
+		
 }
 
-$focus->save();
+$focus->saveentity("Potentials");
 $return_id = $focus->id;
-save_customfields($focus->id);
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
-else $return_module = "Opportunities";
+else $return_module = "Potentials";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
@@ -66,21 +62,22 @@ header("Location: index.php?action=$return_action&module=$return_module&record=$
 //Code to save the custom field info into database
 function save_customfields($entity_id)
 {
-	$dbquery="select * from customfields where module='Opportunities'";
-	$result = mysql_query($dbquery);
-	$custquery = 'select * from opportunitycf where opportunityid="'.$entity_id.'"';
-        $cust_result = mysql_query($custquery);
-	if(mysql_num_rows($result) != 0)
+	global $adb;
+	$dbquery="select * from customfields where module='Potentials'";
+	$result = $adb->query($dbquery);
+	$custquery = "select * from potentialscf where potentialid='".$entity_id."'";
+        $cust_result = $adb->query($custquery);
+	if($adb->num_rows($result) != 0)
 	{
 		
 		$columns='';
 		$values='';
 		$update='';
-		$noofrows = mysql_num_rows($result);
+		$noofrows = $adb->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
 		{
-			$fldName=mysql_result($result,$i,"fieldlabel");
-			$colName=mysql_result($result,$i,"column_name");
+			$fldName=$adb->query_result($result,$i,"fieldlabel");
+			$colName=$adb->query_result($result,$i,"column_name");
 			if(isset($_REQUEST[$colName]))
 			{
 				$fldvalue=$_REQUEST[$colName];
@@ -93,7 +90,7 @@ function save_customfields($entity_id)
 			{
 				$fldvalue = '';
 			}
-			if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
+			if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
 			{
 				//Update Block
 				if($i == 0)
@@ -110,7 +107,7 @@ function save_customfields($entity_id)
 				//Insert Block
 				if($i == 0)
 				{
-					$columns='opportunityid, '.$colName;
+					$columns='potentialid, '.$colName;
 					$values='"'.$entity_id.'", "'.$fldvalue.'"';
 				}
 				else
@@ -122,23 +119,24 @@ function save_customfields($entity_id)
 			
 				
 		}
-		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
+		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
 		{
 			//Update Block
-			$query = 'update opportunitycf SET '.$update.' where opportunityid="'.$entity_id.'"'; 
-			mysql_query($query);
+			$query = 'update potentialscf SET '.$update.' where potentialid="'.$entity_id.'"'; 
+			$adb->query($query);
 		}
 		else
 		{
 			//Insert Block
-			$query = 'insert into opportunitycf ('.$columns.') values('.$values.')';
-			mysql_query($query);
+			$query = 'insert into potentialscf ('.$columns.') values('.$values.')';
+			$adb->query($query);
 		}
 		
 	}
+	/* srini patch
 	else
 	{
-		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
+		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
 		{
 			//Update Block
 		}
@@ -146,8 +144,8 @@ function save_customfields($entity_id)
 		{
 			//Insert Block
 			$query = 'insert into opportunitycf ('.$columns.') values('.$values.')';
-			mysql_query($query);
+			$adb->query($query);
 		}
-	}	
+	}*/	
 }
 ?>

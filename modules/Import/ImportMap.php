@@ -43,7 +43,9 @@ class ImportMap extends SugarBean
 
 	var $table_name = "import_maps";
 	var $object_name = "ImportMap";
+	var $module_id="id";
 	
+	var $tab_name_index = Array("import_maps"=>"id");
 	var $new_schema = true;
 
 	var $column_fields = Array("id"
@@ -65,8 +67,14 @@ class ImportMap extends SugarBean
 		$this->db = new PearDatabase();
 	}
 
+	function toString()
+	{
+		return "Object:ImportMap id=$this->id name=$this->name module=$this->module content=$this->content";
+	}
+
 	function create_tables () 
 	{
+		/*
 		$query = 'CREATE TABLE '.$this->table_name.' ( ';
 		$query .='id char(36) NOT NULL';
 		$query .=', name char(36) NOT NULL';
@@ -89,11 +97,12 @@ class ImportMap extends SugarBean
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
 	
 		// Create the indexes
-                $this->create_index("create index idx_cont_owner_id_module_and_name on ".$this->table_name." (assigned_user_id, module, name, deleted)");
+                $this->create_index("create index idx_cont_owner_id_module_and_name on ".$this->table_name." (assigned_user_id, module, name, deleted)");*/
 	}
 
 	function drop_tables () 
 	{
+		/*
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
 		
@@ -101,6 +110,7 @@ class ImportMap extends SugarBean
 		$this->db->query($query);
 
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
+		*/
 
 	}
 	
@@ -113,12 +123,18 @@ class ImportMap extends SugarBean
 
                 $result = 1;
                 $this->assigned_user_id = $owner_id;
+		//$this->new_with_id=$this->db->getUniqueID("import_maps");
                 $this->name = $name;
                 $this->module = $module;
-                $this->content = $content;
+                //$this->content = $content;
+		$this->content = "'".$this->db->getEmptyBlob()."'";
                 $this->has_header = $has_header;
                 $this->deleted = 0;
-                $this->save();
+                $returnid = $this->save();
+		//$this->db->println("save_map=".$this->new_with_id);
+		$this->db->updateBlob($this->table_name,"content","name='".$name."' and module='".$module."'",$content);
+		//$this->db->updateBlob($this->table_name,"content","id=".$this->new_with_id,$content);
+		
                 return $result;
         }
 

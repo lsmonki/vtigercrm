@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/Forms.php,v 1.3 2004/10/06 09:02:05 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Forms.php,v 1.5 2005/02/19 12:42:23 jack Exp $
  * Description:  Contains a variety of utility functions specific to this module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -52,7 +52,7 @@ function trim(s) {
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (trim(form.name.value) == "") {
+	if (trim(form.title.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_subject";
 	}
@@ -98,7 +98,7 @@ $the_form .= <<<EOQ
 			<input type="hidden" name="parent_type" value="${default_parent_type}">
 			<input type="hidden" name="action" value="Save">
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_note_subject<br>
-		<input name='name' maxlength='255' type="text" value=""><br><br>
+		<input name='title' maxlength='255' type="text" value=""><br><br>
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >
 		</form>
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/data/Tracker.php,v 1.3 2004/10/29 09:55:08 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/data/Tracker.php,v 1.11 2005/03/05 11:33:01 jack Exp $
  * Description:  Updates entries for the Last Viewed functionality tracking the
  * last viewed records on a per user basis.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -59,23 +59,104 @@ class Tracker {
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
      */
-    function track_view($user_id, $module_name, $item_id, $item_summary)
+    function track_view($user_id, $current_module, $item_id, $item_summary)
     {
-        $this->delete_history($user_id, $item_id);
+      global $adb;
+      $this->delete_history($user_id, $item_id);
 
-        // Add a new item to the user's list
+      // Add a new item to the user's list
 
         $esc_item_id = addslashes($item_id);
-        $esc_item_summary = addslashes($item_summary);
+        
 
-        $query = "INSERT into $this->table_name (user_id, module_name, item_id, item_summary) values ('$user_id', '$module_name', '$esc_item_id', '$esc_item_summary')";
+         //get the first name and last name from the respective modules
+          if($current_module =='Leads')
+          {
+            $query = 'select firstname,lastname from leaddetails where leadid=' .$item_id;
+            $result = $this->db->query($query);
+            $firstname = $adb->query_result($result,0,'firstname');
+            $lastname =  $adb->query_result($result,0,'lastname');
+            $item_summary = $lastname .' ' .$firstname;
+          }
+          elseif ($current_module =='Accounts')
+          {
+            $query = 'select accountname from account where accountid=' .$item_id;
+            $result = $this->db->query($query);
+            $accountname = $adb->query_result($result,0,'accountname');
+            $item_summary = $accountname;
+            
+          }
+          elseif($current_module =='Contacts')
+          {
+            $query = 'select firstname,lastname from contactdetails where contactid=' .$item_id;
+            $result = $this->db->query($query);
+            $firstname = $adb->query_result($result,0,'firstname');
+            $lastname =  $adb->query_result($result,0,'lastname');
+            $item_summary = $lastname .' ' .$firstname;
+            
+          }
+          elseif($current_module =='Potentials')
+          {
+            $query = 'select potentialname from potential where potentialid=' .$item_id;
+            $result = $this->db->query($query);
+            $potentialname =  $adb->query_result($result,0,'potentialname');
+            $item_summary = $lastname .' ' .$potentialname;
+          }
+          elseif($current_module =='Notes')
+          {
+            $query = 'select title from notes where notesid=' .$item_id;
+            $result = $this->db->query($query);
+            $title = $adb->query_result($result,0,'title');
+            $item_summary = $title;
+            
+          }
+          elseif($current_module =='HelpDesk')
+          {
+            $query = 'select title from troubletickets where ticketid=' .$item_id;
+            $result = $this->db->query($query);
+            $title = $adb->query_result($result,0,'title');
+            $item_summary = $title;
+          }
+          elseif($current_module =='Activities')
+          {
+            //$query = 'select name from calls where callid=' .$item_id;
+	    $query = 'select subject from activity where activityid=' .$item_id;
+            $result = $this->db->query($query);
+            $name = $adb->query_result($result,0,'subject');
+            $item_summary = $name;
+          }
+          elseif($current_module =='Emails')
+          {
+            //$query = 'select name from emails where emailid=' .$item_id;
+	    $query = 'select subject from activity where activityid=' .$item_id;
+            $result = $this->db->query($query);
+            $name = $adb->query_result($result,0,'subject');
+            $item_summary = $name;
+          }
+          elseif($current_module =='Products')
+          {
+            $query = 'select productname from products where productid=' .$item_id;
+            $result = $this->db->query($query);
+            $productname = $adb->query_result($result,0,'productname');
+            $item_summary = $productname;
+          }
+          elseif($current_module =='Users')
+          {
+            $query = 'select first_name,last_name from users where id=' .$item_id;
+            $result = $this->db->query($query);
+            $firstname = $adb->query_result($result,0,'first_name');
+            $lastname = $adb->query_result($result,0,'last_name');
+            $item_summary = $firstname .' '. $lastname;
+          }
 
-        $this->log->info("Track Item View: ".$query);
-
-       $this->db->query($query, true);
-
-
-		$this->prune_history($user_id);
+          $query = "INSERT into $this->table_name (user_id, module_name, item_id, item_summary) values ('$user_id', '$current_module', '$esc_item_id', ".$this->db->formatString($this->table_name,'item_summary',$item_summary).")";
+          
+          $this->log->info("Track Item View: ".$query);
+          
+          $this->db->query($query, true);
+          
+          
+          $this->prune_history($user_id);
     }
 
     /**
@@ -162,9 +243,9 @@ class Tracker {
         {
             // delete the last one.  This assumes that entries are added one at a time.
             // we should never add a bunch of entries
-            $query = "SELECT * from $this->table_name WHERE user_id='$user_id' ORDER BY id ASC LIMIT 1";
+            $query = "SELECT * from $this->table_name WHERE user_id='$user_id' ORDER BY id ASC";
             $this->log->debug("About to try and find oldest item: $query");
-            $result =  $this->db->query($query);
+            $result =  $this->db->limitQuery($query,0,1);
 
             $oldest_item = $this->db->fetchByAssoc($result, -1, false);
             $query = "DELETE from $this->table_name WHERE id='{$oldest_item['id']}'";
@@ -178,7 +259,7 @@ class Tracker {
     }
 
 	function create_tables() {
-		$query = 'CREATE TABLE '.$this->table_name.' (';
+		/*$query = 'CREATE TABLE '.$this->table_name.' (';
 		$query = $query.'id int( 11 ) NOT NULL auto_increment';
 		$query = $query.', user_id char(36)';
 		$query = $query.', module_name char(25)';
@@ -188,16 +269,17 @@ class Tracker {
 
 
 
-		$this->db->query($query);
+		$this->db->query($query);*/
 
 	}
 
 	function drop_tables () {
-		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
+		/*$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
 		$this->db->query($query);
 
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
+		*/
 
 	}
 }

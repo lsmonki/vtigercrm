@@ -16,8 +16,9 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Leads/Lead.php');
 require_once('modules/Leads/Forms.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
+require_once('include/uifromdbutil.php');
 
 global $mod_strings;
 global $app_strings;
@@ -26,7 +27,12 @@ global $app_list_strings;
 $focus = new Lead();
 
 if(isset($_REQUEST['record'])) {
-    $focus->retrieve($_REQUEST['record']);
+    $focus->id = $_REQUEST['record'];	
+    $focus->retrieve_entity_info($_REQUEST['record'],"Leads");
+    $focus->id = $_REQUEST['record'];
+    $focus->firstname=$focus->column_fields['firstname'];
+    $focus->lastname=$focus->column_fields['lastname'];
+	
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
@@ -46,41 +52,56 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
 $xtpl->assign("ID", $focus->id);
-$xtpl->assign("ACCOUNT_NAME", $focus->account_name);	
-$xtpl->assign("ACCOUNT_ID", $focus->account_id);	
-$xtpl->assign("LEAD_SOURCE", $focus->lead_source);
-$xtpl->assign("SALUTATION", $focus->salutation);
-$xtpl->assign("FIRST_NAME", $focus->first_name);
-$xtpl->assign("LAST_NAME", $focus->last_name);
-$xtpl->assign("PHONE", $focus->phone);
-$xtpl->assign("COMPANY", $focus->company);
-$xtpl->assign("MOBILE", $focus->mobile);
-$xtpl->assign("DESIGNATION", $focus->designation);
-$xtpl->assign("FAX", $focus->fax);
-$xtpl->assign("EMAIL", $focus->email);
-$xtpl->assign("INDUSTRY", $focus->industry);
-$xtpl->assign("WEBSITE", $focus->website);
-$xtpl->assign("ANNUAL_REVENUE", $focus->annual_revenue);
-$xtpl->assign("LEAD_STATUS", $focus->lead_status);
-$xtpl->assign("LICENSE_KEY", $focus->license_key);
-$xtpl->assign("RATING", $focus->rating);
-//$xtpl->assign("ASSIGNED_TO", get_assigned_user_name($focus->assigned_user_id));
-$user_group_name=get_assigned_user_or_group_name($focus->id);
-$xtpl->assign("ASSIGNED_TO", $user_group_name);
-$xtpl->assign("EMPLOYEES", $focus->employees);
-$xtpl->assign("ADDRESS_STREET", $focus->address_street);
-$xtpl->assign("ADDRESS_CITY", $focus->address_city);
-$xtpl->assign("ADDRESS_STATE", $focus->address_state);
-$xtpl->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
-$xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
-$xtpl->assign("YAHOO_ID", $focus->yahoo_id);
-if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $xtpl->assign("YAHOO_MESSENGER", "<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$focus->yahoo_id."'><img border=0 src='http://opi.yahoo.com/online?u=".$focus->yahoo_id."'&m=g&t=2'></a>");
-$xtpl->assign("DESCRIPTION", $focus->description);
+ 
+if (isset($focus->firstname)) $xtpl->assign("FIRST_NAME", $focus->firstname);
+else $xtpl->assign("FIRST_NAME", "");
+$xtpl->assign("LAST_NAME", $focus->lastname);
 
-if($entityDel)
-	{
-		$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
-	}
+//get Block 1 Information
+
+$block_1 = getDetailBlockInformation("Leads",1,$focus->column_fields);
+$xtpl->assign("BLOCK1", $block_1);
+
+//get Address Information
+
+$block_2 = getDetailBlockInformation("Leads",2,$focus->column_fields);
+$xtpl->assign("BLOCK2", $block_2);
+//get Description Information
+
+$block_3 = getDetailBlockInformation("Leads",3,$focus->column_fields);
+$xtpl->assign("BLOCK3", $block_3);
+
+
+$block_5 = getDetailBlockInformation("Leads",5,$focus->column_fields);
+if(trim($block_5) != '')
+{
+	$cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
+        $cust_fld .=  '<tr><td>';
+        $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
+        $cust_fld .= '<tr><th align="left" class="formSecHeader" colspan="2">Custom Information</th></tr>';
+        $cust_fld .= $block_5;
+        $cust_fld .= '</table>';
+        $cust_fld .= '</td></tr></table>';
+
+}
+
+$xtpl->assign("CUSTOMFIELD", $cust_fld);
+
+
+$permissionData = $_SESSION['action_permission_set'];
+if($permissionData[$tabid]['1'] == 0)
+{
+	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
+
+
+	$xtpl->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
+}
+
+
+if($permissionData[$tabid]['2'] == 0)
+{
+	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+}
 
 $xtpl->assign("SENDMAILBUTTON","<td><input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.module.value='Emails';this.form.email_directing_module.value='leads';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\"></td>");
 
@@ -94,19 +115,19 @@ $xtpl->assign("SENDMAILBUTTON","<td><input title=\"$app_strings[LBL_SENDMAIL_BUT
 }
 require_once('modules/Users/UserInfoUtil.php');
 $wordTemplateResult = fetchWordTemplateList("Leads");
-$tempCount = mysql_num_rows($wordTemplateResult);
-$tempVal = mysql_fetch_array($wordTemplateResult);
+$tempCount = $adb->num_rows($wordTemplateResult);
+$tempVal = $adb->fetch_array($wordTemplateResult);
 for($templateCount=0;$templateCount<$tempCount;$templateCount++)
 {
 $optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
-$tempVal = mysql_fetch_array($wordTemplateResult);
+$tempVal = $adb->fetch_array($wordTemplateResult);
 }
 $xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;Select template to Mail Merge:<select name=\"mergefile\">".$optionString."</select>");
 
 
 //Assigning Custom Field Values
-$custfld = CustomFieldDetailView($focus->id, "Leads", "leadcf", "leadid");
-$xtpl->assign("CUSTOMFIELD", $custfld);
+//$custfld = CustomFieldDetailView($focus->id, "Leads", "leadcf", "leadid");
+//$xtpl->assign("CUSTOMFIELD", $custfld);
 $xtpl->parse("main");
 $xtpl->out("main");
 
@@ -115,34 +136,15 @@ echo "<BR>\n";
 // Now get the list of direct reports that match this one.
 $focus_list = & $focus->get_direct_reports();
 
-include('modules/Contacts/SubPanelView.php');
-
-echo "<BR>\n";
-
-// Now get the list of opportunities that match this one.
-$focus_list = & $focus->get_opportunities();
-
-include('modules/Opportunities/SubPanelView.php');
-
-echo "<BR>\n";
-
-// Now get the list of cases that match this one.
-$focus_list = & $focus->get_cases();
-
-include('modules/Cases/SubPanelView.php');
-
-echo "<BR>\n";
 */
 
 // Now get the list of activities that match this contact.
-$focus_tasks_list = & $focus->get_tasks();
-$focus_meetings_list = & $focus->get_meetings();
-$focus_calls_list = & $focus->get_calls();
-$focus_emails_list = & $focus->get_emails();
-$focus_notes_list = & $focus->get_notes();
-
-include('modules/Activities/SubPanelView.php');
-
-echo "</td></tr>\n";
+// $focus_tasks_list = & $focus->get_tasks($focus->id);
+//$focus_meetings_list = & $focus->get_meetings($focus->id);
+ $focus_activities_list = & $focus->get_activities($focus->id);
+ $focus_emails_list = & $focus->get_emails($focus->id);
+// $focus_notes_list = & $focus->get_notes($focus->id);
+ $focus_tickets_list = & $focus->get_tickets($focus->id);
+ $focus_attachments_list = & $focus->get_attachments($focus->id);
 
 ?>

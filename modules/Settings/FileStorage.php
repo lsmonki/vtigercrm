@@ -20,7 +20,7 @@ var $table_name = "filestorage";
 
 function create_tables () 
 {
-		$query = 'CREATE TABLE '.$this->table_name.' ( ';
+		/*$query = 'CREATE TABLE '.$this->table_name.' ( ';
 		$query .='fileid varchar(50) NOT NULL';
 		$query .=', date_entered datetime NOT NULL';
 		$query .=', parent_type varchar(50) NOT NULL';
@@ -34,17 +34,17 @@ function create_tables ()
 
 		$this->log->info($query);
 
-		mysql_query($query);
+		mysql_query($query);*/
 }
 
 	function drop_tables () {
-		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
+		/*$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
 		$this->log->info($query);
 
 		mysql_query($query);
 
-	// - add exception handling logic here if the table can't be dropped.
+	// - add exception handling logic here if the table can't be dropped.*/
 
 	}
 }

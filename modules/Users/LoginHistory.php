@@ -30,6 +30,7 @@ class LoginHistory extends SugarBean {
 	var $login_time;
 	var $logout_time;
 	var $status;
+	var $module_name = "Users";
 
 	var $table_name = "loginhistory";
 
@@ -57,7 +58,7 @@ class LoginHistory extends SugarBean {
 	var $default_order_by = "login_id";
 
 	function create_tables () {
-		$query = 'CREATE TABLE '.$this->table_name.' ( ';
+		/*$query = 'CREATE TABLE '.$this->table_name.' ( ';
 		$query .='login_id int(11) NOT NULL auto_increment';
 		$query .=', user_name varchar(25) NOT NULL';
 		$query .=', user_ip varchar(25) NOT NULL';
@@ -68,20 +69,22 @@ class LoginHistory extends SugarBean {
 		
 		$this->log->info($query);
 		
-		mysql_query($query) or die("Error creating table: ".mysql_error());
+		mysql_query($query) or die("Error creating table: ".mysql_error());*/
 
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
 		
 	}
 
 	function drop_tables () {
+		/*
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
 		$this->log->info($query);
 			
 		mysql_query($query);
 
-		//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
+		//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped. 
+		*/
 
 	}
 	
@@ -93,8 +96,9 @@ class LoginHistory extends SugarBean {
 	/** Records the Login info */
 	function user_login(&$usname,&$usip,&$intime)
 	{
-		$query = "Insert into loginhistory values ('','$usname','$usip','$intime','','Signedin')";
-		$result = mysql_query($query)
+		//print("GS --> intime=".$intime);
+		$query = "Insert into loginhistory values ('','$usname','$usip',".$this->db->formatDate($intime).",'','Signedin')";
+		$result = $this->db->query($query)
                         or die("MySQL error: ".mysql_error());
 		
 		return $result;
@@ -103,23 +107,17 @@ class LoginHistory extends SugarBean {
 	function user_logout(&$usname,&$usip,&$outtime)
 	{
 		// First, get the list of IDs.
-		$query = "Update loginhistory set logout_time='$outtime', status='Signedoff' where user_name='$usname' and user_ip='$usip'";
-		$result = mysql_query($query)
+		$query = "Update loginhistory set logout_time=".$this->db->formatDate($outtime).", status='Signedoff' where user_name='$usname' and user_ip='$usip'";
+		$result = $this->db->query($query)
                         or die("MySQL error: ".mysql_error());
 	}
 
-	function create_list_query(&$order_by, &$where)
-	{
+  function create_list_query(&$order_by, &$where)
+  {
 		// Determine if the account name is present in the where clause.
 
-		$query = "SELECT * from loginhistory";
-
-		if($where != "")
-			$query .= " where ($where)" ;
-
-		$query .= " ORDER BY $order_by";
-
-		return $query;
+		$query = "SELECT * from loginhistory order by login_time";
+                return $query;
 	}
 
 

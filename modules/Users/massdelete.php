@@ -17,16 +17,17 @@
 
 
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 $idlist = $_POST['idlist'];
+$returnmodule=$_REQUEST['return_module'];
 //split the string and store in an array
 $storearray = explode(";",$idlist);
 foreach($storearray as $id)
 {
-$sql = "Delete from leads where id='" .$id ."'";
-$result = mysql_query($sql);
+	$sql="update crmentity set crmentity.deleted=1 where crmentity.crmid='" .$id ."'";
+	$result = $adb->query($sql);
 }
+header("Location: index.php?module=".$returnmodule."&action=index");
 
-header("Location: index.php?module=Leads&action=index");
 ?>
 

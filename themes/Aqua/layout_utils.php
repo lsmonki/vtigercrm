@@ -64,7 +64,7 @@ global $image_path;
 global $app_strings;
 
 $the_form = <<<EOQ
-<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-bottom:1px solid #000"><tbody><tr>
 	  <td>
        <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 		<td vAlign="top" align="left" height="20"> 

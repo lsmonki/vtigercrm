@@ -1,85 +1,59 @@
 <?php
 /*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
- * ("License"); You may not use this file except in compliance with the License
- * The Original Code is:  vtiger CRM Open Source
- * The Initial Developer of the Original Code is vtiger.
- * Portions created by vtiger are Copyright (C) vtiger.
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
-*
+ * Contributor(s): ______________________________________.
  ********************************************************************************/
-require_once('database/DatabaseConnection.php');
-require_once('include/utils.php');
-$product_name;
-$product_code;
-$product_active;
-$product_commissionrate;
-$product_qtyperunit;
-$product_unitprice;
-$product_image;
-$product_description;
+/*********************************************************************************
+ * $Header$
+ * Description:  Saves an Account record and then redirects the browser to the 
+ * defined return URL.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
+ ********************************************************************************/
 
-if(isset($_REQUEST["productname"]))
+require_once('modules/Products/Product.php');
+require_once('include/logging.php');
+require_once('include/database/PearDatabase.php');
+
+$focus = new Product();
+if(isset($_REQUEST['record']))
 {
-$product_name = $_REQUEST["productname"];
+	$focus->id = $_REQUEST['record'];
+}
+if(isset($_REQUEST['mode']))
+{
+	$focus->mode = $_REQUEST['mode'];
 }
 
-if(isset($_REQUEST["productcode"]))
+foreach($focus->column_fields as $fieldname => $val)
 {
-$product_code = $_REQUEST["productcode"];
+	if(isset($_REQUEST[$fieldname]))
+	{
+		$value = $_REQUEST[$fieldname];
+		$focus->column_fields[$fieldname] = $value;
+	}
+		
 }
 
-if(isset($_REQUEST["active"]) && $_REQUEST["active"] == 'on')
-{
-	$product_active = 1;
-}
-else
-{
-	$product_active = 0;
-}
+$focus->saveentity("Products");
+$return_id = $focus->id;
 
-if(isset($_REQUEST["commissionrate"]))
-{
-$product_commissionrate = $_REQUEST["commissionrate"];
-}
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
+else $return_module = "Products";
+if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
+else $return_action = "DetailView";
+if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
-if(isset($_REQUEST["qtyperunit"]))
-{
-$product_qtyperunit = $_REQUEST["qtyperunit"];
-}
-
-if(isset($_REQUEST["unitprice"]))
-{
-$product_unitprice = $_REQUEST["unitprice"];
-}
-if(isset($_REQUEST["description"]))
-{
-$product_description = $_REQUEST["description"];
-}
-
-$mode = $_REQUEST['mode'];
-$return_action = $_REQUEST['return_action'];
-$return_module = $_REQUEST['return_module'];
-$return_id = $_REQUEST['return_id'];
-
-if(isset($mode) && $mode != '' && $mode == 'Edit')
-{
-	$productid = $_REQUEST['id'];
-	$sql = "update products set productname='".$product_name."',category='".$product_code."',product_description='".$product_description."',qty_per_unit='".$product_qtyperunit."',unit_price='".$product_unitprice."',commissionrate='".$product_commissionrate."',discontinued='".$product_active."' where id=".$productid;
-	mysql_query($sql);
-}
-else
-{
-	$sql = "insert into products(productname,category,product_description,qty_per_unit,unit_price,commissionrate,discontinued) values('". $product_name ."','" .$product_code ."','" .$product_description ."','" .$product_qtyperunit ."','" .$product_unitprice ."','" .$product_commissionrate ."','" .$product_active ."')";
-	mysql_query($sql);
-	//Retreiving the max id
-	$idquery = "select max(id) as id from products";
-	$idresult = mysql_query($idquery);
-	$return_id = mysql_result($idresult,0,"id");
-
-}
-
-$loc = "Location: index.php?action=".$return_action."&module=".$return_module."&record=".$return_id;
-header($loc);
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 
 ?>

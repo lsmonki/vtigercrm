@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/User.php,v 1.5 2005/01/03 13:54:30 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/User.php,v 1.9 2005/03/04 08:01:32 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -65,8 +65,11 @@ class User extends SugarBean {
 	
 	var $reports_to_name;
 	var $reports_to_id;
+
+	var $module_id='id';
 	
 	var $table_name = "users";
+	var $module_name = "Users";
 
 	var $object_name = "User";
 	var $user_preferences;
@@ -114,6 +117,7 @@ class User extends SugarBean {
 		
 	var $default_order_by = "user_name";
 
+	var $record_id;
 	var $new_schema = true;
 
 	function User() {
@@ -181,7 +185,7 @@ class User extends SugarBean {
 		return '';
 	}
 	function create_tables () {
-		$query = 'CREATE TABLE '.$this->table_name.' ( ';
+		/*$query = 'CREATE TABLE '.$this->table_name.' ( ';
 		$query .= 'id char(36) NOT NULL';
 		$query .= ', user_name varchar(20)';
 		$query .= ', user_password varchar(30)';
@@ -224,12 +228,13 @@ class User extends SugarBean {
 		$this->db->query($query, true);
 
 	//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
+	*/
 	
 	}
 
 	function drop_tables () {
-		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
-		$this->db->query($query, true);	
+		/*$query = 'DROP TABLE IF EXISTS '.$this->table_name;
+		$this->db->query($query, true);	*/
 		
 
 	//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
@@ -435,7 +440,8 @@ class User extends SugarBean {
 	
 	function fill_in_additional_detail_fields()
 	{
-		$query = "SELECT u1.first_name, u1.last_name from users as u1, users as u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
+		//$query = "SELECT u1.first_name, u1.last_name from users as u1, users as u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
+		$query = "SELECT u1.first_name, u1.last_name from users u1, users u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
 		$result =$this->db->query($query, true, "Error filling in additional detail fields") ;
 		
 		$row = $this->db->fetchByAssoc($result);

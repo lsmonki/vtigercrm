@@ -9,78 +9,126 @@
 *
  ********************************************************************************/
 
-require_once('database/DatabaseConnection.php');
-
+require_once('include/database/PearDatabase.php');
+require_once('modules/Leads/Lead.php');
 //Getting the Parameters from the ConvertLead Form
 $id = $_REQUEST["record"];
 $module = $_REQUEST["module"];
-$assigned_user_id = $_REQUEST["assigned_user_id"];
+$assigned_user_id = $_REQUEST["smowerid"];
 $createpotential = $_REQUEST["createpotential"];
 $potential_name = $_REQUEST["potential_name"];
 $close_date = $_REQUEST["closedate"];
 $current_user_id = $_REQUEST["current_user_id"];
+$accountname = $_REQUEST['account_name'];
 
-//Retreiving the lead info from the Database
-$sql = "SELECT * from leads where id='".$id."'";
-$result = mysql_query($sql);
-$row = mysql_fetch_array($result);
+//Retrieve info from all the tables related to leads
+  $focus = new Lead();
+ $focus->retrieve_entity_info($id,"Leads");
 
-//Inserting data in accounts table
+//get all the lead related columns 
+$row = $focus->column_fields;
 
-$account_id = create_guid();
 $date_entered;
 $date_modified;
 
 $date_entered = date('YmdHis');
 $date_modified = date('YmdHis');
 
-$sql_insert_account = "INSERT INTO accounts (id,date_entered,date_modified,modified_user_id,assigned_user_id,name,industry,annual_revenue,phone_fax,billing_address_street,billing_address_city,billing_address_state,billing_address_postalcode,billing_address_country,description,rating,phone_office,email1,website,employees) VALUES ('$account_id','$date_entered','$date_modified','$current_user_id','$assigned_user_id','" .$row["company"] ."','" .$row["industry"] ."','" .$row["annual_revenue"] ."','" .$row["fax"] ."','" .$row["address_street"]. "','" .$row["address_city"] ."','" .$row["address_state"] ."','" .$row["address_postalcode"] ."','" .$row["address_country"] ."','" .$row["description"] ."','" .$row["rating"] ."','" .$row["phone"] ."','" .$row["email"] ."','" .$row["website"] ."','" .$row["employees"] ."')";
 
-mysql_query($sql_insert_account);
+$crmid = $adb->getUniqueID("crmentity");
+$sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted) values(".$crmid.",".$current_user_id.",".$current_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0)";
 
-//Inserting data into contacts table
-$contact_id = create_guid();
+$adb->query($sql_crmentity);
 
-$date_entered = date('YmdHis');
-$date_modified = date('YmdHis');
 
-$sql_insert_contact = "INSERT INTO contacts (id,date_entered,date_modified,modified_user_id,assigned_user_id,salutation,first_name,last_name,lead_source,title,phone_mobile,phone_work,phone_fax,email1,primary_address_street,primary_address_city,primary_address_state,primary_address_postalcode,primary_address_country,description) VALUES ('$contact_id','$date_entered','$date_modified','$current_user_id','$assigned_user_id','" .$row["salutation"] ."','" .$row["first_name"] ."','" .$row["last_name"] ."','" .$row["lead_source"] ."','" .$row["designation"]. "','" .$row["mobile"] ."','" .$row["phone"] ."','" .$row["fax"] ."','" .$row["email"] ."','" .$row["address_street"] ."','" .$row["address_city"] ."','" .$row["address_state"] ."','" .$row["address_postalcode"] ."','" .$row["address_country"] ."','" .$row["description"] ."')";
+$sql_insert_account = "INSERT INTO account (accountid,accountname,industry,annualrevenue,phone,fax,rating,email1,website,employees) VALUES (".$crmid.",'".$accountname ."','".$row["industry"] ."','" .$row["annualrevenue"] ."','" .$row["phone"] ."','".$row["fax"] ."','" .$row["rating"] ."','" .$row["email"] ."','" .$row["website"] ."','" .$row["noofemployees"] ."')";
 
-mysql_query($sql_insert_contact);
 
-//Inserting data into accounts_contacts table
+$adb->query($sql_insert_account);
 
-$accounts_contacts_id = create_guid();
-$sql_insert_accounts_contacts = "INSERT INTO accounts_contacts (id,contact_id,account_id) VALUES ('$accounts_contacts_id','$contact_id','$account_id')";
-mysql_query($sql_insert_accounts_contacts);
+$sql_insert_accountbillads = "INSERT INTO accountbillads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
 
-//Checking for Potential and inserting data into opportunities, accounts_opportunities, opportunities_contacts
+ $adb->query($sql_insert_accountbillads);
+
+
+$sql_insert_accountshipads = "INSERT INTO accountshipads (accountaddressid,city,code,country,state,street) VALUES (".$crmid.",'".$row["city"] ."','" .$row["code"] ."','" .$row["country"] ."','".$row["state"] ."','" .$row["lane"]."')";
+
+
+ $adb->query($sql_insert_accountshipads);
+
+$sql_insert_accountcustomfield = "INSERT INTO accountscf (accountid) VALUES (".$crmid.")";
+
+ $adb->query($sql_insert_accountcustomfield);
+
+
+$crmcontactid = $adb->getUniqueID("crmentity");
+$sql_crmentity1 = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted) values(".$crmcontactid.",".$current_user_id.",".$current_user_id.",'Contacts',0,0)";
+
+$adb->query($sql_crmentity1);
+
+
+$contact_id = $crmcontactid;
+
+ $date_entered = date('YmdHis');
+ $date_modified = date('YmdHis');
+
+ $sql_insert_contact = "INSERT INTO contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax) VALUES (".$contact_id.",".$crmid.",'".$row["salutation"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["title"] ."','".$row["fax"] ."')";
+
+$adb->query($sql_insert_contact);
+
+
+ $sql_insert_contactsubdetails = "INSERT INTO contactsubdetails (contactsubscriptionid,homephone,otherphone) VALUES (".$contact_id.",'".$row["phone"] ."','" .$row["phone"] ."')";
+
+$adb->query($sql_insert_contactsubdetails);
+
+ $sql_insert_contactaddress = "INSERT INTO contactaddress (contactaddressid,mailingcity,mailingstreet,mailingcountry) VALUES (".$contact_id.",'".$row["city"] ."','" .$row["street"] ."','" .$row["country"] ."')";
+
+$adb->query($sql_insert_contactaddress);
+
+
+ $sql_insert_contactcustomfield = "INSERT INTO contactscf (contactid) VALUES (".$contact_id.")";
+
+$adb->query($sql_insert_contactcustomfield);
+
+
+
 if(! isset($createpotential) || ! $createpotential == "on")
 {
-	$opp_id = create_guid();
+  $oppid = $adb->getUniqueID("crmentity");
+  $sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted) values(".$oppid.",".$current_user_id.",".$current_user_id.",'Potentials',0,0)";
+  
+  $adb->query($sql_crmentity);
+
+  
 
 	$date_entered = date('YmdHis');
 	$date_modified = date('YmdHis');
 
-	$sql_insert_opp = "INSERT INTO opportunities (id,date_entered,date_modified,modified_user_id,assigned_user_id,name,lead_source,date_closed,description) VALUES ('$opp_id','$date_entered','$date_modified','$current_user_id','$assigned_user_id','$potential_name','" .$row["lead_source"] ."','$close_date','" .$row["description"] ."')";
+	$sql_insert_opp = "INSERT INTO potential (potentialid,accountid,potentialname) VALUES (".$oppid.",".$crmid .",'".$potential_name."')";
 
-	mysql_query($sql_insert_opp);
+	$adb->query($sql_insert_opp);
 
-	//Inserting data into accounts_contacts table
 
-	$accounts_opportunities_id = create_guid();
-	$sql_insert_accounts_opportunities = "INSERT INTO accounts_opportunities (id,opportunity_id,account_id) VALUES ('$accounts_opportunities_id','$opp_id','$account_id')";
-	mysql_query($sql_insert_accounts_opportunities);
+
+        	$sql_insert_potentialcustomfield = "INSERT INTO potentialscf (potentialid) VALUES (".$oppid.")";
+
+	$adb->query($sql_insert_potentialcustomfield);
+
+        $sql_insert2contpotentialrel ="insert into contpotentialrel values(".$contact_id.",".$oppid .")";
+        
+        $adb->query($sql_insert2contpotentialrel);
+
+	
 }
 
 //Deleting from the tracker
-	$sql_delete_tracker= "DELETE from tracker where item_id='" .$id ."'";
-	mysql_query($sql_delete_tracker);
+$sql_delete_tracker= "DELETE from tracker where item_id='" .$id ."'";
+$adb->query($sql_delete_tracker);
 
 //Updating the deleted status
-	$sql_update_converted = "UPDATE leads SET converted = 1 where id='" .$id ."'";
-	mysql_query($sql_update_converted); 
+$sql_update_converted = "UPDATE leaddetails SET converted = 1 where leadid='" .$id ."'";
+$adb->query($sql_update_converted); 
 
-header("Location: index.php?action=DetailView&module=Accounts&record=$account_id");
+header("Location: index.php?action=DetailView&module=Accounts&record=$crmid");
 
 ?>

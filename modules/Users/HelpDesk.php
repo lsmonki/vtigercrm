@@ -26,6 +26,8 @@ class HelpDesk extends SugarBean {
 
 	function create_tables () {
 		global $app_strings;
+	
+	/*	
         $query = 'CREATE TABLE '.$this->table_name.' ( ';
 		$query .='id int(11) NOT NULL auto_increment,groupname varchar (100),contact_id varchar(100),priority varchar(150),status varchar(150),parent_id varchar(100),parent_type varchar(25),category varchar(150),title varchar(255) NOT NULL ,description text,update_log text,version_id int(11),date_created datetime,date_modified datetime,assigned_user_id varchar(100) NOT NULL,deleted tinyint(1) NOT NULL default 0,PRIMARY KEY  (id))';
 		$this->log->info($query);
@@ -70,63 +72,64 @@ class HelpDesk extends SugarBean {
 		$query .='      category_name varchar(60) NOT NULL,
                                 PRIMARY KEY  (category_name))';
 		$this->log->info($query);
-		mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());	
+		mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());	*/
               
-		mysql_query("insert into faqcategories values('General')"); 
+		$this->db->query("insert into faqcategories values('General')"); 
 
 
-
+/*
   mysql_query(" CREATE TABLE troubleticketcategories (
                           category varchar(100) NOT NULL default '',
                           PRIMARY KEY  (category)
                         )")or die(mysql_errno() . " " . mysql_error());
 
-		$this->log->info($query);
+		$this->log->info($query); */
 
-	mysql_query("insert into troubleticketcategories values('Big Problem')");
-	mysql_query("insert into troubleticketcategories values('Small Problem')");
-	mysql_query("insert into troubleticketcategories values('Other Problem')");
+	$this->db->query("insert into troubleticketcategories values('Big Problem')");
+	$this->db->query("insert into troubleticketcategories values('Small Problem')");
+	$this->db->query("insert into troubleticketcategories values('Other Problem')");
 	
                
 
-	mysql_query(" CREATE TABLE troubleticketpriorities (
+	/*mysql_query(" CREATE TABLE troubleticketpriorities (
                           priority varchar(100) NOT NULL default '',
                           PRIMARY KEY  (priority)
                           )")or die(mysql_errno() . " " . mysql_error());
 
-		$this->log->info($query);
+		$this->log->info($query);*/
 		
-	mysql_query("insert into troubleticketpriorities values('Low')");
-	mysql_query("insert into troubleticketpriorities values('Medium')");
-	mysql_query("insert into troubleticketpriorities values('High')");
-	mysql_query("insert into troubleticketpriorities values('Critical')");
+	$this->db->query("insert into troubleticketpriorities values('Low')");
+	$this->db->query("insert into troubleticketpriorities values('Medium')");
+	$this->db->query("insert into troubleticketpriorities values('High')");
+	$this->db->query("insert into troubleticketpriorities values('Critical')");
 
-        mysql_query(" CREATE TABLE troubleticketstatus (
+        /*mysql_query(" CREATE TABLE troubleticketstatus (
                           status varchar(60) NOT NULL default '',
                           PRIMARY KEY  (status)
                         )")or die(mysql_errno() . " " . mysql_error());
-		$this->log->info($query);
+		$this->log->info($query);*/
 
 		
-	mysql_query("insert into troubleticketstatus values('Open')");
-	mysql_query("insert into troubleticketstatus values('In Progress')");
-	mysql_query("insert into troubleticketstatus values('Wait For Response')");
-	mysql_query("insert into troubleticketstatus values('Closed')");
+	$this->db->query("insert into troubleticketstatus values('Open')");
+	$this->db->query("insert into troubleticketstatus values('In Progress')");
+	$this->db->query("insert into troubleticketstatus values('Wait For Response')");
+	$this->db->query("insert into troubleticketstatus values('Closed')");
 	
 
-    mysql_query(" CREATE TABLE troubleticketstracktime (
+    /*mysql_query(" CREATE TABLE troubleticketstracktime (
                         ticket_id int(11) not null,
                         supporter_id int(11) not null,
                         minutes int(11) default 0,
                         date_logged int(11) NOT NULL default 0
                 )")or die(mysql_errno() . " " . mysql_error());
                 $this->log->info($query);
-                $this->create_index("create index idx_troubleticketstracktime on troubleticketstracktime (ticket_id)");
+                $this->create_index("create index idx_troubleticketstracktime on troubleticketstracktime (ticket_id)");*/
 
        	}
 
 	function drop_tables () {
 
+		/*
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
 		$this->log->info($query);
@@ -165,7 +168,7 @@ class HelpDesk extends SugarBean {
 		$this->log->info($query);
                 mysql_query($query);
 
-
+		*/
 
 	}
 	

@@ -9,16 +9,17 @@
 *
  ********************************************************************************/
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 function getComboArray($combofieldNames)
 {
+	global $adb;
 	$comboFieldArray = Array();
 	foreach ($combofieldNames as $tableName => $arrayName)
 	{
 		$fldArrName= $arrayName;
 		$arrayName = Array();
-		$result = mysql_query("select * from ".$tableName);
-		while($row = mysql_fetch_array($result))
+		$result = $adb->query("select * from ".$tableName." where presence=1 order by sortorderid");
+		while($row = $adb->fetch_array($result))
 		{
 			$val = $row[$tableName];
 			$arrayName[$val] = $val;	

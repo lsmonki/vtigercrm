@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/Save.php,v 1.3 2004/10/29 09:55:09 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Save.php,v 1.4 2005/02/11 07:18:42 jack Exp $
  * Description:  Saves an Account record and then redirects the browser to the
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -28,20 +28,28 @@ require_once('include/upload_file.php');
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Note();
-
-$focus->retrieve($_REQUEST['record']);
-
-foreach($focus->column_fields as $field)
+if(isset($_REQUEST['record']))
 {
-	if(isset($_REQUEST[$field]))
-	{
-		$value = $_REQUEST[$field];
-		$focus->$field = $value;
-		$local_log->debug("saving note: $field is $value");
-
-	}
+        $focus->id = $_REQUEST['record'];
+}
+if(isset($_REQUEST['mode']))
+{
+        $focus->mode = $_REQUEST['mode'];
 }
 
+//$focus->retrieve($_REQUEST['record']);
+
+foreach($focus->column_fields as $fieldname => $val)
+{
+	if(isset($_REQUEST[$fieldname]))
+	{
+		$value = $_REQUEST[$fieldname];
+		//$focus->$field = $value;
+		//$local_log->debug("saving note: $field is $value");
+		$focus->column_fields[$fieldname] = $value;
+	}
+}
+/*
 foreach($focus->additional_column_fields as $field)
 {
 	if(isset($_REQUEST[$field]))
@@ -51,7 +59,7 @@ foreach($focus->additional_column_fields as $field)
 
 	}
 }
-
+*/
 if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
 
 $upload_file = new UploadFile('uploadfile');
@@ -76,7 +84,7 @@ else
 }
 
 
-$focus->save();
+$focus->saveentity("Notes");
 
 if ($do_final_move)
 {

@@ -52,7 +52,7 @@ $mod_strings = Array(
 'LBL_ANNUAL_REVENUE'=>'Annual Revenue:',
 'LBL_RATING'=>'Rating:',
 'LBL_LICENSE_KEY'=>'License Key:',
-'LBL_NO_OF_EMPLOYEES'=>'No of Employees:',
+'LBL_NO_OF_EMPLOYEES'=>'No. of Employees:',
 'LBL_YAHOO_ID'=>'Yahoo! ID:',
 
 'LBL_ADDRESS_STREET'=>'Street:',
@@ -74,16 +74,6 @@ $mod_strings = Array(
 'LBL_POTENTIAL_NAME'=>'Opportunity Name',
 'LBL_POTENTIAL_CLOSE_DATE'=>'Opportunity Close Date',
 
-'LNK_NEW_LEAD'=>'New Lead',
-'LNK_NEW_CONTACT'=>'New Contact',
-'LNK_NEW_ACCOUNT'=>'New Account',
-'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
-'LNK_NEW_CASE'=>'New Case',
-'LNK_NEW_NOTE'=>'New Note',
-'LNK_NEW_CALL'=>'New Call',
-'LNK_NEW_EMAIL'=>'New Email',
-'LNK_NEW_MEETING'=>'New Meeting',
-'LNK_NEW_TASK'=>'New Task',
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
 'NTC_REMOVE_CONFIRMATION'=>'Are you sure you want to remove this contact from this case?',
 'NTC_REMOVE_DIRECT_REPORT_CONFIRMATION'=>'Are you sure you want to remove this record as a direct report?',
@@ -91,6 +81,42 @@ $mod_strings = Array(
 'ERR_DELETE_RECORD'=>"en_us A record number must be specified to delete the contact.",
 'NTC_COPY_PRIMARY_ADDRESS'=>'Copy primary address to alternate address',
 'NTC_COPY_ALTERNATE_ADDRESS'=>'Copy alternate address to primary address',
+
+// Added fields in fetchfile.php, import.php -- crm4-Beta
+'LBL_COLON'=>' : ', 
+'LBL_IMPORT_LEADS'=>'Import Leads',
+'LBL_LEADS_FILE_LIST'=>'Leads File List',
+'LBL_INSTRUCTIONS'=>'Instructions',
+'LBL_KINDLY_PROVIDE_AN_XLS_FILE'=>'Kindly provide an .xls file alone as input',
+'LBL_PROVIDE_ATLEAST_ONE_FILE'=>'Please provide at least one file as input',
+
+'LBL_NONE'=>'None',
+'LBL_ASSIGNED_TO'=>'Assigned To:',
+'LBL_SELECT_LEAD'=>'Select Lead',
+'LBL_GENERAL_INFORMATION'=>'General Information',
+'LBL_DO_NOT_CREATE_NEW_OPPORTUNITY'=>'Do not create a New Opportunity upon Conversion',
+
+//for v4 release added
+'LBL_NEW_POTENTIAL'=>'New Potential',
+'LBL_POTENTIAL_TITLE'=>'Potentials',
+
+'LBL_NEW_TASK'=>'New Task',
+'LBL_TASK_TITLE'=>'Tasks',
+'LBL_NEW_CALL'=>'New Call',
+'LBL_CALL_TITLE'=>'Calls',
+'LBL_NEW_MEETING'=>'New Meeting',
+'LBL_MEETING_TITLE'=>'Meetings',
+'LBL_NEW_EMAIL'=>'New Email',
+'LBL_EMAIL_TITLE'=>'Emails',
+'LBL_NEW_NOTE'=>'New Note',
+'LBL_NOTE_TITLE'=>'Notes',
+'LBL_NEW_ATTACHMENT'=>'New Attachment',
+'LBL_ATTACHMENT_TITLE'=>'Attachments',
+
+
+
+
+
 );
 
 ?>

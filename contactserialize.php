@@ -16,10 +16,8 @@
 
 //include("Serializer.php");
 require_once("config.php");
-require_once('modules/Tasks/Task.php');
 require_once('modules/Contacts/Contact.php');
 require_once('include/logging.php');
-require_once('database/DatabaseConnection.php');
 require_once('include/database/PearDatabase.php');
 //require_once('SOAP/lib/nusoap.php');
 require_once('include/nusoap/nusoap.php');
@@ -38,7 +36,7 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'date_entered' => array('name'=>'date_entered','type'=>'xsd:datetime'),
+        'start_date' => array('name'=>'start_date','type'=>'xsd:datetime'),
         'date_modified' => array('name'=>'date_modified','type'=>'xsd:datetime'),
         'name' => array('name'=>'name','type'=>'xsd:string'),
         'status' => array('name'=>'status','type'=>'xsd:string'),
@@ -46,6 +44,7 @@ $server->wsdl->addComplexType(
         'time_due' => array('name'=>'time_due','type'=>'xsd:datetime'),
         'priority' => array('name'=>'priority','type'=>'xsd:string'),
         'description' => array('name'=>'description','type'=>'xsd:string'),
+	'contact_name' => array('name'=>'contact_name','type'=>'xsd:string'),
         'id' => array('name'=>'id','type'=>'xsd:string'),
 
     )
@@ -76,7 +75,7 @@ $server->wsdl->addComplexType(
         'last_name' => array('name'=>'last_name','type'=>'xsd:string'),
         'primary_address_city' => array('name'=>'primary_address_city','type'=>'xsd:string'),
         'account_name' => array('name'=>'account_name','type'=>'xsd:string'),
-	'account_id' => array('name'=>'account_id','type'=>'xsd:string'),
+				'account_id' => array('name'=>'account_id','type'=>'xsd:string'),
         'id' => array('name'=>'id','type'=>'xsd:string'),
         'salutation' => array('name'=>'salutation','type'=>'xsd:string'),
         'title'=> array('name'=>'title','type'=>'xsd:string'),
@@ -142,7 +141,7 @@ $server->wsdl->addComplexType(
 );
 
 
-$server->wsdl->addComplexType(
+/*$server->wsdl->addComplexType(
     'contact_column_array',
     'complexType',
     'array',
@@ -179,7 +178,7 @@ $server->wsdl->addComplexType(
         array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType'=>'tns:lead_column_detail[]')
     ),
     'tns:lead_column_detail'
-);
+);*/
  
 
 
@@ -190,39 +189,23 @@ $server->wsdl->addComplexType(
     'array',
     '',
     array(
-        'id' => array('name'=>'id','type'=>'xsd:string'),
-        'date_entered' => array('name'=>'date_entered','type'=>'xsd:string'),
-        'date_modified' => array('name'=>'date_modified','type'=>'xsd:string'),
-        'modified_user_id' => array('name'=>'modified_user_id','type'=>'xsd:string'),
-        'assigned_user_id' => array('name'=>'assigned_user_id','type'=>'xsd:string'), 
-        'name' => array('name'=>'name','type'=>'xsd:string'),
-        'parent_id'=> array('name'=>'parent_id','type'=>'xsd:string'), 
+        'accountid' => array('name'=>'accountid','type'=>'xsd:string'),
+        'accountname' => array('name'=>'accountname','type'=>'xsd:string'),
+        'parentid' => array('name'=>'parentid','type'=>'xsd:string'),
         'account_type' => array('name'=>'account_type','type'=>'xsd:string'),
-        'industry' => array('name'=>'industry','type'=>'xsd:string'),
-        'annual_revenue' => array('name'=>'annual_revenue','type'=>'xsd:string'),
-        'phone_fax' => array('name'=>'phone_fax','type'=>'xsd:string'),
-        'billing_address_street' => array('name'=>'billing_address_street','type'=>'xsd:string'),
-        'billing_address_city' => array('name'=>'billing_address_city','type'=>'xsd:string'),
-        'billing_address_state' => array('name'=>'billing_address_state','type'=>'xsd:string'),
-        'billing_address_postalcode' => array('name'=>'billing_address_postalcode','type'=>'xsd:string'),
-        'billing_address_country' => array('name'=>'billing_address_country','type'=>'xsd:string'),
-        'description' => array('name'=>'description','type'=>'xsd:string'),
-        'rating' => array('name'=>'rating','type'=>'xsd:string'),
-        'phone_office' => array('name'=>'phone_office','type'=>'xsd:string'),
-        'phone_alternate' => array('name'=>'phone_alternate','type'=>'xsd:string'),
+        'industry' => array('name'=>'industry','type'=>'xsd:string'), 
+        'annualrevenue' => array('name'=>'annualrevenue','type'=>'xsd:string'),
+        'rating'=> array('name'=>'rating','type'=>'xsd:string'), 
+        'ownership' => array('name'=>'ownership','type'=>'xsd:string'),
+        'siccode' => array('name'=>'siccode','type'=>'xsd:string'),
+        'tickersymbol' => array('name'=>'tickersymbol','type'=>'xsd:string'),
+        'phone' => array('name'=>'phone','type'=>'xsd:string'),
+        'otherphone' => array('name'=>'otherphone','type'=>'xsd:string'),
         'email1' => array('name'=>'email1','type'=>'xsd:string'),
         'email2' => array('name'=>'email2','type'=>'xsd:string'),
         'website' => array('name'=>'website','type'=>'xsd:string'),
-        'ownership' => array('name'=>'ownership','type'=>'xsd:string'),
-        'employees' => array('name'=>'employees','type'=>'xsd:string'),
-        'sic_code' => array('name'=>'sic_code','type'=>'xsd:string'),
-        'ticker_symbol' => array('name'=>'ticker_symbol','type'=>'xsd:string'),
-        'shipping_address_street' => array('name'=>'shipping_address_street','type'=>'xsd:string'),
-        'shipping_address_city' => array('name'=>'shipping_address_city','type'=>'xsd:string'),
-        'shipping_address_state' => array('name'=>'shipping_address_state','type'=>'xsd:string'),
-        'shipping_address_postalcode' => array('name'=>'shipping_address_postalcode','type'=>'xsd:string'),
-        'shipping_address_country' => array('name'=>'shipping_address_country','type'=>'xsd:string'),
-        'deleted' => array('name'=>'deleted','type'=>'xsd:string'),
+        'fax' => array('name'=>'fax','type'=>'xsd:string'),
+        //'employees' => array('name'=>'employees','type'=>'xsd:string'),
 			)
 );
 
@@ -289,10 +272,24 @@ $server->register(
     $NAMESPACE);
 
 $server->register(
+    'get_version',
+    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+
+
+$server->register(
+    'contact_by_email',
+    array('user_name'=>'xsd:string','email_address'=>'xsd:string'),
+    array('return'=>'tns:contact_detail_array'),
+    $NAMESPACE);
+/*    
+$server->register(
     'contact_by_email',
     array('email_address'=>'xsd:string'),
     array('return'=>'tns:contact_detail_array'),
     $NAMESPACE);
+    */
 
 $server->register(
     'contact_by_search',
@@ -322,13 +319,13 @@ $server->register(
 
 $server->register(
 	'create_task',
-        array('user_name'=>'xsd:string', 'date_entered'=>'xsd:datetime', 'date_modified'=>'xsd:datetime','name'=>'xsd:string','status'=>'xsd:string','priority'=>'xsd:string','description'=>'xsd:string','date_due'=>'xsd:date','contact_name'=>'xsd:string'),
+        array('user_name'=>'xsd:string', 'start_date'=>'xsd:datetime', 'date_modified'=>'xsd:datetime','name'=>'xsd:string','status'=>'xsd:string','priority'=>'xsd:string','description'=>'xsd:string','date_due'=>'xsd:date','contact_name'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
 $server->register(
 	'update_task',
-        array('user_name'=>'xsd:string', 'id'=>'xsd:string', 'date_modified'=>'xsd:datetime','name'=>'xsd:string','status'=>'xsd:string','priority'=>'xsd:string','description'=>'xsd:string','date_due'=>'xsd:date','contact_name'=>'xsd:string'),
+        array('user_name'=>'xsd:string', 'id'=>'xsd:string', 'start_date'=>'xsd:datetime','name'=>'xsd:string','status'=>'xsd:string','priority'=>'xsd:string','description'=>'xsd:string','date_due'=>'xsd:date','contact_name'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
@@ -367,6 +364,18 @@ $server->register(
    array('return'=>'xsd:string'),
     $NAMESPACE);
 
+    $server->register(
+   'create_contacts',
+    array('user_name'=>'xsd:string','contacts'=>'tns:contact_detail_array'),
+    array('return'=>'tns:contact_detail_array'),
+    $NAMESPACE);
+
+  $server->register(
+   'create_tasks',
+    array('user_name'=>'xsd:string','tasks'=>'tns:task_detail_array'),
+    array('return'=>'tns:task_detail_array'),
+    $NAMESPACE);
+
 
 $server->register(
     'contact_by_range',
@@ -396,19 +405,19 @@ $server->register(
 $server->register(
     'get_contacts_columns',
     array('user_name'=>'xsd:string','password'=>'xsd:string'),
-    array('return'=>'tns:contact_column_array'),
+    array('return'=>'tns:contact_column_detail'),
     $NAMESPACE);
 
 $server->register(
     'get_accounts_columns',
     array('user_name'=>'xsd:string','password'=>'xsd:string'),
-    array('return'=>'tns:account_column_array'),
+    array('return'=>'tns:account_column_detail'),
     $NAMESPACE);
 
 $server->register(
     'get_leads_columns',
     array('user_name'=>'xsd:string','password'=>'xsd:string'),
-    array('return'=>'tns:lead_column_array'),
+    array('return'=>'tns:lead_column_detail'),
     $NAMESPACE);
 
 function get_contacts_columns($user_name, $password)
@@ -418,6 +427,14 @@ function get_contacts_columns($user_name, $password)
     return $contact->getColumnNames();
 }
 
+/*require_once('modules/Accounts/Account.php');
+$account = new Account();
+foreach($account->getColumnNames_Acnt() as $flddetails)
+{
+	echo $flddetails;
+}
+*/
+    
 function get_accounts_columns($user_name, $password)
 {
     require_once('modules/Accounts/Account.php');
@@ -448,6 +465,90 @@ function get_contacts_count($user_name, $password)
     return $contact->getCount($user_name);
 }
 
+function create_contacts($user_name,$output_list)
+{
+	$counter=0;
+	foreach($output_list as $contact)
+	{
+   
+      $id = create_contact($user_name, $contact[first_name], $contact[last_name], $contact[email_address ],$contact[account_name ], $contact[salutation ], $contact[title], $contact[phone_mobile], $contact[reports_to],$contact[primary_address_street],$contact[primary_address_city],$contact[primary_address_state],$contact[primary_address_postalcode],$contact[primary_address_country],$contact[alt_address_city],$contact[alt_address_street],$contact[alt_address_state],$contact[alt_address_postalcode],$contact[alt_address_country]);
+      
+	  $output_list[$counter] ['id']=$id;
+	   $counter++;
+	}
+	return array_reverse($output_list);
+}
+
+function create_tasks($user_name,$output_list)
+{
+	$counter=0;
+	foreach($output_list as $task)
+	{
+  
+        $id= create_task($user_name, $task[start_date], $task[date_modified],$task[name],$task[status],$task[priority],$task[description],$task[date_due],$task[contact_name]);
+   
+      
+	  $output_list[$counter] ['id']=$id;
+	   $counter++;
+	}
+	return array_reverse($output_list);
+}
+
+
+function get_version($user_name, $password)
+{
+	return "4.0";
+}
+
+function contact_by_email($user_name,$email_address)
+{
+        $seed_contact = new Contact();
+        $output_list = Array();
+   
+         {  
+            $response = $seed_contact->get_contacts1($user_name,$email_address);
+            $contactList = $response['list'];
+
+    
+       // create a return array of names and email addresses.
+    foreach($contactList as $contact)
+    {
+   
+        $output_list[] = Array("first_name"    => $contact[first_name],
+            "last_name" => $contact[last_name],
+            "primary_address_city" => $contact[primary_address_city],
+            "account_name" => $contact[account_name],
+	    "account_id"=> $contact[account_id],
+            "id" => $contact[id],
+            "email_address" => $contact[email1],
+            "salutation"=>$contact[salutation],
+            "title"=>$contact[title],
+            "phone_mobile"=>$contact[phone_mobile],
+            "reports_to"=>$contact[reports_to_name],
+            "primary_address_street"=>$contact[primary_address_street],
+            "primary_address_city"=>$contact[primary_address_city],
+            "primary_address_state"=>$contact[primary_address_state] ,
+            "primary_address_postalcode"=>$contact[primary_address_postalcode],
+            "primary_address_country"=>$contact[primary_address_country],
+            "alt_address_city"=>$contact[alt_address_city],
+            "alt_address_street"=>$contact[alt_address_street],
+            "alt_address_city"=>$contact[alt_address_city],
+            "alt_address_state"=>$contact[alt_address_state],
+            "alt_address_postalcode"=>$contact[alt_address_postalcode],
+            "alt_address_country"=>$contact[alt_address_country],
+ );
+    }
+}
+
+           
+
+
+    //to remove an erroneous compiler warning
+    $seed_contact = $seed_contact;
+
+
+    return $output_list;
+}
 
 function contact_by_range($user_name,$from_index,$offset)
 {
@@ -458,44 +559,44 @@ function contact_by_range($user_name,$from_index,$offset)
          {  
             $response = $seed_contact->get_contacts($user_name,$from_index,$offset);
             $contactList = $response['list'];
+
     
        // create a return array of names and email addresses.
     foreach($contactList as $contact)
     {
    
-        $output_list[] = Array("first_name"    => $contact->first_name,
-            "last_name" => $contact->last_name,
-            "primary_address_city" => $contact->primary_address_city,
-            "account_name" => $contact->account_name,
-	    "account_id"=> $contact->account_id,
-            "id" => $contact->id,
-            "email_address" => $contact->email1,
-            "salutation"=>$contact->salutation,
-            "title"=>$contact->title,
-            "phone_mobile"=>$contact->phone_mobile,
-            "reports_to"=>$contact->reports_to_name,
-            "primary_address_street"=>$contact->primary_address_street,
-            "primary_address_city"=>$contact->primary_address_city,
-            "primary_address_state"=>$contact->primary_address_state ,
-            "primary_address_postalcode"=>$contact->primary_address_postalcode,
-            "primary_address_country"=>$contact->primary_address_country,
-            "alt_address_city"=>$contact->alt_address_city,
-            "alt_address_street"=>$contact->alt_address_street,
-            "alt_address_city"=>$contact->alt_address_city,
-            "alt_address_state"=>$contact->alt_address_state,
-            "alt_address_postalcode"=>$contact->alt_address_postalcode,
-            "alt_address_country"=>$contact->alt_address_country,
+        $output_list[] = Array("first_name"    => $contact[first_name],
+            "last_name" => $contact[last_name],
+            "primary_address_city" => $contact[primary_address_city],
+            "account_name" => $contact[account_name],
+	    "account_id"=> $contact[account_id],
+            "id" => $contact[id],
+            "email_address" => $contact[email1],
+            "salutation"=>$contact[salutation],
+            "title"=>$contact[title],
+            "phone_mobile"=>$contact[phone_mobile],
+            "reports_to"=>$contact[reports_to_name],
+            "primary_address_street"=>$contact[primary_address_street],
+            "primary_address_city"=>$contact[primary_address_city],
+            "primary_address_state"=>$contact[primary_address_state] ,
+            "primary_address_postalcode"=>$contact[primary_address_postalcode],
+            "primary_address_country"=>$contact[primary_address_country],
+            "alt_address_city"=>$contact[alt_address_city],
+            "alt_address_street"=>$contact[alt_address_street],
+            "alt_address_city"=>$contact[alt_address_city],
+            "alt_address_state"=>$contact[alt_address_state],
+            "alt_address_postalcode"=>$contact[alt_address_postalcode],
+            "alt_address_country"=>$contact[alt_address_country],
  );
     }
 }
-
-
 
            
 
 
     //to remove an erroneous compiler warning
     $seed_contact = $seed_contact;
+
 
     return $output_list;
 }
@@ -508,8 +609,9 @@ function get_tasks_count($user_name, $password)
     $user_id = $seed_user->retrieve_user_id($user_name);
     $current_user = $seed_user;
    
-    require_once('modules/Tasks/Task.php');
-    $task = new Task();
+    require_once('modules/Activities/Activity.php');
+    $task = new Activity();
+
    
     return $task->getCount($user_name);
 
@@ -517,8 +619,8 @@ function get_tasks_count($user_name, $password)
 
 function task_by_range($user_name,$from_index,$offset)
 {
-
-        $seed_task = new Task();
+	require_once('modules/Activities/Activity.php');
+        $seed_task = new Activity();
         $output_list = Array();
    
          {  
@@ -526,18 +628,28 @@ function task_by_range($user_name,$from_index,$offset)
             $taskList = $response['list'];
             foreach($taskList as $temptask)
            {
+		 if($temptask[date_due]=="")
+		 {
+			 $temptask[date_due]=NULL;
+		 }
+		 if($temptask[time_due]=="")
+		 {
+			 $temptask[time_due]=NULL;
+		 }
+
+
 
         		$output_list[] = Array(
-                 "name"	=> $temptask->name,
-		    	"date_modified" => $temptask->date_modified,
-			    "date_entered" => $temptask->date_entered,
-                "id" => $temptask->id,
+                 "name"	=> $temptask[name],
+		    	"date_modified" => $temptask[date_modified],
+			    "start_date" => $temptask[start_date],
+                "id" => $temptask[id],
     			
-    			"status" => $temptask->status,
-		        "date_due" => $temptask->date_due,	
-	    		"description" => $temptask->description,		
-                "contact_name" => $temptask->contact_name,		
-		    	"priority" => $temptask->priority);
+    			"status" => $temptask[status],
+		        "date_due" => $temptask[date_due],	
+	    		"description" => $temptask[description],		
+                "contact_name" => $temptask[contact_name],		
+		    	"priority" => $temptask[priority]);
                  
                  }
         }   
@@ -570,7 +682,6 @@ function add_contacts_matching_email_address(&$output_list, $email_address, &$se
 	$response = $seed_contact->get_list("first_name,last_name,primary_address_city", $where, 0);
 	$contactList = $response['list'];
 	
-        //echo "contact list is  --------  > " .$contactList;
 	//$log->fatal("Retrieved the list");
 	
 	// create a return array of names and email addresses.
@@ -617,7 +728,8 @@ function delete_contact($user_name,$id)
         require_once('modules/Contacts/Contact.php');
         $contact = new Contact();
         $contact->id = $id;
-        $contact->delete($contact->id);
+        //$contact->delete($contact->id);
+	$contact->mark_deleted($contact->id);
 //	$contact->delete();
         return "Suceeded in deleting contact";
 }
@@ -629,7 +741,7 @@ function sync_contact($user_name)
 }
 */
 
-
+/*
 function contact_by_email($email_address) 
 { 
   //global $log;
@@ -673,10 +785,9 @@ function contact_by_email($email_address)
 	$seed_contact = $seed_contact;
 	
 	//$log->debug("Contact by email returning");
-		//echo '------------------------ >>>>>>>>>>>>>>>>>>   ' .$$output_list;
 	return $output_list;
 }  
-
+*/
 function contact_by_search($name) 
 { 
 //	global $log;
@@ -706,42 +817,25 @@ function contact_by_search($name)
 
 function upload_emailattachment($email_id, $filename,$binFile,$filesize)
 {
+	global $adb;
   $filetype= $_FILES['binFile']['type'];
   $filedata = "./cache/mails/".$email_id.$filename;
 
-    
-    if($filesize != 0)	
-    {
-    $data = base64_encode(fread(fopen($filedata, "r"), $filesize)); 
-   // $fileid = create_guid();
-    $date_entered = date('YmdHis');
-    //Retreiving the return module and setting the parent type
-    $parent_type = 'Emails';
-    $parent_id = $email_id;	 			
+      $user_id=1;
 
-    $sql = "INSERT INTO email_attachments ";
-    $sql .= "(date_entered,parent_type,parent_id,data, filename, filesize, filetype) ";
-    $sql .= "VALUES ('$date_entered','$parent_type','$email_id','$data',";
-    $sql .= "'$filename', '$filesize', '$filetype')";
+  $account  = new Account();
+  
+  $account->insertIntoAttachment1($email_id,"Emails",$filedata,$filename,$filesize,$filetype,$user_id);
 
-    echo 'sql ois ' .$sql; 
-/*    
-    $sql = "INSERT INTO email_attachments ";
-    $sql .= "(id,date_entered,parent_type,parent_id,data, filename, filesize, filetype) ";
-    $sql .= "VALUES ('$fileid','$date_entered','$parent_type','$parent_id','$data',";
-    $sql .= "'$filename', '$filesize', '$filetype')";
- echo 'sql ois ' .$sql; 
-*/
-    
-    mysql_query($sql) or die ("Not able to execute insert");
-    mysql_close();
     unlink($filedata);
 
   return "Suceeded in upload_attachment";
-    }
+
+    
 }
 function track_email($user_name, $contact_ids, $date_sent, $email_subject, $email_body)
 {
+
 	//global $log;
 	
 	//todo make the activity body not be html encoded
@@ -766,14 +860,20 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	require_once('modules/Emails/Email.php');
 	
 	$email = new Email();
-	
-	$email->description = $email_body;
-	$email->name = $email_subject;
-	$email->user_id = $user_id;
-	$email->date_start = $date_sent;
+
+	$email_body = str_replace("'", "''", $email_body);
+	$email_subject = str_replace("'", "''", $email_subject);
+
+	$email->column_fields[name]=$email_subject;
+	$email->column_fields[assigned_user_id] = $user_id;
+	$email->column_fields[date_start] = $date_sent;
+	$email->column_fields[description]  = $email_body;
+
 	
 	// Save one copy of the email message
-	$email->save();
+	$email->saveentity("Emails");
+
+
 	
 	// for each contact, add a link between the contact and the email message
 	$contact_id_list = explode(";", $contact_ids);
@@ -782,6 +882,7 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	{
 		$email->set_emails_contact_invitee_relationship($email->id, $contact_id);
 	}
+	$email->set_emails_user_invitee_relationship($email->id, $user_id);
 	
 	//return "Suceeded";
 	return $email->id;
@@ -816,6 +917,50 @@ function create_contact($user_name, $first_name, $last_name, $email_address ,$ac
 	
 	require_once('modules/Contacts/Contact.php');
 	$contact = new Contact();
+
+	$contact->column_fields[firstname]=$first_name;
+	$contact->column_fields['lastname']=$last_name;
+		
+	if($account_name=='')
+	{
+		$account_name="Vtiger_Crm";
+	}
+	else if($account_name==null)
+	{
+		$account_name="Vtiger_Crm";
+	}
+	
+	$contact->column_fields[account_id]=retrieve_account_id($account_name,$user_id);// NULL value is not supported NEED TO FIX
+	
+	$contact->column_fields[salutation]=$salutation;
+	// EMAIL IS NOT ADDED
+	$contact->column_fields[title]=$title;
+	$contact->column_fields[email]=$email_address;
+	
+	
+	$contact->column_fields[mobile]=$phone_mobile;
+	$contact->column_fields[reports_to_id] =retrievereportsto($reports_to,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
+	$contact->column_fields[mailingstreet]=$primary_address_street;
+	$contact->column_fields[mailingcity]=$primary_address_city;
+	$contact->column_fields[mailingcountry]=$primary_address_country;
+	$contact->column_fields[mailingstate]=$primary_address_state;
+	$contact->column_fields[mailingzip]=$primary_address_postalcode;
+
+	$contact->column_fields[otherstreet]=$alt_address_street;
+	$contact->column_fields[othercity]=$alt_address_city;
+	$contact->column_fields[othercountry]=$alt_address_country;
+	$contact->column_fields[otherstate]=$alt_address_state;
+	$contact->column_fields[otherzip]=$alt_address_postalcode;
+
+	$contact->column_fields[assigned_user_id]=$user_id;
+
+	
+	
+
+	$contact->saveentity("Contacts");
+
+	return $contact->id;
+	
 	$contact->first_name = $first_name;
 	$contact->last_name = $last_name;
 	$contact->email1 = $email_address;
@@ -849,12 +994,10 @@ function retrievereportsto($reports_to,$user_id,$account_id)
 {
   if($reports_to=="")
     {
-     //  echo "\nretruninhg null\n";
         return null;
     }
      if($reports_to==null)
      {
-      //  echo "\nretruninhg null\n";
          return null;
      }
 
@@ -883,10 +1026,9 @@ if($tok) {
 
 
 // to do handle smartly handle the manager name
-    $query = "select contacts.id contactid from contacts where contacts.deleted=0 and contacts.first_name like '".$first_name ."' and contacts.last_name like '" .$last_name ."'";
+     $query = "select contactdetails.contactid as contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and contactdetails.firstname like '".$first_name ."' and contactdetails.lastname like '" .$last_name ."'";
 
 
-  // echo "<br> Query : $query <br>";
 
     	require_once('modules/Contacts/Contact.php');
 	    $contact = new Contact();
@@ -898,27 +1040,26 @@ if($tok) {
 
 
     $rows_count =  $db->getRowCount($result);
-    // echo "\nCount ".$rows_count ."\n";
     if($rows_count==0)
     {
-    	$contact->first_name = $first_name;
-        $contact->last_name = $last_name;
-    	$contact->assigned_user_id=$user_id;
-        $contact->account_id=$account_id;
-    	$contact->save();
-        mysql_close();
+    	$contact->column_fields[firstname] = $first_name;
+        $contact->column_fields[lastname] = $last_name;
+    	$contact->column_fields[assigned_user_id]=$user_id;
+        $contact->column_fields[account_id]=$account_id;
+    	$contact->saveentity("Contacts");
+        //mysql_close();
     	return $contact->id;
     }
     else if ($rows_count==1)
     {
         $row = $db->fetchByAssoc($result, 0);
-        mysql_close();
+        //mysql_close();
         return $row["contactid"];	    
     }
     else
     {
         $row = $db->fetchByAssoc($result, 0);
-        mysql_close();
+        //mysql_close();
         return $row["contactid"];	    
     }
 
@@ -931,41 +1072,40 @@ function retrieve_account_id($account_name,$user_id)
         return null;
     }
 
-    $query = "select accounts.name accountname,accounts.id accountid from accounts where accounts.deleted=0 and accounts.name='" .$account_name."'";
+    $query = "select account.accountname accountname,account.accountid accountid from account inner join crmentity on crmentity.crmid=account.accountid where crmentity.deleted=0 and account.accountname='" .$account_name."'";
 
-//  echo "\n".$query;
 
-    $result=  mysql_query($query) or die ("Not able to execute insert");
-    $db = new PearDatabase();
+	$db = new PearDatabase();
+    $result=  $db->query($query) or die ("Not able to execute insert");
+    
     $rows_count =  $db->getRowCount($result);
-  //  echo "\nCount ".$rows_count ."\n";
     if($rows_count==0)
     {
     	require_once('modules/Accounts/Account.php');
 	    $account = new Account();
-    	$account->name = $account_name;
-    	$account->assigned_user_id=$user_id;
-    	$account->save();
-        mysql_close();
+    	$account->column_fields[accountname] = $account_name;
+    	$account->column_fields[assigned_user_id]=$user_id;
+    	$account->saveentity("Accounts");
+        //mysql_close();
     	return $account->id;
     }
     else if ($rows_count==1)
     {
         $row = $db->fetchByAssoc($result, 0);
-        mysql_close();
+        //mysql_close();
         return $row["accountid"];	    
     }
     else
     {
         $row = $db->fetchByAssoc($result, 0);
-        mysql_close();
+        //mysql_close();
         return $row["accountid"];	    
     }
     
 }
 
 
-function create_task($user_name, $date_entered, $date_modified,$name,$status,$priority,$description,$date_due,$contact_name)
+function create_task($user_name, $start_date, $date_modified,$name,$status,$priority,$description,$date_due,$contact_name)
 {
 	//global $log;
 	
@@ -977,22 +1117,25 @@ function create_task($user_name, $date_entered, $date_modified,$name,$status,$pr
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
 	
-	require_once('modules/Contacts/Contact.php');
-	$task = new Task();
+	require_once('modules/Activities/Activity.php');
+	$task = new Activity();
+	
 	//$task->date_entered = $date_entered;
 	//$task->date_modified = $date_modified;
-	$task->assigned_user_id = $assigned_user_id;
-        $task->name = $name;
-	$task->status=$status;
-	$task->priority=$priority;
-	$task->description=$description;
-	$task->date_due=$date_due;
+	//$task[assigned_user_id] = $assigned_user_id;
+    	$task->column_fields[subject] = $name;
+	$task->column_fields[taskstatus]=$status;
+    $task->column_fields[date_start]=$start_date;
+	$task->column_fields[taskpriority]=$priority;
+	$task->column_fields[description]=$description;
+   	$task->column_fields[activitytype]="Task";
+    // NOT EXIST IN DATA MODEL
+    $task->column_fields[date_due]=$date_due;
+   	$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
+	$task->column_fields[assigned_user_id]=$user_id;
+    $task->saveentity("Activities");
 
-    	$task->contact_id= retrievereportsto($contact_name,$user_id,null); 
-	$task->assigned_user_id=$user_id;
-	
-        $task->save();
-	
+
 	return $task->id;
 }
 
@@ -1006,6 +1149,7 @@ function update_contact($user_name,$id, $first_name, $last_name, $email_address 
 	
 	require_once('modules/Contacts/Contact.php');
 	$contact = new Contact();
+	/*
         $contact->first_name = $first_name;
 	$contact->last_name = $last_name;
 	$contact->email1 = $email_address;
@@ -1032,32 +1176,79 @@ function update_contact($user_name,$id, $first_name, $last_name, $email_address 
 	
 
 	$contact->save();
+	*/
+	
+	$contact->column_fields[firstname]=$first_name;
+	$contact->column_fields['lastname']=$last_name;
+	
+	if($account_name=='')
+	{
+		$account_name="Vtiger_crm_soap";
+	}
+	else if($account_name==null)
+	{
+		$account_name="Vtiger_crm_soap";
+	}
+	
+	$contact->column_fields[account_id]=retrieve_account_id($account_name,$user_id);// NULL value is not supported NEED TO FIX
+	
+	$contact->column_fields[salutation]=$salutation;
+	// EMAIL IS NOT ADDED
+	$contact->column_fields[title]=$title;
+	$contact->column_fields[email]=$email_address;
+	
+	
+	$contact->column_fields[mobile]=$phone_mobile;
+	$contact->column_fields[reports_to_id] =retrievereportsto($reports_to,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
+	$contact->column_fields[mailingstreet]=$primary_address_street;
+	$contact->column_fields[mailingcity]=$primary_address_city;
+	$contact->column_fields[mailingcountry]=$primary_address_country;
+	$contact->column_fields[mailingstate]=$primary_address_state;
+	$contact->column_fields[mailingzip]=$primary_address_postalcode;
+
+	$contact->column_fields[otherstreet]=$alt_address_street;
+	$contact->column_fields[othercity]=$alt_address_city;
+	$contact->column_fields[othercountry]=$alt_address_country;
+	$contact->column_fields[otherstate]=$alt_address_state;
+	$contact->column_fields[otherzip]=$alt_address_postalcode;
+
+	$contact->column_fields[assigned_user_id]=$user_id;
+	$contact->id=$id;
+
+	$contact->mode="edit";
+	$contact->saveentity("Contacts");
 	
 	return "Suceeded";
 }
 
 
-function update_task($user_name, $id,$date_modified, $name, $status,$priority,$description,$date_due,$contact_name)
+function update_task($user_name, $id,$start_date, $name, $status,$priority,$description,$date_due,$contact_name)
 {
 	require_once('modules/Users/User.php');
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($user_name);
 	$current_user = $seed_user;
 	
-	require_once('modules/Tasks/Task.php');
-	$task = new Task();
-	$task->user_name = $user_name;
+    require_once('modules/Activities/Activity.php');
+	$task = new Activity();
+
+    $task->column_fields[subject] = $name;
+	$task->column_fields[taskstatus]=$status;
+	$task->column_fields[taskpriority]=$priority;
+	$task->column_fields[description]=$description;
+    $task->column_fields[activitytype]="Task";
+    $task->column_fields[date_due]=$date_due;
+    $task->column_fields[date_start]=$start_date;
+    $task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
+	$task->column_fields[assigned_user_id]=$user_id;
+
+    
 	$task->id = $id;
-//	$task->date_modified = $date_modified;
-	$task->name = $name;
-        $task->status = $status;
-	$task->priority = $priority;
-	$task->description = $description;
-	$task->date_due = $date_due;
-	$task->contact_id= retrievereportsto($contact_name,$user_id,null); 
-        $task->save();
-        return "Suceeded in updating task";
+    $task->mode="edit";
+    $task->saveentity("Activities");
+    return "Suceeded in updating task";
 }
+
 
 
 
@@ -1068,12 +1259,13 @@ function delete_task($user_name,$id)
         $user_id = $seed_user->retrieve_user_id($user_name);
         $current_user = $seed_user;
 
-        require_once('modules/Tasks/Task.php');
-        $task = new Task();
+     require_once('modules/Activities/Activity.php');
+        $task = new Activity();
         $task->id = $id;
-        $task->delete($task->id);
+        $task->mark_deleted($contact->id);
         return "Suceeded in deleting task";
 }
+
 
 
 
@@ -1090,7 +1282,7 @@ function retrieve_task($name)
 	{
 		$output_list[] = Array("name"	=> $temptask->name,
 			"date_modified" => $temptask->date_modified,
-			"date_entered" => $temptask->date_entered,
+			"start_date" => $temptask->start_date,
 			"id" => $temptask->id,
 
 			"status" => $temptask->status,

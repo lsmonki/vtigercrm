@@ -32,7 +32,7 @@ $the_script  = <<<EOQ
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (form.last_name.value == "") {
+	if (form.lastname.value == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_last_name";
 	}
@@ -92,9 +92,9 @@ $the_form .= <<<EOQ
 			<input type="hidden" name="email2" value="">			
 			<input type="hidden" name="action" value="Save">
 		$lbl_first_name<br>
-		<input name='first_name' type="text" value=""><br>
+		<input name='firstname' type="text" value=""><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_last_name<br>
-		<input name='last_name' type="text" value=""><br>
+		<input name='lastname' type="text" value=""><br>
 		$lbl_company<br>
 		<input name='company' type="text" value=""><br>
 		$lbl_phone<br>

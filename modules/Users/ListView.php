@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/ListView.php,v 1.3 2004/10/29 09:55:10 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/ListView.php,v 1.4 2005/01/20 14:34:28 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -66,21 +66,21 @@ if(isset($_REQUEST['query']))
 
 	$where_clauses = Array();
 	
-	if(isset($last_name) && $last_name != "") array_push($where_clauses, "last_name like '".PearDatabase::quote($last_name)."%'");
-	if(isset($first_name) && $first_name != "") array_push($where_clauses, "first_name like '".PearDatabase::quote($first_name)."%'");
-	if(isset($user_name) && $user_name != "") array_push($where_clauses, "user_name like '".PearDatabase::quote($user_name)."%'");
-	if(isset($status) && $status != "") array_push($where_clauses, "status = '".PearDatabase::quote($status)."'");
-	if(isset($is_admin) && $is_admin != "") array_push($where_clauses, "is_admin = '".PearDatabase::quote($is_admin)."'");
-	if(isset($phone) && $phone != "") array_push($where_clauses, "(phone_home like '%".PearDatabase::quote($phone)."%' OR phone_mobile like '%".PearDatabase::quote($phone)."%' OR phone_work like '%".PearDatabase::quote($phone)."%' OR phone_other like '%".PearDatabase::quote($phone)."%' OR phone_fax like '%".PearDatabase::quote($phone)."%')");
-	if(isset($email) && $email != "") array_push($where_clauses, "(users.email1 like '".PearDatabase::quote($email)."%' OR users.email2 like '".PearDatabase::quote($email)."%')");
-	if(isset($yahoo_id) && $yahoo_id != "") array_push($where_clauses, "yahoo_id like '".PearDatabase::quote($yahoo_id)."%'");
-	if(isset($department) && $department != "") array_push($where_clauses, "department like '".PearDatabase::quote($department)."%'");
-	if(isset($title) && $title != "") array_push($where_clauses, "title like '".PearDatabase::quote($title)."%'");
-	if(isset($address_street) && $address_street != "") array_push($where_clauses, "address_street like '".PearDatabase::quote($address_street)."%'");
-	if(isset($address_city) && $address_city != "") array_push($where_clauses, "address_city like '".PearDatabase::quote($address_city)."%'");
-	if(isset($address_state) && $address_state != "") array_push($where_clauses, "address_state like '".PearDatabase::quote($address_state)."%'");
-	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "address_postalcode like '".PearDatabase::quote($address_postalcode)."%'");
-	if(isset($address_country) && $address_country != "") array_push($where_clauses, "address_country like '".PearDatabase::quote($address_country)."%'");
+	if(isset($last_name) && $last_name != "") array_push($where_clauses, "last_name like ".PearDatabase::quote($last_name.'%')."");
+	if(isset($first_name) && $first_name != "") array_push($where_clauses, "first_name like ".PearDatabase::quote($first_name.'%')."");
+	if(isset($user_name) && $user_name != "") array_push($where_clauses, "user_name like ".PearDatabase::quote($user_name.'%')."");
+	if(isset($status) && $status != "") array_push($where_clauses, "status = ".PearDatabase::quote($status)."");
+	if(isset($is_admin) && $is_admin != "") array_push($where_clauses, "is_admin = ".PearDatabase::quote($is_admin)."");
+	if(isset($phone) && $phone != "") array_push($where_clauses, "(phone_home like ".PearDatabase::quote('%'.$phone.'%')." OR phone_mobile like ".PearDatabase::quote('%'.$phone.'%')." OR phone_work like ".PearDatabase::quote('%'.$phone.'%')." OR phone_other like ".PearDatabase::quote('%'.$phone.'%')." OR phone_fax like ".PearDatabase::quote('%'.$phone.'%').")");
+	if(isset($email) && $email != "") array_push($where_clauses, "(users.email1 like ".PearDatabase::quote($email.'%')." OR users.email2 like ".PearDatabase::quote($email.'%').")");
+	if(isset($yahoo_id) && $yahoo_id != "") array_push($where_clauses, "yahoo_id like ".PearDatabase::quote($yahoo_id.'%')."");
+	if(isset($department) && $department != "") array_push($where_clauses, "department like ".PearDatabase::quote($department.'%')."");
+	if(isset($title) && $title != "") array_push($where_clauses, "title like ".PearDatabase::quote($title.'%')."");
+	if(isset($address_street) && $address_street != "") array_push($where_clauses, "address_street like ".PearDatabase::quote($address_street.'%')."");
+	if(isset($address_city) && $address_city != "") array_push($where_clauses, "address_city like ".PearDatabase::quote($address_city.'%')."");
+	if(isset($address_state) && $address_state != "") array_push($where_clauses, "address_state like ".PearDatabase::quote($address_state.'%')."");
+	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "address_postalcode like ".PearDatabase::quote($address_postalcode.'%')."");
+	if(isset($address_country) && $address_country != "") array_push($where_clauses, "address_country like ".PearDatabase::quote($address_country.'%')."");
 
 
 	$where = "";

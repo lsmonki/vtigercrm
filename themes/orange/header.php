@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/orange/header.php,v 1.15 2005/01/08 11:53:37 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/orange/header.php,v 1.18 2005/03/02 10:19:30 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -21,6 +21,7 @@
 
 require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
+require_once("include/utils.php");
 
 
 global $currentModule;
@@ -35,6 +36,9 @@ global $app_strings;
 $module_path="modules/".$currentModule."/";
 require_once('Menu.php');
 global $module_menu;
+
+require_once('include/Clock.php');
+require_once('include/Calc.php');
 
 $xtpl=new XTemplate ($theme_path."header.html");
 
@@ -156,100 +160,35 @@ $xtpl->parse("main.left_form");
 
 //check for the presence of the currentModule and  also for EditView permission
 
+$now_action =  $_REQUEST['action'];
+$now_module = $_REQUEST['module'];
 
+$tabid = getTabid($now_module);
+$actionid = getActionid($now_action);
 
-$permissionData = $_SESSION['action_permission_set'];
-$testaction='EditView';
+if($actionid == 3)
+{
+        $QuickCreateForm = getQuickCreate($tabid,$actionid);
+}
 
-if($currentModule == 'Leads')
-  {
-    $tabid=3;
-  }
-  else if($currentModule == 'Home')
-  {
-    $tabid=1;
-  }
-  else if($currentModule == 'Dashboard')
-  {
-    $tabid=2;
-  }
-  else if($currentModule == 'Accounts')
-  {
-    $tabid=5;
-  }
-  else if($currentModule == 'Contacts')
-  {
-    $tabid=4;
-  }
-  else if($currentModule == 'Opportunities')
-  {
-    $tabid=6;
-  }
-  else if($currentModule == 'Cases')
-  {
-    $tabid=7;
-  }
- else if($currentModule == 'Notes')
-  {
-    $tabid=8;
-  }
-  else if($currentModule == 'Calls')
-  {
-    $tabid=9;
-  }
-  else if($currentModule == 'Emails')
-  {
-    $tabid=10;
-  }
-  else if($currentModule == 'Meetings')
-  {
-    $tabid=11;
-  }
-  else if($currentModule == 'Tasks')
-  {
-    $tabid=12;
-  }
- else if($currentModule == 'MessageBoard')
-  {
-    $tabid=13;
-  }
+if(isset($QuickCreateForm) && $QuickCreateForm == 'true')
+{
 
-
-      $i=0;
-
-        while($i<count($permissionData))
+        require_once("modules/".$currentModule."/Forms.php");
+        if (function_exists('get_new_record_form'))
         {
-          if($permissionData[$i][0]==$tabid && $permissionData[$i][1]==$testaction)
-          {
-            $actionpermissionvalue=$permissionData[$i][2];
-            if($actionpermissionvalue == 0)
-            {
-              //echo "You are not permitted this operation";
-              //exit();
-            }
-            else
-            {
-
-              require_once("modules/".$currentModule."/Forms.php");
-              if ($currentModule && $action == "index" && function_exists('get_new_record_form')) {
                 $xtpl->assign("NEW_RECORD", get_new_record_form());
                 $xtpl->parse("main.left_form_new_record");
-              }
-              
-            }
-            break;
-          }
-          $i++;
         }
+}
 
 
 
+$xtpl->assign("CLOCK_TITLE", "World Clock");
+$xtpl->assign("WORLD_CLOCK", get_world_clock($image_path));
 
-
-
-
-
-
+$xtpl->assign("CALC_TITLE", "Calculator");
+$xtpl->assign("CALC", get_calc($image_path));
 
 $xtpl->parse("main");
 $xtpl->out("main");

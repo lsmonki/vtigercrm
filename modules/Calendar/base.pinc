@@ -12,7 +12,7 @@
  $callink = 'index.php?module=Calendar&action=';
 
 include_once $calpath.'acl.pinc';
-include_once $calpath .'history.pinc';
+#include_once $calpath .'history.pinc';
 
 /**
  * Base for TUTOS objects

@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 
 $fld_module = $_REQUEST["fld_module"];
 //echo $fld_module;
@@ -19,33 +19,41 @@ $colName = $_REQUEST["colName"];
 $uitype = $_REQUEST["uitype"];
 
 //Deleting the CustomField from the Custom Field Table
-$query='delete from customfields where fieldid="'.$id.'"';
-mysql_query($query);
+$query='delete from field where fieldid="'.$id.'"';
+$adb->query($query);
 //Dropping the column in the module table
 if($fld_module == "Leads")
 {
-	$tableName = "leadcf";
+	$tableName = "leadscf";
 }
 elseif($fld_module == "Accounts")
 {
-	$tableName = "accountcf";
+	$tableName = "accountscf";
 }
 elseif($fld_module == "Contacts")
 {
-	$tableName = "contactcf";
+	$tableName = "contactscf";
 }
-elseif($fld_module == "Opportunities")
+elseif($fld_module == "Potentials")
 {
-	$tableName = "opportunitycf";
+	$tableName = "potentialscf";
+}
+elseif($fld_module == "HelpDesk")
+{
+	$tableName = "ticketcf";
+}
+elseif($fld_module == "Products")
+{
+	$tableName = "productcf";
 }
 //echo '<BR>';
 //echo $tableName;
 $dbquery = 'Alter table '.$tableName.' Drop Column '.$colName;
-mysql_query($dbquery);
+$adb->query($dbquery);
 if($uitype == 15)
 {
-$deltablequery = 'drop table '.$fld_module.'_'.$colName;
-mysql_query($deltablequery);
+$deltablequery = 'drop table '.$colName;
+$adb->query($deltablequery);
 }
 header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fld_module);
 ?>

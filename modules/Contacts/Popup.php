@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -13,255 +13,221 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Popup.php,v 1.6 2005/01/10 09:16:28 jack Exp $
- * Description:  This file is used for all popups on this module
- * The popup_picker.html file is used for generating a list from which to find and 
- * choose one instance.
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Popup.php,v 1.10 2005/03/05 05:20:11 jack Exp $
+ * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-global $theme;
+require_once('XTemplate/xtpl.php');
+require_once("data/Tracker.php");
 require_once('modules/Contacts/Contact.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
-require_once('XTemplate/xtpl.php');
-require_once('include/utils.php');
-require_once('include/ListView/ListView.php');
+require_once('include/ComboUtil.php');
 
 global $app_strings;
-global $app_list_strings;
-global $mod_strings;
+global $current_language;
+$current_module_strings = return_module_language($current_language, 'Contacts');
 
 global $list_max_entries_per_page;
 global $urlPrefix;
+
+$log = LoggerManager::getLogger('contact_list');
+
 global $currentModule;
+global $theme;
 
-$log = LoggerManager::getLogger('contact');
+$popuptype = '';
+$popuptype = $_REQUEST["popuptype"];
 
-$seed_object = new Contact();
+// Get _dom arrays from Database
+$comboFieldNames = Array('leadsource'=>'leadsource_dom');
+$comboFieldArray = getComboArray($comboFieldNames);
 
+if (!isset($where)) $where = "";
 
-$where = "";
+$focus = new Contact();
+$query_val = 'false';
 if(isset($_REQUEST['query']))
 {
-	$search_fields = Array("first_name", "last_name", "account_name");
+	$query_val = 'true';
+	// we have a query
+	if (isset($_REQUEST['firstname'])) $firstname = $_REQUEST['firstname'];
+	if (isset($_REQUEST['lastname'])) $lastname = $_REQUEST['lastname'];
+	if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
+	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
+	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
 
 	$where_clauses = Array();
 
-	append_where_clause($where_clauses, "first_name", "contacts.first_name");
-	append_where_clause($where_clauses, "last_name", "contacts.last_name");
-	append_where_clause($where_clauses, "account_name", "accounts.name");
-	append_where_clause($where_clauses, "account_id", "accounts.id");
+	if(isset($lastname) && $lastname != "") {
+			array_push($where_clauses, "contactdetails.lastname like ".PearDatabase::quote($lastname.'%')."");
+			$query_val .= "&lastname=".$lastname;
+	}
+	if(isset($firstname) && $firstname != "") {
+			array_push($where_clauses, "contactdetails.firstname like ".PearDatabase::quote($firstname.'%')."");
+			$query_val .= "&firstname=".$firstname;
+	}
+	if(isset($accountname) && $accountname != "")	{
+			array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%')."");
+			$query_val .= "&accountname=".$accountname;
+	}
+	if(isset($current_user_only) && $current_user_only != "") {
+			array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
+			$query_val .= "&current_user_only=on";
+	}
 
-	$where = generate_where_statement($where_clauses);
-	$log->info($where);
+	$where = "";
+	foreach($where_clauses as $clause)
+	{
+		if($where != "")
+		$where .= " and ";
+		$where .= $clause;
+	}
+	if (!empty($assigned_user_id)) {
+		if (!empty($where)) {
+			$where .= " AND ";
+		}
+		$where .= "crmentity.smownerid IN(";
+		foreach ($assigned_user_id as $key => $val) {
+			$where .= "".PearDatabase::quote($val)."";
+			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
+		}
+	}
+
+	$log->info("Here is the where clause for the list view: $where");
+
 }
 
+if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
+	// Stick the form header out there.
+	$search_form=new XTemplate ('modules/Contacts/PopupSearchForm.html');
+	$search_form->assign("MOD", $current_module_strings);
+	$search_form->assign("APP", $app_strings);
+	$search_form->assign("POPUPTYPE",$popuptype);
 
-$image_path = 'themes/'.$theme.'/images';
+	if (isset($firstname)) $search_form->assign("FIRST_NAME", $_REQUEST['firstname']);
+	if (isset($lastname)) $search_form->assign("LAST_NAME", $_REQUEST['lastname']);
+	if (isset($accountname)) $search_form->assign("COMPANY_NAME", $_REQUEST['accountname']);
+	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 
-////////////////////////////////////////////////////////
-// Start the output
-////////////////////////////////////////////////////////
-if (!isset($_REQUEST['html'])) {
-	$form =new XTemplate ('modules/Contacts/Popup_picker.html');
-	$log->debug("using file modules/Contacts/Popup_picker.html");
-}
-else {
-	$log->debug("_REQUEST['html'] is ".$_REQUEST['html']);
-	$form =new XTemplate ('modules/Contacts/'.$_REQUEST['html'].'.html');
-	$log->debug("using file modules/Contacts/".$_REQUEST['html'].'.html');
+	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
+
+	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
+
+	$search_form->parse("main");
+	$search_form->out("main");
+
+	echo get_form_footer();
+	echo "\n<BR>\n";
 }
 
-$form->assign("MOD", $mod_strings);
-$form->assign("APP", $app_strings);
+//Constructing the list view 
+$focus = new Contact();
 
-// the form key is required
-if(!isset($_REQUEST['form']))
-	die("Missing 'form' parameter");
-	
-// This code should always return an answer.
-// The form name should be made into a parameter and not be hard coded in this file.
-if(isset($_REQUEST['form_submit']) && $_REQUEST['form'] == 'DetailView' && $_REQUEST['form_submit'] == 'true')
-{
-	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(contact_id, contact_name) {\n";
-	$the_javascript .= "    window.opener.document.DetailView.contact_id.value = contact_id; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_module.value = window.opener.document.DetailView.module.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_action.value = 'DetailView'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.source_module.value = 'contacts'; \n";
-	$the_javascript .= "    window.opener.document.DetailView.contact_id.value = contact_id; \n";
-	$the_javascript .= "	window.opener.document.DetailView.entity_id.value = contact_id; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_id.value = window.opener.document.DetailView.record.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.action.value = 'Save'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.submit(); \n";
-	$the_javascript .= "}\n";
-	$the_javascript .= "</script>\n";
-	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
-	$button .= "<tr><td>&nbsp;</td>";
-	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '></td>\n";
-	$button .= "</tr></form></table>\n";
-}
-elseif(isset($_REQUEST['form_submit']) && $_REQUEST['form'] == 'ContactDetailView' && $_REQUEST['form_submit'] == 'true')
-{
-	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(contact_id, contact_name) {\n";
-	$the_javascript .= "	window.opener.document.DetailView.new_reports_to_id.value = contact_id; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_module.value = window.opener.document.DetailView.module.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_action.value = 'DetailView'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_id.value = window.opener.document.DetailView.record.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.action.value = 'Save'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.submit(); \n";
-	$the_javascript .= "}\n";
-	$the_javascript .= "</script>\n";
-	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
-	$button .= "<tr><td>&nbsp;</td>";
-	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '></td>\n";
-	$button .= "</tr></form></table>\n";
-}
-elseif(isset($_REQUEST['form_submit']) && $_REQUEST['form'] == 'OpportunityDetailView' && $_REQUEST['form_submit'] == 'true')
-{
-	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(contact_id, contact_name) {\n";
-	$the_javascript .= "	window.opener.document.DetailView.contact_id.value = contact_id; \n";
-	$the_javascript .= "	window.opener.document.DetailView.contact_role.value = '".$app_list_strings['opportunity_relationship_type_default_key']."'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_module.value = window.opener.document.DetailView.module.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_action.value = 'DetailView'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_id.value = window.opener.document.DetailView.record.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.module.value = 'Contacts'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.action.value = 'SaveContactOpportunityRelationship'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.submit(); \n";
-	$the_javascript .= "}\n";
-	$the_javascript .= "</script>\n";
-	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
-	$button .= "<tr><td>&nbsp;</td>";
-	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '>\n";
-	$button .= "</td></tr></form></table>\n";
-}
-elseif(isset($_REQUEST['form_submit']) && $_REQUEST['form'] == 'CaseDetailView' && $_REQUEST['form_submit'] == 'true')
-{
-	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(case_id, case_name) {\n";
-	$the_javascript .= "	window.opener.document.DetailView.contact_id.value = contact_id; \n";
-	$the_javascript .= "	window.opener.document.DetailView.contact_role.value = '".$app_list_strings['case_relationship_type_default_key']."'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_module.value = window.opener.document.DetailView.module.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_action.value = 'DetailView'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_id.value = window.opener.document.DetailView.record.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.action.value = 'SaveContactCaseRelationship'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.submit(); \n";
-	$the_javascript .= "}\n";
-	$the_javascript .= "</script>\n";
-	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
-	$button .= "<tr><td>&nbsp;</td>";
-	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '>\n";
-	$button .= "</td></tr></form></table>\n";
-}
-elseif ($_REQUEST['form'] == 'ContactEditView') 
-{
-	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(contact_id, contact_name) {\n";
-	$the_javascript .= "	window.opener.document.EditView.reports_to_name.value = contact_name;\n";
-	$the_javascript .= "	window.opener.document.EditView.reports_to_id.value = contact_id;\n";
-	$the_javascript .= "}\n";
-	$the_javascript .= "</script>\n";
-	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
-	$button .= "<tr><td>&nbsp;</td>";
-	$button .= "<td><input title='".$app_strings['LBL_CLEAR_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CLEAR_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.opener.document.EditView.reports_to_name.value = '';window.opener.document.EditView.reports_to_id.value = ''; window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CLEAR_BUTTON_LABEL']."  '></td>\n";
-	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '></td>\n";
-	$button .= "</tr></form></table>\n";
-}
-elseif ($_REQUEST['form'] == 'appnew')
-{                                                                                                                                   $the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-        $the_javascript .= "function set_return(contact_id, contact_name, account_name) {\n";                                       $the_javascript .= "    window.opener.document.appnew.contact_name.value = contact_name;\n";
-        $the_javascript .= "    window.opener.document.appnew.contact_id.value = contact_id;\n";                                    $the_javascript .= "}\n";
-        $the_javascript .= "</script>\n";                                                                                           $button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name
-='form' id='form'>\n";                                                                                                              $button .= "<tr><td>&nbsp;</td>";
-        $button .= "<td><input title='".$app_strings['LBL_CLEAR_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CLEAR_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.opener.document.appnew.contact_name.value = '';window.opener.document.appnew.contact_id.value = ''; window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CLEAR_BUTTON_LABEL']."  '></td>\n";
-        $button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '></td>\n";
-        $button .= "</tr></form></table>\n";
-}
+echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],'', false);
+$xtpl=new XTemplate ('modules/Contacts/Popup.html');
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+
+$xtpl->assign("MOD", $mod_strings);
+$xtpl->assign("APP", $app_strings);
+$xtpl->assign("IMAGE_PATH",$image_path);
+$xtpl->assign("THEME_PATH",$theme_path);
+
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
+	$xtpl->assign("RETURN_MODULE",$_REQUEST['return_module']);
 else 
+	$xtpl->assign("RETURN_MODULE",'Emails');
+
+//Retreive the list from Database
+$list_query = getListQuery("Contacts");
+if(isset($where) && $where != '')
 {
-	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(contact_id, contact_name) {\n";
-	$the_javascript .= "	window.opener.document.EditView.contact_name.value = contact_name;\n";
-	$the_javascript .= "	window.opener.document.EditView.contact_id.value = contact_id;\n";
-	$the_javascript .= "}\n";
-	$the_javascript .= "</script>\n";
-	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
-	$button .= "<tr><td>&nbsp;</td>";
-	$button .= "<td><input title='".$app_strings['LBL_CLEAR_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CLEAR_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.opener.document.EditView.contact_name.value = '';window.opener.document.EditView.contact_id.value = ''; window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CLEAR_BUTTON_LABEL']."  '></td>\n";
-	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '></td>\n";
-	$button .= "</tr></form></table>\n";
-}	
-
-$form->assign("SET_RETURN_JS", $the_javascript);
-
-$form->assign("THEME", $theme);
-$form->assign("IMAGE_PATH", $image_path);
-$form->assign("MODULE_NAME", $currentModule);
-if (isset($_REQUEST['form_submit'])) $form->assign("FORM_SUBMIT", $_REQUEST['form_submit']);
-$form->assign("FORM", $_REQUEST['form']);
-
-insert_popup_header($theme);
-
-// Quick search.
-echo get_form_header($mod_strings['LBL_SEARCH_FORM_TITLE'], "", false);
-
-if (isset($_REQUEST['first_name']))
-{
-	$last_search['FIRST_NAME'] = $_REQUEST['first_name'];
- 	
+	$list_query .= " AND ".$where;
 }
+$list_result = $adb->query($list_query);
 
-if (isset($_REQUEST['last_name']))
+//Retreiving the no of rows
+$noofrows = $adb->num_rows($list_result);
+
+//Retreiving the start value from request
+if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
-	$last_search['LAST_NAME'] = $_REQUEST['last_name'];
- 	
+	$start = $_REQUEST['start'];
 }
-
-if (isset($_REQUEST['account_name'])) 
+else
 {
-	$last_search['ACCOUNT_NAME'] = $_REQUEST['account_name'];
- 	
+	
+	$start = 1;
 }
+//Retreive the Navigation array
+$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
-if (isset($last_search)) 
+//Retreive the List View Table Header
+
+
+$focus->list_mode="search";
+$focus->popup_type=$popuptype;
+
+$listview_header = getSearchListViewHeader($focus,"Contacts");
+$xtpl->assign("LISTHEADER", $listview_header);
+
+
+
+$listview_entries = getSearchListViewEntries($focus,"Contacts",$list_result,$navigation_array);
+$xtpl->assign("LISTENTITY", $listview_entries);
+
+
+if(isset($navigation_array['start']))
 {
-	$form->assign("LAST_SEARCH", $last_search);
+	$startoutput = '<a href="index.php?action=Popup&module=Contacts&start='.$navigation_array['start'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Start</b></a>';
 }
+else
+{
+	$startoutput = '[ Start ]';
+}
+if(isset($navigation_array['end']))
+{
+	$endoutput = '<a href="index.php?action=Popup&module=Contacts&start='.$navigation_array['end'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>End</b></a>';
+}
+else
+{
+	$endoutput = '[ End ]';
+}
+if(isset($navigation_array['next']))
+{
+	$nextoutput = '<a href="index.php?action=Popup&module=Contacts&start='.$navigation_array['next'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Next</b></a>';
+}
+else
+{
+	$nextoutput = '[ Next ]';
+}
+if(isset($navigation_array['prev']))
+{
+	$prevoutput = '<a href="index.php?action=Popup&module=Contacts&start='.$navigation_array['prev'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Prev</b></a>';
+}
+else
+{
+	$prevoutput = '[ Prev ]';
+}
+$xtpl->assign("Start", $startoutput);
+$xtpl->assign("End", $endoutput);
+$xtpl->assign("Next", $nextoutput);
+$xtpl->assign("Prev", $prevoutput);
 
-$form->parse("main.SearchHeader");
-$form->out("main.SearchHeader");
+$xtpl->parse("main");
 
-echo get_form_footer();
+$xtpl->out("main");
 
-$form->parse("main.SearchHeaderEnd");
-$form->out("main.SearchHeaderEnd");
-
-// Reset the sections that are already in the page so that they do not print again later.
-$form->reset("main.SearchHeader");
-$form->reset("main.SearchHeaderEnd");
-
-// Stick the form header out there.
-
-
-
+/*
 $ListView = new ListView();
-$ListView->setXTemplate($form);
-$ListView->setHeaderTitle($mod_strings['LBL_LIST_FORM_TITLE']);
-$ListView->setHeaderText($button);
-$ListView->setQuery($where, "", "first_name, last_name", "CONTACT");
-$ListView->setModStrings($mod_strings);
-$ListView->processListView($seed_object, "main", "CONTACT");
-
+$ListView->initNewXTemplate( 'modules/Contacts/ListView.html',$current_module_strings);
+$ListView->setHeaderText("<table cellspacing='0' cellpadding='0'><tr><td><input type='button' class='button' onClick='document.location=\"index.php?module=Contacts&action=BusinessCard\"' name='addbusinesscard' value='{$current_module_strings['LBL_ADD_BUSINESSCARD']}'></td></tr></table>");
+$ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE'] );
+$ListView->setQuery($where, "", "firstname, lastname", "CONTACT");
+$ListView->processListView($seedContact, "main", "CONTACT");
+*/
 ?>
-
-	<tr><td COLSPAN=7><?php echo get_form_footer(); ?></td></tr>
-	</table>
-</td></tr></tbody></table>
-</td></tr>
-
-<?php insert_popup_footer(); ?>

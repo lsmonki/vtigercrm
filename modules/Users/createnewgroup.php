@@ -11,7 +11,7 @@
  ********************************************************************************/
 
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 
 ?>
 

@@ -24,6 +24,7 @@ require_once('data/Tracker.php');
 require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
 require_once('modules/Import/ImportOpportunity.php');
+require_once('modules/Import/ImportLead.php');
 require_once('modules/Import/Forms.php');
 require_once('modules/Import/ImportMap.php');
 
@@ -31,7 +32,6 @@ global $mod_strings;
 global $app_list_strings;
 global $app_strings;
 global $current_user;
-
 
 
 $focus = 0;
@@ -106,10 +106,14 @@ else if ( $_REQUEST['module'] == 'Accounts')
 {
 	$focus = new ImportAccount();
 } 
-else if ( $_REQUEST['module'] == 'Opportunities')
+else if ( $_REQUEST['module'] == 'Potentials')
 {
 	$focus = new ImportOpportunity();
 } 
+else if ( $_REQUEST['module'] == 'Leads')
+{
+	$focus = new ImportLead();
+}
 else
 {
  echo "Imports aren't set up for this module type\n";
@@ -141,7 +145,7 @@ else if ( $_REQUEST['module'] == 'Accounts')
 $xtpl->parse("main.show_salesforce");
 $xtpl->parse("main.show_act");
 } 
-else if ( $_REQUEST['module'] == 'Opportunities')
+else if ( $_REQUEST['module'] == 'Potentials')
 {
 $xtpl->parse("main.show_salesforce");
 } 

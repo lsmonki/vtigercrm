@@ -50,6 +50,10 @@ class UsersLastImport extends SugarBean
 	var $new_schema = true;
 
 	var $additional_column_fields = Array();
+
+	var $list_fields = Array();
+	var $list_fields_name = Array();
+	var $list_link_field;
 		
 	function UsersLastImport() {
 		$this->log = LoggerManager::getLogger('UsersLastImport');
@@ -63,27 +67,10 @@ class UsersLastImport extends SugarBean
 
 	function create_tables () 
 	{ 
-		$query = "CREATE TABLE $this->table_name ("; 
-		$query .='id char(36) NOT NULL'; 
-		$query .=', assigned_user_id char(36)'; 
-		$query .=', bean_type char(36)'; 
-		$query .=', bean_id char(36)'; 
-                $query .=', deleted bool NOT NULL default 0';
-		$query .=', PRIMARY KEY ( ID ) )'; 
-
-		 
-
-		$this->db->query($query,true,"Error creating import to sugarbean relationship table: "); 
-
-		// Create the indexes 
-		$this->create_index("create index idx_user_id on ".$this->table_name." (assigned_user_id)"); 
 	}
 
         function drop_tables () 
 	{ 
-		$query = 'DROP TABLE IF EXISTS '.$this->table_name; 
-		 
-		$this->db->query($query); 
 	}
 
 
@@ -101,41 +88,80 @@ class UsersLastImport extends SugarBean
 		global $current_user;
 		$query = '';
 
+		$this->db->println("create list bean_type = ".$this->bean_type." where = ".$where);
+
 		if ($this->bean_type == 'Contacts')
 		{
-			$query = "SELECT distinct
-				accounts.name as account_name,
-				accounts.id as account_id,
-				contacts.id,
-				contacts.assigned_user_id,
-				contacts.yahoo_id,
-				contacts.first_name,
-				contacts.last_name,
-				contacts.phone_work,
-				contacts.title,
-				contacts.email1,
+			/*$query = "SELECT distinct
+				account.accountname as account_name,
+				account.accountid  as account_id,
+				contactdetails.contactid,
+				crmentity.smownerid,
+				contactdetails.yahooid,
+				contactdetails.firstname,
+				contactdetails.lastname,
+				contactdetails.phone,
+				contactdetails.title,
+				contactdetails.email,
                                 users.user_name as assigned_user_name
-				FROM contacts, users_last_import
-                                LEFT JOIN users
-                                ON contacts.assigned_user_id=users.id
-				LEFT JOIN accounts_contacts
-				ON contacts.id=accounts_contacts.contact_id
-				LEFT JOIN accounts
-				ON accounts_contacts.account_id=accounts.id
-				WHERE 
-				users_last_import.assigned_user_id=
-					'{$current_user->id}'
-				AND users_last_import.bean_type='Contacts'
-				AND users_last_import.bean_id=contacts.id
-				AND users_last_import.deleted=0
-				AND contacts.deleted=0 
-				AND users.status='ACTIVE'";
+				FROM contactdetails, users_last_import 
+				LEFT JOIN users ON contactdetails.contactid=users.id 
+				LEFT JOIN account  ON account.accountid=contactdetails.accountid 
+				inner join crmentity on crmentity.crmid=contactdetails.contactid  
+				WHERE users_last_import.assigned_user_id= '{$current_user->id}'  
+				AND users_last_import.bean_type='Contacts' 
+				AND users_last_import.bean_id=contactdetails.contactid  
+				AND users_last_import.deleted=0  AND crmentity.deleted=0";
+				*/
+				/*$query = "SELECT distinct crmid,
+				account.accountname as account_name,
+				contactdetails.contactid,
+				contactdetails.accountid,				
+				contactdetails.yahooid,
+				contactdetails.firstname,
+				contactdetails.lastname,
+				contactdetails.phone,
+				contactdetails.title,
+				contactdetails.email,
+				users.id as assigned_user_id,
+				smownerid,
+                                users.user_name as assigned_user_name
+				FROM contactdetails, users_last_import 
+				LEFT JOIN users ON contactdetails.contactid=users.id 
+				LEFT JOIN account  ON account.accountid=contactdetails.accountid 
+				inner join crmentity on crmentity.crmid=contactdetails.contactid  
+				WHERE users_last_import.assigned_user_id= '{$current_user->id}'  
+				AND users_last_import.bean_type='Contacts' 
+				AND users_last_import.bean_id=contactdetails.contactid  
+				AND users_last_import.deleted=0  AND crmentity.deleted=0";*/
+				$query = "SELECT distinct crmid,
+				account.accountname as account_name,
+				contactdetails.contactid,
+				contactdetails.accountid,				
+				contactdetails.yahooid,
+				contactdetails.firstname,
+				contactdetails.lastname,
+				contactdetails.phone,
+				contactdetails.title,
+				contactdetails.email,
+				users.id as assigned_user_id,
+				smownerid,
+                                users.user_name as assigned_user_name
+				FROM contactdetails, users_last_import 
+				LEFT JOIN users ON contactdetails.contactid=users.id 
+				LEFT JOIN account  ON account.accountid=contactdetails.accountid 
+				inner join crmentity on crmentity.crmid=contactdetails.contactid  
+				WHERE users_last_import.assigned_user_id= '{$current_user->id}'  
+				AND users_last_import.bean_type='Contacts' 
+				AND users_last_import.bean_id=contactdetails.contactid  
+				AND users_last_import.deleted=0  AND crmentity.deleted=0";
+			
 
 		} 
 		else if ($this->bean_type == 'Accounts')
 		{
-			$query = "SELECT distinct accounts.*,
-                                users.user_name as assigned_user_name
+			/*$query = "SELECT distinct account.*,
+                                users.user_name assigned_user_name
 				FROM accounts, users_last_import
                                 LEFT JOIN users
                                 ON accounts.assigned_user_id=users.id
@@ -146,15 +172,28 @@ class UsersLastImport extends SugarBean
 				AND users_last_import.bean_id=accounts.id
 				AND users_last_import.deleted=0
 				AND accounts.deleted=0
+				AND users.status='ACTIVE'";*/
+				$query = "SELECT distinct account.*,
+                                users.user_name assigned_user_name,
+				smownerid 
+				FROM account, users_last_import inner join crmentity on crmentity.crmid=account.accountid left join users
+                                ON crmentity.smownerid=users.id
+				WHERE 
+				users_last_import.assigned_user_id=
+					'{$current_user->id}'
+				AND users_last_import.bean_type='Accounts'
+				AND users_last_import.bean_id=crmentity.crmid
+				AND users_last_import.deleted=0
+				AND crmentity.deleted=0
 				AND users.status='ACTIVE'";
 		} 
-		else if ($this->bean_type == 'Opportunities')
+		else if ($this->bean_type == 'Potentials')
 		{
 		
-			$query = "SELECT distinct
-                                accounts.id as account_id,
-                                accounts.name as account_name,
-                                users.user_name as assigned_user_name,
+			/*$query = "SELECT distinct
+                                accounts.id account_id,
+                                accounts.name account_name,
+                                users.user_name assigned_user_name,
                                 opportunities.*
                                 FROM opportunities, users_last_import
                                 LEFT JOIN users
@@ -166,15 +205,144 @@ class UsersLastImport extends SugarBean
                         	WHERE 
 				users_last_import.assigned_user_id=
 					'{$current_user->id}'
-				AND users_last_import.bean_type='Opportunities'
+				AND users_last_import.bean_type='Potentials'
 				AND users_last_import.bean_id=opportunities.id
 				AND users_last_import.deleted=0
 				AND accounts_opportunities.deleted=0 
 				AND accounts.deleted=0 
 				AND opportunities.deleted=0 
+				AND users.status='ACTIVE'";*/
+
+			$query = "SELECT distinct
+                                account.accountid account_id,
+                                account.accountname account_name,
+                                users.user_name assigned_user_name,
+				smownerid,
+				potential.*
+                               FROM potential inner join account on account.accountid=potential.accountid 
+			       inner join  crmentity on crmentity.crmid=potential.potentialid 
+			       left join users ON crmentity.smownerid=users.id 
+			       left join users_last_import on users_last_import.assigned_user_id=users.id 
+			       where users_last_import.assigned_user_id='{$current_user->id}'
+				AND users_last_import.bean_type='Potentials'
+				AND users_last_import.bean_id=crmentity.crmid
+				AND users_last_import.deleted=0
+				AND crmentity.deleted=0 
 				AND users.status='ACTIVE'";
 
 	
+		}
+		else if($this->bean_type == 'Leads')
+		{
+			$query = "SELECT distinct leaddetails.*,
+                                users.user_name assigned_user_name,
+				smownerid 
+				FROM leaddetails, users_last_import inner join crmentity on crmentity.crmid=leaddetails.leadid left join users
+                                ON crmentity.smownerid=users.id
+				WHERE 
+				users_last_import.assigned_user_id=
+					'{$current_user->id}'
+				AND users_last_import.bean_type='Leads'
+				AND users_last_import.bean_id=crmentity.crmid
+				AND users_last_import.deleted=0
+				AND crmentity.deleted=0
+				AND users.status='ACTIVE'";
+		}
+
+		
+
+		/*if(! empty($order_by))
+		{
+			$query .= " ORDER BY $order_by";
+		}*/
+
+		return $query;
+
+	}
+
+	
+
+	
+/*	function create_list_query(&$order_by, &$where)
+	{
+
+		echo 'the bean type is  >>>>>>>>>>>>>>>>>>>>>>>>>>>>  ' .$this->bean_type;
+		global $current_user;
+		$query = '';
+
+		if ($this->bean_type == 'Contacts')
+		{
+			$query = "SELECT distinct
+				account.accountname as account_name,
+				account.accountid  as account_id,
+				contactdetails.contactid,
+				crmentity.smownerid,				
+				contactdetails.firstname,
+				contactdetails.lastname,
+				contactdetails.phone,
+				contactdetails.title,
+				contactdetails.email,
+                                users.user_name as assigned_user_name
+				FROM contactdetails, users_last_import inner join crmentity on crmentity.crmid=contactdetails.contactid
+				LEFT JOIN users ON crmentity.smownerid=users.id 
+				LEFT JOIN account  ON account.accountid=contactdetails.accountid 
+				WHERE users_last_import.assigned_user_id= '{$current_user->id}'  
+				AND users_last_import.bean_type='Contacts' 
+				AND users_last_import.bean_id=contactdetails.contactid  
+				AND users_last_import.deleted=0  AND crmentity.deleted=0 AND users.status='ACTIVE'";
+
+				echo 'Contacts >>>>>>>>>>>>>>>>   '.$query;
+		} 
+		else if ($this->bean_type == 'Accounts')
+		{
+			/*$query = "SELECT distinct account.*,
+                                users.user_name assigned_user_name
+				FROM account, users_last_import
+                                LEFT JOIN users
+                                ON account.assigned_user_id=users.id
+				WHERE 
+				users_last_import.assigned_user_id=
+					'{$current_user->id}'
+				AND users_last_import.bean_type='Accounts'
+				AND users_last_import.bean_id=accounts.id
+				AND users_last_import.deleted=0
+				AND accounts.deleted=0
+				AND users.status='ACTIVE'";
+
+				$query = "SELECT distinct account.*,
+                                users.user_name assigned_user_name
+				FROM account, users_last_import inner join crmentity on crmentity.crmid=account.accountid left join users
+                                ON crmentity.smownerid=users.id
+				WHERE 
+				users_last_import.assigned_user_id=
+					'{$current_user->id}'
+				AND users_last_import.bean_type='Accounts'
+				AND users_last_import.bean_id=crmentity.crmid
+				AND users_last_import.deleted=0
+				AND crmentity.deleted=0
+				AND users.status='ACTIVE'";
+				echo '<br>Accounts >>>>>>>>>>>>>>>>   '.$query;
+		} 
+		else if ($this->bean_type == 'Potentials')
+		{
+		
+			$query = "SELECT distinct
+                                account.accountid account_id,
+                                account.accountname account_name,
+                                users.user_name assigned_user_name
+                                FROM potential, users_last_import inner join  crmentity on crmentity.crmid=potential.potentialdid left join users
+				ON crmentity.smownerid=users.id                                
+                        	WHERE 
+				users_last_import.assigned_user_id=
+					'{$current_user->id}'
+				AND users_last_import.bean_type='Potentials'
+				AND users_last_import.bean_id=crmentity.crmid
+				AND users_last_import.deleted=0
+				AND crmentity.deleted=0 
+				AND users.status='ACTIVE'";
+
+	
+				echo '<br>Potentials >>>>>>>>>>>>>>>>   '.$query;
 		}
 
 		if(! empty($order_by))
@@ -184,7 +352,8 @@ class UsersLastImport extends SugarBean
 
 		return $query;
 
-	}
+	}*/
+	
 	function list_view_parse_additional_sections(&$list_form)
 	{
 		if ($this->bean_type == "Contacts")
@@ -209,6 +378,7 @@ class UsersLastImport extends SugarBean
 		$count += $this->undo_contacts($user_id);
 		$count += $this->undo_accounts($user_id);
 		$count += $this->undo_opportunities($user_id);
+		$count += $this->undo_leads($user_id);
 
 		return $count;
 	}
@@ -216,44 +386,84 @@ class UsersLastImport extends SugarBean
 	function undo_contacts($user_id)
 	{
 		$count = 0;
-		$query1 = "select bean_id from users_last_import 
-		where assigned_user_id='$user_id' 
+		$query1 = "select bean_id from users_last_import where assigned_user_id='$user_id' 
 		AND bean_type='Contacts' AND deleted=0";
 
 		$this->log->info($query1); 
 
-		$result1 = mysql_query($query1) 
+		$result1 = $this->db->query($query1) 
 			or die("Error getting last import for undo: ".mysql_error()); 
 
-		while ( $row1 = mysql_fetch_assoc($result1))
+		while ( $row1 = $this->db->fetchByAssoc($result1))
 		{
-			$query2 = "update contacts set contacts.deleted=1 
-					where contacts.id='{$row1['bean_id']}'";
+			$query2 = "update crmentity set deleted=1 where crmid='{$row1['bean_id']}'";
 
 			$this->log->info($query2); 
 
-			$result2 = mysql_query($query2) 
+			$result2 = $this->db->query($query2) 
 				or die("Error undoing last import: ".mysql_error()); 
 
-			$count = $this->db->getAffectedRowCount($result2);
+			$count++;
+			
+			/*$query2 = "update crmentity set crmentity.deleted=1 inner join contactdetails on contactdetails.contactid=crmentity.crmid where contactdetails.contactid='{$row1['bean_id']}'";
 
-			$query3 = "update accounts_contacts set accounts_contacts.deleted=1 
-					where accounts_contacts.contact_id='{$row1['bean_id']}'
-					AND accounts_contacts.deleted=0";
+			$this->log->info($query2); 
 
-			$this->log->info($query3); 
-
-			$result3 = mysql_query($query3) 
+			$result2 = $this->db->query($query2) 
 				or die("Error undoing last import: ".mysql_error()); 
 
-			$query4 = "update opportunities_contacts set opportunities_contacts.deleted=1 
-					where opportunities_contacts.contact_id='{$row1['bean_id']}'
-					AND opportunities_contacts.deleted=0";
+			$count = $this->db->getAffectedRowCount($result2);*/
 
-			$this->log->info($query4); 
+	//TODO WELL BEFORE RELEASE RICHIE
+			//$query4 = "update contpotentialrel";
 
-			$result4 = mysql_query($query4) 
+			//$this->log->info($query4); 
+
+		//	$result4 = $this->db->query($query4) 
+		//		or die("Error undoing last import: ".mysql_error()); 
+
+		}
+		return $count;
+	}
+
+	function undo_leads($user_id)
+	{
+		$count = 0;
+		$query1 = "select bean_id from users_last_import where assigned_user_id='$user_id' 
+		AND bean_type='Leads' AND deleted=0";
+
+		$this->log->info($query1); 
+
+		$result1 = $this->db->query($query1) 
+			or die("Error getting last import for undo: ".mysql_error()); 
+
+		while ( $row1 = $this->db->fetchByAssoc($result1))
+		{
+			$query2 = "update crmentity set deleted=1 where crmid='{$row1['bean_id']}'";
+
+			$this->log->info($query2); 
+
+			$result2 = $this->db->query($query2) 
 				or die("Error undoing last import: ".mysql_error()); 
+
+			$count++;
+			
+			/*$query2 = "update crmentity set crmentity.deleted=1 inner join contactdetails on contactdetails.contactid=crmentity.crmid where contactdetails.contactid='{$row1['bean_id']}'";
+
+			$this->log->info($query2); 
+
+			$result2 = $this->db->query($query2) 
+				or die("Error undoing last import: ".mysql_error()); 
+
+			$count = $this->db->getAffectedRowCount($result2);*/
+
+	//TODO WELL BEFORE RELEASE RICHIE
+			//$query4 = "update contpotentialrel";
+
+			//$this->log->info($query4); 
+
+		//	$result4 = $this->db->query($query4) 
+		//		or die("Error undoing last import: ".mysql_error()); 
 
 		}
 		return $count;
@@ -269,17 +479,29 @@ class UsersLastImport extends SugarBean
 
 		$this->log->info($query1); 
 
-		$result1 = mysql_query($query1) 
+		$result1 = $this->db->query($query1) 
 			or die("Error getting last import for undo: ".mysql_error()); 
 
-		while ( $row1 = mysql_fetch_assoc($result1))
+		while ( $row1 = $this->db->fetchByAssoc($result1))
 		{
-			$query2 = "update accounts set accounts.deleted=1 
+
+			$query2 = "update crmentity set deleted=1 where crmid='{$row1['bean_id']}'";
+
+			$this->log->info($query2); 
+
+			$result2 = $this->db->query($query2) 
+				or die("Error undoing last import: ".mysql_error()); 
+
+			$count++;
+			//$count = $this->db->getAffectedRowCount($result2);
+			
+			
+			/*$query2 = "update accounts set accounts.deleted=1 
 					where accounts.id='{$row1['bean_id']}'";
 
 			$this->log->info($query2); 
 
-			$result2 = mysql_query($query2) 
+			$result2 = $this->db->query($query2) 
 				or die("Error undoing last import: ".mysql_error()); 
 
 			$count = $this->db->getAffectedRowCount($result2);
@@ -290,7 +512,7 @@ class UsersLastImport extends SugarBean
 
 			$this->log->info($query3); 
 
-			$result3 = mysql_query($query3) 
+			$result3 = $this->db->query($query3) 
 				or die("Error undoing last import: ".mysql_error()); 
 
 			$query4 = "update accounts_opportunities set accounts_opportunities.deleted=1 
@@ -299,8 +521,9 @@ class UsersLastImport extends SugarBean
 
 			$this->log->info($query4); 
 
-			$result4 = mysql_query($query4) 
+			$result4 = $this->db->query($query4) 
 				or die("Error undoing last import: ".mysql_error()); 
+				*/
 
 		}
 		return $count;
@@ -312,21 +535,30 @@ class UsersLastImport extends SugarBean
 		$count = 0;
 		$query1 = "select bean_id from users_last_import 
 		where assigned_user_id='$user_id' 
-		AND bean_type='Opportunities' AND deleted=0";
+		AND bean_type='Potentials' AND deleted=0";
 
 		$this->log->info($query1); 
 
-		$result1 = mysql_query($query1) 
+		$result1 = $this->db->query($query1) 
 			or die("Error getting last import for undo: ".mysql_error()); 
 
-		while ( $row1 = mysql_fetch_assoc($result1))
+		while ( $row1 = $this->db->fetchByAssoc($result1))
 		{
-			$query2 = "update opportunities set opportunities.deleted=1 
+			$query2 = "update crmentity set deleted=1 where crmid='{$row1['bean_id']}'";
+
+			$this->log->info($query2); 
+
+			$result2 = $this->db->query($query2) 
+				or die("Error undoing last import: ".mysql_error()); 
+
+			$count++;
+			
+			/*$query2 = "update opportunities set opportunities.deleted=1 
 					where opportunities.id='{$row1['bean_id']}'";
 
 			$this->log->info($query2); 
 
-			$result2 = mysql_query($query2) 
+			$result2 = $this->db->query($query2) 
 				or die("Error undoing last import: ".mysql_error()); 
 
 			$count = $this->db->getAffectedRowCount($result2);
@@ -337,7 +569,7 @@ class UsersLastImport extends SugarBean
 
 			$this->log->info($query3); 
 
-			$result3 = mysql_query($query3) 
+			$result3 = $this->db->query($query3) 
 				or die("Error undoing last import: ".mysql_error()); 
 
 
@@ -347,8 +579,8 @@ class UsersLastImport extends SugarBean
 
 			$this->log->info($query4); 
 
-			$result4 = mysql_query($query4) 
-				or die("Error undoing last import: ".mysql_error()); 
+			$result4 = $this->db->query($query4) 
+				or die("Error undoing last import: ".mysql_error()); */
 
 		}
 		return $count;

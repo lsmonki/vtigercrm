@@ -1,0 +1,56 @@
+USE "/RU SYSTEM" to override username and password 
+
+
+
+To schedule a task to run every 20 minutes
+schtasks /create /sc minute /mo 20 /tn "Security Script" /tr \\central\data\scripts\sec.vbs
+
+To schedule a command that runs every hour at five minutes past the hour
+The following command schedules the MyApp program to run hourly beginning at five minutes past midnight. Because the /mo parameter is omitted, the command uses the default value for the hourly schedule, which is every (1) hour. If this command is issued after 12:05 A.M., the program will not run until the next day.
+schtasks /create /sc hourly /st 00:05:00 /tn "My App" /tr c:\apps\myapp.exe
+
+To schedule a command that runs every five hours
+The following command schedules the MyApp program to run every five hours beginning on the first day of March 2001. It uses the /mo parameter to specify the interval and the /sd parameter to specify the start date. Because the command does not specify a start time, the current time is used as the start time.
+schtasks /create /sc hourly /mo 5 /sd 03/01/2001 /tn "My App" /tr c:\apps\myapp.exe
+
+To schedule a task that runs every day
+The following example schedules the MyApp program to run once a day, every day, at 8:00 A.M. until December 31, 2001. Because it omits the /mo parameter, the default interval of 1 is used to run the command every day.
+schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc daily /st 08:00:00 /ed 12/31/2001
+
+To schedule a task that runs every other day
+The following example schedules the MyApp program to run every other day at 1:00 P.M. (13:00) beginning on December 31, 2001. The command uses the /mo parameter to specify an interval of two (2) days.
+schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc daily /mo 2 /st 13:00:00 /sd 12/31/2001
+
+To schedule a task that runs every six weeks
+The following command schedules the MyApp program to run on a remote computer every six weeks. The command uses the /mo parameter to specify the interval. It also uses the /s parameter to specify the remote computer and the /ru parameter to schedule the task to run with the permissions of the user's Administrator account. Because the /rp parameter is omitted, SchTasks.exe prompts the user for the Administrator account password.
+Also, because the command is run remotely, all paths in the command, including the path to MyApp.exe, refer to paths on the remote computer.
+schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc weekly /mo 6 /s Server16 /ru Admin01
+
+To schedule a task that runs every other week on Friday
+The following command schedules a task to run every other Friday. It uses the /mo parameter to specify the two-week interval and the /d parameter to specify the day of the week. To schedule a task that runs every Friday, omit the /mo parameter or set it to 1.
+schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc weekly /mo 2 /d FRI
+
+To schedule a task for the first day of every month
+The following command schedules the MyApp program to run on the first day of every month. Because the default modifier is none (no modifier), the default day is day 1, and the default month is every month, the command does not need any additional parameters.
+schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc monthly
+
+To schedule a task for the last day of every month
+The following command schedules the MyApp program to run on the last day of every month. It uses the /mo parameter to specify the last day of the month and the /m parameter with the wildcard character (*) to indicate that the program runs on the last day of every month.
+schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc monthly /mo lastday /m *
+
+To schedule a task that runs every three months
+The following command schedules the MyApp program to run every three months. It uses the /mo parameter to specify the interval.
+schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc monthly /mo 3
+
+To schedule a task for the second Sunday of every month
+The following command schedules the MyApp program to run on the second Sunday of every month. It uses the /mo parameter to specify the second week of the month and the /d parameter to specify the day.
+schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc monthly /mo SECOND /d SUN
+
+To schedule a task for the 15th days of May and June
+The following command schedules the MyApp program to run on May 15 and June 15 at 3:00 PM (15:00). It uses the /d parameter to specify the date and the /m parameter to specify the months. It also uses the /st parameter to specify the start time.
+schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc monthly /d 15 /m MAY,JUN /st 15:00:00
+
+To schedule a task that runs one time
+The following command schedules the MyApp program to run at midnight on January 1, 2002. It uses the /ru parameter to run the task with the permissions of the user's Administrator account and the /rp parameter to provide the password for the Administrator account.
+schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc once /st 00:00:00 /sd 01/01/2002 /ru Admin23 /rp p@ssworD1
+

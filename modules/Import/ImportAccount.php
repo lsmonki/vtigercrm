@@ -20,21 +20,26 @@
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('modules/Contacts/Contact.php');
-require_once('modules/Opportunities/Opportunity.php');
-require_once('modules/Cases/Case.php');
-require_once('modules/Calls/Call.php');
+require_once('modules/Potentials/Opportunity.php');
+//require_once('modules/Cases/Case.php');
+//require_once('modules/Calls/Call.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/Accounts/Account.php');
-
-global $app_list_strings;
+require_once('include/ComboUtil.php');
 
 // Account is used to store account information.
 class ImportAccount extends Account {
 	 var $db;
+
+// Get _dom arrays from Database
+//$comboFieldNames = Array('accounttype'=>'account_type_dom'
+//                      ,'industry'=>'industry_dom');
+//$comboFieldArray = getComboArray($comboFieldNames);
+
 
 	// these are fields that may be set on import
 	// but are to be processed and incorporated
@@ -42,13 +47,13 @@ class ImportAccount extends Account {
 
 
 	// This is the list of fields that are required.
-	var $required_fields =  array("name"=>1);
+	var $required_fields =  array("accountname"=>1);
 	
 	// This is the list of the functions to run when importing
 	var $special_functions =  array(
-	"add_billing_address_streets"
-	,"add_shipping_address_streets"
-	,"fix_website"
+	//"add_billing_address_streets"
+	//,"add_shipping_address_streets"
+	//,"fix_website"
 	 );
 
 
@@ -65,7 +70,7 @@ class ImportAccount extends Account {
 	function add_industry()
 	{
 		if ( isset($this->industry) &&
-			! isset( $app_list_strings['industry_dom'][$this->industry]))
+			! isset( $comboFieldArray['industry_dom'][$this->industry]))
 		{
 			unset($this->industry);
 		}	
@@ -74,7 +79,7 @@ class ImportAccount extends Account {
 	function add_type()
 	{
 		if ( isset($this->type) &&
-			! isset($app_list_strings['account_type_dom'][$this->type]))
+			! isset($comboFieldArray['account_type_dom'][$this->type]))
 		{
 			unset($this->type);
 		}	
@@ -124,7 +129,7 @@ class ImportAccount extends Account {
 
 	// This is the list of fields that are importable.
 	// some if these do not map directly to database columns
-	var $importable_fields = Array(
+	/*var $importable_fields = Array(
 		"id"=>1
 		,"name"=>1
 		,"website"=>1
@@ -160,11 +165,20 @@ class ImportAccount extends Account {
 		,"shipping_address_country"=>1
 		,"description"=>1
 		);
+		*/
 
+		var $importable_fields = Array();
 
 	function ImportAccount() {
+		
 		$this->log = LoggerManager::getLogger('import_account');
 		$this->db = new PearDatabase();
+		$this->db->println("IMP ImportAccount");
+		$colf = getColumnFields("Accounts");
+		foreach($colf as $key=>$value)
+			$this->importable_fields[$key]=1;
+		
+		$this->db->println($this->importable_fields);
 	}
 
 }

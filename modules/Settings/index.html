@@ -9,78 +9,245 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
-<TABLE width="70%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
-    <tr>
-      <td colspan="2" class="formSecHeader">Custom Field Settings:</td>
-    </tr>
-    <tr> 
-      <TD class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Leads">{MOD.LEADCUSTOMFIELDS}</a></div></TD>
-      <TD class="datalabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Accounts">{MOD.ACCOUNTCUSTOMFIELDS}</a></div></TD>
-    </tr>
-    <tr> 
-      <TD class="datalabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Contacts">{MOD.CONTACTCUSTOMFIELDS}</a></div></TD>
-      <TD class="datalabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Opportunities">{MOD.OPPORTUNITYCUSTOMFIELDS}</a></div></TD>
-    </tr>
+<TABLE width="80%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+  <tr> 
+    <td colspan="2" class="formSecHeader">User Management</td>
+  </tr>
+  <tr> 
+    <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/user_mgmt.gif" align="absmiddle"></div></td>
+    <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
+        <tr> 
+          <td><a href="index.php?module=Users&action=listroles"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Roles</a><span class="dim"> 
+            - Create and Manage user roles (e.g., Administrator, Standard User, 
+            etc.)</span></td>
+        </tr>
+        <tr> 
+          <td><a href="index.php?module=Users&action=ListProfiles"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Profiles</a><span class="dim"> 
+            - Create and Manage user profiles (e.g., CEO, Sales Manager, etc.)</span></td>
+        </tr>
+        <tr> 
+          <td><a href="index.php?module=Users&action=listgroups"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.USERGROUPLIST}</a><span class="dim"> 
+            - Create and Manage user groups</span></td>
+        </tr>
+	<tr> 
+          <td><a href="index.php?module=Users&action=OrgSharingDetailView"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Default Organization Sharing Access</a><span class="dim"> 
+            - Setting Default Sharing Access within the Organization </span></td>
+        </tr>
+        <tr>
+          <td><a href="javascript:toggleSetting('fieldaccess');"><img id="fieldaccess_tgimg" src="{IMAGE_PATH}/plus.gif" align="absmiddle" border="0" hspace="5">Field 
+            Accessibility</a><span class="dim"> - Setting Field Accessibility 
+            for each profiles</span><br> <div id="fieldaccess" style="display:none;padding:3px 5px 5px 20px;"> 
+              <table border="0" cellspacing="2" cellpadding="2">
+                <tr> 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Lead 
+                    Field Access</a></td>
+                  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Account 
+                    Field Access</a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Contact 
+                    Field Access</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Opportunity 
+                    Field Access</a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">HelpDesk 
+                    Field Access</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Product 
+                    Field Access</a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Notes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Note 
+                    Field Access</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Emails"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Email 
+                    Field Access</a></td>
+                </tr>
+                <tr>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Activities"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Task 
+                    Field Access</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Events"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Event 
+                    Field Access</a></td>
+                </tr>
+              </table>
+            </div></td>
+        </tr>
+      </table></td>
+  </tr>
 </table>
 <br>
-<TABLE width="70%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
-    <tr>
-      <td colspan="2" class="formSecHeader">Picklist Field Settings:</td>
-    </tr>
-    <tr> 
-      <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Leads">{MOD.EDITLEADPICKLISTVALUES}</a></div></TD>
-      <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Accounts">{MOD.EDITACCOUNTPICKLISTVALUES}</a></div></TD>
-    </tr>
-    <tr> 
-      <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Contacts">{MOD.EDITCONTACTPICKLISTVALUES}</a></div></TD>
-      <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Opportunities">{MOD.EDITOPPORTUNITYPICKLISTVALUES}</a></div></TD>
-    </tr>	 		
-  </TABLE><br>
-
+<TABLE width="80%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+  <tr> 
+    <td colspan="2" class="formSecHeader">Studio</td>
+  </tr>
+  <tr>
+    <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/studio.gif" align="absmiddle"></div></td>
+    <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
+        <tr> 
+          <td><a href="javascript:toggleSetting('customfield');"><img id="customfield_tgimg" hspace="5" src="{IMAGE_PATH}/plus.gif" border="0" align="absmiddle">Custom 
+            Field Settings</a> <span class="dim"> - Create and Manage user defined 
+            fields</span><br> <div id="customfield" style="display:none;padding:3px 5px 5px 20px;"> 
+              <table border="0" cellspacing="2" cellpadding="2">
+                <tr> 
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LEADCUSTOMFIELDS}</a></td>
+				  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.ACCOUNTCUSTOMFIELDS}</a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.CONTACTCUSTOMFIELDS}</a></td>
+				  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.OPPORTUNITYCUSTOMFIELDS}</a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.HELPDESKCUSTOMFIELDS}</a></td>
+				  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.PRODUCTCUSTOMFIELDS}</a></td>
+                </tr>
+              </table>
+            </div></td>
+        </tr>
+        <tr> 
+          <td><a href="javascript:toggleSetting('picklist');"><img id="picklist_tgimg" hspace="5" src="{IMAGE_PATH}/plus.gif" border="0" align="absmiddle">Picklist 
+            Settings</a><span class="dim"> - Edit values of Picklist fields</span><br> 
+            <div id="picklist" style="display:none;padding:3px 5px 5px 20px;">
+              <table border="0" cellspacing="4" cellpadding="2">
+                <tr> 
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITLEADPICKLISTVALUES}</a></td>
+                  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITACCOUNTPICKLISTVALUES}</a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITCONTACTPICKLISTVALUES}</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITOPPORTUNITYPICKLISTVALUES}</a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITHELPDESKPICKLISTVALUES}</a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.PRODUCTCUSTOMFIELDS}</a></td>
+                </tr>
+              </table>
+            </div></td>
+        </tr>
+      </table>
+</td>
+  </tr>
+</table>
 <br>
-<TABLE width="70%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
-    <tr>
-      <td colspan="2" class="formSecHeader">Word Integration:</td>
-    </tr>
-    <tr> 
-      <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Users&action=listwordtemplates">{MOD.WORDINTEGRATION}</a></div></TD>
-    </tr>	 		
-  </TABLE><br>
-
-
-<TABLE width="70%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
-    <tr>
-      <td colspan="2" class="formSecHeader">Group Settings:</td>
-    </tr>
-    <tr> 
-      <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Users&action=listgroups">{MOD.USERGROUPLIST}</a></div></TD>
-    </tr>	 		
-  </TABLE><br>
-
-<TABLE width="70%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
-  <tr>
-  <td colspan="2" class="formSecHeader">HelpDesk Settings:</td>
+<TABLE width="80%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+  <tr> 
+    <td colspan="2" class="formSecHeader">Communication Templates</td>
   </tr>
-  <tr>
-  <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Settings&action=EditComboField&fld_module=HelpDesk&fld_name=Category&table_name=troubleticketcategories&column_name=category">Edit Category</a></div></TD>
-  <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Settings&action=EditComboField&fld_module=HelpDesk&fld_name=Category&table_name=troubleticketpriorities&column_name=priority">Edit Priority</a></div></TD>
+  <tr> 
+    <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/comm_temp.gif" align="absmiddle"></div></td>
+    <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
+        <tr> 
+          <td><a href="index.php?module=Users&action=listemailtemplates"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EMAILTEMPLATES}</a><span class="dim"> 
+            - Create Email Templates</span></td>
+        </tr>
+        <tr> 
+          <td><a href="index.php?module=Users&action=listwordtemplates"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.WORDINTEGRATION}</a><span class="dim"> 
+            - Upload MS Word Templates for Mail Merge</span></td>
+        </tr>
+        <tr> 
+          <td><a href=""><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.NOTIFICATIONSCHEDULERS}</a><span class="dim"> 
+            - Schedule Email Notifications</span></td>
+        </tr>
+      </table></td>
   </tr>
-  <tr>
-  <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Settings&action=EditComboField&fld_module=HelpDesk&fld_name=Category&table_name=troubleticketstatus&column_name=status">Edit Status</a></div></TD>
+</table>
+<br>
+<TABLE width="80%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
+  <tr> 
+    <td colspan="2" class="formSecHeader">Configuration</td>
   </tr>
-  </TABLE><br>
+  <tr> 
+    <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/config.gif" align="absmiddle"></div></td>
+    <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
+        <tr> 
+          <td><a href="index.php?module=Settings&action=EmailConfig"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_CONFIG}</a><span class="dim"> 
+            - Configure Mail Server</span></td>
+        </tr>
+        <tr> 
+          <td><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">Backup 
+            Server Configuration<span class="dim"> - Configure Backup Server</span></td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+<br>
+<script language="JavaScript" src="include/general.js"></script>
+<script>
+var imgpath="{IMAGE_PATH}";
+function toggleSetting(id)
+{
+	var div=getObj(id)
+	var img=getObj(id+"_tgimg")
+	
+	if (div.style.display=="none")
+	{
+		div.style.display="block"
+		img.src=imgpath+"minus.gif"
+	}
+	else
+	{
+		div.style.display="none"
+		img.src=imgpath+"plus.gif"
+	}
+	
+	set_cookie(id+"_state",div.style.display)
+}
 
-<TABLE width="70%" border=0 cellPadding=0 cellSpacing=1 class="formOuterBorder">
-    <tr>
-      <td colspan="2" class="formSecHeader">Template Settings:</td>
-    </tr>
-    <tr> 
-      <TD  class="dataLabel" width="50%" noWrap ><div align="left"><a href="index.php?module=Users&action=listemailtemplates">{MOD.EMAILTEMPLATES}</a></div></TD>
-    </tr>	 		
-  </TABLE><br>
+// Setting cookies
+function set_cookie ( name, value, exp_y, exp_m, exp_d, path, domain, secure )
+{
+  var cookie_string = name + "=" + escape ( value );
 
+  if (exp_y) //delete_cookie(name)
+  {
+    var expires = new Date ( exp_y, exp_m, exp_d );
+    cookie_string += "; expires=" + expires.toGMTString();
+  }
 
+  if (path) cookie_string += "; path=" + escape ( path );
+  if (domain) cookie_string += "; domain=" + escape ( domain );
+  if (secure) cookie_string += "; secure";
 
+  document.cookie = cookie_string;
+}
 
+// Retrieving cookies
+function get_cookie(cookie_name)
+{
+  var results = document.cookie.match(cookie_name + '=(.*?)(;|$)');
+  if (results) return (unescape(results[1]));
+  else return null;
+}
 
+// Delete cookies 
+function delete_cookie( cookie_name )
+{
+  var cookie_date = new Date ( );  // current date & time
+  cookie_date.setTime ( cookie_date.getTime() - 1 );
+  document.cookie = cookie_name += "=; expires=" + cookie_date.toGMTString();
+}
+
+function init(id) {
+	if (get_cookie(id+"_state")==null || get_cookie(id+"_state")==false || get_cookie(id+"_state")=="none") {
+		getObj(id).style.display="none"
+		getObj(id+"_tgimg").src=imgpath+"plus.gif"
+	} else {
+		getObj(id).style.display="block"
+		getObj(id+"_tgimg").src=imgpath+"minus.gif"
+	}
+}
+
+init("customfield")
+init("picklist")
+init("fieldaccess")
+</script>
 <!-- END: main -->

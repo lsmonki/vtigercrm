@@ -7,6 +7,10 @@ $callink = "index.php?module=Calendar&action=";
 include_once $calpath .'webelements.p3';
 include_once $calpath .'permission.p3';
 require_once('modules/Calendar/preference.pinc');
+require_once('modules/Calendar/appointment.pinc');
+
+global $current_language;
+$current_module_strings = return_module_language($current_language, 'Calendar');
 
 /* Check if user is allowed to use it */
 //check_user();
@@ -18,8 +22,11 @@ global $theme;
 $theme_path="themes/".$theme."/";
 require_once ($theme_path."layout_utils.php");
 
+if($d == '')
 $d = Date("d");
+if($m == '')
 $m = Date("n");
+if($y == '')
 $y = Date("Y");
 $f = "default";
 
@@ -78,7 +85,9 @@ echo "</script>\n";
 
 $yoff =  Date("Y") + 10;
 echo "<body leftmargin=\"0\" topmargin=\"5\">\n";
-echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"95%\" align=\"center\">\n";
+echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"250\" class=\"outer\">\n";
+echo "<tr><td>";
+echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\" class=\"navigate\">\n";
 echo "<tr>\n";
 echo "\n";
 $nm = $m + 1;
@@ -93,23 +102,27 @@ if ( $lm == 0 ) {
   $lm = 12;
   $ly = $y -1;
 }
-echo "<td colspan=\"2\" align=\"left\"><font size=\"-1\"><b><a class=\"nodeco\" href=\"".$callink."minical&f=".$f."&n=".$n."&m=".$lm."&d=".$d."&y=".$ly."\"> ". $lang['NavBack'] . "</a></b></td>\n";
-echo "<td colspan=\"4\" align=\"center\"><b>". $m ."/". $y ."</b></td>\n";
-echo "<td colspan=\"2\" align=\"right\"><font size=\"-1\"><b><a class=\"nodeco\" href=\"". $callink ."minical&f=$f&n=$n&m=$nm&d=$d&y=$ny\">". $lang['NavNext'] ."</a></b></td>\n";
+$m_name = $current_module_strings['cal_month_long'][$m];
+
+echo "<td align=\"left\"><a class=\"nodeco\" href=\"".$callink."calendar_month&f=".$f."&n=".$n."&m=".$lm."&d=".$d."&y=".$ly."\" title=\"Previous Month\"><img border=\"0\" src=\"".$image_path."left.gif\"></a></td>\n";
+echo "<td align=\"center\"><b>". $m_name ." ". $y ."</b></td>\n";
+echo "<td align=\"right\"><a class=\"nodeco\" href=\"". $callink ."calendar_month&f=".$f."&n=".$n."&m=".$nm."&d=".$d."&y=".$ny."\" title=\"Next Month\"><img border=\"0\" src=\"".$image_path."right.gif\"></a></td>\n";
 echo "</tr>\n";
 echo "</table>\n";
-echo "<table class=\"single\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" width=\"95%\" align=\"center\">\n";
+echo "</td></tr>\n";
+echo "<tr><td>\n";
+echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"1\" width=\"100%\" align=\"center\">\n";
 echo "<tr>\n";
-echo "<th class=\"viewhead\"><font size=\"-1\">". $lang['week'] ."</th>\n";
+echo "<th class=\"weekday\">". $current_module_strings['LBL_WEEK'] ."</th>\n";
 
-$WeekDayName=array('SSunday','SMonday','STuesday','SWednesday','SThursday','SFriday','SSaturday');
+$WeekDayName=array('LBL_SM_SUN','LBL_SM_MON','LBL_SM_TUE','LBL_SM_WED','LBL_SM_THU','LBL_SM_FRI','LBL_SM_SAT');
  
 for ( $i = $current_user->weekstart;$i<=6;$i++ ) { 
-  echo "<th class=\"viewhead\"><font size=\"-1\">". $lang[$WeekDayName[$i]] ."</th>\n";
+  echo "<th class=\"weekday\">". $current_module_strings[$WeekDayName[$i]] ."</th>\n";
 }
  
 for ( $i = 0;$i<$current_user->weekstart;$i++ ) {
-  echo "<th class=\"viewhead\"><font size=\"-1\">". $lang[$WeekDayName[$i]] ."</th>\n";
+  echo "<th class=\"weekday\">". $current_module_strings[$WeekDayName[$i]] ."</th>\n";
 }
 
 echo "</tr>\n";
@@ -143,20 +156,77 @@ while ( $go == 1 ) {
  $col = "";
  if ( $today == Date("Ymd",$ts) ) {
    $col = "today";
- } else if ($xm != $m ) {
-   $col = "otherday";
  } else if ($wd == 0 ) {
    $col = "holiday";
  } else if ($wd == 6 ) {
    $col = "freeday";
+ } else if ($xm != $m ) {
+   $col = "otherday";
  } else {
    $col = "appday";
  }
  
  echo "<td align=\"right\" class=\"". $col ."\">\n";
- echo " <font size=\"-1\">\n";
- echo "  <a href=\"JavaScript:closeandaway(". ($xd + $n) .",". ($xm + $n) .",". ($yoff - $xy + $n) .")\">". $xxd ."</a>";
- echo " </font>\n";
+if ($xm == $m )
+ {
+ 	#echo "  <a href=\"JavaScript:closeandaway(". ($xd + $n) .",". ($xm + $n) .",". ($yoff - $xy + $n) .")\">". $xxd ."</a>";
+     // added by raj
+     /* Select appointments for this day */
+     $from =  new DateTime();
+     $to   =  new DateTime();
+     $from->setDateTimeTS($ts - 12 * 3600);
+     $to->setDateTimeTS($ts - 12 * 3600);
+     #$to->addDays(7);
+     
+     $pref->callist = array();
+     $app = new appointment();
+     $app->readCal($pref,$from,$to);
+     // appointment::readCal($pref,$from,$to);
+
+     $dd = new DateTime();
+       # $d = strftime($lang['DateFormatStr'],$ts);
+       $dd->setDateTimeTS($ts);
+       $d = $dd->getDate();
+       $tref = Date("Ymd",$ts);
+       $start_design="";       
+       $end_design="";       
+	if(count($pref->callist)!=0)
+	{
+       	     $start_design="<b>";       
+             $end_design="</b>";       
+		
+	}
+//Display Date with link, move here from above to get tref date format
+
+	if ($col=="today")
+		echo $start_design ."  <a class=\"today\" href=\"index.php?module=Calendar&action=calendar_day&t=".$tref."\">". $xxd ."</a>" .$end_design;
+	else
+		echo $start_design ."  <a href=\"index.php?module=Calendar&action=calendar_day&t=".$tref."\">". $xxd ."</a>" .$end_design;	
+
+//
+       $next = NextDay($ts);
+       # Check for workday
+       if ( ! $dd->isWorkDay($pref) ) {
+         $ts = $next;
+         $day++;
+         continue;
+       }
+       $dinfo = GetDaysInfo($ts);
+
+
+       $hastable = 0;
+       $a = 0;
+
+
+	//
+ }
+ else
+ {
+ 	echo "&nbsp;";
+ }
+
+ #echo "  <a href=\"JavaScript:closeandaway(". ($xd + $n) .",". ($xm + $n) .",". ($yoff - $xy + $n) .")\">". $xxd ."</a>";
+
  echo "</td>\n";
 
  if ( $wd == ($l->user->weekstart+6)%7   ) {
@@ -175,6 +245,7 @@ if ( $n == 1 ) {
 }
 
 echo "</table>\n";
+echo "</td></tr></table>\n";
 # selection of none allowed
 
 echo "<br>\n";

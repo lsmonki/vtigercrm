@@ -11,98 +11,60 @@
  ********************************************************************************/
 
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('include/utils.php');
 $vtigerpath = $_SERVER['REQUEST_URI'];
 $vtigerpath = str_replace("/index.php?module=uploads&action=add2db", "", $vtigerpath);
-$uploaddir = $_SERVER['DOCUMENT_ROOT'] .$vtigerpath ."/test/upload/" ;// set this to wherever
+$uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
+
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
-  $binFile = $_FILES['binFile']['name'];
-  $filename = basename($binFile);
-  $filetype= $_FILES['binFile']['type'];
+	$binFile = $_FILES['binFile']['name'];
+	$filename = basename($binFile);
+	$filetype= $_FILES['binFile']['type'];
+	$filesize = $_FILES['binFile']['size'];
 
-    $filesize = $_FILES['binFile']['size'];
+	if($filesize != 0)	
+	{
+		$current_id = $adb->getUniqueID("crmentity");
+		$desc = $_REQUEST['txtDescription'];
+		$description = addslashes($desc);
+		$date_var = date('YmdHis');
 
-    if($filesize != 0)	
-    {
-    	    $data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-	    //$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-	   $textDesc = $_REQUEST['txtDescription'];	
-	    $strDescription = addslashes($textDesc);
-	    $fileid = create_guid();
-	    $date_entered = date('YmdHis');
-	    //Retreiving the return module and setting the parent type
-	    $ret_module = $_REQUEST['return_module'];
-	    $parent_type;		
-	    if($_REQUEST['return_module'] == 'Leads')
-	    {
-		    $parent_type = 'Lead';
-	    }
-	    elseif($_REQUEST['return_module'] == 'Accounts')
-	    {
-		    $parent_type = 'Account';
-	    }
-	    elseif($_REQUEST['return_module'] == 'Contacts')
-	    {
-		    $parent_type = 'Contact';
-	    }
-	    elseif($_REQUEST['return_module'] == 'Opportunities')
-	    {
-		    $parent_type = 'Opportunity';
-	    }
-	   elseif($_REQUEST['return_module'] == 'Cases')
-	    {
-	 	   $parent_type = 'Case';
-	    }		
-	   elseif($_REQUEST['return_module']=='Emails')
-	   {
-		$parent_type='Emails';
-	   	$ret_module='Emails';
-	        $parent_id = $_REQUEST['return_id'];
+		$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+		//$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+		
+		$query = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('";
+		$query .= $current_id."','".$current_user->id."','".$current_user->id."','".$_REQUEST['return_module'].' Attachment'."','".$description."','".$date_var."')";
+		$result = $adb->query($query);
+
+		$sql = "insert into attachments values(";
+		$sql .= $current_id.",'".$filename."','".$description."','".$filetype."','".$filesize."','".$adb->getEmptyBlob()."')";
+		$result = $adb->query($sql);
 	
-			$sql = "INSERT INTO email_attachments ";
-		$sql .= "(id,date_entered,parent_type,parent_id,data,filename,filesize, filetype) ";
-		$sql .= "VALUES ('$fileid','$date_entered','$parent_type','$parent_id','$data',";
-		$sql .= "'$filename', '$filesize', '$filetype')";
-//	echo $sql;
-		$result = mysql_query($sql);
-//echo '<br>file name: '.$filename.'<br>file id: '.$fileid.'<br>Parent type: '.$parent_type.'<br>parent id: '.$parent_id;
-		//mysql_free_result($result);
-		//echo "Thank you. The new file was successfully added to our database.<br><br>";
-		//echo "<a href='index.php'>Continue</a>";
-	      	mysql_close();
-		deleteFile($uploaddir,$filename);
-	        header("Location: index.php?action=EditView&module=$ret_module&record=$parent_id&filename=$filename");
-	   }
+		if($result!=false)	    
+			$result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$current_id."' and name='".$filename."'",$data);
 	
-	    $parent_id = $_REQUEST['return_id'];	 			
-	
-	    $sql = "INSERT INTO filestorage ";
-	    $sql .= "(fileid,date_entered,parent_type,parent_id,data,description, filename, filesize, filetype) ";
-	    $sql .= "VALUES ('$fileid','$date_entered','$parent_type','$parent_id','$data','$strDescription',";
-	    $sql .= "'$filename', '$filesize', '$filetype')";
-	    $result = mysql_query($sql);
-	    //mysql_free_result($result); 
-	    //echo "Thank you. The new file was successfully added to our database.<br><br>";
-	    //echo "<a href='index.php'>Continue</a>";
-	       mysql_close();
-	       deleteFile($uploaddir,$filename);
-	       header("Location: index.php?action=DetailView&module=$ret_module&record=$parent_id");	
-    }
-	
-    else
-    {
-	   include('themes/'.$theme.'/header.php');
-	   $errormessage = "<font color='red'><B>Error Message<ul>
+
+		$crmid = $_REQUEST['return_id'];
+
+		$sql1 = "insert into seattachmentsrel values('";
+		$sql1 .= $crmid."','".$current_id."')";
+
+		$result = $adb->query($sql1);
+header("Location: index.php?action=".$_REQUEST['return_action']."&module=".$_REQUEST['return_module']."&record=".$_REQUEST['return_id']."&filename=".$filename."");
+	}
+	else
+	{
+		include('themes/'.$theme.'/header.php');
+		$errormessage = "<font color='red'><B>Error Message<ul>
 			<li><font color='red'>Invalid file OR</font>
 			<li><font color='red'>File has no data</font>
 			</ul></B></font> <br>" ;
-	   echo $errormessage;
-	   deleteFile($uploaddir,$filename);
-	   include "upload.php";
-    }			
-	   
+		echo $errormessage;
+		deleteFile($uploaddir,$filename);
+		include "upload.php";
+	}			
 } 
 else 
 {
@@ -117,7 +79,7 @@ else
 	}
 	else if($errorCode == 2)
 	{
-	    $errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file</font></B> <br>";
+	    $errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 1000000 bytes</font></B> <br>";
 	    include('themes/'.$theme.'/header.php');
 	    echo $errormessage;
 	    include "upload.php";

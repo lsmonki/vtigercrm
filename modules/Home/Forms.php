@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Home/Forms.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Home/Forms.php,v 1.3 2005/03/04 15:18:47 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -29,12 +29,11 @@
  * Contributor(s): ______________________________________..
  */
 function get_validate_record_js () {
+global $mod_strings;
 global $app_strings;
-//we don't want the parent module's string file, but rather the string file specifc to this subpanel
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'Contacts');
 
-$lbl_last_name = $current_module_strings['LBL_LIST_LAST_NAME'];
+$lbl_last_name = $mod_strings['LBL_LIST_LAST_NAME'];
+$lbl_account_name = $mod_strings['LBL_LIST_ACCOUNT_NAME'];
 $err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
 $err_invalid_email_address = $app_strings['ERR_INVALID_EMAIL_ADDRESS'];
 
@@ -57,17 +56,20 @@ function trim(s) {
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (trim(form.last_name.value) == "") {
+	if (trim(form.lastname.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_last_name";
 	}
-
+	if (trim(form.account_id.value) == "") {
+		isError = true;
+		errorMessage += "\\n$lbl_account_name";
+	}
 	if (isError == true) {
 		alert("$err_missing_required_fields" + errorMessage);
 		return false;
 	}
-	if (trim(form.email1.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
-		alert('"' + form.email1.value + '" $err_invalid_email_address');
+	if (trim(form.email.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email.value)) {
+		alert('"' + form.email.value + '" $err_invalid_email_address');
 		return false;
 	}
 	if (trim(form.email2.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
@@ -93,39 +95,44 @@ return $the_script;
  * Contributor(s): ______________________________________..
  */
 function get_new_record_form () {
+global $mod_strings;
 global $app_strings;
 global $current_user;
-//we don't want the parent module's string file, but rather the string file specifc to this subpanel
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'Contacts');
 
 $lbl_required_symbol = $app_strings['LBL_REQUIRED_SYMBOL'];
-$lbl_first_name = $current_module_strings['LBL_FIRST_NAME'];
-$lbl_last_name = $current_module_strings['LBL_LAST_NAME'];
-$lbl_phone = $current_module_strings['LBL_PHONE'];
-$lbl_email_address = $current_module_strings['LBL_EMAIL_ADDRESS'];
+$lbl_first_name = $mod_strings['LBL_FIRST_NAME'];
+$lbl_last_name = $mod_strings['LBL_LAST_NAME'];
+$lbl_account_name = $mod_strings['LBL_ACCOUNT_NAME'];
+$lbl_phone = $mod_strings['LBL_PHONE'];
+$lbl_email_address = $mod_strings['LBL_EMAIL_ADDRESS'];
 $lbl_save_button_title = $app_strings['LBL_SAVE_BUTTON_TITLE'];
 $lbl_save_button_key = $app_strings['LBL_SAVE_BUTTON_KEY'];
 $lbl_save_button_label = $app_strings['LBL_SAVE_BUTTON_LABEL'];
 $user_id = $current_user->id;
 
-$the_form = get_left_form_header($current_module_strings['LBL_NEW_FORM_TITLE']);
+$the_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 $the_form .= <<<EOQ
 
-		<form name="ContactSave" onSubmit="return verify_data(ContactSave)" method="POST" action="index.php">
+		<form name="EditView" onSubmit="return verify_data(EditView)" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Contacts">
 			<input type="hidden" name="record" value="">
-			<input type="hidden" name="email2" value="">
 			<input type="hidden" name="assigned_user_id" value='${user_id}'>
+			<input type="hidden" name="email2" value="">
 			<input type="hidden" name="action" value="Save">
+			<input type="hidden" name="return_action" value="index">
+			<input type="hidden" name="return_module" value="Contacts">
 		$lbl_first_name<br>
-		<input name='first_name' type="text" value=""><br>
+		<input name='firstname' type="text" value=""><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_last_name<br>
-		<input name='last_name' type="text" value=""><br>
+		<input name='lastname' type="text" value=""><br>
+		<FONT class="required">$lbl_required_symbol</FONT>$lbl_account_name<br>
+		<input name='account_name' type="text" value="" readonly>
+		<input name="account_id" type="hidden" value="">&nbsp;<input title="Change" accessKey="Change" type="button" tabindex="3" class="button" value="Change" name="btn1" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'>
+		<br>
 		$lbl_phone<br>
-		<input name='phone_work' type="text" value=""><br>
+		<input name='phone' type="text" value=""><br>
 		$lbl_email_address<br>
-		<input name='email1' type="text" value=""><br><br>
+		<input name='email' type="text" value=""><br><br>
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >
 		</form>
 

@@ -12,7 +12,7 @@
 require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('include/utils.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 
 global $mod_strings;
 global $app_strings;
@@ -23,15 +23,24 @@ if(isset($_REQUEST['record'])) {
 }
 
 //Retreive lead details from database
-$sql = "SELECT first_name, last_name, company, assigned_user_id from leads where id ='$id'";
-$result = mysql_query($sql);
-$row = mysql_fetch_array($result);
 
-$firstname = $row["first_name"];
-$lastname = $row["last_name"];
+$userid = $row["smownerid"];
+
+$crmid = $adb->getUniqueID("crmentity");
+//$sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted) values(".$id.",".$userid.",".$userid.",account,0,0)";
+
+//$adb->query($sql_crmentity);
+
+
+$sql = "SELECT firstname, lastname, company, smownerid from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid where leaddetails.leadid =".$id;
+$result = $adb->query($sql);
+$row = $adb->fetch_array($result);
+
+$firstname = $row["firstname"];
+$lastname = $row["lastname"];
 $company = $row["company"];
 $potentialname = $row["company"] ."-";
-$userid = $row["assigned_user_id"];
+
 
 //Retreiving the current user id
 global $current_user;
@@ -49,6 +58,7 @@ $xtpl=new XTemplate ('modules/Leads/ConvertLead.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
+$xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
 $xtpl->assign("FIRST_NAME",$firstname);
@@ -62,6 +72,7 @@ $xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array
 $xtpl->assign("ACCOUNT_NAME",$company);
 $xtpl->assign("CREATE_POTENTIAL","yes");
 $xtpl->assign("POTENTIAL_NAME", $potentialname);
+$xtpl->assign("DATE_CLOSED", $focus->closedate);
 
 $xtpl->parse("main");
 $xtpl->out("main");

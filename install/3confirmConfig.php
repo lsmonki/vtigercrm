@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.10 2004/11/03 09:32:27 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.12 2005/02/22 13:57:18 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -29,8 +29,10 @@ if (isset($_REQUEST['cache_dir'])) $cache_dir           = $_REQUEST['cache_dir']
 if (isset($_REQUEST['mail_server'])) $mail_server           = $_REQUEST['mail_server'];
 if (isset($_REQUEST['mail_server_username'])) $mail_server_username           = $_REQUEST['mail_server_username'];
 if (isset($_REQUEST['mail_server_password'])) $mail_server_password           = $_REQUEST['mail_server_password'];
-if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_directory']; 
-
+if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_directory'];
+if (isset($_REQUEST['ftpserver'])) $ftpserver 	= $_REQUEST['ftpserver'];
+if (isset($_REQUEST['ftpuser'])) $ftpuser 	= $_REQUEST['ftpuser'];
+if (isset($_REQUEST['ftppassword'])) $ftppassword	= $_REQUEST['ftppassword'];
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -115,24 +117,22 @@ if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_direct
                <td align="left" nowrap>: <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.'\\'.$cache_dir; ?></font></td>
               </tr>
 
-	  <tr>
-               <td noWrap>Mail Server Name</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($mail_server)) echo $mail_server; ?></font></td>
+	<tr>
+               <td noWrap>Backup FTP Server Name</td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($ftpserver)) echo $ftpserver; ?></font></td>
               </tr>
 
 
 	 <tr>
-               <td noWrap>Mail Server Login User Name</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($mail_server_username)) echo $mail_server_username; ?></font></td>
+               <td noWrap>FTP Server Login User Name</td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($ftpuser)) echo $ftpuser; ?></font></td>
               </tr>
 
 
  <tr>
-               <td noWrap>Mail Server Name Login Password</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($mail_server_password)) echo $mail_server_password; ?></font></td>
+               <td noWrap>FTP Server Login Password</td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($ftppassword)) echo $ftppassword; ?></font></td>
               </tr>
-
-
 
 
               <tr>
@@ -165,6 +165,11 @@ if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_direct
 			<input type="hidden" class="dataInput" name="mail_server_username" value="<?php if (isset($maill_server_username)) echo $mail_server_username; ?>" />
 
 <input type="hidden" class="dataInput" name="mail_server_password" value="<?php if (isset($maill_server_password)) echo $mail_server_password; ?>" />
+
+	<input type="hidden" class="dataInput" name="ftpserver" value="<?php if (isset($ftpserver)) echo "$ftpserver"; ?>" />
+        <input type="hidden" class="dataInput" name="ftpuser" value="<?php if (isset($ftpuser)) echo "$ftpuser"; ?>" />
+        <input type="hidden" class="dataInput" name="ftppassword" value="<?php if (isset($ftppassword)) echo "$ftppassword"; ?>" />
+
 
 
 			 <input class="button" type="submit" name="next" value="Change" /></td>
@@ -199,6 +204,11 @@ if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_direct
 
 
 	  <input type="hidden" class="dataInput" name="mail_server_password" value="<?php if (isset($mail_server_password)) echo $mail_server_password; ?>" />
+
+	<input type="hidden" class="dataInput" name="ftpserver" value="<?php if (isset($ftpserver)) echo "$ftpserver"; ?>" />
+        <input type="hidden" class="dataInput" name="ftpuser" value="<?php if (isset($ftpuser)) echo "$ftpuser"; ?>" />
+        <input type="hidden" class="dataInput" name="ftppassword" value="<?php if (isset($ftppassword)) echo "$ftppassword"; ?>" />
+	
 
 			 <input class="button" type="submit" name="next" value="Create" />
 			</td>

@@ -27,7 +27,9 @@
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
- */
+
+// To be fixed latter
+
 function get_validate_record_js () {
 global $mod_strings;
 global $app_strings;
@@ -84,12 +86,12 @@ EOQ;
 return $the_script;
 }
 
+ */
 /**
  * Create HTML form to enter a new record with the minimum necessary fields.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
- */
 function get_new_record_form () {
 global $mod_strings;
 global $app_strings;
@@ -132,4 +134,5 @@ $the_form .= get_validate_record_js();
 return $the_form;
 }
 
+ */
 ?>

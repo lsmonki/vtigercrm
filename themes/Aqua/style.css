@@ -270,6 +270,61 @@ A.listFormHeaderLinks:link 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000;
 A.listFormHeaderLinks:visited { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }
 A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }
 
+.dim {
+	color: #999999;
+}
+
+/* Calculator */
+.calcBg {
+	background-color: #C5C5C5;
+}
+.calcResult {
+	width: 100%;
+	height: 25;
+	background-color: #F5F5F5;
+	border-top: 1px solid #999;
+	border-left: 0px; 
+	border-right: 1px solid #FFF;
+	border-bottom: 1px solid #FFF;
+	font-size: 12;
+	text-align: right;
+}
+.calcMem {
+	width: 100%;
+	height: 25;
+	border-top: 1px solid #999;
+	border-left: 1px solid #999;
+	border-right: 0px;
+	border-bottom: 1px solid #FFF;
+	background-color: #F5F5F5;
+	font-family: Arial;
+	font-size: 10;
+	color: #BBB;
+	text-align: left;
+}
+.calcBlackBtn, .calcGreyBtn, .calcBigBtn, .calcCancBtn, .calcMemBtn, .calcBackBtn {
+	border: none;
+	width: 25;
+	height: 20;
+	font-size: 11px;
+	color: #FFF;
+}
+.calcBackBtn {
+	background: url(images/calc_back_btn.gif) no-repeat;
+}
+.calcBlackBtn {
+	background: url(images/calc_black_btn.gif) no-repeat;
+}
+.calcGreyBtn {
+	background: url(images/calc_grey_btn.gif) no-repeat;
+}
+.calcCancBtn {
+	background: url(images/calc_canc_btn.gif) no-repeat;
+}
+.calcMemBtn {
+	background: url(images/calc_mem_btn.gif) no-repeat;
+}
+
 /*
   The original advSilver Theme for phpBB version 2+
   Created by subBlue design
@@ -293,8 +348,10 @@ body {
 
 /* General font families for common tags */
 font,th,td,p { font-family: Verdana, Arial, Helvetica, sans-serif }
+/*
 a:link,a:active,a:visited { color : #333366; }
 a:hover		{ text-decoration: underline; color : #333366; }
+*/
 a.headerlink:link,a.headerlink:active,a.headerlink:visited { color : #FFFFFF; }
 a.headerlink1:link,a.headerlink1:active,a.headerlink1:visited { color : #000000; }
 a.headerlink:hover		{ text-decoration: underline; color : #FFFF00; }
@@ -490,7 +547,7 @@ input.post, textarea.post, select {
 	font: normal 11px Verdana, Arial, Helvetica, sans-serif;
 }
 
-input { text-indent : 2px; }
+input { /* text-indent : 2px; */ }
 
 /* The buttons used for bbCode styling in message post 
 input.button {
@@ -593,8 +650,7 @@ a.tickerlink:visited {
 }
 
 .nodeco {
-        text-decoration: none;
-        color: #282c28;
+		text-decoration: none;
 }
 
 div.message {
@@ -637,11 +693,23 @@ div.message {
         font-size: 20px;
 }
 
+.event {
+	border: 1px solid #666666;
+	background: #FDFFDD;
+}
+
+.calhead {
+	font-family: Arial, Helvetica, San-serif;
+	font-size: 18px;
+}
+
 .navigate {
 		height: 25px;
         text-decoration: none;
      	background-color: #E2E2E2; 
-        border: 1px solid #A1A5A9;
+		border-top: 1px solid #FFF;
+		border-left: 1px solid #FFF;
+		border-bottom: 1px solid #666;
         font-size: 12px;
 }
 
@@ -677,15 +745,32 @@ div.message {
         color: black;
 }
 
+.daytime {
+        background: #EEE;
+		border-bottom: 1px solid #ddd;
+}
+
+.weekhead {
+        background: #f5f5f5;
+		border: 1px solid #ddd;
+}
+
 /* line color 1 in overviews */
+.line0 {
+        background-color: #ffffff;
+		border-bottom: 1px solid #ddd;
+}
+
 .line1 {
-        background-color: #efefef;
+        background-color: #ffffff;
+		border-bottom: 1px solid #ddd;
 }
 
 /* line color 2 in overviews */
 .line2 {
 /*        background-color: #dedebb; */
         background-color: #ffffff;
+		border-bottom: 1px solid #ddd;
 }
 
 /* not started task */
@@ -803,7 +888,7 @@ div.message {
 }
 
 .holiday {
-		background: url(images/holidaybg.gif);
+		background: #EEE;
         vertical-align: top;
         color: black;
         font-size: 12px;
@@ -824,28 +909,36 @@ div.message {
 }
 
 .otherday {
-		background: #CCC;
+		background: #fff;
         vertical-align: top;
         color: #666;
         font-size: 12px;
 }
 
 .today {
-		background: url(images/todaybg.gif);
-        vertical-align: top;
-        color: black;
-        font-size: 12px;
+		background: #FFF;
+		vertical-align: top;
+		color: #CC0000;
 }
 
 .week {
         color: black;
-        background: #F5F5F5;
+        background: #EEE;
         width: 4%;
         vertical-align: top;
 }
 
+.weekday {
+		color: #FFF;
+        background: #666;
+}
+
+.eventSep {
+	border-bottom: 1px solid #CCC;
+}
+
 .app {
-        background: #e8ece8 ;
+      /*  background: #e8ece8 ; */
         color: black;
         font-size: 11px;
 }
@@ -931,7 +1024,8 @@ TABLE.single {
 }
 
 TABLE.outer {
-		background: #666666;
+		border: 1px solid #666;
+		background: #DDD;
 }
 
 TABLE.formatted {
@@ -942,7 +1036,7 @@ TABLE.formatted {
 
 TH.viewhead {
         color: black;
-        background: #E2E2E2;
+        background: #EEE;
         font-weight: bold;
 }
 

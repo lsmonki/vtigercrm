@@ -10,7 +10,7 @@
 * 
  ********************************************************************************/
 
-
-	$db = mysql_connect("localhost", "root");
-	mysql_select_db("vtigercrm", $db) or die(mysql_errno() . ": " . mysql_error() . "<br>");
+print("GS-->Illegal call to this page");
+//	$db = mysql_connect("localhost", "root");
+//	mysql_select_db("vtigercrm", $db) or die(mysql_errno() . ": " . mysql_error() . "<br>");
 ?>

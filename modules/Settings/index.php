@@ -23,6 +23,7 @@ require_once($theme_path.'layout_utils.php');
 
 $xtpl=new XTemplate ('modules/Settings/index.html');
 $xtpl->assign("MOD", $mod_strings);
+$xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->parse("main");
 $xtpl->out("main");
 ?>

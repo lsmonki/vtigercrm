@@ -10,13 +10,14 @@
 *
  ********************************************************************************/
 
+ require_once('include/database/PearDatabase.php');
 
 // Delete the data starts
 $sql_role2tab = "delete from role2tab where rolename='" . $_REQUEST["rolename"] ."'";
-$result = mysql_query($sql_role2tab);
+$result = $adb->query($sql_role2tab);
 
 $sql_role2action = "delete from role2action where rolename='" . $_REQUEST["rolename"] ."'";
-$result = mysql_query($sql_role2action);
+$result = $adb->query($sql_role2action);
 
 //Leads starts
 
@@ -31,25 +32,25 @@ if($_REQUEST['lead_create'] == 'on' )
 
 //entry for the Home Tab, Dashboard Tab , MessageBoard Tab
 
-   mysql_query("insert into role2tab(rolename,tabid,module_permission) values('" .$_REQUEST["rolename"]."',1,1)");
-   mysql_query("insert into role2tab(rolename,tabid,module_permission) values('" .$_REQUEST["rolename"]."',13,1)");
-   mysql_query("insert into role2tab(rolename,tabid,module_permission) values('" .$_REQUEST["rolename"]."',2,1)");
-//   mysql_query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',13,'index',1)");
-   mysql_query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',1,'index',1)");
-   mysql_query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',2,'index',1)");
+   $adb->query("insert into role2tab(rolename,tabid,module_permission) values('" .$_REQUEST["rolename"]."',1,1)");
+   $adb->query("insert into role2tab(rolename,tabid,module_permission) values('" .$_REQUEST["rolename"]."',13,1)");
+   $adb->query("insert into role2tab(rolename,tabid,module_permission) values('" .$_REQUEST["rolename"]."',2,1)");
+//   $adb->query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',13,'index',1)");
+   $adb->query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',1,'index',1)");
+   $adb->query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',2,'index',1)");
 //Added Entry for HelpDesk
-   mysql_query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',14,'index',1)");
+   $adb->query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',14,'index',1)");
 //Addedn Entry for Calendar
-   mysql_query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',16,'index',1)");
+   $adb->query("insert into role2action(rolename,tabid,actionname,action_permission) values('" .$_REQUEST["rolename"]."',16,'index',1)");
     	
 
  $sql_leads_tab_permission = "insert into role2tab(rolename,tabid,module_permission) values ('" .$_REQUEST["rolename"]."',3," .$lead_access_flag.")";
 
-$result_leads_tab_permission = mysql_query($sql_leads_tab_permission);
+$result_leads_tab_permission = $adb->query($sql_leads_tab_permission);
 
  $sql_leads_edit_create = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',3,'EditView'," .$flag .")";
 
-$result_leads_edit_create = mysql_query($sql_leads_edit_create);
+$result_leads_edit_create = $adb->query($sql_leads_edit_create);
 
 if('on' == $_REQUEST['lead_delete'])
      $flag=1;
@@ -60,17 +61,17 @@ $sql_leads_delete = "insert into role2action(rolename,tabid,actionname,action_pe
 
 $sql_leads_index = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',3,'index'," .$lead_access_flag .")";
 
-$result_leads_delete = mysql_query($sql_leads_delete);
-$result_leads_index = mysql_query($sql_leads_index);
+$result_leads_delete = $adb->query($sql_leads_delete);
+$result_leads_index = $adb->query($sql_leads_index);
 
 if($_REQUEST['import_leads'] == 'on' )
      $importleadflag=1;
      else
      $importleadflag=0;
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',3,'fetchfile'," .$importleadflag .",'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',3,'fetchfile'," .$importleadflag .",'')");
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',3,'Save',1,'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',3,'Save',1,'')");
 
 //Accounts starts
 
@@ -87,11 +88,11 @@ if($_REQUEST['account_module_access'] == 'on')
 
 $sql_accounts_tab_permission = "insert into role2tab(rolename,tabid,module_permission) values ('" .$_REQUEST["rolename"]."',5," .$account_access_flag.")";
 
-$result_accounts_tab_permission = mysql_query($sql_accounts_tab_permission);
+$result_accounts_tab_permission = $adb->query($sql_accounts_tab_permission);
 
 $sql_accounts_edit_create = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',5,'EditView'," .$flag .")";
 
-$result_accounts_edit_create = mysql_query($sql_accounts_edit_create);
+$result_accounts_edit_create = $adb->query($sql_accounts_edit_create);
 
 if('on' == $_REQUEST['account_delete'])
      $flag=1;
@@ -100,11 +101,11 @@ if('on' == $_REQUEST['account_delete'])
 
 $sql_accounts_delete = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',5,'Delete'," .$flag .")";
 
-$result_accounts_delete = mysql_query($sql_accounts_delete);
+$result_accounts_delete = $adb->query($sql_accounts_delete);
 
 $sql_accounts_index = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',5,'index'," .$account_access_flag .")";
 
-$result_accounts_index = mysql_query($sql_accounts_index);
+$result_accounts_index = $adb->query($sql_accounts_index);
 
 
 if($_REQUEST['import_accounts'] == 'on' )
@@ -112,11 +113,11 @@ if($_REQUEST['import_accounts'] == 'on' )
      else
      $importaccountflag=0;
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',5,'Import'," .$importaccountflag .",'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',5,'Import'," .$importaccountflag .",'')");
 
 
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',5,'Save',1,'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',5,'Save',1,'')");
 
 //Contacts starts
 
@@ -135,11 +136,11 @@ if($_REQUEST['contact_module_access'] == 'on')
 
 $sql_contacts_tab_permission = "insert into role2tab(rolename,tabid,module_permission) values ('" .$_REQUEST["rolename"]."',4," .$contact_access_flag.")";
 
-$result_contacts_tab_permission = mysql_query($sql_contacts_tab_permission);
+$result_contacts_tab_permission = $adb->query($sql_contacts_tab_permission);
 
 $sql_contacts_edit_create = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',4,'EditView'," .$flag .")";
 
-$result_contacts_edit_create = mysql_query($sql_contacts_edit_create);
+$result_contacts_edit_create = $adb->query($sql_contacts_edit_create);
 
 if('on' == $_REQUEST['contact_delete']) 
      $flag=1;
@@ -148,11 +149,11 @@ if('on' == $_REQUEST['contact_delete'])
 
  $sql_contacts_delete = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',4,'Delete'," .$flag .")";
 
- $result_contacts_delete = mysql_query($sql_contacts_delete);
+ $result_contacts_delete = $adb->query($sql_contacts_delete);
 
  $sql_contacts_index = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',4,'index'," .$contact_access_flag .")";
 
-   $result_contacts_index = mysql_query($sql_contacts_index);
+   $result_contacts_index = $adb->query($sql_contacts_index);
 
 
 if($_REQUEST['import_contacts'] == 'on' )
@@ -163,11 +164,11 @@ if($_REQUEST['import_contacts'] == 'on' )
 
 
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',4,'Import'," .$importcontactflag .",'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',4,'Import'," .$importcontactflag .",'')");
 
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',4,'Save',1,'')");
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',4,'BusinessCard',1,'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',4,'Save',1,'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',4,'BusinessCard',1,'')");
 
 
 //Opportunities starts
@@ -187,11 +188,11 @@ if($_REQUEST['opportunities_module_access'] == 'on')
 
 $sql_opportunities_tab_permission = "insert into role2tab(rolename,tabid,module_permission) values ('" .$_REQUEST["rolename"]."',6," .$opportunities_access_flag.")";
 
-$result_opportunities_tab_permission = mysql_query($sql_opportunities_tab_permission);
+$result_opportunities_tab_permission = $adb->query($sql_opportunities_tab_permission);
 
 $sql_opportunities_edit_create = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',6,'EditView'," .$flag .")";
 
-$result_opportunities_edit_create = mysql_query($sql_opportunities_edit_create);
+$result_opportunities_edit_create = $adb->query($sql_opportunities_edit_create);
 
 if('on' == $_REQUEST['opportunities_delete'])
      $flag=1;
@@ -200,19 +201,19 @@ if('on' == $_REQUEST['opportunities_delete'])
 
 $sql_opportunities_delete = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',6,'Delete'," .$flag .")";
 
-$result_opportunities_delete = mysql_query($sql_opportunities_delete);
+$result_opportunities_delete = $adb->query($sql_opportunities_delete);
 
 
 $sql_opportunities_index = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',6,'index'," .$opportunities_access_flag .")";
 
-$result_opportunities_index = mysql_query($sql_opportunities_index);
+$result_opportunities_index = $adb->query($sql_opportunities_index);
 
 
 if($_REQUEST['import_opportunities'] == 'on' )                                                                          $importopportunityflag=1;                                                                                         else                                                                                                          $importopportunityflag=0;
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',6,'Import'," .$importopportunityflag .",'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',6,'Import'," .$importopportunityflag .",'')");
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',6,'Save',1,'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',6,'Save',1,'')");
 //Activities starts
 
 
@@ -230,11 +231,11 @@ if($_REQUEST['activities_module_access'] == 'on')
 
 $sql_activities_tab_permission = "insert into role2tab(rolename,tabid,module_permission) values ('" .$_REQUEST["rolename"]."',12," .$activities_access_flag.")";
 
-$result_activities_tab_permission = mysql_query($sql_activities_tab_permission);
+$result_activities_tab_permission = $adb->query($sql_activities_tab_permission);
 
 $sql_activities_edit_create = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',12,'EditView'," .$flag .")";
 
-$result_activities_edit_create = mysql_query($sql_activities_edit_create);
+$result_activities_edit_create = $adb->query($sql_activities_edit_create);
 
 if('on' == $_REQUEST['activities_delete'])
      $flag=1;
@@ -242,19 +243,19 @@ if('on' == $_REQUEST['activities_delete'])
      $flag=0;
 
 $sql_activities_delete = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',12,'Delete'," .$flag .")";
-$result_activities_delete = mysql_query($sql_activities_delete);
+$result_activities_delete = $adb->query($sql_activities_delete);
 
 
 
 $sql_activities_index = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',12,'index'," .$activities_access_flag .")";
-$result_activities_index = mysql_query($sql_activities_index);
+$result_activities_index = $adb->query($sql_activities_index);
 
 
 
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',12,'Import'," .$importopportunityflag .",'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',12,'Import'," .$importopportunityflag .",'')");
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',12,'Save',1,'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',12,'Save',1,'')");
 //Cases starts
 
 
@@ -274,11 +275,11 @@ if($_REQUEST['cases_module_access'] == 'on')
 
 $sql_cases_tab_permission = "insert into role2tab(rolename,tabid,module_permission) values ('" .$_REQUEST["rolename"]."',7," .$cases_access_flag.")";
 
-$result_cases_tab_permission = mysql_query($sql_cases_tab_permission);
+$result_cases_tab_permission = $adb->query($sql_cases_tab_permission);
 
 $sql_cases_edit_create = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',7,'EditView'," .$flag .")";
 
-$result_cases_edit_create = mysql_query($sql_cases_edit_create);
+$result_cases_edit_create = $adb->query($sql_cases_edit_create);
 
 if('on' == $_REQUEST['cases_delete'])
      $flag=1;
@@ -286,19 +287,19 @@ if('on' == $_REQUEST['cases_delete'])
      $flag=0;
 
 $sql_cases_delete = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',7,'Delete'," .$flag .")";
-$result_cases_delete = mysql_query($sql_cases_delete);
+$result_cases_delete = $adb->query($sql_cases_delete);
 
 
 $sql_cases_index = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',7,'index'," .$cases_access_flag .")";
-$result_cases_index = mysql_query($sql_cases_index);
+$result_cases_index = $adb->query($sql_cases_index);
 
 
 
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',7,'Import'," .$importopportunityflag .",'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',7,'Import'," .$importopportunityflag .",'')");
 
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',7,'Save',1,'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',7,'Save',1,'')");
 //Emails starts
 
 
@@ -317,12 +318,12 @@ if($_REQUEST['emails_module_access'] == 'on')
 
 $sql_emails_tab_permission = "insert into role2tab(rolename,tabid,module_permission) values ('" .$_REQUEST["rolename"]."',10," .$emails_access_flag.")";
 
-$result_emails_tab_permission = mysql_query($sql_emails_tab_permission);
+$result_emails_tab_permission = $adb->query($sql_emails_tab_permission);
 
 
 $sql_email_edit_create = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',10,'EditView'," .$flag .")";
 
-$result_emails_edit_create = mysql_query($sql_email_edit_create);
+$result_emails_edit_create = $adb->query($sql_email_edit_create);
 
 if('on' == $_REQUEST['emails_delete'])
      $flag=1;
@@ -331,18 +332,18 @@ if('on' == $_REQUEST['emails_delete'])
 
 $sql_email_delete = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',10,'Delete'," .$flag .")";
 
-$result_email_delete = mysql_query($sql_email_delete);
+$result_email_delete = $adb->query($sql_email_delete);
 
 $sql_email_index = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',10,'index'," .$emails_access_flag .")";
 
-$result_email_index = mysql_query($sql_email_index);
+$result_email_index = $adb->query($sql_email_index);
 
 
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',10,'Import'," .$importopportunityflag .",'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',10,'Import'," .$importopportunityflag .",'')");
 
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',10,'Save',1,'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',10,'Save',1,'')");
 //Notes starts
 
 
@@ -361,13 +362,13 @@ if($_REQUEST['notes_module_access'] == 'on')
 
 $sql_notes_tab_permission = "insert into role2tab(rolename,tabid,module_permission) values ('" .$_REQUEST["rolename"]."',8," .$notes_access_flag.")";
 
-$result_notes_tab_permission = mysql_query($sql_notes_tab_permission);
+$result_notes_tab_permission = $adb->query($sql_notes_tab_permission);
 
 
 
 $sql_notes_edit_create = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',8,'EditView'," .$flag .")";
 
-$result_notes_edit_create = mysql_query($sql_notes_edit_create);
+$result_notes_edit_create = $adb->query($sql_notes_edit_create);
 
 if('on' == $_REQUEST['notes_delete'])
      $flag=1;
@@ -376,17 +377,17 @@ if('on' == $_REQUEST['notes_delete'])
 
 $sql_notes_delete = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',8,'Delete'," .$flag .")";
 
-$result_notes_delete = mysql_query($sql_notes_delete);
+$result_notes_delete = $adb->query($sql_notes_delete);
 
 
 $sql_notes_index = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',8,'index'," .$notes_access_flag .")";
 
-$result_notes_index = mysql_query($sql_notes_index);
+$result_notes_index = $adb->query($sql_notes_index);
 
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',8,'Import'," .$importopportunityflag .",'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',8,'Import'," .$importopportunityflag .",'')");
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',8,'Save',1,'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',8,'Save',1,'')");
 //Meetings starts
 
 
@@ -410,7 +411,7 @@ if($_REQUEST['meetings_module_access'] == 'on')
 
 $sql_meetings_tab_permission = "insert into role2tab(rolename,tabid,module_permission) values ('" .$_REQUEST["rolename"]."',11," .$meetings_access_flag.")";
 
-$result_meetings_tab_permission = mysql_query($sql_meetings_tab_permission);
+$result_meetings_tab_permission = $adb->query($sql_meetings_tab_permission);
 
 
 
@@ -418,7 +419,7 @@ $result_meetings_tab_permission = mysql_query($sql_meetings_tab_permission);
 
 $sql_meetings_edit_create = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',11,'EditView'," .$flag .")";
 
-$result_meetings_edit_create = mysql_query($sql_meetings_edit_create);
+$result_meetings_edit_create = $adb->query($sql_meetings_edit_create);
 
 if('on' == $_REQUEST['meetings_delete'])
      $flag=1;
@@ -427,18 +428,18 @@ if('on' == $_REQUEST['meetings_delete'])
 
 $sql_meetings_delete = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',11,'Delete'," .$flag .")";
 
-$result_meetings_delete = mysql_query($sql_meetings_delete);
+$result_meetings_delete = $adb->query($sql_meetings_delete);
 
 
 $sql_meetings_index = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',11,'index'," .$meetings_access_flag .")";
 
-$result_meetings_index = mysql_query($sql_meetings_index);
+$result_meetings_index = $adb->query($sql_meetings_index);
 
 
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',11,'Import'," .$importopportunityflag .",'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',11,'Import'," .$importopportunityflag .",'')");
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',11,'Save',1,'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',11,'Save',1,'')");
 //Calls starts
 
 if($_REQUEST['calls_create'] == 'on' )
@@ -453,13 +454,13 @@ if($_REQUEST['calls_module_access'] == 'on')
 
 $sql_calls_tab_permission = "insert into role2tab(rolename,tabid,module_permission) values ('" .$_REQUEST["rolename"]."',9," .$calls_access_flag.")";
 
-$result_calls_tab_permission = mysql_query($sql_calls_tab_permission);
+$result_calls_tab_permission = $adb->query($sql_calls_tab_permission);
 
 
 $sql_calls_edit_create = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',9,'EditView'," .$flag .")";
 
 
-$result_calls_edit_create = mysql_query($sql_calls_edit_create);
+$result_calls_edit_create = $adb->query($sql_calls_edit_create);
 
 if('on' == $_REQUEST['calls_delete'])
      $flag=1;
@@ -469,17 +470,17 @@ if('on' == $_REQUEST['calls_delete'])
 $sql_calls_delete = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',9,'Delete'," .$flag .")";
 
 
-$result_calls_delete = mysql_query($sql_calls_delete);
+$result_calls_delete = $adb->query($sql_calls_delete);
 
 
 
 $sql_calls_index = "insert into role2action(rolename,tabid,actionname,action_permission) values ('" .$_REQUEST["rolename"]."',9,'index'," .$calls_access_flag .")";
 
-$result_calls_index = mysql_query($sql_calls_index);
+$result_calls_index = $adb->query($sql_calls_index);
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',9,'Import'," .$importopportunityflag .",'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',9,'Import'," .$importopportunityflag .",'')");
 
- mysql_query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',9,'Save',1,'')");
+ $adb->query("insert into role2action(rolename,tabid,actionname,action_permission,description) values ('" .$_REQUEST["rolename"]."',9,'Save',1,'')");
 $rolename = $_REQUEST["rolename"];
 header("Location: index.php?module=Users&action=ListPermissions&rolename=$rolename");
 

@@ -13,12 +13,12 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/database/DatabaseConnection.php,v 1.2 2004/10/06 09:02:02 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/database/DatabaseConnection.php,v 1.3 2005/01/20 09:35:16 jack Exp $
  * Description:  Creates the runtime database connection.
  ********************************************************************************/
 
 class DatabaseConnection {
-
+/*
 	var $connection;
 
 	function connect() {
@@ -55,10 +55,34 @@ class DatabaseConnection {
 	}
 	function disconnect() {
 		mysql_close($this->connection);
+	}*/
+
+	function println($msg)
+	{
+	require_once('include/logging.php');
+	$log1 =& LoggerManager::getLogger('GS');
+	if(is_array($msg))
+	{
+		$log1->fatal("PearDatabse ->".print_r($msg,true));
+/*		$log1->fatal("PearDatabse ->".$this->getString($msg));
+		foreach ($msg as $str)
+		{
+			if(is_array($str)) 
+				$this->println($str);
+			else
+				$log1->fatal("PearDatabase ->".$str);
+		}*/		
 	}
+	else
+	{
+		$log1->fatal("PearDatabase ->".$msg);
+	}
+	return $msg;
+	}
+
 }
 
 	$database = new DatabaseConnection;
-	$database->connect();
+	$database->println("DatabaseConnection - Illegal Access");
 
 ?>

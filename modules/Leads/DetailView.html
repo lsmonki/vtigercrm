@@ -36,19 +36,17 @@
 			<input type="hidden" name="return_action">
 			<input type="hidden" name="return_id">			
 			<input type="hidden" name="lead_id" value="{ID}">			
-			<input type="hidden" name="task_id">			
-			<input type="hidden" name="meeting_id">			
-			<input type="hidden" name="call_id">
-			<input type="hidden" name="email_id">
 		        <input type="hidden" name="email_directing_module">
 
 		<tr>
-		<td><input title="{APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{APP.LBL_EDIT_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Leads'; this.form.return_action.value='DetailView'; this.form.return_id.value='{ID}'; this.form.action.value='EditView'" type="submit" name="Edit" value="  {APP.LBL_EDIT_BUTTON_LABEL}  "></td>
-		<td><input title="{APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{APP.LBL_DUPLICATE_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Leads'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.action.value='EditView'" type="submit" name="Duplicate" value=" {APP.LBL_DUPLICATE_BUTTON_LABEL} "></td>
-		{DELETEBUTTON}
+		 {EDITBUTTON}
+		 {DUPLICATEBUTTON}
+		 {DELETEBUTTON}
 		 {SENDMAILBUTTON}
 		<td><input title="{APP.LBL_CONVERT_BUTTON_TITLE}" accessKey="{APP.LBL_CONVERT_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Leads'; this.form.action.value='ConvertLead'" type="submit" name="Delete" value=" {APP.LBL_CONVERT_BUTTON_LABEL} "></td>
 		</tr></table>
+		{WORDTEMPLATEOPTIONS}
+		{MERGEBUTTON}
 	</td>
 	</form>
 </tr>
@@ -57,59 +55,31 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0"  class="formOuterBorder">
 <tr>
 <td>
+
 	<table width="100%" border="0" cellspacing="1" cellpadding="2">
-	<tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_NAME}</td>
-	<td width="30%" valign="top" class="dataField">{SALUTATION} {FIRST_NAME} {LAST_NAME}</td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_PHONE}</td>
-	<td width="30%" valign="top" class="dataField">{PHONE}</td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_COMPANY}</td>
-	<td width="30%" valign="top" class="dataField">{COMPANY}</td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_MOBILE}</td>
-	<td width="30%" valign="top" class="dataField">{MOBILE}</td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_DESIGNATION}</td>
-	<td width="30%" valign="top" class="dataField">{DESIGNATION}</td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_FAX}</td>
-	<td width="30%" valign="top" class="dataField">{FAX}</td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_LEAD_SOURCE}</td>
-	<td width="30%" valign="top" class="dataField">{LEAD_SOURCE}</td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_EMAIL}</td>
-	<td width="30%" valign="top" class="dataField">{EMAIL}</td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_INDUSTRY}</td>
-	<td width="30%" valign="top" class="dataField">{INDUSTRY}</td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_WEBSITE}</td>
-	<td width="30%" valign="top" class="dataField"><A title='http://{WEBSITE}' href='http://{WEBSITE}' target='_blank'>{WEBSITE}</A></td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_ANNUAL_REVENUE}</td>
-	<td width="30%" valign="top" class="dataField">{ANNUAL_REVENUE}</td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_LEAD_STATUS}</td>
-	<td width="30%" valign="top" class="dataField">{LEAD_STATUS}</td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_LICENSE_KEY}</td>
-	<td width="30%" valign="top" class="dataField">{LICENSE_KEY}</td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_RATING}</td>
-	<td width="30%" valign="top" class="dataField">{RATING}</td>
-	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{APP.LBL_ASSIGNED_TO}</td>
-	<td width="30%" valign="top" class="dataField">{ASSIGNED_TO}</td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_NO_OF_EMPLOYEES}</td>
-	<td width="30%" valign="top" class="dataField">{EMPLOYEES}</td>
-	</tr>
-	{CUSTOMFIELD}
-	<tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_ADDRESS}</td>
-	<td width="30%" valign="top"  class="dataField">{ADDRESS_STREET}<br>
-	{ADDRESS_CITY} {ADDRESS_STATE}&nbsp;&nbsp;{POSTALCODE}<br>
-	{ADDRESS_COUNTRY}</td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_YAHOO_ID}</td>
-	<td width="30%" valign="top"  class="dataField">{YAHOO_ID} {YAHOO_MESSENGER}</td>
-	</tr><tr>
-	<td width="20%" valign="top" valign="top" class="dataLabel">{MOD.LBL_DESCRIPTION}</td>
-	<td colspan="3" class="dataField">{DESCRIPTION}</td>
-</tr></table>
+	<tr><th align="left" class="formSecHeader" colspan="4">{MOD.LBL_LEAD_INFORMATION}</th></tr>
+	{BLOCK1}
+	</table>
+</td></tr></table>
+<BR>
+{CUSTOMFIELD}
+<BR>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr><th align="left" class="formSecHeader" colspan="4">{MOD.LBL_ADDRESS_INFORMATION}</th></tr>
+	{BLOCK2}
+	</table>
+</td></tr></table>
+<BR>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr><th align="left" class="formSecHeader" colspan="4">{MOD.LBL_DESCRIPTION_INFORMATION}</th></tr>
+	{BLOCK3}
+	</table>
+
 </td></tr></table>
 <!-- END: main -->

@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -12,199 +12,203 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  ********************************************************************************/
-/*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Popup.php,v 1.3 2004/12/20 16:30:31 jack Exp $
- * Description:  TODO: To be written.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
- ********************************************************************************/
-// This file is used for all popups on this module
-// The popup_picker.html file is used for generating a list from which to find and choose one instance.
 
-global $theme;
-require_once('modules/Opportunities/Opportunity.php');
+require_once('XTemplate/xtpl.php');
+require_once("data/Tracker.php");
+require_once('modules/Potentials/Opportunity.php');
+require_once('include/utils.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
-require_once('XTemplate/xtpl.php');
-require_once('include/utils.php');
 require_once('include/ListView/ListView.php');
+require_once('include/ComboUtil.php');
 
 global $app_strings;
 global $app_list_strings;
-global $mod_strings;
+global $current_language;
+$current_module_strings = return_module_language($current_language, 'potential');
 
 global $list_max_entries_per_page;
 global $urlPrefix;
+
+$log = LoggerManager::getLogger('potential_list');
+
 global $currentModule;
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
 
-$log = LoggerManager::getLogger('contact');
+$popuptype = '';
+$popuptype = $_REQUEST["popuptype"];
 
-$seed_object = new Opportunity();
+// Get _dom arrays from Database
+$comboFieldNames = Array('leadsource'=>'leadsource_dom'
+                        ,'opportunity_type'=>'opportunity_type_dom'
+                        ,'sales_stage'=>'sales_stage_dom');
+$comboFieldArray = getComboArray($comboFieldNames);
 
+if (!isset($where)) $where = "";
 
-$where = "";
+$query_val = 'false';
+$focus = new Potential();
 if(isset($_REQUEST['query']))
 {
-	$search_fields = Array("name", "account_name", "date_closed");
+	// we have a query
+	$query_val = 'true';
+	if (isset($_REQUEST['name'])) $name = $_REQUEST['name'];
+	if (isset($_REQUEST['account_name'])) $accountname = $_REQUEST['account_name'];
 
-	$where_clauses = Array();
+	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
+	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
 
-	append_where_clause($where_clauses, "name", "opportunities.name");
-	append_where_clause($where_clauses, "account_name", "accounts.name");
+	$where_clauses = array();
 
-	$where = generate_where_statement($where_clauses);
+	if(isset($name) && $name != "") {
+			array_push($where_clauses, "potential.potentialname like ".PearDatabase::quote($name.'%')."");
+			$query_val .= "&name=".$name;		
+	}
+	if(isset($accountname) && $accountname != "") {
+			array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%')."");
+			$query_val .= "&accountname=".$accontname;		
+	}
+	if(isset($current_user_only) && $current_user_only != "") {
+			array_push($where_clauses, "crmentity.smcreator='$current_user->id'");
+	}
+	if(isset($assigned_user_id) && $assigned_user_id != "") 
+		array_push($where_clauses, "crmentity.smownerid = '$assigned_user_id'");
+
+	$where = "";
+	foreach($where_clauses as $clause)
+	{
+		if($where != "")
+		$where .= " and ";
+		$where .= $clause;
+	}
+
+	if (!empty($assigned_user_id)) {
+		if (!empty($where)) {
+			$where .= " AND ";
+		}
+		$where .= "crmentity.smcreatorid IN(";
+		foreach ($assigned_user_id as $key => $val) {
+			$where .= "".PearDatabase::quote($val)."";
+			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
+		}
+	}
+
+	$log->info("Here is the where clause for the list view: $where");
+
 }
 
+if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
+	// Stick the form header out there.
+	$search_form=new XTemplate ('modules/Potentials/PopupSearchForm.html');
+	$search_form->assign("MOD", $current_module_strings);
+	$search_form->assign("APP", $app_strings);
+	$search_form->assign("POPUPTYPE",$popuptype);
 
-$image_path = 'themes/'.$theme.'/images';
+	if (isset($name)) $search_form->assign("NAME", $name);
+	if (isset($accountname)) $search_form->assign("ACCOUNT_NAME", $accountname);
+	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 
-////////////////////////////////////////////////////////
-// Start the output
-////////////////////////////////////////////////////////
-if (!isset($_REQUEST['html'])) {
-	$form =new XTemplate ('modules/Opportunities/Popup_picker.html');
-	$log->debug("using file modules/Opportunities/Popup_picker.html");
-}
-else {
-	$log->debug("_REQUEST['html'] is ".$_REQUEST['html']);
-	$form =new XTemplate ('modules/Opportunities/'.$_REQUEST['html'].'.html');
-	$log->debug("using file modules/Opportunities/".$_REQUEST['html'].'.html');
-}
+	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
 
-$form->assign("MOD", $mod_strings);
-$form->assign("APP", $app_strings);
+	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 
-// the form key is required
-if(!isset($_REQUEST['form']))
-	die("Missing 'form' parameter");
+	$search_form->parse("main");
+	$search_form->out("main");
 	
+	echo get_form_footer();
+	echo "\n<BR>\n";
+}
+//Retreive the list from Database
+$list_query = getListQuery("Potentials");
+if(isset($where) && $where != '')
+{
+	$list_query .= " AND ".$where;
+}
+$list_result = $adb->query($list_query);
 
-// This code should always return an answer.
-// The form name should be made into a parameter and not be hard coded in this file.
-if($_REQUEST['form'] == 'EditView')
-{
-	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(opportunity_id, opportunity_name) {\n";
-	$the_javascript .= "	window.opener.document.EditView.opportunity_name.value = opportunity_name;\n";
-	$the_javascript .= "	window.opener.document.EditView.opportunity_id.value = opportunity_id;\n";
-	$the_javascript .= "}\n";
-	$the_javascript .= "</script>\n";
-	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
-	$button .= "<tr><td>&nbsp;</td>";
-	$button .= "<td><input title='".$app_strings['LBL_CLEAR_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CLEAR_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.opener.document.EditView.opportunity_name.value = '';window.opener.document.EditView.opportunity_id.value = ''; window.close()\" type='submit' name='button' value='  Clear  '>\n";
-	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '>\n";
-	$button .= "</td></tr></form></table>\n";
+//Constructing the list view 
 
-}
-elseif ($_REQUEST['form'] == 'TasksEditView') 
+echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],'', false);
+$xtpl=new XTemplate ('modules/Potentials/Popup.html');
+$xtpl->assign("MOD", $mod_strings);
+$xtpl->assign("APP", $app_strings);
+$xtpl->assign("IMAGE_PATH",$image_path);
+$xtpl->assign("THEME_PATH",$theme_path);
+
+//Retreiving the no of rows
+$noofrows = $adb->num_rows($list_result);
+
+//Retreiving the start value from request
+if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
-	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(opportunity_id, opportunity_name) {\n";
-	$the_javascript .= "	window.opener.document.EditView.parent_name.value = opportunity_name;\n";
-	$the_javascript .= "	window.opener.document.EditView.parent_id.value = opportunity_id;\n";
-	$the_javascript .= "}\n";
-	$the_javascript .= "</script>\n";
-	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
-	$button .= "<tr><td>&nbsp;</td>";
-	$button .= "<td><input title='".$app_strings['LBL_CLEAR_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CLEAR_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.opener.document.EditView.parent_name.value = '';window.opener.document.EditView.parent_id.value = ''; window.close()\" type='submit' name='button' value='  Clear  '>\n";
-	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '>\n";
-	$button .= "</td></tr></form></table>\n";
+	$start = $_REQUEST['start'];
 }
-elseif ($_REQUEST['form'] == 'HelpDeskEditView') 
-{
-	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(opportunity_id, opportunity_name) {\n";
-	$the_javascript .= "	window.opener.document.EditView.parent_name.value = opportunity_name;\n";
-	$the_javascript .= "	window.opener.document.EditView.parent_id.value = opportunity_id;\n";
-	$the_javascript .= "}\n";
-	$the_javascript .= "</script>\n";
-	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
-	$button .= "<tr><td>&nbsp;</td>";
-	$button .= "<td><input title='".$app_strings['LBL_CLEAR_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CLEAR_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.opener.document.EditView.parent_name.value = '';window.opener.document.EditView.parent_id.value = ''; window.close()\" type='submit' name='button' value='  Clear  '>\n";
-	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '>\n";
-	$button .= "</td></tr></form></table>\n";
-}
-elseif ($_REQUEST['form'] == 'ContactDetailView') 
-{
-	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(opportunity_id, opportunity_name) {\n";
-	$the_javascript .= "	window.opener.document.DetailView.opportunity_id.value = opportunity_id; \n";
-	$the_javascript .= "	window.opener.document.DetailView.contact_role.value = '".$app_list_strings['opportunity_relationship_type_default_key']."'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_module.value = window.opener.document.DetailView.module.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_action.value = 'DetailView'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_id.value = window.opener.document.DetailView.record.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.action.value = 'SaveContactOpportunityRelationship'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.submit(); \n";
-	$the_javascript .= "}\n";
-	$the_javascript .= "</script>\n";
-	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
-	$button .= "<tr><td>&nbsp;</td>";
-	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '>\n";
-	$button .= "</td></tr></form></table>\n";}	
 else
 {
-	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
-	$the_javascript .= "function set_return(opportunity_id, opportunity_name) {\n";
-	$the_javascript .= "	window.opener.document.DetailView.opportunity_id.value = opportunity_id; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_module.value = window.opener.document.DetailView.module.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_action.value = 'DetailView'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_id.value = window.opener.document.DetailView.record.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.action.value = 'Save'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.submit(); \n";
-	$the_javascript .= "}\n";
-	$the_javascript .= "</script>\n";
-	$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' action='index.php' method='post' name='form' id='form'>\n";
-	$button .= "<tr><td>&nbsp;</td>";
-	$button .= "<td><input title='".$app_strings['LBL_CLEAR_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CLEAR_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.opener.document.EditView.parent_name.value = '';window.opener.document.EditView.parent_id.value = ''; window.close()\" type='submit' name='button' value='  Clear  '>\n";
-	$button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '>\n";
-	$button .= "</td></tr></form></table>\n";
+	
+	$start = 1;
 }
+//Retreive the Navigation array
+$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
-$form->assign("SET_RETURN_JS", $the_javascript);
+//Retreive the List View Table Header
+$focus->list_mode="search";
+$focus->popup_type=$popuptype;
 
-$form->assign("THEME", $theme);
-$form->assign("IMAGE_PATH", $image_path);
-$form->assign("MODULE_NAME", $currentModule);
-if (isset($_REQUEST['form_submit'])) $form->assign("FORM_SUBMIT", $_REQUEST['form_submit']);
-$form->assign("FORM", $_REQUEST['form']);
+$listview_header = getSearchListViewHeader($focus,"Potentials",$eddel=1);
+$xtpl->assign("LISTHEADER", $listview_header);
 
-if (isset($_REQUEST['name'])) $form->assign("NAME", $_REQUEST['name']);
-if (isset($_REQUEST['account_name'])) $form->assign("ACCOUNT_NAME", $_REQUEST['account_name']);
+$listview_entries = getSearchListViewEntries($focus,"Potentials",$list_result,$navigation_array,$eddel=1);
+$xtpl->assign("LISTHEADER", $listview_header);
+$xtpl->assign("LISTENTITY", $listview_entries);
 
-insert_popup_header($theme);
+if(isset($navigation_array['start']))
+{
+	$startoutput = '<a href="index.php?action=Popup&module=Potentials&start='.$navigation_array['start'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Start</b></a>';
+}
+else
+{
+	$startoutput = '[ Start ]';
+}
+if(isset($navigation_array['end']))
+{
+	$endoutput = '<a href="index.php?action=Popup&module=Potentials&start='.$navigation_array['end'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>End</b></a>';
+}
+else
+{
+	$endoutput = '[ End ]';
+}
+if(isset($navigation_array['next']))
+{
+	$nextoutput = '<a href="index.php?action=Popup&module=Potentials&start='.$navigation_array['next'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Next</b></a>';
+}
+else
+{
+	$nextoutput = '[ Next ]';
+}
+if(isset($navigation_array['prev']))
+{
+	$prevoutput = '<a href="index.php?action=Popup&module=Potentials&start='.$navigation_array['prev'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Prev</b></a>';
+}
+else
+{
+	$prevoutput = '[ Prev ]';
+}
+$xtpl->assign("Start", $startoutput);
+$xtpl->assign("End", $endoutput);
+$xtpl->assign("Next", $nextoutput);
+$xtpl->assign("Prev", $prevoutput);
 
-// Quick search.
-echo "<form>";
-echo get_form_header($mod_strings['LBL_SEARCH_FORM_TITLE'], "", false);
+$xtpl->parse("main");
 
-$form->parse("main.SearchHeader");
-$form->out("main.SearchHeader");
+$xtpl->out("main");
 
-echo get_form_footer();
-
-$form->parse("main.SearchHeaderEnd");
-$form->out("main.SearchHeaderEnd");
-
-// Reset the sections that are already in the page so that they do not print again later.
-$form->reset("main.SearchHeader");
-$form->reset("main.SearchHeaderEnd");
-
-
-$ListView = new ListView();
-$ListView->setXTemplate($form);
-$ListView->setHeaderTitle($mod_strings['LBL_LIST_FORM_TITLE']);
-$ListView->setHeaderText($button);
-$ListView->setQuery($where, "", "name", "OPPORTUNITY");
-$ListView->setModStrings($mod_strings);
-$ListView->processListView($seed_object, "main", "OPPORTUNITY");
-
+/*$ListView = new ListView();
+$ListView->initNewXTemplate( 'modules/Potentials/ListView.html',$current_module_strings);
+$ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE'] );
+$ListView->setQuery($where, "", "potentialname", "OPPORTUNITY");
+$ListView->processListView($seedOpportunity, "main", "OPPORTUNITY");
+*/
 ?>
-
-	<tr><td COLSPAN=7><?php echo get_form_footer(); ?></td></tr>
-</form>
-	</table>
-</td></tr></tbody></table>
-</td></tr>
-
-<?php insert_popup_footer(); ?>

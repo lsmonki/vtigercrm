@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/Delete.php,v 1.1 2004/08/17 15:04:39 gjayakrishnan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Delete.php,v 1.4 2005/03/04 05:56:56 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -27,7 +27,11 @@ $focus = new Email();
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the email.");
 
-$focus->mark_deleted($_REQUEST['record']);
+$sql='delete from seactivityrel where activityid="'.$_REQUEST['record'].'" and "'.$_REQUEST['record'].'"';
+$adb->query($sql);
+
+if($_REQUEST['module'] == $_REQUEST['return_module'])
+	$focus->mark_deleted($_REQUEST['record']);
 
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
 ?>

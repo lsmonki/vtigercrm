@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Delete.php,v 1.1 2004/08/17 15:04:13 gjayakrishnan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Delete.php,v 1.4 2005/03/05 04:17:18 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -28,7 +28,14 @@ $focus = new Contact();
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
-$focus->mark_deleted($_REQUEST['record']);
+if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
+{
+	$sql = 'delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
+	$adb->query($sql);
+}
+
+if($_REQUEST['return_module'] == $_REQUEST['module'])
+	$focus->mark_deleted($_REQUEST['record']);
 
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
 ?>

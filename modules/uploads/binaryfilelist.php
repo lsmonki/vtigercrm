@@ -10,24 +10,32 @@
 * 
  ********************************************************************************/
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 
 //or die("Couldn't connect to database $dbDatabase");
-function getAttachmentsList($id,$theme)
+//function getAttachmentsList($id,$theme)
+function getAttachmentsList($id,$theme,$returnmodule,$returnaction)
 {
 
-global $app_strings;
+global $app_strings,$adb;
 
+if($returnmodule == 'HelpDesk')
+{
+	$dbQuery = "select fileid,filename,filesize,filetype,description from ticket_attachment where parent_id='".$id ."' ORDER BY filename ASC" ;
+}
+else
+{
 
 	$dbQuery = "SELECT fileid, filename,filesize,filetype,description ";
 
 	$dbQuery .= "FROM filestorage where parent_id='".$id ."'" ;
 
 	$dbQuery .= " ORDER BY filename ASC";
+}
 
 	//echo $dbQuery;
 
-	$result = mysql_query($dbQuery) or die("Couldn't get file list");
+	$result = $adb->query($dbQuery) or die("Couldn't get file list");
 
 //$list = '<br><br>';
 //$list .= '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
@@ -36,6 +44,7 @@ global $app_strings;
 $list = '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
 $list .= '<tr class="ModuleListTitle" height=20>';
 $list .= '<td>'.$app_strings['LBL_OPERATION'].'</td>';
+$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 $list .= '    ';
 
 $list .= '<td class="moduleListTitle" height="21">';
@@ -65,10 +74,10 @@ $list .= $app_strings['LBL_FILE'].'</td>';
 
 $list .= '</tr>';
 
-$list .= '<tr><td COLSPAN="7" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
+$list .= '<tr><td COLSPAN="9" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
 
 $i=1;
-while($row = mysql_fetch_array($result))
+while($row = $adb->fetch_array($result))
 {
 
 
@@ -76,7 +85,7 @@ if ($i%2==0)
 $trowclass = 'evenListRow';
 else
 $trowclass = 'oddListRow';
-	$list .= '<tr class="'. $trowclass.'"><td><a href="index.php?module=uploads&action=deleteattachments&filename='.$row["filename"] .'&record='.$_REQUEST["record"] .'">Del</td> <td width="34%" height="21" style="padding:0px 3px 0px 3px;"><p style="margin-left: 10; margin-right: 10">';
+	$list .= '<tr class="'. $trowclass.'"><td><a href="index.php?module=uploads&action=deleteattachments&return_module='.$returnmodule.'&return_action='.$returnaction.'&filename='.$row["filename"] .'&record='.$_REQUEST["record"] .'">Del</td><td></td> <td width="34%" height="21" style="padding:0px 3px 0px 3px;"><p style="margin-left: 10; margin-right: 10">';
 
 	 $list .= $row["filename"]; 
 
@@ -99,6 +108,9 @@ $trowclass = 'oddListRow';
 
 	$list .= '<td></td><td width="33%" height="21" style="padding:0px 3px 0px 3px;"><p style="margin-left: 10">';
 
+if($returnmodule == 'HelpDesk')
+        $list .= '<a href="index.php?module=uploads&action=downloadfile&return_module=HelpDesk&fileId='.$row['fileid'].'">';
+else
 	$list .= '<a href="index.php?module=uploads&action=downloadfile&fileId='.$row['fileid'] .'">';
 
 	$list .= $app_strings['LBL_DOWNLOAD'];

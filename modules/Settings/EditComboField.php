@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('XTemplate/xtpl.php');
 global $mod_strings;
 global $app_strings;
@@ -34,10 +34,11 @@ $xtpl->assign("FIELDNAME", $fld_name);
 $xtpl->assign("TABLENAME", $tableName);
 $xtpl->assign("COLUMNNAME", $columnName);
 $xtpl->assign("FIELDMODULE", $fld_module);
-$query = "select * from ".$tableName;
-$result = mysql_query($query);
+$query = "select * from ".$tableName ;//." order by sortorderid";
+$result = $adb->query($query);
 $fldVal='';
-while($row = mysql_fetch_array($result))
+
+while($row = $adb->fetch_array($result))
 {
 	$fldVal .= $row[$columnName];
 	$fldVal .= "\n";	

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Save.php,v 1.3 2004/11/25 10:41:51 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Save.php,v 1.7 2005/02/15 09:21:32 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -22,28 +22,39 @@
 
 require_once('modules/Contacts/Contact.php');
 require_once('include/logging.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Contact();
-
+if(isset($_REQUEST['record']))
+{
+        $focus->id = $_REQUEST['record'];
+}
+if(isset($_REQUEST['mode']))
+{
+        $focus->mode = $_REQUEST['mode'];
+}
+if($_REQUEST['salutation'] == '--None--')	$_REQUEST['salutation'] = '';
+/*
 if (isset($_REQUEST['new_reports_to_id'])) {
 	$focus->retrieve($_REQUEST['new_reports_to_id']);
 	$focus->reports_to_id = $_REQUEST['record']; 
 }
-else {
-	$focus->retrieve($_REQUEST['record']);
+*/
+//else {
+//	$focus->retrieve($_REQUEST['record']);
 
-	foreach($focus->column_fields as $field)
+foreach($focus->column_fields as $fieldname => $val)
+{
+	if(isset($_REQUEST[$fieldname]))
 	{
-		if(isset($_REQUEST[$field]))
-		{
-			$focus->$field = $_REQUEST[$field];
-			
-		}
+		//$focus->$field = $_REQUEST[$field];
+		$value = $_REQUEST[$fieldname];
+		$focus->column_fields[$fieldname] = $value;
 	}
-	
+}
+/*	
 	foreach($focus->additional_column_fields as $field)
 	{
 		if(isset($_REQUEST[$field]))
@@ -53,14 +64,15 @@ else {
 			
 		}
 	}
+*/
 	if (!isset($_REQUEST['email_opt_out'])) $focus->email_opt_out = 'off';
 	if (!isset($_REQUEST['do_not_call'])) $focus->do_not_call = 'off';
-}
+//}
 
-
-$focus->save();
+$focus->saveentity("Contacts");
+//$focus->save();
 $return_id = $focus->id;
-save_customfields($focus->id);
+//save_customfields($focus->id);
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Contacts";
@@ -74,21 +86,22 @@ header("Location: index.php?action=$return_action&module=$return_module&record=$
 //Code to save the custom field info into database
 function save_customfields($entity_id)
 {
+	global $adb;
 	$dbquery="select * from customfields where module='Contacts'";
-	$result = mysql_query($dbquery);
-	$custquery = 'select * from contactcf where contactid="'.$entity_id.'"';
-        $cust_result = mysql_query($custquery);
-	if(mysql_num_rows($result) != 0)
+	$result = $adb->query($dbquery);
+	$custquery = "select * from contactscf where contactid='".$entity_id."'";
+        $cust_result = $adb->query($custquery);
+	if($adb->num_rows($result) != 0)
 	{
 		
 		$columns='';
 		$values='';
 		$update='';
-		$noofrows = mysql_num_rows($result);
+		$noofrows = $adb->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
 		{
-			$fldName=mysql_result($result,$i,"fieldlabel");
-			$colName=mysql_result($result,$i,"column_name");
+			$fldName=$adb->query_result($result,$i,"fieldlabel");
+			$colName=$adb->query_result($result,$i,"column_name");
 			if(isset($_REQUEST[$colName]))
 			{
 				$fldvalue=$_REQUEST[$colName];
@@ -101,7 +114,7 @@ function save_customfields($entity_id)
 			{
 				$fldvalue = '';
 			}
-			if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
+			if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
 			{
 				//Update Block
 				if($i == 0)
@@ -130,23 +143,24 @@ function save_customfields($entity_id)
 			
 				
 		}
-		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
+		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
 		{
 			//Update Block
 			$query = 'update contactcf SET '.$update.' where contactid="'.$entity_id.'"'; 
-			mysql_query($query);
+			$adb->query($query);
 		}
 		else
 		{
 			//Insert Block
 			$query = 'insert into contactcf ('.$columns.') values('.$values.')';
-			mysql_query($query);
+			$adb->query($query);
 		}
 		
 	}
+	/* srini patch
 	else
 	{
-		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
+		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
 		{
 			//Update Block
 		}
@@ -154,8 +168,9 @@ function save_customfields($entity_id)
 		{
 			//Insert Block
 			$query = 'insert into contactcf ('.$columns.') values('.$values.')';
-			mysql_query($query);
+			$adb->query($query);
 		}
-	}	
+	}*/
+	
 }
 ?>

@@ -13,50 +13,98 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Opportunities/ListView.html,v 1.3 2004/06/16 17:49:36 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Potentials/ListView.html,v 1.3 2004/06/16 17:49:36 sugarclint Exp {APP.LBL_CURRENCY_SYM}
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
-<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
-<!-- BEGIN: list_nav_row -->
-	<tr height="20">
-		<td COLSPAN="15" class="listFormHeaderLinks" align="right">
-<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>{EXPORT_LINK}</td>
-<td align="right">{START_LINK}&nbsp;&nbsp;{PREVIOUS_LINK}&nbsp;&nbsp;
-                {NEXT_LINK}&nbsp;&nbsp;{END_LINK}&nbsp;&nbsp; {START_RECORD} - {END_RECORD} {APP.LBL_LIST_OF} {ROW_COUNT}&nbsp;&nbsp;</td></table>
-	</td>
-	</tr>
-<!-- END: list_nav_row -->
-	<tr><td COLSPAN="15" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
-	<tr height="20" class="moduleListTitle">
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="37%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}name" class="listFormHeaderLinks">{MOD.LBL_LIST_OPPORTUNITY_NAME}{name_arrow}</a></td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="30%" class="moduleListTitle" NOWRAP>&nbsp;<span class="moduleListTitle">{MOD.LBL_LIST_ACCOUNT_NAME}</span></td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="10%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}amount" class="listFormHeaderLinks">{MOD.LBL_LIST_AMOUNT}{amount_arrow}</a></td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="13%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}date_closed" class="listFormHeaderLinks" >{MOD.LBL_LIST_DATE_CLOSED}{date_closed_arrow}</a></td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="10%" class="moduleListTitle" NOWRAP>&nbsp;{APP.LBL_LIST_ASSIGNED_USER}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-	  </tr>
-	<tr><td COLSPAN="15" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+<script language="javascript">
 
-<!-- BEGIN: row -->
-<tr height=20 class={ROW_COLOR}>
-		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Opportunities&record={OPPORTUNITY.ID}">{OPPORTUNITY.NAME}</a></td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Accounts&record={OPPORTUNITY.ACCOUNT_ID}">{OPPORTUNITY.ACCOUNT_NAME}</A></td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td align=right valign=TOP style="padding:0px 3px 0px 3px;">{OPPORTUNITY.AMOUNT}</td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td valign=TOP style="padding:0px 3px 0px 3px;">{OPPORTUNITY.DATE_CLOSED}</td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap>{OPPORTUNITY.ASSIGNED_USER_NAME}</td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-</tr>
-<!-- END: row -->
-<tr><td COLSPAN="7">
+function showDefaultCustomView(selectView)
+{
+viewName = selectView.options[selectView.options.selectedIndex].value;
+document.massdelete.action="index.php?module=Potentials&action=ListView&return_module=Potentials&return_action=ListView&viewname="+viewName;
+ document.massdelete.submit();
+}
+
+function massDelete()
+{
+
+        x = document.massdelete.selected_id.length;
+        idstring = "";
+
+        if ( x == undefined)
+        {
+
+                if (document.massdelete.selected_id.checked)
+                {
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
+                        //alert(document.massdelete.idlist.value);
+                }
+                else
+                {
+                        alert("Please select atleast one entity");
+                        return false;
+                }
+        }
+        else
+        {
+                xx = 0;
+                for(i = 0; i < x ; i++)
+                {
+                        if(document.massdelete.selected_id[i].checked)
+                        {
+                                idstring = document.massdelete.selected_id[i].value +";"+idstring
+                        xx++
+                        }
+                }
+                if (xx != 0)
+                {
+                        document.massdelete.idlist.value=idstring;
+                        //alert(document.massdelete.idlist.value);
+                }
+                else
+               {
+                        alert("Please select atleast one entity");
+                        return false;
+                }
+        }
+        document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Potentials&return_action=ListView"
+}
+</script>
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder">
+<form name="massdelete" method="POST">
+<tbody>
+<input name='idlist' type='hidden' >
+
+	<tr height="20">
+		<td COLSPAN="15" class="listFormHeaderLinks">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+			   <td>Status Views : 
+                                   <SELECT NAME="view" onchange="showDefaultCustomView(this)">
+                                   <OPTION VALUE="">Choose a View...</option>
+                                   <OPTION VALUE="All">All</option>
+                                   <OPTION VALUE="Closed Won">Won</option>
+                                   <OPTION VALUE="Closed Lost">Lost</option>
+                                   <OPTION VALUE="Value Proposition">Value Proposition</option>
+                                   <OPTION VALUE="Prospecting">Prospecting</option>
+                                   </SELECT>
+
+
+<input class='button' type='submit' value='{APP.LBL_MASS_DELETE}' onclick="return massDelete()"/>
+			   </td>
+			
+			   <td align="right">{Start}&nbsp;&nbsp;{Prev}&nbsp;&nbsp;{Next}&nbsp;&nbsp;{End}&nbsp;&nbsp;</td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+	<form action="index.php" method="post" name="CustomFieldUpdate" id="form">
+	<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	{LISTHEADER}
+		<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	{LISTENTITY}
+	</form>
+<tr><td COLSPAN="7"></form>
+</table>
 <!-- END: main -->

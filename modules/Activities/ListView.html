@@ -1,0 +1,147 @@
+<!--
+
+/*********************************************************************************
+
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+
+ * ("License"); You may not use this file except in compliance with the 
+
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+
+ * the specific language governing rights and limitations under the License.
+
+ * The Original Code is:  SugarCRM Open Source
+
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+
+ * All Rights Reserved.
+
+ * Contributor(s): ______________________________________.
+
+ ********************************************************************************/
+
+/*********************************************************************************
+
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Events/ListView.html,v 1.8 2004/06/18 07:35:41 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+
+ ********************************************************************************/
+
+-->
+
+<!-- BEGIN: main -->
+
+<script>
+
+
+
+function showDefaultCustomView(selectView)
+
+{
+
+viewName = selectView.options[selectView.options.selectedIndex].value;
+
+document.massdelete.viewname.value=viewName;
+
+//document.massdelete.action="index.php";
+
+
+
+document.massdelete.action="index.php?module=Activities&action=ListView&return_module=Activities&return_action=ListView&viewname="+viewName;
+
+document.massdelete.submit();
+
+}
+
+
+
+</script>
+
+
+
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>	
+
+	<tr height="20">
+
+		<td COLSPAN="15" class="listFormHeaderLinks">
+
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+			<tr>
+
+				<form name="massdelete" method="POST">
+
+				<input name='change_owner' type='hidden'>
+
+				<input name='change_status' type='hidden'>
+
+				<input name='return_action' type='hidden' value="ListView">
+
+				<input name='return_module' type='hidden' value="Activities">
+
+				<input name='idlist' type='hidden' >
+
+				<!--input name='action' type='hidden' value="index"-->
+
+				<input name='viewname' type='hidden'>
+
+				<input name='module' type='hidden' value='Activities'>
+
+			   <td>Select View : 
+
+                                   <SELECT NAME="view" onchange="showDefaultCustomView(this)">
+
+                                   <OPTION VALUE="All">All</option>
+
+                                   <OPTION VALUE="Call">Call</option>
+
+                                   <OPTION VALUE="Meeting">Meeting</option>
+
+                                   <OPTION VALUE="Task">Task</option>
+
+                                   </SELECT>
+
+
+
+<!--
+
+<input class='button' type='submit' value='{APP.LBL_CHANGE_OWNER}' onclick="this.form.change_owner.value='true'; return changeStatus()"/>
+
+			       <input class='button' type='submit' value='{APP.LBL_CHANGE_STATUS}' onclick="this.form.change_status.value='true'; return changeStatus()"/>
+				   -->
+
+			   </td>
+
+			
+
+			   <td align="right">{Start}&nbsp;&nbsp;{Prev}&nbsp;&nbsp;{Next}&nbsp;&nbsp;{End}&nbsp;&nbsp;</td>
+
+			</tr>
+
+			</table>
+
+		</td>
+
+	</tr>
+
+	<form action="index.php" method="post" name="CustomFieldUpdate" id="form">
+
+	<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+
+	{LISTHEADER}
+
+		<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+
+	{LISTENTITY}
+</table>
+	</form>
+
+{SELECT_SCRIPT}
+
+<!-- END: main -->
+

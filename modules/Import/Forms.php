@@ -176,16 +176,28 @@ EOQ;
 
 function getFieldSelect(&$column_fields,$colnum,&$required_fields,$suggest_field,$translated_fields,$module)
 {
-	global $mod_strings;
+/*
+echo '<br> column fields : ';print_r($column_fields);
+echo '<br> column  : '.$colnum;
+echo '<br> required fields : ';print_r($required_fields);
+echo '<br> suggest fields : '.$suggest_field;
+echo '<br> translated fields : ';print_r($translated_fields);
+*/	global $mod_strings;
 	global $app_strings;
 	global $outlook_contacts_field_map;
-	require_once('database/DatabaseConnection.php');
+	require_once('include/database/PearDatabase.php');
+	global $adb;
 
 	$output = "<select name=\"colnum" . $colnum ."\">\n";
 	$output .= "<option value=\"-1\">". $mod_strings['LBL_DONT_MAP'] . "</option>";
 
 	$count = 0;
 	$req_mark = ""; 
+
+	require_once("include/database/PearDatabase.php");
+
+	$adb->println("Field select");
+	$adb->println($translated_fields);
 
 	asort($translated_fields);
 
@@ -197,7 +209,7 @@ function getFieldSelect(&$column_fields,$colnum,&$required_fields,$suggest_field
 		{
 			continue;
 		}
-
+//echo '<br> : '.$field;
 		$output .= "<option value=\"".$field;
 
 		if ( isset( $suggest_field) && 
@@ -222,12 +234,16 @@ function getFieldSelect(&$column_fields,$colnum,&$required_fields,$suggest_field
 
 		$count ++;
 	}
-	$custquery = "select * from customfields where module='".$module."'";
-	$cust_result = mysql_query($custquery);
-	while($row = mysql_fetch_array($cust_result))
+	/*if($module == 'Contacts')
 	{
-			$output .= "<option value='".$row['column_name']."'>". $row['fieldlabel'] . "</option>\n";
-	}
+	$module ='contactdetails';
+	}	
+	$custquery = "select * from field where tablename='".$module."'";
+	$cust_result = $adb->query($custquery);
+	while($row = $adb->fetch_array($cust_result))
+	{
+			$output .= "<option value='".$row['columnname']."'>". $row['fieldlabel'] . "</option>\n";
+	}*/
 
 	$output .= "</select>\n";
 

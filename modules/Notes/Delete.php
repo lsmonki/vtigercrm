@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/Delete.php,v 1.1 2004/08/17 15:05:43 gjayakrishnan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Delete.php,v 1.4 2005/03/04 06:58:22 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -27,7 +27,17 @@ $focus = new Note();
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the note.");
 
-$focus->mark_deleted($_REQUEST['record']);
+if($_REQUEST['return_module']== 'Contacts')
+{
+	$sql = 'update notes set contact_id = 0 where notesid = '.$_REQUEST['record'];
+	$adb->query($sql);
+}
+$sql = 'delete from senotesrel where notesid = '.$_REQUEST['record']. ' and crmid = '.$_REQUEST['return_id'];
+$adb->query($sql);
+
+if($_REQUEST['return_module'] == $_REQUEST['module'])
+        $focus->mark_deleted($_REQUEST['record']);
+
 
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
 ?>

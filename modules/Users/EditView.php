@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.11 2005/01/13 06:58:17 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.14 2005/02/23 11:25:07 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,6 +24,7 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/User.php');
 require_once('modules/Users/Forms.php');
+require_once('include/database/PearDatabase.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -111,26 +112,39 @@ if (is_admin($current_user)) {
 
         
         $ROLE_SELECT_OPTION = '<select name="user_role">';
-          $sql = "select rolename from user2role where userid='" .$focus->id ."'";
-                  $result = mysql_query($sql);
-                $rolenameArray = mysql_fetch_array($result);
-                $roleselected = $rolenameArray["rolename"];
-               $sql = "select name from role";
-                  $result = mysql_query($sql);
-                  $temprow = mysql_fetch_array($result);
+        if($focus->id != '')
+        {
+          $sql = "select * from role inner join user2role on user2role.roleid=role.roleid  where user2role.userid=" .$focus->id ;
+	   $result = $adb->query($sql);
+           $rolenameArray = $adb->fetch_array($result);
+           $roleselected = $rolenameArray["name"];
+	   $roleselectedid = $rolenameArray["roleid"];
+         }
+	/*
+        else
+        {
+          $sql = "select * from role";
+        }
+	*/
+          
+                
+               $sql = "select * from role";
+               $result = $adb->query($sql);
+               $temprow = $adb->fetch_array($result);
                    do
                    {
                     $rolename=$temprow["name"];
+                    $roleid=$temprow["roleid"]; 
    		    $selected = '';
 		       if($roleselected != '' && $rolename == $roleselected)
 	        	{
 		                $selected = 'selected';
         		}
         
-                    $ROLE_SELECT_OPTION .= '<option value= "'.$rolename .'" '.$selected .'>';
+                    $ROLE_SELECT_OPTION .= '<option value="'.$roleid .'" '.$selected .'>';
                     $ROLE_SELECT_OPTION .= $temprow["name"];
                     $ROLE_SELECT_OPTION .= '</option>';
-                   }while($temprow = mysql_fetch_array($result));
+                   }while($temprow = $adb->fetch_array($result));
                                   
                    $ROLE_SELECT_OPTION .= ' </select>';
                    
@@ -141,12 +155,12 @@ if (is_admin($current_user)) {
                    
         $GROUP_SELECT_OPTION = '<select name="group_name">';
                $sql = "select groupname from users2group where userid='" .$focus->id ."'";
-                  $result = mysql_query($sql);
-		$groupnameArray = mysql_fetch_array($result);
+                  $result = $adb->query($sql);
+		$groupnameArray = $adb->fetch_array($result);
 		$groupselected = $groupnameArray["groupname"];
 		$sql2 = "select name from groups";
-                  $result_name = mysql_query($sql2);
-                  $temprow = mysql_fetch_array($result_name);
+                  $result_name = $adb->query($sql2);
+                  $temprow = $adb->fetch_array($result_name);
                    do
                    {
           		  $selected = '';
@@ -159,7 +173,7 @@ if (is_admin($current_user)) {
                     $GROUP_SELECT_OPTION .= '<option value="'.$groupname.'" '.$selected.'>';
                     $GROUP_SELECT_OPTION .= $temprow["name"];
                     $GROUP_SELECT_OPTION .= '</option>';
-                   }while($temprow = mysql_fetch_array($result_name));
+                   }while($temprow = $adb->fetch_array($result_name));
                                   
                    $GROUP_SELECT_OPTION .= ' </select>';
                    

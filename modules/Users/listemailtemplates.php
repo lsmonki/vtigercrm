@@ -10,7 +10,7 @@
 *
  ********************************************************************************/
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -35,9 +35,9 @@ require_once('database/DatabaseConnection.php');
                 <td class="moduleListTitle"><b><?php echo $mod_strings['LBL_DESCRIPTION']; ?></b></td>
                 </tr>
 <?php
-   $sql = "select * from emailtemplatestorage";
-   $result = mysql_query($sql);
-   $temprow = mysql_fetch_array($result);
+   $sql = "select * from emailtemplates";
+   $result = $adb->query($sql);
+   $temprow = $adb->fetch_array($result);
 $edit="Edit  ";
 $del="Del  ";
 $bar="  | ";
@@ -55,7 +55,7 @@ do
   printf("<a href=index.php?module=Users&action=detailviewemailtemplate&templatename=".$templatename.">%s</a></td>",$temprow["templatename"]);
   printf("<td height='25'>%s</td>",$temprow["description"]);
   $cnt++;
-}while($temprow = mysql_fetch_array($result));
+}while($temprow = $adb->fetch_array($result));
 ?>
 </table>
 </body>

@@ -29,10 +29,17 @@ $mod_strings = Array(
 'LBL_SAVE'=>'Save',
 'LBL_RESET'=>'Cancel',
 
+'LBL_CALL' => 'Call',
+'LBL_MEET' => 'Meeting',
 'LBL_APPNT' => 'Appointment',
 'LBL_NEW_APPNT' => 'New Appointment',
 'LBL_NEW_APPNT_INFO' => 'Create a new appointment',
+'LBL_VIEW_DAY_APPNT_INFO' => 'View appointment(s) for this day',
+'LBL_CHANGE_APPNT' => 'see or change this appointment (%s - %s)',
 
+'LBL_DAY' => 'Day',
+'LBL_DAY_BUTTON_KEY' => 'D',
+'LBL_DAY_BUTTON_TITLE' => 'Day [Alt+D]',
 'LBL_DAY1' => 'Monday',
 'LBL_DAY2' => 'Tuesday',
 'LBL_DAY3' => 'Wednesday',
@@ -41,9 +48,19 @@ $mod_strings = Array(
 'LBL_DAY6' => 'Saturday',
 'LBL_DAY0' => 'Sunday',
 
+'LBL_SM_MON' => 'Mo',
+'LBL_SM_TUE' => 'Tu',
+'LBL_SM_WED' => 'We',
+'LBL_SM_THU' => 'Th',
+'LBL_SM_FRI' => 'Fr',
+'LBL_SM_SAT' => 'Sa',
+'LBL_SM_SUN' => 'Su',
+
 'LBL_DATE_TITLE' => '%A, %d. %B %Y',
 
 'LBL_WEEK' => 'Week',
+'LBL_WEEK_BUTTON_KEY' => 'W',
+'LBL_WEEK_BUTTON_TITLE' => 'Week [Alt+W]',
 'LBL_WEEKS' => 'Weeks',
 'LBL_NEXT_WEEK' => 'next week',
 'LBL_LAST_WEEK' => 'last week',
@@ -59,9 +76,15 @@ $mod_strings = Array(
 'LBL_APP_END_TIME' => 'End Time',
 'LBL_AT_DATE_TIME' => 'at',
 
+'LBL_MON' => 'Month',
+'LBL_MON_BUTTON_KEY' => 'M',
+'LBL_MON_BUTTON_TITLE' => 'Month [Alt+M]',
+'LBL_PREV_MON' => 'Previous Month',
+'LBL_NEXT_MON' => 'Next Month',
+
 'LBL_APP_LOCATION' => 'Location',
 'LBL_APP_IGNORE_TIME' => 'ignore above times',
-'LBL_SUBJECT'=>'Subject',
+'LBL_SUBJECT'=>'Subject:',
 'LBL_APP_DESCRIPTION' => 'Description',
 'LBL_CONTACT'=>'Contact:',
 
@@ -82,6 +105,21 @@ $mod_strings = Array(
 			, '5' => 'Option'
 			, '6' => 'Private'),
 
+'cal_month_long'=>array(
+"",
+"January",
+"February",
+"March",
+"April",
+"May",
+"June",
+"July",
+"August",
+"September",
+"October",
+"November",
+"December",
+),
 //DON'T CONVERT THESE THEY ARE MAPPINGS
 'db_last_name' => 'LBL_LIST_LAST_NAME',
 'db_first_name' => 'LBL_LIST_FIRST_NAME',

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/SaveContactOpportunityRelationship.php,v 1.1 2004/08/17 15:04:13 gjayakrishnan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/SaveContactOpportunityRelationship.php,v 1.2 2005/02/15 09:21:32 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 

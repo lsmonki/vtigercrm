@@ -22,25 +22,19 @@
 
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Products',
-'LBL_PRODUCT_NAME'=>'Product Name',
+'LBL_LIST_PRODUCT_NAME'=>'Product Name',
+'LBL_PRODUCT_NAME'=>'Product Name:',
+'LBL_LIST_CATEGORY'=>'Product Category',
+'LBL_CATEGORY'=>'Product Category:',
 'LBL_PRODUCT_CODE'=>'Product Code',
+'LBL_LIST_PRODUCT_CODE'=>'Product Code:',
 'LBL_PRODUCT_ACTIVE'=>'Product Active',
 'LBL_PRODUCT_COMMISSION_RATE'=>'Commission Rate',
 'LBL_PRODUCT_QTY_PER_UNIT'=>'Qty/Unit',
 'LBL_PRODUCT_UNIT_PRICE'=>'Unit Price',
 'LBL_PRODUCT_DESCRIPTION'=>'Description',
 'LBL_PRODUCT_IMAGE'=>'Image',
-'LBL_NEW_FORM_TITLE'=>'New Opportunity',
-'LNK_NEW_CONTACT'=>'New Contact',
-'LNK_NEW_LEAD'=>'New Lead',
-'LNK_NEW_ACCOUNT'=>'New Account',
-'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
-'LNK_NEW_CASE'=>'New Case',
-'LNK_NEW_NOTE'=>'New Note',
-'LNK_NEW_CALL'=>'New Call',
-'LNK_NEW_EMAIL'=>'New Email',
-'LNK_NEW_MEETING'=>'New Meeting',
-'LNK_NEW_TASK'=>'New Task',
+'LBL_NEW_FORM_TITLE'=>'New Product',
 
 //New entry
 'LBL_UPLOAD'=>'Upload File',
@@ -54,6 +48,24 @@ $mod_strings = Array(
 'LBL_ATTACH_FILE'=>'File Attachment',
 'LBL_DESCRIPTION'=>'Description',
 'LBL_FILE'=>'File Name',
+
+
+//for v4 release added
+'LBL_NEW_POTENTIAL'=>'New Potential',
+'LBL_POTENTIAL_TITLE'=>'Potentials',
+
+'LBL_NEW_TICKET'=>'New Ticket',
+'LBL_TICKET_TITLE'=>'Tickets',
+
+'LBL_NEW_CALL'=>'New Call',
+'LBL_CALL_TITLE'=>'Calls',
+
+'LBL_NEW_MEETING'=>'New Meeting',
+'LBL_MEETING_TITLE'=>'Meetings',
+
+'LBL_NEW_ATTACHMENT'=>'New Attachment',
+'LBL_ATTACHMENT_TITLE'=>'Attachments',
+
 
 );
 

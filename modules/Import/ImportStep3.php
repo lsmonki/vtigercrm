@@ -25,9 +25,11 @@ require_once('data/Tracker.php');
 require_once('modules/Import/ImportContact.php');
 require_once('modules/Import/ImportAccount.php');
 require_once('modules/Import/ImportOpportunity.php');
+require_once('modules/Import/ImportLead.php');
 require_once('modules/Import/Forms.php');
 require_once('modules/Import/parse_utils.php');
 require_once('modules/Import/ImportMap.php');
+require_once('include/database/PearDatabase.php');
 
 global $mod_strings;
 global $mod_list_strings;
@@ -118,7 +120,7 @@ else if ( $ret_value == -3 )
 $rows = $ret_value['rows'];
 
 $ret_field_count = $ret_value['field_count'];
-
+//echo 'my return field count i s ' .$ret_field_count;
 $xtpl=new XTemplate ('modules/Import/ImportStep3.html');
 
 $xtpl->assign("TMP_FILE", $tmp_file_name );
@@ -155,9 +157,13 @@ else if ( $_REQUEST['module'] == 'Accounts')
 {
 	$focus = new ImportAccount();
 }
-else if ( $_REQUEST['module'] == 'Opportunities')
+else if ( $_REQUEST['module'] == 'Potentials')
 {
 	$focus = new ImportOpportunity();
+}
+else if ( $_REQUEST['module'] == 'Leads')
+{
+	$focus = new ImportLead();
 }
 
 
@@ -175,8 +181,10 @@ $field_map = $outlook_contacts_field_map;
 if ( isset( $_REQUEST['source_id']))
 {
 	$mapping_file = new ImportMap();
-	
+
+	//$mapping_file->retrieve_entity_info( $_REQUEST['source_id'],$_REQUEST['return_module']);
 	$mapping_file->retrieve( $_REQUEST['source_id'],false);
+	$adb->println("Shankar : ".$mapping_file->toString());
 
 	$mapping_content = $mapping_file->content;
 
@@ -208,7 +216,7 @@ else if ($_REQUEST['source'] == 'other')
 	{
 		$field_map = $outlook_accounts_field_map;
 	}
-	else if ($_REQUEST['module'] == 'Opportunities')
+	else if ($_REQUEST['module'] == 'Potentials')
 	{
 		$field_map = $salesforce_opportunities_field_map;
 	}
@@ -234,7 +242,7 @@ else if ($_REQUEST['source'] == 'salesforce')
 	{
 		$field_map = $salesforce_accounts_field_map;
 	}
-	else if ($_REQUEST['module'] == 'Opportunities')
+	else if ($_REQUEST['module'] == 'Potentials')
 	{
 		$field_map = $salesforce_opportunities_field_map;
 	}
@@ -276,6 +284,9 @@ $list_string_key .= "_import_fields";
 
 $translated_column_fields = $mod_list_strings[$list_string_key];
 
+$adb->println("IMP3 : trans");
+$adb->println($translated_column_fields);
+
 for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 {
 
@@ -290,16 +301,56 @@ for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 	{
 		$suggest = $field_map[$field_count];	
 	}
+
+	if($_REQUEST['module']=='Accounts')
+	{
+		$tablename='account';
+		$focus1=new Account();
+	}
+	if($_REQUEST['module']=='Contacts')
+	{
+		$tablename='contactdetails';
+		$focus1=new Contact();
+ 	}
+	if($_REQUEST['module']=='Leads')
+ 	{
+		$tablename='leaddetails';
+		$focus1=new Lead();
+	}
+	if($_REQUEST['module']=='Potentials')
+ 	{
+		$tablename='potential';
+		$focus1=new Potential();
+	}
 	
-	$xtpl->assign("SELECTFIELD", 
-		getFieldSelect(	$focus->importable_fields,
+//echo 'xxxxxxxxxxxxxxxxxxxx';
+//print_r($focus->importable_fields);
+//print_r($focus->column_fields);
+/*
+	$xtpl->assign("SELECTFIELD", getFieldSelect(	$focus->importable_fields,
+							$requiredfieldval,
+							$focus1->required_fields,
+							$suggest,
+							$focus1->column_fields,
+							$tablename
+						   ));
+*/
+	$xtpl->assign("SELECTFIELD", getFieldSelect(	$focus->importable_fields,
+							$field_count,//requiredfieldval,
+							$focus1->required_fields,
+							$suggest,
+							$translated_column_fields,
+							$tablename
+						   ));
+
+/*		getFieldSelect(	$focus->importable_fields,
 				$field_count,
 				$focus->required_fields,
 				$suggest,
 				$translated_column_fields,
 				$_REQUEST['module']
 				));
-
+*/
 	$xtpl->parse("main.table.row.headcell");
 
 	$pos = 0;
@@ -346,7 +397,7 @@ else
 
 
 $xtpl->assign("MODULE", $_REQUEST['module']);
-$xtpl->assign("JAVASCRIPT", get_validate_import_fields_js($focus->required_fields,$translated_column_fields) );
+//$xtpl->assign("JAVASCRIPT", get_validate_import_fields_js($focus->required_fields,$translated_column_fields) );
 
 $xtpl->assign("JAVASCRIPT2", get_readonly_js() );
 

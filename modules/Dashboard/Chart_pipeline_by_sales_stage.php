@@ -22,7 +22,8 @@
 
 require_once('include/utils.php');
 require_once('include/logging.php');
-require_once("modules/Opportunities/Charts.php");
+require_once("modules/Potentials/Charts.php");
+require_once('include/ComboUtil.php');
 global $app_list_strings, $current_language, $tmp_dir, $currentModule, $action;
 $current_module_strings = return_module_language($current_language, 'Dashboard');
 
@@ -30,6 +31,10 @@ $log = LoggerManager::getLogger('pipeline_by_sales_stage');
 
 if (isset($_REQUEST['pbss_refresh'])) { $refresh = $_REQUEST['pbss_refresh']; }
 else { $refresh = false; }
+
+// Get _dom Arrays from Database
+$comboFieldNames = Array('sales_stage'=>'sales_stage_dom');
+$comboFieldArray = getComboArray($comboFieldNames);
 
 //get the dates to display
 if (isset($_SESSION['pbss_date_start']) && $_SESSION['pbss_date_start'] != '' && !isset($_REQUEST['pbss_date_start'])) {
@@ -86,11 +91,11 @@ elseif (isset($_REQUEST['pbss_sales_stages']) && count($_REQUEST['pbss_sales_sta
 //set $datax using selected sales stage keys 
 if (count($tempx) > 0) {
 	foreach ($tempx as $key) {
-		$datax[$key] = $app_list_strings['sales_stage_dom'][$key];
+		$datax[$key] = $comboFieldArray['sales_stage_dom'][$key];
 	}
 }
 else {
-	$datax = $app_list_strings['sales_stage_dom'];
+	$datax = $comboFieldArray['sales_stage_dom'];
 }
 $log->debug("datax is:");
 $log->debug($datax);
@@ -157,7 +162,7 @@ if (isset($_REQUEST['pbss_edit']) && $_REQUEST['pbss_edit'] == 'true') {
 <td valign='top' ><input class="text" name="pbss_date_end" size='12' maxlength='10' id='date_end' value='<?php if (isset($_SESSION['pbss_date_end'])) echo $_SESSION['pbss_date_end']?>'>  <img src="themes/<?php echo $theme ?>/images/calendar.gif" id="date_end_trigger"> </td>
 </tr><tr>
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_SALES_STAGES'];?></td>
-<td valign='top' ><select name="pbss_sales_stages[]" multiple size='3'><?php echo get_select_options_with_id($app_list_strings['sales_stage_dom'],$_SESSION['pbss_sales_stages']); ?></select></td>
+<td valign='top' ><select name="pbss_sales_stages[]" multiple size='3'><?php echo get_select_options_with_id($comboFieldArray['sales_stage_dom'],$_SESSION['pbss_sales_stages']); ?></select></td>
 </tr><tr>
 <td valign='top' nowrap><?php echo $current_module_strings['LBL_USERS'];?></td>
 <td valign='top' ><select name="pbss_ids[]" multiple size='3'><?php echo get_select_options_with_id(get_user_array(false),$_SESSION['pbss_ids']); ?></select></td>

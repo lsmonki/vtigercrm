@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.39 2005/01/08 13:21:56 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/5createTables.php,v 1.49 2005/03/04 20:24:24 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -26,6 +26,7 @@ if (isset($_REQUEST['admin_password'])) $admin_password	= $_REQUEST['admin_passw
 
 $new_tables = 0;
 
+require_once('include/database/PearDatabase.php');
 require_once('include/logging.php');
 require_once('modules/Leads/Lead.php'); 
 require_once('modules/Settings/FileStorage.php'); 
@@ -33,12 +34,9 @@ require_once('modules/imports/Headers.php');
 require_once('modules/Contacts/Contact.php'); 
 require_once('modules/Calendar/UserCalendar.php'); 
 require_once('modules/Accounts/Account.php'); 
-require_once('modules/Opportunities/Opportunity.php'); 
-require_once('modules/Cases/Case.php'); 
-require_once('modules/Tasks/Task.php'); 
+require_once('modules/Potentials/Opportunity.php'); 
+require_once('modules/Activities/Activity.php'); 
 require_once('modules/Notes/Note.php'); 
-require_once('modules/Meetings/Meeting.php'); 
-require_once('modules/Calls/Call.php'); 
 require_once('modules/Emails/Email.php'); 
 require_once('modules/Users/User.php');
 require_once('modules/Import/SugarFile.php');
@@ -174,8 +172,8 @@ function create_default_users()
         $user->save();
 
         // We need to change the admin user to a fixed id of 1.
-        $query = "update users set id='1' where user_name='$user->user_name'";
-        $result = $db->query($query, true, "Error updating admin user ID: ");
+        //$query = "update users set id='1' where user_name='$user->user_name'";
+        //$result = $db->query($query, true, "Error updating admin user ID: ");
 
         $log->info("Created ".$user->table_name." table. for user $user->id");
 
@@ -239,7 +237,7 @@ $modules = array(
  "Contact"
 ,"UserCalendar"
 ,"Account"
-,"Opportunity"
+,"potential"
 ,"Lead"
 ,"Tab"
 ,"Security"
@@ -247,26 +245,45 @@ $modules = array(
 ,"LoginHistory"
 ,"FileStorage"
 ,"Headers"
-,"aCase"
 ,"User"
 ,"Tracker"
-,"Task"
+,"Activity"
 ,"Note"
-,"Meeting"
-,"Call"
 ,"Email"
-,"SugarFile"
+ ,"SugarFile"
 ,"ImportMap"
 ,"UsersLastImport"
 );
 
 $focus = 0;
 
+// Tables creation
+
+// temporary
+require_once('config.php');
+
+$success = $db->createTables("adodb/DatabaseSchema.xml");
+
+// TODO HTML
+if($success==0)
+{
+	print("Tables not created");
+}
+else if($success==1)
+{
+	print("Tables partially created");
+}
+else
+{
+	print("Tables Successfully created");
+}
+
+
 foreach ( $modules as $module )
 {
         $focus = new $module();
 
-        if ($db_drop_tables == true )
+        /*if ($db_drop_tables == true )
         {
                 $existed = drop_table_install($focus);
 
@@ -293,20 +310,33 @@ foreach ( $modules as $module )
         else
         {
 		echo "Table ".$focus->table_name." already exists<BR>\n";
-        }
+        }*/
+
+	$focus->create_tables(); // inserts only rows
 
 }
-
+/*
 if ($new_tables)
 {
         create_default_users();
-}
+}*/
+
+/*if($success==2)
+{*/
+	create_default_users();
+//}
+
 //Populating users table
-$sql_stmt1 = 'insert into users(id,user_name,user_password,last_name,email1) values("81db51d0-c67e-8604-699e-41a74a5a5c68","standarduser","stX/AHHNK/Gkw","standarduser","standarduser@standard.user.com")';
-mysql_query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error()); 
+$sql_stmt1 = "insert into users(user_name,user_password,last_name,email1) values('standarduser','stX/AHHNK/Gkw','standarduser','standarduser@standard.user.com')";
+$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error()); 
+
+
+$sql_stmt1 = "insert into user2role values(1,1)";
+$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+
 	
-$sql_stmt2 = "insert into user2role(userid,rolename) values('81db51d0-c67e-8604-699e-41a74a5a5c68','standard_user')";
-mysql_query($sql_stmt2) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+$sql_stmt2 = "insert into user2role values(2,2)";
+$db->query($sql_stmt2) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
 
 //Create and populate combo tables

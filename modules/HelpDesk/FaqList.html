@@ -1,0 +1,90 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table cellpadding="0" cellspacing="0" border="0" width="100%" class="formOuterBorder">
+<tr><td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tbody><tr>
+<form name="SearchForm" method="post" action="index.php">
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_CATEGORY}&nbsp;</td>
+		<td class="dataField"><input type=text size="10" name="category" class=dataField  value="{CATEGORY}" />
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_QUESTION}&nbsp;</td>
+		<td class="dataField"><input type=text size="10" name="question" class=dataField  value='{QUESTION}' />
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_CREATED_DATE}&nbsp;<select name='date_crit' tabindex="2">
+                <OPTION selected value='is' {IS}>{MOD.LBL_IS}</OPTION>
+                <OPTION value='isnot' {ISNOT}>{MOD.LBL_IS_NOT}</OPTION>
+                <OPTION value='before' {BEFORE}>{MOD.LBL_IS_BEFORE}</OPTION>
+                <OPTION value='after' {AFTER}>{MOD.LBL_IS_AFTER}</OPTION></select></td>
+		<td class="dataField"><input type=text size="10" name="date" class=dataField  value='{DATE}'/>
+	
+		
+		<td rowspan='2' align="center"><input type="hidden" name="action" value="index"/>
+			<input type="hidden" name="query" value="true"/>
+			<input type="hidden" name="action" value="FaqList"/>
+			<input type="hidden" name="module" value="HelpDesk" />
+		<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
+		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
+		<br>
+		</td>
+	</tr><tr>
+			
+		<td class="dataLabel">{MOD.LBL_MY_FAQ}</td>
+		<td class="dataField"><input name='current_user_only' type="checkbox" {CURRENT_USER_ONLY}></td>
+	</tr>
+</form>
+	</table>
+</td></tr>
+</table>
+<script type="text/javascript" language="JavaScript">
+function clear_form(form) {
+	for (j = 0; j < form.elements.length; j++) {
+		if (form.elements[j].type == 'text' || form.elements[j].type == 'select-one') {
+			form.elements[j].value = '';
+		}
+	}
+}
+</script>
+<BR>
+<BR>
+{FAQLISTHEADER}
+
+
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+	<tr height="20">
+		<td COLSPAN="11" class="listFormHeaderLinks">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+			<td align="right">{Start}&nbsp;&nbsp;{Prev}&nbsp;&nbsp;{Next}&nbsp;&nbsp;{End}&nbsp;&nbsp;</td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+	<form action="index.php" method="post" name="CustomFieldUpdate" id="form">
+	<tr><td colspan="11" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	<tr class="moduleListTitle" height=20>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">{MOD.LBL_QUESTION}</td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">{MOD.LBL_CATEGORY}</td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+		<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">{MOD.LBL_AUTHOR}</td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+
+		<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">{APP.LBL_OPERATION}</td>
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+	</tr>
+	<tr><td colspan="11" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	{FAQLIST}
+	</form>
+</table>
+<!-- END: main -->
+

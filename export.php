@@ -22,14 +22,12 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Accounts/Account.php');
 require_once('modules/Contacts/Contact.php');
-require_once('modules/Calls/Call.php');
-require_once('modules/Cases/Case.php');
+require_once('modules/Leads/Lead.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Emails/Email.php');
-require_once('modules/Meetings/Meeting.php');
+require_once('modules/Activities/Activity.php');
 require_once('modules/Notes/Note.php');
-require_once('modules/Opportunities/Opportunity.php');
-require_once('modules/Tasks/Task.php');
+require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Users/User.php');
 
 global $allow_exports;
@@ -92,8 +90,7 @@ $contact_fields = array(
 ,"description"=>"Description"
 );
 
-
-$account_fields = array(
+/*$account_fields = array(
 "id"=>"Account ID",
 "name"=>"Account Name",
 "website"=>"Website",
@@ -123,51 +120,52 @@ $account_fields = array(
 "description"=>"Description"
 );
 
-
+*/
 
 
 function export_all($type)
 {
-	global $contact_fields;
-	global $account_fields;
+	$contact_fields = Array();
+	$account_fields = Array();
+	global $adb;
 	$focus = 0;
 	$content = '';
 
 	if ($type == "Contacts")
 	{
 		$focus = new Contact;
-	}
+			}
 	else if ($type == "Accounts")
 	{
 		$focus = new Account;
+		$exp_query="SELECT columnname, fieldlabel FROM field where tabid=6";
+		$account_result=$adb->query($exp_query);
+		if($adb->num_rows($account_result)!=0)
+		{
+			while($result = $adb->fetch_array($account_result))
+			{
+				$account_columnname = $result['columnname'];
+				$account_fieldlabel = $result['fieldlabel'];
+				$account_fields[$account_columnname] = $account_fieldlabel;
+			}
+		}
 	}
-	else if ($type == "Opportunities")
+	else if ($type == "Potentials")
 	{
-		$focus = new Opportunity;
-	}
-	else if ($type == "Cases")
-	{
-		$focus = new aCase();
+        	$focus = new Potential;
 	}
 	else if ($type == "Notes")
 	{
 		$focus = new Note;
 	}
-	else if ($type == "Calls")
+	else if ($type == "Leads")
 	{
-		$focus = new Call;
+		$focus = new Lead;
 	}
+
 	else if ($type == "Emails")
 	{
 		$focus = new Email;
-	}
-	else if ($type == "Meetings")
-	{
-		$focus = new Meeting;
-	}
-	else if ($type == "Tasks")
-	{
-		$focus = new Task;
 	}
 
 	$log = LoggerManager::getLogger('export_'.$type);
@@ -194,14 +192,14 @@ function export_all($type)
 	*/
 	$order_by = "";
 
-	$query = $focus->create_export_query($order_by,$where);
+             $query = $focus->create_export_query($order_by,$where);
 
-//	print $query;
+	//print $query;
 //exit;
 
-	$result = $db->query($query,true,"Error exporting $type: "."<BR>$query");
+	$result = $adb->query($query,true,"Error exporting $type: "."<BR>$query");
 
-	$fields_array = $db->getFieldsArray($result);
+	$fields_array = $adb->getFieldsArray($result);
 
 	$header = implode("\",\"",array_values($fields_array));
 	$header = "\"" .$header;
@@ -210,7 +208,7 @@ function export_all($type)
 
 	$column_list = implode(",",array_values($fields_array));
 
-        while($val = $db->fetchByAssoc($result, -1, false))
+        while($val = $adb->fetchByAssoc($result, -1, false))
 	{
 		$new_arr = array();
 
@@ -237,6 +235,7 @@ header( "Expires: Mon, 26 Jul 1997 05:00:00 GMT" );
 header( "Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );
 header( "Cache-Control: post-check=0, pre-check=0", false );
 header("Content-Length: ".strlen($content));
-print $content;
+	print $content;
 exit;
 ?>
+        

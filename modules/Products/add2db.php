@@ -11,7 +11,7 @@
  ********************************************************************************/
 
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('include/utils.php');
 $vtigerpath = $_SERVER['REQUEST_URI'];
 $productid = $_REQUEST['productid'];
@@ -60,10 +60,13 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 
     $sql = "INSERT INTO productcollaterals ";
     $sql .= "(productid,date_entered,parent_type,parent_id,data,description, filename, filesize, filetype) ";
-    $sql .= "VALUES ($parent_id,'$date_entered','$parent_type','$parent_id','$data','$strDescription',";
+    $sql .= "VALUES ($parent_id,".$adb->formatString('productcollaterals','date_entered',$date_entered).",'$parent_type','$parent_id',".$adb->getEmptyBlob().",'$strDescription',";
     $sql .= "'$filename', '$filesize', '$filetype')";
-    $result = mysql_query($sql);
-       mysql_close();
+    $result = $adb->query($sql);
+    if($result!=false)	    
+	    $result = $adb->updateBlob('productcollaterals','data',"parent_id='".$parent_id."' and filename='".$filename."'",$data);
+
+       //mysql_close();
        deleteFile($uploaddir,$filename);
        header("Location: index.php?action=ProductDetailView&module=$ret_module&record=$parent_id");	
       }

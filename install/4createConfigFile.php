@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.19 2005/01/08 13:20:52 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.20 2005/01/28 10:39:34 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -38,7 +38,9 @@ if (isset($_REQUEST['admin_password'])) $admin_password = 	$_REQUEST['admin_pass
 if (isset($_REQUEST['mail_server'])) $mail_server = 	$_REQUEST['mail_server'];
 if (isset($_REQUEST['mail_server_username'])) $mail_server_username = 	$_REQUEST['mail_server_username'];
 if (isset($_REQUEST['mail_server_password'])) $mail_server_password = 	$_REQUEST['mail_server_password'];
-
+if (isset($_REQUEST['ftpserver'])) $ftpserver = 	$_REQUEST['ftpserver'];
+if (isset($_REQUEST['ftpuser'])) $ftpuser = 	$_REQUEST['ftpuser'];
+if (isset($_REQUEST['ftppassword'])) $ftppassword = 	$_REQUEST['ftppassword'];
 $cache_dir = 'cache/';
 
 ?>
@@ -127,6 +129,9 @@ $config .= "\$cache_dir = '$cache_dir';\n";
 $config .= "\$mail_server = '$mail_server';\n";
 $config .= "\$mail_server_username = '$mail_server_username';\n";
 $config .= "\$mail_server_password = '$mail_server_password';\n";
+$config .= "\$ftpserver = '$ftpserver';\n";
+$config .= "\$ftpuser = '$ftpuser';\n";
+$config .= "\$ftppassword = '$ftppassword';\n";
 $config .= "\$tmp_dir = '" . ($cache_dir . "images/") . "';\n";
 $config .= "\$import_dir = '" . ($cache_dir . "import/") . "';\n\n";
 $config .= "// Maximum file size for uploaded files (in bytes)\n";

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/Note.php,v 1.4 2005/01/15 15:31:33 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Note.php,v 1.14 2005/03/05 11:08:41 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -33,8 +33,9 @@ class Note extends SugarBean {
 
 	// Stored fields
 	var $id;
-	var $date_entered;
-	var $date_modified;
+        var $mode;
+
+	var $notesid;
 	var $description;
 	var $name;
 	var $filename;
@@ -50,66 +51,48 @@ class Note extends SugarBean {
 	var $default_note_name_dom = array('Meeting notes', 'Reminder');
 
 	var $table_name = "notes";
+	var $tab_name = Array('crmentity','notes','senotesrel');
+        var $tab_name_index = Array('crmentity'=>'crmid','notes'=>'notesid','senotesrel'=>'notesid');
 
+  	var $module_id = "notesid";
 	var $object_name = "Note";
 
-	var $column_fields = Array("id"
-		, "date_entered"
-		, "date_modified"
-		, "description"
-		, "name"
-		, "filename"
-		, "parent_type"
-		, "parent_id"
-		, "contact_id"
-		);
+	var $column_fields = Array();
+
+        var $sortby_fields = Array('title','modifiedtime');		  
 
 	// This is used to retrieve related fields from form posts.
-	var $additional_column_fields = Array('contact_name', 'contact_phone', 'contact_email', 'parent_name');
+	var $additional_column_fields = Array('', '', '', '');
 
 	// This is the list of fields that are in the lists.
-	var $list_fields = Array('id', 'name', 'parent_type', 'parent_name', 'parent_id', 'date_modified', 'contact_id', 'contact_name','filename');
+	var $list_fields = Array(
+				'Subject'=>Array('notes'=>'title'),
+				'Contact Name'=>Array('notes'=>'contact_id'),
+				'Related to'=>Array('senotesrel'=>'crmid'),
+				'File'=>Array('notes'=>'filename'),
+				'Last Modified'=>Array('crmentity'=>'modifiedtime')
+				);
+	var $list_fields_name = Array(
+					'Subject'=>'title',
+					'Contact Name'=>'contact_id',
+					'Related to'=>'crmid',
+					'File'=>'filename',
+					'Last Modified'=>'modifiedtime'
+				     );	
+	var $list_link_field= 'title';
 
 	function Note() {
-		$this->log = LoggerManager::getLogger('note');
+		$this->log = LoggerManager::getLogger('notes');
 		$this->db = new PearDatabase();
+		$this->column_fields = getColumnFields('Notes');
 	}
 
 	var $new_schema = true;
 
 	function create_tables () {
-		$query = 'CREATE TABLE '.$this->table_name.' ( ';
-		$query .='id char(36) NOT NULL';
-		$query .=', date_entered datetime NOT NULL';
-		$query .=', date_modified datetime NOT NULL';
-		$query .=', name char(255)';
-		$query .=', filename char(255)';
-		$query .=', parent_type char(25)';
-		$query .=', parent_id char(36)';
-		$query .=', contact_id char(36)';
-		$query .=', description text';
-		$query .=', deleted bool NOT NULL default 0';
-		$query .=', PRIMARY KEY ( ID ) )';
-
-
-
-		$this->db->query($query,true,"Error creating table: ");
-
-		//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
-
-		// Create the indexes
-		$this->create_index("create index idx_note_name on notes (name)");
 	}
 
 	function drop_tables () {
-		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
-
-
-
-		$this->db->query($query);
-
-		//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
-
 	}
 
 	function get_summary_text()
@@ -123,12 +106,12 @@ class Note extends SugarBean {
 
 		if($contact_required)
 		{
-			$query = "SELECT notes.id, notes.name, notes.filename, notes.parent_type, notes.parent_id, notes.contact_id, notes.date_modified, contacts.first_name, contacts.last_name FROM contacts, notes ";
+			$query = "SELECT notes.notesid, notes.title, notes.filename,  FROM contactdetailss, notes ";
 			$where_auto = "notes.contact_id = contacts.id AND notes.deleted=0 AND contacts.deleted=0";
 		}
 		else
 		{
-			$query = 'SELECT id, name, filename, parent_type, parent_id, contact_id, date_modified FROM notes ';
+			$query = 'SELECT notesid, title, filename  FROM notes ';
 			$where_auto = "deleted=0";
 		}
 
@@ -140,7 +123,7 @@ class Note extends SugarBean {
 		if($order_by != "")
 			$query .= " ORDER BY $order_by";
 		else
-			$query .= " ORDER BY name";
+			$query .= " ORDER BY title";
 
 		return $query;
 	}
@@ -150,28 +133,12 @@ class Note extends SugarBean {
 
         function create_export_query(&$order_by, &$where)
         {
-
-                        $query = "SELECT
+             $query = "SELECT
                                         notes.*,
-                                        contacts.first_name,
-                                        contacts.last_name
+                                        contactdetails.firstname,
+                                        contactdetails.lastname
                                         FROM notes
-                                        LEFT JOIN contacts
-                                        ON notes.contact_id=contacts.id ";
-                        $where_auto = " notes.deleted=0 ";
-                        //$where_auto = " notes.deleted=0 AND contacts.deleted=0";
-
-                if($where != "")
-                        $query .= "where $where AND ".$where_auto;
-                else
-                        $query .= "where ".$where_auto;
-
-                if($order_by != "")
-                        $query .= " ORDER BY $order_by";
-                else
-                        $query .= " ORDER BY name";
-
-                //echo $query;
+                                        LEFT JOIN contactdetails ON notes.contact_id=contactdetails.contactid inner join crmentity on crmentity.crmid=notes.notesid and crmentity.deleted=0 ";
                 return $query;
         }
 

@@ -10,23 +10,23 @@
  ********************************************************************************/
 
 require_once('config.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 
 global $fileId;
 
 $filename = $_REQUEST['filename'];
 $dbQuery = "SELECT filename,filetype, data ";
-$dbQuery .= "FROM wordtemplatestorage ";
+$dbQuery .= "FROM wordtemplates ";
 $dbQuery .= "WHERE filename = '" .$filename ."'";
 
-$result = mysql_query($dbQuery) or die("Couldn't get file list");
-if(mysql_num_rows($result) == 1)
+$result = $adb->query($dbQuery) or die("Couldn't get file list");
+if($adb->num_rows($result) == 1)
 {
-$fileType = @mysql_result($result, 0, "filetype");
-$name = @mysql_result($result, 0, "filename");
+$fileType = $adb->query_result($result, 0, "filetype");
+$name = $adb->query_result($result, 0, "filename");
 //echo 'filetype is ' .$fileType;
-$fileContent = @mysql_result($result, 0, "data");
-$size = @mysql_result($result, 0, "filesize");
+$fileContent = $adb->query_result($result, 0, "data");
+$size = $adb->query_result($result, 0, "filesize");
 header("Content-type: $fileType");
 //header("Content-length: $size");
 header("Cache-Control: private");

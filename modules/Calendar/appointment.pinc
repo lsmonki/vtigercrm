@@ -29,6 +29,8 @@ define ('APP_STATE_YES',1);
 
  include_once 'modules/Calendar/base.pinc';
  require_once('include/database/PearDatabase.php');
+ //require_once('modules/Calls/Call.php');
+ 
 /**
  * options for calendar selection
  */
@@ -403,23 +405,50 @@ class appointment extends tutos_base {
   }
 
 // srini read_result
-  function read_result ($val_array, $pos=-1 ) {
-    if($pos!=-1) return;
+  function read_result ($val_array, $pos=-1) {
+    //print("GS --> read_result pos=".$pos);
     //print_r($val_array);
+    if($pos!=-1) return;
+    //print("GS --> continuing");
+    if(substr_count($val_array["time_start"],":") != 2)
+    {
+    	$startdate = $val_array["date_start"] .' ' . $val_array["time_start"].':00';
+    }
+    else
+    {
+    	$startdate = $val_array["date_start"] .' ' . $val_array["time_start"];
+    }
+    
+    //end time calculation
+    $endhr = 0;
+    list($sthr,$stmn,$stsc) = split(":",$val_array["time_start"]);
+    $endmin = $stmn + $val_array["duration_minutes"];
+    if($endmin <= 9) $endmin= '0'.$endmin;
+    if($endmin >= 60)
+    {
+	$endmin = $endmin%60;
+        if($endmin <= 9) $endmin= '0'.$endmin;
+        $endhr++;
+    }
+    $endhr = $endhr + $sthr + $val_array["duration_hours"];
+	if($endhr <= 9) $endhr= '0'.$endhr;
+    if ($endhr > 23) $endhr = 23;
+    $enddate = $val_array["date_start"] .' ' . $endhr .":" . $endmin .":00";
+    //
     $this->t_ignore    = $val_array["t_ignore"];
-    $this->descr       = $val_array["descr"];
-    $this->start       = new DateTime($val_array["a_start"]);
-    $this->end         = new DateTime($val_array["a_end"]);
+    $this->descr       = $val_array["subject"];
+    $this->start       = new DateTime($startdate);
+    
+    $this->end         = new DateTime($enddate);
     $this->subject     = $val_array["subject"];
-    $this->contact_name= $val_array["contact_name"];
-    $this->contact_id  = $val_array["contact_id"];
-
+    $this->module_name = $val_array["activitytype"];
+    $this->record_id   = $val_array["activityid"];
     #$this->creator = getObject($this->dbconn,$r->get($pos, "creator"));
-    $obj->creator->id = $val_array["creator"];
+    $obj->creator->id = $val_array["smownerid"];
     $this->creator = $val_array["creator"];
+    //print("GS -> subject=".$this->subject);
 
-
-    $this->outside     = $val_array["outside"];
+    $this->outside     = $val_array["location"];
 
     # Checks
     if ( $this->remembered == "" ) {
@@ -449,8 +478,9 @@ class appointment extends tutos_base {
     parent::read_result($r,$pos);
     $this->read_participants();*/
     parent::read_result($val_array);
+    //print_r($val_array);
     return;
-  }
+  } 
   /**
    * read a list of the participants of this app
    */
@@ -894,12 +924,17 @@ class appointment extends tutos_base {
    * Return a link to this appointment
    */
   function getLink($text = -1) {
-    global $lang;
+    global $lang,$mod_strings;
 
 	// commented temporary srini
     /*if ( ($this->mod_ok()) && ($this->end->getTimestamp() - time() > 0 ) ) {*/
-      $url = $this->getModURL();
-      $info = $lang['changeapp'];
+      // commented and added by raj
+      #$url = $this->getModURL();
+ //     $url = "../../index.php?module=Activities&action=DetailView&actvity_mode=Events&record=".$this->record_id;
+      $url = "../../index.php?action=DetailView&module=Activities&record=".$this->record_id ."&activity_mode=Events";
+
+      //
+      $info = $mod_strings['LBL_CHANGE_APPNT'];
     /*} else {
       $url = $this->getURL();
       $info = $lang['seeapp'];
@@ -1255,13 +1290,17 @@ class appointment extends tutos_base {
    */
   function getLocation() {
     global $lang;
-    return "<span class=\"apploc". $this->outside ."\">". $lang['AppLoc'][$this->outside] ."</span>";
+    #return "<span class=\"apploc". $this->outside ."\">". $lang['AppLoc'][$this->outside] ."</span>";
+    return "<span>". $this->outside ."</span>";
   }
   /**
    * put aout the formatted appointment
    */
   function formatted () {
-    global $lang,$tutos,$current_user;
+    global $lang,$tutos,$current_user,$theme;
+
+    $theme_path="themes/".$theme."/";
+    $image_path=$theme_path."images/";
 
     if ( $this->mod_allow == 3 ) {
       $class = "privapp";
@@ -1304,8 +1343,9 @@ class appointment extends tutos_base {
     }
 
     echo "  <tr>\n";
-    echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" colspan=\"2\"><b> ". $this->getLink($duration) ."</b></td>\n";
-    echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"right\"><b>". $this->getLocation() ."</b></td>\n";
+    echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" colspan=\"3\"><b> ". $this->getLink($duration) ."</b></td>\n";
+    #echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"right\"><b>". $this->getLocation() ."</b></td>\n";
+    #echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"right\"><b>". $this->outside ."</b></td>\n";
     echo "  </tr>\n";
 
     $myself = false;
@@ -1346,6 +1386,14 @@ class appointment extends tutos_base {
       echo "  </tr>\n";
       unset($fp);
     }
+ 
+    //Added for description 
+      $descr = eregi_replace("\n","<br />",$this->descr);
+      if ($descr != "" ) {
+        echo "  <tr><td width=\"16\" align=\"right\" valign=\"top\"><img src=\"".$image_path."".$this->module_name."s.gif\" border=\"0\">&nbsp;</td><td class=\"". $class ."\" colspan=\"2\">". urlReplace($descr) ."&nbsp;</td></tr>\n";
+      }
+
+   //
 
     if ( ($tutos[applocdesc][$this->outside] == 1) 
          || ( ($myself == true) && ($tutos[applocdesc][$this->outside] == 2))
@@ -1420,7 +1468,6 @@ class appointment extends tutos_base {
     $d->setDateTimeTS($o->ts_def);
 
     $x = $d->getYYYYMMDD();
-
     if ( $x < $this->start->getYYYYMMDD()  ) return false;
 
     $this->s_out  = 0;
@@ -1750,21 +1797,67 @@ class appointment extends tutos_base {
     if ($from->getDate() == $to->getDate()) {
       $to->addDays(1);
     }
+    
 /*
     $x1 = DateTime1($from);
     $x2 = DateTime1($to);
 */
-    $x1 = sprintf ("'%04d-%02d-%02d %02d:%02d:%02d'",$from->year,$from->month,$from->day,$from->hour,$from->min,$from->sec);
+    $x1 = sprintf ("%04d-%02d-%02d %02d:%02d:%02d",$from->year,$from->month,$from->day,$from->hour,$from->min,$from->sec);
 
-    $x2 = sprintf ("'%04d-%02d-%02d %02d:%02d:%02d'",$to->year,$to->month,$to->day,$to->hour,$to->min,$to->sec);
+    $x2 = sprintf ("%04d-%02d-%02d %02d:%02d:%02d",$to->year,$to->month,$to->day,$to->hour,$to->min,$to->sec);
 
-
+    list($sx1,$sx1time) = split(" ",$x1);
+    list($sx2,$sx2time) = split(" ",$x2);
 
     $from->ts_def -= $current_user->offset;
     $to->ts_def -= $current_user->offset;
 
-
+// Query created by Raj
     #
+    # First query ( Get Call appointments )
+    #
+    #
+    $q = "SELECT * FROM activity,crmentity WHERE ";
+    $q .= " ( activity.activityid = crmentity.crmid AND activity.activitytype in ('Call','Meeting') AND ";
+    if(!is_admin($current_user))
+    {
+	$q .= " ( ";
+    }
+    $q .= "  (date_start < '". $sx2 ."' AND date_start >= '". $sx1 ."')";
+    #$q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
+    #$q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
+    #$q .= " OR (date_start < ". $sx1 .")";
+    if(!is_admin($current_user))
+    {
+	$q .= " ) AND ( smownerid = '".$current_user->id."' ) ";
+    }
+    $q .= " AND deleted = 0)";
+    $q .= " ORDER by date_start";
+    $r = $this->db->query($q);
+    $n = $this->db->getRowCount($r);
+    $a = 0;
+    //print("GS --> ".$n." q=".$q);
+   
+    while ( $a < $n ) {
+      $o = &new appointment();
+      $result = $this->db->fetchByAssoc($r);
+      //print_r($result);
+      //$o->read_result($r,$a);
+	$o->read_result($result);
+      $a++;
+      if ( $o->see_ok() ) { 
+        /* Get all participants */
+        //$o->read_participants();
+        //print("GS --> see");
+        $obj->callist[$o->record_id] = &$o;
+      }
+      unset($o);
+    }
+
+//
+
+
+/*    #
     # First query ( non repeating appointments )
     #
     $q = "SELECT * FROM ". $this->tablename." WHERE ";
@@ -1798,9 +1891,9 @@ class appointment extends tutos_base {
       //$o->read_result($r,$a);
 	$o->read_result($result);
       $a++;
-      if ( $o->see_ok() ) { 
+      if ( $o->see_ok() ) { */
         /* Get all participants */
-        //$o->read_participants();
+    /*    //$o->read_participants();
         //print("GS --> see");
         $obj->callist[$o->id] = &$o;
       }
@@ -1808,7 +1901,7 @@ class appointment extends tutos_base {
     }
     //$r->free();
 
-
+*/
     $x = new DateTime();
     $x->setDateTimeTS($from->ts);
 

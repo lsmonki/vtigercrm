@@ -11,7 +11,8 @@
  ********************************************************************************/
 
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
+require_once('include/utils.php');
 
 ?>
 
@@ -37,17 +38,36 @@ require_once('database/DatabaseConnection.php');
     {
     
     }
+	<?
+		global $adb;
+		if(isset($_REQUEST['roleid']) && $_REQUEST['roleid'] != '')
+		{	
+			$roleid= $_REQUEST['roleid'];
+			$sql = "select * from role where roleid=".$roleid;
+			$roleResult = $adb->query($sql);
+			$mode = $_REQUEST['mode'];
+			$rolename = $adb->query_result($roleResult,0,"name");
+
+			//retreiving the profileid
+			$sql1 = "select profile.* from role2profile inner join profile on profile.profileid=role2profile.profileid where roleid=".$roleid;
+		        $result1 = $adb->query($sql1);
+			$selected_profileid = $adb->query_result($result1,0,'profileid');
+			echo 'select profileid is'.$selected_profileid;
+		}
+	?>
     
              </script>
             <div class="bodyText mandatory"> </div>
             <form name="newRoleForm" action="index.php">
                     <input type="hidden" name="module" value="Users">
-                    <input type="hidden" name="action" value="UserInfoUtil">
+                    <input type="hidden" name="action" value="SaveRole">
+                    <input type="hidden" name="roleid" value="<?php echo $roleid;    ?>">
+                    <input type="hidden" name="mode" value="<?php echo $mode;    ?>">
               <table width="100%" border="0" cellpadding="0"
  cellspacing="0">
                 <tbody>
                   <tr>
-                    <td class="moduleTitle hline"><?php echo $mod_strings['LBL_CREATE_NEW_ROLE']; ?></td>
+                    <td class="moduleTitle hline">Create New Role:</td>
                   </tr>
                 </tbody>
               </table>
@@ -66,28 +86,34 @@ require_once('database/DatabaseConnection.php');
  cellspacing="1" class="formOuterBorder">
                 <tbody>
                   <tr>
-                    <td class="formSecHeader" colspan="2"><?php echo $mod_strings['LBL_NEW_ROLE']; ?></td>
+                    <td class="formSecHeader" colspan="2">New Role</td>
                   </tr>
                   <tr>
-                    <td class="dataLabel mandatory">* <?php echo $mod_strings['LBL_ROLE_NAME']; ?></td>
-                    <td class="value"><input class="textField" type="text" name="roleName"></td>
+                    <td class="dataLabel mandatory">* Role Name</td>
+                    <td class="value"><input class="textField" type="text" name="roleName" value="<?php echo $rolename;  ?>"></td>
                   </tr>
                   <tr>
-                    <td class="dataLabel mandatory">*<?php echo $mod_strings['LBL_PARENT_ROLE']; ?></td>
+                    <td class="dataLabel mandatory">* Associate With Profile</td>
                     <td class="value">
-                    <select class="select" name="parentRoleName">
+                    <select class="select" name="profileId">
             <?php
-             $sql = "select name from role";
-                  $result = mysql_query($sql);
-                  $temprow = mysql_fetch_array($result);
+             $sql = "select * from profile";
+                  $result = $adb->query($sql);
+                  $temprow = $adb->fetch_array($result);
                   do
                   {
-                    $name=$temprow["name"];
+		    $selected = '';	
+                    $name=$temprow["profilename"];
+		    $profileid=$temprow["profileid"];
+		    if($profileid == $selected_profileid)
+		    {
+			$selected = 'selected';
+		    }		
                     ?>
                       
-                    <option value="<?php echo $name ?>"><?php echo $temprow["name"] ?></option>
+                    <option value="<?php echo $profileid ?>" <?php echo $selected;  ?>><?php echo $temprow["profilename"] ?></option>
                        <?php
-                    }while($temprow = mysql_fetch_array($result));
+                    }while($temprow = $adb->fetch_array($result));
                      ?>
                     
                     </select>

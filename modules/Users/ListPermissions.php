@@ -11,7 +11,7 @@
  ********************************************************************************/
 
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -88,8 +88,8 @@ function delRole()
 
               $sql = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=3";
  
-$result = mysql_query($sql);
-	if(@mysql_result($result,1,"action_permission") == 1)
+$result = $adb->query($sql);
+	if(@$adb->query_result($result,1,"action_permission") == 1)
 	{
         ?>
                           <td>
@@ -108,7 +108,7 @@ $result = mysql_query($sql);
        <?php
         }
 
-	if(@mysql_result($result,0,"action_permission") == 1)
+	if(@$adb->query_result($result,0,"action_permission") == 1)
         {
 	?>
                           <td>
@@ -125,7 +125,7 @@ $result = mysql_query($sql);
 	<?
 	}
 
-	if(@mysql_result($result,2,"module_permission") == 1)
+	if(@$adb->query_result($result,2,"module_permission") == 1)
         {
 	?>
                           <td>
@@ -151,8 +151,8 @@ $result = mysql_query($sql);
   <?php
                         $sql_accounts = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=5";
 
-$result_accounts = mysql_query($sql_accounts);
-if(@mysql_result($result_accounts,1,"action_permission") == 1)
+$result_accounts = $adb->query($sql_accounts);
+if(@$adb->query_result($result_accounts,1,"action_permission") == 1)
 {
 
   ?>
@@ -178,7 +178,7 @@ else
 <?php
 
 }
-if(@mysql_result($result_accounts,0,"action_permission") == 1)
+if(@$adb->query_result($result_accounts,0,"action_permission") == 1)
 {
 ?>
 
@@ -195,7 +195,7 @@ else
 		  </td>
  <?
 }
-if(@mysql_result($result_accounts,2,"module_permission") == 1)
+if(@$adb->query_result($result_accounts,2,"module_permission") == 1)
 {
 ?>
 
@@ -220,8 +220,8 @@ else
 		  <td nowrap="nowrap"><?php echo $mod_strings['LBL_CONTACTS']; ?></td>
  	  <?php
                 $sql_contacts = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=4";
-$result_contacts = mysql_query($sql_contacts);
-        if(@mysql_result($result_contacts,2,"action_permission") == 1)
+$result_contacts = $adb->query($sql_contacts);
+        if(@$adb->query_result($result_contacts,2,"action_permission") == 1)
         {
         ?>
                           <td>
@@ -245,7 +245,7 @@ $result_contacts = mysql_query($sql_contacts);
 
      <?php
         }
-	if(@mysql_result($result_contacts,1,"action_permission") == 1)
+	if(@$adb->query_result($result_contacts,1,"action_permission") == 1)
         {
         ?>
 
@@ -262,7 +262,7 @@ $result_contacts = mysql_query($sql_contacts);
                           </td>
         <?php
 	}
-	if(@mysql_result($result_contacts,2,"module_permission") == 1)
+	if(@$adb->query_result($result_contacts,2,"module_permission") == 1)
         {
         ?>
 
@@ -287,8 +287,8 @@ $result_contacts = mysql_query($sql_contacts);
                           <td nowrap="nowrap"><?php echo $mod_strings['LBL_OPPURTUNITIES']; ?></td>
   <?php
                         $sql_opportunities = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=6";
-$result_opportunities = mysql_query($sql_opportunities);
-        if(@mysql_result($result_opportunities,1,"action_permission") == 1)
+$result_opportunities = $adb->query($sql_opportunities);
+        if(@$adb->query_result($result_opportunities,1,"action_permission") == 1)
         {
         ?>
                           <td>
@@ -312,7 +312,7 @@ $result_opportunities = mysql_query($sql_opportunities);
 
      <?php
         }
-	if(@mysql_result($result_opportunities,0,"action_permission") == 1)
+	if(@$adb->query_result($result_opportunities,0,"action_permission") == 1)
         {
         ?>
 
@@ -329,7 +329,7 @@ $result_opportunities = mysql_query($sql_opportunities);
                           </td>
         <?php
 	}
-       if(@mysql_result($result_opportunities,2,"module_permission") == 1)
+       if(@$adb->query_result($result_opportunities,2,"module_permission") == 1)
         {
         ?>
 
@@ -357,8 +357,8 @@ $result_opportunities = mysql_query($sql_opportunities);
 
                         <?php
                         $sql_activities = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=12";
-$result_activities = mysql_query($sql_activities);
-        if(@mysql_result($result_activities,1,"action_permission") == 1)
+$result_activities = $adb->query($sql_activities);
+        if(@$adb->query_result($result_activities,1,"action_permission") == 1)
         {
         ?>
                           <td>
@@ -382,7 +382,7 @@ $result_activities = mysql_query($sql_activities);
 
      <?php
         }
-	if(@mysql_result($result_activities,0,"action_permission") == 1)
+	if(@$adb->query_result($result_activities,0,"action_permission") == 1)
         {
         ?>
 
@@ -400,7 +400,7 @@ $result_activities = mysql_query($sql_activities);
         <?php
 	}
 
-        if(@mysql_result($result_activities,2,"module_permission") == 1)
+        if(@$adb->query_result($result_activities,2,"module_permission") == 1)
         {
         ?>
 
@@ -433,8 +433,8 @@ $result_activities = mysql_query($sql_activities);
   <?php
                         $sql_emails = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=10";
 
-           $result_emails = mysql_query($sql_emails);
-        if(@mysql_result($result_emails,1,"action_permission") == 1)
+           $result_emails = $adb->query($sql_emails);
+        if(@$adb->query_result($result_emails,1,"action_permission") == 1)
         {
         ?>
                           <td>
@@ -458,7 +458,7 @@ $result_activities = mysql_query($sql_activities);
 
      <?php
         }
-	if(@mysql_result($result_emails,0,"action_permission") == 1)
+	if(@$adb->query_result($result_emails,0,"action_permission") == 1)
         {
         ?>
 
@@ -475,7 +475,7 @@ $result_activities = mysql_query($sql_activities);
                           </td>
         <?php
 	}
-        if(@mysql_result($result_emails,2,"module_permission") == 1)
+        if(@$adb->query_result($result_emails,2,"module_permission") == 1)
         {
         ?>
 
@@ -503,8 +503,8 @@ $result_activities = mysql_query($sql_activities);
 
   <?php
                         $sql_notes = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=8";
-$result_notes = mysql_query($sql_notes);
-        if(@mysql_result($result_notes,1,"action_permission") == 1)
+$result_notes = $adb->query($sql_notes);
+        if(@$adb->query_result($result_notes,1,"action_permission") == 1)
         {
         ?>
                           <td>
@@ -524,7 +524,7 @@ $result_notes = mysql_query($sql_notes);
 
         <?php
         }
-	if(@mysql_result($result_notes,0,"action_permission") == 1)
+	if(@$adb->query_result($result_notes,0,"action_permission") == 1)
         {
         ?>
 
@@ -541,7 +541,7 @@ $result_notes = mysql_query($sql_notes);
                           </td>
         <?php
 	}
-	if(@mysql_result($result_notes,2,"module_permission") == 1)
+	if(@$adb->query_result($result_notes,2,"module_permission") == 1)
         {
         ?>
 
@@ -567,8 +567,8 @@ $result_notes = mysql_query($sql_notes);
 
          <?php
            $sql_meetings = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=11";
-           $result_meetings = mysql_query($sql_meetings);
-        if(@mysql_result($result_meetings,1,"action_permission") == 1)
+           $result_meetings = $adb->query($sql_meetings);
+        if(@$adb->query_result($result_meetings,1,"action_permission") == 1)
         {
         ?>
                           <td>
@@ -592,7 +592,7 @@ $result_notes = mysql_query($sql_notes);
 
        <?php
         }
-	if(@mysql_result($result_meetings,0,"action_permission") == 1)
+	if(@$adb->query_result($result_meetings,0,"action_permission") == 1)
         {
         ?>
 
@@ -611,7 +611,7 @@ $result_notes = mysql_query($sql_notes);
 	}
 
 
-       if(@mysql_result($result_meetings,2,"module_permission") == 1)
+       if(@$adb->query_result($result_meetings,2,"module_permission") == 1)
         {
         ?>
 
@@ -639,8 +639,8 @@ $result_notes = mysql_query($sql_notes);
 
         <?php
            $sql_calls = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=9";
-           $result_calls = mysql_query($sql_calls);
-        if(@mysql_result($result_calls,1,"action_permission") == 1)
+           $result_calls = $adb->query($sql_calls);
+        if(@$adb->query_result($result_calls,1,"action_permission") == 1)
         {
         ?>
                           <td>
@@ -664,7 +664,7 @@ $result_notes = mysql_query($sql_notes);
 
         <?php
         }
-	if(@mysql_result($result_calls,0,"action_permission") == 1)
+	if(@$adb->query_result($result_calls,0,"action_permission") == 1)
         {
         ?>
 
@@ -683,7 +683,7 @@ $result_notes = mysql_query($sql_notes);
 	}
 
 
-       if(@mysql_result($result_calls,2,"module_permission") == 1)
+       if(@$adb->query_result($result_calls,2,"module_permission") == 1)
         {
         ?>
 
@@ -722,8 +722,8 @@ $result_notes = mysql_query($sql_notes);
 
   <?php
 $sql_import_leads = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=3";
-           $result_import_leads = mysql_query($sql_import_leads);
-        if(@mysql_result($result_import_leads,2,"action_permission") == 1)
+           $result_import_leads = $adb->query($sql_import_leads);
+        if(@$adb->query_result($result_import_leads,2,"action_permission") == 1)
         {
         ?>
                           <td>
@@ -747,9 +747,9 @@ $sql_import_leads = "select actionname,action_permission,module_permission from 
   <?php
 
 	$sql_import_accounts = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=5";
-           $result_import_accounts = mysql_query($sql_import_accounts);
+           $result_import_accounts = $adb->query($sql_import_accounts);
 
-	if(@mysql_result($result_import_accounts,2,"action_permission") == 1)
+	if(@$adb->query_result($result_import_accounts,2,"action_permission") == 1)
         {	
         ?>
 
@@ -772,9 +772,9 @@ $sql_import_leads = "select actionname,action_permission,module_permission from 
 
   <?php
 	$sql_import_contacts = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=4";
-           $result_import_contacts = mysql_query($sql_import_contacts);
+           $result_import_contacts = $adb->query($sql_import_contacts);
 
-	if(@mysql_result($result_import_contacts,3,"action_permission") == 1)
+	if(@$adb->query_result($result_import_contacts,3,"action_permission") == 1)
 	{
         ?>
 
@@ -799,9 +799,9 @@ $sql_import_leads = "select actionname,action_permission,module_permission from 
 
  <?php
         $sql_import_opportunities = "select actionname,action_permission,module_permission from role2action inner join role2tab on role2tab.rolename=role2action.rolename and role2tab.tabid=role2action.tabid where role2tab.rolename='".$_REQUEST["rolename"] ."' and role2action.tabid=6";
-           $result_import_opportunities = mysql_query($sql_import_opportunities);
+           $result_import_opportunities = $adb->query($sql_import_opportunities);
 
-        if(@mysql_result($result_import_opportunities,2,"action_permission") == 1)
+        if(@$adb->query_result($result_import_opportunities,2,"action_permission") == 1)
         {
         ?>
 

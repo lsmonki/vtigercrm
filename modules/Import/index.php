@@ -19,7 +19,7 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 //error_reporting(0);
 global $current_language;
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/EditView.php,v 1.5 2005/01/13 09:21:20 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/EditView.php,v 1.9 2005/02/21 11:32:59 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,6 +24,7 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Notes/Forms.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -31,11 +32,18 @@ global $mod_strings;
 
 $focus = new Note();
 
-if(isset($_REQUEST['record'])) {
-    $focus->retrieve($_REQUEST['record']);
+if(isset($_REQUEST['record'])) 
+{
+	$focus->id = $_REQUEST['record'];
+	$focus->mode = 'edit';
+	$focus->retrieve_entity_info($_REQUEST['record'],"Notes");
+        $focus->name=$focus->column_fields['title'];
 }
-$old_id = '';
-
+if(isset($_REQUEST['parent_id']))
+{
+        $focus->column_fields['parent_id'] = $_REQUEST['parent_id'];
+}
+//$old_id = '';
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
 {
 	if (! empty($focus->filename) )
@@ -43,6 +51,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 	 $old_id = $focus->id;
 	}
 	$focus->id = "";
+	$focus->mode = '';
 }
 
 
@@ -74,6 +83,14 @@ if (isset($_REQUEST['filename']) && $_REQUEST['isDuplicate'] != 'true') {
         $focus->filename = $_REQUEST['filename'];
 }
 
+//get Block 1 Information
+$block_1 = getBlockInformation("Notes",1,$focus->mode,$focus->column_fields);
+
+//get Address Information
+$block_2 = getBlockInformation("Notes",2,$focus->mode,$focus->column_fields);
+
+//get Description Information
+$block_3 = getBlockInformation("Notes",3,$focus->mode,$focus->column_fields);
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -85,23 +102,27 @@ $log->info("Note detail view");
 $xtpl=new XTemplate ('modules/Notes/EditView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
+$xtpl->assign("BLOCK1", $block_1);
+$xtpl->assign("BLOCK2", $block_2);
+$xtpl->assign("BLOCK3", $block_3);
+
+if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
+else $xtpl->assign("NAME", "");
+
+if($focus->mode == 'edit')
+{
+        $xtpl->assign("MODE", $focus->mode);
+}
 
 if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
+else $xtpl->assign("RETURN_MODULE","Notes");
 if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
+else $xtpl->assign("RETURN_ACTION","index");
 if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("ID", $focus->id);
-$xtpl->assign("PARENT_NAME", $focus->parent_name);
-$xtpl->assign("PARENT_RECORD_TYPE", $focus->parent_type);
-$xtpl->assign("PARENT_ID", $focus->parent_id);
-$xtpl->assign("CONTACT_NAME", $focus->contact_name);
-$xtpl->assign("CONTACT_PHONE", $focus->contact_phone);
-$xtpl->assign("CONTACT_EMAIL", $focus->contact_email);
-$xtpl->assign("CONTACT_ID", $focus->contact_id);
-if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
-else $xtpl->assign("NAME", "");
 $xtpl->assign("OLD_ID", $old_id );
 
 if ( empty($focus->filename))
@@ -120,9 +141,6 @@ if (isset($focus->parent_type) && $focus->parent_type != "") {
 	$xtpl->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
 }
 if ($focus->parent_type == "Account") $xtpl->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=".urlencode($focus->parent_name));
-
-$xtpl->assign("DESCRIPTION", $focus->description);
-$xtpl->assign("TYPE_OPTIONS", get_select_options_with_id($app_list_strings['record_type_display'], $focus->parent_type));
 
 $xtpl->parse("main");
 

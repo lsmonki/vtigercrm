@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Forms.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Forms.php,v 1.4 2005/02/21 11:35:26 jack Exp $
  * Description:  Contains a variety of utility functions specific to this module.
  ********************************************************************************/
 
@@ -141,7 +141,7 @@ function trim(s) {
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (trim(form.name.value) == "") {
+	if (trim(form.accountname.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_account_name";
 	}
@@ -201,9 +201,9 @@ $the_form .= <<<EOQ
 			<input type="hidden" name="assigned_user_id" value='${user_id}'>
 			<input type="hidden" name="action" value="Save">
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_account_name<br>
-		<input name='name' type="text" value=""><br>
+		<input name='accountname' type="text" value=""><br>
 		$lbl_phone<br>
-		<input name='phone_office' type="text" value=""><br>
+		<input name='phone' type="text" value=""><br>
 		$lbl_website<br>
 		http://<input name='website' type="text" value=""><br>
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >

@@ -20,9 +20,13 @@ global $allow_exports;
 <tr>
 <?php 
 if ($_REQUEST['module'] == 'Contacts' ||
-	$_REQUEST['module'] == 'Opportunities' ||
-	$_REQUEST['module'] == 'Accounts')
+	$_REQUEST['module'] == 'Potentials' ||
+	$_REQUEST['module'] == 'Accounts' ||
+	$_REQUEST['module'] == 'Leads')
 {
+	$permissionData = $_SESSION['action_permission_set'];
+	if($permissionData[$tabid]['5'] == 0)
+	{
 ?>
 <form name="Import" method="get" action="index.php">
 <input type="hidden" name="module" value="<?php echo $_REQUEST['module']; ?>">
@@ -33,11 +37,17 @@ if ($_REQUEST['module'] == 'Contacts' ||
 <td valign="middle" align="right" width="99%"><input title="<?php echo $app_strings['LBL_IMPORT']; ?> <?php echo $mod_strings['LBL_MODULE_NAME']?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $app_strings['LBL_IMPORT']; ?> <?php echo $mod_strings['LBL_MODULE_NAME']?>  " ></td>
 </form>
 <?php
+	}
 }
 
 if  ( $allow_exports=='all' || 
 	(  $allow_exports=='admin' &&  is_admin($current_user))  ) 
-{
+	{
+		if($_REQUEST['module'] != 'Activities')
+		{
+			$permissionData = $_SESSION['action_permission_set'];
+			if($permissionData[$tabid]['6'] == 0)
+			{
 ?>
 <form name="EXPORT" method="get" action="export.php">
 <input type="hidden" name="module" value="<?php echo $_REQUEST['module']; ?>">
@@ -46,7 +56,9 @@ if  ( $allow_exports=='all' ||
 <td valign="middle" align="right" width="1%"><input title="<?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?>  " ></td>
 </form>
 <?php
-}
+			}
+		}
+	}
 ?>
 </tr>
 </table>

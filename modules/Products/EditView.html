@@ -21,7 +21,7 @@
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <tr>
     <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}product.gif" border="0"></td>
-    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_NEW_PRODUCT}{MOD.LBL_COLON}  {NAME}</td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_PRODUCT_NAME}  {NAME}</td>
 	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
 </tr>
 <tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
@@ -31,17 +31,20 @@
 	<td>
 		<table cellpadding="0" cellspacing="5" border="0">
 		<tr>
+	           <link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+                   <script type="text/javascript" src="jscalendar/calendar.js"></script>
+                   <script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
+                   <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
         <form name="EditView" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Products">
-			<input type="hidden" name="record" value="">
 			<input type="hidden" name="action">
-			<input type="hidden" name="mode" value="{MODE}">
-			<input type="hidden" name="id" value={PRODUCTID}>
+			<input type="hidden" name="record" value="{ID}">
+                        <input type="hidden" name="mode" value="{MODE}">
 			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
 			<input type="hidden" name="return_id" value="{RETURN_ID}">
 			<input type="hidden" name="return_action" value="{RETURN_ACTION}">						
 		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
-		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}';cancelForm(this.form)" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
+		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
 		</tr></table>
 	</td>
 	<td></td>
@@ -53,28 +56,21 @@
 <tr>
 <td>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2">
-	<tr>
-	<td width="20%" class="dataLabel"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_PRODUCT_NAME}</td>
-	<td width="30%"><input name='productname' type="text" tabindex='1' size='35' maxlength='40' value="{PRODUCT_NAME}"></td>
-	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_CODE}</td>
-	<td width="30%"><input name='productcode' type="text" tabindex='2' size='15' maxlength='10' value="{PRODUCT_CODE}"></td>
-	</tr>
-	<tr>
-	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_ACTIVE}</td>
-	<td width="30%"><input name='active' type="checkbox" tabindex='1' {ACTIVE}></td></td>
-	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_COMMISSION_RATE}</td>
-	<td width="30%"><input name='commissionrate' type="text" tabindex='4' size='15' maxlength='10' value="{COMMISSION_RATE}"></td>
-	</tr>
-	<tr>
-	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_QTY_PER_UNIT}</td>
-	<td width="30%"><input name='qtyperunit' type="text" tabindex='5' size='15' maxlength='10' value="{QTY_PER_UNIT}"></td>
-	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_UNIT_PRICE}</td>
-	<td width="30%"><input name='unitprice' type="text" tabindex='6' size='15' maxlength='10' value="{UNIT_PRICE}"></td>
-	</tr>
-	<tr>
-	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_DESCRIPTION}</td>
-	<td colspan="4"><textarea name='description' tabindex='7' cols="80" rows="8">{DESCRIPTION}</textarea></td>
-</tr></table>
+	<tr><th align="left" class="formSecHeader" colspan="4">Product Information</th></tr>
+        <tr>
+	{BLOCK1}
+	</table>
+</td></tr></table>
+<BR>
+{CUSTOMFIELD}
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr><th align="left" class="formSecHeader" colspan="4">Description Information</th></tr>
+        <tr>
+	{BLOCK2}	
+	</table>
 </td></tr></table>
 </form>
 <script language="JavaScript" type="text/javascript" src="include/general.js"></script>

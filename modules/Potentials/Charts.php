@@ -13,13 +13,13 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Charts.php,v 1.6 2004/12/21 20:01:38 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Charts.php,v 1.11 2005/03/04 20:22:43 jack Exp $
  * Description:  Includes the functions for Customer module specific charts.
  ********************************************************************************/
 
 require_once('config.php');
 require_once('include/logging.php');
-require_once('modules/Opportunities/Opportunity.php');
+require_once('modules/Potentials/Opportunity.php');
 require_once("jpgraph/src/jpgraph.php");
 require_once('include/utils.php');
 require_once('include/logging.php');
@@ -104,18 +104,18 @@ class jpgraph {
 			foreach ($user_id as $the_id) {
 				if (!$first) $where .= "OR ";
 				$first = false;
-				$where .= "assigned_user_id='$the_id' ";
+				$where .= "crmentity.smcreatorid='$the_id' ";
 			}
 			$where .= ") ";
 
 			//build the where clause for the query that matches $date_start and $date_end
-			$where .= "AND date_closed >= '$date_start' AND date_closed <= '$date_end'";
+			$where .= "AND closingdate >= '$date_start' AND closingdate <= '$date_end'";
 			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".$date_start." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".$date_end."\n";
 
 			//Now do the db queries
 			//query for opportunity data that matches $datay and $user
-			$opp = new Opportunity();
-			$opp_list = $opp->get_full_list("amount DESC, date_closed DESC", $where);
+			$opp = new Potential();
+			$opp_list = $opp->get_full_list("amount DESC, closingdate DESC", $where);
 
 			//build pipeline by sales stage data
 			$total = 0;
@@ -125,10 +125,10 @@ class jpgraph {
 			$other = $current_module_strings['LBL_LEAD_SOURCE_OTHER'];
 			if (isset($opp_list)) {
 				foreach ($opp_list as $record) {
-					$month = substr_replace($record->date_closed,'',-3);
+					$month = substr_replace($record->column_fields['closingdate'],'',-3);
 					if (!in_array($month, $months)) { array_push($months, $month); }
-					if ($record->sales_stage == 'Closed Won' || $record->sales_stage == 'Closed Lost') {
-						$sales_stage=$record->sales_stage;
+					if ($record->column_fields['sales_stage'] == 'Closed Won' || $record->column_fields['sales_stage'] == 'Closed Lost') {
+						$sales_stage=$record->column_fields['sales_stage'];
 					}
 					else {
 						$sales_stage=$other;
@@ -137,9 +137,9 @@ class jpgraph {
 					if (!isset($sum[$month][$sales_stage])) {
 						$sum[$month][$sales_stage] = 0;
 					}
-					if (isset($record->amount))	{
+					if (isset($record->column_fields['amount']))	{
 						// Strip all non numbers from this string.
-						$amount = ereg_replace('[^0-9]', '', $record->amount);
+						$amount = ereg_replace('[^0-9]', '', $record->column_fields['amount']);
 						$sum[$month][$sales_stage] = $sum[$month][$sales_stage] + $amount;
 						if (isset($count[$month][$sales_stage])) {
 							$count[$month][$sales_stage]++;
@@ -185,7 +185,7 @@ class jpgraph {
 					array_push($datax[$stage], 0);
 					array_push($aAlts[$stage], "");
 				}
-				array_push($aTargets[$stage], "index.php?module=Opportunities&action=ListView&date_closed=$month&sales_stage=".urlencode($stage)."&query=true");
+				array_push($aTargets[$stage], "index.php?module=Potentials&action=ListView&date_closed=$month&sales_stage=".urlencode($stage)."&query=true");
 			  }
 		  	  array_push($legend,$month);
 			}
@@ -364,7 +364,7 @@ class jpgraph {
 				foreach ($user_id as $the_id) {
 					if (!$first) $where .= "OR ";
 					$first = false;
-					$where .= "assigned_user_id='$the_id' ";
+					$where .= "crmentity.smcreatorid='$the_id' ";
 				}
 				$where .= ") ";
 			}
@@ -378,15 +378,15 @@ class jpgraph {
 				foreach ($datay as $key=>$value) {
 					if (!$first) $where .= "OR ";
 					$first = false;
-					$where .= "lead_source ='$key' ";
+					$where .= "leadsource ='$key' ";
 				}
 				$where .= ")";
 			}
 
 			//Now do the db queries
 			//query for opportunity data that matches $datay and $user
-			$opp = new Opportunity();
-			$opp_list = $opp->get_full_list("amount DESC, date_closed DESC", $where);
+			$opp = new Potential();
+			$opp_list = $opp->get_full_list("amount DESC, closingdate DESC", $where);
 
 			//build pipeline by sales stage data
 			$total = 0;
@@ -396,15 +396,15 @@ class jpgraph {
 			if (isset($opp_list)) {
 				foreach ($opp_list as $record) {
 					//if lead source is blank, set it to the language's "none" value
-					if (isset($record->lead_source) && $record->lead_source != '') {
-						$lead_source = $record->lead_source;
+					if (isset($record->column_fields['leadsource']) && $record->column_fields['leadsource'] != '') {
+						$lead_source = $record->column_fields['leadsource'];
 					}
 					else {
 						$lead_source = $current_module_strings['NTC_NO_LEGENDS'];
 					}
 
-					if ($record->sales_stage == 'Closed Won' || $record->sales_stage == 'Closed Lost') {
-						$sales_stage=$record->sales_stage;
+					if ($record->column_fields['sales_stage'] == 'Closed Won' || $record->column_fields['sales_stage'] == 'Closed Lost') {
+						$sales_stage=$record->column_fields['sales_stage'];
 					}
 					else {
 						$sales_stage=$other;
@@ -413,9 +413,9 @@ class jpgraph {
 					if (!isset($sum[$lead_source][$sales_stage])) {
 						$sum[$lead_source][$sales_stage] = 0;
 					}
-					if (isset($record->amount))	{
+					if (isset($record->column_fields['amount']))	{
 						// Strip all non numbers from this string.
-						$amount = ereg_replace('[^0-9]', '', $record->amount);
+						$amount = ereg_replace('[^0-9]', '', $record->column_fields['amount']);
 						$sum[$lead_source][$sales_stage] = $sum[$lead_source][$sales_stage] + $amount;
 						if (isset($count[$lead_source][$sales_stage])) {
 							$count[$lead_source][$sales_stage]++;
@@ -458,7 +458,7 @@ class jpgraph {
 					array_push($datax[$stage], 0);
 					array_push($aAlts[$stage], "");
 				}
-				array_push($aTargets[$stage], "index.php?module=Opportunities&action=ListView&lead_source=$lead&sales_stage=".urlencode($stage)."&query=true");
+				array_push($aTargets[$stage], "index.php?module=Potentials&action=ListView&leadsource=".urlencode($lead)."&sales_stage=".urlencode($stage)."&query=true");
 			  }
 			  array_push($legend,$translation);
 			}
@@ -635,7 +635,7 @@ class jpgraph {
 				foreach ($user_id as $the_id) {
 					if (!$first) $where .= "OR ";
 					$first = false;
-					$where .= "assigned_user_id='$the_id' ";
+					$where .= "crmentity.smcreatorid='$the_id' ";
 				}
 				$where .= ") ";
 			}
@@ -655,13 +655,13 @@ class jpgraph {
 			}
 
 			//build the where clause for the query that matches $date_start and $date_end
-			$where .= "AND date_closed >= '$date_start' AND date_closed <= '$date_end'";
+			$where .= "AND closingdate >= '$date_start' AND closingdate <= '$date_end'";
 			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".$date_start." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".$date_end."\n";
 
 			//Now do the db queries
 			//query for opportunity data that matches $datax and $user
-			$opp = new Opportunity();
-			$opp_list = $opp->get_full_list("amount DESC, date_closed DESC", $where);
+			$opp = new Potential();
+			$opp_list = $opp->get_full_list("amount DESC, closingdate DESC", $where);
 
 			//build pipeline by sales stage data
 			$total = 0;
@@ -669,18 +669,18 @@ class jpgraph {
 			$sum = array();
 			if (isset($opp_list)) {
 				foreach ($opp_list as $record) {
-					if (!isset($sum[$record->sales_stage][$record->assigned_user_id])) {
-						$sum[$record->sales_stage][$record->assigned_user_id] = 0;
+					if (!isset($sum[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']])) {
+						$sum[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']] = 0;
 					}
-					if (isset($record->amount))	{
+					if (isset($record->column_fields['amount']))	{
 						// Strip all non numbers from this string.
-						$amount = ereg_replace('[^0-9]', '', $record->amount);
-						$sum[$record->sales_stage][$record->assigned_user_id] = $sum[$record->sales_stage][$record->assigned_user_id] + $amount;
-						if (isset($count[$record->sales_stage][$record->assigned_user_id])) {
-							$count[$record->sales_stage][$record->assigned_user_id]++;
+						$amount = ereg_replace('[^0-9]', '', $record->column_fields['amount']);
+						$sum[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']] = $sum[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']] + $amount;
+						if (isset($count[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']])) {
+							$count[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']]++;
 						}
 						else {
-							$count[$record->sales_stage][$record->assigned_user_id] = 1;
+							$count[$record->column_fields['sales_stage']][$record->column_fields['assigned_user_id']] = 1;
 						}
 						$total = $total + ($amount/1000);
 					}
@@ -712,7 +712,7 @@ class jpgraph {
 					array_push($datay[$the_id], 0);
 					array_push($aAlts[$the_id], "");
 				}
-				array_push($aTargets[$the_id], "index.php?module=Opportunities&action=ListView&assigned_user_id[]=$the_id&sales_stage=".urlencode($stage_key)."&query=true");
+				array_push($aTargets[$the_id], "index.php?module=Potentials&action=ListView&assigned_user_id[]=$the_id&sales_stage=".urlencode($stage_key)."&closingdate_start=".urlencode($date_start)."&closingdate_end=".urlencode($date_end)."&query=true");
 			  }
 			  array_push($legend,$stage_translation);
 			}
@@ -881,7 +881,7 @@ class jpgraph {
 				foreach ($user_id as $the_id) {
 					if (!$first) $where .= "OR ";
 					$first = false;
-					$where .= "assigned_user_id='$the_id' ";
+					$where .= "crmentity.smcreatorid='$the_id' ";
 				}
 				$where .= ") ";
 			}
@@ -894,13 +894,13 @@ class jpgraph {
 				foreach ($legends as $key=>$value) {
 					if (!$first) $where .= "OR ";
 					$first = false;
-					$where .= "lead_source	='$key' ";
+					$where .= "leadsource	='$key' ";
 				}
 				$where .= ")";
 			}
 
-			$opp = new Opportunity();
-			$opp_list = $opp->get_full_list("amount DESC, date_closed DESC", $where);
+			$opp = new Potential();
+			$opp_list = $opp->get_full_list("amount DESC, closingdate DESC", $where);
 
 			//build pipeline by lead source data
 			$total = 0;
@@ -908,13 +908,13 @@ class jpgraph {
 			$sum = array();
 			if (isset($opp_list)) {
 				foreach ($opp_list as $record) {
-					if (!isset($sum[$record->lead_source])) $sum[$record->lead_source] = 0;
-					if (isset($record->amount) && isset($record->lead_source))	{
+					if (!isset($sum[$record->column_fields['leadsource']])) $sum[$record->column_fields['leadsource']] = 0;
+					if (isset($record->column_fields['amount']) && isset($record->column_fields['leadsource']))	{
 						// Strip all non numbers from this string.
-						$amount = ereg_replace('[^0-9]', '', $record->amount);
-						$sum[$record->lead_source] = $sum[$record->lead_source] + ($amount/1000);
-						if (isset($count[$record->lead_source])) $count[$record->lead_source]++;
-						else $count[$record->lead_source] = 1;
+						$amount = ereg_replace('[^0-9]', '', $record->column_fields['amount']);
+						$sum[$record->column_fields['leadsource']] = $sum[$record->column_fields['leadsource']] + ($amount/1000);
+						if (isset($count[$record->column_fields['leadsource']])) $count[$record->column_fields['leadsource']]++;
+						else $count[$record->column_fields['leadsource']] = 1;
 						$total = $total + ($amount/1000);
 					}
 				}
@@ -937,7 +937,7 @@ class jpgraph {
 						// put none in if the field is blank.
 						array_push($visible_legends, $current_module_strings['NTC_NO_LEGENDS']);
 					}
-					array_push($aTargets, "index.php?module=Opportunities&action=ListView&lead_source=".urlencode($lead_source_key)."&query=true");
+					array_push($aTargets, "index.php?module=Potentials&action=ListView&leadsource=".urlencode($lead_source_key)."&query=true");
 					array_push($aAlts, $count[$lead_source_key]." ".$current_module_strings['LBL_OPPS_IN_LEAD_SOURCE']." $lead_source_translation	");
 				}
 			}

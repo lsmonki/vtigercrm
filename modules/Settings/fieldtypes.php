@@ -70,6 +70,10 @@ $image_path=$theme_path."images/";
     <td width="20"><div align="center"><img src="<?php echo $image_path."picklist.gif" ?>" width="20" height="20"></div></td>
     <td nowrap id="field7" class="fieldType" onClick="parent.selFieldType(7)"><?php echo $mod_strings['PickList']; ?></td>
   </tr>
+  <tr>
+    <td width="20"><div align="center"><img src="<?php echo $image_path."url.gif" ?>" width="20" height="20"></div></td>
+    <td nowrap id="field8" class="fieldType" onClick="parent.selFieldType(8)"><?php echo "URL"; ?></td>
+  </tr>
 </table>
 </body>
 </html>

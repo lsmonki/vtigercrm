@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/index.php,v 1.66 2005/01/15 14:49:06 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/index.php,v 1.84 2005/03/05 10:10:05 jack Exp $
  * Description: Main file and starting point for the application.  Calls the 
  * theme header and footer files defined for the user as well as the module as 
  * defined by the input parameters.
@@ -21,6 +21,8 @@
 
 global $entityDel;
 global $display;
+
+require_once('include/utils.php');
 //$phpbb_root_path='./modules/MessageBoard/';
 if (substr(phpversion(), 0, 1) == "5") {
         ini_set("zend.ze1_compatibility_mode", "1");
@@ -39,139 +41,215 @@ function fetchPermissionDataForTabList()
   return $modulesPermitted;
 }
 
+
+
 function fetchPermissionData($module,$action)
 {
-  global $theme,$display;
-  $permissionData = $_SESSION['action_permission_set'];
-  $i=0;
 
-  require_once('modules/Users/UserInfoUtil.php');
+	global $theme,$display;
+	global $others_permission_id;
+	global $others_view;
+	global $others_create_edit;
+	global $others_delete;
+	global $current_user;
+        
+	global $tabid;
+	global $actionid;
+	global $profile_id;
 
-  if($module == 'Leads')
-  {
-    $tabid=3;
-  }
-  else if($module == 'Home')
-  {
-    $tabid=1;
-  }
-  else if($module == 'Dashboard')
-  {
-    $tabid=2;
-  }
-  else if($module == 'Accounts')
-  {
-    $tabid=5;
-  }
-  else if($module == 'Contacts')
-  {
-    $tabid=4;
-  }
-  else if($module == 'Opportunities')
-  {
-    $tabid=6;
-  }
-  else if($module == 'Cases')
-  {
-    $tabid=7;
-  }
-  else if($module == 'Notes')
-  {
-    $tabid=8;
-  }
-  else if($module == 'Calls')
-  {
-    $tabid=9;
-  }
-  else if($module == 'Emails')
-  {
-    $tabid=10;
-  }
-  else if($module == 'Meetings')
-  {
-    $tabid=11;
-  }
-  else if($module == 'Tasks')
-  {
-    $tabid=12;
-  }
- else if($module == 'MessageBoard')
-  {
-    $tabid=13;
-  }
-  else if($module == 'HelpDesk')
-  {
-    $tabid=14;
-  }
-  else if($module == 'Products')
-  {
-    $tabid=15;
-  }
-  else if($module == 'Calendar')
-  {
-    $tabid=16;
-  }
+	require_once('modules/Users/UserInfoUtil.php');
+	$tabid = getTabid($module);
+	//echo 'tab id isss  '.$tabid;
+	//echo '<BR>';
+
+	$actionid = getActionid($action);
+	//echo 'action idd isss '.$actionid;
+	//echo '<BR>';
+	$profile_id = $_SESSION['authenticated_user_profileid'];
+	$tab_per_Data = getAllTabsPermission($profile_id);
+
+	$permissionData = $_SESSION['action_permission_set'];
+	$defSharingPermissionData = $_SESSION['defaultaction_sharing_permission_set'];
+	$others_permission_id = $defSharingPermissionData[$tabid];
+	
+	$i=0;
+
+	
+
+	$accessFlag = false;
+	if($tab_per_Data[$tabid] !=0)
+	{
+		echo "You are not permitted to execute this operation";
+                $display = "No";
+	}
+
+	if($permissionData[$tabid][$actionid] !=0)
+	{
+		echo "You are not permitted to execute this operation";
+		$display = "No";
+	}
+	elseif(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $others_permission_id != '')
+	{
+		$rec_owner_id = getUserId($_REQUEST['record']);
+		if($rec_owner_id != $current_user->id)
+		{
+			if($others_permission_id == 0)
+			{
+				if($action == 'EditView' || $action == 'Delete')
+				{
+					echo "You are not permitted to execute this operation";
+			                $display = "No";	
+				}
+				else
+				{
+					return;
+				}
+			}
+			elseif($others_permission_id == 1)
+			{
+				if($action == 'Delete')
+				{
+					echo "You are not permitted to execute this operation";
+			                $display = "No";	
+				}
+				else
+				{
+					return;
+				}
+			}
+			elseif($others_permission_id == 2)
+			{
+				
+				return;
+			}
+			elseif($others_permission_id == 3)
+			{
+				if($action == 'DetailView' || $action == 'EditView' || $action == 'Delete')
+				{
+					echo "You are not permitted to execute this operation";
+			                $display = "No";	
+				}
+				else
+				{
+					return;
+				}
+			}
+				
+			
+		}
+		else
+		{
+			return;
+		}
+	}
+	else
+	{
+		return;
+	}
+
+	//checkDeletePermission($tabid);
+	//if the tabid is not present in the array then he is not permitted
+	//if the tabid is present, then check for the values of the action_permissions
+	//Check for the action mappings in the profile2standard permissions table
+	/* 
+	   echo 'module iss  '.$module;
+	   echo '<BR>';
+	   echo 'action iss  '.$action;
+	   echo '<BR>';
+	   echo sizeof($permissionData);
+	 */
+	/*
+	while($i<count($permissionData))
+	{
+		if($permissionData[$i][0] == $tabid )
+		{
+
+				
+				echo 'actionid is  '.$permissionData[$i][1];
+				echo '<BR>';
+				echo 'action permission iss  '.$permissionData[$i][2];
+				echo '<BR>';
+			 
+			$defSharingPermissionVal = $defSharingPermissionData[$tabid];
+			if($defSharingPermissionVal == 0)
+			{
+				$others_view='yes';
+				$others_create_edit='no';
+				$others_delete='no';
+			}
+			if($defSharingPermissionVal == 1)
+			{
+				$others_view='yes';
+				$others_create_edit='yes';
+				$others_delete='no';
+			}
+			if($defSharingPermissionVal == 2)
+			{
+				$others_view='yes';
+				$others_create_edit='yes';
+				$others_delete='yes';
+			}
+			if($defSharingPermissionVal == 3)
+			{
+				$others_view='no';
+				$others_create_edit='no';
+				$others_delete='no';
+			}
+
+			$accessFlag=true;
+			if($permissionData[$i][1]==$actionid)
+			{
+				$actionpermissionvalue=$permissionData[$i][2];
+				if($actionpermissionvalue != 0)
+				{
+					echo "You are not permitted to execute this operation";
+					$display = "No";
+				}
+				else
+				{
+					return;
+				}
+			}
+
+		}
+		$i++;
+	}
+	*/
 
 
-  $accessFlag = false;
-  checkDeletePermission($tabid);
-  //if the tabid is not present in the array then he is not permitted
-  //if the tabid is present, then check for the values of the action_permissions
-  while($i<count($permissionData))
-  {
-    if($permissionData[$i][0] == $tabid )
-    {
-      $accessFlag=true;
-      if($permissionData[$i][1]==$action)
-      {
-        $actionpermissionvalue=$permissionData[$i][2];
-        if($actionpermissionvalue == 0)
-        {
-          echo "You are not permitted to execute this operation";
-          $display = "No";
-        }
-        else
-        {
-          return;
-        }
-      }
-      
-    }
-    $i++;
-  }
-   
-  if(!$accessFlag)
-  {
-    echo "You are not permitted to execute this operation";
-       $display = "No";
-  }
+	if(!$accessFlag)
+	{
+		echo "You are not permitted to execute this operation";
+		$display = "No";
+	}
 }
 
 //we have to do this as there is no UI page for Delete. Hence, when the user clicks delete, it gets stuck halfway and the page looks ugly because the theme is not set
 function checkDeletePermission($tabid)
 {
 	global $entityDel;
-  $action ="Delete";
-  $permissionData = $_SESSION['action_permission_set'];
-  $i = 0;
-  //keep searching till Delete method is found in the array
-  while($i<count($permissionData))
-  {
-    if($permissionData[$i][0] == $tabid  &&  $permissionData[$i][1]==$action)
-    {
-      
-      $actionpermissionvalue=$permissionData[$i][2];
-      if($actionpermissionvalue == 1)
-      {
-        $entityDel = true;
-      }
-      else
-      {
-        $entityDel = false;
-      }
-    }
-    $i++;
-  }
+	$action ="Delete";
+	$actionid = 2;	
+	$permissionData = $_SESSION['action_permission_set'];
+	$i = 0;
+	//keep searching till Delete method is found in the array
+	while($i<count($permissionData))
+	{
+		if($permissionData[$i][0] == $tabid  &&  $permissionData[$i][1] == $actionid)
+		{
+			$actionpermissionvalue=$permissionData[$i][2];
+			if($actionpermissionvalue == 0)
+			{
+				//if 0, then the delete button should be shown
+				$entityDel = true;
+			}
+			else
+			{
+				$entityDel = false;
+			}
+		}
+		$i++;
+	}
 
 }
  function stripslashes_checkstrings($value){
@@ -268,7 +346,6 @@ if (is_file('config_override.php'))
 {
 	require_once('config_override.php');
 }
-require_once('include/utils.php');
 $default_config_values = Array( "allow_exports"=>"all","upload_maxsize"=>"3000000" );
  	
 set_default_config($default_config_values);
@@ -326,7 +403,7 @@ if(isset($action) && isset($module))
 {
 	$log->info("About to take action ".$action);
 	$log->debug("in $action");
-	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action) || ereg("^app_ins",$action) || ereg("^minical",$action) || ereg("^minitimer",$action) || ereg("^app_del",$action) || ereg("^send_mail",$action) || ereg("^populatetemplate",$action) || ereg("^TemplateMerge",$action) || ereg("^testemailtemplateusage",$action) || ereg("^saveemailtemplate",$action) || ereg("^lookupemailtemplate",$action) || ereg("^deletewordtemplate",$action) || ereg("^deleteemailtemplate",$action) || ereg("^deleteattachments",$action) || ereg("^MassDeleteUsers",$action))
+	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action) || ereg("^app_ins",$action) || ereg("^minical",$action) || ereg("^minitimer",$action) || ereg("^app_del",$action) || ereg("^send_mail",$action) || ereg("^populatetemplate",$action) || ereg("^TemplateMerge",$action) || ereg("^testemailtemplateusage",$action) || ereg("^saveemailtemplate",$action) || ereg("^lookupemailtemplate",$action) || ereg("^deletewordtemplate",$action) || ereg("^deleteemailtemplate",$action) || ereg("^deleteattachments",$action) || ereg("^MassDeleteUsers",$action) || ereg("^UpdateFieldLevelAccess",$action) || ereg("^UpdateProfile",$action)  || ereg("^updateRelations",$action))
 	{
 		$skipHeaders=true;
 		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action) || ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^lookupemailtemplate",$action))
@@ -407,7 +484,6 @@ if(!$permittedModulesList == "")
      }
 }
 
-
 $moduleList = $tabData->getTabNames($tempList);
 
 foreach ($moduleList as $mod) {
@@ -465,7 +541,7 @@ $mod_strings = return_module_language($current_language, $currentModule);
 
 //TODO: Clint - this key map needs to be moved out of $app_list_strings since it never gets translated.
 //              best to just have an upgrade script that changes the parent_type column from Account to Accounts, etc.
-$app_list_strings['record_type_module'] = array('Account' => 'Accounts','Opportunity' => 'Opportunities', 'Case' => 'Cases');
+$app_list_strings['record_type_module'] = array('Account' => 'Accounts','Potential' => 'Potentials', 'Case' => 'Cases');
 
 //If DetailView, set focus to record passed in
 if($action == "DetailView")
@@ -490,29 +566,17 @@ if($action == "DetailView")
 			require_once("modules/$currentModule/Account.php");
 			$focus = new Account();
 			break;
-		case 'Opportunities':
+		case 'Potentials':
 			require_once("modules/$currentModule/Opportunity.php");
-			$focus = new Opportunity();
+			$focus = new Potential();
 			break;
-		case 'Cases':
-			require_once("modules/$currentModule/Case.php");
-			$focus = new aCase();
-			break;
-		case 'Tasks':
-			require_once("modules/$currentModule/Task.php");
-			$focus = new Task();
+		case 'Activities':
+			require_once("modules/$currentModule/Activity.php");
+			$focus = new Activity();
 			break;
 		case 'Notes':
 			require_once("modules/$currentModule/Note.php");
 			$focus = new Note();
-			break;
-		case 'Meetings':
-			require_once("modules/$currentModule/Meeting.php");
-			$focus = new Meeting();
-			break;
-		case 'Calls':
-			require_once("modules/$currentModule/Call.php");
-			$focus = new Call();
 			break;
 		case 'Emails':
 			require_once("modules/$currentModule/Email.php");
@@ -522,11 +586,22 @@ if($action == "DetailView")
 			require_once("modules/$currentModule/User.php");
 			$focus = new User();
 			break;
+		case 'Products':
+			require_once("modules/$currentModule/Product.php");
+			$focus = new Product();
+			break;
+		case 'HelpDesk':
+			require_once("modules/$currentModule/HelpDesk.php");
+			$focus = new HelpDesk();
+			break;
+		case 'Faq':
+			require_once("modules/$currentModule/Faq.php");
+			$focus = new Faq();
+			break;
 		}
 	
-	$focus->retrieve($_REQUEST['record']);
-	
-	$focus->track_view($current_user->id, $currentModule);
+	//$focus->retrieve($_REQUEST['record']);
+        $focus->track_view($current_user->id, $currentModule,$_REQUEST['record']);
 }	
 
 // set user, theme and language cookies so that login screen defaults to last values
@@ -656,7 +731,7 @@ $copyrightstatement="<style>
 echo $copyrightstatement;
 echo "<table width=60% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n";
 echo "<table width=100% border=0 cellspacing=1 cellpadding=0 class=\"bgwhite\" align=center><tr><td align=center class=\"copy\">\n";
-echo("&copy; This software is a collective work consisting of the following major Open Source components : Apache Software, MySQL Server, PHP, SugarCRM, phpBB, and PHPMailer each licensed under a separate Open Source License. vtiger is not affiliated with nor endorsed by any of the above providers. See <a href='http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt' class=\"copy\" target=\"_blank\">Copyrights </a> for details.<br>\n");
+echo("&copy; This software is a collective work consisting of the following major Open Source components : Apache Software, MySQL Server, PHP, SugarCRM, ADOdb, TUTOS, phpBB, and PHPMailer each licensed under a separate Open Source License. vtiger is not affiliated with nor endorsed by any of the above providers. See <a href='http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt' class=\"copy\" target=\"_blank\">Copyrights </a> for details.<br>\n");
 echo "</td></tr></table></td></tr></table>\n";
 
 echo "<table align='center'><tr><td align='center'>";

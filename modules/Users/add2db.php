@@ -11,11 +11,11 @@
  ********************************************************************************/
 
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('include/utils.php');
 $vtigerpath = $_SERVER['REQUEST_URI'];
 $vtigerpath = str_replace("/index.php?module=Users&action=add2db", "", $vtigerpath);
-$uploaddir = $_SERVER['DOCUMENT_ROOT'] .$vtigerpath ."/test/upload/" ;// set this to wherever
+$uploaddir = $root_directory .$vtigerpath ."/test/upload/" ;// set this to wherever
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
   $binFile = $_FILES['binFile']['name'];
@@ -29,7 +29,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
     //$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
    $textDesc = $_REQUEST['txtDescription'];	
     $strDescription = addslashes($textDesc);
-    $fileid = create_guid();
+//    $fileid = create_guid();
     $date_entered = date('YmdHis');
     //Retreiving the return module and setting the parent type
     $ret_module = $_REQUEST['return_module'];
@@ -46,24 +46,23 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
     {
 	    $parent_type = 'Contact';
     }
-    elseif($_REQUEST['return_module'] == 'Opportunities')
+    elseif($_REQUEST['return_module'] == 'Potentials')
     {
-	    $parent_type = 'Opportunity';
+	    $parent_type = 'Potential';
     }
-   elseif($_REQUEST['return_module'] == 'Cases')
-    {
-	    $parent_type = 'Case';
-    }		
-
-    $parent_id = $_REQUEST['return_id'];	 			
+	 
+   //$parent_id = $_REQUEST['return_id'];	 			
 	$module = $_REQUEST['target_module'];
-    $sql = "INSERT INTO wordtemplatestorage ";
-    $sql .= "(module,date_entered,parent_type,parent_id,data,description,filename,filesize,filetype) ";
-    $sql .= "VALUES ('$module','$date_entered','$parent_type','$parent_id','$data','$strDescription',";
+    $sql = "INSERT INTO wordtemplates ";
+    $sql .= "(module,date_entered,parent_type,data,description,filename,filesize,filetype) ";
+    $sql .= "VALUES ('$module',".$adb->formatString('wordtemplates','date_entered',$date_entered).",'$parent_type',".$adb->getEmptyBlob().",'$strDescription',";
     $sql .= "'$filename', '$filesize', '$filetype')";
     //echo $sql;
-    $result = mysql_query($sql);
-       mysql_close();
+    $result = $adb->query($sql);
+    if($result!=false)	    
+	   $result = $adb->updateBlob('wordtemplates','data'," filename='".$filename."'",$data);
+
+       //mysql_close();
        deleteFile($uploaddir,$filename);
        header("Location: index.php?action=listwordtemplates&module=Users");	
       }

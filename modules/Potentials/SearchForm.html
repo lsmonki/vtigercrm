@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Opportunities/SearchForm.html,v 1.6 2004/07/02 04:34:21 sugarjacob Exp {APP.LBL_CURRENCY_SYM}
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Potentials/SearchForm.html,v 1.6 2004/07/02 04:34:21 sugarjacob Exp {APP.LBL_CURRENCY_SYM}
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
@@ -24,16 +24,16 @@
 	<tbody><tr>
 <form>
 		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_OPPORTUNITY_NAME}&nbsp;</td>
-		<td class="dataField"><input type=text size="10" name="name" class=dataField  value="{NAME}" />
+		<td class="dataField"><input type=text size="10" name="potentialname" class=dataField  value="{NAME}" />
 		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_ACCOUNT_NAME}&nbsp;</td>
-		<td class="dataField"><input type=text size="10" name="account_name" class=dataField  value="{ACCOUNT_NAME}" />
+		<td class="dataField"><input type=text size="10" name="accountname" class=dataField  value="{ACCOUNT_NAME}" />
 		<td rowspan='2' align="center"><input type="hidden" name="action" value="index"/>
 			<input type="hidden" name="query" value="true"/>
-			<input type="hidden" name="module" value="Opportunities" />
+			<input type="hidden" name="module" value="Potentials" />
 		<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
 		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
 		<br>
-		<font size='1'>[<a href='index.php?module=Opportunities&action=index&advanced=true'>{APP.LNK_ADVANCED_SEARCH}</a>]</font>
+		<font size='1'>[<a href='index.php?module=Potentials&action=index&advanced=true'>{APP.LNK_ADVANCED_SEARCH}</a>]</font>
 		</td>
 	</tr><tr>
 		<td class="dataLabel">{APP.LBL_CURRENT_USER_FILTER}</td>
@@ -44,32 +44,32 @@
 </td></tr>
 <tr><td>
 <table cellpadding="0" cellspacing="2" border="0" align="center"><tr>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=A">A</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=B">B</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=C">C</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=D">D</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=E">E</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=F">F</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=G">G</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=H">H</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=I">I</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=J">J</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=K">K</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=L">L</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=M">M</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=N">N</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=O">O</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=P">P</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=Q">Q</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=R">R</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=S">S</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=T">T</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=U">U</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=V">V</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=W">W</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=X">X</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=Y">Y</a></td><td>|</td>
-<td><a href="index.php?module=Opportunities&action=index&query=true&name=Z">Z</a></td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=A">A</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=B">B</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=C">C</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=D">D</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=E">E</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialpotentialname=F">F</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=G">G</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=H">H</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=I">I</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=J">J</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=K">K</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=L">L</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=M">M</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=N">N</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=O">O</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=P">P</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=Q">Q</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=R">R</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=S">S</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=T">T</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=U">U</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=V">V</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=W">W</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=X">X</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=Y">Y</a></td><td>|</td>
+<td><a href="index.php?module=Potentials&action=index&query=true&potentialname=Z">Z</a></td>
 </tr></table>
 </td>
 </tr></table>
@@ -77,9 +77,10 @@
 <!-- END: main -->
 
 <!-- BEGIN: advanced -->
-<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr>
-			<form>
-			<input type="hidden" name="module" value="Opportunities">
+<table width="100%" cellpadding="2" cellspacing="0" border="0" class="formOuterBorder">
+<tr>
+<!--form>
+			<input type="hidden" name="module" value="Potentials">
 			<input type="hidden" name="action" value='index'>
 			<input type="hidden" name="query" value="true"/>
 			<input type="hidden" name="advanced" value="true"/>
@@ -87,32 +88,45 @@
 		<td align='center' nowrap><input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
 		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
 		<br>
-		<font size='1'>[<a href='index.php?module=Opportunities&action=index'>{APP.LNK_BASIC_SEARCH}</a>]</font>
-	</td>
-</tr></table>
-
-<table width="100%" border="1" cellspacing="0" cellpadding="0">
+		<font size='1'>[<a href='index.php?module=Potentials&action=index'>{APP.LNK_BASIC_SEARCH}</a>]</font>
+	</td-->
+</tr>
 <tr>
 <td>
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr><th align="left" class="formSecHeader" colspan="4">{MOD.LBL_GENERAL_INFORMATION}</th><td><form>
+        <td width="100%"></td>
+        <td align='center' nowrap>
+                        <input type="hidden" name="module" value="Potentials">
+                        <input type="hidden" name="action" value='index'>
+                        <input type="hidden" name="query" value="true"/>
+                        <input type="hidden" name="advanced" value="true"/>
+                <input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY
+}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
+                <input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.
+form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
+                <br>
+                <font size='1'>[<a href='index.php?module=Potentials&action=index'>{APP.LNK_BASIC_SEARCH}</a>]</font>
+        </td>
+</td></tr>
 	<tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_OPPORTUNITY_NAME}</td>
-	<td width="30%" class="dataField"><input name='name' type="text" tabindex='1' size='35' maxlength='50' value="{NAME}"></td>
+	<td width="30%" class="dataField"><input name='potentialname' type="text" tabindex='1' size='35' maxlength='50' value="{NAME}"></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_AMOUNT}</td>
 	<td width="30%" class="dataField"><input name='amount' tabindex='2' size='15' maxlength='25' type="text" value='{AMOUNT}'></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_ACCOUNT_NAME}</td>
-	<td width="30%" class="dataField"><input name='account_name' tabindex='1' type='text' value="{ACCOUNT_NAME}"></td>
+	<td width="30%" class="dataField"><input name='accountname' tabindex='1' type='text' value="{ACCOUNT_NAME}"></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_DATE_CLOSED}</td>
-	<td width="30%" class="dataField"><input name='date_closed' type="text" tabindex='2' size='10' maxlength='10' value='{DATE_CLOSED}'></td>
+	<td width="30%" class="dataField"><input name='closingdate' type="text" tabindex='2' size='10' maxlength='10' value='{DATE_CLOSED}'>&nbsp;<font size=1><em old="{APP.NTC_DATE_FORMAT}">(yyyy-mm-dd)</em></font></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_TYPE}</td>
 	<td width="30%" class="dataField"><select tabindex='1' name='opportunity_type'>{TYPE_OPTIONS}</select></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_NEXT_STEP}</td>
-	<td width="30%" class="dataField"><input name='next_step' type="text" tabindex='2' size='15' maxlength='25' value='{NEXT_STEP}'></td>
+	<td width="30%" class="dataField"><input name='nextstep' type="text" tabindex='2' size='15' maxlength='25' value='{NEXT_STEP}'></td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_LEAD_SOURCE}</td>
-	<td width="30%" class="dataField"><select tabindex='1' name='lead_source'>{LEAD_SOURCE_OPTIONS}</select></td>
+	<td width="30%" class="dataField"><select tabindex='1' name='leadsource'>{LEAD_SOURCE_OPTIONS}</select></td>
 	<td width="20%" class="dataLabel">{MOD.LBL_SALES_STAGE}</td>
 	<td width="30%" class="dataField"><select tabindex='2' name='sales_stage'>{SALES_STAGE_OPTIONS}</select></td>
 	</tr><tr>
@@ -121,7 +135,10 @@
 	<td width="20%" class="dataLabel">{MOD.LBL_PROBABILITY}</td>
 	<td width="30%" class="dataField"><input name='probability' tabindex='2' size='4' maxlength='3' type="text" value='{PROBABILITY}'></td>
 </tr></table>
-</td></tr></table>
+
+<table><tr><td width="20%">{CUSTOMFIELD}</td></tr></table>
+
+</tr></table>
 	</form>
 {JAVASCRIPT}
 <!-- END: advanced -->

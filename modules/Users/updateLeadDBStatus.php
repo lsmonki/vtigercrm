@@ -13,17 +13,29 @@
 
 
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 
 $idlist= $_POST['idlist'];
 $leadstatusval = $_POST['leadval'];
-
+$idval=$_REQUEST['user_id'];
 
 $storearray = explode(";",$idlist);
-foreach($storearray as $id)
+
+if(isset($_REQUEST['user_id']) && $_REQUEST['user_id']!='')
 {
-$sql = "update leads set lead_status='" .$leadstatusval ."'where id='" .$id."'";
-$result = mysql_query($sql);
+	foreach($storearray as $id)
+	{
+		$sql = "update crmentity set smownerid='" .$idval ."'where crmid='" .$id."'";
+		$result = $adb->query($sql);
+	}
+}
+elseif(isset($_REQUEST['leadval']) && $_REQUEST['leadval']!='')
+{
+	foreach($storearray as $id)
+	{
+		$sql = "update leaddetails set leadstatus='" .$leadstatusval ."'where leadid='" .$id."'";
+		$result = $adb->query($sql);
+	}
 }
 header("Location: index.php?module=Leads&action=index");
 ?>

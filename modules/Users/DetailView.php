@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/DetailView.php,v 1.16 2004/12/17 10:22:58 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/DetailView.php,v 1.18 2005/03/04 19:27:18 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -52,6 +52,7 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $role = fetchUserRole($focus->id);
+$rolename =  getRoleName($role);
 //the user might belong to multiple groups
 if($focus->id != 1)
 {
@@ -81,6 +82,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id)
 }
 elseif (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
 	$buttons = "<td><input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '></td>\n";
+	
 	$buttons .= "<td><input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=230,resizable=1,scrollbars=1\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'></td>\n";
 	$buttons .= "<td><input title='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ShowHistory'; this.form.return_id.value='$focus->id'; this.form.action.value='ShowHistory'\" type='submit' name='LoginHistory' value=' ".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_LABEL']." '></td>\n";
 }
@@ -102,6 +104,11 @@ if (is_admin($current_user))
 	{
 		$buttons .= "<td><input title='".$app_strings['LBL_TABCUSTOMISE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_TABCUSTOMISE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='TabCustomise'\" type='submit' name='Customise' value=' ".$app_strings['LBL_TABCUSTOMISE_BUTTON_LABEL']." '></td>\n";
 	}
+	if($_REQUEST['record'] != $current_user->id)
+	{
+	$buttons .= "<td><input title='".$app_strings['LBL_DELETE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DELETE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='UserDeleteStep1'\" type='submit' name='Delete' value='  ".$app_strings['LBL_DELETE_BUTTON_LABEL']."  '></td>\n";
+	}
+
         //$buttons .= "<td><input title='".$app_strings['LBL_ROLES_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_ROLES_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='ListPermissions'\" type='submit' name='ListPermissions' value=' ".$app_strings['LBL_ROLES_BUTTON_LABEL']." '></td>\n";
 	if($_SESSION['authenticated_user_roleid'] == 'administrator')
 	{
@@ -123,7 +130,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 }
 
 $xtpl->assign("DESCRIPTION", nl2br($focus->description));
-$xtpl->assign("ROLEASSIGNED","<a href=index.php?module=Users&action=ListPermissions&rolename=".$role .">" .$role ."</a>");
+$xtpl->assign("ROLEASSIGNED","<a href=index.php?module=Users&action=RoleDetailView&roleid=".$role .">" .$rolename ."</a>");
 $xtpl->assign("GROUPASSIGNED","<a href=index.php?module=Users&action=UserInfoUtil&groupname=".$group .">" .$group ."</a>");
 $xtpl->assign("TITLE", $focus->title);
 $xtpl->assign("DEPARTMENT", $focus->department);

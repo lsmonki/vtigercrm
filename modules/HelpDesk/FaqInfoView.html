@@ -1,0 +1,63 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Tickets.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_FAQ}{MOD.LBL_COLON}</td>
+        <td nowrap class='bodySmall' align='right'>[ <A href={PRINT_URL}>{APP.LNK_PRINT}</A> ]</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
+
+<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr> 
+	<td align="left"></td>
+	<td>
+		<table cellpadding="0" cellspacing="5" border="0">
+		<tr>
+			<form name="InfoView" method="POST" action="index.php">
+			<input type="hidden" name="module" value="HelpDesk">
+			<input type="hidden" name="action">
+			<input type="hidden" name="id" value="{ID}">
+			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+			<input type="hidden" name="return_id" value="{RETURN_ID}">
+			<input type="hidden" name="return_action" value="">						
+		<td><input title="{APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{APP.LBL_EDIT_BUTTON_KEY}" class="button" onclick="this.form.action.value='EditFaq'" type="submit" name="button" value="  {APP.LBL_EDIT_BUTTON_LABEL}  " ></td>
+		<td><input title="{APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{APP.LBL_DELETE_BUTTON_KEY}" class="button" onclick="this.form.action.value='DeleteFaq'; this.form.return_action.value='FaqList'; this.form.return_id.value=''; this.form.return_module.value='HelpDesk'" type="submit" name="button" value="  {APP.LBL_DELETE_BUTTON_LABEL}  "></td>
+		</tr></table>
+	</td>
+	<td></td>
+</tr>
+</table> 
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_CATEGORY}{MOD.LBL_COLON}</td>
+	<td width="30%">{CATEGORYVALUE}</select></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_AUTHOR}{MOD.LBL_COLON}</td>
+	<td width="30%">{AUTHORNAME}</select></td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_QUESTION}{MOD.LBL_COLON}</td>
+	<td colspan="4">{QUESTION}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_ANSWER}{MOD.LBL_COLON}</td>
+	<td colspan="4">{ANSWER}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_COMMENTS}{MOD.LBL_COLON}</td>
+	<td colspan="4">{COMMENT}</td>
+</tr></table>
+</td></tr></table>
+</form>
+{JAVASCRIPT}
+<!-- END: main -->

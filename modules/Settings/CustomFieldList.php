@@ -9,7 +9,8 @@
 * 
  ********************************************************************************/
 
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
+require_once('include/CustomFieldUtil.php');
 require_once ($theme_path."layout_utils.php");
 global $mod_strings;
 
@@ -26,18 +27,32 @@ echo '<td><input title="'.$mod_strings['NewCustomFieldAltC'].'" accessKey="C" cl
 echo '</tr></form></table>';
 echo '<br>';
 //onclick="this.form.return_module.value="Settings"; this.form.action.value="index"
-echo getCustomFieldList($_REQUEST['fld_module'], $mod_strings);
 
-function getCustomFieldList($customfieldmodule, $mod_strings)
+
+function fetchTabIDVal($fldmodule)
 {
 
-//fieldid,fieldlabel,column_name,typdesc
+  global $adb;
+  $query = "select tabid from tab where tablabel='" .$fldmodule ."'";
+  $tabidresult = $adb->query($query);
+  return $adb->query_result($tabidresult,0,"tabid");
+}
 
-	$dbQuery = "select * from customfields inner join customfieldtypemapping on customfields.uitype=customfieldtypemapping.uitype where module='".$customfieldmodule."' order by fieldlabel";
+$tabid = fetchTabIDVal($_REQUEST['fld_module']);
 
-	//echo $dbQuery;
+$fld_module = $_REQUEST['fld_module'];
 
-	$result = mysql_query($dbQuery) or die("Couldn't get file list");
+echo getCustomFieldList($tabid,$mod_strings,$fld_module);
+
+
+function getCustomFieldList($tabid, $mod_strings, $fld_module)
+{
+  global $adb;
+        //fieldid,fieldlabel,column_name,typdesc
+
+	$dbQuery = "select fieldid,columnname,fieldlabel,uitype,displaytype from field where tabid=".$tabid." and generatedtype=2 order by sequence";
+        
+        $result = $adb->query($dbQuery) or die("Couldn't get file list");
 
 
 $list = '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="80%">';
@@ -72,7 +87,7 @@ $list .= '</tr>';
 //$list .= '<tr><td COLSPAN="7" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
 
 $i=1;
-while($row = mysql_fetch_array($result))
+while($row = $adb->fetch_array($result))
 {
 
 
@@ -85,17 +100,19 @@ $trowclass = 'oddListRow';
 	 $list .= $row["fieldlabel"]; 
 
 	$list .= '</td>';
-
+        
 
 	$list .= '<td width="33%" height="21">	<p style="margin-left: 10">';
 
-	 $list .= $row["typdesc"]; 
+	$fld_type_name = getCustomFieldTypeName($row["uitype"]);
+
+	 $list .= $fld_type_name; 
 
 	$list .= '</td>';
 
 	$list .= '<td width="33%" height="21">	<p style="margin-left: 10">';
 
-	 $list .= '<a href="javascript:deleteCustomField('.$row["fieldid"].',\''.$customfieldmodule.'\', \''.$row["column_name"].'\', \''.$row["uitype"].'\')">'.$mod_strings['Delete'].'</a>'; 
+	 $list .= '<a href="javascript:deleteCustomField('.$row["fieldid"].',\''.$fld_module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')">'.$mod_strings['Delete'].'</a>'; 
 
 	$list .= '</td>';
 

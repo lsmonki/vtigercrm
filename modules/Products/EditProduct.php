@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('XTemplate/xtpl.php');
 require_once('include/utils.php');
 
@@ -23,12 +23,13 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 //Retreiving the ticket id
-$productid = $_REQUEST['id'];
+if(isset($_REQUEST['id']))	$productid = $_REQUEST['id'];
+else 				$productid = $_REQUEST['record'];
 //echo $productid;
 
 //Retreiving the ticket info from database
 $query = "select * from products where id='".$productid."'";
-$ticketresult = mysql_query($query);
+$ticketresult = $adb->query($query);
 
 $xtpl=new XTemplate ('modules/Products/EditView.html');
 $xtpl->assign("MOD", $mod_strings);
@@ -65,18 +66,18 @@ $xtpl->assign("THEME", $theme);
 $xtpl->assign("MODE", "Edit");
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-if(mysql_result($ticketresult,0,'discontinued') == 1)
+if($adb->query_result($ticketresult,0,'discontinued') == 1)
 {
 	$xtpl->assign("ACTIVE",'checked');
 }
 
 
-$xtpl->assign("PRODUCT_NAME",mysql_result($ticketresult,0,'productname'));
-$xtpl->assign("PRODUCT_CODE",mysql_result($ticketresult,0,'category'));
-$xtpl->assign("COMMISSION_RATE",mysql_result($ticketresult,0,'commissionrate'));
-$xtpl->assign("QTY_PER_UNIT", mysql_result($ticketresult,0,'qty_per_unit'));
-$xtpl->assign("UNIT_PRICE", mysql_result($ticketresult,0,'unit_price'));
-$xtpl->assign("DESCRIPTION", mysql_result($ticketresult,0,'product_description'));
+$xtpl->assign("PRODUCT_NAME",$adb->query_result($ticketresult,0,'productname'));
+$xtpl->assign("PRODUCT_CODE",$adb->query_result($ticketresult,0,'category'));
+$xtpl->assign("COMMISSION_RATE",$adb->query_result($ticketresult,0,'commissionrate'));
+$xtpl->assign("QTY_PER_UNIT", $adb->query_result($ticketresult,0,'qty_per_unit'));
+$xtpl->assign("UNIT_PRICE", $adb->query_result($ticketresult,0,'unit_price'));
+$xtpl->assign("DESCRIPTION", $adb->query_result($ticketresult,0,'product_description'));
 
 $xtpl->parse("main");
 

@@ -8,148 +8,160 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('XTemplate/xtpl.php');
+require_once('modules/Products/Product.php');
 require_once('include/utils.php');
-
-
-//Retreive the list from Database
-$tktresult = mysql_query("select * from products where deleted =0");
-
-//Retreiving the no of rows
-$noofrows = mysql_num_rows($tktresult);
-
-//Retreiving the start value from request
-if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-{
-	$start = $_REQUEST['start'];
-}
-else
-{
-	
-	$start = 1;
-}
-//Setting the start value
-//Setting the start to end counter
-$starttoendvaluecounter = $list_max_entries_per_page - 1;
-//Setting the ending value
-if($noofrows > $list_max_entries_per_page)
-{
-	$end = $start + $starttoendvaluecounter;
-	if($end > $noofrows)
-	{
-		$end = $noofrows;
-	}
-	$startvalue = 1;
-	$remainder = $noofrows % $list_max_entries_per_page;
-	if($remainder > 0)
-	{
-		$endval = $noofrows - $remainder + 1;
-	}
-	elseif($remainder == 0)
-	{
-		$endval = $noofrows - $starttoendvaluecounter;
-	}
-}
-else
-{
-	$end = $noofrows;
-}
-
-
-//Setting the next and previous value
-if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
-{
-	$tempnextstartvalue = $_REQUEST['start'] + $list_max_entries_per_page;
-	if($tempnextstartvalue <= $noofrows)
-	{
-		
-		$nextstartvalue = $tempnextstartvalue;
-	}
-	$tempprevvalue = $_REQUEST['start'] - $list_max_entries_per_page;
-	if($tempprevvalue  > 0)
-	{
-		$prevstartvalue = $tempprevvalue;
-	}
-}
-else
-{
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$nextstartvalue = $list_max_entries_per_page + 1;
-	}
-}
 
 global $app_strings;
 global $mod_strings;
-
-$popuptype= $_REQUEST['popuptype'];
 
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$xtpl=new XTemplate ('modules/Products/ProductsPopupList.html');
+$xtpl=new XTemplate ('modules/Products/Popup.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMAGE_PATH", $image_path);
-$xtpl->assign("THEME_PATH", $theme_path);
-echo get_module_title("Products", $mod_strings['LBL_MODULE_NAME']." List" , false);
-$tkList = '';
-for ($i=$start; $i<=$end; $i++)
-{
-	$tkList .= '<tr  height=20>';
-	$tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-	//$productname = '<a href="index.php?action=ProductDetailView&module=Products&record='.mysql_result($tktresult,$i-1,"id").'">'.mysql_result($tktresult,$i-1,"productname").'</a>';
-	if(isset($popuptype) && $popuptype == 'product')
-	{
-		
-		$productname = '<a href="a" LANGUAGE=javascript onclick=\'set_return_product("'.mysql_result($tktresult,$i-1,"id").'", "'.mysql_result($tktresult,$i-1,"productname").'"); window.close()\'>'.mysql_result($tktresult,$i-1,"productname").'</a>';
-	}
-	else
-	{
-		$productname = '<a href="a" LANGUAGE=javascript onclick=\'set_return("'.mysql_result($tktresult,$i-1,"id").'", "'.mysql_result($tktresult,$i-1,"productname").'"); window.close()\'>'.mysql_result($tktresult,$i-1,"productname").'</a>';
-	}
-	$tkList .= '<td class="oddListRow" style="padding:0px 3px 0px 3px;">'.$productname.'</td>';
-        $tkList .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+$xtpl->assign("IMAGE_PATH",$image_path);
+$xtpl->assign("THEME_PATH",$theme_path);
 
-       	$tkList .= '</tr>';
+$popuptype = '';
+$popuptype = $_REQUEST["popuptype"];
+$xtpl->assign("POPUPTYPE",$popuptype);
+
+
+if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
+{
 	
+	$query_val = "true";
+	if (isset($_REQUEST['productname'])) $productname = $_REQUEST['productname'];
+        if (isset($_REQUEST['productcode'])) $productcode = $_REQUEST['productcode'];
+        if (isset($_REQUEST['commissionrate'])) $commissionrate = $_REQUEST['commissionrate'];
+	if (isset($_REQUEST['qtyperunit'])) $qtyperunit = $_REQUEST['qtyperunit'];
+        if (isset($_REQUEST['unitprice'])) $unitprice = $_REQUEST['unitprice'];
 
+//	$search_query="select * from products inner jon crmentity on crmentity.crmid=products.productid where crmentity.deleted =0";
+
+	if (isset($productname) && $productname !='')
+	{
+		$search_query .= " and productname like '".$productname."%'";
+		$query_val .= "&productname=".$productname;
+		$xtpl->assign("PRODUCT_NAME", $productname);
+	}
+	
+	if (isset($productcode) && $productcode !='')
+	{
+		$search_query .= " and productcode like '".$productcode."%'";
+		$query_val .= "&productcode=".$productcode;
+		$xtpl->assign("PRODUCT_CODE", $productcode);
+	}
+
+	if (isset($commissionrate) && $commissionrate !='')
+	{
+		 $search_query .= " and commissionrate like '".$commissionrate."%'";
+		 $query_val .= "&commissionrate=".$commissionrate;
+		 $xtpl->assign("COMMISSION_RATE", $commissionrate);
+	}
+	
+	if (isset($qtyperunit) && $qtyperunit !='')
+	{
+	 	$search_query .= " and qty_per_unit like '".$qtyperunit."%'";
+		$query_val .= "&qtyperunit=".$qtyperunit;
+		 $xtpl->assign("QTYPERUNIT", $qtyperunit);
+	}
+	
+	if (isset($unitprice) && $unitprice !='')
+	{
+	 	$search_query .= " and unit_price like '".$unitprice."%'";
+		$query_val .= "&unitprice=".$unitprice;
+		$xtpl->assign("UNITPRICE", $unitprice);
+	}
+	 
+        //echo $search_query;
+	//echo '<BR>';
+	//echo $_REQUEST['query'];
+//	$tktresult = $adb->query($search_query);
 }
-$xtpl->assign("PRODUCTLIST", $tkList);
-if(isset($startvalue))
+echo get_module_title("Products", $mod_strings['LBL_MODULE_NAME'].": Home" , true);
+echo "<br>";
+echo get_form_header("Product Search", "", false);
+
+$xtpl->assign("PRODUCTLISTHEADER", get_form_header("Products List", "", false ));
+
+$focus = new Product();
+
+//Retreive the list from Database
+$query = getListQuery("Products");
+
+if(isset($search_query) && $search_query!='')
 {
-	$startoutput = '<a href="index.php?action=index&module=Products&start='.$startvalue.'">start</a>';
+	$query .= $search_query;
+}
+
+$list_result = $adb->query($query);
+
+//Retreiving the no of rows
+$noofrows = $adb->num_rows($list_result);
+
+//Retreiving the start value from request
+if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+{
+        $start = $_REQUEST['start'];
 }
 else
 {
-	$startoutput = 'start';
+
+        $start = 1;
 }
-if(isset($endval))
+//Retreive the Navigation array
+$navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
+
+//Retreive the List View Table Header
+
+$focus->list_mode="search";
+$focus->popup_type=$popuptype;
+
+$listview_header = getSearchListViewHeader($focus,"Products");
+$xtpl->assign("LISTHEADER", $listview_header);
+
+
+$listview_entries = getSearchListViewEntries($focus,"Products",$list_result,$navigation_array);
+$xtpl->assign("LISTENTITY", $listview_entries);
+$query_val = 'false';
+
+if(isset($navigation_array['start']))
 {
-	$endoutput = '<a href="index.php?action=index&module=Products&start='.$endval.'">end</a>';
+	$startoutput = '<a href="index.php?action=Popup&module=Products&start='.$navigation_array['start'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Start</b></a>';
 }
 else
 {
-	$endoutput = 'end';
+        $startoutput = '[ Start ]';
 }
-if(isset($nextstartvalue))
+if(isset($navigation_array['end']))
 {
-	$nextoutput = '<a href="index.php?action=index&module=Products&start='.$nextstartvalue.'">next</a>';
-}
-else
-{
-	$nextoutput = 'next';
-}
-if(isset($prevstartvalue))
-{
-	$prevoutput = '<a href="index.php?action=index&module=Products&start='.$prevstartvalue.'">prev</a>';
+        $endoutput = '<a href="index.php?action=Popup&module=Products&start='.$navigation_array['end'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>End</b></a>';
 }
 else
 {
-	$prevoutput = 'prev';
+        $endoutput = '[ End ]';
+}
+if(isset($navigation_array['next']))
+{
+        $nextoutput = '<a href="index.php?action=Popup&module=Products&start='.$navigation_array['next'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Next</b></a>';
+}
+else
+{
+        $nextoutput = '[ Next ]';
+}
+if(isset($navigation_array['prev']))
+{
+        $prevoutput = '<a href="index.php?action=Popup&module=Products&start='.$navigation_array['prev'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Prev</b></a>';
+}
+else
+{
+        $prevoutput = '[ Prev ]';
 }
 $xtpl->assign("Start", $startoutput);
 $xtpl->assign("End", $endoutput);
@@ -157,7 +169,8 @@ $xtpl->assign("Next", $nextoutput);
 $xtpl->assign("Prev", $prevoutput);
 
 $xtpl->parse("main");
-
 $xtpl->out("main");
+
+
 
 ?>

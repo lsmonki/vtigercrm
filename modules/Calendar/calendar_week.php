@@ -19,6 +19,22 @@
  global $mod_strings;
 
  echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_APPOINTMENT'], true); 
+ echo "\n<BR>\n";
+ $t=Date("Ymd");
+?>
+		<table cellpadding="0" cellspacing="0" border="0">
+		<tr>
+			<form name="Calendar" method="GET" action="index.php">
+			<input type="hidden" name="module" value="Calendar">
+			<input type="hidden" name="action">
+			<input type="hidden" name="t">
+		<td><input title="<? echo $mod_strings['LBL_DAY_BUTTON_TITLE']?>" accessKey="<? echo $mod_strings['LBL_DAY_BUTTON_KEY']?>" onclick="this.form.action.value='calendar_day';this.form.t.value='<?echo $t?>'" type="image" src="<? echo $image_path ?>day.gif" name="button" value="  <? echo $mod_strings['LBL_DAY']?>  " >
+		<input title="<? echo $mod_strings['LBL_WEEK_BUTTON_TITLE']?>" accessKey="<? echo $mod_strings['LBL_WEEK_BUTTON_KEY']?>" onclick="this.form.action.value='calendar_week';this.form.t.value='<?echo $t?>'" type="image" src="<? echo $image_path ?>week_sel.gif" name="button" value="  <? echo $mod_strings['LBL_WEEK']?>  " >
+		<input title="<? echo $mod_strings['LBL_MON_BUTTON_TITLE']?>" accessKey="<? echo $mod_strings['LBL_MON_BUTTON_KEY']?>" onclick="this.form.action.value='calendar_month';this.form.t.value='<?echo $t?>'" type="image" src="<? echo $image_path ?>month.gif" name="button" value="  <? echo $mod_strings['LBL_MON']?>  " ></td>
+		</tr>
+		</form>
+		</table>
+<?
 
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
@@ -48,8 +64,8 @@ require_once('modules/Calendar/UserCalendar.php');
    {
    	$this->pref = new preference();
 	$this->db = new PearDatabase();
-$calobj = new UserCalendar();
-		$this->tablename = $calobj->table_name;
+	$calobj = new UserCalendar();
+	$this->tablename = $calobj->table_name;
 
    }
    Function info() {
@@ -71,9 +87,10 @@ $calobj = new UserCalendar();
      $last_week = Date("Ymd",$ts -  7 * 86400);
      $next_week = Date("Ymd",$ts +  7 * 86400);
 
+	 echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"90%\" class=\"outer\">\n";
      echo "<form action=\"". $callink ."calendar_week\" method=\"get\">\n";
-
-     echo "<br><table class=\"navigate\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
+	 echo "<tr><td>";
+     echo "<table class=\"navigate\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
      //echo " <tr>\n";
      //echo "  <th align=\"left\" nowrap=\"nowrap\">&nbsp;". $lang['forphrase'] ."\n";
      //cal_options($this->team,$this->teamname);
@@ -82,11 +99,13 @@ $calobj = new UserCalendar();
      //echo " <th class=\"navigate\" nowrap=\"nowrap\"></th>\n";
      //
      //echo " </tr>\n";
-     echo " <tr>\n";
-     echo "  <td colspan=\"2\" width=\"100%\" align=\"center\">".$this->pref->menulink($callink ."calendar_week&t=".$last_week,$this->pref->getImage(left,'list'),$mod_strings['LBL_LAST_WEEK']) ."&nbsp;". $mod_strings['LBL_WEEK'] ."&nbsp;" . $wn . "/". $yy ."&nbsp;". $this->pref->menulink($callink ."calendar_week&t=".$next_week,$this->pref->getImage(right,'list') ,$mod_strings['LBL_NEXT_WEEK']) ."</td>\n";
-     echo " </tr>\n";
-	 echo "</table>\n";
-	 echo "<br><table class=\"outer\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%\">\n";
+     echo " <tr height=\"35\">\n";
+     echo "  <td align=\"left\">".$this->pref->menulink($callink ."calendar_week&t=".$last_week,$this->pref->getImage(left,'list'),$mod_strings['LBL_LAST_WEEK']) ."</td>";
+	 echo "  <td align=\"center\" class=\"calhead\">". $mod_strings['LBL_WEEK'] ."&nbsp;" . $wn . "/". $yy ."&nbsp;</td>";
+	 echo "  <td align=\"right\">".$this->pref->menulink($callink ."calendar_week&t=".$next_week,$this->pref->getImage(right,'list') ,$mod_strings['LBL_NEXT_WEEK']) ."</td>\n";
+     echo " </tr></table>\n";
+	 echo " <tr><td class=\"inner\">\n";
+	 echo " <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">\n";
 
      $from =  new DateTime();
      $to =  new DateTime();
@@ -119,24 +138,29 @@ $calobj = new UserCalendar();
 		   if ( $col == 1 ) {
 			 echo " <tr>\n";
 		   }
-		   echo "  <td valign=\"top\" class=\"inner\" width=\"50%\">\n";
-	
+		   
+		   echo "  <td valign=\"top\" width=\"50%\" height=\"100%\">\n";	
+		   
 		   # DAY-TABLE STARTS
-		   echo "<table border=\"0\" cellpadding=\"3\" cellspacing=\"1\" width=\"100%\">\n";
+		   echo "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%\" height=\"100%\">\n";
 		   echo " <tr>\n";
-		   echo "  <th class=\"viewhead\">\n";
+		   echo "  <th class=\"weekhead\">\n";
 		   echo $this->pref->menulink($callink ."calendar_day&t=". $tref,$mod_strings['LBL_DAY'. Date("w",$ts)],strftime($mod_strings['LBL_DATE_TITLE'],$ts));
 		   if ( isset($dinfo[Desc]) ) {
-			 echo " " . $this->pref->menulink($callink ."app_new&t=". $tref,$d,$mod_strings['LBL_NEW_APPNT_INFO'],$dinfo[popinfo]) ."\n";
+			 #echo " " . $this->pref->menulink($callink ."app_new&t=". $tref,$d,$mod_strings['LBL_NEW_APPNT_INFO'],$dinfo[popinfo]) ."\n";
+			 echo " " . $this->pref->menulink($callink ."calendar_day&t=". $tref,$d,strftime($mod_strings['LBL_DATE_TITLE'],$ts),$dinfo[popinfo]) ."\n";
 		   } else {
-			 echo " " . $this->pref->menulink($callink ."app_new&t=". $tref,$d,$mod_strings['LBL_NEW_APPNT_INFO']) ."\n";
+			 #echo " " . $this->pref->menulink($callink ."app_new&t=". $tref,$d,$mod_strings['LBL_NEW_APPNT_INFO']) ."\n";
+			 echo " " . $this->pref->menulink($callink ."calendar_day&t=". $tref,$d,strftime($mod_strings['LBL_DATE_TITLE'],$ts)) ."\n";
 		   }
 		   echo "  </th>\n";
 		   echo " </tr>\n";
 		   echo " <tr>\n";
-		   echo "  <td class=\"". $dinfo[color] ."\" width=\"50%\">\n";
+		   //echo "  <td class=\"". $dinfo[color] ."\" width=\"50%\" style=\"\">\n";
+		   echo "  <td width=\"50%\" style=\"\">\n";
 		   if ( isset($dinfo[Desc]) ) {
-			 echo "<span class=\"dinfo\">". $dinfo[Desc] ."</span>\n";
+		   //echo "<span class=\"dinfo\">". $dinfo[Desc] ."</span>\n";
+		   	echo "<span class=\"dinfo\">". $dinfo[Desc] ."</span>\n";
 		   }
 		   
 		   $hastable = false;
@@ -154,10 +178,10 @@ $calobj = new UserCalendar();
 			   continue;
 			 }
 			 if ( !$hastable ) {
-			   echo "<table class=\"formatted\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"  width=\"100%\">\n";
+			   echo "<table width=\"100%\" class=\"event\" cellspacing=\"2\" cellpadding=\"2\" border=\"0\">\n";
 			   $hastable = true;
 			 } else {
-			   echo "  <tr><td class=\"". $dinfo[color] ."\" colspan=\"3\"><img src=\"". $image_path ."black.png\" width=\"100%\" height=\"1\" alt=\"--------\"></td></tr>\n";
+			   echo "  <tr><td class=\"eventSep\" colspan=\"3\"><img src=\"". $image_path ."blank.gif\" width=\"100%\" height=\"1\"></td></tr>\n";
 			 }
 			 // Show appointments or task or whatever
 			 $this->pref->callist[$idx]->formatted();
@@ -193,6 +217,7 @@ $calobj = new UserCalendar();
        echo " </tr>\n";
      }
      echo "</table>\n";
+     echo "</td></tr></table>\n";
      hiddenFormElements();
      $this->addHidden("t", $this->t);
      echo $this->getHidden();

@@ -8,21 +8,45 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-//Establishing the database connection
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
+//require_once('adodb/adodb.php');
+
 $fldmodule=$_REQUEST['fld_module'];
-$fldlabel=$_REQUEST['fldLabel'];
-$fldType= $_REQUEST['fieldType'];
-/*echo $fldmodule;
-echo $fldlabel;
-echo $fldType;*/
+ $fldlabel=$_REQUEST['fldLabel'];
+ $fldType= $_REQUEST['fieldType'];
+
+/*
+
+echo 'module is  ' .$fldmodule;
+echo 'label is    '. $fldlabel;
+echo 'field type is  ' .$fldType;
+
+*/
+
+
+function fetchTabIDVal($fldmodule)
+{
+
+  global $adb;
+  $query = "select tabid from tab where tablabel='" .$fldmodule ."'";
+  $tabidresult = $adb->query($query);
+  return $adb->query_result($tabidresult,0,"tabid");
+}
+
+$tabid = fetchTabIDVal($fldmodule);
+
 if(get_magic_quotes_gpc() == 1)
 {
 	$fldlabel = stripslashes($fldlabel);
 }
-$checkquery='select * from customfields where module="'.$fldmodule.'" and fieldlabel="'.$fldlabel.'"';
-$checkresult=mysql_query($checkquery);
-if(mysql_num_rows($checkresult) != 0)
+
+
+//checking if the user is trying to create a custom field which already exists  
+
+$checkquery="select * from field where tabid='".$tabid."'and fieldlabel='".$fldlabel."'";
+$checkresult=$adb->query($checkquery);
+
+if($adb->num_rows($checkresult) != 0)
 {
 	
 	if(isset($_REQUEST['fldLength']))
@@ -55,12 +79,13 @@ if(mysql_num_rows($checkresult) != 0)
 }
 else
 {
+  /*
 	//Creating the ColumnName
-	$sql = "select max(fieldid) as fieldid from customfields";
-	$result = mysql_query($sql);
-	if(mysql_num_rows($result) != 0)
+  $sql = "select max(fieldid) fieldid from customfields";
+	$result = $adb->query($sql);
+	if($adb->num_rows($result) != 0)
 	{
-		$row = mysql_fetch_array($result);
+		$row = $adb->fetch_array($result);
 		$max_fieldid = $row["fieldid"];
 		$max_fieldid++;
 	}
@@ -68,26 +93,38 @@ else
 	{
 		$max_fieldid = "1";
 	}
-	$columnName = 'CF_'.$max_fieldid;
+  */
+  
+  $max_fieldid = $adb->getUniqueID("field");
+  
+	$columnName = 'cf_'.$max_fieldid;
 	//Assigning the table Name
 	$tableName ='';
 	if($fldmodule == 'Leads')
 	{
-		$tableName='leadcf';
+		$tableName='leadscf';
 	}
 	elseif($fldmodule == 'Accounts')
 	{
 
-		$tableName='accountcf';
+		$tableName='accountscf';
 	}
 	elseif($fldmodule == 'Contacts')
 	{
 
-		$tableName='contactcf';
+		$tableName='contactscf';
 	}
-	elseif($fldmodule == 'Opportunities')
+	elseif($fldmodule == 'Potentials')
 	{
-		$tableName='opportunitycf';
+		$tableName='potentialscf';
+	}
+	elseif($fldmodule == 'HelpDesk')
+	{
+		$tableName='ticketcf';
+	}
+	elseif($fldmodule == 'Products')
+	{
+		$tableName='productcf';
 	}
 
 	//Assigning the uitype
@@ -106,58 +143,92 @@ else
 	if($fldType == 'Text')
 	{
 		$uitype = 1;
-		$type = "varchar(".$fldlength.")";
+		//$type = "varchar(".$fldlength.")";
+		$type = "C(".$fldlength.")"; // adodb type
 	}
 	elseif($fldType == 'Number')
 	{
 		$uitype = 7;
 
-		$type="double(".$fldlength.",".$decimal.")";	
+		//$type="double(".$fldlength.",".$decimal.")";	
+		$type="N(".$fldlength.",".$decimal.")";	// adodb type
 	}
 	elseif($fldType == 'Percent')
 	{
 		$uitype = 9;
-		$type="double(".$fldlength.",".$decimal.")";
+		//$type="double(".$fldlength.",".$decimal.")";
+		$type="N(".$fldlength.",".$decimal.")"; //adodb type
 	}
 	elseif($fldType == 'Currency')
 	{
 		$uitype = 3;
-		$type="double(".$fldlength.",".$decimal.")";
+		//$type="double(".$fldlength.",".$decimal.")";
+		$type="N(".$fldlength.",".$decimal.")"; //adodb type
 	}
 	elseif($fldType == 'Date')
 	{
 		$uitype = 5;
-		$type = "date";
+		//$type = "date";
+		$type = "T"; // adodb type
+		
 	}
 	elseif($fldType == 'Email')
 	{
 		$uitype = 13;
-		$type = "varchar(50)";
+		//$type = "varchar(50)";
+		$type = "C(50)"; //adodb type
+		
 	}
 	elseif($fldType == 'Phone')
 	{
 		$uitype = 11;
-		$type = "varchar(30)";
+		//$type = "varchar(30)";
+		$type = "C(30)"; //adodb type
+		
 	}
 	elseif($fldType == 'Picklist')
 	{
 		$uitype = 15;
-		$type = "varchar(255)";
+		//$type = "varchar(255)";
+		$type = "C(255)"; //adodb type
+	}
+	elseif($fldType == 'URL')
+	{
+		$uitype = 17;
+		//$type = "varchar(255)";
+		$type = "C(255)"; //adodb type
 	}
 	// No Decimal Pleaces Handling
 
+        
 
-	//Inserting Value into Custom Field Table
-	$query = "insert into customfields values('','".$columnName."','".$tableName."',2,".$uitype.",'".$fldlabel."','','".$fldmodule."')";
-	mysql_query($query);
-	//Altering the tables
-	$query = "ALTER TABLE ".$tableName." ADD COLUMN ".$columnName." ".$type;
-	mysql_query($query);
+
+        
+
+        //1. add the customfield table to the field table as Block4
+        //2. fetch the contents of the custom field and show in the UI
+        
+        //$query = "insert into customfields values('','".$columnName."','".$tableName."',2,".$uitype.",'".$fldlabel."','0','".$fldmodule."')";
+	//retreiving the sequence
+	$custfld_sequece=$adb->getUniqueId("customfield_sequence");
+    
+        $query = "insert into field values(".$tabid.",".$adb->getUniqueID("field").",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",5,1)";
+	
+        $adb->query($query);
+	
+        $adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
+        
+
+
+
+
+          
 	if($fldType == 'Picklist')
 	{
 		// Creating the PickList Table and Populating Values
-		$query = "create table ".$fldmodule."_".$columnName." (".$columnName." varchar(255) NOT NULL)";
-		mysql_query($query);
+		/*$query = "create table ".$fldmodule."_".$columnName." (".$columnName." varchar(255) NOT NULL)";
+		mysql_query($query);*/
+		$adb->createTable($columnName, $columnName." C(255)");
 		$fldPickList =  $_REQUEST['fldPickList'];
 		$pickArray = explode("\n",$fldPickList);
 		$count = count($pickArray);
@@ -166,8 +237,8 @@ else
 			$pickArray[$i] = trim($pickArray[$i]);
 			if($pickArray[$i] != '')
 			{
-				$query = "insert into ".$fldmodule."_".$columnName." values('".$pickArray[$i]."')";
-				mysql_query($query);
+				$query = "insert into ".$columnName." values('".$pickArray[$i]."')";
+				$adb->query($query);
 			}
 		}
 	}

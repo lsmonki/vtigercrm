@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/2setConfig.php,v 1.34 2005/01/10 09:43:36 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/2setConfig.php,v 1.36 2005/02/22 13:52:27 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 require_once("connection.php");
@@ -342,23 +342,22 @@ function verify_data(form) {
             <td></td><td nowrap><strong>email address<strong></td>
             <td align="left"><input class="dataInput" type="text" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" size="40" /></td>
    	      </tr>
-	     <tr>
-            	<td></td><td nowrap><strong>OutGoing Mail Server</strong></td>
-            	<td align="left"><input class="dataInput" type="text" name="mail_server" size='14' value="<?php if (isset($mail_server)) echo $mail_server; ?>" size="40" />
-             </tr>
+		<tr>
+			<td colspan="3" class="moduleTitle" noWrap>Backup Server Configuration</td>
+              </tr>
+	<tr>
+            <td></td><td nowrap><strong>ftp server name</strong></td>
+            <td align="left"><input class="dataInput" type="text" name="ftpserver" size="20" /></td>
+          </tr>
 
-	 <tr>
-                <td></td><td nowrap><strong>OutGoing Mail Server Login User Name</strong></td>
-                <td align="left"><input class="dataInput" type="text" name="mail_server_username" size='14' value="<?php if (isset($mail_server_username)) echo $mail_server_username; ?>" size="40" />
-             </tr>
-
-
- <tr>
-                <td></font></td><td nowrap><strong>OutGoing Mail Server Password</strong></td>
-                <td align="left"><input class="dataInput" type="text" name="mail_server_password" size='14' value="<?php if (isset($mail_server_password)) echo $mail_server_password; ?>" size="40" />
-             </tr>
-
-
+	<tr>
+            <td></td><td nowrap><strong>ftp user name</strong></td>
+            <td align="left"><input class="dataInput" type="text" name="ftpuser" size="20" /></td>
+          </tr>
+	<tr>
+            <td></font></td><td nowrap><strong>ftp password</strong></td>
+            <td align="left"><input class="dataInput" type="password" name="ftppassword" size="20" /></td>
+          </tr>
 
 		</tbody>
 			</table>
