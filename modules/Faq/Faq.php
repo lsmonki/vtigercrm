@@ -1,0 +1,84 @@
+<?php
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * $Header$
+ * Description:  Defines the Account SugarBean Account entity with the necessary
+ * methods and variables.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
+ ********************************************************************************/
+
+include_once('config.php');
+require_once('include/logging.php');
+require_once('include/database/PearDatabase.php');
+require_once('data/SugarBean.php');
+require_once('include/utils.php');
+
+// Faq is used to store faq information.
+class Faq extends SugarBean {
+	var $log;
+	var $db;
+
+	// Stored fields
+	var $id;
+	var $mode;
+	
+	var $tab_name = Array('crmentity','faq','sefaqrel');
+	var $tab_name_index = Array('crmentity'=>'crmid','faq'=>'id','sefaqrel'=>'faqid');
+				
+	var $entity_table = "crmentity";
+	
+	var $column_fields = Array();
+		
+
+	// This is the list of fields that are in the lists.
+	var $list_fields = Array(
+				'Question'=>Array('faq'=>'question'),
+				'Category'=>Array('faq'=>'category'),
+				'Related to'=>Array('sefaqrel'=>'crmid') 
+				);
+	
+	var $list_fields_name = Array(
+				        'Question'=>'question',
+				        'Category'=>'faqcategories',
+				        'Related to'=>'parent_id'
+				      );
+	var $list_link_field= 'question';
+
+	var $list_mode;
+        var $popup_type;
+
+	var $search_fields = Array(
+				'Account Name'=>Array('account'=>'accountname'),
+				'City'=>Array('accountbillads'=>'bill_city'), 
+				);
+	
+	var $search_fields_name = Array(
+				        'Account Name'=>'accountname',
+				        'City'=>'bill_city',
+				      );
+
+
+	function Faq() {
+		$this->log =LoggerManager::getLogger('account');
+		$this->db = new PearDatabase();
+		$this->column_fields = getColumnFields('Faq');
+	}
+
+	
+
+}
+?>
