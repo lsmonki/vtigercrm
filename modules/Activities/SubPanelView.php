@@ -338,8 +338,20 @@ echo '<input type="hidden" name="return_module" value="'.$currentModule.'">';
 echo '<input type="hidden" name="return_id" value="'.$focus->id.'">';
 echo '<input type="hidden" name="action">';
 
-echo '<td vAlign="middle" class="formHeader" align="left" noWrap width="100%" height="15">Attachment&nbsp;';
-echo '<input title="Attach File" accessyKey="F" class="button" onclick="this.form.action.value=\'upload\';this.form.module.value=\'uploads\'" type="submit" name="button" value="New Attachment">';
+echo '<td>';
+echo '<table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+                <td class="formHeader" vAlign="top" align="left" height="20">
+         <img src="' .$image_path. '/left_arc.gif" border="0"></td>
+
+        <td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap width="100%" height="20">Attachments</td>
+        <td  class="formHeader" vAlign="top" align="right" height="20">
+                  <img src="' .$image_path. '/right_arc.gif" border="0"></td>
+                </tr></tbody></table>
+      </td>';
+echo '<td>&nbsp;</td>';
+echo '<td>&nbsp;</td>';
+echo '<td valign="bottom"><input title="Attach File" accessyKey="F" class="button" onclick="this.form.action.value=\'upload\';this.form.module.value=\'uploads\'" type="submit" name="button" value="New Attachment"></td>';
+echo '<td width="100%"></td>';
 
 echo '</td></tr></form></tbody></table>';
 echo getAttachmentsList($focus->id, $theme);
