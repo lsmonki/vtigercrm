@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/orange/layout_utils.php,v 1.13.2.1 2004/09/20 21:47:30 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/orange/layout_utils.php,v 1.16 2004/10/06 09:02:05 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -21,9 +21,6 @@
 
 require_once('include/logging.php');
 global $app_strings;
-global $theme;
-global $image_path;
-$image_path = 'themes/'.$theme.'/images/';
 
 $log = LoggerManager::getLogger('layout_utils');	
 
@@ -82,7 +79,7 @@ else {
 }
 
 if ($show_help==true) {
-     $the_form .= "<td class='bodySmall' align='right'>[ <A href='phprint.php?jt=".session_id()."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
+     $the_form .= "<td class='bodySmall' align='right'>[ <A href='phprint.php?jt=".session_id().$GLOBALS['request_string']."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
      $the_form .= "<td class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";
 }
 
@@ -132,7 +129,7 @@ if($module == 'Leads')
         }
 */
 
-	$the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='phprint.php?jt=".session_id()."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
+    $the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='phprint.php?jt=".session_id().$GLOBALS['request_string']."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
     $the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";
 }
 else {

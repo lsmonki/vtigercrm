@@ -13,9 +13,12 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Save.php,v 1.1 2004/08/17 15:02:56 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Save.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('modules/Accounts/Account.php');
@@ -33,11 +36,8 @@ foreach($focus->column_fields as $field)
 	{
 		$value = $_REQUEST[$field];
 		$focus->$field = $value;
-		if(get_magic_quotes_gpc() == 1)
-		{
-			$focus->$field = stripslashes($focus->$field);
-		}
 	}
+		
 }
 
 foreach($focus->additional_column_fields as $field)
@@ -46,10 +46,7 @@ foreach($focus->additional_column_fields as $field)
 	{
 		$value = $_REQUEST[$field];
 		$focus->$field = $value;
-		if(get_magic_quotes_gpc() == 1)
-		{
-			$focus->$field = stripslashes($focus->$field);
-		}
+		
 	}
 }
 
@@ -65,4 +62,5 @@ if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $
 $local_log->debug("Saved record with id of ".$return_id);
 
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+
 ?>

@@ -4,13 +4,14 @@
 // Description: Radar plot extension for JpGraph
 // Created: 	2001-02-04
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_radar.php,v 1.2 2004/08/19 06:48:29 gjayakrishnan Exp $
+// Ver:		$Id: jpgraph_radar.php,v 1.3 2004/10/06 09:02:05 jack Exp $
 //
 // License:	This code is released under QPL
 // Copyright (C) 2001,2002 Johan Persson
 //========================================================================
 */
 
+require_once('jpgraph_plotmark.inc');
 
 class RadarLogTicks extends Ticks {
 //---------------
@@ -290,10 +291,12 @@ class RadarPlot {
     var $legend="";
     var $weight=1;
     var $linestyle='solid';
+    var $mark=null;
 //---------------
 // CONSTRUCTOR
     function RadarPlot($data) {
 	$this->data = $data;
+	$this->mark = new PlotMark();
     }
 
 //---------------
@@ -371,6 +374,13 @@ class RadarPlot {
 	$pnts[]=$pnts[1];
 	$img->Polygon($pnts);
 	$img->SetLineStyle('solid'); // Reset line style to default
+	// Add plotmarks on top
+	if( $this->mark->show ) {
+	    for($i=0; $i < $nbrpnts; ++$i) {
+		$this->mark->Stroke($img,$pnts[$i*2],$pnts[$i*2+1]); 
+	    }
+	}
+
     }
 	
 //---------------
@@ -382,9 +392,9 @@ class RadarPlot {
     function Legend(&$graph) {
 	if( $this->legend=="" ) return;
 	if( $this->fill )
-	    $graph->legend->Add($this->legend,$this->fill_color);
+	    $graph->legend->Add($this->legend,$this->fill_color,$this->mark);
 	else
-	    $graph->legend->Add($this->legend,$this->color);	
+	    $graph->legend->Add($this->legend,$this->color,$this->mark);	
     }
 	
 } // Class

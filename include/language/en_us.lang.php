@@ -13,10 +13,13 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.11 2004/09/09 14:04:51 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.13 2004/10/07 12:52:32 jack Exp $
  * Description:  Defines the English language pack for the base application.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
- 
+
 $app_strings = Array(
 'LBL_CHARSET'=>'ISO-8859-1',
 'LBL_BROWSER_TITLE'=>'vtiger CRM - Commercial Open Source CRM',
@@ -38,10 +41,12 @@ $app_strings = Array(
 'LBL_TABCUSTOMISE_BUTTON_TITLE'=>'Customise [Alt+C]',
 'LBL_TABCUSTOMISE_BUTTON'=>'Customise',
 'LBL_DELETE_BUTTON_TITLE'=>'Delete [Alt+D]',
+'LBL_DELETE_BUTTON'=>'Delete',
 'LBL_CONVERT_BUTTON_TITLE'=>'Convert [Alt+C]',
 'LBL_CONVERT_BUTTON_KEY'=>'C',
 'LBL_CONVERT_BUTTON_LABEL'=>'Convert Lead',
-'LBL_DELETE_BUTTON'=>'Delete',
+'LBL_TABCUSTOMISE_BUTTON_KEY'=>'C',
+'LBL_TABCUSTOMISE_BUTTON_LABEL'=>'Customize Tab',
 'LBL_NEW_BUTTON_TITLE'=>'New [Alt+N]',
 'LBL_CHANGE_BUTTON_TITLE'=>'Change [Alt+G]',
 'LBL_CANCEL_BUTTON_TITLE'=>'Cancel [Alt+X]',
@@ -51,7 +56,6 @@ $app_strings = Array(
 'LBL_SAVE_BUTTON_KEY'=>'S',
 'LBL_EDIT_BUTTON_KEY'=>'E',
 'LBL_DUPLICATE_BUTTON_KEY'=>'U',
-'LBL_TABCUSTOMISE_BUTTON_KEY'=>'C',
 'LBL_DELETE_BUTTON_KEY'=>'D',
 'LBL_NEW_BUTTON_KEY'=>'N',
 'LBL_CHANGE_BUTTON_KEY'=>'G',
@@ -62,7 +66,6 @@ $app_strings = Array(
 'LBL_SAVE_BUTTON_LABEL'=>'Save',
 'LBL_EDIT_BUTTON_LABEL'=>'Edit',
 'LBL_DUPLICATE_BUTTON_LABEL'=>'Duplicate',
-'LBL_TABCUSTOMISE_BUTTON_LABEL'=>'Customize Tab',
 'LBL_DELETE_BUTTON_LABEL'=>'Delete',
 'LBL_NEW_BUTTON_LABEL'=>'New',
 'LBL_CHANGE_BUTTON_LABEL'=>'Change',
@@ -76,7 +79,12 @@ $app_strings = Array(
 'LBL_SELECT_USER_BUTTON_TITLE'=>'Select User [Alt+U]',
 'LBL_SELECT_USER_BUTTON_KEY'=>'U',
 'LBL_SELECT_USER_BUTTON_LABEL'=>'Select User',
-'LBL_LNK_SETTINGS'=> 'Settings',
+
+'LBL_LIST_USERIP'=>'User IP',
+'LBL_LIST_SIGNIN'=>'Signin Time',
+'LBL_LIST_SIGNOUT'=>'Signout Time',
+'LBL_LIST_STATUS'=>'Status',
+
 'LBL_LIST_NAME'=>'Name',
 'LBL_LIST_USER_NAME'=>'User Name',
 'LBL_LIST_EMAIL'=>'Email',
@@ -85,6 +93,8 @@ $app_strings = Array(
 'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
 'LBL_USER_LIST'=>'User List',
 'LBL_CONTACT_LIST'=>'Contact List',
+'LBL_LNK_SETTINGS'=> 'Settings',
+'LNK_IMPORT_LEADS'=>'Import Leads',
 
 'LNK_ADVANCED_SEARCH'=>'Advanced',
 'LNK_BASIC_SEARCH'=>'Basic',
@@ -97,8 +107,9 @@ $app_strings = Array(
 'LNK_LIST_END'=>'End',
 'LBL_LIST_OF'=>'of',
 'LNK_PRINT'=>'Print',
-'LNK_IMPORT_LEADS'=>'Import Leads',
 'LNK_HELP'=>'Help',
+'LNK_ABOUT'=>'About',
+'LNK_OUTLOOK'=>'./include/images/outlook_download.gif',
 
 'NTC_REQUIRED'=>'Indicates required field',
 'LBL_REQUIRED_SYMBOL'=>'*',
@@ -123,29 +134,35 @@ $app_strings = Array(
 'NTC_CLICK_BACK'=>'Please click the browser back button and fix the error.',
 'LBL_LIST_ASSIGNED_USER'=>'Assigned To',
 'LBL_ASSIGNED_TO'=>'Assigned To:',
+'LBL_DATE_MODIFIED'=>'Last Modified:',
+'LBL_DATE_ENTERED'=>'Created:',
 'LBL_CURRENT_USER_FILTER'=>'Only my items:',
 'NTC_LOGIN_MESSAGE'=>"Please login to the application.",
 'LBL_NONE'=>'--None--',
+'LBL_BACK'=>'Back',
+'LBL_IMPORT'=>'Import',
+'LBL_EXPORT'=>'Export',
+'LBL_EXPORT_ALL'=>'Export All',
 );
 
 //the left value is the key stored in the db and the right value is the display value
 //to translate, only modify the right value in each key/value pair
 $app_list_strings = Array(
-//e.g. auf Deutsch 'Contacts'=>'Contakten', 
-'moduleList' => Array('Home'=>'Home' 
+//e.g. auf Deutsch 'Contacts'=>'Contakten',
+'moduleList' => Array('Home'=>'Home'
 				, 'Dashboard'=>'Dashboard'
-				, 'Leads'=>'Leads' 
-				, 'Contacts'=>'Contacts' 
+				, 'Leads'=>'Leads'
+				, 'Contacts'=>'Contacts'
 				, 'Accounts'=>'Accounts'
-				, 'Opportunities'=>'Opportunities' 
-				, 'Cases'=>'Cases' 
-				, 'Notes'=>'Notes' 
+				, 'Opportunities'=>'Opportunities'
+				, 'Cases'=>'Cases'
+				, 'Notes'=>'Notes & Attachments'
 				, 'Calls'=>'Calls'
 				, 'Emails'=>'Emails'
-				, 'Meetings'=>'Meetings' 
+				, 'Meetings'=>'Meetings'
 				, 'Tasks'=>'Tasks'),
 
-//e.g. en français 'Analyst'=>'Analyste', 
+//e.g. en français 'Analyst'=>'Analyste',
 'account_type_dom' => Array(''=>''
 		, 'Analyst'=>'Analyst'
 		, 'Competitor'=>'Competitor'
@@ -158,8 +175,8 @@ $app_list_strings = Array(
 		, 'Reseller'=>'Reseller'
 		, 'Other'=>'Other'
 		),
-		
-//e.g. en español 'Apparel'=>'Ropa', 
+
+//e.g. en español 'Apparel'=>'Ropa',
 'industry_dom' => Array(''=>''
 		, 'Apparel'=>'Apparel'
 		, 'Banking'=>'Banking'
@@ -235,6 +252,7 @@ $app_list_strings = Array(
                 , 'Sent'=>'Sent'
                 , 'Not Sent'=>'Not Sent'
                 ),
+  
 
 'opportunity_type_dom' => Array(''=>''
 		, 'Existing Business'=>'Existing Business'
@@ -254,7 +272,7 @@ $app_list_strings = Array(
 		, 'Influencer'=>'Influencer'
 		, 'Other'=>'Other'
 		),
-		
+
 //Note:  do not translate case_relationship_type_default_key
 //       it is the key for the default case_relationship_type_dom value
 'case_relationship_type_default_key' => 'Primary Contact',
@@ -262,7 +280,7 @@ $app_list_strings = Array(
 		, 'Primary Contact'=>'Primary Contact'
 		, 'Alternate Contact'=>'Alternate Contact'
 		),
-		
+
 'sales_stage_dom' => Array('Prospecting'=>'Prospecting'
 		, 'Qualification'=>'Qualification'
 		, 'Needs Analysis'=>'Needs Analysis'
@@ -305,6 +323,9 @@ $app_list_strings = Array(
 		, 'Not Held'=>'Not Held'
 		),
 
+//Note:  do not translate case_status_default_key
+//       it is the key for the default case_status_dom value
+'case_status_default_key' => 'New',
 'case_status_dom' => Array('New'=>'New'
 		, 'Assigned'=>'Assigned'
 		, 'Closed'=>'Closed'
@@ -318,10 +339,10 @@ $app_list_strings = Array(
 
 //Note:  do not translate record_type_default_key
 //       it is the key for the default record_type_module value
-'record_type_default_key' => 'Account',
-'record_type_display' => array('Account' => 'Account', 
-		'Opportunity' => 'Opportunity', 
-		'Case' => 'Case'),
+'record_type_default_key' => 'Accounts',
+'record_type_display' => array('Accounts' => 'Account',
+		'Opportunities' => 'Opportunity',
+		'Cases' => 'Case'),
 );
 
 ?>

@@ -24,8 +24,8 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
     $filesize = $_FILES['binFile']['size'];
     if($filesize != 0)	
     {
-    //$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-    $data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+    $data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+    //$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
    $textDesc = $_REQUEST['txtDescription'];	
     $strDescription = addslashes($textDesc);
     $fileid = create_guid();

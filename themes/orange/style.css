@@ -12,7 +12,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Id: style.css,v 1.9 2004/08/20 10:27:17 gjayakrishnan Exp $
+ * $Id: style.css,v 1.10 2004/10/06 09:02:06 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -77,6 +77,7 @@ INPUT.button {
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 
 	BACKGROUND-COLOR: #333366;
 }
+INPUT.button_file { BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 8pt; BORDER-LEFT: 1px solid;  COLOR: #336699; BORDER-BOTTOM: 1px solid; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; }
 SELECT { FONT-SIZE: 8pt; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif}
 A.currentTab {
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;

@@ -15,5 +15,21 @@
 ?>
 <!--end body panes-->
 </td></tr></table>
+	<table CELLSPACING=3 border=0 align="center"><tr>
+      <td align=center noWrap colSpan=4>
+	  <A href="index.php?module=Home&action=index"><?php echo $app_list_strings['moduleList']['Home']; ?></A> |
+	  <A href="index.php?module=Dashboard&action=index"><?php echo $app_list_strings['moduleList']['Dashboard']; ?></A> |
+	  <A href="index.php?module=Contacts&action=index"><?php echo $app_list_strings['moduleList']['Contacts']; ?></A> |
+	  <A href="index.php?module=Accounts&action=index"><?php echo $app_list_strings['moduleList']['Accounts']; ?></A> |
+	  <A href="index.php?module=Opportunities&action=index"><?php echo $app_list_strings['moduleList']['Opportunities']; ?></A> |
+	  <A href="index.php?module=Cases&action=index"><?php echo $app_list_strings['moduleList']['Cases']; ?></A>
+	  <BR>
+	  <A href="index.php?module=Notes&action=index"><?php echo $app_list_strings['moduleList']['Notes']; ?></A> |
+	  <A href="index.php?module=Calls&action=index"><?php echo $app_list_strings['moduleList']['Calls']; ?></A> |
+	  <A href="index.php?module=Emails&action=index"><?php echo $app_list_strings['moduleList']['Emails']; ?></A> |
+	  <A href="index.php?module=Meetings&action=index"><?php echo $app_list_strings['moduleList']['Meetings']; ?></A> |
+	  <A href="index.php?module=Tasks&action=index"><?php echo $app_list_strings['moduleList']['Tasks']; ?></A>
+	  </td>
+    </tr></table>
 </body>
 </html>

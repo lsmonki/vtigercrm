@@ -1,8 +1,8 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
- * License. You may obtain a copy of the License at http://www.mozilla.org/MPL
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Meetings/DetailView.php,v 1.2 2004/09/16 12:13:57 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Meetings/DetailView.php,v 1.3 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -29,9 +32,9 @@ if(isset($_REQUEST['record'])) {
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
-} 
+}
 
-//needed when creating a new meeting with default values passed in 
+//needed when creating a new meeting with default values passed in
 if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) {
 	$focus->contact_name = $_REQUEST['contact_name'];
 }
@@ -66,20 +69,24 @@ if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['
 if(isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
 if(isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
 $xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
+$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $focus->id);
-$xtpl->assign("PARENT_NAME", $focus->parent_name);	
-if (isset($focus->parent_type)) $xtpl->assign("PARENT_MODULE", $app_list_strings['record_type_module'][$focus->parent_type]);
+$xtpl->assign("PARENT_NAME", $focus->parent_name);
+if (isset($focus->parent_type)) $xtpl->assign("PARENT_MODULE", $focus->parent_type);
 $xtpl->assign("PARENT_TYPE", $app_list_strings['record_type_display'][$focus->parent_type]);
-$xtpl->assign("PARENT_ID", $focus->parent_id);	
+$xtpl->assign("PARENT_ID", $focus->parent_id);
 $xtpl->assign("NAME", $focus->name);
 $xtpl->assign("ASSIGNED_TO", $focus->assigned_user_name);
 
 $xtpl->assign("LOCATION", $focus->location);
 $xtpl->assign("DATE_START", $focus->date_start);
 $xtpl->assign("TIME_START", substr($focus->time_start, 0 ,5));
+
+// Fix: No line breaks in "Description" field (DetailView)
 $xtpl->assign("DESCRIPTION", nl2br($focus->description));
 
+$xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
+$xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
 $xtpl->assign("DURATION_HOURS", $focus->duration_hours);
 $xtpl->assign("STATUS", $app_list_strings['meeting_status_dom'][$focus->status]);
 $xtpl->assign("DURATION_MINUTES", $focus->duration_minutes);
@@ -90,11 +97,13 @@ $xtpl->out("main");
 
 echo "<BR>\n";
 
-// Now get the list of invitees that match this one.
-$focus_users_list = & $focus->get_users();
-$focus_contacts_list = & $focus->get_contacts();
 
-include('modules/Meetings/SubPanelViewInvitees.php');
+include('modules/Contacts/SubPanelViewContactsAndUsers.php');
+$SubPanel = new SubPanelViewContactsAndUsers();
+$SubPanel->setFocus($focus);
+$SubPanel->setHideNewButton(true);
+
+$SubPanel->ProcessSubPanelListView('modules/Meetings/SubPanelViewInvitees.html',$mod_strings, $action);
 
 echo "</td></tr>\n";
 

@@ -25,7 +25,7 @@ class XTemplate {
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-	$Id: xtpl.php,v 1.1 2004/08/18 15:27:17 gjayakrishnan Exp $
+	$Id: xtpl.php,v 1.2 2004/10/06 09:02:02 jack Exp $
 */
 
 /***[ variables ]***********************************************************/
@@ -154,6 +154,13 @@ function parse ($bname) {
 	}
 }
 
+/***[ exists ]**************************************************************/
+/*
+	returns true if a block exists otherwise returns false.
+*/
+function exists($bname){
+	return (!empty($this->parsed_blocks[$bname])) || (!empty($this->blocks[$bname]));
+}
 /***[ rparse ]**************************************************************/
 /*
 	returns the parsed text for a block, including all sub-blocks.
@@ -414,8 +421,11 @@ function r_getfile($file) {
 
 /*
   	$Log: xtpl.php,v $
-  	Revision 1.1  2004/08/18 15:27:17  gjayakrishnan
-  	XTemplate files added
+  	Revision 1.2  2004/10/06 09:02:02  jack
+  	* Modifications made for 3.0 Beta Features
+  	
+  	Revision 1.8  2004/08/26 00:43:37  sugarmsi
+  	added an exists method to check if a block exists in a template
   	
   	Revision 1.7  2004/08/08 09:28:36  sugarjacob
   	Fix: XTemplate changed to use <?php script declarations

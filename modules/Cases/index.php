@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Cases/index.php,v 1.1 2004/08/17 15:03:56 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Cases/index.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -26,5 +26,6 @@ global $mod_strings;
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_TITLE'], true); 
 echo "\n<BR>\n";
 include ('modules/Cases/ListView.php'); 
+include ('modules/Import/ImportButton.php');
 
 ?>

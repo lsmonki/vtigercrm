@@ -2,7 +2,7 @@
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
  * ("License"); You may not use this file except in compliance with the 
- * License. You may obtain a copy of the License at http://www.mozilla.org/MPL
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
@@ -13,20 +13,26 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.1 2004/08/17 15:04:39 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('modules/Contacts/Contact.php');
+require_once('modules/Accounts/Account.php');
+require_once('modules/Opportunities/Opportunity.php');
 require_once('modules/Users/User.php');
 
 // Email is used to store customer information.
 class Email extends SugarBean {
 	var $log;
+	var $db;
 
 	// Stored fields
 	var $id;
@@ -60,6 +66,9 @@ class Email extends SugarBean {
 	var $table_name = "emails";
 	var $rel_users_table = "emails_users";
 	var $rel_contacts_table = "emails_contacts";
+	var $rel_cases_table = "emails_cases";
+	var $rel_accounts_table = "emails_accounts";
+	var $rel_opportunities_table = "emails_opportunities";
 
 	var $object_name = "Email";
 
@@ -79,10 +88,11 @@ class Email extends SugarBean {
 	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'contact_id', 'user_id', 'contact_name');		
 
 	// This is the list of fields that are in the lists.
-	var $list_fields = Array('id', 'name', 'parent_type', 'parent_name', 'parent_id', 'date_start', 'assigned_user_name', 'assigned_user_id');
+	var $list_fields = Array('id', 'name', 'parent_type', 'parent_name', 'parent_id', 'date_start', 'assigned_user_name', 'assigned_user_id', 'contact_name');
 		
 	function Email() {
 		$this->log = LoggerManager::getLogger('email');
+		$this->db = new PearDatabase();
 	}
 
 	var $new_schema = true;
@@ -102,9 +112,9 @@ class Email extends SugarBean {
 		$query .=', deleted bool NOT NULL default 0';
 		$query .=', PRIMARY KEY ( ID ) )';
 
-		$this->log->info($query);
 		
-		mysql_query($query) or die("Error creating table: ".mysql_error());
+		
+		$this->db->query($query,true,"Error creating table: ");
 
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
 
@@ -115,8 +125,8 @@ class Email extends SugarBean {
 		$query .=', deleted bool NOT NULL default 0';
 		$query .=', PRIMARY KEY ( ID ) )';
 	
-		$this->log->info($query);
-		mysql_query($query) or die("Error creating email/user relationship table: ".mysql_error());
+		
+		$this->db->query($query,true,"Error creating email/user relationship table: ");
 		
 		$query = "CREATE TABLE $this->rel_contacts_table (";
 		$query .='id char(36) NOT NULL';
@@ -125,8 +135,44 @@ class Email extends SugarBean {
 		$query .=', deleted bool NOT NULL default 0';
 		$query .=', PRIMARY KEY ( ID ) )';
 	
-		$this->log->info($query);
-		mysql_query($query) or die("Error creating email/contact relationship table: ".mysql_error());
+		
+		$this->db->query($query,true,"Error creating email/contact relationship table: ");
+		
+
+		
+		$query = "CREATE TABLE $this->rel_accounts_table (";
+		$query .='id char(36) NOT NULL';
+		$query .=', email_id char(36)';
+		$query .=', account_id char(36)';
+		$query .=', deleted bool NOT NULL default 0';
+		$query .=', PRIMARY KEY ( ID ) )';
+	
+		
+		$this->db->query($query,true,"Error creating email/account relationship table: ");
+		
+				
+		
+		$query = "CREATE TABLE $this->rel_opportunities_table (";
+		$query .='id char(36) NOT NULL';
+		$query .=', email_id char(36)';
+		$query .=', opportunity_id char(36)';
+		$query .=', deleted bool NOT NULL default 0';
+		$query .=', PRIMARY KEY ( ID ) )';
+	
+		
+		$this->db->query($query,true,"Error creating email/opportunity relationship table: ");
+		
+				
+		
+		$query = "CREATE TABLE $this->rel_cases_table (";
+		$query .='id char(36) NOT NULL';
+		$query .=', email_id char(36)';
+		$query .=', case_id char(36)';
+		$query .=', deleted bool NOT NULL default 0';
+		$query .=', PRIMARY KEY ( ID ) )';
+	
+		
+		$this->db->query($query,true,"Error creating email/case relationship table: ");
 
 		// Create the indexes
 		$this->create_index("create index idx_email_name on emails (name)");
@@ -134,32 +180,60 @@ class Email extends SugarBean {
 		$this->create_index("create index idx_usr_email_usr on $this->rel_users_table (user_id)");
 		$this->create_index("create index idx_con_email_email on $this->rel_contacts_table (email_id)");
 		$this->create_index("create index idx_con_email_con on $this->rel_contacts_table (contact_id)");
+		
+		$this->create_index("create index idx_con_email_email on $this->rel_accounts_table (email_id)");
+		$this->create_index("create index idx_con_email_con on $this->rel_accounts_table (account_id)");
+		
+		$this->create_index("create index idx_con_email_email on $this->rel_cases_table (email_id)");
+		$this->create_index("create index idx_con_email_con on $this->rel_cases_table (case_id)");
+		$this->create_index("create index idx_con_email_email on $this->rel_opportunities_table (email_id)");
+		$this->create_index("create index idx_con_email_con on $this->rel_opportunities_table(opportunity_id)");
 	}
 
 	function drop_tables () {
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
-		$this->log->info($query);
+		
 			
-		mysql_query($query);
+		$this->db->query($query);
 
 		$query = 'DROP TABLE IF EXISTS '.$this->rel_users_table;
 
-		$this->log->info($query);
+		
 			
-		mysql_query($query);
+		$this->db->query($query);
 
 		$query = 'DROP TABLE IF EXISTS '.$this->rel_contacts_table;
 
-		$this->log->info($query);
+		
 			
-		mysql_query($query);
+		$this->db->query($query);
+		
+		$query = 'DROP TABLE IF EXISTS '.$this->rel_cases_table;
+
+		
+			
+		$this->db->query($query);
+		$query = 'DROP TABLE IF EXISTS '.$this->rel_accounts_table;
+
+		
+			
+		$this->db->query($query);
+		$query = 'DROP TABLE IF EXISTS '.$this->rel_opportunities_table;
+
+		
+			
+		$this->db->query($query);
+		
 
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
 
 	}
 	
 	/** Returns a list of the associated contacts
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_contacts()
 	{
@@ -170,6 +244,9 @@ class Email extends SugarBean {
 	}
 	
 	/** Returns a list of the associated users
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_users()
 	{
@@ -205,32 +282,32 @@ class Email extends SugarBean {
 	
 	function set_emails_account_relationship($email_id, $account_id)
 	{
-		$query = "update $this->table_name set parent_id='$account_id', parent_type='Account' where _id='$email_id'";
-		mysql_query($query) or die("Error setting account to email relationship: ".mysql_error()."<BR>$query");
+		$query = "insert into $this->rel_accounts_table set id='".create_guid()."', account_id='$account_id', email_id='$email_id'";
+		$this->db->query($query,true,"Error setting email to account relationship: "."<BR>$query");
 	}
 
 	function set_emails_opportunity_relationship($email_id, $opportunity_id)
 	{
-		$query = "update $this->table_name set parent_id='$opportunity_id', parent_type='Opportunity' where _id='$email_id'";
-		mysql_query($query) or die("Error setting opportunity to email relationship: ".mysql_error()."<BR>$query");
+		$query = "insert into $this->rel_opportunities_table set id='".create_guid()."', opportunity_id='$opportunity_id', email_id='$email_id'";
+		$this->db->query($query,true,"Error setting email to opportunity relationship: "."<BR>$query");
 	}
 
 	function set_emails_case_relationship($email_id, $case_id)
 	{
-		$query = "update $this->table_name set parent_id='$case_id', parent_type='Case' where _id='$email_id'";
-		mysql_query($query) or die("Error setting case to email relationship: ".mysql_error()."<BR>$query");
+		$query = "insert into $this->rel_cases_table set id='".create_guid()."', case_id='$case_id', email_id='$email_id'";
+		$this->db->query($query,true,"Error setting email to case relationship: "."<BR>$query");
 	}
 
 	function set_emails_contact_invitee_relationship($email_id, $contact_id)
 	{
 		$query = "insert into $this->rel_contacts_table set id='".create_guid()."', contact_id='$contact_id', email_id='$email_id'";
-		mysql_query($query) or die("Error setting email to contact relationship: ".mysql_error()."<BR>$query");
+		$this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
 	}
 	
 	function set_emails_user_invitee_relationship($email_id, $user_id)
 	{
 		$query = "insert into $this->rel_users_table set id='".create_guid()."', user_id='$user_id', email_id='$email_id'";
-		mysql_query($query) or die("Error setting email to user relationship: ".mysql_error()."<BR>$query");
+		$this->db->query($query,true,"Error setting email to user relationship: "."<BR>$query");
 	}
 
 	function get_summary_text()
@@ -262,9 +339,38 @@ class Email extends SugarBean {
 			$query .= " ORDER BY $order_by";
 		else 
 			$query .= " ORDER BY emails.name";			
-
+	
 		return $query;
 	}
+
+	function create_export_query(&$order_by, &$where)
+        {
+                $contact_required = ereg("contacts", $where);
+
+                if($contact_required)
+                {
+                        $query = "SELECT emails.*, contacts.first_name, contacts.last_name FROM contacts, emails, emails_contacts ";
+                        $where_auto = "emails_contacts.contact_id = contacts.id AND emails_contacts.email_id = emails.id AND emails.deleted=0 AND contacts.deleted=0";
+                }
+                else
+                {
+                        $query = 'SELECT * FROM emails ';
+                        $where_auto = "deleted=0";
+                }
+
+                if($where != "")
+                        $query .= "where $where AND ".$where_auto;
+                else
+                        $query .= "where ".$where_auto;
+
+                if($order_by != "")
+                        $query .= " ORDER BY $order_by";
+                else
+                        $query .= " ORDER BY emails.name";
+
+                return $query;
+        }
+
 
 
 	function fill_in_additional_list_fields()
@@ -279,10 +385,10 @@ class Email extends SugarBean {
 
 		$query  = "SELECT contacts.first_name, contacts.last_name, contacts.phone_work, contacts.email1, contacts.id FROM contacts, emails_contacts ";
 		$query .= "WHERE emails_contacts.contact_id=contacts.id AND emails_contacts.email_id='$this->id' AND emails_contacts.deleted=0 AND contacts.deleted=0";
-		$result = mysql_query($query) or die("Error filling in additional detail fields: ".mysql_error());
+		$result =$this->db->query($query,true," Error filling in additional detail fields: ");
 
 		// Get the id and the name.
-		$row = mysql_fetch_assoc($result);
+		$row = $this->db->fetchByAssoc($result);
 		
 		$this->log->info($row);
 		
@@ -308,42 +414,42 @@ class Email extends SugarBean {
 			$this->log->debug("Call($this->id): contact_email1 = $this->contact_email");
 		}
 
-		if ($this->parent_type == "Opportunity") {
+		if ($this->parent_type == "Opportunities") {
 			require_once("modules/Opportunities/Opportunity.php");
 			$parent = new Opportunity();
 			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
-			$result = mysql_query($query) or die("Error filling in additional detail fields: ".mysql_error());
+			$result =$this->db->query($query,true," Error filling in additional detail fields: ");
 	
 			// Get the id and the name.
-			$row = mysql_fetch_assoc($result);
+			$row = $this->db->fetchByAssoc($result);
 			
 			if($row != null)
 			{
 				$this->parent_name = stripslashes($row['name']);
 			}
 		}
-		elseif ($this->parent_type == "Case") {
+		elseif ($this->parent_type == "Cases") {
 			require_once("modules/Cases/Case.php");
 			$parent = new aCase();
 			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
-			$result = mysql_query($query) or die("Error filling in additional detail fields: ".mysql_error());
+			$result =$this->db->query($query,true," Error filling in additional detail fields: ");
 	
 			// Get the id and the name.
-			$row = mysql_fetch_assoc($result);
+			$row = $this->db->fetchByAssoc($result);
 			
 			if($row != null)
 			{
 				$this->parent_name = stripslashes($row['name']);
 			}
 		}
-		elseif ($this->parent_type == "Account") {
+		elseif ($this->parent_type == "Accounts") {
 			require_once("modules/Accounts/Account.php");
 			$parent = new Account();
 			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
-			$result = mysql_query($query) or die("Error filling in additional detail fields: ".mysql_error());
+			$result =$this->db->query($query,true," Error filling in additional detail fields: ");
 	
 			// Get the id and the name.
-			$row = mysql_fetch_assoc($result);
+			$row = $this->db->fetchByAssoc($result);
 			
 			if($row != null)
 			{
@@ -358,22 +464,92 @@ class Email extends SugarBean {
 	function mark_relationships_deleted($id)
 	{
 		$query = "UPDATE $this->rel_users_table set deleted=1 where email_id='$id'";
-		mysql_query($query) or die("Error marking record deleted: ".mysql_error());
+		$this->db->query($query,true,"Error marking record deleted: ");
 
 		$query = "UPDATE $this->rel_contacts_table set deleted=1 where email_id='$id'";
-		mysql_query($query) or die("Error marking record deleted: ".mysql_error());
+		$this->db->query($query,true,"Error marking record deleted: ");
+		$query = "UPDATE $this->rel_cases_table set deleted=1 where email_id='$id'";
+		$this->db->query($query,true,"Error marking record deleted: ");
+		$query = "UPDATE $this->rel_accounts_table set deleted=1 where email_id='$id'";
+		$this->db->query($query,true,"Error marking record deleted: ");
+		$query = "UPDATE $this->rel_opportunities_table set deleted=1 where email_id='$id'";
+		$this->db->query($query,true,"Error marking record deleted: ");
+		
 	}
 	
 	function mark_email_contact_relationship_deleted($contact_id, $email_id)
 	{
 		$query = "UPDATE $this->rel_contacts_table set deleted=1 where contact_id='$contact_id' and email_id='$email_id' and deleted=0";
-		mysql_query($query) or die("Error clearing email to contact relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing email to contact relationship: ");
 	}
 
 	function mark_email_user_relationship_deleted($user_id, $email_id)
 	{
 		$query = "UPDATE $this->rel_users_table set deleted=1 where user_id='$user_id' and email_id='$email_id' and deleted=0";
-		mysql_query($query) or die("Error clearing email to user relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing email to user relationship: ");
 	}
+	function mark_email_case_relationship_deleted($id, $email_id)
+	{
+		$query = "UPDATE $this->rel_cases_table set deleted=1 where case_id='$id' and email_id='$email_id' and deleted=0";
+		$this->db->query($query,true,"Error clearing email to user relationship: ");
+	}
+	function mark_email_account_relationship_deleted($id, $email_id)
+	{
+		$query = "UPDATE $this->rel_accounts_table set deleted=1 where account_id='$id' and email_id='$email_id' and deleted=0";
+		$this->db->query($query,true,"Error clearing email to user relationship: ");
+	}
+	function mark_email_opportunity_relationship_deleted($id, $email_id)
+	{
+		$query = "UPDATE $this->rel_opportunities_table set deleted=1 where opportunity_id='$id' and email_id='$email_id' and deleted=0";
+		$this->db->query($query,true,"Error clearing email to user relationship: ");
+	}
+	function get_list_view_data(){
+		$email_fields = $this->get_list_view_array();
+		global $app_list_strings;
+		if (isset($this->parent_type) && $this->parent_type != "") 
+			$email_fields['PARENT_MODULE'] = $this->parent_type;
+		return $email_fields;
+	}
+	
+	/** Returns a list of the associated opportunities
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
+	*/
+	function get_opportunities()
+	{
+		// First, get the list of IDs.
+		$query = "SELECT opportunity_id as id from emails_opportunities where email_id='$this->id' AND deleted=0";
+		
+		return $this->build_related_list($query, new Opportunity());
+	}
+	
+	/** Returns a list of the associated accounts
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
+	*/
+	function get_accounts()
+	{
+		// First, get the list of IDs.
+		$query = "SELECT account_id as id from emails_accounts where email_id='$this->id' AND deleted=0";
+		
+		return $this->build_related_list($query, new Account());
+	}
+	
+	
+	/** Returns a list of the associated cases
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
+	*/
+	function get_cases()
+	{
+		// First, get the list of IDs.
+		$query = "SELECT case_id as id from emails_cases where email_id='$this->id' AND deleted=0";
+		
+		return $this->build_related_list($query, new aCase());
+	}
+
 }
 ?>

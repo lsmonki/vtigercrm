@@ -4,7 +4,7 @@
 // Description:	Base64 encoded images for pushpins
 // Created: 	2003-03-20
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: imgdata_pushpins.inc,v 1.2 2004/08/19 06:48:29 gjayakrishnan Exp $
+// Ver:		$Id: imgdata_pushpins.inc,v 1.3 2004/10/06 09:02:03 jack Exp $
 //
 // License:	This code is released under QPL 1.0 
 // Copyright (C) 2003 Johan Persson 

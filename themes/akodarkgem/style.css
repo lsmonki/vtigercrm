@@ -12,7 +12,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Id: style.css,v 1.1 2004/08/17 14:55:39 gjayakrishnan Exp $
+ * $Id: style.css,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -128,7 +128,7 @@ a.buttonbar:hover {
   background-color : #2E3440;
   border           : 1px solid #000000;
 }
-
+INPUT.button_file { BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 8pt; BORDER-LEFT: 1px solid;  COLOR: #336699; BORDER-BOTTOM: 1px solid; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; }
 .inputbox {
   font             : 10px Verdana, Arial, Helvetica, sans-serif;
   color            : #CCCCCC;

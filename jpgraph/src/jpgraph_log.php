@@ -4,7 +4,7 @@
 // Description:	Log scale plot extension for JpGraph
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_log.php,v 1.2 2004/08/19 06:48:29 gjayakrishnan Exp $
+// Ver:		$Id: jpgraph_log.php,v 1.3 2004/10/06 09:02:04 jack Exp $
 //
 // License:	This code is released under QPL
 // Copyright (C) 2001,2002 Johan Persson
@@ -36,8 +36,9 @@ class LogScale extends LinearScale {
     // Translate between world and screen
     function Translate($a) {
 	if( !is_numeric($a) ) {
-	    if( $a != '' && $a != '-' ) 
+	    if( $a != '' && $a != '-' && $a != 'x' ) 
 		JpGraphError::Raise('Your data contains non-numeric values.');
+	    return 1;
 	}
 	if( $a < 0 ) {
 	    JpGraphError::Raise("Negative data values can not be used in a log scale.");
@@ -51,6 +52,11 @@ class LogScale extends LinearScale {
     // Relative translate (don't include offset) usefull when we just want
     // to know the relative position (in pixels) on the axis	
     function RelTranslate($a) {
+	if( !is_numeric($a) ) {
+	    if( $a != '' && $a != '-' && $a != 'x' ) 
+		JpGraphError::Raise('Your data contains non-numeric values.');
+	    return 1;
+	}
 	if( $a==0 ) $a=1;
 	$a=log10($a);
 	return round(($a*1.0 - $this->scale[0]) * $this->scale_factor); 

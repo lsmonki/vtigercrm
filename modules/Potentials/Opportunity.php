@@ -13,13 +13,16 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Opportunity.php,v 1.1 2004/08/17 15:06:09 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Opportunity.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Tasks/Task.php');
@@ -31,7 +34,7 @@ require_once('include/utils.php');
 // Opportunity is used to store customer information.
 class Opportunity extends SugarBean {
 	var $log;
-
+	var $db;
 	// Stored fields
 	var $id;
 	var $lead_source;
@@ -85,11 +88,12 @@ class Opportunity extends SugarBean {
 	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'account_name', 'account_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id');		
 
 	// This is the list of fields that are in the lists.
-	var $list_fields = Array('id', 'name', 'account_name', 'date_closed', 'assigned_user_name', 'assigned_user_id');
+	var $list_fields = Array('id', 'name', 'account_name', 'date_closed', 'amount', 'assigned_user_name', 'assigned_user_id');
 	
 	
 	function Opportunity() {
 		$this->log = LoggerManager::getLogger('opportunity');
+		$this->db = new PearDatabase();
 	}
 
 	var $new_schema = true;
@@ -113,9 +117,9 @@ class Opportunity extends SugarBean {
 		$query .=', description char(255)';
 		$query .=', PRIMARY KEY ( ID ) )';
 
-		$this->log->info($query);
+		$this->db->query($query, true, "Error creating table:" );
 		
-		mysql_query($query) or die("Error creating table: ".mysql_error());
+		
 
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
 		
@@ -126,8 +130,8 @@ class Opportunity extends SugarBean {
 		$query .=', deleted bool NOT NULL default 0';
 		$query .=', PRIMARY KEY ( ID ) )';
 	
-		$this->log->info($query);
-		mysql_query($query) or die("Error creating account/opportunity relationship table: ".mysql_error());
+		$this->db->query($query, true, "Error creating account/opportunity relationship table: " );
+
 
 		$query = "CREATE TABLE $this->rel_opportunity_table (";
 		$query .='id char(36) NOT NULL';
@@ -136,9 +140,7 @@ class Opportunity extends SugarBean {
 		$query .=', contact_role char(50)';
 		$query .=', deleted bool NOT NULL default 0';
 		$query .=', PRIMARY KEY ( ID ) )';
-	
-		$this->log->info($query);
-		mysql_query($query) or die("Error creating opportunity/contact relationship table: ".mysql_error());
+		$this->db->query($query, true,"Error creating opportunity/contact relationship table: ");
 
 		// Create the indexes
 		$this->create_index("create index idx_opp_name on opportunities (name)");
@@ -151,15 +153,15 @@ class Opportunity extends SugarBean {
 	function drop_tables () {
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
-		$this->log->info($query);
-			
-		mysql_query($query);
+		$this->db->query($query);
 
 		$query = 'DROP TABLE IF EXISTS '.$this->rel_account_table;
 
-		$this->log->info($query);
-			
-		mysql_query($query);
+		$this->db->query($query);
+
+		$query = 'DROP TABLE IF EXISTS '.$this->rel_opportunity_table;
+
+		$this->db->query($query);
 
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
 
@@ -196,8 +198,40 @@ class Opportunity extends SugarBean {
 		else 
 			$query .= " ORDER BY opportunities.name";			
 
+		
+
 		return $query;
 	}
+
+
+        function create_export_query($order_by, $where)
+        {
+
+                                $query = "SELECT
+                                opportunities.*,
+                                accounts.name as account_name,
+                                users.user_name as assigned_user_name
+                                FROM opportunities
+                                LEFT JOIN users
+                                ON opportunities.assigned_user_id=users.id
+                                LEFT JOIN accounts_opportunities
+                                ON opportunities.id=accounts_opportunities.opportunity_id
+                                LEFT JOIN accounts
+                                ON accounts_opportunities.account_id=accounts.id ";
+                        $where_auto = "accounts_opportunities.deleted=0 AND accounts.deleted=0 AND opportunities.deleted=0 AND users.status='ACTIVE'";
+
+                if($where != "")
+                        $query .= "where $where AND ".$where_auto;
+                else
+                        $query .= "where ".$where_auto;
+
+                if($order_by != "")
+                        $query .= " ORDER BY $order_by";
+                else
+                        $query .= " ORDER BY opportunities.name";
+                return $query;
+        }
+
 
 
 	function save_relationship_changes($is_update)
@@ -237,13 +271,14 @@ class Opportunity extends SugarBean {
 	function set_opportunity_account_relationship($opportunity_id, $account_id)
 	{
 		$query = "insert into accounts_opportunities set id='".create_guid()."', opportunity_id='$opportunity_id', account_id='$account_id'";
-		mysql_query($query) or die("Error setting account to contact relationship: ".mysql_error());
+		$this->db->query($query, true, "Error setting account to contact relationship: ");
+
 	}
 
 	function clear_opportunity_account_relationship($opportunity_id)
 	{
 		$query = "UPDATE accounts_opportunities set deleted=1 where opportunity_id='$opportunity_id' and deleted=0";
-		mysql_query($query) or die("Error clearing account to opportunity relationship: ".mysql_error());
+		$this->db->query($query, true, "Error clearing account to opportunity relationship: ");
 	}
     
 	function set_opportunity_contact_relationship($opportunity_id, $contact_id)
@@ -251,73 +286,76 @@ class Opportunity extends SugarBean {
 		global $app_list_strings;
 		$default = $app_list_strings['opportunity_relationship_type_default_key'];
 		$query = "insert into opportunities_contacts set id='".create_guid()."', opportunity_id='$opportunity_id', contact_id='$contact_id', contact_role='$default'";
-		mysql_query($query) or die("Error setting opportunity to contact relationship: ".mysql_error());
+		$this->db->query($query, true, "Error setting opportunity to contact relationship: ");
 	}
 	
 	function clear_opportunity_contact_relationship($opportunity_id)
 	{
 		$query = "UPDATE opportunities_contacts set deleted=1 where opportunity_id='$opportunity_id' and deleted=0";
-		mysql_query($query) or die("Error marking record deleted: ".mysql_error());
+		$this->db->query($query, true, "Error marking record deleted: ");
+
 	}
 		
 	function set_opportunity_task_relationship($opportunity_id, $task_id)
 	{
-		$query = "UPDATE tasks set parent_id='$opportunity_id', parent_type='Opportunity' where id='$task_id'";
-		mysql_query($query) or die("Error setting opportunity to task relationship: ".mysql_error());
+		$query = "UPDATE tasks set parent_id='$opportunity_id', parent_type='Opportunities' where id='$task_id'";
+		$this->db->query($query, true, "Error setting opportunity to task relationship: ");
+
 	}
 
 	function clear_opportunity_task_relationship($opportunity_id)
 	{
 		$query = "UPDATE tasks set parent_id='', parent_type='' where parent_id='$opportunity_id'";
-		mysql_query($query) or die("Error clearing opportunity to task relationship: ".mysql_error());
+		$this->db->query($query, true, "Error clearing opportunity to task relationship: ");
+		
 	}
 
 	function set_opportunity_note_relationship($opportunity_id, $note_id)
 	{
-		$query = "UPDATE notes set parent_id='$opportunity_id', parent_type='Opportunity' where id='$note_id'";
-		mysql_query($query) or die("Error setting opportunity to note relationship: ".mysql_error());
+		$query = "UPDATE notes set parent_id='$opportunity_id', parent_type='Opportunities' where id='$note_id'";
+		$this->db->query($query, true, "Error setting opportunity to note relationship: ");
 	}
 
 	function clear_opportunity_note_relationship($opportunity_id)
 	{
 		$query = "UPDATE notes set parent_id='', parent_type='' where parent_id='$opportunity_id'";
-		mysql_query($query) or die("Error clearing opportunity to note relationship: ".mysql_error());
+		$this->db->query($query, true, "Error clearing opportunity to note relationship: ");
 	}
 
 	function set_opportunity_meeting_relationship($opportunity_id, $meeting_id)
 	{
-		$query = "UPDATE meetings set parent_id='$opportunity_id', parent_type='Opportunity' where id='$meeting_id'";
-		mysql_query($query) or die("Error setting opportunity to meeting relationship: ".mysql_error());
+		$query = "UPDATE meetings set parent_id='$opportunity_id', parent_type='Opportunities' where id='$meeting_id'";
+		$this->db->query($query, true,"Error setting opportunity to meeting relationship: ");
 	}
 
 	function clear_opportunity_meeting_relationship($opportunity_id)
 	{
 		$query = "UPDATE meetings set parent_id='', parent_type='' where parent_id='$opportunity_id'";
-		mysql_query($query) or die("Error clearing opportunity to meeting relationship: ".mysql_error());
+		$this->db->query($query, true,"Error clearing opportunity to meeting relationship: ");
 	}
 
 	function set_opportunity_call_relationship($opportunity_id, $call_id)
 	{
-		$query = "UPDATE calls set parent_id='$opportunity_id', parent_type='Opportunity' where id='$call_id'";
-		mysql_query($query) or die("Error setting opportunity to call relationship: ".mysql_error());
+		$query = "UPDATE calls set parent_id='$opportunity_id', parent_type='Opportunities' where id='$call_id'";
+		$this->db->query($query, true,"Error setting opportunity to call relationship: ");
 	}
 
 	function clear_opportunity_call_relationship($opportunity_id)
 	{
 		$query = "UPDATE calls set parent_id='', parent_type='' where parent_id='$opportunity_id'";
-		mysql_query($query) or die("Error clearing opportunity to call relationship: ".mysql_error());
+		$this->db->query($query, true,"Error clearing opportunity to call relationship: ");
 	}
 
 	function set_opportunity_email_relationship($opportunity_id, $email_id)
 	{
-		$query = "UPDATE emails set parent_id='$opportunity_id', parent_type='Opportunity' where id='$email_id'";
-		mysql_query($query) or die("Error setting opportunity to email relationship: ".mysql_error());
+		$query = "UPDATE emails set parent_id='$opportunity_id', parent_type='Opportunities' where id='$email_id'";
+		$this->db->query($query, true,"Error setting opportunity to email relationship: ");
 	}
 
 	function clear_opportunity_email_relationship($opportunity_id)
 	{
 		$query = "UPDATE emails set parent_id='', parent_type='' where parent_id='$opportunity_id'";
-		mysql_query($query) or die("Error clearing opportunity to email relationship: ".mysql_error());
+		$this->db->query($query, true,"Error clearing opportunity to email relationship: ");
 	}
 
 	function mark_relationships_deleted($id)
@@ -337,10 +375,10 @@ class Opportunity extends SugarBean {
 		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
 
 		$query = "SELECT amount, sales_stage, lead_source FROM opportunities where id = '$this->id' and deleted=0";
-		$result = mysql_query($query) or die("Error filling in additional detail fields: ".mysql_error());
+		$result =& $this->db->query($query, true,"Error filling in additional detail fields: ");
 
 		// Get the id and the name.
-		$row = mysql_fetch_assoc($result);
+		$row =  $this->db->fetchByAssoc($result);
 
 		if($row != null)
 		{
@@ -357,10 +395,10 @@ class Opportunity extends SugarBean {
 		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
 
 		$query = "SELECT acc.id, acc.name from accounts as acc, accounts_opportunities as a_o where acc.id = a_o.account_id and a_o.opportunity_id = '$this->id' and a_o.deleted=0 and acc.deleted=0";
-		$result = mysql_query($query) or die("Error filling in additional detail fields: ".mysql_error());
+		$result =& $this->db->query($query, true,"Error filling in additional detail fields: ");
 
 		// Get the id and the name.
-		$row = mysql_fetch_assoc($result);
+		$row = $this->db->fetchByAssoc($result);
 
 		if($row != null)
 		{
@@ -377,6 +415,9 @@ class Opportunity extends SugarBean {
 	
 	
 	/** Returns a list of the associated contacts
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_contacts()
 	{
@@ -390,6 +431,9 @@ class Opportunity extends SugarBean {
 	}
 	
 	/** Returns a list of the associated tasks
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_tasks()
 	{
@@ -400,6 +444,9 @@ class Opportunity extends SugarBean {
 	}
 	
 	/** Returns a list of the associated notes
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_notes()
 	{
@@ -410,6 +457,9 @@ class Opportunity extends SugarBean {
 	}
 	
 	/** Returns a list of the associated meetings
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_meetings()
 	{
@@ -420,6 +470,9 @@ class Opportunity extends SugarBean {
 	}
 	
 	/** Returns a list of the associated calls
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_calls()
 	{
@@ -430,6 +483,9 @@ class Opportunity extends SugarBean {
 	}
 
 	/** Returns a list of the associated emails
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_emails()
 	{
@@ -440,20 +496,41 @@ class Opportunity extends SugarBean {
 	}
 	
 	function get_list_view_data(){
+		global $current_language;
+		$app_strings = return_application_language($current_language);
 		return  Array( 
 					'ID' => $this->id,
 					'NAME' => (($this->name == "") ? "<em>blank</em>" : $this->name),
+					'AMOUNT' => $app_strings['LBL_CURRENCY_SYMBOL'].$this->amount,
 					'ACCOUNT_ID' => $this->account_id,
 					'ACCOUNT_NAME' => $this->account_name,
 					'DATE_CLOSED' => $this->date_closed,
-					'ASSIGNED_USER_NAME' => $this->assigned_user_name
+					'ASSIGNED_USER_NAME' => $this->assigned_user_name,
+					"ENCODED_NAME"=>htmlspecialchars($this->name, ENT_QUOTES)
 				);
 	}
+	/**
+		builds a generic search based on the query string using or
+		do not include any $this-> because this is called on without having the class instantiated
+	*/
+	function build_generic_where_clause ($the_query_string) {
+	$where_clauses = Array();
+	$the_query_string = addslashes($the_query_string);
+	array_push($where_clauses, "name like '$the_query_string%'");
 
-	function list_view_pare_additional_sections(&$list_form){
-		
-		return $list_form;
+	$the_where = "";
+	foreach($where_clauses as $clause)
+	{
+		if($the_where != "") $the_where .= " or ";
+		$the_where .= $clause;
 	}
+
+	
+	return $the_where;
+}
+
+
+	
 	
 
 }

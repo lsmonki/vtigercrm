@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Activities/SubPanelView.php,v 1.6 2004/09/06 16:30:47 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Activities/SubPanelView.php,v 1.7 2004/09/25 09:56:26 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 

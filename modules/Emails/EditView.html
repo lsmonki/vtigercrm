@@ -1,8 +1,8 @@
 <!--
 /*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.2
- * ("License"); You may not use this file except in compliance with the 
- * License. You may obtain a copy of the License at http://www.mozilla.org/MPL
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
@@ -21,15 +21,18 @@
 <tr>
     <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Emails.gif" border="0"></td>
     <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_EMAIL}  {NAME}</td>
-
 	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
 </tr>
 <tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
 
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
-<tr> 
+<tr>
 	<td>
 		<table cellpadding="0" cellspacing="5" border="0"><tr>
+			<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+			<script type="text/javascript" src="jscalendar/calendar.js"></script>
+			<script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
+			<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 			<form name="EditView" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Emails">
 			<input type="hidden" name="record" value="{ID}">
@@ -38,7 +41,7 @@
 			<input type="hidden" name="user_id" value="{USER_ID}">
 			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
 			<input type="hidden" name="return_id" value="{RETURN_ID}">
-			<input type="hidden" name="return_action" value="{RETURN_ACTION}">		
+			<input type="hidden" name="return_action" value="{RETURN_ACTION}">
 		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
 		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
 		</tr></table>
@@ -46,7 +49,7 @@
 	<td></td>
 	<td align="right" nowrap><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</td>
 </tr>
-</table> 
+</table>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
 <tr>
@@ -54,8 +57,8 @@
 	<table width="100%" border="0" cellspacing="1" cellpadding="0">
 	<tr valign="top">
 	<td width="20%" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_DATE_AND_TIME}</td>
-	<td width="30%"><input name='date_start' tabindex='1' maxlength='10' size='10' type="text" value='{DATE_START}'> <input name='time_start' tabindex='1' maxlength='5' size='5' type="text" value='{TIME_START}'><br><font size="1"><em>{APP.NTC_DATE_TIME_FORMAT}</em></font></td>
-	<td width="20%" class="dataLabel" valign="top"><select tabindex='2' name='parent_type' onChange="this.form.parent_name.value=''; this.form.parent_id.value=''; this.form.action.value='EditView'; this.form.submit();">{TYPE_OPTIONS}</select></td>
+	<td width="30%"><input name='date_start' id='jscal_field' tabindex='1' maxlength='10' size='11' type="text" value="{DATE_START}"> <img src="themes/{THEME}/images/calendar.gif" id="jscal_trigger"> &nbsp; <input name='time_start' tabindex='1' maxlength='5' size='5' type="text" value='{TIME_START}'><br><font size="1"><em>{APP.NTC_DATE_TIME_FORMAT}</em></font></td>
+	<td width="20%" class="dataLabel" valign="top"><select tabindex='2' name='parent_type' onChange="document.EditView.parent_name.value='';">{TYPE_OPTIONS}</select></td>
 	<td width="30%"><input name='parent_id' type="hidden" value='{PARENT_ID}'><input name='parent_name' tabindex='0' readonly type='text' value="{PARENT_NAME}"> {CHANGE_PARENT_BUTTON}</td>
 	</tr><tr>
 	<td class="dataLabel" colspan='4'>&nbsp;</td>
@@ -71,20 +74,23 @@
 </tr>
 </table>
 </td></tr></table>
-<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr>  
-     <td></td> 
-     <td></td>
-     <td align="right">
-            <table cellpadding="0" cellspacing="5" border="0">  
-            <tr>  
-                <td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" tabindex='3' accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td> 
-		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" tabindex='3' accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td> 
-	   </tr></table>
-    </td>   
-   <td align="left"></td>  
-</tr></table>
-
+<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr>
+      <td align="left"></td>
+      <td align="left">
+             <table cellpadding="0" cellspacing="5" border="0">
+             <tr>
+                 <td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" tabindex='3' accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
+               <td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" tabindex='3' accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
+          </tr></table>
+     </td>
+    <td align="left"></td>
+ </tr></table>
 </form>
+<script type="text/javascript">
+Calendar.setup ({
+	inputField : "jscal_field", ifFormat : "{CALENDAR_DATEFORMAT}", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
+});
+</script>
 {JAVASCRIPT}
 
 <!-- END: main -->

@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Activities/OpenListView.php,v 1.1 2004/08/18 16:10:43 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Activities/OpenListView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -42,7 +45,7 @@ $today = date("Y-m-d", time());
 $later = date("Y-m-d", strtotime("$today + 7 days"));
 
 $meeting = new Meeting();
-$where = "status = 'Planned' AND date_start >= '$today' AND date_start < '$later' and assigned_user_id='$current_user->id'";
+$where = "status = 'Planned' AND date_start >= '$today' AND date_start < '$later'";
 $focus_meetings_list = $meeting->get_full_list("time_start", $where);
 
 $call = new Call();
@@ -65,7 +68,7 @@ if (count($focus_meetings_list)>0)
 								 'contact_name' => $meeting->contact_name,
 								 'date_start' => $meeting->date_start,
 								 'time_start' => $meeting->time_start
-								 );	
+								 );
 }
 
 if (count($focus_calls_list)>0)
@@ -82,7 +85,7 @@ if (count($focus_calls_list)>0)
 								 'contact_name' => $call->contact_name,
 								 'date_start' => $call->date_start,
 								 'time_start' => $call->time_start
-								 );	
+								 );
 }
 
 $xtpl=new XTemplate ('modules/Activities/OpenListView.html');
@@ -90,11 +93,11 @@ $xtpl->assign("MOD", $current_module_strings);
 $xtpl->assign("APP", $app_strings);
 
 // Stick the form header out there.
-$later_day = date("l, F jS", strtotime("$today + 7 days"));
+$later_day = date("Y-m-d", strtotime("$today + 7 days"));
 echo get_form_header($current_module_strings['LBL_UPCOMING'], "<table><tr><td nowrap>".$current_module_strings['LBL_TODAY'].$later_day."</td></tr></table>", false);
 
 $xtpl->assign("IMAGE_PATH", $image_path);
-$xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=$focus->id");
+$xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=" . ((is_object($focus)) ? $focus->id : ""));
 
 $oddRow = true;
 if (count($open_activity_list) > 0) $open_activity_list = array_csort($open_activity_list, 'date_start', 'time_start', SORT_ASC);
@@ -114,13 +117,13 @@ foreach($open_activity_list as $activity)
 		'TIME' => $activity['date_start'].' '.substr($activity['time_start'],0,5)
 	);
 	switch ($activity['parent_type']) {
-		case 'Account':
+		case 'Accounts':
 			$activity_fields['PARENT_MODULE'] = 'Accounts';
 			break;
-		case 'Case':
+		case 'Cases':
 			$activity_fields['PARENT_MODULE'] = 'Cases';
 			break;
-		case 'Opportunity':
+		case 'Opportunities':
 			$activity_fields['PARENT_MODULE'] = 'Opportunities';
 			break;
 	}
@@ -132,10 +135,10 @@ foreach($open_activity_list as $activity)
 			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=$currentModule&return_action=$action&return_id=$focus->id&action=Save&module=Meetings&record=".$activity['id']."&status=Held'>X</a>";
 			break;
 	}
-	
+
 
 	$xtpl->assign("ACTIVITY", $activity_fields);
-	
+
 	if($oddRow)
     {
         //todo move to themes
@@ -158,5 +161,5 @@ else echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
 echo "<BR>";
 // Stick on the form footer
 echo get_form_footer();
- 
+
 ?>

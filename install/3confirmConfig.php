@@ -1,19 +1,19 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
- * The Original Code is: SugarCRM Open Source
+ * The Original Code is:  SugarCRM Open Source
  * The Initial Developer of the Original Code is SugarCRM, Inc.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.7 2004/08/26 11:44:30 sarajkumar Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.8 2004/10/06 09:02:03 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -25,10 +25,9 @@ if (isset($_REQUEST['db_drop_tables'])) $db_drop_tables = $_REQUEST['db_drop_tab
 if (isset($_REQUEST['site_URL'])) $site_URL 			= $_REQUEST['site_URL'];
 if (isset($_REQUEST['admin_email'])) $admin_email 		= $_REQUEST['admin_email'];
 if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
-if (isset($_REQUEST['root_directory'])) {
-	if (get_magic_quotes_gpc()) { $root_directory = stripslashes($_REQUEST['root_directory']); }
-	else { $root_directory = $_REQUEST['root_directory']; }
-}
+if (isset($_REQUEST['cache_dir'])) $cache_dir           = $_REQUEST['cache_dir'];
+if (isset($_REQUEST['root_directory'])) $root_directory = $_REQUEST['root_directory']; 
+
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -40,16 +39,16 @@ if (isset($_REQUEST['root_directory'])) {
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 <table width="100%" border="0" cellpadding="5" cellspacing="0"><tbody>
-  <tr><td align="center"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger.jpg"/></a></td></tr>
+<tr><td align="center"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger.jpg"/></a></td></tr>
 </tbody></table>
 <P></P>
-<table align="center" border="0" cellpadding="2" cellspacing="2" border="1" width="60%"><tbody><tr> 
+<table align="center" border="0" cellpadding="2" cellspacing="2" border="1" width="60%"><tbody><tr>
    <tr>
       <td width="100%">
 		<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 			  <td>
 			   <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-				<td class="formHeader" vAlign="top" align="left" height="20"> 
+				<td class="formHeader" vAlign="top" align="left" height="20">
 				 <IMG height="5" src="include/images/left_arc.gif" width="5" border="0"></td>
 				<td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20">Step 3: Confirm System Configuration</td>
 				<td  class="formHeader" vAlign="top" align="right" height="20">
@@ -95,18 +94,22 @@ if (isset($_REQUEST['root_directory'])) {
                <td align="left" nowrap>: <font class="dataInput">
 			   <?php if (isset($db_drop_tables) && $db_drop_tables == true) echo "True"; else echo "False"; ?>
 				</font></td>
-			  </tr>               
+			  </tr>
 			<tr><td>&nbsp;</td></tr>
 			  <tr>
   			   <td colspan="2" class="moduleTitle" noWrap>Site Configuration</td>
               </tr>
               <tr>
                <td noWrap>URL</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($site_URL)) echo "$site_URL"; ?></font></td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($site_URL)) echo $site_URL; ?></font></td>
               </tr>
               <tr>
                <td noWrap>Path</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($root_directory)) echo "$root_directory"; ?></font></td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($root_directory)) echo $root_directory; ?></font></td>
+              </tr>
+              <tr>
+               <td noWrap>Cache Path</td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.'\\'.$cache_dir; ?></font></td>
               </tr>
               <tr>
                <td noWrap>Admin Password</td>
@@ -114,7 +117,7 @@ if (isset($_REQUEST['root_directory'])) {
               </tr>
               <tr>
                <td noWrap>Admin Email Address</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($admin_email)) echo "$admin_email"; ?></font></td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($admin_email)) echo $admin_email; ?></font></td>
               </tr>
 
     	      </tbody>
@@ -132,6 +135,7 @@ if (isset($_REQUEST['root_directory'])) {
              <input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
              <input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
              <input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
+			 <input type="hidden" class="dataInput" name="cache_dir" value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" />
 			 <input class="button" type="submit" name="next" value="Change" /></td>
 			</form>
 		 </td></tr>
@@ -142,8 +146,8 @@ if (isset($_REQUEST['root_directory'])) {
 <!-- TODO Clint 4/28 - Add support for creating the database as well -->
 <!--			 Also create database <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font>? -->
 <!--			 <input type="checkbox" class="dataInput" name="db_create" value="1" /> -->
-			 Also populate demo data? 
-			 <input type="checkbox" class="dataInput" name="db_populate" value="1"> 
+			 Also populate demo data?
+			 <input type="checkbox" class="dataInput" name="db_populate" value="1">
 			</td>
 		 </tr>
 		 <tr>
@@ -157,10 +161,11 @@ if (isset($_REQUEST['root_directory'])) {
              <input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
              <input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
              <input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
+			 <input type="hidden" class="dataInput" name="cache_dir" value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" />
 			 <input class="button" type="submit" name="next" value="Create" />
 			</td>
           </tr>
 	</tbody></table>
-</form>		
+</form>
 </body>
 </html>

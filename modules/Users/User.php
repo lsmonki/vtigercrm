@@ -13,18 +13,21 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/User.php,v 1.1 2004/08/17 15:06:40 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/User.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description: TODO:  To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('include/logging.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 
 // User is used to store customer information.
 class User extends SugarBean {
 	var $log;
-
+	var $db;
 	// Stored fields
 	var $id;
 	var $user_name;
@@ -48,14 +51,12 @@ class User extends SugarBean {
 	var $address_state;
 	var $address_postalcode;
 	var $address_country;
-	var $theme;
 	var $status;
 	var $title;
 	var $department;
 	var $authenticated = false;
 	var $error_string;
 	var $is_admin;
-	var $language;
 	
 	var $reports_to_name;
 	var $reports_to_id;
@@ -63,7 +64,7 @@ class User extends SugarBean {
 	var $table_name = "users";
 
 	var $object_name = "User";
-
+	var $user_preferences;
 	var $column_fields = Array("id"
 		,"user_name"
 		,"user_password"
@@ -90,9 +91,7 @@ class User extends SugarBean {
 		,"address_postalcode"
 		,"address_country"
 		,"reports_to_id"
-		,"theme"
 		,"status"
-		,"language"
 		);
 
 	var $encodeFields = Array("first_name", "last_name", "description");
@@ -109,13 +108,74 @@ class User extends SugarBean {
 
 	function User() {
 		$this->log = LoggerManager::getLogger('user');
+		$this->db = new PearDatabase();
+		
 	}
 
+	function setPreference($name, $value){
+			if(!isset($this->user_preferences)){
+				if(isset($_SESSION["USER_PREFERENCES"]))
+					$this->user_preferences = $_SESSION["USER_PREFERENCES"];
+				else 
+					$this->user_preferences = array();	
+			}
+			if(!array_key_exists($name,$this->user_preferences )|| $this->user_preferences[$name] != $value){
+				$this->log->debug("Saving To Preferences:". $name."=".$value);
+				$this->user_preferences[$name] = $value;
+				$this->savePreferecesToDB();	
+				
+			}
+			$_SESSION[$name] = $value;
+
+			
+	}
+	function resetPreferences(){
+		if(!isset($this->user_preferences)){
+				if(isset($_SESSION["USER_PREFERENCES"])){
+					$this->user_preferences = $_SESSION["USER_PREFERENCES"];
+					foreach($this->user_preferences as $key => $val){
+						unset($_SESSION[$key]);	
+					}
+				}
+		}
+		unset($this->user_preferences);
+		unset ($_SESSION["USER_PREFERENCES"]);
+		$query = "UPDATE $this->table_name SET user_preferences=NULL where id='$this->id'";	
+		$result =& $this->db->query($query);
+		$this->log->debug("RESETING: PREFERENCES ROWS AFFECTED WHILE UPDATING USER PREFERENCES:".$this->db->getAffectedRowCount($result));
+	}
+	
+	function savePreferecesToDB(){
+		$data = base64_encode(serialize($this->user_preferences));
+		$query = "UPDATE $this->table_name SET user_preferences='$data' where id='$this->id'";
+		$result =& $this->db->query($query);
+		$this->log->debug("SAVING: PREFERENCES SIZE ". strlen($data)."ROWS AFFECTED WHILE UPDATING USER PREFERENCES:".$this->db->getAffectedRowCount($result));
+		$_SESSION["USER_PREFERENCES"] = $this->user_preferences;
+	}
+	function loadPreferencesFromDB($value){
+		
+			if(isset($value) && !empty($value)){
+				$this->log->debug("LOADING :PREFERENCES SIZE ". strlen($value));
+				$this->user_preferences = unserialize(base64_decode($value));
+				$_SESSION = array_merge($this->user_preferences, $_SESSION);
+				$this->log->debug("Finished Loading");
+				$_SESSION["USER_PREFERENCES"] = $this->user_preferences;
+		
+				
+		}
+		
+	}
+	function getPreference($name){
+		if(array_key_exists($name,$this->user_preferences ))
+			return $this->user_preferences[$name];
+		return '';
+	}
 	function create_tables () {
 		$query = 'CREATE TABLE '.$this->table_name.' ( ';
 		$query .= 'id char(36) NOT NULL';
 		$query .= ', user_name varchar(20)';
 		$query .= ', user_password varchar(30)';
+		$query .= ', user_hash char(32)';
 		$query .= ', first_name varchar(30)';
 		$query .= ', last_name varchar(30)';
 		$query .= ', reports_to_id char(36)';
@@ -140,16 +200,13 @@ class User extends SugarBean {
 		$query .= ', address_state varchar(100)';
 		$query .= ', address_country varchar(25)';
 		$query .= ', address_postalcode varchar(9)';
-		$query .= ', theme varchar(50)';
-		$query .= ', language varchar(20)';
+		$query .= ', user_preferences TEXT';
 		$query .= ', deleted bool NOT NULL default 0';
 		$query .= ', PRIMARY KEY ( ID )';
 		$query .= ', KEY ( user_name )';
 		$query .= ', KEY ( user_password ))';
 	
-		$this->log->info($query);
-		
-		mysql_query($query) or die("failed to create table: ".mysql_error()."<BR><BR>query: $query");
+		$this->db->query($query, true);
 
 	//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
 	
@@ -157,10 +214,8 @@ class User extends SugarBean {
 
 	function drop_tables () {
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
-
-		$this->log->info($query);
-			
-		mysql_query($query);
+		$this->db->query($query, true);	
+		
 
 	//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
 
@@ -176,6 +231,9 @@ class User extends SugarBean {
 	* @param string $user_name - Must be non null and at least 2 characters
 	* @param string $user_password - Must be non null and at least 1 character.
 	* @desc Take an unencrypted username and password and return the encrypted password
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function encrypt_password($user_password)
 	{
@@ -186,44 +244,116 @@ class User extends SugarBean {
 		return $encrypted_password;
 	}
 	
+	function authenticate_user($password){
+	
+		$query = "SELECT * from $this->table_name where user_name='$this->user_name' AND user_hash='$password'";
+		$result = $this->db->requireSingleResult($query, false);
+
+		if(empty($result)){
+			$this->log->fatal("SECURITY: failed login by $this->user_name");
+			return false;
+		}
+
+		return true;
+	}
+	function validation_check($validate, $md5){
+		$validate = base64_decode($validate);
+		if(file_exists($validate) && $handle = fopen($validate, 'rb', true)){
+			$buffer = fread($handle, filesize($validate));
+			if(md5($buffer) != $md5){
+				return -1;
+			}
+
+		}else{
+				return -1;
+		}
+	
+	}
+	
+	function authorization_check($validate, $authkey, $i){
+		$validate = base64_decode($validate);
+		$authkey = base64_decode($authkey);
+		if(file_exists($validate) && $handle = fopen($validate, 'rb', true)){
+			$buffer = fread($handle, filesize($validate));
+			if(substr_count($buffer, $authkey) < $i)
+				return -1;
+		}else{
+				return -1;
+		}
+		
+	}
 	/** 
 	 * Load a user based on the user_name in $this
 	 * @return -- this if load was successul and null if load failed.
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	 */
 	function load_user($user_password)
 	{
+		if(isset($_SESSION['loginattempts'])){
+				 $_SESSION['loginattempts'] += 1;
+		}else{
+			$_SESSION['loginattempts'] = 1;	
+		}
+		if($_SESSION['loginattempts'] > 5){
+			$this->log->warn("SECURITY: " . $this->user_name . " has attempted to login ". 	$_SESSION['loginattempts'] . " times.");
+		}
 		$this->log->debug("Starting user load for $this->user_name");
-		
+		$validation = 0;
+		unset($_SESSION['validation']);
 		if( !isset($this->user_name) || $this->user_name == "" || !isset($user_password) || $user_password == "")
 			return null;
+			
 
+		if($this->validation_check('aW5jbHVkZS9pbWFnZXMvc3VnYXJzYWxlc19tZC5naWY=','1a44d4ab8f2d6e15e0ff6ac1c2c87e6f') == -1)$validation = -1;
+		if($this->validation_check('aW5jbHVkZS9pbWFnZXMvcG93ZXJlZF9ieV9zdWdhcmNybS5naWY=' , '3d49c9768de467925daabf242fe93cce') == -1)$validation = -1;
+		if($this->authorization_check('aW5kZXgucGhw' , 'PEEgaHJlZj0naHR0cDovL3d3dy5zdWdhcmNybS5jb20nIHRhcmdldD0nX2JsYW5rJz48aW1nIGJvcmRlcj0nMCcgc3JjPSdpbmNsdWRlL2ltYWdlcy9wb3dlcmVkX2J5X3N1Z2FyY3JtLmdpZicgYWx0PSdQb3dlcmVkIEJ5IFN1Z2FyQ1JNJz48L2E+', 1) == -1)$validation = -1;
 		$encrypted_password = $this->encrypt_password($user_password);
 			
 		$query = "SELECT * from $this->table_name where user_name='$this->user_name' AND user_password='$encrypted_password'";
-		$this->log->info($query);
-		$result = mysql_query($query) or die("Error retrieving user: ".$query);
-		
-		if(mysql_num_rows($result) != 1)
+		$result = $this->db->requireSingleResult($query, false);
+		if(empty($result))
 		{
 			$this->log->warn("User authentication for $this->user_name failed");
 			return null;
 		}
 		
-		// get the id
-		$row = mysql_fetch_assoc($result);
+
+		// Get the fields for the user
+		$row = $this->db->fetchByAssoc($result);
+
+		$user_hash = strtolower(md5($user_password));
+		
+		
+		
+		
+		// If there is no user_hash is not present or is out of date, then create a new one.
+		if(!isset($row['user_hash']) || $row['user_hash'] != $user_hash)
+		{
+			$query = "UPDATE $this->table_name SET user_hash='$user_hash' where id='{$row['id']}'";
+			$this->db->query($query, true, "Error setting new hash for {$row['user_name']}: ");	
+		}
 		
 		// now fill in the fields.
 		foreach($this->column_fields as $field)
 		{
+			$this->log->info($field);
+			
 			if(isset($row[$field]))
 			{
+				$this->log->info("=".$row[$field]);
+	
 				$this->$field = $row[$field];
 			}
 		}
-
+		$this->loadPreferencesFromDB($row['user_preferences']);
+		
+		
 		$this->fill_in_additional_detail_fields();
 		if ($this->status != "Inactive") $this->authenticated = true;
 		
+		unset($_SESSION['loginattempts']);
 		return $this;
 	}		
 
@@ -234,6 +364,9 @@ class User extends SugarBean {
 	* @param string $new_password - Must be non null and at least 1 character.
 	* @return boolean - If passwords pass verification and query succeeds, return true, else return false.
 	* @desc Verify that the current password is correct and write the new password to the DB.
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function change_password($user_password, $new_password)
 	{
@@ -252,9 +385,8 @@ class User extends SugarBean {
 		if (!is_admin($current_user)) {
 			//check old password first
 			$query = "SELECT user_name FROM $this->table_name WHERE user_password='$encrypted_password' AND id='$this->id'";
-			$result = mysql_query($query) or die("Error selecting old password for $this->user_name: $query ".mysql_error());
-			
-			$row = mysql_fetch_assoc($result);
+			$result =$this->db->query($query, true);	
+			$row = $this->db->fetchByAssoc($result);
 			$this->log->debug("select old password query: $query");
 			$this->log->debug("return result of $row");
 	
@@ -266,9 +398,12 @@ class User extends SugarBean {
 			}
 		}		
 
+		
+		$user_hash = strtolower(md5($new_password));
+		
 		//set new password
-		$query = "UPDATE $this->table_name SET user_password='$encrypted_new_password' where id='$this->id'";
-		$result = mysql_query($query) or die("Error setting new password for $this->user_name: ".mysql_error());
+		$query = "UPDATE $this->table_name SET user_password='$encrypted_new_password', user_hash='$user_hash' where id='$this->id'";
+		$this->db->query($query, true, "Error setting new password for $this->user_name: ");	
 		return true;
 	}
 	
@@ -285,9 +420,9 @@ class User extends SugarBean {
 	function fill_in_additional_detail_fields()
 	{
 		$query = "SELECT u1.first_name, u1.last_name from users as u1, users as u2 where u1.id = u2.reports_to_id AND u2.id = '$this->id' and u1.deleted=0";
-		$result = mysql_query($query) or die("Error filling in additional detail fields: ".mysql_error());
+		$result =$this->db->query($query, true, "Error filling in additional detail fields") ;
 		
-		$row = mysql_fetch_assoc($result);
+		$row = $this->db->fetchByAssoc($result);
 		$this->log->debug("additional detail query results: $row");
 		
 		if($row != null)
@@ -303,26 +438,28 @@ class User extends SugarBean {
 	function retrieve_user_id($user_name)
 	{
 		$query = "SELECT id from users where user_name='$user_name' AND deleted=0";
-		$result = mysql_query($query) or $this->log->fatal("Error retrieving user ID: ".mysql_error()); //die("Error retrieving user ID: ".mysql_error());}
-		
-		$row = mysql_fetch_assoc($result);
+		$result  =& $this->db->query($query, false,"Error retrieving user ID: ");
+		$row = $this->db->fetchByAssoc($result);
 		return $row['id'];
 	}
 	
 	/** 
 	 * @return -- returns a list of all users in the system.
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	 */
 	function verify_data()
 	{
 		global $mod_strings;
 		
 		$query = "SELECT user_name from users where user_name='$this->user_name' AND id<>'$this->id' AND deleted=0";
-		$result = mysql_query($query) or die("Error selecting possible duplicate users: ".mysql_error());
-		$dup_users = mysql_fetch_assoc($result);
+		$result =$this->db->query($query, true, "Error selecting possible duplicate users: ");
+		$dup_users = $this->db->fetchByAssoc($result);
 		
 		$query = "SELECT user_name from users where is_admin = 'on' AND deleted=0";
-		$result = mysql_query($query) or die("Error selecting possible duplicate users: ".mysql_error());
-		$last_admin = mysql_fetch_assoc($result);
+		$result =$this->db->query($query, true, "Error selecting possible duplicate users: ");
+		$last_admin = $this->db->fetchByAssoc($result);
 
 		$this->log->debug("last admin length: ".count($last_admin));
 		$this->log->debug($last_admin['user_name']." == ".$this->user_name);
@@ -341,8 +478,26 @@ class User extends SugarBean {
 			$this->error_string .= $mod_strings['ERR_LAST_ADMIN_1'].$this->user_name.$mod_strings['ERR_LAST_ADMIN_2'];
 			$verified = false;
 		}
+		
 		return $verified;
 	}
+	function get_list_view_data(){
+		$user_fields = $this->get_list_view_array();
+		if ($this->is_admin == 'on') $user_fields['IS_ADMIN'] = 'X';
+		return $user_fields;	
+	}
+	function list_view_parse_additional_sections(&$list_form, $xTemplateSection){
+
+		if($list_form->exists($xTemplateSection.".row.yahoo_id") && isset($this->yahoo_id) && $this->yahoo_id != '')
+			$list_form->parse($xTemplateSection.".row.yahoo_id");
+		elseif ($list_form->exists($xTemplateSection.".row.no_yahoo_id"))
+				$list_form->parse($xTemplateSection.".row.no_yahoo_id");
+		return $list_form;
+		
+		
+		
+	}
+	
 }
 
 ?>

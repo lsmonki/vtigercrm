@@ -85,7 +85,7 @@ else {
 }
 
 if ($show_help==true) {
-     $the_form .= "<td class='bodySmall' align='right'>[ <A href='phprint.php?jt=".session_id()."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
+     $the_form .= "<td class='bodySmall' align='right'>[ <A href='phprint.php?jt=".session_id().$GLOBALS['request_string']."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
      $the_form .= "<td class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";
 }
 
@@ -127,7 +127,7 @@ $the_title .= $module_title."</td></tr></tbody></table></td>\n";
 $the_title .= "<td width='100%'><IMG height='1' src='include/images/blank.gif'></td>";
 
 if ($show_help) {
-	$the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='phprint.php?jt=".session_id()."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
+    $the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='phprint.php?jt=".session_id().$GLOBALS['request_string']."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
     $the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";
 }
 else {

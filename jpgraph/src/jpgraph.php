@@ -4,16 +4,15 @@
 // Description:	PHP4 Graph Plotting library. Base module.
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph.php,v 1.2 2004/08/19 06:48:29 gjayakrishnan Exp $
+// Ver:		$Id: jpgraph.php,v 1.3 2004/10/06 09:02:03 jack Exp $
 //
 // License:	This code is released under QPL 1.0
 // Copyright (C) 2001,2002,2003,2004 Johan Persson Aditus Consulting
 //========================================================================
-
 require_once('jpg-config.inc');
 
 // Version info
-DEFINE('JPG_VERSION','1.14.1');
+DEFINE('JPG_VERSION','1.16');
 
 // For internal use only
 DEFINE("_JPG_DEBUG",false);
@@ -28,11 +27,11 @@ DEFINE("_FORCE_IMGDIR",'/tmp/jpgimg/');
 if(USE_CACHE) {
     if (!defined('CACHE_DIR')) {
 	if ( strstr( PHP_OS, 'WIN') ) {
-	    if( empty($_ENV['TEMP']) ) {
+	    if( empty($_SERVER['TEMP']) ) {
 		die('JpGraph Error: No path specified for CACHE_DIR. Please specify a path for that DEFINE in jpgraph.php');
 	    }
 	    else {
-		DEFINE('CACHE_DIR', $_ENV['TEMP'] . '/');
+		DEFINE('CACHE_DIR', $_SERVER['TEMP'] . '/');
 	    }
 	} else {
 	    DEFINE('CACHE_DIR','/tmp/jpgraph_cache/');
@@ -45,11 +44,11 @@ else {
 
 if (!defined('TTF_DIR')) {
     if (strstr( PHP_OS, 'WIN') ) {
-        if( empty($_ENV['SystemRoot']) ) {
+        if( empty($_SERVER['SystemRoot']) ) {
 	    die('JpGraph Error: No path specified for TTF_DIR. Please specify a path for that DEFINE in jpgraph.php');
         }
 	else {
-	  DEFINE('TTF_DIR', $_ENV['SystemRoot'] . '/fonts/');
+	  DEFINE('TTF_DIR', $_SERVER['SystemRoot'] . '/fonts/');
         }
     } else {
 	DEFINE('TTF_DIR','/usr/X11R6/lib/X11/fonts/truetype/');
@@ -148,18 +147,6 @@ DEFINE("MARK_IMG_MBALL",56);
 DEFINE("MARK_IMG_LBALL",57);
 DEFINE("MARK_IMG_BEVEL",58);
 
-// Styles for gradient color fill
-DEFINE("GRAD_VER",1);
-DEFINE("GRAD_VERT",1);
-DEFINE("GRAD_HOR",2);
-DEFINE("GRAD_MIDHOR",3);
-DEFINE("GRAD_MIDVER",4);
-DEFINE("GRAD_CENTER",5);
-DEFINE("GRAD_WIDE_MIDVER",6);
-DEFINE("GRAD_WIDE_MIDHOR",7);
-DEFINE("GRAD_LEFT_REFLECTION",8);
-DEFINE("GRAD_RIGHT_REFLECTION",9);
-
 // Inline defines
 DEFINE("INLINE_YES",1);
 DEFINE("INLINE_NO",0);
@@ -222,6 +209,35 @@ DEFINE('SKEW3D_RIGHT',3);
 require_once 'jpgraph_gradient.php';
 
 
+
+//
+// A wrapper class that is used to access the specified error object
+// (to hide the global error parameter and avoid having a GLOBAL directive
+// in all methods.
+//
+class JpGraphError {
+    function Install($aErrObject) {
+	GLOBAL $__jpg_err;
+	$__jpg_err = $aErrObject;
+    }
+    function Raise($aMsg,$aHalt=true){
+	GLOBAL $__jpg_err;
+	$tmp = new $__jpg_err;
+	$tmp->Raise($aMsg,$aHalt);
+    }
+}
+
+//
+// ... and install the default error handler
+//
+if( USE_IMAGE_ERROR_HANDLER ) {
+    JpGraphError::Install("JpGraphErrObjectImg");
+}
+else {
+    JpGraphError::Install("JpGraphErrObject");
+}
+
+
 //
 // Routine to determine if GD1 or GD2 is installed
 //
@@ -240,6 +256,7 @@ function CheckGDVersion() {
 //
 // Check what version of the GD library is installed.
 //
+
 if( USE_LIBRARY_GD2 === 'auto' ) {
     $gdversion = CheckGDVersion();
     if( $gdversion == 2 ) {
@@ -309,6 +326,7 @@ class JpGraphErrObjectImg {
 	    'qL72fwAAAABJRU5ErkJggg==' ;
 
 	$supported = imagetypes();
+
 	if( ob_get_length() || headers_sent() || !($supported & IMG_PNG) ) {
 	    // Special case for headers already sent or that the installation doesn't support
 	    // the PNG format (which the error icon is encoded in). 
@@ -391,36 +409,8 @@ class JpGraphErrObjectImg {
 }
 
 //
-// A wrapper class that is used to access the specified error object
-// (to hide the global error parameter and avoid having a GLOBAL directive
-// in all methods.
-//
-class JpGraphError {
-    function Install($aErrObject) {
-	GLOBAL $__jpg_err;
-	$__jpg_err = $aErrObject;
-    }
-    function Raise($aMsg,$aHalt=true){
-	GLOBAL $__jpg_err;
-	$tmp = new $__jpg_err;
-	$tmp->Raise($aMsg,$aHalt);
-    }
-}
-
-//
-// ... and install the default error handler
-//
-if( USE_IMAGE_ERROR_HANDLER ) {
-    JpGraphError::Install("JpGraphErrObjectImg");
-}
-else {
-    JpGraphError::Install("JpGraphErrObject");
-}
-
-//
 // Setup PHP error handler
 //
-
 function _phpErrorHandler($errno,$errmsg,$filename, $linenum, $vars) {
     JpGraphError::Raise('In '.basename($filename).'#'.$linenum."\n".$errmsg);
 }
@@ -1019,7 +1009,7 @@ class Graph {
 	}
     }
 
-    function SetBackgroundGradient($aFrom='navy',$aTo='silver',$aGradType=GRAD_HOR,$aStyle=BGRAD_FRAME) {
+    function SetBackgroundGradient($aFrom='navy',$aTo='silver',$aGradType=2,$aStyle=BGRAD_FRAME) {
 	$this->bkg_gradtype=$aGradType;
 	$this->bkg_gradstyle=$aStyle;
 	$this->bkg_gradfrom = $aFrom;
@@ -2293,6 +2283,7 @@ class Graph {
 	// Should we draw a box around the plot area?
 	if( $this->boxed ) {
 	    $this->img->SetLineWeight(1);
+	    $this->img->SetLineStyle('solid');
 	    $this->img->SetColor($this->box_color);
 	    for($i=0; $i < $this->box_weight; ++$i ) {
 		$this->img->Rectangle(
@@ -2683,10 +2674,16 @@ class LineProperty {
 	
     function Stroke($aImg,$aX1,$aY1,$aX2,$aY2) {
 	if( $this->iShow ) {
-	    $aImg->SetColor($this->iColor);
+	    $aImg->PushColor($this->iColor);
+	    $oldls = $aImg->line_style;
+	    $oldlw = $aImg->line_weight;
 	    $aImg->SetLineWeight($this->iWeight);
 	    $aImg->SetLineStyle($this->iStyle);			
 	    $aImg->StyleLine($aX1,$aY1,$aX2,$aY2);
+	    $aImg->PopColor($this->iColor);
+	    $aImg->line_style = $oldls;
+	    $aImg->line_weight = $oldlw;
+
 	}
     }
 }
@@ -4293,20 +4290,26 @@ class LinearScale {
     // Translate between world and screen
     function Translate($aCoord) {
 	if( !is_numeric($aCoord) ) {
-	    if( $aCoord != '' && $aCoord != '-' ) 
+	    if( $aCoord != '' && $aCoord != '-' && $aCoord != 'x' ) 
 		JpGraphError::Raise('Your data contains non-numeric values.');
+	    return 0;
 	}
-	return $this->off+($aCoord - $this->GetMinVal()) * $this->scale_factor; 
+	else {
+	    return $this->off+($aCoord - $this->GetMinVal()) * $this->scale_factor; 
+	}
     }
 	
     // Relative translate (don't include offset) usefull when we just want
     // to know the relative position (in pixels) on the axis
     function RelTranslate($aCoord) {
 	if( !is_numeric($aCoord) ) {
-	    if( $aCoord != '' && $aCoord != '-' ) 
+	    if( $aCoord != '' && $aCoord != '-' && $aCoord != 'x'  ) 
 		JpGraphError::Raise('Your data contains non-numeric values.');
+	    return 0;
 	}
-	return ($aCoord - $this->GetMinVal()) * $this->scale_factor; 
+	else { 
+	    return ($aCoord - $this->GetMinVal()) * $this->scale_factor; 
+	}
     }
 	
     // Restrict autoscaling to only use integers
@@ -5329,13 +5332,13 @@ class RGB {
 class Image {
     var $img_format;
     var $expired=true;
-    var $img;
+    var $img=null;
     var $left_margin=30,$right_margin=30,$top_margin=20,$bottom_margin=30;
     var $plotwidth=0,$plotheight=0;
     var $rgb=null;
     var $current_color,$current_color_name;
     var $lastx=0, $lasty=0;
-    var $width, $height;
+    var $width=0, $height=0;
     var $line_weight=1;
     var $line_style=1;	// Default line style is solid
     var $obs_list=array();
@@ -6032,8 +6035,10 @@ class Image {
 	$this->bottom_margin=$bm;
 	$this->plotwidth=$this->width - $this->left_margin-$this->right_margin ; 
 	$this->plotheight=$this->height - $this->top_margin-$this->bottom_margin ;
-	if( $this->plotwidth < 0  || $this->plotheight < 0 )
-	    JpGraphError::raise("To small plot area. ($lm,$rm,$tm,$bm : $this->plotwidth x $this->plotheight). With the given image size and margins there is to little space left for the plot. Increase the plot size or reduce the margins.");
+	if( $this->width  > 0 && $this->height > 0 ) {
+	    if( $this->plotwidth < 0  || $this->plotheight < 0 )
+		JpGraphError::raise("To small plot area. ($lm,$rm,$tm,$bm : $this->plotwidth x $this->plotheight). With the given image size and margins there is to little space left for the plot. Increase the plot size or reduce the margins.");
+	}
 	$this->NotifyObservers();
     }
 
@@ -7208,7 +7213,8 @@ class Legend {
     var $shadow_color='gray';
     var $txtcol=array();
     var $mark_abs_size=_DEFAULT_LPM_SIZE;
-    var $xmargin=10,$ymargin=6,$shadow_width=2;
+    var $xmargin=5,$ymargin=3,$shadow_width=2;
+    var $xlmargin=2, $ylmargin='';
     var $xpos=0.05, $ypos=0.15, $xabspos=-1, $yabspos=-1;
 	var $halign="right", $valign="top";
     var $font_family=FF_FONT1,$font_style=FS_NORMAL,$font_size=12;
@@ -7228,6 +7234,24 @@ class Legend {
 	$this->hide=$aHide;
     }
 	
+    function SetHColMargin($aXMarg) {
+	$this->xmargin = $aXMarg;
+    }
+
+    function SetVColMargin($aSpacing) {
+	$this->ymargin = $aSpacing ;
+    }
+
+    function SetLeftMargin($aXMarg) {
+	$this->xlmargin = $aXMarg;
+    }
+
+
+    // Synonym
+    function SetLineSpacing($aSpacing) {
+	$this->ymargin = $aSpacing ;
+    }
+
     function SetShadow($aShow='gray',$aWidth=2) {
 	if( is_string($aShow) ) {
 	    $this->shadow_color = $aShow;
@@ -7256,10 +7280,6 @@ class Legend {
 	
     function SetColumns($aCols) {
 	$this->layout_n = $aCols ;
-    }
-
-    function SetLineSpacing($aSpacing) {
-	$this->ymargin = $aSpacing ;
     }
 
     function SetReverse($f=true) {
@@ -7350,7 +7370,7 @@ class Legend {
 
 	// Make sure that the height is at least as high as mark size + ymargin
 	$abs_height = max($abs_height,$this->mark_abs_size+$this->ymargin);
-	$abs_height += 2*$this->ymargin;
+	$abs_height += 2*$this->ymargin +  $this->mark_abs_size/2;
 						
 	// Find out the maximum width in each column
 	for( $i=$numcolumns; $i < $n; ++$i ) {
@@ -7362,11 +7382,11 @@ class Legend {
 	// Get the total width
 	$mtw = 0;
 	for( $i=0; $i < $numcolumns; ++$i ) {
-	    $mtw += $colwidth[$i] + $this->xmargin;
+	    $mtw += $colwidth[$i] ;
 	}
 
 	// Find out maximum width we need for legend box
-	$abs_width = $mtw+$this->xmargin;
+	$abs_width = $mtw+$this->xlmargin;
 
 	if( $this->xabspos === -1  && $this->yabspos === -1 ) {
 	    $this->xabspos = $this->xpos*$aImg->width ;
@@ -7390,6 +7410,7 @@ class Legend {
 	// Stroke legend box
 	$aImg->SetColor($this->color);	
 	$aImg->SetLineWeight($this->frameweight);
+	$aImg->SetLineStyle('solid');
 
 	if( $this->shadow )
 	    $aImg->ShadowRectangle($xp,$yp,$xp+$abs_width+$this->shadow_width,
@@ -7404,21 +7425,28 @@ class Legend {
 
 	// x1,y1 is the position for the legend mark
 	$aImg->SetLineWeight($this->weight);
-	$x1=$xp+$this->mark_abs_size+8;
-	$y1=$yp + $this->mark_abs_size/2 + $this->ymargin/2; 
+	$x1=$xp+$this->mark_abs_size+$this->xlmargin;
+	$y1=$yp + $this->mark_abs_size/2 + $this->ymargin/3; 
 	
 	$f2 =  round($aImg->GetTextHeight('X')/2);
 
 	$grad = new Gradient($aImg);
 
 	// Now stroke each legend in turn
+	// Each plot has added the following information to  the legend
+	// p[0] = Legend text
+	// p[1] = Color, 
+	// p[2] = For markers a reference to the PlotMark object
+	// p[3] = For lines the line style, for gradient the negative gradient style
+	// p[4] = CSIM target
+	// p[5] = CSIM Alt text
 	$i = 1 ; $row = 0;
 	foreach($this->txtcol as $p) {
 	    $x1 = round($x1); $y1=round($y1);
 	    if ( $p[2] != "" && $p[2]->GetType() > -1 ) {
 		// Make a plot mark legend
 		$aImg->SetColor($p[1]);
-		if( $p[3] > 0 ) {
+		if( is_string($p[3]) || $p[3]>0 ) {
 		    $aImg->SetLineStyle($p[3]);
 		    $aImg->StyleLine($x1-$this->mark_abs_size,$y1+$f2,$x1+$this->mark_abs_size,$y1+$f2);
 		}
@@ -7430,12 +7458,9 @@ class Legend {
 		    // Since size for circles is specified as the radius
 		    // this means that we must half the size to make the total
 		    // width behave as the other marks
-
-		    if( $p[2]->GetType() == MARK_FILLEDCIRCLE || 
-			    $p[2]->GetType() == MARK_CIRCLE ) {
+		    if( $p[2]->GetType() == MARK_FILLEDCIRCLE || $p[2]->GetType() == MARK_CIRCLE ) {
 		        $p[2]->SetSize($this->mark_abs_size/2);
 			$p[2]->Stroke($aImg,$x1,$y1+$f2);
-		    
 		    }
 		    else {
 		        $p[2]->SetSize($this->mark_abs_size);
@@ -7454,11 +7479,11 @@ class Legend {
 		// Draw a colored box
 		$color = $p[1] ;
 		$ym =  round($y1 + $f2 - $this->mark_abs_size/2);
-		if( is_array($color) && count($color)==3 ) {
+		if( is_array($color) && count($color)==2 ) {
 		    // The client want a gradient color
 		    $grad->FilledRectangle($x1,$ym,
 					   $x1+$this->mark_abs_size,$ym+$this->mark_abs_size,
-					   $color[0],$color[1],$color[2]);
+					   $color[0],$color[1],-$p[3]);
 		}
 		else {
 		    $aImg->SetColor($p[1]);
@@ -7488,13 +7513,13 @@ class Legend {
 		}
 	    }
 	    if( $i >= $this->layout_n ) {
-		$x1 = $xp+$this->mark_abs_size+8;
+		$x1 = $xp+$this->mark_abs_size+$this->xlmargin;
 		//$y1 += max($aImg->GetTextHeight($p[0]),$this->mark_abs_size)+$this->ymargin;
 		$y1 += $rowheight[$row++];
 		$i = 1;
 	    }
 	    else {
-		$x1 += $colwidth[($i-1) % $numcolumns] + $this->xmargin;
+		$x1 += $colwidth[($i-1) % $numcolumns] ;
 		++$i;
 	    }
 	}	

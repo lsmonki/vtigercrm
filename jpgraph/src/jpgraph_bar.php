@@ -4,7 +4,7 @@
 // Description:	Bar plot extension for JpGraph
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_bar.php,v 1.2 2004/08/19 06:48:29 gjayakrishnan Exp $
+// Ver:		$Id: jpgraph_bar.php,v 1.3 2004/10/06 09:02:03 jack Exp $
 //
 // License:	This code is released under QPL
 // Copyright (C) 2001,2002,2003 Johan Persson
@@ -77,17 +77,20 @@ class BarPlot extends Plot {
 	
     function Legend(&$graph) {
 	if( $this->grad && $this->legend!="" && !$this->fill ) {
-	    $color=array($this->grad_fromcolor,$this->grad_tocolor,$this->grad_style);
-	    $graph->legend->Add($this->legend,$color,"",0,
+	    $color=array($this->grad_fromcolor,$this->grad_tocolor);
+	    // In order to differentiate between gradients and cooors specified as an RGB triple
+	    $graph->legend->Add($this->legend,$color,"",-$this->grad_style,
 				$this->legendcsimtarget,$this->legendcsimalt);
 	}
 	elseif( $this->fill_color && $this->legend!="" ) {
-	    if( is_array($this->fill_color) )
+	    if( is_array($this->fill_color) ) {
 		$graph->legend->Add($this->legend,$this->fill_color[0],"",0,
 				    $this->legendcsimtarget,$this->legendcsimalt);
-	    else
+	    }
+	    else {
 		$graph->legend->Add($this->legend,$this->fill_color,"",0,
 				    $this->legendcsimtarget,$this->legendcsimalt);	
+	    }
 	}
     }
 
@@ -231,9 +234,7 @@ class BarPlot extends Plot {
 	$numpoints = count($this->coords[0]);
 	if( isset($this->coords[1]) ) {
 	    if( count($this->coords[1])!=$numpoints )
-		die("JpGraph Error: Number of X and Y points are not equal.<br>
-					Number of X-points:".count($this->coords[1])."<br>
-					Number of Y-points:$numpoints");
+		JpGraphError::Raise("Number of X and Y points are not equal. Number of X-points:".count($this->coords[1])."Number of Y-points:$numpoints");
 	    else
 		$exist_x = true;
 	}
@@ -413,7 +414,6 @@ class BarPlot extends Plot {
 	    }
 	    else {
 		JpGraphError::Raise('Unknown position for values on bars :'.$this->valuepos);
-		die();
 	    }
 	    // Create the client side image map
 	    $rpts = $img->ArrRotate($pts);		

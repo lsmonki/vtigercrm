@@ -1,8 +1,8 @@
 <!--
 /*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.2
- * ("License"); You may not use this file except in compliance with the 
- * License. You may obtain a copy of the License at http://www.mozilla.org/MPL
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
@@ -10,7 +10,7 @@
  * The Initial Developer of the Original Code is SugarCRM, Inc.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
- * Contributor(s): ______________________________________.
+ * Contributor(s): Xavier DUTOIT.
  ********************************************************************************/
 /*********************************************************************************
  * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Notes/DetailView.html,v 1.5 2004/07/11 20:08:52 sugarjacob Exp {APP.LBL_CURRENCY_SYM}
@@ -33,20 +33,20 @@
 		<table cellpadding="0" cellspacing="5" border="0">
 			<input type="hidden" name="module" value="Notes">
 			<input type="hidden" name="record" value="{ID}">
-			<input type="hidden" name="isDuplicate" value=false>			
+			<input type="hidden" name="isDuplicate" value=false>
 			<input type="hidden" name="action">
 			<input type="hidden" name="return_module">
 			<input type="hidden" name="return_action">
 			<input type="hidden" name="return_id">
 		<tr>
-		<td><input title="{APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{APP.LBL_EDIT_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.return_id.value='{ID}'; this.form.action.value='EditView'" type="submit" name="button" value="  {APP.LBL_EDIT_BUTTON_LABEL}  "></td> 
-		<td><input title="{APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{APP.LBL_DUPLICATE_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.action.value='EditView'" type="submit" name="button" value=" {APP.LBL_DUPLICATE_BUTTON_LABEL} "></td>
+		<td><input title="{APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{APP.LBL_EDIT_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.return_id.value='{ID}'; this.form.action.value='EditView'" type="submit" name="button" value="  {APP.LBL_EDIT_BUTTON_LABEL}  "></td>
+		<td><input title="{APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{APP.LBL_DUPLICATE_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Notes'; this.form.return_action.value='index'; this.form.isDuplicate.value=true; this.form.action.value='EditView'" type="submit" name="button" value=" {APP.LBL_DUPLICATE_BUTTON_LABEL} "></td>
 		<td><input title="{APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{APP.LBL_DELETE_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Notes'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('{APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="button" value=" {APP.LBL_DELETE_BUTTON_LABEL} "></td>
 		</tr></table>
 	</td>
 	</form>
 </tr>
-</table> 
+</table>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
 <tr>
@@ -60,18 +60,31 @@
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_PHONE}</td>
 	<td width="30%" class="dataField" valign="top">{CONTACT_PHONE}</td>
-	<td width="20%" class="dataLabel">{MOD.LBL_DATE_MODIFIED}</td>
+	<td width="20%" class="dataLabel">{APP.LBL_DATE_MODIFIED}</td>
 	<td width="30%" class="dataField">{DATE_MODIFIED}</td>
 	</tr><tr>
 	<td width="20%" class="dataLabel" valign="top">{MOD.LBL_EMAIL_ADDRESS}</td>
 	<td width="30%" class="dataField" valign="top">{CONTACT_EMAIL}</td>
-	<td width="20%" class="dataLabel">&nbsp;</td>
-	<td width="30%" class="dataLabel">&nbsp;</td>
+	<td width="20%" class="dataLabel">{APP.LBL_DATE_ENTERED}</td>
+	<td width="30%" class="dataField">{DATE_ENTERED}</td>
 	</tr><tr>
 	<td colspan='4' class="dataLabel">&nbsp;</td>
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_SUBJECT}</td>
 	<td width="80%" colspan='3' class="dataField">{NAME}</td>
+	</tr><tr>
+	<!--
+	* BEGIN CONTRIBUTION
+	* Date: 09/07/04
+	* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+	* All Rights Reserved.
+	* Contributor(s): Xavier DUTOIT
+	-->
+	<td width="20%" class="dataLabel">{MOD.LBL_FILENAME}</td>
+	<td width="80%" colspan='3' class="dataField">{FILENAME}</td>
+	<!--
+	* END CONTRIBUTION
+	-->
 	</tr><tr>
 	<td width="20%" valign="top" valign="top" class="dataLabel">{MOD.LBL_NOTE}</td>
 	<td colspan="3" class="dataField"><TEXTAREA readonly cols="100" rows="30">{DESCRIPTION}</TEXTAREA></td>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Charts.php,v 1.3 2004/08/24 11:03:24 rakeebk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Charts.php,v 1.4 2004/10/06 09:02:05 jack Exp $
  * Description:  Includes the functions for Customer module specific charts.
  ********************************************************************************/
 
@@ -21,6 +21,9 @@ require_once('config.php');
 require_once('include/logging.php');
 require_once('modules/Opportunities/Opportunity.php');
 require_once("jpgraph/src/jpgraph.php");
+require_once('include/utils.php');
+require_once('include/logging.php');
+
 
 
 /*
@@ -55,117 +58,773 @@ function calculate_font_family($charset)
 
 class jpgraph {
 	/**
-	 * Creates opportunity pipeline image as a horizontal bar graph.
-	 * param $datax- the sales stage data to display in the x-axis
-	 * param $datay- the sum of opportunity amounts for each opportunity in each sales stage 
-	 * to display in the y-axis
+	 * Creates opportunity pipeline image as a horizontal accumlated bar graph for multiple users.
+	 * param $datax- the month data to display in the x-axis
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	 */
-	function pipeline ($datax=array('foo','bar'),$datay=array(1,2), $title='the title', $subtitle='the subtitle') {
-		global $app_strings, $log, $charset;
-		include ("jpgraph/src/jpgraph_bar.php");
+	function outcome_by_month($date_start='1971-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
+		global $app_strings, $app_list_strings, $current_module_strings, $log, $charset, $tmp_dir;
+		include_once ("jpgraph/src/jpgraph_bar.php");
 		
-		$font = calculate_font_family($charset);
+		// Size of graph
+		$width=600; 
+		$height=400;
+		
+		$log =& LoggerManager::getLogger('outcome_by_month chart');
+		// Set the basic parameters of the graph 
+		$graph = new Graph($width,$height,$cache_file_name);
+		$log->debug("graph object created");
+
+		$graph->SetScale("textlin");
+
+		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
+			$font = calculate_font_family($charset);
 	
-		$log =& LoggerManager::getLogger('opportunity charts');
-		$log->debug("starting pipeline chart");
+			$log->debug("date_start is: $date_start");
+			$log->debug("date_end is: $date_end");
+			$log->debug("user_id is: ");
+			$log->debug($user_id);
+			$log->debug("cache_file_name is: $cache_file_name");
+			
+			//build the where clause for the query that matches $user
+			$where = "(";
+			$first = true;
+			$current = 0;
+			foreach ($user_id as $the_id) {
+				if (!$first) $where .= "OR ";
+				$first = false;
+				$where .= "assigned_user_id='$the_id' ";
+			}
+			$where .= ") ";
+		
+			//build the where clause for the query that matches $date_start and $date_end
+			$where .= "AND date_closed >= '$date_start' AND date_closed <= '$date_end'";
+			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".$date_start." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".$date_end."\n";
+						
+			//Now do the db queries
+			//query for opportunity data that matches $datay and $user
+			$opp = new Opportunity();
+			$opp_list = $opp->get_full_list("amount DESC, date_closed DESC", $where);
+			
+			//build pipeline by sales stage data
+			$total = 0;
+			$count = array();
+			$sum = array();
+			$months = array();
+			$other = $current_module_strings['LBL_LEAD_SOURCE_OTHER'];
+			if (isset($opp_list)) {
+				foreach ($opp_list as $record) {
+					$month = substr_replace($record->date_closed,'',-3);
+					if (!in_array($month, $months)) { array_push($months, $month); }
+					if ($record->sales_stage == 'Closed Won' || $record->sales_stage == 'Closed Lost') {
+						$sales_stage=$record->sales_stage;
+					}
+					else {
+						$sales_stage=$other;
+					}
+					
+					if (!isset($sum[$month][$sales_stage])) {
+						$sum[$month][$sales_stage] = 0;
+					}
+					if (isset($record->amount))	{
+						// Strip all non numbers from this string.
+						$amount = ereg_replace('[^0-9]', '', $record->amount);
+						$sum[$month][$sales_stage] = $sum[$month][$sales_stage] + $amount;  
+						if (isset($count[$month][$sales_stage])) {
+							$count[$month][$sales_stage]++;
+						}
+						else {
+							$count[$month][$sales_stage] = 1;
+						}
+						$total = $total + ($amount/1000);
+					}
+				}
+			}
+			
+			$legend = array();
+			$datax = array();
+			$aTargets = array();
+			$aAlts = array();
+			$stages = array($other, 'Closed Lost', 'Closed Won');
+			//sort the months or push a bogus month on the array so that an empty chart is drawn
+			if (empty($months)) {
+				array_push($months, date('Y-m',time()));
+			}
+			else{
+				sort($months);
+			}
+			foreach($months as $month) {
+			  foreach($stages as $stage) {
+				$log->debug("stage is $stage");
+				if (!isset($datax[$stage])) {
+					$datax[$stage] = array();
+				}
+				if (!isset($aAlts[$stage])) {
+					$aAlts[$stage] = array();
+				}
+				if (!isset($aTargets[$stage])) {
+					$aTargets[$stage] = array();
+				}
+	
+				if (isset($sum[$month][$stage])) {
+					array_push($datax[$stage], $sum[$month][$stage]/1000);
+					array_push($aAlts[$stage], $count[$month][$stage]." ".$current_module_strings['LBL_OPPS_OUTCOME']." $stage");
+				}
+				else {
+					array_push($datax[$stage], 0);
+					array_push($aAlts[$stage], "");
+				}
+				array_push($aTargets[$stage], "index.php?module=Opportunities&action=ListView&date_closed=$month&sales_stage=".urlencode($stage)."&query=true");
+			  }
+		  	  array_push($legend,$month);
+			}
+	
+			$log->debug("datax is:");
+			$log->debug($datax);
+			$log->debug("aAlts is:");
+			$log->debug($aAlts);
+			$log->debug("aTargets is:");
+			$log->debug($aTargets);
+			$log->debug("sum is:");
+			$log->debug($sum);
+			$log->debug("count is:");
+			$log->debug($count);
+		
+			//now build the bar plots for each user across the sales stages
+			$bplot = array();
+			$color = array('Closed Lost'=>'993366','Closed Won'=>'009933', $other=>'336699');
+			$index = 0;
+			foreach($stages as $stage) {
+				// Now create a bar pot
+				$bplot[$index] = new BarPlot($datax[$stage]);
+				
+				//You can change the width of the bars if you like
+				$bplot[$index]->SetWidth(5);
+				
+				// Set fill colors for bars
+				$bplot[$index]->SetFillColor("#".$color[$stage]);
+				
+				// We want to display the value of each bar at the top
+				$bplot[$index]->value->Show();
+				$bplot[$index]->value->SetFont($font,FS_NORMAL,8);
+				//$bplot->value->SetAlign('left','center');
+				$bplot[$index]->value->SetColor("white");
+				$bplot[$index]->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+				$bplot[$index]->SetValuePos('max');
+				
+				//set client side image map URL's
+				$bplot[$index]->SetCSIMTargets($aTargets[$stage],$aAlts[$stage]); 
+				$log->debug("bplot[$index] is: ");
+				$log->debug($bplot[$index]);
+				$index++;
+			}
+			
+			// Create the grouped bar plot
+			$gbplot = new AccBarPlot($bplot);
+	
+			// Add the bar to the graph
+			$graph->Add($gbplot);
+			
+			// No frame around the image
+			$graph->SetFrame(false);
+			
+			// Rotate graph 90 degrees and set margin
+			$top = 20;
+			$bottom = 50;
+			$left = 20;
+			$right = 50;
+			$graph->SetMargin($left,$right,$top,$bottom);
+			
+			// Set white margin color
+			$graph->SetMarginColor('white');
+			
+			// Use a box around the plot area
+			$graph->SetBox();
+			
+			// Use a gradient to fill the plot area
+			$graph->SetBackgroundGradient('white','gray',GRAD_HOR,BGRAD_PLOT);
+			
+			// Setup title
+			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].$app_strings['LBL_CURRENCY_SYMBOL'].$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$graph->title->Set($title);
+			$graph->title->SetFont($font,FS_BOLD,11);
+			
+			// Setup X-axis
+			$graph->xaxis->SetTickLabels($legend);
+			$graph->xaxis->SetFont($font,FS_NORMAL,8);
+			
+			// Some extra margin looks nicer
+			$graph->xaxis->SetLabelMargin(10);
+			
+			// Label align for X-axis
+			$graph->xaxis->SetLabelAlign('center','center');
+			$graph->yaxis->SetLabelSide(SIDE_LEFT);
+			
+			// The fix the tick marks
+			$graph->yaxis->SetTickSide(SIDE_RIGHT);
+			
+			// Add some grace to y-axis so the bars doesn't go
+			// all the way to the end of the plot area
+			$graph->yaxis->scale->SetGrace(10);
+			
+			// Setup the Y-axis to be displayed in the bottom of the 
+			// graph. We also finetune the exact layout of the title,
+			// ticks and labels to make them look nice.
+			$graph->yaxis->SetPos('max');
+			
+			// First make the labels look right
+			$graph->yaxis->SetLabelAlign('left','top');
+			$graph->yaxis->SetLabelFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
+			
+			// The fix the tick marks
+			$graph->yaxis->SetTickSide(SIDE_LEFT);
+			
+			// Finally setup the title
+			$graph->yaxis->SetTitleSide(SIDE_RIGHT);
+			$graph->yaxis->SetTitleMargin(35);
+			
+			$subtitle .= $current_module_strings['LBL_OPP_SIZE'];
+			$graph->footer->right->Set($subtitle); 
+			$graph->footer->right->SetFont($font,FS_NORMAL,8);
+			
+			$graph->yaxis->SetFont($font,FS_NORMAL, 8);
+	
+			// .. and stroke the graph
+			$graph->Stroke($cache_file_name);
+			$imgMap = $graph->GetHTMLImageMap('outcome_by_month');
+			save_image_map($cache_file_name.'.map', $imgMap);
+		}
+		else {
+			$imgMap = file_get_contents($cache_file_name.'.map');
+		}
+		$return = "\n$imgMap\n";
+		$return .= "<img src='$cache_file_name'\n";
+		$return .= "ismap usemap='#outcome_by_month' border='0'>\n";
+		return $return;
+	}
+
+	/**
+	 * Creates lead_source_by_outcome pipeline image as a horizontal accumlated bar graph for multiple users.
+	 * param $datay- the lead source data to display in the x-axis
+	 * param $date_start- the begin date of opps to find
+	 * param $date_end- the end date of opps to find
+	 * param $ids - list of assigned users of opps to find
+	 * param $cache_file_name - file name to write image to
+	 * param $refresh - boolean whether to rebuild image if exists
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
+	 */
+	function lead_source_by_outcome($datay=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
+		global $app_strings, $current_module_strings, $log, $charset, $tmp_dir;
+		include_once ("jpgraph/src/jpgraph_bar.php");
 		
 		// Size of graph
 		$width=300; 
 		$height=400;
 		
+		$log =& LoggerManager::getLogger('lead_source_by_outcome chart');
 		// Set the basic parameters of the graph 
-		$graph = new Graph($width,$height,'auto');
+		$graph = new Graph($width,$height,$cache_file_name);
+		$log->debug("graph object created");
+
 		$graph->SetScale("textlin");
-		//$graph->img->SetImgFormat("jpeg")
+
+		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
+			$font = calculate_font_family($charset);
+	
+			$log->debug("datay is:");
+			$log->debug($datay);
+			$log->debug("user_id is: ");
+			$log->debug($user_id);
+			$log->debug("cache_file_name is: $cache_file_name");
+			
+			$where="";
+			//build the where clause for the query that matches $user
+			$count = count($user_id);
+			if ($count>0) {
+				$where = "(";
+				$first = true;
+				$current = 0;
+				foreach ($user_id as $the_id) {
+					if (!$first) $where .= "OR ";
+					$first = false;
+					$where .= "assigned_user_id='$the_id' ";
+				}
+				$where .= ") ";
+			}
 		
-		// No frame around the image
-		$graph->SetFrame(false);
+			//build the where clause for the query that matches $datay
+			$count = count($datay);
+			if ($count>0) {
+				$where .= "AND ( ";
+				unset($first);
+				$first = true;
+				foreach ($datay as $key=>$value) {
+					if (!$first) $where .= "OR ";
+					$first = false;
+					$where .= "lead_source ='$key' ";
+				}
+				$where .= ")";
+			}
+						
+			//Now do the db queries
+			//query for opportunity data that matches $datay and $user
+			$opp = new Opportunity();
+			$opp_list = $opp->get_full_list("amount DESC, date_closed DESC", $where);
+			
+			//build pipeline by sales stage data
+			$total = 0;
+			$count = array();
+			$sum = array();
+			$other = $current_module_strings['LBL_LEAD_SOURCE_OTHER'];
+			if (isset($opp_list)) {
+				foreach ($opp_list as $record) {
+					//if lead source is blank, set it to the language's "none" value
+					if (isset($record->lead_source) && $record->lead_source != '') { 
+						$lead_source = $record->lead_source; 
+					}
+					else { 
+						$lead_source = $current_module_strings['NTC_NO_LEGENDS']; 
+					}
+
+					if ($record->sales_stage == 'Closed Won' || $record->sales_stage == 'Closed Lost') {
+						$sales_stage=$record->sales_stage;
+					}
+					else {
+						$sales_stage=$other;
+					}
+					
+					if (!isset($sum[$lead_source][$sales_stage])) {
+						$sum[$lead_source][$sales_stage] = 0;
+					}
+					if (isset($record->amount))	{
+						// Strip all non numbers from this string.
+						$amount = ereg_replace('[^0-9]', '', $record->amount);
+						$sum[$lead_source][$sales_stage] = $sum[$lead_source][$sales_stage] + $amount;  
+						if (isset($count[$lead_source][$sales_stage])) {
+							$count[$lead_source][$sales_stage]++;
+						}
+						else {
+							$count[$lead_source][$sales_stage] = 1;
+						}
+						$total = $total + ($amount/1000);
+					}
+				}
+			}
+			
+			$legend = array();
+			$datax = array();
+			$aTargets = array();
+			$aAlts = array();
+			$stages = array($other,'Closed Lost', 'Closed Won');
+			foreach($datay as $lead=>$translation) {
+			  if ($lead == '') { 
+					$lead = $current_module_strings['NTC_NO_LEGENDS']; 
+					$translation = $current_module_strings['NTC_NO_LEGENDS']; 
+			  }
+			  foreach($stages as $stage) {
+				$log->debug("stage_key is $stage");
+				if (!isset($datax[$stage])) {
+					$datax[$stage] = array();
+				}
+				if (!isset($aAlts[$stage])) {
+					$aAlts[$stage] = array();
+				}
+				if (!isset($aTargets[$stage])) {
+					$aTargets[$stage] = array();
+				}
+	
+				if (isset($sum[$lead][$stage])) {
+					array_push($datax[$stage], $sum[$lead][$stage]/1000);
+					array_push($aAlts[$stage], $count[$lead][$stage]." ".$current_module_strings['LBL_OPPS_OUTCOME']." $stage");
+				}
+				else {
+					array_push($datax[$stage], 0);
+					array_push($aAlts[$stage], "");
+				}
+				array_push($aTargets[$stage], "index.php?module=Opportunities&action=ListView&lead_source=$lead&sales_stage=".urlencode($stage)."&query=true");
+			  }
+			  array_push($legend,$translation);
+			}
+	
+			$log->debug("datax is:");
+			$log->debug($datax);
+			$log->debug("aAlts is:");
+			$log->debug($aAlts);
+			$log->debug("aTargets is:");
+			$log->debug($aTargets);
+			$log->debug("sum is:");
+			$log->debug($sum);
+			$log->debug("count is:");
+			$log->debug($count);
 		
-		// Rotate graph 90 degrees and set margin
-		$top = 20;
-		$bottom = 60;
-		$left = 130;
-		$right = 20;
-		$graph->Set90AndMargin($left,$right,$top,$bottom);
+			//now build the bar plots for each user across the sales stages
+			$bplot = array();
+			$color = array('Closed Lost'=>'993366','Closed Won'=>'009933', $other=>'336699');
+			$index = 0;
+			foreach($stages as $stage) {
+				// Now create a bar pot
+				$bplot[$index] = new BarPlot($datax[$stage]);
+				
+				//You can change the width of the bars if you like
+				$bplot[$index]->SetWidth(5);
+				
+				// Set fill colors for bars
+				$bplot[$index]->SetFillColor("#".$color[$stage]);
+				
+				// We want to display the value of each bar at the top
+				$bplot[$index]->value->Show();
+				$bplot[$index]->value->SetFont($font,FS_NORMAL,8);
+				//$bplot->value->SetAlign('left','center');
+				$bplot[$index]->value->SetColor("white");
+				$bplot[$index]->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+				$bplot[$index]->SetValuePos('max');
+				
+				//set client side image map URL's
+				$bplot[$index]->SetCSIMTargets($aTargets[$stage],$aAlts[$stage]); 
+				$log->debug("bplot[$index] is: ");
+				$log->debug($bplot[$index]);
+				$log->debug("datax[$stage] is: ");
+				$log->debug($datax[$stage]);
+				$index++;
+			}
+			
+			// Create the grouped bar plot
+			$gbplot = new AccBarPlot($bplot);
+	
+			// Add the bar to the graph
+			$graph->Add($gbplot);
+			
+			// No frame around the image
+			$graph->SetFrame(false);
+			
+			// Rotate graph 90 degrees and set margin
+			$top = 20;
+			$bottom = 50;
+			$left = 130;
+			$right = 40;
+			$graph->Set90AndMargin($left,$right,$top,$bottom);
+			
+			// Set white margin color
+			$graph->SetMarginColor('white');
+			
+			// Use a box around the plot area
+			$graph->SetBox();
+			
+			// Use a gradient to fill the plot area
+			$graph->SetBackgroundGradient('#F0F0F0','#FFFFFF',GRAD_HOR,BGRAD_PLOT);
+			
+			// Setup title
+			$title = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$app_strings['LBL_CURRENCY_SYMBOL'].$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$graph->title->Set($title);
+			$graph->title->SetFont($font,FS_BOLD,11);
+			
+			// Setup X-axis
+			$graph->xaxis->SetTickLabels($legend);
+			$graph->xaxis->SetFont($font,FS_NORMAL,8);
+			
+			// Some extra margin looks nicer
+			$graph->xaxis->SetLabelMargin(10);
+			
+			// Label align for X-axis
+			$graph->xaxis->SetLabelAlign('right','center');
+			$graph->yaxis->SetLabelSide(SIDE_LEFT);
+			
+			// The fix the tick marks
+			$graph->yaxis->SetTickSide(SIDE_RIGHT);
+			
+			// Add some grace to y-axis so the bars doesn't go
+			// all the way to the end of the plot area
+			$graph->yaxis->scale->SetGrace(10);
+			
+			// Setup the Y-axis to be displayed in the bottom of the 
+			// graph. We also finetune the exact layout of the title,
+			// ticks and labels to make them look nice.
+			$graph->yaxis->SetPos('max');
+			
+			// First make the labels look right
+			$graph->yaxis->SetLabelAlign('left','top');
+			$graph->yaxis->SetLabelFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
+			
+			// The fix the tick marks
+			$graph->yaxis->SetTickSide(SIDE_LEFT);
+			
+			// Finally setup the title
+			$graph->yaxis->SetTitleSide(SIDE_RIGHT);
+			$graph->yaxis->SetTitleMargin(35);
+			
+			$subtitle = $current_module_strings['LBL_OPP_SIZE'];
+			$graph->footer->right->Set($subtitle); 
+			$graph->footer->right->SetFont($font,FS_NORMAL,8);
+			
+			$graph->yaxis->SetFont($font,FS_NORMAL, 8);
+	
+			// .. and stroke the graph
+			$graph->Stroke($cache_file_name);
+			$imgMap = $graph->GetHTMLImageMap('lead_source_by_outcome');
+			save_image_map($cache_file_name.'.map', $imgMap);
+		}
+		else {
+			$imgMap = file_get_contents($cache_file_name.'.map');
+		}
+		$return = "\n$imgMap\n";
+		$return .= "<img src='$cache_file_name'\n";
+		$return .= "ismap usemap='#lead_source_by_outcome' border='0'>\n";
+		return $return;
+	}
+
+	/**
+	 * Creates opportunity pipeline image as a horizontal accumlated bar graph for multiple users.
+	 * param $datax- the sales stage data to display in the x-axis
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
+	 */
+	function pipeline_by_sales_stage($datax=array('foo','bar'), $date_start='2071-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
+		global $app_strings, $current_module_strings, $log, $charset, $tmp_dir;
+		include_once ("jpgraph/src/jpgraph_bar.php");
 		
-		// Set white margin color
-		$graph->SetMarginColor('white');
+		// Size of graph
+		$width=300; 
+		$height=400;
 		
-		// Use a box around the plot area
-		$graph->SetBox();
+		$log =& LoggerManager::getLogger('opportunity charts');
+		// Set the basic parameters of the graph 
+		$graph = new Graph($width,$height,$cache_file_name);
+		$log->debug("graph object created");
+
+		$graph->SetScale("textlin");
+
+		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
+			$font = calculate_font_family($charset);
 		
-		// Use a gradient to fill the plot area
-		$graph->SetBackgroundGradient('#F0F0F0','#FFFFFF',GRAD_HOR,BGRAD_PLOT);
+			$log->debug("starting pipeline chart");
+			$log->debug("datax is:");
+			$log->debug($datax);
+			$log->debug("user_id is: ");
+			$log->debug($user_id);
+			$log->debug("cache_file_name is: $cache_file_name");
+			
+			$where="";
+			//build the where clause for the query that matches $user
+			$count = count($user_id);
+			if ($count>0) {
+				$where = "(";
+				$first = true;
+				$current = 0;
+				foreach ($user_id as $the_id) {
+					if (!$first) $where .= "OR ";
+					$first = false;
+					$where .= "assigned_user_id='$the_id' ";
+				}
+				$where .= ") ";
+			}
 		
-		// Setup title
-		$graph->title->Set($title);
-		$graph->title->SetFont($font,FS_BOLD,11);
+			//build the where clause for the query that matches $datax
+			$count = count($datax);
+			if ($count>0) {
+				$where .= "AND ( ";
+				unset($first);
+				$first = true;
+				foreach ($datax as $key=>$value) {
+					if (!$first) $where .= "OR ";
+					$first = false;
+					$where .= "sales_stage ='$key' ";
+				}
+				$where .= ")";
+			}
+						
+			//build the where clause for the query that matches $date_start and $date_end
+			$where .= "AND date_closed >= '$date_start' AND date_closed <= '$date_end'";
+			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".$date_start." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".$date_end."\n";
+
+			//Now do the db queries
+			//query for opportunity data that matches $datax and $user
+			$opp = new Opportunity();
+			$opp_list = $opp->get_full_list("amount DESC, date_closed DESC", $where);
+			
+			//build pipeline by sales stage data
+			$total = 0;
+			$count = array();
+			$sum = array();
+			if (isset($opp_list)) {
+				foreach ($opp_list as $record) {
+					if (!isset($sum[$record->sales_stage][$record->assigned_user_id])) {
+						$sum[$record->sales_stage][$record->assigned_user_id] = 0;
+					}
+					if (isset($record->amount))	{
+						// Strip all non numbers from this string.
+						$amount = ereg_replace('[^0-9]', '', $record->amount);
+						$sum[$record->sales_stage][$record->assigned_user_id] = $sum[$record->sales_stage][$record->assigned_user_id] + $amount;  
+						if (isset($count[$record->sales_stage][$record->assigned_user_id])) {
+							$count[$record->sales_stage][$record->assigned_user_id]++;
+						}
+						else {
+							$count[$record->sales_stage][$record->assigned_user_id] = 1;
+						}
+						$total = $total + ($amount/1000);
+					}
+				}
+			}
+			
+			$legend = array();
+			$datay = array();
+			$aTargets = array();
+			$aAlts = array();
+			foreach ($datax as $stage_key=>$stage_translation) {
+			  foreach ($user_id as $the_id) {
+			  	$the_user = get_assigned_user_name($the_id);
+				if (!isset($datay[$the_id])) {
+					$datay[$the_id] = array();
+				}
+				if (!isset($aAlts[$the_id])) {
+					$aAlts[$the_id] = array();
+				}
+				if (!isset($aTargets[$the_id])) {
+					$aTargets[$the_id] = array();
+				}
+	
+				if (isset($sum[$stage_key][$the_id])) {
+					array_push($datay[$the_id], $sum[$stage_key][$the_id]/1000);
+					array_push($aAlts[$the_id], $the_user.' - '.$count[$stage_key][$the_id]." ".$current_module_strings['LBL_OPPS_IN_STAGE']." $stage_translation");
+				}
+				else {
+					array_push($datay[$the_id], 0);
+					array_push($aAlts[$the_id], "");
+				}
+				array_push($aTargets[$the_id], "index.php?module=Opportunities&action=ListView&assigned_user_id[]=$the_id&sales_stage=".urlencode($stage_key)."&query=true");
+			  }
+			  array_push($legend,$stage_translation);
+			}
+	
+			$log->debug("datay is:");
+			$log->debug($datay);
+			$log->debug("aAlts is:");
+			$log->debug($aAlts);
+			$log->debug("aTargets is:");
+			$log->debug($aTargets);
+			$log->debug("sum is:");
+			$log->debug($sum);
+			$log->debug("count is:");
+			$log->debug($count);
 		
-		// Setup X-axis
-		$graph->xaxis->SetTickLabels($datax);
-		$graph->xaxis->SetFont($font,FS_NORMAL,8);
-		
-		// Some extra margin looks nicer
-		$graph->xaxis->SetLabelMargin(10);
-		
-		// Label align for X-axis
-		$graph->xaxis->SetLabelAlign('right','center');
-		
-		// Add some grace to y-axis so the bars doesn't go
-		// all the way to the end of the plot area
-		$graph->yaxis->scale->SetGrace(10);
-		
-		// Setup the Y-axis to be displayed in the bottom of the 
-		// graph. We also finetune the exact layout of the title,
-		// ticks and labels to make them look nice.
-		$graph->yaxis->SetPos('max');
-		
-		// First make the labels look right
-		$graph->yaxis->SetLabelAlign('center','top');
-		$graph->yaxis->SetLabelFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
-		$graph->yaxis->SetLabelSide(SIDE_RIGHT);
-		
-		// The fix the tick marks
-		$graph->yaxis->SetTickSide(SIDE_LEFT);
-		
-		// Finally setup the title
-		$graph->yaxis->SetTitleSide(SIDE_RIGHT);
-		$graph->yaxis->SetTitleMargin(35);
-		
-		// To align the title to the right use :
-		$graph->yaxis->SetTitle($subtitle);
-		$graph->yaxis->title->Align('right');
-		
-		$graph->yaxis->title->SetFont($font,FS_NORMAL,8);
-		$graph->yaxis->title->SetAngle(0);
-		
-		$graph->yaxis->SetFont($font,FS_NORMAL, 8);
-		
-		// Now create a bar pot
-		$bplot = new BarPlot($datay);
-		$bplot->SetShadow();
-		
-		//You can change the width of the bars if you like
-		//$bplot->SetWidth(0.5);
-		
-		// Set gradient fill for bars
-		$bplot->SetFillGradient('#990000','#FF6600',GRAD_HOR);  // orange to red
-//		$bplot->SetFillGradient('#339900','#99CC00',GRAD_HOR);  // light green to dark green
-//		$bplot->SetFillGradient('#0033CC','#0099FF',GRAD_HOR);  // light blue to dark blue
-		
-		// We want to display the value of each bar at the top
-		$bplot->value->Show();
-		$bplot->value->SetFont($font,FS_NORMAL,8);
-		//$bplot->value->SetAlign('left','center');
-		$bplot->value->SetColor("white");
-		$bplot->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
-		$bplot->SetValuePos('max');
-		
-		// Add the bar to the graph
-		$graph->Add($bplot);
-		
-		// .. and stroke the graph
-		$graph->Stroke();
+			//now build the bar plots for each user across the sales stages
+			$bplot = array();
+			$color = '336699';
+			$index = 0;
+			foreach($user_id as $the_id) {
+				// Now create a bar pot
+				$bplot[$index] = new BarPlot($datay[$the_id]);
+				$bplot[$index]->SetShadow();
+				
+				//You can change the width of the bars if you like
+				$bplot[$index]->SetWidth(0.5);
+				
+				// Set fill colors for bars
+				$bplot[$index]->SetFillColor("#$color");
+				$color = $color + 220022;
+				
+				// We want to display the value of each bar at the top
+				$bplot[$index]->value->Show();
+				$bplot[$index]->value->SetFont($font,FS_NORMAL,8);
+				//$bplot->value->SetAlign('left','center');
+				$bplot[$index]->value->SetColor("white");
+				$bplot[$index]->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+				$bplot[$index]->SetValuePos('max');
+				
+				//set client side image map URL's
+				$bplot[$index]->SetCSIMTargets($aTargets[$the_id],$aAlts[$the_id]); 
+				$log->debug("bplot[$index] is: ");
+				$log->debug($bplot[$index]);
+				$log->debug("datay[$the_id] is: ");
+				$log->debug($datay[$the_id]);
+				$index++;
+			}
+			
+			// Create the grouped bar plot
+			$gbplot = new AccBarPlot($bplot);
+	
+			// Add the bar to the graph
+			$graph->Add($gbplot);
+			
+			// No frame around the image
+			$graph->SetFrame(false);
+			
+			// Rotate graph 90 degrees and set margin
+			$top = 20;
+			$bottom = 70;
+			$left = 130;
+			$right = 40;
+			$graph->Set90AndMargin($left,$right,$top,$bottom);
+			
+			// Set white margin color
+			$graph->SetMarginColor('white');
+			
+			// Use a box around the plot area
+			$graph->SetBox();
+			
+			// Use a gradient to fill the plot area
+			$graph->SetBackgroundGradient('white','gray',GRAD_HOR,BGRAD_PLOT);
+			
+			// Setup title
+			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].$app_strings['LBL_CURRENCY_SYMBOL'].$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$graph->title->Set($title);
+			$graph->title->SetFont($font,FS_BOLD,11);
+			
+			// Setup X-axis
+			$graph->xaxis->SetTickLabels($legend);
+			$graph->xaxis->SetFont($font,FS_NORMAL,8);
+			
+			// Some extra margin looks nicer
+			$graph->xaxis->SetLabelMargin(10);
+			
+			// Label align for X-axis
+			$graph->xaxis->SetLabelAlign('right','center');
+			
+			// Add some grace to y-axis so the bars doesn't go
+			// all the way to the end of the plot area
+			$graph->yaxis->scale->SetGrace(10);
+			
+			// Setup the Y-axis to be displayed in the bottom of the 
+			// graph. We also finetune the exact layout of the title,
+			// ticks and labels to make them look nice.
+			$graph->yaxis->SetPos('max');
+			
+			// First make the labels look right
+			$graph->yaxis->SetLabelAlign('center','top');
+			$graph->yaxis->SetLabelFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
+			
+			// The fix the tick marks
+			$graph->yaxis->SetTickSide(SIDE_LEFT);
+			
+			// Finally setup the title
+			$graph->yaxis->SetTitleSide(SIDE_RIGHT);
+			$graph->yaxis->SetTitleMargin(35);
+			
+			$subtitle .= $current_module_strings['LBL_OPP_SIZE'];
+			$graph->footer->right->Set($subtitle); 
+			$graph->footer->right->SetFont($font,FS_NORMAL,8);
+			
+			$graph->yaxis->SetFont($font,FS_NORMAL, 8);
+	
+			// .. and stroke the graph
+			$graph->Stroke($cache_file_name);
+			$imgMap = $graph->GetHTMLImageMap('pipeline');
+			save_image_map($cache_file_name.'.map', $imgMap);
+		}
+		else {
+			$imgMap = file_get_contents($cache_file_name.'.map');
+		}
+		$return = "\n$imgMap\n";
+		$return .= "<img src='$cache_file_name'\n";
+		$return .= "ismap usemap='#pipeline' border='0'>\n";
+		return $return;
 	}
 	
 	/**
@@ -173,46 +832,201 @@ class jpgraph {
 	 * param $datax- the sales stage data to display in the x-axis
 	 * param $datay- the sum of opportunity amounts for each opportunity in each sales stage 
 	 * to display in the y-axis
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	 */
-	function pipeline_by_lead_source ($legends=array('foo', 'bar'), $data=array(1,2), $title='the title', $subtitle='the subtitle') {
-		global $app_strings, $log, $charset;
-		include ("jpgraph/src/jpgraph_pie.php");
-		include ("jpgraph/src/jpgraph_pie3d.php");
-
+	function pipeline_by_lead_source($legends=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=true) {
+		global $app_strings, $current_module_strings, $log, $charset, $tmp_dir;
+		include_once ("jpgraph/src/jpgraph_pie.php");
+		include_once ("jpgraph/src/jpgraph_pie3d.php");
+		
 		$font = calculate_font_family($charset);
-		
-		// Create the Pie Graph.
-		$graph = new PieGraph(490,320,"auto");
-		$graph->SetShadow();
-	
-		// Setup title
-		$graph->title->Set($title);
-		$graph->title->SetFont($font,FS_BOLD,11);
-	
-		// No frame around the image
-		$graph->SetFrame(false);
-	
-		$graph->legend->Pos(0.03,0.07);
-		$graph->legend->SetFont($font,FS_NORMAL,12);
-		
-		$graph->footer->left->Set($subtitle); 
-		$graph->footer->left->SetFont($font,FS_NORMAL,8);
 
-		// Create pie plot
-		$p1 = new PiePlot3d($data);
-		$p1->SetSize(0.40);
-		$p1->SetTheme("sand");
-		$p1->SetCenter(0.33);
-		$p1->SetAngle(30);
-		$p1->value->SetFont($font,FS_NORMAL,12);
-		$p1->SetLegends($legends);
-		$p1->SetLabelType(PIE_VALUE_ABS);
-		$p1->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d'); 
+		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
+			$log =& LoggerManager::getLogger('opportunity charts');
+			$log->debug("starting pipeline chart");
+			$log->debug("legends is:");
+			$log->debug($legends);
+			$log->debug("user_id is: ");
+			$log->debug($user_id);
+			$log->debug("cache_file_name is: $cache_file_name");
+	
+			//Now do the db queries
+			//query for opportunity data that matches $legends and $user
+			$where="";
+			//build the where clause for the query that matches $user
+			$count = count($user_id);
+			if ($count>0) {
+				$where = "(";
+				$first = true;
+				foreach ($user_id as $the_id) {
+					if (!$first) $where .= "OR ";
+					$first = false;
+					$where .= "assigned_user_id='$the_id' ";
+				}
+				$where .= ") ";
+			}
+	
+			//build the where clause for the query that matches $datax
+			$count = count($legends);
+			if ($count>0) {
+				$where .= "AND ( ";
+				$first = true;
+				foreach ($legends as $key=>$value) {
+					if (!$first) $where .= "OR ";
+					$first = false;
+					$where .= "lead_source	='$key' ";
+				}
+				$where .= ")";
+			}
+						
+			$opp = new Opportunity();
+			$opp_list = $opp->get_full_list("amount DESC, date_closed DESC", $where);
+	
+			//build pipeline by lead source data
+			$total = 0;
+			$count = array();
+			$sum = array();
+			if (isset($opp_list)) {
+				foreach ($opp_list as $record) {
+					if (!isset($sum[$record->lead_source])) $sum[$record->lead_source] = 0;
+					if (isset($record->amount) && isset($record->lead_source))	{
+						// Strip all non numbers from this string.
+						$amount = ereg_replace('[^0-9]', '', $record->amount);
+						$sum[$record->lead_source] = $sum[$record->lead_source] + ($amount/1000);  
+						if (isset($count[$record->lead_source])) $count[$record->lead_source]++;
+						else $count[$record->lead_source] = 1;
+						$total = $total + ($amount/1000);
+					}
+				}
+			}
+			
+			$visible_legends = array();
+			$data= array();
+			$aTargets = array();
+			$aAlts = array();
+			foreach ($legends as $lead_source_key=>$lead_source_translation) {
+				if (isset($sum[$lead_source_key])) 
+				{
+					array_push($data, $sum[$lead_source_key]);
+					if($lead_source_key != '')
+					{
+						array_push($visible_legends, $lead_source_translation);
+					}
+					else
+					{
+						// put none in if the field is blank.
+						array_push($visible_legends, $current_module_strings['NTC_NO_LEGENDS']);
+					}
+					array_push($aTargets, "index.php?module=Opportunities&action=ListView&lead_source=".urlencode($lead_source_key)."&query=true");
+					array_push($aAlts, $count[$lead_source_key]." ".$current_module_strings['LBL_OPPS_IN_LEAD_SOURCE']." $lead_source_translation	");
+				}
+			}					
+			
+			$log->debug("sum is:");
+			$log->debug($sum);
+			$log->debug("count is:");
+			$log->debug($count);
+			$log->debug("total is: $total");
+			if ($total == 0) {
+				return ($current_module_strings['ERR_NO_OPPS']);
+			}
+			
+			// Create the Pie Graph.
+			$graph = new PieGraph(490,260,$cache_file_name);
+	
+			$graph->SetShadow();
 		
-		$graph->Add($p1);
-		$graph->Stroke();
+			// Setup title
+			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].$app_strings['LBL_CURRENCY_SYMBOL'].$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$graph->title->Set($title);
+			$graph->title->SetFont($font,FS_BOLD,11);
+		
+			// No frame around the image
+			$graph->SetFrame(false);
+		
+			$graph->legend->Pos(0.01,0.10);
+			$graph->legend->SetFont($font,FS_NORMAL,12);
+			
+			$subtitle = $current_module_strings['LBL_OPP_SIZE'];
+			$graph->footer->left->Set($subtitle); 
+			$graph->footer->left->SetFont($font,FS_NORMAL,8);
+	
+			// Create pie plot
+			$p1 = new PiePlot3d($data);
+			$p1->SetSize(0.30);
+			$p1->SetTheme("sand");
+			$p1->SetCenter(0.33,0.35);
+			$p1->SetAngle(30);
+			$p1->value->SetFont($font,FS_NORMAL,12);
+			$p1->SetLegends($visible_legends);
+			$p1->SetLabelType(PIE_VALUE_ABS);
+			$p1->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d'); 
+			
+			//set client side image map URL's
+			$p1->SetCSIMTargets($aTargets,$aAlts); 
+			
+			$graph->Add($p1);
+			
+			$graph->Stroke($cache_file_name);
+			$imgMap = $graph->GetHTMLImageMap('pipeline_by_lead_source');
+			save_image_map($cache_file_name.'.map', $imgMap);
+		}
+		else {
+			$imgMap = file_get_contents($cache_file_name.'.map');
+		}
+		$return = "\n$imgMap\n";
+		$return .= "<img src='$cache_file_name'\n";
+		$return .= "ismap usemap='#pipeline_by_lead_source' border='0'>\n";
+		return $return;
 	
 	}
 
 }
+
+
+/**
+ * Creates a file with the image map
+ * param $filename - file name to save to
+ * param $image_map - image map string to save 
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
+ */
+function save_image_map($filename,$image_map) {
+	// save the image map to file 
+	$log =& LoggerManager::getLogger('save_image_file');
+	
+	if (!$handle = fopen($filename, 'w')) {
+		$log->debug("Cannot open file ($filename)");
+		return;
+	}
+	
+	// Write $somecontent to our opened file.
+	if (fwrite($handle, $image_map) === FALSE) {
+	   $log->debug("Cannot write to file ($filename)");
+	   return false;
+	}
+	
+	$log->debug("Success, wrote ($image_map) to file ($filename)");
+	
+	fclose($handle);
+	return true;
+	
+}
+
+// retrieve the translated strings.
+$app_strings = return_application_language($current_language);
+
+if(isset($app_strings['LBL_CHARSET']))
+{
+	$charset = $app_strings['LBL_CHARSET'];
+}
+else
+{
+	$charset = $default_charset;	
+}
+
+
 ?>

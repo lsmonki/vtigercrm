@@ -13,76 +13,29 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/ListViewTop.php,v 1.1 2004/08/17 15:06:09 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/ListViewTop.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
 require_once('modules/Opportunities/Opportunity.php');
-require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
-
-global $theme;
-global $image_path;
-global $currentModule;
-global $opp_list;
-//we don't want the parent module's string file, but rather the string file specifc to this subpanel
-global $app_strings;
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'Opportunities');
-
-$list_form=new XTemplate ('modules/Opportunities/ListViewTop.html');
-$list_form->assign("MOD", $current_module_strings);
-$list_form->assign("APP", $app_strings);
-
-$list_form->assign("THEME", $theme);
-$list_form->assign("IMAGE_PATH", $image_path);
-$list_form->assign("MODULE_NAME", $currentModule);
-$list_form->assign("MOD", $current_module_strings);
-$list_form->assign("APP", $app_strings);
+require_once('include/ListView/ListView.php');
+$current_module_strings = return_module_language($current_language, "Opportunities");
+$log = LoggerManager::getLogger('top opportunity_list');
+$seedOpportunity = new Opportunity();
 	
 //build top 5 opportunity list
-$oddRow = true;
-$count = 1;
-for($row = 0; $count <= 5 && isset($opp_list[$row]); $row++)
-{
-	if ($opp_list[$row]->sales_stage != 'Closed Won' && $opp_list[$row]->sales_stage != 'Closed Lost') {
-		$count++;
-		$opportunity_fields = array(
-			'ID' => $opp_list[$row]->id,
-			'NAME' => $opp_list[$row]->name,
-			'ACCOUNT_NAME' => $opp_list[$row]->account_name,
-			'ACCOUNT_ID' => $opp_list[$row]->account_id,
-			'DATE_CLOSED' => $opp_list[$row]->date_closed,
-			'AMOUNT' => $opp_list[$row]->amount
-		);
-		
-		$list_form->assign("OPPORTUNITY", $opportunity_fields);
-	
-		
-		if($oddRow)
-		{
-			//todo move to themes
-			$list_form->assign("ROW_COLOR", 'oddListRow');
-		}
-		else
-		{
-			//todo move to themes
-			$list_form->assign("ROW_COLOR", 'evenListRow');
-		}
-		$oddRow = !$oddRow;
-		
-		// Put the rows in.
-		$list_form->parse("main.row");
-	}
-}
-$list_form->parse("main");
+$where = "opportunities.sales_stage <> 'Closed Won' AND opportunities.sales_stage <> 'Closed Lost' AND opportunities.assigned_user_id='".$current_user->id."'";
 
-echo get_form_header($current_module_strings['LBL_TOP_OPPORTUNITIES'], "", false);
-$list_form->out("main");
-echo get_form_footer();
 
-echo "</td></tr>\n</table>\n";
+$ListView = new ListView();
+$ListView->initNewXTemplate( 'modules/Opportunities/ListViewTop.html',$current_module_strings);
+$ListView->setHeaderTitle($current_module_strings['LBL_TOP_OPPORTUNITIES'] );
+$ListView->setQuery($where, 5, "amount * 1 DESC", "OPPORTUNITY");
+$ListView->processListView($seedOpportunity, "main", "OPPORTUNITY");
 
 ?>

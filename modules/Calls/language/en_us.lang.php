@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Calls/language/en_us.lang.php,v 1.2 2004/08/31 05:07:25 rakeebk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Calls/language/en_us.lang.php,v 1.3 2004/10/06 09:02:05 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -61,7 +61,7 @@ $mod_strings = Array(
 'LNK_NEW_TASK'=>'New Task',
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
 'NTC_REMOVE_INVITEE'=>'Are you sure you want to remove this invitee from the call?',
-'LBL_INVITEES'=>'Invitees',
+'LBL_INVITEE'=>'Invitees',
 );
 
 ?>

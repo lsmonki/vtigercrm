@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Save.php,v 1.1 2004/08/17 15:04:13 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Save.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('modules/Contacts/Contact.php');
@@ -36,10 +39,7 @@ else {
 		if(isset($_REQUEST[$field]))
 		{
 			$focus->$field = $_REQUEST[$field];
-			if(get_magic_quotes_gpc() == 1)
-			{
-				$focus->$field = stripslashes($focus->$field);
-			}
+			
 		}
 	}
 	
@@ -49,10 +49,7 @@ else {
 		{
 			$value = $_REQUEST[$field];
 			$focus->$field = $value;
-			if(get_magic_quotes_gpc() == 1)
-			{
-				$focus->$field = stripslashes($focus->$field);
-			}
+			
 		}
 	}
 	if (!isset($_REQUEST['email_opt_out'])) $focus->email_opt_out = 'off';

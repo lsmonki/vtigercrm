@@ -13,13 +13,16 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Cases/SubPanelView.php,v 1.1 2004/08/17 15:03:56 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Cases/SubPanelView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
-
+require_once("include/ListView/ListView.php");
 global $app_strings;
 //we don't want the parent module's string file, but rather the string file specifc to this subpanel
 global $current_language;
@@ -54,57 +57,11 @@ if ($currentModule == 'Accounts') $button .= "<td><input title='".$app_strings['
 elseif ($currentModule == 'Contacts') $button .= "<td><input title='".$app_strings['LBL_SELECT_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_SELECT_BUTTON_KEY']."' type='button' class='button' value='  ".$app_strings['LBL_SELECT_BUTTON_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Cases&action=Popup&html=Popup_picker&form=ContactDetailView&form_submit=true&query=true&account_id=$focus->account_id&account_name=".urlencode($focus->account_name)."\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
 else $button .= "<td><input title='".$app_strings['LBL_SELECT_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_SELECT_BUTTON_KEY']."' type='button' class='button' value='  ".$app_strings['LBL_SELECT_BUTTON_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Cases&action=Popup&html=Popup_picker&form=DetailView&form_submit=true&query=true&account_id=$focus->account_id&account_name=".urlencode($focus->account_name)."\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
 $button .= "</tr></form></table>\n";
+$ListView = new ListView();
+$ListView->initNewXTemplate( 'modules/Cases/SubPanelView.html',$current_module_strings);
+$ListView->setHeaderTitle($current_module_strings['LBL_MODULE_NAME'] );
+$ListView->setHeaderText($button);
+$ListView->processListView($focus_list, "main", "CASE");
 
-// Stick the form header out there.
-echo get_form_header($current_module_strings['LBL_MODULE_NAME'], $button, false);
-
-$xtpl=new XTemplate ('modules/Cases/SubPanelView.html');
-$xtpl->assign("MOD", $current_module_strings);
-$xtpl->assign("APP", $app_strings);
-
-$xtpl->assign("IMAGE_PATH", $image_path);
-$xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=$focus->id");
-
-$oddRow = true;
-foreach($focus_list as $case)
-{
-	$fields = array(
-		'NUMBER' => $case->number,
-		'ACCOUNT_NAME' => $case->account_name,
-		'ACCOUNT_ID' => $case->account_id,
-		'ID' => $case->id,
-		'NAME' => $case->name,
-		'STATUS' => $case->status
-	);
-	
-	$xtpl->assign("CASE", $fields);
-	
-	if($oddRow)
-    {
-        //todo move to themes
-		$xtpl->assign("ROW_COLOR", 'oddListRow');
-    }
-    else
-    {
-        //todo move to themes
-		$xtpl->assign("ROW_COLOR", 'evenListRow');
-    }
-    $oddRow = !$oddRow;
-
-
-
-
-
-
-
-	$xtpl->parse("main.row");
-// Put the rows in.
-}
-
-$xtpl->parse("main");
-$xtpl->out("main");
-
-// Stick on the form footer
-echo get_form_footer();
  
 ?>

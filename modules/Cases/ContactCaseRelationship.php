@@ -13,17 +13,21 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Cases/ContactCaseRelationship.php,v 1.1 2004/08/17 15:03:56 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Cases/ContactCaseRelationship.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 include_once('config.php');
 require_once('include/logging.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 
 // Contact is used to store customer information.
 class ContactCaseRelationship extends SugarBean {
 	var $log;
+	var $db;
 
 	// Stored fields
 	var $id;
@@ -49,6 +53,7 @@ class ContactCaseRelationship extends SugarBean {
 		
 	function ContactCaseRelationship() {
 		$this->log = LoggerManager::getLogger('ContactCaseRelationship');
+		$this->db = new PearDatabase();
 	}
 
 	function fill_in_additional_detail_fields()
@@ -56,9 +61,9 @@ class ContactCaseRelationship extends SugarBean {
 		if(isset($this->contact_id) && $this->contact_id != "")
 		{
 			$query = "SELECT first_name, last_name from contacts where id='$this->contact_id' AND deleted=0";
-			$result = mysql_query($query) or die("Error filling in additional detail fields: ".mysql_error());
+			$result = $this->db->query($query,true," Error filling in additional detail fields: ");
 			// Get the id and the name.
-			$row = mysql_fetch_assoc($result);
+			$row = $this->db->fetchByAssoc($result);
 	
 			if($row != null)
 			{
@@ -69,9 +74,9 @@ class ContactCaseRelationship extends SugarBean {
 		if(isset($this->case_id) && $this->case_id != "")
 		{
 			$query = "SELECT name from cases where id='$this->case_id' AND deleted=0";
-			$result = mysql_query($query) or die("Error filling in additional detail fields: ".mysql_error());
+			$result =$this->db->query($query,true," Error filling in additional detail fields: ");
 			// Get the id and the name.
-			$row = mysql_fetch_assoc($result);
+			 $row = $this->db->fetchByAssoc($result);
 	
 			if($row != null)
 			{

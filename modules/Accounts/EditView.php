@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/EditView.php,v 1.1 2004/08/17 15:02:56 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/EditView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -52,7 +55,7 @@ if(isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['
 if(isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
 $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
+$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ANNUAL_REVENUE", $focus->annual_revenue);
 $xtpl->assign("BILLING_ADDRESS_STREET", $focus->billing_address_street);
 $xtpl->assign("BILLING_ADDRESS_CITY", $focus->billing_address_city);
@@ -87,7 +90,7 @@ $xtpl->assign("ACCOUNT_TYPE", $focus->account_type);
 $xtpl->assign("WEBSITE", $focus->website);
 
 if ($focus->assigned_user_id == '' && (!isset($focus->id) || $focus->id=0)) $focus->assigned_user_id = $current_user->id; 
-$xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(), $focus->assigned_user_id));
+$xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active", $focus->assigned_user_id), $focus->assigned_user_id));
 $xtpl->assign("ACCOUNT_TYPE_OPTIONS", get_select_options($app_list_strings['account_type_dom'], $focus->account_type));
 $xtpl->assign("INDUSTRY_OPTIONS", get_select_options($app_list_strings['industry_dom'], $focus->industry));
 

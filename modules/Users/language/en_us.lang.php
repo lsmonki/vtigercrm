@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.2 2004/08/31 05:27:34 rakeebk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.4 2004/10/06 09:02:05 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -84,7 +84,8 @@ $mod_strings = Array(
 'LBL_LOGIN_HISTORY_BUTTON_TITLE'=>'Login History [Alt+H]',
 'LBL_LOGIN_HISTORY_BUTTON_KEY'=>'H',
 'LBL_LOGIN_HISTORY_BUTTON_LABEL'=>'Login History',
-
+'LBL_LOGIN_HISTORY_TITLE'=>'Users: Login History',
+'LBL_RESET_PREFERENCES'=>'Reset To Default Preferences',
 
 'LBL_CHANGE_PASSWORD'=>'Change Password',
 'LBL_OLD_PASSWORD'=>'Old Password:',

@@ -13,14 +13,17 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.1 2004/08/17 15:02:56 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Opportunities/Opportunity.php');
@@ -32,6 +35,8 @@ require_once('modules/Emails/Email.php');
 // Account is used to store account information.
 class Account extends SugarBean {
 	var $log;
+	var $db;
+
 
 	// Stored fields
 	var $date_entered;
@@ -121,13 +126,18 @@ class Account extends SugarBean {
 		"website");
 
 	// This is used to retrieve related fields from form posts.
-	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id');
+	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id' );
 
 	// This is the list of fields that are in the lists.
-	var $list_fields = Array('id', 'name', 'website', 'phone_office', 'billing_address_city', 'assigned_user_name', 'assigned_user_id');
+	var $list_fields = Array('id', 'name', 'website', 'phone_office', 'billing_address_city', 'assigned_user_name', 'assigned_user_id', 'billing_address_state');
+
+	// This is the list of fields that are required.
+	var $required_fields =  array("name"=>1);
 
 	function Account() {
-		$this->log = LoggerManager::getLogger('account');
+		$this->log =LoggerManager::getLogger('account');
+		$this->db = new PearDatabase();
+		
 	}
 
 	function create_tables () {
@@ -167,9 +177,9 @@ class Account extends SugarBean {
 		$query .=', deleted bool NOT NULL default 0';
 		$query .=', PRIMARY KEY ( id ) )';
 
-		$this->log->info($query);
+		
 
-		mysql_query($query);
+		$this->db->query($query);
 	//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
 
 	}
@@ -177,9 +187,9 @@ class Account extends SugarBean {
 	function drop_tables () {
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
-		$this->log->info($query);
+		
 
-		mysql_query($query);
+		$this->db->query($query);
 
 	//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
 
@@ -191,6 +201,9 @@ class Account extends SugarBean {
 	}
 
 	/** Returns a list of the associated accounts who are member orgs
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_member_accounts()
 	{
@@ -201,6 +214,9 @@ class Account extends SugarBean {
 	}
 
 	/** Returns a list of the associated contacts
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_contacts()
 	{
@@ -211,6 +227,9 @@ class Account extends SugarBean {
 	}
 
 	/** Returns a list of the associated opportunities
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_opportunities()
 	{
@@ -221,6 +240,9 @@ class Account extends SugarBean {
 	}
 
 	/** Returns a list of the associated cases
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_cases()
 	{
@@ -231,6 +253,9 @@ class Account extends SugarBean {
 	}
 
 	/** Returns a list of the associated tasks
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_tasks()
 	{
@@ -241,6 +266,9 @@ class Account extends SugarBean {
 	}
 
 	/** Returns a list of the associated notes
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_notes()
 	{
@@ -251,6 +279,9 @@ class Account extends SugarBean {
 	}
 
 	/** Returns a list of the associated meetings
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_meetings()
 	{
@@ -261,6 +292,9 @@ class Account extends SugarBean {
 	}
 
 	/** Returns a list of the associated calls
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_calls()
 	{
@@ -271,6 +305,9 @@ class Account extends SugarBean {
 	}
 
 	/** Returns a list of the associated emails
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_emails()
 	{
@@ -323,115 +360,115 @@ class Account extends SugarBean {
 	function set_account_opportunity_relationship($account_id, $opportunity_id)
 	{
 		$query = "insert into accounts_opportunities set id='".create_guid()."', opportunity_id='$opportunity_id', account_id='$account_id'";
-		mysql_query($query) or die("Error setting account to opportunity relationship: ".mysql_error());
+		$this->db->query($query,true,"Error setting account to opportunity relationship: ");
 	}
 
 	function clear_account_opportunity_relationship($account_id)
 	{
 		$query = "update accounts_opportunities set deleted=1 where account_id='$account_id' and deleted=0";
-		mysql_query($query) or die("Error clearing account to opportunity relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing account to opportunity relationship: ");
 	}
 
 	function set_account_case_relationship($account_id, $case_id)
 	{
 		$query = "update cases set account_id='$account_id' where id='$case_id'";
-		mysql_query($query) or die("Error setting account to case relationship: ".mysql_error());
+		$this->db->query($query,true,"Error setting account to case relationship: ");
 	}
 
 	function clear_account_case_relationship($account_id)
 	{
 		$query = "update cases set deleted=1 where account_id='$account_id' and deleted=0";
-		mysql_query($query) or die("Error clearing account to case relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing account to case relationship: ");
 	}
 
 	function set_account_contact_relationship($account_id, $contact_id)
 	{
 		$query = "insert into accounts_contacts set id='".create_guid()."', contact_id='$contact_id', account_id='$account_id'";
-		mysql_query($query) or die("Error setting account to contact relationship: ".mysql_error()."<BR>$query");
+		$this->db->query($query,true,"Error setting account to contact relationship: "."<BR>$query");
 	}
 
 	function clear_account_contact_relationship($account_id)
 	{
 		$query = "UPDATE accounts_contacts set deleted=1 where account_id='$account_id' and deleted=0";
-		mysql_query($query) or die("Error clearing account to contact relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing account to contact relationship: ");
 	}
 
 	function set_account_task_relationship($account_id, $task_id)
 	{
-		$query = "UPDATE tasks set parent_id='$account_id', parent_type='Account' where id='$task_id'";
-		mysql_query($query) or die("Error setting account to task relationship: ".mysql_error());
+		$query = "UPDATE tasks set parent_id='$account_id', parent_type='Accounts' where id='$task_id'";
+		$this->db->query($query,true,"Error setting account to task relationship: ");
 	}
 
 	function clear_account_task_relationship($account_id)
 	{
 		$query = "update tasks set parent_id='', parent_type='' where parent_id='$account_id' and deleted=0";
-		mysql_query($query) or die("Error clearing account to task relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing account to task relationship: ");
 	}
 
 	function set_account_note_relationship($account_id, $note_id)
 	{
-		$query = "UPDATE notes set parent_id='$account_id', parent_type='Account' where id='$note_id'";
-		mysql_query($query) or die("Error setting account to note relationship: ".mysql_error());
+		$query = "UPDATE notes set parent_id='$account_id', parent_type='Accounts' where id='$note_id'";
+		$this->db->query($query,true,"Error setting account to note relationship: ");
 	}
 
 	function clear_account_note_relationship($account_id)
 	{
 		$query = "update notes set parent_id='', parent_type='' where parent_id='$account_id' and deleted=0";
-		mysql_query($query) or die("Error clearing account to note relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing account to note relationship: ");
 	}
 
 	function set_account_meeting_relationship($account_id, $meeting_id)
 	{
-		$query = "UPDATE meetings set parent_id='$account_id', parent_type='Account' where id='$meeting_id'";
-		mysql_query($query) or die("Error setting account to meeting relationship: ".mysql_error());
+		$query = "UPDATE meetings set parent_id='$account_id', parent_type='Accounts' where id='$meeting_id'";
+		$this->db->query($query,true,"Error setting account to meeting relationship: ");
 	}
 
 	function clear_account_meeting_relationship($account_id)
 	{
 		$query = "update meetings set parent_id='', parent_type='' where parent_id='$account_id' and deleted=0";
-		mysql_query($query) or die("Error clearing account to meeting relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing account to meeting relationship: ");
 	}
 
 	function set_account_call_relationship($account_id, $call_id)
 	{
-		$query = "UPDATE calls set parent_id='$account_id', parent_type='Account' where id='$call_id'";
-		mysql_query($query) or die("Error setting account to call relationship: ".mysql_error());
+		$query = "UPDATE calls set parent_id='$account_id', parent_type='Accounts' where id='$call_id'";
+		$this->db->query($query,true,"Error setting account to call relationship: ");
 	}
 
 	function clear_account_call_relationship($account_id)
 	{
 		$query = "update calls set parent_id='', parent_type='' where parent_id='$account_id' and deleted=0";
-		mysql_query($query) or die("Error clearing account to call relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing account to call relationship: ");
 	}
 
 	function set_account_email_relationship($account_id, $email_id)
 	{
-		$query = "UPDATE emails set parent_id='$account_id', parent_type='Account' where id='$email_id'";
-		mysql_query($query) or die("Error setting account to email relationship: ".mysql_error());
+		$query = "UPDATE emails set parent_id='$account_id', parent_type='Accounts' where id='$email_id'";
+		$this->db->query($query,true,"Error setting account to email relationship: ");
 	}
 
 	function clear_account_email_relationship($account_id)
 	{
 		$query = "update emails set parent_id='', parent_type='' where parent_id='$account_id' and deleted=0";
-		mysql_query($query) or die("Error clearing account to email relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing account to email relationship: ");
 	}
 
 	function set_account_member_account_relationship($account_id, $member_id)
 	{
 		$query = "update accounts set parent_id='$account_id' where id='$member_id' and deleted=0";
-		mysql_query($query) or die("Error setting account to member account relationship: ".mysql_error());
+		$this->db->query($query,true,"Error setting account to member account relationship: ");
 	}
 
 	function clear_account_account_relationship($account_id)
 	{
 		$query = "update accounts set parent_id='' where parent_id='$account_id' and deleted=0";
-		mysql_query($query) or die("Error clearing account to account relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing account to account relationship: ");
 	}
 
 	function clear_account_member_account_relationship($account_id)
 	{
 		$query = "update accounts set parent_id='' where id='$account_id' and deleted=0";
-		mysql_query($query) or die("Error clearing account to member account relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing account to member account relationship: ");
 	}
 
 	function mark_relationships_deleted($id)
@@ -471,10 +508,10 @@ class Account extends SugarBean {
 		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
 
 		$query = "SELECT a1.name from accounts as a1, accounts as a2 where a1.id = a2.parent_id and a2.id = '$this->id' and a1.deleted=0";
-		$result = mysql_query($query) or die("Error filling in additional detail fields: ".mysql_error());
+		$result = $this->db->query($query,true," Error filling in additional detail fields: ");
 
 		// Get the id and the name.
-		$row = mysql_fetch_assoc($result);
+		$row = $this->db->fetchByAssoc($result);
 
 		if($row != null)
 		{
@@ -487,6 +524,61 @@ class Account extends SugarBean {
 
 		$this->remove_redundant_http();
 	}
+	function get_list_view_data(){
+		$temp_array = $this->get_list_view_array();
+		$temp_array["ENCODED_NAME"]=htmlspecialchars($this->name, ENT_QUOTES);	
+		return $temp_array;
+	}
+	/**
+		builds a generic search based on the query string using or
+		do not include any $this-> because this is called on without having the class instantiated
+	*/
+	function build_generic_where_clause ($the_query_string) {
+	
+	$where_clauses = Array();
+	$the_query_string = addslashes($the_query_string);
+	array_push($where_clauses, "name like '$the_query_string%'");
+	if (is_numeric($the_query_string)) {
+		array_push($where_clauses, "phone_alternate like '%$the_query_string%'");
+		array_push($where_clauses, "phone_fax like '%$the_query_string%'");
+		array_push($where_clauses, "phone_office like '%$the_query_string%'");
+	}
+	
+	$the_where = "";
+	foreach($where_clauses as $clause)
+	{
+		if($the_where != "") $the_where .= " or ";
+		$the_where .= $clause;
+	}
+	
+	
+	return $the_where;
+}
+
+	function create_export_query(&$order_by, &$where)
+        {
+                         $query = "SELECT
+				accounts.*,
+                                users.user_name as assigned_user_name
+                                FROM accounts
+                                LEFT JOIN users
+                                ON accounts.assigned_user_id=users.id ";
+
+                        $where_auto = " users.status='ACTIVE'
+                        AND accounts.deleted=0 ";
+
+                if($where != "")
+                        $query .= "where ($where) AND ".$where_auto;
+                else
+                        $query .= "where ".$where_auto;
+
+                if(!empty($order_by))
+                        $query .= " ORDER BY $order_by";
+
+                return $query;
+        }
+
+
 
 }
 

@@ -4,7 +4,7 @@
 // Description:	Configuration file for JpGraph library
 // Created: 	2004-03-27
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpg-config.inc,v 1.2 2004/08/19 06:48:29 gjayakrishnan Exp $
+// Ver:		$Id: jpg-config.inc,v 1.3 2004/10/06 09:02:03 jack Exp $
 //
 // License:	This code is released under QPL 1.0
 // Copyright (C) 2004 Johan Persson
@@ -36,7 +36,7 @@
 //   TTF_DIR   $SERVER_SYSTEMROOT/fonts/
 //
 //------------------------------------------------------------------------
-// DEFINE("CACHE_DIR","/tmp/jpgraph_cache/");
+//DEFINE("CACHE_DIR",$tmp_dir);
 // DEFINE("TTF_DIR","/usr/X11R6/lib/X11/fonts/truetype/");
 
 
@@ -51,8 +51,8 @@
 // Note: The default setting is to create a subdirectory in the 
 // directory from where the image script is executed and store all files
 // there. As ususal this directory must be writeable by the PHP process.
-DEFINE("CSIMCACHE_DIR","csimcache/"); 
-DEFINE("CSIMCACHE_HTTP_DIR","csimcache/");
+//DEFINE("CSIMCACHE_DIR","csimcache/"); 
+//DEFINE("CSIMCACHE_HTTP_DIR","csimcache/");
 
 //------------------------------------------------------------------------
 // Defines for font setup

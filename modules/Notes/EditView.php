@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -10,11 +10,14 @@
  * The Initial Developer of the Original Code is SugarCRM, Inc.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
- * Contributor(s): ______________________________________.
+ * Contributor(s): Xavier DUTOIT.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/EditView.php,v 1.1 2004/08/17 15:05:43 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Notes/EditView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description: TODO:  To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -33,13 +36,13 @@ if(isset($_REQUEST['record'])) {
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
-} 
+}
 
 
 //setting default flag value so due date and time not required
 if (!isset($focus->id)) $focus->date_due_flag = 'on';
 
-//needed when creating a new case with default values passed in 
+//needed when creating a new case with default values passed in
 if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) {
 	$focus->contact_name = $_REQUEST['contact_name'];
 }
@@ -58,6 +61,15 @@ if (isset($_REQUEST['parent_type'])) {
 elseif (!isset($focus->parent_type)) {
 	$focus->parent_type = $app_list_strings['record_type_default_key'];
 }
+/** BEGIN CONTRIBUTION
+* Date: 09/07/04
+* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+* All Rights Reserved.
+* Contributor(s): Xavier DUTOIT */
+if (isset($_REQUEST['filename']) && $_REQUEST['isDuplicate'] != 'true') {
+	$focus->filename = $_REQUEST['filename'];
+}
+/** END CONTRIBUTION */
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -74,21 +86,30 @@ if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST[
 if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
 if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
 $xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
+$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("ID", $focus->id);
-$xtpl->assign("PARENT_NAME", $focus->parent_name);	
-$xtpl->assign("PARENT_RECORD_TYPE", $focus->parent_type);	
-$xtpl->assign("PARENT_ID", $focus->parent_id);	
-$xtpl->assign("CONTACT_NAME", $focus->contact_name);	
-$xtpl->assign("CONTACT_PHONE", $focus->contact_phone);	
-$xtpl->assign("CONTACT_EMAIL", $focus->contact_email);	
-$xtpl->assign("CONTACT_ID", $focus->contact_id);	
+$xtpl->assign("PARENT_NAME", $focus->parent_name);
+$xtpl->assign("PARENT_RECORD_TYPE", $focus->parent_type);
+$xtpl->assign("PARENT_ID", $focus->parent_id);
+$xtpl->assign("CONTACT_NAME", $focus->contact_name);
+$xtpl->assign("CONTACT_PHONE", $focus->contact_phone);
+$xtpl->assign("CONTACT_EMAIL", $focus->contact_email);
+$xtpl->assign("CONTACT_ID", $focus->contact_id);
+/** BEGIN CONTRIBUTION
+* Date: 09/07/04
+* Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+* All Rights Reserved.
+* Contributor(s): Xavier DUTOIT */
+$xtpl->assign("FILENAME", $focus->filename);
+/** END CONTRIBUTION */
+$xtpl->assign("MAX_FILE_SIZE", $upload_maxsize);
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
 
+
 if (isset($focus->parent_type) && $focus->parent_type != "") {
-	$change_parent_button = "<input title='".$app_strings['LBL_CHANGE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_CHANGE_BUTTON_KEY']."' tabindex='3' type='button' class='button' value='".$app_strings['LBL_CHANGE_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=".$app_list_strings['record_type_module'][$focus->parent_type]."&action=Popup&html=Popup_picker&form=TasksEditView\",\"test\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";	
+	$change_parent_button = "<input title='".$app_strings['LBL_CHANGE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_CHANGE_BUTTON_KEY']."' tabindex='3' type='button' class='button' value='".$app_strings['LBL_CHANGE_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=\"+ document.EditView.parent_type.value + \"&action=Popup&html=Popup_picker&form=TasksEditView\",\"test\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
 	$xtpl->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
 }
 if ($focus->parent_type == "Account") $xtpl->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=".urlencode($focus->parent_name));

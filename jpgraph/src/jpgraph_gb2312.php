@@ -4,7 +4,7 @@
 // Description:	PHP4 Graph Plotting library. Chinese font conversions
 // Created: 	2003-05-30
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_gb2312.php,v 1.2 2004/08/19 06:48:29 gjayakrishnan Exp $
+// Ver:		$Id: jpgraph_gb2312.php,v 1.3 2004/10/06 09:02:04 jack Exp $
 //
 // License:	This code is released under QPL 1.0 
 // Copyright (C) 2001,2002,2003 Johan Persson 

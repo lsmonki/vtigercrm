@@ -1,0 +1,57 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Contacts/EditView.html,v 1.22 2004/07/16 04:04:42 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{APP.LBL_IMPORT_MODULE_NAME} {MOD.LBL_MODULE_NAME} {MOD.LBL_ERROR}</td>
+
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.sugarcrm.com/home/component/option,com_docman' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="formBorder"><img height='2' src='include/images/blank.gif'></div></td></tr></table>
+
+<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr> 
+	<td></td>
+	<td align="right">
+		<table cellpadding="0" cellspacing="5" border="0">
+		<tr>
+			<form enctype="multipart/form-data" name="Import" method="POST" action="index.php">
+			<input type="hidden" name="module" value="{MODULE}">
+			<input type="hidden" name="step" value="1">
+			<input type="hidden" name="action" value="Import">
+		</tr></table>
+	</td>
+	<td></td>
+</tr>
+</table> 
+<br>
+{MESSAGE}
+<br>
+<br>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+        <tr>
+        <td align="right">
+<input title="{MOD.LBL_TRY_AGAIN}" accessKey="" class="button" type="submit" name="button" value="{MOD.LBL_TRY_AGAIN}" ></td>
+ <td></td>
+</tr>
+</table>
+        </form>
+
+
+<!-- END: main -->

@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Cases/ContactCaseRelationshipEdit.php,v 1.1 2004/08/17 15:03:56 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Cases/ContactCaseRelationshipEdit.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -59,7 +62,7 @@ $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
 $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
 $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
 $xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
+$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $focus->id);
 $xtpl->assign("CONTACT", Array("NAME" => $focus->contact_name, "ID" => $focus->contact_id));
 $xtpl->assign("CASES", Array("NAME" => $focus->case_name, "ID" => $focus->case_id));

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/listview.php,v 1.5.2.1 2004/09/20 21:02:21 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/listview.php,v 1.6 2004/09/17 10:40:47 jack Exp $
  * Description:  Includes generic helper functions used throughout the application.
  ********************************************************************************/
 require_once('include/logging.php');

@@ -4,7 +4,7 @@
 // Description:	Line plot extension for JpGraph
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_line.php,v 1.2 2004/08/19 06:48:29 gjayakrishnan Exp $
+// Ver:		$Id: jpgraph_line.php,v 1.3 2004/10/06 09:02:04 jack Exp $
 //
 // License:	This code is released under QPL
 // Copyright (C) 2001,2002 Johan Persson
@@ -173,13 +173,17 @@ class LinePlot extends Plot{
 	$cord[] = $xt;
 	$cord[] = $yt;
 	$yt_old = $yt;
+	$xt_old = $xt;
+	$y_old = $this->coords[0][$startpoint];
 
 	$this->value->Stroke($img,$this->coords[0][$startpoint],$xt,$yt);
 
 	$img->SetColor($this->color);
 	$img->SetLineWeight($this->weight);
 	$img->SetLineStyle($this->line_style);
-	for( $pnts=$startpoint+1; $pnts<$numpoints; ++$pnts) {
+	$pnts=$startpoint+1;
+	$firstnonumeric = false;
+	while( $pnts < $numpoints ) {
 	    
 	    if( $exist_x ) $x=$this->coords[1][$pnts];
 	    else $x=$pnts+$textadj;
@@ -187,16 +191,34 @@ class LinePlot extends Plot{
 	    $yt = $yscale->Translate($this->coords[0][$pnts]);
 	    
 	    $y=$this->coords[0][$pnts];
-	    if( $this->step_style && is_numeric($y) ) {
-		$img->StyleLineTo($xt,$yt_old);
-		$img->StyleLineTo($xt,$yt);
-
-		$cord[] = $xt;
-		$cord[] = $yt_old;
-	
-		$cord[] = $xt;
-		$cord[] = $yt;
-
+	    if( $this->step_style ) {
+		// To handle null values within step style we need to record the
+		// first non numeric value so we know from where to start if the
+		// non value is '-'. 
+		if( is_numeric($y) ) {
+		    $firstnonumeric = false;
+		    if( is_numeric($y_old) ) {
+			$img->StyleLine($xt_old,$yt_old,$xt,$yt_old);
+			$img->StyleLine($xt,$yt_old,$xt,$yt);
+		    }
+		    elseif( $y_old == '-' ) {
+			$img->StyleLine($xt_first,$yt_first,$xt,$yt_first);
+			$img->StyleLine($xt,$yt_first,$xt,$yt);			
+		    }
+		    else {
+			$yt_old = $yt;
+			$xt_old = $xt;
+		    }
+		    $cord[] = $xt;
+		    $cord[] = $yt_old;
+		    $cord[] = $xt;
+		    $cord[] = $yt;
+		}
+		elseif( $firstnonumeric==false ) {
+		    $firstnonumeric = true;
+		    $yt_first = $yt_old;
+		    $xt_first = $xt_old;
+		}
 	    }
 	    else {
 		if( is_numeric($y) || (is_string($y) && $y != "-") ) {
@@ -216,8 +238,12 @@ class LinePlot extends Plot{
 		}
 	    }
 	    $yt_old = $yt;
+	    $xt_old = $xt;
+	    $y_old = $y;
 
 	    $this->StrokeDataValue($img,$this->coords[0][$pnts],$xt,$yt);
+
+	    ++$pnts;
 	}	
 
 	if( $this->filled  ) {

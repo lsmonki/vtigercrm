@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.1 2004/08/17 15:04:13 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -33,7 +36,7 @@ if(isset($_REQUEST['record'])) {
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
-} 
+}
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -47,17 +50,17 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
 $xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
+$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $focus->id);
-$xtpl->assign("ACCOUNT_NAME", $focus->account_name);	
-$xtpl->assign("ACCOUNT_ID", $focus->account_id);	
+$xtpl->assign("ACCOUNT_NAME", $focus->account_name);
+$xtpl->assign("ACCOUNT_ID", $focus->account_id);
 $xtpl->assign("LEAD_SOURCE", $app_list_strings['lead_source_dom'][$focus->lead_source]);
 $xtpl->assign("SALUTATION", $app_list_strings['salutation_dom'][$focus->salutation]);
 $xtpl->assign("FIRST_NAME", $focus->first_name);
 $xtpl->assign("LAST_NAME", $focus->last_name);
 $xtpl->assign("TITLE", $focus->title);
 $xtpl->assign("DEPARTMENT", $focus->department);
-if ($focus->birthdate == '0000-00-00') $xtpl->assign("BIRTHDATE", ''); 
+if ($focus->birthdate == '0000-00-00') $xtpl->assign("BIRTHDATE", '');
 else $xtpl->assign("BIRTHDATE", $focus->birthdate);
 if ($focus->do_not_call == 'on') $xtpl->assign("DO_NOT_CALL", "checked");
 $xtpl->assign("ASSIGNED_TO", $focus->assigned_user_name);
@@ -86,6 +89,8 @@ $xtpl->assign("ALT_ADDRESS_STATE", $focus->alt_address_state);
 $xtpl->assign("ALT_ADDRESS_POSTALCODE", $focus->alt_address_postalcode);
 $xtpl->assign("ALT_ADDRESS_COUNTRY", $focus->alt_address_country);
 $xtpl->assign("DESCRIPTION", $focus->description);
+$xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
+$xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
 $xtpl->parse("main");
 $xtpl->out("main");
 
@@ -94,7 +99,12 @@ echo "<BR>\n";
 // Now get the list of direct reports that match this one.
 $focus_list = & $focus->get_direct_reports();
 
-include('modules/Contacts/SubPanelView.php');
+include('modules/Contacts/SubPanelViewContactsAndUsers.php');
+$SubPanel = new SubPanelViewContactsAndUsers();
+$SubPanel->setFocus($focus);
+$SubPanel->setContactsList($focus_list);
+$SubPanel->setHideUsers(true);
+$SubPanel->ProcessSubPanelListView( 'modules/Contacts/SubPanelViewDirectReport.html',$mod_strings, $action);
 
 echo "<BR>\n";
 

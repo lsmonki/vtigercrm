@@ -12,7 +12,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Id: style.css,v 1.4 2004/08/19 05:58:45 gjayakrishnan Exp $
+ * $Id: style.css,v 1.5 2004/10/06 09:02:05 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -72,6 +72,7 @@ LI { FONT-WEIGHT: normal; FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: Verdana, 
 TEXTAREA { FONT-SIZE: 9pt; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif}
 INPUT { FONT-SIZE: 9pt; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif}
 INPUT.button { BORDER-RIGHT: #336699 1px solid; BORDER-TOP: #336699 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 8pt; BORDER-LEFT: #550066 1px solid; CURSOR: hand; COLOR: #336699; BORDER-BOTTOM: #550066 1px solid; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #CCCCCC}
+INPUT.button_file { BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 8pt; BORDER-LEFT: 1px solid;  COLOR: #336699; BORDER-BOTTOM: 1px solid; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; }
 SELECT { FONT-SIZE: 9pt; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif}
 
 .currentTab {

@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/ListView.php,v 1.1 2004/08/17 15:04:13 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/ListView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -22,7 +25,7 @@ require_once("data/Tracker.php");
 require_once('modules/Contacts/Contact.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
-require_once('include/listview.php');
+require_once('include/ListView/ListView.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -46,7 +49,7 @@ if(isset($_REQUEST['query']))
 	// we have a query
 	if (isset($_REQUEST['first_name'])) $first_name = $_REQUEST['first_name'];
 	if (isset($_REQUEST['last_name'])) $last_name = $_REQUEST['last_name'];
-	if (isset($_REQUEST['companyName'])) $account_name = $_REQUEST['companyName'];
+	if (isset($_REQUEST['account_name'])) $account_name = $_REQUEST['account_name'];
 	if (isset($_REQUEST['lead_source'])) $lead_source = $_REQUEST['lead_source'];
 	if (isset($_REQUEST['do_not_call'])) $do_not_call = $_REQUEST['do_not_call'];
 	if (isset($_REQUEST['phone'])) $phone = $_REQUEST['phone'];
@@ -60,33 +63,46 @@ if(isset($_REQUEST['query']))
 	if (isset($_REQUEST['address_postalcode'])) $address_postalcode = $_REQUEST['address_postalcode'];
 	if (isset($_REQUEST['address_country'])) $address_country = $_REQUEST['address_country'];
 	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
+	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
 
-	
+
 	$where_clauses = Array();
 
-	if(isset($last_name) && $last_name != "") array_push($where_clauses, "last_name like '$last_name%'");
-	if(isset($first_name) && $first_name != "")	array_push($where_clauses, "first_name like '$first_name%'");
+
+	if(isset($last_name) && $last_name != "") array_push($where_clauses, "contacts.last_name like '$last_name%'");
+	if(isset($first_name) && $first_name != "")	array_push($where_clauses, "contacts.first_name like '$first_name%'");
 	if(isset($account_name) && $account_name != "")	array_push($where_clauses, "accounts.name like '$account_name%'");
-	if(isset($lead_source) && $lead_source != "") array_push($where_clauses, "lead_source = '$lead_source'");
-	if(isset($do_not_call) && $do_not_call != "") array_push($where_clauses, "do_not_call = '$do_not_call'");
-	if(isset($phone) && $phone != "") array_push($where_clauses, "(phone_home like '%$phone%' OR phone_mobile like '%$phone%' OR phone_work like '%$phone%' OR phone_other like '%$phone%' OR contacts.phone_fax like '%$phone%' OR assistant_phone like '%$phone%')");
+	if(isset($lead_source) && $lead_source != "") array_push($where_clauses, "contacts.lead_source = '$lead_source'");
+	if(isset($do_not_call) && $do_not_call != "") array_push($where_clauses, "contacts.do_not_call = '$do_not_call'");
+	if(isset($phone) && $phone != "") array_push($where_clauses, "(contacts.phone_home like '%$phone%' OR contacts.phone_mobile like '%$phone%' OR contacts.phone_work like '%$phone%' OR contacts.phone_other like '%$phone%' OR contacts.phone_fax like '%$phone%' OR contacts.assistant_phone like '%$phone%')");
 	if(isset($email) && $email != "") array_push($where_clauses, "(contacts.email1 like '$email%' OR contacts.email2 like '$email%')");
-	if(isset($yahoo_id) && $yahoo_id != "") array_push($where_clauses, "yahoo_id like '$yahoo_id%'");
-	if(isset($assistant) && $assistant != "") array_push($where_clauses, "assistant like '$assistant%'");
-	if(isset($email_opt_out) && $email_opt_out != "") array_push($where_clauses, "email_opt_out = '$email_opt_out'");
-	if(isset($address_street) && $address_street != "") array_push($where_clauses, "(primary_address_street like '$address_street%' OR alt_address_street like '$address_street%')");
-	if(isset($address_city) && $address_city != "") array_push($where_clauses, "(primary_address_city like '$address_city%' OR alt_address_city like '$address_city%')");
-	if(isset($address_state) && $address_state != "") array_push($where_clauses, "(primary_address_state like '$address_state%' OR alt_address_state like '$address_state%')");
-	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "(primary_address_postalcode like '$address_postalcode%' OR alt_address_postalcode like '$address_postalcode%')");
-	if(isset($address_country) && $address_country != "") array_push($where_clauses, "(primary_address_country like '$address_country%' OR alt_address_country like '$address_country%')");
+	if(isset($yahoo_id) && $yahoo_id != "") array_push($where_clauses, "contacts.yahoo_id like '$yahoo_id%'");
+	if(isset($assistant) && $assistant != "") array_push($where_clauses, "contacts.assistant like '$assistant%'");
+	if(isset($email_opt_out) && $email_opt_out != "") array_push($where_clauses, "contacts.email_opt_out = '$email_opt_out'");
+	if(isset($address_street) && $address_street != "") array_push($where_clauses, "(contacts.primary_address_street like '$address_street%' OR contacts.alt_address_street like '$address_street%')");
+	if(isset($address_city) && $address_city != "") array_push($where_clauses, "(contacts.primary_address_city like '$address_city%' OR contacts.alt_address_city like '$address_city%')");
+	if(isset($address_state) && $address_state != "") array_push($where_clauses, "(contacts.primary_address_state like '$address_state%' OR contacts.alt_address_state like '$address_state%')");
+	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "(contacts.primary_address_postalcode like '$address_postalcode%' OR contacts.alt_address_postalcode like '$address_postalcode%')");
+	if(isset($address_country) && $address_country != "") array_push($where_clauses, "(contacts.primary_address_country like '$address_country%' OR contacts.alt_address_country like '$address_country%')");
 	if(isset($current_user_only) && $current_user_only != "") array_push($where_clauses, "contacts.assigned_user_id='$current_user->id'");
-	
+
 	$where = "";
 	foreach($where_clauses as $clause)
 	{
 		if($where != "")
 		$where .= " and ";
 		$where .= $clause;
+	}
+
+	if (!empty($assigned_user_id)) {
+		if (!empty($where)) {
+			$where .= " AND ";
+		}
+		$where .= "contacts.assigned_user_id IN(";
+		foreach ($assigned_user_id as $key => $val) {
+			$where .= "'$val'";
+			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
+		}
 	}
 
 	$log->info("Here is the where clause for the list view: $where");
@@ -98,17 +114,18 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form=new XTemplate ('modules/Contacts/SearchForm.html');
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
-	
+
 	if (isset($first_name)) $search_form->assign("FIRST_NAME", $_REQUEST['first_name']);
 	if (isset($last_name)) $search_form->assign("LAST_NAME", $_REQUEST['last_name']);
 	if (isset($companyName)) $search_form->assign("COMPANY_NAME", $_REQUEST['companyName']);
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	
+
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 
 	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
-	
-	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') { 
+
+	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
+		if(isset($account_name)) $search_form->assign("ACCOUNT_NAME", $account_name);
 		if(isset($date_entered)) $search_form->assign("DATE_ENTERED", $date_entered);
 		if(isset($date_modified)) $search_form->assign("DATE_MODIFIED", $date_modified);
 		if(isset($modified_user_id)) $search_form->assign("MODIFIED_USER_ID", $modified_user_id);
@@ -124,8 +141,11 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		if(isset($address_postalcode)) $search_form->assign("ADDRESS_POSTALCODE", $address_postalcode);
 		if(isset($address_country)) $search_form->assign("ADDRESS_COUNTRY", $address_country);
 
-		if (isset($lead_source)) $search_form->assign("LEAD_SOURCE_OPTIONS", get_select_options($app_list_strings['lead_source_dom'], $lead_source));
-		else $search_form->assign("LEAD_SOURCE_OPTIONS", get_select_options($app_list_strings['lead_source_dom'], ''));
+		if (isset($lead_source)) $search_form->assign("LEAD_SOURCE_OPTIONS", get_select_options_with_id($app_list_strings['lead_source_dom'], $lead_source));
+		else $search_form->assign("LEAD_SOURCE_OPTIONS", get_select_options_with_id($app_list_strings['lead_source_dom'], ''));
+
+		if (!empty($assigned_user_id)) $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), $assigned_user_id));
+		else $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), ''));
 
 		$search_form->parse("advanced");
 		$search_form->out("advanced");
@@ -137,5 +157,10 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	echo get_form_footer();
 	echo "\n<BR>\n";
 }
-listView($current_module_strings['LBL_LIST_FORM_TITLE'] , "CONTACT", 'modules/Contacts/ListView.html', $seedContact, "first_name, last_name");
+
+$ListView = new ListView();
+$ListView->initNewXTemplate( 'modules/Contacts/ListView.html',$current_module_strings);
+$ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE'] );
+$ListView->setQuery($where, "", "first_name, last_name", "CONTACT");
+$ListView->processListView($seedContact, "main", "CONTACT");
 ?>

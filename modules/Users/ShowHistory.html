@@ -10,45 +10,50 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-<tr>
-    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Users.gif" border="0"></td>
-    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_USER}  {FIRST_NAME} {LAST_NAME} ({USER_NAME})</td>
-	<td nowrap class='bodySmall' align='right'>[ <A href={PRINT_URL}>{APP.LNK_PRINT}</A> ]</td>
-	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
-</tr>
-<tr><td colspan="4"><div class="hline"><img height='2' src='include/images/blank.gif'></div></td></tr></table>
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+<!-- BEGIN: list_nav_row -->
+	<tr height="20">
+		<td COLSPAN="11" class="listFormHeaderLinks" align="right">
+<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>&nbsp;</td>
+<td align="right">{START_LINK}&nbsp;&nbsp;{PREVIOUS_LINK}&nbsp;&nbsp;
+                {NEXT_LINK}&nbsp;&nbsp;{END_LINK}&nbsp;&nbsp; {START_RECORD} - {END_RECORD} {APP.LBL_LIST_OF} {ROW_COUNT}&nbsp;&nbsp;</td></table>
 
-<table width="100%" cellpadding="0" cellspacing="0" border="0">
-<form name="DetailView" method="POST" action="index.php">
-<tbody><tr>
-	  <td>
-       <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-		<td class="formHeader" vAlign="top" align="left" height="20"> 
-         <img height="5" src="{IMAGE_PATH}/left_arc.gif" width="5" border="0"></td>
-
-        <td class="formHeader" vAlign="middle" align="left" background="{IMAGE_PATH}/header_tile.gif" noWrap width="100%" height="20">{MOD.LBL_LOGIN_HISTORY_BUTTON_LABEL}</td>
-        <td  class="formHeader" vAlign="top" align="right" height="20">
-	  	  <img height="5" src="{IMAGE_PATH}/right_arc.gif" width="5" border="0"></td>
-		</tr></tbody></table>
-      </td>	
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
-	<td>
-			<input type="hidden" name="module" value="Users">
-			<input type="hidden" name="record" value="{ID}">
-			<input type="hidden" name="action">
-			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
-			<input type="hidden" name="return_id" value="{RETURN_ID}">
-
-     		       <input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
-<td width='100%'><img height='1' src='include/images/blank.gif'></td>
-
-	  </tr><tr>
- 	  <td colspan="5" width="100%" class="formHeader"><img width="100%" height="2" src="themes/Amazon/images//blank.gif"></td>
+	</td>
+	</tr>
+<!-- END: list_nav_row -->
+	<tr><td COLSPAN="11" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+	<tr height="20" class="moduleListTitle">
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="30%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}user_name" class="listFormHeaderLinks">{APP.LBL_LIST_USER_NAME}{user_name_arrow}</a></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="15%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}user_ip" class="listFormHeaderLinks">{APP.LBL_LIST_USERIP}{user_ip_arrow}</a></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="30%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}login_time" class="listFormHeaderLinks">{APP.LBL_LIST_SIGNIN}{login_time_arrow}</a></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="15%" class="moduleListTitle" NOWRAP>&nbsp;<a href="{ORDER_BY}logout_time" class="listFormHeaderLinks">{APP.LBL_LIST_SIGNOUT}{logout_time_arrow}</a></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+		<td width="10%" class="moduleListTitle" NOWRAP>&nbsp;{APP.LBL_LIST_STATUS}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
 	  </tr>
-</form>
-</tbody></table>
+	<tr><td COLSPAN="11" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
 
+<!-- BEGIN: row -->
+<tr height=20 class={ROW_COLOR}>
+		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;">{LOGIN.USER_NAME}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;">{LOGIN.USER_IP}</td>
+
+
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;">{LOGIN.LOGIN_TIME}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;">{LOGIN.LOGOUT_TIME}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap>{LOGIN.STATUS}</td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+</tr>
+<!-- END: row -->
+<tr><td COLSPAN="7">
 <!-- END: main -->
 

@@ -53,12 +53,8 @@ if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $xtpl->assign("YAHOO_MES
 $xtpl->parse("main");
 $xtpl->out("main");
 
-if (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
-	if ($focus->theme != '') $xtpl->assign("THEME", get_theme_display($focus->theme));
-	else $xtpl->assign("THEME", get_theme_display($default_theme)." <em>(default)</em>");
-	if ($focus->language != '') $xtpl->assign("LANGUAGE", get_language_dispay($focus->language));
-	else $xtpl->assign("LANGUAGE", get_language_dispay($default_language)." <em>(default)</em>");
-	if ($focus->is_admin == 'on') $xtpl->assign("IS_ADMIN", "checked");
+if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $focus->is_admin == 'on') {
+	$xtpl->assign("IS_ADMIN", "checked");
 	$xtpl->parse("user_settings");
 	$xtpl->out("user_settings");
 }
@@ -78,5 +74,5 @@ foreach($_POST as $name=>$value)
       <td class="formHeader">Customize Tabs </td>
     </tr>
   </table>
-<br><b><center>Tab Menu Updated! go to '<a href="index.php?module=Users&action=DetailView&record=<?php echo $focus->id ?>">My Account</a>'</center></b><br><br>
+<br><b><center>Tab Menu Updated! kindly go to '<a href="index.php?module=Users&action=DetailView&record=<?php echo $focus->id ?>">My Account</a> to view the changes'</center></b><br><br>
 

@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.1 2004/08/17 15:06:40 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -52,7 +55,7 @@ if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST[
 if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
 if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
 $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
+$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $focus->id);
 $xtpl->assign("USER_NAME", $focus->user_name);
 $xtpl->assign("FIRST_NAME", $focus->first_name);
@@ -77,30 +80,26 @@ $xtpl->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
 $xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
 $xtpl->assign("DESCRIPTION", $focus->description);
 
-$xtpl->assign("THEME_OPTIONS", get_theme_options($focus->theme));
-$all_languages = array_merge(array(''=>'--Default--'), get_languages());
-$xtpl->assign("LANGUAGE_OPTIONS", get_select_options_with_id($all_languages, $focus->language));
-
 if (is_admin($current_user)) {
 	$status  = "<td width='20%' class='dataLabel'><FONT class='required'>".$app_strings['LBL_REQUIRED_SYMBOL']."</FONT>".$mod_strings['LBL_STATUS']."</td>\n";
 	$status .= "<td width='30%'><select name='status' tabindex='1'";
-	if (isset($default_user_name) 
-		&& $default_user_name != "" 
+	if (isset($default_user_name)
+		&& $default_user_name != ""
 		&& $default_user_name == $focus->user_name
-		&& isset($lock_default_user_name) 
+		&& isset($lock_default_user_name)
 		&& $lock_default_user_name == true ) {
 		$status .= " disabled ";
 	}
 	$status .= ">";
-	$status .= get_select_options($app_list_strings['user_status_dom'], $focus->status);
+	$status .= get_select_options_with_id($app_list_strings['user_status_dom'], $focus->status);
 	$status .= "</select></td>\n";
 	$xtpl->assign("USER_STATUS_OPTIONS", $status);
 }
 
-if (isset($default_user_name) 
-	&& $default_user_name != "" 
+if (isset($default_user_name)
+	&& $default_user_name != ""
 	&& $default_user_name == $focus->user_name
-	&& isset($lock_default_user_name) 
+	&& isset($lock_default_user_name)
 	&& $lock_default_user_name == true ) {
 	$status .= " disabled ";
 	$xtpl->assign("DISABLED", "disabled");

@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/DetailView.php,v 1.1 2004/08/17 15:02:56 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/DetailView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -48,7 +51,7 @@ $xtpl->assign("APP", $app_strings);
 
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);
-$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
+$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 if ($focus->annual_revenue != '') $xtpl->assign("ANNUAL_REVENUE", $language['LBL_CURRENCY_SYMBOL'].$focus->annual_revenue);
 $xtpl->assign("BILLING_ADDRESS_STREET", $focus->billing_address_street);
 $xtpl->assign("BILLING_ADDRESS_CITY", $focus->billing_address_city);
@@ -80,6 +83,8 @@ $xtpl->assign("SIC_CODE", $focus->sic_code);
 $xtpl->assign("TICKER_SYMBOL", $focus->ticker_symbol);
 $xtpl->assign("ACCOUNT_TYPE", $app_list_strings['account_type_dom'][$focus->account_type]);
 if ($focus->website != '') $xtpl->assign("WEBSITE", $focus->website);
+$xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
+$xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
 
 $xtpl->parse("main");
 $xtpl->out("main");
@@ -89,7 +94,12 @@ echo "<BR>\n";
 // Now get the list of contacts that match this one.
 $focus_list = & $focus->get_contacts();
 
-include('modules/Contacts/SubPanelView.php');
+include('modules/Contacts/SubPanelViewContactsAndUsers.php');
+$SubPanel = new SubPanelViewContactsAndUsers();
+$SubPanel->setFocus($focus);
+$SubPanel->setHideUsers(true);
+$SubPanel->ProcessSubPanelListView('modules/Contacts/SubPanelViewAccounts.html',$mod_strings, $action);
+
 
 echo "<BR>\n";
 

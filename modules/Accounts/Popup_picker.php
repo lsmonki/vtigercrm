@@ -13,10 +13,13 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Popup_picker.php,v 1.1 2004/08/17 15:02:56 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Popup_picker.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  This file is used for all popups on this module
  * The popup_picker.html file is used for generating a list from which to find and 
  * choose one instance.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 global $theme;
@@ -24,6 +27,7 @@ require_once('modules/Accounts/Account.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('XTemplate/xtpl.php');
+require_once('include/ListView/ListView.php');
 global $mod_strings;
 global $app_strings;
 
@@ -65,102 +69,6 @@ if(isset($_REQUEST['query']))
 	$log->info("Here is the where clause for the list view: $where");
 
 }
-
-$current_offset = 0;
-if(isset($_REQUEST['current_offset']))
-    $current_offset = $_REQUEST['current_offset'];
-
-$response = $seedAccount->get_list("name", $where, $current_offset);
-
-$account_list = $response['list'];
-$row_count = $response['row_count'];
-$next_offset = $response['next_offset'];
-$previous_offset = $response['previous_offset'];
-
-$start_record = $current_offset + 1;
-
-// Set the start row to 0 if there are no rows (adding one looks bad)
-if($row_count == 0)
-    $start_record = 0;
-
-$end_record = $start_record + $list_max_entries_per_page;
-
-// back up the the last page.
-if($end_record > $row_count+1)
-{
-    $end_record = $row_count+1;
-}
-
-// Deterime the start location of the last page
-$number_pages = floor(($row_count - 1)  / $list_max_entries_per_page);
-$last_page_offset = $number_pages * $list_max_entries_per_page;
-$contactList = $response['list'];
-$row_count = $response['row_count'];
-$next_offset = $response['next_offset'];
-$previous_offset = $response['previous_offset'];
-
-$start_record = $current_offset + 1;
-
-// Set the start row to 0 if there are no rows (adding one looks bad)
-if($row_count == 0)
-    $start_record = 0;
-
-$end_record = $start_record + $list_max_entries_per_page;
-
-// back up the the last page.
-if($end_record > $row_count+1)
-{
-    $end_record = $row_count+1;
-}
-
-// Deterime the start location of the last page
-if($row_count == 0)
-	$number_pages = 0;
-else
-	$number_pages = floor(($row_count - 1) / $list_max_entries_per_page);
-
-$last_page_offset = $number_pages * $list_max_entries_per_page;
-
-
-// Create the base URL without the current offset.
-// Check to see if the current offset is already there
-// If not, add it to the end.
-
-// All of the other values should use a regular expression search
-$base_URL = $_SERVER['REQUEST_URI'].'?'.$_SERVER['QUERY_STRING']."&current_offset=";
-$start_URL = $base_URL."0";
-$previous_URL  = $base_URL.$previous_offset;
-$next_URL  = $base_URL.$next_offset;
-$end_URL  = $base_URL.$last_page_offset;
-
-$sort_URL_base = $base_URL.$current_offset."&sort_order=";
-
-$log->debug("Offsets: (start, previous, next, last)(0, $previous_offset, $next_offset, $last_page_offset)");
-
-if(0 == $current_offset)
-    $start_link = $app_strings['LNK_LIST_START'];
-else
-    $start_link = "<a href=\"$start_URL\" class=\"listFormHeaderLinks\">".$app_strings['LNK_LIST_START']."</a>";
-
-if($previous_offset < 0)
-    $previous_link = $app_strings['LNK_LIST_PREVIOUS'];
-else
-    $previous_link = "<a href=\"$previous_URL\" class=\"listFormHeaderLinks\">".$app_strings['LNK_LIST_PREVIOUS']."</a>";
-
-if($next_offset >= $end_record)
-    $next_link = $app_strings['LNK_LIST_NEXT'];
-else
-    $next_link = "<a href=\"$next_URL\" class=\"listFormHeaderLinks\">".$app_strings['LNK_LIST_NEXT']."</a>";
-
-if($last_page_offset <= $current_offset)
-    $end_link = $app_strings['LNK_LIST_END'];
-else
-    $end_link = "<a href=\"$end_URL\" class=\"listFormHeaderLinks\">".$app_strings['LNK_LIST_END']."</a>";
-
-    
-    
-    
-    
     
     
     
@@ -263,45 +171,18 @@ $form->out("main.SearchHeaderEnd");
 $form->reset("main.SearchHeader");
 $form->reset("main.SearchHeaderEnd");
 
-// Stick the form header out there.
-echo get_form_header($mod_strings['LBL_LIST_FORM_TITLE'], $button, false);
-
-$oddRow = true;
-foreach($account_list as $account)
-{
-
-    if($oddRow)
-    {
-        //todo move to themes
-        $class = '"oddListRow"';
-    }
-    else
-    {
-        //todo move to themes
-        $class = '"evenListRow"';
-    }
-    $oddRow = !$oddRow;
-
-    $account_details = Array("ID"=>$account->id,
-    	"NAME"=>$account->name,
-    	"ENCODED_NAME"=>htmlspecialchars($account->name, ENT_QUOTES),
-    	"BILLING_ADDRESS_CITY"=>$account->billing_address_city);
-	$form->assign("ACCOUNT", $account_details);
-	$form->assign("CLASS", $class);
-    $form->parse("main.row");	
-}
-
-$form->assign("START_RECORD", $start_record);
-$form->assign("END_RECORD", $end_record-1);
-$form->assign("RECORD_COUNT", $row_count);
-$form->assign("START_LINK", $start_link);
-$form->assign("PREVIOUS_LINK", $previous_link);
-$form->assign("NEXT_LINK", $next_link);
-$form->assign("END_LINK", $end_link);
 
 
-$form->parse("main");
-$form->out("main");
+
+
+$ListView = new ListView();
+$ListView->setXTemplate($form);
+$ListView->setHeaderTitle($mod_strings['LBL_LIST_FORM_TITLE']);
+$ListView->setHeaderText($button);
+$ListView->setQuery($where, "", "name", "ACCOUNT");
+$ListView->setModStrings($mod_strings);
+$ListView->processListView($seedAccount, "main", "ACCOUNT");
+
 
 ?>
 

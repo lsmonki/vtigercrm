@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/language/en_us.lang.php,v 1.2 2004/08/31 05:00:18 rakeebk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/language/en_us.lang.php,v 1.3 2004/10/06 09:02:05 jack Exp $
  * Description:  Defines the English language pack 
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
  
 $mod_strings = Array(
@@ -30,6 +33,8 @@ $mod_strings = Array(
 'LBL_LIST_WEBSITE'=>'Website',
 'LBL_LIST_STATE'=>'State',
 'LBL_LIST_PHONE'=>'Phone',
+'LBL_LIST_EMAIL_ADDRESS'=>'Email Address',
+'LBL_LIST_CONTACT_NAME'=>'Contact Name',
 
 'LBL_ACCOUNT'=>'Account:',
 'LBL_ACCOUNT_NAME'=>'Account Name:',
@@ -64,8 +69,8 @@ $mod_strings = Array(
 'NTC_COPY_SHIPPING_ADDRESS'=>'Copy shipping address to billing address',
 'NTC_REMOVE_MEMBER_ORG_CONFIRMATION'=>'Are you sure you want to remove this record as a member organization?',
 
-'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_CONTACT'=>'New Contact',
+'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_ACCOUNT'=>'New Account',
 'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
 'LNK_NEW_CASE'=>'New Case',
@@ -74,6 +79,7 @@ $mod_strings = Array(
 'LNK_NEW_EMAIL'=>'New Email',
 'LNK_NEW_MEETING'=>'New Meeting',
 'LNK_NEW_TASK'=>'New Task',
+'LBL_INVITEE'=>'Contacts',
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
 
 

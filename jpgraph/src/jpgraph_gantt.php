@@ -4,7 +4,7 @@
 // Description:	JpGraph Gantt plot extension
 // Created: 	2001-11-12
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_gantt.php,v 1.2 2004/08/19 06:48:29 gjayakrishnan Exp $
+// Ver:		$Id: jpgraph_gantt.php,v 1.3 2004/10/06 09:02:04 jack Exp $
 //
 // License:	This code is released under QPL 
 // Copyright (c) 2002 Johan Persson
@@ -333,6 +333,7 @@ class GanttGraph extends Graph {
     var $iSimpleStyle=GANTT_RDIAG,$iSimpleColor='yellow',$iSimpleBkgColor='red';
     var $iSimpleProgressBkgColor='gray',$iSimpleProgressColor='darkgreen';
     var $iSimpleProgressStyle=GANTT_SOLID;
+    var $hgrid=null;
 //---------------
 // CONSTRUCTOR	
     // Create a new gantt graph
@@ -347,8 +348,11 @@ class GanttGraph extends Graph {
 	}
 	Graph::Graph($aWidth,$aHeight,$aCachedName,$aTimeOut,$aInline);		
 	$this->scale = new GanttScale($this->img);
-	if( $aWidth > 0 )
-		$this->img->SetMargin($aWidth/17,$aWidth/17,$aHeight/7,$aHeight/10);
+
+	// Default margins
+	$this->img->SetMargin(15,17,25,15);
+
+	$this->hgrid = new HorizontalGridLine();
 		
 	$this->scale->ShowHeaders(GANTT_HWEEK|GANTT_HDAY);
 	$this->SetBox();
@@ -559,7 +563,7 @@ class GanttGraph extends Graph {
 	$m=0;
 	if( $this->iObj != null ) {
 	    $m = $this->iObj[0]->GetLineNbr();
-	    for($i=1; $i<count($this->iObj); ++$i) {
+	    for($i=1; $i < count($this->iObj); ++$i) {
 		$m=max($m,$this->iObj[$i]->GetLineNbr());
 	    }
 	}
@@ -590,7 +594,12 @@ class GanttGraph extends Graph {
 	    // The predefined left, right, top, bottom margins.
 	    // Note that the top margin might incease depending on
 	    // the title.
-	    $lm=30;$rm=30;$tm=20;$bm=30;			
+	    $lm = $this->img->left_margin; 
+	    $rm = $this->img->right_margin; 
+	    $rm += 2 ;
+	    $tm = $this->img->top_margin; 
+	    $bm = $this->img->bottom_margin; 
+	    $bm += 1; 
 	    if( BRAND_TIMING ) $bm += 10;
 			
 	    // First find out the height			
@@ -850,6 +859,7 @@ class GanttGraph extends Graph {
     // Stroke the gantt chart
     function Stroke($aStrokeFileName="") {	
 
+
 	// If the filename is the predefined value = '_csim_special_'
 	// we assume that the call to stroke only needs to do enough
 	// to correctly generate the CSIM maps.
@@ -893,11 +903,14 @@ class GanttGraph extends Graph {
 	$this->scale->Stroke();
 
 	if( !$_csim ) {
-	    // Due to rounding we need to draw the box + pixel to the right
+	    // Due to a minor off by 1 bug we need to temporarily adjust the margin
 	    $this->img->right_margin--;
 	    $this->StrokePlotBox();
 	    $this->img->right_margin++;
 	}
+
+	// Stroke Grid line
+	$this->hgrid->Stroke($this->img,$this->scale);
 
 	$n = count($this->iObj);
 	for($i=0; $i < $n; ++$i) {
@@ -2742,8 +2755,6 @@ class GanttScale {
 	    $img->SetColor('white');
 	    $img->Line($xb-$tmp+2,$yt,$xb-$tmp+2,$y);
 	}
-		
-
     }
 
     // Main entry point to stroke scale
@@ -2936,6 +2947,88 @@ class Progress {
     }
 }
 
+DEFINE('GANTT_HGRID1',0);
+DEFINE('GANTT_HGRID2',1);
+
+//===================================================
+// CLASS HorizontalGridLine
+// Responsible for drawinf horizontal gridlines and filled alternatibg rows
+//===================================================
+class HorizontalGridLine {
+    var $iGraph=NULL;
+    var $iRowColor1 = '', $iRowColor2 = '';
+    var $iShow=false;
+    var $line=null;
+    var $iStart=0; // 0=from left margin, 1=just along header
+
+    function HorizontalGridLine() {
+	$this->line = new LineProperty();
+	$this->line->SetColor('gray@0.4');
+	$this->line->SetStyle('dashed');
+    }
+    
+    function Show($aShow=true) {
+	$this->iShow = $aShow;
+    }
+
+    function SetRowFillColor($aColor1,$aColor2='') {
+	$this->iRowColor1 = $aColor1;
+	$this->iRowColor2 = $aColor2;
+    }
+
+    function SetStart($aStart) {
+	$this->iStart = $aStart;
+    }
+
+    function Stroke($aImg,$aScale) {
+	
+	if( ! $this->iShow ) return;
+
+	// Get horizontal width of line
+	/*
+	$limst = $aScale->iStartDate;
+	$limen = $aScale->iEndDate;
+	$xt = round($aScale->TranslateDate($aScale->iStartDate));
+	$xb = round($aScale->TranslateDate($limen)); 
+	*/
+
+	if( $this->iStart === 0 ) {
+	    $xt = $aImg->left_margin-1;
+	}
+	else {
+	    $xt = round($aScale->TranslateDate($aScale->iStartDate))+1;
+	}
+
+	$xb = $aImg->width-$aImg->right_margin;
+
+	$yt = round($aScale->TranslateVertPos(0));
+	$yb = round($aScale->TranslateVertPos(1));	    
+	$height = $yb - $yt;
+
+	// Loop around for all lines in the chart
+	for($i=0; $i < $aScale->iVertLines; ++$i ) {
+	    $yb = $yt - $height;
+	    $this->line->Stroke($aImg,$xt,$yb,$xb,$yb);
+	    if( $this->iRowColor1 !== '' ) {
+		if( $i % 2 == 0 ) {
+		    $aImg->PushColor($this->iRowColor1);
+		    $aImg->FilledRectangle($xt,$yt,$xb,$yb);
+		    $aImg->PopColor();
+		}
+		elseif( $this->iRowColor2 !== '' ) {
+		    $aImg->PushColor($this->iRowColor2);
+		    $aImg->FilledRectangle($xt,$yt,$xb,$yb);
+		    $aImg->PopColor();
+		}
+	    }
+	    $yt = round($aScale->TranslateVertPos($i+1));
+	}
+	$yb = $yt - $height;
+	$this->line->Stroke($aImg,$xt,$yb,$xb,$yb);
+    }
+}
+
+
 //===================================================
 // CLASS GanttBar
 // Responsible for formatting individual gantt bars
@@ -3030,7 +3123,7 @@ class GanttBar extends GanttPlotObject {
 	// If it is an integer > 1 we take it to mean the absolute height in pixels
 	if( $this->iHeightFactor > -0.0 && $this->iHeightFactor <= 1.1)
 	    $vs = $aScale->GetVertSpacing()*$this->iHeightFactor;
-	elseif(is_int($this->iHeightFactor) && $this->iHeightFactor>2 && $this->iHeightFactor<200)
+	elseif(is_int($this->iHeightFactor) && $this->iHeightFactor>2 && $this->iHeightFactor < 200 )
 	    $vs = $this->iHeightFactor;
 	else
 	    JpGraphError::Raise("Specified height (".$this->iHeightFactor.") for gantt bar is out of range.");

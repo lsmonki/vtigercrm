@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/index.php,v 1.1 2004/08/17 15:06:09 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/index.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 global $theme;
@@ -26,5 +29,7 @@ global $mod_strings;
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_TITLE'], true); 
 echo "\n<BR>\n";
 include ('modules/Opportunities/ListView.php'); 
+include ('modules/Import/ImportButton.php');
+
 
 ?>

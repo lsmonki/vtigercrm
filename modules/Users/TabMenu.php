@@ -10,7 +10,8 @@
  ********************************************************************************/
 
 include_once('config.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/logging.php');
+require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 
 class TabMenu
@@ -18,8 +19,9 @@ class TabMenu
 
 	function getTabNames()
 	{
+		$conn= new PearDatabase();
 		$sql="SELECT name from tabmenu where presence = 1 order by sequence";
-		$tabrow=mysql_query($sql);
+		$tabrow=$conn->query($sql);
 		if(mysql_num_rows($tabrow) != 0)
 		{
 			while ($result = mysql_fetch_array($tabrow))
@@ -33,6 +35,7 @@ class TabMenu
 // TabMenu shown in the header page.
 class Tab extends SugarBean {
 	var $log;
+	var $db;
 
 	// Stored fields
 	var $id;
@@ -68,6 +71,7 @@ class Tab extends SugarBean {
 		
 	function Tab() {
 		$this->log = LoggerManager::getLogger('tab');
+		$this->db = new PearDatabase();
 	}
 
 	var $new_schema = true;

@@ -1,3 +1,51 @@
+20 Jun 2004 JpGraph 1.16
+========================
+
+* [me] Fix Issue #19. Margins for gantt charts can not be adjusted when using auto-sizing
+
+* [me] Fix Issue #46. Line style for last plot line is also used for plotbox 
+
+* [me] Fix Issue #44. Fixed margin for values in Pie and Pie3D
+
+* [me] Fix Issue #10. Handling of null values for step style lines
+
+* [me] Fix Issue #43. Fixed color wrap around problem for pie-plots
+
+* [me] Added Plotmarks to Radar plots. Accessed through the new property
+  RadarPlot::mark. Added example radarmarkex1.php
+
+* [me] Moved all GRAD_ symbolic defined into jpgraph_gradient.php (from jpgraph.php)
+
+* [me] Fixed potential rounding (off by 1 pixel) problem for GRAD_MIDHOR gradient.
+
+* [me] Workaround for bug in PHHP on earlier Windows version that doesn't
+  recognize intance variables unless they have been initialized. Solves the
+  warning about property img, with and height not being defined. 
+
+* [me] Fixed a small irritation in gradient so that GRAD_LEFT_REFLECTION (and
+  right) style can have it's color specified as an RGB array as every other style.
+
+* [james.j.spencer@hp.com] Added gradient GRAD_RAISED_PANEL style
+
+* [me] Updated documentation and class reference
+
+* [me] Fixed bug in Legend so that the frame doesn't pick up the last line
+  style also fixed a small problem so that a styled line is shown in the
+  legend even when a plotmark is being used.
+
+* [me] Added Legend::SetVColMargin(), Legend::SetHColMargin() and also
+  adjusted legend box size calculation to make it take less space.
+
+* [me] Code cleanup in jpgraph_bar.php to use Correct error handling
+
+* [me] Added horizontal grid lines to GanttGraph and a new example gantthgridex1.php
+
+* [me] Use $_SERVER varible instead of $_ENV
+
+* [me] Change order of initialization for Error handler so that it is
+  initialized in case of error in GD detection.
+
+
 5 May 2004 JpGraph 1.15
 =======================
 

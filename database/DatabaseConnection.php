@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/database/DatabaseConnection.php,v 1.1 2004/08/17 13:19:01 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/database/DatabaseConnection.php,v 1.2 2004/10/06 09:02:02 jack Exp $
  * Description:  Creates the runtime database connection.
  ********************************************************************************/
 

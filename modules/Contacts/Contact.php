@@ -13,12 +13,15 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.1 2004/08/17 15:04:13 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 include_once('config.php');
 require_once('include/logging.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('include/utils.php');
 require_once('modules/Opportunities/Opportunity.php');
@@ -32,6 +35,7 @@ require_once('modules/Emails/Email.php');
 // Contact is used to store customer information.
 class Contact extends SugarBean {
 	var $log;
+	var $db;
 
 	// Stored fields
 	var $id;
@@ -139,10 +143,13 @@ class Contact extends SugarBean {
 	var $additional_column_fields = Array('assigned_user_name', 'account_name', 'account_id', 'opportunity_id', 'case_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id');		
 	
 	// This is the list of fields that are in the lists.
-	var $list_fields = Array('id', 'first_name', 'last_name', 'account_name', 'account_id', 'title', 'yahoo_id', 'email1', 'phone_work', 'assigned_user_name', 'assigned_user_id');	
-		
+	var $list_fields = Array('id', 'first_name', 'last_name', 'account_name', 'account_id', 'title', 'yahoo_id', 'email1', 'phone_work', 'assigned_user_name', 'assigned_user_id', "case_role", 'case_rel_id', 'opportunity_role', 'opportunity_rel_id');	
+	// This is the list of fields that are required
+	var $required_fields =  array("last_name"=>1);
+
 	function Contact() {
 		$this->log = LoggerManager::getLogger('contact');
+		$this->db = new PearDatabase();
 	}
 
 	function create_tables () {
@@ -186,9 +193,9 @@ class Contact extends SugarBean {
 		$query .=', description text';
 		$query .=', PRIMARY KEY ( ID ) )';
 		
-		$this->log->info($query);
 		
-		mysql_query($query) or die("Error creating table: ".mysql_error());
+		
+		$this->db->query($query,true,"Error creating table: ");
 
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
 		
@@ -199,8 +206,8 @@ class Contact extends SugarBean {
 		$query .=', deleted bool NOT NULL default 0';
 		$query .=', PRIMARY KEY ( ID ) )';
 	
-		$this->log->info($query);
-		mysql_query($query) or die("Error creating account/contact relationship table: ".mysql_error());
+		
+		$this->db->query($query,true,"Error creating account/contact relationship table: ");
 
 		
 		// Create the indexes
@@ -212,21 +219,21 @@ class Contact extends SugarBean {
 	function drop_tables () {
 		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
 
-		$this->log->info($query);
+		
 			
-		mysql_query($query);
+		$this->db->query($query);
 
 		$query = 'DROP TABLE IF EXISTS '.$this->rel_account_table;
 
-		$this->log->info($query);
+		
 			
-		mysql_query($query);
+		$this->db->query($query);
 
 		$query = 'DROP TABLE IF EXISTS '.$this->rel_opportunity_table;
 
-		$this->log->info($query);
+		
 			
-		mysql_query($query);
+		$this->db->query($query);
 	
 		
 		//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
@@ -239,6 +246,9 @@ class Contact extends SugarBean {
 	}
 	
 	/** Returns a list of the associated contacts who are direct reports
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_direct_reports()
 	{
@@ -249,6 +259,9 @@ class Contact extends SugarBean {
 	}
 	
 	/** Returns a list of the associated opportunities
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_opportunities()
 	{
@@ -258,7 +271,23 @@ class Contact extends SugarBean {
 		return $this->build_related_list($query, new Opportunity());
 	}
 	
+		/** Returns a list of the associated opportunities
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
+	*/
+	function get_accounts()
+	{
+		// First, get the list of IDs.
+		$query = "SELECT account_id as id from accounts_contacts where contact_id='$this->id' AND deleted=0";
+		
+		return $this->build_related_list($query, new Account());
+	}
+	
 	/** Returns a list of the associated cases
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_cases()
 	{
@@ -269,6 +298,9 @@ class Contact extends SugarBean {
 	}
 	
 	/** Returns a list of the associated tasks
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_tasks()
 	{
@@ -279,6 +311,9 @@ class Contact extends SugarBean {
 	}
 
 	/** Returns a list of the associated notes
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_notes()
 	{
@@ -289,6 +324,9 @@ class Contact extends SugarBean {
 	}
 
 	/** Returns a list of the associated meetings
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_meetings()
 	{
@@ -299,6 +337,9 @@ class Contact extends SugarBean {
 	}
 
 	/** Returns a list of the associated calls
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_calls()
 	{
@@ -309,6 +350,9 @@ class Contact extends SugarBean {
 	}
 
 	/** Returns a list of the associated emails
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function get_emails()
 	{
@@ -339,10 +383,45 @@ class Contact extends SugarBean {
 		else 
 			$query .= "where ".$where_auto;		
 
-		$query .= " ORDER BY last_name, first_name";
+		if(!empty($order_by))
+			$query .= " ORDER BY $order_by";
 
 		return $query;
 	}
+
+
+
+        function create_export_query(&$order_by, &$where)
+        {
+                         $query = "SELECT
+                                contacts.*,
+                                accounts.name as account_name,
+                                users.user_name as assigned_user_name
+                                FROM contacts
+                                LEFT JOIN users
+                                ON contacts.assigned_user_id=users.id
+                                LEFT JOIN accounts_contacts
+                                ON contacts.id=accounts_contacts.contact_id
+                                LEFT JOIN accounts
+                                ON accounts_contacts.account_id=accounts.id ";
+
+
+                        $where_auto = " accounts_contacts.deleted=0
+                        AND users.status='ACTIVE'
+                        AND accounts.deleted=0 AND contacts.deleted=0 ";
+
+                if($where != "")
+                        $query .= "where ($where) AND ".$where_auto;
+                else
+                        $query .= "where ".$where_auto;
+
+                if(!empty($order_by))
+                        $query .= " ORDER BY $order_by";
+
+                return $query;
+        }
+
+
 
 	function save_relationship_changes($is_update)
     {
@@ -385,13 +464,13 @@ class Contact extends SugarBean {
 	function clear_account_contact_relationship($contact_id)
 	{
 		$query = "UPDATE accounts_contacts set deleted=1 where contact_id='$contact_id' and deleted=0";
-		mysql_query($query) or die("Error clearing account to contact relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing account to contact relationship: ");
 	}
     
 	function set_account_contact_relationship($contact_id, $account_id)
 	{
 		$query = "insert into accounts_contacts set id='".create_guid()."', contact_id='$contact_id', account_id='$account_id'";
-		mysql_query($query) or die("Error setting account to contact relationship: ".mysql_error()."<BR>$query");
+		$this->db->query($query,true,"Error setting account to contact relationship: "."<BR>$query");
 	}
 
 	function set_opportunity_contact_relationship($contact_id, $opportunity_id)
@@ -399,13 +478,13 @@ class Contact extends SugarBean {
 		global $app_list_strings;
 		$default = $app_list_strings['opportunity_relationship_type_default_key'];
 		$query = "insert into opportunities_contacts set id='".create_guid()."', opportunity_id='$opportunity_id', contact_id='$contact_id', contact_role='$default'";
-		mysql_query($query) or die("Error setting account to contact relationship: ".mysql_error()."<BR>$query");
+		$this->db->query($query,true,"Error setting account to contact relationship: "."<BR>$query");
 	}
 
 	function clear_opportunity_contact_relationship($contact_id)
 	{
 		$query = "UPDATE opportunities_contacts set deleted=1 where contact_id='$contact_id' and deleted=0";
-		mysql_query($query) or die("Error clearing opportunity to contact relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing opportunity to contact relationship: ");
 	}
     
 	function set_case_contact_relationship($contact_id, $case_id)
@@ -413,85 +492,85 @@ class Contact extends SugarBean {
 		global $app_list_strings;
 		$default = $app_list_strings['case_relationship_type_default_key'];
 		$query = "insert into contacts_cases set id='".create_guid()."', case_id='$case_id', contact_id='$contact_id', contact_role='$default'";
-		mysql_query($query) or die("Error setting account to contact relationship: ".mysql_error()."<BR>$query");
+		$this->db->query($query,true,"Error setting account to contact relationship: "."<BR>$query");
 	}
 
 	function clear_case_contact_relationship($contact_id)
 	{
 		$query = "UPDATE contacts_cases set deleted=1 where contact_id='$contact_id' and deleted=0";
-		mysql_query($query) or die("Error clearing case to contact relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing case to contact relationship: ");
 	}
     
 	function set_task_contact_relationship($contact_id, $task_id)
 	{
 		$query = "UPDATE tasks set contact_id='$contact_id' where id='$task_id'";
-		mysql_query($query) or die("Error setting contact to task relationship: ".mysql_error());
+		$this->db->query($query,true,"Error setting contact to task relationship: ");
 	}
 	
 	function clear_task_contact_relationship($contact_id)
 	{
 		$query = "UPDATE tasks set deleted=1 where contact_id='$contact_id' and deleted=0";
-		mysql_query($query) or die("Error clearing task to contact relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing task to contact relationship: ");
 	}
 
 	function set_note_contact_relationship($contact_id, $note_id)
 	{
 		$query = "UPDATE notes set contact_id='$contact_id' where id='$note_id'";
-		mysql_query($query) or die("Error setting contact to note relationship: ".mysql_error());
+		$this->db->query($query,true,"Error setting contact to note relationship: ");
 	}
 	
 	function clear_note_contact_relationship($contact_id)
 	{
 		$query = "UPDATE notes set deleted=1 where contact_id='$contact_id' and deleted=0";
-		mysql_query($query) or die("Error clearing note to contact relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing note to contact relationship: ");
 	}
 
 	function set_meeting_contact_relationship($contact_id, $meeting_id)
 	{
 		$query = "insert into meetings_contacts set id='".create_guid()."', meeting_id='$meeting_id', contact_id='$contact_id'";
-		mysql_query($query) or die("Error setting meeting to contact relationship: ".mysql_error()."<BR>$query");
+		$this->db->query($query,true,"Error setting meeting to contact relationship: "."<BR>$query");
 	}
 
 	function clear_meeting_contact_relationship($contact_id)
 	{
 		$query = "UPDATE meetings_contacts set deleted=1 where contact_id='$contact_id' and deleted=0";
-		mysql_query($query) or die("Error clearing meeting to contact relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing meeting to contact relationship: ");
 	}
 
 	function set_call_contact_relationship($contact_id, $call_id)
 	{
 		$query = "insert into calls_contacts set id='".create_guid()."', call_id='$call_id', contact_id='$contact_id'";
-		mysql_query($query) or die("Error setting meeting to contact relationship: ".mysql_error()."<BR>$query");
+		$this->db->query($query,true,"Error setting meeting to contact relationship: "."<BR>$query");
 	}
 
 	function clear_call_contact_relationship($contact_id)
 	{
 		$query = "UPDATE calls_contacts set deleted=1 where contact_id='$contact_id' and deleted=0";
-		mysql_query($query) or die("Error clearing call to contact relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing call to contact relationship: ");
 	}
 
 	function set_email_contact_relationship($contact_id, $email_id)
 	{
 		$query = "insert into emails_contacts set id='".create_guid()."', email_id='$email_id', contact_id='$contact_id'";
-		mysql_query($query) or die("Error setting email to contact relationship: ".mysql_error()."<BR>$query");
+		$this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
 	}
 
 	function clear_email_contact_relationship($contact_id)
 	{
 		$query = "UPDATE emails_contacts set deleted=1 where contact_id='$contact_id' and deleted=0";
-		mysql_query($query) or die("Error clearing email to contact relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing email to contact relationship: ");
 	}
 
 	function clear_contact_all_direct_report_relationship($contact_id)
 	{
 		$query = "UPDATE contacts set reports_to_id='' where reports_to_id='$contact_id' and deleted=0";
-		mysql_query($query) or die("Error clearing contact to direct report relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing contact to direct report relationship: ");
 	}
 
 	function clear_contact_direct_report_relationship($contact_id)
 	{
 		$query = "UPDATE contacts set reports_to_id='' where id='$contact_id' and deleted=0";
-		mysql_query($query) or die("Error clearing contact to direct report relationship: ".mysql_error());
+		$this->db->query($query,true,"Error clearing contact to direct report relationship: ");
 	}
 
 	function mark_relationships_deleted($id)
@@ -518,10 +597,10 @@ class Contact extends SugarBean {
 		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
 		
 		$query = "SELECT acc.id, acc.name from accounts as acc, accounts_contacts as a_c where acc.id = a_c.account_id and a_c.contact_id = '$this->id' and a_c.deleted=0";
-		$result = mysql_query($query) or die("Error filling in additional detail fields: ".mysql_error());
+		$result = $this->db->query($query,true," Error filling in additional detail fields: ");
 
 		// Get the id and the name.
-		$row = mysql_fetch_assoc($result);
+		$row = $this->db->fetchByAssoc($result);
 		
 		if($row != null)
 		{
@@ -534,10 +613,10 @@ class Contact extends SugarBean {
 			$this->account_id = '';
 		}		
 		$query = "SELECT c1.first_name, c1.last_name from contacts as c1, contacts as c2 where c1.id = c2.reports_to_id and c2.id = '$this->id' and c1.deleted=0";
-		$result = mysql_query($query) or die("Error filling in additional detail fields: ".mysql_error());
+		$result = $this->db->query($query,true," Error filling in additional detail fields: ");
 
 		// Get the id and the name.
-		$row = mysql_fetch_assoc($result);
+		$row = $this->db->fetchByAssoc($result);
 		
 		if($row != null)
 		{
@@ -548,15 +627,55 @@ class Contact extends SugarBean {
 			$this->reports_to_name = '';
 		}		
 	}
-	
-	function list_view_pare_additional_sections(&$list_form){
-		if(isset($this->yahoo_id) && $this->yahoo_id != '')
-			$list_form->parse("main.row.yahoo_id");
-		else
-			$list_form->parse("main.row.no_yahoo_id");
-		return $list_form;
+	function get_list_view_data(){
+		$temp_array = $this->get_list_view_array();
+    	$temp_array["ENCODED_NAME"]=htmlspecialchars($this->first_name.' '.$this->last_name, ENT_QUOTES);
+    	return $temp_array;
 		
 	}
+	function list_view_parse_additional_sections(&$list_form, $section){
+		
+		if($list_form->exists($section.".row.yahoo_id") && isset($this->yahoo_id) && $this->yahoo_id != '')
+			$list_form->parse($section.".row.yahoo_id");
+		elseif ($list_form->exists($section.".row.no_yahoo_id"))
+				$list_form->parse($section.".row.no_yahoo_id");
+		return $list_form;
+		
+		
+	}
+	/**
+		builds a generic search based on the query string using or
+		do not include any $this-> because this is called on without having the class instantiated
+	*/
+	function build_generic_where_clause ($the_query_string) {
+	$where_clauses = Array();
+	$the_query_string = addslashes($the_query_string);
+	array_push($where_clauses, "last_name like '$the_query_string%'");
+	array_push($where_clauses, "first_name like '$the_query_string%'");
+	array_push($where_clauses, "assistant like '$the_query_string%'");
+	array_push($where_clauses, "email1 like '$the_query_string%'");
+	array_push($where_clauses, "email2 like '$the_query_string%'");
+	array_push($where_clauses, "yahoo_id like '$the_query_string%'");
+	if (is_numeric($the_query_string)) {
+		array_push($where_clauses, "phone_home like '%$the_query_string%'");
+		array_push($where_clauses, "phone_mobile like '%$the_query_string%'");
+		array_push($where_clauses, "phone_work like '%$the_query_string%'");
+		array_push($where_clauses, "phone_other like '%$the_query_string%'");
+		array_push($where_clauses, "phone_fax like '%$the_query_string%'");
+		array_push($where_clauses, "assistant_phone like '%$the_query_string%'");
+	}
+	
+	$the_where = "";
+	foreach($where_clauses as $clause)
+	{
+		if($the_where != "") $the_where .= " or ";
+		$the_where .= $clause;
+	}
+
+	
+	return $the_where;
+}
+
 
 }
 

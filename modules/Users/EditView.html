@@ -1,6 +1,6 @@
 <!--
 /*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.2
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
  * ("License"); You may not use this file except in compliance with the 
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
@@ -21,10 +21,9 @@
 <tr>
     <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Users.gif" border="0"></td>
     <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">User:  {FIRST_NAME} {LAST_NAME} ({USER_NAME})</td>
-
-	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+    <td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
 </tr>
-<tr><td colspan="4"><div class="hline"><img height='2' src='include/images/blank.gif'></div></td></tr>
+<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr>
 <tr><td colspan="4">{ERROR_STRING}</td></tr></table>
 
 <table width="100%" cellpadding="2" cellspacing="0" border="0"><tr> 
@@ -76,13 +75,10 @@
 	<tr>
 	<th align="left" class="formSecHeader" colspan="4">{MOD.LBL_USER_SETTINGS}</th>
 	</tr><tr>
-	<td width="20%" class="dataLabel">{MOD.LBL_THEME}</td>
-	<td width="30%"><select name='theme' tabindex='3'>{THEME_OPTIONS}</select></td>
-	<td width="20%" class="dataLabel">{MOD.LBL_LANGUAGE}</td>
-	<td width="30%"><select name='language' tabindex='4'>{LANGUAGE_OPTIONS}</select></td>
-	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_ADMIN}</td>
-	<td width="80%" colspan='3'><input name='is_admin' type="checkbox" tabindex='3' {DISABLED} {IS_ADMIN}></td>
+	<td width="80%"><input name='is_admin' type="checkbox" tabindex='3' {DISABLED} {IS_ADMIN}></td>
+	<td class="dataLabel">&nbsp;</td>
+	<td class="dataLabel">&nbsp;</td>
 </tr></table>
 </td></tr></table>
 <BR>
@@ -127,6 +123,7 @@
 	</tr></table>
 </td></tr></table>
 <BR>
+
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
 <tr><td>
 	<table width="100%" border="0" cellspacing="1" cellpadding="0">
@@ -147,6 +144,18 @@
 	<td width="30%"><input name='address_country' tabindex='8' size='10' maxlength='20' value='{ADDRESS_COUNTRY}'></td>
 </tr></table>
 </td></tr></table>
+<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr>
+    <td align="left"></td>
+      <td align="left">
+             <table cellpadding="0" cellspacing="5" border="0">
+             <tr>
+                 <td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" tabindex='5' accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
+               <td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" tabindex='5' accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
+          </tr></table>
+     </td>
+    <td align="left"></td>
+ </tr></table>
+
 	</form>
 
 {JAVASCRIPT}

@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/DetailView.php,v 1.3 2004/09/03 07:50:46 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/DetailView.php,v 1.5 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -35,7 +38,12 @@ if(isset($_REQUEST['record'])) {
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
-} 
+}
+
+if(isset($_REQUEST['reset_preferences'])){
+	print_r($current_user->user_preferences);
+	$current_user->resetPreferences();
+}
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -49,7 +57,7 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
 $xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
+$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $focus->id);
 $xtpl->assign("USER_NAME", $focus->user_name);
 $xtpl->assign("FIRST_NAME", $focus->first_name);
@@ -58,36 +66,32 @@ $xtpl->assign("STATUS", $focus->status);
 $xtpl->assign("YAHOO_ID", $focus->yahoo_id);
 if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $xtpl->assign("YAHOO_MESSENGER", "<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$focus->yahoo_id."'><img border=0 src='http://opi.yahoo.com/online?u=".$focus->yahoo_id."'&m=g&t=2'></a>");
 
-if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) 
-		&& isset($default_user_name) 
+if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id)
+		&& isset($default_user_name)
 		&& $default_user_name == $focus->user_name
-		&& isset($lock_default_user_name) 
+		&& isset($lock_default_user_name)
 		&& $lock_default_user_name == true	) {
 	$buttons = "<td><input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '></td>\n";
 }
 elseif (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
 	$buttons = "<td><input title='".$app_strings['LBL_EDIT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_EDIT_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.return_id.value='$focus->id'; this.form.action.value='EditView'\" type='submit' name='Edit' value='  ".$app_strings['LBL_EDIT_BUTTON_LABEL']."  '></td>\n";
-	$buttons .= "<td><input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=200,resizable=1,scrollbars=1\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'></td>\n";
-        $buttons .= "<td><input title='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ShowHistory'; this.form.return_id.value='$current_user->id'; this.form.action.value='ShowHistory'\" type='submit' name='LoginHistory' value=' ".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_LABEL']." '></td>\n";
+	$buttons .= "<td><input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=230,resizable=1,scrollbars=1\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'></td>\n";
+	$buttons .= "<td><input title='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ShowHistory'; this.form.return_id.value='$focus->id'; this.form.action.value='ShowHistory'\" type='submit' name='LoginHistory' value=' ".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_LABEL']." '></td>\n";
 }
+
 if (is_admin($current_user)) 
 {
-        $buttons .= "<td><input title='".$app_strings['LBL_DUPLICATE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DUPLICATE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.action.value='EditView'\" type='submit' name='Duplicate' value=' ".$app_strings['LBL_DUPLICATE_BUTTON_LABEL']." '></td>\n";
-        $buttons .= "<td><input title='".$app_strings['LBL_TABCUSTOMISE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_TABCUSTOMISE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='TabCustomise'\" type='submit' name='Customise' value=' ".$app_strings['LBL_TABCUSTOMISE_BUTTON_LABEL']." '></td>\n";
-
+	$buttons .= "<td><input title='".$app_strings['LBL_DUPLICATE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_DUPLICATE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.action.value='EditView'\" type='submit' name='Duplicate' value=' ".$app_strings['LBL_DUPLICATE_BUTTON_LABEL']." '></td>\n";
+	$buttons .= "<td><input title='".$app_strings['LBL_TABCUSTOMISE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_TABCUSTOMISE_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='TabCustomise'; this.form.action.value='TabCustomise'\" type='submit' name='Customise' value=' ".$app_strings['LBL_TABCUSTOMISE_BUTTON_LABEL']." '></td>\n";
 }
-
+$buttons .="<td width='100%'></td><TD  align='right' nowrap='nowrap'><a href='".$_SERVER['PHP_SELF'] .'?'.$_SERVER['QUERY_STRING']."&reset_preferences=true' >". $mod_strings['LBL_RESET_PREFERENCES']. " </a></td>";
 if (isset($buttons)) $xtpl->assign("BUTTONS", $buttons);
 
 $xtpl->parse("main");
 $xtpl->out("main");
 
-if (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
-	if ($focus->theme != '') $xtpl->assign("THEME", get_theme_display($focus->theme));
-	else $xtpl->assign("THEME", get_theme_display($default_theme)." <em>(default)</em>");
-	if ($focus->language != '') $xtpl->assign("LANGUAGE", get_language_dispay($focus->language));
-	else $xtpl->assign("LANGUAGE", get_language_dispay($default_language)." <em>(default)</em>");
-	if ($focus->is_admin == 'on') $xtpl->assign("IS_ADMIN", "checked");
+if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $focus->is_admin == 'on') {
+	$xtpl->assign("IS_ADMIN", "checked");
 	$xtpl->parse("user_settings");
 	$xtpl->out("user_settings");
 }

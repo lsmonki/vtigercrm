@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/orange/footer.php,v 1.4 2004/09/02 09:55:28 rakeebk Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/orange/footer.php,v 1.5 2004/10/06 09:02:05 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -23,19 +23,21 @@ global $app_strings;
 <!--end body panes-->
 </td></tr>
 <tr><td colspan="2" align="center">
-	<br>
 	<table CELLSPACING=3 border=0><tr>
       <td align=center noWrap colSpan=4>
-	  <A href="index.php?module=Home&action=index"><?php echo $app_list_strings['moduleList']['Home']; ?></A> | 
-	  <A href="index.php?module=Leads&action=index"><?php echo $app_list_strings['moduleList']['Leads']; ?></A> | 
-	  <A href="index.php?module=Contacts&action=index"><?php echo $app_list_strings['moduleList']['Contacts']; ?></A> | 
-	  <A href="index.php?module=Accounts&action=index"><?php echo $app_list_strings['moduleList']['Accounts']; ?></A> | 
-	  <A href="index.php?module=Opportunities&action=index"><?php echo $app_list_strings['moduleList']['Opportunities']; ?></A> | 
-	  <A href="index.php?module=Cases&action=index"><?php echo $app_list_strings['moduleList']['Cases']; ?></A> | 
-	  <A href="index.php?module=Tasks&action=index"><?php echo $app_list_strings['moduleList']['Tasks']; ?></A> |  
-	  <A href="index.php?module=Calls&action=index"><?php echo $app_list_strings['moduleList']['Calls']; ?></A> |   
-	  <A href="index.php?module=Emails&action=index"><?php echo $app_list_strings['moduleList']['Emails']; ?></A> |  
-	  <A href="index.php?module=Meetings&action=index"><?php echo $app_list_strings['moduleList']['Meetings']; ?></A>  
+	  <A href="index.php?module=Home&action=index"><?php echo $app_list_strings['moduleList']['Home']; ?></A> |
+	  <A href="index.php?module=Dashboard&action=index"><?php echo $app_list_strings['moduleList']['Dashboard']; ?></A> |
+	  <A href="index.php?module=Leads&action=index"><?php echo $app_list_strings['moduleList']['Leads']; ?></A> |
+	  <A href="index.php?module=Contacts&action=index"><?php echo $app_list_strings['moduleList']['Contacts']; ?></A> |
+	  <A href="index.php?module=Accounts&action=index"><?php echo $app_list_strings['moduleList']['Accounts']; ?></A> |
+	  <A href="index.php?module=Opportunities&action=index"><?php echo $app_list_strings['moduleList']['Opportunities']; ?></A> |
+	  <A href="index.php?module=Cases&action=index"><?php echo $app_list_strings['moduleList']['Cases']; ?></A>
+	  <BR>
+	  <A href="index.php?module=Notes&action=index"><?php echo $app_list_strings['moduleList']['Notes']; ?></A> |
+	  <A href="index.php?module=Calls&action=index"><?php echo $app_list_strings['moduleList']['Calls']; ?></A> |
+	  <A href="index.php?module=Emails&action=index"><?php echo $app_list_strings['moduleList']['Emails']; ?></A> |
+	  <A href="index.php?module=Meetings&action=index"><?php echo $app_list_strings['moduleList']['Meetings']; ?></A> |
+	  <A href="index.php?module=Tasks&action=index"><?php echo $app_list_strings['moduleList']['Tasks']; ?></A>
 	  </td>
     </tr></table>
 </td></tr></table>

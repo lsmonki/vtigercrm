@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/index.php,v 1.1 2004/08/17 15:04:39 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/index.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description: TODO:  To be written.
  ********************************************************************************/
 
@@ -25,5 +25,6 @@ require_once ($theme_path."layout_utils.php");
 echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
 echo "\n<BR>\n";
 include ('modules/Emails/ListView.php'); 
+include ('modules/Import/ImportButton.php');
 
 ?>

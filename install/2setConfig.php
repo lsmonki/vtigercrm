@@ -13,18 +13,20 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/2setConfig.php,v 1.18 2004/08/26 15:38:48 sarajkumar Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/2setConfig.php,v 1.23 2004/10/06 09:02:03 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
+require_once("connection.php");
 
-$web_root = $_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
+$web_root = $_SERVER['SERVER_NAME']. ":" .$_SERVER['SERVER_PORT'].$_SERVER['PHP_SELF'];
 $web_root = str_replace("/install.php", "", $web_root);
 $web_root = "http://$web_root";
 $current_dir = pathinfo(dirname(__FILE__));
 $current_dir=$current_dir['dirname'];
+$cache_dir = "cache/";
 
 // To make MySQL run in desired port  
-$sock_path=":5000";
+$sock_path=":" .$mysql_port;
 
 $H_NAME=gethostbyaddr($_SERVER['SERVER_ADDR']);
 if (is_file("config.php")) {
@@ -73,7 +75,7 @@ if (is_file("config.php")) {
 		$db_user_name = $dbconfig['db_user_name'];
 	}
 	else {
-		$db_user_name = 'vtigercrm';
+		$db_user_name = $mysql_username;
 	}
 	
 	if (isset($_REQUEST['db_password'])) {
@@ -83,7 +85,7 @@ if (is_file("config.php")) {
 		$db_password = $dbconfig['db_password']; 
 	}
 	else {
-		$db_password = '';
+		$db_password = $mysql_password;
 	}
 	
 	if (isset($_REQUEST['db_name'])){
@@ -103,18 +105,20 @@ if (is_file("config.php")) {
 	else $site_URL = $web_root;
 	if (isset($_REQUEST['root_directory'])) $root_directory = stripslashes($_REQUEST['root_directory']);
 	else $root_directory = $current_dir;
+	if (isset($_REQUEST['cache_dir'])) $cache_dir= $_REQUEST['cache_dir'];
 	if (isset($_REQUEST['admin_email'])) $admin_email = $_REQUEST['admin_email'];
 	if (isset($_REQUEST['admin_password'])) $admin_password = $_REQUEST['admin_password'];
 }
 else {
 	!isset($_REQUEST['db_host_name']) ? $db_host_name = $H_NAME.$sock_path : $db_host_name = $_REQUEST['db_host_name'];
-	!isset($_REQUEST['db_user_name']) ? $db_user_name = "vtigercrm" : $db_user_name = $_REQUEST['db_user_name'];
-	!isset($_REQUEST['db_password']) ? $db_password= "" : $db_password = $_REQUEST['db_password'];
+	!isset($_REQUEST['db_user_name']) ? $db_user_name = $mysql_username : $db_user_name = $_REQUEST['db_user_name'];
+	!isset($_REQUEST['db_password']) ? $db_password= $mysql_password : $db_password = $_REQUEST['db_password'];
 	!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm" : $db_name = $_REQUEST['db_name'];
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	!isset($_REQUEST['host_name']) ? $host_name= $_SERVER['SERVER_NAME'] : $host_name= $_REQUEST['host_name'];
 	!isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];
 	!isset($_REQUEST['root_directory']) ? $root_directory = $current_dir : $root_directory = stripslashes($_REQUEST['root_directory']);
+	!isset($_REQUEST['cache_dir']) ? $cache_dir = $cache_dir : $cache_dir = stripslashes($_REQUEST['cache_dir']);
 	!isset($_REQUEST['admin_email']) ? $admin_email = "" : $admin_email = $_REQUEST['admin_email'];
 }
 
@@ -131,40 +135,56 @@ else {
 
 <script type="text/javascript" language="Javascript">
 <!--  to hide script contents from old browsers
+function trim(s) {
+        while (s.substring(0,1) == " ") {
+                s = s.substring(1, s.length);
+        }
+        while (s.substring(s.length-1, s.length) == ' ') {
+                s = s.substring(0,s.length-1);
+        }
+
+        return s;
+}
+
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
 	// Here we decide whether to submit the form.
-	if (form.db_host_name.value =='') {
+	if (trim(form.db_host_name.value) =='') {
 		isError = true;
 		errorMessage += "\n database host name";
 		form.db_host_name.focus(); 
 	}
-	if (form.db_user_name.value =='') {
+	if (trim(form.db_user_name.value) =='') {
 		isError = true;
 		errorMessage += "\n database user name";
 		form.db_user_name.focus(); 
 	}
-	if (form.db_name.value =='') {
+	if (trim(form.db_name.value) =='') {
 		isError = true;
 		errorMessage += "\n database name";
 		form.db_name.focus(); 
 	}
-	if (form.site_URL.value =='') {
+	if (trim(form.site_URL.value) =='') {
 		isError = true;
 		errorMessage += "\n site url";
 		form.site_URL.focus(); 
 	}
-	if (form.root_directory.value =='') {
+	if (trim(form.root_directory.value) =='') {
 		isError = true;
 		errorMessage += "\n path";
 		form.root_directory.focus(); 
 	}
-	if (form.admin_password.value =='') {
+	if (trim(form.admin_password.value) =='') {
 		isError = true;
 		errorMessage += "\n admin password";
 		form.admin_password.focus(); 
 	}
+	if (trim(form.cache_dir.value) =='') {
+                isError = true;
+                errorMessage += "\n temp directory path";
+                form.root_directory.focus();
+        }
 
 	// Here we decide whether to submit the form.
 	if (isError == true) {
@@ -257,6 +277,9 @@ function verify_data(form) {
           </tr><tr>
             <td><font color=red>*</font></td><td nowrap><strong>Path</strong></td>
             <td align="left"><input class="dataInput" type="text" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> </td>
+	  </tr><tr valign="top">
+            <td><font color=red>*</font></td><td nowrap><strong>Path to Cache Directory<br>(must be writable)</td>
+            <td align="left"><?php echo $root_directory; ?><input class="dataInput" type="text" name="cache_dir" size='14' value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" size="40" /> </td>
           </tr>
 		<tr>
 			<td colspan="3" class="moduleTitle" noWrap>Admin Configuration</td>

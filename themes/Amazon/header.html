@@ -20,6 +20,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD html 4.01 Transitional//EN">
 <html>
 <head>
+<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">
 <meta http-equiv="Content-Type" content="text/html; charset={LBL_CHARSET}">
 <title>{APP.LBL_BROWSER_TITLE}</title>
 <style type="text/css">@import url("themes/{THEME}/style.css"); </style>
@@ -29,22 +30,20 @@
   <tbody>
   <tr><td colspan="2">
 	<table cellspacing="0" cellpadding="0" width="100%" border="0">
-        <tbody>
+	  <tbody>
 	  <tr>    
-	        <td width="80" height="75"> 
+	<td width="80" height="75">
               <div align="center"><a href="http://www.vtiger.com/"><img src="{IMAGE_PATH}/vtiger.jpg" alt="vtiger.com" border="0"></a></div></td>
 	<td valign="bottom">
 	     <table cellspacing="0" cellpadding="0" border="0"><tbody>
 		 <tr>
 		   <td valign="top"><img width="40" height="1" src="include/images/blank.gif"></td>
-	  	            <td valign="top" align="left" nowrap bgColor="#ffffff"> 
-                      <P></P></td>
+	  	   <td valign="top" align="left" nowrap bgColor="#ffffff"><P></P></td>
            <td valign="top"><img width="5" height="7" src="include/images/blank.gif"></td>
 	       <td valign="middle" align="right" nowrap bgColor="#ffffff">
 			<a href="index.php?module=Users&action=DetailView&record={CURRENT_USER_ID}">{APP.LBL_MY_ACCOUNT}</a>&nbsp;|&nbsp; 
 			{ADMIN_LINK}
-		    <a href="index.php?module=Users&action=Logout">{APP.LBL_LOGOUT}</a>&nbsp;|&nbsp; 
-            <a href="http://www.vtiger.com/products/crm/document.html" target="_blank">{APP.LNK_HELP}</a>&nbsp;</td>
+		    <a href="index.php?module=Users&action=Logout">{APP.LBL_LOGOUT}</a>&nbsp;</td>
 		</tr><tr>
 		</tr><tr>
 	 	<td colspan="4">
@@ -65,16 +64,16 @@
 		</tr> 
 		</tbody></table>
      </td>
-     <td colspan="2" nowrap Valign="middle" align="right"><font size="1">{APP.NTC_WELCOME} {CURRENT_USER}</font>&nbsp;&nbsp;<br> 
-	       <font size="1">{DATE}</font> &nbsp;&nbsp;<br>
-              &nbsp; &nbsp;
-<p></p>
+     <td nowrap Valign="middle" align="right">
+		<font size="1">{APP.NTC_WELCOME} {CURRENT_USER}</font>&nbsp;&nbsp;<br> 
+	    <font size="1">{DATE}</font> <br>
      </td>
   </tr>
 <!-- BEGIN: sub_menu -->
   <tr>
-    <td class="moduleMenu" align="center" width="100%" colSpan="3" height="25">
+    <td class="moduleMenu" align="left" width="100%" colSpan="3" height="25">
 <table cellSpacing="3" cellpadding="0" border="0"><tbody><tr>
+	<td align="right"><img width="70" height="1" src="include/images/blank.gif"></td>
 	<!-- BEGIN: sub_menu_item -->
 	<td nowrap class="moduleMenu"><a class="moduleMenu" href="{URL}">{LABEL}</A></td><td class="moduleMenu">{SEPARATOR}</td>
 	<!-- END: sub_menu_item -->
@@ -82,10 +81,9 @@
 <!-- END: sub_menu -->
 
 	</td>
-	<td noWrap align="right" class="moduleMenu"><A class="moduleMenu" href="{DELETED_ITEMS_URL}">{DELETED_ITEMS_LABEL}&nbsp;</A>
 	</tr></table></td></tr>
 <tr><td valign="top" width="20%">
-
+<A HREF="http://www.sourceforge.net/project/showfiles.php?group_id=117522" target="_blank"><img align="absmiddle" src="{APP.LNK_OUTLOOK}" border="0"></A><br><br>
 <!-- Between submenu and left form -->
 
 <!-- BEGIN: left_form -->  	
@@ -97,8 +95,8 @@
 	  	  <img height="5" src="{IMAGE_PATH}/right_arc.gif" width="5" border="0"></td>
 		</tr></tbody></table>
 		<!-- BEGIN: left_form_search -->
-				<table cellpadding="2" cellspacing="0" border="1" width="100%">
-				 <tr><td nowrap class="leftFormBorder1">
+				<table cellpadding="2" cellspacing="0" border="1" width="100%" class="leftFormBorder1">
+				 <tr><td nowrap>
 				  <form>
 			  	  <input type="hidden" name="action" value="UnifiedSearch">
 				  <input type="hidden" name="module" value="Home">
@@ -111,8 +109,8 @@
 			  <br>
 		<!-- END: left_form_search -->
 		<!-- BEGIN: left_form_recent_view -->
-		    <table cellpadding="0" cellspacing="0" border="1" width="100%"><tbody>
-		 	<tr><td class="leftFormBorder2">
+		    <table cellpadding="0" cellspacing="0" border="1" width="100%" class="leftFormBorder2"><tbody>
+		 	<tr><td>
 				<table cellpadding="2" cellspacing="0" border="0">
 				<tbody>
 		<!-- BEGIN: left_form_recent_view_row -->

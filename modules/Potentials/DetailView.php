@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/DetailView.php,v 1.1 2004/08/17 15:06:09 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/DetailView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -47,7 +50,7 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
 $xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
+$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $focus->id);
 $xtpl->assign("ACCOUNT_NAME", $focus->account_name);	
 $xtpl->assign("ACCOUNT_ID", $focus->account_id);	
@@ -62,15 +65,19 @@ $xtpl->assign("NEXT_STEP", $focus->next_step);
 $xtpl->assign("SALES_STAGE", $app_list_strings['sales_stage_dom'][$focus->sales_stage]);
 $xtpl->assign("PROBABILITY", $focus->probability);
 $xtpl->assign("DESCRIPTION", $focus->description);
+$xtpl->assign("DATE_MODIFIED", substr($focus->date_modified,0,16));
+$xtpl->assign("DATE_ENTERED", substr($focus->date_entered,0,16));
 $xtpl->parse("main");
 $xtpl->out("main");
 
 echo "<BR>\n";
 
-// Now get the list of contacts that match this one.
-$focus_list = & $focus->get_contacts();
 
-include('modules/Contacts/SubPanelViewOpportunity.php');
+include('modules/Contacts/SubPanelViewContactsAndUsers.php');
+$SubPanel = new SubPanelViewContactsAndUsers();
+$SubPanel->setFocus($focus);
+$SubPanel->setHideUsers(true);
+$SubPanel->ProcessSubPanelListView( 'modules/Contacts/SubPanelViewOpportunity.html',$mod_strings, $action);
 
 echo "<BR>\n";
 

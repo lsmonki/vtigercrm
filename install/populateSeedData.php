@@ -6,14 +6,14 @@
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
- * The Original Code is: SugarCRM Open Source
+ * The Original Code is:  SugarCRM Open Source
  * The Initial Developer of the Original Code is SugarCRM, Inc.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/populateSeedData.php,v 1.5 2004/08/26 11:44:30 sarajkumar Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/populateSeedData.php,v 1.6 2004/10/06 09:02:03 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -24,7 +24,7 @@ require_once('modules/Contacts/Contact.php');
 require_once('modules/Accounts/Account.php');
 require_once('modules/Opportunities/Opportunity.php');
 require_once('modules/Tasks/Task.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('include/utils.php');
 require_once('include/language/en_us.lang.php');
 
@@ -38,6 +38,7 @@ global $street_address_array;
 global $street_address_count;
 global $city_array;
 global $city_array_count;
+ $db = new PearDatabase();
 
 function add_digits($quantity, &$string, $min = 0, $max = 9)
 {
@@ -84,10 +85,12 @@ if(isset($default_user_name) && $default_user_name != '' && isset($create_defaul
 
 // Look up the user id for the assigned user
 $seed_user = new User();
+
 $assigned_user_id = $seed_user->retrieve_user_id($assigned_user_name);
 
 for($i = 0; $i < $company_name_count; $i++)
 {
+	
 	$account_name = $company_name_array[$i];
 
 	// Create new accounts.
@@ -147,7 +150,8 @@ for($i = 0; $i < $company_name_count; $i++)
 	// Create a linking table entry to assign an account to the opportunity.
 	
 	$query = "insert into accounts_opportunities set id='".create_guid()."', opportunity_id='$opp->id', account_id='$account->id'";
-	mysql_query($query);
+	global $db;
+	$db->query($query);
 }
 
 
@@ -196,12 +200,13 @@ for($i=0; $i<1000; $i++)
 	// Create a linking table entry to assign an account to the contact.
 	$account_key = array_rand($account_ids);
 	$query = "insert into accounts_contacts set id='".create_guid()."', contact_id='$contact->id', account_id='".$account_ids[$account_key]."'";
-	mysql_query($query) or die(" unable to create seed links between accounts and contacts: ".mysql_error()."<BR>$query");
+	global $db;
+	$db->query($query, true, " unable to create seed links between accounts and contacts:");
 	
 	// This assumes that there will be one opportunity per company in the seed data.
 	$opportunity_key = array_rand($opportunity_ids);
 	$query = "insert into opportunities_contacts set id='".create_guid()."', contact_id='$contact->id', contact_role='".$app_list_strings['opportunity_relationship_type_default_key']."', opportunity_id='".$opportunity_ids[$opportunity_key]."'";
-	mysql_query($query) or die("unable to create seed links between opportunities and contacts");
+	$db->query($query, true, "unable to create seed links between opportunities and contacts");
 
 	//Create new tasks
 	$task = new Task();
@@ -218,7 +223,7 @@ for($i=0; $i<1000; $i++)
 	$task->contact_id = $contact->id;
 	if ($contact->primary_address_city == "San Mateo") {
 		$task->parent_id = $account_ids[$account_key];
-		$task->parent_type = 'Account';
+		$task->parent_type = 'Accounts';
 		$task->save();
 	}
 

@@ -13,22 +13,25 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Home/Menu.php,v 1.4 2004/09/02 10:33:51 rakeebk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Home/Menu.php,v 1.5 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 global $mod_strings;
 $module_menu = Array(
-	Array("index.php?module=Leads&action=EditView&return_module=Leads&return_action=index", $mod_strings['LNK_NEW_LEAD']),
-	Array("index.php?module=Contacts&action=EditView&return_module=Contacts&return_action=index", $mod_strings['LNK_NEW_CONTACT']),
-	Array("index.php?module=Accounts&action=EditView&return_module=Accounts&return_action=index", $mod_strings['LNK_NEW_ACCOUNT']),
-	Array("index.php?module=Opportunities&action=EditView&return_module=Opportunities&return_action=index", $mod_strings['LNK_NEW_OPPORTUNITY']),
-	Array("index.php?module=Cases&action=EditView&return_module=Cases&return_action=index", $mod_strings['LNK_NEW_CASE']),
-	Array("index.php?module=Notes&action=EditView&return_module=Notes&return_action=index", $mod_strings['LNK_NEW_NOTE']),
-	Array("index.php?module=Calls&action=EditView&return_module=Calls&return_action=index", $mod_strings['LNK_NEW_CALL']),
-	Array("index.php?module=Emails&action=EditView&return_module=Emails&return_action=index", $mod_strings['LNK_NEW_EMAIL']),
-	Array("index.php?module=Meetings&action=EditView&return_module=Meetings&return_action=index", $mod_strings['LNK_NEW_MEETING']),
-	Array("index.php?module=Tasks&action=EditView&return_module=Tasks&return_action=index", $mod_strings['LNK_NEW_TASK'])
+	Array("index.php?module=Contacts&action=EditView&return_module=Contacts&return_action=DetailView", $mod_strings['LNK_NEW_CONTACT']),
+	Array("index.php?module=Leads&action=EditView&return_module=Leads&return_action=DetailView", $mod_strings['LNK_NEW_LEAD']),
+	Array("index.php?module=Accounts&action=EditView&return_module=Accounts&return_action=DetailView", $mod_strings['LNK_NEW_ACCOUNT']),
+	Array("index.php?module=Opportunities&action=EditView&return_module=Opportunities&return_action=DetailView", $mod_strings['LNK_NEW_OPPORTUNITY']),
+	Array("index.php?module=Cases&action=EditView&return_module=Cases&return_action=DetailView", $mod_strings['LNK_NEW_CASE']),
+	Array("index.php?module=Notes&action=EditView&return_module=Notes&return_action=DetailView", $mod_strings['LNK_NEW_NOTE']),
+	Array("index.php?module=Calls&action=EditView&return_module=Calls&return_action=DetailView", $mod_strings['LNK_NEW_CALL']),
+	Array("index.php?module=Emails&action=EditView&return_module=Emails&return_action=DetailView", $mod_strings['LNK_NEW_EMAIL']),
+	Array("index.php?module=Meetings&action=EditView&return_module=Meetings&return_action=DetailView", $mod_strings['LNK_NEW_MEETING']),
+	Array("index.php?module=Tasks&action=EditView&return_module=Tasks&return_action=DetailView", $mod_strings['LNK_NEW_TASK'])
 	);
 
 ?>

@@ -13,12 +13,18 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Home/UnifiedSearch.php,v 1.1 2004/08/17 15:05:06 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Home/UnifiedSearch.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('include/logging.php');
-
+require_once('modules/Contacts/Contact.php');
+require_once('modules/Accounts/Account.php');
+require_once('modules/Opportunities/Opportunity.php');
+require_once('modules/Cases/Case.php');
 global $mod_strings;
 
 function build_account_where_clause ($the_query_string) {
@@ -110,22 +116,23 @@ echo get_module_title("", "Search Results", true);
 echo "\n<BR>\n";
 if(isset($_REQUEST['query_string']) && preg_match("/[\w]/", $_REQUEST['query_string'])) {
 	//get accounts
-	$where = build_account_where_clause($_REQUEST['query_string']);
+	$where = Account::build_generic_where_clause($_REQUEST['query_string']);
 	echo "<table><td><tr>\n";
 	include ("modules/Accounts/ListView.php");
 
 	//get contacts
-	$where = build_contact_where_clause($_REQUEST['query_string']);
+	
+	$where = Contact::build_generic_where_clause($_REQUEST['query_string']);
 	echo "<table><td><tr>\n";
 	include ("modules/Contacts/ListView.php");
 
 	//get opportunities
-	$where = build_opportunity_where_clause($_REQUEST['query_string']);
+	$where = Opportunity::build_generic_where_clause($_REQUEST['query_string']);
 	echo "<table><td><tr>\n";
 	include ("modules/Opportunities/ListView.php");
 
 	//get cases
-	$where = build_case_where_clause($_REQUEST['query_string']);
+	$where = aCase::build_generic_where_clause($_REQUEST['query_string']);
 	echo "<table><td><tr>\n";
 	include ("modules/Cases/ListView.php");
 }

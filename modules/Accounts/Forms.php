@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -13,12 +13,15 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Forms.php,v 1.1 2004/08/17 15:02:56 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Forms.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  Contains a variety of utility functions specific to this module.
  ********************************************************************************/
 
 /**
  * Create javascript to validate the data entered into a record.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  */
 function get_validate_record_js () {
 global $mod_strings;
@@ -39,6 +42,9 @@ $the_script  = <<<EOQ
 <!--  to hide script contents from old browsers
 /**
  * DHTML date validation script. Courtesy of SmartWebby.com (http://www.smartwebby.com/dhtml/)
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  */
 // Declaring valid date character, minimum year and maximum year
 var dtCh= "-";
@@ -47,7 +53,7 @@ var maxYear=2100;
 
 function isInteger(s){
 	var i;
-    for (i = 0; i < s.length; i++){   
+    for (i = 0; i < s.length; i++){
         // Check that current character is number.
         var c = s.charAt(i);
         if (((c < "0") || (c > "9"))) return false;
@@ -61,7 +67,7 @@ function stripCharsInBag(s, bag){
     var returnString = "";
     // Search through string's characters one by one.
     // If character is not in bag, append to returnString.
-    for (i = 0; i < s.length; i++){   
+    for (i = 0; i < s.length; i++){
         var c = s.charAt(i);
         if (bag.indexOf(c) == -1) returnString += c;
     }
@@ -78,7 +84,7 @@ function DaysArray(n) {
 		this[i] = 31
 		if (i==4 || i==6 || i==9 || i==11) {this[i] = 30}
 		if (i==2) {this[i] = 29}
-   } 
+   }
    return this
 }
 
@@ -121,11 +127,21 @@ function isDate(dtStr){
 return true
 }
 
+function trim(s) {
+	while (s.substring(0,1) == " ") {
+		s = s.substring(1, s.length);
+	}
+	while (s.substring(s.length-1, s.length) == ' ') {
+		s = s.substring(0,s.length-1);
+	}
+
+	return s;
+}
 
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (form.name.value == "") {
+	if (trim(form.name.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_account_name";
 	}
@@ -134,11 +150,11 @@ function verify_data(form) {
 		alert("$err_missing_required_fields" + errorMessage);
 		return false;
 	}
-	if (form.email1.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form.email1.value)) {
+	if (trim(form.email1.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
 		alert('"' + form.email1.value + '" $err_invalid_email_address');
 		return false;
 	}
-	if (form.email2.value != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(form.email2.value)) {
+	if (trim(form.email2.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
 		alert('"' + form.email2.value + '" $err_invalid_email_address');
 		return false;
 	}
@@ -157,6 +173,9 @@ return $the_script;
 
 /**
  * Create HTML form to enter a new record with the minimum necessary fields.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  */
 function get_new_record_form () {
 global $mod_strings;
@@ -176,9 +195,9 @@ $the_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 $the_form .= <<<EOQ
 		<form name="ContactSave" onSubmit="return verify_data(ContactSave)" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Accounts">
-			<input type="hidden" name="record" value="">			
-			<input type="hidden" name="email1" value="">			
-			<input type="hidden" name="email2" value="">			
+			<input type="hidden" name="record" value="">
+			<input type="hidden" name="email1" value="">
+			<input type="hidden" name="email2" value="">
 			<input type="hidden" name="assigned_user_id" value='${user_id}'>
 			<input type="hidden" name="action" value="Save">
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_account_name<br>
@@ -189,7 +208,7 @@ $the_form .= <<<EOQ
 		http://<input name='website' type="text" value=""><br>
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >
 		</form>
-		
+
 EOQ;
 $the_form .= get_left_form_footer();
 $the_form .= get_validate_record_js();

@@ -13,10 +13,13 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/language/en_us.lang.php,v 1.2 2004/08/31 05:24:18 rakeebk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/language/en_us.lang.php,v 1.3 2004/10/06 09:02:05 jack Exp $
  * Description:  Defines the English language pack for the Account module.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
- 
+
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Opportunities',
 'LBL_MODULE_TITLE'=>'Opportunities: Home',
@@ -25,17 +28,17 @@ $mod_strings = Array(
 'LBL_OPPORTUNITY_NAME'=>'Opportunity Name:',
 'LBL_OPPORTUNITY'=>'Opportunity:',
 'LBL_NAME'=>'Opportunity Name',
-
+'LBL_INVITEE'=>'Contacts',
 'LBL_LIST_OPPORTUNITY_NAME'=>'Opportunity',
 'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
 'LBL_LIST_AMOUNT'=>'Amount',
-'LBL_LIST_DATE_CLOSED'=>'Closed Date',
+'LBL_LIST_DATE_CLOSED'=>'Expected Close',
 'LBL_LIST_SALES_STAGE'=>'Sales Stage',
 
 'LBL_OPPORTUNITY_NAME'=>'Opportunity Name:',
 'LBL_ACCOUNT_NAME'=>'Account Name:',
 'LBL_AMOUNT'=>'Amount:',
-'LBL_DATE_CLOSED'=>'Closed Date:',
+'LBL_DATE_CLOSED'=>'Expected Close Date:',
 'LBL_TYPE'=>'Type:',
 'LBL_NEXT_STEP'=>'Next Step:',
 'LBL_LEAD_SOURCE'=>'Lead Source:',
@@ -43,9 +46,9 @@ $mod_strings = Array(
 'LBL_PROBABILITY'=>'Probability (%):',
 'LBL_DESCRIPTION'=>'Description:',
 
-'LBL_NEW_FORM_TITLE'=>'New Account',
-'LNK_NEW_LEAD'=>'New Lead',
+'LBL_NEW_FORM_TITLE'=>'New Opportunity',
 'LNK_NEW_CONTACT'=>'New Contact',
+'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_ACCOUNT'=>'New Account',
 'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
 'LNK_NEW_CASE'=>'New Case',
@@ -56,7 +59,9 @@ $mod_strings = Array(
 'LNK_NEW_TASK'=>'New Task',
 
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the opportunity.",
-'LBL_TOP_OPPORTUNITIES'=>"My Top Opportunities",
+'LBL_TOP_OPPORTUNITIES'=>"My Top Open Opportunities",
+
+'NTC_REMOVE_OPP_CONFIRMATION'=>'Are you sure you want to remove this contact from this opportunity?',
 );
 
 ?>

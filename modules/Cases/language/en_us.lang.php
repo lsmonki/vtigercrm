@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Cases/language/en_us.lang.php,v 1.2 2004/08/31 05:10:21 rakeebk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Cases/language/en_us.lang.php,v 1.3 2004/10/06 09:02:05 jack Exp $
  * Description:  Defines the English language pack for the Account module.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
  
 $mod_strings = Array(
@@ -41,9 +44,10 @@ $mod_strings = Array(
 'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
 'LBL_LIST_STATUS'=>'Status',
 'LBL_LIST_LAST_MODIFIED'=>'Last Modified',
+'LBL_INVITEE'=>'Contacts',
 
-'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_CONTACT'=>'New Contact',
+'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_ACCOUNT'=>'New Account',
 'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
 'LNK_NEW_CASE'=>'New Case',
@@ -52,6 +56,7 @@ $mod_strings = Array(
 'LNK_NEW_EMAIL'=>'New Email',
 'LNK_NEW_MEETING'=>'New Meeting',
 'LNK_NEW_TASK'=>'New Task',
+'NTC_REMOVE_INVITEE'=>'Are you sure you want to remove this contact from the case?',
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
 );
 

@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -13,9 +13,9 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/Amazon/layout_utils.php,v 1.3 2004/08/22 10:42:06 rakeebk Exp $
- * Description:  Contains a variety of utility functions used to display UI 
- * components such as form headers and footers.  Intended to be modified on a per 
+ * $Header:  vtiger_crm/sugarcrm/themes/Amazon/layout_utils.php,v 1.5 2004/10/06 09:02:05 jack Exp $
+ * Description:  Contains a variety of utility functions used to display UI
+ * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
  ********************************************************************************/
 
@@ -25,19 +25,19 @@ global $theme;
 global $image_path;
 $image_path = 'themes/'.$theme.'/images/';
 
-$log = LoggerManager::getLogger('layout_utils');	
+$log = LoggerManager::getLogger('layout_utils');
 
 /**
  * Create HTML to display formatted form title of a form in the left pane
  * param $left_title - the string to display as the title in the header
  */
-function get_left_form_header ($left_title) 
+function get_left_form_header ($left_title)
 {
 global $image_path;
 
 $the_header = <<<EOQ
        <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-		<td class="leftFormHeader" vAlign="top" align="left" height="20"> 
+		<td class="leftFormHeader" vAlign="top" align="left" height="20">
          <IMG height="5" src="$image_path/left_arc.gif" width="5" border="0"></td>
         <td class="leftFormHeader" vAlign="middle" align="left" noWrap width="100%" height="20">$left_title</td>
         <td  class="leftFormHeader" vAlign="top" align="right" height="20">
@@ -62,7 +62,7 @@ return ("</td></tr></tbody></table>\n");
  * param $other_text - the string to next to the title.  Typically used for form buttons.
  * param $show_help - the boolean which determines if the print and help links are shown.
  */
-function get_form_header ($form_title, $other_text, $show_help) 
+function get_form_header ($form_title, $other_text, $show_help)
 {
 global $image_path;
 global $app_strings;
@@ -71,7 +71,7 @@ $the_form = <<<EOQ
 <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 	  <td>
        <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-		<td class="formHeader" vAlign="top" align="left" height="20"> 
+		<td class="formHeader" vAlign="top" align="left" height="20">
          <IMG height="5" src="$image_path/left_arc.gif" width="5" border="0"></td>
         <td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20">$form_title</td>
         <td  class="formHeader" vAlign="top" align="right" height="20">
@@ -90,7 +90,7 @@ else {
 }
 
 if ($show_help==true) {
-     $the_form .= "<td class='bodySmall' align='right'>[ <A href='phprint.php?jt=".session_id()."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
+     $the_form .= "<td class='bodySmall' align='right'>[ <A href='phprint.php?jt=".session_id().$GLOBALS['request_string']."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
      $the_form .= "<td class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";
 }
 
@@ -124,7 +124,7 @@ global $app_strings;
 $the_title = "<table width='100%' cellpadding='0' cellspacing='0' border='0'><tbody><tr><td>\n";
 $the_title .= "<table cellpadding='2' cellspacing='0' border='0'><tbody><tr>\n";
 $the_title .= "<td vAlign='middle' align='center'>\n";
-		
+
 if (is_file($image_path.$module.".gif")) {
 	$the_title .= "<IMG src='".$image_path.$module.".gif' border='0'>\n";
 }
@@ -134,8 +134,8 @@ $the_title .= $module_title."</td></tr></tbody></table></td>\n";
 $the_title .= "<td width='100%'><IMG height='1' src='include/images/blank.gif'></td>";
 
 if ($show_help) {
-	$the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='phprint.php?jt=".session_id()."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
-    $the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";
+	$the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='phprint.php?jt=".session_id().$GLOBALS['request_string']."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
+	$the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";
 }
 else {
 	$the_title .= "<td class='bodySmall' align='right'>&nbsp;</td>\n";

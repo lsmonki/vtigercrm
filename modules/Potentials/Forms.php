@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -13,14 +13,17 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Forms.php,v 1.1 2004/08/17 15:06:09 gjayakrishnan Exp $
- * Description:  Contains a variety of utility functions used to display UI 
- * components such as form headers and footers.  Intended to be modified on a per 
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Forms.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * Description:  Contains a variety of utility functions used to display UI
+ * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
  ********************************************************************************/
 
 /**
  * Create javascript to validate the data entered into a record.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  */
 function get_validate_record_js () {
 global $mod_strings;
@@ -45,6 +48,9 @@ $the_script  = <<<EOQ
 <!--  to hide script contents from old browsers
 /**
  * DHTML date validation script. Courtesy of SmartWebby.com (http://www.smartwebby.com/dhtml/)
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  */
 // Declaring valid date character, minimum year and maximum year
 var dtCh= "-";
@@ -53,7 +59,7 @@ var maxYear=2100;
 
 function isInteger(s){
 	var i;
-    for (i = 0; i < s.length; i++){   
+    for (i = 0; i < s.length; i++){
         // Check that current character is number.
         var c = s.charAt(i);
         if (((c < "0") || (c > "9"))) return false;
@@ -67,7 +73,7 @@ function stripCharsInBag(s, bag){
     var returnString = "";
     // Search through string's characters one by one.
     // If character is not in bag, append to returnString.
-    for (i = 0; i < s.length; i++){   
+    for (i = 0; i < s.length; i++){
         var c = s.charAt(i);
         if (bag.indexOf(c) == -1) returnString += c;
     }
@@ -84,7 +90,7 @@ function DaysArray(n) {
 		this[i] = 31
 		if (i==4 || i==6 || i==9 || i==11) {this[i] = 30}
 		if (i==2) {this[i] = 29}
-   } 
+   }
    return this
 }
 
@@ -127,25 +133,35 @@ function isDate(dtStr){
 return true
 }
 
+function trim(s) {
+	while (s.substring(0,1) == " ") {
+		s = s.substring(1, s.length);
+	}
+	while (s.substring(s.length-1, s.length) == ' ') {
+		s = s.substring(0,s.length-1);
+	}
+
+	return s;
+}
 
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (form.name.value == "") {
+	if (trim(form.name.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_name";
 	}
-	if (form.account_name.value == "") {
+	if (trim(form.account_name.value) == "") {
 		isError = true;
-		errorMessage += "\\n$lbl_account_name"; 
+		errorMessage += "\\n$lbl_account_name";
 	}
 	// TODO:  Clint - needs to be cleaned up
 	if (form.account_name.value == "skip_me") {
 		form.account_name.value = '';
 	}
-	if (isDate(form.date_closed.value)==false) {
+	if (form.date_closed.value == false) {
 		isError = true;
-		errorMessage += "\\n$lbl_date_closed"; 
+		errorMessage += "\\n$lbl_date_closed";
 	}
 	if (form.sales_stage.selected == "") {
 		isError = true;
@@ -168,12 +184,20 @@ return $the_script;
 
 /**
  * Create HTML form to enter a new record with the minimum necessary fields.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  */
 function get_new_record_form () {
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
+global $theme;
 global $current_user;
+// Unimplemented until jscalendar language files are fixed
+// global $current_language;
+// global $default_language;
+// global $cal_codes;
 
 $lbl_required_symbol = $app_strings['LBL_REQUIRED_SYMBOL'];
 $lbl_opportunity_name = $mod_strings['LBL_OPPORTUNITY_NAME'];
@@ -185,20 +209,28 @@ $lbl_save_button_title = $app_strings['LBL_SAVE_BUTTON_TITLE'];
 $lbl_save_button_key = $app_strings['LBL_SAVE_BUTTON_KEY'];
 $lbl_save_button_label = $app_strings['LBL_SAVE_BUTTON_LABEL'];
 $user_id = $current_user->id;
+// Unimplemented until jscalendar language files are fixed
+// $cal_lang = (empty($cal_codes[$current_language])) ? $cal_codes[$default_language] : $cal_codes[$current_language];
+$cal_lang = "en";
+$cal_dateformat = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 
 $the_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 $the_form .= <<<EOQ
 
+		<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+		<script type="text/javascript" src="jscalendar/calendar.js"></script>
+		<script type="text/javascript" src="jscalendar/lang/calendar-{$cal_lang}.js"></script>
+		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 		<form name="OppSave" onSubmit="return verify_data(OppSave)" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Opportunities">
-			<input type="hidden" name="record" value="">			
-			<input type="hidden" name="account_name" value="skip_me">			
+			<input type="hidden" name="record" value="">
+			<input type="hidden" name="account_name" value="skip_me">
 			<input type="hidden" name="assigned_user_id" value='${user_id}'>
 			<input type="hidden" name="action" value="Save">
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_opportunity_name<br>
 		<input name='name' type="text" value=""><br>
-		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date_closed <font size="1"><em>$ntc_date_format</em></font><br>
-		<input name='date_closed' type="text" value="">&nbsp;<br>
+		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date_closed <br><font size="1"><em>$ntc_date_format</em></font><br>
+		<input name='date_closed' size='12' maxlength='10' id='jscal_field' type="text" value=""> <img src="themes/$theme/images/calendar.gif" id="jscal_trigger"><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_sales_stage<br>
 		<select name='sales_stage'>
 EOQ;
@@ -209,7 +241,12 @@ $the_form .= <<<EOQ
 		<input name='amount' type="text"><br><br>
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >
 		</form>
-		
+		<script type="text/javascript">
+		Calendar.setup ({
+			inputField : "jscal_field", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
+		});
+		</script>
+
 EOQ;
 
 $the_form .= get_left_form_footer();

@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -18,8 +18,8 @@ require_once("data/Tracker.php");
 require_once('modules/Accounts/Account.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
-require_once('include/listview.php');
-
+require_once('include/ListView/ListView.php');
+require_once('include/database/PearDatabase.php');
 global $app_strings;
 global $app_list_strings;
 global $current_language;
@@ -61,33 +61,45 @@ if(isset($_REQUEST['query']))
 	if (isset($_REQUEST['address_country'])) $address_country = $_REQUEST['address_country'];
 	if (isset($_REQUEST['address_postalcode'])) $address_postalcode = $_REQUEST['address_postalcode'];
 	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
-	
+	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
+
 	$where_clauses = Array();
 
-	if(isset($name) && $name != "") array_push($where_clauses, "name like '$name%'");
-	if(isset($website) && $website != "") array_push($where_clauses, "website like '$website%'");
-	if(isset($phone) && $phone != "") array_push($where_clauses, "(phone_office like '%$phone%' OR phone_alternate like '%$phone%' OR phone_fax like '%$phone%')");
-	if(isset($annual_revenue) && $annual_revenue != "") array_push($where_clauses, "annual_revenue like '$annual_revenue%'");
-	if(isset($address_street) && $address_street != "") array_push($where_clauses, "(billing_address_street like '$address_street%' OR shipping_address_street like '$address_street%')");
-	if(isset($address_city) && $address_city != "") array_push($where_clauses, "(billing_address_city like '$address_city%' OR shipping_address_city like '$address_city%')");
-	if(isset($address_state) && $address_state != "") array_push($where_clauses, "(billing_address_state like '$address_state%' OR shipping_address_state like '$address_state%')");
-	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "(billing_address_postalcode like '$address_postalcode%' OR shipping_address_postalcode like '$address_postalcode%')");
-	if(isset($address_country) && $address_country != "") array_push($where_clauses, "(billing_address_country like '$address_country%' OR shipping_address_country like '$address_country%')");
+	if(isset($name) && $name != "") array_push($where_clauses, "accounts.name like '$name%'");
+	if(isset($website) && $website != "") array_push($where_clauses, "accounts.website like '$website%'");
+	if(isset($phone) && $phone != "") array_push($where_clauses, "(accounts.phone_office like '%$phone%' OR accounts.phone_alternate like '%$phone%' OR accounts.phone_fax like '%$phone%')");
+	if(isset($annual_revenue) && $annual_revenue != "") array_push($where_clauses, "accounts.annual_revenue like '$annual_revenue%'");
+	if(isset($address_street) && $address_street != "") array_push($where_clauses, "(accounts.billing_address_street like '$address_street%' OR accounts.shipping_address_street like '$address_street%')");
+	if(isset($address_city) && $address_city != "") array_push($where_clauses, "(accounts.billing_address_city like '$address_city%' OR accounts.shipping_address_city like '$address_city%')");
+	if(isset($address_state) && $address_state != "") array_push($where_clauses, "(accounts.billing_address_state like '$address_state%' OR accounts.shipping_address_state like '$address_state%')");
+	if(isset($address_postalcode) && $address_postalcode != "") array_push($where_clauses, "(accounts.billing_address_postalcode like '$address_postalcode%' OR accounts.shipping_address_postalcode like '$address_postalcode%')");
+	if(isset($address_country) && $address_country != "") array_push($where_clauses, "(accounts.billing_address_country like '$address_country%' OR accounts.shipping_address_country like '$address_country%')");
 	if(isset($email) && $email != "") array_push($where_clauses, "(contacts.email1 like '$email%' OR contacts.email2 like '$email%')");
-	if(isset($industry) && $industry != "") array_push($where_clauses, "industry = '$industry'");
-	if(isset($ownership) && $ownership != "") array_push($where_clauses, "ownership like '$ownership%'");
-	if(isset($rating) && $rating != "") array_push($where_clauses, "rating like '$rating%'");
-	if(isset($sic_code) && $sic_code != "") array_push($where_clauses, "sic_code like '$sic_code%'");
-	if(isset($ticker_symbol) && $ticker_symbol != "") array_push($where_clauses, "ticker_symbol like '$ticker_symbol%'");
-	if(isset($account_type) && $account_type != "") array_push($where_clauses, "account_type = '$account_type'");
-	if(isset($current_user_only) && $current_user_only != "") array_push($where_clauses, "assigned_user_id='$current_user->id'");
-	
+	if(isset($industry) && $industry != "") array_push($where_clauses, "accounts.industry = '$industry'");
+	if(isset($ownership) && $ownership != "") array_push($where_clauses, "accounts.ownership like '$ownership%'");
+	if(isset($rating) && $rating != "") array_push($where_clauses, "accounts.rating like '$rating%'");
+	if(isset($sic_code) && $sic_code != "") array_push($where_clauses, "accounts.sic_code like '$sic_code%'");
+	if(isset($ticker_symbol) && $ticker_symbol != "") array_push($where_clauses, "accounts.ticker_symbol like '$ticker_symbol%'");
+	if(isset($account_type) && $account_type != "") array_push($where_clauses, "accounts.account_type = '$account_type'");
+	if(isset($current_user_only) && $current_user_only != "") array_push($where_clauses, "accounts.assigned_user_id='$current_user->id'");
+
 	$where = "";
 	foreach($where_clauses as $clause)
 	{
 		if($where != "")
 		$where .= " and ";
 		$where .= $clause;
+	}
+
+	if (!empty($assigned_user_id)) {
+		if (!empty($where)) {
+			$where .= " AND ";
+		}
+		$where .= "accounts.assigned_user_id IN(";
+		foreach ($assigned_user_id as $key => $val) {
+			$where .= "'$val'";
+			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
+		}
 	}
 
 	$log->info("Here is the where clause for the list view: $where");
@@ -104,11 +116,11 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if (isset($name)) $search_form->assign("NAME", $name);
 	if (isset($website)) $search_form->assign("WEBSITE", $website);
 	if (isset($phone)) $search_form->assign("PHONE", $phone);
-	
+
 	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
-	
+
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
-	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') { 
+	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
 		if (isset($annual_revenue)) $search_form->assign("ANNUAL_REVENUE", $annual_revenue);
 		if (isset($address_street)) $search_form->assign("ADDRESS_STREET", $address_street);
 		if (isset($address_city)) $search_form->assign("ADDRESS_CITY", $address_city);
@@ -121,10 +133,14 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		if (isset($sic_code)) $search_form->assign("SIC_CODE", $sic_code);
 		if (isset($ticker_symbol)) $search_form->assign("TICKER_SYMBOL", $ticker_symbol);
 
-		if (isset($industry)) $search_form->assign("INDUSTRY_OPTIONS", get_select_options($app_list_strings['industry_dom'], $industry));
-		else $search_form->assign("INDUSTRY_OPTIONS", get_select_options($app_list_strings['industry_dom'], ''));
-		if (isset($account_type)) $search_form->assign("ACCOUNT_TYPE_OPTIONS", get_select_options($app_list_strings['account_type_dom'], $account_type));
-		else $search_form->assign("ACCOUNT_TYPE_OPTIONS", get_select_options($app_list_strings['account_type_dom'], ''));
+		if (isset($industry)) $search_form->assign("INDUSTRY_OPTIONS", get_select_options_with_id($app_list_strings['industry_dom'], $industry));
+		else $search_form->assign("INDUSTRY_OPTIONS", get_select_options_with_id($app_list_strings['industry_dom'], ''));
+		if (isset($account_type)) $search_form->assign("ACCOUNT_TYPE_OPTIONS", get_select_options_with_id($app_list_strings['account_type_dom'], $account_type));
+		else $search_form->assign("ACCOUNT_TYPE_OPTIONS", get_select_options_with_id($app_list_strings['account_type_dom'], ''));
+
+		if (!empty($assigned_user_id)) $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), $assigned_user_id));
+		else $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), ''));
+
 		$search_form->parse("advanced");
 		$search_form->out("advanced");
 	}
@@ -136,6 +152,12 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	echo "\n<BR>\n";
 }
 
-listView($current_module_strings['LBL_LIST_FORM_TITLE'] ,"ACCOUNT", 'modules/Accounts/ListView.html', $seedAccount, "name");
 
+
+$ListView = new ListView();
+$ListView->initNewXTemplate('modules/Accounts/ListView.html',$current_module_strings);
+$ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE']);
+
+$ListView->setQuery($where, "", "name", "ACCOUNT");
+$ListView->processListView($seedAccount, "main", "ACCOUNT");
 ?>

@@ -1,6 +1,6 @@
 <!--
 /*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.2
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
  * ("License"); You may not use this file except in compliance with the 
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
@@ -24,7 +24,7 @@
 	<td nowrap class='bodySmall' align='right'>[ <A href={PRINT_URL}>{APP.LNK_PRINT}</A> ]</td>
 	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
 </tr>
-<tr><td colspan="4"><div class="hline"><img height='2' src='include/images/blank.gif'></div></td></tr></table>
+<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
 
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <form action="index.php" method="post" name="DetailView" id="form">
@@ -75,14 +75,11 @@
 	<tr>
 	<th colspan='4' align="left" class="formSecHeader" width="100%" valign="top">{MOD.LBL_USER_SETTINGS}</th>
 	</tr><tr>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_THEME}</td>
-	<td width="30%" valign="top"  class="dataField">{THEME}</td>
-	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_LANGUAGE}</td>
-	<td width="30%" valign="top"  class="dataField">{LANGUAGE}</td>
-	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_ADMIN}</td>
-	<td width="80%" colspan="3"><input type="checkbox" disabled {IS_ADMIN}></td>
-	</tr></table>
+	<td width="30%"><input type="checkbox" disabled {IS_ADMIN}></td>
+	<td class="dataLabel">&nbsp;</td>
+	<td class="dataLabel">&nbsp;</td>
+		</tr></table>
 </td></tr></table>
 <!-- END: user_settings -->
 
@@ -129,6 +126,8 @@
 	<td width="30%" valign="top"  class="dataField">{ADDRESS_STREET}<br>
 	{ADDRESS_CITY} {ADDRESS_STATE}&nbsp;&nbsp;{ADDRESS_POSTALCODE}<br>
 	{ADDRESS_COUNTRY}</td>
+	<td class="dataLabel">&nbsp;</td>
+	<td class="dataLabel">&nbsp;</td>
 	</tr><tr>
 	<td width="20%" valign="top" valign="top" class="dataLabel">{MOD.LBL_NOTES}</td>
 	<td colspan="3" class="dataField">{DESCRIPTION}</td>

@@ -1,0 +1,44 @@
+<?php
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+
+global $mod_strings;
+?>
+<table width="100%">
+<tr>
+<?php 
+if ($_REQUEST['module'] == 'Contacts' ||
+	$_REQUEST['module'] == 'Accounts')
+{
+?>
+<form name="Import" method="get" action="index.php">
+<input type="hidden" name="module" value="<?php echo $_REQUEST['module']; ?>">
+<input type="hidden" name="action" value="Import">
+<input type="hidden" name="step" value="1">
+<input type="hidden" name="return_module" value="<?php echo $_REQUEST['module']; ?>">
+<input type="hidden" name="return_action" value="index">
+<td align="right" width="99%"><input title="<?php echo $app_strings['LBL_IMPORT']; ?> <?php echo $mod_strings['LBL_MODULE_NAME']?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $app_strings['LBL_IMPORT']; ?> <?php echo $mod_strings['LBL_MODULE_NAME']?>  " >&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</form>
+<?php
+}
+
+?>
+<form name="EXPORT" method="get" action="export.php">
+<input type="hidden" name="module" value="<?php echo $_REQUEST['module']; ?>">
+<input type="hidden" name="all" value="1">
+<input type="hidden" name="action" value="Export">
+<td align="right" width="1%"><input title="<?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?>" accessKey="" class="button" type="submit" name="button" value="  <?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?>  " >&nbsp;&nbsp;&nbsp;&nbsp;</td>
+</form>
+</tr>
+</table>

@@ -1,11 +1,11 @@
 README FOR JPGRAPH
 ==================
 
-This is JpGraph 1.15 an Object Oriented PHP4 Graph Plotting library.
+This is JpGraph 1.16 an Object Oriented PHP4 Graph Plotting library.
 
-The libray is Copyright (C) 2001,2002,2003,2004 Johan Persson and
+The library is Copyright (C) 2001,2002,2003,2004 Johan Persson and
 released under dual license QPL 1.0 for open source and educational
-use amd JpGraph Professional License for commercial use. 
+use and JpGraph Professional License for commercial use. 
 
 Please see full license details at http://www.aditus.nu/jpgraph/
 
@@ -37,7 +37,7 @@ QPL.txt                 QPL 1.0  Licensee
   jpgraph_line.php        Extension: line plots 
   jpgraph_bar.php         Extension: bar plots
   jpgraph_error.php       Extension: error plots
-  jpgraph_scatter.php     Extension: scatter/impuls plots
+  jpgraph_scatter.php     Extension: scatter/impulse plots
   jpgraph_radar.php       Extension: radar plots
   jpgraph_pie.php         Extension: pie plots
   jpgraph_canvas.php      Extension: drawing canvas
@@ -73,14 +73,14 @@ Miminum:
 * GD 1.8.x or GD 2.15 or higher
 
 Recommended:
-* PHP 4.3.5 
+* PHP 4.3.7 
 * Builtin GD library in PHP 4.3.x
 
 Installation
 ------------
-0. Make sure your PHP is  4.3 (preferrable 4.3.5) 
+0. Make sure your PHP is  4.3 (preferable 4.3.7) 
    and that you have compiled support for GD library. 
-   You must make aboslutely sure that you have GD working. 
+   You must make absolutely sure that you have GD working. 
    Please run phpinfo() to check if GD library
    is supported in your installation. If you don't have the GD library
    please consult the PHP manual under section "Image" for
@@ -144,6 +144,8 @@ Change history:
 ------------------------------------------------------------------------
 Date        Ver        Comment
 ------------------------------------------------------------------------
+2004-06-20  1.16       Minor defect fixes
+2004-05-04  1.15       Final 1.15
 2004-04-19  1.15 BETA  Defect fixes and code restructuring to make 
                        jpgraph.php smaller.
 2003-11-25  1.14       Additional error checking, country flags, icon etc

@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Cases/EditView.php,v 1.1 2004/08/17 15:03:56 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Cases/EditView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -39,16 +42,17 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 //needed when creating a new case with a default account value passed in 
 if (isset($_REQUEST['account_name']) && is_null($focus->account_name)) {
 	$focus->account_name = $_REQUEST['account_name'];
-	if(get_magic_quotes_gpc() == 1)
-	{
-		$focus->account_name = stripslashes($focus->account_name);
-	}
+	
 }
 if (isset($_REQUEST['account_id']) && is_null($focus->account_id)) {
 	$focus->account_id = $_REQUEST['account_id'];
 }
 if (isset($_REQUEST['contact_id']) && is_null($focus->contact_id)) {
 	$focus->contact_id = $_REQUEST['contact_id'];
+}
+
+if (is_null($focus->status)) {
+	$focus->status = $app_list_strings['case_status_default_key'];
 }
 
 global $theme;
@@ -66,7 +70,7 @@ if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['
 if(isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
 if(isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
 $xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
+$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("ID", $focus->id);
 if (isset($focus->account_name)) $xtpl->assign("ACCOUNT_NAME", $focus->account_name);
@@ -79,7 +83,7 @@ $xtpl->assign("NUMBER", $focus->number);
 $xtpl->assign("DESCRIPTION", $focus->description);
 
 if ($focus->assigned_user_id == '' && (!isset($focus->id) || $focus->id=0)) $focus->assigned_user_id = $current_user->id; 
-$xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(), $focus->assigned_user_id));
+$xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active", $focus->assigned_user_id), $focus->assigned_user_id));
 $xtpl->assign("STATUS_OPTIONS", get_select_options_with_id($app_list_strings['case_status_dom'], $focus->status));
 
 $xtpl->parse("main");

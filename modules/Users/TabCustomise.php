@@ -15,6 +15,7 @@
 require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/User.php');
+require_once('include/utils.php');
 global $current_user;
 global $theme;
 global $default_language;
@@ -54,12 +55,8 @@ if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $xtpl->assign("YAHOO_MES
 $xtpl->parse("main");
 $xtpl->out("main");
 
-if (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
-	if ($focus->theme != '') $xtpl->assign("THEME", get_theme_display($focus->theme));
-	else $xtpl->assign("THEME", get_theme_display($default_theme)." <em>(default)</em>");
-	if ($focus->language != '') $xtpl->assign("LANGUAGE", get_language_dispay($focus->language));
-	else $xtpl->assign("LANGUAGE", get_language_dispay($default_language)." <em>(default)</em>");
-	if ($focus->is_admin == 'on') $xtpl->assign("IS_ADMIN", "checked");
+if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $focus->is_admin == 'on') {
+       $xtpl->assign("IS_ADMIN", "checked");
 	$xtpl->parse("user_settings");
 	$xtpl->out("user_settings");
 }

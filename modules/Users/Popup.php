@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Popup.php,v 1.1 2004/08/17 15:06:40 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Popup.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 // This file is used for all popups on this module
 // The popup_picker.html file is used for generating a list from which to find and choose one instance.
@@ -25,6 +28,7 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('XTemplate/xtpl.php');
 require_once('include/utils.php');
+require_once('include/ListView/ListView.php');
 
 global $mod_strings;
 global $app_strings;
@@ -52,96 +56,6 @@ if(isset($_REQUEST['query']))
 	$where = generate_where_statement($where_clauses);
 }
 
-$current_offset = 0;
-if(isset($_REQUEST['current_offset']))
-    $current_offset = $_REQUEST['current_offset'];
-
-$response = $seed_object->get_list("user_name", $where, $current_offset);
-
-$record_list = $response['list'];
-$row_count = $response['row_count'];
-$next_offset = $response['next_offset'];
-$previous_offset = $response['previous_offset'];
-
-$start_record = $current_offset + 1;
-
-// Set the start row to 0 if there are no rows (adding one looks bad)
-if($row_count == 0)
-    $start_record = 0;
-
-$end_record = $start_record + $list_max_entries_per_page;
-
-// back up the the last page.
-if($end_record > $row_count+1)
-{
-    $end_record = $row_count+1;
-}
-
-// Deterime the start location of the last page
-$number_pages = floor(($row_count - 1)  / $list_max_entries_per_page);
-$last_page_offset = $number_pages * $list_max_entries_per_page;
-$userList = $response['list'];
-$row_count = $response['row_count'];
-$next_offset = $response['next_offset'];
-$previous_offset = $response['previous_offset'];
-
-$start_record = $current_offset + 1;
-
-// Set the start row to 0 if there are no rows (adding one looks bad)
-if($row_count == 0)
-    $start_record = 0;
-
-$end_record = $start_record + $list_max_entries_per_page;
-
-// back up the the last page.
-if($end_record > $row_count + 1)
-{
-    $end_record = $row_count + 1;
-}
-
-// Deterime the start location of the last page
-if($row_count == 0)
-	$number_pages = 0;
-else
-	$number_pages = floor(($row_count - 1) / $list_max_entries_per_page);
-
-$last_page_offset = $number_pages * $list_max_entries_per_page;
-
-
-// Create the base URL without the current offset.
-// Check to see if the current offset is already there
-// If not, add it to the end.
-
-// All of the other values should use a regular expression search
-$base_URL = $_SERVER['REQUEST_URI'].'?'.$_SERVER['QUERY_STRING']."&current_offset=";
-$start_URL = $base_URL."0";
-$previous_URL  = $base_URL.$previous_offset;
-$next_URL  = $base_URL.$next_offset;
-$end_URL  = $base_URL.$last_page_offset;
-
-$sort_URL_base = $base_URL.$current_offset."&sort_order=";
-
-$log->debug("Offsets: (start, previous, next, last)(0, $previous_offset, $next_offset, $last_page_offset)");
-
-if(0 == $current_offset)
-    $start_link = $app_strings['LNK_LIST_START'];
-else
-    $start_link = "<a href=\"$start_URL\" class=\"listFormHeaderLinks\">".$app_strings['LNK_LIST_START']."</a>";
-
-if($previous_offset < 0)
-    $previous_link = $app_strings['LNK_LIST_PREVIOUS'];
-else
-    $previous_link = "<a href=\"$previous_URL\" class=\"listFormHeaderLinks\">".$app_strings['LNK_LIST_PREVIOUS']."</a>";
-
-if($next_offset >= $end_record)
-    $next_link = $app_strings['LNK_LIST_NEXT'];
-else
-    $next_link = "<a href=\"$next_URL\" class=\"listFormHeaderLinks\">".$app_strings['LNK_LIST_NEXT']."</a>";
-
-if($last_page_offset <= $current_offset)
-    $end_link = $app_strings['LNK_LIST_END'];
-else
-    $end_link = "<a href=\"$end_URL\" class=\"listFormHeaderLinks\">".$app_strings['LNK_LIST_END']."</a>";
 
 $image_path = 'themes/'.$theme.'/images';
 
@@ -237,49 +151,15 @@ if ($_REQUEST['form_submit'] != 'true') $button .= "<td><input title='".$app_str
 $button .= "<td><input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick=\"window.close()\" type='submit' name='button' value='  ".$app_strings['LBL_CANCEL_BUTTON_LABEL']."  '></td>\n";
 $button .= "</tr></form></table>\n";
 
-
-// Stick the form header out there.
-echo get_form_header($mod_strings['LBL_LIST_FORM_TITLE'], $button, false);
-
-$oddRow = true;
-foreach($record_list as $record)
-{
-
-    if($oddRow)
-    {
-        //todo move to themes
-        $class = '"oddListRow"';
-    }
-    else
-    {
-        //todo move to themes
-        $class = '"evenListRow"';
-    }
-    $oddRow = !$oddRow;
-
-    // Retrieve the extra related fields for a list view
-    $record->fill_in_additional_list_fields();
-    
-    $record_details = Array("ID"=>$record->id,
-    	"USER_NAME"=> $record->user_name,
-		"FIRST_NAME" => $record->first_name,
-		"LAST_NAME" => $record->last_name);
-	$form->assign("USER", $record_details);
-	$form->assign("CLASS", $class);
-    $form->parse("main.row");
-}
-
-$form->assign("START_RECORD", $start_record);
-$form->assign("END_RECORD", $end_record-1);
-$form->assign("RECORD_COUNT", $row_count);
-$form->assign("START_LINK", $start_link);
-$form->assign("PREVIOUS_LINK", $previous_link);
-$form->assign("NEXT_LINK", $next_link);
-$form->assign("END_LINK", $end_link);
+$ListView = new ListView();
+$ListView->setXTemplate($form);
+$ListView->setHeaderTitle($mod_strings['LBL_LIST_FORM_TITLE']);
+$ListView->setHeaderText($button);
+$ListView->setQuery($where, "", "user_name", "USER");
+$ListView->setModStrings($mod_strings);
+$ListView->processListView($seed_object, "main", "USER");
 
 
-$form->parse("main");
-$form->out("main");
 
 ?>
 

@@ -1,6 +1,6 @@
 <!--
 /*********************************************************************************
- * The contents of this file are subject to the SugarCRM Public License Version 1.2
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
  * ("License"); You may not use this file except in compliance with the 
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
@@ -39,11 +39,11 @@
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
     			<td valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Accounts&record={ACCOUNT.ID}">{ACCOUNT.NAME}</a></td>
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td valign=TOP style="padding:0px 3px 0px 3px;"><A HREF="mailto:{ACCOUNT.EMAIL}">{ACCOUNT.CITY}</A></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;">{ACCOUNT.BILLING_ADDRESS_CITY}</td>
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td valign=TOP style="padding:0px 3px 0px 3px;"><A HREF="mailto:{ACCOUNT.EMAIL}">{ACCOUNT.STATE}</A></td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;">{ACCOUNT.BILLING_ADDRESS_STATE}</td>
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap>{ACCOUNT.PHONE_WORK}</td>
+    			<td valign=TOP style="padding:0px 3px 0px 3px;"  nowrap>{ACCOUNT.PHONE_OFFICE}</td>
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
     			<td nowrap align="center" valign=TOP style="padding:0px 3px 0px 3px;">[<a class="listFormLinks" href="{URL_PREFIX}index.php?action=EditView&module=Accounts&record={ACCOUNT.ID}">{APP.LNK_EDIT}</a>] &nbsp;&nbsp;[<a class="listFormLinks" onclick="return confirm('{MOD.NTC_REMOVE_MEMBER_ORG_CONFIRMATION}')" href="{URL_PREFIX}index.php?action=DeleteMemberAccountRelationship&module=Accounts&record={ACCOUNT.ID}{RETURN_URL}">{APP.LNK_REMOVE}</a>]</td>
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>

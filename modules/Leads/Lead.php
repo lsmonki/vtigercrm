@@ -15,7 +15,7 @@
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 //require_once('modules/Contacts/Contact.php');
 //require_once('modules/Opportunities/Opportunity.php');
@@ -27,6 +27,7 @@ require_once('modules/Emails/Email.php');
 // Lead is used to store account information.
 class Lead extends SugarBean {
 	var $log;
+	var $db;
 
 	// Stored fields
 	var $date_entered;
@@ -124,6 +125,7 @@ class Lead extends SugarBean {
 
 	function Lead() {
 		$this->log = LoggerManager::getLogger('lead');
+		$this->db = new PearDatabase();
 	}
 
 	function create_tables () {

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/coolblue/layout_utils.php,v 1.3 2004/08/22 10:42:06 rakeebk Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/coolblue/layout_utils.php,v 1.5 2004/10/06 09:02:05 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -36,14 +36,12 @@ function get_left_form_header ($left_title)
 global $image_path;
 
 $the_header = <<<EOQ
-       <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-		<td class="leftFormHeader" vAlign="top" align="left" height="20"> 
-         <IMG height="5" src="$image_path/left_arc.gif" width="5" border="0"></td>
-        <td class="leftFormHeader" vAlign="middle" align="left" noWrap width="100%" height="20">$left_title</td>
-        <td  class="leftFormHeader" vAlign="top" align="right" height="20">
-	  	  <IMG height="5" src="$image_path/right_arc.gif" width="5" border="0"></td>
+       <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+        <td class="leftFormHeader" vAlign="middle" align="left" noWrap height="15">$left_title</td>
+        <td class="leftFormHeader" vAlign="top" align="right" height="15" width="25">
+	  	  <IMG height="15" src="$image_path/right_slope.gif" width="25" border="0"></td>
 		</tr></tbody></table>
-		<table width="100%" cellpadding="3" cellspacing="0" border="1"><tbody><tr><td align="left">
+		<table width="100%" cellpadding="3" cellspacing="0" border="0" class="formOuterBorder"><tbody><tr><td align="left">
 EOQ;
 
 return $the_header;
@@ -68,35 +66,27 @@ global $image_path;
 global $app_strings;
 
 $the_form = <<<EOQ
-<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-	  <td>
-       <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-		<td class="formHeader" vAlign="top" align="left" height="20"> 
-         <IMG height="5" src="$image_path/left_arc.gif" width="5" border="0"></td>
-        <td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20">$form_title</td>
-        <td  class="formHeader" vAlign="top" align="right" height="20">
-	  	  <IMG height="5" src="$image_path/right_arc.gif" width="5" border="0"></td>
-		</tr></tbody></table>
-      </td>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="formHeaderULine"><tbody><tr>
+	  <td valign="bottom">
+       <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+		<td vAlign="middle" class="formHeader" align="left" noWrap width="100%" height="15">$form_title&nbsp;</td>
+        </tr></tbody></table></td>
 EOQ;
 
 if ($other_text) {
 	$the_form .= "<td width='20'><IMG height='1' src='include/images/blank.gif'></td>\n";
-	$the_form .= "<td align='left' valign='bottom'>$other_text</td>\n";
-	$the_form .= "<td width='100%'><IMG height='1' src='include/images/blank.gif'></td>\n";
+	$the_form .= "<td valign='bottom' class='formHeader'><div align='right'>$other_text</div></td>\n";
 }
 else {
-	$the_form .= "<td width='100%'><IMG height='1' src='include/images/blank.gif'></td>\n";
+	$the_form .= "<td><IMG height='1' src='include/images/blank.gif'></td>\n";
 }
 
 if ($show_help==true) {
-     $the_form .= "<td class='bodySmall' align='right'>[ <A href='phprint.php?jt=".session_id()."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
+     $the_form .= "<td class='bodySmall' align='right'>[ <A href='phprint.php?jt=".session_id().$GLOBALS['request_string']."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
      $the_form .= "<td class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";
 }
 
 $the_form .= <<<EOQ
-	  </tr><tr>
- 	  <td colspan="4" width="100%" class="formHeader"><IMG width="100%" height="2" src="$image_path/blank.gif"></td>
 	  </tr>
 </tbody></table>
 EOQ;
@@ -134,15 +124,22 @@ $the_title .= $module_title."</td></tr></tbody></table></td>\n";
 $the_title .= "<td width='100%'><IMG height='1' src='include/images/blank.gif'></td>";
 
 if ($show_help) {
-	$the_title .= "<td class='bodySmall' align='right'>[ <A href='phprint.php?jt=".session_id()."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";
-    $the_title .= "<td class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";
+//test
+/*
+if($module == 'Leads')
+        {
+ $the_title .= "<td color='red' class='bodySmall' nowrap align='right'>[ <A href='index.php?module=imports&action=import'><Blink><B>".$app_strings['LNK_IMPORT_LEADS']."</Blink></B></A> ]</td>\n";
+        }
+*/
+    $the_title .= "<td class='bodySmall' align='right'>[ <A href='phprint.php?jt=".session_id().$GLOBALS['request_string']."'>".$app_strings['LNK_PRINT']."</A> ]</td>\n";	
+    $the_title .= "<td class='bodySmall' nowrap align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>".$app_strings['LNK_HELP']."</A> ]</td>\n";
 }
 else {
 	$the_title .= "<td class='bodySmall' align='right'>&nbsp;</td>\n";
 	$the_title .= "<td class='bodySmall' align='right'>&nbsp;</td>\n";
 }
 
-$the_title .= "</tr><tr><td colspan='4' width='100%' class='formHeader'><IMG width='100%' height='2' src='".$image_path."blank.gif'></td>";
+$the_title .= "</tr><tr><td colspan='4' width='100%' class='hline'><IMG width='100%' height='1' src='".$image_path."blank.gif'></td>";
 $the_title .= "</tr></tbody></table>\n";
 
 return $the_title;
@@ -168,7 +165,7 @@ $out .=	'<HTML><HEAD>';
 $out .=	'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">';
 $out .=	'<title>'.$app_strings['LBL_BROWSER_TITLE'].'</title>';
 $out .=	'<style type="text/css">@import url("themes/'.$theme.'/style.css"); </style>';
-$out .=	'</HEAD><BODY leftMargin="0" topMargin="0" MARGINHEIGHT="0" MARGINWIDTH="0">';
+$out .=	'</HEAD><BODY leftMargin="5" topMargin="5" MARGINHEIGHT="0" MARGINWIDTH="0">';
 
 echo $out;
 }

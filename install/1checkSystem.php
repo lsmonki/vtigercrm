@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/1checkSystem.php,v 1.7 2004/08/26 11:44:30 sarajkumar Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/1checkSystem.php,v 1.9 2004/10/06 09:02:02 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -167,15 +167,13 @@ return $array;
 		</tbody></table>
 	  </td>
     </tr>
-    <tr><td colspan="3">In order for your vtiger CRM installation to function properly, please ensure all of the 
-	system check items listed below are green.  If any are red, please take the necessary steps
-	to fix them.</td></tr>
+    <tr><td colspan="3"></td></tr>
     <tr><td colspan="3" align="center">
 	    <table cellpadding="1" cellspacing="1" border="0"><tbody>
 		<tr>
-			<td><strong>PHP version 4.2.x or 4.3.x.<BR><em><LI><font size=-2>NOTE: PHP version 5.0 not supported</font></em></strong></td>
+			<td><strong>PHP version 4.2.x or 4.3.x.<BR><em><LI><font size=-2>NOTE: Charts are not supported in PHP5</font></em></strong></td>
 			<td width="100">&nbsp;</td>
-			<td align="right"><?php $php_version = phpversion(); echo $php_version < "4.2" && $php_version > "5.0" ?"<strong><font color=\"#FF0000\">Invalid version ($php_version) Installed</font></strong>":"<strong><font color=\"#00CC00\">Version $php_version Installed</font></strong>"; ?></td>
+			<td align="right"><?php $php_version = phpversion(); echo (str_replace(".", "", $php_version) < "420") ? "<strong><font color=\"#FF0000\">Invalid version ($php_version) Installed</font></strong>" : "<strong><font color=\"#00CC00\">Version $php_version Installed</font></strong>"; ?></td>
 			<td>&nbsp;</td>
     	</tr>
 		<tr>
@@ -189,6 +187,11 @@ return $array;
 			<td width="100">&nbsp;</td>
 			<td align="right"><?php echo (is_writable('./config.php') || is_writable('.'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</font></strong>"; ?></td>
 		</tr>
+		<tr>
+		    <td><strong>Cache Directory (cache/)</strong></td>
+                    <td width="100">&nbsp;</td>
+                    <td align="right"><?php echo (is_writable('./cache/'))?"<strong><font color=\"#00CC00\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</font></strong>"; ?></td>
+                 </tr>
 		<tr> 
 			<td><strong>GD graphics library version 2.0 or later</strong></td>
 			<td width="100">&nbsp;</td>
@@ -203,26 +206,23 @@ return $array;
 										eval($gd_info_alternate);
 									
 									if (isset($gd_info['GD Version'])) {
-										$gd_version = $gd_info['GD Version']; 
-										$gd_version=preg_replace('%[^0-9.]%', '', $gd_version); 
+										$gd_version = $gd_info['GD Version'];
+										$gd_version=preg_replace('%[^0-9.]%', '', $gd_version);
+										 
 										if ($gd_version > "2.0") { 
 											echo "<strong><font color=\"#00CC00\">Version $gd_version Installed</font></strong>";
 										}
 										else { 
-											echo "<strong><font color=\"#FF0000\">Version $gd_version Installed.<br>Go to <a href='http://www.boutell.com/gd/'>http://www.boutell.com/gd/</a>, download the latest version, and configure php.ini to reference it.</font></strong>";
+											echo "<strong><font color=\"#00CC00\">Version $gd_version Installed.</font></strong>";
 										}
 									}
 									else {
-										echo "<strong><font size=-1 color=\"#FF0000\">GD Library available, but not properly configured in your PHP installation.<br>Check out our <a href='http://sourceforge.net/docman/?group_id=107819'>online documentation</a> for tips on enabling this library. You can ignore this error and continue your vtiger CRM installation, however the chart images simply won't work.</font></strong>";
+										echo "<strong><font size=-1 color=\"#FF0000\">GD Library available, but not properly configured in your PHP installation.<br>You can ignore this error and continue your vtiger CRM installation, however the chart images simply won't work.</font></strong>";
 									}
 								}
 								?>
 			</td>
 		</tr>
-		<tr>
-			<td align='center' colspan='4'><font size='2'><em><strong>Note:</strong> Your php configuration file (php.ini) 
-			is located at <br><?php echo $phpini;?></em></font></td>
-    	</tr>
        </tbody></table>
 	</td></tr>
 	<tr> 

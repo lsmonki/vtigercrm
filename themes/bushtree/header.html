@@ -20,21 +20,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD html 4.01 Transitional//EN">
 <html>
 <head>
+<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">
 <meta http-equiv="Content-Type" content="text/html; charset={LBL_CHARSET}">
 <title>{APP.LBL_BROWSER_TITLE}</title>
 <style type="text/css">@import url("themes/{THEME}/style.css"); </style>
 </head>
 <body leftMargin="0" topMargin="0" marginHeight="0" marginWidth="0" {ONLOAD}>
-<table width="100%" border="0" cellspacing="0" cellpadding="1" bgcolor="#FFFFFF">
+<table width="100%" border="0" cellspacing="0" cellpadding="3" bgcolor="#FFFFFF">
 	<tr>
-	<td width="60" valign="top">
-		<a href="http://www.vtiger.com/"><img src="{IMAGE_PATH}vtiger.jpg" border="0"></a></td>
-	<td class="sitename" width='435' valign="top"><a href="http://www.vtiger.com"><span class="makeRed">vtiger</span>&nbsp;<span class="makeBlack">CRM</a></span>
-	<BR><span class="makeBlack">
+	<td valign="middle">&nbsp;</td>
+	<td class="sitename" valign="middle"><span class="makeBlack">
 			<a href="index.php?module=Users&action=DetailView&record={CURRENT_USER_ID}">{APP.LBL_MY_ACCOUNT}</a>&nbsp;|&nbsp; 
 			{ADMIN_LINK}
-		    <a href="index.php?module=Users&action=Logout">{APP.LBL_LOGOUT}</a>&nbsp;|&nbsp; 
-            <a href="http://www.vtiger.com/products/crm/document.html" target="_blank">{APP.LNK_HELP}</a>&nbsp;
+		    <a href="index.php?module=Users&action=Logout">{APP.LBL_LOGOUT}</a>&nbsp;</td>
 	</span>
 	</td>
 	<td align="right" valign="top" colspan="2">
@@ -44,7 +42,7 @@
 			<FONT size="1">{APP.NTC_WELCOME} {CURRENT_USER}</FONT>&nbsp;&nbsp;<br> 
 	       	<FONT size="1">{DATE}</FONT> &nbsp;&nbsp;          
 			</td>
-			<td align="right" valign="bottom"> &nbsp; &nbsp;</td>
+			<td align="right" valign="bottom">&nbsp; &nbsp;</td>
 			</tr>
 			<tr>
 			<tr><td colspan="2"><hr height="1"></td></tr>
@@ -65,10 +63,12 @@
 		  <td><IMG src='{IMAGE_PATH}blank.gif' width='1' height='1'></td>
 <!-- BEGIN: tab -->
 			<td><IMG src='{IMAGE_PATH}blank.gif' width='1' height='1'></td>
-			  <td class='{TAB_CLASS}' vAlign='top' align='left' height='26'>&nbsp;</td>
+			  <td class='{TAB_CLASS}' vAlign='top' align='left' height='26'>
+				<IMG src='{IMAGE_PATH}left_arc.gif' height='5' width='5' border='0'></td>
 			  <td class='{TAB_CLASS}' vAlign='middle' noWrap align='center' height='26'>
 				<A class='{TAB_CLASS}' href='index.php?module={MODULE_KEY}&action=index'>{MODULE_NAME}</A></td>
-			  <td class='{TAB_CLASS}' vAlign='top' align='left'>&nbsp;</td>
+			  <td class='{TAB_CLASS}' vAlign='top' align='left'>
+				<IMG src='{IMAGE_PATH}right_arc.gif' height='5' width='5' border='0'></td>
 <!-- END: tab -->
 		  </tr></tbody></table>
         </div></td>
@@ -93,6 +93,7 @@
 <tr>
 <td bgcolor="#F3F3F3" valign="top">
 	<br>
+	<A HREF="http://www.sourceforge.net/project/showfiles.php?group_id=117522" target="_blank"><img align="absmiddle" src="{APP.LNK_OUTLOOK}" border="0"></A><br><br>
 <!-- BEGIN: left_form -->  	
        <table  width="169" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
         <td class="leftFormHeader" valign="middle" align="left" nowrap>{TITLE}</td>

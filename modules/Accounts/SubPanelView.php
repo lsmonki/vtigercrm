@@ -13,13 +13,16 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/SubPanelView.php,v 1.1 2004/08/17 15:02:56 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/SubPanelView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
 require_once("data/Tracker.php");
-
+require_once("include/ListView/ListView.php");
 global $currentModule;
 
 global $theme;
@@ -58,49 +61,11 @@ $button .= "<input type='hidden' name='parent_name'>\n";
 $button .= "<td><input title='".$app_strings['LBL_NEW_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_NEW_BUTTON_KEY']."' class='button' onclick=\"this.form.action.value='EditView';this.form.parent_id.value='$focus->id';this.form.parent_name.value='".urlencode($focus->name)."'\" type='submit' name='button' value='  ".$app_strings['LBL_NEW_BUTTON_LABEL']."  '></td>\n";
 $button .= "<td><input title='".$app_strings['LBL_SELECT_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_SELECT_BUTTON_KEY']."' type='button' class='button' value=' ".$app_strings['LBL_SELECT_BUTTON_LABEL']." ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Accounts&action=Popup&html=Popup_picker&form=AccountDetailView&form_submit=true\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'></td>\n";
 $button .= "</tr></form></table>\n";
+$ListView = new ListView();
+$ListView->initNewXTemplate( 'modules/Accounts/SubPanelViewMemberAccount.html',$current_module_strings);
+$ListView->setHeaderTitle($current_module_strings['LBL_MEMBER_ORG_FORM_TITLE'] );
+$ListView->setHeaderText($button);
+$ListView->processListView($focus_list, "main", "ACCOUNT");
 
-// Stick the form header out there.
-echo get_form_header($current_module_strings['LBL_MEMBER_ORG_FORM_TITLE'], $button, false);
-$xtpl=new XTemplate ('modules/Accounts/SubPanelViewMemberAccount.html');
-$xtpl->assign("MOD", $current_module_strings);
-$xtpl->assign("APP", $app_strings);
-
-$xtpl->assign("IMAGE_PATH", $image_path);
-$xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=$focus->id");
-
-$oddRow = true;
-foreach($focus_list as $account)
-{
-	$account_fields = array(
-		'ID' => $account->id,
-		'NAME' => $account->name,
-		'CITY' => $account->billing_address_city,
-		'STATE' => $account->billing_address_state,
-		'PHONE_WORK' => $account->phone_office
-	);
-	
-	$xtpl->assign("ACCOUNT", $account_fields);
-	
-	if($oddRow)
-    {
-        //todo move to themes
-		$xtpl->assign("ROW_COLOR", 'oddListRow');
-    }
-    else
-    {
-        //todo move to themes
-		$xtpl->assign("ROW_COLOR", 'evenListRow');
-    }
-    $oddRow = !$oddRow;
-
-	$xtpl->parse("main.row");
-// Put the rows in.
-}
-
-$xtpl->parse("main");
-$xtpl->out("main");
-
-// Stick on the form footer
-echo get_form_footer();
  
 ?>

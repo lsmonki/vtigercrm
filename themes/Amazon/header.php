@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/Amazon/header.php,v 1.1 2004/08/17 14:55:53 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/Amazon/header.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -50,10 +50,12 @@ else
 }
 
 $xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
+$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("MODULE_NAME", $currentModule);
-$xtpl->assign("DATE", date("F j, Y, g:i a"));
-$xtpl->assign("CURRENT_USER", $current_user->user_name);
+$xtpl->assign("DATE", date("Y-m-d H:i"));
+if ($current_user->first_name != '') $xtpl->assign("CURRENT_USER", $current_user->first_name);
+else $xtpl->assign("CURRENT_USER", $current_user->user_name);
+
 $xtpl->assign("CURRENT_USER_ID", $current_user->id);
 
 if (is_admin($current_user)) $xtpl->assign("ADMIN_LINK", "<a href='index.php?module=Administration&action=index'>".$app_strings['LBL_ADMIN']."</a>&nbsp;|&nbsp;");

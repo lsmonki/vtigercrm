@@ -13,13 +13,16 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/language/en_us.lang.php,v 1.2 2004/08/31 05:12:54 rakeebk Exp $
- * Description:  Defines the English language pack 
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/language/en_us.lang.php,v 1.3 2004/10/06 09:02:05 jack Exp $
+ * Description:  Defines the English language pack
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
- 
+
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Contacts',
-'LBL_DIRECT_REPORTS_FORM_NAME'=>'Direct Reports',
+'LBL_INVITEE'=>'Direct Reports',
 'LBL_MODULE_TITLE'=>'Contacts: Home',
 'LBL_SEARCH_FORM_TITLE'=>'Contact Search',
 'LBL_LIST_FORM_TITLE'=>'Contact List',
@@ -70,12 +73,13 @@ $mod_strings = Array(
 'LBL_POSTAL_CODE'=>'Postal Code:',
 'LBL_COUNTRY'=>'Country:',
 'LBL_DESCRIPTION_INFORMATION'=>'Description Information',
+'LBL_ADDRESS_INFORMATION'=>'Address Information',
 'LBL_DESCRIPTION'=>'Description:',
 'LBL_CONTACT_ROLE'=>'Role:',
 'LBL_OPP_NAME'=>'Opportunity Name:',
 
-'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_CONTACT'=>'New Contact',
+'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_ACCOUNT'=>'New Account',
 'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
 'LNK_NEW_CASE'=>'New Case',
@@ -87,7 +91,6 @@ $mod_strings = Array(
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
 'NTC_REMOVE_CONFIRMATION'=>'Are you sure you want to remove this contact from this case?',
 'NTC_REMOVE_DIRECT_REPORT_CONFIRMATION'=>'Are you sure you want to remove this record as a direct report?',
-'NTC_REMOVE_OPP_CONFIRMATION'=>'Are you sure you want to remove this contact from this opportunity?',
 'ERR_DELETE_RECORD'=>"en_us A record number must be specified to delete the contact.",
 'NTC_COPY_PRIMARY_ADDRESS'=>'Copy primary address to alternate address',
 'NTC_COPY_ALTERNATE_ADDRESS'=>'Copy alternate address to primary address',

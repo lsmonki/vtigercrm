@@ -13,10 +13,13 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/language/en_us.lang.php,v 1.2 2004/08/31 05:22:32 rakeebk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Notes/language/en_us.lang.php,v 1.3 2004/10/06 09:02:05 jack Exp $
  * Description:  Defines the English language pack for the Account module.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
- 
+
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Notes',
 'LBL_MODULE_TITLE'=>'Notes: Home',
@@ -28,20 +31,21 @@ $mod_strings = Array(
 'LBL_LIST_CONTACT_NAME'=>'Contact Name',
 'LBL_LIST_RELATED_TO'=>'Related To',
 'LBL_LIST_DATE_MODIFIED'=>'Last Modified',
+'LBL_LIST_FILENAME'=>'Attachment',
 
 'LBL_NOTE'=>'Note:',
 'LBL_NOTE_SUBJECT'=>'Note Subject:',
 'LBL_CONTACT_NAME'=>'Contact Name:',
 'LBL_PHONE'=>'Phone:',
 'LBL_SUBJECT'=>'Subject:',
+'LBL_FILENAME'=>'Attachment:',
 'LBL_CLOSE'=>'Close:',
 'LBL_RELATED_TO'=>'Related To:',
-'LBL_DATE_MODIFIED'=>'Last Modified:',
 'LBL_EMAIL_ADDRESS'=>'Email Address:',
 'LBL_COLON'=>':',
 
-'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_CONTACT'=>'New Contact',
+'LNK_NEW_LEAD'=>'New Lead',
 'LNK_NEW_ACCOUNT'=>'New Account',
 'LNK_NEW_OPPORTUNITY'=>'New Opportunity',
 'LNK_NEW_CASE'=>'New Case',

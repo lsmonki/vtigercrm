@@ -9,42 +9,34 @@
 * 
  ********************************************************************************/
 
-
+require_once('config.php');
 require_once('database/DatabaseConnection.php');
 
 global $fileId;
 
 $fileId = $_REQUEST['fileId'];
-
-$dbQuery = "SELECT filetype, data ";
-
+$dbQuery = "SELECT filename,filetype, data ";
 $dbQuery .= "FROM filestorage ";
-
 $dbQuery .= "WHERE fileid = '" .$fileId ."'";
 
 $result = mysql_query($dbQuery) or die("Couldn't get file list");
-
 if(mysql_num_rows($result) == 1)
 {
-
 $fileType = @mysql_result($result, 0, "filetype");
-
+$name = @mysql_result($result, 0, "filename");
+//echo 'filetype is ' .$fileType;
 $fileContent = @mysql_result($result, 0, "data");
-
-//header("Content-type: $fileType");
-
+$size = @mysql_result($result, 0, "filesize");
+header("Content-type: $fileType");
+//header("Content-length: $size");
+//header("Cache-Control: private");
+header("Content-Disposition: attachment; filename=$name");
+//header("Content-Description: PHP Generated Data");
 echo $fileContent;
-
 }
-
 else
-
 {
-
 echo "Record doesn't exist.";
-
 }
-
-
 ?>
 

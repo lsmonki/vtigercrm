@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/data/SugarBean.php,v 1.2 2004/09/13 14:33:19 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/data/SugarBean.php,v 1.3 2004/10/06 09:02:02 jack Exp $
  * Description:  Defines the base class for all data entities used throughout the 
  * application.  The base class including its methods and variables is designed to 
  * be overloaded with module-specific methods and variables particular to the 
@@ -22,7 +22,6 @@
 
 include_once('config.php');
 require_once('include/logging.php');
-require_once('database/DatabaseConnection.php');
 require_once('data/Tracker.php');
 require_once('include/utils.php');
 
@@ -34,14 +33,24 @@ class SugarBean
      * This method uses the presence of an id field that is not null to signify and update.
      * The id field should not be set otherwise.
      * todo - Add support for field type validation and encoding of parameters.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
      */
 	
 	var $new_schema = false;
+	var $new_with_id = false;
 
-    function save() {
+	function save() 
+	{
 		$isUpdate = true;
 
 		if(!isset($this->id) || $this->id == "")
+		{
+			$isUpdate = false;
+		}
+
+		if ( $this->new_with_id == true )
 		{
 			$isUpdate = false;
 		}
@@ -51,21 +60,24 @@ class SugarBean
 		
 		if($isUpdate)
 		{
-    		$query = "Update ";
+    			$query = "Update ";
 		}
 		else
 		{
-    		$this->date_entered = date('YmdHis');
-			if($this->new_schema)
+    			$this->date_entered = date('YmdHis');
+
+			if($this->new_schema && 
+				$this->new_with_id == false)
 			{
 				$this->id = create_guid();
 			}
+
 			$query = "INSERT into ";
 		}
 		// todo - add date modified to the list.
 
-        // write out the SQL statement.
-        $query .= $this->table_name." set ";
+		// write out the SQL statement.
+		$query .= $this->table_name." set ";
 
 		$firstPass = 0;
 		foreach($this->column_fields as $field)
@@ -98,21 +110,27 @@ class SugarBean
         	$this->log->info("Insert: ".$query);
 		}
 
-		mysql_query($query)
-			or die("MySQL error: ".mysql_error());
+		$this->db->query($query, true);
 
 		// If this is not an update then store the id for later.
-		if(!$isUpdate && !$this->new_schema)
-	        $this->id = mysql_insert_id();
+		if(!$isUpdate && !$this->new_schema && !$this->new_with_id)
+		{
+			//this is mysql specific
+	        	$this->id = $this->db->getOne("SELECT LAST_INSERT_ID()" );
+		}
 	        
-	    // let subclasses save related field changes
-	    $this->save_relationship_changes($isUpdate);
-    }
+		// let subclasses save related field changes
+		$this->save_relationship_changes($isUpdate);
+		return $this->id;
+	}
 
     /** 
      * This function is a good location to save changes that have been made to a relationship.
      * This should be overriden in subclasses that have something to save.
      * param $is_update true if this save is an update.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
      */
     function save_relationship_changes($is_update)
     {
@@ -124,6 +142,9 @@ class SugarBean
      * It fills in all of the fields from the DB into the object it was called on.
      * param $id - If ID is specified, it overrides the current value of $this->id.  If not specified the current value of $this->id will be used.
      * returns this - The object that it was called apon or null if exactly 1 record was not found.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
      */
 	function retrieve($id = -1) {
 		if ($id == -1) {
@@ -133,16 +154,14 @@ class SugarBean
 		$query = "SELECT * FROM $this->table_name WHERE ID = '$id'";
 		$this->log->debug("Retrieve $this->object_name: ".$query);
 
-		$result = mysql_query($query)
-			or die("MySQL error: ".mysql_error());
+		$result =& $this->db->requireSingleResult($query, true, "Retrieving record by id $this->table_name:$id found ");
 
-		if(mysql_num_rows($result) != 1)
+		if(empty($result))
 		{
-			$this->log->fatal("Retrieving record by id $this->table_name:$id found ".mysql_num_rows($result)." rows");
 			return null;
 		}
 				
-		$row = mysql_fetch_assoc($result);
+		$row = $this->db->fetchByAssoc($result);
 
 		foreach($this->column_fields as $field)
 		{
@@ -166,13 +185,20 @@ class SugarBean
 		$query = $this->create_lead_list_query($order_by, $where);
 		return $this->process_list_query($query, $row_offset);
 	}
-	function get_list($order_by = "", $where = "", $row_offset = 0) {
+
+	function get_list($order_by = "", $where = "", $row_offset = 0, $limit=-1) {
+		$this->log->debug("get_list:  order_by = '$order_by' and where = '$where' and limit = '$limit'");
+		
 		$query = $this->create_list_query($order_by, $where);
-		return $this->process_list_query($query, $row_offset);
+		
+		return $this->process_list_query($query, $row_offset, $limit);
 	}
 
 	/**
 	 * This function returns a full (ie non-paged) list of the current object type.  
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	 */
 	function get_full_list($order_by = "", $where = "") {
 		$this->log->debug("get_full_list:  order_by = '$order_by' and where = '$where'");
@@ -183,18 +209,20 @@ class SugarBean
 	function create_list_query($order_by, $where)
 	{
 		$query = "SELECT * FROM $this->table_name ";
-
+		
 		if($where != "")
 			$query .= "where ($where) AND deleted=0";
 		else
 			$query .= "where deleted=0";
 
-		if($order_by != "")
+		if(!empty($order_by))
 			$query .= " ORDER BY $order_by";
+
+		
 
 		return $query;
 	}
-
+	
 	function create_lead_list_query($order_by, $where)
 	{
 		$query = "SELECT * FROM $this->table_name ";
@@ -210,48 +238,39 @@ class SugarBean
 		return $query;
 	}
 
-	function process_list_query(&$query, &$row_offset)
+
+	function process_list_query($query, $row_offset, $limit= -1, $max_per_page = -1)
 	{
 		global $list_max_entries_per_page;
-
-		$this->log->debug("get_list: ".$query);
-		$result = mysql_query($query);
-
-		if(!$result)
-		{
-			$this->log->error("Error retrieving $this->object_name list: ".mysql_error()."<br/>Query: $query");
-			die("MySQL error: ".mysql_error()."<br/>Query: ".$query);
+		$this->log->debug("process_list_query: ".$query);
+		if(!empty($limit) && $limit != -1){
+			$result =& $this->db->limitQuery($query, $row_offset + 0, $limit,true,"Error retrieving $this->object_name list: ");
+		}else{
+			$result =& $this->db->query($query,true,"Error retrieving $this->object_name list: ");
 		}
 
 		$list = Array();
-
-		$rows_found = @ mysql_num_rows($result);
+		if($max_per_page == -1){
+			$max_per_page 	= $list_max_entries_per_page;
+		}
+		$rows_found =  $this->db->getRowCount($result);
 
 		$this->log->debug("Found $rows_found ".$this->object_name."s");
 
-		$previous_offset = $row_offset - $list_max_entries_per_page;
-		$next_offset = $row_offset + $list_max_entries_per_page;
+		$previous_offset = $row_offset - $max_per_page;
+		$next_offset = $row_offset + $max_per_page;
 
 		if($rows_found != 0)
 		{
-			// seek to the current offset
-			if(!mysql_data_seek($result, $row_offset))
-			{
-				$this->log->error("Error skipping to offset $row_offset".mysql_error()."<br/>Query: $query");
-				die("Error skipping to offset $row_offset ".mysql_error()."<br/>Query: ".$query);
-			}
 
 			// We have some data.
-			for($row_counter = 0; $row_counter < $list_max_entries_per_page && $row = mysql_fetch_array($result); $row_counter++)
-			{
+			
+			for($index = $row_offset , $row = $this->db->fetchByAssoc($result, $index); $row && $index < $row_offset + $max_per_page ;$index++, $row = $this->db->fetchByAssoc($result, $index)){
 				foreach($this->list_fields as $field)
 				{
 					if (isset($row[$field])) {
 						$this->$field = $row[$field];
-						if(get_magic_quotes_gpc() == 1)
-						{
-							$this->$field = stripslashes($this->$field);
-						}
+						
 						
 						$this->log->debug("$this->object_name({$row['id']}): ".$field." = ".$this->$field);
 					}
@@ -279,25 +298,18 @@ class SugarBean
 	function process_full_list_query($query)
 	{
 		$this->log->debug("process_full_list_query: query is ".$query);
-		$result = mysql_query($query);
+		$result =& $this->db->query($query, false);
 		$this->log->debug("process_full_list_query: result is ".$result);
 
-		if(!$result)
-		{
-			$this->log->error("Error retrieving $this->object_name list: ".mysql_error()."<br/>Query: $query");
-			die("MySQL error: ".mysql_error()."<br/>Query: ".$query);
-		}
-		else {
+		if($this->db->getRowCount($result) > 0){
+		
 			// We have some data.
-			while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+			while ($row = $this->db->fetchByAssoc($result)) {
 				foreach($this->list_fields as $field)
 				{
 					if (isset($row[$field])) {
 						$this->$field = $row[$field];
-						if(get_magic_quotes_gpc() == 1)
-						{
-							$this->$field = stripslashes($this->$field);
-						}
+						
 						$this->log->debug("process_full_list: $this->object_name({$row['id']}): ".$field." = ".$this->$field);
 					}
 				}
@@ -315,6 +327,9 @@ class SugarBean
 	/**
 	 * Track the viewing of a detail record.  This leverages get_summary_text() which is object specific
 	 * params $user_id - The user that is viewing the record.
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	 */
 	function track_view($user_id, $current_module)
 	{
@@ -326,6 +341,9 @@ class SugarBean
 
 	/**
 	 * return the summary text that should show up in the recent history list for this object.
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	 */
 	function get_summary_text()
 	{
@@ -336,6 +354,9 @@ class SugarBean
 	 * This is designed to be overridden and add specific fields to each record.  This allows the generic query to fill in
 	 * the major fields, and then targetted queries to get related fields and add them to the record.  The contact's account for instance.
 	 * This method is only used for populating extra fields in lists
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	 */
 	function fill_in_additional_list_fields()
 	{
@@ -345,6 +366,9 @@ class SugarBean
 	 * This is designed to be overridden and add specific fields to each record.  This allows the generic query to fill in
 	 * the major fields, and then targetted queries to get related fields and add them to the record.  The contact's account for instance.
 	 * This method is only used for populating extra fields in the detail form
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	 */
 	function fill_in_additional_detail_fields()
 	{
@@ -352,21 +376,27 @@ class SugarBean
 
 	/**
 	 * This is a helper class that is used to quickly created indexes when createing tables
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	 */
 	function create_index($query)
 	{
 		$this->log->info($query);
 
-		mysql_query($query) or die("Error creating index: ".mysql_error());
+		$result =& $this->db->query($query, true, "Error creating index:");
 	}
 
 	/** This function should be overridden in each module.  It marks an item as deleted.
 	* If it is not overridden, then marking this type of item is not allowed
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function mark_deleted($id)
 	{
 		$query = "UPDATE $this->table_name set deleted=1 where id='$id'";
-		mysql_query($query) or die("Error marking record deleted: ".mysql_error());
+		$this->db->query($query, true,"Error marking record deleted: ");
 
 		$this->mark_relationships_deleted($id);
 
@@ -378,6 +408,9 @@ class SugarBean
 
 	/** This function deletes relationships to this object.  It should be overridden to handle the relationships of the specific object.
 	* This function is called when the item itself is being deleted.  For instance, it is called on Contact when the contact is being deleted.
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	*/
 	function mark_relationships_deleted($id)
 	{
@@ -389,18 +422,20 @@ class SugarBean
 	 * It is currently used for building sub-panel arrays.
 	 * param $query - the query that should be executed to build the list
 	 * param $template - The object that should be used to copy the records.
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	 */
-	function build_related_list(&$query, &$template)
+	function build_related_list($query, &$template)
 	{
 
 		$this->log->debug("Finding linked records $this->object_name: ".$query);
 
-		$result = mysql_query($query)
-			or die("MySQL error: ".mysql_error());
+		$result =& $this->db->query($query, true);
 
 		$list = Array();
 
-		while($row = mysql_fetch_assoc($result))
+		while($row = $this->db->fetchByAssoc($result))
 		{
 			$template->retrieve($row['id']);
 
@@ -412,18 +447,20 @@ class SugarBean
 	}
 
 	/**
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
+	 * All Rights Reserved..
+	 * Contributor(s): ______________________________________..
 	 */
-	function build_related_list2(&$query, &$template, &$field_list)
+	function build_related_list2($query, &$template, &$field_list)
 	{
 
 		$this->log->debug("Finding linked values $this->object_name: ".$query);
 
-		$result = mysql_query($query)
-			or die("MySQL error: ".mysql_error());
+		$result =& $this->db->query($query, true);
 
 		$list = Array();
 
-		while($row = mysql_fetch_assoc($result))
+		while($row = $this->db->fetchByAssoc($result))
 		{
 			// Create a blank copy
 			$copy = $template;
@@ -432,10 +469,7 @@ class SugarBean
 			{
 				// Copy the relevant fields
 				$copy->$field = $row[$field];
-				if(get_magic_quotes_gpc() == 1)
-				{
-					$copy->$field = stripslashes($copy->$field);
-				}
+				
 			}	
 
 			// this copies the object into the array
@@ -446,13 +480,12 @@ class SugarBean
 	}
 
 	/* This is to allow subclasses to fill in row specific columns of a list view form */
-	function list_view_pare_additional_sections(&$list_form)
+	function list_view_parse_additional_sections(&$list_form)
 	{
 	}
 
 	/* This function assigns all of the values into the template for the list view */
-	function get_list_view_data()
-	{
+	function get_list_view_array(){
 		$return_array = Array();
 		
 		foreach($this->list_fields as $field)
@@ -460,8 +493,104 @@ class SugarBean
 			$return_array[strtoupper($field)] = $this->$field;
 		}
 		
-		return $return_array;
+		return $return_array;	
 	}
+	function get_list_view_data()
+	{
+		
+		return $this->get_list_view_array();
+	}
+
+	function get_where(&$fields_array)
+	{ 
+		$where_clause = "WHERE "; 
+		$first = 1; 
+		foreach ($fields_array as $name=>$value) 
+		{ 
+			if ($first) 
+			{ 
+				$first = 0;
+			} 
+			else 
+			{ 
+				$where_clause .= " AND ";
+			} 
+
+			$where_clause .= "$name = '".addslashes($value)."'";
+		} 
+
+		$where_clause .= " AND deleted=0";
+		return $where_clause;
+	}
+
+
+	function retrieve_by_string_fields($fields_array) 
+	{ 
+		$where_clause = $this->get_where($fields_array);
+		
+		$query = "SELECT * FROM $this->table_name $where_clause";
+		$this->log->debug("Retrieve $this->object_name: ".$query);
+		$result =& $this->db->requireSingleResult($query, true, "Retrieving record $where_clause:");
+		if( empty($result)) 
+		{ 
+		 	return null; 
+		} 
+
+		$row = $this->db->fetchByAssoc($result);
+
+		foreach($this->column_fields as $field) 
+		{ 
+			if(isset($row[$field])) 
+			{ 
+				$this->$field = $row[$field];
+			}
+		} 
+		$this->fill_in_additional_detail_fields();
+		return $this;
+	}
+
+	// this method is called during an import before inserting a bean
+	// define an associative array called $special_fields
+	// the keys are user defined, and don't directly map to the bean's fields
+	// the value is the method name within that bean that will do extra
+	// processing for that field. example: 'full_name'=>'get_names_from_full_name'
+
+	function process_special_fields() 
+	{ 
+		foreach ($this->special_functions as $func_name) 
+		{ 
+			if ( method_exists($this,$func_name) ) 
+			{ 
+				$this->$func_name(); 
+			} 
+		} 
+	}
+	/**
+		builds a generic search based on the query string using or
+		do not include any $this-> because this is called on without having the class instantiated
+	*/
+	function build_generic_where_clause($value){
+			$where_clause = "WHERE "; 
+		$first = 1; 
+		foreach ($fields_array as $name=>$value) 
+		{ 
+			if ($first) 
+			{ 
+				$first = 0;
+			} 
+			else 
+			{ 
+				$where_clause .= " or";
+			} 
+
+			$where_clause .= "$name = '".addslashes($value)."'";
+		} 
+
+		$where_clause .= " AND deleted=0";
+		return $where_clause;
+	}
+
+	
 }
 
 ?>

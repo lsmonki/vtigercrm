@@ -4,7 +4,7 @@
 // Description: Scatter (and impuls) plot extension for JpGraph
 // Created: 	2001-02-11
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_scatter.php,v 1.2 2004/08/19 06:48:29 gjayakrishnan Exp $
+// Ver:		$Id: jpgraph_scatter.php,v 1.3 2004/10/06 09:02:05 jack Exp $
 //
 // License:	This code is released under QPL
 // Copyright (C) 2001,2002 Johan Persson

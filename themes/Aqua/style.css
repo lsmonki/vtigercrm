@@ -80,6 +80,7 @@ border:none;
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 
 	BACKGROUND: url(images/buttonbg.gif);
 }
+INPUT.button_file { BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 8pt; BORDER-LEFT: 1px solid;  COLOR: #336699; BORDER-BOTTOM: 1px solid; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; }
 SELECT { FONT-SIZE: 8pt; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif}
 
 .tabOffBorder {

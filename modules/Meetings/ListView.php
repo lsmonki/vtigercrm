@@ -2,7 +2,7 @@
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
  * ("License"); You may not use this file except in compliance with the 
- * License. You may obtain a copy of the License at http://www.mozilla.org/MPL
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Meetings/ListView.php,v 1.1 2004/08/17 15:05:22 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Meetings/ListView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
@@ -22,7 +25,7 @@ require_once("data/Tracker.php");
 require_once('modules/Meetings/Meeting.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
-
+require_once('include/ListView/ListView.php');
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
@@ -61,12 +64,6 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	echo "\n<BR>\n";
 }
 
-$list_form=new XTemplate ('modules/Meetings/ListView.html');
-$list_form->assign("MOD", $mod_strings);
-$list_form->assign("APP", $app_strings);
-$list_form->assign("THEME", $theme);
-$list_form->assign("IMAGE_PATH", $image_path);
-$list_form->assign("MODULE_NAME", $currentModule);
 
 $where = "";
 
@@ -126,135 +123,16 @@ if(isset($_REQUEST['query']))
 
 }
 
-$current_offset = 0;
-if(isset($_REQUEST['current_offset']))
-    $current_offset = $_REQUEST['current_offset'];
 
-$response = $seedMeeting->get_list("date_start", $where, $current_offset);
-
-$meetingList = $response['list'];
-$row_count = $response['row_count'];
-$next_offset = $response['next_offset'];
-$previous_offset = $response['previous_offset'];
-
-$start_record = $current_offset + 1;
-
-// Set the start row to 0 if there are no rows (adding one looks bad)
-if($row_count == 0)
-    $start_record = 0;
-
-$end_record = $start_record + $list_max_entries_per_page;
-
-// back up the the last page.
-if($end_record > $row_count+1)
-{
-    $end_record = $row_count+1;
-}
-
-// Deterime the start location of the last page
-if($row_count == 0)
-	$number_pages = 0;
-else
-	$number_pages = floor(($row_count - 1) / $list_max_entries_per_page);
-
-$last_page_offset = $number_pages * $list_max_entries_per_page;
-
-
-// Create the base URL without the current offset.
-// Check to see if the current offset is already there
-// If not, add it to the end.
-
-// All of the other values should use a regular expression search
-$base_URL = $_SERVER['REQUEST_URI'].'?'.$_SERVER['QUERY_STRING']."&current_offset=";
-$start_URL = $base_URL."0";
-$previous_URL  = $base_URL.$previous_offset;
-$next_URL  = $base_URL.$next_offset;
-$end_URL  = $base_URL.$last_page_offset;
-
-$sort_URL_base = $base_URL.$current_offset."&sort_order=";
-
-$log->debug("Offsets: (start, previous, next, last)(0, $previous_offset, $next_offset, $last_page_offset)");
-
-if(0 == $current_offset)
-    $start_link = $app_strings['LNK_LIST_START'];
-else
-    $start_link = "<a href=\"$start_URL\" class=\"listFormHeaderLinks\">".$app_strings['LNK_LIST_START']."</a>";
-
-if($previous_offset < 0)
-    $previous_link = $app_strings['LNK_LIST_PREVIOUS'];
-else
-    $previous_link = "<a href=\"$previous_URL\" class=\"listFormHeaderLinks\">".$app_strings['LNK_LIST_PREVIOUS']."</a>";
-
-if($next_offset >= $end_record)
-    $next_link = $app_strings['LNK_LIST_NEXT'];
-else
-    $next_link = "<a href=\"$next_URL\" class=\"listFormHeaderLinks\">".$app_strings['LNK_LIST_NEXT']."</a>";
-
-if($last_page_offset <= $current_offset)
-    $end_link = $app_strings['LNK_LIST_END'];
-else
-    $end_link = "<a href=\"$end_URL\" class=\"listFormHeaderLinks\">".$app_strings['LNK_LIST_END']."</a>";
-
-$log->info("Offset (next, current, prev)($next_offset, $current_offset, $previous_offset)");
-$log->info("Start/end records ($start_record, $end_record)");
-
-$list_form->assign("START_RECORD", $start_record);
-$list_form->assign("END_RECORD", $end_record-1);
-$list_form->assign("ROW_COUNT", $row_count);
-if ($start_link !== "") $list_form->assign("START_LINK", "[ ".$start_link." ]");
-if ($end_link !== "") $list_form->assign("END_LINK", "[ ".$end_link." ]");
-if ($next_link !== "") $list_form->assign("NEXT_LINK", "[ ".$next_link." ]");
-if ($previous_link !== "") $list_form->assign("PREVIOUS_LINK", "[ ".$previous_link." ]");
-$list_form->parse("main.list_nav_row");
-
-
-$oddRow = true;
-foreach($meetingList as $meeting)
-{
-	$meeting_fields = array(
-		'ID' => $meeting->id,
-		'NAME' => $meeting->name,
-		'STATUS' => $meeting->status,
-		'CONTACT_NAME' => $meeting->contact_name,
-		'CONTACT_ID' => $meeting->contact_id,
-		'PARENT_NAME' => $meeting->parent_name,
-		'PARENT_ID' => $meeting->parent_id,
-		'DATE_START' => $meeting->date_start,
-		'ASSIGNED_USER_NAME' => $meeting->assigned_user_name
-	);
-	if (isset($meeting->parent_type)) 
-		$meeting_fields['PARENT_MODULE'] = $app_list_strings['record_type_module'][$meeting->parent_type];
-	if ($meeting->status == "Planned") {
-		$meeting_fields['SET_COMPLETE'] = "<a href='index.php?return_module=$currentModule&return_action=$action&return_id=$focus->id&action=Save&module=Meetings&record=$meeting->id&status=Held'>X</a>";
-	}	
-	
-	$list_form->assign("MEETING", $meeting_fields);
-	
-	if($oddRow)
-    {
-        //todo move to themes
-		$list_form->assign("ROW_COLOR", 'oddListRow');
-    }
-    else
-    {
-        //todo move to themes
-		$list_form->assign("ROW_COLOR", 'evenListRow');
-    }
-    $oddRow = !$oddRow;
-
-	$list_form->parse("main.row");
-// Put the rows in.
-}
-
-$list_form->parse("main");
 
 global $meeting_title;
+$display_title = $mod_strings['LBL_LIST_FORM_TITLE'];
+if($meeting_title)$display_title = $meeting_title;
 
-if ($meeting_title) echo get_form_header($meeting_title, "", false);
-else echo get_form_header($mod_strings['LBL_LIST_FORM_TITLE'], "", false);
-$list_form->out("main");
-echo get_form_footer();
-
-echo "</td></tr>\n</table>\n";
+$ListView = new ListView();
+$ListView->initNewXTemplate( 'modules/Meetings/ListView.html',$mod_strings);
+$ListView->setHeaderTitle($display_title );
+$ListView->setQuery($where, "", "date_start", "MEETING");
+$ListView->processListView($seedMeeting, "main", "MEETING");
 
 ?>

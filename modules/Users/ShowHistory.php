@@ -11,16 +11,29 @@
 
 require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
+require_once('modules/Users/LoginHistory.php');
 require_once('modules/Users/User.php');
+require_once('themes/'.$theme.'/layout_utils.php');
+require_once('include/logging.php');
+require_once('include/ListView/ListView.php');
+require_once('include/database/PearDatabase.php');
+#require_once('modules/Users/User.php');
 require_once('include/utils.php');
-require_once('modules/Users/Listhistory.php');
-
-global $current_user;
-global $theme;
-global $default_language;
 
 global $app_strings;
 global $mod_strings;
+global $app_list_strings;
+global $current_language;
+$current_module_strings = return_module_language($current_language, 'Users');
+
+global $list_max_entries_per_page;
+global $urlPrefix;
+
+$log = LoggerManager::getLogger('login_list');
+
+global $currentModule;
+
+global $theme;
 
 $focus = new User();
 
@@ -29,48 +42,35 @@ if(isset($_REQUEST['record'])) {
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
-} 
-
-global $theme;
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
-
-$log->info("User detail view");
-
-$xtpl=new XTemplate ('modules/Users/ShowHistory.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-
-if (isset($_REQUEST['error_string'])) $xtpl->assign("ERROR_STRING", "<font class='error'>Error: ".$_REQUEST['error_string']."</font>");
-if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", "Users");
-if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", "DetailView");
-if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
-
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
-$xtpl->assign("ID", $focus->id);
-$xtpl->assign("USER_NAME", $focus->user_name);
-$xtpl->assign("FIRST_NAME", $focus->first_name);
-$xtpl->assign("LAST_NAME", $focus->last_name);
-$xtpl->assign("STATUS", $focus->status);
-$xtpl->assign("YAHOO_ID", $focus->yahoo_id);
-if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $xtpl->assign("YAHOO_MESSENGER", "<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$focus->yahoo_id."'><img border=0 src='http://opi.yahoo.com/online?u=".$focus->yahoo_id."'&m=g&t=2'></a>");
-
-$xtpl->parse("main");
-$xtpl->out("main");
-
-if (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
-	if ($focus->theme != '') $xtpl->assign("THEME", get_theme_display($focus->theme));
-	else $xtpl->assign("THEME", get_theme_display($default_theme)." <em>(default)</em>");
-	if ($focus->language != '') $xtpl->assign("LANGUAGE", get_language_dispay($focus->language));
-	else $xtpl->assign("LANGUAGE", get_language_dispay($default_language)." <em>(default)</em>");
-	if ($focus->is_admin == 'on') $xtpl->assign("IS_ADMIN", "checked");
-	$xtpl->parse("user_settings");
-	$xtpl->out("user_settings");
 }
 
-echo getLoghistory($theme);
+echo get_module_title($mod_strings['LBL_MODULE_NAME'], $current_module_strings['LBL_LOGIN_HISTORY_TITLE'], true); 
+echo "\n<BR>\n";
 
-echo "</td></tr>\n";
+// focus_list is the means of passing data to a ListView.
+global $focus_list;
+
+if (!isset($where)) $where = "";
+
+$seedLogin = new LoginHistory();
+
+$button  = "<table cellspacing='0' cellpadding='1' border='0'><form border='0' method='post' name='DetailView' action='index.php'>\n";
+
+$button .= "<tr><td>\n";
+$button .= "<input type='hidden' name='module' value='Users'>\n";
+$button .= "<input type='hidden' name='return_module' value='".$currentModule."'>\n";
+$button .= "<input type='hidden' name='return_action' value='".$action."'>\n";
+$button .= "<input type='hidden' name='record' value='".$focus->id."'>\n";
+$button .= "<input type='hidden' name='action'>\n";
+$button .= "<input title='".$app_strings['LBL_CANCEL_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_CANCEL_BUTTON_KEY']."' class='button' onclick=\"this.form.action.value='DetailView'; this.form.module.value='Users'; this.form.record.value='$focus->id'\" type='submit' name='button' value='".$app_strings['LBL_CANCEL_BUTTON_LABEL']."'></td></tr>";
+
+$button .= "</form></table>";
+
+$ListView = new ListView();
+$ListView->initNewXTemplate('modules/Users/ShowHistory.html',$current_module_strings);
+$ListView->setHeaderTitle($current_module_strings['LBL_LOGIN_HISTORY_BUTTON_LABEL']);
+$ListView->setHeaderText($button);
+$ListView->setQuery($where, "", "login_id", "LOGIN");
+$ListView->processListView($seedLogin, "main", "LOGIN");
+
 ?>

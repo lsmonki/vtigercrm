@@ -13,8 +13,11 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Save.php,v 1.1 2004/08/17 15:06:08 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Save.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  TODO: To be written.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
  ********************************************************************************/
 
 require_once('modules/Opportunities/Opportunity.php');
@@ -32,10 +35,7 @@ foreach($focus->column_fields as $field)
 	{
 		$value = $_REQUEST[$field];
 		$focus->$field = $value;
-		if(get_magic_quotes_gpc() == 1)
-		{
-			$focus->$field = stripslashes($focus->$field);
-		}
+		
 	}
 }
 
@@ -45,10 +45,7 @@ foreach($focus->additional_column_fields as $field)
 	{
 		$value = $_REQUEST[$field];
 		$focus->$field = $value;
-		if(get_magic_quotes_gpc() == 1)
-		{
-			$focus->$field = stripslashes($focus->$field);
-		}
+		
 	}
 }
 
