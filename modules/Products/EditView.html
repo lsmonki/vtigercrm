@@ -1,0 +1,86 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Cases/EditView.html,v 1.9 2004/07/11 20:08:51 sugarjacob Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Tickets.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">New Product:  {NAME}</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
+
+<table width="100%" cellpadding="2" cellspacing="0" border="0"><tr> 
+	<td align="left"></td>
+	<td>
+		<table cellpadding="0" cellspacing="5" border="0">
+		<tr>
+			<form name="EditView" method="POST" action="index.php">
+			<input type="hidden" name="module" value="Products">
+			<input type="hidden" name="action">
+			<input type="hidden" name="id" value={PRODUCTID}>
+			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+			<input type="hidden" name="return_id" value="{RETURN_ID}">
+			<input type="hidden" name="return_action" value="{RETURN_ACTION}">						
+		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
+		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
+		</tr></table>
+	</td>
+	<td></td>
+	<td align="right" nowrap><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</td>
+</tr>
+</table> 
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_NAME}</td>
+	<td width="30%"><input name='productname' type="text" tabindex='1' size='35' maxlength='40' value="{PRODUCT_NAME}"></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_CODE}</td>
+	<td width="30%"><input name='productcode' type="text" tabindex='2' size='15' maxlength='10' value="{PRODUCT_CODE}"></td>
+	</tr>
+	<tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_ACTIVE}</td>
+	<td width="30%"><input name='active' type="checkbox" tabindex='1' {ACTIVE}></td></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_COMMISSION_RATE}</td>
+	<td width="30%"><input name='commissionrate' type="text" tabindex='4' size='15' maxlength='10' value="{COMMISSION_RATE}"></td>
+	</tr>
+	<tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_QTY_PER_UNIT}</td>
+	<td width="30%"><input name='qtyperunit' type="text" tabindex='5' size='15' maxlength='10' value="{QTY_PER_UNIT}"></td>
+	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_UNIT_PRICE}</td>
+	<td width="30%"><input name='unitprice' type="text" tabindex='6' size='15' maxlength='10' value="{UNIT_PRICE}"></td>
+	</tr>
+	<tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_PRODUCT_DESCRIPTION}</td>
+	<td colspan="4"><textarea name='description' tabindex='7' cols="80" rows="8">{DESCRIPTION}</textarea></td>
+</tr></table>
+</td></tr></table>
+<!--a href="javascript:productImg();">Attach Product Image</a>
+</form>
+<script>
+function productImg()
+{
+	$vtigerPath = ' <?php echo $_SERVER['REQUEST_URI'] ?>';
+	alert($vtigerPath);
+	window.open(vtigerPath+"/uploads/upload.php","productImg","top=100,left=100,height=300,width=200")	
+}
+</script -->
+<!-- END: main -->
