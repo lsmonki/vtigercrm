@@ -22,16 +22,17 @@
 
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
- include_once $calpath .'task.pinc';
+ #include_once $calpath .'task.pinc';
  include_once $calpath .'appointment.pinc';
- include_once $calpath .'product.pinc';
- include_once $calpath .'timetrack.pinc';
+ #include_once $calpath .'product.pinc';
+ #include_once $calpath .'timetrack.pinc';
 
+ require_once('modules/Calendar/preference.pinc');
+ 
  /* Check if user is allowed to use it */
- check_user();
+ #check_user();
  loadmodules('appointment','show');
  loadlayout();
-
  /**
   * display a calendar dfor a week
   */
@@ -39,6 +40,11 @@
    /**
     * A one week calendar sheet
     */
+	
+   Function calendar_week()
+   {
+   	$this->pref = new preference();
+   }
    Function info() {
      global $lang,$tutos,$calpath,$callink,$image_path;
 
@@ -81,12 +87,12 @@
      $to->addDays(7);
 
      $this->user->callist = array();
-     appointment::readCal($this->user,$from,$to);
-     task::readCal($this->user,$from,$to);
+     appointment::readCal($this->pref,$from,$to);
+     #task::readCal($this->user,$from,$to);
 
      foreach($tutos[activemodules] as $i => $f) {
        $x = &new $tutos[modules][$f][name]($this->dbconn);
-       $x->readCal($this->user,$from,$to);
+       $x->readCal($this->pref,$from,$to);
      }
 
      $day = 0;
@@ -193,14 +199,14 @@
      global $tutos, $lang;
 
      $this->name = $lang['Calendar'];
-     if ( ! $this->user->feature_ok(usecalendar,PERM_SEE) ) {
-       $msg .= sprintf($lang['Err0022'],"'". $this->name ."'");
-       $this->stop = true;
-     }
+     #if ( ! $this->user->feature_ok(usecalendar,PERM_SEE) ) {
+     #  $msg .= sprintf($lang['Err0022'],"'". $this->name ."'");
+     #  $this->stop = true;
+     #}
 
-     $this->team = $this->user->get_prefteam();
+     #$this->team = $this->user->get_prefteam();
      $this->teamname = "";
-     $this->uids = cal_parse_options($this->user,$this->teamname);
+     #$this->uids = cal_parse_options($this->user,$this->teamname);
      $this->t = $_GET['t'];
      # menu
      $m = appointment::getSelectLink($this->user);

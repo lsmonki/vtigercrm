@@ -27,6 +27,7 @@ define ('CAL_MODPRIV',3);
 define ('APP_STATE_UNKNOWN',0);
 define ('APP_STATE_YES',1);
 
+ include_once 'modules/Calendar/base.pinc';
 /**
  * options for calendar selection
  */
@@ -341,9 +342,9 @@ class appointment extends tutos_base {
 
     $this->init($dbconn);
 
-    if ( ! class_exists ("product") ) {
-      require_once 'product.pinc';
-    }
+   # if ( ! class_exists ("product") ) {
+   #   require_once 'product.pinc';
+   # }
     $this->descr = "";
     $this->trace = 0;
     $this->outside = 0;
@@ -352,7 +353,7 @@ class appointment extends tutos_base {
     $this->end      = new DateTime();
     $this->t_ignore = 0;
     $this->visitor  = -1;
-    $this->product  = new product($this->dbconn);
+    #$this->product  = new product($this->dbconn);
     $this->remember = 0;
     $this->remembered = 0;
     $this->email = 0;
@@ -373,8 +374,6 @@ class appointment extends tutos_base {
     $this->participants_is_read = false;
     $this->res = array();
     $this->tablename  = $this->dbconn->prefix .$table['appointment1'][name];
-    $this->tablename2 = $this->dbconn->prefix .$table['appointment2'][name];
-    $this->crm_calinfo = $this->dbconn->prefix .$table['crmcalendar'][name];
   }
 
   /**
@@ -1509,14 +1508,14 @@ class appointment extends tutos_base {
     if ( $obj == -1 ) return ""; 
     if (! is_object($obj) ) return "";
     if ( $obj->id == -1 ) return "";
-    if (! $user->feature_ok(usecalendar,PERM_NEW) ) return "";
+    #if (! $user->feature_ok(usecalendar,PERM_NEW) ) return "";
     
     $x[0] = array( url => "app_new.php",
                    text => $lang['NewEntry'],
                    info => $lang['NewAppointInfo'],
                    category => array("app","new","obj")
                  );
-    if ( ($obj->getType() == "company") ||
+ /*   if ( ($obj->getType() == "company") ||
          ($obj->getType() == "department")
        ) {
       $x[0][url] = addUrlParameter($x[0][url],"vid=".$obj->id);
@@ -1533,6 +1532,7 @@ class appointment extends tutos_base {
                      category => array("app","new","obj")
                    );
     }
+*/
     return $x;
   }
   /**
@@ -1737,8 +1737,8 @@ class appointment extends tutos_base {
     #
     # First query ( non repeating appointments )
     #
-    $q = "SELECT * FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." WHERE ";
-    $q .= " (repeat = 0) AND (";
+    $q = "SELECT * FROM ". $this->tablename." WHERE ";
+    $q .= " (";
     $q .= "  (a_start < ". $x2 ." AND a_start >= ". $x1 .")";
     $q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
     $q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
@@ -1794,23 +1794,23 @@ class appointment extends tutos_base {
 
 
     # always at the end of query
-    check_dbacl( $q, $current_user->id);
+ #   check_dbacl( $q, $current_user->id);
 
-    $r = $obj->dbconn->Exec($q);
-    $n = $r->numrows();
-    $a = 0;
-    while ( $a < $n ) {
-      $o = &new appointment($obj->dbconn);
-      $o->read_result($r,$a);
-      $a++;
-      if ( $o->see_ok() ) { 
+ #   $r = $obj->dbconn->Exec($q);
+ #   $n = $r->numrows();
+ #   $a = 0;
+ #   while ( $a < $n ) {
+ #     $o = &new appointment($obj->dbconn);
+ #     $o->read_result($r,$a);
+ #     $a++;
+ #     if ( $o->see_ok() ) { 
         /* Get all participants */
-        $o->read_participants();
-        $obj->callist[$o->id] = &$o;
-      }
-      unset($o);
-    }
-    $r->free();
+ #       $o->read_participants();
+ #       $obj->callist[$o->id] = &$o;
+ #     }
+ #     unset($o);
+ #   }
+ #   $r->free();
 
     #
     # Third query ( repeating appointments with end )
@@ -1827,21 +1827,21 @@ class appointment extends tutos_base {
     $q .= ")";
     $q .= " ORDER by a_start";
 
-    $r = $obj->dbconn->Exec($q);
-    $n = $r->numrows();
-    $a = 0;
-    while ( $a < $n ) {
-      $o = &new appointment($obj->dbconn);
-      $o->read_result($r,$a);
-      $a++;
-      if ( $o->see_ok() ) { 
+ #   $r = $obj->dbconn->Exec($q);
+ #   $n = $r->numrows();
+ #   $a = 0;
+ #   while ( $a < $n ) {
+ #     $o = &new appointment($obj->dbconn);
+ #     $o->read_result($r,$a);
+ #     $a++;
+ #     if ( $o->see_ok() ) { 
         /* Get all participants */
-        $o->read_participants();
-        $obj->callist[$o->id] = &$o;
-      }
-      unset($o);
-    }
-    $r->free();
+ #       $o->read_participants();
+ #       $obj->callist[$o->id] = &$o;
+ #     }
+ #     unset($o);
+ #   }
+ #   $r->free();
 
     return;
   }

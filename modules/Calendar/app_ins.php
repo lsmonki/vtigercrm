@@ -9,35 +9,34 @@
  * @module app_ins
  * @package appointment
  */
- global $calpath,$callink;
+ global $calpath,$callink,$db;
  $callink = "index.php?module=Calendar&action=";
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
  include_once $calpath .'appointment.pinc';
+ require_once('modules/Calendar/preference.pinc');
  include_once $calpath .'product.pinc';
 
  /* Check if user is allowed to use it */
- check_user();
+ #check_user();
  loadmodules("appointment","new");
-
+ $pref = new preference();
  if ( ! isset($_POST['gotourl']) ) {
    $gotourl= $callink ."app_new";
  } else {
    $gotourl=$_POST['gotourl'] ;
  }
  $msg = "";
-
+ 
  $a = new appointment($dbconn);
  #
  # ID
  #
- if ( isset($_POST['id']) ) {
-   $gotourl= addUrlParameter($gotourl,"id=".$_POST['id'],true);
+ if ( isset($_POST['creator_id']) ) {
+   $gotourl= addUrlParameter($gotourl,"id=".$_POST['creator_id'],true);
    $a = $a->read($_POST['id'],$a);
-   $a->read_participants();
+   #$a->read_participants();
  }
-
-
  if ( isset($_POST['t_ignore']) ) {
    $a->t_ignore = 1;
  } else {
@@ -55,6 +54,7 @@
 
  $start = new DateTime();
  $start->setDateTimeF("start");
+ $start->getTimeStamp();
  if ( ( !$start->checkDMY()) || (-1 == $start->getTimeStamp() ) ) {
    $msg .= sprintf($lang['Err0038'],$lang['StartDate']) ."<br>";
  } else {
@@ -265,7 +265,7 @@
    $gotourl = $callink ."calendar";
    $gotourl= addUrlParameter($gotourl,"id=".$a->id,true);
  }
-
+ $gotourl= addUrlParameter($gotourl,"msg=".$msg,true);
  $gotourl = addMessage($gotourl,$msg,true);
  $gotourl = addSessionKey($gotourl,true);
  

@@ -65,6 +65,10 @@ $mod_strings = Array(
 
 'LBL_APP_IGNORE_TIME2' => '(i.e. the appointment takes place<br />at no particular time on these day(s) )',
 
+'LBL_APP_ERR001' =>'Invalid Date in field %s!',
+'LBL_APP_ERR002' =>'start after end !',
+'LBL_APP_ERR003' =>'Missing Contact !',
+
 'AppLoc'=> Array('0' => 'Office'
 			, '1' => 'Out'
 			, '2' => 'Vacation'

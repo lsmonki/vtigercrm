@@ -17,7 +17,7 @@ class preference extends DateTime {
 
  function preference()
  {
-	global $tutos,$current_user,$dbconn,$lang;
+	global $tutos,$current_user,$dbconn,$lang,$msg;
 	
 	//Setting MySQL db
 	
@@ -53,6 +53,28 @@ class preference extends DateTime {
 	$_SESSION['userid'] = $current_user->id;
         //$_SESSION['dbnr'] = $db;
         ReadLang($lang);
+	
+	$msg = "";
+  	if ( isset($_POST['msg']) ) {
+    		$msg .= HtmlEntities(UrlDecode($_POST['msg']));
+	  } elseif ( isset($_GET['msg']) ) {
+	    $msg .= HtmlEntities(UrlDecode($_GET['msg']));
+	  } elseif ( isset($_POST['msgid']) ) {
+	    if (isset($_SESSION[$_POST['msgid']])) {
+	      $msg .= UrlDecode($_SESSION[$_POST['msgid']]);
+	      unset($_SESSION[$_POST['msgid']]);
+	    } else {
+	      $msg = "?";
+	    }
+	  } elseif ( isset($_GET['msgid']) ) {
+	    if (isset($_SESSION[$_GET['msgid']])) {
+	      $msg .= UrlDecode($_SESSION[$_GET['msgid']]);
+	      unset($_SESSION[$_GET['msgid']]);
+	    } else {
+	      $msg = "?";
+    		}
+  	}
+
  }
 
 function get_prefweeks() {
@@ -200,7 +222,18 @@ function getImage($type,$purpose) {
     $r .= " </td>\n";
     return $r;
   }
-
+   /**
+   * add a hidden field for a form
+   */
+   Function addHidden($fld,$value) {
+    if (is_array($value)) {
+      foreach ($value as $i) {
+        $this->hidden[] = array($fld ."[]",$i);
+      }
+    } else {
+      $this->hidden[] = array($fld,$value);
+    }
+  }
 
 }
 

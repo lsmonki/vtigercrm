@@ -146,7 +146,7 @@ Function ReadLangFinish(&$lang,$type) {
  * Language is determined by looking at HTTP_ACCEPT_LANGUAGE in automatic mode
  */
 Function ReadLang1(&$lang,$path,&$user) {
-  global $tutos;
+  global $tutos,$current_language;
 
   # error_log($_SERVER["REQUEST_URI"] ." > ReadLang1:".count($lang)." ". $path ." ". $user->f_name ." ". $user->l_name ." ". $user->lang ."<br />\n",3,$tutos[errlog]);
 
@@ -163,8 +163,8 @@ Function ReadLang1(&$lang,$path,&$user) {
     } else {
       $lg = strtolower($_POST['lg']);
     }
-  } else if ($user->lang != "auto" ) {
-    $lg = $user->lang;
+  } else if ($current_language != "auto" ) {
+    $lg = $current_language;
   }
 
   if (isset($lg)) {

@@ -18,16 +18,20 @@
  include_once $calpath .'permission.p3';
  include_once $calpath .'preference.pinc';
  require_once('include/database/PearDatabase.php');
+ require_once('modules/Calendar/Calendar.php');
+ require_once ($theme_path."layout_utils.php");
  if ( $tutos[tasksincalendar] == 1 ) {
-   include_once $calpath .'task.pinc';
+   #include_once $calpath .'task.pinc';
  }
  include_once $calpath .'appointment.pinc';
- include_once $calpath .'product.pinc';
+ #include_once $calpath .'product.pinc';
 
  /* Check if user is allowed to use it */
  #check_user();
  loadmodules("appointment","show");
  loadlayout();
+ echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_TITLE'], true); 
+ echo "\n<BR>\n";
  /**
   * display a calendar for some weeks
   */
@@ -37,6 +41,8 @@
 	{
 		$this->db = new PearDatabase();
  		$this->pref = new preference();
+		$calobj = new Calender();
+		$this->tablename = $calobj->table_name;
 	}
    /**
     * Display One Weeks appointments (including s) starting with Monday or Sunday

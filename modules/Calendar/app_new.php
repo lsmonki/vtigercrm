@@ -47,7 +47,7 @@
     * display the info
     */
    Function info() {
-     global $tutos, $lang,$table,$callink,$app_strings,$mod_strings,$apmt_location;
+     global $tutos, $lang,$table,$callink,$app_strings,$mod_strings,$apmt_location,$current_user;
 
      $a_checked[0] = "";
      $a_checked[1] = "";
@@ -58,16 +58,17 @@
      if ( $this->obj->allowed == 0 ) {
        echo $this->error($lang['ReadOnlyAppoint']);
      }
-     #echo "<form name=\"appnew\" action=\"app_ins.php\" method=\"post\">\n";
-     echo "<form name=\"appnew\" action=\"". $callink ."app_ins\" method=\"post\">\n";
-     #echo "<input type=\"hidden\" name=\"module\" value=\"Calendar\">\n";
-     #echo "<input type=\"hidden\" name=\"return_module\" value=\"Calendar\">\n";
-     #echo "<input type=\"hidden\" name=\"action\" value=\"app_ins\">\n";
-     #echo "<input type=\"hidden\" name=\"return_action\" value=\"calendar\">\n";
+     
+     echo "<form name=\"appnew\" action=\"". $callink ."Save\" method=\"post\">\n";
+     echo "<input type=\"hidden\" name=\"module\" value=\"Calendar\">\n";
+     echo "<input type=\"hidden\" name=\"return_module\" value=\"Calendar\">\n";
+     echo "<input type=\"hidden\" name=\"return_action\" value=\"calendar\">\n";
      $this->addHidden("repeat","0");
      $this->addHidden("r_ignore","0");
-     if ( $this->obj->id > 0 ) {
-       $this->addHidden("id",$this->obj->id);
+     $this->addHidden("a_start","");
+     $this->addHidden("a_end","");
+     if ( $current_user->id !="" ) {
+       $this->addHidden("creator",$current_user->id);
      }
 
 	 //echo $this->DataTableStart();
@@ -180,7 +181,7 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      echo " </td>\n";
      echo "</tr><tr>\n";
      echo $this->showfieldc($mod_strings['LBL_SUBJECT'],1,"subject");
-     echo "<td><input type=\"text\" name=\"subject\" value=\"\" size=\"40\" maxlength=\"50\"></td>\n";	
+     echo "<td><input type=\"text\" name=\"subject\" value=\"".$this->obj->subject."\" size=\"40\" maxlength=\"50\"></td>\n";	
      echo "</tr><tr>\n";
 
      echo $this->showfield($mod_strings['LBL_APP_DESCRIPTION'],0,"descr");
@@ -192,8 +193,8 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      //Added to get vtigerCRM contacts
      echo $this->showfieldc($mod_strings['LBL_CONTACT'],1,"contact_name");
      echo " <td colspan=\"2\">";
-     echo "<input type=\"text\" name=\"contact_name\" value=\"\" size=\"20\" maxlength=\"40\" readonly>";
-     echo "<input type=\"hidden\" name=\"account_name\" value=\"\">";
+     echo "<input type=\"text\" name=\"contact_name\" value=\"".$this->obj->contact_name."\" size=\"20\" maxlength=\"40\" readonly>";
+     echo "<input type=\"hidden\" name=\"contact_id\" value=\"".$this->obj->contact_id."\">";
      //echo " </td>\n";
      echo " &nbsp;<input title='".$app_strings['LBL_SELECT_CONTACT_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_SELECT_CONTACT_BUTTON_KEY']."' type='button' class='button' value='  ".$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=appnew&form_submit=false\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
      //echo " </td>\n";
@@ -300,7 +301,11 @@ onmouseover=\"self.status='minitimer' ;return true\">";
     */
    Function prepare() {
      global $msg,$tutos,$lang,$callink;
-
+     
+     if ($msg!='')
+     {
+	echo "<center><font color=red><b>".$msg."</b></font></center>";
+     }
      $p = array();
      $this->obj = new appointment($this->dbconn);
      if ( isset($_GET['id']) ) {
@@ -339,14 +344,8 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      if ( isset($_GET['descr']) ) {
        $this->obj->descr = StripSlashes($_GET['descr']);
      }
-     if ( isset($_GET['trace']) ) {
-       $this->obj->trace = $_GET['trace'];
-     }
-     if ( isset($_GET['email']) ) {
-       $this->obj->email = $_GET['email'];
-     }
-     if ( isset($_GET['mod_allow']) ) {
-       $this->obj->mod_allow = $_GET['mod_allow'];
+     if ( isset($_GET['subject']) ) {
+       $this->obj->subject = $_GET['subject'];
      }
      if ( isset($_GET['start']) ) {
        $this->obj->start->setDateTime($_GET['start']);
@@ -354,28 +353,18 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      if ( isset($_GET['end']) ) {
        $this->obj->end->setDateTime($_GET['end']);
      }
-     if ( isset($_GET['remember']) ) {
-       $this->obj->remember = $_GET['remember'];
+     if ( isset($_GET['contact_name']) ) {
+       $this->obj->contact_name = $_GET['contact_name'];
      }
      if ( isset($_GET['t_ignore']) ) {
        $this->obj->t_ignore = $_GET['t_ignore'];
      }
-     if ( isset($_GET['check']) ) {
-       $this->obj->check = $_GET['check'];
+     if ( isset($_GET['contact_id']) ) {
+       $this->obj->contact_id = $_GET['contact_id'];
      } else {
        $this->obj->check = 0;
      }
 
-     preset_from_array_or_input($this->obj,'visitor','v');
-     preset_from_array_or_input($this->obj,'product','p');
-
-     if ( isset($_GET['people']) ) {
-       $p = array();
-       foreach($_GET['people'] as $i => $f) {
-         $p[$f] = 2;
-       }
-     }
-     $this->obj->people = $p;
 
      if ( isset($_GET['outside']) ) {
        $this->obj->outside = $_GET['outside'];
