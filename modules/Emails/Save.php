@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.14 2004/12/30 16:52:27 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.15 2005/01/04 12:13:51 jack Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -23,7 +23,7 @@
 
 require_once('modules/Emails/Email.php');
 require_once('include/logging.php');
-require_once('send_mail.php');
+//require_once('send_mail.php');
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Email();

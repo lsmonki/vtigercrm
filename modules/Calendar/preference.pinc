@@ -158,6 +158,49 @@ function getImage($type,$purpose) {
     return "";
 #    return "@ $type @";
   }
+  /**
+   * create a textarea with the given size and name
+   */
+    function textarea($name,$colspan,$maxsize,$value) {
+    $r = "";
+    $cols = 70;
+    $rows = 10;
+    if ($maxsize != -1) {
+      $cols = min($cols,$maxsize);
+      $rows = ceil($maxsize / $cols);
+    }
+    $rows = max(2,$rows);
+    $rows = min(10,$rows);
+
+    $r .= " <td colspan=\"". $colspan ."\">\n";
+    if ($maxsize != -1) {
+      $r .= "<script type=\"text/javascript\" language=\"JavaScript\">\n";
+      $r .= "<!--\n";
+      $r .= "function recount_". $name ."(x,maxlength) {\n";
+      $r .= "  myval = 0+ x.". $name . ".value.length;";
+      $r .= "  x.cnt_". $name .".value = myval;";
+      $r .= "  if (myval > maxlength ) {";
+      $r .= "    x.". $name .".value= x.". $name .".value.substring(0,maxlength);";
+      $r .= "    x.cnt_". $name .".value = maxlength;";
+      $r .= "  }";      
+      $r .= "}\n";
+      $r .= "//-->\n";
+      $r .= "</script>\n";
+    }
+    $r .= "<textarea ";
+    if ($maxsize != -1) {
+      $r .="onblur=\"recount_". $name ."(this.form,". $maxsize .");\" ";
+      $r .="onkeyup=\"recount_". $name ."(this.form,". $maxsize .");\" ";
+      $r .="onchange=\"recount_". $name ."(this.form,". $maxsize .");\" ";
+    }
+    $r .= "id=\"". $name ."\" rows=\"". $rows ."\" cols=\"". $cols ."\" name=\"". $name ."\">". $value ."</textarea>\n";
+    if ($maxsize != -1) {
+        $r .= "<br /><font size=\"-2\">(<input size=\"3\" maxlength=\"3\" name=\"cnt_".$name."\" id=\"cnt_".$name."\" value=\"". strlen($value) ."\"> / ".$maxsize." characters)</font>";
+    }
+    $r .= " </td>\n";
+    return $r;
+  }
+
 
 }
 

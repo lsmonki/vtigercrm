@@ -19,6 +19,7 @@ require_once("config.php");
 require_once('modules/Tasks/Task.php');
 require_once('modules/Contacts/Contact.php');
 require_once('include/logging.php');
+require_once('database/DatabaseConnection.php');
 //require_once('SOAP/lib/nusoap.php');
 require_once('include/nusoap/nusoap.php');
 // create object
@@ -244,6 +245,13 @@ $server->register(
     array('user_name'=>'xsd:string', 'contact_ids'=>'xsd:string', 'date_sent'=>'xsd:date', 'email_subject'=>'xsd:string', 'email_body'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
+
+ $server->register(
+	'upload_emailattachment',
+    array('email_id'=>'xsd:string', 'filename'=>'xsd:string','binFile'=>'xsd:string','fileSize'=>'xsd:long'),
+   array('return'=>'xsd:string'),
+    $NAMESPACE);
+
 
 $server->register(
     'contact_by_range',
@@ -503,6 +511,35 @@ function contact_by_search($name)
 	return $output_list;
 }  
 
+function upload_emailattachment($email_id, $filename,$binFile,$filesize)
+{
+  $filetype= $_FILES['binFile']['type'];
+  $filedata = "./cache/mails/".$email_id.$filename;
+
+    
+    if($filesize != 0)	
+    {
+    $data = base64_encode(fread(fopen($filedata, "r"), $filesize)); 
+    $fileid = create_guid();
+    $date_entered = date('YmdHis');
+    //Retreiving the return module and setting the parent type
+    $parent_type = 'Emails';
+    $parent_id = $email_id;	 			
+
+    $sql = "INSERT INTO email_attachments ";
+    $sql .= "(id,date_entered,parent_type,parent_id,data, filename, filesize, filetype) ";
+    $sql .= "VALUES ('$fileid','$date_entered','$parent_type','$parent_id','$data',";
+    $sql .= "'$filename', '$filesize', '$filetype')";
+ echo 'sql ois ' .$sql; 
+
+    
+    mysql_query($sql) or die ("Not able to execute insert");
+    mysql_close();
+    unlink($filedata);
+
+  return "Suceeded in upload_attachment";
+    }
+}
 function track_email($user_name, $contact_ids, $date_sent, $email_subject, $email_body)
 {
 	//global $log;
@@ -546,7 +583,8 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 		$email->set_emails_contact_invitee_relationship($email->id, $contact_id);
 	}
 	
-	return "Suceeded";
+	//return "Suceeded";
+	return $email->id;
 }
 
 /*
@@ -601,6 +639,7 @@ function create_contact($user_name, $first_name, $last_name, $email_address ,$ac
         $contact->alt_address_state = $alt_address_state;
         $contact->alt_address_street = $alt_address_street;
 	$contact->alt_address_city = $alt_address_city; 
+	$contact->assigned_user_id=$user_id;
 	
 		$contact->save();
 	

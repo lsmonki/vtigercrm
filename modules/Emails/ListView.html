@@ -54,7 +54,11 @@
      	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
     			<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module={EMAIL.PARENT_MODULE}&record={EMAIL.PARENT_ID}">{EMAIL.PARENT_NAME}</a></td>
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;"><form name="ListView" method="POST" action="DetailView.php"><input type="hidden" name="file_name" value="{EMAIL.FILENAME}"><!--a href="{URL_PREFIX}index.php?action=DetailView&module={EMAIL.PARENT_MODULE}&record={EMAIL.PARENT_ID}"-->{EMAIL.FILENAME}<!--/a--></td></form>
+    		<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;">
+			<form name="ListView" method="POST" action="DetailView.php">
+			<input type="hidden" name="file_name" value="{EMAIL.FILENAME}">
+			<a href="{URL_PREFIX}index.php?action=DetailView&module={EMAIL.PARENT_MODULE}&record={EMAIL.PARENT_ID}">{EMAIL.FILENAME}</a>
+		</td></form>
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
     			<td class="{ROW_COLOR}" nowrap valign=TOP style="padding:0px 3px 0px 3px;">{EMAIL.DATE_START}</td>
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>

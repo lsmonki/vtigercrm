@@ -180,11 +180,11 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      echo " </td>\n";
      echo "</tr><tr>\n";
      echo $this->showfieldc($mod_strings['LBL_SUBJECT'],1,"subject");
-     echo "<td><input type=\"text\" name=\"subject\" value=\"\" size=\"40\" maxlength=\"60\"></td>\n";	
+     echo "<td><input type=\"text\" name=\"subject\" value=\"\" size=\"40\" maxlength=\"50\"></td>\n";	
      echo "</tr><tr>\n";
 
      echo $this->showfield($mod_strings['LBL_APP_DESCRIPTION'],0,"descr");
-     echo $this->textarea("descr",5,$table['appointment1']['description'][size],$this->obj->descr);
+     echo $this->pref->textarea("descr",5,100,$this->obj->descr);
      echo "</tr>\n";
      echo "<tr>\n";
      # Customer/Visitor name

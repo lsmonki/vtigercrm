@@ -224,6 +224,16 @@ function fetchWordTemplateList()
 
 
 
+function fetchEmailTemplateInfo($templateName)
+{
+        $sql= "select * from emailtemplatestorage where templatename='" .$templateName ."'";
+        $result = mysql_query($sql);
+        return $result;
+}
+
+
+
+
 
 
 
