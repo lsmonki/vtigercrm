@@ -1,0 +1,352 @@
+/*********************************************************************************
+ * The contents of this file are subject to the Mozilla Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.mozilla.org/MPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * $Id: style.css,v 1.1 2004/05/27 05:30:56 sugarjacob Exp $
+ * Description:  Contains a variety of utility functions used to display UI 
+ * components such as form headers and footers.  Intended to be modified on a per 
+ * theme basis.
+ ********************************************************************************/
+BODY {
+	margin: 3px 3px 3px 3px;
+	background-color : #FFFFFF;
+	color : Black; }
+
+td,tr,p,div {
+	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small;
+	color: #000000;
+	}
+
+h4 { color: #FF9900; font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; font-size: medium; font-weight: bold; }
+h5 { color: #FF9900; font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; font-size: medium; font-weight: bold; }
+h6 { color: #FF9900; font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; font-size: small; font-weight: bold; }
+
+/* Links */
+a:link, a:visited {
+	font-size: x-small;
+	color: #FF0000;
+	text-decoration: none;
+	font-family:  "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+
+	}
+
+a:hover {
+	color: #FF0000;
+	text-decoration: none;
+	background-color: #EEEFED;
+
+	}
+
+/* Horizontal Line */
+hr {
+	background: url(images/grey_spacer_vert.jpg); height:2px; border: 1px inset;
+	}
+
+/* --Default Class Settings-- */
+
+.currentTab {
+	FONT-SIZE: 9pt;
+	COLOR: #FFFFFF;
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	TEXT-DECORATION: none;
+	font-variant: small-caps;
+	font-weight: normal;
+}
+A.currentTab:link { FONT-WEIGHT: bold; COLOR: #FFFFFF; TEXT-DECORATION: none }
+A.currentTab:visited { COLOR: #FFFFFF; TEXT-DECORATION: none }
+A.currentTab:active { COLOR: #FFFFFF; TEXT-DECORATION: none }
+A.currentTab:hover { COLOR: #FFFFFF; TEXT-DECORATION: underline }
+.otherTab {
+	FONT-WEIGHT: lighter;
+	FONT-SIZE: 10pt;
+	COLOR: #000000;
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	TEXT-DECORATION: none;
+	font-variant: small-caps;
+}
+A.otherTab:link { COLOR: #000000; TEXT-DECORATION: none }
+A.otherTab:active { COLOR: #000000; TEXT-DECORATION: none }
+A.otherTab:visited { COLOR: #000000; TEXT-DECORATION: none }
+A.otherTab:hover { COLOR: #000000; TEXT-DECORATION: underline }
+.moduleMenu {
+	FONT-WEIGHT: normal;
+	FONT-SIZE: 8pt;
+	COLOR: #FFFFFF;
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	TEXT-DECORATION: none;
+}
+A.moduleMenu:link { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #FFFFFF; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.moduleMenu:visited { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #FFFFFF; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.moduleMenu:hover { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #FFFFFF; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }
+.moduleTitle {
+	FONT-WEIGHT: bold;
+	FONT-SIZE: 11pt;
+	COLOR: #000000;
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	TEXT-DECORATION: none;
+}
+.formHeader {
+	FONT-WEIGHT: normal;
+	FONT-SIZE: 10pt;
+	COLOR: #FFFFFF;
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	TEXT-DECORATION: none;
+	background-color: #FF0000;
+}
+.formFooter {
+	FONT-WEIGHT: normal;
+	COLOR: #FFFFFF;
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	TEXT-DECORATION: none;
+	background-color: #FFFFFF;
+}
+.formBorder {
+	BORDER-COLOR: #FF0000;
+}
+.leftFormHeader { 
+	color: #FFFFFF; 
+	font-size: 12px; 
+	font-weight: bold 
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	BACKGROUND-COLOR: #FF0000;
+}
+.leftFormFooter { 
+	color: #FFFFFF; 
+	font-size: 12px; 
+	font-weight: bold 
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	BACKGROUND-COLOR: #FF0000;
+}
+.leftFormBorder1 {
+	BORDER-COLOR: #FF0000;
+}
+.leftFormBorder2 {
+	BORDER-COLOR: #FF0000;
+}
+.moduleListTitle {
+	FONT-WEIGHT: normal;
+	FONT-SIZE: 7pt;
+	COLOR: #FFFFFF;
+	FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	TEXT-DECORATION: none;
+	background-color: #FF0000;
+	text-transform: none;
+}
+.moduleName	{ font-weight: normal; font-size: 14pt; color: #ffffff; BACKGROUND-COLOR: #FF0000 }
+.moduleLine { BACKGROUND-COLOR: #FF0000}
+
+.bodyBold { FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.bodyBold:link { FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+.bodySmall { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.bodySmall:link { FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+.bodySmallBold { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.bodySmallBold:link { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+.dataLabel {FONT-WEIGHT: normal; FONT-SIZE: 9pt; COLOR: #000000; LINE-HEIGHT: 16px; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #F8F8F8; TEXT-ALIGN: right }
+.dataField { FONT-WEIGHT: bold; FONT-SIZE: 9pt; COLOR: #000000; LINE-HEIGHT: 16px; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #FFFFFF; TEXT-ALIGN: left }
+.requiredInput { FONT-WEIGHT: normal; FONT-SIZE: 9pt; COLOR: #ffffff; LINE-HEIGHT: 16px; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #990000; TEXT-ALIGN: right }
+
+
+.mainmenu {
+	color: #FF0000;
+	font-family: Verdana, Geneva, Arial, Helvetica, serif;
+	font-weight: bold;
+	text-decoration: none;
+	font-size: xx-small;
+
+	}
+a.mainmenu:link, a.mainmenu:visited {
+	}
+a.mainmenu:hover {
+	color: #FF0000;
+	background-color: #FFFFFF;
+
+	}
+
+.contentheading {
+	font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	font-size: small;
+	font-weight: bold;
+ 	color: #333333 }
+
+.componentheading {
+	font: bold x-small "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #FF0000;
+	text-align: left }
+
+.moduleheading {
+	font: bold x-small Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	color: #333333;
+	text-align: left }
+
+.button {
+	font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: xx-small;
+	color: #000000;
+	border-style: solid;
+	border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px }
+
+.inputbox {
+	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small;
+	font-weight: bold;
+	color: #666666;
+	background: #FFFFFF;
+	border: 1px solid #FF0000; }
+
+.contentdescription {
+	font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small;
+	color: #333333;
+	text-align: left }
+
+/** category text format and links **/
+.category {
+	color: #999999; font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small; font-weight: bold; text-decoration: none;
+	}
+a.category:link, a.category:visited {
+	color: #999999; font-weight: bold;
+	}
+a.category:hover {
+	color: #FF0000;
+	background-color: #EEEFED;
+	}
+
+.contentpaneopen {
+	border : 0px ridge #DCDCDC; }
+
+.poll {
+	font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small;
+	color: #666666;
+	line-height: medium }
+
+.sectiontableentry1, .contentpane {
+	background-color : #FFFFFF; }
+
+.sectiontableentry2 {
+	background-color : #EBEBEB; }
+
+.sectiontableheader {
+	background-color : #999999;
+	color : #FFFFFF;
+	font-weight : bold; }
+
+.small {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small;
+	color: #FF0000;
+	text-decoration: none;
+	font-weight: normal; }
+
+.smalldark {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small;
+	color: #000000;
+	font-weight: normal; }
+
+ul {
+	margin: 0px 0px 0px 0px; }
+
+li {
+	list-style: inside url(../images/arrow.gif) 2px;
+	list-style-image: url(../images/arrow.gif); }
+
+.fase4rdf {
+	font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+	font-size: xx-small; color: #000000; font-weight: normal; }
+a.fase4rdf:link {
+	font-size: x-small; font-weight: normal; color: #FF9900;
+	}
+a.fase4rdf:hover {
+	font-weight: bold; color: #808080;
+	}
+
+table.searchintro {
+  	background-color: #ffffff;
+	border: solid 1px #777777;}
+.quoteblock {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: medium;
+	font-weight: bold;
+	color: #FF0000;
+	font-style: italic;
+
+}
+.sitename {
+
+	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-size: large;
+	font-weight: bold;
+ 	color: #FF0000
+}
+.articlehead {
+
+	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-size: medium;
+	font-weight: bold;
+ 	color: #FF0000
+}
+.smallred {
+
+	font-family: "Trebuchet MS", Tahoma, Arial;
+	font-size: x-small;
+	color: #FF0000;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.makeBlack {
+
+	color: #000000;
+	font-size: x-large;
+
+}
+.makeRed {
+
+	color: #FF0000;
+	font-size: x-large;
+
+}
+.makeWhite {
+
+	color: #FFFFFF;
+	font-size: x-small;
+	font-weight: bold;
+}
+
+.makeBlackSmall {
+
+	color: #000000;
+	font-size: small;
+
+}
+
+.evenListRow { background-color: #EEEEEE }
+.oddListRow { background-color: #DDDDDD }
+
+.required { color: #FF0000; font-weight: bold; }
+
+.listFormLinks 			{ FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.listFormLinks:link 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #FF0000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.listFormLinks:visited { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #FF0000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.listFormLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #FF0000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }
+
+.listFormHeaderLinks 			{ FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.listFormHeaderLinks:link 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #FF0000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.listFormHeaderLinks:visited { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #FF0000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
+A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #FF0000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }

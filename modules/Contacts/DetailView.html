@@ -1,0 +1,131 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Contacts/DetailView.html,v 1.15 2004/07/11 20:08:51 sugarjacob Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Contacts.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_CONTACT}  {FIRST_NAME} {LAST_NAME}</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href={PRINT_URL}>{APP.LNK_PRINT}</A> ]</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
+
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<form action="index.php" method="post" name="DetailView" id="form">
+<tr><td>&nbsp;</td>
+	<td>
+		<table cellpadding="0" cellspacing="5" border="0">
+			<input type="hidden" name="module" value="Contacts">
+			<input type="hidden" name="record" value="{ID}">
+			<input type="hidden" name="isDuplicate" value=false>
+			<input type="hidden" name="action">
+			<input type="hidden" name="return_module">
+			<input type="hidden" name="return_action">
+			<input type="hidden" name="return_id">			
+			<input type="hidden" name="reports_to_id">			
+			<input type="hidden" name="opportunity_id">			
+			<input type="hidden" name="contact_id" value="{ID}">			
+			<input type="hidden" name="contact_role">			
+			<input type="hidden" name="task_id">			
+			<input type="hidden" name="meeting_id">			
+			<input type="hidden" name="call_id">			
+			<input type="hidden" name="case_id">			
+			<input type="hidden" name="new_reports_to_id">			
+		<tr>
+		<td><input title="{APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{APP.LBL_EDIT_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Contacts'; this.form.return_action.value='DetailView'; this.form.return_id.value='{ID}'; this.form.action.value='EditView'" type="submit" name="Edit" value="  {APP.LBL_EDIT_BUTTON_LABEL}  "></td>
+		<td><input title="{APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{APP.LBL_DUPLICATE_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Contacts'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value=true; this.form.action.value='EditView'" type="submit" name="Duplicate" value=" {APP.LBL_DUPLICATE_BUTTON_LABEL} "></td>
+		<td><input title="{APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{APP.LBL_DELETE_BUTTON_KEY}" class="button" onclick="this.form.return_module.value='Contacts'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('{APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value=" {APP.LBL_DELETE_BUTTON_LABEL} "></td>
+		</tr></table>
+	</td>
+	</form>
+</tr>
+</table> 
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  class="formOuterBorder">
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_NAME}</td>
+	<td width="30%" valign="top" class="dataField">{SALUTATION} {FIRST_NAME} {LAST_NAME}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_OFFICE_PHONE}</td>
+	<td width="30%" valign="top" class="dataField">{PHONE_WORK}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel"></td>
+	<td width="30%" valign="top" class="dataField"></td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_MOBILE_PHONE}</td>
+	<td width="30%" valign="top" class="dataField">{PHONE_MOBILE}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_ACCOUNT_NAME}</td>
+	<td width="30%" valign="top" class="dataField"><a href="index.php?module=Accounts&action=DetailView&record={ACCOUNT_ID}">{ACCOUNT_NAME}</a></td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_HOME_PHONE}</td>
+	<td width="30%" valign="top" class="dataField">{PHONE_HOME}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_LEAD_SOURCE}</td>
+	<td width="30%" valign="top" class="dataField">{LEAD_SOURCE}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_OTHER_PHONE}</td>
+	<td width="30%" valign="top" class="dataField">{PHONE_OTHER}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_TITLE}</td>
+	<td width="30%" valign="top" class="dataField">{TITLE}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_FAX_PHONE}</td>
+	<td width="30%" valign="top" class="dataField">{PHONE_FAX}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_DEPARTMENT}</td>
+	<td width="30%" valign="top" class="dataField">{DEPARTMENT}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_EMAIL_ADDRESS}</td>
+	<td width="30%" valign="top" class="dataField">{EMAIL1}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_BIRTHDATE}</td>
+	<td width="30%" valign="top" class="dataField">{BIRTHDATE}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_OTHER_EMAIL_ADDRESS}</td>
+	<td width="30%" valign="top" class="dataField">{EMAIL2}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_REPORTS_TO}</td>
+	<td width="30%" valign="top" class="dataField"><a href="index.php?module=Contacts&action=DetailView&record={REPORTS_TO_ID}">{REPORTS_TO_NAME}</a></td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_ASSISTANT}</td>
+	<td width="30%" valign="top" class="dataField">{ASSISTANT}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_YAHOO_ID}</td>
+	<td width="30%" valign="top"  class="dataField">{YAHOO_ID} {YAHOO_MESSENGER}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_ASSISTANT_PHONE}</td>
+	<td width="30%" valign="top"  class="dataField">{ASSISTANT_PHONE}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_DO_NOT_CALL}</td>
+	<td width="30%" valign="top" class="dataField"><input name='do_not_call' type="checkbox" disabled {DO_NOT_CALL}></td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_EMAIL_OPT_OUT}</td>
+	<td width="30%" valign="top" class="dataField"><input name='email_opt_out' type="checkbox" disabled {EMAIL_OPT_OUT}></td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{APP.LBL_ASSIGNED_TO}</td>
+	<td width="30%" valign="top" class="dataField">{ASSIGNED_TO}</td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_PRIMARY_ADDRESS}</td>
+	<td width="30%" valign="top"  class="dataField">{PRIMARY_ADDRESS_STREET}<br>
+	{PRIMARY_ADDRESS_CITY} {PRIMARY_ADDRESS_STATE}&nbsp;&nbsp;{PRIMARY_ADDRESS_POSTALCODE}<br>
+	{PRIMARY_ADDRESS_COUNTRY}</td>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_ALTERNATE_ADDRESS}</td>
+	<td width="30%" valign="top"  class="dataField">{ALT_ADDRESS_STREET}<br>
+	{ALT_ADDRESS_CITY} {ALT_ADDRESS_STATE}&nbsp;&nbsp;{ALT_ADDRESS_POSTALCODE}<br>
+	{ALT_ADDRESS_COUNTRY}</td>
+	</tr><tr>
+	<td width="20%" valign="top" valign="top" class="dataLabel">{MOD.LBL_DESCRIPTION}</td>
+	<td colspan="3" class="dataField">{DESCRIPTION}</td>
+</tr></table>
+</td></tr></table>
+<!-- END: main -->

@@ -1,0 +1,146 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/themes/busthree/header.html,v 1.13 2004/07/04 04:00:48 sugarclint Exp {LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD html 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={LBL_CHARSET}">
+<title>{APP.LBL_BROWSER_TITLE}</title>
+<style type="text/css">@import url("themes/{THEME}/style.css"); </style>
+</head>
+<body leftMargin="0" topMargin="0" marginHeight="0" marginWidth="0" {ONLOAD}>
+<table width="100%" border="0" cellspacing="0" cellpadding="1" bgcolor="#FFFFFF">
+	<tr>
+	<td width="112" valign="top">
+		<a href="http://www.sugarcrm.com"><img src="{IMAGE_PATH}logo.gif" width="111" height="112"></a></td>
+	<td class="sitename" width='435' valign="top"><a href="http://www.sugarcrm.com"><span class="makeRed">SUGAR</span><span class="makeBlack">CRM</a></span>
+	<BR><span class="makeBlack">
+			<a href="index.php?module=Users&action=DetailView&record={CURRENT_USER_ID}">{APP.LBL_MY_ACCOUNT}</a>&nbsp;|&nbsp; 
+			{ADMIN_LINK}
+		    <a href="index.php?module=Users&action=Logout">{APP.LBL_LOGOUT}</a>&nbsp;|&nbsp; 
+            <a href="http://www.sugarcrm.com/home/component/option,com_docman" target="_blank">{APP.LNK_HELP}</a>&nbsp;
+	</span>
+	</td>
+	<td align="right" valign="top" colspan="2">
+		<table cellpadding="0" cellspacing="0" border="0"><tbody>
+			<tr>
+			<td>
+			<FONT size="1">{APP.NTC_WELCOME} {CURRENT_USER}</FONT>&nbsp;&nbsp;<br> 
+	       	<FONT size="1">{DATE}</FONT> &nbsp;&nbsp;          
+			</td>
+			<td align="right" valign="bottom"><a href="https://sourceforge.net/donate/index.php?group_id=107819" target="_blank"><img src='{IMAGE_PATH}/paypal.gif' border="0" alt="{APP.NTC_SUPPORT_SUGARCRM}"></A> &nbsp; &nbsp;</td>
+			</tr>
+			<tr>
+			<tr><td colspan="2"><hr height="1"></td></tr>
+			<form><td colspan="2" nowrap>
+			{APP.LBL_SEARCH} &gt;&gt;&nbsp;
+			<input class="inputbox" type="text" name="query_string" size="15"  this.value='';">
+	  	    <input type="hidden" name="action" value="UnifiedSearch">
+			<input type="hidden" name="module" value="Home">
+			<input type="hidden" name="search_form" value="false">
+   	  		</td></form>
+			</tr>
+		</tbody></table>
+	</td>
+	</tr>
+	<tr height="30">
+        <td bgcolor="#ff0000" colspan="4" valign="bottom"><div class=makeWhite>
+		  <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+		  <td><IMG src='{IMAGE_PATH}blank.gif' width='1' height='1'></td>
+<!-- BEGIN: tab -->
+			<td><IMG src='{IMAGE_PATH}blank.gif' width='1' height='1'></td>
+			  <td class='{TAB_CLASS}' vAlign='top' align='left' height='26'>
+				<IMG src='{IMAGE_PATH}left_arc.gif' height='5' width='5' border='0'></td>
+			  <td class='{TAB_CLASS}' vAlign='middle' noWrap align='center' height='26'>
+				<A class='{TAB_CLASS}' href='index.php?module={MODULE_KEY}&action=index'>{MODULE_NAME}</A></td>
+			  <td class='{TAB_CLASS}' vAlign='top' align='left'>
+				<IMG src='{IMAGE_PATH}right_arc.gif' height='5' width='5' border='0'></td>
+<!-- END: tab -->
+		  </tr></tbody></table>
+        </div></td>
+        </tr>
+		  </tr>
+<!-- BEGIN: sub_menu -->
+        <tr height="30">
+        <td bgcolor="#000000" class="smallred" colspan=3 valign="bottom">
+		 <table cellSpacing="3" cellpadding="0" border="0"><tbody><tr>
+			<!-- BEGIN: sub_menu_item -->
+			<td noWrap class="moduleMenu"><A class="moduleMenu" href="{URL}">{LABEL}</A></td><td class="moduleMenu">{SEPARATOR}</td>
+			<!-- END: sub_menu_item -->
+			</tr></tbody></table>    
+			<!-- END: sub_menu --> 
+		 </td>
+ 		 <td bgcolor="#000000" class="smallred" valign="bottom" align="right"><A class="moduleMenu" href="{DELETED_ITEMS_URL}">{DELETED_ITEMS_LABEL}</A>
+        </tr>
+
+</table>
+
+<table border="0" width="100%" cellpadding="3" cellspacing="0">
+<tr>
+<td bgcolor="#F3F3F3" valign="top">
+	<br>
+<!-- BEGIN: left_form -->  	
+       <table  width="169" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+        <td class="leftFormHeader" valign="middle" align="left" nowrap>{TITLE}</td>
+		</tr></tbody></table>
+		<!-- BEGIN: left_form_search -->
+				<table width="100%" cellpadding="2" cellspacing="0" border="1" class="leftFormBorder1">
+				 <tr><td nowrap>
+				  <form>
+			  	  <input type="hidden" name="action" value="ListView">
+				  <input type="hidden" name="module" value="Contacts">
+			      <input type="text" name="q" size="14">
+			 	  <input class="button" type="submit" value="{APP.LBL_SEARCH_BUTTON_LABEL}">
+		    	  </form>
+				 </td></tr>
+		    	</table>
+			  <br>
+		<!-- END: left_form_search -->
+		<!-- BEGIN: left_form_recent_view -->
+		    <table cellpadding="0" width="100%" cellspacing="0" border="1" class="leftFormBorder2"><tbody>
+		 	<tr><td>
+				<table cellpadding="2" cellspacing="0" border="0">
+				<tbody>
+		<!-- BEGIN: left_form_recent_view_row -->
+			 	<tr>
+		          <td><img width="16" alt="{MODULE_NAME}" src="{IMAGE_PATH}{MODULE_NAME}.gif"></td>
+		          <td><a title="[{APP.LBL_ALT_HOT_KEY}{ROW_NUMBER}]" accessKey="{ROW_NUMBER}" href="{RECENT_URL}">{RECENT_LABEL}</A></td>
+		        </tr>
+		<!-- END: left_form_recent_view_row -->
+		<!-- BEGIN: left_form_recent_view_empty -->
+			 	<tr>
+		          <td><em>none</em></td>
+		        </tr>
+		<!-- END: left_form_recent_view_empty -->
+	        <td colspan="2"><img height="1" src="include/images/blank.gif"></td>
+	    	</tr></table>
+		<!-- END: left_form_recent_view -->
+
+<!-- END: left_form -->
+</td></tr></tbody>
+</table>
+<!-- BEGIN: left_form_new_record -->
+<br>
+{NEW_RECORD}
+<br>
+<!-- END: left_form_new_record -->
+</td>
+<td width="100%" valign="top" align="center" class="body"> 
+
+<!-- END: main -->

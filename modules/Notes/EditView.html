@@ -1,0 +1,72 @@
+<!--
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.2
+ * ("License"); You may not use this file except in compliance with the 
+ * License. You may obtain a copy of the License at http://www.mozilla.org/MPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * {APP.LBL_CURRENCY_SYM}Header: /cvsroot/sugarcrm/sugarcrm/modules/Notes/EditView.html,v 1.9 2004/07/16 03:56:04 sugarclint Exp {APP.LBL_CURRENCY_SYM}
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr>
+    <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Notes.gif" border="0"></td>
+    <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_NOTE}  {NAME}</td>
+
+	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
+</tr>
+<tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
+
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+<tr> 
+	<td>
+		<table cellpadding="0" cellspacing="5" border="0"><tr>
+			<form name="EditView" method="POST" action="index.php">
+			<input type="hidden" name="module" value="Notes">
+			<input type="hidden" name="record" value="{ID}">
+			<input type="hidden" name="action">
+			<input type="hidden" name="form">
+			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+			<input type="hidden" name="return_id" value="{RETURN_ID}">
+			<input type="hidden" name="return_action" value="{RETURN_ACTION}">		
+		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return verify_data(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
+		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
+		</tr></table>
+	</td>
+	<td></td>
+	<td align="right" nowrap><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{APP.NTC_REQUIRED}</td>
+</tr>
+</table> 
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="0">
+	<tr>
+	<td width="20%" class="dataLabel">{MOD.LBL_CONTACT_NAME}</td>
+	<td width="30%"><input name='contact_name' readonly type='text' value='{CONTACT_NAME}'><input name='contact_id' type="hidden" value='{CONTACT_ID}'>&nbsp;<input title="{APP.LBL_CHANGE_BUTTON_TITLE}" accessKey="{APP.LBL_CHANGE_BUTTON_KEY}" tabindex="3" type="button" class="button" value='{APP.LBL_CHANGE_BUTTON_LABEL}' name='button' LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&form=TasksEditView{DEFAULT_SEARCH}","test","width=600,height=400,resizable=1,scrollbars=1");'></td>
+	<td width="20%" class="dataLabel" valign="top"><select name='parent_type' tabindex="3" onChange="this.form.parent_name.value=''; this.form.parent_id.value=''; this.form.form.value='TasksEditView'; this.form.action.value='EditView'; this.form.submit();">{TYPE_OPTIONS}</select></td>
+	<td width="30%"><input name='parent_id' type="hidden" value='{PARENT_ID}'><input name='parent_name' readonly type='text' value='{PARENT_NAME}'> {CHANGE_PARENT_BUTTON}</td>
+	</tr><tr>
+	<td colspan='4' class="dataLabel" valign="top">&nbsp;</td>
+	</tr><tr>
+	<td width="20%" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_SUBJECT}</td>
+	<td colspan="3"><input name='name' tabindex="1" type="text" size='100' maxlength="255" value="{NAME}"></td>
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_NOTE}</td>
+	<td colspan="3"><textarea name='description' tabindex="2" cols="100" rows="30">{DESCRIPTION}</textarea></td>
+</tr>
+</table>
+</td></tr></table>
+</form>
+{JAVASCRIPT}
+<!-- END: main -->

@@ -1,0 +1,41 @@
+template engine for php, allows to store your html code apart from your php code.
+(tested with php 3.0.11, 4.0.3, 4.0.4)
+
+features:
+	-simple variable interpolation ( {STUFF} )
+	-array variable interpolation		
+	 for eg. {ROW.ID} {ROW.NAME} {ROW.WHATEVER}, you assign an array to the variable ROW once 
+	-global PHP variables available without making assigns
+	 for eg. {PHP.HTTP_HOST} {PHP.PHP_SELF} or any variable: {PHP.session_id}
+	-assign using arrays 
+	for eg. $xtpl->assign(array(STUFF=>"kewlstuff",ROW=>$row));
+	-default nullstring for unassigned variables and unparsed blocks,
+	 custom nullstring for every variable or block
+	-dynamic blocks:
+		-multiple level dynamic blocks (nested blocks)
+		-autoreset feature (do not reset subblocks when reparsing parent block)
+		-recursive parse to parse all subblocks of a block
+	-file(template) include: {FILE "another.template.xtpl"}, the included templates can
+	 also contain includes recursively.. uses fopen so you can include http:// and ftp:// files too
+	-very simple and powerful syntax, you'll love it :)
+
+the code is very short and very optimized, according to my speed tests it's the 
+fastest template engine around which can do nested blocks and variables..
+
+the basic syntax is from FastTemplate and QuickTemplate (http://phpclasses.upperdesign.com/browse.html/package/49),
+but the entire class was written by me from scratch in one day, without a line from other
+template engines. THIS IS NOT A REWRITE OF OTHER ENGINES!
+the algorithm used makes this code amazing fast, you can do a bunch of
+nested dynamic blocks and everything you want, because it doesn't use recursive calls
+to build up the block tree.
+
+contains 7 examples (which covers all features i think), 
+i tried to write them so even newbies should understand easily.
+
+docs and some functions i didn't need (clearing variables, etc) are still missing, but they'll come.
+
+current version is 0.2.4, tested it more & more.
+
+contact info contained in xtpl.p
+
+licensed LGPL.

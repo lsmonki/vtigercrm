@@ -1,0 +1,10 @@
+To install SugarCRM you need to have a web server (Apache and IIS have been tested), PHP 4 configured, and MySQL installed and configured.
+We also rely on the GD graphics library 2.0 or later for php to be configured.
+
+Create a new Database in MySQL for your installation.
+Uncompress our source code in your web application folder and launch a browser to index.php.  
+Fill in all the questions, and you will have a new installation.
+
+If you would like some sample data to play with, check the generate seed data option during the installation.
+
+If you are deploying this system, it is recommended that you remove the install.php file when you are done to prevent someone from changing the settings.
