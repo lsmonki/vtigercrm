@@ -210,7 +210,7 @@ Function acl_deletedefault(&$obj) {
 Function acl_ok(&$obj,$level) {
   global $tutos,$current_user;
 
-  if ( ($tutos[useacl] != 1) || $current_user->isAdmin()) {
+  if ( ($tutos[useacl] != 1) || is_admin($current_user)) {
     return 99;
   }
   if (! isset($obj->acl) ) return 0;

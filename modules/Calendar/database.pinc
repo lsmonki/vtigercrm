@@ -78,7 +78,7 @@ class database extends tutos_base {
     $this->logo = $tutos[logo];
     $this->logolink = $tutos[logolink];
     $this->bugautoname = $tutos[bugautoname];
-    $this->invautoname = $tutos[invautoname];
+    #$this->invautoname = $tutos[invautoname];
     $this->vatlist = "";
     $this->version = "";
     $this->crypt = 0;

@@ -1373,15 +1373,16 @@ class task extends tutos_base {
   function readCal(&$obj, &$from, &$to) {
     global $current_user,$table;
 
-    if ( ! $current_user->feature_ok(usetaskmanagement,PERM_SEE) ) {
-      return;
-    }
+    //if ( ! $current_user->feature_ok(usetaskmanagement,PERM_SEE) ) {
+    //  return;
+    //}
 
     $from->setDateTime($from->getYYYYMMDD() . "000000");
     $to->setDateTime($to->getYYYYMMDD() . "000000");
 
     $x1 =  $obj->dbconn->DateTime($from);
     $x2 =  $obj->dbconn->DateTime($to);
+	echo $x1;
     #
     #
     #

@@ -304,7 +304,7 @@ class layout extends classic_base {
    * create a link in the menu area
    * $m = array
    */
-  function menulink (&$m) {
+/*  function menulink (&$m) {
     if ( isset($m[image]) ) {
       $m[text] = $m[image].$m[text];
     }
@@ -317,6 +317,7 @@ class layout extends classic_base {
       return menulink($m[url],$m[text],$m[info]) ."<br>\n";
     }
   }
+*/
   /**
    * remove a menu item in all categories
    */

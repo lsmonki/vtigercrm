@@ -364,9 +364,9 @@ class tutos_base {
    */
   function see_ok () {
     global $current_user;
-    if ( ! $current_user->feature_ok($this->gettypeid(),PERM_SEE) ) {
-      return 0;
-    }
+    //if ( ! $current_user->feature_ok($this->gettypeid(),PERM_SEE) ) {
+    //  return 0;
+    //}
     return acl_see_ok($this);
   }
   /**
@@ -378,9 +378,9 @@ class tutos_base {
    */
   function use_ok () {
     global $current_user;
-    if ( ! $current_user->feature_ok($this->gettypeid(),PERM_USE) ) {
-      return 0;
-    }
+  //  if ( ! $current_user->feature_ok($this->gettypeid(),PERM_USE) ) {
+  //    return 0;
+  //  }
     return acl_use_ok($this);
   }
   /**
@@ -391,9 +391,9 @@ class tutos_base {
    */
   function del_ok () {
     global $current_user;
-    if ( ! $current_user->feature_ok($this->gettypeid(),PERM_DEL) ) {
-      return 0;
-    }
+  //  if ( ! $current_user->feature_ok($this->gettypeid(),PERM_DEL) ) {
+  //    return 0;
+  //  }
     return acl_del_ok($this);
   }
   /**
@@ -404,9 +404,9 @@ class tutos_base {
    */
   function mod_ok () {
     global $current_user;
-    if ( ! $current_user->feature_ok($this->gettypeid(),PERM_MOD) ) {
-      return 0;
-    }
+    //if ( ! $current_user->feature_ok($this->gettypeid(),PERM_MOD) ) {
+    //  return 0;
+    //}
     return acl_mod_ok($this);
   }
   /**

@@ -25,9 +25,10 @@
  include_once $calpath .'permission.p3';
  include_once $calpath .'appointment.pinc';
 
+ require_once('include/database/PearDatabase.php');
 
  /* Check if user is allowed to use it */
- check_user();
+ //check_user();
  loadmodules("appointment","new");
  loadlayout();
 
@@ -102,7 +103,7 @@
 	 echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"1\" width=\"100%\">\n";
 	 if ( $this->obj->id > 0 ) {
        echo "<tr>\n";
-       echo "<td class=\"desc\">". $lang['AppCreatedBy'] .":</td>\n";
+       echo "<td class=\"desc\">". $mod_strings['LBL_APPCREATED_BY'] .":</td>\n";
        echo "<td colspan=\"5\">". $this->obj->creator->getLink() . "&nbsp;" . $lang['atDateTime'] ."&nbsp;". $this->obj->creation->getDateTime()."</td>";
        //echo "<td align=\"right\">" .acl_link($this->obj) ."</td>\n";
        echo "</tr>\n";
@@ -193,13 +194,13 @@ onmouseover=\"self.status='minitimer' ;return true\">";
 
      echo " </tr>\n";
 
-     if ( $this->user->feature_ok(useprojects,PERM_SEE) ) {
+   //  if ( $this->user->feature_ok(useprojects,PERM_SEE) ) {
        #echo "</tr><tr>\n";
        #echo $this->showfieldc($lang['Product'],0,"p");
        #echo " <td colspan=\"5\">\n";
        #select_from_array_or_input($this->obj,"p",$this->obj->product,1);
        #echo " </td>\n";
-     }
+    // }
 
      # list of possible participants
      #echo "</tr><tr>\n";
@@ -375,13 +376,13 @@ onmouseover=\"self.status='minitimer' ;return true\">";
 
      $this->obj->allowed = $this->obj->mod_ok();
 
-     if ( ($this->obj->id < 0) && !$this->user->feature_ok(usecalendar,PERM_NEW) ) {
+    /* if ( ($this->obj->id < 0) && !$this->user->feature_ok(usecalendar,PERM_NEW) ) {
        $msg .= sprintf($lang['Err0054'],$lang[$this->obj->getType()]);
        $this->stop = true;
      } else if (  ! $this->obj->mod_ok() ) {
        $msg .= sprintf($lang['Err0024'],$lang[$this->obj->getType()]);
        $this->stop = true;
-     }
+     }*/
      # menu
      $m = appointment::getSelectLink($this->user);
      $m[category][] = "obj";
@@ -420,7 +421,7 @@ onmouseover=\"self.status='minitimer' ;return true\">";
 
  $l = new app_new($current_user);
  $l->display();
- $dbconn->Close();
+ //$dbconn->Close();
 ?>
 <!--
     CVS Info:  $Id$

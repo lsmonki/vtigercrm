@@ -150,13 +150,13 @@ Function ReadLang1(&$lang,$path,&$user) {
 
   # error_log($_SERVER["REQUEST_URI"] ." > ReadLang1:".count($lang)." ". $path ." ". $user->f_name ." ". $user->l_name ." ". $user->lang ."<br />\n",3,$tutos[errlog]);
 
-  if (! isset($user) ) {
+ /* if (! isset($user) ) {
     $user = new tutos_user($dbconn);
   }
   if ($user->getType() != "user") {
       echo "User Object required:".$user->getType() ." ". $user->getFullName() ."<br />\n";
   }
-
+*/
   if ( isset($_GET['lg']) || isset($_POST['lg']) ) {
     if ( isset($_GET['lg']) ) {
       $lg = strtolower($_GET['lg']);
@@ -834,11 +834,11 @@ Function asEmail($adr,$email,$name,$subject = "TUTOS") {
      $href = $tutos['base'] ."/". $href;
    }
 
-   if ( $current_user->feature_ok(useoverlib,PERM_SEE) && ($plus != "") ) {
+   #if ( $current_user->feature_ok(useoverlib,PERM_SEE) && ($plus != "") ) {
      return sprintf ("<a class=\"nodeco\" href=\"%s\" %s  onmouseover=\"return overlib('%s',STATUS,'%s',FULLHTML)\" onmouseout=\"nd()\">%s</a>",$href,$attr,myentities($plus,1),myentities($info,1),$text);
-   } else {
-     return sprintf ("<a class=\"nodeco\" href=\"%s\" %s onmouseover=\"self.status='%s' ;return true;\" onmouseout=\"self.status='';return true;\" title=\"%s\">%s</a>",$href,$attr,myentities($info,1),myentities($info),$text);
-   }
+   #} else {
+   #  return sprintf ("<a class=\"nodeco\" href=\"%s\" %s onmouseover=\"self.status='%s' ;return true;\" onmouseout=\"self.status='';return true;\" title=\"%s\">%s</a>",$href,$attr,myentities($info,1),myentities($info),$text);
+   #}
  }
 /**
  * create a link
@@ -859,11 +859,11 @@ Function asEmail($adr,$email,$name,$subject = "TUTOS") {
    if ( ! eregi("^(JavaScript:|http:|https:|mailto:|ftp:|gopher:|\./)",$href) ) {
      $href = $tutos['base'] ."/". $href;
    }
-   if ( $current_user->feature_ok(useoverlib,PERM_SEE) && ($plus != "") ) {
-     return sprintf ("<a href=\"%s\" $target onmouseover=\"return overlib('%s',STATUS,'%s',FULLHTML,VAUTO)\" onmouseout=\"nd()\">%s</a>",$href,myentities($plus,1),myentities($info,1),$text);
-   } else {
+   #if ( $current_user->feature_ok(useoverlib,PERM_SEE) && ($plus != "") ) {
+   #  return sprintf ("<a href=\"%s\" $target onmouseover=\"return overlib('%s',STATUS,'%s',FULLHTML,VAUTO)\" onmouseout=\"nd()\">%s</a>",$href,myentities($plus,1),myentities($info,1),$text);
+   #} else {
      return sprintf ("<a href=\"%s\" $target onmouseover=\"self.status='%s' ;return true;\" onmouseout=\"self.status='';return true;\" title=\"%s\">%s</a>",$href,myentities($info,1),myentities($info),$text);
-   }
+   #}
  }
 /**
  * create a link with confirmation

@@ -291,7 +291,7 @@ set_error_handler('PHP_Error');
 
 define('FPDF_FONTPATH',$tutos['base'] ."/". $tutos[fpdfpath].'/font/');
 
-include_once 'database.pinc';
+include_once $calpath .'database.pinc';
 # (this was moved from config to static)
 # Permission levels (do not change this !)
 #

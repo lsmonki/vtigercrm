@@ -1540,9 +1540,9 @@ class appointment extends tutos_base {
    */
   function getSelectLink (&$user,$text = "") {
     global $lang,$tutos;
-    if ( ! $user->feature_ok(usecalendar,PERM_SEL) ) {
+    #if ( ! $user->feature_ok(usecalendar,PERM_SEL) ) {
       return;
-    }
+    #}
     return array( url => "app_select.php",
                   image => $user->layout->theme->getImage(appointment::getHtmlIcon(),'menu'),
                   text => ($text == "" ?  $lang['Search']: $text),
@@ -1717,9 +1717,9 @@ class appointment extends tutos_base {
   function readCal(&$obj, &$from, &$to) {
     global $msg,$current_user,$table;
 
-    if ( ! $current_user->feature_ok(usecalendar,PERM_SEE) ) {
-      return;
-    }
+    //if ( ! $current_user->feature_ok(usecalendar,PERM_SEE) ) {
+    //  return;
+    //}
 
     $from->setDateTime($from->getYYYYMMDD());
     $to->setDateTime($to->getYYYYMMDD());
@@ -1727,8 +1727,8 @@ class appointment extends tutos_base {
     if ($from->getDate() == $to->getDate()) {
       $to->addDays(1);
     }
-    $x1 =  $obj->dbconn->DateTime($from);
-    $x2 =  $obj->dbconn->DateTime($to);
+    $x1 = $obj->dbconn->DateTime($from);
+    $x2 = $obj->dbconn->DateTime($to);
 
     $from->ts_def -= $current_user->offset;
     $to->ts_def -= $current_user->offset;

@@ -24,7 +24,7 @@ include_once $calpath .'user.pinc';
 
 
 # use files to save session data
-@ini_set("session.save_handler","files");
+#@ini_set("session.save_handler","files");
 # We do that ourself
 @ini_set("session.use_trans_sid","0");
 #
@@ -467,7 +467,7 @@ Function check_user() {
 Function check_dbacl( &$query, $user_id, $id_name="id") {
   global $tutos,$current_user; 
 
-  if ( ($tutos[use_check_dbacl] == 1) && ! $current_user->isadmin()  ) {
+  if ( ($tutos[use_check_dbacl] == 1) && ! is_admin($current_user) ) {
     $query =  "SELECT DISTINCT i.* FROM (".$query.") AS i, adrteam t , acl a "
             . "WHERE i.".$id_name."=a.obj_id AND a.perm>=".$tutos[seeok]." AND ((a.adr_id=".$user_id
             . ") OR (a.adr_id=0) OR ((t.adr_id=".$user_id.") AND (a.adr_id=t.team_id)))";

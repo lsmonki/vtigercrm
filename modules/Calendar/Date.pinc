@@ -957,12 +957,12 @@ mywindow.focus();
   /**
    * add given number of days to this date
    */
-  function isWorkday(&$user) {
+  function isWorkday(&$pref) {
     if ( $this->notime == 1) {
       return 0;
     }
     $wd = Date("w",$this->ts);
-    if ($user->isWorkDay($wd)) {
+    if ($pref->isWorkDay($wd)) {
       return 1;
     }
     return 0;

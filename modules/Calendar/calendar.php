@@ -6,6 +6,7 @@
  * @module calendar
  */
  global $calpath;
+ global $app_strings,$mod_strings;
  $calpath = 'modules/Calendar/';
  $callink = '../../index.php?module=Calendar&action=';
 
@@ -15,6 +16,8 @@
 
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
+ include_once $calpath .'preference.pinc';
+ require_once('include/database/PearDatabase.php');
  if ( $tutos[tasksincalendar] == 1 ) {
    include_once $calpath .'task.pinc';
  }
@@ -22,25 +25,31 @@
  include_once $calpath .'product.pinc';
 
  /* Check if user is allowed to use it */
- check_user();
+ #check_user();
  loadmodules("appointment","show");
  loadlayout();
  /**
   * display a calendar for some weeks
   */
  class calendar extends layout {
+	
+	Function calendar()
+	{
+		$this->db = new PearDatabase();
+ 		$this->pref = new preference();
+	}
    /**
     * Display One Weeks appointments (including s) starting with Monday or Sunday
     * t format YYYYMMDD
     *
     */
    Function Cal_Week ($t) {
-     global $lang, $tutos, $callink,$image_path;
+     global $mod_strings, $tutos, $callink,$image_path,$current_user;
 
      $ts = mktime(12,0,0,substr($t,4,2),substr($t,6,2),substr($t,0,4));
      /* Back to last weekstart day before ts */
 #    echo $this->user->weekstart ." ". $ts." ".  strftime($lang['DateTimeStr'],$ts) ." ".  Date("w",$ts)."<br />";
-     while ( Date("w",$ts) != $this->user->weekstart ) {
+     while ( Date("w",$ts) != $this->pref->weekstart ) {
        $ts -= 86400;
      }
 #    echo $this->user->weekstart ." ". $ts." ".  strftime($lang['DateTimeStr'],$ts) ." ".  Date("w",$ts)."<br />";
@@ -48,7 +57,7 @@
      $w0 =  (( 1 + Date("w",mktime(12,0,0,1,1, Date("Y",$ts) ) )) % 7) > 3;
      $wn = sprintf("%02d", Round( (Date("z",$ts)+7 ) / 7) );
      $yy = Date("y",$ts);
-     echo " <td class=\"week\" width=\"5%\">". menulink($callink ."calendar_week&t=".Date("Ymd",$ts)."&amp;team=". $this->team, $wn ."/". $yy, $lang['week'] ." ". $wn ."/". $yy ) ."</td>\n";
+     echo " <td class=\"week\" width=\"5%\">". $this->pref->menulink($callink ."calendar_week&t=".Date("Ymd",$ts)."&amp;team=". $this->pref->team, $wn ."/". $yy, $mod_strings['LBL_WEEK'] ." ". $wn ."/". $yy ) ."</td>\n";
 
      /* Select appointments for this day */
      $from =  new DateTime();
@@ -56,12 +65,12 @@
      $from->setDateTimeTS($ts - 12 * 3600);
      $to->setDateTimeTS($ts - 12 * 3600);
      $to->addDays(7);
-
+     
      $this->user->callink = array();
-	     appointment::readCal($this->user,$from,$to);
-     if ( $tutos[tasksincalendar] == 1 ) {
-       task::readCal($this->user,$from,$to);
-     }
+	     appointment::readCal($this->pref,$from,$to);
+     //if ( $tutos[tasksincalendar] == 1 ) {
+     //  task::readCal($this->pref,$from,$to);
+     //}
      foreach($tutos[activemodules] as $i => $f) {
        $x = @new $tutos[modules][$f][name]($this->dbconn);
        $x->readCal($this->user,$from,$to);
@@ -76,7 +85,7 @@
        $tref = Date("Ymd",$ts);
        $next = NextDay($ts);
        # Check for workday
-       if ( ! $dd->isWorkDay($this->user) ) {
+       if ( ! $dd->isWorkDay($this->pref) ) {
          $ts = $next;
          $day++;
          continue;
@@ -86,18 +95,18 @@
        echo "<td class=\"". $dinfo[color] ."\" width=\"10%\">\n";
 
        if ( isset($dinfo[Desc]) ) {
-         if ( $this->user->feature_ok(usecalendar,PERM_NEW) ) {
-           echo " " . makelink($callink ."app_new&t=". $tref,$d,$lang['NewAppointInfo'],$dinfo[popinfo]) ."\n";
-         } else {
-           echo " " . $d ."\n";
-         }
+         #if ( $this->user->feature_ok(usecalendar,PERM_NEW) ) {
+          echo " " . $this->pref->makelink($callink ."app_new&t=". $tref,$d,$mod_strings['LBL_NEW_APPNT_INFO'],$dinfo[popinfo]) ."\n";
+         #} else {
+         #  echo " " . $d ."\n";
+         #}
          echo "<br /><span class=\"dinfo\">". $dinfo[Desc] ."</span>\n";
        } else {
-         if ( $this->user->feature_ok(usecalendar,PERM_NEW) ) {
-           echo " " . makelink($callink ."app_new&t=". $tref,$d,$lang['NewAppointInfo']) ."\n";
-         } else {
-           echo " " . $d ."\n";
-         }
+         #if ( $this->user->feature_ok(usecalendar,PERM_NEW) ) {
+           echo " " . makelink($callink ."app_new&t=". $tref,$d,$mod_strings['LBL_NEW_APPNT_INFO']) ."\n";
+         #} else {
+         #  echo " " . $d ."\n";
+         #}
        }
        $hastable = 0;
        $a = 0;
@@ -144,13 +153,13 @@
     * the data display part
     */
    Function info() {
-     global $tutos , $lang, $callink;
+     global $tutos , $lang, $callink,$mod_strings;
 
      $cols = 1;
 
-     $weeks = $this->user->get_prefweeks();
+     $weeks = $this->pref->get_prefweeks();
      for ( $i = 0;$i<=6;$i++ ) {
-       if ($this->user->isWorkDay($i)) {
+       if ($this->pref->isWorkDay($i)) {
          $cols++;
        }
      }
@@ -180,23 +189,23 @@
      //echo " <th class=\"navigate\" colspan=\"2\" rowspan=\"2\" nowrap=\"nowrap\"></th>\n";
      //
 	 echo "  <td nowrap=\"nowrap\" width=\"150\">\n";
-     if ( $this->user->feature_ok(usecalendar,PERM_NEW) ) {
-       echo menulink($callink ."app_new&t=".$this->t,$this->theme->getImage(appointment,'list').$lang['NewAppoint'],$lang['NewAppointInfo']);
-     } else {
-       echo "&nbsp;";
-     }
+     #if ( $this->user->feature_ok(usecalendar,PERM_NEW) ) {
+       echo $this->pref->menulink($callink ."app_new&t=".$this->t,$this->pref->getImage(appointment,'list').$mod_strings['LBL_NEW_APPNT'],$mod_strings['LBL_NEW_APPNT_INFO']);
+     #} else {
+     #  echo "&nbsp;";
+     #}
      echo "  </td>\n";
      echo " <td nowrap=\"nowrap\" align=\"center\">\n";
-	 echo menulink($callink ."calendar&t=". $last_month,$this->theme->getImage(first,'list').$lang[''],$lang['minus4weeks']);
+	 echo $this->pref->menulink($callink ."calendar&t=". $last_month,$this->pref->getImage(first,'list').$lang[''],$mod_strings['LBL_4WEEKS_BACK']);
 	 echo "&nbsp;&nbsp;";
-     echo menulink($callink ."calendar&t=". $last_week,$this->theme->getImage(left,'list').$lang[''],$lang['lastweek']);
+     echo $this->pref->menulink($callink ."calendar&t=". $last_week,$this->pref->getImage(left,'list').$lang[''],$mod_strings['LBL_LAST_WEEK']);
 	 echo "&nbsp;&nbsp;";
-	 echo menulink($callink ."calendar&t=". $next_week,$lang[''].$this->theme->getImage(right,'list'),$lang['nextweek']);     
+	 echo $this->pref->menulink($callink ."calendar&t=". $next_week,$lang[''].$this->pref->getImage(right,'list'),$mod_strings['LBL_NEXT_WEEK']);     
      echo "&nbsp;&nbsp;";
-     echo menulink($callink ."calendar&t=". $next_month,$lang[''].$this->theme->getImage(last,'list'),$lang['plus4weeks']);
+     echo $this->pref->menulink($callink ."calendar&t=". $next_month,$lang[''].$this->pref->getImage(last,'list'),$mod_strings['LBL_4WEEKS_PLUS']);
      echo "</td>\n"; 
 	 echo "<td nowrap=\"nowrap\" width=\"150\" align=\"right\">\n";
- 	 echo menulink($callink ."calendar&t=". $this->t ,$this->theme->getImage(reload,'list').$lang['reload'],$lang['reload']);
+ 	 echo $this->pref->menulink($callink ."calendar&t=". $this->t ,$this->pref->getImage(reload,'list').$mod_strings['LBL_RELOAD'],$mod_strings['LBL_RELOAD']);
 	 echo "&nbsp;</td>\n";
      //Added for Ingtegration	
      //echo " <th class=\"navigate\" rowspan=\"2\" nowrap=\"nowrap\"></th>\n";
@@ -209,15 +218,15 @@
      echo " <br>\n";
 	 echo " <table class=\"outer\" cellpadding=\"3\" cellspacing=\"1\" width=\"100%\" border=\"0\">\n";
      echo " <tr>\n";
-     echo "  <th class=\"viewhead\">". $lang['week'] ."</th>\n";
-     for ( $i = $this->user->weekstart;$i<=6;$i++ ) {
-       if ($this->user->isWorkDay($i)) {
-         echo "  <th class=\"viewhead\">". $lang['Day'.$i] ."</th>\n";
+     echo "  <th class=\"viewhead\">". $mod_strings['LBL_WEEK'] ."</th>\n";
+     for ( $i = $this->pref->weekstart;$i<=6;$i++ ) {
+       if ($this->pref->isWorkDay($i)) {
+         echo "  <th class=\"viewhead\">". $mod_strings['LBL_DAY'.$i] ."</th>\n";
        }
      } 
-     for ( $i = 0;$i<$this->user->weekstart;$i++ ) {
-       if ($this->user->isWorkDay($i)) {
-         echo "  <th class=\"viewhead\">". $lang['Day'.$i] ."</th>\n";
+     for ( $i = 0;$i<$this->pref->weekstart;$i++ ) {
+       if ($this->pref->isWorkDay($i)) {
+         echo "  <th class=\"viewhead\">". $mod_strings['LBL_DAY'.$i] ."</th>\n";
        }
      }
  
@@ -245,14 +254,14 @@
     *
     */
    Function prepare() {
-     global $lang,$msg;
+     global $lang,$msg,$db;
 
-     $this->name = $lang['Calendar'];
+     $this->name = $mod_strings['LBL_MODULE_NAME'];
 
-     if ( ! $this->user->feature_ok(usecalendar,PERM_SEE) ) {
-       $msg .= sprintf($lang['Err0022'],"'". $this->name ."'");
-       $this->stop = true;
-     }
+     #if ( ! $this->user->feature_ok(usecalendar,PERM_SEE) ) {
+     #  $msg .= sprintf($lang['Err0022'],"'". $this->name ."'");
+     #  $this->stop = true;
+     #}
 
      $this->teamname = "";
      $this->t = Date("Ymd");
@@ -264,10 +273,10 @@
      /* Show a calendar containing Appointment id */
      if ( isset($_GET['id']) ) {
        $this->id = $_GET['id'];
-       $query = "SELECT id,a_start FROM ". $this->dbconn->prefix ."calendar where id =". $this->id;
+       $query = "SELECT id,a_start FROM ". $this->dbconn->prefix ."calendar where id =". $current_user->id;
        check_dbacl( $query, $this->user->id);
-       $result = $this->dbconn->Exec($query);
-       if ( 1 != $result->numrows()) {
+       $result = $this->db->query($query);
+       if ( 1 != $this->db->getRowCount($result)) {
          $msg .= sprintf($lang['Err0040'],$lang['Appointment']) ;
          $this->id = -1;
        } else {
@@ -277,21 +286,21 @@
        $result->free();
      }
 
-     $this->uids = cal_parse_options($this->user,$this->teamname);
-     $this->team = $this->user->get_prefteam();
+     #$this->uids = cal_parse_options($this->user,$this->teamname);
+     #$this->team = $this->user->get_prefteam();
 
      # menu
-     $m = appointment::getSelectLink($this->user);
-     $m[category][] = "obj";
-     $this->addmenu($m);
-     $m = appointment::getAddLink($this->user,$this->user);
-     $this->addMenu($m);
+     #$m = appointment::getSelectLink($this->user);
+     #$m[category][] = "obj";
+     #$this->addmenu($m);
+     #$m = appointment::getAddLink($this->user,$this->user);
+     #$this->addMenu($m);
    }
  }
-
+	
  $l = new calendar($current_user);
  $l->display();
- $dbconn->Close();
+ //$dbconn->Close();
 ?>
 <!--
     CVS Info:  $Id$
