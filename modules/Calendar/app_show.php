@@ -29,9 +29,9 @@
  
  require_once ($theme_path."layout_utils.php");
  global $mod_strings;
- 
+
  echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_APPOINTMENT_DETAIL'], true); 
-// echo "\n<BR>\n";
+ echo "\n<BR>\n";
 
  /**
   * display a appointment
@@ -42,7 +42,6 @@
     */
    Function info() {
      global $tutos,$lang;
-	 global $mod_strings,$callink;
 
      if ( $this->format == "ical") {
        Header("Expires: 0");
@@ -64,33 +63,17 @@
        return;
      }
 
-     //echo $this->DataTableStart();
-	 echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"5\" width=\"90%\">\n";
+     echo $this->DataTableStart();
      echo "<tr>\n";
-     //echo "<th colspan=\"3\">". $lang['Calendar'] ."</th>\n";
-     //echo $this->user->layout->showGuiIcons("<th>","</th>",$this->obj,$this->obj,array("mod","del"),false);
-	 echo "<td><input type=\"button\" class=\"button\" onclick=\"callAction('edit')\" value=\"". $lang['Modify'] ."\">&nbsp;";
-	 echo "<input type=\"button\" class=\"button\" onclick=\"callAction('del')\" value=\"". $lang['Delete'] ."\"></td>";
+     echo "<th colspan=\"3\">". $lang['Calendar'] ."</th>\n";
+     echo $this->user->layout->showGuiIcons("<th align=\"right\">","</th>",$this->obj,$this->obj,array("mod","del"),false);
      echo "</tr>\n";
-	 echo "</table>\n";
-	 
-	 echo "<script>\n";
-	 echo "function callAction(act) {\n";
-	 echo "  if (act==\"del\") {\n";
-	 echo "     if (confirm(\"". $lang['ConfirmDelete'] ."\"))\n";
-	 echo "       document.location.href=\"". $callink ."app_del&id=". $this->obj->id ."\"\n";
-	 echo "  } else {\n";
-	 echo "       document.location.href=\"". $callink ."app_new&id=". $this->obj->id ."\"\n";
-	 echo "  }\n";
-	 echo "}\n";
-	 echo "</script>\n";
-	 
-	 echo "<table class=\"single\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\" width=\"90%\">\n";
-	 echo "<tr><td class=\"inner\">\n";
-	 echo "<table border=\"0\" cellpadding=\"5\" cellspacing=\"1\" width=\"100%\">\n";
+
      echo "<tr>\n";
-     echo " <td class=\"desc\">". $lang['AppCreatedBy'] .":</td>\n";
-     echo " <td colspan=\"5\">". $this->obj->creator->getLink() ."&nbsp;". $lang['atDateTime'] ."&nbsp;". $this->obj->creation->getLinkDateTime() ."</td>\n";
+     echo " <td colspan=\"2\">". $lang['AppCreatedBy'] ."\n";
+     echo " ". $this->obj->creator->getLink() ."</td>\n";
+     echo " <td colspan=\"2\">". $lang['atDateTime'] ."\n";
+     echo " ". $this->obj->creation->getLinkDateTime() ."</td>\n";
      echo "</tr>\n";
 
      echo "<tr>\n";
@@ -226,10 +209,8 @@
      }
      # References to modules
      show_module_infolists($this->user,$this->obj,4,$this->format);
-     //echo $this->obj->getHistoryLink(4);
-     //echo $this->DataTableEnd();
-	 echo "</table>\n";
-	 echo "</td></tr></table>\n";
+     echo $this->obj->getHistoryLink(4);
+     echo $this->DataTableEnd();
    }
    /**
     * naviagation

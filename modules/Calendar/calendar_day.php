@@ -147,25 +147,22 @@ echo "\n<BR>\n";
      }
 
      echo "<form action=\"". $callink ."calendar_day\" method=\"get\">\n";
-     echo "<table class=\"navigate\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"90%\">\n";
+     echo "<table class=\"single\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"90%\">\n";
      //echo " <tr>\n";
      //echo "  <th align=\"left\" nowrap=\"nowrap\" colspan=\"". ($maxcol +1) ."\">&nbsp;". $lang['forphrase'] ."\n";
      //cal_options($this->team,$this->teamname);
      //echo "  </th>\n";
      //echo " </tr>\n";
      echo " <tr>\n";
-     echo " <td class=\"viewhead\" nowrap=\"nowrap\" width=\"100%\" align=\"center\">";
+     echo " <th nowrap=\"nowrap\" colspan=\"". ($maxcol +1) ."\" width=\"100%\">";
      echo menulink($callink ."calendar_day&t=".$last_day->getYYYYMMDD(),$this->theme->getImage(left,'list'),$last_day->getDate());
      echo "&nbsp;". strftime($lang['DateFormatTitle'],$from->ts) ."&nbsp;(". $lang['week']." ". menulink($callink ."calendar_week&t=".Date("Ymd",$from->ts), $wn ."/". $yy, $wn ."/". $yy ) .")&nbsp;";
      echo menulink($callink ."calendar_day&t=".$next_day->getYYYYMMDD(),$this->theme->getImage(right,'list'),$next_day->getDate());
-     echo "</td></tr>\n";
-	 echo "</table>\n";
-	 echo "<br><table class=\"outer\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" width=\"90%\"><tr><td class=\"inner\">\n";
-	 echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\">\n";
+     echo "</th></tr>\n";
      for ($i = -1 ; $i <24 ; $i++ ) {
        echo " <tr>\n";
 
-       echo " <th class=\"viewhead\" width=\"10%\" align=\"right\" valign=\"top\">\n";
+       echo " <th width=\"10%\" align=\"right\" valign=\"top\">\n";
        if ( $i == -1 ) {
          echo  menulink($callink . "app_new&t=".$this->t, "NOTIME",$lang['NewAppointInfo']);
        } else {
@@ -177,23 +174,19 @@ echo "\n<BR>\n";
          if ( isset ( $table[$i][$c] ) ) {
            if ( is_object ( $table[$i][$c] ) ) {
              echo " <td class=\"line". (1+($i % 2)) ."\" valign=\"top\" rowspan=\"". $rowspan[$i][$c]."\">";
-             //echo "<img height=\"1\" width=\"100%\" src=\"". $image_path ."black.png\" alt=\"--------\"/>";
-             echo "<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\">\n";
+             echo "<img height=\"1\" width=\"100%\" src=\"". $image_path ."black.png\" alt=\"--------\" /><br />";
+             echo "&nbsp;<center><table class=\"line". (1+($i % 2)) ."\" width=\"90%\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">\n";
              echo $table[$i][$c]->formatted();
-             echo " </table></td>\n";
+             echo " </table></center></td>\n";
            } else if ( $table[$i][$c] = -1 ) {
              # SKIP occupied by rowspan
            }
          } else {
-           echo "<td class=\"line". (1+($i % 2)) ."\" valign=\"top\">";
-		   //echo "<img height=\"1\" width=\"100%\" src=\"". $image_path ."black.png\" alt=\"--------\" />";
-		   echo "</td>\n";
+           echo "<td class=\"line". (1+($i % 2)) ."\" valign=\"top\"><img height=\"1\" width=\"100%\" src=\"". $image_path ."black.png\" alt=\"--------\" /></td>";
          }
        }
        echo " </tr>\n";
      }
-	 echo " </table>\n";
-	 echo "</td></tr></table>\n";
      echo $this->DataTableEnd();
      hiddenFormElements();
      echo $this->getHidden();

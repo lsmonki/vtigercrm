@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/2setConfig.php,v 1.33 2004/12/13 05:55:23 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/2setConfig.php,v 1.33 2004/12/13 05:55:23 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 require_once("connection.php");

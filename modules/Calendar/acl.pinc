@@ -395,11 +395,11 @@ function permission_form(&$layout,&$user,&$obj) {
   # extend lang perm with the module permissions
   # read the language files of modules
   foreach ($tutos[modules] as $r => $x) {
-  	loadmodule($r);
-	if (!isset($lang['perm'][$x['perm']]) ) {
-      	$lang['perm'][$x['perm']] = $r;
-    	}
-    	$lang['perm'][$x['perm']] .=  " (MODULE)";
+    loadmodule($r);
+    if (!isset($lang['perm'][$x['perm']]) ) {
+      $lang['perm'][$x['perm']] = $r;
+    }
+    $lang['perm'][$x['perm']] .=  " (MODULE)";
   }
 
   echo "<script language=\"JavaScript\">\n";
@@ -423,21 +423,19 @@ function permission_form(&$layout,&$user,&$obj) {
   echo "//-->\n";
   echo "</script>\n";
   echo "<tr>\n";
-  echo "<th class=\"viewhead\" nowrap>". $lang['Feature']."</th>\n";
-  echo "<th class=\"viewhead\">". $lang['NewEntry'] ."</th>\n";
-  echo "<th class=\"viewhead\">". $lang['ACLread'] ."</th>\n";
-  echo "<th class=\"viewhead\">". $lang['ACLuse'] ."</th>\n";
-  echo "<th class=\"viewhead\">". $lang['ACLmodify'] ."</th>\n";
-  echo "<th class=\"viewhead\">". $lang['ACLdelete'] ."</th>\n";
-  echo "<th class=\"viewhead\">". $lang['Search'] ."</th>\n";
-  echo "<th class=\"viewhead\" colspan=\"2\">&#9733;<input type=\"checkbox\" name=\"checkitall\" onClick=\"CheckAllAll(this,'f-')\">&#9733;</th>\n";
+  echo "<th nowrap>". $lang['Feature']."</th>\n";
+  echo "<th>". $lang['NewEntry'] ."</th>\n";
+  echo "<th>". $lang['ACLread'] ."</th>\n";
+  echo "<th>". $lang['ACLuse'] ."</th>\n";
+  echo "<th>". $lang['ACLmodify'] ."</th>\n";
+  echo "<th>". $lang['ACLdelete'] ."</th>\n";
+  echo "<th>". $lang['Search'] ."</th>\n";
+  echo "<th colspan=\"2\">&#9733;<input type=\"checkbox\" name=\"checkitall\" onClick=\"CheckAllAll(this,'f-')\">&#9733;</th>\n";
 #  echo "<th>&nbsp;</th>\n";
   echo "</tr>\n";
   $line = 0;
   $perms = array (PERM_NEW,PERM_SEE,PERM_USE,PERM_MOD,PERM_DEL,PERM_SEL);
   foreach($lang['perm'] as $i => $f) {
-   if($f == "use calendar")
-   {
     if ( $i < -1000 ) {
       continue;
     }
@@ -493,7 +491,6 @@ function permission_form(&$layout,&$user,&$obj) {
     }
     echo $layout->OverviewRowEnd($line++);
   }
- }
 }
 
 /**

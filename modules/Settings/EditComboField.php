@@ -18,7 +18,7 @@ $fld_module=$_REQUEST["fld_module"];
 $fld_name=$_REQUEST["fld_name"];
 $tableName=$_REQUEST["table_name"];
 
-echo get_module_title("Settings", $mod_strings['LBL_MODULE_NAME'].": ".$mod_strings['EditPickListValues'], true);
+echo get_module_title("Settings", "Settings: Edit Picklist Values", true);
 echo '<br>';
 
 global $theme;
@@ -28,7 +28,6 @@ require_once($theme_path.'layout_utils.php');
 
 $xtpl=new XTemplate ('modules/Settings/EditField.html');
 $xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
 $xtpl->assign("FIELDNAME", $fld_name);
 $xtpl->assign("TABLENAME", $tableName);
 $xtpl->assign("FIELDMODULE", $fld_module);

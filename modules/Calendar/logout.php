@@ -5,11 +5,9 @@
  * CVS Info:  $Id$
  * $Author$
  */
+ include_once 'webelements.p3';
+ include_once 'permission.p3';
 
- global $calpath;
- $calpath = "modules/Calendar/";
- include_once $calpath .'webelements.p3';
- include_once $calpath .'permission.p3';
 
  check_user();
 
@@ -17,7 +15,7 @@
  $al = split(" ",$tutos[authtype]);
  $cnt = 0;
  foreach ( $al as $a ) {
-   require_once $calpath .'auth/auth_'. $a .'.pinc';
+   require_once 'auth/auth_'. $a .'.pinc';
    $x = "auth_".$tutos[authtype];
    $auth[$cnt++] = new $x();
  }
@@ -31,8 +29,8 @@
  } else {
    $gotourl= addUrlParameter($gotourl,"msg=goodbye");
  }
- 
- //Header("Status: 302 Moved Temporarily");
- //Header("Location: ". getBaseUrl(). $gotourl );
+
+ Header("Status: 302 Moved Temporarily");
+ Header("Location: ". getBaseUrl(). $gotourl );
  $dbconn->Close();
 ?>

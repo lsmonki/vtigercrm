@@ -141,7 +141,7 @@ define ('freemind', 126);
 # These are distinct IDS for the different Objcts in TUTOS
 # never ! change or reuse a ID
 define ('usecalendar',-1);
-#define ('useprojects',-2);
+define ('useprojects',-2);
 define ('usebugtracking',-3);
 define ('usetimetrack',-4);
 # ID 5 is docmanagement module

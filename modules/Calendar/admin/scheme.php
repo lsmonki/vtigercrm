@@ -37,34 +37,33 @@
      global $table,$tableidx,$sequence;
 
      echo "<p>";
-     #echo "<p>";
-     echo "<font color=green>Creating Calendar Tables</font><br />\n";
-     #echo "Trying to open this Database !<br />\n";
-     #echo "(you have to create the database or change config.pinc if this test failed !<br />\n";
+     echo "<p>";
+     echo "Trying to open this Database !<br />\n";
+     echo "(you have to create the database or change config.pinc if this test failed !<br />\n";
    flush();
      $out = 0;
 	if ( $this->obj->conn != -1 ) {
-       #echo "&nbsp; Looks OK <i>(". $this->obj->gettype() ." -> ". $this->obj->conn .")</i> !<br />\n";
+       echo "&nbsp; Looks OK <i>(". $this->obj->gettype() ." -> ". $this->obj->conn .")</i> !<br />\n";
      } else {
-       echo "<font color=red>failed to open Database! </font><br />";
+       echo "failed to open Database <br />";
        flush();
        return;
      }
-     #echo "<p>";
+     echo "<p>";
      flush();
 
      foreach ($table as $i => $f) {
-       #echo $f[Desc] ."<br />\n";
+       echo $f[Desc] ."<br />\n";
        if ($this->obj->droptable($f) == -1) {
-         #echo "Table <b>". $this->obj->prefix . $f[name] ."</b> not dropped:<span class=\"warn\">". $this->obj->lasterror ."</span><br />\n";
+         echo "Table <b>". $this->obj->prefix . $f[name] ."</b> not dropped:<span class=\"warn\">". $this->obj->lasterror ."</span><br />\n";
        } else { 
-         echo "<font color=red><span class=\"found\">Table <b>". $this->obj->prefix . $f[name] ."</b> dropped</span></font><br />\n";
+         echo "<span class=\"found\">Table <b>". $this->obj->prefix . $f[name] ."</b> dropped</span><br />\n";
        }
       
        if ($this->obj->createtable($f) == -1) {
-         #echo "Table not created:<span class=\"warn\">". $this->obj->lasterror ."</span><br />\n";
+         echo "Table not created:<span class=\"warn\">". $this->obj->lasterror ."</span><br />\n";
        } else { 
-         echo "<font color=green><span class=\"found\">Table <b>". $this->obj->prefix . $f[name] ."</b> created</span></font><br />\n";
+         echo "<span class=\"found\">Table <b>". $this->obj->prefix . $f[name] ."</b> created</span><br />\n";
        }
        flush();
      }

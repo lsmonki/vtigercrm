@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.18 2004/11/06 08:12:04 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.18 2004/11/06 08:12:04 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 

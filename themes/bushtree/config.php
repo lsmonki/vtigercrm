@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/bushtree/config.php,v 1.1 2004/08/17 14:56:12 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/bushtree/config.php,v 1.1 2004/08/17 14:56:12 gjayakrishnan Exp $
  * Description:  Theme configuration file.
  ********************************************************************************/
 

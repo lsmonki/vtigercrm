@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.7.2.2 2004/12/22 15:07:59 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.7 2004/12/13 09:28:11 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -247,7 +247,7 @@ class Contact extends SugarBean {
     
     function getCount($user_name) 
     {
-        $query = "select count(*) from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."' and contacts.deleted=0";
+        $query = "select count(*) from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."'";
 
 //        echo "\n Query is " .$query ."\n";
         $result = $this->db->query($query,true,"Error retrieving contacts count");
@@ -264,7 +264,7 @@ class Contact extends SugarBean {
 
     function get_contacts($user_name,$from_index,$offset)
     {   
-         $query = "select contacts.* from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."' and contacts.deleted=0 limit " .$from_index ."," .$offset;
+         $query = "select contacts.* from contacts inner join users on users.id=contacts.assigned_user_id where user_name='" .$user_name ."' limit " .$from_index ."," .$offset;
     // $query = "select * from contacts limit " .$from_index ."," .$offset;
 //    echo $query;
     return $this->process_list_query1($query);
@@ -462,78 +462,11 @@ class Contact extends SugarBean {
 		return $query;
 	}
 
-//method added to construct the query to fetch the custom fields 
-	function constructCustomQueryAddendum()
-	{
-		$result = mysql_query("SHOW COLUMNS FROM contactcf");
-		$i=0;
-		while ($myrow = mysql_fetch_row($result))
-		{
-		        $columnName[$i] = $myrow[0];
-		        $i++;
-		}
-
-		$sql1 = "select column_name,fieldlabel from customfields where column_name in (";
-		$colName = 0;
-		$addTag;
-		while($colName < count($columnName))
-		{
-		        if ($columnName[$colName] == "contactid")
-        		{
-        		}
-        		else
-        		{
-		                if($colName == 1)
-                		{
-
-		                        $addTag .= "'" .$columnName[$colName] ."'";
-                		}
-		                else
-                		{
-		                        $addTag .= ",'" .$columnName[$colName] ."'";
-                		}
-        		}
-		        $colName++;
-		}
-		$sql2 = $sql1.$addTag .")";
-		$result_sql2 = mysql_query($sql2);
-		$resultCount = mysql_num_rows($result_sql2);
-		$rs=mysql_fetch_array($result_sql2);
-		 $j=0;
-		while($j<mysql_num_rows($result_sql2))
-  		{
-			    for($i=0;$i<$resultCount;$i++)
-    				{
-				      $copy[$j][$i]=$rs[$i];
-    				}
-			    $rs=mysql_fetch_array($result_sql2);
-			    $j++;
-		}
-		$sql3 = "select ";
-		$k=0;
-		$l=0;
-		while($k< $resultCount)
-		{	
-
-		        if($k == 0)
-        		{
-		        $sql3.= "contactcf.".$copy[$k][$l]." ".$copy[$k][$l+1];
-        		}
-		        else
-        		{
-		        $sql3.= ",contactcf.".$copy[$k][$l]." ".$copy[$k][$l+1];
-        		}
-		        $k++;
-		}
-	return $sql3;
-
-	}
-
 
 
         function create_export_query(&$order_by, &$where)
         {
-                         $query =  $this->constructCustomQueryAddendum() .",
+                         $query = "SELECT
                                 contacts.*,
                                 accounts.name as account_name,
                                 users.user_name as assigned_user_name
@@ -543,7 +476,7 @@ class Contact extends SugarBean {
                                 LEFT JOIN accounts_contacts
                                 ON contacts.id=accounts_contacts.contact_id
                                 LEFT JOIN accounts
-                                ON accounts_contacts.account_id=accounts.id left join contactcf on contactcf.contactid=contacts.id ";
+                                ON accounts_contacts.account_id=accounts.id ";
 
 
                         $where_auto = " accounts_contacts.deleted=0

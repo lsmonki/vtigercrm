@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Yahoo/language/en_us.lang.php,v 1.2 2004/08/31 05:28:21 rakeebk Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Yahoo/language/en_us.lang.php,v 1.2 2004/08/31 05:28:21 rakeebk Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  

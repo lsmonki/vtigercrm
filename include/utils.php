@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/utils.php,v 1.5.2.1 2004/12/15 14:11:13 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/utils.php,v 1.5 2004/11/04 05:54:41 jack Exp $
  * Description:  Includes generic helper functions used throughout the application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -746,30 +746,17 @@ function set_default_config(&$defaults)
 		}
 	}
 }
-
-$toHtml = array(
-        '"' => '&quot;',
-        '<' => '&lt;',
-        '>' => '&gt;',
-        '& ' => '&amp; ',
-        "'" =>  '&#039;',
-);
-
 function to_html($string, $encode=true){
-        global $toHtml;
-        if($encode && is_string($string)){//$string = htmlentities($string, ENT_QUOTES);
-        $string = str_replace(array_keys($toHtml), array_values($toHtml), $string);
-        }
-        return $string;
+	
+	if($encode && is_string($string))$string = htmlentities($string, ENT_QUOTES);
+	return $string;	
 }
 
 function from_html($string, $encode=true){
-        global $toHtml;
-        //if($encode && is_string($string))$string = html_entity_decode($string, ENT_QUOTES);
-        if($encode && is_string($string)){
-                $string = str_replace(array_values($toHtml), array_keys($toHtml), $string);
-        }
-        return $string;
+	
+	if($encode && is_string($string))$string = html_entity_decode($string, ENT_QUOTES);
+	return $string;	
 }
+
 
 ?>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.10 2004/11/03 09:32:27 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.10 2004/11/03 09:32:27 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 

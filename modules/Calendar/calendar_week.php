@@ -59,20 +59,18 @@
 
      echo "<form action=\"". $callink ."calendar_week\" method=\"get\">\n";
 
-     echo "<br><table class=\"navigate\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
-     //echo " <tr>\n";
+     echo "<table class=\"single\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
+     echo " <tr>\n";
      //echo "  <th align=\"left\" nowrap=\"nowrap\">&nbsp;". $lang['forphrase'] ."\n";
      //cal_options($this->team,$this->teamname);
      //echo "  </th><th>&nbsp;</th>\n";
      //Added for integration	
-     //echo " <th class=\"navigate\" nowrap=\"nowrap\"></th>\n";
+     echo " <th class=\"navigate\" nowrap=\"nowrap\"></th>\n";
      //
-     //echo " </tr>\n";
-     echo " <tr>\n";
-     echo "  <td colspan=\"2\" width=\"100%\" align=\"center\">".menulink($callink ."calendar_week&t=".$last_week,$this->theme->getImage(left,'list'),$lang['lastweek']) ."&nbsp;". $lang['week'] ."&nbsp;" . $wn . "/". $yy ."&nbsp;". menulink($callink ."calendar_week&t=".$next_week,$this->theme->getImage(right,'list') ,$lang['nextweek']) ."</td>\n";
      echo " </tr>\n";
-	 echo "</table>\n";
-	 echo "<br><table class=\"outer\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%\">\n";
+     echo " <tr>\n";
+     echo "  <th colspan=\"2\" width=\"100%\">".menulink($callink ."calendar_week&t=".$last_week,$this->theme->getImage(left,'list'),$lang['lastweek']) ."&nbsp;". $lang['week'] ."&nbsp;" . $wn . "/". $yy ."&nbsp;". menulink($callink ."calendar_week&t=".$next_week,$this->theme->getImage(right,'list') ,$lang['nextweek']) ."</th>\n";
+     echo " </tr>\n";
 
      $from =  new DateTime();
      $to =  new DateTime();
@@ -92,85 +90,78 @@
      $day = 0;
      $col = 1;
      $dd = new DateTime();
-     while ( $day < 8 ) {
-	   if ($day!=7) {
-		   $dd->setDateTimeTS($ts);
-		   $d = $dd->getDate();
-		   $tref = Date("Ymd",$ts);
-		   $dinfo = GetDaysInfo($ts);
-		   /* Select appointments for this day */
-		   $next = NextDay($ts);
-	
-		   if ( $col == 1 ) {
-			 echo " <tr>\n";
-		   }
-		   echo "  <td valign=\"top\" class=\"inner\" width=\"50%\">\n";
-	
-		   # DAY-TABLE STARTS
-		   echo "<table border=\"0\" cellpadding=\"3\" cellspacing=\"1\" width=\"100%\">\n";
-		   echo " <tr>\n";
-		   echo "  <th class=\"viewhead\">\n";
-		   echo menulink($callink ."calendar_day&t=". $tref,$lang['Day'. Date("w",$ts)],strftime($lang['DateFormatTitle'],$ts));
-		   if ( isset($dinfo[Desc]) ) {
-			 echo " " . menulink($callink ."app_new&t=". $tref,$d,$lang['NewAppointInfo'],$dinfo[popinfo]) ."\n";
-		   } else {
-			 echo " " . menulink($callink ."app_new&t=". $tref,$d,$lang['NewAppointInfo']) ."\n";
-		   }
-		   echo "  </th>\n";
-		   echo " </tr>\n";
-		   echo " <tr>\n";
-		   echo "  <td class=\"". $dinfo[color] ."\" width=\"50%\">\n";
-		   if ( isset($dinfo[Desc]) ) {
-			 echo "<span class=\"dinfo\">". $dinfo[Desc] ."</span>\n";
-		   }
-		   
-		   $hastable = false;
-		   foreach ($this->user->callist as $idx => $x) {
-			 /* the correct day */
-			 if ( ! $this->user->callist[$idx]->inside($dd) ) {
-			   continue;
-			 }
-			 if (!cal_check_against_list($this->user->callist[$idx],$this->uids)) {
-			   continue;
-			 }
-			 // Do not show finished tasks
-			 if ( ($this->user->callist[$idx]->gettype() == "task") && ($this->user->callist[$idx]->state == 2) ) {
-			   continue;
-			 }
-			 if ( !$hastable ) {
-			   echo "<table class=\"formatted\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"  width=\"100%\">\n";
-			   $hastable = true;
-			 } else {
-			   echo "  <tr><td class=\"". $dinfo[color] ."\" colspan=\"3\"><img src=\"". $image_path ."black.png\" width=\"100%\" height=\"1\" alt=\"--------\"></td></tr>\n";
-			 }
-			 // Show appointments or task or whatever
-			 $this->user->callist[$idx]->formatted();
-		   }
-	
-		   if ( $hastable ) {
-			 echo " </table>\n";
-		   } else {
-			  echo "<br/><br/><br/><br/>\n";
-		   }
-	
-		   # DAY-TABLE ENDS
-		   echo "</td></tr>\n";
-		   echo "</table>\n";
-	
-		   echo "  </td>\n";
-		   if ( $col == 2 ) {
-			 echo " </tr>\n";
-			 $col = 0;
-		   }
-	
-		   $day++;
-		   $col++;
-		   $ts = $next;
-  	   } else {
-	   		echo "<td class=\"appday\">&nbsp;</td>\n";
-			$day++;
-			$col++;
-	   }
+     while ( $day < 7 ) {
+       $dd->setDateTimeTS($ts);
+       $d = $dd->getDate();
+       $tref = Date("Ymd",$ts);
+       $dinfo = GetDaysInfo($ts);
+       /* Select appointments for this day */
+       $next = NextDay($ts);
+
+       if ( $col == 1 ) {
+         echo " <tr>\n";
+       }
+       echo "  <td class=\"". $dinfo[color] ."\" width=\"50%\">\n";
+
+       # DAY-TABLE STARTS
+       echo "<table class=\"single\" border=\"0\" cellpadding=\"3\" cellspacing=\"0\" width=\"100%\">\n";
+       echo " <tr>\n";
+       echo "  <th>\n";
+       echo menulink($callink ."calendar_day&t=". $tref,$lang['Day'. Date("w",$ts)],strftime($lang['DateFormatTitle'],$ts));
+       if ( isset($dinfo[Desc]) ) {
+         echo " " . menulink($callink ."app_new&t=". $tref,$d,$lang['NewAppointInfo'],$dinfo[popinfo]) ."\n";
+       } else {
+         echo " " . menulink($callink ."app_new&t=". $tref,$d,$lang['NewAppointInfo']) ."\n";
+       }
+       echo "  </th>\n";
+       echo " </tr>\n";
+       echo " <tr>\n";
+       echo "  <td class=\"". $dinfo[color] ."\" width=\"50%\">\n";
+       if ( isset($dinfo[Desc]) ) {
+         echo "<span class=\"dinfo\">". $dinfo[Desc] ."</span>\n";
+       }
+       $hastable = false;
+       foreach ($this->user->callist as $idx => $x) {
+         /* the correct day */
+         if ( ! $this->user->callist[$idx]->inside($dd) ) {
+           continue;
+         }
+         if (!cal_check_against_list($this->user->callist[$idx],$this->uids)) {
+           continue;
+         }
+         // Do not show finished tasks
+         if ( ($this->user->callist[$idx]->gettype() == "task") && ($this->user->callist[$idx]->state == 2) ) {
+           continue;
+         }
+         if ( !$hastable ) {
+           echo "<table  class=\"formatted\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"  width=\"100%\">\n";
+           $hastable = true;
+         } else {
+           echo "  <tr><td class=\"". $dinfo[color] ."\" colspan=\"3\"><img src=\"". $image_path ."black.png\" width=\"100%\" height=\"1\" alt=\"--------\"></td></tr>\n";
+         }
+         // Show appointments or task or whatever
+         $this->user->callist[$idx]->formatted();
+       }
+
+       if ( $hastable ) {
+         echo " </table>\n";
+       } else {
+          echo "<br /><br /><br /><br />\n";
+       }
+
+       # DAY-TABLE ENDS
+       echo "</td></tr>\n";
+       echo "</table>\n";
+
+       echo "  </td>\n";
+       if ( $col == 2 ) {
+         echo " </tr>\n";
+         $col = 0;
+       }
+
+       $day++;
+       $col++;
+       $ts = $next;
      }
      if ( $col == 2 ) {
        echo " </tr>\n";

@@ -272,51 +272,6 @@ if ($HTTP_POST_VARS['submit'])
              <?=$options?>
              </SELECT> </td>
              </tr>
-	    <?	
-	    //Retreiving the Custom Fields
-		$dbQuery = "select * from customfields where module='Leads'";
-		$custresult = mysql_query($dbQuery) or die("Couldn't get file list");
-		if(mysql_num_rows($custresult) != 0)
-        	{
-			$noofrows = mysql_num_rows($custresult);
-			for($i=0; $i<$noofrows; $i++)
-			{
-				$fldLabel=mysql_result($custresult,$i,"fieldlabel");
-                        	$colName=mysql_result($custresult,$i,"column_name");
-
-	     ?>
-				<tr> 
-             			<td nowrap>
-             			<div align="right"><?php echo $fldLabel.':'; ?></div></td>
-		             	<td><SELECT NAME="<?php echo $colName ?>">
-             			<OPTION>None 
-		             	<?=$options?>
-             			</SELECT></td>
-
-		<?php
-				$i++;
-				if($i<$noofrows)
-				{
-					$fldLabel=mysql_result($custresult,$i,"fieldlabel");
-	                        	$colName=mysql_result($custresult,$i,"column_name");
-		?>
-		             		<td nowrap>
-             				<div align="right"><?php echo $fldLabel.':'; ?></div></td>
-		             		<td><SELECT NAME="<?php echo $colName ?>">
-             				<OPTION>None 
-		             		<?=$options?>
-             				</SELECT> </td>
-		<?php
-				}
-				
-		?>
-				
-             			</tr>		
-	     	<?	 		 
-			}	
-		}		
-			
-	    ?>	
              <tr> 
              <td>&nbsp;</td>
                            <td>&nbsp;</td>

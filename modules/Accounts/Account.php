@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.2.2.1 2004/12/22 15:06:38 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.2 2004/10/06 09:02:05 jack Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -137,6 +137,7 @@ class Account extends SugarBean {
 	function Account() {
 		$this->log =LoggerManager::getLogger('account');
 		$this->db = new PearDatabase();
+		
 	}
 
 	function create_tables () {
@@ -553,84 +554,15 @@ class Account extends SugarBean {
 	
 	return $the_where;
 }
-//method added to construct the query to fetch the custom fields 
-	function constructCustomQueryAddendum()
-	{
-		$result = mysql_query("SHOW COLUMNS FROM accountcf");
-		$i=0;
-		while ($myrow = mysql_fetch_row($result))
-		{
-		        $columnName[$i] = $myrow[0];
-		        $i++;
-		}
-
-		$sql1 = "select column_name,fieldlabel from customfields where column_name in (";
-		$colName = 0;
-		$addTag;
-		while($colName < count($columnName))
-		{
-		        if ($columnName[$colName] == "accountid")
-        		{
-        		}
-        		else
-        		{
-		                if($colName == 1)
-                		{
-
-		                        $addTag .= "'" .$columnName[$colName] ."'";
-                		}
-		                else
-                		{
-		                        $addTag .= ",'" .$columnName[$colName] ."'";
-                		}
-        		}
-		        $colName++;
-		}
-		$sql2 = $sql1.$addTag .")";
-		$result_sql2 = mysql_query($sql2);
-		$resultCount = mysql_num_rows($result_sql2);
-		$rs=mysql_fetch_array($result_sql2);
-		 $j=0;
-		while($j<mysql_num_rows($result_sql2))
-  		{
-			    for($i=0;$i<$resultCount;$i++)
-    				{
-				      $copy[$j][$i]=$rs[$i];
-    				}
-			    $rs=mysql_fetch_array($result_sql2);
-			    $j++;
-		}
-		$sql3 = "select ";
-		$k=0;
-		$l=0;
-		while($k< $resultCount)
-		{	
-
-		        if($k == 0)
-        		{
-		        $sql3.= "accountcf.".$copy[$k][$l]." ".$copy[$k][$l+1];
-        		}
-		        else
-        		{
-		        $sql3.= ",accountcf.".$copy[$k][$l]." ".$copy[$k][$l+1];
-        		}
-		        $k++;
-		}
-	return $sql3;
-
-	}
-
-
 
 	function create_export_query(&$order_by, &$where)
         {
-		//get the list of columns and store it in an array
-                         $query = $this->constructCustomQueryAddendum() . ",
+                         $query = "SELECT
 				accounts.*,
                                 users.user_name as assigned_user_name
                                 FROM accounts
                                 LEFT JOIN users
-                                ON accounts.assigned_user_id=users.id left join accountcf on accountcf.accountid=accounts.id ";
+                                ON accounts.assigned_user_id=users.id ";
 
                         $where_auto = " users.status='ACTIVE'
                         AND accounts.deleted=0 ";
@@ -645,6 +577,8 @@ class Account extends SugarBean {
 
                 return $query;
         }
+
+
 
 }
 

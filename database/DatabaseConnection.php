@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/database/DatabaseConnection.php,v 1.2 2004/10/06 09:02:02 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/database/DatabaseConnection.php,v 1.2 2004/10/06 09:02:02 jack Exp $
  * Description:  Creates the runtime database connection.
  ********************************************************************************/
 

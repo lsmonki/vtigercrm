@@ -19,7 +19,7 @@
  global $mod_strings;
 
  echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_APPOINTMENT'], true); 
-// echo "\n<BR>\n";
+ echo "\n<BR>\n";
 
  include_once $calpath .'webelements.p3';
  include_once $calpath .'permission.p3';
@@ -39,7 +39,7 @@
     * display the info
     */
    Function info() {
-     global $tutos, $lang,$table,$callink,$app_strings,$mod_strings;
+     global $tutos, $lang,$table,$callink,$app_strings, $mod_strings;
 
      $a_checked[0] = "";
      $a_checked[1] = "";
@@ -62,11 +62,8 @@
        $this->addHidden("id",$this->obj->id);
      }
 
-	 //echo $this->DataTableStart();
-	 
-	 /*
-	 echo "<table class=\"navigate\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"90%\">\n";
-	 echo "<tr>\n";
+     echo $this->DataTableStart();
+     echo "<tr>\n";
      echo "<th colspan=\"6\">";
      if ( $this->obj->id > 0 ) {
        echo $lang['ModOldAppoint'];
@@ -81,50 +78,26 @@
        echo "</th>\n";
      }
      echo "</tr>\n";
-	 echo "</table>\n";
-	 */
      $this->addHidden("creator",$this->obj->creator->id);
-	 
-	 if ( $this->obj->allowed != 0 ) {
-       echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"5\"><tr>\n";
-       if ( $this->obj->id > 0 ) {
-         //submit_reset(0,1,2,1,2,0);
-		 submit_reset(0,0,2,0,2,0);
-       } else {
-         //submit_reset(0,-1,2,1,2,0);
-		 submit_reset(0,0,2,0,2,0);
-       }
-       echo "</tr></table>\n";
-     }
-	 
-	 echo "<table class=\"single\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\" width=\"90%\">\n";
-	 echo "<tr><td class=\"inner\">\n";
-	 echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"1\" width=\"100%\">\n";
-	 if ( $this->obj->id > 0 ) {
-       echo "<tr>\n";
-       echo "<td class=\"desc\">". $lang['AppCreatedBy'] .":</td>\n";
-       echo "<td colspan=\"5\">". $this->obj->creator->getLink() . "&nbsp;" . $lang['atDateTime'] ."&nbsp;". $this->obj->creation->getDateTime()."</td>";
-       //echo "<td align=\"right\">" .acl_link($this->obj) ."</td>\n";
-       echo "</tr>\n";
-     }
+
      # START
      echo "<tr>\n";
      echo $this->showfieldc($lang['StartDate'],0,"start_d");
      echo "<td colspan=\"2\">";
      $this->obj->start->EnterDate("start");
      echo "</td>";
-     echo "<td valign=\"top\" class=\"desc\">&nbsp;<b>";
+     echo "<td valign=\"top\">&nbsp;<b>";
      if ( !isset($_SERVER['HTTP_USER_AGENT']) || ereg("Lynx",$_SERVER['HTTP_USER_AGENT']) || ereg("w3m",$_SERVER['HTTP_USER_AGENT']) ) {
        echo $lang['StartTime'];
      } else {
        echo "<a href=\"JavaScript: var d = document.forms[0];
-mywindow = window.open('', 'timer', 'resizable=yes,width=100,height=415,top=100,left=450');
+mywindow = window.open('', 'timer', 'width=120,height=420,top=100,left=450');
 mywindow.location.href = '". $callink ."minitimer&f=start&amp;". SID ."'; mywindow.focus();\"
  onmouseover=\"self.status='minitimer' ;return true\">";
        echo $lang['StartTime'];
        echo "</a>\n";
      }
-     echo ":</b>&nbsp;<br/>&nbsp;<font size=\"-1\">(HH:MM)</font></td>\n";
+     echo "</b>&nbsp;<br />&nbsp;<font size=\"-1\">(HH:MM)</font></td>\n";
      echo "<td colspan=\"2\">";
      $this->obj->start->EnterTime("start");
      echo "</td>\n";
@@ -136,18 +109,18 @@ mywindow.location.href = '". $callink ."minitimer&f=start&amp;". SID ."'; mywind
      echo "<td colspan=\"2\">";
      $this->obj->end->EnterDate("end");
      echo "</td>\n";
-     echo "<td valign=\"top\" class=\"desc\">&nbsp;<b>";
+     echo "<td valign=\"top\">&nbsp;<b>";
      if ( !isset($_SERVER['HTTP_USER_AGENT']) || ereg("Lynx",$_SERVER['HTTP_USER_AGENT']) || ereg("w3m",$_SERVER['HTTP_USER_AGENT']) ) {
        echo $lang['EndTime'];
      } else {
        echo "<a href=\"JavaScript: var d = document.forms[0];
-mywindow = window.open('', 'timer', 'resizable=yes,width=100,height=415,top=100,left=450');
+mywindow = window.open('', 'timer', 'width=120,height=420,top=100,left=450');
 mywindow.location.href = '". $callink."minitimer&f=end&amp;". SID ."'; mywindow.focus();\"
 onmouseover=\"self.status='minitimer' ;return true\">";
        echo $lang['EndTime'];
        echo "</a>\n";
      }
-     echo ":</b>&nbsp;<br />&nbsp;<font size=\"-1\">(HH:MM)</font></td>\n";
+     echo "</b>&nbsp;<br />&nbsp;<font size=\"-1\">(HH:MM)</font></td>\n";
      echo "<td colspan=\"2\">";
      $this->obj->end->EnterTime("end");
      echo "</td>\n";
@@ -167,28 +140,35 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      # Ignore times
      echo " <td colspan=\"3\" valign=\"top\">\n";
      echo "<input type=\"checkbox\" name=\"t_ignore\" value=\"1\"". ($this->obj->t_ignore == 1 ? " checked=\"checked\"":"") ." />\n";
-     echo $lang['IgnoreTime'] ."<br/>\n";
+     echo $lang['IgnoreTime'] ."<br />\n";
      echo "<font size=\"-1\">". $lang['IgnoreTime2'] ."</font>";
      echo " </td>\n";
-     echo "</tr><tr>\n";
-     echo $this->showfieldc($mod_strings['LBL_SUBJECT'],1,"subject");
-     echo "<td><input type=\"text\" name=\"subject\" value=\"\" size=\"40\" maxlength=\"60\"></td>\n";	
-     echo "</tr><tr>\n";
 
+
+     echo "</tr><tr>\n";
+     echo "<td>" .$mod_strings['LBL_SUBJECT']."<font color=\"red\">(*)</font></td>\n";	
+     echo "<td colspan=2><input type=\"text\" name=\"subject\" value=\"\" size=\"40\" maxlength=\"60\"></td>\n";	
+     echo "<td colspan=3>&nbsp;</td>";
+     echo "</tr><tr>\n";
      echo $this->showfield($lang['Description'],0,"descr");
      echo $this->textarea("descr",5,$table['appointment1']['description'][size],$this->obj->descr);
+
+
      echo "</tr>\n";
      echo "<tr>\n";
      # Customer/Visitor name
      #echo $this->showfieldc($lang['VisitAt'] ."<br />". $lang['VisitFrom'],0,"v");
      //Added to get vtigerCRM contacts
-     echo $this->showfieldc($mod_strings['LBL_CONTACT'],1,"contact_name");
-     echo " <td colspan=\"2\">";
+     echo "<td class=\"desc\"><label for=\"v\">Contacts</label><font color=\"red\">(*)</font></td>";
+     echo " <td>\n";
      echo "<input type=\"text\" name=\"contact_name\" value=\"\" size=\"20\" maxlength=\"40\" readonly>";
      echo "<input type=\"hidden\" name=\"account_name\" value=\"\">";
-     //echo " </td>\n";
-     echo " &nbsp;<input title='".$app_strings['LBL_SELECT_CONTACT_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_SELECT_CONTACT_BUTTON_KEY']."' type='button' class='button' value='  ".$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=appnew&form_submit=false\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
-     //echo " </td>\n";
+     //select_from_array_or_input($this->obj,"v",$this->obj->visitor,1);
+     echo " </td>\n";
+     echo " <td align=\"left\">&nbsp;\n";
+     echo "<input title='".$app_strings['LBL_SELECT_CONTACT_BUTTON_TITLE']."' accessyKey='".$app_strings['LBL_SELECT_CONTACT_BUTTON_KEY']."' type='button' class='button' value='  ".$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL']."  ' name='button' LANGUAGE=javascript onclick='window.open(\"index.php?module=Contacts&action=Popup&html=Popup_picker&form=appnew&form_submit=false\",\"new\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
+	
+     echo " </td>\n";
      echo " <td colspan=3>&nbsp;</td>\n";
 
      echo " </tr>\n";
@@ -260,22 +240,18 @@ onmouseover=\"self.status='minitimer' ;return true\">";
 
      module_addforms($this->user,$this->obj,6);
 
-     //echo $this->DataTableEnd();
-	 echo "</table>\n";
-	 echo "</td></tr></table>\n";
-
      if ( $this->obj->allowed != 0 ) {
-       echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"5\"><tr>\n";
+       echo "<tr>\n";
+
        if ( $this->obj->id > 0 ) {
-         //submit_reset(0,1,2,1,2,0);
-		 submit_reset(0,0,2,0,2,0);
+         submit_reset(0,1,2,1,2,0);
        } else {
-         //submit_reset(0,-1,2,1,2,0);
-		 submit_reset(0,0,2,0,2,0);
+         submit_reset(0,-1,2,1,2,0);
        }
-       echo "</tr></table>\n";
+       echo "</tr>\n";
      }
 
+     echo $this->DataTableEnd();
      hiddenFormElements();
      echo $this->getHidden();
      echo "</form>\n";

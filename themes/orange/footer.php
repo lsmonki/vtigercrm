@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/orange/footer.php,v 1.6 2004/11/06 14:23:31 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/orange/footer.php,v 1.6 2004/11/06 14:23:31 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.

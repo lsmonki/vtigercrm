@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/graph.php,v 1.1 2004/08/18 12:22:54 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/graph.php,v 1.1 2004/08/18 12:22:54 gjayakrishnan Exp $
  * Description: Main file and starting point for the application.  Calls the 
  * theme header and footer files defined for the user as well as the module as 
  * defined by the input parameters.

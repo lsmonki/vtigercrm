@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/themes/Amazon/header.php,v 1.8.2.1 2004/12/15 14:11:13 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/Amazon/header.php,v 1.8 2004/11/30 15:31:00 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -150,58 +150,6 @@ $xtpl->parse("main.left_form");
 //check for the presence of the currentModule and  also for EditView permission
 
 
-f($currentModule == 'Leads')
-  {
-    $tabid=3;
-  }
-  else if($currentModule == 'Home')
-  {
-    $tabid=1;
-  }
-  else if($currentModule == 'Dashboard')
-  {
-    $tabid=2;
-  }
-else if($currentModule == 'Accounts')
-  {
-    $tabid=5;
-  }
-  else if($currentModule == 'Contacts')
-  {
-    $tabid=4;
-  }
-  else if($currentModule == 'Opportunities')
-  {
-    $tabid=6;
-  }
- else if($currentModule == 'Cases')
-  {
-    $tabid=7;
-  }
- else if($currentModule == 'Notes')
-  {
-    $tabid=8;
-  }
-  else if($currentModule == 'Calls')
-  {
-    $tabid=9;
-  }
-else if($currentModule == 'Emails')
-  {
-    $tabid=10;
-  }
-  else if($currentModule == 'Meetings')
-  {
-    $tabid=11;
-  }
-  else if($currentModule == 'Tasks')
-  {
-    $tabid=12;
-  }
- else if($currentModule == 'MessageBoard')
-  {
-    $tabid=13;
-  }
 
 
 $permissionData = $_SESSION['permission_set'];
@@ -211,7 +159,7 @@ $testaction='EditView';
 
         while($i<count($permissionData))
         {
-          if($permissionData[$i][0]==$tabid && $permissionData[$i][1]==$testaction)
+          if($permissionData[$i][0]==$currentModule && $permissionData[$i][1]==$testaction)
           {
             $actionpermissionvalue=$permissionData[$i][2];
             if($actionpermissionvalue == 0)

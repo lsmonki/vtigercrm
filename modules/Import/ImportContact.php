@@ -52,8 +52,8 @@ class ImportContact extends Contact {
         var $special_functions =  array(
 		"get_names_from_full_name"
 		,"add_create_account"
-		//,"add_salutation"
-		//,"add_lead_source"
+		,"add_salutation"
+		,"add_lead_source"
 		,"add_birthdate"
 		,"add_do_not_call"
 		,"add_email_opt_out"

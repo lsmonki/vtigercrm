@@ -96,7 +96,6 @@ class Security extends SugarBean {
                 mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('administrator',11,1,'')");
 		mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('administrator',12,1,'')");
                 mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('administrator',13,1,'')");
-                mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('administrator',14,1,'')");
 
 
 
@@ -115,7 +114,6 @@ class Security extends SugarBean {
                 mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('standard_user',11,1,'')");
                 mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('standard_user',12,1,'')");
                 mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('standard_user',13,1,'')");
-                mysql_query("insert into role2tab(rolename,tabid,module_permission,description) values ('standard_user',14,1,'')");
 
 
 

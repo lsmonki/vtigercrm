@@ -52,10 +52,10 @@ class ImportOpportunity extends Opportunity {
 	// This is the list of the functions to run when importing
 	var $special_functions =  array(
 		"add_create_account",
-		//"add_lead_source",
-		//"add_opportunity_type",
-        	"add_date_closed"
-        	//"add_sales_stage"
+		"add_lead_source",
+		"add_opportunity_type",
+        	"add_date_closed",
+        	"add_sales_stage"
 	 );
 
         function add_lead_source()

@@ -167,9 +167,7 @@
        $this->addHidden("id",$this->id);
      }
      echo "<form action=\"calendar.php\" method=\"get\">\n";
-//	 echo "<table class=\"leftFormHeader\" cellpadding=\"0\" cellspacing=\"1\" width=\"100%\" border=\"0\">\n";
-//	 echo "<tr><td>\n";
-     echo "<table class=\"navigate\" cellpadding=\"3\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n";
+     echo "<table class=\"single\" cellpadding=\"3\" cellspacing=\"0\" width=\"100%\" border=\"0\">\n";
      echo "<tr>\n";
      //echo " <th class=\"navigate\" align=\"left\" colspan=\"3\" rowspan=\"2\" nowrap=\"nowrap\">\n";
      //echo "&nbsp;". $lang['forphrase'] ."\n";
@@ -177,47 +175,44 @@
      //Commented for integration	
      //echo " </th>\n";
      //Added for integration	
-     //echo " <th class=\"navigate\" colspan=\"2\" rowspan=\"2\" nowrap=\"nowrap\"></th>\n";
+     echo " <th class=\"navigate\" colspan=\"2\" rowspan=\"2\" nowrap=\"nowrap\"></th>\n";
      //
-	 echo "  <td nowrap=\"nowrap\" width=\"150\">\n";
+     echo " <td nowrap=\"nowrap\" class=\"navigate\" colspan=\"".( $cols - 3) ."\" align=\"center\">\n";
+     echo menulink($callink ."index&t=". $last_week,$this->theme->getImage(left,'list').$lang['lastweek'],$lang['lastweek']);
+     echo "&nbsp;&nbsp;&nbsp;";
+     echo menulink($callink ."index&t=". $this->t ,$lang['reload']);
+     echo "&nbsp;&nbsp;&nbsp;";
+     echo menulink($callink ."index&t=". $next_week,$lang['nextweek'].$this->theme->getImage(right,'list'),$lang['nextweek']);
+     echo "</td>\n"; 
+     //Added for Ingtegration	
+     echo " <th class=\"navigate\" rowspan=\"2\" nowrap=\"nowrap\"></th>\n";
+     //
+     echo " </tr>\n";
+
+     echo " <tr>\n";
+     echo "  <td nowrap=\"nowrap\" class=\"navigate\" colspan=\"". ( $cols - 3)."\" align=\"center\">\n";
+     echo menulink($callink ."index&t=". $last_month,$this->theme->getImage(left,'list').$this->theme->getImage(left,'list').$lang['minus4weeks'],$lang['minus4weeks']);
+     echo "&nbsp;&nbsp;&nbsp;";
      if ( $this->user->feature_ok(usecalendar,PERM_NEW) ) {
-       echo menulink($callink ."app_new&t=".$this->t,$this->theme->getImage(appointment,'list').$lang['NewAppoint'],$lang['NewAppointInfo']);
+       echo menulink($callink ."app_new&t=".$this->t,$lang['NewAppoint'],$lang['NewAppointInfo']);
      } else {
        echo "&nbsp;";
      }
+     echo "&nbsp;&nbsp;&nbsp;";
+     echo menulink($callink ."index&t=". $next_month,$lang['plus4weeks'].$this->theme->getImage(right,'list').$this->theme->getImage(right,'list'),$lang['plus4weeks']);
      echo "  </td>\n";
-     echo " <td nowrap=\"nowrap\" align=\"center\">\n";
-	 echo menulink($callink ."calendar&t=". $last_month,$this->theme->getImage(first,'list').$lang[''],$lang['minus4weeks']);
-	 echo "&nbsp;&nbsp;";
-     echo menulink($callink ."calendar&t=". $last_week,$this->theme->getImage(left,'list').$lang[''],$lang['lastweek']);
-	 echo "&nbsp;&nbsp;";
-	 echo menulink($callink ."calendar&t=". $next_week,$lang[''].$this->theme->getImage(right,'list'),$lang['nextweek']);     
-     echo "&nbsp;&nbsp;";
-     echo menulink($callink ."calendar&t=". $next_month,$lang[''].$this->theme->getImage(last,'list'),$lang['plus4weeks']);
-     echo "</td>\n"; 
-	 echo "<td nowrap=\"nowrap\" width=\"150\" align=\"right\">\n";
- 	 echo menulink($callink ."calendar&t=". $this->t ,$this->theme->getImage(reload,'list').$lang['reload'],$lang['reload']);
-	 echo "&nbsp;</td>\n";
-     //Added for Ingtegration	
-     //echo " <th class=\"navigate\" rowspan=\"2\" nowrap=\"nowrap\"></th>\n";
-     //
-     //echo " </tr>\n";
+     echo " </tr>\n";
 
-	 //echo " <tr>\n";
-     echo " </tr></table>\n";
-// 	 echo "</td></tr></table>\n";
-     echo " <br>\n";
-	 echo " <table class=\"outer\" cellpadding=\"3\" cellspacing=\"1\" width=\"100%\" border=\"0\">\n";
      echo " <tr>\n";
-     echo "  <th class=\"viewhead\">". $lang['week'] ."</th>\n";
+     echo "  <th>". $lang['week'] ."</th>\n";
      for ( $i = $this->user->weekstart;$i<=6;$i++ ) {
        if ($this->user->isWorkDay($i)) {
-         echo "  <th class=\"viewhead\">". $lang['Day'.$i] ."</th>\n";
+         echo "  <th>". $lang['Day'.$i] ."</th>\n";
        }
      } 
      for ( $i = 0;$i<$this->user->weekstart;$i++ ) {
        if ($this->user->isWorkDay($i)) {
-         echo "  <th class=\"viewhead\">". $lang['Day'.$i] ."</th>\n";
+         echo "  <th>". $lang['Day'.$i] ."</th>\n";
        }
      }
  

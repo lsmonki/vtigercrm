@@ -12,10 +12,6 @@ check_user();
 session_write_close();
 loadlayout();
 
-global $theme;
-$theme_path="themes/".$theme."/";
-require_once ($theme_path."layout_utils.php");
-
 $d = Date("d");
 $m = Date("n");
 $y = Date("Y");
@@ -49,8 +45,7 @@ if ( $y == -1 ) {
   $y = Date("Y");
 }
 
-echo "<html>\n";
-echo "<style type=\"text/css\">@import url(\"". $theme_path ."/style.css\");</style>";
+
 echo "<script language='JavaScript'>\n";
 echo " function closeandaway (d, m, y) { \n";
 echo "  var x = opener.document.appnew; \n";
@@ -75,8 +70,7 @@ echo "</script>\n";
 
 
 $yoff =  Date("Y") + 10;
-echo "<body leftmargin=\"0\" topmargin=\"5\">\n";
-echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"95%\" align=\"center\">\n";
+echo "<table class=\"single\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\">\n";
 echo "<tr>\n";
 echo "\n";
 $nm = $m + 1;
@@ -91,23 +85,21 @@ if ( $lm == 0 ) {
   $lm = 12;
   $ly = $y -1;
 }
-echo "<td colspan=\"2\" align=\"left\"><font size=\"-1\"><b><a class=\"nodeco\" href=\"".$callink."minical&f=".$f."&n=".$n."&m=".$lm."&d=".$d."&y=".$ly."\"> ". $lang['NavBack'] . "</a></b></td>\n";
-echo "<td colspan=\"4\" align=\"center\"><b>". $m ."/". $y ."</b></td>\n";
-echo "<td colspan=\"2\" align=\"right\"><font size=\"-1\"><b><a class=\"nodeco\" href=\"". $callink ."minical&f=$f&n=$n&m=$nm&d=$d&y=$ny\">". $lang['NavNext'] ."</a></b></td>\n";
+echo "<th colspan=\"2\" align=\"left\"><font size=\"-1\"><a class=\"nodeco\" href=\"".$callink."minical&f=".$f."&n=".$n."&m=".$lm."&d=".$d."&y=".$ly."\">". $lang['NavBack'] ."</a></th>\n";
+echo "<th colspan=\"4\" align=\"center\">". $m ."/". $y ."</th>\n";
+echo "<th colspan=\"2\" align=\"right\"><font size=\"-1\"><a class=\"nodeco\" href=\"". $callink ."minical&f=$f&n=$n&m=$nm&d=$d&y=$ny\">". $lang['NavNext'] ."</a></th>\n";
 echo "</tr>\n";
-echo "</table>\n";
-echo "<table class=\"single\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" width=\"95%\" align=\"center\">\n";
 echo "<tr>\n";
-echo "<th class=\"viewhead\"><font size=\"-1\">". $lang['week'] ."</th>\n";
+echo "<th><font size=\"-1\">". $lang['week'] ."</th>\n";
 
 $WeekDayName=array('SSunday','SMonday','STuesday','SWednesday','SThursday','SFriday','SSaturday');
  
 for ( $i = $current_user->weekstart;$i<=6;$i++ ) { 
-  echo "<th class=\"viewhead\"><font size=\"-1\">". $lang[$WeekDayName[$i]] ."</th>\n";
+  echo "<th><font size=\"-1\">". $lang[$WeekDayName[$i]] ."</th>\n";
 }
  
 for ( $i = 0;$i<$current_user->weekstart;$i++ ) {
-  echo "<th class=\"viewhead\"><font size=\"-1\">". $lang[$WeekDayName[$i]] ."</th>\n";
+  echo "<th><font size=\"-1\">". $lang[$WeekDayName[$i]] ."</th>\n";
 }
 
 echo "</tr>\n";
@@ -142,15 +134,10 @@ while ( $go == 1 ) {
  if ( $today == Date("Ymd",$ts) ) {
    $col = "today";
  } else if ($xm != $m ) {
-   $col = "otherday";
+   $col = "appday";
  } else if ($wd == 0 ) {
    $col = "holiday";
- } else if ($wd == 6 ) {
-   $col = "freeday";
- } else {
-   $col = "appday";
- }
- 
+ } 
  echo "<td align=\"right\" class=\"". $col ."\">\n";
  echo " <font size=\"-1\">\n";
  echo "  <a href=\"JavaScript:closeandaway(". ($xd + $n) .",". ($xm + $n) .",". ($yoff - $xy + $n) .")\">". $xxd ."</a>";

@@ -89,11 +89,6 @@ else if ( $_REQUEST['module'] == 'Opportunities')
 	$current_bean_type = "ImportOpportunity";
 }
 $focus = new $current_bean_type();
-//Constructing the custom field Array
-require_once('include/CustomFieldUtil.php');
-$custFldArray = getCustomFieldArray($_REQUEST['module']);
-//Initializing  an empty Array to store the custom field Column Name and Value
-$resCustFldArray = Array();
 
 // loop through all request variables
 foreach ($_REQUEST as $name=>$value)
@@ -125,7 +120,7 @@ foreach ($_REQUEST as $name=>$value)
 
 	// match up the "official" field to the user 
 	// defined one, and map to columm position: 
-	if ( isset( $focus->importable_fields[$user_field] ) || isset( $custFldArray[$user_field] ))
+	if ( isset( $focus->importable_fields[$user_field] ) )
 	{
 		// now mark that we've seen this field
 		$field_to_pos[$user_field] = $pos;
@@ -199,15 +194,8 @@ foreach ($rows as $row)
 			// TODO: add check for user input
 			// addslashes, striptags, etc..
 			$field = $col_pos_to_field[$field_count];
-			if (substr(trim($field), 0, 3) == "CF_") 
-        		{
-				$resCustFldArray[$field] = $row[$field_count]; 
-        		}
-			else
-			{
-				$focus->$field = $row[$field_count];
-			}
-			
+			$focus->$field = $row[$field_count];
+
 		}
 
 	}
@@ -287,51 +275,7 @@ foreach ($rows as $row)
 		// now do any special processing
 		$focus->process_special_fields();
 
-		$focus->save();
-		$return_id = $focus->id;
-
-		if(count($resCustFldArray)>0)
-		{
-			$dbquery="select * from customfields where module='".$_REQUEST['module']."'";
-			$custresult = mysql_query($dbquery);
-			if(mysql_num_rows($custresult) != 0)
-			{
-				if (! isset( $_REQUEST['module'] ) || $_REQUEST['module'] == 'Contacts')
-				{
-					$columns = 'contactid';
-					$custTabName = 'contactcf';
-				}
-				else if ( $_REQUEST['module'] == 'Accounts')
-				{
-					$columns = 'accountid';
-					$custTabName = 'accountcf';	
-				}
-				else if ( $_REQUEST['module'] == 'Opportunities')
-				{
-					$columns = 'opportunityid';
-					$custTabName = 'opportunitycf';
-				}
-
-				$noofrows = mysql_num_rows($custresult);
-				$values='"'.$focus->id.'"';
-				for($j=0; $j<$noofrows; $j++)
-				{
-					$colName=mysql_result($custresult,$j,"column_name");
-					if(array_key_exists($colName, $resCustFldArray))
-					{
-						$value_colName = $resCustFldArray[$colName];
-
-						$columns .= ', '.$colName;
-						$values .= ', "'.$value_colName.'"';
-					}
-				}
-				
-				$insert_custfld_query = 'insert into '.$custTabName.' ('.$columns.') values('.$values.')';
-				mysql_query($insert_custfld_query);
-
-			}
-		}	
-		
+		$focus->save();	
 		$last_import = new UsersLastImport();
 		$last_import->assigned_user_id = $current_user->id;
 		$last_import->bean_type = $_REQUEST['module'];

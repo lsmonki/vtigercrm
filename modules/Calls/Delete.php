@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Calls/Delete.php,v 1.1 2004/08/17 15:03:41 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Calls/Delete.php,v 1.1 2004/08/17 15:03:41 gjayakrishnan Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 

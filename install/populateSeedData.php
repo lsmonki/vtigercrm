@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/populateSeedData.php,v 1.7 2004/10/12 10:00:13 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/populateSeedData.php,v 1.7 2004/10/12 10:00:13 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Opportunities/Charts.php,v 1.5.4.1 2004/12/22 17:07:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Charts.php,v 1.5 2004/10/29 09:55:09 jack Exp $
  * Description:  Includes the functions for Customer module specific charts.
  ********************************************************************************/
 
@@ -74,7 +74,7 @@ class jpgraph {
 	 * Contributor(s): ______________________________________..
 	 */
 	function outcome_by_month($date_start='1971-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
-		global $app_strings,$lang_crm, $app_list_strings, $current_module_strings, $log, $charset, $tmp_dir;
+		global $app_strings,$lang, $app_list_strings, $current_module_strings, $log, $charset, $tmp_dir;
 		include_once ("jpgraph/src/jpgraph_bar.php");
 
 		// Size of graph
@@ -89,7 +89,7 @@ class jpgraph {
 		$graph->SetScale("textlin");
 
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
-			$font = calculate_font_family($lang_crm);
+			$font = calculate_font_family($lang);
 
 			$log->debug("date_start is: $date_start");
 			$log->debug("date_end is: $date_end");
@@ -331,7 +331,7 @@ class jpgraph {
 	 * Contributor(s): ______________________________________..
 	 */
 	function lead_source_by_outcome($datay=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
-		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
+		global $app_strings,$lang, $current_module_strings, $log, $charset, $tmp_dir;
 		include_once ("jpgraph/src/jpgraph_bar.php");
 
 		// Size of graph
@@ -346,7 +346,7 @@ class jpgraph {
 		$graph->SetScale("textlin");
 
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
-			$font = calculate_font_family($lang_crm);
+			$font = calculate_font_family($lang);
 
 			$log->debug("datay is:");
 			$log->debug($datay);
@@ -601,7 +601,7 @@ class jpgraph {
 	 * Contributor(s): ______________________________________..
 	 */
 	function pipeline_by_sales_stage($datax=array('foo','bar'), $date_start='2071-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
-		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
+		global $app_strings,$lang, $current_module_strings, $log, $charset, $tmp_dir;
 		include_once ("jpgraph/src/jpgraph_bar.php");
 
 		// Size of graph
@@ -616,7 +616,7 @@ class jpgraph {
 		$graph->SetScale("textlin");
 
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
-			$font = calculate_font_family($lang_crm);
+			$font = calculate_font_family($lang);
 
 			$log->debug("starting pipeline chart");
 			$log->debug("datax is:");
@@ -855,11 +855,11 @@ class jpgraph {
 	 * Contributor(s): ______________________________________..
 	 */
 	function pipeline_by_lead_source($legends=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=true) {
-		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
+		global $app_strings,$lang, $current_module_strings, $log, $charset, $tmp_dir;
 		include_once ("jpgraph/src/jpgraph_pie.php");
 		include_once ("jpgraph/src/jpgraph_pie3d.php");
 
-		$font = calculate_font_family($lang_crm);
+		$font = calculate_font_family($lang);
 
 		if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map') || $refresh == true) {
 			$log =& LoggerManager::getLogger('opportunity charts');

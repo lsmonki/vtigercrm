@@ -174,12 +174,11 @@ EOQ;
 	return $the_script;
 }
 
-function getFieldSelect(&$column_fields,$colnum,&$required_fields,$suggest_field,$translated_fields,$module)
+function getFieldSelect(&$column_fields,$colnum,&$required_fields,$suggest_field,$translated_fields)
 {
 	global $mod_strings;
 	global $app_strings;
 	global $outlook_contacts_field_map;
-	require_once('database/DatabaseConnection.php');
 
 	$output = "<select name=\"colnum" . $colnum ."\">\n";
 	$output .= "<option value=\"-1\">". $mod_strings['LBL_DONT_MAP'] . "</option>";
@@ -221,12 +220,6 @@ function getFieldSelect(&$column_fields,$colnum,&$required_fields,$suggest_field
 		$output .=  $name . $req_mark."</option>\n";
 
 		$count ++;
-	}
-	$custquery = "select * from customfields where module='".$module."'";
-	$cust_result = mysql_query($custquery);
-	while($row = mysql_fetch_array($cust_result))
-	{
-			$output .= "<option value='".$row['column_name']."'>". $row['fieldlabel'] . "</option>\n";
 	}
 
 	$output .= "</select>\n";

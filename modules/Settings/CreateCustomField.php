@@ -12,7 +12,7 @@
 require_once ($theme_path."layout_utils.php");
 global $mod_strings;
 
-echo get_module_title("Settings", $mod_strings['LBL_MODULE_NAME'].": ".$mod_strings['NEW']." ".$mod_strings[$_REQUEST['fld_module']]." ".$mod_strings['CUSTOMFIELD'], true);
+echo get_module_title("Settings", "Settings: New Custom Field", true);
 echo "<br>";
 echo "<br>";
 require_once('XTemplate/xtpl.php');
@@ -27,7 +27,6 @@ require_once($theme_path.'layout_utils.php');
 
 $xtpl=new XTemplate ('modules/Settings/customfield.html');
 $xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
 $xtpl->assign("FLD_MODULE", $_REQUEST['fld_module']);
 if(isset($_REQUEST["duplicate"]) && $_REQUEST["duplicate"] == "yes")
 {

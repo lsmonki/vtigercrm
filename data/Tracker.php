@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/data/Tracker.php,v 1.3 2004/10/29 09:55:08 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/data/Tracker.php,v 1.3 2004/10/29 09:55:08 jack Exp $
  * Description:  Updates entries for the Last Viewed functionality tracking the
  * last viewed records on a per user basis.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.

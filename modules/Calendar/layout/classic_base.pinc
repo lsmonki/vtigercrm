@@ -72,7 +72,7 @@ class classic_base extends layout_base {
     }
     #echo "<!-- Copyright 1999 - 2004 by Gero Kohnert gokohnert@users.sourceforge.net -->\n";
     #echo "<!-- all rights reserved -->\n";
-    #echo "<head>\n";
+    echo "<head>\n";
     #echo " <meta http-equiv=\"Content-Type\" content=\"text/html; charset=". $lang['content_encoding'] ."\"".$c."\n";
     #echo " <meta name=\"GENERATOR\" content=\"TUTOS ". $tutos[version] ."\"".$c."\n";
     if ( isset($tutos[lang]) && $tutos[lang] != "" ) {
@@ -80,7 +80,7 @@ class classic_base extends layout_base {
     }
     #echo " <meta http-equiv=\"Expires\" content=\"-1\"".$c."\n";
     if (is_readable(getcwd()."/".$tutos['base'] ."/html/". $this->theme->name .".css") ) {
-      #echo " <link rel=\"stylesheet\" href=\"". $tutos['base'] ."/html/". $this->theme->name .".css\" type=\"text/css\"".$c."\n";
+      echo " <link rel=\"stylesheet\" href=\"". $tutos['base'] ."/html/". $this->theme->name .".css\" type=\"text/css\"".$c."\n";
     } else {
       #echo "\n<!-- NO THEME ". $this->theme->name ." found -->\n";
     }
@@ -102,10 +102,10 @@ class classic_base extends layout_base {
     $x = $_SERVER['REQUEST_URI'];
     $x = htmlentities(delUrlParameter($x,"lg"));
     foreach($lang['lang'] as $i => $f) {
-      #echo " <link rel=\"Alternate\" href=\"". addUrlParaMeter($x,"lg=".$i) ."\" title=\"".  myentities($lang['UserLanguage'] .": ".$f) ."\"".$c."\n";
+      echo " <link rel=\"Alternate\" href=\"". addUrlParaMeter($x,"lg=".$i) ."\" title=\"".  myentities($lang['UserLanguage'] .": ".$f) ."\"".$c."\n";
     }
     #echo " <title>TUTOS: ". myentities($this->name) ."</title>\n";
-    #echo "</head>\n";
+    echo "</head>\n";
   }
   /**
    * error output visible to user

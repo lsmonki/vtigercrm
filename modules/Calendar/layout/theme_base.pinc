@@ -27,9 +27,6 @@ define ('mail',15);
 define ('modify',16);
 define ('delete',17);
 define ('view',18);
-define ('first',19);
-define ('last',20);
-define ('calendar',21);
 
 /**
  *
@@ -96,17 +93,12 @@ class theme_base {
     $this->i[user]         = $this->findImage('user');
     $this->i[modify]       = $this->findImage('modify');
     $this->i[delete]       = $this->findImage('delete');
-    $this->i[view]         = $this->findImage('view');
-    $this->i[first]        = $this->findImage('first');
-    $this->i[last]         = $this->findImage('last');
-    $this->i[appointment]  = $this->findImage('appointment');
-    $this->i[reload]       = $this->findImage('reload');
-    $this->i[calendar]     = $this->findImage('calendar');
+    $this->i[view]       = $this->findImage('view');
 
     $this->a[up]           = "UP";
     $this->a[down]         = "DOWN";
-   // $this->a[left]       = htmlentities("<");
-   // $this->a[right]      = htmlentities(">");
+    $this->a[left]         = htmlentities("<");
+    $this->a[right]        = htmlentities(">");
   }
   /**
    * get a image
@@ -123,9 +115,7 @@ class theme_base {
 
     if (isset($this->i[$type])) {
       if (!empty($this->i[$type])) {
-//        return "<img align=\"absmiddle\" border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $this->i[$type] ."\" alt=\"". (isset($this->a[$type]) ? $this->a[$type] : "") ."\" />";
-        return "<img hspace=\"2\" align=\"absmiddle\" border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $this->i[$type] ."\" />";
-
+        return "<img border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $this->i[$type] ."\" alt=\"". (isset($this->a[$type]) ? $this->a[$type] : "") ."\" />";
       } else {
         return "";
       }
@@ -133,8 +123,7 @@ class theme_base {
     $x = $this->findImage($type,"");
     $this->i[$type] = $x;
     if (! empty($x)) {
-//      return "<img align=\"absmiddle\" border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $x ."\" alt=\"". (isset($this->a[$type]) ? $this->a[$type] : "") ."\" />";
- return "<img hspace=\"2\" align=\"absmiddle\" border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $x ."\" />";
+      return "<img border=\"0\" class=\"". $purpose .",icon_". $type ."\" src=\"". $x ."\" alt=\"". (isset($this->a[$type]) ? $this->a[$type] : "") ."\" />";
     }
     return "";
 #    return "@ $type @";

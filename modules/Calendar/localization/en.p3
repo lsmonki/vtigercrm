@@ -52,7 +52,7 @@ $lang['lastweek']        = "last week";
 $lang['plus4weeks']      = "4 weeks plus";
 $lang['minus4weeks']     = "4 weeks back";
 $lang['only']            = "only";
-$lang['reload']          = "Reload";
+$lang['reload']          = "reload";
 $lang['changeapp']       = "see or change this appointment (%s - %s)";
 $lang['seeapp']          = "see this appointment details (%s - %s)";
 $lang['AllEntries']      = "see all %s entries";
@@ -78,8 +78,8 @@ $lang['Printable']       = "Printable";
 $lang['PrintableInfo']   = "Display as printable Page";
 $lang['managedProd']     = "Managed Products & Projects";
 $lang['soldProd']        = "Sold Products & Projects";
-$lang['Enter']           = "Save";
-$lang['Reset']           = "Cancel";
+$lang['Enter']           = "Enter";
+$lang['Reset']           = "Reset";
 $lang['Remove']          = "Remove";
 $lang['Delete']          = "Delete";
 $lang['Change']          = "Change";
@@ -214,7 +214,6 @@ $lang['AppAllSee']       = "all you can see";
 $lang['AppAllTeams']     = "members of all your teams";
 $lang['AppEverything']   = "everything";
 $lang['AppGetIcal']      = "Get Ical File";
-$lang['ConfirmDelete']   = "Are you sure to delete?";
 # You can expand this as you like
 # see also config.pinc AppLocDesc
 # colors depend on style sheets
