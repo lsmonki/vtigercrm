@@ -2,15 +2,17 @@
 /**
  * Copyright 1999 - 2004 by Gero Kohnert
  */
-global $calpath,$callink;
+global $calpath,$callink,$current_user;
 $callink = "index.php?module=Calendar&action=";
 include_once $calpath .'webelements.p3';
 include_once $calpath .'permission.p3';
+require_once('modules/Calendar/preference.pinc');
 
 /* Check if user is allowed to use it */
-check_user();
+//check_user();
 session_write_close();
 loadlayout();
+$pref = new preference();
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -117,7 +119,7 @@ $ts = mktime(12,0,0,$m,1,$y);
 $today=Date("Ymd",time());
 
 /* Back to last weekstart before ts */
-while ( Date("w",$ts) != $l->user->weekstart ) {
+while ( Date("w",$ts) != $current_user->weekstart ) {
   $ts -= 86400;
 }
 

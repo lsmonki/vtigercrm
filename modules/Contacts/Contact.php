@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.13 2004/12/28 09:22:47 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.14 2004/12/29 05:22:27 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -533,9 +533,9 @@ class Contact extends SugarBean {
 //check if the custom table exists or not in the first place
 function checkIfCustomTableExists()
 {
- $result = mysql_query("SHOW tables like 'contactcf'");
+ $result = mysql_query("select * from contactcf");
  $testrow = mysql_num_fields($result);
-	if(count($testrow) > 1)
+	if($testrow > 1)
 	{
 		$exists=true;
 	}

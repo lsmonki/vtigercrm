@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.33 2004/12/21 20:01:38 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/5createTables.php,v 1.34 2004/12/30 06:57:47 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -399,7 +399,7 @@ mysql_query("insert into role2permission(roleid,permissionid,module,module_actio
 }
 
 //populate Calendar data
-include("modules/Calendar/admin/scheme.php");
+//include("modules/Calendar/admin/scheme.php");
 
 ?>
 The database tables are now set up.<HR></HR>

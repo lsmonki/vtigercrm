@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Opportunity.php,v 1.8 2004/12/28 09:21:57 jack Exp $ 
+ * $Header:  vtiger_crm/sugarcrm/modules/Opportunities/Opportunity.php,v 1.9 2004/12/29 05:22:58 jack Exp $ 
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -271,9 +271,9 @@ class Opportunity extends SugarBean {
 //check if the custom table exists or not in the first place
 function checkIfCustomTableExists()
 {
- $result = mysql_query("SHOW tables like 'opportunitycf'");
+ $result = mysql_query("select * from opportunitycf");
  $testrow = mysql_num_fields($result);
-	if(count($testrow) > 1)
+	if($testrow > 1)
 	{
 		$exists=true;
 	}

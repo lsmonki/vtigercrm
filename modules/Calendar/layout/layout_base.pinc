@@ -32,7 +32,7 @@ class layout_base {
     list($usec,$sec) = explode(" ",microtime());
     $this->start_ts = (float)$usec + (float)$sec;
     $this->user = &$user;
-    $this->dbconn = $user->dbconn;
+    //$this->dbconn = $user->dbconn;
     $this->user->layout = &$this;
 
     if (isset($_GET['format'])) {

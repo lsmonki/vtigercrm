@@ -432,17 +432,21 @@ class Security extends SugarBean {
 
 	 $table_name="email_attachments";
                 $query = "create table " .$table_name ." (id int(11) NOT NULL auto_increment,date_entered datetime NOT NULL,parent_type varchar(100), parent_id varchar(100) NOT NULL,data longblob NOT NULL,filename varchar(50) NOT NULL,filesize varchar(50) NOT NULL,filetype varchar(20) NOT NULL,PRIMARY KEY (id,filename ) )";
-	echo $query;
                 $this->log->info($query);
                 mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
                 $this->create_index("create index idx_email_attachments_name on email_attachments (id,filename)");
 
 
+		$query = "create table wordtemplatestorage(filename varchar(100) NOT NULL,`date_entered` datetime NOT NULL default '0000-00-00 00:00:00',`parent_type` varchar(50) NOT NULL default '',`parent_id` varchar(100) NOT NULL default '',`data` longblob NOT NULL,`description` TEXT,`filesize` varchar(50) NOT NULL default '',`filetype` varchar(20) NOT NULL default '',PRIMARY KEY(filename))";
+	 	$this->log->info($query);
+                mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+                $this->create_index("create index idx_wordtemplatestorage on wordtemplatestorage (filename)");
 
+		$query="create table emailtemplatestorage (foldername varchar(100) NOT NULL default '',templatename varchar (100) NOT NULL,subject varchar(100) NOT NULL, description TEXT, body TEXT , PRIMARY KEY (foldername,templatename,subject))";
 
-
-
-
+	 	$this->log->info($query);
+                mysql_query($query) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
+                $this->create_index("create index idx_emailtemplatestorage on emailtemplatestorage (foldername,templatename,subject)");
 	       	}
 
 	function drop_tables () {
@@ -496,6 +500,19 @@ class Security extends SugarBean {
                                 
 		$this->log->info($query);
                 mysql_query($query);
+
+		$table_name="wordtemplatestorage";
+               $query = 'DROP TABLE IF EXISTS '.$table_name;
+                                
+		$this->log->info($query);
+                mysql_query($query);
+
+		$table_name="emailtemplatestorage";
+               $query = 'DROP TABLE IF EXISTS '.$table_name;
+                                
+		$this->log->info($query);
+                mysql_query($query);
+
 
 	
 	}

@@ -394,9 +394,9 @@ class DateTime {
       $this->sec = Date("s");
       $this->ts = time();
       $this->ts_def = $this->ts;
-      if ( isset($current_user) && ($current_user->offset != 0) ) {
-        $this->ts_def -= $current_user->offset;
-      }
+      //if ( isset($current_user) && ($current_user->offset != 0) ) {
+      //  $this->ts_def -= $current_user->offset;
+      //}
       $this->tz = Date("T");
       $this->offset = Date("Z");
       $this->format = -1;

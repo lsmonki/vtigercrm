@@ -28,6 +28,7 @@ class preference extends DateTime {
 	
 	# Start of week
         $this->weekstart = $tutos[weekstart];
+        $current_user->weekstart = $tutos[weekstart];
 	# Default all  holidays
         foreach ($tutos[holiday] as $i => $f) {
         $this->holiday[strtolower($i)] = $f;

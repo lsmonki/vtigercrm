@@ -23,93 +23,115 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
   $filetype= $_FILES['binFile']['type'];
 
     $filesize = $_FILES['binFile']['size'];
+
     if($filesize != 0)	
     {
-    $data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-    //$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-   $textDesc = $_REQUEST['txtDescription'];	
-    $strDescription = addslashes($textDesc);
-    $fileid = create_guid();
-    $date_entered = date('YmdHis');
-    //Retreiving the return module and setting the parent type
-    $ret_module = $_REQUEST['return_module'];
-    $parent_type;		
-    if($_REQUEST['return_module'] == 'Leads')
-    {
-	    $parent_type = 'Lead';
+    	    $data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+	    //$data = addslashes(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+	   $textDesc = $_REQUEST['txtDescription'];	
+	    $strDescription = addslashes($textDesc);
+	    $fileid = create_guid();
+	    $date_entered = date('YmdHis');
+	    //Retreiving the return module and setting the parent type
+	    $ret_module = $_REQUEST['return_module'];
+	    $parent_type;		
+	    if($_REQUEST['return_module'] == 'Leads')
+	    {
+		    $parent_type = 'Lead';
+	    }
+	    elseif($_REQUEST['return_module'] == 'Accounts')
+	    {
+		    $parent_type = 'Account';
+	    }
+	    elseif($_REQUEST['return_module'] == 'Contacts')
+	    {
+		    $parent_type = 'Contact';
+	    }
+	    elseif($_REQUEST['return_module'] == 'Opportunities')
+	    {
+		    $parent_type = 'Opportunity';
+	    }
+	   elseif($_REQUEST['return_module'] == 'Cases')
+	    {
+	 	   $parent_type = 'Case';
+	    }		
+	   elseif($_REQUEST['return_module']=='Emails')
+	   {
+		$parent_type='Emails';
+	   	$ret_module='Emails';
+	        $parent_id = $_REQUEST['return_id'];
+	
+			$sql = "INSERT INTO email_attachments ";
+		$sql .= "(id,date_entered,parent_type,parent_id,data,filename,filesize, filetype) ";
+		$sql .= "VALUES ('$fileid','$date_entered','$parent_type','$parent_id','$data',";
+		$sql .= "'$filename', '$filesize', '$filetype')";
+//	echo $sql;
+		$result = mysql_query($sql);
+//echo '<br>file name: '.$filename.'<br>file id: '.$fileid.'<br>Parent type: '.$parent_type.'<br>parent id: '.$parent_id;
+		//mysql_free_result($result);
+		//echo "Thank you. The new file was successfully added to our database.<br><br>";
+		//echo "<a href='index.php'>Continue</a>";
+	      	mysql_close();
+		deleteFile($uploaddir,$filename);
+	        header("Location: index.php?action=EditView&module=$ret_module&record=$parent_id&filename=$filename");
+	   }
+	
+	    $parent_id = $_REQUEST['return_id'];	 			
+	
+	    $sql = "INSERT INTO filestorage ";
+	    $sql .= "(fileid,date_entered,parent_type,parent_id,data,description, filename, filesize, filetype) ";
+	    $sql .= "VALUES ('$fileid','$date_entered','$parent_type','$parent_id','$data','$strDescription',";
+	    $sql .= "'$filename', '$filesize', '$filetype')";
+	    $result = mysql_query($sql);
+	    //mysql_free_result($result); 
+	    //echo "Thank you. The new file was successfully added to our database.<br><br>";
+	    //echo "<a href='index.php'>Continue</a>";
+	       mysql_close();
+	       deleteFile($uploaddir,$filename);
+	       header("Location: index.php?action=DetailView&module=$ret_module&record=$parent_id");	
     }
-    elseif($_REQUEST['return_module'] == 'Accounts')
-    {
-	    $parent_type = 'Account';
-    }
-    elseif($_REQUEST['return_module'] == 'Contacts')
-    {
-	    $parent_type = 'Contact';
-    }
-    elseif($_REQUEST['return_module'] == 'Opportunities')
-    {
-	    $parent_type = 'Opportunity';
-    }
-   elseif($_REQUEST['return_module'] == 'Cases')
-    {
-	    $parent_type = 'Case';
-    }		
-
-    $parent_id = $_REQUEST['return_id'];	 			
-
-    $sql = "INSERT INTO filestorage ";
-    $sql .= "(fileid,date_entered,parent_type,parent_id,data,description, filename, filesize, filetype) ";
-    $sql .= "VALUES ('$fileid','$date_entered','$parent_type','$parent_id','$data','$strDescription',";
-    $sql .= "'$filename', '$filesize', '$filetype')";
-    $result = mysql_query($sql);
-    //mysql_free_result($result); 
-    //echo "Thank you. The new file was successfully added to our database.<br><br>";
-    //echo "<a href='index.php'>Continue</a>";
-       mysql_close();
-       deleteFile($uploaddir,$filename);
-       header("Location: index.php?action=DetailView&module=$ret_module&record=$parent_id");	
-      }
+	
     else
-      {
-    include('themes/'.$theme.'/header.php');
-   $errormessage = "<font color='red'><B>Error Message<ul>
+    {
+	   include('themes/'.$theme.'/header.php');
+	   $errormessage = "<font color='red'><B>Error Message<ul>
 			<li><font color='red'>Invalid file OR</font>
 			<li><font color='red'>File has no data</font>
 			</ul></B></font> <br>" ;
-   echo $errormessage;
-       deleteFile($uploaddir,$filename);
-   include "upload.php";
-     }			
-   
+	   echo $errormessage;
+	   deleteFile($uploaddir,$filename);
+	   include "upload.php";
+    }			
+	   
 } 
 else 
 {
-  $errorCode =  $_FILES['binFile']['error'];
+	$errorCode =  $_FILES['binFile']['error'];
 	
-  if($errorCode == 4)
-  {
-   include('themes/'.$theme.'/header.php');
-    $errormessage = "<B><font color='red'>Kindly give a valid file for upload!</font></B> <br>" ;
-    echo $errormessage;
-    include "upload.php";
-  }
-  else if($errorCode == 2)
-  {
-    $errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file</font></B> <br>";
-    include('themes/'.$theme.'/header.php');
-    echo $errormessage;
-    include "upload.php";
-    //echo $errorCode;
-  }
-  else if($errorCode == 3)
-  {
-   include('themes/'.$theme.'/header.php');
-    echo "Problems in file upload. Please try again! <br>";
-    include "upload.php";
-  }
-  
+	if($errorCode == 4)
+	{
+	    include('themes/'.$theme.'/header.php');
+	    $errormessage = "<B><font color='red'>Kindly give a valid file for upload!</font></B> <br>" ;
+	    echo $errormessage;
+	    include "upload.php";
+	}
+	else if($errorCode == 2)
+	{
+	    $errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a smaller file</font></B> <br>";
+	    include('themes/'.$theme.'/header.php');
+	    echo $errormessage;
+	    include "upload.php";
+	    //echo $errorCode;
+	}
+	else if($errorCode == 3)
+	{
+	    include('themes/'.$theme.'/header.php');
+	    echo "Problems in file upload. Please try again! <br>";
+	    include "upload.php";
+	}
+	  
 }
-
+	
 function deleteFile($dir,$filename)
 {
    unlink($dir.$filename);	

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/DetailView.php,v 1.5 2004/12/16 10:28:55 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/DetailView.php,v 1.6 2004/12/29 06:01:23 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,6 +24,10 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/Emails/Forms.php');
+require_once('include/upload_file.php');
+
+global $app_strings;
+global $mod_strings;
 
 $focus = new Email();
 
@@ -53,6 +57,21 @@ if (isset($_REQUEST['account_name']) && is_null($focus->parent_name)) {
 if (isset($_REQUEST['account_id']) && is_null($focus->parent_id)) {
 	$focus->parent_id = $_REQUEST['account_id'];
 }
+if (isset($_REQUEST['parent_name'])) {
+        $focus->parent_name = $_REQUEST['parent_name'];
+}
+if (isset($_REQUEST['parent_id'])) {
+        $focus->parent_id = $_REQUEST['parent_id'];
+}
+if (isset($_REQUEST['parent_type'])) {
+        $focus->parent_type = $_REQUEST['parent_type'];
+}
+if (isset($_REQUEST['filename']) && is_null($focus->filename)) {
+        $focus->filename = $_REQUEST['filename'];
+}
+elseif (is_null($focus->parent_type)) {
+        $focus->parent_type = $app_list_strings['record_type_default_key'];
+}
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -71,14 +90,16 @@ if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("ID", $focus->id);
-$xtpl->assign("PARENT_NAME", $focus->parent_name);	
+$xtpl->assign("PARENT_TYPE", $app_list_strings['record_type_display'][$focus->parent_type]);
 if (isset($focus->parent_type)) 
 {
 	$xtpl->assign("PARENT_MODULE", $focus->parent_type);
-	$xtpl->assign("PARENT_TYPE", $app_list_strings['record_type_display'][$focus->parent_type]);
+//	$xtpl->assign("PARENT_TYPE", $app_list_strings['record_type_display'][$focus->parent_type]);
 }
-$xtpl->assign("PARENT_ID", $focus->parent_id);	
+$xtpl->assign("PARENT_NAME", $focus->parent_name);
+$xtpl->assign("PARENT_ID", $focus->parent_id);           	
 $xtpl->assign("NAME", $focus->name);
 $xtpl->assign("ASSIGNED_TO", $focus->assigned_user_name);
 
@@ -90,7 +111,23 @@ $xtpl->assign("DESCRIPTION", $focus->description);
 
 $xtpl->assign("DURATION_HOURS", $focus->duration_hours);
 $xtpl->assign("DURATION_MINUTES", $focus->duration_minutes);
+$xtpl->assign("FILENAME",$focus->filename);
 
+if ( empty($focus->filename))
+{
+        $xtpl->assign("FILENAME_TEXT", "");
+        $xtpl->assign("FILENAME", "");
+}
+else
+{
+        $xtpl->assign("FILENAME_TEXT", "(".$focus->filename.")");
+        $xtpl->assign("FILENAME", $focus->filename);
+}
+
+//echo '<br>id : '.$focus->id;
+//echo '<br>name : '.$focus->name;
+//echo '<br>filename : '.$focus->filename;
+//echo '<br>description : '.$focus->description;
   if($entityDel)
         {
                $xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
@@ -100,8 +137,6 @@ $xtpl->assign("DURATION_MINUTES", $focus->duration_minutes);
 $xtpl->parse("main");
 
 $xtpl->out("main");
-
-echo "<BR>\n";
 
 // Now get the list of invitees that match this one.
 

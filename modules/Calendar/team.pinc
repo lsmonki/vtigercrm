@@ -422,7 +422,7 @@ class team extends tutos_base {
         $x = $x->read($f,$x);
         acl_raise($this,$f,$tutos[seeok]);
         acl_raise($x,$this->id,$tutos[seeok]);
-        acl_save($x);
+        #acl_save($x);
         $this->modified[] = array ( "field" => "TeamAdd" ,
                                     "old" => "-1",
                                     "new" => $f,
@@ -624,7 +624,7 @@ class team extends tutos_base {
       return;
     }
     $obj->teamlist = array();
-    team::obj_read_int($obj,$obj->id);
+   # team::obj_read_int($obj,$obj->id);
   }
   /**
    * create a link to a overview page

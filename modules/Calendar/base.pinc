@@ -641,8 +641,8 @@ class tutos_base {
       $msg .= $x->obj_save($current_user,$this);
     }
 
-    $msg .= acl_save($this);
-    $msg .= history_save($this);
+    #$msg .= acl_save($this);
+    #$msg .= history_save($this);
 
     # all exiting objects are hashed so we do not need to save the id
     if ( ! isset($g_hash[$this->id]) ) {
@@ -664,20 +664,20 @@ class tutos_base {
     } else {
       $x = $this->uid;
     }
-    $q = "DELETE from ". $this->dbconn->prefix . $this->tablename_hash ." where id =  ". $x ;
-    $this->dbconn->Exec($q);
-    $q = "INSERT into ". $this->dbconn->prefix . $this->tablename_hash ." (id,tutostype) values (". $x .",". $this->gettypeid() .")";
-    $this->dbconn->Exec($q);
-    return $msg;
+    #$q = "DELETE from ". $this->dbconn->prefix . $this->tablename_hash ." where id =  ". $x ;
+    #$this->dbconn->Exec($q);
+    #$q = "INSERT into ". $this->dbconn->prefix . $this->tablename_hash ." (id,tutostype) values (". $x .",". $this->gettypeid() .")";
+    #$this->dbconn->Exec($q);
+    #return $msg;
   }
   /**
    * delete the object id (used for faster getObject)
    */
   function del_obj_id() {
     $msg = "";
-    $q = "DELETE FROM ". $this->dbconn->prefix . $this->tablename_hash ." WHERE id = ". $this->id;
-    $this->dbconn->Exec($q);
-    return $msg;
+    #$q = "DELETE FROM ". $this->dbconn->prefix . $this->tablename_hash ." WHERE id = ". $this->id;
+    #$this->dbconn->Exec($q);
+    #return $msg;
   }
   /**
    * Delete object and references to this object from DB

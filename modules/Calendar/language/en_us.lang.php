@@ -5,7 +5,7 @@
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
+ * the specific apmt_locationuage governing rights and limitations under the License.
  * The Original Code is:  SugarCRM Open Source
  * The Initial Developer of the Original Code is SugarCRM, Inc.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
@@ -14,7 +14,7 @@
  ********************************************************************************/
 /*********************************************************************************
  * $Header$
- * Description:  Defines the English language pack
+ * Description:  Defines the English apmt_locationuage pack
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
@@ -25,6 +25,9 @@ $mod_strings = Array(
 'LBL_MODULE_TITLE'=>'Calendar: Home',
 'LBL_MODULE_APPOINTMENT'=>'Calendar: Appointment',
 'LBL_MODULE_APPOINTMENT_DETAIL'=>'Calendar: Appointment Detail',
+'LBL_CONTACT'=>'Contact:',
+'LBL_SAVE'=>'Save',
+'LBL_RESET'=>'Cancel',
 
 'LBL_APPNT' => 'Appointment',
 'LBL_NEW_APPNT' => 'New Appointment',
@@ -48,6 +51,28 @@ $mod_strings = Array(
 
 
 'LBL_APPCREATED_BY' => 'Created by',
+'LBL_APP_START_DATE' => 'Start Date',
+'LBL_APP_START_TIME' => 'Start Time',
+'LBL_APP_END_DATE' => 'End Date',
+'LBL_APP_END_TIME' => 'End Time',
+'LBL_AT_DATE_TIME' => 'at',
+
+'LBL_APP_LOCATION' => 'Location',
+'LBL_APP_IGNORE_TIME' => 'ignore above times',
+'LBL_SUBJECT'=>'Subject',
+'LBL_APP_DESCRIPTION' => 'Description',
+'LBL_CONTACT'=>'Contact:',
+
+'LBL_APP_IGNORE_TIME2' => '(i.e. the appointment takes place<br />at no particular time on these day(s) )',
+
+'AppLoc'=> Array('0' => 'Office'
+			, '1' => 'Out'
+			, '2' => 'Vacation'
+			, '3' => 'sick'
+			, '4' => 'Postponed'
+			, '5' => 'Option'
+			, '6' => 'Private'),
+
 //DON'T CONVERT THESE THEY ARE MAPPINGS
 'db_last_name' => 'LBL_LIST_LAST_NAME',
 'db_first_name' => 'LBL_LIST_FIRST_NAME',

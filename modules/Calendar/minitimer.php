@@ -11,7 +11,7 @@ include_once $calpath .'webelements.p3';
 include_once $calpath .'permission.p3';
 
 /* Check if user is allowed to use it */
-check_user();
+//check_user();
 loadlayout();
 
 global $theme;

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.10 2004/12/23 13:59:37 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.13 2004/12/30 09:37:23 jack Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -34,7 +34,7 @@ foreach($focus->column_fields as $field)
 	{
 		$value = $_REQUEST[$field];
 		$focus->$field = $value;
-		
+                $local_log->debug("saving note: $field is $value");
 	}
 }
 
@@ -47,8 +47,14 @@ foreach($focus->additional_column_fields as $field)
 		
 	}
 }
+if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
 
+$focus->filename = $_REQUEST['file_name'];
+$focus->parent_id = $_REQUEST['parent_id'];
+
+//echo 'file name : '.$_REQUEST['file_name'].'..'.$focus->filename;
 $focus->save();
+$return_id = $focus->id;
 
 //this is to receive the data from the Select Users button
 $_REQUEST['assigned_user_id']=$_REQUEST['user_id'];
@@ -70,32 +76,31 @@ else
 	$module = $_REQUEST['source_module'];
 }
 
-//subject, contents
+$_REQUEST['filename']=$focus->filename;
 
+//subject, contents
 $_REQUEST['name'] = $focus->name;
 $_REQUEST['description'] = $focus->description;
-
-$return_id = $focus->id;
-
-
-function deleteFile($dir,$filename)
-{
-   unlink($dir.$filename);	
-}
-
-
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Emails";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
+if(isset($_REQUEST['filename']) && $_REQUEST['filename'] != "") $return_id = $_REQUEST['filename'];
 
 $local_log->debug("Saved record with id of ".$return_id);
 
 $uploaddir = $_SERVER['DOCUMENT_ROOT'] ."/test/upload/" ;// set this to wherever
-if($_FILES["uploadfile"])
-{
+
+$binFile = $_FILES['uploadfile']['name'];
+$filename = basename($binFile);
+$filetype= $_FILES['uploadfile']['type'];
+$filesize = $_FILES['uploadfile']['size'];
+
+//echo 'file name,type,size : ',$filename.' .. '.$filetype.' .. '.$filesize;
+
+
 if(move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$uploaddir.$_FILES["uploadfile"]["name"])) 
 {
   $binFile = $_FILES['uploadfile']['name'];
@@ -129,10 +134,7 @@ if(move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$uploaddir.$_FILES["uplo
     {
 	    $parent_type = 'Case';
     }		
-   elseif($_REQUEST['return_module'] == 'Emails')
-    {
-	    $parent_type = 'Emails';
-    }	
+
     $parent_id = $_REQUEST['return_id'];	 			
 
     $sql = "INSERT INTO email_attachments ";
@@ -142,8 +144,8 @@ if(move_uploaded_file($_FILES["uploadfile"]["tmp_name"],$uploaddir.$_FILES["uplo
     $result = mysql_query($sql);
      mysql_close();
      deleteFile($uploaddir,$filename);
-     header("Location: index.php?action=DetailView&module=$ret_module&record=$parent_id");	
-      }
+//     header("Location: index.php?action=DetailView&module=$ret_module&record=$parent_id&filename=$filename");	
+     }
     else
       {
     include('themes/'.$theme.'/header.php');
@@ -162,7 +164,12 @@ else
   $errorCode =  $_FILES['uploadfile']['error'];
   echo "Problems in file upload. Please try again! <br>" .$errorCode;
 }
+
+function deleteFile($dir,$filename)
+{
+   unlink($dir.$filename);	
 }
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+//echo 'return ..'.$return_module.' / '.$return_action.' / '.$return_id.'...'.$filename;
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&filename=$filename");
 ?>

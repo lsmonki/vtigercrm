@@ -26,6 +26,7 @@
  include_once $calpath .'appointment.pinc';
 
  require_once('include/database/PearDatabase.php');
+ require_once('modules/Calendar/preference.pinc');
 
  /* Check if user is allowed to use it */
  //check_user();
@@ -36,11 +37,17 @@
   * display a appointment for changing
   */
  class app_new extends layout {
+
+	Function app_new()
+	{
+		$this->db = new PearDatabase();
+                $this->pref = new preference();	
+	}
    /**
     * display the info
     */
    Function info() {
-     global $tutos, $lang,$table,$callink,$app_strings,$mod_strings;
+     global $tutos, $lang,$table,$callink,$app_strings,$mod_strings,$apmt_location;
 
      $a_checked[0] = "";
      $a_checked[1] = "";
@@ -104,25 +111,25 @@
 	 if ( $this->obj->id > 0 ) {
        echo "<tr>\n";
        echo "<td class=\"desc\">". $mod_strings['LBL_APPCREATED_BY'] .":</td>\n";
-       echo "<td colspan=\"5\">". $this->obj->creator->getLink() . "&nbsp;" . $lang['atDateTime'] ."&nbsp;". $this->obj->creation->getDateTime()."</td>";
+       echo "<td colspan=\"5\">". $this->obj->creator->getLink() . "&nbsp;" . $mod_strings['LBL_AT_DATE_TIME'] ."&nbsp;". $this->obj->creation->getDateTime()."</td>";
        //echo "<td align=\"right\">" .acl_link($this->obj) ."</td>\n";
        echo "</tr>\n";
      }
      # START
      echo "<tr>\n";
-     echo $this->showfieldc($lang['StartDate'],0,"start_d");
+     echo $this->showfieldc($mod_strings['LBL_APP_START_DATE'],0,"start_d");
      echo "<td colspan=\"2\">";
      $this->obj->start->EnterDate("start");
      echo "</td>";
      echo "<td valign=\"top\" class=\"desc\">&nbsp;<b>";
      if ( !isset($_SERVER['HTTP_USER_AGENT']) || ereg("Lynx",$_SERVER['HTTP_USER_AGENT']) || ereg("w3m",$_SERVER['HTTP_USER_AGENT']) ) {
-       echo $lang['StartTime'];
+       echo $mod_strings['LBL_APP_START_TIME'];
      } else {
        echo "<a href=\"JavaScript: var d = document.forms[0];
 mywindow = window.open('', 'timer', 'resizable=yes,width=100,height=415,top=100,left=450');
 mywindow.location.href = '". $callink ."minitimer&f=start&amp;". SID ."'; mywindow.focus();\"
  onmouseover=\"self.status='minitimer' ;return true\">";
-       echo $lang['StartTime'];
+       echo $mod_strings['LBL_APP_START_TIME'];
        echo "</a>\n";
      }
      echo ":</b>&nbsp;<br/>&nbsp;<font size=\"-1\">(HH:MM)</font></td>\n";
@@ -133,19 +140,19 @@ mywindow.location.href = '". $callink ."minitimer&f=start&amp;". SID ."'; mywind
      # END
      echo "</tr><tr>\n";
 
-     echo $this->showfieldc($lang['EndDate'],0,"end_d");
+     echo $this->showfieldc($mod_strings['LBL_APP_END_DATE'],0,"end_d");
      echo "<td colspan=\"2\">";
      $this->obj->end->EnterDate("end");
      echo "</td>\n";
      echo "<td valign=\"top\" class=\"desc\">&nbsp;<b>";
      if ( !isset($_SERVER['HTTP_USER_AGENT']) || ereg("Lynx",$_SERVER['HTTP_USER_AGENT']) || ereg("w3m",$_SERVER['HTTP_USER_AGENT']) ) {
-       echo $lang['EndTime'];
+       echo $mod_strings['LBL_APP_END_TIME'];
      } else {
        echo "<a href=\"JavaScript: var d = document.forms[0];
 mywindow = window.open('', 'timer', 'resizable=yes,width=100,height=415,top=100,left=450');
 mywindow.location.href = '". $callink."minitimer&f=end&amp;". SID ."'; mywindow.focus();\"
 onmouseover=\"self.status='minitimer' ;return true\">";
-       echo $lang['EndTime'];
+       echo $mod_strings['LBL_APP_END_TIME'];
        echo "</a>\n";
      }
      echo ":</b>&nbsp;<br />&nbsp;<font size=\"-1\">(HH:MM)</font></td>\n";
@@ -156,11 +163,11 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      echo "</tr><tr>\n";
 
      # LOCATION
-     echo $this->showfieldc($lang['Location2'],0,"outside");
+     echo $this->showfieldc($mod_strings['LBL_APP_LOCATION'],0,"outside");
      echo " <td colspan=\"2\">\n";
      echo "  <select id=\"outside\" name=\"outside\">\n";
-     foreach ($lang['AppLoc'] as $i => $f) {
-       echo "   <option value=\"". $i ."\"". ($this->obj->outside == $i ? " selected=\"selected\"":"") .">". $lang['AppLoc'][$i] ."</option>\n";
+     foreach ($mod_strings['AppLoc'] as $i => $f) {
+       echo "   <option value=\"". $i ."\"". ($this->obj->outside == $i ? " selected=\"selected\"":"") .">". $mod_strings['AppLoc'][$i] ."</option>\n";
      }
      echo "  </select>\n";
      echo " </td>\n";
@@ -168,15 +175,15 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      # Ignore times
      echo " <td colspan=\"3\" valign=\"top\">\n";
      echo "<input type=\"checkbox\" name=\"t_ignore\" value=\"1\"". ($this->obj->t_ignore == 1 ? " checked=\"checked\"":"") ." />\n";
-     echo $lang['IgnoreTime'] ."<br/>\n";
-     echo "<font size=\"-1\">". $lang['IgnoreTime2'] ."</font>";
+     echo $mod_strings['LBL_APP_IGNORE_TIME'] ."<br/>\n";
+     echo "<font size=\"-1\">". $mod_strings['LBL_APP_IGNORE_TIME2'] ."</font>";
      echo " </td>\n";
      echo "</tr><tr>\n";
      echo $this->showfieldc($mod_strings['LBL_SUBJECT'],1,"subject");
      echo "<td><input type=\"text\" name=\"subject\" value=\"\" size=\"40\" maxlength=\"60\"></td>\n";	
      echo "</tr><tr>\n";
 
-     echo $this->showfield($lang['Description'],0,"descr");
+     echo $this->showfield($mod_strings['LBL_APP_DESCRIPTION'],0,"descr");
      echo $this->textarea("descr",5,$table['appointment1']['description'][size],$this->obj->descr);
      echo "</tr>\n";
      echo "<tr>\n";
@@ -281,7 +288,7 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      echo $this->getHidden();
      echo "</form>\n";
      echo $this->setfocus("appnew.descr");
-     echo $lang['FldsRequired'] ."\n";
+     echo $mod_strings['FldsRequired'] ."\n";
    }
    /**
     * navigate
@@ -297,7 +304,7 @@ onmouseover=\"self.status='minitimer' ;return true\">";
      $p = array();
      $this->obj = new appointment($this->dbconn);
      if ( isset($_GET['id']) ) {
-       $this->name =  $lang['AppointModify'];
+       $this->name =  $mod_strings['AppointModify'];
        $this->obj = $this->obj->read($_GET['id'],$this->obj);
        if ($this->obj->id < 0) {
          $msg .= sprintf($lang['Err0040'],$lang[$this->obj->getType()]);
@@ -318,7 +325,7 @@ onmouseover=\"self.status='minitimer' ;return true\">";
          $p[$i] = 2;
        }
      } else {
-       $this->name = $lang['AppointCreate'];
+       $this->name = $mod_strings['AppointCreate'];
        /* New event */
        if (isset($_GET['t']) && is_numeric($_GET['t'])) {
          $this->obj->start->setDateTime($_GET['t']);

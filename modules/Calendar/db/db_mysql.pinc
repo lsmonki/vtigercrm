@@ -135,17 +135,17 @@ class db_mysql extends tutos_db {
   /* ---------------------------------------------------------------------------
    */
   function nextid($name = "id") {
-    $q = "UPDATE ". $this->prefix . $name ." set nextval=last_insert_id(nextval+1)";
-    $this->exec($q);
-    $q = "SELECT last_insert_id()";
-    $r = $this->exec($q);
+    #$q = "UPDATE ". $this->prefix . $name ." set nextval=last_insert_id(nextval+1)";
+    #$this->exec($q);
+    #$q = "SELECT last_insert_id()";
+    #$r = $this->exec($q);
 
-    if ( 1 != $r->numrows()) {
-      Fatal_Error("got no id",$q);
-    }
-    $id = $r->get(0,0);
-    $r->free();
-    return $id;
+    #if ( 1 != $r->numrows()) {
+    #  Fatal_Error("got no id",$q);
+    #}
+    #$id = $r->get(0,0);
+    #$r->free();
+    #return $id;
   }
   /* ---------------------------------------------------------------------------
    */

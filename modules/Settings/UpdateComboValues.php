@@ -12,6 +12,7 @@ require_once('database/DatabaseConnection.php');
 $fld_module=$_REQUEST["field_module"];
 $fldName=$_REQUEST["field_name"];
 $tableName=$_REQUEST["table_name"];
+$columnName=$_REQUEST["column_name"];
 $fldPickList =  $_REQUEST['listarea'];
 
 //Deleting the already existing values
@@ -28,5 +29,5 @@ for($i = 0; $i < $count; $i++)
 		mysql_query($query);
 	}
 }
-header("Location:index.php?module=Settings&action=EditComboField&fld_module=".$fld_module."&fld_name=".$fldName."&table_name=".$tableName);
+header("Location:index.php?module=Settings&action=EditComboField&fld_module=".$fld_module."&fld_name=".$fldName."&table_name=".$tableName."&column_name=".$columnName);
 ?>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.7 2004/12/28 09:22:23 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.8 2004/12/29 05:21:55 jack Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -624,9 +624,9 @@ class Account extends SugarBean {
 //check if the custom table exists or not in the first place
 function checkIfCustomTableExists()
 {
- $result = mysql_query("SHOW tables like 'accountcf'");
+ $result = mysql_query("select * from accountcf");
  $testrow = mysql_num_fields($result);
-	if(count($testrow) > 1)
+	if($testrow > 1)
 	{
 		$exists=true;
 	}

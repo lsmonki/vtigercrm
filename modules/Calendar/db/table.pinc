@@ -7,7 +7,7 @@
  *  CVS Info:  $Id$
  *  $Author$
  */
-
+/*
 $table['objectids'] = array(
   name => "objectids",
   Desc => "TUTOS object id - type referece",
@@ -182,7 +182,7 @@ $tableidx['team3'] = array(
   Desc  => "ref user - team",
 );
 
-
+*/
 $table['appointment1'] = array(
   name => "calendar",
   Desc => "TUTOS calendar",
@@ -204,6 +204,7 @@ $table['appointment1'] = array(
   "creator"     => array(type => "ID_TYPE",      constraints => "",    Desc => "creator ID"),
   "creation"    => array(type => "TS_TYPE",      constraints => "",    Desc => "creation date")
 );
+/*
 $table['crmcalendar'] = array(
   name => "crm_calendar",
   Desc => "TUTOS CRM calendar",
@@ -494,5 +495,5 @@ $sequence['main'] = array(
   'start' => 1000,
   Desc  => "main TUTOS sequencer",
 );
-
+*/
 ?>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.7 2004/12/16 15:58:40 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.8 2004/12/30 06:52:49 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -153,6 +153,10 @@ $mod_strings = Array(
 'LBL_IMPORT_OPPURTUNITIES'=>'Import Opportunities',
 
 'LBL_ROLE_DETAILS'=>'Role Details',
+//added for vtigercrm4 rc
+'LBL_FILE'=> 'File Name',
+'LBL_UPLOAD'=>'Upload File',
+'LBL_ATTACH_FILE'=>'Attach Word Template ',
 
 );
 

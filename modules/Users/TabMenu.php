@@ -127,7 +127,7 @@ class Tab extends SugarBean {
 		mysql_query("insert into tabmenu values('','HelpDesk',1,14,'HelpDesk','','',0)");
 		mysql_query("insert into tabmenu values('','Products',1,15,'Products','','',0)");
 		mysql_query("insert into tabmenu values('','Calendar',1,16,'Calendar','','',0)");
-	
+		mysql_query("delete from tabmenu where name = 'Cases'");
 		//
 
 

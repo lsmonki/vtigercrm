@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/language/en_us.lang.php,v 1.3 2004/12/21 10:01:26 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/language/en_us.lang.php,v 1.4 2004/12/29 09:15:34 jack Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -59,6 +59,10 @@ $mod_strings = Array(
 // Added Fields
 // Contacts-SubPanelViewContactsAndUsers.php
 'LBL_BULK_MAILS'=>'Bulk Mails',
+'LBL_ATTACHMENT'=>'Attachment',
+'LBL_DESCRIPTION'=>'Description',
+'LBL_UPLOAD'=>'Upload',
+
 );
 
 ?>

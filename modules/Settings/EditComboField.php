@@ -17,6 +17,7 @@ global $app_list_strings;
 $fld_module=$_REQUEST["fld_module"];
 $fld_name=$_REQUEST["fld_name"];
 $tableName=$_REQUEST["table_name"];
+$columnName=$_REQUEST["column_name"];
 
 echo get_module_title("Settings", $mod_strings['LBL_MODULE_NAME'].": ".$mod_strings['EditPickListValues'], true);
 echo '<br>';
@@ -31,13 +32,14 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("FIELDNAME", $fld_name);
 $xtpl->assign("TABLENAME", $tableName);
+$xtpl->assign("COLUMNNAME", $columnName);
 $xtpl->assign("FIELDMODULE", $fld_module);
 $query = "select * from ".$tableName;
 $result = mysql_query($query);
 $fldVal='';
 while($row = mysql_fetch_array($result))
 {
-	$fldVal .= $row[$tableName];
+	$fldVal .= $row[$columnName];
 	$fldVal .= "\n";	
 }
 $xtpl->assign("FLDVALUES", $fldVal);

@@ -128,10 +128,10 @@
      $adr->birthday = new DateTime();
      $adr->creator = $adr;
 
-     $q = "DELETE FROM ". $adr->tablename ." WHERE f_name = ". $adr->dbconn->String($adr->f_name) ." AND l_name = ". $adr->dbconn->String($adr->l_name);
-     $adr->dbconn->exec($q);
+     #$q = "DELETE FROM ". $adr->tablename ." WHERE f_name = ". $adr->dbconn->String($adr->f_name) ." AND l_name = ". $adr->dbconn->String($adr->l_name);
+     #$adr->dbconn->exec($q);
 
-     $msg .= $adr->save();
+     #$msg .= $adr->save();
 
      $this->user = new tutos_user($this->obj);
      $this->user->updatepw = 1;
@@ -140,10 +140,10 @@
      $this->user->id = $adr->id;
      $this->user->admin = 1;
 
-     $q = "DELETE FROM ". $this->user->tablename ." WHERE login = ". $this->user->dbconn->String($this->user->login);
-     $this->user->dbconn->exec($q);
+     #$q = "DELETE FROM ". $this->user->tablename ." WHERE login = ". $this->user->dbconn->String($this->user->login);
+     #$this->user->dbconn->exec($q);
 
-     $msg = $this->user->save();
+     #$msg = $this->user->save();
 #     echo $msg ."<br />\n";
    }
    /**

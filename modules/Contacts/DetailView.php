@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.9 2004/12/28 06:06:04 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.11 2004/12/30 07:37:00 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -100,7 +100,18 @@ if($entityDel)
 		$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
 	}
 
-$xtpl->assign("MERGEBUTTON","<td><input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.return_action.value='ListView';this.form.action.value='Merge'; return confirm('$app_strings[NTC_MERGE_CONFIRMATION]')\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+$xtpl->assign("MERGEBUTTON","<td><input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+
+require_once('modules/Users/UserInfoUtil.php');
+$wordTemplateResult = fetchWordTemplateList();
+$tempCount = mysql_num_rows($wordTemplateResult);
+$tempVal = mysql_fetch_array($wordTemplateResult);
+for($templateCount=0;$templateCount<$tempCount;$templateCount++)
+{
+$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
+$tempVal = mysql_fetch_array($wordTemplateResult);
+}
+$xtpl->assign("WORDTEMPLATEOPTIONS","<td>&nbsp;&nbsp;Select Merge File:<select name=\"mergefile\">".$optionString."</select></td>");
 
 $xtpl->parse("main");
 $xtpl->out("main");

@@ -27,19 +27,21 @@
 <tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
 
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
-<form action="index.php" method="post" name="DetailView" id="form">
+<!--form action="index.php" method="post" name="DetailView" id="form"-->
 <tr><td>&nbsp;</td>
 	<td>
 		<table cellpadding="0" cellspacing="5" border="0">
+			<form  name="DetailView" method="POST" id="form" action="index.php">
 			<input type="hidden" name="module" value="Emails">
 			<input type="hidden" name="record" value="{ID}">
 			<input type="hidden" name="isDuplicate" value=false>			
 			<input type="hidden" name="action">
 			<input type="hidden" name="contact_id" value="{CONTACT_ID}">
 			<input type="hidden" name="user_id" value="{USER_ID}">
-			<input type="hidden" name="return_module">
-			<input type="hidden" name="return_action">
-			<input type="hidden" name="return_id">
+			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+			<input type="hidden" name="return_action" value="{RETURN_ACTION}">
+			<input type="hidden" name="return_id" value="{RETURN_ID}">
+			<!--input type="hidden" name="file_name" value="{FILENAME}"-->
 			<input type="hidden" name="source_module">
 			<input type="hidden" name="entity_id">
 		<tr>
@@ -75,8 +77,11 @@
 	<td width="20%" class="dataLabel">{MOD.LBL_SUBJECT}</td>
 	<td colspan='3' class="dataField">{NAME}</td>
 	</tr><tr>
+        <td width="20%" class="dataLabel">{MOD.LBL_FILENAME}</td>
+	<td width="80%" colspan='3' class="dataField"><a href=##### >{FILENAME}</a></td>
+	</tr><tr>
 	<td width="20%" valign="top" valign="top" class="dataLabel">{MOD.LBL_BODY}</td>
-	<td colspan="3" class="dataField"><textarea readonly tabindex='3' name='description' cols="100" readonly rows="30">{DESCRIPTION}</textarea></td>
+	<td colspan="3" class="dataField"><textarea readonly tabindex='3' name='description' cols="100"  rows="30">{DESCRIPTION}</textarea></td>
 </tr></table>
 </td></tr></table>
 <!-- END: main -->

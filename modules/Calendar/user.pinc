@@ -816,9 +816,9 @@ class tutos_user extends tutos_address {
       $query = $q->getUpdate();
     }
     $this->dbconn->Exec($query);
-    $msg .= acl_save($this);
-    $msg .= acl_savedefault($this);
-    $msg .= history_save($this);
+    #$msg .= acl_save($this);
+    #$msg .= acl_savedefault($this);
+    #$msg .= history_save($this);
     return $msg;
   }
   

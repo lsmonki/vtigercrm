@@ -213,6 +213,14 @@ if(isset($_REQUEST['actiontype']))
   }
 }
 
+function fetchWordTemplateList()
+{
+  
+  $sql_word = "select filename from wordtemplatestorage"; 
+  $result=mysql_query($sql_word);
+  return $result;
+}
+
 
 
 

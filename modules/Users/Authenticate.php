@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Authenticate.php,v 1.6 2004/12/21 20:01:38 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Authenticate.php,v 1.7 2004/12/30 06:57:47 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -45,7 +45,7 @@ if($focus->is_authenticated())
         $Signin = $loghistory->user_login($focus->user_name,$usip,$intime);
 
 	//Authentication for tutos
-        include('modules/Calendar/Authenticate.php');
+        //include('modules/Calendar/Authenticate.php');
 
 	// save the user information into the session
 	// go to the home screen

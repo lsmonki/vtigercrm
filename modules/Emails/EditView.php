@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Emails/EditView.php,v 1.5 2004/12/23 14:04:10 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Emails/EditView.php,v 1.7 2004/12/30 09:16:17 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -24,22 +24,35 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/Emails/Forms.php');
-require_once('modules/Emails/Forms.php');
 
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
 global $current_user;
+// Unimplemented until jscalendar language files are fixed
+// global $current_language;
+// global $default_language;
+// global $cal_codes;
+
 $focus = new Email();
+
 
 if(isset($_REQUEST['record'])) {
     $focus->retrieve($_REQUEST['record']);
 }
-if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
-	$focus->id = "";
+$old_id = '';
+
+if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
+{
+        if (! empty($focus->filename) )
+        {
+         $old_id = $focus->id;
+        }
+        $focus->id = "";
 }
+
 //setting default date and time
- if (!isset($focus->date_start)) $focus->date_start = date('Y-m-d');
+if (!isset($focus->date_start)) $focus->date_start = date('Y-m-d');
 if (!isset($focus->time_start)) $focus->time_start = date('H:i');
 if (!isset($focus->duration_hours)) $focus->duration_hours = "1";
 
@@ -50,10 +63,10 @@ if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) {
 if (isset($_REQUEST['contact_id']) && is_null($focus->contact_id)) {
 	$focus->contact_id = $_REQUEST['contact_id'];
 }
-if (isset($_REQUEST['parent_name'])) {
+if (isset($_REQUEST['parent_name']) && is_null($focus->parent_name)) {
 	$focus->parent_name = $_REQUEST['parent_name'];
 }
-if (isset($_REQUEST['parent_id'])) {
+if (isset($_REQUEST['parent_id']) && is_null($focus->parent_id)) {
 	$focus->parent_id = $_REQUEST['parent_id'];
 }
 if (isset($_REQUEST['parent_type'])) {
@@ -96,6 +109,7 @@ $xtpl->assign("PARENT_RECORD_TYPE", $focus->parent_type);
 $xtpl->assign("PARENT_ID", $focus->parent_id);
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
+$xtpl->assign("OLD_ID", $old_id );
 
 $xtpl->assign("DATE_START", $focus->date_start);
 $xtpl->assign("TIME_START", substr($focus->time_start,0,5));

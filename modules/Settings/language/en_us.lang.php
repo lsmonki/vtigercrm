@@ -104,9 +104,8 @@ $mod_strings = Array(
 'PickList'=>'Pick List',
 
 //added for patch2
-'USERGROUPLIST'=>'Groups'
-
-
-
+'USERGROUPLIST'=>'Groups',
+'EMAILTEMPLATES'=>'EmailTemplates',
+'WORDINTEGRATION'=>'Word Templates'
 );
 

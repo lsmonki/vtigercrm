@@ -539,7 +539,6 @@ Function Fatal_Error ($text1,$text2 = "") {
     }
   }
   if(!is_object($dbconn))
-  echo "dfdf" ;
   if ( isset($dbconn) && is_object($dbconn) ) {
     $dbconn->Close();
   }
@@ -1685,7 +1684,7 @@ Function asEmail($adr,$email,$name,$subject = "TUTOS") {
   *
   */
  Function submit_reset($pre,$t1,$f1,$t2,$f2,$post) {
-   global $lang;
+   global $lang,$mod_strings;
 
    if ( $pre > 0 ) {
      echo " <td colspan=\"".$pre."\">&nbsp;</td>\n";
@@ -1697,13 +1696,13 @@ Function asEmail($adr,$email,$name,$subject = "TUTOS") {
      echo " <td class=\"desc\" colspan=\"". abs($t1) ."\"><label for=\"OK\">". $lang['InputOk'] ."</label>&nbsp;</td>\n";
    }
    if ( $f1 > 0 ) {
-     echo " <td colspan=\"".$f1."\">&nbsp;<input id=\"OK\" name=\"OK\" class=\"button\" type=\"submit\" value=\"". $lang['Enter'] ."\" title=\"". $lang['Enter'] ."\" /></td>\n";
+     echo " <td colspan=\"".$f1."\">&nbsp;<input id=\"OK\" name=\"OK\" class=\"button\" type=\"submit\" value=\"". $mod_strings['LBL_SAVE'] ."\" title=\"". $mod_strings['LBL_SAVE'] ."\" /></td>\n";
    }
    if ( $t2 > 0 ) {
      echo " <td class=\"desc\" colspan=\"".$t2."\" align=\"right\">&nbsp;<label for=\"RESET\">". $lang['Reset'] ."</label>&nbsp;</td>\n";
    }
    if ( $f2 > 0 ) {
-     echo " <td colspan=\"".$f2."\">&nbsp;<input id=\"RESET\" name=\"RESET\" class=\"button\" type=\"reset\" value=\"". $lang['Reset'] ."\" title=\"". $lang['Reset']."\" /></td>\n";
+     echo " <td colspan=\"".$f2."\">&nbsp;<input id=\"RESET\" name=\"RESET\" class=\"button\" type=\"reset\" value=\"". $mod_strings['LBL_RESET'] ."\" title=\"". $mod_strings['LBL_RESET']."\" /></td>\n";
    }
    if ( $post > 0 ) {
      echo " <td colspan=\"".$post."\">&nbsp;</td>\n";

@@ -351,16 +351,16 @@ class database extends tutos_base {
       $q->addFV("creator",$this->creator,"OBJ");
       $q->addFV("creation",$this->creation,"DATETIME");
 
-      $query = $q->getInsert();
+      #$query = $q->getInsert();
     } else {
       $q->addWC("id",$this->id,"");
-      $query = $q->getUpdate();
+      #$query = $q->getUpdate();
     }
 
-    $this->dbconn->Exec($query);
+    #$this->dbconn->Exec($query);
     $msg .= parent::save();
 
-    return $msg;
+    #return $msg;
   }
   /* ---------------------------------------------------------------------------
    * checks if the database type is supported in this PHP environment

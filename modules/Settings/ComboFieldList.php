@@ -68,7 +68,7 @@ foreach($custFldArray as $custFldName => $custFldTableName)
 	}
 	$standCustFld .= '<tr class="'.$trowclass.'">';
 	$standCustFld .= '<td width="34%" height="21"><p style="margin-left: 10;">'.$custFldName.'</td>';
-	$standCustFld .= '<td width="33%" height="21"><p style="margin-left: 10"><a href="index.php?module=Settings&action=EditComboField&fld_module='.$fld_module.'&fld_name='.$custFldName.'&table_name='.$custFldTableName.'">'.$mod_strings['Edit'].'</a></td></tr>';
+	$standCustFld .= '<td width="33%" height="21"><p style="margin-left: 10"><a href="index.php?module=Settings&action=EditComboField&fld_module='.$fld_module.'&fld_name='.$custFldName.'&table_name='.$custFldTableName.'&column_name='.$custFldTableName.'">'.$mod_strings['Edit'].'</a></td></tr>';
 	$i++; 
 }
 $xtpl->assign("MOD", $mod_strings);
