@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.20 2005/01/10 08:47:41 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.21 2005/01/11 14:24:56 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -146,11 +146,11 @@ include('modules/Opportunities/SubPanelView.php');
 echo "<BR>\n";
 
 // Now get the list of cases that match this one.
-$focus_list = & $focus->get_cases();
+//$focus_list = & $focus->get_cases();
 
-include('modules/Cases/SubPanelView.php');
+//include('modules/Cases/SubPanelView.php');
 
-echo "<BR>\n";
+//echo "<BR>\n";
 
 // Now get the list of activities that match this contact.
 $focus_tasks_list = & $focus->get_tasks();

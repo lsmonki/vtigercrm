@@ -33,6 +33,7 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 }
+
 /*
 //needed when creating a new contact with a default account value passed in 
 if (isset($_REQUEST['account_name']) && is_null($focus->account_name)) {

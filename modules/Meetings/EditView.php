@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Meetings/EditView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Meetings/EditView.php,v 1.5 2005/01/13 09:23:01 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -78,6 +78,7 @@ $log->info("Meeting detail view");
 $xtpl=new XTemplate ('modules/Meetings/EditView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
+
 
 // Unimplemented until jscalendar language files are fixed
 // $xtpl->assign("CALENDAR_LANG", ((empty($cal_codes[$current_language])) ? $cal_codes[$default_language] : $cal_codes[$current_language]));

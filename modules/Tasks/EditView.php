@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Tasks/EditView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Tasks/EditView.php,v 1.5 2005/01/13 11:44:40 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -98,6 +98,23 @@ $xtpl->assign("CONTACT_EMAIL", $focus->contact_email);
 $xtpl->assign("CONTACT_ID", $focus->contact_id);
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
+//create the html select code here and assign it
+$result = get_group_options();
+$nameArray = mysql_fetch_array($result);
+$GROUP_SELECT_OPTION = '<select name="assigned_group_name">';
+                   do
+                   {
+                    $groupname=$nameArray["name"];
+                    $GROUP_SELECT_OPTION .= '<option value="';
+                    $GROUP_SELECT_OPTION .=  $groupname;
+                    $GROUP_SELECT_OPTION .=  '">';
+                    $GROUP_SELECT_OPTION .= $nameArray["name"];
+                    $GROUP_SELECT_OPTION .= '</option>';
+                   }while($nameArray = mysql_fetch_array($result));
+                   $GROUP_SELECT_OPTION .='<option value=none>none</option>';
+                   $GROUP_SELECT_OPTION .= ' </select>';
+
+$xtpl->assign("ASSIGNED_USER_GROUP_OPTIONS",$GROUP_SELECT_OPTION);
 
 if (isset($focus->parent_type) && $focus->parent_type != "") {
 	$change_parent_button = "<input title='".$app_strings['LBL_CHANGE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_CHANGE_BUTTON_KEY']."' tabindex='2' type='button' class='button' value='".$app_strings['LBL_CHANGE_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=\"+ document.EditView.parent_type.value + \"&action=Popup&html=Popup_picker&form=TasksEditView\",\"test\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";

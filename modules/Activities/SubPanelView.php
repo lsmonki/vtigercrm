@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Activities/SubPanelView.php,v 1.9 2004/12/24 15:11:21 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Activities/SubPanelView.php,v 1.10 2005/01/16 11:54:04 jack Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -185,7 +185,7 @@ if ($currentModule == 'Opportunities') $button .= "<input type='hidden' name='pa
 if ($currentModule == 'Cases') $button .= "<input type='hidden' name='parent_type' value='Case'>\n<input type='hidden' name='parent_id' value='$focus->id'>\n<input type='hidden' name='parent_name' value='$focus->name'>\n";
 if ($currentModule == 'Contacts') {
 	$button .= "<input type='hidden' name='contact_id' value='$focus->id'>\n<input type='hidden' name='contact_name' value='$focus->first_name $focus->last_name'>\n";
-	$button .= "<input type='hidden' name='parent_type' value='Account'>\n<input type='hidden' name='parent_id' value='$focus->account_id'>\n<input type='hidden' name='parent_name' value='$focus->account_name'>\n";
+	$button .= "<input type='hidden' name='parent_type' value='Contacts'>\n<input type='hidden' name='parent_id' value='$focus->account_id'>\n<input type='hidden' name='parent_name' value='$focus->account_name'>\n";
 }
 $button .= "<input type='hidden' name='return_module' value='".$currentModule."'>\n";
 $button .= "<input type='hidden' name='return_action' value='".$action."'>\n";
@@ -266,7 +266,7 @@ if ($currentModule == 'Opportunities') $button .= "<input type='hidden' name='pa
 if ($currentModule == 'Cases') $button .= "<input type='hidden' name='parent_type' value='Case'>\n<input type='hidden' name='parent_id' value='$focus->id'>\n<input type='hidden' name='parent_name' value='$focus->name'>\n";
 if ($currentModule == 'Contacts') {
 	$button .= "<input type='hidden' name='contact_id' value='$focus->id'>\n<input type='hidden' name='contact_name' value='$focus->first_name $focus->last_name'>\n";
-	$button .= "<input type='hidden' name='parent_type' value='Account'>\n<input type='hidden' name='parent_id' value='$focus->account_id'>\n<input type='hidden' name='parent_name' value='$focus->account_name'>\n";
+	$button .= "<input type='hidden' name='parent_type' value='Contacts'>\n<input type='hidden' name='parent_id' value='$focus->account_id'>\n<input type='hidden' name='parent_name' value='$focus->account_name'>\n";
 }
 if ($currentModule == 'Leads') {
 	$button .= "<input type='hidden' name='lead_id' value='$focus->id'>\n<input type='hidden' name='lead_name' value='$focus->first_name $focus->last_name'>\n";

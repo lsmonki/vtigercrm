@@ -35,7 +35,10 @@ class UploadFile
 	{
 		global $site_URL;
 		global $upload_dir;
-                return $site_URL.'/'.$upload_dir.$bean_id.$stored_file_name;
+                //echo $site_URL.'/'.$upload_dir.$bean_id.$stored_file_name;
+                //echo $_ENV['HOSTNAME'] .':' .$_SERVER["SERVER_PORT"].'/'.$upload_dir.$bean_id.$stored_file_name;
+                return 'http://'.$_ENV['HOSTNAME'] .':' .$_SERVER["SERVER_PORT"].'/'.$upload_dir.$bean_id.$stored_file_name;
+                //return $site_URL.'/'.$upload_dir.$bean_id.$stored_file_name;
 	}
 
 	function duplicate_file($old_id, $new_id, $file_name)

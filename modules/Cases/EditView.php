@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Cases/EditView.php,v 1.2 2004/10/06 09:02:05 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Cases/EditView.php,v 1.4 2005/01/13 09:15:21 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.

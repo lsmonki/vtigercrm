@@ -17,7 +17,67 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
+
+<script language="javascript">
+function massDelete()
+{
+
+	x = document.massdelete.userselection.length;
+	idstring = "";
+ 
+	if ( x == undefined)
+	{
+	
+		if (document.massdelete.userselection.checked)
+		{
+			document.massdelete.idlist.value=document.massdelete.userselection.value;
+			//alert(document.massdelete.idlist.value);
+		}
+		else 
+		{
+			alert("Please select atleast one entity");
+			return false;
+		}
+                
+	}
+	else
+	{
+		xx = 0;
+		for(j = 0;j < x ;j++)
+		{
+			if(document.massdelete.userselection[j].checked)
+			{
+                 		idstring = document.massdelete.userselection[j].value +";"+idstring
+			        xx++	
+			}
+                       
+		}
+		if(xx != 0)
+		{
+                
+                	document.massdelete.idlist.value=idstring;
+			//alert(document.massdelete.idlist.value);
+		}
+		else
+		{
+			alert("Please select atleast one entity");
+			return false;
+		}
+	}       
+
+		document.massdelete.action="index.php?module=Users&action=MassDeleteUsers"
+
+}
+</script>
+
+
 <table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+
+
+<form name="massdelete"  method="post">
+<input type="hidden" name="idlist">
+	<tr><td COLSPAN="16"> <input class='button' type='submit' value='Delete User' onclick="return massDelete()"/></tr>
+
 <!-- BEGIN: list_nav_row -->	
 <tr height="20">
 		<td COLSPAN="15" class="listFormHeaderLinks" align="right">{START_LINK}&nbsp;&nbsp;{PREVIOUS_LINK}&nbsp;&nbsp;
@@ -26,7 +86,7 @@
 	<!-- END: list_nav_row -->
 	<tr><td COLSPAN="15" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
 	<tr height="20" class="moduleListTitle">
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+	<td WIDTH="1" class="blackLine"><td>Operation</td><IMG SRC="{IMAGE_PATH}blank.gif">
 		<td align='center' class="moduleListTitle"><IMG alt="Yahoo Messenger" SRC="modules/Yahoo/images/ym.gif"></td>
 	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
 	
@@ -47,7 +107,8 @@
 
 <!-- BEGIN: row -->
 <tr height=20 class={ROW_COLOR}>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td><td><INPUT type=checkbox NAME="userselection" value={USER.ID}></td>
+ </td>
 <!-- BEGIN: yahoo_id -->
 		<td align='center'><a href='http://edit.yahoo.com/config/send_webmesg?.target={USER.YAHOO_ID}'><img border=0 src='http://opi.yahoo.com/online?u={USER.YAHOO_ID}'&m=g&t=2'></a></td>
 <!-- END: yahoo_id -->
@@ -71,3 +132,5 @@
 <!-- END: row -->
 <tr><td COLSPAN="13">
 <!-- END: main -->
+</form>
+</table>

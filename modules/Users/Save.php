@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Users/Save.php,v 1.10 2005/01/08 15:02:16 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Users/Save.php,v 1.11 2005/01/13 06:06:27 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -103,7 +103,8 @@ else {
 		$return_id = $focus->id;
 	}
 }
-
+if(isset($focus->id) && $focus->id != '')
+{
 if(isset($_POST['user_role']))
 {
    updateUser2RoleMapping($_POST['user_role'],$focus->id);
@@ -111,6 +112,18 @@ if(isset($_POST['user_role']))
 if(isset($_POST['group_name']))
 {
    updateUsers2GroupMapping($_POST['group_name'],$focus->id);
+}
+}
+else
+{
+if(isset($_POST['user_role']))
+{
+   insertUser2RoleMapping($_POST['user_role'],$focus->id);
+}
+if(isset($_POST['group_name']))
+{
+   insertUsers2GroupMapping($_POST['group_name'],$focus->id);
+}
 }
 
 if(isset($_POST['return_module']) && $_POST['return_module'] != "") $return_module = $_POST['return_module'];

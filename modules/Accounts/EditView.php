@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Accounts/EditView.php,v 1.5 2004/12/07 11:22:51 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Accounts/EditView.php,v 1.7 2005/01/13 09:04:59 jack Exp $
  * Description:  TODO To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -34,7 +34,8 @@ global $current_user;
 
 $focus = new Account();
 
-if(isset($_REQUEST['record'])) {
+if(isset($_REQUEST['record'])) 
+{
     $focus->retrieve($_REQUEST['record']);
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {

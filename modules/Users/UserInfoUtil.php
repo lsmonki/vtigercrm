@@ -183,6 +183,25 @@ function fetchActionReferenceEntityValues($parentrolename)
 
 function updateUser2RoleMapping($roleid,$userid)
 {
+  $sqldelete = "delete from user2role where userid = '" .$userid ."'";
+  $result_delete = mysql_query($sqldelete);
+  $sql = "insert into user2role(userid,rolename) values('" .$userid ."','" .$roleid ."')";
+  $result = mysql_query($sql);
+}
+
+
+function updateUsers2GroupMapping($groupname,$userid)
+{
+
+  $sqldelete = "delete from users2group where userid = '" .$userid ."'";
+  $result_delete = mysql_query($sqldelete);
+  $sql = "insert into users2group(groupname,userid) values('" .$groupname ."','" .$userid ."')";
+  $result = mysql_query($sql);
+}
+
+
+function insertUser2RoleMapping($roleid,$userid)
+{
 
   $sql = "insert into user2role(userid,rolename) values('" .$userid ."','" .$roleid ."')";
   $result = mysql_query($sql);
@@ -190,13 +209,12 @@ function updateUser2RoleMapping($roleid,$userid)
 }
 
 
-function updateUsers2GroupMapping($groupname,$userid)
+function insertUsers2GroupMapping($groupname,$userid)
 {
 
   $sql = "insert into users2group(groupname,userid) values('" .$groupname ."','" .$userid ."')";
   $result = mysql_query($sql);
 }
-
 
 
 

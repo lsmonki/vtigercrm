@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Notes/Note.php,v 1.3 2004/10/29 09:55:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Notes/Note.php,v 1.4 2005/01/15 15:31:33 jack Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -158,7 +158,8 @@ class Note extends SugarBean {
                                         FROM notes
                                         LEFT JOIN contacts
                                         ON notes.contact_id=contacts.id ";
-                        $where_auto = " notes.deleted=0 AND contacts.deleted=0";
+                        $where_auto = " notes.deleted=0 ";
+                        //$where_auto = " notes.deleted=0 AND contacts.deleted=0";
 
                 if($where != "")
                         $query .= "where $where AND ".$where_auto;
@@ -170,6 +171,7 @@ class Note extends SugarBean {
                 else
                         $query .= " ORDER BY name";
 
+                //echo $query;
                 return $query;
         }
 

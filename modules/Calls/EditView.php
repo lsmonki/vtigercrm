@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/modules/Calls/EditView.php,v 1.3 2004/10/29 09:55:09 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/modules/Calls/EditView.php,v 1.6 2005/01/13 11:43:46 jack Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -108,6 +108,27 @@ $xtpl->assign("TIME_START", substr($focus->time_start,0,5));
 $xtpl->assign("DESCRIPTION", $focus->description);
 
 if ($focus->assigned_user_id == '' && (!isset($focus->id) || $focus->id=0)) $focus->assigned_user_id = $current_user->id;
+
+//create the html select code here and assign it
+$result = get_group_options();
+$nameArray = mysql_fetch_array($result);
+$GROUP_SELECT_OPTION = '<select name="assigned_group_name">';
+                   do
+                   {
+                    $groupname=$nameArray["name"];
+                    $GROUP_SELECT_OPTION .= '<option value="';
+                    $GROUP_SELECT_OPTION .=  $groupname;
+                    $GROUP_SELECT_OPTION .=  '">';
+                    $GROUP_SELECT_OPTION .= $nameArray["name"];
+                    $GROUP_SELECT_OPTION .= '</option>';
+                   }while($nameArray = mysql_fetch_array($result));
+                   $GROUP_SELECT_OPTION .='<option value=none>none</option>';
+                   $GROUP_SELECT_OPTION .= ' </select>';
+
+$xtpl->assign("ASSIGNED_USER_GROUP_OPTIONS",$GROUP_SELECT_OPTION);
+
+
+
 $xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active", $focus->assigned_user_id), $focus->assigned_user_id));
 $xtpl->assign("DURATION_HOURS", $focus->duration_hours);
 $xtpl->assign("TYPE_OPTIONS", get_select_options_with_id($app_list_strings['record_type_display'], $focus->parent_type));

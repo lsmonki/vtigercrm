@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.29 2005/01/10 10:42:26 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.30 2005/01/11 14:26:54 jack Exp $
  * Description:  Defines the English language pack for the base application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -385,8 +385,7 @@ $app_list_strings = Array(
 //       it is the key for the default record_type_module value
 'record_type_default_key' => 'Accounts',
 'record_type_display' => array('Accounts' => 'Account',
-		'Opportunities' => 'Opportunity',
-		'Cases' => 'Case'),
+		'Opportunities' => 'Opportunity'),
 );
 
 ?>
