@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/themes/orange/layout_utils.php,v 1.13 2004/09/09 10:36:06 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/themes/orange/layout_utils.php,v 1.13.2.1 2004/09/20 21:47:30 jack Exp $
  * Description:  Contains a variety of utility functions used to display UI 
  * components such as form headers and footers.  Intended to be modified on a per 
  * theme basis.
@@ -66,21 +66,16 @@ $the_form = <<<EOQ
 <table width="100%" cellpadding="0" cellspacing="0" border="0" class="formHeaderULine"><tbody><tr>
 	  <td valign="bottom">
        <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-		<td vAlign="middle" class="formHeader" align="left" noWrap width="100%" height="15">$form_title&nbsp;</td><td>
+		<td vAlign="middle" class="formHeader" align="left" noWrap width="100%" height="15">$form_title&nbsp;</td>
+        </tr></tbody></table></td>
 EOQ;
-if($form_title == "Lead List")
-{
-$the_form .= " <form action='index.php?module=imports&action=fetchfile' method=post target=''><input class='button' type='submit' name='Import' value='Import Leads'/></form>";
-//include 'modules/imports/ImportButton.html';
-}
-	$the_form .="</td></tr></tbody></table> </td>";
 
 if ($other_text) {
 	$the_form .= "<td width='20'><IMG height='1' src='include/images/blank.gif'></td>\n";
 	$the_form .= "<td valign='bottom' class='formHeader'><div align='right'>$other_text</div></td>\n";
 }
 else {
-	$the_form .= "<td width='100%'><IMG height='1' src='include/images/blank.gif'></td>\n";
+	$the_form .= "<td><IMG height='1' src='include/images/blank.gif'></td>\n";
 }
 
 if ($show_help==true) {

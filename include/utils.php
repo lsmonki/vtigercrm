@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/include/utils.php,v 1.1 2004/08/17 13:23:37 gjayakrishnan Exp $
+ * $Header:  vtiger_crm/sugarcrm/include/utils.php,v 1.1.2.1 2004/09/20 21:04:34 jack Exp $
  * Description:  Includes generic helper functions used throughout the application.
  ********************************************************************************/
 
@@ -433,7 +433,7 @@ function get_theme_display($theme) {
 function get_theme_options($current_theme) {
    if ($dir = @opendir("./themes")) {
 		while (($file = readdir($dir)) !== false) {
-           if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic") {
+           if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic" && $file != "akodarkgem" && $file != "bushtree" && $file != "coolblue") {
 			   if(is_dir("./themes/".$file)) {
 				   if(!($file[0] == '.')) {
 				   	// set the initial theme name to the filename

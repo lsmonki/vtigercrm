@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header:  vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.10 2004/09/03 15:14:37 jack Exp $
+ * $Header:  vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.10.2.1 2004/09/20 20:58:39 jack Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -117,7 +117,7 @@ $config .= "//\$moduleList = Array('Home', 'Dashboard', 'Leads', 'Contacts', 'Ac
 $config .= "\$default_module = 'Home';\n";
 $config .= "\$default_action = 'index';\n\n";
 $config .= "//set default theme\n";
-$config .= "\$default_theme = 'orange';\n\n";
+$config .= "\$default_theme = 'Aqua';\n\n";
 $config .= "// If true, the time to compose each page is placed in the browser.\n";
 $config .= "\$calculate_response_time = true;\n";
 $config .= "// Default Username - The default text that is placed initially in the login form for user name.\n";
