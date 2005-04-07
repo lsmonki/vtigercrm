@@ -129,7 +129,7 @@ function getV4TablesList()
       {
         $sql = "select account_id,opportunities.id,date_entered,date_modified,assigned_user_id,modified_user_id,opportunities.deleted from ".$oldtable ." inner join accounts_opportunities on accounts_opportunities.opportunity_id = opportunities.id";
       }
-      //echo $sql .'<br>';
+      echo '<br> ' .$sql .'<br>';
       if($oldtable == 'leads')
       {
         $module = 'Leads';
@@ -141,7 +141,7 @@ function getV4TablesList()
 
       
       $result = $this->oldconn->query($sql);
-      // echo '<BR>>>>>>>       <br>           '.$this->oldconn->num_rows($result); 
+       echo '<BR>>>>>>>    '.$oldtable .'   count is           '.$this->oldconn->num_rows($result); 
       $count = $this->oldconn->num_rows($result); 
       if($count > 0)
       {
@@ -170,7 +170,6 @@ function getV4TablesList()
             
           }
             
-          //echo '<br>1      ' .$sql;
           $this->newconn->query($sql);
         }
       }
@@ -202,7 +201,7 @@ function getV4TablesList()
       }
       
       $result = $this->oldconn->query($sql);
-      echo '<br> >>>>>>                  '.$this->oldconn->num_rows($result); 
+      echo '<br> >>>>>>   '.$oldtable .' count is       '.$this->oldconn->num_rows($result); 
       $count = $this->oldconn->num_rows($result); 
       if($count > 0)
       {
@@ -236,7 +235,7 @@ $module;
      
       //echo '<br> '.$sql  .'   <br> ';
       $result = $this->oldconn->query($sql);
-      echo '<br> >>>>>>                  '.$this->oldconn->num_rows($result); 
+      echo '<br> >>>>>>  '.$oldtable .' count is       '.$this->oldconn->num_rows($result); 
       $count = $this->oldconn->num_rows($result); 
       if($oldtable == 'notes')
       {
@@ -281,9 +280,9 @@ $module;
       {
         $sql = "select contacts.id,assigned_user_id,modified_user_id,account_id,contacts.id,date_entered,date_modified,reports_to_id,contacts.deleted from ".$oldtable ." inner join accounts_contacts on accounts_contacts.contact_id = contacts.id";
        }
-      //echo '<br> '.$sql  .'   <br> ';
+      echo '<br> '.$sql  .'   <br> ';
       $result = $this->oldconn->query($sql);
-      echo '<br> >>>>>>                  '.$this->oldconn->num_rows($result); 
+      echo '<br> >>>>>> '.$oldtable .' count is       '.$this->oldconn->num_rows($result); 
       $count = $this->oldconn->num_rows($result); 
       if($oldtable == 'accounts')
       {
@@ -333,9 +332,8 @@ $module;
       $sql = "select id from ".$oldtable  ;
            }
 
-      echo '<br> '.$sql  .'   <br> ';
       $result = $this->oldconn->query($sql);
-      echo '<br>>>>>>>                  '.$this->oldconn->num_rows($result); 
+      echo '<br>>>>>>>  '.$oldtable .' count is                '.$this->oldconn->num_rows($result); 
       $count = $this->oldconn->num_rows($result); 
       if($count > 0)
       {
@@ -381,7 +379,10 @@ $module;
     echo '<br><br>';
     echo '<br>+++++++++++++++++++++++++++++++++++++<br>';
 
-     $sourcetablearray=Array("users","accounts","contacts","leads","opportunities","calls","cases","emails","meetings","notes","tasks","customfields");
+    echo '<br><font color=blue> proceeding with customfields leading the way </font><br>';
+
+    $sourcetablearray=Array("users","customfields","accounts","contacts","leads","opportunities","calls","cases","emails","meetings","notes","tasks");
+    //$sourcetablearray=Array("users","customfields","leads","accounts","contacts","opportunities");
      
     foreach($sourcetablearray as $oldtable)
     {
@@ -454,8 +455,8 @@ function accounts()
 {
    echo '<br> Account <br>';
  
-  $fieldmap_array=Array("accountname"=>"name","annualrevenue"=>"annual_revenue","siccode"=>"sic_code","tickersymbol"=>"ticker_symbol","email1"=>"email1","email2"=>"email2","phone"=>"phone_office","otherphone"=>"phone_alternate","fax"=>"phone_fax","bill_city"=>"billing_address_city","bill_code"=>"billing_address_code","bill_country"=>"billing_address_country","bill_state"=>"billing_address_state","bill_street"=>"billing_address_street","accounttype"=>"account_type","ship_city"=>"shipping_address_city","ship_code"=>"shipping_address_code","ship_country"=>"shipping_address_country","ship_state"=>"shipping_address_state","ship_street"=>"shipping_address_street");
-  $query = "select * from accounts ";
+  $fieldmap_array=Array("accountname"=>"name","annualrevenue"=>"annual_revenue","siccode"=>"sic_code","tickersymbol"=>"ticker_symbol","email1"=>"email1","email2"=>"email2","phone"=>"phone_office","otherphone"=>"phone_alternate","fax"=>"phone_fax","bill_city"=>"billing_address_city","bill_code"=>"billing_address_postalcode","bill_country"=>"billing_address_country","bill_state"=>"billing_address_state","bill_street"=>"billing_address_street","accounttype"=>"account_type","ship_city"=>"shipping_address_city","ship_code"=>"shipping_address_postalcode","ship_country"=>"shipping_address_country","ship_state"=>"shipping_address_state","ship_street"=>"shipping_address_street");
+  $query = "select accounts.*,accountcf.* from accounts left join accountcf on accountcf.accountid=accounts.id";
   $result = $this->oldconn->query($query);
   
   $count = $this->oldconn->num_rows($result); 
@@ -534,11 +535,27 @@ function getAssociatedDataAndSave($object,$fldmaparray,$result)
     {
       
       echo '<br> incoming field '.$field .' module     ' .$module;
+      /*
+      $pos = strrpos($field, "CF_");
+      if($pos == true)
+      {
+        $field = strtolower($field);
+      }
+      */
+      
       if(array_key_exists($field,$fldmaparray))
       {
         $mappedField = $fldmaparray[$field];
+		if($mappedField == 'reports_to_id')
+		{
+			$retrieved_data = $this->fetchOldData($old_data[$mappedField]);
+			$object->column_fields[$field] = $retrieved_data["newid"];
+		}
+		else
+		{
         $object->column_fields[$field] = $old_data[$mappedField];
-        //echo '<br> newfield ' .$field .' oldfield ' .$mappedField .' value '.$old_data[$mappedField]; 
+        echo '<br> newfield ' .$field .' oldfield ' .$mappedField .' value '.$old_data[$mappedField]; 
+                }
       }
       elseif($module == 'Tasks' && $field == 'parent_id' )
       {
@@ -583,7 +600,7 @@ function getAssociatedDataAndSave($object,$fldmaparray,$result)
         }
         $object->column_fields[$field] = $retrieved_data["newid"];
       }
-      elseif($module == 'Notes' && $field == 'contact_id' )
+     elseif($module == 'Notes' && $field == 'contact_id' )
       {
         //echo '<br>the module is ----------------> ' .$module;
         $retrieved_data = $this->fetchOldData($old_data["id"]);
@@ -659,11 +676,18 @@ function getAssociatedDataAndSave($object,$fldmaparray,$result)
         $object->column_fields[$field] = $retrieved_data["newid"];
         //echo '<br> the new parent id is <<<<<<<<<<<<<   ' .$retrieved_data["newid"];
       }
+     elseif($field == 'annual_revenue' || $field == 'amount')
+     {
+       $sum = $old_data[$field];
+       $sum = str_replace(',','',$sum);
+       $object->column_fields[$field] = $sum;
+     }
       else
       {
         $object->column_fields[$field] = $old_data[$field];
         $object->id = $old_data["id"];
-	if($field == 'activitytype')
+        
+                  if($field == 'activitytype')
 		{
 			if($module == 'Tasks')
 			{
@@ -709,9 +733,10 @@ function contacts()
 {
   echo '<br> Contact <br>';
   
-  $fieldmap_array=Array("firstname"=>"first_name","lastname"=>"last_name","email"=>"email1","homephone"=>"phone_home","fax"=>"home_fax","mobile"=>"phone_mobile","otherphone"=>"phone_other","assistantphone"=>"assistant_phone","reportsto"=>"reports_to_id","otheremail"=>"email2","yahooid"=>"yahoo_id","emailoptout"=>"email_opt_out","birthday"=>"birthdate","leadsource"=>"lead_source","mailingstreet"=>"primary_address_street","otherstreet"=>"alt_address_street","mailingstate"=>"primary_address_state","mailingcity"=>"primary_address_city","mailingzip"=>"primary_address_postalcode","mailingcountry"=>"primary_address_country","otherstate"=>"alt_address_state","othercity"=>"alt_address_city","otherzip"=>"alt_address_postalcode","othercountry"=>"alt_address_country");
+  $fieldmap_array=Array("firstname"=>"first_name","lastname"=>"last_name","email"=>"email1","homephone"=>"phone_home","fax"=>"phone_fax","mobile"=>"phone_mobile","phone"=>"phone_work","otherphone"=>"phone_other","assistantphone"=>"assistant_phone","contact_id"=>"reports_to_id","otheremail"=>"email2","yahooid"=>"yahoo_id","emailoptout"=>"email_opt_out","birthday"=>"birthdate","leadsource"=>"lead_source","mailingstreet"=>"primary_address_street","otherstreet"=>"alt_address_street","mailingstate"=>"primary_address_state","mailingcity"=>"primary_address_city","mailingzip"=>"primary_address_postalcode","mailingcountry"=>"primary_address_country","otherstate"=>"alt_address_state","othercity"=>"alt_address_city","otherzip"=>"alt_address_postalcode","othercountry"=>"alt_address_country","donotcall"=>"do_not_call","emailoptout"=>"email_opt_out","salutationtype"=>"salutation");
 
-  $query = "select * from contacts ";
+  $query = "select contacts.* ,contactcf.* from contacts inner join accounts_contacts on accounts_contacts.contact_id = contacts.id left join contactcf on contactcf.contactid=contacts.id";
+  //select contacts.* ,contactcf.* from contacts inner join accounts_contacts on accounts_contacts.contact_id = contacts.id inner join contactcf on contactcf.contactid=contacts.id";
   $result = $this->oldconn->query($query);
   
   $count = $this->oldconn->num_rows($result); 
@@ -759,7 +784,7 @@ function opportunities()
 
   $fieldmap_array=Array("potentialid"=>"id","potentialname"=>"name","nextstep"=>"next_step","closingdate"=>"date_closed","leadsource"=>"lead_source","potentialtype"=>"opportunity_type");
 
-  $query = "select * from opportunities ";
+  $query = "select opportunities.*,opportunitycf.* from opportunities left join opportunitycf on opportunitycf.opportunityid=opportunities.id";
   $result = $this->oldconn->query($query);
   
   $count = $this->oldconn->num_rows($result); 
@@ -1635,6 +1660,8 @@ function proceedRelationalMigration()
             $tabmodule = $old_data["module"]; //now get the tabid
             $tabid = $this->fetchTabIDVal($tabmodule);
             $columnName = $old_data["column_name"]; //now get the tabid
+	    //making the columnName to all lower case
+	    $columnName = strtolower($columnName); 
             $tableName = $old_data["table_name"]; //now get the tabid
             $uitype = $old_data["uitype"]; //now get the tabid
             $fldlabel = $old_data["fieldlabel"]; //now get the tabid
@@ -1707,10 +1734,31 @@ function proceedRelationalMigration()
             }
       
 
-            //get the data from the old custom fields table and then populate into the concerned tables
             $sql_insert = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",5,1,'".$uichekdata."')";
-            //echo 'custom field insert query is '.$sql_insert;
+            echo '<br><bold>custom field insert query is  </bold></br>'.$sql_insert;
             $this->newconn->query($sql_insert);
+	    $this->newconn->alterTable($tableName, $columnName." ".$type, "Add_Column");
+
+
+            echo '<br><b><font color=red>altered the table  </font></b> <br>';
+//Inserting values into profile2field tables
+$sql1 = "select * from profile";
+$sql1_result = $this->newconn->query($sql1);
+$sql1_num = $this->newconn->num_rows($sql1_result);
+echo '============= > number of rows in profile is '.$sql1_num;
+
+for($i=0; $i<$sql1_num; $i++)
+{
+	$profileid = $this->newconn->query_result($sql1_result,$i,"profileid");
+	$sql2 = "insert into profile2field values(".$profileid.", ".$tabid.", ".$custfld_fieldid.", 0,1)";
+	echo '<br><font color=blue> insertion into the profile table in progress</font> <br>';
+	$this->newconn->query($sql2);
+}
+
+
+
+
+
           }
         }
       }
