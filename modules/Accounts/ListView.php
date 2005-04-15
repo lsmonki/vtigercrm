@@ -86,11 +86,15 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 {
         $column[$i]=$adb->query_result($result,$i,'columnname');
         $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
+	$uitype[$i]=$adb->query_result($result,$i,'uitype');
         if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
 
         if(isset($customfield[$i]) && $customfield[$i] != '')
         {
-                $str=" accountscf.".$column[$i]." like '$customfield[$i]%'";
+		if($uitype[$i] == 56)
+			$str=" accountscf.".$column[$i]." = 1";
+		else
+	                $str=" accountscf.".$column[$i]." like '$customfield[$i]%'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
@@ -135,7 +139,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	if(isset($address_state) && $address_state != "")
 	{
 		array_push($where_clauses, "(accountbillads.state like ".PearDatabase::quote($address_state."%")." OR accountshipads.state like ".PearDatabase::quote($address_state."%").")");
-		$url_string .= "&address_street=".$address_street;
+		$url_string .= "&bill_state=".$address_state;
 	}
 	if(isset($address_postalcode) && $address_postalcode != "")
 	{

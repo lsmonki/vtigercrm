@@ -30,11 +30,11 @@ function getDBValidationData($tablearray,$tabid='')
   	{
 		if($numValues > 1 && $i != $numValues-1)
     		{
-			$sql .= "select fieldlabel,fieldname,typeofdata from field where tablename='".$tablearray[$i] ."'and tabid=10 union ";
+			$sql .= "select fieldlabel,fieldname,typeofdata from field where tablename='".$tablearray[$i] ."'and tabid=10 and displaytype <> 2 union ";
      		}
    		else
     		{
-   			$sql  .= "select fieldlabel,fieldname,typeofdata from field where tablename='".$tablearray[$i] ."' and tabid=10";
+   			$sql  .= "select fieldlabel,fieldname,typeofdata from field where tablename='".$tablearray[$i] ."' and tabid=10 and displaytype <> 2 ";
     		}
   	}
   	else

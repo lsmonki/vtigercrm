@@ -29,6 +29,10 @@ $log = LoggerManager::getLogger('outcome_by_month');
 if (isset($_REQUEST['obm_refresh'])) { $refresh = $_REQUEST['obm_refresh']; }
 else { $refresh = false; }
 
+// added for auto refresh
+$refresh = true;
+//
+
 $date_start = array();
 $datax = array();
 //get the dates to display

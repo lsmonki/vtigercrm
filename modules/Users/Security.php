@@ -223,7 +223,7 @@ $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'update_log','troubletickets',1,'15','update_log','Update History',1,0,0,100,7,1,3,'V~O')");
 $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,8,1,2,'T~O')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'1','modifiedtime','Modified Time',1,0,0,100,9,1,2,'T~O')");
- $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'title','troubletickets',1,'22','title','Title',1,0,0,100,1,2,1,'V~O')");
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'title','troubletickets',1,'22','ticket_title','Title',1,0,0,100,1,2,1,'V~M')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'description','troubletickets',1,'19','description','Description',1,0,0,100,1,3,1,'V~O')");
 //Block1 -- End
 //Ticket Details -- END
@@ -267,7 +267,7 @@ $this->db->query("insert into field values (8,".$this->db->getUniqueID("field").
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'activitytype','activity',1,'2','activitytype','Activtiy Type',1,0,0,100,3,1,3,'V~O')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'crmid','seactivityrel',1,'67','parent_id','Related To',1,0,0,100,4,1,1,'I~O')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,5,1,1,'V~M')");
-	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'subject','activity',1,'2','name','Subject',1,0,0,100,6,2,1,'V~M')");
+	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'subject','activity',1,'2','subject','Subject',1,0,0,100,6,2,1,'V~M')");
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'filename','emails',1,'61','filename','Attachment',1,0,0,100,7,3,1,'V~O')");
 	 $this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'description','emails',1,'19','description','Description',1,0,0,100,8,4,1,'V~O')");
 	 $this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'time_start','activity',1,'2','time_start','Time Start',1,0,0,100,9,1,3,'T~O')");
@@ -287,6 +287,7 @@ $this->db->query("insert into field values (10,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'crmid','seactivityrel',1,'66','parent_id','Related To',1,0,0,100,7,1,1,'I~O')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'contactid','cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,8,1,1,'I~O')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'status','activity',1,'15','taskstatus','Status',1,0,0,100,9,1,1,'V~O')");
+ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'eventstatus','activity',1,'15','eventstatus','Status',1,0,0,100,9,1,1,'V~O')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'priority','activity',1,'15','taskpriority','Priority',1,0,0,100,10,1,1,'V~O')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'sendnotification','activity',1,'56','sendnotification','Send Notification',1,0,0,100,11,1,1,'C~O')");
 $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,14,1,2,'T~O')");
@@ -314,8 +315,8 @@ $this->db->query("insert into field values (16,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'duration_minutes','activity',1,'15','duration_minutes','Duration Minutes',1,0,0,100,6,1,3,'O~O')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'crmid','seactivityrel',1,'66','parent_id','Related To',1,0,0,100,7,1,1,'I~O')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'contactid','cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,8,1,1,'V~O')");
-//Status and priority not needed in events
-# $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'status','activity',1,'15','taskstatus','Status',1,0,0,100,9,1,1,'V~O')");
+ $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'eventstatus','activity',1,'15','eventstatus','Status',1,0,0,100,9,1,1,'V~O')");
+//Priority not needed in events
 # $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'priority','activity',1,'15','taskpriority','Priority',1,0,0,100,10,1,1,'V~O')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'sendnotification','activity',1,'56','sendnotification','Send Notification',1,0,0,100,11,1,1,'C~O')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'activitytype','activity',1,'15','activitytype','Activity Type',1,0,0,100,12,1,1,'V~O')");

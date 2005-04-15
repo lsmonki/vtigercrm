@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/DetailView.php,v 1.36 2005/03/17 11:06:58 ray Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/DetailView.php,v 1.36.2.2 2005/04/13 05:04:24 rank Exp $
  * Description:  TODO To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -144,7 +144,7 @@ if(isPermitted("Accounts",8,'') == 'yes')
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 		//$tempVal = mysql_fetch_array($wordTemplateResult);
 	}
-	$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;Select template to Mail Merge:<select name=\"mergefile\">".$optionString."</select>");
+	$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
 }
 /*if($_ENV['HOME'] == '')
 {
@@ -208,6 +208,9 @@ if($tab_per_Data[13] == 0)
 	}
 }
 */
+
+$focus_history_list = & $focus->get_history($focus->id);
+
 if($tab_per_Data[8] == 0)
 {
 	if($permissionData[8][3] == 0)

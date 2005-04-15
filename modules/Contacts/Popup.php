@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Popup.php,v 1.12 2005/03/23 14:19:48 samk Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Popup.php,v 1.12.2.4 2005/04/06 15:01:31 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -117,7 +117,9 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
 	$search_form->assign("POPUPTYPE",$popuptype);
-	
+        $search_form->assign("RETURNID",$_REQUEST['recordid']);
+        $search_form->assign("RETURN_MODULE",$_REQUEST['return_module']);
+
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
 
@@ -128,7 +130,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Contacts','Popup','lastname','true','basic'));
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Contacts','Popup','lastname','true','basic',$popuptype,$_REQUEST['recordid'],$_REQUEST['return_module']));
 	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
 
 	$search_form->parse("main");

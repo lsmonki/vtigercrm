@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Delete.php,v 1.8 2005/03/16 10:29:55 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Delete.php,v 1.8.2.1 2005/04/12 12:18:35 rank Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -33,7 +33,11 @@ if($_REQUEST['return_module'] == 'Accounts')
         $sql = 'update crmentity set deleted = 1 where crmid = '.$_REQUEST['record'];
         $adb->query($sql);
 }
-
+if($_REQUEST['return_module'] == 'Potentials' && $_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
+{
+	$sql = 'delete from contpotentialrel where contactid='.$_REQUEST['record'].' and potentialid='.$_REQUEST['return_id'];
+	$adb->query($sql);
+}
 if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
 {
 	$sql = 'delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];

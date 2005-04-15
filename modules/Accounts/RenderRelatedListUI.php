@@ -98,6 +98,11 @@ function renderRelatedTasks($query,$id)
 	echo '</form>';
 }
 
+function renderRelatedHistory($query,$id)
+{
+	getHistory('Accounts',$query,$id);
+}
+
 function renderRelatedAttachments($query,$id)
 {
         $hidden = getHiddenValues($id);

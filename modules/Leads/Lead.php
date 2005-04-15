@@ -174,11 +174,11 @@ class Lead extends CRMEntity {
 			//construct query as below
 		       if($i == 0)
 		      	{
-				$sql3 .= "leadscf.".$columnName. " " .$fieldlable;
+				$sql3 .= "leadscf.".$columnName. " '" .$fieldlable."'";
 			}
 			else
 			{	
-		$sql3 .= ", leadscf.".$columnName. " " .$fieldlable;
+				$sql3 .= ", leadscf.".$columnName. " '" .$fieldlable."'";
 			}
         
 	         }
@@ -260,7 +260,7 @@ return $exists;
 	function get_activities($id)
 	{
           // First, get the list of IDs.
-	    $query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
+	    $query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held')";
           include('modules/Leads/RenderRelatedListUI.php');
           renderRelatedTasks($query,$id);
         }
@@ -301,6 +301,11 @@ return $exists;
 	    $query ="select activity.subject, emails.emailid, emails.filename,semodule,activitytype,date_start,activity.status,priority,crmentity.crmid,crmentity.smownerid,crmentity.modifiedtime, users.user_name  from emails inner join activity on activity.activityid=emails.emailid inner join seactivityrel on seactivityrel.activityid=emails.emailid inner join crmentity on crmentity.crmid=emails.emailid inner join users on  users.id=crmentity.smownerid where seactivityrel.crmid=".$id;
             renderRelatedEmails($query,$id);
         }
+	function get_history($id)
+	{
+		$query = "SELECT activity.activityid, activity.subject, activity.status, activity.eventstatus, activity.activitytype, contactdetails.contactid, contactdetails.firstname, contactdetails.lastname, crmentity.modifiedtime from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') and (activity.status='Completed' or activity.eventstatus='Held') and seactivityrel.crmid=".$id;
+		renderRelatedHistory($query,$id);
+	}
 
   function get_attachments($id)
   {

@@ -856,7 +856,8 @@ Function asEmail($adr,$email,$name,$subject = "TUTOS") {
    }
    $href = addSessionKey($href,false);
    if ( ! eregi("^(JavaScript:|http:|https:|mailto:|ftp:|gopher:|\./)",$href) ) {
-     $href = $tutos['base'] ."/". $href;
+     #$href = $tutos['base'] ."/". $href;
+     $href = $href;
    }
    #if ( $current_user->feature_ok(useoverlib,PERM_SEE) && ($plus != "") ) {
    #  return sprintf ("<a href=\"%s\" $target onmouseover=\"return overlib('%s',STATUS,'%s',FULLHTML,VAUTO)\" onmouseout=\"nd()\">%s</a>",$href,myentities($plus,1),myentities($info,1),$text);

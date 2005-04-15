@@ -20,12 +20,15 @@ for($i=0; $i<$num_rows; $i++)
 {
 	$ruleid=$adb->query_result($result2,$i,'ruleid');
 	$tabid=$adb->query_result($result2,$i,'tabid');
-	$reqval = $tabid.'_per';	
-	$permission=$_REQUEST[$reqval];
-	$sql7="update def_org_share set permission=".$permission." where tabid=".$tabid." and ruleid=".$ruleid;
-	//echo $sql7;
-	//echo '<BR>';
-	$adb->query($sql7);	
+	if($tabid != 8 && $tab_id != 14 && $tab_id != 15)
+	{
+		$reqval = $tabid.'_per';	
+		$permission=$_REQUEST[$reqval];
+		$sql7="update def_org_share set permission=".$permission." where tabid=".$tabid." and ruleid=".$ruleid;
+		//echo $sql7;
+		//echo '<BR>';
+		$adb->query($sql7);	
+	}
 }
 $loc = "Location: index.php?action=OrgSharingDetailView&module=Users";
 header($loc);

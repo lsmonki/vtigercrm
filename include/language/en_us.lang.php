@@ -28,7 +28,7 @@
 
 /*********************************************************************************
 
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.64 2005/03/28 19:41:32 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.64.2.4 2005/04/13 05:06:27 rank Exp $
 
  * Description:  Defines the English language pack for the base application.
 
@@ -570,6 +570,8 @@ $app_strings = Array(
 
 'Potential'=>'Potential',
 
+'Sales Stage'=>'Sales Stage',
+
 'Amount'=>'Amount',
 
 'Expected Close'=>'Expected Close',
@@ -612,7 +614,22 @@ $app_strings = Array(
 
 'Category'=>'Category',
 
+//Added after 4 GA
+'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 
+//Added fields to display the related lists titles and None Scheduled 
+'LBL_NONE_SCHEDULED'=>'None Scheduled',
+
+'Leads'=>'Leads',
+'Accounts'=>'Accounts',
+'Contacts'=>'Contacts',
+'Potentials'=>'Potentials',
+'Products'=>'Products',
+'Emails'=>'Emails',
+'HelpDesk'=>'HelpDesk',
+'Activities'=>'Activities',
+
+'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
 );
 
 

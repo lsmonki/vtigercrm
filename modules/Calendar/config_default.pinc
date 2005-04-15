@@ -112,12 +112,13 @@ $tutos[baseurl][0]  = "http://localhost/tutos";
 #
 # ATTENTION: On Windows Change this to something your system understands !!!
 #            Like : $tutos[sessionpath] = "c:\\Temp";
-# 
-if (strtoupper(substr(PHP_OS, 0, 3) == 'WIN')) {
-  $tutos[sessionpath] = "C:/Temp";
-} else {
-  $tutos[sessionpath] = "/tmp";
-}
+#
+#Commented by raj starts 
+#if (strtoupper(substr(PHP_OS, 0, 3) == 'WIN')) {
+#  $tutos[sessionpath] = "C:/Temp";
+#} else {
+#  $tutos[sessionpath] = "/tmp";
+#}
 #
 # Where to put the log output for developing and bughunting
 # ATTENTION: On Windows Change this to something your system understands !!!
@@ -126,11 +127,12 @@ if (strtoupper(substr(PHP_OS, 0, 3) == 'WIN')) {
 # TUTOS will create some files that are named like /tmp/debug.out and /tmp/debug.out.log
 # You have to remove old versions of these files by your own !
 #
-if (strtoupper(substr(PHP_OS, 0, 3) == 'WIN')) {
-  $tutos[errlog] = "C:/Temp/debug.out";
-} else {
-  $tutos[errlog] = "/tmp/debug.out";
-}
+#if (strtoupper(substr(PHP_OS, 0, 3) == 'WIN')) {
+#  $tutos[errlog] = "C:/Temp/debug.out";
+#} else {
+#  $tutos[errlog] = "/tmp/debug.out";
+#}
+#Commented by raj ends
 #
 # Logo for the headline
 # (Change this to your company logo or whatever you like)
@@ -712,7 +714,7 @@ $tutos[demo]=0;
 # Doing some debugging logs in messages tables
 # (This will fill the messages table and the file $tutos[errlog])
 #
-$tutos[debug]=0;
+$tutos[debug]=1;
 #
 #
 # Doing some debugging in a browser-window

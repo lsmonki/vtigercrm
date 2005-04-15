@@ -36,6 +36,10 @@ $log = LoggerManager::getLogger('lead_source_by_outcome');
 if (isset($_REQUEST['lsbo_refresh'])) { $refresh = $_REQUEST['lsbo_refresh']; }
 else { $refresh = false; }
 
+// added for auto refresh
+$refresh = true;
+//
+
 $tempx = array();
 $datax = array();
 //get list of sales stage keys to display

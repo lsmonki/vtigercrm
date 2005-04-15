@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.37 2005/03/28 19:57:53 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.37.2.2 2005/04/08 08:26:17 samk Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -55,20 +55,20 @@ class Email extends CRMEntity {
 	// This is the list of fields that are in the lists.
         var $list_fields = Array(
        'Subject'=>Array('activity'=>'subject'),
-       'Contact Name'=>Array('contactdetails'=>'lastname'),
+      // 'Contact Name'=>Array('contactdetails'=>'lastname'),
        'Related to'=>Array('seactivityrel'=>'activityid'),
        'Date Sent'=>Array('activity'=>'date_start'),
        'Assigned To'=>Array('crmentity','smownerid')
        );
 
        var $list_fields_name = Array(
-       'Subject'=>'name',
-       'Contact Name'=>'lastname',
+       'Subject'=>'subject',
+     //  'Contact Name'=>'lastname',
        'Related to'=>'activityid',
        'Date Sent'=>'date_start',
        'Assigned To'=>'assigned_user_id');
 
-       var $list_link_field= 'name';
+       var $list_link_field= 'subject';
 
 
 	var $rel_users_table = "salesmanactivityrel";

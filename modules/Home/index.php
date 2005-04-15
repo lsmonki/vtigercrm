@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Home/index.php,v 1.25 2005/03/21 17:42:47 ray Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Home/index.php,v 1.25.2.3 2005/04/07 10:46:59 rank Exp $
  * Description:  Main file for the Home module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -67,13 +67,16 @@ if($tab_per_Data[9] == 0)
 <br>
 <?php
 //get all the group relation tasks
-$query = "select leaddetails.leadid as id,leaddetails.lastname as name,leadgrouprelation.groupname as groupname, 'Leads     ' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where  crmentity.deleted=0  and leadgrouprelation.groupname is not null and leadgrouprelation.groupname != '' union all select activity.activityid,activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid where  crmentity.deleted=0 and activitygrouprelation.groupname is not null and groupname != '' union all select troubletickets.ticketid,troubletickets.title,ticketgrouprelation.groupname,'Tickets   ' as Type from troubletickets inner join ticketgrouprelation on ticketgrouprelation.ticketid=troubletickets.ticketid inner join crmentity on crmentity.crmid = troubletickets.ticketid and crmentity.deleted=0 and ticketgrouprelation.groupname is not null and ticketgrouprelation.groupname != ''";
+global $current_user;
+$userid= $current_user->id;
+$groupName = fetchUserGroups($userid);
+$query = "select leaddetails.leadid as id,leaddetails.lastname as name,leadgrouprelation.groupname as groupname, 'Leads     ' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where  crmentity.deleted=0  and leadgrouprelation.groupname is not null and leadgrouprelation.groupname='".$groupName."' union all select activity.activityid,activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid where  crmentity.deleted=0 and activitygrouprelation.groupname is not null and groupname ='".$groupName."' union all select troubletickets.ticketid,troubletickets.title,ticketgrouprelation.groupname,'Tickets   ' as Type from troubletickets inner join ticketgrouprelation on ticketgrouprelation.ticketid=troubletickets.ticketid inner join crmentity on crmentity.crmid = troubletickets.ticketid and crmentity.deleted=0 and ticketgrouprelation.groupname is not null and ticketgrouprelation.groupname='".$groupName."'";
 
 
 //$query = "select leaddetails.lastname,leadgrouprelation.groupname, 'Leads' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where  crmentity.deleted=0 union all select activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid where  crmentity.deleted=0 union all select troubletickets.ticketid,troubletickets.groupname,'Tickets' as Type from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.ticketid where troubletickets.groupname is not null and crmentity.deleted=0";
 
   $log->info("Here is the where clause for the list view: $query");
-	$result = $adb->query($query) or die("Couldn't get the group listing");
+	$result = $adb->limitquery($query,0,5) or die("Couldn't get the group listing");
 
 echo get_form_header($app_strings['LBL_GROUP_ALLOCATION_TITLE'], "", false);
 
@@ -105,6 +108,19 @@ while($row = $adb->fetch_array($result))
   {
     $list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module=HelpDesk';
   }
+  elseif($row["type"] == "Activities")
+  {
+	$acti_type = getActivityType($row["id"]);
+	$list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module='.$row["type"];
+	if($acti_type == 'Task')
+	{
+        	$list .= '&activity_mode=Task';
+	}	
+        elseif($acti_type == 'Call' || $acti_type == 'Meeting')
+	{
+                $list .= '&activity_mode=Events';
+	}
+  }
   else
   {
     $list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module='.$row["type"];
@@ -130,6 +146,17 @@ while($row = $adb->fetch_array($result))
         $list .= '</table>';
 
 echo $list;
+function getActivityType($id)
+{
+	global $adb;
+	$quer = "select activitytype from activity where activityid=".$id;
+	$res = $adb->query($quer);
+	$acti_type = $adb->query_result($res,0,"activitytype");
+	return $acti_type;
+		
+}
+
+
 $list='';
 if($tab_per_Data[13] == 0)
 {

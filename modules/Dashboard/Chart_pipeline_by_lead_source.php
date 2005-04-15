@@ -36,6 +36,10 @@ $log = LoggerManager::getLogger('CSIM_pipeline_by_lead_source');
 if (isset($_REQUEST['pbls_refresh'])) { $refresh = $_REQUEST['pbls_refresh']; }
 else { $refresh = false; }
 
+// added for auto refresh
+$refresh = true;
+//
+
 $tempx = array();
 $datax = array();
 //get list of sales stage keys to display

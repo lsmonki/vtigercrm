@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/DetailView.php,v 1.18 2005/03/04 19:27:18 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/DetailView.php,v 1.18.2.2 2005/04/06 10:18:02 ray Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -34,9 +34,14 @@ global $mod_strings;
 
 $focus = new User();
 
-if(isset($_REQUEST['record'])) {
-	$focus->retrieve($_REQUEST['record']);
+if(!empty($_REQUEST['record'])) {
+        $focus->retrieve($_REQUEST['record']);
 }
+else
+{
+        header("Location: index.php?module=Users&action=ListView");
+}
+
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
 }
@@ -131,7 +136,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 
 $xtpl->assign("DESCRIPTION", nl2br($focus->description));
 $xtpl->assign("ROLEASSIGNED","<a href=index.php?module=Users&action=RoleDetailView&roleid=".$role .">" .$rolename ."</a>");
-$xtpl->assign("GROUPASSIGNED","<a href=index.php?module=Users&action=UserInfoUtil&groupname=".$group .">" .$group ."</a>");
+$xtpl->assign("GROUPASSIGNED","<a href='index.php?module=Users&action=UserInfoUtil&groupname=".$group."'>".$group."</a>");
 $xtpl->assign("TITLE", $focus->title);
 $xtpl->assign("DEPARTMENT", $focus->department);
 $xtpl->assign("REPORTS_TO_ID", $focus->reports_to_id);

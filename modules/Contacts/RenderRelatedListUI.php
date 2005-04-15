@@ -102,6 +102,12 @@ function renderRelatedEmails($query,$id)
 	echo '</form>';
 }
 
+function renderRelatedHistory($query,$id)
+{
+	getHistory('Contacts',$query,$id);
+	echo '<br><br>';
+}
+
 function renderRelatedAttachments($query,$id)
 {
 	$hidden = getHiddenValues($id);

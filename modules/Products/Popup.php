@@ -34,6 +34,7 @@ if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
 $xtpl->assign("POPUPTYPE",$popuptype);
+$xtpl->assign("RECORDID",$_REQUEST['recordid']);
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
@@ -166,7 +167,7 @@ $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Pro
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 
-$xtpl->assign("ALPHABETICAL",AlphabeticalSearch('Products','Popup','productname','true','basic'));
+$xtpl->assign("ALPHABETICAL",AlphabeticalSearch('Products','Popup','productname','true','basic',$popuptype,$_REQUEST['recordid'],$_REQUEST['return_module']));
 $xtpl->parse("main");
 $xtpl->out("main");
 

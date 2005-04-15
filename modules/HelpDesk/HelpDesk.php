@@ -32,12 +32,12 @@ class HelpDesk extends CRMEntity {
 
 	var $list_fields_name = Array(
 	'Ticket ID'=>'',
-	'Subject'=>'title',	  			
+	'Subject'=>'ticket_title',	  			
 	'Status'=>'ticketstatus',
 	'Priority'=>'ticketpriorities',
 	'Assigned To'=>'assigned_user_id');
 
-	var $list_link_field= 'title';
+	var $list_link_field= 'ticket_title';
 			
 	
 

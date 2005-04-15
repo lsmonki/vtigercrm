@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.66 2005/03/29 10:34:44 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.66.2.3 2005/04/13 13:25:09 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -344,10 +344,16 @@ class Contact extends CRMEntity {
           // First, get the list of IDs.
 
 		//$query = 'SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid where contactdetails.contactid = '.$id.' and (activitytype="Task" or activitytype="Call" or activitytype="Meeting") and crmentity.deleted=0';
-		$query = "SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid where contactdetails.contactid = ".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0";
+		$query = "SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid where contactdetails.contactid = ".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held')";
 		renderRelatedTasks($query,$id);		
 
           //return $this->build_related_list($query, new Task());
+	}
+
+	function get_history($id)
+	{
+		$query = "SELECT activity.activityid, activity.subject, activity.status, activity.eventstatus, activity.activitytype, contactdetails.contactid, contactdetails.firstname, contactdetails.lastname, crmentity.modifiedtime from activity inner join cntactivityrel on cntactivityrel.activityid= activity.activityid inner join contactdetails on contactdetails.contactid= cntactivityrel.contactid inner join crmentity on crmentity.crmid=activity.activityid left join seactivityrel on seactivityrel.activityid=activity.activityid where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') and (activity.status='Completed' or activity.eventstatus='Held') and cntactivityrel.contactid=".$id;
+		renderRelatedHistory($query,$id);
 	}
 
         function get_attachments($id)
@@ -419,14 +425,13 @@ class Contact extends CRMEntity {
 			//construct query as below
 		       if($i == 0)
 		      	{
-				$sql3 .= "contactscf.".$columnName. " " .$fieldlable;
+				$sql3 .= "contactscf.".$columnName. " '" .$fieldlable."'";
 			}
 			else
 			{	
-		$sql3 .= ", contactscf.".$columnName. " " .$fieldlable;
+				$sql3 .= ", contactscf.".$columnName. " '" .$fieldlable."'";
 			}
         
-        echo '  <<<<<<<<<<<<<< >>>>>>>>>>>>>>>  ' .$sql3;
 	         }
 	return $sql3;
         	}

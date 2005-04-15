@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/Delete.php,v 1.9 2005/03/10 09:29:23 shaw Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/Delete.php,v 1.9.2.1 2005/04/08 14:05:28 rank Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -27,9 +27,6 @@ $focus = new Activity();
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
-$sql= 'delete from seactivityrel where activityid='.$_REQUEST['record'];
-$adb->query($sql);
-
 $sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
 $adb->query($sql_recentviewed);
 if($_REQUEST['return_module'] == 'Contacts')
@@ -37,6 +34,12 @@ if($_REQUEST['return_module'] == 'Contacts')
    $sql = 'delete from cntactivityrel where contactid = '.$_REQUEST['return_id'].' and activityid = '.$_REQUEST['record'];
    $adb->query($sql);
 }
+else
+{
+	$sql= 'delete from seactivityrel where activityid='.$_REQUEST['record'];
+	$adb->query($sql);
+}
+
 if($_REQUEST['return_module'] == 'HelpDesk')
 {
    $sql = 'delete from seticketsrel where ticketid = '.$_REQUEST['return_id'].' and crmid = '.$_REQUEST['record'];

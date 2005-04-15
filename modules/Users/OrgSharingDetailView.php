@@ -37,35 +37,38 @@ $output .=  '</tr>';
 $row=1;
 foreach($defSharingPermissionData as $tab_id => $def_perr)
 {
-	
+
 	$entity_name = getTabname($tab_id);
-	if($def_perr == 0)
-	{
-		$entity_perr = $mod_stings['LBL_READ_ONLY'];
+	if($entity_name != "Notes" && $entity_name != "Products" && $entity_name != "Faq")
+	{	
+		if($def_perr == 0)
+		{
+			$entity_perr = $mod_strings['LBL_READ_ONLY'];
+		}
+		elseif($def_perr == 1)
+		{
+			$entity_perr = $mod_strings['LBL_EDIT_CREATE_ONLY'];
+		}	
+		elseif($def_perr == 2)
+		{
+			$entity_perr = $mod_strings['LBL_READ_CREATE_EDIT_DEL'];
+		}
+		elseif($def_perr == 3)
+		{
+			$entity_perr = $mod_strings['LBL_PRIVATE'];
+		}
+
+		if ($row%2==0)
+			$output .=   '<tr class="evenListRow">';
+		else
+			$output .=   '<tr class="oddListRow">';
+
+		$output .=   '<TD width="40%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$entity_name.'</TD>';
+		$output .=  '<TD width="60%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$entity_perr.'</TD>';
+		$output .=  '</tr>';
+
+		$row++;
 	}
-	elseif($def_perr == 1)
-	{
-		$entity_perr = $mod_strings['LBL_EDIT_CREATE_ONLY'];
-	}	
-	elseif($def_perr == 2)
-	{
-		$entity_perr = $mod_strings['LBL_READ_CREATE_EDIT_DEL'];
-	}
-	elseif($def_perr == 3)
-	{
-		$entity_perr = $mod_strings['LBL_PRIVATE'];
-	}
-	
-	if ($row%2==0)
-		$output .=   '<tr class="evenListRow">';
-	else
-		$output .=   '<tr class="oddListRow">';
-		
-	$output .=   '<TD width="40%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$entity_name.'</TD>';
-	$output .=  '<TD width="60%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$entity_perr.'</TD>';
-	$output .=  '</tr>';
-	
-	$row++;
 }
 
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/ListView.php,v 1.10 2005/03/21 07:21:48 samk Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/ListView.php,v 1.10.2.1 2005/04/08 06:23:53 samk Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -58,10 +58,10 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("MOD", $mod_strings);
 	$search_form->assign("APP", $app_strings);
 
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Emails','index','name','true','basic'));
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Emails','index','subject','true','basic'));
 
 	if(isset($_REQUEST['query'])) {
-		if(isset($_REQUEST['name'])) $search_form->assign("NAME", $_REQUEST['name']);
+		if(isset($_REQUEST['subject'])) $search_form->assign("NAME", $_REQUEST['subject']);
 		if(isset($_REQUEST['contactname'])) $search_form->assign("CONTACT_NAME", $_REQUEST['contactname']);
 		if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
 	}
@@ -96,7 +96,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
 	$url_string .="&query=true";
-	if (isset($_REQUEST['name'])) $name = $_REQUEST['name'];
+	if (isset($_REQUEST['subject'])) $name = $_REQUEST['subject'];
 	if (isset($_REQUEST['contactname'])) $contactname = $_REQUEST['contactname'];
 	if (isset($_REQUEST['date_start'])) $date_start = $_REQUEST['date_start'];
 	if (isset($_REQUEST['location'])) $location = $_REQUEST['location'];
@@ -110,7 +110,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	if(isset($name) && $name != '')
 	{
 		array_push($where_clauses, "activity.subject like ".PearDatabase::quote($name.'%')."");
-		$url_string .= "&name=".$name;
+		$url_string .= "&subject=".$name;
 		
 	}
 	if(isset($contactname) && $contactname != '')

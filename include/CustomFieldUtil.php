@@ -306,28 +306,43 @@ function CustomFieldSearch($customfieldarray, $fldModule, $tableName,$colidName,
 global $adb;
 //for($i=0;$i<count($customfieldarray);$i++){echo '<br> Custom Field : '.$i.'...'.$customfieldarray[$i];}
         //Custom Field Addition
-        $dbquery = "select  * from field  where tablename='".$fldModule."'";
+        $dbquery = "select  * from field  where tablename='".$fldModule."' order by fieldlabel";
         $result = $adb->query($dbquery);
         if($adb->num_rows($result) != 0)
         {
                 $noofrows = $adb->num_rows($result);
 
                 $custfld = '<table width="85%" border="0" cellspacing="0" cellpadding="0">';
-                $custfld .= '<tr><th align="left" class="formSecHeader" colspan="4">Custom Information</th></tr>';
+                $custfld .= '<tr><th align="left" class="formSecHeader" colspan="4">'.$app_strings['LBL_CUSTOM_INFORMATION'].'</th></tr>';
                 for($i=0; $i<$noofrows; $i++)
                 {
                         $id=$customfieldarray[$i];
                         $colName=$column[$i];
                         $setName=$fieldlabel[$i];
-                        $custfld .= '<td width="20%" class="dataLabel">'.$colName.':</td>';
+			$uitype[$i] = $adb->query_result($result,$i,'uitype');
 
-                        $custfld .= '<td width="30%"><input name="'.$setName.'" type="text" tabindex="'.$i.'" size="25" maxl
-ength="25" value="'.$customfieldarray[$i].'"></td>';
-                        if($i%2==1)
-                        {
-                                $custfld .= '<tr>';
-                        }
+			if($uitype[$i] == 56)
+		        {
+                		$custfld .= '<td width="20%" class="dataLabel">'.$colName.':</td>';
+		                if($customfieldarray[$i] == 'on')
+                		{
+		                        $custfld .='<td width="30%"><input name="'.$setName.'" type="checkbox"  checked></td>';
+                		}
+		                else
+                		{
+		                        $custfld .='<td width="30%"><input name="'.$setName.'" type="checkbox"></td>';
+                		}
+		        }
+			else
+			{
+	                        $custfld .= '<td width="20%" class="dataLabel">'.$colName.':</td>';
 
+        	                $custfld .= '<td width="30%"><input name="'.$setName.'" type="text" tabindex="'.$i.'" size="25" maxlength="25" value="'.$customfieldarray[$i].'"></td>';
+	                        if($i%2==1)
+        	                {
+                	                $custfld .= '<tr>';
+                        	}
+			}
                 }
 
                 $custfld .= '</table>';

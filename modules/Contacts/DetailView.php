@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.36 2005/03/17 11:12:06 ray Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.36.2.2 2005/04/13 05:05:18 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -140,7 +140,7 @@ if(isPermitted("Contacts",8,'') == 'yes')
 		$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
-	$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;Select template to Mail Merge:<select name=\"mergefile\">".$optionString."</select>");
+	$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
 }
 $xtpl->parse("main");
 $xtpl->out("main");
@@ -188,6 +188,8 @@ if($tab_per_Data[10] == 0)
  		$focus_emails_list = & $focus->get_emails($focus->id);
 	}
 }
+
+$focus_history_list =  $focus->get_history($focus->id);
 
 if($tab_per_Data[8] == 0)
 {

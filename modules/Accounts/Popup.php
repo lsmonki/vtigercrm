@@ -148,7 +148,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','Popup','name','true','basic'));
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','Popup','name','true','basic',$popuptype));
 	$search_form->parse("main");
 	$search_form->out("main");
 

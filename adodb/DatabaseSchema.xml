@@ -252,8 +252,8 @@
 		<field name="tickersymbol" type="C" size="30"></field>
 		<field name="phone" type="C" size="30"></field>
 		<field name="otherphone" type="C" size="30"></field>
-		<field name="email1" type="C" size="30"></field>
-		<field name="email2" type="C" size="30"></field>
+		<field name="email1" type="C" size="100"></field>
+		<field name="email2" type="C" size="100"></field>
 		<field name="website" type="C" size="30"></field>
 		<field name="fax" type="C" size="30"></field>
 		<field name="employees" type="I" size="10">
@@ -864,7 +864,8 @@
                 <field name="duration_hours" type="C" size="2"></field> 
                 <field name="duration_minutes" type="C" size="2"></field> 
 		<field name="status" type="C" size="100">
-
+		</field>
+		<field name="eventstatus" type="C" size="100">
 		</field>
 		<field name="priority" type="C" size="150"></field>     
                 <field name="location" type="C" size="150"></field>     
@@ -2226,10 +2227,10 @@
 		<field name="user_ip" type="C" size="25">
 			<NOTNULL/>
 		</field>
-		<field name="login_time" type="T">
+		<field name="logout_time" type="T">
 			<DEFTIMESTAMP/>
 		</field>
-		<field name="logout_time" type="T">
+		<field name="login_time" type="T">
 			<DEFTIMESTAMP/>
 		</field>
 		<field name="status" type="C" size="25">			

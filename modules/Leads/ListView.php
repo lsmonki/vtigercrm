@@ -87,11 +87,15 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 {
         $column[$i]=$adb->query_result($result,$i,'columnname');
         $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
+        $uitype[$i]=$adb->query_result($result,$i,'uitype');
         if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
 
         if(isset($customfield[$i]) && $customfield[$i] != '')
         {
-                $str=" leadscf.".$column[$i]." like '$customfield[$i]%'";
+		if($uitype[$i] == 56)
+			$str=" leadscf.".$column[$i]." = 1";
+		else
+	                $str=" leadscf.".$column[$i]." like '$customfield[$i]%'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }

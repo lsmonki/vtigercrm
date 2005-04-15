@@ -29,7 +29,7 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 echo get_module_title("Products", $mod_strings['LBL_MODULE_NAME'].": Home" , true);
 echo "<br>";
-echo get_form_header("Product Search", "", false);
+//echo get_form_header("Product Search", "", false);
 
 $xtpl=new XTemplate ('modules/Products/ProductsList.html');
 $xtpl->assign("MOD", $mod_strings);
@@ -73,13 +73,18 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 	{
 	        $column[$i]=$adb->query_result($result,$i,'columnname');
 	        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
+		$uitype[$i]=$adb->query_result($result,$i,'uitype');
+
 	        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
 	
 	        if(isset($customfield[$i]) && $customfield[$i] != '')
 	        {
-	                $str=" productcf.".$column[$i]." like '$customfield[$i]%'";
-	                array_push($where_clauses, $str);
-	          //      $search_query .= ' and '.$str;
+			if($uitype[$i] == 56)
+                                $str=" productcf.".$column[$i]." = 1";
+                        else
+			        $str=" productcf.".$column[$i]." like '$customfield[$i]%'";
+		        array_push($where_clauses, $str);
+	       	//	  $search_query .= ' and '.$str;
 			$url_string .="&".$column[$i]."=".$customfield[$i];
 	        }
 	}
@@ -165,10 +170,11 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 //Constructing the Search Form
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         // Stick the form header out there.
-//	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'],'', false);
+	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'],'', false);
         $search_form=new XTemplate ('modules/Products/SearchForm.html');
         $search_form->assign("MOD", $mod_strings);
         $search_form->assign("APP", $app_strings);
+	$clearsearch = 'true';
 	
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
@@ -194,16 +200,17 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if (isset($_REQUEST['expiry_date'])) $expiry_date = $_REQUEST['expiry_date'];	
 	if (isset($_REQUEST['purchase_date'])) $purchase_date = $_REQUEST['purchase_date'];	
 
+//Combo Fields for Manufacturer and Category are moved from advanced to Basic Search
+        if (isset($manufacturer)) $search_form->assign("MANUFACTURER", get_select_options($comboFieldArray['manufacturer_dom'], $manufacturer, $clearsearch));
+        else $search_form->assign("MANUFACTURER", get_select_options($comboFieldArray['manufacturer_dom'], '', $clearsearch));
+        if (isset($productcategory)) $search_form->assign("PRODUCTCATEGORY", get_select_options($comboFieldArray['productcategory_dom'], $productcategoty, $clearsearch));
+        else $search_form->assign("PRODUCTCATEGORY", get_select_options($comboFieldArray['productcategory_dom'], '', $clearsearch));
+
         if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') 
 	{
-
 		$url_string .="&advanced=true";
 		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Products','index','productname','true','advanced'));
 
-		if (isset($manufacturer)) $search_form->assign("MANUFACTURER", get_select_options($comboFieldArray['manufacturer_dom'], $manufacturer, $advsearch));
-                else $search_form->assign("MANUFACTURER", get_select_options($comboFieldArray['manufacturer_dom'], '', $advsearch));
-		if (isset($productcategory)) $search_form->assign("PRODUCTCATEGORY", get_select_options($comboFieldArray['productcategory_dom'], $productcategoty, $advsearch));
-	        else $search_form->assign("PRODUCTCATEGORY", get_select_options($comboFieldArray['productcategory_dom'], '', $advsearch));
 		$search_form->assign("SUPPORT_START_DATE",$_REQUEST['start_date']);
 		$search_form->assign("SUPPORT_EXPIRY_DATE",$_REQUEST['expiry_date']);
 		$search_form->assign("PURCHASE_DATE",$_REQUEST['purchase_date']);

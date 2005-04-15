@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.51 2005/03/25 11:33:54 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.51.2.3 2005/04/14 10:25:15 rank Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -230,7 +230,7 @@ class Account extends CRMEntity {
 	{
           // First, get the list of IDs.
 //          $query = "SELECT activity.subject,semodule,activitytype,date_start,status,priority from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid where seactivityrel.crmid=".$id;
-	  $query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0";
+	  $query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held')";
           renderRelatedTasks($query,$id);
 
           //return $this->build_related_list($query, new Task());
@@ -284,6 +284,13 @@ class Account extends CRMEntity {
           renderRelatedEmails($query,$id);
           //return $this->build_related_list($query, new Email());
 	}
+
+	function get_history($id)
+	{
+		$query = "SELECT activity.activityid, activity.subject, activity.status, activity.eventstatus, activity.activitytype, contactdetails.contactid, contactdetails.firstname, contactdetails.lastname, crmentity.modifiedtime from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') and (activity.status='Completed' or activity.eventstatus='Held') and seactivityrel.crmid=".$id;
+		renderRelatedHistory($query,$id);
+	}
+
 	function get_attachments($id)
 	{
 		$query = "select notes.title,'Notes      '  ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
@@ -555,11 +562,11 @@ class Account extends CRMEntity {
 			//construct query as below
 		       if($i == 0)
 		      	{
-				$sql3 .= "accountscf.".$columnName. " " .$fieldlable;
+				$sql3 .= "accountscf.".$columnName. " '" .$fieldlable."'";
 			}
 			else
 			{	
-		$sql3 .= ", accountscf.".$columnName. " " .$fieldlable;
+				$sql3 .= ", accountscf.".$columnName. " '" .$fieldlable."'";
 			}
         
 	         }

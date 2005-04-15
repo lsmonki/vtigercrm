@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/Save.php,v 1.9 2005/03/22 16:37:01 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/Save.php,v 1.9.2.1 2005/04/12 15:12:54 samk Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -59,12 +59,23 @@ if(isset($_REQUEST['mode']))
 }
 
 //$focus->retrieve($_REQUEST['record']);
-if((isset($_REQUEST['change_status']) && $_REQUEST['change_status']) && $_REQUEST['status']!='')
+if((isset($_REQUEST['change_status']) && $_REQUEST['change_status']) && ($_REQUEST['status']!='' || $_REQUEST['eventstatus']!=''))
 {
-	
+	$status ='';
+	$activity_type='';
 	$return_id = $focus->id;
-	$status = $_REQUEST['status'];
-	ChangeStatus($status,$return_id);
+	if(isset($_REQUEST['status']))
+	{
+		$status = $_REQUEST['status'];	
+		$activity_type = "Task";	
+	}
+	elseif(isset($_REQUEST['eventstatus']))
+	{
+		$status = $_REQUEST['eventstatus'];	
+		$activity_type = "Events";	
+	}
+	
+	ChangeStatus($status,$return_id,$activity_type);
 }
 else
 {

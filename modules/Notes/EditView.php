@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/EditView.php,v 1.12 2005/03/24 14:08:32 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/EditView.php,v 1.12.2.1 2005/04/11 13:22:49 rank Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -46,6 +46,7 @@ if(isset($_REQUEST['parent_id']))
 //$old_id = '';
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
 {
+	$old_id = $_REQUEST['record'];
 	if (! empty($focus->filename) )
 	{	
 	 $old_id = $focus->id;

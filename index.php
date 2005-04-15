@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/index.php,v 1.88 2005/03/26 12:07:58 samk Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/index.php,v 1.88.2.1 2005/04/05 10:57:35 samk Exp $
  * Description: Main file and starting point for the application.  Calls the 
  * theme header and footer files defined for the user as well as the module as 
  * defined by the input parameters.
@@ -605,7 +605,14 @@ if($action == "DetailView")
 		}
 	
 	//$focus->retrieve($_REQUEST['record']);
-        $focus->track_view($current_user->id, $currentModule,$_REQUEST['record']);
+        //$focus->track_view($current_user->id, $currentModule,$_REQUEST['record']);
+	
+	if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
+        {
+                // Only track a viewing if the record was retrieved.
+                $focus->track_view($current_user->id, $currentModule,$_REQUEST['record']);
+        }
+
 }	
 
 // set user, theme and language cookies so that login screen defaults to last values

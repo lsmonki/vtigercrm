@@ -75,6 +75,11 @@ function renderRelatedEmails($query,$id)
 	echo '</form>';
 }
 
+function renderRelatedHistory($query,$id)
+{
+	getHistory('Leads',$query,$id);
+}
+
 function renderRelatedAttachments($query,$id)
 {
 	$hidden = getHiddenValues($id);

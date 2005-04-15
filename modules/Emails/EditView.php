@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/EditView.php,v 1.24 2005/03/24 16:18:38 samk Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/EditView.php,v 1.24.2.1 2005/04/11 13:30:53 rank Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -57,6 +57,7 @@ if(isset($_REQUEST['parent_id']))
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
+	$old_id = $_REQUEST['record'];
         if (! empty($focus->filename) )
         {
          $old_id = $focus->id;
@@ -142,7 +143,7 @@ $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("ID", $focus->id);
 $xtpl->assign("ENTITY_ID", $_REQUEST["record"]);
 $xtpl->assign("ENTITY_TYPE",$_REQUEST["email_directing_module"]);
-
+$xtpl->assign("OLD_ID", $old_id );
 
 if ( empty($focus->filename))
 {

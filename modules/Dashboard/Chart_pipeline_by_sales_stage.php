@@ -32,6 +32,10 @@ $log = LoggerManager::getLogger('pipeline_by_sales_stage');
 if (isset($_REQUEST['pbss_refresh'])) { $refresh = $_REQUEST['pbss_refresh']; }
 else { $refresh = false; }
 
+// added for auto refresh
+$refresh = true;
+//
+
 // Get _dom Arrays from Database
 $comboFieldNames = Array('sales_stage'=>'sales_stage_dom');
 $comboFieldArray = getComboArray($comboFieldNames);

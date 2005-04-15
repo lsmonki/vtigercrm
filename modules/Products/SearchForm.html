@@ -40,13 +40,9 @@
 
 		<td><input type=text size="10" name="productcode"  value='{PRODUCT_CODE}' />
 
-		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCT_COMMISSION_RATE}&nbsp;</td>
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCT_UNIT_PRICE}&nbsp;</td>
 
-		<td><input type=text size="10" name="commissionrate"  value='{COMMISSION_RATE}' />
-
-		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCT_QTY_PER_UNIT}&nbsp;</td>
-
-		<td><input type=text size="10" name="qtyperunit"  value='{QTYPERUNIT}'/>
+		<td><input type=text size="10" name="unitprice"  value='{UNITPRICE}'/>
 
 		<td rowspan='2' align="center"><input type="hidden" name="action" value="index"/>
 
@@ -70,9 +66,13 @@
 
 	</tr><tr>
 
-		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCT_UNIT_PRICE}&nbsp;</td>
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_MANUFACTURER}&nbsp;</td>
 
-		<td><input type=text size="10" name="unitprice"  value='{UNITPRICE}'/>
+                <td><select name='manufacturer' tabindex='1'>{MANUFACTURER}</select></td>
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_PRODUCTCATEGORY}&nbsp;</td>
+
+                <td><select name='productcategory' tabindex='1'>{PRODUCTCATEGORY}</select></td>
 
 	</tr>
 
@@ -144,7 +144,7 @@
 
 <br>
 
-       <font size='1'>[<a href='{ADVANCE_LINK}'>{APP.LNK_BASIC_SEARCH}</a>]</font>
+       <font size='1'>[<a href='{BASIC_LINK}'>{APP.LNK_BASIC_SEARCH}</a>]</font>
 
 		</td>
 

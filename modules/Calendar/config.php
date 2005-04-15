@@ -266,8 +266,8 @@ $tutos['typo3dbpasswd'] = $tutos[dbpasswd][1];
 $tutos[tasksincalendar]  = 1;
 
 #$tutos[-17] = 0; # ldap
-$tutos[sessionpath] = $root_directory ."modules/Calendar/tmp";
-$tutos[errlog] = $tutos[sessionpath]. "/debug.out";
+#$tutos[sessionpath] = $root_directory ."modules/Calendar/tmp";
+#$tutos[errlog] = $tutos[sessionpath]. "/debug.out";
 $tutos[jpgraph]  = "jpgraph";
 #$tutos[fpdfpath]  = "";
 $tutos[-15] = 0;

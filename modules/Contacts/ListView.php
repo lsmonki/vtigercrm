@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/ListView.php,v 1.23 2005/03/28 15:30:12 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/ListView.php,v 1.23.2.1 2005/04/06 04:45:49 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -87,11 +87,15 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 {
         $column[$i]=$adb->query_result($result,$i,'columnname');
         $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
+        $uitype[$i]=$adb->query_result($result,$i,'uitype');
         if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
 
         if(isset($customfield[$i]) && $customfield[$i] != '')
         {
-                $str=" contactscf.".$column[$i]." like '$customfield[$i]%'";
+		if($uitype[$i] == 56)
+			$str=" contactscf.".$column[$i]." = 1";
+		else
+	        	$str=" contactscf.".$column[$i]." like '$customfield[$i]%'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }

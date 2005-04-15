@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Save.php,v 1.6 2005/03/22 16:33:28 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Save.php,v 1.6.2.1 2005/04/11 13:28:21 rank Exp $
  * Description:  Saves an Account record and then redirects the browser to the
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -35,6 +35,29 @@ if(isset($_REQUEST['record']))
 if(isset($_REQUEST['mode']))
 {
         $focus->mode = $_REQUEST['mode'];
+}
+
+//Added for retrieve the old existing attachments when duplicated without new attachment
+if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit')
+{
+	$sql = "select attachments.attachmentsid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid=attachments.attachmentsid where seattachmentsrel.crmid= ".$_REQUEST['old_id'];
+	$result = $adb->query($sql);
+	if($adb->num_rows($result) != 0)
+		$attachmentid = $adb->query_result($result,0,'attachmentsid');
+	if($attachmentid != '')
+	{
+		$attachquery = "select * from attachments where attachmentsid = ".$attachmentid;
+		$result = $adb->query($attachquery);
+		$filename = $adb->query_result($result,0,'name');
+		$filetype = $adb->query_result($result,0,'type');
+		$filesize = $adb->query_result($result,0,'attachmentsize');
+		$data = $adb->query_result($result,0,'attachmentcontents');
+//		$_FILES["filename"]["tmp_name"] = basename($filename);
+		$_FILES['filename']['name'] = $filename;
+		$_FILES['filename']['type'] = $filetype;
+		$_FILES['filename']['size'] = $filesize;
+//		if(!@move_uploaded_file($_FILES["filename"]["tmp_name"],$uploaddir.$_FILES["filename"]["name"])){}
+	}
 }
 
 //$focus->retrieve($_REQUEST['record']);
@@ -62,6 +85,8 @@ foreach($focus->additional_column_fields as $field)
 */
 if (!isset($_REQUEST['date_due_flag'])) $focus->date_due_flag = 'off';
 
+//Commented for avoid to save the old attachments using the include/upload_file.php methods
+/*
 $upload_file = new UploadFile('uploadfile');
 
 $do_final_move = 0;
@@ -82,11 +107,21 @@ else
 {
         $focus->filename = $_REQUEST['old_filename'];
 }
-
+*/
 
 //$focus->saveentity("Notes");
 $focus->save("Notes");
 
+//Added for update the existing attachments when duplicated without new attachment
+if($attachmentid != '')
+{
+	$sql = "select attachmentsid from seattachmentsrel where crmid=".$focus->id;
+	$attachmentid = $adb->query_result($adb->query($sql),0,'attachmentsid');
+	$result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$attachmentid."' and name='".$filename."'",$data);
+}
+
+//Commented for avoid to save the old attachments using the include/upload_file.php methods
+/*
 if ($do_final_move)
 {
 	$upload_file->final_move($focus->id);
@@ -95,7 +130,7 @@ else if ( ! empty($_REQUEST['old_id']))
 {
 	$upload_file->duplicate_file($_REQUEST['old_id'], $focus->id, $focus->filename);
 }
-
+*/
 $return_id = $focus->id;
 
 

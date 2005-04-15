@@ -445,7 +445,8 @@ class appointment extends tutos_base {
     $this->record_id   = $val_array["activityid"];
     #$this->creator = getObject($this->dbconn,$r->get($pos, "creator"));
     $obj->creator->id = $val_array["smownerid"];
-    $this->creator = $val_array["creator"];
+    #$this->creator = $val_array["creator"];
+    $this->creator = getUserName($val_array["smownerid"]);
     //print("GS -> subject=".$this->subject);
 
     $this->outside     = $val_array["location"];
@@ -931,7 +932,7 @@ class appointment extends tutos_base {
       // commented and added by raj
       #$url = $this->getModURL();
  //     $url = "../../index.php?module=Activities&action=DetailView&actvity_mode=Events&record=".$this->record_id;
-      $url = "../../index.php?action=DetailView&module=Activities&record=".$this->record_id ."&activity_mode=Events";
+      $url = "index.php?action=DetailView&module=Activities&record=".$this->record_id ."&activity_mode=Events";
 
       //
       $info = $mod_strings['LBL_CHANGE_APPNT'];
@@ -1391,6 +1392,8 @@ class appointment extends tutos_base {
       $descr = eregi_replace("\n","<br />",$this->descr);
       if ($descr != "" ) {
         echo "  <tr><td width=\"16\" align=\"right\" valign=\"top\"><img src=\"".$image_path."".$this->module_name."s.gif\" border=\"0\">&nbsp;</td><td class=\"". $class ."\" colspan=\"2\">". urlReplace($descr) ."&nbsp;</td></tr>\n";
+	echo "  <tr><td class=\"". $class ."\" colspan=\"3\">". $this->creator ."&nbsp;</td></tr>\n";
+
       }
 
    //

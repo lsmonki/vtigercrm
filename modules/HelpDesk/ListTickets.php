@@ -70,9 +70,9 @@ else
 */
 
 //$search_query="select troubletickets.ticketid,contact_id,priority,troubletickets.status,category,troubletickets.title,troubletickets.description,update_log,version_id,crmentity.createdtime,crmentity.modifiedtime, contactdetails.firstname,contactdetails.lastname,users.user_name from troubletickets inner join users on users.id=crmentity.smownerid left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join seticketsrel on seticketsrel.ticketid=troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid and crmentity.smownerid=".$current_user->id." and crmentity.deleted=0";
-$search_query="select troubletickets.ticketid,contact_id,priority,troubletickets.status,category,troubletickets.title,troubletickets.description,update_log,version_id,crmentity.createdtime,crmentity.modifiedtime, contactdetails.firstname,contactdetails.lastname,users.user_name from troubletickets inner join crmentity on crmentity.crmid= troubletickets.ticketid inner join users on users.id=crmentity.smownerid left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join seticketsrel on seticketsrel.ticketid=troubletickets.ticketid where crmentity.smownerid=".$current_user->id." and crmentity.deleted=0";
+$search_query="select troubletickets.ticketid,contact_id,priority,troubletickets.status,category,troubletickets.title,troubletickets.description,update_log,version_id,crmentity.createdtime,crmentity.modifiedtime, contactdetails.firstname,contactdetails.lastname,users.user_name from troubletickets inner join crmentity on crmentity.crmid= troubletickets.ticketid inner join users on users.id=crmentity.smownerid left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join seticketsrel on seticketsrel.ticketid=troubletickets.ticketid where crmentity.smownerid=".$current_user->id." and crmentity.deleted=0 and troubletickets.status <> 'Closed'  ORDER BY createdtime DESC";
 
-$tktresult = $adb->query($search_query);
+$tktresult = $adb->limitquery($search_query,0,5);
 $ticketListheader = get_form_header($current_module_strings['LBL_MY_TICKETS'], "", false );
 echo "<br>";
 
@@ -117,8 +117,7 @@ for ($i=0; $i<$adb->num_rows($tktresult); $i++)
         $subject = '<a href="index.php?action=DetailView&module=HelpDesk&record='.$adb->query_result($tktresult,$i,"ticketid").'">'.$adb->query_result($tktresult,$i,"title").'</a>';
        $list .= '<td style="padding:0px 3px 0px 3px;">'.$subject.'</td>';
                 $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $contact_name = '<a href="index.php?action=DetailView&module=Contacts&record='.$adb->query_result($tktresult,$i-1,"c
-ontact_id").'">'.$adb->query_result($tktresult,$i,"firstname").' '.$adb->query_result($tktresult,$i,"lastname").'</a>';
+        $contact_name = '<a href="index.php?action=DetailView&module=Contacts&record='.$adb->query_result($tktresult,$i,"contact_id").'">'.$adb->query_result($tktresult,$i,"firstname").' '.$adb->query_result($tktresult,$i,"lastname").'</a>';
         $list .= '<td style="padding:0px 3px 0px 3px;">'.$contact_name.'</td>';
                 $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
         $list .= '<td style="padding:0px 3px 0px 3px;">'.$adb->query_result($tktresult,$i,"status").'</td>';

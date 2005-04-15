@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/data/Tracker.php,v 1.14 2005/03/24 12:58:54 ray Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/data/Tracker.php,v 1.14.2.2 2005/04/07 14:20:02 rank Exp $
  * Description:  Updates entries for the Last Viewed functionality tracking the
  * last viewed records on a per user basis.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -78,7 +78,7 @@ class Tracker {
             $result = $this->db->query($query);
             $firstname = $adb->query_result($result,0,'firstname');
             $lastname =  $adb->query_result($result,0,'lastname');
-            $item_summary = $lastname .' ' .$firstname;
+            $item_summary = $firstname .' ' .$lastname;
           }
           elseif ($current_module =='Accounts')
           {
@@ -94,7 +94,7 @@ class Tracker {
             $result = $this->db->query($query);
             $firstname = $adb->query_result($result,0,'firstname');
             $lastname =  $adb->query_result($result,0,'lastname');
-            $item_summary = $lastname .' ' .$firstname;
+            $item_summary = $firstname .' ' .$lastname;
             
           }
           elseif($current_module =='Potentials')
@@ -102,7 +102,7 @@ class Tracker {
             $query = 'select potentialname from potential where potentialid=' .$item_id;
             $result = $this->db->query($query);
             $potentialname =  $adb->query_result($result,0,'potentialname');
-            $item_summary = $lastname .' ' .$potentialname;
+            $item_summary = $potentialname;
           }
           elseif($current_module =='Notes')
           {
@@ -179,7 +179,8 @@ class Tracker {
     		return;
     	}
 
-        $query = "SELECT * from $this->table_name WHERE user_id='$user_id' ORDER BY id DESC";
+//        $query = "SELECT * from $this->table_name WHERE user_id='$user_id' ORDER BY id DESC";
+	$query = "SELECT * from $this->table_name inner join crmentity on crmentity.crmid=tracker.item_id WHERE user_id='$user_id' and crmentity.deleted=0 ORDER BY id DESC";
         $this->log->debug("About to retrieve list: $query");
         $result = $this->db->query($query, true);
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/utils.php,v 1.179 2005/03/28 15:01:29 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/utils.php,v 1.179.2.9 2005/04/14 10:37:37 samk Exp $
  * Description:  Includes generic helper functions used throughout the application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -112,6 +112,9 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="")
 		if (!empty($assigned_user)) {
 			 $query .= " OR id='$assigned_user'";
 		}
+
+		$query .= " order by user_name ASC";
+
 		//$log->debug("get_user_array query: $query");
 		$result = $db->query($query, true, "Error filling in user array: ");
 
@@ -1500,7 +1503,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                 global $adb;
 
                 $attachmentid=$adb->query_result($adb->query("select * from seattachmentsrel where crmid = ".$col_fields['record_id']),0,'attachmentsid');
-
+		if($col_fields[$fieldname] == '' && $attachmentid != '')
+		{
+				$attachquery = "select * from attachments where attachmentsid=".$attachmentid;
+        		        $col_fields[$fieldname] = $adb->query_result($adb->query($attachquery),0,'name');
+		}
                 $custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&filename='.$col_fields[$fieldname].'">'.$col_fields[$fieldname].'</a>';
 
                 $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
@@ -2085,6 +2092,12 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"productname");
         }
+	if($parent_module == 'Contacts' && $module == 'Emails')
+        {
+                $parent_query = "SELECT firstname,lastname FROM contactdetails WHERE contactid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"firstname") ." " .$adb->query_result($parent_result,0,"lastname");
+        }
 
         $parent_value = "<a href='index.php?module=".$parent_module."&action=DetailView&record=".$parent_id."'>".$parent_name."</a>";
         return $parent_value;
@@ -2107,6 +2120,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			}
 		</script>';
 	global $theme;
+	$evt_status;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 
@@ -2154,6 +2168,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
 					{
 						$status = $adb->query_result($list_result,$i-1,"status");
+						if($status == '')
+                                                $status = $adb->query_result($list_result,$i-1,"eventstatus");
 						if ($name=='Related to')
 							$value=getRelatedTo($module,$list_result,$i-1);
 						if($name=='Contact Name')
@@ -2172,14 +2188,19 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						}
 						if ($name == 'Close') 
 						{
-							if($status =='Deferred' || $status == 'Completed' || $status == '')
+							if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '')
 							{
 								$value="";
 							}
 							else
 							{
 								$activityid = $adb->query_result($list_result,$i-1,"activityid");
-								$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>";
+								$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
+                                                                if($activitytype=='Task')
+                                                                $evt_status='&status=Completed';
+                                                                else
+                                                                $evt_status='&eventstatus=Held';
+                                                                $value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
 							}
 						}
 					}
@@ -2579,7 +2600,7 @@ function getListQuery($module,$where='')
 	if ($module == "Potentials")
 	{
 		 //$query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.*, potentialscf.* from potential , account, potentialscf inner join crmentity on crmentity.crmid=potential.potentialid and potential.accountid = account.accountid and potentialscf.potentialid = potential.potentialid where crmentity.deleted=0 ".$where;
-		 $query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.accountid,potential.potentialname,potential.amount,potential.currency,potential.closingdate,potential.typeofrevenue, potentialscf.* from potential inner join crmentity on crmentity.crmid=potential.potentialid inner join account on potential.accountid = account.accountid inner join potentialscf on potentialscf.potentialid = potential.potentialid where crmentity.deleted=0 ".$where;
+		 $query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.accountid,potential.potentialname,potential.sales_stage,potential.amount,potential.currency,potential.closingdate,potential.typeofrevenue, potentialscf.* from potential inner join crmentity on crmentity.crmid=potential.potentialid inner join account on potential.accountid = account.accountid inner join potentialscf on potentialscf.potentialid = potential.potentialid where crmentity.deleted=0 ".$where;
 
 	}
 	if($module == "Leads")
@@ -2766,23 +2787,35 @@ function getQuickCreate($tabid,$actionid)
 	return $QuickCreateForm;
 
 }
-function ChangeStatus($status,$activityid)
+function ChangeStatus($status,$activityid,$activity_mode='')
  {
- 	if ($status != '')
- 	{
- 	        global $adb;
- 		$query = "Update activity set status='".$status."' where activityid = ".$activityid;
- 		$adb->query($query);
- 	}
+        global $adb;
+        if ($activity_mode == 'Task')
+        {
+                $query = "Update activity set status='".$status."' where activityid = ".$activityid;
+        }
+        elseif ($activity_mode == 'Events')
+        {
+                $query = "Update activity set eventstatus='".$status."' where activityid = ".$activityid;
+        }
+        $adb->query($query);
  }
 
-function AlphabeticalSearch($module,$action,$fieldname,$query,$type)
+function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='',$recordid='',$return_module='')
 {
 	if($type=='advanced')
 		$flag='&advanced=true';
 
+	if($popuptype != '')
+		$popuptypevalue = "&popuptype=".$popuptype;
+
+        if($recordid != '')
+                $returnvalue = '&recordid='.$recordid;
+        if($return_module != '')
+                $returnvalue .= '&return_module='.$return_module;
+
 	for($var='A',$i =1;$i<=26;$i++,$var++)
-		$list .= '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&query='.$query.'&'.$fieldname.'='.$var.$flag.'">'.$var.'</a></td>';
+		$list .= '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&query='.$query.'&'.$fieldname.'='.$var.$flag.$popuptypevalue.$returnvalue.'">'.$var.'</a></td>';
 
 	return $list;
 }

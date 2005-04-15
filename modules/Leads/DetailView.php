@@ -150,6 +150,7 @@ $focus_list = & $focus->get_direct_reports();
  $focus_emails_list = & $focus->get_emails($focus->id);
 // $focus_notes_list = & $focus->get_notes($focus->id);
 // $focus_tickets_list = & $focus->get_tickets($focus->id);
+ $focus_history_list = & $focus->get_history($focus->id);
  $focus_attachments_list = & $focus->get_attachments($focus->id);
 
 ?>

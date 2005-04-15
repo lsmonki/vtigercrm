@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/data/CRMEntity.php,v 1.11 2005/03/29 12:14:24 shankarr Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/data/CRMEntity.php,v 1.11.2.5 2005/04/14 09:49:26 sarajkumar Exp $
  * Description:  Defines the base class for all data entities used throughout the 
  * application.  The base class including its methods and variables is designed to 
  * be overloaded with module-specific methods and variables particular to the 
@@ -188,7 +188,11 @@ class CRMEntity extends SugarBean
                 $adb->query($delquery);
         }
      }
-
+	if($module == 'Notes')
+	{
+		$query = "delete from seattachmentsrel where crmid = ".$id;
+		$adb->query($query);
+	}
       $sql3='insert into seattachmentsrel values('.$id.','.$current_id.')';
       $adb->query($sql3);
     }
@@ -220,7 +224,8 @@ class CRMEntity extends SugarBean
     }		
     if($this->mode == 'edit')
     {
-	$sql = "update crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description='".$this->column_fields['description']."', modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
+	$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
+	$sql = "update crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description='".$description_val."', modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
 			
       $adb->query($sql);
     }
@@ -252,14 +257,16 @@ class CRMEntity extends SugarBean
 	$modifiedtime = $adb->query_result($result,0,"modifiedtime");
 	$deleted = $adb->query_result($result,0,"deleted");
 	$module = $adb->query_result($result,0,"module");
+	$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
 	//get the values from this and set to the query below and then relax!
-      $sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime,deleted) values('".$id."','".$creatorid."','".$modifierid."','".$module."','".$this->column_fields['description']."','".$createdtime."','".$modifiedtime ."',".$deleted.")";
+      $sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime,deleted) values('".$id."','".$creatorid."','".$modifierid."','".$module."',".$description_val.",'".$createdtime."','".$modifiedtime ."',".$deleted.")";
       $adb->query($sql);
       $this->id = $id;
 	     	}		
 		else
 		{
-      $sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."','".$this->column_fields['description']."','".$date_var."')";
+      $description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
+      $sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",'".$date_var."','".$date_var."')";
       $adb->query($sql);
       $this->id = $current_id;
                 }
@@ -403,6 +410,11 @@ class CRMEntity extends SugarBean
           $fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
         }
         //code by shankar ends
+
+	if($table_name == 'notes' && $columname == 'filename' && $_FILES['filename']['name'] == '')
+	{
+		$fldvalue = $this->getOldFileName($this->id);
+	}
         if($i == 0)
         {
           $update = $columname."=".$fldvalue."";
@@ -525,7 +537,21 @@ class CRMEntity extends SugarBean
       }
 		
   }
-
+function getOldFileName($notesid)
+{
+	global $adb;
+	$query1 = "select * from seattachmentsrel where crmid=".$notesid;
+	$result = $adb->query($query1);
+	$noofrows = $adb->num_rows($result);
+	if($noofrows != 0)
+		$attachmentid = $adb->query_result($result,0,'attachmentsid');
+	if($attachmentid != '')
+	{
+		$query2 = "select * from attachments where attachmentsid=".$attachmentid;
+		$filename = "'".$adb->query_result($adb->query($query2),0,'name')."'";
+	}
+	return $filename;
+}
 
 	
   function retrieve_entity_info($record, $module)

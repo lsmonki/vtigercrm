@@ -234,7 +234,7 @@ $tutos[version] = $x;
 unset($x);
 
 include_once $calpath .'db/table.pinc';
-include_once $calpath .'modules.pinc';
+#include_once $calpath .'modules.pinc';
 if ( file_exists($tutos['base'] .'/db/table_custom.pinc') && is_readable($tutos['base'] .'/db/table_custom.pinc') ) {
   include_once $calpath .'db/table_custom.pinc';
 }

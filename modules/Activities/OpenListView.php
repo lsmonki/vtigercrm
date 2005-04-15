@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/OpenListView.php,v 1.19 2005/03/28 18:19:29 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/OpenListView.php,v 1.19.2.1 2005/04/12 14:58:10 samk Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -43,7 +43,7 @@ $later = date("Y-m-d", strtotime("$today + 7 days"));
 
 //$activity = new Activity();
 //change made as requested by community by shaw
-$where = "AND (activity.status != 'Completed' or activity.status is null) AND date_start >= '$today' AND date_start < '$later' AND crmentity.smownerid ='{$current_user->id}' ORDER BY date_start";
+$where = "AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held') AND date_start >= '$today' AND date_start < '$later' AND crmentity.smownerid ='{$current_user->id}' ORDER BY date_start";
 
 $list_query = getListQuery("Activities",$where);
 $list_result = $adb->limitQuery($list_query,0,5);
@@ -93,11 +93,11 @@ foreach($open_activity_list as $event)
 		'PARENT_NAME' => $event['parent'],
 	);
 	switch ($event['type']) {
-	//	case 'Call':
-	//		$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed'>X</a>";
-	//		break;
-	//	case 'Meeting':
-	//		$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed'>X</a>";
+		case 'Call':
+			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&eventstatus=Held'>X</a>";
+		break;
+		case 'Meeting':
+			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&eventstatus=Held'>X</a>";
 		case 'Task':
 			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed'>X</a>";
 			break;

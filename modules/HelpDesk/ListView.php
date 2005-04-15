@@ -49,7 +49,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
 	$url_string .="&query=true";
-	if (isset($_REQUEST['title'])) $name = $_REQUEST['title'];
+	if (isset($_REQUEST['ticket_title'])) $name = $_REQUEST['ticket_title'];
 	if (isset($_REQUEST['contact_name'])) $contact_name = $_REQUEST['contact_name'];
 	if (isset($_REQUEST['priority'])) $priority = $_REQUEST['priority'];
 	if (isset($_REQUEST['status'])) $status = $_REQUEST['status'];
@@ -66,11 +66,15 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	{
 	        $column[$i]=$adb->query_result($result,$i,'columnname');
 	        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
+	        $uitype[$i]=$adb->query_result($result,$i,'uitype');
 	        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
 	
 	        if(isset($customfield[$i]) && $customfield[$i] != '')
 	        {
-	                $str=" ticketcf.".$column[$i]." like '$customfield[$i]%'";
+			if($uitype[$i] == 56)
+				$str=" ticketcf.".$column[$i]." = 1";
+			else
+		                $str=" ticketcf.".$column[$i]." like '$customfield[$i]%'";
 	                array_push($where_clauses, $str);
 			$url_string .="&".$column[$i]."=".$customfield[$i];
 	        }
@@ -81,7 +85,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	if(isset($name) && $name != "")
 	{
 		array_push($where_clauses, "troubletickets.title like '%".$name."%'");
-		$url_string .= "&title=".$name;
+		$url_string .= "&ticket_title=".$name;
 	} 
 	if(isset($contact_name) && $contact_name != "")
 	{
@@ -178,7 +182,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	{
 
 		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','title','true','advanced'));	
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','ticket_title','true','advanced'));	
 
 		//Added for Custom Field Search
 		$sql="select * from field where tablename='ticketcf' order by fieldlabel";
@@ -199,7 +203,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	}
 	else
 	{        
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','title','true','basic'));	
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','ticket_title','true','basic'));	
 		$search_form->parse("main");
 	        $search_form->out("main");
 	}

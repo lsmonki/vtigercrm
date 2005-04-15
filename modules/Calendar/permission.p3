@@ -20,7 +20,7 @@ include_once $calpath .'module_base.pinc';
 #include_once $calpath .'handler.pinc';
 include_once $calpath .'db.p3';
 include_once $calpath .'Date.pinc';
-include_once $calpath .'user.pinc';
+#include_once $calpath .'user.pinc';
 
 
 # use files to save session data
@@ -46,7 +46,7 @@ ini_set("session.gc_probability",50);
 #@session_start();
 
 # this will register some session variables
-include_once $calpath .'mail.pinc';
+#include_once $calpath .'mail.pinc';
 
 #ini_set("output_handler","");
 #ini_set("zlib.output_compression_level","5");
