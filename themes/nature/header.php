@@ -136,6 +136,8 @@ if (count($history) > 0) {
                                 $activity_mode = '&activity_mode=Task';
                         elseif($activitytype == 'Call' || $activitytype == 'Meeting')
                                 $activity_mode = '&activity_mode=Events';
+                } else {
+                        $activity_mode = '';
                 }
 
 		$xtpl->assign("RECENT_URL","index.php?module=$row[module_name]&action=DetailView&record=$row[item_id]$activity_mode");

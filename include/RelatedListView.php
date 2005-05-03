@@ -121,6 +121,17 @@ else
 function getAttachmentsAndNotes($parentmodule,$query,$id)
 {
 	global $theme;
+
+	$list = '<script>
+                        function confirmdelete(url)
+                        {
+                                if(confirm("Are you sure?"))
+                                {
+                                        document.location.href=url;
+                                }
+                        }
+                </script>';
+
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	require_once ($theme_path."layout_utils.php");
@@ -159,7 +170,7 @@ else
 	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td class="moduleListTitle">';
 
-	$list .= $app_strings['LBL_TITLE'].'</td>';
+	$list .= $app_strings['LBL_TITLE_OR_DESCRIPTION'].'</td>';
 	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td width="%" class="moduleListTitle">';
 
@@ -212,7 +223,11 @@ else
 		$list .= '<tr class="'. $trowclass.'">';
 
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="30%"><a href="index.php?module='.$module.'&action=DetailView&return_module='.$returnmodule.'&return_action='.$returnaction.'&record='.$row["crmid"] .'&return_id='.$_REQUEST['record'].'">'.$row[0].'</td>';
+
+		if($module == 'Notes')
+			$list .= '<td width="30%"><a href="index.php?module='.$module.'&action=DetailView&return_module='.$returnmodule.'&return_action='.$returnaction.'&record='.$row["crmid"] .'&return_id='.$_REQUEST['record'].'">'.$row[0].'</td>';
+		elseif($module == 'uploads')
+			$list .= '<td width="30%">'.$row[0].'</td>';
 
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
@@ -238,7 +253,9 @@ else
 
 		if($row[1] == 'Notes')
 			$list .= '<a href="index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["crmid"].'&filename='.$row[2].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>  |  ';
-		$list .= '<a href="index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["crmid"].'&filename='.$row[2].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
+//		$list .= '<a href="index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["crmid"].'&filename='.$row[2].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
+		$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["crmid"].'&filename='.$row[2].'&return_id='.$_REQUEST["record"];
+                $list .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
 
 		$list .= '</td>';
 

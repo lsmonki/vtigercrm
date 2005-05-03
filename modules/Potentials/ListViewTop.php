@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/ListViewTop.php,v 1.12 2005/03/04 15:20:52 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/ListViewTop.php,v 1.18 2005/04/20 20:24:30 ray Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -30,10 +30,11 @@ $current_module_strings = return_module_language($current_language, "Potentials"
 $log = LoggerManager::getLogger('top opportunity_list');
 
 
-$where = "AND potential.sales_stage <> 'Closed Won' AND potential.sales_stage <> 'Closed Lost' AND crmentity.smcreatorid='".$current_user->id."' ORDER BY amount * 1 DESC LIMIT 5";
+$where = "AND potential.sales_stage <> 'Closed Won' AND potential.sales_stage <> 'Closed Lost' AND crmentity.smownerid='".$current_user->id."' ORDER BY amount DESC";
 
 $list_query = getListQuery("Potentials",$where);
-$list_result = $adb->query($list_query);
+$list_result = $adb->limitQuery($list_query,0,5);
+//$list_result = $adb->query($list_query);
 $open_potentials_list = array();
 $noofrows = $adb->num_rows($list_result);
 
@@ -46,13 +47,14 @@ for($i=0;$i<$noofrows;$i++)
                                      'accountid' => $adb->query_result($list_result,$i,'accountid'),
                                      'accountname' => $adb->query_result($list_result,$i,'accountname'),
                                      'amount' => $adb->query_result($list_result,$i,'amount'),
-                                     'closingdate' => $adb->query_result($list_result,$i,'closingdate'),
+                                     'closingdate' => getDisplayDate($adb->query_result($list_result,$i,'closingdate')),
                                      );
 }
 
 $xtpl=new XTemplate ('modules/Potentials/ListViewTop.html');
 $xtpl->assign("MOD", $current_module_strings);
 $xtpl->assign("APP", $app_strings);
+$xtpl->assign("CURRENCY_SYMBOL", getCurrencySymbol());
 
 // Stick the form header out there.
 echo get_form_header($current_module_strings['LBL_TOP_OPPORTUNITIES'], '', false);

@@ -1,3 +1,84 @@
+vtiger CRM 4.0.1
+April 29, 2005
+
+We are pleased to announce the latest version of vtiger CRM. This release
+includes some of the new features and numerous bug fixes!
+
+-------------
+New Features
+-------------
+
+1) Default Organisation Fields - Fields that are not needed can be made hidden across the organisation. 
+2) Multiple Date format support.
+3) Currency Support.
+4) Customer Portal Beta Release - as an add on.
+
+----------
+Bug Fixes
+----------
+
+1) When time like '1:00' is given as input in new event, instead of '01:00',
+an expection will be thrown in the calendar
+2) Php warning fixes - contributed by joduba.
+3) 'Sales Stage' column empty in Potentials table for Contacts and Accounts
+Detail view.
+4) Calendar icons not working in homepage in my pipline chart.
+5) Delete confirmation for notes and attachments in all modules Related list.
+6) Select Contact from Popup after navigation throws exception.
+7) Duplicate entry in Notes listview, when created from Ticket Module.
+8 Added 'Contact' in HelpDesk List View.
+9) Issue in Description Update across modules when saved during edition.
+10) Problem in Notes Update, when no attachment is given.
+11) When a Custom field contains space, export query fails.
+12) Intialising 'log_sql' variable in config.php - php warning fix
+13) Show tickets in Detailview / Related listof contacts.
+14) In Help Desk search 'Status' & 'Priority' given as combo.
+15) Note Title should not be unique.
+16) Problem in importing more than 1000 records.
+17) In Email template big text is not supported
+18 Paragraph support in email template
+19) Amount size entry should be increased in Potentials (increase the digits)
+20) Duplicate Email template entry when editing a template.
+21) Notes and Attachment title/description display in related list
+22) When selected a username in the popup window after search from
+Activity/Email Detail View an exception is thrown.
+23) After email export, the body field in document is empty.
+24) Problem in HelpDesk Search based on Created Date.
+25) When assigned, Contact Salutation type in email template, and used in
+select email template, salutation type is empty.
+26) Sorted by 'Contact' in Ticket List View.
+27) Title field not validated when creating a new ticket
+28) My Account' link in login page throws exception
+29) Usename/creator will shown in all events in Calendar
+30) In Account Advance Search 'State' field empty after giving a value to
+search.
+31) In Home Page my groups all the group entities are displayed
+32) In Home Page My Activities, the Activity Link is not working.
+33) The Group Name link is the User Detail View not working.
+34) Email fiele length in accounts table modified from 30 to 100
+35) Check Box custom field Search not working
+36) Product search fields are interchaged between Basic and Advanced.
+commision rate & Qty/Unit -- Moved from Basic to Advanced. Manufacturer &
+category -- Moved from Advanced to Basic
+37) Improper Link issue in Popup after search.
+38) In Home Page My Tickets - Related to Contacts link are not working.
+39) Unwanted includes in Calendar Removed
+40) Sorting of Potentials in Home Page(Amount in Descending order)
+41) Login History - improper login/logout time
+42) Email Form Validation
+43) Pipleline total not getting updated.
+44) In Email List View displaying of Contact Issue.
+45) Enabling Status for Call and Meetings.
+46) Removing Notes, Products from Default Organisation Sharing.
+47) Populating modified time during entity creation.
+48) Edit and Duplicate of Attachments not working.
+49) Displaying of Closed Ticket in Home Page.
+50) Deleted entities are getting listed in Tracker.
+51) Enabling History tabs in Leads, Contacts, Accounts and Potentials for
+Activity History.
+
+
+--------------------
 vtiger CRM 4
 March 29, 2005
 

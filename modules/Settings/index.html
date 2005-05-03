@@ -41,6 +41,47 @@
           <td><a href="index.php?module=Users&action=OrgSharingDetailView"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_DEFAULT_ORGANIZATION_SHARING_ACCESS}</a><span class="dim"> 
             {MOD.LBL_SETTING_DEFAULT_SHARING_ACCESS}</span></td>
         </tr>
+	<tr>
+         <td><a href="javascript:toggleSetting('def_field_access');"><img id="def_field_access_tgimg" src="{IMAGE_PATH}/plus.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a><span class="dim">{MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}</span><br> <div id="def_field_access" style="display:none;padding:3px 5px 5px 20px;"> 
+              <table border="0" cellspacing="2" cellpadding="2">
+                <tr> 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_LEAD_FIELD_ACCESS}
+                    </a></td>
+                  <td width="30">&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ACCOUNT_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_CONTACT_FIELD_ACCESS}
+                    </a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_OPPORTUNITY_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_HELPDESK_FIELD_ACCESS} 
+                    </a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PRODUCT_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+                <tr> 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Notes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_NOTE_FIELD_ACCESS} 
+                    </a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Emails"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+                <tr>
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Activities"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_TASK_FIELD_ACCESS} 
+                    </a></td>
+                  <td>&nbsp;</td>
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Events"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EVENT_FIELD_ACCESS} 
+                    </a></td>
+                </tr>
+		</table>
+            </div></td>
+        </tr>
         <tr>
          <td><a href="javascript:toggleSetting('fieldaccess');"><img id="fieldaccess_tgimg" src="{IMAGE_PATH}/plus.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_FIELD_ACCESSIBILITY}</a><span class="dim">{MOD.LBL_SETTING_FIELD_ACCESSIBILITY}</span><br> <div id="fieldaccess" style="display:none;padding:3px 5px 5px 20px;"> 
               <table border="0" cellspacing="2" cellpadding="2">
@@ -193,6 +234,10 @@
      <tr>
        <td><a href="index.php?module=System&action=systemconfig"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_SYSTEM_CONFIG}</a><span class="dim">
             {MOD.LBL_SYSTEM_CONFIGURATION}</span></td>
+   </tr>
+   <tr>
+       <td><a href="index.php?module=Settings&action=CurrencyInfo"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_CURRENCY_CONFIG}</a><span class="dim">
+            {MOD.LBL_CURRENCY_CONFIGURATION}</span></td>
    </tr>
       </table></td>
 </tr>

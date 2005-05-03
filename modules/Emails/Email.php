@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.37.2.2 2005/04/08 08:26:17 samk Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Email.php,v 1.41 2005/04/28 08:11:21 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -141,7 +141,7 @@ class Email extends CRMEntity {
   {
 		$query = "select notes.title,'Notes      '  ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
-                $query .= "select '          '  title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid  attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
+                $query .= "select attachments.description title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid  attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
 
     renderRelatedAttachments($query,$id);
   }
@@ -259,11 +259,11 @@ class Email extends CRMEntity {
 
                 if($contact_required)
                 {
-			$query = 'SELECT emails.*,activity.*,contactdetails.firstname, contactdetails.lastname FROM emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid=crmentity.crmid left join seactivityrel on seactivityrel.activityid = emails.emailid inner join contactdetails on contactdetails.contactid=seactivityrel.crmid where crmentity.deleted=0 ';
+			$query = 'SELECT emails.emailid,emails.filename,emails.description as email_content,activity.*,contactdetails.firstname, contactdetails.lastname FROM emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid=crmentity.crmid left join seactivityrel on seactivityrel.activityid = emails.emailid inner join contactdetails on contactdetails.contactid=seactivityrel.crmid where crmentity.deleted=0 ';
                 }
                 else
                 {
-			$query = 'SELECT emails.*,activity.* FROM emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid=crmentity.crmid left join seactivityrel on seactivityrel.activityid = emails.emailid where crmentity.deleted=0 ';
+			$query = 'SELECT emails.emailid,emails.filename,emails.description as email_content,activity.* FROM emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid=crmentity.crmid where crmentity.deleted=0 ';
 
                 }
 

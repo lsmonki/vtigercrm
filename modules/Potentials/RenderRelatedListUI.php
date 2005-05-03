@@ -1,767 +1,227 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
 
-function renderRelatedProducts($query)
+require_once('include/RelatedListView.php');
+require_once('modules/Users/UserInfoUtil.php');
+
+function getHiddenValues($id)
 {
+	$hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
+	$hidden .= '<input type="hidden" name="module">';
+	$hidden .= '<input type="hidden" name="mode">';
+	$hidden .= '<input type="hidden" name="potential_id" value="'.$id.'">';
+	$hidden .= '<input type="hidden" name="contact_id" value="'.$id.'">';
+	$hidden .= '<input type="hidden" name="return_module" value="Potentials">';
+	$hidden .= '<input type="hidden" name="return_action" value="DetailView">';
+	$hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
+	$hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
+	$hidden .= '<input type="hidden" name="action">';
+	return $hidden;
+}
+
+function renderRelatedActivities($query,$id)
+{
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id);
+        $hidden .= '<input type="hidden" name="activity_mode">';
+        echo $hidden;
+
+        $focus = new Activity();
   
-  global $theme;
-  $theme_path="themes/".$theme."/";
-  $image_path=$theme_path."images/";
-  require_once ($theme_path."layout_utils.php");
-  
-  
-  global $adb;
-  global $mod_strings;
-  global $app_strings;
+	$button = '';
+
+        if(isPermitted("Activities",1,"") == 'yes')
+        {
+
+		$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.activity_mode.value=\'Task\';this.form.return_module.value=\'Potentials\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
+		$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Potentials\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;';
+	}
+	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
+	
+	$list = GetRelatedList('Potentials','Activities',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
+
+function renderRelatedContacts($query,$id)
+{
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id);
+	echo $hidden;
+	
+	$focus = new Contact();
  
-  $id = $_REQUEST['record']; 
-  $result=$adb->query($query);
-  $list .= '<br><br>';
-  $list .= '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
-  $list .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-  $list .= '<input type="hidden" name="module">';
-  $list .= '<input type="hidden" name="mode">';
-  $list .= '<input type="hidden" name="return_module" value="Potentials">';
-  $list .= '<input type="hidden" name="return_action" value="DetailView">';
-  $list .= '<input type="hidden" name="return_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="action">';
-  $list .= '<td>';
+	$button = '';
 
-  $list .= '<table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="formHeader" vAlign="top" align="left" height="20"> <img src="' .$image_path. '/left_arc.gif" border="0"></td><td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap height="20">'.$app_strings['LBL_PRODUCT_TITLE'].'</td><td  class="formHeader" vAlign="top" align="right" height="20"><img src="' .$image_path. '/right_arc.gif" border="0"></td> </tr></tbody></table></td>';
-  $list .= '<td>&nbsp;</td>';
-  $list .= '<td>&nbsp;</td>';
-  $list .= '<td valign="bottom" align="right"><input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Potentials\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;</td>';
+        if(isPermitted("Contacts",3,"") == 'yes')
+        {
 
-  $list .= '</td></tr></form></tbody></table>';
-
-  $list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
-  $list .= '<tr class="ModuleListTitle" height=20>';
-
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle" height="21">';
-
-  $list .= $app_strings['LBL_ACTION'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_PRODUCT_NAME'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_QUANTITY'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_SALES_PRICE'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_PURCHASE_DATE'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= '</td>';
-  $list .= '</tr>';
-
-  $list .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
-
-  $i=1;
-  while($row = $adb->fetch_array($result))
-  {
-
-    if ($i%2==0)
-      $trowclass = 'evenListRow';
-    else
-      $trowclass = 'oddListRow';
-
-    $list .= '<tr class="'. $trowclass.'">';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= '<a href="index.php?module=Products&action=EditView&return_module=Potentials&return_action=DetailView&record='.$row["productid"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_EDIT'].'</a>  |  <a href="index.php?module=Products&action=Delete&return_module=Potentials&return_action=DetailView&record='.$row["productid"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_DELETE'].'</a>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="30%"><a href="index.php?module=Products&action=DetailView&return_module=Potentials&return_action=DetailView&record='.$row["productid"] .'&return_id='.$_REQUEST['record'].'">'.$row['productname'].'</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['qty_per_unit'];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['unit_price'];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['purchase_date'];
-    $list .= '</td>';
-
-    $list .= '</td>';
-
-    $list .= '</tr>';
-    $i++;
-  }
-
-  $list .= '</table>';
-  echo $list;
-
-  echo "<BR>\n";
-}
-
-function renderRelatedAttachments($query)
-{
-
-  global $theme;
-  $theme_path="themes/".$theme."/";
-  $image_path=$theme_path."images/";
-  require_once ($theme_path."layout_utils.php");
-  
-  
-  global $adb;
-  global $mod_strings;
-  global $app_strings;
-  $id = $_REQUEST['record'];
  
-  $result=$adb->query($query);
-  $list .= '<br><br>';
-  $list .= '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
-  $list .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-  $list .= '<input type="hidden" name="module">';
-  $list .= '<input type="hidden" name="mode">';
-  $list .= '<input type="hidden" name="return_module" value="Potentials">';
-  $list .= '<input type="hidden" name="return_action" value="DetailView">';
-  $list .= '<input type="hidden" name="return_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="action">';
-  $list .= '<td>';
- $list .= '<table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="formHeader" vAlign="top" align="left" height="20"> <img src="' .$image_path. '/left_arc.gif" border="0"></td><td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap height="20">'.$app_strings['LBL_ATTACHMENT_AND_NOTES'].'</td><td  class="formHeader" vAlign="top" align="right" height="20"><img src="' .$image_path. '/right_arc.gif" border="0"></td> </tr></tbody></table></td>';
-  $list .= '<td>&nbsp;</td>';
-  $list .= '<td>&nbsp;</td>';
-  $list .= '<td valign="bottom" align="right"><input title="New Potential" accessyKey="F" class="button" onclick="this.form.action.value=\'upload\';this.form.module.value=\'uploads\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_ATTACHMENT'].'">';
-    $list .= '&nbsp;<input title="New Notes" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Notes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_NOTE'].'">&nbsp;</td>';
-//  $list .= '<td width="50%"></td>';
+		$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&return_module=Potentials&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
+	}
+	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
-  $list .= '</td></tr></form></tbody></table>';
-
-  $list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
-  $list .= '<tr class="ModuleListTitle" height=20>';
-
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle" height="21">';
-
-  $list .= $app_strings['LBL_ACTION'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-
-  $list .= $app_strings['LBL_TITLE'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td width="%" class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_ENTITY_TYPE'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td width="%" class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_FILENAME'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td width="%" class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_TYPE'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td width="%" class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td width="%" class="moduleListTitle">';
-
-  $list .= '</td>';
-  $list .= '</tr>';
-
-  $list .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
-
-  $i=1;
-  while($row = $adb->fetch_array($result))
-  {
-
-if($row[1] == 'Notes')
-{
-	$module = 'Notes';
-	$editaction = 'EditView';
-	$deleteaction = 'Delete';
-}
-elseif($row[1] == 'Attachments')
-{
-	$module = 'uploads';
-	$editaction = 'upload';
-	$deleteaction = 'deleteattachments';
+	$list = GetRelatedList('Potentials','Contacts',$focus,$query,$button,$returnset);
+	echo '</form>';
 }
 
-    if ($i%2==0)
-      $trowclass = 'evenListRow';
-    else
-      $trowclass = 'oddListRow';
 
-    $list .= '<tr class="'. $trowclass.'">';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-
-if($row[1] == 'Notes')
-    $list .= '<a href="index.php?module='.$module.'&action='.$editaction.'&return_module=Potentials&return_action=DetailView&record='.$row["noteattachmentid"].'&filename='.$row[2].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_EDIT'].'</a>  |  ';
-    $list .= '<a href="index.php?module='.$module.'&action='.$deleteaction.'&return_module=Potentials&return_action=DetailView&record='.$row["noteattachmentid"].'&filename='.$row[2].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_DELETE'].'</a>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="30%"><a href="index.php?module='.$module.'&action=DetailView&return_module='.$returnmodule.'&return_action='.$returnaction.'&record='.$row["noteattachmentid"] .'&return_id='.$_REQUEST['record'].'">'.$row[0].'</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row[1];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= '<a href = "index.php?module=uploads&action=downloadfile&return_module=Potentials&activity_type='.$row[1].'&fileid='.$row[5].'&filename='.$row[2].'">'.$row[2].'</a>';
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row[3];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row[4];
-
-    $list .= '</td>';
-
-    $list .= '</tr>';
-    $i++;
-  }
-
-  $list .= '</table>';
-  echo $list;
-
-  echo "<BR>\n";
-}
-
-function renderRelatedTickets($query)
+function renderRelatedProducts($query,$id)
 {
-  
-  global $theme;
-  $theme_path="themes/".$theme."/";
-  $image_path=$theme_path."images/";
-  require_once ($theme_path."layout_utils.php");
-  
-  
-  global $adb;
-  global $mod_strings;
-  global $app_strings;
-  $id=$_REQUEST['record']; 
+	require_once('modules/Products/Product.php');
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id);
+        echo $hidden;
+
+        $focus = new Product();
  
-  $result=$adb->query($query);
-  $list .= '<br><br>';
-  $list .= '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
-  $list .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-  $list .= '<input type="hidden" name="module">';
-  $list .= '<input type="hidden" name="mode">';
-  $list .= '<input type="hidden" name="account_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="return_module" value="Potentials">';
-  $list .= '<input type="hidden" name="return_action" value="DetailView">';
-  $list .= '<input type="hidden" name="return_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="action">';
-  $list .= '<td>';
+	$button = '';
 
-  $list .= '<table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="formHeader" vAlign="top" align="left" height="20"> <img src="' .$image_path. '/left_arc.gif" border="0"></td><td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap height="20">'.$app_strings['LBL_TICKETS'].'</td><td  class="formHeader" vAlign="top" align="right" height="20"><img src="' .$image_path. '/right_arc.gif" border="0"></td> </tr></tbody></table></td>';
-  $list .= '<td>&nbsp;</td>';
-  $list .= '<td>&nbsp;</td>';
-  $list .= '<td valign="bottom" align="right"><input title="New TICKET" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
+        if(isPermitted("Products",1,"") == 'yes')
+        {
 
-  $list .= '</td></tr></form></tbody></table>';
+ 
+		$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Potentials\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
+	}
+	if(isPermitted("Products",3,"") == 'yes')
+        {
+		$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_PRODUCT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&return_module=Potentials&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
+	}
+	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
-  $list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
-  $list .= '<tr class="ModuleListTitle" height=20>';
-
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle" height="21">';
-
-  $list .= $app_strings['LBL_ACTION'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_TICKET_ID'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_SUBJECT'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_PRODUCT'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_LIST_ASSIGNED_USER'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_STATUS'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= '</td>';
-  $list .= '</tr>';
-
-  $list .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
-
-  $i=1;
-  while($row = $adb->fetch_array($result))
-  {
-
-    if ($i%2==0)
-      $trowclass = 'evenListRow';
-    else
-      $trowclass = 'oddListRow';
-
-    $list .= '<tr class="'. $trowclass.'">';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= '<a href="index.php?module=HelpDesk&action=EditView&return_module=Potentials&return_action=DetailView&record='.$row["ticketid"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_EDIT'].'</a>  |  <a href="index.php?module=HelpDesk&action=Delete&record='.$row["ticketid"].'&return_module=Potentials&return_action=DetailView&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_DELETE'].'</a>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['ticketid'];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="25%"><a href="index.php?module=HelpDesk&action=DetailView&return_module=Potentials&return_action='.$returnaction.'&record='.$row["ticketid"] .'">'.$row['title'].'</td>';
-    
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['productname'];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['user_name'];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['status'];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['modifiedtime'];
-
-    $list .= '</td>';
-
-    $list .= '</tr>';
-    $i++;
-  }
-
-
-
-  $list .= '</table>';
-  echo $list;
-
-  echo "<BR>\n";
+	$list = GetRelatedList('Potentials','Products',$focus,$query,$button,$returnset);
+	echo '</form>';
 }
 
-function renderRelatedContacts($query)
+function renderRelatedAttachments($query,$id)
+{
+        $hidden = getHiddenValues($id);
+        echo $hidden;
+
+        getAttachmentsAndNotes('Potentials',$query,$id);
+
+        echo '</form>';
+}
+
+function renderRelatedHistory($query,$id)
+{
+	getHistory('Potentials',$query,$id);
+	echo '<br><br>';
+}
+
+function renderRelatedStageHistory($query,$id)
 {
   
-  global $theme;
-  $theme_path="themes/".$theme."/";
-  $image_path=$theme_path."images/";
-  require_once ($theme_path."layout_utils.php");
+	global $theme;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+	require_once ($theme_path."layout_utils.php");
   
-  
-  global $adb;
-  global $mod_strings;
-  global $app_strings;
-  $id = $_REQUEST['record'];
-  
-  $result=$adb->query($query);
-  $list .= '<br><br>';
-  $list .= '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
-  $list .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-  $list .= '<input type="hidden" name="module">';
-  $list .= '<input type="hidden" name="mode">';
-  $list .= '<input type="hidden" name="return_module" value="Potentials">';
-  $list .= '<input type="hidden" name="return_action" value="DetailView">';
-  $list .= '<input type="hidden" name="return_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="action">';
-  $list .= '<td>';
+	global $adb;
+	global $mod_strings;
+	global $app_strings;
+ 
+	$result=$adb->query($query);
+	$noofrows = $adb->num_rows($result);
 
-  $list .= '<table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="formHeader" vAlign="top" align="left" height="20"> <img src="' .$image_path. '/left_arc.gif" border="0"></td><td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap height="20">'.$mod_strings['LBL_CONTACT_TITLE'].'</td><td  class="formHeader" vAlign="top" align="right" height="20"><img src="' .$image_path. '/right_arc.gif" border="0"></td> </tr></tbody></table></td>';
-  $list .= '<td>&nbsp;</td>';
-  $list .= '<td>&nbsp;</td>';
-//  $list .= '<td valign="bottom" align="right"><input title="New Contact" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Contacts\'" type="submit" name="button" value="'.$app_strings['LBL_SELECT_BUTTON_LABEL'].'">&nbsp;</td>';
-  $list .= '<td valign="bottom" align="right"><input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&return_module=Potentials&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;</td>';
+	echo '<br>';
+	echo get_form_header($app_strings['LBL_SALES_STAGE'].' '.$app_strings['LBL_HISTORY'],'', false);
 
-  $list .= '</td></tr></form></tbody></table>';
+	if($noofrows == 0)
+	{
+	        echo 'Sales Stage Never Changed';
+	}
+	else
+	{
+		$list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
+		$list .= '<tr class="ModuleListTitle" height=20>';
 
-  $list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
-  $list .= '<tr class="ModuleListTitle" height=20>';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td class="moduleListTitle" height="21">';
 
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle" height="21">';
+		$list .= $app_strings['LBL_AMOUNT'].'</td>';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td class="moduleListTitle">';
 
-  $list .= $app_strings['LBL_ACTION'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
+		$list .= $app_strings['LBL_SALES_STAGE'].'</td>';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td class="moduleListTitle">';
 
-  $list .= $app_strings['LBL_CONTACT_NAME'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
+		$list .= $app_strings['LBL_PROBABILITY'].'</td>';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td class="moduleListTitle">';
 
-  $list .= $app_strings['LBL_DEPARTMENT'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
+                $list .= $app_strings['LBL_CLOSE_DATE'].'</td>';
+                $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+                $list .= '<td class="moduleListTitle">';
 
-  $list .= $app_strings['LBL_ROLE'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
+		$list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td class="moduleListTitle">';
 
-  $list .= $app_strings['LBL_EMAIL'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
+		$list .= '</td>';
+		$list .= '</tr>';
 
-  $list .= $app_strings['LBL_PHONE'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
+		$list .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
 
-  $list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
+		$i=1;
+		while($row = $adb->fetch_array($result))
+		{
 
-  $list .= '</td>';
-  $list .= '</tr>';
+			if ($i%2==0)
+				$trowclass = 'evenListRow';
+			else
+				$trowclass = 'oddListRow';
 
-  $list .= '<tr><td COLSPAN="14" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
+			$list .= '<tr class="'. $trowclass.'">';
 
-  $i=1;
-  while($row = $adb->fetch_array($result))
-  {
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td width="15%">'.$row['amount'].'</td>';
 
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td width="25%" height="21" style="padding:0px 3px 0px 3px;">';
+			$list .= $row['stage'];
+			$list .= '</td>';
 
-    if ($i%2==0)
-      $trowclass = 'evenListRow';
-    else
-      $trowclass = 'oddListRow';
-    $list .= '<tr class="'. $trowclass.'">';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
+			$list .= $row['probability'];
+			$list .= '</td>';
 
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= '<a href="index.php?module=Contacts&action=EditView&return_module=Emails&return_action=DetailView&record='.$row["contactid"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_EDIT'].'</a>';
-    //$list = '  | <a href="index.php?module=Contacts&action=Delete&return_module=Emails&return_action=DetailView&record='.$row["contactid"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_DELETE'].'</a>';
+                        $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+                        $list .= '<td width="25%" height="21" style="padding:0px 3px 0px 3px;">';
+                        $list .= $row['closedate'];
+                        $list .= '</td>';
 
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="25%"><a href="index.php?module=Contacts&action=DetailView&return_module=Emails&return_action=DetailView&record='.$row["contactid"].'&return_id='.$_REQUEST['record'].'">'.$row['lastname'].' ' .$row['firstname'].'</td>';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
+			$list .= $row['lastmodified'];
+			$list .= '</td>';
 
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['department']; 
+			$list .= '</td>';
 
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['role']; 
+			$list .= '</tr>';
+			$i++;
+		}
 
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['email']; 
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['phone']; 
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['modifiedtime'];
-
-
-    $list .= '</td>';
-
-    $list .= '</tr>';
-    $i++;
-  }
-
-  $list .= '</table>';
-  echo $list;
-
-  echo "<BR>\n";
+		$list .= '</table>';
+		echo $list;
+	}
+	echo "<BR>\n";
 }
-
-function renderRelatedEmails($query)
-{
-
-  
-  global $theme;
-  $theme_path="themes/".$theme."/";
-  $image_path=$theme_path."images/";
-  require_once ($theme_path."layout_utils.php");
-  
-  
-  global $adb;
-  global $mod_strings;
-  global $app_strings;
-
-  //echo 'hi emails'.$query;
-  // echo "<BR>";
-
-  global $adb;
-  $id = $_REQUEST['record'];
-  $result=$adb->query($query);   
-  
-  $list .= '<br><br>';
-  $list .= '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
-  $list .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-  $list .= '<input type="hidden" name="module">';
-  $list .= '<input type="hidden" name="mode">';
-  $list .= '<input type="hidden" name="return_module" value="Potentials">';
-  $list .= '<input type="hidden" name="return_action" value="DetailView">';
-  $list .= '<input type="hidden" name="return_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="action">';
-  $list .= '<td>';
-
-  $list .= '<table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="formHeader" vAlign="top" align="left" height="20"> <img src="' .$image_path. '/left_arc.gif" border="0"></td><td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap height="20">'.$app_strings['LBL_HISTORY'].'</td><td  class="formHeader" vAlign="top" align="right" height="20"><img src="' .$image_path. '/right_arc.gif" border="0"></td> </tr></tbody></table></td>';
-  $list .= '<td>&nbsp;</td>';
-  $list .= '<td>&nbsp;</td>';
-  $list .= '<td valign="bottom" align="right"><input title="New Email" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Emails\';this.form.return_module.value=\'Potentials\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_EMAIL'].'">&nbsp;</td>';
-
-  $list .= '</td></tr></form></tbody></table>';
-
-  $list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
-  $list .= '<tr class="ModuleListTitle" height=20>';
-
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle" height="21">';
-
-  $list .= $app_strings['LBL_ACTION'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_SUBJECT'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_ENTITY_TYPE'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-//  $list .= $app_strings['LBL_STATUS'].'</td>';
-//  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-//  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_LIST_ASSIGNED_USER'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= '</td>';
-  $list .= '</tr>';
-
-  $list .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
-
-  $i=1;
-  while($row = $adb->fetch_array($result))
-  {
-
-
-    if ($i%2==0)
-      $trowclass = 'evenListRow';
-    else
-      $trowclass = 'oddListRow';
-
-    $list .= '<tr class="'. $trowclass.'">';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= '<a href="index.php?module=Emails&action=EditView&return_module=Potentials&return_action=DetailView&record='.$row["emailid"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_EDIT'].'</a>  |  <a href="index.php?module=Emails&action=Delete&return_module=Potentials&return_action=DetailView&record='.$row["emailid"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_DELETE'].'</a>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="30%"><a href="index.php?module=Emails&action=DetailView&return_module=Potentials&return_action=DetailView&record='.$row["emailid"] .'">'.$row['subject'].'</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['activitytype'];
-    $list .= '</td>';
-
-//    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-//    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-//    $list .= $row['status'];
-//    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['user_name'];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['modifiedtime'];
-
-    $list .= '</td>';
-
-    $list .= '</tr>';
-    $i++;
-  }
-
-  $list .= '</table>';
-  echo $list;
-
-  echo "<BR>\n";
-}
-
-function renderRelatedActivities($query)
-{
-  
-  global $theme;
-  $theme_path="themes/".$theme."/";
-  $image_path=$theme_path."images/";
-  require_once ($theme_path."layout_utils.php");
-  
-  
-  global $adb;
-  global $mod_strings;
-  global $app_strings;
-
-  global $adb;
-  $id = $_REQUEST['record'];
-  $result=$adb->query($query);   
-  
-  $list .= '<br><br>';
-  $list .= '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
-  $list .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-  $list .= '<input type="hidden" name="module">';
-  $list .= '<input type="hidden" name="mode">';
-  $list .= '<input type="hidden" name="activity_mode">';
-  $list .= '<input type="hidden" name="return_module" value="Potentials">';
-  $list .= '<input type="hidden" name="return_action" value="DetailView">';
-  $list .= '<input type="hidden" name="return_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-  $list .= '<input type="hidden" name="action">';
-  $list .= '<td>';
-  $list .= '<table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="formHeader" vAlign="top" align="left" height="20"> <img src="' .$image_path. '/left_arc.gif" border="0"></td><td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap height="20">'.$app_strings['LBL_OPEN_ACTIVITIES'].'</td><td  class="formHeader" vAlign="top" align="right" height="20"><img src="' .$image_path. '/right_arc.gif" border="0"></td> </tr></tbody></table></td>';
-  $list .= '<td>&nbsp;</td>';
-  $list .= '<td>&nbsp;</td>';
-  $list .= '<td valign="bottom" align="right"><input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.activity_mode.value=\'Task\';this.form.return_module.value=\'Potentials\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
-  $list .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Potentials\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;</td>';
-//  $list .= '<td width="50%"></td>';
-
-  $list .= '</td></tr></form></tbody></table>';
-
-  $list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
-  $list .= '<tr class="ModuleListTitle" height=20>';
-
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle" height="21">';
-
-  $list .= $app_strings['LBL_ACTION'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_SUBJECT'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_ENTITY_TYPE'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_DUE_DATE'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_STATUS'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_LIST_ASSIGNED_USER'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
-  $list .= '</td>';
-  $list .= '</tr>';
-
-  $list .= '<tr><td COLSPAN="14" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
-
-  $i=1;
-  while($row = $adb->fetch_array($result))
-  {
-
-    if ($i%2==0)
-      $trowclass = 'evenListRow';
-    else
-      $trowclass = 'oddListRow';
-
-	$mode='Task';
-	if($row['activitytype'] == 'Call' || $row['activitytype'] == 'Meeting')
-		$mode='Events';
-
-    $list .= '<tr class="'. $trowclass.'">';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';   
-    $list .= '<a href="index.php?module=Activities&action=EditView&return_module=Potentials&return_action=DetailView&activity_mode='.$mode.'&record='.$row["activityid"].'&return_id='.$id.'">'.$app_strings['LNK_EDIT'].'</a>  |  <a href="index.php?module=Activities&action=Delete&return_module=Potentials&return_action=DetailView&record='.$row["activityid"].'&return_id='.$id.'">'.$app_strings['LNK_DELETE'].'</a>';
-    $list .= '</td> ';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="30%"><a href="index.php?module=Activities&action=DetailView&return_module=Potentials&return_action=DetailView&activity_mode='.$mode.'&record='.$row["activityid"] .'&return_id='.$id.'">'.$row['subject'].'</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['activitytype'];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['date_start'];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['status'];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['user_name'];
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['modifiedtime'];
-    $list .= '</td>';
-
-    $list .= '</tr>';
-    $i++;
-  }
-
-  $list .= '</table>';
-  echo $list;
-
-  echo "<BR>\n";
-}
-
 
 echo get_form_footer();
 

@@ -59,9 +59,10 @@
 					  <td width="5" class="topBorder"><img src="{IMAGE_PATH}/blank.gif"></td>
                       <!-- BEGIN: tab -->
                       <td><img src='{IMAGE_PATH}/{IMAGE_TABSTART}'></td>
-                      <td background="{IMAGE_PATH}/{IMAGE_TABTILE}"> <a class='{TAB_CLASS}' href='index.php?module={MODULE_KEY}&action=index'>{MODULE_NAME}</a></td>
+                      <td style="padding: 0px 5px 0px 5px" background="{IMAGE_PATH}/{IMAGE_TABTILE}" align="center"> <a class='{TAB_CLASS}' href='index.php?module={MODULE_KEY}&action=index'>{MODULE_NAME}</a></td>
                       <td><img src='{IMAGE_PATH}/{IMAGE_TABEND}'></td>
                       <!-- END: tab -->
+					  <td width="50%" class="topBorder">&nbsp;</td>
                     </tr>
                   </tbody>
                 </table>
@@ -90,8 +91,8 @@
 <!--<a class="moduleMenu" href="{DELETED_ITEMS_URL}">{DELETED_ITEMS_LABEL}&nbsp;</a>-->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr> 
-  <td valign="top"nowrap class="sideBar" style="width:150px;border-bottom:1px solid #E0E0E0;border-right:1px solid #E0E0E0;"> 
-	<A HREF="http://www.sourceforge.net/project/showfiles.php?group_id=117522" target="_blank"><img align="absmiddle" src="{APP.LNK_OUTLOOK}" border="0"></A><br><br>
+  <td valign="top" nowrap class="sideBar" width="180" style="border-bottom:1px solid #E0E0E0;border-right:1px solid #E0E0E0;"> 
+	<!--A HREF="http://www.sourceforge.net/project/showfiles.php?group_id=117522" target="_blank"><img align="absmiddle" src="{APP.LNK_OUTLOOK}" border="0"></A><br><br-->
     <!-- Between submenu and left form -->
     <!-- BEGIN: left_form -->
     <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
@@ -145,9 +146,43 @@
     </table>
     <!-- BEGIN: left_form_new_record -->
     <br>
-    {NEW_RECORD} <br> 
-    <!-- END: left_form_new_record -->
+    {NEW_RECORD}
+	<!-- END: left_form_new_record -->
+	<br> 
+	<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
+      <tbody>
+        <tr> 
+		  <td width="4"><img src="{IMAGE_PATH}/head_start.gif"></td>
+          <td class="leftFormHeader" valign="middle" align="left" nowrap height="20">{CLOCK_TITLE}</td>
+		  <td width="4"><img src="{IMAGE_PATH}/head_end.gif"></td>
+        </tr>
+      </tbody>
+    </table>
+    <table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" class="leftFormBorder1">
+      <tr>
+        <td nowrap> 
+			{WORLD_CLOCK}
+          </td>
+      </tr>
+    </table>
+	<br>
+	<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
+      <tbody>
+        <tr> 
+		  <td width="4"><img src="{IMAGE_PATH}/head_start.gif"></td>
+          <td class="leftFormHeader" valign="middle" align="left" nowrap height="20">{CALC_TITLE}</td>
+		  <td width="4"><img src="{IMAGE_PATH}/head_end.gif"></td>
+        </tr>
+      </tbody>
+    </table>
+    <table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" class="leftFormBorder1">
+      <tr>
+        <td nowrap> 
+			{CALC}
+          </td>
+      </tr>
+    </table>
   </td>
-  <td class="body" valign="top" style="padding:5 0 0 10; border-bottom: 1px solid #E0E0E0;"> 
+  <td width="100%" class="body" valign="top" style="padding:5 0 0 10; border-bottom: 1px solid #E0E0E0;"> 
     <!-- END: main -->
   

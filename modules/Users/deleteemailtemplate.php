@@ -10,7 +10,8 @@
  ********************************************************************************/
 
 $filename = $_REQUEST["templatename"];
-$sql = "delete from emailtemplates where templatename = '".$filename ."'";
+$templateid = $_REQUEST["templateid"];
+$sql = "delete from emailtemplates where templateid =".$templateid;
 $adb->query($sql);
 
 header("Location:index.php?module=Users&action=listemailtemplates");

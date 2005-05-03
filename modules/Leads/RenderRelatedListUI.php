@@ -58,6 +58,9 @@ function renderRelatedEmails($query,$id)
 
         $hidden = getHiddenValues($id);
         $hidden .= '<input type="hidden" name="activity_mode">';
+	$hidden .="<input type=\"hidden\" name=\"email_directing_module\">";
+	$hidden .="<input type=\"hidden\" name=\"record\">";
+
         echo $hidden;
 
         $focus = new Email();
@@ -67,7 +70,7 @@ function renderRelatedEmails($query,$id)
         if(isPermitted("Emails",1,"") == 'yes')
         {
 
-		$button .= '<input title="New Email" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Emails\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_EMAIL'].'">&nbsp;';
+		$button .= '<input title="New Email" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Emails\';this.form.email_directing_module.value=\'leads\';this.form.record.value='.$id.';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_EMAIL'].'">&nbsp;';
 	}
         $returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
 

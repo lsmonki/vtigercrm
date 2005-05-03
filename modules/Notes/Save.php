@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Save.php,v 1.6.2.1 2005/04/11 13:28:21 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/Save.php,v 1.7 2005/04/18 10:37:49 samk Exp $
  * Description:  Saves an Account record and then redirects the browser to the
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.

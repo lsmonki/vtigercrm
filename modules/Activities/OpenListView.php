@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/OpenListView.php,v 1.19.2.1 2005/04/12 14:58:10 samk Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/OpenListView.php,v 1.22 2005/04/19 17:00:30 ray Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -61,7 +61,7 @@ for($i=0;$i<$noofrows;$i++)
                                      'firstname' => $adb->query_result($list_result,$i,'firstname'),
                                      'lastname' => $adb->query_result($list_result,$i,'lastname'),
                                      'contactid' => $adb->query_result($list_result,$i,'contactid'),
-                                     'date_start' => $adb->query_result($list_result,$i,'date_start'),
+                                     'date_start' => getDisplayDate($adb->query_result($list_result,$i,'date_start')),
 				     'parent'=> $parent_name,	
                                      );
 }

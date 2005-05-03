@@ -15,7 +15,7 @@ if ( ! isset($tutos['base']) ) {
   $tutos['base'] = "modules/Calendar";
   #ini_set("include_path",".");
 }
-@include $calpath .'webelements_special.p3';
+#@include $calpath .'webelements_special.p3';
 
 if (! function_exists('html_entity_decode')) {
 # prior to PHP 4.3
@@ -830,7 +830,8 @@ Function asEmail($adr,$email,$name,$subject = "TUTOS") {
    }
    $href = addSessionKey($href,false);
    if ( ! eregi("^(JavaScript:|http:|https:|mailto:|ftp:|gopher:|\./)",$href) ) {
-     $href = $tutos['base'] ."/". $href;
+     #$href = $tutos['base'] ."/". $href;
+     $href = $href;
    }
 
    #if ( $current_user->feature_ok(useoverlib,PERM_SEE) && ($plus != "") ) {

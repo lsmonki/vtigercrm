@@ -28,7 +28,7 @@
 
 /*********************************************************************************
 
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.24 2005/03/25 05:55:10 gjay Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/4createConfigFile.php,v 1.26 2005/04/25 05:40:50 samk Exp $
 
  * Description:  Executes a step in the installation process.
 
@@ -46,7 +46,7 @@ session_start();
 
 // Sugar Sales version number; do not edit!
 
-$sugar_version = "1.5";
+$vtiger_version = "4.0.1";
 
 
 
@@ -212,7 +212,7 @@ $config .= " * Contributor(s): ______________________________________.\n";
 
 $config .= "********************************************************************************/\n\n";
 
-$config .= "\$sugar_version = '".$sugar_version."';\n\n";
+$config .= "\$vtiger_version = '".$vtiger_version."';\n\n";
 
 $config .= "/* Database configuration\n";
 
@@ -233,6 +233,8 @@ $config .= "\$dbconfig['db_password'] = 		'".$db_password."';\n";
 $config .= "\$dbconfig['db_name'] = 			'".$db_name."';\n";
 
 $config .= "\$dbconfig['db_type'] = 'mysql';\n\n";
+
+$config .= "\$dbconfig['log_sql'] = false;\n";
 
 $config .= "\$dbconfigoption['persistent'] = true;\n";
 

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.25.2.1 2005/04/11 13:38:40 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Emails/Save.php,v 1.27 2005/04/29 08:54:38 rank Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -129,7 +129,7 @@ else
 $_REQUEST['filename']=$focus->column_fields['filename'];
 
 //subject, contents
-$_REQUEST['name'] = $focus->column_fields['name'];
+$_REQUEST['name'] = $focus->column_fields['subject'];
 $_REQUEST['description'] = $focus->column_fields['description'];
 
 

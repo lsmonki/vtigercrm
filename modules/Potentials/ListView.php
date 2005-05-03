@@ -21,6 +21,7 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/ComboUtil.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -47,9 +48,15 @@ $focus = new Potential();
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
+$url_string = ''; // assigning http url string
+$sorder = 'ASC';  // Default sort order
+if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
+$sorder = $_REQUEST['sorder'];
+
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
+	$url_string .="&query=true";
 	if (isset($_REQUEST['potentialname'])) $name = $_REQUEST['potentialname'];
 	if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
 	if (isset($_REQUEST['closingdate'])) $date_closed = $_REQUEST['closingdate'];
@@ -74,68 +81,76 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 {
         $column[$i]=$adb->query_result($result,$i,'columnname');
         $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
+        $uitype[$i]=$adb->query_result($result,$i,'uitype');
         if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
 
         if(isset($customfield[$i]) && $customfield[$i] != '')
         {
-                $str=" potentialscf.".$column[$i]." like '$customfield[$i]%'";
+		if($uitype[$i] == 56)
+			$str=" potentialscf.".$column[$i]." = 1";
+		else
+	                $str=" potentialscf.".$column[$i]." like '$customfield[$i]%'";
                 array_push($where_clauses, $str);
+		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
 }
 //upto this added for Custom Field
 
 	if(isset($name) && $name != "") {
 			array_push($where_clauses, "potential.potentialname like ".PearDatabase::quote($name.'%')."");
-			$query_val .= "&name=".$name;		
+			$url_string .= "&potentialname=".$name;		
 	}
 	if(isset($accountname) && $accountname != "") {
 			array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%')."");
-			$query_val .= "&accountname=".$accontname;		
+			$url_string .= "&accountname=".$accountname;		
 			
 			
 	}
 	if(isset($lead_source) && $lead_source == "None") {
 			array_push($where_clauses, "potential.leadsource = ".PearDatabase::quote($lead_source)."");
-			$query_val .= "&leadsource=".$lead_source;		
+			$url_string .= "&leadsource=".$lead_source;		
 	}
 	// added to handle request from dashboard GS
 	if(isset($lead_source) && $lead_source != "") {
 			array_push($where_clauses, "potential.leadsource = ".PearDatabase::quote($lead_source)."");
-			$query_val .= "&leadsource=".$lead_source;		
+			$url_string .= "&leadsource=".$lead_source;		
 	}
 	if(isset($opportunity_type) && $opportunity_type != "") {
 			array_push($where_clauses, "potential.potentialtype = ".PearDatabase::quote($opportunity_type)."");
-			$query_val .= "&$opportunity_type=".$opportunity_type;		
+			$url_string .= "&opportunity_type=".$opportunity_type;		
 	}
 	if(isset($amount) && $amount != "") {
-			array_push($where_clauses, "potential.amount like ".PearDatabase::quote($amount.'%%')."");
-			$query_val .= "&$amount=".$amount;		
+			array_push($where_clauses, "potential.amount like ".PearDatabase::quote($amount.'%')."");
+			$url_string .= "&amount=".$amount;		
 	}
-	if(isset($next_step) && $next_step != "") {
-			array_push($where_clauses, "potential.nextstep like ".PearDatabase::quote($next_step.'%')."");
-			$query_val .= "&$nextstep=".$nextstep;		
+	if(isset($nextstep) && $nextstep != "") {
+			array_push($where_clauses, "potential.nextstep like ".PearDatabase::quote($nextstep.'%')."");
+			$url_string .= "&nextstep=".$nextstep;		
 	}
 	if(isset($sales_stage) && $sales_stage != "") {
 			if($sales_stage=='Other')
-				array_push($where_clauses, "(potential.sales_stage <> 'Closed Won' && potential.sales_stage <> 'Closed Lost')");
+				array_push($where_clauses, "(potential.sales_stage <> 'Closed Won' and potential.sales_stage <> 'Closed Lost')");
 			else
 				array_push($where_clauses, "potential.sales_stage = ".PearDatabase::quote($sales_stage));
-			$query_val .= "&$sales_stage=".$sales_stage;		
+			$url_string .= "&sales_stage=".$sales_stage;		
 	}
 	if(isset($probability) && $probability != "") {
 			array_push($where_clauses, "potential.probability like ".PearDatabase::quote($probability.'%')."");
-			$query_val .= "&$probability=".$probability;		
+			$url_string .= "&probability=".$probability;		
 			
 	}
 	if(isset($current_user_only) && $current_user_only != "") {
-			array_push($where_clauses, "crmentity.smcreator='$current_user->id'");
+			array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
+			$url_string .= "&current_user_only=".$current_user_only;		
 	}
 	if(isset($date_closed) && $date_closed != "") {
-			array_push($where_clauses, "potential.closingdate like ".PearDatabase::quote($date_closed.'%')."");
+			array_push($where_clauses, $adb->getDBDateString("potential.closingdate")." like ".PearDatabase::quote($date_closed.'%')."");
+			$url_string .= "&closingdate=".$date_closed;		
 	}
 	if(isset($date_closed_start) && $date_closed_start != "" && isset($date_closed_end) && $date_closed_end != "")
 	{
-		array_push($where_clauses, "potential.closingdate >= ".PearDatabase::quote($date_closed_start)." and potential.closingdate <= ".PearDatabase::quote($date_closed_end));
+			array_push($where_clauses, "potential.closingdate >= ".PearDatabase::quote($date_closed_start)." and potential.closingdate <= ".PearDatabase::quote($date_closed_end));
+			$url_string .= "&closingdate_start=".$date_closed_start;		
 	}
 
 	$where = "";
@@ -150,7 +165,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		if (!empty($where)) {
 			$where .= " AND ";
 		}
-		$where .= "crmentity.smcreatorid IN(";
+		$where .= "crmentity.smownerid IN(";
 		foreach ($assigned_user_id as $key => $val) {
 			$where .= "".PearDatabase::quote($val)."";
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
@@ -166,6 +181,19 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form=new XTemplate ('modules/Potentials/SearchForm.html');
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
+	
+	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
+	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+	$search_form->assign("JAVASCRIPT", get_clear_form_js());
+	if($order_by != '') {
+		$ordby = "&order_by=".$order_by;
+	}
+	else
+	{
+		$ordby ='';
+	}
+	$search_form->assign("BASIC_LINK", "index.php?module=Potentials".$ordby."&action=index".$url_string."&sorder=".$sorder);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Potentials&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
 
 	if (isset($name)) $search_form->assign("NAME", $name);
 	if (isset($accountname)) $search_form->assign("ACCOUNT_NAME", $accountname);
@@ -174,7 +202,12 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
 
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
+	
 	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
+	
+		$url_string .="&advanced=true";
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Potentials','index','potentialname','true','advanced'));
+
 		if (isset($amount)) $search_form->assign("AMOUNT", $amount);
 		if (isset($date_entered)) $search_form->assign("DATE_ENTERED", $date_entered);
 		if (isset($date_closed)) $search_form->assign("DATE_CLOSED", $date_closed);
@@ -194,6 +227,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 		if (!empty($assigned_user_id)) $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), $assigned_user_id));
 		else $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), ''));
+		$search_form->assign("DATE_FORMAT", $current_user->date_format);
 
 //Added for Custom Field Search
 $sql="select * from field where tablename='potentialscf' order by fieldlabel";
@@ -213,19 +247,42 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 		$search_form->out("advanced");
 	}
 	else {
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Potentials','index','potentialname','true','basic'));
 		$search_form->parse("main");
 		$search_form->out("main");
 	}
 	echo get_form_footer();
 	echo "\n<BR>\n";
 }
+
+$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
+	<form name="massdelete" method="POST">
+	<tr>
+	<input name="idlist" type="hidden">
+	<input name="viewname" type="hidden">';
+if(isPermitted('Potentials',2,'') == 'yes')
+{
+        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+}
+	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].' 
+			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
+				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_WON].'">'.$mod_strings[LBL_WON].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_LOST].'">'.$mod_strings[LBL_LOST].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_VALUE_PROPOSITION].'">'.$mod_strings[LBL_VALUE_PROPOSITION].'</option>
+				<OPTION VALUE="'.$mod_strings[LBL_PROSPECTING].'">'.$mod_strings[LBL_PROSPECTING].'</option>
+			</SELECT>
+		</td>
+	</tr>
+	</table>';
+
 //Retreive the list from Database
 $list_query = getListQuery("Potentials");
+
 if(isset($where) && $where != '')
 {
 	$list_query .= " AND ".$where;
 }
-
 
 if(isset($_REQUEST['viewname']))
 {
@@ -238,23 +295,32 @@ if(isset($_REQUEST['viewname']))
             $defaultcv_criteria = $_REQUEST['viewname'];
        }
 						       
-  $list_query .= " and sales_stage like "."'%" .$defaultcv_criteria ."%'";
+  	$list_query .= " and sales_stage like "."'%" .$defaultcv_criteria ."%'";
+	$viewname = $_REQUEST['viewname'];
+        $view_script = "<script language='javascript'>
+                function set_selected()
+                {
+                        len=document.massdelete.view.length;
+                        for(i=0;i<len;i++)
+                        {
+                                if(document.massdelete.view[i].value == '$viewname')
+                                        document.massdelete.view[i].selected = true;
+                        }
+                }
+                set_selected();
+                </script>";
 }
-
-
-$url_qry = getURLstring($focus);
 
 if(isset($order_by) && $order_by != '')
 {
-        $list_query .= ' ORDER BY '.$order_by;
-        $url_qry .="&order_by=".$order_by;
+        $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
 
 $list_result = $adb->query($list_query);
 
 //Constructing the list view 
 
-echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],'', false);
+echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Potentials/ListView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
@@ -270,57 +336,61 @@ if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 }
 else
 {
-	
 	$start = 1;
 }
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
+// Setting the record count string
+if ($navigation_array['start'] == 1)
+{
+	if($noofrows != 0)
+	$start_rec = $navigation_array['start'];
+	else
+	$start_rec = 0;
+	if($noofrows > $list_max_entries_per_page)
+	{
+		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
+	}
+	else
+	{
+		$end_rec = $noofrows;
+	}
+	
+}
+else
+{
+	if($navigation_array['next'] > $list_max_entries_per_page)
+	{
+		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
+		$end_rec = $navigation_array['next'] - 1;
+	}
+	else
+	{
+		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
+		$end_rec = $noofrows;
+	}
+}
+$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"Potentials",$eddel=1);
+$listview_header = getListViewHeader($focus,"Potentials",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-$listview_entries = getListViewEntries($focus,"Potentials",$list_result,$navigation_array,$eddel=1);
+$listview_entries = getListViewEntries($focus,"Potentials",$list_result,$navigation_array);
 $xtpl->assign("LISTHEADER", $listview_header);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
-if(isset($navigation_array['start']))
-{
-	$startoutput = '<a href="index.php?action=index&module=Potentials'.$url_qry.'&start=1"><b>Start</b></a>';
-}
-else
-{
-	$startoutput = '[ Start ]';
-}
-if(isset($navigation_array['end']))
-{
-	$endoutput = '<a href="index.php?action=index&module=Potentials'.$url_qry.'&start='.$navigation_array['end'].'"><b>End</b></a>';
-}
-else
-{
-	$endoutput = '[ End ]';
-}
-if(isset($navigation_array['next']))
-{
-	$nextoutput = '<a href="index.php?action=index&module=Potentials'.$url_qry.'&start='.$navigation_array['next'].'"><b>Next</b></a>';
-}
-else
-{
-	$nextoutput = '[ Next ]';
-}
-if(isset($navigation_array['prev']))
-{
-	$prevoutput = '<a href="index.php?action=index&module=Potentials'.$url_qry.'&start='.$navigation_array['prev'].'"><b>Prev</b></a>';
-}
-else
-{
-	$prevoutput = '[ Prev ]';
-}
-$xtpl->assign("Start", $startoutput);
-$xtpl->assign("End", $endoutput);
-$xtpl->assign("Next", $nextoutput);
-$xtpl->assign("Prev", $prevoutput);
+if($order_by !='')
+$url_string .="&order_by=".$order_by;
+if($sorder !='')
+$url_string .="&sorder=".$sorder;
+
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Potentials");
+$xtpl->assign("NAVIGATION", $navigationOutput);
+$xtpl->assign("RECORD_COUNTS", $record_string);
+$xtpl->assign("SELECT_SCRIPT", $view_script);
 
 $xtpl->parse("main");
 

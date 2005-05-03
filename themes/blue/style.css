@@ -149,6 +149,18 @@ A.moduleMenu:hover {
 .hline {
 	border-bottom: 1px solid #CCC;
 }
+
+.uline {
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.alphaBg {
+	text-align: center;
+	padding: 1px 5px 1px 5px;
+	border: 1px solid #AFC8E4;
+	background-color: #F5F5F5;
+}
+
 .formHeaderULine {
 	border-bottom: 1px solid #000;	
 }
@@ -267,6 +279,114 @@ A.listFormLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #333366; FONT
 A.listFormHeaderLinks:link 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
 A.listFormHeaderLinks:visited { FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none }
 A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000; FONT-FAMILY: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: underline }
+
+.dim {
+	color: #999999;
+}
+
+/* Calculator */
+.calcBg {
+	background-color: #B3BDC6;
+}
+.calcResult {
+	width: 100%;
+	height: 25;
+	background-color: #CAE7E8;
+	border-top: 1px solid #999;
+	border-left: 0px;
+	border-right: 1px solid #FFF;
+	border-bottom: 1px solid #FFF;
+	font-size: 12;
+	text-align: right;
+}
+.calcMem {
+	width: 100%;
+	height: 25;
+	border-top: 1px solid #999;
+	border-left: 1px solid #999;
+	border-right: 0px;
+	border-bottom: 1px solid #FFF;
+	background-color: #CAE7E8;
+	font-family: Arial;
+	font-size: 10;
+	color: #BBB;
+	text-align: left;
+}
+.calcBlackBtn, .calcGreyBtn, .calcBigBtn, .calcCancBtn, .calcMemBtn, .calcBackBtn {
+	border: none;
+	width: 25;
+	height: 20;
+	font-size: 11px;
+	color: #FFF;
+}
+.calcBackBtn {
+	background: url(images/calc_back_btn.gif) no-repeat;
+}
+.calcBlackBtn {
+	background: url(images/calc_black_btn.gif) no-repeat;
+}
+.calcGreyBtn {
+	background: url(images/calc_grey_btn.gif) no-repeat;
+}
+.calcCancBtn {
+	background: url(images/calc_canc_btn.gif) no-repeat;
+}
+.calcMemBtn {
+	background: url(images/calc_mem_btn.gif) no-repeat;
+}
+
+/* Tab Component */
+.tabLink {
+	font-family: Verdana, Arial, Helvetica, Sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #000;
+	text-decoration: none;
+}
+.tabLink:hover {
+	text-decoration: underline;
+}
+.tabOn {
+	padding: 5;
+	border-top: 1px solid #AFC8E4;
+	background-color: #FFF;
+}
+.tabOff {
+	padding: 5;
+	border-top: 1px solid #AFC8E4;
+	border-left: 1px solid #AFC8E4;
+	border-right: 1px solid #AFC8E4;
+	border-bottom: 1px solid #AFC8E4;
+	background-color: #ECF1F9;
+}
+.tabContent {
+	border-left: 1px solid #AFC8E4;
+	border-right: 1px solid #AFC8E4;
+	border-bottom: 1px solid #AFC8E4;
+}
+.tabStart {
+	border-right: 1px solid #AFC8E4;
+	border-bottom: 1px solid #AFC8E4;
+}
+.tabEnd {
+	border-left: 1px solid #AFC8E4;
+	border-bottom: 1px solid #AFC8E4;
+}
+
+.relListHead {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #000;
+	text-decoration: none;
+}
+.relListHead:hover {
+	text-decoration: underline;
+}
+
+.disabled {
+	color: #CCC;
+}
 
 /*
   The original advSilver Theme for phpBB version 2+
@@ -488,7 +608,7 @@ input.post, textarea.post, select {
 	background-color : #FFFFFF;
 }
 
-input { text-indent : 2px; }
+input { /* text-indent : 2px; */ }
 
 /* The buttons used for bbCode styling in message post */
 input.button {
@@ -567,7 +687,6 @@ a.bodylink:hover{ text-decoration:underline;} */
  * $Author$
  *
  */
-
 a:hover{
         text-decoration: underline;
         }
@@ -578,7 +697,6 @@ a.tickerlink:visited {
 
 .nodeco {
         text-decoration: none;
-        color: #282c28;
 }
 
 div.message {
@@ -621,11 +739,23 @@ div.message {
         font-size: 20px;
 }
 
+.event {
+	border: 1px solid #2C527C;
+	background: #E6FAD8;
+}
+
+.calhead {
+	font-family: Arial, Helvetica, San-serif;
+	font-size: 18px;
+}
+
 .navigate {
 		height: 25px;
         text-decoration: none;
-     	background-color: #f5f5f5; 
-        border: 1px solid #AFC8E4;
+     	background-color: #DBE6F2; 
+        border-top: 1px solid #FFF;
+		border-left: 1px solid #FFF;
+		border-bottom: 1px solid #666;
         font-size: 12px;
 }
 
@@ -661,15 +791,33 @@ div.message {
         color: black;
 }
 
+.daytime {
+        background: #ECEDF0;
+		border-bottom: 1px solid #C7D8EB;
+}
+
+.weekhead {
+        background: #ECF1F9;
+		border: 1px solid #C7D8EB;
+}
+
+/* line color 0 in overviews */
+.line0 {
+        background-color: #ffffff;
+		border-bottom: 1px solid #C7D8EB;
+}
+
 /* line color 1 in overviews */
 .line1 {
-        background-color: #f5f5f5;
+        background-color: #ffffff;
+		border-bottom: 1px solid #C7D8EB;
 }
 
 /* line color 2 in overviews */
 .line2 {
 /*        background-color: #dedebb; */
         background-color: #ffffff;
+		border-bottom: 1px solid #C7D8EB;
 }
 
 /* not started task */
@@ -787,15 +935,13 @@ div.message {
 }
 
 .holiday {
-/*       background: #FFCC66; */
-		background: url(images/holidaybg.gif);
+		background: #DBE6F2;
         vertical-align: top;
         color: black;
         font-size: 12px;
 }
 
 .freeday {
-/*        background: #FFEBC1; */
 		background: #FFFFFF;
         vertical-align: top;
         color: black;
@@ -810,29 +956,35 @@ div.message {
 }
 
 .otherday {
-		background: #CCC;
+		background: #FFF;
         vertical-align: top;
         color: #666;
         font-size: 12px;
 }
 
 .today {
-/*        background: #90C75A;*/
-		background: url(images/todaybg.gif);
+		background: #FFFFFF;
         vertical-align: top;
-        color: black;
-        font-size: 12px;
+        color: #CC0000;
 }
 
 .week {
         color: black;
-        background: #F5F8FC;
+        background: #DBE6F2;
         width: 4%;
         vertical-align: top;
 }
 
+.weekday {
+		color: #FFF;
+        background: #2C527C;
+}
+
+.eventSep {
+	border-bottom: 1px solid #CCC;
+}
+
 .app {
-        background: #e8ece8 ;
         color: black;
         font-size: 11px;
 }
@@ -918,12 +1070,8 @@ TABLE.single {
 }
 
 TABLE.outer {
-		background-color: #AFC8E4;
-/*
-        background: black;
-        margin: 0px;
-        padding: 1px;
-*/
+		border: 1px solid #666;
+		background: #C7D8EB;
 }
 
 TABLE.formatted {
@@ -943,8 +1091,7 @@ TD {
 TH.viewhead {
         color: black;
 		border-top: 1px solid #FFF;
-		border-left: 1px solid #FFF;
-        background: #EEE;
+        background: #ECEDF0;
         font-weight: bold;
 }
 

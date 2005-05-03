@@ -21,6 +21,7 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/ComboUtil.php');
+require_once('include/uifromdbutil.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -48,12 +49,21 @@ $comboFieldArray = getComboArray($comboFieldNames);
 
 if (!isset($where)) $where = "";
 
-$query_val = 'false';
+if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+
+$url_string = '';
+$sorder = 'ASC';
+if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
+$sorder = $_REQUEST['sorder'];
+
+if($popuptype!='') $url_string .= "&popuptype=".$popuptype;
+
 $focus = new Potential();
-if(isset($_REQUEST['query']))
+
+if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
-	$query_val = 'true';
+	$url_string .="&query=true";
 	if (isset($_REQUEST['name'])) $name = $_REQUEST['name'];
 	if (isset($_REQUEST['account_name'])) $accountname = $_REQUEST['account_name'];
 
@@ -64,14 +74,15 @@ if(isset($_REQUEST['query']))
 
 	if(isset($name) && $name != "") {
 			array_push($where_clauses, "potential.potentialname like ".PearDatabase::quote($name.'%')."");
-			$query_val .= "&name=".$name;		
+			$url_string .= "&name=".$name;		
 	}
 	if(isset($accountname) && $accountname != "") {
-			array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%')."");
-			$query_val .= "&accountname=".$accontname;		
+			array_push($where_clauses, "account.accountname like ".PearDatabase::quote('%'.$accountname.'%')."");
+			$url_string .= "&account_name=".$accountname;		
 	}
 	if(isset($current_user_only) && $current_user_only != "") {
 			array_push($where_clauses, "crmentity.smcreator='$current_user->id'");
+			$url_string .= "&current_user_only=".$current_user_only;		
 	}
 	if(isset($assigned_user_id) && $assigned_user_id != "") 
 		array_push($where_clauses, "crmentity.smownerid = '$assigned_user_id'");
@@ -106,6 +117,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("APP", $app_strings);
 	$search_form->assign("POPUPTYPE",$popuptype);
 
+	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
+	if ($sorder !='') $search_form->assign("SORDER", $sorder);
 	if (isset($name)) $search_form->assign("NAME", $name);
 	if (isset($accountname)) $search_form->assign("ACCOUNT_NAME", $accountname);
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
@@ -114,6 +127,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Potentials','Popup','name','true','basic'));
 	$search_form->parse("main");
 	$search_form->out("main");
 	
@@ -126,6 +140,12 @@ if(isset($where) && $where != '')
 {
 	$list_query .= " AND ".$where;
 }
+
+if(isset($order_by) && $order_by != '')
+{
+        $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
+}
+
 $list_result = $adb->query($list_query);
 
 //Constructing the list view 
@@ -153,62 +173,59 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
+// Setting the record count string
+if ($navigation_array['start'] == 1)
+{
+	if($noofrows != 0)
+	$start_rec = $navigation_array['start'];
+	else
+	$start_rec = 0;
+	if($noofrows > $list_max_entries_per_page)
+	{
+		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
+	}
+	else
+	{
+		$end_rec = $noofrows;
+	}
+	
+}
+else
+{
+	if($navigation_array['next'] > $list_max_entries_per_page)
+	{
+		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
+		$end_rec = $navigation_array['next'] - 1;
+	}
+	else
+	{
+		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
+		$end_rec = $noofrows;
+	}
+}
+$record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
+
 //Retreive the List View Table Header
 $focus->list_mode="search";
 $focus->popup_type=$popuptype;
 
-$listview_header = getSearchListViewHeader($focus,"Potentials",$eddel=1);
+$listview_header = getSearchListViewHeader($focus,"Potentials",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-$listview_entries = getSearchListViewEntries($focus,"Potentials",$list_result,$navigation_array,$eddel=1);
+$listview_entries = getSearchListViewEntries($focus,"Potentials",$list_result,$navigation_array);
 $xtpl->assign("LISTHEADER", $listview_header);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
-if(isset($navigation_array['start']))
-{
-	$startoutput = '<a href="index.php?action=Popup&module=Potentials&start='.$navigation_array['start'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Start</b></a>';
-}
-else
-{
-	$startoutput = '[ Start ]';
-}
-if(isset($navigation_array['end']))
-{
-	$endoutput = '<a href="index.php?action=Popup&module=Potentials&start='.$navigation_array['end'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>End</b></a>';
-}
-else
-{
-	$endoutput = '[ End ]';
-}
-if(isset($navigation_array['next']))
-{
-	$nextoutput = '<a href="index.php?action=Popup&module=Potentials&start='.$navigation_array['next'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Next</b></a>';
-}
-else
-{
-	$nextoutput = '[ Next ]';
-}
-if(isset($navigation_array['prev']))
-{
-	$prevoutput = '<a href="index.php?action=Popup&module=Potentials&start='.$navigation_array['prev'].'&query='.$query_val.'&popuptype='.$popuptype.'"><b>Prev</b></a>';
-}
-else
-{
-	$prevoutput = '[ Prev ]';
-}
-$xtpl->assign("Start", $startoutput);
-$xtpl->assign("End", $endoutput);
-$xtpl->assign("Next", $nextoutput);
-$xtpl->assign("Prev", $prevoutput);
+if($order_by !='')
+$url_string .="&order_by=".$order_by;
+if($sorder !='')
+$url_string .="&sorder=".$sorder;
+
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Potentials","Popup");
+$xtpl->assign("NAVIGATION", $navigationOutput);
+$xtpl->assign("RECORD_COUNTS", $record_string);
 
 $xtpl->parse("main");
-
 $xtpl->out("main");
 
-/*$ListView = new ListView();
-$ListView->initNewXTemplate( 'modules/Potentials/ListView.html',$current_module_strings);
-$ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE'] );
-$ListView->setQuery($where, "", "potentialname", "OPPORTUNITY");
-$ListView->processListView($seedOpportunity, "main", "OPPORTUNITY");
-*/
 ?>

@@ -166,7 +166,7 @@ else
 	}
 	elseif($fldType == 'Currency')
 	{
-		$uitype = 3;
+		$uitype = 71;
 		//$type="double(".$fldlength.",".$decimal.")";
 		$type="N(".$fldlength.",".$decimal.")"; //adodb type
 	$uichekdata='N~O~'.$fldlength .','.$decimal;
@@ -245,10 +245,11 @@ else
 		$profileid = $adb->query_result($sql1_result,$i,"profileid");
 		$sql2 = "insert into profile2field values(".$profileid.", ".$tabid.", ".$custfld_fieldid.", 0, 1)";
 		$adb->query($sql2);	 	
-	}	 
+	}
 
-
-
+	//Inserting values into def_org tables
+		$sql_def = "insert into def_org_field values(".$tabid.", ".$custfld_fieldid.", 0, 1)";
+		$adb->query($sql_def);
 
           
 	if($fldType == 'Picklist')

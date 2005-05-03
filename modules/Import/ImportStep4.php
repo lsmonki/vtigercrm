@@ -31,6 +31,9 @@ require_once('modules/Import/parse_utils.php');
 require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 
+set_time_limit(0);
+ini_set("display_errors",'0');
+
 function p($str)
 {
 	global $adb;

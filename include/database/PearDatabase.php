@@ -699,6 +699,7 @@ class PearDatabase{
             $this->setDatabaseHost( $dbconfig['db_host_name']);
             $this->setDatabaseName($dbconfig['db_name']);
             $this->dbOptions = $dbconfigoption;
+	    if($dbconfig['log_sql'])
             $this->enableSQLlog = ($dbconfig['log_sql'] == true);
             //$this->println("resetSettings log=".$this->enableSQLlog);
             //$this->println($dbconfig);

@@ -122,7 +122,7 @@ for ($i=0; $i<$adb->num_rows($tktresult); $i++)
                 $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
         $list .= '<td style="padding:0px 3px 0px 3px;">'.$adb->query_result($tktresult,$i,"status").'</td>';
                 $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-        $list .= '<td style="padding:0px 3px 0px 3px;">'.$adb->query_result($tktresult,$i,"createdtime").'</td>';
+        $list .= '<td style="padding:0px 3px 0px 3px;">'.getDisplayDate($adb->query_result($tktresult,$i,"createdtime")).'</td>';
                 $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
         $list .= '<td style="padding:0px 3px 0px 3px;">'.$adb->query_result($tktresult,$i,"user_name").'</td>';
                 $list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';

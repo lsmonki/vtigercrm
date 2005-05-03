@@ -8,15 +8,16 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 
 //function to construct the combo field from database
 function getComboValues($fieldname, $tableName, $tableColumn, $tabindex, $value)
 {
+	global $adb;
 $query = "select * from ".$tableName;
-$result = mysql_query($query);
+$result = $adb->query($query);
 $output = "<select name='".$fieldname."' tabindex='1'>"; 
-while($row = mysql_fetch_array($result))
+while($row = $adb->fetch_array($result))
 {
 	$selected = '';
 	if($value != '' && $row[$tableColumn] == $value)
@@ -31,16 +32,18 @@ return $output;
 
 function getTicketList()
 {
-	$query = "select troubletickets.id,groupname,contact_id,priority,troubletickets.status,parent_id,parent_type,category,troubletickets.title,troubletickets.description,update_log,version_id,troubletickets.date_created,troubletickets.date_modified,troubletickets.assigned_user_id,contacts.first_name,contacts.last_name,users.user_name from troubletickets left join contacts on troubletickets.contact_id=contacts.id  left join users on troubletickets.assigned_user_id=users.id where troubletickets.deleted=0 and troubletickets.status !='Closed'";
-	$result = mysql_query($query);
+	global $adb;
+	$query = "select troubletickets.id,groupname,contact_id,priority,troubletickets.status,parent_id,parent_type,category,troubletickets.title,troubletickets.description,update_log,version_id,troubletickets.date_created,troubletickets.date_modified,troubletickets.assigned_user_id,contacts.first_name,contacts.last_name,users.user_name from troubletickets left join contacts on troubletickets.contact_id=contacts.id  left join users on troubletickets.assigned_user_id=users.id where troubletickets.deleted=0";
+	$result = $adb->query($query);
 	return $result;
 
 }
 
 function getFaqList()
 {
+	global $adb;
 	$query = "select faq.id,question,answer,category,author_id,users.id,users.user_name from faq left join users on faq.author_id=users.id where faq.deleted ='0'";
-	$result = mysql_query($query);
+	$result = $adb->query($query);
 	return $result;
 
 }

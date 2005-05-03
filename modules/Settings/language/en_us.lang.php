@@ -262,6 +262,15 @@ $mod_strings = Array(
 
 'LBL_SYSTEM_CONFIG'=>'System Configuration',
 
+'LBL_CURRENCY_CONFIGURATION'=>'- Currency Information',
+
+'LBL_CURRENCY_CONFIG'=>'Currency Configuration',
+
+'LBL_CURRENCY_INFO'=>'Currency Information',
+'LBL_CURRENCY_NAME'=>'Currency Name',
+'LBL_CURRENCY_CODE'=>'Currency Code',
+'LBL_CURRENCY_SYMBOL'=>'Currency Symbol',
+
 
 
 //Fields for Settings
@@ -283,6 +292,10 @@ $mod_strings = Array(
 'LBL_CREATE_AND_MANAGE_USER_GROUPS'=>'- Create and Manage user groups',
 
 'LBL_DEFAULT_ORGANIZATION_SHARING_ACCESS'=>'Default Organization Sharing Access',
+
+'LBL_DEFAULT_ORGANIZATION_FIELDS'=>'Default Organization Fields Access',
+
+'LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS'=>'Setting Default Field Access within the Organization',
 
 'LBL_SETTING_DEFAULT_SHARING_ACCESS'=>'- Setting Default Sharing Access within the Organization',
 

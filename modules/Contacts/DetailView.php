@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.36.2.2 2005/04/13 05:05:18 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/DetailView.php,v 1.38 2005/04/25 05:04:46 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -189,6 +189,7 @@ if($tab_per_Data[10] == 0)
 	}
 }
 
+$focus_tickets_list = & $focus->get_tickets($focus->id);
 $focus_history_list =  $focus->get_history($focus->id);
 
 if($tab_per_Data[8] == 0)

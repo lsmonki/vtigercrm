@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Popup.php,v 1.12.2.4 2005/04/06 15:01:31 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Popup.php,v 1.15 2005/04/19 15:33:44 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -233,6 +233,8 @@ if($order_by !='')
 $url_string .="&order_by=".$order_by;
 if($sorder !='')
 $url_string .="&sorder=".$sorder;
+
+$url_string .="&recordid=".$_REQUEST['recordid'].'&return_module='.$_REQUEST['return_module'];
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Contacts","Popup");
 $xtpl->assign("NAVIGATION", $navigationOutput);

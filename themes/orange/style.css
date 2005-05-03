@@ -26,7 +26,7 @@
 
 /*********************************************************************************
 
- * $Id: style.css,v 1.18 2005/03/17 05:59:33 gjay Exp $
+ * $Id: style.css,v 1.19 2005/04/26 13:13:05 gjay Exp $
 
  * Description:  Contains a variety of utility functions used to display UI 
 
@@ -278,6 +278,10 @@ A.moduleMenu:hover {
 
 	border-bottom: 1px solid #FFB062;
 
+}
+
+.uline {
+	border-bottom: 1px solid #EADEC8;
 }
 
 .alphaBg {
@@ -568,7 +572,58 @@ A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000
 	background: url(images/calc_mem_btn.gif) no-repeat;
 }
 
+/* Tab Component */
+.tabLink {
+	font-family: Verdana, Arial, Helvetica, Sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #000;
+	text-decoration: none;
+}
+.tabLink:hover {
+	text-decoration: underline;
+}
+.tabOn {
+	padding: 5;
+	border-top: 1px solid #EADEC8;
+	background-color: #FFF;
+}
+.tabOff {
+	padding: 5;
+	border-top: 1px solid #EADEC8;
+	border-left: 1px solid #EADEC8;
+	border-right: 1px solid #EADEC8;
+	border-bottom: 1px solid #EADEC8;
+	background-color: #F8F4ED;
+}
+.tabContent {
+	border-left: 1px solid #EADEC8;
+	border-right: 1px solid #EADEC8;
+	border-bottom: 1px solid #EADEC8;
+}
+.tabStart {
+	border-right: 1px solid #EADEC8;
+	border-bottom: 1px solid #EADEC8;
+}
+.tabEnd {
+	border-left: 1px solid #EADEC8;
+	border-bottom: 1px solid #EADEC8;
+}
 
+.relListHead {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #000;
+	text-decoration: none;
+}
+.relListHead:hover {
+	text-decoration: underline;
+}
+
+.disabled {
+	color: #CCC;
+}
 
 /*
 
@@ -1160,7 +1215,7 @@ a.bodylink:hover{ text-decoration:underline;} */
 
  *
 
- * CVS Info: $Id: style.css,v 1.18 2005/03/17 05:59:33 gjay Exp $
+ * CVS Info: $Id: style.css,v 1.19 2005/04/26 13:13:05 gjay Exp $
 
  * $Author: gjay $
 

@@ -8,7 +8,8 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
+//require_once('database/DatabaseConnection.php');
 require_once('HelpDeskUtil.php');
 require_once('XTemplate/xtpl.php');
 require_once('include/utils.php');
@@ -24,17 +25,18 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 //Retreiving the ticket id
-$ticketid = $_REQUEST['id'];
+if(isset($_REQUEST['id']))	$ticketid=$_REQUEST['id'];
+else	$ticketid = $_REQUEST['record'];
 
 //Retreiving the ticket info from database
-$query = "select troubletickets.id,groupname,contact_id,priority,status,parent_id,parent_type,category,troubletickets.title,troubletickets.description,update_log,version_id,troubletickets.date_created,troubletickets.date_modified,troubletickets.assigned_user_id,first_name,last_name from troubletickets left join contacts on troubletickets.contact_id=contacts.id where troubletickets.id='".$ticketid."'";
-$ticketresult = mysql_query($query);
+$query = "select troubletickets.id,groupname,contact_id,priority,status,parent_id,parent_type,category,troubletickets.title,troubletickets.description,update_log,version_id,troubletickets.date_created,troubletickets.date_modified,troubletickets.assigned_user_id,troubletickets.estimate_finish_time,first_name,last_name from troubletickets left join contacts on troubletickets.contact_id=contacts.id where troubletickets.id='".$ticketid."'";
+$ticketresult = $adb->query($query);//mysql_query($query);
 
-$user_id = mysql_result($ticketresult,0,'assigned_user_id');
+$user_id = $adb->query_result($ticketresult,0,'assigned_user_id');
 
 $user_query = "select user_name from users where id='".$user_id."'";
-$user_result = mysql_query($user_query);
-$user_name = mysql_result($user_result,0,'user_name');
+$user_result = $adb->query($user_query);//mysql_query($user_query);
+$user_name = $adb->query_result($user_result,0,'user_name');//mysql_result($user_result,0,'user_name');
 
 $xtpl=new XTemplate ('modules/HelpDesk/CreateTicket.html');
 $xtpl->assign("MOD", $mod_strings);
@@ -65,18 +67,18 @@ else
 	$xtpl->assign("RETURN_ID", $ticketid);
 }
 
-
+$str="<b>".$mod_strings['LBL_TICKET_ID'].$mod_strings['LBL_COLON']."&nbsp;".$ticketid."</b>";
+$xtpl->assign("TICKETID",$str);
 $xtpl->assign("ID", $ticketid);
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("MODE", "Edit");
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
 
-$groupname_val = mysql_result($ticketresult,0,'groupname');
-$priority_val = mysql_result($ticketresult,0,'priority');
-$status_val = mysql_result($ticketresult,0,'status');
-$category_val = mysql_result($ticketresult,0,'category');
-
+$groupname_val = $adb->query_result($ticketresult,0,'groupname');//mysql_result($ticketresult,0,'groupname');
+$priority_val = $adb->query_result($ticketresult,0,'priority');//mysql_result($ticketresult,0,'priority');
+$status_val = $adb->query_result($ticketresult,0,'status');
+$category_val = $adb->query_result($ticketresult,0,'category');
 
 //Assigning the combo values
 $xtpl->assign("ASSIGNED_USER_GROUP_OPTIONS",getComboValues("assigned_group_name","groups","name","1",$groupname_val));
@@ -88,9 +90,13 @@ $xtpl->assign("CATEGORYOPTIONS",getComboValues("category","troubleticketcategori
 
 $xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active", $user_id), $user_id));
 
+$xtpl->assign("ESTIMATED_FINISHING_DATE", $adb->query_result($ticketresult,0,'estimate_finish_time'));
+$estimated_finishing_time=split(' ',$adb->query_result($ticketresult,0,'estimate_finish_time'));
+$xtpl->assign("ESTIMATED_FINISHING_TIME", $estimated_finishing_time[1]);
+
 //Assignig the Entity Values
-$parent_type = mysql_result($ticketresult,0,'parent_type');
-$parent_id = mysql_result($ticketresult,0,'parent_id');
+$parent_type = $adb->query_result($ticketresult,0,'parent_type');
+$parent_id = $adb->query_result($ticketresult,0,'parent_id');
 if($parent_type == 'Accounts')
 {
 	
@@ -98,9 +104,9 @@ if($parent_type == 'Accounts')
 	$pt_type = "Account Name";
 	if(isset($parent_id) && $parent_id != '')
 	{
-		$pt_rst=mysql_query("select name from accounts where id='".$parent_id."'");
+		$pt_rst=$adb->query("select name from accounts where id='".$parent_id."'");
 		$xtpl->assign("PARENT_ID", $parent_id);
-		$xtpl->assign("ENTITYNAME", mysql_result($pt_rst,0,'name'));
+		$xtpl->assign("ENTITYNAME", $adb->query_result($pt_rst,0,'name'));
 	}
 	
 }
@@ -111,8 +117,8 @@ elseif($parent_type == 'Opportunities')
 	$pt_type = "Opportunity Name";
 	if(isset($parent_id) && $parent_id != '')
 	{
-		$pt_rst=mysql_query("select name from opportunities where id='".$parent_id."'");
-		$xtpl->assign("ENTITYNAME", mysql_result($pt_rst,0,'name'));
+		$pt_rst=$adb->query("select name from opportunities where id='".$parent_id."'");
+		$xtpl->assign("ENTITYNAME", $adb->query_result($pt_rst,0,'name'));
 		$xtpl->assign("PARENT_ID", $parent_id);
 	}
 }
@@ -122,24 +128,30 @@ elseif($parent_type == 'Products')
 	$xtpl->assign("PRODUCTSELECTED", "selected");
 	if(isset($parent_id) && $parent_id != '')
 	{
-		$pt_rst=mysql_query("select productname from products where id='".$parent_id."'");
-		$xtpl->assign("ENTITYNAME", mysql_result($pt_rst,0,'productname'));
+		$pt_rst=$adb->query("select productname from products where id='".$parent_id."'");
+		$xtpl->assign("ENTITYNAME", $adb->query_result($pt_rst,0,'productname'));
 		$xtpl->assign("PARENT_ID", $parent_id);
 	}
 }
 
 //Assigining the contact Name
-$last_name = mysql_result($ticketresult,0,'last_name');
+$last_name = $adb->query_result($ticketresult,0,'last_name');
 if(isset($last_name) && $last_name != '')
 {
-   $contactname = mysql_result($ticketresult,0,'first_name')." ".mysql_result($ticketresult,0,'last_name');
+   $contactname = $adb->query_result($ticketresult,0,'first_name')." ".$adb->query_result($ticketresult,0,'last_name');
    $xtpl->assign("CONTACT_NAME", $contactname);
-   $xtpl->assign("CONTACT_ID", mysql_result($ticketresult,0,'contact_id'));
+   $xtpl->assign("CONTACT_ID", $adb->query_result($ticketresult,0,'contact_id'));
 }
 
 //Assigning the subject and description
-   $xtpl->assign("SUBJECT", mysql_result($ticketresult,0,'title'));
-   $xtpl->assign("DESCRIPTION", mysql_result($ticketresult,0,'description'));
+   $xtpl->assign("SUBJECT", $adb->query_result($ticketresult,0,'title'));
+   $xtpl->assign("DESCRIPTION", $adb->query_result($ticketresult,0,'description'));
+
+//Updating the Custom Field
+$xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+require_once('include/CustomFieldUtil.php');
+$custfld = CustomFieldEditView($ticketid, "HelpDesk", "ticketcf", "ticketid", $app_strings, $theme);
+$xtpl->assign("CUSTOMFIELD", $custfld);
 
 $xtpl->parse("main");
 

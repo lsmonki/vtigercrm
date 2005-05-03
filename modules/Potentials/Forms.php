@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Forms.php,v 1.8 2005/03/03 18:53:27 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Forms.php,v 1.11 2005/04/20 20:25:13 ray Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -158,9 +158,9 @@ function verify_data(form) {
 		errorMessage += "\\n$lbl_account_name";
 	}
 	// TODO:  Clint - needs to be cleaned up
-	if (form.account_name.value == "skip_me") {
-		form.account_name.value = '';
-	}
+	//if (form.account_name.value == "skip_me") {
+	//	form.account_name.value = '';
+	//}
 	if (form.closingdate.value == false) {
 		isError = true;
 		errorMessage += "\\n$lbl_date_closed";
@@ -204,9 +204,11 @@ global $current_user;
 
 $lbl_required_symbol = $app_strings['LBL_REQUIRED_SYMBOL'];
 $lbl_opportunity_name = $mod_strings['LBL_OPPORTUNITY_NAME'];
+$lbl_account_name = $mod_strings['LBL_LIST_ACCOUNT_NAME'];
 $lbl_sales_stage = $mod_strings['LBL_SALES_STAGE'];
 $lbl_date_closed = $mod_strings['LBL_DATE_CLOSED'];
-$lbl_amount = $mod_strings['LBL_AMOUNT'];
+$lbl_amount = $mod_strings['LBL_AMOUNT'].' ('.getDisplayCurrency().')';
+
 $ntc_date_format = $app_strings['NTC_DATE_FORMAT'];
 $lbl_save_button_title = $app_strings['LBL_SAVE_BUTTON_TITLE'];
 $lbl_save_button_key = $app_strings['LBL_SAVE_BUTTON_KEY'];
@@ -230,15 +232,19 @@ $the_form .= <<<EOQ
 		<script type="text/javascript" src="jscalendar/calendar.js"></script>
 		<script type="text/javascript" src="jscalendar/lang/calendar-{$cal_lang}.js"></script>
 		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-		<form name="OppSave" onSubmit="return verify_data(OppSave)" method="POST" action="index.php">
+		<form name="EditView" onSubmit="return verify_data(EditView)" method="POST" action="index.php">
 			<input type="hidden" name="module" value="Potentials">
 			<input type="hidden" name="record" value="">
-			<input type="hidden" name="account_name" value="skip_me">
 			<input type="hidden" name="assigned_user_id" value='${user_id}'>
 			<input type="hidden" name="action" value="Save">
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_opportunity_name<br>
 		<input name='potentialname' type="text" value=""><br>
-		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date_closed <br><font size="1"><em old='ntc_date_format'>(yyyy-mm-dd)</em></font><br>
+		<FONT class="required">$lbl_required_symbol</FONT>$lbl_account_name<br>
+		<input name='account_name' type="text" value="" readonly>
+		<input name="account_id" type="hidden" value="">&nbsp;<input title="Change" accessKey="Change" type="button" tabindex="3" class="button" value="Change" name="btn1" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'>
+		<br>
+
+		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date_closed <br><font size="1"><em old='ntc_date_format'>($current_user->date_format)</em></font><br>
 		<input name='closingdate' size='12' maxlength='10' id='jscal_field' type="text" value=""> <img src="themes/$theme/images/calendar.gif" id="jscal_trigger"><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_sales_stage<br>
 		<select name='sales_stage'>

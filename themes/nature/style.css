@@ -361,6 +361,9 @@ A.moduleMenu:hover {
 	border-bottom: 1px solid #FFD125;
 
 }
+.uline {
+	border-bottom: 1px solid #E7E7CF;
+}
 
 .alphaBg {
 	text-align: center;
@@ -649,6 +652,59 @@ A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000
 }
 .calcMemBtn {
 	background: url(images/calc_mem_btn.gif) no-repeat;
+}
+
+/* Tab Component */
+.tabLink {
+	font-family: Verdana, Arial, Helvetica, Sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #000;
+	text-decoration: none;
+}
+.tabLink:hover {
+	text-decoration: underline;
+}
+.tabOn {
+	padding: 5;
+	border-top: 1px solid #D1D1A5;
+	background-color: #FFF;
+}
+.tabOff {
+	padding: 5;
+	border-top: 1px solid #D1D1A5;
+	border-left: 1px solid #D1D1A5;
+	border-right: 1px solid #D1D1A5;
+	border-bottom: 1px solid #D1D1A5;
+	background-color: #EFEFDE;
+}
+.tabContent {
+	border-left: 1px solid #D1D1A5;
+	border-right: 1px solid #D1D1A5;
+	border-bottom: 1px solid #D1D1A5;
+}
+.tabStart {
+	border-right: 1px solid #D1D1A5;
+	border-bottom: 1px solid #D1D1A5;
+}
+.tabEnd {
+	border-left: 1px solid #D1D1A5;
+	border-bottom: 1px solid #D1D1A5;
+}
+
+.relListHead {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #000;
+	text-decoration: none;
+}
+.relListHead:hover {
+	text-decoration: underline;
+}
+
+.disabled {
+	color: #CCC;
 }
 
 /*

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/2setConfig.php,v 1.40 2005/03/25 19:19:09 ray Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/2setConfig.php,v 1.41 2005/04/29 06:44:13 samk Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 require_once("connection.php");
@@ -99,7 +99,7 @@ if (is_file("config.php")) {
 		$db_name = $dbconfig['db_name'];
 	}
 	else {
-		$db_name = 'vtigercrm4';
+		$db_name = 'vtigercrm4_0_1';
 	}
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	
@@ -120,7 +120,7 @@ else {
 	!isset($_REQUEST['db_host_name']) ? $db_host_name = $H_NAME.$sock_path : $db_host_name = $_REQUEST['db_host_name'];
 	!isset($_REQUEST['db_user_name']) ? $db_user_name = $mysql_username : $db_user_name = $_REQUEST['db_user_name'];
 	!isset($_REQUEST['db_password']) ? $db_password= $mysql_password : $db_password = $_REQUEST['db_password'];
-	!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm4" : $db_name = $_REQUEST['db_name'];
+	!isset($_REQUEST['db_name']) ? $db_name = "vtigercrm4_0_1" : $db_name = $_REQUEST['db_name'];
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
 	!isset($_REQUEST['host_name']) ? $host_name= $_SERVER['SERVER_NAME'] : $host_name= $_REQUEST['host_name'];
 	!isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];

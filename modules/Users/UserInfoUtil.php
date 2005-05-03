@@ -73,10 +73,14 @@ function fetchUserGroups($userid)
 
 function getAllTabsPermission($profileid)
 {
-	global $adb;
+	global $adb,$MAX_TAB_PER;
 	$sql = "select * from profile2tab where profileid=" .$profileid ;
 	$result = $adb->query($sql);
 	$tab_perr_array = Array();
+	if($MAX_TAB_PER !='')
+	{
+		$tab_perr_array = array_fill(0,$MAX_TAB_PER,0);
+	}
 	$num_rows = $adb->num_rows($result);
 	for($i=0; $i<$num_rows; $i++)
 	{

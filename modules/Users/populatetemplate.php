@@ -15,7 +15,7 @@ include_once('modules/Leads/Lead.php');
 
 
 //download the template file and store it in some specific location
-$sql = "select templatename,body from emailtemplates where templatename='".$_REQUEST["templatename"] ."'";
+$sql = "select templatename,body from emailtemplates where templateid='".$_REQUEST["templateid"] ."'";
 $tempresult = $adb->query($sql);
 $tempArray = $adb->fetch_array($tempresult);
 $fileContent = $tempArray["body"];

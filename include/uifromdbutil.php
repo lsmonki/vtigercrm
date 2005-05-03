@@ -18,7 +18,7 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 	$tabid = getTabid($module);
 	global $profile_id;
 
-	$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
+	$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
 	
 
         $result = $adb->query($sql);
@@ -79,7 +79,7 @@ function getDetailBlockInformation($module, $block, $col_fields)
 
 	//retreive the fields from database
 	
-	$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
+	$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid=".$profile_id." order by sequence";
 	
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);

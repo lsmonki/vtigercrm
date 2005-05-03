@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Popup.php,v 1.4 2005/03/23 10:46:26 samk Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/Popup.php,v 1.5 2005/04/27 09:51:34 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -64,6 +64,7 @@ $image_path = 'themes/'.$theme.'/images';
 ////////////////////////////////////////////////////////
 if (!isset($_REQUEST['html'])) {
 	$form =new XTemplate ('modules/Users/Popup_picker.html');
+	$form->assign("POPUPTYPE",$_REQUEST['popuptype']);
 	$log->debug("using file modules/Users/Popup_picker.html");
 }
 else {

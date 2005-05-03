@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Home/index.php,v 1.25.2.3 2005/04/07 10:46:59 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Home/index.php,v 1.28 2005/04/20 06:57:47 samk Exp $
  * Description:  Main file for the Home module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -173,7 +173,7 @@ $t=Date("Ymd");
 </td>
 <td width="320" valign="top" align="center">
             <?php include("modules/Calendar/minical.php"); ?>
-            <form name="Calendar" method="GET" action="index.php">
+            <form name="minc" method="GET" action="index.php">
                 <input type="hidden" name="module" value="Calendar">
                 <input type="hidden" name="action">
                 <input type="hidden" name="t">

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/index.php,v 1.3 2005/02/11 10:54:22 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/index.php,v 1.4 2005/03/17 14:01:15 samk Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -29,7 +29,14 @@ global $mod_strings;
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_TITLE'], true); 
 echo "\n<BR>\n";
 include ('modules/Potentials/ListView.php'); 
-include ('modules/Import/ImportButton.php');
 
+echo "<br><table width='250' cellpadding=0 cellspacing=0><tr><td>";
+echo get_form_header($mod_strings['LBL_TOOL_FORM_TITLE'], "", false);
+echo "</td></tr>";
+echo "<tr><td class='formOuterBorder' style='padding: 10px'>";
+echo "<ul>";
+include('modules/Import/ImportButton.php');
+echo "</ul>";
+echo "</td></tr></table>";
 
 ?>

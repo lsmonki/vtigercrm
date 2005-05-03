@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/EditView.php,v 1.11 2005/02/21 15:40:21 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/EditView.php,v 1.16 2005/03/24 16:18:38 samk Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -27,7 +27,7 @@ require_once('modules/Potentials/Forms.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/uifromdbutil.php');
-
+require_once('include/FormValidationUtil.php');
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
@@ -59,14 +59,16 @@ $block_1 = getBlockInformation("Potentials",1,$focus->mode,$focus->column_fields
 
 
 
-//get Address Information
+//get Description Information
 
 $block_2 = getBlockInformation("Potentials",2,$focus->mode,$focus->column_fields);
 
 //get Description Information
 
-$block_3 = getBlockInformation("Potentials",3,$focus->mode,$focus->column_fields);
+//$block_3 = getBlockInformation("Potentials",3,$focus->mode,$focus->column_fields);
 
+$block_1_header = getBlockTableHeader("LBL_OPPORTUNITY_INFORMATION");
+$block_2_header = getBlockTableHeader("LBL_ADDRESS_INFORMATION");
 
 //get Custom Field Information
 $block_5 = getBlockInformation("Potentials",5,$focus->mode,$focus->column_fields);
@@ -74,8 +76,9 @@ if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
         $cust_fld .=  '<tr><td>';
+	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
+        $cust_fld .= $block_5_header;
         $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= '<tr><th align="left" class="formSecHeader" colspan="2">Custom Information</th></tr>';
         $cust_fld .= $block_5;
         $cust_fld .= '</table>';
         $cust_fld .= '</td></tr></table>';
@@ -114,6 +117,8 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("BLOCK3", $block_3);
+$xtpl->assign("BLOCK1_HEADER", $block_1_header);
+$xtpl->assign("BLOCK2_HEADER", $block_2_header);
 
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
@@ -166,6 +171,61 @@ $custfld = CustomFieldEditView($focus->id, "Potentials", "opportunitycf", "oppor
 $xtpl->assign("CUSTOMFIELD", $custfld);
 
 */
+
+
+
+
+
+ $potential_tables = Array('potential','crmentity','potentialscf'); 
+ $tabid = getTabid("Potentials");
+ $validationData = getDBValidationData($potential_tables,$tabid);
+ $fieldName = '';
+ $fieldLabel = '';
+ $fldDataType = '';
+
+ $rows = count($validationData);
+ foreach($validationData as $fldName => $fldLabel_array)
+ {
+   if($fieldName == '')
+   {
+     $fieldName="'".$fldName."'";
+   }
+   else
+   {
+     $fieldName .= ",'".$fldName ."'";
+   }
+   foreach($fldLabel_array as $fldLabel => $datatype)
+   {
+	if($fieldLabel == '')
+	{
+			
+     		$fieldLabel = "'".$fldLabel ."'";
+	}		
+      else
+       {
+      $fieldLabel .= ",'".$fldLabel ."'";
+        }
+ 	if($fldDataType == '')
+         {
+      		$fldDataType = "'".$datatype ."'";
+    	}
+	 else
+        {
+       		$fldDataType .= ",'".$datatype ."'";
+     	}
+   }
+ }
+
+
+$xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
+$xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
+$xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
+
+
+
+
+
+
 $xtpl->parse("main");
 
 $xtpl->out("main");

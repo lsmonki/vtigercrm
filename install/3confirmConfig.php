@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.13 2005/03/17 18:13:59 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/3confirmConfig.php,v 1.14 2005/04/25 09:41:26 samk Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 
@@ -114,7 +114,7 @@ if (isset($_REQUEST['ftppassword'])) $ftppassword	= $_REQUEST['ftppassword'];
               </tr>
               <tr>
                <td noWrap>Cache Path</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.'\\'.$cache_dir; ?></font></td>
+               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.''.$cache_dir; ?></font></td>
               </tr>
 
 

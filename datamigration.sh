@@ -8,68 +8,299 @@
 # All Rights Reserved.
 #
 # ********************************************************************************
-
 setVariables()
 {
 	wdir=`pwd`
 	cp -f ../apache/htdocs/vtigerCRM/migrator_backup_connection.php ../apache/htdocs/vtigerCRM/migrator_connection.php
-	chmod 777 ../apache/htdocs/vtigerCRM/migrator_connection.php 
+        chmod 777 ../apache/htdocs/vtigerCRM/migrator_connection.php
 }
 
-
-getvtiger3_2_installdir()
+checkInstallDir()
 {
-	echo "Specify the host name of the vtiger CRM 3.2 mysql server"
-	read mysql_host_name_3_2
+	bindir=$1
+	retval=1
+	if [ -d ${bindir} ]
+	then
+		if [ -f ${bindir}/startvTiger.sh -a -f ${bindir}/stopvTiger.sh ]
+		then
+			retval=0
+		else
+			echo "No such file ${bindir}/startvtiger.sh ${bindir}/stopvtiger.sh."
+			echo "Invalid vtiger 4.0 directory specified"
+		fi
+	else
+		echo "No such Directory: $bindir"
+	fi
+	return ${retval}	
+}
+
+getvtiger4_0_installdir()
+{
+	cancontinue=false
 	
-	echo ''
-	echo "Specify the user name of the vtiger CRM 3.2 mysql server"
-	read mysql_username_3_2 
+	while [ $cancontinue != "true" ]
+	do
+		echo "Specify the absolute path of the bin directory of the vtiger CRM 4.0 "
+		echo "(For example /home/test/vtigerCRM3_0/bin):"
+	 	read dir_4_0
+		
+		if [ "${dir_4_0}" != "" ]	
+		then
+			checkInstallDir ${dir_4_0}
+			if [ $? != 0 ]
+			then
+				cancontinue=false
+			else
+				cancontinue=true
+			fi
+		else
+			echo "value cannot be null"
+		fi
+	done
+ 	
+	echo 'The 4.0 vtiger CRM installation directory is' $dir_4_0
+}
+
+getvtiger4_0_data()
+{
+	scrfile=${dir_4_0}/startvTiger.sh
+
+	echo "Specify the host name of the vtiger CRM 4.0 mysql server"
+        read mysql_host_name_4_0
 
 	echo ''
-	echo "Specify the password of the vtiger CRM 3.2 mysql server"
-	read mysql_password_3_2
+        echo "Specify the apache port of the vtiger CRM 4.0.1"
+        read apache_port_4_0_1
+	
+	mysql_dir=`grep "mysql_dir=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
+	echo $mysql_dir
 
-	echo ''
-	echo "Specify the port of the vtiger CRM 3.2 mysql server"
-	read mysql_port_3_2
+	mysql_username=`grep "mysql_username=" ${scrfile}  | cut -d "=" -f2 | cut -d "'" -f2`
+	echo $mysql_username
 
-	echo ''
-	echo "Specify the apache port of the vtiger CRM 4.0 mysql server"
-	read apache_port_4_0		
+	mysql_password=`grep "mysql_password=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
+	echo $mysql_password
 
+	mysql_port=`grep "mysql_port=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
+	echo $mysql_port
 
+	mysql_socket=`grep "mysql_socket=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
+	echo $mysql_socket
 
-	finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLHOSTNAME ${mysql_host_name_3_2}
-	finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLUSERNAME ${mysql_username_3_2}
-	finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLPASSWORD ${mysql_password_3_2}
-	finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLPORT ${mysql_port_3_2}
-	chmod 777 ../apache/htdocs/vtigerCRM/migrator_connection.php	
+	mysql_bundled=`grep "mysql_bundled=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
+	echo $mysql_bundled
+	
+	pwd
+	src_file_4_0_1=./startvTiger.sh
+	mysql_dir_4_0_1=`grep "mysql_dir=" ${src_file_4_0_1} | cut -d "=" -f2 | cut -d "'" -f2`
+	echo $mysql_dir_4_0_1
 
+	finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLHOSTNAME ${mysql_host_name_4_0}
+        finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLUSERNAME ${mysql_username}
+        finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLPASSWORD ${mysql_password}
+        finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLPORT ${mysql_port}
+        chmod 777 ../apache/htdocs/vtigerCRM/migrator_connection.php
 }
 
 finAndReplace()
 {
-	fileName=$1
-	var=$2
-	val=$3
-	
-	tmpFile=${fileName}.$$
-	sed -e "s@${var}@${val}@g" ${fileName} > ${tmpFile}
-	mv -f ${tmpFile} ${fileName}
-	
+        fileName=$1
+        var=$2
+        val=$3
+
+        tmpFile=${fileName}.$$
+        sed -e "s@${var}@${val}@g" ${fileName} > ${tmpFile}
+        mv -f ${tmpFile} ${fileName}
+
 }
 
-migrate()
+isvtiger_MySQL_Running()
 {
-	wget http://localhost:${apache_port_4_0}/Migrator.php
+	version=$1
+	retval=1
+	echo "select 1" | ${mysql_dir}/bin/mysql --user=${mysql_username} --password=${mysql_password}  --port=${mysql_port} --socket=${mysql_socket} > /dev/null
+
+	exit_status=$?
+
+	if [ $exit_status -eq 0 ]
+	then
+        	echo " "
+        	echo "The vtiger CRM $version MySQL server is running"
+        	echo " "
+		retval=0
+	fi
+
+	return ${retval}
+}
+
+checkInput()
+{
+	checkcharlower=$1
+	checkcharupper=$2
+	correctkey=false
+	
+	while [ "${correctkey}" != "true" ]
+	do
+		read char
+		if [ "$char" != "${checkcharlower}" -a "$char" != "${checkcharupper}" ]
+		then
+			echo "Press ${checkcharlower} (or) ${checkcharupper}"
+		else
+			correctkey=true	
+		fi
+	done
+
+}
+promptAndCheckMySQL()
+{
+	version=$1
+	echo ""
+	echo "**************************************************"
+	echo "Mysql server in the directory $mysql_dir is not running at port $mysql_port."
+	echo "Start the vtiger CRM $version mysql server and then Press C to contiunue"
+	echo "**************************************************"
+	echo ""
+	checkInput "c" "C"
+}
+
+startMySQL()
+{
+	version=$1
+	if [ "$mysql_bundled" == "false" ]
+	then
+		mysql_running=false
+		while [ "${mysql_running}" != "true" ]
+		do
+			promptAndCheckMySQL $version
+			isvtiger_MySQL_Running $version
+			if [ $? = 0 ]
+			then	
+				mysql_running=true
+			fi
+		done
+	else
+		mysql_running=false
+		while [ "${mysql_running}" != "true" ]
+		do
+			echo "vtiger CRM $version Mysql Server is not running."
+			echo "Going to start the  vtiger CRM $version mysql server at port $mysql_port"
+			${mysql_dir}/bin/mysqld_safe --no-defaults --basedir=$mysql_dir --datadir=$mysql_dir/data --socket=$mysql_socket --tmpdir=$mysql_dir/tmp --user=root --port=$mysql_port --default-table-type=INNODB > /dev/null &
+			sleep 8
+			isvtiger_MySQL_Running $version
+			if [ $? -ne 0 ]
+			then
+				echo ""
+				echo "*****************************************"
+				echo "Unable to start vtiger CRM $version mysql server."
+				echo "Check whether the port $mysql_port is free."
+				echo "Free the port and press c to continue"
+				echo "*****************************************"
+				echo ""
+				checkInput "c" "C"		
+			else
+				mysql_running=true
+			fi
+		done
+	fi
+
+}
+
+getdump4_0_db()
+{
+	echo "********************************************"
+	echo "Taking the dump of vtiger CRM 4.0 database"
+	echo "*******************************************"
+	echo 'set FOREIGN_KEY_CHECKS=0;' > vtiger_4_0_dump.txt		
+	${mysql_dir_4_0_1}/bin/mysqldump --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm4 >> vtiger_4_0_dump.txt
+	if [ $? -eq 0 ]
+	then
+		echo 'Data dump taken successfully in vtiger_4_0_dump.txt'
+	else
+		echo 'Unable to take the database dump. vtigercrm database may be corrupted'
+		exit
+	fi
+		
+	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "create database vtigercrm_4_0_bkp" 
+	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm_4_0_bkp < vtiger_4_0_dump.txt
+	wget http://localhost:${apache_port_4_0_1}/Migrate.php
+	#${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm_4_0_bkp < migrate_4_0to4_0_1.sql
+	echo 'set FOREIGN_KEY_CHECKS=0;' > migrated_vtiger_4_0_dump.txt
+	${mysql_dir_4_0_1}/bin/mysqldump --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm_4_0_bkp >> migrated_vtiger_4_0_dump.txt
+	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "drop database vtigercrm_4_0_bkp"
+
+}
+
+
+stopvtiger4_0MySQL()
+{
+	echo "Shutting down the vtiger CRM 4.0 mysql server"
+       	${mysql_dir}/bin/mysqladmin --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket shutdown
+       	echo "vtiger CRM 4.0 MySQL server shutdown"
+}
+
+getvtiger4_0_1data()
+{
+	scrfile=./startvTiger.sh
+	
+	mysql_dir=`grep "mysql_dir=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
+	echo "3.2 dir is$mysql_dir"
+
+	mysql_username=`grep "mysql_username=" ${scrfile}  | cut -d "=" -f2 | cut -d "'" -f2`
+	echo "3.2 user name is $mysql_username"
+
+	mysql_password=`grep "mysql_password=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
+	echo "3.2 password is $mysql_password"
+
+	mysql_port=`grep "mysql_port=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
+	echo "3.2 port is $mysql_port"
+
+	mysql_socket=`grep "mysql_socket=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
+	echo "3.2 socket is $mysql_socket"
+
+	mysql_bundled=`grep "mysql_bundled=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
+	echo "3.2 bundled status is $mysql_bundled"
+}
+
+dumpinto4_0_1db()
+{
+	
+       	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "drop database vtigercrm4_0_1"
+       	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "create database if not exists vtigercrm4_0_1"
+	${mysql_dir}/bin/mysql  --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm4_0_1 --force < migrated_vtiger_4_0_dump.txt  2> migrate_log.txt
+	
+	if [ $? -eq 0 ]
+	then
+		echo 'vTiger CRM 4.0 Data successfully migrated into vtiger CRM 4.0.1 database vtigercrm4_0_1'
+	else
+		echo 'Unable to dump data into the vtiger CRM 4.0.1 database vtigercrm4_0_1. Check the migrate_log.txt in the $wdir directory'
+		exit
+	fi
 }
 
 main()
 {
 	setVariables $*
-	getvtiger3_2_installdir
-	migrate
+	getvtiger4_0_installdir
+	getvtiger4_0_data
+	isvtiger_MySQL_Running 4.0
+
+	if [ $? != 0 ]
+	then
+		startMySQL 4.0
+	fi
+	getdump4_0_db
+	if [ "$mysql_bundled" == "true" ]
+	then
+		stopvtiger4_0MySQL
+	fi
+	getvtiger4_0_1data
+	isvtiger_MySQL_Running 4.0.1
+	if [ $? != 0 ]
+	then
+		startMySQL 4.0.1
+	fi
+	dumpinto4_0_1db
+	 	
 }
 
 

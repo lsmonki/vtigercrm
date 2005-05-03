@@ -25,31 +25,36 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("THEME", $theme);
 
-$sql = "select * from emailtemplates order by templatename";
-$result = $adb->query($sql);
-$temprow = $adb->fetch_array($result);
-$cnt=1;
-$selcount = $_REQUEST['templatename'];	
-do
+if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
 {
-  if ($cnt == $selcount)
-  {
-      $templatename = $temprow["templatename"]; 
-  }
-  $cnt++;
-}while($temprow = $adb->fetch_array($result));
+	$tempid = $_REQUEST['templateid'];
+	$sql = "select * from emailtemplates where templateid=".$tempid;
+	$result = $adb->query($sql);
+/*	$temprow = $adb->fetch_array($result);
+	$cnt=1;
+	$selcount = $_REQUEST['templatename'];	
+	do
+	{
+	  if ($cnt == $selcount)
+  	  {
+	      $templatename = $temprow["templatename"]; 
+  	  }
+	  $cnt++;
+	}while($temprow = $adb->fetch_array($result));
 
-$result = fetchEmailTemplateInfo($templatename);
+	$result = fetchEmailTemplateInfo($templatename);
+*/
 //
-$emailtemplateResult = $adb->fetch_array($result);
-
+	$emailtemplateResult = $adb->fetch_array($result);
+}
 $xtpl->assign("FOLDERNAME", $emailtemplateResult["foldername"]);
 
 $xtpl->assign("TEMPLATENAME", $emailtemplateResult["templatename"]);
 $xtpl->assign("DESCRIPTION", $emailtemplateResult["description"]);
+$xtpl->assign("TEMPLATEID", $emailtemplateResult["templateid"]);
 
 $xtpl->assign("SUBJECT", $emailtemplateResult["subject"]);
-$xtpl->assign("BODY", $emailtemplateResult["body"]);
+$xtpl->assign("BODY", nl2br($emailtemplateResult["body"]));
 
 $xtpl->parse("main");
 $xtpl->out("main");

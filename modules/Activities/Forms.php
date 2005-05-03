@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/Forms.php,v 1.6 2005/03/10 15:27:00 ray Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Activities/Forms.php,v 1.7 2005/04/19 16:49:29 ray Exp $
  * Description:  Contains a variety of utility functions used to display UI
  * components such as form headers and footers.  Intended to be modified on a per
  * theme basis.
@@ -29,6 +29,7 @@
  * Contributor(s): ______________________________________..
  */
 require_once('include/ComboUtil.php');
+require_once('include/utils.php');
 function get_validate_record_js () {
 global $mod_strings;
 global $app_strings;
@@ -209,6 +210,7 @@ $user_id = $current_user->id;
 $cal_lang = "en";
 $cal_dateformat = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 $value=date('Y-m-d');
+$dis_value=getNewDisplayDate();
 $curr_time = date('H:i');
 
 $the_form = get_left_form_header("New Task");
@@ -227,8 +229,8 @@ $the_form .= <<<EOQ
 		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Subject<br>
 		<input name='subject' type="text" value=""><br>
 		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Start Date & Time&nbsp;<br>
-		<input name="date_start" id="jscal_field_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_date_start">&nbsp; <input name="time_start" tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
-		<font size=1><em old="(yyyy-mm-dd 24:00)">(yyyy-mm-dd 24:00)</em></font><br><br>
+		<input name="date_start" id="jscal_field_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$dis_value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_date_start">&nbsp; <input name="time_start" tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
+		<font size=1><em old="(yyyy-mm-dd 24:00)">($current_user->date_format 24:00)</em></font><br><br>
 		<input title="${app_strings['LBL_SAVE_BUTTON_TITLE']}" accessKey="${app_strings['LBL_SAVE_BUTTON_KEY']}" class="button" type="submit" name="button" value="${app_strings['LBL_SAVE_BUTTON_LABEL']}" >
 		</form>
 		<script type="text/javascript">
@@ -255,8 +257,8 @@ $the_form .= <<<EOQ
 		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Subject<br>
 		<input name='subject' type="text" value=""><br>
 		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Start Date & Time&nbsp;<br>
-		<input name="date_start" id="jscal_field_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_date_start">&nbsp; <input name="time_start" tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
-		<font size=1><em old="(yyyy-mm-dd 24:00)">(yyyy-mm-dd 24:00)</em></font><br>
+		<input name="date_start" id="jscal_field_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$dis_value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_date_start">&nbsp; <input name="time_start" tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
+		<font size=1><em old="(yyyy-mm-dd 24:00)">($current_user->date_format 24:00)</em></font><br>
 		Activity Type<br>
 		<select name='activitytype'>
 EOQ;

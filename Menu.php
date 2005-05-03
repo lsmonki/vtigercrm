@@ -39,6 +39,7 @@ $module_menu_array = Array('Contacts' => $app_strings['LNK_NEW_CONTACT'],
 	                    );
 $module_menu = Array();
 $i= 0;
+$add_url = "";
 foreach($module_menu_array as $module1 => $label)
 {
 	if($module1 == 'Events')

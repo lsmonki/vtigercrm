@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/data/CRMEntity.php,v 1.11.2.5 2005/04/14 09:49:26 sarajkumar Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/data/CRMEntity.php,v 1.16 2005/04/29 04:21:31 rajeshkannan Exp $
  * Description:  Defines the base class for all data entities used throughout the 
  * application.  The base class including its methods and variables is designed to 
  * be overloaded with module-specific methods and variables particular to the 
@@ -225,7 +225,7 @@ class CRMEntity extends SugarBean
     if($this->mode == 'edit')
     {
 	$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-	$sql = "update crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description='".$description_val."', modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
+	$sql = "update crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
 			
       $adb->query($sql);
     }
@@ -386,6 +386,11 @@ class CRMEntity extends SugarBean
           }
 
         }
+	elseif($uitype == 5 || $uitype == 6 || $uitype ==23)
+       {
+
+               $fldvalue = getDBInsertDateValue($this->column_fields[$fieldname]);
+       }
         else
         {
           $fldvalue = $this->column_fields[$fieldname]; 
@@ -466,7 +471,7 @@ class CRMEntity extends SugarBean
                 {
                         $date_var = date('YmdHis');
 			//$sql = "insert into potstagehistory values('',".$this->id.",".$_REQUEST['amount'].",'".$_REQUEST['sales_stage']."',".$_REQUEST['probability'].",".$_REQUEST['expectedrevenue'].",".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
-			$sql = "insert into potstagehistory values('',".$this->id.",".$_REQUEST['amount'].",'".$sales_stage."',".$_REQUEST['probability'].",0,".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
+			$sql = "insert into potstagehistory values('',".$this->id.",'".$_REQUEST['amount']."','".$sales_stage."','".$_REQUEST['probability']."',0,".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
                         $adb->query($sql);
                 }
         }
@@ -548,9 +553,9 @@ function getOldFileName($notesid)
 	if($attachmentid != '')
 	{
 		$query2 = "select * from attachments where attachmentsid=".$attachmentid;
-		$filename = "'".$adb->query_result($adb->query($query2),0,'name')."'";
+		$filename = $adb->query_result($adb->query($query2),0,'name');
 	}
-	return $filename;
+	return "'".$filename."'";
 }
 
 	

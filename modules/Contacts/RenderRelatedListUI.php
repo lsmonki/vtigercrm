@@ -86,6 +86,8 @@ function renderRelatedEmails($query,$id)
 	global $app_strings;
 	
 	$hidden = getHiddenValues($id);
+	$hidden .="<input type=\"hidden\" name=\"email_directing_module\">";
+	$hidden .="<input type=\"hidden\" name=\"record\">";
 	echo $hidden;
 
 	$focus = new Email();
@@ -94,7 +96,7 @@ function renderRelatedEmails($query,$id)
 
         if(isPermitted("Emails",1,"") == 'yes')
         {	
-		$button .= '<input title="New Email" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Emails\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_EMAIL'].'">';
+		$button .= '<input title="New Email" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Emails\';this.form.email_directing_module.value=\'contacts\';this.form.record.value='.$id.';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_EMAIL'].'">';
 	}
 	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
@@ -106,6 +108,24 @@ function renderRelatedHistory($query,$id)
 {
 	getHistory('Contacts',$query,$id);
 	echo '<br><br>';
+}
+
+function renderRelatedTickets($query,$id)
+{
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id);
+        echo $hidden;
+
+        $focus = new HelpDesk();
+
+        $button = '';	
+	$button .= '<td valign="bottom" align="right"><input title="New Ticket" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
+        $returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
+
+        $list = GetRelatedList('Contacts','HelpDesk',$focus,$query,$button,$returnset);
+        echo '</form>';
 }
 
 function renderRelatedAttachments($query,$id)

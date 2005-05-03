@@ -1,4 +1,1 @@
-<!-- Testing -->
 vtigerCRM
-
-the world is round

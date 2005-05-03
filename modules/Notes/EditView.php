@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/EditView.php,v 1.12.2.1 2005/04/11 13:22:49 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Notes/EditView.php,v 1.13 2005/04/18 10:37:49 samk Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.

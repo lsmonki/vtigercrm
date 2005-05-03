@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/modules/HelpDesk/Save.php,v 1.7 2005/03/22 13:56:54 rajeshkannan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/modules/HelpDesk/Save.php,v 1.8 2005/04/25 05:21:46 rajeshkannan Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -56,7 +56,7 @@ if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $retur
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
-$_REQUEST['name'] = $_REQUEST['title'];
+$_REQUEST['name'] = $_REQUEST['ticket_title'];
 $_REQUEST['parent_id'] = $_REQUEST['contact_id'];
 $_REQUEST['return_id'] = $return_id;
 

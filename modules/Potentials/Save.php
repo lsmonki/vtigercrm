@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Save.php,v 1.5 2005/02/11 10:54:22 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Save.php,v 1.6 2005/03/15 10:02:12 shaw Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -47,7 +47,8 @@ foreach($focus->column_fields as $fieldname => $val)
 		
 }
 
-$focus->saveentity("Potentials");
+//$focus->saveentity("Potentials");
+$focus->save("Potentials");
 $return_id = $focus->id;
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];

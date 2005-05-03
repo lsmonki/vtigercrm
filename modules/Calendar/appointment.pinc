@@ -410,18 +410,29 @@ class appointment extends tutos_base {
     //print_r($val_array);
     if($pos!=-1) return;
     //print("GS --> continuing");
-    if(substr_count($val_array["time_start"],":") != 2)
+    $fmt_sthr='';
+    $fmt_stm='';
+    list($sthr,$stmn,$stsc) = split(":",$val_array["time_start"]);
+    if($sthr <= 9 && strlen(trim($sthr)) < 2) 
     {
-    	$startdate = $val_array["date_start"] .' ' . $val_array["time_start"].':00';
+	$fmt_sthr= '0'.$sthr;
     }
     else
     {
-    	$startdate = $val_array["date_start"] .' ' . $val_array["time_start"];
+	$fmt_sthr= $sthr;
     }
-    
+    if($stmn <= 9 && strlen(trim($stmn)) < 2) 
+    {
+	$fmt_stm= '0'.$stmn;
+    }
+    else
+    {
+	$fmt_stm = $stmn;
+    }
+    $startdate = $val_array["date_start"] .' ' . $fmt_sthr .":" . $fmt_stm .":00";
+        
     //end time calculation
     $endhr = 0;
-    list($sthr,$stmn,$stsc) = split(":",$val_array["time_start"]);
     $endmin = $stmn + $val_array["duration_minutes"];
     if($endmin <= 9) $endmin= '0'.$endmin;
     if($endmin >= 60)
@@ -431,7 +442,7 @@ class appointment extends tutos_base {
         $endhr++;
     }
     $endhr = $endhr + $sthr + $val_array["duration_hours"];
-	if($endhr <= 9) $endhr= '0'.$endhr;
+    if($endhr <= 9) $endhr= '0'.$endhr;
     if ($endhr > 23) $endhr = 23;
     $enddate = $val_array["date_start"] .' ' . $endhr .":" . $endmin .":00";
     //

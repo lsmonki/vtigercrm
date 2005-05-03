@@ -28,7 +28,7 @@
 
 /*********************************************************************************
 
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.64.2.4 2005/04/13 05:06:27 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.68 2005/04/26 06:50:39 rank Exp $
 
  * Description:  Defines the English language pack for the base application.
 
@@ -524,7 +524,7 @@ $app_strings = Array(
 
 'LBL_HOUR_AND_MINUTE'=>'(hours/minutes)',
 
-'YEAR_MONTH_DATE'=>'(yyyy-mm-dd 24:00)',
+'YEAR_MONTH_DATE'=>'24:00',
 
 
 
@@ -630,6 +630,7 @@ $app_strings = Array(
 'Activities'=>'Activities',
 
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
+'LBL_TITLE_OR_DESCRIPTION'=>'Title / Description',
 );
 
 

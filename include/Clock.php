@@ -253,7 +253,7 @@ dsp1.left=x-8+"px";
 dsp2.top=y-80+"px";
 dsp2.left=x-55+"px";
 dsp3.top=y+55+"px";
-dsp3.left=x-49+"px";
+dsp3.left=x-60+"px";
 //dsp4.backgroundColor=bCol;
 //dsp4.color=tCol;
 //var currSkin="<%=skintype%>"
@@ -367,7 +367,11 @@ function ClockAndAssign(){
 	}
 	//todaysDate=day+"/"+month+"/"+year;
 	todaysDate=mon[month-1]+" "+day+", "+year;
-	ampm=(hr>11)?"pm":"am";
+	
+	if (hr<0) hr+=24;
+	if (hr>23) hr-=24;
+	
+	ampm=(hr>11)?"PM":"AM";
 	
 	for (i=0;i<s;i++){
 	 cs[i].top=y+(i*hDims)*Math.sin(sec)+"px";
@@ -383,7 +387,14 @@ function ClockAndAssign(){
 	}
 	
 	document.getElementById("amOrPm").firstChild.data=ampm;
-	document.getElementById("theDate").firstChild.data=todaysDate;
+	
+//	if (hr.toString().length==1) hr="0"+hr
+	if (hr==0) hr=12
+	else if (hr>11) hr-=12;
+	
+	if (mins.toString().length==1) mins="0"+mins;
+	
+	document.getElementById("theDate").firstChild.data=todaysDate+" "+hr+":"+mins+" "+ampm;
 	setTimeout('ClockAndAssign()',100);
 	}
 	ClockAndAssign();

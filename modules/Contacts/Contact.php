@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.66.2.3 2005/04/13 13:25:09 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Contact.php,v 1.70 2005/04/27 11:21:49 rank Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -29,6 +29,7 @@ require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Activities/Activity.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
+require_once('modules/HelpDesk/HelpDesk.php');
 
 // Contact is used to store customer information.
 class Contact extends CRMEntity {
@@ -316,7 +317,7 @@ class Contact extends CRMEntity {
 	{
           // First, get the list of IDs.
           //include('modules/Contacts/RenderRelatedListUI.php');
-	  $query = 'select contactdetails.accountid, contactdetails.contactid , potential.potentialid, potential.potentialname, potential.potentialtype, potential.amount, potential.closingdate, crmentity.crmid, crmentity.smownerid from contactdetails inner join potential on contactdetails.accountid = potential.accountid inner join crmentity on crmentity.crmid = potential.potentialid where contactdetails.contactid = '.$id.' and crmentity.deleted=0';
+	  $query = 'select contactdetails.accountid, contactdetails.contactid , potential.potentialid, potential.potentialname, potential.potentialtype, potential.sales_stage, potential.amount, potential.closingdate, crmentity.crmid, crmentity.smownerid from contactdetails inner join potential on contactdetails.accountid = potential.accountid inner join crmentity on crmentity.crmid = potential.potentialid where contactdetails.contactid = '.$id.' and crmentity.deleted=0';
           renderRelatedPotentials($query,$id);
           //return $this->build_related_list($query, new Opportunity());
 	}
@@ -355,13 +356,18 @@ class Contact extends CRMEntity {
 		$query = "SELECT activity.activityid, activity.subject, activity.status, activity.eventstatus, activity.activitytype, contactdetails.contactid, contactdetails.firstname, contactdetails.lastname, crmentity.modifiedtime from activity inner join cntactivityrel on cntactivityrel.activityid= activity.activityid inner join contactdetails on contactdetails.contactid= cntactivityrel.contactid inner join crmentity on crmentity.crmid=activity.activityid left join seactivityrel on seactivityrel.activityid=activity.activityid where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') and (activity.status='Completed' or activity.eventstatus='Held') and cntactivityrel.contactid=".$id;
 		renderRelatedHistory($query,$id);
 	}
+	function get_tickets($id)
+	{
+		$query = "select crmentity.crmid, troubletickets.title, contactdetails.contactid, troubletickets.contact_id, contactdetails.firstname, contactdetails.lastname, troubletickets.status, troubletickets.priority, crmentity.smownerid from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on contactdetails.contactid=troubletickets.contact_id left join users on users.id=crmentity.smownerid where crmentity.deleted=0 and contactdetails.contactid=".$id;
+		renderRelatedTickets($query,$id);
+	}
 
         function get_attachments($id)
         {
 		//$query = 'select notes.title,"Notes      " as ActivityType, notes.filename, attachments.type as "FileType",crm2.modifiedtime as "lastmodified", notes.notesid as noteattachmentid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$id;
 		$query = "select notes.title,'Notes      '  ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid  attachmentsid, notes.notesid crmid from notes inner join crmentity on crmentity.crmid= notes.contact_id inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
-		$query .= "select '          '  title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
+		$query .= "select attachments.description title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
                 renderRelatedAttachments($query,$id);
 	  }
 

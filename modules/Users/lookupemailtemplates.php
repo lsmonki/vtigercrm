@@ -35,7 +35,7 @@ $theme_path="themes/".$theme."/";
                 <td class="moduleListTitle"><b><?php echo $mod_strings['LBL_DESCRIPTION']; ?></b></td>
                 </tr>
 <?php
-   $sql = "select * from emailtemplates";
+   $sql = "select * from emailtemplates order by templateid desc";
    $result = $adb->query($sql);
    $temprow = $adb->fetch_array($result);
 $cnt=1;
@@ -43,13 +43,13 @@ $cnt=1;
 require_once('modules/Users/UserInfoUtil.php');
 do
 {
-  $name=$temprow["name"];
+  //$name=$temprow["name"];
   if ($cnt%2==0)
   printf("<tr class='evenListRow'> <td height='25'>");
   else
   printf("<tr class='oddListRow'> <td height='25'>");
  $templatename = $temprow["templatename"]; 
-  printf("<a href=index.php?module=Users&action=populatetemplate&templatename=".$templatename.'&entityid='.$_REQUEST["entityid"].'&entity='.$_REQUEST['entity'].">%s</a></td>",$temprow["templatename"]);
+  printf("<a href='index.php?module=Users&action=populatetemplate&templatename=".$temprow['templatename']."&templateid=".$temprow['templateid']."&entityid=".$_REQUEST["entityid"]."&entity=".$_REQUEST['entity']."'>%s</a></td>",$temprow["templatename"]);
    printf("<td height='25'>%s</td>",$temprow["description"]);
   $cnt++;
 }while($temprow = $adb->fetch_array($result));

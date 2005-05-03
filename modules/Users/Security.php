@@ -77,10 +77,10 @@ class Security extends CRMEntity {
  $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'industry','account',1,'15','industry','industry',1,0,0,100,13,1,1,'V~O')");
  $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'siccode','account',1,'1','siccode','SIC Code',1,0,0,100,14,1,1,'I~O')");
  $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'account_type','account',1,'15','accounttype','Type',1,0,0,100,15,1,1,'V~O')");
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'annualrevenue','account',1,'1','annual_revenue','Annual Revenue',1,0,0,100,16,1,1,'I~O')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'annualrevenue','account',1,'71','annual_revenue','Annual Revenue',1,0,0,100,16,1,1,'I~O')");
  $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,17,1,1,'V~M')");
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,18,1,2,'T~O')");
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'1','modifiedtime','Modified Time',1,0,0,100,18,1,2,'T~O')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,18,1,2,'T~O')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,18,1,2,'T~O')");
 
  //Block 2
  $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'street','accountbillads',1,'21','bill_street','Billing Address',1,0,0,100,1,2,1,'V~O')");
@@ -121,13 +121,13 @@ class Security extends CRMEntity {
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'website','leadsubdetails',1,'17','website','Website',1,0,0,100,11,1,1,'V~O')");
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'industry','leaddetails',1,'15','industry','Industry',1,0,0,100,12,1,1,'V~O')");
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'leadstatus','leaddetails',1,'15','leadstatus','Lead Status',1,0,0,100,13,1,1,'V~O')");
- $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'annualrevenue','leaddetails',1,'1','annualrevenue','Annual Revenue',1,0,0,100,14,1,1,'V~O')");
+ $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'annualrevenue','leaddetails',1,'71','annualrevenue','Annual Revenue',1,0,0,100,14,1,1,'V~O')");
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'rating','leaddetails',1,'15','rating','Rating',1,0,0,100,15,1,1,'V~O')");
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'noofemployees','leaddetails',1,'1','noofemployees','No Of Employees',1,0,0,100,16,1,1,'V~O')");
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,17,1,1,'V~M')");
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'yahooid','leaddetails',1,'13','yahooid','Yahoo Id',1,0,0,100,18,1,1,'V~O')");
-$this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,19,1,2,'T~O')");
- $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'1','modifiedtime','Modified Time',1,0,0,100,20,1,2,'T~O')");
+$this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,19,1,2,'T~O')");
+ $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,20,1,2,'T~O')");
 //Block1 -- End
 
 //Block2 -- Start
@@ -167,8 +167,8 @@ $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'donotcall','contactdetails',1,'56','donotcall','Do Not Call',1,0,0,100,20,1,1,'C~O')");
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'emailoptout','contactdetails',1,'56','emailoptout','Email Opt Out',1,0,0,100,21,1,1,'C~O')");
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,22,1,1,'V~M')");
-$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,23,1,2,'T~O')");
- $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'1','modifiedtime','Modified Time',1,0,0,100,24,1,2,'T~O')");
+$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,23,1,2,'T~O')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,24,1,2,'T~O')");
 //Block1 -- End
 
 //Block 2 -- Start
@@ -193,7 +193,7 @@ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").
 //Potential Details -- START
 //Block1 -- Start
  $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'potentialname','potential',1,'2','potentialname','Potential Name',1,0,0,100,1,1,1,'V~M')");	
- $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'amount','potential',1,1,'amount','Amount',1,0,0,100,2,1,1,'N~O')");	
+ $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'amount','potential',1,71,'amount','Amount',1,0,0,100,2,1,1,'N~O')");	
  $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'accountid','potential',1,'50','account_id','Account Name',1,0,0,100,3,1,1,'V~M')");	
  $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'closingdate','potential',1,'23','closingdate','Expected Close Date',1,0,0,100,5,1,1,'D~M')");	
  $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'potentialtype','potential',1,'15','opportunity_type','Type',1,0,0,100,6,1,1,'V~O')");	
@@ -202,8 +202,8 @@ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'sales_stage','potential',1,'16','sales_stage','Sales Stage',1,0,0,100,9,1,1,'V~O')");
  $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,10,1,1,'V~M')");
  $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'probability','potential',1,'9','probability','Probability',1,0,0,100,11,1,1,'N~O')");
-$this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,13,1,2,'T~O')");
- $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'1','modifiedtime','Modified Time',1,0,0,100,14,1,2,'T~O')");
+$this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,13,1,2,'T~O')");
+ $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,14,1,2,'T~O')");
 //Block1 -- End
 
 //Block2 -- Start
@@ -221,8 +221,8 @@ $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'status','troubletickets',1,'15','ticketstatus','Status',1,0,0,100,6,1,1,'V~O')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'category','troubletickets',1,'15','ticketcategories','Category',1,0,0,100,7,1,1,'V~O')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'update_log','troubletickets',1,'15','update_log','Update History',1,0,0,100,7,1,3,'V~O')");
-$this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,8,1,2,'T~O')");
- $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'1','modifiedtime','Modified Time',1,0,0,100,9,1,2,'T~O')");
+$this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,8,1,2,'T~O')");
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,9,1,2,'T~O')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'title','troubletickets',1,'22','ticket_title','Title',1,0,0,100,1,2,1,'V~M')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'description','troubletickets',1,'19','description','Description',1,0,0,100,1,3,1,'V~O')");
 //Block1 -- End
@@ -233,16 +233,16 @@ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productname','products',1,'2','productname','Product Name',1,0,0,100,1,1,1,'V~M')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productcode','products',1,'1','productcode','Product Code',1,0,0,100,2,1,1,'V~O')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'discontinued','products',1,'56','discontinued','Product Active',1,0,0,100,3,1,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'commissionrate','products',1,'1','commissionrate','Commission Rate',1,0,0,100,4,1,1,'N~O')"); 
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'commissionrate','products',1,'9','commissionrate','Commission Rate',1,0,0,100,4,1,1,'N~O')"); 
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'qty_per_unit','products',1,'1','qty_per_unit','Qty/Unit',1,0,0,100,5,1,1,'N~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'unit_price','products',1,'1','unit_price','Unit Price',1,0,0,100,6,1,1,'N~O')"); 
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'unit_price','products',1,'71','unit_price','Unit Price',1,0,0,100,6,1,1,'N~O')"); 
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'manufacturer','products',1,'15','manufacturer','Manufacturer',1,0,0,100,7,1,1,'V~O')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productcategory','products',1,'15','productcategory','Product Category',1,0,0,100,8,1,1,'V~O')");	
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'start_date','products',1,'5','start_date','Support Start Date',1,0,0,100,8,1,1,'D~O')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'expiry_date','products',1,'5','expiry_date','Support Expiry Date',1,0,0,100,9,1,1,'D~O~GE~start_date~Support Expiry Date')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'purchase_date','products',1,'5','purchase_date','Purchase Date',1,0,0,100,10,1,1,'D~O')");
-$this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,11,1,2,'T~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'1','modifiedtime','Modified Time',1,0,0,100,12,1,2,'T~O')");
+$this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,11,1,2,'T~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,12,1,2,'T~O')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'product_description','products',1,'19','product_description','Description',1,0,0,100,13,2,1,'V~O')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'crmid','seproductsrel',1,'66','parent_id','Related To',1,0,0,100,14,1,1,'I~O')");
 //Block1 -- End
@@ -253,8 +253,8 @@ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (8,".$this->db->getUniqueID("field").",'contact_id','notes',1,'57','contact_id','Contact Name',1,0,0,100,1,1,1,'V~O')");
  $this->db->query("insert into field values (8,".$this->db->getUniqueID("field").",'crmid','senotesrel',1,'62','parent_id','Related To',1,0,0,100,2,1,1,'I~O')");
  $this->db->query("insert into field values (8,".$this->db->getUniqueID("field").",'title','notes',1,'2','title','Subject',1,0,0,100,3,1,1,'V~M')");
-$this->db->query("insert into field values (8,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,4,1,2,'T~O')");
- $this->db->query("insert into field values (8,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'1','modifiedtime','Modified Time',1,0,0,100,5,1,2,'T~O')");
+$this->db->query("insert into field values (8,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,4,1,2,'T~O')");
+ $this->db->query("insert into field values (8,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,5,1,2,'T~O')");
  $this->db->query("insert into field values (8,".$this->db->getUniqueID("field").",'filename','notes',1,'61','filename','Attachment',1,0,0,100,4,2,1,'V~O')");
  $this->db->query("insert into field values (8,".$this->db->getUniqueID("field").",'notecontent','notes',1,'19','notecontent','Note',1,0,0,100,5,3,1,'V~O')");
 //Block1 -- End
@@ -271,8 +271,8 @@ $this->db->query("insert into field values (8,".$this->db->getUniqueID("field").
 	$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'filename','emails',1,'61','filename','Attachment',1,0,0,100,7,3,1,'V~O')");
 	 $this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'description','emails',1,'19','description','Description',1,0,0,100,8,4,1,'V~O')");
 	 $this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'time_start','activity',1,'2','time_start','Time Start',1,0,0,100,9,1,3,'T~O')");
-$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,10,1,2,'T~O')");
- $this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'1','modifiedtime','Modified Time',1,0,0,100,11,1,2,'T~O')");
+$this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,10,1,2,'T~O')");
+ $this->db->query("insert into field values (10,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,11,1,2,'T~O')");
 //Block1 -- End
 //Email Details -- END
 
@@ -290,8 +290,8 @@ $this->db->query("insert into field values (10,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'eventstatus','activity',1,'15','eventstatus','Status',1,0,0,100,9,1,1,'V~O')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'priority','activity',1,'15','taskpriority','Priority',1,0,0,100,10,1,1,'V~O')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'sendnotification','activity',1,'56','sendnotification','Send Notification',1,0,0,100,11,1,1,'C~O')");
-$this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,14,1,2,'T~O')");
- $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'1','modifiedtime','Modified Time',1,0,0,100,15,1,2,'T~O')");
+$this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,14,1,2,'T~O')");
+ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,15,1,2,'T~O')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'activitytype','activity',1,'15','activitytype','Activity Type',1,0,0,100,16,1,3,'V~O')");
 
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'description','activity',1,'19','description','Description',1,0,0,100,1,2,1,'V~O')");
@@ -321,8 +321,8 @@ $this->db->query("insert into field values (16,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'sendnotification','activity',1,'56','sendnotification','Send Notification',1,0,0,100,11,1,1,'C~O')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'activitytype','activity',1,'15','activitytype','Activity Type',1,0,0,100,12,1,1,'V~O')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'location','activity',1,'1','location','Location',1,0,0,100,13,1,1,'V~O')");
-$this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,14,1,2,'T~O')");
- $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'1','modifiedtime','Modified Time',1,0,0,100,15,1,2,'T~O')");
+$this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,14,1,2,'T~O')");
+ $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,15,1,2,'T~O')");
 
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'description','activity',1,'19','description','Description',1,0,0,100,1,2,1,'V~O')");
 
@@ -336,8 +336,8 @@ $this->db->query("insert into field values (16,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'question','faq',1,'19','question','Question',1,0,0,100,1,2,1,'V~O')");
  $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'answer','faq',1,'19','answer','Answer',1,0,0,100,1,3,1,'V~O')");
  $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'comments','faq',1,'19','comments','Comments',1,0,0,100,1,4,1,'V~O')");
-$this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'1','createdtime','Created Time',1,0,0,100,3,1,2,'T~O')");
- $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'1','modifiedtime','Modified Time',1,0,0,100,4,1,2,'T~O')");
+$this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,3,1,2,'T~O')");
+ $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,4,1,2,'T~O')");
 //Block1 -- End
 //Ticket Details -- END
 
@@ -754,7 +754,9 @@ $this->db->query("insert into field values (15,".$this->db->getUniqueID("field")
                 insertProfile2field($profile1_id);
                 insertProfile2field($profile2_id);	
                 insertProfile2field($profile3_id);	
-                insertProfile2field($profile4_id);	
+                insertProfile2field($profile4_id);
+
+		insert_def_org_field();	
 		
 
 		//Inserting into profile 2 utility Admin
@@ -870,6 +872,9 @@ $this->db->query("insert into field values (15,".$this->db->getUniqueID("field")
                  $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,description,notificationsubject,notificationbody) values (".$this->db->getUniqueID("notificationscheduler").",'Support Starting Notification' ,1,'Your support starts today','Support Start Notification','Support starts please')");
                  
                  $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,description,notificationsubject,notificationbody) values (".$this->db->getUniqueID("notificationscheduler").",'Support Ending Notification' ,1,'Support Ending Notification','Support ending please','Support Ending Notification')");
+
+		//Insert into currency table
+		$this->db->query("insert into currency_info values('U.S Dollar','USD','$')");
                  
 	       	}
 

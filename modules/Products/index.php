@@ -214,6 +214,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		$search_form->assign("SUPPORT_START_DATE",$_REQUEST['start_date']);
 		$search_form->assign("SUPPORT_EXPIRY_DATE",$_REQUEST['expiry_date']);
 		$search_form->assign("PURCHASE_DATE",$_REQUEST['purchase_date']);
+		$search_form->assign("DATE_FORMAT", $current_user->date_format);
 
 		//Added for Custom Field Search
 		$sql="select * from field where tablename='productcf' order by fieldlabel";

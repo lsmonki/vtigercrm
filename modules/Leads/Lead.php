@@ -213,7 +213,7 @@ return $exists;
   $query = $this->constructCustomQueryAddendum() . ", 
 			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.city city, leadaddress.state state,leadaddress.code code,leadaddress.country country,users.user_name, users.status user_status
                         FROM ".$this->entity_table."
-                        LEFT JOIN leaddetails
+                        INNER JOIN leaddetails
                         ON crmentity.crmid=leaddetails.leadid
                         LEFT JOIN leadaddress 
                         ON leaddetails.leadid=leadaddress.leadaddressid
@@ -229,7 +229,7 @@ return $exists;
 		{
                   $query = "SELECT 
 			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.*,users.user_name, users.status user_status FROM ".$this->entity_table."
-                        LEFT JOIN leaddetails
+                        INNER JOIN leaddetails
                         ON crmentity.crmid=leaddetails.leadid
                         LEFT JOIN leadsubdetails
                         ON leaddetails.leadid = leadsubdetails.leadsubscriptionid
@@ -311,7 +311,7 @@ return $exists;
   {
 		$query = "select notes.title,'Notes      ' ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
                 $query .= ' union all ';
-                $query .= "select '          ' title ,'Attachments' ActivityType, attachments.name filename, attachments.type FileType,crm2.modifiedtime lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
+                $query .= "select attachments.description title ,'Attachments' ActivityType, attachments.name filename, attachments.type FileType,crm2.modifiedtime lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
 
     renderRelatedAttachments($query,$id);
   }

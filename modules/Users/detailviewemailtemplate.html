@@ -16,6 +16,7 @@
 <input type="hidden" name="action" >
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="templatename" value="{TEMPLATENAME}">
+<input type="hidden" name="templateid" value="{TEMPLATEID}">
 <input type="hidden" name="foldername" value="{FOLDERNAME}">
 <TABLE WIDTH="100%" CELLPADDING=0 CELLSPACING=0 BORDER=0>
 <TR><TD>
@@ -32,10 +33,10 @@
                 <TD NOWRAP>&nbsp;<input type="submit" name="cancel" value="{APP.LBL_CANCEL_BUTTON_LABEL}" class="button" onclick="this.form.action.value='listemailtemplates'">&nbsp;<input type="submit" name="edit" value="{APP.LBL_EDIT_BUTTON_LABEL}" class="button" onclick="this.form.action.value='editemailtemplate'">&nbsp;<input type="submit" name="delete" value="{APP.LBL_DELETE_BUTTON_LABEL}" class="button" onclick="this.form.action.value='deleteemailtemplate'" ></TD>
               </TR>
 </TABLE>
-<table width="50%" border=0 cellspacing=1 cellpadding=2 class="formOuterBorder">
+<table width="75%" border=0 cellspacing=1 cellpadding=2 class="formOuterBorder">
 <td class="formSecHeader" colspan=2 nowrap>{MOD.LBL_EMAIL_TEMPLATE_INFORMATION}</td>
-<tr><td nowrap class="dataLabel" width="50%">{MOD.LBL_FOLDER}
-</td><td>{FOLDERNAME}</td></tr>
+<tr><td nowrap class="dataLabel" width="25%">{MOD.LBL_FOLDER}
+</td><td width="75%">{FOLDERNAME}</td></tr>
 <tr ><td nowrap class="dataLabel">{MOD.LBL_TEMPLATE_NAME}</td><td>{TEMPLATENAME}</td></tr>
 <tr ><td nowrap class="dataLabel">{MOD.LBL_DESCRIPTION}{MOD.LBL_COLON}
 </td><td>{DESCRIPTION} </td></tr>

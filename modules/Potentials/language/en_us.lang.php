@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/language/en_us.lang.php,v 1.13 2005/02/12 13:55:52 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/language/en_us.lang.php,v 1.18 2005/04/28 14:05:53 ray Exp $
  * Description:  Defines the English language pack for the Account module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -48,6 +48,7 @@ $mod_strings = Array(
 'LBL_DESCRIPTION'=>'Description:',
 'LBL_OPPORTUNITY_INFORMATION'=>'Potential Information:',
 'LBL_DESCRIPTION_INFORMATION'=>'Description Information:',
+'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 
 'LBL_NEW_FORM_TITLE'=>'New Potential',
 
@@ -58,10 +59,6 @@ $mod_strings = Array(
 
 'LBL_SELECT_OPPOPTUNITY'=>'Select Potential',
 'LBL_GENERAL_INFORMATION'=>'General Information',
-
-
-
-
 
 
 
@@ -86,6 +83,30 @@ $mod_strings = Array(
 'LBL_NEW_CONTACT'=>'New Contact',
 'LBL_CONTACT_TITLE'=>'Contacts',
 
+//Added fields after RC1 - Release
+'LBL_ALL'=>'All',
+'LBL_WON'=>'Won',
+'LBL_LOST'=>'Lost',
+'LBL_VALUE_PROPOSITION'=>'Value Proposition',
+'LBL_PROSPECTING'=>'Prospecting',
+
+// Added for 4GA
+'LBL_TOOL_FORM_TITLE'=>'Potential Tools',
+//Added for 4GA
+'Potential Name'=>'Potential Name',
+'Amount'=>'Amount',
+'Account Name'=>'Account Name',
+'Currency'=>'Currency',
+'Expected Close Date'=>'Expected Close Date',
+'Type'=>'Type',
+'Next Step'=>'Next Step',
+'Lead Source'=>'Lead Source',
+'Sales Stage'=>'Sales Stage',
+'Assigned To'=>'Assigned To',
+'Probability'=>'Probability (%)',
+'Description'=>'Description',
+'Created Time'=>'Created Time',
+'Modified Time'=>'Modified Time',
 
 );
 

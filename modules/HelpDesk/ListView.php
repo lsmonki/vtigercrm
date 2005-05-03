@@ -30,6 +30,11 @@ global $mod_strings;
 global $current_language;
 $current_module_strings = return_module_language($current_language, 'HelpDesk');
 
+$comboFieldNames = Array('ticketpriorities'=>'ticketpriorities_dom'
+			,'ticketstatus'=>'ticketstatus_dom'
+			,'ticketcategories'=>'ticketcategories_dom');
+$comboFieldArray = getComboArray($comboFieldNames);
+
 global $currentModule;
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -95,17 +100,17 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	}
 	if(isset($priority) && $priority != "")
 	{
-		array_push($where_clauses, "troubletickets.priority like '%".$priority."%'");
+		array_push($where_clauses, "troubletickets.priority = '".$priority."'");
 		$url_string .= "&priority=".$priority;
 	}
 	if(isset($status) && $status != "")
 	{
-		array_push($where_clauses, "troubletickets.status like '%".$status."%'");
+		array_push($where_clauses, "troubletickets.status = '".$status."'");
 		$url_string .= "&status=".$status;
 	}
 	if(isset($category) && $category != "")
 	{
-		array_push($where_clauses, "troubletickets.category like '%".$category."%'");
+		array_push($where_clauses, "troubletickets.category = '".$category."'");
 		$url_string .= "&category=".$category;
 	}
 	if (isset($date) && $date !='')
@@ -117,15 +122,15 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		}
 		if($date_criteria == 'isnot')
 		{
-			array_push($where_clauses, "troubletickets.date_created not like '".$date."%'");
+			array_push($where_clauses, "crmentity.createdtime not like '".$date."%'");
 		}
 		if($date_criteria == 'before')
 		{
-			array_push($where_clauses,"troubletickets.date_created < '".$date." 23:59:59'");
+			array_push($where_clauses,"crmentity.createdtime < '".$date." 23:59:59'");
 		}
 		if($date_criteria == 'after')
 		{
-			array_push($where_clauses, "troubletickets.date_created > '".$date." 00:00:00'");
+			array_push($where_clauses, "crmentity.createdtime > '".$date." 00:00:00'");
 		}
 		$url_string .= "&date=".$date;
 		$url_string .= "&date_crit=".$date_criteria;
@@ -152,6 +157,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         $search_form=new XTemplate ('modules/HelpDesk/SearchForm.html');
         $search_form->assign("MOD", $current_module_strings);
         $search_form->assign("APP", $app_strings);
+	$clearsearch = 'true';
 
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
@@ -168,9 +174,15 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 	if (isset($name)) $search_form->assign("SUBJECT", $name);
 	if (isset($contact_name)) $search_form->assign("CONTACT_NAME", $contact_name);
-	if (isset($priority)) $search_form->assign("PRIORITY", $priority); 
-	if (isset($status)) $search_form->assign("STATUS", $status); 
-	if (isset($category)) $search_form->assign("CATEGORY", $category);
+	//if (isset($priority)) $search_form->assign("PRIORITY", $priority);
+	if (isset($priority)) $search_form->assign("PRIORITY", get_select_options($comboFieldArray['ticketpriorities_dom'], $priority, $clearsearch));
+        else $search_form->assign("PRIORITY", get_select_options($comboFieldArray['ticketpriorities_dom'], '', $clearsearch));
+	//if (isset($status)) $search_form->assign("STATUS", $status); 
+	if (isset($status)) $search_form->assign("STATUS", get_select_options($comboFieldArray['ticketstatus_dom'], $status, $clearsearch));
+        else $search_form->assign("STATUS", get_select_options($comboFieldArray['ticketstatus_dom'], '', $clearsearch));
+	//if (isset($category)) $search_form->assign("CATEGORY", $category);
+	if (isset($category)) $search_form->assign("CATEGORY", get_select_options($comboFieldArray['ticketcategories_dom'], $category, $clearsearch));
+        else $search_form->assign("CATEGORY", get_select_options($comboFieldArray['ticketcategories_dom'], '', $clearsearch));
 	if ($date_criteria == 'is' && $date != '') $search_form->assign("IS", 'selected');
 	if ($date_criteria == 'isnot' && $date != '') $search_form->assign("ISNOT", 'selected');
 	if ($date_criteria == 'before' && $date != '') $search_form->assign("BEFORE", 'selected');

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/User.php,v 1.9 2005/03/04 08:01:32 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/User.php,v 1.10 2005/04/19 14:40:48 ray Exp $
  * Description: TODO:  To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -62,6 +62,7 @@ class User extends SugarBean {
 	var $authenticated = false;
 	var $error_string;
 	var $is_admin;
+	var $date_format;
 	
 	var $reports_to_name;
 	var $reports_to_id;
@@ -105,6 +106,7 @@ class User extends SugarBean {
 		,"workdays"
 		,"weekstart"
 		,"status"
+		,"date_format"
 		);
 
 	var $encodeFields = Array("first_name", "last_name", "description");

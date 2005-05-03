@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.15 2005/03/17 06:34:28 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/EditView.php,v 1.16 2005/04/19 14:44:02 ray Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -97,6 +97,33 @@ $xtpl->assign("ADDRESS_STATE", $focus->address_state);
 $xtpl->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
 $xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
 $xtpl->assign("DESCRIPTION", $focus->description);
+
+$DATE_FORMAT_SELECT_OPTION = '<select name="date_format">';
+		
+               
+if($focus->date_format == 'dd-mm-yyyy')
+{
+	$selected1 = 'selected';
+}
+elseif($focus->date_format == 'mm-dd-yyyy')
+{
+	$selected2 = 'selected';
+}
+elseif($focus->date_format == 'yyyy-mm-dd')
+{
+	$selected3 = 'selected';
+}
+$DATE_FORMAT_SELECT_OPTION .= '<option value="dd-mm-yyyy" '.$selected1.'>';
+$DATE_FORMAT_SELECT_OPTION .= 'dd-mm-yyyy';
+$DATE_FORMAT_SELECT_OPTION .= '</option>';
+$DATE_FORMAT_SELECT_OPTION .= '<option value="mm-dd-yyyy" '.$selected2.'>';
+$DATE_FORMAT_SELECT_OPTION .= 'mm-dd-yyyy';
+$DATE_FORMAT_SELECT_OPTION .= '</option>';
+$DATE_FORMAT_SELECT_OPTION .= '<option value="yyyy-mm-dd" '.$selected3.'>';
+$DATE_FORMAT_SELECT_OPTION .= 'yyyy-mm-dd';
+$DATE_FORMAT_SELECT_OPTION .= '</option>';	
+$DATE_FORMAT_SELECT_OPTION .= ' </select>';
+$xtpl->assign("DATE_FORMAT", $DATE_FORMAT_SELECT_OPTION);
 
 if (is_admin($current_user)) {
 	$status  = "<td width='20%' class='dataLabel'><FONT class='required'>".$app_strings['LBL_REQUIRED_SYMBOL']."</FONT>".$mod_strings['LBL_STATUS']."</td>\n";
@@ -182,6 +209,8 @@ if (is_admin($current_user)) {
                    $GROUP_SELECT_OPTION .= ' </select>';
                    
                    $xtpl->assign("GROUP_NAME", $GROUP_SELECT_OPTION);
+
+	  
 
 }
 

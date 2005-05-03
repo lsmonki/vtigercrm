@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Charts.php,v 1.11 2005/03/04 20:22:43 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Charts.php,v 1.12 2005/04/20 20:23:34 ray Exp $
  * Description:  Includes the functions for Customer module specific charts.
  ********************************************************************************/
 
@@ -110,7 +110,7 @@ class jpgraph {
 
 			//build the where clause for the query that matches $date_start and $date_end
 			$where .= "AND closingdate >= '$date_start' AND closingdate <= '$date_end'";
-			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".$date_start." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".$date_end."\n";
+			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".getDisplayDate($date_start)." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".getDisplayDate($date_end)."\n";
 
 			//Now do the db queries
 			//query for opportunity data that matches $datay and $user
@@ -220,7 +220,7 @@ class jpgraph {
 				$bplot[$index]->value->SetFont($font,FS_NORMAL,8);
 				//$bplot->value->SetAlign('left','center');
 				$bplot[$index]->value->SetColor("white");
-				$bplot[$index]->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+				$bplot[$index]->value->SetFormat(getCurrencySymbol().'%d');
 				$bplot[$index]->SetValuePos('max');
 
 				//set client side image map URL's
@@ -256,7 +256,7 @@ class jpgraph {
 			$graph->SetBackgroundGradient('white','gray',GRAD_HOR,BGRAD_PLOT);
 
 			// Setup title
-			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].$app_strings['LBL_CURRENCY_SYMBOL'].$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].getCurrencySymbol().$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$graph->title->Set($title);
 			$graph->title->SetFont($font,FS_BOLD,11);
 
@@ -285,7 +285,7 @@ class jpgraph {
 
 			// First make the labels look right
 			$graph->yaxis->SetLabelAlign('left','top');
-			$graph->yaxis->SetLabelFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+			$graph->yaxis->SetLabelFormat(getCurrencySymbol().'%d');
 			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
 
 			// The fix the tick marks
@@ -493,7 +493,7 @@ class jpgraph {
 				$bplot[$index]->value->SetFont($font,FS_NORMAL,8);
 				//$bplot->value->SetAlign('left','center');
 				$bplot[$index]->value->SetColor("white");
-				$bplot[$index]->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+				$bplot[$index]->value->SetFormat(getCurrencySymbol().'%d');
 				$bplot[$index]->SetValuePos('max');
 
 				//set client side image map URL's
@@ -531,7 +531,7 @@ class jpgraph {
 			$graph->SetBackgroundGradient('#F0F0F0','#FFFFFF',GRAD_HOR,BGRAD_PLOT);
 
 			// Setup title
-			$title = $current_module_strings['LBL_ALL_OPPORTUNITIES'].$app_strings['LBL_CURRENCY_SYMBOL'].$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$title = $current_module_strings['LBL_ALL_OPPORTUNITIES'].getCurrencySymbol().$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$graph->title->Set($title);
 			$graph->title->SetFont($font,FS_BOLD,11);
 
@@ -560,7 +560,7 @@ class jpgraph {
 
 			// First make the labels look right
 			$graph->yaxis->SetLabelAlign('left','top');
-			$graph->yaxis->SetLabelFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+			$graph->yaxis->SetLabelFormat(getCurrencySymbol().'%d');
 			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
 
 			// The fix the tick marks
@@ -656,7 +656,7 @@ class jpgraph {
 
 			//build the where clause for the query that matches $date_start and $date_end
 			$where .= "AND closingdate >= '$date_start' AND closingdate <= '$date_end'";
-			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".$date_start." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".$date_end."\n";
+			$subtitle = $current_module_strings['LBL_DATE_RANGE']." ".getDisplayDate($date_start)." ".$current_module_strings['LBL_DATE_RANGE_TO']." ".getDisplayDate($date_end)."\n";
 
 			//Now do the db queries
 			//query for opportunity data that matches $datax and $user
@@ -749,7 +749,7 @@ class jpgraph {
 				$bplot[$index]->value->SetFont($font,FS_NORMAL,8);
 				//$bplot->value->SetAlign('left','center');
 				$bplot[$index]->value->SetColor("white");
-				$bplot[$index]->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+				$bplot[$index]->value->SetFormat(getCurrencySymbol().'%d');
 				$bplot[$index]->SetValuePos('max');
 
 				//set client side image map URL's
@@ -787,7 +787,7 @@ class jpgraph {
 			$graph->SetBackgroundGradient('white','gray',GRAD_HOR,BGRAD_PLOT);
 
 			// Setup title
-			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].$app_strings['LBL_CURRENCY_SYMBOL'].$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].getCurrencySymbol().$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$graph->title->Set($title);
 			$graph->title->SetFont($font,FS_BOLD,11);
 
@@ -812,7 +812,7 @@ class jpgraph {
 
 			// First make the labels look right
 			$graph->yaxis->SetLabelAlign('center','top');
-			$graph->yaxis->SetLabelFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+			$graph->yaxis->SetLabelFormat(getCurrencySymbol().'%d');
 			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
 
 			// The fix the tick marks
@@ -957,7 +957,7 @@ class jpgraph {
 			$graph->SetShadow();
 
 			// Setup title
-			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].$app_strings['LBL_CURRENCY_SYMBOL'].$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
+			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].getCurrencySymbol().$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$graph->title->Set($title);
 			$graph->title->SetFont($font,FS_BOLD,11);
 
@@ -980,7 +980,7 @@ class jpgraph {
 			$p1->value->SetFont($font,FS_NORMAL,12);
 			$p1->SetLegends($visible_legends);
 			$p1->SetLabelType(PIE_VALUE_ABS);
-			$p1->value->SetFormat($app_strings['LBL_CURRENCY_SYMBOL'].'%d');
+			$p1->value->SetFormat(getCurrencySymbol().'%d');
 
 			//set client side image map URL's
 			$p1->SetCSIMTargets($aTargets,$aAlts);

@@ -17,3 +17,4 @@ Please refer to the following URLs for installation procedure in various operati
 
 (D) vtiger Thunderbird Extension 4: http://vtiger.com/products/crm/help/vtiger_Thunderbird_Extension_User_Guide.pdf
  
+(E) vtiger Customer Portal 4.0.1 Beta: http://vtiger.com/products/crm/help/vtiger_Customer_Portal_User_Guide.pdf

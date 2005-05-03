@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/5createTables.php,v 1.57 2005/03/28 07:37:23 samk Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/install/5createTables.php,v 1.58 2005/04/19 16:57:08 ray Exp $
  * Description:  Executes a step in the installation process.
  ********************************************************************************/
 set_time_limit(600);
@@ -30,7 +30,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/logging.php');
 require_once('modules/Leads/Lead.php'); 
 require_once('modules/Settings/FileStorage.php'); 
-require_once('modules/imports/Headers.php'); 
+//require_once('modules/imports/Headers.php'); 
 require_once('modules/Contacts/Contact.php'); 
 require_once('modules/Accounts/Account.php'); 
 require_once('modules/Potentials/Opportunity.php'); 
@@ -166,6 +166,7 @@ function create_default_users()
         $user->workdays = '0,1,2,3,4,5,6,';
         $user->weekstart = '1';
         $user->namedays = '';
+	$user->date_format = 'yyyy-mm-dd';
         $user->email = $admin_email;
         $user->save();
 
@@ -250,7 +251,6 @@ $modules = array(
 ,"Security"
 ,"LoginHistory"
 ,"FileStorage"
-,"Headers"
 ,"User"
 ,"Tracker"
 ,"Activity"
@@ -334,7 +334,7 @@ if ($new_tables)
 
 //Populating users table
 $uid = $db->getUniqueID("users");
-$sql_stmt1 = "insert into users(id,user_name,user_password,last_name,email1) values(".$uid.",'standarduser','stX/AHHNK/Gkw','standarduser','standarduser@standard.user.com')";
+$sql_stmt1 = "insert into users(id,user_name,user_password,last_name,email1,date_format) values(".$uid.",'standarduser','stX/AHHNK/Gkw','standarduser','standarduser@standard.user.com','yyyy-mm-dd')";
 $db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error()); 
 
 

@@ -189,16 +189,25 @@ function patternValidate(fldName,fldLabel,type) {
 	
 	if (type.toUpperCase()=="DATE") {//DATE validation 
 		//YMD
-//		var reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/ //2 digit year
-		var re = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/ // 4 digit year
+		//var reg1 = /^\d{2}(\-|\/|\.)\d{1,2}\1\d{1,2}$/ //2 digit year
+		//var re = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/ //4 digit year
 	   
 		//MYD
-//		var reg1 = /^\d{1,2}(\-|\/|\.)\d{2}\1\d{1,2}$/ 
-//		var reg2 = /^\d{1,2}(\-|\/|\.)\d{4}\1\d{1,2}$/ 
+		//var reg1 = /^\d{1,2}(\-|\/|\.)\d{2}\1\d{1,2}$/ 
+		//var reg2 = /^\d{1,2}(\-|\/|\.)\d{4}\1\d{1,2}$/ 
 	   
 	   //DMY
-//		var reg1 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/ 
-//		var reg2 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/
+		//var reg1 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{2}$/ 
+		//var reg2 = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/
+
+		switch (userDateFormat) {
+			case "yyyy-mm-dd" : 
+								var re = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/
+								break;
+			case "mm-dd-yyyy" : 
+			case "dd-mm-yyyy" : 
+								var re = /^\d{1,2}(\-|\/|\.)\d{1,2}\1\d{4}$/								
+		}
 	}
 	
 	if (type.toUpperCase()=="TIME") {//TIME validation
@@ -210,6 +219,34 @@ function patternValidate(fldName,fldLabel,type) {
 		currObj.focus()
 		return false
 	}
+}
+
+function splitDateVal(dateval) {
+	var datesep;
+	var dateelements = new Array(3);
+	
+	if (dateval.indexOf("-")>=0) datesep="-"
+	else if (dateval.indexOf(".")>=0) datesep="."
+	else if (dateval.indexOf("/")>=0) datesep="/"
+	
+	switch (userDateFormat) {
+		case "yyyy-mm-dd" : 
+							dateelements[0]=dateval.substr(dateval.lastIndexOf(datesep)+1,dateval.length) //dd
+							dateelements[1]=dateval.substring(dateval.indexOf(datesep)+1,dateval.lastIndexOf(datesep)) //mm
+							dateelements[2]=dateval.substring(0,dateval.indexOf(datesep)) //yyyyy
+							break;
+		case "mm-dd-yyyy" : 
+							dateelements[0]=dateval.substring(dateval.indexOf(datesep)+1,dateval.lastIndexOf(datesep))
+							dateelements[1]=dateval.substring(0,dateval.indexOf(datesep))
+							dateelements[2]=dateval.substr(dateval.lastIndexOf(datesep)+1,dateval.length)
+							break;
+		case "dd-mm-yyyy" : 
+							dateelements[0]=dateval.substring(0,dateval.indexOf(datesep))
+							dateelements[1]=dateval.substring(dateval.indexOf(datesep)+1,dateval.lastIndexOf(datesep))
+							dateelements[2]=dateval.substr(dateval.lastIndexOf(datesep)+1,dateval.length)
+	}
+	
+	return dateelements;
 }
 
 function compareDates(date1,fldLabel1,date2,fldLabel2,type) {
@@ -251,13 +288,11 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 		return false;
 	dateval=getObj(dateFldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '') 
 	
-	if (dateval.indexOf("-")>=0) datesep="-"
-	else if (dateval.indexOf(".")>=0) datesep="."
-	else if (dateval.indexOf("/")>=0) datesep="/"
+	var dateelements=splitDateVal(dateval)
 	
-	dd=dateval.substr(dateval.lastIndexOf(datesep)+1,dateval.length)
-	mm=dateval.substring(dateval.indexOf(datesep)+1,dateval.lastIndexOf(datesep))
-	yyyy=dateval.substring(0,dateval.indexOf(datesep))
+	dd=dateelements[0]
+	mm=dateelements[1]
+	yyyy=dateelements[2]
 	
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
 		alert("Please enter a valid "+fldLabel)
@@ -324,21 +359,16 @@ function dateTimeComparison(dateFldName1,timeFldName1,fldLabel1,dateFldName2,tim
 	var dateval1=getObj(dateFldName1).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 	var dateval2=getObj(dateFldName2).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 	
-	if (dateval1.indexOf("-")>=0) date1sep="-"
-	else if (dateval1.indexOf(".")>=0) date1sep="."
-	else if (dateval1.indexOf("/")>=0) date1sep="/"
+	var dateelements1=splitDateVal(dateval1)
+	var dateelements2=splitDateVal(dateval2)
 	
-	var dd1=dateval1.substr(dateval1.lastIndexOf(date1sep)+1,dateval1.length)
-	var mm1=dateval1.substring(dateval1.indexOf(date1sep)+1,dateval1.lastIndexOf(date1sep))
-	var yyyy1=dateval1.substring(0,dateval1.indexOf(date1sep))
+	dd1=dateelements1[0]
+	mm1=dateelements1[1]
+	yyyy1=dateelements1[2]
 	
-	if (dateval2.indexOf("-")>=0) date2sep="-"
-	else if (dateval2.indexOf(".")>=0) date2sep="."
-	else if (dateval2.indexOf("/")>=0) date2sep="/"
-
-	var dd2=dateval2.substr(dateval2.lastIndexOf(date2sep)+1,dateval2.length)
-	var mm2=dateval2.substring(dateval2.indexOf(date2sep)+1,dateval2.lastIndexOf(date2sep))
-	var yyyy2=dateval2.substring(0,dateval2.indexOf(date2sep))
+	dd2=dateelements2[0]
+	mm2=dateelements2[1]
+	yyyy2=dateelements2[2]
 	
 	var timeval1=getObj(timeFldName1).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 	var timeval2=getObj(timeFldName2).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
@@ -376,14 +406,12 @@ function dateValidate(fldName,fldLabel,type) {
 	if(patternValidate(fldName,fldLabel,"DATE")==false)
 		return false;
 	dateval=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '') 
+
+	var dateelements=splitDateVal(dateval)
 	
-	if (dateval.indexOf("-")>=0) datesep="-"
-	else if (dateval.indexOf(".")>=0) datesep="."
-	else if (dateval.indexOf("/")>=0) datesep="/"
-	
-	dd=dateval.substr(dateval.lastIndexOf(datesep)+1,dateval.length)
-	mm=dateval.substring(dateval.indexOf(datesep)+1,dateval.lastIndexOf(datesep))
-	yyyy=dateval.substring(0,dateval.indexOf(datesep))
+	dd=dateelements[0]
+	mm=dateelements[1]
+	yyyy=dateelements[2]
 	
 	if (dd<1 || dd>31 || mm<1 || mm>12 || yyyy<1 || yyyy<1000) {
 		alert("Please enter a valid "+fldLabel)
@@ -433,22 +461,17 @@ function dateValidate(fldName,fldLabel,type) {
 function dateComparison(fldName1,fldLabel1,fldName2,fldLabel2,type) {
 	var dateval1=getObj(fldName1).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
 	var dateval2=getObj(fldName2).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-	
-	if (dateval1.indexOf("-")>=0) date1sep="-"
-	else if (dateval1.indexOf(".")>=0) date1sep="."
-	else if (dateval1.indexOf("/")>=0) date1sep="/"
-	
-	var dd1=dateval1.substr(dateval1.lastIndexOf(date1sep)+1,dateval1.length)
-	var mm1=dateval1.substring(dateval1.indexOf(date1sep)+1,dateval1.lastIndexOf(date1sep))
-	var yyyy1=dateval1.substring(0,dateval1.indexOf(date1sep))
-	
-	if (dateval2.indexOf("-")>=0) date2sep="-"
-	else if (dateval2.indexOf(".")>=0) date2sep="."
-	else if (dateval2.indexOf("/")>=0) date2sep="/"
 
-	var dd2=dateval2.substr(dateval2.lastIndexOf(date2sep)+1,dateval2.length)
-	var mm2=dateval2.substring(dateval2.indexOf(date2sep)+1,dateval2.lastIndexOf(date2sep))
-	var yyyy2=dateval2.substring(0,dateval2.indexOf(date2sep))
+	var dateelements1=splitDateVal(dateval1)
+	var dateelements2=splitDateVal(dateval2)
+	
+	dd1=dateelements1[0]
+	mm1=dateelements1[1]
+	yyyy1=dateelements1[2]
+	
+	dd2=dateelements2[0]
+	mm2=dateelements2[1]
+	yyyy2=dateelements2[2]
 	
 	var date1=new Date()
 	var date2=new Date()		

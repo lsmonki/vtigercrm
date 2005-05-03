@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/DetailView.php,v 1.18.2.2 2005/04/06 10:18:02 ray Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/DetailView.php,v 1.21 2005/04/19 14:44:02 ray Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -77,6 +77,7 @@ $xtpl->assign("FIRST_NAME", $focus->first_name);
 $xtpl->assign("LAST_NAME", $focus->last_name);
 $xtpl->assign("STATUS", $focus->status);
 $xtpl->assign("YAHOO_ID", $focus->yahoo_id);
+$xtpl->assign("DATE_FORMAT", $focus->date_format);
 if (isset($focus->yahoo_id) && $focus->yahoo_id !== "") $xtpl->assign("YAHOO_MESSENGER", "<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$focus->yahoo_id."'><img border=0 src='http://opi.yahoo.com/online?u=".$focus->yahoo_id."'&m=g&t=2'></a>");
 if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id)
 		&& isset($default_user_name)

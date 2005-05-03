@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.51.2.3 2005/04/14 10:25:15 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Accounts/Account.php,v 1.53 2005/04/28 08:06:45 rank Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -215,7 +215,7 @@ class Account extends CRMEntity {
   function get_opportunities($id)
   {
 //	$query = "select products.productid, products.productname, products.productcode, potential.potentialid, potential.accountid, potential.potentialname, potential.amount, potential.closingdate, potential.potentialtype, crmentity.crmid from products,potential inner join seproductsrel on seproductsrel.crmid = potential.accountid and seproductsrel.productid=products.productid inner join crmentity on crmentity.crmid=potential.potentialid";
-	$query = 'select potential.potentialid, potential.accountid, potential.potentialname, potential.potentialtype, potential.amount, potential.closingdate, potential.potentialtype, users.user_name, crmentity.crmid, crmentity.smownerid from potential inner join crmentity on crmentity.crmid= potential.potentialid left join users on crmentity.smownerid = users.id where crmentity.deleted=0 and potential.accountid= '.$id ;
+	$query = 'select potential.potentialid, potential.accountid, potential.potentialname, potential.sales_stage, potential.potentialtype, potential.amount, potential.closingdate, potential.potentialtype, users.user_name, crmentity.crmid, crmentity.smownerid from potential inner join crmentity on crmentity.crmid= potential.potentialid left join users on crmentity.smownerid = users.id where crmentity.deleted=0 and potential.accountid= '.$id ;
     //include('modules/Accounts/RenderRelatedListUI.php');
     renderRelatedPotentials($query,$id);
     // return $this->build_related_list($query, new potential());
@@ -295,7 +295,7 @@ class Account extends CRMEntity {
 	{
 		$query = "select notes.title,'Notes      '  ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
 		$query .= ' union all ';
-		$query .= "select '          '  title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType, crm2.modifiedtime  lastmodified, attachments.attachmentsid  attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
+		$query .= "select attachments.description  title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType, crm2.modifiedtime  lastmodified, attachments.attachmentsid  attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
 		renderRelatedAttachments($query,$id);
 	}
 	function get_tickets($id)
@@ -604,7 +604,7 @@ return $exists;
 			account.*, ".$this->entity_table.".*, accountbillads.city  billing_city, accountbillads.country  billing_country, accountbillads.code  billing_code, accountbillads.state  billing_state, accountbillads.street  billing_street, accountshipads.city  shipping_city, accountshipads.country  shipping_country, accountshipads.code  shipping_code, accountshipads.state  shipping_state,  accountshipads.street  shipping_street,
                         users.user_name, users.status  user_status
                         FROM ".$this->entity_table."
-                        LEFT JOIN account
+                        INNER JOIN account
                         ON crmentity.crmid=account.accountid
                         LEFT JOIN accountbillads
                         ON account.accountid=accountbillads.accountaddressid
@@ -622,7 +622,7 @@ return $exists;
 			account.*, ".$this->entity_table.".*, accountbillads.city  billing_city, accountbillads.country  billing_country, accountbillads.code  billing_code, accountbillads.state billing_state, accountbillads.street billing_street, accountshipads.city shipping_city, accountshipads.country shipping_country, accountshipads.code shipping_code, accountshipads.state shipping_state,  accountshipads.street shipping_street,
                         users.user_name, users.status user_status
                         FROM ".$this->entity_table."
-                        LEFT JOIN account
+                        INNER JOIN account
                         ON crmentity.crmid=account.accountid
                         LEFT JOIN accountbillads
                         ON account.accountid=accountbillads.accountaddressid

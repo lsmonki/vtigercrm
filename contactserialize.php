@@ -17,6 +17,7 @@
 //include("Serializer.php");
 require_once("config.php");
 require_once('modules/Contacts/Contact.php');
+require_once('modules/HelpDesk/HelpDesk.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 //require_once('SOAP/lib/nusoap.php');
@@ -296,7 +297,41 @@ $server->wsdl->addComplexType(
 
 //end code for mail merge
 
+//Field array for troubletickets
 
+$server->wsdl->addComplexType(
+	'tickets_list_array',
+	'complexType',
+	'array',
+	'',
+	array(
+	        'ticketid' => array('name'=>'ticketid','type'=>'xsd:string'),
+	        'title' => array('name'=>'title','type'=>'xsd:string'),
+        	'groupname' => array('name'=>'groupname','type'=>'xsd:string'),
+        	'firstname' => array('name'=>'firstname','type'=>'xsd:string'),
+        	'lastname' => array('name'=>'lastname','type'=>'xsd:string'),
+	        'contact_id' => array('name'=>'contact_id','type'=>'xsd:string'),
+	        'priority' => array('name'=>'priority','type'=>'xsd:string'),
+	        'status' => array('name'=>'status','type'=>'xsd:string'),
+	        'category' => array('name'=>'category','type'=>'xsd:string'),
+	        'description' => array('name'=>'description','type'=>'xsd:string'),
+	        'createdtime' => array('name'=>'createdtime','type'=>'xsd:string'),
+	        'modifiedtime' => array('name'=>'modifiedtime','type'=>'xsd:string'),
+	     )
+);		
+
+//Added for User Details
+$server->wsdl->addComplexType(
+	'user_array',
+	'complexType',
+	'array',
+        '',
+        array(
+		'id' => array('name'=>'id','type'=>'xsd:string'),
+		'user_name' => array('name'=>'user_name','type'=>'xsd:string'),
+		'user_password' => array('name'=>'user_password','type'=>'xsd:string'),
+	     )
+);
 
 $server->register(
     'create_session',
@@ -328,13 +363,24 @@ $server->register(
     array('user_name'=>'xsd:string','email_address'=>'xsd:string'),
     array('return'=>'tns:contact_detail_array'),
     $NAMESPACE);
-/*    
+
 $server->register(
-    'contact_by_email',
-    array('email_address'=>'xsd:string'),
-    array('return'=>'tns:contact_detail_array'),
-    $NAMESPACE);
-    */
+	'authenticate_user',
+	array('user_name'=>'xsd:string','password'=>'xsd:string'),
+	array('return'=>'tns:user_array'),
+	$NAMESPACE);
+  
+$server->register(
+	'create_ticket',
+	array('title'=>'xsd:string','description'=>'xsd:string','priority'=>'xsd:string','category'=>'xsd:string','user_name'=>'xsd:string'),
+	array('return'=>'tns:tickets_list_array'),
+	$NAMESPACE);
+ 
+$server->register(
+	'get_tickets_list',
+	array('user_name'=>'xsd:string'),
+	array('return'=>'tns:tickets_list_array'),
+	$NAMESPACE);
 
 $server->register(
     'contact_by_search',
@@ -673,6 +719,43 @@ function contact_by_email($user_name,$email_address)
 
     return $output_list;
 }
+
+function get_tickets_list($user_name)
+{
+	require_once('modules/Users/User.php');
+        $seed_user = new User();
+        $user_id = $seed_user->retrieve_user_id($user_name);
+
+        $seed_ticket = new HelpDesk();
+        $output_list = Array();
+   
+	$response = $seed_ticket->get_user_tickets_list($user_name,$user_id);
+        $ticketsList = $response['list'];
+    
+       	// create a return array of ticket details.
+	foreach($ticketsList as $ticket)
+	{
+   		$output_list[] = Array(
+			"ticketid" => $ticket[ticketid],
+			"title"    => $ticket[title],
+			"firstname" => $ticket[firstname],
+			"lastname" => $ticket[lastname],
+			"contact_id"=> $ticket[contact_id],
+			"priority" => $ticket[priority],
+			"status"=>$ticket[status],
+			"category"=>$ticket[category],
+			"description"=>$ticket[description],
+                        "createdtime"=>$ticket[createdtime],
+                        "modifiedtime"=>$ticket[modifiedtime],
+ 			);
+    	}
+
+    //to remove an erroneous compiler warning
+    $seed_ticket = $seed_ticket;
+
+    return $output_list;
+}
+
 
 function contact_by_range($user_name,$from_index,$offset)
 {
@@ -1123,6 +1206,44 @@ function create_contact1($user_name, $first_name, $last_name, $email_address ,$a
 	$contact->save("Contacts");
 
 	return $contact->id;
+}
+
+function create_ticket($title,$description,$priority,$category,$user_name)
+{
+	require_once('modules/Users/User.php');
+        $seed_user = new User();
+        $user_id = $seed_user->retrieve_user_id($user_name);
+
+        $seed_ticket = new HelpDesk();
+        $output_list = Array();
+   
+	//$response = $seed_ticket->create_tickets_list($user_name,$smcreatorid);
+	require_once('modules/HelpDesk/HelpDesk.php');
+	$ticket = new HelpDesk();
+	
+    	$ticket->column_fields[ticket_title] = $title;
+	$ticket->column_fields[description]=$description;
+	$ticket->column_fields[ticketpriorities]=$priority;
+	$ticket->column_fields[ticketcategories]=$category;
+	$ticket->column_fields[ticketstatus]='Open';
+
+	$ticket->column_fields[assigned_user_id]=$user_id;
+    	//$ticket->saveentity("HelpDesk");
+    	$ticket->save("HelpDesk");
+
+	return get_tickets_list($user_name); 
+	//return $ticket->id;
+}
+function authenticate_user($username,$password)
+{
+	global $adb;
+	$sql = "select id, user_name, user_password from users where user_name='".$username."' and user_password = '".$password."'";
+	$result = $adb->query($sql);	
+	$list['id'] = $adb->query_result($result,0,'id');
+	$list['user_name'] = $adb->query_result($result,0,'user_name');
+	$list['user_password'] = $adb->query_result($result,0,'user_password');
+
+	return $list;
 }
 
 function retrievereportsto($reports_to,$user_id,$account_id)

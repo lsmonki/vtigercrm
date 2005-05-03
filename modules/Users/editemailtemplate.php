@@ -20,9 +20,12 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$templatename= $_REQUEST["templatename"];
-$foldername=$_REQUEST["foldername"];
-$sql = "select * from emailtemplates where templatename='".$templatename ."' and foldername='".$foldername ."'";
+
+if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
+{
+	$templateid = $_REQUEST['templateid'];
+}
+$sql = "select * from emailtemplates where templateid=".$templateid;
 $result = $adb->query($sql);
 $emailtemplateResult = $adb->fetch_array($result);
 
@@ -32,6 +35,7 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("FOLDERNAME", $emailtemplateResult["foldername"]);
 $xtpl->assign("TEMPLATENAME", $emailtemplateResult["templatename"]);
+$xtpl->assign("TEMPLATEID", $emailtemplateResult["templateid"]);
 $xtpl->assign("DESCRIPTION", $emailtemplateResult["description"]);
 $xtpl->assign("SUBJECT", $emailtemplateResult["subject"]);
 $xtpl->assign("BODY", $emailtemplateResult["body"]);

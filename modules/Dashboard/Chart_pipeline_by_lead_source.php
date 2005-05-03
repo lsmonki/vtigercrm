@@ -128,7 +128,7 @@ if (isset($_REQUEST['pbls_edit']) && $_REQUEST['pbls_edit'] == 'true') {
 <?php } 
 else {
 	if (file_exists($tmp_dir.$cache_file_name)) {
-		$file_date = date('Y-m-d H:i', filemtime($tmp_dir.$cache_file_name));
+		$file_date = getDisplayDate(date('Y-m-d H:i', filemtime($tmp_dir.$cache_file_name)));
 	}
 	else {
 		$file_date = '';

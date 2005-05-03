@@ -14,6 +14,7 @@
 <input type="hidden" name="action">
 <input type="hidden" name="mode" value="{MODE}">
 <input type="hidden" name="module" value="Users">
+<input type="hidden" name="templateid" value="{TEMPLATEID}">
     <TABLE WIDTH="100%" CELLPADDING=0 CELLSPACING=0 BORDER=0>
     <TR>
     <TD ALIGN=LEFT CLASS="moduleTitle hline" NOWRAP> {MOD.LBL_EMAIL_TEMPLATE}{MOD.LBL_COLON}{MOD.LBL_NEW_TEMPLATE}</TD>
@@ -55,7 +56,7 @@
                 
                 options[1] = new Option('Contact: First Name', '$contacts_firstname'); 
                 options[2] = new Option('Contact: Last Name', '$contacts_lastname'); 
-                options[3] = new Option('Contact: Salutation', '$contacts_salutation'); 
+                options[3] = new Option('Contact: Salutation', '$contacts_salutationtype'); 
                 options[4] = new Option('Contact: Title', '$contacts_title'); 
                 options[5] = new Option('Contact: Email', '$contacts_email'); 
                 options[6] = new Option('Contact: Department', '$contacts_department'); 

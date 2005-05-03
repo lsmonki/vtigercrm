@@ -34,7 +34,7 @@ require_once('include/database/PearDatabase.php');
     <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_DESCRIPTION']; ?></td>
   </tr>
   <?php
-   $sql = "select * from emailtemplates order by templatename";
+   $sql = "select * from emailtemplates order by templateid DESC";
    $result = $adb->query($sql);
    $temprow = $adb->fetch_array($result);
 $edit="Edit  ";
@@ -51,7 +51,7 @@ do
   else
   printf("<tr class='oddListRow'> <td height='21' style='padding:0px 3px 0px 3px;'>");
  $templatename = $temprow["templatename"]; 
-  printf("<a href=index.php?module=Users&action=detailviewemailtemplate&templatename=".$cnt.">%s</a></td>",$temprow["templatename"]);
+  printf("<a href=index.php?module=Users&action=detailviewemailtemplate&templateid=".$temprow["templateid"].">%s</a></td>",$temprow["templatename"]);
   printf("<td height='21' style='padding:0px 3px 0px 3px;'>%s</td>",$temprow["description"]);
   $cnt++;
 }while($temprow = $adb->fetch_array($result));

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Delete.php,v 1.8.2.1 2005/04/12 12:18:35 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Contacts/Delete.php,v 1.9 2005/04/18 10:37:49 samk Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 

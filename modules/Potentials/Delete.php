@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Delete.php,v 1.5 2005/03/04 06:57:28 jack Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Potentials/Delete.php,v 1.9 2005/03/16 10:31:13 rank Exp $
  * Description:  TODO: To be written.
  ********************************************************************************/
 
@@ -27,9 +27,16 @@ $focus = new Potential();
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the opportunity.");
 
+if($_REQUEST['return_module'] == 'Accounts')
+{
+	$sql = 'update crmentity set deleted = 1 where crmid = '.$_REQUEST['record'];
+	$adb->query($sql);
+}
 $sql ='delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
 $adb->query($sql);
 
+$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
+$adb->query($sql_recentviewed);
 if($_REQUEST['return_module'] == $_REQUEST['module'])
         $focus->mark_deleted($_REQUEST['record']);
 

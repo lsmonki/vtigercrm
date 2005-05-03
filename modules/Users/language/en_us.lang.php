@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.17 2005/03/28 03:56:00 rank Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/language/en_us.lang.php,v 1.18 2005/04/19 14:45:38 ray Exp $
  * Description:  Defines the English language pack for the Account module.
  ********************************************************************************/
  
@@ -39,6 +39,7 @@ $mod_strings = Array(
 'LBL_NEW_USER_BUTTON_TITLE'=>'New User [Alt+N]',
 'LBL_NEW_USER_BUTTON_LABEL'=>'New User',
 'LBL_NEW_USER_BUTTON_KEY'=>'N',
+'LBL_DATE_FORMAT'=>'Date Format',
 
 'LBL_ERROR'=>'Error:',
 'LBL_PASSWORD'=>'Password:',

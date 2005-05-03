@@ -8,13 +8,16 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('database/DatabaseConnection.php');
+require_once('include/database/PearDatabase.php');
 $return_action = $_REQUEST['return_action'];
 $return_module = $_REQUEST['return_module'];
 $return_id = $_REQUEST['return_id'];
-$ticketid = $_REQUEST['id'];
+
+if(isset($_REQUEST['id']))	$ticketid = $_REQUEST['id'];
+else $ticketid=$_REQUEST['record'];
+
 $query="update troubletickets set deleted='1' where id=".$ticketid;
-mysql_query($query); 
+$adb->query($query); 
 
 $loc = "Location: index.php?action=".$return_action."&module=".$return_module."&record=".$return_id;
 header($loc);

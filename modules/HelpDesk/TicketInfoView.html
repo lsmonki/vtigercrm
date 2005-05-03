@@ -33,12 +33,15 @@
 		<td><input title="{APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{APP.LBL_EDIT_BUTTON_KEY}" class="button" onclick="this.form.action.value='EditTicket'" type="submit" name="button" value="  {APP.LBL_EDIT_BUTTON_LABEL}  " ></td>
 		<td><input title="{APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{APP.LBL_DELETE_BUTTON_KEY}" class="button" onclick="this.form.action.value='DeleteTicket'; this.form.return_action.value='index'; this.form.return_id.value=''; this.form.return_module.value='HelpDesk'" type="submit" name="button" value="  {APP.LBL_DELETE_BUTTON_LABEL}  "></td>
 		<td><input title="History" accessKey="History" class="button" onclick="this.form.action.value='TicketHistory'" type="submit" name="button" value="  History  " ></td>
+	
+	<td width="30%">&nbsp;</td>
+	<td><h3><b>{MOD.LBL_TICKET_ID}&nbsp;{MOD.LBL_COLON}&nbsp; </b></h3></td>
+	<td><h3><b>&nbsp;{ID} </b></h3></td>
 		</tr></table>
 	</td>
 	<td></td>
 </tr>
 </table> 
-
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
 <tr>
 <td>
@@ -61,10 +64,17 @@
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_CATEGORY}</td>
 	<td width="30%">{CATEGORYOPTIONS}</td>
+        <td width="20%" class="dataLabel">{MOD.LBL_CREATED_DATE}</td>
+        <td width="30%">{CREATEDDATE}</td>
 	</tr><tr>
+        <td width="20%" class="dataLabel">{MOD.LBL_ESTIMATED_FINISHING_TIME}</td>
+        <td width="30%">{EXPECTED_CLOSE_DATE}</td>
+        </tr><tr>
 	<td width="20%" valign="top" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_SUBJECT}</td>
 	<td colspan="4">{SUBJECT}</td>
-	</tr><tr>
+	</tr>
+	{CUSTOMFIELD}
+	<tr>
 	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_DESCRIPTION}</td>
 	<td colspan="4">{DESCRIPTION}</td>
 </tr></table>

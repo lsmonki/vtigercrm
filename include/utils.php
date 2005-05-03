@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/utils.php,v 1.179.2.9 2005/04/14 10:37:37 samk Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/utils.php,v 1.188 2005/04/29 05:54:39 rank Exp $
  * Description:  Includes generic helper functions used throughout the application.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -740,8 +740,21 @@ function parse_calendardate($local_format) {
 	else {
 		return "%Y-%m-%d";
 	} */
-
-	return "%Y-%m-%d";
+	global $current_user;
+	if($current_user->date_format == 'dd-mm-yyyy')
+	{
+		$dt_popup_fmt = "%d-%m-%Y";
+	}
+	elseif($current_user->date_format == 'mm-dd-yyyy')
+	{
+		$dt_popup_fmt = "%m-%d-%Y";
+	}
+	elseif($current_user->date_format == 'yyyy-mm-dd')
+	{
+		$dt_popup_fmt = "%Y-%m-%d";
+	}
+	return $dt_popup_fmt;
+	//return "%Y-%m-%d";
 }
 
 function set_default_config(&$defaults)
@@ -851,6 +864,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	global $theme;
 	global $mod_strings;
 	global $app_strings;
+	global $current_user;
 	$value = $col_fields[$fieldname];
 	$custfld = '';
 
@@ -860,7 +874,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	if($uitype == 5 || $uitype == 6 || $uitype ==23)
 	{
 		if($value=='')
-                $value=date('Y-m-d');
+                {
+                        $disp_value=getNewDisplayDate();
+                }
+                else
+                {
+                        $disp_value = getDisplayDate($value);
+                }
+
 		$custfld .= '<td width="20%" class="dataLabel">';
 
 		if($uitype == 6 || $uitype == 23)
@@ -868,7 +889,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		$custfld .= $mod_strings[$fieldlabel].':</td>';
 		$date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
-		$custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field_'.$fieldname.'" type="text" size="11" maxlength="10" value="'.$value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_'.$fieldname.'">';
+		$custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field_'.$fieldname.'" type="text" size="11" maxlength="10" value="'.$disp_value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_'.$fieldname.'">';
 		if($uitype == 6)
                 {
 			if($col_fields['time_start']!='')
@@ -882,9 +903,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                         $custfld .= '&nbsp; <input name="time_start" size="5" maxlength="5" type="text" value="'.$curr_time.'">';
                 }
 		if($uitype == 5 || $uitype == 23)
-			$custfld .= '<br><font size=1><em old="(yyyy-mm-dd)">'.$app_strings['NTC_DATE_FORMAT'].'</em></font></td>';
+			$custfld .= '<br><font size=1><em old="(yyyy-mm-dd)">('.$current_user->date_format.')</em></font></td>';
 		else
-			$custfld .= '<br><font size=1><em old="(yyyy-mm-dd 24:00)">'.$app_strings['YEAR_MONTH_DATE'].'</em></font></td>';
+			$custfld .= '<br><font size=1><em old="(yyyy-mm-dd 24:00)">('.$current_user->date_format.' '.$app_strings['YEAR_MONTH_DATE'].')</em></font></td>';
 		$custfld .= '<script type="text/javascript">';
 		$custfld .= 'Calendar.setup ({';
 				$custfld .= 'inputField : "jscal_field_'.$fieldname.'", ifFormat : "'.$date_format.'", showsTime : false, button : "jscal_trigger_'.$fieldname.'", singleClick : true, step : 1';
@@ -1344,6 +1365,21 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		$custfld .= '<td width="30%"><input name="parent_id" type="hidden" value=""><input name="parent_name" readonly type="text" value=""> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value + "&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';	
 	}
+	elseif($uitype == 71 || $uitype == 72)
+	{
+		$custfld .= '<td width="20%" class="dataLabel">';
+
+		if($uitype == 72)
+		{
+			$custfld .= '<font color="red">*</font>';
+		}
+
+		$disp_currency = getDisplayCurrency();
+
+		$custfld .= $mod_strings[$fieldlabel].': ('.$disp_currency.')</td>';
+
+		$custfld .= '<td width="30%"><input name="'.$fieldname.'" type="text" size="25" maxlength="'.$maxlength.'" value="'.$value.'"></td>';
+	}
 	else
 	{
 		$custfld .= '<td width="20%" class="dataLabel">';
@@ -1656,7 +1692,25 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                        $start_time = $col_fields['time_start'];
                 }
 	
-          	$custfld .= '<td width="30%" valign="top" class="dataField">'.$col_fields[$fieldname].'&nbsp;'.$start_time.'</td>';
+          	$custfld .= '<td width="30%" valign="top" class="dataField">'.getDisplayDate($col_fields[$fieldname]).'&nbsp;'.$start_time.'</td>';
+	}
+	elseif($uitype == 5 || $uitype == 23 || $uitype == 70)
+	{
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$cur_date_val = $col_fields[$fieldname];
+		$display_val = getDisplayDate($cur_date_val);
+		$custfld .= '<td width="30%" valign="top" class="dataField">'.$display_val.'</td>';	
+	}
+	elseif($uitype == 71 || $uitype == 72)
+	{
+		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$display_val = '';
+		if($col_fields[$fieldname] != '' && $col_fields[$fieldname] != 0)
+		{	
+			$curr_symbol = getCurrencySymbol();
+			$display_val = $curr_symbol.' '.$col_fields[$fieldname];
+		}
+		$custfld .= '<td width="30%" valign="top" class="dataField">'.$display_val.'</td>';	
 	}
 	else
 	{
@@ -1899,9 +1953,16 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	{
 		$fieldname = $focus->list_fields_name[$name];
 
+		//Getting the Entries from Profile2 field table
 		$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
 		$result = $adb->query($query);
-		if($adb->query_result($result,0,"visible") == 0)
+
+		//Getting the Entries from def_org_field table
+		$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
+		$result_def = $adb->query($query1);
+
+
+		if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
 		{
 
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
@@ -1976,7 +2037,12 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 		$tabid = getTabid($module);
 		$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
 		$result = $adb->query($query);
-		if($adb->query_result($result,0,"visible") == 0)
+
+		//Getting the Entries from def_org_field table
+		$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
+		$result_def = $adb->query($query1);
+
+		if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
 		{
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
                         {
@@ -2150,7 +2216,13 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			global $profile_id;
 			$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
 			$result = $adb->query($query);
-			if($adb->query_result($result,0,"visible") == 0)
+
+
+			//Getting the Entries from def_org_field table
+			$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
+			$result_def = $adb->query($query1);
+
+			if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
 			{
 				if($fieldname == '')
 				{
@@ -2165,7 +2237,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				}
 				else
 				{
-					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
+					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
 					{
 						$status = $adb->query_result($list_result,$i-1,"status");
 						if($status == '')
@@ -2307,7 +2379,13 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 			global $profile_id;
 			$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
 			$result = $adb->query($query);
-			if($adb->query_result($result,0,"visible") == 0)
+	
+			//Getting the Entries from def_org_field table
+			$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
+			$result_def = $adb->query($query1);
+
+
+			if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
 			{
 
 				if($fieldname == '')
@@ -2382,6 +2460,31 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
                 $user_name = getUserName($temp_val);
 		$value = $user_name;
+	}
+	elseif($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
+	{
+		if($temp_val != '')
+		{
+			$value = getDisplayDate($temp_val);  
+		}
+		else
+		{
+			$value = $temp_val;
+		}
+		
+	}
+	elseif($uitype == 71 || $uitype == 72)
+	{
+		if($temp_val != '' && $temp_val != 0)
+		{
+			$symbol = getCurrencySymbol();
+			$value = $symbol.' '.$temp_val;  
+		}
+		else
+		{
+			$value = '';
+		}
+		
 	}
 	elseif($uitype == 17)
 	{
@@ -2589,7 +2692,7 @@ function getListQuery($module,$where='')
 {
 	if($module == "HelpDesk")
 	{
-		$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentity.deleted=0";
+		$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.contactid, troubletickets.contact_id, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentity.deleted=0";
 		//$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid  left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id where crmentity.deleted=0";
 	}
 	if($module == "Accounts")
@@ -2614,7 +2717,7 @@ function getListQuery($module,$where='')
 	}
         if($module == "Notes")
         {
-		$query="select crmentity.crmid, notes.title, notes.contact_id, notes.filename, crmentity.modifiedtime,senotesrel.crmid as relatedto, contactdetails.firstname, contactdetails.lastname from notes inner join crmentity on crmentity.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentity.deleted=0";
+		$query="select crmentity.crmid, notes.title, notes.contact_id, notes.filename, crmentity.modifiedtime,senotesrel.crmid as relatedto, contactdetails.firstname, contactdetails.lastname from notes inner join crmentity on crmentity.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentity.deleted=0 group by notes.notesid order by crmentity.modifiedtime ASC";
         }
         if($module == "Calls")
         {
@@ -2757,12 +2860,35 @@ function insertProfile2field($profileid)
 	}
 }
 
+function insert_def_org_field()
+{
+	global $adb;
+	$adb->database->SetFetchMode(ADODB_FETCH_ASSOC); 
+	$fld_result = $adb->query("select * from field where generatedtype=1 and displaytype in (1,2)");
+        $num_rows = $adb->num_rows($fld_result);
+        for($i=0; $i<$num_rows; $i++)
+        {
+                 $tab_id = $adb->query_result($fld_result,$i,'tabid');
+                 $field_id = $adb->query_result($fld_result,$i,'fieldid');
+                 $adb->query("insert into def_org_field values (".$tab_id.",".$field_id.",0,1)");
+	}
+}
+
 function getProfile2FieldList($fld_module, $profileid)
 {
 	global $adb;
 	$tabid = getTabid($fld_module);
 	
 	$query = "select profile2field.visible,field.* from profile2field inner join field on field.fieldid=profile2field.fieldid where profile2field.profileid=".$profileid." and profile2field.tabid=".$tabid;
+	$result = $adb->query($query);
+	return $result;
+}
+function getDefOrgFieldList($fld_module)
+{
+	global $adb;
+	$tabid = getTabid($fld_module);
+	
+	$query = "select def_org_field.visible,field.* from def_org_field inner join field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid;
 	$result = $adb->query($query);
 	return $result;
 }
@@ -2820,4 +2946,121 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
 	return $list;
 }
 
+function getDisplayDate($cur_date_val)
+{
+	global $current_user;
+	$dat_fmt = $current_user->date_format;
+	if($dat_fmt == '')
+	{
+		$dat_fmt = 'dd-mm-yyyy';
+	}
+
+		//echo $dat_fmt;
+		//echo '<BR>'.$cur_date_val.'<BR>';
+		$date_value = explode(' ',$cur_date_val);
+		list($y,$m,$d) = split('-',$date_value[0]);
+		//echo $y.'----'.$m.'------'.$d;
+		if($dat_fmt == 'dd-mm-yyyy')
+		{
+			//echo '<br> inside 1';
+			$display_date = $d.'-'.$m.'-'.$y;
+		}
+		elseif($dat_fmt == 'mm-dd-yyyy')
+		{
+
+			//echo '<br> inside 2';
+			$display_date = $m.'-'.$d.'-'.$y;
+		}
+		elseif($dat_fmt == 'yyyy-mm-dd')
+		{
+
+			//echo '<br> inside 3';
+			$display_date = $y.'-'.$m.'-'.$d;
+		}
+
+		if($date_value[1] != '')
+		{
+			$display_date = $display_date.' '.$date_value[1];
+		}
+	return $display_date;
+ 			
+}
+
+
+function getNewDisplayDate()
+{
+	global $current_user;
+	$dat_fmt = $current_user->date_format;
+	if($dat_fmt == '')
+        {
+                $dat_fmt = 'dd-mm-yyyy';
+        }
+	//echo $dat_fmt;
+	//echo '<BR>';
+	$display_date='';
+	if($dat_fmt == 'dd-mm-yyyy')
+	{
+		$display_date = date('d-m-Y');
+	}
+	elseif($dat_fmt == 'mm-dd-yyyy')
+	{
+		$display_date = date('m-d-Y');
+	}
+	elseif($dat_fmt == 'yyyy-mm-dd')
+	{
+		$display_date = date('Y-m-d');
+	}
+		
+	//echo $display_date;
+	return $display_date;
+}
+
+function getDBInsertDateValue($value)
+{
+	global $current_user;
+	$dat_fmt = $current_user->date_format;
+	if($dat_fmt == '')
+        {
+                $dat_fmt = 'dd-mm-yyyy';
+        }
+	//echo $dat_fmt;
+	//echo '<BR>';
+	$insert_date='';
+	if($dat_fmt == 'dd-mm-yyyy')
+	{
+		list($d,$m,$y) = split('-',$value);
+	}
+	elseif($dat_fmt == 'mm-dd-yyyy')
+	{
+		list($m,$d,$y) = split('-',$value);
+	}
+	elseif($dat_fmt == 'yyyy-mm-dd')
+	{
+		list($y,$m,$d) = split('-',$value);
+	}
+		
+	//echo $display_date;
+	$insert_date=$y.'-'.$m.'-'.$d;
+	return $insert_date;
+}
+
+function getDisplayCurrency()
+{
+	global $adb;
+	$sql1 = "select * from currency_info";
+	$result = $adb->query($sql1);
+	$curr_name = $adb->query_result($result,0,"currency_name");
+	$curr_symbol = $adb->query_result($result,0,"currency_symbol");
+	$disp_curr = $curr_name.' : '.$curr_symbol;
+	return $disp_curr;
+}	
+
+function getCurrencySymbol()
+{
+	global $adb;
+	$sql1 = "select * from currency_info";
+	$result = $adb->query($sql1);
+	$curr_symbol = $adb->query_result($result,0,"currency_symbol");
+	return $curr_symbol;
+}
 ?>

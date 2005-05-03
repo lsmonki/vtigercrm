@@ -22,7 +22,11 @@
 	<td>
 		<table cellpadding="0" cellspacing="5" border="0">
 		<tr>
-			<form name="EditView" method="POST" action="index.php" onsubmit="return check4null(EditView);">
+			<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+        	        <script type="text/javascript" src="jscalendar/calendar.js"></script>
+			<script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
+	                <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>	
+			<form name="EditView" method="POST" action="index.php">
 			<input type="hidden" name="module" value="HelpDesk">
 			<input type="hidden" name="action">
 			<input type="hidden" name="mode" value="{MODE}">
@@ -30,7 +34,7 @@
 			<input type="hidden" name="return_module" value="{RETURN_MODULE}">
 			<input type="hidden" name="return_id" value="{RETURN_ID}">
 			<input type="hidden" name="return_action" value="{RETURN_ACTION}">						
-		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='SaveTicket'" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
+		<td><input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='SaveTicket';return check4null(EditView)" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " ></td>
 		<td><input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='{RETURN_ACTION}'; this.form.module.value='{RETURN_MODULE}'; this.form.record.value='{RETURN_ID}'" type="submit" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  "></td>
 		</tr></table>
 	</td>
@@ -64,6 +68,12 @@
 	</tr><tr>
 	<td width="20%" class="dataLabel">{MOD.LBL_CATEGORY}</td>
 	<td width="30%">{CATEGORYOPTIONS}</td>
+        <td width="20%" class="dataLabel">{MOD.LBL_SEND_MAIL} ?</td>
+        <td width="30%"><input name='send_mail' type="checkbox" tabindex='1' {SEND_MAIL}></td>
+
+	</tr><tr>
+	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_ESTIMATED_FINISHING_TIME}</td>
+	<td width="30%"><input name='estimated_finishing_date' id='jscal_field' tabindex='1' size='11' maxlength='10' type="text" value="{ESTIMATED_FINISHING_DATE}"> <img src="themes/{THEME}/images/calendar.gif" id="jscal_trigger"> &nbsp; <input name='estimated_finishing_time' tabindex='1' size='5' maxlength='5' type="text" value='{ESTIMATED_FINISHING_TIME}'><br><font size="1"><em old="{APP.NTC_DATE_TIME_FORMAT}">(yyyy-mm-dd 24:00)</em></font> </td>
 	</tr><tr>
 	<td width="20%" valign="top" class="dataLabel"><FONT class="required">{APP.LBL_REQUIRED_SYMBOL}</FONT>{MOD.LBL_SUBJECT}</td>
 	<td colspan="4"><textarea name='subject' cols="70" tabindex='1' rows="1">{SUBJECT}</textarea></td>
@@ -72,32 +82,53 @@
 	<td colspan="4"><textarea name='description' tabindex='2' cols="80" rows="8">{DESCRIPTION}</textarea></td>
 </tr></table>
 </td></tr></table>
+<BR>
+<BR>
+{CUSTOMFIELD}
       </form>
 <script>
 
-                                                                                                              function trim(s)                                                                                              {                                                                                                                     while (s.substring(0,1) == " ") {                                                                                     s = s.substring(1, s.length);                                                                         }                                                                                                             while (s.substring(s.length-1, s.length) == ' ') {                                                                    s = s.substring(0,s.length-1);                                                                        }                                                                                                                                                                                                                           return s;                                                                                             }
+function trim(s)
+{
+	while (s.substring(0,1) == " ")
+	{
+		s = s.substring(1, s.length);
+	}
+      	while (s.substring(s.length-1, s.length) == ' ')
+	{
+	        s = s.substring(0,s.length-1);
+	}
+        return s;
+}
 
 
 function check4null(form)
 {
         var isError = false;
         var errorMessage = "";
-        if (trim(form.subject.value) =='') {
+        if (trim(form.subject.value) =='')
+	{
                 isError = true;
                 errorMessage += "\n subject";
                 form.subject.focus();
         }
 
-        if (isError == true) {
+        if (isError == true) 
+	{
                 alert("Missing required fields: " + errorMessage);
                 return false;
         }
- return true;
+	return true;
 
 }
 
 </script>
 
+<script type="text/javascript">
+        Calendar.setup ({
+                inputField : "jscal_field", ifFormat : "{CALENDAR_DATEFORMAT}", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
+        });
+</script>
 
 {JAVASCRIPT}
 <!-- END: main -->

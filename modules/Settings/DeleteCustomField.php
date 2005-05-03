@@ -26,6 +26,10 @@ $adb->query($query);
 $query='delete from profile2field where fieldid="'.$id.'"';
 $adb->query($query);
 
+//Deleting from def_org_field table
+$query='delete from def_org_field where fieldid="'.$id.'"';
+$adb->query($query);
+
 //Dropping the column in the module table
 if($fld_module == "Leads")
 {
