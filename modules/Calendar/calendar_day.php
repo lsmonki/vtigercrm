@@ -16,7 +16,7 @@
  $theme_path="themes/".$theme."/";
  $image_path=$theme_path."images/";
  require_once ($theme_path."layout_utils.php");
- global $mod_strings,$app_strings;
+ global $mod_strings,$app_strings,$current_user;
 
  echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'], true); 
 echo "\n<BR>\n";
@@ -405,14 +405,24 @@ function check_form()
 <script language="JavaScript">
 var createBoxObj;
 function showCreateBox(start,end) {
-	var event_year=start.substring(0,4)
-	var event_month=start.substring(4,6)
-	var event_day=start.substring(6,8)
-	
+	var yyyy=start.substring(0,4)
+	var mm=start.substring(4,6)
+	var dd=start.substring(6,8)
+	<?php
+		$a ='';
+		$b ='';
+		$c ='';
+		$dat_fmt = $current_user->date_format;
+        	if($dat_fmt == '')
+        	{
+                	$dat_fmt = 'dd-mm-yyyy';
+        	}
+		list($a,$b,$c)=split("-",$dat_fmt);
+	?>
 	var event_st_hr=start.substring(8,10)
 	var event_st_min=start.substring(10,12)
 
-	document.appSave.date_start.value=event_year+"-"+event_month+"-"+event_day
+	document.appSave.date_start.value=<?php echo $a;?>+"-"+<?php echo $b;?>+"-"+<?php echo $c;?>;
 	document.appSave.time_start.value=event_st_hr+":"+event_st_min
 
 	createBoxObj=getObj("createBox")
