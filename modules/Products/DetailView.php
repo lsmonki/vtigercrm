@@ -129,19 +129,12 @@ echo '</td></tr></form></tbody></table>';
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
+getRelatedLists("Products",$focus);
 
 
+/*
 //Constructing the Related Lists from here
 include('modules/Products/RenderRelatedListUI.php');
-/*
-if($tab_per_Data[2] == 0)
-{
-        if($permissionData[2][3] == 0)
-        {
-		 $focus->get_opportunities($focus->id);
-	}
-}
-*/
 if($tab_per_Data[13] == 0)
 {
         if($permissionData[13][3] == 0)
@@ -165,13 +158,7 @@ if($tab_per_Data[8] == 0)
 	}
 }
 
-/*
-require_once('include/RelatedTicketListUtil.php');
-$list = getTicketList($productid, "Products", $image_path,$theme);
-echo $list;
-// Stick on the form footer
-echo get_form_footer();
-*/
 
+*/
 
 ?>

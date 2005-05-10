@@ -122,13 +122,12 @@ $xtpl->out("main");
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
-
+getRelatedLists("Potentials",$focus);
 
 //Constructing the Related Lists from here
-include('modules/Potentials/RenderRelatedListUI.php');
 // Now get the list of opportunities that match this one.
 
-
+/*
 // Now get the list of activities that match this opportunity.
 if($tab_per_Data[9] == 0)
 {
@@ -137,15 +136,7 @@ if($tab_per_Data[9] == 0)
 		$focus_activities_list = & $focus->get_activities($focus->id);
 	}
 }
-/*
-if($tab_per_Data[10] == 0)
-{
-        if($permissionData[10][3] == 0)
-        {
-		 $focus_emails_list = & $focus->get_emails($focus->id);
-	}
-}
-*/
+
 if($tab_per_Data[4] == 0)
 {
         if($permissionData[4][3] == 0)
@@ -163,15 +154,7 @@ if($tab_per_Data[14] == 0)
 }
 $focus_history_list = & $focus->get_history($focus->id);
 $focus_stage_history_list = & $focus->get_stage_history($focus->id);
-/*
-if($tab_per_Data[13] == 0)
-{
-        if($permissionData[13][3] == 0)
-        {
-		 $focus_tickets_list = & $focus->get_tickets($focus->id);
-	}
-}
-*/
+
 if($tab_per_Data[8] == 0)
 {
         if($permissionData[8][3] == 0)
@@ -180,9 +163,6 @@ if($tab_per_Data[8] == 0)
 	}
 }
 
-/*
-require_once('include/RelatedTicketListUtil.php');
-$list = getTicketList($focus->id, "Potentials", $image_path,$theme);
-echo $list;
+
 */
 ?>

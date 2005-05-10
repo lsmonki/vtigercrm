@@ -101,10 +101,9 @@ $xtpl->out("main");
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
-
-
+$focus->id = $_REQUEST['record'];
+getRelatedLists("HelpDesk",$focus);
 //Constructing the Related Lists from here
-include('modules/HelpDesk/RenderRelatedListUI.php');
 /*
 if($tab_per_Data[2] == 0)
 {
@@ -113,7 +112,8 @@ if($tab_per_Data[2] == 0)
 		$focus->get_opportunities($_REQUEST['record']);
 	}
 }
-*/
+
+
 $focus->get_activities($_REQUEST['record']);
 if($tab_per_Data[8] == 0)
 {
@@ -123,7 +123,7 @@ if($tab_per_Data[8] == 0)
 	}
 }
 
-/*
+
 require_once('modules/Products/binaryfilelist.php');
 echo '<br><br>';
 echo '<table width="50%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';

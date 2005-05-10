@@ -149,24 +149,9 @@ $permissionData = $_SESSION['action_permission_set'];
 
 
 //Constructing the Related Lists from here
-include('modules/Emails/RenderRelatedListUI.php');
-/*
-if($tab_per_Data[7] == 0)
-{
-        if($permissionData[7][3] == 0)
-        {
-		$focus->get_leads($focus->id);
-	}
-}
+getRelatedLists("Emails",$focus);
 
-if($tab_per_Data[6] == 0)
-{
-        if($permissionData[6][3] == 0)
-        {
-		$focus->get_accounts($focus->id);
-	}
-}
-*/
+/*
 if($tab_per_Data[4] == 0)
 {
         if($permissionData[4][3] == 0)
@@ -174,15 +159,7 @@ if($tab_per_Data[4] == 0)
 		$focus->get_contacts($focus->id);
 	}
 }
-/*
-if($tab_per_Data[2] == 0)
-{
-        if($permissionData[2][3] == 0)
-        {
-		$focus->get_potentials($focus->id);
-	}
-}
-*/
+
 $focus->get_users($focus->id);
 if($tab_per_Data[8] == 0)
 {
@@ -191,5 +168,5 @@ if($tab_per_Data[8] == 0)
 		$focus->get_attachments($focus->id);
 	}
 }
-
+*/
 ?>
