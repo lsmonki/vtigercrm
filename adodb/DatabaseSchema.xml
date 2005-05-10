@@ -501,7 +501,51 @@
 		</data>
 	</table>
 
+	<table name="PortalInfo">
+		<field name="id" type="I" size="11">
+                        <KEY/>
+		</field>
+		<field name="user_name" type="C" size="50"></field>
+		<field name="user_password" type="C" size="30"></field>
+		<field name="type" type="C" size="5"></field>
+		<field name="last_login_time" type="T">
+                        <NOTNULL/>
+                </field>
+		<field name="login_time" type="T">
+                        <NOTNULL/>
+                </field>
+                <field name="logout_time" type="T">
+                        <NOTNULL/>
+                </field>
+		<field name="isactive" type="I" size="1"></field>
+	</table>
+	<table name="PortalInfo" alter="true">
 
+                <constraint>ADD CONSTRAINT fk_PortalInfo FOREIGN KEY (id) REFERENCES contactdetails(contactid)  ON DELETE CASCADE </constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
+
+	<table name="CustomerDetails">
+		<field name="customerid" type="I" size="19">
+			<KEY/>
+                </field>
+		<field name="portal" type="C" size="3"></field>
+		<field name="support_start_date" type="D"></field>
+		<field name="support_end_date" type="D"></field>
+	</table>
+	<table name="CustomerDetails" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_CustomerDetails FOREIGN KEY (customerid) REFERENCES contactdetails(contactid) ON DELETE CASCADE </constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
 
 	<table name="leaddetails">
 		<field name="leadid" type="I" size="19">
@@ -1626,6 +1670,7 @@
 			<NOTNULL/>
 		</field>
 		<field name="description" type="X"></field>
+		<field name="resolution" type="X"></field>
 		<field name="update_log" type="X"></field>
 		<field name="version_id" type="I" size="11">
 		</field>
