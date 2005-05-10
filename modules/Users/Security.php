@@ -151,7 +151,7 @@ $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'phone','contactdetails',1,'11','phone','Office Phone',1,0,0,100,3,1,1,'V~O')");	
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'lastname','contactdetails',1,'2','lastname','Last Name',1,0,0,100,4,1,1,'V~M')");	
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mobile','contactdetails',1,'1','mobile','Mobile',1,0,0,100,5,1,1,'V~O')");	
- $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'accountid','contactdetails',1,'50','account_id','Account Name',1,0,0,100,6,1,1,'I~M')");	
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'accountid','contactdetails',1,'51','account_id','Account Name',1,0,0,100,6,1,1,'I~O')");	
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'homephone','contactsubdetails',1,'11','homephone','Home Phone',1,0,0,100,7,1,1,'V~O')");	
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'leadsource','contactsubdetails',1,'15','leadsource','Lead Source',1,0,0,100,8,1,1,'V~O')");	
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'otherphone','contactsubdetails',1,'11','otherphone','Phone',1,0,0,100,9,1,1,'V~O')");
@@ -170,6 +170,12 @@ $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").
 $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,23,1,2,'T~O')");
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,24,1,2,'T~O')");
 //Block1 -- End
+
+//Block - Begin Customer Portal
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'portal','CustomerDetails',1,'56','portal','Portal User',1,0,0,100,1,4,1,'C~O')");
+$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'support_start_date','CustomerDetails',1,'5','support_start_date','Support Start Date',1,0,0,100,2,4,1,'D~O')");
+$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'support_end_date','CustomerDetails',1,'5','support_end_date','Support End Date',1,0,0,100,3,4,1,'D~O')");
+//Block - End Customer Portal
 
 //Block 2 -- Start
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mailingstreet','contactaddress',1,'21','mailingstreet','Mailing Street',1,0,0,100,1,2,1,'V~O')");
@@ -225,6 +231,7 @@ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,9,1,2,'T~O')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'title','troubletickets',1,'22','ticket_title','Title',1,0,0,100,1,2,1,'V~M')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'description','troubletickets',1,'19','description','Description',1,0,0,100,1,3,1,'V~O')");
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'resolution','troubletickets',1,'19','resolution','Resolution',1,0,0,100,1,4,1,'V~O')");
 //Block1 -- End
 //Ticket Details -- END
 
