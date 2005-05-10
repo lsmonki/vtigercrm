@@ -3063,4 +3063,40 @@ function getCurrencySymbol()
 	$curr_symbol = $adb->query_result($result,0,"currency_symbol");
 	return $curr_symbol;
 }
+
+function getRelatedLists($module,$focus)
+{
+	global $adb;
+	global $profile_id;
+	$tab_per_Data = getAllTabsPermission($profile_id);
+	$permissionData = $_SESSION['action_permission_set'];
+	$inc_file = 'modules/'.$module.'/RenderRelatedListUI.php';
+	include($inc_file);
+	$cur_tab_id = getTabid($module);
+
+	$sql1 = "select * from relatedlists where tabid=".$cur_tab_id;
+	$result = $adb->query($sql1);
+	$num_row = $adb->num_rows($result);
+	for($i=0; $i<$num_row; $i++)
+	{
+		$rel_tab_id = $adb->query_result($result,$i,"related_tabid");
+		$funtion_name = $adb->query_result($result,$i,"name");
+		if($rel_tab_id != 0)
+		{
+			if($tab_per_Data[$rel_tab_id] == 0)
+			{
+		        	if($permissionData[$rel_tab_id][3] == 0)
+        			{
+		                	$focus_list = & $focus->$funtion_name($focus->id);
+        			}
+			}
+		}
+		else
+		{
+			$focus_list = & $focus->$funtion_name($focus->id);
+		}
+	}
+
+}
+
 ?>
