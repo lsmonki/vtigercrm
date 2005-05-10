@@ -159,7 +159,9 @@ global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
 
+getRelatedLists("Contacts",$focus);
 
+/*
 //Constructing the Related Lists from here
 include('modules/Contacts/RenderRelatedListUI.php');
 
@@ -199,11 +201,7 @@ if($tab_per_Data[8] == 0)
  		$focus_attachments_list = & $focus->get_attachments($focus->id);
 	}
 }
-/*
-require_once('include/RelatedTicketListUtil.php');
-$list = getTicketList($focus->id, "Contacts", $image_path,$theme);
-echo $list;
-*/
 
+*/
 ?>
 
