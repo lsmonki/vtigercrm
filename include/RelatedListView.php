@@ -388,7 +388,8 @@ function getHistory($parentmodule,$query,$id)
 	
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 			$list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-			$list .= $row['modifiedtime'];
+			$modifiedtime = getDisplayDate($row['modifiedtime']);
+			$list .= $modifiedtime;
 	
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 			$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
