@@ -1805,9 +1805,12 @@ function getColumnFields($module)
 function getUserName($userid)
 {
 	global $adb;
-	$sql = "select user_name from users where id=".$userid;
-	$result = $adb->query($sql);
-	$user_name = $adb->query_result($result,0,"user_name");
+	if($userid != '')
+	{
+		$sql = "select user_name from users where id=".$userid;
+		$result = $adb->query($sql);
+		$user_name = $adb->query_result($result,0,"user_name");
+	}
 	return $user_name;	
 }		
 //outlook security
@@ -2725,8 +2728,8 @@ function getListQuery($module,$where='')
         }
 	if($module == "Contacts")
         {
-                //$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf inner join crmentity on crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid inner join account on account.accountid = contactdetails.accountid where crmentity.deleted=0";
-		$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf,crmentity,account where crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid and account.accountid = contactdetails.accountid and crmentity.deleted=0";
+                $query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf inner join crmentity on crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid left join account on account.accountid = contactdetails.accountid where crmentity.deleted=0";
+		//$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf,crmentity,account where crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid and account.accountid = contactdetails.accountid and crmentity.deleted=0";
         }
 	if($module == "Meetings")
         {
