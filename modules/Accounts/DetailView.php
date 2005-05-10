@@ -162,7 +162,9 @@ global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
 
+getRelatedLists("Accounts",$focus);
 
+/*
 //Constructing the Related Lists from here
 include('modules/Accounts/RenderRelatedListUI.php');
 // Now get the list of opportunities that match this one.
@@ -191,23 +193,6 @@ if($tab_per_Data[9] == 0)
 	}
 }
 
-/*
-if($tab_per_Data[10] == 0)
-{
-	if($permissionData[10][3] == 0)
-	{
-		$focus_emails_list = & $focus->get_emails($focus->id);
-	}
-}
-
-if($tab_per_Data[13] == 0)
-{
-	if($permissionData[13][3] == 0)
-	{
-		$focus_tickets_list = & $focus->get_tickets($focus->id);
-	}
-}
-*/
 
 $focus_history_list = & $focus->get_history($focus->id);
 
@@ -218,14 +203,6 @@ if($tab_per_Data[8] == 0)
 		$focus_attachments_list = & $focus->get_attachments($focus->id);
 	}
 }
-//$focus_notes_list = & $focus->get_notes($focus->id);
-
-/*
-require_once('include/RelatedTicketListUtil.php');
-$list = getTicketList($focus->id, "Accounts", $image_path,$theme);
-echo $list;
 */
-
-
 
 ?>
