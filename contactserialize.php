@@ -315,6 +315,7 @@ $server->wsdl->addComplexType(
 	        'status' => array('name'=>'status','type'=>'xsd:string'),
 	        'category' => array('name'=>'category','type'=>'xsd:string'),
 	        'description' => array('name'=>'description','type'=>'xsd:string'),
+	        'resolution' => array('name'=>'resolution','type'=>'xsd:string'),
 	        'createdtime' => array('name'=>'createdtime','type'=>'xsd:string'),
 	        'modifiedtime' => array('name'=>'modifiedtime','type'=>'xsd:string'),
 	     )
@@ -330,6 +331,9 @@ $server->wsdl->addComplexType(
 		'id' => array('name'=>'id','type'=>'xsd:string'),
 		'user_name' => array('name'=>'user_name','type'=>'xsd:string'),
 		'user_password' => array('name'=>'user_password','type'=>'xsd:string'),
+		'last_login' => array('name'=>'last_login_time','type'=>'xsd:string'),
+		'support_start_date' => array('name'=>'support_start_date','type'=>'xsd:string'),
+		'support_end_date' => array('name'=>'support_end_date','type'=>'xsd:string'),
 	     )
 );
 
@@ -369,17 +373,29 @@ $server->register(
 	array('user_name'=>'xsd:string','password'=>'xsd:string'),
 	array('return'=>'tns:user_array'),
 	$NAMESPACE);
+
+$server->register(
+	'change_password',
+	array('id'=>'xsd:string','user_name'=>'xsd:string','password'=>'xsd:string'),
+	array('return'=>'tns:user_array'),
+	$NAMESPACE);
   
 $server->register(
 	'create_ticket',
-	array('title'=>'xsd:string','description'=>'xsd:string','priority'=>'xsd:string','category'=>'xsd:string','user_name'=>'xsd:string'),
+	array('title'=>'xsd:string','description'=>'xsd:string','priority'=>'xsd:string','category'=>'xsd:string','user_name'=>'xsd:string','contact_id'=>'xsd:string'),
 	array('return'=>'tns:tickets_list_array'),
 	$NAMESPACE);
  
 $server->register(
 	'get_tickets_list',
-	array('user_name'=>'xsd:string'),
+	array('user_name'=>'xsd:string','id'=>'xsd:string'),
 	array('return'=>'tns:tickets_list_array'),
+	$NAMESPACE);
+
+$server->register(
+	'update_login_details',
+	array('id'=>'xsd:string','flag'=>'xsd:string'),
+	array('return'=>'tns:user_array'),
 	$NAMESPACE);
 
 $server->register(
@@ -720,16 +736,16 @@ function contact_by_email($user_name,$email_address)
     return $output_list;
 }
 
-function get_tickets_list($user_name)
+function get_tickets_list($user_name,$id)
 {
-	require_once('modules/Users/User.php');
-        $seed_user = new User();
-        $user_id = $seed_user->retrieve_user_id($user_name);
+//	require_once('modules/Users/User.php');
+//        $seed_user = new User();
+//        $user_id = $seed_user->retrieve_user_id($user_name);
 
         $seed_ticket = new HelpDesk();
         $output_list = Array();
    
-	$response = $seed_ticket->get_user_tickets_list($user_name,$user_id);
+	$response = $seed_ticket->get_user_tickets_list($user_name,$id);
         $ticketsList = $response['list'];
     
        	// create a return array of ticket details.
@@ -745,6 +761,7 @@ function get_tickets_list($user_name)
 			"status"=>$ticket[status],
 			"category"=>$ticket[category],
 			"description"=>$ticket[description],
+			"resolution"=>$ticket[resolution],
                         "createdtime"=>$ticket[createdtime],
                         "modifiedtime"=>$ticket[modifiedtime],
  			);
@@ -1208,12 +1225,12 @@ function create_contact1($user_name, $first_name, $last_name, $email_address ,$a
 	return $contact->id;
 }
 
-function create_ticket($title,$description,$priority,$category,$user_name)
+function create_ticket($title,$description,$priority,$category,$user_name,$contact_id)
 {
-	require_once('modules/Users/User.php');
+/*	require_once('modules/Users/User.php');
         $seed_user = new User();
         $user_id = $seed_user->retrieve_user_id($user_name);
-
+*/
         $seed_ticket = new HelpDesk();
         $output_list = Array();
    
@@ -1227,23 +1244,61 @@ function create_ticket($title,$description,$priority,$category,$user_name)
 	$ticket->column_fields[ticketcategories]=$category;
 	$ticket->column_fields[ticketstatus]='Open';
 
-	$ticket->column_fields[assigned_user_id]=$user_id;
+	$ticket->column_fields[contact_id]=$contact_id;
+//	$ticket->column_fields[assigned_user_id]=$user_id;
     	//$ticket->saveentity("HelpDesk");
     	$ticket->save("HelpDesk");
 
-	return get_tickets_list($user_name); 
+	return get_tickets_list($user_name,$contact_id); 
 	//return $ticket->id;
 }
 function authenticate_user($username,$password)
 {
 	global $adb;
-	$sql = "select id, user_name, user_password from users where user_name='".$username."' and user_password = '".$password."'";
+	$current_date = date("Y-m-d");
+	$sql = "select id, user_name, user_password,last_login_time, support_start_date, support_end_date from PortalInfo inner join CustomerDetails on PortalInfo.id=CustomerDetails.customerid where user_name='".$username."' and user_password = '".$password."' and isactive=1 and CustomerDetails.support_end_date >= ".$current_date;
 	$result = $adb->query($sql);	
 	$list['id'] = $adb->query_result($result,0,'id');
 	$list['user_name'] = $adb->query_result($result,0,'user_name');
 	$list['user_password'] = $adb->query_result($result,0,'user_password');
+	$list['last_login_time'] = $adb->query_result($result,0,'last_login_time');
+	$list['support_start_date'] = $adb->query_result($result,0,'support_start_date');
+	$list['support_end_date'] = $adb->query_result($result,0,'support_end_date');
 
 	return $list;
+}
+function change_password($id,$username,$password)
+{
+	global $adb;
+	$sql = "update PortalInfo set user_password='".$password."' where id=".$id." and user_name='".$username."'";
+	$result = $adb->query($sql);
+
+	$list = authenticate_user($username,$password);
+
+        return $list;
+}
+function update_login_details($id,$flag)
+{
+        global $adb;
+	$current_time = date("Y-m-d H:i:s");
+
+	if($flag == 'login')
+	{
+	        $sql = "update PortalInfo set login_time='".$current_time."' where id=".$id;
+	        $result = $adb->query($sql);
+	}
+	elseif($flag == 'logout')
+	{
+		$sql = "select * from PortalInfo where id=".$id;
+                $result = $adb->query($sql);
+                if($adb->num_rows($result) != 0)
+                        $last_login = $adb->query_result($result,0,'login_time');
+
+		$sql = "update PortalInfo set logout_time = '".$current_time."', last_login_time='".$last_login."' where id=".$id;
+		$result = $adb->query($sql);
+	}
+
+        return $list;
 }
 
 function retrievereportsto($reports_to,$user_id,$account_id)
