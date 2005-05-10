@@ -51,6 +51,7 @@ class HelpDesk extends CRMEntity {
 	        'status',
         	'category',
 		'description',
+		'resolution',
 		'modifiedtime',
 		'createdtime'
 		);
@@ -89,7 +90,7 @@ class HelpDesk extends CRMEntity {
 	
 	function get_user_tickets_list($user_name,$id)
 	{
-		$query = "select crmentity.crmid, troubletickets.ticketid, troubletickets.contact_id, troubletickets.title, troubletickets.status, troubletickets.priority, troubletickets.category, troubletickets.description, crmentity.smownerid, crmentity.createdtime, crmentity.modifiedtime, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentity.deleted=0 and users.user_name='".$user_name."' and crmentity.smownerid = '".$id."'";
+		$query = "select crmentity.crmid, troubletickets.ticketid, troubletickets.contact_id, troubletickets.title, troubletickets.status, troubletickets.priority, troubletickets.category, troubletickets.description, troubletickets.resolution, crmentity.smownerid, crmentity.createdtime, crmentity.modifiedtime, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid inner join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id  where crmentity.deleted=0 and contactdetails.email='".$user_name."' and troubletickets.contact_id = '".$id."'";
 		return $this->process_list_query($query);
 	}
 
