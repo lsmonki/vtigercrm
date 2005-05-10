@@ -56,6 +56,11 @@ $block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
 $xtpl->assign("BLOCK1_HEADER", $block_1_header);
 $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 
+$block_4 = getDetailBlockInformation("HelpDesk",4,$focus->column_fields);
+$block_4_header = getBlockTableHeader("LBL_TICKET_RESOLUTION");
+$xtpl->assign("BLOCK4", $block_4);
+$xtpl->assign("BLOCK4_HEADER", $block_4_header);
+
 $block_5 = getDetailBlockInformation("HelpDesk",5,$focus->column_fields);
 if(trim($block_5) != '')
 {
