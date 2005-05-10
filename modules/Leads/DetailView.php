@@ -130,27 +130,20 @@ if(isPermitted("Leads",8,'') == 'yes')
 }
 
 
-//Assigning Custom Field Values
-//$custfld = CustomFieldDetailView($focus->id, "Leads", "leadcf", "leadid");
-//$xtpl->assign("CUSTOMFIELD", $custfld);
 $xtpl->parse("main");
 $xtpl->out("main");
 
 echo "<BR>\n";
-/*
-// Now get the list of direct reports that match this one.
-$focus_list = & $focus->get_direct_reports();
-
-*/
+getRelatedLists("Leads",$focus);
 
 // Now get the list of activities that match this contact.
 // $focus_tasks_list = & $focus->get_tasks($focus->id);
 //$focus_meetings_list = & $focus->get_meetings($focus->id);
- $focus_activities_list = & $focus->get_activities($focus->id);
- $focus_emails_list = & $focus->get_emails($focus->id);
+// $focus_activities_list = & $focus->get_activities($focus->id);
+// $focus_emails_list = & $focus->get_emails($focus->id);
 // $focus_notes_list = & $focus->get_notes($focus->id);
 // $focus_tickets_list = & $focus->get_tickets($focus->id);
- $focus_history_list = & $focus->get_history($focus->id);
- $focus_attachments_list = & $focus->get_attachments($focus->id);
+// $focus_history_list = & $focus->get_history($focus->id);
+// $focus_attachments_list = & $focus->get_attachments($focus->id);
 
 ?>
