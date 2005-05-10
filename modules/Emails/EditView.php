@@ -54,6 +54,7 @@ if(isset($_REQUEST['record'])) {
 if(isset($_REQUEST['parent_id']))
 {
         $focus->column_fields['parent_id'] = $_REQUEST['parent_id'];
+	$focus->mode = '';
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
