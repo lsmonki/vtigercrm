@@ -3528,4 +3528,26 @@
 		</data>
 	</table>
 
+	<table name="relatedlists">
+		<field name="relation_id" type="I" size="19">
+                        <KEY/>
+                </field>
+		<field name="tabid" type="I" size="10"></field>
+		<field name="related_tabid" type="I" size="10"></field>
+		<field name="name" type="C" size="100"></field>
+		<field name="sequence" type="I" size="10"></field>
+		<field name="label" type="C" size="100"></field>
+		<field name="presence" type="I" size="10">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<index name="idx_profile2tab">
+			<col>relation_id</col>	
+		</index>
+		
+		<data>
+		</data>
+	</table>
+
+
 </schema>
