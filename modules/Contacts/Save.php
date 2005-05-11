@@ -84,6 +84,124 @@ if(isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] != '') $activ
 
 $local_log->debug("Saved record with id of ".$return_id);
 
+//BEGIN -- Code for Create Customer Portal Users password and Send Mail 
+if($_REQUEST['portal'] == '' && $_REQUEST['mode'] == 'edit')
+{
+	$sql = "update PortalInfo set user_name='".$_REQUEST['email']."',isactive=0 where id=".$_REQUEST['record'];
+	$adb->query($sql);
+}
+elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mode'] != 'edit')
+{
+	$id = $_REQUEST['record'];
+	$username = $_REQUEST['email'];
+
+	if($_REQUEST['mode'] != 'edit')
+		$insert = 'true';
+
+	$sql = "select id,user_name,user_password,isactive from PortalInfo";
+	$result = $adb->query($sql);
+
+	for($i=0;$i<$adb->num_rows($result);$i++)
+	{
+		if($id == $adb->query_result($result,$i,'id'))
+		{
+			$dbusername = $adb->query_result($result,$i,'user_name');
+			$isactive = $adb->query_result($result,$i,'isactive');
+
+			if($username == $dbusername && $isactive == 1)
+				$flag = 'true';
+			else
+			{
+				$sql = "update PortalInfo set user_name='".$username."', isactive=1 where id=".$id;
+				$adb->query($sql);
+				$update = 'true';
+				$flag = 'true';
+				$password = $adb->query_result($result,$i,'user_password');
+			}
+		}
+	}
+	if($flag != 'true')
+		$insert = 'true';
+	else
+		$insert = 'false';
+
+	if($insert == 'true')
+	{
+		$password = makeRandomPassword();
+		$sql = "insert into PortalInfo (id,user_name,user_password,type,isactive) values(".$focus->id.",'".$username."','".$password."','C',1)";
+                $adb->query($sql);
+	}
+
+	$subject = "Customer Portal Login Details";
+	$contents = "Your User Id for Portal is : <b>".$_REQUEST['email'].'</b>';
+	$contents .= '<br>Your password is : <b>'.$password.'</b>';
+	
+	if($insert == 'true' || $update == 'true')
+	{
+		SendMailToCustomer('Contacts',$focus->id,$_REQUEST['email'],$current_user->id,$subject,$contents);
+	}
+}
+function SendMailToCustomer($module,$id,$to,$current_user_id,$subject,$contents)
+{
+	include("modules/Emails/class.phpmailer.php");
+
+	$mail = new PHPMailer();
+	
+	$mail->Subject = $subject;
+	$mail->Body    = nl2br($contents);	
+	$mail->IsSMTP();
+
+	if($current_user_id != '')
+	{
+		global $adb;
+		$sql = "select * from users where id= ".$current_user_id;
+		$result = $adb->query($sql);
+		$from = $adb->query_result($result,0,'email1');
+		$initialfrom = $adb->query_result($result,0,'user_name');
+	}
+	if($mail_server=='')
+        {
+		global $adb;
+                $mailserverresult=$adb->query("select * from systems where server_type='email'");
+                $mail_server=$adb->query_result($mailserverresult,0,'server');
+                $_REQUEST['server']=$mail_server;
+        }
+	$mail->Host = $mail_server;
+        $mail->SMTPAuth = true;
+        $mail->Username = $mail_server_username;
+        $mail->Password = $mail_server_password;
+	$mail->From = $from;
+	$mail->FromName = $initialfrom;
+
+	$mail->AddAddress($to);
+	$mail->AddReplyTo($from);
+	$mail->WordWrap = 50;
+
+	$mail->IsHTML(true);
+
+	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
+
+	if(!$mail->Send())
+	{
+		$errormsg = "Mail Could not be sent...";	
+	}
+}
+function makeRandomPassword() 
+{
+        $salt = "abcdefghijklmnopqrstuvwxyz0123456789";
+        srand((double)microtime()*1000000);
+        $i = 0;
+        while ($i <= 7)
+	{
+                $num = rand() % 33;
+                $tmp = substr($salt, $num, 1);
+                $pass = $pass . $tmp;
+                $i++;
+	}
+      return $pass;
+}
+//END -- Code for Create Customer Portal Users password and Send Mail
+
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&activity_mode=$activitymode");
 //Code to save the custom field info into database
 function save_customfields($entity_id)
