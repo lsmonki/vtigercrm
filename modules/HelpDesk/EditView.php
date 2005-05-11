@@ -78,6 +78,14 @@ $xtpl->assign("BLOCK3", $block_3);
 $xtpl->assign("BLOCK1_HEADER", $block_1_header);
 $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 
+if($focus->mode == 'edit')
+{
+	$block_4 = getBlockInformation("HelpDesk",4,$focus->mode,$focus->column_fields);
+	$block_4_header = getBlockTableHeader("LBL_TICKET_RESOLUTION");
+	$xtpl->assign("BLOCK4", $block_4);
+	$xtpl->assign("BLOCK4_HEADER", $block_4_header);
+}
+
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
 
