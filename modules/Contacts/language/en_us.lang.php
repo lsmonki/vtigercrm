@@ -174,7 +174,13 @@ $mod_strings = Array(
 'LBL_NEW_APPOINTMENT'=>'New Appointment',
 'LBL_SUBJECT'=>'Subject:',
 'LBL_START_DATE'=>'Start Date:',
-'LBL_START_TIME'=>'Start Time:'
+'LBL_START_TIME'=>'Start Time:',
+
+//Added field after 4_0_1
+'Portal User'=>'Portal User',
+'LBL_CUSTOMER_PORTAL_INFORMATION'=>'Customer Portal Information',
+'Support Start Date'=>'Support Start Date',
+'Support End Date'=>'Support End Date',
 
 );
 
