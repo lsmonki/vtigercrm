@@ -70,7 +70,9 @@ $block_3 = getBlockInformation("Contacts",3,$focus->mode,$focus->column_fields);
 $block_1_header = getBlockTableHeader("LBL_CONTACT_INFORMATION");
 $block_2_header = getBlockTableHeader("LBL_ADDRESS_INFORMATION");
 $block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
+$block_4_header = getBlockTableHeader("LBL_CUSTOMER_PORTAL_INFORMATION");
 
+$block_4 = getBlockInformation("Contacts",4,$focus->mode,$focus->column_fields);
 
 $block_5 = getBlockInformation("Contacts",5,$focus->mode,$focus->column_fields);
 if(trim($block_5) != '')
@@ -115,9 +117,11 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("BLOCK3", $block_3);
+$xtpl->assign("BLOCK4", $block_4);
 $xtpl->assign("BLOCK1_HEADER", $block_1_header);
 $xtpl->assign("BLOCK2_HEADER", $block_2_header);
 $xtpl->assign("BLOCK3_HEADER", $block_3_header);
+$xtpl->assign("BLOCK4_HEADER", $block_4_header);
 
 if (isset($focus->firstname)) $xtpl->assign("FIRST_NAME", $focus->firstname);
 else $xtpl->assign("FIRST_NAME", "");
