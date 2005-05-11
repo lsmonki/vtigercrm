@@ -132,6 +132,9 @@ $mod_strings = Array(
 'LBL_PRIORITIES'=>'Priorities',
 'LBL_SUPPORTERS'=>'Supporters',
 
+//Added fields after 4_0_1
+'LBL_TICKET_RESOLUTION'=>'Resolution Information',
+'Resolution'=>'Resolution',
 );
 
 ?>
