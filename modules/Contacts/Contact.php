@@ -81,8 +81,8 @@ class Contact extends CRMEntity {
 	var $assigned_user_name;
 		
 	var $table_name = "contactdetails";
-	var $tab_name = Array('crmentity','contactdetails','contactaddress','contactsubdetails','contactscf');
-	var $tab_name_index = Array('crmentity'=>'crmid','contactdetails'=>'contactid','contactaddress'=>'contactaddressid','contactsubdetails'=>'contactsubscriptionid','contactscf'=>'contactid');
+	var $tab_name = Array('crmentity','contactdetails','contactaddress','contactsubdetails','contactscf','CustomerDetails');
+	var $tab_name_index = Array('crmentity'=>'crmid','contactdetails'=>'contactid','contactaddress'=>'contactaddressid','contactsubdetails'=>'contactsubscriptionid','contactscf'=>'contactid','CustomerDetails'=>'customerid');
 
 
 	var $rel_account_table = "accounts_contacts";
@@ -174,7 +174,7 @@ class Contact extends CRMEntity {
 	);
 
 	// This is the list of fields that are required
-	var $required_fields =  array("lastname"=>1, 'account_id'=>1);
+	var $required_fields =  array("lastname"=>1);
 
 	function Contact() {
 		$this->log = LoggerManager::getLogger('contact');
