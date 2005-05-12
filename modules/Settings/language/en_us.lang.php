@@ -407,9 +407,6 @@ $mod_strings = Array(
 
 'LBL_PRODUCT_CATEGORY'=>'Product Category',
 
-
-
 );
 
-
-
+?>
