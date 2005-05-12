@@ -3594,5 +3594,23 @@
 		</data>
 	</table>
 
+	<table name="rss">
+                <field name="rssid" type="I" size="19">
+                        <KEY/>
+                </field>
+                <field name="rssurl" type="C" size="200">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>  
+                <field name="rsstitle" type="C" size="200"></field>
+                <field name="rsstype" type="I" size="10">
+			<DEFAULT value="0"/>
+		</field>
+                <field name="starred" type="I" size="1">
+	              <DEFAULT value="0"/>	
+		</field>
+                <data>
+                </data>
+        </table>
 
 </schema>
