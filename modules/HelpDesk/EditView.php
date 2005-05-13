@@ -84,6 +84,19 @@ if($focus->mode == 'edit')
 	$block_4_header = getBlockTableHeader("LBL_TICKET_RESOLUTION");
 	$xtpl->assign("BLOCK4", $block_4);
 	$xtpl->assign("BLOCK4_HEADER", $block_4_header);
+
+	$block_7 = getCommentInformation($focus->id);
+	if($block_7 != '')
+	{
+		$block_7_header = getBlockTableHeader("LBL_COMMENTS");
+		$xtpl->assign("BLOCK7", $block_7);
+		$xtpl->assign("BLOCK7_HEADER", $block_7_header);
+	}
+
+	$block_6 = getBlockInformation("HelpDesk",6,$focus->mode,$focus->column_fields);
+        $block_6_header = getBlockTableHeader("LBL_COMMENTS");
+        $xtpl->assign("BLOCK6", $block_6);
+        $xtpl->assign("BLOCK6_HEADER", $block_6_header);
 }
 
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
@@ -171,5 +184,48 @@ $xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
 $xtpl->parse("main");
 
 $xtpl->out("main");
+
+function getCommentInformation($ticketid)
+{
+        global $adb;
+        global $mod_strings;
+        $sql = "select * from ticketcomments where ticketid=".$ticketid;
+        $result = $adb->query($sql);
+        $noofrows = $adb->num_rows($result);
+	if($noofrows == 0)
+		return '';
+
+	$list .= '<div style="overflow: scroll;height:200;width:100%;">';
+        for($i=0;$i<$noofrows;$i++)
+        {
+		if($adb->query_result($result,$i,'comments') != '')
+		{
+                	$list .= '<div valign="top" width="70%" class="dataField">';
+			$list .= nl2br($adb->query_result($result,$i,'comments'));
+
+			$list .= '</div><div valign="top" width="20%" class="dataLabel"><font color=darkred>';
+                        $list .= $mod_strings['LBL_AUTHOR'].' : ';
+			if($adb->query_result($result,$i,'ownertype') == 'user')
+				$list .= getUserName($adb->query_result($result,$i,'ownerid'));
+			else
+				$list .= getCustomerName($ticketid);
+
+        	        $list .= ' on '.$adb->query_result($result,$i,'createdtime').' &nbsp;';
+	
+	                $list .= '</font></div>';
+		}
+        }
+	$list .= '</div>';
+        return $list;
+}
+
+function getCustomerName($id)
+{
+        global $adb;
+        $sql = "select * from PortalInfo inner join troubletickets on troubletickets.contact_id = PortalInfo.id where troubletickets.ticketid=".$id;
+        $result = $adb->query($sql);
+        $customername = $adb->query_result($result,0,'user_name');
+        return $customername;
+}
 
 ?>
