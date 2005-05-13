@@ -56,7 +56,30 @@ if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $retur
 else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
-$_REQUEST['name'] = $_REQUEST['ticket_title'];
+if($_REQUEST['mode'] == 'edit')
+	$reply = 'Re : ';
+else
+	$reply = '';
+
+$_REQUEST['name'] = '[ Ticket ID : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
+$bodysubject = ' Ticket ID : '.$focus->id.'<br> Ticket Title : '.$_REQUEST['ticket_title'].'<br><br>';
+
+if($_REQUEST['ticketstatus'] == 'Closed')
+	$bodydetails .= 'We are happy that your problem is solved.  ....................';
+elseif($_REQUEST['ticketstatus'] != 'Closed' && $_REQUEST['mode'] != 'edit')
+	$bodydetails .= '<br> We have received the following Ticket details from you: ';
+elseif($_REQUEST['mode'] == 'edit')
+	$bodydetails .= '<br> Updated details of the ticket :';
+
+$bodydetails .= '<br><br>Ticket Details : <br>';
+$bodydetails .= '<br> Status : <b>'.$_REQUEST['ticketstatus'].'</b>';
+$bodydetails .= '<br> Priority : <b>'.$_REQUEST['ticketpriorities'].'</b>';
+$bodydetails .= '<br> Category : <b>'.$_REQUEST['ticketcategories'].'</b>';
+$bodydetails .= '<br><br> Description : <br>'.$_REQUEST['description'];
+$bodydetails .= '<br><br>Solution : <br>'.$_REQUEST['solution'];
+
+
+$_REQUEST['description'] = $bodysubject.$bodydetails;
 $_REQUEST['parent_id'] = $_REQUEST['contact_id'];
 $_REQUEST['return_id'] = $return_id;
 
