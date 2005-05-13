@@ -16,8 +16,8 @@ class HelpDesk extends CRMEntity {
 	var $id;
 	var $mode;
 
-	var $tab_name = Array('crmentity','troubletickets','seticketsrel','ticketcf');
-	var $tab_name_index = Array('crmentity'=>'crmid','troubletickets'=>'ticketid','seticketsrel'=>'ticketid','ticketcf'=>'ticketid');
+	var $tab_name = Array('crmentity','troubletickets','seticketsrel','ticketcf','ticketcomments');
+	var $tab_name_index = Array('crmentity'=>'crmid','troubletickets'=>'ticketid','seticketsrel'=>'ticketid','ticketcf'=>'ticketid','ticketcomments'=>'ticketid');
 	var $column_fields = Array();
 
 	var $sortby_fields = Array('title','status','priority','crmid','firstname');
@@ -51,7 +51,7 @@ class HelpDesk extends CRMEntity {
 	        'status',
         	'category',
 		'description',
-		'resolution',
+		'solution',
 		'modifiedtime',
 		'createdtime'
 		);
@@ -87,10 +87,33 @@ class HelpDesk extends CRMEntity {
                 $query .= "select attachments.description title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;	
 		renderRelatedAttachments($query,$id);	
 	}
-	
+
+        function get_ticket_comments_list($ticketid)
+        {
+                $sql = "select * from ticketcomments where ticketid=".$ticketid;
+                $result = $this->db->query($sql);
+                $noofrows = $this->db->num_rows($result);
+                for($i=0;$i<$noofrows;$i++)
+                {
+			$ownerid = $this->db->query_result($result,$i,"ownerid");
+			$ownertype = $this->db->query_result($result,$i,"ownertype");
+                        if($ownertype == 'user')
+                                $name = getUserName($ownerid);
+                        elseif($ownertype == 'customer')
+                        {
+                                $sql1 = 'select * from PortalInfo where id='.$ownerid;
+                                $name = $this->db->query_result($this->db->query($sql1),0,'user_name');
+                        }
+
+                        $output['comments'][$i] = nl2br($this->db->query_result($result,$i,"comments"));
+			$output['owner'][$i] = $name;
+                        $output['createdtime'][$i] = $this->db->query_result($result,$i,"createdtime");
+                }
+                return $output;
+        }	
 	function get_user_tickets_list($user_name,$id)
 	{
-		$query = "select crmentity.crmid, troubletickets.ticketid, troubletickets.contact_id, troubletickets.title, troubletickets.status, troubletickets.priority, troubletickets.category, troubletickets.description, troubletickets.resolution, crmentity.smownerid, crmentity.createdtime, crmentity.modifiedtime, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid inner join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id  where crmentity.deleted=0 and contactdetails.email='".$user_name."' and troubletickets.contact_id = '".$id."'";
+		$query = "select crmentity.crmid, troubletickets.ticketid, troubletickets.contact_id, troubletickets.title, troubletickets.status, troubletickets.priority, troubletickets.category, troubletickets.description, troubletickets.solution, crmentity.smownerid, crmentity.createdtime, crmentity.modifiedtime, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid inner join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id  where crmentity.deleted=0 and contactdetails.email='".$user_name."' and troubletickets.contact_id = '".$id."'";
 		return $this->process_list_query($query);
 	}
 
