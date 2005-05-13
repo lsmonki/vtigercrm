@@ -1129,6 +1129,21 @@
 		<field name="commissionrate" type="N" size="3.3"></field>
 		<field name="commissionmethod" type="C" size="50"></field>
 		<field name="discontinued" type="I" size="1"></field>
+		<field name="usageunit" type="C" size="200"></field>
+		<field name="handler" type="I" size="11"></field>
+		<field name="contactid" type="I" size="11"></field>
+		<field name="currency" type="C" size="200"></field>
+		<field name="reorderlevel" type="I" size="11"></field>
+		<field name="website" type="C" size="100"></field>
+		<field name="taxclass" type="C" size="200"></field>
+		<field name="mfr_part_no" type="C" size="200"></field>
+		<field name="vendor_part_no" type="C" size="200"></field>
+		<field name="serialno" type="C" size="200"></field>
+		<field name="qtyinstock" type="I" size="11"></field>
+		<field name="productsheet" type="C" size="200"></field>
+		<field name="qtyindemand" type="I" size="11"></field>
+		<field name="glacct" type="C" size="200"></field>
+		<field name="vendor_id" type="I" size="11"></field>	
 	
 		<opt>Type=InnoDB</opt>
 		
@@ -3612,5 +3627,102 @@
                 <data>
                 </data>
         </table>
+
+	<table name="vendor">
+		<field name="vendorid" type="I" size="19">
+			<KEY/>
+                    <NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="company_name" type="C" size="100"></field>
+		<field name="name" type="C" size="100"></field>
+		<field name="phone" type="C" size="100"></field>
+		<field name="email" type="C" size="100"></field>
+		<field name="website" type="C" size="100"></field>
+		<field name="glacct" type="C" size="50"></field>
+		<field name="category" type="C" size="50"></field>
+		<field name="street" type="X"></field>
+		<field name="city" type="C" size="30"></field>
+		<field name="state" type="C" size="30"></field>
+		<field name="postalcode" type="C" size="100"></field>
+		<field name="country" type="C" size="100"></field>
+		<field name="description" type="X"></field>
+		
+                  
+<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="vendor" alter="true">
+	<constraint>ADD CONSTRAINT fk_Vendor FOREIGN KEY (vendorid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="pricebook">
+		<field name="pricebookid" type="I" size="19">
+			<KEY/>
+                    <NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="bookname" type="C" size="100"></field>
+		<field name="active" type="I" size="1"></field>
+		<field name="description" type="X"></field>
+		
+                  
+	<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	<table name="pricebook" alter="true">
+	<constraint>ADD CONSTRAINT fk_Vendor FOREIGN KEY (pricebookid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="pricebookproductrel">
+		<field name="pricebookid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="productid" type="I" size="19">
+			<KEY/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="PriceBookProductRel_IDX0">
+			<col>pricebookid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="PriceBookProductRel_IDX1">
+			<col>productid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="pricebookproductrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_PriceBookProductRel FOREIGN KEY (pricebookid) REFERENCES pricebook(pricebookid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="pricebookproductrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_PriceBookProductRel2 FOREIGN KEY (productid) REFERENCES products(productid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
 
 </schema>
