@@ -72,6 +72,10 @@ class CRMEntity extends SugarBean
           $this->insertIntoEntityTable($table_name, $module);
         }
       }
+      elseif($table_name ==  "ticketcomments" && $_REQUEST['comments'] != '')
+      {
+                $this->insertIntoTicketCommentTable($table_name, $module);
+      }
       else
       {
         $this->insertIntoEntityTable($table_name, $module);			
@@ -557,7 +561,18 @@ function getOldFileName($notesid)
 	}
 	return "'".$filename."'";
 }
+function insertIntoTicketCommentTable($table_name, $module)
+{
+        global $adb;
+        $current_time = date('Y-m-d H:i:s');
+	if($_REQUEST['assigned_user_id'] != '')
+		$ownertype = 'user';
+	else
+		$ownertype = 'customer';
 
+	$sql = "insert into ticketcomments values('',".$this->id.",'".$_REQUEST['comments']."','".$_REQUEST['assigned_user_id']."','".$ownertype."','".$current_time."')";
+        $adb->query($sql);
+}
 	
   function retrieve_entity_info($record, $module)
   {
