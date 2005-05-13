@@ -233,7 +233,8 @@ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,9,1,2,'T~O')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'title','troubletickets',1,'22','ticket_title','Title',1,0,0,100,1,2,1,'V~M')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'description','troubletickets',1,'19','description','Description',1,0,0,100,1,3,1,'V~O')");
- $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'resolution','troubletickets',1,'19','resolution','Resolution',1,0,0,100,1,4,1,'V~O')");
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'solution','troubletickets',1,'19','solution','Solution',1,0,0,100,1,4,1,'V~O')");
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'comments','ticketcomments',1,'19','comments','Add Comment',1,0,0,100,1,6,1,'V~O')");
 //Block1 -- End
 //Ticket Details -- END
 
