@@ -405,16 +405,6 @@
 		</data>
 	</table>
 
-	<table name="contactdetails" alter="true">
-		
-		<constraint>ADD CONSTRAINT fk_ContactDetails2 FOREIGN KEY (accountid) REFERENCES account(accountid)  ON DELETE CASCADE </constraint>
-		
-		<opt>Type=InnoDB</opt>
-		
-		<data>
-		</data>
-	</table>
-
 
 	<table name="contactsubdetails">
 		<field name="contactsubscriptionid" type="I" size="19">
@@ -1685,7 +1675,7 @@
 			<NOTNULL/>
 		</field>
 		<field name="description" type="X"></field>
-		<field name="resolution" type="X"></field>
+		<field name="solution" type="X"></field>
 		<field name="update_log" type="X"></field>
 		<field name="version_id" type="I" size="11">
 		</field>
@@ -1696,6 +1686,27 @@
 		</data>
 	</table>
 
+	<table name="ticketcomments">
+
+		<field name="commentid" type="I" size="19">
+	                <KEY/>
+			<AUTOINCREMENT/>
+        	        <DEFAULT value="0"/>
+                </field>
+		<field name="ticketid" type="I" size="19">
+			<DEFAULT value="0"/>
+		</field>
+                <field name="comments" type="X"></field>
+                <field name="ownerid" type="I" size="19">
+                        <NOTNULL/>
+                        <DEFAULT value="0"/>
+                </field>
+                <field name="ownertype" type="C" size="10"></field>
+		<field name="createdtime" type="T" >
+                        <NOTNULL/>
+                </field>
+
+	</table>
 
 
 	<table name="salesmanactivityrel">
