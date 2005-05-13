@@ -133,8 +133,14 @@ elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mo
 	}
 
 	$subject = "Customer Portal Login Details";
-	$contents = "Your User Id for Portal is : <b>".$_REQUEST['email'].'</b>';
-	$contents .= '<br>Your password is : <b>'.$password.'</b>';
+	$contents = "Dear ".$_REQUEST['firstname'].' '.$_REQUEST['lastname'].',<br><br>';
+	$contents .= 'Your Customer Portal Login details are given below:';
+//	$contents .= '<br>Customer Portal URL:';
+	$contents .= "<br><br>User Id : ".$_REQUEST['email'];
+	$contents .= '<br>Password : '.$password.'';
+
+	$contents .= '<br><br><b>Note : </b>We suggest you to change your password after logging in first time.';
+	$contents .= '<br><br>Support Team';
 	
 	if($insert == 'true' || $update == 'true')
 	{
