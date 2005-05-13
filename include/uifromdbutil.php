@@ -135,10 +135,12 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$output = '<td align="right">';
+		
+	$dir_name=getModuleDirName($module);
 	if(isset($navigation_array['prev']))
 	{
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start=1" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start=1" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
 
 	}
 	else
@@ -148,8 +150,8 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	}
 	if(isset($navigation_array['next']))
 	{
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$module.'&action='.$action_val.$url_qry.'&start='.$navigation_array['end'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['end'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
 	}
 	else
 	{
