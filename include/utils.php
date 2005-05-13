@@ -1380,6 +1380,21 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		$custfld .= '<td width="30%"><input name="'.$fieldname.'" type="text" size="25" maxlength="'.$maxlength.'" value="'.$value.'"></td>';
 	}
+	elseif($uitype == 75)
+	{
+
+		if($value != '')
+               {
+                       $vendor_name = getVendorName($value);
+               }
+	       elseif(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id'] != '')
+	       {
+			$value = $_REQUEST['vendor_id'];
+			$vendor_name = getVendorName($value);
+	       }		 	
+		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+        	$custfld .= '<td width="30%"><input name="vendor_name" readonly type="text" value="'.$vendor_name.'"><input name="vendor_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=VendorPopup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
+	}
 	else
 	{
 		$custfld .= '<td width="20%" class="dataLabel">';
@@ -1712,6 +1727,17 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}
 		$custfld .= '<td width="30%" valign="top" class="dataField">'.$display_val.'</td>';	
 	}
+	elseif($uitype == 75)
+        {
+                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+                $vendor_id = $col_fields[$fieldname];
+                if($vendor_id != '')
+                {
+                        $vendor_name = getVendorName($vendor_id);
+                }
+
+                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Products&action=VendorDetailView&record='.$vendor_id.'">'.$vendor_name.'</a></td>';
+        }
 	else
 	{
 	  $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
@@ -1759,6 +1785,15 @@ function getContactName($contact_id)
         $lastname = $adb->query_result($result,0,"lastname");
         $contact_name = $firstname.' '.$lastname;
         return $contact_name;
+}
+
+function getVendorName($vendor_id)
+{
+        global $adb;
+        $sql = "select * from vendor where vendorid=".$vendor_id;
+        $result = $adb->query($sql);
+        $vendor_name = $adb->query_result($result,0,"name");
+        return $vendor_name;
 }
 
 function getGroupName($id, $module)
@@ -2174,7 +2209,7 @@ function getRelatedTo($module,$list_result,$rset)
 
 }
 
-function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='')
+function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete')
 {
 	global $adb;
 	global $app_strings;
@@ -2289,6 +2324,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$account_name = getAccountName($account_id);
 						$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
 					}
+					elseif($module == 'PriceBook' && $name == 'Product Name')
+					{
+						$product_id = $adb->query_result($list_result,$i-1,"productid");
+						$product_name = getProductName($product_id);
+						$value = '<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
+					}
 					elseif($owner_id == 0 && $name == 'Assigned To')
                                        {
                                                $value = getGroupName($entity_id, $module);
@@ -2333,15 +2374,16 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				$returnset .= '&activity_mode=Events';
 		}
 		$list_header .= '<td style="padding:0px 3px 0px 3px;">';
+		$mod_dir=getModuleDirName($module);
 		if(isPermitted($module,1,$entity_id) == 'yes')
 		{
 			
 			
-			$list_header .='<a href="index.php?action=EditView&module='.$module.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
+			$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
 		}
 		if(isPermitted($module,2,$entity_id) == 'yes')
 		{
-			$del_param = 'index.php?action=Delete&module='.$module.'&record='.$entity_id.$returnset;
+			$del_param = 'index.php?action='.$del_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset;
 			$list_header .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
 		}
 		$list_header .= '<td>';
@@ -2631,8 +2673,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				{
 					// Added for get the first name of contact in Popup window
                                         if($colname == "lastname" && $module == 'Contacts')
+					{
                                                $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
-                                        $temp_val =$firstname.' '.$temp_val;
+                                        	$temp_val =$firstname.' '.$temp_val;
+					}
 			
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
 				}
@@ -2675,6 +2719,16 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                                                 $value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Events">'.$temp_val.'</a>';
                                         }
                                 }
+				elseif($module == "Vendor")
+				{
+						
+                                        $value = '<a href="index.php?action=VendorDetailView&module=Products&record='.$entity_id.'">'.$temp_val.'</a>';
+				}
+				elseif($module == "PriceBook")
+				{
+						
+                                        $value = '<a href="index.php?action=PriceBookDetailView&module=Products&record='.$entity_id.'">'.$temp_val.'</a>';
+				}
                                 else
                                 {
                                         $value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'">'.$temp_val.'</a>';
@@ -2748,9 +2802,17 @@ function getListQuery($module,$where='')
 	{
 		$query = "select crmentity.crmid,faq.question,faq.category,sefaqrel.crmid as relatedto from faq inner join crmentity on crmentity.crmid=faq.id left join sefaqrel on faq.id=sefaqrel.faqid where crmentity.deleted=0";
 	}
+	if($module == "Vendor")
+	{
+		$query = "select crmentity.crmid, vendor.* from vendor inner join crmentity on crmentity.crmid=vendor.vendorid where crmentity.deleted=0";
+	}
+	if($module == "PriceBook")
+	{
+		$query = "select crmentity.crmid, pricebook.*,pricebookproductrel.productid from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid inner join pricebookproductrel on pricebookproductrel.pricebookid=pricebook.pricebookid where crmentity.deleted=0";
+	}
 	global $others_permission_id;
 	global $current_user;	
-	if($others_permission_id == 3 && $module != 'Notes' && $module != 'Products' && $module != 'Faq')
+	if($others_permission_id == 3 && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $module!= 'Vendor' && $module != 'PriceBook')
 	{
 		$query .= " and crmentity.smownerid in(".$current_user->id .",0)";
 	}
@@ -3100,6 +3162,19 @@ function getRelatedLists($module,$focus)
 		}
 	}
 
+}
+
+function getModuleDirName($module)
+{
+	if($module == 'Vendor' || $module == 'PriceBook')
+	{
+		$dir_name = 'Products';	
+	}
+	else
+	{
+		$dir_name = $module;
+	}
+	return $dir_name;
 }
 
 ?>
