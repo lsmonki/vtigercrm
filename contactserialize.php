@@ -315,12 +315,32 @@ $server->wsdl->addComplexType(
 	        'status' => array('name'=>'status','type'=>'xsd:string'),
 	        'category' => array('name'=>'category','type'=>'xsd:string'),
 	        'description' => array('name'=>'description','type'=>'xsd:string'),
-	        'resolution' => array('name'=>'resolution','type'=>'xsd:string'),
+	        'solution' => array('name'=>'solution','type'=>'xsd:string'),
 	        'createdtime' => array('name'=>'createdtime','type'=>'xsd:string'),
 	        'modifiedtime' => array('name'=>'modifiedtime','type'=>'xsd:string'),
 	     )
-);		
-
+);	
+$server->wsdl->addComplexType(
+        'ticket_comments_array',
+        'complexType',
+        'array',
+        '',
+        array(
+                'comments' => array('name'=>'comments','type'=>'tns:xsd:string'),
+             )
+);	
+$server->wsdl->addComplexType(
+        'ticket_update_comment_array',
+        'complexType',
+        'array',
+        '',
+        array(
+                'ticketid' => array('name'=>'ticketid','type'=>'tns:xsd:string'),
+                'contact_id' => array('name'=>'contact_id','type'=>'tns:xsd:string'),
+                'createdtime' => array('name'=>'createdtime','type'=>'tns:xsd:string'),
+                'comments' => array('name'=>'comments','type'=>'tns:xsd:string'),
+             )
+);	
 //Added for User Details
 $server->wsdl->addComplexType(
 	'user_array',
@@ -390,6 +410,21 @@ $server->register(
 	'get_tickets_list',
 	array('user_name'=>'xsd:string','id'=>'xsd:string'),
 	array('return'=>'tns:tickets_list_array'),
+	$NAMESPACE);
+
+$server->register(
+	'get_ticket_comments',
+	array('id'=>'xsd:string'),
+	array('return'=>'tns:ticket_comments_array'),
+	$NAMESPACE);
+
+$server->register(
+	'update_ticket_comment',
+	array('ticketid'=>'xsd:string'),
+	array('ownerid'=>'xsd:string'),
+	array('createdtime'=>'xsd:string'),
+	array('comments'=>'xsd:string'),
+	array('return'=>'tns:ticket_update_comment_array'),
 	$NAMESPACE);
 
 $server->register(
@@ -736,6 +771,15 @@ function contact_by_email($user_name,$email_address)
     return $output_list;
 }
 
+function get_ticket_comments($ticketid)
+{
+	$seed_ticket = new HelpDesk();
+        $output_list = Array();
+
+	$response = $seed_ticket->get_ticket_comments_list($ticketid);
+
+	return $response;
+}
 function get_tickets_list($user_name,$id)
 {
 //	require_once('modules/Users/User.php');
@@ -761,7 +805,7 @@ function get_tickets_list($user_name,$id)
 			"status"=>$ticket[status],
 			"category"=>$ticket[category],
 			"description"=>$ticket[description],
-			"resolution"=>$ticket[resolution],
+			"solution"=>$ticket[solution],
                         "createdtime"=>$ticket[createdtime],
                         "modifiedtime"=>$ticket[modifiedtime],
  			);
@@ -1249,8 +1293,24 @@ function create_ticket($title,$description,$priority,$category,$user_name,$conta
     	//$ticket->saveentity("HelpDesk");
     	$ticket->save("HelpDesk");
 
+	$_REQUEST['name'] = '[ Ticket ID : '.$ticket->id.' ] '.$title;
+	$body = ' Ticket ID : '.$ticket->id.'<br> Ticket Title : '.$title.'<br><br>';
+	$_REQUEST['description'] = $body.$description;
+	$_REQUEST['return_module'] = 'HelpDesk';
+	$_REQUEST['contact_id'] = $contact_id; 
+	$_REQUEST['parent_id'] = $contact_id; 
+	$_REQUEST['assigned_user_id'] = $contact_id; 
+	require_once('modules/Emails/send_mail.php');
+
 	return get_tickets_list($user_name,$contact_id); 
 	//return $ticket->id;
+}
+function update_ticket_comment($ticketid,$ownerid,$createdtime,$comments)
+{
+	global $adb;
+	$servercreatedtime = date("Y-m-d H:i:s");
+	$sql = "insert into ticketcomments values('',".$ticketid.",'".$comments."','".$ownerid."','customer','".$servercreatedtime."')";
+	$adb->query($sql);
 }
 function authenticate_user($username,$password)
 {
