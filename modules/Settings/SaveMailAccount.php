@@ -29,12 +29,12 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
 
 if(isset($_REQUEST['edit']) && $_REQUEST['edit'] && $_REQUEST['record']!='')
 {
-	$sql="update mail_accounts set display_name = '".$displayname."', mail_id = '".$email."', account_name = '".$account_name."', mail_protocol = '".$mailprotocol."', mail_username = '".$server_usermame."', mail_password='".$server_password."', mail_severname='".$mail_servername."' where id = ".$id;
+	$sql="update mail_accounts set display_name = '".$displayname."', mail_id = '".$email."', account_name = '".$account_name."', mail_protocol = '".$mailprotocol."', mail_username = '".$server_username."', mail_password='".$server_password."', mail_servername='".$mail_servername."' where account_id = ".$id;
 }
 else
 {
 	$account_id = $adb->getUniqueID("mail_accounts");
-	$sql="insert into mail_accounts values(" .$account_id .",'".$current_user->id."','".$displayname."','".$email."','".$account_name."','".$mailprotocol."','".$server_username."','".$server_password."','".$mail_servername."',0,0)";
+	$sql="insert into mail_accounts values(" .$account_id .",'".$current_user->id."','".$displayname."','".$email."','".$account_name."','".$mailprotocol."','".$server_username."','".$server_password."','".$mail_servername."',1,0)";
 }
 
 $adb->query($sql);

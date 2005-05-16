@@ -53,9 +53,10 @@ echo '<br><br>';
 		<tr><td COLSPAN="12" class="blackLine"><IMG SRC="<?php echo $image_path;?>blank.gif"></td></tr>
 <?php
    global $current_user;
-   $sql = "select * from mail_accounts where user_id=".$current_user->id;
+   $sql = "select * from mail_accounts where status=1 and user_id=".$current_user->id;
    $result = $adb->query($sql);
    $temprow = $adb->fetch_array($result);
+   $rowcount = $adb->num_rows($result);
 $edit="Edit  ";
 $del="Del  ";
 $bar="  | ";
@@ -66,15 +67,16 @@ $entity=$_REQUEST['entity'];
 
 
 require_once('modules/Users/UserInfoUtil.php');
+if($rowcount!=0)
+{
 do
 {
-  //$name=$temprow["name"];
+
   if ($cnt%2==0)
   printf('<tr class="evenListRow"> <td height="25">&nbsp;<input type="checkbox" name="select_id"></td>');
   else
   printf('<tr class="oddListRow"> <td height="25">&nbsp;<input type="checkbox" name="select_id"></td>');
   $templatename = $temprow["templatename"]; 
-  #printf("<a href=index.php?module=Users&action=populatetemplate&templatename=".$templatename."&entityid=".$entityid."&entity=".$entity.">%s</a></td>",$temprow["templatename"]);
   printf('<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'%s"></td>','blank.gif');
   printf("<td height='25'>&nbsp;%s</td>",$temprow["display_name"]);
   printf('<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'%s"></td>','blank.gif');
@@ -86,11 +88,13 @@ do
   $DEFAULT="Selected";
   printf('<td align=center><input type="radio" name="set_default" value="%s" '.$DEFAULT.'></td>',$temprow["account_id"]);
   printf('<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'%s"></td>','blank.gif');
-  printf('<td>&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&account_id=%s">'.$mod_strings["Edit"].'</a></td>',$temprow["account_id"]);
+  printf('<td>&nbsp;<a href="index.php?module=Settings&action=AddMailAccount&record=%s">'.$mod_strings["Edit"].'</a></td>',$temprow["account_id"]);
   $cnt++;
   printf("</tr>");	
   $DEFAULT='';
-}while($temprow = $adb->fetch_array($result));
+}
+while($temprow = $adb->fetch_array($result));
+}
 ?>
 </tbody>
 </table>

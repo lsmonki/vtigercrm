@@ -222,7 +222,7 @@ $mod_strings = Array(
 
 //Added fields for Title Informations -- after 4 Beta
 
-'LBL_EMAIL_CONFIG'=>'Email Configuration',
+'LBL_EMAIL_CONFIG'=>'Outgoing Mail Server Configuration',
 
 'LBL_WORD_INTEGRATION'=>'Word Integration:',
 
@@ -353,7 +353,7 @@ $mod_strings = Array(
 
 'LBL_CONFIGURATION'=>'Configuration',
 
-'LBL_CONFIGURE_MAIL_SERVER'=>' - Configure Mail Server',
+'LBL_CONFIGURE_MAIL_SERVER'=>' - Configure Outgoing Mail Server',
 
 'LBL_BACKUP_SERVER_CONFIGURATION'=>'Backup Server Configuration',
 
@@ -423,7 +423,8 @@ $mod_strings = Array(
 'LBL_DEFAULT'=>'Default',
 'LBL_IMAP'=>'IMAP',
 'LBL_POP'=>'POP',
-
+'LBL_WEB_MAIL_CONFIG'=>'Web Mail Configuration',
+'LBL_CONFIGURE_WEB_MAIL'=>' - Configure Web Mail',
 
 );
 

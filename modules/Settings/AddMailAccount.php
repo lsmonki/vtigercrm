@@ -29,6 +29,29 @@ require_once($theme_path.'layout_utils.php');
 $xtpl=new XTemplate ('modules/Settings/AddMailAccount.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
+$xtpl->assign("POP_SELECT", "CHECKED");
+
+if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
+{
+	$sql = "select * from mail_accounts where account_id=".$_REQUEST['record'];
+	$result = $adb->query($sql);
+	$rowcount = $adb->num_rows($result);
+	if ($rowcount!=0)
+	{
+		while($temprow = $adb->fetchByAssoc($result))
+		{
+			$xtpl->assign("DISPLAYNAME", $temprow['display_name']);
+			$xtpl->assign("EMAIL", $temprow['mail_id']);
+			$xtpl->assign("ACCOUNTNAME", $temprow['account_name']);
+			$xtpl->assign($temprow['mail_protocol'],$temprow['mail_protocol']);
+			$xtpl->assign("SERVERUSERNAME", $temprow['mail_username']);
+			$xtpl->assign("SERVERPASSWORD", $temprow['mail_password']);
+			$xtpl->assign("SERVERNAME", $temprow['mail_servername']);
+			$xtpl->assign("RECORD_ID", $temprow['account_id']);
+			$xtpl->assign("EDIT", "TRUE");
+		}
+	}
+}	
 
 /*$sql="select * from systems where server_type = 'email'";
 $result = $adb->query($sql);
