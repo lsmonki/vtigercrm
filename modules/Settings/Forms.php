@@ -33,6 +33,10 @@ global $mod_strings;
 global $app_strings;
 
 $lbl_last_name = $mod_strings['LBL_LIST_LAST_NAME'];
+$lbl_email_id = $mod_strings['LBL_EMAIL_ADDRESS'];
+$lbl_user_name = $app_strings['LBL_LIST_USER_NAME'];
+$lbl_password = $mod_strings['LBL_LIST_PASSWORD'];
+$lbl_servername = $mod_strings['LBL_MAIL_SERVER_NAME'];
 $err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
 $err_invalid_email_address = $app_strings['ERR_INVALID_EMAIL_ADDRESS'];
 
@@ -55,24 +59,31 @@ function trim(s) {
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (trim(form.last_name.value) == "") {
+	if (trim(form.email.value) == "") {
 		isError = true;
-		errorMessage += "\\n$lbl_last_name";
+		errorMessage += "\\n$lbl_email_id";
+	}
+	if (trim(form.server_username.value) == "") {
+		isError = true;
+		errorMessage += "\\n$lbl_user_name";
+	}
+	if (trim(form.server_password.value) == "") {
+		isError = true;
+		errorMessage += "\\n$lbl_password";
+	}
+	if (trim(form.mail_servername.value) == "") {
+		isError = true;
+		errorMessage += "\\n$lbl_servername";
 	}
 
 	if (isError == true) {
 		alert("$err_missing_required_fields" + errorMessage);
 		return false;
 	}
-	if (trim(form.email1.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email1.value)) {
-		alert('"' + form.email1.value + '" $err_invalid_email_address');
+	if (trim(form.email.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email.value)) {
+		alert('"' + form.email.value + '" $err_invalid_email_address');
 		return false;
 	}
-	if (trim(form.email2.value) != "" && !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(form.email2.value)) {
-		alert('"' + form.email2.value + '" $err_invalid_email_address');
-		return false;
-	}
-
 	return true;
 }
 

@@ -80,8 +80,6 @@ $mod_strings = Array(
 
 'PRODUCTCUSTOMFIELDS'=>'Product Custom Fields',
 
-
-
 'EDITLEADPICKLISTVALUES'=>'Edit Lead PickList ',
 
 'EDITACCOUNTPICKLISTVALUES'=>'Edit Account PickList ',
@@ -406,6 +404,26 @@ $mod_strings = Array(
 'LBL_MANUFACTURER'=>'Manufacturer',
 
 'LBL_PRODUCT_CATEGORY'=>'Product Category',
+
+//Added for Web based Email client integration (post 4.0.1 release)
+
+'LBL_ADD_MAIL_ACCOUNT'=>'Add Mail Account',
+'LBL_NEW_MAIL_ACCOUNT_TITLE'=>'New Mail Account [Alt+M]',
+'LBL_NEW_MAIL_ACCOUNT_KEY'=>'M',
+'LBL_NEW_MAIL_ACCOUNT_LABEL'=>'New Mail Account',
+'LBL_GENERAL_INFO'=>'General Information',
+'LBL_DISPLAY_NAME'=>'Display Name',
+'LBL_MAIL_PROTOCOL'=>'Mail Protocol',
+'LBL_LIST_PASSWORD'=>'Password',
+'LBL_MAIL_SERVER_NAME'=>'Mail Server Name',
+'LBL_TEST_SETTINGS'=>'Test my account setting immediately',
+'LBL_TEST_BUTTON_TITLE'=>'Test my account now! [Alt+T]',
+'LBL_TEST_BUTTON_KEY'=>'T',
+'LBL_TEST_BUTTON_LABEL'=>'Test my account now!',
+'LBL_DEFAULT'=>'Default',
+'LBL_IMAP'=>'IMAP',
+'LBL_POP'=>'POP',
+
 
 );
 
