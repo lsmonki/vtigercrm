@@ -3766,4 +3766,295 @@
                 </data>
         </table>
 
+	<table name="quotes">
+		<field name="quoteid" type="I" size="19">
+			<KEY/>
+                    <NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="subject" type="C" size="100"></field>
+		<field name="potentialid" type="I" size="19"></field>
+		<field name="quotestage" type="C" size="200"></field>
+		<field name="validtill" type="D"></field>
+		<field name="team" type="C" size="200"></field>
+		<field name="contactid" type="I" size="19"></field>
+		<field name="currency" type="C" size="100"></field>
+		<field name="subtotal" type="N" size="11.3"></field>
+		<field name="carrier" type="C" size='100'></field>
+		<field name="shipping" type="C" size="100"></field>
+		<field name="inventorymanager" type="I" size="19"></field>
+		<field name="type" type="C" size="100"></field>
+		<field name="tax" type="N" size="3.2"></field>
+		<field name="total" type="N" size="11.3"></field>
+		
+                  
+<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="quotes" alter="true">
+	<constraint>ADD CONSTRAINT fk_Quotes1 FOREIGN KEY (quoteid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="quotes" alter="true">
+	<constraint>ADD CONSTRAINT fk_Quotes2 FOREIGN KEY (potentialid) REFERENCES potential(potentiaidl) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="quotes" alter="true">
+	<constraint>ADD CONSTRAINT fk_Quotes3 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="quotesbillads">
+		<field name="quotebilladdressid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="bill_city" type="C" size="30"></field>
+		<field name="bill_code" type="C" size="30"></field>
+		<field name="bill_country" type="C" size="30"></field>
+		<field name="bill_state" type="C" size="30"></field>
+		<field name="bill_street" type="C" size="250"></field>
+		<opt>Type=InnoDB</opt> 
+		<data>
+		</data>
+	</table>
+
+
+	<table name="quotesbillads" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_QuotesBillAds FOREIGN KEY (quotebilladdressid) REFERENCES quotes(quoteid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="quotesshipads">
+		<field name="quoteshipaddressid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="ship_city" type="C" size="30"></field>
+		<field name="ship_code" type="C" size="30"></field>
+		<field name="ship_country" type="C" size="30"></field>
+		<field name="ship_state" type="C" size="30"></field>
+		<field name="ship_street" type="C" size="250"></field>
+		<opt>Type=InnoDB</opt> 
+		<data>
+		</data>
+	</table>
+
+	<table name="quotesshipads" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_QuotesShipAds FOREIGN KEY (quoteshipaddressid) REFERENCES quotes(quoteid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="quotesproductrel">
+		<field name="quoteid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="productid" type="I" size="19">
+			<KEY/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="QuotesProductRel_IDX0">
+			<col>quoteid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="QuotesProductRel_IDX1">
+			<col>productid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="quotesproductrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_QuotesProductRel FOREIGN KEY (quoteid) REFERENCES quotes(quoteid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="quotesproductrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_QuotesProductRel2 FOREIGN KEY (productid) REFERENCES products(productid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="purchaseorder">
+		<field name="purchaseorderid" type="I" size="19">
+			<KEY/>
+                    <NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="subject" type="C" size="100"></field>
+		<field name="quoteid" type="I" size="19"></field>
+		<field name="vendorid" type="I" size="19"></field>
+		<field name="requisition_no" type="C" size="100"></field>
+		<field name="tracking_no" type="C" size="100"></field>
+		<field name="contactid" type="I" size="19"></field>
+		<field name="duedate" type="D"></field>
+		<field name="carrier" type="C" size='100'></field>
+		<field name="type" type="C" size="100"></field>
+		<field name="salestax" type="N" size="3.2"></field>
+		<field name="salescommission" type="N" size="3.2"></field>
+		<field name="exciseduty" type="N" size="3.2"></field>
+		<field name="total" type="N" size="11.3"></field>
+		
+                  
+<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="purchaseorder" alter="true">
+	<constraint>ADD CONSTRAINT fk_PO1 FOREIGN KEY (purchaseorderid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="purchaseorder" alter="true">
+	<constraint>ADD CONSTRAINT fk_PO2 FOREIGN KEY (vendorid) REFERENCES vendor(vendorid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="purchaseorder" alter="true">
+	<constraint>ADD CONSTRAINT fk_PO2 FOREIGN KEY (quoteid) REFERENCES quotes(quote) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="purchaseorder" alter="true">
+	<constraint>ADD CONSTRAINT fk_PO3 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="pobillads">
+		<field name="pobilladdressid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="bill_city" type="C" size="30"></field>
+		<field name="bill_code" type="C" size="30"></field>
+		<field name="bill_country" type="C" size="30"></field>
+		<field name="bill_state" type="C" size="30"></field>
+		<field name="bill_street" type="C" size="250"></field>
+		<opt>Type=InnoDB</opt> 
+		<data>
+		</data>
+	</table>
+
+
+	<table name="pobillads" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_PoBillAds FOREIGN KEY (pobilladdressid) REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="poshipads">
+		<field name="poshipaddressid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="ship_city" type="C" size="30"></field>
+		<field name="ship_code" type="C" size="30"></field>
+		<field name="ship_country" type="C" size="30"></field>
+		<field name="ship_state" type="C" size="30"></field>
+		<field name="ship_street" type="C" size="250"></field>
+		<opt>Type=InnoDB</opt> 
+		<data>
+		</data>
+	</table>
+
+	<table name="poshipads" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_PoShipAds FOREIGN KEY (poshipaddressid) REFERENCES purchaseorder(purchaseorderid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="poproductrel">
+		<field name="purchaseorderid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="productid" type="I" size="19">
+			<KEY/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="PoProductRel_IDX0">
+			<col>quoteid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="PoProductRel_IDX1">
+			<col>productid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="poproductrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_PoProductRel FOREIGN KEY (purchaseorderid) REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="poproductrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_PoProductRel2 FOREIGN KEY (productid) REFERENCES products(productid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
 </schema>
