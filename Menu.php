@@ -35,7 +35,9 @@ $module_menu_array = Array('Contacts' => $app_strings['LNK_NEW_CONTACT'],
 	                   'Notes' => $app_strings['LNK_NEW_NOTE'],
 	                   'Emails' => $app_strings['LNK_NEW_EMAIL'],
 			   'Events' => $app_strings['LNK_NEW_EVENT'],
-	                   'Tasks' => $app_strings['LNK_NEW_TASK']
+	                   'Tasks' => $app_strings['LNK_NEW_TASK'],
+			   'Quotes' => $app_strings['LNK_NEW_QUOTE'],	
+			   'Orders' => $app_strings['LNK_NEW_PO']	
 	                    );
 $module_menu = Array();
 $i= 0;
