@@ -957,7 +957,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<td width="20%" class="dataLabel" valign="top"><font color="red">*</font> '.$mod_strings[$fieldlabel].':</td>';
         	$custfld .= '<td><textarea name="'.$fieldname.'" cols="30" rows="2">'.$value.'</textarea></td>';
 	}
-	elseif($uitype == 52)
+	elseif($uitype == 52 || $uitype == 77)
 	{
 		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		global $current_user;
@@ -969,8 +969,17 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$assigned_user_id = $current_user->id;
 		}
+		if($uitype == 52)
+		{
+			$combo_lbl_name = 'assigned_user_id';
+		}
+		elseif($uitype == 77)
+		{
+			$combo_lbl_name = 'assigned_user_id1';
+		}
+
 		$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
-                $custfld .= '<td width="30%"><select name="assigned_user_id">'.$users_combo.'</select></td>';
+                $custfld .= '<td width="30%"><select name="'.$combo_lbl_name.'">'.$users_combo.'</select></td>';
 	}
 	elseif($uitype == 53)     
 	{  
@@ -1395,6 +1404,36 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
         	$custfld .= '<td width="30%"><input name="vendor_name" readonly type="text" value="'.$vendor_name.'"><input name="vendor_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=VendorPopup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
 	}
+	elseif($uitype == 76)
+	{
+
+		if($value != '')
+               {
+                       $potential_name = getPotentialName($value);
+               }
+	       elseif(isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '')
+	       {
+			$value = $_REQUEST['potental_id'];
+			$potential_name = getPotentialName($value);
+	       }		 	
+		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+        	$custfld .= '<td width="30%"><input name="potential_name" readonly type="text" value="'.$potential_name.'"><input name="potential_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
+	}
+	elseif($uitype == 78)
+	{
+
+		if($value != '')
+               {
+                       $quote_name = getQuoteName($value);
+               }
+	       elseif(isset($_REQUEST['quote_id']) && $_REQUEST['quote_id'] != '')
+	       {
+			$value = $_REQUEST['quote_id'];
+			$potential_name = getQuoteName($value);
+	       }		 	
+		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+        	$custfld .= '<td width="30%"><input name="quote_name" readonly type="text" value="'.$quote_name.'"><input name="quote_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
+	}
 	else
 	{
 		$custfld .= '<td width="20%" class="dataLabel">';
@@ -1454,7 +1493,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		
 
 	}
-	elseif($uitype == 52)
+	elseif($uitype == 52 || $uitype == 77)
 	{
 		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$user_id = $col_fields[$fieldname];
@@ -1738,6 +1777,28 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
                 $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Products&action=VendorDetailView&record='.$vendor_id.'">'.$vendor_name.'</a></td>';
         }
+	elseif($uitype == 76)
+        {
+                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+                $potential_id = $col_fields[$fieldname];
+                if($potential_id != '')
+                {
+                        $potential_name = getPotentialName($potential_id);
+                }
+
+                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a></td>';
+        }
+	elseif($uitype == 78)
+        {
+                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+                $quote_id = $col_fields[$fieldname];
+                if($quote_id != '')
+                {
+                        $quote_name = getQuoteName($quote_id);
+                }
+
+                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Quotes&action=DetailView&record='.$quote_id.'">'.$quote_name.'</a></td>';
+        }
 	else
 	{
 	  $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
@@ -1767,13 +1828,21 @@ function getAccountName($account_id)
 	$accountname = $adb->query_result($result,0,"accountname");
 	return $accountname;
 }
-function getProductName($product_id)
+function getproductname($product_id)
 {
 	global $adb;
 	$sql = "select productname from products where productid=".$product_id;
         $result = $adb->query($sql);
 	$productname = $adb->query_result($result,0,"productname");
 	return $productname;
+}
+function getPotentialName($potential_id)
+{
+	global $adb;
+	$sql = "select potentialname from potential where potentialid=".$potential_id;
+        $result = $adb->query($sql);
+	$potentialname = $adb->query_result($result,0,"potentialname");
+	return $potentialname;
 }
 
 function getContactName($contact_id)
@@ -1796,6 +1865,14 @@ function getVendorName($vendor_id)
         return $vendor_name;
 }
 
+function getQuoteName($quote_id)
+{
+        global $adb;
+        $sql = "select * from quotes where quoteid=".$quote_id;
+        $result = $adb->query($sql);
+        $quote_name = $adb->query_result($result,0,"subject");
+        return $quote_name;
+}
 function getGroupName($id, $module)
 {
 	global $adb;
@@ -2275,6 +2352,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				}
 				else
 				{
+				
+				
 					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
 					{
 						$status = $adb->query_result($list_result,$i-1,"status");
@@ -2324,11 +2403,17 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$account_name = getAccountName($account_id);
 						$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
 					}
-					elseif($module == 'PriceBook' && $name == 'Product Name')
+					elseif(($module == 'PriceBook' || $module == 'Quotes' || 'Orders') && $name == 'Product Name')
 					{
 						$product_id = $adb->query_result($list_result,$i-1,"productid");
 						$product_name = getProductName($product_id);
 						$value = '<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
+					}
+					elseif($module == 'Quotes' && $name == 'Potential Name')
+					{
+						$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
+						$potential_name = getPotentialName($potential_id);
+						$value = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
 					}
 					elseif($owner_id == 0 && $name == 'Assigned To')
                                        {
@@ -2336,6 +2421,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                        }
 					else
 					{
+						
 						$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
 						$field_result = $adb->query($query);
 						$list_result_count = $i-1;
@@ -2498,10 +2584,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 {
 	global $adb;
 	$uitype = $adb->query_result($field_result,0,"uitype");
+	
 	$colname = $adb->query_result($field_result,0,"columnname");
 	$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
-	
-	if($uitype == 52 || $uitype == 53)
+		
+	if($uitype == 52 || $uitype == 53 || $uitype == 77)
 	{
                 $user_name = getUserName($temp_val);
 		$value = $user_name;
@@ -2661,7 +2748,32 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		else
 			$value='';
 	}
+	elseif($uitype == 78)
+        {
 
+		global $adb;
+		if($temp_val != '')
+                {
+			
+                        $quote_name = getQuoteName($temp_val);
+			$value= '<a href=index.php?module=Quotes&action=DetailView&record='.$temp_val.'>'.$quote_name.'</a>';
+		}
+		else
+			$value='';
+        }
+	elseif($uitype == 75)
+        {
+
+		global $adb;
+		if($temp_val != '')
+                {
+			
+                        $vendor_name = getVendorName($temp_val);
+			$value= '<a href=index.php?module=Products&action=VendorDetailView&record='.$temp_val.'>'.$vendor_name.'</a>';
+		}
+		else
+			$value='';
+        }
 	else
 	{
 	
@@ -2809,6 +2921,14 @@ function getListQuery($module,$where='')
 	if($module == "PriceBook")
 	{
 		$query = "select crmentity.crmid, pricebook.*,pricebookproductrel.productid from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid inner join pricebookproductrel on pricebookproductrel.pricebookid=pricebook.pricebookid where crmentity.deleted=0";
+	}
+	if($module == "Quotes")
+	{
+		$query = "select crmentity.*, quotes.*, quotesbillads.*, quotesshipads.*, quotesproductrel.productid from quotes inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid  inner join quotesproductrel on quotes.quoteid=quotesproductrel.quoteid where crmentity.deleted=0";
+	}
+	if($module == "Orders")
+	{
+		$query = "select crmentity.*, purchaseorder.*, pobillads.*, poshipads.*, poproductrel.productid from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid  inner join poproductrel on purchaseorder.purchaseorderid=poproductrel.purchaseorderid where crmentity.deleted=0";
 	}
 	global $others_permission_id;
 	global $current_user;	
