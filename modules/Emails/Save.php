@@ -224,7 +224,16 @@ function deleteFile($dir,$filename)
 $_REQUEST['return_id']=$return_id;
 //echo 'return..'.$return_module.'/'.$return_action.'<br>parent id='.$parent_id.'<br>return id = '.$return_id.'/'.$filename;
 if( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
+{
 	include("modules/Emails/send_mail.php");
+}
+elseif(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'mailbox')
+{
+	header("Location: index.php?action=$return_action&module=$return_module");
+	
+}
 else
+{
 	header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
+}
 ?>

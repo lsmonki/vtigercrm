@@ -102,6 +102,8 @@ $mod_strings = Array(
 'MESSAGE_ADD_USER_OR_CONTACT'=>'Please Add any User(s) or Contact(s)...',
 'MESSAGE_MAIL_SENT_SUCCESSFULLY'=>' Mail(s) sent successfully!',
 
+// Added for web mail post 4.0.1 release
+'LBL_FETCH_WEBMAIL'=>'Fetch Web Mail',
 );
 
 ?>

@@ -631,6 +631,11 @@ $app_strings = Array(
 
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
 'LBL_TITLE_OR_DESCRIPTION'=>'Title / Description',
+
+//Added for web mail 
+'LBL_ADD_VTIGER_TITLE'=>'Add to vtigerCRM',
+'LBL_ADD_VTIGER_BUTTON_KEY'=>'Add to vtigerCRM',
+'LBL_ADD_VTIGER_BUTTON_LABEL'=>'Add to vtigerCRM',
 );
 
 
