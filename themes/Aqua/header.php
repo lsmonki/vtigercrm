@@ -128,8 +128,9 @@ $xtpl->parse("main.sub_menu");
 $xtpl->assign("TITLE", $app_strings['LBL_SEARCH']);
 $xtpl->parse("main.left_form.left_form_search");
 $xtpl->parse("main.left_form");
-
-$xtpl->assign("TITLE", $app_strings['LBL_LAST_VIEWED']);
+if($currentModule != "Rss")
+{
+$xtpl->assign("LASTVIEWED_TITLE", $app_strings['LBL_LAST_VIEWED']);
 
 $tracker = new Tracker();
 $history = $tracker->get_recently_viewed($current_user->id);
@@ -162,10 +163,9 @@ if (count($history) > 0) {
 else {
 		$xtpl->parse("main.left_form.left_form_recent_view.left_form_recent_view_empty");
 }
-
 $xtpl->parse("main.left_form.left_form_recent_view");
 $xtpl->parse("main.left_form");
-
+}
 
 //check for the access for Create/Edit and enable or disable 
 //check for the presence of the currentModule and  also for EditView permission
@@ -191,13 +191,33 @@ if(isset($QuickCreateForm) && $QuickCreateForm == 'true')
 	      	$xtpl->parse("main.left_form_new_record");
 	}
 }
+
+if($currentModule == "Rss")
+{
+        require_once("modules/".$currentModule."/Forms.php");
+        if (function_exists('get_rssfeeds_form'))
+        {
+                $xtpl->assign("RSSFEEDS_TITLE","RSS Feeds:");
+                $xtpl->assign("RSSFEEDS", get_rssfeeds_form());
+                $xtpl->parse("main.left_form_rss");
+        }
+}
              
 $xtpl->assign("CLOCK_TITLE", $app_strings['LBL_WORLD_CLOCK']);
 $xtpl->assign("WORLD_CLOCK", get_world_clock($image_path));
+if($currentModule != "Rss")
+{
+ $xtpl->parse("main.left_form_clock");
+}
+
 
 $xtpl->assign("CALC_TITLE", $app_strings['LBL_CALCULATOR']);
 $xtpl->assign("CALC", get_calc($image_path));
-		
+if($currentModule != "Rss")
+{
+ $xtpl->parse("main.left_form_calculator");
+}
+
 $xtpl->parse("main");
 $xtpl->out("main");
 ?>
