@@ -259,6 +259,8 @@ $app_strings = Array(
 'LNK_NEW_TASK'=>'New Task',
 
 'LNK_NEW_EVENT'=>'New Event',
+'LNK_NEW_QUOTE'=>'New Quote',
+'LNK_NEW_PO'=>'New Purchase Order',
 
 
 
@@ -628,11 +630,13 @@ $app_strings = Array(
 'Emails'=>'Emails',
 'HelpDesk'=>'HelpDesk',
 'Activities'=>'Activities',
+'Quotes'=>'Quotes',
+'Orders'=>'Orders',
 
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
 'LBL_TITLE_OR_DESCRIPTION'=>'Title / Description',
 
-//Added for web mail 
+//Added for web mail
 'LBL_ADD_VTIGER_TITLE'=>'Add to vtigerCRM',
 'LBL_ADD_VTIGER_BUTTON_KEY'=>'Add to vtigerCRM',
 'LBL_ADD_VTIGER_BUTTON_LABEL'=>'Add to vtigerCRM',
@@ -672,7 +676,12 @@ $app_list_strings = Array(
 
 				, 'HelpDesk'=>'HelpDesk'
 
-				, 'Calendar'=>'Calendar'),
+				, 'Calendar'=>'Calendar'
+
+				, 'Quotes'=>'Quotes'
+		
+				, 'Orders'=>'Orders'
+				),
 
 
 
