@@ -22,10 +22,13 @@
  
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Orders',
+'LBL_SO_MODULE_NAME'=>'Sales Order',
 'LBL_MODULE_TITLE'=>'Orders: Home',
 'LBL_SEARCH_FORM_TITLE'=>'Orders Search',
 'LBL_LIST_FORM_TITLE'=>'Purchase Order List',
+'LBL_LIST_SO_FORM_TITLE'=>'Sales Order List',
 'LBL_NEW_FORM_TITLE'=>'New Purchase Order',
+'LBL_NEW_FORM_SO_TITLE'=>'New Sales Order',
 'LBL_MEMBER_ORG_FORM_TITLE'=>'Member Organizations',
 
 'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
@@ -135,9 +138,16 @@ $mod_strings = Array(
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
 'Description'=>'Description',
+'Potential Name'=>'Potential Name',
+'Customer No'=>'Customer No',
+'Purchase Order'=>'Purchase Order',
+'Vendor Terms'=>'Vendor Terms',
+'Pending'=>'Pending',
 //Quote Info
 'LBL_PO_INFORMATION'=>'Purchase Order Information',
 'LBL_PO'=>'Purchase Order:',
+'LBL_SO_INFORMATION'=>'Sales Order Information',
+'LBL_SO'=>'Sales Order:',
 
 
 
