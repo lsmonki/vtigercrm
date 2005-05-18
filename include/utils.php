@@ -1434,6 +1434,21 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
         	$custfld .= '<td width="30%"><input name="quote_name" readonly type="text" value="'.$quote_name.'"><input name="quote_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
 	}
+	elseif($uitype == 79)
+	{
+
+		if($value != '')
+               {
+                       $purchaseorder_name = getPoName($value);
+               }
+	       elseif(isset($_REQUEST['purchaseorder_id']) && $_REQUEST['purchaseorder_id'] != '')
+	       {
+			$value = $_REQUEST['purchaseorder_id'];
+			$purchaseorder_name = getPoName($value);
+	       }		 	
+		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+        	$custfld .= '<td width="30%"><input name="purchaseorder_name" readonly type="text" value="'.$purchaseorder_name.'"><input name="purchaseorder_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Orders&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
+	}
 	else
 	{
 		$custfld .= '<td width="20%" class="dataLabel">';
@@ -1799,6 +1814,17 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
                 $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Quotes&action=DetailView&record='.$quote_id.'">'.$quote_name.'</a></td>';
         }
+	elseif($uitype == 79)
+        {
+                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+                $purchaseorder_id = $col_fields[$fieldname];
+                if($purchaseorder_id != '')
+                {
+                        $purchaseorder_name = getPoName($purchaseorder_id);
+                }
+
+                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Orders&action=DetailView&record='.$purchaseorder_id.'">'.$purchaseorder_name.'</a></td>';
+        }
 	else
 	{
 	  $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
@@ -1872,6 +1898,15 @@ function getQuoteName($quote_id)
         $result = $adb->query($sql);
         $quote_name = $adb->query_result($result,0,"subject");
         return $quote_name;
+}
+
+function getPoName($po_id)
+{
+        global $adb;
+        $sql = "select * from purchaseorder where purchaseorderid=".$po_id;
+        $result = $adb->query($sql);
+        $po_name = $adb->query_result($result,0,"subject");
+        return $po_name;
 }
 function getGroupName($id, $module)
 {
@@ -2761,6 +2796,19 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		else
 			$value='';
         }
+	elseif($uitype == 79)
+        {
+
+		global $adb;
+		if($temp_val != '')
+                {
+			
+                        $purchaseorder_name = getPoName($temp_val);
+			$value= '<a href=index.php?module=Orders&action=DetailView&record='.$temp_val.'>'.$purchaseorder_name.'</a>';
+		}
+		else
+			$value='';
+        }
 	elseif($uitype == 75)
         {
 
@@ -2801,6 +2849,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$focus->record_id = $_REQUEST['recordid'];
                                         $value = '<a href="a" LANGUAGE=javascript onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
                                 }
+				elseif($popuptype == "formname_specific")
+				{
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_formname_specific("'.$_REQUEST['form'].'", "'.$entity_id.'", "'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
+				}
 				else
 				{
 					if($colname == "lastname")
@@ -2840,6 +2892,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				{
 						
                                         $value = '<a href="index.php?action=PriceBookDetailView&module=Products&record='.$entity_id.'">'.$temp_val.'</a>';
+				}
+				elseif($module == "SalesOrder")
+				{
+						
+                                        $value = '<a href="index.php?action=SalesOrderDetailView&module=Orders&record='.$entity_id.'">'.$temp_val.'</a>';
 				}
                                 else
                                 {
@@ -2929,6 +2986,10 @@ function getListQuery($module,$where='')
 	if($module == "Orders")
 	{
 		$query = "select crmentity.*, purchaseorder.*, pobillads.*, poshipads.*, poproductrel.productid from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid  inner join poproductrel on purchaseorder.purchaseorderid=poproductrel.purchaseorderid where crmentity.deleted=0";
+	}
+	if($module == "SalesOrder")
+	{
+		$query = "select crmentity.*, salesorder.*, sobillads.*, soshipads.*, soproductrel.productid from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid  inner join soproductrel on salesorder.salesorderid=soproductrel.salesorderid where crmentity.deleted=0";
 	}
 	global $others_permission_id;
 	global $current_user;	
@@ -3289,6 +3350,10 @@ function getModuleDirName($module)
 	if($module == 'Vendor' || $module == 'PriceBook')
 	{
 		$dir_name = 'Products';	
+	}
+	elseif($module == 'SalesOrder')
+	{
+		$dir_name = 'Orders';
 	}
 	else
 	{
