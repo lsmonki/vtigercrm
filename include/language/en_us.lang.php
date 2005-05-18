@@ -261,6 +261,7 @@ $app_strings = Array(
 'LNK_NEW_EVENT'=>'New Event',
 'LNK_NEW_QUOTE'=>'New Quote',
 'LNK_NEW_PO'=>'New Purchase Order',
+'LNK_NEW_SO'=>'New Sales Order',
 
 
 
@@ -635,11 +636,6 @@ $app_strings = Array(
 
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
 'LBL_TITLE_OR_DESCRIPTION'=>'Title / Description',
-
-//Added for web mail
-'LBL_ADD_VTIGER_TITLE'=>'Add to vtigerCRM',
-'LBL_ADD_VTIGER_BUTTON_KEY'=>'Add to vtigerCRM',
-'LBL_ADD_VTIGER_BUTTON_LABEL'=>'Add to vtigerCRM',
 );
 
 
