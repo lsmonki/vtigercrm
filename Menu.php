@@ -37,13 +37,17 @@ $module_menu_array = Array('Contacts' => $app_strings['LNK_NEW_CONTACT'],
 			   'Events' => $app_strings['LNK_NEW_EVENT'],
 	                   'Tasks' => $app_strings['LNK_NEW_TASK'],
 			   'Quotes' => $app_strings['LNK_NEW_QUOTE'],	
-			   'Orders' => $app_strings['LNK_NEW_PO']	
+			   'Orders' => $app_strings['LNK_NEW_PO'],	
+			   'SalesOrder' => $app_strings['LNK_NEW_SO']	
 	                    );
 $module_menu = Array();
 $i= 0;
 $add_url = "";
 foreach($module_menu_array as $module1 => $label)
 {
+	$add_url='';
+	$curr_action = 'EditView';
+	$ret_action = 'DetailView';
 	if($module1 == 'Events')
 	{
 		$module_display = 'Activities';
@@ -56,6 +60,14 @@ foreach($module_menu_array as $module1 => $label)
                 $add_url = "&activity_mode=Task";
 		$tabid = getTabid("Activities");
 	}
+	elseif($module1 == 'SalesOrder')
+	{
+		$module_display = 'Orders';
+		$tabid = getTabid("SalesOrder");
+		$curr_action = 'SalesOrderEditView';
+		$ret_action = 'SalesOrderDetailView';	
+		
+	}
 	else
 	{
 		$module_display = $module1;
@@ -66,7 +78,7 @@ foreach($module_menu_array as $module1 => $label)
 	{
 		if($permissionData[$tabid][1] ==0)
 		{
-			$tempArray = Array("index.php?module=".$module_display."&action=EditView&return_module=".$module_display."&return_action=DetailView".$add_url, $label);
+			$tempArray = Array("index.php?module=".$module_display."&action=".$curr_action."&return_module=".$module_display."&return_action=".$ret_action.$add_url, $label);
 			$module_menu[$i] = $tempArray;
 			$i++;
 		}
