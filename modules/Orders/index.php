@@ -58,7 +58,11 @@ echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_
 
 echo "\n<BR>\n";
 
-include ('modules/Orders/ListView.php'); 
+include ('modules/Orders/ListView.php');
+
+echo "\n<BR>\n";
+
+include ('modules/Orders/SalesOrderListView.php');
 
 
 ?>

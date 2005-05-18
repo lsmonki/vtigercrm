@@ -88,13 +88,13 @@ class Order extends CRMEntity {
         var $popup_type;
 
 	var $search_fields = Array(
-				'Account Name'=>Array('account'=>'accountname'),
-				'City'=>Array('accountbillads'=>'city'), 
+				'Purchase Order Id'=>Array('crmentity'=>'crmid'),
+				'Subject'=>Array('purchaseorder'=>'subject'), 
 				);
 	
 	var $search_fields_name = Array(
-				        'Account Name'=>'accountname',
-				        'City'=>'bill_city',
+				        'Purchase Order Id'=>'',
+				        'Subject'=>'subject',
 				      );
 
 	// This is the list of fields that are required.
