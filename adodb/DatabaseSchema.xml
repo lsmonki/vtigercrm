@@ -4057,4 +4057,154 @@
 		</data>
 	</table>
 
+	<table name="salesorder">
+		<field name="salesorderid" type="I" size="19">
+			<KEY/>
+                    <NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="subject" type="C" size="100"></field>
+		<field name="potentialid" type="I" size="19"></field>
+		<field name="customerno" type="C" size="100"></field>
+		<field name="purchaseorderid" type="I" size="19"></field>
+		<field name="vendorterms" type="C" size="100"></field>
+		<field name="contactid" type="I" size="19"></field>
+		<field name="vendorid" type="I" size="19"></field>
+		<field name="duedate" type="D"></field>
+		<field name="carrier" type="C" size='100'></field>
+		<field name="pending" type="C" size='200'></field>
+		<field name="type" type="C" size="100"></field>
+		<field name="salestax" type="N" size="3.2"></field>
+		<field name="salescommission" type="N" size="3.2"></field>
+		<field name="exciseduty" type="N" size="3.2"></field>
+		<field name="total" type="N" size="11.3"></field>
+		
+                  
+<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="salesorder" alter="true">
+	<constraint>ADD CONSTRAINT fk_SO1 FOREIGN KEY (salesorderid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="salesorder" alter="true">
+	<constraint>ADD CONSTRAINT fk_SO2 FOREIGN KEY (vendorid) REFERENCES vendor(vendorid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="salesorder" alter="true">
+	<constraint>ADD CONSTRAINT fk_SO2 FOREIGN KEY (purchaseorderid) REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="salesorder" alter="true">
+	<constraint>ADD CONSTRAINT fk_SO3 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="sobillads">
+		<field name="sobilladdressid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="bill_city" type="C" size="30"></field>
+		<field name="bill_code" type="C" size="30"></field>
+		<field name="bill_country" type="C" size="30"></field>
+		<field name="bill_state" type="C" size="30"></field>
+		<field name="bill_street" type="C" size="250"></field>
+		<opt>Type=InnoDB</opt> 
+		<data>
+		</data>
+	</table>
+
+
+	<table name="sobillads" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SoBillAds FOREIGN KEY (sobilladdressid) REFERENCES salesorder(salesorderid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="soshipads">
+		<field name="soshipaddressid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="ship_city" type="C" size="30"></field>
+		<field name="ship_code" type="C" size="30"></field>
+		<field name="ship_country" type="C" size="30"></field>
+		<field name="ship_state" type="C" size="30"></field>
+		<field name="ship_street" type="C" size="250"></field>
+		<opt>Type=InnoDB</opt> 
+		<data>
+		</data>
+	</table>
+
+	<table name="soshipads" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SoShipAds FOREIGN KEY (soshipaddressid) REFERENCES salesorder(salesorderid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="soproductrel">
+		<field name="salesorderid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="productid" type="I" size="19">
+			<KEY/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="SoProductRel_IDX0">
+			<col>salesorderid</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="SoProductRel_IDX1">
+			<col>productid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="soproductrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SoProductRel FOREIGN KEY (salesorderid) REFERENCES salesorder(salesorderid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="soproductrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SoProductRel2 FOREIGN KEY (productid) REFERENCES products(productid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
 </schema>
