@@ -24,6 +24,8 @@
 require_once('modules/Emails/Email.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
+
+
 //require_once('send_mail.php');
 $local_log =& LoggerManager::getLogger('index');
 
@@ -36,6 +38,54 @@ if(isset($_REQUEST['mode']))
 {
         $focus->mode = $_REQUEST['mode'];
 }
+
+
+//check if the contact already exists by using the email address as criteria
+//if contact exists, then add the email to that contact
+
+if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
+{
+  $email=$_REQUEST['fromemail'];
+  $ctctExists = checkIfContactExists($email);
+    if($ctctExists > 0)
+    {
+      $focus->column_fields['parent_id']=$ctctExists;
+      $focus->save("Emails");
+    }
+    else
+    {
+      echo 'contact not found in db!';
+    }
+}
+
+
+  function checkIfContactExists($mailid)
+  {
+    global $adb;
+    $sql = "select contactid from contactdetails where email= '".$mailid ."'";
+    // echo $sql;
+    $result = $adb->query($sql);
+    $numRows = $adb->num_rows($result);
+    if($numRows > 0)
+    {
+      return $adb->query_result($result,0,"contactid");
+    }
+    else
+    {
+      return -1;
+    }
+    //return the result
+
+  }
+
+
+
+
+
+
+
+
+
 
 //Added for retrieve the old existing attachments when duplicated without new attachment
 if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit')
