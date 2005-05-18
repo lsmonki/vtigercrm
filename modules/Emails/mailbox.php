@@ -9,10 +9,10 @@
 *
  ********************************************************************************/
 
-   $ServerName = "{localhost/imap:143/notls}INBOX"; // For a IMAP connection    (PORT 143)
+   $ServerName = "{crm-test1/imap:143/notls}INBOX"; // For a IMAP connection    (PORT 143)
    
-   $UserName = "user";
-   $PassWord = "password";
+   $UserName = "p1";
+   $PassWord = "p1";
    
    $mbox = imap_open($ServerName, $UserName,$PassWord) or die("Could not open Mailbox - try again later!");
    
@@ -25,13 +25,25 @@
 $MN=$msgCount;
 $overview=imap_fetch_overview($mbox,"1:$MN",0);
 $mime_type = get_mime_type($overview);
-$size=sizeof($overview);
+//$size=sizeof($overview);
+$size = imap_num_msg($mbox);
 global $app_strings,$current_user;
+
 if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 {
-	
+  
+  
 
-	  $msgid = $_REQUEST['view'];
+  $msgid = $_REQUEST['view'];
+  
+  $header = @imap_headerinfo($mbox, $msgid, 80, 80);
+  $fromaddress[$msgid] = $header->from[0]->host;
+  $domain = $fromaddress[$msgid];
+  $fromname[$msgid] = $header->from[0]->mailbox;
+  $sendername=$fromname[$msgid];
+  $from[$msgid]= $fromname[$msgid]."@".$fromaddress[$msgid];
+  
+  $totalfromaddress = $sendername ."@".$domain;
 	  $val=$overview[$msgid];
 	  $msg=$val->msgno;
 	  $from=$val->from;
@@ -119,8 +131,10 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
         <input type="hidden" name="action">
         <input type="hidden" name="return_module" value="Emails">
         <input type="hidden" name="return_id" value="{RETURN_ID}">
-        <input type="hidden" name="return_action" value="mailbox">';
-	$date_fmt = Array();
+        <input type="hidden" name="return_action" value="mailbox">
+        <input type="hidden" name="from" value="'.$from .'">';
+	
+        $date_fmt = Array();
 	list($mday,$mmon,$myear,$mtime)=split(" ",$date);
 	$maildate = strtotime($mday." ".$mmon." ".$myear);
 	list($date_fmt[0],$date_fmt[1],$date_fmt[2]) = split("-",$current_user->date_format);
@@ -139,7 +153,8 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 	<input type=hidden name="assigned_user_id" value="'.$current_user->id.'">
 	<input type=hidden name="description" value="'.$content.'">
 	<input type=hidden name="subject" value="'.$subj.'">
-';
+        <input type=hidden name="fromemail" value="'.$totalfromaddress.'">';
+
    echo '<input title="'.$app_strings[LBL_ADD_VTIGER_BUTTON_TITLE].'" accessKey="'.$app_strings['LBL_ADD_VTIGER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'Save\';" type="submit" name="button" value="'.$app_strings['LBL_ADD_VTIGER_BUTTON_LABEL'].'">
 	</form>';
 
@@ -147,17 +162,27 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 else
 {
 	echo "<table border=\"0\" cellspacing=\"0\" width=\"582\">";
-
+        
 	for($i=$size-1;$i>=0;$i--)
 	{
+          $header = @imap_headerinfo($mbox, $i, 80, 80);
+          $fromaddress[$i] = $header->from[0]->host;
+          $domain = $fromaddress[$i];
+          $fromname[$i] = $header->from[0]->mailbox;
+          $sendername=$fromname[$i];
+          $from[$i]= $fromname[$i]."@".$fromaddress[$i];
+          
+          $totalfromaddress = $sendername ."@".$domain;
+          
 	  $val=$overview[$i];
 	  $msg=$val->msgno;
-	  $from=$val->from;
+          $from=$val->from;
+         
 	  $date=$val->date;
 	  $subj=$val->subject;
 	  //transformHTML($subj);
 	  $seen=$val->seen;
-   
+             
 	  $from = ereg_replace("\"","",$from);
    
 	  // MAKE DANISH DATE DISPLAY
@@ -175,9 +200,9 @@ else
 	    $subj = substr($subj,0,59) ."...";
 	    get_part();
   	  }
-   
-	  echo "<tr bgcolor=\"$bgColor\"><td colspan=\"2\">$from</td><td colspan=\"2\"><a href=\"index.php?action=mailbox&module=Emails&view=".$i."\">$subj</a></td>
-   		 <td class=\"tblContent\" colspan=\"2\">$date</td></tr>\n";
+          
+	  echo "<tr bgcolor=\"$bgColor\"><td colspan=\"2\"><input type=checkbox name='addtocrm'>$from</td><td>$totalfromaddress </td><td colspan=\"2\"><a href=\"index.php?action=mailbox&module=Emails&view=".$i."\">$subj</a></td>
+   		 <td class=\"tblContent\" colspan=\"2\">$date</td></tr>\n ";
 	}
 
 	echo "</table>";
