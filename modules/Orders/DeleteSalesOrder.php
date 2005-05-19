@@ -18,13 +18,13 @@
  * defined return URL.
  ********************************************************************************/
 
-require_once('modules/Orders/Order.php');
+require_once('modules/Orders/SalesOrder.php');
 global $mod_strings;
 
 require_once('include/logging.php');
-$log = LoggerManager::getLogger('order_delete');
+$log = LoggerManager::getLogger('salesorder_delete');
 
-$focus = new Order();
+$focus = new SalesOrder();
 
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
