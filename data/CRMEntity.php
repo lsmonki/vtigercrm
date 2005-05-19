@@ -424,15 +424,17 @@ class CRMEntity extends SugarBean
 	{
 		$fldvalue = $this->getOldFileName($this->id);
 	}
-        if($i == 0)
-        {
-          $update = $columname."=".$fldvalue."";
-        }
-        else
-        {
-          $update .= ', '.$columname."=".$fldvalue."";
-        }
-
+	if($table_name != 'ticketcomments')
+	{
+		if($i == 0)
+        	{
+	          $update = $columname."=".$fldvalue."";
+        	}
+	        else
+        	{
+	          $update .= ', '.$columname."=".$fldvalue."";
+        	}
+	}
       }
       else
       {
