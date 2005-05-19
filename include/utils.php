@@ -2991,6 +2991,10 @@ function getListQuery($module,$where='')
 	{
 		$query = "select crmentity.*, salesorder.*, sobillads.*, soshipads.*, soproductrel.productid from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid  inner join soproductrel on salesorder.salesorderid=soproductrel.salesorderid where crmentity.deleted=0";
 	}
+	if($module == "Invoice")
+	{
+		$query = "select crmentity.*, invoice.*, invoicebillads.*, invoiceshipads.*, invoiceproductrel.productid from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid  inner join invoiceproductrel on invoice.invoiceid=invoiceproductrel.invoiceid where crmentity.deleted=0";
+	}
 	global $others_permission_id;
 	global $current_user;	
 	if($others_permission_id == 3 && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $module!= 'Vendor' && $module != 'PriceBook')
