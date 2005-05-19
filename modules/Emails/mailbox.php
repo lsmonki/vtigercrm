@@ -10,14 +10,13 @@
  ********************************************************************************/
 
    $ServerName = "{crm-test1/imap:143/notls}INBOX"; // For a IMAP connection    (PORT 143)
-   
    $UserName = "p1";
    $PassWord = "p1";
    
    $mbox = imap_open($ServerName, $UserName,$PassWord) or die("Could not open Mailbox - try again later!");
    
    if ($hdr = imap_check($mbox)) {
-	   echo "Num Messages " . $hdr->Nmsgs ."\n\n<br><br>";
+	   echo "Total Messages  :-> " . $hdr->Nmsgs ."\n\n<br><br>";
    	$msgCount = $hdr->Nmsgs;
    } else {
    	echo "failed";
@@ -27,24 +26,24 @@ $overview=imap_fetch_overview($mbox,"1:$MN",0);
 $mime_type = get_mime_type($overview);
 //$size=sizeof($overview);
 $size = imap_num_msg($mbox);
+
+//echo '>>>>>>>>>>>          ' .imap_num_recent($mbox);
 global $app_strings,$current_user;
 
 if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 {
-  
-  
-
   $msgid = $_REQUEST['view'];
-  
   $header = @imap_headerinfo($mbox, $msgid, 80, 80);
   $fromaddress[$msgid] = $header->from[0]->host;
   $domain = $fromaddress[$msgid];
   $fromname[$msgid] = $header->from[0]->mailbox;
   $sendername=$fromname[$msgid];
   $from[$msgid]= $fromname[$msgid]."@".$fromaddress[$msgid];
-  
+  // imap_delete($mbox, 0);
+  //imap_expunge($mbox);
   $totalfromaddress = $sendername ."@".$domain;
-	  $val=$overview[$msgid];
+  //echo '--------------           '.$msgid;
+	  $val=$overview[$msgid-1];
 	  $msg=$val->msgno;
 	  $from=$val->from;
 	  $date=$val->date;
@@ -92,12 +91,19 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 	    $subj = substr($subj,0,59) ."...";
 	    get_part();
   	  }
-	echo "<b>From<b>:" . $from ."<br>";
-	echo "<b>Date<b>:" .$date ."<br>";
-	echo "<b>Subject<b>:" .$subj."<br>";
-	echo "<b>Mail body<b>:";
+	
+	echo get_module_title("Emails",'Emails', true);
+	echo "<br>";
+	echo "<form action='' method=post>";
+	echo '<table border="0" cellpadding="0" cellspacing="1" width="80%" class="formOuterBorder">';
+	echo '<tr><td class="formSecHeader" colspan=2>Email Information</td></tr>';
+	echo "<tr><td class='datalabel' width='15%'>From:</td><td>" . $from ."</td></tr>";
+	echo "<tr><td class='datalabel'>Date:</td><td>" .$date ."</td></tr>";
+	echo "<tr><td class='datalabel'>Subject:</td><td>" .$subj."</td></tr>";
+	echo "<tr><td class='datalabel' valign=top>Mail body:</td><td>";
 	$content = get_part($mbox,$msg,$mime_type);
 	echo nl2br($content);
+	echo "</td></tr></table>";
 	
 	//get the attachment
 	$struct = imap_fetchstructure($mbox,$msg);
@@ -132,7 +138,12 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
         <input type="hidden" name="return_module" value="Emails">
         <input type="hidden" name="return_id" value="{RETURN_ID}">
         <input type="hidden" name="return_action" value="mailbox">
-        <input type="hidden" name="from" value="'.$from .'">';
+        <input type="hidden" name="from" value="'.$from .'">;
+          <input type="hidden" name="sname" value="'.$ServerName .'">;
+          <input type="hidden" name="uname" value="'.$UserName .'">;
+         <input type="hidden" name="passwd" value="'.$PassWord .'">';
+        
+        
 	
         $date_fmt = Array();
 	list($mday,$mmon,$myear,$mtime)=split(" ",$date);
@@ -153,25 +164,40 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 	<input type=hidden name="assigned_user_id" value="'.$current_user->id.'">
 	<input type=hidden name="description" value="'.$content.'">
 	<input type=hidden name="subject" value="'.$subj.'">
-        <input type=hidden name="fromemail" value="'.$totalfromaddress.'">';
-
-   echo '<input title="'.$app_strings[LBL_ADD_VTIGER_BUTTON_TITLE].'" accessKey="'.$app_strings['LBL_ADD_VTIGER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'Save\';" type="submit" name="button" value="'.$app_strings['LBL_ADD_VTIGER_BUTTON_LABEL'].'">
+        <input type=hidden name="fromemail" value="'.$totalfromaddress.'">
+        <br><input type=checkbox name=addbox value=Add>  Add to vtiger CRM  <br>
+        <input type=checkbox name=deletebox value='.$msg.'> Delete from Mail Server <br>';
+    echo '<br><table width=80%><tr><td align=center><input title="'.$app_strings[LBL_ADD_VTIGER_BUTTON_TITLE].'" accessKey="'.$app_strings['LBL_ADD_VTIGER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'Save\';" type="submit" name="button" value="'.$app_strings['LBL_SAVE_LABEL'].'">&nbsp;<input class=button type=button value=Cancel onclick=\"window.history.back()\"></td></tr></table>
 	</form>';
 
 }
 else
 {
-	echo "<table border=\"0\" cellspacing=\"0\" width=\"582\">";
+	echo get_module_title("Emails",'Emails', true); 
+	echo "<br>";
+	echo "<form action='index.php>module=Emails&action=Save' method=post>";
+	echo '<table border="0" cellpadding="0" cellspacing="0" width="80%"><tr><td>';
+	echo get_form_header("Received Emails", "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\"><tr><td><input class=\"button\" type=button value=\"Add to vtigerCRM Emails\"></td></tr></table>", false );
+	echo "</td></tr></table>";
+	echo '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="80%">';
+	echo '<tr class="ModuleListTitle" height=20>';
+	echo '<td width="10" class="moduleListTitle" style="padding:0px 3px 0px 3px;"></td>';
+	echo '<td width="15" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>';
+	echo '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Sender</td>';
+	echo '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Subject</td>';
+	echo '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Date</td>';
+	echo '</tr>';
         
 	for($i=$size-1;$i>=0;$i--)
 	{
-          $header = @imap_headerinfo($mbox, $i, 80, 80);
-          $fromaddress[$i] = $header->from[0]->host;
-          $domain = $fromaddress[$i];
-          $fromname[$i] = $header->from[0]->mailbox;
-          $sendername=$fromname[$i];
-          $from[$i]= $fromname[$i]."@".$fromaddress[$i];
+          $j = $i+1;
+          $header = @imap_headerinfo($mbox, $j, 80, 80);
           
+          $fromaddress[$j] = $header->from[0]->host;
+          $domain = $fromaddress[$j];
+          $fromname[$j] = $header->from[0]->mailbox;
+          $sendername=$fromname[$j];
+          $sender[$j]= $fromname[$j]."@".$fromaddress[$j];
           $totalfromaddress = $sendername ."@".$domain;
           
 	  $val=$overview[$i];
@@ -182,7 +208,9 @@ else
 	  $subj=$val->subject;
 	  //transformHTML($subj);
 	  $seen=$val->seen;
-             
+          //imap_delete($mbox, 1);
+          //imap_expunge($mbox);
+
 	  $from = ereg_replace("\"","",$from);
    
 	  // MAKE DANISH DATE DISPLAY
@@ -192,8 +220,10 @@ else
    
 	  if ($bgColor == "#F0F0F0") {
 	    $bgColor = "#FFFFFF";
+	    $rowClass = "oddListRow";
 	  } else {
 	    $bgColor = "#F0F0F0";
+	    $rowClass = "evenListrow";
   	  }
    
 	  if (strlen($subj) > 60) {
@@ -201,11 +231,12 @@ else
 	    get_part();
   	  }
           
-	  echo "<tr bgcolor=\"$bgColor\"><td colspan=\"2\"><input type=checkbox name='addtocrm'>$from</td><td>$totalfromaddress </td><td colspan=\"2\"><a href=\"index.php?action=mailbox&module=Emails&view=".$i."\">$subj</a></td>
-   		 <td class=\"tblContent\" colspan=\"2\">$date</td></tr>\n ";
+	  echo "<tr class=\"$rowClass\"><td height=\"21\" style=\"padding:0px 3px 0px 3px;\">$msg</td><td style=\"padding:0px 3px 0px 3px;\"><input type=checkbox NAME=\"selected_id\" onClick=toggleSelectAll(this.name,\"selectall\")>$sendername</td><td style=\"padding:0px 3px 0px 3px;\">$totalfromaddress </td><td style=\"padding:0px 3px 0px 3px;\"><a href=\"index.php?action=mailbox&module=Emails&view=".$j."\">$subj</a></td>
+   		 <td style=\"padding:0px 3px 0px 3px;\">$date</td></tr>\n ";
 	}
 
 	echo "</table>";
+	echo "</form>";
 }
 imap_close($mbox);
 
