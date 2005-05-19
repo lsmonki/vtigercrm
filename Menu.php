@@ -38,7 +38,8 @@ $module_menu_array = Array('Contacts' => $app_strings['LNK_NEW_CONTACT'],
 	                   'Tasks' => $app_strings['LNK_NEW_TASK'],
 			   'Quotes' => $app_strings['LNK_NEW_QUOTE'],	
 			   'Orders' => $app_strings['LNK_NEW_PO'],	
-			   'SalesOrder' => $app_strings['LNK_NEW_SO']	
+			   'SalesOrder' => $app_strings['LNK_NEW_SO'],	
+			   'Invoice' => $app_strings['LNK_NEW_INVOICE']	
 	                    );
 $module_menu = Array();
 $i= 0;
