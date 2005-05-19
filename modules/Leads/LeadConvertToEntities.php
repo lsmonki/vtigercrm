@@ -19,6 +19,7 @@ $createpotential = $_REQUEST["createpotential"];
 $potential_name = $_REQUEST["potential_name"];
 $close_date = $_REQUEST["closedate"];
 $current_user_id = $_REQUEST["current_user_id"];
+$assigned_user_id = $_REQUEST["assigned_user_id"];
 $accountname = $_REQUEST['account_name'];
 
 //Retrieve info from all the tables related to leads
@@ -36,7 +37,7 @@ $date_modified = date('YmdHis');
 
 $crmid = $adb->getUniqueID("crmentity");
 //$sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted) values(".$crmid.",".$current_user_id.",".$current_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0)";
-$sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(".$crmid.",".$current_user_id.",".$current_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0,'".$row['description']."')";
+$sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(".$crmid.",".$current_user_id.",".$assigned_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0,'".$row['description']."')";
 
 $adb->query($sql_crmentity);
 
@@ -64,7 +65,7 @@ $sql_insert_accountcustomfield = "INSERT INTO accountscf (accountid) VALUES (".$
  $date_modified = date('YmdHis');
 
 $crmcontactid = $adb->getUniqueID("crmentity");
-$sql_crmentity1 = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime) values(".$crmcontactid.",".$current_user_id.",".$current_user_id.",'Contacts',0,0,'".$row['description']."','".$date_entered."')";
+$sql_crmentity1 = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,description,createdtime) values(".$crmcontactid.",".$current_user_id.",".$assigned_user_id.",'Contacts',0,0,'".$row['description']."','".$date_entered."')";
 
 $adb->query($sql_crmentity1);
 
@@ -98,7 +99,7 @@ if(! isset($createpotential) || ! $createpotential == "on")
 
 
   $oppid = $adb->getUniqueID("crmentity");
-  $sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,description) values(".$oppid.",".$current_user_id.",".$current_user_id.",'Potentials',0,0,'".$date_entered."','".$row['description']."')";
+  $sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,description) values(".$oppid.",".$current_user_id.",".$assigned_user_id.",'Potentials',0,0,'".$date_entered."','".$row['description']."')";
   
   $adb->query($sql_crmentity);
 
