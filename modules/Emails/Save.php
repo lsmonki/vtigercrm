@@ -40,8 +40,29 @@ if(isset($_REQUEST['mode']))
 }
 
 
+
+
 //check if the contact already exists by using the email address as criteria
 //if contact exists, then add the email to that contact
+$ServerName = $_REQUEST['sname'];
+$UserName = $_REQUEST['uname'];
+$PassWord = $_REQUEST['passwd'];
+
+$mbox = imap_open($ServerName, $UserName,$PassWord) or die("Could not open Mailbox - try again later!");
+
+if(isset($_REQUEST['addbox']) && $_REQUEST['addbox'] != null)
+{
+  //echo '>>>>>>>>>>add box ' .$_REQUEST['addbox'];
+}
+if(isset($_REQUEST['deletebox']) && $_REQUEST['deletebox'] != null)
+{
+  //echo 'id of deleted mail is '.$_REQUEST['deletebox'];
+  imap_delete($mbox,$_REQUEST['deletebox']);
+  imap_expunge($mbox);
+  //echo '>>>>>>>>>>>deleted the mail';
+}
+
+//echo $_REQUEST['fromemail'];
 
 if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
 {
