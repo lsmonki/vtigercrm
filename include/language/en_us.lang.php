@@ -262,6 +262,7 @@ $app_strings = Array(
 'LNK_NEW_QUOTE'=>'New Quote',
 'LNK_NEW_PO'=>'New Purchase Order',
 'LNK_NEW_SO'=>'New Sales Order',
+'LNK_NEW_INVOICE'=>'New Invoice',
 
 
 
@@ -633,6 +634,7 @@ $app_strings = Array(
 'Activities'=>'Activities',
 'Quotes'=>'Quotes',
 'Orders'=>'Orders',
+'Invoice'=>'Invoice',
 
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
 'LBL_TITLE_OR_DESCRIPTION'=>'Title / Description',
@@ -677,6 +679,8 @@ $app_list_strings = Array(
 				, 'Quotes'=>'Quotes'
 		
 				, 'Orders'=>'Orders'
+
+				, 'Invoice'=>'Invoice'
 				),
 
 
