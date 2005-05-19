@@ -78,8 +78,18 @@ $bodydetails .= '<br> Category : <b>'.$_REQUEST['ticketcategories'].'</b>';
 $bodydetails .= '<br><br> Description : <br>'.$_REQUEST['description'];
 $bodydetails .= '<br><br>Solution : <br>'.$_REQUEST['solution'];
 
+$sql = "select * from ticketcomments where ticketid=".$focus->id;
+$result = $adb->query($sql);
+for($i=0;$i<$adb->num_rows($result);$i++)
+{
+	$comment = $adb->query_result($result,$i,'comments');
+	if($comment != '')
+	{
+		$commentlist .= '<br><br>'.$comment;
+	}
+}
 
-$_REQUEST['description'] = $bodysubject.$bodydetails;
+$_REQUEST['description'] = $bodysubject.$bodydetails.$commentlist;
 $_REQUEST['parent_id'] = $_REQUEST['contact_id'];
 $_REQUEST['return_id'] = $return_id;
 
