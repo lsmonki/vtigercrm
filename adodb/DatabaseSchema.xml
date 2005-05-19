@@ -4207,4 +4207,139 @@
 		</data>
 	</table>
 
+	<table name="invoice">
+		<field name="invoiceid" type="I" size="19">
+			<KEY/>
+                    <NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="subject" type="C" size="100"></field>
+		<field name="purchaseorderid" type="I" size="19"></field>
+		<field name="customerno" type="C" size="100"></field>
+		<field name="notes" type="C" size="100"></field>
+		<field name="invoicedate" type="D"></field>
+		<field name="duedate" type="D"></field>
+		<field name="invoiceterms" type="C" size="100"></field>
+		<field name="type" type="C" size="100"></field>
+		<field name="salestax" type="N" size="3.2"></field>
+		<field name="salescommission" type="N" size="3.2"></field>
+		<field name="exciseduty" type="N" size="3.2"></field>
+		<field name="subtotal" type="N" size="11.3"></field>
+		<field name="total" type="N" size="11.3"></field>
+		<field name="shipping" type="C" size="100"></field>
+		
+                  
+<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="invoice" alter="true">
+	<constraint>ADD CONSTRAINT fk_Invoice1 FOREIGN KEY (invoiceid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="invoice" alter="true">
+	<constraint>ADD CONSTRAINT fk_Invoice2 FOREIGN KEY (purchaseorderid) REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="invoicebillads">
+		<field name="invoicebilladdressid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="bill_city" type="C" size="30"></field>
+		<field name="bill_code" type="C" size="30"></field>
+		<field name="bill_country" type="C" size="30"></field>
+		<field name="bill_state" type="C" size="30"></field>
+		<field name="bill_street" type="C" size="250"></field>
+		<opt>Type=InnoDB</opt> 
+		<data>
+		</data>
+	</table>
+
+
+	<table name="invoicebillads" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_InvoiceBillAds FOREIGN KEY (invoicebilladdressid) REFERENCES invoice(invoiceid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="invoiceshipads">
+		<field name="invoiceshipaddressid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="ship_city" type="C" size="30"></field>
+		<field name="ship_code" type="C" size="30"></field>
+		<field name="ship_country" type="C" size="30"></field>
+		<field name="ship_state" type="C" size="30"></field>
+		<field name="ship_street" type="C" size="250"></field>
+		<opt>Type=InnoDB</opt> 
+		<data>
+		</data>
+	</table>
+
+	<table name="invoiceshipads" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_InvoiceShipAds FOREIGN KEY (invoiceshipaddressid) REFERENCES invoice(invoiceid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="invoiceproductrel">
+		<field name="invoiceid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="productid" type="I" size="19">
+			<KEY/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="InvoiceProductRel_IDX0">
+			<col>invoice</col>
+		</index>
+		<opt>Type=InnoDB</opt> <index name="InvoiceProductRel_IDX1">
+			<col>productid</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="invoiceproductrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_InvoiceProductRel FOREIGN KEY (invoiceid) REFERENCES invoice(invoiceid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="invoiceproductrel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_InvoiceProductRel2 FOREIGN KEY (productid) REFERENCES products(productid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
 </schema>
