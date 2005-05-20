@@ -9,9 +9,14 @@
 *
  ********************************************************************************/
 
-   $ServerName = "{crm-test1/imap:143/notls}INBOX"; // For a IMAP connection    (PORT 143)
-   $UserName = "p1";
-   $PassWord = "p1";
+//get the mail server info
+global $current_user;
+require_once('modules/Users/UserInfoUtil.php');
+$mailInfo = getMailServerInfo($current_user);
+   $temprow = $adb->fetch_array($mailInfo);
+   $ServerName = "{".$temprow["mail_servername"]."/imap:143/notls}INBOX"; // For a IMAP connection    (PORT 143)
+   $UserName = $temprow["mail_username"];
+   $PassWord = $temprow["mail_password"];
    
    $mbox = imap_open($ServerName, $UserName,$PassWord) or die("Could not open Mailbox - try again later!");
    
@@ -27,7 +32,6 @@ $mime_type = get_mime_type($overview);
 //$size=sizeof($overview);
 $size = imap_num_msg($mbox);
 
-//echo '>>>>>>>>>>>          ' .imap_num_recent($mbox);
 global $app_strings,$current_user;
 
 if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
@@ -39,10 +43,7 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
   $fromname[$msgid] = $header->from[0]->mailbox;
   $sendername=$fromname[$msgid];
   $from[$msgid]= $fromname[$msgid]."@".$fromaddress[$msgid];
-  // imap_delete($mbox, 0);
-  //imap_expunge($mbox);
   $totalfromaddress = $sendername ."@".$domain;
-  //echo '--------------           '.$msgid;
 	  $val=$overview[$msgid-1];
 	  $msg=$val->msgno;
 	  $from=$val->from;

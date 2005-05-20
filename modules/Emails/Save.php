@@ -44,25 +44,26 @@ if(isset($_REQUEST['mode']))
 
 //check if the contact already exists by using the email address as criteria
 //if contact exists, then add the email to that contact
+if((isset($_REQUEST['sname']) && $_REQUEST['sname'] != null) && ((isset($_REQUEST['uname']) && $_REQUEST['uname'] != null)))
+{
 $ServerName = $_REQUEST['sname'];
 $UserName = $_REQUEST['uname'];
 $PassWord = $_REQUEST['passwd'];
-
 $mbox = imap_open($ServerName, $UserName,$PassWord) or die("Could not open Mailbox - try again later!");
-
-if(isset($_REQUEST['addbox']) && $_REQUEST['addbox'] != null)
-{
-  //echo '>>>>>>>>>>add box ' .$_REQUEST['addbox'];
 }
 if(isset($_REQUEST['deletebox']) && $_REQUEST['deletebox'] != null)
 {
-  //echo 'id of deleted mail is '.$_REQUEST['deletebox'];
   imap_delete($mbox,$_REQUEST['deletebox']);
   imap_expunge($mbox);
-  //echo '>>>>>>>>>>>deleted the mail';
 }
-
-//echo $_REQUEST['fromemail'];
+if(isset($_REQUEST['addbox']) && $_REQUEST['addbox'] != null)
+{
+}
+else
+{
+	header("Location: index.php?module=Emails&action=index");
+	exit();
+}
 
 if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
 {
@@ -71,7 +72,7 @@ if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
     if($ctctExists > 0)
     {
       $focus->column_fields['parent_id']=$ctctExists;
-      $focus->save("Emails");
+    //  $focus->save("Emails");
     }
     else
     {
@@ -300,8 +301,7 @@ if( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
 }
 elseif(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'mailbox')
 {
-	header("Location: index.php?action=$return_action&module=$return_module");
-	
+	header("Location: index.php?module=$return_module&action=index");
 }
 else
 {

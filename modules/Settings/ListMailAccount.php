@@ -31,7 +31,7 @@ echo '<br><br>';
 		
 		<input title="<?php echo $mod_strings['LBL_NEW_MAIL_ACCOUNT_TITLE'];?>" accessKey="<?php echo $mod_strings['LBL_NEW_MAIL_ACCOUNT_KEY'];?>" class="button" onclick="this.form.action.value='AddMailAccount'" type="submit" name="button" value="  <?php echo $mod_strings['LBL_NEW_MAIL_ACCOUNT_LABEL'];?>  " >
 		
-		<input title="<?php echo $app_strings['LBL_SAVE_BUTTON_TITLE'];?>" accessKey="<?php echo $app_strings['LBL_DELETE_BUTTON_KEY'];?>" class="button" onclick="this.form.action.value='Save';return formValidate() " type="submit" name="button" value="  <?php echo $app_strings['LBL_DELETE_BUTTON_LABEL'];?>  " >
+		<input title="<?php echo $app_strings['LBL_DELETE_BUTTON_TITLE'];?>" accessKey="<?php echo $app_strings['LBL_DELETE_BUTTON_KEY'];?>" class="button" onclick="this.form.action.value='DeleteMailAccount';return formValidate() " type="submit" name="button" value="  <?php echo $app_strings['LBL_DELETE_BUTTON_LABEL'];?>  " >
 <br><br>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
 		<tbody>
@@ -53,8 +53,9 @@ echo '<br><br>';
 		<tr><td COLSPAN="12" class="blackLine"><IMG SRC="<?php echo $image_path;?>blank.gif"></td></tr>
 <?php
    global $current_user;
-   $sql = "select * from mail_accounts where status=1 and user_id=".$current_user->id;
-   $result = $adb->query($sql);
+   require_once('modules/Users/UserInfoUtil.php');
+
+   $result = getMailServerInfo($current_user);
    $temprow = $adb->fetch_array($result);
    $rowcount = $adb->num_rows($result);
 $edit="Edit  ";
@@ -62,11 +63,6 @@ $del="Del  ";
 $bar="  | ";
 $cnt=1;
 
-$entityid=$_REQUEST['entityid'];
-$entity=$_REQUEST['entity'];
-
-
-require_once('modules/Users/UserInfoUtil.php');
 if($rowcount!=0)
 {
 do

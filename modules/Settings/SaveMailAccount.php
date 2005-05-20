@@ -39,5 +39,5 @@ else
 
 $adb->query($sql);
 
-header("Location:index.php?module=Settings&action=index");
+header("Location:index.php?module=Settings&action=ListMailAccount");
 ?>
