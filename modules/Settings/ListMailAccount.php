@@ -76,7 +76,6 @@ do
   printf('<tr class="evenListRow"> <td height="25">&nbsp;<input type="checkbox" name="select_id"></td>');
   else
   printf('<tr class="oddListRow"> <td height="25">&nbsp;<input type="checkbox" name="select_id"></td>');
-  $templatename = $temprow["templatename"]; 
   printf('<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'%s"></td>','blank.gif');
   printf("<td height='25'>&nbsp;%s</td>",$temprow["display_name"]);
   printf('<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'%s"></td>','blank.gif');
