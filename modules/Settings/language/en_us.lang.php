@@ -96,6 +96,7 @@ $mod_strings = Array(
 
 'EDITTASKPICKLISTVALUES'=>'Edit Task PickList ',
 
+'EDITRSSPICKLISTVALUES'=>'Edit Rss PickList',
 
 
 // Added for Release vtigerCRM 3.2 PATCH 1.0
