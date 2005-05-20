@@ -88,6 +88,11 @@ elseif($fld_module == 'Activities')
 			,$mod_strings['LBL_PRIORITY']=>'taskpriority');
 	$standCustFld = getStdOutput($custFldArray, $mod_strings);
 }
+elseif($fld_module == 'Rss')
+{
+        $custFldArray = Array($mod_strings['LBL_RSS_CATEGORY']=>'rsscategory');
+        $standCustFld = getStdOutput($custFldArray, $mod_strings);
+}
 
  
 function fetchTabIDVal($fldmodule)
