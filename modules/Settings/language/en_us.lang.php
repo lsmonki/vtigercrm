@@ -406,6 +406,8 @@ $mod_strings = Array(
 
 'LBL_PRODUCT_CATEGORY'=>'Product Category',
 
+'LBL_RSS_CATEGORY'=>'Rss Category',
+
 //Added for Web based Email client integration (post 4.0.1 release)
 
 'LBL_ADD_MAIL_ACCOUNT'=>'Add Mail Account',
