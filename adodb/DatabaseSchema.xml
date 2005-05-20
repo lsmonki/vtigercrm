@@ -3635,6 +3635,33 @@
                 <field name="starred" type="I" size="1">
 	              <DEFAULT value="0"/>	
 		</field>
+		<field name="rsscategory" type="C" size="100">
+                        <DEFAULT value=""/>
+                </field>
+                <data>
+                </data>
+        </table>
+
+	<table name="rsscategory">
+                <field name="rsscategoryid" type="I" size="19">
+                        <KEY/>
+        <AUTOINCREMENT/>
+                </field>
+                <field name="rsscategory" type="C" size="200">
+                        <NOTNULL/>
+                </field>
+                <field name="sortorderid" type="I" size="19">
+                        <NOTNULL/>
+                        <DEFAULT value="0"/>
+                </field>
+                <field name="presence" type="I" size="1">
+                        <NOTNULL/>
+                        <DEFAULT value="1"/>
+                </field>
+                <opt>Type=InnoDB</opt> <index name="RssCategory_UK0">
+                        <UNIQUE/>
+                        <col>rsscategory</col>
+                </index>
                 <data>
                 </data>
         </table>
