@@ -425,6 +425,7 @@ $mod_strings = Array(
 'LBL_POP'=>'POP',
 'LBL_WEB_MAIL_CONFIG'=>'Web Mail Configuration',
 'LBL_CONFIGURE_WEB_MAIL'=>' - Configure Web Mail',
+'LBL_LIST_MAIL_ACCOUNT'=>'  List Mail Account',
 
 );
 
