@@ -638,6 +638,10 @@ $app_strings = Array(
 
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
 'LBL_TITLE_OR_DESCRIPTION'=>'Title / Description',
+
+//Added for RSS Module
+'LBL_RSS_FEEDS'=>'RSS Feeds',
+'LBL_ADD_RSS_FEEDS'=>'Add New RSS Feed',
 );
 
 
