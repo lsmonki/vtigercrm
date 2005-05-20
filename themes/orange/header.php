@@ -128,7 +128,9 @@ $xtpl->assign("TITLE", $app_strings['LBL_SEARCH']);
 $xtpl->parse("main.left_form.left_form_search");
 $xtpl->parse("main.left_form");
 
-$xtpl->assign("TITLE", $app_strings['LBL_LAST_VIEWED']);
+if($currentModule != "Rss")
+{
+$xtpl->assign("LASTVIEWED_TITLE", $app_strings['LBL_LAST_VIEWED']);
 
 $tracker = new Tracker();
 $history = $tracker->get_recently_viewed($current_user->id);
@@ -164,7 +166,7 @@ else {
 
 $xtpl->parse("main.left_form.left_form_recent_view");
 $xtpl->parse("main.left_form");
-
+}
 
 
 //check for the access for Create/Edit and enable or disable 
@@ -193,14 +195,30 @@ if(isset($QuickCreateForm) && $QuickCreateForm == 'true')
         }
 }
 
-
+if($currentModule == "Rss")
+{
+        require_once("modules/".$currentModule."/Forms.php");
+        if (function_exists('get_rssfeeds_form'))
+        {
+                $xtpl->assign("RSSFEEDS_TITLE","<div style='float:left'>".$app_strings['LBL_RSS_FEEDS'].":</div><div style='float:right;'><a href='javascript:openPopUp(\"addRssFeedIns\",this,\"index.php?action=Popup&module=Rss\",\"addRssFeedWin\",350,150,\"menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes\");' title='".$app_strings['LBL_ADD_RSS_FEEDS']."'><img src='".$image_path."/addrss.gif' border=0 align=absmiddle></a>&nbsp;</div>");
+		$xtpl->assign("RSSFEEDS", get_rssfeeds_form());
+                $xtpl->parse("main.left_form_rss");
+        }
+}
 
 $xtpl->assign("CLOCK_TITLE", $app_strings['LBL_WORLD_CLOCK']);
 $xtpl->assign("WORLD_CLOCK", get_world_clock($image_path));
+if($currentModule != "Rss")
+{
+ $xtpl->parse("main.left_form_clock");
+}
 
 $xtpl->assign("CALC_TITLE", $app_strings['LBL_CALCULATOR']);
 $xtpl->assign("CALC", get_calc($image_path));
-
+if($currentModule != "Rss")
+{
+ $xtpl->parse("main.left_form_calculator");
+}
 $xtpl->parse("main");
 $xtpl->out("main");
 

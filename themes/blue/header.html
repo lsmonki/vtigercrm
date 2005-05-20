@@ -95,6 +95,7 @@
 	<!--A HREF="http://www.sourceforge.net/project/showfiles.php?group_id=117522" target="_blank"><img align="absmiddle" src="{APP.LNK_OUTLOOK}" border="0"></A><br><br-->
     <!-- Between submenu and left form -->
     <!-- BEGIN: left_form -->
+    <!-- BEGIN: left_form_search -->
     <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
       <tbody>
         <tr> 
@@ -104,7 +105,6 @@
         </tr>
       </tbody>
     </table>
-    <!-- BEGIN: left_form_search -->
     <table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" class="leftFormBorder1">
       <tr> <form>
         <td nowrap> 
@@ -119,6 +119,15 @@
     <br> 
     <!-- END: left_form_search -->
     <!-- BEGIN: left_form_recent_view -->
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
+      <tbody>
+        <tr>
+                  <td width="4"><img src="{IMAGE_PATH}/head_start.gif"></td>
+          <td class="leftFormHeader" valign="middle" align="left" nowrap height="20">{LASTVIEWED_TITLE}</td>
+                  <td width="4"><img src="{IMAGE_PATH}/head_end.gif"></td>
+        </tr>
+      </tbody>
+    </table>
     <table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" class="leftFormBorder2">
       <tbody>
         <tr> 
@@ -138,16 +147,36 @@
               <td colspan="2"><img height="1" src="include/images/blank.gif"></td>
               </tr>
             </table>
-            <!-- END: left_form_recent_view -->
-            <!-- END: left_form -->
-          </td>
+           </td>
         </tr>
       </tbody>
     </table>
+    <!-- END: left_form_recent_view -->
+    <!-- END: left_form -->
     <!-- BEGIN: left_form_new_record -->
     <br>
     {NEW_RECORD}
 	<!-- END: left_form_new_record -->
+<!-- BEGIN: left_form_rss -->
+        <br>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
+      <tbody>
+        <tr>
+                  <td width="4"><img src="{IMAGE_PATH}/head_start.gif"></td>
+          <td class="leftFormHeader" valign="middle" align="left" nowrap height="20">{RSSFEEDS_TITLE}</td>
+                  <td width="4"><img src="{IMAGE_PATH}/head_end.gif"></td>
+        </tr>
+      </tbody>
+    </table>
+    <table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" class="leftFormBorder1">
+      <tr>
+        <td nowrap>
+                        {RSSFEEDS}
+          </td>
+      </tr>
+    </table>
+<!-- END: left_form_rss -->
+    <!-- BEGIN: left_form_clock -->
 	<br> 
 	<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
       <tbody>
@@ -165,7 +194,9 @@
           </td>
       </tr>
     </table>
-	<br>
+<!-- END: left_form_clock -->
+<!-- BEGIN: left_form_calculator -->
+     <br>
 	<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
       <tbody>
         <tr> 
@@ -182,6 +213,7 @@
           </td>
       </tr>
     </table>
+<!-- END: left_form_calculator -->
   </td>
   <td width="100%" class="body" valign="top" style="padding:5 0 0 10; border-bottom: 1px solid #E0E0E0;"> 
     <!-- END: main -->
