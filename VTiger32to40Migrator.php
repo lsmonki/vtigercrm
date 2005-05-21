@@ -382,7 +382,7 @@ $module;
     echo '<br><font color=blue> proceeding with customfields leading the way </font><br>';
 
     $sourcetablearray=Array("users","customfields","accounts","contacts","leads","opportunities","calls","cases","emails","meetings","notes","tasks");
-    //$sourcetablearray=Array("users","customfields","leads","accounts","contacts","opportunities");
+    //$sourcetablearray=Array("users","customfields","leads");
      
     foreach($sourcetablearray as $oldtable)
     {
@@ -533,7 +533,8 @@ function getAssociatedDataAndSave($object,$fldmaparray,$result)
   
     foreach($object->column_fields as $field=>$value)
     {
-      
+     //this is the 4.0 field coming in
+    //this has to be matched with the 3.2 fields 
       echo '<br> incoming field '.$field .' module     ' .$module;
       /*
       $pos = strrpos($field, "CF_");
@@ -541,8 +542,13 @@ function getAssociatedDataAndSave($object,$fldmaparray,$result)
       {
         $field = strtolower($field);
       }
+     if(strrpos($field,"cf_"))
+     {
+     echo '>>>>>>>>>>>>>>>>> yes boss        !' .strtoupper($field);
+        $object->column_fields[$field] = $old_data[strtoupper($field)];
+        echo '<br> newfield ' .$field .' oldfield ' .$strtoupper($field) .' value '.$old_data[strtoupper($field)]; 
+     }
       */
-      
       if(array_key_exists($field,$fldmaparray))
       {
         $mappedField = $fldmaparray[$field];
@@ -682,12 +688,12 @@ function getAssociatedDataAndSave($object,$fldmaparray,$result)
        $sum = str_replace(',','',$sum);
        $object->column_fields[$field] = $sum;
      }
-      else
+    else
       {
         $object->column_fields[$field] = $old_data[$field];
         $object->id = $old_data["id"];
         
-                  if($field == 'activitytype')
+                if($field == 'activitytype')
 		{
 			if($module == 'Tasks')
 			{
@@ -760,7 +766,8 @@ echo '<br> Lead <br>';
  
   $fieldmap_array=Array("leadid"=>"id","firstname"=>"first_name","lastname"=>"last_name","leadsource"=>"lead_source","annualrevenue"=>"annual_revenue","yahooid"=>"yahoo_id","leadstatus"=>"lead_status","noofemployees"=>"employees","lane"=>"address_street","state"=>"address_state","city"=>"address_city","code"=>"address_postalcode","country"=>"address_country");
 
-  $query = "select * from leads ";
+  $query = "select * from leads inner join leadcf on leads.id=leadcf.leadid";
+  echo $query;
   $result = $this->oldconn->query($query);
   
   $count = $this->oldconn->num_rows($result); 
@@ -1755,6 +1762,31 @@ for($i=0; $i<$sql1_num; $i++)
 	$this->newconn->query($sql2);
 }
 
+//fix for the custom field migration of picklist
+
+	if($uitype == 15)
+	{
+		// Creating the PickList Table and Populating Values
+		$this->newconn->createTable($columnName, $columnName." C(255)");
+		//query the old table and get the values
+		$sql_picklist = "select * from ".$tabmodule."_".strtoupper($columnName);
+		echo '>>>>>>>..picklist query ' .$sql_picklist;
+		$sql_picklist_result = $this->oldconn->query($sql_picklist);
+		$count = $this->oldconn->num_rows($sql_picklist_result);
+	if($count > 0)
+	        {
+	          while($picklist_data = $this->oldconn->fetchByAssoc($sql_picklist_result))
+	           {
+			$picklist_data[$columnName] = trim($picklist_data[$columnName]);
+			if($picklist_data[$columnName] != '')
+			{
+				$query = "insert into ".$columnName." values('".$picklist_data[$columnName]."')";
+				echo '>>>>>>>>>>>>> query is >>>>>>>>> ' .$query;
+				$this->newconn->query($query);
+			}
+		}
+	}
+     }
 
 
 
