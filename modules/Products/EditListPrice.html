@@ -1,0 +1,45 @@
+<!--
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
+-->
+<!-- BEGIN: main -->
+<table width="65%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+<table width="100%" cellpadding="0" cellspacing="1" border="0">
+  <tbody><form action="index.php" method="post" name="index" id="form">
+  <input type="hidden" name="module" value="Products">
+  <input type="hidden" name="action" value="UpdateListPrice">
+  <input type="hidden" name="return_module" value="Products">
+  <input type="hidden" name="return_action" value="PriceBookDetailView">
+  <input type="hidden" name="record" value="{PRICEBOOKID}">
+  <input type="hidden" name="product_id" value="{PRODUCTID}">
+  <tr><td colspan="2" class="formSecHeader">EditListPrice</td></tr>
+  <tr> 
+    <td width="50%" nowrap class="dataLabel">EditListPrice:</td>
+    <td align="left"> <input class="dataInput" type="text" name="list_price" value="{LISTPRICE}" size="40" /> 
+    </td>
+  </tr>
+  </table>
+</td>
+</tr>
+</table>
+<br>
+<table width="65%" cellpadding="0" cellspacing="0" border="0"><tbody>
+	<tr>
+	         <td align="center">
+			<input title="{APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='UpdateListPrice'; return verify_data(EditView)" type="submit" name="button" value="{APP.LBL_SAVE_BUTTON_LABEL}" >
+	                <input title="{APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='PriceBookDetailView'; this.form.module.value='Products'; this.form.return_action.value='PriceBookDetailView'; this.form.return_module.value='Products';" type="submit" name="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}"></td>
+	</tr>
+	</form>
+</table>
+
+<!-- END: main -->

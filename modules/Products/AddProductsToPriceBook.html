@@ -1,0 +1,98 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<script language="javascript">
+function addtopricebook()
+{
+
+	x = document.addToPB.selected_id.length;
+	idstring = "";
+
+	if ( x == undefined)
+	{
+	
+		if (document.addToPB.selected_id.checked)
+		{
+			document.addToPB.idlist.value=document.addToPB.selected_id.value;
+			//alert(document.massdelete.idlist.value);
+		}
+		else 
+		{
+			alert("Please select atleast one entity");
+			return false;
+		}
+	}
+	else
+	{
+		xx = 0;
+		for(i = 0; i < x ; i++)
+		{
+			if(document.addToPB.selected_id[i].checked)
+			{
+				idstring = document.addToPB.selected_id[i].value +";"+idstring
+			xx++	
+			}
+		}
+		if (xx != 0)
+		{
+			document.addToPB.idlist.value=idstring;
+			//alert(document.massdelete.idlist.value);
+		}
+		else
+		{
+			alert("Please select atleast one entity");
+			return false;
+		}
+	}
+document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=AddProductsToPriceBook"
+}
+
+function updateListPrice(unitprice,fieldname)
+{
+	document.addToPB.elements[fieldname].value=unitprice;
+}
+
+</script>
+
+<script type="text/javascript" language="JavaScript">
+function clear_form(form) {
+	for (j = 0; j < form.elements.length; j++) {
+		if (form.elements[j].type == 'text' || form.elements[j].type == 'select-one') {
+			form.elements[j].value = '';
+		}
+	}
+}
+</script>
+<BR>
+<BR>
+{PRODUCTLISTHEADER}
+<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">
+  <tr height="20"> 
+    <td COLSPAN="18" class="listFormHeaderLinks">
+	 <table border="0" cellpadding="0" cellspacing="0" width="100%">
+		<tr>
+			<td>&nbsp;{RECORD_COUNTS}</td>
+			   {NAVIGATION}
+		</tr>
+	 </table>
+    </td>
+   </tr>
+   <tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+   {LISTHEADER}
+ 	<tr><td colspan="18" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
+   {LISTENTITY}
+   </form>
+</table>
+
+<!-- END: main -->
+</form>
+</table>
+
