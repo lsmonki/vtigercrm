@@ -27,7 +27,7 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-echo get_module_title("PriceBook", "PriceBook: Home" , true);
+//echo get_module_title("PriceBook", "PriceBook: Home" , true);
 echo "<br>";
 //echo get_form_header("Product Search", "", false);
 
