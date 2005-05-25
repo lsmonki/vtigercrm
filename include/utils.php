@@ -2660,7 +2660,18 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	elseif($uitype == 13)
         {
                 $value = '<a href="mailto:'.$temp_val.'">'.$temp_val.'</a>';
-        }	
+        }
+	elseif($uitype == 56)
+	{
+		if($temp_val == 1)
+		{
+			$value = 'yes';
+		}
+		else
+		{
+			$value = '';
+		}
+	}	
 	elseif($uitype == 57)
 	{
 		global $adb;
@@ -2977,7 +2988,7 @@ function getListQuery($module,$where='')
 	}
 	if($module == "PriceBook")
 	{
-		$query = "select crmentity.crmid, pricebook.*,pricebookproductrel.productid from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid inner join pricebookproductrel on pricebookproductrel.pricebookid=pricebook.pricebookid where crmentity.deleted=0";
+		$query = "select crmentity.crmid, pricebook.* from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid where crmentity.deleted=0";
 	}
 	if($module == "Quotes")
 	{
@@ -3177,7 +3188,7 @@ function ChangeStatus($status,$activityid,$activity_mode='')
         $adb->query($query);
  }
 
-function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='',$recordid='',$return_module='')
+function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='',$recordid='',$return_module='',$append_url='')
 {
 	if($type=='advanced')
 		$flag='&advanced=true';
@@ -3191,7 +3202,7 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
                 $returnvalue .= '&return_module='.$return_module;
 
 	for($var='A',$i =1;$i<=26;$i++,$var++)
-		$list .= '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&query='.$query.'&'.$fieldname.'='.$var.$flag.$popuptypevalue.$returnvalue.'">'.$var.'</a></td>';
+		$list .= '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&query='.$query.'&'.$fieldname.'='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$var.'</a></td>';
 
 	return $list;
 }
@@ -3318,9 +3329,10 @@ function getRelatedLists($module,$focus)
 {
 	global $adb;
 	global $profile_id;
+	$mod_dir_name=getModuleDirName($module);
 	$tab_per_Data = getAllTabsPermission($profile_id);
 	$permissionData = $_SESSION['action_permission_set'];
-	$inc_file = 'modules/'.$module.'/RenderRelatedListUI.php';
+	$inc_file = 'modules/'.$mod_dir_name.'/RenderRelatedListUI.php';
 	include($inc_file);
 	$cur_tab_id = getTabid($module);
 
