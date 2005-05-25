@@ -395,7 +395,7 @@ $this->db->query("insert into field values (18,".$this->db->getUniqueID("field")
 //PriceBook Details Start
 //Block1
  $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'bookname','pricebook',1,'2','bookname','Price Book Name',1,0,0,100,1,1,1,'V~O')");
- $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'productid','pricebookproductrel',1,'59','product_id','Product Name',1,0,0,100,2,1,1,'I~O')");
+// $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'productid','pricebookproductrel',1,'59','product_id','Product Name',1,0,0,100,2,1,1,'I~O')");
  $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'active','pricebook',1,'56','active','Active',1,0,0,100,3,1,1,'V~O')");
 $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,4,1,2,'T~O')");
  $this->db->query("insert into field values (19,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,5,1,2,'T~O')");
@@ -1262,6 +1262,8 @@ $this->db->query("insert into field values (19,".$this->db->getUniqueID("field")
 
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("HelpDesk").",0,'get_attachments',2,'Attachments',0)");
+
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("PriceBook").",14,'get_pricebook_products',2,'Products',0)");
 
 
 
