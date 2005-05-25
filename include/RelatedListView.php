@@ -2,7 +2,7 @@
 require_once('modules/Users/UserInfoUtil.php');
 require_once("include/utils.php");
 
-function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset)
+function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,$edit_val='',$del_val='')
 {
 
 require_once('XTemplate/xtpl.php');
@@ -12,7 +12,9 @@ require_once('include/database/PearDatabase.php');
 global $adb;
 global $app_strings;
 global $current_language;
-$current_module_strings = return_module_language($current_language, $module);
+
+$mod_dir=getModuleDirName($module);
+$current_module_strings = return_module_language($current_language, $mod_dir);
 
 global $list_max_entries_per_page;
 global $urlPrefix;
@@ -56,7 +58,7 @@ global $current_user;
 $rel_tab_id = getTabid($relatedmodule);
 $defSharingPermissionData = $_SESSION['defaultaction_sharing_permission_set'];
 $others_rel_permission_id = $defSharingPermissionData[$rel_tab_id];
-if($others_rel_permission_id == 3 && $module != 'Notes' && $module != 'Products' && $module != 'Faq')
+if($others_rel_permission_id == 3 && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $module != 'PriceBook')
 {
 	 $query .= " and crmentity.smownerid in(".$current_user->id .",0)";
 }
@@ -76,7 +78,6 @@ if(isset($order_by) && $order_by != '')
 }
 
 $list_result = $adb->query($query);
-
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
         
@@ -103,7 +104,14 @@ else
 	$listview_header = getListViewHeader($focus,$relatedmodule,'','','','relatedlist');//"Accounts");
 	$xtpl->assign("LISTHEADER", $listview_header);
 
-	$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset);
+	if($module == 'PriceBook' && $relatedmodule == 'Products')
+	{
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,$edit_val,$del_val);
+	}
+	else
+	{
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset);
+	}
 	//$listview_entries = getListViewEntries1($focus,"Accounts",$list_result,$navigation_array);
 	$xtpl->assign("LISTENTITY", $listview_entries);
 	$xtpl->assign("SELECT_SCRIPT", $view_script);
@@ -406,6 +414,107 @@ function getHistory($parentmodule,$query,$id)
 		$list .= '</table>';
 		echo $list;
 	}
+}
+
+function getPriceBookRelatedProducts($query,$focus)
+{
+	global $adb;
+	global $app_strings;
+	global $mod_strings;
+	global $current_language;
+	$current_module_strings = return_module_language($current_language, 'Products');
+
+	global $list_max_entries_per_page;
+	global $urlPrefix;
+
+
+	global $theme;
+	$pricebook_id = $_REQUEST['record'];
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+	require_once($theme_path.'layout_utils.php');
+	$list_result = 	$adb->query($query);
+	$num_rows = $adb->num_rows($list_result);
+	$xtpl=new XTemplate('include/RelatedListView.html');
+	$xtpl->assign("MOD", $mod_strings);
+	$xtpl->assign("APP", $app_strings);
+	$xtpl->assign("IMAGE_PATH",$image_path);
+
+	$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
+	<form name="selectproduct" method="POST">
+	<tr>
+	<input name="action" type="hidden" value="AddProductsToPriceBook">
+	<input name="module" type="hidden" value="Products">
+	<input name="return_module" type="hidden" value="Products">
+	<input name="return_action" type="hidden" value="PriceBookDetailView">;
+	<input name="pricebook_id" type="hidden" value="'.$_REQUEST["record"].'">';
+
+        $other_text .='<td><input title="Select Products" accessyKey="F" class="button" onclick="this.form.action.value=\'AddProductsToPriceBook\';this.form.module.value=\'Products\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'PriceBookDetailView\'" type="submit" name="button" value="'.$app_strings["LBL_SELECT_PRODUCT_BUTTON_LABEL"].'">&nbsp;</td>';
+		$other_text .='</tr></table>';
+
+//Retreive the list from Database
+echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'], $other_text, false );
+
+
+//echo $list_query;
+$list_result = $adb->query($query);
+$num_rows = $adb->num_rows($list_result);
+
+//Retreive the List View Table Header
+
+echo '<BR>';
+$list_header = '';
+$list_header .= '<tr class="moduleListTitle" height=20>';
+$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_LIST_PRODUCT_NAME'].'</td>';
+$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_PRODUCT_CODE'].'</td>';
+$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_PRODUCT_UNIT_PRICE'].'</td>';
+$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_PB_LIST_PRICE'].'</td>';
+$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">Edit|Del</td>';
+$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+$list_header .= '</tr>';
+
+$xtpl->assign("LISTHEADER", $list_header);
+
+$list_body ='';
+for($i=0; $i<$num_rows; $i++)
+{
+	$entity_id = $adb->query_result($list_result,$i,"crmid");
+		if (($i%2)==0)
+			$list_body .= '<tr height=20 class=evenListRow>';
+		else
+			$list_body .= '<tr height=20 class=oddListRow>';
+
+		$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
+		$listprice = $adb->query_result($list_result,$i,"listprice");
+		$field_name=$entity_id."_listprice";
+
+		$list_body .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$list_body .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$adb->query_result($list_result,$i,"productname").'</td>';
+		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$list_body .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$adb->query_result($list_result,$i,"productcode").'</td>';
+		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$list_body .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$unit_price.'</td>';
+		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$list_body .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$listprice.'</td>';
+		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$list_body .= '<td height="21" style="padding:0px 3px 0px 3px;"><a href="index.php?module=Products&action=EditListPrice&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&listprice='.$listprice.'">edit</a>&nbsp;|&nbsp;<a href="index.php?module=Products&action=DeletePriceBookProductRel&record='.$entity_id.'&pricebook_id='.$pricebook_id.'">del</a></td>';
+	$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+	
+}
+
+
+//$listview_entries = getListViewEntries($focus,"Products",$list_result,$navigation_array);
+
+$xtpl->assign("LISTENTITY", $list_body);
+
+$xtpl->parse("main");
+$xtpl->out("main");	
+
 }
 
 //echo '</form>';
