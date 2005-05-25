@@ -44,6 +44,7 @@ $mod_strings = Array(
 'LBL_PRODUCT_COMMISSION_RATE'=>'Commission Rate',
 'LBL_PRODUCT_QTY_PER_UNIT'=>'Qty/Unit',
 'LBL_PRODUCT_UNIT_PRICE'=>'Unit Price',
+'LBL_PB_LIST_PRICE'=>'List Price',
 'LBL_PRODUCT_DESCRIPTION'=>'Description',
 'LBL_PRODUCT_IMAGE'=>'Image',
 'LBL_NEW_FORM_TITLE'=>'New Product',
