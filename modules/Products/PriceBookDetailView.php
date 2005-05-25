@@ -83,74 +83,10 @@ $xtpl->assign("ID", $_REQUEST['record']);
 $xtpl->parse("main");
 $xtpl->out("main");
 
-/*
-require_once('modules/Products/binaryfilelist.php');
-echo '<br><br>';
-echo '<table width="50%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
-echo '<form border="0" action="index.php" method="post" name="form" id="form">';
-
-echo '<input type="hidden" name="module">';
-echo '<input type="hidden" name="mode">';
-echo '<input type="hidden" name="return_module" value="'.$currentModule.'">';
-echo '<input type="hidden" name="return_id" value="'.$productid.'">';
-echo '<input type="hidden" name="action">';
-
-
-echo '<td>';
-echo '<table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-                <td class="formHeader" vAlign="top" align="left" height="20">
-         <img src="' .$image_path. '/left_arc.gif" border="0"></td>
-   <td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap width="100%" height="20">'.$mod_strings['LBL_ATTACHMENTS'].'</td>
-        <td  class="formHeader" vAlign="top" align="right" height="20">
-                  <img src="' .$image_path. '/right_arc.gif" border="0"></td>
-                </tr></tbody></table>
-      </td>';
-echo '<td>&nbsp;</td>';
-echo '<td>&nbsp;</td>';
-echo '<td valign="bottom"><input title="Attach File" accessyKey="F" class="button" onclick="this.form.action.value=\'upload\';this.form.module.value=\'Products\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_ATTACHMENT'].'"></td>';
-echo '<td width="50%"></td>';
-
-echo '</td></tr></form></tbody></table>';
-*/
-
-// $focus->get_attachments($focus->id);
-
-
 //Security check for related list
-/*
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
-getRelatedLists("Products",$focus);
-*/
-
-/*
-//Constructing the Related Lists from here
-include('modules/Products/RenderRelatedListUI.php');
-if($tab_per_Data[13] == 0)
-{
-        if($permissionData[13][3] == 0)
-        {
-		 $focus->get_tickets($focus->id);
-	}
-}
-// $focus->get_meetings($focus->id);
-if($tab_per_Data[9] == 0)
-{
-        if($permissionData[9][3] == 0)
-        {
-		 $focus->get_activities($focus->id);
-	}
-}
-if($tab_per_Data[8] == 0)
-{
-        if($permissionData[8][3] == 0)
-        {
-		 $focus->get_attachments($focus->id);
-	}
-}
-
-
-*/
+getRelatedLists("PriceBook",$focus);
 
 ?>
