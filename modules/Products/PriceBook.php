@@ -26,8 +26,8 @@ class PriceBook extends CRMEntity {
 	var $id;
 	var $mode;
 
-	var $tab_name = Array('crmentity','pricebook','pricebookproductrel');
-	var $tab_name_index = Array('crmentity'=>'crmid','pricebook'=>'pricebookid','pricebookproductrel'=>'pricebookid');
+	var $tab_name = Array('crmentity','pricebook');
+	var $tab_name_index = Array('crmentity'=>'crmid','pricebook'=>'pricebookid');
 	var $column_fields = Array();
 
 //	var $sortby_fields = Array('productname','productcode','commissionrate');		  
@@ -35,11 +35,11 @@ class PriceBook extends CRMEntity {
         // This is the list of fields that are in the lists.
 	var $list_fields = Array(
                                 'Price Book Name'=>Array('pricebook'=>'bookname'),
-                                'Product Name'=>Array('pricebook'=>'productid')
+                                'Active'=>Array('pricebook'=>'active')
                                 );
         var $list_fields_name = Array(
                                         'Price Book Name'=>'bookname',
-                                        'Product Name'=>'product_id'
+                                        'Active'=>'active'
                                      );
         var $list_link_field= 'bookname';
 
@@ -70,6 +70,13 @@ class PriceBook extends CRMEntity {
         {
                 return $this->name;
         }
+
+	
+	function get_pricebook_products($id)
+         {                                                                                                                     
+         $query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, products.purchase_date, crmentity.crmid, crmentity.smownerid,pricebookproductrel.listprice from products inner join pricebookproductrel on products.productid = pricebookproductrel.productid inner join crmentity on crmentity.crmid = products.productid inner join pricebook on pricebook.pricebookid = pricebookproductrel.pricebookid  where pricebook.pricebookid = '.$id.' and crmentity.deleted = 0'; 
+	 renderPriceBookRelatedProducts($query,$id);                                                                  
+}
 
 }
 ?>
