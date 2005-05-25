@@ -263,6 +263,8 @@ $app_strings = Array(
 'LNK_NEW_PO'=>'New Purchase Order',
 'LNK_NEW_SO'=>'New Sales Order',
 'LNK_NEW_INVOICE'=>'New Invoice',
+'LNK_NEW_VENDOR'=>'New Vendor',
+'LNK_NEW_PRICEBOOK'=>'New PriceBook',
 
 
 
