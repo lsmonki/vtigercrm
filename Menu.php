@@ -36,6 +36,8 @@ $module_menu_array = Array('Contacts' => $app_strings['LNK_NEW_CONTACT'],
 	                   'Emails' => $app_strings['LNK_NEW_EMAIL'],
 			   'Events' => $app_strings['LNK_NEW_EVENT'],
 	                   'Tasks' => $app_strings['LNK_NEW_TASK'],
+	                   'Vendor' => $app_strings['LNK_NEW_VENDOR'],
+	                   'PriceBook' => $app_strings['LNK_NEW_PRICEBOOK'],
 			   'Quotes' => $app_strings['LNK_NEW_QUOTE'],	
 			   'Orders' => $app_strings['LNK_NEW_PO'],	
 			   'SalesOrder' => $app_strings['LNK_NEW_SO'],	
@@ -67,6 +69,22 @@ foreach($module_menu_array as $module1 => $label)
 		$tabid = getTabid("SalesOrder");
 		$curr_action = 'SalesOrderEditView';
 		$ret_action = 'SalesOrderDetailView';	
+		
+	}
+	elseif($module1 == 'Vendor')
+	{
+		$module_display = 'Products';
+		$tabid = getTabid("Vendor");
+		$curr_action = 'VendorEditView';
+		$ret_action = 'VendorDetailView';	
+		
+	}
+	elseif($module1 == 'PriceBook')
+	{
+		$module_display = 'Products';
+		$tabid = getTabid("PriceBook");
+		$curr_action = 'PriceBookEditView';
+		$ret_action = 'PriceBookDetailView';	
 		
 	}
 	else
