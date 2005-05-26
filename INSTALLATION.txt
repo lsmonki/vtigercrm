@@ -1,0 +1,11 @@
+-----------------------------------------------------
+vtiger Customer Portal 4.0.1 Beta Installation Manual
+-----------------------------------------------------
+Please refer to the following URL for vtiger Customer Portal installation procedure:
+
+http://vtiger.com/products/crm/help/vtiger_Customer_Portal_User_Guide.pdf
+
+Or 
+
+http://www.vtiger.com/wiki/index.php/Vtiger_Customer_Portal_User_Guide
+
