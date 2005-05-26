@@ -49,7 +49,7 @@
 		<field name="namedays" type="C" size="60"></field>
 		<field name="workdays" type="C" size="30"></field>
 	 	<field name="weekstart" type="I" size="11"></field>
-		<field name="date_format" type="C" size="30"></field>	
+		<field name="date_format" type="C" size="30"></field>
 		<field name="deleted" type="I" size="1">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
@@ -62,7 +62,7 @@
 			<col>user_password</col>
 		</index>
 		<data>
-		
+
 		</data>
 	</table>
 
@@ -121,7 +121,7 @@
 			<col>modifiedby</col>
 		</index>
 		<data>
-			
+
 		</data>
 	</table>
 
@@ -152,7 +152,7 @@
 			<col>modifiedby</col>
 		</index>
 		<data>
-		
+
 		</data>
 	</table>
 
@@ -164,7 +164,7 @@
 		<field name="fieldid" type="I" size="19">
                     <KEY/>
                      <AUTOINCREMENT/></field>
-						
+
              <field name="columnname" type="C" size="30">
 			<NOTNULL/>
 		</field>
@@ -181,7 +181,7 @@
 		<field name="fieldname" type="C" size="50">
 			<NOTNULL/>
 		</field>
-                
+
 		<field name="fieldlabel" type="C" size="50">
 			<NOTNULL/>
 		</field>
@@ -218,7 +218,7 @@
 
 
 	<table name="field" alter="true">
-		
+
 		<constraint>ADD CONSTRAINT fk_pi FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
@@ -298,7 +298,7 @@
 	<table name="accountbillads" alter="true">
 		
 		<constraint>ADD CONSTRAINT fk_AccountBillAds FOREIGN KEY (accountaddressid) REFERENCES account(accountid) ON DELETE CASCADE</constraint>
-		
+
 		<opt>Type=InnoDB</opt>
 		
 		<data>
@@ -398,7 +398,7 @@
 	<table name="contactdetails" alter="true">
 		
 		<constraint>ADD CONSTRAINT fk_ContactDetails FOREIGN KEY (contactid) REFERENCES crmentity(crmid)  ON DELETE CASCADE </constraint>
-		
+
 		<opt>Type=InnoDB</opt>
 		
 		<data>
@@ -431,9 +431,9 @@
 	<table name="contactsubdetails" alter="true">
 		
 		<constraint>ADD CONSTRAINT fk_ContactSubDetails FOREIGN KEY (contactsubscriptionid) REFERENCES contactdetails(contactid)  ON DELETE CASCADE </constraint>
-		
+
 		<opt>Type=InnoDB</opt>
-		
+
 		<data>
 		</data>
 	</table>
@@ -455,17 +455,17 @@
 		<field name="mailingzip" type="C" size="30"></field>
 		<field name="otherzip" type="C" size="30"></field>
 		<field name="otherstreet" type="C" size="250"></field>
-		<opt>Type=InnoDB</opt> 
+		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
 
 	<table name="contactaddress" alter="true">
-		
+
 		<constraint>ADD CONSTRAINT fk_ContactAddress FOREIGN KEY (contactaddressid) REFERENCES contactdetails(contactid)  ON DELETE CASCADE </constraint>
-		
+
 		<opt>Type=InnoDB</opt>
-		
+
 		<data>
 		</data>
 	</table>
@@ -475,18 +475,18 @@
 			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<opt>Type=InnoDB</opt> 
+		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
 
 
 	<table name="contactscf" alter="true">
-		
+
 		<constraint>ADD CONSTRAINT fk_ContactsCF FOREIGN KEY (contactid) REFERENCES contactdetails(contactid)  ON DELETE CASCADE </constraint>
-		
+
 		<opt>Type=InnoDB</opt>
-		
+
 		<data>
 		</data>
 	</table>
@@ -4385,5 +4385,104 @@
                 <data>
                 </data>
         </table>
+
+	<table name="customview">
+                <field name="cvid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="viewname" type="C" size="100">
+                        <NOTNULL/>
+                </field>
+		<field name="setdefault" type="I" size="1">
+                        <DEFAULT value="0"/>
+                </field>
+                <field name="entitytype" type="C" size="100">
+                        <NOTNULL/>
+                </field>
+                <data>
+                </data>
+        </table>
+
+
+	<table name="cvcolumnlist">
+		<field name="cvid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="columnindex" type="I" size="11">
+		     <NOTNULL/>
+		</field>
+		<field name="columnname" type="C" size="250">
+		      <DEFAULT value=""/>
+		</field>
+		<index name="cvcolumnlist_IDX0">
+			<col>cvid</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="cvcolumnlist" alter="true">
+		<constraint>ADD CONSTRAINT cvcolumnlist_FK1 FOREIGN KEY (cvid) REFERENCES customview (cvid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="cvstdfilter">
+		<field name="cvid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="columnname" type="C" size="250">
+			<DEFAULT value=""/>
+		</field>
+		<field name="stdfilter" type="C" size="250">
+			<DEFAULT value=""/>
+		</field>
+		<field name="startdate" type="D">
+			<DEFAULT value=""/>
+		</field>
+		<field name="enddate" type="D">
+			<DEFAULT value=""/>
+		</field>
+		<index name="cvstdfilter_IDX0">
+			<col>cvid</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="cvstdfilter" alter="true">
+		<constraint>ADD CONSTRAINT cvstdfilter_FK1 FOREIGN KEY (cvid) REFERENCES customview (cvid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="cvadvfilter">
+		<field name="cvid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="columnindex" type="I" size="11">
+			<NOTNULL/>
+		</field>
+		<field name="columnname" type="C" size="250">
+			<DEFAULT value=""/>
+		</field>
+		<field name="comparator" type="C" size="10">
+			<DEFAULT value=""/>
+		</field>
+		<field name="value" type="200">
+			<DEFAULT value=""/>
+		</field>
+		<index name="cvadvfilter_IDX0">
+			<col>cvid</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="cvadvfilter" alter="true">
+		<constraint>ADD CONSTRAINT cvadvfilter_FK1 FOREIGN KEY (cvid) REFERENCES customview (cvid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
 
 </schema>
