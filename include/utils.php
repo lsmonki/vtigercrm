@@ -2895,6 +2895,20 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				{
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_formname_specific("'.$_REQUEST['form'].'", "'.$entity_id.'", "'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
 				}
+				elseif($popuptype == "inventory_prod")
+				{
+					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory("'.$entity_id.'", "'.$temp_val.'", "'.$unitprice.'"); window.close()\'>'.$temp_val.'</a>';
+				}
+				elseif($popuptype == "inventory_pb")
+				{
+
+					$prod_id = $_REQUEST['productid'];
+					$flname =  $_REQUEST['fldname'];
+					$listprice=getListPrice($prod_id,$entity_id);	
+					
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory_pb("'.$listprice.'", "'.$flname.'"); window.close()\'>'.$temp_val.'</a>';
+				}
 				else
 				{
 					if($colname == "lastname")
@@ -3023,7 +3037,7 @@ function getListQuery($module,$where='')
 	}
 	if($module == "Quotes")
 	{
-		$query = "select crmentity.*, quotes.*, quotesbillads.*, quotesshipads.*, quotesproductrel.productid from quotes inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid  inner join quotesproductrel on quotes.quoteid=quotesproductrel.quoteid where crmentity.deleted=0";
+		$query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
 	}
 	if($module == "Orders")
 	{
@@ -3427,4 +3441,113 @@ function getReminderSelectOption($start,$end,$fldname,$selvalue='')
 	return $OPTION_FLD;
 }
 
+function getAssociatedProducts($module,$focus)
+{
+	global $adb;
+	$output = '';
+	if($module == 'Quotes')
+	{
+		$query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
+	}
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=1;$i<=$num_rows;$i++)
+	{
+		$productname=$adb->query_result($result,$i-1,'productname');
+		$unitprice=$adb->query_result($result,$i-1,'unit_price');
+		$productid=$adb->query_result($result,$i-1,'productid');
+		$qty=$adb->query_result($result,$i-1,'quantity');
+		$listprice=$adb->query_result($result,$i-1,'listprice');
+		$total = $qty*$listprice;
+
+		$product_id_var = 'hdnProductId'.$i;
+		$status_var = 'hdnRowStatus'.$i;
+		$qty_var = 'txtQty'.$i;
+		$list_price_var = 'txtListPrice'.$i;	
+		$total_var = 'total'.$i;	
+
+		$output .='<tr id=row'.$i.'>';
+		$output .='<td width="20%">'.$productname.'</td>';
+		$output .= '<td><input type=text id="'.$qty_var.'" name="'.$qty_var.'" size="5" value="'.$qty.'" onBlur=\'calcTotal('.$i.')\'></td>';
+		$output .= '<td>'.$unitprice.'</td>';
+		$output .='<td><input type=text id="'.$list_price_var.'" name="'.$list_price_var.'" value="'.$listprice.'" onBlur=\'calcTotal('.$i.')\'></td>';
+		$output .='<td><div id="'.$total_var.'" align="right">'.$total.'</div></td>';
+		$output .='<td id="delCol'.$i.'"><a href=\'javascript:delRow('.$i.')\'>Del</a>';
+		$output .= '<input type=hidden id="'.$product_id_var.'" name="'.$product_id_var.'" value='.$productid.'>';
+		$output .= '<input type=hidden id="'.$status_var.'" name="'.$status_var.'">';
+		$output .= '<input type=hidden id="hdnTotal'.$i.'" name="hdnTotal'.$i.'">';
+		$output .= '</td></tr>';
+
+	}
+	return $output;
+
+}
+function getNoOfAssocProducts($module,$focus)
+{
+	global $adb;
+	$output = '';
+	if($module == 'Quotes')
+	{
+		$query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
+	}
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	return $num_rows;
+}
+
+function getListPrice($productid,$pbid)
+{
+	global $adb;
+	$query = "select listprice from pricebookproductrel where pricebookid=".$pbid." and productid=".$productid;
+	$result = $adb->query($query);
+	$lp = $adb->query_result($result,0,'listprice');
+	return $lp;
+}
+
+function getDetailAssociatedProducts($module,$id)
+{
+	global $adb;
+	$output = '';
+	
+
+	$output .='<table width="100%" border="0" cellspacing="1" cellpadding="0">';		
+	$output .= '<tr><td width="15%" class="dataLabel">Product</td><td width="30%"><input name="bill_country" type="text" size="25" maxlength="" value=""></td><td width="20%" class="dataLabel">Country:</td><td width="30%"><input name="ship_country" type="text" size="25" maxlength="" value=""></td></tr>';
+
+	if($module == 'Quotes')
+	{
+		$query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$id;
+	}
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=1;$i<=$num_rows;$i++)
+	{
+		$productname=$adb->query_result($result,$i-1,'productname');
+		$unitprice=$adb->query_result($result,$i-1,'unit_price');
+		$productid=$adb->query_result($result,$i-1,'productid');
+		$qty=$adb->query_result($result,$i-1,'quantity');
+		$listprice=$adb->query_result($result,$i-1,'listprice');
+		$total = $qty*$listprice;
+
+		$product_id_var = 'hdnProductId'.$i;
+		$status_var = 'hdnRowStatus'.$i;
+		$qty_var = 'txtQty'.$i;
+		$list_price_var = 'txtListPrice'.$i;	
+		$total_var = 'total'.$i;	
+
+		$output .='<tr id=row'.$i.'>';
+		$output .='<td width="20%">'.$productname.'</td>';
+		$output .= '<td><input type=text id="'.$qty_var.'" name="'.$qty_var.'" size="5" value="'.$qty.'" onBlur=\'calcTotal('.$i.')\'></td>';
+		$output .= '<td>'.$unitprice.'</td>';
+		$output .='<td><input type=text id="'.$list_price_var.'" name="'.$list_price_var.'" value="'.$listprice.'" onBlur=\'calcTotal('.$i.')\'></td>';
+		$output .='<td><div id="'.$total_var.'" align="right">'.$total.'</div></td>';
+		$output .='<td id="delCol'.$i.'"><a href=\'javascript:delRow('.$i.')\'>Del</a>';
+		$output .= '<input type=hidden id="'.$product_id_var.'" name="'.$product_id_var.'" value='.$productid.'>';
+		$output .= '<input type=hidden id="'.$status_var.'" name="'.$status_var.'">';
+		$output .= '<input type=hidden id="hdnTotal'.$i.'" name="hdnTotal'.$i.'">';
+		$output .= '</td></tr>';
+
+	}
+	return $output;
+
+}
 ?>
