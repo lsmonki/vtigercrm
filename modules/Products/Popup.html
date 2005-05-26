@@ -94,6 +94,12 @@ function add_data_to_relatedlist(entity_id,recordid) {
 
         opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&destination_module=Contacts&entityid="+entity_id+"&parid="+recordid;
 }
+
+function set_return_inventory(product_id, product_name,unitprice) {
+        window.opener.document.EditView.txtProduct.value = product_name;
+        window.opener.document.EditView.hdnProductId.value = product_id;
+        window.opener.document.EditView.hdnUnitPrice.value = unitprice;
+}
 </script>
 <!-- END: main -->
 </table>
