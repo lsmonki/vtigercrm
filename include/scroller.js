@@ -28,11 +28,11 @@ if (contentwidth==parseInt(tabcontainer.style.width)) {
 
 var speed=50;
 var intensity=10;
-function scrollright() {
+function scrolright() {
 	if (window.moverightvar) clearTimeout(moverightvar)
 	moverightvar=setInterval("moveright()",speed)
 }
-function scrollleft() {
+function scrolleft() {
 	if (window.moveleftvar) clearTimeout(moveleftvar)
 	moveleftvar=setInterval("moveleft()",speed)
 }
