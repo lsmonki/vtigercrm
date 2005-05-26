@@ -52,26 +52,47 @@ foreach($focus->column_fields as $fieldname => $val)
 	}
 		
 }
-//echo '<BR>';
-//print_r($focus->column_fields);
-//echo '<BR>';
 
-/* foreach($focus->additional_column_fields as $field)
-{
-	if(isset($_REQUEST[$field]))
-	{
-		$value = $_REQUEST[$field];
-		$focus->$field = $value;
-		
-	}
-}*/
 
-//$focus->saveentity("Accounts");
 $focus->save("Quotes");
-//echo '<BR>';
-//echo $focus->id;
+if($focus->mode == 'Edit')
+{
+	$query1 = "delete from quotesproductrel where quoteid=".$focus->id;
+	$adb->query($query);
+
+}
+//Printing the total Number of rows
+$tot_no_prod = $_REQUEST['totalProductCount'];
+for($i=1; $i<=$tot_no_prod; $i++)
+{
+	$product_id_var = 'hdnProductId'.$i;
+	$status_var = 'hdnRowStatus'.$i;
+	$qty_var = 'txtQty'.$i;
+	$list_price_var = 'txtListPrice'.$i;
+
+	$prod_id = $_REQUEST[$product_id_var];
+	$prod_status = $_REQUEST[$status_var];
+	$qty = $_REQUEST[$qty_var];
+	$listprice = $_REQUEST[$list_price_var];
+	if($prod_status != 'D')
+	{
+		
+		$query ="insert into quotesproductrel values(".$focus->id.",".$prod_id.",".$qty.",".$listprice.")";
+		$adb->query($query);	 	
+	}	
+}
+
+
+/*
+echo 'rowid : '.$_REQUEST[$product_id_var];
+echo '<BR>';
+echo 'status : '.$_REQUEST['hdnRowStatus1'];
+echo '<BR>';
+echo 'qty : '.$_REQUEST['txtQty1'];
+echo '<BR>';
+echo 'LP: '.$_REQUEST['txtListPrice1'];
+*/
 $return_id = $focus->id;
-//save_customfields($focus->id);
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Quotes";
@@ -82,113 +103,4 @@ if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $
 $local_log->debug("Saved record with id of ".$return_id);
 
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
-//Code to save the custom field info into database
-function save_customfields($entity_id)
-{
-	global $adb;
-	$dbquery="select * from customfields where module='Accounts'";
-        /*
-	$result = mysql_query($dbquery);
-	$custquery = 'select * from accountcf where accountid="'.$entity_id.'"';
-        $cust_result = mysql_query($custquery);
-	if(mysql_num_rows($result) != 0)
-        */
-	$result = $adb->query($dbquery);
-	$custquery = "select * from accountcf where accountid='".$entity_id."'";
-        $cust_result = $adb->query($custquery);
-	if($adb->num_rows($result) != 0)
-	{
-		
-		$columns='';
-		$values='';
-		$update='';
-                //	$noofrows = mysql_num_rows($result);
-                $noofrows = $adb->num_rows($result);
-		for($i=0; $i<$noofrows; $i++)
-		{
-                  //$fldName=mysql_result($result,$i,"fieldlabel");
-                  //$colName=mysql_result($result,$i,"column_name");
-	$fldName=$adb->query_result($result,$i,"fieldlabel");
-			$colName=$adb->query_result($result,$i,"column_name");
-			if(isset($_REQUEST[$colName]))
-			{
-				$fldvalue=$_REQUEST[$colName];
-				if(get_magic_quotes_gpc() == 1)
-                		{
-                        		$fldvalue = stripslashes($fldvalue);
-                		}
-			}
-			else
-			{
-				$fldvalue = '';
-			}
-			//if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
-                          if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
-			{
-				//Update Block
-				if($i == 0)
-				{
-                                  //$update = $colName.'="'.$fldvalue.'"';
-                                        $update = $colName."='".$fldvalue."'";
-				}
-				else
-				{
-                                  //$update .= ', '.$colName.'="'.$fldvalue.'"';
-                                        $update .= ', '.$colName."='".$fldvalue."'";
-				}
-			}
-			else
-			{
-				//Insert Block
-				if($i == 0)
-				{
-					$columns='accountid, '.$colName;
-					//$values='"'.$entity_id.'", "'.$fldvalue.'"';
-                                        $values="'".$entity_id."', '".$fldvalue."'";
-				}
-				else
-				{
-					$columns .= ', '.$colName;
-					//$values .= ', "'.$fldvalue.'"';
-                                        $values .= ", '".$fldvalue."'";
-				}
-			}
-			
-				
-		}
-		//if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
-                  if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
-		{
-			//Update Block
-                  //$query = 'update accountcf SET '.$update.' where accountid="'.$entity_id.'"'; 
-                  //mysql_query($query);
-                        $query = 'update accountcf SET '.$update." where accountid='".$entity_id."'"; 
-			$adb->query($query);
-		}
-		else
-		{
-			//Insert Block
-			$query = 'insert into accountcf ('.$columns.') values('.$values.')';
-			//mysql_query($query);
-                        $adb->query($query);
-		}
-		
-	}
-	// commented by srini - PATCH for saving accounts
-	/*else
-	{
-          //if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && mysql_num_rows($cust_result) !=0)
-                  if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
-		{
-			//Update Block
-		}
-		else
-		{
-			//Insert Block
-			$query = 'insert into accountcf ('.$columns.') values('.$values.')';
-                        $adb->query($query);
-			//mysql_query($query);
-		}
-	}*/	
-}
 ?>

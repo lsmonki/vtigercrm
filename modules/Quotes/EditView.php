@@ -46,7 +46,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
 } 
-
 //get Block 1 Information
 $block_1_header = getBlockTableHeader("LBL_QUOTE_INFORMATION");
 $block_1 = getBlockInformation("Quotes",1,$focus->mode,$focus->column_fields);
@@ -62,6 +61,8 @@ $block_2 = getBlockInformation("Quotes",2,$focus->mode,$focus->column_fields);
 
 $block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
 $block_3 = getBlockInformation("Quotes",3,$focus->mode,$focus->column_fields);
+
+
 /*
 //get Custom Field Information
 $block_5 = getBlockInformation("Accounts",5,$focus->mode,$focus->column_fields);
@@ -102,6 +103,7 @@ $xtpl->assign("BLOCK2_HEADER", $block_2_header);
 $xtpl->assign("BLOCK3", $block_3);
 $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 
+
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
 /*
@@ -110,10 +112,25 @@ if(isset($cust_fld))
         $xtpl->assign("CUSTOMFIELD", $cust_fld);
 }
 */
+
+
 if($focus->mode == 'edit')
 {
+	$num_of_products = getNoOfAssocProducts($module,$focus);
+	$xtpl->assign("ROWCOUNT", $num_of_products);
+	$associated_prod = getAssociatedProducts("Quotes",$focus);
+	$xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$xtpl->assign("MODE", $focus->mode);
-}		
+	$xtpl->assign("TAXVALUE", $focus->column_fields['txtTax']);
+	$xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
+	$xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
+}
+else
+{
+	$xtpl->assign("ROWCOUNT", '0');
+	$xtpl->assign("TAXVALUE", '0');
+}
+		
 
 if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
 else $xtpl->assign("RETURN_MODULE","Quotes");

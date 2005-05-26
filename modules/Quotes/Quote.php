@@ -40,8 +40,8 @@ class Quote extends CRMEntity {
 	
 		
 	var $table_name = "quotes";
-	var $tab_name = Array('crmentity','quotes','quotesbillads','quotesshipads','quotesproductrel');
-	var $tab_name_index = Array('crmentity'=>'crmid','quotes'=>'quoteid','quotesbillads'=>'quotebilladdressid','quotesshipads'=>'quoteshipaddressid','quotesproductrel'=>'quoteid');
+	var $tab_name = Array('crmentity','quotes','quotesbillads','quotesshipads');
+	var $tab_name_index = Array('crmentity'=>'crmid','quotes'=>'quoteid','quotesbillads'=>'quotebilladdressid','quotesshipads'=>'quoteshipaddressid');
 				
 	
 	var $entity_table = "crmentity";
@@ -67,7 +67,6 @@ class Quote extends CRMEntity {
 				'Quote Stage'=>Array('quotes'=>'quotestage'), 
 				'Potential Name'=>Array('quotes'=>'potentialid'),
 				'Type'=>Array('quotes'=> 'type'),
-				'Product Name'=>Array('quotesproductrel'=>'productid'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 	
@@ -76,7 +75,6 @@ class Quote extends CRMEntity {
 				        'Quote Stage'=>'quotestage',
 				        'Potential Name'=>'potential_id',
 					'Type'=>'type',
-					'Product Name'=>'product_id',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';

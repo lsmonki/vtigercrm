@@ -36,6 +36,7 @@
 
 <!-- BEGIN: main -->
 
+<form name="EditView" method="get" action="index.php">
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 
 <tr>
@@ -64,7 +65,6 @@
 
 		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 
-			<form name="EditView" method="POST" action="index.php">
 
 			<input type="hidden" name="module" value="Quotes">
 
@@ -80,7 +80,9 @@
 
 			<input type="hidden" name="return_action" value="{RETURN_ACTION}">
 
-		<input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';return formValidate() " type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
+			<input type="hidden" name="totalProductCount">
+
+		<input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';settotalnoofrows(); return formValidate() " type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
 
 		<input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
 
@@ -146,11 +148,57 @@
 
 </td></tr></table>
 <br>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr> 
+      <td>Product: 
+        <input name="txtProduct" type="text">
+	<input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="Select" name="button" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=inventory_prod","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");'>
+        Qty: 
+        <input name="txtQty" type="text" value="1" size="5"> <input type="button" value="add" onClick="addRow()"> 
+        <input name="hdnUnitPrice" type="hidden" value="11.75"> <input name="hdnProductId" type="hidden"> 
+      </td>
+    </tr>
+  </table>
+  <br>
+  <div id="productList">
+    <table width="100%" border="1" cellspacing="0" cellpadding="0">
+      <tr> 
+        <td width="20%">Product</td>
+        <td width="15%">Qty</td>
+        <td width="20%">Unit Price</td>
+        <td width="20%">List Price</td>
+        <td width="20%"><div align="center">Total</div></td>
+        <td width="10"></td>
+      </tr>
+	{ASSOCIATEDPRODUCTS}
+    </table>
+  </div>
+  <table width="100%" border="0" cellspacing="2" cellpadding="2">
+    <tr> 
+      <td width="100%"><div align="right">Sub Total:</div></td>
+	  <td id="subTotal" align="right" width="100" style="border:1px solid #000;">&nbsp;</td>
+	  <td width="40">&nbsp;</td>
+    </tr>
+    <tr>
+      <td><div align="right">Tax:</div></td>
+          <td align="right" width="100"><input type="text" id="txtTax" name="txtTax" value="{TAXVALUE}" onblur="calcGrandTotal()"></td>
+          <td width="40">&nbsp;</td>
+    </tr>
+    <tr>
+      <td><div align="right">Grand Total:</div></td>
+          <td id="grandTotal" align="right" width="100" style="border:1px solid #000;">&nbsp;</td>
+          <td width="40">&nbsp;</td>
+    </tr>
+  </table>
+  <div id="strikeLines"></div>
+<input type="hidden" name="hdnSubTotal" id="hdnSubTotal" value="{SUBTOTAL}">
+<input type="hidden" name="hdnGrandTotal" id="hdnGrandTotal" value="{GRANDTOTAL}">
+<br>
  <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
 
 
       <td><div align="center">
-           <input title="{APP.LBL_SAVE_BUTTON_TITLE}" tabindex='5' accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save'; return formValidate()" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
+           <input title="{APP.LBL_SAVE_BUTTON_TITLE}" tabindex='5' accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';settotalnoofrows();return formValidate()" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
 
 		<input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
 
@@ -160,6 +208,105 @@
  </tr></table>
 
 </form>
+<script type="text/javascript" language="JavaScript">
+var prodList=getObj("productList")
+var rowCnt={ROWCOUNT};
+var listTableStart="<table width='100%' border='1' cellspacing='0' cellpadding='0'>"
+
+function settotalnoofrows()
+{
+	document.EditView.totalProductCount.value = rowCnt;	
+}
+
+function addRow() {	
+	//adding new row
+	rowCnt++;
+
+	//calculating product total and truncating decimal part to digits
+	var prodTotal=eval(getObj("txtQty").value*getObj("hdnUnitPrice").value).toString()
+	prodTotal=roundValue(prodTotal)	
+		
+	var newRow="<tr id=row"+rowCnt+"><td>"+getObj("txtProduct").value+"</td>"
+	newRow+="<td><input type=text id='txtQty"+rowCnt+"' name='txtQty"+rowCnt+"' size='5' value='"+getObj("txtQty").value+"' onBlur='calcTotal("+rowCnt+")'></td>"
+	newRow+="<td>"+getObj("hdnUnitPrice").value+"</td>"
+
+	newRow+="<td><input type=text id='txtListPrice"+rowCnt+"' name='txtListPrice"+rowCnt+"' value='"+getObj("hdnUnitPrice").value+"' onBlur='calcTotal("+rowCnt+")'><input title='Change [Alt+G]' accessKey='G' type='button' class='button' value='Select' name='button' LANGUAGE=javascript onclick=\"return window.open('index.php?module=Products&action=PriceBookPopup&html=Popup_picker&form=EditView&popuptype=inventory_pb&fldname=txtListPrice"+rowCnt+"&productid="+getObj("hdnProductId").value+"','test','width=600,height=400,resizable=1,scrollbars=1,top=150,left=200');\"></td>"
+
+	newRow+="<td><div id='total"+rowCnt+"' align='right'>"+prodTotal+"</div></td>"
+	newRow+="<td id='delCol"+rowCnt+"'><a href='javascript:delRow("+rowCnt+")'>Del</a>"
+	newRow+="<input type=hidden id='hdnProductId"+rowCnt+"' name='hdnProductId"+rowCnt+"' value='"+getObj("hdnProductId").value+"'>"
+	newRow+="<input type=hidden id='hdnRowStatus"+rowCnt+"' name='hdnRowStatus"+rowCnt+"'>"
+	newRow+="<input type=hidden id='hdnTotal"+rowCnt+"' name='hdnTotal"+rowCnt+"'>"
+	newRow+="</td></tr>"
+	
+	if (browser_ie) {
+		var prodListBody=getObj("productList").children[0].children[0]
+	} else if (browser_nn4 || browser_nn6) {
+		if (rowCnt==1) {
+			var prodListBody=getObj("productList").childNodes.item(1).childNodes.item(1)
+		} else {
+			var prodListBody=getObj("productList").childNodes.item(0).childNodes.item(0)
+		}
+	}
+	
+	prodList.innerHTML=listTableStart+prodListBody.innerHTML+newRow+"</table>"
+	
+	//creating strike lines that is to be displayed while deleting a row
+	var lineLeft=findPosX(getObj("row"+rowCnt))
+	var lineTop=findPosY(getObj("row"+rowCnt))
+	var lineWidth=prodList.offsetWidth-getObj("delCol"+rowCnt).offsetWidth
+	var strikeLine="<div id='strikeLine"+rowCnt+"' style='visibility:hidden;background:url({IMAGE_PATH}strikeline.gif) repeat-x;position:absolute;top:"+lineTop+";left:"+lineLeft+";width:"+lineWidth+";height:20px;z-index:10'></div>"
+
+	getObj("strikeLines").innerHTML+=strikeLine
+	
+	calcGrandTotal()	
+}
+
+function delRow(rowId) {
+	//striking a row
+	if (getObj("strikeLine"+rowId).style.visibility=="hidden") {
+		getObj("strikeLine"+rowId).style.visibility="visible"
+		getObj("hdnRowStatus"+rowId).value="D"
+	} else {
+		getObj("strikeLine"+rowId).style.visibility="hidden"
+		getObj("hdnRowStatus"+rowId).value="U"
+	}
+	
+	calcGrandTotal()
+}
+
+function calcTotal(rowId) {
+	getObj("total"+rowId).innerHTML=getObj("hdnTotal"+rowId).value=roundValue(eval(getObj("txtQty"+rowId).value*getObj("txtListPrice"+rowId).value).toString())
+	calcGrandTotal()
+}
+
+function calcGrandTotal() {
+	var subTotal=0,grandTotal=0;
+	for (var i=1;i<=rowCnt;i++) {
+		if (getObj("hdnRowStatus"+i).value!="D") {
+			subTotal+=parseFloat(getObj("total"+i).innerHTML)
+		}
+	}
+
+	grandTotal=subTotal+parseFloat(getObj("txtTax").value)
+	getObj("subTotal").innerHTML=getObj("hdnSubTotal").value=roundValue(subTotal.toString())
+	getObj("grandTotal").innerHTML=getObj("hdnGrandTotal").value=roundValue(grandTotal.toString())
+}
+
+function roundValue(val) {
+	if (val.indexOf(".")<0) {
+		val+=".00"
+	} else {
+		var dec=val.substring(val.indexOf(".")+1,val.length)
+		if (dec.length>2)
+			val=val.substring(0,val.indexOf("."))+"."+dec.substring(0,2)
+		else if (dec.length==1)
+			val=val+"0"
+	}
+	
+	return val;
+}
+</script>
 
 <script type="text/javascript" language="Javascript">
 
