@@ -45,23 +45,39 @@
 </td>
         </tr>
         <tr> 
-          <td valign="bottom"><table width="100%" cellpadding="0" cellspacing="0" border="0">
-              <tbody>
-                <tr> 
-                  <td class="tabOffBorder"><img src='{IMAGE_PATH}/blank.gif' width='1' height='1'></td>
-                  <!-- BEGIN: tab -->
-				  <td width="5" class="{CLASS_TABBORDER}"><img src='{IMAGE_PATH}/{IMAGE_TABSTART}' width="5" height="28"></td>
-                  <td class="{CLASS_TABBORDER}" background="{IMAGE_PATH}/{IMAGE_TABTILE}" nowrap><div align="center" style="padding: 0 2 0 2"><a class='{TAB_CLASS}' href='index.php?module={MODULE_KEY}&action=index'>{MODULE_NAME}</a></div></td>
-                  <td width="5" class="{CLASS_TABBORDER}"><img src='{IMAGE_PATH}/{IMAGE_TABEND}' width="5" height="28"></td>
-                  <!-- END: tab -->
-				  <td class="tabOffBorder" width="50%">&nbsp;</td>
-                </tr>
-              </tbody>
+          <td valign="bottom"> <table width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr> 
+                <td width="100%"> <div id="tabcontainer" style="width:200px;overflow:hidden;"> 
+                    <div id="tabcontent" style="position:relative;left:0px;top:0px;"> 
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tbody>
+                          <tr> 
+                            <td class="tabOffBorder"><img src='{IMAGE_PATH}/blank.gif' width='1' height='1'></td>
+                            <!-- BEGIN: tab -->
+                            <td width="5" class="{CLASS_TABBORDER}"><img src='{IMAGE_PATH}/{IMAGE_TABSTART}' width="5" height="28"></td>
+                            <td class="{CLASS_TABBORDER}" background="{IMAGE_PATH}/{IMAGE_TABTILE}" nowrap><div align="center" style="padding: 0 2 0 2"><a class='{TAB_CLASS}' href='index.php?module={MODULE_KEY}&action=index'>{MODULE_NAME}</a></div></td>
+                            <td width="5" class="{CLASS_TABBORDER}"><img src='{IMAGE_PATH}/{IMAGE_TABEND}' width="5" height="28"></td>
+                            <!-- END: tab -->
+                            <td class="tabOffBorder" width="50%">&nbsp;</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div></td>
+                <td class="tabOffBorder" align="right" width="150"><table cellpadding="0" cellspacing="1">
+                    <tr> 
+                      <td><img id="scrollleft" src="{IMAGE_PATH}scroll_left.gif" border="0" onclick="moveleft()" onmousedown="scrollleft();this.src='{IMAGE_PATH}scroll_left_down.gif';" onmouseup="this.src='{IMAGE_PATH}scroll_left.gif';clearTimeout(moveleftvar)" onmouseout="this.src='{IMAGE_PATH}scroll_left.gif';clearTimeout(moveleftvar)"></td>
+                      <td><img id="scrollright" src="{IMAGE_PATH}scroll_right.gif" border="0" onclick="moveright()" onmousedown="scrollright();this.src='{IMAGE_PATH}scroll_right_down.gif';" onmouseup="this.src='{IMAGE_PATH}scroll_right.gif';clearTimeout(moverightvar)"  onmouseout="this.src='{IMAGE_PATH}scroll_right.gif';clearTimeout(moverightvar)"></td>
+                    </tr>
+                  </table></td>
+              </tr>
             </table></td>
         </tr>
       </table></td>
   </tr>
 </table>
+<script language="JavaScript" type="text/javascript" src="include/general.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/scroller.js"></script>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
   <tbody>
   	<tr>

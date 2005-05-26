@@ -53,19 +53,36 @@
 		</tr>
 		<tr>
 			<td height="54" colspan="3" valign="bottom">
-				<table width="100%" cellpadding="0" cellspacing="0" border="0">
-                  <tbody>
+				 <table width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr> 
+                <td width="100%">
+					 <div id="tabcontainer" style="width:200px;overflow:hidden;">
+                    <div id="tabcontent" style="position:relative;left:0px;top:0px;"> 
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tbody>
+                          <tr> 
+                            <td width="5" class="topBorder"><img src="{IMAGE_PATH}/blank.gif"></td>
+                            <!-- BEGIN: tab -->
+                            <td><img src='{IMAGE_PATH}/{IMAGE_TABSTART}'></td>
+                            <td style="padding: 0px 5px 0px 5px" background="{IMAGE_PATH}/{IMAGE_TABTILE}" align="center"> 
+                              <a class='{TAB_CLASS}' href='index.php?module={MODULE_KEY}&action=index'>{MODULE_NAME}</a></td>
+                            <td><img src='{IMAGE_PATH}/{IMAGE_TABEND}'></td>
+                            <!-- END: tab -->
+                            <td width="50%" class="topBorder">&nbsp;</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+				  </div>
+				  </td>
+                <td align="right" width="150"><table cellpadding="0" cellspacing="1">
                     <tr> 
-					  <td width="5" class="topBorder"><img src="{IMAGE_PATH}/blank.gif"></td>
-                      <!-- BEGIN: tab -->
-                      <td><img src='{IMAGE_PATH}/{IMAGE_TABSTART}'></td>
-                      <td style="padding: 0px 5px 0px 5px" background="{IMAGE_PATH}/{IMAGE_TABTILE}" align="center"> <a class='{TAB_CLASS}' href='index.php?module={MODULE_KEY}&action=index'>{MODULE_NAME}</a></td>
-                      <td><img src='{IMAGE_PATH}/{IMAGE_TABEND}'></td>
-                      <!-- END: tab -->
-					  <td width="50%" class="topBorder">&nbsp;</td>
+                      <td><img id="scrollleft" src="{IMAGE_PATH}scroll_left.gif" border="0" onclick="moveleft()" onmousedown="scrollleft();this.src='{IMAGE_PATH}scroll_left_down.gif';" onmouseup="this.src='{IMAGE_PATH}scroll_left.gif';clearTimeout(moveleftvar)" onmouseout="this.src='{IMAGE_PATH}scroll_left.gif';clearTimeout(moveleftvar)"></td>
+                      <td><img id="scrollright" src="{IMAGE_PATH}scroll_right.gif" border="0" onclick="moveright()" onmousedown="scrollright();this.src='{IMAGE_PATH}scroll_right_down.gif';" onmouseup="this.src='{IMAGE_PATH}scroll_right.gif';clearTimeout(moverightvar)"  onmouseout="this.src='{IMAGE_PATH}scroll_right.gif';clearTimeout(moverightvar)"></td>
                     </tr>
-                  </tbody>
-                </table>
+                  </table></td>
+              </tr>
+            </table>
 			</td>
 		</tr>
 		</table>
@@ -88,6 +105,8 @@
     <!-- END: sub_menu --></td>
   </tbody>
 </table>
+<script language="JavaScript" type="text/javascript" src="include/general.js"></script> 
+<script language="JavaScript" type="text/javascript" src="include/scroller.js"></script>
 <!--<a class="moduleMenu" href="{DELETED_ITEMS_URL}">{DELETED_ITEMS_LABEL}&nbsp;</a>-->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr> 
