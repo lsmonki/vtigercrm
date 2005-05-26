@@ -599,6 +599,10 @@ function insertIntoReminderTable($table_name, $module)
 			$this->activity_reminder($this->id,$reminder_time,0,'');	
 		}
 	}
+	elseif($_REQUEST['set_reminder'] == 'No')
+	{
+		$this->activity_reminder($this->id,'0',0,'delete');	
+	}
 }
 	
   function retrieve_entity_info($record, $module)

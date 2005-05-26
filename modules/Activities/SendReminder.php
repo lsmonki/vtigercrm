@@ -22,8 +22,8 @@
 //file modified by shankar
 
 require("modules/Emails/class.phpmailer.php");
-#require("modules/Activities/Activity.php");
 require("include/database/PearDatabase.php");
+require("config.php");
 
 // Get the list of activity for which reminder needs to be sent
 
@@ -43,6 +43,7 @@ if($adb->num_rows($result) >= 1)
 	        $curr_time = strtotime(date("Y-m-d H:i"))/60;
 	        $activity_time = strtotime(date("$date_start $time_start"))/60;
 		$activity_id = $result_set['activityid'];
+		$activitymode = ($result_set['activitytype'] == "Task")?"Task":"Events";
 		$to_addr='';	
 		if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) == $reminder_time)
 		{
@@ -73,7 +74,10 @@ if($adb->num_rows($result) >= 1)
 			}
 			$from ="reminders@localserver.com";
 			$subject = "[Reminder:".$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$result_set['subject'];
-			$contents = $result_set['description'];
+
+			//Set the mail body/contents here
+			$contents ="Hi,\n\n This a activity reminder mail. Kindly visit the link for more details of the activity <a href='".$site_URL."/index.php?action=DetailView&module=Activities&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>\n\n Regards,\n Reminder Manager";
+
 			if(count($to_addr) >=1)
 			{
 				send_mail($to_addr,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password);
@@ -119,7 +123,7 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 	{
 		$mail->AddAddress($addr);                  // name is optional
 	}
-	$mail->AddReplyTo($from);
+	//$mail->AddReplyTo($from);
 	$mail->WordWrap = 50;                                 // set word wrap to 50 characters
 
 	$mail->IsHTML(true);                                  // set email format to HTML
