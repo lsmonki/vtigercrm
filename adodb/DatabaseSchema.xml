@@ -4369,5 +4369,19 @@
 		<data>
 		</data>
 	</table>
+		
+	<table name="activity_reminder">
+                <field name="activity_id" type="I" size="11">
+                        <NOTNULL/>
+                </field>
+                <field name="reminder_time" type="I" size="11">
+                        <NOTNULL/>
+                </field>
+                <field name="reminder_sent" type="I" size="2">
+                        <NOTNULL/>
+                </field>
+                <data>
+                </data>
+        </table>
 
 </schema>

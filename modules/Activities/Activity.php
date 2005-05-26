@@ -49,9 +49,11 @@ class Activity extends CRMEntity {
 
 	var $object_name = "activity";	
 	
-	var $tab_name = Array('crmentity','activity','seactivityrel','cntactivityrel','salesmanactivityrel');
+	var $reminder_table = "activity_reminder";
+	
+	var $tab_name = Array('crmentity','activity','seactivityrel','cntactivityrel','salesmanactivityrel','activity_reminder');
 
-	var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid','salesmanactivityrel'=>'activityid');
+	var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid','salesmanactivityrel'=>'activityid','activity_reminder'=>'activity_id');
 
 	var $column_fields = Array();
 	var $sortby_fields = Array('subject');		
@@ -429,6 +431,31 @@ function save_relationship_changes($is_update)
 			$task_fields['DATE_DUE'] = "<font class='overdueTask'>".$task_fields['DATE_DUE']."</font>";
 		}
 		return $task_fields;
+	}
+	
+	function activity_reminder($activity_id,$reminder_time,$reminder_sent=0,$mode='')
+	{
+		if($mode == 'edit')
+		{
+			//Check for activityid already present in the reminder_table
+			$query_exist = "SELECT activity_id FROM ".$this->reminder_table." WHERE activity_id = ".$activity_id;
+			$result_exist = $this->db->query($query_exist);
+			if($this->db->num_rows($result_exist) == 1)
+			{
+				$query = "UPDATE ".$this->reminder_table." SET";
+				$query .=" reminder_sent = ".$reminder_sent.",";
+				$query .=" reminder_time = ".$reminder_time." WHERE activity_id =".$activity_id; 
+			}
+			else
+			{
+				$query = "INSERT INTO ".$this->reminder_table." VALUES (".$activity_id.",".$reminder_time.",0)";
+			}
+		}
+		else
+		{
+			$query = "INSERT INTO ".$this->reminder_table." VALUES (".$activity_id.",".$reminder_time.",0)";
+		}
+      		$this->db->query($query,true,"Error in processing table $this->reminder_table");
 	}
 
 }

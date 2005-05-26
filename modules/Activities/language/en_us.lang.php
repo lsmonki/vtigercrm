@@ -94,6 +94,15 @@ $mod_strings = Array(
 'Duration Minutes'=>'Duration Minutes',
 'Location'=>'Location',
 
+//Added for Send Reminder 4.2 release
+'Send Reminder'=>'Send Reminder',
+'LBL_YES'=>'Yes',
+'LBL_NO'=>'No',
+'LBL_DAYS'=>'days',
+'LBL_MINUTES'=>'minutes',
+'LBL_HOURS'=>'hours',
+'LBL_BEFORE_EVENT'=>'before event',
+
 );
 
 ?>

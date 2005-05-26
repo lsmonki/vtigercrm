@@ -76,6 +76,10 @@ class CRMEntity extends SugarBean
       {
                 $this->insertIntoTicketCommentTable($table_name, $module);
       }
+      elseif($table_name == "activity_reminder")
+      {
+		$this->insertIntoReminderTable($table_name,$module);
+      }
       else
       {
         $this->insertIntoEntityTable($table_name, $module);			
@@ -576,6 +580,25 @@ function insertIntoTicketCommentTable($table_name, $module)
 
 	$sql = "insert into ticketcomments values('',".$this->id.",'".$_REQUEST['comments']."','".$current_user->id."','".$ownertype."','".$current_time."')";
         $adb->query($sql);
+}
+function insertIntoReminderTable($table_name, $module)
+{
+	if($_REQUEST['set_reminder'] == 'Yes')
+	{
+	
+		$rem_days = $_REQUEST['remdays'];
+	        $rem_hrs = $_REQUEST['remhrs'];
+	        $rem_min = $_REQUEST['remmin'];
+        	$reminder_time = $rem_days * 24 * 60 + $rem_hrs * 60 + $rem_min;
+		if($_REQUEST['mode'] == 'edit')
+		{
+			$this->activity_reminder($this->id,$reminder_time,0,'edit');	
+		}
+		else
+		{
+			$this->activity_reminder($this->id,$reminder_time,0,'');	
+		}
+	}
 }
 	
   function retrieve_entity_info($record, $module)

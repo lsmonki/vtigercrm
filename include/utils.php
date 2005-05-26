@@ -1449,6 +1449,25 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
         	$custfld .= '<td width="30%"><input name="purchaseorder_name" readonly type="text" value="'.$purchaseorder_name.'"><input name="purchaseorder_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Orders&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
 	}
+	elseif($uitype == 30)
+	{
+		$rem_days = 0;
+		$rem_hrs = 0;
+		$rem_min = 0;
+		if($value!='')
+		$SET_REM = "CHECKED";
+		$rem_days = floor($col_fields[$fieldname]/(24*60));
+		$rem_hrs = floor(($col_fields[$fieldname]-$rem_days*24*60)/60);
+		$rem_min = ($col_fields[$fieldname]-$rem_days*24*60)%60;
+
+                $custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+                $custfld .= '<td valign="top" colspan=3>&nbsp;<input type="radio" name="set_reminder" value="Yes" '.$SET_REM.'>&nbsp;'.$mod_strings['LBL_YES'].'&nbsp;<input type="radio" name="set_reminder" value="No">&nbsp;'.$mod_strings['LBL_NO'].'&nbsp;';
+		$day_options = getReminderSelectOption(0,31,'remdays',$rem_days);
+		$hr_options = getReminderSelectOption(0,23,'remhrs',$rem_hrs);
+		$min_options = getReminderSelectOption(1,59,'remmin',$rem_min);
+		$custfld .= '&nbsp;&nbsp;'.$day_options.' &nbsp;'.$mod_strings['LBL_DAYS'].'&nbsp;&nbsp;'.$hr_options.'&nbsp;'.$mod_strings['LBL_HOURS'].'&nbsp;&nbsp;'.$min_options.'&nbsp;'.$mod_strings['LBL_MINUTES'].'&nbsp;&nbsp;'.$mod_strings['LBL_BEFORE_EVENT'].'</td>';
+		$SET_REM = '';
+	}
 	else
 	{
 		$custfld .= '<td width="20%" class="dataLabel">';
@@ -1825,6 +1844,18 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
                 $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Orders&action=DetailView&record='.$purchaseorder_id.'">'.$purchaseorder_name.'</a></td>';
         }
+	elseif($uitype == 30)
+	{
+		$rem_days = 0;
+		$rem_hrs = 0;
+		$rem_min = 0;
+		$rem_days = floor($col_fields[$fieldname]/(24*60));
+		$rem_hrs = floor(($col_fields[$fieldname]-$rem_days*24*60)/60);
+		$rem_min = ($col_fields[$fieldname]-$rem_days*24*60)%60;
+                 
+                $custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+                $custfld .= '<td valign="top" colspan=3 class="datafield">&nbsp;'.$rem_days.'&nbsp;'.$mod_strings['LBL_DAYS'].'&nbsp;'.$rem_hrs.'&nbsp;'.$mod_strings['LBL_HOURS'].'&nbsp;'.$rem_min.'&nbsp;'.$mod_strings['LBL_MINUTES'].'&nbsp;&nbsp;'.$mod_strings['LBL_BEFORE_EVENT'].'</td>';
+	}
 	else
 	{
 	  $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
@@ -3376,6 +3407,24 @@ function getModuleDirName($module)
 		$dir_name = $module;
 	}
 	return $dir_name;
+}
+
+function getReminderSelectOption($start,$end,$fldname,$selvalue='')
+{
+	global $mod_strings;
+	global $app_strings;
+	
+	$def_sel ="";
+	$OPTION_FLD = "<SELECT name=".$fldname.">";
+	for($i=$start;$i<=$end;$i++)
+	{
+		if($i==$selvalue)
+		$def_sel = "SELECTED";
+		$OPTION_FLD .= "<OPTION VALUE=".$i." ".$def_sel.">".$i."</OPTION>\n";
+		$def_sel = "";
+	}
+	$OPTION_FLD .="</SELECT>";
+	return $OPTION_FLD;
 }
 
 ?>

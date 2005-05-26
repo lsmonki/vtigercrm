@@ -71,6 +71,10 @@ if (!isset($focus->id)) $focus->date_due_flag = 'on';
 
 $block_1 = getBlockInformation($tab_type,1,$focus->mode,$focus->column_fields);
 
+//get Set Reminder
+
+$block_7 = getBlockInformation($tab_type,7,$focus->mode,$focus->column_fields);
+
 //get Description Information
 
 $block_2 = getBlockInformation($tab_type,2,$focus->mode,$focus->column_fields);
@@ -88,6 +92,7 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
+$xtpl->assign("BLOCK7", $block_7);
 $xtpl->assign("ACTIVITY_MODE", $activity_mode);
 $xtpl->assign("ACTIVITY_INFORMATION",$activity_lbl);
 

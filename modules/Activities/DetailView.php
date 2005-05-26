@@ -95,9 +95,12 @@ $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $xtpl->assign("ID", $focus->id);
 $xtpl->assign("NAME", $focus->name);
 //get Block 1 Information
-
 $block_1 = getDetailBlockInformation($tab_type,1,$focus->column_fields);
 $xtpl->assign("BLOCK1", $block_1);
+
+//get Reminder Information
+$block_7 = getDetailBlockInformation($tab_type,7,$focus->column_fields);
+$xtpl->assign("BLOCK7", $block_7);
 
 //get Address Information
 
