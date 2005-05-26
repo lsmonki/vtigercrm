@@ -3730,7 +3730,7 @@
 		<field name="productid" type="I" size="19">
 			<KEY/>
 		</field>
-		<field name="listprice" type="N" size="11.3">
+		<field name="listprice" type="N" size="11.3"></field>
 		<opt>Type=InnoDB</opt> <index name="PriceBookProductRel_IDX0">
 			<col>pricebookid</col>
 		</index>
@@ -3904,6 +3904,8 @@
 		<field name="productid" type="I" size="19">
 			<KEY/>
 		</field>
+		<field name="quantity" type="I" size="19"></field>
+                <field name="listprice" type="N" size="11.3"></field>
 		<opt>Type=InnoDB</opt> <index name="QuotesProductRel_IDX0">
 			<col>quoteid</col>
 		</index>
