@@ -53,6 +53,13 @@
                           <!-- BEGIN: tab -->
                           <td class="{CLASS_TABBG}"><div align="center"><a class='{CLASS_TAB}' href='index.php?module={MODULE_KEY}&action=index'>{MODULE_NAME}</a></div></td>
                           <!-- END: tab -->
+						  <td class="topBorder">test</td>
+						  <td class="topBorder">test1</td>
+						  <td class="topBorder">test2</td>
+						  <td class="topBorder">test3</td>
+						  <td class="topBorder">test4</td>
+						  <td class="topBorder">test5</td>
+						  <td class="topBorder">test6</td>
                           <td class="topBorder"></td>
                         </tr>
                       </table>
@@ -61,8 +68,8 @@
 				  </td>
                 <td class="topBorder" align="right" width="150"><table cellpadding="0" cellspacing="0">
                     <tr>
-                      <td><img id="scrollleft" src="{IMAGE_PATH}scroll_left.gif" border="0" onclick="moveleft()" onmousedown="scrollleft();this.src='{IMAGE_PATH}scroll_left_down.gif';" onmouseup="this.src='{IMAGE_PATH}scroll_left.gif';clearTimeout(moveleftvar)" onmouseout="this.src='{IMAGE_PATH}scroll_left.gif';clearTimeout(moveleftvar)"></td>
-                      <td><img id="scrollright" src="{IMAGE_PATH}scroll_right.gif" border="0" onclick="moveright()" onmousedown="scrollright();this.src='{IMAGE_PATH}scroll_right_down.gif';" onmouseup="this.src='{IMAGE_PATH}scroll_right.gif';clearTimeout(moverightvar)"  onmouseout="this.src='{IMAGE_PATH}scroll_right.gif';clearTimeout(moverightvar)"></td>
+                      <td><img id="scrollleft" src="{IMAGE_PATH}scroll_left.gif" border="0" onclick="moveleft()" onmousedown="scrolleft();this.src='{IMAGE_PATH}scroll_left_down.gif';" onmouseup="this.src='{IMAGE_PATH}scroll_left.gif';if(window.moveleftvar) clearTimeout(moveleftvar)" onmouseout="this.src='{IMAGE_PATH}scroll_left.gif';if(window.moveleftvar) clearTimeout(moveleftvar)"></td>
+                      <td><img id="scrollright" src="{IMAGE_PATH}scroll_right.gif" border="0" onclick="moveright()" onmousedown="scrolright();this.src='{IMAGE_PATH}scroll_right_down.gif';" onmouseup="this.src='{IMAGE_PATH}scroll_right.gif';if(window.moverightvar) clearTimeout(moverightvar)"  onmouseout="this.src='{IMAGE_PATH}scroll_right.gif';if(window.moverightvar) clearTimeout(moverightvar)"></td>
                     </tr>
                   </table></td>
               </tr>
