@@ -1,0 +1,191 @@
+<?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+require_once('XTemplate/xtpl.php');
+require_once('data/Tracker.php');
+
+global $mod_strings;
+global $app_list_strings;
+global $app_strings;
+global $current_user;
+$focus = 0;
+global $theme;
+
+//<<<<<>>>>>>
+global $oCustomView;
+//<<<<<>>>>>>
+
+$error_msg = '';
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+require_once($theme_path.'layout_utils.php');
+require_once('modules/CustomView/CustomView.php');
+
+$cv_module = $_REQUEST['module'];
+$recordid = $_REQUEST['record'];
+
+$xtpl=new XTemplate ('modules/CustomView/EditView.html');
+$xtpl->assign("MOD", $mod_strings);
+$xtpl->assign("APP", $app_strings);
+$xtpl->assign("IMAGE_PATH", $image_path);
+$xtpl->assign("MODULE",$cv_module);
+$xtpl->assign("CVMODULE", $cv_module);
+$xtpl->assign("CUSTOMVIEWID",$recordid);
+
+if($recordid == "")
+{
+        $oCustomView = new CustomView();
+        $modulecollist = $oCustomView->getModuleColumnsList($cv_module);
+        $choosecolhtml = getByModule_ColumnsHTML($cv_module,$modulecollist);
+
+        //step2
+        $stdfilterhtml = $oCustomView->getStdFilterCriteria();
+        $stdfiltercolhtml = getStdFilterHTML($cv_module);
+        $stdfilterjs = $oCustomView->getCriteriaJS();
+
+        //step4
+        $advfilterhtml = getAdvCriteriaHTML();
+	for($i=1;$i<11;$i++)
+	{
+		$xtpl->assign("CHOOSECOLUMN".$i,$choosecolhtml);
+	}
+	for($i=1;$i<6;$i++)
+	{
+		$xtpl->assign("FOPTION".$i,$advfilterhtml);
+        	$xtpl->assign("BLOCK".$i,$choosecolhtml);
+	}
+
+	$xtpl->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);
+	$xtpl->assign("STDFILTERCRITERIA",$stdfilterhtml);
+	$xtpl->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
+}
+else
+{
+	$oCustomView = new CustomView();
+
+	$customviewdtls = $oCustomView->getCustomViewByCvid($recordid);
+	$modulecollist = $oCustomView->getModuleColumnsList($cv_module);
+	$selectedcolumnslist = $oCustomView->getColumnsListByCvid($recordid);
+	
+	$xtpl->assign("VIEWNAME",$customviewdtls["viewname"]);
+	
+	if($customviewdtls["setdefault"] == 1)
+	{
+		$xtpl->assign("CHECKED","checked");
+	}
+	for($i=1;$i<10;$i++)
+        {
+           $choosecolhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$selectedcolumnslist[$i-1]); 
+	   $xtpl->assign("CHOOSECOLUMN".$i,$choosecolhtml);
+        }
+	
+	$stdfilterlist = $oCustomView->getStdFilterByCvid($recordid);
+	$stdfilterhtml = $oCustomView->getStdFilterCriteria($stdfilterlist["stdfilter"]);
+        $stdfiltercolhtml = getStdFilterHTML($cv_module,$stdfilterlist["columnname"]);
+        $stdfilterjs = $oCustomView->getCriteriaJS();
+	
+	if(isset($stdfilterlist["startdate"]) && isset($stdfilterlist["enddate"]))
+	{
+		$xtpl->assign("STARTDATE",$stdfilterlist["startdate"]);
+		$xtpl->assign("ENDDATE",$stdfilterlist["enddate"]);
+	}
+
+	$advfilterlist = $oCustomView->getAdvFilterByCvid($recordid);
+	for($i=1;$i<6;$i++)
+        {
+                $advfilterhtml = getAdvCriteriaHTML($advfilterlist[$i-1]["comparator"]);
+		$advcolumnhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$advfilterlist[$i-1]["columnname"]); 
+		$xtpl->assign("FOPTION".$i,$advfilterhtml);
+                $xtpl->assign("BLOCK".$i,$advcolumnhtml);
+		$xtpl->assign("VALUE".$i,$advfilterlist[$i-1]["value"]);
+        }
+
+	$xtpl->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);
+        $xtpl->assign("STDFILTERCRITERIA",$stdfilterhtml);
+        $xtpl->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
+
+}
+
+$xtpl->assign("RETURN_MODULE", $cvmodule);
+$xtpl->assign("RETURN_ACTION", "index");
+
+$xtpl->parse("main");
+$xtpl->out("main");
+
+//step2
+function getByModule_ColumnsHTML($module,$columnslist,$selected="")
+{
+	global $oCustomView;
+
+	foreach($oCustomView->module_list[$module] as $key=>$value)
+        {
+            $shtml .= "<optgroup label=\"".$module." ".$key."\" class=\"select\" style=\"border:none\">";
+            foreach($columnslist[$module][$key] as $field=>$fieldlabel)
+            {
+                if($selected == $field)
+                {
+                        $shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
+                }else
+                {
+                        $shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+                }
+            }
+        }
+        return $shtml;
+}
+//step2
+
+//step3
+function getStdFilterHTML($module,$selected="")
+{
+        global $app_list_strings;
+        global $oCustomView;
+
+        $result = $oCustomView->getStdCriteriaByModule($module);
+
+        if(isset($result))
+        {
+                foreach($result as $key=>$value)
+                {
+                        if($key == $selected)
+                        {
+                        $shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+                        }else
+                        {
+                        $shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+                        }
+                }
+        }
+
+        return $shtml;
+}
+//step3
+
+//step4
+function getAdvCriteriaHTML($selected="")
+{
+         global $adv_filter_options;
+
+         foreach($adv_filter_options as $key=>$value)
+         {
+                if($selected == $key)
+                {
+                        $shtml .= "<option selected value=\"".$key."\">".$value."</option>";
+                }else
+                {
+                        $shtml .= "<option value=\"".$key."\">".$value."</option>";
+                }
+         }
+
+         return $shtml;
+}
+//step4
+
+?>
