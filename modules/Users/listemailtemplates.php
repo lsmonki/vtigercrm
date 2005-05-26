@@ -23,14 +23,14 @@ require_once('include/database/PearDatabase.php');
 <!--fmt:setLocale value="ja_JP"/--><form action="index.php">
 <input type="hidden" name="module" value="Users">
 <input type="hidden" name="action" value="createemailtemplate">
-<?php echo get_module_title($mod_strings['LBL_MODULE_NAME'],$mod_strings['LBL_EMAIL_TEMPLATES'],false);?> 
+<?php echo get_module_title($mod_strings['LBL_MODULE_NAME'],$mod_strings['LBL_EMAIL_TEMPLATES'],false);?>
 <br>
 <input type="submit" class="button" name="Submit" value="<?php echo $mod_strings['LBL_NEW_TEMPLATE']; ?>">
 <br>
 <br>
-<table width="30%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
-  <tr> 
-    <td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_TEMPLATE_NAME']; ?></td>
+<table width="80%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
+  <tr>
+    <td width="30%" class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_TEMPLATE_NAME']; ?></td>
     <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_DESCRIPTION']; ?></td>
   </tr>
   <?php
