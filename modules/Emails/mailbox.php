@@ -178,7 +178,7 @@ else
 	echo "<br>";
 	echo "<form action='index.php>module=Emails&action=Save' method=post>";
 	echo '<table border="0" cellpadding="0" cellspacing="0" width="80%"><tr><td>';
-	echo get_form_header("Received Emails", "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\"><tr><td><input class=\"button\" type=button value=\"Add to vtigerCRM Emails\"></td></tr></table>", false );
+	echo get_form_header("Received Emails", "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\"><tr></tr></table>", false );
 	echo "</td></tr></table>";
 	echo '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="80%">';
 	echo '<tr class="ModuleListTitle" height=20>';
