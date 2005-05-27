@@ -44,6 +44,13 @@ echo '<br><br>';
                 <td width="30%" class="moduleListTitle">&nbsp;<b><?php echo $mod_strings['LBL_MAIL_SERVER_NAME']; ?></b></td>
 		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo $image_path;?>blank.gif"></td>
 		<td width="25%" class="moduleListTitle">&nbsp;<b><?php echo $mod_strings['LBL_EMAIL_ADDRESS']; ?></b></td>
+
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo $image_path;?>blank.gif"></td>
+		<td width="25%" class="moduleListTitle">&nbsp;<b><?php echo $mod_strings['LBL_MAIL_PROTOCOL']; ?></b></td>
+
+		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo $image_path;?>blank.gif"></td>
+		<td width="25%" class="moduleListTitle">&nbsp;<b><?php echo $mod_strings['LBL_MAIL_UNAME']; ?></b></td>
+			
 		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo $image_path;?>blank.gif"></td>
 		<td width="10%" class="moduleListTitle">&nbsp;<b><?php echo $mod_strings['LBL_DEFAULT']; ?></b></td>
 		<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="<?php echo $image_path;?>blank.gif"></td>
@@ -78,6 +85,14 @@ do
   printf("<td height='25'>&nbsp;%s</td>",$temprow["mail_servername"]);
   printf('<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'%s"></td>','blank.gif');
   printf("<td height='25'>&nbsp;%s</td>",$temprow["mail_id"]);
+
+  printf('<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'%s"></td>','blank.gif');
+  printf("<td height='25'>&nbsp;%s</td>",$temprow["mail_protocol"]);
+
+
+  printf('<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'%s"></td>','blank.gif');
+  printf("<td height='25'>&nbsp;%s</td>",$temprow["mail_username"]);
+  
   printf('<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'%s"></td>','blank.gif');
   if($temprow["set_default"]==1);
   $DEFAULT="Selected";
