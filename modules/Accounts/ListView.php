@@ -233,7 +233,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	{
 		$ordby ='';
 	}
-	
+
 	//added querysting viewname to display the selected view<<<<<<<customview>>>>>>
 	$search_form->assign("BASIC_LINK", "index.php?module=Accounts".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$_REQUEST['viewname']);
 	$search_form->assign("ADVANCE_LINK", "index.php?module=Accounts&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$_REQUEST['viewname']);

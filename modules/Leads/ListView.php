@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -26,6 +26,7 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 require_once('include/uifromdbutil.php');
+require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $current_language;
@@ -77,7 +78,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
 
-	
+
 	$where_clauses = Array();
 
 //Added for Custom Field Search
@@ -171,7 +172,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		array_push($where_clauses, "crmentity.smownerid = '$assigned_user_id'");
 		$url_string .= "&assigned_user_id=".$assigned_user_id;
 	}
-	
+
 	$where = "";
 	foreach($where_clauses as $clause)
 	{
@@ -195,6 +196,12 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if (isset($company)) $search_form->assign("COMPANY", $_REQUEST['company']);
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+	
+	//viewid is given to show the actual view<<<<<<<<<<customview>>>>>>>>
+	$viewidforsearch = $_REQUEST['viewname'];
+	$search_form->assign("VIEWID",$viewidforsearch);
+	//<<<<<<<customview>>>>>>>>>>
+
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if($order_by != '') {
 		$ordby = "&order_by=".$order_by;
@@ -203,16 +210,17 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	{
 		$ordby ='';
 	}
-	$search_form->assign("BASIC_LINK", "index.php?module=Leads".$ordby."&action=index".$url_string."&sorder=".$sorder);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Leads&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
 	
+	$search_form->assign("BASIC_LINK", "index.php?module=Leads".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewidforsearch);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Leads&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewidforsearch);
+
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 
 	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
-	
-	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') { 
+
+	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
 		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Leads','index','lastname','true','advanced'));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Leads','index','lastname','true','advanced',"","","","",$viewidforsearch));
 		$advsearch = 'true';
 		//if(isset($date_entered)) $search_form->assign("DATE_ENTERED", $date_entered);
 		//if(isset($date_modified)) $search_form->assign("DATE_MODIFIED", $date_modified);
@@ -237,7 +245,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		else $search_form->assign("RATING_OPTIONS", get_select_options($comboFieldArray['rating_dom'], '', $advsearch));
 
 		if (isset($industry)) $search_form->assign("INDUSTRY_OPTIONS", get_select_options($comboFieldArray['industry_dom'], $industry, $advsearch));
-		else $search_form->assign("INDUSTRY_OPTIONS", get_select_options($comboFieldArray['industry_dom'], '', $advsearch));			
+		else $search_form->assign("INDUSTRY_OPTIONS", get_select_options($comboFieldArray['industry_dom'], '', $advsearch));
 		if (isset($assigned_user_id)) $search_form->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active", $assigned_user_id), $assigned_user_id));
 		else $search_form->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active",$assigned_user_id),$assigned_user_id));
 //Added for Custom Field Search
@@ -259,7 +267,7 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 		$search_form->out("advanced");
 	}
 	else {
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Leads','index','lastname','true','basic'));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Leads','index','lastname','true','basic',"","","","",$viewidforsearch));
 		$search_form->parse("main");
 		$search_form->out("main");
 	}
@@ -267,12 +275,31 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 	echo "\n<BR>\n";
 }
 
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Leads");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']))
+{
+        $viewid =  $_REQUEST['viewname'];
+}else
+{
+	$viewid = "0";
+}
+if(isset($_REQUEST['viewname']) == false)
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}
+}
+//<<<<<customview>>>>>
+
 // Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden">
+	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_owner" type="hidden">
 	<input name="change_status" type="hidden">
 	<td>';
@@ -285,8 +312,8 @@ if(isPermitted('Leads',1,'') == 'yes')
    	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
 	       <input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_STATUS].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/>';
 }
-	$other_text .=	'</td>
-			<td align="right">'.$app_strings[LBL_VIEW].' 
+	/*$other_text .=	'</td>
+			<td align="right">'.$app_strings[LBL_VIEW].'
 			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
 				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
 				<OPTION VALUE="'.$mod_strings[LBL_CONTACTED].'">'.$mod_strings[LBL_CONTACTED].'</option>
@@ -296,7 +323,21 @@ if(isPermitted('Leads',1,'') == 'yes')
 			</SELECT>
 		</td>
 	</tr>
-	</table>';
+	</table>';*/
+	
+	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+                        <SELECT NAME="view" onchange="showDefaultCustomView(this)">
+                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+				'.$customviewcombo_html.'
+                        </SELECT>
+                        <a href="index.php?module=Leads&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+                        <span class="sep">|</span>
+                        <span class="bodyText disabled">Delete</span><span class="sep">|</span>
+                        <a href="index.php?module=Leads&action=CustomView" class="link">Create View</a>
+                </td>
+        </tr>
+        </table>';
+
 //
 
 $focus = new Lead();
@@ -311,39 +352,35 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH",$image_path);
 
 //Retreive the list from Database
-$query = getListQuery("Leads");
+//<<<<<<<<<customview>>>>>>>>>
+if($viewid != "0")
+{
+	$listquery = getListQuery("Leads");
+	$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Leads");
+}else
+{
+	$query = getListQuery("Leads");
+}
+//<<<<<<<<customview>>>>>>>>>
 
 if(isset($where) && $where != '')
 {
         $query .= ' and '.$where;
 }
 
-if(isset($_REQUEST['viewname']))
-{
-   if($_REQUEST['viewname'] == 'All')
-   {
-        $defaultcv_criteria = '';
-   }
-   else
-   {
-  	$defaultcv_criteria = $_REQUEST['viewname'];
-   }
-  $query .= " and leadstatus like "."'%" .$defaultcv_criteria ."%'";
-	$viewname = $_REQUEST['viewname'];
-  	$view_script = "<script language='javascript'>
-		function set_selected()
+$view_script = "<script language='javascript'>
+	function set_selected()
+	{
+		len=document.massdelete.view.length;
+		for(i=0;i<len;i++)
 		{
-			len=document.massdelete.view.length;
-			for(i=0;i<len;i++)
-			{
-				if(document.massdelete.view[i].value == '$viewname')
-					document.massdelete.view[i].selected = true;
-			}
+			if(document.massdelete.view[i].value == '$viewname')
+				document.massdelete.view[i].selected = true;
 		}
-		set_selected();
-		</script>";
+	}
+	set_selected();
+	</script>";
 
-}
 
 if(isset($order_by) && $order_by != '')
 {
@@ -384,7 +421,7 @@ if ($navigation_array['start'] == 1)
 	{
 		$end_rec = $noofrows;
 	}
-	
+
 }
 else
 {
@@ -403,10 +440,10 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"Leads",$url_string,$sorder,$order_by);
+$listview_header = getListViewHeader($focus,"Leads",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-$listview_entries = getListViewEntries($focus,"Leads",$list_result,$navigation_array);
+$listview_entries = getListViewEntries($focus,"Leads",$list_result,$navigation_array,"","",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 
@@ -415,7 +452,7 @@ $url_string .="&order_by=".$order_by;
 if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Leads");
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Leads","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 
