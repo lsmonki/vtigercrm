@@ -13,6 +13,7 @@ require_once('XTemplate/xtpl.php');
 require_once('modules/Products/PriceBook.php');
 require_once('include/utils.php');
 require_once('include/uifromdbutil.php');
+require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $mod_strings;
@@ -77,7 +78,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 		$uitype[$i]=$adb->query_result($result,$i,'uitype');
 
 	        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-	
+
 	        if(isset($customfield[$i]) && $customfield[$i] != '')
 	        {
 			if($uitype[$i] == 56)
@@ -245,18 +246,58 @@ echo get_form_footer();
 
 }
 */
+
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("PriceBook");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']))
+{
+        $viewid =  $_REQUEST['viewname'];
+}else
+{
+	$viewid = "0";
+}
+if(isset($_REQUEST['viewname']) == false)
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}
+}
+//<<<<<customview>>>>>
+
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden">';
-        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
-		$other_text .='</tr>
-	</table>';
+$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+
+$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+                        <SELECT NAME="view" onchange="showDefaultCustomView(this)">
+                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+				'.$customviewcombo_html.'
+                        </SELECT>
+                        <a href="index.php?module=PriceBook&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+                        <span class="sep">|</span>
+                        <span class="bodyText disabled">Delete</span><span class="sep">|</span>
+                        <a href="index.php?module=PriceBook&action=CustomView" class="link">Create View</a>
+                </td>
+        </tr>
+        </table>';
 
 //Retreive the list from Database
+//<<<<<<<<<customview>>>>>>>>>
+if($viewid != "0")
+{
+	$listquery = getListQuery("PriceBook");
+	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"PriceBook");
+}else
+{
+	$list_query = getListQuery("PriceBook");
+}
+//<<<<<<<<customview>>>>>>>>>
 
-$list_query = getListQuery("PriceBook");
 /*
 if(isset($where) && $where != '')
 {
@@ -304,7 +345,7 @@ if ($navigation_array['start'] == 1)
 	{
 		$end_rec = $noofrows;
 	}
-	
+
 }
 else
 {
@@ -323,11 +364,11 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"PriceBook",$url_string,$sorder,$order_by);
+$listview_header = getListViewHeader($focus,"PriceBook",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
 
-$listview_entries = getListViewEntries($focus,"PriceBook",$list_result,$navigation_array,'','&return_module=Products&return_action=PriceBookListView','PriceBookEditView');
+$listview_entries = getListViewEntries($focus,"PriceBook",$list_result,$navigation_array,'','&return_module=Products&return_action=PriceBookListView','PriceBookEditView','PriceBookDelete',$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
 if($order_by !='')
@@ -335,7 +376,7 @@ $url_string .="&order_by=".$order_by;
 if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"PriceBook",'PriceBookListView','PriceBookDelete');
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"PriceBook",'PriceBookListView',$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 

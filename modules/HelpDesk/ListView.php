@@ -24,6 +24,7 @@ require_once('include/utils.php');
 require_once('modules/HelpDesk/HelpDeskUtil.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/uifromdbutil.php');
+require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $mod_strings;
@@ -73,7 +74,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
 	        $uitype[$i]=$adb->query_result($result,$i,'uitype');
 	        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-	
+
 	        if(isset($customfield[$i]) && $customfield[$i] != '')
 	        {
 			if($uitype[$i] == 56)
@@ -91,10 +92,10 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	{
 		array_push($where_clauses, "troubletickets.title like '%".$name."%'");
 		$url_string .= "&ticket_title=".$name;
-	} 
+	}
 	if(isset($contact_name) && $contact_name != "")
 	{
-		array_push($where_clauses, "(contactdetails.firstname like".PearDatabase::quote($contact_name.'%')." OR contactdetails.lastname like ".PearDatabase::quote($contact_name.'%').")"); 
+		array_push($where_clauses, "(contactdetails.firstname like".PearDatabase::quote($contact_name.'%')." OR contactdetails.lastname like ".PearDatabase::quote($contact_name.'%').")");
 		$url_string .= "&contact_name=".$contact_name;
 
 	}
@@ -134,7 +135,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		}
 		$url_string .= "&date=".$date;
 		$url_string .= "&date_crit=".$date_criteria;
-	} 
+	}
 	if (isset($current_user_only) && $current_user_only !='')
 	{
 		$search_query .= array_push($where_clauses,"crmentity.smownerid='".$current_user->id."'");
@@ -144,7 +145,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	$where = "";
 	foreach($where_clauses as $clause)                                                                            {
 	{
-		if($where != "")		
+		if($where != "")
 		$where .= " and ";
 		$where .= $clause;                                                                                    }
 	}
@@ -161,6 +162,12 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+		
+	//viewid is given to show the actual view<<<<<<<<<<customview>>>>>>>>
+	$viewidforsearch = $_REQUEST['viewname'];
+	$search_form->assign("VIEWID",$viewidforsearch);
+	//<<<<<<<customview>>>>>>>>>>
+
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if($order_by != '') {
 		$ordby = "&order_by=".$order_by;
@@ -169,15 +176,15 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	{
 		$ordby ='';
 	}
-	$search_form->assign("BASIC_LINK", "index.php?module=HelpDesk".$ordby."&action=index".$url_string."&sorder=".$sorder);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=HelpDesk&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
+	$search_form->assign("BASIC_LINK", "index.php?module=HelpDesk".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewidforsearch);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=HelpDesk&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewidforsearch);
 
 	if (isset($name)) $search_form->assign("SUBJECT", $name);
 	if (isset($contact_name)) $search_form->assign("CONTACT_NAME", $contact_name);
 	//if (isset($priority)) $search_form->assign("PRIORITY", $priority);
 	if (isset($priority)) $search_form->assign("PRIORITY", get_select_options($comboFieldArray['ticketpriorities_dom'], $priority, $clearsearch));
         else $search_form->assign("PRIORITY", get_select_options($comboFieldArray['ticketpriorities_dom'], '', $clearsearch));
-	//if (isset($status)) $search_form->assign("STATUS", $status); 
+	//if (isset($status)) $search_form->assign("STATUS", $status);
 	if (isset($status)) $search_form->assign("STATUS", get_select_options($comboFieldArray['ticketstatus_dom'], $status, $clearsearch));
         else $search_form->assign("STATUS", get_select_options($comboFieldArray['ticketstatus_dom'], '', $clearsearch));
 	//if (isset($category)) $search_form->assign("CATEGORY", $category);
@@ -190,11 +197,11 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if ($date != '') $search_form->assign("DATE", $date);
 	if ($current_user_only != '')	$search_form->assign("CURRENT_USER_ONLY", "checked");
 
-        if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') 
+        if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true')
 	{
 
 		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','ticket_title','true','advanced'));	
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','ticket_title','true','advanced',"","","","",$viewidforsearch));
 
 		//Added for Custom Field Search
 		$sql="select * from field where tablename='ticketcf' order by fieldlabel";
@@ -214,8 +221,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
                 $search_form->out("advanced");
 	}
 	else
-	{        
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','ticket_title','true','basic'));	
+	{
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','ticket_title','true','basic',"","","","",$viewidforsearch));
 		$search_form->parse("main");
 	        $search_form->out("main");
 	}
@@ -223,6 +230,25 @@ echo get_form_footer();
 echo '<br>';
 
 }
+
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("HelpDesk");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']))
+{
+        $viewid =  $_REQUEST['viewname'];
+}else
+{
+	$viewid = "0";
+}
+if(isset($_REQUEST['viewname']) == false)
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}
+}
+//<<<<<customview>>>>>
 
 // Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
@@ -234,7 +260,7 @@ if(isPermitted('HelpDesk',2,'') == 'yes')
 {
         $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
-		$other_text .='<td align="right">'.$app_strings[LBL_VIEW].' 
+		/*$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
 			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
 				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
 				<OPTION VALUE="'.$mod_strings[LBL_LOW].'">'.$mod_strings[LBL_LOW].'</option>
@@ -242,6 +268,19 @@ if(isPermitted('HelpDesk',2,'') == 'yes')
 				<OPTION VALUE="'.$mod_strings[LBL_HIGH].'">'.$mod_strings[LBL_HIGH].'</option>
 				<OPTION VALUE="'.$mod_strings[LBL_CRITICAL].'">'.$mod_strings[LBL_CRITICAL].'</option>
 			</SELECT>
+		</td>
+	</tr>
+	</table>';*/
+
+$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
+				<OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+			</SELECT>
+	                <a href="index.php?module=HelpDesk&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+	                <span class="sep">|</span>
+                        <span class="bodyText disabled">Delete</span><span class="sep">|</span>
+                        <a href="index.php?module=HelpDesk&action=CustomView" class="link">Create View</a>
+
 		</td>
 	</tr>
 	</table>';
@@ -256,14 +295,23 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH",$image_path);
 
 //Retreive the list from Database
-$list_query = getListQuery("HelpDesk");
+//<<<<<<<<<customview>>>>>>>>>
+if($viewid != "0")
+{
+	$listquery = getListQuery("HelpDesk");
+	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"HelpDesk");
+}else
+{
+	$list_query = getListQuery("HelpDesk");
+}
+//<<<<<<<<customview>>>>>>>>>
 
 if(isset($where) && $where != '')
 {
 	$list_query .= ' and '.$where;
 }
 
-if(isset($_REQUEST['viewname']))
+/*if(isset($_REQUEST['viewname']))
 {
 	if($_REQUEST['viewname'] == 'All')
 	   {
@@ -289,7 +337,20 @@ if(isset($_REQUEST['viewname']))
 		set_selected();
 		</script>";
 
-}
+}*/
+
+$view_script = "<script language='javascript'>
+	function set_selected()
+	{
+		len=document.massdelete.view.length;
+		for(i=0;i<len;i++)
+		{
+			if(document.massdelete.view[i].value == '$viewid')
+				document.massdelete.view[i].selected = true;
+		}
+	}
+	set_selected();
+	</script>";
 
 if(isset($order_by) && $order_by != '')
 {
@@ -299,7 +360,7 @@ if(isset($order_by) && $order_by != '')
 
 $list_result = $adb->query($list_query);
 
-//Constructing the list view 
+//Constructing the list view
 
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
@@ -311,7 +372,7 @@ if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 }
 else
 {
-	
+
 	$start = 1;
 }
 //Retreive the Navigation array
@@ -332,7 +393,7 @@ if ($navigation_array['start'] == 1)
 	{
 		$end_rec = $noofrows;
 	}
-	
+
 }
 else
 {
@@ -351,10 +412,10 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"HelpDesk",$url_string,$sorder,$order_by);
+$listview_header = getListViewHeader($focus,"HelpDesk",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-$listview_entries = getListViewEntries($focus,"HelpDesk",$list_result,$navigation_array);
+$listview_entries = getListViewEntries($focus,"HelpDesk",$list_result,$navigation_array,"","","","",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 
@@ -364,7 +425,7 @@ if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
 $xtpl->assign("SELECT_SCRIPT", $view_script);
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"HelpDesk");
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"HelpDesk","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 

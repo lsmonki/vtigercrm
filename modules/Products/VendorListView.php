@@ -13,6 +13,7 @@ require_once('XTemplate/xtpl.php');
 require_once('modules/Products/Vendor.php');
 require_once('include/utils.php');
 require_once('include/uifromdbutil.php');
+require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $mod_strings;
@@ -77,7 +78,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 		$uitype[$i]=$adb->query_result($result,$i,'uitype');
 
 	        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-	
+
 	        if(isset($customfield[$i]) && $customfield[$i] != '')
 	        {
 			if($uitype[$i] == 56)
@@ -97,7 +98,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 		//$search_query .= " and productname like '".$productname."%'";
 		$url_string .= "&productname=".$productname;
 	}
-	
+
 	if (isset($productcode) && $productcode !='')
 	{
 		array_push($where_clauses, "productcode like ".PearDatabase::quote($productcode.'%'));
@@ -111,14 +112,14 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 		 //$search_query .= " and commissionrate like '".$commissionrate."%'";
 		 $url_string .= "&commissionrate=".$commissionrate;
 	}
-	
+
 	if (isset($qtyperunit) && $qtyperunit !='')
 	{
 		array_push($where_clauses, "qty_per_unit like ".PearDatabase::quote($qtyperunit.'%'));
 	 	//$search_query .= " and qty_per_unit like '".$qtyperunit."%'";
 		$url_string .= "&qtyperunit=".$qtyperunit;
 	}
-	
+
 	if (isset($unitprice) && $unitprice !='')
 	{
 		array_push($where_clauses, "unit_price like ".PearDatabase::quote($unitprice.'%'));
@@ -142,13 +143,13 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 		array_push($where_clauses, "start_date like ".PearDatabase::quote($start_date.'%'));
                 //$search_query .= " and start_date = '".$start_date."%'";
                 $url_string .= "&start_date=".$start_date;
-        } 
+        }
 	if (isset($expiry_date) && $expiry_date !='')
         {
 		array_push($where_clauses, "expiry_date like ".PearDatabase::quote($expiry_date.'%'));
                 //$search_query .= " and expiry_date = '".$expiry_date."%'";
                 $url_string .= "&expiry_date=".$expiry_date;
-        } 
+        }
 	if (isset($purchase_date) && $purchase_date !='')
         {
 		array_push($where_clauses, "purchase_date like ".PearDatabase::quote($purchase_date.'%'));
@@ -164,7 +165,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 	}
 
 	$log->info("Here is the where clause for the list view: $where");
- 
+
 
 }
 
@@ -176,7 +177,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         $search_form->assign("MOD", $mod_strings);
         $search_form->assign("APP", $app_strings);
 	$clearsearch = 'true';
-	
+
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
@@ -195,11 +196,11 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if ($productcode !='') $search_form->assign("PRODUCT_CODE", $productcode);
 	if ($qtyperunit !='') $search_form->assign("QTYPERUNIT", $qtyperunit);
 	if ($unitprice !='') $search_form->assign("UNITPRICE", $unitprice);
-	if (isset($_REQUEST['manufacturer'])) $manufacturer = $_REQUEST['manufacturer'];	
-	if (isset($_REQUEST['productcategory'])) $productcategoty = $_REQUEST['productcategory'];	
-	if (isset($_REQUEST['start_date'])) $start_date = $_REQUEST['start_date'];	
-	if (isset($_REQUEST['expiry_date'])) $expiry_date = $_REQUEST['expiry_date'];	
-	if (isset($_REQUEST['purchase_date'])) $purchase_date = $_REQUEST['purchase_date'];	
+	if (isset($_REQUEST['manufacturer'])) $manufacturer = $_REQUEST['manufacturer'];
+	if (isset($_REQUEST['productcategory'])) $productcategoty = $_REQUEST['productcategory'];
+	if (isset($_REQUEST['start_date'])) $start_date = $_REQUEST['start_date'];
+	if (isset($_REQUEST['expiry_date'])) $expiry_date = $_REQUEST['expiry_date'];
+	if (isset($_REQUEST['purchase_date'])) $purchase_date = $_REQUEST['purchase_date'];
 
 //Combo Fields for Manufacturer and Category are moved from advanced to Basic Search
         if (isset($manufacturer)) $search_form->assign("MANUFACTURER", get_select_options($comboFieldArray['manufacturer_dom'], $manufacturer, $clearsearch));
@@ -207,7 +208,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         if (isset($productcategory)) $search_form->assign("PRODUCTCATEGORY", get_select_options($comboFieldArray['productcategory_dom'], $productcategoty, $clearsearch));
         else $search_form->assign("PRODUCTCATEGORY", get_select_options($comboFieldArray['productcategory_dom'], '', $clearsearch));
 
-        if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') 
+        if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true')
 	{
 		$url_string .="&advanced=true";
 		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Products','index','productname','true','advanced'));
@@ -235,7 +236,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
                 $search_form->out("advanced");
 	}
 	else
-	{        
+	{
 		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Products','index','productname','true','basic'));
 		$search_form->parse("main");
 	        $search_form->out("main");
@@ -245,18 +246,60 @@ echo get_form_footer();
 
 }
 */
+
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Vendor");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']))
+{
+        $viewid =  $_REQUEST['viewname'];
+}else
+{
+	$viewid = "0";
+}
+if(isset($_REQUEST['viewname']) == false)
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}
+}
+//<<<<<customview>>>>>
+
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden">';
         $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
-		$other_text .='</tr>
-	</table>';
+
+$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+                        <SELECT NAME="view" onchange="showDefaultCustomView(this)">
+                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+				'.$customviewcombo_html.'
+                        </SELECT>
+                        <a href="index.php?module=Vendor&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+                        <span class="sep">|</span>
+                        <span class="bodyText disabled">Delete</span><span class="sep">|</span>
+                        <a href="index.php?module=Vendor&action=CustomView" class="link">Create View</a>
+                </td>
+        </tr>
+        </table>';
 
 //Retreive the list from Database
 
-$list_query = getListQuery("Vendor");
+//Retreive the list from Database
+//<<<<<<<<<customview>>>>>>>>>
+if($viewid != "0")
+{
+	$listquery = getListQuery("Vendor");
+	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Vendor");
+}else
+{
+	$list_query = getListQuery("Vendor");
+}
+//<<<<<<<<customview>>>>>>>>>
+
 /*
 if(isset($where) && $where != '')
 {
@@ -304,7 +347,7 @@ if ($navigation_array['start'] == 1)
 	{
 		$end_rec = $noofrows;
 	}
-	
+
 }
 else
 {
@@ -323,11 +366,11 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"Vendor",$url_string,$sorder,$order_by);
+$listview_header = getListViewHeader($focus,"Vendor",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
 
-$listview_entries = getListViewEntries($focus,"Vendor",$list_result,$navigation_array,'','&return_module=Products&return_action=VendorListView','VendorEditView');
+$listview_entries = getListViewEntries($focus,"Vendor",$list_result,$navigation_array,'','&return_module=Products&return_action=VendorListView','VendorEditView','',$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
 if($order_by !='')
@@ -335,7 +378,7 @@ $url_string .="&order_by=".$order_by;
 if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Vendor",'VendorListView','VendorDelete');
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Vendor","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 

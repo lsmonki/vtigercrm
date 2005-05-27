@@ -343,7 +343,7 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 $listview_header = getListViewHeader($focus,"Activities",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-$listview_entries = getListViewEntries($focus,"Activities",$list_result,$navigation_array,"","",$oCustomView);
+$listview_entries = getListViewEntries($focus,"Activities",$list_result,$navigation_array,"","","","",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 

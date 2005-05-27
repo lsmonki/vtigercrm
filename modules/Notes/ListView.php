@@ -28,6 +28,7 @@ require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/utils.php');
 require_once('include/uifromdbutil.php');
+require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -53,7 +54,12 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("MOD", $mod_strings);
 	$search_form->assign("APP", $app_strings);
 
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Notes','index','title','true','basic'));
+	//viewid is given to show the actual view<<<<<<<<<<customview>>>>>>>>
+	$viewidforsearch = $_REQUEST['viewname'];
+	$search_form->assign("VIEWID",$viewidforsearch);
+	//<<<<<<<customview>>>>>>>>>>
+
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Notes','index','title','true','basic',"","","","",$viewidforsearch));
 
 	if(isset($_REQUEST['query'])) {
 		if(isset($_REQUEST['title'])) $search_form->assign("NAME", $_REQUEST['title']);
@@ -122,6 +128,26 @@ $ListView->setHeaderTitle($display_title );
 $ListView->setQuery($where, "", "notes.date_entered DESC", "NOTE");
 $ListView->processListView($seedNote, "main", "NOTE");
 */
+
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Notes");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']))
+{
+        $viewid =  $_REQUEST['viewname'];
+}else
+{
+	$viewid = "0";
+}
+if(isset($_REQUEST['viewname']) == false)
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}
+}
+//<<<<<customview>>>>>
+
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
@@ -131,10 +157,18 @@ if(isPermitted('Notes',2,'') == 'yes')
 {
         $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
 }
- $other_text .='</td>
-		<td align="right">&nbsp;</td>
-	</tr>
-	</table>';
+$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+                        <SELECT NAME="view" onchange="showDefaultCustomView(this)">
+                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+				'.$customviewcombo_html.'
+                        </SELECT>
+                        <a href="index.php?module=Notes&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+                        <span class="sep">|</span>
+                        <span class="bodyText disabled">Delete</span><span class="sep">|</span>
+                        <a href="index.php?module=Notes&action=CustomView" class="link">Create View</a>
+                </td>
+        </tr>
+        </table>';
 //
 
 $focus = new Note();
@@ -149,7 +183,16 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH",$image_path);
 
 //Retreive the list from Database
-$query = getListQuery("Notes");
+//<<<<<<<<<customview>>>>>>>>>
+if($viewid != "0")
+{
+	$listquery = getListQuery("Notes");
+	$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Notes");
+}else
+{
+	$query = getListQuery("Notes");
+}
+//<<<<<<<<customview>>>>>>>>>
 
 if(isset($where) && $where != '')
 {
@@ -194,7 +237,7 @@ if ($navigation_array['start'] == 1)
 	{
 		$end_rec = $noofrows;
 	}
-	
+
 }
 else
 {
@@ -214,11 +257,11 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"Notes",$url_string,$sorder,$order_by);
+$listview_header = getListViewHeader($focus,"Notes",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
 
-$listview_entries = getListViewEntries($focus,"Notes",$list_result,$navigation_array);
+$listview_entries = getListViewEntries($focus,"Notes",$list_result,$navigation_array,"","","","",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
 if($order_by !='')
@@ -226,7 +269,7 @@ $url_string .="&order_by=".$order_by;
 if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Notes");
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Notes","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 

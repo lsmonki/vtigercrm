@@ -467,7 +467,7 @@ $listview_header = getListViewHeader($focus,"Accounts",$url_string,$sorder,$orde
 $xtpl->assign("LISTHEADER", $listview_header);
 
 
-$listview_entries = getListViewEntries($focus,"Accounts",$list_result,$navigation_array,"","",$oCustomView);
+$listview_entries = getListViewEntries($focus,"Accounts",$list_result,$navigation_array,"","","","",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 

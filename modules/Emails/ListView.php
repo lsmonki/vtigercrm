@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -26,6 +26,7 @@ require_once('modules/Emails/Email.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/uifromdbutil.php');
+require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -58,7 +59,12 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("MOD", $mod_strings);
 	$search_form->assign("APP", $app_strings);
 
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Emails','index','subject','true','basic'));
+	//viewid is given to show the actual view<<<<<<<<<<customview>>>>>>>>
+	$viewidforsearch = $_REQUEST['viewname'];
+	$search_form->assign("VIEWID",$viewidforsearch);
+	//<<<<<<<customview>>>>>>>>>>
+
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Emails','index','subject','true','basic',"","","","",$viewidforsearch));
 
 	if(isset($_REQUEST['query'])) {
 		if(isset($_REQUEST['subject'])) $search_form->assign("NAME", $_REQUEST['subject']);
@@ -66,25 +72,55 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
 	}
 	$search_form->parse("main");
-	
+
 	echo get_form_header($mod_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 	$search_form->out("main");
 	echo get_form_footer();
 	echo "\n<BR>\n";
 }
 
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Emails");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']))
+{
+        $viewid =  $_REQUEST['viewname'];
+}else
+{
+	$viewid = "0";
+}
+if(isset($_REQUEST['viewname']) == false)
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}
+}
+//<<<<<customview>>>>>
+
 // Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
+	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_status" type="hidden">
 		<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>
-   		</td>
-		<td align="right">&nbsp;</td>
-	</tr>
-	</table>';
-//
+   		</td>';
+
+$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+                        <SELECT NAME="view" onchange="showDefaultCustomView(this)">
+                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+				'.$customviewcombo_html.'
+                        </SELECT>
+                        <a href="index.php?module=Emails&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+                        <span class="sep">|</span>
+                        <span class="bodyText disabled">Delete</span><span class="sep">|</span>
+                        <a href="index.php?module=Emails&action=CustomView" class="link">Create View</a>
+                </td>
+        </tr>
+        </table>';
+
 
 
 
@@ -111,7 +147,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	{
 		array_push($where_clauses, "activity.subject like ".PearDatabase::quote($name.'%')."");
 		$url_string .= "&subject=".$name;
-		
+
 	}
 	if(isset($contactname) && $contactname != '')
 	{
@@ -158,7 +194,18 @@ $display_title = $mod_strings['LBL_LIST_FORM_TITLE'];
 if($email_title)$display_title = $email_title;
 
 //Retreive the list from Database
-$list_query = getListQuery("Emails");
+//<<<<<<<<<customview>>>>>>>>>
+if($viewid != "0")
+{
+	$listquery = getListQuery("Emails");
+	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Emails");
+}else
+{
+	$list_query = getListQuery("Emails");
+}
+//<<<<<<<<customview>>>>>>>>>
+
+
 if(isset($where) && $where != '')
 {
 	$list_query .= " AND " .$where;
@@ -170,7 +217,7 @@ if(isset($order_by) && $order_by != '')
         $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
 
-//Constructing the list view 
+//Constructing the list view
 
 echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Emails/ListView.html');
@@ -188,7 +235,7 @@ if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 }
 else
 {
-	
+
 	$start = 1;
 }
 //Retreive the Navigation array
@@ -209,7 +256,7 @@ if ($navigation_array['start'] == 1)
 	{
 		$end_rec = $noofrows;
 	}
-	
+
 }
 else
 {
@@ -228,10 +275,10 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"Emails",$url_string,$sorder,$order_by);
+$listview_header = getListViewHeader($focus,"Emails",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-$listview_entries = getListViewEntries($focus,"Emails",$list_result,$navigation_array);
+$listview_entries = getListViewEntries($focus,"Emails",$list_result,$navigation_array,"","","","",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
 if($order_by !='')
@@ -239,7 +286,7 @@ $url_string .="&order_by=".$order_by;
 if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
-$navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Emails");
+$navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Emails","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 
