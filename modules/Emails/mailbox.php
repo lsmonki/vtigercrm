@@ -14,7 +14,15 @@ global $current_user;
 require_once('modules/Users/UserInfoUtil.php');
 $mailInfo = getMailServerInfo($current_user);
    $temprow = $adb->fetch_array($mailInfo);
-   $ServerName = "{".$temprow["mail_servername"]."/imap:143/notls}INBOX"; // For a IMAP connection    (PORT 143)
+	if($temprow["mail_protocol"] == 'POP')
+	{
+         $ServerName = "{".$temprow["mail_servername"]."/pop3:110/notls}INBOX"; 
+        }
+	else
+	{
+   $ServerName = "{".$temprow["mail_servername"]."/imap:143/notls}INBOX";
+   // For a IMAP connection    (PORT 143)
+  	}
    $UserName = $temprow["mail_username"];
    $PassWord = $temprow["mail_password"];
    
