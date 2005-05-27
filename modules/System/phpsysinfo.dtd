@@ -3,7 +3,7 @@
   phpSysInfo - A PHP System Information Script
   http://phpsysinfo.sourceforge.net/
 
-  $Id: phpsysinfo.dtd,v 1.1 2005/03/14 07:41:03 shankarr Exp $
+  $Id: phpsysinfo.dtd,v 1.9 2004/06/09 16:22:47 webbie Exp $
 
 -->
 <!ELEMENT phpsysinfo (Generation, Vitals, Network, Hardware, Memory, Swap, FileSystem)>

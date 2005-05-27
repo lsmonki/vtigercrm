@@ -49,7 +49,7 @@ if (!isset($template)) {
 if (!isset($template)) {
   $template = $default_template;
 }
-
+//echo 'template is '.$template;
 // check to see if we have a random template first
 if ($template == 'random') {
   $dir = opendir(APP_ROOT .'/templates/');
@@ -61,7 +61,6 @@ if ($template == 'random') {
   $template = $buf[array_rand($buf, 1)];
   $random = true;
 }
-
 if ($template != 'xml') {
   $template = basename(APP_ROOT .'/templates/' . $template); 
   // figure out if we got a template passed in the url
@@ -70,7 +69,6 @@ if ($template != 'xml') {
     $template = $default_template;
   }
 }
-
 define('TEMPLATE_SET', $template);
 // get our current language
 // default to english, but this is negotiable.
