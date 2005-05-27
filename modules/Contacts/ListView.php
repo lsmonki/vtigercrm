@@ -334,10 +334,10 @@ if(isPermitted('Contacts',2,'') == 'yes')
 if($viewid != "0")
 {
 	$listquery = getListQuery("Contacts");
-	$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Contacts");
+	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Contacts");
 }else
 {
-	$query = getListQuery("Contacts");
+	$list_query = getListQuery("Contacts");
 }
 //<<<<<<<<customview>>>>>>>>>
 
