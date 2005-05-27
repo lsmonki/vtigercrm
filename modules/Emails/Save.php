@@ -76,7 +76,7 @@ if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
     }
     else
     {
-      echo 'contact not found in db!';
+      //echo 'contact not found in db!';
     }
 }
 
