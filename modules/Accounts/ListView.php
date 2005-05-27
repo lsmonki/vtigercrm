@@ -101,8 +101,8 @@ for($i=0;$i<$adb->num_rows($result);$i++)
         }
 }
 //upto this added for Custom Field
-	
-	if(isset($name) && $name != "") 
+
+	if(isset($name) && $name != "")
 	{
 		array_push($where_clauses, "account.accountname like ".PearDatabase::quote($name."%"));
 		$url_string .= "&accountname=".$name;
@@ -118,12 +118,12 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		$url_string .= "&phone=".$phone;
 	}
 	if(isset($annual_revenue) && $annual_revenue != "")
-	{ 
+	{
 		array_push($where_clauses, "account.annualrevenue like ".PearDatabase::quote($annual_revenue."%"));
 		$url_string .= "&annual_revenue=".$annual_revenue;
 	}
 	if(isset($employees) && $employees != "")
-	{ 
+	{
 		array_push($where_clauses, "account.employees like ".PearDatabase::quote($employees."%"));
 		$url_string .= "&employees=".$employees;
 	}
@@ -235,8 +235,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	}
 
 	//added querysting viewname to display the selected view<<<<<<<customview>>>>>>
-	$search_form->assign("BASIC_LINK", "index.php?module=Accounts".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$_REQUEST['viewname']);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Accounts&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$_REQUEST['viewname']);
+	$search_form->assign("BASIC_LINK", "index.php?module=Accounts".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewidforsearch);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Accounts&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewidforsearch);
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if (isset($name)) $search_form->assign("NAME", $name);
