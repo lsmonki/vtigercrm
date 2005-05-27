@@ -47,6 +47,7 @@
  }
 
  </script>
+ <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
  <link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
         <script type="text/javascript" src="jscalendar/calendar.js"></script>
         <script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
@@ -94,6 +95,12 @@
         </div></td>
   </tr>
 </table>
+<script type="text/javascript" defer="1">
+var oFCKeditor = null;
+oFCKeditor = new FCKeditor( "description" ) ;
+oFCKeditor.BasePath   = "include/fckeditor/" ;
+oFCKeditor.ReplaceTextarea() ;
+</script>
 </form>
 <!--
 

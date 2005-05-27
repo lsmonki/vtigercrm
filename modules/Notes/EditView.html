@@ -47,6 +47,7 @@
  }
 
  </script>
+ <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 <form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
   <input type="hidden" name="max_file_size" value="{MAX_FILE_SIZE}">
   <input type="hidden" name="module" value="Notes">
@@ -92,6 +93,12 @@
         </div></td>
     </tr>
   </table>
+<script type="text/javascript" defer="1">
+var oFCKeditor = null;
+oFCKeditor = new FCKeditor( "notecontent" ) ;
+oFCKeditor.BasePath   = "include/fckeditor/" ;
+oFCKeditor.ReplaceTextarea() ;
+</script>
 </form>
 {JAVASCRIPT} 
 <!-- END: main -->
