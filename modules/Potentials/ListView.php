@@ -347,7 +347,7 @@ $view_script = "<script language='javascript'>
 		len=document.massdelete.view.length;
 		for(i=0;i<len;i++)
 		{
-			if(document.massdelete.view[i].value == '$viewname')
+			if(document.massdelete.view[i].value == '$viewid')
 				document.massdelete.view[i].selected = true;
 		}
 	}
