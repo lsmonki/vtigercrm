@@ -42,6 +42,7 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
+	
 } 
 
 global $theme;
@@ -79,6 +80,12 @@ $block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
 $block_3 = getDetailBlockInformation("Quotes",3,$focus->column_fields);
 $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 $xtpl->assign("BLOCK3", $block_3);
+
+$block_4_header = getBlockTableHeader("LBL_RELATED_PRODUCTS");
+$block_4 = getDetailAssociatedProducts($module,$focus);
+$xtpl->assign("BLOCK4_HEADER", $block_4_header);
+$xtpl->assign("BLOCK4", $block_4);
+
 /*
 $block_5 = getDetailBlockInformation("Accounts",5,$focus->column_fields);
 if(trim($block_5) != '')
