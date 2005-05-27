@@ -34,6 +34,14 @@ $numRows=$adb->num_rows($result);
   //CAUTION: The url exceeded was happening because the variable names were the same and would have been set in session thereby getting into an infinite loop
   header("Location: index.php?module=Users&action=listgroupmembers&nameofgroup=$groupname&groupmembers=$groupnameList");
 }
+function getMailServerInfo($user)
+{
+	global $adb;
+	//$sql= "select rolename from user2role where userid='" .$userid ."'";
+   $sql = "select * from mail_accounts where status=1 and user_id=".$user->id;
+        $result = $adb->query($sql);
+	return $result;
+}
 
 function fetchUserRole($userid)
 {
