@@ -935,7 +935,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			}
 			else
 			{	
-				$chk_val = '';	
+				$chk_val = '';
 			}
 
 			$custfld .= '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
@@ -945,7 +945,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 19)
 	{
 		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
-        	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" cols="60" rows="8">'.$value.'</textarea></td>';
+        	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" cols="118" rows="30">'.$value.'</textarea></td>';
 	}
 	elseif($uitype == 21)
 	{
