@@ -735,7 +735,7 @@ function parse_calendardate($local_format) {
 	preg_match("/\(?([^-]{1})[^-]*-([^-]{1})[^-]*-([^-]{1})[^-]*\)/", $local_format, $matches);
 	if (isset($matches[1]) && isset($matches[2]) && isset($matches[3])) {
 		$calendar_format = "%" . $matches[1] . "-%" . $matches[2] . "-%" . $matches[3];
-		return str_replace(array("y", "å", "a", "j"), array("Y", "Y", "Y", "d"), $calendar_format);
+		return str_replace(array("y", "ï¿½, "a", "j"), array("Y", "Y", "Y", "d"), $calendar_format);
 	}
 	else {
 		return "%Y-%m-%d";
@@ -2102,7 +2102,7 @@ function getURLstring($focus)
 	return $qry;
 
 }
-function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='')
+function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv)
 {
 	global $adb;
 	global $theme;
@@ -2111,7 +2111,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	$arrow='';
 	$qry = getURLstring($focus);
 	$theme_path="themes/".$theme."/";
-	$image_path=$theme_path."images/";		
+	$image_path=$theme_path."images/";
 	$list_header = '<tr class="moduleListTitle" height=20>';
 	$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 	if($relatedlist == '')
@@ -2123,16 +2123,36 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	//Get the tabid of the module
 	//require_once('modules/Users/UserInfoUtil.php')
 	$tabid = getTabid($module);
-	global $profile_id;		
+	global $profile_id;
         if($profile_id == '')
         {
                 global $current_user;
                 $profile_id = fetchUserProfileId($current_user->id);
         }
+	//added for customview 27/5
+	if($oCv)
+        {
+                if(isset($oCv->list_fields))
+                {
+                        $focus->list_fields = $oCv->list_fields;
+                }
+        }
 
+	//modified for customview 27/5 - $app_strings change to $mod_strings
 	foreach($focus->list_fields as $name=>$tableinfo)
 	{
-		$fieldname = $focus->list_fields_name[$name];
+		//$fieldname = $focus->list_fields_name[$name];  //commented for customview 27/5
+		//added for customview 27/5
+		if($oCv)
+                {
+                        if(isset($oCv->list_fields_name))
+                        {
+                                $fieldname = $oCv->list_fields_name[$name];
+                        }else
+                        {
+                                $fieldname = $focus->list_fields_name[$name];
+                        }
+                }
 
 		//Getting the Entries from Profile2 field table
 		$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
@@ -2167,16 +2187,16 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                                         	}
 						if($relatedlist !='')
                                                 {
-                                                        $name = $app_strings[$name];
+                                                        $name = $mod_strings[$name];
                                                 }
                                                 else
                                                 {
-                                        		$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$app_strings[$name]."&nbsp;".$arrow."</a>";
+                                        		$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$mod_strings[$name]."&nbsp;".$arrow."</a>";
                                         		$arrow = '';
 						}
 					}
 					else
-						$name = $app_strings[$name];
+						$name = $mod_strings[$name];
 				}
 			}
 			//Added condition to hide the close column in Related Lists
@@ -2190,7 +2210,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 				$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
 			}
 		}
-	}	
+	}
 	$list_header .='<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">'.$app_strings['LBL_EDIT'].' | '.$app_strings['LBL_DELETE'].'</td>';
 	$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
 	$list_header .= '</tr>';
@@ -2352,7 +2372,8 @@ function getRelatedTo($module,$list_result,$rset)
 
 }
 
-function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete')
+//parameter added for customview $oCv 27/5
+function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
 {
 	global $adb;
 	global $app_strings;
@@ -2373,6 +2394,15 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 	//getting the fieldtable entries from database
 	$tabid = getTabid($module);
+	
+	//added for customview 27/5
+	if($oCv)
+        {
+                if(isset($oCv->list_fields))
+                {
+                        $focus->list_fields = $oCv->list_fields;
+                }
+        }
 
 	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
@@ -2386,7 +2416,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		$owner_id = $adb->query_result($list_result,$i-1,"smownerid");
 
 		if($relatedlist == '')
-		{		
+		{
 			$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 			$list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall")></td>';
 		}
@@ -2394,6 +2424,16 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		foreach($focus->list_fields as $name=>$tableinfo)
 		{
 			$fieldname = $focus->list_fields_name[$name];
+			
+			//added for customview 27/5
+			if($oCv)
+                        {
+                                if(isset($oCv->list_fields_name))
+                                {
+                                        $fieldname = $oCv->list_fields_name[$name];
+                                }
+                        }
+
 			global $profile_id;
 			$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
 			$result = $adb->query($query);
@@ -2414,12 +2454,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$table_name=$tablename;
 						$column_name = $colname;
 					}
-					$value = $adb->query_result($list_result,$i-1,$colname); 
+					$value = $adb->query_result($list_result,$i-1,$colname);
 				}
 				else
 				{
-				
-				
+
+
 					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
 					{
 						$status = $adb->query_result($list_result,$i-1,"status");
@@ -2441,7 +2481,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							if(($contact_name != "") && ($contact_id !='NULL'))
 								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
 						}
-						if ($name == 'Close') 
+						if ($name == 'Close')
 						{
 							if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '')
 							{
@@ -2465,9 +2505,18 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					}
 					elseif($name=='Account Name')
 					{
-						$account_id = $adb->query_result($list_result,$i-1,"accountid");
-						$account_name = getAccountName($account_id);
-						$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+						//modified for customview 27/5
+						if($module == 'Accounts')
+                                                {
+                                                	$account_id = $adb->query_result($list_result,$i-1,"crmid");
+                                                	$account_name = getAccountName($account_id);
+                                                	$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+                                                }else
+                                                {
+                                                	$account_id = $adb->query_result($list_result,$i-1,"accountid");
+                                                	$account_name = getAccountName($account_id);
+                                                	$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+                                                }
 					}
 					elseif(($module == 'PriceBook' || $module == 'Quotes' || 'Orders') && $name == 'Product Name')
 					{
@@ -2487,7 +2536,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                        }
 					else
 					{
-						
+
 						$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
 						$field_result = $adb->query($query);
 						$list_result_count = $i-1;
@@ -2504,7 +2553,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				else
 				{
 					$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
-					$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';	
+					$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 				}
 				if($fieldname=='filename')
 				{
@@ -2512,7 +2561,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				}
 			}
 
-		}	
+		}
 
 		if($returnset=='')
 			$returnset = '&return_module='.$module.'&return_action=index';
@@ -3233,7 +3282,8 @@ function ChangeStatus($status,$activityid,$activity_mode='')
         $adb->query($query);
  }
 
-function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='',$recordid='',$return_module='',$append_url='')
+//parameter $viewid added for customview 27/5
+function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='',$recordid='',$return_module='',$append_url='',$viewid='')
 {
 	if($type=='advanced')
 		$flag='&advanced=true';
@@ -3247,7 +3297,7 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
                 $returnvalue .= '&return_module='.$return_module;
 
 	for($var='A',$i =1;$i<=26;$i++,$var++)
-		$list .= '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&query='.$query.'&'.$fieldname.'='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$var.'</a></td>';
+		$list .= '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&viewname='.$viewid.'&query='.$query.'&'.$fieldname.'='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$var.'</a></td>';
 
 	return $list;
 }
