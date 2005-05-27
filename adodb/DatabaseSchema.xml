@@ -4469,7 +4469,7 @@
 		<field name="comparator" type="C" size="10">
 			<DEFAULT value=""/>
 		</field>
-		<field name="value" type="200">
+		<field name="value" type="C" size="200">
 			<DEFAULT value=""/>
 		</field>
 		<index name="cvadvfilter_IDX0">
