@@ -65,6 +65,9 @@ $app_strings = Array(
 'NTC_NO_ITEMS_DISPLAY'=>'none',
 
 'LBL_ALT_HOT_KEY'=>'Alt+',
+//added for 4.2
+'LBL_SAVE_LABEL'=>'Save',
+
 
 
 
