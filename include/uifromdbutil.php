@@ -128,19 +128,19 @@ function getBlockTableHeader($header_label)
 	return $output;
 
 }
-
-function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='index')
+//added $viewid for customview to retain the sameview 27/5
+function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='index',$viewid='')
 {
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$output = '<td align="right">';
-		
+
 	$dir_name=getModuleDirName($module);
 	if(isset($navigation_array['prev']))
 	{
-		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start=1" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'&viewname='.$viewid.'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
 
 	}
 	else
@@ -150,8 +150,8 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	}
 	if(isset($navigation_array['next']))
 	{
-		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
-		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['end'].'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'&viewname='.$viewid.'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['end'].'&viewname='.$viewid.'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
 	}
 	else
 	{
@@ -159,7 +159,7 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 		$output .= '<img src="'.$image_path.'end_disabled.gif" border="0" align="absmiddle">&nbsp;';
 	}
 	$output .= '</td>';
-	return $output;	
+	return $output;
 }
 
 ?>
