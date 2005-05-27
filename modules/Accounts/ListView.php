@@ -23,6 +23,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils.php');
 require_once('include/uifromdbutil.php');
+require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $current_language;
@@ -215,9 +216,15 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form=new XTemplate ('modules/Accounts/SearchForm.html');
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
-	
+
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+
+	//viewid is given to show the actual view<<<<<<<<<<customview>>>>>>>>
+	$viewidforsearch = $_REQUEST['viewname'];
+	$search_form->assign("VIEWID",$viewidforsearch);
+	//<<<<<<<customview>>>>>>>>>>
+
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if($order_by != '') {
 		$ordby = "&order_by=".$order_by;
@@ -226,9 +233,10 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	{
 		$ordby ='';
 	}
-	$search_form->assign("BASIC_LINK", "index.php?module=Accounts".$ordby."&action=index".$url_string."&sorder=".$sorder);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Accounts&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
-
+	
+	//added querysting viewname to display the selected view<<<<<<<customview>>>>>>
+	$search_form->assign("BASIC_LINK", "index.php?module=Accounts".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$_REQUEST['viewname']);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Accounts&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$_REQUEST['viewname']);
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if (isset($name)) $search_form->assign("NAME", $name);
@@ -237,15 +245,15 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if (isset($address_city)) $search_form->assign("ADDRESS_CITY", $address_city);
 
 	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
-	
-	
+
+
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], '', false);
 
 
 	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
 
-	$url_string .="&advanced=true";
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','advanced'));
+	$url_string .="&advanced=true";     //addedparameter for AlphabeticalSeach $viewidforseach
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','advanced',"","","","",$viewidforsearch));
 
 		if (isset($annual_revenue)) $search_form->assign("ANNUAL_REVENUE", $annual_revenue);
 		if (isset($employees)) $search_form->assign("EMPLOYEES", $employees);
@@ -284,8 +292,8 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 		$search_form->parse("advanced");
 		$search_form->out("advanced");
 	}
-	else {
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','basic'));
+	else {  //customview //
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','basic',"","","","",,$viewidforsearch));
 		$search_form->parse("main");
 		$search_form->out("main");
 	}
@@ -293,16 +301,35 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 	echo "\n<BR>\n";
 }
 
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Accounts");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']))
+{
+        $viewid =  $_REQUEST['viewname'];
+}else
+{
+	$viewid = "0";
+}
+if(isset($_REQUEST['viewname']) == false)
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}
+}
+//<<<<<customview>>>>>
+
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden">';
+	<input name="viewname" type="hidden" value="'.$viewid.'">'; //give the viewid to hidden //customview
 if(isPermitted('Accounts',2,'') == 'yes')
 {
         $other_text .=	'<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
-	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].' 
+	/*$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
 			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
 				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
 				<OPTION VALUE="'.$mod_strings[LBL_PROSPECT].'">'.$mod_strings[LBL_PROSPECT].'</option>
@@ -312,7 +339,20 @@ if(isPermitted('Accounts',2,'') == 'yes')
 			</SELECT>
 		</td>
 	</tr>
-	</table>';
+	</table>';*/
+
+	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+                        <SELECT NAME="view" onchange="showDefaultCustomView(this)">
+                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+				'.$customviewcombo_html.'
+                        </SELECT>
+                        <a href="index.php?module=Accounts&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+                        <span class="sep">|</span>
+                        <span class="bodyText disabled">Delete</span><span class="sep">|</span>
+                        <a href="index.php?module=Accounts&action=CustomView" class="link">Create View</a>
+                </td>
+        </tr>
+        </table>';
 
 /*
 $ListView = new ListView();
@@ -335,38 +375,34 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH",$image_path);
 
 //Retreive the list from Database
-$query = getListQuery("Accounts");
+//<<<<<<<<<customview>>>>>>>>>
+if($viewid != "0")
+{
+	$listquery = getListQuery("Accounts");
+	$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Accounts");
+}else
+{
+	$query = getListQuery("Accounts");
+}
+//<<<<<<<<customview>>>>>>>>>
 
 if(isset($where) && $where != '')
 {
         $query .= ' and '.$where;
 }
 
-if(isset($_REQUEST['viewname']))
-{
-if($_REQUEST['viewname'] == 'All')
-   {
-     $defaultcv_criteria = '';
-   }
-   else
-   {
-     $defaultcv_criteria = $_REQUEST['viewname'];
-          $query .= " and account_type like "."'%" .$defaultcv_criteria ."%'";          
-   }
-	$viewname = $_REQUEST['viewname'];
-        $view_script = "<script language='javascript'>
-                function set_selected()
-                {
-                        len=document.massdelete.view.length;
-                        for(i=0;i<len;i++)
-                        {
-                                if(document.massdelete.view[i].value == '$viewname')
-                                        document.massdelete.view[i].selected = true;
-                        }
-                }
-                set_selected();
-                </script>";
-}
+$view_script = "<script language='javascript'>
+	function set_selected()
+	{
+		len=document.massdelete.view.length;
+		for(i=0;i<len;i++)
+		{
+			if(document.massdelete.view[i].value == '$viewname')
+				document.massdelete.view[i].selected = true;
+		}
+	}
+	set_selected();
+	</script>";
 
 //$url_qry = getURLstring($focus);
 
@@ -379,7 +415,7 @@ $list_result = $adb->query($query);
 
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
-        
+
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
@@ -409,7 +445,7 @@ if ($navigation_array['start'] == 1)
 	{
 		$end_rec = $noofrows;
 	}
-	
+
 }
 else
 {
@@ -427,11 +463,11 @@ else
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header
-$listview_header = getListViewHeader($focus,"Accounts",$url_string,$sorder,$order_by);
+$listview_header = getListViewHeader($focus,"Accounts",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
 
-$listview_entries = getListViewEntries($focus,"Accounts",$list_result,$navigation_array);
+$listview_entries = getListViewEntries($focus,"Accounts",$list_result,$navigation_array,"","",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 
@@ -440,7 +476,7 @@ $url_string .="&order_by=".$order_by;
 if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Accounts");
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Accounts","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 
