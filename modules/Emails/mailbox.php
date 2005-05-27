@@ -148,8 +148,8 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
         <input type="hidden" name="return_id" value="{RETURN_ID}">
         <input type="hidden" name="return_action" value="mailbox">
         <input type="hidden" name="from" value="'.$from .'">;
-          <input type="hidden" name="sname" value="'.$ServerName .'">;
-          <input type="hidden" name="uname" value="'.$UserName .'">;
+          <input type="hidden" name="sname" value="'.$ServerName .'">
+          <input type="hidden" name="uname" value="'.$UserName .'">
          <input type="hidden" name="passwd" value="'.$PassWord .'">';
         
         
