@@ -3812,7 +3812,7 @@
 		<field name="shipping" type="C" size="100"></field>
 		<field name="inventorymanager" type="I" size="19"></field>
 		<field name="type" type="C" size="100"></field>
-		<field name="tax" type="N" size="3.2"></field>
+		<field name="tax" type="N" size="11.3"></field>
 		<field name="total" type="N" size="11.3"></field>
 		
                   
