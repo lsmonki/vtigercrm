@@ -113,7 +113,6 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
 	$content = get_part($mbox,$msg,$mime_type);
 	echo nl2br($content);
 	echo "</td></tr></table>";
-	
 	//get the attachment
 	$struct = imap_fetchstructure($mbox,$msg);
 	$contentParts = count($struct->parts);
@@ -176,7 +175,7 @@ if(isset($_REQUEST['view']) && $_REQUEST['view']!='')
         <input type=hidden name="fromemail" value="'.$totalfromaddress.'">
         <br><input type=checkbox name=addbox value=Add>  Add to vtiger CRM  <br>
         <input type=checkbox name=deletebox value='.$msg.'> Delete from Mail Server <br>';
-    echo '<br><table width=80%><tr><td align=center><input title="'.$app_strings[LBL_ADD_VTIGER_BUTTON_TITLE].'" accessKey="'.$app_strings['LBL_ADD_VTIGER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'Save\';" type="submit" name="button" value="'.$app_strings['LBL_SAVE_LABEL'].'">&nbsp;<input class=button type=button value=Cancel onclick=\"window.history.back()\"></td></tr></table>
+    echo '<br><table width=80%><tr><td align=center><input title="'.$app_strings[LBL_ADD_VTIGER_BUTTON_TITLE].'" accessKey="'.$app_strings['LBL_ADD_VTIGER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'Save\';" type="submit" name="button" value="'.$app_strings['LBL_SAVE_LABEL'].'">&nbsp;<input class=button type=button value=Cancel onclick="window.history.back()" ></td></tr></table>
 	</form>';
 
 }
@@ -287,7 +286,8 @@ function get_part($stream, $msg_number, $mime_type, $structure = false,$part_num
     if($structure->type == 1) /* multipart */ {
       while(list($index, $sub_structure) = each($structure->parts)) {
         if($part_number) {
-          $prefix = $part_number . '.';
+          //$prefix = $part_number . '.';
+          $prefix = $part_number ;
         }
         $data = get_part($stream, $msg_number, $mime_type, $sub_structure,$prefix .    ($index + 1));
         if($data) {
