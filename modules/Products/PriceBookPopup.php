@@ -253,7 +253,9 @@ echo get_form_footer();
 
 //Retreive the list from Database
 
-$list_query = getListQuery("PriceBook");
+//$list_query = getListQuery("PriceBook");
+$productid=$_REQUEST['productid'];
+$list_query= 'select pricebook.*,pricebookproductrel.productid,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from pricebook inner join pricebookproductrel on pricebookproductrel.pricebookid = pricebook.pricebookid inner join crmentity on crmentity.crmid = pricebook.pricebookid where pricebookproductrel.productid='.$productid.' and crmentity.deleted=0';
 /*
 if(isset($where) && $where != '')
 {
