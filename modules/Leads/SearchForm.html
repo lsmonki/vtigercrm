@@ -29,12 +29,13 @@
 		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_COMPANY}&nbsp;</td>
 		<td><input type=text size="10" name="company" value="{COMPANY}">
 
-		
+
 		<td rowspan='2' align="center"><input type="hidden" name="action" value="index"/>
 			<input type="hidden" name="query" value="true"/>
 			<input type="hidden" name="module" value="Leads" />
                 	<input type="hidden" name="order_by" value="{ORDER_BY}" />
                 	<input type="hidden" name="sorder" value="{SORDER}" />
+			<input type="hidden" name="viewname" value="{VIEWID}"/>
 		<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
 		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
 		<br>
@@ -81,6 +82,7 @@
                 <input type="hidden" name="module" value="Leads" />
                 <input type="hidden" name="order_by" value="{ORDER_BY}" />
                 <input type="hidden" name="sorder" value="{SORDER}" />
+		<input type="hidden" name="viewname" value="{VIEWID}"/>
         <input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" na
 me="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
         <input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);"
