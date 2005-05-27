@@ -48,12 +48,10 @@ class PriceBook extends CRMEntity {
 	var $popup_type;
 
 	var $search_fields = Array(
-                                'Price Book Name'=>Array('pricebook'=>'bookname'),
-                                'Product Name'=>Array('pricebook'=>'productid')
+                                'Price Book Name'=>Array('pricebook'=>'bookname')
                                 );
         var $search_fields_name = Array(
                                         'Price Book Name'=>'bookname',
-                                        'Product Name'=>'product_id'
                                      );
 /*	
 //	var $combofieldNames = Array('manufacturer'=>'manufacturer_dom'
