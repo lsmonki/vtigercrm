@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// $Id: class.BSD.common.inc.php,v 1.1 2005/03/14 07:42:53 shankarr Exp $
+// $Id: class.BSD.common.inc.php,v 1.25 2004/10/13 08:13:29 webbie Exp $
 
 class bsd_common {
   var $dmesg; 
@@ -64,24 +64,7 @@ class bsd_common {
   } 
 
   function uptime () {
-    $sys_ticks = $this->get_sys_ticks();
-
-    $min = $sys_ticks / 60;
-    $hours = $min / 60;
-    $days = floor($hours / 24);
-    $hours = floor($hours - ($days * 24));
-    $min = floor($min - ($days * 60 * 24) - ($hours * 60));
-
-    global $text; // retrieve the translations
-    
-    if ($days != 0) {
-      $result = "$days " . $text['days'] . " ";
-    } 
-
-    if ($hours != 0) {
-      $result .= "$hours " . $text['hours'] . " ";
-    } 
-    $result .= "$min " . $text['minutes'];
+    $result = $this->get_sys_ticks();
 
     return $result;
   } 
@@ -109,7 +92,7 @@ class bsd_common {
     for ($i = 0, $max = count($this->read_dmesg()); $i < $max; $i++) {
       $buf = $this->dmesg[$i];
       if (preg_match("/$this->cpu_regexp/", $buf, $ar_buf)) {
-        $results['mhz'] = round($ar_buf[2]);
+        $results['cpuspeed'] = round($ar_buf[2]);
         break;
       } 
     } 

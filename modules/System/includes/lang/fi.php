@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: fi.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: fi.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
 
 // Finnish language file by Jani 'Japala' Ponkko
 
@@ -35,13 +35,15 @@ $text['loadavg']        = 'Keskikuormat';
 $text['hardware']       = 'Laitteisto';
 $text['numcpu']         = 'Prosessoreita';
 $text['cpumodel']       = 'Malli';
-$text['mhz']            = 'Piirin MHz';
+$text['cpuspeed']       = 'Piirin MHz';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'V&auml;limuistin koko';
 $text['bogomips']       = 'J&auml;rjestelm&auml;n Bogomipsit';
-$text['usb']            = 'USB Laitteet';
+
 $text['pci']            = 'PCI Laitteet';
 $text['ide']            = 'IDE Laitteet';
 $text['scsi']           = 'SCSI Laitteet';
+$text['usb']            = 'USB Laitteet';
 
 $text['netusage']       = 'Verkon k&auml;ytt&ouml;';
 $text['device']         = 'Laite';

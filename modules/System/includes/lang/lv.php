@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: lv.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: lv.php,v 1.6 2004/08/30 15:51:26 webbie Exp $
 
 $text['title']          = 'Sistçmas informâcija';
 
@@ -33,12 +33,15 @@ $text['loadavg']        = 'Vidçjie ielâdes râdîtâji';
 $text['hardware']       = 'Aparatûra';
 $text['numcpu']         = 'Procesors';
 $text['cpumodel']       = 'Modelis';
-$text['mhz']            = 'Èipa MHz';
+$text['cpuspeed']       = 'Èipa MHz';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Keð atmiòa';
 $text['bogomips']       = 'Sistçmas "Bogomips"';
+
 $text['pci']            = 'PCI ierîces';
 $text['ide']            = 'IDE ierîces';
 $text['scsi']           = 'SCSI ierîces';
+$text['usb']            = 'USB ierîces';
 
 $text['netusage']       = 'Tîkla informâcija';
 $text['device']         = 'Ierîce';

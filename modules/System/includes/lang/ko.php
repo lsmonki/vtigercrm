@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: ko.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: ko.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
 // Translated by Sungkook KIM - ace@aceteam.org
 
 $charset                = 'euc-kr';
@@ -36,12 +36,15 @@ $text['loadavg']        = '평균 로드';
 $text['hardware']       = '하드웨어 정보';
 $text['numcpu']         = '프로세서 갯수';
 $text['cpumodel']       = '프로세서 모델';
-$text['mhz']            = '칩셋 클럭';
+$text['cpuspeed']       = '칩셋 클럭';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = '케쉬 사이즈';
 $text['bogomips']       = '자체테스트 클럭';
+
 $text['pci']            = 'PCI 장치';
 $text['ide']            = 'IDE 장치';
 $text['scsi']           = 'SCSI 장치';
+$text['usb']            = 'USB 장치';
 
 $text['netusage']       = ' 네트워크 사용정보';
 $text['device']         = '장치';

@@ -19,17 +19,20 @@
 
 // This class was created by Z. Frombach ( zoltan at frombach dot com )
 
-// $Id: class.mbmon.inc.php,v 1.1 2005/03/14 07:42:35 shankarr Exp $
+// $Id: class.mbmon.inc.php,v 1.3 2004/10/30 08:09:28 webbie Exp $
 
 class mbinfo {
+	var $lines;
+
   function temperature() {
-    $lines = array();
     $results = array();
 
-    $lines = explode("\n", execute_program('mbmon', '-c 1 -r'));
+	if (!isset($this->lines) ) {
+	    $this->lines = explode("\n", execute_program('mbmon', '-c 1 -r'));
+	}
 
     $i = 0;
-    foreach($lines as $line) {
+    foreach($this->lines as $line) {
       if (preg_match('/^(TEMP\d*)\s*:\s*(.*)$/D', $line, $data)) {
         if ($data[2]<>'0') {
           $results[$i]['label'] = $data[1];
@@ -44,13 +47,14 @@ class mbinfo {
   }
 
   function fans() {
-    $lines = array();
     $results = array();
 
-    $lines = explode("\n", execute_program('mbmon', '-c 1 -r'));
+	if (!isset($this->lines) ) {
+	    $this->lines = explode("\n", execute_program('mbmon', '-c 1 -r'));
+	}
 
     $i = 0;
-    foreach($lines as $line) {
+    foreach($this->lines as $line) {
       if (preg_match('/^(FAN\d*)\s*:\s*(.*)$/D', $line, $data)) {
         if ($data[2]<>'0') {
           $results[$i]['label'] = $data[1];
@@ -65,13 +69,14 @@ class mbinfo {
   }
 
   function voltage() {
-    $lines = array();
     $results = array();
 
-    $lines = explode("\n", execute_program('mbmon', '-c 1 -r'));
+	if (!isset($this->lines) ) {
+	    $this->lines = explode("\n", execute_program('mbmon', '-c 1 -r'));
+	}
 
     $i = 0;
-    foreach($lines as $line) {
+    foreach($this->lines as $line) {
       if (preg_match('/^(V.*)\s*:\s*(.*)$/D', $line, $data)) {
         if ($data[2]<>'+0.00') {
           $results[$i]['label'] = $data[1];

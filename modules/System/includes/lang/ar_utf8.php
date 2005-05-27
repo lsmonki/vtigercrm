@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: ar_utf8.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: ar_utf8.php,v 1.7 2004/08/30 15:51:25 webbie Exp $
 //
 //Translated to arabic by: Nizar Abed  - nizar@srcget.com - Adios
 
@@ -37,12 +37,15 @@ $text['loadavg']        = 'معدل ألتشغيل';
 $text['hardware']       = 'معلومات ألمعدات';
 $text['numcpu']         = 'وحدات ألمعالجه';
 $text['cpumodel']       = 'نوع';
-$text['mhz']            = 'MHz سرعه في';
+$text['cpuspeed']       = 'سرعه في';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = ' cache سعة ذاكرة';
 $text['bogomips']       = 'Bogomips سرعه في';
+
 $text['pci']            = 'PCI معدات ';
 $text['ide']            = 'IDE معدات';
 $text['scsi']           = 'SCSI معدات';
+$text['usb']            = 'USB معدات';
 
 $text['netusage']       = 'إستعمال ألشبكه';
 $text['device']         = 'معدات';

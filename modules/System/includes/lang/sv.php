@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: sv.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: sv.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
 //
 // translation by shockzor
 // updated/edited by jetthe
@@ -36,12 +36,15 @@ $text['loadavg']        = 'Medelbelastning';
 $text['hardware']       = 'Hårdvaruinformation';
 $text['numcpu']         = 'Processorer';
 $text['cpumodel']       = 'Modell';
-$text['mhz']            = 'Klockfrekvens';
+$text['cpuspeed']       = 'Klockfrekvens';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Cachestorlek';
 $text['bogomips']       = 'Bogomips';
+
 $text['pci']            = 'PCI-enheter';
 $text['ide']            = 'IDE-enheter';
 $text['scsi']           = 'SCSI-enheter';
+$text['usb']            = 'USB-enheter';
 
 $text['netusage']       = 'Nätverksanvändning';
 $text['device']         = 'Enheter';

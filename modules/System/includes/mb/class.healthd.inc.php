@@ -17,15 +17,20 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// $Id: class.healthd.inc.php,v 1.1 2005/03/14 07:42:35 shankarr Exp $
+// $Id: class.healthd.inc.php,v 1.5 2004/10/30 08:09:27 webbie Exp $
 
 class mbinfo {
+    var $lines;
+
   function temperature() {
     $ar_buf = array();
     $results = array();
 
-    $buf = execute_program('healthdc', '-t');
-    $ar_buf = preg_split("/\t+/", $buf);
+    if (!isset($this->lines)) {
+      $this->lines = execute_program('healthdc', '-t');
+    }
+
+    $ar_buf = preg_split("/\t+/", $this->lines);
 
     $results[0]['label'] = 'temp1';
     $results[0]['value'] = $ar_buf[1];
@@ -46,8 +51,11 @@ class mbinfo {
     $ar_buf = array();
     $results = array();
 
-    $buf = execute_program('healthdc', '-t');
-    $ar_buf = preg_split("/\t+/", $buf);
+    if (!isset($this->lines)) {
+      $this->lines = execute_program('healthdc', '-t');
+    }
+
+    $ar_buf = preg_split("/\t+/", $this->lines);
 
     $results[0]['label'] = 'fan1';
     $results[0]['value'] = $ar_buf[4];
@@ -69,8 +77,11 @@ class mbinfo {
     $ar_buf = array();
     $results = array();
 
-    $buf = execute_program('healthdc', '-t');
-    $ar_buf = preg_split("/\t+/", $buf);
+    if (!isset($this->lines)) {
+      $this->lines = execute_program('healthdc', '-t');
+    }
+
+    $ar_buf = preg_split("/\t+/", $this->lines);
 
     $results[0]['label'] = 'Vcore1';
     $results[0]['value'] = $ar_buf[7];

@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: memory.php,v 1.1 2005/03/14 07:43:09 shankarr Exp $
+// $Id: memory.php,v 1.5 2003/11/26 19:41:09 webbie Exp $
 
 //
 // xml_memory()

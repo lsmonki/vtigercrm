@@ -17,11 +17,11 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// $Id: ca.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
-
+// $Id: ca.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
+//
 // Traductor: Miquel Guillamet Montalat
 // E-mail: mikelet15@netscape.com Web: http://gitx.dhs.org
-
+//
 $text['title']       = 'Informació del Sistema';
 
 $text['vitals']      = 'Vital';
@@ -36,13 +36,15 @@ $text['loadavg']     = 'Carrega del Servidor';
 $text['hardware']    = 'Informació del Hardware';
 $text['numcpu']      = 'Processadors';
 $text['cpumodel']    = 'Model';
-$text['mhz']         = 'Frequència en MHz';
+$text['cpuspeed']    = 'Frequència en MHz';
+$text['busspeed']    = 'BUS Speed';
 $text['cache']       = 'RAM';
 $text['bogomips']    = 'Bogomips';
-$text['usb']         = 'Dispisitius USB';
+
 $text['pci']         = 'Dispositius PCI';
 $text['ide']         = 'Dispositius IDE';
 $text['scsi']        = 'Dispositius SCSI';
+$text['usb']         = 'Dispisitius USB';
 
 $text['netusage']    = 'Utilització de la XARXA';
 $text['device']      = 'Dispositiu';

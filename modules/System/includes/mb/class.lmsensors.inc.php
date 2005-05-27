@@ -17,14 +17,24 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// $Id: class.lmsensors.inc.php,v 1.1 2005/03/14 07:42:35 shankarr Exp $
+// $Id: class.lmsensors.inc.php,v 1.12 2004/10/30 08:09:27 webbie Exp $
 
 class mbinfo {
+    var $lines;
+
   function temperature() {
     $ar_buf = array();
     $results = array();
 
-    $sensors_value = explode("\n", execute_program("sensors", ""));
+    if (!isset($this->lines)) {
+        $this->lines = execute_program("sensors", "");
+    }
+
+    // Martijn Stolk: Dirty fix for misinterpreted output of sensors, 
+    // where info could come on next line when the label is too long.
+    $sensors_value = $this->lines;
+    $sensors_value = preg_replace("/:\n/", ":", $sensors_value);
+    $sensors_value = explode("\n", $sensors_value);
 
     foreach($sensors_value as $line) {
       $data = array();
@@ -69,7 +79,11 @@ class mbinfo {
     $ar_buf = array();
     $results = array();
 
-    $sensors_value = explode("\n", execute_program("sensors", ""));
+    if (!isset($this->lines)) {
+        $this->lines = execute_program("sensors", "");
+    }
+
+    $sensors_value = $this->lines;
 
     foreach($sensors_value as $line) {
       $data = array();
@@ -106,7 +120,11 @@ class mbinfo {
     $ar_buf = array();
     $results = array();
 
-    $sensors_value = explode("\n", execute_program("sensors", ""));
+    if (!isset($this->lines)) {
+        $this->lines = execute_program("sensors", "");
+    }
+
+    $sensors_value = $this->lines;
 
     foreach($sensors_value as $line) {
       $data = array();

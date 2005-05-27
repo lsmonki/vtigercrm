@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: tr.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: tr.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
 
 $text['title']          = 'Sistem Bilgisi';
 
@@ -33,12 +33,15 @@ $text['loadavg']        = 'Yükleme Ortalamasý';
 $text['hardware']       = 'Hardware Bilgisi';
 $text['numcpu']         = 'CPU Sayýsý';
 $text['cpumodel']       = 'Model';
-$text['mhz']            = 'CPU Hýzý( Mhz)';
+$text['cpuspeed']       = 'CPU Hýzý( Mhz)';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Cache Büyüklüðü';
 $text['bogomips']       = 'Sistem Bogomips';
+
 $text['pci']            = 'PCI Araçlar';
 $text['ide']            = 'IDE Araçlar';
 $text['scsi']           = 'SCSI Araçlar';
+$text['usb']            = 'USB Araçlar';
 
 $text['netusage']       = 'Network Kullanýmý';
 $text['device']         = 'Arayüz';

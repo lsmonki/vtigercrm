@@ -17,46 +17,48 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: is.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: is.php,v 1.11 2004/08/30 15:51:26 webbie Exp $
 
 $text['title']          = 'Kerfisupplýsingar';
 
-$text['vitals']         = 'Helstu Upplýsingar';
+$text['vitals']         = 'Helstu upplýsingar';
 $text['hostname']       = 'Vélarnafn';
-$text['ip']             = 'IP Tala';
+$text['ip']             = 'IP-tala';
 $text['kversion']       = 'Útgáfa kjarna';
-$text['dversion']       = 'Distro Name';
+$text['dversion']       = 'Nafn dreifingar';
 $text['uptime']         = 'Uppitími';
 $text['users']          = 'Notendur';
-$text['loadavg']        = 'Meðal álag';
+$text['loadavg']        = 'Meðalálag';
 
 $text['hardware']       = 'Upplýsingar um vélbúnað';
-$text['numcpu']         = 'Örgjörvi/Örgjörvar';
-$text['cpumodel']       = 'Týpa';
-$text['mhz']            = 'Hraði';
+$text['numcpu']         = 'Fjöldi örgjörva';
+$text['cpumodel']       = 'Tegund';
+$text['cpuspeed']       = 'Hraði';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Stærð flýtiminnis';
-$text['bogomips']       = 'Kerfis Bogomips';
-$text['usb']            = 'USB Jaðartæki';
-$text['pci']            = 'PCI Jaðartæki';
-$text['ide']            = 'IDE Jaðartæki';
-$text['scsi']           = 'SCSI Jaðartæki';
+$text['bogomips']       = 'Bogomips';
 
-$text['netusage']       = 'Notkun Nets';
+$text['pci']            = 'PCI jaðartæki';
+$text['ide']            = 'IDE jaðartæki';
+$text['scsi']           = 'SCSI jaðartæki';
+$text['usb']            = 'USB jaðartæki';
+
+$text['netusage']       = 'Netnotkun';
 $text['device']         = 'Jaðartæki';
-$text['received']       = 'Tekið á móti';
+$text['received']       = 'Móttekið';
 $text['sent']           = 'Sent';
-$text['errors']         = 'Villur/Drop';
+$text['errors']         = 'Villur/Hent';
 
 $text['memusage']       = 'Minnisnotkun';
 $text['phymem']         = 'Vinnsluminni';
 $text['swap']           = 'Sýndarminni';
 
-$text['fs']             = 'Tengd Skráarkerfi';
+$text['fs']             = 'Tengd skráarkerfi';
 $text['mount']          = 'Tengipunktur';
 $text['partition']      = 'Disksneið';
 
-$text['percent']        = 'Prósent af Heildarstærð';
-$text['type']           = 'Týpa';
+$text['percent']        = 'Hlutfall af heildarstærð';
+$text['type']           = 'Tegund';
 $text['free']           = 'Laust';
 $text['used']           = 'Notað';
 $text['size']           = 'Stærð';
@@ -70,27 +72,27 @@ $text['none']           = 'ekkert';
 
 $text['capacity']       = 'Heildarstærð'; 
 
-$text['template']       = 'Template';
+$text['template']       = 'Sniðmát';
 $text['language']       = 'Tungumál';
 $text['submit']         = 'Senda';
 $text['created']        = 'Búið til af';
-$text['locale']         = 'en_US';
-$text['gen_time']       = 'on %b %d, %Y at %r';
+$text['locale']         = 'is_IS';
+$text['gen_time']       = 'þann %d.%m.%Y kl. %R';
 
 $text['days']           = 'dagar';
 $text['hours']          = 'klukkustundir';
 $text['minutes']        = 'mínútur';
   
-$text['temperature']    = 'Temperature';
-$text['voltage']        = 'Voltage';
-$text['fans']           = 'Fans';
-$text['s_value']        = 'Value';
-$text['s_min']          = 'Min';
-$text['s_max']          = 'Max';
-$text['s_div']          = 'Div';
-$text['hysteresis']     = 'Hysteresis';
-$text['s_limit']        = 'Limit';
-$text['s_label']        = 'Label';
+$text['temperature']    = 'Hitastig';
+$text['voltage']        = 'Volt';
+$text['fans']           = 'Viftur';
+$text['s_value']        = 'Gildi';
+$text['s_min']          = 'Lægst';
+$text['s_max']          = 'Hæst';
+$text['s_div']          = 'Deilir';
+$text['hysteresis']     = 'Aðvörun lýkur';
+$text['s_limit']        = 'Aðvörun byrjar';
+$text['s_label']        = 'Nafn mælis';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
 $text['rpm_mark']       = 'RPM';

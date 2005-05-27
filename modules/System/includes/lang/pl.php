@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: pl.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: pl.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
 
 $charset                = 'iso-8859-2';
 
@@ -35,12 +35,15 @@ $text['loadavg']        = 'Obci±¿enia ¶rednie';
 $text['hardware']       = 'Informacja o sprzêcie';
 $text['numcpu']         = 'Procesory';
 $text['cpumodel']       = 'Model';
-$text['mhz']            = 'Cz&#281;stotliwo&#347;&#263;';
+$text['cpuspeed']       = 'Cz&#281;stotliwo&#347;&#263;';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Cache Size';
 $text['bogomips']       = 'System Bogomips';
+
 $text['pci']            = 'Urz±dzenia PCI';
 $text['ide']            = 'Urz±dzenia IDE';
 $text['scsi']           = 'Urz±dzenia SCSI';
+$text['usb']            = 'Urz±dzenia USB';
 
 $text['netusage']       = 'Sieæ';
 $text['device']         = 'Urz±dzenie';

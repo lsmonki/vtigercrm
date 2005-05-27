@@ -17,7 +17,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: big5.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: big5.php,v 1.13 2004/08/30 15:51:25 webbie Exp $
+//
 $charset                = 'big5';
 $text['title']          = '系統資訊';
 
@@ -33,13 +34,15 @@ $text['loadavg']        = '系統負載';
 $text['hardware']       = '硬體資源';
 $text['numcpu']         = '運算元';
 $text['cpumodel']       = 'CPU型號';
-$text['mhz']            = '工作頻率';
+$text['cpuspeed']       = '工作頻率';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = '快取大小';
 $text['bogomips']       = '邏輯運算元';
-$text['usb']            = 'USB 介面';
+
 $text['pci']            = 'PCI 介面';
 $text['ide']            = 'IDE 介面';
 $text['scsi']           = 'SCSI 介面';
+$text['usb']            = 'USB 介面';
 
 $text['netusage']       = '網路封包';
 $text['device']         = '介面';

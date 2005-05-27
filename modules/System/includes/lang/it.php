@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: it.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: it.php,v 1.12 2004/08/30 15:51:26 webbie Exp $
 
 $text['title']          = 'Informazioni sul Sistema';
 
@@ -33,13 +33,15 @@ $text['loadavg']        = 'Carico Medio';
 $text['hardware']       = 'Informazioni Hardware';
 $text['numcpu']         = 'Processori';
 $text['cpumodel']       = 'Modello';
-$text['mhz']            = 'MHz del Chip';
+$text['cpuspeed']       = 'MHz del Chip';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Dimensione Cache';
 $text['bogomips']       = 'Bogomips del Sistema';
-$text['usb']            = 'Unità USB';
+
 $text['pci']            = 'Unità PCI';
 $text['ide']            = 'Unità IDE';
 $text['scsi']           = 'Unità SCSI';
+$text['usb']            = 'Unità USB';
 
 $text['netusage']       = 'Utilizzo della Rete';
 $text['device']         = 'Device';

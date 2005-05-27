@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: cn.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: cn.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
 
 $charset                = 'gb2312';
 
@@ -34,12 +34,15 @@ $text['loadavg']        = '平均负载';
 $text['hardware']       = '硬件信息';
 $text['numcpu']         = '处理器数量';
 $text['cpumodel']       = 'CPU型号';
-$text['mhz']            = '芯片速度';
+$text['cpuspeed']       = '芯片速度';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Cache大小';
 $text['bogomips']       = '系统Bogomips';
+
 $text['pci']            = 'PCI设备';
 $text['ide']            = 'IDE设备';
 $text['scsi']           = 'SCSI设备';
+$text['usb']            = 'USB设备';
 
 $text['netusage']       = '网络负载';
 $text['device']         = '网络设备';

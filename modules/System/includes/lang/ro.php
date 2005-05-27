@@ -34,12 +34,15 @@ $text['loadavg']        = 'Incarcarea sistemului';
 $text['hardware']       = 'Informatii hardware';
 $text['numcpu']         = 'Procesoare';
 $text['cpumodel']       = 'Model';
-$text['mhz']            = 'Chip MHz';
+$text['cpuspeed']       = 'CPU Speed';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Marime Cache';
 $text['bogomips']       = 'Bogomips';
+
 $text['pci']            = 'Dispozitive PCI';
 $text['ide']            = 'Dispozitive IDE';
 $text['scsi']           = 'Dispozitive SCSI';
+$text['usb']            = 'Dispozitive USB';
 
 $text['netusage']       = 'Utilizarea retelei';
 $text['device']         = 'Dispozitiv';

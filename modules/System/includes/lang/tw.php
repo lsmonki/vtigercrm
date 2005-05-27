@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: tw.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: tw.php,v 1.11 2004/08/30 15:51:26 webbie Exp $
 
 $charset                = 'big5';
 
@@ -35,12 +35,15 @@ $text['loadavg']        = '平均負載';
 $text['hardware']       = '硬體資訊';
 $text['numcpu']         = '處理器數量';
 $text['cpumodel']       = 'CPU型號';
-$text['mhz']            = '晶片速度';
+$text['cpuspeed']       = '晶片速度';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = '快取大小';
 $text['bogomips']       = '系統 Bogomips';
+
 $text['pci']            = 'PCI 設備';
 $text['ide']            = 'IDE 設備';
 $text['scsi']           = 'SCSI 設備';
+$text['usb']            = 'USB 設備';
 
 $text['netusage']       = '網路使用量';
 $text['device']         = '網路設備';

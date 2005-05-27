@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: gr.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: gr.php,v 1.9 2004/08/30 15:51:26 webbie Exp $
 
 $charset                = "iso-8895-7";
 
@@ -35,12 +35,15 @@ $text['loadavg']        = 'Load Average';
 $text['hardware']       = 'Πληροφορίες Υλικού';
 $text['numcpu']         = 'Επεξεργαστές';
 $text['cpumodel']       = 'Μοντέλο';
-$text['mhz']            = 'Ταχύτητα MHz';
+$text['cpuspeed']       = 'Ταχύτητα MHz';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Μέγεθος Μνήμης Cache';
 $text['bogomips']       = 'Επεξεργαστική Ισχύς σε Bogomips';
+
 $text['pci']            = 'Συσκευές PCI';
 $text['ide']            = 'Συσκευές IDE';
 $text['scsi']           = 'Συσκευές SCSI';
+$text['usb']            = 'Συσκευές USB';
 
 $text['netusage']       = 'Χρήση Δικτύου';
 $text['device']         = 'Συσκευή';

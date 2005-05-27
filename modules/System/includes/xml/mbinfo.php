@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.  
 //   
-// $Id: mbinfo.php,v 1.1 2005/03/14 07:43:09 shankarr Exp $
+// $Id: mbinfo.php,v 1.5 2004/08/24 22:58:31 webbie Exp $
 
 function xml_mbtemp() {
     global $text;
@@ -33,7 +33,6 @@ function xml_mbtemp() {
         $_text .= "      <Label>" . $data[$i]['label'] . "</Label>\n";
         $_text .= "      <Value>" . $data[$i]['value'] . "</Value>\n";
         $_text .= "      <Limit>" . $data[$i]['limit'] . "</Limit>\n";
-        $_text .= "      <histeresis>" . round($data[$i]['percent']) . "</histeresis>\n";
         $_text .= "       </Item>\n";
     }
     $_text .= "    </Temperature>\n";
@@ -95,7 +94,7 @@ function html_mbtemp() {
   $scale_factor = 4;
 
   $_text = "\n<table width=\"100%\">\n";
-  $_text .= '<tr><td><font size="-1"><b>'. $text['s_label'] . '</b></font></td><td><font size="-1"><b>' . $text['s_value'] . '</b></font></td><td align="right" valign="top"><font size="-1"><b>' . $text['s_limit'] . '</b></font></td><td align="right" valign="top"><font size="-1"><b>' . $text['hysteresis'] . '</b></font></td></tr>';
+  $_text .= '<tr><td><font size="-1"><b>'. $text['s_label'] . '</b></font></td><td><font size="-1"><b>' . $text['s_value'] . '</b></font></td><td align="right" valign="top"><font size="-1"><b>' . $text['s_limit'] . '</b></font></td></tr>';
 
   $data = $mbinfo->temperature();
   for ($i=0, $max = sizeof($data); $i < $max; $i++) {
@@ -105,7 +104,6 @@ function html_mbtemp() {
      $_text .= create_bargraph($data[$i]['value'], $data[$i]['value'], $scale_factor);
      $_text .= "&nbsp;" . round($data[$i]['value']) . $text['degree_mark'] . "</font></td>\n";
      $_text .= "\t\t<td align=\"right\" valign=\"top\"><font size=\"-1\">". $data[$i]['limit'] . " " . $text['degree_mark'] . "</font></td>\n"; 
-     $_text .= "\t\t<td align=\"right\" valign=\"top\"><font size=\"-1\">" . round($data[$i]['percent'],1) . " " . $text['degree_mark'] . "</font></td>\n";
   };
   $_text .= "\n</table>\n";
 

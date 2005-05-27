@@ -17,13 +17,11 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: pt-br.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
-
-
+// $Id: pt-br.php,v 1.6 2004/08/30 15:51:26 webbie Exp $
+//
 // Tradutor: Marcílio Cunha Marinho Maia, 29/03/2003 às 04:34 (Goiânia-GO,Brasil)
 // E-mail: marcilio@nextsolution.com.br Web: http://www.nextsolution.com.br
 // Icq: 22493131
-
 
 $text['title']          = 'Informação Sobre o Sistema';
 
@@ -39,12 +37,15 @@ $text['loadavg']        = 'Carga do Sistema';
 $text['hardware']       = 'Informações sobre o Hardware';
 $text['numcpu']         = 'Processadores';
 $text['cpumodel']       = 'Modelo';
-$text['mhz']            = 'Velocidade em MHz';
+$text['cpuspeed']       = 'Velocidade em MHz';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Tamanho do Cache';
 $text['bogomips']       = 'Velocidade em Bogomips';
+
 $text['pci']            = 'Dispositivos PCI';
 $text['ide']            = 'Dispositivos IDE';
 $text['scsi']           = 'Dispositivos SCSI';
+$text['usb']            = 'Dispositivos USB';
 
 $text['netusage']       = 'Uso da Rede';
 $text['device']         = 'Dispositivo';

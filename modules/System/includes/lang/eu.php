@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: eu.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: eu.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
 
 $text['title']          = 'Sistemaren Informazioa';
 
@@ -33,13 +33,15 @@ $text['loadavg']        = 'Karga ertainak';
 $text['hardware']       = 'Hardwarezko Informazioa';
 $text['numcpu']         = 'Prozasatzailea';
 $text['cpumodel']       = 'Modeloa';
-$text['mhz']            = 'Txip MHz';
+$text['cpuspeed']       = 'Txip MHz';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Cache tamaina';
 $text['bogomips']       = 'Sistemare Bogomips-ak';
-$text['usb']            = 'USB Dispositiboak';
+
 $text['pci']            = 'PCI Dispositiboak';
 $text['ide']            = 'IDE Dispositiboak';
 $text['scsi']           = 'SCSI Dispositiboak';
+$text['usb']            = 'USB Dispositiboak';
 
 $text['netusage']       = 'Sarearen Erabilera';
 $text['device']         = 'Dispositiboa';

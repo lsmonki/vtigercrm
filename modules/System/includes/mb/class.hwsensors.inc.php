@@ -17,18 +17,21 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// $Id: class.hwsensors.inc.php,v 1.1 2005/03/14 07:42:35 shankarr Exp $
+// $Id: class.hwsensors.inc.php,v 1.3 2004/10/30 08:09:27 webbie Exp $
 
 class mbinfo {
+    var $lines;
+
   function temperature() {
-    $buf = array();
     $ar_buf = array();
     $lines = array();
     $results = array();
 
-    $buf = execute_program('sysctl', '-w hw.sensors');
+    if (!isset($this->lines) ) {
+        $this->lines = execute_program('sysctl', '-w hw.sensors');
+    }
 
-    $lines = explode("\n", $buf);
+    $lines = explode("\n", $this->lines);
 
     for ($i = 0, $j = 0, $max = sizeof($lines); $i < $max; $i++) {
       $ar_buf = preg_split("/[\s,]+/", $lines[$i]);
@@ -46,14 +49,15 @@ class mbinfo {
   } 
 
   function fans() {
-    $buf = array();
     $ar_buf = array();
     $lines = array();
     $results = array();
 
-    $buf = execute_program('sysctl', '-w hw.sensors');
+    if (!isset($this->lines) ) {
+        $this->lines = execute_program('sysctl', '-w hw.sensors');
+    }
 
-    $lines = explode("\n", $buf);
+    $lines = explode("\n", $this->lines);
 
     for ($i = 0, $j = 0, $max = sizeof($lines); $i < $max; $i++) {
       $ar_buf = preg_split("/[\s,]+/", $lines[$i]);
@@ -69,15 +73,15 @@ class mbinfo {
   } 
 
   function voltage() {
-
-    $buf = array();
     $ar_buf = array();
     $lines = array();
     $results = array();
 
-    $buf = execute_program('sysctl', '-w hw.sensors');
+    if (!isset($this->lines) ) {
+        $this->lines = execute_program('sysctl', '-w hw.sensors');
+    }
 
-    $lines = explode("\n", $buf);
+    $lines = explode("\n", $this->lines);
 
     for ($i = 0, $j = 0, $max = sizeof($lines); $i < $max; $i++) {
       $ar_buf = preg_split("/[\s,]+/", $lines[$i]);

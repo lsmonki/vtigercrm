@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: sk.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: sk.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
 
 $charset                = 'iso-8859-2';
 
@@ -35,12 +35,15 @@ $text['loadavg']        = 'Priemer loadu';
 $text['hardware']       = 'Hardwarové informácie';
 $text['numcpu']         = 'Procesory';
 $text['cpumodel']       = 'Model';
-$text['mhz']            = 'Frekvencia';
+$text['cpuspeed']       = 'Frekvencia';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Veåkos» cache';
 $text['bogomips']       = 'Bogomipsov';
+
 $text['pci']            = 'PCI zariadenia';
 $text['ide']            = 'IDE zariadenia';
 $text['scsi']           = 'SCSI zariadenia';
+$text['usb']            = 'USB zariadenia';
 
 $text['netusage']       = 'Pou¾ívanie siete';
 $text['device']         = 'Zariadenia';

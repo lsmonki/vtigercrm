@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: da.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: da.php,v 1.14 2004/08/30 15:51:26 webbie Exp $
 
 # Translated by Jonas Koch Bentzen (understroem.dk).
 
@@ -35,13 +35,15 @@ $text['loadavg']        = 'Ressourceforbrug - gennemsnit';
 $text['hardware']       = 'Hardwareinformation';
 $text['numcpu']         = 'Processorer';
 $text['cpumodel']       = 'Model';
-$text['mhz']            = 'MHz';
+$text['cpuspeed']       = 'CPU Speed';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Cachestørrelse';
 $text['bogomips']       = 'Bogomips';
-$text['usb']            = 'USB-enheder';
+
 $text['pci']            = 'PCI-enheder';
 $text['ide']            = 'IDE-enheder';
 $text['scsi']           = 'SCSI-enheder';
+$text['usb']            = 'USB-enheder';
 
 $text['netusage']       = 'Netværkstrafik';
 $text['device']         = 'Enhed';

@@ -35,12 +35,15 @@ $text['loadavg']        = 'Средняя загрузка';
 $text['hardware']       = 'Аппаратное обеспечение';
 $text['numcpu']         = 'Процессоры';
 $text['cpumodel']       = 'Модель';
-$text['mhz']            = 'Скорость процессора MHz';
+$text['cpuspeed']       = 'Скорость процессора MHz';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Размер кеша';
 $text['bogomips']       = 'System Bogomips';
+
 $text['pci']            = 'Устройства PCI';
 $text['ide']            = 'Устройства IDE';
 $text['scsi']           = 'Устройства SCSI';
+$text['usb']            = 'Устройства USB';
 
 $text['netusage']       = 'Использование сети';
 $text['device']         = 'Устройство';

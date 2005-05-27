@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// $Id: class.HP-UX.inc.php,v 1.1 2005/03/14 07:42:53 shankarr Exp $
+// $Id: class.HP-UX.inc.php,v 1.12 2004/10/13 08:13:29 webbie Exp $
 
 class sysinfo {
   // get our apache SERVER_NAME or vhost
@@ -44,25 +44,17 @@ class sysinfo {
   } 
 
   function uptime () {
-    global $text;
+    $result = 0;
     $ar_buf = array();
 
     $buf = execute_program('uptime');
-
     if (preg_match("/up (\d+) days,\s*(\d+):(\d+),/", $buf, $ar_buf)) {
       $min = $ar_buf[3];
       $hours = $ar_buf[2];
       $days = $ar_buf[1];
-
-      if ($days != 0) {
-        $result = "$days " . $text['days'] . " ";
-      } 
-
-      if ($hours != 0) {
-        $result .= "$hours " . $text['hours'] . " ";
-      } 
-      $result .= "$min " . $text['minutes'];
+      $result = $days * 86400 + $hours * 3600 + $min * 60;
     } 
+
     return $result;
   } 
 
@@ -101,13 +93,13 @@ class sysinfo {
             $results['model'] = $value;
             break;
           case 'cpu MHz':
-            $results['mhz'] = sprintf('%.2f', $value);
+            $results['cpuspeed'] = sprintf('%.2f', $value);
             break;
           case 'cycle frequency [Hz]': // For Alpha arch - 2.2.x
-            $results['mhz'] = sprintf('%.2f', $value / 1000000);
+            $results['cpuspeed'] = sprintf('%.2f', $value / 1000000);
             break;
           case 'clock': // For PPC arch (damn borked POS)
-            $results['mhz'] = sprintf('%.2f', $value);
+            $results['cpuspeed'] = sprintf('%.2f', $value);
             break;
           case 'cpu': // For PPC arch (damn borked POS)
             $results['model'] = $value;
@@ -148,7 +140,7 @@ class sysinfo {
     } 
 
     $keys = array_keys($results);
-    $keys2be = array('model', 'mhz', 'cache', 'bogomips', 'cpus');
+    $keys2be = array('model', 'cpuspeed', 'cache', 'bogomips', 'cpus');
 
     while ($ar_buf = each($keys2be)) {
       if (! in_array($ar_buf[1], $keys)) {

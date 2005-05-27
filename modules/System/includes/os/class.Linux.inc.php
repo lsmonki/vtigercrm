@@ -12,7 +12,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-// $Id: class.Linux.inc.php,v 1.1 2005/03/14 07:42:53 shankarr Exp $
+// $Id: class.Linux.inc.php,v 1.37 2004/10/13 08:13:29 webbie Exp $
 class sysinfo {
   // get our apache SERVER_NAME or vhost
   function vhostname () {
@@ -61,27 +61,11 @@ class sysinfo {
   } 
   
   function uptime () {
-    global $text;
     $fd = fopen('/proc/uptime', 'r');
     $ar_buf = split(' ', fgets($fd, 4096));
     fclose($fd);
 
-    $sys_ticks = trim($ar_buf[0]);
-
-    $min = $sys_ticks / 60;
-    $hours = $min / 60;
-    $days = floor($hours / 24);
-    $hours = floor($hours - ($days * 24));
-    $min = floor($min - ($days * 60 * 24) - ($hours * 60));
-
-    if ($days != 0) {
-      $result = "$days " . $text['days'] . " ";
-    } 
-
-    if ($hours != 0) {
-      $result .= "$hours " . $text['hours'] . " ";
-    } 
-    $result .= "$min " . $text['minutes'];
+    $result = trim($ar_buf[0]);
 
     return $result;
   } 
@@ -118,13 +102,13 @@ class sysinfo {
             $results['model'] = $value;
             break;
           case 'cpu MHz':
-            $results['mhz'] = sprintf('%.2f', $value);
+            $results['cpuspeed'] = sprintf('%.2f', $value);
             break;
           case 'cycle frequency [Hz]': // For Alpha arch - 2.2.x
-            $results['mhz'] = sprintf('%.2f', $value / 1000000);
+            $results['cpuspeed'] = sprintf('%.2f', $value / 1000000);
             break;
           case 'clock': // For PPC arch (damn borked POS)
-            $results['mhz'] = sprintf('%.2f', $value);
+            $results['cpuspeed'] = sprintf('%.2f', $value);
             break;
           case 'cpu': // For PPC arch (damn borked POS)
             $results['model'] = $value;
@@ -163,7 +147,7 @@ class sysinfo {
             $results['cpus'] += 1;
             break;
           case 'Cpu0ClkTck': // Linux sparc64
-            $results['mhz'] = sprintf('%.2f', hexdec($value) / 1000000);
+            $results['cpuspeed'] = sprintf('%.2f', hexdec($value) / 1000000);
             break;
           case 'Cpu0Bogo': // Linux sparc64 & sparc32
             $results['bogomips'] = $value;
@@ -177,7 +161,7 @@ class sysinfo {
     } 
 
     $keys = array_keys($results);
-    $keys2be = array('model', 'mhz', 'cache', 'bogomips', 'cpus');
+    $keys2be = array('model', 'cpuspeed', 'cache', 'bogomips', 'cpus');
 
     while ($ar_buf = each($keys2be)) {
       if (! in_array($ar_buf[1], $keys)) {
@@ -488,6 +472,10 @@ class sysinfo {
       $buf = fgets($fd, 1024);
       fclose($fd);
       $result = trim($buf);
+   } elseif ($fd = fopen('/etc/cobalt-release', 'r')) {
+      $buf = fgets($fd, 1024);
+      fclose($fd);
+      $result = trim($buf);
    } else {
       $result = 'N.A.';
    }
@@ -515,6 +503,8 @@ class sysinfo {
       $result = 'Trustix.gif';
    } elseif (file_exists('/etc/arch-release')) {
       $result = 'Arch.gif';
+   } elseif (file_exists('/etc/cobalt-release')) {
+      $result = 'Cobalt.gif';
    } else {
       $result = 'xp.gif';
    }

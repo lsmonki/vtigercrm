@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// $Id: class.SunOS.inc.php,v 1.1 2005/03/14 07:42:53 shankarr Exp $
+// $Id: class.SunOS.inc.php,v 1.11 2004/10/13 08:13:29 webbie Exp $
 
 echo "<center><b>Note: The SunOS version of phpSysInfo is work in progress, some things currently don't work";
 
@@ -59,23 +59,7 @@ class sysinfo {
   } 
 
   function uptime () {
-    global $text;
-    $sys_ticks = time() - $this->kstat('unix:0:system_misc:boot_time');
-
-    $min = $sys_ticks / 60;
-    $hours = $min / 60;
-    $days = floor($hours / 24);
-    $hours = floor($hours - ($days * 24));
-    $min = floor($min - ($days * 60 * 24) - ($hours * 60));
-
-    if ($days != 0) {
-      $result = "$days " . $text['days'] . " ";
-    } 
-
-    if ($hours != 0) {
-      $result .= "$hours " . $text['hours'] . " ";
-    } 
-    $result .= "$min " . $text['minutes'];
+    $result = time() - $this->kstat('unix:0:system_misc:boot_time');
 
     return $result;
   } 
@@ -99,13 +83,13 @@ class sysinfo {
     $ar_buf = array();
 
     $results['model'] = execute_program('uname', '-i');
-    $results['mhz'] = $this->kstat('cpu_info:0:cpu_info0:clock_MHz');
+    $results['cpuspeed'] = $this->kstat('cpu_info:0:cpu_info0:clock_MHz');
     $results['cache'] = $this->kstat('cpu_info:0:cpu_info0:cpu_type');
     $results['bogomips'] = 1;
     $results['cpus'] = $this->kstat('unix:0:system_misc:ncpus');
 
     $keys = array_keys($results);
-    $keys2be = array('model', 'mhz', 'cache', 'bogomips', 'cpus');
+    $keys2be = array('model', 'cpuspeed', 'cache', 'bogomips', 'cpus');
 
     while ($ar_buf = each($keys2be)) {
       if (! in_array($ar_buf[1], $keys)) {

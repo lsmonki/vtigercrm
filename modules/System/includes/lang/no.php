@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: no.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: no.php,v 1.12 2004/08/30 15:51:26 webbie Exp $
 
 $text['title']          = 'Systeminformasjon';
 
@@ -33,12 +33,15 @@ $text['loadavg']        = 'Gj.Snitt Belastning';
 $text['hardware']       = 'Maskinvareinformasjon';
 $text['numcpu']         = 'Prosessorer';
 $text['cpumodel']       = 'Modell';
-$text['mhz']            = 'Brikke MHz';
+$text['cpuspeed']       = 'Brikke MHz';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Cache St&oslash;rrelse';
 $text['bogomips']       = 'System Bogomips';
+
 $text['pci']            = 'PCI Enheter';
 $text['ide']            = 'IDE Enheter';
 $text['scsi']           = 'SCSI Enheter';
+$text['usb']            = 'USB Enheter';
 
 $text['netusage']       = 'Nettverksbruk';
 $text['device']         = 'Enhet';

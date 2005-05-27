@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// $Id: class.Darwin.inc.php,v 1.1 2005/03/14 07:42:53 shankarr Exp $
+// $Id: class.Darwin.inc.php,v 1.18 2004/08/25 03:04:56 webbie Exp $
 
 require('./includes/os/class.BSD.common.inc.php');
 
@@ -64,7 +64,8 @@ class sysinfo extends bsd_common {
     // $results['model'] = $this->grab_key('hw.machine');
     $results['model'] = ereg_replace('Processor type: ', '', execute_program('hostinfo', '| grep "Processor type"')); // get processor type
     $results['cpus'] = $this->grab_key('hw.ncpu');
-    $results['mhz'] = round($this->grab_key('hw.cpufrequency') / 1000000); // return cpu speed
+    $results['cpuspeed'] = round($this->grab_key('hw.cpufrequency') / 1000000); // return cpu speed - Mhz
+    $results['busspeed'] = round($this->grab_key('hw.busfrequency') / 1000000); // return bus speed - Mhz
     $results['cache'] = round($this->grab_key('hw.l2cachesize') / 1024); // return l2 cache
     
     return $results;

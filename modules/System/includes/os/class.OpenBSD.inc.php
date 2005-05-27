@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// $Id: class.OpenBSD.inc.php,v 1.1 2005/03/14 07:42:53 shankarr Exp $
+// $Id: class.OpenBSD.inc.php,v 1.14 2004/07/02 02:33:16 webbie Exp $
 
 require('./includes/os/class.BSD.common.inc.php');
 

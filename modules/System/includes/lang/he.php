@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: he.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: he.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
 $charset                = 'windows-1255';
 $text_dir               = 'rtl';
 $text['title']          = 'מידע על המערכת';
@@ -34,13 +34,15 @@ $text['loadavg']        = 'ממוצע עומסים';
 $text['hardware']       = 'מידע חומרה';
 $text['numcpu']         = 'מעבדים';
 $text['cpumodel']       = 'סוג';
-$text['mhz']            = 'מהירות בMHz';
+$text['cpuspeed']       = 'מהירות בMHz';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'גודל זכרון מטמון';
 $text['bogomips']       = 'מהירות בbogomips';
-$text['usb']            = 'התקני USB';
+
 $text['pci']            = 'התקני PCI';
 $text['ide']            = 'התקני IDE';
 $text['scsi']           = 'התקני SCSI';
+$text['usb']            = 'התקני USB';
 
 $text['netusage']       = 'רשת';
 $text['device']         = 'התקן';

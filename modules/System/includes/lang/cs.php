@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: cs.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: cs.php,v 1.11 2004/08/30 15:51:26 webbie Exp $
 
 $charset                = 'iso-8859-2';
 
@@ -35,13 +35,15 @@ $text['loadavg']        = 'Prùmìrná zátì¾';
 $text['hardware']       = 'Hardwarové informace';
 $text['numcpu']         = 'Procesory';
 $text['cpumodel']       = 'Model';
-$text['mhz']            = 'Frekvence';
+$text['cpuspeed']       = 'Frekvence';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Velikost cache';
 $text['bogomips']       = 'Bogomipsy';
-$text['usb']            = 'USB zaøízení';
+
 $text['pci']            = 'PCI zaøízení';
 $text['ide']            = 'IDE zaøízení';
 $text['scsi']           = 'SCSI zaøízení';
+$text['usb']            = 'USB zaøízení';
 
 $text['netusage']       = 'Pou¾ívání sítì';
 $text['device']         = 'Zaøízení';

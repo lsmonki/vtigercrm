@@ -1,298 +1,290 @@
-<?php 
+<?php
+//
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
+//
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
 // of the License, or (at your option) any later version.
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
+//
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-// WINNT implementation written by Carl C. Longnecker, longneck@iname.com
-
-// $Id: class.WINNT.inc.php,v 1.1 2005/03/14 07:42:53 shankarr Exp $
+//
+// $Id: class.WINNT.inc.php, v1.2 (NT_Service) 2005/04/19 Millennium $
+//
 
 class sysinfo {
-    // winnt needs some special prep
-    // $wmi holds the COM object that we pull all the WMI data from
-    var $wmi; 
-    // this constructor initialis the $wmi object
-    function sysinfo ()
-    {
-        $this->wmi = new COM("WinMgmts:\\\\.");
-    } 
-    // get our apache SERVER_NAME or vhost
-    function vhostname ()
-    {
-        if (! ($result = getenv('SERVER_NAME'))) {
-            $result = 'N.A.';
-        } 
-        return $result;
-    } 
-    // get our canonical hostname
-    function chostname ()
-    {
-        if (! ($result = getenv('SERVER_NAME'))) {
-            $result = 'N.A.';
-        } 
-        return $result;
-    } 
-    // get the IP address of our canonical hostname
-    function ip_addr ()
-    {
-        if (!($result = getenv('SERVER_ADDR'))) {
-            $result = 'N.A.';
-        } 
-        return $result;
-    } 
-
-    function kernel ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_OperatingSystem");
-        $obj = $objInstance->Next();
+		var $Win32_Serv_Addr;
+		var $Win32_Serv_Port;
 		
-		$result = $obj->Version;
-		if ($obj->ServicePackMajorVersion > 0) {
-		    $result .= ' SP' .  $obj->ServicePackMajorVersion;
+			
+		// Constructor, set IP-address en Port number
+		function sysinfo (){
+			$this->Win32_Serv_Addr = "127.0.0.1";
+			$this->Win32_Serv_Port = 1337;
+		
 		}
 		
+		// get our apache SERVER_NAME or vhost
+    function vhostname () {
+        if (! ($result = getenv('SERVER_NAME'))) {
+            $result = 'N.A.';
+        }
         return $result;
-    } 
+    }
 
-    function uptime ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_OperatingSystem");
-        $obj = $objInstance->Next();
+    // get our canonical hostname
+    function chostname () {
+	$result = gethostbyaddr(gethostbyname(getenv('COMPUTERNAME')));
+       	return $result;
+    }
 
-        $year = intval(substr($obj->LastBootUpTime, 0, 4));
-        $month = intval(substr($obj->LastBootUpTime, 4, 2));
-        $day = intval(substr($obj->LastBootUpTime, 6, 2));
-        $hour = intval(substr($obj->LastBootUpTime, 8, 2));
-        $minute = intval(substr($obj->LastBootUpTime, 10, 2));
-        $seconds = intval(substr($obj->LastBootUpTime, 12, 2));
-
-        $boottime = mktime($hour, $minute, $seconds, $month, $day, $year);
-
-        $diff_seconds = mktime() - $boottime;
-        $diff_days = floor($diff_seconds / 86400);
-        $diff_seconds -= $diff_days * 86400;
-        $diff_hours = floor($diff_seconds / 3600);
-        $diff_seconds -= $diff_hours * 3600;
-        $diff_minutes = floor($diff_seconds / 60);
-        $diff_seconds -= $diff_minutes * 60;
-
-        $result = "$diff_days days, $diff_hours hours, $diff_minutes minutes, and $diff_seconds seconds";
+    // get the IP address of our canonical hostname
+    function ip_addr () {
+        if (!($result = getenv('SERVER_ADDR'))) {
+            $result = "N.A.";
+        }
         return $result;
-    } 
+    }
 
-    function users ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_PerfRawData_TermService_TerminalServices");
-        $obj = $objInstance->Next();
-        return $obj->TotalSessions;
-    } 
+    function kernel () {
+    	$fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+			if (!$fp) {
+   			$result = 'N.A.';
+			}
+			else {
+				fputs($fp, "GET kernel\r\n");
+				$result = trim(fgets($fp));
+   			fclose($fp);
+   		}
+   		return $result;
+    }
 
-    function loadavg ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_Processor");
+    function uptime () {
+        $fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+	if (!$fp) {
+   		$result = 'N.A.';;
+	}
+	else {
+        	fputs($fp, "GET uptime\r\n");
+		$result = trim(fgets($fp));
+		fclose($fp);
+	}
+        return $result;
+    }
 
-        $cpuload = array();
-        while ($obj = $objInstance->Next()) {
-            $cpuload[] = $obj->LoadPercentage;
-        } // while
-        return $cpuload;
-    } 
+    function users () {
+      $fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+			if (!$fp) {
+   			$result = 'N.A.';
+			}
+			else {
+				fputs($fp, "GET users\r\n");
+				$result = trim(fgets($fp));
+   			fclose($fp);
+   		}
+   		return $result;
+    }
 
-    function cpu_info ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_Processor");
-
-        $obj = $objInstance->Next(); 
-        // still need bogomips (wtf are bogomips?)
-        $results['cpus'] = getenv('NUMBER_OF_PROCESSORS');
-        $results['model'] = $obj->Name;
-        $results['cache'] = $obj->L2CacheSize;
-        $results['mhz'] = $obj->CurrentClockSpeed . "/" . $obj->ExtClock;
-
-        return $results;
-    } 
-
-    function pci ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_PnPEntity");
-
-        $pci = array();
-        while ($obj = $objInstance->Next()) {
-            if (substr($obj->PNPDeviceID, 0, 4) == "PCI\\") {
-                $pci[] = $obj->Name;
-            } 
-        } // while
-        return $pci;
-    } 
-
-    function ide ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_PnPEntity");
-
-        $ide = array();
-        while ($obj = $objInstance->Next()) {
-            if (substr($obj->PNPDeviceID, 0, 4) == "IDE\\") {
-                $ide[]['model'] = $obj->Name;
-            } 
-        } // while
-        return $ide;
-    } 
-
-    function scsi ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_PnPEntity");
-
-        $scsi = array();
-        while ($obj = $objInstance->Next()) {
-            if (substr($obj->PNPDeviceID, 0, 5) == "SCSI\\") {
-                $scsi[] = $obj->Name;
-            } 
-        } // while
-        return $scsi;
-    } 
-
-    function usb ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_PnPEntity");
-
-        $usb = array();
-        while ($obj = $objInstance->Next()) {
-            if (substr($obj->PNPDeviceID, 0, 4) == "USB\\") {
-                $usb[] = $obj->Name;
-            } 
-        } // while
-        return $usb;
-    } 
-
-    function sbus ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_PnPEntity");
-
-        $sbus = array();
-        while ($obj = $objInstance->Next()) {
-            if (substr($obj->PNPDeviceID, 0, 5) == "SBUS\\") {
-                $sbus[] = $obj->Name;
-            } 
-        } // while
-        return $sbus;
-    } 
-
-    function network ()
-    {
-        /* need this for documentation in case i find some better net stats
-		$results[$dev_name]['rx_bytes'] = $stats[0];
-        $results[$dev_name]['rx_packets'] = $stats[1];
-        $results[$dev_name]['rx_errs'] = $stats[2];
-        $results[$dev_name]['rx_drop'] = $stats[3];
-
-        $results[$dev_name]['tx_bytes'] = $stats[8];
-        $results[$dev_name]['tx_packets'] = $stats[9];
-        $results[$dev_name]['tx_errs'] = $stats[10];
-        $results[$dev_name]['tx_drop'] = $stats[11];
-
-        $results[$dev_name]['errs'] = $stats[2] + $stats[10];
-        $results[$dev_name]['drop'] = $stats[3] + $stats[11];
-		*/
-
-        $objInstance = $this->wmi->InstancesOf("Win32_PerfRawData_Tcpip_NetworkInterface");
-
+    function loadavg () {
         $results = array();
-        while ($obj = $objInstance->Next()) {
-            $results[$obj->Name]['errs'] = $obj->PacketsReceivedErrors;
-            $results[$obj->Name]['drop'] = $obj->PacketsReceivedDiscarded;
-        } // while
+      $fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+			if ($fp) {
+   			fputs($fp, "GET loadavg\r\n");
+ 				$load = trim(fgets($fp));      
+ 				for ($counter = 0; $counter < $load; $counter++) {
+          $results[$counter] = trim(fgets($fp)) . "%";
+      	} 
+				fclose($fp);
+      }
+      return $results;
+    }
+
+    function cpu_info () {
+    		$results = array();
+    		$fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+				if ($fp) {
+   				fputs($fp, "GET cpu_info\r\n");
+        	$results['cpus'] = trim(fgets($fp)); 
+        	$results['model']  = trim(fgets($fp));
+        	$results['cpuspeed'] = trim(fgets($fp));
+        	$results['cache']  = round(trim(fgets($fp)) / 1024) . " KB";
+        	$results['bogomips'] = trim(fgets($fp));
+        	fclose($fp);
+        }       
         return $results;
-    } 
+    }
 
-    function memory ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_LogicalMemoryConfiguration");
-        $obj = $objInstance->Next();
-        $results['ram']['total'] = $obj->TotalPhysicalMemory;
+    function pci () {
+     $results = array();
+      $fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+			if ($fp) {
+   			fputs($fp, "GET pci\r\n");
+ 				$pci = trim(fgets($fp));      
+ 				for ($counter = 0; $counter < $pci; $counter++) {
+          $results[$counter] = trim(fgets($fp));
+      	} 
+				fclose($fp);
+      }
+      asort($results);
+      return $results;
+    }
 
-        $objInstance = $this->wmi->InstancesOf("Win32_PerfRawData_PerfOS_Memory");
-        $obj = $objInstance->Next();
-        $results['ram']['free'] = $obj->AvailableKBytes;
+    function ide () {
+      $results = array();
+      $fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+			if ($fp) {
+   			fputs($fp, "GET ide\r\n");
+ 				$ide = trim(fgets($fp));      
+ 				for ($counter = 0; $counter < $ide; $counter++) {
+          $results[$counter] = array();
+          $results[$counter]['model'] = trim(fgets($fp));
+      	} 
+				fclose($fp);
+      }
+      asort($results);
+      return $results;
+    }
 
-        $results['ram']['used'] = $results['ram']['total'] - $results['ram']['free'];
-        $results['ram']['t_used'] = $results['ram']['used'];
-        $results['ram']['t_free'] = $results['ram']['total'] - $results['ram']['t_used'];
-        $results['ram']['percent'] = round(($results['ram']['t_used'] * 100) / $results['ram']['total']);
+    function scsi () {
+      $results = array();
+      $fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+			if ($fp) {
+   			fputs($fp, "GET scsi\r\n");
+ 				$scsi = trim(fgets($fp));      
+ 				for ($counter = 0; $counter < $scsi; $counter++) {
+          $results[$counter] = array();
+          $results[$counter]['model'] = trim(fgets($fp));
+      	} 
+				fclose($fp);
+      }
+      asort($results);
+      return $results;
+    }
+    
+		function usb () {
+			$results = array();
+      $fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+			if ($fp) {
+   			fputs($fp, "GET usb\r\n");
+ 				$usb = trim(fgets($fp));      
+ 				for ($counter = 0; $counter < $usb; $counter++) {
+          $results[$counter] = trim(fgets($fp));
+      	} 
+				fclose($fp);
+      }
+      asort($results);
+      return $results;
+		}
+		
+    function sbus () {
+    	$results = array();
+    	$_results[0] = ""; 
+    	// TODO. Nothing here yet. Move along.
+    	$results = $_results;
+    	return $results;
+  	} 
 
-        $results['swap']['total'] = 0;
-        $results['swap']['used'] = 0;
-        $results['swap']['free'] = 0;
+    function network () {
+      $results = array();
+    	$fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+			if ($fp) {
+   			fputs($fp, "GET network\r\n");
+ 				$nic = trim(fgets($fp));      
+ 				for ($counter = 0; $counter < $nic; $counter++) {
+          $dev_name = fgets($fp);
+     
+          $results[$dev_name] = array();
 
-        $objInstance = $this->wmi->InstancesOf("Win32_PageFileUsage");
+          $results[$dev_name]['rx_bytes'] = trim(fgets($fp));
+          $results[$dev_name]['rx_packets'] = trim(fgets($fp));
+          $results[$dev_name]['rx_errs'] = trim(fgets($fp));
+          $results[$dev_name]['rx_drop'] = trim(fgets($fp));
 
-        $k = 0;
-        while ($obj = $objInstance->Next()) {
-            $results['devswap'][$k]['dev'] = $obj->Name;
-            $results['devswap'][$k]['total'] = $obj->AllocatedBaseSize * 1024;
-            $results['devswap'][$k]['used'] = $obj->CurrentUsage * 1024;
-            $results['devswap'][$k]['free'] = ($obj->AllocatedBaseSize - $obj->CurrentUsage) * 1024;
-            $results['devswap'][$k]['percent'] = $obj->CurrentUsage / $obj->AllocatedBaseSize;
+          $results[$dev_name]['tx_bytes'] = trim(fgets($fp));
+          $results[$dev_name]['tx_packets'] = trim(fgets($fp));
+          $results[$dev_name]['tx_errs'] = trim(fgets($fp));
+          $results[$dev_name]['tx_drop'] = trim(fgets($fp));
 
-            $results['swap']['total'] += $results['devswap'][$k]['total'];
-            $results['swap']['used'] += $results['devswap'][$k]['used'];
-            $results['swap']['free'] += $results['devswap'][$k]['free'];
-            $k += 1;
+          $results[$dev_name]['errs'] = $results[$dev_name]['rx_errs'] + $results[$dev_name]['tx_errs'];
+          $results[$dev_name]['drop'] = $results[$dev_name]['rx_drop'] + $results[$dev_name]['tx_drop'];
         } 
+				fclose($fp);
+      }
+    	return $results;
+    }
 
-        $results['swap']['percent'] = round($results['swap']['used'] / $results['swap']['total'] * 100);
-
+    function memory () {
+    		$results['ram'] = array();
+    		$results['swap'] = array();
+        
+        $fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+				if ($fp) {
+   				fputs($fp, "GET memory\r\n");
+        
+ 					$results['ram']['total']   = trim(fgets($fp)) / 1024;
+        	$results['ram']['free']    = trim(fgets($fp)) / 1024;
+        	$results['ram']['used']    = $results['ram']['total'] - $results['ram']['free'];
+        	$results['ram']['shared']  = 0;
+        	$results['ram']['buffers'] = 0;
+        	$results['ram']['cached']  = 0;
+					$results['ram']['t_used']  = $results['ram']['used'];
+        	$results['ram']['t_free']  = $results['ram']['free'];
+        	$results['ram']['percent'] = round(($results['ram']['t_used'] * 100) / $results['ram']['total']);
+                    
+        	$results['swap']['total']   = trim(fgets($fp)) / 1024;
+        	$results['swap']['free']    = trim(fgets($fp)) / 1024;
+        	$results['swap']['used']    = $results['swap']['total'] - $results['swap']['free'];
+        	$results['swap']['percent'] = round(($results['swap']['used'] * 100) / $results['swap']['total']);
+        
+        	fclose($fp);
+        }
         return $results;
-    } 
+    }
 
-    function filesystems ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_LogicalDisk");
+    function filesystems () {
+    	$results = array();
+      $fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+			if ($fp) {
+   			fputs($fp, "GET filesystems\r\n");
+ 				$drives = trim(fgets($fp));      
+ 				for ($counter = 0; $counter < $drives; $counter++) {
+          $results[$counter] = array();
+					$results[$counter]['disk'] = trim(fgets($fp));
+      		$results[$counter]['size'] = trim(fgets($fp)) / 1024;
+      		$results[$counter]['free'] = trim(fgets($fp)) / 1024;
+      		$results[$counter]['used'] = $results[$counter]['size'] - $results[$counter]['free'];
+      		$results[$counter]['percent'] = round(($results[$counter]['used'] * 100) / $results[$counter]['size']) . '%';
+      		$results[$counter]['mount'] = trim(fgets($fp));
+      		$results[$counter]['fstype'] = trim(fgets($fp));
+    		} 
+				fclose($fp);
+      }
+      return $results;  
+    }
+    
+    function distro () {
+   		$fp = fsockopen($this->Win32_Serv_Addr, $this->Win32_Serv_Port);
+			if (!$fp) {
+   			$result = 'N.A.';
+			}
+			else {
+				fputs($fp, "GET distro\r\n");
+				$result = trim(fgets($fp));
+   			fclose($fp);
+   		}
+   		return $result;
+  	}
 
-        $k = 0;
-        while ($obj = $objInstance->Next()) {
-            $results[$k]['mount'] = $obj->Name;
-            $results[$k]['size'] = $obj->Size / 1024;
-            $results[$k]['used'] = ($obj->Size - $obj->FreeSpace) / 1024;
-            $results[$k]['free'] = $obj->FreeSpace / 1024;
-            $results[$k]['percent'] = round($results[$k]['used'] / $results[$k]['size'] * 100);
-            $results[$k]['fstype'] = $obj->FileSystem;
-
-            $typearray = array("Unknown", "No Root Directory", "Removeable Disk",
-                "Local Disk", "Network Drive", "Compact Disc", "RAM Disk");
-            $floppyarray = array("Unknown", "5 1/4 in.", "3 1/2 in.", "3 1/2 in.",
-                "3 1/2 in.", "3 1/2 in.", "5 1/4 in.", "5 1/4 in.", "5 1/4 in.",
-                "5 1/4 in.", "5 1/4 in.", "Other", "HD", "3 1/2 in.", "3 1/2 in.",
-                "5 1/4 in.", "5 1/4 in.", "3 1/2 in.", "3 1/2 in.", "5 1/4 in.",
-                "3 1/2 in.", "3 1/2 in.", "8 in.");
-
-            $results[$k]['disk'] = $typearray[$obj->DriveType];
-            if ($obj->DriveType == 2) $results[$k]['disk'] .= " (" . $floppyarray[$obj->MediaType] . ")";
-            $k += 1;
-        } 
-
-        return $results;
-    } 
-
-    function distro ()
-    {
-        $objInstance = $this->wmi->InstancesOf("Win32_OperatingSystem");
-        $obj = $objInstance->Next();
-        return $obj->Caption;
-    } 
-
-    function distroicon ()
-    {
-       return 'xp.gif';
-    } 
-} 
-
-?>
+  	function distroicon () {   
+   		$result = 'xp.gif';
+   		return $result;
+  	}
+}

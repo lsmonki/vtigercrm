@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: et.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: et.php,v 1.13 2004/08/30 15:51:26 webbie Exp $
 
 $text['title']          = 'S&uuml;steemi Informatsioon';
 
@@ -33,14 +33,15 @@ $text['loadavg']        = 'Koormuse keskmised';
 $text['hardware']       = 'Riistvara Informatsioon';
 $text['numcpu']         = 'Protsessoreid';
 $text['cpumodel']       = 'Mudel';
-$text['mhz']            = 'Taktsagedus MHz';
+$text['cpuspeed']       = 'Taktsagedus MHz';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Vahem&auml;lu suurus';
 $text['bogomips']       = 'S&uuml;steemi Bogomips';
-$text['usb']            = 'USB Seadmed';
+
 $text['pci']            = 'PCI Seadmed';
 $text['ide']            = 'IDE Seadmed';
 $text['scsi']           = 'SCSI Seadmed';
-$text['None']           = 'Puudub';
+$text['usb']            = 'USB Seadmed';
 
 $text['netusage']       = 'V&otilde;rguteenuse kasutamine';
 $text['device']         = 'Seade';

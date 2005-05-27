@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: bg.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: bg.php,v 1.10 2004/08/30 15:51:25 webbie Exp $
 
 $charset                = 'cp-1251';
 
@@ -35,12 +35,15 @@ $text['loadavg']        = 'Средно натоварване';
 $text['hardware']       = 'Информация за хардуера';
 $text['numcpu']         = 'Брой процесори';
 $text['cpumodel']       = 'Модел на процесор';
-$text['mhz']            = 'Честота';
+$text['cpuspeed']       = 'Честота';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Размер на кешa ';
 $text['bogomips']       = 'Bogomips индекс';
+
 $text['pci']            = 'PCI устройства';
 $text['ide']            = 'IDE устройства';
 $text['scsi']           = 'SCSI устройства';
+$text['usb']            = 'USB устройства';
 
 $text['netusage']       = 'Мрежова информация';
 $text['device']         = 'Интерфейси';

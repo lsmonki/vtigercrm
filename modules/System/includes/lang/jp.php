@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: jp.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: jp.php,v 1.7 2004/08/30 15:51:26 webbie Exp $
 
 $charset                = 'euc-jp';
 $text['title']          = 'システム情報';
@@ -34,12 +34,15 @@ $text['loadavg']        = 'ロードアベレージ';
 $text['hardware']       = 'ハードウェア情報';
 $text['numcpu']         = 'CPU数';
 $text['cpumodel']       = 'CPUモデル';
-$text['mhz']            = 'クロック速度(MHz)';
+$text['cpuspeed']       = 'クロック速度(MHz)';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'キャッシュサイズ';
 $text['bogomips']       = 'System Bogomips';
+
 $text['pci']            = 'PCIデバイス一覧';
 $text['ide']            = 'IDEデバイス一覧';
 $text['scsi']           = 'SCSIデバイス一覧';
+$text['usb']            = 'USBデバイス一覧';
 
 $text['netusage']       = 'ネットワーク利用状況';
 $text['device']         = 'インタフェイス名';

@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Translated by Zsozso - zsozso@internews.hu
-// $Id: hu.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: hu.php,v 1.12 2004/08/30 15:51:26 webbie Exp $
 
 $charset                = 'iso-8859-2';
 
@@ -35,13 +35,15 @@ $text['loadavg']        = 'Terhelési Átlag';
 $text['hardware']       = 'Hardware Információ';
 $text['numcpu']         = 'Processzor';
 $text['cpumodel']       = 'Modell';
-$text['mhz']            = 'Chip MHz';
+$text['cpuspeed']       = 'Chip MHz';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Cache Méret';
 $text['bogomips']       = 'Rendszer Bogomips';
-$text['usb']            = 'USB Eszközök';
+
 $text['pci']            = 'PCI Eszközök';
 $text['ide']            = 'IDE Eszközök';
 $text['scsi']           = 'SCSI Eszközök';
+$text['usb']            = 'USB Eszközök';
 
 $text['netusage']       = 'Háló Használat';
 $text['device']         = 'Eszköz';

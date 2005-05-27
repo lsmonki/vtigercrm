@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: ct.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: ct.php,v 1.10 2004/08/30 15:51:26 webbie Exp $
 
 $text['title']          = 'Informaci&oacute; del Sistema';
 
@@ -33,13 +33,15 @@ $text['loadavg']        = 'Càrrega Promitg';
 $text['hardware']       = 'Informaci&oacute; del Maquinari';
 $text['numcpu']         = 'Processadors';
 $text['cpumodel']       = 'Model';
-$text['mhz']            = 'Xip MHz';
+$text['cpuspeed']       = 'Xip MHz';
+$text['busspeed']       = 'BUS Speed';
 $text['cache']          = 'Tamany Memòria Cau';
 $text['bogomips']       = 'Bogomips';
-$text['usb']            = 'Dispositius USB';
+
 $text['pci']            = 'Dispositius PCI';
 $text['ide']            = 'Dispositius IDE';
 $text['scsi']           = 'Dispositius SCSI';
+$text['usb']            = 'Dispositius USB';
 
 $text['netusage']       = 'Ús de la Xarxa';
 $text['device']         = 'Dispositiu';

@@ -17,13 +17,15 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: filesystems.php,v 1.1 2005/03/14 07:43:09 shankarr Exp $
+// $Id: filesystems.php,v 1.12 2004/10/29 06:49:33 webbie Exp $
 
 //
 // xml_filesystems()
 //
 function xml_filesystems () {
     global $sysinfo;
+    global $show_mount_point;
+
     $fs = $sysinfo->filesystems();
 
     $_text = "  <FileSystem>\n";
@@ -33,7 +35,11 @@ function xml_filesystems () {
         $sum['free'] += $fs[$i]['free'];
         $_text .= "    <Mount>\n";
 
-        $_text .= "      <MountPoint>" . $fs[$i]['mount'] . "</MountPoint>\n";
+        $_text .= "      <MountPointID>" . $i . "</MountPointID>\n";
+
+        if ($show_mount_point) {
+          $_text .= "      <MountPoint>" . $fs[$i]['mount'] . "</MountPoint>\n";
+        }
 
         $_text .= "      <Type>" . $fs[$i]['fstype'] . "</Type>\n"
                 . "      <Device>" . $fs[$i]['disk'] . "</Device>\n"
@@ -72,7 +78,7 @@ function html_filesystems () {
            . '<td align="right" valign="top"><font size="-1"><b>' . $text['size'] . '</b></font></td></tr>';
 
     for ($i=1, $max = sizeof($XPath->getDataParts('/phpsysinfo/FileSystem')); $i < $max; $i++) {
-        if ($XPath->match("/phpsysinfo/FileSystem/Mount[$i]/MountPoint")) {
+        if ($XPath->match("/phpsysinfo/FileSystem/Mount[$i]/MountPointID")) {
             $sum['size'] += $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Size");
             $sum['used'] += $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Used");
             $sum['free'] += $XPath->getData("/phpsysinfo/FileSystem/Mount[$i]/Free");

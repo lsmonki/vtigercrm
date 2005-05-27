@@ -17,7 +17,14 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: nl.php,v 1.1 2005/03/14 07:42:10 shankarr Exp $
+// $Id: nl.php,v 1.15 2004/08/30 15:51:26 webbie Exp $
+
+if (PHP_OS == 'WINNT') {
+  $text['locale']         = 'dutch'; // (windows) 
+}
+else {	
+  $text['locale']         = 'nl-NL'; // (Linux and friends(?))
+}
 
 $text['title']          = 'Systeem Informatie';
 
@@ -25,7 +32,7 @@ $text['vitals']         = 'Systeem overzicht';
 $text['hostname']       = 'Toegewezen naam';
 $text['ip']             = 'IP-adres';
 $text['kversion']       = 'Kernelversie';
-$text['dversion']       = 'Distro Name';
+$text['dversion']       = 'Distributie';
 $text['uptime']         = 'Uptime';
 $text['users']          = 'Huidige gebruikers';
 $text['loadavg']        = 'Gemiddelde belasting';
@@ -33,12 +40,15 @@ $text['loadavg']        = 'Gemiddelde belasting';
 $text['hardware']       = 'Hardware overzicht';
 $text['numcpu']         = 'Processors';
 $text['cpumodel']       = 'Model';
-$text['mhz']            = 'Chip MHz';
-$text['cache']          = 'Buffergrootte';
+$text['cpuspeed']       = 'CPU snelheid';
+$text['busspeed']       = 'BUS snelheid';
+$text['cache']          = 'Cache grootte';
 $text['bogomips']       = 'Systeem Bogomips';
+
 $text['pci']            = 'PCI Apparaten';
 $text['ide']            = 'IDE Apparaten';
 $text['scsi']           = 'SCSI Apparaten';
+$text['usb']            = 'USB Apparaten';
 
 $text['netusage']       = 'Netwerkgebruik';
 $text['device']         = 'Apparaat';
@@ -69,26 +79,25 @@ $text['none']           = 'geen';
 
 $text['capacity']       = 'Capaciteit';
   
-$text['template']       = 'Model';
-$text['language']       = 'Language';
+$text['template']       = 'Opmaak-model';
+$text['language']       = 'Taal';
 $text['submit']         = 'Toepassen';
 $text['created']        = 'Gegenereerd door';
-$text['locale']         = 'en_US';
-$text['gen_time']       = 'on %b %d, %Y at %r';
+$text['gen_time']       = 'op %d %B %Y, om %H:%M:%S';
 
 $text['days']           = 'dagen';
 $text['hours']          = 'uren';
 $text['minutes']        = 'minuten';
   
-$text['temperature']    = 'Temperature';
+$text['temperature']    = 'Temperatuur';
 $text['voltage']        = 'Voltage';
 $text['fans']           = 'Fans';
-$text['s_value']        = 'Value';
+$text['s_value']        = 'Waarde';
 $text['s_min']          = 'Min';
 $text['s_max']          = 'Max';
 $text['s_div']          = 'Div';
 $text['hysteresis']     = 'Hysteresis';
-$text['s_limit']        = 'Limit';
+$text['s_limit']        = 'Limiet';
 $text['s_label']        = 'Label';
 $text['degree_mark']    = '&ordm;C';
 $text['voltage_mark']   = 'V';
