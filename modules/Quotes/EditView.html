@@ -176,7 +176,7 @@
   <table width="100%" border="0" cellspacing="2" cellpadding="2">
     <tr> 
       <td width="100%"><div align="right">Sub Total:</div></td>
-	  <td id="subTotal" align="right" width="100" style="border:1px solid #000;">&nbsp;</td>
+	  <td id="subTotal" align="right" width="100" style="border:1px solid #000;">{GRANDTOTAL}</td>
 	  <td width="40">&nbsp;</td>
     </tr>
     <tr>
@@ -186,11 +186,11 @@
     </tr>
     <tr>
       <td><div align="right">Grand Total:</div></td>
-          <td id="grandTotal" align="right" width="100" style="border:1px solid #000;">&nbsp;</td>
+          <td id="grandTotal" align="right" width="100" style="border:1px solid #000;">{SUBTOTAL}</td>
           <td width="40">&nbsp;</td>
     </tr>
   </table>
-  <div id="strikeLines"></div>
+  <div id="strikeLines">{STRIKELINES}</div>
 <input type="hidden" name="hdnSubTotal" id="hdnSubTotal" value="{SUBTOTAL}">
 <input type="hidden" name="hdnGrandTotal" id="hdnGrandTotal" value="{GRANDTOTAL}">
 <br>
@@ -242,11 +242,11 @@ function addRow() {
 	if (browser_ie) {
 		var prodListBody=getObj("productList").children[0].children[0]
 	} else if (browser_nn4 || browser_nn6) {
-		if (rowCnt==1) {
-			var prodListBody=getObj("productList").childNodes.item(1).childNodes.item(1)
-		} else {
-			var prodListBody=getObj("productList").childNodes.item(0).childNodes.item(0)
-		}
+		if (getObj("productList").childNodes.item(0).tagName=="TABLE") {
+                        var prodListBody=getObj("productList").childNodes.item(0).childNodes.item(0)
+                } else {
+                        var prodListBody=getObj("productList").childNodes.item(1).childNodes.item(1)
+                }
 	}
 	
 	prodList.innerHTML=listTableStart+prodListBody.innerHTML+newRow+"</table>"
@@ -306,6 +306,21 @@ function roundValue(val) {
 	
 	return val;
 }
+
+function createStrikeLines() {
+	var lineLeft,lineTop,lineWidth,strikeLine="";
+	for (var i=1;i<=rowCnt;i++) {
+		lineLeft=findPosX(getObj("row"+i))
+	       	lineTop=findPosY(getObj("row"+i))
+        	lineWidth=prodList.offsetWidth-getObj("delCol"+i).offsetWidth
+
+		strikeLine+="<div id='strikeLine"+i+"' style='visibility:hidden;background:url({IMAGE_PATH}strikeline.gif) repeat-x;position:absolute;top:"+lineTop+";left:"+lineLeft+";width:"+lineWidth+";height:20px;z-index:10'></div>"
+	}
+
+        getObj("strikeLines").innerHTML=strikeLine
+}
+
+createStrikeLines();
 </script>
 
 <script type="text/javascript" language="Javascript">

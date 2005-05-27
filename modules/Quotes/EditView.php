@@ -148,10 +148,10 @@ $xtpl->assign("ID", $focus->id);
 
 
 
-/*
-$account_tables = Array('account','crmentity','accountbillads','accountshipads','accountscf'); 
- $tabid = getTabid("Accounts");
- $validationData = getDBValidationData($account_tables,$tabid);
+
+$quote_tables = Array('quotes','crmentity','quotesbillads','quotesshipads'); 
+ $tabid = getTabid("Quotes");
+ $validationData = getDBValidationData($quote_tables,$tabid);
  $fieldName = '';
  $fieldLabel = '';
  $fldDataType = '';
@@ -192,7 +192,7 @@ $account_tables = Array('account','crmentity','accountbillads','accountshipads',
 $xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
 $xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
-*/
+
 
 
 
