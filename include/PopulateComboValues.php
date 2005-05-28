@@ -14,11 +14,11 @@ require_once('include/language/en_us.lang.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboStrings.php');
 
-class PopulateComboValues 
+class PopulateComboValues
 {
-  
+
 	//var $table_name="lead_source";
-	var $app_list_strings;	
+	var $app_list_strings;
 
   function insertComboValues($values, $tableName)
 	{
@@ -27,7 +27,7 @@ class PopulateComboValues
           foreach ($values as $val => $cal)
           {
             if($val != '')
-            {	
+            {
               $adb->query("insert into ".$tableName. " values('','".$val."',".$i.",1)");
             }
             else
@@ -41,7 +41,7 @@ class PopulateComboValues
 	function create_tables () {
 		global $app_list_strings,$adb;
                 global $combo_strings;
-		$comboTables = Array('leadsource','accounttype','industry','leadstatus','rating','licencekeystatus','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketcategories','duration_minutes','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','activitytype','currency','faqcategories');
+		$comboTables = Array('leadsource','accounttype','industry','leadstatus','rating','licencekeystatus','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketcategories','duration_minutes','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','activitytype','currency','faqcategories','rsscategory');
 
 		foreach ($comboTables as $comTab)
 		{
@@ -64,17 +64,17 @@ class PopulateComboValues
 				$tableRows = mysql_query("select * from ".$comTab);
 				if(mysql_num_rows($tableRows) == 0)
 				{
-					
+
 					$this->insertComboValues($combo_strings[$comTab."_dom"],$comTab);
 				}
 			}*/
-			
+
                   $this->insertComboValues($combo_strings[$comTab."_dom"],$comTab);
-		}			
-			
+		}
+
 	}
 
-	
+
 
 }
 ?>
