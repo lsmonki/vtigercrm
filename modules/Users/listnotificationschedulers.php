@@ -10,9 +10,12 @@
 *
  ********************************************************************************/
 
+require_once('include/database/PearDatabase.php');
+
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
+
 ?>
 <html>
 <head>
@@ -35,173 +38,43 @@ $image_path=$theme_path."images/";
       <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_NOTIFICATION'];?></td>
       <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_DESCRIPTION'];?></td>
     </tr>
-    <tr class='oddListRow'> 
- <td height="21" valign="top" nowrap> <div align="center">
 <?
 
-$sql = "select active from notificationscheduler where schedulednotificationid=1";
-$result = mysql_query($sql);
-$result_row = mysql_fetch_row($result);
-if($result_row[0] == 1)
+$query = "SELECT * FROM notificationscheduler";
+$result = $adb->query($query);
+if($adb->num_rows($result) >=1)
 {
-?>
-<INPUT TYPE=CHECKBOX NAME="1" checked>
-<?
+	$row_list  = 1;
+	while($result_row = $adb->fetch_array($result))
+	{
+		$chkd = '';
+		$active = $result_row['active'];
+		$shedid = $result_row['schedulednotificationid'];
+		$label = $result_row['label'];
+		$shedname = $result_row['schedulednotificationname'];
+		if($active == 1)
+		{
+			$chkd = "CHECKED";
+		}
+		if($row_list%2 ==1)
+		{
+			$ListRow = "oddListRow";
+		}
+		else
+		{
+			$ListRow = "evenListRow";
+		}
+		echo   '<tr class="'.$ListRow.'"> 
+			 <td height="21" valign="top" nowrap> <div align="center">
+			<INPUT TYPE=CHECKBOX NAME="'.$shedid.'" '.$chkd.'></div></td>
+		         <td valign="top" nowrap style="padding:0px 3px 0px 3px;"><a href="index.php?module=Users&action=EditNotification&record='.$shedid.'">'.$mod_strings[$label].'</a></td>
+			 <td valign="top" style="padding:0px 3px 0px 3px;">'.$mod_strings[$shedname].'</td>
+			</tr>';
+		
+	}
+
 }
-else
-{
 ?>
-<INPUT TYPE=CHECKBOX NAME="1" >
-<?
-  }
-?>
-     </div></td>
-      <td valign="top" nowrap style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_TASK_NOTIFICATION'];?></a></td>
-      <td valign="top" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_TASK_NOTIFICATION_DESCRITPION'];?></td>
-    </tr>
-
-
-
-    <tr class='evenListRow'> 
-      <td valign="top" nowrap><div align="center">
-
-<?
-
-$sql = "select active from notificationscheduler where schedulednotificationid=2";
-$result = mysql_query($sql);
-$result_row = mysql_fetch_row($result);
-if($result_row[0] == 1)
-{
-?>
-<INPUT TYPE=CHECKBOX NAME="2" checked>
-<?
-}
-else
-{
-?>
-<INPUT TYPE=CHECKBOX NAME="2">
-<?
-  }
-?>
-
-</div></td>
-      <td valign="top" nowrap style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_MANY_TICKETS'];?></a></td>
-      <td valign="top" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_MANY_TICKETS_DESCRIPTION'];?></td>
-    </tr>
-
-
-      <tr class='oddListRow'> 
-      <td valign="top" nowrap style="padding:0px 3px 0px 3px;"><div align="center">
-
-
-<?
-
-$sql = "select active from notificationscheduler where schedulednotificationid=3";
-$result = mysql_query($sql);
-$result_row = mysql_fetch_row($result);
-if($result_row[0] == 1)
-{
-?>
-<INPUT TYPE=CHECKBOX NAME="3" checked>
-<?
-}
-else
-{
-?>
-<INPUT TYPE=CHECKBOX NAME="3">
-<?
-  }
-?>
-
-
-
-</div></td>
-      <td valign="top" nowrap style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_PENDING_TICKETS'];?></a></td>
-      <td valign="top" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_TICKETS_DESCRIPTION'];?></td>
-    </tr>
-    <tr class='evenListRow'> 
-      <td valign="top" nowrap><div align="center">
-
-<?
-
-$sql = "select active from notificationscheduler where schedulednotificationid=4";
-$result = mysql_query($sql);
-$result_row = mysql_fetch_row($result);
-if($result_row[0] == 1)
-{
-?>
-<INPUT TYPE=CHECKBOX NAME="4" checked>
-<?
-}
-else
-{
-?>
-<INPUT TYPE=CHECKBOX NAME="4">
-<?
-  }
-?>
-
-
-
-
-
-</div></td>
-      <td valign="top" nowrap style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_START_NOTIFICATION'];?></a></td>
-      <td valign="top" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_START_DESCRIPTION'];?></td>
-    </tr>
-     <tr class='oddListRow'> 
-      <td valign="top" nowrap style="padding:0px 3px 0px 3px;"><div align="center">
-
-<?
-
-$sql = "select active from notificationscheduler where schedulednotificationid=5";
-$result = mysql_query($sql);
-$result_row = mysql_fetch_row($result);
-if($result_row[0] == 1)
-{
-?>
-<INPUT TYPE=CHECKBOX NAME="5" checked>
-<?
-}
-else
-{
-?>
-<INPUT TYPE=CHECKBOX NAME="5">
-<?
-  }
-?>
-
-
-</div></td>
-      <td valign="top" nowrap style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_BEG_DEAL'];?></a></td>
-      <td valign="top" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_BIG_DEAL_DESCRIPTION'];?></td>
-    </tr>
-     <tr class='evenListRow'> 
-      <td valign="top" nowrap style="padding:0px 3px 0px 3px;"><div align="center">
-
-<?
-
-$sql = "select active from notificationscheduler where schedulednotificationid=6";
-$result = mysql_query($sql);
-$result_row = mysql_fetch_row($result);
-if($result_row[0] == 1)
-{
-?>
-<INPUT TYPE=CHECKBOX NAME="6" checked>
-<?
-}
-else
-{
-?>
-<INPUT TYPE=CHECKBOX NAME="6">
-<?
-  }
-?>
-
-</div></td>
-      <td valign="top" nowrap style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_SUPPORT_NOTICIATION'];?></a></td>
-      <td valign="top" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_SUPPORT_DESCRIPTION'];?></td>
-    </tr>
   </table>
 </form>
 </body>
