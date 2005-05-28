@@ -31,27 +31,21 @@ global $mod_strings;
 global $app_strings;
 global $image_path;
 
-$the_script  = <<<EOQ
-
+$the_script='
 <script language="JavaScript" type="text/javascript" src="include/general.js"></script>
 <script type="text/javascript" language="Javascript">
-// to hide script contents from old browsers
 function toggleRSSFolder(id) {
         if (getObj(id+"_feeds").style.display=="none") {
                 getObj(id+"_feeds").style.display="block"
-                getObj(id+"_folder").src="$image_path/rss_folder_opn.gif"
-                getObj(id+"_toggle").src="$image_path/minus.gif"
+                getObj(id+"_folder").src="'.$image_path.'rss_folder_opn.gif"
+                getObj(id+"_toggle").src="'.$image_path.'minus.gif"
         } else {
                 getObj(id+"_feeds").style.display="none"
-                getObj(id+"_folder").src="$image_path/rss_folder_cls.gif"
-                getObj(id+"_toggle").src="$image_path/plus.gif"
+                getObj(id+"_folder").src="'.$image_path.'rss_folder_cls.gif"
+                getObj(id+"_toggle").src="'.$image_path.'plus.gif"
         }
 }
-// end hiding contents from old browsers
-</script>
-
-EOQ;
-
+</script>';
 return $the_script;
 }
 
@@ -70,19 +64,17 @@ $oRss = new vtigerRSS();
 $allrsshtml = $oRss->getRSSCategoryHTML();
 $starred_rss_html = $oRss->getStarredRssFolder();
 
-$the_form .= <<<EOQ
-      <table width="100%" border="0" cellspacing="2" cellpadding="0" style="margin-top:10px">
+$the_form .= '<table width="100%" border="0" cellspacing="2" cellpadding="0" style="margin-top:10px">
         <tr>
-          <td width="15"><div align="center"><a href="javascript:;" onClick="toggleRSSFolder('S')"><img id="S_toggle" 
-src="$image_path/plus.gif" border="0"></a></div></td>
-          <td width="20"><div align="center"><img id="S_folder" src="$image_path/rss_folder_cls.gif"></div></td>
-          <td nowrap><a href="javascript:;" onClick="toggleRSSFolder('S')" class="rssFolder">Starred Feeds</a></td>
+          <td width="15"><div align="center"><a href="javascript:;" onClick="toggleRSSFolder('."'S'".')"><img id="S_toggle"
+src="'.$image_path.'plus.gif" border="0"></a></div></td>
+          <td width="20"><div align="center"><img id="S_folder" src="'.$image_path.'rss_folder_cls.gif"></div></td>
+          <td nowrap><a href="javascript:;" onClick="toggleRSSFolder('."'S'".')" class="rssFolder">Starred Feeds</a></td>
         </tr>
         <tr>
           <td colspan="3"><div id="S_feeds" style="display:none"><table width="100%" border="0" cellspacing="2" cellpadding=
-"2" style="margin:5 0 0 35">$starred_rss_html</table></div></td>
-        </tr>
-EOQ;
+"2" style="margin:5 0 0 35">'.$starred_rss_html.'</table></div></td>
+        </tr>';
 
 $the_form .= $allrsshtml;
 
