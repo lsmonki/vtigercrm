@@ -59,7 +59,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("VIEWID",$viewidforsearch);
 	//<<<<<<<customview>>>>>>>>>>
 
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Activities','index','name','true','basic',"","","","",,$viewidforsearch));
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Activities','index','name','true','basic',"","","","",$viewidforsearch));
 
 	if(isset($_REQUEST['query'])) {
 		if (isset($_REQUEST['name'])) $search_form->assign("NAME", $_REQUEST['name']);
@@ -193,7 +193,7 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden" value="'.$viewid'">
+	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_owner" type="hidden">
 	<input name="change_status" type="hidden">
 		<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>

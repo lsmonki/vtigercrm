@@ -293,7 +293,7 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 		$search_form->out("advanced");
 	}
 	else {  //customview //
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','basic',"","","","",,$viewidforsearch));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','basic',"","","","",$viewidforsearch));
 		$search_form->parse("main");
 		$search_form->out("main");
 	}
