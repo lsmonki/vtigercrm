@@ -107,7 +107,7 @@ else $xtpl->assign("NAME", "");
 
 if($focus->mode == 'edit')
 {
-	$num_of_products = getNoOfAssocProducts($module,$focus);
+	$num_of_products = getNoOfAssocProducts("Orders",$focus);
 	$xtpl->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("Orders",$focus);
 	$xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);

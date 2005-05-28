@@ -104,16 +104,31 @@ $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
+
+
+if($focus->mode == 'edit')
+{
+	$num_of_products = getNoOfAssocProducts("SalesOrder",$focus);
+	$xtpl->assign("ROWCOUNT", $num_of_products);
+	$associated_prod = getAssociatedProducts("SalesOrder",$focus);
+	$xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$xtpl->assign("MODE", $focus->mode);
+	$xtpl->assign("TAXVALUE", $focus->column_fields['txtTax']);
+	$xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
+	$xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
+}
+else
+{
+	$xtpl->assign("ROWCOUNT", '0');
+	$xtpl->assign("TAXVALUE", '0');
+}
 /*
 if(isset($cust_fld))
 {
         $xtpl->assign("CUSTOMFIELD", $cust_fld);
 }
 */
-if($focus->mode == 'edit')
-{
-	$xtpl->assign("MODE", $focus->mode);
-}		
+		
 
 if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
 else $xtpl->assign("RETURN_MODULE","Orders");
@@ -131,10 +146,10 @@ $xtpl->assign("ID", $focus->id);
 
 
 
-/*
-$account_tables = Array('account','crmentity','accountbillads','accountshipads','accountscf'); 
- $tabid = getTabid("Accounts");
- $validationData = getDBValidationData($account_tables,$tabid);
+
+$so_tables = Array('salesorder','crmentity','sobillads','soshipads'); 
+ $tabid = getTabid("SalesOrder");
+ $validationData = getDBValidationData($so_tables,$tabid);
  $fieldName = '';
  $fieldLabel = '';
  $fldDataType = '';
@@ -175,7 +190,7 @@ $account_tables = Array('account','crmentity','accountbillads','accountshipads',
 $xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
 $xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
-*/
+
 
 
 

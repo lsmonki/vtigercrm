@@ -40,8 +40,8 @@ class SalesOrder extends CRMEntity {
 	
 		
 	var $table_name = "salesorder";
-	var $tab_name = Array('crmentity','salesorder','sobillads','soshipads','soproductrel');
-	var $tab_name_index = Array('crmentity'=>'crmid','salesorder'=>'salesorderid','sobillads'=>'sobilladdressid','soshipads'=>'soshipaddressid','soproductrel'=>'salesorderid');
+	var $tab_name = Array('crmentity','salesorder','sobillads','soshipads');
+	var $tab_name_index = Array('crmentity'=>'crmid','salesorder'=>'salesorderid','sobillads'=>'sobilladdressid','soshipads'=>'soshipaddressid');
 				
 	
 	var $entity_table = "crmentity";
@@ -65,20 +65,14 @@ class SalesOrder extends CRMEntity {
 	var $list_fields = Array(
 				'Sales Order Id'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('salesorder'=>'subject'),
-				'Purchase Order'=>Array('salesorder'=>'purchaseorderid'),
 				'Vendor Name'=>Array('salesorder'=>'vendorid'), 
-				'Type'=>Array('salesorder'=> 'type'),
-				'Product Name'=>Array('soproductrel'=>'productid'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 	
 	var $list_fields_name = Array(
 				        'Sales Order Id'=>'',
 				        'Subject'=>'subject',
-				        'Purchase Order'=>'purchaseorder_id',
 				        'Vendor Name'=>'vendor_id',
-					'Type'=>'type',
-					'Product Name'=>'product_id',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
@@ -88,13 +82,15 @@ class SalesOrder extends CRMEntity {
         var $popup_type;
 
 	var $search_fields = Array(
-				'Account Name'=>Array('account'=>'accountname'),
-				'City'=>Array('accountbillads'=>'city'), 
+				'Sales Order Id'=>Array('crmentity'=>'crmid'),
+				'Subject'=>Array('salesorder'=>'subject'),
+				'Vendor Name'=>Array('salesorder'=>'vendorid') 
 				);
 	
 	var $search_fields_name = Array(
-				        'Account Name'=>'accountname',
-				        'City'=>'bill_city',
+					'Sales Order Id'=>'',
+				        'Subject'=>'subject',
+				        'Vendor Name'=>'vendor_id'
 				      );
 
 	// This is the list of fields that are required.

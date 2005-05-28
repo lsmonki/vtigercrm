@@ -29,6 +29,7 @@ require_once('include/database/PearDatabase.php');
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new SalesOrder();
+
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];
@@ -55,6 +56,33 @@ foreach($focus->column_fields as $fieldname => $val)
 
 
 $focus->save("SalesOrder");
+if($focus->mode == 'edit')
+{
+        $query1 = "delete from soproductrel where salesorderid=".$focus->id;
+        //echo $query1;
+        $adb->query($query1);
+
+}
+//Printing the total Number of rows
+$tot_no_prod = $_REQUEST['totalProductCount'];
+for($i=1; $i<=$tot_no_prod; $i++)
+{
+        $product_id_var = 'hdnProductId'.$i;
+        $status_var = 'hdnRowStatus'.$i;
+        $qty_var = 'txtQty'.$i;
+        $list_price_var = 'txtListPrice'.$i;
+
+        $prod_id = $_REQUEST[$product_id_var];
+        $prod_status = $_REQUEST[$status_var];
+        $qty = $_REQUEST[$qty_var];
+        $listprice = $_REQUEST[$list_price_var];
+        if($prod_status != 'D')
+        {
+
+                $query ="insert into soproductrel values(".$focus->id.",".$prod_id.",".$qty.",".$listprice.")";
+                $adb->query($query);
+        }
+}
 $return_id = $focus->id;
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
