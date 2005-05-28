@@ -4095,7 +4095,7 @@
 		<field name="subject" type="C" size="100"></field>
 		<field name="potentialid" type="I" size="19"></field>
 		<field name="customerno" type="C" size="100"></field>
-		<field name="purchaseorderid" type="I" size="19"></field>
+		<field name="quoteid" type="I" size="19"></field>
 		<field name="vendorterms" type="C" size="100"></field>
 		<field name="contactid" type="I" size="19"></field>
 		<field name="vendorid" type="I" size="19"></field>
@@ -4103,10 +4103,11 @@
 		<field name="carrier" type="C" size='100'></field>
 		<field name="pending" type="C" size='200'></field>
 		<field name="type" type="C" size="100"></field>
-		<field name="salestax" type="N" size="3.2"></field>
-		<field name="salescommission" type="N" size="3.2"></field>
-		<field name="exciseduty" type="N" size="3.2"></field>
+		<field name="salestax" type="N" size="11.3"></field>
+		<field name="salescommission" type="N" size="11.3"></field>
+		<field name="exciseduty" type="N" size="11.3"></field>
 		<field name="total" type="N" size="11.3"></field>
+		<field name="subtotal" type="N" size="11.3"></field>
 		
                   
 <opt>Type=InnoDB</opt>
@@ -4204,6 +4205,8 @@
 		<field name="productid" type="I" size="19">
 			<KEY/>
 		</field>
+		<field name="quantity" type="I" size="19"></field>
+		<field name="listprice" type="N" size="11.3"></field>
 		<opt>Type=InnoDB</opt> <index name="SoProductRel_IDX0">
 			<col>salesorderid</col>
 		</index>
@@ -4243,19 +4246,20 @@
 			<DEFAULT value="0"/>
 		</field>
 		<field name="subject" type="C" size="100"></field>
-		<field name="purchaseorderid" type="I" size="19"></field>
+		<field name="salesorderid" type="I" size="19"></field>
 		<field name="customerno" type="C" size="100"></field>
 		<field name="notes" type="C" size="100"></field>
 		<field name="invoicedate" type="D"></field>
 		<field name="duedate" type="D"></field>
 		<field name="invoiceterms" type="C" size="100"></field>
 		<field name="type" type="C" size="100"></field>
-		<field name="salestax" type="N" size="3.2"></field>
-		<field name="salescommission" type="N" size="3.2"></field>
-		<field name="exciseduty" type="N" size="3.2"></field>
+		<field name="salestax" type="N" size="11.3"></field>
+		<field name="salescommission" type="N" size="11.3"></field>
+		<field name="exciseduty" type="N" size="11.3"></field>
 		<field name="subtotal" type="N" size="11.3"></field>
 		<field name="total" type="N" size="11.3"></field>
 		<field name="shipping" type="C" size="100"></field>
+
 		
                   
 <opt>Type=InnoDB</opt>
@@ -4339,6 +4343,8 @@
 		<field name="productid" type="I" size="19">
 			<KEY/>
 		</field>
+		<field name="quantity" type="I" size="19"></field>
+		<field name="listprice" type="N" size="11.3"></field>
 		<opt>Type=InnoDB</opt> <index name="InvoiceProductRel_IDX0">
 			<col>invoice</col>
 		</index>
