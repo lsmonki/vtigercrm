@@ -173,8 +173,13 @@ $combo_strings = Array(
 'currency_dom' => Array('Rupees'=>'Rupees',
                         'Dollar'=>'Dollar',
                         'Euro'=>'Euro'
-                        )
-			
+                        ),
+
+//added for 4.2b release 28/5
+'rsscategory' => Array('vtiger Discussions'=>'vtiger Discussions',
+                       'vtiger Wiki'=>'vtiger Wiki'
+                      )
+
 );
 
 ?>
