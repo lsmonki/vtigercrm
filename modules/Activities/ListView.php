@@ -48,18 +48,37 @@ global $focus_list;
 
 if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Activities");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']))
+{
+        $viewid =  $_REQUEST['viewname'];
+}else
+{
+	$viewid = "0";
+}
+if(isset($_REQUEST['viewname']) == false)
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}
+}
+//<<<<<customview>>>>>
+
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	// Stick the form header out there.
 	$search_form=new XTemplate ('modules/Activities/SearchForm.html');
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
-	
+
 	//viewid is given to show the actual view<<<<<<<<<<customview>>>>>>>>
 	$viewidforsearch = $_REQUEST['viewname'];
 	$search_form->assign("VIEWID",$viewidforsearch);
 	//<<<<<<<customview>>>>>>>>>>
 
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Activities','index','name','true','basic',"","","","",$viewidforsearch));
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Activities','index','name','true','basic',"","","","",$viewid));
 
 	if(isset($_REQUEST['query'])) {
 		if (isset($_REQUEST['name'])) $search_form->assign("NAME", $_REQUEST['name']);
@@ -147,24 +166,6 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 }
 
-//<<<<cutomview>>>>>>>
-$oCustomView = new CustomView("Activities");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']))
-{
-        $viewid =  $_REQUEST['viewname'];
-}else
-{
-	$viewid = "0";
-}
-if(isset($_REQUEST['viewname']) == false)
-{
-	if($oCustomView->setdefaultviewid != "")
-	{
-		$viewid = $oCustomView->setdefaultviewid;
-	}
-}
-//<<<<<customview>>>>>
 
 // Buttons and View options
 /*$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
@@ -188,6 +189,20 @@ if(isset($_REQUEST['viewname']) == false)
 	</tr>
 	</table>';
 //*/
+if($viewid == 0)
+{
+$cvHTML = '<span class="bodyText disabled">Edit</span>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Activities&action=CustomView" class="link">Create View</a>';
+}
+else
+{
+$cvHTML = '<a href="index.php?module=Activities&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Activities&action=CustomView" class="link">Create View</a>';
+}
 
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
@@ -204,10 +219,7 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 				<OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 				'.$customviewcombo_html.'
 			</SELECT>
-			<a href="index.php?module=Activities&action=CustomView&record='.$viewid.'" class="link">Edit</a>
-                        <span class="sep">|</span>
-                        <span class="bodyText disabled">Delete</span><span class="sep">|</span>
-                        <a href="index.php?module=Activities&action=CustomView" class="link">Create View</a>
+			'.$cvHTML.'
 		</td>
 	</tr>
 	</table>';
@@ -343,7 +355,7 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 $listview_header = getListViewHeader($focus,"Activities",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-$listview_entries = getListViewEntries($focus,"Activities",$list_result,$navigation_array,"","","","",$oCustomView);
+$listview_entries = getListViewEntries($focus,"Activities",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 

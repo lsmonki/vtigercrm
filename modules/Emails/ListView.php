@@ -53,32 +53,6 @@ global $focus_list;
 
 if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
-	// Stick the form header out there.
-	$search_form=new XTemplate ('modules/Emails/SearchForm.html');
-	$search_form->assign("MOD", $mod_strings);
-	$search_form->assign("APP", $app_strings);
-
-	//viewid is given to show the actual view<<<<<<<<<<customview>>>>>>>>
-	$viewidforsearch = $_REQUEST['viewname'];
-	$search_form->assign("VIEWID",$viewidforsearch);
-	//<<<<<<<customview>>>>>>>>>>
-
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Emails','index','subject','true','basic',"","","","",$viewidforsearch));
-
-	if(isset($_REQUEST['query'])) {
-		if(isset($_REQUEST['subject'])) $search_form->assign("NAME", $_REQUEST['subject']);
-		if(isset($_REQUEST['contactname'])) $search_form->assign("CONTACT_NAME", $_REQUEST['contactname']);
-		if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
-	}
-	$search_form->parse("main");
-
-	echo get_form_header($mod_strings['LBL_SEARCH_FORM_TITLE'], "", false);
-	$search_form->out("main");
-	echo get_form_footer();
-	echo "\n<BR>\n";
-}
-
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Emails");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
@@ -98,6 +72,27 @@ if(isset($_REQUEST['viewname']) == false)
 }
 //<<<<<customview>>>>>
 
+if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
+	// Stick the form header out there.
+	$search_form=new XTemplate ('modules/Emails/SearchForm.html');
+	$search_form->assign("MOD", $mod_strings);
+	$search_form->assign("APP", $app_strings);
+
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Emails','index','subject','true','basic',"","","","",$viewid));
+
+	if(isset($_REQUEST['query'])) {
+		if(isset($_REQUEST['subject'])) $search_form->assign("NAME", $_REQUEST['subject']);
+		if(isset($_REQUEST['contactname'])) $search_form->assign("CONTACT_NAME", $_REQUEST['contactname']);
+		if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
+	}
+	$search_form->parse("main");
+
+	echo get_form_header($mod_strings['LBL_SEARCH_FORM_TITLE'], "", false);
+	$search_form->out("main");
+	echo get_form_footer();
+	echo "\n<BR>\n";
+}
+
 // Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
@@ -108,16 +103,27 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 		<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>
    		</td>';
 
+if($viewid == 0)
+{
+$cvHTML = '<span class="bodyText disabled">Edit</span>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Emails&action=CustomView" class="link">Create View</a>';
+}else
+{
+$cvHTML = '<a href="index.php?module=Emails&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Emails&action=CustomView" class="link">Create View</a>';
+}
+
 $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">
                                 <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
-                        <a href="index.php?module=Emails&action=CustomView&record='.$viewid.'" class="link">Edit</a>
-                        <span class="sep">|</span>
-                        <span class="bodyText disabled">Delete</span><span class="sep">|</span>
-                        <a href="index.php?module=Emails&action=CustomView" class="link">Create View</a>
-                </td>
+			'.$cvHTML.'
+                        </td>
         </tr>
         </table>';
 
@@ -278,7 +284,7 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 $listview_header = getListViewHeader($focus,"Emails",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-$listview_entries = getListViewEntries($focus,"Emails",$list_result,$navigation_array,"","","","",$oCustomView);
+$listview_entries = getListViewEntries($focus,"Emails",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
 if($order_by !='')

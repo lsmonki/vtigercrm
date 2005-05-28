@@ -151,6 +151,26 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	}
 }
 
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("HelpDesk");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']))
+{
+        $viewid =  $_REQUEST['viewname'];
+}else
+{
+	$viewid = "0";
+}
+if(isset($_REQUEST['viewname']) == false)
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}
+}
+//<<<<<customview>>>>>
+
+
 //Constructing the Search Form
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         // Stick the form header out there.
@@ -162,11 +182,6 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
-		
-	//viewid is given to show the actual view<<<<<<<<<<customview>>>>>>>>
-	$viewidforsearch = $_REQUEST['viewname'];
-	$search_form->assign("VIEWID",$viewidforsearch);
-	//<<<<<<<customview>>>>>>>>>>
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if($order_by != '') {
@@ -176,8 +191,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	{
 		$ordby ='';
 	}
-	$search_form->assign("BASIC_LINK", "index.php?module=HelpDesk".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewidforsearch);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=HelpDesk&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewidforsearch);
+	$search_form->assign("BASIC_LINK", "index.php?module=HelpDesk".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewid);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=HelpDesk&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewid);
 
 	if (isset($name)) $search_form->assign("SUBJECT", $name);
 	if (isset($contact_name)) $search_form->assign("CONTACT_NAME", $contact_name);
@@ -201,7 +216,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	{
 
 		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','ticket_title','true','advanced',"","","","",$viewidforsearch));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','ticket_title','true','advanced',"","","","",$viewid));
 
 		//Added for Custom Field Search
 		$sql="select * from field where tablename='ticketcf' order by fieldlabel";
@@ -222,7 +237,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	}
 	else
 	{
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','ticket_title','true','basic',"","","","",$viewidforsearch));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','ticket_title','true','basic',"","","","",$viewid));
 		$search_form->parse("main");
 	        $search_form->out("main");
 	}
@@ -230,25 +245,6 @@ echo get_form_footer();
 echo '<br>';
 
 }
-
-//<<<<cutomview>>>>>>>
-$oCustomView = new CustomView("HelpDesk");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']))
-{
-        $viewid =  $_REQUEST['viewname'];
-}else
-{
-	$viewid = "0";
-}
-if(isset($_REQUEST['viewname']) == false)
-{
-	if($oCustomView->setdefaultviewid != "")
-	{
-		$viewid = $oCustomView->setdefaultviewid;
-	}
-}
-//<<<<<customview>>>>>
 
 // Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
@@ -272,15 +268,25 @@ if(isPermitted('HelpDesk',2,'') == 'yes')
 	</tr>
 	</table>';*/
 
+if($viewid == 0)
+{
+$cvHTML = '<span class="bodyText disabled">Edit</span>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=HelpDesk&action=CustomView" class="link">Create View</a>';
+}else
+{
+$cvHTML = '<a href="index.php?module=HelpDesk&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=HelpDesk&action=CustomView" class="link">Create View</a>';
+}
+
 $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
 			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
 				<OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 			</SELECT>
-	                <a href="index.php?module=HelpDesk&action=CustomView&record='.$viewid.'" class="link">Edit</a>
-	                <span class="sep">|</span>
-                        <span class="bodyText disabled">Delete</span><span class="sep">|</span>
-                        <a href="index.php?module=HelpDesk&action=CustomView" class="link">Create View</a>
-
+			'.$cvHTML.'
 		</td>
 	</tr>
 	</table>';
@@ -415,7 +421,7 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 $listview_header = getListViewHeader($focus,"HelpDesk",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-$listview_entries = getListViewEntries($focus,"HelpDesk",$list_result,$navigation_array,"","","","",$oCustomView);
+$listview_entries = getListViewEntries($focus,"HelpDesk",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 

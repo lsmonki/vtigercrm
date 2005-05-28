@@ -192,6 +192,25 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 
 }
 
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Contacts");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']))
+{
+        $viewid =  $_REQUEST['viewname'];
+}else
+{
+	$viewid = "0";
+}
+if(isset($_REQUEST['viewname']) == false)
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}
+}
+//<<<<<customview>>>>>
+
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	// Stick the form header out there.
 	$search_form=new XTemplate ('modules/Contacts/SearchForm.html');
@@ -201,11 +220,6 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
 
-	//viewid is given to show the actual view<<<<<<<<<<customview>>>>>>>>
-	$viewidforsearch = $_REQUEST['viewname'];
-	$search_form->assign("VIEWID",$viewidforsearch);
-	//<<<<<<<customview>>>>>>>>>>
-
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if($order_by != '') {
 		$ordby = "&order_by=".$order_by;
@@ -214,8 +228,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	{
 		$ordby ='';
 	}
-	$search_form->assign("BASIC_LINK", "index.php?module=Contacts".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewidforsearch);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Contacts&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewidforsearch);
+	$search_form->assign("BASIC_LINK", "index.php?module=Contacts".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewid);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Contacts&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewid);
 
 	if (isset($firstname)) $search_form->assign("FIRST_NAME", $_REQUEST['firstname']);
 	if (isset($lastname)) $search_form->assign("LAST_NAME", $_REQUEST['lastname']);
@@ -230,7 +244,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
 
 		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Contacts','index','lastname','true','advanced',"","","","",$viewidforsearch));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Contacts','index','lastname','true','advanced',"","","","",$viewid));
 
 		if(isset($accountname)) $search_form->assign("ACCOUNT_NAME", $accountname);
 		//if(isset($createdtime)) $search_form->assign("DATE_ENTERED", $createdtime);
@@ -272,7 +286,7 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 		$search_form->out("advanced");
 	}
 	else {
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Contacts','index','lastname','true','basic',"","","","",$viewidforsearch));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Contacts','index','lastname','true','basic',"","","","",$viewid));
 		$search_form->parse("main");
 		$search_form->out("main");
 	}
@@ -280,24 +294,6 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 	echo "\n<BR>\n";
 }
 
-//<<<<cutomview>>>>>>>
-$oCustomView = new CustomView("Contacts");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']))
-{
-        $viewid =  $_REQUEST['viewname'];
-}else
-{
-	$viewid = "0";
-}
-if(isset($_REQUEST['viewname']) == false)
-{
-	if($oCustomView->setdefaultviewid != "")
-	{
-		$viewid = $oCustomView->setdefaultviewid;
-	}
-}
-//<<<<<customview>>>>>
 
 // Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
@@ -314,15 +310,26 @@ if(isPermitted('Contacts',2,'') == 'yes')
 		<td align="right">&nbsp;</td>
 	</tr>
 	</table>';*/
+if($viewid == 0)
+{
+$cvHTML = '<span class="bodyText disabled">Edit</span>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Contacts&action=CustomView" class="link">Create View</a>';
+}else
+{
+$cvHTML = '<a href="index.php?module=Contacts&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Contacts&action=CustomView" class="link">Create View</a>';
+}
+
 	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
 		<SELECT NAME="view" onchange="showDefaultCustomView(this)">
 			<OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 			'.$customviewcombo_html.'
 		</SELECT>
-		<a href="index.php?module=Contacts&action=CustomView&record='.$viewid.'" class="link">Edit</a>
-		<span class="sep">|</span>
-		<span class="bodyText disabled">Delete</span><span class="sep">|</span>
-		<a href="index.php?module=Contacts&action=CustomView" class="link">Create View</a>
+		'.$cvHTML.'
 	</td>
 </tr>
 </table>';
@@ -414,7 +421,7 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 $listview_header = getListViewHeader($focus,"Contacts",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-$listview_entries = getListViewEntries($focus,"Contacts",$list_result,$navigation_array,"","","","",$oCustomView);
+$listview_entries = getListViewEntries($focus,"Contacts",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
 if($order_by !='')
