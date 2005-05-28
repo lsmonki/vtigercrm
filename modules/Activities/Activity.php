@@ -433,13 +433,13 @@ function save_relationship_changes($is_update)
 		return $task_fields;
 	}
 	
-	function activity_reminder($activity_id,$reminder_time,$reminder_sent=0,$mode='')
+	function activity_reminder($activity_id,$reminder_time,$reminder_sent=0,$remindermode='')
 	{
 		//Check for activityid already present in the reminder_table
 		$query_exist = "SELECT activity_id FROM ".$this->reminder_table." WHERE activity_id = ".$activity_id;
 		$result_exist = $this->db->query($query_exist);
 
-		if($mode == 'edit')
+		if($remindermode == 'edit')
 		{
 			if($this->db->num_rows($result_exist) == 1)
 			{
@@ -452,7 +452,7 @@ function save_relationship_changes($is_update)
 				$query = "INSERT INTO ".$this->reminder_table." VALUES (".$activity_id.",".$reminder_time.",0)";
 			}
 		}
-		elseif(($mode == 'delete') && ($this->db->num_rows($result_exist) == 1))
+		elseif(($remindermode == 'delete') && ($this->db->num_rows($result_exist) == 1))
 		{
 			$query = "DELETE FROM ".$this->reminder_table." WHERE activity_id = ".$activity_id;
 		}
