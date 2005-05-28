@@ -3528,35 +3528,31 @@
 
 
 
-
-
 	<table name="notificationscheduler">
-		<field name="schedulednotificationid" type="I" size="19">
-			<KEY/>
-	<AUTOINCREMENT/>
-			
-		</field>
-		<field name="schedulednotificationname" type="C" size="200">
-		</field>
-		<field name="description" type="X">
-		</field>
-		<field name="active" type="I" size="1">
-		</field>
-	<field name="notificationsubject" type="C" size="200">
-		</field>
-	<field name="notificationbody" type="X" >
-		</field>
-		<opt>Type=InnoDB</opt>
+                <field name="schedulednotificationid" type="I" size="19">
+                        <KEY/>
+                        <AUTOINCREMENT/>
+                </field>
+                <field name="schedulednotificationname" type="C" size="200">
+                </field>
+                <field name="active" type="I" size="1">
+                </field>
+                <field name="notificationsubject" type="C" size="200">
+                </field>
+                <field name="notificationbody" type="X" >
+                </field>
+                <field name="label" type="C" size="50">
+                </field>
+                <opt>Type=InnoDB</opt>
                 <index name="notificationscheduler_UK0">
-			<UNIQUE/>
-			<col>schedulednotificationname</col>
-		</index>
-		<data>
-		</data>
-	</table>
+                        <UNIQUE/>
+                        <col>schedulednotificationname</col>
+                </index>
+                <data>
+                </data>
+        </table>
 
 
-	
 	<table name="activityproductrel">
 		<field name="activityid" type="I" size="19">
 			<KEY/>
