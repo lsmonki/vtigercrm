@@ -23,6 +23,7 @@
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Orders',
 'LBL_SO_MODULE_NAME'=>'Sales Order',
+'LBL_RELATED_PRODUCTS'=>'Product Information:',
 'LBL_MODULE_TITLE'=>'Orders: Home',
 'LBL_SEARCH_FORM_TITLE'=>'Orders Search',
 'LBL_LIST_FORM_TITLE'=>'Purchase Order List',
