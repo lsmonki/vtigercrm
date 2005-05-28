@@ -71,7 +71,7 @@ $xtpl->assign("MOD", $current_module_strings);
 $xtpl->assign("APP", $app_strings);
 
 // Stick the form header out there.
-$later_day = date("Y-m-d", strtotime("$today + 7 days"));
+$later_day = getDisplayDate(date("Y-m-d", strtotime("$today + 7 days")));
 echo get_form_header($current_module_strings['LBL_UPCOMING'], "<table><tr><td nowrap>".$current_module_strings['LBL_TODAY'].$later_day."</td></tr></table>", false);
 
 $xtpl->assign("IMAGE_PATH", $image_path);
