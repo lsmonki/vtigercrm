@@ -1268,24 +1268,21 @@ $this->db->query("insert into field values (19,".$this->db->getUniqueID("field")
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("PriceBook").",14,'get_pricebook_products',2,'Products',0)");
 
 
+               $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_TASK_NOTIFICATION_DESCRITPION',1,'Task Delay Notification','Tasks delayed beyond 24 hrs ','LBL_TASK_NOTIFICATION')");
 
 
-                 $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,description,notificationsubject,notificationbody) values (".$this->db->getUniqueID("notificationscheduler").",'Notification stating tasks which are delayed beyond 24 hrs',1,'Delayed Task Notification','Task Delay Notification','Tasks delayed beyond 24 hrs')");
+                $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_BIG_DEAL_DESCRIPTION' ,1,'Big Deal notification','Success! A big deal has been won! ','LBL_BIG_DEAL')");
 
 
-                 $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,description,notificationsubject,notificationbody) values (".$this->db->getUniqueID("notificationscheduler").",'Big Deal Notification' ,1,'A big deal has been achieved','Big Deal notification','Success! A big deal has been won!')");
+                $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_TICKETS_DESCRIPTION',1,'Pending Tickets notification','Ticket pending please ','LBL_PENDING_TICKETS')");
 
 
-                 $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,description,notificationsubject,notificationbody) values (".$this->db->getUniqueID("notificationscheduler").",'Notification for pending tickets',1,'Pending Tickets notification','Pending Tickets notification','Ticket pending please')");
+                $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_MANY_TICKETS_DESCRIPTION',1,'Too many tickets Notification','Too many tickets pending against this entity ','LBL_MANY_TICKETS')");
 
 
+                $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_START_DESCRIPTION' ,1,'Support Start Notification','Support starts please ','LBL_START_NOTIFICATION')");
 
-                 $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,description,notificationsubject,notificationbody) values (".$this->db->getUniqueID("notificationscheduler").",'Notifcation stating too many tickets are allocated to an entity',1,'Too many tickets Notification','Too many tickets Notification','Too many tickets pending against this entity    ')");
-
-
-                 $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,description,notificationsubject,notificationbody) values (".$this->db->getUniqueID("notificationscheduler").",'Support Starting Notification' ,1,'Your support starts today','Support Start Notification','Support starts please')");
-                 
-                 $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,description,notificationsubject,notificationbody) values (".$this->db->getUniqueID("notificationscheduler").",'Support Ending Notification' ,1,'Support Ending Notification','Support ending please','Support Ending Notification')");
+                $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_SUPPORT_DESCRIPTION',1,'Support ending please','Support Ending Notification','LBL_SUPPORT_NOTICIATION')");
 
 		//Insert into currency table
 		$this->db->query("insert into currency_info values('U.S Dollar','USD','$')");
