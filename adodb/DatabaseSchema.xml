@@ -4409,7 +4409,6 @@
 
 	<table name="cvcolumnlist">
 		<field name="cvid" type="I" size="19">
-			<KEY/>
 		</field>
 		<field name="columnindex" type="I" size="11">
 		     <NOTNULL/>
@@ -4432,7 +4431,6 @@
 
 	<table name="cvstdfilter">
 		<field name="cvid" type="I" size="19">
-			<KEY/>
 		</field>
 		<field name="columnname" type="C" size="250">
 			<DEFAULT value=""/>
@@ -4461,7 +4459,6 @@
 
 	<table name="cvadvfilter">
 		<field name="cvid" type="I" size="19">
-			<KEY/>
 		</field>
 		<field name="columnindex" type="I" size="11">
 			<NOTNULL/>
