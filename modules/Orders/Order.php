@@ -40,8 +40,8 @@ class Order extends CRMEntity {
 	
 		
 	var $table_name = "purchaseorder";
-	var $tab_name = Array('crmentity','purchaseorder','pobillads','poshipads','poproductrel');
-	var $tab_name_index = Array('crmentity'=>'crmid','purchaseorder'=>'purchaseorderid','pobillads'=>'pobilladdressid','poshipads'=>'poshipaddressid','poproductrel'=>'purchaseorderid');
+	var $tab_name = Array('crmentity','purchaseorder','pobillads','poshipads');
+	var $tab_name_index = Array('crmentity'=>'crmid','purchaseorder'=>'purchaseorderid','pobillads'=>'pobilladdressid','poshipads'=>'poshipaddressid');
 				
 	
 	var $entity_table = "crmentity";
@@ -68,7 +68,6 @@ class Order extends CRMEntity {
 				'Quote Name'=>Array('purchaseorder'=>'quoteid'),
 				'Vendor Name'=>Array('purchaseorder'=>'vendorid'), 
 				'Type'=>Array('purchaseorder'=> 'type'),
-				'Product Name'=>Array('poproductrel'=>'productid'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 	
@@ -78,7 +77,6 @@ class Order extends CRMEntity {
 				        'Quote Name'=>'quote_id',
 				        'Vendor Name'=>'vendor_id',
 					'Type'=>'type',
-					'Product Name'=>'product_id',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
