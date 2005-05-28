@@ -148,6 +148,12 @@ A.moduleMenu:hover {
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
 	TEXT-DECORATION: none;
 }
+
+.subMenu {
+	    background: #F5F5F5;
+	        border: 1px solid #CCC;
+	}
+
 .hline {
 	border-bottom: 1px solid #A1A5A9;
 }

@@ -65,7 +65,7 @@ else
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("MODULE_NAME", $currentModule);
-$xtpl->assign("DATE", date("Y-m-d H:i"));
+$xtpl->assign("DATE", getDisplayDate(date("Y-m-d H:i")));
 if ($current_user->first_name != '') $xtpl->assign("CURRENT_USER", $current_user->first_name);
 else $xtpl->assign("CURRENT_USER", $current_user->user_name);
 
@@ -106,9 +106,13 @@ foreach($moduleList as $module_name)
 // Assign the module name back to the current module.
 $xtpl->assign("MODULE_NAME", $currentModule);
 
+//Menu items to be displayed
+$showmenu = 0;
 foreach($module_menu as $menu_item)
 {
 	$after_this = current($module_menu);
+	if($showmenu < 10)
+	{
 
 	if ($menu_item[1] != 'Deleted Items') {
 		$xtpl->assign("URL", $menu_item[0]);
@@ -122,7 +126,32 @@ foreach($module_menu as $menu_item)
 	}
 
 	$xtpl->parse("main.sub_menu.sub_menu_item");
+	}
+        $showmenu++;
 }
+//Menu items to be displayed in drop down
+$showmenu = 0;
+$showmenu_drop = 10;
+foreach($module_menu as $menu_item)
+{
+	if(($showmenu >= $showmenu_drop) && ($showmenu < count($module_menu)))
+	{
+		$after_this = current($module_menu);
+
+		if ($menu_item[1] != 'Deleted Items') {
+			$xtpl->assign("URL", $menu_item[0]);
+			$xtpl->assign("LABEL", $menu_item[1]);
+		}
+		else {
+			$xtpl->assign("DELETED_ITEMS_URL", $menu_item[0]);
+			$xtpl->assign("DELETED_ITEMS_LABEL", $menu_item[1]);
+		}
+
+		$xtpl->parse("main.dropdown_sub_menu_item");
+	}
+	$showmenu++;
+}
+
 $xtpl->parse("main.sub_menu");
 
 $xtpl->assign("TITLE", $app_strings['LBL_SEARCH']);

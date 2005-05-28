@@ -259,7 +259,10 @@ A.moduleMenu:hover {
 	TEXT-DECORATION: underline 
 
 }
-
+.subMenu {
+	    background: #F5F5F5;
+	        border: 1px solid #CCC;
+	}
 .moduleTitle {
 
 	FONT-WEIGHT: bold;

@@ -141,6 +141,10 @@ A.moduleMenu:hover {
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
 	TEXT-DECORATION: none;
 }
+.subMenu {
+	    background: #D1DFEF;
+	        border: 1px solid #AFC8E4;
+	}
 .sideBar {
 	padding: 10;
 	background-color: #F5F5F5;
