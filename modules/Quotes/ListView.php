@@ -23,6 +23,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils.php');
 require_once('include/uifromdbutil.php');
+require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $current_language;
@@ -322,6 +323,52 @@ $ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE']);
 $ListView->setQuery($where, "", "accountname", "ACCOUNT");
 $ListView->processListView($seedAccount, "main", "ACCOUNT");
 */
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Quotes");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']))
+{
+        $viewid =  $_REQUEST['viewname'];
+}else
+{
+	$viewid = "0";
+}
+if(isset($_REQUEST['viewname']) == false)
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}
+}
+//<<<<<customview>>>>>
+
+if($viewid == 0)
+{
+$cvHTML='<span class="bodyText disabled">Edit</span>
+	<span class="sep">|</span>
+	<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+	<a href="index.php?module=Quotes&action=CustomView" class="link">Create View</a>';
+}else
+{
+$cvHTML='<a href="index.php?module=Quotes&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+	<span class="sep">|</span>
+	<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+	<a href="index.php?module=Quotes&action=CustomView" class="link">Create View</a>';
+}
+
+$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
+	<form name="massdelete" method="POST">
+	<tr>
+	<td align="right">'.$app_strings[LBL_VIEW].'
+		<SELECT NAME="view" onchange="showDefaultCustomView(this)">
+			<OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+			'.$customviewcombo_html.'
+		</SELECT>
+		'.$cvHTML.'
+	</td>
+</tr>
+</table>';
+
 
 $focus = new Quote();
 
@@ -335,40 +382,34 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH",$image_path);
 
 //Retreive the list from Database
-$query = getListQuery("Quotes");
+//<<<<<<<<<customview>>>>>>>>>
+if($viewid != "0")
+{
+	$listquery = getListQuery("Accounts");
+	$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Accounts");
+}else
+{
+	$query = getListQuery("Accounts");
+}
+//<<<<<<<<customview>>>>>>>>>
 
 if(isset($where) && $where != '')
 {
         $query .= ' and '.$where;
 }
 
-if(isset($_REQUEST['viewname']))
-{
-if($_REQUEST['viewname'] == 'All')
-   {
-     $defaultcv_criteria = '';
-   }
-   else
-   {
-     $defaultcv_criteria = $_REQUEST['viewname'];
-          $query .= " and account_type like "."'%" .$defaultcv_criteria ."%'";          
-   }
-	$viewname = $_REQUEST['viewname'];
-        $view_script = "<script language='javascript'>
-                function set_selected()
-                {
-                        len=document.massdelete.view.length;
-                        for(i=0;i<len;i++)
-                        {
-                                if(document.massdelete.view[i].value == '$viewname')
-                                        document.massdelete.view[i].selected = true;
-                        }
-                }
-                set_selected();
-                </script>";
-}
-
-//$url_qry = getURLstring($focus);
+$view_script = "<script language='javascript'>
+	function set_selected()
+	{
+		len=document.massdelete.view.length;
+		for(i=0;i<len;i++)
+		{
+			if(document.massdelete.view[i].value == '$viewname')
+				document.massdelete.view[i].selected = true;
+		}
+	}
+	set_selected();
+	</script>";
 
 if(isset($order_by) && $order_by != '')
 {
@@ -379,7 +420,7 @@ $list_result = $adb->query($query);
 
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
-        
+
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
@@ -427,11 +468,11 @@ else
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header
-$listview_header = getListViewHeader($focus,"Quotes",$url_string,$sorder,$order_by);
+$listview_header = getListViewHeader($focus,"Quotes",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
 
-$listview_entries = getListViewEntries($focus,"Quotes",$list_result,$navigation_array);
+$listview_entries = getListViewEntries($focus,"Quotes",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 
@@ -440,7 +481,7 @@ $url_string .="&order_by=".$order_by;
 if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Quotes");
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Quotes","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 
