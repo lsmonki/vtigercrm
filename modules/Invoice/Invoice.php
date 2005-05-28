@@ -40,8 +40,8 @@ class Invoice extends CRMEntity {
 	
 		
 	var $table_name = "invoice";
-	var $tab_name = Array('crmentity','invoice','invoicebillads','invoiceshipads','invoiceproductrel');
-	var $tab_name_index = Array('crmentity'=>'crmid','invoice'=>'invoiceid','invoicebillads'=>'invoicebilladdressid','invoiceshipads'=>'invoiceshipaddressid','invoiceproductrel'=>'invoiceid');
+	var $tab_name = Array('crmentity','invoice','invoicebillads','invoiceshipads');
+	var $tab_name_index = Array('crmentity'=>'crmid','invoice'=>'invoiceid','invoicebillads'=>'invoicebilladdressid','invoiceshipads'=>'invoiceshipaddressid');
 				
 	
 	var $entity_table = "crmentity";
@@ -65,18 +65,14 @@ class Invoice extends CRMEntity {
 	var $list_fields = Array(
 				'Invoice Id'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('invoice'=>'subject'),
-				'Purchase Order'=>Array('invoice'=>'purchaseorderid'),
-				'Type'=>Array('invoice'=> 'type'),
-				'Product Name'=>Array('invoice'=>'productid'),
+				'Sales Order'=>Array('invoice'=>'salesorderid'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 	
 	var $list_fields_name = Array(
 				        'Invoice Id'=>'',
 				        'Subject'=>'subject',
-				        'Purchase Order'=>'purchaseorder_id',
-					'Type'=>'type',
-					'Product Name'=>'product_id',
+				        'Sales Order'=>'salesorder_id',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
@@ -86,12 +82,12 @@ class Invoice extends CRMEntity {
         var $popup_type;
 
 	var $search_fields = Array(
-				'Purchase Order Id'=>Array('crmentity'=>'crmid'),
+				'Invoice Id'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('purchaseorder'=>'subject'), 
 				);
 	
 	var $search_fields_name = Array(
-				        'Purchase Order Id'=>'',
+				        'Invoice Id'=>'',
 				        'Subject'=>'subject',
 				      );
 
