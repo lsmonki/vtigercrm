@@ -497,22 +497,24 @@ $this->db->query("insert into field values (19,".$this->db->getUniqueID("field")
  //Block1
  
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'subject','salesorder',1,'2','subject','Subject',1,0,0,100,1,1,1,'V~M')");	
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'potentialid','salesorder',1,'76','potential_id','Potential Name',1,0,0,100,2,1,1,'I~M')");	
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'customerno','salesorder',1,'1','customerno','Customer No',1,0,0,100,3,1,1,'V~O')");	
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'purchaseorderid','salesorder',1,'79','purchaseorder_id','Purchase Order',1,0,0,100,4,1,1,'I~O')");	
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'potentialid','salesorder',1,'76','potential_id','Potential Name',1,0,0,100,2,1,1,'I~O')");	
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'customerno','salesorder',1,'1','customerno','Customer No',1,0,0,100,3,1,1,'V~O')");
+$this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'quoteid','salesorder',1,'78','quote_id','Quote Name',1,0,0,100,4,1,1,'I~O')");	
+// $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'purchaseorderid','salesorder',1,'79','purchaseorder_id','Purchase Order',1,0,0,100,4,1,1,'I~O')");	
 
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'vendorterms','salesorder',1,'1','vendorterms','Vendor Terms',1,0,0,100,5,1,1,'V~O')");	
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'contactid','salesorder',1,'57','contact_id','Contact Name',1,0,0,100,6,1,1,'I~O')");	
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'vendorid','salesorder',1,'75','vendor_id','Vendor Name',1,0,0,100,7,1,1,'I~O')");	
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'duedate','salesorder',1,'5','duedate','Due Date',1,0,0,100,8,1,1,'V~O')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'duedate','salesorder',1,'5','duedate','Due Date',1,0,0,100,8,1,1,'D~O')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'carrier','salesorder',1,'1','carrier','Carrier',1,0,0,100,9,1,1,'V~O')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'pending','salesorder',1,'1','pending','Pending',1,0,0,100,10,1,1,'V~O')");
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'type','salesorder',1,'1','type','Type',1,0,0,100,11,1,1,'V~O')");
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'salestax','salesorder',1,'1','salestax','Sales Tax',1,0,0,100,12,1,1,'I~O')");
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'salescommission','salesorder',1,'1','salescommission','Sales Commission',1,0,0,100,13,1,1,'I~O')");
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'exciseduty','salesorder',1,'1','exciseduty','Excise Duty',1,0,0,100,13,1,1,'I~O')");
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'total','salesorder',1,'1','total','Total',1,0,0,100,14,1,1,'I~O')");
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'productid','soproductrel',1,'59','product_id','Product Name',1,0,0,100,15,1,1,'I~O')");
+// $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'type','salesorder',1,'1','type','Type',1,0,0,100,11,1,1,'V~O')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'salestax','salesorder',1,'1','txtTax','Sales Tax',1,0,0,100,12,1,3,'N~O')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'salescommission','salesorder',1,'1','salescommission','Sales Commission',1,0,0,100,13,1,1,'N~O')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'exciseduty','salesorder',1,'1','exciseduty','Excise Duty',1,0,0,100,13,1,1,'N~O')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'total','salesorder',1,'1','hdnGrandTotal','Total',1,0,0,100,14,1,3,'N~O')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'subtotal','salesorder',1,'1','hdnSubTotal','Total',1,0,0,100,15,1,3,'N~O')");
+// $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'productid','soproductrel',1,'59','product_id','Product Name',1,0,0,100,15,1,1,'I~O')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,15,1,1,'V~M')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,16,1,2,'T~O')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,17,1,2,'T~O')");
@@ -541,21 +543,21 @@ $this->db->query("insert into field values (19,".$this->db->getUniqueID("field")
 //Invoice Details -- START
  //Block1
  
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'subject','invoice',1,'2','subject','Subject',1,0,0,100,1,1,1,'V~M')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'purchaseorderid','invoice',1,'79','purchaseorder_id','Purchase Order',1,0,0,100,2,1,1,'I~O')");	
+$this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'subject','invoice',1,'2','subject','Subject',1,0,0,100,1,1,1,'V~M')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'salesorderid','invoice',1,'80','salesorder_id','Sales Order',1,0,0,100,2,1,1,'I~O')");	
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'customerno','invoice',1,'1','customerno','Customer No',1,0,0,100,3,1,1,'V~O')");	
 
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'notes','invoice',1,'1','notes','Notes',1,0,0,100,4,1,1,'V~O')");	
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'invoicedate','invoice',1,'5','invoicedate','Invoice Date',1,0,0,100,5,1,1,'V~O')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'duedate','invoice',1,'5','duedate','Due Date',1,0,0,100,6,1,1,'V~O')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'invoicedate','invoice',1,'5','invoicedate','Invoice Date',1,0,0,100,5,1,1,'D~O')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'duedate','invoice',1,'5','duedate','Due Date',1,0,0,100,6,1,1,'D~O')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'invoiceterms','invoice',1,'1','invoiceterms','Invoice Terms',1,0,0,100,7,1,1,'V~O')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'type','invoice',1,'1','type','Type',1,0,0,100,8,1,1,'V~O')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'salestax','invoice',1,'1','salestax','Sales Tax',1,0,0,100,9,1,1,'I~O')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'salescommission','invoice',1,'1','salescommission','Sales Commission',1,0,0,10,13,1,1,'I~O')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'exciseduty','invoice',1,'1','exciseduty','Excise Duty',1,0,0,100,11,1,1,'I~O')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'subtotal','invoice',1,'1','subtotal','Sub Total',1,0,0,100,12,1,1,'I~O')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'total','invoice',1,'1','total','Total',1,0,0,100,13,1,1,'I~O')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'productid','invoiceproductrel',1,'59','product_id','Product Name',1,0,0,100,14,1,1,'I~O')");
+// $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'type','invoice',1,'1','type','Type',1,0,0,100,8,1,1,'V~O')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'salestax','invoice',1,'1','txtTax','Sales Tax',1,0,0,100,9,1,3,'N~O')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'salescommission','invoice',1,'1','salescommission','Sales Commission',1,0,0,10,13,1,1,'N~O')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'exciseduty','invoice',1,'1','exciseduty','Excise Duty',1,0,0,100,11,1,1,'N~O')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'subtotal','invoice',1,'1','hdnSubTotal','Sub Total',1,0,0,100,12,1,3,'N~O')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'total','invoice',1,'1','hdnGrandTotal','Total',1,0,0,100,13,1,3,'N~O')");
+// $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'productid','invoiceproductrel',1,'59','product_id','Product Name',1,0,0,100,14,1,1,'I~O')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,15,1,1,'V~M')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,16,1,2,'T~O')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,17,1,2,'T~O')");
@@ -583,7 +585,6 @@ $this->db->query("insert into field values (19,".$this->db->getUniqueID("field")
 
 
                 // Insert End
-                
                 
 
 		//New Security Start
