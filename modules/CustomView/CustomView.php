@@ -136,7 +136,11 @@ class CustomView extends CRMEntity{
         {
                 foreach($this->module_list[$module] as $key=>$value)
                 {
-                        $ret_module_list[$module][$key] = $this->getColumnsListbyBlock($module,$value);
+                        $columnlist = $this->getColumnsListbyBlock($module,$value);
+			if(isset($columnlist))
+			{
+				$ret_module_list[$module][$key] = $columnlist;
+			}
                 }
                 return $ret_module_list;
         }

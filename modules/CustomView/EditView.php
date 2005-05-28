@@ -43,8 +43,10 @@ if($recordid == "")
 {
         $oCustomView = new CustomView();
         $modulecollist = $oCustomView->getModuleColumnsList($cv_module);
-        $choosecolhtml = getByModule_ColumnsHTML($cv_module,$modulecollist);
-
+	if(isset($modulecollist))
+	{
+        	$choosecolhtml = getByModule_ColumnsHTML($cv_module,$modulecollist);
+	}
         //step2
         $stdfilterhtml = $oCustomView->getStdFilterCriteria();
         $stdfiltercolhtml = getStdFilterHTML($cv_module);
@@ -127,6 +129,8 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 	foreach($oCustomView->module_list[$module] as $key=>$value)
         {
             $shtml .= "<optgroup label=\"".$module." ".$key."\" class=\"select\" style=\"border:none\">";
+	    if(isset($columnslist[$module][$key]))
+	    {
             foreach($columnslist[$module][$key] as $field=>$fieldlabel)
             {
                 if($selected == $field)
@@ -137,6 +141,7 @@ function getByModule_ColumnsHTML($module,$columnslist,$selected="")
                         $shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
                 }
             }
+	    }
         }
         return $shtml;
 }

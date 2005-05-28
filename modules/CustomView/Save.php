@@ -8,7 +8,6 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
@@ -87,7 +86,7 @@ if($cvmodule != "")
 
 		  if($setdefault == 1)
 		  {
-		  	$updatedefaultsql = "update customview set entitytype=0 where entitytype='".$cvmodule."'";
+		  	$updatedefaultsql = "update customview set setdefault=0 where entitytype='".$cvmodule."'";
 			$updatedefaultresult = $adb->query($updatedefaultsql);
 		  }
 
@@ -133,7 +132,7 @@ if($cvmodule != "")
 
 	     if($setdefault == 1)
 	     {
-			$updatedefaultsql = "update customview set entitytype=0 where entitytype='".$cvmodule."'";
+			$updatedefaultsql = "update customview set setdefault=0 where entitytype='".$cvmodule."'";
 			$updatedefaultresult = $adb->query($updatedefaultsql);
 	     }
 
