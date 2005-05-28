@@ -3954,10 +3954,11 @@
 		<field name="duedate" type="D"></field>
 		<field name="carrier" type="C" size='100'></field>
 		<field name="type" type="C" size="100"></field>
-		<field name="salestax" type="N" size="3.2"></field>
-		<field name="salescommission" type="N" size="3.2"></field>
-		<field name="exciseduty" type="N" size="3.2"></field>
+		<field name="salestax" type="N" size="11.3"></field>
+		<field name="salescommission" type="N" size="11.3"></field>
+		<field name="exciseduty" type="N" size="11.3"></field>
 		<field name="total" type="N" size="11.3"></field>
+		<field name="subtotal" type="N" size="11.3"></field>
 		
                   
 <opt>Type=InnoDB</opt>
@@ -4055,6 +4056,8 @@
 		<field name="productid" type="I" size="19">
 			<KEY/>
 		</field>
+		<field name="quantity" type="I" size="19"></field>
+		<field name="listprice" type="N" size="11.3"></field>
 		<opt>Type=InnoDB</opt> <index name="PoProductRel_IDX0">
 			<col>quoteid</col>
 		</index>
