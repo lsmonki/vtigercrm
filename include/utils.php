@@ -1449,6 +1449,21 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
         	$custfld .= '<td width="30%"><input name="purchaseorder_name" readonly type="text" value="'.$purchaseorder_name.'"><input name="purchaseorder_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Orders&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
 	}
+	elseif($uitype == 80)
+	{
+
+		if($value != '')
+               {
+                       $salesorder_name = getSoName($value);
+               }
+	       elseif(isset($_REQUEST['salesorder_id']) && $_REQUEST['salesorder_id'] != '')
+	       {
+			$value = $_REQUEST['salesorder_id'];
+			$salesorder_name = getSoName($value);
+	       }		 	
+		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+        	$custfld .= '<td width="30%"><input name="salesorder_name" readonly type="text" value="'.$salesorder_name.'"><input name="salesorder_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Orders&action=SalesOrderPopup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
+	}
 	elseif($uitype == 30)
 	{
 		$rem_days = 0;
@@ -1844,6 +1859,17 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
                 $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Orders&action=DetailView&record='.$purchaseorder_id.'">'.$purchaseorder_name.'</a></td>';
         }
+	elseif($uitype == 80)
+        {
+                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+                $salesorder_id = $col_fields[$fieldname];
+                if($salesorder_id != '')
+                {
+                        $salesorder_name = getSoName($salesorder_id);
+                }
+
+                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$salesorder_id.'">'.$salesorder_name.'</a></td>';
+        }
 	elseif($uitype == 30)
 	{
 		$rem_days = 0;
@@ -1938,6 +1964,15 @@ function getPoName($po_id)
         $result = $adb->query($sql);
         $po_name = $adb->query_result($result,0,"subject");
         return $po_name;
+}
+
+function getSoName($so_id)
+{
+        global $adb;
+        $sql = "select * from salesorder where salesorderid=".$so_id;
+        $result = $adb->query($sql);
+        $so_name = $adb->query_result($result,0,"subject");
+        return $so_name;
 }
 function getGroupName($id, $module)
 {
@@ -2900,6 +2935,19 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		else
 			$value='';
         }
+	elseif($uitype == 80)
+        {
+
+		global $adb;
+		if($temp_val != '')
+                {
+			
+                        $salesorder_name = getSoName($temp_val);
+			$value= '<a href=index.php?module=Orders&action=SalesOrderDetailView&record='.$temp_val.'>'.$salesorder_name.'</a>';
+		}
+		else
+			$value='';
+        }
 	elseif($uitype == 75)
         {
 
@@ -3500,6 +3548,19 @@ function getAssociatedProducts($module,$focus)
 	{
 		$query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
 	}
+	elseif($module == 'Orders')
+	{
+		$query="select products.productname,products.unit_price,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
+	}
+	elseif($module == 'SalesOrder')
+	{
+		$query="select products.productname,products.unit_price,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$focus->id;
+	}
+	elseif($module == 'Invoice')
+	{
+		$query="select products.productname,products.unit_price,invoiceproductrel.* from invoiceproductrel inner join products on products.productid=invoiceproductrel.productid where invoiceid=".$focus->id;
+	}
+
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
 	for($i=1;$i<=$num_rows;$i++)
@@ -3541,6 +3602,18 @@ function getNoOfAssocProducts($module,$focus)
 	{
 		$query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
 	}
+	elseif($module == 'Orders')
+	{
+		$query="select products.productname,products.unit_price,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
+	}
+	elseif($module == 'SalesOrder')
+	{
+		$query="select products.productname,products.unit_price,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$focus->id;
+	}
+	elseif($module == 'Invoice')
+	{
+		$query="select products.productname,products.unit_price,invoiceproductrel.* from invoiceproductrel inner join products on products.productid=invoiceproductrel.productid where invoiceid=".$focus->id;
+	}
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
 	return $num_rows;
@@ -3567,6 +3640,18 @@ function getDetailAssociatedProducts($module,$focus)
 	if($module == 'Quotes')
 	{
 		$query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
+	}
+	elseif($module == 'Orders')
+	{
+		$query="select products.productname,products.unit_price,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
+	}
+	elseif($module == 'SalesOrder')
+	{
+		$query="select products.productname,products.unit_price,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$focus->id;
+	}
+	elseif($module == 'Invoice')
+	{
+		$query="select products.productname,products.unit_price,invoiceproductrel.* from invoiceproductrel inner join products on products.productid=invoiceproductrel.productid where invoiceid=".$focus->id;
 	}
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
