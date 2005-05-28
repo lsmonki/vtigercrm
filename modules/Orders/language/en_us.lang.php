@@ -144,6 +144,7 @@ $mod_strings = Array(
 'Purchase Order'=>'Purchase Order',
 'Vendor Terms'=>'Vendor Terms',
 'Pending'=>'Pending',
+'Account Name'=>'Account Name',
 //Quote Info
 'LBL_PO_INFORMATION'=>'Purchase Order Information',
 'LBL_PO'=>'Purchase Order:',
