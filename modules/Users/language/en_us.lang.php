@@ -244,7 +244,9 @@ $mod_strings = Array(
 'LBL_FIELD_PERMISSION_VISIBLE'=>'Visible',
 'LBL_FIELD_PERMISSIOM_TABLE_HEADER'=>'Standard Fields',
 'LBL_FIELD_LEVEL_ACCESS'=>'Field Level Access',
- 
+
+//Added fields after 4.0.1
+'LBL_SIGNATURE'=>'Signature',
 );
 
 ?>
