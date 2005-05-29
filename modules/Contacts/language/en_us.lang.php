@@ -181,7 +181,8 @@ $mod_strings = Array(
 'LBL_CUSTOMER_PORTAL_INFORMATION'=>'Customer Portal Information',
 'Support Start Date'=>'Support Start Date',
 'Support End Date'=>'Support End Date',
-
+//Added for 4.2 Release -- CustomView
+'Name'=>'Name',
 );
 
 ?>
