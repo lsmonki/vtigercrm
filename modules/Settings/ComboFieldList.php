@@ -73,7 +73,11 @@ elseif($fld_module == 'HelpDesk')
 elseif($fld_module == 'Products')
 {
 	$custFldArray = Array($mod_strings['LBL_MANUFACTURER']=>'manufacturer'
-			,$mod_strings['LBL_PRODUCT_CATEGORY']=>'productcategory');
+			,$mod_strings['LBL_PRODUCT_CATEGORY']=>'productcategory'
+			,$mod_strings['LBL_USAGEUNIT']=>'usageunit'
+			,$mod_strings['LBL_TAXCLASS']=>'taxclass'
+			,$mod_strings['LBL_GLACCT']=>'glacct'
+			);
 	$standCustFld = getStdOutput($custFldArray, $mod_strings);
 }
 elseif($fld_module == 'Events')
@@ -93,8 +97,34 @@ elseif($fld_module == 'Rss')
         $custFldArray = Array($mod_strings['LBL_RSS_CATEGORY']=>'rsscategory');
         $standCustFld = getStdOutput($custFldArray, $mod_strings);
 }
+elseif($fld_module == 'Vendor')
+{
+	$custFldArray = Array($mod_strings['LBL_GLACCT']=>'glacct'
+			);
+	$standCustFld = getStdOutput($custFldArray, $mod_strings);
+}
+elseif($fld_module == 'Quotes')
+{
+	$custFldArray = Array($mod_strings['LBL_QUOTE_STAGE']=>'quotestage'
+				,$mod_strings['LBL_CARRIER']=>'carrier'	
+			);
+	$standCustFld = getStdOutput($custFldArray, $mod_strings);
+}
+elseif($fld_module == 'Orders')
+{
+	$custFldArray = Array($mod_strings['LBL_CARRIER']=>'carrier'
+			);
+	$standCustFld = getStdOutput($custFldArray, $mod_strings);
+}
+elseif($fld_module == 'SalesOrder')
+{
+	$custFldArray = Array($mod_strings['LBL_CARRIER']=>'carrier'
+			);
+	$standCustFld = getStdOutput($custFldArray, $mod_strings);
+}
 
- 
+
+
 function fetchTabIDVal($fldmodule)
 {
 
