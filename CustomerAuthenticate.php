@@ -12,10 +12,10 @@
 
 require_once('PortalConfig.php');
 require_once('nusoap/lib/nusoap.php');
-$proxyhost = isset($_POST['proxyhost']) ? $_POST['proxyhost'] : '';
-$proxyport = isset($_POST['proxyport']) ? $_POST['proxyport'] : '';
-$proxyusername = isset($_POST['proxyusername']) ? $_POST['proxyusername'] : '';
-$proxypassword = isset($_POST['proxypassword']) ? $_POST['proxypassword'] : '';
+$proxyhost = isset($_POST['proxyhost']) ? $_POST['proxyhost'] : $Proxy_Host;
+$proxyport = isset($_POST['proxyport']) ? $_POST['proxyport'] : $Proxy_Port;
+$proxyusername = isset($_POST['proxyusername']) ? $_POST['proxyusername'] : $Proxy_Username;
+$proxypassword = isset($_POST['proxypassword']) ? $_POST['proxypassword'] : $Proxy_Password;
 global $client;
 global $Server_Path;
 $client = new soapclient($Server_Path."/contactserialize.php", false,
@@ -49,8 +49,8 @@ if($result[1] == $username && $result[2] == $password)
         $params1 = Array('id' => "$result[0]",'flag'=>"login");
         $result1 = $client->call('update_login_details', $params1, $Server_Path, $Server_Path);
 
-	include("general.php");
-	//header("Location: general.php?action=UserTickets&username=$username");
+	//include("general.php");
+	header("Location: general.php?action=UserTickets");
 }
 else
 {
