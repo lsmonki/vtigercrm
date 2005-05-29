@@ -67,7 +67,7 @@ class Activity extends CRMEntity {
        'Type'=>Array('activity'=>'activitytype'),
        'Subject'=>Array('activity'=>'subject'),
        'Contact Name'=>Array('contactdetails'=>'lastname'),
-       'Related to'=>Array('seactivityrel'=>'activityid'),
+       'Related To'=>Array('seactivityrel'=>'activityid'),
        'Start Date/Due Date'=>Array('activity'=>'date_start'),
        'Assigned To'=>Array('crmentity','smownerid')
        );
@@ -94,7 +94,7 @@ class Activity extends CRMEntity {
        'Type'=>'activitytype',
        'Subject'=>'subject',
        'Contact Name'=>'lastname',
-       'Related to'=>'activityid',
+       'Related To'=>'activityid',
        'Start Date/Due Date'=>'date_start',
        'Assigned To'=>'assigned_user_id');
 

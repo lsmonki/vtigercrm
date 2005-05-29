@@ -102,7 +102,10 @@ $mod_strings = Array(
 'LBL_MINUTES'=>'minutes',
 'LBL_HOURS'=>'hours',
 'LBL_BEFORE_EVENT'=>'before event',
-
+//Added for CustomView 4.2 Release
+'Close'=>'Close',
+'Start Date/Due Date'=>'Start Date/Due Date',
+'Type'=>'Type',
 );
 
 ?>
