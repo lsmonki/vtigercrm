@@ -97,6 +97,12 @@ $mod_strings = Array(
 'EDITTASKPICKLISTVALUES'=>'Edit Task PickList ',
 
 'EDITRSSPICKLISTVALUES'=>'Edit Rss PickList',
+'EDITVENDORPICKLISTVALUES'=>'Edit Vendor PickList',
+'EDITPBPICKLISTVALUES'=>'Edit PriceBook PickList',
+'EDITPOPICKLISTVALUES'=>'Edit Purchase Order PickList',
+'EDITSOPICKLISTVALUES'=>'Edit Sales Order PickList',
+'EDITQUOTEPICKLISTVALUES'=>'Edit Quote PickList',
+'EDITINVOICEPICKLISTVALUES'=>'Edit Invoice PickList',
 
 
 // Added for Release vtigerCRM 3.2 PATCH 1.0
@@ -429,6 +435,12 @@ $mod_strings = Array(
 'LBL_WEB_MAIL_CONFIG'=>'Web Mail Configuration',
 'LBL_CONFIGURE_WEB_MAIL'=>' - Configure Web Mail',
 'LBL_LIST_MAIL_ACCOUNT'=>'  List Mail Account',
+'LBL_USAGEUNIT'=>'Usage Unit',
+'LBL_GLACCT'=>'GL Account',
+'LBL_QUOTE_STAGE'=>'Quote Stage',
+'LBL_CARRIER'=>'Carrier',
+'LBL_TAXCLASS'=>'Tax Class',
+
 
 );
 
