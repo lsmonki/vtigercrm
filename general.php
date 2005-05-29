@@ -14,10 +14,10 @@ session_start();
 
 require_once('PortalConfig.php');
 require_once('nusoap/lib/nusoap.php');
-$proxyhost = isset($_POST['proxyhost']) ? $_POST['proxyhost'] : '';
-$proxyport = isset($_POST['proxyport']) ? $_POST['proxyport'] : '';
-$proxyusername = isset($_POST['proxyusername']) ? $_POST['proxyusername'] : '';
-$proxypassword = isset($_POST['proxypassword']) ? $_POST['proxypassword'] : '';
+$proxyhost = isset($_POST['proxyhost']) ? $_POST['proxyhost'] : $Proxy_Host;
+$proxyport = isset($_POST['proxyport']) ? $_POST['proxyport'] : $Proxy_Port;
+$proxyusername = isset($_POST['proxyusername']) ? $_POST['proxyusername'] : $Proxy_Username;
+$proxypassword = isset($_POST['proxypassword']) ? $_POST['proxypassword'] : $Proxy_Password;
 global $Server_Path;
 global $client;
 
@@ -38,16 +38,14 @@ if($_REQUEST['logout'] == 'true')
 	session_destroy();
 	include("index.php");
 }
-
-elseif(isset($_REQUEST['action']) && $_REQUEST['action'] != '' && $_SESSION['customer_id'] != '')
-{
-	$action = $_REQUEST['action'].".php";
-	include($action);
-}
 else
 {
-	include("UserTickets.php");
-}
+	if(isset($_REQUEST['action']) && $_REQUEST['action'] != '' && $_SESSION['customer_id'] != '')
+		$action = $_REQUEST['action'].".php";
+	else
+		$action = "UserTickets.php";
 
+	include($action);
+}
 
 ?>
