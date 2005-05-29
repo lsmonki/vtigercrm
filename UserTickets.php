@@ -574,7 +574,7 @@ echo "</td></tr></table>";
 }
 else
 {
-	header("Location: general.php?action=PortalLogin");
+	header("Location: general.php?action=index&logout=true");
 }
 ?>
 <script language="javascript">
