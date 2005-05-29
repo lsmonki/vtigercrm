@@ -104,6 +104,8 @@ $mod_strings = Array(
 
 // Added for web mail post 4.0.1 release
 'LBL_FETCH_WEBMAIL'=>'Fetch Web Mail',
+//Added for 4.2 Release -- CustomView
+'LBL_ALL'=>'All',
 );
 
 ?>

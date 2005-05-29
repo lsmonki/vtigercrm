@@ -139,7 +139,10 @@ $mod_strings = Array(
 //Mapping for price book
 'Price Book Name'=>'Price Book Name',
 'Product Name'=>'Product Name',
-'Active'=>'Active'
+'Active'=>'Active',
+
+//Added for 4.2 Release -- CustomView
+'LBL_ALL'=>'All',
 );
 
 ?>
