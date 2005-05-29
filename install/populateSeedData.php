@@ -30,6 +30,9 @@ require_once('include/utils.php');
 require_once('include/language/en_us.lang.php');
 require_once('include/ComboStrings.php');
 require_once('include/ComboUtil.php');
+require_once('modules/Products/Product.php');
+require_once('modules/Products/PriceBook.php');
+require_once('modules/Products/Vendor.php');
 
 global $first_name_array;
 global $first_name_count;
@@ -80,6 +83,9 @@ function create_date()
 
 $account_ids = Array();
 $opportunity_ids = Array();
+$vendor_ids = Array();
+$product_ids = Array();
+$pricebook_ids = Array();
 
 // Determine the assigned user for all demo data.  This is the default user if set, or admin
 $assigned_user_name = "admin";
@@ -332,6 +338,36 @@ for($i=0; $i<10; $i++)
 }
 
 // Temp fix since user is not logged in while populating data updating creatorid in crmentity - GS
+
+
+//Populating Vendor Data
+for($i=0; $i<10; $i++)
+{
+	$vendor = new Vendor();
+	$vendor->column_fields["name"] = ucfirst(strtolower($first_name_array[$i]));
+	$vendor->column_fields["company_name"] = ucfirst(strtolower($company_name_array[$i]));
+	$vendor->column_fields["phone"] = create_phone_number();
+	$vendor->column_fields["email"] = strtolower($vendor->column_fields["name"])."@company.com";
+	$website = str_replace($whitespace, "", strtolower($vendor->column_fields["company_name"]));
+        $vendor->column_fields["website"] = "www.".$website.".com";
+
+	$vendor->column_fields["assigned_user_id"] = $assigned_user_id;
+	
+
+	
+	// Fill in a bogus address
+	$vendor->column_fields["treet"] = $street_address_array[rand(0,$street_address_count-1)]; 
+	$key = array_rand($city_array);
+	$vendor->column_fields["city"] = $city_array[$key];
+	$vendor->column_fields["state"] = "CA";
+	$vendor->column_fields["postalcode"] = '99999';
+	$vendor->column_fields["country"] = 'USA';	
+
+	$vendor->save("Vendor");
+	$vendor_ids[] = $vendor->id;
+
+
+}
 
 $adb->query("update crmentity set crmentity.smcreatorid=".$assigned_user_id);
 
