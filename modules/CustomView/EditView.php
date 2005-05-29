@@ -38,7 +38,7 @@ $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("MODULE",$cv_module);
 $xtpl->assign("CVMODULE", $cv_module);
 $xtpl->assign("CUSTOMVIEWID",$recordid);
-
+$xtpl->assign("DATAFORMAT",$current_user->date_format);
 if($recordid == "")
 {
         $oCustomView = new CustomView();
@@ -67,6 +67,9 @@ if($recordid == "")
 	$xtpl->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);
 	$xtpl->assign("STDFILTERCRITERIA",$stdfilterhtml);
 	$xtpl->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
+	
+	$xtpl->assign("MANDATORYCHECK",implode(",",$oCustomView->mandatoryvalues));
+	$xtpl->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
 }
 else
 {
@@ -75,24 +78,24 @@ else
 	$customviewdtls = $oCustomView->getCustomViewByCvid($recordid);
 	$modulecollist = $oCustomView->getModuleColumnsList($cv_module);
 	$selectedcolumnslist = $oCustomView->getColumnsListByCvid($recordid);
-	
+
 	$xtpl->assign("VIEWNAME",$customviewdtls["viewname"]);
-	
+
 	if($customviewdtls["setdefault"] == 1)
 	{
 		$xtpl->assign("CHECKED","checked");
 	}
 	for($i=1;$i<10;$i++)
         {
-           $choosecolhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$selectedcolumnslist[$i-1]); 
+           $choosecolhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$selectedcolumnslist[$i-1]);
 	   $xtpl->assign("CHOOSECOLUMN".$i,$choosecolhtml);
         }
-	
+
 	$stdfilterlist = $oCustomView->getStdFilterByCvid($recordid);
 	$stdfilterhtml = $oCustomView->getStdFilterCriteria($stdfilterlist["stdfilter"]);
         $stdfiltercolhtml = getStdFilterHTML($cv_module,$stdfilterlist["columnname"]);
         $stdfilterjs = $oCustomView->getCriteriaJS();
-	
+
 	if(isset($stdfilterlist["startdate"]) && isset($stdfilterlist["enddate"]))
 	{
 		$xtpl->assign("STARTDATE",$stdfilterlist["startdate"]);
@@ -103,7 +106,7 @@ else
 	for($i=1;$i<6;$i++)
         {
                 $advfilterhtml = getAdvCriteriaHTML($advfilterlist[$i-1]["comparator"]);
-		$advcolumnhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$advfilterlist[$i-1]["columnname"]); 
+		$advcolumnhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$advfilterlist[$i-1]["columnname"]);
 		$xtpl->assign("FOPTION".$i,$advfilterhtml);
                 $xtpl->assign("BLOCK".$i,$advcolumnhtml);
 		$xtpl->assign("VALUE".$i,$advfilterlist[$i-1]["value"]);
@@ -112,6 +115,9 @@ else
 	$xtpl->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);
         $xtpl->assign("STDFILTERCRITERIA",$stdfilterhtml);
         $xtpl->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
+
+	$xtpl->assign("MANDATORYCHECK",implode(",",$oCustomView->mandatoryvalues));
+	$xtpl->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
 
 }
 

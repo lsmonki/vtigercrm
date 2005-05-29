@@ -27,9 +27,8 @@ $adv_filter_options = array("e"=>"equals",
                             "l"=>"less than",
                             "g"=>"greater than",
                             "m"=>"less or equal",
-                            "h"=>"greater or equal",
-                            "u"=>"includes",
-                            "x"=>"excludes");
+                            "h"=>"greater or equal"
+                            );
 
 class CustomView extends CRMEntity{
 
@@ -41,18 +40,25 @@ class CustomView extends CRMEntity{
                                  "Potentials"=>Array("Information"=>1,"Description"=>2),
                                  "Products"=>Array("Information"=>1,"Description"=>2),
                                  "Notes"=>Array("Information"=>1,"Description"=>3),
-                                 "Emails"=>Array("Information"=>1,"Description"=>2)
+                                 "Emails"=>Array("Information"=>1,"Description"=>2),
+				 "Activities"=>Array("Information"=>1,"Description"=>2),
+				 "HelpDesk"=>Array("Information"=>1,"Description"=>2),
+				 "Quotes"=>Array("Information"=>1,"Description"=>2)
                                 );
 
 	var $customviewmodule;
 
 	var $list_fields;
-	
+
 	var $list_fields_name;
 
 	var $setdefaultviewid;
 
 	var $escapemodule;
+
+	var $mandatoryvalues;
+	
+	var $showvalues;
 
 	function CustomView($module="")
 	{
@@ -62,7 +68,7 @@ class CustomView extends CRMEntity{
 	}
 
 	// to get the available customviews for a module
-	// return type array 
+	// return type array
 	function getCustomViewByCvid($cvid)
 	{
 		global $adb;
@@ -109,10 +115,10 @@ class CustomView extends CRMEntity{
                 global $profile_id;
 
                 $sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid";
-		$sql.= " where field.uitype != 50 and field.tabid=".$tabid." and field.block=".$block ." and"; 
+		$sql.= " where field.uitype != 50 and field.tabid=".$tabid." and field.block=".$block ." and";
 		$sql.= " field.displaytype in (1,2) and profile2field.visible=0";
 		$sql.= " and profile2field.profileid=".$profile_id." order by sequence";
-		
+
 		$result = $adb->query($sql);
                 $noofrows = $adb->num_rows($result);
                 for($i=0; $i<$noofrows; $i++)
@@ -120,14 +126,22 @@ class CustomView extends CRMEntity{
                         $fieldtablename = $adb->query_result($result,$i,"tablename");
                         $fieldcolname = $adb->query_result($result,$i,"columnname");
 			$fieldname = $adb->query_result($result,$i,"fieldname");
+			$fieldtype = $adb->query_result($result,$i,"typeofdata");
+			$fieldtype = explode("~",$fieldtype);
+			$fieldtypeofdata = $fieldtype[0];
                         /*if($fieldtablename == "crmentity")
                         {
                            $fieldtablename = $fieldtablename.$module;
                         }*/
                         $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
                         $fieldlabel1 = str_replace(" ","_",$fieldlabel);
-                        $optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1;
+                        $optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
                         $module_columnlist[$optionvalue] = $fieldlabel;
+			if($fieldtype[1] == "M")
+			{
+				$this->mandatoryvalues[] = "'".$optionvalue."'";
+				$this->showvalues[] = $fieldlabel;
+			}
                 }
                 return $module_columnlist;
         }
@@ -485,7 +499,7 @@ class CustomView extends CRMEntity{
                 return $advfilterlist;
         }
         //<<<<<<<<advanced filter>>>>>>>>>>>>>>
-	
+
 	function getCvColumnListSQL($cvid)
 	{
 		$columnslist = $this->getColumnsListByCvid($cvid);
@@ -499,11 +513,10 @@ class CustomView extends CRMEntity{
 				{
 					$list = explode(":",$value);
 					$sqllist[] = $list[0].".".$list[1];
-					
+
 					$tablefield[$list[0]] = $list[1];
 					$fieldlabel = trim(str_replace($this->escapemodule," ",$list[3]));
 					$this->list_fields[$fieldlabel] = $tablefield;
-					
 					$this->list_fields_name[$fieldlabel] = $list[2];
 				}
 			}
@@ -511,7 +524,7 @@ class CustomView extends CRMEntity{
 		}
 		return $returnsql;
 	}
-	
+
 	function getCVStdFilterSQL($cvid)
 	{
 		global $adb;
@@ -534,7 +547,7 @@ class CustomView extends CRMEntity{
 				}elseif($columnname = "enddate")
 				{
 					$enddate = $value;
-				}					
+				}
 			}
 			if($filtertype != "custom")
 			{
@@ -542,7 +555,7 @@ class CustomView extends CRMEntity{
 				$startdate = $datearray[0];
 				$enddate = $datearray[1];
 			}
-			
+
 			if($startdate != "" && $enddate != "")
 			{
 				$columns = explode(":",$filtercolumn);
@@ -552,7 +565,82 @@ class CustomView extends CRMEntity{
 		//echo $stdfiltersql;
 		return $stdfiltersql;
 	}
+	function getCVAdvFilterSQL($cvid)
+	{
+		$advfilter = $this->getAdvFilterByCvid($cvid);
+		if(isset($advfilter))
+		{
+			foreach($advfilter as $key=>$advfltrow)
+			{
+				if(isset($advfltrow))
+				{
+					$columns = explode(":",$advfltrow["columnname"]);
+					if($advfltrow["columnname"] != "" && $advfltrow["comparator"] != "" && $advfltrow["value"] != "")
+					{
+						$advfiltersql[] = $columns[0].".".$columns[1].$this->getAdvComparator($advfltrow["comparator"],$advfltrow["value"]);
+					}
+				}
+			}
+		}
+		if(isset($advfiltersql))
+		{
+		    $advfsql = implode(" and ",$advfiltersql);
+		}
+		return $advfsql;
+	}
+	
+	function getAdvComparator($comparator,$value)
+	{
+/*		fLabels['e'] = 'equals';
+		fLabels['n'] = 'not equal to';
+		fLabels['s'] = 'starts with';
+		fLabels['c'] = 'contains';
+		fLabels['k'] = 'does not contain';
+		fLabels['l'] = 'less than';
+		fLabels['g'] = 'greater than';
+		fLabels['m'] = 'less or equal';
+		fLabels['h'] = 'greater or equal';*/
+		//require_once('include/database/PearDatabase.php');
 
+		if($comparator == "e")
+		{
+			$rtvalue = " = ".PearDatabase::quote($value);
+		}
+		if($comparator == "n")
+		{
+			$rtvalue = " <> ".PearDatabase::quote($value);
+		}
+		if($comparator == "s")
+		{
+			$rtvalue = " like ".PearDatabase::quote($value."%");
+		}
+		if($comparator == "c")
+		{
+			$rtvalue = " like ".PearDatabase::quote("%".$value."%");
+		}
+		if($comparator == "k")
+		{
+			$rtvalue = " not like ".PearDatabase::quote("%".$value."%");
+		}
+		if($comparator == "l")
+		{
+			$rtvalue = " < ".PearDatabase::quote($value);
+		}
+		if($comparator == "g")
+		{
+			$rtvalue = " > ".PearDatabase::quote($value);
+		}
+		if($comparator == "m")
+		{
+			$rtvalue = " <= ".PearDatabase::quote($value);
+		}
+		if($comparator == "h")
+		{
+			$rtvalue = " >= ".PearDatabase::quote($value);
+		}
+		
+		return $rtvalue;
+	}
 	function getDateforStdFilterBytype($type)
 	{
 		$today = date("Y-m-d",mktime(0, 0, 0, date("m")  , date("d"), date("Y")));
@@ -758,16 +846,38 @@ class CustomView extends CRMEntity{
 		if($viewid != "" && $listquery != "")
 		{
 			$listviewquery = substr($listquery, strpos($listquery,'from'),strlen($listquery));
+			//$listviewquery = substr($listviewquery,strpos($listviewquery,'from'),strpos($listviewquery,'where'));
+
+			//$wherequery = substr($listquery, strpos($listquery,'where'),strlen($listquery));
+
+
+			//echo $listviewquery." ".$wherequery;
 			$query = "select ".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid ".$listviewquery;
 			$stdfiltersql = $this->getCVStdFilterSQL($viewid);
+			$advfiltersql = $this->getCVAdvFilterSQL($viewid);
 			if(isset($stdfiltersql) && $stdfiltersql != '')
 			{
 				$query .= ' and '.$stdfiltersql;
 			}
+			if(isset($advfiltersql) && $advfiltersql != '')
+			{
+				$query .= ' and '.$advfiltersql;
+			}
 
 		}
-		
+		//echo $query;
 		return $query;
+	}
+
+	function getParentId($fields,$values)
+	{
+		global $adb;
+
+		if($fields = 'crmentity.smownerid')
+		{
+			$sSQL = " left join users on users".$value;
+			$result = $adb->query($sSQL);
+		}
 	}
 
 }

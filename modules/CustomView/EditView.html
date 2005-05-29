@@ -9,15 +9,139 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
-<form enctype="multipart/form-data" name="CustomView" method="POST" action="index.php">
+<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+<script type="text/javascript" src="jscalendar/calendar.js"></script>
+<script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>
+<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/calc.js"></script>
+<form enctype="multipart/form-data" name="CustomView" method="POST" action="index.php" onsubmit="return mandatoryCheck();">
 <input type="hidden" name="module" value="CustomView">
 <input type="hidden" name="action" value="Save">
 <input type="hidden" name="cvmodule" value="{CVMODULE}">
 <input type="hidden" name="return_module" value="{RETURN_MODULE}">
 <input type="hidden" name="record" value="{CUSTOMVIEWID}">
 <input type="hidden" name="return_action" value="{RETURN_ACTION}">
+<script language="javascript" type="text/javascript">
+var typeofdata = new Array();
+typeofdata['V'] = ['e','n','s','c','k'];
+typeofdata['N'] = ['e','n','l','g','m','h'];
+typeofdata['T'] = ['e','n','l','g','m','h'];
+typeofdata['I'] = ['e','n','l','g','m','h'];
+typeofdata['C'] = ['e','n'];
+typeofdata['DT'] = ['e','n'];
+
+var fLabels = new Array();
+fLabels['e'] = 'equals';
+fLabels['n'] = 'not equal to';
+fLabels['s'] = 'starts with';
+fLabels['c'] = 'contains';
+fLabels['k'] = 'does not contain';
+fLabels['l'] = 'less than';
+fLabels['g'] = 'greater than';
+fLabels['m'] = 'less or equal';
+fLabels['h'] = 'greater or equal';
+var noneLabel;
+
+function trimfValues(value)
+{
+    var string_array;
+    string_array = value.split(":");
+    return string_array[4];
+}
+
+function updatefOptions(sel, opSelName) {
+    var selObj = document.getElementById(opSelName);
+    var fieldtype = null ;
+
+    var currOption = selObj.options[selObj.selectedIndex];
+    var currField = sel.options[sel.selectedIndex];
+
+    if(currField.value != null && currField.value.length != 0)
+    {
+	fieldtype = trimfValues(currField.value);
+	ops = typeofdata[fieldtype];
+	var off = 0;
+	if(ops != null)
+	{
+
+		var nMaxVal = selObj.length;
+		for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+		{
+			selObj.remove(0);
+		}
+		selObj.options[0] = new Option ('None', '');
+		if (currField.value == '') {
+			selObj.options[0].selected = true;
+		}
+		off = 1;
+		for (var i = 0; i < ops.length; i++)
+		{
+			var label = fLabels[ops[i]];
+			if (label == null) continue;
+			var option = new Option (fLabels[ops[i]], ops[i]);
+			selObj.options[i + off] = option;
+			if (currOption != null && currOption.value == option.value)
+			{
+				option.selected = true;
+			}
+		}
+	}
+    }else
+    {
+	var nMaxVal = selObj.length;
+	for(nLoop = 0; nLoop < nMaxVal; nLoop++)
+	{
+		selObj.remove(0);
+	}
+	selObj.options[0] = new Option ('None', '');
+	if (currField.value == '') {
+		selObj.options[0].selected = true;
+	}
+    }
+
+}
+function mandatoryCheck()
+{
+	var mandatorycheck = false;
+	var i,j;
+	var manCheck = new Array({MANDATORYCHECK});
+	var showvalues = "{SHOWVALUES}";
+	//var columnvalue = document.getElementById("column"+1).value;
+	if(manCheck)
+	{
+		for(i=1;i<=9;i++)
+		{
+			var columnvalue = document.getElementById("column"+i).value;
+			if(columnvalue != null)
+			{
+				for(j=0;j<manCheck.length;j++)
+				{
+					if(columnvalue == manCheck[j])
+					{
+						mandatorycheck = true;
+					}
+				}
+				if(mandatorycheck == true)
+				{
+					return true;
+				}else
+				{
+					mandatorycheck = false;
+				}
+			}
+			//alert(columnvalue);
+		}
+	}
+	if(mandatorycheck == false)
+	{
+		alert("Must have one Required field to be selected\n"+showvalues);
+	}
+
+	return false;
+}
+</script>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr> 
+  <tr>
     <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
     <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MODULE}: {MOD.LBL_MODULE_NAME}</td>
     <!--<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> 
@@ -59,7 +183,7 @@
 
     <table width="100%" border=0 cellPadding="0" cellSpacing="1" class="formOuterBorder">
       <tr>
-        <td class="formSecHeader" colspan="3">{MOD.LBL_STEP_2_TITLE}</td>
+        <td class="formSecHeader" colspan="3"><font class="required">*</font>{MOD.LBL_STEP_2_TITLE}</td>
       </tr>
       	
       <tr>
@@ -129,11 +253,10 @@
                 <td><select name="stdDateFilter" class="select" onchange='showDateRange(this.options[this.selectedIndex].value )'>
                     {STDFILTERCRITERIA}
                   </select></td>
-                <td><input name="startdate" id="startdate" type="text" size="10" class="textField" value="{STARTDATE}">
-                    <img id="startdateimg" src="{IMAGE_PATH}calendar.gif" width="16" height="18" border="0" align="absmiddle"></td> <td nowrap>
-                    <input name="enddate" id="enddate" type="text" size="10" class="textField" value="{ENDDATE}">
-                    <a href="javascript:;" id="enddateimg"><img src="{IMAGE_PATH}calendar.gif" width="16" height="18" bo
-rder="0" align="absmiddle"></a></td>
+                <td><input name="startdate" id="jscal_field_date_start" type="text" size="10" class="textField" value="{STARTDATE}">
+	            <img src="{IMAGE_PATH}calendar.gif" id="jscal_trigger_date_start"></td><td nowrap>
+                    <input name="enddate" id="jscal_field_date_end" type="text" size="10" class="textField" value="{ENDDATE}">
+                    <img src="{IMAGE_PATH}calendar.gif" id="jscal_trigger_date_end"></td>
                 <td>
                 </td>
               </tr>
@@ -177,7 +300,7 @@ rder="0" align="absmiddle"></a></td>
             </ul></td>
         </tr>
         <tr>
-          <td><select name="fcol1" id="fcol1" onchange="updateOperator(this, 'fop1');">
+          <td><select name="fcol1" id="fcol1" onchange="updatefOptions(this, 'fop1');">
               <option value="">None</option>
               {BLOCK1}
               </select> &nbsp; <select name="fop1" id="fop1">
@@ -187,7 +310,7 @@ rder="0" align="absmiddle"></a></td>
             &nbsp;and</TD>
         </TR>
 	<TR>
-          <TD><select name="fcol2" id="fcol2" onchange="updateOperator(this, 'fop2');">
+          <TD><select name="fcol2" id="fcol2" onchange="updatefOptions(this, 'fop2');">
               <option value="">None</option>
               {BLOCK2}
               </select> &nbsp;
@@ -198,7 +321,7 @@ rder="0" align="absmiddle"></a></td>
             &nbsp;and</TD>
         </TR>
         <TR>
-          <TD><select name="fcol3" id="fcol3" onchange="updateOperator(this, 'fop3');">
+          <TD><select name="fcol3" id="fcol3" onchange="updatefOptions(this, 'fop3');">
               <option value="">None</option>
               {BLOCK3}
               </select> &nbsp;
@@ -209,7 +332,7 @@ rder="0" align="absmiddle"></a></td>
             &nbsp;and</TD>
         </TR>
         <TR>
-          <TD> <select name="fcol4" id="fcol4" onchange="updateOperator(this, 'fop4');">
+          <TD> <select name="fcol4" id="fcol4" onchange="updatefOptions(this, 'fop4');">
               <option value="">None</option>
               {BLOCK4}
               </select> &nbsp;
@@ -220,7 +343,7 @@ rder="0" align="absmiddle"></a></td>
             &nbsp;and</TD>
         </TR>
 	<TR>
-          <TD> <select name="fcol5" id="fcol5" onchange="updateOperator(this, 'fop5');">
+          <TD> <select name="fcol5" id="fcol5" onchange="updatefOptions(this, 'fop5');">
               <option value="">None</option>
               {BLOCK5}
               </select> &nbsp;
@@ -244,6 +367,10 @@ rder="0" align="absmiddle"></a></td>
             </div></td>
         </tr>
     </table>
+    <script type="text/javascript">
+    	Calendar.setup ({inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1});
+	Calendar.setup ({inputField : "jscal_field_date_end", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1});
+    </script>
 </form>
 {JAVASCRIPT} 
 <!-- END: main -->
