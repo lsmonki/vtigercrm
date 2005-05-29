@@ -14,10 +14,10 @@ global $Server_Path;
 global $Portal_Path;
 
 //This is the vtigerCRM Server Path where contactserialize.php file is located
-$Server_Path = "http://rajeshkannan"; //for eg. http://vtiger-server:90 
+$Server_Path = ""; //for eg. http://vtiger-server:90 
 
 //This is the Customer Portal path where CustomerAuthenticate.php file is located 
-$Authenticate_Path = "http://rajeshkannan/customerportal"; //for eg. http://your-server/vtiger_customerportal 
+$Authenticate_Path = ""; //for eg. http://your-server/vtiger_customerportal 
 
 //These are the Proxy Settings parameters
 $Proxy_Host = ''; //Host Name of the Proxy
