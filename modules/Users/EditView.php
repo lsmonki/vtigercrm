@@ -96,6 +96,7 @@ $xtpl->assign("ADDRESS_CITY", $focus->address_city);
 $xtpl->assign("ADDRESS_STATE", $focus->address_state);
 $xtpl->assign("ADDRESS_POSTALCODE", $focus->address_postalcode);
 $xtpl->assign("ADDRESS_COUNTRY", $focus->address_country);
+$xtpl->assign("SIGNATURE", $focus->signature);
 $xtpl->assign("DESCRIPTION", $focus->description);
 
 $DATE_FORMAT_SELECT_OPTION = '<select name="date_format">';
