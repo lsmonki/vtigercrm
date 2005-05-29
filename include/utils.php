@@ -2030,6 +2030,18 @@ function getUserName($userid)
 		$user_name = $adb->query_result($result,0,"user_name");
 	}
 	return $user_name;	
+}
+
+function getUserEmail($userid)
+{
+        global $adb;
+        if($userid != '')
+        {
+                $sql = "select email1 from users where id=".$userid;
+                $result = $adb->query($sql);
+                $email = $adb->query_result($result,0,"email1");
+        }
+        return $email;
 }		
 //outlook security
 function getUserId_Ol($username)
