@@ -60,7 +60,11 @@ $mod_strings = Array(
 'Modified Time'=>'Modified Time',
 'Attachment'=>'Attachment',
 'Note'=>'Note',
-
+//Added for 4.2 Release -- CustomView
+'Related to'=>'Related to',
+'Last Modified'=>'Last Modified',
+'File'=>'File',
+'LBL_ALL'=>'All',
 
 );
 
