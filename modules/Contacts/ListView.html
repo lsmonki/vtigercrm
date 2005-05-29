@@ -18,6 +18,15 @@
 -->
 <!-- BEGIN: main -->
 <script language="javascript">
+
+function showDefaultCustomView(selectView)
+{
+viewName = selectView.options[selectView.options.selectedIndex].value;
+document.massdelete.viewname.value=viewName;
+document.massdelete.action="index.php?module=Contacts&action=index&return_module=Contacts&return_action=index&viewname="+viewName;
+document.massdelete.submit();
+}
+
 function massDelete()
 {
 
