@@ -183,6 +183,7 @@ $mod_strings = Array(
 'Support End Date'=>'Support End Date',
 //Added for 4.2 Release -- CustomView
 'Name'=>'Name',
+'LBL_ALL'=>'All',
 );
 
 ?>
