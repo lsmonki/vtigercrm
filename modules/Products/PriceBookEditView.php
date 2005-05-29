@@ -80,10 +80,10 @@ $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php
 
 
 
-/*
-$vendor_tables = Array('vendor'); 
 
- $validationData = getDBValidationData($product_tables);
+$pb_tables = Array('pricebook'); 
+
+ $validationData = getDBValidationData($pb_tables);
  $fieldName = '';
  $fieldLabel = '';
  $fldDataType = '';
@@ -126,11 +126,6 @@ $vendor_tables = Array('vendor');
 $xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
 $xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
-
-*/
-
-
-
 
 $xtpl->parse("main");
 
