@@ -109,7 +109,9 @@ $mod_strings = Array(
 'Description'=>'Description',
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
-
+//Added for 4.2 Release -- CustomView
+'Potential'=>'Potential',
+'Expected Close'=>'Expected Close',
 );
 
 ?>
