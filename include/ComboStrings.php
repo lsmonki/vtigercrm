@@ -175,11 +175,58 @@ $combo_strings = Array(
                         'Euro'=>'Euro'
                         ),
 
-//added for 4.2b release 28/5
-'rsscategory' => Array('vtiger Discussions'=>'vtiger Discussions',
+'rsscategory_dom' => Array('vtiger Discussions'=>'vtiger Discussions',
                        'vtiger Wiki'=>'vtiger Wiki'
-                      )
+                      ),
 
+'usageunit_dom' => Array('Box'=>'Box',
+                        'Carton'=>'Carton',
+                        'Caton'=>'Caton',
+                        'Dozen'=>'Dazon',
+                        'Each'=>'Each',
+                        'Hours'=>'Hours',
+                        'Impressions'=>'Impressions',
+                        'Lb'=>'Lb',
+                        'M'=>'M',
+                        'Pack'=>'Pack',
+                        'Pages'=>'Pages',
+                        'Pieces'=>'Pieces',
+                        'Quantity'=>'Quantity',
+                        'Reams'=>'Reams',
+                        'Sheet'=>'Sheet',
+                        'Spiral Binder'=>'Spiral Binder',
+                        'Sq Ft'=>'Sq Ft'
+                        ),
+
+'glacct_dom' => Array('300-Sales-Software'=>'300-Sales-Software',
+                        '301-Sales-Hardware'=>'301-Sales-Hardware',
+                        '302-Rental-Income'=>'302-Rental-Income',
+                        '303-Interest-Income'=>'303-Interest-Income',
+                        '304-Sales-Software-Support'=>'304-Sales-Software-Support',
+                        '305-Sales Other'=>'305-Sales Other',
+                        '306-Internet Sales'=>'306-Internet Sales',
+                        '307-Service-Hardware Labor'=>'307-Service-Hardware Labor',
+                        '308-Sales-Books'=>'308-Sales-Books'
+                        ),
+
+'quotestage_dom' => Array('Created'=>'Created',
+                        'Delivered'=>'Delivered',
+                        'Reviewed'=>'Reviewed',
+                        'Accepted'=>'Accepted',
+                        'Rejected'=>'Rejected'
+                        ),
+
+'carrier_dom' => Array('FedEx'=>'FedEx',
+                        'UPS'=>'UPS',
+                        'USPS'=>'USPS',
+                        'DHL'=>'DHL',
+                        'BlueDart'=>'BlueDart'
+                        ),
+
+'taxclass_dom' => Array('SalesTax'=>'SalesTax',
+                        'Vat'=>'Vat'
+                        )
+		
 );
 
 ?>
