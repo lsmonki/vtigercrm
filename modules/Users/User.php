@@ -93,6 +93,7 @@ class User extends SugarBean {
 		,"phone_fax"
 		,"email1"
 		,"email2"
+		,"signature"
 		,"yahoo_id"
 		,"address_street"
 		,"address_city"
