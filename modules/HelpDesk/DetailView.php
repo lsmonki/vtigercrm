@@ -116,6 +116,7 @@ $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
 $focus->id = $_REQUEST['record'];
 getRelatedLists("HelpDesk",$focus);
+Get_Ticket_History();
 
 function getCommentInformation($ticketid)
 {
