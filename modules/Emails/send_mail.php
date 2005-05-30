@@ -46,6 +46,9 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 	//	header("Location: index.php?action=ListView&module=".$_REQUEST['return_module']."&parent_id=$parent_id&record=$return_id");
 	}
 
+	if(!@$sign = $adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"signature")){}
+        $contents .= '<br><br><font color=darkgrey>'.$sign.'</font>';
+
 	$mail->Subject = $subject;
 	$mail->Body    = nl2br($contents);//"This is the HTML message body <b>in bold!</b>";
 
