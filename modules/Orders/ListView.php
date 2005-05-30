@@ -23,6 +23,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils.php');
 require_once('include/uifromdbutil.php');
+require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $current_language;
@@ -323,6 +324,53 @@ $ListView->setQuery($where, "", "accountname", "ACCOUNT");
 $ListView->processListView($seedAccount, "main", "ACCOUNT");
 */
 
+// Buttons and View options
+
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Orders");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']) == false)
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}else
+	{
+		$viewid = "0";
+	}
+}else
+{
+	$viewid =  $_REQUEST['viewname'];
+}
+//<<<<<customview>>>>>
+
+$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
+		<tr>';
+
+if($viewid == 0)
+{
+$cvHTML = '<span class="bodyText disabled">Edit</span>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Orders&action=CustomView" class="link">Create View</a>';
+}else
+{
+$cvHTML = '<a href="index.php?module=Orders&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Orders&action=CustomView" class="link">Create View</a>';
+}
+	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+                        <SELECT NAME="view" onchange="showDefaultCustomView(this)">
+                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+				'.$customviewcombo_html.'
+                        </SELECT>
+			'.$cvHTML.'
+                </td>
+        </tr>
+        </table>';
+
+
 $focus = new Order();
 
 
@@ -336,38 +384,34 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH",$image_path);
 
 //Retreive the list from Database
-$query = getListQuery("Orders");
+//<<<<<<<<<customview>>>>>>>>>
+if($viewid != "0")
+{
+	$listquery = getListQuery("Orders");
+	$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Orders");
+}else
+{
+	$query = getListQuery("Orders");
+}
+//<<<<<<<<customview>>>>>>>>>
 
 if(isset($where) && $where != '')
 {
         $query .= ' and '.$where;
 }
 
-if(isset($_REQUEST['viewname']))
-{
-if($_REQUEST['viewname'] == 'All')
-   {
-     $defaultcv_criteria = '';
-   }
-   else
-   {
-     $defaultcv_criteria = $_REQUEST['viewname'];
-          $query .= " and account_type like "."'%" .$defaultcv_criteria ."%'";          
-   }
-	$viewname = $_REQUEST['viewname'];
-        $view_script = "<script language='javascript'>
-                function set_selected()
-                {
-                        len=document.massdelete.view.length;
-                        for(i=0;i<len;i++)
-                        {
-                                if(document.massdelete.view[i].value == '$viewname')
-                                        document.massdelete.view[i].selected = true;
-                        }
-                }
-                set_selected();
-                </script>";
-}
+$view_script = "<script language='javascript'>
+	function set_selected()
+	{
+		len=document.massdelete.view.length;
+		for(i=0;i<len;i++)
+		{
+			if(document.massdelete.view[i].value == '$viewid')
+				document.massdelete.view[i].selected = true;
+		}
+	}
+	set_selected();
+	</script>";
 
 //$url_qry = getURLstring($focus);
 
@@ -428,11 +472,11 @@ else
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header
-$listview_header = getListViewHeader($focus,"Orders",$url_string,$sorder,$order_by);
+$listview_header = getListViewHeader($focus,"Orders",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
 
-$listview_entries = getListViewEntries($focus,"Orders",$list_result,$navigation_array);
+$listview_entries = getListViewEntries($focus,"Orders",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 
@@ -441,7 +485,7 @@ $url_string .="&order_by=".$order_by;
 if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Orders");
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Orders","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 
