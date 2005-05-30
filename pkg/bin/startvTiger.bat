@@ -43,18 +43,18 @@ goto checkmysql
 echo ""
 echo "making an attempt to kill any existing vtigercrm service"
 echo ""
-bin\apache -k stop -n vtigercrm4_0_1
-bin\apache -k uninstall -n vtigercrm4_0_1
+bin\apache -k stop -n vtigercrm4_2_alpha
+bin\apache -k uninstall -n vtigercrm4_2_alpha
 echo ""
 echo ""
-echo "installing vtigercrm4_0_1 apache service"
+echo "installing vtigercrm4_2_alpha apache service"
 echo ""
 echo ""
-bin\apache -k install -n vtigercrm4_0_1 -f conf\httpd.conf
+bin\apache -k install -n vtigercrm4_2_alpha -f conf\httpd.conf
 echo ""
-echo "Starting  vtigercrm4_0_1 apache service"
+echo "Starting  vtigercrm4_2_alpha apache service"
 echo ""
-bin\apache -n vtigercrm4_0_1 -k start
+bin\apache -n vtigercrm4_2_alpha -k start
 IF ERRORLEVEL 1 goto stopservice
 goto checkmysql
 
@@ -112,27 +112,27 @@ goto checkdatabase
 
 :checkdatabase
 echo ""
-echo "check to see if vtigercrm4_0_1 database already exists"
+echo "check to see if vtigercrm4_2_alpha database already exists"
 echo ""
-mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm4'" | "%WINDIR%\system32\find.exe" "vtigercrm4_0_1" > NUL
+mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm4'" | "%WINDIR%\system32\find.exe" "vtigercrm4_2_alpha" > NUL
 IF ERRORLEVEL 1 goto dbnotexists
 echo ""
-ECHO  "vtigercrm4_0_1 database exists"
+ECHO  "vtigercrm4_2_alpha database exists"
 echo ""
 goto end
 
 
 :dbnotexists
 echo ""
-ECHO "vtigercrm4_0_1 database does not exist"
+ECHO "vtigercrm4_2_alpha database does not exist"
 echo ""
 echo %cd%
 echo ""
-echo "Proceeding to create database vtigercrm4_0_1 and populate the same"
+echo "Proceeding to create database vtigercrm4_2_alpha and populate the same"
 echo ""
-mysql --user=%mysql_username% --password=%mysql_password% --port=%mysql_port% -e "create database if not exists vtigercrm4_0_1"
+mysql --user=%mysql_username% --password=%mysql_password% --port=%mysql_port% -e "create database if not exists vtigercrm4_2_alpha"
 echo ""
-echo "vtigercrm4_0_1 database created"
+echo "vtigercrm4_2_alpha database created"
 echo ""
 goto end
 

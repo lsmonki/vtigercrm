@@ -111,20 +111,20 @@ if [ $exit_status -ne 0 ]; then
 		
 fi
 echo ""
-echo "Checking if the vtigercrm4_0_1 database already exists"
+echo "Checking if the vtigercrm4_2alpha database already exists"
 echo ""
-echo "select 1" | ./bin/mysql --user=$mysql_username --password=$mysql_password  --port=$mysql_port --socket=$mysql_socket -D vtigercrm4_0_1 >/dev/null
+echo "select 1" | ./bin/mysql --user=$mysql_username --password=$mysql_password  --port=$mysql_port --socket=$mysql_socket -D vtigercrm4_2alpha >/dev/null
 if [ $? -ne 0 ]; then
 	echo ""
-	echo "Database vtigercrm4_0_1 does not exist. Creating database vtigercrm4_0_1"
+	echo "Database vtigercrm4_2alpha does not exist. Creating database vtigercrm4_2alpha"
 	echo ""
-	./bin/mysql --user=$mysql_username --password=$mysql_password  --port=$mysql_port --socket=$mysql_socket -e "create database if not exists vtigercrm4_0_1"
+	./bin/mysql --user=$mysql_username --password=$mysql_password  --port=$mysql_port --socket=$mysql_socket -e "create database if not exists vtigercrm4_2alpha"
 fi
 
 host=`hostname`
 echo "*****************************************************************************************************"
 if [ $apache_bundled == 'false' ];then
-	echo "Please access the product at http://${host}:<apache port>/vtigerCRM4_0_1/vtigerCRM"
+	echo "Please access the product at http://${host}:<apache port>/vtigerCRM4_2alpha/vtigerCRM"
 else
 	echo "Please access the product at http://${host}:<apache port>"
 echo "*****************************************************************************************************"
