@@ -38,6 +38,10 @@ global $theme;
 
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
+echo get_module_title("Quotes", "Quotes" , true);
+echo "<br>";
+
+
 // Get _dom arrays from Database
 $comboFieldNames = Array('accounttype'=>'account_type_dom'
                       ,'industry'=>'industry_dom');
