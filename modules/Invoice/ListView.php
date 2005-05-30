@@ -324,7 +324,7 @@ $ListView->setQuery($where, "", "accountname", "ACCOUNT");
 $ListView->processListView($seedAccount, "main", "ACCOUNT");
 */
 //<<<<cutomview>>>>>>>
-$oCustomView = new CustomView("Orders");
+$oCustomView = new CustomView("Invoice");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
 if(isset($_REQUEST['viewname']) == false)
 {
