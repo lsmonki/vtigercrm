@@ -35,16 +35,19 @@ class CustomView extends CRMEntity{
 
 
 	var $module_list = Array("Leads"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-                                 "Contacts"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-                                 "Accounts"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-                                 "Potentials"=>Array("Information"=>1,"Description"=>2),
-                                 "Products"=>Array("Information"=>1,"Description"=>2),
-                                 "Notes"=>Array("Information"=>1,"Description"=>3),
-                                 "Emails"=>Array("Information"=>1,"Description"=>2),
+				 "Contacts"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
+				 "Accounts"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
+				 "Potentials"=>Array("Information"=>1,"Description"=>2,"Custom Information"=>5),
 				 "Activities"=>Array("Information"=>1,"Description"=>2),
-				 "HelpDesk"=>Array("Information"=>1,"Description"=>2),
-				 "Quotes"=>Array("Information"=>1,"Description"=>2)
-                                );
+				 "Products"=>Array("Information"=>1,"Description"=>2,"Custom Information"=>5),
+				 "Notes"=>Array("Information"=>1,"Description"=>3),
+				 "Emails"=>Array("Information"=>1,"Description"=>2),
+				 "HelpDesk"=>Array("Information"=>1,"Custom Information"=>5,"Description"=>6),
+				 "Quotes"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
+				 "Orders"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
+				 "Invoice"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5)
+				);
+
 
 	var $customviewmodule;
 
@@ -302,15 +305,15 @@ class CustomView extends CRMEntity{
                         {
                                 document.CustomView.startdate.readOnly=true
                                 document.CustomView.enddate.readOnly=true
-                                getObj("startdateimg").style.visibility="hidden"
-                                getObj("enddateimg").style.visibility="hidden"
+                                getObj("jscal_trigger_date_start").style.visibility="hidden"
+                                getObj("jscal_trigger_date_end").style.visibility="hidden"
                         }
                         else
                         {
                                 document.CustomView.startdate.readOnly=false
                                 document.CustomView.enddate.readOnly=false
-                                getObj("startdateimg").style.visibility="visible"
-                                getObj("enddateimg").style.visibility="visible"
+                                getObj("jscal_trigger_date_start").style.visibility="visible"
+                                getObj("jscal_trigger_date_end").style.visibility="visible"
                         }
                         if( type == "today" )
                         {
