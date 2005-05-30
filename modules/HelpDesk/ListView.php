@@ -284,6 +284,7 @@ $cvHTML = '<a href="index.php?module=HelpDesk&action=CustomView&record='.$viewid
 $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
 			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
 				<OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+				'.$customviewcombo_html.'
 			</SELECT>
 			'.$cvHTML.'
 		</td>
