@@ -72,11 +72,19 @@ if($adb->num_rows($result) >= 1)
 					}
 				}
 			}
+			
+			// Set the preferred email id
 			$from ="reminders@localserver.com";
-			$subject = "[Reminder:".$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$result_set['subject'];
+			
+			// Retriving the Subject and message from reminder table		
+			$sql = "select active,notificationsubject,notificationbody from notificationscheduler where schedulednotificationid=1";
+			$result_main = $adb->query($sql);
+
+			$subject = "[Reminder:".$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$adb->query_result($result_main,0,'notificationsubject');
 
 			//Set the mail body/contents here
-			$contents ="Hi,\n\n This a activity reminder mail. Kindly visit the link for more details of the activity <a href='".$site_URL."/index.php?action=DetailView&module=Activities&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>\n\n Regards,\n Reminder Manager";
+			#$contents ="Hi,\n\n This a activity reminder mail. Kindly visit the link for more details of the activity <a href='".$site_URL."/index.php?action=DetailView&module=Activities&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>\n\n Regards,\n Reminder Manager";
+			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n Kindly visit the link for more details on the activity <a href='".$site_URL."/index.php?action=DetailView&module=Activities&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>";
 
 			if(count($to_addr) >=1)
 			{

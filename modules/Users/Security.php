@@ -1289,7 +1289,9 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 
                 $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_START_DESCRIPTION' ,1,'Support Start Notification','Support starts please ','LBL_START_NOTIFICATION')");
 
-                $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_SUPPORT_DESCRIPTION',1,'Support ending please','Support Ending Notification','LBL_SUPPORT_NOTICIATION')");
+                $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_SUPPORT_DESCRIPTION',1,'Support ending please','Support Ending Notification','LBL_SUPPORT_NOTICIATION')");
+		
+ 		$this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_ACTIVITY_REMINDER_DESCRIPTION' ,1,'Activity Reminder Notication','This is a reminder notification for the Activity','LBL_ACTIVITY_NOTIFICATION')");
 
 		//Insert into currency table
 		$this->db->query("insert into currency_info values('U.S Dollar','USD','$')");

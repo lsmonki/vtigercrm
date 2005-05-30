@@ -48,6 +48,7 @@ if($adb->num_rows($result) >=1)
 	while($result_row = $adb->fetch_array($result))
 	{
 		$chkd = '';
+		$disabled = '';
 		$active = $result_row['active'];
 		$shedid = $result_row['schedulednotificationid'];
 		$label = $result_row['label'];
@@ -64,13 +65,18 @@ if($adb->num_rows($result) >=1)
 		{
 			$ListRow = "evenListRow";
 		}
+		
+		if ($label == 'LBL_ACTIVITY_NOTIFICATION')
+		{
+			$disabled = 'disabled="disabled"';
+		} 
 		echo   '<tr class="'.$ListRow.'"> 
 			 <td height="21" valign="top" nowrap> <div align="center">
-			<INPUT TYPE=CHECKBOX NAME="'.$shedid.'" '.$chkd.'></div></td>
+			<INPUT TYPE=CHECKBOX '.$disabled.' NAME="'.$shedid.'" '.$chkd.' ></div></td>
 		         <td valign="top" nowrap style="padding:0px 3px 0px 3px;"><a href="index.php?module=Users&action=EditNotification&record='.$shedid.'">'.$mod_strings[$label].'</a></td>
 			 <td valign="top" style="padding:0px 3px 0px 3px;">'.$mod_strings[$shedname].'</td>
 			</tr>';
-		
+		$disabled ='';
 	}
 
 }
