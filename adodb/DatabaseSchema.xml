@@ -4728,4 +4728,130 @@
 		<data></data>
 	</table>
 
+	<table name="usageunit">
+		<field name="usageunitid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="usageunit" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="UsageUnit_UK0">
+			<UNIQUE/>
+			<col>usageunit</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="glacct">
+		<field name="glacctid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="glacct" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="GlAcct_UK0">
+			<UNIQUE/>
+			<col>glacct</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="quotestage">
+		<field name="quotestageid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="quotestage" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="quotestage_UK0">
+			<UNIQUE/>
+			<col>quotestage</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="carrier">
+		<field name="carrierid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="carrier" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="carrier_UK0">
+			<UNIQUE/>
+			<col>carrier</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="taxclass">
+		<field name="taxclassid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="taxclass" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="carrier_UK0">
+			<UNIQUE/>
+			<col>carrier</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
 </schema>
