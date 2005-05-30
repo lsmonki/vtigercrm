@@ -29,7 +29,7 @@ $mod_strings = Array(
 'LBL_MEMBER_ORG_FORM_TITLE'=>'Member Organizations',
 
 'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
-'LBL_RELATED_PRODUCTS'=>'Products',
+'LBL_RELATED_PRODUCTS'=>'Line Items',
 'LBL_LIST_CITY'=>'City',
 'LBL_LIST_WEBSITE'=>'Website',
 'LBL_LIST_STATE'=>'State',
