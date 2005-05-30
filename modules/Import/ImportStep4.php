@@ -30,16 +30,17 @@ require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Import/parse_utils.php');
 require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
+require_once('modules/Import/ImportSave.php');
 
 set_time_limit(0);
 ini_set("display_errors",'0');
+
 
 function p($str)
 {
 	global $adb;
 	$adb->println("IMP :".$str);
 }
-
 
 function implode_assoc($inner_delim, $outer_delim, $array) 
 {
@@ -87,6 +88,8 @@ if ( isset( $_REQUEST['has_header']) && $_REQUEST['has_header'] == 'on')
 {
 	$has_header = 1;
 }
+if($_REQUEST['modulename'] != '')
+	$_REQUEST['module'] = $_REQUEST['modulename'];
 
 if (! isset( $_REQUEST['module'] ) || $_REQUEST['module'] == 'Contacts')
 {
@@ -181,7 +184,7 @@ if (file_exists($_REQUEST['tmp_file']))
 	unlink($_REQUEST['tmp_file']);
 }
 
-$rows = $ret_value['rows'];
+$datarows = $ret_value['rows'];
 
 $ret_field_count = $ret_value['field_count'];
 
@@ -189,15 +192,15 @@ $saved_ids = array();
 
 $firstrow = 0;
 
-if (! isset($rows))
+if (! isset($datarows))
 {
 	$error = $mod_strings['LBL_FILE_ALREADY_BEEN_OR'];
-	$rows = array();
+	$datarows = array();
 }
 
 if ($has_header == 1)
 {
-	$firstrow = array_shift($rows);
+	$firstrow = array_shift($datarows);
 }
 
 
@@ -206,202 +209,73 @@ $seedUsersLastImport->mark_deleted_by_user_id($current_user->id);
 $skip_required_count = 0;
 
 p("processing started ret_field_count=".$ret_field_count);
-$adb->println($rows);
+$adb->println($datarows);
 
-// go thru each row, process and save()
-foreach ($rows as $row)
+$error = '';
+$focus = new $current_bean_type();
+
+if(isset($_SESSION['totalrows']) && $_SESSION['totalrows'] != '')
 {
-	$focus = new $current_bean_type();
+	$xrows = $_SESSION['totalrows'];
+}
+else
+{
+	$xrows = $datarows;
+}
+if(isset($_SESSION['return_field_count']))
+{
+	$ret_field_count = $_SESSION['return_field_count'];
+}
+if(isset($_SESSION['column_position_to_field']))
+{
+	$col_pos_to_field = $_SESSION['column_position_to_field'];
+}
+if($xrows != '')
+{
+	$datarows = $xrows;
+}
+if($_REQUEST['noofrows'] != '')
+	$totalnoofrows = $_REQUEST['noofrows'];
+else
+	$totalnoofrows = count($datarows);
 
-	$do_save = 1;
+$loopcount = ($totalnoofrows/$RECORDCOUNT)+1;
 
-	for($field_count = 0; $field_count < $ret_field_count; $field_count++)
-	{
-		p("col_pos[".$field_count."]=".$col_pos_to_field[$field_count]);
+if($_REQUEST['startval'] != '')
+	$START = $_REQUEST['startval'];
+else
+	$START = $_SESSION['startval'];
+if($_REQUEST['recordcount'] != '')
+	$RECORDCOUNT = $_REQUEST['recordcount'];
+else
+	$RECORDCOUNT = $_SESSION['recordcount'];
 
-		if ( isset( $col_pos_to_field[$field_count]) )
+if(($START+$RECORDCOUNT) > $totalnoofrows)
+{
+	$RECORDCOUNT = $totalnoofrows - $START;
+}
+
+if($totalnoofrows > $RECORDCOUNT && $START < $totalnoofrows)
+{
+		$rows1 = Array();
+		for($j=$START;$j<$START+$RECORDCOUNT;$j++)
 		{
-			p("set =".$field_count);
-			if (! isset( $row[$field_count]) )
-			{
-				continue;
-			}
-
-			p("setting");
-
-			// TODO: add check for user input
-			// addslashes, striptags, etc..
-			$field = $col_pos_to_field[$field_count];
-			if (substr(trim($field), 0, 3) == "CF_") 
-        		{
-				p("setting custfld".$field."=".$row[$field_count]);
-				$resCustFldArray[$field] = $row[$field_count]; 
-        		}
-			else
-			{
-				//$focus->$field = $row[$field_count];
-				$focus->column_fields[$field] = $row[$field_count];
-				p("Setting ".$field."=".$row[$field_count]);
-			}
-			
+			$rows1[] = $datarows[$j];
 		}
+		$res = InsertImportRecords($datarows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$START,$RECORDCOUNT,$_REQUEST['module'],$totalnoofrows);
 
-	}
+if($START != 0)
+	echo '<b>'.$res.'</b>';
 
-	p("setting done");
-	
-
-	// id cannot be imported - GS
-	/*
-	// if the id was specified	
-	if ( isset( $focus->id ) )
+		$count = $_REQUEST['count'];
+}
+else
+{
+	if($START == 0)
 	{
-		p("id is set");
-		
-		// check if it already exists
-		$check_bean = new $current_bean_type();
-
-		$query = "select * from {$check_bean->table_name} WHERE id='{$focus->id}'";
-
-                $log->info($query);
-
-                $result = $adb->query($query)
-                       or die("Error selecting sugarbean: ".mysql_error());
-
-		$row = $check_bean->db->fetchByAssoc($result);
-
-		if (isset($row['id']) && $row['id'] != -1)
-		{
-			// if it exists but was deleted, just remove it
-			if ( isset($row['deleted']) && $row['deleted'] == 1)
-			{
-				$query2 = "delete from {$check_bean->table_name} WHERE id='{$focus->id}'";
-
-                		$log->info($query2);
-
-                		$result2 = $adb->query($query2)
-                       			or die("Error deleting existing sugarbean: ".mysql_error());
-			
-			}
-			else
-			{
-				$id_exists_count++;
-				$do_save = 0;
-			}
-		}
-
-		// check if the id is too long
-		else if ( strlen($focus->id) > 36)
-		{
-			$broken_ids++;
-			$do_save = 0;
-		}
-
-		if ($do_save != 0)
-		{
-			// set the flag to force an insert
-			$focus->new_with_id = true;
-		}
+		$res = InsertImportRecords($datarows,$datarows,$focus,$ret_field_count,$col_pos_to_field,$START,$totalnoofrows,$_REQUEST['module'],$totalnoofrows);
 	}
-	*/
-
-	p("do save before req fields=".$do_save);
-
-	$adb->println($focus->required_fields);
-
-	foreach ($focus->required_fields as $field=>$notused) 
-	{ 
-		$fv = $focus->column_fields[$field];
-		if (! isset($fv) || $fv == '') 
-		{
-		       p("fv ".$field." not set");	
-			$do_save = 0; 
-			$skip_required_count++; 
-			break; 
-		} 
-	}
-
-	p("do save=".$do_save);
-
-	if ($do_save)
-	{
-		p("saving..");
-
-	
-		if ( ! isset($focus->column_fields["assigned_user_id"]) || $focus->column_fields["assigned_user_id"]=='')
-		{
-			$focus->column_fields["assigned_user_id"] = $current_user->id;
-		}	
-		/*
-		if ( ! isset($focus->modified_user_id) || $focus->modified_user_id=='')
-		{
-			$focus->modified_user_id = $current_user->id;
-		}*/	
-
-		// now do any special processing
-		$focus->process_special_fields(); 
-
-		$focus->save($module);
-		//$focus->saveentity($module);
-		$return_id = $focus->id;
-
-		if(count($resCustFldArray)>0)
-		{
-
-	if($_REQUEST['module'] == 'Contacts')
-	{
-		$_REQUEST['module']='contactdetails';
-	}
-			$dbquery="select * from field where tablename='".$_REQUEST['module']."'";
-			$custresult = $adb->query($dbquery);
-			if($adb->num_rows($custresult) != 0)
-			{
-				if (! isset( $_REQUEST['module'] ) || $_REQUEST['module'] == 'Contacts')
-				{
-					$columns = 'contactid';
-					$custTabName = 'contactscf';
-				}
-				else if ( $_REQUEST['module'] == 'Accounts')
-				{
-					$columns = 'accountid';
-					$custTabName = 'accountscf';	
-				}
-				else if ( $_REQUEST['module'] == 'Potentials')
-				{
-					$columns = 'potentialid';
-					$custTabName = 'potentialscf';
-				}
-
-				$noofrows = $adb->num_rows($custresult);
-				$values='"'.$focus->id.'"';
-				for($j=0; $j<$noofrows; $j++)
-				{
-					$colName=$adb->query_result($custresult,$j,"columnname");
-					if(array_key_exists($colName, $resCustFldArray))
-					{
-						$value_colName = $resCustFldArray[$colName];
-
-						$columns .= ', '.$colName;
-						$values .= ', "'.$value_colName.'"';
-					}
-				}
-				
-				$insert_custfld_query = 'insert into '.$custTabName.' ('.$columns.') values('.$values.')';
-				$adb->query($insert_custfld_query);
-
-			}
-		}	
-		
-		$last_import = new UsersLastImport();		
-		$last_import->assigned_user_id = $current_user->id;
-		$last_import->bean_type = $_REQUEST['module'];
-		$last_import->bean_id = $focus->id;
-		$last_import->save();
-		array_push($saved_ids,$focus->id);
-		$count++;
-	}
-	
-
+	exit;
 }
 
 // SAVE MAPPING IF REQUESTED
