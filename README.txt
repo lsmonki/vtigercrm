@@ -1,3 +1,33 @@
+vtiger CRM 4.2 Alpha
+May 31, 2005
+
+We are pleased to announce the latest version of vtiger CRM. This release includes many new features and few bug fixes!
+
+******************************************************************************************
+Note: vtiger CRM 4.2 Alpha is only for testing and can not be used for production purpose.
+
+Please post Bugs at the following URL:
+
+vtiger Discussions: http://www.vtiger.com/discussions/viewforum.php?f=12
+
+******************************************************************************************
+
+New Features
+
+1. Quotes module
+2. Order Management module (Purchase Orders & Sales Orders)
+3. Invoices module
+4. Price Books 
+5. Vendor/Suppliers Management
+6. Customizable Reports
+7. Customizable List Views
+8. Customer Self-service Portal
+9. RSS module
+10. Event Reminders
+11. Configurable Email Notifications
+12. Incoming Email Support
+
+--------------------
 vtiger CRM 4.0.1
 April 29, 2005
 

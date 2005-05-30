@@ -1,23 +1,25 @@
 
 This software is a collective work consisting of the following major Open Source components: 
-Apache software, MySQL server, PHP, SugarCRM, phpBB, TUTOS, phpSysinfo, and PHPMailer each licensed under a separate Open Source License. 
+Apache software, MySQL server, PHP, SugarCRM, phpBB, TUTOS, phpSysinfo, PHPMailer, and lastRSS each licensed under a separate Open Source License. 
 vtiger.com is not affiliated with nor endorsed by any of the above providers.                    
 
 
 For Linux
 
-1. Apache web server software, under the Apache License available at <vtiger CRM Home>/vtigerCRM_linux/apache/LICENSE.txt
-2. MySQL database software, used under the GPL License available at <vtiger CRM Home>/vtigerCRM_linux/mysql/README.txt 
-3. PHP software, under the PHP License, version 3.0 available at <vtiger CRM Home>/vtigerCRM_linux/php/license.txt  
-4. SugarCRM software used under the SugarCRM Public License SPL 1.1.2 available at <vtiger CRM Home>/vtigerCRM/LICENSE_linux.txt
+1. Apache web server software used under the Apache License available at <vtiger CRM Home>/vtigerCRM_linux/apache/LICENSE.txt
+2. MySQL database software used under the GPL available at <vtiger CRM Home>/vtigerCRM_linux/mysql/README.txt 
+3. PHP software used under the PHP License version 3.0 available at <vtiger CRM Home>/vtigerCRM_linux/php/license.txt  
+4. SugarCRM software used under the SugarCRM Public License (SPL 1.1.2) available at <vtiger CRM Home>/vtigerCRM/LICENSE_linux.txt
 5. gd 2.0.28 software used "AS IS" available at <vtiger CRM Home>/vtigerCRM_linux/gd-2.0.28/
-6. GNU LGPL License for usage of nusoap downloaded from http://sourceforge.net/projects/nusoap
-7. GNU GPL License for usage of phpBB software downloaded from http://www.phpbb.com/support/license.php
-8. GNU GPL License for usage of TUTOS software downloaded from http://www.tutos.org/html/copyright.html available at <vtiger CRM Home>/vtigerCRM/modules/Calendar/TUTOS_Copyright.pdf
-9. PHPMailer software used under the LGPL available at <vtiger CRM Home>/vtigerCRM/modules/Emails/PHPMailer_LICENSE.txt
+6. nusoap software used under GNU LGPL from http://sourceforge.net/projects/nusoap
+7. phpBB software used under GNU GPL downloaded from http://www.phpbb.com/support/license.php
+8. TUTOS software used under GNU GPL downloaded from http://www.tutos.org/html/copyright.html available at <vtiger CRM Home>/vtigerCRM/modules/Calendar/TUTOS_Copyright.pdf
+9. PHPMailer software used under the GNU LGPL available at <vtiger CRM Home>/vtigerCRM/modules/Emails/PHPMailer_LICENSE.txt
 10. ADOdb software used under BSD license available at <vtiger CRM Home>/vtigerCRM/adodb/license.txt
-11. phpSysinfo software used GPL license available at <vtiger CRM Home>/vtigerCRM/modules/System/COPYING
-12. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
+11. phpSysinfo software used under GNU GPL available at <vtiger CRM Home>/vtigerCRM/modules/System/COPYING
+12. lastRSS software used under GNU GPL downloaded from http://lastrss.webdot.cz/  
+13. FCKeditor software used under LGPL downloaded from http://www.fckeditor.net/download/default.html available at <vtiger CRM Home>/vtigerCRM/includes/FCKeditor/license.txt  
+14. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
 The licenses of the Open Source components are reproduced in full below.
 
 				Apache License
@@ -1191,6 +1193,7 @@ thus forming a work based on the Library, and copy and distribute such
 modifications or work under the terms of Section 1 above, provided that you
 also meet all of these conditions:
 
+
     a) The modified work must itself be a software library.
 
     b) You must cause the files modified to carry prominent notices stating
@@ -1499,8 +1502,18 @@ necessary. Here is a sample; alter the names:
 
 That's all there is to it!
 
-We have used the ExcelReader package to read the xls files. We have taken the
-utility from the following site : http://freshmeat.net/projects/phpexcelreader/ 
-The product is available as GNU General Public License (GPL).
-We are grateful to the creator of the product for providing such a beautiful
-utility!
+Acknowledgements:
+
+We have used the following software:
+
+1. ExcelReader package to read the xls files. We have taken the utility from the following Web site : 
+ http://freshmeat.net/projects/phpexcelreader/
+ The product is available as GNU General Public License (GPL).
+
+2. E-mail Client to handle attachments with PHP. We have taken the ideas from the article by Kevin Steffer available at the following Web site:
+http://www.linuxscope.net/articles/mailAttachmentsPHP.html
+
+3. FPDF package to create PDF reports and documents. We have taken the utility from the following Web site: 
+http://www.fpdf.org/
+
+We are grateful to the creators of the respective products for providing such a beautiful utilities.
