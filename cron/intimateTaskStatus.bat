@@ -1,2 +1,3 @@
 @echo off
-..\..\..\..\php\php.exe ..\intimateTaskStatus.php
+cd ..\
+..\..\..\php\php.exe intimateTaskStatus.php
