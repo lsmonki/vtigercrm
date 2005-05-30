@@ -185,6 +185,8 @@ global $current_user;
 $lbl_required_symbol = $app_strings['LBL_REQUIRED_SYMBOL'];
 $lbl_quote_subject = $mod_strings['Subject'];
 $lbl_quote_name = $mod_strings['Quote Name'];
+$lbl_vendor_name = $mod_strings['Vendor Name'];
+$lbl_acct_name = $mod_strings['Account Name'];
 $lbl_po_name = $mod_strings['Purchase Order'];
 $lbl_prod_name = $mod_strings['Product Name'];
 $lbl_type = $mod_strings['Type'];
@@ -202,12 +204,10 @@ $the_form .= <<<EOQ
 			<input type="hidden" name="action" value="Save">
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_quote_subject<br>
 		<input name='subject' type="text" value=""><br>
-		$lbl_quote_name<br>
-		<input name="quote_name" readonly type="text"><input name="quote_id" type="hidden">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");'><br>
-		$lbl_type<br>
-		<input name='type' type="text" value=""><br>
-                $lbl_prod_name<br>
-		<input name="product_id" type="hidden"><input name="product_name" readonly type="text"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");'><br><br>
+		$lbl_vendor_name<br>
+		<input name="vendor_name" readonly type="text"><input name="vendor_id" type="hidden">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=VendorPopup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");'><br>
+                $lbl_acct_name<br>
+		<input name="account_id" type="hidden"><input name="account_name" readonly type="text"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");'><br><br>
 		
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >
 		</form>
@@ -223,12 +223,10 @@ $the_form .= <<<EOQ
 			<input type="hidden" name="action" value="SaveSalesOrder">
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_quote_subject<br>
 		<input name='subject' type="text" value=""><br>
-		$lbl_po_name<br>
-		<input name="purchaseorder_name" readonly type="text"><input name="purchaseorder_id" type="hidden">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Orders&action=Popup&html=Popup_picker&popuptype=formname_specific&form=EditView1","test","width=600,height=400,resizable=1,scrollbars=1");'><br>
-		$lbl_type<br>
-		<input name='type' type="text" value=""><br>
-                $lbl_prod_name<br>
-		<input name="product_id" type="hidden"><input name="product_name" readonly type="text"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=EditView1&popuptype=formname_specific","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");'><br><br>
+		$lbl_quote_name<br>
+		<input name="quote_name" readonly type="text"><input name="quote_id" type="hidden">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=formname_specific&form=EditView1","test","width=600,height=400,resizable=1,scrollbars=1");'><br>
+                $lbl_acct_name<br>
+		<input name="account_id" type="hidden"><input name="account_name" readonly type="text"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&html=Popup_picker&form=EditView1&popuptype=formname_specific","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");'><br><br>
 		
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >
 		</form>
