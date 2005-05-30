@@ -4627,12 +4627,13 @@
 
 	<table name="reportmodules">
 		<field name="reportmodulesid" type="I" size="19">
+			<KEY/>
 		</field>
 		<field name="primarymodule" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="secondarymodule" type="C" size="250">
+		<field name="secondarymodules" type="C" size="250">
 			<DEFAULT value=""/>
 		</field>
 		<index name="reportmodules_IDX0">
