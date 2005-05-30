@@ -711,6 +711,49 @@ A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000
 	color: #CCC;
 }
 
+/* Reports Related */
+.rptTable {
+	border-left: 1px solid #E7E7CF;
+}
+.rptTitle, .rptHead, .rptData, .rptGrpHead, .rptGrp1Total, .rptGrp2Total, .rptTotal {
+	font-family: Verdana, Arial, Helvetica, Sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	height: 20px;
+	padding: 4px;
+	border-right: 1px solid #E7E7CF;
+	border-bottom: 1px solid #E7E7CF;
+	background: #E7E7CF;
+}
+.rptTitle {
+	border-right: 1px solid #333;
+	border-bottom: 1px solid #333;
+	background: #066;
+	color: #FFF;
+}
+.rptGrpHead {
+	background: #FFF;
+	border-bottom: 1px solid #FFF;
+	font-weight: normal;
+}
+.rptData {
+	background: #FFF;
+	font-weight: normal;
+}
+.rptGrp1Total {
+	background: #E3F4F4;
+}
+.rptGrp2Total {
+	background: #F1FBEC;
+}
+.rptTotal {
+	background: #FFF7DD;
+}
+.rptEmptyGrp {
+	background: #FFF;
+	border-right: 1px solid #E7E7CF;
+}
+
 /*
 
   The original advSilver Theme for phpBB version 2+
