@@ -50,6 +50,14 @@ function renderRelatedAttachments($query,$id)
         echo '</form>';
 }
 
+function Get_Ticket_History()
+{
+        global $app_strings;
+        echo '<br><br>';
+        echo get_form_header($app_strings['LBL_HISTORY'],"", false);
+        include("modules/HelpDesk/TicketHistory.php");
+}
+
 echo get_form_footer();
 
 ?>
