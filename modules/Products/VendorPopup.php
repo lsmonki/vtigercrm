@@ -31,7 +31,7 @@ $popuptype = $_REQUEST["popuptype"];
 if($popuptype!='') $url_string .= "&popuptype=".$popuptype;
 
 require_once($theme_path.'layout_utils.php');
-echo get_module_title("Vendor", $mod_strings['LBL_MODULE_NAME'].": Home" , true);
+echo get_module_title("Vendor", "Vendor" , true);
 echo "<br>";
 //echo get_form_header("Product Search", "", false);
 
