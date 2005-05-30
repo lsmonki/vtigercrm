@@ -945,7 +945,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 19)
 	{
 		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
-        	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" cols="118" rows="30">'.$value.'</textarea></td>';
+        	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" cols="80" rows="15">'.$value.'</textarea></td>';
 	}
 	elseif($uitype == 21)
 	{
@@ -2154,7 +2154,7 @@ function getURLstring($focus)
 	return $qry;
 
 }
-function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv)
+function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='')
 {
 	global $adb;
 	global $theme;
@@ -2204,7 +2204,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                         {
                                 $fieldname = $focus->list_fields_name[$name];
                         }
-                }
+                }else
+		{
+			$fieldname = $focus->list_fields_name[$name];
+		}
 
 		//Getting the Entries from Profile2 field table
 		$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
@@ -2239,16 +2242,35 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                                         	}
 						if($relatedlist !='')
                                                 {
-                                                        $name = $mod_strings[$name];
+                                                        if($oCv)
+							{
+								$name = $mod_strings[$name];
+							}else
+							{
+								$name = $app_strings[$name];
+							}
                                                 }
                                                 else
                                                 {
-                                        		$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$mod_strings[$name]."&nbsp;".$arrow."</a>";
-                                        		$arrow = '';
+							if($oCv)
+							{
+                                        			$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$mod_strings[$name]."&nbsp;".$arrow."</a>";
+                                        			$arrow = '';
+							}else
+							{
+								$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$app_strings[$name]."&nbsp;".$arrow."</a>";
+                                        			$arrow = '';
+							}
 						}
 					}
 					else
-						$name = $mod_strings[$name];
+						if($oCv)
+						{
+							$name = $mod_strings[$name];
+						}else
+						{
+							$name = $app_strings[$name];
+						}
 				}
 			}
 			//Added condition to hide the close column in Related Lists
