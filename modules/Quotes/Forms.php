@@ -23,6 +23,8 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  */
+require_once('include/ComboUtil.php');
+require_once('include/utils.php');
 function get_validate_record_js () {
 global $mod_strings;
 global $app_strings;
@@ -185,14 +187,16 @@ global $current_user;
 $lbl_required_symbol = $app_strings['LBL_REQUIRED_SYMBOL'];
 $lbl_quote_subject = $mod_strings['Subject'];
 $lbl_pot_name = $mod_strings['Potential Name'];
-$lbl_prod_name = $mod_strings['Product Name'];
+$lbl_acct_name = $mod_strings['Account Name'];
 $lbl_quote_stage = $mod_strings['Quote Stage'];
 $lbl_save_button_title = $app_strings['LBL_SAVE_BUTTON_TITLE'];
 $lbl_save_button_key = $app_strings['LBL_SAVE_BUTTON_KEY'];
 $lbl_save_button_label = $app_strings['LBL_SAVE_BUTTON_LABEL'];
 $lbl_change_button_label = $app_strings['LBL_CHANGE_BUTTON_LABEL'];
 $user_id = $current_user->id;
-
+$comboFieldNames = Array('quotestage'=>'quotestage_dom'
+                         );
+$comboFieldArray = getComboArray($comboFieldNames);
 $the_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 $the_form .= <<<EOQ
 		<form name="EditView" onSubmit="return verify_data(EditView)" method="POST" action="index.php">
@@ -204,9 +208,14 @@ $the_form .= <<<EOQ
 		$lbl_pot_name<br>
 		<input name="potential_name" readonly type="text"><input name="potential_id" type="hidden">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");'><br>
 		$lbl_quote_stage<br>
-		<input name='quotestage' type="text" value=""><br>
-                $lbl_prod_name<br>
-		<input name="product_id" type="hidden"><input name="product_name" readonly type="text"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");'><br><br>
+		<select name='quotestage'>
+EOQ;
+
+$the_form .= get_select_options_with_id($comboFieldArray['quotestage_dom'], "");
+$the_form .= <<<EOQ
+                </select><br>
+                $lbl_acct_name<br>
+		<input name="account_id" type="hidden"><input name="account_name" readonly type="text"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");'><br><br>
 		
 		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >
 		</form>
