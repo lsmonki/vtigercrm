@@ -53,12 +53,12 @@ foreach($focus->column_fields as $fieldname => $val)
 		
 }
 
-
 $focus->save("Quotes");
-if($focus->mode == 'Edit')
+if($focus->mode == 'edit')
 {
 	$query1 = "delete from quotesproductrel where quoteid=".$focus->id;
-	$adb->query($query);
+	//echo $query1;
+	$adb->query($query1);
 
 }
 //Printing the total Number of rows
@@ -78,6 +78,7 @@ for($i=1; $i<=$tot_no_prod; $i++)
 	{
 		
 		$query ="insert into quotesproductrel values(".$focus->id.",".$prod_id.",".$qty.",".$listprice.")";
+		//echo $query;
 		$adb->query($query);	 	
 	}	
 }

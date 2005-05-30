@@ -134,6 +134,65 @@
 
 <BR>
 
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+<tr><td>
+	{BLOCK4_HEADER}
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+      <td class="dataLabel" width="20%" height="28">Product: </td>
+	<td class="dataLabel" width="30%">
+	<div align="left">
+        <input name="txtProduct" type="text">
+	<input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="Select" name="button" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=inventory_prod","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");'>
+	</div>
+	</td>
+	<td class="dataLabel" width="20%">
+        Product Qty: 
+	</td>
+	<td class="dataLabel" width="30%">
+	<div align="left">
+        <input name="txtQty" type="text" value="1" size="5"> <input type="button" class="button" value="add" onClick="addRow()"> 
+        <input name="hdnUnitPrice" type="hidden" value="11.75"> <input name="hdnProductId" type="hidden"> 
+	</div>
+      </td>
+    </tr>
+  </table>
+  <div id="productList">
+   
+    <table width="100%" border="0" cellspacing="1" cellpadding="0">
+      <tr> 
+        <td width="20%" class="dataLabel"><b><div align="left">Product</div></b></td>
+        <td width="15%" class="dataLabel"><b><div align="left">Qty</b></div></td>
+        <td width="20%" class="dataLabel"><b>Unit Price</b></td>
+        <td width="20%" class="dataLabel"><b>List Price</b></td>
+        <td width="20%" class="dataLabel"><b>Total</b></td>
+        <td width="10" class="dataLabel"></td>
+      </tr>
+	{ASSOCIATEDPRODUCTS}
+    </table>  </div>
+  <table width="100%" border="0" cellspacing="2" cellpadding="2">
+    <tr> 
+      <td width="100%"><div align="right"><b>Sub Total:</b></div></td>
+	  <td id="subTotal" align="right" width="100" style="border:1px solid #000;">{GRANDTOTAL}</td>
+	  <td width="40">&nbsp;</td>
+    </tr>
+    <tr>
+      <td><div align="right"><b>Tax:</b></div></td>
+          <td align="right" width="100"><input type="text" id="txtTax" name="txtTax" value="{TAXVALUE}" onblur="calcGrandTotal()"></td>
+          <td width="40">&nbsp;</td>
+    </tr>
+    <tr>
+      <td><div align="right"><b>Grand Total:</b></div></td>
+          <td id="grandTotal" align="right" width="100" style="border:1px solid #000;">{SUBTOTAL}</td>
+          <td width="40">&nbsp;</td>
+    </tr>
+  </table>
+  <div id="strikeLines">{STRIKELINES}</div>
+<input type="hidden" name="hdnSubTotal" id="hdnSubTotal" value="{SUBTOTAL}">
+<input type="hidden" name="hdnGrandTotal" id="hdnGrandTotal" value="{GRANDTOTAL}">
+</td></tr></table>
+<br>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
 
 <tr><td>
@@ -147,52 +206,6 @@
 	</table>
 
 </td></tr></table>
-<br>
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr> 
-      <td>Product: 
-        <input name="txtProduct" type="text">
-	<input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="Select" name="button" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=inventory_prod","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");'>
-        Qty: 
-        <input name="txtQty" type="text" value="1" size="5"> <input type="button" value="add" onClick="addRow()"> 
-        <input name="hdnUnitPrice" type="hidden" value="11.75"> <input name="hdnProductId" type="hidden"> 
-      </td>
-    </tr>
-  </table>
-  <br>
-  <div id="productList">
-    <table width="100%" border="1" cellspacing="0" cellpadding="0">
-      <tr> 
-        <td width="20%">Product</td>
-        <td width="15%">Qty</td>
-        <td width="20%">Unit Price</td>
-        <td width="20%">List Price</td>
-        <td width="20%"><div align="center">Total</div></td>
-        <td width="10"></td>
-      </tr>
-	{ASSOCIATEDPRODUCTS}
-    </table>
-  </div>
-  <table width="100%" border="0" cellspacing="2" cellpadding="2">
-    <tr> 
-      <td width="100%"><div align="right">Sub Total:</div></td>
-	  <td id="subTotal" align="right" width="100" style="border:1px solid #000;">{GRANDTOTAL}</td>
-	  <td width="40">&nbsp;</td>
-    </tr>
-    <tr>
-      <td><div align="right">Tax:</div></td>
-          <td align="right" width="100"><input type="text" id="txtTax" name="txtTax" value="{TAXVALUE}" onblur="calcGrandTotal()"></td>
-          <td width="40">&nbsp;</td>
-    </tr>
-    <tr>
-      <td><div align="right">Grand Total:</div></td>
-          <td id="grandTotal" align="right" width="100" style="border:1px solid #000;">{SUBTOTAL}</td>
-          <td width="40">&nbsp;</td>
-    </tr>
-  </table>
-  <div id="strikeLines">{STRIKELINES}</div>
-<input type="hidden" name="hdnSubTotal" id="hdnSubTotal" value="{SUBTOTAL}">
-<input type="hidden" name="hdnGrandTotal" id="hdnGrandTotal" value="{GRANDTOTAL}">
 <br>
  <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
 
@@ -211,14 +224,20 @@
 <script type="text/javascript" language="JavaScript">
 var prodList=getObj("productList")
 var rowCnt={ROWCOUNT};
-var listTableStart="<table width='100%' border='1' cellspacing='0' cellpadding='0'>"
+var listTableStart="<table width='100%' border='0' cellspacing='1' cellpadding='0' class='formOuterBorder'>"
 
 function settotalnoofrows()
 {
 	document.EditView.totalProductCount.value = rowCnt;	
 }
 
-function addRow() {	
+function addRow() {
+	//Checking if the ProductId exists
+	if(document.EditView.hdnProductId.value == '')
+	{
+		alert("Select a Product and then Add");
+		return false;
+	}	
 	//adding new row
 	rowCnt++;
 
@@ -226,14 +245,14 @@ function addRow() {
 	var prodTotal=eval(getObj("txtQty").value*getObj("hdnUnitPrice").value).toString()
 	prodTotal=roundValue(prodTotal)	
 		
-	var newRow="<tr id=row"+rowCnt+"><td>"+getObj("txtProduct").value+"</td>"
-	newRow+="<td><input type=text id='txtQty"+rowCnt+"' name='txtQty"+rowCnt+"' size='5' value='"+getObj("txtQty").value+"' onBlur='calcTotal("+rowCnt+")'></td>"
-	newRow+="<td>"+getObj("hdnUnitPrice").value+"</td>"
+	var newRow="<tr id=row"+rowCnt+" class='evenListRow'><td align='left'>"+getObj("txtProduct").value+"</td>"
+	newRow+="<td align='left'><input type=text id='txtQty"+rowCnt+"' name='txtQty"+rowCnt+"' size='5' value='"+getObj("txtQty").value+"' onBlur='calcTotal("+rowCnt+")'></td>"
+	newRow+="<td class='dataLabel' align='left'>"+getObj("hdnUnitPrice").value+"</td>"
 
-	newRow+="<td><input type=text id='txtListPrice"+rowCnt+"' name='txtListPrice"+rowCnt+"' value='"+getObj("hdnUnitPrice").value+"' onBlur='calcTotal("+rowCnt+")'><input title='Change [Alt+G]' accessKey='G' type='button' class='button' value='Select' name='button' LANGUAGE=javascript onclick=\"return window.open('index.php?module=Products&action=PriceBookPopup&html=Popup_picker&form=EditView&popuptype=inventory_pb&fldname=txtListPrice"+rowCnt+"&productid="+getObj("hdnProductId").value+"','test','width=600,height=400,resizable=1,scrollbars=1,top=150,left=200');\"></td>"
+	newRow+="<td class='dataLabel'<input type=text id='txtListPrice"+rowCnt+"' name='txtListPrice"+rowCnt+"' size='12' value='"+getObj("hdnUnitPrice").value+"' onBlur='calcTotal("+rowCnt+")'><input title='Change [Alt+G]' accessKey='G' type='button' class='button' value='Select' name='button' LANGUAGE=javascript onclick=\"return window.open('index.php?module=Products&action=PriceBookPopup&html=Popup_picker&form=EditView&popuptype=inventory_pb&fldname=txtListPrice"+rowCnt+"&productid="+getObj("hdnProductId").value+"','test','width=600,height=400,resizable=1,scrollbars=1,top=150,left=200');\"></td>"
 
-	newRow+="<td><div id='total"+rowCnt+"' align='right'>"+prodTotal+"</div></td>"
-	newRow+="<td id='delCol"+rowCnt+"'><a href='javascript:delRow("+rowCnt+")'>Del</a>"
+	newRow+="<td class='dataLabel'><div id='total"+rowCnt+"' align='right'>"+prodTotal+"</div></td>"
+	newRow+="<td class='dataLabel' id='delCol"+rowCnt+"'><a href='javascript:delRow("+rowCnt+")'>Del</a>"
 	newRow+="<input type=hidden id='hdnProductId"+rowCnt+"' name='hdnProductId"+rowCnt+"' value='"+getObj("hdnProductId").value+"'>"
 	newRow+="<input type=hidden id='hdnRowStatus"+rowCnt+"' name='hdnRowStatus"+rowCnt+"'>"
 	newRow+="<input type=hidden id='hdnTotal"+rowCnt+"' name='hdnTotal"+rowCnt+"'>"
