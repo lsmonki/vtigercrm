@@ -4491,5 +4491,240 @@
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
+	
+	<table name="selectquery">
+                <field name="queryid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="startindex" type="I" size="19">
+                        <DEFAULT value="0"/>
+                </field>
+		<field name="numofobjects" type="I" size="19">
+                        <DEFAULT value="0"/>
+                </field>
+                <data>
+                </data>
+        </table>
+
+	<table name="selectcolumn">
+		<field name="queryid" type="I" size="19">
+		</field>
+		<field name="columnindex" type="I" size="11">
+		     <NOTNULL/>
+		     <DEFAULT value="0"/>
+		</field>
+		<field name="columnname" type="C" size="250">
+		      <DEFAULT value=""/>
+		</field>
+		<index name="selectcolumn_IDX0">
+			<col>queryid</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="selectcolumn" alter="true">
+		<constraint>ADD CONSTRAINT selectcolumn_FK1 FOREIGN KEY (QUERYID) REFERENCES selectquery (QUERYID) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="relcriteria">
+		<field name="queryid" type="I" size="19">
+		</field>
+		<field name="columnindex" type="I" size="11">
+			<NOTNULL/>
+		</field>
+		<field name="columnname" type="C" size="250">
+			<DEFAULT value=""/>
+		</field>
+		<field name="comparator" type="C" size="10">
+			<DEFAULT value=""/>
+		</field>
+		<field name="value" type="C" size="200">
+			<DEFAULT value=""/>
+		</field>
+		<index name="relcriteria_IDX0">
+			<col>queryid</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="relcriteria" alter="true">
+		<constraint>ADD CONSTRAINT relcriteria_FK1 FOREIGN KEY (QUERYID) REFERENCES selectquery (QUERYID) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="reportfolder">
+		<field name="folderid" type="I" size="19">
+			<KEY/>
+			<AUTOINCREMENT/>
+		</field>
+		<field name="foldername" type="C" size="100">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="description" type="C" size="250">
+			<DEFAULT value=""/>
+		</field>
+		<field name="state" type="C" size="50">
+			<DEFAULT value="SAVED"/>
+		</field>
+		<data></data>
+	</table>
+
+	<table name="report">
+		<field name="reportid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="folderid" type="I" size="19">
+			<NOTNULL/>
+		</field>
+		<field name="reportname" type="C" size="100">
+			<DEFAULT value=""/>
+		</field>
+		<field name="description" type="C" size="250">
+			<DEFAULT value=""/>
+		</field>
+		<field name="reporttype" type="C" size="50">
+			<DEFAULT value=""/>
+		</field>
+		<field name="queryid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="state" type="C" size="50">
+			<DEFAULT value="SAVED"/>
+		</field>
+		<field name="customizable" type="I" size="1">
+			<DEFAULT value="1"/>
+		</field>
+		<field name="category" type="I" size="11">
+			<DEFAULT value="1"/>
+		</field>
+		<index name="report_IDX0">
+			<col>queryid</col>
+		</index>
+		<index name="report_IDX1">
+			<col>folderid</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="report" alter="true">
+		<constraint>ADD CONSTRAINT report_FK1 FOREIGN KEY (QUERYID) REFERENCES selectquery (QUERYID) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+	<table name="report" alter="true">
+		<constraint>ADD CONSTRAINT report_FK2 FOREIGN KEY (FOLDERID) REFERENCES reportfolder (FOLDERID) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="reportmodules">
+		<field name="reportmodulesid" type="I" size="19">
+		</field>
+		<field name="primarymodule" type="C" size="50">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="secondarymodule" type="C" size="250">
+			<DEFAULT value=""/>
+		</field>
+		<index name="reportmodules_IDX0">
+			<col>reportmodulesid</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+	<table name="reportmodules" alter="true">
+		<constraint>ADD CONSTRAINT reportmodules_FK1 FOREIGN KEY (REPORTMODULESID) REFERENCES report (REPORTID) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="reportsortcol">
+		<field name="sortcolid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="reportid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="columnname" type="C" size="250">
+			<DEFAULT value=""/>
+		</field>
+		<field name="sortorder" type="C" size="250">
+			<DEFAULT value="Asc"/>
+		</field>
+		<index name="reportsortcol_IDX0">
+			<col>reportid</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+	<table name="reportsortcol" alter="true">
+		<constraint>ADD CONSTRAINT reportsortcol_FK1 FOREIGN KEY (REPORTID) REFERENCES report (REPORTID) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+
+	<table name="reportdatefilter">
+		<field name="datefilterid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="datecolumnname" type="C" size="250">
+			<DEFAULT value=""/>
+		</field>
+		<field name="datefilter" type="C" size="250">
+			<DEFAULT value=""/>
+		</field>
+		<field name="startdate" type="D">
+			<DEFAULT value=""/>
+		</field>
+		<field name="enddate" type="D">
+			<DEFAULT value=""/>
+		</field>
+		<index name="reportdatefilter_IDX0">
+			<col>datefilterid</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+	<table name="reportdatefilter" alter="true">
+		<constraint>ADD CONSTRAINT reportdatefilter_FK1 FOREIGN KEY (DATEFILTERID) REFERENCES report (REPORTID) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+	
+	<table name="reportsummary">
+		<field name="reportsummaryid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="summarytype" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="columnname" type="C" size="250">
+			<DEFAULT value=""/>
+		</field>
+		<index name="reportsummary_IDX0">
+			<col>reportsummaryid</col>
+		</index>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
+	<table name="reportsummary" alter="true">
+		<constraint>ADD CONSTRAINT reportsummary_FK1 FOREIGN KEY (REPORTSUMMARYID) REFERENCES report (REPORTID) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data></data>
+	</table>
 
 </schema>
