@@ -23,7 +23,7 @@
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Invoice',
 'LBL_SO_MODULE_NAME'=>'Invoice',
-'LBL_RELATED_PRODUCTS'=>'Related Products:',
+'LBL_RELATED_PRODUCTS'=>'Line Items',
 'LBL_MODULE_TITLE'=>'Invoice: Home',
 'LBL_SEARCH_FORM_TITLE'=>'Invoice Search',
 'LBL_LIST_FORM_TITLE'=>'Invoice List',
