@@ -1,2 +1,3 @@
 @echo off
-..\..\..\..\..\php\php.exe ..\..\modules\Activities\SendReminder.php
+cd ..\..\
+..\..\..\php\php.exe modules\Activities\SendReminder.php
