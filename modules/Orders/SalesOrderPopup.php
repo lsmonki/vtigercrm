@@ -21,7 +21,9 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-
+echo get_module_title("Orders", "SalesOrder" , true);
+echo '<BR>';
+echo get_form_header("Sales Order List",'', false);
 $xtpl=new XTemplate ('modules/Orders/SalesOrderPopup.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
