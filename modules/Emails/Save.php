@@ -41,7 +41,6 @@ if(isset($_REQUEST['mode']))
 
 
 
-
 //check if the contact already exists by using the email address as criteria
 //if contact exists, then add the email to that contact
 if((isset($_REQUEST['sname']) && $_REQUEST['sname'] != null) && ((isset($_REQUEST['uname']) && $_REQUEST['uname'] != null)))
@@ -51,20 +50,13 @@ $UserName = $_REQUEST['uname'];
 $PassWord = $_REQUEST['passwd'];
 $mbox = imap_open($ServerName, $UserName,$PassWord) or die("Could not open Mailbox - try again later!");
 }
-if(isset($_REQUEST['deletebox']) && $_REQUEST['deletebox'] != null)
+if((isset($_REQUEST['deletebox']) && $_REQUEST['deletebox'] != null) && $_REQUEST['addbox'] == null)
 {
   imap_delete($mbox,$_REQUEST['deletebox']);
   imap_expunge($mbox);
+header("Location: index.php?module=Emails&action=index");
+exit();
 }
-if(isset($_REQUEST['addbox']) && $_REQUEST['addbox'] != null)
-{
-}
-else
-{
-	header("Location: index.php?module=Emails&action=index");
-	exit();
-}
-
 if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
 {
   $email=$_REQUEST['fromemail'];
