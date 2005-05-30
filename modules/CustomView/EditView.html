@@ -14,7 +14,7 @@
 <script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/calc.js"></script>
-<form enctype="multipart/form-data" name="CustomView" method="POST" action="index.php" onsubmit="return mandatoryCheck();">
+<form enctype="multipart/form-data" name="CustomView" method="POST" action="index.php" onsubmit="verify_data(CustomView); return mandatoryCheck();">
 <input type="hidden" name="module" value="CustomView">
 <input type="hidden" name="action" value="Save">
 <input type="hidden" name="cvmodule" value="{CVMODULE}">
@@ -138,6 +138,31 @@ function mandatoryCheck()
 	}
 
 	return false;
+}
+function trim(s) {
+	while (s.substring(0,1) == " ") {
+		s = s.substring(1, s.length);
+	}
+	while (s.substring(s.length-1, s.length) == ' ') {
+		s = s.substring(0,s.length-1);
+	}
+
+	return s;
+}
+
+function verify_data(form) {
+	var isError = false;
+	var errorMessage = "";
+	if (trim(form.viewName.value) == "") {
+		isError = true;
+		errorMessage += "\nView Name";
+	}
+	// Here we decide whether to submit the form.
+	if (isError == true) {
+		alert("Missing required fields:" + errorMessage);
+		return false;
+	}
+	//return true;
 }
 </script>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
