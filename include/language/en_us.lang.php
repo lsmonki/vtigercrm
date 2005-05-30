@@ -690,8 +690,10 @@ $app_list_strings = Array(
 				, 'Orders'=>'Orders'
 
 				, 'Invoice'=>'Invoice'
-			
+
 				, 'Rss'=>'RSS'
+				
+				, 'Reports'=>'Reports'
 				),
 
 
