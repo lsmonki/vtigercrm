@@ -619,15 +619,15 @@ and profile2field.profileid=".$profile_id." order by sequence";
 			{
 				document.NewReport.startdate.readOnly=true
 				document.NewReport.enddate.readOnly=true
-				getObj("startdateimg").style.visibility="hidden"
-				getObj("enddateimg").style.visibility="hidden"
+				getObj("jscal_trigger_date_start").style.visibility="hidden"
+				getObj("jscal_trigger_date_end").style.visibility="hidden"
 			}
 			else
 			{
 				document.NewReport.startdate.readOnly=false
 				document.NewReport.enddate.readOnly=false
-				getObj("startdateimg").style.visibility="visible"
-				getObj("enddateimg").style.visibility="visible"
+				getObj("jscal_trigger_date_start").style.visibility="visible"
+				getObj("jscal_trigger_date_end").style.visibility="visible"
 			}
 			if( type == "today" )
 			{
