@@ -439,17 +439,17 @@ function getPriceBookRelatedProducts($query,$focus)
 	$xtpl->assign("MOD", $mod_strings);
 	$xtpl->assign("APP", $app_strings);
 	$xtpl->assign("IMAGE_PATH",$image_path);
-
+	echo '<BR>';
 	$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="selectproduct" method="POST">
 	<tr>
 	<input name="action" type="hidden" value="AddProductsToPriceBook">
 	<input name="module" type="hidden" value="Products">
 	<input name="return_module" type="hidden" value="Products">
-	<input name="return_action" type="hidden" value="PriceBookDetailView">;
+	<input name="return_action" type="hidden" value="PriceBookDetailView">
 	<input name="pricebook_id" type="hidden" value="'.$_REQUEST["record"].'">';
 
-        $other_text .='<td><input title="Select Products" accessyKey="F" class="button" onclick="this.form.action.value=\'AddProductsToPriceBook\';this.form.module.value=\'Products\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'PriceBookDetailView\'" type="submit" name="button" value="'.$app_strings["LBL_SELECT_PRODUCT_BUTTON_LABEL"].'">&nbsp;</td>';
+        $other_text .='<td><input title="Select Products" accessyKey="F" class="button" onclick="this.form.action.value=\'AddProductsToPriceBook\';this.form.module.value=\'Products\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'PriceBookDetailView\'" type="submit" name="button" value="'.$app_strings["LBL_SELECT_PRODUCT_BUTTON_LABEL"].'"></td>';
 		$other_text .='</tr></table>';
 
 //Retreive the list from Database
@@ -462,7 +462,6 @@ $num_rows = $adb->num_rows($list_result);
 
 //Retreive the List View Table Header
 
-echo '<BR>';
 $list_header = '';
 $list_header .= '<tr class="moduleListTitle" height=20>';
 $list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
