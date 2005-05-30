@@ -251,6 +251,7 @@ $mod_strings = Array(
 //Added for Event Reminder 4.2 Alpha release
 'LBL_ACTIVITY_NOTIFICATION'=>'Event Reminder Notification',
 'LBL_ACTIVITY_REMINDER_DESCRIPTION'=>'Notify before an event to occur based on the reminder set',
+'LBL_MESSAGE'=>'Message',
 
 );
 
