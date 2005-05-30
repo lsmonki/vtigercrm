@@ -246,10 +246,10 @@ echo get_form_footer();
 
 }
 */
-
+$viewid =  $_REQUEST['viewname'];
 //<<<<cutomview>>>>>>>
-$oCustomView = new CustomView("Vendor");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
+/*$oCustomView = new CustomView("Vendor");
+//$customviewcombo_html = $oCustomView->getCustomViewCombo();
 if(isset($_REQUEST['viewname']))
 {
         $viewid =  $_REQUEST['viewname'];
@@ -263,7 +263,7 @@ if(isset($_REQUEST['viewname']) == false)
 	{
 		$viewid = $oCustomView->setdefaultviewid;
 	}
-}
+}*/
 //<<<<<customview>>>>>
 
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
@@ -278,10 +278,10 @@ $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
                                 <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
-                        <a href="index.php?module=Vendor&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+                        <!--<a href="index.php?module=Vendor&action=CustomView&record='.$viewid.'" class="link">Edit</a>
                         <span class="sep">|</span>
                         <span class="bodyText disabled">Delete</span><span class="sep">|</span>
-                        <a href="index.php?module=Vendor&action=CustomView" class="link">Create View</a>
+                        <a href="index.php?module=Vendor&action=CustomView" class="link">Create View</a>-->
                 </td>
         </tr>
         </table>';
@@ -290,16 +290,16 @@ $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
-if($viewid != "0")
+/*if($viewid != "0")
 {
 	$listquery = getListQuery("Vendor");
 	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Vendor");
 }else
 {
-	$list_query = getListQuery("Vendor");
-}
-//<<<<<<<<customview>>>>>>>>>
 
+}*/
+//<<<<<<<<customview>>>>>>>>>
+$list_query = getListQuery("Vendor");
 /*
 if(isset($where) && $where != '')
 {

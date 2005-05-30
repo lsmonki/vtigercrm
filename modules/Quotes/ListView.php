@@ -326,19 +326,18 @@ $ListView->processListView($seedAccount, "main", "ACCOUNT");
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Quotes");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']))
-{
-        $viewid =  $_REQUEST['viewname'];
-}else
-{
-	$viewid = "0";
-}
 if(isset($_REQUEST['viewname']) == false)
 {
 	if($oCustomView->setdefaultviewid != "")
 	{
 		$viewid = $oCustomView->setdefaultviewid;
+	}else
+	{
+		$viewid = "0";
 	}
+}else
+{
+	$viewid =  $_REQUEST['viewname'];
 }
 //<<<<<customview>>>>>
 
@@ -385,11 +384,11 @@ $xtpl->assign("IMAGE_PATH",$image_path);
 //<<<<<<<<<customview>>>>>>>>>
 if($viewid != "0")
 {
-	$listquery = getListQuery("Accounts");
-	$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Accounts");
+	$listquery = getListQuery("Quotes");
+	$query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Quotes");
 }else
 {
-	$query = getListQuery("Accounts");
+	$query = getListQuery("Quotes");
 }
 //<<<<<<<<customview>>>>>>>>>
 

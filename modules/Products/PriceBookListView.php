@@ -248,7 +248,7 @@ echo get_form_footer();
 */
 
 //<<<<cutomview>>>>>>>
-$oCustomView = new CustomView("PriceBook");
+/*$oCustomView = new CustomView("PriceBook");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
 if(isset($_REQUEST['viewname']))
 {
@@ -263,7 +263,7 @@ if(isset($_REQUEST['viewname']) == false)
 	{
 		$viewid = $oCustomView->setdefaultviewid;
 	}
-}
+}*/
 //<<<<<customview>>>>>
 
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
@@ -278,24 +278,25 @@ $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
                                 <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
-                        <a href="index.php?module=PriceBook&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+                        <!--<a href="index.php?module=PriceBook&action=CustomView&record='.$viewid.'" class="link">Edit</a>
                         <span class="sep">|</span>
                         <span class="bodyText disabled">Delete</span><span class="sep">|</span>
-                        <a href="index.php?module=PriceBook&action=CustomView" class="link">Create View</a>
+                        <a href="index.php?module=PriceBook&action=CustomView" class="link">Create View</a>-->
                 </td>
         </tr>
         </table>';
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
-if($viewid != "0")
+/*if($viewid != "0")
 {
 	$listquery = getListQuery("PriceBook");
 	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"PriceBook");
 }else
 {
 	$list_query = getListQuery("PriceBook");
-}
+}*/
+$list_query = getListQuery("PriceBook");
 //<<<<<<<<customview>>>>>>>>>
 
 /*

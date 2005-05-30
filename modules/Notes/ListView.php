@@ -51,19 +51,18 @@ global $focus_list;
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Notes");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']))
-{
-        $viewid =  $_REQUEST['viewname'];
-}else
-{
-	$viewid = "0";
-}
 if(isset($_REQUEST['viewname']) == false)
 {
 	if($oCustomView->setdefaultviewid != "")
 	{
 		$viewid = $oCustomView->setdefaultviewid;
+	}else
+	{
+		$viewid = "0";
 	}
+}else
+{
+	$viewid =  $_REQUEST['viewname'];
 }
 //<<<<<customview>>>>>
 

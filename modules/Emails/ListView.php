@@ -56,19 +56,18 @@ if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['curre
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Emails");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']))
-{
-        $viewid =  $_REQUEST['viewname'];
-}else
-{
-	$viewid = "0";
-}
 if(isset($_REQUEST['viewname']) == false)
 {
 	if($oCustomView->setdefaultviewid != "")
 	{
 		$viewid = $oCustomView->setdefaultviewid;
+	}else
+	{
+		$viewid = "0";
 	}
+}else
+{
+	$viewid =  $_REQUEST['viewname'];
 }
 //<<<<<customview>>>>>
 

@@ -195,19 +195,18 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Contacts");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']))
-{
-        $viewid =  $_REQUEST['viewname'];
-}else
-{
-	$viewid = "0";
-}
 if(isset($_REQUEST['viewname']) == false)
 {
 	if($oCustomView->setdefaultviewid != "")
 	{
 		$viewid = $oCustomView->setdefaultviewid;
+	}else
+	{
+		$viewid = "0";
 	}
+}else
+{
+	$viewid =  $_REQUEST['viewname'];
 }
 //<<<<<customview>>>>>
 
@@ -219,6 +218,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+	
+	$search_form->assign("VIEWID",$viewid);
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if($order_by != '') {
@@ -300,6 +301,7 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
+	<input name="viewname" type="hidden">
 	<input name="change_status" type="hidden">';
 
 if(isPermitted('Contacts',2,'') == 'yes')
