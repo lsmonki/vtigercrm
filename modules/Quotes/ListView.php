@@ -366,6 +366,7 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 		'.$cvHTML.'
 	</td>
 </tr>
+</form>
 </table>';
 
 
