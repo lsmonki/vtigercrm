@@ -17,6 +17,7 @@ global $app_strings;
 global $app_list_strings;
 global $mod_strings;
 global $current_user;
+global $adb;
 
 global $theme;
 $theme_path="themes/".$theme."/";
