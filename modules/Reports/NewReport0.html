@@ -1,0 +1,133 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<html>
+<head>
+    <script language="JavaScript" type="text/JavaScript">
+        function showRelatedModules(currmodule) 
+        {
+            for (i=0;i<getObj("primarymodule").length;i++) 
+            {
+                var moduleopt=getObj("primarymodule")[i].value
+                if (currmodule==i) 
+                    getObj(moduleopt+"relatedmodule").style.display="block"
+                else
+                    getObj(moduleopt+"relatedmodule").style.display="none"
+            }
+        }
+        
+        function selectAction( url )
+        {
+            document.NewReport.action = url;
+            document.NewReport.submit();
+        }
+    </script>
+</head>
+<body>
+<form name="NewReport" action="index.php">
+        
+        <input name="module" type="hidden" value="Reports">
+	<input type="hidden" name="record" value="{ID}">
+	<input type="hidden" name="mode" value="{MODE}">
+	<input type="hidden" name="action" value="SaveReport0">
+	<input type="hidden" name="return_module" value="{RETURN_MODULE}">
+	<input type="hidden" name="return_action" value="{RETURN_ACTION}">
+	
+ <table width="100%" cellspacing="0" cellpadding="0">
+    <tr> 
+        <td><table width="100%" cellspacing="0" cellpadding="2">
+        <tr> 
+            <td>Select a Module for which a new Report has to be created:</td>
+        </tr>        
+        <tr> 
+        <td><select name="primarymodule" id="primarymodule" class="select" onChange="showRelatedModules(this.selectedIndex)" style="width:150;">    
+{PRIMARYMODULE}
+        </select><br><br></td>
+    </tr>
+
+        <tr> 
+            <td>Select Related Module:</td>
+        </tr>
+        <tr> 
+        <td>
+                
+            <select id='Leadsrelatedmodule' name='Leadsrelatedmodule[]' class="select" style="width:150;">
+
+                <option value="">--None--</option>
+
+                <option value="Converted Leads">Converted Leads</option>                
+
+            </select>
+                
+            <select id='Accountsrelatedmodule' name='Accountsrelatedmodule[]' class="select" style="width:150;">
+
+                <option value="">--None--</option>
+
+                <option value="Potentials">Potentials</option>                
+
+                <option value="Contacts">Contacts</option>                
+
+            </select>
+                
+            <select id='Contactsrelatedmodule' name='Contactsrelatedmodule[]' class="select" style="width:150;">
+
+                <option value="">--None--</option>
+
+                <option value="Accounts">Accounts</option>                
+
+                <option value="Potentials">Potentials</option>                
+
+            </select>
+                
+            <select id='Potentialsrelatedmodule' name='Potentialsrelatedmodule[]' class="select" style="width:150;">
+
+                <option value="">--None--</option>
+
+		<option value="Accounts">Accounts</option>                
+
+                <option value="Contacts">Contacts</option>                
+
+                <option value="Leads">Leads</option>                
+
+            </select>
+    		<!--<span class="dim">[Use Ctrl or Shift key to select multiple]</span>-->
+        </td>
+        </tr>        
+        <tr> 
+          <td><br><input name="nextBtn" class="button" type="submit" value="Continue" onClick="">&nbsp;
+          <input name="cancel" class="button" type="button" value="Cancel" onClick="document.location.href='?module=Reports&action=index'"></td>
+
+        </tr>
+    </table></td>
+    </tr>
+    <script>
+        showRelatedModules( document.NewReport.primarymodule.selectedIndex );
+    </script>
+</table>
+<br>
+  <table width="100%" border="0" cellspacing="0" cellpadding="2">
+    <tr>
+	  <td class="uline"><img src="{IMAGE_PATH}/note.gif" align="absmiddle">&nbsp;<strong>Note:</strong></td>
+
+    </tr>
+	 <tr>
+	  <td>
+	  	<ul>
+	  		<li>Report Module and related module once selected cannot be modified later.</li>
+		</ul>
+	  </td>
+    </tr>
+
+  </table>
+</form>
+</body>
+</html>
+<!-- END: main -->

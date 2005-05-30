@@ -1,0 +1,47 @@
+<?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+?>
+<html>
+<head>
+<title></title>
+<!--meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
+</head>
+<body>
+<table width="100%" cellspacing="0" cellpadding="0">
+    <tr> 
+    <td>
+        <br>
+         <table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+            <tr>
+        	<td class="uline"><strong>Standard Filters:</strong></td>
+            </tr>
+            <tr><td>
+                <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+		<?php include("modules/Reports/StandardFilter.php"); ?>
+            </td></tr>
+        </table>
+          <br>
+        <table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+            <tr>
+        	<td class="uline"><strong>Advanced Filters:</strong></td>
+            </tr>
+            <tr><td>
+                <br>
+               	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+		<?php include("modules/Reports/AdvancedFilter.php");?>
+            </tr></td>
+          </table>
+        <br>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
