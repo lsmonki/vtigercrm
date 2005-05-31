@@ -298,13 +298,13 @@ if (isset($d) && $d){
 	    
 	    <input id="btnExport" name="btnExport" value="Export To PDF" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=CreatePDF&record=<?php echo $reportid; ?>')" title="Export To PDF">
 
-            <input value="Save As" class="button" type="button" onClick="saveAs( this, '/crm/SaveReport.do?dlgType=saveAs', 'SaveReport' )" title="Save As">
-            
+            <!--<input value="Save As" class="button" type="button" onClick="saveAs( this, '/crm/SaveReport.do?dlgType=saveAs', 'SaveReport' )" title="Save As">-->
+
             <input value="Customize" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=NewReport1&record=<?php echo $reportid; ?>' )" title="Customize">
 
 	    <input value="Reload" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=SaveAndRun&record=<?php echo $reportid; ?>')" title="Reload">
 
-	    <input value="Hide Details" class="button" type="button" onClick="showOrHideDetails( 'false' )" />
+	    <!--<input value="Hide Details" class="button" type="button" onClick="showOrHideDetails( 'false' )" />-->
 
 <!--             <input value="Create Chart" class="button" type="button" onClick="goToURL( '/crm/CustomReport.do?actionItem=addChart&reportId=30000000005463' )" />-->
             
