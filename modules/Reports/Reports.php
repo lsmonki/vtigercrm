@@ -30,7 +30,7 @@ $adv_filter_options = array("e"=>"equals",
 			    "m"=>"less or equal",
 			    "h"=>"greater or equal");
 
-$report_modules = Array('Leads','Accounts','Contacts','Potentials','Products','Notes','Emails','HelpDesk','Quotes','Orders','Invoice','Activities');
+$report_modules = Array('Leads','Accounts','Contacts','Potentials','Products','HelpDesk','Quotes','Orders','Invoice','Activities');
 
 foreach($report_modules as $values)
 {

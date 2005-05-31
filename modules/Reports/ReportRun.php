@@ -582,11 +582,11 @@ class ReportRun extends CRMEntity
 		}
 		if($module == "Orders")
 		{
-			$query = "from purchaseorder inner join crmentity as crmentityOrders on crmentityOrders.crmid=purchaseorder.purchaseorderid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid  inner join poproductrel on purchaseorder.purchaseorderid=poproductrel.purchaseorderid where crmentityOrders.deleted=0";
+			$query = "from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid where crmentity.deleted=0";
 		}
 		if($module == "Invoice")
 		{
-			$query = "from invoice inner join crmentity as crmentityInvoice on crmentityInvoice.crmid=invoice.invoiceid inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid  inner join invoiceproductrel on invoice.invoiceid=invoiceproductrel.invoiceid where crmentityInvoice.deleted=0";
+			$query = "from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid  where crmentity.deleted=0";
 		}
 		global $others_permission_id;
 		global $current_user;
