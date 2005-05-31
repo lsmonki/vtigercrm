@@ -360,7 +360,7 @@ if($currentModule == "Rss")
         require_once("modules/".$currentModule."/Forms.php");
         if (function_exists('get_rssfeeds_form'))
         {
-		$xtpl->assign("RSSFEEDS_TITLE","<div style='float:left'>".$app_strings['LBL_RSS_FEEDS'].":</div><div style='float:right;'><a href='javascript:openPopUp(\"addRssFeedIns\",this,\"index.php?action=Popup&module=Rss\",\"addRssFeedWin\",350,150,\"menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes\");' title='".$app_strings['LBL_ADD_RSS_FEEDS']."'><img src='".$image_path."/addrss.gif' border=0 align=absmiddle></a>&nbsp;</div>");
+		$xtpl->assign("RSSFEEDS_TITLE","<div style='float:left'>".$app_strings['LBL_RSS_FEEDS'].":</div><div style='float:right;'><a href='javascript:openPopUp(\"addRssFeedIns\",this,\"index.php?action=Popup&module=Rss\",\"addRssFeedWin\",350,150,\"menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes\");' title='".$app_strings['LBL_ADD_RSS_FEEDS']."'>Add<img src='".$image_path."/addrss.gif' border=0 align=absmiddle></a>&nbsp;</div>");
 		$xtpl->assign("RSSFEEDS", get_rssfeeds_form());
                 $xtpl->parse("main.left_form_rss");
         }
