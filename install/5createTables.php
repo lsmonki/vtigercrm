@@ -365,7 +365,7 @@ create_custom_field_tables();
 //Report Foldername,Report Description//
 require_once('modules/Reports/PopulateReports.php');
 
-$rptfolder = Array(Array('Accounts and Contact Reports'=>'Accounts and Contact Reports'),
+$rptfolder = Array(Array('Account Reports'=>'Account Reports'),
                    Array('Potential Reports'=>'Potential Reports'),
 		   Array('Lead Reports'=>'Lead Reports')
                   );
