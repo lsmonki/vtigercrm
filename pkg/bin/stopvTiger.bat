@@ -32,13 +32,13 @@ goto StopMySQL
 cd /d %apache_dir%
 rem shut down apache
 echo ""
-echo "stopping vtigercrm4_0_1 apache service"
+echo "stopping vtigercrm4_2alpha apache service"
 echo ""
-bin\apache -n vtigercrm4_0_1 -k stop
+bin\apache -n vtigercrm4_2alpha -k stop
 echo ""
-echo "uninstalling vtigercrm4_0_1 apache service"
+echo "uninstalling vtigercrm4_2alpha apache service"
 echo ""
-bin\apache -k uninstall -n vtigercrm4_0_1
+bin\apache -k uninstall -n vtigercrm4_2alpha
 rem .\bin\ShutdownApache.exe logs\httpd.pid
 goto StopMySQL
 
