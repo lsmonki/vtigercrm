@@ -46,7 +46,7 @@ session_start();
 
 // Sugar Sales version number; do not edit!
 
-$vtiger_version = "4.0.1";
+$vtiger_version = "4.2 Alpha";
 
 
 
