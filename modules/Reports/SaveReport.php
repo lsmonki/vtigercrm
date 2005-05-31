@@ -27,6 +27,7 @@ global $focus_list;
 $save_report_form=new XTemplate ("modules/Reports/SaveReport.html");
 $save_report_form->assign("MOD", $mod_strings);
 $save_report_form->assign("APP", $app_strings);
+$save_report_form->assign("THEME_PATH",$theme);
 $oReport = new Reports();
 $reportfolderhtml = $oReport->sgetRptFldrSaveReport();
 $save_report_form->assign("REPORT_FOLDER", $reportfolderhtml);

@@ -48,35 +48,54 @@ function getOpenerObj(n) {
         
         window.self.close();
         return false;
-    }    
+    }   
+ function trim(s) {
+        while (s.substring(0,1) == " ") {
+                s = s.substring(1, s.length);
+        }
+        while (s.substring(s.length-1, s.length) == ' ') {
+                s = s.substring(0,s.length-1);
+        }
+        return s;
+}
+function verify_data(form) {
+        var isError = false;
+        var errorMessage = "";
+        if (trim(form.reportName.value) == "") {
+                isError = true;
+                errorMessage += "\nReport Name";
+        }
+        // Here we decide whether to submit the form.
+        if (isError == true) {
+                alert("Missing required fields:" + errorMessage);
+                return false;
+        }
+        return true;
+}
+
 </script>
 <head>
 <title></title>
 <!--meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
 
-<link href="/crm/css/elegant.css" rel="stylesheet" type="text/css">
+<link href="themes/{THEME_PATH}/style.css" rel="stylesheet" type="text/css">
 </head>
-
 <form name="NewReport">
 <body>
-<table width="100%" border=0  cellPadding=0 cellSpacing=0 class="secHead">
-  <td height=20>Save Report:</td>
-  </tr>
-</table>
-<table width="100%" border=0 cellspacing=1 cellpadding=2 class="secContent">
+<table width="80%" border=0  cellPadding=2 cellSpacing=2 class="formOuterBorder">
+<tr>
+  <td colspan="3" class="formSecHeader" height=20>Save Report:</td>
   <tr> 
-    <td width ="20%" nowrap="nowrap" class="label mandatory">Report Name </td>
-    <td nowrap><input type="text" name="reportName" class="textField" style="width:100%"/> 
-    </td>
-
+    <td width ="20%" nowrap="nowrap" class="dataLabel">Report Name:</td>
+    <td nowrap><input type="text" name="reportName" class="textField" style="width:100%"/></td>
   </tr>
   <tr> 
-    <td width ="20%" nowrap="nowrap" class="label">Description </td>
+    <td width ="20%" nowrap="nowrap" class="dataLabel">Description:</td>
     <td nowrap><input type="text" name="reportDesc" class="textField" style="width:100%"/> 
     </td>
   </tr>
   <tr> 
-    <td width="20%" nowrap="nowrap" valign="top" class="label">Report Folder </td>
+    <td width="20%" nowrap="nowrap" valign="top" class="dataLabel">Report Folder:</td>
     <td nowrap>
     <select name="folder" class="select">
         {REPORT_FOLDER}
@@ -91,7 +110,6 @@ function getOpenerObj(n) {
       <input type='button' value="Cancel" class="button" onClick="window.close()"/> 
     </td>
   </tr>
-
 </table>
 <p></p>
 </body>
