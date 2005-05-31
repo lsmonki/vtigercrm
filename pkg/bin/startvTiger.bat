@@ -114,7 +114,7 @@ goto checkdatabase
 echo ""
 echo "check to see if vtigercrm4_2alpha database already exists"
 echo ""
-mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm4'" | "%WINDIR%\system32\find.exe" "vtigercrm4_2alpha" > NUL
+mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm4_2alpha'" | "%WINDIR%\system32\find.exe" "vtigercrm4_2alpha" > NUL
 IF ERRORLEVEL 1 goto dbnotexists
 echo ""
 ECHO  "vtigercrm4_2alpha database exists"
