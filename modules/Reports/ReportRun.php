@@ -836,7 +836,7 @@ class ReportRun extends CRMEntity
 		if($outputformat == "HTML")
 		{
 			$sSQL = $this->sGetSQL("REPORT");
-			echo $sSQL;
+			//echo $sSQL;
 			//$modules = array("Leads_", "Accounts_", "Potentials_", "Contacts_","_");
 			$result = $adb->query($sSQL);
 			$y=$adb->num_fields($result);
