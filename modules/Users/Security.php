@@ -330,7 +330,7 @@ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").
 $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'duration_hours','activity',1,'63','duration_hours','Duration',1,0,0,100,17,1,3,'T~O')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'duration_minutes','activity',1,'15','duration_minutes','Duration Minutes',1,0,0,100,18,1,3,'T~O')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'location','activity',1,'1','location','Location',1,0,0,100,19,1,3,'V~O')");
- $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'reminder_time','activity_reminder',1,'30','reminder_time','Send Reminder',1,0,0,100,1,7,1,'I~O')");
+ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'reminder_time','activity_reminder',1,'30','reminder_time','Send Reminder',1,0,0,100,1,7,3,'I~O')");
 
 //Block1 -- End
 //Task Details -- END
