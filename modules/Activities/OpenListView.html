@@ -28,6 +28,12 @@ admin	<!--
 	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
 		<td width="23%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_CONTACT}</td>
 	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+
+	<td width="19%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_ACCOUNT}</td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+
+
+
 		<td width="30%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_RELATED_TO}</td>
 	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
 		<td width="10%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_DATE}</td>
@@ -46,7 +52,14 @@ admin	<!--
     			<td valign=center class={ROW_COLOR} style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module={ACTIVITY.MODULE}&activity_mode={ACTIVITY.MODE}&record={ACTIVITY.ID}{RETURN_URL}">{ACTIVITY.NAME}</a></td>
 		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
     			<td valign=center class={ROW_COLOR} style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Contacts&record={ACTIVITY.CONTACT_ID}{RETURN_URL}">{ACTIVITY.CONTACT_NAME}</a></td>
-		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+	<td valign=center class={ROW_COLOR} style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Accounts&record={ACTIVITY.ACCOUNT_ID}{RETURN_URL}">{ACTIVITY.ACCOUNT_NAME}</a></td>	
+
+
+
+
+
+	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
     			<td valign=center class={ROW_COLOR} style="padding:0px 3px 0px 3px;">{ACTIVITY.PARENT_NAME}</td>
     	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
     			<td nowrap valign=center class={ROW_COLOR} style="padding:0px 3px 0px 3px;">{ACTIVITY.TIME}</td>
