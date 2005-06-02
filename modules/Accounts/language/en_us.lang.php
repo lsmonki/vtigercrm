@@ -27,7 +27,8 @@ $mod_strings = Array(
 'LBL_LIST_FORM_TITLE'=>'Account List',
 'LBL_NEW_FORM_TITLE'=>'New Account',
 'LBL_MEMBER_ORG_FORM_TITLE'=>'Member Organizations',
-
+// Label for Top Accounts in Home Page, added for 4.2 GA
+'LBL_TOP_ACCOUNTS'=>'My Top Accounts', 
 'LBL_LIST_ACCOUNT_NAME'=>'Account Name',
 'LBL_LIST_CITY'=>'City',
 'LBL_LIST_WEBSITE'=>'Website',
