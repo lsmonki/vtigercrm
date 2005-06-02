@@ -117,7 +117,8 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	$where_clauses = Array();
 
 	if(isset($current_user_only) && $current_user_only != ""){
-		array_push($where_clauses, "crmentity.smcreatorid='$current_user->id'");
+		//fix as requested by Fredy for getting the proper behaviour in Activity Search
+		array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
 		$url_string .= "&current_user_only=".$current_user_only;
 	}
 	if(isset($name) && $name != '')
