@@ -60,6 +60,8 @@ for($i=0;$i<$noofrows;$i++)
                                      'status' => $adb->query_result($list_result,$i,'status'),
                                      'firstname' => $adb->query_result($list_result,$i,'firstname'),
                                      'lastname' => $adb->query_result($list_result,$i,'lastname'),
+ 'accountname' => $adb->query_result($list_result,$i,'accountname'),
+				     'accountid' => $adb->query_result($list_result, $i, 'accountid'),
                                      'contactid' => $adb->query_result($list_result,$i,'contactid'),
                                      'date_start' => getDisplayDate($adb->query_result($list_result,$i,'date_start')),
 				     'parent'=> $parent_name,	
@@ -89,6 +91,7 @@ foreach($open_activity_list as $event)
 		'MODULE' => $event['module'],
 		'STATUS' => $event['status'],
 		'CONTACT_NAME' => $event['firstname'].' '.$event['lastname'],
+	'ACCOUNT_NAME' => $event['accountname'],
 		'TIME' => $event['date_start'],
 		'PARENT_NAME' => $event['parent'],
 	);
