@@ -40,8 +40,8 @@ class Order extends CRMEntity {
 	
 		
 	var $table_name = "purchaseorder";
-	var $tab_name = Array('crmentity','purchaseorder','pobillads','poshipads');
-	var $tab_name_index = Array('crmentity'=>'crmid','purchaseorder'=>'purchaseorderid','pobillads'=>'pobilladdressid','poshipads'=>'poshipaddressid');
+	var $tab_name = Array('crmentity','purchaseorder','pobillads','poshipads','purchaseordercf');
+	var $tab_name_index = Array('crmentity'=>'crmid','purchaseorder'=>'purchaseorderid','pobillads'=>'pobilladdressid','poshipads'=>'poshipaddressid','purchaseordercf'=>'purchaseorderid');
 				
 	
 	var $entity_table = "crmentity";

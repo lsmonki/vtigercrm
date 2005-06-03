@@ -40,8 +40,8 @@ class SalesOrder extends CRMEntity {
 	
 		
 	var $table_name = "salesorder";
-	var $tab_name = Array('crmentity','salesorder','sobillads','soshipads');
-	var $tab_name_index = Array('crmentity'=>'crmid','salesorder'=>'salesorderid','sobillads'=>'sobilladdressid','soshipads'=>'soshipaddressid');
+	var $tab_name = Array('crmentity','salesorder','sobillads','soshipads','salesordercf');
+	var $tab_name_index = Array('crmentity'=>'crmid','salesorder'=>'salesorderid','sobillads'=>'sobilladdressid','soshipads'=>'soshipaddressid','salesordercf'=>'salesorderid');
 				
 	
 	var $entity_table = "crmentity";

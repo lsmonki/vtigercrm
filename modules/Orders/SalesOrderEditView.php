@@ -65,9 +65,9 @@ $block_3 = getBlockInformation("SalesOrder",3,$focus->mode,$focus->column_fields
 
 
 $block_4_header = getBlockTableHeader("LBL_RELATED_PRODUCTS");
-/*
+
 //get Custom Field Information
-$block_5 = getBlockInformation("Accounts",5,$focus->mode,$focus->column_fields);
+$block_5 = getBlockInformation("SalesOrder",5,$focus->mode,$focus->column_fields);
 if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
@@ -80,7 +80,7 @@ if(trim($block_5) != '')
         $cust_fld .= '</td></tr></table>';
 	$cust_fld .='<BR>';
 }
-*/
+
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -126,12 +126,12 @@ else
 	$xtpl->assign("ROWCOUNT", '0');
 	$xtpl->assign("TAXVALUE", '0');
 }
-/*
+
 if(isset($cust_fld))
 {
         $xtpl->assign("CUSTOMFIELD", $cust_fld);
 }
-*/
+
 		
 
 if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
