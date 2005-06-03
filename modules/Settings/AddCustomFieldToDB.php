@@ -126,7 +126,30 @@ else
 	{
 		$tableName='productcf';
 	}
-
+	elseif($fldmodule == 'Vendor')
+	{
+		$tableName='vendorcf';
+	}
+	elseif($fldmodule == 'PriceBook')
+	{
+		$tableName='pricebookcf';
+	}
+	elseif($fldmodule == 'Quotes')
+	{
+		$tableName='quotescf';
+	}
+	elseif($fldmodule == 'Orders')
+	{
+		$tableName='purchaseordercf';
+	}
+	elseif($fldmodule == 'SalesOrder')
+	{
+		$tableName='salesordercf';
+	}
+	elseif($fldmodule == 'Invoice')
+	{
+		$tableName='invoicecf';
+	}
 	//Assigning the uitype
 	$fldlength=$_REQUEST['fldLength'];
 	$uitype='';
