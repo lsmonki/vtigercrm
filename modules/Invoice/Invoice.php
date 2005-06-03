@@ -40,8 +40,8 @@ class Invoice extends CRMEntity {
 	
 		
 	var $table_name = "invoice";
-	var $tab_name = Array('crmentity','invoice','invoicebillads','invoiceshipads');
-	var $tab_name_index = Array('crmentity'=>'crmid','invoice'=>'invoiceid','invoicebillads'=>'invoicebilladdressid','invoiceshipads'=>'invoiceshipaddressid');
+	var $tab_name = Array('crmentity','invoice','invoicebillads','invoiceshipads','invoicecf');
+	var $tab_name_index = Array('crmentity'=>'crmid','invoice'=>'invoiceid','invoicebillads'=>'invoicebilladdressid','invoiceshipads'=>'invoiceshipaddressid','invoicecf'=>'invoiceid');
 				
 	
 	var $entity_table = "crmentity";
