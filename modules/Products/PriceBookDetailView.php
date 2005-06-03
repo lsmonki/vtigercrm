@@ -48,8 +48,8 @@ $block_1_header = getBlockTableHeader("LBL_PRICEBOOK_INFORMATION");
 $block_2_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
 $xtpl->assign("BLOCK1_HEADER", $block_1_header);
 $xtpl->assign("BLOCK2_HEADER", $block_2_header);
-/*
-$block_5 = getDetailBlockInformation("Products",5,$focus->column_fields);
+
+$block_5 = getDetailBlockInformation("PriceBook",5,$focus->column_fields);
 if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
@@ -65,7 +65,7 @@ if(trim($block_5) != '')
 }
 
 $xtpl->assign("CUSTOMFIELD", $cust_fld);
-*/
+
 
 	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Products'; this.form.return_action.value='PriceBookDetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='PriceBookEditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
 

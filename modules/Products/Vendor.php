@@ -26,8 +26,8 @@ class Vendor extends CRMEntity {
 	var $id;
 	var $mode;
 
-	var $tab_name = Array('crmentity','vendor');
-	var $tab_name_index = Array('crmentity'=>'crmid','vendor'=>'vendorid');
+	var $tab_name = Array('crmentity','vendor','vendorcf');
+	var $tab_name_index = Array('crmentity'=>'crmid','vendor'=>'vendorid','vendorcf'=>'vendorid');
 	var $column_fields = Array();
 
 //	var $sortby_fields = Array('productname','productcode','commissionrate');		  

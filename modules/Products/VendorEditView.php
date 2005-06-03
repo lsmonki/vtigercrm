@@ -44,6 +44,22 @@ $block_2 = getBlockInformation("Vendor",2,$focus->mode,$focus->column_fields);
 //get Custom Field Information
 $block_3 = getBlockInformation("Vendor",3,$focus->mode,$focus->column_fields);
 
+
+//get Custom Field Information
+$block_5 = getBlockInformation("Vendor",5,$focus->mode,$focus->column_fields);
+if(trim($block_5) != '')
+{
+        $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
+        $cust_fld .=  '<tr><td>';
+	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
+        $cust_fld .= $block_5_header;
+        $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
+        $cust_fld .= $block_5;
+        $cust_fld .= '</table>';
+        $cust_fld .= '</td></tr></table>';
+        $cust_fld .='<BR>';
+}
+
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -64,12 +80,12 @@ $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 /*
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
-
+*/
 if(isset($cust_fld))
 {
         $xtpl->assign("CUSTOMFIELD", $cust_fld);
 }
-*/
+
 $xtpl->assign("ID", $focus->id);
 
 //$xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
