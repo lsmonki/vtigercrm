@@ -3937,7 +3937,7 @@
 	</table>
 
 	<table name="quotescf">
-		<field name="quotesid" type="I" size="19">
+		<field name="quoteid" type="I" size="19">
 			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
@@ -3949,7 +3949,7 @@
 
 	<table name="quotescf" alter="true">
 		
-		<constraint>ADD CONSTRAINT fk_QuotesCF FOREIGN KEY (quotesid) REFERENCES quotes(quoteid)  ON DELETE CASCADE </constraint>
+		<constraint>ADD CONSTRAINT fk_QuotesCF FOREIGN KEY (quoteid) REFERENCES quotes(quoteid)  ON DELETE CASCADE </constraint>
 		
 		<opt>Type=InnoDB</opt>
 		
