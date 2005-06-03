@@ -80,6 +80,15 @@ $mod_strings = Array(
 
 'PRODUCTCUSTOMFIELDS'=>'Product Custom Fields',
 
+'VENDORCUSTOMFIELDS'=>'Vendor Custom Fields',
+
+'PRICEBOOKCUSTOMFIELDS'=>'PriceBook Custom Fields',
+
+'POCUSTOMFIELDS'=>'Purchase Order Custom Fields',
+'SOCUSTOMFIELDS'=>'Sales Order Custom Fields',
+'QUOTESCUSTOMFIELDS'=>'Quotes Custom Fields',
+'INVOICECUSTOMFIELDS'=>'Invoice Custom Fields',
+
 'EDITLEADPICKLISTVALUES'=>'Edit Lead PickList ',
 
 'EDITACCOUNTPICKLISTVALUES'=>'Edit Account PickList ',
