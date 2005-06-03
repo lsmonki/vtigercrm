@@ -86,8 +86,8 @@ $block_4 = getDetailAssociatedProducts($module,$focus);
 $xtpl->assign("BLOCK4_HEADER", $block_4_header);
 $xtpl->assign("BLOCK4", $block_4);
 
-/*
-$block_5 = getDetailBlockInformation("Accounts",5,$focus->column_fields);
+
+$block_5 = getDetailBlockInformation("Quotes",5,$focus->column_fields);
 if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
@@ -103,7 +103,7 @@ if(trim($block_5) != '')
 }
 
 $xtpl->assign("CUSTOMFIELD", $cust_fld);
-*/
+
 $xtpl->assign("ID", $_REQUEST['record']);
 
 

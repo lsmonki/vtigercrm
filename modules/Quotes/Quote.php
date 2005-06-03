@@ -40,8 +40,8 @@ class Quote extends CRMEntity {
 	
 		
 	var $table_name = "quotes";
-	var $tab_name = Array('crmentity','quotes','quotesbillads','quotesshipads');
-	var $tab_name_index = Array('crmentity'=>'crmid','quotes'=>'quoteid','quotesbillads'=>'quotebilladdressid','quotesshipads'=>'quoteshipaddressid');
+	var $tab_name = Array('crmentity','quotes','quotesbillads','quotesshipads','quotescf');
+	var $tab_name_index = Array('crmentity'=>'crmid','quotes'=>'quoteid','quotesbillads'=>'quotebilladdressid','quotesshipads'=>'quoteshipaddressid','quotescf'=>'quoteid');
 				
 	
 	var $entity_table = "crmentity";
