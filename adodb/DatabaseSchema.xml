@@ -3698,6 +3698,27 @@
 		</data>
 	</table>
 
+	<table name="vendorcf">
+		<field name="vendorid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="vendorcf" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_VendorCF FOREIGN KEY (vendorid) REFERENCES vendor(vendorid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
 	<table name="pricebook">
 		<field name="pricebookid" type="I" size="19">
 			<KEY/>
@@ -3716,6 +3737,27 @@
 	<table name="pricebook" alter="true">
 	<constraint>ADD CONSTRAINT fk_Vendor FOREIGN KEY (pricebookid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="pricebookcf">
+		<field name="pricebookid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="pricebookcf" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_VendorCF FOREIGN KEY (pricebookid) REFERENCES pricebook(pricebookid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
 		<data>
 		</data>
 	</table>
@@ -3894,6 +3936,27 @@
 		</data>
 	</table>
 
+	<table name="quotescf">
+		<field name="quotesid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="quotescf" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_QuotesCF FOREIGN KEY (quotesid) REFERENCES quotes(quoteid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
 
 	<table name="quotesproductrel">
 		<field name="quoteid" type="I" size="19">
@@ -4040,6 +4103,27 @@
 	<table name="poshipads" alter="true">
 		
 		<constraint>ADD CONSTRAINT fk_PoShipAds FOREIGN KEY (poshipaddressid) REFERENCES purchaseorder(purchaseorderid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="purchaseordercf">
+		<field name="purchaseorderid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="purchaseordercf" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_PoCF FOREIGN KEY (purchaseorderid) REFERENCES purchaseorder(purchaseorderid)  ON DELETE CASCADE </constraint>
 		
 		<opt>Type=InnoDB</opt>
 		
@@ -4201,6 +4285,27 @@
 		</data>
 	</table>
 
+	<table name="salesordercf">
+		<field name="salesorderid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="salesordercf" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_SoCF FOREIGN KEY (salesorderid) REFERENCES salesorder(salesorderid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
 
 	<table name="soproductrel">
 		<field name="salesorderid" type="I" size="19">
@@ -4339,6 +4444,28 @@
 		<data>
 		</data>
 	</table>
+
+	<table name="invoicecf">
+		<field name="invoiceid" type="I" size="19">
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="invoicecf" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_InvoiceCF FOREIGN KEY (invoiceid) REFERENCES invoice(invoiceid)  ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
 
 
 	<table name="invoiceproductrel">
