@@ -378,7 +378,7 @@ function dateTimeValidate(dateFldName,timeFldName,fldLabel,type) {
 	chkdate.setMonth(mm-1)
 	chkdate.setDate(dd)
 	chkdate.setHours(hourval)
-	chkdate.setHours(minval)
+	chkdate.setMinutes(minval)
 	
 	if (type!="OTH") {
 		if (!compareDates(chkdate,fldLabel,currdate,"current date & time",type)) {
