@@ -1107,15 +1107,10 @@
 		<field name="unit_price" type="N" size="11.2"></field>
 		<field name="weight" type="N" size="11.3"></field>
 		<field name="pack_size" type="I" size="11"></field>
-		<field name="start_date" type="D">
-                        <NOTNULL/>
-		</field>
-		<field name="expiry_date" type="D">
-                        <NOTNULL/>
-		</field>
-		<field name="purchase_date" type="D">
-                        <NOTNULL/>
-		</field>
+		<field name="sales_start_date" type="D"></field>
+		<field name="sales_end_date" type="D"></field>
+		<field name="start_date" type="D"></field>
+		<field name="expiry_date" type="D"></field>
 		<field name="cost_factor" type="I" size="11"></field>
 		<field name="commissionrate" type="N" size="3.3"></field>
 		<field name="commissionmethod" type="C" size="50"></field>
