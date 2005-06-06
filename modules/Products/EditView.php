@@ -42,6 +42,8 @@ $block_1 = getBlockInformation("Products",1,$focus->mode,$focus->column_fields);
 //get Address Information
 
 $block_2 = getBlockInformation("Products",2,$focus->mode,$focus->column_fields);
+$block_3 = getBlockInformation("Products",3,$focus->mode,$focus->column_fields);
+$block_4 = getBlockInformation("Products",4,$focus->mode,$focus->column_fields);
 
 //get Custom Field Information
 $block_5 = getBlockInformation("Products",5,$focus->mode,$focus->column_fields);
@@ -68,10 +70,16 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
+$xtpl->assign("BLOCK3", $block_3);
+$xtpl->assign("BLOCK4", $block_4);
 $block_1_header = getBlockTableHeader("LBL_PRODUCT_INFORMATION");
-$block_2_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
+$block_2_header = getBlockTableHeader("LBL_PRICING_INFORMATION");
+$block_3_header = getBlockTableHeader("LBL_STOCK_INFORMATION");
+$block_4_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
 $xtpl->assign("BLOCK1_HEADER", $block_1_header);
 $xtpl->assign("BLOCK2_HEADER", $block_2_header);
+$xtpl->assign("BLOCK3_HEADER", $block_3_header);
+$xtpl->assign("BLOCK4_HEADER", $block_4_header);
 
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
