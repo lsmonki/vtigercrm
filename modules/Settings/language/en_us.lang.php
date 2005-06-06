@@ -450,6 +450,19 @@ $mod_strings = Array(
 'LBL_CARRIER'=>'Carrier',
 'LBL_TAXCLASS'=>'Tax Class',
 
+//Added for Organization Details (4.2 release)
+'LBL_ORGANIZATION_NAME'=>'Company Name',
+'LBL_ORGANIZATION_ADDRESS'=>'Address',
+'LBL_ORGANIZATION_CITY'=>'City',
+'LBL_ORGANIZATION_STATE'=>'State',
+'LBL_ORGANIZATION_CODE'=>'Code',
+'LBL_ORGANIZATION_COUNTRY'=>'Country',
+'LBL_ORGANIZATION_PHONE'=>'Phone',
+'LBL_ORGANIZATION_FAX'=>'Fax',
+'LBL_ORGANIZATION_WEBSITE'=>'Website',
+'LBL_ORGANIZATION_DETAILS'=>'Company Details',
+'LBL_SPECIFY_COMPANY_DETAILS'=>' - Specify Company Information',
+
 
 );
 
