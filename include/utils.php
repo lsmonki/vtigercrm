@@ -1059,7 +1059,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
           
           
         }
-	elseif($uitype == 51 || $uitype == 50)
+	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{
 
                 if(isset($_REQUEST['account_id']) && $_REQUEST['account_id'] != '')
@@ -1070,12 +1070,20 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$account_name = getAccountName($value);	
 		}
 		$custfld .= '<td width="20%" class="dataLabel">';
-		if($uitype==50)
+		if($uitype==50 || $uitype==73)
 			$custfld .= '<font color="red">*</font>';
 		$custfld .= $mod_strings[$fieldlabel].':</td>';
 
+		if($uitype == 73)
+		{
+			
+			$custfld .= '<td width="30%" valign="top"  class="dataField"><input readonly name="account_name" type="text" value="'.$account_name.'"><input name="account_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="Change" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="btn1" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific_account_address&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';
+		}
+		else
+		{
 
-		$custfld .= '<td width="30%" valign="top"  class="dataField"><input readonly name="account_name" type="text" value="'.$account_name.'"><input name="account_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="Change" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="btn1" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
+			$custfld .= '<td width="30%" valign="top"  class="dataField"><input readonly name="account_name" type="text" value="'.$account_name.'"><input name="account_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="Change" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="btn1" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';
+		}	
 	}
 	elseif($uitype == 54)
 	{
@@ -1529,7 +1537,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                 $custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
                 $custfld .= '<td valign="top" class="dataField">'.$col_fields[$fieldname].'</td>';
         }
-	elseif($uitype == 51 || $uitype == 50)
+	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{
 		$account_id = $col_fields[$fieldname];
 		if($account_id != '')
@@ -3044,6 +3052,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$listprice=getListPrice($prod_id,$entity_id);	
 					
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory_pb("'.$listprice.'", "'.$flname.'"); window.close()\'>'.$temp_val.'</a>';
+				}
+				elseif($popuptype == "specific_account_address")
+				{
+					require_once('modules/Accounts/Account.php');
+					$acct_focus = new Account();
+					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
+
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.$temp_val.'", "'.$acct_focus->column_fields['bill_street'].'", "'.$acct_focus->column_fields['ship_street'].'", "'.$acct_focus->column_fields['bill_city'].'", "'.$acct_focus->column_fields['ship_city'].'", "'.$acct_focus->column_fields['bill_state'].'", "'.$acct_focus->column_fields['ship_state'].'", "'.$acct_focus->column_fields['bill_code'].'", "'.$acct_focus->column_fields['ship_code'].'", "'.$acct_focus->column_fields['bill_country'].'", "'.$acct_focus->column_fields['ship_country'].'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				else
 				{
