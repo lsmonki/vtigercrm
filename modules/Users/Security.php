@@ -245,37 +245,50 @@ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field")
 
 //Product Details -- START
 //Block1 -- Start
+
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productname','products',1,'2','productname','Product Name',1,0,0,100,1,1,1,'V~M')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productcode','products',1,'1','productcode','Product Code',1,0,0,100,2,1,1,'V~O')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'discontinued','products',1,'56','discontinued','Product Active',1,0,0,100,3,1,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'commissionrate','products',1,'9','commissionrate','Commission Rate',1,0,0,100,4,1,1,'N~O')"); 
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'qty_per_unit','products',1,'1','qty_per_unit','Qty/Unit',1,0,0,100,5,1,1,'N~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'unit_price','products',1,'71','unit_price','Unit Price',1,0,0,100,6,1,1,'N~O')"); 
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'manufacturer','products',1,'15','manufacturer','Manufacturer',1,0,0,100,7,1,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productcategory','products',1,'15','productcategory','Product Category',1,0,0,100,8,1,1,'V~O')");	
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'start_date','products',1,'5','start_date','Support Start Date',1,0,0,100,8,1,1,'D~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'expiry_date','products',1,'5','expiry_date','Support Expiry Date',1,0,0,100,9,1,1,'D~O~GE~start_date~Support Expiry Date')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'purchase_date','products',1,'5','purchase_date','Purchase Date',1,0,0,100,10,1,1,'D~O')");
-$this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,11,1,2,'T~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,12,1,2,'T~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'product_description','products',1,'19','product_description','Description',1,0,0,100,13,2,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'crmid','seproductsrel',1,'66','parent_id','Related To',1,0,0,100,14,1,1,'I~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'usageunit','products',1,'15','usageunit','Usage Unit',1,0,0,100,15,1,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'handler','products',1,'52','assigned_user_id','Handler',1,0,0,100,16,1,1,'I~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'contactid','products',1,'57','contact_id','Contact Name',1,0,0,100,17,1,1,'I~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'currency','products',1,'1','currency','Currency',1,0,0,100,18,1,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'reorderlevel','products',1,'1','reorderlevel','Reorder Level',1,0,0,100,19,1,1,'I~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'website','products',1,'17','website','Website',1,0,0,100,20,1,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'taxclass','products',1,'15','taxclass','Tax Class',1,0,0,100,21,1,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'mfr_part_no','products',1,'1','mfr_part_no','Mfr PartNo',1,0,0,100,22,1,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'vendor_part_no','products',1,'1','vendor_part_no','Vendor PartNo',1,0,0,100,23,1,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'serialno','products',1,'1','serial_no','Serial No',1,0,0,100,24,1,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'qtyinstock','products',1,'1','qtyinstock','Qty In Stock',1,0,0,100,25,1,1,'I~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productsheet','products',1,'1','productsheet','Product Sheet',1,0,0,100,26,1,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'qtyindemand','products',1,'1','qtyindemand','Qty In Demand',1,0,0,100,27,1,1,'I~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'glacct','products',1,'15','glacct','GL Account',1,0,0,100,28,1,1,'V~O')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'vendor_id','products',1,'75','vendor_id','Vendor Name',1,0,0,100,29,1,1,'I~O')");
-//Block1 -- End
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'manufacturer','products',1,'15','manufacturer','Manufacturer',1,0,0,100,4,1,1,'V~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productcategory','products',1,'15','productcategory','Product Category',1,0,0,100,4,1,1,'V~O')");
+$this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'sales_start_date','products',1,'5','sales_start_date','Sales Start Date',1,0,0,100,5,1,1,'D~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'sales_end_date','products',1,'5','sales_end_date','Sales End Date',1,0,0,100,6,1,1,'D~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'start_date','products',1,'5','start_date','Support Start Date',1,0,0,100,7,1,1,'D~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'expiry_date','products',1,'5','expiry_date','Support Expiry Date',1,0,0,100,8,1,1,'D~O~GE~start_date~Support Expiry Date')");
+ 
+
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'crmid','seproductsrel',1,'66','parent_id','Related To',1,0,0,100,10,1,1,'I~O')");
+
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'contactid','products',1,'57','contact_id','Contact Name',1,0,0,100,11,1,1,'I~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'website','products',1,'17','website','Website',1,0,0,100,12,1,1,'V~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'vendor_id','products',1,'75','vendor_id','Vendor Name',1,0,0,100,13,1,1,'I~O')");
+$this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'mfr_part_no','products',1,'1','mfr_part_no','Mfr PartNo',1,0,0,100,14,1,1,'V~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'vendor_part_no','products',1,'1','vendor_part_no','Vendor PartNo',1,0,0,100,15,1,1,'V~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'serialno','products',1,'1','serial_no','Serial No',1,0,0,100,16,1,1,'V~O')");
+$this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'productsheet','products',1,'1','productsheet','Product Sheet',1,0,0,100,17,1,1,'V~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'glacct','products',1,'15','glacct','GL Account',1,0,0,100,18,1,1,'V~O')");
+$this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,19,1,2,'T~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,20,1,2,'T~O')");
+
+//Block2 Pricing Information
+
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'unit_price','products',1,'71','unit_price','Unit Price',1,0,0,100,1,2,1,'N~O')"); 
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'commissionrate','products',1,'9','commissionrate','Commission Rate',1,0,0,100,2,2,1,'N~O')"); 
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'currency','products',1,'1','currency','Currency',1,0,0,100,3,2,1,'V~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'taxclass','products',1,'15','taxclass','Tax Class',1,0,0,100,4,2,1,'V~O')");
+
+
+//Block 3 stock info
+
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'usageunit','products',1,'15','usageunit','Usage Unit',1,0,0,100,1,3,1,'V~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'qty_per_unit','products',1,'1','qty_per_unit','Qty/Unit',1,0,0,100,2,3,1,'N~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'qtyinstock','products',1,'1','qtyinstock','Qty In Stock',1,0,0,100,3,3,1,'I~O')");
+$this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'reorderlevel','products',1,'1','reorderlevel','Reorder Level',1,0,0,100,4,3,1,'I~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'handler','products',1,'52','assigned_user_id','Handler',1,0,0,100,5,3,1,'I~O')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'qtyindemand','products',1,'1','qtyindemand','Qty In Demand',1,0,0,100,6,3,1,'I~O')");
+
+//Block 4 Description Info
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'product_description','products',1,'19','product_description','Description',1,0,0,100,1,4,1,'V~O')");
 //Product Details -- END
 
 //Note Details -- START
