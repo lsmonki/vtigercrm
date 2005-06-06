@@ -646,7 +646,13 @@ if (isset($_SESSION['authenticated_user_language'])) {
 //skip headers for popups, deleting, saving, importing and other actions
 if(!$skipHeaders) {
 	$log->debug("including headers");
-	include('themes/'.$theme.'/header.php');
+	//include('themes/'.$theme.'/header.php');
+	if(isset($_SESSION["authenticated_user_id"]))
+	{
+		include('themes/'.$theme.'/header.php');
+	}
+	else 
+		include('themes/'.$theme.'/header1.php');
 	
 	if(isset($_SESSION['administrator_error']))
 	{
@@ -706,10 +712,12 @@ else
 
 
 
-
-
 if(!$skipFooters)
-	     include('themes/'.$theme.'/footer.php');
+//include('themes/'.$theme.'/footer.php');
+	if(isset($_SESSION["authenticated_user_id"]))
+	{
+		include('themes/'.$theme.'/footer.php');
+	}
 if(!$viewAttachment)
 {
 // Under the SPL you do not have the right to remove this copyright statement.	
@@ -772,10 +780,6 @@ if($calculate_response_time)
 }
 echo "</td></tr></table>\n";
 }
-
-
-
-
 
 
 
