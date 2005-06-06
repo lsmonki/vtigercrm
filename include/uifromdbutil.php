@@ -24,7 +24,7 @@ function getBlockInformation($module, $block, $mode, $col_fields)
         $result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	$output='';
-	if (($module == 'Accounts' || $module == 'Contacts') && $block == 2)
+	if (($module == 'Accounts' || $module == 'Contacts' || $module == 'Quotes' || $module == 'Orders' || $module == 'SalesOrder'|| $module == 'Invoice') && $block == 2)
 	{
 			$mvAdd_flag = true;
 			$moveAddress = "<td rowspan='5' valign='middle' align='center'><input title='Copy billing address to shipping address'  class='button' onclick='return copyAddressRight(EditView)'  type='button' name='copyright' value='&raquo;' style='padding:0px 2px 0px 2px;font-size:12px'><br><br>
