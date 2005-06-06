@@ -20,6 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 $theme_path="themes/".$theme."/";
+$image_path="include/images/";
 require_once($theme_path.'layout_utils.php');
 
 global $app_language;
@@ -89,7 +90,7 @@ if(isset($_SESSION["login_error"]))
 
 
 
-echo get_module_title($current_module_strings['LBL_MODULE_NAME'], $current_module_strings['LBL_LOGIN'], true);
+//echo get_module_title($current_module_strings['LBL_MODULE_NAME'], $current_module_strings['LBL_LOGIN'], true);
 ?>
 <script type="text/javascript" language="JavaScript">
 <!-- Begin
@@ -102,19 +103,19 @@ function set_focus() {
 }
 //  End -->
 </script>
-
+<br>
 <table cellpadding="0" align="center" width="100%" cellspacing="0" border="0">
 <tbody><tr>
 <td width="25%">&nbsp;</td>
 <td>
 <P>&nbsp;</P>
-<table cellpadding="2" width="100%" cellspacing="0" border="0">
+<table cellpadding="10" width="100%" cellspacing="0" border="1px">
 <form action="index.php" method="post" name="DetailView" id="form">
 <tr>
-<td width="5%">&nbsp;</td>
-<td width="95%">
-<?php echo $app_strings['NTC_LOGIN_MESSAGE']; ?>
-		<table cellpadding="0" cellspacing="5" border="0">
+<td width="95%"><p><font size="+2" face="Verdana, Arial, Helvetica, sans-serif">
+<?php echo $app_strings['NTC_LOGIN_MESSAGE']; ?></font>
+	              <hr>
+		<table cellpadding="0" cellspacing="10" border="0">
 			<input type="hidden" name="module" value="Users">
 			<input type="hidden" name="action" value="Authenticate">
 			<input type="hidden" name="return_module" value="Users">
@@ -123,8 +124,8 @@ function set_focus() {
 if( isset($_SESSION['validation'])){
 ?>
 		<tr>
-			<td><?php echo $current_module_strings['LBL_ERROR'];?></td>
-			<td><font color="Red"><?php echo $current_module_strings['VLD_ERROR']; ?></font></td>
+		<td width="50%">&nbsp;</td>
+		<td width="50%"><font color="Red"> <?php echo $current_module_strings['VLD_ERROR']; ?> </font></td>
 		</tr>
 <?php
 }
@@ -132,9 +133,12 @@ else if(isset($login_error) && $login_error != "")
 {
 ?>
 		<tr>
-			<td><?php echo $current_module_strings['LBL_ERROR'] ?></td>
-			<td><font color="Red"><?php echo $login_error ?></font></td>
+			<td width="50%">&nbsp;</td>
+			<td width="50%"><b><font color="Brown">
 		</tr>
+		 <?php echo $login_error ?>
+                 </font></b></td>
+                 </tr>
 <?php
 }
 
@@ -155,32 +159,56 @@ else {
 }
 
 ?>
-		<tr>
-			<td><?php echo $current_module_strings['LBL_USER_NAME'] ?></td>
-			<td><input type="text" size='20' name="user_name"  value="<?php echo $login_user_name ?>"></td>
-		</tr>
-		<tr>
-			<td><?php echo $current_module_strings['LBL_PASSWORD'] ?></td>
-			<td><input type="password" size='20' name="user_password" value="<?php echo $login_password ?>"></td>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-			<td><input title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accessKey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" class="button" type="submit" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  "><br><br></td>
-		</tr>
-		<tr>
-			<td><?php echo $current_module_strings['LBL_THEME'] ?></td>
-			<td><select name='login_theme'><?php echo get_select_options_with_id(get_themes(), $display_theme) ?></select></td>
-		</tr>
-		<tr>
-			<td><?php echo $current_module_strings['LBL_LANGUAGE'] ?></td>
-			<td><select name='login_language'><?php echo get_select_options_with_id(get_languages(), $display_language) ?></select></td>
-		</tr>
-		<tr><td>&nbsp;</td></tr>
-		</table>
+	<tr>
+	<td width="50%"><?php echo "<img src='".$image_path."security.png'>";?></td>
+	<td width="50%"><b>
+	<?php echo $current_module_strings['LBL_USER_NAME'] ?>
+		</b><br>
+		<input type="text" size='20' name="user_name"  value="<?php echo $login_user_name ?>">
+		</td>
+	</tr>
+	<tr>
+	<td width="50%">
+	<?php echo $app_strings['NTC_WELCOME_MESSAGE']; ?>
+	</td>
+	<td width="50%"><b>
+	<?php echo $current_module_strings['LBL_PASSWORD'] ?>
+	</b><br>
+	<input type="password" size='20' name="user_password" value="<?php echo $login_password ?>">
+	</td>
+	</tr>
+	<tr>
+	<td width="50%">
+	<?php echo $app_strings['NTC_DESCRIPTION']; ?>
+	</td>
+	<td width="50%"><b>
+	<?php echo $current_module_strings['LBL_THEME'] ?>
+	</b><br>
+		<select name='login_theme'>
+		<?php echo get_select_options_with_id(get_themes(), $display_theme) ?>
+		</select>
+	</td>
+	</tr>
+	<tr>
+	<td width="50%">&nbsp;</td>
+	<td width="50%"><b>
+	<?php echo $current_module_strings['LBL_LANGUAGE'] ?>
+	</b><br>
+	<select name='login_language'>
+	<?php echo get_select_options_with_id(get_languages(), $display_language) ?>
+	</select>
+	</td>
+	</tr>
+	<tr>
+	<td width="50%">&nbsp;</td>
+	<td width="50%"><b>
+	<input title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" class="button" type="submit" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  ">
+	</b></td>
+	</tr>
+	</table>
 	</td>
 	</form>
-</tr>
 </table>
 </td>
-<td width="60%">&nbsp;</td>
+<td width="30%">&nbsp;</td>
 </tr></tbody></table>
