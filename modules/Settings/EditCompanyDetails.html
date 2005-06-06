@@ -1,0 +1,68 @@
+<!--
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
+-->
+<!-- BEGIN: main -->
+<table width="65%" border="0" cellspacing="1" cellpadding="0" class="formOuterBorder">
+<tr>
+<td>
+<table width="100%" cellpadding="2" cellspacing="1" border="0">
+  <tbody><form action="index.php" method="post" name="index" id="form">
+  <input type="hidden" name="module" value="Settings">
+  <input type="hidden" name="action" value="index">
+  <input type="hidden" name="return_module" value="{RETURN_MODULE}">
+  <input type="hidden" name="return_action" value="{RETURN_ACTION}">
+  <tr> 
+    <th colspan="2" align=left class="formSecHeader">Company Information</th></tr>	   
+    <td width="50%" nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_NAME}: </td>
+    <td align="left"> <input class="dataInput" type="text" name="organization_name" value="{ORGANIZATIONNAME}" size="40"/> 
+    <input type="hidden" name="org_name" value="{ORGANIZATIONNAME}"> </td></tr>
+  <tr>
+    <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_ADDRESS}: </td>
+    <td align="left"> <input class="dataInput" type="text" name="organization_address" value="{ORGANIZATIONADDRESS}" size="40" /> </td></tr>
+  <tr>
+    <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_CITY}: </td>
+    <td align="left"><input class="dataInput" type="text" name="organization_city" value="{ORGANIZATIONCITY}" size="40"/> </td></tr>
+  <tr>
+    <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_STATE}: </td>
+    <td align="left"><input class="dataInput" type="text" name="organization_state" value="{ORGANIZATIONSTATE}" size="40"</td></tr>
+  <tr>
+    <td nowrap class="dataLabel"> {MOD.LBL_ORGANIZATION_CODE}: </td>
+    <td align="left"><input class="dataInput" type="text" name="organization_code" value="{ORGANIZATIONCODE}" size="40"</td></tr>
+  <tr>
+    <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_COUNTRY}: </td>
+    <td align="left"><input class="dataInput" type="text" name="organization_country" value="{ORGANIZATIONCOUNTRY}" size="40"</td></tr>
+  <tr>
+    <td nowrap class="dataLabel"> {MOD.LBL_ORGANIZATION_PHONE}: </td>
+    <td align="left"><input class="dataInput" type="text" name="organization_phone" value="{ORGANIZATIONPHONE}" size="40"</td></tr>
+  <tr>
+    <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_FAX}: </td>
+    <td align="left"><input class="dataInput" type="text" name="organization_fax" value="{ORGANIZATIONPHONE}" size="40"</td></tr>
+  <tr>
+    <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_WEBSITE}: </td>
+    <td align="left"><input class="dataInput" type="text" name="organization_website" value="{ORGANIZATIONWEBSITE}" size="40"</td></tr>
+
+</table>
+</td>
+</tr>
+</table>
+<br>
+<table width="65%" cellpadding="0" cellspacing="0" border="0"><tbody>
+ <tr>
+   <td align="center">
+	   <input title="{APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='SaveCompany'; this.form.module.value='Settings'; this.form.return_action.value='OrganizationConfig'; this.form.return_module.value='Settings';" type="submit" name="button" value="{APP.LBL_SAVE_BUTTON_LABEL}" >
+
+	<input title="{APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="this.form.action.value='OrganizationConfig'; this.form.module.value='Settings'; this.form.return_action.value='OrganizationConfig'; this.form.return_module.value='Settings';" type="submit" name="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}"></td>
+ </tr>
+</form>
+</table>
+
+<!-- END: main -->
