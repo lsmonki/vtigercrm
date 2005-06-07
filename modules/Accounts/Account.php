@@ -300,8 +300,8 @@ class Account extends CRMEntity {
 	}
 	function get_tickets($id)
 	{
-		$query = 'select users.user_name, users.id, seticketsrel.*, troubletickets.title, troubletickets.status, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime  from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.crmid inner join users on users.id=crmentity.smownerid where seticketsrel.crmid = '.$id; 
-		renderRelatedTickets($query);
+		$query = 'select users.user_name, users.id, seticketsrel.*, troubletickets.title, troubletickets.ticketid as crmid, troubletickets.status, troubletickets.priority, troubletickets.parent_id, crmentity.smownerid, crmentity.modifiedtime  from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.crmid inner join users on users.id=crmentity.smownerid where seticketsrel.crmid = '.$id; 
+		renderRelatedTickets($query,$id);
 	}
 
 
