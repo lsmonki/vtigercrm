@@ -161,8 +161,7 @@ function MailSend($mail)
         if(!$mail->Send())
         {
            $msg =$mail->ErrorInfo;
-           header("Location: index.php?action=$returnaction&module=".$_REQUEST['return_module']."&parent_id=$parent_id&recor
-d=".$_REQUEST['return_id']."&filename=$filename&message=$msg");
+	   header("Location: index.php?action=".$_REQUEST['return_action']."&module=".$_REQUEST['return_module']."&parent_id=$parent_id&record=".$_REQUEST['return_id']."&filename=$filename&message=$msg");
         }
 	else 
 		return true;
