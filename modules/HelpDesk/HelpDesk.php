@@ -25,7 +25,7 @@ class HelpDesk extends CRMEntity {
 	var $list_fields = Array(
 	'Ticket ID'=>Array('crmentity'=>'crmid'),
 	'Subject'=>Array('troubletickets'=>'title'),	  			
-	'Contact Name'=>Array('contactdetails'=>'firstname'),	  			
+	'Related to'=>Array('troubletickets'=>'parent_id'),	  			
 	'Status'=>Array('troubletickets'=>'status'),
 	'Priority'=>Array('troubletickets'=>'priority'),
 	'Assigned To'=>Array('crmentity','smownerid')
@@ -34,7 +34,7 @@ class HelpDesk extends CRMEntity {
 	var $list_fields_name = Array(
 	'Ticket ID'=>'',
 	'Subject'=>'ticket_title',	  			
-	'Contact Name'=>'firstname',	  			
+	'Related to'=>'parent_id',	  			
 	'Status'=>'ticketstatus',
 	'Priority'=>'ticketpriorities',
 	'Assigned To'=>'assigned_user_id');
@@ -46,8 +46,11 @@ class HelpDesk extends CRMEntity {
 		'title',
         	'firstname',
 	        'lastname',
-        	'contact_id',
+        	'parent_id',
+        	'productid',
+        	'productname',
         	'priority',
+        	'severity',
 	        'status',
         	'category',
 		'description',
@@ -113,7 +116,7 @@ class HelpDesk extends CRMEntity {
         }	
 	function get_user_tickets_list($user_name,$id)
 	{
-		$query = "select crmentity.crmid, troubletickets.ticketid, troubletickets.contact_id, troubletickets.title, troubletickets.status, troubletickets.priority, troubletickets.category, troubletickets.description, troubletickets.solution, crmentity.smownerid, crmentity.createdtime, crmentity.modifiedtime, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid inner join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id  where crmentity.deleted=0 and contactdetails.email='".$user_name."' and troubletickets.contact_id = '".$id."'";
+		$query = "select crmentity.crmid, troubletickets.*, crmentity.smownerid, crmentity.createdtime, crmentity.modifiedtime, contactdetails.firstname, contactdetails.lastname, products.productid, products.productname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.parent_id=contactdetails.contactid left join products on products.productid = troubletickets.product_id left join users on crmentity.smownerid=users.id  where crmentity.deleted=0 and contactdetails.email='".$user_name."' and troubletickets.parent_id = '".$id."'";
 		return $this->process_list_query($query);
 	}
 
