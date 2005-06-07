@@ -26,7 +26,7 @@ if(isset($_REQUEST['record']))
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit'; 	
     $focus->retrieve_entity_info($_REQUEST['record'],"HelpDesk");
-    $focus->name=$focus->column_fields['title'];		
+    $focus->name=$focus->column_fields['ticket_title'];		
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
@@ -222,7 +222,7 @@ function getCommentInformation($ticketid)
 function getCustomerName($id)
 {
         global $adb;
-        $sql = "select * from PortalInfo inner join troubletickets on troubletickets.contact_id = PortalInfo.id where troubletickets.ticketid=".$id;
+        $sql = "select * from PortalInfo inner join troubletickets on troubletickets.parent_id = PortalInfo.id where troubletickets.ticketid=".$id;
         $result = $adb->query($sql);
         $customername = $adb->query_result($result,0,'user_name');
         return $customername;
