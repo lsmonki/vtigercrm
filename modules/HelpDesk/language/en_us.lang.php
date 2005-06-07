@@ -127,7 +127,7 @@ $mod_strings = Array(
 'LBL_OPEN'=>'Open',
 'LBL_CLOSED'=>'Closed',
 'LBL_TOTAL'=>'Total',
-'LBL_TICKET_HISTORY'=>'Ticket History:',
+'LBL_TICKET_HISTORY'=>'Ticket History',
 'LBL_CATEGORIES'=>'Categories',
 'LBL_PRIORITIES'=>'Priorities',
 'LBL_SUPPORTERS'=>'Supporters',
@@ -140,6 +140,11 @@ $mod_strings = Array(
 //Added for 4.2 Release -- CustomView
 'Ticket ID'=>'Ticket ID',
 'Subject'=>'Subject',
+
+//Added after 4.2 alpha
+'Severity'=>'Severity',
+'Product Name'=>'Product Name',
+'Related to'=>'Related to',
 
 );
 
