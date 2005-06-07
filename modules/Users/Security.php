@@ -229,13 +229,15 @@ $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").
 // $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'groupname','troubletickets',1,'54','groupname','Group',1,0,0,100,1,1,1)");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,2,1,1,'V~M')");
  // $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'crmid','seticketsrel',1,'59','parent_id','Product Name',1,0,0,100,3,1,1,'V~O')");
- $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'contact_id','troubletickets',1,'57','contact_id','Contact Name',1,0,0,100,4,1,1,'I~O')");
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'parent_id','troubletickets',1,'68','parent_id','Related To',1,0,0,100,4,1,1,'I~O')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'priority','troubletickets',1,'15','ticketpriorities','Priority',1,0,0,100,5,1,1,'V~O')");
- $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'status','troubletickets',1,'15','ticketstatus','Status',1,0,0,100,6,1,1,'V~O')");
- $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'category','troubletickets',1,'15','ticketcategories','Category',1,0,0,100,7,1,1,'V~O')");
- $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'update_log','troubletickets',1,'15','update_log','Update History',1,0,0,100,7,1,3,'V~O')");
-$this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,8,1,2,'T~O')");
- $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,9,1,2,'T~O')");
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'product_id','troubletickets',1,'59','product_id','Product Name',1,0,0,100,6,1,1,'I~O')");
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'severity','troubletickets',1,'15','ticketseverities','Severity',1,0,0,100,7,1,1,'V~O')");
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'status','troubletickets',1,'15','ticketstatus','Status',1,0,0,100,8,1,1,'V~O')");
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'category','troubletickets',1,'15','ticketcategories','Category',1,0,0,100,9,1,1,'V~O')");
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'update_log','troubletickets',1,'15','update_log','Update History',1,0,0,100,9,1,3,'V~O')");
+$this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,10,1,2,'T~O')");
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,11,1,2,'T~O')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'title','troubletickets',1,'22','ticket_title','Title',1,0,0,100,1,2,1,'V~M')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'description','troubletickets',1,'19','description','Description',1,0,0,100,1,3,1,'V~O')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'solution','troubletickets',1,'19','solution','Solution',1,0,0,100,1,4,1,'V~O')");
@@ -1209,11 +1211,12 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",".getTabid("Activities").",'get_activities',3,'Acivities',0)");
 
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",".getTabid("HelpDesk").",'get_tickets',4,'HelpDesk',0)");
 	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",".getTabid("Activities").",'get_history',4,'History',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",".getTabid("Activities").",'get_history',5,'History',0)");
 
 	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",0,'get_attachments',5,'Attachments',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",0,'get_attachments',6,'Attachments',0)");
 
 	//Inserting Lead Related Lists	
 
