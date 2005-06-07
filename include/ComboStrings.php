@@ -152,8 +152,13 @@ $combo_strings = Array(
                                         ,'Other Problem'=>'Other Problem'
                                         ),
 'ticketpriorities_dom' => Array('Low'=>'Low'
-                                        ,'Medium'=>'Medium'
+                                        ,'Normal'=>'Normal'
                                         ,'High'=>'High'
+                                        ,'Urgent'=>'Urgent'
+                                        ),
+'ticketseverities_dom' => Array('Minor'=>'Minor'
+                                        ,'Major'=>'Major'
+                                        ,'Feature'=>'Feature'
                                         ,'Critical'=>'Critical'
                                         ),
 
