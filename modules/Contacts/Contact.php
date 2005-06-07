@@ -358,7 +358,7 @@ class Contact extends CRMEntity {
 	}
 	function get_tickets($id)
 	{
-		$query = "select crmentity.crmid, troubletickets.title, contactdetails.contactid, troubletickets.contact_id, contactdetails.firstname, contactdetails.lastname, troubletickets.status, troubletickets.priority, crmentity.smownerid from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on contactdetails.contactid=troubletickets.contact_id left join users on users.id=crmentity.smownerid where crmentity.deleted=0 and contactdetails.contactid=".$id;
+		$query = "select crmentity.crmid, troubletickets.title, contactdetails.contactid, troubletickets.parent_id, contactdetails.firstname, contactdetails.lastname, troubletickets.status, troubletickets.priority, crmentity.smownerid from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on contactdetails.contactid=troubletickets.parent_id left join users on users.id=crmentity.smownerid where crmentity.deleted=0 and contactdetails.contactid=".$id;
 		renderRelatedTickets($query,$id);
 	}
 
