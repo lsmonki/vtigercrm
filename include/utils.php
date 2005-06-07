@@ -947,9 +947,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
         	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" cols="80" rows="15">'.$value.'</textarea></td>';
 	}
-	elseif($uitype == 21)
+	elseif($uitype == 21 || $uitype == 24)
 	{
-		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+		$custfld .= '<td width="20%" class="dataLabel" valign="top">';
+                if($uitype == 24)
+                {
+                        $custfld .= '<font color="red">*</font>';
+                }
+		$custfld .= $mod_strings[$fieldlabel].':</td>';
         	$custfld .= '<td><textarea name="'.$fieldname.'" cols="30" rows="2">'.$value.'</textarea></td>';
 	}
 	elseif($uitype == 22)
@@ -1565,7 +1570,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$custfld .= '<td width="30%" valign="top" class="dataField"><a href="http://'.$col_fields[$fieldname].'" target="_blank">'.$col_fields[$fieldname].'</a></td>';
 	}
-        elseif($uitype == 19 || $uitype == 21 || $uitype == 22)
+        elseif($uitype == 19 || $uitype == 21 || $uitype == 22 || $uitype == 24)
         {
                 $col_fields[$fieldname]=nl2br($col_fields[$fieldname]);
                 $custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
