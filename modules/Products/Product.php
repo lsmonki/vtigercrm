@@ -97,7 +97,7 @@ class Product extends CRMEntity {
 
 	function get_tickets($id)
         {
-		$query = 'select users.user_name, users.id, products.productid,products.productname, troubletickets.ticketid,troubletickets.title, troubletickets.status, troubletickets.priority, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from products  inner join seticketsrel on seticketsrel.crmid = products.productid inner join troubletickets on troubletickets.ticketid = seticketsrel.ticketid inner join crmentity on crmentity.crmid = troubletickets.ticketid left join users on users.id=crmentity.smownerid where products.productid= '.$id.' and crmentity.deleted=0';
+		$query = 'select users.user_name, users.id, products.productid,products.productname, troubletickets.ticketid, troubletickets.parent_id, troubletickets.title, troubletickets.status, troubletickets.priority, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from products  inner join seticketsrel on seticketsrel.crmid = products.productid inner join troubletickets on troubletickets.ticketid = seticketsrel.ticketid inner join crmentity on crmentity.crmid = troubletickets.ticketid left join users on users.id=crmentity.smownerid where products.productid= '.$id.' and crmentity.deleted=0';
           renderRelatedTickets($query,$id);
         }
 
