@@ -52,9 +52,9 @@ function renderRelatedAttachments($query,$id)
 
 function Get_Ticket_History()
 {
-        global $app_strings;
+        global $mod_strings;
         echo '<br><br>';
-        echo get_form_header($app_strings['LBL_HISTORY'],"", false);
+        echo get_form_header($mod_strings['LBL_TICKET_HISTORY'],"", false);
         include("modules/HelpDesk/TicketHistory.php");
 }
 
