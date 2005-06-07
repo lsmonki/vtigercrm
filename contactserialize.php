@@ -17,6 +17,7 @@
 //include("Serializer.php");
 require_once("config.php");
 require_once('modules/Contacts/Contact.php');
+require_once('modules/Products/Product.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
@@ -310,8 +311,11 @@ $server->wsdl->addComplexType(
         	'groupname' => array('name'=>'groupname','type'=>'xsd:string'),
         	'firstname' => array('name'=>'firstname','type'=>'xsd:string'),
         	'lastname' => array('name'=>'lastname','type'=>'xsd:string'),
-	        'contact_id' => array('name'=>'contact_id','type'=>'xsd:string'),
+	        'parent_id' => array('name'=>'parent_id','type'=>'xsd:string'),
+	        'productid' => array('name'=>'productid','type'=>'xsd:string'),
+	        'productname' => array('name'=>'productname','type'=>'xsd:string'),
 	        'priority' => array('name'=>'priority','type'=>'xsd:string'),
+	        'severity' => array('name'=>'severity','type'=>'xsd:string'),
 	        'status' => array('name'=>'status','type'=>'xsd:string'),
 	        'category' => array('name'=>'category','type'=>'xsd:string'),
 	        'description' => array('name'=>'description','type'=>'xsd:string'),
@@ -330,13 +334,27 @@ $server->wsdl->addComplexType(
              )
 );	
 $server->wsdl->addComplexType(
+        'combo_values_array',
+        'complexType',
+        'array',
+        '',
+        array(
+                'productid' => array('name'=>'productid','type'=>'tns:xsd:string'),
+                'productname' => array('name'=>'productname','type'=>'tns:xsd:string'),
+                'ticketpriorities' => array('name'=>'ticketpriorities','type'=>'tns:xsd:string'),
+                'ticketseverities' => array('name'=>'ticketseverities','type'=>'tns:xsd:string'),
+                'ticketcategories' => array('name'=>'ticketcategories','type'=>'tns:xsd:string'),
+             )
+);	
+
+$server->wsdl->addComplexType(
         'ticket_update_comment_array',
         'complexType',
         'array',
         '',
         array(
                 'ticketid' => array('name'=>'ticketid','type'=>'tns:xsd:string'),
-                'contact_id' => array('name'=>'contact_id','type'=>'tns:xsd:string'),
+                'parent_id' => array('name'=>'parent_id','type'=>'tns:xsd:string'),
                 'createdtime' => array('name'=>'createdtime','type'=>'tns:xsd:string'),
                 'comments' => array('name'=>'comments','type'=>'tns:xsd:string'),
              )
@@ -402,7 +420,7 @@ $server->register(
   
 $server->register(
 	'create_ticket',
-	array('title'=>'xsd:string','description'=>'xsd:string','priority'=>'xsd:string','category'=>'xsd:string','user_name'=>'xsd:string','contact_id'=>'xsd:string'),
+	array('title'=>'xsd:string','description'=>'xsd:string','priority'=>'xsd:string','severity'=>'xsd:string','category'=>'xsd:string','user_name'=>'xsd:string','parent_id'=>'xsd:string','product_id'=>'xsd:string'),
 	array('return'=>'tns:tickets_list_array'),
 	$NAMESPACE);
  
@@ -419,6 +437,12 @@ $server->register(
 	$NAMESPACE);
 
 $server->register(
+	'get_combo_values',
+	array('id'=>'xsd:string'),
+	array('return'=>'tns:combo_values_array'),
+	$NAMESPACE);
+
+$server->register(
 	'update_ticket_comment',
 	array('ticketid'=>'xsd:string'),
 	array('ownerid'=>'xsd:string'),
@@ -426,11 +450,22 @@ $server->register(
 	array('comments'=>'xsd:string'),
 	array('return'=>'tns:ticket_update_comment_array'),
 	$NAMESPACE);
+$server->register(
+        'close_current_ticket',
+        array('ticketid'=>'xsd:string'),
+	array('return'=>'xsd:string'),
+        $NAMESPACE);
 
 $server->register(
 	'update_login_details',
 	array('id'=>'xsd:string','flag'=>'xsd:string'),
 	array('return'=>'tns:user_array'),
+	$NAMESPACE);
+
+$server->register(
+	'send_mail_for_password',
+	array('email'=>'xsd:string'),
+	array('return'=>'xsd:string'),
 	$NAMESPACE);
 
 $server->register(
@@ -780,6 +815,38 @@ function get_ticket_comments($ticketid)
 
 	return $response;
 }
+function get_combo_values($id)
+{
+	global $adb;
+	$output = Array();
+	$sql = "select * from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0";
+	$result = $adb->query($sql);
+	$noofrows = $adb->num_rows($result);
+	for($i=0;$i<$noofrows;$i++)
+        {
+        	$output['productid']['productid'][$i] = $adb->query_result($result,$i,"productid");
+                $output['productname']['productname'][$i] = $adb->query_result($result,$i,"productname");
+        }
+
+	$result1 = $adb->query("select * from ticketpriorities");
+	for($i=0;$i<$adb->num_rows($result1);$i++)
+	{
+		$output['ticketpriorities']['ticketpriorities'][$i] = $adb->query_result($result1,$i,"ticketpriorities");
+	}
+
+        $result2 = $adb->query("select * from ticketseverities");
+        for($i=0;$i<$adb->num_rows($result2);$i++)
+        {
+                $output['ticketseverities']['ticketseverities'][$i] = $adb->query_result($result2,$i,"ticketseverities");
+        }
+
+        $result3 = $adb->query("select * from ticketcategories");
+        for($i=0;$i<$adb->num_rows($result3);$i++)
+        {
+                $output['ticketcategories']['ticketcategories'][$i] = $adb->query_result($result3,$i,"ticketcategories");
+        }
+	return $output;
+}
 function get_tickets_list($user_name,$id)
 {
 //	require_once('modules/Users/User.php');
@@ -800,8 +867,11 @@ function get_tickets_list($user_name,$id)
 			"title"    => $ticket[title],
 			"firstname" => $ticket[firstname],
 			"lastname" => $ticket[lastname],
-			"contact_id"=> $ticket[contact_id],
+			"parent_id"=> $ticket[parent_id],
+			"productid"=> $ticket[productid],
+			"productname"=> $ticket[productname],
 			"priority" => $ticket[priority],
+			"severity"=>$ticket[severity],
 			"status"=>$ticket[status],
 			"category"=>$ticket[category],
 			"description"=>$ticket[description],
@@ -1269,7 +1339,7 @@ function create_contact1($user_name, $first_name, $last_name, $email_address ,$a
 	return $contact->id;
 }
 
-function create_ticket($title,$description,$priority,$category,$user_name,$contact_id)
+function create_ticket($title,$description,$priority,$severity,$category,$user_name,$parent_id,$product_id)
 {
 /*	require_once('modules/Users/User.php');
         $seed_user = new User();
@@ -1285,10 +1355,12 @@ function create_ticket($title,$description,$priority,$category,$user_name,$conta
     	$ticket->column_fields[ticket_title] = $title;
 	$ticket->column_fields[description]=$description;
 	$ticket->column_fields[ticketpriorities]=$priority;
+	$ticket->column_fields[ticketseverities]=$severity;
 	$ticket->column_fields[ticketcategories]=$category;
 	$ticket->column_fields[ticketstatus]='Open';
 
-	$ticket->column_fields[contact_id]=$contact_id;
+	$ticket->column_fields[parent_id]=$parent_id;
+	$ticket->column_fields[product_id]=$product_id;
 //	$ticket->column_fields[assigned_user_id]=$user_id;
     	//$ticket->saveentity("HelpDesk");
     	$ticket->save("HelpDesk");
@@ -1297,12 +1369,11 @@ function create_ticket($title,$description,$priority,$category,$user_name,$conta
 	$body = ' Ticket ID : '.$ticket->id.'<br> Ticket Title : '.$title.'<br><br>';
 	$_REQUEST['description'] = $body.$description;
 	$_REQUEST['return_module'] = 'HelpDesk';
-	$_REQUEST['contact_id'] = $contact_id; 
-	$_REQUEST['parent_id'] = $contact_id; 
-	$_REQUEST['assigned_user_id'] = $contact_id; 
+	$_REQUEST['parent_id'] = $parent_id; 
+	$_REQUEST['assigned_user_id'] = $parnet_id; 
 	require_once('modules/Emails/send_mail.php');
 
-	return get_tickets_list($user_name,$contact_id); 
+	return get_tickets_list($user_name,$parent_id); 
 	//return $ticket->id;
 }
 function update_ticket_comment($ticketid,$ownerid,$createdtime,$comments)
@@ -1311,6 +1382,19 @@ function update_ticket_comment($ticketid,$ownerid,$createdtime,$comments)
 	$servercreatedtime = date("Y-m-d H:i:s");
 	$sql = "insert into ticketcomments values('',".$ticketid.",'".$comments."','".$ownerid."','customer','".$servercreatedtime."')";
 	$adb->query($sql);
+
+	$updatequery = "update crmentity set modifiedtime = '".$servercreatedtime."' where crmid=".$ticketid;
+	$adb->query($updatequery);
+}
+function close_current_ticket($ticketid)
+{
+	global $adb;
+	$sql = "update troubletickets set status='Closed' where ticketid=".$ticketid;
+	$result = $adb->query($sql);
+	if($result)
+		return "<br><b>Ticket status is updated as 'Closed'.</b>";
+	else
+		return "<br><b>Ticket could not be closed.</br>";
 }
 function authenticate_user($username,$password)
 {
@@ -1359,6 +1443,67 @@ function update_login_details($id,$flag)
 	}
 
         return $list;
+}
+function send_mail_for_password($mailid)
+{
+	global $adb;
+        include("modules/Emails/class.phpmailer.php");
+
+	$sql = "select * from PortalInfo  where user_name='".$mailid."'";
+	$user_name = $adb->query_result($adb->query($sql),0,'user_name');
+	$password = $adb->query_result($adb->query($sql),0,'user_password');
+	$isactive = $adb->query_result($adb->query($sql),0,'isactive');
+
+	$fromquery = "select users.user_name, users.email1 from users inner join crmentity on users.id = crmentity.smownerid inner join contactdetails on contactdetails.contactid=crmentity.crmid where contactdetails.email ='".$mailid."'";
+	$initialfrom = $adb->query_result($adb->query($fromquery),0,'user_name');
+	$from = $adb->query_result($adb->query($fromquery),0,'email1');
+
+	$contents = "<br>Following are your Customer Portal login details :";
+	$contents .= "<br><br>User Name : ".$user_name;
+	$contents .= "<br>Password : ".$password;
+
+        $mail = new PHPMailer();
+
+        $mail->Subject = "Regarding your Customer Portal login details";
+        $mail->Body    = $contents;
+        $mail->IsSMTP();
+
+        $mailserverresult=$adb->query("select * from systems where server_type='email'");
+        $mail_server=$adb->query_result($mailserverresult,0,'server');
+
+        $mail->Host = $mail_server;
+        $mail->SMTPAuth = true;
+        $mail->Username = $mail_server_username;
+        $mail->Password = $mail_server_password;
+        $mail->From = $from;
+        $mail->FromName = $initialfrom;
+
+        $mail->AddAddress($user_name);
+        $mail->AddReplyTo($current_user->name);
+        $mail->WordWrap = 50;
+
+        $mail->IsHTML(true);
+
+        $mail->AltBody = "This is the body in plain text for non-HTML mail clients";
+	if($mailid == '')
+	{
+		return "false@@@<b>Please give your email id</b>";
+	}
+	elseif($user_name == '' && $password == '')
+	{
+		return "false@@@<b>Please check your email id for Customer Portal</b>";
+	}
+	elseif($isactive == 0)
+        {
+                return "false@@@<b>Your login is revoked. Please contact your admin.</b>";
+        }
+	elseif(!$mail->Send())
+	{
+		return "false@@@<b>Mail could not be sent</b>";
+	}
+	else
+		return "true@@@<b>Mail has been sent to your mail id with the customer portal login details</b>";
+
 }
 
 function retrievereportsto($reports_to,$user_id,$account_id)
