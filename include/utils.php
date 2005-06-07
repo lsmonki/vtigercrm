@@ -1370,6 +1370,40 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
 
         }
+        elseif($uitype == 68)
+        {
+                if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
+                        $value = $_REQUEST['parent_id'];
+
+		if($value != '')
+		{
+			$parent_module = getSalesEntityType($value);
+			if($parent_module == "Contacts")
+			{
+				$sql = "select * from  contactdetails where contactid=".$value;
+				$result = $adb->query($sql);
+				$first_name = $adb->query_result($result,0,"firstname");
+				$last_name = $adb->query_result($result,0,"lastname");
+				$parent_name = $first_name.' '.$last_name;
+				$contact_selected = "selected";
+
+			}
+			elseif($parent_module == "Accounts")
+			{
+				$sql = "select * from  account where accountid=".$value;
+				$result = $adb->query($sql);
+				$parent_name = $adb->query_result($result,0,"accountname");
+				$account_selected = "selected";
+
+			}
+		}
+		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>';
+                $custfld .= '<OPTION value="Contacts" '.$contact_selected.'>'.$app_strings['COMBO_CONTACTS'];
+                $custfld .= '<OPTION value="Accounts" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
+
+	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
+
+        }
 
 	elseif($uitype == 65)
 	{
@@ -1779,6 +1813,39 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
                                 $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$first_name.' '.$last_name.'</a></td>';
 			}
+		}
+		else
+		{
+			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+			$custfld .= '<td width="30%" valign="top" class="dataField">'.$value.'</td>';
+		}
+	}
+	elseif($uitype == 68)
+	{
+		$value = $col_fields[$fieldname];
+		if($value != '')
+		{
+			$parent_module = getSalesEntityType($value);
+			if($parent_module == "Contacts")
+			{
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_CONTACT_NAME'].':</td>';
+				$sql = "select * from  contactdetails where contactid=".$value;
+				$result = $adb->query($sql);
+				$first_name = $adb->query_result($result,0,"firstname");
+                                $last_name = $adb->query_result($result,0,"lastname");
+
+                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$first_name.' '.$last_name.'</a></td>';
+			}
+			elseif($parent_module == "Accounts")
+			{
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_ACCOUNT_NAME'].':</td>';
+				$sql = "select * from account where accountid=".$value;
+				$result = $adb->query($sql);
+				$account_name = $adb->query_result($result,0,"accountname");
+
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$account_name.'</a></td>';
+			}
+
 		}
 		else
 		{
@@ -2414,6 +2481,12 @@ function getRelatedTo($module,$list_result,$rset)
 
         $evt_query="select seactivityrel.crmid,crmentity.setype from seactivityrel, crmentity where seactivityrel.activityid='".$activity_id."' and seactivityrel.crmid = crmentity.crmid";
 
+	if($module == 'HelpDesk')
+	{
+        	$activity_id = $adb->query_result($list_result,$rset,"parent_id");
+		$evt_query = "select * from crmentity where crmid=".$activity_id;
+	}
+
         $evt_result = $adb->query($evt_query);
         $parent_module = $adb->query_result($evt_result,0,'setype');
         $parent_id = $adb->query_result($evt_result,0,'crmid');
@@ -2956,6 +3029,33 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		else
 			$value='';
 	}
+	elseif($uitype == 68)
+	{
+		global $adb;
+
+		$parentid = $adb->query_result($list_result,$list_result_count,"parent_id");
+		$parenttype = $adb->query_result($list_result,$list_result_count,"parent_type");
+
+		if($parenttype == "Contacts")	
+		{
+			$tablename = "contactdetails";		$fieldname = "contactname";     $idname="contactid";
+		}
+		if($parenttype == "Accounts")	
+		{
+			$tablename = "account";	$fieldname = "accountname";	$idname="accountid";	
+		}
+		if($parentid != '')
+                {
+			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
+			//echo '<br> query : .. '.$sql;
+			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
+			//echo '<br><br> val : '.$fieldvalue;
+
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'>'.$fieldvalue.'</a>';
+		}
+		else
+			$value='';
+	}
 	elseif($uitype == 78)
         {
 
@@ -3126,7 +3226,7 @@ function getListQuery($module,$where='')
 {
 	if($module == "HelpDesk")
 	{
-		$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.contactid, troubletickets.contact_id, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentity.deleted=0";
+		$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.contactid, troubletickets.parent_id, contactdetails.firstname, contactdetails.lastname, account.accountid, account.accountname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.parent_id=contactdetails.contactid left join account on account.accountid=troubletickets.parent_id left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentity.deleted=0";
 		//$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid  left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id where crmentity.deleted=0";
 	}
 	if($module == "Accounts")
