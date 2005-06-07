@@ -112,14 +112,26 @@ function renderRelatedAttachments($query,$id)
 	echo '</form>';
 }
 
-/*
-function renderRelatedTickets($query)
+
+function renderRelatedTickets($query,$id)
 {
-  global $mod_strings;
-  global $app_strings;
-  $list .= '<td valign="bottom" align="right"><input title="New TICKET" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
+        global $mod_strings;
+        global $app_strings;
+        require_once('include/RelatedListView.php');
+
+	$hidden = getHiddenValues($id);
+        echo $hidden;
+
+	$focus = new HelpDesk();
+        $button = '';
+
+	$button .= '<td valign="bottom" align="right"><input title="New TICKET" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
+	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+
+        $list = GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
+        echo '</form>';
 }
-*/
+
 
 echo get_form_footer();
 
