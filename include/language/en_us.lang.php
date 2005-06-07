@@ -647,6 +647,9 @@ $app_strings = Array(
 //Added for RSS Module
 'LBL_RSS_FEEDS'=>'RSS Feeds',
 'LBL_ADD_RSS_FEEDS'=>'Add New RSS Feed',
+
+//Added fields after 4.2 alpha
+'COMBO_ACCOUNTS'=>'Accounts',
 );
 
 
