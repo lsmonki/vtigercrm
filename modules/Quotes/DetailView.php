@@ -78,6 +78,13 @@ $xtpl->assign("BLOCK2", $block_2);
 //get Description Information
 $block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
 $block_3 = getDetailBlockInformation("Quotes",3,$focus->column_fields);
+
+$block_6_header = getBlockTableHeader("LBL_TERMS_INFORMATION");
+$block_6 = getDetailBlockInformation("Quotes",6,$focus->column_fields);
+$xtpl->assign("BLOCK6_HEADER", $block_6_header);
+$xtpl->assign("BLOCK6", $block_6);
+
+
 $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 $xtpl->assign("BLOCK3", $block_3);
 

@@ -62,6 +62,8 @@ $block_2 = getBlockInformation("Quotes",2,$focus->mode,$focus->column_fields);
 $block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
 $block_3 = getBlockInformation("Quotes",3,$focus->mode,$focus->column_fields);
 
+$block_6_header = getBlockTableHeader("LBL_TERMS_INFORMATION");
+$block_6 = getBlockInformation("Quotes",6,$focus->mode,$focus->column_fields);
 
 $block_4_header = getBlockTableHeader("LBL_RELATED_PRODUCTS");
 
@@ -104,6 +106,8 @@ $xtpl->assign("BLOCK2_HEADER", $block_2_header);
 $xtpl->assign("BLOCK3", $block_3);
 $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 $xtpl->assign("BLOCK4_HEADER", $block_4_header);
+$xtpl->assign("BLOCK6", $block_6);
+$xtpl->assign("BLOCK6_HEADER", $block_6_header);
 
 
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
