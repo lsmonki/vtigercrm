@@ -945,7 +945,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 19)
 	{
 		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
-        	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" cols="80" rows="15">'.$value.'</textarea></td>';
+        	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" cols="70" rows="8">'.$value.'</textarea></td>';
 	}
 	elseif($uitype == 21 || $uitype == 24)
 	{
