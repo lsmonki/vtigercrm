@@ -142,8 +142,10 @@ $mod_strings = Array(
 'Modified Time'=>'Modified Time',
 'Description'=>'Description',
 'Account Name'=>'Account Name',
+'Terms & Conditions'=>'Terms & Conditions',
 //Quote Info
 'LBL_QUOTE_INFORMATION'=>'Quote Information',
+'LBL_TERMS_INFORMATION'=>'Terms & Conditions',
 'LBL_QUOTE'=>'Quote:',
 
 
