@@ -3872,6 +3872,7 @@
 		<field name="tax" type="N" size="11.3"></field>
 		<field name="total" type="N" size="11.3"></field>
 		<field name="accountid" type="I" size="19"></field>
+		<field name="terms_conditions" type="X"></field>
 		
                   
 <opt>Type=InnoDB</opt>
