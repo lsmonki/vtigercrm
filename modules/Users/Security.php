@@ -464,6 +464,10 @@ $this->db->query("insert into field values (19,".$this->db->getUniqueID("field")
 
  //Block3
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,3,1,'V~O')");
+
+//Block 6
+$this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'terms_conditions','quotes',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,6,1,'V~O')");
+
 //Quote Details -- END
 
 //Purchase Order Details -- START
