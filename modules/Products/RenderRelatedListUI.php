@@ -49,6 +49,7 @@ function renderRelatedTickets($query,$id)
 
         $hidden = getHiddenValues($id);
         echo $hidden;
+	echo '<input type="hidden" name="parent_id" value="">';
         $focus = new HelpDesk();
 
 	$button = '';
