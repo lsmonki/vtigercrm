@@ -316,7 +316,9 @@ class CRMEntity extends SugarBean
     $old_user_id = $adb->query_result($crmresult,0,"smownerid");
     $old_status = $adb->query_result($tktresult,0,"status");
     $old_priority = $adb->query_result($tktresult,0,"priority");
-    if($old_user_id != $this->column_fields['assigned_user_id'] || $old_status != $this->column_fields['ticketstatus'] || $old_priority != $this->column_fields['ticketpriorities'])
+    $old_severity = $adb->query_result($tktresult,0,"severity");
+    $old_category = $adb->query_result($tktresult,0,"category");
+    if($old_user_id != $this->column_fields['assigned_user_id'] || $old_status != $this->column_fields['ticketstatus'] || $old_priority != $this->column_fields['ticketpriorities'] || $old_severity != $this->column_fields['ticketseverities'] || $old_category != $this->column_fields['ticketcategories'])
     {
       $updatelog .= date("l dS F Y h:i:s A").' by '.$current_user->user_name.'--//--';
     }	
@@ -333,7 +335,14 @@ class CRMEntity extends SugarBean
     {
       $updatelog .= ' Priority Changed to '.$this->column_fields['ticketpriorities'].'\.';
     }
-
+    if($old_severity != $this->column_fields['ticketseverities'])
+    {
+      $updatelog .= ' Severity Changed to '.$this->column_fields['ticketseverities'].'\.';
+    }
+    if($old_category != $this->column_fields['ticketcategories'])
+    {
+      $updatelog .= ' Category Changed to '.$this->column_fields['ticketcategories'].'\.';
+    }
     if($old_user_id != $this->column_fields['assigned_user_id'] || $old_status != $this->column_fields['ticketstatus'] || $old_priority != $this->column_fields['ticketpriorities'])
     {
       $updatelog .= '--//--';
