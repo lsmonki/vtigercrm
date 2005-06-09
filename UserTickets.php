@@ -249,8 +249,49 @@ function HomeTickets($result)
 function CreateTicket()
 {
 	global $mod_strings;
+	global $client;
+
+        $params = Array('id' => "$result[0]");
+        $result = $client->call('get_combo_values', $params, $Server_Path, $Server_Path);
+
+        $_SESSION['combolist'] = $result;
+	$combolist = $_SESSION['combolist'];
+	for($i=0;$i<count($result);$i++)
+	{
+		if($result[$i]['productid'] != '')
+		{
+			$productslist[0] = $result[$i]['productid'];
+		}
+		if($result[$i]['productname'] != '')
+		{
+			$productslist[1] = $result[$i]['productname'];
+		}
+		if($result[$i]['ticketpriorities'] != '')
+		{
+			$ticketpriorities = $result[$i]['ticketpriorities'];
+		}
+		if($result[$i]['ticketseverities'] != '')
+		{
+			$ticketseverities = $result[$i]['ticketseverities'];
+		}
+		if($result[$i]['ticketcategories'] != '')
+		{
+			$ticketcategories = $result[$i]['ticketcategories'];
+		}
+	}
+
+	$noofrows = count($productslist[0]);
+
+	for($i=0;$i<$noofrows;$i++)
+	{
+		if($i > 0)
+			$productarray .= ',';
+		$productarray .= "'".$productslist[1][$i]."'";
+	}
+
 	$list = '';
 	$list .= '<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">';
+
 	$list .= '<tr><td class="pageTitle uline">'.$mod_strings['LBL_CREATE_NEW_TICKET'].'</td></tr>';
 	$list .= '<tr><td height="25">'.$mod_strings['LBL_NEW_INFORMATION'].'</td></tr>';
 	$list .= '<tr><td style="padding-top: 10px">';
@@ -258,21 +299,47 @@ function CreateTicket()
 	$list .= '<input type=hidden name=username value="'.$_REQUEST['username'].'">';
 	$list .= '<input type=hidden name=fun value="save">';
 	$list .= '<table border="0" cellspacing="2" cellpadding="2">';
+
+
 	$list .= '<tr><td align="right">'.$mod_strings['LBL_TITLE'].': </td>';
-	$list .= '<td><input name="title" maxlength="255" type="text" value=""></td></tr>';
+	$list .= '<td><input name="title" maxlength="255" type="text" value=""></td>';
+
+$list .= '<tr><td align="right">'.$mod_strings['LBL_PRODUCT_NAME'].' : </td>';
+//To get Product dropdown - start
+$list .= '      <style>                       @import url( css/dropdown.css );                </style>
+
+                <script src="js/modomt.js"></script>
+                <script src="js/getobject2.js"></script>
+                <script src="js/acdropdown.js"></script>
+                <script language="javascript">
+	                var products = new Array('.$productarray.')
+                </script> ';
+$list .=  '<td valign="center">     
+                <input class="dropdown" autocomplete="off" name="productid" id="inputer2" style="width: 135px;" acdropdown="true" autocomplete_list="array:products" autocomplete_list_sort="false" autocomplete_matchsubstring="true">
+                </td>';
+//To get Product dropdown - end
 
 	$list .= '<tr><td align="right">'.$mod_strings['LBL_PRIORITY'].': </td>';
 	$list .= '<td><select name="priority">';
-	$list .= '<OPTION value="Low">'.$mod_strings['LOW'].'</OPTION>';
-	$list .= '<OPTION value="Medium">'.$mod_strings['MEDIUM'].'</OPTION>';
-	$list .= '<OPTION value="High">'.$mod_strings['HIGH'].'</OPTION>';
-	$list .= '<OPTION value="Critical">'.$mod_strings['CRITICAL'].'</OPTION>';
+	for($i=0;$i<count($ticketpriorities);$i++)
+	{
+		$list .= '<OPTION value="'.$ticketpriorities[$i].'">'.$ticketpriorities[$i].'</OPTION>';
+	}
 	$list .= '</select></td></tr>';
+	$list .= '<tr><td align="right">'.$mod_strings['LBL_SEVERITY'].': </td>';
+	$list .= '<td><select name="severity">';
+	for($i=0;$i<count($ticketseverities);$i++)
+        {
+                $list .= '<OPTION value="'.$ticketseverities[$i].'">'.$ticketseverities[$i].'</OPTION>';
+        }
+	$list .= '</select></td></tr>';
+
 	$list .= '<tr><td align="right">'.$mod_strings['LBL_CATEGORY'].': </td>';
 	$list .= '<td><select name="category">';
-	$list .= '<OPTION value="Big Problem">'.$mod_strings['BIG_PROBLEM'].'</OPTION>';
-	$list .= '<OPTION value="Small Problem">'.$mod_strings['SMALL_PROBLEM'].'</OPTION>';
-	$list .= '<OPTION value="Other Problem">'.$mod_strings['OTHER_PROBLEM'].'</OPTION>';
+	for($i=0;$i<count($ticketcategories);$i++)
+        {
+                $list .= '<OPTION value="'.$ticketcategories[$i].'">'.$ticketcategories[$i].'</OPTION>';
+        }
 	$list .= '</select></td></tr>';
 
 	$list .= '<tr><td align="right" valign="top">'.$mod_strings['LBL_DESCRIPTION'].': </td>';
@@ -298,10 +365,23 @@ function GetDetailView($result,$ticketid)
 	$innerarray = $commentresult[0];
 	$outercount = count($result);
 	$innercount = count($innerarray);
+	
+	for($i=0;$i<$outercount;$i++)
+	{
+		if($result[$i]['ticketid'] == $ticketid && $result[$i]['status'] != 'Closed')
+		{
+			$close_this_ticket = '<td class="pageTitle uline" align="right"><a href=general.php?action=UserTickets&fun=close_ticket&ticketid='.$ticketid.'>'.$mod_strings['LBL_CLOSE_TICKET'].'</a>&nbsp;&nbsp;&nbsp;</td>';
+		}
+	}
 
 	$list .= '';
 	$list .= '<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">';
-	$list .= '<tr><td class="pageTitle uline">'.$mod_strings['LBL_TICKET_INFORMATION'].'</td></tr></table>';
+	$list .= '<tr><td class="pageTitle uline">'.$mod_strings['LBL_TICKET_INFORMATION'].'</td>';
+
+	if($close_this_ticket != '')
+		$list .= $close_this_ticket;
+
+	$list .= '</tr></table>';
 	$list .= '<table border="0" cellspacing="4" cellpadding="2" style="margin-top:10px">';
         for($i=0;$i<$outercount;$i++)
         {
@@ -321,6 +401,11 @@ function GetDetailView($result,$ticketid)
 			$ticket_status = $result[$i]['status'];
 			$list .= '<td width="15%" align="right" nowrap>'.$mod_strings['LBL_MODIFIED_TIME'].' : </td>';
                         $list .= '<td width="15%"><b>'.$result[$i]['modifiedtime'].'</b></td>';
+
+			$list .= '<tr><td width="15%" align="right" nowrap>'.$mod_strings['LBL_SEVERITY'].' : </td>';
+                        $list .= '<td width="15%" nowrap><b>'.$result[$i]['severity'].'</b></td>';
+			$list .= '<td width="15%" align="right" nowrap>'.$mod_strings['LBL_PRODUCT_NAME'].' : </td>';
+                        $list .= '<td width="15%" nowrap><b>'.$result[$i]['productname'].'</b></td>';
 
 			$list .= '<tr><td align="right" nowrap>'.$mod_strings['LBL_TITLE'].' : </td>';
                         $list .= '<td><b>'.$result[$i]['title'].'</b></td></tr>';
@@ -365,6 +450,13 @@ function GetDetailView($result,$ticketid)
 
 	return $list;
 }
+function Close_Ticket($result,$ticketid)
+{
+	global $client;
+	$params = Array('id'=>"$ticketid");
+	$result = $client->call('close_current_ticket', $params, $Server_Path, $Server_Path);
+	return $result;
+}
 function UpdateComment()
 {
 	global $client;
@@ -392,15 +484,20 @@ function SaveTicket($ticket,$username)
 	$title = $_REQUEST['title'];
 	$description = $_REQUEST['description'];
 	$priority = $_REQUEST['priority'];
+	$severity = $_REQUEST['severity'];
 	$category = $_REQUEST['category'];
-	$contact_id = $_SESSION['customer_id'];
+	$parent_id = $_SESSION['customer_id'];
+	$productid = $_SESSION['combolist'][0]['productid'][$_REQUEST['productid']];
+
 	$params = array(
 			'title'=>"$title",
 			'description'=>"$description",
 			'priority'=>"$priority",
+			'severity'=>"$severity",
 			'category'=>"$category",
 			'user_name' => "$username",
-			'contact_id'=>"$contact_id");
+			'parent_id'=>"$parent_id",
+			'product_id'=>"$productid");
 
 	$result = $client->call('create_ticket', $params);
 
@@ -544,6 +641,12 @@ if(isset($_REQUEST['fun']) && $_REQUEST['fun'] == 'detail')
 	$list = GetDetailView($result,$ticketid);
 	echo $list;
 }
+if(isset($_REQUEST['fun']) && $_REQUEST['fun'] == 'close_ticket')
+{
+	$ticketid = $_REQUEST['ticketid'];
+	$list = Close_Ticket($result,$ticketid);
+	echo $list;
+}
 
 if($_REQUEST['fun'] == 'savepassword')
 {
@@ -555,6 +658,7 @@ if($_REQUEST['fun'] == 'save')
 {
 	$ticket = Array(
 			'title'=>'title',
+			'productid'=>'productid',
 			'description'=>'description',
 			'priority'=>'priority',
 			'category'=>'category',
@@ -563,6 +667,7 @@ if($_REQUEST['fun'] == 'save')
 	foreach($ticket as $key => $val)
 		$ticket[$key] = $_REQUEST[$key];
 	$ticket['owner'] = $username;
+	$ticket['productid'] = $_SESSION['combolist'][0]['productid'][$ticket['productid']];
 
 	SaveTicket($ticket,$username);
 }
