@@ -4999,5 +4999,19 @@
 		</data>
 	</table>
 
+	<table name="organizationdetails">
+		<field name="organizationame" type="C" size="60"></field>
+		<field name="address" type="C" size="150"></field>
+		<field name="city" type="C" size="100"></field>
+		<field name="state" type="C" size="100"></field>
+		<field name="country" type="C" size="100"></field>
+		<field name="code" type="C" size="30"></field>
+		<field name="phone" type="C" size="30"></field>
+		<field name="fax" type="C" size="30"></field>
+		<field name="website" type="C" size="50"></field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
 
 </schema>
