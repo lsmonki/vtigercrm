@@ -5014,4 +5014,56 @@
 		</data>
 	</table>
 
+	<table name="recurringtype">
+		<field name="recurringeventid" type="I" size="19">
+			<KEY/>
+			<AUTOINCREMENT/>
+
+		</field>
+		<field name="recurringtype" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="RecurringEvent_UK0">
+			<UNIQUE/>
+			<col>status</col>
+		</index>
+		<data>
+
+		</data>
+	</table>
+
+	<table name="recurringevents">
+		<field name="recurringid" type="I" size="19">
+			<KEY/>
+			<AUTOINCREMENT/>
+		</field>
+		<field name="activityid" type="I" size="19">
+			<NOTNULL/>
+		</field>
+		<field name="recurringdate" type="D"></field>
+		<field name="recurringtype" type="I" size="30"></field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+
+	<table name="recurringevents" alter="true">
+
+		<constraint>ADD CONSTRAINT fk_RecurringEvents FOREIGN KEY (recurringid) REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
+
+		<opt>Type=InnoDB</opt>
+
+		<data>
+		</data>
+	</table>
+
 </schema>
