@@ -145,6 +145,7 @@ $mod_strings = Array(
 'Severity'=>'Severity',
 'Product Name'=>'Product Name',
 'Related to'=>'Related to',
+'LBL_MORE'=>'More',
 
 );
 
