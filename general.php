@@ -24,7 +24,17 @@ global $client;
 $client = new soapclient($Server_Path."/contactserialize.php", false,
                                                 $proxyhost, $proxyport, $proxyusername, $proxypassword);
 
-if($_REQUEST['logout'] == 'true')
+if($_REQUEST['param'] == 'forgot_password')
+{
+	global $client;
+
+	$email = $_REQUEST['email_id'];
+	$params = array('email' => "$email");
+	$result = $client->call('send_mail_for_password', $params);
+	$_REQUEST['mail_send_message'] = $result;
+	require_once("supportpage.php");
+}
+elseif($_REQUEST['logout'] == 'true')
 {
 	$id = $_SESSION['customer_id'];
         $params = array('id' => "$id",'flag'=>"logout");
