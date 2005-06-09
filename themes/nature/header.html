@@ -206,7 +206,8 @@
         <!-- END: sub_menu -->
       </tbody>
     </table>
-	<div class="subMenu" id="subMenu" style="position:absolute;display:none;filter:Alpha(Opacity=80);-moz-opacity:0.8;z-index:50">
+	<div id="subMenuBg" class="subMenu" style="position:absolute;display:none;filter:Alpha(Opacity=90);-moz-opacity:0.90;z-index:50"></div>
+	<div id="subMenu" style="position:absolute;display:none;z-index:60">
 		<table cellspacing="2" cellpadding="2" border="0">
                 <!-- BEGIN: dropdown_sub_menu_item -->
 		  <tr> 
@@ -216,22 +217,7 @@
                 <!-- END: dropdown_sub_menu_item -->
         </table>
 	</div>
-	<script>
-	function showSubMenu() {
-		getObj("subMenu").style.display="block"
-		getObj("subMenu").style.top=findPosY(getObj("showSubMenu"))+15
-		getObj("subMenu").style.left=findPosX(getObj("showSubMenu"))+getObj("showSubMenu").offsetWidth-getObj("subMenu").offsetWidth
-	}
-	function hideSubMenu(ev) {
-		if (!ev) var obj = window.event.srcElement;
-		else var obj = ev.target;
-		
-		if (obj.id!="showSubMenu")
-			if (getObj("subMenu").style.display=="block")
-				getObj("subMenu").style.display="none"
-	}
-	document.onclick=hideSubMenu;
-	</script>
+	<script language="JavaScript" type="text/javascript" src="include/submenu.js"></script>
 	</td>
   </tr>
   <tr>
