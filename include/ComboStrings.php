@@ -230,7 +230,14 @@ $combo_strings = Array(
 
 'taxclass_dom' => Array('SalesTax'=>'SalesTax',
                         'Vat'=>'Vat'
-                        )
+                        ),
+
+'recurringtype_dom' => Array(''=>'',
+			'Daily'=>'Daily',
+			'Weekly'=>'Weekly',
+			'Monthly'=>'Monthly',
+			'Yearly'=>'Yearly'
+			)
 		
 );
 
