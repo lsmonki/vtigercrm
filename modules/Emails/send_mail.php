@@ -178,7 +178,7 @@ function getParentMailId($returnmodule,$parentid)
         if($returnmodule == 'Contacts' || $returnmodule == 'HelpDesk')
         {
 		if($returnmodule == 'HelpDesk')
-			$parentid = $_REQUEST['contact_id'];
+			$parentid = $_REQUEST['parent_id'];
                 $tablename = 'contactdetails';
                 $idname = 'contactid';
         }
