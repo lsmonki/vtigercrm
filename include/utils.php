@@ -1144,7 +1144,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 59)
 	{
-                if(isset($_REQUEST['parent_id']) & $_REQUEST['parent_id'] != '')
+		if($_REQUEST['module'] == 'HelpDesk')
+		{
+			if(isset($_REQUEST['product_id']) & $_REQUEST['product_id'] != '')
+				$value = $_REQUEST['product_id'];
+		}
+                elseif(isset($_REQUEST['parent_id']) & $_REQUEST['parent_id'] != '')
                         $value = $_REQUEST['parent_id'];
 
 		if($value != '')
@@ -2489,7 +2494,8 @@ function getRelatedTo($module,$list_result,$rset)
 	if($module == 'HelpDesk')
 	{
         	$activity_id = $adb->query_result($list_result,$rset,"parent_id");
-		$evt_query = "select * from crmentity where crmid=".$activity_id;
+		if($activity_id != '')
+			$evt_query = "select * from crmentity where crmid=".$activity_id;
 	}
 
         $evt_result = $adb->query($evt_query);
@@ -2524,6 +2530,12 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_query = "SELECT firstname,lastname FROM contactdetails WHERE contactid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"firstname") ." " .$adb->query_result($parent_result,0,"lastname");
+        }
+	elseif($parent_module == 'Contacts')
+        {
+                $parent_query = "SELECT firstname,lastname FROM contactdetails WHERE contactid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+		$parent_name = $adb->query_result($parent_result,0,"firstname") ." " .$adb->query_result($parent_result,0,"lastname");
         }
 
         $parent_value = "<a href='index.php?module=".$parent_module."&action=DetailView&record=".$parent_id."'>".$parent_name."</a>";
