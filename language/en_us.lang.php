@@ -73,6 +73,16 @@ $mod_strings = Array(
 'LBL_COMMENT_BY'=>'Comment by',
 'LBL_ON'=>'on',
 
+//Added fields ater 4_2alpha release
+'LBL_PRODUCT_NAME'=>'Product Name',
+'LBL_SEVERITY'=>'Severity',
+'LBL_FORGOT_LOGIN'=>'Forgot Password?',
+'LBL_SIGN_UP'=>'Sign Up?',
+'LBL_YOUR_EMAIL'=>'Your email id :',
+'LBL_SEND_PASSWORD'=>'Send Me Password',
+'LBL_CLOSE'=>'Close',
+'LBL_CLOSE_TICKET'=>'Close this ticket',
+
 );
 
 
