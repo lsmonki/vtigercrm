@@ -2501,6 +2501,11 @@ function getRelatedTo($module,$list_result,$rset)
         $evt_result = $adb->query($evt_query);
         $parent_module = $adb->query_result($evt_result,0,'setype');
         $parent_id = $adb->query_result($evt_result,0,'crmid');
+	if($module == 'HelpDesk' && ($parent_module == 'Accounts' || $parent_module == 'Contacts'))
+        {
+                global $theme;
+		$module_icon = '<img src="themes/'.$theme.'/images/'.$parent_module.'.gif" alt="" border=0 align=center title='.$parent_module.'> ';
+        }
         if($parent_module == 'Accounts')
         {
                 $parent_query = "SELECT accountname FROM account WHERE accountid=".$parent_id;
@@ -2538,7 +2543,7 @@ function getRelatedTo($module,$list_result,$rset)
 		$parent_name = $adb->query_result($parent_result,0,"firstname") ." " .$adb->query_result($parent_result,0,"lastname");
         }
 
-        $parent_value = "<a href='index.php?module=".$parent_module."&action=DetailView&record=".$parent_id."'>".$parent_name."</a>";
+	$parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=DetailView&record=".$parent_id."' title=".$parent_module.">".$parent_name."</a>";
         return $parent_value;
 
 
