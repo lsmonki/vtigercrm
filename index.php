@@ -12,6 +12,14 @@
 
 include("PortalConfig.php");
 include("language/en_us.lang.php");
+if($_REQUEST['close_window'] == 'true')
+{
+?>
+<script>
+	window.close();
+</script>
+<?php
+}
 ?>
 
 
@@ -65,6 +73,14 @@ include("language/en_us.lang.php");
           <tr> 
             <td>&nbsp;</td>
             <td><input class="button" type="submit" value="<?php  echo $mod_strings['LBL_LOGIN']?>"></td>
+
+            <td>&nbsp;</td>
+            <td align="right" width=100>
+		<a href='javascript:;' onclick='window.open("supportpage.php?param=forgot_password","Forgot Password","width=400,height=250");'><?php  echo $mod_strings['LBL_FORGOT_LOGIN']?></a><br>
+		<!--a href="supportpage.php?param=sign_up"><?php  echo $mod_strings['LBL_SIGN_UP']?></a-->
+	    </td>
+
+
           </tr>
         </table>
       </form></td>
