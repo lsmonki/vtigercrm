@@ -76,6 +76,7 @@ function clear_form(form) {
    </form>
 </table>
 <br>
+<script type='text/javascript' language='JavaScript' src='include/general.js'></script>
 <script type='text/javascript' language='JavaScript'>
 function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_name.value = product_name;
@@ -95,10 +96,13 @@ function add_data_to_relatedlist(entity_id,recordid) {
         opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&destination_module=Contacts&entityid="+entity_id+"&parid="+recordid;
 }
 
-function set_return_inventory(product_id, product_name,unitprice) {
-        window.opener.document.EditView.txtProduct.value = product_name;
-        window.opener.document.EditView.hdnProductId.value = product_id;
-        window.opener.document.EditView.hdnUnitPrice.value = unitprice;
+function set_return_inventory(product_id,product_name,unitprice,qtyinstock,curr_row) {
+        window.opener.document.EditView.elements["txtProduct"+curr_row].value = product_name;
+        window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
+	window.opener.document.EditView.elements["txtListPrice"+curr_row].value = unitprice;
+	getOpenerObj("unitPrice"+curr_row).innerHTML = unitprice;
+	getOpenerObj("qtyInStock"+curr_row).innerHTML = qtyinstock;
+	window.opener.document.EditView.elements["txtQty"+curr_row].focus()
 }
 </script>
 <!-- END: main -->

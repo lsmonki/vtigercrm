@@ -94,6 +94,7 @@ function set_return_specific(vendor_id, vendor_name) {
 }
 function set_return_inventory_pb(listprice, fldname) {
         window.opener.document.EditView.elements[fldname].value = listprice;
+	window.opener.document.EditView.elements[fldname].focus();
 }
 </script>
 <!-- END: main -->
