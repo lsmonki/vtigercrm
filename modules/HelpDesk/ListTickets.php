@@ -138,7 +138,7 @@ for ($i=0; $i<$adb->num_rows($tktresult); $i++)
 }
 
 if($resultcount > 5)
-        $list .= '</td></tr><tr><td colspan="11">&nbsp;</td><td align="right"><a href="index.php?action=index&module=HelpDesk">'.$current_module_strings['LBL_MORE'].'...&nbsp;&nbsp;</a></td>';
+        $list .= '</td></tr><tr><td colspan="11">&nbsp;</td><td align="right"><a href="index.php?action=index&module=HelpDesk&query=true&my_open_tickets=true">'.$current_module_strings['LBL_MORE'].'...&nbsp;&nbsp;</a></td>';
 
 $list.='</table>';
 echo $list;
