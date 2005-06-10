@@ -237,17 +237,18 @@ if($currentModule == "Rss")
 
 $xtpl->assign("CLOCK_TITLE", $app_strings['LBL_WORLD_CLOCK']);
 $xtpl->assign("WORLD_CLOCK", get_world_clock($image_path));
-if($currentModule != "Rss")
+if($currentModule != "Rss" && $WORLD_CLOCK_DISPLAY == 'true')
 {
- $xtpl->parse("main.left_form_clock");
+	$xtpl->parse("main.left_form_clock");
 }
 
 $xtpl->assign("CALC_TITLE", $app_strings['LBL_CALCULATOR']);
 $xtpl->assign("CALC", get_calc($image_path));
-if($currentModule != "Rss")
+if($currentModule != "Rss" && $CALCULATOR_DISPLAY == 'true')
 {
- $xtpl->parse("main.left_form_calculator");
+	$xtpl->parse("main.left_form_calculator");
 }
+
 $xtpl->parse("main");
 $xtpl->out("main");
 
