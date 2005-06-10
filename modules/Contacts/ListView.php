@@ -140,10 +140,6 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 			array_push($where_clauses, "contactsubdetails.assistant like ".PearDatabase::quote($assistant.'%')."");
 			$url_string .= "&yahooid=".$yahooid;
 	}
-	if(isset($emailoptout) && $emailoptout != "") {
-			array_push($where_clauses, "contactdetails.emailoptout = ".PearDatabase::quote($emailoptout)."");
-			$url_string .= "&emailoptout=".$emailoptout;
-	}
 	if(isset($mailingstreet) && $mailingstreet != "") {
 			array_push($where_clauses, "(contactaddress.mailingstreet like ".PearDatabase::quote($mailingstreet.'%')." OR contactaddress.otherstreet like ".PearDatabase::quote($mailingstreet.'%').")");
 			$url_string .= "&mailingstreet=".$mailingstreet;
@@ -167,8 +163,16 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	if(isset($current_user_only) && $current_user_only != "") {
 			array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
 			$url_string .= "&current_user_only=".$current_user_only;
+	}	
+	if(isset($emailoptout) && $emailoptout != "") {
+			array_push($where_clauses, "contactdetails.emailoptout = 1");
+			$url_string .= "&emailoptout=".$emailoptout;
 	}
-
+        else
+	{
+			array_push($where_clauses, "contactdetails.emailoptout = 0");
+	}
+	
 	$where = "";
 	foreach($where_clauses as $clause)
 	{
@@ -256,7 +260,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		if(isset($email)) $search_form->assign("EMAIL", $email);
 		if(isset($yahooid)) $search_form->assign("YAHOO_ID", $yahooid);
 		if(isset($assistant)) $search_form->assign("ASSISTANT", $assistant);
-		if(isset($emailoptout)) $search_form->assign("EMAIL_OPT_OUT", $emailoptout);
+		if(isset($emailoptout)) $search_form->assign("EMAIL_OPT_OUT", "CHECKED");
 		if(isset($mailingstreet)) $search_form->assign("ADDRESS_STREET", $mailingstreet);
 		if(isset($mailingcity)) $search_form->assign("ADDRESS_CITY", $mailingcity);
 		if(isset($mailingstate)) $search_form->assign("ADDRESS_STATE", $mailingstate);
