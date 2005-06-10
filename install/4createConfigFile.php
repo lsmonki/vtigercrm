@@ -214,6 +214,10 @@ $config .= "********************************************************************
 
 $config .= "\$vtiger_version = '".$vtiger_version."';\n\n";
 
+$config .= "//World clock & Calculator will be displayed if these variables are 'true' otherwise will not be displayed.\n";
+$config .= "\$WORLD_CLOCK_DISPLAY = 'true';\n";
+$config .= "\$CALCULATOR_DISPLAY = 'true';\n\n";
+
 $config .= "/* Database configuration\n";
 
 $config .= "      db_host_name:     MySQL Database Hostname\n";
