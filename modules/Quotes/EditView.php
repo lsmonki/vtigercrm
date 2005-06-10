@@ -122,19 +122,43 @@ if(isset($cust_fld))
 
 if($focus->mode == 'edit')
 {
+	print_r($focus->column_fields);	
 	$num_of_products = getNoOfAssocProducts($module,$focus);
 	$xtpl->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("Quotes",$focus);
 	$xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$xtpl->assign("MODE", $focus->mode);
 	$xtpl->assign("TAXVALUE", $focus->column_fields['txtTax']);
+	$xtpl->assign("ADJUSTMENTVALUE", $focus->column_fields['txtAdjustment']);
 	$xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
 	$xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
 }
 else
 {
-	$xtpl->assign("ROWCOUNT", '0');
+	$xtpl->assign("ROWCOUNT", '1');
 	$xtpl->assign("TAXVALUE", '0');
+	//Setting the first row
+	$output ='';
+	$output .= '<tr id="row1" class="oddListRow">';
+        $output .= '<td height="25" style="padding:3px;" nowrap><input id="txtProduct1" name="txtProduct1" type="text" readonly> <img src="'.$image_path.'search.gif" onClick=\'productPickList(this)\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $output .= '<td style="padding:3px;"><div id="qtyInStock1"></div>&nbsp;</td>';
+        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $output .= '<td style="padding:3px;"><input type=text id="txtQty1" name="txtQty1" size="7" onBlur=\'calcTotal(this)\'></td>';
+        $output .='<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $output .= '<td style="padding:3px;"><div id="unitPrice1"></div>&nbsp;</td>';
+        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $output .= '<td style="padding:3px;"><input type=text id="txtListPrice1" name="txtListPrice1" value="0.00" size="12" onBlur="calcTotal(this)"> <img src="'.$image_path.'pricebook.gif" onClick=\'priceBookPickList(this)\' align="absmiddle" style="cursor:hand;cursor:pointer" title="Price Book"></td>';
+        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $output .= '<td style="padding:3px;"><div id="total1" align="right"></div></td>';
+        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+        $output .= '<td style="padding:0px 3px 0px 3px;" align="center" width="50">';
+        $output .= '<input type="hidden" id="hdnProductId1" name="hdnProductId1">';
+        $output .= '<input type="hidden" id="hdnRowStatus1" name="hdnRowStatus1">';
+        $output .= '<input type="hidden" id="hdnTotal1" name="hdnTotal1">';
+        $output .= '</td></tr>';
+	$xtpl->assign("ROW1", $output);
+
 }
 	
 
