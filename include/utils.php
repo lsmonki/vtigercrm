@@ -1144,12 +1144,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 59)
 	{
-		if($_REQUEST['module'] == 'HelpDesk')
-		{
-			if(isset($_REQUEST['product_id']) & $_REQUEST['product_id'] != '')
-				$value = $_REQUEST['product_id'];
-		}
-                elseif(isset($_REQUEST['parent_id']) & $_REQUEST['parent_id'] != '')
+                if(isset($_REQUEST['parent_id']) & $_REQUEST['parent_id'] != '')
                         $value = $_REQUEST['parent_id'];
 
 		if($value != '')
@@ -2494,18 +2489,12 @@ function getRelatedTo($module,$list_result,$rset)
 	if($module == 'HelpDesk')
 	{
         	$activity_id = $adb->query_result($list_result,$rset,"parent_id");
-		if($activity_id != '')
-			$evt_query = "select * from crmentity where crmid=".$activity_id;
+		$evt_query = "select * from crmentity where crmid=".$activity_id;
 	}
 
         $evt_result = $adb->query($evt_query);
         $parent_module = $adb->query_result($evt_result,0,'setype');
         $parent_id = $adb->query_result($evt_result,0,'crmid');
-	if($module == 'HelpDesk' && ($parent_module == 'Accounts' || $parent_module == 'Contacts'))
-        {
-                global $theme;
-		$module_icon = '<img src="themes/'.$theme.'/images/'.$parent_module.'.gif" alt="" border=0 align=center title='.$parent_module.'> ';
-        }
         if($parent_module == 'Accounts')
         {
                 $parent_query = "SELECT accountname FROM account WHERE accountid=".$parent_id;
@@ -2536,14 +2525,8 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"firstname") ." " .$adb->query_result($parent_result,0,"lastname");
         }
-	elseif($parent_module == 'Contacts')
-        {
-                $parent_query = "SELECT firstname,lastname FROM contactdetails WHERE contactid=".$parent_id;
-                $parent_result = $adb->query($parent_query);
-		$parent_name = $adb->query_result($parent_result,0,"firstname") ." " .$adb->query_result($parent_result,0,"lastname");
-        }
 
-	$parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=DetailView&record=".$parent_id."' title=".$parent_module.">".$parent_name."</a>";
+        $parent_value = "<a href='index.php?module=".$parent_module."&action=DetailView&record=".$parent_id."'>".$parent_name."</a>";
         return $parent_value;
 
 
@@ -3163,8 +3146,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				}
 				elseif($popuptype == "inventory_prod")
 				{
+					$row_id = $_REQUEST['curr_row'];
+					
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory("'.$entity_id.'", "'.$temp_val.'", "'.$unitprice.'"); window.close()\'>'.$temp_val.'</a>';
+					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory("'.$entity_id.'", "'.$temp_val.'", "'.$unitprice.'", "'.$qty_stock.'", "'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_pb")
 				{
@@ -3721,21 +3707,24 @@ function getAssociatedProducts($module,$focus)
 {
 	global $adb;
 	$output = '';
+	global $theme;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
 	if($module == 'Quotes')
 	{
-		$query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
+		$query="select products.productname,products.unit_price,products.qtyinstock,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
 	}
 	elseif($module == 'Orders')
 	{
-		$query="select products.productname,products.unit_price,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
+		$query="select products.productname,products.unit_price,products.qtyinstock,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
 	}
 	elseif($module == 'SalesOrder')
 	{
-		$query="select products.productname,products.unit_price,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$focus->id;
+		$query="select products.productname,products.unit_price,products.qtyinstock,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$focus->id;
 	}
 	elseif($module == 'Invoice')
 	{
-		$query="select products.productname,products.unit_price,invoiceproductrel.* from invoiceproductrel inner join products on products.productid=invoiceproductrel.productid where invoiceid=".$focus->id;
+		$query="select products.productname,products.unit_price,products.qtyinstock,invoiceproductrel.* from invoiceproductrel inner join products on products.productid=invoiceproductrel.productid where invoiceid=".$focus->id;
 	}
 
 	$result = $adb->query($query);
@@ -3744,6 +3733,7 @@ function getAssociatedProducts($module,$focus)
 	{
 		$productname=$adb->query_result($result,$i-1,'productname');
 		$unitprice=$adb->query_result($result,$i-1,'unit_price');
+		$qtyinstock=$adb->query_result($result,$i-1,'qtyinstock');
 		$productid=$adb->query_result($result,$i-1,'productid');
 		$qty=$adb->query_result($result,$i-1,'quantity');
 		$listprice=$adb->query_result($result,$i-1,'listprice');
@@ -3753,8 +3743,37 @@ function getAssociatedProducts($module,$focus)
 		$status_var = 'hdnRowStatus'.$i;
 		$qty_var = 'txtQty'.$i;
 		$list_price_var = 'txtListPrice'.$i;	
-		$total_var = 'total'.$i;	
+		$total_var = 'total'.$i;
 
+		if($num_rows%2 == 0)
+		{
+			$row_class = "evenListRow";
+		}
+		else
+		{
+			$row_class = "oddListRow";
+		}
+
+		$output .= '<tr id="row'.$i.'" class="'.$row_class.'">';
+        	$output .= '<td height="25" style="padding:3px;" nowrap><input id="txtProduct'.$i.'" name="txtProduct'.$i.'" type="text" readonly value="'.$productname.'"> <img src="'.$image_path.'search.gif" onClick=\'productPickList(this)\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+                $output .= '<td style="padding:3px;"><div id="qtyInStock'.$i.'">'.$qtyinstock.'</div>&nbsp;</td>';
+        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+	        $output .= '<td style="padding:3px;"><input type=text id="txtQty'.$i.'" name="txtQty'.$i.'" size="7" value="'.$qty.'" onBlur=\'calcTotal(this)\'></td>';
+	        $output .='<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+                $output .= '<td style="padding:3px;"><div id="unitPrice'.$i.'">'.$unitprice.'</div>&nbsp;</td>';
+	        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+	        $output .= '<td style="padding:3px;"><input type=text id="txtListPrice'.$i.'" name="txtListPrice'.$i.'" value="'.$listprice.'" size="12" onBlur="calcTotal(this)"> <img src="'.$image_path.'pricebook.gif" onClick=\'priceBookPickList(this)\' align="absmiddle" style="cursor:hand;cursor:pointer" title="Price Book"></td>';
+        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+        	$output .= '<td style="padding:3px;"><div id="total'.$i.'" align="right">'.$total.'</div></td>';
+        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+        	$output .= '<td style="padding:0px 3px 0px 3px;" align="center" width="50"><a id="delRow'.$i.'" href=\'javascript:;\' onclick=\'delRow(this.id)\'>Del</a>';
+                $output .= '<input type="hidden" id="hdnProductId'.$i.'" name="hdnProductId'.$i.'" value="'.$productid.'">';
+          	$output .= '<input type="hidden" id="hdnRowStatus'.$i.'" name="hdnRowStatus'.$i.'">';
+	       $output .= '<input type="hidden" id="hdnTotal'.$i.'" name="hdnTotal'.$i.'" value="'.$total.'">';
+                $output .= '</td></tr>';	
+
+		/*
 		$output .='<tr id=row'.$i.' class="evenListRow">';
 		$output .='<td width="20%" align="left">'.$productname.'</td>';
 		$output .= '<td align="left"><input type=text id="'.$qty_var.'" name="'.$qty_var.'" size="5" value="'.$qty.'" onBlur=\'calcTotal('.$i.')\'></td>';
@@ -3766,6 +3785,7 @@ function getAssociatedProducts($module,$focus)
 		$output .= '<input type=hidden id="'.$status_var.'" name="'.$status_var.'">';
 		$output .= '<input type=hidden id="hdnTotal'.$i.'" name="hdnTotal'.$i.'">';
 		$output .= '</td></tr>';
+		*/
 
 	}
 	return $output;
