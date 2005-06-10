@@ -1,0 +1,77 @@
+[Root]
+Most Recent Package=Dep File 1
+
+
+[Package|Dep File 1|Root]
+SubWizProgID=PDWizard.DepPkgSubWiz
+BuildFolder=C:\vtigerCRM\06122004\vtigerCRMWordMerge\Bin
+
+[Package|Dep File 1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Dep File 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Dep File 1|Files Found]
+
+[Package|Dep File 1|Files Released]
+
+[Package|Dep File 1|Missing Dependency Information]
+C:\WINNT\system32\msxml3.dll=
+C:\Program Files\SimonFell\PocketSOAP\pSOAP32.dll=
+C:\Program Files\Microsoft Office\Office\MSWORD9.OLB=
+C:\Program Files\Microsoft Office\Office\MSO9.DLL=
+
+[Package|Dep File 1|Out-of-Date Dependency Information]
+
+[Package|Dep File 1|Files Added]
+
+[Package|Dep File 1|Files Removed]
+
+[Package|Dep File 1|Files In Project]
+C:\vtigerCRM\06122004\vtigerCRMWordMerge\Bin\vtigerCRMOfficePlugin.dll=Yes
+C:\WINNT\system32\MSVBVM60.DLL=Yes
+C:\WINNT\system32\OLEAUT32.DLL=Yes
+C:\WINNT\system32\OLEPRO32.DLL=Yes
+C:\WINNT\system32\ASYCFILT.DLL=Yes
+C:\WINNT\system32\STDOLE2.TLB=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\Program Files\Microsoft Office\Office\MSO9.DLL=Yes
+C:\Program Files\Microsoft Office\Office\MSWORD9.OLB=Yes
+C:\Program Files\SimonFell\PocketSOAP\pSOAP32.dll=Yes
+C:\WINNT\system32\msxml3.dll=Yes
+
+[Package|Dep File 1|Configure Registry Files]
+Applicable=
+
+[Package|Dep File 1|Configure Remote Servers]
+Applicable=
+
+[Package|Dep File 1|Install Locations]
+C:\vtigerCRM\06122004\vtigerCRMWordMerge\Bin\vtigerCRMOfficePlugin.dll=$(AppPath)
+C:\WINNT\system32\MSVBVM60.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Office\Office\MSO9.DLL=$(WinSysPath)
+C:\Program Files\Microsoft Office\Office\MSWORD9.OLB=$(WinSysPath)
+C:\Program Files\SimonFell\PocketSOAP\pSOAP32.dll=$(WinSysPath)
+C:\WINNT\system32\msxml3.dll=$(WinSysPath)
+
+[Package|Dep File 1|Configure Shared Files]
+Applicable=
+
+[Package|Dep File 1|DepFile]
+DepCabFile=vtigerCRMOfficePlugin.CAB
+DepCabRun=vtigerCRMOfficePlugin.INF
+
+[Package|Dep File 1|Package]
+PackageFolder=C:\vtigerCRM\06122004\vtigerCRMWordMerge\Bin
+ProjectFolder=C:\vtigerCRM\06122004\vtigerCRMWordMerge\Source
+ServerSideCab=
+File1=C:\vtigerCRM\06122004\vtigerCRMWordMerge\Bin\vtigerCRMOfficePlugin.DEP
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

@@ -1,0 +1,145 @@
+[Root]
+Most Recent Package=Internet Package 2
+
+
+[Package|Internet Package 1|Root]
+SubWizProgID=PDWizard.InetCABPkgSubWiz
+BuildFolder=C:\vtigerCRM\vtiger\Package
+
+[Package|Internet Package 1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Internet Package 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Internet Package 1|Files Found]
+
+[Package|Internet Package 1|Files Released]
+
+[Package|Internet Package 1|Missing Dependency Information]
+C:\Program Files\Microsoft Office\Office\MSWORD9.OLB=
+C:\WINNT\system32\urlmon.dll=
+
+[Package|Internet Package 1|Out-of-Date Dependency Information]
+
+[Package|Internet Package 1|Files Added]
+
+[Package|Internet Package 1|Files Removed]
+c:\winnt\system32\urlmon.dll=
+c:\program files\microsoft office\office\msword9.olb=
+
+[Package|Internet Package 1|Files In Project]
+C:\vtigerCRM\vtiger\bin\vtigerCRM.dll=Yes
+C:\WINNT\system32\MSVBVM60.DLL=Yes
+C:\WINNT\system32\OLEAUT32.DLL=Yes
+C:\WINNT\system32\OLEPRO32.DLL=Yes
+C:\WINNT\system32\ASYCFILT.DLL=Yes
+C:\WINNT\system32\STDOLE2.TLB=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINNT\system32\urlmon.dll=No
+C:\Program Files\Microsoft Office\Office\MSWORD9.OLB=No
+
+[Package|Internet Package 1|Configure Registry Files]
+Applicable=No
+
+[Package|Internet Package 1|Configure Remote Servers]
+Applicable=No
+
+[Package|Internet Package 1|Install Locations]
+
+[Package|Internet Package 1|Configure Shared Files]
+Applicable=
+
+[Package|Internet Package 1|ComponentInfo]
+vtigerCRM.dll=thiscab
+MSVBVM60.DLL=thiscab
+OLEAUT32.DLL=thiscab
+OLEPRO32.DLL=thiscab
+ASYCFILT.DLL=thiscab
+STDOLE2.TLB=thiscab
+COMCAT.DLL=thiscab
+
+[Package|Internet Package 1|ObjectInfo]
+clsvtiger=true;true
+Activex=true;true
+
+[Package|Internet Package 1|Package]
+PackageFolder=C:\vtigerCRM\vtiger\Package
+ProjectFolder=C:\vtigerCRM\vtiger\source
+ServerSideCab=C:\vtigerCRM\vtiger\Package\vtigerCRM.CAB
+File1=C:\vtigerCRM\vtiger\Package\vtigerCRM.CAB
+File2=C:\vtigerCRM\vtiger\Package\vtigerCRM.HTM
+Handler1=PDWizard.WebPostDplySubWiz
+Handler2=PDWizard.FolderDplySubWiz
+
+
+[Package|Internet Package 2|Root]
+SubWizProgID=PDWizard.InetCABPkgSubWiz
+BuildFolder=C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\source\Package
+
+[Package|Internet Package 2|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Internet Package 2|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Internet Package 2|Files Found]
+
+[Package|Internet Package 2|Files Released]
+
+[Package|Internet Package 2|Missing Dependency Information]
+C:\Program Files\Microsoft Office\Office\MSWORD9.OLB=
+C:\WINNT\system32\urlmon.dll=
+
+[Package|Internet Package 2|Out-of-Date Dependency Information]
+
+[Package|Internet Package 2|Files Added]
+
+[Package|Internet Package 2|Files Removed]
+c:\program files\microsoft office\office\msword9.olb=
+c:\winnt\system32\urlmon.dll=
+
+[Package|Internet Package 2|Files In Project]
+C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\bin\vtigerCRM.dll=Yes
+C:\WINNT\system32\MSVBVM60.DLL=Yes
+C:\WINNT\system32\OLEAUT32.DLL=Yes
+C:\WINNT\system32\OLEPRO32.DLL=Yes
+C:\WINNT\system32\ASYCFILT.DLL=Yes
+C:\WINNT\system32\STDOLE2.TLB=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINNT\system32\urlmon.dll=No
+C:\Program Files\Microsoft Office\Office\MSWORD9.OLB=No
+
+[Package|Internet Package 2|Configure Registry Files]
+Applicable=No
+
+[Package|Internet Package 2|Configure Remote Servers]
+Applicable=No
+
+[Package|Internet Package 2|Install Locations]
+
+[Package|Internet Package 2|Configure Shared Files]
+Applicable=
+
+[Package|Internet Package 2|ComponentInfo]
+vtigerCRM.dll=thiscab
+MSVBVM60.DLL=thiscab
+OLEAUT32.DLL=thiscab
+OLEPRO32.DLL=thiscab
+ASYCFILT.DLL=thiscab
+STDOLE2.TLB=thiscab
+COMCAT.DLL=thiscab
+
+[Package|Internet Package 2|ObjectInfo]
+Activex=true;true
+
+[Package|Internet Package 2|Package]
+PackageFolder=C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\source\Package
+ProjectFolder=C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\source
+ServerSideCab=C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\source\Package\vtigerCRM.CAB
+File1=C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\source\Package\vtigerCRM.CAB
+File2=C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\source\Package\vtigerCRM.HTM
+Handler1=PDWizard.WebPostDplySubWiz
+Handler2=PDWizard.FolderDplySubWiz
