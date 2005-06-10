@@ -141,6 +141,11 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		$search_query .= array_push($where_clauses,"crmentity.smownerid='".$current_user->id."'");
 		$url_string .= "&current_user_only=".$current_user_only;
 	}
+	if(isset($_REQUEST['my_open_tickets']) && $_REQUEST['my_open_tickets'] == true)
+	{
+		$search_query .= array_push($where_clauses," troubletickets.status != 'Closed'");
+		$search_query .= array_push($where_clauses,"crmentity.smownerid='".$current_user->id."'");
+	}
 
 	$where = "";
 	foreach($where_clauses as $clause)                                                                            {
