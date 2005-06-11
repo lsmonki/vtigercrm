@@ -2322,35 +2322,41 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                                         	}
 						if($relatedlist !='')
                                                 {
-                                                        if($oCv)
-							{
-								$name = $mod_strings[$name];
-							}else
-							{
-								$name = $app_strings[$name];
-							}
+							if($app_strings[$name])
+                                                        {
+                                                                $name = $app_strings[$name];
+                                                        }
+                                                        else
+                                                        {
+                                                                $name = $mod_strings[$name];
+                                                        }
                                                 }
                                                 else
                                                 {
-							if($oCv)
-							{
-                                        			$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$mod_strings[$name]."&nbsp;".$arrow."</a>";
-                                        			$arrow = '';
-							}else
-							{
-								$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$app_strings[$name]."&nbsp;".$arrow."</a>";
-                                        			$arrow = '';
-							}
-						}
-					}
-					else
-						if($oCv)
-						{
-							$name = $mod_strings[$name];
-						}else
-						{
-							$name = $app_strings[$name];
-						}
+                                                        if($app_strings[$name])
+                                                        {
+                                                                $lbl_name = $app_strings[$name];
+                                                        }
+                                                        else
+                                                        {
+                                                                $lbl_name = $mod_strings[$name];
+                                                        }
+
+                                                                $name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+                                                                $arrow = '';
+                                                }
+                                        }
+                                        else
+                                        {       if($app_strings[$name])
+                                                {
+                                                        $name = $app_strings[$name];
+                                                }
+                                                else
+                                                {
+                                                        $name = $mod_strings[$name];
+                                                }
+                                        }
+
 				}
 			}
 			//Added condition to hide the close column in Related Lists
