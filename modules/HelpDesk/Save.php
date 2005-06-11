@@ -72,6 +72,7 @@ if($focus->column_fields['parent_id'] != '')
 	{
 		$sql = "select * from contactdetails where contactid=".$focus->column_fields['parent_id'];
 		$result = $adb->query($sql);
+		$emailoptout = $adb->query_result($result,0,'emailoptout');
 		$contactname = $adb->query_result($result,0,'firstname').' '.$adb->query_result($result,0,'lastname');
 		$contact_mailid = $adb->query_result($result,0,'email');
 	}
@@ -119,8 +120,14 @@ if($_REQUEST['product_id'] != '' && $focus->id != '' && $_REQUEST['mode'] != 'ed
         $return_id = $_REQUEST['product_id'];
 }
 
-require_once('modules/Emails/send_mail.php');
-//header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+if($emailoptout == 0)
+{
+	require_once('modules/Emails/send_mail.php');
+}
+else
+{
+	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+}
 
 function getTicketComments($ticketid)
 {
