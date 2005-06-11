@@ -26,18 +26,18 @@ $mod_strings = Array(
 'LBL_SEARCH_FORM_TITLE'=>'Product Search',
 'LBL_PRODUCT_NAME'=>'Product Name:',
 'LBL_VENDOR_NAME'=>'Vendor Name:',
-'LBL_PRICEBOOK_NAME'=>'PriceBook Name:',
+'LBL_PRICEBOOK_NAME'=>'Price Book Name:',
 'LBL_VENDOR'=>'Vendor',
 'LBL_PRICEBOOK'=>'Price Book',
 'LBL_VENDOR_INFORMATION'=>'Vendor Information:',
-'LBL_PRICEBOOK_INFORMATION'=>'PriceBook Information:',
+'LBL_PRICEBOOK_INFORMATION'=>'Price Book Information:',
 'LBL_VENDOR_ADDRESS_INFORMATION'=>'Address Information:',
 'LBL_DESCRIPTION_INFORMATION'=>'Description Name:',
 'LBL_PRICING_INFORMATION'=>'Pricing Information:',
 'LBL_STOCK_INFORMATION'=>'Stock Information:',
 'LBL_LIST_FORM_TITLE'=>'Product List',
 'LBL_LIST_VENDOR_FORM_TITLE'=>'Vendor List',
-'LBL_LIST_PRICEBOOK_FORM_TITLE'=>'PriceBook List',
+'LBL_LIST_PRICEBOOK_FORM_TITLE'=>'Price Book List',
 'LBL_LIST_CATEGORY'=>'Product Category',
 'LBL_CATEGORY'=>'Product Category:',
 'LBL_PRODUCT_CODE'=>'Product Code',
@@ -147,6 +147,14 @@ $mod_strings = Array(
 
 //Added for 4.2 Release -- CustomView
 'LBL_ALL'=>'All',
+'LBL_VENDOR_SEARCH_FORM_TITLE'=>'Vendor Search',
+'LBL_PRICEBOOK_SEARCH_FORM_TITLE'=>'PriceBook Search',
+'LBL_VENDOR_TITLE'=>'Vendors',
+'LBL_PRICEBOOK_TITLE'=>'Price Books',
+'LBL_PRODUCTS_TITLE'=>'Products',
+'LBL_COMPANY_NAME'=>'Company Name',
+'LBL_CATEGORY_TITLE'=>'Company Name',
+'LBL_ACTIVE_TITLE'=>'Active',
 );
 
 ?>

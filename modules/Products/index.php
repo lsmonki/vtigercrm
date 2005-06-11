@@ -54,18 +54,80 @@ global $mod_strings;
 
 
 echo get_module_title("Products", $mod_strings['LBL_MODULE_NAME'].": Home" , true);
-
+$submenu = array('LBL_PRODUCTS_TITLE'=>'ListView.php','LBL_VENDOR_TITLE'=>'VendorListView.php','LBL_PRICEBOOK_TITLE'=>'PriceBookListView.php'); 
 echo "\n<BR>\n";
-
-include ('modules/Products/ListView.php');
-
-echo "\n<BR>\n";
-
-include ('modules/Products/VendorListView.php');
-
-echo "\n<BR>\n";
-
-include ('modules/Products/PriceBookListView.php');
-
 ?>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+   <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td class="tabStart">&nbsp;&nbsp;</td>
+<?
+	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
+	{
+		$classname = "tabOff";
+	}
+	else
+	{
+		$classname = "tabOn";
+	}
+	$listView = "ListView.php";
+	foreach($submenu as $label=>$filename)
+	{
+		list($lbl,$sname,$title)=split("_",$label);
+		if(stristr($label,$_REQUEST['smodule']))
+		{
+			echo '<td class="tabOn" nowrap><a href="index.php?module=Products&action=index&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+			$listView = $filename;
+			$classname = "tabOff";
+		}
+		else
+		{
+			echo '<td class="'.$classname.'" nowrap><a href="index.php?module=Products&action=index&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+		}
+		$classname = "tabOff";
+	}
+?>
+     <td width="100%" class="tabEnd">&nbsp;</td>
+   </tr>
+ </table></td>
+ </tr>
+ <tr>
+   <td class="tabContent" style="padding:10"><div id="tabcontent1"><? include ('modules/Products/'.$listView); ?> </div>
+   </td>
+ </tr>
+</table>
+
+<!--script>
+function toggleTab(id) {
+   for (i=1;i<=3;i++) {
+      if (i==id) {
+         getObj("tab"+i).className="tabOn"
+         getObj("tabcontent"+i).style.display="block"
+	 set_cookie("prod_tab"+i,"block");
+      } else {
+         getObj("tab"+i).className="tabOff"
+         getObj("tabcontent"+i).style.display="none"
+	 set_cookie("prod_tab"+i,"none");
+      }
+   }
+}
+
+for(i=1;i<=3;i++)
+{
+	if(get_cookie("prod_tab"+i)!='' && get_cookie("prod_tab"+i)!=null)
+	{
+		if (get_cookie("prod_tab"+i) == 'block')
+		{
+			getObj("tab"+i).className="tabOn"
+         		getObj("tabcontent"+i).style.display="block"
+		}
+		else
+		{
+			getObj("tab"+i).className="tabOff"
+ 	        	getObj("tabcontent"+i).style.display="none"
+		}
+	}
+}
+</script-->
 

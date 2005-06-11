@@ -30,7 +30,7 @@ class Vendor extends CRMEntity {
 	var $tab_name_index = Array('crmentity'=>'crmid','vendor'=>'vendorid','vendorcf'=>'vendorid');
 	var $column_fields = Array();
 
-//	var $sortby_fields = Array('productname','productcode','commissionrate');		  
+	var $sortby_fields = Array('name','company_name','category');		  
 
         // This is the list of fields that are in the lists.
 	var $list_fields = Array(

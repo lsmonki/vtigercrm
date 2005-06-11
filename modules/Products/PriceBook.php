@@ -30,7 +30,7 @@ class PriceBook extends CRMEntity {
 	var $tab_name_index = Array('crmentity'=>'crmid','pricebook'=>'pricebookid','pricebookcf'=>'pricebookid');
 	var $column_fields = Array();
 
-//	var $sortby_fields = Array('productname','productcode','commissionrate');		  
+	var $sortby_fields = Array('bookname');		  
 
         // This is the list of fields that are in the lists.
 	var $list_fields = Array(

@@ -45,7 +45,7 @@ $focus = new Product();
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
-$url_string = ''; // assigning http url string
+$url_string = '&smodule=PRODUCTS'; // assigning http url string
 $sorder = 'ASC';  // Default sort order
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
 $sorder = $_REQUEST['sorder'];
