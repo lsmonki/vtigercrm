@@ -130,7 +130,17 @@ for($i=0;$i< $noofrows;$i++)
 	}
 	else
 		$to=$adb->query_result($result,$i,"email");
+
 	$mail->AddAddress($to);
+
+	$emailoptout = $adb->query_result($result,$i,"emailoptout");
+	if($emailoptout == 1 && $to != '')
+	{
+		$mail->ClearAddresses();
+		$mail->AddAddress("");
+		$emailoptout_error = true;
+	}
+
 	$j=$i+1;
 
 
@@ -166,8 +176,15 @@ for($i=0;$i< $noofrows;$i++)
 		}
 		if($message=='Language string failed to load: recipients_failed')
 		{
-			//if($to=='')
-		                echo '<center><tr align="left"><font color="purple"<b><h3>'.$j.' . '.$mod_strings['MESSAGE_MAIL_ID_IS_INCORRECT'].' </h3></font></b></tr></center>';
+			if($emailoptout_error == true)
+			{
+				$ERROR_MESSAGE = $mod_strings['MESSAGE_CONTACT_NOT_WANT_MAIL'];
+				$flag = true;
+			}
+			else
+				$ERROR_MESSAGE = $mod_strings['MESSAGE_MAIL_ID_IS_INCORRECT'];
+
+		                echo '<center><tr align="left"><font color="purple"<b><h3>'.$j.' . '.$ERROR_MESSAGE.' </h3></font></b></tr></center>';
 		}
 	}
 }
