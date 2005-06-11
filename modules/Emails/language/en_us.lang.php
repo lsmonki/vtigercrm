@@ -106,6 +106,7 @@ $mod_strings = Array(
 'LBL_FETCH_WEBMAIL'=>'Fetch Web Mail',
 //Added for 4.2 Release -- CustomView
 'LBL_ALL'=>'All',
+'MESSAGE_CONTACT_NOT_WANT_MAIL'=>'This Contact does not want to receive mails.',
 );
 
 ?>
