@@ -31,6 +31,7 @@ $module_menu_array = Array('Contacts' => $app_strings['LNK_NEW_CONTACT'],
 	                   'Accounts' => $app_strings['LNK_NEW_ACCOUNT'],
 	                   'Potentials' => $app_strings['LNK_NEW_OPPORTUNITY'],
 	                   'HelpDesk' => $app_strings['LNK_NEW_HDESK'],
+	                   'Faq' => $app_strings['LNK_NEW_FAQ'],
 	                   'Products' => $app_strings['LNK_NEW_PRODUCT'],
 	                   'Notes' => $app_strings['LNK_NEW_NOTE'],
 	                   'Emails' => $app_strings['LNK_NEW_EMAIL'],
@@ -101,6 +102,12 @@ foreach($module_menu_array as $module1 => $label)
 			$module_menu[$i] = $tempArray;
 			$i++;
 		}
+	}
+	elseif($module_display == 'Faq')
+	{
+			$tempArray = Array("index.php?module=".$module_display."&action=".$curr_action."&return_module=".$module_display."&return_action=".$ret_action.$add_url, $label);
+			$module_menu[$i] = $tempArray;
+			$i++;
 	}
 }
 
