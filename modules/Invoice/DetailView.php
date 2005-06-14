@@ -83,6 +83,11 @@ $block_4 = getDetailAssociatedProducts('Invoice',$focus);
 $xtpl->assign("BLOCK4_HEADER", $block_4_header);
 $xtpl->assign("BLOCK4", $block_4);
 
+$block_6_header = getBlockTableHeader("LBL_TERMS_INFORMATION");
+$block_6 = getDetailBlockInformation("Invoice",6,$focus->column_fields);
+$xtpl->assign("BLOCK6_HEADER", $block_6_header);
+$xtpl->assign("BLOCK6", $block_6);
+
 $block_5 = getDetailBlockInformation("Invoice",5,$focus->column_fields);
 if(trim($block_5) != '')
 {
