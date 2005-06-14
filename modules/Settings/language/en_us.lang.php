@@ -464,6 +464,7 @@ $mod_strings = Array(
 'LBL_SPECIFY_COMPANY_DETAILS'=>' - Specify Company Information',
 
 'LBL_SEVERITY'=>'Severity',
+'LBL_FAQ_CATEGORY'=>'FAQ Category',
 
 );
 
