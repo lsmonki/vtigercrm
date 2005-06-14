@@ -36,7 +36,7 @@
 
 <!-- BEGIN: main -->
 
-<form name="EditView" method="POST" action="index.php">
+<form name="EditView" method="get" action="index.php">
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 
 <tr>
@@ -133,180 +133,274 @@
 </td></tr></table>
 
 <BR>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
-<tr><td>
-	{BLOCK4_HEADER}
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr> 
-      <td class="dataLabel" width="20%" height="28">Product: </td>
-	<td class="dataLabel" width="30%">
-	<div align="left">
-        <input name="txtProduct" type="text">
-	<input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="Select" name="button" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=inventory_prod","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");'>
-	</div>
-	</td>
-	<td class="dataLabel" width="20%">
-        Product Qty: 
-	</td>
-	<td class="dataLabel" width="30%">
-	<div align="left">
-        <input name="txtQty" type="text" value="1" size="5"> <input type="button" class="button" value="add" onClick="addRow()"> 
-        <input name="hdnUnitPrice" type="hidden" value="11.75"> <input name="hdnProductId" type="hidden"> 
-	</div>
-      </td>
-    </tr>
-  </table>
-  <div id="productList">
-   
-    <table width="100%" border="0" cellspacing="1" cellpadding="0">
-      <tr> 
-        <td width="20%" class="dataLabel"><b><div align="left">Product</div></b></td>
-        <td width="15%" class="dataLabel"><b><div align="left">Qty</b></div></td>
-        <td width="20%" class="dataLabel"><b>Unit Price</b></td>
-        <td width="20%" class="dataLabel"><b>List Price</b></td>
-        <td width="20%" class="dataLabel"><b>Total</b></td>
-        <td width="10" class="dataLabel"></td>
+  <div style="padding:2 0 2 0"><strong>Product Details</strong></div>
+  <div id="productList"> 
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formBorder">
+      <tr class="moduleListTitle" height="20" id="tablehead"> 
+        <td width="20%" style="padding:3px;">Product</td>
+        <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
+        <td width="12%" style="padding:3px;">Qty In Stock</td>
+        <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
+        <td width="12%" style="padding:3px;">Qty</td>
+        <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
+        <td width="15%" style="padding:3px;">Unit Price</td>
+        <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
+        <td width="16%" style="padding:3px;">List Price</td>
+        <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
+        <td width="20%" style="padding:3px;"><div align="center">Total</div></td>
+        <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
+        <td width="15" style="padding:3px;"></td>
       </tr>
-	{ASSOCIATEDPRODUCTS}
-    </table>  </div>
+      <tr id="tableheadline">
+        <td colspan="14" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+      </tr>
+      {ROW1}
+      {ASSOCIATEDPRODUCTS} 
+    </table>
+  </div>
   <table width="100%" border="0" cellspacing="2" cellpadding="2">
     <tr> 
-      <td width="100%"><div align="right"><b>Sub Total:</b></div></td>
-	  <td id="subTotal" align="right" width="100" style="border:1px solid #000;">{GRANDTOTAL}</td>
-	  <td width="40">&nbsp;</td>
+	  <td width="150"><input type="button" class="button" value="Add Product" onClick="addRow()"></td>
+      <td><div align="right"><b>Sub Total:</b></div></td>
+      <td width="150" style="padding-right:35"><div id="subTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;{SUBTOTAL}</div></td>
     </tr>
-    <tr>
+    <tr> 
+	  <td>&nbsp;</td>
       <td><div align="right"><b>Tax:</b></div></td>
-          <td align="right" width="100"><input type="text" id="txtTax" name="txtTax" value="{TAXVALUE}" onblur="calcGrandTotal()"></td>
-          <td width="40">&nbsp;</td>
+      <td width="150" style="padding-right:35"><div align="right"><input type="text" id="txtTax" name="txtTax" value="{TAXVALUE}" onblur="calcGrandTotal()" style="width:100%"></div></td>
     </tr>
-    <tr>
+	<tr> 
+	  <td>&nbsp;</td>
+      <td><div align="right"><b>Adjustment:</b></div></td>
+      <td width="150" style="padding-right:35"><div align="right"><input type="text" id="txtAdjustment" name="txtAdjustment" value="{ADJUSTMENTVALUE}" onblur="calcGrandTotal()" style="width:100%"></div></td>
+    </tr>
+    <tr> 
+	  <td>&nbsp;</td>
       <td><div align="right"><b>Grand Total:</b></div></td>
-          <td id="grandTotal" align="right" width="100" style="border:1px solid #000;">{SUBTOTAL}</td>
-          <td width="40">&nbsp;</td>
+      <td width="150" style="padding-right:35"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;{GRANDTOTAL}</div></td>
     </tr>
   </table>
-  <div id="strikeLines">{STRIKELINES}</div>
-<input type="hidden" name="hdnSubTotal" id="hdnSubTotal" value="{SUBTOTAL}">
-<input type="hidden" name="hdnGrandTotal" id="hdnGrandTotal" value="{GRANDTOTAL}">
-</td></tr></table>
-<br>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
-
-<tr><td>
-
-	{BLOCK3_HEADER}
-
-	<table width="100%" border="0" cellspacing="1" cellpadding="0">		
-
-	{BLOCK3}
-
-	</table>
-
-</td></tr></table>
-<br>
- <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-
-
-      <td><div align="center">
-           <input title="{APP.LBL_SAVE_BUTTON_TITLE}" tabindex='5' accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';settotalnoofrows();return formValidate()" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
-
-		<input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
-
-         </div>
-     </td>
-
- </tr></table>
-
+  <input type="hidden" name="hdnSubTotal" id="hdnSubTotal" value="{SUBTOTAL}">
+  <input type="hidden" name="hdnGrandTotal" id="hdnGrandTotal" value="{GRANDTOTAL}">
+  <br>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+    <tr> 
+      <td> {BLOCK6_HEADER} 
+        <table width="100%" border="0" cellspacing="1" cellpadding="0">
+          {BLOCK6} </table></td>
+    </tr>
+  </table>
+  <br>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+    <tr> 
+      <td> {BLOCK3_HEADER} 
+        <table width="100%" border="0" cellspacing="1" cellpadding="0">
+          {BLOCK3} </table></td>
+    </tr>
+  </table>
+  <br>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr> 
+      <td><div align="center"> 
+          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" tabindex='5' accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';settotalnoofrows();return validate()" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
+          <input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
+        </div></td>
+    </tr>
+  </table>
 </form>
 <script type="text/javascript" language="JavaScript">
 var prodList=getObj("productList")
 var rowCnt={ROWCOUNT};
-var listTableStart="<table width='100%' border='0' cellspacing='1' cellpadding='0' class='formOuterBorder'>"
+//var rowCnt=1;
+var listTableStart="<table width='100%' border='0' cellspacing='0' cellpadding='0' class='formBorder'>"
 
-function settotalnoofrows()
-{
+function settotalnoofrows() {
 	document.EditView.totalProductCount.value = rowCnt;	
 }
 
-function addRow() {
-	//Checking if the ProductId exists
-	if(document.EditView.hdnProductId.value == '')
-	{
-		alert("Select a Product and then Add");
-		return false;
-	}	
-	//adding new row
-	rowCnt++;
+function productPickList(currObj) {
+	var trObj=currObj.parentNode.parentNode
+	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
+	window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=inventory_prod&curr_row="+rowId,"productWin","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");
+}
 
-	//calculating product total and truncating decimal part to digits
-	var prodTotal=eval(getObj("txtQty").value*getObj("hdnUnitPrice").value).toString()
-	prodTotal=roundValue(prodTotal)	
-		
-	var newRow="<tr id=row"+rowCnt+" class='evenListRow'><td align='left'>"+getObj("txtProduct").value+"</td>"
-	newRow+="<td align='left'><input type=text id='txtQty"+rowCnt+"' name='txtQty"+rowCnt+"' size='5' value='"+getObj("txtQty").value+"' onBlur='calcTotal("+rowCnt+")'></td>"
-	newRow+="<td class='dataLabel' align='left'>"+getObj("hdnUnitPrice").value+"</td>"
+function priceBookPickList(currObj) {
+	var trObj=currObj.parentNode.parentNode
+	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
+	window.open("index.php?module=Products&action=PriceBookPopup&html=Popup_picker&form=EditView&popuptype=inventory_pb&fldname=txtListPrice"+rowId+"&productid="+getObj("hdnProductId"+rowId).value,"priceBookWin","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");
+}
 
-	newRow+="<td class='dataLabel'<input type=text id='txtListPrice"+rowCnt+"' name='txtListPrice"+rowCnt+"' size='12' value='"+getObj("hdnUnitPrice").value+"' onBlur='calcTotal("+rowCnt+")'><input title='Change [Alt+G]' accessKey='G' type='button' class='button' value='Select' name='button' LANGUAGE=javascript onclick=\"return window.open('index.php?module=Products&action=PriceBookPopup&html=Popup_picker&form=EditView&popuptype=inventory_pb&fldname=txtListPrice"+rowCnt+"&productid="+getObj("hdnProductId").value+"','test','width=600,height=400,resizable=1,scrollbars=1,top=150,left=200');\"></td>"
-
-	newRow+="<td class='dataLabel'><div id='total"+rowCnt+"' align='right'>"+prodTotal+"</div></td>"
-	newRow+="<td class='dataLabel' id='delCol"+rowCnt+"'><a href='javascript:delRow("+rowCnt+")'>Del</a>"
-	newRow+="<input type=hidden id='hdnProductId"+rowCnt+"' name='hdnProductId"+rowCnt+"' value='"+getObj("hdnProductId").value+"'>"
-	newRow+="<input type=hidden id='hdnRowStatus"+rowCnt+"' name='hdnRowStatus"+rowCnt+"'>"
-	newRow+="<input type=hidden id='hdnTotal"+rowCnt+"' name='hdnTotal"+rowCnt+"'>"
-	newRow+="</td></tr>"
-	
+function getProdListBody() {
 	if (browser_ie) {
 		var prodListBody=getObj("productList").children[0].children[0]
 	} else if (browser_nn4 || browser_nn6) {
 		if (getObj("productList").childNodes.item(0).tagName=="TABLE") {
-                        var prodListBody=getObj("productList").childNodes.item(0).childNodes.item(0)
-                } else {
-                        var prodListBody=getObj("productList").childNodes.item(1).childNodes.item(1)
-                }
+			var prodListBody=getObj("productList").childNodes.item(0).childNodes.item(0)
+		} else {
+			var prodListBody=getObj("productList").childNodes.item(1).childNodes.item(1)
+		}
 	}
-	
-	prodList.innerHTML=listTableStart+prodListBody.innerHTML+newRow+"</table>"
-	
-	//creating strike lines that is to be displayed while deleting a row
-	var lineLeft=findPosX(getObj("row"+rowCnt))
-	var lineTop=findPosY(getObj("row"+rowCnt))
-	var lineWidth=prodList.offsetWidth-getObj("delCol"+rowCnt).offsetWidth
-	var strikeLine="<div id='strikeLine"+rowCnt+"' style='visibility:hidden;background:url({IMAGE_PATH}strikeline.gif) repeat-x;position:absolute;top:"+lineTop+";left:"+lineLeft+";width:"+lineWidth+";height:20px;z-index:10'></div>"
-
-	getObj("strikeLines").innerHTML+=strikeLine
-	
-	calcGrandTotal()	
+	return prodListBody;
 }
+
+function addRow() {
+   //adding new row
+   rowCnt++;
+
+   if (rowCnt%2==0)
+       var newRow="<tr id=row"+rowCnt+" class='evenListRow'>"
+   else
+       var newRow="<tr id=row"+rowCnt+" class='oddListRow'>"
+         newRow+="<td style='padding:3px;'><input id='txtProduct"+rowCnt+"' name='txtProduct"+rowCnt+"' type='text' readonly> <img src='{IMAGE_PATH}search.gif' onclick='productPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer'></td>"
+   newRow+="<td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>"
+   newRow+="<td style='padding:3px;'><div id='qtyInStock"+rowCnt+"'></div></td>"
+   newRow+="<td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>"
+   newRow+="<td style='padding:3px;'><input type=text id='txtQty"+rowCnt+"' name='txtQty"+rowCnt+"' size='7' value='1' onBlur='calcTotal(this)'></td>"
+   newRow+="<td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>"
+   newRow+="<td style='padding:3px;'><div id='unitPrice"+rowCnt+"'></div></td>"
+   newRow+="<td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>"
+   newRow+="<td style='padding:3px;'><input type=text id='txtListPrice"+rowCnt+"' name='txtListPrice"+rowCnt+"' size='12' value='0.00' onBlur='calcTotal(this)'> <img src='{IMAGE_PATH}pricebook.gif' onclick='priceBookPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer'></td>"
+   newRow+="<td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>"
+   newRow+="<td style='padding:3px;'><div id='total"+rowCnt+"' align='right'></div></td>"
+   newRow+="<td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>"
+   newRow+="<td style='padding:3px;' align='center' width='50'><a id='delRow"+rowCnt+"' href='javascript:;' onclick='delRow(this.id)'>Del</a>"
+   newRow+="<input type=hidden id='hdnProductId"+rowCnt+"' name='hdnProductId"+rowCnt+"'>"
+   newRow+="<input type=hidden id='hdnRowStatus"+rowCnt+"' name='hdnRowStatus"+rowCnt+"'>"
+   newRow+="<input type=hidden id='hdnTotal"+rowCnt+"' name='hdnTotal"+rowCnt+"'></td></tr>"
+     var prodListBody=getProdListBody()
+     if (browser_nn4 || browser_nn6) {
+       var product=new Array(rowCnt-1)
+       var qty=new Array(rowCnt-1)
+       var listPrice=new Array(rowCnt-1)
+       var productId=new Array(rowCnt-1)
+       var total=new Array(rowCnt-1)
+       var rowStatus=new Array(rowCnt-1)
+	//alert(rowCnt)
+         for (var i=1,k=0;i<=rowCnt-1;i++,k++) {
+           product[k]=getObj("txtProduct"+i).value
+           qty[k]=getObj("txtQty"+i).value
+           listPrice[k]=getObj("txtListPrice"+i).value
+           total[k]=getObj("hdnTotal"+i).value
+           productId[k]=getObj("hdnProductId"+i).value
+           rowStatus[k]=getObj("hdnRowStatus"+i).value
+       }
+   }
+     prodList.innerHTML=listTableStart+prodListBody.innerHTML+newRow+"</table>"
+     if (browser_nn4 || browser_nn6) {
+       for (var i=1,k=0;i<=rowCnt-1;i++,k++) {
+           getObj("txtProduct"+i).value=product[k]
+           getObj("txtQty"+i).value=qty[k]
+           getObj("txtListPrice"+i).value=listPrice[k]
+           getObj("hdnTotal"+i).value=total[k]
+           getObj("hdnProductId"+i).value=productId[k]
+           getObj("hdnRowStatus"+i).value=rowStatus[k]
+       }
+   }
+} 
 
 function delRow(rowId) {
-	//striking a row
-	if (getObj("strikeLine"+rowId).style.visibility=="hidden") {
-		getObj("strikeLine"+rowId).style.visibility="visible"
-		getObj("hdnRowStatus"+rowId).value="D"
-	} else {
-		getObj("strikeLine"+rowId).style.visibility="hidden"
-		getObj("hdnRowStatus"+rowId).value="U"
-	}
-	
-	calcGrandTotal()
+   var rowId=parseInt(rowId.substr(rowId.indexOf("w")+1,rowId.length))
+      //removing the corresponding row
+   var prodListBody=getProdListBody()
+   prodListBody.removeChild(getObj("row"+rowId))
+      //assigning new innerHTML after deleting a row
+   var newInnerHTML="<tr class='moduleListTitle' height='20' id='tablehead'>"+getObj("tablehead").innerHTML+"</tr>"
+   newInnerHTML+="<tr id='tableheadline'>"+getObj("tableheadline").innerHTML+"</tr>";
+      var rowArray=new Array(rowCnt-1);
+      if (browser_nn4 || browser_nn6) {
+       var product=new Array(rowCnt-1)
+       var qty=new Array(rowCnt-1)
+       var listPrice=new Array(rowCnt-1)
+       var productId=new Array(rowCnt-1)
+       var total=new Array(rowCnt-1)
+       var rowStatus=new Array(rowCnt-1)
+   }
+      for (var i=1,k=0;i<=rowId-1;i++,k++) {
+       if (i%2==0) var rowClass="evenListRow"
+       else var rowClass="oddListRow"
+              rowArray[k]="<tr id='row"+i+"' class='"+rowClass+"'>"+getObj("row"+i).innerHTML+"</tr>"
+       newInnerHTML+=rowArray[k]
+              if (browser_nn4 || browser_nn6) {
+           product[k]=getObj("txtProduct"+i).value
+           qty[k]=getObj("txtQty"+i).value
+           listPrice[k]=getObj("txtListPrice"+i).value
+           total[k]=getObj("hdnTotal"+i).value
+           productId[k]=getObj("hdnProductId"+i).value
+           rowStatus[k]=getObj("hdnRowStatus"+i).value
+       }
+   }
+      for (var i=rowId+1;i<=rowCnt;i++,k++) {
+       rowArray[k]=getObj("row"+i).innerHTML
+       var temp=rowArray[k]
+       temp=temp.replace("row"+i,"row"+(i-1))
+       temp=temp.replace("txtProduct"+i,"txtProduct"+(i-1))
+       temp=temp.replace("txtProduct"+i,"txtProduct"+(i-1))
+       temp=temp.replace("qtyInStock"+i,"qtyInStock"+(i-1))
+       temp=temp.replace("txtQty"+i,"txtQty"+(i-1))
+       temp=temp.replace("txtQty"+i,"txtQty"+(i-1))
+       temp=temp.replace("unitPrice"+i,"unitPrice"+(i-1))
+       temp=temp.replace("txtListPrice"+i,"txtListPrice"+(i-1))
+       temp=temp.replace("txtListPrice"+i,"txtListPrice"+(i-1))
+       temp=temp.replace("total"+i,"total"+(i-1))
+       temp=temp.replace("delRow"+i,"delRow"+(i-1))
+       temp=temp.replace("hdnProductId"+i,"hdnProductId"+(i-1))
+       temp=temp.replace("hdnProductId"+i,"hdnProductId"+(i-1))
+       temp=temp.replace("hdnRowStatus"+i,"hdnRowStatus"+(i-1))
+       temp=temp.replace("hdnRowStatus"+i,"hdnRowStatus"+(i-1))
+       temp=temp.replace("hdnTotal"+i,"hdnTotal"+(i-1))
+       temp=temp.replace("hdnTotal"+i,"hdnTotal"+(i-1))
+              if ((i-1)%2==0) var rowClass="evenListRow"
+       else var rowClass="oddListRow"
+              rowArray[k]="<tr id='row"+(i-1)+"' class='"+rowClass+"'>"+temp+"</tr>"
+       newInnerHTML+=rowArray[k]
+              if (browser_nn4 || browser_nn6) {
+           product[k]=getObj("txtProduct"+i).value
+           qty[k]=getObj("txtQty"+i).value
+           listPrice[k]=getObj("txtListPrice"+i).value
+           total[k]=getObj("hdnTotal"+i).value
+           productId[k]=getObj("hdnProductId"+i).value
+           rowStatus[k]=getObj("hdnRowStatus"+i).value
+       }           }
+
+   var prodListBody=getProdListBody()
+   prodList.innerHTML=listTableStart+newInnerHTML+"</table>"
+
+   rowCnt--
+
+   for (var i=1,k=0;i<=rowCnt;i++,k++) {
+       if (browser_nn4 || browser_nn6) {
+           getObj("txtProduct"+i).value=product[k]
+           getObj("txtQty"+i).value=qty[k]
+           getObj("txtListPrice"+i).value=listPrice[k]
+           getObj("hdnTotal"+i).value=total[k]
+           getObj("hdnProductId"+i).value=productId[k]
+           getObj("hdnRowStatus"+i).value=rowStatus[k]
+       }
+   }
+
+   calcGrandTotal()
 }
 
-function calcTotal(rowId) {
-	getObj("total"+rowId).innerHTML=getObj("hdnTotal"+rowId).value=roundValue(eval(getObj("txtQty"+rowId).value*getObj("txtListPrice"+rowId).value).toString())
+
+function calcTotal(currObj) {
+	var trObj=currObj.parentNode.parentNode
+	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
+	var total=eval(getObj("txtQty"+rowId).value*getObj("txtListPrice"+rowId).value)
+	getObj("total"+rowId).innerHTML=getObj("hdnTotal"+rowId).value=roundValue(total.toString())
 	calcGrandTotal()
 }
 
 function calcGrandTotal() {
 	var subTotal=0,grandTotal=0;
 	for (var i=1;i<=rowCnt;i++) {
-		if (getObj("hdnRowStatus"+i).value!="D") {
-			subTotal+=parseFloat(getObj("total"+i).innerHTML)
-		}
+		if (getObj("hdnTotal"+i).value=="") 
+			getObj("hdnTotal"+i).value=0
+		if (!isNaN(getObj("hdnTotal"+i).value)) 
+			subTotal+=parseFloat(getObj("hdnTotal"+i).value)
 	}
-
-	grandTotal=subTotal+parseFloat(getObj("txtTax").value)
+	
+	grandTotal=subTotal+parseFloat(getObj("txtTax").value)+parseFloat(getObj("txtAdjustment").value)
+	
 	getObj("subTotal").innerHTML=getObj("hdnSubTotal").value=roundValue(subTotal.toString())
 	getObj("grandTotal").innerHTML=getObj("hdnGrandTotal").value=roundValue(grandTotal.toString())
 }
@@ -324,22 +418,8 @@ function roundValue(val) {
 	
 	return val;
 }
-
-function createStrikeLines() {
-	var lineLeft,lineTop,lineWidth,strikeLine="";
-	for (var i=1;i<=rowCnt;i++) {
-		lineLeft=findPosX(getObj("row"+i))
-	       	lineTop=findPosY(getObj("row"+i))
-        	lineWidth=prodList.offsetWidth-getObj("delCol"+i).offsetWidth
-
-		strikeLine+="<div id='strikeLine"+i+"' style='visibility:hidden;background:url({IMAGE_PATH}strikeline.gif) repeat-x;position:absolute;top:"+lineTop+";left:"+lineLeft+";width:"+lineWidth+";height:20px;z-index:10'></div>"
-	}
-
-        getObj("strikeLines").innerHTML=strikeLine
-}
-
-createStrikeLines();
 </script>
+
 
 
 <script type="text/javascript" language="Javascript">
