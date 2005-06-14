@@ -384,8 +384,8 @@ $this->db->query("insert into field values (16,".$this->db->getUniqueID("field")
 
 //Faq Details -- START
 //Block1 -- Start
- $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'category','faq',1,'15','faqcategories','Category',1,0,0,100,1,1,1,'V~O')");
- $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'crmid','sefaqrel',1,'62','parent_id','Related To',1,0,0,100,2,1,1,'I~O')");
+$this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'product_id','faq',1,'59','product_id','Product Name',1,0,0,100,1,1,1,'I~O')");
+ $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'category','faq',1,'15','faqcategories','Category',1,0,0,100,2,1,1,'V~O')");
  $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'question','faq',1,'19','question','Question',1,0,0,100,1,2,1,'V~O')");
  $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'answer','faq',1,'19','answer','Answer',1,0,0,100,1,3,1,'V~O')");
  $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'comments','faq',1,'19','comments','Comments',1,0,0,100,1,4,1,'V~O')");
