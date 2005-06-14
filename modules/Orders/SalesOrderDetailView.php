@@ -78,6 +78,12 @@ $block_3 = getDetailBlockInformation("SalesOrder",3,$focus->column_fields);
 $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 $xtpl->assign("BLOCK3", $block_3);
 
+//get Terms&Conditions
+$block_6_header = getBlockTableHeader("LBL_TERMS_INFORMATION");
+$block_6 = getDetailBlockInformation("SalesOrder",6,$focus->column_fields);
+$xtpl->assign("BLOCK6_HEADER", $block_6_header);
+$xtpl->assign("BLOCK6", $block_6);
+
 $block_4_header = getBlockTableHeader("LBL_RELATED_PRODUCTS");
 $block_4 = getDetailAssociatedProducts('SalesOrder',$focus);
 $xtpl->assign("BLOCK4_HEADER", $block_4_header);
