@@ -147,6 +147,8 @@ $mod_strings = Array(
 'Related to'=>'Related to',
 'LBL_MORE'=>'More',
 
+'LBL_TICKETS'=>'Tickets',
+
 );
 
 ?>
