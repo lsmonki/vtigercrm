@@ -37,8 +37,8 @@ class Faq extends CRMEntity {
 	var $id;
 	var $mode;
 	
-	var $tab_name = Array('crmentity','faq','sefaqrel');
-	var $tab_name_index = Array('crmentity'=>'crmid','faq'=>'id','sefaqrel'=>'faqid');
+	var $tab_name = Array('crmentity','faq');
+	var $tab_name_index = Array('crmentity'=>'crmid','faq'=>'id');
 				
 	var $entity_table = "crmentity";
 	
@@ -50,13 +50,13 @@ class Faq extends CRMEntity {
 	var $list_fields = Array(
 				'Question'=>Array('faq'=>'question'),
 				'Category'=>Array('faq'=>'category'),
-				'Related to'=>Array('sefaqrel'=>'crmid') 
+				'Product Name'=>Array('faq'=>'product_id') 
 				);
 	
 	var $list_fields_name = Array(
 				        'Question'=>'question',
 				        'Category'=>'faqcategories',
-				        'Related to'=>'parent_id'
+				        'Product Name'=>'product_id'
 				      );
 	var $list_link_field= 'question';
 
