@@ -2215,6 +2215,7 @@
 			<KEY/>
 			<AUTOINCREMENT/>
 		</field>
+		<field name="product_id" type="C" size="100"></field>
 		<field name="question" type="X">
 			<NOTNULL/>
 		</field>
@@ -2228,50 +2229,6 @@
 		<data>
 		</data>
 	</table>
-<table name="sefaqrel">
-		<field name="crmid" type="I" size="11">
-			<KEY/>
-		</field>
-		<field name="faqid" type="I" size="11">
-			<KEY/>
-		</field>
-	<opt>Type=InnoDB</opt> <index name="SeFaqRel_IDX0">
-			<col>crmid</col>
-		</index>
-		<opt>Type=InnoDB</opt> <index name="SeFaqRel_IDX1">
-			<col>faqid</col>
-		</index>
-			<data>
-		</data>
-	</table>
-
-
-
-
-	<table name="sefaqrel" alter="true">
-		
-		<constraint>ADD CONSTRAINT fk_SeFaqRel FOREIGN KEY (crmid) REFERENCES crmentity(crmid) ON DELETE CASCADE </constraint>
-		
-		<opt>Type=InnoDB</opt>
-		
-		<data>
-		</data>
-	</table>
-
-
-	<table name="sefaqrel" alter="true">
-		
-		<constraint>ADD CONSTRAINT fk_SeFaqRel2 FOREIGN KEY (faqid) REFERENCES faq(id) ON DELETE CASCADE </constraint>
-		
-		<opt>Type=InnoDB</opt>
-		
-		<data>
-		</data>
-	</table>
-
-
-
-
 
 	<table name="files">
 		<field name="id" type="C" size="36">
