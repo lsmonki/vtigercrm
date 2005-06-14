@@ -68,7 +68,8 @@ elseif($fld_module == 'HelpDesk')
 	$custFldArray = Array($mod_strings['LBL_PRIORITY']=>'ticketpriorities'
 			,$mod_strings['LBL_SEVERITY']=>'ticketseverities'
 			,$mod_strings['LBL_STATUS']=>'ticketstatus'
-			,$mod_strings['LBL_CATEGORY']=>'ticketcategories');
+			,$mod_strings['LBL_CATEGORY']=>'ticketcategories'
+			,$mod_strings['LBL_FAQ_CATEGORY']=>'faqcategories');
 	$standCustFld = getStdOutput($custFldArray, $mod_strings);
 }
 elseif($fld_module == 'Products')
