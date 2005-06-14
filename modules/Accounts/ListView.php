@@ -204,6 +204,9 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 		foreach ($assigned_user_id as $key => $val) {
 			$where .= PearDatabase::quote($val);
 			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
+			   // ACIPIA - to allow prev/next button to use criterias
+			  $url_string .= '&' . urlencode( 'assigned_user_id[]' ) . '=' . $val ;
+			   // ACIPIA 
 		}
 	}
 
