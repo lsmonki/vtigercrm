@@ -144,7 +144,7 @@ $mod_strings = Array(
 //Added after 4.2 alpha
 'Severity'=>'Severity',
 'Product Name'=>'Product Name',
-'Related to'=>'Related to',
+'Related To'=>'Related To',
 'LBL_MORE'=>'More',
 
 'LBL_TICKETS'=>'Tickets',
