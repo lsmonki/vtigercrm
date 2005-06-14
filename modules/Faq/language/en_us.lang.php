@@ -109,6 +109,9 @@ $mod_strings = Array(
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
 
+//Added fields after 4.2 alpha
+'LBL_TICKETS'=>'Tickets',
+'LBL_FAQ'=>'FAQ',
 );
 
 ?>
