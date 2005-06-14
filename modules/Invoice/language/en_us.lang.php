@@ -78,6 +78,7 @@ $mod_strings = Array(
 'LBL_COUNTRY'=>'Country:',
 'LBL_DESCRIPTION_INFORMATION'=>'Description Information',
 'LBL_DESCRIPTION'=>'Description:',
+'LBL_TERMS_INFORMATION'=>'Terms & Conditions',
 'NTC_COPY_BILLING_ADDRESS'=>'Copy billing address to shipping address',
 'NTC_COPY_SHIPPING_ADDRESS'=>'Copy shipping address to billing address',
 'NTC_REMOVE_MEMBER_ORG_CONFIRMATION'=>'Are you sure you want to remove this record as a member organization?',
@@ -153,6 +154,7 @@ $mod_strings = Array(
 'Notes'=>'Notes',
 'Pending'=>'Pending',
 'Account Name'=>'Account Name',
+'Terms & Conditions'=>'Terms & Conditions',
 //Quote Info
 'LBL_INVOICE_INFORMATION'=>'Invoice Information',
 'LBL_INVOICE'=>'Invoice:',
