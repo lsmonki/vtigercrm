@@ -112,6 +112,7 @@ $mod_strings = Array(
 //Added fields after 4.2 alpha
 'LBL_TICKETS'=>'Tickets',
 'LBL_FAQ'=>'FAQ',
+'Product Name'=>'Product Name',
 );
 
 ?>
