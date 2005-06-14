@@ -77,6 +77,7 @@ $mod_strings = Array(
 'LBL_POSTAL_CODE'=>'Postal Code:',
 'LBL_COUNTRY'=>'Country:',
 'LBL_DESCRIPTION_INFORMATION'=>'Description Information',
+'LBL_TERMS_INFORMATION'=>'Terms & Conditions',
 'LBL_DESCRIPTION'=>'Description:',
 'NTC_COPY_BILLING_ADDRESS'=>'Copy billing address to shipping address',
 'NTC_COPY_SHIPPING_ADDRESS'=>'Copy shipping address to billing address',
