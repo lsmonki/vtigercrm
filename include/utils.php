@@ -1144,7 +1144,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 59)
 	{
-                if(isset($_REQUEST['parent_id']) & $_REQUEST['parent_id'] != '')
+		if($_REQUEST['module'] == 'HelpDesk')
+                {
+                        if(isset($_REQUEST['product_id']) & $_REQUEST['product_id'] != '')
+                                $value = $_REQUEST['product_id'];
+                }
+                elseif(isset($_REQUEST['parent_id']) & $_REQUEST['parent_id'] != '')
                         $value = $_REQUEST['parent_id'];
 
 		if($value != '')
@@ -2495,12 +2500,18 @@ function getRelatedTo($module,$list_result,$rset)
 	if($module == 'HelpDesk')
 	{
         	$activity_id = $adb->query_result($list_result,$rset,"parent_id");
-		$evt_query = "select * from crmentity where crmid=".$activity_id;
+		if($activity_id != '')
+			$evt_query = "select * from crmentity where crmid=".$activity_id;
 	}
 
         $evt_result = $adb->query($evt_query);
         $parent_module = $adb->query_result($evt_result,0,'setype');
         $parent_id = $adb->query_result($evt_result,0,'crmid');
+	if($module == 'HelpDesk' && ($parent_module == 'Accounts' || $parent_module == 'Contacts'))
+        {
+                global $theme;
+                $module_icon = '<img src="themes/'.$theme.'/images/'.$parent_module.'.gif" alt="" border=0 align=center title='.$parent_module.'> ';
+        }
         if($parent_module == 'Accounts')
         {
                 $parent_query = "SELECT accountname FROM account WHERE accountid=".$parent_id;
@@ -2525,14 +2536,14 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"productname");
         }
-	if($parent_module == 'Contacts' && $module == 'Emails')
+	if($parent_module == 'Contacts' && ($module == 'Emails' || $module == 'HelpDesk'))
         {
                 $parent_query = "SELECT firstname,lastname FROM contactdetails WHERE contactid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"firstname") ." " .$adb->query_result($parent_result,0,"lastname");
         }
 
-        $parent_value = "<a href='index.php?module=".$parent_module."&action=DetailView&record=".$parent_id."'>".$parent_name."</a>";
+        $parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=DetailView&record=".$parent_id."'>".$parent_name."</a>";
         return $parent_value;
 
 
@@ -2665,7 +2676,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							}
 						}
 					}
-					elseif(($module == 'Faq' || $module == 'Notes') && $name=='Related to')
+					elseif($module == 'Notes' && $name=='Related to')
 					{
 						$value=getRelatedToEntity($module,$list_result,$i-1);
 					}
@@ -2684,9 +2695,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                                 	$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
                                                 }
 					}
-					elseif(($module == 'PriceBook' || $module == 'Quotes' || 'Orders') && $name == 'Product Name')
+					elseif(($module == 'PriceBook' || $module == 'Quotes' || $module == 'Orders' || $module == 'Faq') && $name == 'Product Name')
 					{
-						$product_id = $adb->query_result($list_result,$i-1,"productid");
+						if($module == 'Faq')
+							$product_id = $adb->query_result($list_result,$i-1,"product_id");
+						else
+							$product_id = $adb->query_result($list_result,$i-1,"productid");
 						$product_name = getProductName($product_id);
 						$value = '<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
 					}
@@ -3291,7 +3305,7 @@ function getListQuery($module,$where='')
         }
 	if($module == "Faq")
 	{
-		$query = "select crmentity.crmid,faq.question,faq.category,sefaqrel.crmid as relatedto from faq inner join crmentity on crmentity.crmid=faq.id left join sefaqrel on faq.id=sefaqrel.faqid where crmentity.deleted=0";
+		$query = "select crmentity.crmid,faq.* from faq inner join crmentity on crmentity.crmid=faq.id left join products on faq.product_id=products.productid where crmentity.deleted=0";
 	}
 	if($module == "Vendor")
 	{
