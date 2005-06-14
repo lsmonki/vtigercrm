@@ -4042,6 +4042,7 @@
 		<field name="total" type="N" size="11.3"></field>
 		<field name="subtotal" type="N" size="11.3"></field>
 		<field name="accountid" type="I" size="19"></field>
+		<field name="terms_conditions" type="X"></field>
 		
                   
 <opt>Type=InnoDB</opt>
@@ -4218,6 +4219,7 @@
 		<field name="total" type="N" size="11.3"></field>
 		<field name="subtotal" type="N" size="11.3"></field>
 		<field name="accountid" type="I" size="19"></field>
+		<field name="terms_conditions" type="X"></field>
 		
                   
 <opt>Type=InnoDB</opt>
@@ -4392,6 +4394,7 @@
 		<field name="total" type="N" size="11.3"></field>
 		<field name="shipping" type="C" size="100"></field>
 		<field name="accountid" type="I" size="19"></field>
+		<field name="terms_conditions" type="X"></field>
 
 		
                   
