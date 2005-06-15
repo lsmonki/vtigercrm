@@ -125,6 +125,7 @@ if(isPermitted("Quotes",1,$_REQUEST['record']) == 'yes')
 	$xtpl->assign("CREATEPDF","<td><input title=\"Export To PDF\" accessKey=\"Alt+e\" class=\"button\" onclick=\"this.form.return_module.value='Quotes'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='CreatePDF'\" type=\"submit\" name=\"Export To PDF\" value=\"Export To PDF\"></td>");
 }
 
+	$xtpl->assign("CONVERTSALESORDER","<td><input title=\"$app_strings[LBL_CONVERTSO_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTSO_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Orders'; this.form.return_action.value='SalesOrderDetailView'; this.form.convertmode.value='quotetoso';this.form.module.value='Orders'; this.form.action.value='SalesOrderEditView'\" type=\"submit\" name=\"Convert To SalesOrder\" value=\"$app_strings[LBL_CONVERTSO_BUTTON_LABEL]\"></td>");
 
 if(isPermitted("Quotes",2,$_REQUEST['record']) == 'yes')
 {
