@@ -1136,7 +1136,15 @@
 		<data>
 		</data>
 	</table>
-	
+	<table name="products" alter="true">
+
+        	<constraint>ADD CONSTRAINT fk_productsCF FOREIGN KEY (productid) REFERENCES crmentity(crmid)  ON DELETE CASCADE             </constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>	
 
 	<table name="currency">
 		<field name="currencyid" type="I" size="19">
@@ -1658,9 +1666,7 @@
 
 	<table name="troubletickets">
 		<field name="ticketid" type="I" size="19">
-		<KEY/>
-		<DEFAULT value="0"/>
-			
+			<KEY/>
 		</field>
 		<field name="groupname" type="C" size="100"></field>
 <field name="parent_id" type="C" size="100"></field>
@@ -1679,21 +1685,30 @@
 		</field>
 		 	
 		<opt>Type=InnoDB</opt>
-	 	
+	 		<index name="troubletickets_IDX0">
+                                <col>ticketid</col>
+                        </index>	
+
 		<data>
 		</data>
 	</table>
+	<table name="troubletickets" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_troubleticketsCF FOREIGN KEY (ticketid) REFERENCES crmentity(crmid)  ON DELETE CASCADE        </constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
 
 	<table name="ticketcomments">
 
 		<field name="commentid" type="I" size="19">
 	                <KEY/>
 			<AUTOINCREMENT/>
-        	        <DEFAULT value="0"/>
                 </field>
-		<field name="ticketid" type="I" size="19">
-			<DEFAULT value="0"/>
-		</field>
+		<field name="ticketid" type="I" size="19"></field>
                 <field name="comments" type="X"></field>
                 <field name="ownerid" type="I" size="19">
                         <NOTNULL/>
@@ -1704,8 +1719,23 @@
                         <NOTNULL/>
                 </field>
 
-	</table>
+		<opt>Type=InnoDB</opt>
+                        <index name="ticketcomments_IDX0">
+                                <col>ticketid</col>
+                        </index>
 
+                <data>
+                </data>
+	</table>
+	<table name="ticketcomments" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_ticketcommentsCF FOREIGN KEY (ticketid) REFERENCES troubletickets(ticketid)  ON DELETE CASCADE </constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
 
 	<table name="salesmanactivityrel">
 		<field name="smid" type="I" size="19">
@@ -2223,12 +2253,53 @@
 		<field name="category" type="C" size="100">
 			<NOTNULL/>
 		</field>
-		<field name="comments" type="X"></field>
 		<opt>Type=InnoDB</opt>
+			<index name="faq_IDX0">
+                                <col>id</col>
+                        </index>
 				
 		<data>
 		</data>
 	</table>
+	<table name="faq" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_faqCF FOREIGN KEY (id) REFERENCES crmentity(crmid)  ON DELETE CASCADE </constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
+
+	<table name="faqcomments">
+
+		<field name="commentid" type="I" size="19">
+	                <KEY/>
+			<AUTOINCREMENT/>
+                </field>
+		<field name="faqid" type="I" size="19"></field>
+                <field name="comments" type="X"></field>
+		<field name="createdtime" type="T" >
+                        <NOTNULL/>
+                </field>
+
+		<opt>Type=InnoDB</opt>
+                        <index name="faqcomments_IDX0">
+                                <col>faqid</col>
+                        </index>
+
+                <data>
+                </data>
+	</table>
+	<table name="faqcomments" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_faqcommentsCF FOREIGN KEY (faqid) REFERENCES faq(id)  ON DELETE CASCADE </constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
 
 	<table name="files">
 		<field name="id" type="C" size="36">
@@ -4177,7 +4248,7 @@
 		<field name="accountid" type="I" size="19"></field>
 		<field name="terms_conditions" type="X"></field>
 		<field name="purchaseorder" type="C" size='200'></field>
-		
+	
                   
 <opt>Type=InnoDB</opt>
 		<data>
