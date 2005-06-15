@@ -482,7 +482,7 @@ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field")
  
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'subject','purchaseorder',1,'2','subject','Subject',1,0,0,100,1,1,1,'V~M')");	
  //$this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'quoteid','purchaseorder',1,'78','quote_id','Quote Name',1,0,0,100,2,1,1,'I~M')");	
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'vendorid','purchaseorder',1,'75','vendor_id','Vendor Name',1,0,0,100,3,1,1,'I~O')");	
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'vendorid','purchaseorder',1,'81','vendor_id','Vendor Name',1,0,0,100,3,1,1,'I~M')");	
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'requisition_no','purchaseorder',1,'1','requisition_no','Requisition No',1,0,0,100,4,1,1,'V~O')");	
 
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'tracking_no','purchaseorder',1,'1','tracking_no','Tracking Number',1,0,0,100,5,1,1,'V~O')");	
@@ -496,7 +496,7 @@ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'exciseduty','purchaseorder',1,'1','exciseduty','Excise Duty',1,0,0,100,12,1,1,'N~O')");
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'total','purchaseorder',1,'1','hdnGrandTotal','Total',1,0,0,100,13,1,3,'N~O')");
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'subtotal','purchaseorder',1,'1','hdnSubTotal','Sub Total',1,0,0,100,14,1,3,'N~O')");
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'accountid','purchaseorder',1,'73','account_id','Account Name',1,0,0,100,15,1,1,'I~M')");
+// $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'accountid','purchaseorder',1,'73','account_id','Account Name',1,0,0,100,15,1,1,'I~M')");
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,16,1,1,'V~M')");
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,17,1,2,'T~O')");
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,18,1,2,'T~O')");
