@@ -76,6 +76,10 @@ class CRMEntity extends SugarBean
       {
                 $this->insertIntoTicketCommentTable($table_name, $module);
       }
+      elseif($table_name ==  "faqcomments" && $_REQUEST['comments'] != '')
+      {
+                $this->insertIntoFAQCommentTable($table_name, $module);
+      }
       elseif($table_name == "activity_reminder")
       {
 		$this->insertIntoReminderTable($table_name,$module);
@@ -588,6 +592,15 @@ function insertIntoTicketCommentTable($table_name, $module)
 		$ownertype = 'customer';
 
 	$sql = "insert into ticketcomments values('',".$this->id.",'".$_REQUEST['comments']."','".$current_user->id."','".$ownertype."','".$current_time."')";
+        $adb->query($sql);
+}
+function insertIntoFAQCommentTable($table_name, $module)
+{
+        global $adb;
+
+        $current_time = date('Y-m-d H:i:s');
+
+	$sql = "insert into faqcomments values('',".$this->id.",'".$_REQUEST['comments']."','".$current_time."')";
         $adb->query($sql);
 }
 function insertIntoReminderTable($table_name, $module)
