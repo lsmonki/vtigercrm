@@ -415,7 +415,7 @@ $mod_strings = Array(
 
 'LBL_STATUS'=>'Status',
 
-'LBL_CATEGORY'=>'Category',
+'LBL_CATEGORY'=>'Ticket Category',
 
 'LBL_MANUFACTURER'=>'Manufacturer',
 
