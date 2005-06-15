@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://communicator/skin/pref/pref.css" type="text/css"?>
+<!--
+*********************************************************************************
+* The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+********************************************************************************
+-->
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	title="Export to vtiger CRM"
+	id="expwizard"
+	onload="load_expab();"
+	style="padding-top:0px; padding-left:0px; padding-right:0px;">
+
+<script type="application/x-javascript" src="chrome://messenger/content/addressbook/addressbook.js"/>
+<script type="application/x-javascript" src="chrome://messenger/content/addressbook/abCommon.js"/>
+<script type="application/x-javascript" src="chrome://messenger/content/addressbook/abCardOverlay.js"/>
+<script type="application/x-javascript" src="chrome://vtiger/content/exportab.js"/>
+	
+<image src="export_top.png"/>
+
+<vbox>
+<vbox id="vboxexp" style="margin:7px;">
+<groupbox flex="1">
+ <caption label="Export Contacts to vtiger CRM"/>
+  <hbox>
+	 <vbox valign="middle" align="right">
+		 <label value="Choose source Address Book to be exported:"/>
+	 </vbox>
+	 <vbox>
+		<menulist id="expablist">
+				<menupopup id="expopup">
+				</menupopup>
+		 </menulist>
+	 </vbox>
+ </hbox>
+ <spacer flex="1"/>
+ <!--<progressmeter id="identifier" mode="normal" value="100" style="margin: 4px;"/>-->
+<hbox>
+	 <vbox>
+		 <label hidden="true" value="Exporting Address Book..."/>
+	 </vbox>
+	 <!--<vbox>
+		<label value="10%"/>
+	 </vbox>-->
+ </hbox>
+</groupbox>
+</vbox>
+	<hbox id="commandBar" flex="1" align="right" style="margin-bottom:5px;">
+		<hbox>
+			<button label="Export" id="expbutton" oncommand="export_vtigerABURL();"/>
+			<!--<button label="Cancel" oncommand="window.close();"/>-->
+		</hbox>
+	</hbox>
+</vbox>
+</window>

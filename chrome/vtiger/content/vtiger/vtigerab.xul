@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://vtiger/skin/vtiger.css" type="text/css"?>
+
+<!--
+*********************************************************************************
+* The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+********************************************************************************
+-->
+<overlay id="vtigeraboverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript" src="chrome://vtiger/content/vtigerab.js"/>
+<script type="application/x-javascript" src="chrome://global/content/nsUserSettings.js"/>
+<script type="application/x-javascript" src="chrome://messenger/content/addressbook/addressbook.js"/>
+<script type="application/x-javascript" src="chrome://messenger/content/addressbook/abCommon.js"/>
+
+<toolbarpalette id="AddressBookToolbarPalette">
+	<toolbarbutton id="import-button" class="toolbarbutton-1" label= "Import Contacts"
+	oncommand="get_selected();window.openDialog('chrome://vtiger/content/importab.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" tooltiptext="Import Contacts from vtiger CRM"/>
+	<toolbarbutton id="export-button" class="toolbarbutton-1" label= "Export Contacts"
+	oncommand="get_selected();window.openDialog('chrome://vtiger/content/exportab.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" tooltiptext="Export Contacts to vtiger CRM"/>
+</toolbarpalette>
+
+<popup id="dirTreeContext">
+  <menuseparator insertafter="dirTreeContext-delete"/>
+  <menuitem id="dirTreeImppopup" label="Import from vtiger CRM..." accesskey="p" oncommand="get_selected();window.openDialog('chrome://vtiger/content/importab.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>
+  <menuitem id="dirTreeEmppopup" label="Export to vtiger CRM..." accesskey="x" oncommand="get_selected();window.openDialog('chrome://vtiger/content/exportab.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>
+</popup>
+
+<menu id="tasksMenu">
+	<menupopup id="taskPopup">
+		<menuseparator/>
+		<menuitem label="Import from vtiger CRM..."  accesskey="p" oncommand="get_selected();window.openDialog('chrome://vtiger/content/importab.xul','','chrome,resizable=no,titlebar,modal,centerscreen');" id="impmenu"/>
+		<menuitem label="Export to vtiger CRM..." accesskey="x" id="expmenu" oncommand="get_selected();window.openDialog('chrome://vtiger/content/exportab.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>
+ </menupopup>
+</menu>
+		  
+</overlay>

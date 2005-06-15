@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://communicator/skin/pref/pref.css" type="text/css"?>
+<!--
+*********************************************************************************
+* The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+********************************************************************************
+-->
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	title="Add Message to vtiger CRM"
+	id="addmsgtovtigercrm"
+	onload="vget_mailfrmaddrs();"
+	style="padding-top:0px; padding-left:0px; padding-right:0px;">
+	
+<script type="application/x-javascript" src="chrome://global/content/strres.js"/>
+<script type="application/x-javascript" src="chrome://global/content/nsUserSettings.js"/>
+<script type="application/x-javascript" src="chrome://vtiger/content/addtovtiger.js"/>
+
+<image src="email_add.png"/>
+
+<vbox>
+<vbox id="tabbedui" style="margin:7px;">
+<tabbox>
+      <tabs id="abTabs">
+        <tab label="Contacts"/>
+        <tab label="Edit Message"/>
+      </tabs>
+
+      <tabpanels id="abTabPanels" flex="1">
+      <vbox flex="1">
+        <groupbox flex="1">
+          <caption label="Search for contacts in vtiger CRM"/>
+			  <hbox>
+				 <vbox>
+					 <textbox style="width:20em;" align="left" id="txtemailid"/>
+				 </vbox>
+				 <vbox>
+					<button style="width: 15em;" label="Search" oncommand="bget_CntBySearch();"/>
+				 </vbox>
+				</hbox>
+        </groupbox>
+
+        <groupbox flex="1">
+          <caption class="tab-caption" label="Select a contact to associate with current message"/>
+            <vbox>
+					 <listbox id="lstcontactinfo" ondblclick="load_vtigercrm(this.selectedItem.value)">
+					  <listhead>
+						 <listheader label="Type"/>
+						 <listheader label="Full Name"/>
+						 <listheader label="Company Name"/>
+						 <listheader label="Email Address"/>
+					  </listhead>
+					  <listcols>
+						 <listcol flex="1"/>
+						 <listcol flex="2"/>
+						 <listcol flex="3"/>
+						 <listcol flex="4"/>
+					  </listcols>
+					</listbox>
+            </vbox>
+          </groupbox>
+			 
+        </vbox>
+
+        <!--Edit Message Tab -->
+        <vbox index="other" flex="1">
+            <textbox id="TextAreaValue" flex="1" multiline="true" rows="10"/>
+		  </vbox>
+      </tabpanels> 
+    </tabbox>
+</vbox>
+	<hbox id="commandBar" flex="1" align="right" style="margin-bottom:5px;">
+		<hbox>
+			<button label="Add to vtiger CRM" oncommand="vaddemailtovtigerCRM();"/>
+			<button label="Close" oncommand="window.close();"/>
+		</hbox>
+	</hbox>
+</vbox>
+</window>

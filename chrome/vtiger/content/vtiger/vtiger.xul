@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://vtiger/skin/vtiger.css" type="text/css"?>
+<!--
+*********************************************************************************
+* The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+********************************************************************************
+-->
+<overlay id="vtigeremailoverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript" src="jar:resource:/chrome/mail.jar!/content/messenger/msgMail3PaneWindow.js"/>
+<script type="application/x-javascript" src="chrome://global/content/nsUserSettings.js"/>
+<script type="application/x-javascript" src="chrome://vtiger/content/vtiger.js"/>
+
+<toolbarpalette id="MailToolbarPalette">
+<toolbarbutton id="vtiger-button" class="toolbarbutton-1" label= "Add to vtiger CRM"
+ oncommand="load_addmsgtovtiger();"/>
+</toolbarpalette>
+
+<menupopup id="taskPopup">
+	 <menuitem insertafter="menu_preferences" id="vtigerMenu"/>
+	 <menuseparator/>
+	 <menuitem label="vtiger CRM Configuration..." accesskey="v" oncommand="window.openDialog('chrome://vtiger/content/vtiger-settings.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>
+	 <menuitem label="Add Message to vtiger CRM..." accesskey="d" oncommand="load_addmsgtovtiger();window.openDialog('chrome://vtiger/content/addtovtiger.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>	 
+</menupopup>
+
+<popup id="threadPaneContext">
+    <menuitem id="vtigerpcontext" accesskey="v" label="Add Message to vtiger CRM" oncommand="load_addmsgtovtiger();window.openDialog('chrome://vtiger/content/addtovtiger.xul','','chrome,resizable=no,titlebar,modal,centerscreen');"/>
+</popup>
+
+
+
+</overlay>

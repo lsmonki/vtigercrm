@@ -1,0 +1,56 @@
+/* ********************************************************************************
+* The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+******************************************************************************* */
+#vtiger-button {
+  list-style-image: url("chrome://vtiger/content/vtiger32.png");
+}
+
+#vtiger-button:hover {
+  list-style-image: url("chrome://vtiger/content/vtiger_3232_hover.png");
+}
+
+toolbar[iconsize="small"] #vtiger-button {
+  list-style-image: url("chrome://vtiger/content/vtiger20.png");
+}
+
+toolbar[iconsize="small"] #vtiger-button:hover {
+  list-style-image: url("chrome://vtiger/content/vtiger_2020_hover.png");
+}
+
+#import-button {
+  list-style-image: url("chrome://vtiger/content/import.png");
+}
+
+#import-button:hover {
+  list-style-image: url("chrome://vtiger/content/import_3232_hover.png");
+} 
+
+toolbar[iconsize="small"] #import-button {
+  list-style-image: url("chrome://vtiger/content/import_20x20.png");
+}
+
+toolbar[iconsize="small"] #import-button:hover{
+  list-style-image: url("chrome://vtiger/content/import_2020_hover.png");
+}
+
+#export-button {
+  list-style-image: url("chrome://vtiger/content/export.png");
+}
+
+#export-button:hover {
+  list-style-image: url("chrome://vtiger/content/export_3232_hover.png");
+}
+
+toolbar[iconsize="small"] #export-button {
+  list-style-image: url("chrome://vtiger/content/export_20x20.png");
+}
+
+toolbar[iconsize="small"] #export-button:hover {
+  list-style-image: url("chrome://vtiger/content/export_2020_hover.png");
+}

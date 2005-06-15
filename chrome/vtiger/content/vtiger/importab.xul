@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://communicator/skin/pref/pref.css" type="text/css"?>
+<!--
+*********************************************************************************
+* The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+********************************************************************************
+-->
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	title="Import from vtiger CRM"
+	id="impwizard"
+	onload="load_ab();"
+	style="padding-top:0px; padding-left:0px; padding-right:0px;">
+
+<script type="application/x-javascript" src="chrome://messenger/content/addressbook/addressbook.js"/>
+<script type="application/x-javascript" src="chrome://messenger/content/addressbook/abCommon.js"/>
+<script type="application/x-javascript" src="chrome://messenger/content/addressbook/abCardOverlay.js"/>
+<script type="application/x-javascript" src="chrome://vtiger/content/importab.js"/>
+	
+<image src="import_top.png"/>
+
+<vbox>
+<vbox id="tabbedui" style="margin:7px;">
+<groupbox flex="1">
+ <caption label="Import Contacts from vtiger CRM"/>
+  <hbox>
+	 <vbox valign="middle" align="right">
+		 <label value="Choose target Address Book:"/>
+	 </vbox>
+	 <vbox>
+		 <menulist id="impablist" editable="true">
+				<menupopup id="impopup">
+				</menupopup>
+		 </menulist>
+	 </vbox>
+ </hbox>
+ <spacer flex="1"/>
+ <!--<progressmeter class="progressmeter-statusbar" id="impprog" mode="undetermined" value="50" style="margin: 4px;"/>-->
+ <!--<progressmeter id="impprog" mode="undetermined" value="10" style="margin: 4px;"/>-->
+ <hbox>
+	 <vbox>
+			<label hidden="true" id="lblimpcontacts" value="Importing Contacts..."/>
+	 </vbox>
+	 <!--<vbox>
+		 <label id="lblCount" value=""/>
+	 </vbox>-->
+ </hbox>
+</groupbox>
+</vbox>
+	<hbox id="commandBar" flex="1" align="right" style="margin-bottom:5px;">
+		<hbox>
+			<button label="Import" id="impbutton" oncommand="create_vtigerABURL();"/>
+			<!--<button label="Cancel" oncommand="window.close();"/>-->
+		</hbox>
+	</hbox>
+</vbox>
+</window>

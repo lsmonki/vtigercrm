@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+<!--
+$Id:	
+*********************************************************************************
+* The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+********************************************************************************
+-->    
+	 <Description about="urn:mozilla:install-manifest">
+        <em:id>{e4aab225-76d8-4f86-a8d0-0935fa80cccf}</em:id>
+        <em:name>vtiger Thunderbird Extension</em:name>
+        <em:version>4.0.1</em:version>
+        <em:description>vtiger CRM Extension for Thunderbird.</em:description>
+        <em:creator>vtiger.com</em:creator>
+		  <em:iconURL>chrome://vtiger/skin/vtiger32.png</em:iconURL>
+        <em:homepageURL>http://www.vtiger.com</em:homepageURL>
+		  <em:updateURL>http://www.vtiger.com/products/crm/downloads/tbird/update.rdf</em:updateURL>
+        <em:file>
+            <Description about="urn:mozilla:extension:file:vtiger.jar">
+					<em:package>content/vtiger/</em:package>
+					<em:skin>skin/classic/vtiger/</em:skin>
+            </Description>
+        </em:file>
+        <em:targetApplication><!-- Mozilla Thunderbird -->
+            <Description>
+                <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id>
+                <em:minVersion>0.5</em:minVersion>
+                <em:maxVersion>1.0</em:maxVersion>
+            </Description>
+        </em:targetApplication>
+		  <em:targetApplication><!-- Mozilla -->
+            <Description>
+                <em:id>{86c18b42-e466-45a9-ae7a-9b95ba6f5640}</em:id>
+                <em:maxVersion>1.4</em:maxVersion>
+                <em:minVersion>1.8</em:minVersion>
+            </Description>
+        </em:targetApplication>
+    </Description>
+</RDF>
+
+
