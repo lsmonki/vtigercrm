@@ -532,11 +532,11 @@ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'potentialid','salesorder',1,'76','potential_id','Potential Name',1,0,0,100,2,1,1,'I~O')");	
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'customerno','salesorder',1,'1','customerno','Customer No',1,0,0,100,3,1,1,'V~O')");
 $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'quoteid','salesorder',1,'78','quote_id','Quote Name',1,0,0,100,4,1,1,'I~O')");	
-// $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'purchaseorderid','salesorder',1,'79','purchaseorder_id','Purchase Order',1,0,0,100,4,1,1,'I~O')");	
+$this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'purchaseorder','salesorder',1,'1','purchaseorder','Purchase Order',1,0,0,100,4,1,1,'V~O')");	
 
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'vendorterms','salesorder',1,'1','vendorterms','Vendor Terms',1,0,0,100,5,1,1,'V~O')");	
+ //$this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'vendorterms','salesorder',1,'1','vendorterms','Vendor Terms',1,0,0,100,5,1,1,'V~O')");	
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'contactid','salesorder',1,'57','contact_id','Contact Name',1,0,0,100,6,1,1,'I~O')");	
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'vendorid','salesorder',1,'75','vendor_id','Vendor Name',1,0,0,100,7,1,1,'I~O')");	
+ //$this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'vendorid','salesorder',1,'75','vendor_id','Vendor Name',1,0,0,100,7,1,1,'I~O')");	
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'duedate','salesorder',1,'5','duedate','Due Date',1,0,0,100,8,1,1,'D~O')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'carrier','salesorder',1,'15','carrier','Carrier',1,0,0,100,9,1,1,'V~O')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'pending','salesorder',1,'1','pending','Pending',1,0,0,100,10,1,1,'V~O')");
