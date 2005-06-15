@@ -2890,6 +2890,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	
 	$colname = $adb->query_result($field_result,0,"columnname");
 	$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
+
+	if(strlen($temp_val) > 40)
+        {
+                $temp_val = substr($temp_val,0,40).'...';
+        }
 		
 	if($uitype == 52 || $uitype == 53 || $uitype == 77)
 	{
@@ -3321,7 +3326,7 @@ function getListQuery($module,$where='')
         }
 	if($module == "Faq")
 	{
-		$query = "select crmentity.crmid,faq.* from faq inner join crmentity on crmentity.crmid=faq.id left join products on faq.product_id=products.productid where crmentity.deleted=0";
+		$query = "select crmentity.crmid, faq.*, crmentity.createdtime, crmentity.modifiedtime from faq inner join crmentity on crmentity.crmid=faq.id left join products on faq.product_id=products.productid where crmentity.deleted=0";
 	}
 	if($module == "Vendor")
 	{
