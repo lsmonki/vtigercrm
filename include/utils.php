@@ -3922,4 +3922,30 @@ function getDetailAssociatedProducts($module,$focus)
 	return $output;
 
 }
+
+function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
+{
+        $focus->column_fields['quote_id'] = $quoteid;
+        $focus->column_fields['subject'] = $quote_focus->column_fields['subject'];
+        $focus->column_fields['contact_id'] = $quote_focus->column_fields['contact_id'];
+        $focus->column_fields['potential_id'] = $quote_focus->column_fields['potential_id'];
+        $focus->column_fields['account_id'] = $quote_focus->column_fields['account_id'];
+        $focus->column_fields['carrier'] = $quote_focus->column_fields['carrier'];
+        $focus->column_fields['bill_street'] = $quote_focus->column_fields['bill_street'];
+        $focus->column_fields['ship_street'] = $quote_focus->column_fields['ship_street'];
+        $focus->column_fields['bill_city'] = $quote_focus->column_fields['bill_city'];
+        $focus->column_fields['ship_city'] = $quote_focus->column_fields['ship_city'];
+        $focus->column_fields['bill_state'] = $quote_focus->column_fields['bill_state'];
+        $focus->column_fields['ship_state'] = $quote_focus->column_fields['ship_state'];
+        $focus->column_fields['bill_code'] = $quote_focus->column_fields['bill_code'];
+        $focus->column_fields['ship_code'] = $quote_focus->column_fields['ship_code'];
+        $focus->column_fields['bill_country'] = $quote_focus->column_fields['bill_country'];
+        $focus->column_fields['ship_country'] = $quote_focus->column_fields['ship_country'];
+        $focus->column_fields['description'] = $quote_focus->column_fields['description'];
+        $focus->column_fields['terms_conditions'] = $quote_focus->column_fields['terms_conditions'];
+
+        return $focus;
+
+}
+
 ?>
