@@ -160,7 +160,7 @@ else {
 
 ?>
 	<tr>
-	<td width="50%"><?php echo "<img src='".$image_path."security.png'>";?></td>
+	<td width="50%"><?php echo "<img src='".$image_path."login.gif'>";?></td>
 	<td width="50%"><b>
 	<?php echo $current_module_strings['LBL_USER_NAME'] ?>
 		</b><br>
