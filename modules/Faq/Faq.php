@@ -37,26 +37,32 @@ class Faq extends CRMEntity {
 	var $id;
 	var $mode;
 	
-	var $tab_name = Array('crmentity','faq');
-	var $tab_name_index = Array('crmentity'=>'crmid','faq'=>'id');
+	var $tab_name = Array('crmentity','faq','faqcomments');
+	var $tab_name_index = Array('crmentity'=>'crmid','faq'=>'id','faqcomments'=>'faqid');
 				
 	var $entity_table = "crmentity";
 	
 	var $column_fields = Array();
 		
-	var $sortby_fields = Array('question','category');		
+	var $sortby_fields = Array('question','category','id');		
 
 	// This is the list of fields that are in the lists.
 	var $list_fields = Array(
+				'FAQ Id'=>Array('faq'=>'id'),
 				'Question'=>Array('faq'=>'question'),
 				'Category'=>Array('faq'=>'category'),
-				'Product Name'=>Array('faq'=>'product_id') 
+				'Product Name'=>Array('faq'=>'product_id'), 
+				'Created Time'=>Array('crmentity'=>'createdtime'), 
+				'Modified Time'=>Array('crmentity'=>'modifiedtime') 
 				);
 	
 	var $list_fields_name = Array(
+				        'FAQ Id'=>'',
 				        'Question'=>'question',
 				        'Category'=>'faqcategories',
-				        'Product Name'=>'product_id'
+				        'Product Name'=>'product_id',
+					'Created Time'=>'createdtime',
+					'Modified Time'=>'modifiedtime' 
 				      );
 	var $list_link_field= 'question';
 
@@ -79,7 +85,30 @@ class Faq extends CRMEntity {
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Faq');
 	}
-
+	
+	function getFAQComments($faqid)
+	{
+		global $mod_strings;
+		$sql = "select * from faqcomments where faqid=".$faqid;
+		$result = $this->db->query($sql);
+		$noofrows = $this->db->num_rows($result);
+		if($noofrows == 0)
+			return '';
+		$list .= '<div style="overflow: scroll;height:150;width:100%;">';
+		for($i=0;$i<$noofrows;$i++)
+		{
+			$comment = $this->db->query_result($result,$i,'comments');
+			$createdtime = $this->db->query_result($result,$i,'createdtime');
+			if($comment != '')
+			{
+				$list .= '<div valign="top" width="70%" class="dataField">&nbsp;&nbsp;'.$comment.'</div>';
+				$list .= '<div valign="top" width="70%" class="dataLabel">'.$mod_strings['Created Time'];
+				$list .= ' : '.$createdtime.'</div>';
+			}
+		}
+		$list .= '</div>';
+		return $list;
+	}
 	
 
 }
