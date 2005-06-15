@@ -1441,7 +1441,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		$custfld .= '<td width="30%"><input name="'.$fieldname.'" type="text" size="25" maxlength="'.$maxlength.'" value="'.$value.'"></td>';
 	}
-	elseif($uitype == 75)
+	elseif($uitype == 75 || $uitype ==81)
 	{
 
 		if($value != '')
@@ -1453,8 +1453,16 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value = $_REQUEST['vendor_id'];
 			$vendor_name = getVendorName($value);
 	       }		 	
-		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
-        	$custfld .= '<td width="30%"><input name="vendor_name" readonly type="text" value="'.$vendor_name.'"><input name="vendor_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=VendorPopup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
+		$custfld .= '<td width="20%" valign="center" class="dataLabel">';
+		$pop_type = 'specific';
+		if($uitype == 81)
+		{
+			$custfld .= '<font color="red">*</font>';
+			$pop_type = 'specific_vendor_address';
+		}
+		$custfld .= $mod_strings[$fieldlabel].'</td>';
+		
+        	$custfld .= '<td width="30%"><input name="vendor_name" readonly type="text" value="'.$vendor_name.'"><input name="vendor_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=VendorPopup&html=Popup_picker&popuptype='.$pop_type.'&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
 	}
 	elseif($uitype == 76)
 	{
@@ -1900,7 +1908,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}
 		$custfld .= '<td width="30%" valign="top" class="dataField">'.$display_val.'</td>';	
 	}
-	elseif($uitype == 75)
+	elseif($uitype == 75 || $uitype == 81)
         {
                 $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
                 $vendor_id = $col_fields[$fieldname];
@@ -3120,7 +3128,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		else
 			$value='';
         }
-	elseif($uitype == 75)
+	elseif($uitype == 75 || $uitype == 81)
         {
 
 		global $adb;
@@ -3188,6 +3196,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
 
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.$temp_val.'", "'.$acct_focus->column_fields['bill_street'].'", "'.$acct_focus->column_fields['ship_street'].'", "'.$acct_focus->column_fields['bill_city'].'", "'.$acct_focus->column_fields['ship_city'].'", "'.$acct_focus->column_fields['bill_state'].'", "'.$acct_focus->column_fields['ship_state'].'", "'.$acct_focus->column_fields['bill_code'].'", "'.$acct_focus->column_fields['ship_code'].'", "'.$acct_focus->column_fields['bill_country'].'", "'.$acct_focus->column_fields['ship_country'].'"); window.close()\'>'.$temp_val.'</a>';
+				}
+				elseif($popuptype == "specific_vendor_address")
+				{
+					require_once('modules/Products/Vendor.php');
+					$acct_focus = new Vendor();
+					$acct_focus->retrieve_entity_info($entity_id,"Vendor");
+
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.$temp_val.'", "'.$acct_focus->column_fields['treet'].'", "'.$acct_focus->column_fields['city'].'", "'.$acct_focus->column_fields['state'].'", "'.$acct_focus->column_fields['postalcode'].'", "'.$acct_focus->column_fields['country'].'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				else
 				{
