@@ -23,7 +23,6 @@
 require_once('XTemplate/xtpl.php');
 #require_once('data/Tracker.php'); // Commented for Tracker issue
 require_once('modules/Faq/Faq.php');
-require_once('modules/Faq/Faq.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/uifromdbutil.php');
@@ -61,7 +60,13 @@ $block_2 = getBlockInformation("Faq",2,$focus->mode,$focus->column_fields);
 $block_3 = getBlockInformation("Faq",3,$focus->mode,$focus->column_fields);
 
 //get Custom Field Information
-$block_4 = getBlockInformation("Faq",4,$focus->mode,$focus->column_fields);
+if($focus->mode == 'edit')
+{
+	$focus->column_fields['comments'] = '';
+	$block_4 = getBlockInformation("Faq",4,$focus->mode,$focus->column_fields);
+	$comments = $focus->getFAQComments($focus->id);
+	$block_4_header = getBlockTableHeader("LBL_COMMENT_INFORMATION");
+}
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -76,7 +81,9 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("BLOCK3", $block_3);
+$xtpl->assign("BLOCK4_COMMENTS", $comments);
 $xtpl->assign("BLOCK4", $block_4);
+$xtpl->assign("BLOCK4_HEADER", $block_4_header);
 
 if($focus->mode == 'edit')
 {

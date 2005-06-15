@@ -72,8 +72,12 @@ $xtpl->assign("BLOCK2", $block_2);
 $block_3 = getDetailBlockInformation("Faq",3,$focus->column_fields);
 $xtpl->assign("BLOCK3", $block_3);
 
-$block_4 = getDetailBlockInformation("Faq",4,$focus->column_fields);
-$xtpl->assign("BLOCK4", $block_4);
+//$block_4 = getDetailBlockInformation("Faq",4,$focus->column_fields);
+//$xtpl->assign("BLOCK4", $block_4);
+$block_4_header = getBlockTableHeader("LBL_COMMENT_INFORMATION");
+$commentlist = $focus->getFAQComments($focus->id);
+$xtpl->assign("BLOCK4", $commentlist);
+$xtpl->assign("BLOCK4_HEADER", $block_4_header);
 
 $xtpl->assign("ID", $_REQUEST['record']);
 if(isPermitted("Faq",1,$_REQUEST['record']) == 'yes')
