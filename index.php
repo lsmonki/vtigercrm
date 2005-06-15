@@ -652,7 +652,7 @@ if(!$skipHeaders) {
 		include('themes/'.$theme.'/header.php');
 	}
 	else 
-		include('themes/'.$theme.'/header1.php');
+		include('themes/'.$theme.'/loginheader.php');
 	
 	if(isset($_SESSION['administrator_error']))
 	{
