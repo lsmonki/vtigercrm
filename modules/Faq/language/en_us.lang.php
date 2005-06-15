@@ -21,10 +21,10 @@
  ********************************************************************************/
  
 $mod_strings = Array(
-'LBL_MODULE_NAME'=>'Faq',
-'LBL_MODULE_TITLE'=>'Faq: Home',
-'LBL_SEARCH_FORM_TITLE'=>'Faq Search',
-'LBL_LIST_FORM_TITLE'=>'Faq List',
+'LBL_MODULE_NAME'=>'FAQ',
+'LBL_MODULE_TITLE'=>'FAQ: Home',
+'LBL_SEARCH_FORM_TITLE'=>'FAQ Search',
+'LBL_LIST_FORM_TITLE'=>'FAQ List',
 'LBL_NEW_FORM_TITLE'=>'New Faq',
 'LBL_MEMBER_ORG_FORM_TITLE'=>'Member Organizations',
 
@@ -113,6 +113,9 @@ $mod_strings = Array(
 'LBL_TICKETS'=>'Tickets',
 'LBL_FAQ'=>'FAQ',
 'Product Name'=>'Product Name',
+'FAQ Id'=>'FAQ Id',
+'Add Comment'=>'Add Comment',
+'LBL_COMMENT_INFORMATION'=>'Comment Information',
 );
 
 ?>
