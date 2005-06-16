@@ -30,7 +30,11 @@ require("config.php");
 global $adb;
 
 // Select the events with reminder
-$query="select crmentity.crmid,activity.*,activity_reminder.* from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id where ".$adb->getDBDateString("activity.date_start")." >= '".date('Y-m-d')."' and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0;";
+//$query="select crmentity.crmid,activity.*,activity_reminder.* from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id where ".$adb->getDBDateString("activity.date_start")." >= '".date('Y-m-d')."' and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0;";
+
+
+$query="select crmentity.crmid,activity.*,activity_reminder.*,recurringevents.activityid,recurringevents.recurringdate,recurringevents.recurringtype from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id left join recurringevents on activity.activityid=recurringevents.activityid where '".date('Y-m-d')."' between ".$adb->getDBDateString("activity.date_start")." and ". $adb->getDBDateString("activity.due_date") ." and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0;";
+
 $result = $adb->query($query);
 
 if($adb->num_rows($result) >= 1)
@@ -41,10 +45,33 @@ if($adb->num_rows($result) >= 1)
 		$time_start = $result_set['time_start'];
 		$reminder_time = $result_set['reminder_time'];
 	        $curr_time = strtotime(date("Y-m-d H:i"))/60;
-	        $activity_time = strtotime(date("$date_start $time_start"))/60;
 		$activity_id = $result_set['activityid'];
 		$activitymode = ($result_set['activitytype'] == "Task")?"Task":"Events";
-		$to_addr='';	
+		$to_addr='';
+
+		$recur_id = $result_set['recurringid'];
+		$current_date=date('Y-m-d');
+		
+		if($recur_id == 0)
+		{
+			//echo "<h1>if $recur_id</h1>";
+			$date_start = $result_set['date_start'];
+		}
+		elseif( ($recur_id !=0) 
+		{
+			//echo "<h1>else $recur_id</h1>";
+			$date_start = $result_set['recurringdate'];
+			$st=explode("-",$date_start);	
+			$dateDiff = mktime(0,0,0,$st[1],$st[2],$st[0]) - mktime(0,0,0,'m','d','Y');
+			$days = floor($dateDiff/60/60/24)+1; //to calculate no of. days
+			
+			if($days != 0)
+				break;
+			
+		}
+
+	        $activity_time = strtotime(date("$date_start $time_start"))/60;
+	
 		if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) == $reminder_time)
 		{
 			$query_user="SELECT users.email1,salesmanactivityrel.smid FROM salesmanactivityrel inner join users on users.id=salesmanactivityrel.smid where salesmanactivityrel.activityid =".$activity_id." and users.deleted=0"; 
@@ -77,7 +104,7 @@ if($adb->num_rows($result) >= 1)
 			$from ="reminders@localserver.com";
 			
 			// Retriving the Subject and message from reminder table		
-			$sql = "select active,notificationsubject,notificationbody from notificationscheduler where schedulednotificationid=7";
+			$sql = "select active,notificationsubject,notificationbody from notificationscheduler where schedulednotificationid=1";
 			$result_main = $adb->query($sql);
 
 			$subject = "[Reminder:".$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$adb->query_result($result_main,0,'notificationsubject');
