@@ -4572,7 +4572,10 @@
                 </field>
                 <field name="reminder_sent" type="I" size="2">
                         <NOTNULL/>
-                </field>
+		</field>
+		<field name="recurringid" type="I" size="19">
+			<NOTNULL/>
+		</field>
                 <data>
                 </data>
         </table>
@@ -5084,21 +5087,11 @@
 			<NOTNULL/>
 		</field>
 		<field name="recurringdate" type="D"></field>
-		<field name="recurringtype" type="I" size="30"></field>
+		<field name="recurringtype" type="C" size="30"></field>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
 	</table>
 
-
-	<table name="recurringevents" alter="true">
-
-		<constraint>ADD CONSTRAINT fk_RecurringEvents FOREIGN KEY (recurringid) REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
-
-		<opt>Type=InnoDB</opt>
-
-		<data>
-		</data>
-	</table>
 
 </schema>
