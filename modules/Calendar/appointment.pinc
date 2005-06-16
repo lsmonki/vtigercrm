@@ -406,8 +406,8 @@ class appointment extends tutos_base {
 
 // srini read_result
   function read_result ($val_array, $pos=-1) {
-    //print("GS --> read_result pos=".$pos);
-    //print_r($val_array);
+  //  print("<br>GS --> read_result pos=".$pos);
+   // print_r($val_array);
     if($pos!=-1) return;
     //print("GS --> continuing");
     $fmt_sthr='';
@@ -1837,7 +1837,7 @@ class appointment extends tutos_base {
     {
 	$q .= " ( ";
     }
-    $q .= "  (date_start < '". $sx2 ."' AND date_start >= '". $sx1 ."')";
+    $q .= "  (date_start < '". $sx2 ."' AND date_start >= '". $sx1 . "' and (date_start like (due_date) or  (date_start != '0000-00-00' and  due_date = '0000-00-00') ) ) ";
     #$q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
     #$q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
     #$q .= " OR (date_start < ". $sx1 .")";
@@ -1847,10 +1847,51 @@ class appointment extends tutos_base {
     }
     $q .= " AND deleted = 0)";
     $q .= " ORDER by date_start";
+
     $r = $this->db->query($q);
     $n = $this->db->getRowCount($r);
     $a = 0;
     //print("GS --> ".$n." q=".$q);
+   
+    while ( $a < $n ) {
+      $o = &new appointment();
+      $result = $this->db->fetchByAssoc($r);
+      //print_r($result);
+      //$o->read_result($r,$a);
+	$o->read_result($result);
+      $a++;
+      if ( $o->see_ok() ) { 
+        /* Get all participants */
+        //$o->read_participants();
+        //print("GS --> see");
+        $obj->callist[$o->record_id] = &$o;
+      }
+      unset($o);
+    }
+//
+
+// Query created by Rama
+    #
+    # Second query ( Get Recurring appointments )
+    #
+    #
+    $q = "SELECT activity.activityid, activity.subject, activity.activitytype, activity.description, activity.time_start, activity.duration_hours, activity.duration_minutes, activity.priority, activity.location, crmentity.*, recurringevents.recurringid, recurringevents.recurringdate as date_start ,recurringevents.recurringtype  from activity,crmentity,recurringevents  WHERE ";
+    $q .= " ( activity.activityid = crmentity.crmid AND activity.activityid=recurringevents.activityid AND activity.activitytype in ('Call','Meeting') AND ";
+    if(!is_admin($current_user))
+    {
+	$q .= " ( ";
+    }
+    $q .= "  (recurringdate < '". $sx2 ."' AND recurringdate >= '". $sx1 . "') ";
+    if(!is_admin($current_user))
+    {
+	$q .= " ) AND ( smownerid = '".$current_user->id."' ) ";
+    }
+    $q .= " AND deleted = 0)";
+    $q .= " ORDER by recurringid";
+    $r = $this->db->query($q);
+    $n = $this->db->getRowCount($r);
+    $a = 0;
+    //print("<br>GS --> ".$n." q=".$q);
    
     while ( $a < $n ) {
       $o = &new appointment();
