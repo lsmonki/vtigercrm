@@ -36,7 +36,7 @@ global $current_user;
 
 $focus = new SalesOrder();
 
-if(isset($_REQUEST['record'])) 
+if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
 {
     if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoso')
     {
@@ -46,16 +46,65 @@ if(isset($_REQUEST['record']))
 	$quote_focus->retrieve_entity_info($quoteid,"Quotes");
 	$focus = getConvertQuoteToSoObject($focus,$quote_focus,$quoteid);
 			
+    }
+    elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'update_quote_val')
+    {
+	//Updating the Selected Quote Value in Edit Mode
+	foreach($focus->column_fields as $fieldname => $val)
+	{
+        	if(isset($_REQUEST[$fieldname]))
+        	{
+                	$value = $_REQUEST[$fieldname];
+	                //echo '<BR>';
+        	        //echo $fieldname."         ".$value;
+                	//echo '<BR>';
+	                $focus->column_fields[$fieldname] = $value;
+        	}
+
+	}
+	$quoteid = $focus->column_fields['quote_id'];
+	$quote_focus = new Quote();
+	$quote_focus->id = $quoteid;
+	$quote_focus->retrieve_entity_info($quoteid,"Quotes");
+	$focus = getConvertQuoteToSoObject($focus,$quote_focus,$quoteid);
+	$focus->id = $_REQUEST['record'];
+	$focus->mode = 'edit'; 	
+        $focus->name=$focus->column_fields['subject'];
+			
     }	
     else
     {				
-
     	$focus->id = $_REQUEST['record'];
 	$focus->mode = 'edit'; 	
         $focus->retrieve_entity_info($_REQUEST['record'],"SalesOrder");		
         $focus->name=$focus->column_fields['subject'];
     }	 
 }
+else
+{
+	if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'update_quote_val')
+	{
+		//Updating the Select Quote Value in Create Mode
+		foreach($focus->column_fields as $fieldname => $val)
+		{
+        		if(isset($_REQUEST[$fieldname]))
+        		{
+                		$value = $_REQUEST[$fieldname];
+		                //echo '<BR>';
+        		        //echo $fieldname."         ".$value;
+                		//echo '<BR>';
+	                	$focus->column_fields[$fieldname] = $value;
+        		}
+
+		}
+		$quoteid = $focus->column_fields['quote_id'];
+		$quote_focus = new Quote();
+		$quote_focus->id = $quoteid;
+		$quote_focus->retrieve_entity_info($quoteid,"Quotes");
+		$focus = getConvertQuoteToSoObject($focus,$quote_focus,$quoteid);
+	}
+}
+
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -129,13 +178,13 @@ if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
 
 
-if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoso')
+if(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'quotetoso' || $_REQUEST['convertmode'] == 'update_quote_val'))
 {
 	$num_of_products = getNoOfAssocProducts("Quotes",$quote_focus);
 	$xtpl->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
 	$xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
-	$xtpl->assign("MODE", $quote_focus->mode);
+	$xtpl->assign("MODE", $focus->mode);
 	$xtpl->assign("TAXVALUE", $quote_focus->column_fields['txtTax']);
 	$xtpl->assign("ADJUSTMENTVALUE", $quote_focus->column_fields['txtAdjustment']);
 	$xtpl->assign("SUBTOTAL", $quote_focus->column_fields['hdnSubTotal']);
