@@ -106,8 +106,10 @@ $mod_strings = Array(
 'LBL_BEFORE_EVENT'=>'before event',
 //Added for CustomView 4.2 Release
 'Close'=>'Close',
-'Start Date/Due Date'=>'Start Date/Due Date',
+'Start Date'=>'Start Date',
 'Type'=>'Type',
+'End Date'=>'End Date',
+'Recurrence'=> 'Recurring Events',
 );
 
 ?>
