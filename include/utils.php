@@ -3948,4 +3948,52 @@ function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 
 }
 
+function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
+{
+	$focus->column_fields['subject'] = $quote_focus->column_fields['subject'];
+	$focus->column_fields['account_id'] = $quote_focus->column_fields['account_id'];
+	$focus->column_fields['bill_street'] = $quote_focus->column_fields['bill_street'];
+	$focus->column_fields['ship_street'] = $quote_focus->column_fields['ship_street'];
+	$focus->column_fields['bill_city'] = $quote_focus->column_fields['bill_city'];
+	$focus->column_fields['ship_city'] = $quote_focus->column_fields['ship_city'];
+	$focus->column_fields['bill_state'] = $quote_focus->column_fields['bill_state'];
+	$focus->column_fields['ship_state'] = $quote_focus->column_fields['ship_state'];
+	$focus->column_fields['bill_code'] = $quote_focus->column_fields['bill_code'];
+	$focus->column_fields['ship_code'] = $quote_focus->column_fields['ship_code'];
+	$focus->column_fields['bill_country'] = $quote_focus->column_fields['bill_country'];
+	$focus->column_fields['ship_country'] = $quote_focus->column_fields['ship_country'];
+	$focus->column_fields['description'] = $quote_focus->column_fields['description'];
+	$focus->column_fields['terms_conditions'] = $quote_focus->column_fields['terms_conditions'];
+
+	return $focus;
+
+}
+
+
+function getConvertSoToInvoice($focus,$so_focus,$soid)
+{
+	$focus->column_fields['salesorder_id'] = $soid;
+	$focus->column_fields['subject'] = $so_focus->column_fields['subject'];
+	$focus->column_fields['customerno'] = $so_focus->column_fields['customerno'];
+	$focus->column_fields['duedate'] = $so_focus->column_fields['duedate'];
+	$focus->column_fields['account_id'] = $so_focus->column_fields['account_id'];
+	$focus->column_fields['exciseduty'] = $so_focus->column_fields['exciseduty'];
+	$focus->column_fields['salescommission'] = $so_focus->column_fields['salescommission'];
+	$focus->column_fields['bill_street'] = $so_focus->column_fields['bill_street'];
+	$focus->column_fields['ship_street'] = $so_focus->column_fields['ship_street'];
+	$focus->column_fields['bill_city'] = $so_focus->column_fields['bill_city'];
+	$focus->column_fields['ship_city'] = $so_focus->column_fields['ship_city'];
+	$focus->column_fields['bill_state'] = $so_focus->column_fields['bill_state'];
+	$focus->column_fields['ship_state'] = $so_focus->column_fields['ship_state'];
+	$focus->column_fields['bill_code'] = $so_focus->column_fields['bill_code'];
+	$focus->column_fields['ship_code'] = $so_focus->column_fields['ship_code'];
+	$focus->column_fields['bill_country'] = $so_focus->column_fields['bill_country'];
+	$focus->column_fields['ship_country'] = $so_focus->column_fields['ship_country'];
+	$focus->column_fields['description'] = $so_focus->column_fields['description'];
+	$focus->column_fields['terms_conditions'] = $so_focus->column_fields['terms_conditions'];
+
+	return $focus;
+
+}
+
 ?>
