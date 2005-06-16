@@ -137,6 +137,7 @@ else
 {
 	$xtpl->assign("ROWCOUNT", '1');
 	$xtpl->assign("TAXVALUE", '0');
+	$xtpl->assign("ADJUSTMENTVALUE", '0');
 	//Setting the first row
 	$output ='';
 	$output .= '<tr id="row1" class="oddListRow">';
