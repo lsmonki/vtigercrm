@@ -50,11 +50,33 @@ function getPrimaryModuleList()
 	
 	return $shtml;
 }
+function getRelatedModuleList()
+{
+	global $app_list_strings;
+	global $related_modules;
+
+	foreach($related_modules as $key_module=>$rel_modules)
+	{
+		$shtml .= "<select id='".$key_module."relatedmodule' name='".$key_module."relatedmodule[]' class='select' style='width:150;'>";
+		$shtml .= "<option value=''>--None--</option>";
+		$optionhtml = "";
+		foreach($rel_modules as $rep_key=>$rep_value)
+		{
+			$optionhtml .= "<option value='".$rep_value."'>".$app_list_strings['moduleList'][$rep_value]."</option>";			
+		}
+		$shtml .= $optionhtml."</select>";
+	}
+	
+	return $shtml;
+}
+
 $primary_module_html = getPrimaryModuleList();
+$related_module_html = getRelatedModuleList();
 $list_report_form=new XTemplate ('modules/Reports/NewReport0.html');
 $list_report_form->assign("MOD", $mod_strings);
 $list_report_form->assign("APP", $app_strings);
 $list_report_form->assign("PRIMARYMODULE",$primary_module_html);
+$list_report_form->assign("RELATEDMODULES",$related_module_html);
 $list_report_form->assign("IMAGE_PATH", $image_path);
 $list_report_form->parse("main");
 $list_report_form->out("main");

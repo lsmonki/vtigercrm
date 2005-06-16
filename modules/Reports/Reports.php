@@ -16,7 +16,9 @@ global $app_list_strings;
 global $modules;
 global $blocks;
 global $adv_filter_options;
+
 global $report_modules;
+global $related_modules;
 
 //$modules = array("Leads_", "Accounts_", "Potentials_", "Contacts_", "Products_", "_");
 
@@ -31,6 +33,18 @@ $adv_filter_options = array("e"=>"equals",
 			    "h"=>"greater or equal");
 
 $report_modules = Array('Leads','Accounts','Contacts','Potentials','Products','HelpDesk','Quotes','Orders','Invoice','Activities');
+
+$related_modules = Array('Leads'=>Array('Converted Leads'),
+			 'Accounts'=>Array('Potentials','Contacts','Products','Quotes','Orders','Invoice'),
+			 'Contacts'=>Array('Accounts','Potentials'),
+			 'Potentials'=>Array('Accounts','Contacts','Leads'),
+			 'Activities'=>Array('Leads','Accounts','Contacts','Potentials','Products','HelpDesk'),
+			 'Products'=>Array('Accounts','HelpDesk'),
+			 'HelpDesk'=>Array('Contacts'),
+			 'Quotes'=>Array('Accounts','Contacts','Potentials'),
+			 'Orders'=>Array('Accounts','Contacts'),
+			 'Invoice'=>Array('Accounts')
+			);
 
 foreach($report_modules as $values)
 {

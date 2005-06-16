@@ -17,12 +17,12 @@ global $adb;
 $local_log =& LoggerManager::getLogger('index');
 
 $primarymodule_req = $_REQUEST["primarymodule"];
-//$sec_module_name = $_REQUEST["primarymodule"]."relatedmodule";
-//if(isset($_REQUEST[$sec_module_name])) $secondarymodule_req = $_REQUEST[$sec_module_name]; 
+$sec_module_name = $_REQUEST["primarymodule"]."relatedmodule";
+if(isset($_REQUEST[$sec_module_name])) $secondarymodule_req = $_REQUEST[$sec_module_name]; 
 
 if(count($secondarymodule_req)>0)
 {
-	//$secondarymodule_req = implode(":",$secondarymodule_req);
+	$secondarymodule_req = implode(":",$secondarymodule_req);
 }
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Reports";

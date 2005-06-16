@@ -48,8 +48,9 @@
             <td>Select a Module for which a new Report has to be created:</td>
         </tr>        
         <tr> 
-        <td><select name="primarymodule" id="primarymodule" class="select" onChange="showRelatedModules(this.selectedIndex)" style="width:150;">    
-{PRIMARYMODULE}
+        <td>
+	<select name="primarymodule" id="primarymodule" class="select" onChange="showRelatedModules(this.selectedIndex)" style="width:150;">    
+		{PRIMARYMODULE}
         </select><br><br></td>
     </tr>
 
@@ -58,47 +59,7 @@
         </tr>
         <tr> 
         <td>
-                
-            <select id='Leadsrelatedmodule' name='Leadsrelatedmodule[]' class="select" style="width:150;">
-
-                <option value="">--None--</option>
-
-                <option value="Converted Leads">Converted Leads</option>                
-
-            </select>
-                
-            <select id='Accountsrelatedmodule' name='Accountsrelatedmodule[]' class="select" style="width:150;">
-
-                <option value="">--None--</option>
-
-                <option value="Potentials">Potentials</option>                
-
-                <option value="Contacts">Contacts</option>                
-
-            </select>
-                
-            <select id='Contactsrelatedmodule' name='Contactsrelatedmodule[]' class="select" style="width:150;">
-
-                <option value="">--None--</option>
-
-                <option value="Accounts">Accounts</option>                
-
-                <option value="Potentials">Potentials</option>                
-
-            </select>
-                
-            <select id='Potentialsrelatedmodule' name='Potentialsrelatedmodule[]' class="select" style="width:150;">
-
-                <option value="">--None--</option>
-
-		<option value="Accounts">Accounts</option>                
-
-                <option value="Contacts">Contacts</option>                
-
-                <option value="Leads">Leads</option>                
-
-            </select>
-    		<!--<span class="dim">[Use Ctrl or Shift key to select multiple]</span>-->
+		{RELATEDMODULES}                
         </td>
         </tr>        
         <tr> 

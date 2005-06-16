@@ -74,7 +74,7 @@ function FancyTable($header,$data,$title)
     $this->SetFillColor(224,235,255);
     $this->SetTextColor(0);
     $this->SetFont('','B',18);
-    $this->Cell(($this->columnlength*30),10,$title,0,0,'C',0);
+    $this->Cell(($this->columnlength*50),10,$title,0,0,'C',0);
     $this->Ln();
     //Colors, line width and bold font
     $this->SetFont('Arial','',10);
@@ -85,7 +85,7 @@ function FancyTable($header,$data,$title)
     $this->SetFont('Arial','B',10);
     //Header
     for($i=0;$i<count($header);$i++)
-        $this->Cell(30,7,$header[$i],1,0,'C',1);
+        $this->Cell(50,7,$header[$i],1,0,'C',1);
     $this->Ln();
     $this->SetFillColor(233,241,253);
     $this->SetTextColor(0);
@@ -96,7 +96,7 @@ function FancyTable($header,$data,$title)
     {
     	foreach($array_value as $header=>$value)
 	{
-		$this->Cell(30,6,$value,'LR',0,'L',$fill);
+		$this->Cell(50,6,$value,'LR',0,'L',$fill);
 	}
 	$this->Ln();
        	$fill=!$fill;
@@ -123,10 +123,10 @@ if($columnlength > 0 && $columnlength <= 4)
 	$pdf = new PDF('P','mm','A3');
 }elseif($columnlength >= 8 && $columnlength <= 12)
 {
-	$pdf = new PDF('P','mm','A2');
+	$pdf = new PDF('L','mm','A3');
 }elseif($columnlength > 12)
 {
-	$pdf = new PDF('P','mm','A1');
+	$pdf = new PDF('L','mm','A3');
 }
 
 $pdf->columnlength = $columnlength;

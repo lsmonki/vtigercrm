@@ -54,7 +54,7 @@ class ReportRun extends CRMEntity
 		$this->reporttype = $oReport->reporttype;
 	}
 	
-	function getSelectColumnsList($reportid)
+	function getQueryColumnsList($reportid)
 	{
 		global $adb;
 		global $modules;
@@ -70,12 +70,54 @@ class ReportRun extends CRMEntity
 		{
 			$fieldcolname = $columnslistrow["columnname"];
 			$selectedfields = explode(":",$fieldcolname);
-			$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];	
+			
+			$querycolumns = $this->getEscapedColumns($selectedfields);
+			if($querycolumns == "")
+			{
+				$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];	
+			}else
+			{
+				$columnslist[$fieldcolname] = $querycolumns;
+			}
 		}
 		
 		return $columnslist;		
 	}
 
+	function getEscapedColumns($selectedfields)
+	{
+		$fieldname = $selectedfields[3];
+		if($fieldname == "assigned_user_id")
+		{
+			$querycolumn = "usersRel.user_name"." ".$selectedfields[2];
+		}
+		if($fieldname == "account_id")
+		{
+			$querycolumn = "accountRel.accountname"." ".$selectedfields[2];
+		}
+		if($fieldname == "parent_id")
+		{
+			$querycolumn = "case crmentityRel.setype when 'Accounts' then accountRel.accountname when 'Leads' then leaddetailsRel.lastname when 'Potentials' then potentialRel.potentialname End"." ".$selectedfields[2].", crmentityRel.setype Entity_type";
+		}
+		if($fieldname == "contact_id")
+		{
+			$querycolumn = "contactdetailsRel.lastname"." ".$selectedfields[2];
+		}
+		if($fieldname == "vendor_id")
+		{
+			$querycolumn = "vendorRel.name"." ".$selectedfields[2];
+		}
+		if($fieldname == "potential_id")
+                {
+                        $querycolumn = "potentialRel.potentialname"." ".$selectedfields[2];
+                }
+		if($fieldname == "assigned_user_id1")
+                {
+                        $querycolumn = "usersRel1.user_name"." ".$selectedfields[2];
+                }
+		return $querycolumn;
+	}
+	
 	function getSelectedColumnsList($reportid)
 	{
 	
@@ -538,62 +580,133 @@ class ReportRun extends CRMEntity
 	   return $sql;
 	}
 
-	function getReportsQuery($module,$where='')
+	function getReportsQuery($module)
 	{
-		if($module == "HelpDesk")
-		{
-			$query = "from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity as crmentityHelpDesk on crmentityHelpDesk.crmid=troubletickets.ticketid left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentityHelpDesk.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentityHelpDesk.deleted=0 ";
-		}
-		if($module == "Accounts")
-		{
-			$query = "from account inner join crmentity as crmentityAccounts on crmentityAccounts.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid where crmentityAccounts.deleted=0 ";
-		}
-		if ($module == "Potentials")
-		{
-			$query = "from potential inner join crmentity as crmentityPotentials on crmentityPotentials.crmid=potential.potentialid inner join account on potential.accountid = account.accountid inner join potentialscf on potentialscf.potentialid = potential.potentialid where crmentityPotentials.deleted=0 ";
-		}
+
 		if($module == "Leads")
 		{
-			$query = "from leaddetails inner join crmentity as crmentityLeads on crmentityLeads.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid where crmentityLeads.deleted=0 and leaddetails.converted=0";
+			$query = "from leaddetails 
+				inner join crmentity as crmentityLeads on crmentityLeads.crmid=leaddetails.leadid 
+				inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid 
+				inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid 
+				inner join leadscf on leaddetails.leadid = leadscf.leadid 
+				left join users as usersRel on usersRel.id = crmentityLeads.smownerid
+				where crmentityLeads.deleted=0 and leaddetails.converted=0";
 		}
+
+		if($module == "Accounts")
+                {
+			$query = "from account 
+				inner join crmentity as crmentityAccounts on crmentityAccounts.crmid=account.accountid 
+				inner join accountbillads on account.accountid=accountbillads.accountaddressid 
+				inner join accountshipads on account.accountid=accountshipads.accountaddressid 
+				inner join accountscf on account.accountid = accountscf.accountid 
+				left join account as accountRel on accountRel.accountid = account.parentid
+				where crmentityAccounts.deleted=0 ";
+		}
+
+		if($module == "Contacts")
+                {
+			$query = "from contactdetails
+				inner join crmentity as crmentityContacts on crmentityContacts.crmid = contactdetails.contactid 
+				inner join contactaddress on contactdetails.contactid = contactaddress.contactaddressid 
+				inner join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid 
+				inner join contactscf on contactdetails.contactid = contactscf.contactid 
+				left join account as accountRel on accountRel.accountid = contactdetails.accountid 
+				left join users as usersRel on usersRel.id = crmentityContacts.smownerid 
+				where crmentityContacts.deleted=0";
+		}
+
+		if($module == "Potentials")
+		{
+			$query = "from potential 
+				inner join crmentity as crmentityPotentials on crmentityPotentials.crmid=potential.potentialid 
+				inner join account as accountRel on potential.accountid = accountRel.accountid 
+				inner join potentialscf on potentialscf.potentialid = potential.potentialid
+				left join users as usersRel on usersRel.id = crmentityPotentials.smownerid  
+				where crmentityPotentials.deleted=0 ";
+		}
+		
 		if($module == "Products")
 		{
-			$query = "from products inner join crmentity as crmentityProducts on crmentityProducts.crmid=products.productid left join productcf on products.productid = productcf.productid where crmentityProducts.deleted=0";
+			$query = "from products 
+				inner join crmentity as crmentityProducts on crmentityProducts.crmid=products.productid 
+				left join productcf on products.productid = productcf.productid 
+				left join users as usersRel on usersRel.id = crmentityProducts.smownerid 
+				left join contactdetails as contactdetailsRel on contactdetailsRel.contactid = products.contactid
+				left join vendor as vendorRel on vendorRel.vendorid = products.vendor_id  
+				left join seproductsrel on seproductsrel.productid = products.productid 
+				left join crmentity as crmentityRel on crmentityRel.crmid = seproductsrel.crmid 
+				left join account as accountRel on accountRel.accountid=crmentityRel.crmid 
+				left join leaddetails as leaddetailsRel on leaddetailsRel.leadid = crmentityRel.crmid 
+				left join potential as potentialRel on potentialRel.potentialid = crmentityRel.crmid 
+				where crmentityProducts.deleted=0 ";
 		}
-		if($module == "Notes")
+
+		if($module == "HelpDesk")
 		{
-			$query="from notes inner join crmentity as crmentityNotes on crmentityNotes.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentityNotes.deleted=0 ";
+			$query = "from troubletickets 
+				inner join crmentity as crmentityHelpDesk 
+				on crmentityHelpDesk.crmid=troubletickets.ticketid 
+				inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid
+				left join contactdetails as contactdetailsRel on troubletickets.contact_id=contactdetailsRel.contactid 
+				left join users as usersRel on crmentityHelpDesk.smownerid=usersRel.id 
+				where crmentityHelpDesk.deleted=0 ";
 		}
-		if($module == "Contacts")
-		{
-			$query = "from contactdetails, contactaddress, contactsubdetails, contactscf inner join crmentity as crmentityContacts on crmentityContacts.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid left join account on account.accountid = contactdetails.accountid where crmentityContacts.deleted=0";
-		}
+
 		if($module == "Activities")
 		{
-			$query = "from activity inner join crmentity as crmentityActivities on crmentityActivities.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid WHERE crmentityActivities.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') ";
+			$query = "from activity 
+				inner join crmentity as crmentityActivities on crmentityActivities.crmid=activity.activityid 
+				left join cntactivityrel on cntactivityrel.activityid= activity.activityid 
+				left join contactdetails as contactdetailsRel on contactdetailsRel.contactid= cntactivityrel.contactid
+				left join users as usersRel on usersRel.id = crmentityActivities.smownerid
+				left join seactivityrel on seactivityrel.activityid = activity.activityid
+				left join crmentity as crmentityRel on crmentityRel.crmid = seactivityrel.crmid
+				left join account as accountRel on accountRel.accountid=crmentityRel.crmid
+				left join leaddetails as leaddetailsRel on leaddetailsRel.leadid = crmentityRel.crmid
+				left join potential as potentialRel on potentialRel.potentialid = crmentityRel.crmid
+				WHERE crmentityActivities.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')";
 		}
-		if($module == "Emails")
-		{
-			$query = "from emails inner join crmentity as crmentityEmails on crmentityEmails.crmid=emails.emailid inner join activity on activity.activityid = crmentityEmails.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid WHERE crmentityEmails.deleted=0";
-		}
+		
 		if($module == "Quotes")
 		{
-			$query = "from quotes inner join crmentity as crmentityQuotes on crmentityQuotes.crmid=quotes.quoteid inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid where crmentityQuotes.deleted=0";
+			$query = "from quotes 
+				inner join crmentity as crmentityQuotes on crmentityQuotes.crmid=quotes.quoteid 
+				inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid 
+				inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid 
+				left join users as usersRel on usersRel.id = crmentityQuotes.smownerid
+				left join users as usersRel1 on usersRel1.id = quotes.inventorymanager
+				left join potential as potentialRel on potentialRel.potentialid = quotes.potentialid
+				left join contactdetails as contactdetailsRel on contactdetailsRel.contactid = quotes.contactid
+				left join account as accountRel on accountRel.accountid = quotes.accountid
+				where crmentityQuotes.deleted=0";
 		}
+		
 		if($module == "Orders")
 		{
-			$query = "from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid where crmentity.deleted=0";
+			$query = "from purchaseorder 
+				inner join crmentity as crmentityOrders on crmentityOrders.crmid=purchaseorder.purchaseorderid 
+				inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid 
+				inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid 
+				left join users as usersRel on usersRel.id = crmentityOrders.smownerid 
+				left join vendor as vendorRel on vendorRel.vendorid = purchaseorder.vendorid 
+				left join contactdetails as contactdetailsRel on contactdetailsRel.contactid = purchaseorder.contactid 
+				left join account as accountRel on accountRel.accountid = purchaseorder.accountid 
+				where crmentityOrders.deleted=0";
 		}
+
 		if($module == "Invoice")
 		{
-			$query = "from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid  where crmentity.deleted=0";
+			$query = "from invoice 
+				inner join crmentity as crmentityInvoice on crmentityInvoice.crmid=invoice.invoiceid 
+				inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid 
+				inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid 
+				left join users as usersRel on usersRel.id = crmentityInvoice.smownerid
+				left join account as accountRel on accountRel.accountid = invoice.accountid
+				where crmentityInvoice.deleted=0";
 		}
-		global $others_permission_id;
-		global $current_user;
-		if($others_permission_id == 3 && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $module!= 'Vendor' && $module != 'PriceBook')
-		{
-			$query .= " and crmentity".$module.".smownerid in(".$current_user->id .",0)";
-		}
+
 		return $query;
 	}
 
@@ -640,6 +753,71 @@ class ReportRun extends CRMEntity
 //		{
 //			switch($primarymodule)	
 //		}	
+	}
+	
+	function sGetSQLforReport($reportid)
+	{
+		$columnlist = $this->getQueryColumnsList($reportid);
+		$groupslist = $this->getGroupingList($reportid);
+		$stdfilterlist = $this->getStdFilterList($reportid);
+		$columnstotallist = $this->getColumnsTotal($reportid);
+		$advfilterlist = $this->getAdvFilterList($reportid);
+
+		if($this->reporttype == "summary")
+		{
+			if(isset($this->groupbylist))
+			{
+				$newcolumnlist = array_diff($columnlist, $this->groupbylist);
+				$selectlist = array_merge($this->groupbylist,$newcolumnlist);
+			}else
+			{
+				$selectlist = $columnlist;
+			}
+		}else
+		{
+			$selectlist = $columnlist;
+		}
+
+		//columns list
+		if(isset($selectlist))
+		{
+			$selectedcolumns =  implode(", ",$selectlist);
+		}
+		//groups list
+		if(isset($groupslist))
+		{
+			$groupsquery = implode(", ",$groupslist);
+		}
+		//standard list
+		if(isset($stdfilterlist))
+		{
+			$stdfiltersql = implode(", ",$stdfilterlist);
+		}
+		//columns to total list
+		if(isset($columnstotallist))
+		{
+			//      print_r($columnstotal);
+		}
+		//advanced filterlist
+		if(isset($advfilterlist))
+		{
+			$advfiltersql = implode(" and ",$advfilterlist);
+		}
+		
+		if($stdfiltersql != "")
+		{
+			$wheresql = " and ".$stdfiltersql;
+		}
+		if($advfiltersql != "")
+	        {
+                	$wheresql = " and ".$advfiltersql;
+        	}
+
+		$reportquery = $this->getReportsQuery($this->primarymodule);
+		$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
+
+		return $reportquery;
+
 	}
 
 	function sGetSQL($sqltype)
@@ -823,8 +1001,8 @@ class ReportRun extends CRMEntity
 			}
 
 			//"left join potential on potential.accountid = account.accountid left join crmentity as crmentity1 on crmentity1.crmid = potential.accountid left join potentialscf on potentialscf.potentialid = potential.potentialid left join contactdetails on contactdetails.accountid = account.accountid left join crmentity as crmentity2 on crmentity2.crmid = contactdetails.contactid left join contactsubdetails on contactsubdetails.contactsubscriptionid = contactdetails.contactid left join contactaddress on contactaddress.contactaddressid = contactdetails.contactid left join contactscf on contactscf.contactid = contactdetails.contactid";
-		}
-		//echo $sSQL;*/
+		}*/
+		//echo $sSQL;
 		return $sSQL;
 	}
 
@@ -835,7 +1013,7 @@ class ReportRun extends CRMEntity
 
 		if($outputformat == "HTML")
 		{
-			$sSQL = $this->sGetSQL("REPORT");
+			$sSQL = $this->sGetSQLforReport($this->reportid);
 			//echo $sSQL;
 			//$modules = array("Leads_", "Accounts_", "Potentials_", "Contacts_","_");
 			$result = $adb->query($sSQL);

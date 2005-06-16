@@ -38,7 +38,7 @@ $secondarymodule = $ogReport->secmodule;
 
 $oReportRun = new ReportRun($reportid);
 
-/*$columnlist = $oReportRun->getSelectColumnsList($reportid);
+$columnlist = $oReportRun->getQueryColumnsList($reportid);
 $groupslist = $oReportRun->getGroupingList($reportid);
 if($oReporRun->reporttype == "summary")
 {
@@ -60,7 +60,7 @@ if(isset($selectlist))
 {
 	$selectedcolumns =  implode(", ",$selectlist);
 }
-
+//print_r($selectlist);
 if(isset($groupslist))
 {
 	$groupsquery = implode(", ",$groupslist);
@@ -101,13 +101,7 @@ if($stdfiltersql != "")
 	}
 }
 
-$modulequery = getListQuery($oReportRun->primarymodule);
-//$modulequery = str_replace("crmentity.crmid","crmentity".$oReportRun->primarymodule.".crmid",$modulequery);
-
-//$modulequery = str_replace("crmentity","crmentity crmentity".$oReportRun->primarymodule,$modulequery);
-//echo $modulequery;
-$reportquery = substr($modulequery, strpos($modulequery,'from'),strlen($modulequery));
-//$modulequery = $oReportRun->getSQLforPrimaryModule($oReportRun->primarymodule);
+$reportquery = $oReportRun->getReportsQuery($oReportRun->primarymodule);
 $reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
 //echo $reportquery;
 
