@@ -82,7 +82,15 @@ class CRMEntity extends SugarBean
       }
       elseif($table_name == "activity_reminder")
       {
-		$this->insertIntoReminderTable($table_name,$module);
+	      $recur_type = trim($_REQUEST['recurringtype']);
+	      if($recur_type == "--None--")
+	      {
+		      $this->insertIntoReminderTable($table_name,$module,"");
+	      }
+      }
+      elseif($table_name == "recurringevents")
+      {
+	      $this->insertIntoRecurringTable($table_name,$module);
       }
       else
       {
@@ -611,21 +619,112 @@ function insertIntoReminderTable($table_name, $module)
 		$rem_days = $_REQUEST['remdays'];
 	        $rem_hrs = $_REQUEST['remhrs'];
 	        $rem_min = $_REQUEST['remmin'];
-        	$reminder_time = $rem_days * 24 * 60 + $rem_hrs * 60 + $rem_min;
-		if($_REQUEST['mode'] == 'edit')
+		$reminder_time = $rem_days * 24 * 60 + $rem_hrs * 60 + $rem_min;
+		if ($recurid == "")
 		{
-			$this->activity_reminder($this->id,$reminder_time,0,'edit');	
+			if($_REQUEST['mode'] == 'edit')
+			{
+
+				$this->activity_reminder($this->id,$reminder_time,0,$recurid,'edit');
+			}
+			else
+			{
+				$this->activity_reminder($this->id,$reminder_time,0,$recurid,'');
+			}
 		}
 		else
 		{
-			$this->activity_reminder($this->id,$reminder_time,0,'');	
+			$this->activity_reminder($this->id,$reminder_time,0,$recurid,'');
 		}
 	}
 	elseif($_REQUEST['set_reminder'] == 'No')
 	{
-		$this->activity_reminder($this->id,'0',0,'delete');	
+		$this->activity_reminder($this->id,'0',0,$recurid,'delete');
 	}
 }
+
+function insertIntoRecurringTable($table_name,$module)
+{
+	global $adb;
+	$st_date = $_REQUEST['date_start'];
+	$end_date = $_REQUEST['due_date'];
+	$st=explode("-",$st_date);
+	$end=explode("-",$end_date);
+	$type = trim($_REQUEST['recurringtype']);
+	$flag="true";
+
+	if($_REQUEST['mode'] == 'edit')
+	{
+		$activity_id=$this->id;
+
+		$sql='select distinct(recurringevents.recurringtype),activity.date_start,activity.due_date from recurringevents,activity where activity.activityid=recurringevents.activityid and activity.activityid='.$activity_id;
+		$result = $adb->query($sql);
+		$noofrows = $adb->num_rows($result);
+		for($i=0; $i<$noofrows; $i++)
+		{
+			$recur_type = $adb->query_result($result,$i,"recurringtype");
+			$start_date = $adb->query_result($result,$i,"date_start");
+			$end_date_old = $adb->query_result($result,$i,"due_date");
+		}
+		if(($st_date == $start_date) && ($end_date==$end_date_old) && ($type == $recur_type))
+		{
+			$flag="false";
+		}
+		else
+		{
+			$sql = 'delete from activity_reminder where activity_id='.$activity_id;
+			$adb->query($sql);
+
+			$sql = 'delete  from recurringevents where activityid='.$activity_id;
+			$adb->query($sql);
+		}
+	}
+	if($flag=="true")
+	{
+		$date_val=$st_date;
+		$date_array[]=$st_date;
+		if($type !=  "--None--")
+		{
+			while($date_val <= $end_date)
+			{
+				if($type == 'Daily')
+				{
+					$date_val = date("Y-m-d",mktime(0,0,0,date("$st[1]"),(date("$st[2]")+(1)),date("$st[0]")));
+				}
+				elseif($type == 'Weekly')
+				{
+					$date_val = date("Y-m-d",mktime(0,0,0,date("$st[1]"),(date("$st[2]")+(7)),date("$st[0]")));
+				}
+				elseif($type == 'Monthly' )
+				{
+					$date_val = date("Y-m-d",mktime(0,0,0,(date("$st[1]")+1),date("$st[2]"),date("$st[0]")));
+				}
+				elseif($type == 'Yearly')
+				{
+					$date_val = date("Y-m-d",mktime(0,0,0,date("$st[1]"),date("$st[2]"),(date("$st[0]")+1)));
+				}
+				$date_array[]=$date_val;
+				$st=explode("-",$date_val);
+			}
+			for($k=0; $k< count($date_array); $k++)
+			{
+				$tdate=$date_array[$k];
+				if($tdate <= $end_date)
+				{
+					$current_id = $adb->getUniqueID("recurringevents");
+					$recurring_insert = 'insert into recurringevents values ("'.$current_id.'","'.$this->id.'","'.$tdate.'","'.$type.'")';
+					$adb->query($recurring_insert);
+
+					if($_REQUEST['set_reminder'] == 'Yes')
+					{
+						$this->insertIntoReminderTable("activity_reminder",$module,$current_id);
+					}
+				}
+			}
+		}
+	}
+}
+
 	
   function retrieve_entity_info($record, $module)
   {
