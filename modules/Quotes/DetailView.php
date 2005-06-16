@@ -127,6 +127,8 @@ if(isPermitted("Quotes",1,$_REQUEST['record']) == 'yes')
 
 	$xtpl->assign("CONVERTSALESORDER","<td><input title=\"$app_strings[LBL_CONVERTSO_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTSO_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Orders'; this.form.return_action.value='SalesOrderDetailView'; this.form.convertmode.value='quotetoso';this.form.module.value='Orders'; this.form.action.value='SalesOrderEditView'\" type=\"submit\" name=\"Convert To SalesOrder\" value=\"$app_strings[LBL_CONVERTSO_BUTTON_LABEL]\"></td>");
 
+	$xtpl->assign("CONVERTINVOICE","<td><input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Invoice'; this.form.return_action.value='DetailView'; this.form.convertmode.value='quotetoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\"></td>");
+
 if(isPermitted("Quotes",2,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Quotes'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
