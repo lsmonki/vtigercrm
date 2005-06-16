@@ -1066,9 +1066,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         }
 	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{
-
-                if(isset($_REQUEST['account_id']) && $_REQUEST['account_id'] != '')
-                        $value = $_REQUEST['account_id'];	
+		if($_REQUEST['convertmode'] != 'update_quote_val')
+		{
+                	if(isset($_REQUEST['account_id']) && $_REQUEST['account_id'] != '')
+                        	$value = $_REQUEST['account_id'];	
+		}
 
 		if($value != '')
 		{		
