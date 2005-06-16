@@ -300,8 +300,9 @@ else
 sqimap_logout($imapConnection);
 if ($exception)
 {
-    displayPageHeader($color, $mailbox);
-    error_message(_("No messages were selected."), $mailbox, $sort, $startMessage, $color);
+ header("Location : index.php?module=squirrelmail-1.4.4&action=right_main");
+// displayPageHeader($color, $mailbox);
+  //  error_message(_("No messages were selected."), $mailbox, $sort, $startMessage, $color);
 }
 else
 {
