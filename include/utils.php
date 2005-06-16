@@ -1066,7 +1066,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         }
 	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{
-		if($_REQUEST['convertmode'] != 'update_quote_val')
+		if($_REQUEST['convertmode'] != 'update_quote_val' && $_REQUEST['convertmode'] != 'update_so_val')
 		{
                 	if(isset($_REQUEST['account_id']) && $_REQUEST['account_id'] != '')
                         	$value = $_REQUEST['account_id'];	
@@ -3919,6 +3919,7 @@ function getDetailAssociatedProducts($module,$focus)
 	
 		$output .= '<tr><td width="15%" class="dataLabel" colspan="4">Sub Total:</td><td width="15%" class="dataLabel">'.$focus->column_fields['hdnSubTotal'].'</td></tr>';
 		$output .= '<tr><td width="15%" class="dataLabel" colspan="4">Tax:</td><td width="15%" class="dataLabel">'.$focus->column_fields['txtTax'].'</td></tr>';
+		$output .= '<tr><td width="15%" class="dataLabel" colspan="4">Adjustment:</td><td width="15%" class="dataLabel">'.$focus->column_fields['txtAdjustment'].'</td></tr>';
 		$output .= '<tr><td width="15%" class="dataLabel" colspan="4">Total:</td><td width="15%" class="dataLabel">'.$focus->column_fields['hdnGrandTotal'].'</td></tr>';
 		//$output .= '</table>';
 	return $output;
