@@ -37,7 +37,7 @@ global $current_user;
 
 $focus = new Invoice();
 
-if(isset($_REQUEST['record'])) 
+if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
 {
     if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoinvoice')
     {
@@ -56,7 +56,29 @@ if(isset($_REQUEST['record']))
 	$so_focus->retrieve_entity_info($soid,"SalesOrder");
 	$focus = getConvertSoToInvoice($focus,$so_focus,$soid);
 			
-    }	
+    }
+    elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'update_so_val')
+    {
+        //Updating the Selected SO Value in Edit Mode
+        foreach($focus->column_fields as $fieldname => $val)
+        {
+                if(isset($_REQUEST[$fieldname]))
+                {
+                        $value = $_REQUEST[$fieldname];
+                        $focus->column_fields[$fieldname] = $value;
+                }
+
+        }
+	$soid = $focus->column_fields['salesorder_id'];
+        $so_focus = new SalesOrder();
+        $so_focus->id = $soid;
+        $so_focus->retrieve_entity_info($soid,"SalesOrder");
+        $focus = getConvertSoToInvoice($focus,$so_focus,$soid);
+        $focus->id = $_REQUEST['record'];
+        $focus->mode = 'edit';
+        $focus->name=$focus->column_fields['subject'];
+
+    }		
     else
     {	
  	    $focus->id = $_REQUEST['record'];
@@ -64,6 +86,28 @@ if(isset($_REQUEST['record']))
 	    $focus->retrieve_entity_info($_REQUEST['record'],"Invoice");		
 	    $focus->name=$focus->column_fields['subject'];
     } 
+}
+else
+{
+	if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'update_so_val')
+	{
+		//Updating the Selected SO Value in Create Mode
+		foreach($focus->column_fields as $fieldname => $val)
+		{
+			if(isset($_REQUEST[$fieldname]))
+			{
+				$value = $_REQUEST[$fieldname];
+				$focus->column_fields[$fieldname] = $value;
+			}
+
+		}
+		$soid = $focus->column_fields['salesorder_id'];
+		$so_focus = new SalesOrder();
+		$so_focus->id = $soid;
+		$so_focus->retrieve_entity_info($soid,"SalesOrder");
+		$focus = getConvertSoToInvoice($focus,$so_focus,$soid);
+
+	}
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
@@ -150,13 +194,13 @@ if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoinvoi
 	$xtpl->assign("SUBTOTAL", $quote_focus->column_fields['hdnSubTotal']);
 	$xtpl->assign("GRANDTOTAL", $quote_focus->column_fields['hdnGrandTotal']);
 }
-elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'sotoinvoice')
+elseif(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'sotoinvoice' || $_REQUEST['convertmode'] == 'update_so_val'))
 {
 	$num_of_products = getNoOfAssocProducts("SalesOrder",$so_focus);
 	$xtpl->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("SalesOrder",$so_focus);
 	$xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
-	$xtpl->assign("MODE", $so_focus->mode);
+	$xtpl->assign("MODE", $focus->mode);
 	$xtpl->assign("TAXVALUE", $so_focus->column_fields['txtTax']);
 	$xtpl->assign("ADJUSTMENTVALUE", $so_focus->column_fields['txtAdjustment']);
 	$xtpl->assign("SUBTOTAL", $so_focus->column_fields['hdnSubTotal']);
