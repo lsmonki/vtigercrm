@@ -117,6 +117,8 @@ $permissionData = $_SESSION['action_permission_set'];
 
 	$xtpl->assign("CREATEPDF","<td><input title=\"Export To PDF\" accessKey=\"Alt+e\" class=\"button\" onclick=\"this.form.return_module.value='Orders'; this.form.return_action.value='SalesOrderDetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='CreateSOPDF'\" type=\"submit\" name=\"Export To PDF\" value=\"Export To PDF\"></td>");
 
+	$xtpl->assign("CONVERTINVOICE","<td><input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Invoice'; this.form.return_action.value='DetailView'; this.form.convertmode.value='sotoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\"></td>");
+
 
 	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Orders'; this.form.return_action.value='SalesOrderListView'; this.form.action.value='DeleteSalesOrder'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
 
