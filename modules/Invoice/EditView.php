@@ -23,6 +23,8 @@
 require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Invoice/Invoice.php');
+require_once('modules/Quotes/Quote.php');
+require_once('modules/Orders/SalesOrder.php');
 require_once('modules/Invoice/Forms.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
@@ -37,10 +39,31 @@ $focus = new Invoice();
 
 if(isset($_REQUEST['record'])) 
 {
-    $focus->id = $_REQUEST['record'];
-    $focus->mode = 'edit'; 	
-    $focus->retrieve_entity_info($_REQUEST['record'],"Invoice");		
-    $focus->name=$focus->column_fields['subject']; 
+    if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoinvoice')
+    {
+	$quoteid = $_REQUEST['record'];
+	$quote_focus = new Quote();
+	$quote_focus->id = $quoteid;
+	$quote_focus->retrieve_entity_info($quoteid,"Quotes");
+	$focus = getConvertQuoteToInvoice($focus,$quote_focus,$quoteid);
+			
+    }
+    elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'sotoinvoice')
+    {
+	$soid = $_REQUEST['record'];
+	$so_focus = new SalesOrder();
+	$so_focus->id = $soid;
+	$so_focus->retrieve_entity_info($soid,"SalesOrder");
+	$focus = getConvertSoToInvoice($focus,$so_focus,$soid);
+			
+    }	
+    else
+    {	
+ 	    $focus->id = $_REQUEST['record'];
+	    $focus->mode = 'edit'; 	
+	    $focus->retrieve_entity_info($_REQUEST['record'],"Invoice");		
+	    $focus->name=$focus->column_fields['subject'];
+    } 
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
@@ -114,7 +137,32 @@ $xtpl->assign("BLOCK6_HEADER", $block_6_header);
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
 
-if($focus->mode == 'edit')
+
+if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoinvoice')
+{
+	$num_of_products = getNoOfAssocProducts("Quotes",$quote_focus);
+	$xtpl->assign("ROWCOUNT", $num_of_products);
+	$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
+	$xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$xtpl->assign("MODE", $quote_focus->mode);
+	$xtpl->assign("TAXVALUE", $quote_focus->column_fields['txtTax']);
+	$xtpl->assign("ADJUSTMENTVALUE", $quote_focus->column_fields['txtAdjustment']);
+	$xtpl->assign("SUBTOTAL", $quote_focus->column_fields['hdnSubTotal']);
+	$xtpl->assign("GRANDTOTAL", $quote_focus->column_fields['hdnGrandTotal']);
+}
+elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'sotoinvoice')
+{
+	$num_of_products = getNoOfAssocProducts("SalesOrder",$so_focus);
+	$xtpl->assign("ROWCOUNT", $num_of_products);
+	$associated_prod = getAssociatedProducts("SalesOrder",$so_focus);
+	$xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$xtpl->assign("MODE", $so_focus->mode);
+	$xtpl->assign("TAXVALUE", $so_focus->column_fields['txtTax']);
+	$xtpl->assign("ADJUSTMENTVALUE", $so_focus->column_fields['txtAdjustment']);
+	$xtpl->assign("SUBTOTAL", $so_focus->column_fields['hdnSubTotal']);
+	$xtpl->assign("GRANDTOTAL", $so_focus->column_fields['hdnGrandTotal']);
+}
+elseif($focus->mode == 'edit')
 {
 	$num_of_products = getNoOfAssocProducts("Invoice",$focus);
 	$xtpl->assign("ROWCOUNT", $num_of_products);
