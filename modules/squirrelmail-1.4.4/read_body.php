@@ -21,7 +21,7 @@
 define('SM_PATH','modules/squirrelmail-1.4.4/');
 /* SquirrelMail required files. */
 echo "<li><a href='index.php?module=squirrelmail-1.4.4&action=redirect'>INBOX</a></li>";
-echo 'in read body';
+//echo 'in read body';
 require_once(SM_PATH . 'include/validate.php');
 require_once(SM_PATH . 'functions/global.php');
 require_once(SM_PATH . 'functions/imap.php');
@@ -528,13 +528,26 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
         $s .= $topbar_delimiter;
         $s .= '<a href="' . $delete_url . '">' . _("Delete") . '</a>';
     }
-
+/*
     $comp_uri = 'compose' .
                 '&passed_id=' . $passed_id .
                 '&amp;mailbox=' . $urlMailbox .
                 '&amp;startMessage=' . $startMessage .
                 (isset($passed_ent_id)?'&amp;passed_ent_id='.urlencode($passed_ent_id):'');
+*/
 
+
+		$comp_uri = 'compose' .
+		'&passed_id=' . $passed_id .
+		'&amp;mailbox=' . $urlMailbox .
+		'&amp;startMessage=' . $startMessage .
+		(isset($passed_ent_id)?'&amp;passed_ent_id='.urlencode($passed_ent_id):'');
+
+
+
+
+
+		
     if (($mailbox == $draft_folder) && ($save_as_draft)) {
         $comp_alt_uri = $comp_uri . '&amp;smaction=draft';
         $comp_alt_string = _("Resume Draft");
@@ -624,11 +637,11 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
 
     $comp_action_uri = $comp_uri . '&amp;smaction=reply';
     $s .= $topbar_delimiter;
-    //$s .= makeComposeLink($comp_action_uri, _("Reply"));
+    $s .= makeComposeLink($comp_action_uri, _("Reply"));
 
     $comp_action_uri = $comp_uri . '&amp;smaction=reply_all';
     $s .= $topbar_delimiter;
-  //  $s .= makeComposeLink($comp_action_uri, _("Reply All"));
+    $s .= makeComposeLink($comp_action_uri, _("Reply All"));
     $s .= '</small></td></tr></table>';
     $ret = concat_hook_function('read_body_menu_top', $s);
     if($ret != '') {

@@ -20,10 +20,18 @@ include_once(SM_PATH . 'functions/display_messages.php');
  */
 function cachePrefValues($data_dir, $username) {
     global $prefs_are_cached, $prefs_cache;
+    //echo ' in cachePrefValues printing prefs_are_cached <br>';
 
     sqgetGlobalVar('prefs_are_cached', $prefs_are_cached, SQ_SESSION );
+    // print_r($prefs_are_cached);
+
+
     if ( isset($prefs_are_cached) && $prefs_are_cached) {
+      //echo ' printing pref_cache <br> ';
+
         sqgetGlobalVar('prefs_cache', $prefs_cache, SQ_SESSION );
+        //print_r($prefs_cache);
+
         return;
     }
 
@@ -111,9 +119,9 @@ function getPref($data_dir, $username, $string, $default = '') {
  */
 function savePrefValues($data_dir, $username) {
     global $prefs_cache;
-
+//echo ' in savePrefValues method ';
     $filename = getHashedFile($username, $data_dir, "$username.pref");
-
+//echo ' <br> filename is  '.$filename;
     /* Open the file for writing, or else display an error to the user. */
     if(!$file = @fopen($filename.'.tmp', 'w'))
     {
@@ -135,6 +143,8 @@ function savePrefValues($data_dir, $username) {
     }
     @unlink($filename . '.tmp');
     @chmod($filename, 0600);
+    //Richie
+    //echo 'after chmoding the files ';
     sqsession_register($prefs_cache , 'prefs_cache');
 }
 
@@ -158,7 +168,7 @@ function removePref($data_dir, $username, $string) {
  */
 function setPref($data_dir, $username, $string, $value) {
     global $prefs_cache;
-
+//echo '>>>>>>>>>>>>>>>> in file_prefs ';
     cachePrefValues($data_dir, $username);
     if (isset($prefs_cache[$string]) && ($prefs_cache[$string] == $value)) {
         return;

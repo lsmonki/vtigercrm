@@ -205,15 +205,11 @@ elseif (!isset($moveButton) )
 
      sqgetGlobalVar('mailbox',       $mailbox);
    $message = sqimap_get_message($imapConnection, $id[0], $mailbox);
-   //print_r($message);
    $header = $message->rfc822_header;
-  // echo 'xxxxxxxxxxxxxxxxxxxxx<br><br>';
-  // echo 'xxxxxxxxxxxxxxxxxxxxx<br><br>';
-   //echo $header->from[0]->mailbox;
-   //echo '@'.$header->from[0]->host;
-  // echo '<br>xxxxxxxxxxxxxxxxxxxxx<br><br>';
    //print_r($header);
-     header("Location: index.php?module=Emails&action=Save");      
+   $fromemail = $header->from[0]->mailbox .'@'.$header->from[0]->host;
+   $subject  = $header->subject ;
+     header("Location: index.php?module=Emails&action=Save&fromemail=".$fromemail."&subject=".$subject);      
      return;
     }
     
@@ -250,7 +246,6 @@ elseif (!isset($moveButton) )
     }
     else
     {
-      echo '44444444444';
       $composesession = attachSelectedMessages($id, $imapConnection);
       $location = set_url_var($location, 'session', $composesession, false);
       if ($compose_new_win)
@@ -271,7 +266,6 @@ elseif (!isset($moveButton) )
 }
 else
 {    // Move messages
-  echo '555555';
   if (count($id))
     {
         sqimap_msgs_list_copy($imapConnection,$id,$targetMailbox);

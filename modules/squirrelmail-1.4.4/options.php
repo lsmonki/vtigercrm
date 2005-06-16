@@ -18,6 +18,7 @@
  * @ignore
  */
 //define('SM_PATH','../');
+//echo 'in options --------------------->';
 define('SM_PATH','modules/squirrelmail-1.4.4/');
 /* SquirrelMail required files. */
 require_once(SM_PATH . 'include/validate.php');
@@ -43,7 +44,6 @@ define('SMOPT_PAGE_DISPLAY', 'display');
 define('SMOPT_PAGE_HIGHLIGHT', 'highlight');
 define('SMOPT_PAGE_FOLDER', 'folder');
 define('SMOPT_PAGE_ORDER', 'order');
-echo 'in options ';
 function process_optionmode_submit($optpage, $optpage_data) {
     /* Initialize the maximum option refresh level. */
     $max_refresh = SMOPT_REFRESH_NONE;
@@ -173,12 +173,12 @@ switch ($optpage) {
         $optpage_loader = 'load_optpage_data_highlight';
         $optpage_loadhook = 'optpage_loadhook_highlight';
         break;
-    case SMOPT_PAGE_FOLDER:
-        $optpage_name   = _("Folder Preferences");
-        $optpage_file   = SM_PATH . 'include/options/folder.php';
-        $optpage_loader = 'load_optpage_data_folder';
-        $optpage_loadhook = 'optpage_loadhook_folder';
-        break;
+    //case SMOPT_PAGE_FOLDER:
+        //$optpage_name   = _("Folder Preferences");
+        //$optpage_file   = SM_PATH . 'include/options/folder.php';
+        //$optpage_loader = 'load_optpage_data_folder';
+        //$optpage_loadhook = 'optpage_loadhook_folder';
+      //  break;
     case SMOPT_PAGE_ORDER:
         $optpage_name = _("Index Order");
         $optpage_file = SM_PATH . 'include/options/order.php';
@@ -333,13 +333,14 @@ if ($optpage == SMOPT_PAGE_MAIN) {
         'js'   => false
     );
 
-    /* Build a section for Folder Options. */
+    /* Build a section for Folder Options.
     $optpage_blocks[] = array(
         'name' => _("Folder Preferences"),
         'url'  => 'index.php?module=squirrelmail-1.4.4&action=options&optpage=' . SMOPT_PAGE_FOLDER,
         'desc' => _("These settings change the way your folders are displayed and manipulated."),
         'js'   => false
     );
+    */
 
     /* Build a section for Index Order Options. */
     /*
@@ -390,7 +391,6 @@ if ($optpage == SMOPT_PAGE_MAIN) {
     if ($first_optpage != false) {
         print_optionpages_row($first_optpage);
     }
-
     echo "</td></tr></table></td></tr></table>\n";
 
     do_hook('options_link_and_description');

@@ -28,7 +28,7 @@ require_once(SM_PATH . 'functions/html.php');
 require_once(SM_PATH . 'functions/forms.php');
 
 /* get globals */
-sqGetGlobalVar('action', $action);
+sqGetGlobalVar('theaction', $theaction);
 sqGetGlobalVar('theid', $theid);
 sqGetGlobalVar('identname', $identname);
 sqGetGlobalVar('newcolor_choose', $newcolor_choose);
@@ -37,6 +37,8 @@ sqGetGlobalVar('color_type', $color_type);
 sqGetGlobalVar('match_type', $match_type);
 sqGetGlobalVar('value', $value);
 
+//Richie
+echo '<br> the 1 '.$theaction;
 /* end of get globals */
  
 function oh_opt( $val, $sel, $tit ) {
@@ -45,51 +47,67 @@ function oh_opt( $val, $sel, $tit ) {
         echo ' selected="selected"';
     echo  ">$tit</option>\n";
 }
-
-if (! isset($action)) {
-    $action = '';
+//Richie
+echo '<br>  the 2 '.$theaction;
+if (!isset($theaction)) {
+    $theaction = '';
 }
 if (! isset($message_highlight_list)) {
     $message_highlight_list = array();
 }
-
-if (isset($theid) && ($action == 'delete') ||
-                     ($action == 'up')     ||
-                     ($action == 'down')) {
+if (isset($theid) && ($theaction == 'delete') ||
+                     ($theaction == 'up')     ||
+                     ($theaction == 'down')) {
     $new_rules = array();
-    switch($action) {
+    switch($theaction) {
         case('delete'):
-            foreach($message_highlight_list as $rid => $rule) {
-                 if($rid != $theid) {
-                     $new_rules[] = $rule;
+          echo '<br>delete selected';
+            foreach($message_highlight_list as $rid => $rule)
+	    {
+		    echo ' the rid is '.$rid;
+		    echo ' the theid is '.$theid;
+		    echo ' the rule is '.$rule;
+		    print_r($rule);
+                 if($rid != $theid)
+		 {
+                    $new_rules[] = $rule;
                  }
+		    
             }
             break;
         case('down'):
             $theid++;
         case('up'):
-            foreach($message_highlight_list as $rid => $rule) {
+          foreach($message_highlight_list as $rid => $rule) {
+            //        echo '<br> up selected , printing theid ....... ';
+            print_r($theid);
                 if($rid == $theid) {
-                    $temp_rule         = $new_rules[$rid-1];
-                    $new_rules[$rid-1] = $rule;
-                    $new_rules[$rid]   = $temp_rule;
+                  $temp_rule         = $new_rules[$rid-1];
+                  $new_rules[$rid-1] = $rule;
+                  $new_rules[$rid]   = $temp_rule;
+                  print_r($new_rules[$rid]);
                 } else {
-                    $new_rules[$rid]   = $rule;
+                  $new_rules[$rid]   = $rule;
+                  //    echo '>>>>>>>>>>>> '.$new_rules[$rid];
                 }
             }
             break;
         default:
             $new_rules = $message_highlight_list;
+            // echo 'printing in the default category <br>';
+            //print_r($new_rules);
             break;
     }
+    echo ' <br> printing the message highlight list finally <br> ';
     $message_highlight_list = $new_rules;
-
+    print_r($message_highlight_list); 
+    
     setPref($data_dir, $username, 'hililist', serialize($message_highlight_list));
-
-    header( 'Location: index.php?module=squirrelmail-1.4.4&action=options_highlight' );
+    header('Location: index.php?module=squirrelmail-1.4.4&action=options_highlight');
     exit;
-} else if ($action == 'save') {
-
+} else if ($theaction == 'save') {
+	//Richie
+  echo ' ----------------- ';
     if ($color_type == 1) $newcolor = $newcolor_choose;
     elseif ($color_type == 2) $newcolor = $newcolor_input;
     else $newcolor = $color_type;
@@ -98,21 +116,20 @@ if (isset($theid) && ($action == 'delete') ||
     $newcolor = str_replace('"', '', $newcolor);
     $newcolor = str_replace('\'', '', $newcolor);
     $value = str_replace(',', ' ', $value);
-
-    if(isset($theid)) {
-        $message_highlight_list[$theid] = 
-            array( 'name' => $identname, 'color' => $newcolor,
-                   'value' => $value, 'match_type' => $match_type );
+    echo 'value >>>>>>>>>>> '.$value;
+    if(isset($theid))
+    {
+      $message_highlight_list[$theid] = 
+        array( 'name' => $identname, 'color' => $newcolor,
+               'value' => $value, 'match_type' => $match_type );
     } else {
-        $message_highlight_list[] = 
+      $message_highlight_list[] = 
             array( 'name' => $identname, 'color' => $newcolor,
                    'value' => $value, 'match_type' => $match_type );
     }
-
     setPref($data_dir, $username, 'hililist', serialize($message_highlight_list));
 }
 displayPageHeader($color, 'None');
-
 echo
 html_tag( 'table', "\n" .
     html_tag( 'tr', "\n" .
@@ -123,9 +140,10 @@ html_tag( 'table', '', '', '', 'width="100%" border="0" cellpadding="1" cellspac
      html_tag( 'tr' ) . "\n" .
          html_tag( 'td', '', 'left' );
 
-echo '<center>[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&action=add">' . _("New") . '</a>]'.
+echo '<center>[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=add">' . _("New") . '</a>]'.
         ' - [<a href="index.php?module=squirrelmail-1.4.4&action=options">'._("Done").'</a>]</center><br />'."\n";
 $mhl_count = count($message_highlight_list);
+echo '+++++++++++         '.$mhl_count;
 if ($mhl_count > 0) {
     echo html_tag( 'table', '', 'center', '', 'width="80%" border="0" cellpadding="3" cellspacing="0"' ) . "\n";
     for ($i=0; $i < $mhl_count; $i++) {
@@ -148,15 +166,15 @@ if ($mhl_count > 0) {
             break;
         }
 
-        $links = '<small>[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight.php&action=edit&amp;theid=' . $i . '">' .
+        $links = '<small>[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=edit&amp;theid=' . $i . '">' .
                  _("Edit") .
-                 '</a>]&nbsp;[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&action=delete&amp;theid='.  $i . '">' .
+                 '</a>]&nbsp;[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=delete&amp;theid='.  $i . '">' .
                  _("Delete");
         if($i > 0) {
-            $links .= '</a>]&nbsp;[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&action=up&amp;theid='.  $i . '">' .  _("Up");
+            $links .= '</a>]&nbsp;[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=up&amp;theid='.  $i . '">' .  _("Up");
         }
         if($i+1 < $mhl_count) {
-            $links .= '</a>]&nbsp;[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&action=down&amp;theid='.  $i . '">' .  _("Down");
+            $links .= '</a>]&nbsp;[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=down&amp;theid='.  $i . '">' .  _("Down");
         }
         $links .= '</a>]</small>';
 
@@ -179,7 +197,8 @@ if ($mhl_count > 0) {
     echo '<center>' . _("No highlighting is defined") . "</center><br />\n".
         "<br />\n";
 }
-if ($action == 'edit' || $action == 'add') {
+if ($theaction == 'edit' || $theaction == 'add') {
+echo '>>>>>>>>>>>>>>>>> 66666666 ';
 
     $color_list[0] = '4444aa';
     $color_list[1] = '44aa44';
@@ -325,9 +344,11 @@ if ($action == 'edit' || $action == 'add') {
     for ($i=0; $i < 14; $i++) {
         ${"selected".$i} = '';
     }
-    if ($action == 'edit' && isset($theid) && isset($message_highlight_list[$theid]['color'])) {
+    if ($theaction == 'edit' && isset($theid) && isset($message_highlight_list[$theid]['color'])) {
+
         for ($i=0; $i < 14; $i++) {
             if ($color_list[$i] == $message_highlight_list[$theid]['color']) {
+		    echo 'sssssssssss';
                 $selected_choose = TRUE;
                 $selected_i = $color_list[$i];
                 continue;
@@ -335,7 +356,8 @@ if ($action == 'edit' || $action == 'add') {
         }
     }
 
-    if ($action == 'edit' && isset($theid) && isset($message_highlight_list[$theid]['color'])) {
+    if ($theaction == 'edit' && isset($theid) && isset($message_highlight_list[$theid]['color'])) {
+		    echo 'xxxxxxxsssssssssss';
         $current_color = $message_highlight_list[$theid]['color'];
     }
     else {
@@ -362,8 +384,8 @@ if ($action == 'edit' || $action == 'add') {
         $selected_input = TRUE;
 
     echo addForm('index.php?module=squirrelmail-1.4.4&action=options_highlight', 'POST', 'f').
-         addHidden('action', 'save');
-    if($action == 'edit') {
+         addHidden('theaction', 'save');
+    if($theaction == 'edit') {
         echo addHidden('theid', (isset($theid)?$theid:''));
     }
     echo html_tag( 'table', '', 'center', '', 'width="80%" cellpadding="3" cellspacing="0" border="0"' ) . "\n";
@@ -372,7 +394,7 @@ if ($action == 'edit' || $action == 'add') {
     echo _("Identifying name") . ":";
     echo '      </b></td>' . "\n";
     echo html_tag( 'td', '', 'left' ) . "\n";
-    if ($action == 'edit' && isset($theid) && isset($message_highlight_list[$theid]['name']))
+    if ($theaction == 'edit' && isset($theid) && isset($message_highlight_list[$theid]['name']))
         $disp = $message_highlight_list[$theid]['name'];
     else
         $disp = '';
@@ -452,7 +474,7 @@ if ($action == 'edit' || $action == 'add') {
             _("Subject") );
     echo "         </select>\n";
     echo '<b>' . _("Matches") . ':</b> ';
-    if ($action == 'edit' && isset($theid) && isset($message_highlight_list[$theid]['value']))
+    if ($theaction == 'edit' && isset($theid) && isset($message_highlight_list[$theid]['value']))
         $disp = $message_highlight_list[$theid]['value'];
     else
         $disp = '';

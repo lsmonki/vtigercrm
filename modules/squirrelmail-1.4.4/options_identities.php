@@ -17,6 +17,7 @@
  * @ignore
  */
 //define('SM_PATH','../');
+echo 'xxxxxxxxxxxxxxxxxxxxxxxxxx';
 define('SM_PATH','modules/squirrelmail-1.4.4/');
 /* SquirrelMail required files. */
 require_once(SM_PATH . 'include/validate.php');
@@ -35,7 +36,7 @@ if (!empty($_POST)) {
 
     if (isset($return)) {
        SaveUpdateFunction();
-       header('Location: options_personal.php');
+       header('Location: index.php?module=squirrelmail-1.4.4&action=options_personal');
        exit();
     }
     

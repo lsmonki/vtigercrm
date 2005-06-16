@@ -17,6 +17,7 @@
  * @ignore
  */
 //define('SM_PATH','../');
+echo '34eeeeeeeeeeeeeeeeeeeeeeeee';
 define('SM_PATH','modules/squirrelmail-1.4.4/');
 /* SquirrelMail required files. */
 require_once(SM_PATH . 'include/validate.php');

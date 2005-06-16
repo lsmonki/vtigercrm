@@ -527,7 +527,8 @@ function makeComposeLink($url, $text = null, $target='')
     global $compose_new_win,$javascript_on;
 
     if(!$text) {
-	    echo '<br> in strings.php';
+	    //Richie
+	    //echo '<br> in strings.php';
         $text = _("Compose");
     }
 
@@ -535,7 +536,6 @@ function makeComposeLink($url, $text = null, $target='')
     // if not using "compose in new window", make
     // regular link and be done with it
     if($compose_new_win != '1') {
-	    echo '<br> in strings.php 2 xxxxx'.$url;
         return makeInternalLink($url, $text, $target);
     }
 

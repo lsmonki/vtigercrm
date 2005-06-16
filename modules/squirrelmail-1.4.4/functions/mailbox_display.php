@@ -717,8 +717,8 @@ function mail_message_listing_beginning ($imapConnection,
             . html_tag( 'tr' ) ."\n"
             . html_tag( 'td', '', 'left', '', 'valign="middle" nowrap' );
             getMbxList($imapConnection);
-            echo getButton('SUBMIT', 'moveButton',_("Move")) . "\n";
-            echo getButton('SUBMIT', 'attache',_("Forward")) . "\n";
+            //echo getButton('SUBMIT', 'moveButton',_("Move")) . "\n";
+            //echo getButton('SUBMIT', 'attache',_("Forward")) . "\n";
             echo getButton('SUBMIT', 'addToVtigerCRMButton',_("Add2Vtiger")) . "\n";
 
   echo "      </small></td>\n"
