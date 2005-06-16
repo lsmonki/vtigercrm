@@ -49,5 +49,14 @@ if($_REQUEST['return_module'] == 'HelpDesk')
 if($_REQUEST['module'] == $_REQUEST['return_module'])
         $focus->mark_deleted($_REQUEST['record']);
 
+ $activity_id=$_REQUEST['record'];
+
+ $sql = 'delete from activity_reminder where activity_id='.$activity_id;
+ $adb->query($sql);
+
+ $sql = 'delete  from recurringevents where activityid='.$activity_id;	
+ $adb->query($sql);
+
+
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
 ?>
