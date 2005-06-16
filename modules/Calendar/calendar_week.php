@@ -7,7 +7,6 @@
  * @modulegroup appointment
  * @module calendar_week
  */
- 
  global $calpath,$callink;
  $calpath = 'modules/Calendar/';
  $callink = 'index.php?module=Calendar&action=';
@@ -72,8 +71,10 @@ require_once('modules/Calendar/UserCalendar.php');
      global $lang,$tutos,$calpath,$callink,$image_path,$mod_strings;
 
      //$adr = $this->user;
-     $adr = $this->pref;
+     //$adr = $this->pref;
      $ts = mktime(12,0,0,substr($this->t,4,2),substr($this->t,6,2),substr($this->t,0,4));
+
+	$xy=Date("w",$ts);
 
      /* Back to last Monday or Sunday before ts */
      while ( Date("w",$ts) != $this->pref->weekstart ) {
@@ -82,10 +83,12 @@ require_once('modules/Calendar/UserCalendar.php');
 
      $w0 =  (( 1 + Date("w",mktime(12,0,0,1,1, Date("Y",$ts) ) )) % 7) > 3;
      $wn = sprintf("%02d", Round( (Date("z",$ts)+7 ) / 7) );
+
+
      #$yy = Date("y",$ts);
      $yy = Date("Y",$ts);
      $day_from = Date("d",$ts);
-     $day_to = Date("d",$ts + 7 * 86400);
+     $day_to = Date("d",$ts + 6 * 86400);
      $mon = Date("n",$ts);
      $m_name = $mod_strings['cal_month_long'][$mon];
      $mon_next = Date("n",$ts + 7 * 86400);
@@ -93,11 +96,12 @@ require_once('modules/Calendar/UserCalendar.php');
      $last_week = Date("Ymd",$ts -  7 * 86400);
      $next_week = Date("Ymd",$ts +  7 * 86400);
 
+
      if ($mn_name == $m_name)
      {
 	$mn_name ="";
      }
-	 echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"90%\" class=\"outer\">\n";
+	echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"90%\" class=\"outer\">\n";
      echo "<form action=\"". $callink ."calendar_week\" method=\"get\">\n";
 	 echo "<tr><td>";
      echo "<table class=\"navigate\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
@@ -117,14 +121,6 @@ require_once('modules/Calendar/UserCalendar.php');
 	 echo " <tr><td class=\"inner\">\n";
 	 echo " <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">\n";
 
-     $from =  new DateTime();
-     $to =  new DateTime();
-     $from->setDateTimeTS($ts - 12 * 3600);
-     $to->setDateTimeTS($ts - 12 * 3600);
-     $to->addDays(7);
-
-     $this->pref->callist = array();
-     appointment::readCal($this->pref,$from,$to);
      //print_r($this->pref->callist);
      #task::readCal($this->user,$from,$to);
 
@@ -143,6 +139,15 @@ require_once('modules/Calendar/UserCalendar.php');
 		   $tref = Date("Ymd",$ts);
 		   $dinfo = GetDaysInfo($ts);
 		   /* Select appointments for this day */
+
+	     $from =  new DateTime();
+	     $to =  new DateTime();
+	     $from->setDateTimeTS($ts - 12 * 3600);
+	     $to->setDateTimeTS($ts - 12 * 3600);
+	     #$to->addDays(7);
+	     $this->pref->callist = array();
+	     appointment::readCal($this->pref,$from,$to);
+
 		   $next = NextDay($ts);
 	
 		   if ( $col == 1 ) {
@@ -171,10 +176,12 @@ require_once('modules/Calendar/UserCalendar.php');
 		   if ( isset($dinfo[Desc]) ) {
 		   //echo "<span class=\"dinfo\">". $dinfo[Desc] ."</span>\n";
 		   	echo "<span class=\"dinfo\">". $dinfo[Desc] ."</span>\n";
+			
 		   }
 		   
 		   $hastable = false;
 		   foreach ($this->pref->callist as $idx => $x) {
+			
 			 /* the correct day */
 			 if ( ! $this->pref->callist[$idx]->inside($dd) ) {
 			   continue;
