@@ -22,6 +22,12 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once ($theme_path."layout_utils.php");
 
+if(isset($_REQUEST['mailconnect']))
+{
+       echo '<center><font color=red><b>Unable to connect to mail server! </b></color></center><br>';
+}
+	
+
 echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
 echo "\n<BR>\n";
 include ('modules/Emails/ListView.php'); 
