@@ -34,15 +34,13 @@ class Vendor extends CRMEntity {
 
         // This is the list of fields that are in the lists.
 	var $list_fields = Array(
-                                'Name'=>Array('vendor'=>'name'),
-                                'Company Name'=>Array('vendor'=>'company_name'),
+                                'Vendor Name'=>Array('vendor'=>'name'),
                                 'Phone'=>Array('vendor'=>'phone'),
                                 'Email'=>Array('vendor'=>'email'),
                                 'Category'=>Array('vendor'=>'category')
                                 );
         var $list_fields_name = Array(
-                                        'Name'=>'name',
-                                        'Company Name'=>'company_name',
+                                        'Vendor Name'=>'name',
                                         'Phone'=>'phone',
                                         'Email'=>'email',
                                         'Category'=>'category'
@@ -54,12 +52,12 @@ class Vendor extends CRMEntity {
 	var $popup_type;
 
 	var $search_fields = Array(
-                                'Name'=>Array('vendor'=>'name'),
-                                'Company Name'=>Array('vendor'=>'company_name')
+                                'Vendor Name'=>Array('vendor'=>'name'),
+                                'Phone'=>Array('vendor'=>'phone')
                                 );
         var $search_fields_name = Array(
-                                        'Name'=>'name',
-                                        'Company Name'=>'company_name'
+                                        'Vendor Name'=>'name',
+                                        'Phone'=>'phone'
                                      );
 /*	
 //	var $combofieldNames = Array('manufacturer'=>'manufacturer_dom'
