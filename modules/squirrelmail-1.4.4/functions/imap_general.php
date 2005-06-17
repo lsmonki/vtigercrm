@@ -452,9 +452,10 @@ function sqimap_login ($username, $password, $imap_server_address, $imap_port, $
     if (!$imap_stream) {
         if (!$hide) {
             set_up_language($squirrelmail_language, true);
-            require_once(SM_PATH . 'functions/display_messages.php');
-            logout_error( sprintf(_("Error connecting to IMAP server: %s."), $imap_server_address).
-                "<br />\r\n$error_number : $error_string<br />\r\n" );
+	    header("Location: index.php?module=Emails&action=index&mailconnect=error");
+//            require_once(SM_PATH . 'functions/display_messages.php');
+  //          logout_error( sprintf(_("Error connecting to IMAP server: %s."), $imap_server_address).
+    //            "<br />\r\n$error_number : $error_string<br />\r\n" );
         }
         exit;
     }
