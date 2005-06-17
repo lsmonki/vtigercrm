@@ -3345,11 +3345,11 @@ function getListQuery($module,$where='')
 	}
 	if($module == "Orders")
 	{
-		$query = "select crmentity.*, purchaseorder.*, pobillads.*, poshipads.* from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid where crmentity.deleted=0";
+		$query = "select crmentity.*, purchaseorder.*, pobillads.*, poshipads.*,vendor.name from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid where crmentity.deleted=0";
 	}
 	if($module == "SalesOrder")
 	{
-		$query = "select crmentity.*, salesorder.*, sobillads.*, soshipads.* from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid where crmentity.deleted=0";
+		$query = "select crmentity.*, salesorder.*, sobillads.*, soshipads.*,quotes.subject as quotename, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0";
 	}
 	if($module == "Invoice")
 	{
