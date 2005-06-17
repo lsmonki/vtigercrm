@@ -81,7 +81,7 @@ if ( !sqgetGlobalVar('composenew', $composenew, SQ_GET) ) {
     $composenew = false;
 }
 /* end of get globals */
-$secretkey="p1";
+//$secretkey="p1";
     $key = OneTimePadEncrypt($secretkey, $onetimepad);
 /* Open a connection on the imap port (143) */
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
