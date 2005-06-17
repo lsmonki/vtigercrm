@@ -141,7 +141,7 @@ if (!isset($optmode)) {
     $optmode = SMOPT_MODE_DISPLAY;
 }
 
-    $key = OneTimePadEncrypt("p1", $onetimepad);
+//    $key = OneTimePadEncrypt("p1", $onetimepad);
 /*
  * First, set the load information for each option page.   
  */

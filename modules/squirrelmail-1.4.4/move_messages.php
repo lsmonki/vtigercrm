@@ -134,7 +134,7 @@ sqgetGlobalVar('location',        $location,        SQ_POST);
 /* end of get globals */
 
 
-    $key = OneTimePadEncrypt("p1", $onetimepad);
+    //$key = OneTimePadEncrypt("p1", $onetimepad);
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 $mbx_response=sqimap_mailbox_select($imapConnection, $mailbox);
 

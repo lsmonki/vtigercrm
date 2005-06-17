@@ -706,7 +706,7 @@ if (!sqgetGlobalVar('messages', $messages, SQ_SESSION) ) {
     $messages = array();
 }
 
-$key=OneTimePadEncrypt("p1", $onetimepad);
+//$key=OneTimePadEncrypt("p1", $onetimepad);
 
 /** GET VARS */
 sqgetGlobalVar('sendreceipt',   $sendreceipt,   SQ_GET);

@@ -34,7 +34,7 @@ sqgetGlobalVar('passed_id', $passed_id, SQ_GET);
 sqgetGlobalVar('mailbox', $mailbox, SQ_GET);
 
 
-$key=OneTimePadEncrypt("p1", $onetimepad);
+//$key=OneTimePadEncrypt("p1", $onetimepad);
 
 if (! sqgetGlobalVar('passed_ent_id', $passed_ent_id, SQ_GET) ) {
     $passed_ent_id = '';

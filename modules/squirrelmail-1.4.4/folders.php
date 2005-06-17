@@ -89,7 +89,7 @@ if ( isset($success) && $success ) {
 
 echo "\n<br />";
 
-    $key = OneTimePadEncrypt("p1", $onetimepad);
+//    $key = OneTimePadEncrypt("p1", $onetimepad);
 $imapConnection = sqimap_login ($username, $key, $imapServerAddress, $imapPort, 0);
 
 // force retrieval of a non cached folderlist

@@ -55,7 +55,7 @@ sqgetGlobalVar('doedit',    $doedit,    SQ_POST);
  */
 
 
-    $key = OneTimePadEncrypt("p1", $onetimepad);
+//    $key = OneTimePadEncrypt("p1", $onetimepad);
 function addressbook_inp_field($label, $field, $name, $size, $values, $add) {
     global $color;
     $value = ( isset($values[$field]) ? $values[$field] : '');

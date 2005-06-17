@@ -63,7 +63,7 @@ if ($folder_prefix && (substr($subfolder, 0, strlen($folder_prefix)) != $folder_
     $subfolder_orig = $subfolder;
 }
 
-    $key = OneTimePadEncrypt("p1", $onetimepad);
+//    $key = OneTimePadEncrypt("p1", $onetimepad);
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 
 if (trim($subfolder_orig) == '') {

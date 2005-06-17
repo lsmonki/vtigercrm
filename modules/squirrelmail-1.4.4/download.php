@@ -46,7 +46,7 @@ set_my_charset();
 
 global $uid_support;
 
-$key=OneTimePadEncrypt("p1", $onetimepad);
+//$key=OneTimePadEncrypt("p1", $onetimepad);
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 $mbx_response =  sqimap_mailbox_select($imapConnection, $mailbox);
 

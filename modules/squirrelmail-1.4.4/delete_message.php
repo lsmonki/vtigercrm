@@ -51,7 +51,7 @@ if (isset($_GET['startMessage'])) {
     $startMessage = (int) $_GET['startMessage'];
 }
 
-$key=OneTimePadEncrypt("p1", $onetimepad);
+//$key=OneTimePadEncrypt("p1", $onetimepad);
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 
 sqimap_mailbox_select($imapConnection, $mailbox);
