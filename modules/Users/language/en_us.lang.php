@@ -253,6 +253,12 @@ $mod_strings = Array(
 'LBL_ACTIVITY_REMINDER_DESCRIPTION'=>'Notify before an event to occur based on the reminder set',
 'LBL_MESSAGE'=>'Message',
 
+
+//Added for 4.2GA support for mail server integration
+'LBL_ADD_MAILSERVER_BUTTON_TITLE'=>'Add Mail Server',
+'LBL_ADD_MAILSERVER_BUTTON_KEY'=>'M',
+'LBL_ADD_MAILSERVER_BUTTON_LABEL'=>'Add Mail Server',
+
 );
 
 ?>
