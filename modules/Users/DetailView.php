@@ -91,6 +91,7 @@ elseif (is_admin($current_user) || $_REQUEST['record'] == $current_user->id) {
 	
 	$buttons .= "<td><input title='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_KEY']."' class='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=Users&action=ChangePassword&form=DetailView\",\"test\",\"width=320,height=230,resizable=1,scrollbars=1\");' type='button' name='password' value='".$mod_strings['LBL_CHANGE_PASSWORD_BUTTON_LABEL']."'></td>\n";
 	$buttons .= "<td><input title='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ShowHistory'; this.form.return_id.value='$focus->id'; this.form.action.value='ShowHistory'\" type='submit' name='LoginHistory' value=' ".$mod_strings['LBL_LOGIN_HISTORY_BUTTON_LABEL']." '></td>\n";
+	$buttons .= "<td><input title='".$mod_strings['LBL_ADD_MAILSERVER_BUTTON_TITLE']."' accessKey='".$mod_strings['LBL_ADD_MAILSERVER_BUTTON_KEY']."' class='button' onclick=\"this.form.return_module.value='Users'; this.form.return_action.value='ListMailAccount'; this.form.return_id.value='$focus->id'; this.form.module.value='Settings' ;this.form.action.value='AddMailAccount'\" type='submit' name='AddMailServerAccount' value=' ".$mod_strings['LBL_ADD_MAILSERVER_BUTTON_LABEL']." '></td>\n";
 }
 /* Forum Display/Hide Button
 if($_REQUEST['forumDisplay'] == "true" || $displayForums == "true")
