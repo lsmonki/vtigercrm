@@ -396,8 +396,8 @@ $this->db->query("insert into field values (15,".$this->db->getUniqueID("field")
 
 //Vendor Details --START
 //Block1
- $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'name','vendor',1,'2','name','Name',1,0,0,100,1,1,1,'V~M')");
- $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'company_name','vendor',1,'2','company_name','Company Name',1,0,0,100,2,1,1,'V~M')");
+ $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'name','vendor',1,'2','name','Vendor Name',1,0,0,100,1,1,1,'V~M')");
+// $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'company_name','vendor',1,'2','company_name','Company Name',1,0,0,100,2,1,1,'V~M')");
  $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'phone','vendor',1,'1','phone','Phone',1,0,0,100,3,1,1,'V~O')");
  $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'email','vendor',1,'13','email','Email',1,0,0,100,4,1,1,'V~O')");
  $this->db->query("insert into field values (18,".$this->db->getUniqueID("field").",'website','vendor',1,'17','website','Website',1,0,0,100,5,1,1,'V~O')");
