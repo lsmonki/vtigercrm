@@ -46,10 +46,6 @@ sqsession_is_active();
 sqsession_unregister ('user_is_logged_in');
 sqsession_register ($base_uri, 'base_uri');
 
-$login_username="p1";
-$secretkey="p1";
-$imapServerAddress="test@test.com";
-$imapPort="143";
 
 
 // get globals we me need 
@@ -60,6 +56,15 @@ if(!sqGetGlobalVar('squirrelmail_language', $squirrelmail_language) || $squirrel
     $squirrelmail_language = $squirrelmail_default_language;
 }
 
+global $current_user;
+require_once('modules/Users/UserInfoUtil.php');
+$mailInfo = getMailServerInfo($current_user);
+$temprow = $adb->fetch_array($mailInfo);
+
+$login_username= $temprow["mail_username"];
+$secretkey=$temprow["mail_password"];
+$imapServerAddress=$temprow["mail_servername"];
+$imapPort="143";
 
 set_up_language($squirrelmail_language, true);
 setcookie('squirrelmail_language', $squirrelmail_language, time()+2592000,$base_uri);
