@@ -58,6 +58,10 @@ $app_strings = Array(
 
 'LBL_LAST_VIEWED'=>'Last Viewed',
 
+'NTC_WELCOME_MESSAGE'=>"Welcome to vtiger CRM!",
+
+'NTC_DESCRIPTION'=>"Use a valid username and password to login to the vtiger CRM.",
+
 'NTC_WELCOME'=>'Welcome',
 
 'NTC_SUPPORT_SUGARCRM'=>"Support the SugarCRM open source project with a donation through PayPal - it's fast, free and secure!",
@@ -330,7 +334,7 @@ $app_strings = Array(
 
 'LBL_CURRENT_USER_FILTER'=>'Only my items:',
 
-'NTC_LOGIN_MESSAGE'=>"Please login to the application.",
+'NTC_LOGIN_MESSAGE'=>"Login",
 
 'LBL_NONE'=>'--None--',
 
