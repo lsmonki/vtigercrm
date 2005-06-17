@@ -45,30 +45,23 @@ $focus = new SalesOrder();
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
-$url_string = ''; // assigning http url string
+$url_string = '&smodule=SO'; // assigning http url string
 $sorder = 'ASC';  // Default sort order
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
 $sorder = $_REQUEST['sorder'];
-/*
+
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
 	$url_string .="&query=true";
-	if (isset($_REQUEST['productname'])) $productname = $_REQUEST['productname'];
-        if (isset($_REQUEST['productcode'])) $productcode = $_REQUEST['productcode'];
-        if (isset($_REQUEST['commissionrate'])) $commissionrate = $_REQUEST['commissionrate'];
-	if (isset($_REQUEST['qtyperunit'])) $qtyperunit = $_REQUEST['qtyperunit'];
-        if (isset($_REQUEST['unitprice'])) $unitprice = $_REQUEST['unitprice'];
-        if (isset($_REQUEST['manufacturer'])) $manufacturer = $_REQUEST['manufacturer'];
-        if (isset($_REQUEST['productcategory'])) $productcategory = $_REQUEST['productcategory'];
-	if (isset($_REQUEST['start_date'])) $start_date = $_REQUEST['start_date'];
-        if (isset($_REQUEST['expiry_date'])) $expiry_date = $_REQUEST['expiry_date'];
-        if (isset($_REQUEST['purchase_date'])) $purchase_date = $_REQUEST['purchase_date'];
+	if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
+        if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
+        if (isset($_REQUEST['quotename'])) $quotename = $_REQUEST['quotename'];
 
 	$where_clauses = Array();
 	//$search_query='';
 
 	//Added for Custom Field Search
-	$sql="select * from field where tablename='productcf' order by fieldlabel";
+	$sql="select * from field where tablename='salesordercf' order by fieldlabel";
 	$result=$adb->query($sql);
 	for($i=0;$i<$adb->num_rows($result);$i++)
 	{
@@ -81,9 +74,9 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 	        if(isset($customfield[$i]) && $customfield[$i] != '')
 	        {
 			if($uitype[$i] == 56)
-                                $str=" productcf.".$column[$i]." = 1";
+                                $str=" salesordercf.".$column[$i]." = 1";
                         else
-			        $str=" productcf.".$column[$i]." like '$customfield[$i]%'";
+			        $str=" salesordercf.".$column[$i]." like '$customfield[$i]%'";
 		        array_push($where_clauses, $str);
 	       	//	  $search_query .= ' and '.$str;
 			$url_string .="&".$column[$i]."=".$customfield[$i];
@@ -91,70 +84,27 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 	}
 	//upto this added for Custom Field
 
-	if (isset($productname) && $productname !='')
+	if (isset($subject) && $subject !='')
 	{
-		array_push($where_clauses, "productname like ".PearDatabase::quote($productname.'%'));
+		array_push($where_clauses, "salesorder.subject like ".PearDatabase::quote($subject.'%'));
 		//$search_query .= " and productname like '".$productname."%'";
-		$url_string .= "&productname=".$productname;
+		$url_string .= "&subject=".$subject;
 	}
 	
-	if (isset($productcode) && $productcode !='')
+	if (isset($accountname) && $accountname !='')
 	{
-		array_push($where_clauses, "productcode like ".PearDatabase::quote($productcode.'%'));
+		array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%'));
 		//$search_query .= " and productcode like '".$productcode."%'";
-		$url_string .= "&productcode=".$productcode;
+		$url_string .= "&accountname=".$accountname;
 	}
 
-	if (isset($commissionrate) && $commissionrate !='')
+	if (isset($quotename) && $quotename !='')
 	{
-		array_push($where_clauses, "commissionrate like ".PearDatabase::quote($commissionrate.'%'));
+		array_push($where_clauses, "quotes.subject like ".PearDatabase::quote($quotename.'%'));
 		 //$search_query .= " and commissionrate like '".$commissionrate."%'";
-		 $url_string .= "&commissionrate=".$commissionrate;
+		 $url_string .= "&quotename=".$quotename;
 	}
 	
-	if (isset($qtyperunit) && $qtyperunit !='')
-	{
-		array_push($where_clauses, "qty_per_unit like ".PearDatabase::quote($qtyperunit.'%'));
-	 	//$search_query .= " and qty_per_unit like '".$qtyperunit."%'";
-		$url_string .= "&qtyperunit=".$qtyperunit;
-	}
-	
-	if (isset($unitprice) && $unitprice !='')
-	{
-		array_push($where_clauses, "unit_price like ".PearDatabase::quote($unitprice.'%'));
-	 //	$search_query .= " and unit_price like '".$unitprice."%'";
-		$url_string .= "&unitprice=".$unitprice;
-	}
-	if (isset($manufacturer) && $manufacturer !='' && $manufacturer !='--None--')
-        {
-		array_push($where_clauses, "manufacturer like ".PearDatabase::quote($manufacturer.'%'));
-        	//$search_query .= " and manufacturer like '".$manufacturer."%'";
-                $url_string .= "&manufacturer=".$manufacturer;
-	}
-	if (isset($productcategory) && $productcategory !='' && $productcategory !='--None--')
-        {
-		array_push($where_clauses, "productcategory like ".PearDatabase::quote($productcategory.'%'));
-        	//$search_query .= " and productcategory like '".$productcategory."%'";
-                $url_string .= "&productcategory=".$productcategory;
-	}
-	if (isset($start_date) && $start_date !='')
-        {
-		array_push($where_clauses, "start_date like ".PearDatabase::quote($start_date.'%'));
-                //$search_query .= " and start_date = '".$start_date."%'";
-                $url_string .= "&start_date=".$start_date;
-        } 
-	if (isset($expiry_date) && $expiry_date !='')
-        {
-		array_push($where_clauses, "expiry_date like ".PearDatabase::quote($expiry_date.'%'));
-                //$search_query .= " and expiry_date = '".$expiry_date."%'";
-                $url_string .= "&expiry_date=".$expiry_date;
-        } 
-	if (isset($purchase_date) && $purchase_date !='')
-        {
-		array_push($where_clauses, "purchase_date like ".PearDatabase::quote($purchase_date.'%'));
-                //$search_query .= " and purchase_date = '".$purchase_date."%'";
-                $url_string .= "&purchase_date=".$purchase_date;
-        }
 	$where = "";
 	foreach($where_clauses as $clause)
 	{
@@ -171,8 +121,8 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 //Constructing the Search Form
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         // Stick the form header out there.
-	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'],'', false);
-        $search_form=new XTemplate ('modules/Products/SearchForm.html');
+	echo get_form_header($current_module_strings['LBL_SO_SEARCH_TITLE'],'', false);
+        $search_form=new XTemplate ('modules/Orders/SalesOrderSearchForm.html');
         $search_form->assign("MOD", $mod_strings);
         $search_form->assign("APP", $app_strings);
 	$clearsearch = 'true';
@@ -187,30 +137,18 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	{
 		$ordby ='';
 	}
-	$search_form->assign("BASIC_LINK", "index.php?module=Products".$ordby."&action=index".$url_string."&sorder=".$sorder);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Products&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
+	$search_form->assign("BASIC_LINK", "index.php?module=Orders".$ordby."&action=index".$url_string."&sorder=".$sorder);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Orders&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
 
-	if ($productname !='') $search_form->assign("PRODUCT_NAME", $productname);
-	if ($commissionrate !='') $search_form->assign("COMMISSION_RATE", $commissionrate);
-	if ($productcode !='') $search_form->assign("PRODUCT_CODE", $productcode);
-	if ($qtyperunit !='') $search_form->assign("QTYPERUNIT", $qtyperunit);
-	if ($unitprice !='') $search_form->assign("UNITPRICE", $unitprice);
-	if (isset($_REQUEST['manufacturer'])) $manufacturer = $_REQUEST['manufacturer'];	
-	if (isset($_REQUEST['productcategory'])) $productcategoty = $_REQUEST['productcategory'];	
-	if (isset($_REQUEST['start_date'])) $start_date = $_REQUEST['start_date'];	
-	if (isset($_REQUEST['expiry_date'])) $expiry_date = $_REQUEST['expiry_date'];	
-	if (isset($_REQUEST['purchase_date'])) $purchase_date = $_REQUEST['purchase_date'];	
+	if ($subject !='') $search_form->assign("SUBJECT", $subject);
+	if ($accountname !='') $search_form->assign("ACCOUNTNAME", $accountname);
+	if ($quotename !='') $search_form->assign("QUOTENAME", $quotename);
 
 //Combo Fields for Manufacturer and Category are moved from advanced to Basic Search
-        if (isset($manufacturer)) $search_form->assign("MANUFACTURER", get_select_options($comboFieldArray['manufacturer_dom'], $manufacturer, $clearsearch));
-        else $search_form->assign("MANUFACTURER", get_select_options($comboFieldArray['manufacturer_dom'], '', $clearsearch));
-        if (isset($productcategory)) $search_form->assign("PRODUCTCATEGORY", get_select_options($comboFieldArray['productcategory_dom'], $productcategoty, $clearsearch));
-        else $search_form->assign("PRODUCTCATEGORY", get_select_options($comboFieldArray['productcategory_dom'], '', $clearsearch));
-
         if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') 
 	{
 		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Products','index','productname','true','advanced'));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','index&smodule=SO','subject','true','advanced'));
 
 		$search_form->assign("SUPPORT_START_DATE",$_REQUEST['start_date']);
 		$search_form->assign("SUPPORT_EXPIRY_DATE",$_REQUEST['expiry_date']);
@@ -218,7 +156,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		$search_form->assign("DATE_FORMAT", $current_user->date_format);
 
 		//Added for Custom Field Search
-		$sql="select * from field where tablename='productcf' order by fieldlabel";
+		$sql="select * from field where tablename='salesordercf' order by fieldlabel";
 		$result=$adb->query($sql);
 		for($i=0;$i<$adb->num_rows($result);$i++)
 		{
@@ -227,7 +165,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
 		}
 		require_once('include/CustomFieldUtil.php');
-		$custfld = CustomFieldSearch($customfield, "productcf", "productcf", "productid", $app_strings,$theme,$column,$fieldlabel);
+		$custfld = CustomFieldSearch($customfield, "salesordercf", "salesordercf", "salesorderid", $app_strings,$theme,$column,$fieldlabel);
 		$search_form->assign("CUSTOMFIELD", $custfld);
 		//upto this added for Custom Field
 
@@ -236,7 +174,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	}
 	else
 	{        
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Products','index','productname','true','basic'));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','index&smodule=SO','subject','true','basic'));
 		$search_form->parse("main");
 	        $search_form->out("main");
 	}
@@ -244,7 +182,7 @@ echo get_form_footer();
 //echo '<br><br>';
 
 }
-*/
+
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
@@ -257,12 +195,12 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 //Retreive the list from Database
 
 $list_query = getListQuery("SalesOrder");
-/*
+
 if(isset($where) && $where != '')
 {
         $list_query .= ' and '.$where;
 }
-*/
+
 $xtpl->assign("SOLISTHEADER", get_form_header($current_module_strings['LBL_LIST_SO_FORM_TITLE'], $other_text, false ));
 
 if(isset($order_by) && $order_by != '')
@@ -323,7 +261,7 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"SalesOrder",$url_string,$sorder,$order_by);
+$listview_header = getListViewHeader($focus,"Orders",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
 
 

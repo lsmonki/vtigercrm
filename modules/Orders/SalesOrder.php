@@ -56,23 +56,25 @@ class SalesOrder extends CRMEntity {
 
 	var $column_fields = Array();
 
-	//var $sortby_fields = Array('accountname','city','website','phone');		
+	var $sortby_fields = Array('subject');		
 
 	// This is used to retrieve related fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'smownerid', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id' );
 
 	// This is the list of fields that are in the lists.
 	var $list_fields = Array(
-				'Sales Order Id'=>Array('crmentity'=>'crmid'),
+				'Order Id'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('salesorder'=>'subject'),
-				'Vendor Name'=>Array('salesorder'=>'vendorid'), 
+				'Account Name'=>Array('account'=>'accountid'), 
+				'Quote Name'=>Array('quotes'=>'quoteid'), 
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 	
 	var $list_fields_name = Array(
-				        'Sales Order Id'=>'',
+				        'Order Id'=>'',
 				        'Subject'=>'subject',
-				        'Vendor Name'=>'vendor_id',
+				        'Account Name'=>'account_id',
+				        'Quote Name'=>'quote_id',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
@@ -82,13 +84,13 @@ class SalesOrder extends CRMEntity {
         var $popup_type;
 
 	var $search_fields = Array(
-				'Sales Order Id'=>Array('crmentity'=>'crmid'),
+				'Order Id'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('salesorder'=>'subject'),
 				'Vendor Name'=>Array('salesorder'=>'vendorid') 
 				);
 	
 	var $search_fields_name = Array(
-					'Sales Order Id'=>'',
+					'Order Id'=>'',
 				        'Subject'=>'subject',
 				        'Vendor Name'=>'vendor_id'
 				      );

@@ -49,39 +49,23 @@ if (!isset($where)) $where = "";
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
-$url_string = '';
+$url_string = '&smodule=PO';
 $sorder = 'ASC';
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
 $sorder = $_REQUEST['sorder'];
-/*
+
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
 	$url_string .="&query=true";
-	if (isset($_REQUEST['accountname'])) $name = $_REQUEST['accountname'];
-	if (isset($_REQUEST['website'])) $website = $_REQUEST['website'];
-	if (isset($_REQUEST['phone'])) $phone = $_REQUEST['phone'];
-	if (isset($_REQUEST['annual_revenue'])) $annual_revenue = $_REQUEST['annual_revenue'];
-	if (isset($_REQUEST['email'])) $email = $_REQUEST['email'];
-	if (isset($_REQUEST['employees'])) $employees = $_REQUEST['employees'];
-	if (isset($_REQUEST['industry'])) $industry = $_REQUEST['industry'];
-	if (isset($_REQUEST['ownership'])) $ownership = $_REQUEST['ownership'];
-	if (isset($_REQUEST['rating'])) $rating = $_REQUEST['rating'];
-	if (isset($_REQUEST['siccode'])) $sic_code = $_REQUEST['siccode'];
-	if (isset($_REQUEST['tickersymbol'])) $ticker_symbol = $_REQUEST['tickersymbol'];
-	if (isset($_REQUEST['accounttype'])) $account_type = $_REQUEST['accounttype'];
-	if (isset($_REQUEST['address_street'])) $address_street = $_REQUEST['address_street'];
-	if (isset($_REQUEST['bill_city'])) $address_city = $_REQUEST['bill_city'];
-	if (isset($_REQUEST['bill_state'])) $address_state = $_REQUEST['bill_state'];
-	if (isset($_REQUEST['bill_country'])) $address_country = $_REQUEST['bill_country'];
-	if (isset($_REQUEST['bill_code'])) $address_postalcode = $_REQUEST['bill_code'];
-	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
-	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
+	if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
+	if (isset($_REQUEST['vendorname'])) $vendorname = $_REQUEST['vendorname'];
+	if (isset($_REQUEST['trackingno'])) $trackingno = $_REQUEST['trackingno'];
 
 	$where_clauses = Array();
 
 //Added for Custom Field Search
-$sql="select * from field where tablename='accountscf' order by fieldlabel";
+$sql="select * from field where tablename='purchaseordercf' order by fieldlabel";
 $result=$adb->query($sql);
 for($i=0;$i<$adb->num_rows($result);$i++)
 {
@@ -93,101 +77,31 @@ for($i=0;$i<$adb->num_rows($result);$i++)
         if(isset($customfield[$i]) && $customfield[$i] != '')
         {
 		if($uitype[$i] == 56)
-			$str=" accountscf.".$column[$i]." = 1";
+			$str=" purchaseordercf.".$column[$i]." = 1";
 		else
-	                $str=" accountscf.".$column[$i]." like '$customfield[$i]%'";
+	                $str=" purchaseordercf.".$column[$i]." like '$customfield[$i]%'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
 }
 //upto this added for Custom Field
 	
-	if(isset($name) && $name != "") 
+	if(isset($subject) && $subject != "") 
 	{
-		array_push($where_clauses, "account.accountname like ".PearDatabase::quote($name."%"));
-		$url_string .= "&accountname=".$name;
+		array_push($where_clauses, "purchaseorder.subject like ".PearDatabase::quote($subject."%"));
+		$url_string .= "&subject=".$subject;
 	}
-	if(isset($website) && $website != "")
+	if(isset($vendorname) && $vendorname != "")
 	{
-		array_push($where_clauses, "account.website like ".PearDatabase::quote("%".$website."%"));
-		$url_string .= "&website=".$website;
+		array_push($where_clauses, "vendor.name like ".PearDatabase::quote("%".$vendorname."%"));
+		$url_string .= "&vendorname=".$vendorname;
 	}
-	if(isset($phone) && $phone != "")
+	if(isset($trackingno) && $trackingno != "")
 	{
-		array_push($where_clauses, "(account.phone like ".PearDatabase::quote("%".$phone."%")." OR account.otherphone like ".PearDatabase::quote("%".$phone."%")." OR account.fax like ".PearDatabase::quote("%".$phone."%").")");
-		$url_string .= "&phone=".$phone;
+		array_push($where_clauses, "purchaseorder.tracking_no like ".PearDatabase::quote("%".$trackingno."%"));
+		$url_string .= "&trackingno=".$trackingno;
 	}
-	if(isset($annual_revenue) && $annual_revenue != "")
-	{ 
-		array_push($where_clauses, "account.annualrevenue like ".PearDatabase::quote($annual_revenue."%"));
-		$url_string .= "&annual_revenue=".$annual_revenue;
-	}
-	if(isset($employees) && $employees != "")
-	{ 
-		array_push($where_clauses, "account.employees like ".PearDatabase::quote($employees."%"));
-		$url_string .= "&employees=".$employees;
-	}
-	if(isset($address_street) && $address_street != "")
-	{
-		array_push($where_clauses, "(accountbillads.street like ".PearDatabase::quote($address_street."%")." OR accountshipads.street like ".PearDatabase::quote($address_street."%").")");
-		$url_string .= "&address_street=".$address_street;
-	}
-	if(isset($address_city) && $address_city != "")
-	{
-		array_push($where_clauses, "(accountbillads.city like ".PearDatabase::quote($address_city."%")." OR accountshipads.city like ".PearDatabase::quote($address_city."%").")");
-		$url_string .= "&bill_city=".$address_city;
-	}
-	if(isset($address_state) && $address_state != "")
-	{
-		array_push($where_clauses, "(accountbillads.state like ".PearDatabase::quote($address_state."%")." OR accountshipads.state like ".PearDatabase::quote($address_state."%").")");
-		$url_string .= "&bill_state=".$address_state;
-	}
-	if(isset($address_postalcode) && $address_postalcode != "")
-	{
-		array_push($where_clauses, "(accountbillads.code like ".PearDatabase::quote($address_postalcode."%")." OR accountshipads.code like ".PearDatabase::quote($address_postalcode."%").")");
-		$url_string .= "&bill_code=".$address_postalcode;
-	}
-	if(isset($address_country) && $address_country != "")
-	{
-		array_push($where_clauses, "(accountbillads.country like ".PearDatabase::quote($address_country."%")." OR accountshipads.country like ".PearDatabase::quote($address_country."%").")");
-		$url_string .= "&bill_country=".$address_country;
-	}
-	if(isset($email) && $email != "")
-	{
-		array_push($where_clauses, "(account.email1 like ".PearDatabase::quote($email."%")." OR account.email2 like ".PearDatabase::quote($email."%").")");
-		$url_string .= "&email=".$email;
-	}
-	if(isset($industry) && $industry != "")
-	{
-		array_push($where_clauses, "account.industry = ".PearDatabase::quote($industry));
-		$url_string .= "&industry=".$industry;
-	}
-	if(isset($ownership) && $ownership != "")
-	{
-	 	array_push($where_clauses, "account.ownership like ".PearDatabase::quote($ownership."%"));
-		$url_string .= "&ownership=".$ownership;
-	}
-	if(isset($rating) && $rating != "") array_push($where_clauses, "account.rating like ".PearDatabase::quote($rating."%"));
-	if(isset($sic_code) && $sic_code != "")
-	{
-		array_push($where_clauses, "account.siccode like ".PearDatabase::quote($sic_code."%"));
-		$url_string .= "&siccode=".$sic_code;
-	}
-	if(isset($ticker_symbol) && $ticker_symbol != "")
-	{
-		array_push($where_clauses, "account.tickersymbol like ".PearDatabase::quote($ticker_symbol."%"));
-		$url_string .= "&tickersymbol=".$ticker_symbol;
-	}
-	if(isset($account_type) && $account_type != "")
-	{
-		array_push($where_clauses, "account.account_type = ".PearDatabase::quote($account_type));
-		$url_string .= "&accounttype=".$account_type;
-	}
-	if(isset($current_user_only) && $current_user_only != "")
-	{
-		array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-		$url_string .= "&current_user_only=".$current_user_only;
-	}
+	
 	$where = "";
 	foreach($where_clauses as $clause)
 	{
@@ -211,9 +125,27 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 
 }
 
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Orders");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']) == false || $_REQUEST['viewname']=='')
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}else
+	{
+		$viewid = "0";
+	}
+}else
+{
+	$viewid =  $_REQUEST['viewname'];
+}
+//<<<<<customview>>>>>
+
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	// Stick the form header out there.
-	$search_form=new XTemplate ('modules/Accounts/SearchForm.html');
+	$search_form=new XTemplate ('modules/Orders/SearchForm.html');
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
 	
@@ -227,49 +159,33 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	{
 		$ordby ='';
 	}
-	$search_form->assign("BASIC_LINK", "index.php?module=Accounts".$ordby."&action=index".$url_string."&sorder=".$sorder);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Accounts&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
+	$search_form->assign("BASIC_LINK", "index.php?module=Orders".$ordby."&action=index".$url_string."&sorder=".$sorder);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Orders&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
 
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	if (isset($name)) $search_form->assign("NAME", $name);
-	if (isset($website)) $search_form->assign("WEBSITE", $website);
-	if (isset($phone)) $search_form->assign("PHONE", $phone);
-	if (isset($address_city)) $search_form->assign("ADDRESS_CITY", $address_city);
+	if (isset($subject)) $search_form->assign("SUBJECT", $subject);
+	if (isset($vendorname)) $search_form->assign("VENDOR_NAME", $vendorname);
+	if (isset($trackingno)) $search_form->assign("TRACKINGNO", $trackingno);
 
-	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
 	
-	
-	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], '', false);
+	echo get_form_header($current_module_strings['LBL_PO_SEARCH_TITLE'], '', false);
 
 
 	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
 
 	$url_string .="&advanced=true";
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','advanced'));
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','index','subject','true','advanced',$viewid));
 
 		if (isset($annual_revenue)) $search_form->assign("ANNUAL_REVENUE", $annual_revenue);
 		if (isset($employees)) $search_form->assign("EMPLOYEES", $employees);
-		if (isset($address_street)) $search_form->assign("ADDRESS_STREET", $address_street);
-		if (isset($address_state)) $search_form->assign("ADDRESS_STATE", $address_state);
-		if (isset($address_country)) $search_form->assign("ADDRESS_COUNTRY", $address_country);
-		if (isset($address_postalcode)) $search_form->assign("ADDRESS_POSTALCODE", $address_postalcode);
-		if (isset($email)) $search_form->assign("EMAIL", $email);
-		if (isset($ownership)) $search_form->assign("OWNERSHIP", $ownership);
-		if (isset($rating)) $search_form->assign("RATING", $rating);
-		if (isset($sic_code)) $search_form->assign("SIC_CODE", $sic_code);
-		if (isset($ticker_symbol)) $search_form->assign("TICKER_SYMBOL", $ticker_symbol);
 
-		if (isset($industry)) $search_form->assign("INDUSTRY_OPTIONS", get_select_options($comboFieldArray['industry_dom'], $industry, $_REQUEST['advanced']));
-		else $search_form->assign("INDUSTRY_OPTIONS", get_select_options($comboFieldArray['industry_dom'], '', $_REQUEST['advanced']));
-		if (isset($account_type)) $search_form->assign("ACCOUNT_TYPE_OPTIONS", get_select_options($comboFieldArray['account_type_dom'], $account_type, $_REQUEST['advanced']));
-		else $search_form->assign("ACCOUNT_TYPE_OPTIONS", get_select_options_with_id($comboFieldArray['account_type_dom'], '', $_REQUEST['advanced']));
 
 		if (!empty($assigned_user_id)) $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), $assigned_user_id));
 		else $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), ''));
 
 //Added for Custom Field Search
-$sql="select * from field where tablename='accountscf' order by fieldlabel";
+$sql="select * from field where tablename='purchaseordercf' order by fieldlabel";
 $result=$adb->query($sql);
 for($i=0;$i<$adb->num_rows($result);$i++)
 {
@@ -278,7 +194,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
         if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
 }
 require_once('include/CustomFieldUtil.php');
-$custfld = CustomFieldSearch($customfield, "accountscf", "accountcf", "accountid", $app_strings,$theme,$column,$fieldlabel);
+$custfld = CustomFieldSearch($customfield, "purchaseordercf", "purchaseordercf", "purchaseorderid", $app_strings,$theme,$column,$fieldlabel);
 $search_form->assign("CUSTOMFIELD", $custfld);
 //upto this added for Custom Field
 
@@ -286,7 +202,7 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 		$search_form->out("advanced");
 	}
 	else {
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','basic'));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','index','subject','true','basic',$viewid));
 		$search_form->parse("main");
 		$search_form->out("main");
 	}
@@ -314,7 +230,7 @@ if(isPermitted('Accounts',2,'') == 'yes')
 		</td>
 	</tr>
 	</table>';
-*/
+
 /*
 $ListView = new ListView();
 $ListView->initNewXTemplate('modules/Accounts/ListView.html',$current_module_strings);
@@ -326,23 +242,6 @@ $ListView->processListView($seedAccount, "main", "ACCOUNT");
 
 // Buttons and View options
 
-//<<<<cutomview>>>>>>>
-$oCustomView = new CustomView("Orders");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']) == false)
-{
-	if($oCustomView->setdefaultviewid != "")
-	{
-		$viewid = $oCustomView->setdefaultviewid;
-	}else
-	{
-		$viewid = "0";
-	}
-}else
-{
-	$viewid =  $_REQUEST['viewname'];
-}
-//<<<<<customview>>>>>
 
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 		<tr>';

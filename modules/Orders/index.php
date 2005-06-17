@@ -56,14 +56,46 @@ global $mod_strings;
 
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_TITLE'], true); 
 
+$submenu = array('LBL_PO_FORM_TITLE'=>'ListView.php','LBL_SO_FORM_TITLE'=>'SalesOrderListView.php'); 
 echo "\n<BR>\n";
-
-include ('modules/Orders/ListView.php');
-
-echo "\n<BR>\n";
-
-include ('modules/Orders/SalesOrderListView.php');
-
-
 ?>
-
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+   <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td class="tabStart">&nbsp;&nbsp;</td>
+<?
+	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
+	{
+		$classname = "tabOff";
+	}
+	else
+	{
+		$classname = "tabOn";
+	}
+	$listView = "ListView.php";
+	foreach($submenu as $label=>$filename)
+	{
+		list($lbl,$sname,$title)=split("_",$label);
+		if(stristr($label,$_REQUEST['smodule']))
+		{
+			echo '<td class="tabOn" nowrap><a href="index.php?module=Orders&action=index&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+			$listView = $filename;
+			$classname = "tabOff";
+		}
+		else
+		{
+			echo '<td class="'.$classname.'" nowrap><a href="index.php?module=Orders&action=index&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+		}
+		$classname = "tabOff";
+	}
+?>
+     <td width="100%" class="tabEnd">&nbsp;</td>
+   </tr>
+ </table></td>
+ </tr>
+ <tr>
+   <td class="tabContent" style="padding:10"><div id="tabcontent1"><? include ('modules/Orders/'.$listView); ?> </div>
+   </td>
+ </tr>
+</table>

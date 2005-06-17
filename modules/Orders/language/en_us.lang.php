@@ -161,7 +161,16 @@ $mod_strings = Array(
 'LBL_SO_INFORMATION'=>'Sales Order Information',
 'LBL_SO'=>'Sales Order:',
 
-
+ //Added for 4.2 GA
+'LBL_SO_FORM_TITLE'=>'Sales',
+'LBL_PO_FORM_TITLE'=>'Purchase',
+'LBL_SUBJECT_TITLE'=>'Subject',
+'LBL_VENDOR_NAME_TITLE'=>'Vendor Name',
+'LBL_TRACKING_NO_TITLE'=>'Tracking No:',
+'LBL_PO_SEARCH_TITLE'=>'Purchase Order Search',
+'LBL_SO_SEARCH_TITLE'=>'Sales Order Search',
+'LBL_QUOTE_NAME_TITLE'=>'Quote Name',
+'Order Id'=>'Order Id',
 
 );
 

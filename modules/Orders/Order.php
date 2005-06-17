@@ -56,27 +56,25 @@ class Order extends CRMEntity {
 
 	var $column_fields = Array();
 
-	//var $sortby_fields = Array('accountname','city','website','phone');		
+	var $sortby_fields = Array('subject','tracking_no');		
 
 	// This is used to retrieve related fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'smownerid', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id' );
 
 	// This is the list of fields that are in the lists.
 	var $list_fields = Array(
-				'Purchase Order Id'=>Array('crmentity'=>'crmid'),
+				'Order Id'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('purchaseorder'=>'subject'),
-				'Quote Name'=>Array('purchaseorder'=>'quoteid'),
 				'Vendor Name'=>Array('purchaseorder'=>'vendorid'), 
-				'Type'=>Array('purchaseorder'=> 'type'),
+				'Tracking Number'=>Array('purchaseorder'=> 'tracking_no'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 	
 	var $list_fields_name = Array(
-				        'Purchase Order Id'=>'',
+				        'Order Id'=>'',
 				        'Subject'=>'subject',
-				        'Quote Name'=>'quote_id',
 				        'Vendor Name'=>'vendor_id',
-					'Type'=>'type',
+					'Tracking Number'=>'tracking_no',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
@@ -86,12 +84,12 @@ class Order extends CRMEntity {
         var $popup_type;
 
 	var $search_fields = Array(
-				'Purchase Order Id'=>Array('crmentity'=>'crmid'),
+				'Order Id'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('purchaseorder'=>'subject'), 
 				);
 	
 	var $search_fields_name = Array(
-				        'Purchase Order Id'=>'',
+				        'Order Id'=>'',
 				        'Subject'=>'subject',
 				      );
 
