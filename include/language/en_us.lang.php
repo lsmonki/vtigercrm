@@ -662,6 +662,7 @@ $app_strings = Array(
 //Added fields after 4.2 alpha
 'COMBO_ACCOUNTS'=>'Accounts',
 'LNK_NEW_FAQ'=>'New Faq',
+'Vendor Name'=>'Vendor Name',
 
 );
 
