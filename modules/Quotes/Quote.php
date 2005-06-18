@@ -56,7 +56,7 @@ class Quote extends CRMEntity {
 
 	var $column_fields = Array();
 
-	//var $sortby_fields = Array('accountname','city','website','phone');		
+	var $sortby_fields = Array('subject');		
 
 	// This is used to retrieve related fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'smownerid', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id' );
@@ -66,7 +66,7 @@ class Quote extends CRMEntity {
 				'Subject'=>Array('quotes'=>'subject'),
 				'Quote Stage'=>Array('quotes'=>'quotestage'), 
 				'Potential Name'=>Array('quotes'=>'potentialid'),
-				'Type'=>Array('quotes'=> 'type'),
+				'Account Name'=>Array('account'=> 'accountid'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 	
@@ -74,7 +74,7 @@ class Quote extends CRMEntity {
 				        'Subject'=>'subject',
 				        'Quote Stage'=>'quotestage',
 				        'Potential Name'=>'potential_id',
-					'Type'=>'type',
+					'Account Name'=>'account_id',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
