@@ -50,8 +50,15 @@ if (isset($_GET['sort'])) {
 if (isset($_GET['startMessage'])) {
     $startMessage = (int) $_GET['startMessage'];
 }
+global $current_user;
+require_once('modules/Users/UserInfoUtil.php');
+$mailInfo = getMailServerInfo($current_user);
+$temprow = $adb->fetch_array($mailInfo);
 
-//$key=OneTimePadEncrypt("p1", $onetimepad);
+$login_username= $temprow["mail_username"];
+$secretkey=$temprow["mail_password"];
+
+$key=OneTimePadEncrypt($secretkey, $onetimepad);
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 
 sqimap_mailbox_select($imapConnection, $mailbox);
@@ -70,14 +77,14 @@ if (!isset($mail_sent)) {
 
 $location = get_location();
 if (isset($where) && isset($what)) {
-    header("Location: index.php?module=squirrelmail-1.4.4?action=search&where=" . $where .
+    header("Location: index.php?module=squirrelmail-1.4.4&action=search&where=" . $where .
            '&what=' . $what . '&mailbox=' . urlencode($mailbox));
 } else {
     if (!empty($saved_draft) || !empty($mail_sent)) {
-          header("Location: index.php?module=squirrelmail-1.4.4?action=compose&mail_sent=$mail_sent&saved_draft=$saved_draft");
+          header("Location: index.php?module=squirrelmail-1.4.4&action=compose&mail_sent=$mail_sent&saved_draft=$saved_draft");
     }
     else {
-        header("Location: index.php?module=squirrelmail-1.4.4?action=right_main&sort=$sort&startMessage=$startMessage&mailbox=" .urlencode($mailbox));
+        header("Location: index.php?module=squirrelmail-1.4.4&action=right_main&sort=$sort&startMessage=$startMessage&mailbox=" .urlencode($mailbox));
     }
 }
 
