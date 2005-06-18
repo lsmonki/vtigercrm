@@ -24,8 +24,8 @@ require_once(SM_PATH . 'include/validate.php');
 require_once(SM_PATH . 'functions/imap.php');
 require_once(SM_PATH . 'functions/mime.php');
 
-//header('Pragma: ');
-//header('Cache-Control: cache');
+header('Pragma: ');
+header('Cache-Control: cache');
 
 /* globals */
 sqgetGlobalVar('key',        $key,          SQ_COOKIE);
@@ -45,7 +45,6 @@ set_my_charset();
 /* end globals */
 
 global $uid_support;
-
 global $current_user;
 require_once('modules/Users/UserInfoUtil.php');
 $mailInfo = getMailServerInfo($current_user);
