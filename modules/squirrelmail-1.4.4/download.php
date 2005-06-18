@@ -46,7 +46,15 @@ set_my_charset();
 
 global $uid_support;
 
-//$key=OneTimePadEncrypt("p1", $onetimepad);
+global $current_user;
+require_once('modules/Users/UserInfoUtil.php');
+$mailInfo = getMailServerInfo($current_user);
+$temprow = $adb->fetch_array($mailInfo);
+
+$login_username= $temprow["mail_username"];
+$secretkey=$temprow["mail_password"];
+
+$key=OneTimePadEncrypt($secretkey, $onetimepad);
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 $mbx_response =  sqimap_mailbox_select($imapConnection, $mailbox);
 
