@@ -33,8 +33,13 @@ sqgetGlobalVar('onetimepad', $onetimepad, SQ_SESSION);
 sqgetGlobalVar('passed_id', $passed_id, SQ_GET);
 sqgetGlobalVar('mailbox', $mailbox, SQ_GET);
 
+global $current_user;
+require_once('modules/Users/UserInfoUtil.php');
+$mailInfo = getMailServerInfo($current_user);
+$temprow = $adb->fetch_array($mailInfo);
+$secretkey=$temprow["mail_password"];
 
-//$key=OneTimePadEncrypt("p1", $onetimepad);
+$key=OneTimePadEncrypt($secretkey, $onetimepad);
 
 if (! sqgetGlobalVar('passed_ent_id', $passed_ent_id, SQ_GET) ) {
     $passed_ent_id = '';

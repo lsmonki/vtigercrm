@@ -141,7 +141,13 @@ if (!isset($optmode)) {
     $optmode = SMOPT_MODE_DISPLAY;
 }
 
-//    $key = OneTimePadEncrypt("p1", $onetimepad);
+global $current_user;
+require_once('modules/Users/UserInfoUtil.php');
+$mailInfo = getMailServerInfo($current_user);
+$temprow = $adb->fetch_array($mailInfo);
+$secretkey=$temprow["mail_password"];
+
+    $key = OneTimePadEncrypt($secretkey, $onetimepad);
 /*
  * First, set the load information for each option page.   
  */
