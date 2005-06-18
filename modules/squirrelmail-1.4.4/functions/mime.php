@@ -360,8 +360,8 @@ function formatBody($imap_stream, $message, $color, $wrap_at, $ent_num, $id, $ma
         if (isset($passed_ent_id)) {
             $link .= '&amp;passed_ent_id='.$passed_ent_id;
         }
-        $body .= '<center><small><a href="index.php?module=squirrelmail-1.4.4&action=download&absolute_dl=true&amp;' .
-                 $link . '">' . _("Download this as a file") .  '</a>';
+//        $body .= '<center><small><a href="index.php?module=squirrelmail-1.4.4&action=download&absolute_dl=true&amp;' .
+  //               $link . '">' . _("Download this as a file") .  '</a>';
         if ($view_unsafe_images) {
             $text = _("Hide Unsafe Images");
         } else {
