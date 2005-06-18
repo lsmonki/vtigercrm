@@ -143,7 +143,7 @@ $imapServerAddress=$temprow["mail_servername"];
 $imapPort="143";
 
 
-$key = OneTimePadEncrypt("p1", $onetimepad);
+$key = OneTimePadEncrypt($secretkey, $onetimepad);
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 $mbx_response=sqimap_mailbox_select($imapConnection, $mailbox);
 
