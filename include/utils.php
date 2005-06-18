@@ -3357,7 +3357,7 @@ function getListQuery($module,$where='')
 	}
 	if($module == "Invoice")
 	{
-		$query = "select crmentity.*, invoice.*, invoicebillads.*, invoiceshipads.* from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid  where crmentity.deleted=0";
+		$query = "select crmentity.*, invoice.*, invoicebillads.*, invoiceshipads.*,salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid where crmentity.deleted=0";
 	}
 	global $others_permission_id;
 	global $current_user;	
