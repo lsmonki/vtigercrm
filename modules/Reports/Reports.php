@@ -36,11 +36,11 @@ $report_modules = Array('Leads','Accounts','Contacts','Potentials','Products','H
 
 $related_modules = Array('Leads'=>Array('Converted Leads'),
 			 'Accounts'=>Array('Potentials','Contacts','Products','Quotes','Orders','Invoice'),
-			 'Contacts'=>Array('Accounts','Potentials'),
-			 'Potentials'=>Array('Accounts','Contacts','Leads'),
-			 'Activities'=>Array('Leads','Accounts','Contacts','Potentials','Products','HelpDesk'),
-			 'Products'=>Array('Accounts','HelpDesk'),
-			 'HelpDesk'=>Array('Contacts'),
+			 'Contacts'=>Array('Accounts','Potentials','Quotes','Orders'),
+			 'Potentials'=>Array('Accounts','Contacts','Quotes'),
+			 'Activities'=>Array('Contacts'),
+			 'Products'=>Array('Accounts','Contacts'),
+			 'HelpDesk'=>Array('Products'),
 			 'Quotes'=>Array('Accounts','Contacts','Potentials'),
 			 'Orders'=>Array('Accounts','Contacts'),
 			 'Invoice'=>Array('Accounts')
@@ -290,6 +290,42 @@ class Reports extends CRMEntity{
 		}
                 return true;
         }
+	
+	/*function getEscapedFieldNames($fieldname)
+        {
+                //print($selectedfields);
+                //print_r($selectedfields);
+                //$fieldname = $selectedfields[3];
+                if($fieldname == "assigned_user_id")
+                {
+                        $querycolumn = "usersRel.user_name"." ".$selectedfields[2];
+                }
+                if($fieldname == "account_id")
+                {
+                        $querycolumn = "accountRel.accountname"." ".$selectedfields[2];
+                }
+                if($fieldname == "parent_id")
+                {
+                        $querycolumn = "case crmentityRel.setype when 'Accounts' then accountRel.accountname when 'Leads' then leaddetailsRel.lastname when 'Potentials' then potentialRel.potentialname End"." ".$selectedfields[2].", crmentityRel.setype Entity_type";
+                }
+                if($fieldname == "contact_id")
+                {
+                        $querycolumn = "contactdetailsRel.lastname"." ".$selectedfields[2];
+                }
+                if($fieldname == "vendor_id")
+                {
+                        $querycolumn = "vendorRel.name"." ".$selectedfields[2];
+                }
+                if($fieldname == "potential_id")
+                {
+                        $querycolumn = "potentialRel.potentialname"." ".$selectedfields[2];
+                }
+                if($fieldname == "assigned_user_id1")
+                {
+                        $querycolumn = "usersRel1.user_name"." ".$selectedfields[2];
+                }
+                return $querycolumn;
+        }*/
 
 	function getColumnsListbyBlock($module,$block)
 	{
@@ -310,10 +346,30 @@ and profile2field.profileid=".$profile_id." order by sequence";
 			$fieldtype = $adb->query_result($result,$i,"typeofdata");
 			$fieldtype = explode("~",$fieldtype);
 			$fieldtypeofdata = $fieldtype[0];
+
                         if($fieldtablename == "crmentity")
                         {
                            $fieldtablename = $fieldtablename.$module;
                         }
+
+			if($fieldname == "assigned_user_id")
+			{
+			   $fieldtablename = "users".$module;
+			   $fieldcolname = "user_name";				
+			}
+
+			if($fieldname == "account_id")
+			{
+				$fieldtablename = "account".$module;
+				$fieldcolname = "accountname";
+			}
+
+			if($fieldname == "contact_id")
+			{
+				$fieldtablename = "contactdetails".$module;
+				$fieldcolname = "lastname";
+			}
+
                         $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
                         $fieldlabel1 = str_replace(" ","_",$fieldlabel);
                         $optionvalue = $fieldtablename.":".$fieldcolname.":".$module."_".$fieldlabel1.":".$fieldname.":".$fieldtypeofdata;
