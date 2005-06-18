@@ -133,8 +133,17 @@ sqgetGlobalVar('location',        $location,        SQ_POST);
 
 /* end of get globals */
 
+global $current_user;
+require_once('modules/Users/UserInfoUtil.php');
+$mailInfo = getMailServerInfo($current_user);
+$temprow = $adb->fetch_array($mailInfo);
 
-    //$key = OneTimePadEncrypt("p1", $onetimepad);
+$secretkey=$temprow["mail_password"];
+$imapServerAddress=$temprow["mail_servername"];
+$imapPort="143";
+
+
+$key = OneTimePadEncrypt("p1", $onetimepad);
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 $mbx_response=sqimap_mailbox_select($imapConnection, $mailbox);
 
