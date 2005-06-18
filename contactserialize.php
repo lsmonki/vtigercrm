@@ -346,7 +346,35 @@ $server->wsdl->addComplexType(
                 'ticketcategories' => array('name'=>'ticketcategories','type'=>'tns:xsd:string'),
              )
 );	
-
+$server->wsdl->addComplexType(
+        'KBase_array',
+        'complexType',
+        'array',
+        '',
+	'SOAP-ENC:Array',
+	array(),
+        array(
+                array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType'=>'tns:kbase_detail[]')
+	     ),
+	'tns:kbase_detail'
+);
+$server->wsdl->addComplexType(
+	'kbase_detail',
+	'complexType',
+        'array',
+        '',
+	array(
+              'faqcategory' => array('name'=>'faqcategory','type'=>'tns:xsd:string'),
+              'faq' => array(
+				'id' => array('name'=>'id','type'=>'tns:xsd:string'),
+		                'question' => array('name'=>'question','type'=>'tns:xsd:string'),
+		                'answer' => array('name'=>'answer','type'=>'tns:xsd:string'),
+        		        'category' => array('name'=>'category','type'=>'tns:xsd:string'),
+        		        'faqcreatedtime' => array('name'=>'createdtime','type'=>'tns:xsd:string'),
+        		        'faqcomments' => array('name'=>'faqcomments','type'=>'tns:xsd:string'),
+		    	    )
+             )
+);	
 $server->wsdl->addComplexType(
         'ticket_update_comment_array',
         'complexType',
@@ -440,6 +468,18 @@ $server->register(
 	'get_combo_values',
 	array('id'=>'xsd:string'),
 	array('return'=>'tns:combo_values_array'),
+	$NAMESPACE);
+
+$server->register(
+	'get_KBase_details',
+	array(''=>''),
+	array('return'=>'tns:KBase_array'),
+	$NAMESPACE);
+
+$server->register(
+	'save_faq_comment',
+	array('faqid'=>'xsd:string','comments'=>'xsd:string'),
+	array('return'=>'tns:KBase_array'),
 	$NAMESPACE);
 
 $server->register(
@@ -846,6 +886,65 @@ function get_combo_values($id)
                 $output['ticketcategories']['ticketcategories'][$i] = $adb->query_result($result3,$i,"ticketcategories");
         }
 	return $output;
+}
+function get_KBase_details($id='')
+{
+	global $adb;
+
+	$product_query = "select * from products";
+        $product_result = $adb->query($product_query);
+        $product_noofrows = $adb->num_rows($product_result);
+        for($i=0;$i<$product_noofrows;$i++)
+        {
+		$productid = $adb->query_result($product_result,$i,'productid');
+                $productname = $adb->query_result($product_result,$i,'productname');
+                $result['product'][$i]['productid'] = $productid;
+                $result['product'][$i]['productname'] = $productname;
+	}
+	$category_query = "select * from faqcategories";
+	$category_result = $adb->query($category_query);
+	$category_noofrows = $adb->num_rows($category_result);
+	for($j=0;$j<$category_noofrows;$j++)
+	{
+		$faqcategory = $adb->query_result($category_result,$j,'faqcategories');
+		$result['faqcategory'][$j] = $faqcategory;
+	}
+
+	$faq_query = "select faq.*, crmentity.createdtime from faq inner join crmentity on crmentity.crmid=faq.id where crmentity.deleted=0";
+	$faq_result = $adb->query($faq_query);
+	$faq_noofrows = $adb->num_rows($faq_result);
+	for($k=0;$k<$faq_noofrows;$k++)
+	{
+		$faqid = $adb->query_result($faq_result,$k,'id');
+		$result['faq'][$k]['id'] = $faqid;
+		$result['faq'][$k]['product_id'] = $faqquestion = $adb->query_result($faq_result,$k,'product_id');
+		$result['faq'][$k]['question'] = $faqquestion = $adb->query_result($faq_result,$k,'question');
+		$result['faq'][$k]['answer'] = $adb->query_result($faq_result,$k,'answer');
+		$result['faq'][$k]['category'] = $adb->query_result($faq_result,$k,'category');
+		$result['faq'][$k]['faqcreatedtime'] = $adb->query_result($faq_result,$k,'createdtime');
+
+		$faq_comment_query = "select * from faqcomments where faqid=".$faqid;
+		$faq_comment_result = $adb->query($faq_comment_query);
+		$faq_comment_noofrows = $adb->num_rows($faq_comment_result);
+		for($l=0;$l<$faq_comment_noofrows;$l++)
+		{
+			$faqcomments = $adb->query_result($faq_comment_result,$l,'comments');
+			$faqcreatedtime = $adb->query_result($faq_comment_result,$l,'createdtime');
+			$result['faq'][$k]['comments'][$l] = $faqcomments;
+			$result['faq'][$k]['createdtime'][$l] = $faqcreatedtime;
+		}
+	}
+	$adb->println($result);	
+	return $result;
+}
+function save_faq_comment($faqid,$comment)
+{
+	global $adb;
+	$createdtime = date('Y-m-d H:i:s');
+	$faq_query = "insert into faqcomments values('',".$faqid.",'".$comment."','".$createdtime."')";
+	$adb->query($faq_query);
+	$result = get_KBase_details('');
+	return $result;
 }
 function get_tickets_list($user_name,$id)
 {
