@@ -161,7 +161,9 @@ $mod_strings = Array(
 'LBL_SO_INFORMATION'=>'Sales Order Information',
 'LBL_SO'=>'Sales Order:',
 
-
+//Added in release 4.2
+'LBL_SUBJECT'=>'Subject:',
+'LBL_SALES_ORDER'=>'Sales order:',
 
 );
 
