@@ -2711,7 +2711,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							$product_id = $adb->query_result($list_result,$i-1,"product_id");
 						else
 							$product_id = $adb->query_result($list_result,$i-1,"productid");
-						$product_name = getProductName($product_id);
+
+						if($product_id != '')
+							$product_name = getProductName($product_id);
+						else
+                                                        $product_name = '';
+
 						$value = '<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
 					}
 					elseif($module == 'Quotes' && $name == 'Potential Name')
