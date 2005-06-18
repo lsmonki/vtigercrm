@@ -536,14 +536,17 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
                 (isset($passed_ent_id)?'&amp;passed_ent_id='.urlencode($passed_ent_id):'');
 */
 
-
+/*
 		$comp_uri = 'compose' .
 		'&passed_id=' . $passed_id .
 		'&amp;mailbox=' . $urlMailbox .
 		'&amp;startMessage=' . $startMessage .
+*/		(isset($passed_ent_id)?'&amp;passed_ent_id='.urlencode($passed_ent_id):'');
+
+		$modifiedcomp_uri='&passed_id=' . $passed_id .
+		'&amp;mailbox=' . $urlMailbox .
+		'&amp;startMessage=' . $startMessage .
 		(isset($passed_ent_id)?'&amp;passed_ent_id='.urlencode($passed_ent_id):'');
-
-
 
 
 
@@ -637,11 +640,15 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
 
     $comp_action_uri = $comp_uri . '&amp;smaction=reply';
     $s .= $topbar_delimiter;
-    $s .= makeComposeLink($comp_action_uri, _("Reply"));
-
-    $comp_action_uri = $comp_uri . '&amp;smaction=reply_all';
+   // echo $comp_action_uri;
+    //$s .= makeComposeLink($comp_action_uri, _("Reply"));
+    $s .= "<a href=index.php?module=Emails&action=EditView".$modifiedcomp_uri.'>Reply</a>';
+    // echo $string;
+    
+    $comp_action_uri = $modifiedcomp_uri . '&amp;smaction=reply_all';
     $s .= $topbar_delimiter;
-    $s .= makeComposeLink($comp_action_uri, _("Reply All"));
+    //$s .= makeComposeLink($comp_action_uri, _("Reply All"));
+    $s .= "<a href=index.php?module=Emails&action=EditView".$modifiedcomp_uri.'>Reply All</a>';
     $s .= '</small></td></tr></table>';
     $ret = concat_hook_function('read_body_menu_top', $s);
     if($ret != '') {
