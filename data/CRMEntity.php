@@ -609,37 +609,35 @@ function insertIntoFAQCommentTable($table_name, $module)
         $current_time = date('Y-m-d H:i:s');
 
 	$sql = "insert into faqcomments values('',".$this->id.",'".$_REQUEST['comments']."','".$current_time."')";
-        $adb->query($sql);
+	$adb->query($sql);
 }
-function insertIntoReminderTable($table_name, $module)
+function insertIntoReminderTable($table_name,$module,$recurid)
 {
 	if($_REQUEST['set_reminder'] == 'Yes')
 	{
-	
 		$rem_days = $_REQUEST['remdays'];
-	        $rem_hrs = $_REQUEST['remhrs'];
-	        $rem_min = $_REQUEST['remmin'];
+		$rem_hrs = $_REQUEST['remhrs'];
+		$rem_min = $_REQUEST['remmin'];
 		$reminder_time = $rem_days * 24 * 60 + $rem_hrs * 60 + $rem_min;
 		if ($recurid == "")
 		{
 			if($_REQUEST['mode'] == 'edit')
 			{
-
-				$this->activity_reminder($this->id,$reminder_time,0,$recurid,'edit');
+				$this->activity_reminder($this->id,$reminder_time,0,'edit');
 			}
 			else
 			{
-				$this->activity_reminder($this->id,$reminder_time,0,$recurid,'');
+				$this->activity_reminder($this->id,$reminder_time,0,'');
 			}
 		}
 		else
 		{
-			$this->activity_reminder($this->id,$reminder_time,0,$recurid,'');
+			$this->activity_reminder($this->id,$reminder_time,0,'');
 		}
 	}
 	elseif($_REQUEST['set_reminder'] == 'No')
 	{
-		$this->activity_reminder($this->id,'0',0,$recurid,'delete');
+		$this->activity_reminder($this->id,'0',0,'delete');
 	}
 }
 
@@ -657,18 +655,27 @@ function insertIntoRecurringTable($table_name,$module)
 	{
 		$activity_id=$this->id;
 
-		$sql='select distinct(recurringevents.recurringtype),activity.date_start,activity.due_date from recurringevents,activity where activity.activityid=recurringevents.activityid and activity.activityid='.$activity_id;
+		$sql='select distinct(recurringevents.recurringtype),activity.date_start,activity.due_date,activity.duration_hours,duration_minutes from recurringevents,activity where activity.activityid=recurringevents.activityid and activity.activityid='.$activity_id;
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
 		{
-			$recur_type = $adb->query_result($result,$i,"recurringtype");
-			$start_date = $adb->query_result($result,$i,"date_start");
-			$end_date_old = $adb->query_result($result,$i,"due_date");
+			$recur_type_b4_edit = $adb->query_result($result,$i,"recurringtype");
+			$date_start_b4edit = $adb->query_result($result,$i,"date_start");
+			$end_date_b4edit = $adb->query_result($result,$i,"due_date");
 		}
-		if(($st_date == $start_date) && ($end_date==$end_date_old) && ($type == $recur_type))
+		if(($st_date == $date_start_b4edit) && ($end_date==$end_date_b4edit) && ($type == $recur_type_b4_edit))
 		{
-			$flag="false";
+			if($_REQUEST['set_reminder'] == 'Yes')
+			{
+				$this->activity_reminder($activity_id,'0',0,'delete');
+				$flag="true";
+			}
+			elseif($_REQUEST['set_reminder'] == 'No')
+			{
+				$this->activity_reminder($activity_id,'0',0,'delete');
+				$flag="false";
+			}
 		}
 		else
 		{
@@ -712,11 +719,10 @@ function insertIntoRecurringTable($table_name,$module)
 				if($tdate <= $end_date)
 				{
 					$current_id = $adb->getUniqueID("recurringevents");
-					$recurring_insert = 'insert into recurringevents values ("'.$current_id.'","'.$this->id.'","'.$tdate.'","'.$type.'")';
-					$adb->query($recurring_insert);
-
-					if($_REQUEST['set_reminder'] == 'Yes')
+					if($reminder_flag != "true")
 					{
+						$recurring_insert = 'insert into recurringevents values ("'.$current_id.'","'.$this->id.'","'.$tdate.'","'.$type.'")';
+						$adb->query($recurring_insert);
 						$this->insertIntoReminderTable("activity_reminder",$module,$current_id);
 					}
 				}
@@ -724,6 +730,7 @@ function insertIntoRecurringTable($table_name,$module)
 		}
 	}
 }
+
 
 	
   function retrieve_entity_info($record, $module)
