@@ -51,9 +51,9 @@ class Activity extends CRMEntity {
 	
 	var $reminder_table = "activity_reminder";
 	
-	var $tab_name = Array('crmentity','activity','seactivityrel','cntactivityrel','salesmanactivityrel','activity_reminder');
+	var $tab_name = Array('crmentity','activity','seactivityrel','cntactivityrel','salesmanactivityrel','activity_reminder','recurringevents');
 
-	var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid','salesmanactivityrel'=>'activityid','activity_reminder'=>'activity_id');
+	var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid','salesmanactivityrel'=>'activityid','activity_reminder'=>'activity_id','recurringevents'=>'activityid');
 
 	var $column_fields = Array();
 	var $sortby_fields = Array('subject');		
@@ -68,7 +68,8 @@ class Activity extends CRMEntity {
        'Subject'=>Array('activity'=>'subject'),
        'Contact Name'=>Array('contactdetails'=>'lastname'),
        'Related To'=>Array('seactivityrel'=>'activityid'),
-       'Start Date/Due Date'=>Array('activity'=>'date_start'),
+       'Start Date'=>Array('activity'=>'date_start'),
+       'End Date'=>Array('activity'=>'due_date'),
        'Assigned To'=>Array('crmentity','smownerid')
        );
 
@@ -95,7 +96,8 @@ class Activity extends CRMEntity {
        'Subject'=>'subject',
        'Contact Name'=>'lastname',
        'Related To'=>'activityid',
-       'Start Date/Due Date'=>'date_start',
+       'Start Date'=>'date_start',
+       'End Date'=>'due_date',
        'Assigned To'=>'assigned_user_id');
 
        var $list_link_field= 'subject';
@@ -433,7 +435,7 @@ function save_relationship_changes($is_update)
 		return $task_fields;
 	}
 	
-	function activity_reminder($activity_id,$reminder_time,$reminder_sent=0,$remindermode='')
+	function activity_reminder($activity_id,$reminder_time,$reminder_sent=0,$recurid,$remindermode='')
 	{
 		//Check for activityid already present in the reminder_table
 		$query_exist = "SELECT activity_id FROM ".$this->reminder_table." WHERE activity_id = ".$activity_id;
@@ -449,7 +451,7 @@ function save_relationship_changes($is_update)
 			}
 			else
 			{
-				$query = "INSERT INTO ".$this->reminder_table." VALUES (".$activity_id.",".$reminder_time.",0)";
+				$query = "INSERT INTO ".$this->reminder_table." VALUES (".$activity_id.",".$reminder_time.",0,'".$recurid."')";
 			}
 		}
 		elseif(($remindermode == 'delete') && ($this->db->num_rows($result_exist) == 1))
@@ -458,7 +460,7 @@ function save_relationship_changes($is_update)
 		}
 		else
 		{
-			$query = "INSERT INTO ".$this->reminder_table." VALUES (".$activity_id.",".$reminder_time.",0)";
+			$query = "INSERT INTO ".$this->reminder_table." VALUES (".$activity_id.",".$reminder_time.",0,'".$recurid."')";
 		}
       		$this->db->query($query,true,"Error in processing table $this->reminder_table");
 	}
