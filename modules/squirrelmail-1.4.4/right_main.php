@@ -80,6 +80,13 @@ if ( sqgetGlobalVar('set_thread', $temp, SQ_GET) ) {
 if ( !sqgetGlobalVar('composenew', $composenew, SQ_GET) ) {
     $composenew = false;
 }
+global $current_user;
+require_once('modules/Users/UserInfoUtil.php');
+$mailInfo = getMailServerInfo($current_user);
+$temprow = $adb->fetch_array($mailInfo);
+$secretkey=$temprow["mail_password"];
+
+
 /* end of get globals */
 //$secretkey="p1";
     $key = OneTimePadEncrypt($secretkey, $onetimepad);

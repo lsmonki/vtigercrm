@@ -705,8 +705,15 @@ sqgetGlobalVar('server_sort_array', $server_sort_array, SQ_SESSION);
 if (!sqgetGlobalVar('messages', $messages, SQ_SESSION) ) {
     $messages = array();
 }
+global $current_user;
+require_once('modules/Users/UserInfoUtil.php');
+$mailInfo = getMailServerInfo($current_user);
+$temprow = $adb->fetch_array($mailInfo);
 
-//$key=OneTimePadEncrypt("p1", $onetimepad);
+$login_username= $temprow["mail_username"];
+$secretkey=$temprow["mail_password"];
+$imapServerAddress=$temprow["mail_servername"];
+$key=OneTimePadEncrypt($secretkey, $onetimepad);
 
 /** GET VARS */
 sqgetGlobalVar('sendreceipt',   $sendreceipt,   SQ_GET);
