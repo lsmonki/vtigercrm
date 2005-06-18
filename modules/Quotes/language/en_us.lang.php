@@ -148,7 +148,11 @@ $mod_strings = Array(
 'LBL_TERMS_INFORMATION'=>'Terms & Conditions',
 'LBL_QUOTE'=>'Quote:',
 
-
+//Added during 4.2 release
+'LBL_SUBJECT'=>'Subject:',
+'LBL_POTENTIAL_NAME'=>'Potential Name:',
+'LBL_ACCOUNT_NAME'=>'Account Name:',
+'LBL_QUOTE_STAGE'=>'Quote Stage:',
 
 );
 
