@@ -461,7 +461,7 @@ function formatAttachments($message, $exclude_id, $mailbox, $id) {
         } else {
             $passed_ent_id_link = '';
         }
-        $defaultlink = $default_page . "?startMessage=$startMessage"
+        $defaultlink = $default_page . "&startMessage=$startMessage"
                      . "&amp;passed_id=$id&amp;mailbox=$urlMailbox"
                      . '&amp;ent_id='.$ent.$passed_ent_id_link;
         if ($where && $what) {
