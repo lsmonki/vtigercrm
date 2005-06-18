@@ -3345,8 +3345,7 @@ function getListQuery($module,$where='')
 	}
 	if($module == "Quotes")
 	{
-		//$query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
-		$query = "select crmentity.*, quotes.*, quotesbillads.*, quotesshipads.* from quotes inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid where crmentity.deleted=0";
+		$query = "select crmentity.*, quotes.*, quotesbillads.*, quotesshipads.*,potential.potentialname,account.accountname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0";
 	}
 	if($module == "Orders")
 	{
