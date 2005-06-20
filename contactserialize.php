@@ -371,6 +371,7 @@ $server->wsdl->addComplexType(
 		                'answer' => array('name'=>'answer','type'=>'tns:xsd:string'),
         		        'category' => array('name'=>'category','type'=>'tns:xsd:string'),
         		        'faqcreatedtime' => array('name'=>'createdtime','type'=>'tns:xsd:string'),
+        		        'faqmodifiedtime' => array('name'=>'createdtime','type'=>'tns:xsd:string'),
         		        'faqcomments' => array('name'=>'faqcomments','type'=>'tns:xsd:string'),
 		    	    )
              )
@@ -910,18 +911,19 @@ function get_KBase_details($id='')
 		$result['faqcategory'][$j] = $faqcategory;
 	}
 
-	$faq_query = "select faq.*, crmentity.createdtime from faq inner join crmentity on crmentity.crmid=faq.id where crmentity.deleted=0";
+	$faq_query = "select faq.*, crmentity.createdtime, crmentity.modifiedtime from faq inner join crmentity on crmentity.crmid=faq.id where crmentity.deleted=0 order by crmentity.modifiedtime DESC";
 	$faq_result = $adb->query($faq_query);
 	$faq_noofrows = $adb->num_rows($faq_result);
 	for($k=0;$k<$faq_noofrows;$k++)
 	{
 		$faqid = $adb->query_result($faq_result,$k,'id');
 		$result['faq'][$k]['id'] = $faqid;
-		$result['faq'][$k]['product_id'] = $faqquestion = $adb->query_result($faq_result,$k,'product_id');
-		$result['faq'][$k]['question'] = $faqquestion = $adb->query_result($faq_result,$k,'question');
+		$result['faq'][$k]['product_id']  = $adb->query_result($faq_result,$k,'product_id');
+		$result['faq'][$k]['question'] =  $adb->query_result($faq_result,$k,'question');
 		$result['faq'][$k]['answer'] = $adb->query_result($faq_result,$k,'answer');
 		$result['faq'][$k]['category'] = $adb->query_result($faq_result,$k,'category');
 		$result['faq'][$k]['faqcreatedtime'] = $adb->query_result($faq_result,$k,'createdtime');
+		$result['faq'][$k]['faqmodifiedtime'] = $adb->query_result($faq_result,$k,'modifiedtime');
 
 		$faq_comment_query = "select * from faqcomments where faqid=".$faqid;
 		$faq_comment_result = $adb->query($faq_comment_query);
@@ -930,8 +932,11 @@ function get_KBase_details($id='')
 		{
 			$faqcomments = $adb->query_result($faq_comment_result,$l,'comments');
 			$faqcreatedtime = $adb->query_result($faq_comment_result,$l,'createdtime');
-			$result['faq'][$k]['comments'][$l] = $faqcomments;
-			$result['faq'][$k]['createdtime'][$l] = $faqcreatedtime;
+			if($faqcomments != '')
+			{
+				$result['faq'][$k]['comments'][$l] = $faqcomments;
+				$result['faq'][$k]['createdtime'][$l] = $faqcreatedtime;
+			}
 		}
 	}
 	$adb->println($result);	
