@@ -465,6 +465,8 @@ $mod_strings = Array(
 
 'LBL_SEVERITY'=>'Severity',
 'LBL_FAQ_CATEGORY'=>'FAQ Category',
+'LBL_VENDOR_FIELD_ACCESS'=>'Vendor Field Access',
+'LBL_PB_FIELD_ACCESS'=>'PriceBook Field Access',
 
 );
 
