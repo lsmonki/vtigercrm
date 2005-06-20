@@ -3443,8 +3443,38 @@ function getActionid($action)
         {
                 $actionid= 1;
         }
-
-				
+	else if($action == 'PriceBookEditView')
+        {
+                $actionid= 1;
+        }
+        else if($action == 'PriceBookDetailView')
+        {
+                $actionid= 4;
+        }
+        else if($action == 'SavePriceBook')
+        {
+                $actionid= 0;
+        }
+        else if($action == 'DeletePriceBook')
+        {
+                $actionid= 1;
+        }
+	else if($action == 'SalesOrderEditView')
+        {
+                $actionid= 1;
+        }
+        else if($action == 'SalesOrderDetailView')
+        {
+                $actionid= 4;
+        }
+        else if($action == 'SaveSalesOrder')
+        {
+                $actionid= 0;
+        }
+        else if($action == 'DeleteSalesOrder')
+        {
+                $actionid= 1;
+        }
 	return $actionid;
 }
 
