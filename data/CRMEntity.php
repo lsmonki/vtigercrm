@@ -527,11 +527,12 @@ class CRMEntity extends SugarBean
 	{
 		updateTicketGroupRelation($this->id,$groupname);
 	}
-        else
+  /*      else
         {
 				  
           updateActivityGroupRelation($this->id,$groupname);
         }
+*/	
         
       }
       else
@@ -545,10 +546,11 @@ class CRMEntity extends SugarBean
 	{
 		updateTicketGroupRelation($this->id,'');
 	}
-        else
+      /*  else
         {
           updateActivityGroupRelation($this->id,'');
         }
+     */	
 
       }
 
