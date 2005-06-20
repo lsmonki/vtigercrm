@@ -150,6 +150,21 @@ class Tracker {
             $lastname = $adb->query_result($result,0,'last_name');
             $item_summary = $firstname .' '. $lastname;
           }
+	  elseif($current_module =='Invoice')
+          {
+            $query = 'select subject from invoice where invoiceid=' .$item_id;
+            $result = $this->db->query($query);
+            $invoice = $adb->query_result($result,0,'subject');
+            $item_summary = $invoice;
+          }
+          elseif($current_module =='Quotes')
+          {
+            $query = 'select subject from quotes where quoteid=' .$item_id;
+            $result = $this->db->query($query);
+            $quote = $adb->query_result($result,0,'subject');
+            $item_summary = $quote;
+          }
+
 	 
 	 #if condition added to skip faq in last viewed history
 	  if ($current_module != 'Faq')
