@@ -2255,6 +2255,20 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	global $theme;
 	global $app_strings;
 	global $mod_strings;
+	//Seggregating between module and smodule
+        if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'VENDOR')
+        {
+                $smodule = 'Vendor';
+        }
+        elseif(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'PRICEBOOK')
+        {
+                $smodule = 'PriceBook';
+        }
+        else
+        {
+                $smodule = $module;
+        }
+
 	$arrow='';
 	$qry = getURLstring($focus);
 	$theme_path="themes/".$theme."/";
@@ -2269,7 +2283,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 
 	//Get the tabid of the module
 	//require_once('modules/Users/UserInfoUtil.php')
-	$tabid = getTabid($module);
+	$tabid = getTabid($smodule);
 	global $profile_id;
         if($profile_id == '')
         {
@@ -3407,6 +3421,24 @@ function getActionid($action)
 	{
 		$actionid= 8;
 	}
+	else if($action == 'VendorEditView')
+        {
+                $actionid= 1;
+        }
+        else if($action == 'VendorDetailView')
+        {
+                $actionid= 4;
+        }
+        else if($action == 'SaveVendor')
+        {
+                $actionid= 0;
+        }
+        else if($action == 'DeleteVendor')
+        {
+                $actionid= 1;
+        }
+
+				
 	return $actionid;
 }
 

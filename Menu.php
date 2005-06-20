@@ -23,6 +23,7 @@
 global $mod_strings;
 global $app_strings;
 global $moduleList;
+//print_r($moduleList);
 require_once('include/utils.php');
 $permissionData = $_SESSION['action_permission_set'];
 
@@ -92,10 +93,26 @@ foreach($module_menu_array as $module1 => $label)
 	{
 		$module_display = $module1;
 		$tabid = getTabid($module1);
-	}	
+	}
 
-	if(in_array($module_display, $moduleList))
+	if($module1 == 'Vendor')
 	{
+		$profile_id = $_SESSION['authenticated_user_profileid'];
+	        $tab_per_Data = getAllTabsPermission($profile_id);
+		if($tab_per_Data[$tabid] == 0)
+		{
+			if($permissionData[$tabid][1] ==0)
+			{
+				$tempArray = Array("index.php?module=".$module_display."&action=".$curr_action."&return_module=".$module_display."&return_action=".$ret_action.$add_url, $label);
+				$module_menu[$i] = $tempArray;
+				$i++;
+			}
+		}
+	
+	}
+	elseif(in_array($module_display, $moduleList))
+	{
+	
 		if($permissionData[$tabid][1] ==0)
 		{
 			$tempArray = Array("index.php?module=".$module_display."&action=".$curr_action."&return_module=".$module_display."&return_action=".$ret_action.$add_url, $label);
@@ -109,6 +126,7 @@ foreach($module_menu_array as $module1 => $label)
 			$module_menu[$i] = $tempArray;
 			$i++;
 	}
+	
 }
 
 
