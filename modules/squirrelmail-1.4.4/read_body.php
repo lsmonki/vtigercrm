@@ -30,7 +30,8 @@ require_once(SM_PATH . 'functions/date.php');
 require_once(SM_PATH . 'functions/url_parser.php');
 require_once(SM_PATH . 'functions/html.php');
 require_once(SM_PATH . 'functions/global.php');
-
+global $msgData ;
+$msgData='';
 /**
  * Given an IMAP message id number, this will look it up in the cached
  * and sorted msgs array and return the index. Used for finding the next
@@ -494,6 +495,7 @@ function formatEnvheader($mailbox, $passed_id, $passed_ent_id, $message,
 }
 
 function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_response) {
+	global $msgData;
     global $base_uri, $draft_folder, $where, $what, $color, $sort,
            $startMessage, $PHP_SELF, $save_as_draft,
            $enable_forward_as_attachment;
@@ -536,14 +538,17 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
                 (isset($passed_ent_id)?'&amp;passed_ent_id='.urlencode($passed_ent_id):'');
 */
 
-
+/*
 		$comp_uri = 'compose' .
 		'&passed_id=' . $passed_id .
 		'&amp;mailbox=' . $urlMailbox .
 		'&amp;startMessage=' . $startMessage .
+*/		(isset($passed_ent_id)?'&amp;passed_ent_id='.urlencode($passed_ent_id):'');
+
+		$modifiedcomp_uri='&passed_id=' . $passed_id .
+		'&amp;mailbox=' . $urlMailbox .
+		'&amp;startMessage=' . $startMessage .
 		(isset($passed_ent_id)?'&amp;passed_ent_id='.urlencode($passed_ent_id):'');
-
-
 
 
 
@@ -631,17 +636,21 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
 
     if ($enable_forward_as_attachment) {
         $comp_action_uri = $comp_uri . '&amp;smaction=forward_as_attachment';
-        $s .= $topbar_delimiter;
+    //    $s .= $topbar_delimiter;
      //   $s .= makeComposeLink($comp_action_uri, _("Forward as Attachment"));
     }
 
     $comp_action_uri = $comp_uri . '&amp;smaction=reply';
+    //$s .= $topbar_delimiter;
+   // echo $comp_action_uri;
+    //$s .= makeComposeLink($comp_action_uri, _("Reply"));
+    $s .= "<a href=index.php?module=Emails&action=EditView".$modifiedcomp_uri."&body=".$msgData.'>Reply</a>';
+    // echo $string;
+    
+    $comp_action_uri = $modifiedcomp_uri . '&amp;smaction=reply_all';
     $s .= $topbar_delimiter;
-    $s .= makeComposeLink($comp_action_uri, _("Reply"));
-
-    $comp_action_uri = $comp_uri . '&amp;smaction=reply_all';
-    $s .= $topbar_delimiter;
-    $s .= makeComposeLink($comp_action_uri, _("Reply All"));
+    //$s .= makeComposeLink($comp_action_uri, _("Reply All"));
+    $s .= "<a href=index.php?module=Emails&action=EditView".$msgData.$modifiedcomp_uri."&body=".$msgData.'>Reply All</a>';
     $s .= '</small></td></tr></table>';
     $ret = concat_hook_function('read_body_menu_top', $s);
     if($ret != '') {
@@ -834,6 +843,7 @@ if ($show_html_default == 1) {
 $cnt = count($ent_ar);
 for ($i = 0; $i < $cnt; $i++) {
    $messagebody .= formatBody($imapConnection, $message, $color, $wrap_at, $ent_ar[$i], $passed_id, $mailbox);
+       $msgData = $messagebody;
    if ($i != $cnt-1) {
        $messagebody .= '<hr noshade size=1>';
    }
