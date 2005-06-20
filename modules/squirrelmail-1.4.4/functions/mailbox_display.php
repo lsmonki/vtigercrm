@@ -735,7 +735,8 @@ function mail_message_listing_beginning ($imapConnection,
     echo getButton('SUBMIT', 'markUnread',_("Unread"));
     echo getButton('SUBMIT', 'delete',_("Delete")) ."&nbsp;\n";
     if (!strpos($php_self,'mailbox')) {
-        $location = $php_self.'?mailbox=INBOX&amp;startMessage=1';
+            //important fix else it gives Warning error while changing message to Read/Unread/Delete cases
+        $location = $php_self.'&mailbox=INBOX&amp;startMessage=1';
     } else {
         $location = $php_self;
     }
@@ -919,7 +920,7 @@ function get_selectall_link($start_msg, $sort) {
             $result .= "<a href=\"$PHP_SELF&amp;mailbox=" . urlencode($mailbox)
                     .  "&amp;startMessage=$start_msg&amp;sort=$sort&amp;checkall=";
         } else {
-            $result .= "<a href=\"$PHP_SELF?mailbox=" . urlencode($mailbox)
+            $result .= "<a href=\"$PHP_SELF&mailbox=" . urlencode($mailbox)
                     .  "&amp;startMessage=$start_msg&amp;sort=$sort&amp;checkall=";
         }
         if (isset($checkall) && $checkall == '1') {
@@ -970,7 +971,7 @@ function get_msgcnt_str($start_msg, $end_msg, $num_msgs) {
 function get_paginator_link($box, $start_msg, $use, $text) {
     global $PHP_SELF;
 
-    $result = "<A HREF=\"right_main.php?use_mailbox_cache=$use"
+    $result = "<A HREF=\"index.php?module=squirrelmail-1.4.4&action=right_main.php&use_mailbox_cache=$use"
             . "&amp;startMessage=$start_msg&amp;mailbox=$box\" "
             . ">$text</A>";
     return ($result);
@@ -1154,14 +1155,14 @@ function get_paginator_str($box, $start_msg, $end_msg, $num_msgs,
             }
         }
     } else if ($PG_SHOWNUM == 999999) {
-        $pg_str = "<A HREF=\"right_main.php?PG_SHOWALL=0"
+        $pg_str = "<A HREF=\"index.php?module=squirrelmail-1.4.4&action=right_main.php&PG_SHOWALL=0"
                 . "&amp;use_mailbox_cache=$use&amp;startMessage=1&amp;mailbox=$box\" "
                 . ">" ._("Paginate") . '</A>' . $spc;
     }
 
     /* If necessary, compute the 'show all' string. */
     if (($prv_str != '') || ($nxt_str != '')) {
-        $all_str = "<A HREF=\"right_main.php?PG_SHOWALL=1"
+        $all_str = "<A HREF=\"index.php?module=squirrelmail-1.4.4&action=right_main.php&PG_SHOWALL=1"
                  . "&amp;use_mailbox_cache=$use&amp;startMessage=1&amp;mailbox=$box\" "
                  . ">" . _("Show All") . '</A>';
     }
