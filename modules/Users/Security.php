@@ -649,6 +649,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2tab values (".$profile1_id.",15,0)");
 		$this->db->query("insert into profile2tab values (".$profile1_id.",16,0)");
 		$this->db->query("insert into profile2tab values (".$profile1_id.",17,0)");
+		$this->db->query("insert into profile2tab values (".$profile1_id.",18,0)");
 		$this->db->query("insert into profile2tab values (".$profile1_id.",20,0)");
 		$this->db->query("insert into profile2tab values (".$profile1_id.",21,0)");
 		$this->db->query("insert into profile2tab values (".$profile1_id.",23,0)");
@@ -670,6 +671,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2tab values (".$profile2_id.",15,0)");
 		$this->db->query("insert into profile2tab values (".$profile2_id.",16,0)");
 		$this->db->query("insert into profile2tab values (".$profile2_id.",17,0)");
+		$this->db->query("insert into profile2tab values (".$profile2_id.",18,0)");
 		$this->db->query("insert into profile2tab values (".$profile2_id.",20,0)");
 		$this->db->query("insert into profile2tab values (".$profile2_id.",21,0)");
 		$this->db->query("insert into profile2tab values (".$profile2_id.",23,0)");
@@ -690,6 +692,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2tab values (".$profile3_id.",15,0)");
 		$this->db->query("insert into profile2tab values (".$profile3_id.",16,0)");
 		$this->db->query("insert into profile2tab values (".$profile3_id.",17,0)");
+		$this->db->query("insert into profile2tab values (".$profile3_id.",18,0)");
 		$this->db->query("insert into profile2tab values (".$profile3_id.",20,0)");
 		$this->db->query("insert into profile2tab values (".$profile3_id.",21,0)");
 		$this->db->query("insert into profile2tab values (".$profile3_id.",23,0)");
@@ -710,6 +713,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2tab values (".$profile4_id.",15,0)");
 		$this->db->query("insert into profile2tab values (".$profile4_id.",16,0)");	
 		$this->db->query("insert into profile2tab values (".$profile4_id.",17,0)");
+		$this->db->query("insert into profile2tab values (".$profile4_id.",18,0)");
 		$this->db->query("insert into profile2tab values (".$profile4_id.",20,0)");
 		$this->db->query("insert into profile2tab values (".$profile4_id.",21,0)");
 		$this->db->query("insert into profile2tab values (".$profile4_id.",23,0)");
@@ -795,6 +799,12 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",16,2,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",16,3,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",16,4,0)");
+
+		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",18,0,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",18,1,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",18,2,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",18,3,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",18,4,0)");
 
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",20,0,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile1_id.",20,1,0)");
@@ -897,6 +907,12 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",16,3,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",16,4,0)");
 
+		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",18,0,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",18,1,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",18,2,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",18,3,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",18,4,0)");
+
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",20,0,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",20,1,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile2_id.",20,2,0)");
@@ -997,6 +1013,12 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",16,3,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",16,4,0)");
 
+		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",18,0,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",18,1,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",18,2,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",18,3,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",18,4,0)");
+
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",20,0,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",20,1,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile3_id.",20,2,0)");
@@ -1096,6 +1118,12 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",16,2,1)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",16,3,0)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",16,4,0)");
+
+		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",18,0,1)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",18,1,1)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",18,2,1)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",18,3,0)");
+		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",18,4,0)");	
 
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",20,0,1)");
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",20,1,1)");
@@ -1212,7 +1240,8 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
                 $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",13,2)");
                 $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",14,2)");
                 $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",15,2)");
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",16,2)");		
+                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",16,2)");
+                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",18,2)");		
                 $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",20,2)");			
                 $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",21,2)");			
                 $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",23,2)");			
