@@ -875,7 +875,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	{
 		if($value=='')
                 {
-                        $disp_value=getNewDisplayDate();
+			if($fieldname != 'birthday')
+                        	$disp_value=getNewDisplayDate();
                 }
                 else
                 {
