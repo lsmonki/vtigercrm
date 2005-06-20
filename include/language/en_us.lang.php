@@ -663,6 +663,9 @@ $app_strings = Array(
 'COMBO_ACCOUNTS'=>'Accounts',
 'LNK_NEW_FAQ'=>'New Faq',
 'Vendor Name'=>'Vendor Name',
+'LNK_WEARE'=>'We are?',
+'LBL_ABOUTUS_TITLE'=>'vtiger CRM - About Us',
+'LBL_DISCUSS'=>'Discuss with other users',
 
 );
 
