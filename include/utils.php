@@ -944,6 +944,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 19)
 	{
+		if(isset($_REQUEST['body']))
+			{
+				$value = ($_REQUEST['body']);
+			}
+
 		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
         	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" cols="70" rows="8">'.$value.'</textarea></td>';
 	}
