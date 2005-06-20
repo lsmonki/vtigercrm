@@ -20,7 +20,7 @@
 //define('SM_PATH','../');
 define('SM_PATH','modules/squirrelmail-1.4.4/');
 /* SquirrelMail required files. */
-echo "<li><a href='index.php?module=squirrelmail-1.4.4&action=redirect'>INBOX</a></li>";
+echo "<li><a href='index.php?module=squirrelmail-1.4.4&action=redirect'>Inbox</a></li>";
 //echo 'in read body';
 require_once(SM_PATH . 'include/validate.php');
 require_once(SM_PATH . 'functions/global.php');
@@ -536,17 +536,14 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
                 (isset($passed_ent_id)?'&amp;passed_ent_id='.urlencode($passed_ent_id):'');
 */
 
-/*
+
 		$comp_uri = 'compose' .
 		'&passed_id=' . $passed_id .
 		'&amp;mailbox=' . $urlMailbox .
 		'&amp;startMessage=' . $startMessage .
-*/		(isset($passed_ent_id)?'&amp;passed_ent_id='.urlencode($passed_ent_id):'');
-
-		$modifiedcomp_uri='&passed_id=' . $passed_id .
-		'&amp;mailbox=' . $urlMailbox .
-		'&amp;startMessage=' . $startMessage .
 		(isset($passed_ent_id)?'&amp;passed_ent_id='.urlencode($passed_ent_id):'');
+
+
 
 
 
@@ -640,15 +637,11 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
 
     $comp_action_uri = $comp_uri . '&amp;smaction=reply';
     $s .= $topbar_delimiter;
-   // echo $comp_action_uri;
-    //$s .= makeComposeLink($comp_action_uri, _("Reply"));
-    $s .= "<a href=index.php?module=Emails&action=EditView".$modifiedcomp_uri.'>Reply</a>';
-    // echo $string;
-    
-    $comp_action_uri = $modifiedcomp_uri . '&amp;smaction=reply_all';
+    $s .= makeComposeLink($comp_action_uri, _("Reply"));
+
+    $comp_action_uri = $comp_uri . '&amp;smaction=reply_all';
     $s .= $topbar_delimiter;
-    //$s .= makeComposeLink($comp_action_uri, _("Reply All"));
-    $s .= "<a href=index.php?module=Emails&action=EditView".$modifiedcomp_uri.'>Reply All</a>';
+    $s .= makeComposeLink($comp_action_uri, _("Reply All"));
     $s .= '</small></td></tr></table>';
     $ret = concat_hook_function('read_body_menu_top', $s);
     if($ret != '') {
