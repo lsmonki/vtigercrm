@@ -703,12 +703,12 @@ function isPermitted($module,$actionid,$record_id)
 	                        //echo '<BR>';	
 				$permission = 'yes';
 				$rec_owner_id = '';
-				if($record_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq')
+				if($record_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $module != 'Vendor'  && $module != 'PriceBook')
 				{
 					$rec_owner_id = getUserId($record_id);
 				}
 
-				if($record_id != '' && $others_permission_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $rec_owner_id != 0)
+				if($record_id != '' && $others_permission_id != '' && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $module != 'Vendor' && $module != 'PriceBook' && $rec_owner_id != 0)
 				{
 					//echo "inside other permission success";
                                 	//echo '<BR>';
