@@ -838,7 +838,7 @@ function printHeader($mailbox, $sort, $color, $showsort=true) {
             echo "</td>\n";
             break;
         case 3: /* date */
-            echo html_tag( 'td' ,'' , 'left', '', 'width="45%" nowrap' )
+            echo html_tag( 'td' ,'' , 'center', '', 'width="45%" nowrap' )
                  . '<b>' . _("Date") . '</b>';
             if ($showsort) {
                 ShowSortButton($sort, $mailbox, 0, 1);
