@@ -95,7 +95,7 @@ foreach($module_menu_array as $module1 => $label)
 		$tabid = getTabid($module1);
 	}
 
-	if($module1 == 'Vendor')
+	if($module1 == 'Vendor' || $module1 == 'PriceBook')
 	{
 		$profile_id = $_SESSION['authenticated_user_profileid'];
 	        $tab_per_Data = getAllTabsPermission($profile_id);
