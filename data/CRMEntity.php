@@ -90,7 +90,11 @@ class CRMEntity extends SugarBean
       }
       elseif($table_name == "recurringevents")
       {
-	      $this->insertIntoRecurringTable($table_name,$module);
+		$recur_type = trim($_REQUEST['recurringtype']);
+		if($recur_type != "--None--")
+	      	{		   
+	      		$this->insertIntoRecurringTable($table_name,$module);
+		}		
       }
       else
       {
@@ -668,12 +672,16 @@ function insertIntoRecurringTable($table_name,$module)
 		{
 			if($_REQUEST['set_reminder'] == 'Yes')
 			{
-				$this->activity_reminder($activity_id,'0',0,'delete');
+				$sql = 'delete from activity_reminder where activity_id='.$activity_id;
+				$adb->query($sql);
+				$sql = 'delete  from recurringevents where activityid='.$activity_id;
+				$adb->query($sql);
 				$flag="true";
 			}
 			elseif($_REQUEST['set_reminder'] == 'No')
 			{
-				$this->activity_reminder($activity_id,'0',0,'delete');
+				$sql = 'delete  from activity_reminder where activity_id='.$activity_id;
+				$adb->query($sql);
 				$flag="false";
 			}
 		}
@@ -681,7 +689,6 @@ function insertIntoRecurringTable($table_name,$module)
 		{
 			$sql = 'delete from activity_reminder where activity_id='.$activity_id;
 			$adb->query($sql);
-
 			$sql = 'delete  from recurringevents where activityid='.$activity_id;
 			$adb->query($sql);
 		}
@@ -718,19 +725,25 @@ function insertIntoRecurringTable($table_name,$module)
 				$tdate=$date_array[$k];
 				if($tdate <= $end_date)
 				{
-					$current_id = $adb->getUniqueID("recurringevents");
+					$max_recurid_qry = 'select max(recurringid) recurid  from recurringevents;';
+					$result = $adb->query($max_recurid_qry);
+					$noofrows = $adb->num_rows($result);
+					for($i=0; $i<$noofrows; $i++)
+					{
+						$recur_id = $adb->query_result($result,$i,"recurid");
+					}
+					$current_id =$recur_id+1;
 					$recurring_insert = 'insert into recurringevents values ("'.$current_id.'","'.$this->id.'","'.$tdate.'","'.$type.'")';
-						$adb->query($recurring_insert);
+					$adb->query($recurring_insert);
 					if($_REQUEST['set_reminder'] == 'Yes')
 					{
-						$this->insertIntoReminderTable("activity_reminder",$module,$current_id);
+						$this->insertIntoReminderTable("activity_reminder",$module,$current_id,'');
 					}
 				}
 			}
 		}
 	}
 }
-
 
 	
   function retrieve_entity_info($record, $module)
