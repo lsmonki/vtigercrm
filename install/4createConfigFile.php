@@ -44,12 +44,10 @@ session_start();
 
 
 
-// Sugar Sales version number; do not edit!
+// vtiger CRM version number; do not edit!
 
 $vtiger_version = "4.2 Alpha";
-
-
-
+$release_date = "30 Jun 2005";
 
 
 if (isset($_REQUEST['db_host_name'])) 	$db_host_name = 	$_REQUEST['db_host_name'];
@@ -213,6 +211,7 @@ $config .= " * Contributor(s): ______________________________________.\n";
 $config .= "********************************************************************************/\n\n";
 
 $config .= "\$vtiger_version = '".$vtiger_version."';\n\n";
+$config .= "\$release_date = '".$release_date."';\n\n";
 
 $config .= "//World clock & Calculator will be displayed if these variables are 'true' otherwise will not be displayed.\n";
 $config .= "\$WORLD_CLOCK_DISPLAY = 'true';\n";
