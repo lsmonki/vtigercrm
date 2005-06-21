@@ -74,7 +74,7 @@ ECHO;
 
 function makeInternalLink($path, $text, $target='') {
 //Richie
-//	    echo 'PHdrInL   ';
+	    //echo 'PHdrInL  base uri is ';
     sqgetGlobalVar('base_uri', $base_uri, SQ_SESSION);
     if ($target != '') 
     {
@@ -106,10 +106,10 @@ function displayPageHeader($color, $mailbox, $xtra='', $session=false) {
     }
     if ($session) {
         //$compose_uri = $base_uri.'src/compose.php?mailbox='.urlencode($mailbox).'&amp;attachedmessages=true&amp;session='."$session";
-        $compose_uri = 'index.php?module=squirrelmail-1.4.4&action=compose?mailbox='.urlencode($mailbox).'&amp;attachedmessages=true&amp;session='."$session";
+        $compose_uri = 'index.php?module=squirrelmail-1.4.4&action=compose&mailbox='.urlencode($mailbox).'&amp;attachedmessages=true&amp;session='."$session";
     } else {
         //$compose_uri = $base_uri.'src/compose.php?newmessage=1';
-        $compose_uri = 'index.php?module=squirrelmail-1.4.4&action=compose?newmessage=1';
+        $compose_uri = 'index.php?module=squirrelmail-1.4.4&action=compose&newmessage=1';
         $session = 0;
     }
 
@@ -119,7 +119,6 @@ function displayPageHeader($color, $mailbox, $xtra='', $session=false) {
         switch ( $module ) {
         case 'read_body.php':
             $js ='';
-echo '7777777777777777';
             // compose in new window code
             if ($compose_new_win == '1') {
                 if (!preg_match("/^[0-9]{3,4}$/", $compose_width)) {
@@ -286,9 +285,9 @@ echo '7777777777777777';
     //displayInternalLink ('addressbook', _("Addresses"));
     //echo "&nbsp;&nbsp;\n";
     //displayInternalLink ('folders', _("Folders"));
-    //echo "&nbsp;&nbsp;\n";
-    //displayInternalLink ('options', _("Options"));
-    //echo "&nbsp;&nbsp;\n";
+    echo "&nbsp;&nbsp;\n";
+    displayInternalLink ('options', _("Options"));
+    echo "&nbsp;&nbsp;\n";
     //displayInternalLink ("search?mailbox=$urlMailbox", _("Search"));
     echo "&nbsp;&nbsp;\n";
     //displayInternalLink ('help', _("Help"));
