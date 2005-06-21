@@ -117,7 +117,7 @@ if (isset($theid) && ($theaction == 'delete') ||
 echo
 html_tag( 'table', "\n" .
     html_tag( 'tr', "\n" .
-        html_tag( 'td', '<center><b>' . _("Options") . ' - ' . _("Message Highlighting") . '</b></center>', 'left')
+        html_tag( 'td', '<center><b>' . _("Options") . ' - ' . _("Message Highlighting") . '</b></center>', 'center')
    ),
    'center', $color[9], 'width="95%" border="0" cellpadding="1" cellspacing="0"' ) . "<br />\n" .
 html_tag( 'table', '', '', '', 'width="100%" border="0" cellpadding="1" cellspacing="0"' ) . 
@@ -465,6 +465,6 @@ echo 'theaction is '.$theaction .'  theid is '.$theid .'  msghighlightlist is  '
     echo '<center><input type="submit" value="' . _("Submit") . "\" /></center>\n";
     echo "</form>\n";
 }
-//do_hook('options_highlight_bottom');
+do_hook('options_highlight_bottom');
 ?>
 </table></body></html>
