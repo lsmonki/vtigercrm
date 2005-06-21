@@ -181,7 +181,6 @@ if ($mhl_count > 0) {
         "<br />\n";
 }
 if ($theaction == 'edit' || $theaction == 'add') {
-echo '>>>>>>>>>>>>>>>>>  edit/add invoked';
 
     $color_list[0] = '4444aa';
     $color_list[1] = '44aa44';
