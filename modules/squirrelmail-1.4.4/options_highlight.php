@@ -37,8 +37,8 @@ sqGetGlobalVar('color_type', $color_type);
 sqGetGlobalVar('match_type', $match_type);
 sqGetGlobalVar('value', $value);
 
+
 //Richie
-echo '<br> the 1 '.$theaction;
 /* end of get globals */
  
 function oh_opt( $val, $sel, $tit ) {
@@ -48,7 +48,6 @@ function oh_opt( $val, $sel, $tit ) {
     echo  ">$tit</option>\n";
 }
 //Richie
-echo '<br>  the 2 '.$theaction;
 if (!isset($theaction)) {
     $theaction = '';
 }
@@ -61,13 +60,8 @@ if (isset($theid) && ($theaction == 'delete') ||
     $new_rules = array();
     switch($theaction) {
         case('delete'):
-          echo '<br>delete selected';
             foreach($message_highlight_list as $rid => $rule)
 	    {
-		    echo ' the rid is '.$rid;
-		    echo ' the theid is '.$theid;
-		    echo ' the rule is '.$rule;
-		    print_r($rule);
                  if($rid != $theid)
 		 {
                     $new_rules[] = $rule;
@@ -77,15 +71,14 @@ if (isset($theid) && ($theaction == 'delete') ||
             break;
         case('down'):
             $theid++;
+//	    echo 'down called';
         case('up'):
           foreach($message_highlight_list as $rid => $rule) {
             //        echo '<br> up selected , printing theid ....... ';
-            print_r($theid);
                 if($rid == $theid) {
                   $temp_rule         = $new_rules[$rid-1];
                   $new_rules[$rid-1] = $rule;
                   $new_rules[$rid]   = $temp_rule;
-                  print_r($new_rules[$rid]);
                 } else {
                   $new_rules[$rid]   = $rule;
                   //    echo '>>>>>>>>>>>> '.$new_rules[$rid];
@@ -94,20 +87,15 @@ if (isset($theid) && ($theaction == 'delete') ||
             break;
         default:
             $new_rules = $message_highlight_list;
-            // echo 'printing in the default category <br>';
-            //print_r($new_rules);
             break;
     }
-    echo ' <br> printing the message highlight list finally <br> ';
     $message_highlight_list = $new_rules;
-    print_r($message_highlight_list); 
-    
+    //print_r($message_highlight_list);
     setPref($data_dir, $username, 'hililist', serialize($message_highlight_list));
-    header('Location: index.php?module=squirrelmail-1.4.4&action=options_highlight');
-    exit;
+    //header('Location:  index.php?module=squirrelmail-1.4.4&action=options_highlight');
+    //exit;
 } else if ($theaction == 'save') {
 	//Richie
-  echo ' ----------------- ';
     if ($color_type == 1) $newcolor = $newcolor_choose;
     elseif ($color_type == 2) $newcolor = $newcolor_input;
     else $newcolor = $color_type;
@@ -116,34 +104,29 @@ if (isset($theid) && ($theaction == 'delete') ||
     $newcolor = str_replace('"', '', $newcolor);
     $newcolor = str_replace('\'', '', $newcolor);
     $value = str_replace(',', ' ', $value);
-    echo 'value >>>>>>>>>>> '.$value;
+    //invoked only during Edit
     if(isset($theid))
     {
-      $message_highlight_list[$theid] = 
-        array( 'name' => $identname, 'color' => $newcolor,
-               'value' => $value, 'match_type' => $match_type );
+      $message_highlight_list[$theid] = array( 'name' => $identname, 'color' => $newcolor, 'value' => $value, 'match_type' => $match_type );
     } else {
-      $message_highlight_list[] = 
-            array( 'name' => $identname, 'color' => $newcolor,
-                   'value' => $value, 'match_type' => $match_type );
+      $message_highlight_list[] =   array( 'name' => $identname, 'color' => $newcolor, 'value' => $value, 'match_type' => $match_type );
     }
     setPref($data_dir, $username, 'hililist', serialize($message_highlight_list));
 }
-displayPageHeader($color, 'None');
+//displayPageHeader($color, 'None');
 echo
 html_tag( 'table', "\n" .
     html_tag( 'tr', "\n" .
         html_tag( 'td', '<center><b>' . _("Options") . ' - ' . _("Message Highlighting") . '</b></center>', 'left')
-    ),
-    'center', $color[9], 'width="95%" border="0" cellpadding="1" cellspacing="0"' ) . "<br />\n" .
+   ),
+   'center', $color[9], 'width="95%" border="0" cellpadding="1" cellspacing="0"' ) . "<br />\n" .
 html_tag( 'table', '', '', '', 'width="100%" border="0" cellpadding="1" cellspacing="0"' ) . 
-     html_tag( 'tr' ) . "\n" .
-         html_tag( 'td', '', 'left' );
+    html_tag( 'tr' ) . "\n" .
+        html_tag( 'td', '', 'left' );
 
 echo '<center>[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=add">' . _("New") . '</a>]'.
         ' - [<a href="index.php?module=squirrelmail-1.4.4&action=options">'._("Done").'</a>]</center><br />'."\n";
 $mhl_count = count($message_highlight_list);
-echo '+++++++++++         '.$mhl_count;
 if ($mhl_count > 0) {
     echo html_tag( 'table', '', 'center', '', 'width="80%" border="0" cellpadding="3" cellspacing="0"' ) . "\n";
     for ($i=0; $i < $mhl_count; $i++) {
@@ -198,7 +181,7 @@ if ($mhl_count > 0) {
         "<br />\n";
 }
 if ($theaction == 'edit' || $theaction == 'add') {
-echo '>>>>>>>>>>>>>>>>> 66666666 ';
+echo '>>>>>>>>>>>>>>>>>  edit/add invoked';
 
     $color_list[0] = '4444aa';
     $color_list[1] = '44aa44';
@@ -345,10 +328,9 @@ echo '>>>>>>>>>>>>>>>>> 66666666 ';
         ${"selected".$i} = '';
     }
     if ($theaction == 'edit' && isset($theid) && isset($message_highlight_list[$theid]['color'])) {
-
+echo 'theaction is '.$theaction .'  theid is '.$theid .'  msghighlightlist is  ' .$message_highlight_list[$theid]['color'];
         for ($i=0; $i < 14; $i++) {
             if ($color_list[$i] == $message_highlight_list[$theid]['color']) {
-		    echo 'sssssssssss';
                 $selected_choose = TRUE;
                 $selected_i = $color_list[$i];
                 continue;
@@ -357,7 +339,6 @@ echo '>>>>>>>>>>>>>>>>> 66666666 ';
     }
 
     if ($theaction == 'edit' && isset($theid) && isset($message_highlight_list[$theid]['color'])) {
-		    echo 'xxxxxxxsssssssssss';
         $current_color = $message_highlight_list[$theid]['color'];
     }
     else {
@@ -485,6 +466,6 @@ echo '>>>>>>>>>>>>>>>>> 66666666 ';
     echo '<center><input type="submit" value="' . _("Submit") . "\" /></center>\n";
     echo "</form>\n";
 }
-do_hook('options_highlight_bottom');
+//do_hook('options_highlight_bottom');
 ?>
 </table></body></html>
