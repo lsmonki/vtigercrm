@@ -892,7 +892,16 @@ function get_KBase_details($id='')
 {
 	global $adb;
 
-	$product_query = "select * from products";
+	$category_query = "select * from faqcategories";
+	$category_result = $adb->query($category_query);
+	$category_noofrows = $adb->num_rows($category_result);
+	for($j=0;$j<$category_noofrows;$j++)
+	{
+		$faqcategory = $adb->query_result($category_result,$j,'faqcategories');
+		$result['faqcategory'][$j] = $faqcategory;
+	}
+
+	$product_query = "select * from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0";
         $product_result = $adb->query($product_query);
         $product_noofrows = $adb->num_rows($product_result);
         for($i=0;$i<$product_noofrows;$i++)
@@ -901,14 +910,6 @@ function get_KBase_details($id='')
                 $productname = $adb->query_result($product_result,$i,'productname');
                 $result['product'][$i]['productid'] = $productid;
                 $result['product'][$i]['productname'] = $productname;
-	}
-	$category_query = "select * from faqcategories";
-	$category_result = $adb->query($category_query);
-	$category_noofrows = $adb->num_rows($category_result);
-	for($j=0;$j<$category_noofrows;$j++)
-	{
-		$faqcategory = $adb->query_result($category_result,$j,'faqcategories');
-		$result['faqcategory'][$j] = $faqcategory;
 	}
 
 	$faq_query = "select faq.*, crmentity.createdtime, crmentity.modifiedtime from faq inner join crmentity on crmentity.crmid=faq.id where crmentity.deleted=0 order by crmentity.modifiedtime DESC";
@@ -919,8 +920,8 @@ function get_KBase_details($id='')
 		$faqid = $adb->query_result($faq_result,$k,'id');
 		$result['faq'][$k]['id'] = $faqid;
 		$result['faq'][$k]['product_id']  = $adb->query_result($faq_result,$k,'product_id');
-		$result['faq'][$k]['question'] =  $adb->query_result($faq_result,$k,'question');
-		$result['faq'][$k]['answer'] = $adb->query_result($faq_result,$k,'answer');
+		$result['faq'][$k]['question'] =  nl2br($adb->query_result($faq_result,$k,'question'));
+		$result['faq'][$k]['answer'] = nl2br($adb->query_result($faq_result,$k,'answer'));
 		$result['faq'][$k]['category'] = $adb->query_result($faq_result,$k,'category');
 		$result['faq'][$k]['faqcreatedtime'] = $adb->query_result($faq_result,$k,'createdtime');
 		$result['faq'][$k]['faqmodifiedtime'] = $adb->query_result($faq_result,$k,'modifiedtime');
@@ -930,7 +931,7 @@ function get_KBase_details($id='')
 		$faq_comment_noofrows = $adb->num_rows($faq_comment_result);
 		for($l=0;$l<$faq_comment_noofrows;$l++)
 		{
-			$faqcomments = $adb->query_result($faq_comment_result,$l,'comments');
+			$faqcomments = nl2br($adb->query_result($faq_comment_result,$l,'comments'));
 			$faqcreatedtime = $adb->query_result($faq_comment_result,$l,'createdtime');
 			if($faqcomments != '')
 			{
