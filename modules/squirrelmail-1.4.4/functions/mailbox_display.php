@@ -188,6 +188,7 @@ function printMessageInfo($imapConnection, $t, $not_last=true, $key, $mailbox,
     $subject = str_replace('&nbsp;',' ',$subject);
     if (sizeof($index_order)) {
         foreach ($index_order as $index_order_part) {
+                echo 'xxxxxxxxxxxxxxxxxxxxxxxx';
             switch ($index_order_part) {
             case 1: /* checkbox */
                 echo html_tag( 'td',
@@ -369,6 +370,7 @@ function getSelfSortMessages($imapConnection, $start_msg, $show_num,
 function showMessagesForMailbox($imapConnection, $mailbox, $num_msgs,
                                 $start_msg, $sort, $color, $show_num,
                                 $use_cache, $mode='') {
+                                        echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
     global $msgs, $msort, $auto_expunge, $thread_sort_messages,
            $allow_server_sort, $server_sort_order;
 
@@ -884,7 +886,7 @@ function ShowSortButton($sort, $mailbox, $Up, $Down ) {
     } else {
         $source_url = $PHP_SELF;
     }
-
+echo '>>>>>>>>>>> source url is '.$source_url;
     /* Now that we have everything figured out, show the actual button. */
     echo ' <a href="' . $source_url .'?newsort=' . $which
          . '&amp;startMessage=1&amp;mailbox=' . urlencode($mailbox)
@@ -971,7 +973,7 @@ function get_msgcnt_str($start_msg, $end_msg, $num_msgs) {
 function get_paginator_link($box, $start_msg, $use, $text) {
     global $PHP_SELF;
 
-    $result = "<A HREF=\"index.php?module=squirrelmail-1.4.4&action=right_main.php&use_mailbox_cache=$use"
+    $result = "<A HREF=\"index.php?module=squirrelmail-1.4.4&action=right_main&use_mailbox_cache=$use"
             . "&amp;startMessage=$start_msg&amp;mailbox=$box\" "
             . ">$text</A>";
     return ($result);
@@ -1155,14 +1157,14 @@ function get_paginator_str($box, $start_msg, $end_msg, $num_msgs,
             }
         }
     } else if ($PG_SHOWNUM == 999999) {
-        $pg_str = "<A HREF=\"index.php?module=squirrelmail-1.4.4&action=right_main.php&PG_SHOWALL=0"
+        $pg_str = "<A HREF=\"index.php?module=squirrelmail-1.4.4&action=right_main&PG_SHOWALL=0"
                 . "&amp;use_mailbox_cache=$use&amp;startMessage=1&amp;mailbox=$box\" "
                 . ">" ._("Paginate") . '</A>' . $spc;
     }
 
     /* If necessary, compute the 'show all' string. */
     if (($prv_str != '') || ($nxt_str != '')) {
-        $all_str = "<A HREF=\"index.php?module=squirrelmail-1.4.4&action=right_main.php&PG_SHOWALL=1"
+        $all_str = "<A HREF=\"index.php?module=squirrelmail-1.4.4&action=right_main&PG_SHOWALL=1"
                  . "&amp;use_mailbox_cache=$use&amp;startMessage=1&amp;mailbox=$box\" "
                  . ">" . _("Show All") . '</A>';
     }
