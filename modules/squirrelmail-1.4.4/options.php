@@ -274,7 +274,7 @@ if ($optmode == SMOPT_MODE_SUBMIT) {
 /* Finally, display whatever page we are supposed to show now. */
 /***************************************************************/
 
-displayPageHeader($color, 'None', (isset($optpage_data['xtra']) ? $optpage_data['xtra'] : ''));
+//displayPageHeader($color, 'None', (isset($optpage_data['xtra']) ? $optpage_data['xtra'] : ''));
 
 echo html_tag( 'table', '', 'center', $color[0], 'width="95%" cellpadding="1" cellspacing="0" border="0"' ) . "\n" .
         html_tag( 'tr' ) . "\n" .
