@@ -85,6 +85,8 @@ require_once('modules/Users/UserInfoUtil.php');
 $mailInfo = getMailServerInfo($current_user);
 $temprow = $adb->fetch_array($mailInfo);
 $secretkey=$temprow["mail_password"];
+$imapServerAddress=$temprow["mail_servername"];
+
 /* end of get globals */
 //$secretkey="p1";
     $key = OneTimePadEncrypt($secretkey, $onetimepad);
