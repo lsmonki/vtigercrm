@@ -58,7 +58,23 @@ function fetchPermissionData($module,$action)
 	global $profile_id;
 
 	require_once('modules/Users/UserInfoUtil.php');
-	$tabid = getTabid($module);
+	//Changing the tabid if the module is vendor,pricebook or salesorder
+        if($action == 'VendorEditView' || $action == 'VendorDetailView' || $action == 'DeleteVendor' || $action == 'SaveVendor')
+        {
+                $tabid = getTabid('Vendor');
+        }
+        elseif($action == 'PriceBookEditView' || $action == 'PriceBookDetailView' || $action == 'DeletePriceBook' || $action == 'SavePriceBook')
+        {
+                $tabid = getTabid('PriceBook');
+        }
+        elseif($action == 'SalesOrderEditView' || $action == 'SalesOrderDetailView' || $action == 'DeleteSalesOrder' || $action == 'SaveSalesOrder')
+        {
+                $tabid = getTabid('SalesOrder');
+        }
+        else
+        {
+		$tabid = getTabid($module);
+	}
 	//echo 'tab id isss  '.$tabid;
 	//echo '<BR>';
 
