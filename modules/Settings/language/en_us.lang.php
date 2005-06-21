@@ -467,6 +467,10 @@ $mod_strings = Array(
 'LBL_FAQ_CATEGORY'=>'FAQ Category',
 'LBL_VENDOR_FIELD_ACCESS'=>'Vendor Field Access',
 'LBL_PB_FIELD_ACCESS'=>'PriceBook Field Access',
+'LBL_QUOTE_FIELD_ACCESS'=>'Quote Field Access',
+'LBL_PO_FIELD_ACCESS'=>'Purchase Order Field Access',
+'LBL_SO_FIELD_ACCESS'=>'Sales Order Access',
+'LBL_INVOICE_FIELD_ACCESS'=>'Invoice Field Access',
 
 );
 
