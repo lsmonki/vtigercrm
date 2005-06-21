@@ -56,7 +56,8 @@ global $mod_strings;
 
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_TITLE'], true); 
 
-$submenu = array('LBL_PO_FORM_TITLE'=>'ListView.php','LBL_SO_FORM_TITLE'=>'SalesOrderListView.php'); 
+$submenu = array('LBL_PO_FORM_TITLE'=>'ListView.php','LBL_SO_FORM_TITLE'=>'SalesOrderListView.php');
+$sec_arr = array('ListView.php'=>'Orders','SalesOrderListView.php'=>'SalesOrder'); 
 echo "\n<BR>\n";
 ?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -74,21 +75,37 @@ echo "\n<BR>\n";
 		$classname = "tabOn";
 	}
 	$listView = "ListView.php";
+	$profile_id = $_SESSION['authenticated_user_profileid'];
+        $tab_per_Data = getAllTabsPermission($profile_id);
+        $permissionData = $_SESSION['action_permission_set'];
 	foreach($submenu as $label=>$filename)
-	{
-		list($lbl,$sname,$title)=split("_",$label);
-		if(stristr($label,$_REQUEST['smodule']))
-		{
-			echo '<td class="tabOn" nowrap><a href="index.php?module=Orders&action=index&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
-			$listView = $filename;
-			$classname = "tabOff";
-		}
-		else
-		{
-			echo '<td class="'.$classname.'" nowrap><a href="index.php?module=Orders&action=index&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
-		}
-		$classname = "tabOff";
-	}
+        {
+                $cur_mod = $sec_arr[$filename];
+                $cur_tabid = getTabid($cur_mod);
+
+                if($tab_per_Data[$cur_tabid] == 0)
+                {
+
+                        if($permissionData[$cur_tabid][3] ==0)
+                        {
+                                list($lbl,$sname,$title)=split("_",$label);
+                                if(stristr($label,$_REQUEST['smodule']))
+                                {
+                                        echo '<td class="tabOn" nowrap><a href="index.php?module=Orders&action=index&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';
+                                        $listView = $filename;
+                                        $classname = "tabOff";
+                                }
+                                else
+                                {
+                                        echo '<td class="'.$classname.'" nowrap><a href="index.php?module=Orders&action=index&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';
+                                }
+                                $classname = "tabOff";
+                        }
+
+                }
+
+        }
+	
 ?>
      <td width="100%" class="tabEnd">&nbsp;</td>
    </tr>
