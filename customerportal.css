@@ -9,7 +9,7 @@
  ********************************************************************************/
 
 
-BODY, TD, P, DIV  { 
+BODY, TD, P, DIV, FONT, PRE  { 
 	margin: 0px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -154,4 +154,63 @@ A.tabOn:hover, A.tabOff:hover {
    margin: 2 0 2 0;
    color: #900;
    font-size:10px;
+}
+
+.kbHead {
+	font-size: 14px;
+	font-weight: bold;
+	color: #900;
+}
+.kbBand {
+	border-top: 1px solid #FFF;
+	background-color: #EAD2DD;
+	height: 15px;
+}
+.kbULine {
+	border-bottom: 1px solid #D3A3BA;
+}
+.kbNav {
+	vertical-align: top;
+	width: 22%;
+	padding: 5px 10px 5px 10px; 
+	border-right: 1px solid #EAD2DD;
+}
+.kbNavHead {
+	font-weight: bold;
+	color: #000;
+	text-decoration: none;
+}
+.kbNavHead:hover {
+	text-decoration: underline;
+}
+.kbNavLink {
+	height: 22px;
+}
+.kbNavCnt {
+	color: #666;
+}
+.kbMain {
+	vertical-align: top;
+	padding: 5px 10px 5px 10px; 
+}
+.kbFAQ {
+	color: #039;
+	font-size: 12px;
+	font-weight: bold;
+}
+.kbAnswer {
+	padding: 3px 0px 3px 0px;
+}
+.kbFAQInfo {
+	color: #888;
+	font-size: 10px;
+}
+.kbArticleInfo {
+	border: 1px solid #D8D8ED;
+	background-color: #F8F8FC;
+}
+.kbPgOptHead {
+	padding-left: 3px;
+	background-color: #D8D8ED;
+	font-weight: bold;
 }
