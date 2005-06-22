@@ -1095,6 +1095,17 @@ div.message {
 	color: black;
 	font-size: 10px;
 }
+.heldmeeting {
+	color: grey;
+	font-size: 10px;
+	text-decoration: line-through;
+}
+
+.heldmeeting a {
+	color: grey;
+	text-decoration: line-through;
+}
+
 
 /* one of 31 days in a horizontal list res_cal */
 .monthday {
