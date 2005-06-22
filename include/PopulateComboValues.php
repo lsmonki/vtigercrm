@@ -41,7 +41,7 @@ class PopulateComboValues
 	function create_tables () {
 		global $app_list_strings,$adb;
                 global $combo_strings;
-		$comboTables = Array('leadsource','accounttype','industry','leadstatus','rating','licencekeystatus','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketcategories','duration_minutes','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','activitytype','currency','faqcategories','rsscategory','usageunit','glacct','quotestage','carrier','taxclass','recurringtype');
+		$comboTables = Array('leadsource','accounttype','industry','leadstatus','rating','licencekeystatus','opportunity_type','salutationtype','sales_stage','ticketstatus','ticketpriorities','ticketseverities','ticketcategories','duration_minutes','eventstatus','taskstatus','taskpriority','manufacturer','productcategory','activitytype','currency','faqcategories','rsscategory','usageunit','glacct','quotestage','carrier','taxclass','recurringtype','faqstatus');
 
 		foreach ($comboTables as $comTab)
 		{
