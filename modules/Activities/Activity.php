@@ -70,6 +70,7 @@ class Activity extends CRMEntity {
        'Related To'=>Array('seactivityrel'=>'activityid'),
        'Start Date'=>Array('activity'=>'date_start'),
        'End Date'=>Array('activity'=>'due_date'),
+       'Recurring Type'=>Array('recurringevents'=>'recurringtype'),
        'Assigned To'=>Array('crmentity','smownerid')
        );
 
@@ -98,6 +99,7 @@ class Activity extends CRMEntity {
        'Related To'=>'activityid',
        'Start Date'=>'date_start',
        'End Date'=>'due_date',
+	'Recurring Type'=>'recurringtype',	
        'Assigned To'=>'assigned_user_id');
 
        var $list_link_field= 'subject';
@@ -129,7 +131,9 @@ class Activity extends CRMEntity {
 
         function get_users($id)
         {
-                $query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id,  users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
+               //$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id,  users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
+		$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax,activity.date_start,activity.due_date,activity.time_start,activity.duration_hours,activity.duration_minutes from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id  inner join activity on activity.activityid=salesmanactivityrel.activityid where activity.activityid='.$id;
+
                 renderRelatedUsers($query,$id);
         }
 
@@ -353,7 +357,7 @@ class Activity extends CRMEntity {
     return $this->process_list_query1($query);
     
     }
-
+	
 
     function process_list_query1($query)
     {
@@ -415,9 +419,6 @@ function save_relationship_changes($is_update)
     	}
 
     }
-    
-
-
 	function get_list_view_data(){
 		global $action, $currentModule, $focus, $app_list_strings;
 		$today = date("Y-m-d", time());
@@ -464,6 +465,8 @@ function save_relationship_changes($is_update)
 		}
       		$this->db->query($query,true,"Error in processing table $this->reminder_table");
 	}
+	
+
 
 }
 ?>
