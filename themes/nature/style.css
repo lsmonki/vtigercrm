@@ -710,6 +710,17 @@ A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000
 .disabled {
 	color: #CCC;
 }
+.heldmeeting {
+	color: grey;
+	font-size: 10px;
+	text-decoration: line-through;
+}
+
+.heldmeeting a {
+	color: grey;
+	text-decoration: line-through;
+}
+
 
 /* Reports Related */
 .rptTable {
