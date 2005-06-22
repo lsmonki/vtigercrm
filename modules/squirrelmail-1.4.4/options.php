@@ -95,16 +95,16 @@ function print_optionpages_row($leftopt, $rightopt = false) {
                     html_tag( 'tr', "\n" .
                         html_tag( 'td',
                             '<a href="' . $leftopt['url'] . '">' . $leftopt['name'] . '</a>' ,
-                        'left', $color[9], 'valign="top" width="49%"' ) .
+                        'center', $color[12], 'valign="top" width="49%"' ) .
                         html_tag( 'td',
                             '&nbsp;' ,
-                        'left', $color[4], 'valign="top" width="2%"' ) . "\n" .
+                        'center', $color[13], 'valign="top" width="2%"' ) . "\n" .
                         $rightopt_name
                     ) . "\n" .
                     html_tag( 'tr', "\n" .
                         html_tag( 'td',
                             $leftopt['desc'] ,
-                        'left', $color[0], 'valign="top" width="49%"' ) .
+                        'left', $color[12], 'valign="top" width="49%"' ) .
                         html_tag( 'td',
                             '&nbsp;' ,
                         'left', $color[4], 'valign="top" width="2%"' ) . "\n" .

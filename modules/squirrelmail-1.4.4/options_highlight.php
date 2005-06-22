@@ -37,11 +37,11 @@ sqGetGlobalVar('color_type', $color_type);
 sqGetGlobalVar('match_type', $match_type);
 sqGetGlobalVar('value', $value);
 
-
 //Richie
 /* end of get globals */
  
 function oh_opt( $val, $sel, $tit ) {
+	echo 'function oh_opt invoked';
     echo "<option value=\"$val\"";
     if ( $sel )
         echo ' selected="selected"';
@@ -52,6 +52,7 @@ if (!isset($theaction)) {
     $theaction = '';
 }
 if (! isset($message_highlight_list)) {
+	echo ' array not set so creating a new array <br>';
     $message_highlight_list = array();
 }
 if (isset($theid) && ($theaction == 'delete') ||
@@ -119,13 +120,15 @@ html_tag( 'table', "\n" .
     html_tag( 'tr', "\n" .
         html_tag( 'td', '<center><b>' . _("Options") . ' - ' . _("Message Highlighting") . '</b></center>', 'center')
    ),
-   'center', $color[9], 'width="95%" border="0" cellpadding="1" cellspacing="0"' ) . "<br />\n" .
+   'center', $color[12], 'width="95%" border="0" cellpadding="1" cellspacing="0"' ) . "<br />\n" .
 html_tag( 'table', '', '', '', 'width="100%" border="0" cellpadding="1" cellspacing="0"' ) . 
     html_tag( 'tr' ) . "\n" .
-        html_tag( 'td', '', 'left' );
+        html_tag( 'td', '', 'center' );
 
 echo '<center>[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=add">' . _("New") . '</a>]'.
         ' - [<a href="index.php?module=squirrelmail-1.4.4&action=options">'._("Done").'</a>]</center><br />'."\n";
+	//Problem area is here as the array is not getting properly updated
+
 $mhl_count = count($message_highlight_list);
 if ($mhl_count > 0) {
     echo html_tag( 'table', '', 'center', '', 'width="80%" border="0" cellpadding="3" cellspacing="0"' ) . "\n";
