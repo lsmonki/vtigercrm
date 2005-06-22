@@ -173,6 +173,10 @@ $combo_strings = Array(
 	        	   ),
 'faqcategories_dom' => Array('General'=>'General'
 				),
+'faqstatus_dom' => Array('Reviewed'=>'Reviewed'
+				,'Published'=>'Published'
+				,'Obsolute'=>'Obsolute'
+				),
 
 
 'currency_dom' => Array('Rupees'=>'Rupees',
