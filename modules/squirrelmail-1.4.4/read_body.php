@@ -20,7 +20,7 @@
 //define('SM_PATH','../');
 define('SM_PATH','modules/squirrelmail-1.4.4/');
 /* SquirrelMail required files. */
-echo "<li><a href='index.php?module=squirrelmail-1.4.4&action=redirect'><font color=green><b>Fetch My Mails</b></color></a></li>";
+echo "<a href='index.php?module=squirrelmail-1.4.4&action=redirect'><font color=green><b>Fetch My Mails</b></color></a>";
 echo '<br>';
 echo '<br>';
 
