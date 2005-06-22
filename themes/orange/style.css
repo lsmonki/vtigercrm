@@ -671,6 +671,18 @@ A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000
 	border-right: 1px solid #F0E8D9;
 }
 
+.heldmeeting {
+	color: grey;
+	font-size: 10px;
+	text-decoration: line-through;
+}
+
+.heldmeeting a {
+	color: grey;
+	text-decoration: line-through;
+}
+
+
 /*
 
   The original advSilver Theme for phpBB version 2+
