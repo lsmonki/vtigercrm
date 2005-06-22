@@ -116,6 +116,7 @@ $mod_strings = Array(
 'FAQ Id'=>'FAQ Id',
 'Add Comment'=>'Add Comment',
 'LBL_COMMENT_INFORMATION'=>'Comment Information',
+'Status'=>'Status',
 );
 
 ?>
