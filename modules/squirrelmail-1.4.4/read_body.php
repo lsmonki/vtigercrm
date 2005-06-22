@@ -473,7 +473,7 @@ function formatEnvheader($mailbox, $passed_id, $passed_ent_id, $message,
     }
 
     $s  = '<table width="100%" cellpadding="0" cellspacing="2" border="0"';
-    $s .= ' align="center" bgcolor="'.$color[0].'">';
+    $s .= ' align="center" class="formOuterBorder">';
     foreach ($env as $key => $val) {
         if ($val) {
             $s .= '<tr>';
@@ -482,10 +482,9 @@ function formatEnvheader($mailbox, $passed_id, $passed_ent_id, $message,
             $s .= '</tr>';
         }
     }
-    echo '<table bgcolor="'.$color[9].'" width="100%" cellpadding="1"'.
+    echo '<table class="formSecHeader" width="100%" cellpadding="1"'.
          ' cellspacing="0" border="0" align="center">'."\n";
-    echo '<tr><td height="5" colspan="2" bgcolor="'.
-          $color[4].'"></td></tr><tr><td align="center">'."\n";
+    echo '<tr><td height="5" colspan="2" class="formOuterBorder"></td></tr><tr><td align="center">'."\n";
     echo $s;
     do_hook('read_body_header');
     formatToolbar($mailbox, $passed_id, $passed_ent_id, $message, $color);
@@ -503,7 +502,7 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
     $topbar_delimiter = '&nbsp;|&nbsp;';
     $urlMailbox = urlencode($mailbox);
     $s = '<table width="100%" cellpadding="3" cellspacing="0" align="center"'.
-         ' border="0" bgcolor="'.$color[9].'"><tr>' .
+         ' border="0" class="formOuterBorder"><tr>' .
          html_tag( 'td', '', 'left', '', 'width="33%"' ) . '<small>';
     //$msgs_url = $base_uri . 'src/';
     $msgs_url = $base_uri;
@@ -854,7 +853,7 @@ formatMenuBar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_response);
 formatEnvheader($mailbox, $passed_id, $passed_ent_id, $message, $color, $FirstTimeSee);
 echo '<table width="100%" cellpadding="0" cellspacing="0" align="center" border="0">';
 echo '  <tr><td>';
-echo '    <table width="100%" cellpadding="1" cellspacing="0" align="center" border="0" bgcolor="'.$color[9].'">';
+echo '    <table width="100%" cellpadding="1" cellspacing="0" align="center" border="0" class="formOuterBorder"">';
 echo '      <tr><td>';
 echo '        <table width="100%" cellpadding="3" cellspacing="0" align="center" border="0">';
 echo '          <tr bgcolor="'.$color[4].'"><td>';
@@ -877,11 +876,11 @@ if ($attachmentsdisplay) {
    echo '    <table width="100%" cellpadding="1" cellspacing="0" align="center"'.' border="0" bgcolor="'.$color[9].'">';
    echo '     <tr><td>';
    echo '       <table width="100%" cellpadding="0" cellspacing="0" align="center" border="0" bgcolor="'.$color[4].'">';
-   echo '        <tr>' . html_tag( 'td', '', 'left', $color[9] );
+   echo '        <tr>' . html_tag( 'td', '', 'left', $color[12] );
    echo '           <b>' . _("Attachments") . ':</b>';
    echo '        </td></tr>';
    echo '        <tr><td>';
-   echo '          <table width="100%" cellpadding="2" cellspacing="2" align="center"'.' border="0" bgcolor="'.$color[0].'"><tr><td>';
+   echo '          <table width="100%" cellpadding="2" cellspacing="2" align="center"'.' border="0" class="formOuterHeader"><tr><td>';
    echo              $attachmentsdisplay;
    echo '          </td></tr></table>';
    echo '       </td></tr></table>';
