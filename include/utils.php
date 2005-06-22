@@ -3943,57 +3943,133 @@ function getListPrice($productid,$pbid)
 function getDetailAssociatedProducts($module,$focus)
 {
 	global $adb;
+	global $theme;
+        $theme_path="themes/".$theme."/";
+        $image_path=$theme_path."images/";
+
 	$output = '';
+	$output .= '<div style="padding:2 0 2 0"><strong>Product Details</strong></div> <div id="productList">';
+    $output .= '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formBorder">';
+    $output .= '<tr class="moduleListTitle" height="20" id="tablehead">';
+    $output .= '<td width="20%" style="padding:3px;">Product</td>';
+    $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+    $output .= '<td width="12%" style="padding:3px;">Qty In Stock</td>';
+    $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+    $output .= '<td width="12%" style="padding:3px;">Qty</td>';
+    $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+    $output .= '<td width="15%" style="padding:3px;">Unit Price</td>';
+    $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+    $output .= '<td width="16%" style="padding:3px;">List Price</td>';
+    $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+    $output .= '<td width="20%" style="padding:3px;"><div align="center">Total</div></td>';
+    $output .=  '</tr>';
+    $output .=  '<tr id="tableheadline">';
+    $output .=  '<td colspan="11" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+    $output .=  '</tr>';
+		
 	
 
 	//$output .='<table width="100%" border="0" cellspacing="1" cellpadding="0">';		
-	$output .= '<tr><td width="15%" class="dataLabel">Product</td><td width="15%" class="dataLabel">Quantity</td><td width="15%" class="dataLabel">Unit Price</td><td width="15%" class="dataLabel">List Price</td><td width="15%" class="dataLabel">Total</td></tr>';
+	//$output .= '<tr><td width="15%" class="dataLabel">Product</td><td width="15%" class="dataLabel">Quantity</td><td width="15%" class="dataLabel">Unit Price</td><td width="15%" class="dataLabel">List Price</td><td width="15%" class="dataLabel">Total</td></tr>';
 
 	if($module == 'Quotes')
 	{
-		$query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
+		$query="select products.productname,products.unit_price,products.qtyinstock,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
 	}
 	elseif($module == 'Orders')
 	{
-		$query="select products.productname,products.unit_price,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
+		$query="select products.productname,products.unit_price,products.qtyinstock,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
 	}
 	elseif($module == 'SalesOrder')
 	{
-		$query="select products.productname,products.unit_price,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$focus->id;
+		$query="select products.productname,products.unit_price,products.qtyinstock,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$focus->id;
 	}
 	elseif($module == 'Invoice')
 	{
-		$query="select products.productname,products.unit_price,invoiceproductrel.* from invoiceproductrel inner join products on products.productid=invoiceproductrel.productid where invoiceid=".$focus->id;
+		$query="select products.productname,products.unit_price,products.qtyinstock,invoiceproductrel.* from invoiceproductrel inner join products on products.productid=invoiceproductrel.productid where invoiceid=".$focus->id;
 	}
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
 	for($i=1;$i<=$num_rows;$i++)
 	{
+		$productname=$adb->query_result($result,$i-1,'productname');
+		$unitprice=$adb->query_result($result,$i-1,'unit_price');
+		$productid=$adb->query_result($result,$i-1,'productid');
+		$qtyinstock=$adb->query_result($result,$i-1,'qtyinstock');
+		$qty=$adb->query_result($result,$i-1,'quantity');
+		$listprice=$adb->query_result($result,$i-1,'listprice');
+		$total = $qty*$listprice;
 
+		if($num_rows%2 == 0)
+		{
+			$row_class = "evenListRow";
+		}
+		else
+		{
+			$row_class = "oddListRow";
+		}
+
+		$output .= '<tr class="'.$row_class.'">';
+        	$output .= '<td height="25" style="padding:3px;" nowrap>'.$productname.'</td>';
+        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+                $output .= '<td style="padding:3px;">'.$qtyinstock.'</td>';
+        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+	        $output .= '<td style="padding:3px;">'.$qty.'</td>';
+	        $output .='<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+                $output .= '<td style="padding:3px;">'.$unitprice.'</td>';
+	        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+	        $output .= '<td style="padding:3px;">'.$listprice.'</td>';
+        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+        	$output .= '<td style="padding:3px;"><div id="total'.$i.'" align="right">'.$total.'</div></td>';
+                $output .= '</tr>';
+
+
+/*
 		if (($i%2)==0)
                         $output .= '<tr height=20 class=dataLabel>';
                 else
                         $output .= '<tr height=20 class=dataLabel>';	
 
-		$productname=$adb->query_result($result,$i-1,'productname');
-		$unitprice=$adb->query_result($result,$i-1,'unit_price');
-		$productid=$adb->query_result($result,$i-1,'productid');
-		$qty=$adb->query_result($result,$i-1,'quantity');
-		$listprice=$adb->query_result($result,$i-1,'listprice');
-		$total = $qty*$listprice;
+		
 
 			
 		$output .= '<td width="15%">'.$productname.'</td><td width="15%">'.$qty.'</td><td width="15%" >'.$unitprice.'</td><td width="15%">'.$listprice.'</td><td width="15%">'.$total.'</td></tr>';
 
-		
+*/		
 
 	}
-	
+	$output .= '</table>';
+  	$output .= '</div>';
+	$output .= '<table width="100%" border="0" cellspacing="2" cellpadding="2">';
+        $output .= '<tr>'; 
+	$output .= '<td width="150"></td>';
+      	$output .= '<td><div align="right"><b>Sub Total:</b></div></td>';
+        $output .= '<td width="150" style="padding-right:35"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnSubTotal'].'</div></td>';
+        $output .= '</tr>';
+        $output .= '<tr>'; 
+	$output .=  '<td>&nbsp;</td>';
+        $output .= '<td><div align="right"><b>Tax:</b></div></td>';
+        $output .= '<td width="150" style="padding-right:35"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtTax'].'</div></td>';
+      $output .= '</tr>';
+      $output .= '<tr>'; 
+      $output .= '<td>&nbsp;</td>';
+      $output .= '<td><div align="right"><b>Adjustment:</b></div></td>';
+      $output .= '<td width="150" style="padding-right:35"><div align="right"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtAdjustment'].'</div></td>';
+      $output .= '</tr>';
+      $output .= '<tr>'; 
+      $output .= '<td>&nbsp;</td>';
+      $output .= '<td><div align="right"><b>Grand Total:</b></div></td>';
+      $output .= '<td width="150" style="padding-right:35"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnGrandTotal'].'</div></td>';
+    $output .= '</tr>';
+    $output .= '</table>';
+
+/*	
 		$output .= '<tr><td width="15%" class="dataLabel" colspan="4">Sub Total:</td><td width="15%" class="dataLabel">'.$focus->column_fields['hdnSubTotal'].'</td></tr>';
 		$output .= '<tr><td width="15%" class="dataLabel" colspan="4">Tax:</td><td width="15%" class="dataLabel">'.$focus->column_fields['txtTax'].'</td></tr>';
 		$output .= '<tr><td width="15%" class="dataLabel" colspan="4">Adjustment:</td><td width="15%" class="dataLabel">'.$focus->column_fields['txtAdjustment'].'</td></tr>';
 		$output .= '<tr><td width="15%" class="dataLabel" colspan="4">Total:</td><td width="15%" class="dataLabel">'.$focus->column_fields['hdnGrandTotal'].'</td></tr>';
 		//$output .= '</table>';
+	*/
 	return $output;
 
 }
