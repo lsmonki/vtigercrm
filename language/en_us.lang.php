@@ -83,6 +83,29 @@ $mod_strings = Array(
 'LBL_CLOSE'=>'Close',
 'LBL_CLOSE_TICKET'=>'Close this ticket',
 
+//Added fields for Knowledge Base details
+'LBL_KNOWLEDGE_BASE'=>'Knowledge Base',
+'LBL_SEARCH'=>'Search',
+'LNK_CATEGORY'=>'Category',
+'LNK_PRODUCTS'=>'Products',
+'LBL_SEARCH_RESULT'=>'Search Result:',
+'LBL_NO_FAQ_IN_THIS_CATEGORY'=>'There is no Articles in this Category.',
+'LBL_NO_FAQ_IN_THIS_PRODUCT'=>'There is no Articles in this Product.',
+'LBL_NO_FAQ'=>'There are no Articles.',
+'LBL_NO_FAQ_IN_THIS_SEARCH_CRITERIA'=>'There is no Articles matched with the given Search Criteria.',
+'LBL_PRODUCT'=>'Product',
+'LBL_ADDED_ON'=>'Added on : ',
+'LBL_ARTICLE_ID'=>'Article Id',
+'LBL_PAGE_OPTIONS'=>'Page Options',
+'LBL_PRINT_THIS_PAGE'=>'Print this page',
+'LBL_EMAIL_THIS_PAGE'=>'Email this page',
+'LBL_ADD_TO_FAVORITES'=>'Add to Favorites',
+'LBL_RECENTLY_CREATED'=>'Recently Created Articles',
+'LBL_CREATED_DATE'=>'Created Date',
+'LBL_MODIFIED_DATE'=>'Modified Date',
+'LNK_CUSTOMER_PORTAL_LOGIN'=>'Customer Portal Login',
+'KBASE_DETAILS'=>'The knowledge base is organized based on both categories and products, please select a category or product that you are interested in.
+Additionally, you can also search the entire knowledge base by entering keywords below.',
 );
 
 
