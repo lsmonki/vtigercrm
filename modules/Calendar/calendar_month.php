@@ -228,7 +228,7 @@ while ( $go == 1 ) {
          } 
         else {
            //echo "  <tr><td class=\"". $dinfo[color] ."\" colspan=\"3\"><img src=\"". $image_path ."black.png\" width=\"100%\" height=\"1\" alt=\"--------\"></td></tr>\n";
-		   echo "  <tr><td height=\"2\" colspan=\"3\" class=\"eventSep\"><img src=\"". $image_path ."blank.gif\"></td></tr>\n";
+		   echo "  <tr><td height=\"2\" colspan=\"4\" class=\"eventSep\"><img src=\"". $image_path ."blank.gif\"></td></tr>\n";
          }
 #echo "1 ".$this->user->weekstart ."<br />";
          $pref->callist[$idx]->formatted();
