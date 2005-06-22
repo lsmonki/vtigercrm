@@ -367,6 +367,7 @@ class appointment extends tutos_base {
    
     $this->subject = "";
     $this->account_name = "";
+    $this->account_id = "";	
     $this->contact_name = "";
 
 	$this->init_custom("appointment1");
@@ -449,7 +450,11 @@ class appointment extends tutos_base {
     $this->t_ignore    = $val_array["t_ignore"];
     $this->descr       = $val_array["subject"];
     $this->start       = new DateTime($startdate);
-    
+// For  getting the account name by Fredy
+    $this->account_name = $val_array["accountname"];    // fk
+    $this->account_id   = $val_array["accountid"];      // fk
+    $this->eventstatus  = $val_array["eventstatus"];    // fk
+// For  getting the account name by Fredy
     $this->end         = new DateTime($enddate);
     $this->subject     = $val_array["subject"];
     $this->module_name = $val_array["activitytype"];
@@ -1319,7 +1324,11 @@ class appointment extends tutos_base {
     } else {
       $class = "app".$this->outside;
     }
-
+	//included from Fredy's patch 
+    if ($this->eventstatus == 'Held') {
+            $class = "heldmeeting";
+    }
+	
     if ( $this->repeat != APP_NOREP ) {
       $start = $this->start->getTime();
       $end = $this->end->getTime();
@@ -1356,21 +1365,33 @@ class appointment extends tutos_base {
 
     echo "  <tr>\n";
     echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" colspan=\"3\"><b> ". $this->getLink($duration) ."</b></td>\n";
+
+ 	//added from Fredy's patch	
+   echo "  <td class=\"". $class ."\" align=\"right\">". $this->creator ."&nbsp;</td>\n";
     #echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"right\"><b>". $this->getLocation() ."</b></td>\n";
     #echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"right\"><b>". $this->outside ."</b></td>\n";
     echo "  </tr>\n";
+
+	//added account names to the calendar entry given by Fredy
+    if ($this->account_id != null) {
+        echo "  <tr>\n";
+            echo " <td class=\"". $class ."\" colspan=\"4\"><b> "."<a href=index.php?module=Accounts&action=DetailView&record="
+            .$this->account_id.">".$this->account_name."</a></b></td>\n";
+            echo "  </tr>\n";
+    }
+
 
     $myself = false;
     foreach ( $this->participant as $i => $fp) {
       $fp = &$this->participant[$i];
       echo "  <tr>\n";
       if ( ($this->trace == 1) && ( ($fp->gettype() == "address") || ($fp->gettype() == "user") )) {
-        $cols = 2;
-      } else {
         $cols = 3;
+      } else {
+        $cols = 4;
       }
       if ( ($fp->gettype() == "address") || ($fp->gettype() == "user") ) {
-        echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" width=\"100%\" colspan=\"". $cols ."\">";
+        echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"left\" \"  width=\"100%\" colspan=\"". $cols ."\">";
         /* for adresses show link with first + last name */
         echo $fp->getLink( $fp->getShortName());
         if ($fp->id == $current_user->id) {
@@ -1402,8 +1423,10 @@ class appointment extends tutos_base {
     //Added for description 
       $descr = eregi_replace("\n","<br />",$this->descr);
       if ($descr != "" ) {
-        echo "  <tr><td width=\"16\" align=\"right\" valign=\"top\"><img src=\"".$image_path."".$this->module_name."s.gif\" border=\"0\">&nbsp;</td><td class=\"". $class ."\" colspan=\"2\">". urlReplace($descr) ."&nbsp;</td></tr>\n";
-	echo "  <tr><td class=\"". $class ."\" colspan=\"3\">". $this->creator ."&nbsp;</td></tr>\n";
+        echo "  <tr><td width=\"16\" align=\"right\" valign=\"top\"><img src=\""
+		.$image_path."".$this->module_name."s.gif\" border=\"0\">&nbsp;</td><td class=\""
+		. $class ."\" colspan=\"2\">". urlReplace($descr) ."&nbsp;</td></tr>\n";
+	//echo "  <tr><td class=\"". $class ."\" colspan=\"3\">". $this->creator ."&nbsp;</td></tr>\n";
 
       }
 
@@ -1831,27 +1854,35 @@ class appointment extends tutos_base {
     # First query ( Get Call appointments )
     #
     #
-    $q = "SELECT * FROM activity,crmentity WHERE ";
-    $q .= " ( activity.activityid = crmentity.crmid AND activity.activitytype in ('Call','Meeting') AND ";
+	// query extended for fetching the accountname from Fredy's patch	
+    $q=" Select activity.*,crmentity.*,account.accountname,account.accountid FROM ";
+    $q.=" activity inner join crmentity on activity.activityid = crmentity.crmid left join"; 
+    $q.=" cntactivityrel on activity.activityid = cntactivityrel.activityid left join "; 
+    $q.=" contactdetails on cntactivityrel.contactid = contactdetails.contactid left join"; 
+    $q.=" account  on contactdetails.accountid = account.accountid WHERE ";
+    $q.=" activity.activitytype in ('Call','Meeting') AND ";
     if(!is_admin($current_user))
     {
 	$q .= " ( ";
     }
-    $q .= "  (date_start < '". $sx2 ."' AND date_start >= '". $sx1 . "' and (date_start like (due_date) or  (date_start != '0000-00-00' and  due_date = '0000-00-00') ) ) ";
+	
+    $q.=" (activity.date_start < '". $sx2 ."' AND activity.date_start >= '". $sx1;
+    $q.="' and (activity.date_start like (activity.due_date) or (activity.date_start != '0000-00-00' and activity.due_date = '0000-00-00') ) ";
     #$q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
     #$q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
     #$q .= " OR (date_start < ". $sx1 .")";
+
     if(!is_admin($current_user))
     {
-	$q .= " ) AND ( smownerid = '".$current_user->id."' ) ";
+	$q .= "  ) crmentity.smownerid ='".$current_user->id."' ) ";
     }
-    $q .= " AND deleted = 0)";
-    $q .= " ORDER by date_start";
+    $q .= " AND crmentity.deleted = 0)";
+    $q .= " ORDER by activity.date_start,activity.time_start";
 
     $r = $this->db->query($q);
     $n = $this->db->getRowCount($r);
     $a = 0;
-    //print("GS --> ".$n." q=".$q);
+   // print("GS --> ".$n." q=".$q);
    
     while ( $a < $n ) {
       $o = &new appointment();
@@ -1870,13 +1901,14 @@ class appointment extends tutos_base {
     }
 //
 
-// Query created by Rama
+// Query created by Jaguar
     #
     # Second query ( Get Recurring appointments )
     #
     #
-    $q = "SELECT activity.activityid, activity.subject, activity.activitytype, activity.description, activity.time_start, activity.duration_hours, activity.duration_minutes, activity.priority, activity.location, crmentity.*, recurringevents.recurringid, recurringevents.recurringdate as date_start ,recurringevents.recurringtype  from activity,crmentity,recurringevents  WHERE ";
-    $q .= " ( activity.activityid = crmentity.crmid AND activity.activityid=recurringevents.activityid AND activity.activitytype in ('Call','Meeting') AND ";
+   $q = "SELECT activity.activityid, activity.subject, activity.activitytype, activity.description, activity.time_start, activity.duration_hours, activity.duration_minutes, activity.priority, activity.location,activity.eventstatus, crmentity.*, recurringevents.recurringid, recurringevents.recurringdate as date_start ,recurringevents.recurringtype,account.accountname,account.accountid from activity inner join crmentity on activity.activityid = crmentity.crmid inner join recurringevents on activity.activityid=recurringevents.activityid  left join cntactivityrel on activity.activityid = cntactivityrel.activityid left join contactdetails on cntactivityrel.contactid = contactdetails.contactid left join account  on contactdetails.accountid = account.accountid ";
+
+   $q.=" where ( activity.activitytype in ('Call','Meeting') AND "; 
     if(!is_admin($current_user))
     {
 	$q .= " ( ";
@@ -1884,15 +1916,14 @@ class appointment extends tutos_base {
     $q .= "  (recurringdate < '". $sx2 ."' AND recurringdate >= '". $sx1 . "') ";
     if(!is_admin($current_user))
     {
-	$q .= " ) AND ( smownerid = '".$current_user->id."' ) ";
+	$q .= " ) AND (  crmentity.smownerid = '".$current_user->id."' ) ";
     }
-    $q .= " AND deleted = 0)";
+    $q .= " AND crmentity.deleted = 0 )" ; 
     $q .= " ORDER by recurringid";
     $r = $this->db->query($q);
     $n = $this->db->getRowCount($r);
     $a = 0;
-    //print("<br>GS --> ".$n." q=".$q);
-   
+ //   print("<br>GS --> ".$n." q=".$q);
     while ( $a < $n ) {
       $o = &new appointment();
       $result = $this->db->fetchByAssoc($r);
