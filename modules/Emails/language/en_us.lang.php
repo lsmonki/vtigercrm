@@ -107,6 +107,9 @@ $mod_strings = Array(
 //Added for 4.2 Release -- CustomView
 'LBL_ALL'=>'All',
 'MESSAGE_CONTACT_NOT_WANT_MAIL'=>'This Contact does not want to receive mails.',
+'LBL_WEBMAILS_TITLE'=>'WebMails',
+'LBL_EMAILS_TITLE'=>'Emails',
+
 );
 
 ?>
