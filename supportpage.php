@@ -36,7 +36,7 @@ if($_REQUEST['mail_send_message'] != '')
 		$list .= '<br><tr><td>&nbsp;</td></tr>';
 		$list .= '<tr><td>'.$mail_send_message[1].'</td></tr>';
 		$list .= '<br><tr><td>&nbsp;</td></tr>';
-		$list .= '<tr><td align="right"><a href="index.php?close_window=true"> '.$mod_strings['LBL_CLOSE'].'</a>';
+		$list .= '<tr><td align="right"><a href="cp_index.php?close_window=true"> '.$mod_strings['LBL_CLOSE'].'</a>';
 		$list .= '</td></tr></table>';
 
 		echo $list;
