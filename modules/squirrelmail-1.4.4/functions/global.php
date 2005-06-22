@@ -148,7 +148,9 @@ function sqsession_register ($var, $name) {
     } else {
         $_SESSION["$name"] = $var;
     }
-    //session_register("$name");
+
+    //important for the filter criteria implementation
+    @session_register("$name");
 }
 
 /**
@@ -166,7 +168,8 @@ function sqsession_unregister ($name) {
     } else {
         unset($_SESSION[$name]);
     }
-    //session_unregister("$name");
+    //important for the filter criteria implementation
+    @session_unregister("$name");
 }
 
 /**
