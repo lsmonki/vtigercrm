@@ -58,6 +58,7 @@ $temprow = $adb->fetch_array($mailInfo);
 $login_username= $temprow["mail_username"];
 $secretkey=$temprow["mail_password"];
 
+$imapServerAddress=$temprow["mail_servername"];
 $key=OneTimePadEncrypt($secretkey, $onetimepad);
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 

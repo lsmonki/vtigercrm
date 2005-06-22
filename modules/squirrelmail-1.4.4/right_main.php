@@ -17,6 +17,66 @@
  * Path for SquirrelMail required files.
  * @ignore
  */
+
+echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
+$submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
+$sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
+echo '<br>';
+?>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+   <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td class="tabStart">&nbsp;&nbsp;</td>
+<?
+	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
+	{
+		$classname = "tabOff";
+	}
+	else
+	{
+		$classname = "tabOn";
+	}
+	$listView = "ListView.php";
+	foreach($submenu as $label=>$filename)
+	{
+		$cur_mod = $sec_arr[$filename];
+		$cur_tabid = getTabid($cur_mod);
+
+		if($tab_per_Data[$cur_tabid] == 0)
+		{
+
+			list($lbl,$sname,$title)=split("_",$label);
+			if(stristr($label,"EMAILS"))
+			{
+
+				echo '<td class="tabOn" nowrap><a href="index.php?module=Emails&action=ListView&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';
+
+				$listView = $filename;
+				$classname = "tabOff";
+			}
+			elseif(stristr($label,$_REQUEST['smodule']))
+			{
+				echo '<td class="tabOn" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+				$listView = $filename;
+				$classname = "tabOff";
+			}
+			else
+			{
+				echo '<td class="'.$classname.'" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+			}
+			$classname = "tabOff";
+		}
+
+	}
+?>
+     <td width="100%" class="tabEnd">&nbsp;</td>
+   </tr>
+ </table></td>
+ </tr>
+ </table>
+ <br>
+<?
 define('SM_PATH','modules/squirrelmail-1.4.4/');
 //define('SM_PATH','../');
 /* SquirrelMail required files. */
@@ -29,8 +89,6 @@ require_once(SM_PATH . 'functions/mailbox_display.php');
 require_once(SM_PATH . 'functions/display_messages.php');
 require_once(SM_PATH . 'functions/html.php');
 require_once(SM_PATH . 'functions/plugin.php');
-
-
 /***********************************************************
  * incoming variables from URL:                            *
  *   $sort             Direction to sort by date           *
@@ -45,7 +103,6 @@ require_once(SM_PATH . 'functions/plugin.php');
  *    $username         duh                                *
  *                                                         *
  ***********************************************************/
-
 
 /* lets get the global vars we may need */
 sqgetGlobalVar('username',  $username,      SQ_SESSION);
@@ -86,11 +143,11 @@ $mailInfo = getMailServerInfo($current_user);
 $temprow = $adb->fetch_array($mailInfo);
 $secretkey=$temprow["mail_password"];
 $imapServerAddress=$temprow["mail_servername"];
+
 /* end of get globals */
 //$secretkey="p1";
     $key = OneTimePadEncrypt($secretkey, $onetimepad);
-    /* Open a connection on the imap port (143) */
-    echo $imapServerAddress;
+/* Open a connection on the imap port (143) */
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 
 if (isset($PG_SHOWALL)) {
@@ -118,6 +175,7 @@ if (isset($newsort) && $newsort != $sort) {
 }
 
 
+
 /* If the page has been loaded without a specific mailbox, */
 /* send them to the inbox                                  */
 if (!isset($mailbox)) {
@@ -134,7 +192,8 @@ if (!isset($startMessage) || ($startMessage == '')) {
 if ($imap_server_type == 'uw' && (strstr($mailbox, '../') || substr($mailbox, 0, 1) == '/')) {
    $mailbox = 'INBOX';
 }
-echo "<a href='index.php?module=squirrelmail-1.4.4&action=redirect'><font color=green><b>Fetch My Mails!</b></color></a>";
+echo "<a href='index.php?module=squirrelmail-1.4.4&action=redirect'><b><font color=green> <u>Fetch My Mails!</u></color></b></a>";
+echo '<hr>';
 echo '<br>';
 echo '<br>';
 

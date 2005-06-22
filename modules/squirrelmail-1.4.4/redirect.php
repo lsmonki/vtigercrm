@@ -67,7 +67,7 @@ $imapServerAddress=$temprow["mail_servername"];
 $imapPort="143";
 
 set_up_language($squirrelmail_language, true);
-setcookie('squirrelmail_language', $squirrelmail_language, time()+2592000,$base_uri);
+@setcookie('squirrelmail_language', $squirrelmail_language, time()+2592000,$base_uri);
 
 /*
 if (!isset($login_username)) {
@@ -104,7 +104,7 @@ $key=OneTimePadEncrypt($secretkey, $onetimepad);
 
     $username = $login_username;
     sqsession_register ($username, 'username');
-    setcookie('key', $key, 0, $base_uri);
+    @setcookie('key', $key, 0, $base_uri);
     //do_hook ('login_verified');
 
 }
@@ -166,7 +166,7 @@ if ( sqgetGlobalVar('session_expired_location', $session_expired_location, SQ_SE
 
 /* Write session data and send them off to the appropriate page. */
 //session_write_close();
-header("Location: $redirect_url");
+@header("Location: $redirect_url");
 
 /* --------------------- end main ----------------------- */
 
