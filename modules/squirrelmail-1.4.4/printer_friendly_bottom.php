@@ -39,6 +39,7 @@ $mailInfo = getMailServerInfo($current_user);
 $temprow = $adb->fetch_array($mailInfo);
 $secretkey=$temprow["mail_password"];
 
+$imapServerAddress=$temprow["mail_servername"];
 $key=OneTimePadEncrypt($secretkey, $onetimepad);
 
 if (! sqgetGlobalVar('passed_ent_id', $passed_ent_id, SQ_GET) ) {
