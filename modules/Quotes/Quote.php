@@ -67,6 +67,7 @@ class Quote extends CRMEntity {
 				'Quote Stage'=>Array('quotes'=>'quotestage'), 
 				'Potential Name'=>Array('quotes'=>'potentialid'),
 				'Account Name'=>Array('account'=> 'accountid'),
+				'Total'=>Array('quotes'=> 'total'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 	
@@ -75,6 +76,7 @@ class Quote extends CRMEntity {
 				        'Quote Stage'=>'quotestage',
 				        'Potential Name'=>'potential_id',
 					'Account Name'=>'account_id',
+					'Total'=>'hdnGrandTotal',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
