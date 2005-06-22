@@ -65,6 +65,7 @@ if($tab_per_Data[9] == 0)
 }
 ?>
 <br>
+<br>
 <?php
 //get all the group relation tasks
 global $current_user;
@@ -156,13 +157,21 @@ function getActivityType($id)
 		
 }
 
-
+echo '<BR>';
 $list='';
 if($tab_per_Data[13] == 0)
 {
         if($permissionData[13][3] == 0)
         {
 		require_once('modules/HelpDesk/ListTickets.php');
+	}
+}
+echo '<BR><BR>';
+if($tab_per_Data[21] == 0)
+{
+        if($permissionData[21][3] == 0)
+        {
+		require_once('modules/Quotes/ListTopQuotes.php');
 	}
 }
 global $current_language;
