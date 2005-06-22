@@ -88,9 +88,9 @@ $xtpl->assign("BLOCK6", $block_6);
 $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 $xtpl->assign("BLOCK3", $block_3);
 
-$block_4_header = getBlockTableHeader("LBL_RELATED_PRODUCTS");
+//$block_4_header = getBlockTableHeader("LBL_RELATED_PRODUCTS");
 $block_4 = getDetailAssociatedProducts($module,$focus);
-$xtpl->assign("BLOCK4_HEADER", $block_4_header);
+//$xtpl->assign("BLOCK4_HEADER", $block_4_header);
 $xtpl->assign("BLOCK4", $block_4);
 
 
