@@ -659,6 +659,9 @@ $app_strings = Array(
 'LBL_RSS_FEEDS'=>'RSS Feeds',
 'LBL_ADD_RSS_FEEDS'=>'Add New RSS Feed',
 
+// Added for  4.2 GA
+'LBL_AVAILABLE'=>'Availability',
+
 //Added fields after 4.2 alpha
 'COMBO_ACCOUNTS'=>'Accounts',
 'LNK_NEW_FAQ'=>'New Faq',
