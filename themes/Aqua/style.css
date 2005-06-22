@@ -1122,6 +1122,18 @@ div.message {
 	text-align: center;
 }
 
+.heldmeeting {
+	color: grey;
+	font-size: 10px;
+	text-decoration: line-through;
+}
+
+.heldmeeting a {
+	color: grey;
+	text-decoration: line-through;
+}
+
+
 ADDRESS {
         font-size: x-small;
 }
