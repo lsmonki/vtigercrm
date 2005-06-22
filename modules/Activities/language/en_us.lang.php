@@ -110,6 +110,7 @@ $mod_strings = Array(
 'Type'=>'Type',
 'End Date'=>'End Date',
 'Recurrence'=> 'Recurring Events',
+'Recurring Type'=> 'Recurring Type',
 );
 
 ?>
