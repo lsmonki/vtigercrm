@@ -55,7 +55,7 @@ if($result[1] == $username && $result[2] == $password)
 else
 {
 	$_REQUEST['error_msg'] = '<br><font color=red><b> Please enter a valid Username and Password</b></font>';
-	include("index.php");
+	include("cp_index.php");
 }
 /*
 function encrypt_password($user_name,$user_password)
