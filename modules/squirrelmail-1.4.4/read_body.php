@@ -20,7 +20,10 @@
 //define('SM_PATH','../');
 define('SM_PATH','modules/squirrelmail-1.4.4/');
 /* SquirrelMail required files. */
-echo "<li><a href='index.php?module=squirrelmail-1.4.4&action=redirect'>Inbox</a></li>";
+echo "<li><a href='index.php?module=squirrelmail-1.4.4&action=redirect'><font color=green><b>Fetch My Mails</b></color></a></li>";
+echo '<br>';
+echo '<br>';
+
 //echo 'in read body';
 require_once(SM_PATH . 'include/validate.php');
 require_once(SM_PATH . 'functions/global.php');

@@ -86,11 +86,11 @@ $mailInfo = getMailServerInfo($current_user);
 $temprow = $adb->fetch_array($mailInfo);
 $secretkey=$temprow["mail_password"];
 $imapServerAddress=$temprow["mail_servername"];
-
 /* end of get globals */
 //$secretkey="p1";
     $key = OneTimePadEncrypt($secretkey, $onetimepad);
-/* Open a connection on the imap port (143) */
+    /* Open a connection on the imap port (143) */
+    echo $imapServerAddress;
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 
 if (isset($PG_SHOWALL)) {
@@ -118,7 +118,6 @@ if (isset($newsort) && $newsort != $sort) {
 }
 
 
-
 /* If the page has been loaded without a specific mailbox, */
 /* send them to the inbox                                  */
 if (!isset($mailbox)) {
@@ -135,7 +134,7 @@ if (!isset($startMessage) || ($startMessage == '')) {
 if ($imap_server_type == 'uw' && (strstr($mailbox, '../') || substr($mailbox, 0, 1) == '/')) {
    $mailbox = 'INBOX';
 }
-echo "<li><a href='index.php?module=squirrelmail-1.4.4&action=redirect'>Inbox</a></li>";
+echo "<li><a href='index.php?module=squirrelmail-1.4.4&action=redirect'><font color=green><b>Fetch My Mails!</b></color></a></li>";
 //Richie//Richie//Richie//Richie//Richie//Richie//Richie//Richie
 //echo 'in right_main';
 
