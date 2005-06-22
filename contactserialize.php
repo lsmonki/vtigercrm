@@ -912,7 +912,7 @@ function get_KBase_details($id='')
                 $result['product'][$i]['productname'] = $productname;
 	}
 
-	$faq_query = "select faq.*, crmentity.createdtime, crmentity.modifiedtime from faq inner join crmentity on crmentity.crmid=faq.id where crmentity.deleted=0 order by crmentity.modifiedtime DESC";
+	$faq_query = "select faq.*, crmentity.createdtime, crmentity.modifiedtime from faq inner join crmentity on crmentity.crmid=faq.id where crmentity.deleted=0 and faq.status='Published' order by crmentity.modifiedtime DESC";
 	$faq_result = $adb->query($faq_query);
 	$faq_noofrows = $adb->num_rows($faq_result);
 	for($k=0;$k<$faq_noofrows;$k++)
