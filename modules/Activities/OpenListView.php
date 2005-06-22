@@ -43,7 +43,9 @@ $later = date("Y-m-d", strtotime("$today + 7 days"));
 
 //$activity = new Activity();
 //change made as requested by community by shaw
-$where = "AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held') AND date_start >= '$today' AND date_start < '$later' AND crmentity.smownerid ='{$current_user->id}' ORDER BY date_start";
+$where = "AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NUL
+L ||  activity.eventstatus != 'Held') AND date_start >= '$today' AND date_start < '$later' AND crmentity.smown
+erid ='{$current_user->id}' group by crmid ORDER BY date_start";
 
 $list_query = getListQuery("Activities",$where);
 $list_result = $adb->limitQuery($list_query,0,5);
@@ -60,7 +62,7 @@ for($i=0;$i<$noofrows;$i++)
                                      'status' => $adb->query_result($list_result,$i,'status'),
                                      'firstname' => $adb->query_result($list_result,$i,'firstname'),
                                      'lastname' => $adb->query_result($list_result,$i,'lastname'),
- 'accountname' => $adb->query_result($list_result,$i,'accountname'),
+ 					'accountname' => $adb->query_result($list_result,$i,'accountname'),
 				     'accountid' => $adb->query_result($list_result, $i, 'accountid'),
                                      'contactid' => $adb->query_result($list_result,$i,'contactid'),
                                      'date_start' => getDisplayDate($adb->query_result($list_result,$i,'date_start')),
