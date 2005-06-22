@@ -2253,6 +2253,9 @@
 		<field name="category" type="C" size="100">
 			<NOTNULL/>
 		</field>
+		<field name="status" type="C" size="100">
+			<NOTNULL/>
+		</field>
 		<opt>Type=InnoDB</opt>
 			<index name="faq_IDX0">
                                 <col>id</col>
@@ -3202,6 +3205,26 @@
 		
 		</data>
 	</table>
+	<table name="faqstatus">
+		<field name="faqstatus_id" type="I" size="19">
+			<KEY/>
+			<AUTOINCREMENT/>
+		</field>
+		<field name="faqstatus" type="C" size="60"></field>
+		<field name="SORTORDERID" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="PRESENCE" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+	
+		<data>
+		
+		</data>
+	</table>
+
 
 
 
