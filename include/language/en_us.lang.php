@@ -669,6 +669,12 @@ $app_strings = Array(
 'Quote Stage'=>'Quote Stage',
 'Potential Name'=>'Potential Name',
 'Total'=>'Total Amount',
+  /* For purchase order related list in vendor */
+'LBL_PORDER_BUTTON_TITLE'=>'New Purchase Order [Alt+O]',
+'LBL_PORDER_BUTTON'=>'New Purchase Order',
+'LBL_PORDER_BUTTON_KEY'=>'O',
+'Tracking Number'=>'Tracking Number',
+'Order Id'=>'Order Id',
 
 );
 

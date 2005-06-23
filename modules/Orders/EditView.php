@@ -45,8 +45,24 @@ if(isset($_REQUEST['record']))
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
-} 
+}
+// Get vendor address if vendorid is given
+if(isset($_REQUEST['vendor_id']) && $_REQUEST['record']==''){
+	require_once('modules/Products/Vendor.php');
+	$vend_focus = new Vendor();
+	$vend_focus->retrieve_entity_info($_REQUEST['vendor_id'],"Vendor");
+	$focus->column_fields['bill_city']=$vend_focus->column_fields['city'];
+	$focus->column_fields['ship_city']=$vend_focus->column_fields['city'];
+	$focus->column_fields['bill_street']=$vend_focus->column_fields['treet'];
+	$focus->column_fields['ship_street']=$vend_focus->column_fields['treet'];
+	$focus->column_fields['bill_state']=$vend_focus->column_fields['state'];
+	$focus->column_fields['ship_state']=$vend_focus->column_fields['state'];
+	$focus->column_fields['bill_code']=$vend_focus->column_fields['postalcode'];
+	$focus->column_fields['ship_code']=$vend_focus->column_fields['postalcode'];
+	$focus->column_fields['bill_country']=$vend_focus->column_fields['country'];
+	$focus->column_fields['ship_country']=$vend_focus->column_fields['country'];
 
+}
 //get Block 1 Information
 $block_1_header = getBlockTableHeader("LBL_PO_INFORMATION");
 $block_1 = getBlockInformation("Orders",1,$focus->mode,$focus->column_fields);

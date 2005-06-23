@@ -156,6 +156,29 @@ function renderRelatedProducts($query,$id,$sid="product_id")
 	$list = GetRelatedList('Vendor','Products',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
+function renderRelatedOrders($query,$id,$sid="product_id")
+{
+	require_once('modules/Orders/Order.php');
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id,$sid);
+        echo $hidden;
+
+        $focus = new Order();
+ 
+	$button = '';
+
+        if(isPermitted("Orders",1,"") == 'yes')
+        {
+ 
+		$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Orders\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'VendorDetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
+	}
+	$returnset = '&return_module=Products&smodule=VENDOR&return_action=VendorDetailView&return_id='.$id;
+
+	$list = GetRelatedList('Vendor','Orders',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
 
 echo get_form_footer();
 
