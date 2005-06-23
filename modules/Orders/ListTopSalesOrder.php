@@ -71,7 +71,7 @@ $xtpl->assign("IMAGE_PATH",$image_path);
 //<<<<<<<<<customview>>>>>>>>>
 $date_var = date('Y-m-d');
 
-$where = ' and crmentity.smownerid='.$current_user->id.' and  salesorder.duedate >= '.$date_var.' ORDER BY total DESC';
+$where = ' and crmentity.smownerid='.$current_user->id.' and  salesorder.duedate >= \''.$date_var.'\' ORDER BY total DESC';
 $query = getListQuery("SalesOrder",$where);
 
 //<<<<<<<<customview>>>>>>>>>

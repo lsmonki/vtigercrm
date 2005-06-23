@@ -74,18 +74,13 @@ $xtpl->assign("IMAGE_PATH",$image_path);
 //<<<<<<<<<customview>>>>>>>>>
 $date_var = date('Y-m-d');
 
-$where = ' and crmentity.smownerid='.$current_user->id.' and  quotes.validtill >= '.$date_var.' ORDER BY total DESC';
+$where = ' and crmentity.smownerid='.$current_user->id.' and  quotes.validtill >= \''.$date_var.'\' ORDER BY total DESC';
 $query = getListQuery("Quotes",$where);
 
 //<<<<<<<<customview>>>>>>>>>
 
 $list_result = $adb->limitQuery($query,0,5);
 //$list_result = $adb->query($query);
-
-//Retreiving the no of rows
-$noofrows = $adb->num_rows($list_result);
-
-$list_result = $adb->query($query);
 
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
