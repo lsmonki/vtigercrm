@@ -167,11 +167,27 @@ if($tab_per_Data[13] == 0)
 	}
 }
 echo '<BR><BR>';
-if($tab_per_Data[21] == 0)
+if($tab_per_Data[20] == 0)
 {
-        if($permissionData[21][3] == 0)
+        if($permissionData[20][3] == 0)
         {
 		require_once('modules/Quotes/ListTopQuotes.php');
+	}
+}
+echo '<BR><BR>';
+if($tab_per_Data[22] == 0)
+{
+        if($permissionData[22][3] == 0)
+        {
+		require_once('modules/Orders/ListTopSalesOrder.php');
+	}
+}
+echo '<BR><BR>';
+if($tab_per_Data[23] == 0)
+{
+        if($permissionData[23][3] == 0)
+        {
+		require_once('modules/Invoice/ListTopInvoice.php');
 	}
 }
 global $current_language;
