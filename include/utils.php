@@ -3188,6 +3188,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                                                $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
                                         	$temp_val =$firstname.' '.$temp_val;
 					}
+
+					$temp_val = str_replace("'",'\"',$temp_val);
 			
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
 				}
@@ -3242,6 +3244,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					if($colname == "lastname")
                                                 $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
                                         $temp_val =$firstname.' '.$temp_val;
+
+					$temp_val = str_replace("'",'\"',$temp_val);
 	
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return("'.$entity_id.'", "'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
 				}
