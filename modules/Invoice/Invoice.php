@@ -66,6 +66,7 @@ class Invoice extends CRMEntity {
 				'Invoice Id'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('invoice'=>'subject'),
 				'Sales Order'=>Array('invoice'=>'salesorderid'),
+				'Total'=>Array('invoice'=>'total'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 	
@@ -73,6 +74,7 @@ class Invoice extends CRMEntity {
 				        'Invoice Id'=>'',
 				        'Subject'=>'subject',
 				        'Sales Order'=>'salesorder_id',
+				        'Total'=>'hdnGrandTotal',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
