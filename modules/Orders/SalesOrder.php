@@ -67,6 +67,7 @@ class SalesOrder extends CRMEntity {
 				'Subject'=>Array('salesorder'=>'subject'),
 				'Account Name'=>Array('account'=>'accountid'), 
 				'Quote Name'=>Array('quotes'=>'quoteid'), 
+				'Total'=>Array('salesorder'=>'total'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
 	
@@ -75,6 +76,7 @@ class SalesOrder extends CRMEntity {
 				        'Subject'=>'subject',
 				        'Account Name'=>'account_id',
 				        'Quote Name'=>'quote_id',
+					'Total'=>'hdnGrandTotal',
 				        'Assigned To'=>'assigned_user_id'
 				      );
 	var $list_link_field= 'subject';
