@@ -1400,9 +1400,13 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("PriceBook").",14,'get_pricebook_products',2,'Products',0)");
 
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendor").",14,'get_products',1,'Products',0)");
-	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendor").",21,'get_purchase_orders',2,'Products',0)");
+        // Inserting Vendor Related Lists
+        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendor").",14,'get_products',1,'Products',0)");
+
+        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendor").",21,'get_purchase_orders',2,'Products',0)");
+
+        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendor").",4,'get_contacts',3,'Contacts',0)");
+
 
                $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_TASK_NOTIFICATION_DESCRITPION',1,'Task Delay Notification','Tasks delayed beyond 24 hrs ','LBL_TASK_NOTIFICATION')");
 

@@ -1779,8 +1779,46 @@
 		</data>
 	</table>
 
+        <table name="vendorcontactrel">
+                <field name="vendorid" type="I" size="19">
+                        <KEY/>
+                        <DEFAULT value="0"/>
+                </field>
+                <field name="contactid" type="I" size="19">
+                        <KEY/>
+                        <DEFAULT value="0"/>
+                </field>
+                <opt>Type=InnoDB</opt> <index name="VendorContactRel_IDX0">
+                        <col>vendorid</col>
+                </index>
+                <opt>Type=InnoDB</opt> <index name="VendorContactRel_IDX1">
+                        <col>contactid</col>
+                </index>
+                <data>
+                </data>
+        </table>
 
 
+        <table name="vendorcontactrel" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_VendorContactRel FOREIGN KEY (vendorid) REFERENCES vendor(vendorid) ON DELETE CASCADE</constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
+
+
+
+        <table name="vendorcontactrel" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_VendorContactRel FOREIGN KEY (contactid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+		     <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
 
 
 	<table name="salesmanticketrel">
