@@ -26,6 +26,12 @@ class Product extends CRMEntity {
 	var $id;
 	var $mode;
 
+	// These are related
+	var $name;
+	var $vendorid;
+	var $contactname;
+	var $contactid;
+
 	var $tab_name = Array('crmentity','products','productcf','seproductsrel');
 	var $tab_name_index = Array('crmentity'=>'crmid','products'=>'productid','productcf'=>'productid','seproductsrel'=>'productid');
 	var $column_fields = Array();
@@ -113,6 +119,12 @@ class Product extends CRMEntity {
 		//$query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
 		renderRelatedActivities($query,$id);
+	}
+	function product_novendor()
+	{
+		$query = "SELECT products.productname,crmentity.deleted from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0 and products.vendor_id=''";
+		$result=$this->db->query($query);
+		return $this->db->num_rows($result);
 	}
 
 }

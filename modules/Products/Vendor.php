@@ -74,6 +74,12 @@ class Vendor extends CRMEntity {
         {
                 return $this->name;
         }
+	function get_products($id)
+	{
+		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,vendor.name from products inner join crmentity on crmentity.crmid = products.productid left outer join vendor on vendor.vendorid = products.vendor_id where vendor.vendorid = '.$id.' and crmentity.deleted = 0';
+	      	renderRelatedProducts($query,$id,'vendor_id');
+        }
+
 
 }
 ?>

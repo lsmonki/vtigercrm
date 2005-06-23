@@ -28,6 +28,11 @@ if(isset($_REQUEST['record']))
     $focus->retrieve_entity_info($_REQUEST['record'],"Products");
     $focus->name=$focus->column_fields['productname'];		
 }
+if(isset($_REQUEST['vendorid']))
+{
+        $focus->column_fields['vendorid'] = $_REQUEST['vendorid'];
+}
+
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -58,6 +63,15 @@ if(trim($block_5) != '')
         $cust_fld .= '</table>';
         $cust_fld .= '</td></tr></table>';
         $cust_fld .='<BR>';
+}
+
+//needed when creating a new product with a default vendor name to passed 
+if (isset($_REQUEST['name']) && is_null($focus->name)) {
+	$focus->name = $_REQUEST['name'];
+	
+}
+if (isset($_REQUEST['vendorid']) && is_null($focus->vendorid)) {
+	$focus->vendorid = $_REQUEST['vendorid'];
 }
 
 global $theme;

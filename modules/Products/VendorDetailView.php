@@ -160,4 +160,10 @@ if($tab_per_Data[8] == 0)
 
 */
 
+//Security check for related list
+global $profile_id;
+$tab_per_Data = getAllTabsPermission($profile_id);
+$permissionData = $_SESSION['action_permission_set'];
+getRelatedLists("Vendor",$focus);
+
 ?>

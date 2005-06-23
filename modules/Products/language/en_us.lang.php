@@ -155,6 +155,7 @@ $mod_strings = Array(
 'LBL_COMPANY_NAME'=>'Company Name',
 'LBL_CATEGORY_TITLE'=>'Company Name',
 'LBL_ACTIVE_TITLE'=>'Active',
+'LBL_LIST_VENDOR_NAME'=>'Vendor Name',
 );
 
 ?>

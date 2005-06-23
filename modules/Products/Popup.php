@@ -28,8 +28,17 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH",$image_path);
 $xtpl->assign("THEME_PATH",$theme_path);
 
+$url_string = '';
+$search_query = '';
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
         $xtpl->assign("RETURN_MODULE",$_REQUEST['return_module']);
+if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] !='')
+{
+        $xtpl->assign("SMODULE",$_REQUEST['smodule']);
+	$url_string = '&smodule=VENDOR';
+	$search_query .= " and vendor_id=''";
+}
+
 
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
@@ -38,7 +47,6 @@ $xtpl->assign("RECORDID",$_REQUEST['recordid']);
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
-$url_string = '';
 $sorder = 'ASC';
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
 $sorder = $_REQUEST['sorder'];

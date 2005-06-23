@@ -14,12 +14,13 @@ require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/Activities/Activity.php');
 require_once('modules/Users/UserInfoUtil.php');
 
-function getHiddenValues($id)
+function getHiddenValues($id,$sid="product_id")
 {
         $hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
         $hidden .= '<input type="hidden" name="module">';
         $hidden .= '<input type="hidden" name="mode">';
-        $hidden .= '<input type="hidden" name="product_id" value="'.$id.'">';
+        $hidden .= '<input type="hidden" name="'.$sid.'" value="'.$id.'">';
+        $hidden .= '<input type="hidden" name="smodule" value="VENDOR">';
         $hidden .= '<input type="hidden" name="return_module" value="Products">';
         $hidden .= '<input type="hidden" name="return_action" value="DetailView">';
         $hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
@@ -121,6 +122,38 @@ function renderPriceBookRelatedProducts($query,$id)
 	  $list = getPriceBookRelatedProducts($query,$focus);
 
 		
+	echo '</form>';
+}
+
+function renderRelatedProducts($query,$id,$sid="product_id")
+{
+	require_once('modules/Products/Product.php');
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id,$sid);
+        echo $hidden;
+
+        $focus = new Product();
+ 
+	$button = '';
+
+        if(isPermitted("Products",1,"") == 'yes')
+        {
+
+ 
+		$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'VendorDetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
+	}
+	if(isPermitted("Products",3,"") == 'yes')
+        {
+		if($focus->product_novendor() !=0)
+		{
+			$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_PRODUCT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&return_module=Products&smodule=VENDOR&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
+		}
+	}
+	$returnset = '&return_module=Products&smodule=VENDOR&return_action=VendorDetailView&return_id='.$id;
+
+	$list = GetRelatedList('Vendor','Products',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
 
