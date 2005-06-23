@@ -171,6 +171,7 @@ $mod_strings = Array(
 'LBL_SO_SEARCH_TITLE'=>'Sales Order Search',
 'LBL_QUOTE_NAME_TITLE'=>'Quote Name',
 'Order Id'=>'Order Id',
+'LBL_MY_TOP_SO'=>'My Top Open Sales Orders',
 
 );
 
