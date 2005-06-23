@@ -675,6 +675,9 @@ $app_strings = Array(
 'LBL_PORDER_BUTTON_KEY'=>'O',
 'Tracking Number'=>'Tracking Number',
 'Order Id'=>'Order Id',
+'Quote Name'=>'Quote Name',
+'Invoice Id'=>'Invoice Id',
+'Sales Order'=>'Sales Order',
 
 );
 
