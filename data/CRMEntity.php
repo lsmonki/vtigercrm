@@ -48,6 +48,13 @@ class CRMEntity extends SugarBean
     $this->db->println("TRANS saveentity starts");
     $this->db->startTransaction();
 	
+	// Code included by Jaguar - starts    
+    if(isset($_REQUEST['recurringtype']) && $_REQUEST['recurringtype']!='')
+	    $recur_type = trim($_REQUEST['recurringtype']);
+    else
+    	$recur_type='';	
+	// Code included by Jaguar - Ends
+
     foreach($this->tab_name as $table_name)
     {
       if($table_name == "crmentity")
@@ -82,20 +89,19 @@ class CRMEntity extends SugarBean
       }
       elseif($table_name == "activity_reminder")
       {
-	      $recur_type = trim($_REQUEST['recurringtype']);
 	      if($recur_type == "--None--")
 	      {
 		      $this->insertIntoReminderTable($table_name,$module,"");
 	      }
       }
-      elseif($table_name == "recurringevents")
+      elseif($table_name == "recurringevents") // Code included by Jaguar -  starts
       {
 		$recur_type = trim($_REQUEST['recurringtype']);
-		if($recur_type != "--None--")
+		if($recur_type != "--None--"  && $recur_type != '')
 	      	{		   
 	      		$this->insertIntoRecurringTable($table_name,$module);
 		}		
-      }
+      }// Code included by Jaguar - Ends
       else
       {
         $this->insertIntoEntityTable($table_name, $module);			
@@ -647,6 +653,7 @@ function insertIntoReminderTable($table_name,$module,$recurid)
 	}
 }
 
+// Code included by Jaguar - starts 
 function insertIntoRecurringTable($table_name,$module)
 {
 	global $adb;
@@ -686,6 +693,8 @@ function insertIntoRecurringTable($table_name,$module)
 				$adb->query($sql);
 				$flag="false";
 			}
+			else
+				$flag="false";
 		}
 		else
 		{
@@ -746,6 +755,8 @@ function insertIntoRecurringTable($table_name,$module)
 		}
 	}
 }
+
+// Code included by Jaguar - Ends 
 
 	
   function retrieve_entity_info($record, $module)
