@@ -31,6 +31,7 @@
 			<input type="hidden" name="popuptype" value="{POPUPTYPE}"/>
 			<input type="hidden" name="query" value="true"/>
 			<input type="hidden" name="module" value="Products" />
+			<input type="hidden" name="smodule" value="{SMODULE}" />
 		<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
 		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
 		<br>
@@ -93,7 +94,7 @@ function set_return_formname_specific(formname,product_id, product_name) {
 }
 function add_data_to_relatedlist(entity_id,recordid) {
 
-        opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Contacts&entityid="+entity_id+"&parid="+recordid;
+        opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Products&entityid="+entity_id+"&parid="+recordid;
 }
 
 function set_return_inventory(product_id,product_name,unitprice,qtyinstock,curr_row) {

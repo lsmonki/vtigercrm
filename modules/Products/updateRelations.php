@@ -15,7 +15,7 @@ global $adb;
 //if($_REQUEST['module']=='Users')
 //	$sql = "insert into salesmanactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
 //else
-if($_REQUEST['module']=='Products')
+if($_REQUEST['destination_module']=='Products')
 {
 	if($_REQUEST['smodule']=='VENDOR')
 	{
@@ -24,6 +24,16 @@ if($_REQUEST['module']=='Products')
 		$adb->query($sql);
 	}
 }
+if($_REQUEST['destination_module']=='Contacts')
+{
+	if($_REQUEST['smodule']=='VENDOR')
+	{
+		$sql = "insert into vendorcontactrel values (".$_REQUEST['parid'].",".$_REQUEST['entityid'].")";
+		$adb->query($sql);
+	}
+}
+
+
 	#$sql = "insert into seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .")";
 #$adb->query($sql);
  header("Location:index.php?action=VendorDetailView&module=Products&record=".$_REQUEST["parid"]);

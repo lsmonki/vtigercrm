@@ -175,7 +175,7 @@ $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Pro
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 
-$xtpl->assign("ALPHABETICAL",AlphabeticalSearch('Products','Popup','productname','true','basic',$popuptype,$_REQUEST['recordid'],$_REQUEST['return_module']));
+$xtpl->assign("ALPHABETICAL",AlphabeticalSearch('Products','Popup&smodule=$smodule','productname','true','basic',$popuptype,$_REQUEST['recordid'],$_REQUEST['return_module']));
 $xtpl->parse("main");
 $xtpl->out("main");
 

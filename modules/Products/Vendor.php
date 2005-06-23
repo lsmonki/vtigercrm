@@ -84,5 +84,36 @@ class Vendor extends CRMEntity {
 		$query = "select crmentity.*, purchaseorder.*,vendor.name from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid where crmentity.deleted=0 and purchaseorder.vendorid=".$id;
 	      	renderRelatedOrders($query,$id,'vendor_id');
         }
+	function get_contacts($id)
+        {
+ 		$query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid,vendorcontactrel.vendorid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  inner join vendorcontactrel on vendorcontactrel.contactid=contactdetails.contactid where crmentity.deleted=0 and vendorcontactrel.vendorid = '.$id;
+               renderRelatedContacts($query,$id);
+       }
+       function get_related_contacts($id)
+       {
+               $query = 'SELECT vendorcontactrel.*, crmentity.crmid from vendorcontactrel inner join crmentity on crmentity.crmid = vendorcontactrel.contactid where crmentity.deleted=0 and vendorcontactrel.vendorid = '.$id;
+               $result = $this->db->query($query);
+               $cnt_id = array();
+               $cnt_list = '';
+               if($this->db->num_rows($result)!=0)
+               {
+                       while($row = $this->db->fetch_array($result))
+                       {
+                               $cnt_id[] = $row['contactid'];
+                       }
+                       for ($i = 0; $i < count($cnt_id); $i++)
+                       {
+                               $cnt_list .= $cnt_id[$i] . ',';
+                       }
+
+                       if ($cnt_list)
+                       {
+                               $cnt_list = substr($cnt_list, 0, strlen($cnt_list) -1);
+                       }
+
+               }
+               return $cnt_list;
+         }
+
 }
 ?>

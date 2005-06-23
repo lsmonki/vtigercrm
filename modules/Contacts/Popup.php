@@ -57,8 +57,21 @@ $url_string = '';
 $sorder = 'ASC';
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
 $sorder = $_REQUEST['sorder'];
-
 if($popuptype!='') $url_string .= "&popuptype=".$popuptype;
+$smodule ="";
+// Added for  Vendor popup
+if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] !='')
+{
+        $smodule = $_REQUEST['smodule'];
+	$url_string = '&smodule='.$_REQUEST['smodule'];
+	require_once("modules/Products/Vendor.php");
+	$vendor_focus = new Vendor();
+	$vendor_cnt = $vendor_focus->get_related_contacts($_REQUEST['recordid']);
+	if($vendor_cnt !='')
+	{
+		$search_query .= " and contactdetails.contactid NOT IN (".$vendor_cnt.")";
+	}
+}
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
@@ -117,6 +130,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
 	$search_form->assign("POPUPTYPE",$popuptype);
+	$search_form->assign("SMODULE",$smodule);
         $search_form->assign("RETURNID",$_REQUEST['recordid']);
         $search_form->assign("RETURN_MODULE",$_REQUEST['return_module']);
 
@@ -130,7 +144,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Contacts','Popup','lastname','true','basic',$popuptype,$_REQUEST['recordid'],$_REQUEST['return_module']));
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Contacts','Popup&smodule=$smodule','lastname','true','basic',$popuptype,$_REQUEST['recordid'],$_REQUEST['return_module']));
 	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
 
 	$search_form->parse("main");
@@ -158,8 +172,11 @@ if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 else 
 	$xtpl->assign("RETURN_MODULE",'Emails');
 
+$xtpl->assign("SMODULE",$smodule);
 //Retreive the list from Database
 $list_query = getListQuery("Contacts");
+$list_query .= $search_query; 
+
 if(isset($where) && $where != '')
 {
 	$list_query .= " AND ".$where;
