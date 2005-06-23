@@ -96,8 +96,8 @@ echo "</td></tr>";
 echo "<tr><td class='formOuterBorder' style='padding: 10px'>";
 echo "<ul>";
 include('modules/Import/ImportButton.php');
-echo "<li><a href='index.php?module=squirrelmail-1.4.4&action=redirect'>".$mod_strings['LBL_FETCH_WEBMAIL']."</a></li>";
-echo "</ul>";
+//echo "<li><a href='index.php?module=squirrelmail-1.4.4&action=redirect'>".$mod_strings['LBL_FETCH_WEBMAIL']."</a></li>";
+//echo "</ul>";
 echo "</td></tr></table>";
 //require_once('modules/squirrelmail-1.4.4/right_main.php');
 ?>
