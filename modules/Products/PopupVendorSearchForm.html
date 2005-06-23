@@ -1,0 +1,89 @@
+<!--*********************************************************************************
+
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+
+ * ("License"); You may not use this file except in compliance with the License
+
+ * The Original Code is:  vtiger CRM Open Source
+
+ * The Initial Developer of the Original Code is vtiger.
+
+ * Portions created by vtiger are Copyright (C) vtiger.
+
+ * All Rights Reserved.
+
+*
+
+ ********************************************************************************/
+
+-->
+
+<!-- BEGIN: main -->
+
+{AA}
+
+<table cellpadding="0" cellspacing="0" border="0" width="100%" class="formOuterBorder">
+
+<tr><td>
+
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+
+	<tbody><tr>
+
+<form>
+
+	<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_VENDOR_NAME}&nbsp;</td>
+
+		<td><input type=text size="10" name="vendorname"  value="{VENDOR_NAME}" />
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_COMPANY_NAME}&nbsp;</td>
+
+		<td><input type=text size="10" name="companyname"  value='{COMPANY_NAME}' />
+
+		<td class="dataLabel" noWrap>&nbsp;{MOD.LBL_CATEGORY_TITLE}&nbsp;</td>
+
+		<td><input type=text size="10" name="category"  value='{CATEGORY}'/>
+
+		<td rowspan='2' align="center"><input type="hidden" name="action" value="VendorPopup"/>
+			<input type="hidden" name="popuptype" value="{POPUPTYPE}"/>
+
+			<input type="hidden" name="query" value="true"/>
+
+			<input type="hidden" name="module" value="Products" />
+
+                	<input type="hidden" name="order_by" value="{ORDER_BY}" />
+
+	                <input type="hidden" name="sorder" value="{SORDER}" />
+
+			<input type="hidden" name="viewname" value="{VIEWID}" />
+
+		<input title="{APP.LBL_SEARCH_BUTTON_TITLE}" accessKey="{APP.LBL_SEARCH_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
+
+		<input title="{APP.LBL_CLEAR_BUTTON_TITLE}" accessKey="{APP.LBL_CLEAR_BUTTON_KEY}" onclick="clear_form(this.form);" class="button" type="button" name="clear" value=" {APP.LBL_CLEAR_BUTTON_LABEL} "/>
+
+		<br>
+
+       		<!--font size='1'>[<a href='{ADVANCE_LINK}'>{APP.LNK_ADVANCED_SEARCH}</a>]</font-->
+
+		</td>
+
+	</tr>
+</form>
+
+	</table>
+
+</td></tr>
+
+</table>
+
+<table cellpadding="2" cellspacing="4" border="0" align="center" style="margin-top:5px;margin-bottom:5px"><tr>
+
+{ALPHABETICAL}
+
+</tr></table>
+
+{JAVASCRIPT}
+
+<!-- END: main -->
+
+
