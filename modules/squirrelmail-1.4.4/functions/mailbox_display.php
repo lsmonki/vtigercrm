@@ -884,7 +884,6 @@ function ShowSortButton($sort, $mailbox, $Up, $Down ) {
     } else {
         $source_url = $PHP_SELF;
     }
-echo '>>>>>>>>>>> source url is '.$source_url;
     /* Now that we have everything figured out, show the actual button. */
     echo ' <a href="' . $source_url .'?newsort=' . $which
          . '&amp;startMessage=1&amp;mailbox=' . urlencode($mailbox)
