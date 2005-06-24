@@ -471,6 +471,12 @@ $mod_strings = Array(
 'LBL_PO_FIELD_ACCESS'=>'Purchase Order Field Access',
 'LBL_SO_FIELD_ACCESS'=>'Sales Order Access',
 'LBL_INVOICE_FIELD_ACCESS'=>'Invoice Field Access',
+'INVENTORYNOTIFICATION'=>'Inventory Notifications',
+'LBL_INVENTORY_NOTIFICATIONS'=>'Edit Inventory Email Notifications',
+'LBL_INV_NOT_DESC'=>'The following is the list of notifications that are sent to the product handler regarding the demand and the current quantity in hand during the creation of a Quote, SalesOrder and Invoice.',
+
+'InvoiceNotification'=>'Product Stock Notification during Invoice Generation',
+'InvoiceNotificationDescription'=>'When the product stock level goes below the re-order level, notification will be sent to the product handler',
 
 );
 
