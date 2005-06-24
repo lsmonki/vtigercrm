@@ -31,7 +31,7 @@ if(isset($_REQUEST['mailconnect']))
 	
 
 echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
-
+/*
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
 $sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
 echo "\n<BR>\n";
@@ -88,6 +88,7 @@ echo "\n<BR>\n";
  </table></td>
  </tr>
 <?
+*/
 include ('modules/Emails/ListView.php'); 
 
 echo "<br><table width='250' cellpadding=0 cellspacing=0><tr><td>";
