@@ -178,7 +178,28 @@ function renderRelatedOrders($query,$id,$sid="product_id")
 
 	$list = GetRelatedList('Vendor','Orders',$focus,$query,$button,$returnset);
 	echo '</form>';
+} 
+function renderRelatedContacts($query,$id)
+{
+        global $mod_strings;
+        global $app_strings;
+        require_once('modules/Contacts/Contact.php');
+
+        $hidden = getHiddenValues($id);                                                                                             echo $hidden;
+
+        $focus = new Contact();
+
+        $button = '';
+        if(isPermitted("Contacts",1,"") == 'yes')
+        {
+                $button .= '<input title="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_TITLE'].'" accessKey="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_KEY'].'" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&return_module=Products&smodule=VENDOR&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
+        }
+        $returnset = '&return_module=Products&return_action=VendorDetailView&return_id='.$id;
+
+        $list = GetRelatedList('Vendor','Contacts',$focus,$query,$button,$returnset);
+        echo '</form>';
 }
+
 
 echo get_form_footer();
 
