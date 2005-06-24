@@ -81,6 +81,7 @@ for($i=1; $i<=$tot_no_prod; $i++)
 
                 $query ="insert into soproductrel values(".$focus->id.",".$prod_id.",".$qty.",".$listprice.")";
                 $adb->query($query);
+		updateStk($prod_id,$qty);
         }
 }
 $return_id = $focus->id;
@@ -92,6 +93,117 @@ else $return_action = "SalesOrderDetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
 $local_log->debug("Saved record with id of ".$return_id);
+
+function updateStk($product_id,$qty)
+{
+	global $adb;
+	global $current_user;
+	$prod_name = getProductName($product_id);
+	$qtyinstk= getPrdQtyInStck($product_id);
+	$upd_qty = $qtyinstk-$qty;
+	//Check for reorder level and send mail
+	$reorderlevel = getPrdReOrderLevel($product_id);
+	if($upd_qty < $reorderlevel)
+	{
+		
+		//send mail to the handler
+		$handler=getPrdHandler($product_id);
+		$handler_name = getUserName($handler);
+		$to_address= getUserEmail($handler);
+		//Get the email details from database;
+		$query = "select * from inventorynotification where notificationname='SalesOrderNotification'";
+		$result = $adb->query($query);
+
+		$subject = $adb->query_result($result,0,'notificationsubject');
+		$body = $adb->query_result($result,0,'notificationbody');
+
+		$subject = str_replace('{PRODUCTNAME}',$prod_name,$subject);
+		$body = str_replace('{HANDLER}',$handler_name,$body);	
+		$body = str_replace('{PRODUCTNAME}',$prod_name,$body);	
+		$body = str_replace('{CURRENTSTOCK}',$qtyinstk,$body);	
+		$body = str_replace('{SOQUANTITY}',$qty,$body);	
+		$body = str_replace('{CURRENTUSER}',$current_user->user_name,$body);	
+
+		SendMailToCustomer($to_address,$current_user->id,$subject,$body);
+		
+	}
+}
+
+
+function getPrdQtyInStck($product_id)
+{
+	global $adb;
+	$query1 = "select qtyinstock from products where productid=".$product_id;
+	$result=$adb->query($query1);
+	$qtyinstck= $adb->query_result($result,0,"qtyinstock");
+	return $qtyinstck;
+	
+	
+}
+function getPrdReOrderLevel($product_id)
+{
+	global $adb;
+	$query1 = "select reorderlevel from products where productid=".$product_id;
+	$result=$adb->query($query1);
+	$reorderlevel= $adb->query_result($result,0,"reorderlevel");
+	return $reorderlevel;
+	
+}
+function getPrdHandler($product_id)
+{
+	global $adb;
+	$query1 = "select handler from products where productid=".$product_id;
+	$result=$adb->query($query1);
+	$handler= $adb->query_result($result,0,"handler");
+	return $handler;
+	
+}
+
+function SendMailToCustomer($to,$current_user_id,$subject,$contents)
+{
+	require_once("modules/Emails/class.phpmailer.php");
+
+	$mail = new PHPMailer();
+	
+	$mail->Subject = $subject;
+	$mail->Body    = nl2br($contents);	
+	$mail->IsSMTP();
+
+	if($current_user_id != '')
+	{
+		global $adb;
+		$sql = "select * from users where id= ".$current_user_id;
+		$result = $adb->query($sql);
+		$from = $adb->query_result($result,0,'email1');
+		$initialfrom = $adb->query_result($result,0,'user_name');
+	}
+	if($mail_server=='')
+        {
+		global $adb;
+                $mailserverresult=$adb->query("select * from systems where server_type='email'");
+                $mail_server=$adb->query_result($mailserverresult,0,'server');
+                $_REQUEST['server']=$mail_server;
+        }
+	$mail->Host = $mail_server;
+        $mail->SMTPAuth = true;
+        $mail->Username = $mail_server_username;
+        $mail->Password = $mail_server_password;
+	$mail->From = $from;
+	$mail->FromName = $initialfrom;
+
+	$mail->AddAddress($to);
+	$mail->AddReplyTo($from);
+	$mail->WordWrap = 50;
+
+	$mail->IsHTML(true);
+
+	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
+
+	if(!$mail->Send())
+	{
+		$errormsg = "Mail Could not be sent...";	
+	}
+}
 
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 ?>
