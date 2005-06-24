@@ -3968,7 +3968,7 @@ function getDetailAssociatedProducts($module,$focus)
     $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
     $output .= '<td width="16%" style="padding:3px;">List Price</td>';
     $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-    $output .= '<td width="20%" style="padding:3px;"><div align="center">Total</div></td>';
+    $output .= '<td style="padding:3px;"><div align="center">Total</div></td>';
     $output .=  '</tr>';
     $output .=  '<tr id="tableheadline">';
     $output .=  '<td colspan="11" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
@@ -4007,7 +4007,7 @@ function getDetailAssociatedProducts($module,$focus)
 		$listprice=$adb->query_result($result,$i-1,'listprice');
 		$total = $qty*$listprice;
 
-		if($num_rows%2 == 0)
+		if($i%2 == 0)
 		{
 			$row_class = "evenListRow";
 		}
@@ -4051,22 +4051,22 @@ function getDetailAssociatedProducts($module,$focus)
         $output .= '<tr>'; 
 	$output .= '<td width="150"></td>';
       	$output .= '<td><div align="right"><b>Sub Total:</b></div></td>';
-        $output .= '<td width="150" style="padding-right:35"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnSubTotal'].'</div></td>';
+        $output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnSubTotal'].'</div></td>';
         $output .= '</tr>';
         $output .= '<tr>'; 
 	$output .=  '<td>&nbsp;</td>';
         $output .= '<td><div align="right"><b>Tax:</b></div></td>';
-        $output .= '<td width="150" style="padding-right:35"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtTax'].'</div></td>';
+        $output .= '<td width="150"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtTax'].'</div></td>';
       $output .= '</tr>';
       $output .= '<tr>'; 
       $output .= '<td>&nbsp;</td>';
       $output .= '<td><div align="right"><b>Adjustment:</b></div></td>';
-      $output .= '<td width="150" style="padding-right:35"><div align="right"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtAdjustment'].'</div></td>';
+      $output .= '<td width="150"><div align="right"><div align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['txtAdjustment'].'</div></td>';
       $output .= '</tr>';
       $output .= '<tr>'; 
       $output .= '<td>&nbsp;</td>';
       $output .= '<td><div align="right"><b>Grand Total:</b></div></td>';
-      $output .= '<td width="150" style="padding-right:35"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnGrandTotal'].'</div></td>';
+      $output .= '<td width="150"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnGrandTotal'].'</div></td>';
     $output .= '</tr>';
     $output .= '</table>';
 
