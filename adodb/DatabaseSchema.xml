@@ -5153,6 +5153,24 @@
 		<data>
 		</data>
 	</table>
+	
+	<table name="inventorynotification">
+                <field name="notificationid" type="I" size="19">
+                        <KEY/>
+                        <AUTOINCREMENT/>
+                </field>
+                <field name="notificationname" type="C" size="200">
+                </field>
+                <field name="notificationsubject" type="C" size="200">
+                </field>
+                <field name="notificationbody" type="X" >
+                </field>
+                <field name="label" type="C" size="50">
+                </field>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
 
 
 </schema>
