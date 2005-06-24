@@ -188,7 +188,6 @@ function printMessageInfo($imapConnection, $t, $not_last=true, $key, $mailbox,
     $subject = str_replace('&nbsp;',' ',$subject);
     if (sizeof($index_order)) {
         foreach ($index_order as $index_order_part) {
-                echo 'xxxxxxxxxxxxxxxxxxxxxxxx';
             switch ($index_order_part) {
             case 1: /* checkbox */
                 echo html_tag( 'td',
@@ -370,7 +369,6 @@ function getSelfSortMessages($imapConnection, $start_msg, $show_num,
 function showMessagesForMailbox($imapConnection, $mailbox, $num_msgs,
                                 $start_msg, $sort, $color, $show_num,
                                 $use_cache, $mode='') {
-                                        echo 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
     global $msgs, $msort, $auto_expunge, $thread_sort_messages,
            $allow_server_sort, $server_sort_order;
 
