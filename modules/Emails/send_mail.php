@@ -77,6 +77,15 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 	$mail->FromName = $initialfrom;
 
 	$mail->AddAddress($to);                  // name is optional
+        if($_REQUEST['ccmail'] != '')
+        {
+		$ccmail = explode(",",$_REQUEST['ccmail']);
+		for($i=0;$i<count($ccmail);$i++)
+		{
+	                $mail->AddCC($ccmail[$i]);
+		}
+        }
+
 	$mail->AddReplyTo($from);
 	$mail->WordWrap = 50;                                 // set word wrap to 50 characters
 
