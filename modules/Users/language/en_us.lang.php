@@ -259,6 +259,19 @@ $mod_strings = Array(
 'LBL_ADD_MAILSERVER_BUTTON_KEY'=>'M',
 'LBL_ADD_MAILSERVER_BUTTON_LABEL'=>'Add Mail Server',
 
+'INVENTORYNOTIFICATION'=>'Inventory Notifications',
+'LBL_INVENTORY_NOTIFICATIONS'=>'Edit Inventory Email Notifications',
+'LBL_INV_NOT_DESC'=>'The following are the list of notifications that are sent to the product handler regarding the demand and the current quantity in hand during the creation of a Quote, SalesOrder and Invoice.',
+
+'InvoiceNotification'=>'Product Stock Notification during Invoice Generation',
+'InvoiceNotificationDescription'=>'When the product stock level goes below the re-order level, notification will be sent to the product handler',
+
+'QuoteNotification'=>'Product Stock Notification during Quote Generation',
+'QuoteNotificationDescription'=>'During quote generation if the product stock in warehouse is lesser than the  quantity mentioned in quote then this notification will be sent to the product handler',
+
+'SalesOrderNotification'=>'Product Stock Notification during Sales Order Generation',
+'SalesOrderNotificationDescription'=>'During sales order generation if the product stock in warehouse is lesser than the quantity mentioned in sales order then this notification will be sent to the product handler',
+
 );
 
 ?>
