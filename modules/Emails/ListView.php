@@ -28,6 +28,65 @@ require_once('include/logging.php');
 require_once('include/uifromdbutil.php');
 require_once('modules/CustomView/CustomView.php');
 
+$submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
+$sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
+echo '<br>';
+?>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+   <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td class="tabStart">&nbsp;&nbsp;</td>
+<?
+	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
+	{
+		$classname = "tabOff";
+	}
+	else
+	{
+		$classname = "tabOn";
+	}
+	$listView = "ListView.php";
+	foreach($submenu as $label=>$filename)
+	{
+		$cur_mod = $sec_arr[$filename];
+		$cur_tabid = getTabid($cur_mod);
+
+		if($tab_per_Data[$cur_tabid] == 0)
+		{
+
+			list($lbl,$sname,$title)=split("_",$label);
+			if(stristr($label,"EMAILS"))
+			{
+
+				echo '<td class="tabOn" nowrap><a href="index.php?module=Emails&action=ListView" class="tabLink">'.$mod_strings[$label].'</a></td>';
+
+				$listView = $filename;
+				$classname = "tabOff";
+			}
+			elseif(stristr($label,$_REQUEST['smodule']))
+			{
+				echo '<td class="tabOn" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+				$listView = $filename;
+				$classname = "tabOff";
+			}
+			else
+			{
+				echo '<td class="'.$classname.'" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+			}
+			$classname = "tabOff";
+		}
+
+	}
+?>
+     <td width="100%" class="tabEnd">&nbsp;</td>
+   </tr>
+ </table></td>
+ </tr>
+ </table>
+ <br>
+<?
+
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
