@@ -76,6 +76,9 @@ class vtigerRSS extends CRMEntity
 				return $shtml;
 			   }
 	                }
+			
+			return $shtml;
+
         	}else
         	{
                 	$shtml = "Sorry: It's not possible to reach RSS URL";
