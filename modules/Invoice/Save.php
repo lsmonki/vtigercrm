@@ -99,6 +99,7 @@ function updateStk($product_id,$qty)
 {
 	global $adb;
 	global $current_user;
+	$prod_name = getProductName($product_id);
 	$qtyinstk= getPrdQtyInStck($product_id);
 	$upd_qty = $qtyinstk-$qty;
 	$query= "update products set qtyinstock=".$upd_qty." where productid=".$product_id;
@@ -109,10 +110,23 @@ function updateStk($product_id,$qty)
 	{
 		//send mail to the handler
 		$handler=getPrdHandler($product_id);
+		$handler_name = getUserName($handler);
 		$to_address= getUserEmail($handler);
-		$subject = "The Quantity in Stock for the product ".getProductName($product_id)." is low";
-		$contents = "The Quantity in Stock for the product ".getProductName($product_id)." is lesser than the reorder level ".$reorderlevel." The  current quantity in stock is ".$upd_qty;
-		SendMailToCustomer($to_address,$current_user->id,$subject,$contents);
+		//Get the email details from database;
+		$query = "select * from inventorynotification where notificationname='InvoiceNotification'";
+		$result = $adb->query($query);
+
+		$subject = $adb->query_result($result,0,'notificationsubject');
+		$body = $adb->query_result($result,0,'notificationbody');
+
+		$subject = str_replace('{PRODUCTNAME}',$prod_name,$subject);
+		$body = str_replace('{HANDLER}',$handler_name,$body);	
+		$body = str_replace('{PRODUCTNAME}',$prod_name,$body);	
+		$body = str_replace('{CURRENTSTOCK}',$upd_qty,$body);	
+		$body = str_replace('{REORDERLEVELVALUE}',$reorderlevel,$body);	
+		$body = str_replace('{CURRENTUSER}',$current_user->user_name,$body);	
+
+		SendMailToCustomer($to_address,$current_user->id,$subject,$body);
 		
 	}
 }
