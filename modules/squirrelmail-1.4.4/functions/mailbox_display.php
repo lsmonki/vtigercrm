@@ -885,9 +885,11 @@ function ShowSortButton($sort, $mailbox, $Up, $Down ) {
         $source_url = $PHP_SELF;
     }
     /* Now that we have everything figured out, show the actual button. */
-    echo ' <a href="' . $source_url .'?newsort=' . $which
+    //echo ' <a href="' . $source_url .'?newsort=' . $which
+    //fix for the sorting of emails in the webmail list view
+    echo ' <a href="index.php?module=squirrelmail-1.4.4&action=right_main&newsort=' . $which
          . '&amp;startMessage=1&amp;mailbox=' . urlencode($mailbox)
-         . '"><IMG SRC="../images/' . $img
+         . '"><IMG SRC="modules/squirrelmail-1.4.4/images/' . $img
          . '" BORDER=0 WIDTH=12 HEIGHT=10 ALT="sort"></a>';
 }
 
