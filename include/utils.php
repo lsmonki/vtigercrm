@@ -1342,12 +1342,20 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$contact_selected = "selected";
 
 			}
-		
+			elseif($parent_module == "Quotes")
+                        {
+                                $sql = "select * from  quotes where quoteid=".$value;
+                                $result = $adb->query($sql);
+                                $parent_name = $adb->query_result($result,0,"subject");
+                                $quote_selected = "selected";
+
+                        }
 		}
 		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>';
                 $custfld .= '<OPTION value="Leads" '.$lead_selected.'>'.$app_strings['COMBO_LEADS'].'</OPTION>';
                 $custfld .= '<OPTION value="Accounts" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
                 $custfld .= '<OPTION value="Potentials" '.$contact_selected.'>'.$app_strings['COMBO_POTENTIALS'].'</OPTION>';
+		$custfld .= '<OPTION value="Quotes" '.$quote_selected.'>'.$app_strings['COMBO_QUOTES'].'</OPTION>';
 
 	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
 
@@ -1806,6 +1814,15 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$potentialname.'</a></td>';
 			}
+			elseif($parent_module == "Quotes")
+                        {
+                                $custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_QUOTE_NAME'].':</td>';
+                                $sql = "select * from  quotes where quoteid=".$value;
+                                $result = $adb->query($sql);
+                                $quotename = $adb->query_result($result,0,"subject");
+
+                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$quotename.'</a></td>';
+                        }
 		}
 		else
 		{
@@ -2565,6 +2582,12 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_query = "SELECT productname FROM products WHERE productid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"productname");
+        }
+	if($parent_module == 'Quotes')
+        {
+                $parent_query = "SELECT subject FROM quotes WHERE quoteid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"subject");
         }
 	if($parent_module == 'Contacts' && ($module == 'Emails' || $module == 'HelpDesk'))
         {

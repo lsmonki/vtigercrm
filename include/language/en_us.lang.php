@@ -678,7 +678,13 @@ $app_strings = Array(
 'Quote Name'=>'Quote Name',
 'Invoice Id'=>'Invoice Id',
 'Sales Order'=>'Sales Order',
-
+ // Added Quote in activity parent type selection / Realted list
+'COMBO_QUOTES'=>'Quotes',
+'End Date'=>'End Date',
+'Start Date'=>'Start Date',
+'Related To'=>'Related To',
+'Recurring Type'=> 'Recurring Type',
+'LBL_QUOTE_NAME'=>'Quote Name'
 );
 
 
