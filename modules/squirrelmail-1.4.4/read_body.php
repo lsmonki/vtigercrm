@@ -18,6 +18,8 @@
  * @ignore
  */
 echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
+global $msgvtSubject ;
+$msgvtSubject='';
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
 $sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
 echo '<br>';
@@ -499,15 +501,15 @@ function formatRecipientString($recipients, $item ) {
     return $string;
 }
 
-function formatEnvheader($mailbox, $passed_id, $passed_ent_id, $message, 
-                         $color, $FirstTimeSee) {
+function formatEnvheader($mailbox, $passed_id, $passed_ent_id, $message,$color, $FirstTimeSee) {
     global $msn_user_support, $default_use_mdn, $default_use_priority,
            $show_xmailer_default, $mdn_user_support, $PHP_SELF, $javascript_on,
-           $squirrelmail_language;
+           $squirrelmail_language,$msgvtSubject;
 
     $header = $message->rfc822_header;
     $env = array();
     $env[_("Subject")] = decodeHeader($header->subject);
+    $msgvtSubject = $env[_("Subject")];
     $from_name = $header->getAddr_s('from');
     if (!$from_name) {
         $from_name = $header->getAddr_s('sender');
@@ -579,11 +581,18 @@ function formatEnvheader($mailbox, $passed_id, $passed_ent_id, $message,
 }
 
 function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_response) {
-	global $msgData;
-    global $base_uri, $draft_folder, $where, $what, $color, $sort,
+  global $msgData,$msgvtSubject;
+        global $base_uri, $draft_folder, $where, $what, $color, $sort,
            $startMessage, $PHP_SELF, $save_as_draft,
            $enable_forward_as_attachment;
+        
 
+
+        $header = $message->rfc822_header;
+        $env = array();
+        $env[_("Subject")] = decodeHeader($header->subject);
+        $msgvtSubject = $env[_("Subject")];
+        
     $topbar_delimiter = '&nbsp;|&nbsp;';
     $urlMailbox = urlencode($mailbox);
     $s = '<table width="100%" cellpadding="3" cellspacing="0" align="center"'.
@@ -728,13 +737,13 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
     //$s .= $topbar_delimiter;
    // echo $comp_action_uri;
     //$s .= makeComposeLink($comp_action_uri, _("Reply"));
-    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&body='.$msgData.'">Reply</a>';
+    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&mg_subject='.$msgvtSubject.'&body='.$msgData.'">Reply</a>';
     // echo $string;
     
     $comp_action_uri = $modifiedcomp_uri . '&amp;smaction=reply_all';
     $s .= $topbar_delimiter;
     //$s .= makeComposeLink($comp_action_uri, _("Reply All"));
-    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&body='.$msgData.'">Reply All</a>';
+    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&mg_subject='.$msgvtSubject.'&body='.$msgData.'">Reply All</a>';
     $s .= '</small></td></tr></table>';
     $ret = concat_hook_function('read_body_menu_top', $s);
     if($ret != '') {
