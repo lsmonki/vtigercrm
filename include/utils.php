@@ -1314,6 +1314,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                                 $sorder_selected = "selected";
 
                         }
+			elseif($parent_module == "Invoice")
+                        {
+                                $sql = "select * from  invoice where invoiceid=".$value;
+                                $result = $adb->query($sql);
+                                $parent_name= $adb->query_result($result,0,"subject");
+                                $invoice_selected = "selected";
+
+                        }
+
 
 		}
 		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>';
@@ -1321,8 +1330,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 $custfld .= '<OPTION value="Accounts" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
                 $custfld .= '<OPTION value="Potentials" '.$contact_selected.'>'.$app_strings['COMBO_POTENTIALS'].'</OPTION>';
 		$custfld .= '<OPTION value="Products" '.$product_selected.'>'.$app_strings['COMBO_PRODUCTS'].'</OPTION>';
+		$custfld .= '<OPTION value="Invoice" '.$Invoice_selected.'>'.$app_strings['COMBO_INVOICES'].'</OPTION>';
                 $custfld .= '<OPTION value="Orders" '.$porder_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
-                $custfld .= '<OPTION value="SalesOrder" '.$sorder_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION></select></td>';
+                $custfld .= '<OPTION value="Orders" '.$sorder_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION></select></td>';
 
 	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
 
@@ -1387,6 +1397,13 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                                         $parent_name = $adb->query_result($result,0,"subject");
                                         $sales_selected = "selected";
                                 }
+				if($parent_module == "Invoice")
+                                {
+                                        $sql = "select * from invoice where invoiceid=".$value;
+                                        $result = $adb->query($sql);
+                                        $parent_name = $adb->query_result($result,0,"subject");
+                                        $invoice_selected = "selected";
+                                }
 
                         }
 
@@ -1399,7 +1416,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		if($act_mode == "Task")
                 {
                         $custfld .= '<OPTION value="Orders" '.$purchase_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
-                        $custfld .= '<OPTION value="SalesOrder" '.$sales_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION>';
+                        $custfld .= '<OPTION value="Orders" '.$sales_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION>';
+                        $custfld .= '<OPTION value="Invoice" '.$invoice_selected.'>'.$app_strings['COMBO_INVOICES'].'</OPTION>';
                 }
                 $custfld .='</select></td>';
 
@@ -1817,6 +1835,33 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$productname.'</a></td>';
 			}
+			elseif($parent_module == "Orders")
+			{
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_PORDER_NAME'].':</td>';
+				$sql = "select * from  purchaseorder where purchaseorderid=".$value;
+				$result = $adb->query($sql);
+				$pordername= $adb->query_result($result,0,"subject");
+
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$pordername.'</a></td>';
+			}
+			elseif($parent_module == "SalesOrder")
+			{
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_SORDER_NAME'].':</td>';
+				$sql = "select * from  salesorder where salesorderid=".$value;
+				$result = $adb->query($sql);
+				$sordername= $adb->query_result($result,0,"subject");
+
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a></td>';
+			}
+			elseif($parent_module == "Invoice")
+			{
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_INVOICE_NAME'].':</td>';
+				$sql = "select * from  invoice where invoiceid=".$value;
+				$result = $adb->query($sql);
+				$invoicename= $adb->query_result($result,0,"subject");
+
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$invoicename.'</a></td>';
+			}
 		}
 		else
 		{
@@ -1887,6 +1932,16 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
                                 $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a></td>';
                         }
+			elseif($parent_module == "Invoice")
+                        {
+                                $custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_INVOICE_NAME'].':</td>';
+                                $sql = "select * from  invoice where invoiceid=".$value;
+                                $result = $adb->query($sql);
+                                $invoicename = $adb->query_result($result,0,"subject");
+
+                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$invoicename.'</a></td>';
+                        }
+
 		}
 		else
 		{
@@ -2589,6 +2644,24 @@ function getRelatedToEntity($module,$list_result,$rset)
 			$parent_result = $adb->query($parent_query);
 			$parent_name = $adb->query_result($parent_result,0,"productname");
 		}
+		if($parent_module == 'Orders')
+		{
+			$parent_query = "SELECT subject FROM purchaseorder WHERE purchaseorderid=".$seid;
+			$parent_result = $adb->query($parent_query);
+			$parent_name = $adb->query_result($parent_result,0,"subject");
+		}
+		if($parent_module == 'SalesOrder')
+		{
+			$parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$seid;
+			$parent_result = $adb->query($parent_query);
+			$parent_name = $adb->query_result($parent_result,0,"subject");
+		}
+		if($parent_module == 'Invoice')
+		{
+			$parent_query = "SELECT subject FROM invoice WHERE invoiceid=".$seid;
+			$parent_result = $adb->query($parent_query);
+			$parent_name = $adb->query_result($parent_result,0,"subject");
+		}
 
 		$parent_value = "<a href='index.php?module=".$parent_module."&action=DetailView&record=".$seid."'>".$parent_name."</a>"; 
 	}
@@ -2605,7 +2678,7 @@ function getRelatedTo($module,$list_result,$rset)
 
         global $adb;
         $activity_id = $adb->query_result($list_result,$rset,"activityid");
-
+	$action = "DetailView";
         $evt_query="select seactivityrel.crmid,crmentity.setype from seactivityrel, crmentity where seactivityrel.activityid='".$activity_id."' and seactivityrel.crmid = crmentity.crmid";
 
 	if($module == 'HelpDesk')
@@ -2664,6 +2737,7 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"subject");
+		$action = "SalesOrderDetailView";
         }
 	if($parent_module == 'Contacts' && ($module == 'Emails' || $module == 'HelpDesk'))
         {
@@ -2672,7 +2746,7 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_name = $adb->query_result($parent_result,0,"firstname") ." " .$adb->query_result($parent_result,0,"lastname");
         }
 
-        $parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=DetailView&record=".$parent_id."'>".$parent_name."</a>";
+        $parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=".$action."&record=".$parent_id."'>".$parent_name."</a>";
         return $parent_value;
 
 
@@ -2765,8 +2839,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				else
 				{
 
-
-					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
+					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
 					{
 						$status = $adb->query_result($list_result,$i-1,"status");
 						if($status == '')
@@ -3122,6 +3195,11 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		{
 			$tablename = "products";	$fieldname = "productname";     $idname="productid";
 		}
+		if($parenttype == "Invoice")	
+		{
+			$tablename = "invoice";	$fieldname = "subject";     $idname="invoiceid";
+		}
+
 
 		if($parentid != '')
                 {

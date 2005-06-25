@@ -678,13 +678,22 @@ $app_strings = Array(
 'Quote Name'=>'Quote Name',
 'Invoice Id'=>'Invoice Id',
 'Sales Order'=>'Sales Order',
- // Added Quote in activity parent type selection / Realted list
+ // Added Quote in activity parent type selection / Related list
 'COMBO_QUOTES'=>'Quotes',
 'End Date'=>'End Date',
 'Start Date'=>'Start Date',
-'Related To'=>'Related To',
+'Related to'=>'Related To',
 'Recurring Type'=> 'Recurring Type',
-'LBL_QUOTE_NAME'=>'Quote Name'
+'LBL_QUOTE_NAME'=>'Quote Name',
+ //Added Orders in activity parent type selection / Related list
+'COMBO_PORDER'=>'Purchase Order',
+'COMBO_SORDER'=>'Sales Order',
+'LBL_PORDER_NAME'=>'Purchase Order',
+'LBL_SORDER_NAME'=>'Sales Order',
+ // Added Invoice in activity parent type selection / Related list
+'COMBO_INVOICES'=>'Invoice',
+'LBL_INVOICE_NAME'=>'Invoice',
+	
 );
 
 

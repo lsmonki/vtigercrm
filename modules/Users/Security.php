@@ -61,7 +61,7 @@ class Security extends CRMEntity {
  $this->db->query("INSERT INTO tab VALUES (19,'PriceBook',2,16,'PriceBook','','',1)");
  $this->db->query("INSERT INTO tab VALUES (20,'Quotes',0,17,'Quotes','','',1)");
  $this->db->query("INSERT INTO tab VALUES (21,'Orders',0,18,'Orders','','',1)");
- $this->db->query("INSERT INTO tab VALUES (22,'SalesOrder',2,19,'SalesOrder','','',1)");
+ $this->db->query("INSERT INTO tab VALUES (22,'SalesOrder',0,19,'SalesOrder','','',1)");
  $this->db->query("INSERT INTO tab VALUES (23,'Invoice',0,20,'Invoice','','',1)");
  $this->db->query("INSERT INTO tab VALUES (24,'Rss',0,21,'Rss','','',1)");
  $this->db->query("INSERT INTO tab VALUES (25,'Reports',0,22,'Reports','','',1)");
@@ -523,7 +523,7 @@ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,3,1,'V~O')");
 
  //Block6
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'terms_conditions','purchaseorder',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,6,1,'V~O')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'terms_conditions','purchaseorder',1,'19','terms_conditions','Terms & Condifitons',1,0,0,100,1,6,1,'V~O')");
 //Purchase Order Details -- END
 
 //Sales Order Details -- START
@@ -1406,27 +1406,35 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
         $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendor").",21,'get_purchase_orders',2,'Products',0)");
 
         $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendor").",4,'get_contacts',3,'Contacts',0)");
-	
+
 	// Inserting Quotes Related Lists
-
+	
         $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Quotes").",22,'get_salesorder',1,'Sales Order',0)");
-
-        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Quotes").",9,'get_activities',2,'Activities',0)");
-
-        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Quotes").",9,'get_history',3,'History',0)");
+        
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Quotes").",9,'get_activities',2,'Activities',0)");
+	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Quotes").",9,'get_history',3,'History',0)");
 
 	// Inserting Purchase order Related Lists
 
-        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Orders").",9,'get_activities',1,'Activities',0)");
-
-        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Orders").",0,'get_attachments',2,'Attachments',0)");
-
-        // Inserting Sales order Related Lists
-
-        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("SalesOrder").",9,'get_activities',1,'Activities',0)");
-
-        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("SalesOrder").",0,'get_attachments',2,'Attachments',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Orders").",9,'get_activities',1,'Activities',0)");
 	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Orders").",0,'get_attachments',2,'Attachments',0)");
+	
+	// Inserting Sales order Related Lists
+
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("SalesOrder").",9,'get_activities',1,'Activities',0)");
+	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("SalesOrder").",0,'get_attachments',2,'Attachments',0)");
+	
+	// Inserting Invoice Related Lists
+
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Invoice").",9,'get_activities',1,'Activities',0)");
+	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Invoice").",0,'get_attachments',2,'Attachments',0)");
+
+
+
                $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_TASK_NOTIFICATION_DESCRITPION',1,'Task Delay Notification','Tasks delayed beyond 24 hrs ','LBL_TASK_NOTIFICATION')");
 
 
@@ -1444,48 +1452,6 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
                 $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_SUPPORT_DESCRIPTION',1,'Support ending please','Support Ending Notification','LBL_SUPPORT_NOTICIATION')");
 		
  		$this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_ACTIVITY_REMINDER_DESCRIPTION' ,1,'Activity Reminder Notication','This is a reminder notification for the Activity','LBL_ACTIVITY_NOTIFICATION')");
-
-		//Inserting Inventory Notifications
-
-		$invoice_body = 'Dear {HANDLER},
-
-The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. Kindly procure required number of units as the stock level is below reorder level {REORDERLEVELVALUE}.
-
-Please treat this information as Urgent as the invoice is already sent  to the customer.
-
-Severity: Critical
-
-Thanks,
-{CURRENTUSER}';
-
-		
-               $this->db->query("insert into inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("inventorynotification").",'InvoiceNotification','{PRODUCTNAME} Stock Level is Low','".$invoice_body." ','InvoiceNotificationDescription')");
-
-		$quote_body = 'Dear {HANDLER},
-
-Quote is generated for {QUOTEQUANTITY} units of {PRODUCTNAME}. The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. 
-
-Severity: Minor
-
-Thanks,
-{CURRENTUSER}';	
-		
-		
-               $this->db->query("insert into inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("inventorynotification").",'QuoteNotification','Quote given for {PRODUCTNAME}','".$quote_body." ','QuoteNotificationDescription')");
-
-		$so_body = 'Dear {HANDLER},
-
-SalesOrder is generated for {SOQUANTITY} units of {PRODUCTNAME}. The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. 
-
-Please treat this information  with priority as the sales order is already generated.
-
-Severity: Major
-
-Thanks,
-{CURRENTUSER}';
-
-		
-               $this->db->query("insert into inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("inventorynotification").",'SalesOrderNotification','Sales Order generated for {PRODUCTNAME}','".$so_body." ','SalesOrderNotificationDescription')");
 
 		//Insert into currency table
 		$this->db->query("insert into currency_info values('U.S Dollar','USD','$')");

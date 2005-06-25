@@ -126,6 +126,12 @@ if(isPermitted("Invoice",2,$_REQUEST['record']) == 'yes')
 $xtpl->parse("main");
 $xtpl->out("main");
 
+//Security check for related list
+global $profile_id;
+$tab_per_Data = getAllTabsPermission($profile_id);
+$permissionData = $_SESSION['action_permission_set'];
+getRelatedLists("Invoice",$focus);
+
 echo "<BR>\n";
 
 
