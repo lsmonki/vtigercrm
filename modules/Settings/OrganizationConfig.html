@@ -51,10 +51,23 @@
 	    <td nowrap class="dataField"><a href="http://{ORGANIZATIONWEBSITE}">{ORGANIZATIONWEBSITE}</a></td>	      </tr>
 	<tr>
 	    <td nowrap class="dataLabel">{MOD.LBL_ORGANIZATION_LOGO}: </td>
-	    <td nowrap class="dataField"> <a href="index.php?module=Settings&action=downloadfile">{ORGANIZATIONLOGONAME}</a></td></tr>
+	    <td nowrap class="dataField"><a href="javascript:popitup('{ORGANIZATIONLOGOPATH}/{ORGANIZATIONLOGONAME}');">{ORGANIZATIONLOGONAME}</a></td></tr>
 	</tr>
 	
 </table>
 </td></tr>
 </table>
+
+<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
+<!--
+var win = null;
+function popitup(url)
+{
+        newwindow=window.open(url,'name','height=300,width=450,left=550,top=20');
+
+}
+
+// -->
+</SCRIPT>
+
 <!-- END: main -->
