@@ -205,22 +205,43 @@ elseif(isset($undeleteButton))
 }
 elseif (!isset($moveButton) )
 {
-  if (count($id)) 
-  {
-    $cnt = count($id);
-    if(isset($addToVtigerCRMButton))
-    {
-   //  echo ' invoked add to vtiger crm button';
+	if (count($id)) 
+	{
+		$cnt = count($id);
+		if(isset($addToVtigerCRMButton))
+		{
+			$msgsubject =  array();
+			$msgfromemail = array();
+			sqgetGlobalVar('mailbox',       $mailbox);
+			for($k=0;$k< count($id);$k++)
+			{
+				$message = sqimap_get_message($imapConnection, $id[$k], $mailbox);
+				$header = $message->rfc822_header;
+				/*
+				$from = $message->rfc822_header->getAddr_s('from');
+				$date = getLongDateString($message->rfc822_header->date);
+				
+				$subject = trim($rfc822_header->subject);
+				$cc = $message->rfc822_header->getAddr_s('cc');
+				$to = $message->rfc822_header->getAddr_s('to');
 
-     sqgetGlobalVar('mailbox',       $mailbox);
-   $message = sqimap_get_message($imapConnection, $id[0], $mailbox);
-   $header = $message->rfc822_header;
-   //print_r($header);
-   $fromemail = $header->from[0]->mailbox .'@'.$header->from[0]->host;
-   $subject  = $header->subject ;
-     header("Location: index.php?module=Emails&action=Save&fromemail=".$fromemail."&subject=".$subject);      
-     return;
-    }
+				echo 'cc is '.$cc;
+				echo 'to is '.$to;
+				
+				print_r($header);
+				exit;
+				*/
+				$fromemail = $header->from[0]->mailbox .'@'.$header->from[0]->host;
+				$subject  = $header->subject ;
+				$msgsubject[$k]=$subject;
+				$msgfromemail[$k]=$fromemail;
+			}
+		      	$tempidlist = implode(",", $id); 
+			$fromemail = implode(",",$msgfromemail);
+			$subject = implode(",",$msgsubject);
+			header("Location: index.php?module=Emails&action=Save&fromemail=".$fromemail."&subject=".$subject."&idlist=".$tempidlist);      
+			return;
+		}
     
     if (!isset($attache))
     {
@@ -305,6 +326,11 @@ else
       $exception = true;
     }
 }
+
+
+
+
+
 // Log out this session
 sqimap_logout($imapConnection);
 if ($exception)
