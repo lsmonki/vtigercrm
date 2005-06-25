@@ -192,10 +192,8 @@ if (!isset($startMessage) || ($startMessage == '')) {
 if ($imap_server_type == 'uw' && (strstr($mailbox, '../') || substr($mailbox, 0, 1) == '/')) {
    $mailbox = 'INBOX';
 }
-echo "<a href='index.php?module=squirrelmail-1.4.4&action=redirect'><b><font color=green> <u>Fetch My Mails!</u></color></b></a>";
+echo "<a href='index.php?module=squirrelmail-1.4.4&action=redirect'><b><font color=green> <u>Fetch My Mails!</u></color></b></a><br>";
 echo '<hr>';
-echo '<br>';
-echo '<br>';
 
 //Richie//Richie//Richie//Richie//Richie//Richie//Richie//Richie
 //echo 'in right_main';
