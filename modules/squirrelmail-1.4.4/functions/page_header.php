@@ -262,7 +262,7 @@ function displayPageHeader($color, $mailbox, $xtra='', $session=false) {
     }
     echo "<a name=\"pagetop\"></a>\n"
         . html_tag( 'table', '', '', $color[4], 'border="0" width="100%" cellspacing="0" cellpadding="2"' ) ."\n"
-        . html_tag( 'tr', '', '', $color[9] ) ."\n"
+        . html_tag( 'tr', '', '', $color[12] ) ."\n"
         . html_tag( 'td', '', 'left' ) ."\n";
     if ( $shortBoxName <> '' && strtolower( $shortBoxName ) <> 'none' ) {
         echo '         ' . _("Current Folder") . ": <b>$shortBoxName&nbsp;</b>\n";
