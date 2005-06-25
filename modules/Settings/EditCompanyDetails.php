@@ -14,6 +14,13 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
+
+$filename=$_REQUEST['file_name'];
+$filetype=$_REQUEST['file_type'];
+$filesize=$_REQUEST['file_size'];
+$logo_value=$_REQUEST['logo_value'];
+echo "<h3> file". $filename."ss  </h3>";
+
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Settings: Company Information", true);
 echo '<br><br>';
 
@@ -24,6 +31,7 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $xtpl=new XTemplate ('modules/Settings/EditCompanyDetails.html');
+//$xtpl=new XTemplate ('modules/Settings/add2db');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
@@ -38,30 +46,37 @@ $organization_country = $adb->query_result($result,0,'country');
 $organization_phone = $adb->query_result($result,0,'phone');
 $organization_fax = $adb->query_result($result,0,'fax');
 $organization_website = $adb->query_result($result,0,'website');
+$organization_logoname = $adb->query_result($result,0,'logoname');
+
 
 $xtpl->assign("RETURN_MODULE","Settings");
 $xtpl->assign("RETURN_ACTION","index");
 
+$xtpl->assign("FILE_NAME",$filename);
+$xtpl->assign("FILE_TYPE",$filetype);
+$xtpl->assign("FILE_SIZE",$filesize);
+$xtpl->assign("LOGO_VALUE",$logo_value);
 
 if (isset($organization_name))
-$xtpl->assign("ORGANIZATIONNAME",$organization_name);
+	$xtpl->assign("ORGANIZATIONNAME",$organization_name);
 if (isset($organization_address))
-$xtpl->assign("ORGANIZATIONADDRESS",$organization_address);
+	$xtpl->assign("ORGANIZATIONADDRESS",$organization_address);
 if (isset($organization_city))
-$xtpl->assign("ORGANIZATIONCITY",$organization_city);
+	$xtpl->assign("ORGANIZATIONCITY",$organization_city);
 if (isset($organization_state))
-$xtpl->assign("ORGANIZATIONSTATE",$organization_state);
+	$xtpl->assign("ORGANIZATIONSTATE",$organization_state);
 if (isset($organization_code))
-$xtpl->assign("ORGANIZATIONCODE",$organization_code);
+	$xtpl->assign("ORGANIZATIONCODE",$organization_code);
 if (isset($organization_country))
-$xtpl->assign("ORGANIZATIONCOUNTRY",$organization_country);
+	$xtpl->assign("ORGANIZATIONCOUNTRY",$organization_country);
 if (isset($organization_phone))
-$xtpl->assign("ORGANIZATIONPHONE",$organization_phone);
+	$xtpl->assign("ORGANIZATIONPHONE",$organization_phone);
 if (isset($organization_fax))
-$xtpl->assign("ORGANIZATIONFAX",$organization_fax);
+	$xtpl->assign("ORGANIZATIONFAX",$organization_fax);
 if (isset($organization_website))
-$xtpl->assign("ORGANIZATIONWEBSITE",$organization_website);
-
+	$xtpl->assign("ORGANIZATIONWEBSITE",$organization_website);
+if (isset($organization_logoname))
+	$xtpl->assign("ORGANIZATIONLOGONAME",$organization_logoname);
 
 
 $xtpl->parse("main");
