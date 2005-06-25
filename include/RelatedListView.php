@@ -126,7 +126,7 @@ else
 
 }
 
-function getAttachmentsAndNotes($parentmodule,$query,$id)
+function getAttachmentsAndNotes($parentmodule,$query,$id,$sid='')
 {
 	global $theme;
 
@@ -150,7 +150,14 @@ function getAttachmentsAndNotes($parentmodule,$query,$id)
 
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
-	
+	if($sid=='salesorderid')
+	{
+		$return_action = "SalesOrderDetailView";
+	}
+	else
+	{
+		$return_action = "DetailView";
+	}
 	$button .= '<table cellspacing=0 cellpadding=2><tr><td>';
 	$button .= '<input type="hidden" name="fileid">';
 	$button .= '<input title="New Attachment" accessyKey="F" class="button" onclick="this.form.action.value=\'upload\';this.form.module.value=\'uploads\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_ATTACHMENT'].'">&nbsp;';
@@ -158,7 +165,7 @@ function getAttachmentsAndNotes($parentmodule,$query,$id)
         if(isPermitted("Notes",1,"") == 'yes')
         {
 	
-		$button .= '<input title="New Notes" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Notes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_NOTE'].'">&nbsp;';
+		$button .= '<input title="New Notes" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\''.$return_action.'\';this.form.module.value=\'Notes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_NOTE'].'">&nbsp;';
 	}
 	$button .= '</td></tr></table>';
 	
@@ -260,9 +267,9 @@ else
 		$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
 
 		if($row[1] == 'Notes')
-			$list .= '<a href="index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["crmid"].'&filename='.$row[2].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>  |  ';
+			$list .= '<a href="index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row[2].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>  |  ';
 //		$list .= '<a href="index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["crmid"].'&filename='.$row[2].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
-		$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["crmid"].'&filename='.$row[2].'&return_id='.$_REQUEST["record"];
+		$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row[2].'&return_id='.$_REQUEST["record"];
                 $list .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
 
 		$list .= '</td>';

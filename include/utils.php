@@ -1298,12 +1298,31 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$product_selected = "selected";
 
 			}
+			elseif($parent_module == "Orders")
+                        {
+                                $sql = "select * from  purchaseorder where purchaseorderid=".$value;
+                                $result = $adb->query($sql);
+                                $parent_name= $adb->query_result($result,0,"subject");
+                                $porder_selected = "selected";
+
+                        }
+                        elseif($parent_module == "SalesOrder")
+                        {
+                                $sql = "select * from  salesorder where salesorderid=".$value;
+                                $result = $adb->query($sql);
+                                $parent_name= $adb->query_result($result,0,"subject");
+                                $sorder_selected = "selected";
+
+                        }
+
 		}
 		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>';
                 $custfld .= '<OPTION value="Leads" '.$lead_selected.'>'.$app_strings['COMBO_LEADS'].'</OPTION>';
                 $custfld .= '<OPTION value="Accounts" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
                 $custfld .= '<OPTION value="Potentials" '.$contact_selected.'>'.$app_strings['COMBO_POTENTIALS'].'</OPTION>';
-                $custfld .= '<OPTION value="Products" '.$product_selected.'>'.$app_strings['COMBO_PRODUCTS'].'</OPTION></select></td>';
+		$custfld .= '<OPTION value="Products" '.$product_selected.'>'.$app_strings['COMBO_PRODUCTS'].'</OPTION>';
+                $custfld .= '<OPTION value="Orders" '.$porder_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
+                $custfld .= '<OPTION value="SalesOrder" '.$sorder_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION></select></td>';
 
 	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
 
@@ -1312,7 +1331,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         {
                 if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
                         $value = $_REQUEST['parent_id'];
-
+		// Check for activity type if task orders to be added in select option
+                $act_mode = $_REQUEST['activity_mode'];
+			
 		if($value != '')
 		{
 			$parent_module = getSalesEntityType($value);
@@ -1350,12 +1371,37 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                                 $quote_selected = "selected";
 
                         }
+			elseif($act_mode == "Task")
+                        {
+                                if($parent_module == "Orders")
+                                {
+                                        $sql = "select * from purchaseorder where purchaseorderid=".$value;
+                                        $result = $adb->query($sql);
+                                        $parent_name = $adb->query_result($result,0,"subject");
+                                        $purchase_selected = "selected";
+                                }
+                                if($parent_module == "SalesOrder")
+                                {
+                                        $sql = "select * from salesorder where salesorderid=".$value;
+                                        $result = $adb->query($sql);
+                                        $parent_name = $adb->query_result($result,0,"subject");
+                                        $sales_selected = "selected";
+                                }
+
+                        }
+
 		}
 		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>';
                 $custfld .= '<OPTION value="Leads" '.$lead_selected.'>'.$app_strings['COMBO_LEADS'].'</OPTION>';
                 $custfld .= '<OPTION value="Accounts" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
                 $custfld .= '<OPTION value="Potentials" '.$contact_selected.'>'.$app_strings['COMBO_POTENTIALS'].'</OPTION>';
 		$custfld .= '<OPTION value="Quotes" '.$quote_selected.'>'.$app_strings['COMBO_QUOTES'].'</OPTION>';
+		if($act_mode == "Task")
+                {
+                        $custfld .= '<OPTION value="Orders" '.$purchase_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
+                        $custfld .= '<OPTION value="SalesOrder" '.$sales_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION>';
+                }
+                $custfld .='</select></td>';
 
 	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
 
@@ -1822,6 +1868,24 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                                 $quotename = $adb->query_result($result,0,"subject");
 
                                 $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$quotename.'</a></td>';
+                        }
+			elseif($parent_module == "Orders")
+                        {
+                                $custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_PORDER_NAME'].':</td>';
+                                $sql = "select * from  purchaseorder where purchaseorderid=".$value;
+                                $result = $adb->query($sql);
+                                $pordername = $adb->query_result($result,0,"subject");
+
+                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$pordername.'</a></td>';
+                        }
+                        elseif($parent_module == "SalesOrder")
+                        {
+                                $custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_SORDER_NAME'].':</td>';
+                                $sql = "select * from  salesorder where salesorderid=".$value;
+                                $result = $adb->query($sql);
+                                $sordername = $adb->query_result($result,0,"subject");
+
+                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a></td>';
                         }
 		}
 		else
@@ -2586,6 +2650,18 @@ function getRelatedTo($module,$list_result,$rset)
 	if($parent_module == 'Quotes')
         {
                 $parent_query = "SELECT subject FROM quotes WHERE quoteid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"subject");
+        }
+	if($parent_module == 'Orders')
+        {
+                $parent_query = "SELECT subject FROM purchaseorder WHERE purchaseorderid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"subject");
+        }
+        if($parent_module == 'SalesOrder')
+        {
+                $parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"subject");
         }

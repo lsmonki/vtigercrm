@@ -137,6 +137,11 @@ $xtpl->parse("main");
 $xtpl->out("main");
 
 echo "<BR>\n";
+//Security check for related list
+global $profile_id;
+$tab_per_Data = getAllTabsPermission($profile_id);
+$permissionData = $_SESSION['action_permission_set'];
+getRelatedLists("SalesOrder",$focus);
 
 
 ?>
