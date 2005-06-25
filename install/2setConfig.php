@@ -301,6 +301,8 @@ function verify_data(form) {
               <tr>
                <td><font color=red>*</font></td><td nowrap><strong>MySQL Database Name</strong></td>
                <td align="left"><input type="text" class="dataInput" name="db_name" readonly value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
+
+		<input type="hidden" name="dbtype" value="<?php echo $dbconfig['db_type']; ?>">
               </tr>
               <!-- tr>
                <td></td><td nowrap><strong>Drop Existing Tables?</strong></td>
