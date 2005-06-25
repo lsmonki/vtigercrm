@@ -16,7 +16,7 @@ require_once('include/utils.php');
 
 $vtigerpath = $_SERVER['REQUEST_URI'];
 $vtigerpath = str_replace("/index.php?module=Settings&action=add2db", "", $vtigerpath);
-$uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
+$uploaddir = $root_directory ."/test/logo/" ;// set this to wherever
 $saveflag="true";
 
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
@@ -29,7 +29,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 
 	if($filesize != 0)	
 	{
-		$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
+		//$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
 		if($result!=false)
 		{
 			$savelogo="true";
@@ -42,7 +42,7 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 			<li><font color='red'>Invalid file OR</font>
 			<li><font color='red'>File has no data</font>
 			</ul></B></font> <br>" ;
-		deleteFile($uploaddir,$filename);
+		//deleteFile($uploaddir,$filename);
 	}			
 } 
 else 
@@ -65,11 +65,11 @@ else
 	  
 }
 	
+
 function deleteFile($dir,$filename)
 {
    unlink($dir.$filename);	
 }
-
 if($saveflag=="true")
 {
 	$organization_name=$_REQUEST['organization_name'];
@@ -102,7 +102,7 @@ if($saveflag=="true")
 	$adb->query($sql);
 	if($savelogo=="true")
 	{
-		$result = $adb->updateBlob('organizationdetails','logo',"organizationame='".$organization_name."' and logoname='".$filename."'",$data);
+	//	$result = $adb->updateBlob('organizationdetails','logo',"organizationame='".$organization_name."' and logoname='".$filename."'",$data);
 		header("Location: index.php?module=Settings&action=OrganizationConfig");
 	}
 	elseif($savelogo=="false")
