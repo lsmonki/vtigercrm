@@ -29,7 +29,7 @@ $H_NAME=gethostbyaddr($_SERVER['SERVER_ADDR']);
 //$dbconfig['db_user_name'] = 	'vtigercrm';
 //$dbconfig['db_password'] = 		'';
 //$dbconfig['db_name'] = 			'vtigercrm';
-
+$dbconfig['db_type'] = 'mysql';
 //$host_name = '';
 
 //$site_URL = '';
