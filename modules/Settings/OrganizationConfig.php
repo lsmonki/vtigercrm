@@ -70,10 +70,31 @@ if (isset($organization_website))
 	$xtpl->assign("ORGANIZATIONWEBSITE",$organization_website);
 if (isset($organization_logo))
 	$xtpl->assign("ORGANIZATIONLOGO",$organization_logo);
-if (isset($organization_logoname))
-	$xtpl->assign("ORGANIZATIONLOGONAME",$organization_logoname);
 
-	
+$path = "test/logo";
+$dir_handle = @opendir($path) or die("Unable to open directory $path");
+
+while ($file = readdir($dir_handle))
+{
+        $filetyp = substr($file, -3);
+        if ($filetyp == 'gif' OR $filetyp == 'jpg' OR $filetyp == 'png')
+        {
+		if($file!="." && $file!="..")
+		{
+			
+ 		     $organization_logopath= $path;
+		     $logo_name=$file;
+		}
+			
+        }
+}
+
+
+if (isset($organization_logopath))
+	$xtpl->assign("ORGANIZATIONLOGOPATH",$path);
+if (isset($organization_logoname))
+	$xtpl->assign("ORGANIZATIONLOGONAME",$logo_name);
+closedir($dir_handle);
 
 $xtpl->parse("main");
 $xtpl->out("main");
