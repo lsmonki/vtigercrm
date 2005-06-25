@@ -19,7 +19,6 @@ $filename=$_REQUEST['file_name'];
 $filetype=$_REQUEST['file_type'];
 $filesize=$_REQUEST['file_size'];
 $logo_value=$_REQUEST['logo_value'];
-echo "<h3> file". $filename."ss  </h3>";
 
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Settings: Company Information", true);
 echo '<br><br>';
