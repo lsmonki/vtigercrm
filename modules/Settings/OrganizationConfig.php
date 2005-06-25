@@ -43,6 +43,8 @@ $organization_country = $adb->query_result($result,0,'country');
 $organization_phone = $adb->query_result($result,0,'phone');
 $organization_fax = $adb->query_result($result,0,'fax');
 $organization_website = $adb->query_result($result,0,'website');
+$organization_logo = $adb->query_result($result,0,'logo');
+$organization_logoname = $adb->query_result($result,0,'logoname');
 
 $xtpl->assign("RETURN_MODULE","Settings");
 $xtpl->assign("RETURN_ACTION","index");
@@ -66,6 +68,10 @@ if (isset($organization_fax))
 	$xtpl->assign("ORGANIZATIONFAX",$organization_fax);
 if (isset($organization_website))
 	$xtpl->assign("ORGANIZATIONWEBSITE",$organization_website);
+if (isset($organization_logo))
+	$xtpl->assign("ORGANIZATIONLOGO",$organization_logo);
+if (isset($organization_logoname))
+	$xtpl->assign("ORGANIZATIONLOGONAME",$organization_logoname);
 
 	
 
