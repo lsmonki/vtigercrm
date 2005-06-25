@@ -585,14 +585,16 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
         global $base_uri, $draft_folder, $where, $what, $color, $sort,
            $startMessage, $PHP_SELF, $save_as_draft,
            $enable_forward_as_attachment;
-        
-
 
         $header = $message->rfc822_header;
         $env = array();
         $env[_("Subject")] = decodeHeader($header->subject);
         $msgvtSubject = $env[_("Subject")];
-        
+         $env[_("Cc")] = formatRecipientString($header->cc, "cc");
+	 $msgvtcc = $env[_("Cc")];
+         $env[_("To")] = formatRecipientString($header->to, "to");
+	 $msgvtTo = $env[_("To")];
+
     $topbar_delimiter = '&nbsp;|&nbsp;';
     $urlMailbox = urlencode($mailbox);
     $s = '<table width="100%" cellpadding="3" cellspacing="0" align="center"'.
@@ -737,13 +739,13 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
     //$s .= $topbar_delimiter;
    // echo $comp_action_uri;
     //$s .= makeComposeLink($comp_action_uri, _("Reply"));
-    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&mg_subject='.$msgvtSubject.'&body='.$msgData.'">Reply</a>';
+    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&msg_to='.$msgvtTo.'&msg_cc='.$msgvtcc.'&mg_subject='.$msgvtSubject.'&body='.$msgData.'">Reply</a>';
     // echo $string;
     
     $comp_action_uri = $modifiedcomp_uri . '&amp;smaction=reply_all';
     $s .= $topbar_delimiter;
     //$s .= makeComposeLink($comp_action_uri, _("Reply All"));
-    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&mg_subject='.$msgvtSubject.'&body='.$msgData.'">Reply All</a>';
+    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&msg_to='.$msgvtTo.'&msg_cc='.$msgvtcc.'&mg_subject='.$msgvtSubject.'&body='.$msgData.'">Reply All</a>';
     $s .= '</small></td></tr></table>';
     $ret = concat_hook_function('read_body_menu_top', $s);
     if($ret != '') {
