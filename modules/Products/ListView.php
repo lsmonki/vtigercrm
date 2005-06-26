@@ -197,6 +197,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+	
+	$search_form->assign("VIEWID",$viewid);
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if($order_by != '') {
@@ -325,6 +327,18 @@ if(isset($order_by) && $order_by != '')
 
 $list_result = $adb->query($list_query);
 
+$view_script = "<script language='javascript'>
+	function set_selected()
+	{
+		len=document.massdelete.view.length;
+		for(i=0;i<len;i++)
+		{
+			if(document.massdelete.view[i].value == '$viewid')
+				document.massdelete.view[i].selected = true;
+		}
+	}
+	set_selected();
+	</script>";
 
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
@@ -382,6 +396,7 @@ $xtpl->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"Products",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
+$xtpl->assign("SELECT_SCRIPT", $view_script);
 
 if($order_by !='')
 $url_string .="&order_by=".$order_by;
