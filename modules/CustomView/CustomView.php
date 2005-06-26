@@ -85,6 +85,7 @@ class CustomView extends CRMEntity{
 		{
 			$customviewlist["viewname"] = $cvrow["viewname"];
 			$customviewlist["setdefault"] = $cvrow["setdefault"];
+			$customviewlist["setmetrics"] = $cvrow["setmetrics"];
 		}
 		return $customviewlist;		
 	}	

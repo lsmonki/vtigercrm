@@ -11,51 +11,51 @@
 require_once('include/database/PearDatabase.php');
 
 $customviews = Array(Array('viewname'=>'Hot Leads',
-			   'setdefault'=>'0',
+			   'setdefault'=>'0','setmetrics'=>'1',
 			   'cvmodule'=>'Leads','stdfilterid'=>'','advfilterid'=>'0'),
 
 		     Array('viewname'=>'This Month Leads',
-			   'setdefault'=>'0',
+			   'setdefault'=>'0','setmetrics'=>'0',
 			   'cvmodule'=>'Leads','stdfilterid'=>'0','advfilterid'=>''),
 
 		     Array('viewname'=>'Prospect Accounts',
-                           'setdefault'=>'0',
+                           'setdefault'=>'0','setmetrics'=>'1',
                            'cvmodule'=>'Accounts','stdfilterid'=>'','advfilterid'=>'1'),
 		     
 		     Array('viewname'=>'New This Week',
-                           'setdefault'=>'0',
+                           'setdefault'=>'0','setmetrics'=>'0',
                            'cvmodule'=>'Accounts','stdfilterid'=>'1','advfilterid'=>''),
 
 		     Array('viewname'=>'Contacts Address',
-                           'setdefault'=>'0',
+                           'setdefault'=>'0','setmetrics'=>'0',
                            'cvmodule'=>'Contacts','stdfilterid'=>'','advfilterid'=>''),
 
 		     Array('viewname'=>'Todays Birthday',
-                           'setdefault'=>'0',
+                           'setdefault'=>'0','setmetrics'=>'0',
                            'cvmodule'=>'Contacts','stdfilterid'=>'2','advfilterid'=>''),
 
 		     Array('viewname'=>'Potentails Won',
-                           'setdefault'=>'0',
+                           'setdefault'=>'0','setmetrics'=>'1',
                            'cvmodule'=>'Potentials','stdfilterid'=>'','advfilterid'=>'2'),
 
 		     Array('viewname'=>'Prospecting',
-                           'setdefault'=>'0',
+                           'setdefault'=>'0','setmetrics'=>'0',
                            'cvmodule'=>'Potentials','stdfilterid'=>'','advfilterid'=>'3'),
  	 	     
 	             Array('viewname'=>'Open Tickets',
-                           'setdefault'=>'0',
+                           'setdefault'=>'0','setmetrics'=>'1',
                            'cvmodule'=>'HelpDesk','stdfilterid'=>'','advfilterid'=>'4'),
        	             
 		     Array('viewname'=>'High Prioriy Tickets',
-                           'setdefault'=>'0',
+                           'setdefault'=>'0','setmetrics'=>'0',
                            'cvmodule'=>'HelpDesk','stdfilterid'=>'','advfilterid'=>'5'),
 
 		     Array('viewname'=>'Open Quotes',
-                           'setdefault'=>'0',
+                           'setdefault'=>'0','setmetrics'=>'1',
                            'cvmodule'=>'Quotes','stdfilterid'=>'','advfilterid'=>'6'),
 
 		     Array('viewname'=>'Rejected Quotes',
-                           'setdefault'=>'0',
+                           'setdefault'=>'0','setmetrics'=>'0',
                            'cvmodule'=>'Quotes','stdfilterid'=>'','advfilterid'=>'7')
 		    );
 
@@ -212,7 +212,7 @@ $cvadvfilters = Array(
 
 foreach($customviews as $key=>$customview)
 {
-        $queryid = insertCustomView($customview['viewname'],$customview['setdefault'],$customview['cvmodule']);
+        $queryid = insertCustomView($customview['viewname'],$customview['setdefault'],$customview['setmetrics'],$customview['cvmodule']);
         insertCvColumns($queryid,$cvcolumns[$key]);
 	
 	if(isset($cvstdfilters[$customview['stdfilterid']]))
@@ -226,7 +226,7 @@ foreach($customviews as $key=>$customview)
 	}
 }
 
-function insertCustomView($viewname,$setdefault,$cvmodule)
+function insertCustomView($viewname,$setdefault,$setmetrics,$cvmodule)
 {
 	global $adb;
 
@@ -234,8 +234,8 @@ function insertCustomView($viewname,$setdefault,$cvmodule)
 	if($genCVid != "")
 	{
 
-		$customviewsql = "insert into customview(cvid,viewname,setdefault,entitytype)";
-		$customviewsql .= " values(".$genCVid.",'".$viewname."',".$setdefault.",'".$cvmodule."')";
+		$customviewsql = "insert into customview(cvid,viewname,setdefault,setmetrics,entitytype)";
+		$customviewsql .= " values(".$genCVid.",'".$viewname."',".$setdefault.",".$setmetrics.",'".$cvmodule."')";
 		//echo $customviewsql;
 		$customviewresult = $adb->query($customviewsql);
 	}

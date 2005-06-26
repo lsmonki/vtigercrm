@@ -99,8 +99,8 @@ if($cvmodule != "")
 			$updatedefaultresult = $adb->query($updatedefaultsql);
 		  }
 
-		  $customviewsql = "insert into customview(cvid,viewname,setdefault,entitytype)";
-		  $customviewsql .= " values(".$genCVid.",'".$viewname."',".$setdefault.",'".$cvmodule."')";
+		  $customviewsql = "insert into customview(cvid,viewname,setdefault,setmetrics,entitytype)";
+		  $customviewsql .= " values(".$genCVid.",'".$viewname."',".$setdefault.",".$setmetrics.",'".$cvmodule."')";
 		  //echo $customviewsql;
 		  $customviewresult = $adb->query($customviewsql);
 
@@ -145,7 +145,7 @@ if($cvmodule != "")
 			$updatedefaultresult = $adb->query($updatedefaultsql);
 	     }
 
-	     $updatecvsql = "update customview set viewname='".$viewname."',setdefault=".$setdefault." where cvid=".$cvid;
+	     $updatecvsql = "update customview set viewname='".$viewname."',setdefault=".$setdefault.",setmetrics=".$setmetrics." where cvid=".$cvid;
 	     $updatecvresult = $adb->query($updatecvsql);
 
 	     $deletesql = "delete from cvcolumnlist where cvid=".$cvid;
