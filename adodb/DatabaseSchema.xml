@@ -4651,6 +4651,9 @@
 		<field name="setdefault" type="I" size="1">
                         <DEFAULT value="0"/>
                 </field>
+		<field name="setmetrics" type="I" size="1">
+                        <DEFAULT value="0"/>
+                </field>
                 <field name="entitytype" type="C" size="100">
                         <NOTNULL/>
                 </field>
