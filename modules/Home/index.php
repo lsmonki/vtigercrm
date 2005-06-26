@@ -45,7 +45,11 @@ $task_title = $mod_strings['LBL_OPEN_TASKS'];
 ?>
 <table width=100% cellpadding="5" cellspacing="5" border="0">
 <tr>
-<td valign="top"><?php
+<td valign="top">
+<?php
+        include("modules/CustomView/ListViewTop.php");
+?>
+<?php
 if($tab_per_Data[2] == 0)
 {
 	if($permissionData[2][3] == 0)
