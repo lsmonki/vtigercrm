@@ -361,22 +361,11 @@ $combo->create_tables();
 require_once('include/PopulateCustomFieldTables.php');
 create_custom_field_tables();
 
-//Start Reports Population//
-//Report Foldername,Report Description//
+//Default report population//
 require_once('modules/Reports/PopulateReports.php');
 
-$rptfolder = Array(Array('Account Reports'=>'Account Reports'),
-                   Array('Potential Reports'=>'Potential Reports'),
-		   Array('Lead Reports'=>'Lead Reports')
-                  );
-
-foreach($rptfolder as $key=>$rptarray)
-{
-	foreach($rptarray as $foldername=>$folderdescription)
-	{
-		PopulateReportFolder($foldername,$folderdescription);
-	}
-}
+//Default customview population//
+require_once('modules/CustomView/PopulateCustomView.php');
 
 //Creating and Populating PHPBB tables and data
 //require_once('include/PopulatePhpBBtables.php');
