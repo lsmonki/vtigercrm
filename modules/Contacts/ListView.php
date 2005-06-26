@@ -369,8 +369,20 @@ if(isset($order_by) && $order_by != '')
 
 $list_result = $adb->query($list_query);
 
-//Constructing the list view
+$view_script = "<script language='javascript'>
+	function set_selected()
+	{
+		len=document.massdelete.view.length;
+		for(i=0;i<len;i++)
+		{
+			if(document.massdelete.view[i].value == '$viewid')
+				document.massdelete.view[i].selected = true;
+		}
+	}
+	set_selected();
+	</script>";
 
+//Constructing the list view
 echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Contacts/ListView.html');
 $xtpl->assign("MOD", $mod_strings);
@@ -432,6 +444,7 @@ $xtpl->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"Contacts",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
+$xtpl->assign("SELECT_SCRIPT", $view_script);
 
 if($order_by !='')
 $url_string .="&order_by=".$order_by;
