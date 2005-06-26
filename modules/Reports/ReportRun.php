@@ -104,7 +104,7 @@ class ReportRun extends CRMEntity
 		{
 			$querycolumn = "contactdetailsRel.lastname"." ".$selectedfields[2];
 		}*/
-		if($fieldname == "vendor_id")
+		/*if($fieldname == "vendor_id")
 		{
 			$querycolumn = "vendorRel.name"." ".$selectedfields[2];
 		}
@@ -115,7 +115,7 @@ class ReportRun extends CRMEntity
 		if($fieldname == "assigned_user_id1")
                 {
                         $querycolumn = "usersRel1.user_name"." ".$selectedfields[2];
-                }
+                }*/
 		return $querycolumn;
 	}
 	
@@ -165,6 +165,61 @@ class ReportRun extends CRMEntity
 		return $sSQL;
 	}
 	
+	function getAdvComparator($comparator,$value)
+        {
+
+		if($comparator == "e")
+                {
+                        if(trim($value) != "")
+			{
+				$rtvalue = " = ".PearDatabase::quote($value);
+			}else
+			{
+				$rtvalue = " is NULL";
+			}
+                }
+                if($comparator == "n")
+                {
+                        if(trim($value) != "")
+			{
+				$rtvalue = " <> ".PearDatabase::quote($value);
+			}else
+			{
+				$rtvalue = " is NOT NULL";
+			}
+                }
+                if($comparator == "s")
+                {
+                        $rtvalue = " like ".PearDatabase::quote($value."%");
+                }
+                if($comparator == "c")
+                {
+                        $rtvalue = " like ".PearDatabase::quote("%".$value."%");
+                }
+                if($comparator == "k")
+                {
+                        $rtvalue = " not like ".PearDatabase::quote("%".$value."%");
+                }
+                if($comparator == "l")
+                {
+                        $rtvalue = " < ".PearDatabase::quote($value);
+                }
+                if($comparator == "g")
+		{
+                        $rtvalue = " > ".PearDatabase::quote($value);
+                }
+                if($comparator == "m")
+                {
+                        $rtvalue = " <= ".PearDatabase::quote($value);
+                }
+                if($comparator == "h")
+                {
+                        $rtvalue = " >= ".PearDatabase::quote($value);
+                }
+                
+		return $rtvalue;
+        }
+	
 	function getAdvFilterList($reportid)
 	{
 		global $adb;
@@ -187,16 +242,13 @@ class ReportRun extends CRMEntity
 		     {
 			$selectedfields = explode(":",$fieldcolname);
 			
-			if($comparator == "e")
-			{
-                           $fieldvalue = $selectedfields[0].".".$selectedfields[1]." = '".$value."'";
-			}
-			
+			$fieldvalue = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,$value);
+
 			$advfilterlist[$fieldcolname] = $fieldvalue;		
 		     }
 	    						
 		}
-		
+		//print_r($advfilterlist);	
 		return $advfilterlist;
 	}	
 
@@ -517,7 +569,7 @@ class ReportRun extends CRMEntity
 				$this->groupbylist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];
 			}
 		}
-		
+		//print_r($grouplist);	
 		return $grouplist;
 	}
 
@@ -826,8 +878,7 @@ tid
                                 left join crmentity as crmentityProducts on crmentityProducts.crmid=products.productid
                                 left join productcf on products.productid = productcf.productid
                                 left join users as usersProducts on usersProducts.id = crmentityProducts.smownerid
-                                left join contactdetails as contactdetailsProducts on contactdetailsProducts.contactid = pro
-ducts.contactid
+				left join contactdetails as contactdetailsProducts on contactdetailsProducts.contactid = products.contactid 
                                 left join vendor as vendorRel on vendorRel.vendorid = products.vendor_id
                                 left join seproductsrel on seproductsrel.productid = products.productid
                                 left join crmentity as crmentityRel on crmentityRel.crmid = seproductsrel.crmid
@@ -928,7 +979,7 @@ ducts.contactid
 				inner join crmentity as crmentityHelpDesk 
 				on crmentityHelpDesk.crmid=troubletickets.ticketid 
 				inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid
-				left join crmentity as crmentityRel on crmentityRel.crmid = troubletickets.parent_id 
+				left join crmentity as crmentityHelpDeskRel on crmentityHelpDeskRel.crmid = troubletickets.parent_id 
 				left join products as productsRel on productsRel.productid = troubletickets.product_id
 				left join users as usersHelpDesk on crmentityHelpDesk.smownerid=usersHelpDesk.id 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
@@ -1073,6 +1124,7 @@ ducts.contactid
 		{
 			$groupsquery = implode(", ",$groupslist);
 		}
+		
 		//standard list
 		if(isset($stdfilterlist))
 		{
@@ -1100,7 +1152,14 @@ ducts.contactid
         	}
 
 		$reportquery = $this->getReportsQuery($this->primarymodule);
-		$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
+
+		if(trim($groupsquery) != "")
+		{
+			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql. " order by ".$groupsquery;
+		}else
+		{
+			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
+		}
 		
 		//echo $reportquery;
 		return $reportquery;
@@ -1301,6 +1360,7 @@ ducts.contactid
 		if($outputformat == "HTML")
 		{
 			$sSQL = $this->sGetSQLforReport($this->reportid);
+			//echo $sSQL;
 			$result = $adb->query($sSQL);
 			$y=$adb->num_fields($result);
 

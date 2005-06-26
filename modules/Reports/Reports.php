@@ -98,7 +98,7 @@ class Reports extends CRMEntity{
 				 "Products"=>Array("Information"=>1,"Description"=>2,"Custom Information"=>5),
 				 "Notes"=>Array("Information"=>1,"Description"=>3),
 				 "Emails"=>Array("Information"=>1,"Description"=>2),
-				 "HelpDesk"=>Array("Information"=>1,"Custom Information"=>5,"Description"=>6),
+				 "HelpDesk"=>Array("Information"=>'1,2',"Custom Information"=>5,"Description"=>6),
 				 "Quotes"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
 				 "Orders"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
 				 "Invoice"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5)
@@ -333,8 +333,7 @@ class Reports extends CRMEntity{
                 $tabid = getTabid($module);
                 global $profile_id;
 
-                $sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.uitype != 50 and field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) and profile2field.visible=0
-and profile2field.profileid=".$profile_id." order by sequence";
+                $sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.uitype != 50 and field.tabid=".$tabid." and field.block in (".$block .") and field.displaytype in (1,2) and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
 
                 $result = $adb->query($sql);
                 $noofrows = $adb->num_rows($result);
@@ -351,24 +350,39 @@ and profile2field.profileid=".$profile_id." order by sequence";
                         {
                            $fieldtablename = $fieldtablename.$module;
                         }
-
 			if($fieldname == "assigned_user_id")
 			{
 			   $fieldtablename = "users".$module;
 			   $fieldcolname = "user_name";				
 			}
-
 			if($fieldname == "account_id")
 			{
 				$fieldtablename = "account".$module;
 				$fieldcolname = "accountname";
 			}
-
 			if($fieldname == "contact_id")
 			{
 				$fieldtablename = "contactdetails".$module;
 				$fieldcolname = "lastname";
 			}
+			if($fieldname == "vendor_id")
+	                {
+                        	$fieldtablename = "vendorRel";
+				$fieldcolname = "name";
+//				$querycolumn = "vendorRel.name"." ".$selectedfields[2];
+                	}
+                	if($fieldname == "potential_id")
+                	{
+                        	$fieldtablename = "potentialRel";
+			        $fieldcolname = "potentialname";
+//				$querycolumn = "potentialRel.potentialname"." ".$selectedfields[2];
+                	}
+                	if($fieldname == "assigned_user_id1")
+                	{
+                        	$fieldtablename = "usersRel1";
+			        $fieldcolname = "user_name";
+//				$querycolumn = "usersRel1.user_name"." ".$selectedfields[2];
+                	}
 
                         $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
                         $fieldlabel1 = str_replace(" ","_",$fieldlabel);
@@ -384,7 +398,7 @@ and profile2field.profileid=".$profile_id." order by sequence";
 		$tabid = getTabid($module);
 		global $profile_id;
 		//echo $selected;
-		$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.uitype != 50 and field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";	
+		$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.uitype != 50 and field.tabid=".$tabid." and field.block in (".$block .") and field.displaytype in (1,2) and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";	
 		
 		//putan if condition and reuse the code for sorting
 		$shtml = "<optgroup label=\"".$block_name."\" class=\"select\" style=\"border:none\">";

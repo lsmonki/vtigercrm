@@ -38,7 +38,7 @@ $secondarymodule = $ogReport->secmodule;
 
 $oReportRun = new ReportRun($reportid);
 
-$columnlist = $oReportRun->getQueryColumnsList($reportid);
+/*$columnlist = $oReportRun->getQueryColumnsList($reportid);
 $groupslist = $oReportRun->getGroupingList($reportid);
 if($oReporRun->reporttype == "summary")
 {
@@ -102,7 +102,7 @@ if($stdfiltersql != "")
 }
 
 $reportquery = $oReportRun->getReportsQuery($oReportRun->primarymodule);
-$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
+$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;*/
 //echo $reportquery;
 
 /*function getModifiedCvListQuery($viewid,$listquery,$module)
