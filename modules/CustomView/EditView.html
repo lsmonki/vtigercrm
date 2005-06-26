@@ -189,18 +189,22 @@ function verify_data(form) {
 
     <table width="100%" border=0 cellPadding="0" cellSpacing="1" class="formOuterBorder">
       <tr>
-        <td class="formSecHeader" colspan="2">{MOD.LBL_STEP_1_TITLE}</td>
+        <td class="formSecHeader" colspan="3">{MOD.LBL_STEP_1_TITLE}</td>
       </tr>
             <tr>
                 <td class='dataLabel'><font class="required">*</font> View Name:</td>
                 <td>
                         <input class='textField' type='text' name='viewName' value="{VIEWNAME}" size="40">
                 </td>
+		<td></td>
             </tr>
-            <tr>
+            <tr width="50%">
                 <td class='dataLabel'></td>
                 <td>
                         <input class='textField' {CHECKED} type='checkbox' name='setDefault' value="">Set as Default
+                </td>
+                <td width="50%">
+                        <input class='textField' {MCHECKED} type='checkbox' name='setMetrics' value="">List in Metrics
                 </td>
             </tr>
     </table>

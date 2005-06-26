@@ -42,7 +42,7 @@ class CustomView extends CRMEntity{
 				 "Products"=>Array("Information"=>1,"Description"=>2,"Custom Information"=>5),
 				 "Notes"=>Array("Information"=>1,"Description"=>3),
 				 "Emails"=>Array("Information"=>1,"Description"=>2),
-				 "HelpDesk"=>Array("Information"=>1,"Custom Information"=>5,"Description"=>6),
+				 "HelpDesk"=>Array("Information"=>'1,2',"Description"=>3,"Custom Information"=>5),
 				 "Quotes"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
 				 "Orders"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
 				 "Invoice"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5)
@@ -118,7 +118,7 @@ class CustomView extends CRMEntity{
                 global $profile_id;
 
                 $sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid";
-		$sql.= " where field.uitype != 50 and field.tabid=".$tabid." and field.block=".$block ." and";
+		$sql.= " where field.tabid=".$tabid." and field.block in (".$block.") and";
 		$sql.= " field.displaytype in (1,2) and profile2field.visible=0";
 		$sql.= " and profile2field.profileid=".$profile_id." order by sequence";
 
@@ -607,11 +607,23 @@ class CustomView extends CRMEntity{
 
 		if($comparator == "e")
 		{
-			$rtvalue = " = ".PearDatabase::quote($value);
+			if(trim($value) != "")
+                        {
+                                $rtvalue = " = ".PearDatabase::quote($value);
+                        }else
+                        {
+                                $rtvalue = " is NULL";
+                        }
 		}
 		if($comparator == "n")
 		{
-			$rtvalue = " <> ".PearDatabase::quote($value);
+			if(trim($value) != "")
+                        {
+                                $rtvalue = " <> ".PearDatabase::quote($value);
+                        }else
+                        {
+                                $rtvalue = "is NOT NULL";
+                        }
 		}
 		if($comparator == "s")
 		{
@@ -871,6 +883,54 @@ class CustomView extends CRMEntity{
 		//echo $query;
 		return $query;
 	}
+	
+	function getMetricsCvListQuery($viewid,$listquery,$module)
+	{
+		if($viewid != "" && $listquery != "")
+                {
+                        $listviewquery = substr($listquery, strpos($listquery,'from'),strlen($listquery));
+
+                        $query = "select count(*) count ".$listviewquery;
+                        
+			$stdfiltersql = $this->getCVStdFilterSQL($viewid);
+                        $advfiltersql = $this->getCVAdvFilterSQL($viewid);
+                        if(isset($stdfiltersql) && $stdfiltersql != '')
+                        {
+                                $query .= ' and '.$stdfiltersql;
+                        }
+                        if(isset($advfiltersql) && $advfiltersql != '')
+                        {
+                                $query .= ' and '.$advfiltersql;
+                        }
+
+                }
+
+                return $query;
+	}
+	
+	/*function getMetricsCustomView($viewnames)
+	{
+		global $adb;
+                $tabid = getTabid($this->customviewmodule);
+                $ssql = "select customview.* from customview inner join tab on tab.name = customview.entitytype";
+                $ssql .= " where ;
+                //echo $ssql;
+                $result = $adb->query($ssql);
+                while($cvrow=$adb->fetch_array($result))
+                {
+                        if($cvrow['setdefault'] == 1)
+                        {
+                                $shtml .= "<option selected value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
+                                $this->setdefaultviewid = $cvrow['cvid'];
+                        }
+                        else
+                        {
+                                $shtml .= "<option value=\"".$cvrow['cvid']."\">".$cvrow['viewname']."</option>";
+                        }
+                }
+                //echo $shtml;
+                return $shtml;
+	}*/
 
 	function getParentId($fields,$values)
 	{

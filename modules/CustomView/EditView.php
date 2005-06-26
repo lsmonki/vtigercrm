@@ -85,6 +85,10 @@ else
 	{
 		$xtpl->assign("CHECKED","checked");
 	}
+	if($customviewdtls["setmetrics"] == 1)
+        {
+                $xtpl->assign("MCHECKED","checked");
+        }
 	for($i=1;$i<10;$i++)
         {
            $choosecolhtml = getByModule_ColumnsHTML($cv_module,$modulecollist,$selectedcolumnslist[$i-1]);

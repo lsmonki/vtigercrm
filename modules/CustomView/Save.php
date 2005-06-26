@@ -25,6 +25,15 @@ if($cvmodule != "")
 	{
 	  $setdefault = 0;
 	}
+
+	if(isset($_REQUEST["setMetrics"]))
+        {
+          $setmetrics = 1;
+        }else
+        {
+          $setmetrics = 0;
+        }
+
 	//echo $viewname.$setdefault;
  	$allKeys = array_keys($HTTP_POST_VARS);
 
