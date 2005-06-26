@@ -119,6 +119,24 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 
 }
 
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Invoice");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']) == false || $_REQUEST['viewname']=='')
+{
+	if($oCustomView->setdefaultviewid != "")
+	{
+		$viewid = $oCustomView->setdefaultviewid;
+	}else
+	{
+		$viewid = "0";
+	}
+}else
+{
+	$viewid =  $_REQUEST['viewname'];
+}
+//<<<<<customview>>>>>
+
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	// Stick the form header out there.
 	$search_form=new XTemplate ('modules/Invoice/SearchForm.html');
@@ -127,6 +145,9 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+	
+	$search_form->assign("VIEWID",$viewid);
+
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if($order_by != '') {
 		$ordby = "&order_by=".$order_by;
@@ -135,8 +156,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	{
 		$ordby ='';
 	}
-	$search_form->assign("BASIC_LINK", "index.php?module=Invoice".$ordby."&action=index".$url_string."&sorder=".$sorder);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Invoice&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
+	$search_form->assign("BASIC_LINK", "index.php?module=Invoice".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewid);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Invoice&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewid);
 
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
@@ -152,7 +173,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
 
 	$url_string .="&advanced=true";
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Invoice','index','subject','true','advanced'));
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Invoice','index','subject','true','advanced',"","","","",$viewid));
 
 		if (isset($annual_revenue)) $search_form->assign("ANNUAL_REVENUE", $annual_revenue);
 		if (isset($employees)) $search_form->assign("EMPLOYEES", $employees);
@@ -175,7 +196,7 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 		$search_form->out("advanced");
 	}
 	else {
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Invoice','index','subject','true','basic'));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Invoice','index','subject','true','basic',"","","","",$viewid));
 		$search_form->parse("main");
 		$search_form->out("main");
 	}
@@ -187,51 +208,13 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden">';
+	<input name="viewname" type="hidden" value="'.$viewid.'">
+	<td>';
+
 if(isPermitted('Invoice',2,'') == 'yes')
 {
-        $other_text .=	'<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
-	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].' 
-			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
-				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_PROSPECT].'">'.$mod_strings[LBL_PROSPECT].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_INVESTOR].'">'.$mod_strings[LBL_INVESTOR].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_RESELLER].'">'.$mod_strings[LBL_RESELLER].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_PARTNER].'">'.$mod_strings[LBL_PARTNER].'</option>
-			</SELECT>
-		</td>
-	</tr>
-	</table>';
-
-/*
-$ListView = new ListView();
-$ListView->initNewXTemplate('modules/Accounts/ListView.html',$current_module_strings);
-$ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE']);
-
-$ListView->setQuery($where, "", "accountname", "ACCOUNT");
-$ListView->processListView($seedAccount, "main", "ACCOUNT");
-*/
-//<<<<cutomview>>>>>>>
-$oCustomView = new CustomView("Invoice");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']) == false || $_REQUEST['viewname']=='')
-{
-	if($oCustomView->setdefaultviewid != "")
-	{
-		$viewid = $oCustomView->setdefaultviewid;
-	}else
-	{
-		$viewid = "0";
-	}
-}else
-{
-	$viewid =  $_REQUEST['viewname'];
-}
-//<<<<<customview>>>>>
-
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-		<tr>';
 
 if($viewid == 0)
 {
