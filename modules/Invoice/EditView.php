@@ -113,6 +113,22 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
 } 
+if(isset($_REQUEST['account_id']) && $_REQUEST['record']==''){
+	require_once('modules/Accounts/Account.php');
+	$acct_focus = new Account();
+	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
+	$focus->column_fields['bill_city']=$acct_focus->column_fields['bill_city'];
+	$focus->column_fields['ship_city']=$acct_focus->column_fields['ship_city'];
+	$focus->column_fields['bill_street']=$acct_focus->column_fields['bill_street'];
+	$focus->column_fields['ship_street']=$acct_focus->column_fields['ship_street'];
+	$focus->column_fields['bill_state']=$acct_focus->column_fields['bill_state'];
+	$focus->column_fields['ship_state']=$acct_focus->column_fields['ship_state'];
+	$focus->column_fields['bill_code']=$acct_focus->column_fields['bill_code'];
+	$focus->column_fields['ship_code']=$acct_focus->column_fields['ship_code'];
+	$focus->column_fields['bill_country']=$acct_focus->column_fields['bill_country'];
+	$focus->column_fields['ship_country']=$acct_focus->column_fields['ship_country'];
+
+}
 
 //get Block 1 Information
 $block_1_header = getBlockTableHeader("LBL_INVOICE_INFORMATION");

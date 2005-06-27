@@ -686,6 +686,9 @@ $app_strings = Array(
 'Recurring Type'=> 'Recurring Type',
 'LBL_QUOTE_NAME'=>'Quote Name',
  //Added Orders in activity parent type selection / Related list
+'LBL_NEW_QUOTE_BUTTON_TITLE'=>'New Quote [Alt+Q]',
+'LBL_NEW_QUOTE_BUTTON_KEY'=>'Q',
+'LBL_NEW_QUOTE_BUTTON'=>'New Quote',
 'COMBO_PORDER'=>'Purchase Order',
 'COMBO_SORDER'=>'Sales Order',
 'LBL_PORDER_NAME'=>'Purchase Order',
@@ -693,6 +696,13 @@ $app_strings = Array(
  // Added Invoice in activity parent type selection / Related list
 'COMBO_INVOICES'=>'Invoice',
 'LBL_INVOICE_NAME'=>'Invoice',
+
+'LBL_NEW_INVOICE_BUTTON_TITLE'=>'New Invoice [Alt+I]',
+'LBL_NEW_INVOICE_BUTTON_KEY'=>'I',
+'LBL_NEW_INVOICE_BUTTON'=>'New Invoice',
+'LBL_NEW_SORDER_BUTTON_TITLE'=>'New Sales Order [Alt+E]',
+'LBL_NEW_SORDER_BUTTON_KEY'=>'E',
+'LBL_NEW_SORDER_BUTTON'=>'New Sales Order',
 	
 );
 

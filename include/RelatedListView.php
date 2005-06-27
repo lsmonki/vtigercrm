@@ -108,10 +108,14 @@ else
 	{
 		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,$edit_val,$del_val);
 	}
-	else
+	elseif($module == 'Accounts' && $relatedmodule == 'Orders')
+	{
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'SalesOrderEditView');
+	}else
 	{
 		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset);
 	}
+
 	//$listview_entries = getListViewEntries1($focus,"Accounts",$list_result,$navigation_array);
 	$xtpl->assign("LISTENTITY", $listview_entries);
 	$xtpl->assign("SELECT_SCRIPT", $view_script);

@@ -298,6 +298,22 @@ class Account extends CRMEntity {
 		$query .= "select attachments.description  title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType, crm2.modifiedtime  lastmodified, attachments.attachmentsid  attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
 		renderRelatedAttachments($query,$id);
 	}
+	function get_quotes($id)
+	{
+		$query = "select crmentity.*, quotes.*,potential.potentialname,account.accountname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0 and account.accountid=".$id;
+		renderRelatedQuotes($query,$id);
+	}
+	function get_invoices($id)
+	{
+		$query = "select crmentity.*, invoice.*, account.accountname, salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid where crmentity.deleted=0 and account.accountid=".$id;
+		renderRelatedInvoices($query,$id);
+	}
+	function get_salesorder($id)
+	{
+		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0 and salesorder.accountid = ".$id;
+		renderRelatedOrders($query,$id);	
+	}
+
 	function get_tickets($id)
 	{
 		$query = "select users.user_name, users.id, troubletickets.title, troubletickets.ticketid as crmid, troubletickets.status, troubletickets.priority, troubletickets.parent_id, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join account on account.accountid=troubletickets.parent_id left join users on users.id=crmentity.smownerid where account.accountid =".$id;

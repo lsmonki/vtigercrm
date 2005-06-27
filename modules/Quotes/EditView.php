@@ -46,6 +46,24 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
+// Get Account address if account is given
+if(isset($_REQUEST['account_id']) && $_REQUEST['record']==''){
+	require_once('modules/Accounts/Account.php');
+	$acct_focus = new Account();
+	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
+	$focus->column_fields['bill_city']=$acct_focus->column_fields['bill_city'];
+	$focus->column_fields['ship_city']=$acct_focus->column_fields['ship_city'];
+	$focus->column_fields['bill_street']=$acct_focus->column_fields['bill_street'];
+	$focus->column_fields['ship_street']=$acct_focus->column_fields['ship_street'];
+	$focus->column_fields['bill_state']=$acct_focus->column_fields['bill_state'];
+	$focus->column_fields['ship_state']=$acct_focus->column_fields['ship_state'];
+	$focus->column_fields['bill_code']=$acct_focus->column_fields['bill_code'];
+	$focus->column_fields['ship_code']=$acct_focus->column_fields['ship_code'];
+	$focus->column_fields['bill_country']=$acct_focus->column_fields['bill_country'];
+	$focus->column_fields['ship_country']=$acct_focus->column_fields['ship_country'];
+
+}
+
 //get Block 1 Information
 $block_1_header = getBlockTableHeader("LBL_QUOTE_INFORMATION");
 $block_1 = getBlockInformation("Quotes",1,$focus->mode,$focus->column_fields);
@@ -122,7 +140,6 @@ if(isset($cust_fld))
 
 if($focus->mode == 'edit')
 {
-	print_r($focus->column_fields);	
 	$num_of_products = getNoOfAssocProducts($module,$focus);
 	$xtpl->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("Quotes",$focus);

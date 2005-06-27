@@ -1327,6 +1327,13 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",0,'get_attachments',6,'Attachments',0)");
 
+	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",20,'get_quotes',7,'Quotes',0)");
+	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",23,'get_invoices',8,'Invoice',0)");
+	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",22,'get_salesorder',9,'Sales Order',0)");
+
 	//Inserting Lead Related Lists	
 
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Leads").",".getTabid("Activities").",'get_activities',1,'Activities',0)");
