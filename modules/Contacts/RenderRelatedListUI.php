@@ -136,6 +136,97 @@ function renderRelatedAttachments($query,$id)
 	getAttachmentsAndNotes('Contacts',$query,$id);
 	echo '</form>';
 }
+function renderRelatedProducts($query,$id)
+{
+	require_once('modules/Products/Product.php');
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id,$sid);
+        echo $hidden;
+
+        $focus = new Product();
+ 
+	$button = '';
+
+        if(isPermitted("Products",1,"") == 'yes')
+        {
+ 
+		$button .= '<input title="'.$app_strings['LBL_NEW_PRODUCT'].'" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Contacts\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
+	}
+	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
+
+	$list = GetRelatedList('Contacts','Products',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
+function renderRelatedSalesOrders($query,$id,$sid="product_id")
+{
+	require_once('modules/Orders/SalesOrder.php');
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id,$sid);
+        echo $hidden;
+
+        $focus = new SalesOrder();
+ 
+	$button = '';
+
+        if(isPermitted("SalesOrder",1,"") == 'yes')
+        {
+ 
+		$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'SalesOrderEditView\';this.form.module.value=\'Orders\';this.form.return_module.value=\'Contacts\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;';
+	}
+	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
+
+	$list = GetRelatedList('Contacts','Orders',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
+
+function renderRelatedOrders($query,$id)
+{
+	require_once('modules/Orders/Order.php');
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id);
+        echo $hidden;
+
+        $focus = new Order();
+ 
+	$button = '';
+
+        if(isPermitted("Orders",1,"") == 'yes')
+        {
+ 
+		$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Orders\';this.form.return_module.value=\'Contacts\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
+	}
+	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
+
+	$list = GetRelatedList('Contacts','Orders',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
+function renderRelatedQuotes($query,$id)
+{
+	global $mod_strings;
+	global $app_strings;
+	require_once('modules/Quotes/Quote.php');
+
+	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
+	
+	$focus = new Quote();
+	
+	$button = '';
+	if(isPermitted("Quotes",1,"") == 'yes')
+        {
+		$button .= '<input title="'.$app_strings['LBL_NEW_QUOTE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_QUOTE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Quotes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_QUOTE_BUTTON'].'">&nbsp;</td>';
+	}
+	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
+
+	$list = GetRelatedList('Contacts','Quotes',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
+
 
 echo get_form_footer();
 

@@ -1363,6 +1363,15 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Contacts").",0,'get_attachments',6,'Attachments',0)");
+	
+	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Contacts").",".getTabid("Quotes").",'get_quotes',7,'Quotes',0)");
+	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Contacts").",".getTabid("Orders").",'get_purchase_orders',8,'Purchase Order',0)");
+	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Contacts").",".getTabid("SalesOrder").",'get_salesorder',9,'Sales Order',0)");
+	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Contacts").",".getTabid("Products").",'get_products',10,'Products',0)");
 
 	//Inserting Potential Related Lists	
 

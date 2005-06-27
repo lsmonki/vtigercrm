@@ -40,7 +40,7 @@ if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
 	$adb->query($sql);
 }
 
-if($_REQUEST['module'] == $_REQUEST['return_module'])
+if($_REQUEST['module'] == $_REQUEST['return_module'] || $_REQUEST['return_module'] == "Contacts")
 	$focus->mark_deleted($_REQUEST['record']);
 
 if(isset($_REQUEST['activity_mode']))

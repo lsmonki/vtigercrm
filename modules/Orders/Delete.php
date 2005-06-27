@@ -19,20 +19,36 @@
  ********************************************************************************/
 
 require_once('modules/Orders/Order.php');
+require_once('modules/Orders/SalesOrder.php');
 global $mod_strings;
 
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('order_delete');
 
-$focus = new Order();
+if($_REQUEST['module'] == 'Orders')
+{
+	$focus = new Order();
 
-if(!isset($_REQUEST['record']))
-	die($mod_strings['ERR_DELETE_RECORD']);
+	if(!isset($_REQUEST['record']))
+		die($mod_strings['ERR_DELETE_RECORD']);
 
-$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
-$adb->query($sql_recentviewed);
-if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module'] == "Accounts")
-	$focus->mark_deleted($_REQUEST['record']);
+	$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
+	$adb->query($sql_recentviewed);
+	if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module'] == "Accounts" || $_REQUEST['return_module'] == "Contacts")
+		$focus->mark_deleted($_REQUEST['record']);
+}
+if($_REQUEST['module'] == 'SalesOrder')
+{
+	$focus = new SalesOrder();
+
+	if(!isset($_REQUEST['record']))
+		die($mod_strings['ERR_DELETE_RECORD']);
+
+	$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
+	$adb->query($sql_recentviewed);
+	if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module'] == "Contacts")
+		$focus->mark_deleted($_REQUEST['record']);
+}
 
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
 ?>
