@@ -1,5 +1,4 @@
 <?php
-
 /**
   V4.55 3 Jan 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
@@ -252,6 +251,27 @@ class ADODB_DataDict {
 		}
 		return $this->NameQuote($name);
 	}
+
+	// temporary for debuging vtiger - GS
+
+	function println($msg)
+        {
+                require_once('include/logging.php');
+                $log1 =& LoggerManager::getLogger('VT');
+                if(is_array($msg))
+                {
+                        $log1->fatal("Install ->".print_r($msg,true));
+                }
+                else
+                {
+                        $log1->fatal("Install ->".$msg);
+                }
+                return $msg;
+        }
+
+
+//----------------
+
 	
 	// Executes the sql array returned by GetTableSQL and GetIndexSQL
 	function ExecuteSQLArray($sql, $continueOnError = true)
@@ -262,10 +282,18 @@ class ADODB_DataDict {
 		foreach($sql as $line) {
 			
 			if ($this->debug) $conn->debug = true;
+			$this->println($line);
 			$ok = $conn->Execute($line);
 			$conn->debug = $saved;
 			if (!$ok) {
-				if ($this->debug) ADOConnection::outp($conn->ErrorMsg());
+				$this->println("Table Creation Error: Query Failed");
+				$this->println(" ");
+				if ($this->debug)
+				{
+
+					$this->println("InstallError: ".$conn->ErrorMsg());
+					ADOConnection::outp($conn->ErrorMsg());
+				}
 				if (!$continueOnError) return 0;
 				$rez = 1;
 			}
