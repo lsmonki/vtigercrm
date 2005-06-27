@@ -17,8 +17,10 @@ For Windows
 10. ADOdb software used under BSD license available at <vtiger CRM Home>/vtigerCRM/adodb/license.txt
 11. phpSysinfo software used under GNU GPL available at <vtiger CRM Home>/vtigerCRM/modules/System/COPYING
 12. lastRSS software used under GNU GPL downloaded from http://lastrss.webdot.cz/
-13. FCKeditor software used under LGPL downloaded from http://www.fckeditor.net/download/default.html available at <vtiger CRM Home>/vtigerCRM/includes/FCKeditor/license.txt 
-14. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
+13. FCKeditor software used under LGPL downloaded from http://www.fckeditor.net/download/default.html available at <vtiger CRM Home>/vtigerCRM/includes/FCKeditor/license.txt
+14. Squirrel Mail used under GNU GPL downloaded from http://www.squirrelmail.org/download.php available at http://www.squirrelmail.org/wiki/en_US/SquirrelMailGPL
+15. Mailfeed used under GNU GPL downloaed from http://wiki.wonko.com/software/mailfeed/ available at http://wiki.wonko.com/software/mailfeed/#copyright 
+16. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
 
 For Linux
 
@@ -34,8 +36,10 @@ For Linux
 10. ADOdb software used under BSD license available at <vtiger CRM Home>/vtigerCRM/adodb/license.txt
 11. phpSysinfo software used under GNU GPL available at <vtiger CRM Home>/vtigerCRM/modules/System/COPYING
 12. lastRSS software used under GNU GPL downloaded from http://lastrss.webdot.cz/  
-13. FCKeditor software used under LGPL downloaded from http://www.fckeditor.net/download/default.html available at <vtiger CRM Home>/vtigerCRM/includes/FCKeditor/license.txt  
-14. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
+13. FCKeditor software used under LGPL downloaded from http://www.fckeditor.net/download/default.html available at <vtiger CRM Home>/vtigerCRM/includes/FCKeditor/license.txt
+14. Squirrel Mail used under GNU GPL downloaded from http://www.squirrelmail.org/download.php available at http://www.squirrelmail.org/wiki/en_US/SquirrelMailGPL
+15. Mailfeed used under GNU GPL downloaed from http://wiki.wonko.com/software/mailfeed/ available at http://wiki.wonko.com/software/mailfeed/#copyright   
+16. In addition to the above mentioned Open Source components, vtiger provides additional functionality, which is dual-licensed under Mozilla Public License (MPL 1.1) as well as the GNU Public License (GPL).
 The licenses of the Open Source components are reproduced in full below.
 
 
