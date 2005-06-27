@@ -10,6 +10,13 @@
 -->
 <!-- BEGIN: main -->
 <script language="javascript">
+function showDefaultCustomView(selectView)
+{
+viewName = selectView.options[selectView.options.selectedIndex].value;
+document.massdelete.viewname.value=viewName;
+document.massdelete.action="index.php?module=Orders&smodule=SO&action=index&viewname="+viewName;
+document.massdelete.submit();
+}
 function massDelete()
 {
 
@@ -52,7 +59,7 @@ function massDelete()
 			return false;
 		}
 	}
-document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Products&return_action=index"
+document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Orders&smodule=SO&return_action=index"
 }
 </script>
 
@@ -86,6 +93,7 @@ function clear_form(form) {
    </form>
 </table>
 <br>
+{SELECT_SCRIPT}
 <!-- END: main -->
 </form>
 </table>

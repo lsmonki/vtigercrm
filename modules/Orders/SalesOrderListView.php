@@ -13,6 +13,7 @@ require_once('XTemplate/xtpl.php');
 require_once('modules/Orders/SalesOrder.php');
 require_once('include/utils.php');
 require_once('include/uifromdbutil.php');
+require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $mod_strings;
@@ -118,6 +119,24 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 }
 
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("SalesOrder");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']) == false)
+{
+        if($oCustomView->setdefaultviewid != "")
+        {
+                $viewid = $oCustomView->setdefaultviewid;
+        }else
+        {
+                $viewid = "0";
+        }
+}else
+{
+        $viewid =  $_REQUEST['viewname'];
+}
+//<<<<<customview>>>>>
+
 //Constructing the Search Form
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         // Stick the form header out there.
@@ -129,7 +148,11 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+	
+	$search_form->assign("VIEWID",$viewid);
+
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
+
 	if($order_by != '') {
 		$ordby = "&order_by=".$order_by;
 	}
@@ -148,7 +171,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') 
 	{
 		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','index&smodule=SO','subject','true','advanced'));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','index&smodule=SO','subject','true','advanced',"","","","",$viewid));
 
 		$search_form->assign("SUPPORT_START_DATE",$_REQUEST['start_date']);
 		$search_form->assign("SUPPORT_EXPIRY_DATE",$_REQUEST['expiry_date']);
@@ -174,7 +197,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	}
 	else
 	{        
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','index&smodule=SO','subject','true','basic'));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','index&smodule=SO','subject','true','basic',"","","","",$viewid));
 		$search_form->parse("main");
 	        $search_form->out("main");
 	}
@@ -183,18 +206,53 @@ echo get_form_footer();
 
 }
 
+// Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden">';
-        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
-		$other_text .='</tr>
-	</table>';
+	<input name="viewname" type="hidden" value="'.$viewid.'">
+	<td>';
+if(isPermitted('SalesOrder',2,'') == 'yes')
+{
+	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>&nbsp;';
+}
 
-//Retreive the list from Database
+if($viewid == 0)
+{
+$cvHTML = '<span class="bodyText disabled">Edit</span>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Orders&action=CustomView&smodule=SO" class="link">Create View</a>';
+}else
+{
+$cvHTML = '<a href="index.php?module=Orders&action=CustomView&smodule=SO&record='.$viewid.'" class="link">Edit</a>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Orders&action=CustomView&smodule=SO" class="link">Create View</a>';
+}
+	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+                        <SELECT NAME="view" onchange="showDefaultCustomView(this)">
+                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+				'.$customviewcombo_html.'
+                        </SELECT>
+			'.$cvHTML.'
+                </td>
+        </tr>
+        </table>';
 
-$list_query = getListQuery("SalesOrder");
+//$list_query = getListQuery("SalesOrder");
+
+//<<<<<<<<<customview>>>>>>>>>
+if($viewid != "0")
+{
+	$listquery = getListQuery("SalesOrder");
+	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"SalesOrder");
+}else
+{
+	$list_query = getListQuery("SalesOrder");
+}
+//<<<<<<<<customview>>>>>>>>>
 
 if(isset($where) && $where != '')
 {
@@ -213,6 +271,19 @@ $list_result = $adb->query($list_query);
 
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
+
+$view_script = "<script language='javascript'>
+	function set_selected()
+	{
+		len=document.massdelete.view.length;
+		for(i=0;i<len;i++)
+		{
+			if(document.massdelete.view[i].value == '$viewid')
+				document.massdelete.view[i].selected = true;
+		}
+	}
+	set_selected();
+	</script>";
 
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
@@ -261,19 +332,19 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 //Retreive the List View Table Header
 
-$listview_header = getListViewHeader($focus,"Orders",$url_string,$sorder,$order_by);
+$listview_header = getListViewHeader($focus,"Orders",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-
-$listview_entries = getListViewEntries($focus,"SalesOrder",$list_result,$navigation_array,'','&return_module=Orders&return_action=index','SalesOrderEditView');
+$listview_entries = getListViewEntries($focus,"SalesOrder",$list_result,$navigation_array,'','&return_module=Orders&return_action=index','SalesOrderEditView','SalesOrderDelete',$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
+$xtpl->assign("SELECT_SCRIPT", $view_script);
 
 if($order_by !='')
 $url_string .="&order_by=".$order_by;
 if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"SalesOrder",'index','SalesOrderDelete');
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"SalesOrder",'index',$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 
