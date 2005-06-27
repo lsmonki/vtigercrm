@@ -25,13 +25,14 @@ echo '<br><br>';
 
 ?>
 
-            <form action="index.php">
+            <form action="index.php" name="massdelete">
              <input type="hidden" name="module" value="Settings">
-             <input type="hidden" name="action" value="createemailtemplate">
+             <input type="hidden" name="action" value="">
+             <input type="hidden" name="idlist">
 		
 		<input title="<?php echo $mod_strings['LBL_NEW_MAIL_ACCOUNT_TITLE'];?>" accessKey="<?php echo $mod_strings['LBL_NEW_MAIL_ACCOUNT_KEY'];?>" class="button" onclick="this.form.action.value='AddMailAccount'" type="submit" name="button" value="  <?php echo $mod_strings['LBL_NEW_MAIL_ACCOUNT_LABEL'];?>  " >
 		
-		<input title="<?php echo $app_strings['LBL_DELETE_BUTTON_TITLE'];?>" accessKey="<?php echo $app_strings['LBL_DELETE_BUTTON_KEY'];?>" class="button" onclick="this.form.action.value='DeleteMailAccount';return formValidate() " type="submit" name="button" value="  <?php echo $app_strings['LBL_DELETE_BUTTON_LABEL'];?>  " >
+		<input title="<?php echo $app_strings['LBL_DELETE_BUTTON_TITLE'];?>" accessKey="<?php echo $app_strings['LBL_DELETE_BUTTON_KEY'];?>" class="button" onclick="this.form.action.value='DeleteMailAccount'; return massDelete()" type="submit" name="button" value="  <?php echo $app_strings['LBL_DELETE_BUTTON_LABEL'];?>  " >
 <br><br>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
 		<tbody>
@@ -76,9 +77,9 @@ do
 {
 
   if ($cnt%2==0)
-  printf('<tr class="evenListRow"> <td height="25">&nbsp;<input type="checkbox" name="select_id"></td>');
+	  printf('<tr class="evenListRow"> <td height="25">&nbsp;<input type="checkbox" name="selected_id" value='.$temprow['account_id'].'></td>');
   else
-  printf('<tr class="oddListRow"> <td height="25">&nbsp;<input type="checkbox" name="select_id"></td>');
+	  printf('<tr class="oddListRow"> <td height="25">&nbsp;<input type="checkbox" name="selected_id" value='.$temprow['account_id'].'></td>');
   printf('<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'%s"></td>','blank.gif');
   printf("<td height='25'>&nbsp;%s</td>",$temprow["display_name"]);
   printf('<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'%s"></td>','blank.gif');
@@ -108,3 +109,48 @@ while($temprow = $adb->fetch_array($result));
 ?>
 </tbody>
 </table>
+<script>
+function massDelete()
+{
+        x = document.massdelete.selected_id.length;
+        idstring = "";
+
+        if ( x == undefined)
+        {
+
+                if (document.massdelete.selected_id.checked)
+                {
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
+                        //alert(document.massdelete.idlist.value);
+                }
+                else
+                {
+                        alert("Please select atleast one entity");
+                        return false;
+                }
+        }
+        else
+        {
+                xx = 0;
+                for(i = 0; i < x ; i++)
+                {
+                        if(document.massdelete.selected_id[i].checked)
+                        {
+                                idstring = document.massdelete.selected_id[i].value +";"+idstring
+                        xx++
+                        }
+                }
+                if (xx != 0)
+                {
+                        document.massdelete.idlist.value=idstring;
+                        //alert(document.massdelete.idlist.value);
+                }
+                else
+                {
+                        alert("Please select atleast one entity");
+                        return false;
+                }
+        }
+        document.massdelete.action="index.php?module=Settings&action=DeleteMailAccount&return_module=Settings&return_action=ListMailAccount"
+}
+</script>
