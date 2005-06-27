@@ -635,7 +635,10 @@ class jpgraph {
 				foreach ($user_id as $the_id) {
 					if (!$first) $where .= "OR ";
 					$first = false;
-					$where .= "crmentity.smcreatorid='$the_id' ";
+					//reference post
+					//if I change the owner of a opportunity, the graph shown on Home does not update correctly, this is because the graph is looking for the creatorid and not for the ownerid
+					//fix incorporated based on /sak's feedback
+					$where .= "crmentity.smownerid='$the_id' ";
 				}
 				$where .= ") ";
 			}
