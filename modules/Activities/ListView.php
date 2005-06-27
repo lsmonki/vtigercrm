@@ -73,8 +73,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("APP", $app_strings);
 
 	//viewid is given to show the actual view<<<<<<<<<<customview>>>>>>>>
-	$viewidforsearch = $_REQUEST['viewname'];
-	$search_form->assign("VIEWID",$viewidforsearch);
+	$search_form->assign("VIEWID",$viewid);
 	//<<<<<<<customview>>>>>>>>>>
 
 	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Activities','index','name','true','basic',"","","","",$viewid));
