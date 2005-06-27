@@ -112,6 +112,11 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
     	$focus->mode = ''; 	
 } 
 
+if(isset($_REQUEST['potential_id']))
+{
+        $focus->column_fields['potential_id'] = $_REQUEST['potential_id'];
+}
+
 // Get Account address if account is given
 if(isset($_REQUEST['account_id']) && $_REQUEST['record']==''){
 	require_once('modules/Accounts/Account.php');
