@@ -72,6 +72,10 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("MOD", $mod_strings);
 	$search_form->assign("APP", $app_strings);
 
+	$search_form->assign("VIEWID",$viewid);
+
+	$search_form->assign("JAVASCRIPT", get_clear_form_js());
+
 	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Notes','index','title','true','basic',"","","","",$viewid));
 
 	if(isset($_REQUEST['query'])) {
@@ -146,10 +150,12 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
-	<input name="change_status" type="hidden">';
+	<input name="viewname" type="hidden" value="'.$viewid.'">
+	<input name="change_status" type="hidden">
+	<td>';
 if(isPermitted('Notes',2,'') == 'yes')
 {
-        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+        $other_text .='<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
 }
 
 if($viewid == 0)
@@ -215,6 +221,19 @@ $list_result = $adb->query($query);
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 
+$view_script = "<script language='javascript'>
+	function set_selected()
+	{
+		len=document.massdelete.view.length;
+		for(i=0;i<len;i++)
+		{
+			if(document.massdelete.view[i].value == '$viewid')
+				document.massdelete.view[i].selected = true;
+		}
+	}
+	set_selected();
+	</script>";
+
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
@@ -269,6 +288,7 @@ $xtpl->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"Notes",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
+$xtpl->assign("SELECT_SCRIPT", $view_script);
 
 if($order_by !='')
 $url_string .="&order_by=".$order_by;
