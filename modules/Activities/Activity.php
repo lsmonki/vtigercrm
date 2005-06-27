@@ -139,7 +139,7 @@ class Activity extends CRMEntity {
 
 	function get_products($id)
 	{
-		$query = 'select activity.activityid, products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, products.purchase_date, crmentity.crmid, crmentity.smownerid from activity inner join seactivityrel on activity.activityid = seactivityrel.activityid inner join products on seactivityrel.crmid = products.productid inner join crmentity on crmentity.crmid = products.productid where activity.activityid = '.$id.' and crmentity.deleted = 0';
+		$query = 'select activity.activityid, products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from activity inner join seactivityrel on activity.activityid = seactivityrel.activityid inner join products on seactivityrel.crmid = products.productid inner join crmentity on crmentity.crmid = products.productid where activity.activityid = '.$id.' and crmentity.deleted = 0';
 		renderRelatedProducts($query,$id);
 	}
 //Function Call for Related List -- End
