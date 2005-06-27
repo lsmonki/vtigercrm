@@ -634,6 +634,8 @@ $app_strings = Array(
 
 'Category'=>'Category',
 
+'Price Book Name'=>'Price Book Name',
+
 //Added after 4 GA
 'LBL_CUSTOM_INFORMATION'=>'Custom Information',
 

@@ -31,8 +31,8 @@ $popuptype = $_REQUEST["popuptype"];
 if($popuptype!='') $url_string .= "&popuptype=".$popuptype;
 
 require_once($theme_path.'layout_utils.php');
-echo get_module_title("PriceBook", $mod_strings['LBL_MODULE_NAME'].": Home" , true);
-echo "<br>";
+//echo get_module_title("PriceBook", $mod_strings['LBL_MODULE_NAME'].": Home" , true);
+//echo "<br>";
 //echo get_form_header("Product Search", "", false);
 
 $xtpl=new XTemplate ('modules/Products/PriceBookPopup.html');
@@ -177,7 +177,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         // Stick the form header out there.
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'],'', false);
-        $search_form=new XTemplate ('modules/Products/SearchForm.html');
+        $search_form=new XTemplate ('modules/Products/PopupSearchForm.html');
         $search_form->assign("MOD", $mod_strings);
         $search_form->assign("APP", $app_strings);
 	$clearsearch = 'true';
@@ -207,12 +207,12 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if (isset($_REQUEST['purchase_date'])) $purchase_date = $_REQUEST['purchase_date'];	
 
 //Combo Fields for Manufacturer and Category are moved from advanced to Basic Search
-        if (isset($manufacturer)) $search_form->assign("MANUFACTURER", get_select_options($comboFieldArray['manufacturer_dom'], $manufacturer, $clearsearch));
+/*        if (isset($manufacturer)) $search_form->assign("MANUFACTURER", get_select_options($comboFieldArray['manufacturer_dom'], $manufacturer, $clearsearch));
         else $search_form->assign("MANUFACTURER", get_select_options($comboFieldArray['manufacturer_dom'], '', $clearsearch));
         if (isset($productcategory)) $search_form->assign("PRODUCTCATEGORY", get_select_options($comboFieldArray['productcategory_dom'], $productcategoty, $clearsearch));
         else $search_form->assign("PRODUCTCATEGORY", get_select_options($comboFieldArray['productcategory_dom'], '', $clearsearch));
-
-        if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') 
+*/
+ /*       if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') 
 	{
 		$url_string .="&advanced=true";
 		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Products','index','productname','true','advanced'));
@@ -250,7 +250,6 @@ echo get_form_footer();
 
 }
 */
-
 //Retreive the list from Database
 
 //$list_query = getListQuery("PriceBook");
@@ -262,7 +261,7 @@ if(isset($where) && $where != '')
         $list_query .= ' and '.$where;
 }
 */
-$xtpl->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PB_FORM_TITLE'],'', false ));
+$xtpl->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'],'', false ));
 
 
 if(isset($order_by) && $order_by != '')
