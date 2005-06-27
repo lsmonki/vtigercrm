@@ -2543,7 +2543,7 @@
 
 	<table name="productcf" alter="true">
 		
-		<constraint>ADD CONSTRAINT fk_ProductsCF FOREIGN KEY (productid) REFERENCES products(productid)  ON DELETE CASCADE </constraint>
+		<constraint>ADD CONSTRAINT fk_ProductCF FOREIGN KEY (productid) REFERENCES products(productid)  ON DELETE CASCADE </constraint>
 		
 		<opt>Type=InnoDB</opt>
 		
@@ -3842,7 +3842,7 @@
 		</data>
 	</table>
 	<table name="pricebook" alter="true">
-	<constraint>ADD CONSTRAINT fk_Vendor FOREIGN KEY (pricebookid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+	<constraint>ADD CONSTRAINT fk_PriceBook FOREIGN KEY (pricebookid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
@@ -3861,7 +3861,7 @@
 
 	<table name="pricebookcf" alter="true">
 		
-		<constraint>ADD CONSTRAINT fk_VendorCF FOREIGN KEY (pricebookid) REFERENCES pricebook(pricebookid)  ON DELETE CASCADE </constraint>
+		<constraint>ADD CONSTRAINT fk_PriceBookCF FOREIGN KEY (pricebookid) REFERENCES pricebook(pricebookid)  ON DELETE CASCADE </constraint>
 		
 		<opt>Type=InnoDB</opt>
 		
@@ -3980,7 +3980,7 @@
 	</table>
 
 	<table name="quotes" alter="true">
-	<constraint>ADD CONSTRAINT fk_Quotes2 FOREIGN KEY (potentialid) REFERENCES potential(potentiaidl) ON DELETE CASCADE</constraint>
+	<constraint>ADD CONSTRAINT fk_Quotes2 FOREIGN KEY (potentialid) REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
