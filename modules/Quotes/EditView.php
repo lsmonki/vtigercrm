@@ -43,6 +43,8 @@ if(isset($_REQUEST['record']))
     $focus->name=$focus->column_fields['subject']; 
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+	$num_of_products = getNoOfAssocProducts($module,$focus);
+        $associated_prod = getAssociatedProducts("Quotes",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
@@ -149,6 +151,16 @@ if($focus->mode == 'edit')
 	$xtpl->assign("ADJUSTMENTVALUE", $focus->column_fields['txtAdjustment']);
 	$xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
 	$xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
+}
+elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+        $xtpl->assign("ROWCOUNT", $num_of_products);
+        $xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+        $xtpl->assign("MODE", $focus->mode);
+        $xtpl->assign("TAXVALUE", $focus->column_fields['txtTax']);
+        $xtpl->assign("ADJUSTMENTVALUE", $focus->column_fields['txtAdjustment']);
+        $xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
+        $xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
+
 }
 else
 {
