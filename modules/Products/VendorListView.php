@@ -172,6 +172,24 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 }
 
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Vendor");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+if(isset($_REQUEST['viewname']) == false)
+{
+        if($oCustomView->setdefaultviewid != "")
+        {
+                $viewid = $oCustomView->setdefaultviewid;
+        }else
+        {
+                $viewid = "0";
+        }
+}else
+{
+        $viewid =  $_REQUEST['viewname'];
+}
+//<<<<<customview>>>>>
+
 //Constructing the Search Form
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         // Stick the form header out there.
@@ -183,7 +201,11 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+
+	$search_form->assign("VIEWID",$viewid);
+
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
+
 	if($order_by != '') {
 		$ordby = "&order_by=".$order_by;
 	}
@@ -214,7 +236,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true')
 	{
 		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Products','index','name','true','advanced'));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Products','index','name','true','advanced',"","","","",$viewid));
 
 		$search_form->assign("SUPPORT_START_DATE",$_REQUEST['start_date']);
 		$search_form->assign("SUPPORT_EXPIRY_DATE",$_REQUEST['expiry_date']);
@@ -240,7 +262,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	}
 	else
 	{
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Products','index&smodule=VENDOR','vendorname','true','basic'));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Products','index&smodule=VENDOR','vendorname','true','basic',"","","","",$viewid));
 		$search_form->parse("main");
 	        $search_form->out("main");
 	}
@@ -249,60 +271,53 @@ echo get_form_footer();
 
 }
 
-$viewid =  $_REQUEST['viewname'];
-//<<<<cutomview>>>>>>>
-/*$oCustomView = new CustomView("Vendor");
-//$customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']))
-{
-        $viewid =  $_REQUEST['viewname'];
-}else
-{
-	$viewid = "0";
-}
-if(isset($_REQUEST['viewname']) == false)
-{
-	if($oCustomView->setdefaultviewid != "")
-	{
-		$viewid = $oCustomView->setdefaultviewid;
-	}
-}*/
-//<<<<<customview>>>>>
 
+// Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden">';
-        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+	<input name="viewname" type="hidden" value="'.$viewid.'">
+	<td>';
+if(isPermitted('Vendor',2,'') == 'yes')
+{
+	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>&nbsp;';
+}
 
-$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+if($viewid == 0)
+{
+$cvHTML = '<span class="bodyText disabled">Edit</span>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Products&action=CustomView&smodule=VENDOR" class="link">Create View</a>';
+}else
+{
+$cvHTML = '<a href="index.php?module=Products&action=CustomView&smodule=VENDOR&record='.$viewid.'" class="link">Edit</a>
+<span class="sep">|</span>
+<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=Products&action=CustomView&smodule=VENDOR" class="link">Create View</a>';
+}
+	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">
                                 <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
-                        <!--<a href="index.php?module=Vendor&action=CustomView&record='.$viewid.'" class="link">Edit</a>
-                        <span class="sep">|</span>
-                        <span class="bodyText disabled">Delete</span><span class="sep">|</span>
-                        <a href="index.php?module=Vendor&action=CustomView" class="link">Create View</a>-->
+			'.$cvHTML.'
                 </td>
         </tr>
         </table>';
 
 //Retreive the list from Database
-
-//Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
-/*if($viewid != "0")
+if($viewid != "0")
 {
 	$listquery = getListQuery("Vendor");
 	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Vendor");
 }else
 {
-
-}*/
+	$list_query = getListQuery("Vendor");
+}
 //<<<<<<<<customview>>>>>>>>>
-$list_query = getListQuery("Vendor");
 
 if(isset($where) && $where != '')
 {
@@ -320,6 +335,19 @@ $list_result = $adb->query($list_query);
 
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
+
+$view_script = "<script language='javascript'>
+	function set_selected()
+	{
+		len=document.massdelete.view.length;
+		for(i=0;i<len;i++)
+		{
+			if(document.massdelete.view[i].value == '$viewid')
+				document.massdelete.view[i].selected = true;
+		}
+	}
+	set_selected();
+	</script>";
 
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
@@ -371,9 +399,9 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 $listview_header = getListViewHeader($focus,"Products",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-
 $listview_entries = getListViewEntries($focus,"Vendor",$list_result,$navigation_array,'','&return_module=Products&return_action=VendorListView','VendorEditView','',$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
+$xtpl->assign("SELECT_SCRIPT", $view_script);
 
 if($order_by !='')
 $url_string .="&order_by=".$order_by;
