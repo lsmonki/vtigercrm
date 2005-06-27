@@ -106,6 +106,8 @@ else
 }
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+	$num_of_products = getNoOfAssocProducts("SalesOrder",$focus);
+	$associated_prod = getAssociatedProducts("SalesOrder",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
 } 
@@ -213,6 +215,16 @@ elseif($focus->mode == 'edit')
 	$num_of_products = getNoOfAssocProducts("SalesOrder",$focus);
 	$xtpl->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("SalesOrder",$focus);
+	$xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$xtpl->assign("MODE", $focus->mode);
+	$xtpl->assign("TAXVALUE", $focus->column_fields['txtTax']);
+	$xtpl->assign("ADJUSTMENTVALUE", $focus->column_fields['txtAdjustment']);
+	$xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
+	$xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
+}
+elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
+{
+	$xtpl->assign("ROWCOUNT", $num_of_products);
 	$xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
 	$xtpl->assign("MODE", $focus->mode);
 	$xtpl->assign("TAXVALUE", $focus->column_fields['txtTax']);
