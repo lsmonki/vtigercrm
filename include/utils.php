@@ -1626,6 +1626,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	else
 	{
 		$custfld .= '<td width="20%" class="dataLabel">';
+		//Added condition to set the subject if click Reply All from web mail
+		if($_REQUEST['module'] == 'Emails' && $_REQUEST['mg_subject'] != '')
+		{
+			$value = $_REQUEST['mg_subject'];
+		}
 
 		if($uitype == 2)
 			$custfld .= '<font color="red">*</font>';

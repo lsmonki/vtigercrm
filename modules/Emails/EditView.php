@@ -187,6 +187,12 @@ $xtpl->assign("BLOCK4", $block_4);
 $block_1_header = getBlockTableHeader("LBL_EMAIL_INFORMATION");
 $xtpl->assign("BLOCK1_HEADER", $block_1_header);
 
+//Added to set the cc when click reply all
+if(isset($_REQUEST['msg_cc']) && $_REQUEST['msg_cc'] != '')
+{
+	$xtpl->assign("MAIL_MSG_CC", $_REQUEST['msg_cc']);
+}
+
 if($focus->mode == 'edit')
 {
         $xtpl->assign("MODE", $focus->mode);
