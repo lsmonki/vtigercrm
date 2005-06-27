@@ -79,8 +79,8 @@ $app_strings = Array(
 
 'LBL_EDIT_BUTTON_TITLE'=>'Edit [Alt+E]',
 
-'LBL_CONVERTSO_BUTTON_TITLE'=>'Convert To SalesOrder',
-'LBL_CONVERTINVOICE_BUTTON_TITLE'=>'Convert To Invoice',
+'LBL_CONVERTSO_BUTTON_TITLE'=>'Create SalesOrder',
+'LBL_CONVERTINVOICE_BUTTON_TITLE'=>'Create Invoice',
 
 'LBL_EDIT_BUTTON'=>'Edit',
 
@@ -161,8 +161,8 @@ $app_strings = Array(
 'LBL_SAVE_BUTTON_LABEL'=>'Save',
 
 'LBL_EDIT_BUTTON_LABEL'=>'Edit',
-'LBL_CONVERTSO_BUTTON_LABEL'=>'Convert To SalesOrder',
-'LBL_CONVERTINVOICE_BUTTON_LABEL'=>'Convert To Invoice',
+'LBL_CONVERTSO_BUTTON_LABEL'=>'Create SalesOrder',
+'LBL_CONVERTINVOICE_BUTTON_LABEL'=>'Create Invoice',
 
 'LBL_DUPLICATE_BUTTON_LABEL'=>'Duplicate',
 
