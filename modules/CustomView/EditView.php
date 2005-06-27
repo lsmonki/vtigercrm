@@ -28,7 +28,18 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 require_once('modules/CustomView/CustomView.php');
 
-$cv_module = $_REQUEST['module'];
+$submodule = array('VENDOR'=>'Vendor','PRICEBOOK'=>'PriceBook','PRODUCTS'=>'Products','PO'=>'Orders','SO'=>'SalesOrder');
+
+if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
+{
+      $cv_module = $submodule[$_REQUEST['smodule']];
+}
+else
+{
+      $cv_module = $_REQUEST['module'];
+}
+
+//$cv_module = $_REQUEST['module'];
 $recordid = $_REQUEST['record'];
 
 $xtpl=new XTemplate ('modules/CustomView/EditView.html');
@@ -67,7 +78,7 @@ if($recordid == "")
 	$xtpl->assign("STDFILTERCOLUMNS",$stdfiltercolhtml);
 	$xtpl->assign("STDFILTERCRITERIA",$stdfilterhtml);
 	$xtpl->assign("STDFILTER_JAVASCRIPT",$stdfilterjs);
-	
+
 	$xtpl->assign("MANDATORYCHECK",implode(",",$oCustomView->mandatoryvalues));
 	$xtpl->assign("SHOWVALUES",implode(",",$oCustomView->showvalues));
 }
@@ -162,7 +173,7 @@ function getStdFilterHTML($module,$selected="")
 {
         global $app_list_strings;
         global $oCustomView;
-
+	//print_r($mod_strings);
         $result = $oCustomView->getStdCriteriaByModule($module);
 
         if(isset($result))

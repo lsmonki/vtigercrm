@@ -191,5 +191,17 @@ if($cvmodule != "")
 	}	
 }
 //echo $cvmodule;
+
+if($cvmodule == "Vendor")
+{
+	$cvmodule = "Products&smodule=VENDOR";
+}elseif($cvmodule == "PriceBook")
+{
+	$cvmodule = "Products&smodule=PRICEBOOK";
+}elseif($cvmodule == "SalesOrder")
+{
+	$cvmodule = "Orders&smodule=SO";
+}
+
 header("Location: index.php?action=index&module=$cvmodule");
 ?>
