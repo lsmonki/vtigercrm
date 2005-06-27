@@ -786,6 +786,11 @@ function createTables($schemaFile, $dbHostName=false, $userName=false, $userPass
 	//$this->println("ADODB createTables connect status=".$db->Connect($this->dbHostName, $this->userName, $this->userPassword, $this->dbName));
 	$schema = new adoSchema( $db );
 	$sql = $schema->ParseSchema( $schemaFile );
+
+	$this->println("--------------Starting the table creation------------------");
+	//$this->println($sql);
+
+
 	$result = $schema->ExecuteSchema( $sql, true );
 	if($result)
 	print $db->errorMsg();
