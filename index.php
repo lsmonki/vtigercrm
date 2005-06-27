@@ -542,6 +542,11 @@ else
 }
 $log->debug('Current theme is: '.$theme);
 
+//Logging instantiation
+require_once('vtiger_logger.php');
+$vtlog = new vtiger_logger();
+//$vtlog->logthis('Enabled Logging');
+
 //Used for current record focus
 $focus = "";
 
