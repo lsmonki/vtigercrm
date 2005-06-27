@@ -142,19 +142,34 @@ $today=Date("Ymd",time());
 
 /* Back to last weekstart before ts */
 while ( Date("w",$ts) != $current_user->weekstart ) {
-  $ts -= 86400;
+  $ts -= 86400; //  1 day has 86400 seconds
 }
 
 $go = 1;
 $a = 0;
 $w = 0;
 while ( $go == 1 ) {
- $wd = Date("w",$ts);
- $xd = Date("j",$ts);
- $xxd = Date("d",$ts);
- $xm = Date("n",$ts);
- $xy = Date("Y",$ts);
+ $wd = Date("w",$ts);  // day of week (0-6)
+ $xd = Date("j",$ts);  // day of month without leading zero
+ $xxd = Date("d",$ts); // day of month with leading zero
+ $xm = Date("n",$ts);  // month (1-12
+ $xy = Date("Y",$ts);  // Year (2005)
+
+/* if ( $wd == $l->user->weekstart ) {
+   # new week
+   echo "<tr>\n";
+   $w0 =  (( 1 + Date("w",mktime(12,0,0,1,1, Date("Y",$ts) ) )) % 7) > 3;
+   $wn = sprintf("%02d", Round( (Date("z",$ts)+7 ) / 7) );
+   echo " <td align=\"right\" class=\"week\">". $wn ."&nbsp;</td>\n";
+ }
+*/
+
+// Overlapping days -starts by Fredy
+
  if ( $wd == $l->user->weekstart ) {
+     if ($xm > $m or $xy > $y) {
+         break;
+     }
    # new week
    echo "<tr>\n";
    $w0 =  (( 1 + Date("w",mktime(12,0,0,1,1, Date("Y",$ts) ) )) % 7) > 3;
@@ -162,21 +177,47 @@ while ( $go == 1 ) {
    echo " <td align=\"right\" class=\"week\">". $wn ."&nbsp;</td>\n";
  }
 
+// check for overlapping days
+ $month_overlap = (($xm == $nm) or ($xm == $lm));
+
  $col = "";
- if ( $today == Date("Ymd",$ts) ) {
-   $col = "today";
- } else if ($wd == 0 ) {
-   $col = "holiday";
- } else if ($wd == 6 ) {
-   $col = "freeday";
- } else if ($xm != $m ) {
-   $col = "otherday";
- } else {
-   $col = "appday";
+
+// Overlapping days -ends 
+
+ $col = "";
+
+if (!$month_overlap) {
+
+	if ( $today == Date("Ymd",$ts) ) {
+		$col = "today";
+	} else if ($wd == 0 ) {
+		$col = "holiday";
+	} else if ($wd == 6 ) {
+		$col = "freeday";
+	} else if ($xm != $m ) {
+		$col = "otherday";
+	} else {
+		$col = "appday";
+	}
+}
+else 
+{ // day overlaps by Fredy
+     if ( $today == Date("Ymd",$ts)) {
+       $col = "ol-today";
+     } else if ($wd == 0) {
+       $col = "ol-holiday";
+     } else if ($wd == 6) {
+       $col = "ol-freeday";
+     } else if ($xm != $m ) {
+       $col = "ol-otherday";
+     } else {
+       $col = "ol-appday";
+     }
  }
+
  
  echo "<td align=\"right\" valign=\"top\" class=\"". $col ."\" height=\"90\" width=\"200\">\n";
- if ($xm == $m )
+ if (($xm == $m ) || $month_overlap)
  {
  	#echo "  <a href=\"JavaScript:closeandaway(". ($xd + $n) .",". ($xm + $n) .",". ($yoff - $xy + $n) .")\">". $xxd ."</a>";
      // added by raj
@@ -228,7 +269,7 @@ while ( $go == 1 ) {
          } 
         else {
            //echo "  <tr><td class=\"". $dinfo[color] ."\" colspan=\"3\"><img src=\"". $image_path ."black.png\" width=\"100%\" height=\"1\" alt=\"--------\"></td></tr>\n";
-		   echo "  <tr><td height=\"2\" colspan=\"4\" class=\"eventSep\"><img src=\"". $image_path ."blank.gif\"></td></tr>\n";
+	   echo "  <tr><td height=\"2\" colspan=\"4\" class=\"eventSep\"><img src=\"". $image_path ."blank.gif\"></td></tr>\n";
          }
 #echo "1 ".$this->user->weekstart ."<br />";
          $pref->callist[$idx]->formatted();
