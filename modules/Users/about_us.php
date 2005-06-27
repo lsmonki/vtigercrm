@@ -10,7 +10,7 @@ global $mod_strings;
 ?>
 <title><?php echo $app_strings['LBL_ABOUTUS_TITLE']?></title>
 <style type="text/css">@import url("<?php echo $theme_path?>style.css");</style>
-<body>
+<body class="vtigerbg">
 <table width="100%" border="0">
 <tr>
 <td><img src="<?php echo $image_path?>vtiger-crm.gif" alt="vigercrm" border="0"></td>
