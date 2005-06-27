@@ -1188,6 +1188,10 @@ IMG.list {
 	border: 0;
 }
 
+.vtigerbg {
+   background-color: #FFFCDF;
+} 
+
 #maintable {
    width: 100%;
    height: 100%;
