@@ -739,7 +739,7 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
     //$s .= $topbar_delimiter;
    // echo $comp_action_uri;
     //$s .= makeComposeLink($comp_action_uri, _("Reply"));
-    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&msg_to='.$msgvtTo.'&msg_cc='.$msgvtcc.'&mg_subject='.$msgvtSubject.'&body='.$msgData.'">Reply</a>';
+    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&msg_to='.$msgvtTo.'&mg_subject='.$msgvtSubject.'&body='.$msgData.'">Reply</a>';
     // echo $string;
     
     $comp_action_uri = $modifiedcomp_uri . '&amp;smaction=reply_all';
