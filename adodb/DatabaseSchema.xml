@@ -4484,6 +4484,7 @@
 		<field name="shipping" type="C" size="100"></field>
 		<field name="accountid" type="I" size="19"></field>
 		<field name="terms_conditions" type="X"></field>
+		<field name="purchaseorder" type="C" size='200'></field>
 
 		
                   
