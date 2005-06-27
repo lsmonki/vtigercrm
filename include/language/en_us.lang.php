@@ -753,6 +753,11 @@ $app_list_strings = Array(
 				, 'Rss'=>'RSS'
 				
 				, 'Reports'=>'Reports'
+				
+				, 'Vendor'=>'Vendor'
+
+				, 'SalesOrder'=>'Sales Order'
+				
 				),
 
 
