@@ -87,9 +87,6 @@ if(isset($_SESSION["login_error"]))
 	$login_error = $_SESSION['login_error'];
 }
 
-
-
-
 //echo get_module_title($current_module_strings['LBL_MODULE_NAME'], $current_module_strings['LBL_LOGIN'], true);
 ?>
 <script type="text/javascript" language="JavaScript">
@@ -103,19 +100,59 @@ function set_focus() {
 }
 //  End -->
 </script>
-<br>
+<table width="100%" height="88%">
+<tr><td align="center" valign="middle" bgcolor="#C9EBFF">
 <table cellpadding="0" align="center" width="100%" cellspacing="0" border="0">
 <tbody><tr>
-<td width="25%">&nbsp;</td>
+<td width="15%">&nbsp;</td>
 <td>
-<P>&nbsp;</P>
-<table cellpadding="10" width="100%" cellspacing="0" border="1px">
+<table cellpadding="10" width="100%" cellspacing="0" style="border: 1px solid #5BBFFA"  bgcolor="#FFFCDF">
 <form action="index.php" method="post" name="DetailView" id="form">
 <tr>
-<td width="95%"><p><font size="+2" face="Verdana, Arial, Helvetica, sans-serif">
-<?php echo $app_strings['NTC_LOGIN_MESSAGE']; ?></font>
-	              <hr>
-		<table cellpadding="0" cellspacing="10" border="0">
+<td width="95%" valign="top">
+
+<?php echo "<img src='".$image_path."vtiger-crm.gif'>";?>
+<?php //echo $app_strings['NTC_LOGIN_MESSAGE']; ?></td></tr>
+<tr>
+<td width="100%">
+<table width="100%" align="left" border="0" cellspacing="4" cellpadding="1" align="center" bgcolor="#FFFCDF">
+<tr>
+<td width="35%" valign ="top">
+	<table width="100%" align="left" valign ="top" bgcolor="#FFFCDF" cellspacing="0" cellpadding="3" align="center">
+        <tr> 
+        <td style="border-bottom: 1px solid #bbbbbb"><font face="Verdana, Arial, Helvetica, sans-serif"><strong>Key Modules</strong></font></td></tr>
+	<tr><td>:: Activitiy Management</td></tr>
+	<tr><td>:: Lead Management</td></tr>
+	<tr><td>:: Opportunity Management</td></tr>
+	<tr><td>:: Account & Contact Management</td></tr>
+	<tr><td>:: Products Management</td></tr>
+	<tr><td>:: Quotations</td></tr>
+	<tr><td>:: Order Management</td></tr>
+	<tr><td>:: Invoices</td></tr>
+	<tr><td>:: Trouble Tickets</td></tr>
+	<tr><td>:: Knowledge Base</td></tr>
+	<tr><td>:: Reports & Dashboards</td></tr>
+	<tr><td>:: More ...</td></tr>
+        </table></td>
+	<td bgcolor="#E5E5E5"></td>
+<td width="30%" valign ="top">
+<table width="100%" align="left" valign ="top" cellspacing="2" cellpadding="2" align="center" bgcolor="#FFFCDF">
+<tr><td style="border-bottom: 1px solid #bbbbbb"><font face="Verdana, Arial, Helvetica, sans-serif"><strong>vtiger CRM Add-ons</strong></font></td></tr>
+<tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: vtiger Customer Portal</font></td></tr>
+<tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: vtiger Outlook Plug-in</font></td></tr>
+<tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: vtiger Office Plug-in</font></td></tr>
+<tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: vtiger Thunderbird Extension</font></td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+</table>
+</td>    	
+<td bgcolor="#E5E5E5"></td>
+<td width="35%" valign ="top"><table align="center" valign ="top" cellpadding="0" cellspacing="10" border="0" bgcolor="#FFFCDF" width="100%">
 			<input type="hidden" name="module" value="Users">
 			<input type="hidden" name="action" value="Authenticate">
 			<input type="hidden" name="return_module" value="Users">
@@ -124,8 +161,7 @@ function set_focus() {
 if( isset($_SESSION['validation'])){
 ?>
 		<tr>
-		<td width="50%">&nbsp;</td>
-		<td width="50%"><font color="Red"> <?php echo $current_module_strings['VLD_ERROR']; ?> </font></td>
+		<td><font color="Red"> <?php echo $current_module_strings['VLD_ERROR']; ?> </font></td>
 		</tr>
 <?php
 }
@@ -133,16 +169,13 @@ else if(isset($login_error) && $login_error != "")
 {
 ?>
 		<tr>
-			<td width="50%">&nbsp;</td>
-			<td width="50%"><b><font color="Brown">
+		<td><b><font color="Brown">
 		</tr>
 		 <?php echo $login_error ?>
                  </font></b></td>
                  </tr>
 <?php
 }
-
-
 
 if (isset($_REQUEST['ck_login_language'])) {
 	$display_language = $_REQUEST['ck_login_language'];
@@ -160,28 +193,29 @@ else {
 
 ?>
 	<tr>
-	<td width="50%"><?php echo "<img src='".$image_path."login.gif'>";?></td>
-	<td width="50%"><b>
+<?php //echo "<img src='".$image_path."login.gif'>";?>
+	
+    </td>    
+</td>
+	<td><b>
 	<?php echo $current_module_strings['LBL_USER_NAME'] ?>
 		</b><br>
 		<input type="text" size='20' name="user_name"  value="<?php echo $login_user_name ?>">
 		</td>
 	</tr>
 	<tr>
-	<td width="50%">
-	<?php echo $app_strings['NTC_WELCOME_MESSAGE']; ?>
+	<?php //echo $app_strings['NTC_WELCOME_MESSAGE']; ?>
 	</td>
-	<td width="50%"><b>
+	<td><b>
 	<?php echo $current_module_strings['LBL_PASSWORD'] ?>
 	</b><br>
 	<input type="password" size='20' name="user_password" value="<?php echo $login_password ?>">
 	</td>
 	</tr>
 	<tr>
-	<td width="50%">
-	<?php echo $app_strings['NTC_DESCRIPTION']; ?>
+	<?php //echo $app_strings['NTC_DESCRIPTION']; ?>
 	</td>
-	<td width="50%"><b>
+	<td><b>
 	<?php echo $current_module_strings['LBL_THEME'] ?>
 	</b><br>
 		<select name='login_theme'>
@@ -190,8 +224,7 @@ else {
 	</td>
 	</tr>
 	<tr>
-	<td width="50%">&nbsp;</td>
-	<td width="50%"><b>
+	<td><b>
 	<?php echo $current_module_strings['LBL_LANGUAGE'] ?>
 	</b><br>
 	<select name='login_language'>
@@ -200,19 +233,53 @@ else {
 	</td>
 	</tr>
 	<tr>
-	<td width="50%">&nbsp;</td>
-	<td width="50%"><b>
+	<td><b>
 	<input title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" class="button" type="submit" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  ">
 	</b></td>
 	</tr>
+	<tr><td>&nbsp</td></tr>
 	</table>
 	</td>
 	</form>
-</table>
+	</td>
+</table></td>
+</tr>
 </td>
-<td width="30%">&nbsp;</td>
-</tr></tbody></table>
-<br>
-<br>
-<br>
-<br>
+</tr>
+</table>
+<td width="15%">&nbsp;</td></tr>
+<tr><td width="15%">&nbsp;</td>
+<td><font face="Verdana, Arial, Helvetica, sans-serif">&nbsp;&nbsp;Best viewed in IE 5.0+, Netscape 7.0+,Opera 7.01+ & Mozilla 1.5+ with 1024x768 resolution</font></td>
+<td width="15%">&nbsp;</td></tr>
+</tbody></table></td></tr></table>
+<script language="JavaScript1.2">
+    var marqueewidth="200px"
+    var marqueeheight="100px"
+    var marqueespeed=1
+    var pauseit=25
+    var marqueecontent=':: Activitiy Management<br>:: Lead Management<br>:: Opportunity Management<br>:: Account & Contact Management<br>:: Products Management<br>:: Quotations<br>:: Order Management<br>:: Invoices<br>:: Trouble Tickets<br>:: Knowledge Base<br>:: Reports & Dashboards<br>:: RSS Feeds<br>:: Product Customization<br>:: More...'
+    marqueespeed=(document.all)? marqueespeed : Math.max(1, marqueespeed-1) //slow speed down by 1 for NS
+    var copyspeed=marqueespeed
+    var pausespeed=(pauseit==0)? copyspeed: 0
+    var iedom=document.all||document.getElementById
+    var actualheight=''
+    var cross_marquee, ns_marquee
+
+    function populate(){
+    cross_marquee=document.getElementById? document.getElementById("iemarquee") : document.all.iemarquee
+    cross_marquee.style.top=parseInt(marqueeheight)+8+"px"
+    cross_marquee.innerHTML=marqueecontent
+    actualheight=cross_marquee.offsetHeight
+    lefttime=setInterval("scrollmarquee()",30)
+    }
+
+    function scrollmarquee() {
+    if (parseInt(cross_marquee.style.top)>(actualheight*(-1)+8))
+    cross_marquee.style.top=parseInt(cross_marquee.style.top)-copyspeed+"px"
+    else
+    cross_marquee.style.top=parseInt(marqueeheight)+8+"px"
+    }
+    populate()
+</script>
+
+
