@@ -28,9 +28,10 @@ require_once("config.php");
 require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
-
+global $vtlog;
 if($_REQUEST['sendnotification'] == 'on')
 {
+$vtlog->logthis("send notification is on",'info');  
 	include("modules/Emails/send_mail.php");
 	send_mail('users',$_REQUEST['assigned_user_id'],$current_user->user_name,$_REQUEST['subject'],$_REQUEST['description'],$mail_server,$mail_server_username,$mail_server_password,$filename);
 }
@@ -52,6 +53,7 @@ elseif($activity_mode == 'Events')
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];
+$vtlog->logthis("id is ".$id,'debug');  	
 }
 if(isset($_REQUEST['mode']))
 {
