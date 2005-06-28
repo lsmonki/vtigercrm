@@ -840,6 +840,8 @@ function get_assigned_user_or_group_name($id,$module)
 
 function getTabname($tabid)
 {
+	global $vtlog;
+	$vtlog->logthis("tab id is ".$tabid,'info');  
         global $adb;
 	$sql = "select tablabel from tab where tabid='".$tabid."'";
 	$result = $adb->query($sql);
@@ -850,6 +852,9 @@ function getTabname($tabid)
 
 function getTabid($module)
 {
+	global $vtlog;
+	$vtlog->logthis("module  is ".$module,'info');  
+        
         global $adb;
 	$sql = "select tabid from tab where name='".$module."'";
 	$result = $adb->query($sql);
@@ -872,7 +877,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$mod_strings[$fieldlabel] = $fieldlabel;
 
 	if($uitype == 5 || $uitype == 6 || $uitype ==23)
-	{
+	{	
+          global $vtlog;
+          $vtlog->logthis("uitype is ".$uitype,'info');  
+
 		if($value=='')
                 {
 			if($fieldname != 'birthday')
@@ -915,6 +923,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 15 || $uitype == 16)
 	{
+	$vtlog->logthis("uitype selected is  ".$uitype,'info');  
 		$custfld .= '<td width="20%" class="dataLabel">';
 
 		if($uitype == 16)
@@ -2143,6 +2152,9 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 function getSalesEntityType($crmid)
 {
+global $vtlog;
+$vtlog->logthis("in getSalesEntityType ".$crmid,'info');  
+	
 	global $adb;
 	$sql = "select * from crmentity where crmid=".$crmid;
         $result = $adb->query($sql);
@@ -2152,6 +2164,9 @@ function getSalesEntityType($crmid)
 
 function getAccountName($account_id)
 {
+global $vtlog;
+$vtlog->logthis("in getAccountName ".$account_id,'info');  
+
 	global $adb;
 	$sql = "select accountname from account where accountid=".$account_id;
         $result = $adb->query($sql);
@@ -2160,6 +2175,10 @@ function getAccountName($account_id)
 }
 function getproductname($product_id)
 {
+
+global $vtlog;
+$vtlog->logthis("in getproductname ".$product_id,'info');  
+
 	global $adb;
 	$sql = "select productname from products where productid=".$product_id;
         $result = $adb->query($sql);
@@ -2168,6 +2187,8 @@ function getproductname($product_id)
 }
 function getPotentialName($potential_id)
 {
+global $vtlog;
+$vtlog->logthis("in getPotentialName ".$potential_id,'info');  
 	global $adb;
 	$sql = "select potentialname from potential where potentialid=".$potential_id;
         $result = $adb->query($sql);
@@ -2177,6 +2198,8 @@ function getPotentialName($potential_id)
 
 function getContactName($contact_id)
 {
+global $vtlog;
+$vtlog->logthis("in getContactName ".$contact_id,'info');  
         global $adb;
         $sql = "select * from contactdetails where contactid=".$contact_id;
         $result = $adb->query($sql);
@@ -2188,6 +2211,8 @@ function getContactName($contact_id)
 
 function getVendorName($vendor_id)
 {
+global $vtlog;
+$vtlog->logthis("in getVendorName ".$vendor_id,'info');  
         global $adb;
         $sql = "select * from vendor where vendorid=".$vendor_id;
         $result = $adb->query($sql);
@@ -2197,6 +2222,8 @@ function getVendorName($vendor_id)
 
 function getQuoteName($quote_id)
 {
+global $vtlog;
+$vtlog->logthis("in getQuoteName ".$quote_id,'info');  
         global $adb;
         $sql = "select * from quotes where quoteid=".$quote_id;
         $result = $adb->query($sql);
@@ -2206,6 +2233,10 @@ function getQuoteName($quote_id)
 
 function getPoName($po_id)
 {
+
+global $vtlog;
+$vtlog->logthis("in getPoName ".$po_id,'info');  
+
         global $adb;
         $sql = "select * from purchaseorder where purchaseorderid=".$po_id;
         $result = $adb->query($sql);
@@ -2215,6 +2246,8 @@ function getPoName($po_id)
 
 function getSoName($so_id)
 {
+global $vtlog;
+$vtlog->logthis("in getSoName ".$so_id,'info');  
         global $adb;
         $sql = "select * from salesorder where salesorderid=".$so_id;
         $result = $adb->query($sql);
@@ -2223,6 +2256,8 @@ function getSoName($so_id)
 }
 function getGroupName($id, $module)
 {
+global $vtlog;
+$vtlog->logthis("in getGroupName ".$id.'  module is    '.$module,'info');  
 	global $adb;
 	if($module == 'Leads')
 	{
@@ -2248,6 +2283,8 @@ function getGroupName($id, $module)
 
 function getColumnFields($module)
 {
+global $vtlog;
+$vtlog->logthis("in getColumnFields ".$module,'info');  
 	global $adb;
 	$column_fld = Array();
         $tabid = getTabid($module);
@@ -2264,6 +2301,9 @@ function getColumnFields($module)
 
 function getUserName($userid)
 {
+global $vtlog;
+$vtlog->logthis("in getUserName ".$userid,'info');  
+
 	global $adb;
 	if($userid != '')
 	{
@@ -2276,6 +2316,9 @@ function getUserName($userid)
 
 function getUserEmail($userid)
 {
+global $vtlog;
+$vtlog->logthis("in getUserEmail ".$userid,'info');  
+
         global $adb;
         if($userid != '')
         {
@@ -2288,6 +2331,9 @@ function getUserEmail($userid)
 //outlook security
 function getUserId_Ol($username)
 {
+global $vtlog;
+$vtlog->logthis("in getUserId_Ol ".$username,'info');  
+
 	global $adb;
 	$sql = "select id from users where user_name='".$username."'";
 	$result = $adb->query($sql);
@@ -3579,6 +3625,9 @@ function getListQuery($module,$where='')
 
 function getActionid($action)
 {
+global $vtlog;
+$vtlog->logthis("get Actionid ".$action,'info');  
+
 	$actionid = '';
 	if($action == 'Save')
 	{
@@ -3664,11 +3713,15 @@ function getActionid($action)
         {
                 $actionid= 1;
         }
+	$vtlog->logthis("action id selected is ".$actionid ,'info');  
 	return $actionid;
 }
 
 function getActionname($actionid)
 {
+	global $vtlog;
+	$vtlog->logthis("getActionName   ".$actionid ,'info');  
+
 	$actionname = '';
 	if($actionid == 0)
 	{
@@ -3712,6 +3765,9 @@ function getActionname($actionid)
 
 function getUserId($record)
 {
+	global $vtlog;
+	$vtlog->logthis("in getUserId ".$record,'info');  
+
 	global $adb;
         $user_id=$adb->query_result($adb->query("select * from crmentity where crmid = ".$record),0,'smownerid');
 	return $user_id;	
@@ -3719,6 +3775,9 @@ function getUserId($record)
 
 function insertProfile2field($profileid)
 {
+	global $vtlog;
+	$vtlog->logthis("in insertProfile2field ".$profileid,'info');  
+	
 	global $adb;
 	$adb->database->SetFetchMode(ADODB_FETCH_ASSOC); 
 	$fld_result = $adb->query("select * from field where generatedtype=1 and displaytype in (1,2)");
@@ -3747,6 +3806,9 @@ function insert_def_org_field()
 
 function getProfile2FieldList($fld_module, $profileid)
 {
+	global $vtlog;
+	$vtlog->logthis("in getProfile2FieldList ".$fld_module. ' profile id is  '.$profileid,'info');  
+
 	global $adb;
 	$tabid = getTabid($fld_module);
 	
@@ -3756,6 +3818,9 @@ function getProfile2FieldList($fld_module, $profileid)
 }
 function getDefOrgFieldList($fld_module)
 {
+	global $vtlog;
+	$vtlog->logthis("in getDefOrgFieldList ".$fld_module,'info');  
+
 	global $adb;
 	$tabid = getTabid($fld_module);
 	
@@ -3786,6 +3851,9 @@ function getQuickCreate($tabid,$actionid)
 }
 function ChangeStatus($status,$activityid,$activity_mode='')
  {
+	global $vtlog;
+	$vtlog->logthis("in ChangeStatus ".$status. ' activityid is  '.$activityid,'info');  
+
         global $adb;
         if ($activity_mode == 'Task')
         {
@@ -3861,6 +3929,9 @@ function getDisplayDate($cur_date_val)
 
 function getNewDisplayDate()
 {
+	global $vtlog;
+	$vtlog->logthis("in getNewDisplayDate ",'info');  
+
 	global $current_user;
 	$dat_fmt = $current_user->date_format;
 	if($dat_fmt == '')
@@ -4143,6 +4214,9 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 
 function getListPrice($productid,$pbid)
 {
+	global $vtlog;
+	$vtlog->logthis("in getListPrice productid ".$productid,'info');  
+
 	global $adb;
 	$query = "select listprice from pricebookproductrel where pricebookid=".$pbid." and productid=".$productid;
 	$result = $adb->query($query);
@@ -4286,6 +4360,9 @@ function getDetailAssociatedProducts($module,$focus)
 
 function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 {
+	global $vtlog;
+	$vtlog->logthis("in getConvertQuoteToSoObject ".$quoteid,'info');  
+
         $focus->column_fields['quote_id'] = $quoteid;
         $focus->column_fields['subject'] = $quote_focus->column_fields['subject'];
         $focus->column_fields['contact_id'] = $quote_focus->column_fields['contact_id'];
@@ -4311,6 +4388,9 @@ function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 
 function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 {
+	global $vtlog;
+	$vtlog->logthis("in getConvertQuoteToInvoice ".$quoteid,'info'); 
+
 	$focus->column_fields['subject'] = $quote_focus->column_fields['subject'];
 	$focus->column_fields['account_id'] = $quote_focus->column_fields['account_id'];
 	$focus->column_fields['bill_street'] = $quote_focus->column_fields['bill_street'];
@@ -4333,6 +4413,9 @@ function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 
 function getConvertSoToInvoice($focus,$so_focus,$soid)
 {
+	global $vtlog;
+	$vtlog->logthis("in getConvertSoToInvoice ".$soid,'info');  
+
 	$focus->column_fields['salesorder_id'] = $soid;
 	$focus->column_fields['subject'] = $so_focus->column_fields['subject'];
 	$focus->column_fields['customerno'] = $so_focus->column_fields['customerno'];
