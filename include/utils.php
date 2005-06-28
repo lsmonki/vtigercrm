@@ -4107,7 +4107,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	}
 	elseif($module == 'Products')
 	{
-		$query="select products.productname,products.unit_price,products.qtyinstock,crmentity.* from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0 and productid=".$seid;
+		$query="select products.productid,products.productname,products.unit_price,products.qtyinstock,crmentity.* from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0 and productid=".$seid;
 	}
 
 	$result = $adb->query($query);
