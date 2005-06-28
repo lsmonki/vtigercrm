@@ -199,6 +199,26 @@ function renderRelatedContacts($query,$id)
         $list = GetRelatedList('Vendor','Contacts',$focus,$query,$button,$returnset);
         echo '</form>';
 }
+function renderRelatedQuotes($query,$id,$sid="product_id")
+{
+	global $mod_strings;
+	global $app_strings;
+	require_once('modules/Quotes/Quote.php');
+
+	$hidden = getHiddenValues($id,$sid);                                                                                             echo $hidden;
+	
+	$focus = new Quote();
+	
+	$button = '';
+	if(isPermitted("Quotes",1,"") == 'yes')
+        {
+		$button .= '<input title="'.$app_strings['LBL_NEW_QUOTE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_QUOTE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Quotes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_QUOTE_BUTTON'].'">&nbsp;</td>';
+	}
+	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+	$list = GetRelatedList('Products','Quotes',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
 
 
 echo get_form_footer();

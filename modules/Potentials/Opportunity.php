@@ -631,7 +631,7 @@ return $exists;
 	function get_products($id)
 	{
 		//$query = 'select potential.potentialid, potential.potentialname, products.productid, products.productname, products.qty_per_unit, products.unit_price, products.purchase_date from potential inner join crmentity on crmentity.crmid = potential.potentialid inner join seproductsrel on seproductsrel.productid = products.productid inner join products on seproductsrel.productid = products.productid where potential.potentialid='.$id;
-		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, products.purchase_date, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join potential on potential.potentialid = seproductsrel.crmid  where potential.potentialid = '.$id.' and crmentity.deleted = 0';
+		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join potential on potential.potentialid = seproductsrel.crmid  where potential.potentialid = '.$id.' and crmentity.deleted = 0';
 	      	renderRelatedProducts($query,$id);
         }
 	function get_stage_history($id)
@@ -663,7 +663,7 @@ return $exists;
 	function get_quotes($id)
 	{
 		$query = "select crmentity.*, quotes.*,potential.potentialname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0 and potential.potentialid=".$id;
-		renderRelatedQuotes($query,$id);
+		renderRelatedQuotes($query,$id,$this->column_fields['account_id']);
 	 }
 	 function get_salesorder($id)
 	 {

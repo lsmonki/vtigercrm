@@ -51,10 +51,18 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 if(isset($_REQUEST['potential_id']))
 {
         $focus->column_fields['potential_id'] = $_REQUEST['potential_id'];
+	$num_of_products = getNoOfAssocProducts("Potentials",$focus,$focus->column_fields['potential_id']);
+        $associated_prod = getAssociatedProducts("Potentials",$focus,$focus->column_fields['potential_id']);
+}
+if(isset($_REQUEST['product_id']))
+{
+        $focus->column_fields['product_id'] = $_REQUEST['product_id'];
+        $num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
+        $associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 }
 
 // Get Account address if account is given
-if(isset($_REQUEST['account_id']) && $_REQUEST['record']==''){
+if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['record']==''){
 	require_once('modules/Accounts/Account.php');
 	$acct_focus = new Account();
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
@@ -163,6 +171,16 @@ elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
         $xtpl->assign("MODE", $focus->mode);
         $xtpl->assign("TAXVALUE", $focus->column_fields['txtTax']);
         $xtpl->assign("ADJUSTMENTVALUE", $focus->column_fields['txtAdjustment']);
+        $xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
+        $xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
+
+}
+elseif((isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '') || (isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
+        $xtpl->assign("ROWCOUNT", $num_of_products);
+        $xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+        $xtpl->assign("MODE", $focus->mode);
+        $xtpl->assign("TAXVALUE", "0.000");
+        $xtpl->assign("ADJUSTMENTVALUE", "0.000");
         $xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
         $xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
 

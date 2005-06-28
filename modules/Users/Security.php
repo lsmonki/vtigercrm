@@ -1401,6 +1401,8 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",0,'get_attachments',3,'Attachments',0)");
+	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",".getTabid("Quotes").",'get_quotes',4,'Quotes',0)");
 
 		//Inserting Emails Related Lists	
 

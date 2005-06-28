@@ -222,14 +222,16 @@ function renderRelatedStageHistory($query,$id)
 	}
 	echo "<BR>\n";
 }
-function renderRelatedQuotes($query,$id)
+function renderRelatedQuotes($query,$id,$acntid='')
 {
 	global $mod_strings;
 	global $app_strings;
 	require_once('modules/Quotes/Quote.php');
 
-	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
-	
+	$hidden = getHiddenValues($id);
+	$hidden .='<input type="hidden" name="account_id" value="'.$acntid.'">';
+	echo $hidden;
+	if($acntid!='')
 	$focus = new Quote();
 	
 	$button = '';

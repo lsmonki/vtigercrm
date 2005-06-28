@@ -4007,7 +4007,7 @@ function getReminderSelectOption($start,$end,$fldname,$selvalue='')
 	return $OPTION_FLD;
 }
 
-function getAssociatedProducts($module,$focus)
+function getAssociatedProducts($module,$focus,$seid='')
 {
 	global $adb;
 	$output = '';
@@ -4030,6 +4030,14 @@ function getAssociatedProducts($module,$focus)
 	{
 		$query="select products.productname,products.unit_price,products.qtyinstock,invoiceproductrel.* from invoiceproductrel inner join products on products.productid=invoiceproductrel.productid where invoiceid=".$focus->id;
 	}
+	elseif($module == 'Potentials')
+	{
+		$query="select products.productname,products.unit_price,products.qtyinstock,seproductsrel.* from products inner join seproductsrel on seproductsrel.productid=products.productid where crmid=".$seid;
+	}
+	elseif($module == 'Products')
+	{
+		$query="select products.productname,products.unit_price,products.qtyinstock,crmentity.* from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0 and productid=".$seid;
+	}
 
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
@@ -4041,6 +4049,9 @@ function getAssociatedProducts($module,$focus)
 		$productid=$adb->query_result($result,$i-1,'productid');
 		$qty=$adb->query_result($result,$i-1,'quantity');
 		$listprice=$adb->query_result($result,$i-1,'listprice');
+		if($listprice == '')
+		$listprice = $unitprice;
+		
 		$total = $qty*$listprice;
 
 		$product_id_var = 'hdnProductId'.$i;
@@ -4095,7 +4106,7 @@ function getAssociatedProducts($module,$focus)
 	return $output;
 
 }
-function getNoOfAssocProducts($module,$focus)
+function getNoOfAssocProducts($module,$focus,$seid='')
 {
 	global $adb;
 	$output = '';
@@ -4115,6 +4126,16 @@ function getNoOfAssocProducts($module,$focus)
 	{
 		$query="select products.productname,products.unit_price,invoiceproductrel.* from invoiceproductrel inner join products on products.productid=invoiceproductrel.productid where invoiceid=".$focus->id;
 	}
+	elseif($module == 'Potentials')
+	{
+		$query="select products.productname,products.unit_price,seproductsrel.* from products inner join seproductsrel on seproductsrel.productid=products.productid where crmid=".$seid;
+	}	
+	elseif($module == 'Products')
+	{
+		$query="select products.productname,products.unit_price, crmentity.* from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0 and productid=".$seid;
+	}
+
+
 	$result = $adb->query($query);
 	$num_rows=$adb->num_rows($result);
 	return $num_rows;
