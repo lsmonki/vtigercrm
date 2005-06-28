@@ -297,7 +297,7 @@ $xtpl->assign("ID", $focus->id);
 
 
 
-$invoice_tables = Array('invoice','crmentity','invoicebillads','invoiceshipads'); 
+$invoice_tables = Array('invoice','invoicebillads','invoiceshipads'); 
  $tabid = getTabid("Invoice");
  $validationData = getDBValidationData($invoice_tables,$tabid);
  $fieldName = '';
