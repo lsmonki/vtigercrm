@@ -65,7 +65,8 @@ class Tracker {
     {
       global $adb;
       $this->delete_history($user_id, $item_id);
-
+global $vtlog;
+$vtlog->logthis("in  track view method ".$current_module,'info');
       // Add a new item to the user's list
 
         $esc_item_id = addslashes($item_id);
