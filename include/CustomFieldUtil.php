@@ -14,6 +14,8 @@ require_once('include/utils.php');
 
 function getCustomFieldTypeName($uitype)
 {
+	global $vtlog;
+	$vtlog->logthis("uitype is ".$uitype,'info');  
 	$fldname = '';
 	
 	if($uitype == 1)
