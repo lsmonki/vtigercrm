@@ -207,7 +207,7 @@ $xtpl->assign("ID", $focus->id);
 
 
 
-$po_tables = Array('purchaseorder','crmentity','pobillads','poshipads'); 
+$po_tables = Array('purchaseorder','pobillads','poshipads'); 
  $tabid = getTabid("Orders");
  $validationData = getDBValidationData($po_tables,$tabid);
  $fieldName = '';
