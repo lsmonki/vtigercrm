@@ -28,6 +28,7 @@ function getHiddenValues($id)
 
 function renderRelatedContacts($query,$id)
 {
+	global $vtlog;
 	global $mod_strings;
 	global $app_strings;
 
@@ -46,16 +47,18 @@ function renderRelatedContacts($query,$id)
 	$returnset = '&return_module=Emails&return_action=DetailView&return_id='.$id;
 
 	$list = GetRelatedList('Emails','Contacts',$focus,$query,$button,$returnset);
+	$vtlog->logthis("Contact Related List for Email is Displayed",'info');
 	echo '</form>';
 }
 
 function renderRelatedAttachments($query,$id)
 {
+	global $vtlog;
         $hidden = getHiddenValues($id);
         echo $hidden;
 
         getAttachmentsAndNotes('Emails',$query,$id);
-
+	$vtlog->logthis("Notes&Attachments Related List for Email is Displayed",'info');
         echo '</form>';
 }
 

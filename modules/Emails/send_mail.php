@@ -30,6 +30,7 @@ send_mail('users',$_REQUEST['assigned_user_id'],$current_user->user_name,$_REQUE
 
 function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password,$filename)
 {
+	global $vtlog;
 	global $adb;
 	global $root_directory;
 
@@ -37,6 +38,7 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 
 
 	$sql="select email1 from ". $srcmodule ." where id='" .$to ."'" ;
+	$vtlog->logthis("Email for assigned_user_id is selected.",'debug');
         $result = $adb->query($sql);
 
 	$mail = new PHPMailer();
@@ -58,6 +60,7 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 
         $result = $adb->query($sql);
         $from = $adb->query_result($result,0,"email1");
+	$vtlog->logthis("From Email is selected.",'debug');
 
 	$mail->IsSMTP();                                      // set mailer to use SMTP
 	//$mail->Host = "smtp1.example.com;smtp2.example.com";  // specify main and backup server
@@ -110,6 +113,7 @@ if($result1 != '')
 	}
 
 	$mail->AddAttachment($root_directory."/test/upload/".$filename);//temparray['filename']) //add attachments
+	$vtlog->logthis("Attachment Files are Attached with the mail.",'debug');
 }
 	//$mail->AddAttachment("/var/tmp/file.tar.gz");         // add attachments
 	//$mail->AddAttachment("/tmp/image.jpg", "new.jpg");    // optional name
@@ -133,6 +137,7 @@ if($result1 != '')
 		if($mailto != '')
 		{
 			$mail->AddAddress($mailto);
+			$vtlog->logthis("Parent(comes from Lead/Contact) Mail id is selected and added in to address.",'debug');
 			$flag = MailSend($mail);
 		}
 		$returnmodule = $_REQUEST['return_module'];
@@ -146,6 +151,7 @@ if($result1 != '')
 		{
 			$mail->ClearAddresses();
 	                $mailto = getParentMailId($_REQUEST['parent_type'],$_REQUEST['parent_id']);
+			$vtlog->logthis("Parent(Lead/Contact) Mail id is selected and added in to address.",'debug');
 	                if($mailto != '')
 			{
         	                $mail->AddAddress($mailto);
