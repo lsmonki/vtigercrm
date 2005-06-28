@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -27,6 +27,7 @@ require_once('include/ListView/ListView.php');
 
 global $app_strings;
 global $adb;
+global $vtlog;
 
 $metricviewnames = "'Hot Leads'";
 
@@ -39,6 +40,7 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH", $image_path);
 
 $metriclists = getMetricList();
+$vtlog->logthis("Metrics :: Successfully got MetricList to be displayed","info");
 
 if(isset($metriclists))
 {
@@ -47,6 +49,7 @@ foreach ($metriclists as $key => $metriclist)
 	$listquery = getListQuery($metriclist['module']);
 	$oCustomView = new CustomView($metriclist['module']);
 	$metricsql = $oCustomView->getMetricsCvListQuery($metriclist['id'],$listquery,$metriclist['module']);
+	//$vtlog->logthis("Metrics :: Successfully got MetricSQL to be queried","info");
 	$metricresult = $adb->query($metricsql);
 	if($metricresult)
 	{
@@ -54,9 +57,10 @@ foreach ($metriclists as $key => $metriclist)
 		if(isset($rowcount))
 		{
 			$metriclists[$key]['count'] = $rowcount['count'];
-		}	
+		}
 	}
 }
+$vtlog->logthis("Metrics :: Successfully build the Metrics","info");
 }
 
 //print_r($metriclists);
@@ -88,7 +92,7 @@ foreach($metriclists as $metriclist)
 	$xtpl->assign("ROW_COLOR", 'evenListRow');
     }
     $oddRow = !$oddRow;
-        
+
     $xtpl->parse("main.row");
     // Put the rows in.
 }
@@ -120,7 +124,7 @@ function getMetricList()
 		$metriclists[] = $metricslist;
 	}
 
-	return $metriclists;	
+	return $metriclists;
 }
 
 ?>

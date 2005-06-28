@@ -11,6 +11,7 @@
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
+global $vtlog;
 
 $cvid = $_REQUEST["record"];
 $cvmodule = $_REQUEST["cvmodule"];
@@ -98,12 +99,13 @@ if($cvmodule != "")
 		  	$updatedefaultsql = "update customview set setdefault=0 where entitytype='".$cvmodule."'";
 			$updatedefaultresult = $adb->query($updatedefaultsql);
 		  }
+		  $vtlog->logthis("CustomView :: Save :: setdefault upated successfully","info");
 
 		  $customviewsql = "insert into customview(cvid,viewname,setdefault,setmetrics,entitytype)";
 		  $customviewsql .= " values(".$genCVid.",'".$viewname."',".$setdefault.",".$setmetrics.",'".$cvmodule."')";
 		  //echo $customviewsql;
 		  $customviewresult = $adb->query($customviewsql);
-
+		  $vtlog->logthis("CustomView :: Save :: customview created successfully","info");
 		  if($customviewresult)
 		  {
 			if(isset($columnslist))
@@ -115,6 +117,7 @@ if($cvmodule != "")
 				//echo $columnsql;
 				$columnresult = $adb->query($columnsql);
 			    }
+			    $vtlog->logthis("CustomView :: Save :: cvcolumnlist created successfully","info");
 
 			    $stdfiltersql = "insert into cvstdfilter(cvid,columnname,stdfilter,startdate,enddate)";
 			    $stdfiltersql .= " values (".$genCVid.",'".$std_filter_list["columnname"]."',";
@@ -123,6 +126,7 @@ if($cvmodule != "")
 			    $stdfiltersql .= "'".$std_filter_list["enddate"]."')";
 			    //echo $stdfiltersql;
 			    $stdfilterresult = $adb->query($stdfiltersql);
+			    $vtlog->logthis("CustomView :: Save :: cvstdfilter created successfully","info");
 
 			    for($i=0;$i<count($adv_filter_col);$i++)
 			    {
@@ -133,6 +137,7 @@ if($cvmodule != "")
 				//echo $advfiltersql;
 				$advfilterresult = $adb->query($advfiltersql);
 			    }
+			    $vtlog->logthis("CustomView :: Save :: cvadvfilter created successfully","info");
 			}
 		  }
 		}
@@ -144,9 +149,11 @@ if($cvmodule != "")
 			$updatedefaultsql = "update customview set setdefault=0 where entitytype='".$cvmodule."'";
 			$updatedefaultresult = $adb->query($updatedefaultsql);
 	     }
+	     $vtlog->logthis("CustomView :: Save :: setdefault upated successfully".$genCVid,"info");
 
 	     $updatecvsql = "update customview set viewname='".$viewname."',setdefault=".$setdefault.",setmetrics=".$setmetrics." where cvid=".$cvid;
 	     $updatecvresult = $adb->query($updatecvsql);
+	     $vtlog->logthis("CustomView :: Save :: customview upated successfully".$genCVid,"info");
 
 	     $deletesql = "delete from cvcolumnlist where cvid=".$cvid;
 	     $deleteresult = $adb->query($deletesql);
@@ -156,6 +163,8 @@ if($cvmodule != "")
 
              $deletesql = "delete from cvadvfilter where cvid=".$cvid;
              $deleteresult = $adb->query($deletesql);
+	     $vtlog->logthis("CustomView :: Save :: cvcolumnlist,cvstdfilter,cvadvfilter deleted successfully before update".$genCVid,"info");
+
 	     $genCVid = $cvid;
              if($updatecvresult)
 	     {
@@ -168,6 +177,7 @@ if($cvmodule != "")
                          //echo $columnsql;
                          $columnresult = $adb->query($columnsql);
                      }
+		     $vtlog->logthis("CustomView :: Save :: cvcolumnlist update successfully".$genCVid,"info");
 
                      $stdfiltersql = "insert into cvstdfilter(cvid,columnname,stdfilter,startdate,enddate)";
                      $stdfiltersql .= " values (".$genCVid.",'".$std_filter_list["columnname"]."',";
@@ -176,6 +186,7 @@ if($cvmodule != "")
                      $stdfiltersql .= "'".$std_filter_list["enddate"]."')";
                      //echo $stdfiltersql;
                      $stdfilterresult = $adb->query($stdfiltersql);
+		     $vtlog->logthis("CustomView :: Save :: cvstdfilter update successfully".$genCVid,"info");
 
                      for($i=0;$i<count($adv_filter_col);$i++)
                      {
@@ -186,9 +197,10 @@ if($cvmodule != "")
                         // echo $advfiltersql;
                          $advfilterresult = $adb->query($advfiltersql);
                      }
+		     $vtlog->logthis("CustomView :: Save :: cvadvfilter update successfully".$genCVid,"info");
                 }
-	     }	
-	}	
+	     }
+	}
 }
 //echo $cvmodule;
 

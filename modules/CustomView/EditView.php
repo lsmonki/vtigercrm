@@ -17,6 +17,7 @@ global $app_strings;
 global $current_user;
 $focus = 0;
 global $theme;
+global $vtlog;
 
 //<<<<<>>>>>>
 global $oCustomView;
@@ -54,12 +55,14 @@ if($recordid == "")
 {
         $oCustomView = new CustomView();
         $modulecollist = $oCustomView->getModuleColumnsList($cv_module);
+	$vtlog->logthis('CustomView :: Successfully got ColumnsList for the module'.$cv_module,'info');
 	if(isset($modulecollist))
 	{
         	$choosecolhtml = getByModule_ColumnsHTML($cv_module,$modulecollist);
 	}
         //step2
         $stdfilterhtml = $oCustomView->getStdFilterCriteria();
+	$vtlog->logthis('CustomView :: Successfully got StandardFilter for the module'.$cv_module,'info');
         $stdfiltercolhtml = getStdFilterHTML($cv_module);
         $stdfilterjs = $oCustomView->getCriteriaJS();
 
@@ -69,6 +72,7 @@ if($recordid == "")
 	{
 		$xtpl->assign("CHOOSECOLUMN".$i,$choosecolhtml);
 	}
+	$vtlog->logthis('CustomView :: Successfully got AdvancedFilter for the module'.$cv_module,'info');
 	for($i=1;$i<6;$i++)
 	{
 		$xtpl->assign("FOPTION".$i,$advfilterhtml);
@@ -87,8 +91,11 @@ else
 	$oCustomView = new CustomView();
 
 	$customviewdtls = $oCustomView->getCustomViewByCvid($recordid);
+	$vtlog->logthis('CustomView :: Successfully got ViewDetails for the Viewid'.$recordid,'info');
+
 	$modulecollist = $oCustomView->getModuleColumnsList($cv_module);
 	$selectedcolumnslist = $oCustomView->getColumnsListByCvid($recordid);
+	$vtlog->logthis('CustomView :: Successfully got ColumnsList for the Viewid'.$recordid,'info');
 
 	$xtpl->assign("VIEWNAME",$customviewdtls["viewname"]);
 
@@ -107,6 +114,7 @@ else
         }
 
 	$stdfilterlist = $oCustomView->getStdFilterByCvid($recordid);
+	$vtlog->logthis('CustomView :: Successfully got Standard Filter for the Viewid'.$recordid,'info');
 	$stdfilterhtml = $oCustomView->getStdFilterCriteria($stdfilterlist["stdfilter"]);
         $stdfiltercolhtml = getStdFilterHTML($cv_module,$stdfilterlist["columnname"]);
         $stdfilterjs = $oCustomView->getCriteriaJS();
@@ -118,6 +126,7 @@ else
 	}
 
 	$advfilterlist = $oCustomView->getAdvFilterByCvid($recordid);
+	$vtlog->logthis('CustomView :: Successfully got Advanced Filter for the Viewid'.$recordid,'info');
 	for($i=1;$i<6;$i++)
         {
                 $advfilterhtml = getAdvCriteriaHTML($advfilterlist[$i-1]["comparator"]);
