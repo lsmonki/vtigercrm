@@ -27,11 +27,12 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
-
+global $vtlog;
 $focus = new Account();
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];
+$vtlog->logthis("id is ".$focus->id,'info'); 
 }
 if(isset($_REQUEST['mode']))
 {
@@ -85,6 +86,7 @@ header("Location: index.php?action=$return_action&module=$return_module&record=$
 //Code to save the custom field info into database
 function save_customfields($entity_id)
 {
+$vtlog->logthis("save customfields invoked",'info');
 	global $adb;
 	$dbquery="select * from customfields where module='Accounts'";
         /*
