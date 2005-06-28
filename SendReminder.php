@@ -29,8 +29,9 @@ require("config.php");
 
 global $adb;
 
-// Select the events with reminder
-$query="select crmentity.crmid,activity.*,activity_reminder.* from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id where ".$adb->getDBDateString("activity.date_start")." >= '".date('Y-m-d')."' and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0;";
+//modified query for recurring events -Jag
+ 	$query="select crmentity.crmid,activity.*,activity_reminder.reminder_time,activity_reminder.reminder_sent,activity_reminder.recurringid,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id left outer join recurringevents on activity.activityid=recurringevents.activityid where DATE_FORMAT(activity.date_start,'%Y-%m-%d, %H:%i:%s') >= '".date('Y-m-d')."' and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0 group by activity.activityid,recurringevents.recurringid ;";
+
 $result = $adb->query($query);
 
 if($adb->num_rows($result) >= 1)
@@ -41,10 +42,25 @@ if($adb->num_rows($result) >= 1)
 		$time_start = $result_set['time_start'];
 		$reminder_time = $result_set['reminder_time'];
 	        $curr_time = strtotime(date("Y-m-d H:i"))/60;
-	        $activity_time = strtotime(date("$date_start $time_start"))/60;
 		$activity_id = $result_set['activityid'];
 		$activitymode = ($result_set['activitytype'] == "Task")?"Task":"Events";
-		$to_addr='';	
+		$to_addr='';
+			
+		//code included for recurring events by jaguar starts	
+		$recur_id = $result_set['recurringid'];
+		$current_date=date('Y-m-d');
+		if($recur_id == 0)
+		{
+			$date_start = $result_set['date_start'];
+		}
+		else
+		{
+			$date_start = $result_set['recurringdate'];
+		}
+		//code included for recurring events by jaguar ends	
+
+	        $activity_time = strtotime(date("$date_start $time_start"))/60;
+
 		if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) == $reminder_time)
 		{
 			$query_user="SELECT users.email1,salesmanactivityrel.smid FROM salesmanactivityrel inner join users on users.id=salesmanactivityrel.smid where salesmanactivityrel.activityid =".$activity_id." and users.deleted=0"; 
@@ -83,7 +99,6 @@ if($adb->num_rows($result) >= 1)
 			$subject = "[Reminder:".$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$adb->query_result($result_main,0,'notificationsubject');
 
 			//Set the mail body/contents here
-			#$contents ="Hi,\n\n This a activity reminder mail. Kindly visit the link for more details of the activity <a href='".$site_URL."/index.php?action=DetailView&module=Activities&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>\n\n Regards,\n Reminder Manager";
 			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n Kindly visit the link for more details on the activity <a href='".$site_URL."/index.php?action=DetailView&module=Activities&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>";
 
 			if(count($to_addr) >=1)
@@ -93,7 +108,6 @@ if($adb->num_rows($result) >= 1)
 				$adb->query($upd_query);
 				
 			}
-		//$parentmailid = getParentMailId($_REQUEST['return_module'],$_REQUEST['parent_id']);
 		}
 	}
 }
@@ -147,10 +161,11 @@ function MailSend($mail)
         if(!$mail->Send())
         {
            $msg = $mail->ErrorInfo;
-           //header("Location: index.php?action=$returnaction&module=".$_REQUEST['return_module']."&parent_id=$parent_id&record=".$_REQUEST['return_id']."&filename=$filename&message=$msg");
         }
-	else 
+	else
+       	{	
 		return true;
+	}		
 }
 
 function getParentMailId($returnmodule,$parentid)
