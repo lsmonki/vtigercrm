@@ -16,6 +16,7 @@ global $app_list_strings;
 global $modules;
 global $blocks;
 global $adv_filter_options;
+global $vtlog;
 
 global $report_modules;
 global $related_modules;
@@ -53,21 +54,21 @@ foreach($report_modules as $values)
 $modules[] = "_";
 
 class Reports extends CRMEntity{
-	
+
 	var $srptfldridjs;
-	
+
 	var $column_fields = Array();
-	
+
 	var $sort_fields = Array();
 	var $sort_values = Array();
-	
+
 	var $id;
 	var $mode;
 	var $mcount;
-	
+
 	var $startdate;
 	var $enddate;
-	
+
 	var $ascdescorder;
 
 	var $stdselectedfilter;
@@ -80,12 +81,12 @@ class Reports extends CRMEntity{
 	var $reporttype;
 	var $reportname;
 	var $reportdescription;
-	var $folderid;		
-	var $module_blocks;	
+	var $folderid;
+	var $module_blocks;
 
-	var $pri_module_columnslist;		
+	var $pri_module_columnslist;
 	var $sec_module_columnslist;
-	
+
 	var $advft_column;
         var $advft_option;
         var $advft_value;
@@ -107,7 +108,7 @@ class Reports extends CRMEntity{
 	function Reports($reportid="")
 	{
 		global $adb;
-		
+
 		if($reportid != "")
 		{
 			$ssql = "select reportmodules.*,report.* from report inner join reportmodules on report.reportid = reportmodules.reportmodulesid";
@@ -121,11 +122,11 @@ class Reports extends CRMEntity{
 				$this->reporttype = $reportmodulesrow["reporttype"];
 				$this->reportname = $reportmodulesrow["reportname"];
 				$this->reportdescription = $reportmodulesrow["description"];
-				$this->folderid = $reportmodulesrow["folderid"];				
+				$this->folderid = $reportmodulesrow["folderid"];
 			}
 		}
 	}
-	
+
 	function save($module_name)
 	{
 		if($module_name = "ReportFolder")
@@ -133,26 +134,28 @@ class Reports extends CRMEntity{
 			if($this->mode = "Save")
 			{
 				$this->id = "";
-				
+
 			}elseif($this->mode = "Edit")
 			{
-				
+
 			}
 		}
 	}
 	function sgetRptFldr(){
-		
+
 		global $adb;
+		global $vtlog;
+
 		$sql = "select * from reportfolder order by folderid";
 		$result = $adb->query($sql);
 		$reportfldrow = $adb->fetch_array($result);
 		$x = 0;
                 do
 		{
-			
+
 			$reporttempid = $reportfldrow["folderid"]."RptFldr";
 			$reporttempidjs[$x] = "'".$reportfldrow["folderid"]."RptFldr'";
-			
+
 			$shtml .= "<br><table width=\"95%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 			<tr>
 			    <td width=\"15\" nowrap>
@@ -178,17 +181,19 @@ class Reports extends CRMEntity{
 			</table>";
 			$shtml .= $this->sgetRptsforFldr($reportfldrow["folderid"]);
 			$x = $x + 1;
-			
+
 		}while($reportfldrow = $adb->fetch_array($result));
 		$this->srptfldridjs = implode(",",$reporttempidjs);
-		
+
+		$vtlog->logthis("Reports :: ListView->Successfully returned report folder HTML","info");
 		return $shtml;
 	}
-	
+
 	function sgetRptsforFldr($rpt_fldr_id)
 	{
 		$srptdetails="";
 		global $adb;
+		global $vtlog;
 		
 		$sql = "select report.*, reportmodules.* from report inner join reportfolder on reportfolder.folderid = report.folderid";
 		$sql .= " inner join reportmodules on reportmodules.reportmodulesid = report.reportid where reportfolder.folderid=".$rpt_fldr_id;
@@ -198,14 +203,14 @@ class Reports extends CRMEntity{
 		{
 			$srptdetails .= '<div id="'.$rpt_fldr_id.'RptFldr" style="display:block">
 				<table width="95%" border="0" cellspacing="0" cellpadding="0">
-				  <tr> 
+				  <tr>
 				    <td width="15">&nbsp;</td>
 				    <td>
 				    <table border="0" width="100%" cellspacing="0" cellpadding="0" class="formOuterBorder">
-						<tr> 
+						<tr>
 							<td width="15%" nowrap height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;"></td>
 							<td width="30%" nowrap height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Report Name</td>
-							<td width="55%" nowrap height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Description</td>			
+							<td width="55%" nowrap height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Description</td>
 						</tr>';
 						$rowcnt = 1;
 						do
@@ -221,7 +226,7 @@ class Reports extends CRMEntity{
 								{
 									$srptdetails .= '<a class="link" href="index.php?module=Reports&action=NewReport1&record='.$report["reportid"] .'&primarymodule='.$report["primarymodule"].'&secondarymodule='.$report["secondarymodules"].'">Customize</a>';
 								}
-								
+
 								if($report["state"]=="SAVED")
 								{
 								//	$srptdetails .= '<span class="sep">|</span>&nbsp;<span class="disabled">Del</span>';
@@ -246,16 +251,18 @@ class Reports extends CRMEntity{
 			{
 				$srptdetails .= '<div id="'.$rpt_fldr_id.'RptFldr" style="display:block">
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				  <tr> 
+				  <tr>
 				    <td width="15"></td>
 				    <td height="21">No reports in this folder</td>
 				  </tr>
 				</table>
-				</div>'; 
+				</div>';
 			}
+
+		$vtlog->logthis("Reports :: ListView->Successfully returned report details HTML","info");
 		return $srptdetails;
 	}
-	
+
 	function sgetJsRptFldr()
 	{
 		$srptfldr_js = "var ReportListArray=new Array(".$this->srptfldridjs.")
@@ -267,12 +274,12 @@ class Reports extends CRMEntity{
 	{
 		foreach($this->module_list[$module] as $key=>$value)
 		{
-			$ret_module_list[$module][$key] = $this->getColumnsListbyBlock($module,$value); 
+			$ret_module_list[$module][$key] = $this->getColumnsListbyBlock($module,$value);
 		}
 		$this->pri_module_columnslist = $ret_module_list;
-		return true;	
+		return true;
 	}
-	
+
 	function getSecModuleColumnsList($module)
         {
                 if($module != "")
@@ -290,7 +297,7 @@ class Reports extends CRMEntity{
 		}
                 return true;
         }
-	
+
 	/*function getEscapedFieldNames($fieldname)
         {
                 //print($selectedfields);
@@ -330,6 +337,8 @@ class Reports extends CRMEntity{
 	function getColumnsListbyBlock($module,$block)
 	{
                 global $adb;
+		global $vtlog;
+
                 $tabid = getTabid($module);
                 global $profile_id;
 
@@ -353,7 +362,7 @@ class Reports extends CRMEntity{
 			if($fieldname == "assigned_user_id")
 			{
 			   $fieldtablename = "users".$module;
-			   $fieldcolname = "user_name";				
+			   $fieldcolname = "user_name";
 			}
 			if($fieldname == "account_id")
 			{
@@ -389,25 +398,26 @@ class Reports extends CRMEntity{
                         $optionvalue = $fieldtablename.":".$fieldcolname.":".$module."_".$fieldlabel1.":".$fieldname.":".$fieldtypeofdata;
 			$module_columnlist[$optionvalue] = $fieldlabel;
 		}
+		$vtlog->logthis("Reports :: FieldColumns->Successfully returned ColumnslistbyBlock".$module.$block,"info");
                 return $module_columnlist;
 	}
 	function getReportBlockInformation($module,$block,$block_name,$selected="")
 	{
-		//retreive the tabid	
+		//retreive the tabid
 		global $adb;
 		$tabid = getTabid($module);
 		global $profile_id;
 		//echo $selected;
-		$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.uitype != 50 and field.tabid=".$tabid." and field.block in (".$block .") and field.displaytype in (1,2) and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";	
-		
+		$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid  where field.uitype != 50 and field.tabid=".$tabid." and field.block in (".$block .") and field.displaytype in (1,2) and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
+
 		//putan if condition and reuse the code for sorting
 		$shtml = "<optgroup label=\"".$block_name."\" class=\"select\" style=\"border:none\">";
-		
+
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
 		{
-			$fieldtablename = $adb->query_result($result,$i,"tablename");	
+			$fieldtablename = $adb->query_result($result,$i,"tablename");
 			$fieldcolname = $adb->query_result($result,$i,"columnname");
 			//if($this->mcount != 0)
 			//{
@@ -438,7 +448,7 @@ class Reports extends CRMEntity{
 		return $shtml;
 		//return $this->modules_block;
 	}
-	
+
 	function getAvailableColumnsforQs($primarymodule,$secondarymodule)
 	{
 
@@ -448,26 +458,26 @@ class Reports extends CRMEntity{
 
 		for($i=0;$i < count($secondarymodule) ;$i++)
 		{
-			$this->mcount = $this->mcount + 1; 
+			$this->mcount = $this->mcount + 1;
 			$html .= $this->getColumnsforReportModule($secondarymodule[$i]);
 		}
-		
+
 		return $html;
 	}
-	
+
 	function getColumnsforReportModule($module,$selectedvalue="")
 	{
 		global $app_list_strings;
 		//global $adb;
-		
+
 		//$sSQL = "select * from tab where tabname='".$module."'";
 		//$result = $adb->query($sSQL);
 		//$tabrow = $adb->fetch_array($result);
-		
+
 		//if($result)
 		//{
-			
-		//}	
+
+		//}
 		//if($module == "Leads")
 		//{
 		 foreach($app_list_strings['moduleList'] as $key=>$value)
@@ -503,22 +513,22 @@ class Reports extends CRMEntity{
 		}*/
 		return $shtml;
 	}
-	
+
 	function getSortingColumnDetails($reportId)
 	{
 		$ssql = "select reportsortcol.* from report left join reportsortcol on report.reportid=reportsortcol.reportid where report.reportid=".$reportId;
 	}
-	
+
 	function getSelectedReportType($reportid)
 	{
 		global $adb;
-		
+
 		$ssql = "select report.reporttype from report where reportid=".$reportid;
 		$result = $adb->query($ssql);
 		$reporttyperow = $adb->fetch_array($result);
 		return $reporttyperow["reporttype"];
 	}
-	
+
 	function getSelectedStandardCriteria($reportid)
 	{
 		global $adb;
@@ -575,6 +585,8 @@ class Reports extends CRMEntity{
 	function getStdCriteriaByModule($module)
 	{	
 		global $adb;
+		global $vtlog;
+
 		$tabid = getTabid($module);
 		global $profile_id;
 		
@@ -602,6 +614,7 @@ class Reports extends CRMEntity{
 			$stdcriteria_list[$optionvalue] = $fieldlabel;
 		}
 		
+		$vtlog->logthis("Reports :: StdfilterColumns->Successfully returned Stdfilter for".$module,"info");
 		return $stdcriteria_list;
 		
 	}
@@ -609,6 +622,8 @@ class Reports extends CRMEntity{
 	function sgetStandardCriteriaHTML($tabid,$count,$selectedvalue="")
 	{
 		global $adb;
+		global $vtlog;
+
 		global $profile_id;
 		
 		$sql = "select * from field inner join tab on tab.tabid = field.tabid inner join profile2field on profile2field.fieldid=field.fieldid  where field.tabid=".$tabid." and (field.uitype =5 or field.displaytype=2) and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by field.sequence";
@@ -645,6 +660,7 @@ class Reports extends CRMEntity{
 		
 		}while($criteriatyperow = $adb->fetch_array($result));
 		
+		$vtlog->logthis("Reports :: StdfilterColumns->Successfully returned Stdfilter HTML for".$tabid,"info");
 		return $shtml;
 	}
 	
@@ -877,23 +893,26 @@ class Reports extends CRMEntity{
 	
 	function getSelctedSortingColumns($reportid)
 	{
-		
+
 		global $adb;
-		
-    	        $sreportsortsql = "select reportsortcol.* from report"; 
-		$sreportsortsql .= " inner join reportsortcol on report.reportid = reportsortcol.reportid"; 
+		global $vtlog;
+
+    	        $sreportsortsql = "select reportsortcol.* from report";
+		$sreportsortsql .= " inner join reportsortcol on report.reportid = reportsortcol.reportid";
 		$sreportsortsql .= " where report.reportid =".$reportid." order by reportsortcol.sortcolid";
 
 		$result = $adb->query($sreportsortsql);
 		$noofrows = $adb->num_rows($result);
-		
+
 		for($i=0; $i<$noofrows; $i++)
 		{
-			$fieldcolname = $adb->query_result($result,$i,"columnname");	
+			$fieldcolname = $adb->query_result($result,$i,"columnname");
 			$sort_values = $adb->query_result($result,$i,"sortorder");
 			$this->ascdescorder[] = $sort_values;
 			$array_list[] = $fieldcolname;
 		}
+		
+		$vtlog->logthis("Reports :: Successfully returned getSelctedSortingColumns","info");
 		return $array_list;
 	}
 	
@@ -902,15 +921,15 @@ class Reports extends CRMEntity{
 
 		global $adb;
 	        global $modules;
-	
-		
-		$ssql = "select selectcolumn.* from report inner join selectquery on selectquery.queryid = report.queryid"; 
-		$ssql .= " left join selectcolumn on selectcolumn.queryid = selectquery.queryid where report.reportid =".$reportid; 
+		global $vtlog;
+
+		$ssql = "select selectcolumn.* from report inner join selectquery on selectquery.queryid = report.queryid";
+		$ssql .= " left join selectcolumn on selectcolumn.queryid = selectquery.queryid where report.reportid =".$reportid;
 		$ssql .= " order by selectcolumn.columnindex";
-		
+
 		$result = $adb->query($ssql);
 		$noofrows = $adb->num_rows($result);
-		
+
 		for($i=0; $i<$noofrows; $i++)
 		{
 			$fieldcolname = $adb->query_result($result,$i,"columnname");
@@ -920,7 +939,8 @@ class Reports extends CRMEntity{
 				$shtml .= "<option value=\"".$fieldcolname."\">".str_replace($modules," ",$fieldlist[2])."</option>";
 			}
 		}
-		
+
+		$vtlog->logthis("Reports :: Successfully returned getSelectedColumnsList","info");
 		return $shtml;
 	}
 
@@ -929,13 +949,14 @@ class Reports extends CRMEntity{
 	{
 		global $adb;
 		global $modules;
-		
-		$ssql = "select relcriteria.* from report inner join selectquery on relcriteria.queryid = report.queryid"; 
+		global $vtlog;
+
+		$ssql = "select relcriteria.* from report inner join selectquery on relcriteria.queryid = report.queryid";
 		$ssql.= " left join relcriteria on relcriteria.queryid = selectquery.queryid";
 		$ssql.= " where report.reportid =".$reportid." order by relcriteria.columnindex";
 
 		$result = $adb->query($ssql);
-		
+
 		while($relcriteriarow = $adb->fetch_array($result))
 		{
 			$this->advft_column[] = $relcriteriarow["columnname"];
@@ -943,6 +964,7 @@ class Reports extends CRMEntity{
 			$this->advft_value[] = $relcriteriarow["value"];
 		}
 
+		$vtlog->logthis("Reports :: Successfully returned getAdvancedFilterList","info");
 		return true;
 	}
 	//<<<<<<<<advanced filter>>>>>>>>>>>>>>
@@ -950,6 +972,8 @@ class Reports extends CRMEntity{
 	function sgetRptFldrSaveReport()
 	{
 		global $adb;
+		global $vtlog;
+
 		$sql = "select * from reportfolder order by folderid";
 		$result = $adb->query($sql);
 		$reportfldrow = $adb->fetch_array($result);
@@ -957,9 +981,10 @@ class Reports extends CRMEntity{
                 do
 		{
 			$shtml .= "<option value='".$reportfldrow['folderid']."'>".$reportfldrow['foldername']."</option>";
-			
+
 		}while($reportfldrow = $adb->fetch_array($result));
 		
+		$vtlog->logthis("Reports :: Successfully returned sgetRptFldrSaveReport","info");
 		return $shtml;
 	}
 	
@@ -981,7 +1006,8 @@ class Reports extends CRMEntity{
 	function sgetColumntoTotalSelected($primarymodule,$secondarymodule,$reportid)
 	{
 		global $adb;
-		
+		global $vtlog;
+
 		if($reportid != "")
 		{
 			$ssql = "select reportsummary.* from reportsummary inner join report on report.reportid = reportsummary.reportsummaryid where report.reportid=".$reportid;
@@ -1008,6 +1034,7 @@ class Reports extends CRMEntity{
 			}
 		}
 		
+		$vtlog->logthis("Reports :: Successfully returned sgetColumntoTotalSelected","info");
 		return $shtml;
 	}
 
@@ -1018,6 +1045,8 @@ class Reports extends CRMEntity{
 	{
 		//retreive the tabid	
 		global $adb;
+		global $vtlog;
+
 		$tabid = getTabid($module);
 		global $profile_id;
 		
@@ -1127,6 +1156,7 @@ $columntototalrow['fieldlabel'] = str_replace(" ","_",$columntototalrow['fieldla
 			}
 		}while($columntototalrow = $adb->fetch_array($result));
 		
+		$vtlog->logthis("Reports :: Successfully returned sgetColumnstoTotalHTML","info");
 		return $shtml;
 	}
 }

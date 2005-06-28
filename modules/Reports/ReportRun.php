@@ -11,6 +11,8 @@
 global $calpath;
 global $app_strings,$mod_strings;
 global $theme;
+global $vtlog;
+
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once('include/database/PearDatabase.php');
@@ -58,29 +60,31 @@ class ReportRun extends CRMEntity
 	{
 		global $adb;
 		global $modules;
+		global $vtlog;
 
 		$ssql = "select selectcolumn.* from report inner join selectquery on selectquery.queryid = report.queryid";
-                $ssql .= " left join selectcolumn on selectcolumn.queryid = selectquery.queryid"; 
+                $ssql .= " left join selectcolumn on selectcolumn.queryid = selectquery.queryid";
 		$ssql .= " where report.reportid =".$reportid;
                 $ssql .= " order by selectcolumn.columnindex";
 
                 $result = $adb->query($ssql);
-		
+
 		while($columnslistrow = $adb->fetch_array($result))
 		{
 			$fieldcolname = $columnslistrow["columnname"];
 			$selectedfields = explode(":",$fieldcolname);
-			
+
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 			if($querycolumns == "")
 			{
-				$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];	
+				$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];
 			}else
 			{
 				$columnslist[$fieldcolname] = $querycolumns;
 			}
 		}
 		
+		$vtlog->logthis("ReportRun :: Successfully returned getQueryColumnsList".$reportid,"info");
 		return $columnslist;		
 	}
 
@@ -124,7 +128,8 @@ class ReportRun extends CRMEntity
 	
 		global $adb;
 		global $modules;
-
+		global $vtlog;
+		
 		$ssql = "select selectcolumn.* from report inner join selectquery on selectquery.queryid = report.queryid"; 
 		$ssql .= " left join selectcolumn on selectcolumn.queryid = selectquery.queryid where report.reportid =".$reportid; 
 		$ssql .= " order by selectcolumn.columnindex";
@@ -162,11 +167,15 @@ class ReportRun extends CRMEntity
 			}
 		}
 		$sSQL .= implode(",",$sSQLList);
+		
+		$vtlog->logthis("ReportRun :: Successfully returned getSelectedColumnsList".$reportid,"info");
 		return $sSQL;
 	}
 	
 	function getAdvComparator($comparator,$value)
         {
+
+		global $vtlog;
 
 		if($comparator == "e")
                 {
@@ -216,7 +225,8 @@ class ReportRun extends CRMEntity
                 {
                         $rtvalue = " >= ".PearDatabase::quote($value);
                 }
-                
+
+                $vtlog->logthis("ReportRun :: Successfully returned getAdvComparator","info");
 		return $rtvalue;
         }
 	
@@ -224,7 +234,8 @@ class ReportRun extends CRMEntity
 	{
 		global $adb;
 		global $modules;
-	
+		global $vtlog;
+
 		$advfiltersql =  "select relcriteria.* from report";
 		$advfiltersql .= " inner join selectquery on selectquery.queryid = report.queryid";
                 $advfiltersql .= " left join relcriteria on relcriteria.queryid = selectquery.queryid";
@@ -248,7 +259,8 @@ class ReportRun extends CRMEntity
 		     }
 	    						
 		}
-		//print_r($advfilterlist);	
+
+		$vtlog->logthis("ReportRun :: Successfully returned getAdvFilterList".$reportid,"info");
 		return $advfilterlist;
 	}	
 
@@ -256,6 +268,7 @@ class ReportRun extends CRMEntity
 	{
 		global $adb;
 		global $modules;
+		global $vtlog;
 
 		$stdfiltersql = "select reportdatefilter.* from report";
 		$stdfiltersql .= " inner join reportdatefilter on report.reportid = reportdatefilter.datefilterid";
@@ -291,6 +304,7 @@ class ReportRun extends CRMEntity
 
 			}		
 		}
+		$vtlog->logthis("ReportRun :: Successfully returned getStdFilterList".$reportid,"info");
 		return $stdfilterlist;
 	}
 
@@ -298,7 +312,8 @@ class ReportRun extends CRMEntity
 	{
 		global $adb;
 		global $modules;
-	
+		global $vtlog;
+
 		$sreportstdfiltersql = "select reportdatefilter.* from report"; 
 		$sreportstdfiltersql .= " inner join reportdatefilter on report.reportid = reportdatefilter.datefilterid"; 
 		$sreportstdfiltersql .= " where report.reportid =".$reportid;
@@ -333,6 +348,7 @@ class ReportRun extends CRMEntity
 				}
 			}
 		}
+		$vtlog->logthis("ReportRun :: Successfully returned getStandardCriterialSql".$reportid,"info");
 		return $sSQL;
 	}
 
@@ -532,7 +548,8 @@ class ReportRun extends CRMEntity
 			$datevalue[0] = "";
 			$datevalue[1] = "";
 			}
-			
+
+			//$vtlog->logthis("ReportRun :: Successfully returned getQueryColumnsList".$reportid,"info");
 			return $datevalue;
 	}
 
@@ -540,6 +557,7 @@ class ReportRun extends CRMEntity
 	{
 		global $adb;
 		global $modules;
+		global $vtlog;
 
 		$sreportsortsql = "select reportsortcol.* from report";
                 $sreportsortsql .= " inner join reportsortcol on report.reportid = reportsortcol.reportid";
@@ -569,7 +587,7 @@ class ReportRun extends CRMEntity
 				$this->groupbylist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];
 			}
 		}
-		//print_r($grouplist);	
+		$vtlog->logthis("ReportRun :: Successfully returned getGroupingList".$reportid,"info");
 		return $grouplist;
 	}
 
@@ -578,6 +596,7 @@ class ReportRun extends CRMEntity
 	
 		global $adb;
 		global $modules;
+		global $vtlog;
 		//$modules = array("Leads_", "Accounts_", "Potentials_", "Contacts_","_");
 	
 		$sreportsortsql = "select reportsortcol.* from report"; 
@@ -615,11 +634,14 @@ class ReportRun extends CRMEntity
 				$this->orderbylistsql .= $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];
 			}
 		}
+		$vtlog->logthis("ReportRun :: Successfully returned getSelectedOrderbyList".$reportid,"info");
 		return $sSQL;
 	}
 
 	function getSQLforPrimaryModule($module)
 	{
+	   global $vtlog;
+
 	   if($module != "")
 	   {
 		foreach($this->reportsql as $reportmodule=>$reportquery)
@@ -630,10 +652,13 @@ class ReportRun extends CRMEntity
 			}
 		}
 	   }
+	   $vtlog->logthis("ReportRun :: Successfully returned getSQLforPrimaryModule".$module,"info");
 	   return $sql;
 	}
 	function getRelatedModulesQuery($module,$secmodule)
 	{
+		global $vtlog;
+
 		if($module == "Contacts")
 		{
 			if($secmodule == "Accounts")
@@ -901,11 +926,12 @@ tid
                                 left join users as usersContacts on usersContacts.id = crmentityContacts.smownerid ";
 			}
 		}
+		$vtlog->logthis("ReportRun :: Successfully returned getRelatedModulesQuery".$secmodule,"info");
 		return $query;
 	}
 	function getReportsQuery($module)
 	{
-
+		global $vtlog;
 		//echo $this->secondarymodule."<br>";
 		if($module == "Leads")
 		{
@@ -1043,6 +1069,7 @@ tid
 				where crmentityInvoice.deleted=0";
 		}
 
+		$vtlog->logthis("ReportRun :: Successfully returned getReportsQuery".$module,"info");
 		return $query;
 	}
 
@@ -1093,6 +1120,8 @@ tid
 	
 	function sGetSQLforReport($reportid)
 	{
+		global $vtlog;
+
 		$columnlist = $this->getQueryColumnsList($reportid);
 		$groupslist = $this->getGroupingList($reportid);
 		$stdfilterlist = $this->getStdFilterList($reportid);
@@ -1162,6 +1191,7 @@ tid
 		}
 		
 		//echo $reportquery;
+		$vtlog->logthis("ReportRun :: Successfully returned sGetSQLforReport".$reportid,"info");
 		return $reportquery;
 
 	}
@@ -1534,6 +1564,7 @@ tid
 	{
 		global $adb;
 		global $modules;
+		global $vtlog;
 
 		$coltotalsql = "select reportsummary.* from report";
                 $coltotalsql .= " inner join reportsummary on report.reportid = reportsummary.reportsummaryid";
@@ -1566,6 +1597,8 @@ tid
                                 }
                         }
 		}
+
+		$vtlog->logthis("ReportRun :: Successfully returned getColumnsTotal".$reportid,"info");
 		return $stdfilterlist;
 	}
 	//<<<<<<new>>>>>>>>>
@@ -1574,7 +1607,8 @@ tid
 	{
 		global $adb;
 		global $modules;
-	
+		global $vtlog;
+
 		$sreportstdfiltersql = "select reportsummary.* from report"; 
 		$sreportstdfiltersql .= " inner join reportsummary on report.reportid = reportsummary.reportsummaryid"; 
 		$sreportstdfiltersql .= " where report.reportid =".$reportid;
@@ -1611,6 +1645,7 @@ tid
 		{
 			$sSQL = implode(",",$sSQLList);
 		}
+		$vtlog->logthis("ReportRun :: Successfully returned getColumnsToTotalColumns".$reportid,"info");
 		return $sSQL;
 	}
 
