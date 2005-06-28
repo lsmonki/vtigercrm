@@ -29,7 +29,6 @@ $H_NAME=gethostbyaddr($_SERVER['SERVER_ADDR']);
 //$dbconfig['db_user_name'] = 	'vtigercrm';
 //$dbconfig['db_password'] = 		'';
 //$dbconfig['db_name'] = 			'vtigercrm';
-$dbconfig['db_type'] = 'mysql';
 //$host_name = '';
 
 //$site_URL = '';
@@ -51,6 +50,7 @@ $default_action = 'index';
 
 //set default theme
 $default_theme = 'orange';
+$databasetype = 'mysql';
 
 // If true, the time to compose each page is placed in the browser.
 $calculate_response_time = true;
