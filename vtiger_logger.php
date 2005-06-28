@@ -22,11 +22,11 @@ class vtiger_logger{
                 	$log1 =& LoggerManager::getLogger('VT');
                 	if(is_array($msg))
                 	{
-                        	$log1->fatal("Message".print_r($msg,true));
+                        	$log1->debug("Message".print_r($msg,true));
                 	}
                 	else
                 	{
-                        	$log1->fatal("Message ->".$msg);
+                        	$log1->debug("Message ->".$msg);
                 	}
                 	return $msg;
 		}
