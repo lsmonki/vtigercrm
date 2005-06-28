@@ -214,7 +214,7 @@ $xtpl->assign("ID", $focus->id);
 
 
 
-$quote_tables = Array('quotes','crmentity','quotesbillads','quotesshipads'); 
+$quote_tables = Array('quotes','quotesbillads','quotesshipads'); 
  $tabid = getTabid("Quotes");
  $validationData = getDBValidationData($quote_tables,$tabid);
  $fieldName = '';
