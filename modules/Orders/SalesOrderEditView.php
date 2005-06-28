@@ -288,7 +288,7 @@ $xtpl->assign("ID", $focus->id);
 
 
 
-$so_tables = Array('salesorder','crmentity','sobillads','soshipads'); 
+$so_tables = Array('salesorder','sobillads','soshipads'); 
  $tabid = getTabid("SalesOrder");
  $validationData = getDBValidationData($so_tables,$tabid);
  $fieldName = '';
