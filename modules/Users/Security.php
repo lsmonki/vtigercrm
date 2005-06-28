@@ -1474,6 +1474,47 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		
  		$this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_ACTIVITY_REMINDER_DESCRIPTION' ,1,'Activity Reminder Notication','This is a reminder notification for the Activity','LBL_ACTIVITY_NOTIFICATION')");
 
+		//Inserting Inventory Notifications
+	$invoice_body = 'Dear {HANDLER},
+
+The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. Kindly procure required number of units as the stock level is below reorder level {REORDERLEVELVALUE}.
+
+Please treat this information as Urgent as the invoice is already sent  to the customer.
+
+Severity: Critical
+
+Thanks,
+{CURRENTUSER}';
+
+		
+               $this->db->query("insert into inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("inventorynotification").",'InvoiceNotification','{PRODUCTNAME} Stock Level is Low','".$invoice_body." ','InvoiceNotificationDescription')");
+
+		$quote_body = 'Dear {HANDLER},
+
+Quote is generated for {QUOTEQUANTITY} units of {PRODUCTNAME}. The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. 
+
+Severity: Minor
+
+Thanks,
+{CURRENTUSER}';	
+		
+		
+               $this->db->query("insert into inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("inventorynotification").",'QuoteNotification','Quote given for {PRODUCTNAME}','".$quote_body." ','QuoteNotificationDescription')");
+
+		$so_body = 'Dear {HANDLER},
+
+SalesOrder is generated for {SOQUANTITY} units of {PRODUCTNAME}. The current stock of {PRODUCTNAME} in our warehouse is {CURRENTSTOCK}. 
+
+Please treat this information  with priority as the sales order is already generated.
+
+Severity: Major
+
+Thanks,
+{CURRENTUSER}';
+
+		
+               $this->db->query("insert into inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("inventorynotification").",'SalesOrderNotification','Sales Order generated for {PRODUCTNAME}','".$so_body." ','SalesOrderNotificationDescription')");
+
 		//Insert into currency table
 		$this->db->query("insert into currency_info values('U.S Dollar','USD','$')");
                  
