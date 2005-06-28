@@ -302,7 +302,16 @@ function verify_data(form) {
                <td><font color=red>*</font></td><td nowrap><strong>MySQL Database Name</strong></td>
                <td align="left"><input type="text" class="dataInput" name="db_name" readonly value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
 
-		<input type="hidden" name="dbtype" value="<?php echo $dbconfig['db_type']; ?>">
+		<input type="hidden" name="dbtype" value="<?php
+                if(isset($dbconfig['db_type']) && $dbconfig['db_type'] != '')
+                {
+                        echo $dbconfig['db_type'];
+                }
+                elseif(isset($databasetype) && $databasetype != '')
+                {
+                        echo $databasetype;
+
+                } ?>">
               </tr>
               <!-- tr>
                <td></td><td nowrap><strong>Drop Existing Tables?</strong></td>
