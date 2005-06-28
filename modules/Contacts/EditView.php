@@ -28,6 +28,8 @@ require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/uifromdbutil.php');
 require_once('include/FormValidationUtil.php');
+
+global $vtlog;
 global $mod_strings;
 global $app_list_strings;
 global $app_strings;
@@ -44,6 +46,7 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record']))
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit';
     $focus->retrieve_entity_info($_REQUEST['record'],"Contacts");
+	$vtlog->logthis("Entity info successfully retrieved for EditView.",'info');
     $focus->firstname=$focus->column_fields['firstname'];
     $focus->lastname=$focus->column_fields['lastname'];
 

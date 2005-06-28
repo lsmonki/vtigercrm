@@ -28,6 +28,7 @@ require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/uifromdbutil.php');
 
+global $vtlog;
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
@@ -38,6 +39,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 
         $focus->id=$_REQUEST['record'];
         $focus->retrieve_entity_info($_REQUEST['record'],'Contacts');
+		$vtlog->logthis("Entity info successfully retrieved for DetailView.",'info');
 	$focus->firstname=$focus->column_fields['firstname'];
         $focus->lastname=$focus->column_fields['lastname'];
 }
@@ -91,6 +93,7 @@ $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 $xtpl->assign("BLOCK4_HEADER", $block_4_header);
 
 $block_5 = getDetailBlockInformation("Contacts",5,$focus->column_fields);
+$vtlog->logthis("Detail Block Informations successfully retrieved.",'info');
 if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';

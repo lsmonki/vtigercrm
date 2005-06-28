@@ -26,6 +26,7 @@ require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
+global $vtlog;
 $focus = new Contact();
 if(isset($_REQUEST['record']))
 {
@@ -141,7 +142,9 @@ elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mo
 
 	$contents .= '<br><br><b>Note : </b>We suggest you to change your password after logging in first time.';
 	$contents .= '<br><br>Support Team';
-	
+
+	$vtlog->logthis("Customer Portal Informations Updated",'info');	
+
 	if($insert == 'true' || $update == 'true')
 	{
 		SendMailToCustomer('Contacts',$focus->id,$_REQUEST['email'],$current_user->id,$subject,$contents);

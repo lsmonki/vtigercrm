@@ -31,6 +31,9 @@ require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 
+require_once('vtiger_logger.php');
+$vtlog = new vtiger_logger();
+
 // Contact is used to store customer information.
 class Contact extends CRMEntity {
 	var $log;
@@ -437,6 +440,7 @@ class Contact extends CRMEntity {
 	function constructCustomQueryAddendum()
 	{
         
+	 global $vtlog;
          global $adb;
         	//get all the custom fields created 
 		$sql1 = "select columnname,fieldlabel from field where generatedtype=2 and tabid=4";
@@ -459,7 +463,8 @@ class Contact extends CRMEntity {
 			}
         
 	         }
-	return $sql3;
+		$vtlog->logthis("Custom Query successfully Constructed in constructCustomQueryAddendum()",'info');
+		return $sql3;
         	}
 
 //check if the custom table exists or not in the first place
@@ -480,6 +485,7 @@ return $exists;
 
         function create_export_query(&$order_by, &$where)
         {
+		global $vtlog;
 		if($this->checkIfCustomTableExists())
 		{
 	   $query =  $this->constructCustomQueryAddendum() .",
@@ -506,6 +512,7 @@ return $exists;
 			        left join contactscf on contactscf.contactid=contactdetails.contactid
 				where crmentity.deleted=0 and users.status='Active' ";
 		}
+		$vtlog->logthis("Export Query Constructed Successfully",'info');
                 return $query;
         }
 
