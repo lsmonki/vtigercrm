@@ -115,7 +115,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
 } 
-if(isset($_REQUEST['account_id']) && $_REQUEST['record']==''){
+if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['record']==''){
 	require_once('modules/Accounts/Account.php');
 	$acct_focus = new Account();
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
