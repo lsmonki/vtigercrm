@@ -25,12 +25,16 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
+    global $vtlog;
 $focus = new Lead();
 
-if(isset($_REQUEST['record'])) {
+if(isset($_REQUEST['record']))
+{
     $focus->id = $_REQUEST['record'];	
+
     $focus->retrieve_entity_info($_REQUEST['record'],"Leads");
     $focus->id = $_REQUEST['record'];
+    $vtlog->logthis("id is ".$focus->id ,'debug'); 
     $focus->firstname=$focus->column_fields['firstname'];
     $focus->lastname=$focus->column_fields['lastname'];
 	

@@ -22,6 +22,16 @@ $current_user_id = $_REQUEST["current_user_id"];
 $assigned_user_id = $_REQUEST["assigned_user_id"];
 $accountname = $_REQUEST['account_name'];
 
+global $vtlog;
+$vtlog->logthis("id is ".$id,'debug'); 
+$vtlog->logthis("assigned_user_id is ".$assigned_user_id,'debug');
+$vtlog->logthis("createpotential is ".$createpotential,'debug');
+$vtlog->logthis("close date is ".$close_date,'debug');
+$vtlog->logthis("current user id is ."$current_user_id,'debug');
+$vtlog->logthis("assigned user id is ."$assigned_user_id,'debug');
+$vtlog->logthis("accountname is ."$accountname,'debug');
+$vtlog->logthis("module is ."$module,'debug');
+
 //Retrieve info from all the tables related to leads
   $focus = new Lead();
  $focus->retrieve_entity_info($id,"Leads");
@@ -71,6 +81,7 @@ $adb->query($sql_crmentity1);
 
 
 $contact_id = $crmcontactid;
+$vtlog->logthis("contact id is ."$contact_id,'debug');
 
  $sql_insert_contact = "INSERT INTO contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (".$contact_id.",".$crmid.",'".$row["salutation"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["title"] ."','".$row["fax"] ."','".$row['yahooid']."')";
 
@@ -94,9 +105,10 @@ $adb->query($sql_insert_contactcustomfield);
 
 if(! isset($createpotential) || ! $createpotential == "on")
 {
-	$date_entered = date('YmdHis');
-	$date_modified = date('YmdHis');
-
+  $vtlog->logthis("createpotential is not set",'info');
+  $date_entered = date('YmdHis');
+  $date_modified = date('YmdHis');
+  
 
   $oppid = $adb->getUniqueID("crmentity");
   $sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted,createdtime,description) values(".$oppid.",".$current_user_id.",".$assigned_user_id.",'Potentials',0,0,'".$date_entered."','".$row['description']."')";
