@@ -19,6 +19,9 @@ if($reportid != "")
 {
 	$idelreportsql = "delete from selectquery where queryid=".$reportid;
 	$idelreportsqlresult = $adb->query($idelreportsql);
+
+	$ireportsql = "delete from report where reportid=".$reportid;
+        $ireportsqlresult = $adb->query($ireportsql);
 }
 header("Location: index.php?action=index&module=Reports");
 ?>
