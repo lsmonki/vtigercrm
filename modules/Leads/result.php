@@ -17,8 +17,9 @@ require_once('include/database/PearDatabase.php');
 
 $data = new Spreadsheet_Excel_Reader();
 $data->setOutputEncoding('CP1251');
-
+global $vtlog;
 $filename = $HTTP_GET_VARS['filename'];
+$vtlog->logthis("filename is ".$filename,'info');  
 //$filename = $_REQUEST['filename'];
 $data->read($filename);
 
@@ -26,37 +27,51 @@ $data->read($filename);
 
 $firstname = $HTTP_POST_VARS['First_Name'];
 
+$vtlog->logthis("firstname is ".$firstname,'info');  
 $lastname = $HTTP_POST_VARS['Last_Name'];
 
+$vtlog->logthis("lastname is ".$lastname,'info');  
 $phone = $HTTP_POST_VARS['Phone'];
+$vtlog->logthis("phone is ".$phone,'info');  
 $mobile = $HTTP_POST_VARS['Mobile'];
+$vtlog->logthis("mobile is ".$mobile,'info');  
 
 $company = $HTTP_POST_VARS['Company'];
+$vtlog->logthis("company is ".$company,'info');  
 //echo $company;
 
 $fax = $HTTP_POST_VARS['Fax'];
+$vtlog->logthis("fax is ".$fax,'info');  
 
 $designation = $HTTP_POST_VARS['Designation'];
 
+$vtlog->logthis("designation is ".$designation,'info');  
 $email = $HTTP_POST_VARS['Email'];
 
+$vtlog->logthis("email is ".$email,'info');  
 $salutation = $HTTP_POST_VARS['Salutation'];
 //not being used
 
+$vtlog->logthis("salutation is  ".$salutation,'info');  
 //echo 'LeadSource';
 $leadsource = $HTTP_POST_VARS['LeadSource'];
 
+$vtlog->logthis("leadsource is ".$leadsource,'info');  
 $website = $HTTP_POST_VARS['Website'];
+$vtlog->logthis("website is ".$website,'info');  
 //echo 'Industry';
 $industry = $HTTP_POST_VARS['Industry'];
+$vtlog->logthis("industry is ".$industry,'info');  
 //echo $industry;
 
 //echo 'LeadStatus';
 $leadstatus = $HTTP_POST_VARS['LeadStatus'];
+$vtlog->logthis("leadstatus is ".$leadstatus,'info');  
 //echo $leadstatus;
 
 //echo 'AnnualRevenue';
 $annualrevenue = $HTTP_POST_VARS['Annual_Revenue'];
+$vtlog->logthis("annualrevenue is ".$annualrevenue,'info');  
 //echo $annualrevenue;
 
 

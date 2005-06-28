@@ -18,14 +18,16 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
+global $vtlog;
 if(isset($_REQUEST['record'])) {
     $id = $_REQUEST['record'];
+$vtlog->logthis(" the id is ".$id,'debug');  
 }
-
 //Retreive lead details from database
 
 $userid = $row["smownerid"];
 
+$vtlog->logthis(" the userid is ".$userid,'debug');  
 $crmid = $adb->getUniqueID("crmentity");
 //$sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,deleted) values(".$id.",".$userid.",".$userid.",account,0,0)";
 
@@ -37,10 +39,14 @@ $result = $adb->query($sql);
 $row = $adb->fetch_array($result);
 
 $firstname = $row["firstname"];
+$vtlog->logthis(" the firstname is ".$firstname,'debug');  
 $lastname = $row["lastname"];
+$vtlog->logthis(" the lastname is ".$lastname,'debug');  
 $company = $row["company"];
+$vtlog->logthis(" the company is  ".$company,'debug');  
 $potentialname = $row["company"] ."-";
 
+$vtlog->logthis(" the potentialname is ".$potentialname,'debug');  
 
 //Retreiving the current user id
 global $current_user;
