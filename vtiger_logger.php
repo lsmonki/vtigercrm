@@ -14,7 +14,7 @@ class vtiger_logger{
 
 	var $debug_status; 
 
-	function logthis($msg)
+	function logthis($msg,$loglevel)
         {
 		if($this->debug_status)
 		{
@@ -22,11 +22,11 @@ class vtiger_logger{
                 	$log1 =& LoggerManager::getLogger('VT');
                 	if(is_array($msg))
                 	{
-                        	$log1->debug("Message".print_r($msg,true));
+                        	$log1->$loglevel("Message".print_r($msg,true));
                 	}
                 	else
                 	{
-                        	$log1->debug("Message ->".$msg);
+                        	$log1->$loglevel("Message ->".$msg);
                 	}
                 	return $msg;
 		}
