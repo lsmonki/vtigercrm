@@ -457,18 +457,18 @@ $this->db->query("insert into field values (19,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'bill_street','quotesbillads',1,'24','bill_street','Billing Address',1,0,0,100,1,2,1,'V~M')");
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'ship_street','quotesshipads',1,'24','ship_street','Shipping Address',1,0,0,100,2,2,1,'V~M')");
 
- $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'bill_city','quotesbillads',1,'2','bill_city','Billing City',1,0,0,100,3,2,1,'V~M')");
- $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'ship_city','quotesshipads',1,'2','ship_city','Shipping City',1,0,0,100,4,2,1,'V~M')");
+ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'bill_city','quotesbillads',1,'1','bill_city','Billing City',1,0,0,100,3,2,1,'V~O')");
+ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'ship_city','quotesshipads',1,'1','ship_city','Shipping City',1,0,0,100,4,2,1,'V~O')");
 
- $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'bill_state','quotesbillads',1,'2','bill_state','Billing State',1,0,0,100,5,2,1,'V~M')");
- $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'ship_state','quotesshipads',1,'2','ship_state','Shipping State',1,0,0,100,6,2,1,'V~M')");
+ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'bill_state','quotesbillads',1,'1','bill_state','Billing State',1,0,0,100,5,2,1,'V~O')");
+ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'ship_state','quotesshipads',1,'1','ship_state','Shipping State',1,0,0,100,6,2,1,'V~O')");
 
- $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'bill_code','quotesbillads',1,'2','bill_code','Billing Code',1,0,0,100,7,2,1,'V~M')");
- $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'ship_code','quotesshipads',1,'2','ship_code','Shipping Code',1,0,0,100,8,2,1,'V~M')");
+ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'bill_code','quotesbillads',1,'1','bill_code','Billing Code',1,0,0,100,7,2,1,'V~O')");
+ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'ship_code','quotesshipads',1,'1','ship_code','Shipping Code',1,0,0,100,8,2,1,'V~O')");
 
 
- $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'bill_country','quotesbillads',1,'2','bill_country','Billing Country',1,0,0,100,9,2,1,'V~M')");
- $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'ship_country','quotesshipads',1,'2','ship_country','Shipping Country',1,0,0,100,10,2,1,'V~M')");
+ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'bill_country','quotesbillads',1,'1','bill_country','Billing Country',1,0,0,100,9,2,1,'V~O')");
+ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'ship_country','quotesshipads',1,'1','ship_country','Shipping Country',1,0,0,100,10,2,1,'V~O')");
 
  //Block3
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,3,1,'V~O')");
@@ -506,18 +506,18 @@ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field")
 $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'bill_street','pobillads',1,'24','bill_street','Billing Address',1,0,0,100,1,2,1,'V~M')");
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'ship_street','poshipads',1,'24','ship_street','Shipping Address',1,0,0,100,2,2,1,'V~M')");
 
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'bill_city','pobillads',1,'2','bill_city','Billing City',1,0,0,100,3,2,1,'V~M')");
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'ship_city','poshipads',1,'2','ship_city','Shipping City',1,0,0,100,4,2,1,'V~M')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'bill_city','pobillads',1,'1','bill_city','Billing City',1,0,0,100,3,2,1,'V~O')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'ship_city','poshipads',1,'1','ship_city','Shipping City',1,0,0,100,4,2,1,'V~O')");
 
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'bill_state','pobillads',1,'2','bill_state','Billing State',1,0,0,100,5,2,1,'V~M')");
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'ship_state','poshipads',1,'2','ship_state','Shipping State',1,0,0,100,6,2,1,'V~M')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'bill_state','pobillads',1,'1','bill_state','Billing State',1,0,0,100,5,2,1,'V~O')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'ship_state','poshipads',1,'1','ship_state','Shipping State',1,0,0,100,6,2,1,'V~O')");
 
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'bill_code','pobillads',1,'2','bill_code','Billing Code',1,0,0,100,7,2,1,'V~M')");
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'ship_code','poshipads',1,'2','ship_code','Shipping Code',1,0,0,100,8,2,1,'V~M')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'bill_code','pobillads',1,'1','bill_code','Billing Code',1,0,0,100,7,2,1,'V~O')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'ship_code','poshipads',1,'1','ship_code','Shipping Code',1,0,0,100,8,2,1,'V~O')");
 
 
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'bill_country','pobillads',1,'2','bill_country','Billing Country',1,0,0,100,9,2,1,'V~M')");
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'ship_country','poshipads',1,'2','ship_country','Shipping Country',1,0,0,100,10,2,1,'V~M')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'bill_country','pobillads',1,'1','bill_country','Billing Country',1,0,0,100,9,2,1,'V~O')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'ship_country','poshipads',1,'1','ship_country','Shipping Country',1,0,0,100,10,2,1,'V~O')");
 
  //Block3
  $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,3,1,'V~O')");
@@ -548,7 +548,7 @@ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'exciseduty','salesorder',1,'1','exciseduty','Excise Duty',1,0,0,100,13,1,1,'N~O')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'total','salesorder',1,'1','hdnGrandTotal','Total',1,0,0,100,14,1,3,'N~O')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'subtotal','salesorder',1,'1','hdnSubTotal','Total',1,0,0,100,15,1,3,'N~O')");
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'accountid','salesorder',1,'73','account_id','Account Name',1,0,0,100,16,1,1,'I~O')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'accountid','salesorder',1,'73','account_id','Account Name',1,0,0,100,16,1,1,'I~M')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,17,1,1,'V~M')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,18,1,2,'T~O')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,19,1,2,'T~O')");
@@ -557,18 +557,18 @@ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'bill_street','sobillads',1,'24','bill_street','Billing Address',1,0,0,100,1,2,1,'V~M')");
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'ship_street','soshipads',1,'24','ship_street','Shipping Address',1,0,0,100,2,2,1,'V~M')");
 
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'bill_city','sobillads',1,'2','bill_city','Billing City',1,0,0,100,3,2,1,'V~M')");
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'ship_city','soshipads',1,'2','ship_city','Shipping City',1,0,0,100,4,2,1,'V~M')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'bill_city','sobillads',1,'1','bill_city','Billing City',1,0,0,100,3,2,1,'V~O')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'ship_city','soshipads',1,'1','ship_city','Shipping City',1,0,0,100,4,2,1,'V~O')");
 
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'bill_state','sobillads',1,'2','bill_state','Billing State',1,0,0,100,5,2,1,'V~M')");
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'ship_state','soshipads',1,'2','ship_state','Shipping State',1,0,0,100,6,2,1,'V~M')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'bill_state','sobillads',1,'1','bill_state','Billing State',1,0,0,100,5,2,1,'V~O')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'ship_state','soshipads',1,'1','ship_state','Shipping State',1,0,0,100,6,2,1,'V~O')");
 
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'bill_code','sobillads',1,'2','bill_code','Billing Code',1,0,0,100,7,2,1,'V~M')");
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'ship_code','soshipads',1,'2','ship_code','Shipping Code',1,0,0,100,8,2,1,'V~M')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'bill_code','sobillads',1,'1','bill_code','Billing Code',1,0,0,100,7,2,1,'V~O')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'ship_code','soshipads',1,'1','ship_code','Shipping Code',1,0,0,100,8,2,1,'V~O')");
 
 
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'bill_country','sobillads',1,'2','bill_country','Billing Country',1,0,0,100,9,2,1,'V~M')");
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'ship_country','soshipads',1,'2','ship_country','Shipping Country',1,0,0,100,10,2,1,'V~M')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'bill_country','sobillads',1,'1','bill_country','Billing Country',1,0,0,100,9,2,1,'V~O')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'ship_country','soshipads',1,'1','ship_country','Shipping Country',1,0,0,100,10,2,1,'V~O')");
 
  //Block3
  $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,3,1,'V~O')");
@@ -596,7 +596,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'exciseduty','invoice',1,'1','exciseduty','Excise Duty',1,0,0,100,11,1,1,'N~O')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'subtotal','invoice',1,'1','hdnSubTotal','Sub Total',1,0,0,100,12,1,3,'N~O')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'total','invoice',1,'1','hdnGrandTotal','Total',1,0,0,100,13,1,3,'N~O')");
-$this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'accountid','invoice',1,'73','account_id','Account Name',1,0,0,100,14,1,1,'I~O')");
+$this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'accountid','invoice',1,'73','account_id','Account Name',1,0,0,100,14,1,1,'I~M')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,15,1,1,'V~M')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,16,1,2,'T~O')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,17,1,2,'T~O')");
@@ -605,18 +605,18 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'bill_street','invoicebillads',1,'24','bill_street','Billing Address',1,0,0,100,1,2,1,'V~M')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'ship_street','invoiceshipads',1,'24','ship_street','Shipping Address',1,0,0,100,2,2,1,'V~M')");
 
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'bill_city','invoicebillads',1,'2','bill_city','Billing City',1,0,0,100,3,2,1,'V~M')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'ship_city','invoiceshipads',1,'2','ship_city','Shipping City',1,0,0,100,4,2,1,'V~M')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'bill_city','invoicebillads',1,'1','bill_city','Billing City',1,0,0,100,3,2,1,'V~O')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'ship_city','invoiceshipads',1,'1','ship_city','Shipping City',1,0,0,100,4,2,1,'V~O')");
 
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'bill_state','invoicebillads',1,'2','bill_state','Billing State',1,0,0,100,5,2,1,'V~M')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'ship_state','invoiceshipads',1,'2','ship_state','Shipping State',1,0,0,100,6,2,1,'V~M')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'bill_state','invoicebillads',1,'1','bill_state','Billing State',1,0,0,100,5,2,1,'V~O')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'ship_state','invoiceshipads',1,'1','ship_state','Shipping State',1,0,0,100,6,2,1,'V~O')");
 
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'bill_code','invoicebillads',1,'2','bill_code','Billing Code',1,0,0,100,7,2,1,'V~M')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'ship_code','invoiceshipads',1,'2','ship_code','Shipping Code',1,0,0,100,8,2,1,'V~M')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'bill_code','invoicebillads',1,'1','bill_code','Billing Code',1,0,0,100,7,2,1,'V~O')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'ship_code','invoiceshipads',1,'1','ship_code','Shipping Code',1,0,0,100,8,2,1,'V~O')");
 
 
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'bill_country','invoicebillads',1,'2','bill_country','Billing Country',1,0,0,100,9,2,1,'V~M')");
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'ship_country','invoiceshipads',1,'2','ship_country','Shipping Country',1,0,0,100,10,2,1,'V~M')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'bill_country','invoicebillads',1,'1','bill_country','Billing Country',1,0,0,100,9,2,1,'V~O')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'ship_country','invoiceshipads',1,'1','ship_country','Shipping Country',1,0,0,100,10,2,1,'V~O')");
 
  //Block3
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,3,1,'V~O')");
