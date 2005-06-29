@@ -923,7 +923,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 15 || $uitype == 16)
 	{
-	$vtlog->logthis("uitype selected is  ".$uitype,'info');  
+	#$vtlog->logthis("uitype selected is  ".$uitype,'info');  
 		$custfld .= '<td width="20%" class="dataLabel">';
 
 		if($uitype == 16)

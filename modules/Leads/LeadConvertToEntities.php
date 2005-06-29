@@ -27,10 +27,10 @@ $vtlog->logthis("id is ".$id,'debug');
 $vtlog->logthis("assigned_user_id is ".$assigned_user_id,'debug');
 $vtlog->logthis("createpotential is ".$createpotential,'debug');
 $vtlog->logthis("close date is ".$close_date,'debug');
-$vtlog->logthis("current user id is ."$current_user_id,'debug');
-$vtlog->logthis("assigned user id is ."$assigned_user_id,'debug');
-$vtlog->logthis("accountname is ."$accountname,'debug');
-$vtlog->logthis("module is ."$module,'debug');
+$vtlog->logthis("current user id is ".$current_user_id,'debug');
+$vtlog->logthis("assigned user id is ".$assigned_user_id,'debug');
+$vtlog->logthis("accountname is ".$accountname,'debug');
+$vtlog->logthis("module is ".$module,'debug');
 
 //Retrieve info from all the tables related to leads
   $focus = new Lead();
