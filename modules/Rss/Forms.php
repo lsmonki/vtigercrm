@@ -35,15 +35,16 @@ $the_script='
 <script language="JavaScript" type="text/javascript" src="include/general.js"></script>
 <script type="text/javascript" language="Javascript">
 function toggleRSSFolder(id) {
-        if (getObj(id+"_feeds").style.display=="none") {
-                getObj(id+"_feeds").style.display="block"
-                getObj(id+"_folder").src="'.$image_path.'rss_folder_opn.gif"
-                getObj(id+"_toggle").src="'.$image_path.'minus.gif"
+	if (document.getElementById(id+"_feeds").style.display=="none") {
+                document.getElementById(id+"_feeds").style.display="block"
+                document.getElementById(id+"_folder").src="'.$image_path.'rss_folder_opn.gif"
+                document.getElementById(id+"_toggle").src="'.$image_path.'minus.gif"
         } else {
-                getObj(id+"_feeds").style.display="none"
-                getObj(id+"_folder").src="'.$image_path.'rss_folder_cls.gif"
-                getObj(id+"_toggle").src="'.$image_path.'plus.gif"
+                document.getElementById(id+"_feeds").style.display="none"
+                document.getElementById(id+"_folder").src="'.$image_path.'rss_folder_cls.gif"
+                document.getElementById(id+"_toggle").src="'.$image_path.'plus.gif"
         }
+
 }
 </script>';
 return $the_script;
@@ -64,7 +65,7 @@ $oRss = new vtigerRSS();
 $allrsshtml = $oRss->getRSSCategoryHTML();
 $starred_rss_html = $oRss->getStarredRssFolder();
 
-$the_form .= '<table width="100%" border="0" cellspacing="2" cellpadding="0" style="margin-top:10px">
+$the_form .= '<form name="rssfolder"><table width="100%" border="0" cellspacing="2" cellpadding="0" style="margin-top:10px">
         <tr>
           <td width="15"><div align="center"><a href="javascript:;" onClick="toggleRSSFolder('."'S'".')"><img id="S_toggle"
 src="'.$image_path.'plus.gif" border="0"></a></div></td>
@@ -80,6 +81,7 @@ $the_form .= $allrsshtml;
 
 $the_form .= "</table>";
 $the_form .= get_validate_record_js();
+$this_form .= "</form>";
 return $the_form;
 }
 

@@ -17,7 +17,11 @@ $image_path=$theme_path."images/";
 require_once('data/CRMEntity.php');
 require_once('include/database/PearDatabase.php');
 require_once($theme_path."layout_utils.php");
-require_once('include/lastrss/lastRSS.php');
+// Require the xmlParser class
+require_once('include/feedParser/xmlParser.php');
+
+// Require the feedParser class
+require_once('include/feedParser/feedParser.php');
 
 class vtigerRSS extends CRMEntity
 {
@@ -31,7 +35,7 @@ class vtigerRSS extends CRMEntity
 	{
 		global $cache_dir;
 		//print_r($url);
-		$this->rss = new lastRSS();
+		/*$this->rss = new lastRSS();
 		$this->rss->cache_dir = $cache_dir;
 		$this->cache_time = $this->rsscache_time;
 		if($this->rss_object = $this->rss->get($url))
@@ -42,7 +46,32 @@ class vtigerRSS extends CRMEntity
 		}else
 		{
 			return false;
+		}*/
+		
+		$this->rss = new feedParser();
+		// Read in our sample feed file
+		$data = @implode("",@file($url));
+		// Tell feedParser to parse the data
+		$info = $this->rss->parseFeed($data);
+
+		if(isset($info))
+		{
+			$this->rss_object = $info["channel"];
+		}else
+		{
+			return false;
+		}	
+		if(isset($this->rss_object))
+		{
+			$this->rss_title = $this->rss_object["title"];
+                        $this->rss_link = $this->rss_object["link"];
+			$this->rss_object = $info["item"];
+                        return true;
+		}else
+		{
+			return false;
 		}
+		
 	}
 	
 	/*function getRSSHeadings()
@@ -64,10 +93,10 @@ class vtigerRSS extends CRMEntity
  	 
         function getListViewRSSHtml()
 	{
-		if($this->rss_object)
+		if(isset($this->rss_object))
         	{
                 	$i = 0;
-			foreach($this->rss_object[items] as $item)
+			foreach($this->rss_object as $key=>$item)
                 	{
 			   $i = $i + 1;	   
 			   $shtml .= "<li><a href=\"$item[link]\" class=\"rssNews\" target=\"_blank\">$item[title]</a></li>";
@@ -294,9 +323,9 @@ class vtigerRSS extends CRMEntity
                 $shtml .= " <a href=\"$this->rss_link\" target=\"_blank\">".$allrssrow['rsstitle']."</a>";
 		$shtml .= "</td></tr>";
 		$shtml .= "<tr><td style=\"padding-top:10\"><ul>".$rss_html."</ul></td></tr>";
-		if($this->rss_object)
+		if(isset($this->rss_object))
 		{
-		 	if(count($this->rss_object[items]) > 10)
+		 	if(count($this->rss_object) > 10)
 			{
 		  		$shtml .= "<tr><td align=\"right\">
 				  	   <a target=\"_BLANK\" href=\"$this->rss_link\">More...</a>
@@ -349,9 +378,9 @@ class vtigerRSS extends CRMEntity
 		 $shtml .= "</td></tr>";
 		 $shtml .= "<tr><td style=\"padding-top:10\"><ul>".$rss_html."</ul></td></tr>";
 		 }
-		 if($this->rss_object)
+		 if(isset($this->rss_object))
                  {
-                        if(count($this->rss_object[items]) > 10)
+                        if(count($this->rss_object) > 10)
                         {
                                 $shtml .= "<tr><td align=\"right\">
                                            <a target=\"_BLANK\" href=\"$this->rss_link\">More...</a>
