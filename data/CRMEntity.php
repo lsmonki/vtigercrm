@@ -122,7 +122,7 @@ class CRMEntity extends SugarBean
     // global $current_user;
     global $adb;
     //global $root_directory;
-global $vtlog;
+	global $vtlog;
 
     $ownerid = $user_id;
 		
@@ -234,6 +234,7 @@ $vtlog->logthis("module is ".$module,'info');
   {
     global $adb;
     global $current_user;
+    global $vtlog;	
                 
     $date_var = date('YmdHis');
     if($_REQUEST['assigntype'] == 'T')
@@ -377,8 +378,8 @@ $vtlog->logthis("module is =".$module,'info');
   //code added by shankar ends
   function insertIntoEntityTable($table_name, $module)
   {
-		
-$vtlog->logthis("function insertIntoCrmEntity ".$module.' table name ' .$table_name,'info');  
+	global $vtlog;	
+	$vtlog->logthis("function insertIntoCrmEntity ".$module.' table name ' .$table_name,'info');  
     global $adb;
     $insertion_mode = $this->mode;
 		
@@ -815,7 +816,8 @@ $vtlog->logthis("type is ".$type,'debug');
 
   function save($module_name) 
   {
-$vtlog->logthis("module name is ".$module_name,'debug');  
+	global $vtlog;
+	$vtlog->logthis("module name is ".$module_name,'debug');  
     //GS Save entity being called with the modulename as parameter
       $this->saveentity($module_name,$migration);
   }
