@@ -77,6 +77,8 @@ $dir_handle = @opendir($path) or die("Unable to open directory $path");
 while ($file = readdir($dir_handle))
 {
         $filetyp = substr($file, -3);
+   if($organization_logoname==$file)
+   {    
         if ($filetyp == 'gif' OR $filetyp == 'jpg' OR $filetyp == 'png')
         {
 		if($file!="." && $file!="..")
@@ -87,6 +89,7 @@ while ($file = readdir($dir_handle))
 		}
 			
         }
+   }	
 }
 
 
