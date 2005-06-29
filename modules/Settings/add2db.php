@@ -26,24 +26,36 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 	$filetype= $_FILES['binFile']['type'];
 	$filesize = $_FILES['binFile']['size'];
 
+	$filetype_array=explode("/",$filetype); 
 
-	if($filesize != 0)	
+	if($filesize != 0)
 	{
-		//$data = base64_encode(fread(fopen($uploaddir.$binFile, "r"), $filesize));
-		if($result!=false)
+		if ($filetype_array[0] == "image" ) //Checking whether the file is an image or not
 		{
-			$savelogo="true";
+			if($result!=false)
+			{
+				$savelogo="true";
+			}
+		}
+		else
+		{
+			$savelogo="false";
+			include('themes/'.$theme.'/header.php');
+			$errormessage = "<font color='red'><B> Logo has to be an Image </B></font>";
+			echo $errormessage;
+			return;
 		}
 	}
 	else
 	{
 		include('themes/'.$theme.'/header.php');
 		$errormessage = "<font color='red'><B>Error Message<ul>
-			<li><font color='red'>Invalid file OR</font>
-			<li><font color='red'>File has no data</font>
-			</ul></B></font> <br>" ;
-		//deleteFile($uploaddir,$filename);
-	}			
+		<li><font color='red'>Invalid file OR</font>
+		<li><font color='red'>File has no data</font>
+		</ul></B></font> <br>" ;
+		deleteFile($uploaddir,$filename);
+	}
+
 } 
 else 
 {
@@ -102,7 +114,6 @@ if($saveflag=="true")
 	$adb->query($sql);
 	if($savelogo=="true")
 	{
-	//	$result = $adb->updateBlob('organizationdetails','logo',"organizationame='".$organization_name."' and logoname='".$filename."'",$data);
 		header("Location: index.php?module=Settings&action=OrganizationConfig");
 	}
 	elseif($savelogo=="false")
