@@ -121,7 +121,7 @@ function set_focus() {
 	<table width="100%" align="left" valign ="top" bgcolor="#FFFCDF" cellspacing="0" cellpadding="3" align="center">
         <tr> 
         <td style="border-bottom: 1px solid #bbbbbb"><font face="Verdana, Arial, Helvetica, sans-serif"><strong>Key Modules</strong></font></td></tr>
-	<tr><td>:: Activitiy Management</td></tr>
+	<tr><td>:: Activity Management</td></tr>
 	<tr><td>:: Lead Management</td></tr>
 	<tr><td>:: Opportunity Management</td></tr>
 	<tr><td>:: Account & Contact Management</td></tr>
