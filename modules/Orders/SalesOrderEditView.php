@@ -118,7 +118,7 @@ if(isset($_REQUEST['potential_id']))
 }
 
 // Get Account address if account is given
-if(isset($_REQUEST['account_id']) && $_REQUEST['record']==''){
+if(isset($_REQUEST['account_id']) && $_REQUEST['record']=='' && $_REQUEST['account_id'] != ''){
 	require_once('modules/Accounts/Account.php');
 	$acct_focus = new Account();
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
