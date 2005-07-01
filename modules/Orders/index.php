@@ -88,7 +88,7 @@ echo "\n<BR>\n";
 
                         if($permissionData[$cur_tabid][3] ==0)
                         {
-                                list($lbl,$sname,$title)=split("_",$label);
+                                list($lbl,$sname,$frm,$title)=split("_",$label);
                                 if(stristr($label,$_REQUEST['smodule']))
                                 {
                                         echo '<td class="tabOn" nowrap><a href="index.php?module=Orders&action=index&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';
