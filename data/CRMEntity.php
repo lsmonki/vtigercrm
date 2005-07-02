@@ -693,14 +693,15 @@ $vtlog->logthis("type is ".$type,'debug');
 	{
 		$activity_id=$this->id;
 
-		$sql='select distinct(recurringevents.recurringtype),activity.date_start,activity.due_date,activity.duration_hours,duration_minutes from recurringevents,activity where activity.activityid=recurringevents.activityid and activity.activityid='.$activity_id;
+		$sql='select min(recurringdate) min_date,max(recurringdate) max_date,recurringtype from recurringevents where activityid='. $activity_id.' group by activityid';
+		
 		$result = $adb->query($sql);
 		$noofrows = $adb->num_rows($result);
 		for($i=0; $i<$noofrows; $i++)
 		{
 			$recur_type_b4_edit = $adb->query_result($result,$i,"recurringtype");
-			$date_start_b4edit = $adb->query_result($result,$i,"date_start");
-			$end_date_b4edit = $adb->query_result($result,$i,"due_date");
+			$date_start_b4edit = $adb->query_result($result,$i,"min_date");
+			$end_date_b4edit = $adb->query_result($result,$i,"max_date");
 		}
 		if(($st_date == $date_start_b4edit) && ($end_date==$end_date_b4edit) && ($type == $recur_type_b4_edit))
 		{
