@@ -762,7 +762,7 @@ function create_contacts($user_name,$output_list)
    
         if($contact[birthdate]=="4501-01-01")
         {
-	        $contact[birthdate] = "";
+	        $contact[birthdate] = "0000-00-00";
         }
 		$id = create_contact1($user_name, $contact[first_name], $contact[last_name], $contact[email_address ],$contact[account_name ], $contact[salutation ], $contact[title], $contact[phone_mobile], $contact[reports_to],$contact[primary_address_street],$contact[primary_address_city],$contact[primary_address_state],$contact[primary_address_postalcode],$contact[primary_address_country],$contact[alt_address_city],$contact[alt_address_street],$contact[alt_address_state],$contact[alt_address_postalcode],$contact[alt_address_country],$contact[office_phone],$contact[home_phone],$contact[other_phone],$contact[fax],$contact[department],$contact[birthdate],$contact[assistant_name],$contact[assistant_phone]);
       
@@ -794,7 +794,7 @@ function create_tasks($user_name,$output_list)
 
 function get_version($user_name, $password)
 {
-	return "4.0";
+	return "4.2";
 }
 
 function contact_by_email($user_name,$email_address)
@@ -1013,7 +1013,7 @@ function contact_by_range($user_name,$from_index,$offset)
         {
             $account_name="";
         }
-        if($birthdate == "")
+        if($birthdate == "0000-00-00")
         {
 	        $birthdate = "4501-01-01";
         }
@@ -1301,15 +1301,7 @@ function upload_emailattachment($email_id, $filename,$binFile,$filesize)
 function track_email($user_name, $contact_ids, $date_sent, $email_subject, $email_body)
 {
 
-	//global $log;
-	
-	//todo make the activity body not be html encoded
-	//$log->fatal("In track email: username: $user_name contacts: $contact_ids date_sent: $date_sent"); // activity: $email_body");
-	
-	
-	// translate date sent from VB format 7/22/2004 9:36:31 AM
-	// to yyyy-mm-dd 9:36:31 AM
-	$date_sent = ereg_replace("([0-9]*)/([0-9]*)/([0-9]*)( .*$)", "\\3-\\1-\\2\\4", $date_sent);
+//	$date_sent = ereg_replace("([0-9]*)/([0-9]*)/([0-9]*)( .*$)", "\\3-\\1-\\2\\4", $date_sent);
 	
 	
 	
@@ -1320,6 +1312,8 @@ function track_email($user_name, $contact_ids, $date_sent, $email_subject, $emai
 	$current_user = $seed_user;
 	$current_user->retrieve($user_id);
 	
+	$date_sent = getDisplayDate($date_sent);
+
 	require_once('modules/Emails/Email.php');
 	
 	$email = new Email();
@@ -1373,7 +1367,7 @@ function create_contact($user_name, $first_name, $last_name, $email_address ,$ac
 {
     if($birthdate == "4501-01-01")
     {
-	    $birthdate = "";
+	    $birthdate = "0000-00-00";
     }
 	return create_contact1($user_name, $first_name, $last_name, $email_address ,$account_name , $salutation , $title, $phone_mobile, $reports_to,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country,$alt_address_city,$alt_address_street,$alt_address_state,$alt_address_postalcode,$alt_address_country,$office_phone,$home_phone,"",$fax,$department,"","","");
 }
@@ -1435,7 +1429,7 @@ function create_contact1($user_name, $first_name, $last_name, $email_address ,$a
     $contact->column_fields[otherphone]= $other_phone;
     $contact->column_fields[fax]= $fax;
     $contact->column_fields[department]=$department;
-    $contact->column_fields[birthday]= $birthdate;
+    $contact->column_fields[birthday]= getDisplayDate($birthdate);
     $contact->column_fields[assistant]= $assistant_name;
     $contact->column_fields[assistantphone]= $assistant_phone;
 
@@ -1751,12 +1745,12 @@ function create_task($user_name, $start_date, $date_modified,$name,$status,$prio
 	//$task[assigned_user_id] = $assigned_user_id;
     $task->column_fields[subject] = $name;
 	$task->column_fields[taskstatus]=$status;
-    $task->column_fields[date_start]=$start_date;
+    $task->column_fields[date_start]=getDisplayDate($start_date);
 	$task->column_fields[taskpriority]=$priority;
 	$task->column_fields[description]=$description;
    	$task->column_fields[activitytype]="Task";
     // NOT EXIST IN DATA MODEL
-    $task->column_fields[due_date]=$date_due;
+    $task->column_fields[due_date]=getDisplayDate($date_due);
    	$task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
 	$task->column_fields[assigned_user_id]=$user_id;
     //$task->saveentity("Activities");
@@ -1851,9 +1845,9 @@ function update_contact($user_name,$id, $first_name, $last_name, $email_address 
     $contact->column_fields[department]=$department;
     if($birthdate == "4501-01-01")
     {
-	    $birthdate = "";
+	    $birthdate = "0000-00-00";
     }
-    $contact->column_fields[birthday]= $birthdate;
+    $contact->column_fields[birthday]= getDisplayDate($birthdate);
     $contact->column_fields[assistant]= $assistant_name;
     $contact->column_fields[assistantphone]= $assistant_phone;
 
@@ -1879,7 +1873,7 @@ function update_task($user_name, $id,$start_date, $name, $status,$priority,$desc
 
 	if($date_due == "4501-01-01")
 	{
-	    $date_due = "";
+	    $date_due = "0000-00-00";
 	}
 		
     $task->column_fields[subject] = $name;
@@ -1887,8 +1881,8 @@ function update_task($user_name, $id,$start_date, $name, $status,$priority,$desc
 	$task->column_fields[taskpriority]=$priority;
 	$task->column_fields[description]=$description;
     $task->column_fields[activitytype]="Task";
-    $task->column_fields[due_date]=$date_due;
-    $task->column_fields[date_start]=$start_date;
+    $task->column_fields[due_date]= getDisplayDate($date_due);
+    $task->column_fields[date_start]= getDisplayDate($start_date);
     $task->column_fields[contact_id]= retrievereportsto($contact_name,$user_id,null); 
 	$task->column_fields[assigned_user_id]=$user_id;
 
@@ -1975,7 +1969,7 @@ function calendar_by_range($user_name,$from_index,$offset)
 	{
 		$starthour = explode(":",$temptask[time_start]);
 		
-		if($temptask[date_due]=="0000-00-00")
+		if($temptask[date_due]== "0000-00-00" || $temptask[date_due] == "")
 		{
 			$temptask[date_due] = $temptask[start_date];
 		}
@@ -2054,14 +2048,14 @@ function create_calendar($user_name, $start_date, $date_modified,$name,$descript
 	
 	//<<<<<<<<<<<<<<<<<Date Time>>>>>>>>>>>>>>>
 	$startdate = explode(" ",$start_date);
-    $task->column_fields[date_start]=$startdate[0];
+    $task->column_fields[date_start]=getDisplayDate($startdate[0]);
     $task->column_fields[time_start]=$startdate[1];
     
     $starthourmin = explode(":",$startdate[1]);
    	$task->column_fields[activitytype]="Meeting";
 
     $duedate = explode(" ",$date_due);
-    $task->column_fields[due_date]=$duedate[0];
+    $task->column_fields[due_date]=getDisplayDate($duedate[0]);
     
     $duetime = explode(":",$duedate[1]);
 
@@ -2111,14 +2105,14 @@ function update_calendar($user_name, $id,$start_date,$name,$description,$date_du
     
     //<<<<<<<<<<<<<<<<<Date Time>>>>>>>>>>>>>>>
 	$startdate = explode(" ",$start_date);
-    $task->column_fields[date_start]=$startdate[0];
+    $task->column_fields[date_start] = getDisplayDate($startdate[0]);
     $task->column_fields[time_start]=$startdate[1];
     
     $starthourmin = explode(":",$startdate[1]);
    	$task->column_fields[activitytype]="Meeting";
 
     $duedate = explode(" ",$date_due);
-    $task->column_fields[due_date]=$duedate[0];
+    $task->column_fields[due_date]= getDisplayDate($duedate[0]);
     
     $duetime = explode(":",$duedate[1]);
 
