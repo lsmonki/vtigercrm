@@ -1248,7 +1248,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
         	$custfld .= '<td width="30%"><input name="contact_name" readonly type="text" value="'.$contact_name.'"><input name="contact_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
 	}
-        elseif($uitype == 61)
+        elseif($uitype == 61 || $uitype == 69)
         {
                 global $current_user;
                 if($value != '')
@@ -1806,6 +1806,22 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                 $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
                 $custfld .= '<td width="30%" valign="top" class="dataField">'.$custfldval.'</td>';
         }
+	elseif($uitype == 69)
+	{
+			
+                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		if($col_fields[$fieldname] != '')
+		{
+			$imgpath = "test/product/".$col_fields[$fieldname];
+			
+                	$custfld .= '<td width="30%" valign="top" class="dataField"><img src="'.$imgpath.'" border="0"></td>';
+		}
+		else
+		{
+                	$custfld .= '<td width="30%" valign="top" class="dataField"></td>';
+		}
+		
+	}
 	elseif($uitype == 62)
 	{
 		$value = $col_fields[$fieldname];
@@ -4441,6 +4457,61 @@ function getConvertSoToInvoice($focus,$so_focus,$soid)
 
 	return $focus;
 
+}
+
+function upload_product_image_file($mode,$id)
+{
+	global $root_directory;
+	$uploaddir = $root_directory ."/test/product/";
+
+	$file_path_name = $_FILES['imagename']['name'];
+	$file_name = basename($file_path_name);
+	$file_name = $id.'_'.$file_name;
+	$filetype= $_FILES['imagename']['type'];
+	$filesize = $_FILES['imagename']['size'];
+
+	$ret_array = Array();
+
+	if($filesize > 0)
+	{
+
+		if(move_uploaded_file($_FILES["imagename"]["tmp_name"],$uploaddir.$file_name))
+		{
+
+			$upload_status = "yes";
+			$ret_array["status"] = $upload_status;
+			$ret_array["file_name"] = $file_name;
+			
+
+		}
+		else
+		{
+			$errorCode =  $_FILES['imagename']['error'];
+			$upload_status = "no";
+			$ret_array["status"] = $upload_status;
+			$ret_array["errorcode"] = $errorCode;
+			
+			
+		}
+
+	}
+	else
+	{
+		$upload_status = "no";
+                $ret_array["status"] = $upload_status;
+	}
+	return $ret_array;		
+
+}
+
+function getProductImageName($id)
+{
+	global $adb;
+	$query = "select imagename from products where productid=".$id;
+	$result = $adb->query($query);
+	$image_name = $adb->query_result($result,0,"imagename");
+	return $image_name;
+	
 }
 
 ?>
