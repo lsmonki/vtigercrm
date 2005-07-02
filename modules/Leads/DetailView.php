@@ -55,7 +55,7 @@ $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
 $xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id());
+$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $focus->id);
  
 if (isset($focus->firstname)) $xtpl->assign("FIRST_NAME", $focus->firstname);
