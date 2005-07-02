@@ -190,7 +190,7 @@ function renderRelatedOrders($query,$id)
 
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Accounts','Orders',$focus,$query,$button,$returnset);
+	$list = GetRelatedList('Accounts','SalesOrder',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
 

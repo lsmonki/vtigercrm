@@ -108,9 +108,9 @@ else
 	{
 		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,$edit_val,$del_val);
 	}
-	elseif(($module == 'Accounts' || $module == 'Potentials' || $module == 'Contacts') && $relatedmodule == 'Orders')
+	elseif($relatedmodule == 'SalesOrder')
 	{
-		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'SalesOrderEditView');
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'SalesOrderEditView','DeleteSalesOrder');
 	}else
 	{
 		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset);

@@ -264,7 +264,7 @@ function renderRelatedSalesOrders($query,$id)
 
 	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Potentials','Orders',$focus,$query,$button,$returnset);
+	$list = GetRelatedList('Potentials','SalesOrder',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
 

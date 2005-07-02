@@ -686,6 +686,7 @@ $app_strings = Array(
 'Start Date'=>'Start Date',
 'Related to'=>'Related To',
 'Recurring Type'=> 'Recurring Type',
+'SalesOrder'=> 'Sales Orders',
 'LBL_QUOTE_NAME'=>'Quote Name',
  //Added Orders in activity parent type selection / Related list
 'LBL_NEW_QUOTE_BUTTON_TITLE'=>'New Quote [Alt+Q]',

@@ -68,7 +68,7 @@ function renderRelatedOrders($query,$id)
 
 	$returnset = '&return_module=Quotes&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Quotes','Orders',$focus,$query,$button,$returnset);
+	$list = GetRelatedList('Quotes','SalesOrder',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
 function renderRelatedHistory($query,$id)
