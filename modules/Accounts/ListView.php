@@ -472,6 +472,9 @@ else
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header
+if($viewid !='')
+$viewid .= "&viewname=".$viewid;
+
 $listview_header = getListViewHeader($focus,"Accounts",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
