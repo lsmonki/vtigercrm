@@ -22,6 +22,7 @@ document.massdelete.action="index.php?module=HelpDesk&action=index&return_module
 function massDelete()
 {
 	x = document.massdelete.selected_id.length;
+	var viewid = document.massdelete.viewname.value;
 	idstring = "";
 
 	if ( x == undefined)
@@ -60,7 +61,7 @@ function massDelete()
 			return false;
 		}
 	}
-document.massdelete.action="index.php?module=Users&action=massdelete&return_module=HelpDesk&return_action=TicketsList"
+document.massdelete.action="index.php?module=Users&action=massdelete&return_module=HelpDesk&return_action=TicketsList&viewname="+viewid;
 }
 
 

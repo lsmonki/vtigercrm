@@ -30,7 +30,7 @@ document.massdelete.submit();
 function massDelete()
 {
         x = document.massdelete.selected_id.length;
-
+	var viewid = document.massdelete.viewname.value;
         idstring = "";
 
         if ( x == undefined)
