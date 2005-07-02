@@ -464,6 +464,31 @@ $vtlog->logthis("module is =".$module,'info');
 	{
 		$fldvalue = $this->getOldFileName($this->id);
 	}
+	if($table_name == 'products' && $columname == 'imagename')
+	{
+		//Product Image Handling done
+		if($_FILES['imagename']['name'] != '')
+		{
+
+			$prd_img_arr = upload_product_image_file("edit",$this->id);
+			//print_r($prd_img_arr);
+			if($prd_img_arr["status"] == "yes")
+			{
+				$fldvalue ="'".$prd_img_arr["file_name"]."'";
+			}
+			else
+			{
+				$fldvalue ="'".getProductImageName($this->id)."'";
+			}	 
+
+
+		}
+		else
+		{
+			$fldvalue ="'".getProductImageName($this->id)."'";
+		}
+
+	}
 	if($table_name != 'ticketcomments')
 	{
 		if($i == 0)
@@ -496,6 +521,31 @@ $vtlog->logthis("module is =".$module,'info');
           $fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
           //echo ' updatevalue is ............. ' .$fldvalue;
         }
+	elseif($table_name == 'products' && $columname == 'imagename')
+	{
+		//Product Image Handling done
+		if($_FILES['imagename']['name'] != '')
+		{
+
+			$prd_img_arr = upload_product_image_file("create",$this->id);
+			//print_r($prd_img_arr);
+			if($prd_img_arr["status"] == "yes")
+			{
+				$fldvalue ="'".$prd_img_arr["file_name"]."'";
+			}
+			else
+			{
+				$fldvalue ="''";
+			}	 
+
+
+		}
+		else
+		{
+			$fldvalue ="''";
+		}
+
+	}
         //code by shankar ends
         $column .= ", ".$columname;
         $value .= ", ".$fldvalue."";
