@@ -1130,6 +1130,7 @@
 		<field name="qtyindemand" type="I" size="11"></field>
 		<field name="glacct" type="C" size="200"></field>
 		<field name="vendor_id" type="I" size="11"></field>	
+		<field name="imagename" type="C" size="150"></field>
 	
 		<opt>Type=InnoDB</opt>
 		
@@ -1144,7 +1145,7 @@
 
                 <data>
                 </data>
-        </table>	
+        </table>
 
 	<table name="currency">
 		<field name="currencyid" type="I" size="19">
