@@ -140,6 +140,7 @@ if($cvmodule != "")
 			    $vtlog->logthis("CustomView :: Save :: cvadvfilter created successfully","info");
 			}
 		  }
+		  $cvid = $genCVid;
 		}
 	}else
 	{
@@ -215,5 +216,5 @@ if($cvmodule == "Vendor")
 	$cvmodule = "Orders&smodule=SO";
 }
 
-header("Location: index.php?action=index&module=$cvmodule");
+header("Location: index.php?action=index&module=$cvmodule&viewname=$cvid");
 ?>
