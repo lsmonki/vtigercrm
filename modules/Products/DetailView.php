@@ -50,14 +50,18 @@ $block_3 = getDetailBlockInformation("Products",3,$focus->column_fields);
 $xtpl->assign("BLOCK3", $block_3);
 $block_4 = getDetailBlockInformation("Products",4,$focus->column_fields);
 $xtpl->assign("BLOCK4", $block_4);
+$block_6 = getDetailBlockInformation("Products",6,$focus->column_fields);
+$xtpl->assign("BLOCK6", $block_6);
 $block_1_header = getBlockTableHeader("LBL_PRODUCT_INFORMATION");
 $block_2_header = getBlockTableHeader("LBL_PRICING_INFORMATION");
 $block_3_header = getBlockTableHeader("LBL_STOCK_INFORMATION");
 $block_4_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
+$block_6_header = getBlockTableHeader("LBL_IMAGE_INFORMATION");
 $xtpl->assign("BLOCK1_HEADER", $block_1_header);
 $xtpl->assign("BLOCK2_HEADER", $block_2_header);
 $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 $xtpl->assign("BLOCK4_HEADER", $block_4_header);
+$xtpl->assign("BLOCK6_HEADER", $block_6_header);
 
 $block_5 = getDetailBlockInformation("Products",5,$focus->column_fields);
 if(trim($block_5) != '')

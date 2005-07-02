@@ -21,7 +21,7 @@
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
 <script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-<form name="EditView" method="POST" action="index.php">
+<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
   <input type="hidden" name="module" value="Products">
   <input type="hidden" name="action">
   <input type="hidden" name="record" value="{ID}">
@@ -30,6 +30,7 @@
   <input type="hidden" name="return_module" value="{RETURN_MODULE}">
   <input type="hidden" name="return_id" value="{RETURN_ID}">
   <input type="hidden" name="return_action" value="{RETURN_ACTION}">
+  <INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
   <table width="100%" cellpadding="2" cellspacing="0" border="0">
     <tr> 
       <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}product.gif" border="0"></td>
@@ -46,7 +47,7 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr> 
       <td><div align="center"> 
-          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';return formValidate()" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
+          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';return validate()" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
           <input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
         </div></td>
     </tr>
@@ -76,7 +77,15 @@
     </tr>
   </table>
   <BR>
-  {CUSTOMFIELD} 
+  {CUSTOMFIELD}
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+    <tr> 
+      <td> {BLOCK6_HEADER} 
+        <table width="100%" border="0" cellspacing="1" cellpadding="2">
+          {BLOCK6} </table></td>
+    </tr>
+  </table>
+  <br> 
   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
     <tr> 
       <td> {BLOCK4_HEADER} 
@@ -88,7 +97,7 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr> 
       <td><div align="center"> 
-          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';return formValidate()" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
+          <input title="{APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='Save';return validate()" type="submit" name="button" value="  {APP.LBL_SAVE_BUTTON_LABEL}  " >
           <input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
         </div></td>
     </tr>
@@ -142,5 +151,41 @@ function productImg()
 	var fieldname = new Array({VALIDATION_DATA_FIELDNAME})
 	var fieldlabel = new Array({VALIDATION_DATA_FIELDLABEL})
 	var fielddatatype = new Array({VALIDATION_DATA_FIELDDATATYPE})
+	var extensiontype = new Array(".jpg", ".png", ".gif")
 </script>
+<script>
+function validate() {
+
+		status = false
+		imageType = document.EditView.imagename.value
+
+		if(imageType != '')
+		{
+			for(i=0; i<extensiontype.length ; i++)
+			{
+				if (imageType.indexOf(extensiontype[i]) >= 0 )
+				{
+					status = true	
+				}	
+			}
+		}
+		else
+		{
+			status = true 
+		}
+		if(status)
+		{
+			if(!formValidate())
+				return false
+		}
+		else
+		{
+			alert("Kindly specify a valid Product Image File of type .jpg, .png or .gif")
+			return false
+		}
+
+		
+		
+}
+</script>		
 <!-- END: main -->
