@@ -50,7 +50,12 @@ if (!isset($_GET['action']) || !isset($_GET['module'])) {
 	die("Error: invalid print link");
 }
 $record = (isset($_GET['record'])) ? $_GET['record'] : "";
-$url = $site_URL . "/index.php?module={$_GET['module']}&action={$_GET['action']}&record=$record";
+//Added activity mode for events or tasks for Back
+if($_GET['module'] == 'Activities')
+{
+        $activity_mode = '&activity_mode='.$_REQUEST['activity_mode'];
+}
+$url = $site_URL . "/index.php?module={$_GET['module']}&action={$_GET['action']}&record=$record$activity_mode";
 $lang_crm = (empty($_GET['lang_crm'])) ? $default_language : $_GET['lang_crm'];
 $app_strings = return_application_language($lang_crm);
 insert_charset_header();
