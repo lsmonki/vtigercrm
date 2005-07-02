@@ -27,6 +27,7 @@ function massDelete()
 {
 
 	x = document.massdelete.selected_id.length;
+	var viewid = document.massdelete.viewname.value;
 	idstring = "";
 
 	if ( x == undefined)
@@ -65,11 +66,13 @@ function massDelete()
 			return false;
 		}
 	}	
-	document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Leads&return_action=index"
+	document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Leads&return_action=index&viewname="+viewid;
 }
 function changeStatus()
 {
 	x = document.massdelete.selected_id.length;
+	var viewid = document.massdelete.viewname.value;
+
 	idstring = "";
 	if ( x == undefined)
 	{
@@ -108,7 +111,7 @@ function changeStatus()
 		}
 	}	
 
-	document.massdelete.action="index.php?module=Users&action=massChangeStatus"
+	document.massdelete.action="index.php?module=Users&action=massChangeStatus&viewname="+viewid;
 }
 
 
