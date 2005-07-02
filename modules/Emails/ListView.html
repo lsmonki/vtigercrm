@@ -29,6 +29,8 @@ function massDelete()
 {
 
         x = document.massdelete.selected_id.length;
+	var viewid = document.massdelete.viewname.value;
+
         idstring = "";
 
         if ( x == undefined)
@@ -67,7 +69,7 @@ function massDelete()
                         return false;
                 }
         }
-        document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Emails&return_action=ListView"
+        document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Emails&return_action=ListView&viewname="+viewid;
 }
 </script>
 
