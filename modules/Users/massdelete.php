@@ -19,6 +19,7 @@
 
 require_once('include/database/PearDatabase.php');
 $idlist = $_POST['idlist'];
+$viewid = $_REQUEST['viewname'];
 $returnmodule=$_REQUEST['return_module'];
 //split the string and store in an array
 $storearray = explode(";",$idlist);
@@ -31,7 +32,7 @@ if(isset($_REQUEST['smodule']) && ($_REQUEST['smodule']!=''))
 {
 	$smod = "&smodule=".$_REQUEST['smodule'];
 }
-header("Location: index.php?module=".$returnmodule."&action=index".$smod);
+header("Location: index.php?module=".$returnmodule."&action=index&viewname=".$viewid.$smod);
 
 ?>
 
