@@ -3634,9 +3634,6 @@ function getListQuery($module,$where='')
 	{
 		$query .= " and crmentity.smownerid in(".$current_user->id .",0)";
 	}
-	//Appeding the recurring event by jaguar
-	if($module=="Activities")
-	$query.="group by crmid";
 
 	return $query;
 }
