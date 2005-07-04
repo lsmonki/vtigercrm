@@ -26,7 +26,7 @@ checkInstallDir()
 			retval=0
 		else
 			echo "No such file ${bindir}/startvtiger.sh ${bindir}/stopvtiger.sh."
-			echo "Invalid vtiger 4.0 directory specified"
+			echo "Invalid vtiger 4.0.1 directory specified"
 		fi
 	else
 		echo "No such Directory: $bindir"
@@ -34,14 +34,55 @@ checkInstallDir()
 	return ${retval}	
 }
 
-getvtiger4_0_installdir()
+getvtiger4_0_1_installdir()
 {
 	cancontinue=false
 	
 	while [ $cancontinue != "true" ]
 	do
-		echo "Specify the absolute path of the bin directory of the vtiger CRM 4.0 "
-		echo "(For example /home/test/vtigerCRM3_0/bin):"
+		echo ""
+		echo "Is 4.0.1 mysql installed in the same machine as 4.2 GA? (Y/N)"
+		echo ""
+		local flag=0
+		while [ $flag -eq 0 ]
+		do
+			read RESPONSE
+			case $RESPONSE in
+				[nN]|[nN][oO])
+		echo "**********************"
+		echo "**********************"
+		echo "**********************"
+        	echo "Please ensure that the mysql server instance for 4.0.1 is running "
+		echo "**********************"
+		echo "**********************"
+		echo "**********************"
+					echo "Please enter the machine name"
+					read macname
+					echo "Please enter the mysql Port Number"
+					read macport
+					echo "Please enter the mysql User Name"
+					read username
+					echo "Please enter the mysql Password"
+					read passwd
+					# take the dump and proceed normally to line 348
+					getRemoteMySQLDump macname macport username passwd
+					flag=1
+					;;
+
+				[yY]|[yY][eE][sS])
+						echo ""
+						flag=1
+						;;
+
+				*)
+					invalid_msg
+					;;
+			esac
+		done
+
+		echo ""
+		echo "Specify the absolute path of the bin directory of the vtiger CRM 4.0.1 "
+		echo "(For example /home/test/vtigerCRM4_0_1/bin):"
 	 	read dir_4_0
 		
 		if [ "${dir_4_0}" != "" ]	
@@ -58,18 +99,20 @@ getvtiger4_0_installdir()
 		fi
 	done
  	
-	echo 'The 4.0 vtiger CRM installation directory is' $dir_4_0
+		echo ""
+	echo 'The 4.0.1 vtiger CRM installation directory is' $dir_4_0
 }
 
-getvtiger4_0_data()
+getvtiger4_0_1_data()
 {
 	scrfile=${dir_4_0}/startvTiger.sh
 
-	echo "Specify the host name of the vtiger CRM 4.0 mysql server"
+		echo ""
+	echo "Specify the host name of the vtiger CRM 4.0.1 mysql server"
         read mysql_host_name_4_0
 
 	echo ''
-        echo "Specify the apache port of the vtiger CRM 4.0.1"
+        echo "Specify the apache port of the vtiger CRM 4.2"
         read apache_port_4_0_1
 	
 	mysql_dir=`grep "mysql_dir=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
@@ -163,6 +206,23 @@ promptAndCheckMySQL()
 	checkInput "c" "C"
 }
 
+
+
+
+getRemoteMySQLDump()
+{
+       machine_name=$1
+       m_port=$2
+       m_uname=$3
+       m_passwd=$4
+
+        scrfile=./startvTiger.sh
+        mysql_dir=`grep "mysql_dir=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
+		
+${mysql_dir}/bin/mysqldump -u $m_name -h $machine_name --port=$m_port --password=$m_passwd vtigercrm4_0_1 >> vtigercrm4_0_1_dump.txt
+
+}
+
 startMySQL()
 {
 	version=$1
@@ -184,7 +244,7 @@ startMySQL()
 		do
 			echo "vtiger CRM $version Mysql Server is not running."
 			echo "Going to start the  vtiger CRM $version mysql server at port $mysql_port"
-			${mysql_dir}/bin/mysqld_safe --no-defaults --basedir=$mysql_dir --datadir=$mysql_dir/data --socket=$mysql_socket --tmpdir=$mysql_dir/tmp --user=root --port=$mysql_port --default-table-type=INNODB > /dev/null &
+			${mysql_dir}/bin/mysqld_safe --basedir=$mysql_dir --datadir=$mysql_dir/data --socket=$mysql_socket --tmpdir=$mysql_dir/tmp --user=root --port=$mysql_port --default-table-type=INNODB > /dev/null &
 			sleep 8
 			isvtiger_MySQL_Running $version
 			if [ $? -ne 0 ]
@@ -205,74 +265,80 @@ startMySQL()
 
 }
 
-getdump4_0_db()
+getdump4_0_1_db()
 {
 	echo "********************************************"
-	echo "Taking the dump of vtiger CRM 4.0 database"
+	echo "Taking the dump of vtiger CRM 4.0.1 database"
 	echo "*******************************************"
-	echo 'set FOREIGN_KEY_CHECKS=0;' > vtiger_4_0_dump.txt		
-	${mysql_dir_4_0_1}/bin/mysqldump --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm4 >> vtiger_4_0_dump.txt
+	echo 'set FOREIGN_KEY_CHECKS=0;' > vtiger_4_0_1_dump.txt		
+	${mysql_dir_4_0_1}/bin/mysqldump --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm4_0_1 >> vtiger_4_0_1_dump.txt
 	if [ $? -eq 0 ]
 	then
-		echo 'Data dump taken successfully in vtiger_4_0_dump.txt'
+		echo 'Data dump taken successfully in vtiger_4_0_1_dump.txt'
 	else
 		echo 'Unable to take the database dump. vtigercrm database may be corrupted'
 		exit
 	fi
 		
-	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "create database vtigercrm_4_0_bkp" 
-	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm_4_0_bkp < vtiger_4_0_dump.txt
+	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "create database vtigercrm_4_0_1_bkp" 
+	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm_4_0_1_bkp < vtiger_4_0_1_dump.txt
 	wget http://localhost:${apache_port_4_0_1}/Migrate.php
 	#${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm_4_0_bkp < migrate_4_0to4_0_1.sql
-	echo 'set FOREIGN_KEY_CHECKS=0;' > migrated_vtiger_4_0_dump.txt
-	${mysql_dir_4_0_1}/bin/mysqldump --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm_4_0_bkp >> migrated_vtiger_4_0_dump.txt
-	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "drop database vtigercrm_4_0_bkp"
+	echo 'set FOREIGN_KEY_CHECKS=0;' > migrated_vtiger_4_2_dump.txt
+	${mysql_dir_4_0_1}/bin/mysqldump --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm_4_0_1_bkp >> migrated_vtiger_4_2_dump.txt
+	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "drop database vtigercrm_4_0_1_bkp"
 
 }
 
 
-stopvtiger4_0MySQL()
+stopvtiger4_0_1MySQL()
 {
-	echo "Shutting down the vtiger CRM 4.0 mysql server"
+	echo "Shutting down the vtiger CRM 4.0.1 mysql server"
        	${mysql_dir}/bin/mysqladmin --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket shutdown
-       	echo "vtiger CRM 4.0 MySQL server shutdown"
+       	echo "vtiger CRM 4.0.1 MySQL server shutdown"
 }
 
-getvtiger4_0_1data()
+getvtiger4_2data()
 {
 	scrfile=./startvTiger.sh
 	
+		echo ""
 	mysql_dir=`grep "mysql_dir=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
-	echo "3.2 dir is$mysql_dir"
+	echo "4.2 dir is$mysql_dir"
 
+		echo ""
 	mysql_username=`grep "mysql_username=" ${scrfile}  | cut -d "=" -f2 | cut -d "'" -f2`
-	echo "3.2 user name is $mysql_username"
+	echo "4.2 user name is $mysql_username"
 
 	mysql_password=`grep "mysql_password=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
-	echo "3.2 password is $mysql_password"
+		echo ""
+	echo "4.2 password is $mysql_password"
 
+		echo ""
 	mysql_port=`grep "mysql_port=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
-	echo "3.2 port is $mysql_port"
+	echo "4.2 port is $mysql_port"
 
+		echo ""
 	mysql_socket=`grep "mysql_socket=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
-	echo "3.2 socket is $mysql_socket"
+	echo "4.2 socket is $mysql_socket"
 
+		echo ""
 	mysql_bundled=`grep "mysql_bundled=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
-	echo "3.2 bundled status is $mysql_bundled"
+	echo "4.2 bundled status is $mysql_bundled"
 }
 
-dumpinto4_0_1db()
+dumpinto4_2db()
 {
 	
-       	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "drop database vtigercrm4_0_1"
-       	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "create database if not exists vtigercrm4_0_1"
-	${mysql_dir}/bin/mysql  --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm4_0_1 --force < migrated_vtiger_4_0_dump.txt  2> migrate_log.txt
+       	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "drop database vtigercrm4_2"
+       	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "create database if not exists vtigercrm4_2"
+	${mysql_dir}/bin/mysql  --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm4_2 --force < migrated_vtiger_4_2_dump.txt  2> migrate_log.txt
 	
 	if [ $? -eq 0 ]
 	then
-		echo 'vTiger CRM 4.0 Data successfully migrated into vtiger CRM 4.0.1 database vtigercrm4_0_1'
+		echo 'vTiger CRM 4.0.1 Data successfully migrated into vtiger CRM 4.2 database vtigercrm4_2'
 	else
-		echo 'Unable to dump data into the vtiger CRM 4.0.1 database vtigercrm4_0_1. Check the migrate_log.txt in the $wdir directory'
+		echo 'Unable to dump data into the vtiger CRM 4.2 database vtigercrm4_2. Check the migrate_log.txt in the $wdir directory'
 		exit
 	fi
 }
@@ -280,28 +346,26 @@ dumpinto4_0_1db()
 main()
 {
 	setVariables $*
-	getvtiger4_0_installdir
-	getvtiger4_0_data
-	isvtiger_MySQL_Running 4.0
+	getvtiger4_0_1_installdir
+	getvtiger4_0_1_data
+	isvtiger_MySQL_Running 4_0_1
 
 	if [ $? != 0 ]
 	then
-		startMySQL 4.0
+		startMySQL 4_0_1
 	fi
-	getdump4_0_db
+	getdump4_0_1_db
 	if [ "$mysql_bundled" == "true" ]
 	then
-		stopvtiger4_0MySQL
+		stopvtiger4_0_1MySQL
 	fi
-	getvtiger4_0_1data
-	isvtiger_MySQL_Running 4.0.1
+	getvtiger4_2data
+	isvtiger_MySQL_Running 4_2
 	if [ $? != 0 ]
 	then
-		startMySQL 4.0.1
+		startMySQL 4_2
 	fi
-	dumpinto4_0_1db
+	dumpinto4_2db
 	 	
 }
-
-
 main $*
