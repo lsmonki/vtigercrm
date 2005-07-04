@@ -20,7 +20,6 @@ function getHiddenValues($id,$sid="product_id")
         $hidden .= '<input type="hidden" name="module">';
         $hidden .= '<input type="hidden" name="mode">';
         $hidden .= '<input type="hidden" name="'.$sid.'" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="smodule" value="VENDOR">';
         $hidden .= '<input type="hidden" name="return_module" value="Products">';
         $hidden .= '<input type="hidden" name="return_action" value="DetailView">';
         $hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
@@ -132,6 +131,7 @@ function renderRelatedProducts($query,$id,$sid="product_id")
         global $app_strings;
 
         $hidden = getHiddenValues($id,$sid);
+        $hidden .= '<input type="hidden" name="smodule" value="VENDOR">';
         echo $hidden;
 
         $focus = new Product();
@@ -163,6 +163,7 @@ function renderRelatedOrders($query,$id,$sid="product_id")
         global $app_strings;
 
         $hidden = getHiddenValues($id,$sid);
+        $hidden .= '<input type="hidden" name="smodule" value="VENDOR">';
         echo $hidden;
 
         $focus = new Order();
@@ -178,14 +179,61 @@ function renderRelatedOrders($query,$id,$sid="product_id")
 
 	$list = GetRelatedList('Vendor','Orders',$focus,$query,$button,$returnset);
 	echo '</form>';
+}
+function renderProductPurchaseOrders($query,$id)
+{
+	require_once('modules/Orders/Order.php');
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id);
+        echo $hidden;
+
+        $focus = new Order();
+ 
+	$button = '';
+
+        if(isPermitted("Orders",1,"") == 'yes')
+        {
+ 
+		$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Orders\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
+	}
+	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+	$list = GetRelatedList('Products','Orders',$focus,$query,$button,$returnset);
+	echo '</form>';
 } 
+function renderProductSalesOrders($query,$id)
+{
+	require_once('modules/Orders/SalesOrder.php');
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id);
+        echo $hidden;
+
+        $focus = new SalesOrder();
+ 
+	$button = '';
+	if(isPermitted("SalesOrder",1,"") == 'yes')
+        {
+		$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_SORDER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'SalesOrderEditView\';this.form.module.value=\'Orders\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;</td>';
+	}
+	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+	$list = GetRelatedList('Products','SalesOrder',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
+
 function renderRelatedContacts($query,$id)
 {
         global $mod_strings;
         global $app_strings;
         require_once('modules/Contacts/Contact.php');
 
-        $hidden = getHiddenValues($id);                                                                                             echo $hidden;
+        $hidden = getHiddenValues($id);
+        $hidden .= '<input type="hidden" name="smodule" value="VENDOR">';
+	echo $hidden;
 
         $focus = new Contact();
 

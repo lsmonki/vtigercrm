@@ -35,7 +35,14 @@ if($_REQUEST['module'] == 'Orders')
 	$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
 	$adb->query($sql_recentviewed);
 	if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module'] == "Accounts" || $_REQUEST['return_module'] == "Contacts" || $_REQUEST['return_module'] == "Potentials")
+	{
 		$focus->mark_deleted($_REQUEST['record']);
+	}
+	elseif($_REQUEST['return_module'] == "Products")
+	{	
+		$sql_req ='DELETE from poproductrel where purchaseorderid= '.$_REQUEST['record'].' and productid = '.$_REQUEST['return_id'];
+		$adb->query($sql_req);
+	}
 }
 if($_REQUEST['module'] == 'SalesOrder')
 {
