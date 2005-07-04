@@ -218,6 +218,7 @@ function renderRelatedUsers($query,$id)
   //$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
   //$list .= '<td class="moduleListTitle">';	
 
+  // To display the dates for the Group calendar starts -Jaguar
 	$recur_dates_qry='select distinct(recurringdate) from recurringevents where activityid='.$activity_id;
 	$recur_result=$adb->query($recur_dates_qry);
 	$noofrows_recur = $adb->num_rows($recur_result);
@@ -230,13 +231,14 @@ function renderRelatedUsers($query,$id)
                 {
                         $recur_dates=$row_recur['recurringdate'];
 			$st=explode("-",$recur_dates);
-			$date_val = date("d/m",mktime(0,0,0,date("$st[1]"),(date("$st[2]")+(1)),date("$st[0]")));
+			$date_val = date("d/m",mktime(0,0,0,date("$st[1]"),(date("$st[2]")),date("$st[0]")));
 			$recur_table.="<td>$date_val</td> ";
                 }
 		$recur_table.="</tr>";
 	}
 	$recur_table.="</table>";
 	$list .= $recur_table;
+  	// To display the dates for the Group calendar Ends -Jaguar
 	$list .= '</td><td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td class="moduleListTitle">';
 
