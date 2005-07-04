@@ -277,7 +277,8 @@ $cvHTML = '<span class="bodyText disabled">Edit</span>
 {
 $cvHTML = '<a href="index.php?module=Products&action=CustomView&record='.$viewid.'" class="link">Edit</a>
 <span class="sep">|</span>
-<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Products&record='.$viewid.'" class="link">Delete</a>
+<span class="sep">|</span>
 <a href="index.php?module=Products&action=CustomView" class="link">Create View</a>';
 }
 

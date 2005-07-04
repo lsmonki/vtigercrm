@@ -199,7 +199,8 @@ else
 {
 $cvHTML = '<a href="index.php?module=Activities&action=CustomView&record='.$viewid.'" class="link">Edit</a>
 <span class="sep">|</span>
-<span class="bodyText disabled">Delete</span><span class="sep">|</span>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Activities&record='.$viewid.'" class="link">Delete</a>
+<span class="sep">|</span>
 <a href="index.php?module=Activities&action=CustomView" class="link">Create View</a>';
 }
 
