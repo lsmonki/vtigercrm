@@ -252,6 +252,7 @@ function patternValidate(fldName,fldLabel,type) {
 		currObj.focus()
 		return false
 	}
+	else return true
 }
 
 function splitDateVal(dateval) {
@@ -724,6 +725,14 @@ function formValidate() {
 					   		if (!numConstComp(fieldname[i],fieldlabel[i],type[3],type[4]))
 								return false
 					   	}
+					}
+					break;
+			case "E"  :
+					if (getObj(fieldname[i]).value.length!=0)
+					{
+						var etype = "EMAIL"
+						if (!patternValidate(fieldname[i],fieldlabel[i],etype))
+							return false
 					}
 					break;
 		}
