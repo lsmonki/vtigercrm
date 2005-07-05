@@ -32,9 +32,9 @@ if(!isset($_REQUEST['record']))
 if($_REQUEST['return_module'] == $_REQUEST['module'])
 	$focus->mark_deleted($_REQUEST['record']);
 
-if($_REQUEST['return_module'] == 'Contacts')
+if($_REQUEST['return_module'] == 'Contacts' || $_REQUEST['return_module'] == 'Accounts')
 {
-	$sql = "update troubletickets set contact_id='' where ticketid=".$_REQUEST['record'];
+	$sql = "update troubletickets set parent_id='' where ticketid=".$_REQUEST['record'];
 	$adb->query($sql);
 }
 
