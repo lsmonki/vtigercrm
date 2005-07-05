@@ -137,8 +137,20 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 }
 
 $xtpl->assign("DESCRIPTION", nl2br($focus->description));
-$xtpl->assign("ROLEASSIGNED","<a href=index.php?module=Users&action=RoleDetailView&roleid=".$role .">" .$rolename ."</a>");
-$xtpl->assign("GROUPASSIGNED","<a href='index.php?module=Users&action=UserInfoUtil&groupname=".$group."'>".$group."</a>");
+if(is_admin($current_user))
+{
+	$xtpl->assign("ROLEASSIGNED","<a href=index.php?module=Users&action=RoleDetailView&roleid=".$role .">" .$rolename ."</a>");
+}
+
+
+if(is_admin($current_user))
+{
+	$xtpl->assign("GROUPASSIGNED","<a href='index.php?module=Users&action=UserInfoUtil&groupname=".$group."'>".$group."</a>");
+}
+else
+{
+	$xtpl->assign("GROUPASSIGNED",$group);
+}
 $xtpl->assign("TITLE", $focus->title);
 $xtpl->assign("DEPARTMENT", $focus->department);
 $xtpl->assign("REPORTS_TO_ID", $focus->reports_to_id);
