@@ -114,6 +114,8 @@ if(isset($_REQUEST['message']) && $_REQUEST['message']== 'Language string failed
 	echo '<h3><b><font color=red>'.$mod_strings['MESSAGE_CHECK_MAIL_SERVER_NAME'].'</font></b></h3>';
 if(isset($_REQUEST['message']) && (($_REQUEST['message']=='Language string failed to load: recipients_failed') || ($message == 'Language string failed to load: recipients_failed')) )
 	echo '<h3><b><font color=red>'.$mod_strings['MESSAGE_CHECK_MAIL_ID'].'</font></b></h3>';
+if(@strstr($_REQUEST['message'],'Language string failed to load: from_failed'))
+	echo '<h3><b><font color=red>Please check the "From" mail id.</font></b></h3>';
 
 if(isset($_REQUEST['record'])) {
 	$focus->id = $_REQUEST['record'];
@@ -123,7 +125,7 @@ if(isset($_REQUEST['record'])) {
         $focus->name=$focus->column_fields['name'];		
 }
 //$old_id = '';
-if(isset($_REQUEST['parent_id']))
+if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
 {
         $focus->column_fields['parent_id'] = $_REQUEST['parent_id'];
 	$focus->mode = '';
