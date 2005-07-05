@@ -212,11 +212,16 @@ if(isset($where) && $where != '')
         $query .= ' and '.$where;
 }
 
+$query .= ' group by notes.notesid';
+
 if(isset($order_by) && $order_by != '')
 {
         $query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
-
+else
+{
+        $query .= ' order by crmentity.modifiedtime ASC';
+}
 $list_result = $adb->query($query);
 
 //Retreiving the no of rows
