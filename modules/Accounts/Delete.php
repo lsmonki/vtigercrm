@@ -29,8 +29,11 @@ $focus = new Account();
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
-$sql ='delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
-$adb->query($sql);
+if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
+{
+	$sql ='delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
+	$adb->query($sql);
+}
 
 $sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
 $adb->query($sql_recentviewed);
