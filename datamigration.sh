@@ -41,12 +41,13 @@ getvtiger4_0_1_installdir()
 	
 	while [ $cancontinue != "true" ]
 	do
-		echo ""
-		echo "Is 4.0.1 mysql installed in the same machine as 4.2 GA? (Y/N)"
-		echo ""
-		local flag=0
+			local flag=0
 		while [ $flag -eq 0 ]
 		do
+			echo ""
+			echo "Is 4.0.1 mysql installed in the same machine as 4.2 GA? (Y/N)"
+			echo ""
+
 			read RESPONSE
 			case $RESPONSE in
 				[nN]|[nN][oO])
@@ -57,27 +58,35 @@ getvtiger4_0_1_installdir()
 		echo "**********************"
 		echo "**********************"
 		echo "**********************"
-					echo "Please enter the machine name"
-					read macname
-					if [ "${macname}" != "" ]
-					then
+					
+					while [ "$macname" = "" ]
+					do
+						echo "Please enter the machine name"
+						read macname
+					done
+						
+					while [ "$macport" = "" ]
+					do
 						echo "Please enter the mysql Port Number"
 						read macport
-        	                                if [ "${macport}" != "" ]
-						then
+					done
+
+					while [ "${username}" = "" ]
+					do
 							echo "Please enter the mysql User Name"
 							read username
-                			                        if [ "${username}" != "" ]
-								then	 
-									echo "Please enter the mysql Password"
-								read passwd
-							        fi
-						fi
-					fi	
-				 echo ''
-			         echo "Specify the apache port of the vtiger CRM 4.2"
-		                 read apache_port_4_2
-		       		
+					done
+					
+							echo "Please enter the mysql Password"
+							read passwd
+				 
+					while [ "${apache_port_4_2}" = "" ]
+					do
+						echo ''
+					         echo "Specify the apache port of the vtiger CRM 4.2"
+			        	         read apache_port_4_2
+		       			done
+
 					getRemoteMySQLDump $macname $macport $username $passwd
 					export diffmac=1
 					flag=1
@@ -89,31 +98,31 @@ getvtiger4_0_1_installdir()
 						flag=1
 						;;
 
-				*)
-					invalid_msg
+				*)	echo "invalid option"					
 					;;
 			esac
 		done
 
 		if [ ${diffmac} -eq 0 ]
 		then
-			echo ""
-			echo "Specify the absolute path of the bin directory of the vtiger CRM 4.0.1 "
-			echo "(For example /home/test/vtigerCRM4_0_1/bin):"
-		 	read dir_4_0
-		
-			if [ "${dir_4_0}" != "" ]	
-			then
-				checkInstallDir ${dir_4_0}
-				if [ $? != 0 ]
+			res=0
+			
+			while [ "$dir_4_0" = "" ] || [ $res != 0 ]
+			do
+				echo ""
+				echo "Specify the absolute path of the bin directory of the vtiger CRM 4.0.1 "
+				echo "(For example /home/test/vtigerCRM4_0_1/bin):"
+		 		read dir_4_0
+				if [ "${dir_4_0}" = "" ]
 				then
-					cancontinue=false
-				else
-					cancontinue=true
+					echo "Kindly enter a valid value please!"
 				fi
-			else
-				echo "value cannot be null"
-			fi
+		
+				checkInstallDir ${dir_4_0}
+				res=$?
+				##res stores the result of the previous op
+				cancontinue=true
+			done
 		fi
 	done
  	
@@ -125,13 +134,19 @@ getvtiger4_0_1_data()
 {
 	scrfile=${dir_4_0}/startvTiger.sh
 
-	echo ""
-	echo "Specify the host name of the vtiger CRM 4.0.1 mysql server"
-        read mysql_host_name_4_0
+	while [ "${mysql_host_name_4_0}" = "" ]
+	do
+		echo ""
+		echo "Specify the host name of the vtiger CRM 4.0.1 mysql server"
+	        read mysql_host_name_4_0
+	done
 
-	echo ''
-        echo "Specify the apache port of the vtiger CRM 4.2"
-        read apache_port_4_0_1
+	while [ "${apache_port_4_0_1}" = "" ]
+	do
+		echo ''
+        	echo "Specify the apache port of the vtiger CRM 4.2"
+	        read apache_port_4_0_1
+	done
 	
 	mysql_dir=`grep "mysql_dir=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
 	echo $mysql_dir
