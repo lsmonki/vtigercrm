@@ -402,7 +402,7 @@ $url_string .="&viewname=".$viewid;
 $listview_header = getListViewHeader($focus,"Products",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
-$listview_entries = getListViewEntries($focus,"Vendor",$list_result,$navigation_array,'','&return_module=Products&return_action=VendorListView','VendorEditView','',$oCustomView);
+$listview_entries = getListViewEntries($focus,"Vendor",$list_result,$navigation_array,'','&return_module=Products&return_action=index','VendorEditView','DeleteVendor',$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 
