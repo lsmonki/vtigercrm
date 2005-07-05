@@ -321,7 +321,8 @@ class Contact extends CRMEntity {
           // First, get the list of IDs.
           //include('modules/Contacts/RenderRelatedListUI.php');
 	  $query = 'select contactdetails.accountid, contactdetails.contactid , potential.potentialid, potential.potentialname, potential.potentialtype, potential.sales_stage, potential.amount, potential.closingdate, crmentity.crmid, crmentity.smownerid from contactdetails inner join potential on contactdetails.accountid = potential.accountid inner join crmentity on crmentity.crmid = potential.potentialid where contactdetails.contactid = '.$id.' and crmentity.deleted=0';
-          renderRelatedPotentials($query,$id);
+	  if($this->column_fields['account_id'] != 0)
+          	renderRelatedPotentials($query,$id);
           //return $this->build_related_list($query, new Opportunity());
 	}
 	
@@ -402,7 +403,7 @@ class Contact extends CRMEntity {
   function get_emails($id)
   {
 	//$query = 'select seactivityrel.crmid, emails.emailid, activity.subject, activity.activitytype,users.user_name, crmentity.modifiedtime, crmentity.crmid, crmentity.smownerid, activity.date_start from activity inner join seactivityrel on seactivityrel.activityid = activity.activityid inner join emails on emails.emailid = seactivityrel.activityid inner join contactdetails on contactdetails.contactid = seactivityrel.crmid inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid = emails.emailid  where contactdetails.contactid = '.$id.'  and crmentity.deleted = 0';
-	$query = 'select seactivityrel.crmid, emails.emailid, activity.subject, activity.activitytype,users.user_name, crmentity.modifiedtime, crmentity.crmid, crmentity.smownerid, activity.date_start from activity,seactivityrel,emails,contactdetails,users,crmentity where seactivityrel.activityid = activity.activityid and emails.emailid = seactivityrel.activityid and contactdetails.contactid = seactivityrel.crmid and users.id=crmentity.smownerid and crmentity.crmid = emails.emailid  and contactdetails.contactid = '.$id.'  and crmentity.deleted = 0';
+	$query = 'select activity.activityid, emails.emailid, activity.subject, activity.activitytype,users.user_name, crmentity.modifiedtime, crmentity.crmid, crmentity.smownerid, activity.date_start from activity,seactivityrel,emails,contactdetails,users,crmentity where seactivityrel.activityid = activity.activityid and emails.emailid = seactivityrel.activityid and contactdetails.contactid = seactivityrel.crmid and users.id=crmentity.smownerid and crmentity.crmid = emails.emailid  and contactdetails.contactid = '.$id.'  and crmentity.deleted = 0';
     renderRelatedEmails($query,$id);
   }
   
