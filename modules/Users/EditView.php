@@ -66,7 +66,7 @@ if(isset($_REQUEST['activity_mode']))
 {
 	$xtpl->assign("ACTIVITYMODE",$_REQUEST['activity_mode']);
 }
-if (isset($_REQUEST['return_id']))
+if ($_REQUEST['isDuplicate'] != 'true' && isset($_REQUEST['return_id']))
 {
         $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
         $RETURN_ID = $_REQUEST['return_id'];
@@ -186,6 +186,7 @@ if (is_admin($current_user)) {
 
                    
         $GROUP_SELECT_OPTION = '<select name="group_name">';
+		$GROUP_SELECT_OPTION .= '<option value="">--None--</option>';
                $sql = "select groupname from users2group where userid='" .$focus->id ."'";
                   $result = $adb->query($sql);
 		$groupnameArray = $adb->fetch_array($result);
@@ -225,7 +226,17 @@ if (isset($default_user_name)
 }
 
 if ($_REQUEST['Edit'] == ' Edit ')
-$xtpl->assign("READONLY", "readonly");
+{
+	$xtpl->assign("READONLY", "readonly");
+	$xtpl->assign("USERNAME_READONLY", "readonly");
+	
+}	
+if(isset($_REQUEST['record']) && $_REQUEST['isDuplicate'] != 'true')
+{
+	$xtpl->assign("USERNAME_READONLY", "readonly");
+}
+
+
 
 if (is_admin($current_user) && $focus->is_admin == 'on') $xtpl->assign("IS_ADMIN", "checked");
 elseif (is_admin($current_user) && $focus->is_admin != 'on') ;
