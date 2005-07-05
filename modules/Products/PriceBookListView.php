@@ -296,7 +296,7 @@ $listview_header = getListViewHeader($focus,"Products",$url_string,$sorder,$orde
 $xtpl->assign("LISTHEADER", $listview_header);
 
 
-$listview_entries = getListViewEntries($focus,"PriceBook",$list_result,$navigation_array,'','&return_module=Products&return_action=PriceBookListView','PriceBookEditView','PriceBookDelete',$oCustomView);
+$listview_entries = getListViewEntries($focus,"PriceBook",$list_result,$navigation_array,'','&return_module=Products&return_action=index&smodule=PRICEBOOK','PriceBookEditView','DeletePriceBook',$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
 if($order_by !='')
