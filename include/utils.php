@@ -1236,15 +1236,26 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		//if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != '')
 		//	$value = $_REQUEST['contact_id'];
 
-		if($value != '')
+	       if($value != '')
                {
                        $contact_name = getContactName($value);
                }
 	       elseif(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != '')
 	       {
-			$value = $value = $_REQUEST['contact_id'];
-			$contact_name = getContactName($value);
-	       }		 	
+			if($_REQUEST['module'] == 'Contacts' && $fieldname = 'contact_id')
+			{
+				$contact_name = '';	
+			}
+			else
+			{
+				$value = $_REQUEST['contact_id'];
+				$contact_name = getContactName($value);		
+			}
+			
+	       }
+	
+		//Checking for contacts duplicate
+					 	
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
         	$custfld .= '<td width="30%"><input name="contact_name" readonly type="text" value="'.$contact_name.'"><input name="contact_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
 	}
