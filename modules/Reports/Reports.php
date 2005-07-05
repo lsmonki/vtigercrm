@@ -36,7 +36,7 @@ $adv_filter_options = array("e"=>"equals",
 $report_modules = Array('Leads','Accounts','Contacts','Potentials','Products','HelpDesk','Quotes','Orders','Invoice','Activities');
 
 $related_modules = Array('Leads'=>Array('Converted Leads'),
-			 'Accounts'=>Array('Potentials','Contacts','Products','Quotes','Orders','Invoice'),
+			 'Accounts'=>Array('Potentials','Contacts','Products','Quotes','Invoice'),
 			 'Contacts'=>Array('Accounts','Potentials','Quotes','Orders'),
 			 'Potentials'=>Array('Accounts','Contacts','Quotes'),
 			 'Activities'=>Array('Contacts'),
