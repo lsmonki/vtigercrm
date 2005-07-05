@@ -77,13 +77,13 @@ class ReportRun extends CRMEntity
 			$querycolumns = $this->getEscapedColumns($selectedfields);
 			if($querycolumns == "")
 			{
-				$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." ".$selectedfields[2];
+				$columnslist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." '".$selectedfields[2]."'";
 			}else
 			{
 				$columnslist[$fieldcolname] = $querycolumns;
 			}
 		}
-		
+		//print_r($columnslist);
 		$vtlog->logthis("ReportRun :: Successfully returned getQueryColumnsList".$reportid,"info");
 		return $columnslist;		
 	}
@@ -1006,6 +1006,7 @@ tid
 				on crmentityHelpDesk.crmid=troubletickets.ticketid 
 				inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid
 				left join crmentity as crmentityHelpDeskRel on crmentityHelpDeskRel.crmid = troubletickets.parent_id 
+				left join ticketcomments on ticketcomments.ticketid = troubletickets.ticketid
 				left join products as productsRel on productsRel.productid = troubletickets.product_id
 				left join users as usersHelpDesk on crmentityHelpDesk.smownerid=usersHelpDesk.id 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
