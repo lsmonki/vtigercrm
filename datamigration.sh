@@ -13,6 +13,7 @@ setVariables()
 	wdir=`pwd`
 	cp -f ../apache/htdocs/vtigerCRM/migrator_backup_connection.php ../apache/htdocs/vtigerCRM/migrator_connection.php
         chmod 777 ../apache/htdocs/vtigerCRM/migrator_connection.php
+	export diffmac=0
 }
 
 checkInstallDir()
@@ -58,15 +59,29 @@ getvtiger4_0_1_installdir()
 		echo "**********************"
 					echo "Please enter the machine name"
 					read macname
-					echo "Please enter the mysql Port Number"
-					read macport
-					echo "Please enter the mysql User Name"
-					read username
-					echo "Please enter the mysql Password"
-					read passwd
-					# take the dump and proceed normally to line 348
-					getRemoteMySQLDump macname macport username passwd
+					if [ "${macname}" != "" ]
+					then
+						echo "Please enter the mysql Port Number"
+						read macport
+        	                                if [ "${macport}" != "" ]
+						then
+							echo "Please enter the mysql User Name"
+							read username
+                			                        if [ "${username}" != "" ]
+								then	 
+									echo "Please enter the mysql Password"
+								read passwd
+							        fi
+						fi
+					fi	
+				 echo ''
+			         echo "Specify the apache port of the vtiger CRM 4.2"
+		                 read apache_port_4_2
+		       		
+					getRemoteMySQLDump $macname $macport $username $passwd
+					export diffmac=1
 					flag=1
+					cancontinue=true
 					;;
 
 				[yY]|[yY][eE][sS])
@@ -80,22 +95,25 @@ getvtiger4_0_1_installdir()
 			esac
 		done
 
-		echo ""
-		echo "Specify the absolute path of the bin directory of the vtiger CRM 4.0.1 "
-		echo "(For example /home/test/vtigerCRM4_0_1/bin):"
-	 	read dir_4_0
-		
-		if [ "${dir_4_0}" != "" ]	
+		if [ ${diffmac} -eq 0 ]
 		then
-			checkInstallDir ${dir_4_0}
-			if [ $? != 0 ]
+			echo ""
+			echo "Specify the absolute path of the bin directory of the vtiger CRM 4.0.1 "
+			echo "(For example /home/test/vtigerCRM4_0_1/bin):"
+		 	read dir_4_0
+		
+			if [ "${dir_4_0}" != "" ]	
 			then
-				cancontinue=false
+				checkInstallDir ${dir_4_0}
+				if [ $? != 0 ]
+				then
+					cancontinue=false
+				else
+					cancontinue=true
+				fi
 			else
-				cancontinue=true
+				echo "value cannot be null"
 			fi
-		else
-			echo "value cannot be null"
 		fi
 	done
  	
@@ -107,7 +125,7 @@ getvtiger4_0_1_data()
 {
 	scrfile=${dir_4_0}/startvTiger.sh
 
-		echo ""
+	echo ""
 	echo "Specify the host name of the vtiger CRM 4.0.1 mysql server"
         read mysql_host_name_4_0
 
@@ -211,18 +229,44 @@ promptAndCheckMySQL()
 
 getRemoteMySQLDump()
 {
-       machine_name=$1
-       m_port=$2
-       m_uname=$3
-       m_passwd=$4
+     
+machine_name=$1
+m_port=$2
+m_uname=$3
+m_passwd=$4
+scrfile=./startvTiger.sh
+mysql_dir=`grep "mysql_dir=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
+#take the dump of the 4.0.1 mysql
+echo 'set FOREIGN_KEY_CHECKS=0;' > vtiger4_0_1_dump.txt
+${mysql_dir}/bin/mysqldump -u $m_uname -h $machine_name --port=$m_port --password=$m_passwd vtigercrm4_0_1 >> vtiger4_0_1_dump.txt
 
-        scrfile=./startvTiger.sh
-        mysql_dir=`grep "mysql_dir=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
-		
-${mysql_dir}/bin/mysqldump -u $m_name -h $machine_name --port=$m_port --password=$m_passwd vtigercrm4_0_1 >> vtigercrm4_0_1_dump.txt
+if [ $? -eq 0 ]
+then
+	echo 'Data dump taken successfully in vtiger_4_0_1_dump.txt'
+else
+	echo 'Unable to take the database dump. vtigercrm database may be corrupted'
+	exit
+fi
+#this should be the 4.0.1 mysql, so create the bkup database in it 
+${mysql_dir}/bin/mysql -h $machine_name --user=$m_uname --password=$m_passwd --port=$m_port -e "create database vtigercrm_4_0_1_bkp"
+#dump the 4.0.1 dump into the bkup database
+${mysql_dir}/bin/mysql -h $machine_name --user=$m_uname --password=$m_passwd --port=$m_port vtigercrm_4_0_1_bkp < vtiger4_0_1_dump.txt
 
+wget http://localhost:${apache_port_4_2}/Migrate.php
+
+echo 'set FOREIGN_KEY_CHECKS=0;' > migrated_vtiger_4_2_dump.txt
+
+#dump the migrated bkup database to a file
+
+echo 'about to take the dump of the bkup file and put into the migrated_dump.txt file'
+
+ ${mysql_dir}/bin/mysqldump -h $machine_name --user=$m_uname --password=$m_passwd --port=$m_port vtigercrm_4_0_1_bkp >> migrated_vtiger_4_2_dump.txt
+
+echo 'about to drop the database vtigercrm_4_0_1_bkp'
+
+ #${mysql_dir}/bin/mysql -h $machine_name --user=$m_uname --password=$m_passwd --port=$m_port -e "drop database vtigercrm_4_0_1_bkp"
 }
-
+#end of getRemoteMySQLDump
 startMySQL()
 {
 	version=$1
@@ -300,6 +344,7 @@ stopvtiger4_0_1MySQL()
 
 getvtiger4_2data()
 {
+	echo 'in get vtiger 4_2 data '
 	scrfile=./startvTiger.sh
 	
 		echo ""
@@ -329,7 +374,6 @@ getvtiger4_2data()
 
 dumpinto4_2db()
 {
-	
        	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "drop database vtigercrm4_2"
        	${mysql_dir}/bin/mysql --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket -e "create database if not exists vtigercrm4_2"
 	${mysql_dir}/bin/mysql  --user=$mysql_username --password=$mysql_password --port=$mysql_port --socket=$mysql_socket vtigercrm4_2 --force < migrated_vtiger_4_2_dump.txt  2> migrate_log.txt
@@ -347,18 +391,23 @@ main()
 {
 	setVariables $*
 	getvtiger4_0_1_installdir
-	getvtiger4_0_1_data
-	isvtiger_MySQL_Running 4_0_1
 
-	if [ $? != 0 ]
+	if [ ${diffmac} -eq 0 ]
 	then
-		startMySQL 4_0_1
+		getvtiger4_0_1_data
+		isvtiger_MySQL_Running 4_0_1
+
+		if [ $? != 0 ]
+		then
+			startMySQL 4_0_1
+		fi
+		getdump4_0_1_db
+		if [ "$mysql_bundled" == "true" ]
+		then
+			stopvtiger4_0_1MySQL
+		fi	
 	fi
-	getdump4_0_1_db
-	if [ "$mysql_bundled" == "true" ]
-	then
-		stopvtiger4_0_1MySQL
-	fi
+
 	getvtiger4_2data
 	isvtiger_MySQL_Running 4_2
 	if [ $? != 0 ]
@@ -368,4 +417,5 @@ main()
 	dumpinto4_2db
 	 	
 }
+
 main $*
