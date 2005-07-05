@@ -54,6 +54,8 @@ $xtpl=new XTemplate ('modules/Faq/DetailView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
+if(isset($focus->column_fields[question]))$xtpl->assign("FAQ_TITLE", $focus->column_fields[question]);
+
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
