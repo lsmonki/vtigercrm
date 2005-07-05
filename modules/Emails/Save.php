@@ -102,7 +102,7 @@ if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
 
 
 //Added for retrieve the old existing attachments when duplicated without new attachment
-if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit')
+if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
 {
 	$sql = "select attachments.attachmentsid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid=attachments.attachmentsid where seattachmentsrel.crmid= ".$_REQUEST['old_id'];
 
