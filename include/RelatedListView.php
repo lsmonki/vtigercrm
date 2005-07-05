@@ -58,7 +58,7 @@ global $current_user;
 $rel_tab_id = getTabid($relatedmodule);
 $defSharingPermissionData = $_SESSION['defaultaction_sharing_permission_set'];
 $others_rel_permission_id = $defSharingPermissionData[$rel_tab_id];
-if($others_rel_permission_id == 3 && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $module != 'PriceBook')
+if($others_rel_permission_id == 3 && $relatedmodule != 'Notes' && $relatedmodule != 'Products' && $relatedmodule != 'Faq' && $relatedmodule != 'PriceBook') //Security fix by Don
 {
 	 $query .= " and crmentity.smownerid in(".$current_user->id .",0)";
 }
@@ -66,6 +66,12 @@ if($others_rel_permission_id == 3 && $module != 'Notes' && $module != 'Products'
 if(isset($where) && $where != '')
 {
         $query .= ' and '.$where;
+}
+
+//Appending the group by for Jaguar/Don
+if($relatedmodule == 'Activities')
+{
+	$query .= ' group by crmentity.crmid';
 }
 
 
