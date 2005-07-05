@@ -1867,7 +1867,7 @@ class appointment extends tutos_base {
     }
 	
     $q.=" (activity.date_start < '". $sx2 ."' AND activity.date_start >= '". $sx1;
-    $q.="' and (activity.date_start like (activity.due_date) or (activity.date_start != '0000-00-00' and activity.due_date = '0000-00-00') ) ";
+    $q.="' and (activity.date_start like (activity.due_date) or (activity.date_start != '0000-00-00' ))";//query modified by Jag
     #$q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
     #$q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
     #$q .= " OR (date_start < ". $sx1 .")";
