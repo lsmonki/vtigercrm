@@ -11,6 +11,7 @@
 setVariables()
 {
 	wdir=`pwd`
+	echo 'copying the migrator_backup_connection file to the migrator_connection file'
 	cp -f ../apache/htdocs/vtigerCRM/migrator_backup_connection.php ../apache/htdocs/vtigerCRM/migrator_connection.php
         chmod 777 ../apache/htdocs/vtigerCRM/migrator_connection.php
 	export diffmac=0
@@ -110,7 +111,7 @@ getvtiger4_0_1_installdir()
 			while [ "$dir_4_0" = "" ] || [ $res != 0 ]
 			do
 				echo ""
-				echo "Specify the absolute path of the bin directory of the vtiger CRM 4.0.1 "
+				echo "Specify the absolute path of the bin directory of the vtiger CRM 4.0.1"
 				echo "(For example /home/test/vtigerCRM4_0_1/bin):"
 		 		read dir_4_0
 				if [ "${dir_4_0}" = "" ]
@@ -149,16 +150,16 @@ getvtiger4_0_1_data()
 	done
 	
 	mysql_dir=`grep "mysql_dir=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
-	echo $mysql_dir
+	echo 'mysql dir is ' $mysql_dir
 
 	mysql_username=`grep "mysql_username=" ${scrfile}  | cut -d "=" -f2 | cut -d "'" -f2`
-	echo $mysql_username
+	echo 'mysql username is ' $mysql_username
 
 	mysql_password=`grep "mysql_password=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
-	echo $mysql_password
+	echo 'mysql password is ' $mysql_password
 
 	mysql_port=`grep "mysql_port=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
-	echo $mysql_port
+	echo 'mysql port is ' $mysql_port
 
 	mysql_socket=`grep "mysql_socket=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
 	echo $mysql_socket
@@ -244,11 +245,27 @@ promptAndCheckMySQL()
 
 getRemoteMySQLDump()
 {
-     
 machine_name=$1
 m_port=$2
 m_uname=$3
 m_passwd=$4
+
+echo ''
+echo ''
+echo '###########################################################'
+echo '###########################################################'
+echo 'replacing the values in the migrator_connection.php file '
+echo '###########################################################'
+echo '###########################################################'
+echo ''
+echo ''
+
+finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLHOSTNAME ${machine_name}
+finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLUSERNAME ${m_uname}
+finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLPASSWORD ${m_passwd}
+finAndReplace ../apache/htdocs/vtigerCRM/migrator_connection.php MYSQLPORT ${m_port}
+chmod 777 ../apache/htdocs/vtigerCRM/migrator_connection.php
+
 scrfile=./startvTiger.sh
 mysql_dir=`grep "mysql_dir=" ${scrfile} | cut -d "=" -f2 | cut -d "'" -f2`
 #take the dump of the 4.0.1 mysql
@@ -267,6 +284,17 @@ ${mysql_dir}/bin/mysql -h $machine_name --user=$m_uname --password=$m_passwd --p
 #dump the 4.0.1 dump into the bkup database
 ${mysql_dir}/bin/mysql -h $machine_name --user=$m_uname --password=$m_passwd --port=$m_port vtigercrm_4_0_1_bkp < vtiger4_0_1_dump.txt
 
+
+
+
+
+
+
+
+
+
+
+
 wget http://localhost:${apache_port_4_2}/Migrate.php
 
 echo 'set FOREIGN_KEY_CHECKS=0;' > migrated_vtiger_4_2_dump.txt
@@ -280,8 +308,11 @@ echo 'about to take the dump of the bkup file and put into the migrated_dump.txt
 echo 'about to drop the database vtigercrm_4_0_1_bkp'
 
  #${mysql_dir}/bin/mysql -h $machine_name --user=$m_uname --password=$m_passwd --port=$m_port -e "drop database vtigercrm_4_0_1_bkp"
+
 }
 #end of getRemoteMySQLDump
+
+
 startMySQL()
 {
 	version=$1
