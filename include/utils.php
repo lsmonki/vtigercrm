@@ -2061,14 +2061,29 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                 {
                        $start_time = $col_fields['time_start'];
                 }
+		if($col_fields[$fieldname] == '0000-00-00')
+		{
+			$displ_date = '';	
+		}
+		else
+		{
+			$displ_date = getDisplayDate($col_fields[$fieldname]);
+		}
 	
-          	$custfld .= '<td width="30%" valign="top" class="dataField">'.getDisplayDate($col_fields[$fieldname]).'&nbsp;'.$start_time.'</td>';
+          	$custfld .= '<td width="30%" valign="top" class="dataField">'.$displ_date.'&nbsp;'.$start_time.'</td>';
 	}
 	elseif($uitype == 5 || $uitype == 23 || $uitype == 70)
 	{
 		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$cur_date_val = $col_fields[$fieldname];
-		$display_val = getDisplayDate($cur_date_val);
+		if($cur_date_val == '0000-00-00')
+		{
+			$display_val = '';	
+		}
+		else
+		{
+			$display_val = getDisplayDate($cur_date_val);
+		}
 		$custfld .= '<td width="30%" valign="top" class="dataField">'.$display_val.'</td>';	
 	}
 	elseif($uitype == 71 || $uitype == 72)
@@ -3169,9 +3184,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	}
 	elseif($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
 	{
-		if($temp_val != '')
+		if($temp_val != '' && $temp_val != '0000-00-00')
 		{
 			$value = getDisplayDate($temp_val);  
+		}
+		elseif($temp_val == '0000-00-00')
+		{
+			$value = '';
 		}
 		else
 		{
