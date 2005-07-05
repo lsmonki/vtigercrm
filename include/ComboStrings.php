@@ -175,7 +175,7 @@ $combo_strings = Array(
 				),
 'faqstatus_dom' => Array('Reviewed'=>'Reviewed'
 				,'Published'=>'Published'
-				,'Obsolute'=>'Obsolute'
+				,'Obsolete'=>'Obsolete'
 				),
 
 
