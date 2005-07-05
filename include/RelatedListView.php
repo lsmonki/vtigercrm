@@ -265,7 +265,11 @@ else
 
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-		$list .= $row[4];
+
+		if($row[4] != '0000-00-00 00:00:00')
+			$list .= $row[4];
+		else
+                        $list .= '';
 
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
