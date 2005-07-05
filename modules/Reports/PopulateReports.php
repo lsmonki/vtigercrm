@@ -157,7 +157,6 @@ $selectcolumns = Array(Array('contactdetails:firstname:Contacts_First_Name:first
 		       Array('purchaseorder:subject:Orders_Subject:subject:V',
 			     'vendorRel:name:Orders_Vendor_Name:vendor_id:I',
 			     'purchaseorder:tracking_no:Orders_Tracking_Number:tracking_no:V',
-			     'accountOrders:accountname:Orders_Account_Name:account_id:I',
 			     'contactdetails:firstname:Contacts_First_Name:firstname:V',
 			     'contactdetails:lastname:Contacts_Last_Name:lastname:V',
 			     'contactsubdetails:leadsource:Contacts_Lead_Source:leadsource:V',
@@ -171,7 +170,6 @@ $selectcolumns = Array(Array('contactdetails:firstname:Contacts_First_Name:first
 			     'purchaseorder:carrier:Orders_Carrier:carrier:V',
 			     'purchaseorder:salescommission:Orders_Sales_Commission:salescommission:N',
 			     'purchaseorder:exciseduty:Orders_Excise_Duty:exciseduty:N',
-                             'accountOrders:accountname:Orders_Account_Name:account_id:I',
                              'usersOrders:user_name:Orders_Assigned_To:assigned_user_id:V'),
 
 		       Array('invoice:subject:Invoice_Subject:subject:V',

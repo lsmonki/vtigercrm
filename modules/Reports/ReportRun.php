@@ -1052,7 +1052,6 @@ tid
 				left join users as usersOrders on usersOrders.id = crmentityOrders.smownerid 
 				left join vendor as vendorRel on vendorRel.vendorid = purchaseorder.vendorid 
 				left join contactdetails as contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid 
-				left join account as accountOrders on accountOrders.accountid = purchaseorder.accountid 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityOrders.deleted=0";
 		}

@@ -43,7 +43,7 @@ $related_modules = Array('Leads'=>Array('Converted Leads'),
 			 'Products'=>Array('Accounts','Contacts'),
 			 'HelpDesk'=>Array('Products'),
 			 'Quotes'=>Array('Accounts','Contacts','Potentials'),
-			 'Orders'=>Array('Accounts','Contacts'),
+			 'Orders'=>Array('Contacts'),
 			 'Invoice'=>Array('Accounts')
 			);
 
