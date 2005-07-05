@@ -76,8 +76,16 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 	$mail->SMTPAuth = true;     // turn on SMTP authentication
 	$mail->Username = $mail_server_username ;//$smtp_username;  // SMTP username
 	$mail->Password = $mail_server_password ;//$smtp_password; // SMTP password
-	$mail->From = $from;
-	$mail->FromName = $initialfrom;
+	if($_REQUEST['return_module'] == 'HelpDesk')
+	{
+		$mail->From = 'support@vtiger.com';
+		$mail->FromName = 'Vtiger Support';
+	}
+	else
+	{
+		$mail->From = $from;
+		$mail->FromName = $initialfrom;
+	}
 
 	$mail->AddAddress($to);                  // name is optional
         if($_REQUEST['ccmail'] != '')
@@ -128,7 +136,7 @@ if($result1 != '')
         if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != '')
                 $return_id = $_REQUEST['return_id'];
 
-	$flag = MailSend($mail);
+	$error_info = MailSend($mail);
 
 	if($_REQUEST['return_module'] == 'Leads' || $_REQUEST['return_module'] == 'Contacts' || $_REQUEST['return_module'] == 'HelpDesk')
 	{
@@ -138,11 +146,10 @@ if($result1 != '')
 		{
 			$mail->AddAddress($mailto);
 			$vtlog->logthis("Parent(comes from Lead/Contact) Mail id is selected and added in to address.",'debug');
-			$flag = MailSend($mail);
+			$error_info = MailSend($mail);
 		}
-		$returnmodule = $_REQUEST['return_module'];
 		$returnaction = 'DetailView';
-		$return_id = $_REQUEST['return_id'];
+		$return_id = $_REQUEST['record'];
 	}
 
 	if($_REQUEST['return_module'] == 'Emails')
@@ -155,19 +162,22 @@ if($result1 != '')
 	                if($mailto != '')
 			{
         	                $mail->AddAddress($mailto);
-				$flag = MailSend($mail);
+				$error_info = MailSend($mail);
 			}
 		}
-		$returnmodule = $_REQUEST['return_module'];
 		$returnaction = 'index';
 	}
-//	if(!$mail->Send()) 
-//	{
-//	   $msg =$mail->ErrorInfo;
-//         header("Location: index.php?action=$returnaction&module=".$_REQUEST['return_module']."&parent_id=$parent_id&record=".$_REQUEST['return_id']."&filename=$filename&message=$msg");
-//	}
-//	else
-   	   header("Location: index.php?action=$returnaction&module=$returnmodule&parent_id=$parent_id&record=$return_id&filename=$filename");
+	if($error_info != 1)
+	{
+		if($_REQUEST['return_module'] != 'HelpDesk')
+		{
+			$returnmodule = 'Emails';
+			$returnaction = 'EditView';
+		}
+		$return_id = $_REQUEST['return_id'];
+	}
+
+   	   header("Location: index.php?action=$returnaction&module=$returnmodule&parent_id=$parent_id&record=$return_id&filename=$filename&message=$error_info");
 
 }
 
@@ -175,8 +185,8 @@ function MailSend($mail)
 {
         if(!$mail->Send())
         {
-           $msg =$mail->ErrorInfo;
-	   header("Location: index.php?action=".$_REQUEST['return_action']."&module=".$_REQUEST['return_module']."&parent_id=$parent_id&record=".$_REQUEST['return_id']."&filename=$filename&message=$msg");
+		$msg =$mail->ErrorInfo;
+		return $msg;
         }
 	else 
 		return true;
