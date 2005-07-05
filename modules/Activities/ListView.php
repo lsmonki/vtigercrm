@@ -285,7 +285,7 @@ $view_script = "<script language='javascript'>
 	set_selected();
 	</script>";
 
-$list_query .= ' GROUP BY crmid'; //Appeding for the recurring event by jaguar
+$list_query .= ' GROUP BY crmentity.crmid'; //Appeding for the recurring event by jaguar
 
 if(isset($order_by) && $order_by != '')
 {
