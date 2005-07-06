@@ -31,7 +31,7 @@ $mod_strings = Array(
 'LBL_OPEN_ACTIVITIES'=>'Open Activities',
 'LBL_ACTIVITY'=>'Activity:',
 'LBL_HISTORY'=>'History',
-'LBL_UPCOMING'=>"My Upcoming Activities",
+'LBL_UPCOMING'=>"My Upcoming and Pending Activities",
 'LBL_TODAY'=>'through ',
 
 'LBL_NEW_TASK_BUTTON_TITLE'=>'New Task [Alt+N]',
@@ -63,6 +63,7 @@ $mod_strings = Array(
 'LBL_LIST_DATE'=>'Date',
 'LBL_LIST_SUBJECT'=>'Subject',
 'LBL_LIST_LAST_MODIFIED'=>'Last Modified',
+'LBL_LIST_RECURRING_TYPE'=>'Recurring Type',
 
 'ERR_DELETE_RECORD'=>"A record number must be specified to delete the account.",
 'NTC_NONE_SCHEDULED'=>'None scheduled.',
