@@ -179,8 +179,8 @@ function SendMailToCustomer($module,$id,$to,$current_user_id,$subject,$contents)
         $mail->SMTPAuth = true;
         $mail->Username = $mail_server_username;
         $mail->Password = $mail_server_password;
-	$mail->From = 'support@vtiger.com';//$from;
-	$mail->FromName = 'Vtiger Support';//$initialfrom;
+	$mail->From = $from;
+	$mail->FromName = $initialfrom;
 
 	$mail->AddAddress($to);
 	$mail->AddReplyTo($from);
