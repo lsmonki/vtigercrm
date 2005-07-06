@@ -381,7 +381,9 @@
                 <field name="otheremail" type="C" size="100"></field>
                 <field name="yahooid" type="C" size="100"></field>
                 <field name="donotcall" type="C" size="3"></field>
-                <field name="emailoptout" type="C" size="3"></field>
+                <field name="emailoptout" type="C" size="3">
+			<DEFAULT value="0"/>
+		</field>
 		<field name="currency" type="C" size="20">
 			<DEFAULT value="Dollars"/>
 		</field>
