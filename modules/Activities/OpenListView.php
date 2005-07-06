@@ -91,10 +91,13 @@ foreach($open_activity_list as $event)
 		'MODULE' => $event['module'],
 		'STATUS' => $event['status'],
 		'CONTACT_NAME' => $event['firstname'].' '.$event['lastname'],
-	'ACCOUNT_NAME' => $event['accountname'],
+		'ACCOUNT_NAME' => $event['accountname'],
 		'TIME' => $event['date_start'],
 		'PARENT_NAME' => $event['parent'],
 	);
+	$end_date=$event['due_date']; //included for getting the OverDue Activities in the Upcoming Activities
+	$start_date=$event['date_start'];
+
 	switch ($event['type']) {
 		case 'Call':
 			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&eventstatus=Held'>X</a>";
@@ -112,16 +115,46 @@ foreach($open_activity_list as $event)
 		$activity_fields['MODE'] = 'Task';
 
 	$xtpl->assign("ACTIVITY", $activity_fields);
+	
+	
+	//Code included for showing Overdue Activities in Upcoming Activities -Jaguar
+	if($end_date== '0000-00-00' OR $end_date =="")
+	{
+		$end_date=$start_date;
+	}
+	$current_date=date("Y-m-d",mktime(date("m"),date("d"),date("Y")));
+	$end=explode("-",$end_date);
+	$curr=explode("-",$current_date);
+	$date_diff= mktime(0,0,0,date("$curr[1]"),date("$curr[2]"),date("$curr[0]")) - mktime(0,0,0,date("$end[1]"),date("$end[2]"),date("$end[0]"));
+	if($date_diff>0)
+	{
+		$x="RED";
+	}
+	else
+	{
+		if($oddRow)
+		{
+			$x="oddListRow";
+		}
+		else
+		{
+			$x="evenListRow";
+		}
+	}
+	// Code by Jaguar Ends
 
-	if($oddRow)
+
+    if($oddRow)
     {
-        //todo move to themes
-		$xtpl->assign("ROW_COLOR", 'oddListRow');
+        	//todo move to themes
+		$xtpl->assign("ROW_COLOR", $x);
+		//$xtpl->assign("ROW_COLOR", 'oddListRow');
     }
     else
     {
         //todo move to themes
-		$xtpl->assign("ROW_COLOR", 'evenListRow');
+		$xtpl->assign("ROW_COLOR", $x);
+		//$xtpl->assign("ROW_COLOR", 'evenListRow');
     }
         $oddRow = !$oddRow;
         
