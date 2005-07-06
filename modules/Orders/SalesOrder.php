@@ -88,13 +88,15 @@ class SalesOrder extends CRMEntity {
 	var $search_fields = Array(
 				'Order Id'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('salesorder'=>'subject'),
-				'Vendor Name'=>Array('salesorder'=>'vendorid') 
+				'Account Name'=>Array('account'=>'accountid'),
+				'Quote Name'=>Array('salesorder'=>'quoteid') 
 				);
 	
 	var $search_fields_name = Array(
 					'Order Id'=>'',
 				        'Subject'=>'subject',
-				        'Vendor Name'=>'vendor_id'
+				        'Account Name'=>'account_id',
+				        'Quote Name'=>'quote_id'
 				      );
 
 	// This is the list of fields that are required.

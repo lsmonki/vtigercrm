@@ -1622,7 +1622,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$salesorder_name = getSoName($value);
 	       }		 	
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
-        	$custfld .= '<td width="30%"><input name="salesorder_name" readonly type="text" value="'.$salesorder_name.'"><input name="salesorder_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Orders&action=SalesOrderPopup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
+        	$custfld .= '<td width="30%"><input name="salesorder_name" readonly type="text" value="'.$salesorder_name.'"><input name="salesorder_id" type="hidden" value="'.$value.'">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Orders&action=PopupSalesOrder&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';	
 	}
 	elseif($uitype == 30)
 	{
@@ -3150,11 +3150,17 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					{
 						$value=getRelatedToEntity($module,$list_result,$i-1);
 					}
-					elseif($name=='Account Name' && $module == 'Potentials')
+					elseif($name=='Account Name' && ($module == 'Potentials' || $module == 'SalesOrder'))
                                         {
                                                 $account_id = $adb->query_result($list_result,$i-1,"accountid");
                                                 $account_name = getAccountName($account_id);
                                                 $value = $account_name;
+                                        }
+					elseif($name=='Quote Name' && $module == 'SalesOrder')
+                                        {
+                                                $quote_id = $adb->query_result($list_result,$i-1,"quoteid");
+                                                $quotename = getQuoteName($quote_id);
+                                                $value = $quotename;
                                         }
 					else
 					{
