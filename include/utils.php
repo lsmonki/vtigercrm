@@ -3375,6 +3375,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		$parentid = $adb->query_result($list_result,$list_result_count,"parent_id");
 		$parenttype = $adb->query_result($list_result,$list_result_count,"parent_type");
 
+		if($parenttype == '' && $parentid != '')
+                        $parenttype = getSalesEntityType($parentid);
+
 		if($parenttype == "Contacts")	
 		{
 			$tablename = "contactdetails";		$fieldname = "contactname";     $idname="contactid";
