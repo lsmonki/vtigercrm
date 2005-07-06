@@ -76,6 +76,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("VIEWID",$viewid);
 	//<<<<<<<customview>>>>>>>>>>
 
+	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Activities','index','name','true','basic',"","","","",$viewid));
 
 	if(isset($_REQUEST['query'])) {
