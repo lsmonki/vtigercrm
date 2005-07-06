@@ -10,6 +10,39 @@ if NOT "X%ins_dir4_0%" == "X" goto checkdir
 echo "*******************"
 echo "*******************"
 echo "*******************"
+set /p diffmac="Is the vtiger CRM 4.0.1 mysql db in the same machine as the vtigerCRM4_2GA mysql db installation? (Y/N): "
+if NOT "%diffmac%"=="Y" (
+ get the 4.0.1 machinename, the mysqluser name, mysql port, mysql password of the 4.0.1 mysql db containing machine
+set /p diffmac_uname="Enter the vtiger CRM 4.0.1 mysql db username? "
+set /p diffmac_password="Enter the vtiger CRM 4.0.1 mysql db password?: "
+set /p diffmac_port="Enter the vtiger CRM 4.0.1 mysql db port?: "
+set /p diffmac_hostname="Enter the hostname of  the machine hosting the vtiger CRM 4.0.1?: "
+rem then store the data in the mysql_params.bat file
+echo "%diffmac_username%"
+"set mysql_username =" echo "%diffmac_uname%" > mysql_params.bat
+"set mysql_password =" echo "%diffmac_password%" > mysql_params.bat
+"set mysql_port =" echo "%diffmac_port%" > mysql_params.bat
+"set mysql_hostname =" echo "%diffmac_hostname%" > mysql_params.bat
+
+rem use the mysql script to get the dump and other details as normal
+echo ' about to dump the migrated database to the vtiger_4_2_dump.txt file'
+echo set FOREIGN_KEY_CHECKS=0; > vtiger_4_2_dump.txt
+"%mysql_dir_4_2%\mysqldump" --user=%diffmac_uname% --password=%diffmac_password% --port=%diffmac_port% vtigercrm4_0_1 >> vtiger_4_2_dump.txt
+IF ERRORLEVEL 1 (
+	 echo "Unable to take the vtiger CRM %version% database backup. vtigercrm database may be corrupted"
+	 goto exitmigration
+) 
+call mysql_params.bat
+goto invokemysqlparams
+	echo ^<?php > ..\apache\htdocs\vtigerCRM\migrator_connection.php
+	echo $mysql_host_name_old = '%mysql_host_name_4_0%'; >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
+	echo $mysql_username_old = '%mysql_username%'; >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
+	echo $mysql_password_old = '%mysql_password%'; >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
+	echo $mysql_port_old = '%mysql_port%'; >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
+	echo ?^> >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
+)
+
+rem the below line loops till the user gives the proper data. the prompt cannot be killed in any manner, so need to fix this asap.
 set /p ins_dir4_0="Enter the vtiger CRM 4.0.1 installation bin directory (For example: C:\Program Files\vtigerCRM4_0_1\bin: "
 goto checkdir
 
@@ -33,20 +66,24 @@ goto findstrdir
 echo "Reading the vtiger CRM %version% MySQL Parameters"
 if %version% == "4.0.1" (
 	echo "Inside 4.0.1 loop"
+echo 'about to parse the startvTiger.bat of the 4.0.1 server and populate to mysql_params file
 	%FIND_STR% /C:"set mysql_" "%ins_dir4_0%\startvTiger.bat" > mysql_params.bat
 )	
 if %version% == "4.2" (
 	echo "Inside 4.2 loop"
+echo 'about to parse the startvTiger.bat of the 4.2 server and populate to mysql_params file
 	%FIND_STR% /C:"set mysql_" startvTiger.bat > mysql_params.bat
 )	
 call mysql_params.bat
 set mysql_dir_4_0_1=..\mysql\bin
 echo %mysql_dir%
+:invokemysqlparams
 echo %mysql_username%
 echo %mysql_password%
 echo %mysql_port%
 echo %mysql_bundled%
 echo %mysql_dir_4_0_1%
+goto end
 
 if %version% == "4.0.1" (
 	set /p mysql_host_name_4_0="Specify the host name of the vtiger CRM 4.0.1 mysql server:  "
@@ -59,7 +96,6 @@ if %version% == "4.0.1" (
 	echo ?^> >> ..\apache\htdocs\vtigerCRM\migrator_connection.php
 
 )
-
 
 goto isMySQLRunning
 
@@ -131,6 +167,7 @@ goto set4_2version
 
 :set4_2version
 set version="4.2"
+echo '######################## version set as 4.2 vtiger CRM ######################## '
 goto readMySQLparams
 
 :dumpin4_2mysql
