@@ -64,7 +64,9 @@
 			
 			<input type="hidden" name="viewname" value="{VIEWID}"/>
 
-		<input class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/></td>
+			<input class="button" type="submit" name="button" value="{APP.LBL_SEARCH_BUTTON_LABEL}"/>
+			<input class="button" type="button" name="clear" value="{APP.LBL_CLEAR_BUTTON_LABEL}" onclick="clear_form(this.form);"/>
+		</td>
 
 	</tr><tr>
 
@@ -87,6 +89,6 @@
 {ALPHABETICAL}
 
 </tr></table>
-
+{JAVASCRIPT}
 <!-- END: main -->
 
