@@ -93,7 +93,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	}
 	if(isset($vendorname) && $vendorname != "")
 	{
-		array_push($where_clauses, "vendor.name like ".PearDatabase::quote("%".$vendorname."%"));
+		array_push($where_clauses, "vendor.vendorname like ".PearDatabase::quote("%".$vendorname."%"));
 		$url_string .= "&vendorname=".$vendorname;
 	}
 	if(isset($trackingno) && $trackingno != "")

@@ -30,33 +30,33 @@ class Vendor extends CRMEntity {
 	var $tab_name_index = Array('crmentity'=>'crmid','vendor'=>'vendorid','vendorcf'=>'vendorid');
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('name','company_name','category');		  
+	var $sortby_fields = Array('vendorname','company_name','category');		  
 
         // This is the list of fields that are in the lists.
 	var $list_fields = Array(
-                                'Vendor Name'=>Array('vendor'=>'name'),
+                                'Vendor Name'=>Array('vendor'=>'vendorname'),
                                 'Phone'=>Array('vendor'=>'phone'),
                                 'Email'=>Array('vendor'=>'email'),
                                 'Category'=>Array('vendor'=>'category')
                                 );
         var $list_fields_name = Array(
-                                        'Vendor Name'=>'name',
+                                        'Vendor Name'=>'vendorname',
                                         'Phone'=>'phone',
                                         'Email'=>'email',
                                         'Category'=>'category'
                                      );
-        var $list_link_field= 'name';
+        var $list_link_field= 'vendorname';
 
 
 	var $list_mode;
 	var $popup_type;
 
 	var $search_fields = Array(
-                                'Vendor Name'=>Array('vendor'=>'name'),
+                                'Vendor Name'=>Array('vendor'=>'vendorname'),
                                 'Phone'=>Array('vendor'=>'phone')
                                 );
         var $search_fields_name = Array(
-                                        'Vendor Name'=>'name',
+                                        'Vendor Name'=>'vendorname',
                                         'Phone'=>'phone'
                                      );
 /*	
@@ -76,12 +76,12 @@ class Vendor extends CRMEntity {
         }
 	function get_products($id)
 	{
-		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,vendor.name from products inner join crmentity on crmentity.crmid = products.productid left outer join vendor on vendor.vendorid = products.vendor_id where vendor.vendorid = '.$id.' and crmentity.deleted = 0';
+		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,vendor.vendorname from products inner join crmentity on crmentity.crmid = products.productid left outer join vendor on vendor.vendorid = products.vendor_id where vendor.vendorid = '.$id.' and crmentity.deleted = 0';
 	      	renderRelatedProducts($query,$id,'vendor_id');
         }
 	function get_purchase_orders($id)
 	{
-		$query = "select crmentity.*, purchaseorder.*,vendor.name from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid where crmentity.deleted=0 and purchaseorder.vendorid=".$id;
+		$query = "select crmentity.*, purchaseorder.*,vendor.vendorname from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid where crmentity.deleted=0 and purchaseorder.vendorid=".$id;
 	      	renderRelatedOrders($query,$id,'vendor_id');
         }
 	function get_contacts($id)

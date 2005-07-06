@@ -91,7 +91,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 	if (isset($vendorname) && $vendorname !='')
 	{
-		array_push($where_clauses, "name like ".PearDatabase::quote($vendorname.'%'));
+		array_push($where_clauses, "vendorname like ".PearDatabase::quote($vendorname.'%'));
 		//$search_query .= " and productname like '".$productname."%'";
 		$url_string .= "&vendorname=".$vendorname;
 	}
@@ -152,7 +152,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true')
 	{
 		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Products','index','name','true','advanced'));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Products','index','vendorname','true','advanced'));
 
 		$search_form->assign("SUPPORT_START_DATE",$_REQUEST['start_date']);
 		$search_form->assign("SUPPORT_EXPIRY_DATE",$_REQUEST['expiry_date']);
