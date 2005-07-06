@@ -39,6 +39,17 @@ elseif($_REQUEST['return_module'] == "Quotes")
 {
 	$relation_query = "UPDATE salesorder set quoteid='' where salesorderid=".$_REQUEST['record'];
 	$adb->query($relation_query);
-}	
+}
+elseif($_REQUEST['return_module'] == "Potentials")
+{
+	$relation_query = "UPDATE salesorder set potentialid='' where salesorderid=".$_REQUEST['record'];
+	$adb->query($relation_query);
+}
+elseif($_REQUEST['return_module'] == "Products")
+{
+	$relation_query = "DELETE from soproductrel where salesorderid=".$_REQUEST['record']." and productid=".$_REQUEST['return_id'];
+	$adb->query($relation_query);
+}
+	
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&smodule=SO&record=".$_REQUEST['return_id']);
 ?>
