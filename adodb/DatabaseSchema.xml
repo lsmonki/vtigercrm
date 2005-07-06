@@ -3778,7 +3778,7 @@
 			<DEFAULT value="0"/>
 		</field>
 		<field name="company_name" type="C" size="100"></field>
-		<field name="name" type="C" size="100"></field>
+		<field name="vendorname" type="C" size="100"></field>
 		<field name="phone" type="C" size="100"></field>
 		<field name="email" type="C" size="100"></field>
 		<field name="website" type="C" size="100"></field>

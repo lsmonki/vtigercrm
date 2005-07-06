@@ -2258,7 +2258,7 @@ $vtlog->logthis("in getVendorName ".$vendor_id,'info');
         global $adb;
         $sql = "select * from vendor where vendorid=".$vendor_id;
         $result = $adb->query($sql);
-        $vendor_name = $adb->query_result($result,0,"name");
+        $vendor_name = $adb->query_result($result,0,"vendorname");
         return $vendor_name;
 }
 
