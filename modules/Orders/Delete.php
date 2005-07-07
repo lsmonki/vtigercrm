@@ -39,13 +39,20 @@ if($_REQUEST['module'] == 'Orders')
 		$focus->mark_deleted($_REQUEST['record']);
 	}
 	elseif($_REQUEST['return_module'] == "Products")
-	{	
-		$sql_req ='DELETE from poproductrel where purchaseorderid= '.$_REQUEST['record'].' and productid = '.$_REQUEST['return_id'];
+	{
+		if($_REQUEST['return_action'] == "VendorDetailView")
+		{	
+			$sql_req ='DELETE from purchaseorder where purchaseorderid= '.$_REQUEST['record'];
+		}
+		else
+		{	
+			$sql_req ='DELETE from poproductrel where purchaseorderid= '.$_REQUEST['record'].' and productid = '.$_REQUEST['return_id'];
+		}
 		$adb->query($sql_req);
 	}
 	elseif($_REQUEST['return_module'] == "Contacts")
 	{	
-		$sql_req ='UPDATE purchaseorder set contactid='' where purchaseorderid = '.$_REQUEST['record'];
+		$sql_req ='UPDATE purchaseorder set contactid="" where purchaseorderid = '.$_REQUEST['record'];
 		$adb->query($sql_req);
 	}
 
