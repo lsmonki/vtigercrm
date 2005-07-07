@@ -154,6 +154,7 @@ $mod_strings = Array(
 'LBL_ACCOUNT_NAME'=>'Account Name:',
 'LBL_QUOTE_STAGE'=>'Quote Stage:',
 'LBL_MY_TOP_QUOTE'=>'My Top Open Quotes',
+'Quote Id'=>'Quote Id',
 
 );
 
