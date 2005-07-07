@@ -173,6 +173,9 @@ $url_string .="&sorder=".$sorder;
 
 $url_string .="&recordid=".$_REQUEST['recordid'].'&return_module='.$_REQUEST['return_module'];
 
+if($_REQUEST['return_module'] == "Orders")
+$url_string .="&curr_row=".$_REQUEST['curr_row'];
+
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Products","Popup");
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);

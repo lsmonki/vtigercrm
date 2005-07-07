@@ -3150,7 +3150,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					{
 						$value=getRelatedToEntity($module,$list_result,$i-1);
 					}
-					elseif($name=='Account Name' && ($module == 'Potentials' || $module == 'SalesOrder'))
+					elseif($name=='Account Name' && ($module == 'Potentials' || $module == 'SalesOrder' || $module == 'Quotes'))
                                         {
                                                 $account_id = $adb->query_result($list_result,$i-1,"accountid");
                                                 $account_name = getAccountName($account_id);

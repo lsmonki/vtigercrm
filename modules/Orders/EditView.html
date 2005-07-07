@@ -221,7 +221,8 @@ function settotalnoofrows() {
 function productPickList(currObj) {
 	var trObj=currObj.parentNode.parentNode
 	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
-	window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=inventory_prod&curr_row="+rowId,"productWin","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");
+	window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&recordid={RETURN_ID}&return_module={RETURN_MODULE}&popuptype=inventory_prod&curr_row="+rowId,"productWin","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200")
+	//window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=inventory_prod&curr_row="+rowId,"productWin","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");
 }
 
 function priceBookPickList(currObj) {
