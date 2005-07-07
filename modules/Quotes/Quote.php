@@ -87,11 +87,13 @@ class Quote extends CRMEntity {
 
 	var $search_fields = Array(
 				'Subject'=>Array('quotes'=>'subject'),
+				'Account Name'=>Array('quotes'=>'accountid'),
 				'Quote Stage'=>Array('quotes'=>'quotestage'), 
 				);
 	
 	var $search_fields_name = Array(
 				        'Subject'=>'subject',
+				        'Account Name'=>'account_id',
 				        'Quote Stage'=>'quotestage',
 				      );
 

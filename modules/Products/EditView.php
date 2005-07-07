@@ -28,7 +28,7 @@ if(isset($_REQUEST['record']))
     $focus->retrieve_entity_info($_REQUEST['record'],"Products");
     $focus->name=$focus->column_fields['productname'];		
 }
-if(isset($_REQUEST['vendorid']))
+if(isset($_REQUEST['vendorid']) && $_REQUEST['vendorid']!='')
 {
         $focus->column_fields['vendorid'] = $_REQUEST['vendorid'];
 }

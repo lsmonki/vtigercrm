@@ -36,16 +36,15 @@ $log = LoggerManager::getLogger('quotes_list');
 global $currentModule;
 global $theme;
 
+// Get _dom arrays from Database
+$comboFieldNames = Array('quotestage'=>'quotestage_dom');
+$comboFieldArray = getComboArray($comboFieldNames);
+
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
 echo get_module_title("Quotes", "Quotes" , true);
 echo "<br>";
 
-
-// Get _dom arrays from Database
-$comboFieldNames = Array('accounttype'=>'account_type_dom'
-                      ,'industry'=>'industry_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
 
 // focus_list is the means of passing data to a ListView.
 global $focus_list;
@@ -62,56 +61,57 @@ $sorder = $_REQUEST['sorder'];
 if($popuptype!='') $url_string .= "&popuptype=".$popuptype;
 
 $seedAccount = new Quote();
-/*
+
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
 	// we have a query
 	$url_string .="&query=true";
-	if (isset($_REQUEST['name'])) $name = $_REQUEST['name'];
-	if (isset($_REQUEST['website'])) $website = $_REQUEST['website'];
-	if (isset($_REQUEST['phone'])) $phone = $_REQUEST['phone'];
-	if (isset($_REQUEST['address_city'])) $address_city = $_REQUEST['address_city'];
-	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
-	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
+	if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
+	if (isset($_REQUEST['potentialname'])) $potentialname = $_REQUEST['potentialname'];
+	if (isset($_REQUEST['quotestage'])) $quotestage = $_REQUEST['quotestage'];
+	if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
 
 	$where_clauses = Array();
-*/
-/*
+
 //Added for Custom Field Search
-$sql="select * from customfields inner join customfieldtypemapping on customfields.uitype=customfieldtypemapping.uitype where module='Accounts' order by fieldlabel";
+$sql="select * from field where tablename='quotescf' order by fieldlabel";
 $result=$adb->query($sql);
 for($i=0;$i<$adb->num_rows($result);$i++)
 {
-        $column[$i]=$adb->query_result($result,$i,'column_name');
+        $column[$i]=$adb->query_result($result,$i,'columnname');
         $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
+	$uitype[$i]=$adb->query_result($result,$i,'uitype');
         if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
 
         if(isset($customfield[$i]) && $customfield[$i] != '')
         {
-                $str=" accountcf.".$column[$i]." like '$customfield[$i]%'";
+		if($uitype[$i] == 56)
+			$str=" quotescf.".$column[$i]." = 1";
+		else
+	                $str=" quotescf.".$column[$i]." like '$customfield[$i]%'";
                 array_push($where_clauses, $str);
+		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
 }
 //upto this added for Custom Field
-*/
-
-/*	
-	if(isset($name) && $name != ""){
-		array_push($where_clauses, "account.accountname like ".PearDatabase::quote($name."%"));
-		$url_string .= "&name=".$name;
+	
+	if(isset($subject) && $subject != "") 
+	{
+		array_push($where_clauses, "quotes.subject like ".PearDatabase::quote($subject."%"));
+		$url_string .= "&subject=".$subject;
 	}
-	if(isset($website) && $website != "") array_push($where_clauses, "account.website like ".PearDatabase::quote("%".$website."%"));
-	if(isset($phone) && $phone != "") array_push($where_clauses, "(account.phone like ".PearDatabase::quote("%".$phone."%")." OR account.otherphone like ".PearDatabase::quote("%".$phone."%")." OR account.fax like ".PearDatabase::quote("%".$phone."%").")");
-	if(isset($address_city) && $address_city != ""){
-		array_push($where_clauses, "(accountbillads.city like ".PearDatabase::quote("%".$address_city."%")." OR accountshipads.city like ".PearDatabase::quote($address_city."%").")");
-		$url_string .= "&address_city=".$address_city;
-	}
-	if(isset($ownership) && $ownership != "") array_push($where_clauses, "account.ownership like ".PearDatabase::quote($ownership."%"));
-	if(isset($current_user_only) && $current_user_only != ""){
-		array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-		$url_string .= "&current_user_only=".$current_user_only;
+	if(isset($accountname) && $accountname != "")
+	{
+		array_push($where_clauses, "account.accountname like ".PearDatabase::quote("%".$accountname."%"));
+		$url_string .= "&accountname=".$accountname;
 	}
 
+	if(isset($quotestage) && $quotestage != "")
+	{
+		array_push($where_clauses, "quotes.quotestage like ".PearDatabase::quote("%".$quotestage."%"));
+		$url_string .= "&quotestage=".$quotestage;
+	}
+	
 	$where = "";
 	foreach($where_clauses as $clause)
 	{
@@ -137,34 +137,67 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	// Stick the form header out there.
-	$search_form=new XTemplate ('modules/Accounts/PopupSearchForm.html');
+	$search_form=new XTemplate ('modules/Quotes/PopupSearchForm.html');
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
 	
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
-
-	$search_form->assign("POPUPTYPE",$popuptype);
+	
+	$search_form->assign("VIEWID",$viewid);
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	if (isset($name)) $search_form->assign("NAME", $name);
-	if (isset($website)) $search_form->assign("WEBSITE", $website);
-	if (isset($phone)) $search_form->assign("PHONE", $phone);
-	if (isset($address_city)) $search_form->assign("ADDRESS_CITY", $address_city);
+	if($order_by != '') {
+		$ordby = "&order_by=".$order_by;
+	}
+	else
+	{
+		$ordby ='';
+	}
+	$search_form->assign("BASIC_LINK", "index.php?module=Quotes".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewid);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Quotes&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewid);
 
-	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
 
-	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
+	$search_form->assign("JAVASCRIPT", get_clear_form_js());
+	if (isset($subject)) $search_form->assign("SUBJECT", $subject);
+	if (isset($accountname)) $search_form->assign("ACCOUNTNAME", $accountname);
+	
+	if (isset($quotestage)) $search_form->assign("QUOTESTAGE", get_select_options($comboFieldArray['quotestage_dom'], $quotestage, $advsearch));
+	else $search_form->assign("QUOTESTAGE", get_select_options($comboFieldArray['quotestage_dom'], '', $advsearch));
 
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','Popup','name','true','basic',$popuptype));
-	$search_form->parse("main");
-	$search_form->out("main");
+	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], '', false);
 
+	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
+
+	$url_string .="&advanced=true";
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Quotes','Popup','subject','true','advanced',"","","","",$viewid));
+
+		
+//Added for Custom Field Search
+$sql="select * from field where tablename='quotescf' order by fieldlabel";
+$result=$adb->query($sql);
+for($i=0;$i<$adb->num_rows($result);$i++)
+{
+        $column[$i]=$adb->query_result($result,$i,'columnname');
+        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
+        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
+}
+require_once('include/CustomFieldUtil.php');
+$custfld = CustomFieldSearch($customfield, "quotescf", "quotescf", "quoteid", $app_strings,$theme,$column,$fieldlabel);
+$search_form->assign("CUSTOMFIELD", $custfld);
+//upto this added for Custom Field
+
+		$search_form->parse("advanced");
+		$search_form->out("advanced");
+	}
+	else {
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Quotes','Popup','subject','true','basic',"","","","",$viewid));
+		$search_form->parse("main");
+		$search_form->out("main");
+	}
 	echo get_form_footer();
 	echo "\n<BR>\n";
 }
-*/
-
 
 $focus = new Quote();
 
