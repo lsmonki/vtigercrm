@@ -4177,7 +4177,8 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$listprice=$adb->query_result($result,$i-1,'listprice');
 		if($listprice == '')
 		$listprice = $unitprice;
-		
+		if($qty =='')
+		$qty = 1;
 		$total = $qty*$listprice;
 
 		$product_id_var = 'hdnProductId'.$i;
