@@ -45,6 +45,11 @@ elseif($_REQUEST['return_module'] == "Contacts")
 	$relation_query = "UPDATE quotes set contactid='' where quoteid=".$_REQUEST['record'];
 	$adb->query($relation_query);
 }
+elseif($_REQUEST['return_module'] == "Products")
+{
+	$relation_query = "DELETE FROM quotesproductrel where productid=".$_REQUEST['return_id']." and quoteid=".$_REQUEST['record'];
+	$adb->query($relation_query);
+}
 
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
 ?>

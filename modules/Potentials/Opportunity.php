@@ -668,7 +668,7 @@ return $exists;
 	 function get_salesorder($id)
 	 {
 	 	$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname, potential.potentialname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left outer join potential on potential.potentialid=salesorder.potentialid where crmentity.deleted=0 and potential.potentialid = ".$id;
-		renderRelatedSalesOrders($query,$id);	
+		renderRelatedSalesOrders($query,$id,$this->column_fields['account_id']);	
 	 }
 
 	function get_list_view_data(){

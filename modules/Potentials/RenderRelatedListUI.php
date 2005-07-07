@@ -245,13 +245,14 @@ function renderRelatedQuotes($query,$id,$acntid='')
 	echo '</form>';
 }
 
-function renderRelatedSalesOrders($query,$id)
+function renderRelatedSalesOrders($query,$id,$acntid='')
 {
 	require_once('modules/Orders/SalesOrder.php');
         global $mod_strings;
         global $app_strings;
 
         $hidden = getHiddenValues($id);
+	$hidden .='<input type="hidden" name="account_id" value="'.$acntid.'">';
         echo $hidden;
 
         $focus = new SalesOrder();

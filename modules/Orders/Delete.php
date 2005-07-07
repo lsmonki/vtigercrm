@@ -34,7 +34,7 @@ if($_REQUEST['module'] == 'Orders')
 
 	$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
 	$adb->query($sql_recentviewed);
-	if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module'] == "Accounts" || $_REQUEST['return_module'] == "Contacts" || $_REQUEST['return_module'] == "Potentials")
+	if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module'] == "Accounts")
 	{
 		$focus->mark_deleted($_REQUEST['record']);
 	}
@@ -43,18 +43,12 @@ if($_REQUEST['module'] == 'Orders')
 		$sql_req ='DELETE from poproductrel where purchaseorderid= '.$_REQUEST['record'].' and productid = '.$_REQUEST['return_id'];
 		$adb->query($sql_req);
 	}
-}
-if($_REQUEST['module'] == 'SalesOrder')
-{
-	$focus = new SalesOrder();
+	elseif($_REQUEST['return_module'] == "Contacts")
+	{	
+		$sql_req ='UPDATE purchaseorder set contactid='' where purchaseorderid = '.$_REQUEST['record'];
+		$adb->query($sql_req);
+	}
 
-	if(!isset($_REQUEST['record']))
-		die($mod_strings['ERR_DELETE_RECORD']);
-
-	$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
-	$adb->query($sql_recentviewed);
-	if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module'] == "Contacts" || $_REQUEST['return_module'] == "Potentials")
-		$focus->mark_deleted($_REQUEST['record']);
 }
 
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
