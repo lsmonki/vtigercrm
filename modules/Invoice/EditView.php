@@ -114,7 +114,15 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$associated_prod = getAssociatedProducts("Invoice",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
+}
+if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
+        $focus->column_fields['product_id'] = $_REQUEST['product_id'];
+	$num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
+	$associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
+	$focus->id = "";
+    	$focus->mode = ''; 	
 } 
+ 
 if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['record']==''){
 	require_once('modules/Accounts/Account.php');
 	$acct_focus = new Account();
@@ -245,6 +253,15 @@ elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 	$xtpl->assign("ADJUSTMENTVALUE", $focus->column_fields['txtAdjustment']);
 	$xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
 	$xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
+}
+elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
+        $xtpl->assign("ROWCOUNT", $num_of_products);
+        $xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+        $xtpl->assign("MODE", $focus->mode);
+        $xtpl->assign("TAXVALUE", "0.000");
+        $xtpl->assign("ADJUSTMENTVALUE", "0.000");
+        $xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
+        $xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
 }
 else
 {

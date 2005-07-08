@@ -1333,11 +1333,11 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",0,'get_attachments',6,'Attachments',0)");
 
 	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",20,'get_quotes',7,'Quotes',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",".getTabid("Quotes").",'get_quotes',7,'Quotes',0)");
 	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",23,'get_invoices',8,'Invoice',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",".getTabid("Invoice").",'get_invoices',8,'Invoice',0)");
 	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",22,'get_salesorder',9,'Sales Order',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Accounts").",".getTabid("SalesOrder").",'get_salesorder',9,'Sales Order',0)");
 
 	//Inserting Lead Related Lists	
 
@@ -1404,7 +1404,9 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",".getTabid("Orders").",'get_purchase_orders',5,'Purchase Order',0)");
 	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",".getTabid("SalesOrder").",'get_salesorder',5,'Sales Order',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",".getTabid("SalesOrder").",'get_salesorder',6,'Sales Order',0)");
+	
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",".getTabid("Invoice").",'get_invoices',7,'Invoice',0)");
 	
 		//Inserting Emails Related Lists	
 
@@ -1434,7 +1436,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 
 	// Inserting Quotes Related Lists
 	
-        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Quotes").",22,'get_salesorder',1,'Sales Order',0)");
+        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Quotes").",".getTabid("Invoice").",'get_salesorder',1,'Sales Order',0)");
         
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Quotes").",9,'get_activities',2,'Activities',0)");
 	
@@ -1452,7 +1454,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("SalesOrder").",0,'get_attachments',2,'Attachments',0)");
 	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("SalesOrder").",23,'get_invoices',3,'Invoice',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("SalesOrder").",".getTabid("Invoice").",'get_invoices',3,'Invoice',0)");
 	
 	// Inserting Invoice Related Lists
 

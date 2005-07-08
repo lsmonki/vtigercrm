@@ -135,8 +135,11 @@ class Product extends CRMEntity {
 		$query = "select crmentity.*, salesorder.*, products.productname as productname, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join soproductrel on soproductrel.salesorderid=salesorder.salesorderid inner join products on products.productid=soproductrel.productid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0 and products.productid = ".$id;
 		renderProductSalesOrders($query,$id);	
 	}
-
-
+	function get_invoices($id)
+	{
+		$query = "select crmentity.*, invoice.*, invoiceproductrel.quantity, account.accountname from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join invoiceproductrel on invoiceproductrel.invoiceid=invoice.invoiceid where crmentity.deleted=0 and invoiceproductrel.productid=".$id;
+		renderRelatedInvoices($query,$id);
+	}
 	function product_novendor()
 	{
 		$query = "SELECT products.productname,crmentity.deleted from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0 and products.vendor_id=''";
