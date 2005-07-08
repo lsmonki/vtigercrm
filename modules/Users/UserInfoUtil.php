@@ -111,7 +111,7 @@ function getTabsPermission($profileid)
 	{
 		$tabid= $adb->query_result($result,$i,'tabid');
 		$tab_per= $adb->query_result($result,$i,'permissions');
-		if($tabid != 1 && $tabid != 3 && $tabid != 16 && $tab_id != 15 && $tab_id != 17)
+		if($tabid != 1 && $tabid != 3 && $tabid != 16 && $tab_id != 15 && $tab_id != 17 && $tab_id != 18 && $tab_id != 19 && $tab_id != 22)
 		{
 			$tab_perr_array[$tabid] = $tab_per;
 		}
@@ -132,7 +132,7 @@ function getTabsActionPermission($profileid)
 		$access = Array();
 		$tab_id = $adb->query_result($result1,$i,'tabid');
 
-		if($tab_id != 1 && $tab_id != 3 && $tab_id != 15 && $tab_id !=16  && $tab_id != 17)
+		if($tab_id != 1 && $tab_id != 3 && $tab_id != 15 && $tab_id !=16  && $tab_id != 17 && $tab_id != 18 && $tab_id != 19 && $tab_id != 22)
 		{
 			//Inserting the Standard Actions into the Array	
 			$sql= "select * from profile2standardpermissions where profileid =".$profileid." and tabid=".$tab_id;
@@ -166,7 +166,7 @@ function getTabsUtilityActionPermission($profileid)
 		$access = Array();
 		$tab_id = $adb->query_result($result1,$i,'tabid');
 
-		if($tab_id != 1 && $tab_id != 3 && $tab_id != 16 && $tab_id != 15  && $tab_id != 17)
+		if($tab_id != 1 && $tab_id != 3 && $tab_id != 16 && $tab_id != 15  && $tab_id != 17 && $tab_id != 18 && $tab_id != 19 && $tab_id != 22)
 		{
 			//Inserting the Standard Actions into the Array	
 			$sql= "select * from profile2utility where profileid =".$profileid." and tabid=".$tab_id;
