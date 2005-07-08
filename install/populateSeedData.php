@@ -344,10 +344,10 @@ for($i=0; $i<10; $i++)
 for($i=0; $i<10; $i++)
 {
 	$vendor = new Vendor();
-	$vendor->column_fields["name"] = ucfirst(strtolower($first_name_array[$i]));
+	$vendor->column_fields["vendorname"] = ucfirst(strtolower($first_name_array[$i]));
 	$vendor->column_fields["company_name"] = ucfirst(strtolower($company_name_array[$i]));
 	$vendor->column_fields["phone"] = create_phone_number();
-	$vendor->column_fields["email"] = strtolower($vendor->column_fields["name"])."@company.com";
+	$vendor->column_fields["email"] = strtolower($vendor->column_fields["vendorname"])."@company.com";
 	$website = str_replace($whitespace, "", strtolower($vendor->column_fields["company_name"]));
         $vendor->column_fields["website"] = "www.".$website.".com";
 
