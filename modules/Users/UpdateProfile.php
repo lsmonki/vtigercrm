@@ -29,7 +29,7 @@ for($i=0; $i<$num_tab_per; $i++)
 {
 	$tab_id = $adb->query_result($tab_perr_result,$i,"tabid");
 	$request_var = $tab_id.'_tab';
-	if($tab_id != 1 && $tab_id != 3 && $tab_id != 16 && $tab_id != 15  && $tab_id != 17)
+	if($tab_id != 1 && $tab_id != 3 && $tab_id != 16 && $tab_id != 15  && $tab_id != 17 && $tab_id != 18 && $tab_id != 19 && $tab_id != 22)
 	{
 		$permission = $_REQUEST[$request_var];
 		if($permission == 'on')
@@ -47,13 +47,26 @@ for($i=0; $i<$num_tab_per; $i++)
 			$update_query = "update profile2tab set permissions=".$permission_value." where tabid=16 and profileid=".$profileid;
 			$adb->query($update_query);
 		}
+		if($tab_id ==14)
+		{
+			$update_query = "update profile2tab set permissions=".$permission_value." where tabid=18 and profileid=".$profileid;
+			$adb->query($update_query);
+			$update_query = "update profile2tab set permissions=".$permission_value." where tabid=19 and profileid=".$profileid;
+			$adb->query($update_query);
+
+		}
+		if($tab_id == 21)
+		{
+			$update_query = "update profile2tab set permissions=".$permission_value." where tabid=22 and profileid=".$profileid;
+			$adb->query($update_query);
+		}
 	}
 }	
 //Updating the profile2standardpermissions table
 for($i=0; $i<$num_act_per; $i++)
 {
 	$tab_id = $adb->query_result($act_perr_result,$i,"tabid");
-	if($tab_id != 1 && $tab_id != 3 && $tab_id != 16 && $tab_id != 15  && $tab_id != 17)
+	if($tab_id != 1 && $tab_id != 3 && $tab_id != 16 && $tab_id != 15  && $tab_id != 17 && $tab_id != 18 && $tab_id != 19 && $tab_id != 22)
 	{
 		$action_id = $adb->query_result($act_perr_result,$i,"operation");
 		$action_name = getActionname($action_id);
@@ -94,6 +107,21 @@ for($i=0; $i<$num_act_per; $i++)
 			$update_query = "update profile2standardpermissions set permissions=".$permission_value." where tabid=16 and Operation=".$action_id." and profileid=".$profileid;
 		$adb->query($update_query);
 		}
+		
+		if($tab_id == 14)
+		{
+			$update_query = "update profile2standardpermissions set permissions=".$permission_value." where tabid=18 and Operation=".$action_id." and profileid=".$profileid;
+		$adb->query($update_query);
+			$update_query = "update profile2standardpermissions set permissions=".$permission_value." where tabid=19 and Operation=".$action_id." and profileid=".$profileid;
+		$adb->query($update_query);
+		}
+
+		if($tab_id ==21)
+		{
+			$update_query = "update profile2standardpermissions set permissions=".$permission_value." where tabid=22 and Operation=".$action_id." and profileid=".$profileid;
+		$adb->query($update_query);
+		}	
+
 	}
 }
 
@@ -101,7 +129,7 @@ for($i=0; $i<$num_act_per; $i++)
 for($i=0; $i<$num_act_util_per; $i++)
 {
 	$tab_id = $adb->query_result($act_utility_result,$i,"tabid");
-	if($tab_id != 1 && $tab_id != 3 && $tab_id != 16 && $tab_id != 15  && $tab_id != 17)
+	if($tab_id != 1 && $tab_id != 3 && $tab_id != 16 && $tab_id != 15  && $tab_id != 17 && $tab_id != 18 && $tab_id != 19  && $tab_id != 22)
 	{
 		$action_id = $adb->query_result($act_utility_result,$i,"activityid");
 		$action_name = getActionname($action_id);
@@ -133,6 +161,19 @@ for($i=0; $i<$num_act_util_per; $i++)
 			$update_query = "update profile2utility set permission=".$permission_value." where tabid=16 and activityid=".$action_id." and profileid=".$profileid;
 			$adb->query($update_query);
 		}
+		if($tab_id ==14)
+		{
+			$update_query = "update profile2utility set permission=".$permission_value." where tabid=18 and activityid=".$action_id." and profileid=".$profileid;
+			$adb->query($update_query);
+			$update_query = "update profile2utility set permission=".$permission_value." where tabid=19 and activityid=".$action_id." and profileid=".$profileid;
+			$adb->query($update_query);
+		}
+		if($tab_id ==21)
+		{
+			$update_query = "update profile2utility set permission=".$permission_value." where tabid=22 and activityid=".$action_id." and profileid=".$profileid;
+			$adb->query($update_query);
+		}
+
 	}
 }
 
