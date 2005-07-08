@@ -39,7 +39,7 @@ foreach($defSharingPermissionData as $tab_id => $def_perr)
 {
 
 	$entity_name = getTabname($tab_id);
-	if($entity_name != "Notes" && $entity_name != "Products" && $entity_name != "Faq")
+	if($entity_name != "Notes" && $entity_name != "Products" && $entity_name != "Faq" && $entity_name != "Vendor" && $entity_name != "PriceBook" && $entity_name != 'Events' && $entity_name != 'SalesOrder')
 	{	
 		if($def_perr == 0)
 		{
