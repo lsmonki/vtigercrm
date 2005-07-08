@@ -182,6 +182,12 @@ class SalesOrder extends CRMEntity {
 		$query .= "select attachments.description  title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType, crm2.modifiedtime  lastmodified, attachments.attachmentsid  attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;
 		renderRelatedAttachments($query,$id,$sid='salesorderid');
 	}
+	function get_invoices($id)
+	{
+		$query = "select crmentity.*, invoice.*, account.accountname, salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join salesorder on salesorder.salesorderid=invoice.salesorderid where crmentity.deleted=0 and salesorder.salesorderid=".$id;
+		renderRelatedInvoices($query,$id);
+	}
+
 }
 
 ?>

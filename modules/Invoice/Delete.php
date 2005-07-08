@@ -32,7 +32,15 @@ if(!isset($_REQUEST['record']))
 $sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
 $adb->query($sql_recentviewed);
 if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module'] == "Accounts")
+{
 	$focus->mark_deleted($_REQUEST['record']);
+}
+elseif($_REQUEST['return_module']=="Orders")
+{
+	$relation_query = "UPDATE invoice set salesorderid='' where invoiceid=".$_REQUEST['record'];
+	$adb->query($relation_query);
 
+	
+}
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
 ?>

@@ -107,7 +107,22 @@ function renderRelatedAttachments($query,$id,$sid='purchaseorderid')
 	getAttachmentsAndNotes('Orders',$query,$id,$sid);
 	echo '</form>';
 }
+function renderRelatedInvoices($query,$id)
+{
+	global $mod_strings;
+	global $app_strings;
+	require_once('modules/Invoice/Invoice.php');
 
+	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
+	
+	$focus = new Invoice();
+	
+	$button = '';
+	$returnset = '&return_module=Orders&return_action=SalesOrderDetailView&return_id='.$id;
+
+	$list = GetRelatedList('Orders','Invoice',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
 function renderRelatedHistory($query,$id)
 {
 	getHistory('Orders',$query,$id);
