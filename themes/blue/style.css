@@ -1010,11 +1010,29 @@ div.message {
 }
 
 .today {
-		background: #FFFFFF;
+	background: #CCCCCC;
         vertical-align: top;
-        color: #CC0000;
+        color: #000;
+        font-weight: bold;	
 }
 
+/* classes are added for getting the events in the mini calendar*/
+.todayevent, .todayevent a{
+	background: #99CC66;
+	vertical-align: top;
+	color: #FFFFFF;
+	font-weight: bold;
+
+}
+.eventbold  {
+
+	background: #E5E5E5;
+	vertical-align: top;
+	color: #000;
+	font-weight: bold;
+}
+
+/* -- */
 .week {
         color: black;
         background: #DBE6F2;
