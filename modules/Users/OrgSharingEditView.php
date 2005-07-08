@@ -38,7 +38,7 @@ $output .=  '</tr>';
 $row=1;
 foreach($defSharingPermissionData as $tab_id => $def_perr)
 {
-	if($tab_id != 8 && $tab_id != 14 && $tab_id != 15)
+	if($tab_id != 8 && $tab_id != 14 && $tab_id != 15 && $tab_id != 18 && $tab_id != 19 && $tab_id != 16 && $tab_id != 22)
 	{
 		$selected_a = '';
 		$selected_b = '';
