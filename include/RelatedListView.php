@@ -309,6 +309,17 @@ function getHistory($parentmodule,$query,$id)
 	global $mod_strings;
 	global $app_strings;
 
+	//Appending the security parameter
+	global $others_permission_id;
+	global $current_user;
+	$rel_tab_id = getTabid("Activities");
+	$defSharingPermissionData = $_SESSION['defaultaction_sharing_permission_set'];
+	$others_rel_permission_id = $defSharingPermissionData[$rel_tab_id];
+	if($others_rel_permission_id == 3) //Security fix by Don
+	{
+         	$query .= " and crmentity.smownerid in(".$current_user->id .",0)";
+	}
+
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
 	
@@ -422,9 +433,17 @@ function getHistory($parentmodule,$query,$id)
 	
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 			$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
+
+			if(isPermitted("Activities",1,$row["activityid"]) == 'yes')
+                	{
 	
-			$list .= '<a href="index.php?module=Activities&action=EditView&return_module='.$parentmodule.'&return_action=DetailView&activity_mode='.$activitymode.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>  |  ';
-			$list .= '<a href="index.php?module=Activities&action=Delete&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
+				$list .= '<a href="index.php?module=Activities&action=EditView&return_module='.$parentmodule.'&return_action=DetailView&activity_mode='.$activitymode.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>  |  ';
+			}
+	
+			if(isPermitted("Activities",2,$row["activityid"]) == 'yes')
+                	{
+				$list .= '<a href="index.php?module=Activities&action=Delete&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
+			}
 	
 			$list .= '</td>';
 
