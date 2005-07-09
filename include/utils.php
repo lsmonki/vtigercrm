@@ -2967,7 +2967,15 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                                                 $evt_status='&status=Completed';
                                                                 else
                                                                 $evt_status='&eventstatus=Held';
-                                                                $value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
+								if(isPermitted("Activities",1,$activityid) == 'yes')
+                        					{
+                                                                	$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
+								}
+								else
+								{
+									$value = "";
+								}
+								
 							}
 						}
 					}
@@ -3011,7 +3019,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$value = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
 					}
 					elseif($owner_id == 0 && $name == 'Assigned To')
-                                       {
+                                        {
                                                $value = getGroupName($entity_id, $module);
                                        }
 					else
