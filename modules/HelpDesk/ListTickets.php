@@ -78,7 +78,7 @@ $ticketListheader = get_form_header($current_module_strings['LBL_MY_TICKETS'], "
 echo "<br>";
 
 $list.=$ticketListheader;
-$list.='<table width=100% cellpadding="0" cellspacing="0" border="0" class="formBorder">';
+$list.='<table width=100% cellpadding="0" cellspacing="0" border="0">';
 
 //$list.='<!-- BEGIN: list_nav_row -->';
 //$list.='<tr height="20"> <td COLSPAN="15" class="listFormHeaderLinks">';
@@ -93,7 +93,7 @@ $list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;"
 $list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 $list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['LBL_SUBJECT'].'</td>';
 $list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['Related To'].'</td>';
+$list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['Related to'].'</td>';
 $list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 $list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['LBL_STATUS'].'</td>';
 $list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
@@ -138,9 +138,9 @@ for ($i=0; $i<$adb->num_rows($tktresult); $i++)
 }
 
 if($resultcount > 5)
-        $list .= '</td></tr><tr><td colspan="11">&nbsp;</td><td align="right"><a href="index.php?action=index&module=HelpDesk&query=true&my_open_tickets=true">'.$current_module_strings['LBL_MORE'].'...&nbsp;&nbsp;</a></td>';
+        $list .= '</td></tr><tr><td colspan="11">&nbsp;</td><td align="right"><a href="index.php?action=index&module=HelpDesk&query=true&my_open_tickets=true">'.$current_module_strings['LBL_MORE'].'...&nbsp;&nbsp;</a></td></tr>';
 
-$list.='</table>';
+$list.='<tr><td COLSPAN="15" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr></table>';
 echo $list;
 
 function getParentLink($parent_id)
@@ -149,7 +149,7 @@ function getParentLink($parent_id)
 
 	$sql = "select setype from crmentity where crmid=".$parent_id;
 	$parent_module = $adb->query_result($adb->query($sql),0,'setype');
-	
+
 	if($parent_module == 'Contacts')
 	{
 		$sql = "select firstname,lastname from contactdetails where contactid=".$parent_id;
@@ -164,7 +164,7 @@ function getParentLink($parent_id)
 	        $parent_name = '<a href="index.php?action=DetailView&module='.$parent_module.'&record='.$parent_id.'">'.$parentname.'</a>';
 	}
 
-	return $parent_name;	
+	return $parent_name;
 }
 
 ?>
