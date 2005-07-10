@@ -26,7 +26,7 @@ require_once('include/logging.php');
 
 
 
-/*
+
 // TTF Font families
 DEFINE("FF_COURIER",10);
 DEFINE("FF_VERDANA",11);
@@ -40,7 +40,7 @@ DEFINE("FF_TREBUCHE",17);
 DEFINE("FF_SIMSUN",30);
 DEFINE("FF_CHINESE",31);
 DEFINE("FF_BIG5",31);
-*/
+
 
 function calculate_font_family($locale)
 
@@ -75,6 +75,7 @@ class jpgraph {
 	 */
 	function outcome_by_month($date_start='1971-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
 		global $app_strings,$lang_crm, $app_list_strings, $current_module_strings, $log, $charset, $tmp_dir;
+		global $theme;
 		include_once ("jpgraph/src/jpgraph_bar.php");
 
 		// Size of graph
@@ -203,7 +204,7 @@ class jpgraph {
 
 			//now build the bar plots for each user across the sales stages
 			$bplot = array();
-			$color = array('Closed Lost'=>'993366','Closed Won'=>'009933', $other=>'336699');
+			$color = array('Closed Lost'=>'FF9900','Closed Won'=>'009933', $other=>'0066CC');
 			$index = 0;
 			foreach($stages as $stage) {
 				// Now create a bar pot
@@ -230,6 +231,15 @@ class jpgraph {
 				$index++;
 			}
 
+			if($theme == "blue")
+			{
+				$font_color = "#212473";
+			}
+			else
+			{
+				$font_color = "#000000";
+			}
+
 			// Create the grouped bar plot
 			$gbplot = new AccBarPlot($bplot);
 
@@ -237,7 +247,7 @@ class jpgraph {
 			$graph->Add($gbplot);
 
 			// No frame around the image
-			$graph->SetFrame(false);
+			$graph->SetFrame(true,"white");
 
 			// Rotate graph 90 degrees and set margin
 			$top = 20;
@@ -247,20 +257,22 @@ class jpgraph {
 			$graph->SetMargin($left,$right,$top,$bottom);
 
 			// Set white margin color
-			$graph->SetMarginColor('white');
+			$graph->SetMarginColor('#F5F5F5');
 
 			// Use a box around the plot area
 			$graph->SetBox();
 
 			// Use a gradient to fill the plot area
-			$graph->SetBackgroundGradient('white','gray',GRAD_HOR,BGRAD_PLOT);
+			$graph->SetBackgroundGradient('#E5E5E5','white',GRAD_HOR,BGRAD_PLOT);
 
 			// Setup title
 			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].getCurrencySymbol().$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$graph->title->Set($title);
+			$graph->title->SetColor($font_color);
 			$graph->title->SetFont($font,FS_BOLD,11);
 
 			// Setup X-axis
+			$graph->xaxis->SetColor($font_color);
 			$graph->xaxis->SetTickLabels($legend);
 			$graph->xaxis->SetFont($font,FS_NORMAL,8);
 
@@ -269,6 +281,7 @@ class jpgraph {
 
 			// Label align for X-axis
 			$graph->xaxis->SetLabelAlign('center','center');
+			$graph->yaxis->SetColor($font_color);
 			$graph->yaxis->SetLabelSide(SIDE_LEFT);
 
 			// The fix the tick marks
@@ -296,6 +309,7 @@ class jpgraph {
 			$graph->yaxis->SetTitleMargin(35);
 
 			$subtitle .= $current_module_strings['LBL_OPP_SIZE'];
+			$graph->footer->right->SetColor($font_color);
 			$graph->footer->right->Set($subtitle);
 			$graph->footer->right->SetFont($font,FS_NORMAL,8);
 
@@ -332,6 +346,8 @@ class jpgraph {
 	 */
 	function lead_source_by_outcome($datay=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
 		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
+		global $theme;
+
 		include_once ("jpgraph/src/jpgraph_bar.php");
 
 		// Size of graph
@@ -476,7 +492,7 @@ class jpgraph {
 
 			//now build the bar plots for each user across the sales stages
 			$bplot = array();
-			$color = array('Closed Lost'=>'993366','Closed Won'=>'009933', $other=>'336699');
+			$color = array('Closed Lost'=>'FF9900','Closed Won'=>'009933', $other=>'0066CC');
 			$index = 0;
 			foreach($stages as $stage) {
 				// Now create a bar pot
@@ -490,7 +506,7 @@ class jpgraph {
 
 				// We want to display the value of each bar at the top
 				$bplot[$index]->value->Show();
-				$bplot[$index]->value->SetFont($font,FS_NORMAL,8);
+				$bplot[$index]->value->SetFont($font,FS_NORMAL,7);
 				//$bplot->value->SetAlign('left','center');
 				$bplot[$index]->value->SetColor("white");
 				$bplot[$index]->value->SetFormat(getCurrencySymbol().'%d');
@@ -505,6 +521,15 @@ class jpgraph {
 				$index++;
 			}
 
+			if($theme == "blue")
+			{
+				$font_color = "#212473";
+			}
+			else
+			{
+				$font_color = "#000000";
+			}
+
 			// Create the grouped bar plot
 			$gbplot = new AccBarPlot($bplot);
 
@@ -512,7 +537,7 @@ class jpgraph {
 			$graph->Add($gbplot);
 
 			// No frame around the image
-			$graph->SetFrame(false);
+			$graph->SetFrame(true,"white");
 
 			// Rotate graph 90 degrees and set margin
 			$top = 20;
@@ -522,21 +547,23 @@ class jpgraph {
 			$graph->Set90AndMargin($left,$right,$top,$bottom);
 
 			// Set white margin color
-			$graph->SetMarginColor('white');
+			$graph->SetMarginColor('#F5F5F5');
 
 			// Use a box around the plot area
 			$graph->SetBox();
 
 			// Use a gradient to fill the plot area
-			$graph->SetBackgroundGradient('#F0F0F0','#FFFFFF',GRAD_HOR,BGRAD_PLOT);
+			$graph->SetBackgroundGradient('#E5E5E5','white',GRAD_HOR,BGRAD_PLOT);
 
 			// Setup title
 			$title = $current_module_strings['LBL_ALL_OPPORTUNITIES'].getCurrencySymbol().$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$graph->title->Set($title);
+			$graph->title->SetColor($font_color);
 			$graph->title->SetFont($font,FS_BOLD,11);
 
 			// Setup X-axis
 			$graph->xaxis->SetTickLabels($legend);
+			$graph->xaxis->SetColor($font_color);
 			$graph->xaxis->SetFont($font,FS_NORMAL,8);
 
 			// Some extra margin looks nicer
@@ -545,7 +572,7 @@ class jpgraph {
 			// Label align for X-axis
 			$graph->xaxis->SetLabelAlign('right','center');
 			$graph->yaxis->SetLabelSide(SIDE_LEFT);
-
+			$graph->yaxis->SetColor($font_color);
 			// The fix the tick marks
 			$graph->yaxis->SetTickSide(SIDE_RIGHT);
 
@@ -571,6 +598,7 @@ class jpgraph {
 			$graph->yaxis->SetTitleMargin(35);
 
 			$subtitle = $current_module_strings['LBL_OPP_SIZE'];
+			$graph->footer->right->SetColor($font_color);
 			$graph->footer->right->Set($subtitle);
 			$graph->footer->right->SetFont($font,FS_NORMAL,8);
 
@@ -602,6 +630,7 @@ class jpgraph {
 	 */
 	function pipeline_by_sales_stage($datax=array('foo','bar'), $date_start='2071-10-15', $date_end='2071-10-15', $user_id=array('1'), $cache_file_name='a_file', $refresh=false) {
 		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
+		global $theme;
 		include_once ("jpgraph/src/jpgraph_bar.php");
 
 		// Size of graph
@@ -733,17 +762,18 @@ class jpgraph {
 
 			//now build the bar plots for each user across the sales stages
 			$bplot = array();
-			$color = '336699';
+			$color = 'D50100';
 			$index = 0;
 			foreach($user_id as $the_id) {
 				// Now create a bar pot
 				$bplot[$index] = new BarPlot($datay[$the_id]);
+				//color="black",$hsize=3,$vsize=3,$show=true
 				$bplot[$index]->SetShadow();
-
 				//You can change the width of the bars if you like
 				$bplot[$index]->SetWidth(0.5);
 
 				// Set fill colors for bars
+				//$bplot[$index]->SetFillGradient('red','#7D7D7D',GRAD_HOR);//SetFillColor("#$color");
 				$bplot[$index]->SetFillColor("#$color");
 				$color = $color + 220022;
 
@@ -771,7 +801,7 @@ class jpgraph {
 			$graph->Add($gbplot);
 
 			// No frame around the image
-			$graph->SetFrame(false);
+			$graph->SetFrame(true,"white");
 
 			// Rotate graph 90 degrees and set margin
 			$top = 20;
@@ -781,21 +811,33 @@ class jpgraph {
 			$graph->Set90AndMargin($left,$right,$top,$bottom);
 
 			// Set white margin color
-			$graph->SetMarginColor('white');
+			$graph->SetMarginColor('#F5F5F5');
 
 			// Use a box around the plot area
 			$graph->SetBox();
 
 			// Use a gradient to fill the plot area
-			$graph->SetBackgroundGradient('white','gray',GRAD_HOR,BGRAD_PLOT);
+			$graph->SetBackgroundGradient('#E5E5E5','white',GRAD_HOR,BGRAD_PLOT);
+
+			if($theme == "blue")
+			{
+				$font_color = "#212473";
+			}
+			else
+			{
+				$font_color = "#000000";
+			}
+
 
 			// Setup title
 			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].getCurrencySymbol().$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$graph->title->Set($title);
+			$graph->title->SetColor($font_color);
 			$graph->title->SetFont($font,FS_BOLD,11);
 
 			// Setup X-axis
 			$graph->xaxis->SetTickLabels($legend);
+			$graph->xaxis->SetColor($font_color);
 			$graph->xaxis->SetFont($font,FS_NORMAL,8);
 
 			// Some extra margin looks nicer
@@ -814,6 +856,7 @@ class jpgraph {
 			$graph->yaxis->SetPos('max');
 
 			// First make the labels look right
+			$graph->yaxis->SetColor($font_color);
 			$graph->yaxis->SetLabelAlign('center','top');
 			$graph->yaxis->SetLabelFormat(getCurrencySymbol().'%d');
 			$graph->yaxis->SetLabelSide(SIDE_RIGHT);
@@ -827,6 +870,7 @@ class jpgraph {
 
 			$subtitle .= $current_module_strings['LBL_OPP_SIZE'];
 			$graph->footer->right->Set($subtitle);
+			$graph->footer->right->SetColor($font_color);
 			$graph->footer->right->SetFont($font,FS_NORMAL,8);
 
 			$graph->yaxis->SetFont($font,FS_NORMAL, 8);
@@ -859,6 +903,8 @@ class jpgraph {
 	 */
 	function pipeline_by_lead_source($legends=array('foo','bar'), $user_id=array('1'), $cache_file_name='a_file', $refresh=true) {
 		global $app_strings,$lang_crm, $current_module_strings, $log, $charset, $tmp_dir;
+		global $theme;
+
 		include_once ("jpgraph/src/jpgraph_pie.php");
 		include_once ("jpgraph/src/jpgraph_pie3d.php");
 
@@ -954,6 +1000,15 @@ class jpgraph {
 				return ($current_module_strings['ERR_NO_OPPS']);
 			}
 
+			if($theme == "blue")
+			{
+				$font_color = "#212473";
+			}
+			else
+			{
+				$font_color = "#000000";
+			}
+
 			// Create the Pie Graph.
 			$graph = new PieGraph(490,260,$cache_file_name);
 
@@ -962,22 +1017,26 @@ class jpgraph {
 			// Setup title
 			$title = $current_module_strings['LBL_TOTAL_PIPELINE'].getCurrencySymbol().$total.$app_strings['LBL_THOUSANDS_SYMBOL'];
 			$graph->title->Set($title);
+			$graph->title->SetColor($font_color);
 			$graph->title->SetFont($font,FS_BOLD,11);
 
 			// No frame around the image
 			$graph->SetFrame(false);
+			//$graph->SetMarginColor('#F5F5F5');
 
 			$graph->legend->Pos(0.01,0.10);
+			$graph->legend->SetColor($font_color);
 			$graph->legend->SetFont($font,FS_NORMAL,12);
 
 			$subtitle = $current_module_strings['LBL_OPP_SIZE'];
 			$graph->footer->left->Set($subtitle);
+			$graph->footer->left->SetColor($font_color);
 			$graph->footer->left->SetFont($font,FS_NORMAL,8);
 
 			// Create pie plot
 			$p1 = new PiePlot3d($data);
 			$p1->SetSize(0.30);
-			$p1->SetTheme("sand");
+			$p1->SetTheme("water");
 			$p1->SetCenter(0.33,0.35);
 			$p1->SetAngle(30);
 			$p1->value->SetFont($font,FS_NORMAL,12);
