@@ -47,8 +47,15 @@ $task_title = $mod_strings['LBL_OPEN_TASKS'];
 <tr>
 <td valign="top">
 <?php
-        include("modules/CustomView/ListViewTop.php");
+if($tab_per_Data[9] == 0)
+{
+	if($permissionData[9][3] == 0)
+	{
+		include("modules/Activities/OpenListView.php") ;
+	}
+}
 ?>
+<br>
 <?php
 if($tab_per_Data[2] == 0)
 {
@@ -58,17 +65,6 @@ if($tab_per_Data[2] == 0)
 	}
 }
  ?>
-<br>
-<?php
-if($tab_per_Data[9] == 0)
-{
-        if($permissionData[9][3] == 0)
-        {
- 		include("modules/Activities/OpenListView.php") ;
-	}
-}
-?>
-<br>
 <br>
 <?php
 //get all the group relation tasks
@@ -85,7 +81,7 @@ $query = "select leaddetails.leadid as id,leaddetails.lastname as name,leadgroup
 
 echo get_form_header($app_strings['LBL_GROUP_ALLOCATION_TITLE'], "", false);
 
-$list = '<table width="100%" cellpadding="0" cellspacing="0" class="formBorder"><tr>';
+$list = '<table width="100%" cellpadding="0" cellspacing="0"><tr>';
 $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 $list .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px">';
 $list .= $app_strings['LBL_ENTITY_NAME'].'</td>';
@@ -120,7 +116,7 @@ while($row = $adb->fetch_array($result))
 	if($acti_type == 'Task')
 	{
         	$list .= '&activity_mode=Task';
-	}	
+	}
         elseif($acti_type == 'Call' || $acti_type == 'Meeting')
 	{
                 $list .= '&activity_mode=Events';
@@ -148,7 +144,7 @@ while($row = $adb->fetch_array($result))
   $i++;
 }
 
-        $list .= '</table>';
+        $list .= '<tr><td WIDTH="1" colspan="6" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr></table>';
 
 echo $list;
 function getActivityType($id)
@@ -158,7 +154,7 @@ function getActivityType($id)
 	$res = $adb->query($quer);
 	$acti_type = $adb->query_result($res,0,"activitytype");
 	return $acti_type;
-		
+
 }
 
 echo '<BR>';
@@ -171,6 +167,8 @@ if($tab_per_Data[13] == 0)
 	}
 }
 echo '<BR><BR>';
+include("modules/CustomView/ListViewTop.php");
+echo '<BR>';
 if($tab_per_Data[20] == 0)
 {
         if($permissionData[20][3] == 0)
@@ -178,7 +176,7 @@ if($tab_per_Data[20] == 0)
 		require_once('modules/Quotes/ListTopQuotes.php');
 	}
 }
-echo '<BR><BR>';
+echo '<BR>';
 if($tab_per_Data[22] == 0)
 {
         if($permissionData[22][3] == 0)
@@ -186,7 +184,7 @@ if($tab_per_Data[22] == 0)
 		require_once('modules/Orders/ListTopSalesOrder.php');
 	}
 }
-echo '<BR><BR>';
+echo '<BR>';
 if($tab_per_Data[23] == 0)
 {
         if($permissionData[23][3] == 0)
@@ -200,17 +198,17 @@ $current_module_strings = return_module_language($current_language, 'Calendar');
 $t=Date("Ymd");
 ?>
 </td>
-<td width="320" valign="top" align="center">
+<td width="300" valign="top" align="center">
             <?php include("modules/Calendar/minical.php"); ?>
             <form name="minc" method="GET" action="index.php">
                 <input type="hidden" name="module" value="Calendar">
                 <input type="hidden" name="action">
                 <input type="hidden" name="t">
-                <input title="<? echo $current_module_strings['LBL_DAY_BUTTON_TITLE']?>" accessKey="<? echo $current_module_strings['LBL_DAY_BUTTON_KEY']?>" onclick="this.form.action.value='calendar_day';this.form.t.value='<? echo $t?>'" type="image" src="<? echo $image_path ?>day.gif" name="button" value="  <? echo $current_module_strings['LBL_DAY']?>  " >
+                <!--<input title="<? echo $current_module_strings['LBL_DAY_BUTTON_TITLE']?>" accessKey="<? echo $current_module_strings['LBL_DAY_BUTTON_KEY']?>" onclick="this.form.action.value='calendar_day';this.form.t.value='<? echo $t?>'" type="image" src="<? echo $image_path ?>day.gif" name="button" value="  <? echo $current_module_strings['LBL_DAY']?>  " >
                 <input title="<? echo $current_module_strings['LBL_WEEK_BUTTON_TITLE']?>" accessKey="<? echo $current_module_strings['LBL_WEEK_BUTTON_KEY']?>" onclick="this.form.action.value='calendar_week';this.form.t.value='<? echo $t?>'" type="image" src="<? echo $image_path ?>week.gif" name="button" value="  <? echo $current_module_strings['LBL_WEEK']?>  " >
-                <input title="<? echo $current_module_strings['LBL_MON_BUTTON_TITLE']?>" accessKey="<? echo $current_module_strings['LBL_MON_BUTTON_KEY']?>" onclick="this.form.action.value='calendar_month';this.form.t.value='<? echo $t?>'" type="image" src="<? echo $image_path ?>month.gif" name="button" value="  <? echo $current_module_strings['LBL_MON']?>  " >
+                <input title="<? echo $current_module_strings['LBL_MON_BUTTON_TITLE']?>" accessKey="<? echo $current_module_strings['LBL_MON_BUTTON_KEY']?>" onclick="this.form.action.value='calendar_month';this.form.t.value='<? echo $t?>'" type="image" src="<? echo $image_path ?>month.gif" name="button" value="  <? echo $current_module_strings['LBL_MON']?>  " >-->
             </form>
 <?php echo get_left_form_header($mod_strings['LBL_PIPELINE_FORM_TITLE']);
-	include ("modules/Dashboard/Chart_my_pipeline_by_sales_stage.php"); 
+	include ("modules/Dashboard/Chart_my_pipeline_by_sales_stage.php");
 	echo get_left_form_footer(); ?>
 </td></tr></table><br>
