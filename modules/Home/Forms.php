@@ -94,7 +94,7 @@ return $the_script;
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  */
-function get_new_record_form () {
+/*function get_new_record_form () {
 global $mod_strings;
 global $app_strings;
 global $current_user;
@@ -141,6 +141,6 @@ $the_form .= get_left_form_footer();
 $the_form .= get_validate_record_js();
 
 return $the_form;
-}
+}*/
 
 ?>

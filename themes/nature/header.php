@@ -82,7 +82,7 @@ foreach($moduleList as $module_name)
 	}
 	else
 	{
-		$xtpl->assign("CLASS_TABBG", "otherTabBg");
+		$xtpl->assign("CLASS_TABBG", "");
 		$xtpl->assign("CLASS_TAB", "otherTab");
 	}
 	$xtpl->parse("main.tab");
@@ -188,7 +188,7 @@ $xtpl->parse("main.left_form");
 
 
 
-//check for the access for Create/Edit and enable or disable 
+//check for the access for Create/Edit and enable or disable
 
 //check for the presence of the currentModule and  also for EditView permission
 
