@@ -156,7 +156,6 @@ class UsersLastImport extends SugarBean
 				AND users_last_import.bean_type='Contacts' 
 				AND users_last_import.deleted=0  AND crmentity.deleted=0";
 			
-
 		} 
 		else if ($this->bean_type == 'Accounts')
 		{
@@ -173,11 +172,12 @@ class UsersLastImport extends SugarBean
 				AND users_last_import.deleted=0
 				AND accounts.deleted=0
 				AND users.status='ACTIVE'";*/
-				$query = "SELECT distinct account.*,
+				$query = "SELECT distinct account.*, accountbillads.city,
                                 users.user_name assigned_user_name,
-				smownerid 
+				crmid, smownerid 
 				FROM account
 				inner join crmentity on crmentity.crmid=account.accountid
+				inner join accountbillads on crmentity.crmid=accountbillads.accountaddressid
 				left join users_last_import on users_last_import.bean_id=crmentity.crmid
 			       	left join users ON crmentity.smownerid=users.id
 				WHERE 
@@ -218,7 +218,7 @@ class UsersLastImport extends SugarBean
                                 account.accountid account_id,
                                 account.accountname account_name,
                                 users.user_name assigned_user_name,
-				smownerid,
+				crmentity.crmid, smownerid,
 				potential.*
                                FROM potential 
 			       inner join account on account.accountid=potential.accountid 
@@ -232,15 +232,16 @@ class UsersLastImport extends SugarBean
 				AND crmentity.deleted=0 
 				AND users.status='Active'";
 
-	
 		}
 		else if($this->bean_type == 'Leads')
 		{
-			$query = "SELECT distinct leaddetails.*,
+			$query = "SELECT distinct leaddetails.*, crmentity.crmid, leadaddress.phone,leadsubdetails.website,
                                 users.user_name assigned_user_name,
 				smownerid 
 				FROM leaddetails 
 				inner join crmentity on crmentity.crmid=leaddetails.leadid 
+				inner join leadaddress on crmentity.crmid=leadaddress.leadaddressid 
+				inner join leadsubdetails on crmentity.crmid=leadsubdetails.leadsubscriptionid 
 				left join users_last_import on users_last_import.bean_id=crmentity.crmid			       	
 				left join users ON crmentity.smownerid=users.id
 				WHERE 
