@@ -165,6 +165,13 @@ $vtlog->logthis("in  track view method ".$current_module,'info');
             $quote = $adb->query_result($result,0,'subject');
             $item_summary = $quote;
           }
+	  elseif($current_module =='Orders')
+          {
+            $query = 'select subject from purchaseorder where purchaseorderid=' .$item_id;
+            $result = $this->db->query($query);
+            $po = $adb->query_result($result,0,'subject');
+            $item_summary = $po;
+          }
 
 	 
 	 #if condition added to skip faq in last viewed history
