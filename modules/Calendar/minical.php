@@ -161,55 +161,81 @@ while ( $go == 1 ) {
  }
 
  $col = "";
- if ( $today == Date("Ymd",$ts) ) {
+ if ( $today == Date("Ymd",$ts) ) 
+ {
    $col = "today";
- } else if ($wd == 0 ) {
+ }
+ else if ($wd == 0 ) 
+ {
    $col = "holiday";
- } else if ($wd == 6 ) {
+ }
+ else if ($wd == 6 ) 
+ {
    $col = "freeday";
- } else if ($xm != $m ) {
+ }
+ else if ($xm != $m ) 
+ {
    $col = "otherday";
- } else {
+ } 
+ else 
+ {
    $col = "appday";
  }
  
- echo "<td align=\"right\" class=\"". $col ."\">\n";
-if ($xm == $m )
+ //For displaying the class - included by Jaguar
+ if($xm !=$m)
  {
- 	#echo "  <a href=\"JavaScript:closeandaway(". ($xd + $n) .",". ($xm + $n) .",". ($yoff - $xy + $n) .")\">". $xxd ."</a>";
-     // added by raj
-     /* Select appointments for this day */
-     $from =  new DateTime();
-     $to   =  new DateTime();
-     $from->setDateTimeTS($ts - 12 * 3600);
-     $to->setDateTimeTS($ts - 12 * 3600);
-     #$to->addDays(7);
-     
-     $pref->callist = array();
-     $app = new appointment();
-     $app->readCal($pref,$from,$to);
-     // appointment::readCal($pref,$from,$to);
+	 echo "<td align=\"right\" class=\"". $col ."\">\n";
+ }
+ else
+ {
+	 $tdavl="<td align=\"right\" class=\"";
+ }
+// ends - Jaguar
+ 
+if ($xm == $m )
+{
+	#echo "  <a href=\"JavaScript:closeandaway(". ($xd + $n) .",". ($xm + $n) .",". ($yoff - $xy + $n) .")\">". $xxd ."</a>";
+	// added by raj
+	/* Select appointments for this day */
+	$from =  new DateTime();
+	$to   =  new DateTime();
+	$from->setDateTimeTS($ts - 12 * 3600);
+	$to->setDateTimeTS($ts - 12 * 3600);
+	#$to->addDays(7);
 
-     $dd = new DateTime();
-       # $d = strftime($lang['DateFormatStr'],$ts);
-       $dd->setDateTimeTS($ts);
-       $d = $dd->getDate();
-       $tref = Date("Ymd",$ts);
-       $start_design="";       
-       $end_design="";       
+	$pref->callist = array();
+	$app = new appointment();
+	$app->readCal($pref,$from,$to);
+	// appointment::readCal($pref,$from,$to);
+
+	$dd = new DateTime();
+	# $d = strftime($lang['DateFormatStr'],$ts);
+	$dd->setDateTimeTS($ts);
+	$d = $dd->getDate();
+	$tref = Date("Ymd",$ts);
+	$eventclass=$col;
 	if(count($pref->callist)!=0)
 	{
-       	     $start_design="<b>";       
-             $end_design="</b>";       
-		
+		//Classes are provided when events are created  - Jaguar
+		if($col == "today")
+			$eventclass="todayevent";
+		else
+			$eventclass="eventbold";
 	}
+	$tdavl.=$eventclass."\">\n";
+	echo $tdavl; //displaying the td - Jaguar
+
 //Display Date with link, move here from above to get tref date format
 
 	if ($col=="today")
-		echo $start_design ."  <a class=\"today\" href=\"index.php?module=Calendar&action=calendar_day&t=".$tref."\">". $xxd ."</a>" .$end_design;
+	{	
+		echo "<a href=\"index.php?module=Calendar&action=calendar_day&t=".$tref."\">". $xxd ."</a>"; 
+	}	
 	else
-		echo $start_design ."  <a href=\"index.php?module=Calendar&action=calendar_day&t=".$tref."\">". $xxd ."</a>" .$end_design;	
-
+	{
+		 echo "<a href=\"index.php?module=Calendar&action=calendar_day&t=".$tref."\">". $xxd ."</a>" ;
+	}
 //
        $next = NextDay($ts);
        # Check for workday
@@ -223,7 +249,6 @@ if ($xm == $m )
 
        $hastable = 0;
        $a = 0;
-
 
 	//
  }
