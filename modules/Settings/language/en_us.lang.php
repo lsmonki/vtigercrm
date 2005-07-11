@@ -190,7 +190,7 @@ $mod_strings = Array(
 
 //Settings/EditComboField.php
 
-'EditPickListValues'=>'Edit Pick List ',
+'EditPickListValues'=>'Pick List Edit ',
 
 
 
