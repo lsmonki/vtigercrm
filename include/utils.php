@@ -2210,9 +2210,12 @@ global $vtlog;
 $vtlog->logthis("in getAccountName ".$account_id,'info');  
 
 	global $adb;
-	$sql = "select accountname from account where accountid=".$account_id;
-        $result = $adb->query($sql);
-	$accountname = $adb->query_result($result,0,"accountname");
+	if($account_id != '')
+	{
+		$sql = "select accountname from account where accountid=".$account_id;
+        	$result = $adb->query($sql);
+		$accountname = $adb->query_result($result,0,"accountname");
+	}
 	return $accountname;
 }
 function getproductname($product_id)
