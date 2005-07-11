@@ -19,7 +19,7 @@ $fld_name=$_REQUEST["fld_name"];
 $tableName=$_REQUEST["table_name"];
 $columnName=$_REQUEST["column_name"];
 
-echo get_module_title("Settings", $mod_strings['LBL_MODULE_NAME'].": ".$mod_strings['EditPickListValues'], true);
+echo get_module_title("Settings", $mod_strings['LBL_MODULE_NAME'].": ".$fld_module." ".$mod_strings['EditPickListValues'], true);
 echo '<br>';
 
 global $theme;
