@@ -1,7 +1,7 @@
 <!--
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -28,14 +28,14 @@
 <body leftmargin="0" topmargin="0" marginheight="0" marginwidth="0" {ONLOAD}>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr class="topBand">
-    <td width="80" height="75" class="tabOffBorder"> 
-      <div align="center"><a href="http://www.vtiger.com"><img src="{IMAGE_PATH}/vtiger.jpg" alt="vigercrm" border="0"></a> 
+    <td width="80" height="75" class="tabOffBorder">
+      <div align="center"><a href="http://www.vtiger.com"><img src="{IMAGE_PATH}/vtiger.jpg" alt="vigercrm" border="0"></a>
       </div></td>
     <td><table height="75" width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr> 
+        <tr>
           <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-              <tr> 
-                <td><div align="right"><font size="1" color="#000000"><strong>{APP.NTC_WELCOME} 
+              <tr>
+                <td><div align="right"><font size="1" color="#000000"><strong>{APP.NTC_WELCOME}
                     {CURRENT_USER}</strong></font>&nbsp; <font size="1">[{DATE}]</font></div></td>
                 <td><div align="right" style="padding-right:10"><a href="index.php?module=Users&action=DetailView&record={CURRENT_USER_ID}"><img src="{IMAGE_PATH}/user.gif" hspace="3" align="absmiddle" border="0">{APP.LBL_MY_ACCOUNT}</a>
   		{ADMIN_LINK}&nbsp;<a href="http://www.vtiger.com/products/crm/document.html" target="_blank"><img src="{IMAGE_PATH}/help.gif" hspace="3" align="absmiddle" border="0">{APP.LNK_HELP}</a>&nbsp;
@@ -52,14 +52,14 @@ function openwin()
             </table>
 </td>
         </tr>
-        <tr> 
+        <tr>
           <td valign="bottom"> <table width="100%" cellpadding="0" cellspacing="0" border="0">
-              <tr> 
-                <td width="100%"> <div id="tabcontainer" style="width:200px;overflow:hidden;"> 
-                    <div id="tabcontent" style="position:relative;left:0px;top:0px;"> 
+              <tr>
+                <td width="100%"> <div id="tabcontainer" style="width:200px;overflow:hidden;">
+                    <div id="tabcontent" style="position:relative;left:0px;top:0px;">
                       <table width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tbody>
-                          <tr> 
+                          <tr>
                             <td class="tabOffBorder"><img src='{IMAGE_PATH}/blank.gif' width='1' height='1'></td>
                             <!-- BEGIN: tab -->
                             <td width="5" class="{CLASS_TABBORDER}"><img src='{IMAGE_PATH}/{IMAGE_TABSTART}' width="5" height="28"></td>
@@ -73,7 +73,7 @@ function openwin()
                     </div>
                   </div></td>
                 <td class="tabOffBorder" align="right"><table cellpadding="0" cellspacing="1">
-                    <tr> 
+                    <tr>
                       <td><img id="scrollleft" src="{IMAGE_PATH}scroll_left.gif" border="0" onclick="moveleft()" onmousedown="scrolleft();this.src='{IMAGE_PATH}scroll_left_down.gif';" onmouseup="this.src='{IMAGE_PATH}scroll_left.gif';clearTimeout(moveleftvar)" onmouseout="this.src='{IMAGE_PATH}scroll_left.gif';clearTimeout(moveleftvar)"></td>
                       <td><img id="scrollright" src="{IMAGE_PATH}scroll_right.gif" border="0" onclick="moveright()" onmousedown="scrolright();this.src='{IMAGE_PATH}scroll_right_down.gif';" onmouseup="this.src='{IMAGE_PATH}scroll_right.gif';clearTimeout(moverightvar)"  onmouseout="this.src='{IMAGE_PATH}scroll_right.gif';clearTimeout(moverightvar)"></td>
                     </tr>
@@ -92,7 +92,7 @@ function openwin()
 		<td class="topBar" colspan="2">&nbsp;</td>
 	</tr>
   	<!-- BEGIN: sub_menu -->
-	<tr> 
+	<tr>
 		<td width="190" class="moduleMenuBg">&nbsp;</td>
 		<td class="moduleMenuBg">
 		<table cellspacing="0" cellpadding="2" border="0">
@@ -101,12 +101,12 @@ function openwin()
 	  <td nowrap><a class="moduleMenu" href="{URL}">{LABEL}</A></td>
 	  <td width="10" align="center" class="moduleMenu">{SEPARATOR}</td>
 	  <!-- END: sub_menu_item -->
-	  <td nowrap><a id="showSubMenu" href="javascript:showSubMenu()"><img border=0 src="{IMAGE_PATH}showsubmenu.gif"></a></td>
+	  <td nowrap><a id="showSubMenu" href="#" onMouseOver="javascript:showSubMenu();"><img border=0 src="{IMAGE_PATH}showsubmenu.gif"></a></td>
 	   </tr>
 	  </table>
 	</tr>
 	<!-- END: sub_menu -->
-	
+
 	</td>
   </tbody>
 </table>
@@ -114,19 +114,19 @@ function openwin()
 	<div id="subMenu" style="position:absolute;display:none;z-index:60">
 	<table cellspacing="2" cellpadding="2" border="0">
 		<!-- BEGIN: dropdown_sub_menu_item -->
-		  <tr> 
+		  <tr>
 			<td width="5">&nbsp;</td>
 			<td nowrap><a class="moduleMenu" href="{URL}">{LABEL}</A></td>
 		</tr>
-		<!-- END: dropdown_sub_menu_item -->	
+		<!-- END: dropdown_sub_menu_item -->
         </table>
 	</div>
 <script language="JavaScript" type="text/javascript" src="include/submenu.js"></script>
 <!--<a class="moduleMenu" href="{DELETED_ITEMS_URL}">{DELETED_ITEMS_LABEL}&nbsp;</a>-->
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:2">
   <tr>
-    <td width="180" valign="top" style="padding:5 10 0 5;">	
-	<!--A HREF="http://www.sourceforge.net/project/showfiles.php?group_id=117522" target="_blank"><img align="absmiddle" src="{APP.LNK_OUTLOOK}" border="0"></A><br><br-->	
+    <td width="180" valign="top" style="padding:5 10 0 5;">
+	<!--A HREF="http://www.sourceforge.net/project/showfiles.php?group_id=117522" target="_blank"><img align="absmiddle" src="{APP.LNK_OUTLOOK}" border="0"></A><br><br-->
 	{FORUM}
 	<!-- Between submenu and left form -->
     <!-- BEGIN: left_form -->
@@ -137,35 +137,39 @@ function openwin()
     	</tr></tbody></table>
     <table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" class="leftFormBorder1">
       <tr>
-        <td nowrap> 
-            
+        <td nowrap>
+
 			<input type="hidden" name="action" value="UnifiedSearch">
             <input type="hidden" name="module" value="Home">
             <input type="hidden" name="search_form" value="false">
             <input type="text" name="query_string" size="20" value="{SEARCH}">
 			<input type="image" align="absmiddle" value="{APP.LBL_SEARCH_BUTTON_LABEL}" src="{IMAGE_PATH}/search.gif">
-			
+
           </td>
       </tr>
-    </table> 
+    </table>
     <!-- END: left_form_search -->
     <!-- BEGIN: left_form_recent_view -->
-        <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody>
+ 	<tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('lviewed');">
             <td class="leftFormHeader" valign="middle" align="left" nowrap width="100%" height="20">{LASTVIEWED_TITLE}</td>
-        </tr></tbody></table>
+	    <td class="leftFormHeader"><img src='themes/images/toggle2.gif' id="img_lviewed" width='15' height='15'></img></td>
+        </tr>
+	</tbody></table>
+    <div id="lviewed" style="display:block;">
     <table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" class="leftFormBorder2">
       <tbody>
         <tr>
           <td> <table cellpadding="2" cellspacing="0" border="0">
               <tbody>
                 <!-- BEGIN: left_form_recent_view_row -->
-                <tr> 
+                <tr>
                   <td><img alt="{MODULE_NAME}" src="{IMAGE_PATH}{MODULE_NAME}.gif"></td>
                   <td><a title="[{APP.LBL_ALT_HOT_KEY}{ROW_NUMBER}]" accessKey="{ROW_NUMBER}" href="{RECENT_URL}">{RECENT_LABEL}</A></td>
                 </tr>
                 <!-- END: left_form_recent_view_row -->
                 <!-- BEGIN: left_form_recent_view_empty -->
-                <tr> 
+                <tr>
                   <td><em>{APP.NTC_NO_ITEMS_DISPLAY}</em></td>
                 </tr>
                 <!-- END: left_form_recent_view_empty -->
@@ -176,51 +180,64 @@ function openwin()
         </tr>
       </tbody>
     </table>
+    </div>
     <!-- END: left_form_recent_view -->
     </form>
     <!-- END: left_form -->
     <!-- BEGIN: left_form_new_record -->
-    {NEW_RECORD} <br> 
+    {NEW_RECORD} <br>
     <!-- END: left_form_new_record -->
     <!-- BEGIN: left_form_rss -->
-        <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody>
+	<tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('rssblock');">
             <td class="leftFormHeader" valign="middle" align="left" nowrap width="100%" height="20">{RSSFEEDS_TITLE}</td>
         </tr></tbody>
         </table>
+    <div id="rssblock" style="display:none;">
     <table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" class="leftFormBorder1">
       <tr>
         <td nowrap>
                         {RSSFEEDS}
           </td>
       </tr>
-    </table><br>
+    </table></div><br>
     <!-- END: left_form_rss -->
     <!-- BEGIN: left_form_clock -->
-	<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+	<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody>
+	<tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('wclock');">
 	    <td class="leftFormHeader" valign="middle" align="left" nowrap width="100%" height="20">{CLOCK_TITLE}</td>
+	    <td align="right" class="leftFormHeader"><img src='themes/images/toggle2.gif' id="img_wclock" width='15' height='15'></td>
     	</tr></tbody>
 	</table>
+    <div id="wclock" style="display:block;">
     <table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" class="leftFormBorder1">
       <tr>
-        <td nowrap> 
+        <td nowrap>
 			{WORLD_CLOCK}
           </td>
       </tr>
-    </table><br>
+    </table></div><br>
      <!-- END: left_form_clock -->
-<!-- BEGIN: left_form_calculator -->	
-	<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+<!-- BEGIN: left_form_calculator -->
+	<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody>
+	<tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('calc');">
 	    <td class="leftFormHeader" valign="middle" align="left" nowrap width="100%" height="20">{CALC_TITLE}</td>
+	    <td align="right" class="leftFormHeader"><img src='themes/images/toggle2.gif' id="img_calc" width='15' height='15'></td>
     	</tr></tbody>
 	</table>
+   <div id="calc" style="display:block;">
     <table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" class="leftFormBorder1">
       <tr>
-        <td nowrap> 
+        <td nowrap>
 			{CALC}
           </td>
       </tr>
     </table>
+    </div>
 <!-- END: left_form_calculator -->
 	</td>
-    <td width="100%" class="body" valign="top" style="padding:5 0 0 10"> 
+  <script language='Javascript'>
+  	var leftpanelistarray=new Array('lviewed','wclock','calc');
+  setExpandCollapse_gen()</script>
+    <td width="100%" class="body" valign="top" style="padding:5 0 0 10">
 	<!-- END: main -->
