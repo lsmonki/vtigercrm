@@ -432,8 +432,14 @@ $vtlog->logthis("module is =".$module,'info');
         }
 	elseif($uitype == 5 || $uitype == 6 || $uitype ==23)
        {
-
-               $fldvalue = getDBInsertDateValue($this->column_fields[$fieldname]);
+		if($_REQUEST['action'] == 'Import')
+                {
+                        $fldvalue = $this->column_fields[$fieldname];
+                }
+                else
+		{
+			$fldvalue = getDBInsertDateValue($this->column_fields[$fieldname]);
+		}
        }
         else
         {
