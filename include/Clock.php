@@ -27,10 +27,10 @@ margin-top:10px;position:absolute;top:0px;left:0px;width:2px;height:2px;font-siz
 margin-top:10px;position:absolute;top:0px;left:0px;width:15px;height:15px;text-align:center;font-family:arial,sans-serif;font-size:10px;color:#000000;
 }
 .datestyle{
-margin-top:20px;position:absolute;top:0px;left:0px;width:100px;text-align:center;font-family:arial,sans-serif;font-size:10px;color:#000000;
+margin-top:20px;position:absolute;top:0px;left:0px;width:100px;text-align:center;font-family:arial,sans-serif;font-size:8px;color:#000000;
 }
 .ampmstyle{
-margin-top:23px;position:absolute;top:0px;left:0px;width:20px;text-align:center;font-family:arial,sans-serif;font-size:10px;color:#000000;
+margin-top:23px;position:absolute;top:0px;left:0px;width:20px;text-align:center;font-family:arial,sans-serif;font-size:8px;color:#000000;
 }
 -->
 </style>

@@ -22,7 +22,7 @@ $the_calc = <<<EOQ
   <tr>
     <!-- td class="calcBg" width="7"></td -->
     <td class="calcBg">
-        <table border="0" cellpadding="3" cellspacing="4">
+        <table border="0" cellpadding="2" cellspacing="2">
 		<form name="calculator">
           <tr style="height:5">
             <td></td>
@@ -51,9 +51,9 @@ $the_calc = <<<EOQ
                 </tr -->
               </table></td>
           </tr>
-          <tr style="height:5">
+          <!--<tr style="height:5">
             <td></td>
-          </tr>
+          </tr>-->
           <tr>
             <td colspan="3"><!-- div align="center"><img src="$image_path/calc_logo.gif" width="80" height="17"></div--></td>
             <td width="25"> <input type="button" name="CE" class="calcCancBtn" value="CE" onClick="CECalc(); return false;">
