@@ -67,11 +67,11 @@ $the_form = <<<EOQ
 <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 	  <td>
        <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-      <td class="formHeader" vAlign="top" align="left" height="20">
-         <IMG height="5" src="$image_path/left_arc.gif" width="5" border="0"></td>
-        <td class="formHeader" vAlign="middle" align="left" noWrap height="20" width="100%">$form_title</td>
-        <td  class="formHeader" vAlign="top" align="right" height="20">
-	  	  <IMG height="5" src="$image_path/right_arc.gif" width="5" border="0"></td>
+      <!--<td class="formHeader" vAlign="top" align="left" height="20">
+         <IMG height="5" src="$image_path/left_arc.gif" width="5" border="0"></td>-->
+        <td vAlign="middle" align="left" noWrap><h3>$form_title</h3></td>
+        <!--<td  class="formHeader" vAlign="top" align="right" height="20">
+	  	  <IMG height="5" src="$image_path/right_arc.gif" width="5" border="0"></td>-->
 		</tr></tbody></table>
       </td>
 EOQ;
