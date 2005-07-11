@@ -243,6 +243,7 @@ function add_create_account()
 		}*/
 		
 		//$query = "select * from {$focus->table_name} WHERE accountname='{$acc_name}' left join crmentity on crmentity.crmid =account.accountid";
+		$acc_name = addslashes($acc_name);
 		$query = "select crmentity.deleted, account.* from account,crmentity WHERE accountname='{$acc_name}' and crmentity.crmid =account.accountid";
 
                 $this->log->info($query);
