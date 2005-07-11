@@ -183,6 +183,36 @@ if (count($history) > 0) {
 				$activity_mode = '&activity_mode=Events';
 		}
 
+		$url_module = $row['module_name'];
+		$url_action = 'DetailView';
+
+		if($row['module_name']=='Orders')
+		{		
+			$xtpl->assign("MODULE_IMAGE_NAME","purchase_order");
+		}
+		elseif($row['module_name']=='SalesOrder')
+		{		
+			$xtpl->assign("MODULE_IMAGE_NAME","sales_order");
+			$url_module = 'Orders';
+			$url_action = 'SalesOrderDetailView';
+		}
+		elseif($row['module_name']=='Vendor')
+		{		
+			$xtpl->assign("MODULE_IMAGE_NAME","vendor");
+			$url_module = 'Products';
+			$url_action = 'VendorDetailView';
+		}
+		elseif($row['module_name']=='PriceBook')
+		{		
+			$xtpl->assign("MODULE_IMAGE_NAME","pricebook");
+			$url_module = 'Products';
+			$url_action = 'PriceBookDetailView';
+		}
+		else
+		{
+			$xtpl->assign("MODULE_IMAGE_NAME",$row['module_name']);
+		}
+
 		$xtpl->assign("RECENT_URL","index.php?module=$row[module_name]&action=DetailView&record=$row[item_id]$activity_mode");
 		$activity_mode = '';	
 		$xtpl->parse("main.left_form.left_form_recent_view.left_form_recent_view_row");
