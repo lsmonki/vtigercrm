@@ -234,6 +234,11 @@ if($xrows != '')
 {
 	$datarows = $xrows;
 }
+if($_REQUEST['skipped_record_count'] != '')
+	$skipped_record_count = $_REQUEST['skipped_record_count'];
+else
+	$_REQUEST['skipped_record_count'] = 0;
+
 if($_REQUEST['noofrows'] != '')
 	$totalnoofrows = $_REQUEST['noofrows'];
 else
@@ -262,7 +267,7 @@ if($totalnoofrows > $RECORDCOUNT && $START < $totalnoofrows)
 		{
 			$rows1[] = $datarows[$j];
 		}
-		$res = InsertImportRecords($datarows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$START,$RECORDCOUNT,$_REQUEST['module'],$totalnoofrows);
+		$res = InsertImportRecords($datarows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$START,$RECORDCOUNT,$_REQUEST['module'],$totalnoofrows,$skipped_record_count);
 
 if($START != 0)
 	echo '<b>'.$res.'</b>';
@@ -273,9 +278,9 @@ else
 {
 	if($START == 0)
 	{
-		$res = InsertImportRecords($datarows,$datarows,$focus,$ret_field_count,$col_pos_to_field,$START,$totalnoofrows,$_REQUEST['module'],$totalnoofrows);
+		$res = InsertImportRecords($datarows,$datarows,$focus,$ret_field_count,$col_pos_to_field,$START,$totalnoofrows,$_REQUEST['module'],$totalnoofrows,$skipped_record_count);
 	}
-	exit;
+//	exit;
 }
 
 // SAVE MAPPING IF REQUESTED
