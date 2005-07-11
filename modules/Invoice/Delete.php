@@ -39,8 +39,12 @@ elseif($_REQUEST['return_module']=="Orders")
 {
 	$relation_query = "UPDATE invoice set salesorderid='' where invoiceid=".$_REQUEST['record'];
 	$adb->query($relation_query);
-
-	
 }
+elseif($_REQUEST['return_module']=="Products")
+{
+	$relation_query = "DELETE from invoiceproductrel where productid=".$_REQUEST['return_id']." and invoiceid=".$_REQUEST['record'];
+	$adb->query($relation_query);
+}
+
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
 ?>
