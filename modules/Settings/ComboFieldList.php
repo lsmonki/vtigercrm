@@ -178,29 +178,38 @@ function getStdOutput($custFldArray, $mod_strings)
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("STANDARD_COMBO_FIELDS", $standCustFld);
 
-//Custom PickList Fields
-$userCustFld ='';
-$i=1;
-foreach($usrFldArray as $custFldName => $custFldColName)
-{
-	if ($i%2==0)
-	{
-		$trowclass = 'evenListRow';
-	}
-	else
-	{	
-		$trowclass = 'oddListRow';
-	}
-	$custFldTableName = $fld_module.'_'.$custFldColName;
-	$userCustFld .= '<tr class="'.$trowclass.'">';
-	$userCustFld .= '<td width="12%" height="21"><a href="index.php?module=Settings&action=EditComboField&fld_module='.$fld_module.'&fld_name='.$custFldName.'&table_name='.$custFldColName.'&column_name='.$custFldColName.'">'.$mod_strings['Edit'].'</a></td>';
-	$userCustFld .= '<td height="21">'.$custFldName.'</td></tr>';
-	$i++; 
-}
-$cust_fld_header = get_form_header($mod_strings['CustomFields'], "", false );
-$xtpl->assign("CUSTOMHEADER", $cust_fld_header);
-$xtpl->assign("CUSTOM_COMBO_FIELDS", $userCustFld);
 
+if($fld_module != 'Activities' && $fld_module != 'Events' && $fld_module != 'Rss')
+{
+	//Custom PickList Fields
+	$userCustFld ='';
+	$i=1;
+	foreach($usrFldArray as $custFldName => $custFldColName)
+	{
+		if ($i%2==0)
+		{
+			$trowclass = 'evenListRow';
+		}
+		else
+		{	
+			$trowclass = 'oddListRow';
+		}
+		$custFldTableName = $fld_module.'_'.$custFldColName;
+		$userCustFld .= '<tr class="'.$trowclass.'">';
+		$userCustFld .= '<td width="12%" height="21"><a href="index.php?module=Settings&action=EditComboField&fld_module='.$fld_module.'&fld_name='.$custFldName.'&table_name='.$custFldColName.'&column_name='.$custFldColName.'">'.$mod_strings['Edit'].'</a></td>';
+		$userCustFld .= '<td height="21">'.$custFldName.'</td></tr>';
+		$i++; 
+	}
+	$cust_fld_header = get_form_header($mod_strings['CustomFields'], "", false );
+	$xtpl->assign("CUSTOMHEADER", $cust_fld_header);
+	$custom_combo_table_header = '<tr>
+		<td class="ModuleListTitle" width="15%" style="padding:0px 3px 0px 3px;"><div align="center">Operation</div></td>
+        <td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;">'.$mod_strings['FieldName'].'</td>
+	</tr>';
+
+	$xtpl->assign("CUSTOM_COMBO_HEADER",$custom_combo_table_header);
+	$xtpl->assign("CUSTOM_COMBO_FIELDS", $userCustFld);
+}
 $xtpl->parse("main");
 $xtpl->out("main");
 
