@@ -1227,7 +1227,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
                 $this->db->query("insert into profile2utility values (".$profile1_id.",7,5,0)");
                 $this->db->query("insert into profile2utility values (".$profile1_id.",7,6,0)");
                 $this->db->query("insert into profile2utility values (".$profile1_id.",8,6,0)");
-                $this->db->query("insert into profile2utility values (".$profile1_id.",9,6,0)");
+                //$this->db->query("insert into profile2utility values (".$profile1_id.",9,6,0)");
                 $this->db->query("insert into profile2utility values (".$profile1_id.",10,6,0)");
 		$this->db->query("insert into profile2utility values (".$profile1_id.",7,8,0)");
                 $this->db->query("insert into profile2utility values (".$profile1_id.",6,8,0)");
@@ -1244,7 +1244,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
                 $this->db->query("insert into profile2utility values (".$profile2_id.",7,5,1)");
                 $this->db->query("insert into profile2utility values (".$profile2_id.",7,6,1)");
                 $this->db->query("insert into profile2utility values (".$profile2_id.",8,6,1)");
-                $this->db->query("insert into profile2utility values (".$profile2_id.",9,6,1)");
+                //$this->db->query("insert into profile2utility values (".$profile2_id.",9,6,1)");
                 $this->db->query("insert into profile2utility values (".$profile2_id.",10,6,1)");
                 $this->db->query("insert into profile2utility values (".$profile2_id.",7,8,0)");
                 $this->db->query("insert into profile2utility values (".$profile2_id.",6,8,0)");
@@ -1261,7 +1261,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
                 $this->db->query("insert into profile2utility values (".$profile3_id.",7,5,1)");
                 $this->db->query("insert into profile2utility values (".$profile3_id.",7,6,1)");
                 $this->db->query("insert into profile2utility values (".$profile3_id.",8,6,1)");
-                $this->db->query("insert into profile2utility values (".$profile3_id.",9,6,1)");
+                //$this->db->query("insert into profile2utility values (".$profile3_id.",9,6,1)");
                 $this->db->query("insert into profile2utility values (".$profile3_id.",10,6,1)");
                 $this->db->query("insert into profile2utility values (".$profile3_id.",7,8,0)");
                 $this->db->query("insert into profile2utility values (".$profile3_id.",6,8,0)");
@@ -1278,7 +1278,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
                 $this->db->query("insert into profile2utility values (".$profile4_id.",7,5,1)");
                 $this->db->query("insert into profile2utility values (".$profile4_id.",7,6,1)");
                 $this->db->query("insert into profile2utility values (".$profile4_id.",8,6,1)");
-                $this->db->query("insert into profile2utility values (".$profile4_id.",9,6,1)");
+                //$this->db->query("insert into profile2utility values (".$profile4_id.",9,6,1)");
                 $this->db->query("insert into profile2utility values (".$profile4_id.",10,6,1)");
                 $this->db->query("insert into profile2utility values (".$profile4_id.",7,8,1)");
                 $this->db->query("insert into profile2utility values (".$profile4_id.",6,8,1)");
