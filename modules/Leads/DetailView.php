@@ -117,7 +117,7 @@ $permissionData = $_SESSION['action_permission_set'];
 
 if(isPermitted("Leads",1,$_REQUEST['record']) == 'yes' && $tab_per_Data[getTabid("Accounts")] == 0 && $tab_per_Data[getTabid("Contacts")] == 0 && $permissionData[getTabid("Accounts")][1] == 0 && $permissionData[getTabid("Contacts")][1] ==0)
 {
-	$xtpl->assign("CONVERTLEAD","<td><input title=\"$app_strings[LBL_CONVERT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='ConvertLead'\" type=\"submit\" name=\"Convert\" value=\"$app_strings[LBL_CONVERT_BUTTON_LABEL]\"></td>");
+	$xtpl->assign("CONVERTLEAD","<td><input title=\"$app_strings[LBL_CONVERT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.action.value='ConvertLead'\" type=\"submit\" name=\"Convert\" value=\"$app_strings[LBL_CONVERT_BUTTON_LABEL]\"></td>");
 }
 
 
