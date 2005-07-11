@@ -76,7 +76,7 @@ function makeInternalLink($path, $text, $target='') {
 //Richie
 	    //echo 'PHdrInL  base uri is ';
     sqgetGlobalVar('base_uri', $base_uri, SQ_SESSION);
-    if ($target != '') 
+    if ($target != '')
     {
         $target = " target=\"$target\"";
     }
@@ -260,21 +260,27 @@ function displayPageHeader($color, $mailbox, $xtra='', $session=false) {
     if ( $shortBoxName == 'INBOX' ) {
         $shortBoxName = _("INBOX");
     }
-    echo "<a name=\"pagetop\"></a>\n"
-        . html_tag( 'table', '', '', $color[4], 'border="0" width="100%" cellspacing="0" cellpadding="2"' ) ."\n"
-        . html_tag( 'tr', '', '', $color[12] ) ."\n"
+
+	//***********raj - currentfolder****************//
+    /*echo "<a name=\"pagetop\"></a>\n"
+        . html_tag( 'table', '', '', '', 'border="0" width="90%" cellspacing="0" cellpadding="0"' ) ."\n"
+        . html_tag( 'tr', '', '', '') ."\n"
         . html_tag( 'td', '', 'left' ) ."\n";
     if ( $shortBoxName <> '' && strtolower( $shortBoxName ) <> 'none' ) {
         echo '         ' . _("Current Folder") . ": <b>$shortBoxName&nbsp;</b>\n";
     } else {
         echo '&nbsp;';
     }
-    echo  "      </td>\n"
+
+    //$smoduleurl = "&smodule=WEBMAILS";
+	//echo '<input type="button" class="button" name="fetchmail" value="Fetch My Mails" onclick=document.location.href="index.php?module=squirrelmail-1.4.4&action=redirect'.$smoduleurl.'";></input>';
+    //echo  "      </td>\n"
         . html_tag( 'td', '', 'right' ) ."<b>\n";
 //    displayInternalLink ('src/signout.php', _("Sign Out"), $frame_top);
     echo "</b></td>\n"
-        . "   </tr>\n"
-        . html_tag( 'tr', '', '', $color[4] ) ."\n"
+        . "   </tr>\n";
+
+   /*     . html_tag( 'tr', '', '', $color[4] ) ."\n"
         . ($hide_sm_attributions ? html_tag( 'td', '', 'left', '', 'colspan="2"' )
                                  : html_tag( 'td', '', 'left' ) )
         . "\n";
@@ -286,8 +292,7 @@ function displayPageHeader($color, $mailbox, $xtra='', $session=false) {
     //echo "&nbsp;&nbsp;\n";
     //displayInternalLink ('folders', _("Folders"));
     echo "&nbsp;&nbsp;\n";
-    displayInternalLink ('options', _("Options"));
-    echo "&nbsp;&nbsp;\n";
+
     //displayInternalLink ("search?mailbox=$urlMailbox", _("Search"));
     echo "&nbsp;&nbsp;\n";
     //displayInternalLink ('help', _("Help"));
@@ -295,7 +300,7 @@ function displayPageHeader($color, $mailbox, $xtra='', $session=false) {
 
     //do_hook('menuline');
 
-    echo "      </td>\n";
+    echo "      </td>\n";*/
 /*
     if (!$hide_sm_attributions)
     {
@@ -305,9 +310,11 @@ function displayPageHeader($color, $mailbox, $xtra='', $session=false) {
         echo '<a href="'.$provider_uri.'" target="_blank">'.$provider_name.'</a>';
         echo "</td>\n";
     }
-    */
+
+    //echo displayInternalLink ('options_highlight', _("Options"));
+    //echo "&nbsp;&nbsp;\n";
     echo "   </tr>\n".
-        "</table><br>\n\n";
+        "</table><br>\n\n";*/
 }
 
 /* blatently copied/truncated/modified from the above function */

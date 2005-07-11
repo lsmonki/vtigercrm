@@ -48,7 +48,7 @@ sqsession_register ($base_uri, 'base_uri');
 
 
 
-// get globals we me need 
+// get globals we me need
 sqGetGlobalVar('login_username', $login_username);
 sqGetGlobalVar('secretkey', $secretkey);
 sqGetGlobalVar('js_autodetect_results', $js_autodetect_results);
@@ -84,10 +84,10 @@ if (!sqsession_is_registered('user_is_logged_in')) {
     $key = OneTimePadEncrypt($secretkey, $onetimepad);
     sqsession_register($onetimepad, 'onetimepad');
 
-    // remove redundant spaces 
+    // remove redundant spaces
     $login_username = trim($login_username);
 
-    // Verify that username and password are correct. 
+    // Verify that username and password are correct.
     if ($force_username_lowercase) {
         $login_username = strtolower($login_username);
     }
@@ -150,7 +150,8 @@ if ($javascript_setting != SMPREF_JS_ON){
 setPref($data_dir, $username, 'javascript_on', $js_pref);
 
 /* Compute the URL to forward the user to. */
-$redirect_url = 'index.php?module=squirrelmail-1.4.4&action=webmail';
+$smodule = $_REQUEST['smodule'];
+$redirect_url = 'index.php?module=squirrelmail-1.4.4&action=webmail&smodule='.$smodule;
 /*
 if ( sqgetGlobalVar('session_expired_location', $session_expired_location, SQ_SESSION) ) {
     sqsession_unregister('session_expired_location');

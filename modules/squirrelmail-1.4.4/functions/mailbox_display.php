@@ -14,11 +14,11 @@
  */
 
 /** The standard includes.. */
+
 require_once(SM_PATH . 'functions/strings.php');
 require_once(SM_PATH . 'functions/html.php');
 require_once(SM_PATH . 'class/html.class.php');
 require_once(SM_PATH . 'functions/imap_mailbox.php');
-
 /* Constants:
  *   PG_SEL_MAX:   default value for page_selector_max
  *   SUBJ_TRIM_AT: the length at which we trim off subjects
@@ -64,7 +64,7 @@ function printMessageInfo($imapConnection, $t, $not_last=true, $key, $mailbox,
             if (!isset($color[12])) {
                 $color[12] = '#EAEAEA';
             }
-            $color_string = $color[12];
+            $color_string = '#F5F5F5';
         }
     }
     $msg = $msgs[$key];
@@ -100,10 +100,12 @@ function printMessageInfo($imapConnection, $t, $not_last=true, $key, $mailbox,
             }
         }
     }
-    $senderName = str_replace('&nbsp;',' ',$senderName);
-    echo html_tag( 'tr','','','','VALIGN="top"') . "\n";
 
-    if (isset($msg['FLAG_FLAGGED']) && ($msg['FLAG_FLAGGED'] == true)) {
+   $senderName = str_replace('&nbsp;',' ',$senderName);
+
+   echo html_tag( 'tr','','','','VALIGN="top"') . "\n";
+
+   if (isset($msg['FLAG_FLAGGED']) && ($msg['FLAG_FLAGGED'] == true)) {
         $flag = "<font color=\"$color[2]\">";
         $flag_end = '</font>';
     } else {
@@ -195,9 +197,10 @@ function printMessageInfo($imapConnection, $t, $not_last=true, $key, $mailbox,
                                'center',
                                $hlt_color );
                 break;
-            case 2: /* from */
-                echo html_tag( 'td',
-                               $italic . $bold . $flag . $fontstr . $senderName .
+            case 4: /* from */
+
+                //echo "<td class='moduleListTitle'>".$italic . $bold . $flag . $fontstr . $senderName ."</td>";
+                echo html_tag( 'td', $italic . $bold . $flag . $fontstr . $senderName .
                                $fontstr_end . $flag_end . $bold_end . $italic_end,
                                'left',
                                $hlt_color );
@@ -210,11 +213,11 @@ function printMessageInfo($imapConnection, $t, $not_last=true, $key, $mailbox,
                 echo html_tag( 'td',
                                $bold . $flag . $fontstr . $date_string .
                                $fontstr_end . $flag_end . $bold_end,
-                               'center',
+                               'left',
                                $hlt_color,
                                'nowrap' );
                 break;
-            case 4: /* subject */
+            case 2: /* subject */
                 $td_str = $bold;
                 if ($thread_sort_messages == 1) {
                     if (isset($indent_array[$msg['ID']])) {
@@ -285,12 +288,12 @@ function printMessageInfo($imapConnection, $t, $not_last=true, $key, $mailbox,
             ++$col;
         }
     }
-    if ($not_last) {
-        echo '</tr>' . "\n" . '<tr><td COLSPAN="' . $col . '" BGCOLOR="' .
-             $color[0] . '" HEIGHT="2"></td></tr>' . "\n";
+    /*if ($not_last) {
+        echo '</tr>' . "\n" . '<tr><td COLSPAN="' . $col . '" BGCOLOR="#E5E5E5" HEIGHT="2"></td></tr>' . "\n";
     } else {
         echo '</tr>'."\n";
-    }
+    }*/
+    echo '</tr>'."\n";
 }
 
 function getServerMessages($imapConnection, $start_msg, $show_num, $num_msgs, $id) {
@@ -486,27 +489,20 @@ function showMessagesForMailbox($imapConnection, $mailbox, $num_msgs,
     $msg_cnt_str = get_msgcnt_str($start_msg, $end_msg, $num_msgs);
 
     do_hook('mailbox_index_before');
+
     echo '<table border="0" width="100%" cellpadding="0" cellspacing="0">';
     echo '<tr><td>';
-
-    mail_message_listing_beginning($imapConnection, $mailbox, $sort,
-                                  $msg_cnt_str, $paginator_str, $start_msg);
-    echo '</td></tr>';
-    /* line between the button area and the list */
-    echo '<tr><td HEIGHT="5" BGCOLOR="'.$color[4].'"></td></tr>';
-    echo '<tr><td>';
-    echo '    <table width="100%" cellpadding="1" cellspacing="0" align="center"'.' border="0" bgcolor="'.$color[9].'">';
-    echo '     <tr><td>';
-    echo '       <table width="100%" cellpadding="1" cellspacing="0" align="center" border="0" bgcolor="'.$color[5].'">';
-    echo '<tr><td>';
-    printHeader($mailbox, $srt, $color, !$thread_sort_messages);
-
-    displayMessageArray($imapConnection, $num_msgs, $start_msg,
-		      $msort, $mailbox, $sort, $color, $show_num,0,0);
-    echo '</td></tr></table></td></tr></table>';
-
-    mail_message_listing_end($num_msgs, $paginator_str, $msg_cnt_str, $color);
+    	mail_message_listing_beginning($imapConnection, $mailbox, $sort,$msg_cnt_str, $paginator_str, $start_msg);
     echo '</td></tr></table>';
+
+	echo '<table width="90%" cellpadding="1" cellspacing="0" align="left" border="0" class=""><tr><td><table width="100%" cellpadding="1" cellspacing="0" align="left" border="0">';
+	echo '<tr><td>';
+		printHeader($mailbox, $srt, $color, !$thread_sort_messages);
+	echo '</td></tr><tr><td>';
+		displayMessageArray($imapConnection, $num_msgs, $start_msg,$msort, $mailbox, $sort, $color, $show_num,0,0);
+	echo '</td></tr>';
+	echo '</table></td></tr></table>';
+
     //$t = elapsed($start);
     //echo("elapsed time = $t seconds\n");
 }
@@ -615,8 +611,7 @@ function displayMessageArray($imapConnection, $num_msgs, $start_msg,
             next($msort);
             $k++;
         } while (isset ($key) && ($k < $i));
-        printMessageInfo($imapConnection, $t, true, $key, $mailbox,
-                         $real_startMessage, $where, $what);
+        printMessageInfo($imapConnection, $t, true, $key, $mailbox,$real_startMessage, $where, $what);
     } else {
         $i = $start_msg;
         reset($msort);
@@ -629,8 +624,7 @@ function displayMessageArray($imapConnection, $num_msgs, $start_msg,
         $not_last = true;
         do {
             if (!$i || $i == $endVar-1) $not_last = false;
-                printMessageInfo($imapConnection, $t, $not_last, $key, $mailbox,
-                                 $real_startMessage, $where, $what);
+                printMessageInfo($imapConnection, $t, $not_last, $key, $mailbox,$real_startMessage, $where, $what);
             $key = key($msort);
             $t++;
             $i++;
@@ -685,41 +679,45 @@ function mail_message_listing_beginning ($imapConnection,
      * This is the beginning of the message list table.
      * It wraps around all messages
      */
+    //***********raj - addtovtigerbutton****************//
     $safe_name = preg_replace("/[^0-9A-Za-z_]/", '_', $mailbox);
     $form_name = "FormMsgs" . $safe_name;
-    echo '<form name="' . $form_name . '" method="post" action="index.php?module=squirrelmail-1.4.4&action=move_messages">' ."\n"
-	. $moveFields
-        . html_tag( 'table' ,
-            html_tag( 'tr',
-                html_tag( 'td' ,
-                    html_tag( 'table' ,
-                        html_tag( 'tr',
-                            html_tag( 'td', $paginator, 'left' ) .
-                            html_tag( 'td', $msg_cnt_str, 'right' )
-                        )
-                    , '', $color[4], 'border="0" width="100%" cellpadding="1"  cellspacing="0"' )
-                , 'left', '', '' )
-            , '', $color[0] )
-	    , '', '', 'border="0" width="100%" cellpadding="1"  cellspacing="0"' );
-	/* line between header and button area */
-        echo '<tr><td HEIGHT="5" BGCOLOR="'.$color[4].'"></td></tr>';
+
+    echo '<form name="' . $form_name . '" method="post" action="index.php?module=squirrelmail-1.4.4&action=move_messages">' ."\n";
+
+	echo '<table border="0" width="90%" cellpadding="5"  cellspacing="0" class="formOuterBorder" style="background-color: #F5F5F5;">
+		   <tr>
+		   		<td>'.$paginator.'&nbsp; | &nbsp; <a href="index.php?module=squirrelmail-1.4.4&action=options_highlight">Options</a></td>
+		   		<td align="right">'.$msg_cnt_str.'</td>
+		   </tr>
+		 </table><br>';
+
+	echo '<table border="0" width="90%" cellpadding="1"  cellspacing="0">
+		   <tr>
+		   		<td width="20%"><h3>WebMails List<h3></td>
+		   		<td width="70%"><input type="button" class="button" name="fetchmail" value="Fetch My Mails" onclick=document.location.href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule=WEBMAILS";></input></td>
+		   		<td><input type="SUBMIT" name="markRead" value="Read" class="button"></input> </td>
+		   		<td align="right"><input type="SUBMIT" name="markUnread" value="Unread" class="button"></input> </td>
+		   		<td align="right"><input type="SUBMIT" name="delete" value="Delete" class="button"></input> </td>
+		   </tr>
+		 </table>';
+
+
+	/* line between header and button area
+    echo '<tr><td HEIGHT="5"></td></tr>';
 
         echo '<tr><td>';
         echo html_tag( 'tr' ) . "\n"
         . html_tag( 'td' ,'' , 'left', '', '' )
-         . html_tag( 'table' ,'' , '', $color[9], 'border="0" width="100%" cellpadding="1"  cellspacing="0"' )
+         . html_tag( 'table' ,'' , '', '', 'border="0" width="100%" cellpadding="1"  cellspacing="0"' )
 	  . '<tr><td>'
-           . html_tag( 'table' ,'' , '', $color[0], 'border="0" width="100%" cellpadding="1"  cellspacing="0"' )
-            //. html_tag( 'tr',
-	        //getSmallStringCell(_("Move Selected To"), 'left', 'nowrap') .
-	        //getSmallStringCell(_("Transform Selected Messages"), 'right')
-            //)
+           . html_tag( 'table' ,'' , '', '', 'border="0" width="90%" cellpadding="0"  cellspacing="0"' )
             . html_tag( 'tr' ) ."\n"
-            . html_tag( 'td', '', 'left', '', 'valign="middle" nowrap' );
-            getMbxList($imapConnection);
-            //echo getButton('SUBMIT', 'moveButton',_("Move")) . "\n";
-            //echo getButton('SUBMIT', 'attache',_("Forward")) . "\n";
-            echo getButton('SUBMIT', 'addToVtigerCRMButton',_("Add2Vtiger")) . "\n";
+            . html_tag( 'td', 'WebMails List', 'left', '', 'valign="middle" nowrap' );
+            //getMbxList($imapConnection);
+            //echo get_form_header("WebMails List",$other_text, false);
+            //echo '<input type="SUBMIT" name="addToVtigerCRMButton" value="Add to vtiger CRM" class="button"></input>';
+            //echo getButton('SUBMIT', 'addToVtigerCRMButton',_("Add2Vtiger")) . "\n";
 
   echo "      </small></td>\n"
          . html_tag( 'td', '', 'right', '', 'nowrap' );
@@ -731,9 +729,14 @@ function mail_message_listing_beginning ($imapConnection,
              .'&nbsp;' . _("mailbox") . "\n";
     }
 
-    echo getButton('SUBMIT', 'markRead',_("Read"));
-    echo getButton('SUBMIT', 'markUnread',_("Unread"));
-    echo getButton('SUBMIT', 'delete',_("Delete")) ."&nbsp;\n";
+	echo '<input type="SUBMIT" name="markRead" value="Read" class="button"></input>';
+	echo '<input type="SUBMIT" name="markUnread" value="Unread" class="button"></input>';
+	echo '<input type="SUBMIT" name="delete" value="Delete" class="button"></input>';*/
+
+    //echo getButton('SUBMIT', 'markRead',_("Read"));
+   // echo getButton('SUBMIT', 'markUnread',_("Unread"));
+   // echo getButton('SUBMIT', 'delete',_("Delete")) ."&nbsp;\n";
+
     if (!strpos($php_self,'mailbox')) {
             //important fix else it gives Warning error while changing message to Read/Unread/Delete cases
         $location = $php_self.'&mailbox=INBOX&amp;startMessage=1';
@@ -766,7 +769,7 @@ function mail_message_listing_beginning ($imapConnection,
                  , '', '', '' );
     }
 
-    echo "</TABLE></td></tr></table></td></tr>\n";
+    //echo "</TABLE></td></tr></table></td></tr>\n";
 
     do_hook('mailbox_form_before');
 
@@ -782,7 +785,7 @@ function mail_message_listing_beginning ($imapConnection,
 
 function mail_message_listing_end($num_msgs, $paginator_str, $msg_cnt_str, $color) {
   if ($num_msgs) {
-    /* space between list and footer */
+    /* space between list and footer
     echo '<tr><td HEIGHT="5" BGCOLOR="'.$color[4].'" COLSPAN="1">';
 
     echo '</td></tr><tr><td>';
@@ -794,11 +797,19 @@ function mail_message_listing_end($num_msgs, $paginator_str, $msg_cnt_str, $colo
                             html_tag( 'td', $paginator_str ) .
                             html_tag( 'td', $msg_cnt_str, 'right' )
                         )
-                    , '', $color[4], 'width="100%" border="0" cellpadding="1" cellspacing="0"' )
+                    , '', '', 'width="90%" border="1" cellpadding="1" cellspacing="0"' )
                 )
             )
-        , '', $color[9], 'width="100%" border="0" cellpadding="1"  cellspacing="0"' );
-    echo '</td></tr>';
+        , '', '', 'width="100%" border="0" cellpadding="1"  cellspacing="0"' );
+    echo '</td></tr>';*/
+
+    echo '<tr><td><!-- table border="0" width="90%" cellpadding="1"  cellspacing="0" style="border-top: 1px solid #CCCCCC;">
+			   <tr>
+			   		<td>'.$paginator_str.'</td>
+			   		<td align="right">'.$msg_cnt_str.'</td>
+			   </tr>
+		 </table --></td></tr><br>';
+
   }
     /* End of message-list table */
 
@@ -808,7 +819,7 @@ function mail_message_listing_end($num_msgs, $paginator_str, $msg_cnt_str, $colo
 
 function printHeader($mailbox, $sort, $color, $showsort=true) {
     global $index_order;
-    echo html_tag( 'tr' ,'' , 'center', $color[5] );
+    echo html_tag( 'tr' ,'' , 'center', '','class="formSecHeader"' );
 
     /* calculate the width of the subject column based on the
      * widths of the other columns */
@@ -822,15 +833,15 @@ function printHeader($mailbox, $sort, $color, $showsort=true) {
         switch ($item) {
         case 1: /* checkbox */
         case 5: /* flags */
-            echo html_tag( 'td' ,'&nbsp;' , '', '', 'width="1%"' );
+            echo html_tag( 'td' ,'' , '', '', '' );
             break;
-        case 2: /* from */
+        case 4: /* from */
             if (handleAsSent($mailbox)) {
-                echo html_tag( 'td' ,'' , 'left', '', 'width="25%"' )
-                     . '<b>' . _("To") . '</b>';
+                echo html_tag( 'td' ,'' , 'left', '', 'width="25%" class="moduleListTitle"' )
+                     . '' . _("To") . '';
             } else {
                 echo html_tag( 'td' ,'' , 'left', '', 'width="25%"' )
-                     . '<b>' . _("From") . '</b>';
+                     . '' . _("From") . '';
             }
             if ($showsort) {
                 ShowSortButton($sort, $mailbox, 2, 3);
@@ -838,23 +849,23 @@ function printHeader($mailbox, $sort, $color, $showsort=true) {
             echo "</td>\n";
             break;
         case 3: /* date */
-            echo html_tag( 'td' ,'' , 'center', '', 'width="45%" nowrap' )
-                 . '<b>' . _("Date") . '</b>';
+            echo html_tag( 'td' ,'' , 'left', '', 'width="20%" nowrap' )
+                 . '' . _("Date") . '';
             if ($showsort) {
                 ShowSortButton($sort, $mailbox, 0, 1);
             }
             echo "</td>\n";
             break;
-        case 4: /* subject */
-            echo html_tag( 'td' ,'' , 'left', '', 'width="'.$subjectwidth.'%"' )
-                 . '<b>' . _("Subject") . '</b>';
+        case 2: /* subject */
+            echo html_tag( 'td' ,'' , 'left', '', 'width="50%"' )
+                 . '' . _("Subject") . '';
             if ($showsort) {
                 ShowSortButton($sort, $mailbox, 4, 5);
             }
             echo "</td>\n";
             break;
         case 6: /* size */
-            echo html_tag( 'td', '<b>' . _("Size") . '</b>', 'center', '', 'width="5%" nowrap' );
+            echo html_tag( 'td', '' . _("Size") . '', 'center', '', 'width="5%" nowrap' );
             break;
         }
     }

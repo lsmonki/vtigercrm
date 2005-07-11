@@ -18,9 +18,9 @@
  * @ignore
  */
 
-echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
+echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true);
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
-$sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
+$sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails');
 echo '<br>';
 ?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -28,14 +28,15 @@ echo '<br>';
    <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
    <tr>
      <td class="tabStart">&nbsp;&nbsp;</td>
-<?
+<?php
+
 	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
 	{
-		$classname = "tabOff";
+		$classname = "tabOn";
 	}
 	else
 	{
-		$classname = "tabOn";
+		$classname = "tabOff";
 	}
 	$listView = "ListView.php";
 	foreach($submenu as $label=>$filename)
@@ -50,20 +51,20 @@ echo '<br>';
 			if(stristr($label,"EMAILS"))
 			{
 
-				echo '<td class="tabOn" nowrap><a href="index.php?module=Emails&action=ListView&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';
+				echo '<td class="tabOff" nowrap><a href="index.php?module=Emails&action=ListView&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';
 
 				$listView = $filename;
 				$classname = "tabOff";
 			}
 			elseif(stristr($label,$_REQUEST['smodule']))
 			{
-				echo '<td class="tabOn" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+				echo '<td class="tabOn" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';
 				$listView = $filename;
 				$classname = "tabOff";
 			}
 			else
 			{
-				echo '<td class="'.$classname.'" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+				echo '<td class="'.$classname.'" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';
 			}
 			$classname = "tabOff";
 		}
@@ -192,8 +193,11 @@ if (!isset($startMessage) || ($startMessage == '')) {
 if ($imap_server_type == 'uw' && (strstr($mailbox, '../') || substr($mailbox, 0, 1) == '/')) {
    $mailbox = 'INBOX';
 }
-echo "<a href='index.php?module=squirrelmail-1.4.4&action=redirect'><b><font color=green> <u>Fetch My Mails!</u></color></b></a><br>";
-echo '<hr>';
+
+
+//$smoduleurl = "&smodule=".$_REQUEST['smodule'];
+//echo '<input type="button" class="button" name="fetchmail" value="Fetch My Mails" onclick=document.location.href="index.php?module=squirrelmail-1.4.4&action=redirect'.$smoduleurl.'";></input>';
+//echo '<hr>';
 
 //Richie//Richie//Richie//Richie//Richie//Richie//Richie//Richie
 //echo 'in right_main';

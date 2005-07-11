@@ -3079,6 +3079,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 		$list_header .= '</tr>';
 	}
+	$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 	return $list_header;
 }
 
