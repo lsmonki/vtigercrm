@@ -167,7 +167,7 @@ function getStdOutput($custFldArray, $mod_strings)
 		}
 
 		$standCustFld .= '<tr class="'.$trowclass.'">';
-		$standCustFld .= '<td width="12%" height="21" style="padding:0px 3px 0px 3px;"><div align="center"><a href="index.php?module=Settings&action=EditComboField&fld_module='.$fld_module.'&fld_name='.$custFldName.'&table_name='.$custFldTableName.'&column_name='.$custFldTableName.'">'.$mod_strings['Edit'].'</a></div></td>';
+		$standCustFld .= '<td width="12%" height="21" style="padding:0px 3px 0px 3px;"><div align="center"><a href="index.php?module=Settings&action=EditComboField&fld_module='.$_REQUEST["fld_module"].'&fld_name='.$custFldName.'&table_name='.$custFldTableName.'&column_name='.$custFldTableName.'">'.$mod_strings['Edit'].'</a></div></td>';
 		$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$custFldName.'</td>';
 		$standCustFld .= '</tr>';
 		$i++; 
