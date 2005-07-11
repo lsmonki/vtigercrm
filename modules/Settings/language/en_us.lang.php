@@ -480,6 +480,12 @@ $mod_strings = Array(
 
 'InvoiceNotification'=>'Product Stock Notification during Invoice Generation',
 'InvoiceNotificationDescription'=>'When the product stock level goes below the re-order level, notification will be sent to the product handler',
+'Vendor'=>'Vendor',
+'PriceBook'=>'PriceBook',
+'Quotes'=>'Quote',
+'Orders'=>'Purchase Order',
+'SalesOrder'=>'SalesOrder',
+'Invoice'=>'Invoice',
 
 );
 
