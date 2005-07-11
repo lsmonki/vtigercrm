@@ -1,9 +1,12 @@
 <?php
 
 $count = 0;
+$skip_required_count = 0;
 
-function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$start,$recordcount,$module,$totalnoofrows)
+function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$start,$recordcount,$module,$totalnoofrows,$skip_required_count)
 {
+	global $current_user;
+
 if($start == 0)
 {
 	$_SESSION['totalrows'] = $rows;
@@ -15,6 +18,7 @@ $ii = $start;
 foreach ($rows1 as $row)
 {
 	global $adb;
+	global $mod_strings;
 
 	$do_save = 1;
 
@@ -156,9 +160,13 @@ $RECORDCOUNT = $recordcount;
 
 if($end >= $totalnoofrows)
 {
-	$module = $_REQUEST['module'];
-	$action = 'index';
+	$module = 'Import';//$_REQUEST['module'];
+	$action = 'ImportSteplast';
 	//exit;
+	$imported_records = $ii - $skip_required_count;
+	if($imported_records == $ii)
+		$skip_required_count = 0;
+	$message= urlencode($mod_strings['LBL_SUCCESS']."<BR>$imported_records ". $_REQUEST['return_module']." ".$mod_strings['LBL_SUCCESSFULLY']."<br>$skip_required_count " .  $mod_strings['LBL_RECORDS_SKIPPED'] );
 }
 else
 {
@@ -171,7 +179,7 @@ else
 setTimeout("b()",1000);
 function b()
 {
-        document.location.href="index.php?action=<?php echo $action?>&module=<?php echo $module?>&modulename=<?php echo $modulename?>&startval=<?php echo $end?>&recordcount=<?php echo $RECORDCOUNT?>&noofrows=<?php echo $totalnoofrows?>";
+        document.location.href="index.php?action=<?php echo $action?>&module=<?php echo $module?>&modulename=<?php echo $modulename?>&startval=<?php echo $end?>&recordcount=<?php echo $RECORDCOUNT?>&noofrows=<?php echo $totalnoofrows?>&message=<?php echo $message?>&skipped_record_count=<?php echo $skip_required_count?>";
 }
 </script>
 
