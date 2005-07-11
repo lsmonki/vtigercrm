@@ -208,7 +208,7 @@ var getOddMinutes;
 var addOddMinutes;
 plusMinus=false;
 
-var mon=new Array("January","February","March","April","May","June","July","August","September","October","November","December");
+var mon=new Array("January","February","March","April","May","June","August","September","October","November","December");
 
 document.write('<div id="theDate" class="datestyle" style="color:'+cCol+'">\!<\/div>');
 document.write('<div id="amOrPm" class="ampmstyle" style="color:'+aCol+'">\!<\/div>');
