@@ -172,6 +172,27 @@ $vtlog->logthis("in  track view method ".$current_module,'info');
             $po = $adb->query_result($result,0,'subject');
             $item_summary = $po;
           }
+	  elseif($current_module =='SalesOrder')
+          {
+            $query = 'select subject from salesorder where salesorderid=' .$item_id;
+            $result = $this->db->query($query);
+            $so = $adb->query_result($result,0,'subject');
+            $item_summary = $so;
+          }
+	  elseif($current_module =='Vendor')
+          {
+            $query = 'select vendorname from vendor where vendorid=' .$item_id;
+            $result = $this->db->query($query);
+            $vendor = $adb->query_result($result,0,'vendorname');
+            $item_summary = $vendor;
+          }
+	  elseif($current_module =='PriceBook')
+          {
+            $query = 'select bookname from pricebook where pricebookid=' .$item_id;
+            $result = $this->db->query($query);
+            $pb = $adb->query_result($result,0,'bookname');
+            $item_summary = $pb;
+          }	
 
 	 
 	 #if condition added to skip faq in last viewed history
