@@ -171,9 +171,12 @@ A.moduleMenu:hover {
 .formHeader {
 	FONT-WEIGHT: bold;
 	FONT-SIZE: 12px;
-	COLOR: #FD4102;
+	COLOR: #000000; /*#FD4102*/
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
 	TEXT-DECORATION: none;
+	background-image: url(images/tabletopbg.gif);
+	background-repeat: repeat-x;
+	background-position: left;
 }
 .formFooter {
 	FONT-WEIGHT: normal;
@@ -184,7 +187,7 @@ A.moduleMenu:hover {
 }
 .formBorder {
 	background-color: #C6D7EC;
-	border: 1px solid #C6D7EC;
+	border: 1px solid #FFFFFF;
 }
 .formOuterBorder {
 	margin-top: 2px;
@@ -198,6 +201,9 @@ A.moduleMenu:hover {
 	font-weight: bold ;
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
 	BACKGROUND-COLOR: #D1DFEF;
+	background-image: url(images/tabletopbg.gif);
+	background-repeat: repeat-x;
+	background-position: left;	
 }
 .leftFormHeader { 
 	BACKGROUND-COLOR: #AFC8E4;
@@ -290,12 +296,13 @@ A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000
 
 /* Calculator */
 .calcBg {
-	background-color: #B3BDC6;
+	background-color: #EEEEEE;/*B3BDC6*/
+	border: 1px solid #CCCCCC;
 }
 .calcResult {
 	width: 100%;
 	height: 25;
-	background-color: #CAE7E8;
+	background-color: #CCFFCC;
 	border-top: 1px solid #999;
 	border-left: 0px;
 	border-right: 1px solid #FFF;
@@ -310,7 +317,7 @@ A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000
 	border-left: 1px solid #999;
 	border-right: 0px;
 	border-bottom: 1px solid #FFF;
-	background-color: #CAE7E8;
+	background-color: #CCFFCC;
 	font-family: Arial;
 	font-size: 10;
 	color: #BBB;
@@ -1010,29 +1017,11 @@ div.message {
 }
 
 .today {
-	background: #CCCCCC;
+		background: #FFFFFF;
         vertical-align: top;
-        color: #000;
-        font-weight: bold;	
+        color: #CC0000;
 }
 
-/* classes are added for getting the events in the mini calendar*/
-.todayevent, .todayevent a{
-	background: #99CC66;
-	vertical-align: top;
-	color: #FFFFFF;
-	font-weight: bold;
-
-}
-.eventbold  {
-
-	background: #E5E5E5;
-	vertical-align: top;
-	color: #000;
-	font-weight: bold;
-}
-
-/* -- */
 .week {
         color: black;
         background: #DBE6F2;
