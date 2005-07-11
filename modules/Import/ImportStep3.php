@@ -32,6 +32,11 @@ require_once('modules/Import/ImportMap.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
 
+@session_unregister('column_position_to_field');
+@session_unregister('totalrows');
+@session_unregister('recordcount');
+@session_unregister('startval');
+@session_unregister('return_field_count');
 $_SESSION['totalrows'] = '';
 $_SESSION['recordcount'] = 500;
 $_SESSION['startval'] = 0;
