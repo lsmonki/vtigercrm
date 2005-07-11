@@ -331,8 +331,7 @@ A.moduleMenu:hover {
 .formBorder {
 
 	background-color: #FFB062;
-
-	border: 1px solid #FFB062;
+	border: 1px solid #FFFFFF;
 
 }
 
@@ -1555,28 +1554,10 @@ div.message {
 }
 
 .today {
-	background: #CCCCCC;
-	vertical-align: top;
-	color: #000;
-	font-weight: bold;
+        background: #FFFFFF;
+		vertical-align: top;
+        color: #CC0000;
 }
-
-/* classes are added for getting the events in the mini calendar -Jaguar*/
-.todayevent, .todayevent a{
-	background: #99CC66;
-	vertical-align: top;
-	color: #FFFFFF;
-	font-weight: bold;
-
-}
-.eventbold  {
-
-	background: #E5E5E5;
-	vertical-align: top;
-	color: #000;
-	font-weight: bold;
-}
-/* */
 
 .week {
         color: black;
