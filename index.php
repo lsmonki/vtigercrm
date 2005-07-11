@@ -571,7 +571,7 @@ $mod_strings = return_module_language($current_language, $currentModule);
 $app_list_strings['record_type_module'] = array('Account' => 'Accounts','Potential' => 'Potentials', 'Case' => 'Cases');
 
 //If DetailView, set focus to record passed in
-if($action == "DetailView")
+if($action == "DetailView" || $action == "SalesOrderDetailView" || $action == "VendorDetailView" || $action == "PriceBookDetailView")
 {
 	if(!isset($_REQUEST['record']))
 		die("A record number must be specified to view details.");
@@ -579,6 +579,8 @@ if($action == "DetailView")
 	// If we are going to a detail form, load up the record now.
 	// Use the record to track the viewing.
 	// todo - Have a record of modules and thier primary object names.
+	//Getting the actual module
+	$actualModule = $currentModule;
 	switch($currentModule)
 	{
 		case 'Leads':
@@ -614,9 +616,25 @@ if($action == "DetailView")
 			$focus = new User();
 			break;
 		case 'Products':
-			require_once("modules/$currentModule/Product.php");
-			$focus = new Product();
+			if($action == 'DetailView')
+			{
+				require_once("modules/$currentModule/Product.php");
+				$focus = new Product();
+			}
+			elseif($action == 'VendorDetailView')
+			{
+				require_once("modules/$currentModule/Vendor.php");
+				$focus = new Vendor();
+				$actualModule = 'Vendor';
+			}
+			elseif($action == 'PriceBookDetailView')
+			{
+				require_once("modules/$currentModule/PriceBook.php");
+				$focus = new PriceBook();
+				$actualModule = 'PriceBook';
+			}
 			break;
+			
 		case 'HelpDesk':
 			require_once("modules/$currentModule/HelpDesk.php");
 			$focus = new HelpDesk();
@@ -630,8 +648,17 @@ if($action == "DetailView")
 			$focus = new Quote();
 			break;
 		case 'Orders':
-			require_once("modules/$currentModule/Order.php");
-			$focus = new Order();
+			if($action == 'DetailView')
+			{
+				require_once("modules/$currentModule/Order.php");
+				$focus = new Order();
+			}
+			elseif($action == 'SalesOrderDetailView')
+			{
+				require_once("modules/$currentModule/SalesOrder.php");
+				$focus = new SalesOrder();
+				$actualModule = 'SalesOrder';
+			}
 			break;
 		case 'Invoice':
 			require_once("modules/$currentModule/Invoice.php");
@@ -639,13 +666,14 @@ if($action == "DetailView")
 			break;
 		}
 	
+		
 	//$focus->retrieve($_REQUEST['record']);
         //$focus->track_view($current_user->id, $currentModule,$_REQUEST['record']);
 	
 	if(isset($_REQUEST['record']) && $_REQUEST['record']!='')
         {
                 // Only track a viewing if the record was retrieved.
-                $focus->track_view($current_user->id, $currentModule,$_REQUEST['record']);
+                $focus->track_view($current_user->id, $actualModule,$_REQUEST['record']);
         }
 
 }	
