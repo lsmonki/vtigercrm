@@ -84,8 +84,8 @@ elseif($fld_module == 'Products')
 }
 elseif($fld_module == 'Events')
 {
-	$custFldArray = Array($mod_strings['LBL_STATUS']=>'taskstatus'
-			,$mod_strings['LBL_PRIORITY']=>'taskpriority');
+	$custFldArray = Array($mod_strings['LBL_STATUS']=>'eventstatus'
+			);
 	$standCustFld = getStdOutput($custFldArray, $mod_strings);
 }
 elseif($fld_module == 'Activities')
