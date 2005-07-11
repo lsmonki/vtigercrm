@@ -213,7 +213,7 @@ if (count($history) > 0) {
 			$xtpl->assign("MODULE_IMAGE_NAME",$row['module_name']);
 		}
 
-		$xtpl->assign("RECENT_URL","index.php?module=$row[module_name]&action=DetailView&record=$row[item_id]$activity_mode");
+		$xtpl->assign("RECENT_URL","index.php?module=$url_module&action=$url_action&record=$row[item_id]$activity_mode");
 		$activity_mode = '';	
 		$xtpl->parse("main.left_form.left_form_recent_view.left_form_recent_view_row");
 		$current_row++;
