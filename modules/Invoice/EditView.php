@@ -26,6 +26,7 @@ require_once('modules/Invoice/Invoice.php');
 require_once('modules/Quotes/Quote.php');
 require_once('modules/Orders/SalesOrder.php');
 require_once('modules/Invoice/Forms.php');
+require_once('modules/Potentials/Opportunity.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
 require_once('include/uifromdbutil.php');
@@ -115,6 +116,17 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
+if(isset($_REQUEST['opportunity_id']) || $_REQUEST['opportunity_id'] !='')
+{
+	$potfocus = new Potential();
+        $potfocus->column_fields['potential_id'] = $_REQUEST['opportunity_id'];
+	$num_of_products = getNoOfAssocProducts("Potentials",$potfocus,$potfocus->column_fields['potential_id']);
+        $associated_prod = getAssociatedProducts("Potentials",$potfocus,$potfocus->column_fields['potential_id']);
+	$focus->id = "";
+    	$focus->mode = ''; 	
+
+	
+}
 if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
         $focus->column_fields['product_id'] = $_REQUEST['product_id'];
 	$num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
@@ -123,7 +135,8 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
     	$focus->mode = ''; 	
 } 
  
-if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['record']==''){
+ 
+if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && ($_REQUEST['record']=='' || $_REQUEST['convertmode'] == "potentoinvoice")){
 	require_once('modules/Accounts/Account.php');
 	$acct_focus = new Account();
 	$acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
@@ -254,7 +267,7 @@ elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 	$xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
 	$xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
 }
-elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
+elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') || (isset($_REQUEST['opportunity_id']) && $_REQUEST['opportunity_id'] != '')) {
         $xtpl->assign("ROWCOUNT", $num_of_products);
         $xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
         $xtpl->assign("MODE", $focus->mode);
