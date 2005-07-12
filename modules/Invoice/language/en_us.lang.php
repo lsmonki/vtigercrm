@@ -168,6 +168,7 @@ $mod_strings = Array(
 'LBL_MY_TOP_INVOICE'=>'My Top Open Invoice',
 'LBL_INVOICE_NAME'=>'Invoice Name:',
 'Purchase Order'=>'Purchase Order:',
+'Status'=>'Status',
 
 );
 
