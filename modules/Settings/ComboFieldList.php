@@ -52,7 +52,8 @@ elseif($fld_module == 'Accounts')
 }
 elseif($fld_module == 'Contacts')
 {
-	$custFldArray = Array($mod_strings['LBL_SALUTATION']=>'salutationtype');
+	$custFldArray = Array($mod_strings['LBL_SALUTATION']=>'salutationtype'
+			      ,$mod_strings['LBL_LEAD_SOURCE']=>'leadsource');
 	$standCustFld = getStdOutput($custFldArray, $mod_strings);
 }
 elseif($fld_module == 'Potentials')
