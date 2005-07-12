@@ -244,7 +244,26 @@ $combo_strings = Array(
 			'Weekly'=>'Weekly',
 			'Monthly'=>'Monthly',
 			'Yearly'=>'Yearly'
-			)
+			),
+
+'invoicestatus_dom' => Array('Created'=>'Created',
+			'Approved'=>'Approved',
+			'Sent'=>'Sent',
+			'Credit Invoice'=>'Credit Invoice',
+			'Paid'=>'Paid'
+			),
+
+'postatus_dom' => Array('Created'=>'Created',
+			'Approved'=>'Approved',
+			'Delivered'=>'Delivered',
+			'Canceled'=>'Canceled'
+			),
+
+'sostatus_dom' => Array('Created'=>'Created',
+			'Approved'=>'Approved',
+			'Delivered'=>'Delivered',
+			'Canceled'=>'Canceled'
+			),
 		
 );
 
