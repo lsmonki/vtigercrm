@@ -37,7 +37,14 @@ global $app_strings;
 	  <A href="index.php?module=Activities&action=index"><?php echo $app_list_strings['moduleList']['Activities']; ?></A> | 
 	  <A href="index.php?module=HelpDesk&action=index"><?php echo $app_list_strings['moduleList']['HelpDesk']; ?></A> |
 	  <A href="index.php?module=Products&action=index"><?php echo $app_list_strings['moduleList']['Products']; ?></A> |
-	  <A href="index.php?module=Calendar&action=index"><?php echo $app_list_strings['moduleList']['Calendar']; ?></A> 
+	  <A href="index.php?module=Calendar&action=index"><?php echo $app_list_strings['moduleList']['Calendar']; ?></A> |
+
+	  <A href="index.php?module=Quotes&action=index"><?php echo $app_list_strings['moduleList']['Quotes']; ?></A> |
+          <A href="index.php?module=Orders&action=index"><?php echo $app_list_strings['moduleList']['Orders']; ?></A> |
+          <A href="index.php?module=Invoice&action=index"><?php echo $app_list_strings['moduleList']['Invoice']; ?></A> |
+
+          <A href="index.php?module=Rss&action=index"><?php echo $app_list_strings['moduleList']['Rss']; ?></A> |
+          <A href="index.php?module=Reports&action=index"><?php echo $app_list_strings['moduleList']['Reports']; ?></A>
 
 	  </td>
     </tr></table>
