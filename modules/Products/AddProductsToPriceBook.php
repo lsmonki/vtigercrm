@@ -29,7 +29,8 @@ $pricebook_id = $_REQUEST['pricebook_id'];
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-echo get_module_title("Products", "Add Products to PriceBook:" , true);
+$pricebookname = getPriceBookName($pricebook_id);
+echo get_module_title($current_module_strings['LBL_MODULE_NAME'], $current_module_strings['LBL_ADD_PRODUCTS_PRICEBOOK'].": ".$pricebookname, true);
 echo "<br>";
 //echo get_form_header("Product Search", "", false);
 

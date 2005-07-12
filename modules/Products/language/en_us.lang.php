@@ -28,7 +28,7 @@ $mod_strings = Array(
 'LBL_VENDOR_NAME'=>'Vendor Name:',
 'LBL_PRICEBOOK_NAME'=>'Price Book Name:',
 'LBL_VENDOR'=>'Vendor',
-'LBL_PRICEBOOK'=>'Price Book',
+'LBL_PRICEBOOK'=>'Price Book:',
 'LBL_VENDOR_INFORMATION'=>'Vendor Information:',
 'LBL_PRICEBOOK_INFORMATION'=>'Price Book Information:',
 'LBL_VENDOR_ADDRESS_INFORMATION'=>'Address Information:',
@@ -161,7 +161,8 @@ $mod_strings = Array(
 'LBL_ADD_PRICEBOOK_BUTTON_TITLE'=>'Add To Price Books [Alt+B]',
 'LBL_ADD_PRICEBOOK_BUTTON_KEY'=>'B',
 'LBL_ADD_PRICEBOOK_BUTTON_LABEL'=>'Add To Price Books',
-'LBL_ADD_PRODUCT_PRICEBOOKS'=>'Add Product to PriceBooks'
+'LBL_ADD_PRODUCT_PRICEBOOKS'=>'Add Product to PriceBooks',
+'LBL_ADD_PRODUCTS_PRICEBOOK'=>'Add Products to PriceBook',
 
 );
 

@@ -29,7 +29,8 @@ $productid = $_REQUEST['return_id'];
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_ADD_PRODUCT_PRICEBOOKS'] , true);
+$productname = getProductName($productid);
+echo get_module_title($current_module_strings['LBL_MODULE_NAME'], $current_module_strings['LBL_ADD_PRODUCT_PRICEBOOKS'].": ".$productname, true);
 echo "<br>";
 //echo get_form_header("Product Search", "", false);
 

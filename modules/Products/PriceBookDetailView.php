@@ -20,6 +20,7 @@ $focus = new PriceBook();
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
   $focus->retrieve_entity_info($_REQUEST['record'],"PriceBook");
   $focus->id = $_REQUEST['record'];
+  $pricebookname = getPriceBookName($focus->id);
   //$focus->name=$focus->column_fields['productname'];		
 }
 
@@ -82,6 +83,7 @@ if(isPermitted("PriceBook",2,$_REQUEST['record']) == 'yes')
 
 
 $xtpl->assign("IMAGE_PATH", $image_path);
+$xtpl->assign("PRICEBOOKNAME", $pricebookname);
 $xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $_REQUEST['record']);
 $xtpl->parse("main");

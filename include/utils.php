@@ -2281,7 +2281,16 @@ $vtlog->logthis("in getQuoteName ".$quote_id,'info');
         $quote_name = $adb->query_result($result,0,"subject");
         return $quote_name;
 }
-
+function getPriceBookName($pricebookid)
+{
+global $vtlog;
+$vtlog->logthis("in getPriceBookName ".$pricebookid,'info');  
+        global $adb;
+        $sql = "select * from pricebook where pricebookid=".$pricebookid;
+        $result = $adb->query($sql);
+        $pricebook_name = $adb->query_result($result,0,"bookname");
+        return $pricebook_name;
+}
 function getPoName($po_id)
 {
 
