@@ -620,7 +620,7 @@ A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000
 .calcBg {
 	/*background-color: #666;*//*BFC1B7*/
 	background: url(images/cal_bg.gif);
-	border: 1px solid #009900;"
+	border: 1px solid #009900;
 }
 .calcResult {
 	width: 100%;
