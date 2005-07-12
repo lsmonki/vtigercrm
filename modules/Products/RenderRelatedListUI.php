@@ -110,15 +110,13 @@ function renderPriceBookRelatedProducts($query,$id)
         $focus = new Product();
  
 	$button = '';
-
-
  
 		$button .= '<input title="Select Products" accessyKey="F" class="button" onclick="this.form.action.value=\'AddProductsToPriceBook\';this.form.module.value=\'Products\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'PriceBookDetailView\'" type="submit" name="button" value="'.$app_strings['LBL_SELECT_PRODUCT_BUTTON_LABEL'].'">&nbsp;';
 		//$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_PRODUCT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&return_module=Products&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
 	$returnset = '&return_module=Products&return_action=PriceBookDetailView&return_id='.$id;
 
 	//$list = GetRelatedList('PriceBook','Products',$focus,$query,$button,$returnset,'updatePbListPrice','DeletePbProductRel');
-	  $list = getPriceBookRelatedProducts($query,$focus);
+	  $list = getPriceBookRelatedProducts($query,$focus,$returnset);
 
 		
 	echo '</form>';
@@ -267,7 +265,48 @@ function renderRelatedQuotes($query,$id,$sid="product_id")
 	$list = GetRelatedList('Products','Quotes',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
+function renderRelatedInvoices($query,$id)
+{
+	global $mod_strings;
+	global $app_strings;
+	require_once('modules/Invoice/Invoice.php');
 
+	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
+	
+	$focus = new Invoice();
+	
+	$button = '';
+	if(isPermitted("Invoice",1,"") == 'yes')
+        {
+		$button .= '<input title="'.$app_strings['LBL_NEW_INVOICE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_INVOICE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Invoice\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_INVOICE_BUTTON'].'">&nbsp;</td>';
+	}
+	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+	$list = GetRelatedList('Products','Invoice',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
+function renderProductRelatedPriceBooks($query,$id)
+{
+	global $mod_strings;
+	global $app_strings;
+	require_once('modules/Products/PriceBook.php');
+
+	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
+	
+	$focus = new PriceBook();
+	
+	$button = '';
+	if(isPermitted("PriceBook",3,"") == 'yes')
+        {
+		$button .= '<input title="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_TITLE'].'" accessyKey="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'AddProductToPriceBooks\';this.form.module.value=\'Products\'" type="submit" name="button" value="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_LABEL'].'">&nbsp;</td>';
+
+		//$button .= '<input title="'.$mod_strings['LBL_SELECT_PRICEBOOK_BUTTON_TITLE'].'" accessKey="'.$mod_strings['LBL_SELECT_PRICEBOOK_BUTTON_KEY'].'" type="button" class="button" value="'.$mod_strings['LBL_SELECT_PRICEBOOK_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&return_module=Potentials&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
+	}
+	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+	$list = GetRelatedList('Products','PriceBook',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
 
 echo get_form_footer();
 

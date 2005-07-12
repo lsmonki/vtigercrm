@@ -114,6 +114,10 @@ else
 	{
 		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,$edit_val,$del_val);
 	}
+	if($module == 'Products' && $relatedmodule == 'PriceBook')
+	{
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'PriceBookEditView','DeletePriceBookProductRel');
+	}
 	elseif($relatedmodule == 'SalesOrder')
 	{
 		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'SalesOrderEditView','DeleteSalesOrder');
@@ -456,7 +460,7 @@ function getHistory($parentmodule,$query,$id)
 	}
 }
 
-function getPriceBookRelatedProducts($query,$focus)
+function getPriceBookRelatedProducts($query,$focus,$returnset='')
 {
 	global $adb;
 	global $app_strings;
@@ -541,7 +545,7 @@ for($i=0; $i<$num_rows; $i++)
 		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 		$list_body .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$listprice.'</td>';
 		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_body .= '<td height="21" style="padding:0px 3px 0px 3px;"><a href="index.php?module=Products&action=EditListPrice&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&listprice='.$listprice.'">edit</a>&nbsp;|&nbsp;<a href="index.php?module=Products&action=DeletePriceBookProductRel&record='.$entity_id.'&pricebook_id='.$pricebook_id.'">del</a></td>';
+		$list_body .= '<td height="21" style="padding:0px 3px 0px 3px;"><a href="index.php?module=Products&action=EditListPrice&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&listprice='.$listprice.'">edit</a>&nbsp;|&nbsp;<a href="index.php?module=Products&action=DeletePriceBookProductRel'.$returnset.'&record='.$entity_id.'&pricebook_id='.$pricebook_id.'">del</a></td>';
 	$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 	
 }

@@ -651,6 +651,7 @@ $app_strings = Array(
 'HelpDesk'=>'HelpDesk',
 'Activities'=>'Activities',
 'Quotes'=>'Quotes',
+'PriceBook'=>'Price Books',
 'Orders'=>'Orders',
 'Invoice'=>'Invoice',
 

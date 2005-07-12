@@ -74,7 +74,13 @@ class PriceBook extends CRMEntity {
          {                                                                                                                     
          $query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,pricebookproductrel.listprice from products inner join pricebookproductrel on products.productid = pricebookproductrel.productid inner join crmentity on crmentity.crmid = products.productid inner join pricebook on pricebook.pricebookid = pricebookproductrel.pricebookid  where pricebook.pricebookid = '.$id.' and crmentity.deleted = 0'; 
 	 renderPriceBookRelatedProducts($query,$id);                                                                  
-}
+	}
+	function get_nonproduct_pricebooks($id)
+        {                                                    
+		$query ='select distinct(pricebookproductrel.pricebookid),crmentity.crmid, pricebook.bookname from pricebookproductrel inner join crmentity on crmentity.crmid=pricebookproductrel.pricebookid inner join pricebook on pricebook.pricebookid=pricebookproductrel.pricebookid where crmentity.deleted=0 and pricebook.active=1 and productid!='.$id;                                 return $query;
+	}
+
+	
 
 }
 ?>

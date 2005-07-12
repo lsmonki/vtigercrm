@@ -158,6 +158,11 @@ $mod_strings = Array(
 'LBL_LIST_VENDOR_NAME'=>'Vendor Name',
 'LBL_IMAGE_INFORMATION'=>'Product Image Information:',
 'Product Image'=>'Product Image',
+'LBL_ADD_PRICEBOOK_BUTTON_TITLE'=>'Add To Price Books [Alt+B]',
+'LBL_ADD_PRICEBOOK_BUTTON_KEY'=>'B',
+'LBL_ADD_PRICEBOOK_BUTTON_LABEL'=>'Add To Price Books',
+'LBL_ADD_PRODUCT_PRICEBOOKS'=>'Add Product to PriceBooks'
+
 );
 
 ?>
