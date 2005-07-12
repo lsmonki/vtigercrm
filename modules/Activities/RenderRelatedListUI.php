@@ -356,11 +356,11 @@ function renderRelatedUsers($query,$id)
 		
 	
 
-    $list .= '</tr>';
+    $list .= '</tr></table>';
     $i++;
   }
 
-  $list .= '</table>';
+  $list .= '</td></tr></table>';
 
   echo $list;
 
