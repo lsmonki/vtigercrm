@@ -171,9 +171,12 @@ $combo_strings = Array(
 'activitytype_dom' => Array('Call'=>'Call'
 		            , 'Meeting'=>'Meeting'
 	        	   ),
+
 'faqcategories_dom' => Array('General'=>'General'
 				),
-'faqstatus_dom' => Array('Reviewed'=>'Reviewed'
+
+'faqstatus_dom' => Array('Draft'=>'Draft'
+				,'Reviewed'=>'Reviewed'
 				,'Published'=>'Published'
 				,'Obsolete'=>'Obsolete'
 				),
