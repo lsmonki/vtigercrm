@@ -27,15 +27,15 @@ margin-top:10px;position:absolute;top:0px;left:0px;width:2px;height:2px;font-siz
 margin-top:10px;position:absolute;top:0px;left:0px;width:15px;height:15px;text-align:center;font-family:arial,sans-serif;font-size:10px;color:#000000;
 }
 .datestyle{
-margin-top:20px;position:absolute;top:0px;left:0px;width:100px;text-align:center;font-family:arial,sans-serif;font-size:8px;color:#000000;
+margin-top:20px;position:absolute;top:0px;left:0px;width:100px;text-align:center;font-family:arial,sans-serif;font-size:10px;color:#000000;
 }
 .ampmstyle{
-margin-top:23px;position:absolute;top:0px;left:0px;width:20px;text-align:center;font-family:arial,sans-serif;font-size:8px;color:#000000;
+margin-top:23px;position:absolute;top:0px;left:0px;width:20px;text-align:center;font-family:arial,sans-serif;font-size:10px;color:#000000;
 }
 -->
 </style>
-<div id="theClockLayer"> 
-  <div id="theCities" class="citystyle"> 
+<div id="theClockLayer">
+  <div id="theCities" class="citystyle">
     <form action="" name="frmtimezone">
       <select id="city" name="city" onchange="lcl(this.selectedIndex,this.options[0].selected)" class="select" style="width:140;position:relative;left:-13px">
         <option value="0" selected>Local time</option>
@@ -208,7 +208,7 @@ var getOddMinutes;
 var addOddMinutes;
 plusMinus=false;
 
-var mon=new Array("January","February","March","April","May","June","August","September","October","November","December");
+var mon=new Array("January","February","March","April","May","June","July","August","September","October","November","December");
 
 document.write('<div id="theDate" class="datestyle" style="color:'+cCol+'">\!<\/div>');
 document.write('<div id="amOrPm" class="ampmstyle" style="color:'+aCol+'">\!<\/div>');
