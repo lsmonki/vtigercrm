@@ -10,7 +10,7 @@
 -->
 <HTML>
 <BODY>
-<FORM METHOD="post" action="index.php?module=uploads&action=add2db" enctype="multipart/form-data">
+<FORM METHOD="post" action="index.php?module=uploads&action=add2db&return_module=<?php echo $_REQUEST['return_module']?>" enctype="multipart/form-data">
   <?php
 		$ret_action = $_REQUEST['return_action'];
 		$ret_module = $_REQUEST['return_module']; 
