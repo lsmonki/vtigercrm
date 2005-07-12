@@ -105,6 +105,14 @@ function set_return_inventory(product_id,product_name,unitprice,qtyinstock,curr_
 	getOpenerObj("qtyInStock"+curr_row).innerHTML = qtyinstock;
 	window.opener.document.EditView.elements["txtQty"+curr_row].focus()
 }
+
+function set_return_inventory_po(product_id,product_name,unitprice,curr_row) {
+        window.opener.document.EditView.elements["txtProduct"+curr_row].value = product_name;
+        window.opener.document.EditView.elements["hdnProductId"+curr_row].value = product_id;
+	window.opener.document.EditView.elements["txtListPrice"+curr_row].value = unitprice;
+	getOpenerObj("unitPrice"+curr_row).innerHTML = unitprice;
+	window.opener.document.EditView.elements["txtQty"+curr_row].focus()
+}
 </script>
 <!-- END: main -->
 </table>
