@@ -308,7 +308,7 @@ class jpgraph {
 			$graph->yaxis->SetTitleSide(SIDE_RIGHT);
 			$graph->yaxis->SetTitleMargin(35);
 
-			$subtitle .= $current_module_strings['LBL_OPP_SIZE'];
+			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].getCurrencySymbol().$current_module_strings['LBL_OPP_SIZE_VALUE'];
 			$graph->footer->right->SetColor($font_color);
 			$graph->footer->right->Set($subtitle);
 			$graph->footer->right->SetFont($font,FS_NORMAL,8);
@@ -597,7 +597,7 @@ class jpgraph {
 			$graph->yaxis->SetTitleSide(SIDE_RIGHT);
 			$graph->yaxis->SetTitleMargin(35);
 
-			$subtitle = $current_module_strings['LBL_OPP_SIZE'];
+			$subtitle = $current_module_strings['LBL_OPP_SIZE'].getCurrencySymbol().$current_module_strings['LBL_OPP_SIZE_VALUE']; 
 			$graph->footer->right->SetColor($font_color);
 			$graph->footer->right->Set($subtitle);
 			$graph->footer->right->SetFont($font,FS_NORMAL,8);
@@ -868,7 +868,7 @@ class jpgraph {
 			$graph->yaxis->SetTitleSide(SIDE_RIGHT);
 			$graph->yaxis->SetTitleMargin(35);
 
-			$subtitle .= $current_module_strings['LBL_OPP_SIZE'];
+			$subtitle .= $current_module_strings['LBL_OPP_SIZE'].getCurrencySymbol().$current_module_strings['LBL_OPP_SIZE_VALUE']; 
 			$graph->footer->right->Set($subtitle);
 			$graph->footer->right->SetColor($font_color);
 			$graph->footer->right->SetFont($font,FS_NORMAL,8);
@@ -1028,7 +1028,7 @@ class jpgraph {
 			$graph->legend->SetColor($font_color);
 			$graph->legend->SetFont($font,FS_NORMAL,12);
 
-			$subtitle = $current_module_strings['LBL_OPP_SIZE'];
+			$subtitle = $current_module_strings['LBL_OPP_SIZE'].getCurrencySymbol().$current_module_strings['LBL_OPP_SIZE_VALUE'];
 			$graph->footer->left->Set($subtitle);
 			$graph->footer->left->SetColor($font_color);
 			$graph->footer->left->SetFont($font,FS_NORMAL,8);
