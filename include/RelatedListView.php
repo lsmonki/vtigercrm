@@ -40,7 +40,16 @@ echo '<br><br>';
 
 $button = '<table cellspacing=0 cellpadding=2><tr><td>'.$button.'</td></tr></table>';
 
-echo get_form_header($app_strings[$relatedmodule],$button, false);
+// Added to have Purchase Order as form Title
+if($relatedmodule == 'Orders') 
+{
+	echo get_form_header($app_strings['PurchaseOrder'],$button, false);
+}
+else
+{
+	echo get_form_header($app_strings[$relatedmodule],$button, false);
+}
+
 $xtpl=new XTemplate ('include/RelatedListView.html');
 require_once('themes/'.$theme.'/layout_utils.php');
 $theme_path="themes/".$theme."/";
