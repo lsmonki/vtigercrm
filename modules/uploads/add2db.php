@@ -85,10 +85,10 @@ else
 	    include "upload.php";
 	    //echo $errorCode;
 	}
-	else if($errorCode == 3)
+	else if($errorCode == 3 || $errorcode == '')
 	{
 	    include('themes/'.$theme.'/header.php');
-	    echo "Problems in file upload. Please try again! <br>";
+	    echo "<b><font color='red'>Problems in file upload. Please try again!</font></b><br>";
 	    include "upload.php";
 	}
 	  
