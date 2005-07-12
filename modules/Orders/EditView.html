@@ -139,8 +139,6 @@
       <tr class="moduleListTitle" height="20" id="tablehead"> 
         <td width="20%" style="padding:3px;"><font color="red">*</font>Product</td>
         <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
-        <td width="12%" style="padding:3px;">Qty In Stock</td>
-        <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
         <td width="12%" style="padding:3px;"><font color="red">*</font>Qty</td>
         <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
         <td width="15%" style="padding:3px;">Unit Price</td>
@@ -152,7 +150,7 @@
         <td width="15" style="padding:3px;"></td>
       </tr>
       <tr id="tableheadline">
-        <td colspan="14" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+        <td colspan="12" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
       </tr>
       {ROW1}
       {ASSOCIATEDPRODUCTS} 
@@ -221,7 +219,7 @@ function settotalnoofrows() {
 function productPickList(currObj) {
 	var trObj=currObj.parentNode.parentNode
 	var rowId=parseInt(trObj.id.substr(trObj.id.indexOf("w")+1,trObj.id.length))
-	window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&recordid={RETURN_ID}&return_module={RETURN_MODULE}&popuptype=inventory_prod&curr_row="+rowId,"productWin","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200")
+	window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&recordid={RETURN_ID}&return_module={RETURN_MODULE}&popuptype=inventory_prod_po&curr_row="+rowId,"productWin","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200")
 	//window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=inventory_prod&curr_row="+rowId,"productWin","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");
 }
 
@@ -253,8 +251,6 @@ function addRow() {
    else
        var newRow="<tr id=row"+rowCnt+" class='oddListRow'>"
          newRow+="<td style='padding:3px;'><input id='txtProduct"+rowCnt+"' name='txtProduct"+rowCnt+"' type='text' readonly> <img src='{IMAGE_PATH}search.gif' onclick='productPickList(this)' align='absmiddle' style='cursor:hand;cursor:pointer'></td>"
-   newRow+="<td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>"
-   newRow+="<td style='padding:3px;'><div id='qtyInStock"+rowCnt+"'></div></td>"
    newRow+="<td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>"
    newRow+="<td style='padding:3px;'><input type=text id='txtQty"+rowCnt+"' name='txtQty"+rowCnt+"' size='7' value='1' onBlur='calcTotal(this)'></td>"
    newRow+="<td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>"
