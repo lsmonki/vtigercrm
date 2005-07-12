@@ -45,7 +45,11 @@ if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
 $sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
 $adb->query($sql_recentviewed);
 }
-
+if($_REQUEST['return_module'] == 'Products')
+{
+	$sql = 'delete from vendorcontactrel where contactid='.$_REQUEST['record'].' and vendorid='.$_REQUEST['return_id'];
+	$adb->query($sql);
+}
 if($_REQUEST['return_module'] == $_REQUEST['module'])
 	$focus->mark_deleted($_REQUEST['record']);
 
