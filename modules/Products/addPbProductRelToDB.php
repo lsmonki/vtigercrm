@@ -16,17 +16,35 @@ require_once('include/database/PearDatabase.php');
 $idlist = $_POST['idlist'];
 $returnmodule=$_REQUEST['return_module'];
 $pricebook_id=$_REQUEST['pricebook_id'];
-//split the string and store in an array
-$storearray = explode(";",$idlist);
-foreach($storearray as $id)
+$productid=$_REQUEST['product_id'];
+if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 {
-	$lp_name = $id.'_listprice';
-	$list_price = $_REQUEST[$lp_name];
-	//Updating the pricebook product rel table
-	$query= "insert into pricebookproductrel (pricebookid,productid,listprice) values(".$pricebook_id.",".$id.",".$list_price.")";
-	$adb->query($query);
+	//split the string and store in an array
+	$storearray = explode(";",$idlist);
+	foreach($storearray as $id)
+	{
+		$lp_name = $id.'_listprice';
+		$list_price = $_REQUEST[$lp_name];
+		//Updating the pricebook product rel table
+		$query= "insert into pricebookproductrel (pricebookid,productid,listprice) values(".$pricebook_id.",".$id.",".$list_price.")";
+		$adb->query($query);
+	}
+	header("Location: index.php?module=Products&action=PriceBookDetailView&record=".$pricebook_id);
 }
-header("Location: index.php?module=Products&action=PriceBookDetailView&record=".$pricebook_id);
+elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
+{
+	//split the string and store in an array
+	$storearray = explode(";",$idlist);
+	foreach($storearray as $id)
+	{
+		$lp_name = $id.'_listprice';
+		$list_price = $_REQUEST[$lp_name];
+		//Updating the pricebook product rel table
+		$query= "insert into pricebookproductrel (pricebookid,productid,listprice) values(".$id.",".$productid.",".$list_price.")";
+		$adb->query($query);
+	}
+	header("Location: index.php?module=Products&action=DetailView&record=".$productid);
+}
 
 ?>
 
