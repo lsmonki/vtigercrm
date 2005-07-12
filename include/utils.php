@@ -2224,7 +2224,7 @@ $vtlog->logthis("in getAccountName ".$account_id,'info');
 	}
 	return $accountname;
 }
-function getproductname($product_id)
+function getProductName($product_id)
 {
 
 global $vtlog;
@@ -3524,6 +3524,14 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory("'.$entity_id.'", "'.$temp_val.'", "'.$unitprice.'", "'.$qty_stock.'", "'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
 				}
+				elseif($popuptype == "inventory_prod_po")
+				{
+					$row_id = $_REQUEST['curr_row'];
+
+					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
+					//$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory_po("'.$entity_id.'", "'.$temp_val.'", "'.$unitprice.'", "'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
+				}
 				elseif($popuptype == "inventory_pb")
 				{
 
@@ -4226,8 +4234,11 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$output .= '<tr id="row'.$i.'" class="'.$row_class.'">';
         	$output .= '<td height="25" style="padding:3px;" nowrap><input id="txtProduct'.$i.'" name="txtProduct'.$i.'" type="text" readonly value="'.$productname.'"> <img src="'.$image_path.'search.gif" onClick=\'productPickList(this)\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
         	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-                $output .= '<td style="padding:3px;"><div id="qtyInStock'.$i.'">'.$qtyinstock.'</div>&nbsp;</td>';
-        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		if($module != 'Orders' && $focus->object_name != 'Order')
+		{
+                	$output .= '<td style="padding:3px;"><div id="qtyInStock'.$i.'">'.$qtyinstock.'</div>&nbsp;</td>';
+        		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		}	
 	        $output .= '<td style="padding:3px;"><input type=text id="txtQty'.$i.'" name="txtQty'.$i.'" size="7" value="'.$qty.'" onBlur=\'calcTotal(this)\'></td>';
 	        $output .='<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
                 $output .= '<td style="padding:3px;"><div id="unitPrice'.$i.'">'.$unitprice.'</div>&nbsp;</td>';
@@ -4320,8 +4331,11 @@ function getDetailAssociatedProducts($module,$focus)
     $output .= '<tr class="moduleListTitle" height="20" id="tablehead">';
     $output .= '<td width="20%" style="padding:3px;">Product</td>';
     $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-    $output .= '<td width="12%" style="padding:3px;">Qty In Stock</td>';
-    $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+    if($module != 'Orders')
+    {
+    	$output .= '<td width="12%" style="padding:3px;">Qty In Stock</td>';
+    	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+    }	
     $output .= '<td width="12%" style="padding:3px;">Qty</td>';
     $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
     $output .= '<td width="15%" style="padding:3px;">Unit Price</td>';
@@ -4379,8 +4393,11 @@ function getDetailAssociatedProducts($module,$focus)
 		$output .= '<tr class="'.$row_class.'">';
         	$output .= '<td height="25" style="padding:3px;" nowrap>'.$productname.'</td>';
         	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-                $output .= '<td style="padding:3px;">'.$qtyinstock.'</td>';
-        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		if($module != 'Orders')
+		{	
+                	$output .= '<td style="padding:3px;">'.$qtyinstock.'</td>';
+	        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		}
 	        $output .= '<td style="padding:3px;">'.$qty.'</td>';
 	        $output .='<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
                 $output .= '<td style="padding:3px;">'.$unitprice.'</td>';
