@@ -4134,6 +4134,7 @@
 		<field name="total" type="N" size="11.3"></field>
 		<field name="subtotal" type="N" size="11.3"></field>
 		<field name="terms_conditions" type="X"></field>
+		<field name="postatus" type="C" size="200"></field>
 		
                   
 <opt>Type=InnoDB</opt>
@@ -4312,6 +4313,7 @@
 		<field name="accountid" type="I" size="19"></field>
 		<field name="terms_conditions" type="X"></field>
 		<field name="purchaseorder" type="C" size='200'></field>
+		<field name="sostatus" type="C" size='200'></field>
 	
                   
 <opt>Type=InnoDB</opt>
@@ -4488,6 +4490,7 @@
 		<field name="accountid" type="I" size="19"></field>
 		<field name="terms_conditions" type="X"></field>
 		<field name="purchaseorder" type="C" size='200'></field>
+		<field name="invoicestatus" type="C" size='200'></field>
 
 		
                   
@@ -5050,6 +5053,81 @@
 		<opt>Type=InnoDB</opt> <index name="quotestage_UK0">
 			<UNIQUE/>
 			<col>quotestage</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="invoicestatus">
+		<field name="inovicestatusid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="invoicestatus" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="invoicestatus_UK0">
+			<UNIQUE/>
+			<col>invoicestatus</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="postatus">
+		<field name="postatusid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="postatus" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="postatus_UK0">
+			<UNIQUE/>
+			<col>postatus</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+	<table name="sostatus">
+		<field name="sostatusid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="sostatus" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="sostatus_UK0">
+			<UNIQUE/>
+			<col>sostatus</col>
 		</index>
 		<data>
 		</data>
