@@ -83,10 +83,10 @@ FCKeditor.prototype.ReplaceTextarea = function()
 		oTextarea.style.display = 'none' ;
 		
 		if (document.getElementById(this.InstanceName+"___Config")!=null) {
-			window.frames[this.InstanceName+"___Frame"].frames["eEditorArea"].document.write(oTextarea.value) ;						
+			window.frames[this.InstanceName+"___Frame"].frames["eEditorArea"].document.write("<pre>"+oTextarea.value+"</pre>") ;						
 		} else {
 			this._InsertHtmlBefore( this._GetConfigHtml(), oTextarea ) ;
-			this._InsertHtmlBefore( this._GetIFrameHtml(), oTextarea ) ;		
+			this._InsertHtmlBefore( this._GetIFrameHtml(), oTextarea ) ;	
 		}
 	}
 }
@@ -121,7 +121,7 @@ FCKeditor.prototype._GetIFrameHtml = function()
 	var sLink = this.BasePath + 'editor/fckeditor.html?InstanceName=' + this.InstanceName ;
 	if (this.ToolbarSet) sLink += '&Toolbar=' + this.ToolbarSet ;
 
-	return '<iframe id="' + this.InstanceName + '___Frame" src="' + sLink + '" width="' + this.Width + '" height="' + this.Height + '" frameborder="no" scrolling="no"></iframe>' ;
+	return '<iframe id="' + this.InstanceName + '___Frame" name="' + this.InstanceName + '___Frame" src="' + sLink + '" width="' + this.Width + '" height="' + this.Height + '" frameborder="no" scrolling="no"></iframe>' ;
 }
 
 FCKeditor.prototype._IsCompatibleBrowser = function()

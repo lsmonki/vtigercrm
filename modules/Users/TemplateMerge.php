@@ -10,9 +10,7 @@
  ********************************************************************************/
 require_once('modules/Users/UserInfoUtil.php');
 require_once('modules/Emails/templates/testemailtemplateusage.php');
-	global $vtlog;  
 $replacedString = substituteTokens("".$_REQUEST["templatename"],$globals);
-	$vtlog->logthis("the replaced string is ".$replacedString,'debug');  
 ?>
 <form name="frmrepstr">
 <textarea name="repstr" style="visibility:hidden">
