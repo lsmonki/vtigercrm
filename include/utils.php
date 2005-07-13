@@ -2788,7 +2788,12 @@ function getRelatedTo($module,$list_result,$rset)
 {
 
         global $adb;
-	if($module == "Products")
+	if($module == "Notes")
+        {
+                $notesid = $adb->query_result($list_result,$rset,"notesid");
+                $action = "DetailView";
+                $evt_query="select senotesrel.crmid,crmentity.setype from senotesrel, crmentity where senotesrel.notesid ='".$notesid."' and senotesrel.crmid = crmentity.crmid";
+	}else if($module == "Products")
 	{
 		$productid = $adb->query_result($list_result,$rset,"productid");
                 $action = "DetailView";
@@ -3011,7 +3016,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                         }
 					elseif($module == 'Notes' && $name=='Related to')
 					{
-						$value=getRelatedToEntity($module,$list_result,$i-1);
+						$value=getRelatedTo($module,$list_result,$i-1);
 					}
 					elseif($name=='Account Name')
 					{
@@ -3661,7 +3666,7 @@ function getListQuery($module,$where='')
 	}
         if($module == "Notes")
         {
-		$query="select crmentity.crmid, notes.title, notes.contact_id, notes.filename, crmentity.modifiedtime,senotesrel.crmid as relatedto, contactdetails.firstname, contactdetails.lastname from notes inner join crmentity on crmentity.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentity.deleted=0";
+		$query="select crmentity.crmid, notes.title, notes.contact_id, notes.filename, crmentity.modifiedtime,senotesrel.crmid as relatedto, contactdetails.firstname, contactdetails.lastname, notes.* from notes inner join crmentity on crmentity.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentity.deleted=0";
         }
         if($module == "Calls")
         {
