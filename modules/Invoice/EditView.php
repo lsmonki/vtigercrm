@@ -70,6 +70,13 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
                 }
 
         }
+	//Handling for dateformat in invoicedate field
+        if($focus->column_fields['invoicedate'] != '')
+        {
+              $curr_due_date = $focus->column_fields['invoicedate'];
+              $focus->column_fields['invoicedate'] = getDBInsertDateValue($curr_due_date);
+        }
+
 	$soid = $focus->column_fields['salesorder_id'];
         $so_focus = new SalesOrder();
         $so_focus->id = $soid;
@@ -102,6 +109,13 @@ else
 			}
 
 		}
+		//Handling for dateformat in invoicedate field
+                if($focus->column_fields['invoicedate'] != '')
+                {
+                        $curr_due_date = $focus->column_fields['invoicedate'];
+                        $focus->column_fields['invoicedate'] = getDBInsertDateValue($curr_due_date);
+                }
+
 		$soid = $focus->column_fields['salesorder_id'];
 		$so_focus = new SalesOrder();
 		$so_focus->id = $soid;
