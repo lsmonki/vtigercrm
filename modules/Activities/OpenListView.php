@@ -131,7 +131,7 @@ foreach($open_activity_list as $event)
 	$date_diff= mktime(0,0,0,date("$curr[1]"),date("$curr[2]"),date("$curr[0]")) - mktime(0,0,0,date("$end[1]"),date("$end[2]"),date("$end[0]"));
 	if($date_diff>0)
 	{
-		$x="RED";
+		$x="pending";
 	}
 	else
 	{
