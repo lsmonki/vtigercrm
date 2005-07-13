@@ -4339,8 +4339,10 @@ function getDetailAssociatedProducts($module,$focus)
 {
 	global $adb;
 	global $theme;
+	global $vtlog;
         $theme_path="themes/".$theme."/";
         $image_path=$theme_path."images/";
+	$vtlog->logthis("in getDetailAssociatedProducts. Module is  ".$module,'debug');
 
 	$output = '';
 	$output .= '<div style="padding:2 0 2 0"><strong>Product Details</strong></div> <div id="productList">';
@@ -4561,6 +4563,8 @@ function getConvertSoToInvoice($focus,$so_focus,$soid)
 function upload_product_image_file($mode,$id)
 {
 	global $root_directory;
+	global $vtlog;
+	$vtlog->logthis("Inside upload_product_image_file. The id is ".$id,'debug');
 	$uploaddir = $root_directory ."/test/product/";
 
 	$file_path_name = $_FILES['imagename']['name'];
@@ -4606,9 +4610,11 @@ function upload_product_image_file($mode,$id)
 function getProductImageName($id)
 {
 	global $adb;
+	global $vtlog;
 	$query = "select imagename from products where productid=".$id;
 	$result = $adb->query($query);
 	$image_name = $adb->query_result($result,0,"imagename");
+	$vtlog->logthis("Inside getProductImageName. The image_name is ".$image_name,'debug');
 	return $image_name;
 	
 }
