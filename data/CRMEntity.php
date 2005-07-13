@@ -737,9 +737,9 @@ function insertIntoRecurringTable($table_name,$module)
 	global $vtlog;
 $vtlog->logthis("in insertIntoRecurringTable  ".$table_name."    module is  ".$module,'info');  
 	global $adb;
-	$st_date = $_REQUEST['date_start'];
+	$st_date = getDBInsertDateValue($_REQUEST["date_start"]);	
 $vtlog->logthis("st_date ".$st_date,'debug');  
-	$end_date = $_REQUEST['due_date'];
+	$end_date = getDBInsertDateValue($_REQUEST["due_date"]);
 $vtlog->logthis("end_date is set ".$end_date,'debug');  
 	$st=explode("-",$st_date);
 $vtlog->logthis("exploding string is ".$st,'debug');  
