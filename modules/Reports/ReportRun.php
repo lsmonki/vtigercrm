@@ -252,9 +252,20 @@ class ReportRun extends CRMEntity
 		     if($fieldcolname != "" && $comparator != "")
 		     {
 			$selectedfields = explode(":",$fieldcolname);
-			
-			$fieldvalue = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,$value);
-
+			$valuearray = explode(",",trim($value));
+                        if(isset($valuearray) && count($valuearray) > 1)
+                        {
+				$advorsql = "";
+				for($n=0;$n<count($valuearray);$n++)
+				{
+					$advorsql[] = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($valuearray[$n]));
+				}
+				$advorsqls = implode(" or ",$advorsql);
+				$fieldvalue = " (".$advorsqls.") ";
+			}else
+			{
+				$fieldvalue = $selectedfields[0].".".$selectedfields[1].$this->getAdvComparator($comparator,trim($value));
+			}
 			$advfilterlist[$fieldcolname] = $fieldvalue;		
 		     }
 	    						
@@ -298,7 +309,7 @@ class ReportRun extends CRMEntity
                                         $startenddate = $this->getStandarFiltersStartAndEndDate($datefilter);
                                         if($startenddate[0] != "" && $startenddate[1] != "")
                                         {
-                                                $stdfilterlist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." between '".$startenddate[0]."' and '".$startenddate[1]."'";
+                                                $stdfilterlist[$fieldcolname] = $selectedfields[0].".".$selectedfields[1]." between '".$startenddate[0]." 00:00:00' and '".$startenddate[1]." 23:59:00'";
                                         }
                                 }
 
@@ -688,8 +699,7 @@ class ReportRun extends CRMEntity
                                 left join users as usersQuotes on usersQuotes.id = crmentityQuotes.smownerid
                                 left join users as usersRel1 on usersRel1.id = quotes.inventorymanager
                                 left join potential as potentialRel on potentialRel.potentialid = quotes.potentialid
-                                left join contactdetails as contactdetailsQuotes on contactdetailsQuotes.contactid = quotes.contac
-tid
+                                left join contactdetails as contactdetailsQuotes on contactdetailsQuotes.contactid = quotes.contactid
                                 left join account as accountQuotes on accountQuotes.accountid = quotes.accountid ";
                         }
                         if($secmodule == "Orders")
@@ -700,8 +710,7 @@ tid
                                 left join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid
                                 left join users as usersOrders on usersOrders.id = crmentityOrders.smownerid
                                 left join vendor as vendorRel on vendorRel.vendorid = purchaseorder.vendorid
-                                left join contactdetails as contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid
-                                left join account as accountOrders on accountOrders.accountid = purchaseorder.accountid ";
+                                left join contactdetails as contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid ";
                         }
 
 		}
@@ -747,8 +756,7 @@ tid
                                 left join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid
                                 left join users as usersOrders on usersOrders.id = crmentityOrders.smownerid
                                 left join vendor as vendorRel on vendorRel.vendorid = purchaseorder.vendorid
-                                left join contactdetails as contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid
-                                left join account as accountOrders on accountOrders.accountid = purchaseorder.accountid ";
+                                left join contactdetails as contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid ";
 			}
 			if($secmodule == "Invoice")
 			{
@@ -758,6 +766,20 @@ tid
                                 left join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid
                                 left join users as usersInvoice on usersInvoice.id = crmentityInvoice.smownerid
                                 left join account as accountInvoice on accountInvoice.accountid = invoice.accountid ";
+			}
+			if($secmodule == "Products")
+			{
+				$query = "left join seproductsrel on seproductsrel.crmid = account.accountid
+				left join products on products.productid = seproductsrel.productid
+                                left join crmentity as crmentityProducts on crmentityProducts.crmid=products.productid
+                                left join productcf on products.productid = productcf.productid
+                                left join users as usersProducts on usersProducts.id = crmentityProducts.smownerid
+                                left join contactdetails as contactdetailsProducts on contactdetailsProducts.contactid = products.contactid
+                                left join vendor as vendorRel on vendorRel.vendorid = products.vendor_id
+                                left join crmentity as crmentityRel on crmentityRel.crmid = seproductsrel.crmid
+                                left join account as accountRel on accountRel.accountid=crmentityRel.crmid
+                                left join leaddetails as leaddetailsRel on leaddetailsRel.leadid = crmentityRel.crmid
+                                left join potential as potentialRel on potentialRel.potentialid = crmentityRel.crmid ";
 			}
 		}
 		if($module == "Quotes")
@@ -1073,51 +1095,6 @@ tid
 		return $query;
 	}
 
-	function getSQLforPrimaryModule1($module)
-	{
- 	   if($module != "")
-	   {
-		switch($module)
-		{
-			case "Leads":
-				$sSQL = " from  crmentity as crmentityLeads";
-				$sSQL .= " inner join leaddetails on crmentityLeads.crmid=leaddetails.leadid";
-                        	$sSQL .= " left join leadsubdetails on leadsubscriptionid = leaddetails.leadid";
-                        	$sSQL .= " left join leadaddress on leadaddress.leadaddressid = leaddetails.leadid";
-                        	$sSQL .= " left join leadscf on leadscf.leadid = leaddetails.leadid";
-				break;
-			case "Contacts":
-				$sSQL = " from crmentity as crmentityContacts";
-				$sSQL .= " inner join contactdetails on contactdetails.contactid = crmentityContacts.crmid";
-                        	$sSQL .= " left join contactsubdetails on contactsubdetails.contactsubscriptionid = contactdetails.contactid";
-                        	$sSQL .= " left join contactaddress on contactaddress.contactaddressid = contactdetails.contactid";
-                        	$sSQL .= " left join contactscf on contactscf.contactid = contactdetails.contactid";
-				break;
-			case "Accounts":
-				$sSQL = " from crmentity as crmentityAccounts";
-				$sSQL .= " inner join account on account.accountid = crmentity.crmid";
-                        	$sSQL .= " left join accountbillads on accountbillads.accountaddressid = account.accountid";
-                        	$sSQL .= " left join accountshipads on accountshipads.accountaddressid = account.accountid";
-				break;
-			case "Potentials":
-				$sSQL = " from crmentity as crmentityPotentials";
-				$sSQL .= " inner join potential on potential.potentialid = crmentity.crmid";
-                        	$sSQL .= " left join potentialscf on potentialscf.potentialid = potential.potentialid";
-				break;		
-		}
-		
-		return $sSQL;			
-	   }
-	}
-
-	function getSQLforSecondaryModule($primarymodule,$secondarymodule)
-	{
-//		if($primarymodule != "" && $secondarymodule != "")
-//		{
-//			switch($primarymodule)	
-//		}	
-	}
-	
 	function sGetSQLforReport($reportid)
 	{
 		global $vtlog;
@@ -1190,196 +1167,10 @@ tid
 			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
 		}
 		
-		//echo $reportquery;
+		echo $reportquery;
 		$vtlog->logthis("ReportRun :: Successfully returned sGetSQLforReport".$reportid,"info");
 		return $reportquery;
 
-	}
-
-	function sGetSQL($sqltype)
-	{
-	
-		/*if($this->primarymodule == "Leads")
-		{
-
-			if($oReport->reporttype != "tabular")
-			{
-				$orderbysql = $this->getSelectedOrderbyList($this->reportid);
-			}
-
-			$sSQL = "select ";
-			if($sqltype == "REPORT")
-			{
-				$sSQL .= $this->getSelectedColumnsList($this->reportid);
-			}elseif($sqltype == "TOTAL")
-			{
-				$sSQL .= $this->getColumnsToTotalColumns($this->reportid);
-				if($this->getColumnsToTotalColumns($this->reportid) == "")
-				{
-					$sSQL = "";
-					return $sSQL;
-				}
-			}
-			$sSQL .= " from  crmentity as crmentityLeads inner join leaddetails on crmentityLeads.crmid=leaddetails.leadid";
-			$sSQL .= " left join leadsubdetails on leadsubscriptionid = leaddetails.leadid";
-			$sSQL .= " left join leadaddress on leadaddress.leadaddressid = leaddetails.leadid";
-			$sSQL .= " left join leadscf on leadscf.leadid = leaddetails.leadid";
-
-			$stdfiltersql = $this->getStandardCriterialSql($this->reportid);
-			if($stdfiltersql != "")
-			{
-				$sSQL .= " where ".$stdfiltersql ;
-			}
-			if($orderbysql != "")
-			{
-				$sSQL .= " order by ".$orderbysql ;
-			}
-		}*/
-		
-		if($oReport->reporttype != "tabular")
-		{
-			$orderbysql = $this->getSelectedOrderbyList($this->reportid);
-		}
-
-		$sSQL = "select ";
-		if($sqltype == "REPORT")
-		{
-			$sSQL .= $this->getSelectedColumnsList($this->reportid);
-		}elseif($sqltype == "TOTAL")
-		{
-			$sSQL .= $this->getColumnsToTotalColumns($this->reportid);
-			if($this->getColumnsToTotalColumns($this->reportid) == "")
-			{
-				$sSQL = "";
-				return $sSQL;
-			}
-		}
-		/*$sSQL .= " from  crmentity as crmentityLeads inner join leaddetails on crmentityLeads.crmid=leaddetails.leadid";
-		$sSQL .= " left join leadsubdetails on leadsubscriptionid = leaddetails.leadid";
-		$sSQL .= " left join leadaddress on leadaddress.leadaddressid = leaddetails.leadid";
-		$sSQL .= " left join leadscf on leadscf.leadid = leaddetails.leadid";*/
-		$sSQL .= " ".$this->getReportsQuery($this->primarymodule);
-
-		$stdfiltersql = $this->getStandardCriterialSql($this->reportid);
-		if($stdfiltersql != "")
-		{
-			$sSQL .= " and ".$stdfiltersql ;
-		}
-
-		$advfilterlist = $this->getAdvFilterList($this->reportid);
-		if(isset($advfilterlist))
-		{
-			$advfiltersql = implode(" and ",$advfilterlist);
-		}
-
-		if($advfiltersql != "")
-		{
-			$sSQL .= " and ".$advfiltersql ;
-		}
-
-		if($orderbysql != "")
-		{
-			$sSQL .= " order by ".$orderbysql ;
-		}
-
-		/*if($this->primarymodule == "Contacts")
-		{
-
-			$orderbysql = $this->getSelectedOrderbyList($this->reportid);
-
-			$sSQL = "select ";
-			if($sqltype == "REPORT")
-			{
-				$sSQL .= $this->getSelectedColumnsList($this->reportid);
-			}elseif($sqltype == "TOTAL")
-			{
-				$sSQL .= $this->getColumnsToTotalColumns($this->reportid);
-			}
-			$sSQL .= " from crmentity as crmentityContacts inner join contactdetails on contactdetails.contactid = crmentityContacts.crmid";
-			$sSQL .= " left join contactsubdetails on contactsubdetails.contactsubscriptionid = contactdetails.contactid";
-			$sSQL .= " left join contactaddress on contactaddress.contactaddressid = contactdetails.contactid";
-			$sSQL .= " left join contactscf on contactscf.contactid = contactdetails.contactid";
-			if($this->secondarymodule != "")
-			{
-				$secondarymodule = explode(":",$this->secondarymodule);
-				for($i=0;$i < count($secondarymodule) ;$i++)
-				{
-					if($secondarymodule[$i] == "Accounts")
-					{
-						$sSQL .= " left join crmentity as crmentityAccounts on crmentityAccounts.crmid=contactdetails.accountid";
-						$sSQL .= " left join account on account.accountid = crmentityAccounts.crmid" ;
-						$sSQL .= " left join accountbillads on accountbillads.accountaddressid = account.accountid" ;
-						$sSQL .= " left join accountshipads on accountshipads.accountaddressid = account.accountid";
-					}elseif($secondarymodule[$i] == "Potentials")
-					{
-						if(count($secondarymodule) == 1)
-						{
-							$sSQL .= " left join crmentity as crmentityPotentials on crmentityPotentials.crmid=contactdetails.accountid";
-							$sSQL .= " left join account on account.accountid = crmentityPotentials.crmid" ;
-							$sSQL .= " left join accountbillads on accountbillads.accountaddressid = account.accountid" ;
-							$sSQL .= " left join accountshipads on accountshipads.accountaddressid = account.accountid";
-						}else
-						{
-						$sSQL .= " left join potential on potential.accountid = account.accountid";
-						$sSQL .= " left join crmentity as crmentityPotentials on crmentityPotentials.crmid = potential.potentialid";
-						$sSQL .= " left join potentialscf on potentialscf.potentialid = potential.potentialid";
-						}
-					}
-				}
-			}
-
-			if($orderbysql != "")
-			{
-				$sSQL .= " order by ".$orderbysql ;
-			}
-		}
-
-		if($this->primarymodule== "Potentials")
-		{
-			$orderbysql = $this->getSelectedOrderbyList($this->reportid);
-
-			$sSQL = "select ";
-			if($sqltype == "REPORT")
-			{
-				$sSQL .= $this->getSelectedColumnsList($this->reportid);
-			}elseif($sqltype == "TOTAL")
-			{
-				$sSQL .= $this->getColumnsToTotalColumns($this->reportid);
-			}
-			$sSQL .= " from crmentity inner join potential on potential.potentialid = crmentity.crmid";
-			$sSQL .= " left join potentialscf on potentialscf.potentialid = potential.potentialid";
-
-			if($orderbysql != "")
-			{
-				$sSQL .= " order by ".$orderbysql ;
-			}
-		}
-
-		if($this->primarymodule == "Accounts")
-		{
-			$orderbysql = $this->getSelectedOrderbyList($this->reportid);
-
-			$sSQL = "select ";
-			if($sqltype == "REPORT")
-			{
-				$sSQL .= $this->getSelectedColumnsList($this->reportid);
-			}elseif($sqltype == "TOTAL")
-			{
-				$sSQL .= $this->getColumnsToTotalColumns($this->reportid);
-			}
-			$sSQL .= " from crmentity inner join account on account.accountid = crmentity.crmid";
-			$sSQL .= " left join accountbillads on accountbillads.accountaddressid = account.accountid";
-			$sSQL .= " left join accountshipads on accountshipads.accountaddressid = account.accountid";
-
-			if($orderbysql != "")
-			{
-				$sSQL .= " order by ".$orderbysql ;
-			}
-
-			//"left join potential on potential.accountid = account.accountid left join crmentity as crmentity1 on crmentity1.crmid = potential.accountid left join potentialscf on potentialscf.potentialid = potential.potentialid left join contactdetails on contactdetails.accountid = account.accountid left join crmentity as crmentity2 on crmentity2.crmid = contactdetails.contactid left join contactsubdetails on contactsubdetails.contactsubscriptionid = contactdetails.contactid left join contactaddress on contactaddress.contactaddressid = contactdetails.contactid left join contactscf on contactscf.contactid = contactdetails.contactid";
-		}*/
-		//echo $sSQL;
-		return $sSQL;
 	}
 
 	function GenerateReport($outputformat)
@@ -1390,7 +1181,6 @@ tid
 		if($outputformat == "HTML")
 		{
 			$sSQL = $this->sGetSQLforReport($this->reportid);
-			//echo $sSQL;
 			$result = $adb->query($sSQL);
 			$y=$adb->num_fields($result);
 
@@ -1405,38 +1195,21 @@ tid
 				$noofrows = $adb->num_rows($result);
 				$custom_field_values = $adb->fetch_array($result);
 				
-				//$modules = array("Leads_", "Accounts_", "Potentials_", "Contacts_","_");
-				
 				do
 				{
 					$arraylists = Array();
 					
 					$newvalue = $custom_field_values[0];
 					if($newvalue == "")
-					 {
+					{
 						 $newvalue = "-";
-					 }
-					if($lastvalue != "")
-					 {
-						 if($lastvalue == $newvalue)
-						 {
-							//$valtemplate .= '<tr valign=top>
-							//  <td height=1></td>
-							//  <td colspan='.($y-1).' bgcolor=#CCCCCC></td>
-							//</tr>';
-						 }else
-						 {
-							// $valtemplate .= '<tr valign=top>
-							//  <td colspan='.$y.' bgcolor=#CCCCCC></td>
-							//</tr>';
-						 }
-					 }
+					}
 					 
 					$valtemplate .= "<tr>";
 					
 					for ($i=0; $i<$y; $i++)
 					  {
-						  $fld = $adb->field_name($result, $i);
+						   $fld = $adb->field_name($result, $i);
 						   $fieldvalue = $custom_field_values[$i];
 						   
 						   if($fieldvalue == "" )
@@ -1447,10 +1220,23 @@ tid
 						  {
 								if($lastvalue == $fieldvalue)
 								{
-									$valtemplate .= "<td class='rptEmptyGrp'>&nbsp;</td>";									
+									if($this->reporttype == "summary")
+									{
+										$valtemplate .= "<td class='rptEmptyGrp'>&nbsp;</td>";									
+									}else
+									{
+										$valtemplate .= "<td class='rptData'>".$fieldvalue."</td>";
+
+									}
 								}else
 								{
+									if($this->reporttype == "tabular")
+									{
+									$valtemplate .= "<td class='rptData'>".$fieldvalue."</td>";
+									}else
+									{
 									$valtemplate .= "<td class='rptGrpHead'>".$fieldvalue."</td>";
+									}
 								}
 						  }else
 						  {

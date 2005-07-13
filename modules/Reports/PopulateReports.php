@@ -128,7 +128,7 @@ $selectcolumns = Array(Array('contactdetails:firstname:Contacts_First_Name:first
                              'products:productcategory:Products_Product_Category:productcategory:V',
                              'contactdetailsProducts:lastname:Products_Contact_Name:contact_id:I',
                              'products:website:Products_Website:website:V',
-			     'products:vendor_id:Products_Vendor_Name:vendor_id:I',
+			     'vendorRel:vendorname:Products_Vendor_Name:vendor_id:I',
 			     'products:mfr_part_no:Products_Mfr_PartNo:mfr_part_no:V'),
 
 		       Array('products:productname:Products_Product_Name:productname:V',
@@ -155,7 +155,7 @@ $selectcolumns = Array(Array('contactdetails:firstname:Contacts_First_Name:first
 			     'quotes:shipping:Quotes_Shipping:shipping:V'),
 
 		       Array('purchaseorder:subject:Orders_Subject:subject:V',
-			     'vendorRel:name:Orders_Vendor_Name:vendor_id:I',
+			     'vendorRel:vendorname:Orders_Vendor_Name:vendor_id:I',
 			     'purchaseorder:tracking_no:Orders_Tracking_Number:tracking_no:V',
 			     'contactdetails:firstname:Contacts_First_Name:firstname:V',
 			     'contactdetails:lastname:Contacts_Last_Name:lastname:V',
@@ -163,7 +163,7 @@ $selectcolumns = Array(Array('contactdetails:firstname:Contacts_First_Name:first
 			     'contactdetails:email:Contacts_Email:email:V'),
 
 		       Array('purchaseorder:subject:Orders_Subject:subject:V',
-			     'vendorRel:name:Orders_Vendor_Name:vendor_id:I',
+			     'vendorRel:vendorname:Orders_Vendor_Name:vendor_id:I',
 			     'purchaseorder:requisition_no:Orders_Requisition_No:requisition_no:V',
                              'purchaseorder:tracking_no:Orders_Tracking_Number:tracking_no:V',
 			     'contactdetailsOrders:lastname:Orders_Contact_Name:contact_id:I',

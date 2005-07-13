@@ -67,7 +67,13 @@ function getPrimaryColumnsHTML($module)
 	    {
 		foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
 		{
-			$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+			if(isset($mod_strings[$fieldlabel]))
+			{
+				$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+			}else
+			{
+				$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+			}
 		}
 	    }
         }
@@ -93,7 +99,13 @@ function getSecondaryColumnsHTML($module)
 			{
 				foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
 				{
+					if(isset($mod_strings[$fieldlable]))
+					{
 					$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+					}else
+					{
+	  			        $shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+					}
 				}
 			}
         	}

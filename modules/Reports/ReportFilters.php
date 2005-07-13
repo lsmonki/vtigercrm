@@ -24,7 +24,6 @@
         	<td class="uline"><strong>Standard Filters:</strong></td>
             </tr>
             <tr><td>
-                <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 		<?php include("modules/Reports/StandardFilter.php"); ?>
             </td></tr>
         </table>
@@ -34,8 +33,6 @@
         	<td class="uline"><strong>Advanced Filters:</strong></td>
             </tr>
             <tr><td>
-                <br>
-               	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 		<?php include("modules/Reports/AdvancedFilter.php");?>
             </tr></td>
           </table>

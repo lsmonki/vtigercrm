@@ -29,9 +29,16 @@ global $ogReport;
 // focus_list is the means of passing data to a ListView.
 global $focus_list;
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Create Report", true);
-echo "\n<BR>\n";
+if(isset($_REQUEST["record"]))
+{
+	echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Customize Report", true);
+	echo "\n<BR>\n";
+}else
+{
+	echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Create Report", true);
+	echo "\n<BR>\n";
 
+}
 if(isset($_REQUEST["record"]))
 {
 	$reportid = $_REQUEST["record"];
@@ -64,17 +71,15 @@ if(isset($_REQUEST["record"]))
             }
         }
         
-        function hideTabs( hide )
+        function hideTabs(hide)
         {
-            if( hide == true )
+            if(hide == true)
             {
-                getObj( "tab3" ).style.display = "none";
-//                getObj( "tab6" ).style.display = "none";
+                getObj("tab3").style.display = "none";
             }
             else
             {
-                getObj( "tab3" ).style.display = "block";
-//                getObj( "tab6" ).style.display = "block";
+                getObj("tab3").style.display = "block";
             }
         }
         
@@ -107,8 +112,7 @@ if(isset($_REQUEST["record"]))
         
         function cancelWizard()
         {
-            document.NewReport.actionItem.value = "cancel";
-            document.NewReport.submit();
+	    document.location.href = "index.php?module=Reports&action=index";		
         }       
 	function trim(s) 
 	{
@@ -133,7 +137,7 @@ if(isset($_REQUEST["record"]))
         {
             if( num == 3 || num == 6 )
             {
-			    var typeObj = getObj( 'reportType' );
+		var typeObj = getObj( 'reportType' );
                 if( typeObj[0].checked == true )
                 {
                     return;
@@ -186,8 +190,7 @@ if(isset($_REQUEST["record"]))
   <input type="hidden" name='folder' value="<?php echo $folderid?>"/>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='tab1'>
     <tr>
-      <td class="formSecHeader"><div style="float:left"><a href="javascript:displayStep(1)" class="tabLink">Report
-        Type</a></div></td>
+      <td class="formSecHeader"><a href="javascript:displayStep(1)" class="tabLink">Report Type</a></td>
     </tr>
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='step1' style="display:block">
@@ -198,8 +201,7 @@ if(isset($_REQUEST["record"]))
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='tab2' style="margin-top:1px;">
     <tr>
-      <td class="formSecHeader"><a href="javascript:displayStep(2)" class="tabLink">Select
-        Columns</a></td>
+      <td class="formSecHeader"><a href="javascript:displayStep(2)" class="tabLink">Select Columns</a></td>
     </tr>
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='step2' style="display:none">
@@ -210,8 +212,7 @@ if(isset($_REQUEST["record"]))
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='tab3' style="margin-top:1px;">
     <tr>
-      <td class="formSecHeader"><a href="javascript:displayStep(3)" class="tabLink">Specify
-        Grouping</a></td>
+      <td class="formSecHeader"><a href="javascript:displayStep(3)" class="tabLink">Specify Grouping</a></td>
     </tr>
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='step3' style="display:none">
@@ -222,8 +223,7 @@ if(isset($_REQUEST["record"]))
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='tab4' style="margin-top:1px;">
     <tr>
-      <td class="formSecHeader"><a href="javascript:displayStep(4)" class="tabLink">Choose
-        Columns to Total</a></td>
+      <td class="formSecHeader"><a href="javascript:displayStep(4)" class="tabLink">Choose Columns to Total</a></td>
     </tr>
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='step4' style="display:none">
@@ -234,8 +234,7 @@ if(isset($_REQUEST["record"]))
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='tab5' style="margin-top:1px;">
     <tr>
-      <td class="formSecHeader"><a href="javascript:displayStep(5)" class="tabLink">Specify
-        Criteria</a></td>
+      <td class="formSecHeader"><a href="javascript:displayStep(5)" class="tabLink">Specify Criteria</a></td>
     </tr>
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='step5' style="display:none">

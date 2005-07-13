@@ -62,7 +62,10 @@ function getRelatedModuleList()
 		$optionhtml = "";
 		foreach($rel_modules as $rep_key=>$rep_value)
 		{
+			if($rep_value != '')
+			{
 			$optionhtml .= "<option value='".$rep_value."'>".$app_list_strings['moduleList'][$rep_value]."</option>";			
+			}
 		}
 		$shtml .= $optionhtml."</select>";
 	}

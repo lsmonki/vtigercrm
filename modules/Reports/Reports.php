@@ -35,7 +35,7 @@ $adv_filter_options = array("e"=>"equals",
 
 $report_modules = Array('Leads','Accounts','Contacts','Potentials','Products','HelpDesk','Quotes','Orders','Invoice','Activities');
 
-$related_modules = Array('Leads'=>Array('Converted Leads'),
+$related_modules = Array('Leads'=>Array(''),
 			 'Accounts'=>Array('Potentials','Contacts','Products','Quotes','Invoice'),
 			 'Contacts'=>Array('Accounts','Potentials','Quotes','Orders'),
 			 'Potentials'=>Array('Accounts','Contacts','Quotes'),
@@ -377,7 +377,7 @@ class Reports extends CRMEntity{
 			if($fieldname == "vendor_id")
 	                {
                         	$fieldtablename = "vendorRel";
-				$fieldcolname = "name";
+				$fieldcolname = "vendorname";
 //				$querycolumn = "vendorRel.name"." ".$selectedfields[2];
                 	}
                 	if($fieldname == "potential_id")
