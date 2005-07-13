@@ -678,6 +678,10 @@ if($action == "DetailView" || $action == "SalesOrderDetailView" || $action == "V
 
 }	
 
+//Added to highlight the HelpDesk tab when create, edit or view the FAQ
+if($currentModule == 'Faq')
+        $currentModule = 'HelpDesk';
+
 // set user, theme and language cookies so that login screen defaults to last values
 if (isset($_SESSION['authenticated_user_id'])) {
         $log->debug("setting cookie ck_login_id to ".$_SESSION['authenticated_user_id']);
