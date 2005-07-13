@@ -41,11 +41,11 @@ function getDBValidationData($tablearray,$tabid='')
   	{
     		if($numValues > 1 && $i != $numValues-1)
     		{
-      			$sql .= "select fieldlabel,fieldname,typeofdata from field where tablename='".$tablearray[$i] ."'".$tab_con." union ";
+      			$sql .= "select fieldlabel,fieldname,typeofdata from field where tablename='".$tablearray[$i] ."'".$tab_con." and displaytype in (1,3) union ";
     		}
     		else
     		{
-      			$sql  .= "select fieldlabel,fieldname,typeofdata from field where tablename='".$tablearray[$i] ."'".$tab_con;
+      			$sql  .= "select fieldlabel,fieldname,typeofdata from field where tablename='".$tablearray[$i] ."'".$tab_con." and displaytype in (1,3)";
     		}
   	}
   }
