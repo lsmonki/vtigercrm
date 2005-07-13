@@ -2788,17 +2788,25 @@ function getRelatedTo($module,$list_result,$rset)
 {
 
         global $adb;
-        $activity_id = $adb->query_result($list_result,$rset,"activityid");
-	$action = "DetailView";
-        $evt_query="select seactivityrel.crmid,crmentity.setype from seactivityrel, crmentity where seactivityrel.activityid='".$activity_id."' and seactivityrel.crmid = crmentity.crmid";
-
-	if($module == 'HelpDesk')
+	if($module == "Products")
 	{
-        	$activity_id = $adb->query_result($list_result,$rset,"parent_id");
-		if($activity_id != '')
-			$evt_query = "select * from crmentity where crmid=".$activity_id;
-	}
+		$productid = $adb->query_result($list_result,$rset,"productid");
+                $action = "DetailView";
+                $evt_query="select seproductsrel.crmid,crmentity.setype from seproductsrel, crmentity where seproductsrel.productid ='".$productid."' and seproductsrel.crmid = crmentity.crmid";
 
+	}else
+	{
+		$activity_id = $adb->query_result($list_result,$rset,"activityid");
+		$action = "DetailView";
+		$evt_query="select seactivityrel.crmid,crmentity.setype from seactivityrel, crmentity where seactivityrel.activityid='".$activity_id."' and seactivityrel.crmid = crmentity.crmid";
+
+		if($module == 'HelpDesk')
+		{
+			$activity_id = $adb->query_result($list_result,$rset,"parent_id");
+			if($activity_id != '')
+				$evt_query = "select * from crmentity where crmid=".$activity_id;
+		}
+	}
         $evt_result = $adb->query($evt_query);
         $parent_module = $adb->query_result($evt_result,0,'setype');
         $parent_id = $adb->query_result($evt_result,0,'crmid');
@@ -2997,6 +3005,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							}
 						}
 					}
+					elseif($module == "Products" && $name == "Related to")
+                                        {
+                                                $value=getRelatedTo($module,$list_result,$i-1);
+                                        }
 					elseif($module == 'Notes' && $name=='Related to')
 					{
 						$value=getRelatedToEntity($module,$list_result,$i-1);
