@@ -313,7 +313,6 @@ class Account extends CRMEntity {
 		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0 and salesorder.accountid = ".$id;
 		renderRelatedOrders($query,$id);	
 	}
-
 	function get_tickets($id)
 	{
 		$query = "select users.user_name, users.id, troubletickets.title, troubletickets.ticketid as crmid, troubletickets.status, troubletickets.priority, troubletickets.parent_id, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join account on account.accountid=troubletickets.parent_id left join users on users.id=crmentity.smownerid where account.accountid =".$id;
@@ -321,10 +320,15 @@ class Account extends CRMEntity {
 		$query .= "select users.user_name, users.id, troubletickets.title, troubletickets.ticketid as crmid, troubletickets.status, troubletickets.priority, troubletickets.parent_id, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join contactdetails on contactdetails.contactid = troubletickets.parent_id left join account on account.accountid=contactdetails.accountid left join users on users.id=crmentity.smownerid where account.accountid =".$id;
 		renderRelatedTickets($query,$id);
 	}
+	function get_products($id)
+	{
+		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join account on account.accountid = seproductsrel.crmid  where account.accountid = '.$id.' and crmentity.deleted = 0';
+	      	renderRelatedProducts($query,$id);
+        }
 
 
 	function save_relationship_changes($is_update)
-    {
+    	{
     	if($this->member_id != "")
     	{
     		$this->set_account_member_account_relationship($this->id, $this->member_id);

@@ -34,7 +34,7 @@ if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
 	if($_REQUEST['return_module'] == 'Activities')
         	$sql = 'delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
 
-	if($_REQUEST['return_module'] == 'Potentials')
+	if($_REQUEST['return_module'] == 'Potentials' || $_REQUEST['return_module'] == 'Accounts' || $_REQUEST['return_module'] == 'Leads')
 		$sql = 'delete from seproductsrel where crmid = '.$_REQUEST['return_id'].' and productid = '.$_REQUEST['record'];
 
 	$adb->query($sql);

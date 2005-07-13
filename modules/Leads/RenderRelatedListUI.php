@@ -77,6 +77,30 @@ function renderRelatedEmails($query,$id)
         $list = GetRelatedList('Leads','Emails',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
+function renderRelatedProducts($query,$id)
+{
+	require_once('modules/Products/Product.php');
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id);
+        echo $hidden;
+
+        $focus = new Product();
+ 
+	$button = '';
+
+        if(isPermitted("Products",1,"") == 'yes')
+        {
+
+ 
+		$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Leads\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
+	}
+	$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+
+	$list = GetRelatedList('Leads','Products',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
 
 function renderRelatedHistory($query,$id)
 {

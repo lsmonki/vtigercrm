@@ -321,6 +321,12 @@ return $exists;
 		$query = 'select users.user_name, users.id, seticketsrel.*, troubletickets.title, troubletickets.status, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime  from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.crmid inner join users on users.id=crmentity.smownerid where seticketsrel.crmid = '.$id; 
           renderRelatedTickets($query);
   }
+	function get_products($id)
+	{
+		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join leaddetails on leaddetails.leadid = seproductsrel.crmid  where leaddetails.leadid = '.$id.' and crmentity.deleted = 0';
+	      	renderRelatedProducts($query,$id);
+        }
+
 
 
   function save_relationship_changes($is_update)

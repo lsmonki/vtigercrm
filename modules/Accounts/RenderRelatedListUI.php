@@ -193,6 +193,31 @@ function renderRelatedOrders($query,$id)
 	$list = GetRelatedList('Accounts','SalesOrder',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
+function renderRelatedProducts($query,$id)
+{
+	require_once('modules/Products/Product.php');
+        global $mod_strings;
+        global $app_strings;
+
+        $hidden = getHiddenValues($id);
+        echo $hidden;
+
+        $focus = new Product();
+ 
+	$button = '';
+
+        if(isPermitted("Products",1,"") == 'yes')
+        {
+
+ 
+		$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Accounts\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
+	}
+	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+
+	$list = GetRelatedList('Accounts','Products',$focus,$query,$button,$returnset);
+	echo '</form>';
+}
+
 
 echo get_form_footer();
 
