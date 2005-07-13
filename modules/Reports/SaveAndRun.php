@@ -25,8 +25,8 @@ global $mod_strings;
 
 $reportid = $_REQUEST["record"];
 
-$stdDateFilterField = $_REQUEST["stdDateFilterField"];
-$stdDateFilter = $_REQUEST["stdDateFilter"];
+$filtercolumn = $_REQUEST["stdDateFilterField"];
+$filter = $_REQUEST["stdDateFilter"];
 $startdate = $_REQUEST["startdate"];
 $enddate = $_REQUEST["enddate"];
 
@@ -40,7 +40,9 @@ $ogReport = new Reports($reportid);
 $primarymodule = $ogReport->primodule;
 $secondarymodule = $ogReport->secmodule;
 $oReportRun = new ReportRun($reportid);
-$sshtml = $oReportRun->GenerateReport("HTML");
+$filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
+//print_r($filterlist);
+$sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
 
 ?>
 <html>

@@ -318,7 +318,35 @@ class ReportRun extends CRMEntity
 		$vtlog->logthis("ReportRun :: Successfully returned getStdFilterList".$reportid,"info");
 		return $stdfilterlist;
 	}
+	function RunTimeFilter($filtercolumn,$filter,$startdate,$enddate)
+	{
+		if($filtercolumn != "none")
+		{
+			if($filter == "custom")
+			{
+				if($startdate != "" && $enddate != "")
+				{
+					$selectedfields = explode(":",$filtercolumn);
+					$stdfilterlist[$filtercolumn] = $selectedfields[0].".".$selectedfields[1]." between '".$startdate."' and '".$enddate."'";
+				}
+			}else
+			{
+				if($startdate != "" && $enddate != "")
+                                {
+				$selectedfields = explode(":",$filtercolumn);
+				$startenddate = $this->getStandarFiltersStartAndEndDate($filter);
+				if($startenddate[0] != "" && $startenddate[1] != "")
+				{
+					$stdfilterlist[$filtercolumn] = $selectedfields[0].".".$selectedfields[1]." between '".$startenddate[0]." 00:00:00' and '".$startenddate[1]." 23:59:00'";
+				}
+				}
+			}
 
+		}
+
+		return $stdfilterlist;
+
+	}
 	function getStandardCriterialSql($reportid)
 	{
 		global $adb;
@@ -1095,7 +1123,7 @@ class ReportRun extends CRMEntity
 		return $query;
 	}
 
-	function sGetSQLforReport($reportid)
+	function sGetSQLforReport($reportid,$filterlist)
 	{
 		global $vtlog;
 
@@ -1136,6 +1164,11 @@ class ReportRun extends CRMEntity
 		{
 			$stdfiltersql = implode(", ",$stdfilterlist);
 		}
+		//print_r($filterlist);
+		if(isset($filterlist))
+		{
+			$stdfiltersql = implode(", ",$filterlist);
+		}
 		//columns to total list
 		if(isset($columnstotallist))
 		{
@@ -1146,7 +1179,7 @@ class ReportRun extends CRMEntity
 		{
 			$advfiltersql = implode(" and ",$advfilterlist);
 		}
-		
+
 		if($stdfiltersql != "")
 		{
 			$wheresql = " and ".$stdfiltersql;
@@ -1154,9 +1187,8 @@ class ReportRun extends CRMEntity
 
 		if($advfiltersql != "")
 	        {
-                	$wheresql = " and ".$advfiltersql;
+                	$wheresql .= " and ".$advfiltersql;
         	}
-
 		$reportquery = $this->getReportsQuery($this->primarymodule);
 
 		if(trim($groupsquery) != "")
@@ -1166,21 +1198,19 @@ class ReportRun extends CRMEntity
 		{
 			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
 		}
-		
-		//echo $reportquery;
 		$vtlog->logthis("ReportRun :: Successfully returned sGetSQLforReport".$reportid,"info");
 		return $reportquery;
 
 	}
 
-	function GenerateReport($outputformat)
+	function GenerateReport($outputformat,$filterlist="")
 	{
                  global $adb;
          	 global $modules;
 
 		if($outputformat == "HTML")
 		{
-			$sSQL = $this->sGetSQLforReport($this->reportid);
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
 			$result = $adb->query($sSQL);
 			$y=$adb->num_fields($result);
 
@@ -1288,7 +1318,7 @@ class ReportRun extends CRMEntity
 		}elseif($outputformat == "PDF")
 		{
 			
-			$sSQL = $this->sGetSQLforReport($this->reportid);
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist);
 			//$modules = array("Leads_", "Accounts_", "Potentials_", "Contacts_","_");
 			$result = $adb->query($sSQL);
 			$y=$adb->num_fields($result);
@@ -1323,7 +1353,7 @@ class ReportRun extends CRMEntity
 			
 			global $adb;
 			
-			$sSQL = $this->sGetSQLforReport("TOTAL");
+			$sSQL = $this->sGetSQLforReport("TOTAL",$filterlist);
 			if($sSQL != "")
 			{
 				//$modules = array("Leads_", "Accounts_", "Potentials_", "Contacts_","_");
