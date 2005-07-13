@@ -57,7 +57,8 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 
 //Retreive the list from Database
 
-$list_query = $focus->get_nonproduct_pricebooks($productid);
+//$list_query = $focus->get_nonproduct_pricebooks($productid);
+$list_query = getListQuery("PriceBook");
 
 $xtpl->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'], $other_text, false ));
 
@@ -74,7 +75,7 @@ $sql1="select crmentity.crmid, pricebookproductrel.pricebookid,products.unit_pri
 //$sql1 = "select crmentity.crmid, pricebookproductrel.pricebookid,products.unit_price from pricebookproductrel inner join crmentity on crmentity.crmid=pricebookproductrel.productid inner join products on products.productid=pricebookproductrel.productid where crmentity.delete=0 and pricebookproductrel.productid=".$productid;
 $res1 = $adb->query($sql1);
 $num_prod_rows = $adb->num_rows($res1);
-$prod_array = Array();
+$pbk_array = Array();
 $unit_price = $adb->query_result($res1,0,"unit_price");
 for($i=0; $i<$num_prod_rows; $i++)
 {
@@ -104,7 +105,7 @@ $list_body ='';
 for($i=0; $i<$num_rows; $i++)
 {
 	$entity_id = $adb->query_result($list_result,$i,"crmid");
-	if(! array_key_exists($entity_id, $prod_array))
+	if(! array_key_exists($entity_id, $pbk_array))
 	{
 		if (($i%2)==0)
 			$list_body .= '<tr height=20 class=evenListRow>';
@@ -137,7 +138,7 @@ if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
 $xtpl->assign("LISTENTITY", $list_body);
-$xtpl->assign("RECORD_COUNTS", $record_string);
+//$xtpl->assign("RECORD_COUNTS", $record_string);
 $xtpl->assign("RETURN_ID", $productid);
 
 $xtpl->parse("main");

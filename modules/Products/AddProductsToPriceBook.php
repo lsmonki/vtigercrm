@@ -351,7 +351,7 @@ if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
 $xtpl->assign("LISTENTITY", $list_body);
-$xtpl->assign("RECORD_COUNTS", $record_string);
+//$xtpl->assign("RECORD_COUNTS", $record_string);
 
 $xtpl->parse("main");
 $xtpl->out("main");
