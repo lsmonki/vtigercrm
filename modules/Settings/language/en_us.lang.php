@@ -465,6 +465,8 @@ $mod_strings = Array(
 'LBL_ORGANIZATION_LOGO'=>'Logo Name',
 'LBL_UPLOAD'=>'Upload',
 'LBL_FILENAME'=>'File Name',
+'LBL_SETTINGS'=>'Settings',
+'LBL_COMPANY_INFO'=>'Company Information',
 
 'LBL_SEVERITY'=>'Severity',
 'LBL_FAQ_CATEGORY'=>'FAQ Category',
@@ -486,6 +488,16 @@ $mod_strings = Array(
 'Orders'=>'Purchase Order',
 'SalesOrder'=>'SalesOrder',
 'Invoice'=>'Invoice',
+
+//For Custom Fields
+'LBL_LEAD_MAP_CUSTOM_FIELD'=>'Map Lead Custom Fields',
+'leadCustomFieldDescription'=>'Map each of your organizations lead custom fields to each of your custom accoun
+t, contact, or potential fields. These mappings will be used when you convert leads',
+'LBL_MAPPING_INFO'=>'Mapping Information',
+'LBL_ACCOUNT_FIELD'=>'Account Field',
+'LBL_CONTACT_FIELD'=>'Contact Field',
+'LBL_POTENTIAL_FIELD'=>'Potential Field',
+
 
 );
 
