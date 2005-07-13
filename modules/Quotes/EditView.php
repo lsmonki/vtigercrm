@@ -188,11 +188,12 @@ elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 elseif((isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '') || (isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
         $xtpl->assign("ROWCOUNT", $num_of_products);
         $xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$InvTotal = getInventoryTotal($_REQUEST['return_module'],$_REQUEST['return_id']);
         $xtpl->assign("MODE", $focus->mode);
         $xtpl->assign("TAXVALUE", "0.000");
         $xtpl->assign("ADJUSTMENTVALUE", "0.000");
-        $xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
-        $xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
+        $xtpl->assign("SUBTOTAL", $InvTotal.".00");
+        $xtpl->assign("GRANDTOTAL", $InvTotal.".00");
 
 }
 else

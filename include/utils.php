@@ -4628,6 +4628,33 @@ function updateSubTotal($module,$tablename,$colname,$colname1,$entid_fld,$entid,
         $sub_query = "update ".$tablename." set ".$colname."=".$subtot_upd.",".$colname1."=".$gdtot_upd." where ".$entid_fld."=".$entid;
         $adb->query($sub_query);
 }
+function getInventoryTotal($return_module,$id)
+{
+	global $adb;
+	if($return_module == "Potentials")
+	{
+		$query ="select products.productname,products.unit_price,products.qtyinstock,seproductsrel.* from products inner join seproductsrel on seproductsrel.productid=products.productid where crmid=".$id;
+	}
+	elseif($return_module == "Products")
+	{
+		$query="select products.productid,products.productname,products.unit_price,products.qtyinstock,crmentity.* from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0 and productid=".$id;
+	}
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	$total=0;
+	for($i=1;$i<=$num_rows;$i++)
+	{
+		$unitprice=$adb->query_result($result,$i-1,'unit_price');
+		$qty=$adb->query_result($result,$i-1,'quantity');
+		$listprice=$adb->query_result($result,$i-1,'listprice');
+		if($listprice == '')
+		$listprice = $unitprice;
+		if($qty =='')
+		$qty = 1;
+		$total = $total+($qty*$listprice);
+	}
+	return $total;
+}
 
 
 ?>
