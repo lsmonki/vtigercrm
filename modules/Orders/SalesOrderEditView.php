@@ -59,9 +59,17 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
         	        //echo $fieldname."         ".$value;
                 	//echo '<BR>';
 	                $focus->column_fields[$fieldname] = $value;
+			
         	}
 
 	}
+	//Handling for dateformat in due_date field
+	if($focus->column_fields['duedate'] != '')
+	{
+		$curr_due_date = $focus->column_fields['duedate'];
+		$focus->column_fields['duedate'] = getDBInsertDateValue($curr_due_date);
+	}
+		
 	$quoteid = $focus->column_fields['quote_id'];
 	$quote_focus = new Quote();
 	$quote_focus->id = $quoteid;
@@ -97,6 +105,12 @@ else
         		}
 
 		}
+		//Handling for dateformat in due_date field
+		if($focus->column_fields['duedate'] != '')
+		{
+			$curr_due_date = $focus->column_fields['duedate'];
+			$focus->column_fields['duedate'] = getDBInsertDateValue($curr_due_date);
+		}		
 		$quoteid = $focus->column_fields['quote_id'];
 		$quote_focus = new Quote();
 		$quote_focus->id = $quoteid;
