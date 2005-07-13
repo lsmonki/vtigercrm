@@ -21,6 +21,7 @@ $replacedString = substituteTokens("".$_REQUEST["templatename"],$globals);
 </form>
 <script language="javascript">
 opener.document.EditView.description.value=document.frmrepstr.repstr.value
+opener.oFCKeditor.ReplaceTextarea() ;
 window.close()
 </script>
 
