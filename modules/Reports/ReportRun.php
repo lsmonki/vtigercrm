@@ -1224,71 +1224,89 @@ class ReportRun extends CRMEntity
 				
 				$noofrows = $adb->num_rows($result);
 				$custom_field_values = $adb->fetch_array($result);
-				
+				$groupslist = $this->getGroupingList($this->reportid);
+
 				do
 				{
 					$arraylists = Array();
-					
-					$newvalue = $custom_field_values[0];
-					if($newvalue == "")
+					if(count($groupslist) == 1)
 					{
-						 $newvalue = "-";
+						$newvalue = $custom_field_values[0];
+					}elseif(count($groupslist) == 2)
+					{
+						$newvalue = $custom_field_values[0];
+						$snewvalue = $custom_field_values[1];
+					}elseif(count($groupslist) == 3)
+					{
+						$newvalue = $custom_field_values[0];
+                                                $snewvalue = $custom_field_values[1];
+						$tnewvalue = $custom_field_values[2];
 					}
-					 
+					
+					if($newvalue == "") $newvalue = "-";
+
+					if($snewvalue == "") $snewvalue = "-";
+
+					if($tnewvalue == "") $tnewvalue = "-";
+ 
 					$valtemplate .= "<tr>";
 					
 					for ($i=0; $i<$y; $i++)
-					  {
-						   $fld = $adb->field_name($result, $i);
-						   $fieldvalue = $custom_field_values[$i];
-						   
-						   if($fieldvalue == "" )
-						   {
-							   $fieldvalue = "-";
-						   }
-						   if($i == 0)
-						  {
-								if($lastvalue == $fieldvalue)
-								{
-									if($this->reporttype == "summary")
-									{
-										$valtemplate .= "<td class='rptEmptyGrp'>&nbsp;</td>";									
-									}else
-									{
-										$valtemplate .= "<td class='rptData'>".$fieldvalue."</td>";
+					{
+						$fld = $adb->field_name($result, $i);
+						$fieldvalue = $custom_field_values[$i];
 
-									}
-								}else
-								{
-									if($this->reporttype == "tabular")
-									{
-									$valtemplate .= "<td class='rptData'>".$fieldvalue."</td>";
-									}else
-									{
-									$valtemplate .= "<td class='rptGrpHead'>".$fieldvalue."</td>";
-									}
-								}
-						  }else
-						  {
-							  $arraylists[str_replace($modules," ",$fld->name)] = $fieldvalue;
-							  $valtemplate .= "<td class='rptData'>".$fieldvalue."</td>";
-						  }
+						if($fieldvalue == "" )
+						{
+							$fieldvalue = "-";
+						}
+						if(($lastvalue == $fieldvalue) && $this->reporttype == "summary")
+						{
+							if($this->reporttype == "summary")
+							{
+								$valtemplate .= "<td class='rptEmptyGrp'>&nbsp;</td>";									
+							}else
+							{
+								$valtemplate .= "<td class='rptData'>".$fieldvalue."</td>";
+							}
+						}else if(($secondvalue == $fieldvalue) && $this->reporttype == "summary")
+						{
+							if($lastvalue == $newvalue)
+							{
+								$valtemplate .= "<td class='rptEmptyGrp'>&nbsp;</td>";	
+							}else
+							{
+								$valtemplate .= "<td class='rptGrpHead'>".$fieldvalue."</td>";
+							}
+						}
+						else if(($thirdvalue == $fieldvalue) && $this->reporttype == "summary")
+						{
+							if($secondvalue == $snewvalue)
+							{
+								$valtemplate .= "<td class='rptEmptyGrp'>&nbsp;</td>";
+							}else
+							{
+								$valtemplate .= "<td class='rptGrpHead'>".$fieldvalue."</td>";
+							}
+						}
+						else
+						{
+							if($this->reporttype == "tabular")
+							{
+								$valtemplate .= "<td class='rptData'>".$fieldvalue."</td>";
+							}else
+							{
+								$valtemplate .= "<td class='rptGrpHead'>".$fieldvalue."</td>";
+							}
+						}
 					  }
 					 $valtemplate .= "</tr>";
 					 $lastvalue = $newvalue;
+					 $secondvalue = $snewvalue;
+					 $thirdvalue = $tnewvalue;
 				$arr_val[] = $arraylists;
 				}while($custom_field_values = $adb->fetch_array($result));
 				
-				//<<<<<<<<construct HTML>>>>>>>>>>>>
-				
-				/*
-				$totalhtml = '<tr valign=top>
-				<td colspan='.($y+1).' bgcolor=#CCCCCC></td>
-				</tr>
-				<tr valign=top>
-				<td  colspan='.($y+1).' valign="middle" class="rptTotal">Grand Total: '.$noofrows.' Records</td>
-				</tr>';
-				*/
 				
 				$totalhtml = '
 				<tr>
