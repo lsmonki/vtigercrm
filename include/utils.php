@@ -1438,9 +1438,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 $custfld .= '<OPTION value="Leads" '.$lead_selected.'>'.$app_strings['COMBO_LEADS'].'</OPTION>';
                 $custfld .= '<OPTION value="Accounts" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
                 $custfld .= '<OPTION value="Potentials" '.$contact_selected.'>'.$app_strings['COMBO_POTENTIALS'].'</OPTION>';
-		$custfld .= '<OPTION value="Quotes" '.$quote_selected.'>'.$app_strings['COMBO_QUOTES'].'</OPTION>';
 		if($act_mode == "Task")
                 {
+			$custfld .= '<OPTION value="Quotes" '.$quote_selected.'>'.$app_strings['COMBO_QUOTES'].'</OPTION>';
                         $custfld .= '<OPTION value="Orders" '.$purchase_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
                         $custfld .= '<OPTION value="Orders" '.$sales_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION>';
                         $custfld .= '<OPTION value="Invoice" '.$invoice_selected.'>'.$app_strings['COMBO_INVOICES'].'</OPTION>';
