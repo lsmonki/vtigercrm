@@ -23,7 +23,7 @@ function getHiddenValues($id,$sid="product_id")
         $hidden .= '<input type="hidden" name="return_module" value="Products">';
         $hidden .= '<input type="hidden" name="return_action" value="DetailView">';
         $hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
+        //$hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
         $hidden .= '<input type="hidden" name="action">';	
 	return $hidden;
 }
@@ -178,13 +178,17 @@ function renderRelatedOrders($query,$id,$sid="product_id")
 	$list = GetRelatedList('Vendor','Orders',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
-function renderProductPurchaseOrders($query,$id)
+function renderProductPurchaseOrders($query,$id,$vendid='')
 {
 	require_once('modules/Orders/Order.php');
         global $mod_strings;
         global $app_strings;
 
         $hidden = getHiddenValues($id);
+	if($vendid!=0)
+	{
+        	$hidden .= '<input type="hidden" name="vendor_id" value="'.$vendid.'">';
+	}
         echo $hidden;
 
         $focus = new Order();
@@ -201,13 +205,21 @@ function renderProductPurchaseOrders($query,$id)
 	$list = GetRelatedList('Products','Orders',$focus,$query,$button,$returnset);
 	echo '</form>';
 } 
-function renderProductSalesOrders($query,$id)
+function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
 {
 	require_once('modules/Orders/SalesOrder.php');
         global $mod_strings;
         global $app_strings;
 
         $hidden = getHiddenValues($id);
+	if($prtid!=0 && $prtid!='')
+	{
+		$parent_module = getSalesEntityType($prtid);
+		if($parent_module == "Accounts")
+        	$hidden .= '<input type="hidden" name="account_id" value="'.$prtid.'">';
+	}
+        $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
+
         echo $hidden;
 
         $focus = new SalesOrder();

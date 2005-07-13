@@ -56,7 +56,7 @@ if(isset($_REQUEST['product_id']) || $_REQUEST['product_id'] !='')
 }
 
 // Get vendor address if vendorid is given
-if(isset($_REQUEST['vendor_id']) && $_REQUEST['record']==''){
+if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['record']==''){
 	require_once('modules/Products/Vendor.php');
 	$vend_focus = new Vendor();
 	$vend_focus->retrieve_entity_info($_REQUEST['vendor_id'],"Vendor");

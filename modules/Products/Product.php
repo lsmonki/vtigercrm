@@ -128,12 +128,12 @@ class Product extends CRMEntity {
 	function get_purchase_orders($id)
 	{
 		$query = "select crmentity.*, purchaseorder.*,products.productname,poproductrel.productid from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join poproductrel on poproductrel.purchaseorderid=purchaseorder.purchaseorderid inner join products on products.productid=poproductrel.productid where crmentity.deleted=0 and products.productid=".$id;
-	      	renderProductPurchaseOrders($query,$id);
+	      	renderProductPurchaseOrders($query,$id,$this->column_fields['vendor_id']);
         }
 	function get_salesorder($id)
 	{
 		$query = "select crmentity.*, salesorder.*, products.productname as productname, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join soproductrel on soproductrel.salesorderid=salesorder.salesorderid inner join products on products.productid=soproductrel.productid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0 and products.productid = ".$id;
-		renderProductSalesOrders($query,$id);	
+		renderProductSalesOrders($query,$id,$this->column_fields['contact_id'],$this->column_fields['parent_id']);	
 	}
 	function get_invoices($id)
 	{
