@@ -664,7 +664,9 @@ function formValidate() {
 			case "O"  : break;
 			case "V"  : break;
 			case "C"  : break;
-			case "DT" : 
+			case "DT" :
+				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+				{	 
 					if (type[1]=="M")
 						if (!emptyCheck(type[2],fieldlabel[i],getObj(type[2]).type))
                            	return false
@@ -678,9 +680,12 @@ function formValidate() {
 							if (!dateTimeComparison(fieldname[i],type[2],fieldlabel[i],type[5],type[6],type[4]))
 								return false
 
-					   	}	
+					   	}
+				}		
 					   	break;
-			case "D"  :	
+			case "D"  :
+				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+			{	
 					if(typeof(type[2])=="undefined") var currdatechk="OTH"
                                         else var currdatechk=type[2]
 
@@ -689,9 +694,12 @@ function formValidate() {
 					if (type[3]) {
 						if (!dateComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
 								return false
-					  	}	
+					  	}
+			}	
 					   	break;
-			case "T"  : 
+			case "T"  :
+				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+			{	 
 					if(typeof(type[2])=="undefined") var currtimechk="OTH"
                                         else var currtimechk=type[2]
 
@@ -701,8 +709,11 @@ function formValidate() {
 							if (!timeComparison(fieldname[i],fieldlabel[i],type[4],type[5],type[3]))
 								return false
 					   	}
+			}
 					   	break;
-			case "I"  :	
+			case "I"  :
+				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+			{	
 					if (getObj(fieldname[i]).value.length!=0)
                                         {
 						if (!intValidate(fieldname[i],fieldlabel[i]))
@@ -712,8 +723,11 @@ function formValidate() {
 								return false
 					   	}
 					}
+			}
 				   	break;
 			case "N"  :
+				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+				{
 					if (getObj(fieldname[i]).value.length!=0)
 					{
 						if (typeof(type[2])=="undefined") var numformat="any"
@@ -726,14 +740,18 @@ function formValidate() {
 								return false
 					   	}
 					}
+				 }
 					break;
 			case "E"  :
+				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
+				{
 					if (getObj(fieldname[i]).value.length!=0)
 					{
 						var etype = "EMAIL"
 						if (!patternValidate(fieldname[i],fieldlabel[i],etype))
 							return false
 					}
+				}
 					break;
 		}
 	}
