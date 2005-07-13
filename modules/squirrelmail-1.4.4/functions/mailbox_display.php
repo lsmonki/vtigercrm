@@ -502,6 +502,8 @@ function showMessagesForMailbox($imapConnection, $mailbox, $num_msgs,
 		displayMessageArray($imapConnection, $num_msgs, $start_msg,$msort, $mailbox, $sort, $color, $show_num,0,0);
 	echo '</td></tr>';
 	echo '</table></td></tr></table>';
+    //echo 'here';
+    mail_message_listing_end($num_msgs, $paginator_str, $msg_cnt_str, $color);
 
     //$t = elapsed($start);
     //echo("elapsed time = $t seconds\n");
@@ -684,7 +686,7 @@ function mail_message_listing_beginning ($imapConnection,
     $form_name = "FormMsgs" . $safe_name;
 
     echo '<form name="' . $form_name . '" method="post" action="index.php?module=squirrelmail-1.4.4&action=move_messages">' ."\n";
-
+    echo $moveFields;
 	echo '<table border="0" width="90%" cellpadding="5"  cellspacing="0" class="formOuterBorder" style="background-color: #F5F5F5;">
 		   <tr>
 		   		<td>'.$paginator.'&nbsp; | &nbsp; <a href="index.php?module=squirrelmail-1.4.4&action=options_highlight">Options</a></td>
@@ -692,11 +694,14 @@ function mail_message_listing_beginning ($imapConnection,
 		   </tr>
 		 </table><br>';
 
+    //getMbxList($imapConnection);
+
 	echo '<table border="0" width="90%" cellpadding="1"  cellspacing="0">
 		   <tr>
-		   		<td width="20%"><h3>WebMails List<h3></td>
-		   		<td width="70%"><input type="button" class="button" name="fetchmail" value="Fetch My Mails" onclick=document.location.href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule=WEBMAILS";></input></td>
-		   		<td><input type="SUBMIT" name="markRead" value="Read" class="button"></input> </td>
+		   		<td width="20%" class="formHeader">WebMails List</td>
+		   		<td><input type="button" class="button" name="fetchmail" value="Fetch My Mails" onclick=document.location.href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule=WEBMAILS";></input></td>
+		   		<td width="50%"><input type="SUBMIT" name="addToVtigerCRMButton" value="Add to vtiger CRM" class="button"></input></td>
+                <td><input type="SUBMIT" name="markRead" value="Read" class="button"></input> </td>
 		   		<td align="right"><input type="SUBMIT" name="markUnread" value="Unread" class="button"></input> </td>
 		   		<td align="right"><input type="SUBMIT" name="delete" value="Delete" class="button"></input> </td>
 		   </tr>
@@ -714,7 +719,7 @@ function mail_message_listing_beginning ($imapConnection,
            . html_tag( 'table' ,'' , '', '', 'border="0" width="90%" cellpadding="0"  cellspacing="0"' )
             . html_tag( 'tr' ) ."\n"
             . html_tag( 'td', 'WebMails List', 'left', '', 'valign="middle" nowrap' );
-            //getMbxList($imapConnection);
+            getMbxList($imapConnection);
             //echo get_form_header("WebMails List",$other_text, false);
             //echo '<input type="SUBMIT" name="addToVtigerCRMButton" value="Add to vtiger CRM" class="button"></input>';
             //echo getButton('SUBMIT', 'addToVtigerCRMButton',_("Add2Vtiger")) . "\n";
@@ -734,8 +739,8 @@ function mail_message_listing_beginning ($imapConnection,
 	echo '<input type="SUBMIT" name="delete" value="Delete" class="button"></input>';*/
 
     //echo getButton('SUBMIT', 'markRead',_("Read"));
-   // echo getButton('SUBMIT', 'markUnread',_("Unread"));
-   // echo getButton('SUBMIT', 'delete',_("Delete")) ."&nbsp;\n";
+    //echo getButton('SUBMIT', 'markUnread',_("Unread"));
+    //echo getButton('SUBMIT', 'delete',_("Delete")) ."&nbsp;\n";
 
     if (!strpos($php_self,'mailbox')) {
             //important fix else it gives Warning error while changing message to Read/Unread/Delete cases
@@ -750,7 +755,7 @@ function mail_message_listing_beginning ($imapConnection,
     echo "</TD>\n"
          . "   </TR>\n";
 
-    /* draws thread sorting links */
+    /* draws thread sorting links 
     if ($allow_thread_sort == TRUE) {
         if ($thread_sort_messages == 1 ) {
             $set_thread = 2;
@@ -767,7 +772,7 @@ function mail_message_listing_beginning ($imapConnection,
                               . '</a></small>&nbsp;'
                      , '', '', '' )
                  , '', '', '' );
-    }
+    }*/
 
     //echo "</TABLE></td></tr></table></td></tr>\n";
 
@@ -803,12 +808,12 @@ function mail_message_listing_end($num_msgs, $paginator_str, $msg_cnt_str, $colo
         , '', '', 'width="100%" border="0" cellpadding="1"  cellspacing="0"' );
     echo '</td></tr>';*/
 
-    echo '<tr><td><!-- table border="0" width="90%" cellpadding="1"  cellspacing="0" style="border-top: 1px solid #CCCCCC;">
+    echo '<!--<table border="0" width="90%" cellpadding="1"  cellspacing="0" style="border-top: 1px solid #CCCCCC;">
 			   <tr>
 			   		<td>'.$paginator_str.'</td>
 			   		<td align="right">'.$msg_cnt_str.'</td>
 			   </tr>
-		 </table --></td></tr><br>';
+		 </table>--><br>';
 
   }
     /* End of message-list table */
