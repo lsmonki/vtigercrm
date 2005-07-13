@@ -36,10 +36,15 @@ if($_REQUEST['return_module'] == 'Contacts' || $_REQUEST['return_module'] == 'Ac
 {
 	$sql = "update troubletickets set parent_id='' where ticketid=".$_REQUEST['record'];
 	$adb->query($sql);
-}
+	$se_sql= 'delete from seticketsrel where ticketid='.$_REQUEST['record'];
+	$adb->query($se_sql);
 
-$sql= 'delete from seticketsrel where ticketid='.$_REQUEST['record'];
-$adb->query($sql);
+}
+if($_REQUEST['return_module'] == 'Products')
+{
+	$sql = "update troubletickets set product_id='' where ticketid=".$_REQUEST['record'];
+	$adb->query($sql);
+}
 
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);
 ?>
