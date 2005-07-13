@@ -222,6 +222,14 @@ function renderRelatedUsers($query,$id)
 	$recur_dates_qry='select distinct(recurringdate) from recurringevents where activityid='.$activity_id;
 	$recur_result=$adb->query($recur_dates_qry);
 	$noofrows_recur = $adb->num_rows($recur_result);
+	if($noofrows_recur==0)
+	{
+		$recur_dates_qry='select activity.date_start,recurringevents.* from activity left outer join recurringevents on activity.activityid=recurringevents.activityid where recurringevents.activityid is NULL and activity.activityid='.$activity_id .' group by activity.activityid';
+		$recur_result=$adb->query($recur_dates_qry);
+		$noofrows_recur = $adb->num_rows($recur_result);
+
+	}
+
 	
 	$recur_table="<table border=0 cellspacing=0 cellpadding=2>
 		     <tr><td colspan=".$noofrows_recur." align=center>".$app_strings['LBL_AVAILABLE']."</td></tr>";
@@ -229,9 +237,25 @@ function renderRelatedUsers($query,$id)
 	{
 		while($row_recur = $adb->fetch_array($recur_result))
                 {
-                        $recur_dates=$row_recur['recurringdate'];
+			global $current_user;
+			$dat_fmt = $current_user->date_format;
+			if($dat_fmt == 'yyyy-mm-dd' || $dat_fmt == 'mm-dd-yyyy')
+			{
+				$date_display="m/d";
+			}
+			else if($dat_fmt == 'dd-mm-yyyy')
+			{
+				$date_display="d/m";
+			}
+
+			$recur_dates=$row_recur['recurringdate'];
+			if($recur_dates=="")
+			{
+				$recur_dates=$row_recur['date_start'];
+			}
+
 			$st=explode("-",$recur_dates);
-			$date_val = date("d/m",mktime(0,0,0,date("$st[1]"),(date("$st[2]")),date("$st[0]")));
+			$date_val = date($date_display,mktime(0,0,0,date("$st[1]"),(date("$st[2]")),date("$st[0]")));
 			$recur_table.="<td>$date_val</td> ";
                 }
 		$recur_table.="</tr>";
@@ -308,8 +332,11 @@ function renderRelatedUsers($query,$id)
         $list .= '</td><td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;" nowrap>';
 
-	$act_date_start=$row['date_start'];
-	$act_due_date=$row['due_date'];
+	//$act_date_start=$row['date_start'];
+	//$act_due_date=$row['due_date'];
+	$act_date_start= getDBInsertDateValue($row['date_start']); //getting the Date format - Jaguar
+	$act_due_date= getDBInsertDateValue($row['due_date']);
+
 	$act_time_start=$row['time_start'];
 	$act_hour_dur=$row['duration_hours'];
 	$act_mins_dur=$row['duration_minutes'];
