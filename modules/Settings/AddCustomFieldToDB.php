@@ -294,6 +294,14 @@ else
 			}
 		}
 	}
+	//Inserting into LeadMapping table - Jaguar
+	if($fldmodule == 'Leads')
+	{
+
+		$sql_def = "insert into convertleadmapping (leadfid) values(".$custfld_fieldid.")";
+		$adb->query($sql_def);
+	}
+
 	header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fldmodule);
 }
 ?>
