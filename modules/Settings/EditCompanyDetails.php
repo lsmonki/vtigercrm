@@ -20,7 +20,7 @@ $filetype=$_REQUEST['file_type'];
 $filesize=$_REQUEST['file_size'];
 $logo_value=$_REQUEST['logo_value'];
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Settings: Company Information", true);
+echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_SETTINGS'].' : '. $mod_strings['LBL_COMPANY_INFO'], true);
 echo '<br><br>';
 
 global $adb;
