@@ -5257,7 +5257,24 @@
                 <opt>Type=InnoDB</opt>
                 <data>
                 </data>
-        </table>
+	</table>
+
+	<table name="convertleadmapping">
+		<field name="cfmid" type="I" size="19">
+			<KEY/>
+			<AUTOINCREMENT/>
+		</field>
+		<field name="leadfid" type="I" size="19">
+			<NOTNULL/>
+		</field>
+		<field name="accountfid" type="I" size="19"></field>
+		<field name="contactfid" type="I" size="19"></field>
+		<field name="potentialfid" type="I" size="19"></field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
 
 
 </schema>
