@@ -14,7 +14,7 @@
 <script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/calc.js"></script>
-<form enctype="multipart/form-data" name="CustomView" method="POST" action="index.php" onsubmit="verify_data(CustomView); return mandatoryCheck();">
+<form enctype="multipart/form-data" name="CustomView" method="POST" action="index.php" onsubmit="return mandatoryCheck();">
 <input type="hidden" name="module" value="CustomView">
 <input type="hidden" name="action" value="Save">
 <input type="hidden" name="cvmodule" value="{CVMODULE}">
@@ -102,6 +102,8 @@ function updatefOptions(sel, opSelName) {
 }
 function mandatoryCheck()
 {
+	//return verify_data();
+
 	var mandatorycheck = false;
 	var i,j;
 	var manCheck = new Array({MANDATORYCHECK});
@@ -109,6 +111,18 @@ function mandatoryCheck()
 	//var columnvalue = document.getElementById("column"+1).value;
 	if(manCheck)
 	{
+		var isError = false;
+	        var errorMessage = "";
+        	if (trim(document.CustomView.viewName.value) == "") {
+                	isError = true;
+                	errorMessage += "\nView Name";
+        	}
+        	// Here we decide whether to submit the form.
+        	if (isError == true) {
+                	alert("Missing required fields:" + errorMessage);
+                	return false;
+        	}
+
 		for(i=1;i<=9;i++)
 		{
 			var columnvalue = document.getElementById("column"+i).value;
@@ -150,10 +164,10 @@ function trim(s) {
 	return s;
 }
 
-function verify_data(form) {
+function verify_data() {
 	var isError = false;
 	var errorMessage = "";
-	if (trim(form.viewName.value) == "") {
+	if (trim(document.CustomView.viewName.value) == "") {
 		isError = true;
 		errorMessage += "\nView Name";
 	}
@@ -164,6 +178,12 @@ function verify_data(form) {
 	}
 	//return true;
 }
+
+function goto_CustomAction()
+{
+        document.location.href = "index.php?module=Leads&action=CustomAction";
+}
+
 </script>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -175,6 +195,16 @@ function verify_data(form) {
   <tr>
     <td colspan="3" class="hline"><img height='1' src='include/images/blank.gif'></td>
   </tr>
+</table>
+<br>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td><div align="center">
+                <input type="submit" class="button" name="save" value="Save"  tabindex="2">
+                <input name="cancel" class="button" type="button" value="Cancel" onclick='window.history.back()'>
+		{CUSTOMACTIONBUTTON}
+            </div></td>
+        </tr>
 </table>
 <!-- BEGIN: error -->
 <font color="red">{ERROR}</font> 
@@ -308,7 +338,7 @@ function verify_data(form) {
       </tr>
       <tr>
 	<td>
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="secContent">
+	<table width="100%" border="0" cellspacing="3" cellpadding="6" class="secContent">
   	<tr>
     	<td> <table width="100%" border=0 cellspacing=0 cellpadding=0>
         <tr>
@@ -320,14 +350,15 @@ function verify_data(form) {
                 in the third column.</li>
               <li>You can enter up to 10 items, separated by commas. For example:
                 CA, NY, TX, FL searches for CA or NY or TX or FL.</li>
-              <li>Place quotation marks around data that includes commas. For
+              <!--<li>Place quotation marks around data that includes commas. For
                 example, &quot;200,000&quot;,&quot;1,000,000&quot; searches for
                 200,000 or 1,000,000.</li>
               <li>For fields that can be set on or off, use &quot;0&quot; for
                 no and &quot;1&quot; for yes, e.g., &quot;Active equals 1&quot;
-                or &quot;Converted equals 0.&quot;</li>
+                or &quot;Converted equals 0.&quot;</li>-->
             </ul></td>
         </tr>
+	<tr><td>&nbsp;</td></tr>
         <tr>
           <td><select name="fcol1" id="fcol1" onchange="updatefOptions(this, 'fop1');">
               <option value="">None</option>
@@ -335,7 +366,7 @@ function verify_data(form) {
               </select> &nbsp; <select name="fop1" id="fop1">
               <option value="">None</option>
               {FOPTION1}
-            </select> &nbsp; <input name="fval1" id="fval1" type="text" size=20 maxlength=80 value="{VALUE1}">
+            </select> &nbsp; <input name="fval1" id="fval1" type="text" size=30 maxlength=80 value="{VALUE1}">
             &nbsp;and</TD>
         </TR>
 	<TR>
@@ -346,7 +377,7 @@ function verify_data(form) {
               <select name="fop2" id="fop2">
               <option value="">None</option>
               {FOPTION2}
-            </select> &nbsp; <input name="fval2" id="fval2" type="text" size=20 maxlength=80 value="{VALUE2}">
+            </select> &nbsp; <input name="fval2" id="fval2" type="text" size=30 maxlength=80 value="{VALUE2}">
             &nbsp;and</TD>
         </TR>
         <TR>
@@ -357,7 +388,7 @@ function verify_data(form) {
               <select name="fop3" id="fop3">
               <option value="">None</option>
               {FOPTION3}
-            </select> &nbsp; <input name="fval3" id="fval3" type="text" size=20 maxlength=80 value="{VALUE3}">
+            </select> &nbsp; <input name="fval3" id="fval3" type="text" size=30 maxlength=80 value="{VALUE3}">
             &nbsp;and</TD>
         </TR>
         <TR>
@@ -368,7 +399,7 @@ function verify_data(form) {
               <select name="fop4" id="fop4">
               <option value="">None</option>
               {FOPTION4}
-            </select> &nbsp; <input name="fval4" id="fval4" type="text" size=20 maxlength=80 value="{VALUE4}">
+            </select> &nbsp; <input name="fval4" id="fval4" type="text" size=30 maxlength=80 value="{VALUE4}">
             &nbsp;and</TD>
         </TR>
 	<TR>
@@ -379,7 +410,7 @@ function verify_data(form) {
              <select name="fop5" id="fop5">
               <option value="">None</option>
               {FOPTION5}
-            </select> &nbsp; <input name="fval5" id="fval5" type="text" size=20 maxlength=80 value="{VALUE5}"></TD>
+            </select> &nbsp; <input name="fval5" id="fval5" type="text" size=30 maxlength=80 value="{VALUE5}"></TD>
         </TR>
          </table></td>
   	</tr>
@@ -400,6 +431,7 @@ function verify_data(form) {
     	Calendar.setup ({inputField : "jscal_field_date_start", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1});
 	Calendar.setup ({inputField : "jscal_field_date_end", ifFormat : "%Y-%m-%d", showsTime : false, button : "jscal_trigger_date_end", singleClick : true, step : 1});
     </script>
+    <br>
 </form>
 {JAVASCRIPT} 
 <!-- END: main -->

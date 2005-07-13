@@ -17,6 +17,8 @@ $image_path=$theme_path."images/";
 require_once('include/database/PearDatabase.php');
 require_once ($theme_path."layout_utils.php");
 require_once('data/CRMEntity.php');
+require_once('include/utils.php');
+
 global $adv_filter_options;
 
 $adv_filter_options = array("e"=>"equals",
@@ -136,11 +138,16 @@ class CustomView extends CRMEntity{
 			$fieldtype = $adb->query_result($result,$i,"typeofdata");
 			$fieldtype = explode("~",$fieldtype);
 			$fieldtypeofdata = $fieldtype[0];
-                        /*if($fieldtablename == "crmentity")
+                        /*if($fieldcolname == "crmid" || $fieldcolname == "parent_id")
                         {
-                           $fieldtablename = $fieldtablename.$module;
+                           $fieldtablename = "crmentity";
+			   $fieldcolname = "setype";
                         }*/
                         $fieldlabel = $adb->query_result($result,$i,"fieldlabel");
+				if($fieldlabel == "Related To")
+				{
+					$fieldlabel = "Related to";
+				}
                         $fieldlabel1 = str_replace(" ","_",$fieldlabel);
                         $optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
                         $module_columnlist[$optionvalue] = $fieldlabel;
@@ -566,7 +573,7 @@ class CustomView extends CRMEntity{
 			if($startdate != "" && $enddate != "")
 			{
 				$columns = explode(":",$filtercolumn);
-				$stdfiltersql = $columns[0].".".$columns[1]." between '".$startdate."' and '".$enddate."'";
+				$stdfiltersql = $columns[0].".".$columns[1]." between '".$startdate." 00:00:00' and '".$enddate." 23:59:00'";
 			}
 		}
 		//echo $stdfiltersql;
@@ -581,10 +588,25 @@ class CustomView extends CRMEntity{
 			{
 				if(isset($advfltrow))
 				{
+					//echo $advfltrow["columnname"];
 					$columns = explode(":",$advfltrow["columnname"]);
 					if($advfltrow["columnname"] != "" && $advfltrow["comparator"] != "" && $advfltrow["value"] != "")
 					{
-						$advfiltersql[] = $columns[0].".".$columns[1].$this->getAdvComparator($advfltrow["comparator"],$advfltrow["value"]);
+						
+						$valuearray = explode(",",trim($advfltrow["value"]));
+						if(isset($valuearray) && count($valuearray) > 1)
+						{
+							$advorsql = "";
+							for($n=0;$n<count($valuearray);$n++)
+							{
+								$advorsql[] = $this->getRealValues($columns[0],$columns[1],$advfltrow["comparator"],trim($valuearray[$n]));
+							}
+							$advorsqls = implode(" or ",$advorsql);
+							$advfiltersql[] = " (".$advorsqls.") ";
+						}else
+						{
+							$advfiltersql[] = $this->getRealValues($columns[0],$columns[1],$advfltrow["comparator"],trim($advfltrow["value"]));
+						}
 					}
 				}
 			}
@@ -596,6 +618,169 @@ class CustomView extends CRMEntity{
 		return $advfsql;
 	}
 	
+	function getRealValues($tablename,$fieldname,$comparator,$value)
+	{
+		if($fieldname == "smownerid" || $fieldname == "inventorymanager")
+		{
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,getUserId_Ol($value));
+		}else if($fieldname == "parentid")
+		{
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getAccountId($value));
+		}else if($fieldname == "accountid")
+		{
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getAccountId($value));
+		}else if($fieldname == "contactid")
+		{
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getContactId($value));
+		}else if($fieldname == "vendor_id" || $fieldname == "vendorid")
+		{
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getVendorId($value));
+		}else if($fieldname == "potentialid")
+		{
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getPotentialId($value));
+		}else if($fieldname == "quoteid")
+		{
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getQuoteId($value));
+		}
+		else if($fieldname == "product_id")
+		{
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getProductId($value));
+		}
+		else if($fieldname == "salesorderid")
+		{
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$this->getSoId($value));
+		}
+		else if($fieldname == "crmid" || $fieldname == "parent_id")
+		{
+			$value = $tablename.".".$fieldname." in (".$this->getSalesEntityId($value).") ";
+		}
+		else
+		{
+			$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value);	
+		}
+		return $value;
+	}
+	
+	function getSalesEntityId($setype)
+	{
+		global $vtlog;
+		$vtlog->logthis("in getSalesEntityId ".$setype,'info');
+		global $adb;
+		$sql = "select crmid from crmentity where setype='".$setype."' and deleted = 0";
+		$result = $adb->query($sql);
+		while($row = $adb->fetch_array($result))
+		{
+			$parent_id[] = $row["crmid"];
+		}
+		if(isset($parent_id))
+		{
+			$parent_id = implode(",",$parent_id);
+		}else
+		{
+			$parent_id = 0;
+		}
+		return $parent_id;
+	}
+
+	function getSoId($so_name)
+	{
+		global $vtlog;
+		$vtlog->logthis("in getSoId ".$so_name,'info');
+		global $adb;
+		if($so_name != '')
+		{
+			$sql = "select salesorderid from salesorder where subject='".$so_name."'";
+			$result = $adb->query($sql);
+			$so_id = $adb->query_result($result,0,"salesorderid");
+		}
+		return $so_id;
+	}
+
+	function getProductId($product_name)
+	{
+
+		global $vtlog;
+		$vtlog->logthis("in getProductId ".$product_name,'info');
+		global $adb;
+		if($product_name != '')
+		{
+			$sql = "select productid from products where productname='".$product_name."'";
+			$result = $adb->query($sql);
+			$productid = $adb->query_result($result,0,"productid");
+		}
+		return $productid;
+	}
+
+	function getQuoteId($quote_name)
+	{
+		global $vtlog;
+		$vtlog->logthis("in getQuoteId ".$quote_name,'info');
+		global $adb;
+		if($quote_name != '')
+		{
+			$sql = "select quoteid from quotes where subject='".$quote_name."'";
+			$result = $adb->query($sql);
+			$quote_id = $adb->query_result($result,0,"quoteid");
+		}
+		return $quote_id;
+	}
+
+	function getPotentialId($pot_name)
+	{
+		global $vtlog;
+		$vtlog->logthis("in getPotentialId ".$pot_name,'info');
+		global $adb;
+		if($pot_name != '')
+		{
+			$sql = "select potentialid from potential where potentialname='".$pot_name."'";
+			$result = $adb->query($sql);
+			$potentialid = $adb->query_result($result,0,"potentialid");
+		}
+		return $potentialid;
+	}
+	function getVendorId($vendor_name)
+	{
+		global $vtlog;
+		$vtlog->logthis("in getVendorId ".$vendor_name,'info');
+		global $adb;
+		if($vendor_name != '')
+		{
+			$sql = "select vendorid from vendor where vendorname='".$vendor_name."'";
+			$result = $adb->query($sql);
+			$vendor_id = $adb->query_result($result,0,"vendorid");
+		}
+		return $vendor_id;
+	}
+	
+	function getContactId($contact_name)
+	{
+		global $vtlog;
+		$vtlog->logthis("in getContactId ".$contact_name,'info');
+		global $adb;
+		if($contact_name != '')
+		{
+			$sql = "select contactid from contactdetails where lastname='".$contact_name."'";
+			$result = $adb->query($sql);
+			$contact_id = $adb->query_result($result,0,"contactid");
+		}
+		return $contact_id;
+	}
+
+	function getAccountId($account_name)
+	{
+		global $vtlog;
+		$vtlog->logthis("in getAccountId ".$account_name,'info');
+
+		global $adb;
+		if($account_name != '')
+		{
+			$sql = "select accountid from account where accountname='".$account_name."'";
+			$result = $adb->query($sql);
+			$accountid = $adb->query_result($result,0,"accountid");
+		}		
+		return $accountid;
+	}
+
 	function getAdvComparator($comparator,$value)
 	{
 /*		fLabels['e'] = 'equals';
@@ -871,7 +1056,20 @@ class CustomView extends CRMEntity{
 
 
 			//echo $listviewquery." ".$wherequery;
-			$query = "select ".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid ".$listviewquery;
+			if($module == "Activities" || $module == "Emails")
+			{
+				$query = "select ".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid,activity.* ".$listviewquery;
+			}else if($module == "Notes")
+			{
+				$query = "select ".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid,notes.* ".$listviewquery;
+			}
+			else if($module == "Products")
+			{
+				$query = "select ".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid,products.* ".$listviewquery;
+			}else
+			{
+				$query = "select ".$this->getCvColumnListSQL($viewid)." ,crmentity.crmid ".$listviewquery;
+			}
 			$stdfiltersql = $this->getCVStdFilterSQL($viewid);
 			$advfiltersql = $this->getCVAdvFilterSQL($viewid);
 			if(isset($stdfiltersql) && $stdfiltersql != '')
