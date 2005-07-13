@@ -59,6 +59,15 @@ elseif($fld_module == "Products")
 //echo $tableName;
 $dbquery = 'Alter table '.$tableName.' Drop Column '.$colName;
 $adb->query($dbquery);
+
+//Deleting from convert lead mapping table- Jaguar
+if($fld_module=="Leads")
+{
+	$deletequery = 'delete from convertleadmapping where leadfid='.$id;
+	$adb->query($deletequery);
+}
+
+
 if($uitype == 15)
 {
 $deltablequery = 'drop table '.$colName;
