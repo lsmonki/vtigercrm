@@ -64,6 +64,8 @@ for($i=0;$i<$noofrows;$i++)
 				     'accountid' => $adb->query_result($list_result, $i, 'accountid'),
                                      'contactid' => $adb->query_result($list_result,$i,'contactid'),
                                      'date_start' => getDisplayDate($adb->query_result($list_result,$i,'date_start')),
+				      'recurringtype' => getDisplayDate($adb->query_result($list_result,$i,'recurringtype')),
+
 				     'parent'=> $parent_name,	
                                      );
 }
@@ -93,6 +95,7 @@ foreach($open_activity_list as $event)
 		'CONTACT_NAME' => $event['firstname'].' '.$event['lastname'],
 		'ACCOUNT_NAME' => $event['accountname'],
 		'TIME' => $event['date_start'],
+		'RECURRINGTYPE' => $event['recurringtype'],
 		'PARENT_NAME' => $event['parent'],
 	);
 	$end_date=$event['due_date']; //included for getting the OverDue Activities in the Upcoming Activities
