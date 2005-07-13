@@ -19,11 +19,12 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-
+global $vtlog;
 
 if(isset($_REQUEST['templateid']) && $_REQUEST['templateid']!='')
 {
 	$templateid = $_REQUEST['templateid'];
+	$vtlog->logthis("the templateid is set to the value ".$templateid,'debug');  
 }
 $sql = "select * from emailtemplates where templateid=".$templateid;
 $result = $adb->query($sql);

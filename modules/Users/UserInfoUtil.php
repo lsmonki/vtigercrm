@@ -14,7 +14,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/utils.php');
 include('config.php');
-
+global $vtlog;
 if(isset($_REQUEST['groupname']))
 {
   $groupname = $_REQUEST['groupname'];
@@ -484,19 +484,27 @@ function fetchEmailTemplateInfo($templateName)
 //template file 
 function substituteTokens($filename,$globals)
 {
+	global $vtlog;
+	$vtlog->logthis("in substituteTokens method  with filename ".$filename.' and content globals as '.$globals,'debug');  
+
 	global $root_directory;
 	//$globals = implode(",\\$",$tokens);
     
 	if (!$filename)
 	 {
+
+	$vtlog->logthis("filename is not set in substituteTokens",'debug');  
 		 $filename = $this->filename;
+	$vtlog->logthis("filename is not set in substituteTokens so taking default filename",'debug');  
 	 }
 	
     if (!$dump = file ($filename))
 	 {
+	$vtlog->logthis("not able to create the file or get access to the file with filename ".$filename." so returning 0",'debug');  
      		 return 0;
     	 }	
 
+	$vtlog->logthis("about to start replacing the tokens",'debug');  
       require_once($root_directory .'/modules/Emails/templates/testemailtemplateusage.php');
       eval ("global $globals; ");
     while (list($key,$val) = each($dump))
@@ -505,11 +513,14 @@ function substituteTokens($filename,$globals)
       if (ereg( "\$",$val)) 
 	{
         $val = addslashes ($val);      
+	$vtlog->logthis("token is ".$val,'debug');  
         eval(  "\$val = \"$val\";");
         $val = stripslashes ($val);
 	$replacedString .= $val;
       }
     }
+
+	$vtlog->logthis("the replacedString  is ".$replacedString,'debug');  
 	return $replacedString;
 }
 
