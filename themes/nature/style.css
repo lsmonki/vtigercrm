@@ -1618,14 +1618,9 @@ div.message {
         font-size: 12px;
 }
 
-.today {
-		background: #FFF;
-        vertical-align: top;
-        color: #CC0000;
-}
 
 .today {
-	background: #CCCCCC;
+	background: #99ffff;
 	vertical-align: top;
 	color: #000;
 	font-weight: bold;
@@ -1640,11 +1635,17 @@ div.message {
 }
 .eventbold  {
 
-	background: #E5E5E5;
+	background: #FFCC66;
 	vertical-align: top;
 	color: #000;
 	font-weight: bold;
 }
+.pending {
+
+	background: #ffcccc;
+	color: #000;
+}
+
 /* */
 
 .week {
