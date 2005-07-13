@@ -2633,7 +2633,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                                                 {
                                                         $name = $app_strings[$name];
                                                 }
-                                                else
+                                                elseif($mod_strings[$name])
                                                 {
                                                         $name = $mod_strings[$name];
                                                 }
