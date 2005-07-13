@@ -24,6 +24,12 @@ echo '<input type="hidden" name="module" value="Settings">';
 echo '<input type="hidden" name="action" value="CreateCustomField">';
 echo '<tr><br>';
 echo '<td><input title="'.$mod_strings['NewCustomFieldAltC'].'" accessKey="C" class="button" type="submit" name="NewCustomField" value="'.$mod_strings['NewCustomField'].'"></td>';
+
+if($_REQUEST['fld_module']=="Leads")
+{
+	echo '<td><input title="'.$mod_strings['CUSTOMFIELDMAPPING'].'"  class="button" onclick="this.form.action.value=\'LeadCustomFieldMapping\'" type="submit" name="LeadCustomFieldMapping" value="'.$mod_strings['CUSTOMFIELDMAPPING'].'"></td>'; //button for custom field mapping
+}
+
 echo '</tr></form></table>';
 echo '<br>';
 //onclick="this.form.return_module.value="Settings"; this.form.action.value="index"
