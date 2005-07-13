@@ -120,7 +120,7 @@ for($i=0; $i<$noofrows; $i++)
 {
 	$lead_field_id=$adb->query_result($result,$i,"fieldid");
 	$lead_field_label=$adb->query_result($result,$i,"fieldlabel");
-	$display_val.="<tr><td nowrap class='dataLabel'>".$lead_field_label;
+	$display_val.="<tr><td nowrap class='dataLabel' width=\"10%\">".$lead_field_label.":" ;
 
 	$convert_sql="select * from convertleadmapping where leadfid=".$lead_field_id;
 	$convert_result = $adb->query($convert_sql);
@@ -138,9 +138,9 @@ for($i=0; $i<$noofrows; $i++)
 		$contact_combo=getContactCustomValues($lead_field_id,$contactid);
 		$potential_combo=getPotentialCustomValues($lead_field_id,$potentialid);
 		$display_val.="</td>";
-		$display_val.="<td class=\"dataLabel\" align=\"center\">".$account_combo."</td>";
-		$display_val.="<td class=\"dataLabel\"  align=\"center\">".$contact_combo."</td>";
-		$display_val.="<td class=\"dataLabel\" align=\"center\">".$potential_combo."</td>";
+		$display_val.="<td class=\"customdataLabel\" >".$account_combo."</td>";
+		$display_val.="<td class=\"customdataLabel\" >".$contact_combo."</td>";
+		$display_val.="<td class=\"customdataLabel\">".$potential_combo."</td>";
 		$display_val.="</tr>";
 
 }
