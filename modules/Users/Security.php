@@ -392,7 +392,7 @@ $this->db->query("insert into field values (15,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'category','faq',1,'15','faqcategories','Category',1,0,0,100,2,1,1,'V~O')");
  $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'status','faq',1,'15','faqstatus','Status',1,0,0,100,3,1,1,'V~O')");
  $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'question','faq',1,'20','question','Question',1,0,0,100,1,2,1,'V~M')");
- $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'answer','faq',1,'20','answer','Answer',1,0,0,100,1,3,1,'V~M')");
+ $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'answer','faq',1,'20','faq_answer','Answer',1,0,0,100,1,3,1,'V~M')");
  $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'comments','faqcomments',1,'19','comments','Add Comment',1,0,0,100,1,4,1,'V~O')");
 $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,3,1,2,'T~O')");
  $this->db->query("insert into field values (15,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,4,1,2,'T~O')");
