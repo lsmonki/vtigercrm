@@ -258,7 +258,7 @@ function RssItem($title, $description = "", $author = "", $category = "",
 	?>
 			<item>
 				<title><?=htmlspecialchars($title)?></title>
-				<link>index.php?module=squirrelmail-1.4.4&amp;action=read_body</link>
+				<link>index.php?module=squirrelmail-1.4.4&amp;action=right_main&amp;smodule=WEBMAILS</link>
 				<?php
 				if (strlen($pubDate))
 				{
