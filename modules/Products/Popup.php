@@ -160,6 +160,9 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 $focus->list_mode="search";
 $focus->popup_type=$popuptype;
 
+if(isset($_REQUEST['curr_row']))
+$url_string .="&curr_row=".$_REQUEST['curr_row'];
+
 $listview_header = getSearchListViewHeader($focus,"Products",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
 
@@ -173,8 +176,6 @@ $url_string .="&sorder=".$sorder;
 
 $url_string .="&recordid=".$_REQUEST['recordid'].'&return_module='.$_REQUEST['return_module'];
 
-if($_REQUEST['return_module'] == "Orders")
-$url_string .="&curr_row=".$_REQUEST['curr_row'];
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Products","Popup");
 $xtpl->assign("NAVIGATION", $navigationOutput);
