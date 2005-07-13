@@ -18,15 +18,25 @@
 
 body         { 
 	font-size: 10pt;
-	background-color:#FFFFFF;
+	background-color:#CCC;
 	color:#000000;
 	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 }
 
+form,h1,h2,h3,h4{margin:0;padding:0;}
+
+h3{
+        font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
+        font-size: 14px;
+
+}
+
+table{background-color:#FFF;}
 td,tr,p,div {
         font-family: Trebuchet MS, Verdana, Arial, Helvetica, sans-serif;
         font-size: 10pt;
         color: #333333;
+	
         }
 
 a:link       { 
@@ -43,7 +53,7 @@ a:visited    {
 a:hover      { color: #336699; text-decoration: underline 
 }
 INPUT { FONT-SIZE: 9pt; }
-INPUT.button { BORDER-RIGHT: #005AA0 1px solid; BORDER-TOP: #005AA0 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 8pt; BORDER-LEFT: #005AA0 1px solid; CURSOR: hand; COLOR: #005AA0; BORDER-BOTTOM: #005AA0 1px solid;  BACKGROUND-COLOR: #CCCCCC}
+INPUT.button { FONT-WEIGHT: bold; FONT-SIZE: 14px; width: 75; height:25 }
 SELECT { FONT-SIZE: 9pt; }
 .moduleTitle {
 	FONT-WEIGHT: bold;

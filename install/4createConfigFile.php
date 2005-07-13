@@ -104,45 +104,33 @@ $cache_dir = 'cache/';
 
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 
-<table width="100%" border="0" cellpadding="5" cellspacing="0"><tbody>
-
-<tr><td align="center"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger.jpg"/></a></td></tr>
-
+<table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
+  <tr>
+      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
+      <td align="right"><h2>Step 4 of 5</h2></td>
+      <td align="right"><IMG alt="vtiger CRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
+    </tr>
 </tbody></table>
-
-<P></P>
-
-<table align="center" border="0" cellpadding="2" cellspacing="2" border="1" width="60%"><tbody><tr>
+<table width="75%" align="center" cellpadding="10" cellspacing="0" border="0"><tbody>
 
    <tr>
 
-      <td width="100%">
+      <td>
 
 		<table width=100% cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 
 			  <td>
 
-			   <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+			   <table width=100% cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 
-				<td class="formHeader" vAlign="top" align="left" height="20">
-
-				 <IMG height="5" src="include/images/left_arc.gif" width="5" border="0"></td>
-
-				<td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20">Step 4: Create Config File</td>
-
-				<td  class="formHeader" vAlign="top" align="right" height="20">
-
-				  <IMG height="5" src="include/images/right_arc.gif" width="5" border="0"></td>
+				<td><h3>Create Config File</h3></td>
+				<td width="80%"><hr width="100%"></td>
 
 				</tr></tbody></table>
 
 			  </td>
 
-			  <td width="100%" align="right">&nbsp;</td>
 
-			  </tr><tr>
-
-			  <td colspan="2" width="100%" class="formHeader"><IMG width="100%" height="2" src="include/images/blank.gif"></td>
 
 			  </tr>
 
@@ -152,9 +140,7 @@ $cache_dir = 'cache/';
 
           </tr>
 
-	<tr><td>&nbsp;</td></tr>
-
-          <tr>
+	         <tr>
 
             <td width="100%">
 
@@ -164,7 +150,7 @@ $cache_dir = 'cache/';
 
 if (isset($_REQUEST['root_directory'])) {
 
-	$root_directory = $_REQUEST['root_directory']; 
+	$root_directory = $_REQUEST['root_directory'];
 
 }
 

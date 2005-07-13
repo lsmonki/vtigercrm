@@ -80,27 +80,26 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
-<table width="100%" border="0" cellpadding="5" cellspacing="0"><tbody>
-<tr><td align="center"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger.jpg"/></a></td></tr>
+<table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
+  <tr>
+      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
+      <td align="right"><h2>Step 3 of 5</h2></td>
+      <td align="right"><IMG alt="vtiger CRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
+    </tr>
 </tbody></table>
-<P></P>
-<table align="center" border="0" cellpadding="2" cellspacing="2" border="1" width="60%"><tbody><tr>
+<table width="75%" align="center" border="0" cellpadding="10" cellspacing="0" border="0"><tbody>
    <tr>
       <td width="100%">
 		<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 			  <td>
-			   <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-				<td class="formHeader" vAlign="top" align="left" height="20">
-				 <IMG height="5" src="include/images/left_arc.gif" width="5" border="0"></td>
-				<td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20">Step 3: Confirm System Configuration</td>
-				<td  class="formHeader" vAlign="top" align="right" height="20">
-				  <IMG height="5" src="include/images/right_arc.gif" width="5" border="0"></td>
+			   <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+
+				<td nowrap><h3>Confirm System Configuration</h3></td>
+				<td width="80%"><hr width="100%"></td>
+
 				</tr></tbody></table>
 			  </td>
-			  <td width="100%" align="right">&nbsp;</td>
-			  </tr><tr>
-			  <td colspan="2" width="100%" class="formHeader"><IMG width="100%" height="2" src="include/images/blank.gif"></td>
-			  </tr>
+
 		</tbody></table>
 	  </td>
           </tr>
@@ -111,59 +110,76 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
           </tr>
           <tr>
 		    <td align="center">
-			<table width="50%" cellpadding="2" border="0"><tbody>
-              <tr>
-  			   <td colspan="2" class="moduleTitle" noWrap>Database Configuration</td>
-              </tr>
+					<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
+		              <tr>
+					<td bgcolor="#EEEEEE"><h3>Database Configuration</h3></td>
+		              </tr>
+              </table>
+<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
 			  <tr>
-               <td>Host Name</td>
+               <td bgcolor="#F5F5F5" width="40%">Host Name</td>
                <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_host_name)) echo "$db_host_name"; ?></font></td>
               </tr>
               <tr>
-               <td>MySQL User Name</td>
+               <td bgcolor="#F5F5F5" width="40%">User Name</td>
                <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_user_name)) echo "$db_user_name"; ?></font></td>
               </tr>
               <tr>
-               <td noWrap>MySQL Password</td>
+               <td bgcolor="#F5F5F5" width="40%" noWrap>Password</td>
                <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_password)) echo ereg_replace('.', '*', $db_password); ?></font></td>
               </tr>
               <tr>
-               <td noWrap>MySQL Database Name</td>
+               <td noWrap bgcolor="#F5F5F5" width="40%">Database Name</td>
                <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font></td>
               </tr>
               <tr>
-               <td noWrap>Drop Existing Tables</td>
+               <td noWrap bgcolor="#F5F5F5" width="40%">Drop Existing Tables</td>
                <td align="left" nowrap>: <font class="dataInput">
 			   <?php if (isset($db_drop_tables) && $db_drop_tables == true) echo "True"; else echo "False"; ?>
 				</font></td>
-			  </tr>
-			<tr><td>&nbsp;</td></tr>
-			  <tr>
-  			   <td colspan="2" class="moduleTitle" noWrap>Site Configuration</td>
+			  </tr></table><br>
+					<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
+		              <tr>
+					<td bgcolor="#EEEEEE"><h3>Site Configuration</h3></td>
+		              </tr>
+              </table>
+			<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
+
+              <tr>
+               <td noWrap bgcolor="#F5F5F5" width="40%">URL</td>
+               <td align="left">: <font class="dataInput"><?php if (isset($site_URL)) echo $site_URL; ?></font></td>
               </tr>
               <tr>
-               <td noWrap>URL</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($site_URL)) echo $site_URL; ?></font></td>
+               <td noWrap bgcolor="#F5F5F5" width="40%">Path</td>
+               <td align="left">: <font class="dataInput"><?php if (isset($root_directory)) echo $root_directory; ?></font></td>
               </tr>
               <tr>
-               <td noWrap>Path</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($root_directory)) echo $root_directory; ?></font></td>
-              </tr>
-              <tr>
-               <td noWrap>Cache Path</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.''.$cache_dir; ?></font></td>
+               <td noWrap bgcolor="#F5F5F5" width="40%">Cache Path</td>
+               <td align="left">: <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.''.$cache_dir; ?></font></td>
               </tr>
 
 
               <tr>
-               <td noWrap>Admin Password</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($admin_password)) echo ereg_replace('.', '*', $admin_password); ?></font></td>
+               <td noWrap bgcolor="#F5F5F5" width="40%">Admin Password</td>
+               <td align="left">: <font class="dataInput"><?php if (isset($admin_password)) echo ereg_replace('.', '*', $admin_password); ?></font></td>
               </tr>
 
     	      </tbody>
 			</table>
-		  </td></tr>
-          <tr><td align="center">
+<table width="70%" cellpadding="5" border="0">
+          <tr>
+
+          <td>
+		  		 			<form action="install.php" method="post" name="form" id="form">
+		  		 			<input type="hidden" name="file" value="4createConfigFile.php">
+		  		 <!-- TODO Clint 4/28 - Add support for creating the database as well -->
+		  		 <!--			 Also create database <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font>? -->
+		  		 <!--			 <input type="checkbox" class="dataInput" name="db_create" value="1" /> -->
+		  		 			 <b>Also populate demo data?</b>
+		  		 			 <input type="checkbox" class="dataInput" name="db_populate" value="1">
+			</td>
+
+          <td align="right">
 			<form action="install.php" method="post" name="form" id="form">
 			 <input type="hidden" name="file" value="2setConfig.php">
              <input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
@@ -188,22 +204,13 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 
 
 
-			 <input class="button" type="submit" name="next" value="Change" /></td>
-			</form>
-		 </td></tr>
-		 <tr><td>&nbsp;</td></tr>
-		 <tr><td align="center">
-			<form action="install.php" method="post" name="form" id="form">
-			<input type="hidden" name="file" value="4createConfigFile.php">
-<!-- TODO Clint 4/28 - Add support for creating the database as well -->
-<!--			 Also create database <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font>? -->
-<!--			 <input type="checkbox" class="dataInput" name="db_create" value="1" /> -->
-			 Also populate demo data?
-			 <input type="checkbox" class="dataInput" name="db_populate" value="1">
-			</td>
-		 </tr>
-		 <tr>
-			<td align="right">
+			 <input class="button" type="submit" name="next" value="Change" /></td></form>
+
+		 </td>
+
+	<td align="right">
+	<form action="install.php" method="post" name="form" id="form">
+	<input type="hidden" name="file" value="4createConfigFile.php">
 			 <input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
              <input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
              <input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
@@ -224,11 +231,14 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 	<input type="hidden" class="dataInput" name="ftpserver" value="<?php if (isset($ftpserver)) echo "$ftpserver"; ?>" />
         <input type="hidden" class="dataInput" name="ftpuser" value="<?php if (isset($ftpuser)) echo "$ftpuser"; ?>" />
         <input type="hidden" class="dataInput" name="ftppassword" value="<?php if (isset($ftppassword)) echo "$ftppassword"; ?>" />
-	
+
 
 			 <input class="button" type="submit" name="next" value="Create" />
 			</td>
-          </tr>
+		 </tr>
+		 <tr><td>&nbsp;</td></tr>
+
+
 	</tbody></table>
 </form>
 </body>
@@ -249,26 +259,25 @@ if($mysql_status == 'false')
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
-<table width="100%" border="0" cellpadding="5" cellspacing="0"><tbody>
-<tr><td align="center"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger.jpg"/></a></td></tr>
+<table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
+  <tr>
+      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
+      <td align="right"><h2>Step 3 of 5</h2></td>
+      <td align="right"><IMG alt="vtiger CRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
+    </tr>
 </tbody></table>
-<P></P>
-<table align="center" border="0" cellpadding="2" cellspacing="2" border="1" width="60%"><tbody><tr>
+<table width="75%" align="center" cellpadding="10" cellspacing="0" border="0"><tbody>
    <tr>
-      <td width="100%">
+      <td>
 		<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 			  <td>
-			   <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-				<td class="formHeader" vAlign="top" align="left" height="20">
-				 <IMG height="5" src="include/images/left_arc.gif" width="5" border="0"></td>
-				<td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20">Step 3: Invalid Mysql Connection Parameters specified</td>
-				<td  class="formHeader" vAlign="top" align="right" height="20">
-				  <IMG height="5" src="include/images/right_arc.gif" width="5" border="0"></td>
+			   <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+
+				<td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20"><h3>Invalid Mysql Connection Parameters specified</h3></td>
+				<td width="80%"><hr width="100%"></td>
 				</tr></tbody></table>
 			  </td>
-			  <td width="100%" align="right">&nbsp;</td>
-			  </tr><tr>
-			  <td colspan="2" width="100%" class="formHeader"><IMG width="100%" height="2" src="include/images/blank.gif"></td>
+
 			  </tr>
 		</tbody></table>
 	  </td>
@@ -280,7 +289,7 @@ if($mysql_status == 'false')
 			-  specified MySQL user, password , hostname or port is invalid.<BR>
                         -  specified MySQL user does not have access to connect to the mysql server from the host</b></font>
 		</td>
-          </tr>	
+          </tr>
           <tr>
             <td>
           <font color=brown><b><P>Kindly check the specified mysql connection parameters... <P></b></font>
@@ -288,33 +297,34 @@ if($mysql_status == 'false')
           </tr>
           <tr>
 		    <td align="center">
-			<table width="50%" cellpadding="2" border="0"><tbody>
-              <tr>
-  			   <td colspan="2" class="moduleTitle" noWrap>Database Configuration</td>
-              </tr>
+	<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
+		              <tr>
+					<td bgcolor="#EEEEEE"><h3>Database Configuration</h3></td>
+		              </tr>
+              </table>
+	<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
 			  <tr>
-               <td>Host Name</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_host_name)) echo "$db_host_name"; ?></font></td>
+               <td bgcolor="#F5F5F5" width="40%">Host Name</td>
+               <td align="left" nowrap><font class="dataInput"><?php if (isset($db_host_name)) echo "$db_host_name"; ?></font></td>
               </tr>
               <tr>
-               <td>MySQL User Name</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_user_name)) echo "$db_user_name"; ?></font></td>
+               <td bgcolor="#F5F5F5" width="40%">User Name</td>
+               <td align="left" nowrap><font class="dataInput"><?php if (isset($db_user_name)) echo "$db_user_name"; ?></font></td>
               </tr>
               <tr>
-               <td noWrap>MySQL Password</td>
-               <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_password)) echo ereg_replace('.', '*', $db_password); ?></font></td>
+               <td noWrap bgcolor="#F5F5F5" width="40%">Password</td>
+               <td align="left" nowrap><font class="dataInput"><?php if (isset($db_password)) echo ereg_replace('.', '*', $db_password); ?></font></td>
               </tr>
               <tr>
-               <td noWrap>MySQL Database Name</td>
+               <td noWrap bgcolor="#F5F5F5" width="40%">MySQL Database Name</td>
                <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font></td>
               </tr>
-              
 
-    	      </tbody>
 			</table>
 		  </td></tr>
-          <tr><td align="center">
-			<form action="install.php" method="post" name="form" id="form">
+          <tr>
+      <td align="right">
+        <form action="install.php" method="post" name="form" id="form">
 			 <input type="hidden" name="file" value="2setConfig.php">
              <input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
              <input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
@@ -338,14 +348,12 @@ if($mysql_status == 'false')
 
 
 
-			 <input class="button" type="submit" name="next" value="Change" /></td>
-			</form>
+			 <input class="button" type="submit" name="next" value="Change" />
+        </form>
 		 </td></tr>
-		 <tr><td>&nbsp;</td></tr>
 </table>
 </body>
 </html>
-
 <?php
 }
 ?>
@@ -362,26 +370,24 @@ if($mysql_status == 'true' && $mysql_db_status == 'false')
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
-<table width="100%" border="0" cellpadding="5" cellspacing="0"><tbody>
-<tr><td align="center"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger.jpg"/></a></td></tr>
+<table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
+  <tr>
+      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
+      <td align="right"><h2>Step 3 of 5</h2></td>
+      <td align="right"><IMG alt="vtiger CRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
+    </tr>
 </tbody></table>
-<P></P>
-<table align="center" border="0" cellpadding="2" cellspacing="2" border="1" width="60%"><tbody><tr>
+<table width="75%" align="center" cellpadding="10" cellspacing="0" border="0"><tbody>
    <tr>
       <td width="100%">
 		<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 			  <td>
-			   <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-				<td class="formHeader" vAlign="top" align="left" height="20">
-				 <IMG height="5" src="include/images/left_arc.gif" width="5" border="0"></td>
-				<td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20">Step 3: Database Not Found </td>
-				<td  class="formHeader" vAlign="top" align="right" height="20">
-				  <IMG height="5" src="include/images/right_arc.gif" width="5" border="0"></td>
+			   <table  width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+				<td><h3>Database Not Found</h3> </td>
+				<td width="80%"><hr width="100%"></td>
 				</tr></tbody></table>
 			  </td>
-			  <td width="100%" align="right">&nbsp;</td>
-			  </tr><tr>
-			  <td colspan="2" width="100%" class="formHeader"><IMG width="100%" height="2" src="include/images/blank.gif"></td>
+
 			  </tr>
 		</tbody></table>
 	  </td>
@@ -390,9 +396,10 @@ if($mysql_status == 'true' && $mysql_db_status == 'false')
 		<td>
 			<font color=brown><b><P>Error Message: The specified database <?php echo $db_name ?> is not present. Create the database or specify some other database name <P></b></font>
 		</td>
-          </tr>	
-          <tr><td align="center">
-			<form action="install.php" method="post" name="form" id="form">
+          </tr>
+          <tr>
+      <td height="40" align="right">
+        <form action="install.php" method="post" name="form" id="form">
 			 <input type="hidden" name="file" value="2setConfig.php">
              <input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
              <input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
@@ -416,13 +423,14 @@ if($mysql_status == 'true' && $mysql_db_status == 'false')
 
 
 
-			 <input class="button" type="submit" name="next" value="Change" /></td>
-			</form>
-		 </td></tr>
-		 <tr><td>&nbsp;</td></tr>
+			 <input class="button" type="submit" name="next" value="Change" />
+        </form>
+</td>
+</tr>
 </table>
 </body>
 </html>
+
 
 <?php
 }

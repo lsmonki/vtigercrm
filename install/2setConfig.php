@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -25,13 +25,13 @@ $current_dir = pathinfo(dirname(__FILE__));
 $current_dir=$current_dir['dirname']."/";
 $cache_dir = "cache/";
 
-// To make MySQL run in desired port  
+// To make MySQL run in desired port
 $sock_path=":" .$mysql_port;
 
 $H_NAME=gethostbyaddr($_SERVER['SERVER_ADDR']);
 if (is_file("config.php")) {
 	require_once("config.php");
-	
+
 	session_start();
 	if(isset($upload_maxsize))
                  $_SESSION['upload_maxsize'] = $upload_maxsize;
@@ -50,17 +50,17 @@ if (is_file("config.php")) {
 		// We need to encode the languages in a way that can be retrieved later.
 		$language_keys = Array();
 		$language_values = Array();
-		
+
 		foreach($languages as $key=>$value)
 		{
 			$language_keys[] = $key;
 			$language_values[] = $value;
-		}	
-			
+		}
+
 		$_SESSION['language_keys'] = urlencode(implode(",",$language_keys));
 		$_SESSION['language_values'] = urlencode(implode(",",$language_values));
 	}
-	
+
 	global $dbconfig;
 	if (isset($_REQUEST['db_host_name'])) {
 		$db_host_name = $_REQUEST['db_host_name'];
@@ -71,7 +71,7 @@ if (is_file("config.php")) {
 	else {
 		$db_host_name = $H_NAME.$sock_path;
 	}
-	
+
 	if (isset($_REQUEST['db_user_name'])) {
 		$db_user_name = $_REQUEST['db_user_name'];
 	}
@@ -81,17 +81,17 @@ if (is_file("config.php")) {
 	else {
 		$db_user_name = $mysql_username;
 	}
-	
+
 	if (isset($_REQUEST['db_password'])) {
 		$db_password = $_REQUEST['db_password'];
 	}
 	elseif (isset($dbconfig['db_password'])) {
-		$db_password = $dbconfig['db_password']; 
+		$db_password = $dbconfig['db_password'];
 	}
 	else {
 		$db_password = $mysql_password;
 	}
-	
+
 	if (isset($_REQUEST['db_name'])){
 		$db_name = $_REQUEST['db_name'];
 	}
@@ -102,7 +102,7 @@ if (is_file("config.php")) {
 		$db_name = 'vtigercrm4_2';
 	}
 	!isset($_REQUEST['db_drop_tables']) ? $db_drop_tables = "0" : $db_drop_tables = $_REQUEST['db_drop_tables'];
-	
+
 	if (isset($_REQUEST['host_name'])) $host_name = $_REQUEST['host_name'];
 	else $host_name = $_SERVER['SERVER_NAME'];
 	if (isset($_REQUEST['site_URL'])) $site_URL = $_REQUEST['site_URL'];
@@ -126,7 +126,7 @@ else {
 	!isset($_REQUEST['site_URL']) ? $site_URL = $web_root : $site_URL = $_REQUEST['site_URL'];
 	!isset($_REQUEST['root_directory']) ? $root_directory = $current_dir : $root_directory = stripslashes($_REQUEST['root_directory']);
 	!isset($_REQUEST['cache_dir']) ? $cache_dir = $cache_dir : $cache_dir = stripslashes($_REQUEST['cache_dir']);
-	
+
 	!isset($_REQUEST['mail_server']) ? $mail_server = $mail_server : $mail_server = stripslashes($_REQUEST['mail_server']);
 	!isset($_REQUEST['mail_server_username']) ? $mail_server_username = $mail_server_username : $mail_server_username = stripslashes($_REQUEST['mail_server_username']);
 	!isset($_REQUEST['mail_server_password']) ? $mail_server_password = $mail_server_password : $mail_server_password = stripslashes($_REQUEST['mail_server_password']);
@@ -164,27 +164,27 @@ function verify_data(form) {
 	if (trim(form.db_host_name.value) =='') {
 		isError = true;
 		errorMessage += "\n database host name";
-		form.db_host_name.focus(); 
+		form.db_host_name.focus();
 	}
 	if (trim(form.db_user_name.value) =='') {
 		isError = true;
 		errorMessage += "\n database user name";
-		form.db_user_name.focus(); 
+		form.db_user_name.focus();
 	}
 	if (trim(form.db_name.value) =='') {
 		isError = true;
 		errorMessage += "\n database name";
-		form.db_name.focus(); 
+		form.db_name.focus();
 	}
 	if (trim(form.site_URL.value) =='') {
 		isError = true;
 		errorMessage += "\n site url";
-		form.site_URL.focus(); 
+		form.site_URL.focus();
 	}
 	if (trim(form.root_directory.value) =='') {
 		isError = true;
 		errorMessage += "\n path";
-		form.root_directory.focus(); 
+		form.root_directory.focus();
 	}
 /*
 	 if (trim(form.admin_email.value) =='') {
@@ -196,7 +196,7 @@ function verify_data(form) {
 	if (trim(form.admin_password.value) =='') {
 		isError = true;
 		errorMessage += "\n admin password";
-		form.admin_password.focus(); 
+		form.admin_password.focus();
 	}
 	if (trim(form.cache_dir.value) =='') {
                 isError = true;
@@ -240,66 +240,67 @@ function verify_data(form) {
 </script>
 
 
-<table width="100%" border="0" cellpadding="5" cellspacing="0"><tbody>
+<table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
   <tr>
-      <td align="center"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger.jpg"/></a></td>
+      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
+      <td align="right"><h2>Step 2 of 5</h2></td>
+      <td align="right"><IMG alt="vtiger CRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
     </tr>
 </tbody></table>
-<table align="center" border="0" cellpadding="2" cellspacing="2" border="1" width="60%"><tbody><tr> 
+
+<table width="75%" align="center" border="0" cellpadding="10" cellspacing="0" border="0"><tbody>
    <tr>
       <td width="100%">
-		<table width=100% cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+		<table cellpadding="0" cellspacing="0" border="0" width="100%"><tbody><tr>
 			  <td>
-			   <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-				<td class="formHeader" vAlign="top" align="left" height="20"> 
-				 <IMG height="5" src="include/images/left_arc.gif" width="5" border="0"></td>
-				<td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20">Step 2: Database Configuration</td>
-				<td  class="formHeader" vAlign="top" align="right" height="20">
-				  <IMG height="5" src="include/images/right_arc.gif" width="5" border="0"></td>
+			   <table cellpadding="0" cellspacing="0" border="0" width="100%"><tbody><tr>
+
+				<td nowrap><h3>Database Configuration</h3></td>
+				<td width="80%"><hr width="100%"></td>
+
 				</tr></tbody></table>
 			  </td>
-			  <td width="100%" align="right">&nbsp;</td>
-			  </tr><tr>
-			  <td colspan="2" width="100%" class="formHeader"><IMG width="100%" height="2" src="include/images/blank.gif"></td>
-			  </tr>
+			   </tr>
 		</tbody></table>
 	  </td>
           </tr>
           <tr>
             <td>
-          <P>Please enter your database configuration information below... <P>
-		  
-		  If you do not have root access to your database (for example you are installing in a virtual 
-		  hosting environment), you will need to have your database created for you before you proceed. 
+          <P><b>Please enter your database configuration information below...</b> <P>
+
+		  If you do not have root access to your database (for example you are installing in a virtual
+		  hosting environment), you will need to have your database created for you before you proceed.
 		  However, this installer will still be able to create the necessary database tables.<P>
-			
+
 		  If you unsure of your database host, username or password, we suggest that you use the default
 		  values below. <P>
-		  <font color=red>* Required field</font></td>
+		  </td>
           </tr>
-		  <tr><td>&nbsp;</td></tr>
-          <tr>
+		  <tr>
 		    <td align="center">
 			<form action="install.php" method="post" onsubmit="return verify_data(setConfig);" name="setConfig" id="form">
 			<input type="hidden" name="file" value="3confirmConfig.php">
-			<table width="50%" cellpadding="2" border="0"><tbody>
+			<div align="left" width="70%"><font color=red>* Required field</font></div>
+			<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
               <tr>
-			<td colspan="3" class="moduleTitle" noWrap>Database Configuration</td>
+			<td bgcolor="#EEEEEE"><h3>Database Configuration</h3></td>
               </tr>
-			  <tr>
-               <td><font color=red>*</font></td><td nowrap><strong>Host Name</strong></td>
+              </table>
+			<table width="70%" cellpadding="5"  cellspacing="1" border="0" style="border: 1px dotted #666666;"><tbody>
+			<tr>
+               <td nowrap bgcolor="#F5F5F5" width="40%"><strong>Host Name</strong> <sup><font color=red>*</font></sup></td>
                <td align="left"><input type="text" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" /></td>
               </tr>
               <tr>
-               <td><font color=red>*</font></td><td nowrap><strong>MySQL User Name</strong></td>
+               <td nowrap bgcolor="#F5F5F5"><strong>User Name</strong> <sup><font color=red>*</font></sup></td>
                <td align="left"><input type="text" class="dataInput" name="db_user_name" readonly value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" /></td>
               </tr>
               <tr>
-               <td></td><td nowrap><strong>MySQL Password</strong></td>
+               <td nowrap bgcolor="#F5F5F5"><strong>Password</strong> <sup><font color=red>*</font></sup></td>
                <td align="left"><input type="password" class="dataInput" name="db_password" readonly value="<?php if (isset($db_password)) echo "$db_password"; ?>" /></td>
               </tr>
               <tr>
-               <td><font color=red>*</font></td><td nowrap><strong>MySQL Database Name</strong></td>
+               <td nowrap bgcolor="#F5F5F5"><strong>Database Name</strong> <sup><font color=red>*</font></sup></td>
                <td align="left"><input type="text" class="dataInput" name="db_name" readonly value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
 
 		<input type="hidden" name="dbtype" value="<?php
@@ -313,50 +314,60 @@ function verify_data(form) {
 
                 } ?>">
               </tr>
+              </table>
               <!-- tr>
                <td></td><td nowrap><strong>Drop Existing Tables?</strong></td>
-               <td align="left"><input type="checkbox" name="db_drop_tables" 
-			   <?php if (isset($db_drop_tables) && $db_drop_tables==true) echo "checked "; ?> value="$db_drop_tables"/></td> 
+               <td align="left"><input type="checkbox" name="db_drop_tables"
+			   <?php if (isset($db_drop_tables) && $db_drop_tables==true) echo "checked "; ?> value="$db_drop_tables"/></td>
               </tr -->
-			<tr><td>&nbsp;</td></tr>
-              <tr>
-			<td colspan="3" class="moduleTitle" noWrap>Site Configuration</td>
-              </tr>
-              <tr>
-			<td><font color=red>*</font></td><td nowrap><strong>URL</td>
-            <td align="left"><input class="dataInput" type="text" name="site_URL" 
-			value="<?php if (isset($site_URL)) echo $site_URL; ?>" size="40" /> 
+			<br><table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
+			              <tr>
+						<td bgcolor="#EEEEEE"><h3>Site Configuration</h3></td>
+			              </tr>
+              </table>
+            <table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
+            <tr>
+			<td nowrap bgcolor="#F5F5F5" width="40%"><strong>URL</strong> <sup><font color=red>*</font></sup></td>
+            <td align="left"><input class="dataInput" type="text" name="site_URL"
+			value="<?php if (isset($site_URL)) echo $site_URL; ?>" size="40" />
 		  	</td>
           </tr><tr>
-            <td><font color=red>*</font></td><td nowrap><strong>Path</strong></td>
+            <td bgcolor="#F5F5F5"><strong>Path</strong> <sup><font color=red>*</font></sup></td>
             <td align="left"><input class="dataInput" type="text" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> </td>
 	  </tr><tr valign="top">
-            <td><font color=red>*</font></td><td nowrap><strong>Path to Cache Directory<br>(must be writable)</td>
+            <td nowrap bgcolor="#F5F5F5"><strong>Path to Cache Directory  <sup><font color=red>*</font></sup><br>(must be writable)</td>
             <td align="left"><?php echo $root_directory; ?><input class="dataInput" type="text" name="cache_dir" size='14' value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" size="40" /> </td>
           </tr>
+          </table><br>
+            <table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
 		<tr>
-			<td colspan="3" class="moduleTitle" noWrap>Admin Configuration</td>
+			<td bgcolor="#EEEEEE"><h3>Admin Configuration</h3></td>
               </tr>
+              </table>
+	<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
 	<tr>
-            <td></td><td nowrap><strong>username</strong></td>
+
+            <td nowrap bgcolor="#F5F5F5" width="40%"><strong>username</strong></td>
             <td align="left">admin</td>
           </tr>
 
-	<tr>
-            <td><font color=red>*</font></td><td nowrap><strong>password</strong></td>
-            <td align="left"><input class="dataInput" type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>" size="40" /></td>
+	<tr><td bgcolor="#F5F5F5" nowrap><strong>password</strong><sup><font color=red>*</font></sup></td>
+        <td align="left"><input class="dataInput" type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>" size="40" /></td>
           </tr>
 	<tr>
-            <td colspan=3><font color=blue>( the default password is 'admin'. You can change the password if necessary now or else you can change it from the Admin page inside the vtiger CRM )</font></td>
+	<td colspan="2"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later in vtiger CRM </font></td>
+
         </tr>
-		</tbody>
-			</table>
-		  </td></tr>
+		</table>
+
+
+
+<table width="70%" cellpadding="5" border="0">
           <tr>
-			<td align="right"><br /> <input class="button" type="submit" name="next" value="Next" /></td>
+			<td align="right"><br /> <input class="button" type="submit" name="next" value="Next >" /></td>
           </tr>
 	</tbody></table>
-		
+
 </form>
 </body>
 </html>

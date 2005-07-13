@@ -1,7 +1,7 @@
 <?php
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
- * ("License"); You may not use this file except in compliance with the 
+ * ("License"); You may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
  * Software distributed under the License is distributed on an  "AS IS"  basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
@@ -28,23 +28,23 @@ $new_tables = 0;
 
 require_once('include/database/PearDatabase.php');
 require_once('include/logging.php');
-require_once('modules/Leads/Lead.php'); 
-require_once('modules/Settings/FileStorage.php'); 
-//require_once('modules/imports/Headers.php'); 
-require_once('modules/Contacts/Contact.php'); 
-require_once('modules/Accounts/Account.php'); 
-require_once('modules/Potentials/Opportunity.php'); 
-require_once('modules/Activities/Activity.php'); 
-require_once('modules/Notes/Note.php'); 
-require_once('modules/Emails/Email.php'); 
+require_once('modules/Leads/Lead.php');
+require_once('modules/Settings/FileStorage.php');
+//require_once('modules/imports/Headers.php');
+require_once('modules/Contacts/Contact.php');
+require_once('modules/Accounts/Account.php');
+require_once('modules/Potentials/Opportunity.php');
+require_once('modules/Activities/Activity.php');
+require_once('modules/Notes/Note.php');
+require_once('modules/Emails/Email.php');
 require_once('modules/Users/User.php');
 require_once('modules/Import/SugarFile.php');
 require_once('modules/Import/ImportMap.php');
-require_once('modules/Import/UsersLastImport.php'); 
+require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Users/TabMenu.php');
 require_once('modules/Users/LoginHistory.php');
 require_once('modules/Settings/FileStorage.php');
-require_once('data/Tracker.php'); 
+require_once('data/Tracker.php');
 require_once('include/utils.php');
 require_once('modules/Users/Security.php');
 // load up the config_override.php file.  This is used to provide default user settings
@@ -81,13 +81,13 @@ function createAttributesTable () {
 		module_id int(11),
 		object_name text,
 		name text,
-	
+
 		PRIMARY KEY ( module_id, object_name ))";
 	// fk module_id, object_name -> object table.
 
 	$this->query($query);
 }
-	
+
 function createLabelsTable () {
 	global $log;
 	// create the translation tables
@@ -99,7 +99,7 @@ function createLabelsTable () {
 		value_popup text,
 		PRIMARY KEY ( module_id, name ))";
 
-	$this->query($query);	
+	$this->query($query);
 }
 
 //Drop old tables if table exists and told to drop it
@@ -190,12 +190,12 @@ function create_default_users()
 	        $default_user->weekstart = '1';
         	$default_user->namedays = '';
                 $default_user->save();
-	
+
         }
 
 	//Inserting values into user2role table
 	$role_query = "select roleid from role where name='administrator'";
-	$db->database->SetFetchMode(ADODB_FETCH_ASSOC); 
+	$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
 	$role_result = $db->query($role_query);
 	$role_id = $db->query_result($role_result,0,"roleid");
 
@@ -213,26 +213,27 @@ function create_default_users()
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
-<table width="100%" border="0" cellpadding="5" cellspacing="0"><tbody>
-  <tr><td align="center"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger.jpg"/></a></td></tr>
+table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
+  <tr>
+      <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
+      <td align="right"><h2>Step 5 of 5</h2></td>
+      <td align="right"><IMG alt="vtiger CRM" border="0" src="include/images/spacer.gif" width="10" height="1"/></td>
+    </tr>
 </tbody></table>
-<P></P>
-<table align="center" border="0" cellpadding="2" cellspacing="2" border="1" width="60%"><tbody><tr> 
+<table width="75%" align="center" cellpadding="10" cellspacing="0" border="0"><tbody>
+
    <tr>
       <td width="100%">
-		<table width=100% cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+		<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 			  <td>
-			   <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-				<td class="formHeader" vAlign="top" align="left" height="20"> 
-				 <IMG height="5" src="include/images/left_arc.gif" width="5" border="0"></td>
-				<td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20">Step 5: Create Database Tables</td>
-				<td  class="formHeader" vAlign="top" align="right" height="20">
-				  <IMG height="5" src="include/images/right_arc.gif" width="5" border="0"></td>
+			   <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+
+				<td><h5>Create Database Tables</h3></td>
+				<td width="80%"><hr width="100%"></td>
+
 				</tr></tbody></table>
 			  </td>
-			  <td width="100%" align="right">&nbsp;</td>
-			  </tr><tr>
-			  <td colspan="2" width="100%" class="formHeader"><IMG width="100%" height="2" src="include/images/blank.gif"></td>
+
 			  </tr>
 		</tbody></table>
 	  </td>
@@ -335,7 +336,7 @@ if ($new_tables)
 //Populating users table
 $uid = $db->getUniqueID("users");
 $sql_stmt1 = "insert into users(id,user_name,user_password,last_name,email1,date_format) values(".$uid.",'standarduser','stX/AHHNK/Gkw','standarduser','standarduser@standard.user.com','yyyy-mm-dd')";
-$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error()); 
+$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
 
 //$sql_stmt1 = "insert into user2role values(1,1)";
@@ -343,11 +344,11 @@ $db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
 
 $role_query = "select roleid from role where name='standard_user'";
-$db->database->SetFetchMode(ADODB_FETCH_ASSOC); 
+$db->database->SetFetchMode(ADODB_FETCH_ASSOC);
 $role_result = $db->query($role_query);
 $role_id = $db->query_result($role_result,0,"roleid");
 
-	
+
 $sql_stmt2 = "insert into user2role values(".$uid.",".$role_id.")";
 $db->query($sql_stmt2) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
@@ -405,7 +406,7 @@ $deltaTime = microtime_diff($startTime, $endTime);
 
 function populatePermissions4StandardUser()
 {
-	
+
   mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Leads','EditView',1,1,'')");
   mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Leads','Delete',1,1,'')");
   mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Leads','index',1,1,'')");
@@ -415,11 +416,11 @@ function populatePermissions4StandardUser()
   mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Accounts','EditView',1,1,'')");
   mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Accounts','Delete',1,1,'')");
 mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Accounts','index',1,1,'')");
- 
+
  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Contacts','EditView',1,1,'')");
  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Contacts','Delete',1,1,'')");
 mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Contacts','index',1,1,'')");
- 
+
  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Opportunities','EditView',1,1,'')");
  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Opportunities','Delete',1,1,'')");
  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Opportunities','index',1,1,'')");
@@ -427,7 +428,7 @@ mysql_query("insert into role2permission(roleid,permissionid,module,module_actio
  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Calls','EditView',1,1,'')");
  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Calls','Delete',1,1,'')");
  mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Calls','index',1,1,'')");
-                            
+
 		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Emails','EditView',1,1,'')");
 		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Emails','Delete',1,1,'')");
                 mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Emails','index',1,1,'')");
@@ -449,7 +450,7 @@ mysql_query("insert into role2permission(roleid,permissionid,module,module_actio
 		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Cases','EditView',1,1,'')");
 		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Cases','Delete',1,1,'')");
                 mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Cases','index',1,1,'')");
-                
+
 		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','imports','fetchfile',0,1,'')");
 		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Contacts','BusinessCard',0,1,'')");
 		mysql_query("insert into role2permission(roleid,permissionid,module,module_action,action_permission,module_permission,description) values (2,'','Contacts','Import',0,1,'')");
