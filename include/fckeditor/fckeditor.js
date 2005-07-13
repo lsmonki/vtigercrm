@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -15,9 +15,6 @@
  * 	instances in a HTML page in the client side. For server side
  * 	operations, use the specific integration system.
  * 
- * Version:  2.0 RC3
- * Modified: 2005-02-27 19:04:39
- * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
@@ -28,7 +25,7 @@ var FCKeditor = function( instanceName, width, height, toolbarSet, value )
 	// Properties
 	this.InstanceName	= instanceName ;
 	this.Width			= width			|| '100%' ;
-	this.Height			= height		|| '400' ;
+	this.Height			= height		|| '200' ;
 	this.ToolbarSet		= toolbarSet	|| 'Default' ;
 	this.Value			= value			|| '' ;
 	this.BasePath		= '/fckeditor/' ;
@@ -54,7 +51,7 @@ FCKeditor.prototype.Create = function()
 
 	if ( !this.CheckBrowser || this._IsCompatibleBrowser() )
 	{
-		document.write( '<input type="hidden" id="' + this.InstanceName + '" name="' + this.InstanceName + '" value="' + this._HTMLEncode( this.Value ) + '">' ) ;
+		document.write( '<input type="hidden" id="' + this.InstanceName + '" name="' + this.InstanceName + '" value="' + this._HTMLEncode( this.Value ) + '" />' ) ;
 		document.write( this._GetConfigHtml() ) ;
 		document.write( this._GetIFrameHtml() ) ;
 	}
@@ -79,13 +76,18 @@ FCKeditor.prototype.ReplaceTextarea = function()
 		
 		if ( !oTextarea || oTextarea.tagName != 'TEXTAREA' )
 		{
-			alert( 'Error: The TEXTAREA id "' + this.InstanceName + '" was not found' ) ;
+			//alert( 'Error: The TEXTAREA id "' + this.InstanceName + '" was not found' ) ;
 			return ;
 		}
 
 		oTextarea.style.display = 'none' ;
-		this._InsertHtmlBefore( this._GetConfigHtml(), oTextarea ) ;
-		this._InsertHtmlBefore( this._GetIFrameHtml(), oTextarea ) ;
+		
+		if (document.getElementById(this.InstanceName+"___Config")!=null) {
+			window.frames[this.InstanceName+"___Frame"].frames["eEditorArea"].document.write(oTextarea.value) ;						
+		} else {
+			this._InsertHtmlBefore( this._GetConfigHtml(), oTextarea ) ;
+			this._InsertHtmlBefore( this._GetIFrameHtml(), oTextarea ) ;		
+		}
 	}
 }
 
@@ -107,11 +109,11 @@ FCKeditor.prototype._GetConfigHtml = function()
 	var sConfig = '' ;
 	for ( var o in this.Config )
 	{
-		if ( sConfig.length > 0 ) sConfig += '&' ;
+		if ( sConfig.length > 0 ) sConfig += '&amp;' ;
 		sConfig += escape(o) + '=' + escape( this.Config[o] ) ;
 	}
 
-	return '<input type="hidden" id="' + this.InstanceName + '___Config" value="' + sConfig + '">' ;
+	return '<input type="hidden" id="' + this.InstanceName + '___Config" value="' + sConfig + '" />' ;
 }
 
 FCKeditor.prototype._GetIFrameHtml = function()
