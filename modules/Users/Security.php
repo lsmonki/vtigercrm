@@ -1529,6 +1529,208 @@ Thanks,
 		//Insert into currency table
 		$this->db->query("insert into currency_info values('U.S Dollar','USD','$')");
                  
+
+
+
+//insert into email template table
+
+	$body='
+	Hello!
+
+	On behalf of the vtiger team,  I am pleased to announce the release of vtiger crm4.2 . This is a feature packed release including the mass email template handling, custom view feature, reports feature and a host of other utilities. vtiger runs on all platforms.
+
+	Notable Features of vtiger are :
+	-Email Client Integration
+	-Trouble Ticket Integration
+	-Invoice Management Integration
+	-Reports Integration
+	-Portal Integration
+	-Enhanced Word Plugin Support
+	-Custom View Integration
+
+	Known Issues:
+	-ABCD
+	-EFGH
+	-IJKL
+	-MNOP
+	-QRST';
+
+          $this->db->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Announcement for Release','Announcement for Release','Announcement of a release','".$body."',0,".$this->db->getUniqueID('emailtemplates').")");
+	
+
+
+$body='name
+street,
+city,
+state,
+ zip)
+ 
+ Dear
+ 
+ Please check the following invoices that are yet to be paid by you:
+ 
+ No. Date      Amount
+ 1   1/1/01    $4000
+ 2   2/2//01   $5000
+ 3   3/3/01    $10000
+ 4   7/4/01    $23560
+ 
+ Kindly let us know if there are any issues that you feel are pending to be discussed.
+ We will be more than happy to give you a call.
+ We would like to continue our business with you.
+ 
+ Sincerely,
+ name
+ title';
+
+
+               $this->db->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Pending Invoices','Invoices Pending','Payment Due','".$body."',0,".$this->db->getUniqueID('emailtemplates').")");
+
+
+
+
+
+$body=' Dear
+
+Your proposal on the project XYZW has been reviewed by us
+and is acceptable in its entirety.
+
+We are eagerly looking forward to this project
+and are pleased about having the opportunity to work
+together. We look forward to a long standing relationship
+with your esteemed firm.
+
+I would like to take this opportunity to invite you
+to a game of golf on Wednesday morning 9am at the
+Cuff Links Ground. We will be waiting for you in the
+Executive Lounge.
+
+Looking forward to seeing you there.
+
+Sincerely,
+name
+title';
+	       
+               $this->db->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Acceptance Proposal','Acceptance Proposal','Acceptance of Proposal','".$body."',0,".$this->db->getUniqueID('emailtemplates').")");
+
+
+$body= ' The undersigned hereby acknowledges receipt and delivery
+of the goods.
+The undersigned will release the payment subject to the goods being discovered not satisfactory.
+
+Signed under seal this <date>
+
+Sincerely,
+name
+title';
+	       
+               $this->db->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Good received acknowledgement','Goods received acknowledgement','Acknowledged Receipt of Goods','".$body."',0,".$this->db->getUniqueID('emailtemplates').")");
+
+
+	       $body= ' Dear
+	 We are in receipt of your order as contained in the
+   purchase order form.We consider this to be final and binding on both sides.
+If there be any exceptions noted, we shall consider them
+only if the objection is received within ten days of receipt of
+this notice.
+
+Thank you for your patronage.
+Sincerely,
+name
+title';
+
+
+	       
+               $this->db->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Accept Order','Accept Order','Acknowledgement/Acceptance of Order','".$body."',0,".$this->db->getUniqueID('emailtemplates').")");
+
+
+
+
+$body='Dear
+
+We are relocating our office to
+11111,XYZDEF Cross,
+UVWWX Circle
+The telephone number for this new location is (101) 1212-1328.
+
+Our Manufacturing Division will continue operations
+at 3250 Lovedale Square Avenue, in Frankfurt.
+
+We hope to keep in touch with you all.
+Please update your addressbooks.
+
+
+Thank You,
+name
+title';
+	       
+               $this->db->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Address Change','Change of Address','Address Change','".$body."',0,".$this->db->getUniqueID('emailtemplates').")");
+
+
+
+$body='Dear
+
+Thank you for extending us the opportunity to meet with
+you and members of your staff.
+
+I know that John Doe serviced your account
+for many years and made many friends at your firm. He has personally
+discussed with me the deep relationship that he had with your firm.
+While his presence will be missed, I can promise that we will
+continue to provide the fine service that was accorded by
+John to your firm.
+
+I was genuinely touched to receive such fine hospitality.
+
+Thank you once again.
+
+Sincerely,
+name
+title';
+
+
+	       
+               $this->db->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Follow Up','Follow Up','Follow Up of meeting','".$body."',0,".$this->db->getUniqueID('emailtemplates').")");
+
+
+
+$body='Congratulations!
+
+The numbers are in and I am proud to inform you that our
+total sales for the previous quarter
+amounts to $100,000,00.00!. This is the first time
+we have exceeded the target by almost 30%.
+We have also beat the previous quarter record by a
+whopping 75%!
+
+Let us meet at Smoking Joe for a drink in the evening!
+
+C you all there guys!
+
+Sincerely,
+name
+title';
+
+	       
+               $this->db->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Target Crossed!','Target Crossed!','Fantastic Sales Spree!','".$body."',0,".$this->db->getUniqueID('emailtemplates').")");
+
+$body='
+Dear
+
+Thank you for your confidence in our ability to serve you.
+We are glad to be given the chance to serve you.I look
+forward to establishing a long term partnership with you.
+Consider me as a friend.
+Should any need arise,please do give us a call.
+
+Sincerely,
+name
+title';
+
+	       
+               $this->db->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Thanks Note','Thanks Note','Note of thanks','".$body."',0,".$this->db->getUniqueID('emailtemplates').")");
+
+
 	       	}
 
 	function drop_tables () {
