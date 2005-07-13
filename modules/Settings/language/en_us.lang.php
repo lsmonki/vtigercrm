@@ -497,7 +497,7 @@ t, contact, or potential fields. These mappings will be used when you convert le
 'LBL_ACCOUNT_FIELD'=>'Account Field',
 'LBL_CONTACT_FIELD'=>'Contact Field',
 'LBL_POTENTIAL_FIELD'=>'Potential Field',
-
+'CUSTOMFIELDMAPPING'=>'Custom Field Mapping',
 
 );
 
