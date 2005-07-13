@@ -15,7 +15,8 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Settings: Company Information", true);
+
+echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_SETTINGS'].' : '. $mod_strings['LBL_COMPANY_INFO'], true);
 echo '<br><br>';
 global $adb;
 global $theme;
