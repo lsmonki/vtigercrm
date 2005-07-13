@@ -680,6 +680,7 @@ $app_strings = Array(
 'Order Id'=>'Order Id',
 'Quote Name'=>'Quote Name',
 'Invoice Id'=>'Invoice Id',
+'Quote Id'=>'Quote Id',
 'Sales Order'=>'Sales Order',
  // Added Quote in activity parent type selection / Related list
 'COMBO_QUOTES'=>'Quotes',
