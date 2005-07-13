@@ -1027,7 +1027,7 @@ div.message {
 }
 
 .today {
-	background: #CCCCCC;
+	background: #99ffff;
 	vertical-align: top;
 	color: #000;
 	font-weight: bold;
@@ -1042,11 +1042,17 @@ div.message {
 }
 .eventbold  {
 
-	background: #E5E5E5;
+	background: #FFCC66;
 	vertical-align: top;
 	color: #000;
 	font-weight: bold;
 }
+.pending {
+
+	background: #ffcccc;
+	color: #000;
+}
+
 /* */
 
 
