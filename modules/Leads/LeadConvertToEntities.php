@@ -19,7 +19,7 @@ $module = $_REQUEST["module"];
 $assigned_user_id = $_REQUEST["smowerid"];
 $createpotential = $_REQUEST["createpotential"];
 $potential_name = $_REQUEST["potential_name"];
-$close_date = $_REQUEST["closedate"];
+$close_date = getDBInsertDateValue($_REQUEST["closedate"]);
 $current_user_id = $_REQUEST["current_user_id"];
 $assigned_user_id = $_REQUEST["assigned_user_id"];
 $accountname = $_REQUEST['account_name'];
@@ -134,6 +134,86 @@ function getInsertValues($type,$type_id)
 }
 //function Ends
 
+function getRelatedNotesAttachments($id,$accountid)
+{
+	global $adb,$vtlog,$id;
+
+	
+	$sql_lead_notes	="select * from senotesrel where crmid=".$id;
+	$lead_notes_result = $adb->query($sql_lead_notes);
+	$noofrows = $adb->num_rows($lead_notes_result);
+
+	for($i=0; $i<$noofrows;$i++ )
+	{
+
+		$lead_related_note_id=$adb->query_result($lead_notes_result,$i,"notesid");
+		$vtlog->logthis("Lead related note id ".$lead_related_note_id,'debug');	
+
+		$sql_delete_lead_notes="delete from senotesrel where crmid=".$id;
+		$adb->query($sql_delete_lead_notes);
+
+		$sql_insert_account_notes="insert into senotesrel(crmid,notesid) values (".$accountid.",".$lead_related_note_id.")";
+		$adb->query($sql_insert_account_notes);
+	}
+
+	$sql_lead_attachment="select * from seattachmentsrel where crmid=".$id;
+        $lead_attachment_result = $adb->query($sql_lead_attachment);
+        $noofrows = $adb->num_rows($lead_attachment_result);
+
+        for($i=0;$i<$noofrows;$i++)
+        {
+						
+                $lead_related_attachment_id=$adb->query_result($lead_attachment_result,$i,"attachmentsid");
+		$vtlog->logthis("Lead related attachment id ".$lead_related_attachment_id,'debug');	
+
+                $sql_delete_lead_attachment="delete from seattachmentsrel where crmid=".$id;
+                $adb->query($sql_delete_lead_attachment);
+
+                $sql_insert_account_attachment="insert into seattachmentsrel(crmid,attachmentsid) values (".$accountid.",".$lead_related_attachment_id.")";                        
+                $adb->query($sql_insert_account_attachment);
+        }
+	
+}
+
+function getRelatedActivities($accountid,$contact_id)
+{
+	global $adb,$vtlog,$id;	
+	
+	$sql_lead_activity="select * from seactivityrel where crmid=".$id;
+	$lead_activity_result = $adb->query($sql_lead_activity);
+        $noofrows = $adb->num_rows($lead_activity_result);
+        for($i=0;$i<$noofrows;$i++)
+        {
+
+                $lead_related_activity_id=$adb->query_result($lead_activity_result,$i,"activityid");
+		$vtlog->logthis("Lead related activity id ".$lead_related_activity_id,'debug');	
+
+		$sql_type_email="select setype from crmentity where crmid=".$lead_related_activity_id;
+		$type_email_result = $adb->query($sql_type_email);
+                $type=$adb->query_result($type_email_result,0,"setype");
+		$vtlog->logthis("type of activity id ".$type,'debug');	
+
+                $sql_delete_lead_activity="delete from seactivityrel where crmid=".$id;
+                $adb->query($sql_delete_lead_activity);
+
+		if($type != "Emails")
+		{
+                	$sql_insert_account_activity="insert into seactivityrel(crmid,activityid) values (".$accountid.",".$lead_related_activity_id.")";
+	                $adb->query($sql_insert_account_activity);
+
+			$sql_insert_account_activity="insert into cntactivityrel(contactid,activityid) values (".$contact_id.",".$lead_related_activity_id.")";
+                	$adb->query($sql_insert_account_activity);
+		}
+		else
+		{
+			 $sql_insert_account_activity="insert into seactivityrel(crmid,activityid) values (".$contact_id.",".$lead_related_activity_id.")";                                                                                     $adb->query($sql_insert_account_activity);
+		}
+        }
+
+	
+}
+
+
 //$sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted) values(".$crmid.",".$current_user_id.",".$current_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0)";
 $sql_crmentity = "insert into crmentity(crmid,smcreatorid,smownerid,setype,presence,createdtime,modifiedtime,deleted,description) values(".$crmid.",".$current_user_id.",".$assigned_user_id.",'Accounts',1,".$date_entered.",".$date_modified.",0,'".$row['description']."')";
 
@@ -155,7 +235,7 @@ $sql_insert_accountshipads = "INSERT INTO accountshipads (accountaddressid,city,
 
  $adb->query($sql_insert_accountshipads);
 
-//Getting the custom field values from leads and inserting into Accounts if the field is mapped
+//Getting the custom field values from leads and inserting into Accounts if the field is mapped - Jaguar
 $insert_value=$crmid;
 $insert_column="accountid";	
 $val= getInsertValues("Accounts",$insert_value);
@@ -166,6 +246,9 @@ $adb->query($sql_insert_accountcustomfield);
 
 //
 
+
+$acccount_id=$crmid;
+getRelatedNotesAttachments($id,$crmid); //To Convert Related Notes & Attachments -Jaguar
 
  $date_entered = date('YmdHis');
  $date_modified = date('YmdHis');
@@ -193,7 +276,7 @@ $adb->query($sql_insert_contactsubdetails);
 $adb->query($sql_insert_contactaddress);
 
 
-//Getting the customfield values from leads and inserting into the respected ContactCustomfield to which it is mapped
+//Getting the customfield values from leads and inserting into the respected ContactCustomfield to which it is mapped - Jaguar
 $insert_column="contactid";
 $insert_value=$contact_id;
 $val= getInsertValues("Contacts",$contact_id);
@@ -204,6 +287,7 @@ $sql_insert_contactcustomfield = "INSERT INTO contactscf (".$insert_column.") VA
 $adb->query($sql_insert_contactcustomfield);
 //
 
+getRelatedActivities($acccount_id,$contact_id); //To convert relates Activites  and Email -Jaguar
 
 if(! isset($createpotential) || ! $createpotential == "on")
 {
@@ -222,7 +306,7 @@ if(! isset($createpotential) || ! $createpotential == "on")
 
 	$adb->query($sql_insert_opp);
 
-//Getting the customfield values from leads and inserting into the respected PotentialCustomfield to which it is mapped
+//Getting the customfield values from leads and inserting into the respected PotentialCustomfield to which it is mapped - Jaguar
 	$insert_column="potentialid";
 	$insert_value=$oppid;
 	$val= getInsertValues("Potentials",$oppid);
