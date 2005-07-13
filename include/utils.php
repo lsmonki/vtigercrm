@@ -4612,5 +4612,22 @@ function getProductImageName($id)
 	return $image_name;
 	
 }
+function updateSubTotal($module,$tablename,$colname,$colname1,$entid_fld,$entid,$prod_total)
+{
+        global $adb;
+        //getting the subtotal
+        $query = "select ".$colname.",".$colname1." from ".$tablename." where ".$entid_fld."=".$entid;
+        $result1 = $adb->query($query);
+        $subtot = $adb->query_result($result1,0,$colname);
+        $subtot_upd = $subtot - $prod_total;
+
+        $gdtot = $adb->query_result($result1,0,$colname1);
+        $gdtot_upd = $gdtot - $prod_total;
+
+        //updating the subtotal
+        $sub_query = "update ".$tablename." set ".$colname."=".$subtot_upd.",".$colname1."=".$gdtot_upd." where ".$entid_fld."=".$entid;
+        $adb->query($sub_query);
+}
+
 
 ?>

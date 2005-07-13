@@ -42,8 +42,26 @@ elseif($_REQUEST['return_module']=="Orders")
 }
 elseif($_REQUEST['return_module']=="Products")
 {
-	$relation_query = "DELETE from invoiceproductrel where productid=".$_REQUEST['return_id']." and invoiceid=".$_REQUEST['record'];
-	$adb->query($relation_query);
+	//$relation_query = "DELETE from invoiceproductrel where productid=".$_REQUEST['return_id']." and invoiceid=".$_REQUEST['record'];
+	//$adb->query($relation_query);
+	//Removing the relation from the quotes product rel
+	$inv_query = "select * from invoiceproductrel where productid=".$_REQUEST['return_id'];
+	//echo $qt_query;
+	$result = $adb->query($inv_query);
+	$num_rows = $adb->num_rows($result);
+	for($i=0; $i< $num_rows; $i++)
+	{
+        	$invoice_id = $adb->query_result($result,$i,"invoiceid");
+	        $qty = $adb->query_result($result,$i,"quantity");
+	        $listprice = $adb->query_result($result,$i,"listprice");
+        	$prod_total = $qty * $listprice;
+
+	        //Get the current sub total from Quotes and update it with the new subtotal
+	        updateSubTotal("Invoices","invoice","subtotal","total","invoiceid",$invoice_id,$prod_total);
+	}
+	//delete the relation from quotes product rel
+	$del_query = "delete from invoiceproductrel where productid=".$_REQUEST['return_id']." and invoiceid=".$_REQUEST['record'];
+	$adb->query($del_query);
 }
 
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']);

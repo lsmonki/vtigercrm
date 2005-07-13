@@ -43,12 +43,30 @@ if($_REQUEST['module'] == 'Orders')
 		if($_REQUEST['return_action'] == "VendorDetailView")
 		{	
 			$sql_req ='DELETE from purchaseorder where purchaseorderid= '.$_REQUEST['record'];
+			$adb->query($sql_req);
 		}
 		else
 		{	
-			$sql_req ='DELETE from poproductrel where purchaseorderid= '.$_REQUEST['record'].' and productid = '.$_REQUEST['return_id'];
+			//$sql_req ='DELETE from poproductrel where purchaseorderid= '.$_REQUEST['record'].' and productid = '.$_REQUEST['return_id'];
+			//Removing the relation from the po product rel
+			$po_query = "select * from poproductrel where productid=".$_REQUEST['return_id'];
+			$result = $adb->query($po_query);
+			$num_rows = $adb->num_rows($result);
+			for($i=0; $i< $num_rows; $i++)
+			{
+			        $po_id = $adb->query_result($result,$i,"purchaseorderid");
+			        $qty = $adb->query_result($result,$i,"quantity");
+			        $listprice = $adb->query_result($result,$i,"listprice");
+			        $prod_total = $qty * $listprice;
+
+			        //Get the current sub total from Quotes and update it with the new subtotal
+			        updateSubTotal("Orders","purchaseorder","subtotal","total","purchaseorderid",$po_id,$prod_total);
+			}
+			//delete the relation from po product rel
+			$del_query = "delete from poproductrel where productid=".$_REQUEST['return_id']." and purchaseorderid=".$_REQUEST['record'];
+			$adb->query($del_query);
+
 		}
-		$adb->query($sql_req);
 	}
 	elseif($_REQUEST['return_module'] == "Contacts")
 	{	

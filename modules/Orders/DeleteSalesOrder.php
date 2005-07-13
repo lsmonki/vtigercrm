@@ -47,8 +47,26 @@ elseif($_REQUEST['return_module'] == "Potentials")
 }
 elseif($_REQUEST['return_module'] == "Products")
 {
-	$relation_query = "DELETE from soproductrel where salesorderid=".$_REQUEST['record']." and productid=".$_REQUEST['return_id'];
-	$adb->query($relation_query);
+	//$relation_query = "DELETE from soproductrel where salesorderid=".$_REQUEST['record']." and productid=".$_REQUEST['return_id'];
+	//$adb->query($relation_query);
+	//Removing the relation from the so product rel
+	$so_query = "select * from soproductrel where productid=".$_REQUEST['return_id'];
+	$result = $adb->query($so_query);
+	$num_rows = $adb->num_rows($result);
+	for($i=0; $i< $num_rows; $i++)
+	{
+        	$so_id = $adb->query_result($result,$i,"salesorderid");
+	        $qty = $adb->query_result($result,$i,"quantity");
+        	$listprice = $adb->query_result($result,$i,"listprice");
+	        $prod_total = $qty * $listprice;
+
+        	//Get the current sub total from Quotes and update it with the new subtotal
+	        updateSubTotal("SalesOrder","salesorder","subtotal","total","salesorderid",$so_id,$prod_total);
+	}
+	//delete the relation from so product rel
+	$del_query = "delete from soproductrel where productid=".$_REQUEST['return_id']." and salesorderid=".$_REQUEST['record'];
+	$adb->query($del_query);
+
 }
 	
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&smodule=SO&record=".$_REQUEST['return_id']);
