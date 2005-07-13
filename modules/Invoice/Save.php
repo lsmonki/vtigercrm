@@ -55,6 +55,16 @@ foreach($focus->column_fields as $fieldname => $val)
 
 
 $focus->save("Invoice");
+
+//Checking if salesorderid is present and updating the quote status
+if($focus->column_fields["salesorder_id"] != '')
+{
+        $so_id = $focus->column_fields["salesorder_id"];
+        $query1 = "update salesorder set sostatus='Approved' where salesorderid=".$so_id;
+        $adb->query($query1);
+}
+
+
 if($focus->mode == 'edit')
 {
         $query1 = "delete from invoiceproductrel where invoiceid=".$focus->id;
