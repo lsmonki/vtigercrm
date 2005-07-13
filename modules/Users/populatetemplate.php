@@ -22,7 +22,7 @@ $tempArray = $adb->fetch_array($tempresult);
 $fileContent = $tempArray["body"];
 	$vtlog->logthis("the filecontent is ".$fileContent,'debug');  
 $handle = fopen($root_directory.'/modules/Emails/templates/'.$_REQUEST["templatename"],"wb") ;
-fwrite($handle,$fileContent,700000);
+fwrite($handle,$fileContent,89999999);
 fclose($handle);
 
 //create a file and write to it so that it can be used as the emailtemplateusage.php file
