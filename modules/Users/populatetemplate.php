@@ -12,6 +12,7 @@
 require_once('include/database/PearDatabase.php');
 include_once('modules/Contacts/Contact.php');
 include_once('modules/Leads/Lead.php');
+include_once('modules/Users/User.php');
 
 
 //download the template file and store it in some specific location
@@ -66,7 +67,10 @@ else
 $focus->retrieve_entity_info($recordid,$module);
 //$focus->column_fields();
 $i=0;
+$m=0;
+$n=0;
 $myString;
+
 //storing the columnname and the value pairs
 foreach ($focus->column_fields as $columnName=>$value)
 {
@@ -77,7 +81,18 @@ foreach ($focus->column_fields as $columnName=>$value)
 
 }
 
-//storing the columnnames in a string
+global $current_user;
+global $adb;
+$query = 'select * from users where id= '.$current_user->id;
+$result = $adb->query($query);
+$res_row = $adb->fetchByAssoc($result);
+foreach ($res_row as $columnName=>$value)
+{
+	  $myString .='$users_' .$columnName.' = "'. $value."\";\n\n";
+	  $usercolName[$n] = $columnName;
+	  $n++;
+	  $m=$n;
+}
 
 $myString .= "\$globals = \"";
 
@@ -85,6 +100,11 @@ for($i=0;$i<$j-1;$i++)
 {
   $myString .= "\\$" .$module ."_" .$colName[$i].", ";
 }
+for($n=0;$n<$m;$n++)
+{
+  $myString .= '\\$users_' .$usercolName[$n].", ";
+}
+
 $myString .= "\\$" .$module ."_" .$colName[$i];
 $myString .="\"; \n\n";
 
