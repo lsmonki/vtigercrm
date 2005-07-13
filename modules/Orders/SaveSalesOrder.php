@@ -56,6 +56,16 @@ foreach($focus->column_fields as $fieldname => $val)
 
 
 $focus->save("SalesOrder");
+//Checking if quote_id is present and updating the quote status
+if($focus->column_fields["quote_id"] != '')
+{
+        $qt_id = $focus->column_fields["quote_id"];
+        $query1 = "update quotes set quotestage='Accepted' where quoteid=".$qt_id;
+        $adb->query($query1);
+}
+
+
+
 if($focus->mode == 'edit')
 {
         $query1 = "delete from soproductrel where salesorderid=".$focus->id;
