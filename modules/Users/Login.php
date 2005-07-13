@@ -100,30 +100,38 @@ function set_focus() {
 }
 //  End -->
 </script>
-<table width="100%" height="88%">
-<tr><td align="center" valign="middle" bgcolor="#C9EBFF">
+<table width="100%" height="88%" border="0">
+<tr><td align="center" valign="middle">
 <table cellpadding="0" align="center" width="100%" cellspacing="0" border="0">
 <tbody><tr>
-<td width="15%">&nbsp;</td>
-<td>
-<table cellpadding="10" width="100%" cellspacing="0" style="border: 1px solid #5BBFFA"  bgcolor="#FFFCDF">
-<form action="index.php" method="post" name="DetailView" id="form">
+
+<td colspan="3">
+<table cellpadding="0" width="75%" cellspacing="0" border="0" align="center"> <!-- style="border: 1px solid #5BBFFA" -->
 <tr>
-<td width="95%" valign="top">
+<form action="index.php" method="post" name="DetailView" id="form">
+<td bgcolor="#C9EBFF" align="left" width="11" height="15"><?php echo "<img src='".$image_path."login_left.gif'>";?> </td>
+<td bgcolor="#C9EBFF"> </td>
+<td bgcolor="#C9EBFF" align="right"><?php echo "<img src='".$image_path."login_right.gif'>";?> </td></tr>
+<tr>
+<td bgcolor="#C9EBFF"> </td>
+<td valign="top" bgcolor="#C9EBFF">
 
 <?php echo "<img src='".$image_path."vtiger-crm.gif'>";?>
-<?php //echo $app_strings['NTC_LOGIN_MESSAGE']; ?></td></tr>
+<?php //echo $app_strings['NTC_LOGIN_MESSAGE']; ?></td>
+<td bgcolor="#C9EBFF"> </td>
+
+</tr>
 <tr>
-<td width="100%">
-<table width="100%" align="left" border="0" cellspacing="4" cellpadding="1" align="center" bgcolor="#FFFCDF">
+<td bgcolor="#C9EBFF"> </td>
+<td bgcolor="#C9EBFF">
+
+<table width="100%" align="left" border="0" cellspacing="4" cellpadding="0" align="center">
 <tr>
 <td width="35%" valign ="top">
-	<table width="100%" align="left" valign ="top" bgcolor="#FFFCDF" cellspacing="0" cellpadding="3" align="center">
-        <tr> 
-        <td style="border-bottom: 1px solid #bbbbbb"><font face="Verdana, Arial, Helvetica, sans-serif"><strong>Key Modules</strong></font></td></tr>
-	<tr><td>:: Activity Management</td></tr>
-	<tr><td>:: Lead Management</td></tr>
-	<tr><td>:: Opportunity Management</td></tr>
+	<table width="100%" align="left" valign ="top" cellspacing="0" cellpadding="10" align="center">
+        <tr>
+        <td style="border-bottom: 1px dotted #000"><h4 style="margin: 0;pdiing:0;"><font face="Verdana, Arial, Helvetica, sans-serif">Key Modules</strong></font></h4></td></tr>
+	<tr><td>:: Sales Force Automation</td></tr>
 	<tr><td>:: Account & Contact Management</td></tr>
 	<tr><td>:: Products Management</td></tr>
 	<tr><td>:: Quotations</td></tr>
@@ -132,16 +140,16 @@ function set_focus() {
 	<tr><td>:: Trouble Tickets</td></tr>
 	<tr><td>:: Knowledge Base</td></tr>
 	<tr><td>:: Reports & Dashboards</td></tr>
-	<tr><td>:: More ...</td></tr>
+	<tr><td>:: <a href="http://www.vtigercrm.com/" target="_blank">More ...</td></tr>
         </table></td>
-	<td bgcolor="#E5E5E5"></td>
-<td width="30%" valign ="top">
-<table width="100%" align="left" valign ="top" cellspacing="2" cellpadding="2" align="center" bgcolor="#FFFCDF">
-<tr><td style="border-bottom: 1px solid #bbbbbb"><font face="Verdana, Arial, Helvetica, sans-serif"><strong>vtiger CRM Add-ons</strong></font></td></tr>
-<tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: vtiger Customer Portal</font></td></tr>
-<tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: vtiger Outlook Plug-in</font></td></tr>
-<tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: vtiger Office Plug-in</font></td></tr>
-<tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: vtiger Thunderbird Extension</font></td></tr>
+	<td bgcolor="#FFFFFF" width="1"><?php echo "<img src='".$image_path."spacer.gif'>";?></td>
+<td width="35%" valign ="top">
+<table width="100%" align="left" valign ="top" cellspacing="0" cellpadding="10" align="center">
+<tr><td style="border-bottom: 1px dotted #000"><h4 style="margin: 0;pdiing:0;"><font face="Verdana, Arial, Helvetica, sans-serif"><strong>vtiger CRM Add-ons</strong></font></h4></td></tr>
+<tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: <a href="http://www.vtiger.com/products/crm/customer-support.html" target="_blank">vtiger Customer Portal</font></td></tr>
+<tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: <a href="http://www.vtiger.com/products/crm/microsoft-outlook-integration.html" target="_blank">vtiger Outlook Plug-in</font></td></tr>
+<tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: <a href="http://www.vtiger.com/products/crm/microsoft-office-integration.html" target="_blank">vtiger Office Plug-in</font></td></tr>
+<tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: <a href="http://www.vtiger.com/products/crm/thunderbird-integration.html" target="_blank">vtiger Thunderbird Extension</font></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td></tr>
@@ -150,9 +158,11 @@ function set_focus() {
 <tr><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td></tr>
 </table>
-</td>    	
-<td bgcolor="#E5E5E5"></td>
-<td width="35%" valign ="top"><table align="center" valign ="top" cellpadding="0" cellspacing="10" border="0" bgcolor="#FFFCDF" width="100%">
+</td>
+<td bgcolor="#FFFFFF" width="1"><?php echo "<img src='".$image_path."spacer.gif'>";?></td>
+<td width="35%" valign ="top"><table align="center" valign ="top" cellpadding="10" cellspacing="0" border="0" width="100%">
+			<tr><td style="border-bottom: 1px dotted #000"><h4 style="margin: 0;pdiing:0;"><font face="Verdana, Arial, Helvetica, sans-serif"><strong>User Log-in</strong></font></td></h4></tr>
+
 			<input type="hidden" name="module" value="Users">
 			<input type="hidden" name="action" value="Authenticate">
 			<input type="hidden" name="return_module" value="Users">
@@ -194,13 +204,13 @@ else {
 ?>
 	<tr>
 <?php //echo "<img src='".$image_path."login.gif'>";?>
-	
-    </td>    
+
+    </td>
 </td>
 	<td><b>
 	<?php echo $current_module_strings['LBL_USER_NAME'] ?>
 		</b><br>
-		<input type="text" size='20' name="user_name"  value="<?php echo $login_user_name ?>">
+		<input type="text" size='30' name="user_name"  value="<?php echo $login_user_name ?>">
 		</td>
 	</tr>
 	<tr>
@@ -209,7 +219,7 @@ else {
 	<td><b>
 	<?php echo $current_module_strings['LBL_PASSWORD'] ?>
 	</b><br>
-	<input type="password" size='20' name="user_password" value="<?php echo $login_password ?>">
+	<input type="password" size='30' name="user_password" value="<?php echo $login_password ?>">
 	</td>
 	</tr>
 	<tr>
@@ -218,7 +228,7 @@ else {
 	<td><b>
 	<?php echo $current_module_strings['LBL_THEME'] ?>
 	</b><br>
-		<select name='login_theme'>
+		<select name='login_theme' style="width:100;">
 		<?php echo get_select_options_with_id(get_themes(), $display_theme) ?>
 		</select>
 	</td>
@@ -227,15 +237,15 @@ else {
 	<td><b>
 	<?php echo $current_module_strings['LBL_LANGUAGE'] ?>
 	</b><br>
-	<select name='login_language'>
+	<select name='login_language' style="width:100;">
 	<?php echo get_select_options_with_id(get_languages(), $display_language) ?>
 	</select>
 	</td>
 	</tr>
 	<tr>
-	<td><b>
-	<input title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" class="button" type="submit" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  ">
-	</b></td>
+	<td align="right"><b>
+	<input title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" class="button" type="submit" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  " style="width:100; height:25;">
+	</b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </td>
 	</tr>
 	<tr><td>&nbsp</td></tr>
 	</table>
@@ -243,43 +253,21 @@ else {
 	</form>
 	</td>
 </table></td>
+<td bgcolor="#C9EBFF"> </td>
 </tr>
-</td>
+<tr>
+
+<td align="left" valign="bottom" width="11" height="15"><?php echo "<img src='".$image_path."login_botleft.gif'>";?></td>
+<td bgcolor="#C9EBFF"> </td>
+<td bgcolor="#C9EBFF" align="right" valign="bottom"><?php echo "<img src='".$image_path."login_botright.gif'>";?></td>
+</tr>
+
 </tr>
 </table>
-<td width="15%">&nbsp;</td></tr>
+</tr>
 <tr><td width="15%">&nbsp;</td>
-<td><font face="Verdana, Arial, Helvetica, sans-serif">&nbsp;&nbsp;Best viewed in IE 5.0+, Netscape 7.0+,Opera 7.01+ & Mozilla 1.5+ with 1024x768 resolution</font></td>
+<td align="center"><font face="Verdana, Arial, Helvetica, sans-serif">&nbsp;&nbsp;Best viewed in IE 5.0+, Netscape 7.0+,Opera 7.01+ & Mozilla 1.5+ with 1024x768 resolution</font></td>
 <td width="15%">&nbsp;</td></tr>
 </tbody></table></td></tr></table>
-<script language="JavaScript1.2">
-    var marqueewidth="200px"
-    var marqueeheight="100px"
-    var marqueespeed=1
-    var pauseit=25
-    var marqueecontent=':: Activitiy Management<br>:: Lead Management<br>:: Opportunity Management<br>:: Account & Contact Management<br>:: Products Management<br>:: Quotations<br>:: Order Management<br>:: Invoices<br>:: Trouble Tickets<br>:: Knowledge Base<br>:: Reports & Dashboards<br>:: RSS Feeds<br>:: Product Customization<br>:: More...'
-    marqueespeed=(document.all)? marqueespeed : Math.max(1, marqueespeed-1) //slow speed down by 1 for NS
-    var copyspeed=marqueespeed
-    var pausespeed=(pauseit==0)? copyspeed: 0
-    var iedom=document.all||document.getElementById
-    var actualheight=''
-    var cross_marquee, ns_marquee
-
-    function populate(){
-    cross_marquee=document.getElementById? document.getElementById("iemarquee") : document.all.iemarquee
-    cross_marquee.style.top=parseInt(marqueeheight)+8+"px"
-    cross_marquee.innerHTML=marqueecontent
-    actualheight=cross_marquee.offsetHeight
-    lefttime=setInterval("scrollmarquee()",30)
-    }
-
-    function scrollmarquee() {
-    if (parseInt(cross_marquee.style.top)>(actualheight*(-1)+8))
-    cross_marquee.style.top=parseInt(cross_marquee.style.top)-copyspeed+"px"
-    else
-    cross_marquee.style.top=parseInt(marqueeheight)+8+"px"
-    }
-    populate()
-</script>
 
 
