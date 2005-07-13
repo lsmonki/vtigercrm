@@ -245,13 +245,21 @@ function renderRelatedContacts($query,$id)
         $list = GetRelatedList('Vendor','Contacts',$focus,$query,$button,$returnset);
         echo '</form>';
 }
-function renderRelatedQuotes($query,$id,$sid="product_id")
+function renderRelatedQuotes($query,$id,$cntid='',$prtid='',$sid="product_id")
 {
 	global $mod_strings;
 	global $app_strings;
 	require_once('modules/Quotes/Quote.php');
-
-	$hidden = getHiddenValues($id,$sid);                                                                                             echo $hidden;
+	
+	$hidden = getHiddenValues($id,$sid); 
+	if($prtid!=0 && $prtid!='')
+	{
+		$parent_module = getSalesEntityType($prtid);
+		if($parent_module == "Accounts")
+        	$hidden .= '<input type="hidden" name="account_id" value="'.$prtid.'">';
+	}
+        $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
+	echo $hidden;
 	
 	$focus = new Quote();
 	
@@ -265,13 +273,21 @@ function renderRelatedQuotes($query,$id,$sid="product_id")
 	$list = GetRelatedList('Products','Quotes',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
-function renderRelatedInvoices($query,$id)
+function renderRelatedInvoices($query,$id,$prtid='')
 {
 	global $mod_strings;
 	global $app_strings;
 	require_once('modules/Invoice/Invoice.php');
 
-	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
+	$hidden = getHiddenValues($id);
+	if($prtid!=0 && $prtid!='')
+	{
+		$parent_module = getSalesEntityType($prtid);
+		if($parent_module == "Accounts")
+        	$hidden .= '<input type="hidden" name="account_id" value="'.$prtid.'">';
+	}
+
+	echo $hidden;
 	
 	$focus = new Invoice();
 	

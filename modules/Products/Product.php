@@ -123,7 +123,7 @@ class Product extends CRMEntity {
 	function get_quotes($id)
  	{
 		$query = "select crmentity.*, quotes.*,potential.potentialname,account.accountname,quotesproductrel.productid from quotes inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesproductrel on quotesproductrel.quoteid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0 and quotesproductrel.productid=".$id;
-		renderRelatedQuotes($query,$id);
+		renderRelatedQuotes($query,$id,$this->column_fields['contact_id'],$this->column_fields['parent_id']);
 	}
 	function get_purchase_orders($id)
 	{
@@ -138,7 +138,7 @@ class Product extends CRMEntity {
 	function get_invoices($id)
 	{
 		$query = "select crmentity.*, invoice.*, invoiceproductrel.quantity, account.accountname from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join invoiceproductrel on invoiceproductrel.invoiceid=invoice.invoiceid where crmentity.deleted=0 and invoiceproductrel.productid=".$id;
-		renderRelatedInvoices($query,$id);
+		renderRelatedInvoices($query,$id,$this->column_fields['parent_id']);
 	}
 	function get_product_pricebooks($id)
         {                                                                                                                     
