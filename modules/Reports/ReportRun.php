@@ -1167,7 +1167,7 @@ class ReportRun extends CRMEntity
 			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
 		}
 		
-		echo $reportquery;
+		//echo $reportquery;
 		$vtlog->logthis("ReportRun :: Successfully returned sGetSQLforReport".$reportid,"info");
 		return $reportquery;
 
