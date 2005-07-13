@@ -95,7 +95,7 @@ foreach($open_activity_list as $event)
 		'CONTACT_NAME' => $event['firstname'].' '.$event['lastname'],
 		'ACCOUNT_NAME' => $event['accountname'],
 		'TIME' => $event['date_start'],
-		'RECURRINGTYPE' => $event['recurringtype'],
+		'RECURRINGTYPE' => ereg_replace('--','',$event['recurringtype']),
 		'PARENT_NAME' => $event['parent'],
 	);
 	$end_date=$event['due_date']; //included for getting the OverDue Activities in the Upcoming Activities
