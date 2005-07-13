@@ -279,6 +279,10 @@ $mod_strings = Array(
 'SalesOrderNotification'=>'Product Stock Notification during Sales Order Generation',
 'SalesOrderNotificationDescription'=>'During sales order generation if the product stock in warehouse is lesser than the quantity mentioned in sales order then this notification will be sent to the product handler',
 
+//New addition for 4.2 GA
+'LBL_USER_FIELDS'=>'User Fields',
+
+
 );
 
 ?>
