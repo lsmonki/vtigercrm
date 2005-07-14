@@ -4228,9 +4228,9 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$qty=$adb->query_result($result,$i-1,'quantity');
 		$listprice=$adb->query_result($result,$i-1,'listprice');
 		if($listprice == '')
-		$listprice = $unitprice;
+			$listprice = $unitprice;
 		if($qty =='')
-		$qty = 1;
+			$qty = 1;
 		$total = $qty*$listprice;
 
 		$product_id_var = 'hdnProductId'.$i;
@@ -4249,40 +4249,34 @@ function getAssociatedProducts($module,$focus,$seid='')
 		}
 
 		$output .= '<tr id="row'.$i.'" class="'.$row_class.'">';
-        	$output .= '<td height="25" style="padding:3px;" nowrap><input id="txtProduct'.$i.'" name="txtProduct'.$i.'" type="text" readonly value="'.$productname.'"> <img src="'.$image_path.'search.gif" onClick=\'productPickList(this)\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
-        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$output .= '<td height="25" style="padding:3px;" nowrap><input id="txtProduct'.$i.'" name="txtProduct'.$i.'" type="text" readonly value="'.$productname.'"> <img src="'.$image_path.'search.gif" onClick=\'productPickList(this)\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 		if($module != 'Orders' && $focus->object_name != 'Order')
 		{
-                	$output .= '<td style="padding:3px;"><div id="qtyInStock'.$i.'">'.$qtyinstock.'</div>&nbsp;</td>';
-        		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+			$output .= '<td style="padding:3px;"><div id="qtyInStock'.$i.'">'.$qtyinstock.'</div>&nbsp;</td>';
+			$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 		}	
-	        $output .= '<td style="padding:3px;"><input type=text id="txtQty'.$i.'" name="txtQty'.$i.'" size="7" value="'.$qty.'" onBlur=\'calcTotal(this)\'></td>';
-	        $output .='<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-                $output .= '<td style="padding:3px;"><div id="unitPrice'.$i.'">'.$unitprice.'</div>&nbsp;</td>';
-	        $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-	        $output .= '<td style="padding:3px;"><input type=text id="txtListPrice'.$i.'" name="txtListPrice'.$i.'" value="'.$listprice.'" size="12" onBlur="calcTotal(this)"> <img src="'.$image_path.'pricebook.gif" onClick=\'priceBookPickList(this)\' align="absmiddle" style="cursor:hand;cursor:pointer" title="Price Book"></td>';
-        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-        	$output .= '<td style="padding:3px;"><div id="total'.$i.'" align="right">'.$total.'</div></td>';
-        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-        	$output .= '<td style="padding:0px 3px 0px 3px;" align="center" width="50"><a id="delRow'.$i.'" href=\'javascript:;\' onclick=\'delRow(this.id)\'>Del</a>';
-                $output .= '<input type="hidden" id="hdnProductId'.$i.'" name="hdnProductId'.$i.'" value="'.$productid.'">';
-          	$output .= '<input type="hidden" id="hdnRowStatus'.$i.'" name="hdnRowStatus'.$i.'">';
-	       $output .= '<input type="hidden" id="hdnTotal'.$i.'" name="hdnTotal'.$i.'" value="'.$total.'">';
-                $output .= '</td></tr>';	
+		$output .= '<td style="padding:3px;"><input type=text id="txtQty'.$i.'" name="txtQty'.$i.'" size="7" value="'.$qty.'" onBlur=\'calcTotal(this)\'></td>';
+		$output .='<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$output .= '<td style="padding:3px;"><div id="unitPrice'.$i.'">'.$unitprice.'</div>&nbsp;</td>';
+		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$output .= '<td style="padding:3px;"><input type=text id="txtListPrice'.$i.'" name="txtListPrice'.$i.'" value="'.$listprice.'" size="12" onBlur="calcTotal(this)"> <img src="'.$image_path.'pricebook.gif" onClick=\'priceBookPickList(this)\' align="absmiddle" style="cursor:hand;cursor:pointer" title="Price Book"></td>';
+		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$output .= '<td style="padding:3px;"><div id="total'.$i.'" align="right">'.$total.'</div></td>';
+		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 
-		/*
-		$output .='<tr id=row'.$i.' class="evenListRow">';
-		$output .='<td width="20%" align="left">'.$productname.'</td>';
-		$output .= '<td align="left"><input type=text id="'.$qty_var.'" name="'.$qty_var.'" size="5" value="'.$qty.'" onBlur=\'calcTotal('.$i.')\'></td>';
-		$output .= '<td class="dataLabel" align="left">'.$unitprice.'</td>';
-		$output .='<td class="dataLabel"><input type=text id="'.$list_price_var.'" name="'.$list_price_var.'" size="12" value="'.$listprice.'" onBlur=\'calcTotal('.$i.')\'><input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="Select" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=PriceBookPopup&html=Popup_picker&form=EditView&popuptype=inventory_pb&fldname='.$list_price_var.'&productid='.$productid.'","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
-		$output .='<td class="dataLabel"><div id="'.$total_var.'" align="right">'.$total.'</div></td>';
-		$output .='<td class="dataLabel" id="delCol'.$i.'"><a href=\'javascript:delRow('.$i.')\'>Del</a>';
-		$output .= '<input type=hidden id="'.$product_id_var.'" name="'.$product_id_var.'" value='.$productid.'>';
-		$output .= '<input type=hidden id="'.$status_var.'" name="'.$status_var.'">';
-		$output .= '<input type=hidden id="hdnTotal'.$i.'" name="hdnTotal'.$i.'">';
-		$output .= '</td></tr>';
-		*/
+		if($i != 1)
+		{
+			$output .= '<td style="padding:0px 3px 0px 3px;" align="center" width="50"><a id="delRow'.$i.'" href=\'javascript:;\' onclick=\'delRow(this.id)\'>Del</a>';
+		}
+		else
+		{
+			$output .= '<td style="padding:0px 3px 0px 3px;" align="center" width="50">';
+		}
+		$output .= '<input type="hidden" id="hdnProductId'.$i.'" name="hdnProductId'.$i.'" value="'.$productid.'">';
+		$output .= '<input type="hidden" id="hdnRowStatus'.$i.'" name="hdnRowStatus'.$i.'">';
+		$output .= '<input type="hidden" id="hdnTotal'.$i.'" name="hdnTotal'.$i.'" value="'.$total.'">';
+		$output .= '</td></tr>';	
 
 	}
 	return $output;
