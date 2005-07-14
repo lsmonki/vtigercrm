@@ -209,11 +209,11 @@ function create_default_users()
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM Open Source Installer: Step 5</title>
+<title>vtiger CRM 4.2 Installer: Step 5</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
-table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
+<table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
   <tr>
       <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
       <td align="right"><h2>Step 5 of 5</h2></td>
@@ -228,8 +228,8 @@ table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" styl
 			  <td>
 			   <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 
-				<td><h5>Create Database Tables</h3></td>
-				<td width="80%"><hr width="100%"></td>
+				<td><h3>Create Database Tables</h3></td>
+				<td width="74%"><hr width="100%"></td>
 
 				</tr></tbody></table>
 			  </td>
@@ -468,8 +468,7 @@ The database tables are now set up.<HR></HR>
 total time: <?php echo "$deltaTime"; ?> seconds.<BR />
 </td></tr>
 <tr><td><hr></td></tr>
-<tr><td align=left><font color=green>Your system is now installed and configured for use.  You will need to log in for the first time using the "admin"
-userid and the password you entered in step 2.</font></td></tr>
+<tr><td align=left><font color=green>Your system is now installed and configured for use.  You need to log in for the first time using the "admin" user name and the password you entered in step 2.</font></td></tr>
 <tr><td align="right">
          <form action="index.php" method="post" name="form" id="form">
          <input type="hidden" name="default_user_name" value="admin">

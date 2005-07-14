@@ -76,7 +76,7 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM Open Source Installer: Step 3</title>
+<title>vtiger CRM 4.2 Installer: Step 3</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
@@ -112,7 +112,7 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 		    <td align="center">
 					<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
 		              <tr>
-					<td bgcolor="#EEEEEE"><h3>Database Configuration</h3></td>
+					<td bgcolor="#EEEEEE"><h4>Database Configuration</h4></td>
 		              </tr>
               </table>
 <table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
@@ -140,7 +140,7 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 			  </tr></table><br>
 					<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
 		              <tr>
-					<td bgcolor="#EEEEEE"><h3>Site Configuration</h3></td>
+					<td bgcolor="#EEEEEE"><h4>Site Configuration</h4></td>
 		              </tr>
               </table>
 			<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
@@ -255,7 +255,7 @@ if($mysql_status == 'false')
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM Open Source Installer: Step 3</title>
+<title>vtiger CRM 4.2 Installer: Step 3</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
@@ -273,8 +273,8 @@ if($mysql_status == 'false')
 			  <td>
 			   <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 
-				<td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20"><h3>Invalid Mysql Connection Parameters specified</h3></td>
-				<td width="80%"><hr width="100%"></td>
+				<td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20"><h4>Invalid Mysql Connection Parameters specified</h4></td>
+				<td width="80%">&nbsp;</td>
 				</tr></tbody></table>
 			  </td>
 
@@ -284,15 +284,15 @@ if($mysql_status == 'false')
           </tr>
 	  <tr>
 		<td>
-			<font color=brown><b><P>Error Message: Unable to connect to MySQL Sever with the specified connection parameters. This may be due to the following reasons:<P>
+			<font color=brown><b><P>Error Message: Unable to connect to database Sever with the specified connection parameters. This may be due to the following reasons:<P>
 
-			-  specified MySQL user, password , hostname or port is invalid.<BR>
-                        -  specified MySQL user does not have access to connect to the mysql server from the host</b></font>
+			-  specified database user, password , hostname or port is invalid.<BR>
+                        -  specified database user does not have access to connect to the database server from the host</b></font>
 		</td>
           </tr>
           <tr>
             <td>
-          <font color=brown><b><P>Kindly check the specified mysql connection parameters... <P></b></font>
+          <font color=brown><b><P>Kindly check the specified database connection parameters... <P></b></font>
 		    </td>
           </tr>
           <tr>
@@ -316,7 +316,7 @@ if($mysql_status == 'false')
                <td align="left" nowrap><font class="dataInput"><?php if (isset($db_password)) echo ereg_replace('.', '*', $db_password); ?></font></td>
               </tr>
               <tr>
-               <td noWrap bgcolor="#F5F5F5" width="40%">MySQL Database Name</td>
+               <td noWrap bgcolor="#F5F5F5" width="40%">Database Name</td>
                <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font></td>
               </tr>
 
@@ -366,7 +366,7 @@ if($mysql_status == 'true' && $mysql_db_status == 'false')
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM Open Source Installer: Step 3</title>
+<title>vtiger CRM 4.2 Installer: Step 3</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
@@ -383,8 +383,8 @@ if($mysql_status == 'true' && $mysql_db_status == 'false')
 		<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 			  <td>
 			   <table  width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-				<td><h3>Database Not Found</h3> </td>
-				<td width="80%"><hr width="100%"></td>
+				<td class="formHeader" vAlign="middle" align="left" noWrap width="100%" height="20"><h4>Database Not Found</h4> </td>
+				<td width="80%">&nbsp;</td>
 				</tr></tbody></table>
 			  </td>
 

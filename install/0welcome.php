@@ -48,7 +48,7 @@ foreach($pieces as $val)
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM Open Source Installer: Step 1</title>
+<title>vtiger CRM 4.2 Installer: Step 1</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
@@ -74,7 +74,7 @@ foreach($pieces as $val)
 		</tbody></table>
 	  </td>
     </tr>
-	<tr><td><h3>Welcome to the vtiger CRM installation</h3><P>
+	<tr><td><h4>Welcome to the vtiger CRM installation</h4><P>
   			This installer creates the vtiger CRM database tables and sets the configuration variables that you need to start.
 			The entire process should take about ten minutes.
 			<P>For installation help, please visit the vtiger CRM <A href="http://www.vtiger.com/forums/index.php?c=3" target="_blank">support forums</A>.</td>
@@ -85,7 +85,7 @@ foreach($pieces as $val)
 		<td><hr></td>
 	</tr>
 	<tr>
-		<td valign='top'><h3>vtiger CRM Registration</h3><br>
+		<td valign='top'><h4>vtiger CRM Registration</h4><br>
 Please take a moment and register with vtiger CRM. Your name and email address are the only required fields for registration. All other fields are optional, but very helpful. We do not sell, rent, share, or otherwise distribute the information collected here to third parties.
 <P>
 Please see <a href="http://www.vtigercrm.com" target="_blank">http://www.vtigercrm.com</a> for information on additional functionality, support requests…

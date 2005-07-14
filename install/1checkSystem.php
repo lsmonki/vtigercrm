@@ -128,7 +128,7 @@ $array = Array(
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM Open Source Installer: Step 1</title>
+<title>vtiger CRM 4.2 Installer: Step 1</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0" class="">
@@ -167,7 +167,7 @@ $array = Array(
 
     	</tr>
 		<tr>
-			<td bgcolor="#EEEEEE"><strong>MySQL database</strong></td>
+			<td bgcolor="#EEEEEE"><strong>Database</strong></td>
 
         	<td align="right"><?php echo function_exists('mysql_connect')?"<strong><font color=\"#0066CC\">Available</font></strong>":"<strong><font color=\"#FF0000\">Not Available</font></strong>";?></td>
 

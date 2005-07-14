@@ -139,7 +139,7 @@ else {
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM Open Source Installer: Step 2</title>
+<title>vtiger CRM 4.2 Installer: Step 2</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
@@ -255,7 +255,7 @@ function verify_data(form) {
 			  <td>
 			   <table cellpadding="0" cellspacing="0" border="0" width="100%"><tbody><tr>
 
-				<td nowrap><h3>Database Configuration</h3></td>
+				<td nowrap><h3>System Configuration</h3></td>
 				<td width="80%"><hr width="100%"></td>
 
 				</tr></tbody></table>
@@ -272,8 +272,8 @@ function verify_data(form) {
 		  hosting environment), you will need to have your database created for you before you proceed.
 		  However, this installer will still be able to create the necessary database tables.<P>
 
-		  If you unsure of your database host, username or password, we suggest that you use the default
-		  values below. <P>
+		  <p>If you unsure of your database host, username or password, we suggest that you use the default
+		  values below. <P/>
 		  </td>
           </tr>
 		  <tr>
@@ -283,7 +283,7 @@ function verify_data(form) {
 			<div align="left" width="70%"><font color=red>* Required field</font></div>
 			<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
               <tr>
-			<td bgcolor="#EEEEEE"><h3>Database Configuration</h3></td>
+			<td bgcolor="#EEEEEE"><h4>Database Configuration</h4></td>
               </tr>
               </table>
 			<table width="70%" cellpadding="5"  cellspacing="1" border="0" style="border: 1px dotted #666666;"><tbody>
@@ -322,7 +322,7 @@ function verify_data(form) {
               </tr -->
 			<br><table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
 			              <tr>
-						<td bgcolor="#EEEEEE"><h3>Site Configuration</h3></td>
+						<td bgcolor="#EEEEEE"><h4>Site Configuration</h4></td>
 			              </tr>
               </table>
             <table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
@@ -341,7 +341,7 @@ function verify_data(form) {
           </table><br>
             <table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
 		<tr>
-			<td bgcolor="#EEEEEE"><h3>Admin Configuration</h3></td>
+			<td bgcolor="#EEEEEE"><h4>Admin Configuration</h4></td>
               </tr>
               </table>
 	<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
@@ -352,7 +352,7 @@ function verify_data(form) {
           </tr>
 
 	<tr><td bgcolor="#F5F5F5" nowrap><strong>password</strong><sup><font color=red>*</font></sup></td>
-        <td align="left"><input class="dataInput" type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>" size="40" /></td>
+        <td align="left"><input class="dataInput" type="password" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin"; ?>"></td>
           </tr>
 	<tr>
 	<td colspan="2"><font color=blue> <b>Note:</b> The default password is 'admin'. You can change the password if necessary now or else you can change it later in vtiger CRM </font></td>

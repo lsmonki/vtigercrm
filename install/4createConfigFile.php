@@ -96,7 +96,7 @@ $cache_dir = 'cache/';
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-<title>vtiger CRM Open Source Installer: Step 4</title>
+<title>vtiger CRM 4.2 Installer: Step 4</title>
 
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 
@@ -128,11 +128,7 @@ $cache_dir = 'cache/';
 
 				</tr></tbody></table>
 
-			  </td>
-
-
-
-			  </tr>
+			  </td></tr>
 
 		</tbody></table>
 
@@ -409,9 +405,9 @@ if ($is_writable && ($config_file = @ fopen("config.php", "w"))) {
 
 	echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"><tbody><tr><td align=\"left\">";
 
-	echo "<P><P><P>Successfully created config file <b>config.php</b> in</td>";
+	echo "Successfully created config file (<b>config.php</b>) in :</td>";
 
-        echo "<td align=\"right\"><font color=\"00CC00\">".$root_directory."</font>\n";
+        echo "<td align=\"left\"><font color=\"00CC00\">".$root_directory."</font>\n";
 
 	echo "</td></tr>";
 
