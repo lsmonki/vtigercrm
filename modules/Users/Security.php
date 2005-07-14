@@ -360,7 +360,7 @@ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").
 //Event Details --START
 //Block1 -- Start
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'subject','activity',1,'2','subject','Subject',1,0,0,100,1,1,1,'V~M')");
- $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,2,1,1,'I~O')");
+ $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,2,1,1,'I~O')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'date_start','activity',1,'6','date_start','Start Date & Time',1,0,0,100,3,1,1,'DT~M~time_start')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'time_start','activity',1,'2','time_start','Time Start',1,0,0,100,4,1,3,'T~M')");
 
@@ -1734,6 +1734,9 @@ title';
 	       
                $this->db->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Thanks Note','Thanks Note','Note of thanks','".$body."',0,".$this->db->getUniqueID('emailtemplates').")");
 
+		
+	       //Insert into organizationdetails table 
+	       $this->db->query("insert into organizationdetails(organizationame,address,city,state,country,code,phone,fax,website,logoname) values ('vtiger',' 40-41-42, Sivasundar Apartments, Flat D-II, Shastri Street, Velachery','Chennai','Tamil Nadu','India','600 042','+91-44-5202-1990','+91-44-5202-1990','www.vtiger.com','vtiger_logo.gif')");
 
 	       	}
 
