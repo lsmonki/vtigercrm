@@ -23,7 +23,7 @@
             <th colspan=4 class="formSecHeader" align="left">{MOD.LBL_MAPPING_INFO}</th>
         </tr>
         <tr>
-		<th width="10%">&nbsp;</th>
+                <th  width="10%">&nbsp;</th>
                 <th>{MOD.LBL_ACCOUNT_FIELD}</th>
                 <th>{MOD.LBL_CONTACT_FIELD}</th>
                 <th>{MOD.LBL_POTENTIAL_FIELD}</th>
@@ -36,7 +36,7 @@
 <table width="75%" cellpadding="8" cellspacing="0" border="0" >
 <tr>
 <td align="center"> 
-	<input title="{APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SAVE_BUTTON_LABEL}" >
+	<input title="{APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SAVE_BUTTON_LABEL}" onclick ="return validateCustomFieldAccounts();">
 
         <input title="{APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}"></td>
 	
@@ -45,6 +45,74 @@
 </table>
 
 </form>
+
+<script>
+ 	
+	function validateCustomFieldAccounts()
+	{
+		var obj=document.getElementsByTagName("SELECT");
+		var i,j=0,k=0,l=0;
+		var n=obj.length;
+		account = new Array;
+		contact =  new Array;
+		potential = new Array;
+		for( i = 0; i < n; i++)
+		{
+			if(obj[i].name.indexOf("_account")>0)
+			{
+				account[j]=obj[i].value;
+				j++;
+			}
+			if(obj[i].name.indexOf("_contact")>0)
+                        {
+                                contact[k]=obj[i].value;
+                                k++;
+                        }
+			if(obj[i].name.indexOf("_potential")>0)
+                        {
+                                potential[l]=obj[i].value;
+                                l++;
+                        }
+		}
+		for( i = 0; i < account.length; i++)	
+		{
+			for(j=i+1; j<account.length; j++)
+			{
+				if( account[i] == account[j])
+				{
+					alert("Same custom field of Accounts cannot be used");
+					return false;
+				}
+			}
+		}
+		
+		for( i = 0; i < contact.length; i++)	
+		{
+			for(k=i+1; k< contact.length; k++)
+			{
+				if( contact[i] == contact[k])
+				{
+					alert("Same custom field of Contacts cannot be used");
+					return false;
+				}
+			}
+		}
+		for( i = 0; i < potential.length; i++)	
+		{
+			for(l=i+1; l<potential.length; l++)
+			{
+				if( potential[i] == potential[l])
+				{
+					alert("Same custom field of Potential cannot be used");
+					return false;
+				}
+			}
+
+		}
+	}
+	
+</script>
+
 
 <!-- END: main -->
 
