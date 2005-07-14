@@ -150,13 +150,6 @@ function set_focus() {
 <tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: <a href="http://www.vtiger.com/products/crm/microsoft-outlook-integration.html" target="_blank">vtiger Outlook Plug-in</font></td></tr>
 <tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: <a href="http://www.vtiger.com/products/crm/microsoft-office-integration.html" target="_blank">vtiger Office Plug-in</font></td></tr>
 <tr><td><font face="Verdana, Arial, Helvetica, sans-serif">:: <a href="http://www.vtiger.com/products/crm/thunderbird-integration.html" target="_blank">vtiger Thunderbird Extension</font></td></tr>
-<tr><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td></tr>
 </table>
 </td>
 <td bgcolor="#FFFFFF" width="1"><?php echo "<img src='".$image_path."spacer.gif'>";?></td>
@@ -210,7 +203,7 @@ else {
 	<td><b>
 	<?php echo $current_module_strings['LBL_USER_NAME'] ?>
 		</b><br>
-		<input type="text" size='30' name="user_name"  value="<?php echo $login_user_name ?>">
+		<input type="text" size='20' name="user_name"  value="<?php echo $login_user_name ?>">
 		</td>
 	</tr>
 	<tr>
@@ -219,7 +212,7 @@ else {
 	<td><b>
 	<?php echo $current_module_strings['LBL_PASSWORD'] ?>
 	</b><br>
-	<input type="password" size='30' name="user_password" value="<?php echo $login_password ?>">
+	<input type="password" size='20' name="user_password" value="<?php echo $login_password ?>">
 	</td>
 	</tr>
 	<tr>
@@ -262,12 +255,12 @@ else {
 <td bgcolor="#C9EBFF" align="right" valign="bottom"><?php echo "<img src='".$image_path."login_botright.gif'>";?></td>
 </tr>
 
-</tr>
 </table>
 </tr>
 <tr><td width="15%">&nbsp;</td>
 <td align="center"><font face="Verdana, Arial, Helvetica, sans-serif">&nbsp;&nbsp;Best viewed in IE 5.0+, Netscape 7.0+,Opera 7.01+ & Mozilla 1.5+ with 1024x768 resolution</font></td>
 <td width="15%">&nbsp;</td></tr>
 </tbody></table></td></tr></table>
+
 
 
