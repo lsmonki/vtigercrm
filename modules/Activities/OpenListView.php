@@ -43,7 +43,7 @@ $later = date("Y-m-d", strtotime("$today + 7 days"));
 
 //$activity = new Activity();
 //change made as requested by community by shaw
-$where = "AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held') AND date_start >= '$today' AND date_start < '$later' AND crmentity.smownerid ='{$current_user->id}' group by crmid ORDER BY date_start";
+$where = "AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held') AND ((date_start >= '$today' AND date_start < '$later') OR (date_start < '$today') ) AND crmentity.smownerid ='{$current_user->id}' group by crmid ORDER BY date_start";
 
 $list_query = getListQuery("Activities",$where);
 $list_result = $adb->limitQuery($list_query,0,5);
