@@ -124,7 +124,7 @@ if (is_admin($current_user))
 
 }
 
-  $buttons .="<td width='100%'></td><TD  align='right' nowrap='nowrap'><a href='".$_SERVER['PHP_SELF'] .'?'.$_SERVER['QUERY_STRING']."&reset_preferences=true' >". $mod_strings['LBL_RESET_PREFERENCES']. " </a></td>";
+ // $buttons .="<td width='100%'></td><TD  align='right' nowrap='nowrap'><a href='".$_SERVER['PHP_SELF'] .'?'.$_SERVER['QUERY_STRING']."&reset_preferences=true' >". $mod_strings['LBL_RESET_PREFERENCES']. " </a></td>";
 if (isset($buttons)) $xtpl->assign("BUTTONS", $buttons);
 
 $xtpl->parse("main");
