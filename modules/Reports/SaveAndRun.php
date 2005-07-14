@@ -49,63 +49,13 @@ $sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
 <head>
 <script language="JavaScript" type="text/javascript" src="include/general.js"></script>
 <script type="text/javascript" language="JavaScript">
-    function openPage( url )
-    {
-        document.location.href = url;
-    }
-
     function goToURL( url )
     {
         document.location.href = url;
     }
     
-    function exportReport( fileType )
-    {
-        document.NewReport.fileType.value = fileType;
-        document.NewReport.action = "/crm/ExportReport.do";
-        document.NewReport.submit();
-    }
-    
-    function showOrHideDetails( showOrHide )
-    {
-        document.NewReport.showDetails.value = showOrHide;
-        document.NewReport.action = "/crm/CustomReport.do"
-        document.NewReport.actionItem.value = "run";
-        document.NewReport.submit();
-    }
-    
-    function save( url, title, state )
-    {    
-        if( state == "UNSAVED" )
-        {
-            window.open(url,title,"width=950,height=650,top=20,left=20;toolbar=no,status=no,menubar=no,directories=no,resizable=yes,scrollbar=no")
-        }
-    }
-    
-    function saveAs( buttonIns, url, title )
-    {   
-        document.NewReport.action = "/crm/CustomReport.do";    
-        openPopUp( "WinSaveAs", buttonIns, url, title, 300, 120, "toolbar=no,status=no,menubar=no,directories=no,resizable=yes,scrollbar=no" );
-    }
-    
-    function showExportMenu()
-    {
-            getObj("dropDownMenu").style.display="block"
-            getObj("dropDownMenu").style.left=findPosX(getObj("btnExport"))
-            getObj("dropDownMenu").style.top=findPosY(getObj("btnExport"))+getObj("btnExport").offsetHeight
-    }
+//window.open("index.php?module=Reports&action=CreatePDF&record=6","test","width=950,height=650,top=20,left=20;toolbar=no,status=no,menubar=no,directories=no,resizable=yes,scrollbar=no")
 
-    function hideExportMenu(ev)
-    {
-            if (browser_ie)
-                    currElement=window.event.srcElement
-            else if (browser_nn4 || browser_nn6)
-                    currElement=ev.target
-
-            if (currElement.id!="btnExport")
-                    if (getObj("dropDownMenu").style.display=="block")
-                            getObj("dropDownMenu").style.display="none"
-    }
 </script>
 </head>
 <body>

@@ -109,7 +109,7 @@ $reportid = $_REQUEST["record"];
 $oReport = new Reports($reportid);
 
 $oReportRun = new ReportRun($reportid);
-$arr_val = $oReportRun->GenerateReport("PDF");
+$arr_val = $oReportRun->GenerateReport("PDF",$filterlist);
 
 if(isset($arr_val))
 {

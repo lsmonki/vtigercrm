@@ -1203,7 +1203,7 @@ class ReportRun extends CRMEntity
 
 	}
 
-	function GenerateReport($outputformat,$filterlist="")
+	function GenerateReport($outputformat,$filterlist)
 	{
                  global $adb;
          	 global $modules;
