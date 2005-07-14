@@ -476,6 +476,12 @@ function copyAddressLeft(form) {
 	function validate() {
 		if(!formValidate())
 			return false
+		if(rowCnt == 0)
+		{
+			alert('No product is selected. Select atleast one Product');
+			return false;
+		}
+		
 
 				for (var i=1;i<=rowCnt;i++) {
 					if (!emptyCheck("txtProduct"+i,"Product","text")) return false
