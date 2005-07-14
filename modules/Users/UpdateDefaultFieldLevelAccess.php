@@ -34,7 +34,7 @@ for($i=0; $i<$noofrows; $i++)
 		}
 		//Updating the Mandatory fields
 		$uitype = $adb->query_result($fieldListResult,$i,"uitype");
-                if($uitype == 2 || $uitype == 51 || $uitype == 6 || $uitype == 22)
+                if($uitype == 2 || $uitype == 51 || $uitype == 6 || $uitype == 22 || $uitype == 73 || $uitype == 24 || $uitype == 81 || $uitype == 50 || $uitype == 23 || $uitype == 16)
                 {
                        $visible_value = 0; 
                 }		
