@@ -136,8 +136,6 @@ if(isset($_REQUEST['opportunity_id']) || $_REQUEST['opportunity_id'] !='')
         $potfocus->column_fields['potential_id'] = $_REQUEST['opportunity_id'];
 	$num_of_products = getNoOfAssocProducts("Potentials",$potfocus,$potfocus->column_fields['potential_id']);
         $associated_prod = getAssociatedProducts("Potentials",$potfocus,$potfocus->column_fields['potential_id']);
-	$focus->id = "";
-    	$focus->mode = ''; 	
 
 	
 }
@@ -145,8 +143,6 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
         $focus->column_fields['product_id'] = $_REQUEST['product_id'];
 	$num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
 	$associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
-	$focus->id = "";
-    	$focus->mode = ''; 	
 } 
  
  
