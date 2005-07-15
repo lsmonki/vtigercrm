@@ -50,14 +50,9 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	$focus = getConvertQuoteToInvoice($focus,$quote_focus,$quoteid);
 			
     }
-    elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'sotoinvoice')
+    elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'potentoinvoice')
     {
-	$soid = $_REQUEST['record'];
-	$so_focus = new SalesOrder();
-	$so_focus->id = $soid;
-	$so_focus->retrieve_entity_info($soid,"SalesOrder");
-	$focus = getConvertSoToInvoice($focus,$so_focus,$soid);
-			
+	    $focus->mode = '';		
     }
     elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'update_so_val')
     {
@@ -137,7 +132,7 @@ if(isset($_REQUEST['opportunity_id']) || $_REQUEST['opportunity_id'] !='')
         $potfocus->column_fields['potential_id'] = $_REQUEST['opportunity_id'];
 	$num_of_products = getNoOfAssocProducts("Potentials",$potfocus,$potfocus->column_fields['potential_id']);
         $associated_prod = getAssociatedProducts("Potentials",$potfocus,$potfocus->column_fields['potential_id']);
-
+    	//$focus->mode = ''; 	
 	
 }
 if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
