@@ -134,21 +134,21 @@
 </td></tr></table>
 
 <BR>
-  <div style="padding:2 0 2 0"><strong>Product Details</strong></div>
+  <div style="padding:2 0 2 0"><strong>{APP.LBL_PRODUCT_DETAILS}</strong></div>
   <div id="productList"> 
     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formBorder">
       <tr class="moduleListTitle" height="20" id="tablehead"> 
-        <td width="20%" style="padding:3px;"><font color="red">*</font>Product</td>
+        <td width="20%" style="padding:3px;"><font color="red">*</font>{APP.LBL_PRODUCT}</td>
         <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
-        <td width="12%" style="padding:3px;">Qty In Stock</td>
+        <td width="12%" style="padding:3px;">{APP.LBL_QTY_IN_STOCK}</td>
         <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
-        <td width="12%" style="padding:3px;"><font color="red">*</font>Qty</td>
+        <td width="12%" style="padding:3px;"><font color="red">*</font>{APP.LBL_QTY}</td>
         <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
-        <td width="15%" style="padding:3px;">Unit Price</td>
+        <td width="15%" style="padding:3px;">{APP.LBL_UNIT_PRICE}</td>
         <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
-        <td width="16%" style="padding:3px;"><font color="red">*</font>List Price</td>
+        <td width="16%" style="padding:3px;"><font color="red">*</font>{APP.LBL_LIST_PRICE}</td>
         <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
-        <td width="20%" style="padding:3px;"><div align="center">Total</div></td>
+        <td width="20%" style="padding:3px;"><div align="center">{APP.LBL_TOTAL}</div></td>
         <td WIDTH='1' class='blackLine'><IMG SRC='{IMAGE_PATH}blank.gif'></td>
         <td width="15" style="padding:3px;"></td>
       </tr>
@@ -161,23 +161,23 @@
   </div>
   <table width="100%" border="0" cellspacing="2" cellpadding="2">
     <tr> 
-	  <td width="150"><input type="button" class="button" value="Add Product" onClick="addRow()"></td>
-      <td><div align="right"><b>Sub Total:</b></div></td>
+	  <td width="150"><input type="button" class="button" value="{APP.LBL_ADD_PRODUCT}" onClick="addRow()"></td>
+      <td><div align="right"><b>{APP.LBL_SUB_TOTAL}:</b></div></td>
       <td width="150" style="padding-right:35"><div id="subTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;{SUBTOTAL}</div></td>
     </tr>
     <tr> 
 	  <td>&nbsp;</td>
-      <td><div align="right"><b>Tax:</b></div></td>
+      <td><div align="right"><b>{APP.LBL_TAX}:</b></div></td>
       <td width="150" style="padding-right:35"><div align="right"><input type="text" id="txtTax" name="txtTax" value="{TAXVALUE}" onblur="calcGrandTotal()" style="width:100%"></div></td>
     </tr>
 	<tr> 
 	  <td>&nbsp;</td>
-      <td><div align="right"><b>Adjustment:</b></div></td>
+      <td><div align="right"><b>{APP.LBL_ADJUSTMENT}:</b></div></td>
       <td width="150" style="padding-right:35"><div align="right"><input type="text" id="txtAdjustment" name="txtAdjustment" value="{ADJUSTMENTVALUE}" onblur="calcGrandTotal()" style="width:100%"></div></td>
     </tr>
     <tr> 
 	  <td>&nbsp;</td>
-      <td><div align="right"><b>Grand Total:</b></div></td>
+      <td><div align="right"><b>{APP.LBL_GRAND_TOTAL}:</b></div></td>
       <td width="150" style="padding-right:35"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;{GRANDTOTAL}</div></td>
     </tr>
   </table>
