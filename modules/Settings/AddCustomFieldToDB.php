@@ -176,22 +176,25 @@ else
 		$uitype = 7;
 
 		//$type="double(".$fldlength.",".$decimal.")";	
-		//this may sound ridiculous passing decimal but that is the way adodb wants 
-		$type="N(".$fldlength.".".$decimal.")";	// adodb type
+		//this may sound ridiculous passing decimal but that is the way adodb wants
+		$dbfldlength = $fldlength + $decimal + 1;
+ 
+		$type="N(".$dbfldlength.".".$decimal.")";	// adodb type
 	$uichekdata='N~O~'.$fldlength .','.$decimal;
 	}
 	elseif($fldType == 'Percent')
 	{
 		$uitype = 9;
 		//$type="double(".$fldlength.",".$decimal.")";
-		$type="N(".$fldlength.",".$decimal.")"; //adodb type
-	$uichekdata='N~O~'.$fldlength .','.$decimal;
+		$type="N(5.2)"; //adodb type
+		$uichekdata='N~O~2~2';
 	}
 	elseif($fldType == 'Currency')
 	{
 		$uitype = 71;
 		//$type="double(".$fldlength.",".$decimal.")";
-		$type="N(".$fldlength.",".$decimal.")"; //adodb type
+		$dbfldlength = $fldlength + $decimal + 1;
+		$type="N(".$dbfldlength.".".$decimal.")"; //adodb type
 	$uichekdata='N~O~'.$fldlength .','.$decimal;
 	}
 	elseif($fldType == 'Date')
@@ -256,7 +259,7 @@ else
         $query = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",5,1,'".$uichekdata."')";
 	
         $adb->query($query);
-	
+
         $adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
        
 	//Inserting values into profile2field tables
