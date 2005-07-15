@@ -287,8 +287,10 @@ function deleteFile($dir,$filename)
 }
 $_REQUEST['return_id']=$return_id;
 
-if($_REQUEST['return_module'] != 'Emails')
-	$return_id = $_REQUEST['record'];
+if($_REQUEST['return_module'] != 'Emails' && $_REQUEST['record'] != '')
+	{
+		$return_id = $_REQUEST['record'];
+	}
 
 //echo 'return..'.$return_module.'/'.$return_action.'<br>parent id='.$parent_id.'<br>return id = '.$return_id.'/'.$filename;
 if( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
