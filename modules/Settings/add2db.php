@@ -27,28 +27,30 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 	$filesize = $_FILES['binFile']['size'];
 
 	$filetype_array=explode("/",$filetype); 
-
 	if($filesize != 0)
 	{
-		if ($filetype_array[0] == "image" ) //Checking whether the file is an image or not
+		if (($filetype_array[1] == "jpeg" ) || ($filetype_array[1] == "png")) //Checking whether the file is an image or not
 		{
 			if($result!=false)
 			{
 				$savelogo="true";
 			}
 		}
+		else if($filetype_array[1] == "gif")
+		{
+			$savelogo="false";
+                        $errormessage = "<font color='red'><B> Logo has to be either jpeg/png file </B></font>";
+		}
 		else
 		{
 			$savelogo="false";
-			include('themes/'.$theme.'/header.php');
 			$errormessage = "<font color='red'><B> Logo has to be an Image </B></font>";
-			echo $errormessage;
-			return;
 		}
+		
 	}
 	else
 	{
-		include('themes/'.$theme.'/header.php');
+		$savelogo="false";
 		$errormessage = "<font color='red'><B>Error Message<ul>
 		<li><font color='red'>Invalid file OR</font>
 		<li><font color='red'>File has no data</font>
@@ -62,17 +64,18 @@ else
 	$errorCode =  $_FILES['binFile']['error'];
 	if($errorCode == 4)
 	{
-	    $errormessage = "<B><font color='red'>Kindly give a valid file for upload!</font></B> <br>" ;
+	    	$errormessage = "<B><font color='red'>Kindly give a valid file for upload!</font></B> <br>" ;
+	    	$savelogo="false";	    	
 	}
 	else if($errorCode == 2)
 	{
-	    $errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 1000000 bytes</font></B> <br>";
-	    $savelogo="false";	    	
+	    	$errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 1000000 bytes</font></B> <br>";
+	    	$savelogo="false";	    	
 	}
 	else if($errorCode == 3)
 	{
-	    $errormessage = "<b>Problems in file upload. Please try again! </b><br>";
-		$savelogo="false";
+		$errormessage = "<b>Problems in file upload. Please try again! </b><br>";
+	  	$savelogo="false";
 	}
 	  
 }
@@ -103,6 +106,7 @@ if($saveflag=="true")
 	$result = $adb->query($sql);
 	$org_name = $adb->query_result($result,0,'organizationame');
 
+
 	if($org_name=='')
 	{
 		$sql="insert into organizationdetails(organizationame,address,city,state,code,country,phone,fax,website,logoname) values( '".$organization_name ."','".$organization_address."','". $organization_city."','".$organization_state."','".$organization_code."','".$organization_country."','".$organization_phone."','".$organization_fax."','".$organization_website."','".$organization_logoname."')";
@@ -112,17 +116,18 @@ if($saveflag=="true")
 		$sql="update organizationdetails set organizationame = '".$organization_name."', address = '".$organization_address."', city = '".$organization_city."', state = '".$organization_state."',  code = '".$organization_code."', country = '".$organization_country."' ,  phone = '".$organization_phone."' ,  fax = '".$organization_fax."',  website = '".$organization_website."', logoname = '". $organization_logoname ."' where organizationame = '".$org_name."'";
 	}
 	$adb->query($sql);
+
 	if($savelogo=="true")
 	{
 		header("Location: index.php?module=Settings&action=OrganizationConfig");
 	}
 	elseif($savelogo=="false")
 	{
+
 	    include('themes/'.$theme.'/header.php');
 	    echo $errormessage;	
 		return;
 	}
-	header("Location: index.php?module=Settings&action=OrganizationConfig");
 	
 
 }
