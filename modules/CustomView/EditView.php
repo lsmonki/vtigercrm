@@ -161,21 +161,36 @@ $xtpl->out("main");
 function getByModule_ColumnsHTML($module,$columnslist,$selected="")
 {
 	global $oCustomView;
+	global $app_list_strings;
+	
+	$mod_strings = return_module_language($current_language,$module);
 
 	foreach($oCustomView->module_list[$module] as $key=>$value)
         {
-            $shtml .= "<optgroup label=\"".$module." ".$key."\" class=\"select\" style=\"border:none\">";
+            $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".$key."\" class=\"select\" style=\"border:none\">";
 	    if(isset($columnslist[$module][$key]))
 	    {
             foreach($columnslist[$module][$key] as $field=>$fieldlabel)
             {
-                if($selected == $field)
-                {
-                        $shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
-                }else
-                {
-                        $shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
-                }
+		    if(isset($mod_strings[$fieldlabel]))
+		    {
+			    if($selected == $field)
+			    {
+				    $shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+			    }else
+			    {
+				    $shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+			    }
+		    }else
+		    {
+			    if($selected == $field)
+			    {
+				    $shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
+			    }else
+			    {
+				    $shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+			    }
+		    }
             }
 	    }
         }
@@ -190,18 +205,32 @@ function getStdFilterHTML($module,$selected="")
         global $oCustomView;
 	//print_r($mod_strings);
         $result = $oCustomView->getStdCriteriaByModule($module);
+	$mod_strings = return_module_language($current_language,$module);
 
         if(isset($result))
         {
                 foreach($result as $key=>$value)
                 {
-                        if($key == $selected)
+                        if(isset($mod_strings[$value]))
+			{
+			if($key == $selected)
                         {
-                        $shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+                        $shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$mod_strings[$value]."</option>";
                         }else
                         {
-                        $shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+                        $shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$mod_strings[$value]."</option>";
                         }
+			}else
+			{
+			if($key == $selected)
+                        {
+                   	$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+                        }else
+                        {
+                        $shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</opt
+ion>";
+                        }
+			}
                 }
         }
 
@@ -213,6 +242,7 @@ function getStdFilterHTML($module,$selected="")
 function getAdvCriteriaHTML($selected="")
 {
          global $adv_filter_options;
+	 global $app_list_strings;
 
          foreach($adv_filter_options as $key=>$value)
          {
