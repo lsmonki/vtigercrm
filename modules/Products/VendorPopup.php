@@ -28,7 +28,6 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
-if($popuptype!='') $url_string .= "&popuptype=".$popuptype;
 
 require_once($theme_path.'layout_utils.php');
 echo get_module_title("Vendor", "Vendor" , true);
@@ -52,6 +51,7 @@ if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
 $url_string = ''; // assigning http url string
 $sorder = 'ASC';  // Default sort order
+if($popuptype!='') $url_string .= "&popuptype=".$popuptype;
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
 $sorder = $_REQUEST['sorder'];
 
