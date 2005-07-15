@@ -109,7 +109,7 @@ if(isPermitted("Potentials",1,$_REQUEST['record']) == 'yes')
 }
 if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("CONVERTINVOICE","<td><input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Potentials'; this.form.return_action.value='DetailView'; this.form.convertmode.value='potentoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\"></td>");
+	$xtpl->assign("CONVERTINVOICE","<td><input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Potentials'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."';this.form.convertmode.value='potentoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\"></td>");
 }
 if(isPermitted("Potentials",2,$_REQUEST['record']) == 'yes')
 {
