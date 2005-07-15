@@ -39,7 +39,12 @@ if(isset($_REQUEST['mode']))
         $focus->mode = $_REQUEST['mode'];
 }
 
-
+//Check if the file is exist or not.
+if(!is_file($_FILES["filename"]["name"]) && $_FILES["filename"]["name"] != '')
+{
+        $file_upload_error = true;
+        $_FILES = '';
+}
 
 //check if the contact already exists by using the email address as criteria
 //if contact exists, then add the email to that contact
