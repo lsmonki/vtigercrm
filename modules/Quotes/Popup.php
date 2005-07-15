@@ -140,6 +140,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form=new XTemplate ('modules/Quotes/PopupSearchForm.html');
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
+	$search_form->assign("POPUPTYPE",$popuptype);
 	
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
@@ -170,7 +171,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
 
 	$url_string .="&advanced=true";
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Quotes','Popup','subject','true','advanced',"","","","",$viewid));
+	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Quotes','Popup','subject','true','advanced',$popuptype,"","","",$viewid));
 
 		
 //Added for Custom Field Search
@@ -191,7 +192,7 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 		$search_form->out("advanced");
 	}
 	else {
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Quotes','Popup','subject','true','basic',"","","","",$viewid));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Quotes','Popup','subject','true','basic',$popuptype,"","","",$viewid));
 		$search_form->parse("main");
 		$search_form->out("main");
 	}
