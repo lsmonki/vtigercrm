@@ -112,6 +112,10 @@ $mod_strings = Array(
 'End Date'=>'End Date',
 'Recurrence'=> 'Recurring Events',
 'Recurring Type'=> 'Recurring Type',
+//Activities - Notification Error
+'LBL_NOTIFICATION_ERROR'=>'Mail Error : Unable to connect to Mail Server. Please check your outgoing mail server configuration in Settings->Outgoing Mail Server Configuration',
+
+
 );
 
 ?>
