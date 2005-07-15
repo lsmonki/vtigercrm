@@ -17,7 +17,7 @@ function getHiddenValues($id)
 	global $adb;
 	$sql = $adb->query('select accountid from contactdetails where contactid='.$id);
 	$accountid = $adb->query_result($sql,0,'accountid');
-	
+	if($accountid == 0) $accountid='';
 	$hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
 	$hidden .= '<input type="hidden" name="module">';
 	$hidden .= '<input type="hidden" name="mode">';
