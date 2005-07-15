@@ -12,17 +12,15 @@
 <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 <body>
 <form action="index.php" method="post" name="templatecreate" onsubmit="return check4null(templatecreate);">  
-<input type="hidden" name="action">
+<input type="hidden" name="action" value="SaveAction.php">
 <input type="hidden" name="mode" value="{MODE}">
 <input type="hidden" name="module" value="CustomView">
 <input type="hidden" name="cvmodule" value="{CVMODULE}">
-<input type="hidden" name="templateid" value="{TEMPLATEID}">
+<input type="hidden" name="cvid" value="{CVID}">
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}{MODULE}.gif" border="0"></td>
     <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_MODULE_NAME}:Custom Action</td>
-    <!--<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A>
-      ]</td>-->
   </tr>
   <tr>
     <td colspan="3" class="hline"><img height='1' src='include/images/blank.gif'></td>
@@ -31,7 +29,7 @@
 <br>
 <table width="90%" border=0 cellPadding="0" cellSpacing="0">
  <tr>
-   <td><div align='right'><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font> Indicates required field</div></td>
+   <td><div align='right'><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font> {APP.NTC_REQUIRED}</div></td>
  </tr>
 </table>
 <table width="90%" border=0 cellspacing=1 cellpadding=0 class="formOuterBorder">

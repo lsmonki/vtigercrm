@@ -1133,6 +1133,24 @@ class CustomView extends CRMEntity{
                 //echo $shtml;
                 return $shtml;
 	}*/
+	function getCustomActionDetails($cvid)
+	{
+		global $adb;
+
+		$sSQL = "select customaction.* from customaction inner join customview on customaction.cvid = customview.cvid";
+                $sSQL .= " where customaction.cvid=".$cvid;
+                //echo $sSQL;
+                $result = $adb->query($sSQL);
+
+                while($carow = $adb->fetch_array($result))
+                {
+                        $calist["subject"] = $carow["subject"];
+                        $calist["module"] = $carow["module"];
+                        $calist["content"] = $carow["content"];
+			$calist["cvid"] = $carow["cvid"];
+                }
+                return $calist;	
+	}
 
 	function getParentId($fields,$values)
 	{

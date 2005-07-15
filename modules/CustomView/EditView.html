@@ -29,7 +29,7 @@ typeofdata['T'] = ['e','n','l','g','m','h'];
 typeofdata['I'] = ['e','n','l','g','m','h'];
 typeofdata['C'] = ['e','n'];
 typeofdata['DT'] = ['e','n'];
-
+typeofdata['D'] = ['e','n'];
 var fLabels = new Array();
 fLabels['e'] = 'equals';
 fLabels['n'] = 'not equal to';
@@ -181,7 +181,7 @@ function verify_data() {
 
 function goto_CustomAction(module)
 {
-        document.location.href = "index.php?module="+module+"&action=CustomAction";
+        document.location.href = "index.php?module="+module+"&action=CustomAction&record={CUSTOMVIEWID}";
 }
 
 </script>
