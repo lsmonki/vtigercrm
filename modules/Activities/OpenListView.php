@@ -43,9 +43,10 @@ $later = date("Y-m-d", strtotime("$today + 7 days"));
 
 //$activity = new Activity();
 //change made as requested by community by shaw
-$where = "AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held') AND ((date_start >= '$today' AND date_start < '$later') OR (date_start < '$today') ) AND crmentity.smownerid ='{$current_user->id}' group by crmid ORDER BY date_start";
+ $list_query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held') AND (((date_start >= '$today' AND date_start < '$later') OR (date_start < '$today'))  OR (recurringevents.recurringdate between '$today' and '$later') ) AND salesmanactivityrel.smid ='{$current_user->id}'";
 
-$list_query = getListQuery("Activities",$where);
+//$list_query = getListQuery("Activities",$where);
+//echo $list_query."<h3>END</h3>";
 $list_result = $adb->limitQuery($list_query,0,5);
 $open_activity_list = array();
 $noofrows = $adb->num_rows($list_result);
@@ -65,6 +66,7 @@ for($i=0;$i<$noofrows;$i++)
                                      'contactid' => $adb->query_result($list_result,$i,'contactid'),
                                      'date_start' => getDisplayDate($adb->query_result($list_result,$i,'date_start')),
 				      'recurringtype' => getDisplayDate($adb->query_result($list_result,$i,'recurringtype')),
+				      'recurringdate' => getDisplayDate($adb->query_result($list_result,$i,'recurringdate')),
 
 				     'parent'=> $parent_name,	
                                      );
@@ -83,6 +85,7 @@ $xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailV
 
 $oddRow = true;
 #if (count($open_activity_list) > 0) $open_activity_list = array_csort($open_activity_list, 'date_start', 'time_start', SORT_ASC);
+
 foreach($open_activity_list as $event)
 {
 	$activity_fields = array(
@@ -121,12 +124,23 @@ foreach($open_activity_list as $event)
 	
 	
 	//Code included for showing Overdue Activities in Upcoming Activities -Jaguar
+	$end_date=getDBInsertDateValue($end_date);
 	if($end_date== '0000-00-00' OR $end_date =="")
 	{
 		$end_date=$start_date;
 	}
+	$recur_date=ereg_replace('--','',$event['recurringdate']);
+	if($recur_date!="")
+	{
+		$recur_date=getDBInsertDateValue($recur_date);	
+		$end=explode("-",$recur_date);
+	}
+	else
+	{
+		$end=explode("-",$end_date);
+	}
+	
 	$current_date=date("Y-m-d",mktime(date("m"),date("d"),date("Y")));
-	$end=explode("-",$end_date);
 	$curr=explode("-",$current_date);
 	$date_diff= mktime(0,0,0,date("$curr[1]"),date("$curr[2]"),date("$curr[0]")) - mktime(0,0,0,date("$end[1]"),date("$end[2]"),date("$end[0]"));
 	if($date_diff>0)
