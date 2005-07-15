@@ -92,6 +92,7 @@ function renderRelatedActivities($query,$id)
 function renderRelatedAttachments($query,$id)
 {
         $hidden = getHiddenValues($id);
+	$hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
         echo $hidden;
 
         getAttachmentsAndNotes('Products',$query,$id);
