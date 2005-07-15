@@ -169,13 +169,14 @@ if($result1 != '')
 	}
 	if($error_info != 1)
 	{
-		if($_REQUEST['return_module'] != 'HelpDesk')
+		if($_REQUEST['return_module'] == 'Emails' || $_REQUEST['return_module'] == '')
 		{
 			$returnmodule = 'Emails';
 			$returnaction = 'EditView';
 		}
-		$return_id = $_REQUEST['return_id'];
 	}
+	if($return_id == '' && $_REQUEST['return_id'] != '')
+		$return_id = $_REQUEST['return_id'];
 
    	   header("Location: index.php?action=$returnaction&module=$returnmodule&parent_id=$parent_id&record=$return_id&filename=$filename&message=$error_info");
 
