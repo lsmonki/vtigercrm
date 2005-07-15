@@ -28,6 +28,13 @@ require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils.php');
 require_once('include/uifromdbutil.php');
+global $mod_strings;
+if( $_SESSION['mail_send_error']!="")
+{
+	echo '<b><font color=red>'. $mod_strings{"LBL_NOTIFICATION_ERROR"}.'</font></b><br>';
+}
+session_unregister('mail_send_error');
+
 $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
 {
