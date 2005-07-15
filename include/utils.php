@@ -2856,6 +2856,12 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"subject");
         }
+	if($parent_module == 'Invoice')
+        {
+                $parent_query = "SELECT subject FROM invoice WHERE invoiceid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"subject");
+        }
         if($parent_module == 'SalesOrder')
         {
                 $parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$parent_id;
