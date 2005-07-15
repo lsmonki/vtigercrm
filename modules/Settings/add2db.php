@@ -64,8 +64,9 @@ else
 	$errorCode =  $_FILES['binFile']['error'];
 	if($errorCode == 4)
 	{
-	    	$errormessage = "<B><font color='red'>Kindly give a valid file for upload!</font></B> <br>" ;
-	    	$savelogo="false";	    	
+	    	$savelogo="true";	    	
+		$errorcode="";
+		$saveflag="true";
 	}
 	else if($errorCode == 2)
 	{
