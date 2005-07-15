@@ -36,7 +36,6 @@ if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 if (!isset($where)) $where = "";
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
-$xtpl->assign("POPUPTYPE",$popuptype);
 $xtpl->assign("RECORDID",$_REQUEST['recordid']);
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
@@ -102,6 +101,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         $search_form=new XTemplate ('modules/Orders/PopupSalesOrderSearchForm.html');
         $search_form->assign("MOD", $mod_strings);
         $search_form->assign("APP", $app_strings);
+	$search_form->assign("POPUPTYPE",$popuptype);
 	$clearsearch = 'true';
 	
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
@@ -129,7 +129,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') 
 	{
 		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','PopupSalesOrder','subject','true','advanced',"","","","",$viewid));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','PopupSalesOrder','subject','true','advanced',$popuptype,"","","",$viewid));
 
 		$search_form->assign("SUPPORT_START_DATE",$_REQUEST['start_date']);
 		$search_form->assign("SUPPORT_EXPIRY_DATE",$_REQUEST['expiry_date']);
@@ -155,7 +155,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	}
 	else
 	{        
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','PopupSalesOrder','subject','true','basic',"","","","",$viewid));
+		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','PopupSalesOrder','subject','true','basic',$popuptype,"","","",$viewid));
 		$search_form->parse("main");
 	        $search_form->out("main");
 	}
