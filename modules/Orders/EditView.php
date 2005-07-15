@@ -53,7 +53,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 if(isset($_REQUEST['product_id']) || $_REQUEST['product_id'] !='')
 {
         $focus->column_fields['product_id'] = $_REQUEST['product_id'];
-	$vtlog->logthis("Purchase Order EditView: Product Id from the request is ".$_REQUEST['potential_id'],'debug');
+	$vtlog->logthis("Purchase Order EditView: Product Id from the request is ".$_REQUEST['product_id'],'debug');
         $num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
         $associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 }
