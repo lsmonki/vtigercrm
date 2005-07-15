@@ -582,22 +582,50 @@ function timeComparison(fldName1,fldLabel1,fldName2,fldLabel2,type) {
 	} else return true;
 }
 
-function numValidate(fldName,fldLabel,format) {
-	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-	if (format!="any") {
-		var format=format.split(",")
-		var restr="/^\\d{1,"+format[0]+"}(\\.\\d{1,"+format[0]+"})$/"
-		var re=eval(restr)
-	} else {
-		var re=/^\d+(\.\d\d*)*$/
-	}
-	
-	if (!re.test(val)) {
-		alert("Invalid "+fldLabel)
-		getObj(fldName).focus()
-		return false
-	} else return true
+function numValidate(fldName,fldLabel,format,neg) {
+   var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+   if (format!="any") {
+       if (isNaN(val)) {
+           var invalid=true
+       } else {
+           var format=format.split(",")
+           var splitval=val.split(".")
+           if (neg==true) {
+               if (splitval[0].indexOf("-")>=0) {
+                   if (splitval[0].length-1>format[0])
+                       invalid=true
+               } else {
+                   if (splitval[0].length>format[0])
+                       invalid=true
+               }
+           } else {
+               if (val<0)
+                   invalid=true
+               else if (splitval[0].length>format[0])
+                   invalid=true
+           }
+                      if (splitval[1])
+               if (splitval[1].length>format[1])
+                   invalid=true
+       }
+              if (invalid==true) {
+           alert("Invalid "+fldLabel)
+           getObj(fldName).focus()
+           return false
+       } else return true
+   } else {
+       if (neg==true)
+           var re=/^(-|)\d+(\.\d\d*)*$/
+       else
+           var re=/^\d+(\.\d\d*)*$/
+   }
+      if (!re.test(val)) {
+       alert("Invalid "+fldLabel)
+       getObj(fldName).focus()
+       return false
+   } else return true
 }
+
 
 function intValidate(fldName,fldLabel) {
 	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
@@ -726,6 +754,7 @@ function formValidate() {
 			}
 				   	break;
 			case "N"  :
+			case "NN" :
 				if (getObj(fieldname[i]) != null && getObj(fieldname[i]).value.replace(/^\s+/g, '').replace(/\s+$/g, '').length!=0)
 				{
 					if (getObj(fieldname[i]).value.length!=0)
@@ -733,8 +762,14 @@ function formValidate() {
 						if (typeof(type[2])=="undefined") var numformat="any"
 						else var numformat=type[2]
 					
-						if (!numValidate(fieldname[i],fieldlabel[i],numformat))
+						if (type[0]=="NN") {
+							
+							if (!numValidate(fieldname[i],fieldlabel[i],numformat,true))
+	return false
+						} else {
+							if (!numValidate(fieldname[i],fieldlabel[i],numformat))
 							return false
+						}
 					   	if (type[3]) {
 					   		if (!numConstComp(fieldname[i],fieldlabel[i],type[3],type[4]))
 								return false
