@@ -1859,7 +1859,9 @@ class appointment extends tutos_base {
     $q.=" activity inner join crmentity on activity.activityid = crmentity.crmid left join"; 
     $q.=" cntactivityrel on activity.activityid = cntactivityrel.activityid left join "; 
     $q.=" contactdetails on cntactivityrel.contactid = contactdetails.contactid left join"; 
-    $q.=" account  on contactdetails.accountid = account.accountid WHERE ";
+    $q.=" account  on contactdetails.accountid = account.accountid";
+    $q.=" inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid"; //  When adding the users to the event then to show it in the users Calendar of particular user - Jaguar	
+    $q.=" WHERE ";
     $q.=" activity.activitytype in ('Call','Meeting') AND ";
     if(!is_admin($current_user))
     {
@@ -1874,7 +1876,7 @@ class appointment extends tutos_base {
 
     if(!is_admin($current_user))
     {
-	$q .= "  ) AND (crmentity.smownerid ='".$current_user->id."' ) ";
+	$q .= "  ) AND (crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."') ";
     }
     $q .= " AND crmentity.deleted = 0)";
     $q .= " ORDER by activity.date_start,activity.time_start";
@@ -1906,7 +1908,7 @@ class appointment extends tutos_base {
     # Second query ( Get Recurring appointments )
     #
     #
-   $q = "SELECT activity.activityid, activity.subject, activity.activitytype, activity.description, activity.time_start, activity.duration_hours, activity.duration_minutes, activity.priority, activity.location,activity.eventstatus, crmentity.*, recurringevents.recurringid, recurringevents.recurringdate as date_start ,recurringevents.recurringtype,account.accountname,account.accountid from activity inner join crmentity on activity.activityid = crmentity.crmid inner join recurringevents on activity.activityid=recurringevents.activityid  left join cntactivityrel on activity.activityid = cntactivityrel.activityid left join contactdetails on cntactivityrel.contactid = contactdetails.contactid left join account  on contactdetails.accountid = account.accountid ";
+   $q = "SELECT activity.activityid, activity.subject, activity.activitytype, activity.description, activity.time_start, activity.duration_hours, activity.duration_minutes, activity.priority, activity.location,activity.eventstatus, crmentity.*, recurringevents.recurringid, recurringevents.recurringdate as date_start ,recurringevents.recurringtype,account.accountname,account.accountid from activity inner join crmentity on activity.activityid = crmentity.crmid inner join recurringevents on activity.activityid=recurringevents.activityid  left join cntactivityrel on activity.activityid = cntactivityrel.activityid left join contactdetails on cntactivityrel.contactid = contactdetails.contactid left join account  on contactdetails.accountid = account.accountid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid";
 
    $q.=" where ( activity.activitytype in ('Call','Meeting') AND "; 
     if(!is_admin($current_user))
@@ -1916,7 +1918,7 @@ class appointment extends tutos_base {
     $q .= "  (recurringdate < '". $sx2 ."' AND recurringdate >= '". $sx1 . "') ";
     if(!is_admin($current_user))
     {
-	$q .= " ) AND (  crmentity.smownerid = '".$current_user->id."' ) ";
+	$q .= " ) AND (crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."' ) ";
     }
     $q .= " AND crmentity.deleted = 0 )" ; 
     $q .= " ORDER by recurringid";
