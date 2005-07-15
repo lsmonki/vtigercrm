@@ -32,6 +32,8 @@ require_once('include/FormValidationUtil.php');
 global $app_strings;
 global $mod_strings;
 global $current_user;
+global $vtlog;
+
 
 $focus = new Order();
 
@@ -51,6 +53,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 if(isset($_REQUEST['product_id']) || $_REQUEST['product_id'] !='')
 {
         $focus->column_fields['product_id'] = $_REQUEST['product_id'];
+	$vtlog->logthis("Purchase Order EditView: Product Id from the request is ".$_REQUEST['potential_id'],'debug');
         $num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
         $associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 }
@@ -165,11 +168,12 @@ elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
         $xtpl->assign("ROWCOUNT", $num_of_products);
         $xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$InvTotal = getInventoryTotal($_REQUEST['return_module'],$_REQUEST['return_id']);
         $xtpl->assign("MODE", $focus->mode);
         $xtpl->assign("TAXVALUE", "0.000");
         $xtpl->assign("ADJUSTMENTVALUE", "0.000");
-        $xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
-        $xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
+        $xtpl->assign("SUBTOTAL", $InvTotal.".00");
+        $xtpl->assign("GRANDTOTAL", $InvTotal.".00");
 
 }
 else
