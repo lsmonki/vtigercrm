@@ -375,7 +375,7 @@ $server->wsdl->addComplexType(
         		        'faqcomments' => array('name'=>'faqcomments','type'=>'tns:xsd:string'),
 		    	    )
              )
-);	
+);
 $server->wsdl->addComplexType(
         'ticket_update_comment_array',
         'complexType',
@@ -475,6 +475,17 @@ $server->register(
 	'get_KBase_details',
 	array(''=>''),
 	array('return'=>'tns:KBase_array'),
+	$NAMESPACE);
+
+$server->register(
+	'create_lead_from_webform',
+	array('lastname'=>'xsd:string',
+		'email'=>'xsd:string', 
+		'phone'=>'xsd:string', 
+		'company'=>'xsd:string', 
+		'country'=>'xsd:string', 
+		'description'=>'xsd:string'),
+	array('return'=>'xsd:string'),
 	$NAMESPACE);
 
 $server->register(
@@ -943,6 +954,33 @@ function get_KBase_details($id='')
 	$adb->println($result);	
 	return $result;
 }
+
+function create_lead_from_webform($lastname,$email,$phone,$company,$country,$description)
+{
+	global $adb;
+	$adb->println("Create New Lead from Web Form - Starts");
+	require_once("modules/Leads/Lead.php");
+
+	$focus = new Lead();
+	$focus->column_fields['lastname'] = $lastname;
+	$focus->column_fields['email'] = $email;
+	$focus->column_fields['phone'] = $phone;
+	$focus->column_fields['company'] = $company;
+	$focus->column_fields['country'] = $country;
+	$focus->column_fields['description'] = $description;
+
+	$focus->save("Leads");
+	
+	$focus->retrieve_entity_info($focus->id,"Leads");
+
+	$adb->println("Create New Lead from Web Form - Ends");
+
+	if($focus->id != '')
+		return 'Thank you for your interest. Your message has been successfully added as a Lead.';
+	else
+		return "Lead creation is failed. Try again";
+}
+
 function save_faq_comment($faqid,$comment)
 {
 	global $adb;
