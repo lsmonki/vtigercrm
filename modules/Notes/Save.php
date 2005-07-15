@@ -37,8 +37,15 @@ if(isset($_REQUEST['mode']))
         $focus->mode = $_REQUEST['mode'];
 }
 
+//Check if the file is exist or not.
+if(!is_file($_FILES["filename"]["name"]) && $_FILES["filename"]["name"] != '')
+{
+	$file_upload_error = true;
+	$_FILES = '';
+}
+
 //Added for retrieve the old existing attachments when duplicated without new attachment
-if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit')
+if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
 {
 	$sql = "select attachments.attachmentsid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid=attachments.attachmentsid where seattachmentsrel.crmid= ".$_REQUEST['old_id'];
 	$result = $adb->query($sql);
@@ -132,7 +139,7 @@ else if ( ! empty($_REQUEST['old_id']))
 }
 */
 $return_id = $focus->id;
-
+$note_id = $return_id;
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Notes";
@@ -154,6 +161,14 @@ if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module']=='Emails') ||($_R
 }
 
 $local_log->debug("Saved record with id of ".$return_id);
+
+//Redirect to EditView if the given file is not valid.
+if($file_upload_error)
+{
+	$return_module = 'Notes';
+	$return_action = 'EditView';
+	$return_id = $note_id.'&upload_error=true&return_module='.$_REQUEST['return_module'].'&return_action='.$_REQUEST['return_action'].'&return_id='.$_REQUEST['return_id'];
+}
 
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 ?>
