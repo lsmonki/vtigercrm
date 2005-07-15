@@ -32,6 +32,11 @@ global $mod_strings;
 
 $focus = new Note();
 
+if($_REQUEST['upload_error'] == true)
+{
+	echo '<br><b><font color="red"> The file you have selected is not a valid file.</font></b><br>';
+}
+
 if(isset($_REQUEST['record'])) 
 {
 	$focus->id = $_REQUEST['record'];
