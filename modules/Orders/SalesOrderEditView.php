@@ -33,6 +33,10 @@ require_once('include/FormValidationUtil.php');
 global $app_strings;
 global $mod_strings;
 global $current_user;
+global $vtlog;
+
+$vtlog->logthis("Inside Sales Order EditView",'debug');
+
 
 $focus = new SalesOrder();
 
@@ -126,9 +130,13 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
     	$focus->mode = ''; 	
 } 
 
-if(isset($_REQUEST['potential_id']))
+if(isset($_REQUEST['potential_id']) || $_REQUEST['potential_id'] !='')
 {
         $focus->column_fields['potential_id'] = $_REQUEST['potential_id'];
+	$vtlog->logthis("Sales Order EditView: Potential Id from the request is ".$_REQUEST['potential_id'],'debug');
+	$num_of_products = getNoOfAssocProducts("Potentials",$focus,$focus->column_fields['potential_id']);
+        $associated_prod = getAssociatedProducts("Potentials",$focus,$focus->column_fields['potential_id']);
+
 }
 
 if(isset($_REQUEST['product_id']) || $_REQUEST['product_id'] !='')
@@ -258,14 +266,15 @@ elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 	$xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
 	$xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
 }
-elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
+elseif((isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] != '') || (isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '')) {
         $xtpl->assign("ROWCOUNT", $num_of_products);
         $xtpl->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$InvTotal = getInventoryTotal($_REQUEST['return_module'],$_REQUEST['return_id']);
         $xtpl->assign("MODE", $focus->mode);
         $xtpl->assign("TAXVALUE", "0.000");
         $xtpl->assign("ADJUSTMENTVALUE", "0.000");
-        $xtpl->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
-        $xtpl->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);
+        $xtpl->assign("SUBTOTAL", $InvTotal.".00");
+        $xtpl->assign("GRANDTOTAL", $InvTotal.".00");
 
 }
 else
