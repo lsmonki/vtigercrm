@@ -39,7 +39,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 
         $focus->id=$_REQUEST['record'];
         $focus->retrieve_entity_info($_REQUEST['record'],'Contacts');
-		$vtlog->logthis("Entity info successfully retrieved for DetailView.",'info');
+	$vtlog->logthis("Entity info successfully retrieved for Contact DetailView.",'info');
 	$focus->firstname=$focus->column_fields['firstname'];
         $focus->lastname=$focus->column_fields['lastname'];
 }
