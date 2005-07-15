@@ -45,6 +45,11 @@ elseif($_REQUEST['return_module'] == "Potentials")
 	$relation_query = "UPDATE salesorder set potentialid='' where salesorderid=".$_REQUEST['record'];
 	$adb->query($relation_query);
 }
+elseif($_REQUEST['return_module'] == "Contacts")
+{
+	$relation_query = "UPDATE salesorder set contactid='' where salesorderid=".$_REQUEST['record'];
+	$adb->query($relation_query);
+}
 elseif($_REQUEST['return_module'] == "Products")
 {
 	//$relation_query = "DELETE from soproductrel where salesorderid=".$_REQUEST['record']." and productid=".$_REQUEST['return_id'];
