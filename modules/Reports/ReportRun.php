@@ -1207,6 +1207,7 @@ class ReportRun extends CRMEntity
 	{
                  global $adb;
          	 global $modules;
+		 global $mod_strings;
 
 		if($outputformat == "HTML")
 		{
@@ -1310,7 +1311,7 @@ class ReportRun extends CRMEntity
 				
 				$totalhtml = '
 				<tr>
-				<td colspan='.($y+1).' class="rptTotal">Grand Total: '.$noofrows.' Records</td>
+				<td colspan='.($y+1).' class="rptTotal">'.$mod_strings['LBL_GRAND_TOTAL'].': '.$noofrows.' Records</td>
 				</tr>';
 				
 				$sHTML = '<html>
@@ -1318,7 +1319,7 @@ class ReportRun extends CRMEntity
 				<body>
 				 <table cellpadding="0" cellspacing="0" border="0" class="rptTable">
 				 <tr>
-				 	<td class="rptTitle" colspan="'.$y.'">Generated Report</td>
+				 	<td class="rptTitle" colspan="'.$y.'">'.$mod_strings['LBL_GENERATED_REPORT'].'</td>
 				 </tr>
 				  <tr>'. 
 				   $header

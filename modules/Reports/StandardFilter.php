@@ -77,19 +77,34 @@ function getPrimaryStdFilterHTML($module,$selected="")
 {
 	global $app_list_strings;
 	global $ogReport;
+	global $current_language;
+
+        $mod_strings = return_module_language($current_language,$module);
 
 	$result = $ogReport->getStdCriteriaByModule($module);
-
+	
 	if(isset($result))
 	{
 		foreach($result as $key=>$value)
 		{
-			if($key == $selected)
+			if(isset($mod_strings[$value]))
 			{
-			$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+				if($key == $selected)
+				{
+					$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$mod_strings[$value]."</option>";
+				}else
+				{
+					$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$mod_strings[$value]."</option>";
+				}
 			}else
 			{
-			$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+				if($key == $selected)
+				{
+					$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+				}else
+				{
+					$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$module]." - ".$value."</option>";
+				}
 			}
 		}
 	}
@@ -101,6 +116,7 @@ function getSecondaryStdFilterHTML($module,$selected="")
 {
 	global $app_list_strings;
 	global $ogReport;
+	global $current_language;
 
 	if($module != "")
         {
@@ -108,16 +124,29 @@ function getSecondaryStdFilterHTML($module,$selected="")
         	for($i=0;$i < count($secmodule) ;$i++)
         	{
 			$result = $ogReport->getStdCriteriaByModule($secmodule[$i]);
+			$mod_strings = return_module_language($current_language,$secmodule[$i]);
         		if(isset($result))
         		{
                 		foreach($result as $key=>$value)
                 		{
-                        		if($key == $selected)
-					{
-					$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$value."</option>";
+                        		if(isset($mod_strings[$value]))
+                                        {
+						if($key == $selected)
+						{
+							$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$mod_strings[$value]."</option>";
+						}else
+						{
+							$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$mod_strings[$value]."</option>";
+						}
 					}else
 					{
-					$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$value."</option>";
+						if($key == $selected)
+						{
+							$shtml .= "<option selected value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$value."</option>";
+						}else
+						{
+							$shtml .= "<option value=\"".$key."\">".$app_list_strings['moduleList'][$secmodule[$i]]." - ".$value."</option>";
+						}
 					}
                 		}
         		}

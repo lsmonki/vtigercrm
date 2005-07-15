@@ -16,30 +16,23 @@
 	<input type="hidden" name="action" value="SaveReportFolder">
 	<input type="hidden" name="return_module" value="{RETURN_MODULE}">
 	<input type="hidden" name="return_action" value="{RETURN_ACTION}">
-
-   <!--<table width="100%" border="0" cellpadding="0" cellspacing="0">
-        <tr>
-        <td class="title hline">Create New Report Folder</td>
-        </tr>
-    </table>
-    <p></p>-->
     <table width="50%" border=0 cellPadding="0" cellSpacing="0">
       <tr>
-        <td><div align='right'><font class="required">*</font> Indicates required field</div></td>
+        <td><div align='right'><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font> {APP.NTC_REQUIRED}</div></td>
       </tr>
     </table>
     <table width="50%" border=0 cellPadding="0" cellSpacing="1" class="formOuterBorder">
       <tr>
-        <td class="formSecHeader" colspan="2">Folder Details</td>
+        <td class="formSecHeader" colspan="2">{MOD.LBL_REP_FOLDER_DTLS}</td>
       </tr>
             <tr>
-                	<td class='dataLabel'><font class="required">*</font> Folder Name:</td>
+                <td class='dataLabel'><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font> {MOD.LBL_REP_FOLDER_NAME}</td>
                 <td>
-			<input class='textField' type='text' name='folderName' value="{FOLDERNAME}" size="25">
+		<input class='textField' type='text' name='folderName' value="{FOLDERNAME}" size="25">
                 </td>
             </tr>
             <tr>
-                <td class='dataLabel'>Folder Description:</td>
+                <td class='dataLabel'>{MOD.LBL_REP_FOLDER_DESC}</td>
                 <td>
 			<input class='textField' type='text' name='folderDesc' value="{FOLDERDESC}" size="40">
                 </td>
@@ -49,11 +42,12 @@
     <table width="50%" border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td><div align="center">
-                <input type="submit" class="button" name="save" value="Save"  tabindex="2">
-                <input name="cancel" class="button" type="button" value="Cancel" onclick='window.history.back()'>
+                <input type="submit" class="button" name="save" value="{APP.LBL_SAVE_LABEL}"  tabindex="2">
+                <input name="cancel" class="button" type="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}" onclick='window.history.back()'>
             </div></td>
         </tr>
     </table>
+<br><br>    
 </body>
 <script language="javascript">
 function trim(s) {

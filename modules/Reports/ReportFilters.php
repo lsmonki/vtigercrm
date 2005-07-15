@@ -8,6 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
+global $mod_strings;
 ?>
 <html>
 <head>
@@ -21,7 +22,7 @@
         <br>
          <table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
             <tr>
-        	<td class="uline"><strong>Standard Filters:</strong></td>
+        	<td class="uline"><strong><?php echo $mod_strings['LBL_STANDARD_FILTER'];?>:</strong></td>
             </tr>
             <tr><td>
 		<?php include("modules/Reports/StandardFilter.php"); ?>
@@ -30,7 +31,7 @@
           <br>
         <table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
             <tr>
-        	<td class="uline"><strong>Advanced Filters:</strong></td>
+        	<td class="uline"><strong><?php echo $mod_strings['LBL_ADVANCED_FILTER'];?>:</strong></td>
             </tr>
             <tr><td>
 		<?php include("modules/Reports/AdvancedFilter.php");?>

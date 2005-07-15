@@ -31,7 +31,7 @@ global $currentModule;
 global $image_path;
 global $theme;
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Create New Report Folder", true);
+echo get_module_title($mod_strings['LBL_MODULE_NAME'],$mod_strings['LBL_REP_FOLDER'], true);
 echo "\n<BR>\n";
 
 $new_report_form=new XTemplate ('modules/Reports/NewReportFolder.html');

@@ -27,7 +27,7 @@ global $image_path;
 global $theme;
 global $focus_list;
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Create Report", true);
+echo get_module_title($mod_strings['LBL_MODULE_NAME'],$mod_strings['LBL_CREATE_REPORT'], true);
 echo "\n<BR>\n";
 
 function getPrimaryModuleList()

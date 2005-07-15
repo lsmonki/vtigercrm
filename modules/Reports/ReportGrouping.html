@@ -35,16 +35,16 @@
           <td colspan="3"><table border="0" cellspacing="5" cellpadding="0">
               <tr class="bodyText">
 		
-                <td width="23%" nowrap>Summarize information by:</td>
-                <td width="12%" nowrap>Sort Order:</td>
-                <td width="65%" nowrap style="visibility:hidden">Group Dates By:</td>
+                <td width="40%" nowrap>{MOD.LBL_GROUPING_SUMMARIZE}</td>
+                <td width="50%" nowrap>{MOD.LBL_GROUPING_SORT}</td>
+
               </tr>
               <tr>
 
                 <td>
                 
         <select name="Group1" class="select" onchange='updateXAxisFields( this.options[ this.selectedIndex ].value, this.options[ this.selectedIndex ].label )'>
-            <option value="none">None</option>    
+            <option value="none">{MOD.LBL_NONE}</option>    
             {BLOCK1}            
         </select>                        
             </td>            
@@ -62,16 +62,14 @@
             
           <td colspan="3"><table border="0" cellspacing="5" cellpadding="0">
               <tr class="bodyText">	
-                <td width="23%" nowrap>and then by:</td>
-                <td width="12%" nowrap>Sort Order:</td>
-                <td width="65%" nowrap style="visibility:hidden">Group Dates By:</td>
-
+                <td width="30%" nowrap>{MOD.LBL_GROUPING_THEN_BY}</td>
+                <td width="50%" nowrap>{MOD.LBL_GROUPING_SORT}</td>
               </tr>
               <tr>
                 <td>
                 
         <select name="Group2" class="select" onchange='updateXAxisFields( this.options[ this.selectedIndex ].value, this.options[ this.selectedIndex ].label )'>
-            <option value="none">None</option>    
+            <option value="none">{MOD.LBL_NONE}</option>    
         {BLOCK2}          
         </select>                        
             </td>            
@@ -92,16 +90,16 @@
           <td colspan="3"><table border="0" cellspacing="5" cellpadding="0">
               <tr class="bodyText">
 		
-                <td width="23%" nowrap>and finally by:</td>
-                <td width="12%" nowrap>Sort Order:</td>
-                <td width="65%" nowrap style="visibility:hidden">Group Dates By:</td>
+                <td width="40%" nowrap>{MOD.LBL_GROUPING_FINALLY_BY}</td>
+                <td width="50%" nowrap>{MOD.LBL_GROUPING_SORT}</td>
+
               </tr>
 
               <tr>
                 <td>
                 
         <select name="Group3" class="select" onchange='updateXAxisFields( this.options[ this.selectedIndex ].value, this.options[ this.selectedIndex ].label )'>
-            <option value="none">None</option>    
+            <option value="none">{MOD.LBL_NONE}</option>    
             {BLOCK3}
         </select>                        
             </td>            

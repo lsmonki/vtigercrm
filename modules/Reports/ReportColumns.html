@@ -163,12 +163,6 @@
             }
         }        
         
-        function previous()
-        {
-            formSelectColumnString();
-            selectAction('/crm/CustomReport.do?curstep=2&step=1');
-        }
-        
         function selectAction( url )
         {
             formSelectColumnString();
@@ -186,9 +180,9 @@
     <td>
     <br> <table border="0" align="center" cellpadding="0" cellspacing="2">
         <tr> 
-            <td><strong>Available Columns:</strong></td>
+            <td><strong>{MOD.LBL_AVAILABLE_COLUMNS}</strong></td>
             <td>&nbsp;</td>
-            <td><strong>Selected Columns:</strong></td>
+            <td><strong>{MOD.LBL_SELECTED_COLUMNS}</strong></td>
 
             <td>&nbsp;</td>
         </tr>
@@ -202,7 +196,7 @@
         <td><table border="0" align="center" cellpadding="0" cellspacing="5">
             <tr> 
                 <td><div align="center"> 
-                    <input type="button" name="Button" value="Add" class="button" onClick="addColumn()">
+                    <input type="button" name="Button" value="{MOD.LBL_ADD_BUTTON}" class="button" onClick="addColumn()">
 
                 </div></td>
             </tr>

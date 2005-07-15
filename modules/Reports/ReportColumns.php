@@ -59,7 +59,7 @@ function getPrimaryColumnsHTML($module)
 	global $current_language;
 
 	$mod_strings = return_module_language($current_language,$module);
-
+	//print_r($mod_strings);
 	foreach($ogReport->module_list[$module] as $key=>$value)
         {
             $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".$key."\" class=\"select\" style=\"border:none\">";

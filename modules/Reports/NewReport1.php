@@ -31,11 +31,11 @@ global $focus_list;
 
 if(isset($_REQUEST["record"]))
 {
-	echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Customize Report", true);
+	echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_CUSTOMIZE_REPORT'], true);
 	echo "\n<BR>\n";
 }else
 {
-	echo get_module_title($mod_strings['LBL_MODULE_NAME'], "Create Report", true);
+	echo get_module_title($mod_strings['LBL_MODULE_NAME'],$mod_strings['LBL_CREATE_REPORT'], true);
 	echo "\n<BR>\n";
 
 }
@@ -176,7 +176,7 @@ if(isset($_REQUEST["record"]))
         }
     </style>
 
-<div style="margin:10 0 10 0">Provide the following report information</div>
+<div style="margin:10 0 10 0"><?php echo $mod_strings['LBL_NEW_REP1_HDR1']; ?></div>
 <form method='post' name="NewReport" action='index.php'>
   <input type="hidden" name='modulesString' value=''/>
   <input type="hidden" name='primarymodule' value="<?php echo $primarymodule?>"/>
@@ -190,7 +190,7 @@ if(isset($_REQUEST["record"]))
   <input type="hidden" name='folder' value="<?php echo $folderid?>"/>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='tab1'>
     <tr>
-      <td class="formSecHeader"><a href="javascript:displayStep(1)" class="tabLink">Report Type</a></td>
+      <td class="formSecHeader"><a href="javascript:displayStep(1)" class="tabLink"><?php echo $mod_strings['LBL_REPORT_TYPE']; ?></a></td>
     </tr>
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='step1' style="display:block">
@@ -201,7 +201,7 @@ if(isset($_REQUEST["record"]))
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='tab2' style="margin-top:1px;">
     <tr>
-      <td class="formSecHeader"><a href="javascript:displayStep(2)" class="tabLink">Select Columns</a></td>
+      <td class="formSecHeader"><a href="javascript:displayStep(2)" class="tabLink"><?php echo $mod_strings['LBL_SELECT_COLUMNS']; ?></a></td>
     </tr>
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='step2' style="display:none">
@@ -212,7 +212,7 @@ if(isset($_REQUEST["record"]))
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='tab3' style="margin-top:1px;">
     <tr>
-      <td class="formSecHeader"><a href="javascript:displayStep(3)" class="tabLink">Specify Grouping</a></td>
+      <td class="formSecHeader"><a href="javascript:displayStep(3)" class="tabLink"><?php echo $mod_strings['LBL_SPECIFY_GROUPING']; ?></a></td>
     </tr>
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='step3' style="display:none">
@@ -223,7 +223,7 @@ if(isset($_REQUEST["record"]))
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='tab4' style="margin-top:1px;">
     <tr>
-      <td class="formSecHeader"><a href="javascript:displayStep(4)" class="tabLink">Choose Columns to Total</a></td>
+      <td class="formSecHeader"><a href="javascript:displayStep(4)" class="tabLink"><?php echo $mod_strings['LBL_COLUMNS_TO_TOTAL']; ?></a></td>
     </tr>
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='step4' style="display:none">
@@ -234,7 +234,7 @@ if(isset($_REQUEST["record"]))
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='tab5' style="margin-top:1px;">
     <tr>
-      <td class="formSecHeader"><a href="javascript:displayStep(5)" class="tabLink">Specify Criteria</a></td>
+      <td class="formSecHeader"><a href="javascript:displayStep(5)" class="tabLink"><?php echo $mod_strings['LBL_SPECIFY_CRITERIA'];?></a></td>
     </tr>
   </table>
   <table width="80%" border="0" cellspacing="0" cellpadding="2" class="formOuterBorder" id='step5' style="display:none">
@@ -246,8 +246,8 @@ if(isset($_REQUEST["record"]))
   <table width="80%" border="0" cellspacing="0" cellpadding="0">
     <tr>
       <td> <div align="center"><br>
-          <input name="btnSaveAndRun" class="button" type="button" value="Save and Run" onclick='saveAndRunReport()'/>
-          <input name="cancel" class="button" type="button" value="Cancel" onClick="cancelWizard()">
+          <input name="btnSaveAndRun" class="button" type="button" value="<?php echo $mod_strings['LBL_SAVERUN_BUTTON'];?>" onclick='saveAndRunReport()'/>
+          <input name="cancel" class="button" type="button" value="<?php echo $app_strings['LBL_CANCEL_BUTTON_LABEL'];?>" onClick="cancelWizard()">
         </div></td>
     </tr>
   </table>

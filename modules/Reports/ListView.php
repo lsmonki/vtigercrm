@@ -41,9 +41,9 @@ $list_report_form->assign("APP", $app_strings);
 $list_report_form->assign("IMAGE_PATH", $image_path);
 
 //report creation button
-$newrpt_button = '<input type="button" class="button" name="newReport" value="Create New Report" onclick=invokeAction("newReport") >';
+$newrpt_button = '<input type="button" class="button" name="newReport" value="'.$mod_strings[LBL_REP_BUTTON].'" onclick=invokeAction("newReport") >';
 //report folder creation button
-$newrpt_fldr_button = '<input type="button" class="button" name="newReportFolder" value="Create New Report Folder" onclick=invokeAction("newReportFolder") >';
+$newrpt_fldr_button = '<input type="button" class="button" name="newReportFolder" value="'.$mod_strings[LBL_REP_FOLDER_BUTTON].'" onclick=invokeAction("newReportFolder") >';
 
 $list_report_form->assign("NEWRPT_BUTTON",$newrpt_button);
 $list_report_form->assign("NEWRPT_FLDR_BUTTON",$newrpt_fldr_button);

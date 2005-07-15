@@ -53,9 +53,6 @@ $sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
     {
         document.location.href = url;
     }
-    
-//window.open("index.php?module=Reports&action=CreatePDF&record=6","test","width=950,height=650,top=20,left=20;toolbar=no,status=no,menubar=no,directories=no,resizable=yes,scrollbar=no")
-
 </script>
 </head>
 <body>
@@ -66,7 +63,7 @@ echo get_module_title($mod_strings['LBL_MODULE_NAME'], $ogReport->reportname, fa
 <form name="NewReport" action="index.php" method="POST">
     <table width="90%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
         <tr>
-          <td class="formSecHeader">Filter Options:</td>
+          <td class="formSecHeader"><?php echo $mod_strings['LBL_FILTER_OPTIONS'];?>:</td>
         </tr>
         <tr>
           <td>    
@@ -82,11 +79,11 @@ echo get_module_title($mod_strings['LBL_MODULE_NAME'], $ogReport->reportname, fa
 <br>
     <table align='center' border="0" cellspacing="2" cellpadding="2">
         <tr><td>
-	    <input id="btnExport" name="btnExport" value="Export To PDF" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=CreatePDF&record=<?php echo $reportid; ?>')" title="Export To PDF">
+	    <input id="btnExport" name="btnExport" value="<?php echo $mod_strings['LBL_EXPORTPDF_BUTTON']?>" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=CreatePDF&record=<?php echo $reportid; ?>')" title="Export To PDF">
 
-            <input value="Customize" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=NewReport1&record=<?php echo $reportid; ?>' )" title="Customize">
+            <input value="<?php echo $mod_strings['LBL_CUSTOMIZE_BUTTON'];?>" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=NewReport1&record=<?php echo $reportid; ?>' )" title="Customize">
 
-	    <input value="Apply filter" class="button" type="submit" title="Apply filter"/>
+	    <input value="<?php echo $mod_strings['LBL_APPLYFILTER_BUTTON'];?>" class="button" type="submit" title="Apply filter"/>
 
         </td></tr>        
     </table>    

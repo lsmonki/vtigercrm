@@ -19,7 +19,7 @@ typeofdata['N'] = ['e','n','l','g','m','h'];
 typeofdata['T'] = ['e','n','l','g','m','h'];
 typeofdata['I'] = ['e','n','l','g','m','h'];
 typeofdata['C'] = ['e','n'];
-typeofdata['DT'] = ['e','n'];
+typeofdata['D'] = ['e','n','l','g','m','h'];
 
 var fLabels = new Array();
 fLabels['e'] = 'equals';
@@ -96,66 +96,64 @@ function updatefOptions(sel, opSelName) {
   <!--<tr>
     <td> <table width="100%" border=0 cellspacing=0 cellpadding=0>-->
         <tr>
-          <td height="25">Set the search conditions to further restrict the list.</td>
+          <td height="25">{MOD.LBL_AF_HDR1}</td>
         </tr>
         <tr>
           <td><ul>
-              <li>You can use &quot;or&quot; filters by entering multiple items
-                in the third column.</li>
-              <li>You can enter up to 10 items, separated by commas. For example:
-                CA, NY, TX, FL searches for CA or NY or TX or FL.</li>
+              <li>{MOD.LBL_AF_HDR2}</li>
+              <li>{MOD.LBL_AF_HDR3}</li>
             </ul>
 	    </td>
         </tr>
 	<tr><td>&nbsp;</td></tr>
 	<tr>
           <td width="100%" ><select name="fcol1" id="fcol1" onchange="updatefOptions(this, 'fop1');">
-              <option value="">None</option>
+              <option value="">{MOD.LBL_NONE}</option>
 	      {BLOCK1}
               </select> &nbsp;
 	      <select name="fop1" id="fop1">
-              		<option value="">None</option>
+              		<option value="">{MOD.LBL_NONE}</option>
 			{FOPTION1}
             </select> &nbsp; <input name="fval1" id="fval1" type="text" size=20 maxlength=80 value="{VALUE1}">
             &nbsp;and</TD>
         </TR>
         <TR>
           <TD><select name="fcol2" id="fcol2" onchange="updatefOptions(this, 'fop2');">
-              <option value="">None</option>
+              <option value="">{MOD.LBL_NONE}</option>
 	      {BLOCK2}
               </select> &nbsp;
 	      <select name="fop2" id="fop2">
-              <option value="">None</option>
+              <option value="">{MOD.LBL_NONE}</option>
 	      {FOPTION2}
             </select> &nbsp; <input name="fval2" id="fval2" type="text" size=20 maxlength=80 value="{VALUE2}">
             &nbsp;and</TD>
         </TR>
         <TR>
           <TD><select name="fcol3" id="fcol3" onchange="updatefOptions(this, 'fop3');">
-              <option value="">None</option>
+              <option value="">{MOD.LBL_NONE}</option>
 	      {BLOCK3} 
               </select> &nbsp; 
               <select name="fop3" id="fop3">
-              <option value="">None</option>
+              <option value="">{MOD.LBL_NONE}</option>
 	      {FOPTION3} 
             </select> &nbsp; <input name="fval3" id="fval3" type="text" size=20 maxlength=80 value="{VALUE3}"> 
             &nbsp;and</TD>
         </TR>
         <TR> 
           <TD> <select name="fcol4" id="fcol4" onchange="updatefOptions(this, 'fop4');">
-              <option value="">None</option>
+              <option value="">{MOD.LBL_NONE}</option>
 	      {BLOCK4}
 	      </select> &nbsp; 
 	      <select name="fop4" id="fop4">
-              <option value="">None</option>
+              <option value="">{MOD.LBL_NONE}</option>
 	      {FOPTION4} 
             </select> &nbsp; <input name="fval4" id="fval4" type="text" size=20 maxlength=80 value="{VALUE4}"> 
             &nbsp;and</TD>
         </TR>
         <TR>
           <TD><select name="fcol5" id="fcol5" onchange="updatefOptions(this, 'fop5');">
-              <option value="">None</option>{BLOCK5}</select> &nbsp;
-	      <select name="fop5" id="fop5"><option value="">None</option>{FOPTION5}</select> &nbsp;
+              <option value="">{MOD.LBL_NONE}</option>{BLOCK5}</select> &nbsp;
+	      <select name="fop5" id="fop5"><option value="">{MOD.LBL_NONE}</option>{FOPTION5}</select> &nbsp;
 	      <input name="fval5" id="fval5" type="text" size=20 maxlength=80 value="{VALUE5}">
 	  </TD>
         </TR>

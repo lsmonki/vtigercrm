@@ -11,22 +11,8 @@
 <!-- BEGIN:main -->
 <html>
 <head>
-    <title></title>
-    <link href="styles/elegant.css" rel="stylesheet" type="text/css">
-
-    <script language="JavaScript" type="text/JavaScript" src="javascript/general.js"></script>
-    <script language='javascript'>
-        function goToURL( url, title )
-        {
-            window.open(url,title,"width=950,height=650,top=20,left=20;toolbar=no,status=no,menubar=no,directories=no,resizable=yes,scrollbar=no")
-        }        
-        
-        function selectAction( url )
-        {
-            document.NewReport.action = url;
-            document.NewReport.submit();
-        }
-    </script>    
+<title></title>
+<script language="JavaScript" type="text/JavaScript" src="javascript/general.js"></script>
 </head>
 <body>
 <table width="100%" cellspacing="0" cellpadding="0">
@@ -35,24 +21,15 @@
         <tr>
           <td> <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
               <tr>
-                <td width="35%" height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Columns</td>
+                <td width="35%" height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;">{MOD.LBL_COLUMNS}</td>
                 <td width="10%" height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;">
-		<div align="center">Sum</div></td>
+		<div align="center">{MOD.LBL_COLUMNS_SUM}</div></td>
                 <td width="10%" height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;">
-		<div align="center">Average</div></td>
-                <td width="15%" height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;">
-		<div align="center">Lowest Value</div></td>
-                <td width="20%" class="moduleListTitle"><div align="center">Largest Value</div></td>
+		<div align="center">{MOD.LBL_COLUMNS_AVERAGE}</div></td>
+                <td width="25%" height="21" class="moduleListTitle" style="padding:0px 3px 0px 3px;">
+		<div align="center">{MOD.LBL_COLUMNS_LOW_VALUE}</div></td>
+                <td width="30%" class="moduleListTitle"><div align="center">{MOD.LBL_COLUMNS_LARGE_VALUE}</div></td>
               </tr>
-              <!--<tr class="oddListRow">
-                <td height="21" style="padding:0px 3px 0px 3px;">Record Count</td>
-                <td height="21" style="padding:0px 3px 0px 3px;"><div align="center">
-                    <input type="checkbox"/>
-                  </div></td>
-                <td height="21" style="padding:0px 3px 0px 3px;"></td>
-                <td height="21" style="padding:0px 3px 0px 3px;"></td>
-                <td height="21" style="padding:0px 3px 0px 3px;"></td>
-              </tr>-->
               {BLOCK1}
             </table></td>
         </tr>

@@ -71,20 +71,38 @@ $report_group->assign("BLOCK3",$BLOCK1);
 function getPrimaryColumns_GroupingHTML($module,$selected="")
 {
         global $ogReport;
+	
+	global $app_list_strings;
+        global $current_language;
+
+        $mod_strings = return_module_language($current_language,$module);
 
         foreach($ogReport->module_list[$module] as $key=>$value)
         {
-            $shtml .= "<optgroup label=\"".$module." ".$key."\" class=\"select\" style=\"border:none\">";
+            $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".$key."\" class=\"select\" style=\"border:none\">";
 	    if(isset($ogReport->pri_module_columnslist[$module][$key]))
 	    {
 		foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
 		{
-			if($selected == $field)
+			if(isset($mod_strings[$fieldlabel]))
 			{
-				$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
+				if($selected == $field)
+				{
+					$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+				}else
+				{
+					$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+				}
 			}else
 			{
-				$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+				if($selected == $field)
+				{
+					$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
+				}else
+				{
+					$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+				}
+
 			}
 		}
            }
@@ -95,25 +113,42 @@ function getPrimaryColumns_GroupingHTML($module,$selected="")
 function getSecondaryColumns_GroupingHTML($module,$selected="")
 {
         global $ogReport;
+	global $app_list_strings;
+        global $current_language;
+
         if($module != "")
         {
         $secmodule = explode(":",$module);
         for($i=0;$i < count($secmodule) ;$i++)
         {
-                foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
+                $mod_strings = return_module_language($current_language,$secmodule[$i]);
+		foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
                 {
-                        $shtml .= "<optgroup label=\"".$secmodule[$i]." ".$key."\" class=\"select\" style=\"border:none\">";
+                        $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".$key."\" class=\"select\" style=\"border:none\">";
 			if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
 			{
 				foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
 				{
-					if($selected == $field)
+					if(isset($mod_strings[$fieldlabel]))
 					{
-						$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
+						if($selected == $field)
+						{
+							$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+						}else
+						{
+							$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+						}
 					}else
 					{
-						$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+						if($selected == $field)
+						{
+							$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
+						}else
+						{
+							$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+						}
 					}
+
 
 				}
 			}
