@@ -33,7 +33,7 @@ global $app_list_strings;
 
 $focus = new Potential();
 
-if(isset($_REQUEST['record'])) {
+if(isset($_REQUEST['record'])  && $_REQUEST['record']!='') {
     $focus->retrieve_entity_info($_REQUEST['record'],"Potentials");
     $focus->id = $_REQUEST['record'];	
     $focus->name=$focus->column_fields['potentialname'];
@@ -56,6 +56,8 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $focus->id);
+
+$xtpl->assign("ACCOUNTID",$focus->column_fields['account_id']);
 
 if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
 else $xtpl->assign("NAME", "");
@@ -107,7 +109,7 @@ if(isPermitted("Potentials",1,$_REQUEST['record']) == 'yes')
 }
 if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("CONVERTINVOICE","<td><input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Invoice'; this.form.return_action.value='DetailView'; this.form.convertmode.value='potentoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\"></td>");
+	$xtpl->assign("CONVERTINVOICE","<td><input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Potentials'; this.form.return_action.value='DetailView'; this.form.convertmode.value='potentoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\"></td>");
 }
 if(isPermitted("Potentials",2,$_REQUEST['record']) == 'yes')
 {
