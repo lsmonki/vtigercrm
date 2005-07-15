@@ -45,7 +45,6 @@ function renderRelatedActivities($query,$id)
         if(isPermitted("Activities",1,"") == 'yes')
         {
 		$button .= '<input title="'.$app_strings['LBL_NEW_TASK'].'" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.activity_mode.value=\'Task\';this.form.return_module.value=\'Quotes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TASK'].'">&nbsp;';
-		$button .= '<input title="'.$app_strings['LBL_NEW_EVENT'].'" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';;this.form.activity_mode.value=\'Events\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Quotes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;';
 	}
 	$returnset = '&return_module=Quotes&return_action=DetailView&return_id='.$id;
 
