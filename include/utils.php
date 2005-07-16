@@ -3228,6 +3228,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 		}	
 		$list_header .= '</tr>';
 	}
+	$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 	return $list_header;
 }
 
