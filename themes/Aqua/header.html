@@ -28,10 +28,10 @@
 <body leftmargin="0" topmargin="0" marginheight="0" marginwidth="0" {ONLOAD}>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr class="topBand">
-    <td width="80" height="75" class="tabOffBorder">
+    <td height="75" class="tabOffBorder" valign="bottom">
       <div align="center"><a href="http://www.vtiger.com"><img src="{IMAGE_PATH}/vtiger.jpg" alt="vigercrm" border="0"></a>
       </div></td>
-    <td><table height="75" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <td width="99%"><table height="75" width="98%" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
@@ -53,7 +53,7 @@ function openwin()
 </td>
         </tr>
         <tr>
-          <td valign="bottom" align="middle"> <table width="90%" cellpadding="0" cellspacing="0" border="0">
+          <td valign="bottom" align="middle"> <table width="100%" cellpadding="0" cellspacing="0" border="0">
               <tr>
                 <td width="100%"> <div id="tabcontainer" style="width:200px;overflow:hidden;">
                     <div id="tabcontent" style="position:relative;left:0px;top:0px;">
@@ -72,12 +72,14 @@ function openwin()
                       </table>
                     </div>
                   </div></td>
-                <td class="tabOffBorder" align="right"><table cellpadding="0" cellspacing="1">
+                <td align="left" class="tabOffBorder"><table cellpadding="0" cellspacing="1" border="0" >
                     <tr>
                       <td><img id="scrollleft" src="{IMAGE_PATH}scroll_left.gif" border="0" onclick="moveleft()" onmousedown="scrolleft();this.src='{IMAGE_PATH}scroll_left_down.gif';" onmouseup="this.src='{IMAGE_PATH}scroll_left.gif';clearTimeout(moveleftvar)" onmouseout="this.src='{IMAGE_PATH}scroll_left.gif';clearTimeout(moveleftvar)"></td>
                       <td><img id="scrollright" src="{IMAGE_PATH}scroll_right.gif" border="0" onclick="moveright()" onmousedown="scrolright();this.src='{IMAGE_PATH}scroll_right_down.gif';" onmouseup="this.src='{IMAGE_PATH}scroll_right.gif';clearTimeout(moverightvar)"  onmouseout="this.src='{IMAGE_PATH}scroll_right.gif';clearTimeout(moverightvar)"></td>
+   										
                     </tr>
                   </table></td>
+                  <td class="tabOffBorder">&nbsp;</td>
               </tr>
             </table></td>
         </tr>
@@ -189,18 +191,17 @@ function openwin()
     <!-- END: left_form_new_record -->
     <!-- BEGIN: left_form_rss -->
         <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody>
-	<tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('rssblock');">
+	<tr>
             <td class="leftFormHeader" valign="middle" align="left" nowrap width="100%" height="20">{RSSFEEDS_TITLE}</td>
         </tr></tbody>
         </table>
-    <div id="rssblock" style="display:none;">
     <table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" class="leftFormBorder1">
       <tr>
         <td nowrap>
                         {RSSFEEDS}
           </td>
       </tr>
-    </table></div><br>
+    </table><br>
     <!-- END: left_form_rss -->
     <!-- BEGIN: left_form_clock -->
 	<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody>

@@ -652,6 +652,7 @@ A.listFormHeaderLinks:hover 	{ FONT-WEIGHT: bold; FONT-SIZE: 8pt; COLOR: #000000
 .rptGrpHead {
 	background: #FFF;
 	border-bottom: 1px solid #FFF;
+	border-top: 1px solid #F0E8D9;
 	font-weight: normal;
 }
 .rptData {
