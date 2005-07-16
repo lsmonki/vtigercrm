@@ -281,7 +281,7 @@ $mod_strings = Array(
 
 //New addition for 4.2 GA
 'LBL_USER_FIELDS'=>'User Fields',
-
+'LBL_NOTE_DO_NOT_REMOVE_INFO'=>'Note: Donot remove or alter the values within {  }',
 
 );
 
