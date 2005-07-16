@@ -709,6 +709,23 @@ $app_strings = Array(
 'LBL_NEW_SORDER_BUTTON_TITLE'=>'New Sales Order [Alt+E]',
 'LBL_NEW_SORDER_BUTTON_KEY'=>'E',
 'LBL_NEW_SORDER_BUTTON'=>'New Sales Order',
+
+'LBL_PRODUCT_DETAILS'=>'Product Details',
+'LBL_PRODUCT'=>'Product',
+'LBL_QTY_IN_STOCK'=>'Qty In Stock',
+'LBL_QTY'=>'Qty',
+'LBL_UNIT_PRICE'=>'Unit Price',
+'LBL_LIST_PRICE'=>'List Price',
+'LBL_TOTAL'=>'Total',
+'LBL_ADD_PRODUCT'=>'Add Product',
+'LBL_SUB_TOTAL'=>'Sub Total',
+'LBL_TAX'=>'Tax',
+'LBL_ADJUSTMENT'=>'Adjustment',
+'LBL_GRAND_TOTAL'=>'Grand Total',
+'LBL_QUOTE_ID'=>'Quote Id',
+'LBL_SALES_ORDER_ID'=>'Sales Order Id',
+'LBL_PURCHASE_ORDER_ID'=>'Purchase Order Id',
+'LBL_EXPORT_TO_PDF'=>'Export To PDF',
 	
 );
 
