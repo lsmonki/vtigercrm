@@ -27,10 +27,10 @@ $image_path=$theme_path."images/";
 <br>
 <?php echo $mod_strings['LBL_INV_NOT_DESC'];?>
 <br><br>
-  <table alignment="center" width="80%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
-    <tr> 
-      <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_NOTIFICATION'];?></td>
-      <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_DESCRIPTION'];?></td>
+  <table width="80%" border="0" cellspacing="1" cellpadding="0" class="FormBorder">
+    <tr height="20"> 
+      <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_NOTIFICATION'];?></b></td>
+      <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_DESCRIPTION'];?></b></td>
     </tr>
 <?
 
@@ -51,7 +51,7 @@ for($i=0; $i<$num_rows; $i++)
 	{
 		$ListRow = "evenListRow";
 	}
-	$out .= '<tr class="'.$ListRow.'">';
+	$out .= '<tr class="'.$ListRow.'" height="70">';
 	$out .='<td valign="top" nowrap style="padding:0px 3px 0px 3px;"><a href="index.php?module=Users&action=EditInventoryNotification&record='.$not_id.'">'.$mod_strings[$not_mod].'</a></td>';
 	$out .= '<td valign="top" style="padding:0px 3px 0px 3px;">'.$mod_strings[$not_des].'</td>';
 	$out .= '</tr>';

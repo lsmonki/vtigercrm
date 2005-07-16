@@ -29,10 +29,10 @@ $output = '';
 $output .= '<input type="hidden" name="module" value="Users">';
 $output .= '<input type="hidden" name="action" value="SaveOrgSharing">';
 $output .= '<br><input title="Save" accessKey="C" class="button" type="submit" name="Save" value="'.$mod_strings['LBL_SAVE_PERMISSIONS'].'"><br><br>';
-$output .= '<TABLE width="60%" border=0 cellPadding=0 cellSpacing=0 class="formOuterBorder">';
+$output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="formOuterBorder">';
 $output .= '<tr>';
-$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_ORG_SHARING_PRIVILEGES'].'</td>';
-$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;">Access Privilege</td>';
+$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['LBL_ORG_SHARING_PRIVILEGES'].'</b></td>';
+$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>Access Privilege</b></td>';
 $output .=  '</tr>';
 
 $row=1;

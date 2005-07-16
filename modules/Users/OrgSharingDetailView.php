@@ -28,10 +28,10 @@ $defSharingPermissionData = getDefaultSharingAction();
 $output .= '<input type="hidden" name="module" value="Users">';
 $output .= '<input type="hidden" name="action" value="OrgSharingEditView">';
 $output .= '<br><input title="Edit" accessKey="C" class="button" type="submit" name="Edit" value="'.$mod_strings['LBL_EDIT_PERMISSIONS'].'"><br><br>';
-$output .= '<TABLE width="60%" border=0 cellPadding=0 cellSpacing=0 class="FormBorder">';
+$output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="FormBorder">';
 $output .= '<tr>';
-$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_ORG_SHARING_PRIVILEGES'].'</td>';
-$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;">Access Privilege</td>';
+$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['LBL_ORG_SHARING_PRIVILEGES'].'</b></td>';
+$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>Access Privilege</b></td>';
 $output .=  '</tr>';
 
 $row=1;

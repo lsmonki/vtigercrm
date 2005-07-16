@@ -30,26 +30,26 @@ function getAttachmentsList()
 
 	$result = $adb->query($dbQuery) or die("Couldn't get file list");
 
-$list = '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="90%">';
+$list = '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="90%">';
 
 $list .= '<tr height=20>';
-$list .='<td width="20%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">'.$app_strings['LBL_OPERATION'].'</div></td>';
+$list .='<td width="20%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center"><b>'.$app_strings['LBL_OPERATION'].'</b></div></td>';
 $list .= '';
 
-$list .= '<td width="20%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
-$list .= $app_strings['LBL_FILENAME'].'</td>';
+$list .= '<td width="20%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b>';
+$list .= $app_strings['LBL_FILENAME'].'</b></td>';
 
-$list .= '<td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
-$list .= $mod_strings['LBL_MODULENAMES'].'</td>';
+$list .= '<td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b>';
+$list .= $mod_strings['LBL_MODULENAMES'].'</b></td>';
 
-$list .= '<td width="20%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
-$list .= $app_strings['LBL_UPD_DESC'].'</td>';
+$list .= '<td width="20%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b>';
+$list .= $app_strings['LBL_UPD_DESC'].'</b></td>';
 
-$list .= '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
-$list .= $app_strings['LBL_TYPE'].'</td>';
+$list .= '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b>';
+$list .= $app_strings['LBL_TYPE'].'</td></b>';
 
-$list .= '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
-$list .= $app_strings['LBL_FILE'].'</td>';
+$list .= '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b>';
+$list .= $app_strings['LBL_FILE'].'</b></td>';
 
 $list .= '</tr>';
 

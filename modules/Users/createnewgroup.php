@@ -59,12 +59,12 @@ require_once('include/database/PearDatabase.php');
                 <tbody>
                   <tr>
                     <td>
-                    <div align="right"><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL'];?></font><?php echo $mod_strings['LBL_INDICATES_REQUIRED_FIELD']; ?></div>
+                    <div><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL'];?></font><?php echo $mod_strings['LBL_INDICATES_REQUIRED_FIELD']; ?></div>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <table width="40%" border="0" cellpadding="0"
+              <table width="40%" border="0" cellpadding="5"
  cellspacing="1" class="formOuterBorder">
                 <tbody>
                   <tr>

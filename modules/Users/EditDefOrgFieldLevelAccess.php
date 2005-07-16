@@ -55,10 +55,10 @@ function getStdOutput($fieldListResult, $noofrows, $mod_strings,$profileid)
 	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" width="40%"><tr><td>';
 	$standCustFld .= get_form_header($mod_strings['LBL_FIELD_PERMISSIOM_TABLE_HEADER'], "", false );
 	$standCustFld .= '</td></tr></table>';
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="40%">';
+	$standCustFld .= '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="40%">';
 	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
-	$standCustFld .=  '<td width="50%" nowrap class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_FIELD_PERMISSION_FIELD_NAME'].'</td>';
-	$standCustFld .=  '<td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">'.$mod_strings['LBL_FIELD_PERMISSION_VISIBLE'].'</div></td>';
+	$standCustFld .=  '<td width="50%" nowrap class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['LBL_FIELD_PERMISSION_FIELD_NAME'].'</b></td>';
+	$standCustFld .=  '<td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center"><b>'.$mod_strings['LBL_FIELD_PERMISSION_VISIBLE'].'</b></div></td>';
 	$standCustFld .=  '</tr>';
 	
 	$row=1;

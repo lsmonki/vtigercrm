@@ -63,8 +63,7 @@ require_once('include/utils.php');
                     <input type="hidden" name="action" value="SaveRole">
                     <input type="hidden" name="roleid" value="<?php echo $roleid;    ?>">
                     <input type="hidden" name="mode" value="<?php echo $mode;    ?>">
-              <table width="100%" border="0" cellpadding="0"
- cellspacing="0">
+              <table width="100%" border="0" cellpadding="0" cellspacing="0">
                 <tbody>
                   <tr>
                     <td class="moduleTitle hline"><?php echo $mod_strings['LBL_HDR_ROLE_NAME'];?></td>
@@ -72,17 +71,16 @@ require_once('include/utils.php');
                 </tbody>
               </table>
               <p></p>
-              <table width="40%" border="0" cellpadding="0"
- cellspacing="0">
+              <table width="40%" border="0" cellpadding="0" cellspacing="0">
                 <tbody>
                   <tr>
                     <td>
-                    <div align="right"><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL']; ?></font><?php echo $mod_strings['LBL_INDICATES_REQUIRED_FIELD']; ?> </div>
+                    <div><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL']; ?></font><?php echo $mod_strings['LBL_INDICATES_REQUIRED_FIELD']; ?> </div>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <table width="40%" border="0" cellpadding="0"
+              <table width="40%" border="0" cellpadding="5"
  cellspacing="1" class="formOuterBorder">
                 <tbody>
                   <tr>

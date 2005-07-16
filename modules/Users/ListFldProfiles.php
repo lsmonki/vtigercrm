@@ -44,14 +44,14 @@ $standCustFld = getStdOutput($profileListResult, $noofrows, $mod_strings, $fld_m
 function getStdOutput($profileListResult, $noofrows, $mod_strings, $fld_module)
 {
 	global $adb;
-	echo '<table border="0" cellpadding="0" cellspacing="0" width="40%"><tr><td>';
+	echo '<table border="0" cellpadding="0" cellspacing="0" width="30%"><tr><td>';
 	echo get_form_header("Profiles", "", false );
 	echo '</td></tr></table>';
 	$standCustFld= '';
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="40%">';
+	$standCustFld .= '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="30%">';
 	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
-	$standCustFld .=   '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_NEW_PROFILE_NAME'].'</td>';
-	$standCustFld .=  '</tr>';
+	$standCustFld .=   '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['LBL_NEW_PROFILE_NAME'].'</td>';
+	$standCustFld .=  '</b></tr>';
 	
 	$row=1;
 	for($i=0; $i<$noofrows; $i++,$row++)

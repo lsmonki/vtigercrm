@@ -66,7 +66,7 @@ function getStdOutput($roleResult, $roleid)
 	}
         
         $standCustFld .= '<br><br>'; 
-	$standCustFld .= '<table border="0" cellpadding="1" cellspacing="1" width="50%" class="formOuterBorder">';
+	$standCustFld .= '<table border="0" cellpadding="5" cellspacing="1" width="50%" class="formOuterBorder">';
 	$standCustFld .=  '<tr colspan="2">';
 	$standCustFld .=   '<td class="formSecHeader" colspan="2">Role Information</td>';
 	$standCustFld .=  '</tr>';	

@@ -28,7 +28,7 @@
 		</TR>
 	</TABLE>
 <br>	
-<div align="right" style="width:90%"><font class='required'>{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_INDICATES_REQUIRED_FIELD}</div>
+
 <SCRIPT>
     var allOptions = null;
     function setAllOptions(inputOptions) {
@@ -128,7 +128,7 @@
 
 </SCRIPT>
 
-    <TABLE WIDTH="90%" BORDER=0 CELLSPACING=0 CELLPADDING=1 class="formOuterBorder">
+    <TABLE WIDTH="90%" BORDER=0 CELLSPACING=0 CELLPADDING=5 class="formOuterBorder">
         <TR>
             <TD class="formSecHeader">
             {MOD.LBL_AVAILABLE_MERGE_FIELDS}
@@ -181,7 +181,8 @@
         </TD></TR>
     </TABLE>
 <br>
-<table width="90%" border=0 cellspacing=1 cellpadding=0 class="formOuterBorder">
+<div style="width:90%"><font class='required'>{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_INDICATES_REQUIRED_FIELD}</div>
+<table width="90%" border=0 cellspacing=1 cellpadding=5 class="formOuterBorder">
 <td class="formSecHeader" colspan=5 nowrap>{MOD.LBL_EMAIL_TEMPLATE_INFORMATION}</td>
 <tr><td nowrap class="dataLabel"><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_FOLDER}
 </td><td colspan=4><select name="foldername" tabindex="1" value="{FOLDERNAME}"><option value="Personal">{MOD.LBL_PERSONAL}</option>
@@ -197,6 +198,7 @@
 </td><td valign=top colspan=4><TEXTAREA wrap="SOFT" NAME="body" ROWS="10" COLS="70" tabindex="7">{BODY}</TEXTAREA></td></tr>
 </table>
 <br>
+
   <TABLE WIDTH="90%" CELLPADDING="0" CELLSPACING="0" BORDER="0">
     <TD NOWRAP><div align="center">
         <input type="submit" name="save" value="{APP.LBL_SAVE_BUTTON_LABEL}" class="button" onclick="this.form.action.value='saveemailtemplate'">

@@ -28,10 +28,10 @@ require_once('include/database/PearDatabase.php');
 <input type="submit" class="button" name="Submit" value="<?php echo $mod_strings['LBL_NEW_TEMPLATE']; ?>">
 <br>
 <br>
-<table width="80%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
+<table width="65%" border="0" cellspacing="1" cellpadding="5" class="FormBorder">
   <tr>
-    <td width="30%" class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_TEMPLATE_NAME']; ?></td>
-    <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_DESCRIPTION']; ?></td>
+    <td width="40%" class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_TEMPLATE_NAME']; ?></b></td>
+    <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_DESCRIPTION']; ?></b></td>
   </tr>
   <?php
    $sql = "select * from emailtemplates order by templateid DESC";
@@ -52,7 +52,7 @@ do
   printf("<tr class='oddListRow'> <td height='21' style='padding:0px 3px 0px 3px;'>");
  $templatename = $temprow["templatename"]; 
   printf("<a href=index.php?module=Users&action=detailviewemailtemplate&templateid=".$temprow["templateid"].">%s</a></td>",$temprow["templatename"]);
-  printf("<td height='21' style='padding:0px 3px 0px 3px;'>%s</td>",$temprow["description"]);
+  printf("<td height='21' style='padding:0px 3px 0px 3px;' nowrap>%s</td>",$temprow["description"]);
   $cnt++;
 }while($temprow = $adb->fetch_array($result));
 ?>

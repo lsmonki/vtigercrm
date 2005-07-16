@@ -49,10 +49,10 @@ function getStdOutput($roleListResult, $noofrows, $mod_strings)
 	$standCustFld .= '<input type="hidden" name="action" value="createrole">';
 	$standCustFld .= '<br><input title="New" accessKey="C" class="button" type="submit" name="New" value="'.$mod_strings['LBL_TITLE_ROLE_NAME'].'">';
 	$standCustFld .= '<br><BR>'; 
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="50%">';
+	$standCustFld .= '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="30%">';
 	$standCustFld .=  '<tr>';
-	$standCustFld .=   '<td class="ModuleListTitle" width="18%" height="21" style="padding:0px 3px 0px 3px;"><div align="center">Operation</div></td>';
-	$standCustFld .=   '<td class="ModuleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_ROLE_NAME'].'</td>';
+	$standCustFld .=   '<td class="ModuleListTitle" width="18%" height="21" style="padding:0px 3px 0px 3px;"><div><b>Operation</b></div></td>';
+	$standCustFld .=   '<td class="ModuleListTitle" height="21" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['LBL_ROLE_NAME'].'</b></td>';
 	$standCustFld .=  '</tr>';
 	
 	$row=1;
@@ -70,7 +70,7 @@ function getStdOutput($roleListResult, $noofrows, $mod_strings)
 		$standCustFld .= '<tr class="'.$trowclass.'">';
 		$role_name = $adb->query_result($roleListResult,$i,"name");
 		$role_id = $adb->query_result($roleListResult,$i,"roleid");
-		$standCustFld .= '<td width="18%" height="21" style="padding:0px 3px 0px 3px;"><div align="center">';
+		$standCustFld .= '<td width="18%" height="21" style="padding:0px 3px 0px 3px;"><div>';
 		$standCustFld .= '<a href="index.php?module=Users&action=createrole&mode=edit&roleid='.$role_id.'">'.$app_strings['LNK_EDIT'].'</a>';
 		global $current_user;
         	$current_role = fetchUserRole($current_user->id);

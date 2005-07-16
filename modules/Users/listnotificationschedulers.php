@@ -32,11 +32,11 @@ $image_path=$theme_path."images/";
 <br><br>
 <input class="button" type="submit" value ="<?php echo $mod_strings['LBL_BUTTON_UPDATE'];?>">
 <br><br>
-  <table alignment="center" width="50%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
-    <tr> 
-      <td height="20" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center"><?php echo $mod_strings['LBL_ACTIVE'];?></div></td>
-      <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_NOTIFICATION'];?></td>
-      <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><?php echo $mod_strings['LBL_DESCRIPTION'];?></td>
+  <table width="70%" border="0" cellspacing="1" cellpadding="5" class="FormBorder">
+    <tr height="20"> 
+      <td  class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center"><b><?php echo $mod_strings['LBL_ACTIVE'];?></b></div></td>
+      <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_NOTIFICATION'];?></b></td>
+      <td class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_DESCRIPTION'];?></b></td>
     </tr>
 <?
 

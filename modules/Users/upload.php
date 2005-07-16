@@ -30,7 +30,7 @@
  	<td class="formSecHeader">File Information</td>
 </tr>
  	<td> 
-	<TABLE BORDER="0" cellspacing="1" cellpadding="0">
+	<TABLE BORDER="0" cellspacing="1" cellpadding="5">
 	<TR>
 	   <TD class="dataLabel"><?php echo $mod_strings['LBL_MODULENAMES']; ?>:</TD>
 	   <TD><SELECT name="target_module">

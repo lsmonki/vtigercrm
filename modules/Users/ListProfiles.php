@@ -47,10 +47,10 @@ function getStdOutput($profileListResult, $noofrows, $mod_strings)
 	$standCustFld .= '<input type="hidden" name="action" value="CreateProfile">';
 	$standCustFld .= '<br><input title="New" accessKey="C" class="button" type="submit" name="New" value="New Profile">';
 	$standCustFld .= '<br><BR>'; 
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="50%">';
+	$standCustFld .= '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="40%">';
 	$standCustFld .=  '<tr height=20>';
-	$standCustFld .=   '<td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;"><div align="center">Operation</div></td>';
-	$standCustFld .=   '<td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;">Profile Name</td>';
+	$standCustFld .=   '<td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;"><div align="center"><b>Operation</b></div></td>';
+	$standCustFld .=   '<td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>Profile Name</b></td>';
 	$standCustFld .=  '</tr>';
 	
 	$row=1;

@@ -29,10 +29,10 @@ require_once('include/database/PearDatabase.php');
              <input type="hidden" name="action" value="createnewgroup">
              <input type="submit" class="button" name="Submit" value="<? echo $mod_strings['LBL_CREATE_NEW_GROUP']; ?>">
 <br><br>
-		<table width="30%" border="0" cellspacing="0" cellpadding="0" class="FormBorder">
+		<table width="30%" border="0" cellspacing="1" cellpadding="5" class="FormBorder">
 		<tr>
-		<td class="moduleListTitle" height="20" style='padding:0px 3px 0px 3px;'><?php echo $mod_strings['LBL_GROUP_NAME']; ?></td>
-                <td class="moduleListTitle" style='padding:0px 3px 0px 3px;'><?php echo $mod_strings['LBL_DESCRIPTION']; ?></td>
+		<td class="moduleListTitle" height="20" style='padding:0px 3px 0px 3px;'><b><?php echo $mod_strings['LBL_GROUP_NAME']; ?></b></td>
+                <td class="moduleListTitle" style='padding:0px 3px 0px 3px;'><b><?php echo $mod_strings['LBL_DESCRIPTION']; ?></b></td>
                 </tr>
 <?php
    $sql = "select * from groups";
