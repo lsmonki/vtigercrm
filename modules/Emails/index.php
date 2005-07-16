@@ -24,7 +24,7 @@ require_once ($theme_path."layout_utils.php");
 
 if(isset($_REQUEST['mailconnect']))
 {
-	 echo '<center><font color=red><b>Error connecting mail server!<br> Check in My Accounts->List Mail Server -> List Mail Account </b></color></center><br>';
+	 echo '<center><font color=red><b>'.$mod_strings['LBL_MAIL_CONNECT_ERROR_INFO'].'</b></color></center><br>';
 
 //       echo '<center><font color=red><b>Unable to connect to mail server! </b></color></center><br>';
 }
