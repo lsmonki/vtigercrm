@@ -65,6 +65,7 @@ for($i=0;$i<$noofrows;$i++)
 				     'accountid' => $adb->query_result($list_result, $i, 'accountid'),
                                      'contactid' => $adb->query_result($list_result,$i,'contactid'),
                                      'date_start' => getDisplayDate($adb->query_result($list_result,$i,'date_start')),
+				     'due_date' => getDisplayDate($adb->query_result($list_result,$i,'due_date')),
 				      'recurringtype' => getDisplayDate($adb->query_result($list_result,$i,'recurringtype')),
 				      'recurringdate' => getDisplayDate($adb->query_result($list_result,$i,'recurringdate')),
 
@@ -88,6 +89,9 @@ $oddRow = true;
 
 foreach($open_activity_list as $event)
 {
+	$recur_date=ereg_replace('--','',$event['recurringdate']);
+        if($recur_date!="")
+                 $event['date_start']=$event['recurringdate'];
 	$activity_fields = array(
 		'ID' => $event['id'],
 		'CONTACT_ID' => $event['contactid'],
@@ -99,6 +103,8 @@ foreach($open_activity_list as $event)
 		'ACCOUNT_NAME' => $event['accountname'],
 		'TIME' => $event['date_start'],
 		'RECURRINGTYPE' => ereg_replace('--','',$event['recurringtype']),
+		'DUEDATE' => ereg_replace('--','',$event['due_date']),
+		'RECURRINGDATE' => ereg_replace('--','',$event['recurringdate']),
 		'PARENT_NAME' => $event['parent'],
 	);
 	$end_date=$event['due_date']; //included for getting the OverDue Activities in the Upcoming Activities
@@ -129,7 +135,6 @@ foreach($open_activity_list as $event)
 	{
 		$end_date=$start_date;
 	}
-	$recur_date=ereg_replace('--','',$event['recurringdate']);
 	if($recur_date!="")
 	{
 		$recur_date=getDBInsertDateValue($recur_date);	
@@ -143,6 +148,7 @@ foreach($open_activity_list as $event)
 	$current_date=date("Y-m-d",mktime(date("m"),date("d"),date("Y")));
 	$curr=explode("-",$current_date);
 	$date_diff= mktime(0,0,0,date("$curr[1]"),date("$curr[2]"),date("$curr[0]")) - mktime(0,0,0,date("$end[1]"),date("$end[2]"),date("$end[0]"));
+	
 	if($date_diff>0)
 	{
 		$x="pending";
