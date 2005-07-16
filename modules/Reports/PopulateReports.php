@@ -359,8 +359,12 @@ $advfilters = Array(
                            ),
 		      Array(
                             Array('columnname'=>'troubletickets:status:HelpDesk_Status:ticketstatus:V',
-                                  'comparator'=>'e',
+                                  'comparator'=>'n',
                                   'value'=>'Open'
+                                 ),
+			    Array('columnname'=>'troubletickets:status:HelpDesk_Status:ticketstatus:V',
+                                  'comparator'=>'n',
+                                  'value'=>'Closed'
                                  )
                            ),
 		      Array(
