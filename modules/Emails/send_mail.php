@@ -169,6 +169,7 @@ if($result1 != '')
 	}
 	if($error_info != 1)
 	{
+		$_SESSION['mail_send_error'] = $error_info;
 		if($_REQUEST['return_module'] == 'Emails' || $_REQUEST['return_module'] == '')
 		{
 			$returnmodule = 'Emails';
