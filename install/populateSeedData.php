@@ -33,6 +33,8 @@ require_once('include/ComboUtil.php');
 require_once('modules/Products/Product.php');
 require_once('modules/Products/PriceBook.php');
 require_once('modules/Products/Vendor.php');
+require_once('modules/Faq/Faq.php');
+require_once('modules/HelpDesk/HelpDesk.php');
 
 global $first_name_array;
 global $first_name_count;
@@ -245,6 +247,7 @@ for($i=0; $i<10; $i++)
 
 	//$contact->saveentity("Contacts");
 	$contact->save("Contacts");
+	$contact_ids[] = $contact->id;
 
 	
 	// This assumes that there will be one opportunity per company in the seed data.
@@ -369,10 +372,235 @@ for($i=0; $i<10; $i++)
 
 }
 
+
+//Populating Product Data
+
+$product_name_array= array( "Vtiger Single User Pack", "Vtiger 5 Users Pack", "Vtiger 10 Users Pack",
+        "Vtiger 25 Users Pack", "Vtiger 50 Users Pack", "Double Panel See-thru Clipboard",
+        "abcd1234", "Cd-R CD Recordable", "Sharp - Plain Paper Fax" , "Brother Ink Jet Cartridge"); 
+$product_code_array= array("001","002","003","023","005","sg-106","1324356","sg-108","sg-119","sg-125");
+
+for($i=0; $i<10; $i++)
+{
+        $product = new Product();
+	if($i>=4)
+	{
+		$parent_key = array_rand($opportunity_ids);
+		$product->column_fields["parent_id"]=$opportunity_ids[$parent_key];
+
+		$usageunit	=	"Each";
+		$qty_per_unit	=	1;
+		$qty_in_stock	=	rand(10000, 99999);
+		$category 	= 	"Hardware";		
+		$website 	=	"";
+		$manufacturer	= 	"";
+	}
+	else
+	{
+		$account_key = array_rand($account_ids);
+		$product->column_fields["parent_id"]=$account_ids[$account_key];
+
+		$usageunit	=	"";
+		$qty_per_unit	=	"";
+		$qty_in_stock	=	"";
+		$category 	= 	"Software";	
+		$website 	=	"www.vtiger.com";
+		$manufacturer	= 	"vtiger";
+	}
+
+        $product->column_fields["productname"] 	= 	$product_name_array[$i];
+        $product->column_fields["productcode"] 	= 	$product_code_array[$i];
+        $product->column_fields["manufacturer"]	= 	$manufacturer;
+
+	$product->column_fields["productcategory"] = 	$category;
+        $product->column_fields["website"] 	=	$website;
+        $product->column_fields["productsheet"] =	"";
+
+	$vendor_key = array_rand($vendor_ids);
+        $product->column_fields["vendor_id"] 	= 	$vendor_ids[$vendor_key];
+	$contact_key = array_rand($contact_ids);
+        $product->column_fields["contact_id"] 	= 	$contact_ids[$contact_key];
+
+        $product->column_fields["start_date"] 	= 	& create_date();
+        $product->column_fields["sales_start_date"] 	= & create_date();
+
+        $product->column_fields["unit_price"] 	= 	rand(100, 999);
+        $product->column_fields["commissionrate"] = 	rand(100, 999);
+        $product->column_fields["taxclass"] 	= 	'SalesTax';
+        $product->column_fields["usageunit"]	= 	$usageunit;
+     	$product->column_fields["qty_per_unit"] = 	$qty_per_unit;
+        $product->column_fields["qtyinstock"] 	= 	$qty_in_stock;
+      	//$product->column_fields["reorderlevel"] =	rand(10, 99);
+
+	$product->save("Products");
+	$product_ids[] = $product ->id;
+}
+
+
+//Populating HelpDesk- FAQ Data
+
+	$status_array=array ("Draft","Reviewed","Published");
+	$question_array=array (
+	"How to migrate data from previous versions to the latest version?",
+	"Error message: The file is damaged and could not be repaired.",
+	"A program is trying to access e-mail addresses you have stored in Outlook. Do you want to allow this? If this is unexpected, it may be a virus and you should choose No when trying to add Email to vitger CRM ",
+	"When trying to merge a template with a contact, First I was asked allow installation of ActiveX control. I accepted. After it appears a message that it will not be installed because it can't verify the publisher. Do you have a workarround for this issue ?",
+	" Error message - please close all instances of word before using the vtiger word plugin. Do I need to close all Word and Outlook instances first before I can reopen Word and sign in?"
+	
+	);
+
+
+	$answer_array=array (
+	"Database migration scripts are available to migrate from the following versions:
+
+	1.0 to 2.0
+
+	2.0 to 2.1
+
+	2.1 to 3.0
+
+	3.0 to 3.2
+
+	3.2 to 4.0
+
+	4.0 to 4.0.1
+
+	4.0.1 to 4.2",
+	
+	"The above error message is due to version incompatibility between FPDF and PHP5. Use PHP 4.3.X version","Published",
+	"The above error message is displayed if you have installed the Microsoft(R) Outlook(R) E-mail Security Update. Please refer to the following URL for complete details:
+
+http://support.microsoft.com/default.aspx?scid=kb%3BEN-US%3B263074
+
+If you want to continue working with vtiger Outlook Plug-in, select the Allow access for check box and select the time from drop-down box.",
+	" Since, vtigerCRM & all plugins are open source, it is not signed up with third party vendors and IE will ask to download even though the plugin are not signed.
+
+This message if produced by Microsoft Windows XP. I English Windows XP with the SP2 and the last updates. I told IE to accept installation of the ActiveX, but after it, this message has appeared. Provably there is a place where to tall to WinXP to not validate if the code is signed... but I don\'t know where.
+
+In IE from Tools->Internet Options->Security->Custom Level, there you can see various options for downloading plugins which are not signed and you can adjust according to your need, so relax your security settings for a while and give a try to vtiger Office Plugin.",
+	"Before modifying any templates, please ensure that you don\'t have any documents open and only one instance of word is available in your memory."
+	);
+
+$num_array=array(0,1,2,3,4);
+for($i=0;$i<5;$i++)
+{
+
+	$faq = new Faq();
+	
+	$rand=array_rand($num_array);
+	$faq->column_fields["product_id"]	= $product_ids[$i];
+	$faq->column_fields["faqcategories"]	= "General";
+	$faq->column_fields["faqstatus"] 	= $status_array[$i];
+	$faq->column_fields["question"]		= $question_array[$i];
+	$faq->column_fields["faq_answer"]	= $answer_array[$i];
+
+	$faq->save("Faq");
+	$faq_ids[] = $faq ->id;
+}
+
+// Populate Ticket data
+
+
+//$severity_array=array("Minor","Major","Critical","");
+$status_array=array("Open","In Progress","Wait For Response","Open","closed");
+$category_array=array("Big Problem ","Small Problem","Other Problem","Small Problem","Other Problem");
+$ticket_title_array=array("Upload Attachment problem",
+			"Individual Customization -Menu and RSS","Export Output query",
+		"Import Error CSV Leads","How to automatically add a lead from a web form to VTiger");
+
+for($i=0;$i<5;$i++)
+{
+	$helpdesk= new HelpDesk();
+	
+	$rand=array_rand($num_array);
+	$contact_key = array_rand($contact_ids);
+        $helpdesk->column_fields["parent_id"] 	= 	$contact_ids[$contact_key];
+
+	$helpdesk->column_fields["ticketpriorities"]= "Normal";
+	$helpdesk->column_fields["product_id"]	= 	$product_ids[$i];
+
+	$helpdesk->column_fields["ticketseverities"]	= "Minor";
+	$helpdesk->column_fields["ticketstatus"]	= $status_array[$i];
+	$helpdesk->column_fields["ticketcategories"]	= $category_array[$i];
+	//$rand_key = array_rand($s);
+	$helpdesk->column_fields["ticket_title"]	= $ticket_title_array[$i];
+	
+	$helpdesk->save("HelpDesk");
+	$helpdesk_ids[] = $helpdesk->id;
+}
+
+// Populate Activities Data
+$task_array=array("Tele Conference","Call user - John","Send Fax to Mary Smith");
+$event_array=array("","","","Team Meeting","Call Richie","Meeting with Don");
+$task_status_array=array("Not Started","In Progress","Completed");
+$task_priority_array=array("High","Medium","Low");
+
+for($i=0;$i<6;$i++)
+{
+	$event = new Activity();
+	
+	$rand_num=array_rand($num_array);
+
+	$rand_date = & create_date();
+	$en=explode("-",$rand_date);
+	$recur_daily_date=date('Y-m-d',mktime(date($en[1]),date($en[2])+5,date($en[0])));
+	$recur_week_date=date('Y-m-d',mktime(date($en[1]),date($en[2])+30,date($en[0])));
+	$start_time_hr=rand(00,23);
+	$start_time_min=rand(00,59);
+	$start_time=$start_time_hr.":".$start_time_min;
+	if($i<3)
+	{
+		$event->column_fields["subject"]	= $task_array[$i];	
+		if($i==2)
+		{
+			$account_key = array_rand($account_ids);
+			$event->column_fields["parent_id"]	= $account_ids[$account_key];;	
+		}
+		$event->column_fields["taskstatus"]	= $task_status_array[$i];	
+		$event->column_fields["taskpriority"]	= $task_priority_array[$i];	
+		$event->column_fields["activitytype"]	= "Task";	
+				
+	}
+	else
+	{
+		$event->column_fields["subject"]	= $event_array[$i];	
+		$event->column_fields["duration_hours"]	= rand(0,3);	
+		$event->column_fields["duration_minutes"]= rand(0,59);	
+		$event->column_fields["eventstatus"]	= "Planned";	
+	}
+	$event->column_fields["date_start"]	= $rand_date;	
+	$event->column_fields["time_start"]	= $start_time;	
+	$event->column_fields["due_date"]	= $rand_date;	
+	
+	$contact_key = array_rand($contact_ids);
+        $event->column_fields["contact_id"]	= 	$contact_ids[$contact_key];
+	if($i==4)
+	{
+        	$event->column_fields["recurringtype"] 	= "Daily";
+		$event->column_fields["activitytype"]	= "Meeting";	
+		$event->column_fields["due_date"]	= $recur_daily_date;	
+	}
+	elseif($i==5)
+	{	
+        	$event->column_fields["recurringtype"] 	= "Weekly";
+		$event->column_fields["activitytype"]	= "Meeting";	
+		$event->column_fields["due_date"]	= $recur_week_date;	
+	}
+	else
+	{
+		if($i>3)
+		{
+			$event->column_fields["activitytype"]	= "Call";	
+		}
+	}
+
+	$event->save("Activities");
+        $event_ids[] = $event->id;
+
+}
+
+
 $adb->query("update crmentity set crmentity.smcreatorid=".$assigned_user_id);
-
-
-
 
 
 /*
