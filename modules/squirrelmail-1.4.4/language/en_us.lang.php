@@ -62,7 +62,7 @@ $mod_strings = Array(
 'LBL_EDIT'=>'Edit',
 'LBL_DELETE'=>'Delete',
 'LBL_UP'=>'Up',
-'LBL_DOWN'=>'Dpwn',
+'LBL_DOWN'=>'Down',
 'LBL_MESSAGE_HIGHLIGHTING_INFO'=>'Based upon given criteria, incoming messages can have different background colors in the message list. This helps to easily distinguish who the messages are from, especially for mailing lists.',
 
 );
