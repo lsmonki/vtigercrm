@@ -319,6 +319,10 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 	echo "\n<BR>\n";
 }
 
+if($viewid != 0)
+{
+	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
+}
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
@@ -326,7 +330,11 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<input name="viewname" type="hidden" value="'.$viewid.'">'; //give the viewid to hidden //customview
 if(isPermitted('Accounts',2,'') == 'yes')
 {
-        $other_text .=	'<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text .=	'<td width="10"><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+}
+if(isset($CActionDtls))
+{
+	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return massMail()"/>';
 }
 	/*$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
 			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
