@@ -290,9 +290,12 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 	echo "\n<BR>\n";
 }
 
-
+if($viewid != 0)
+{
+	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
+}
 // Buttons and View options
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
+$other_text = '<table width="100%" border="1" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
@@ -308,6 +311,10 @@ if(isPermitted('Leads',1,'') == 'yes')
 {
    	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
 	       <input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_STATUS].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/>';
+}
+if(isset($CActionDtls))
+{
+	$other_text .='&nbsp;<input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return massMail()"/>';
 }
 	/*$other_text .=	'</td>
 			<td align="right">'.$app_strings[LBL_VIEW].'
