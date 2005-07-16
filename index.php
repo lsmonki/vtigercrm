@@ -819,8 +819,7 @@ if($action != "about_us")
 {
 echo "<table width=60% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n";
 echo "<table width=100% border=0 cellspacing=1 cellpadding=0 class=\"bgwhite\" align=center><tr><td align=center class=\"copy\">\n";
-echo("&copy; This software is a collective work consisting of the following major Open Source components:
-Apache software, MySQL server, PHP, SugarCRM, phpBB, TUTOS, phpSysinfo, SquirrelMail, and PHPMailer each licensed under a separate Open Source License. vtiger.com is not affiliated with nor endorsed by any of the above providers. See <a href='http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt' class=\"copy\" target=\"_blank\">Copyrights </a> for details.<br>\n");
+echo("&copy; This software is a collective work consisting of the following major Open Source components: Apache software, MySQL server, PHP, SugarCRM, phpBB, TUTOS, phpSysinfo, SquirrelMail, and PHPMailer each licensed under a separate Open Source License. vtiger.com is not affiliated with nor endorsed by any of the above providers. See <a href='http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt' class=\"copy\" target=\"_blank\">Copyrights </a> for details.<br>\n");
 echo "</td></tr></table></td></tr></table>\n";
 
 echo "<table align='center'><tr><td align='center'>";
