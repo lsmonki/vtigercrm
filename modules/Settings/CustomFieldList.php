@@ -23,7 +23,7 @@ echo '<input type="hidden" name="fld_module" value="'.$_REQUEST['fld_module'].'"
 echo '<input type="hidden" name="module" value="Settings">';
 echo '<input type="hidden" name="action" value="CreateCustomField">';
 echo '<tr><br>';
-echo '<td><input title="'.$mod_strings['NewCustomFieldAltC'].'" accessKey="C" class="button" type="submit" name="NewCustomField" value="'.$mod_strings['NewCustomField'].'"></td>';
+echo '<td><input title="'.$mod_strings['`'].'" accessKey="C" class="button" type="submit" name="NewCustomField" value="'.$mod_strings['NewCustomField'].'"></td>';
 
 if($_REQUEST['fld_module']=="Leads")
 {
