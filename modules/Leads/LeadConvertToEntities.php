@@ -239,9 +239,15 @@ $sql_insert_accountshipads = "INSERT INTO accountshipads (accountaddressid,city,
 $insert_value=$crmid;
 $insert_column="accountid";	
 $val= getInsertValues("Accounts",$insert_value);
-$insert_column.=",".$val[0];
-$insert_value.=",".$val[1];
+if($val[0]!="")
+	$insert_column.=",";
+if($val[1]!="")
+	$insert_value.=",";
+
+$insert_column.=$val[0];
+$insert_value.=$val[1];
 $sql_insert_accountcustomfield = "INSERT INTO accountscf (".$insert_column.") VALUES (".$insert_value.")";
+
 $adb->query($sql_insert_accountcustomfield);
 
 //
@@ -280,8 +286,14 @@ $adb->query($sql_insert_contactaddress);
 $insert_column="contactid";
 $insert_value=$contact_id;
 $val= getInsertValues("Contacts",$contact_id);
-$insert_column.=",".$val[0];
-$insert_value.=",".$val[1];
+
+if($val[0]!="")
+	$insert_column.=",";	
+if($val[1]!="")
+	$insert_value.=",";	
+
+$insert_column.=$val[0];
+$insert_value.=$val[1];
 $sql_insert_contactcustomfield = "INSERT INTO contactscf (".$insert_column.") VALUES (".$insert_value.")";
 
 $adb->query($sql_insert_contactcustomfield);
@@ -302,7 +314,7 @@ if(! isset($createpotential) || ! $createpotential == "on")
   $adb->query($sql_crmentity);
 
 
-	$sql_insert_opp = "INSERT INTO potential (potentialid,accountid,potentialname,leadsource,closingdate) VALUES (".$oppid.",".$crmid .",'".$potential_name."','".$row['leadsource']."','".$close_date."')";
+	$sql_insert_opp = "INSERT INTO potential (potentialid,accountid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (".$oppid.",".$crmid .",'".$potential_name."','".$row['leadsource']."','".$close_date."','Prospecting',0)";
 
 	$adb->query($sql_insert_opp);
 
@@ -310,9 +322,13 @@ if(! isset($createpotential) || ! $createpotential == "on")
 	$insert_column="potentialid";
 	$insert_value=$oppid;
 	$val= getInsertValues("Potentials",$oppid);
-
-	$insert_column.=",".$val[0];
-	$insert_value.=",".$val[1];
+	if($val[0]!="")
+		$insert_column.=",";		
+	if($val[1]!="")
+		$insert_value.=",";		
+	
+	$insert_column.=$val[0];
+	$insert_value.=$val[1];
 
 	$sql_insert_potentialcustomfield = "INSERT INTO potentialscf (".$insert_column.") VALUES (".$insert_value.")";
 //
