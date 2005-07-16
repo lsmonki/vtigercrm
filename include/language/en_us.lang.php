@@ -72,7 +72,7 @@ $app_strings = Array(
 //added for 4.2
 'LBL_SAVE_LABEL'=>'Save',
 
-
+'LBL_SEND_MAIL_BUTTON'=>'Send Mail',
 
 
 'LBL_SAVE_BUTTON_TITLE'=>'Save [Alt+S]',
