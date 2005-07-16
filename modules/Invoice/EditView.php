@@ -126,7 +126,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
-if(isset($_REQUEST['opportunity_id']) || $_REQUEST['opportunity_id'] !='')
+if(isset($_REQUEST['opportunity_id']) && $_REQUEST['opportunity_id'] !='')
 {
 	$potfocus = new Potential();
         $potfocus->column_fields['potential_id'] = $_REQUEST['opportunity_id'];
