@@ -976,9 +976,9 @@ function create_lead_from_webform($lastname,$email,$phone,$company,$country,$des
 	$adb->println("Create New Lead from Web Form - Ends");
 
 	if($focus->id != '')
-		return 'Thank you for your interest. Your message has been successfully added as a Lead.';
+		return 'Thank you for your interest. Information has been successfully added as Lead.';
 	else
-		return "Lead creation is failed. Try again";
+		return "Lead creation failed. Try again";
 }
 
 function save_faq_comment($faqid,$comment)
