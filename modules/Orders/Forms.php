@@ -177,6 +177,7 @@ return $the_script;
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  */
+/*
 function get_new_record_form () {
 global $mod_strings;
 global $app_strings;
@@ -238,5 +239,6 @@ $the_form .= get_validate_record_js();
 
 return $the_form;
 }
+*/
 
 ?>
