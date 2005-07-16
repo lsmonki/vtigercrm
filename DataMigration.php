@@ -33,7 +33,7 @@ class DataMigration
   function preliminarySteps()
   {
 
-
+echo '------------------------------------- test print -------------------------';
     echo '<br>+++++++++++++++++++++++++++++++++++++<br>';
     echo '<br><br>';
     echo '<br><font color=red><b>++PRELIMINARY STEPS FOR DATA MIGRATION INITIATED++</b></font><br>';
@@ -55,7 +55,16 @@ class DataMigration
     echo '<br> '.$sql90 .' <br> ';
     $this->oldconn->query($sql90);
 
-
+//custom Action
+$sql90 = "CREATE TABLE `customaction` (
+  `cvid` int(19) default NULL,
+  `subject` varchar(250) NOT NULL default '',
+  `module` varchar(50) NOT NULL default '',
+  `content` longtext,
+  KEY `customaction_IDX0` (`cvid`)
+) TYPE=InnoDB";
+echo '<br> '.$sql90 .' <br> ';
+$this->oldconn->query($sql90);
 
 
 //convertleadmapping
@@ -127,6 +136,7 @@ $sql90="CREATE TABLE `convertleadmapping` (
     echo '<br> '.$sql90 .' <br> ';
     $this->oldconn->query($sql90);
 
+    /* 
     $sql90=" CREATE TABLE `currency_info` (
 	  `currency_name` varchar(100) NOT NULL default '',
 	    `currency_code` varchar(100) default NULL,
@@ -136,6 +146,7 @@ $sql90="CREATE TABLE `convertleadmapping` (
 
     echo '<br> '.$sql90 .' <br> ';
     $this->oldconn->query($sql90);
+    */
 
 
     $sql90="CREATE TABLE `customview` (
@@ -228,7 +239,8 @@ $sql90="CREATE TABLE `convertleadmapping` (
 					  `accountid` int(19) default NULL,
 					    `terms_conditions` longtext,
 					      `purchaseorder` varchar(200) default NULL,
-					        PRIMARY KEY  (`invoiceid`),
+					        `invoicestatus` varchar(200) default NULL,
+					         PRIMARY KEY  (`invoiceid`),
 						  CONSTRAINT `fk_Invoice1` FOREIGN KEY (`invoiceid`) REFERENCES `crmentity` (`crmid`) ON DELETE CASCADE
 					  ) TYPE=InnoDB";
 
@@ -354,7 +366,8 @@ $sql90="CREATE TABLE `convertleadmapping` (
 					      `total` decimal(11,3) default NULL,
 					        `subtotal` decimal(11,3) default NULL,
 						  `terms_conditions` longtext,
-						    PRIMARY KEY  (`purchaseorderid`),
+						    `postatus` varchar(200) default NULL,	
+						     PRIMARY KEY  (`purchaseorderid`),
 						      CONSTRAINT `fk_PO1` FOREIGN KEY (`purchaseorderid`) REFERENCES `crmentity` (`crmid`) ON DELETE CASCADE
 					      ) TYPE=InnoDB";
     echo '<br> '.$sql90 .' <br> ';
@@ -614,7 +627,8 @@ $sql90="CREATE TABLE `convertleadmapping` (
 						      `accountid` int(19) default NULL,
 						        `terms_conditions` longtext,
 							  `purchaseorder` varchar(200) default NULL,
-							    PRIMARY KEY  (`salesorderid`),
+							    `sostatus` varchar(200) default NULL,	
+							     PRIMARY KEY  (`salesorderid`),
 							      CONSTRAINT `fk_SO1` FOREIGN KEY (`salesorderid`) REFERENCES `crmentity` (`crmid`) ON DELETE CASCADE
 						      ) TYPE=InnoDB";
     echo '<br> '.$sql90 .' <br> ';
@@ -865,7 +879,7 @@ $sql90="CREATE TABLE `convertleadmapping` (
     echo '<br> '.$sql90 .' <br> ';
     $this->oldconn->query($sql90);
 
-
+	/*
     $sql90="CREATE TABLE `revenuetype` (
 		  `revenuetypeid` int(19) NOT NULL auto_increment,
 		    `revenuetype` varchar(200) NOT NULL default '',
@@ -876,6 +890,7 @@ $sql90="CREATE TABLE `convertleadmapping` (
 		    ) TYPE=InnoDB";
     echo '<br> '.$sql90 .' <br> ';
     $this->oldconn->query($sql90);
+    */ 
 	
 
     $sql90="CREATE TABLE `rss` (
@@ -1046,6 +1061,38 @@ $sql90="CREATE TABLE `convertleadmapping` (
     $this->oldconn->query($sql94);
 
 
+	$sql90="CREATE TABLE `postatus` (
+		  `postatusid` int(19) NOT NULL auto_increment,
+		    `postatus` varchar(200) NOT NULL default '',
+		      `sortorderid` int(19) NOT NULL default '0',
+		        `presence` int(1) NOT NULL default '1',
+			  PRIMARY KEY  (`postatusid`),
+			    UNIQUE KEY `postatus_UK0` (`postatus`)
+		    ) TYPE=InnoDB";
+    echo '<br> DON '.$sql90 .' <br> ';
+    $this->oldconn->query($sql90);
+
+	$sql90="CREATE TABLE `sostatus` (
+		  `sostatusid` int(19) NOT NULL auto_increment,
+		    `sostatus` varchar(200) NOT NULL default '',
+		      `sortorderid` int(19) NOT NULL default '0',
+		        `presence` int(1) NOT NULL default '1',
+			  PRIMARY KEY  (`sostatusid`),
+			    UNIQUE KEY `sostatus_UK0` (`sostatus`)
+		    ) TYPE=InnoDB";
+    echo '<br> DON '.$sql90 .' <br> ';
+    $this->oldconn->query($sql90);
+
+	$sql90="CREATE TABLE `invoicestatus` (
+		  `invoicestatusid` int(19) NOT NULL auto_increment,
+		    `invoicestatus` varchar(200) NOT NULL default '',
+		      `sortorderid` int(19) NOT NULL default '0',
+		        `presence` int(1) NOT NULL default '1',
+			  PRIMARY KEY  (`invoicestatusid`),
+			    UNIQUE KEY `invoicestatus_UK0` (`invoicestatus`)
+		    ) TYPE=InnoDB";
+    echo '<br> DON '.$sql90 .' <br> ';
+    $this->oldconn->query($sql90);
 
 
     //table creation ends
@@ -1087,9 +1134,11 @@ $sql90="CREATE TABLE `convertleadmapping` (
     echo '<br> '.$sql56 .' <br> ';
     $this->oldconn->query($sql56);
 
+   /*	
     $sql57 = "ALTER TABLE products add column currency VARCHAR(200)";
     echo '<br> '.$sql57 .' <br> ';
     $this->oldconn->query($sql57);
+*/
 
     $sql58 = "ALTER TABLE products add column reorderlevel int(11)";
     echo '<br> '.$sql58 .' <br> ';
@@ -1123,6 +1172,16 @@ $sql90="CREATE TABLE `convertleadmapping` (
     $sql65 = "ALTER TABLE products drop column purchase_date";
     echo '<br> '.$sql65 .' <br> ';
     $res65 = $this->oldconn->query($sql65);
+
+    //Added by Don
+    $sql66 = "ALTER TABLE products add column imagename VARCHAR(150)";
+    echo '<br> '.$sql66 .' <br> ';
+    $this->oldconn->query($sql66);
+
+    //Chages in Contact Details Table Don	
+    $sql67 = "ALTER TABLE contactdetails change column emailoptout emailoptout char(3) default 0";
+    echo '<br> '.$sql67 .' <br> ';
+    $this->oldconn->query($sql67);	 		
 
     //Changes to troubletickets table
     $sql7 = "ALTER TABLE troubletickets change contact_id parent_id VARCHAR(100)";
@@ -1229,7 +1288,7 @@ $sql90="CREATE TABLE `convertleadmapping` (
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
-    $sql172="insert into field values (4,".$this->oldconn->getUniqueID("field").",'support_end_date','CustomerDetails',1,'5','support_end_date','Support End Date',1,0,0,100,3,4,1,'D~O')";
+    $sql172="insert into field values (4,".$this->oldconn->getUniqueID("field").",'support_end_date','CustomerDetails',1,'5','support_end_date','Support End Date',1,0,0,100,3,4,1,'D~O~OTH~GE~support_start_date~Support Start Date')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
@@ -1308,6 +1367,10 @@ $sql90="CREATE TABLE `convertleadmapping` (
     $res172 = $this->oldconn->query($sql172);
 
 
+	$sql176="insert into field values (14,".$this->oldconn->getUniqueID("field").",'imagename','products',1,'69','imagename','Product Image',1,0,0,100,1,6,1,'V~O')"; 
+    echo '<br> DON'.$sql176 .' <br> ';
+    $res176 = $this->oldconn->query($sql176);
+
 
     $sql176="update field set sequence=2, block=2 where columnname='commissionrate' and tablename='products' and fieldlabel='Commission Rate'"; 
     echo '<br> '.$sql176 .' <br> ';
@@ -1348,8 +1411,8 @@ $sql90="CREATE TABLE `convertleadmapping` (
 
 
 
-    $sql176="update field set sequence=8 where columnname='expiry_date' and tablename='products' and fieldlabel='Support Expiry Date'"; 
-    echo '<br> '.$sql176 .' <br> ';
+    $sql176="update field set sequence=8,typeofdata='D~O~OTH~GE~start_date~Start Date' where columnname='expiry_date' and tablename='products' and fieldlabel='Support Expiry Date'"; 
+    echo '<br>DON '.$sql176 .' <br> ';
     $res176 = $this->oldconn->query($sql176);
 
     //deleted field
@@ -2260,13 +2323,167 @@ $sql90="CREATE TABLE `convertleadmapping` (
     $sql172="insert into def_org_share values (".$this->oldconn->getUniqueID('def_org_share').",23,2)";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
-    
-    
-    
+   
+   echo '>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'; 
 
-    
-    
-    //insert into related list table
+
+
+        //insert into related list table
+	$sql172="insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Accounts").",".$this->getTabid("Potentials").",'get_opportunities',1,'Potentials',0)";
+    echo '<br> >>>>>>>>>>>>>>>  '.$sql172 .' <br> ';
+	$this->oldconn->query($sql172);	
+	//$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Accounts").",".$this->getTabid("Potentials").",'get_opportunities',1,'Potentials',0)");	
+		
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Accounts").",".$this->getTabid("Contacts").",'get_contacts',2,'Contacts',0)");
+
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Accounts").",".$this->getTabid("Activities").",'get_activities',3,'Acivities',0)");
+
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Accounts").",".$this->getTabid("HelpDesk").",'get_tickets',4,'HelpDesk',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Accounts").",".$this->getTabid("Activities").",'get_history',5,'History',0)");
+
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Accounts").",0,'get_attachments',6,'Attachments',0)");
+
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Accounts").",".$this->getTabid("Quotes").",'get_quotes',7,'Quotes',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Accounts").",".$this->getTabid("Invoice").",'get_invoices',8,'Invoice',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Accounts").",".$this->getTabid("SalesOrder").",'get_salesorder',9,'Sales Order',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Accounts").",".$this->getTabid("Products").",'get_products',10,'Products',0)");
+
+	//Inserting Lead Related Lists	
+
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Leads").",".$this->getTabid("Activities").",'get_activities',1,'Activities',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Leads").",".$this->getTabid("Emails").",'get_emails',2,'Emails',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Leads").",".$this->getTabid("Activities").",'get_history',3,'History',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Leads").",0,'get_attachments',4,'Attachments',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Leads").",".$this->getTabid("Products").",'get_products',5,'Products',0)");
+
+	//Inserting for contact related lists
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Contacts").",".$this->getTabid("Potentials").",'get_opportunities',1,'Potentials',0)");	
+		
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Contacts").",".$this->getTabid("Activities").",'get_activities',2,'Activities',0)");
+
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Contacts").",".$this->getTabid("Emails").",'get_emails',3,'Emails',0)");
+
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Contacts").",".$this->getTabid("HelpDesk").",'get_tickets',4,'HelpDesk',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Contacts").",".$this->getTabid("Quotes").",'get_quotes',5,'Quotes',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Contacts").",".$this->getTabid("Orders").",'get_purchase_orders',6,'Purchase Order',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Contacts").",".$this->getTabid("SalesOrder").",'get_salesorder',7,'Sales Order',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Contacts").",".$this->getTabid("Products").",'get_products',8,'Products',0)");
+
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Contacts").",".$this->getTabid("Activities").",'get_history',9,'History',0)");
+
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Contacts").",0,'get_attachments',10,'Attachments',0)");
+
+	//Inserting Potential Related Lists	
+
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Potentials").",".$this->getTabid("Activities").",'get_activities',1,'Activities',0)");
+
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Potentials").",".$this->getTabid("Contacts").",'get_contacts',2,'Contacts',0)");
+
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Potentials").",".$this->getTabid("Products").",'get_products',3,'History',0)");
+
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Potentials").",0,'get_stage_history',4,'Sales Stage History',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Potentials").",0,'get_attachments',5,'Attachments',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Potentials").",".$this->getTabid("Quotes").",'get_Quotes',6,'Quotes',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Potentials").",".$this->getTabid("SalesOrder").",'get_salesorder',7,'Sales Order',0)");
+
+		//Inserting Product Related Lists	
+
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Products").",".$this->getTabid("HelpDesk").",'get_tickets',1,'HelpDesk',0)");
+
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Products").",".$this->getTabid("Activities").",'get_activities',2,'Activities',0)");
+
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Products").",0,'get_attachments',3,'Attachments',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Products").",".$this->getTabid("Quotes").",'get_quotes',4,'Quotes',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Products").",".$this->getTabid("Orders").",'get_purchase_orders',5,'Purchase Order',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Products").",".$this->getTabid("SalesOrder").",'get_salesorder',6,'Sales Order',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Products").",".$this->getTabid("Invoice").",'get_invoices',7,'Invoice',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Products").",".$this->getTabid("PriceBook").",'get_product_pricebooks',8,'PriceBook',0)");
+	
+		//Inserting Emails Related Lists	
+
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Emails").",".$this->getTabid("Contacts").",'get_contacts',1,'Contacts',0)");
+
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Emails").",0,'get_users',2,'Users',0)");
+
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Emails").",0,'get_attachments',3,'Attachments',0)");
+
+		//Inserting HelpDesk Related Lists
+		
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("HelpDesk").",".$this->getTabid("Activities").",'get_activities',1,'Activities',0)");
+
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("HelpDesk").",0,'get_attachments',2,'Attachments',0)");
+
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("PriceBook").",14,'get_pricebook_products',2,'Products',0)");
+
+        // Inserting Vendor Related Lists
+        $this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Vendor").",14,'get_products',1,'Products',0)");
+
+        $this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Vendor").",21,'get_purchase_orders',2,'Products',0)");
+
+        $this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Vendor").",4,'get_contacts',3,'Contacts',0)");
+
+	// Inserting Quotes Related Lists
+	
+        $this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Quotes").",".$this->getTabid("Invoice").",'get_salesorder',1,'Sales Order',0)");
+        
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Quotes").",9,'get_activities',2,'Activities',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Quotes").",9,'get_history',3,'History',0)");
+
+	// Inserting Purchase order Related Lists
+
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Orders").",9,'get_activities',1,'Activities',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Orders").",0,'get_attachments',2,'Attachments',0)");
+	
+	// Inserting Sales order Related Lists
+
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("SalesOrder").",9,'get_activities',1,'Activities',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("SalesOrder").",0,'get_attachments',2,'Attachments',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("SalesOrder").",".$this->getTabid("Invoice").",'get_invoices',3,'Invoice',0)");
+	
+	// Inserting Invoice Related Lists
+
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Invoice").",9,'get_activities',1,'Activities',0)");
+	
+	$this->oldconn->query("insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Invoice").",0,'get_attachments',2,'Attachments',0)");
+	
+/*
+
     //Inserting for account related lists
     
     $sql172="insert into relatedlists values(".$this->oldconn->getUniqueID('relatedlists').",".$this->getTabid("Accounts").",".$this->getTabid("Potentials").",'get_opportunities',1,'Potentials',0)";	
@@ -2608,7 +2825,7 @@ $sql90="CREATE TABLE `convertleadmapping` (
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
     
-    
+  */  
 
     //Inserting Inventory Notifications
     $invoice_body = 'Dear {HANDLER},
@@ -2673,7 +2890,7 @@ $sql172="insert into field values (14,".$this->oldconn->getUniqueID("field").",'
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
- $sql172="insert into field values (14,".$this->oldconn->getUniqueID("field").",'sales_end_date','products',1,'5','sales_end_date','Sales End Date',1,0,0,100,6,1,1,'D~O')";
+ $sql172="insert into field values (14,".$this->oldconn->getUniqueID("field").",'sales_end_date','products',1,'5','sales_end_date','Sales End Date',1,0,0,100,6,1,1,'D~O~OTH~GE~sales_start_date~Sales Start Date')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
@@ -2789,7 +3006,7 @@ $sql172="insert into field values (16,".$this->oldconn->getUniqueID("field").",'
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
- $sql172="insert into field values (18,".$this->oldconn->getUniqueID("field").",'email','vendor',1,'13','email','Email',1,0,0,100,4,1,1,'V~O')";
+ $sql172="insert into field values (18,".$this->oldconn->getUniqueID("field").",'email','vendor',1,'13','email','Email',1,0,0,100,4,1,1,'E~O')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
@@ -2896,9 +3113,9 @@ $sql172="insert into field values (19,".$this->oldconn->getUniqueID("field").",'
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
- $sql172="insert into field values (20,".$this->oldconn->getUniqueID("field").",'currency','quotes',1,'1','currency','Currency',1,0,0,100,7,1,1,'V~O')";
-    echo '<br> '.$sql172 .' <br> ';
-    $res172 = $this->oldconn->query($sql172);
+ //$sql172="insert into field values (20,".$this->oldconn->getUniqueID("field").",'currency','quotes',1,'1','currency','Currency',1,0,0,100,7,1,1,'V~O')";
+   // echo '<br> '.$sql172 .' <br> ';
+    //$res172 = $this->oldconn->query($sql172);
 
  $sql172="insert into field values (20,".$this->oldconn->getUniqueID("field").",'carrier','quotes',1,'15','carrier','Carrier',1,0,0,100,8,1,1,'V~O')";
     echo '<br> '.$sql172 .' <br> ';
@@ -2922,7 +3139,7 @@ $sql172="insert into field values (19,".$this->oldconn->getUniqueID("field").",'
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
- $sql172="insert into field values (20,".$this->oldconn->getUniqueID("field").",'adjustment','quotes',1,'1','txtAdjustment','Adjustment',1,0,0,100,20,1,3,'N~O')";
+ $sql172="insert into field values (20,".$this->oldconn->getUniqueID("field").",'adjustment','quotes',1,'1','txtAdjustment','Adjustment',1,0,0,100,20,1,3,'NN~O')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
@@ -3060,7 +3277,7 @@ $sql172="insert into field values (20,".$this->oldconn->getUniqueID("field").",'
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
- $sql172="insert into field values (21,".$this->oldconn->getUniqueID("field").",'adjustment','purchaseorder',1,'1','txtAdjustment','Adjustment',1,0,0,100,10,1,3,'N~O')";
+ $sql172="insert into field values (21,".$this->oldconn->getUniqueID("field").",'adjustment','purchaseorder',1,'1','txtAdjustment','Adjustment',1,0,0,100,10,1,3,'NN~O')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
@@ -3079,6 +3296,10 @@ $sql172="insert into field values (20,".$this->oldconn->getUniqueID("field").",'
  $sql172="insert into field values (21,".$this->oldconn->getUniqueID("field").",'subtotal','purchaseorder',1,'1','hdnSubTotal','Sub Total',1,0,0,100,14,1,3,'N~O')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
+
+ $sql172="insert into field values (21,".$this->oldconn->getUniqueID("field").",'postatus','purchaseorder',1,'15','postatus','Status',1,0,0,100,15,1,1,'V~O')";
+ echo '<br>DON '.$sql172 .' <br> ';
+ $this->oldconn->query($sql172);
 
 
  $sql172="insert into field values (21,".$this->oldconn->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,16,1,1,'V~M')";
@@ -3148,7 +3369,7 @@ $sql172="insert into field values (21,".$this->oldconn->getUniqueID("field").",'
 
 
  //Block6
- $sql172="insert into field values (21,".$this->oldconn->getUniqueID("field").",'terms_conditions','purchaseorder',1,'19','terms_conditions','Terms & Condifitons',1,0,0,100,1,6,1,'V~O')";
+ $sql172="insert into field values (21,".$this->oldconn->getUniqueID("field").",'terms_conditions','purchaseorder',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,6,1,'V~O')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
@@ -3196,12 +3417,16 @@ $sql172="insert into field values (22,".$this->oldconn->getUniqueID("field").",'
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
+$sql172="insert into field values (22,".$this->oldconn->getUniqueID("field").",'sostatus','salesorder',1,'15','sostatus','Status',1,0,0,100,11,1,1,'V~O')";
+   echo '<br> DON'.$sql172 .' <br> ';
+    $this->oldconn->query($sql172);
+
 
  $sql172="insert into field values (22,".$this->oldconn->getUniqueID("field").",'salestax','salesorder',1,'1','txtTax','Sales Tax',1,0,0,100,12,1,3,'N~O')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
- $sql172="insert into field values (22,".$this->oldconn->getUniqueID("field").",'adjustment','salesorder',1,'1','txtAdjustment','Sales Tax',1,0,0,100,12,1,3,'N~O')";
+ $sql172="insert into field values (22,".$this->oldconn->getUniqueID("field").",'adjustment','salesorder',1,'1','txtAdjustment','Sales Tax',1,0,0,100,12,1,3,'NN~O')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
@@ -3314,10 +3539,11 @@ $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
-
+/*
  $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'notes','invoice',1,'1','notes','Notes',1,0,0,100,4,1,1,'V~O')";	
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
+*/
 
  $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'invoicedate','invoice',1,'5','invoicedate','Invoice Date',1,0,0,100,5,1,1,'D~O')";
     echo '<br> '.$sql172 .' <br> ';
@@ -3326,10 +3552,11 @@ $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'
  $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'duedate','invoice',1,'5','duedate','Due Date',1,0,0,100,6,1,1,'D~O')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
-
+/*
  $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'invoiceterms','invoice',1,'1','invoiceterms','Invoice Terms',1,0,0,100,7,1,1,'V~O')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
+*/
 
 $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'purchaseorder','invoice',1,'1','purchaseorder','Purchase Order',1,0,0,100,8,1,1,'V~O')";
     echo '<br> '.$sql172 .' <br> ';
@@ -3340,7 +3567,7 @@ $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
- $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'adjustment','invoice',1,'1','txtAdjustment','Sales Tax',1,0,0,100,9,1,3,'N~O')";
+ $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'adjustment','invoice',1,'1','txtAdjustment','Sales Tax',1,0,0,100,9,1,3,'NN~O')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
@@ -3364,15 +3591,19 @@ $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
- $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,15,1,1,'V~M')";
+$sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'invoicestatus','invoice',1,'15','invoicestatus','Status',1,0,0,100,15,1,1,'V~O')";
+    echo '<br> DON '.$sql172 .' <br> ';
+    $res172 = $this->oldconn->query($sql172);
+
+ $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'smownerid','crmentity',1,'52','assigned_user_id','Assigned To',1,0,0,100,16,1,1,'V~M')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
- $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,16,1,2,'T~O')";
+ $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,17,1,2,'T~O')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
- $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,17,1,2,'T~O')";
+ $sql172="insert into field values (23,".$this->oldconn->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,18,1,2,'T~O')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
@@ -3468,6 +3699,255 @@ $sql172="update field set sequence=2 where columnname='category' and tablename='
    echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
+//Code Added by DonKing
+	
+	$sql173="insert into organizationdetails(organizationame,address,city,state,country,code,phone,fax,website,logoname) values ('vtiger',' 40-41-42, Sivasundar Apartments, Flat D-II, Shastri Street, Velachery','Chennai','Tamil Nadu','India','600 042','+91-44-5202-1990','+91-44-5202-1990','www.vtiger.com','vtiger_crm-logo.jpg')";
+	echo '<br> DON'.$sql173 .' <br> ';
+	$res173 = $this->oldconn->query($sql173);
+
+
+$sql174="update field set uitype='23',typeofdata='D~M~OTH~GE~date_start~Start Date & Time' where columnname='due_date' and tablename='activity' and fieldlabel='Due Date'";
+   echo '<br> DON '.$sql174 .' <br> ';
+    $this->oldconn->query($sql174);
+
+$sql175="update field set uitype='23',typeofdata='D~M~OTH~GE~date_start~Start Date & Time' where columnname='due_date' and tablename='activity' and fieldlabel='End Date'";
+   echo '<br> DON '.$sql175 .' <br> ';
+    $this->oldconn->query($sql175);
+
+$sql176="update field set fieldname='faq_answer',uitype='20',typeofdata='V~M' where columnname='answer' and tablename='faq' and fieldlabel='Answer'";
+   echo '<br> DON '.$sql176 .' <br> ';
+    $this->oldconn->query($sql176);
+
+$sql176="update field set uitype='20',typeofdata='V~M' where columnname='question' and tablename='faq' and fieldlabel='Question'";
+   echo '<br> DON '.$sql176 .' <br> ';
+    $this->oldconn->query($sql176);
+
+//Changing the annual revenue in field  table for module leads
+
+$sql176="update field set typeofdata='I~O' where columnname='annualrevenue' and tablename='leaddetails' and fieldlabel='Annual Revenue'";
+   echo '<br> DON '.$sql176 .' <br> ';
+    $this->oldconn->query($sql176);
+
+//Deleting the Profile2utility entry for export Activity in profile2utility table
+	$sql176="delete from profile2utility where tabid=9 and activityid=6";
+   	echo '<br> DON '.$sql176 .' <br> ';
+	$this->oldconn->query($sql176);
+
+//Updating the Email
+	$sql176="update field set typeofdata='E~O' where columnname='email1' and tablename='account' and fieldlabel='Email'";
+   echo '<br> DON '.$sql176 .' <br> ';
+    $this->oldconn->query($sql176);
+
+	$sql176="update field set typeofdata='E~O' where columnname='email2' and tablename='account' and fieldlabel='Other Email'";
+   echo '<br> DON '.$sql176 .' <br> ';
+    $this->oldconn->query($sql176);
+
+	$sql176="update field set typeofdata='E~O' where columnname='email' and tablename='leaddetails' and fieldlabel='Email'";
+   echo '<br> DON '.$sql176 .' <br> ';
+    $this->oldconn->query($sql176);
+
+	$sql176="update field set typeofdata='E~O' where columnname='email' and tablename='contactdetails' and fieldlabel='Email'";
+   echo '<br> DON '.$sql176 .' <br> ';
+    $this->oldconn->query($sql176);	
+		 
+
+//Inserting into email templates table
+
+	$body='
+	Hello!
+
+	On behalf of the vtiger team,  I am pleased to announce the release of vtiger crm4.2 . This is a feature packed release including the mass email template handling, custom view feature, reports feature and a host of other utilities. vtiger runs on all platforms.
+
+	Notable Features of vtiger are :
+	-Email Client Integration
+	-Trouble Ticket Integration
+	-Invoice Management Integration
+	-Reports Integration
+	-Portal Integration
+	-Enhanced Word Plugin Support
+	-Custom View Integration
+
+	Known Issues:
+	-ABCD
+	-EFGH
+	-IJKL
+	-MNOP
+	-QRST';
+
+          $this->oldconn->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Announcement for Release','Announcement for Release','Announcement of a release','".$body."',0,".$this->oldconn->getUniqueID('emailtemplates').")");
+	
+
+
+$body='name
+street,
+city,
+state,
+ zip)
+ 
+ Dear
+ 
+ Please check the following invoices that are yet to be paid by you:
+ 
+ No. Date      Amount
+ 1   1/1/01    $4000
+ 2   2/2//01   $5000
+ 3   3/3/01    $10000
+ 4   7/4/01    $23560
+ 
+ Kindly let us know if there are any issues that you feel are pending to be discussed.
+ We will be more than happy to give you a call.
+ We would like to continue our business with you.
+ 
+ Sincerely,
+ name
+ title';
+
+
+               $this->oldconn->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Pending Invoices','Invoices Pending','Payment Due','".$body."',0,".$this->oldconn->getUniqueID('emailtemplates').")");
+
+
+
+
+
+$body=' Dear
+
+Your proposal on the project XYZW has been reviewed by us
+and is acceptable in its entirety.
+
+We are eagerly looking forward to this project
+and are pleased about having the opportunity to work
+together. We look forward to a long standing relationship
+with your esteemed firm.
+
+I would like to take this opportunity to invite you
+to a game of golf on Wednesday morning 9am at the
+Cuff Links Ground. We will be waiting for you in the
+Executive Lounge.
+
+Looking forward to seeing you there.
+
+Sincerely,
+name
+title';
+	       
+               $this->oldconn->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Acceptance Proposal','Acceptance Proposal','Acceptance of Proposal','".$body."',0,".$this->oldconn->getUniqueID('emailtemplates').")");
+
+
+$body= ' The undersigned hereby acknowledges receipt and delivery
+of the goods.
+The undersigned will release the payment subject to the goods being discovered not satisfactory.
+
+Signed under seal this <date>
+
+Sincerely,
+name
+title';
+	       
+               $this->oldconn->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Good received acknowledgement','Goods received acknowledgement','Acknowledged Receipt of Goods','".$body."',0,".$this->oldconn->getUniqueID('emailtemplates').")");
+
+
+	       $body= ' Dear
+	 We are in receipt of your order as contained in the
+   purchase order form.We consider this to be final and binding on both sides.
+If there be any exceptions noted, we shall consider them
+only if the objection is received within ten days of receipt of
+this notice.
+
+Thank you for your patronage.
+Sincerely,
+name
+title';
+
+
+	       
+               $this->oldconn->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Accept Order','Accept Order','Acknowledgement/Acceptance of Order','".$body."',0,".$this->oldconn->getUniqueID('emailtemplates').")");
+
+
+
+
+$body='Dear
+
+We are relocating our office to
+11111,XYZDEF Cross,
+UVWWX Circle
+The telephone number for this new location is (101) 1212-1328.
+
+Our Manufacturing Division will continue operations
+at 3250 Lovedale Square Avenue, in Frankfurt.
+
+We hope to keep in touch with you all.
+Please update your addressbooks.
+
+
+Thank You,
+name
+title';
+	       
+               $this->oldconn->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Address Change','Change of Address','Address Change','".$body."',0,".$this->oldconn->getUniqueID('emailtemplates').")");
+
+
+
+$body='Dear
+
+Thank you for extending us the opportunity to meet with
+you and members of your staff.
+
+I know that John Doe serviced your account
+for many years and made many friends at your firm. He has personally
+discussed with me the deep relationship that he had with your firm.
+While his presence will be missed, I can promise that we will
+continue to provide the fine service that was accorded by
+John to your firm.
+
+I was genuinely touched to receive such fine hospitality.
+
+Thank you once again.
+
+Sincerely,
+name
+title';
+
+
+	       
+               $this->oldconn->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Follow Up','Follow Up','Follow Up of meeting','".$body."',0,".$this->oldconn->getUniqueID('emailtemplates').")");
+
+
+
+$body='Congratulations!
+
+The numbers are in and I am proud to inform you that our
+total sales for the previous quarter
+amounts to $100,000,00.00!. This is the first time
+we have exceeded the target by almost 30%.
+We have also beat the previous quarter record by a
+whopping 75%!
+
+Let us meet at Smoking Joe for a drink in the evening!
+
+C you all there guys!
+
+Sincerely,
+name
+title';
+
+	       
+               $this->oldconn->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Target Crossed!','Target Crossed!','Fantastic Sales Spree!','".$body."',0,".$this->oldconn->getUniqueID('emailtemplates').")");
+
+$body='
+Dear
+
+Thank you for your confidence in our ability to serve you.
+We are glad to be given the chance to serve you.I look
+forward to establishing a long term partnership with you.
+Consider me as a friend.
+Should any need arise,please do give us a call.
+
+Sincerely,
+name
+title';
+
+	       
+               $this->oldconn->query("insert into emailtemplates(foldername,templatename,subject,description,body,deleted,templateid) values ('Public','Thanks Note','Thanks Note','Note of thanks','".$body."',0,".$this->oldconn->getUniqueID('emailtemplates').")");
 
 
 
@@ -3523,7 +4003,7 @@ $sql172="update field set sequence=2 where columnname='category' and tablename='
 
 	//Populating combo values
 	require("include/ComboStrings.php");
-	$comboTables = Array('rsscategory','usageunit','glacct','quotestage','carrier','taxclass','recurringtype','faqstatus');
+	$comboTables = Array('rsscategory','usageunit','glacct','quotestage','carrier','taxclass','recurringtype','faqstatus','sostatus','postatus','invoicestatus');
 	foreach ($comboTables as $comTab)
 	{
 		$this->insertComboValues($combo_strings[$comTab."_dom"],$comTab);
