@@ -51,5 +51,5 @@ if($cvid != "")
 		//print_r($updatecasql);
 	}
 }
-header("Location: index.php?action=index&module=$cvmodule");
+header("Location: index.php?action=index&module=$cvmodule&viewname=$cvid");
 ?>
