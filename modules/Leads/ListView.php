@@ -295,7 +295,7 @@ if($viewid != 0)
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
 // Buttons and View options
-$other_text = '<table width="100%" border="1" cellpadding="1" cellspacing="0">
+$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
