@@ -147,13 +147,13 @@ $tabid = fetchTabIDVal($fldmodule);
 function getStdOutput($custFldArray, $mod_strings)
 {
 	$standCustFld = ''; 
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" width="80%"><tr><td>';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" width="40%"><tr><td>';
 	$standCustFld .= get_form_header($mod_strings['LBL_STANDARD_FIELDS'], "", false );
 	$standCustFld .= '</td></tr></table>';
-	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="80%">';
+	$standCustFld .= '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="40%">';
 	$standCustFld .= '<tr height=20>';
-	$standCustFld .= '<td class="ModuleListTitle" width="12%" style="padding:0px 3px 0px 3px;"><div align="center">Operation</div></td>';
-	$standCustFld .= '<td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;">'.$mod_strings['FieldName'].'</td>';
+	$standCustFld .= '<td class="ModuleListTitle" width="20%" style="padding:0px 3px 0px 3px;"><div><b>Operation</b></div></td>';
+	$standCustFld .= '<td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['FieldName'].'</b></td>';
 	$standCustFld .= '</tr>';
 	$i=1;
 	foreach($custFldArray as $custFldName => $custFldTableName)
@@ -168,7 +168,7 @@ function getStdOutput($custFldArray, $mod_strings)
 		}
 
 		$standCustFld .= '<tr class="'.$trowclass.'">';
-		$standCustFld .= '<td width="12%" height="21" style="padding:0px 3px 0px 3px;"><div align="center"><a href="index.php?module=Settings&action=EditComboField&fld_module='.$_REQUEST["fld_module"].'&fld_name='.$custFldName.'&table_name='.$custFldTableName.'&column_name='.$custFldTableName.'">'.$mod_strings['Edit'].'</a></div></td>';
+		$standCustFld .= '<td width="12%" height="21" style="padding:0px 3px 0px 3px;"><div><a href="index.php?module=Settings&action=EditComboField&fld_module='.$_REQUEST["fld_module"].'&fld_name='.$custFldName.'&table_name='.$custFldTableName.'&column_name='.$custFldTableName.'">'.$mod_strings['Edit'].'</a></div></td>';
 		$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$custFldName.'</td>';
 		$standCustFld .= '</tr>';
 		$i++; 
@@ -204,8 +204,8 @@ if($fld_module != 'Activities' && $fld_module != 'Events' && $fld_module != 'Rss
 	$cust_fld_header = get_form_header($mod_strings['CustomFields'], "", false );
 	$xtpl->assign("CUSTOMHEADER", $cust_fld_header);
 	$custom_combo_table_header = '<tr>
-		<td class="ModuleListTitle" width="15%" style="padding:0px 3px 0px 3px;"><div align="center">Operation</div></td>
-        <td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;">'.$mod_strings['FieldName'].'</td>
+		<td class="ModuleListTitle" width="20%" style="padding:0px 3px 0px 3px;"><div><b>Operation</b></div></td>
+        <td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>'.$mod_strings['FieldName'].'</b></td>
 	</tr>';
 
 	$xtpl->assign("CUSTOM_COMBO_HEADER",$custom_combo_table_header);

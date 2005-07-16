@@ -61,26 +61,26 @@ function getCustomFieldList($tabid, $mod_strings, $fld_module)
         $result = $adb->query($dbQuery) or die("Couldn't get file list");
 
 
-$list = '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="60%">';
+$list = '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="60%">';
 
 $list .='<form action="index.php" method="post" name="CustomFieldUpdate" id="form">';
 
 $list .= '<tr height=20>';
 
-$list .= '<td class="ModuleListTitle" width="15%" style="padding:0px 3px 0px 3px;"><div align="center">Operation</div>';
+$list .= '<td class="ModuleListTitle" width="20%" style="padding:0px 3px 0px 3px;"><div><b>Operation</b></div>';
 
 $list .= '</td>';
 
 $list .= '';
 
-$list .= '<td class="ModuleListTitle" height="21" style="padding:0px 3px 0px 3px;">';
+$list .= '<td class="ModuleListTitle" height="21" width="20%" style="padding:0px 3px 0px 3px;"><b>';
 
-$list .= $mod_strings['FieldName'].'</td>';
+$list .= $mod_strings['FieldName'].'</b></td>';
 
 //$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-$list .= '<td class="ModuleListTitle" width="30%" style="padding:0px 3px 0px 3px;">';
+$list .= '<td class="ModuleListTitle" width="20%" style="padding:0px 3px 0px 3px;"><b>';
 
-$list .= $mod_strings['FieldType'].'</td>';
+$list .= $mod_strings['FieldType'].'</b></td>';
 
 $list .= '</tr>';
 
@@ -97,7 +97,7 @@ else
 $trowclass = 'oddListRow';
 	$list .= '<tr class="'. $trowclass.'">';
 	
-	$list .= '<td height="21" style="padding:0px 3px 0px 3px;"><div align="center">';
+	$list .= '<td height="21" style="padding:0px 3px 0px 3px;"><div>';
 
 	 $list .= '<a href="javascript:deleteCustomField('.$row["fieldid"].',\''.$fld_module.'\', \''.$row["columnname"].'\', \''.$row["uitype"].'\')">'.$mod_strings['Delete'].'</a>'; 
 
