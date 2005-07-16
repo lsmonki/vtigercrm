@@ -21136,17 +21136,10 @@ $first_name_array = Array(
 );
 require_once('include/database/PearDatabase.php');
 $company_name_array = Array(
-"OTC BB",
-"2M Invest A/S",
-"A 77 Capital Inc",
-"ABSA Group Limited",
-"AB Watley Group Inc",
-"AG Media Group Inc",
-"AITS Inc",
-"AIL INTECH",
-"AMI Resources Inc",
-"AMS Marketing",
-"A Novo Broadband Inc",
+"vtiger",
+"t3M Invest A/S",
+"EDFG Group Limited",
+"vtigerCRM Inc",
 "X-CEED INC 99"
 );
 
