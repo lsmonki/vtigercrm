@@ -4746,6 +4746,32 @@
 		<opt>Type=InnoDB</opt>
 		<data></data>
 	</table>
+
+	<table name="customaction">
+                <field name="cvid" type="I" size="19">
+                </field>
+                <field name="subject" type="C" size="250">
+                        <NOTNULL/>
+                </field>
+                <field name="module" type="C" size="50">
+                        <NOTNULL/>
+                </field>
+                <field name="content" type="X">
+                        <DEFAULT value=""/>
+                </field>
+                <index name="customaction_IDX0">
+                        <col>cvid</col>
+                </index>
+                <opt>Type=InnoDB</opt>
+                <data></data>
+        </table>
+
+        <table name="customaction" alter="true">
+                <constraint>ADD CONSTRAINT customaction_FK1 FOREIGN KEY (cvid) REFERENCES customview (cvid) ON DELETE CASCAD
+E</constraint>
+                <opt>Type=InnoDB</opt>
+                <data></data>
+        </table>
 	
 	<table name="selectquery">
                 <field name="queryid" type="I" size="19">
