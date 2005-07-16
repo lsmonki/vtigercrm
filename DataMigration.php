@@ -57,6 +57,24 @@ class DataMigration
 
 
 
+
+//convertleadmapping
+
+$sql90="CREATE TABLE `convertleadmapping` (
+         `cfmid` int(19) NOT NULL auto_increment,
+   `leadfid` int(19) NOT NULL default '0',
+  `accountfid` int(19) default NULL,
+  `contactfid` int(19) default NULL,
+  `potentialfid` int(19) default NULL,
+  PRIMARY KEY  (`cfmid`)
+) TYPE=InnoDB";
+
+    echo '<br> '.$sql90 .' <br> ';
+    $this->oldconn->query($sql90);
+
+
+    
+
     $sql90="CREATE TABLE `CustomerDetails` (
 	  `customerid` int(19) NOT NULL default '0',
 	    `portal` char(3) default NULL,
@@ -918,7 +936,7 @@ class DataMigration
     $sql90="CREATE TABLE `vendor` (
 		  `vendorid` int(19) NOT NULL default '0',
 		    `company_name` varchar(100) default NULL,
-		      `name` varchar(100) default NULL,
+		      `vendorname` varchar(100) default NULL,
 		        `phone` varchar(100) default NULL,
 			  `email` varchar(100) default NULL,
 			    `website` varchar(100) default NULL,
@@ -2762,7 +2780,7 @@ $sql172="insert into field values (16,".$this->oldconn->getUniqueID("field").",'
 
  //Vendor Details --START
  //Block1
- $sql172="insert into field values (18,".$this->oldconn->getUniqueID("field").",'name','vendor',1,'2','name','Vendor Name',1,0,0,100,1,1,1,'V~M')";
+ $sql172="insert into field values (18,".$this->oldconn->getUniqueID("field").",'vendorname','vendor',1,'2','vendorname','Vendor Name',1,0,0,100,1,1,1,'V~M')";
     echo '<br> '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
