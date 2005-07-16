@@ -654,6 +654,7 @@ function mail_message_listing_beginning ($imapConnection,
     global $color, $auto_expunge, $base_uri, $thread_sort_messages,
            $allow_thread_sort, $allow_server_sort, $server_sort_order,
            $PHP_SELF;
+    global $mod_strings;
 
     $php_self = $PHP_SELF;
     /* fix for incorrect $PHP_SELF */
@@ -689,7 +690,7 @@ function mail_message_listing_beginning ($imapConnection,
     echo $moveFields;
 	echo '<table border="0" width="90%" cellpadding="5"  cellspacing="0" class="formOuterBorder" style="background-color: #F5F5F5;">
 		   <tr>
-		   		<td>'.$paginator.'&nbsp; | &nbsp; <a href="index.php?module=squirrelmail-1.4.4&action=options_highlight">Options</a></td>
+		   		<td>'.$paginator.'&nbsp; | &nbsp; <a href="index.php?module=squirrelmail-1.4.4&action=options_highlight">'.$mod_strings['LNK_OPTIONS'].'</a></td>
 		   		<td align="right">'.$msg_cnt_str.'</td>
 		   </tr>
 		 </table><br>';
@@ -698,12 +699,12 @@ function mail_message_listing_beginning ($imapConnection,
 
 	echo '<table border="0" width="90%" cellpadding="1"  cellspacing="0">
 		   <tr>
-		   		<td width="20%" class="formHeader">WebMails List</td>
-		   		<td><input type="button" class="button" name="fetchmail" value="Fetch My Mails" onclick=document.location.href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule=WEBMAILS";></input></td>
-		   		<td width="50%"><input type="SUBMIT" name="addToVtigerCRMButton" value="Add to vtiger CRM" class="button"></input></td>
-                <td><input type="SUBMIT" name="markRead" value="Read" class="button"></input> </td>
-		   		<td align="right"><input type="SUBMIT" name="markUnread" value="Unread" class="button"></input> </td>
-		   		<td align="right"><input type="SUBMIT" name="delete" value="Delete" class="button"></input> </td>
+		   		<td width="20%" class="formHeader">'.$mod_strings['LBL_WEBMAILS_LIST'].'</td>
+		   		<td><input type="button" class="button" name="fetchmail" value="'.$mod_strings['LBL_FETCH_MY_MAILS'].'" onclick=document.location.href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule=WEBMAILS";></input></td>
+		   		<td width="50%"><input type="SUBMIT" name="addToVtigerCRMButton" value="'.$mod_strings['LBL_ADD_TO_VTIGER_CRM'].'" class="button"></input></td>
+                <td><input type="SUBMIT" name="markRead" value="'.$mod_strings['LBL_READ'].'" class="button"></input> </td>
+		   		<td align="right"><input type="SUBMIT" name="markUnread" value="'.$mod_strings['LBL_UNREAD'].'" class="button"></input> </td>
+		   		<td align="right"><input type="SUBMIT" name="delete" value="'.$mod_strings['LBL_DELETE'].'" class="button"></input> </td>
 		   </tr>
 		 </table>';
 
@@ -824,6 +825,7 @@ function mail_message_listing_end($num_msgs, $paginator_str, $msg_cnt_str, $colo
 
 function printHeader($mailbox, $sort, $color, $showsort=true) {
     global $index_order;
+    global $mod_strings;
     echo html_tag( 'tr' ,'' , 'center', '','class="formSecHeader"' );
 
     /* calculate the width of the subject column based on the
@@ -846,7 +848,7 @@ function printHeader($mailbox, $sort, $color, $showsort=true) {
                      . '' . _("To") . '';
             } else {
                 echo html_tag( 'td' ,'' , 'left', '', 'width="25%"' )
-                     . '' . _("From") . '';
+                     . '' . _($mod_strings['LBL_FROM']) . '';
             }
             if ($showsort) {
                 ShowSortButton($sort, $mailbox, 2, 3);
@@ -855,7 +857,7 @@ function printHeader($mailbox, $sort, $color, $showsort=true) {
             break;
         case 3: /* date */
             echo html_tag( 'td' ,'' , 'left', '', 'width="20%" nowrap' )
-                 . '' . _("Date") . '';
+                 . '' . _($mod_strings['LBL_DATE']) . '';
             if ($showsort) {
                 ShowSortButton($sort, $mailbox, 0, 1);
             }
@@ -863,7 +865,7 @@ function printHeader($mailbox, $sort, $color, $showsort=true) {
             break;
         case 2: /* subject */
             echo html_tag( 'td' ,'' , 'left', '', 'width="50%"' )
-                 . '' . _("Subject") . '';
+                 . '' . _($mod_strings['LBL_SUBJECT']) . '';
             if ($showsort) {
                 ShowSortButton($sort, $mailbox, 4, 5);
             }
@@ -912,6 +914,7 @@ function ShowSortButton($sort, $mailbox, $Up, $Down ) {
 function get_selectall_link($start_msg, $sort) {
     global $checkall, $what, $where, $mailbox, $javascript_on;
     global $PHP_SELF, $PG_SHOWNUM;
+    global $mod_strings;
 
     $result = '';
     if ($javascript_on) {
@@ -953,9 +956,9 @@ function get_selectall_link($start_msg, $sort) {
         $result .= "\">";
 
         if (isset($checkall) && ($checkall == '1')) {
-            $result .= _("Unselect All");
+            $result .= _($mod_strings['LNK_UNSELECT_ALL']);
         } else {
-            $result .= _("Select All");
+            $result .= _($mod_strings['LNK_SELECT_ALL']);
         }
         $result .= "</A>\n";
     }
@@ -969,12 +972,13 @@ function get_selectall_link($start_msg, $sort) {
  */
 function get_msgcnt_str($start_msg, $end_msg, $num_msgs) {
     /* Compute the $msg_cnt_str. */
+    global $mod_strings;
     $result = '';
     if ($start_msg < $end_msg) {
-        $result = sprintf(_("Viewing Messages: %s to %s (%s total)"),
+        $result = sprintf(_($mod_strings['LBL_VIEWING_MESSAGES'].": %s to %s (%s ".$mod_strings['LBL_TOTAL'].")"),
                   '<b>'.$start_msg.'</b>', '<b>'.$end_msg.'</b>', $num_msgs);
     } else if ($start_msg == $end_msg) {
-        $result = sprintf(_("Viewing Message: %s (%s total)"), '<b>'.$start_msg.'</b>', $num_msgs);
+        $result = sprintf(_($mod_strings['LBL_VIEWING_MESSAGES'].": %s (%s ".$mod_strings['LBL_TOTAL'].")"), '<b>'.$start_msg.'</b>', $num_msgs);
     } else {
         $result = '<br>';
     }
