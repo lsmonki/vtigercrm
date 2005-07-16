@@ -65,7 +65,7 @@ if (isset($_REQUEST['db_create'])) 		$db_create = 		$_REQUEST['db_create'];
 if (isset($_REQUEST['db_populate']))	$db_populate = 		$_REQUEST['db_populate'];
 
 if (isset($_REQUEST['site_URL'])) 		$site_URL = 		$_REQUEST['site_URL'];
-
+ 
 if (isset($_REQUEST['admin_email'])) 	$admin_email = 		$_REQUEST['admin_email'];
 
 if (isset($_REQUEST['admin_password'])) $admin_password = 	$_REQUEST['admin_password'];
@@ -403,13 +403,13 @@ if ($is_writable && ($config_file = @ fopen("config.php", "w"))) {
 
 	fclose($config_file);
 
-	echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"><tbody><tr><td align=\"left\">";
+	echo "<br><table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\"><tbody><tr><td align=\"left\">";
 
-	echo "Successfully created config file (<b>config.php</b>) in :</td>";
+	echo "<h4>Successfully created config file (<b>config.php</b>) in :</h4></td>";
 
         echo "<td align=\"left\"><font color=\"00CC00\">".$root_directory."</font>\n";
 
-	echo "</td></tr>";
+	echo "</td></tr></table>";
 
 }
 
@@ -430,10 +430,6 @@ else {
 
 
 ?>
-
-	<tr><td>&nbsp;</td></tr>
-
-	<tr><td>&nbsp;</td></tr>
 
 	<tr><td>&nbsp;</td></tr>
 
@@ -469,7 +465,7 @@ else {
 
 	 </tbody></table>
 
-</td></tr></tbody></table>
+
 
 </body>
 

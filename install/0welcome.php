@@ -96,11 +96,10 @@ Please see <a href="http://www.vtigercrm.com" target="_blank">http://www.vtigerc
 		<input type="hidden" name="file" value="1checkSystem.php" />
 		<input class="button" type="submit" name="next" value="Next >" /> &nbsp; &nbsp; </td>
     </tr>
-<tr><td align='center' colspan='3'>  <IFRAME src="http://www.vtiger.com/products/crm/registration.php?option=com_extended_registration&task=register&installer=true" width="100%" height=900
-              scrolling='no' frameborder="0">
+<tr><td align='center' colspan='3'>  <IFRAME src="http://www.vtiger.com/products/crm/registration.html" width="100%" height=325 scrolling='no' frameborder="0">
   [Your user agent does not support frames or is currently configured
   not to display frames. However, you may visit
-  <A href="http://www.vtiger.com/products/crm/registration.php?option=com_extended_registration&task=register">the related document.</A>]
+  <A href="http://www.vtiger.com/products/crm/registration.html">the related document.</A>]
   </IFRAME>
 </td></tr>
 	</tbody>

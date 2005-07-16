@@ -110,12 +110,12 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
           </tr>
           <tr>
 		    <td align="center">
-					<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
+					<table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
 		              <tr>
 					<td bgcolor="#EEEEEE"><h4>Database Configuration</h4></td>
 		              </tr>
               </table>
-<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
+<table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
 			  <tr>
                <td bgcolor="#F5F5F5" width="40%">Host Name</td>
                <td align="left" nowrap>: <font class="dataInput"><?php if (isset($db_host_name)) echo "$db_host_name"; ?></font></td>
@@ -138,50 +138,39 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 			   <?php if (isset($db_drop_tables) && $db_drop_tables == true) echo "True"; else echo "False"; ?>
 				</font></td>
 			  </tr></table><br>
-					<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
+					<table width="85%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
 		              <tr>
 					<td bgcolor="#EEEEEE"><h4>Site Configuration</h4></td>
 		              </tr>
               </table>
-			<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
+			<table width="85%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
 
               <tr>
-               <td noWrap bgcolor="#F5F5F5" width="40%">URL</td>
+               <td bgcolor="#F5F5F5" width="40%">URL</td>
                <td align="left">: <font class="dataInput"><?php if (isset($site_URL)) echo $site_URL; ?></font></td>
               </tr>
               <tr>
-               <td noWrap bgcolor="#F5F5F5" width="40%">Path</td>
+               <td bgcolor="#F5F5F5" width="40%">Path</td>
                <td align="left">: <font class="dataInput"><?php if (isset($root_directory)) echo $root_directory; ?></font></td>
               </tr>
               <tr>
-               <td noWrap bgcolor="#F5F5F5" width="40%">Cache Path</td>
+               <td bgcolor="#F5F5F5" width="40%">Cache Path</td>
                <td align="left">: <font class="dataInput"><?php if (isset($cache_dir)) echo $root_directory.''.$cache_dir; ?></font></td>
               </tr>
 
 
               <tr>
-               <td noWrap bgcolor="#F5F5F5" width="40%">Admin Password</td>
+               <td bgcolor="#F5F5F5" width="40%">Admin Password</td>
                <td align="left">: <font class="dataInput"><?php if (isset($admin_password)) echo ereg_replace('.', '*', $admin_password); ?></font></td>
               </tr>
 
     	      </tbody>
 			</table>
-<table width="70%" cellpadding="5" border="0">
+<table width="80%" cellpadding="5" border="0">
           <tr>
-
-          <td>
-		  		 			<form action="install.php" method="post" name="form" id="form">
-		  		 			<input type="hidden" name="file" value="4createConfigFile.php">
-		  		 <!-- TODO Clint 4/28 - Add support for creating the database as well -->
-		  		 <!--			 Also create database <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font>? -->
-		  		 <!--			 <input type="checkbox" class="dataInput" name="db_create" value="1" /> -->
-		  		 			 <b>Also populate demo data?</b>
-		  		 			 <input type="checkbox" class="dataInput" name="db_populate" value="1">
-			</td>
-
-          <td align="right">
-			<form action="install.php" method="post" name="form" id="form">
-			 <input type="hidden" name="file" value="2setConfig.php">
+           <td align="left" valign="bottom">
+	       		 <form action="install.php" method="post" name="form" id="form">
+			       <input type="hidden" name="file" value="2setConfig.php">
              <input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
              <input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
              <input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
@@ -207,8 +196,43 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
 			 <input class="button" type="submit" name="next" value="Change" /></td></form>
 
 		 </td>
+<td width="40%" align="right" valign="bottom">
+		  					<form action="install.php" method="post" name="form" id="form"> 
+		  		 			<input type="hidden" name="file" value="4createConfigFile.php">
+		  		 <!-- TODO Clint 4/28 - Add support for creating the database as well -->
+		  		 <!--			 Also create database <font class="dataInput"><?php if (isset($db_name)) echo "$db_name"; ?></font>? -->
+		  		 <!--			 <input type="checkbox" class="dataInput" name="db_create" value="1" /> -->
+		  		 			 <b>Also populate demo data?</b>
+		  		 			 <input type="checkbox" class="dataInput" name="db_populate" value="1">
+		  		 			 
+		  		 			 
+			 <input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
+             <input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
+             <input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
+             <input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
+             <input type="hidden" class="dataInput" name="db_drop_tables" value="<?php if (isset($db_drop_tables)) echo "$db_drop_tables"; ?>" />
+             <input type="hidden" class="dataInput" name="site_URL" value="<?php if (isset($site_URL)) echo "$site_URL"; ?>" />
+             <input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
+             <input type="hidden" class="dataInput" name="admin_email" value="<?php if (isset($admin_email)) echo "$admin_email"; ?>" />
+             <input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; ?>" />
+			 <input type="hidden" class="dataInput" name="cache_dir" value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" />
+			 <input type="hidden" class="dataInput" name="mail_server" value="<?php if (isset($mail_server)) echo $mail_server; ?>" />
 
-	<td align="right">
+		  <input type="hidden" class="dataInput" name="mail_server_username" value="<?php if (isset($mail_server_username)) echo $mail_server_username; ?>" />
+
+
+	  <input type="hidden" class="dataInput" name="mail_server_password" value="<?php if (isset($mail_server_password)) echo $mail_server_password; ?>" />
+
+	<input type="hidden" class="dataInput" name="ftpserver" value="<?php if (isset($ftpserver)) echo "$ftpserver"; ?>" />
+        <input type="hidden" class="dataInput" name="ftpuser" value="<?php if (isset($ftpuser)) echo "$ftpuser"; ?>" />
+        <input type="hidden" class="dataInput" name="ftppassword" value="<?php if (isset($ftppassword)) echo "$ftppassword"; ?>" />
+
+
+			 <input class="button" type="submit" name="next" value="Create" /></form>
+		  		 			 
+			</td>
+
+	<!-- td align="right">
 	<form action="install.php" method="post" name="form" id="form">
 	<input type="hidden" name="file" value="4createConfigFile.php">
 			 <input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
@@ -233,14 +257,14 @@ if($mysql_status == 'true' && $mysql_db_status == 'true')
         <input type="hidden" class="dataInput" name="ftppassword" value="<?php if (isset($ftppassword)) echo "$ftppassword"; ?>" />
 
 
-			 <input class="button" type="submit" name="next" value="Create" />
-			</td>
+			 <input class="button" type="submit" name="next" value="Create" /></form>
+			</td -->
 		 </tr>
-		 <tr><td>&nbsp;</td></tr>
+		 
 
 
 	</tbody></table>
-</form>
+
 </body>
 </html>
 <?php

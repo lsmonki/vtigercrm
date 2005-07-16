@@ -273,7 +273,7 @@ function verify_data(form) {
 		  However, this installer will still be able to create the necessary database tables.<P>
 
 		  <p>If you unsure of your database host, username or password, we suggest that you use the default
-		  values below. <P/>
+		  values below. </P>
 		  </td>
           </tr>
 		  <tr>
@@ -281,12 +281,12 @@ function verify_data(form) {
 			<form action="install.php" method="post" onsubmit="return verify_data(setConfig);" name="setConfig" id="form">
 			<input type="hidden" name="file" value="3confirmConfig.php">
 			<div align="left" width="70%"><font color=red>* Required field</font></div>
-			<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
+			<table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
               <tr>
 			<td bgcolor="#EEEEEE"><h4>Database Configuration</h4></td>
               </tr>
               </table>
-			<table width="70%" cellpadding="5"  cellspacing="1" border="0" style="border: 1px dotted #666666;"><tbody>
+			<table width="80%" cellpadding="5"  cellspacing="1" border="0" style="border: 1px dotted #666666;"><tbody>
 			<tr>
                <td nowrap bgcolor="#F5F5F5" width="40%"><strong>Host Name</strong> <sup><font color=red>*</font></sup></td>
                <td align="left"><input type="text" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" /></td>
@@ -320,14 +320,14 @@ function verify_data(form) {
                <td align="left"><input type="checkbox" name="db_drop_tables"
 			   <?php if (isset($db_drop_tables) && $db_drop_tables==true) echo "checked "; ?> value="$db_drop_tables"/></td>
               </tr -->
-			<br><table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
+			<br><table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;"><tbody>
 			              <tr>
 						<td bgcolor="#EEEEEE"><h4>Site Configuration</h4></td>
 			              </tr>
               </table>
-            <table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
+            <table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
             <tr>
-			<td nowrap bgcolor="#F5F5F5" width="40%"><strong>URL</strong> <sup><font color=red>*</font></sup></td>
+			<td bgcolor="#F5F5F5" width="40%"><strong>URL</strong> <sup><font color=red>*</font></sup></td>
             <td align="left"><input class="dataInput" type="text" name="site_URL"
 			value="<?php if (isset($site_URL)) echo $site_URL; ?>" size="40" />
 		  	</td>
@@ -335,16 +335,16 @@ function verify_data(form) {
             <td bgcolor="#F5F5F5"><strong>Path</strong> <sup><font color=red>*</font></sup></td>
             <td align="left"><input class="dataInput" type="text" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> </td>
 	  </tr><tr valign="top">
-            <td nowrap bgcolor="#F5F5F5"><strong>Path to Cache Directory  <sup><font color=red>*</font></sup><br>(must be writable)</td>
+            <td bgcolor="#F5F5F5"><strong>Path to Cache Directory  <sup><font color=red>*</font></sup><br>(must be writable)</td>
             <td align="left"><?php echo $root_directory; ?><input class="dataInput" type="text" name="cache_dir" size='14' value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" size="40" /> </td>
           </tr>
           </table><br>
-            <table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
+            <table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
 		<tr>
 			<td bgcolor="#EEEEEE"><h4>Admin Configuration</h4></td>
               </tr>
               </table>
-	<table width="70%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
+	<table width="80%" cellpadding="5" border="0" style="border: 1px dotted #666666;">
 	<tr>
 
             <td nowrap bgcolor="#F5F5F5" width="40%"><strong>username</strong></td>
