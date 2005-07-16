@@ -307,7 +307,7 @@ if ( isset( $optpage_data ) ) {
     }
 }
 
-$optpage_title = _("Options");
+$optpage_title = _($mod_strings['LBL_OPTIONS']);
 if (isset($optpage_name) && ($optpage_name != '')) {
     $optpage_title .= " - $optpage_name";
 }
@@ -412,9 +412,9 @@ if ($optpage == SMOPT_PAGE_MAIN) {
 */
     /* Build a section for Message Highlighting Options. */
     $optpage_blocks[] = array(
-        'name' =>_("Message Highlighting"),
+        'name' =>_($mod_strings['LBL_MESSAGE_HIGHLIGHTING']),
         'url'  => 'index.php?module=squirrelmail-1.4.4&action=options_highlight',
-        'desc' =>_("Based upon given criteria, incoming messages can have different background colors in the message list. This helps to easily distinguish who the messages are from, especially for mailing lists."),
+        'desc' =>_($mod_strings['LBL_MESSAGE_HIGHLIGHTING_INFO']),//."Based upon given criteria, incoming messages can have different background colors in the message list. This helps to easily distinguish who the messages are from, especially for mailing lists."),
         'js'   => false
     );
 

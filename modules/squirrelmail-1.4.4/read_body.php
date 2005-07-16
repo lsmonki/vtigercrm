@@ -88,7 +88,7 @@ define('SM_PATH','modules/squirrelmail-1.4.4/');
 
 $smoduleurl = "&smodule=WEBMAILS";
 
-echo '<input type="button" class="button" name="fetchmail" value="Fetch My Mails" onclick=document.location.href="index.php?module=squirrelmail-1.4.4&action=redirect'.$smoduleurl.'";></input>';
+echo '<input type="button" class="button" name="fetchmail" value="'.$mod_strings['LBL_FETCH_MY_MAILS'].'" onclick=document.location.href="index.php?module=squirrelmail-1.4.4&action=redirect'.$smoduleurl.'";></input>';
 echo '<br><br>';
 
 //echo 'in read body';
@@ -190,12 +190,13 @@ function findPreviousMessage($numMessages, $passed_id) {
  */
 function printer_friendly_link($mailbox, $passed_id, $passed_ent_id, $color) {
     global $javascript_on;
+    global $mod_strings;
 
     $params = '&passed_ent_id=' . urlencode($passed_ent_id) .
               '&mailbox=' . urlencode($mailbox) .
               '&passed_id=' . urlencode($passed_id);
 
-    $print_text = _("View Printable Version");
+    $print_text = _($mod_strings['LNK_VIEW_PRINTABLE_VERSION']);
 
     $result = '';
     /* Output the link. */
@@ -489,10 +490,11 @@ function formatEnvheader($mailbox, $passed_id, $passed_ent_id, $message,$color, 
     global $msn_user_support, $default_use_mdn, $default_use_priority,
            $show_xmailer_default, $mdn_user_support, $PHP_SELF, $javascript_on,
            $squirrelmail_language,$msgvtSubject;
+    global $mod_strings;
 
     $header = $message->rfc822_header;
     $env = array();
-    $env[_("Subject")] = decodeHeader($header->subject);
+    $env[_($mod_strings['LBL_SUBJECT'])] = decodeHeader($header->subject);
     $msgvtSubject = $env[_("Subject")];
     $from_name = $header->getAddr_s('from');
     if (!$from_name) {
@@ -501,13 +503,13 @@ function formatEnvheader($mailbox, $passed_id, $passed_ent_id, $message,$color, 
             $from_name = _("Unknown sender");
         }
     }
-    $env[_("From")] = decodeHeader($from_name);
-    $env[_("Date")] = getLongDateString($header->date);
-    $env[_("To")] = formatRecipientString($header->to, "to");
-    $env[_("Cc")] = formatRecipientString($header->cc, "cc");
-    $env[_("Bcc")] = formatRecipientString($header->bcc, "bcc");
+    $env[_($mod_strings['LBL_FROM'])] = decodeHeader($from_name);
+    $env[_($mod_strings['LBL_DATE'])] = getLongDateString($header->date);
+    $env[_($mod_strings['LBL_TO'])] = formatRecipientString($header->to, "to");
+    $env[_($mod_strings['LBL_CC'])] = formatRecipientString($header->cc, "cc");
+    $env[_($mod_strings['LBL_BCC']."Bcc")] = formatRecipientString($header->bcc, "bcc");
     if ($default_use_priority) {
-        $env[_("Priority")] = htmlspecialchars(getPriorityStr($header->priority));
+        $env[_($mod_strings['LBL_PRIORITY'])] = htmlspecialchars(getPriorityStr($header->priority));
     }
     if ($show_xmailer_default) {
         $env[_("Mailer")] = decodeHeader($header->xmailer);
@@ -586,6 +588,7 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
         global $base_uri, $draft_folder, $where, $what, $color, $sort,
            $startMessage, $PHP_SELF, $save_as_draft,
            $enable_forward_as_attachment;
+	global $mod_strings;
 
         $header = $message->rfc822_header;
         $env = array();
@@ -608,7 +611,7 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
         $msgs_str  = _("Search Results");
     } else {
         $msgs_url .= 'right_main&sort=' . $sort . '&amp;startMessage=' .$startMessage . '&amp;mailbox=' . $urlMailbox;
-        $msgs_str  = _("Message List");
+        $msgs_str  = _($mod_strings['LNK_MESSAGE_LIST']);
     }
     $s .= '<a href="' . $msgs_url . '">' . $msgs_str . '</a>';
 
@@ -622,7 +625,7 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
             $delete_url .= 'sort=' . $sort . '&amp;startMessage=' . $startMessage;
         }
         $s .= $topbar_delimiter;
-        $s .= '<a href="' . $delete_url . '">' . _("Delete") . '</a>';
+        $s .= '<a href="' . $delete_url . '">' . _($mod_strings['LNK_DELETE']) . '</a>';
     }
 /*
     $comp_uri = 'compose' .
@@ -668,18 +671,18 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
             $uri = $base_uri . 'read_body&passed_id='.$prev.
                    '&amp;mailbox='.$urlMailbox.'&amp;sort='.$sort.
                    '&amp;startMessage='.$startMessage.'&amp;show_more=0';
-            $s .= '<a href="'.$uri.'">'._("Previous").'</a>';
+            $s .= '<a href="'.$uri.'">'._($mod_strings['LNK_PREVIOUS']).'</a>';
         } else {
-            $s .= _("Previous");
+            $s .= _($mod_strings['LNK_PREVIOUS']);
         }
         $s .= $topbar_delimiter;
         if ($next != -1) {
             $uri = $base_uri . 'read_body&passed_id='.$next.
                    '&amp;mailbox='.$urlMailbox.'&amp;sort='.$sort.
                    '&amp;startMessage='.$startMessage.'&amp;show_more=0';
-            $s .= '<a href="'.$uri.'">'._("Next").'</a>';
+            $s .= '<a href="'.$uri.'">'._($mod_strings['LNK_NEXT']).'</a>';
         } else {
-            $s .= _("Next");
+            $s .= _($mod_strings['LNK_NEXT']);
         }
     } else if (isset($passed_ent_id) && $passed_ent_id) {
         /* code for navigating through attached message/rfc822 messages */
@@ -738,13 +741,13 @@ function formatMenubar($mailbox, $passed_id, $passed_ent_id, $message, $mbx_resp
     //$s .= $topbar_delimiter;
    // echo $comp_action_uri;
     //$s .= makeComposeLink($comp_action_uri, _("Reply"));
-    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&msg_to='.$msgvtTo.'&mg_subject='.$msgvtSubject.'&body='.$msgData.'">Reply</a>';
+    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&msg_to='.$msgvtTo.'&mg_subject='.$msgvtSubject.'&body='.$msgData.'">'.$mod_strings['LNK_REPLY'].'</a>';
     // echo $string;
 
     $comp_action_uri = $modifiedcomp_uri . '&amp;smaction=reply_all';
     $s .= $topbar_delimiter;
     //$s .= makeComposeLink($comp_action_uri, _("Reply All"));
-    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&msg_to='.$msgvtTo.'&msg_cc='.$msgvtcc.'&mg_subject='.$msgvtSubject.'&body='.$msgData.'">Reply All</a>';
+    $s .= '<a href="index.php?module=Emails&action=EditView'.$modifiedcomp_uri.'&msg_to='.$msgvtTo.'&msg_cc='.$msgvtcc.'&mg_subject='.$msgvtSubject.'&body='.$msgData.'">'.$mod_strings['LNK_REPLY_ALL'].'</a>';
     $s .= '</small></td></tr></table>';
     $ret = concat_hook_function('read_body_menu_top', $s);
     if($ret != '') {
@@ -972,7 +975,7 @@ if ($attachmentsdisplay) {
    echo '     <tr><td>';
    echo '       <table width="100%" cellpadding="0" cellspacing="0" align="center" border="0" bgcolor="'.$color[4].'">';
    echo '        <tr>' . html_tag( 'td', '', 'left', '','class="formSecHeader"' );
-   echo '           <b>' . _("Attachments") . ':</b>';
+   echo '           <b>' . _($mod_strings['LBL_ATTACHMENTS']) . ':</b>';
    echo '        </td></tr>';
    echo '        <tr><td>';
    echo '          <table width="100%" cellpadding="2" cellspacing="2" align="center"'.' border="0" class="formOuterHeader"><tr><td>';

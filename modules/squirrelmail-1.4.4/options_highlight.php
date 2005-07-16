@@ -101,6 +101,8 @@ sqGetGlobalVar('value', $value);
 /* end of get globals */
  
 function oh_opt( $val, $sel, $tit ) {
+	global $mod_strings;
+
 	echo 'function oh_opt invoked';
     echo "<option value=\"$val\"";
     if ( $sel )
@@ -178,15 +180,15 @@ if (isset($theid) && ($theaction == 'delete') ||
 echo
 html_tag( 'table', "\n" .
     html_tag( 'tr', "\n" .
-        html_tag( 'td', '<center><b>' . _("Options") . ' - ' . _("Message Highlighting") . '</b></center>', 'center')
+        html_tag( 'td', '<center><b>' . _($mod_strings['LBL_OPTIONS']) . ' - ' . _($mod_strings['LBL_MESSAGE_HIGHLIGHTING']) . '</b></center>', 'center')
    ),
    'center', $color[12], 'width="95%" border="0" cellpadding="1" cellspacing="0"' ) . "<br />\n" .
 html_tag( 'table', '', '', '', 'width="100%" border="0" cellpadding="1" cellspacing="0"' ) . 
     html_tag( 'tr' ) . "\n" .
         html_tag( 'td', '', 'center' );
 
-echo '<center>[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=add">' . _("New") . '</a>]'.
-        ' - [<a href="index.php?module=squirrelmail-1.4.4&action=options">'._("Done").'</a>]</center><br />'."\n";
+echo '<center>[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=add">' . _($mod_strings['LNK_NEW']) . '</a>]'.
+        ' - [<a href="index.php?module=squirrelmail-1.4.4&action=options">'._($mod_strings['LNK_DONE']).'</a>]</center><br />'."\n";
 	//Problem area is here as the array is not getting properly updated
 
 $mhl_count = count($message_highlight_list);
@@ -213,14 +215,14 @@ if ($mhl_count > 0) {
         }
 
         $links = '<small>[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=edit&amp;theid=' . $i . '">' .
-                 _("Edit") .
+                 _($mod_strings['LBL_EDIT']) .
                  '</a>]&nbsp;[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=delete&amp;theid='.  $i . '">' .
-                 _("Delete");
+                 _($mod_strings['LBL_DELETE']);
         if($i > 0) {
-            $links .= '</a>]&nbsp;[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=up&amp;theid='.  $i . '">' .  _("Up");
+            $links .= '</a>]&nbsp;[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=up&amp;theid='.  $i . '">' .  _($mod_strings['LBL_UP']);
         }
         if($i+1 < $mhl_count) {
-            $links .= '</a>]&nbsp;[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=down&amp;theid='.  $i . '">' .  _("Down");
+            $links .= '</a>]&nbsp;[<a href="index.php?module=squirrelmail-1.4.4&action=options_highlight&theaction=down&amp;theid='.  $i . '">' .  _($mod_strings['LBL_DOWN']);
         }
         $links .= '</a>]</small>';
 
@@ -240,7 +242,7 @@ if ($mhl_count > 0) {
     echo "</table>\n".
         "<br />\n";
 } else {
-    echo '<center>' . _("No highlighting is defined") . "</center><br />\n".
+    echo '<center>' . _($mod_strings['LBL_NO_HIGHLIGHTING_IS_DEFINED']) . "</center><br />\n".
         "<br />\n";
 }
 if ($theaction == 'edit' || $theaction == 'add') {
@@ -434,7 +436,7 @@ echo 'theaction is '.$theaction .'  theid is '.$theid .'  msghighlightlist is  '
     echo html_tag( 'table', '', 'center', '', 'width="80%" cellpadding="3" cellspacing="0" border="0"' ) . "\n";
     echo html_tag( 'tr', '', '', $color[0] ) . "\n";
     echo html_tag( 'td', '', 'right', '', 'nowrap' ) . "<b>\n";
-    echo _("Identifying name") . ":";
+    echo _($mod_strings['LBL_IDENTIFYING_NAME']) . ":";
     echo '      </b></td>' . "\n";
     echo html_tag( 'td', '', 'left' ) . "\n";
     if ($theaction == 'edit' && isset($theid) && isset($message_highlight_list[$theid]['name']))
@@ -446,7 +448,7 @@ echo 'theaction is '.$theaction .'  theid is '.$theid .'  msghighlightlist is  '
     echo "   </tr>\n";
     echo html_tag( 'tr', html_tag( 'td', '<small><small>&nbsp;</small></small>', 'left' ) ) ."\n";
     echo html_tag( 'tr', '', '', $color[0] ) . "\n";
-    echo html_tag( 'td', '<b>'. _("Color") . ':</b>', 'right' );
+    echo html_tag( 'td', '<b>'. _($mod_strings['LBL_COLOR']) . ':</b>', 'right' );
     echo html_tag( 'td', '', 'left' );
     echo '         '.addRadioBox('color_type', $selected_choose, '1');
 
@@ -470,7 +472,7 @@ echo 'theaction is '.$theaction .'  theid is '.$theid .'  msghighlightlist is  '
     echo "<br />\n";
 
     echo '         '.addRadioBox('color_type', $selected_input, 2).
-        ' &nbsp;'. _("Other:") .
+        ' &nbsp;'. _($mod_strings['LBL_OTHER'].":") .
         addInput('newcolor_input',
             (($selected_input && isset($theid)) ? $message_highlight_list[$theid]['color'] : ''),
             '7');
@@ -502,21 +504,21 @@ echo 'theaction is '.$theaction .'  theid is '.$theid .'  msghighlightlist is  '
     echo "         <select name=\"match_type\">\n";
     oh_opt( 'from',
             (isset($theid)?$message_highlight_list[$theid]['match_type'] == 'from':1),
-            _("From") );
+            _($mod_strings['LBL_FROM']) );
     oh_opt( 'to',
             (isset($theid)?$message_highlight_list[$theid]['match_type'] == 'to':0),
-            _("To") );
+            _($mod_strings['LBL_TO']) );
     oh_opt( 'cc',
             (isset($theid)?$message_highlight_list[$theid]['match_type'] == 'cc':0),
-            _("Cc") );
+            _($mod_strings['LBL_CC']) );
     oh_opt( 'to_cc',
             (isset($theid)?$message_highlight_list[$theid]['match_type'] == 'to_cc':0),
-            _("To or Cc") );
+            _($mod_strings['LBL_TO_OR_CC']) );
     oh_opt( 'subject',
             (isset($theid)?$message_highlight_list[$theid]['match_type'] == 'subject':0),
-            _("Subject") );
+            _($mod_strings['LBL_SUBJECT']) );
     echo "         </select>\n";
-    echo '<b>' . _("Matches") . ':</b> ';
+    echo '<b>' . _($mod_strings['LBL_MATCHES']) . ':</b> ';
     if ($theaction == 'edit' && isset($theid) && isset($message_highlight_list[$theid]['value']))
         $disp = $message_highlight_list[$theid]['value'];
     else
@@ -525,7 +527,7 @@ echo 'theaction is '.$theaction .'  theid is '.$theid .'  msghighlightlist is  '
     echo "        </td>\n";
     echo "   </tr>\n";
     echo "</table>\n";
-    echo '<center><input type="submit" value="' . _("Submit") . "\" /></center>\n";
+    echo '<center><input type="submit" value="' . _($mod_strings['LBL_SUBMIT']) . "\" /></center>\n";
     echo "</form>\n";
 }
 do_hook('options_highlight_bottom');

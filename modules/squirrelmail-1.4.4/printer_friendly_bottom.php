@@ -125,24 +125,24 @@ echo '<body text="#000000" bgcolor="#FFFFFF" link="#000000" vlink="#000000" alin
      /* headers (we use table because translations are not all the same width) */
      html_tag( 'table', '', 'center', '', 'cellspacing="0" cellpadding="0" border="0" width="100%"' ) .
      html_tag( 'tr',
-         html_tag( 'td', _("From").':&nbsp;', 'left' ,'','valign="top"') .
+         html_tag( 'td', _($mod_strings['LBL_FROM']).':&nbsp;', 'left' ,'','valign="top"') .
          html_tag( 'td', $from, 'left' )
      ) . "\n" .
      html_tag( 'tr',
-         html_tag( 'td', _("Subject").':&nbsp;', 'left','','valign="top"' ) .
+         html_tag( 'td', _($mod_strings['LBL_SUBJECT']).':&nbsp;', 'left','','valign="top"' ) .
          html_tag( 'td', $subject, 'left' )
      ) . "\n" .
      html_tag( 'tr',
-         html_tag( 'td', _("Date").':&nbsp;', 'left' ) .
+         html_tag( 'td', _($mod_strings['LBL_DATE']).':&nbsp;', 'left' ) .
          html_tag( 'td', htmlspecialchars($date), 'left' )
      ) . "\n" .
      html_tag( 'tr',
-         html_tag( 'td', _("To").':&nbsp;', 'left','','valign="top"' ) .
+         html_tag( 'td', _($mod_strings['LBL_TO']).':&nbsp;', 'left','','valign="top"' ) .
          html_tag( 'td', $to, 'left' )
     ) . "\n";
     if ( strlen($cc) > 0 ) { /* only show Cc: if it's there... */
          echo html_tag( 'tr',
-             html_tag( 'td', _("Cc").':&nbsp;', 'left','','valign="top"' ) .
+             html_tag( 'td', _($mod_strings['LBL_CC']).':&nbsp;', 'left','','valign="top"' ) .
              html_tag( 'td', $cc, 'left' )
          );
      }
