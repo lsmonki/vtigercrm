@@ -50,6 +50,15 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
 	$focus = getConvertQuoteToInvoice($focus,$quote_focus,$quoteid);
 			
     }
+    elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'sotoinvoice')
+    {
+        $soid = $_REQUEST['record'];
+        $so_focus = new SalesOrder();
+        $so_focus->id = $soid;
+        $so_focus->retrieve_entity_info($soid,"SalesOrder");
+        $focus = getConvertSoToInvoice($focus,$so_focus,$soid);
+
+    }
     elseif(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'potentoinvoice')
     {
 	    $focus->mode = '';		
