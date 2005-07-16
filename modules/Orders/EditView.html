@@ -133,7 +133,8 @@
 </td></tr></table>
 
 <BR>
-  <div style="padding:2 0 2 0"><strong>{APP.LBL_PRODUCT_DETAILS}</strong></div>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+  <tr><td  class="formBorder"><div style="padding:2 0 2 0"><strong>{APP.LBL_PRODUCT_DETAILS}</strong></div>
   <div id="productList"> 
     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formBorder">
       <tr class="moduleListTitle" height="20" id="tablehead"> 
@@ -154,6 +155,9 @@
       </tr>
       {ROW1}
       {ASSOCIATEDPRODUCTS} 
+      <tr id="tableheadline">
+        <td colspan="11" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+      </tr>
     </table>
   </div>
   <table width="100%" border="0" cellspacing="2" cellpadding="2">
@@ -180,7 +184,7 @@
   </table>
   <input type="hidden" name="hdnSubTotal" id="hdnSubTotal" value="{SUBTOTAL}">
   <input type="hidden" name="hdnGrandTotal" id="hdnGrandTotal" value="{GRANDTOTAL}">
-  <br>
+ </td></tr></table><br>
   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
     <tr> 
       <td> {BLOCK6_HEADER} 
