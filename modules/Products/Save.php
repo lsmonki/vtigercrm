@@ -49,6 +49,84 @@ foreach($focus->column_fields as $fieldname => $val)
 $focus->save("Products");
 $return_id = $focus->id;
 
+//Checking and Sending Mail from reorder level
+global $current_user;
+$productname = $focus->column_fields['productname'];
+$qty_stk = $focus->column_fields['qtyinstock'];
+$reord = $focus->column_fields['reorderlevel'];
+$handler = $focus->column_fields['assigned_user_id'];
+if($qty_stk != '' && $reord != '')
+{
+
+	if($qty_stk < $reord)
+	{
+	
+		$handler_name = getUserName($handler);
+		$sender_name = getUserName($current_user->id);
+		$to_address= getUserEmail($handler);
+		$subject =  $productname.' Stock Level is Low';
+		$body = 'Dear '.$handler_name.',
+
+The current stock of '.$productname.' in our warehouse is '.$qty_stk.'. Kindly procure required number of units as the stock level is below reorder level '.$reord.'.
+
+Severity: Major 
+
+Thanks,
+'.$sender_name; 
+		SendMailToCustomer($to_address,$current_user->id,$subject,$body);	
+			
+	}	
+	
+}
+function SendMailToCustomer($to,$current_user_id,$subject,$contents)
+{
+        global $vtlog;
+        $vtlog->logthis("Inside SendMailToCustomer function.",'debug');
+        require_once("modules/Emails/class.phpmailer.php");
+
+        $mail = new PHPMailer();
+
+        $mail->Subject = $subject;
+        $mail->Body    = nl2br($contents);
+        $mail->IsSMTP();
+
+        if($current_user_id != '')
+        {
+                global $adb;
+                $sql = "select * from users where id= ".$current_user_id;
+                $result = $adb->query($sql);
+                $from = $adb->query_result($result,0,'email1');
+                $initialfrom = $adb->query_result($result,0,'user_name');
+        }
+        if($mail_server=='')
+        {
+                global $adb;
+                $mailserverresult=$adb->query("select * from systems where server_type='email'");
+                $mail_server=$adb->query_result($mailserverresult,0,'server');
+                $_REQUEST['server']=$mail_server;
+        }
+        $mail->Host = $mail_server;
+        $mail->SMTPAuth = true;
+        $mail->Username = $mail_server_username;
+        $mail->Password = $mail_server_password;
+	$mail->From = $from;
+        $mail->FromName = $initialfrom;
+
+        $mail->AddAddress($to);
+        $mail->AddReplyTo($from);
+        $mail->WordWrap = 50;
+
+        $mail->IsHTML(true);
+
+        $mail->AltBody = "This is the body in plain text for non-HTML mail clients";
+
+        if(!$mail->Send())
+        {
+                $errormsg = "Mail Could not be sent...";
+        }
+}
+
+
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 else $return_module = "Products";
 if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
