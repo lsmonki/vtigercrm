@@ -379,11 +379,12 @@ $product_name_array= array( "Vtiger Single User Pack", "Vtiger 5 Users Pack", "V
         "Vtiger 25 Users Pack", "Vtiger 50 Users Pack", "Double Panel See-thru Clipboard",
         "abcd1234", "Cd-R CD Recordable", "Sharp - Plain Paper Fax" , "Brother Ink Jet Cartridge"); 
 $product_code_array= array("001","002","003","023","005","sg-106","1324356","sg-108","sg-119","sg-125");
+$subscription_rate=array("149","699","1299","2999","4995");
 
 for($i=0; $i<10; $i++)
 {
         $product = new Product();
-	if($i>=4)
+	if($i>4)
 	{
 		$parent_key = array_rand($opportunity_ids);
 		$product->column_fields["parent_id"]=$opportunity_ids[$parent_key];
@@ -394,6 +395,8 @@ for($i=0; $i<10; $i++)
 		$category 	= 	"Hardware";		
 		$website 	=	"";
 		$manufacturer	= 	"";
+		$commission_rate=	rand(10,99);
+		$unit_price	=	rand(100,999);
 	}
 	else
 	{
@@ -406,6 +409,8 @@ for($i=0; $i<10; $i++)
 		$category 	= 	"Software";	
 		$website 	=	"www.vtiger.com";
 		$manufacturer	= 	"vtiger";
+		$commission_rate=	0;
+		$unit_price	=	$subscription_rate[$i];
 	}
 
         $product->column_fields["productname"] 	= 	$product_name_array[$i];
@@ -424,8 +429,8 @@ for($i=0; $i<10; $i++)
         $product->column_fields["start_date"] 	= 	& create_date();
         $product->column_fields["sales_start_date"] 	= & create_date();
 
-        $product->column_fields["unit_price"] 	= 	rand(100, 999);
-        $product->column_fields["commissionrate"] = 	rand(100, 999);
+        $product->column_fields["unit_price"] 	= 	$unit_price;
+        $product->column_fields["commissionrate"] = 	$commission_rate;
         $product->column_fields["taxclass"] 	= 	'SalesTax';
         $product->column_fields["usageunit"]	= 	$usageunit;
      	$product->column_fields["qty_per_unit"] = 	$qty_per_unit;
@@ -531,7 +536,7 @@ for($i=0;$i<5;$i++)
 
 // Populate Activities Data
 $task_array=array("Tele Conference","Call user - John","Send Fax to Mary Smith");
-$event_array=array("","","","Team Meeting","Call Richie","Meeting with Don");
+$event_array=array("","","Call Smith","Team Meeting","Call Richie","Meeting with Don");
 $task_status_array=array("Not Started","In Progress","Completed");
 $task_priority_array=array("High","Medium","Low");
 
@@ -542,16 +547,27 @@ for($i=0;$i<6;$i++)
 	$rand_num=array_rand($num_array);
 
 	$rand_date = & create_date();
-	$en=explode("-",$rand_date);
-	$recur_daily_date=date('Y-m-d',mktime(date($en[1]),date($en[2])+5,date($en[0])));
-	$recur_week_date=date('Y-m-d',mktime(date($en[1]),date($en[2])+30,date($en[0])));
+	$en=explode("/",$rand_date);
+	if($en[1]<10)
+		$en[1]="0".$en[1];
+	if($en[2]<10)
+		$en[2]="0".$en[2];
+	$recur_daily_date=date('Y-m-d',mktime(0,0,0,date($en[1]),date($en[2])+5,date($en[0])));
+	$recur_week_date=date('Y-m-d',mktime(0,0,0,date($en[1]),date($en[2])+30,date($en[0])));
+
+
 	$start_time_hr=rand(00,23);
 	$start_time_min=rand(00,59);
+	if($start_time_hr<10)
+		$start_time_hr="0".$start_time_hr;
+	if($start_time_min<10)
+		$start_time_min="0".$start_time_min;
+
 	$start_time=$start_time_hr.":".$start_time_min;
-	if($i<3)
+	if($i<2)
 	{
 		$event->column_fields["subject"]	= $task_array[$i];	
-		if($i==2)
+		if($i==1)
 		{
 			$account_key = array_rand($account_ids);
 			$event->column_fields["parent_id"]	= $account_ids[$account_key];;	
@@ -588,10 +604,7 @@ for($i=0;$i<6;$i++)
 	}
 	else
 	{
-		if($i>3)
-		{
-			$event->column_fields["activitytype"]	= "Call";	
-		}
+		$event->column_fields["activitytype"]	= "Call";	
 	}
 
 	$event->save("Activities");
