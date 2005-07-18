@@ -119,6 +119,23 @@ if(isPermitted("HelpDesk",2,$_REQUEST['record']) == 'yes')
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $_REQUEST['record']);
+
+if(isPermitted("HelpDesk",8,'') == 'yes')
+{
+$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+
+        require_once('modules/Users/UserInfoUtil.php');
+        $wordTemplateResult = fetchWordTemplateList("HelpDesk");
+        $tempCount = $adb->num_rows($wordTemplateResult);
+        $tempVal = $adb->fetch_array($wordTemplateResult);
+        for($templateCount=0;$templateCount<$tempCount;$templateCount++)
+        {
+                $optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
+                $tempVal = $adb->fetch_array($wordTemplateResult);
+        }
+$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
+}
+
 $xtpl->parse("main");
 $xtpl->out("main");
 
