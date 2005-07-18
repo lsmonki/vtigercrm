@@ -200,8 +200,8 @@ function goto_CustomAction(module)
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td><div align="center">
-                <input type="submit" class="button" name="save" value="Save"  tabindex="2">
-                <input name="cancel" class="button" type="button" value="Cancel" onclick='window.history.back()'>
+                <input type="submit" class="button" name="save" value="{APP.LBL_SAVE_BUTTON_LABEL}"  tabindex="2">
+                <input name="cancel" class="button" type="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}" onclick='window.history.back()'>
 		{CUSTOMACTIONBUTTON}
             </div></td>
         </tr>
@@ -213,7 +213,7 @@ function goto_CustomAction(module)
 
     <table width="100%" border=0 cellPadding="0" cellSpacing="0">
       <tr>
-        <td><div align='right'><font class="required">*</font> Indicates required field</div></td>
+        <td><div align='right'><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font> {APP.NTC_REQUIRED}</div></td>
       </tr>
     </table>
 
@@ -222,7 +222,7 @@ function goto_CustomAction(module)
         <td class="formSecHeader" colspan="3">{MOD.LBL_STEP_1_TITLE}</td>
       </tr>
             <tr>
-                <td class='dataLabel'><font class="required">*</font> View Name:</td>
+                <td class='dataLabel'><font class="required">{APP.LBL_REQUIRED_SYMBOL}</font>{MOD.LBL_VIEW_NAME}</td>
                 <td>
                         <input class='textField' type='text' name='viewName' value="{VIEWNAME}" size="40">
                 </td>
@@ -231,10 +231,10 @@ function goto_CustomAction(module)
             <tr width="50%">
                 <td class='dataLabel'></td>
                 <td>
-                        <input class='textField' {CHECKED} type='checkbox' name='setDefault' value="">Set as Default
+                        <input class='textField' {CHECKED} type='checkbox' name='setDefault' value="">{MOD.LBL_SETDEFAULT}
                 </td>
                 <td width="50%">
-                        <input class='textField' {MCHECKED} type='checkbox' name='setMetrics' value="">List in Metrics
+                        <input class='textField' {MCHECKED} type='checkbox' name='setMetrics' value="">{MOD.LBL_LIST_IN_METRICS}
                 </td>
             </tr>
     </table>
@@ -298,10 +298,10 @@ function goto_CustomAction(module)
       	<td>
 	   <table border="0" cellspacing="2" cellpadding="2" style="margin:10 0 10 5">
  	       <tr>
-                <td>Column:</td>
+                <td>{MOD.LBL_SF_COLUMNS}:</td>
                 <td>&nbsp;</td>
-                <td>Start Date:</td>
-                <td>End Date:</td>
+                <td>{MOD.LBL_SF_STARTDATE}:</td>
+                <td>{MOD.LBL_SF_ENDDATE}:</td>
                 <td>&nbsp;</td>
               </tr>
               <tr>
@@ -342,14 +342,12 @@ function goto_CustomAction(module)
   	<tr>
     	<td> <table width="100%" border=0 cellspacing=0 cellpadding=0>
         <tr>
-          <td height="25">Set the search conditions to further restrict the list.</td>
+          <td height="25">{MOD.LBL_AF_HDR1}</td>
         </tr>
         <tr>
           <td> <ul>
-              <li>You can use &quot;or&quot; filters by entering multiple items
-                in the third column.</li>
-              <li>You can enter up to 10 items, separated by commas. For example:
-                CA, NY, TX, FL searches for CA or NY or TX or FL.</li>
+              <li>{MOD.LBL_AF_HDR2}</li>
+              <li>{MOD.LBL_AF_HDR3}</li>
               <!--<li>Place quotation marks around data that includes commas. For
                 example, &quot;200,000&quot;,&quot;1,000,000&quot; searches for
                 200,000 or 1,000,000.</li>
@@ -422,8 +420,8 @@ function goto_CustomAction(module)
     <table width="100%" border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td><div align="center">
-                <input type="submit" class="button" name="save" value="Save"  tabindex="2">
-                <input name="cancel" class="button" type="button" value="Cancel" onclick='window.history.back()'>
+                <input type="submit" class="button" name="save" value="{APP.LBL_SAVE_BUTTON_LABEL}"  tabindex="2">
+                <input name="cancel" class="button" type="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}" onclick='window.history.back()'>
             </div></td>
         </tr>
     </table>
