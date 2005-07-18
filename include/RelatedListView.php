@@ -305,6 +305,7 @@ else
 		$i++;
 	}
 
+	$list .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
 	$list .= '</table>';
 	echo $list;
 

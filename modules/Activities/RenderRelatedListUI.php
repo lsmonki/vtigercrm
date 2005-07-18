@@ -190,6 +190,9 @@ function renderRelatedUsers($query,$id)
 
   $list .= '</td></tr></form></tbody></table>';
 
+  $list .= '<table border="0" cellpadding="0" cellspacing="0" class="formHeaderULine" width="100%">';
+  $list .= '<tr height=1><td height=1></td></tr></table>';
+
   $list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
   $list .= '<tr class="ModuleListTitle" height=20>';
 
@@ -391,6 +394,7 @@ function renderRelatedUsers($query,$id)
     $i++;
   }
 
+  $list .= '<tr><td COLSPAN="10" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
   $list .= '</table>';
   $list .= '</td></tr></table>';
 
