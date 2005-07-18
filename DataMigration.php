@@ -2976,9 +2976,9 @@ $sql172="insert into field values (14,".$this->oldconn->getUniqueID("field").",'
 
 
  //Block 4 Description Info
- $sql172="insert into field values (14,".$this->oldconn->getUniqueID("field").",'product_description','products',1,'19','product_description','Description',1,0,0,100,1,4,1,'V~O')";
-    echo '<br> '.$sql172 .' <br> ';
-    $res172 = $this->oldconn->query($sql172);
+ //$sql172="insert into field values (14,".$this->oldconn->getUniqueID("field").",'product_description','products',1,'19','product_description','Description',1,0,0,100,1,4,1,'V~O')";
+  //  echo '<br> '.$sql172 .' <br> ';
+  //  $res172 = $this->oldconn->query($sql172);
 
 
  
