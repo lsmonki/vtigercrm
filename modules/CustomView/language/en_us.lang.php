@@ -22,10 +22,22 @@
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Custom View',
 'LBL_STEP_1_TITLE'=>'View Information',
+'LBL_VIEW_NAME'=>'View Name:',
+'LBL_SETDEFAULT'=>'Set as Default',
+'LBL_LIST_IN_METRICS'=>'List in Metrics',
 'LBL_STEP_2_TITLE'=>'Choose Columns',
 'LBL_STEP_3_TITLE'=>'Standard Filters',
 'LBL_STEP_4_TITLE'=>'Advanced Filters',
 'LBL_STEP_5_TITLE'=>'Access Information'
+'LBL_ADVANCED_FILTER'=>'Advanced Filters',
+'LBL_STANDARD_FILTER'=>'Standard Filters',
+'LBL_SF_COLUMNS'=>'Column',
+'LBL_SF_STARTDATE'=>'Start Date',
+'LBL_SF_ENDDATE'=>'End Date',
+'LBL_AF_HDR1'=>'Set the search conditions to further restrict the list.',
+'LBL_AF_HDR2'=>'You can use &quot;or&quot; filters by entering multiple items in the third column.',
+'LBL_AF_HDR3'=>'You can enter up to 10 items, separated by commas. For example: CA, NY, TX, FL searches for CA or NY or TX or FL.',
+
 );
 
 ?>
