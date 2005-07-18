@@ -239,7 +239,7 @@ function setInvoiceTitle($title,$logo_name,$caddress)
 		{
 
 			$this->Ln();
-			$this->Cell(20);
+			$this->Cell(40);
 			$this->SetFont('','',10);
 			$this->Cell(0,5,$caddress[$i],0,0,'L',0);
 		}
