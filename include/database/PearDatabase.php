@@ -232,7 +232,7 @@ global $vtlog;
 	{
 		global $vtlog;
 		//$this->println("ADODB query ".$sql);		
-		$vtlog->logthis('query being executed : '.$query,'debug');
+		$vtlog->logthis('query being executed : '.$sql,'debug');
 		$this->checkConnection();
 		$result = & $this->database->Execute($sql);
 		$this->lastmysqlrow = -1;
