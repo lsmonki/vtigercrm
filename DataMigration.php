@@ -1434,7 +1434,7 @@ $sql90="CREATE TABLE `convertleadmapping` (
 
 
 
-    $sql176="update field set sequence=1 and block=4 where columnname='product_description' and tablename='products' and fieldlabel='Description' and tabid=14 and typeofdata='V~O'"; 
+    $sql176="update field set sequence=1,block=4 where columnname='product_description' and tablename='products' and fieldlabel='Description' and tabid=14 and typeofdata='V~O'"; 
     echo '<br> '.$sql176 .' <br> ';
     $res176 = $this->oldconn->query($sql176);
 
@@ -1551,6 +1551,12 @@ $sql90="CREATE TABLE `convertleadmapping` (
 
     $sql172="insert into field values (15,".$this->oldconn->getUniqueID("field").",'status','faq',1,'15','faqstatus','Status',1,0,0,100,3,1,1,'V~O')";
     echo '<br> '.$sql172 .' <br> ';
+    $res172 = $this->oldconn->query($sql172);
+
+
+	//Fixed by Don From Faq the Related To field is removed	
+    $sql172="delete from field where tablename='sefaqrel' and fieldname='parent_id' and fieldlabel='Related To' and tabid=15";
+    echo '<br> FAQ Query Fixed by Don '.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
 
