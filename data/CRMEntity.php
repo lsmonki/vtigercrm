@@ -590,38 +590,43 @@ $vtlog->logthis("module is =".$module,'info');
 		  {
 			  $groupname = $_REQUEST['assigned_group_name'];
 			  //echo 'about to update lead group relation';
-			  if($module == 'Leads')
+			  if($module == 'Leads' && $table_name == 'leaddetails')
 			  {
 				  updateLeadGroupRelation($this->id,$groupname);
 			  }
-			  elseif($module == 'HelpDesk')
+			  elseif($module == 'HelpDesk' && $table_name == 'troubletickets')
 			  {
 				  updateTicketGroupRelation($this->id,$groupname);
 			  }
-			  /*      else
-				  {
-
-				  updateActivityGroupRelation($this->id,$groupname);
-				  }
-			   */	
+			  elseif($module =='Activities' || $module =='Events'  )
+			  {
+				 if($table_name == 'activity')
+				 {
+				   updateActivityGroupRelation($this->id,$groupname);
+				 }
+			  }
+			   	
 
 		  }
 		  else
 		  {
 			  //echo 'about to update lead group relation again!';
-			  if($module == 'Leads')
+			  if($module == 'Leads' && $table_name == 'leaddetails')
 			  {
 				  updateLeadGroupRelation($this->id,'');
 			  }
-			  elseif($module == 'HelpDesk')
+			  elseif($module == 'HelpDesk' && $table_name == 'troubletickets')
 			  {
 				  updateTicketGroupRelation($this->id,'');
 			  }
-			  /*  else
-			      {
-			      updateActivityGroupRelation($this->id,'');
-			      }
-			   */	
+			  elseif($module =='Activities' || $module =='Events')
+			  {
+				  if($table_name == 'activity')
+                                  {
+			             updateActivityGroupRelation($this->id,'');
+				  }
+			  }
+			  	
 
 		  }
 
