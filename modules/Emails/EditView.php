@@ -101,13 +101,12 @@ echo '<br>';
 
 
 
-
-
-
-
-
-
 $focus = new Email();
+
+if($_REQUEST['upload_error'] == true)
+{
+        echo '<br><b><font color="red"> The selected file has no data or a invalid file.</font></b><br>';
+}
 
 $message = substr($_REQUEST['message'],0,49);
 if(isset($_REQUEST['message']) && $_REQUEST['message']== 'Language string failed to load: connect_host')

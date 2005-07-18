@@ -40,11 +40,12 @@ if(isset($_REQUEST['mode']))
 }
 
 //Check if the file is exist or not.
-if(!is_file($_FILES["filename"]["name"]) && $_FILES["filename"]["name"] != '')
+if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 {
         $file_upload_error = true;
         $_FILES = '';
 }
+
 
 //check if the contact already exists by using the email address as criteria
 //if contact exists, then add the email to that contact
@@ -174,6 +175,7 @@ $focus->column_fields["activitytype"]="Emails";
 $focus->save("Emails");
 
 $return_id = $focus->id;
+$email_id = $return_id;
 //Added for update the existing attachments when duplicated without new attachment
 if($attachmentid != '')
 {
@@ -308,7 +310,15 @@ if($_REQUEST['return_module'] != 'Emails' && $_REQUEST['record'] != '')
 	}
 
         //echo 'return..'.$return_module.'/'.$return_action.'<br>parent id='.$parent_id.'<br>return id = '.$return_id.'/'.$filename;
-if( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
+
+if($file_upload_error)
+{
+        $return_module = 'Emails';
+        $return_action = 'EditView';
+        $return_id = $email_id.'&upload_error=true&return_module='.$_REQUEST['return_module'].'&return_action='.$_REQUEST['return_action'].'&return_id='.$_REQUEST['return_id'];
+	header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
+}
+elseif( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
 {
 	include("modules/Emails/send_mail.php");
 }

@@ -34,7 +34,7 @@ $focus = new Note();
 
 if($_REQUEST['upload_error'] == true)
 {
-	echo '<br><b><font color="red"> The file you have selected is not a valid file.</font></b><br>';
+	echo '<br><b><font color="red"> The selected file has no data or a invalid file.</font></b><br>';
 }
 
 if(isset($_REQUEST['record'])) 

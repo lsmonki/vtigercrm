@@ -37,12 +37,14 @@ if(isset($_REQUEST['mode']))
         $focus->mode = $_REQUEST['mode'];
 }
 
+
 //Check if the file is exist or not.
-if(!is_file($_FILES["filename"]["name"]) && $_FILES["filename"]["name"] != '')
+if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 {
 	$file_upload_error = true;
 	$_FILES = '';
 }
+
 
 //Added for retrieve the old existing attachments when duplicated without new attachment
 if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
@@ -163,12 +165,14 @@ if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module']=='Emails') ||($_R
 $local_log->debug("Saved record with id of ".$return_id);
 
 //Redirect to EditView if the given file is not valid.
+
 if($file_upload_error)
 {
 	$return_module = 'Notes';
 	$return_action = 'EditView';
 	$return_id = $note_id.'&upload_error=true&return_module='.$_REQUEST['return_module'].'&return_action='.$_REQUEST['return_action'].'&return_id='.$_REQUEST['return_id'];
 }
+
 
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
 ?>
