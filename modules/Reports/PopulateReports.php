@@ -360,10 +360,6 @@ $advfilters = Array(
 		      Array(
                             Array('columnname'=>'troubletickets:status:HelpDesk_Status:ticketstatus:V',
                                   'comparator'=>'n',
-                                  'value'=>'Open'
-                                 ),
-			    Array('columnname'=>'troubletickets:status:HelpDesk_Status:ticketstatus:V',
-                                  'comparator'=>'n',
                                   'value'=>'Closed'
                                  )
                            ),
@@ -371,6 +367,10 @@ $advfilters = Array(
                             Array('columnname'=>'quotes:quotestage:Quotes_Quote_Stage:quotestage:V',
                                   'comparator'=>'n',
                                   'value'=>'Accepted'
+                                 ),
+			    Array('columnname'=>'quotes:quotestage:Quotes_Quote_Stage:quotestage:V',
+                                  'comparator'=>'n',
+                                  'value'=>'Rejected'
                                  )
                            )
                      );
