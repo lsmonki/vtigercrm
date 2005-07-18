@@ -37,6 +37,7 @@
 	<option><?php echo $app_strings['COMBO_LEADS'];?></option>
 	<option><?php echo $app_strings['COMBO_ACCOUNTS'];?></option>
 	<option><?php echo $app_strings['COMBO_CONTACTS'];?></option>
+        <option><?php echo $app_strings['COMBO_HELPDESK'];?></option>
 	</SELECT>
 	</TD> 
   </TR>
