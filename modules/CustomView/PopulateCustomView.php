@@ -186,8 +186,8 @@ $cvadvfilters = Array(
                            ),
 		     Array(
                             Array('columnname'=>'troubletickets:status:ticketstatus:HelpDesk_Status:V',
-                                  'comparator'=>'e',
-                                  'value'=>'Open'
+                                  'comparator'=>'n',
+                                  'value'=>'Closed'
                                  )
                            ),
 		     Array(
