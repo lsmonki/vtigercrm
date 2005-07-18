@@ -196,11 +196,18 @@ class CustomView extends CRMEntity{
                 global $adb;
                 $tabid = getTabid($module);
                 global $profile_id;
-
+	
+		foreach($this->module_list[$module] as $key=>$blockid)
+                {
+                        $blockids[] = $blockid;
+                }
+                $blockids = implode(",",$blockids);
+	
                 $sql = "select * from field inner join tab on tab.tabid = field.tabid
                         inner join profile2field on profile2field.fieldid=field.fieldid
-                        where field.tabid=".$tabid." and (field.uitype =5 or field.displaytype=2)
-                        and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by field.sequence";
+                        where field.tabid=".$tabid." and field.block in (".$blockids.") 
+			and (field.uitype =5 or field.displaytype=2) 
+			and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by field.sequence";
 
                 $result = $adb->query($sql);
 
