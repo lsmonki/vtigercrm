@@ -1352,8 +1352,8 @@ $sql90="CREATE TABLE `convertleadmapping` (
 
 
 
-    $sql176="update field set sequence=1 where columnname='modifiedtime' and tablename='crmentity' and fieldlabel='Modified Time' and tabid=13 and typeofdata='T~O'"; 
-    echo '<br> '.$sql176 .' <br> ';
+    $sql176="update field set sequence=11 where columnname='modifiedtime' and tablename='crmentity' and fieldlabel='Modified Time' and tabid=13 and typeofdata='T~O'"; 
+    echo '<br> Fixed by Don'.$sql176 .' <br> ';
     $res176 = $this->oldconn->query($sql176);
 
 
@@ -1385,8 +1385,8 @@ $sql90="CREATE TABLE `convertleadmapping` (
 
 
     
-    $sql176="update field set sequence=6, block=1 where columnname='unit_price' and tablename='products' and fieldlabel='Unit Price' and tabid=14"; 
-    echo '<br> '.$sql176 .' <br> ';
+    $sql176="update field set sequence=1, block=2 where columnname='unit_price' and tablename='products' and fieldlabel='Unit Price' and tabid=14"; 
+    echo '<br> Fixed by don'.$sql176 .' <br> ';
     $res176 = $this->oldconn->query($sql176);
 
 
@@ -1491,8 +1491,8 @@ $sql90="CREATE TABLE `convertleadmapping` (
 
 
 
-    $sql172 = "update field set block=9 where columnname='crmid' and tablename='seactivityrel' and fieldlabel='Related To' and tabid=16";
-    echo '<br> '.$sql172 .' <br> ';
+    $sql172 = "update field set sequence=9 where columnname='crmid' and tablename='seactivityrel' and fieldlabel='Related To' and tabid=16";
+    echo '<br> Fixed by don'.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
 
@@ -1556,8 +1556,8 @@ $sql90="CREATE TABLE `convertleadmapping` (
 
 
 
-    $sql176="update field set tablename='faqcomments',fieldlabel='Add Comment'  where columnname='comments' and columnname='faq' and tabid=15"; 
-    echo '<br> '.$sql176 .' <br> ';
+    $sql176="update field set tablename='faqcomments',fieldlabel='Add Comment'  where columnname='comments' and tablename='faq' and tabid=15"; 
+    echo '<br> Fixed by don'.$sql176 .' <br> ';
     $res176 = $this->oldconn->query($sql176);
 
 
@@ -3685,8 +3685,8 @@ $sql172="insert into field values (14,".$this->oldconn->getUniqueID("field").",'
     $res172 = $this->oldconn->query($sql172);
 
 
- $sql172 = "update field set sequence=9 where columnname='crmid' and tablename='seactivityrel' and fieldlabel='Related To' and typeofdata='I~O'";
-    echo '<br> '.$sql172 .' <br> ';
+ $sql172 = "update field set sequence=9 where columnname='crmid' and tablename='seactivityrel' and fieldlabel='Related To' and typeofdata='I~O' and tabid=16";
+    echo '<br> Fixed by don'.$sql172 .' <br> ';
     $res172 = $this->oldconn->query($sql172);
 
  $sql172 = "update field set sequence=10, block=1  where columnname='contactid' and tablename='cntactivityrel' and fieldlabel='Contact Name' and typeofdata='V~O'";
