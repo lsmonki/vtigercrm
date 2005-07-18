@@ -75,8 +75,14 @@ foreach($pieces as $val)
 	  </td>
     </tr>
 	<tr><td><h4>Welcome to the vtiger CRM installation</h4><P>
-  			This installer creates the vtiger CRM database tables and sets the configuration variables that you need to start.
-			The entire process should take about ten minutes.
+  			This installer creates the vtiger CRM 4.2 database tables and sets the configuration variables that you need to start.
+			The entire process should take about four minutes.
+
+			<p>
+
+ <font color=red> <b>Kindly note vtiger CRM 4.2 is tested on mysql 4.0.x and PHP 4.3.8 and Apache 2.0.40 . Support for PHP 5 will be provided in future releases </b> </font>
+
+			
 			<P>For installation help, please visit the vtiger CRM <A href="http://www.vtiger.com/forums/index.php?c=3" target="_blank">support forums</A>.</td>
 	</tr>
 
