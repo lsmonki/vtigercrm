@@ -198,8 +198,12 @@ $cvadvfilters = Array(
                            ),
 		     Array(
                             Array('columnname'=>'quotes:quotestage:quotestage:Quotes_Quote_Stage:V',
-                                  'comparator'=>'e',
+                                  'comparator'=>'n',
                                   'value'=>'Accepted'
+                                 ),
+			    Array('columnname'=>'quotes:quotestage:quotestage:Quotes_Quote_Stage:V',
+                                  'comparator'=>'n',
+                                  'value'=>'Rejected'
                                  )
                            ),
 		     Array(
