@@ -637,7 +637,12 @@ $server->register(
     array('user_name'=>'xsd:string','password'=>'xsd:string'),
     array('return'=>'xsd:int'),
     $NAMESPACE);
-   
+
+$server->register(
+    'get_tickets_columns',
+    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('return'=>'tns:tickets_list_array'),
+    $NAMESPACE);
 
 $server->register(
     'get_contacts_columns',
@@ -702,6 +707,13 @@ $server->register(
         
 //calendar   
 
+function get_tickets_columns($user_name, $password)
+{
+    require_once('modules/HelpDesk/HelpDesk.php');
+    $helpdesk = new HelpDesk();
+    return $helpdesk->getColumnNames_Hd();
+}
+
 function get_contacts_columns($user_name, $password)
 {
     require_once('modules/Contacts/Contact.php');
@@ -733,7 +745,7 @@ foreach($account->getColumnNames_Acnt() as $flddetails)
 	echo $flddetails;
 }
 */
-    
+
 function get_accounts_columns($user_name, $password)
 {
     require_once('modules/Accounts/Account.php');
@@ -1047,10 +1059,10 @@ function contact_by_range($user_name,$from_index,$offset)
     {
         $account_name=$contact[account_name];
         $birthdate = $contact[birthdate];
-        if($account_name=="Vtiger_Crm")
+        /*if($account_name=="Vtiger_Crm")
         {
             $account_name="";
-        }
+        }*/
         if($birthdate == "0000-00-00")
         {
 	        $birthdate = "4501-01-01";
@@ -1129,7 +1141,7 @@ function task_by_range($user_name,$from_index,$offset)
             $taskList = $response['list'];
             foreach($taskList as $temptask)
            {
-		 if($temptask[date_due]=="")
+		 if($temptask[date_due]=="0000-00-00")
 		 {
 			 $temptask[date_due]="4501-01-01";
 		 }
@@ -1428,14 +1440,14 @@ function create_contact1($user_name, $first_name, $last_name, $email_address ,$a
 	$contact->column_fields[firstname]=$first_name;
 	$contact->column_fields[lastname]=$last_name;
 		
-	if($account_name=='')
+	/*if($account_name=='')
 	{
 		$account_name="Vtiger_Crm";
 	}
 	else if($account_name==null)
 	{
 		$account_name="Vtiger_Crm";
-	}
+	}*/
 	
 	$contact->column_fields[account_id]=retrieve_account_id($account_name,$user_id);// NULL value is not supported NEED TO FIX
 	
@@ -1843,14 +1855,14 @@ function update_contact($user_name,$id, $first_name, $last_name, $email_address 
 	$contact->column_fields[firstname]=$first_name;
 	$contact->column_fields['lastname']=$last_name;
 	
-	if($account_name=='')
+	/*if($account_name=='')
 	{
 		$account_name="Vtiger_Crm";
 	}
 	else if($account_name==null)
 	{
 		$account_name="Vtiger_Crm";
-	}
+	}*/
 	
 	$contact->column_fields[account_id]=retrieve_account_id($account_name,$user_id);// NULL value is not supported NEED TO FIX
 	

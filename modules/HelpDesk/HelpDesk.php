@@ -155,9 +155,20 @@ class HelpDesk extends CRMEntity {
 	        return $response;
 	}
 
+ function getColumnNames_Hd()
+ {
+       $table1flds = $this->db->getColumnNames("troubletickets");
+       $sql1 = "select fieldlabel from field where generatedtype=2 and tabid=13";
+                 $result = $this->db->query($sql1);
+                 $numRows = $this->db->num_rows($result);
+                 for($i=0; $i < $numRows;$i++)
+                 {
+                        $custom_fields[$i] = $this->db->query_result($result,$i,"fieldlabel");
+                 }
 
-
-
+                 $mergeflds = array_merge($table1flds,$custom_fields);
+       return $mergeflds;
+}
 
 }
 ?>
