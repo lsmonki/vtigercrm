@@ -28,6 +28,10 @@ require("config.php");
 // Get the list of activity for which reminder needs to be sent
 
 global $adb;
+require_once('vtiger_logger.php');
+$vtlog = new vtiger_logger();
+
+$vtlog->logthis(" invoked SendReminder ",'debug');
 
 //modified query for recurring events -Jag
  	$query="select crmentity.crmid,activity.*,activity_reminder.reminder_time,activity_reminder.reminder_sent,activity_reminder.recurringid,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id left outer join recurringevents on activity.activityid=recurringevents.activityid where DATE_FORMAT(activity.date_start,'%Y-%m-%d, %H:%i:%s') >= '".date('Y-m-d')."' and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0 group by activity.activityid,recurringevents.recurringid ;";
@@ -63,6 +67,7 @@ if($adb->num_rows($result) >= 1)
 
 		if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) == $reminder_time)
 		{
+			$vtlog->logthis(" InSide  REMINDER",'debug');
 			$query_user="SELECT users.email1,salesmanactivityrel.smid FROM salesmanactivityrel inner join users on users.id=salesmanactivityrel.smid where salesmanactivityrel.activityid =".$activity_id." and users.deleted=0"; 
 			$user_result = $adb->query($query_user);		
 			if($adb->num_rows($user_result)>=1)
@@ -105,7 +110,15 @@ if($adb->num_rows($result) >= 1)
 			{
 				send_mail($to_addr,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password);
 				$upd_query = "UPDATE activity_reminder SET reminder_sent=1 where activity_id=".$activity_id;
+
+				if($recur_id!=0)
+				{
+					$upd_query.=" and recurringid =".$recur_id;
+				}
+
 				$adb->query($upd_query);
+
+				
 				
 			}
 		}
