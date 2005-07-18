@@ -44,7 +44,7 @@ global $mod_strings;
 
 <tr>
 <td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>Toll Free Number:&nbsp;</b></font></td>
-<td class="dataField" height="30 px">&nbsp;+1-888-720-9500</td>
+<td class="dataField" height="30 px">&nbsp;+1-877-788-4473</td>
 </tr>
 <tr>
 <td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>vtiger Discussions:&nbsp;</a></b></font></td>
