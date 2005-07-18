@@ -558,6 +558,8 @@ $app_strings = Array(
 
 'COMBO_PRODUCTS'=>'Products',
 
+'COMBO_HELPDESK'=>'HelpDesk',
+
 
 
 'LBL_SELECT'=>'Select',
