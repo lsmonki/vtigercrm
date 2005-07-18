@@ -17,6 +17,9 @@ require_once('include/logging.php');
 include('adodb/adodb.inc.php');
 require_once("adodb/adodb-xmlschema.inc.php");
 	
+		require_once('vtiger_logger.php');
+		global $vtlog;
+		$vtlog = new vtiger_logger();
 
 class PearDatabase{
 	var $database = null;
@@ -185,9 +188,7 @@ class PearDatabase{
 	 * Contributor(s): ______________________________________..
 	*/
 	function checkConnection(){
-		require_once('vtiger_logger.php');
-		$vtlog = new vtiger_logger();
-
+global $vtlog;
 			if(!isset($this->database))
 			{
 				$this->println("TRANS creating new connection");
@@ -203,7 +204,7 @@ class PearDatabase{
 			}
 			else
 			{
-				$this->println("checkconnect using old connection");
+		//		$this->println("checkconnect using old connection");
 				 $vtlog->logthis('checkconnect using old connection','info');
 			}
 	}
@@ -229,7 +230,9 @@ class PearDatabase{
 
 	function query($sql, $dieOnError=false, $msg='')
 	{
-		$this->println("ADODB query ".$sql);		
+		global $vtlog;
+		//$this->println("ADODB query ".$sql);		
+		$vtlog->logthis('query being executed : '.$query,'debug');
 		$this->checkConnection();
 		$result = & $this->database->Execute($sql);
 		$this->lastmysqlrow = -1;
@@ -273,7 +276,9 @@ class PearDatabase{
 	
 	function limitQuery($sql,$start,$count, $dieOnError=false, $msg='')
 	{
-		$this->println("ADODB limitQuery sql=".$sql." st=".$start." co=".$count);
+		global $vtlog;
+		//$this->println("ADODB limitQuery sql=".$sql." st=".$start." co=".$count);
+		$vtlog->logthis(' limitQuery sql = '.$sql .' st = '.$start .' co = '.$count,'debug');
 		$this->checkConnection();
 		$result =& $this->database->SelectLimit($sql,$count,$start);
 		if(!$result) $this->checkError($msg.' Limit Query Failed:' . $sql . '::', $dieOnError);
@@ -386,10 +391,12 @@ class PearDatabase{
 	*/
 	
 	function getRowCount(&$result){
+		global $vtlog;
 		//$this->println("ADODB getRowCount");
 		if(isset($result) && !empty($result))
 			$rows= $result->RecordCount();			
-		$this->println("ADODB getRowCount rows=".$rows);	
+		//$this->println("ADODB getRowCount rows=".$rows);	
+		$vtlog->logthis('getRowCount rows= '.$rows,'debug');
 		return $rows;			
 	}
 
@@ -446,9 +453,12 @@ class PearDatabase{
 	}*/
 
 	function getAffectedRowCount(&$result){
-		$this->println("ADODB getAffectedRowCount");
+		global $vtlog;
+//		$this->println("ADODB getAffectedRowCount");
+	$vtlog->logthis('getAffectedRowCount','debug');
 		$rows =$this->database->Affected_Rows(); 
-		$this->println("ADODB getAffectedRowCount rows=".rows);
+	//	$this->println("ADODB getAffectedRowCount rows=".rows);
+	$vtlog->logthis('getAffectedRowCount rows = '.$rows,'debug');
 		return $rows;
 	}
 			
@@ -558,7 +568,10 @@ class PearDatabase{
 	*/
 	
 	function getNextRow(&$result, $encode=true){
-		$this->println("ADODB getNextRow");
+		global $vtlog;
+
+		//$this->println("ADODB getNextRow");
+		$vtlog->logthis('getNextRow','info');
 		if(isset($result)){
 			$row = $this->change_key_case($result->FetchRow());
 			if($row && $encode&& is_array($row))return array_map('to_html', $row);	
