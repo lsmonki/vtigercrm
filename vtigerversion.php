@@ -11,5 +11,5 @@
 
 $patch_version = '';
 $modified_database = '';
-$vtiger_version = '4.0';
+$vtiger_version = '4.2';
 ?>
