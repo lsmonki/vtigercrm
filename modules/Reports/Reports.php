@@ -589,13 +589,20 @@ class Reports extends CRMEntity{
 
 		$tabid = getTabid($module);
 		global $profile_id;
-		
+	
+		foreach($this->module_list[$module] as $key=>$blockid)
+		{
+			$blockids[] = $blockid;
+		}	
+		$blockids = implode(",",$blockids);	
+
+		print_r($blockids);
 		$sql = "select * from field inner join tab on tab.tabid = field.tabid 
 			inner join profile2field on profile2field.fieldid=field.fieldid 
 			where field.tabid=".$tabid." and (field.uitype =5 or field.displaytype=2)  
-			and profile2field.visible=0 and profile2field.profileid=".$profile_id." order by field.sequence";
+			and profile2field.visible=0 and field.block in (".$blockids.") and profile2field.profileid=".$profile_id." order by field.sequence";
 		
-		//echo $sql;
+		echo $sql;
                 $result = $adb->query($sql);
 
                 while($criteriatyperow = $adb->fetch_array($result))
