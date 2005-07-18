@@ -110,7 +110,7 @@ function renderRelatedProducts($query,$id)
 
 	function status_availability($owner,$userid,$activity_id,$avail_date,$activity_start_time,$activity_end_time)	
 	{
-		global $adb,$image_path;
+		global $adb,$image_path,$vtlog;
 		$avail_flag="false";
 		if( $owner != $userid)
 		{
@@ -141,6 +141,8 @@ function renderRelatedProducts($query,$id)
 				{
 					$availability= 'busy';
 					$avail_flag="true";
+					$vtlog->logthis("user start time-- ".$user_start_time."user end time".$user_end_time,'info');
+					$vtlog->logthis("Availability ".$availability,'info');
 				}
 			}
 		}
@@ -167,7 +169,7 @@ function renderRelatedUsers($query,$id)
   $image_path=$theme_path."images/";
   require_once ($theme_path."layout_utils.php");
   $activity_id=$id;
-  global $adb;
+  global $adb,$vtlog;
   global $mod_strings;
   global $app_strings;
 
@@ -364,6 +366,7 @@ function renderRelatedUsers($query,$id)
 		{
 			$recur_dates=$row_recur['recurringdate'];
 			$availability=status_availability($owner,$userid,$activity_id,$recur_dates,$activity_start_time,$activity_end_time);	
+			$vtlog->logthis("activity start time ".$activity_start_time."activity end time".$activity_end_time."Available date".$recur_dates,'info');
 			$avail_table.="<td>$availability</td>";
 			//$list .= $availability;
 			
@@ -376,6 +379,7 @@ function renderRelatedUsers($query,$id)
 	{
 		$recur_dates=$act_date_start;
 		$availability=status_availability($owner,$userid,$activity_id,$recur_dates,$activity_start_time,$activity_end_time);	
+		$vtlog->logthis("activity start time ".$activity_start_time."activity end time".$activity_end_time."Available  date".$recur_dates,'info');
 		$list .= $availability;
 	}
 	// Group Calendar coding	
