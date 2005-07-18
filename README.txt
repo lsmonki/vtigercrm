@@ -259,7 +259,7 @@ B. Bug Fixes
 
 
 *****************
-3. Known Issues
+C. Known Issues
 *****************
 
 1. FORUM:1816 - Outlook Plugin error in Outlook
@@ -294,7 +294,9 @@ B. Bug Fixes
 
 16. While generating reports the fields selected in 'Columns to Total' will not be displayed.
 
-Limitations
+***************
+D. Limitations
+***************
 
 1. Security is not implemented for Reports and Dashboards.
 
