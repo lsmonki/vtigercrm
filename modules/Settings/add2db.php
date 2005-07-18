@@ -36,11 +36,12 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 				$savelogo="true";
 			}
 		}
-		else if($filetype_array[1] == "gif")
+	/*	else if($filetype_array[1] == "gif")
 		{
 			$savelogo="false";
                         $errormessage = "<font color='red'><B> Logo has to be either jpeg/png file </B></font>";
 		}
+	*/
 		else
 		{
 			$savelogo="false";
@@ -114,6 +115,11 @@ if($saveflag=="true")
 	}
 	else
 	{
+		if($savelogo=="false")
+		{
+			$organization_logoname="";
+		}
+	
 		$sql="update organizationdetails set organizationame = '".$organization_name."', address = '".$organization_address."', city = '".$organization_city."', state = '".$organization_state."',  code = '".$organization_code."', country = '".$organization_country."' ,  phone = '".$organization_phone."' ,  fax = '".$organization_fax."',  website = '".$organization_website."', logoname = '". $organization_logoname ."' where organizationame = '".$org_name."'";
 	}
 	$adb->query($sql);
