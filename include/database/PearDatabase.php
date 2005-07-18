@@ -185,6 +185,9 @@ class PearDatabase{
 	 * Contributor(s): ______________________________________..
 	*/
 	function checkConnection(){
+		require_once('vtiger_logger.php');
+		$vtlog = new vtiger_logger();
+
 			if(!isset($this->database))
 			{
 				$this->println("TRANS creating new connection");
@@ -201,6 +204,7 @@ class PearDatabase{
 			else
 			{
 				$this->println("checkconnect using old connection");
+				 $vtlog->logthis('checkconnect using old connection','info');
 			}
 	}
 
