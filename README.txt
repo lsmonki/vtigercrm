@@ -1,3 +1,311 @@
+vtiger CRM 4.2 GA
+July 18, 2005
+
+We are pleased to announce the latest version of vtiger CRM. This release includes many new features and few bug fixes!
+
+*****************
+A. New Features
+*****************
+
+  * Activity Management
+
+  * Manage recurring events (daily/weekly/monthly/yearly)
+
+  * Group/Shared calendar to plan meetings with vtiger CRM users without time conflicts
+
+  * UI enhancements related to overdue tasks in Activities list view 
+
+2. Lead Management
+
+ * Capture leads directly from your Web site to vtiger CRM
+
+ * Customize Online Lead Form as per your Web site requirements
+
+ * Create mailing lists and execute E-mail marketing campaigns
+
+ * Add multiple products to the leads
+
+ * Customize list of the leads as per users' requirements
+
+ * Create fully customizable lead reports
+
+ * Lead conversion mapping for all the custom fields
+
+3. Account & Contact Management
+
+ * Generate quotes, sales orders, and invoices directly from the accounts and contacts 
+
+ * Track history of all the products purchased by customers
+
+4. Products Management
+
+ * Create Price Books and associate products with Price Books
+
+ * Procure products from the selected Vendors list
+
+ * Associate Trouble Tickets and Knowledge Base articles with products
+
+ * Ability to upload product images for easy identification
+
+5. Sales Quotes
+
+ * Track outstanding quotes from the quotes list view
+
+ * Add Line Items to the quotes and update sub-total, taxes, adjustments, and grand total amounts
+
+ * Select different prices for the same product as per customer segment
+
+ * Create printer-friendly Sales Quotes and deliver to the prospect customers through in-built E-mail service
+
+ * Create Sales Order or Invoice with a single click from the Sales Quote
+
+ * Avoid duplicate work by dynamically displaying the Billing and Shipping addresses of the prospect
+
+ * Display quotes related to accounts under the related list
+
+ * Customize Sales Quote fields as per your organization requirements
+
+ * Set up your company information to display your company address while creating PDF documents
+
+6. Order Management
+
+ * Streamline organization-wide procurement and fulfillment processes by integrated Order Management with CRM
+
+ * Track outstanding orders from the Orders List View
+
+ *  Procure products from the available Vendors/Manufacturers/Resellers list in vtiger CRM
+
+ * Manage up-to-date stock position by seamless integration between order fulfillment and available stock in your warehouse
+
+ * Customize Purchase Order (PO) and Sales Order (SO) fields as per your organization requirements
+
+ * Avoid duplicate work by dynamically displaying the Billing and Shipping addresses of the prospect while creating orders
+
+ * Add Line Items to the Orders and update sub-total, taxes, adjustments, and grand total amounts automatically
+
+ * Create printer-friendly Order (PO/SO) and deliver to the Vendors/Customers through in-built E-mail service
+
+ * Once the Sales Order is confirmed create Invoice from Sales Order with a single click
+
+ * Periodically notify the stock position to the concerned parties in your organization so that stock is always available to fulfill the outstanding orders
+
+7. Invoices
+
+ * Track outstanding invoices from the Invoices list view
+
+ * Create printer-friendly Invoices and deliver to the customers through in-built E-mail service
+
+ * Customize Invoice fields as per your organization requirements
+
+ * Add Line Items to the Invoice and update sub-total, taxes, adjustments, and grand total amounts automatically
+
+ * Customize Invoice fields as per your organization requirements
+
+ * Avoid duplicate work by dynamically displaying the Billing and Shipping addresses of the customer while creating invoices
+
+ * Associate invoices with the General Ledger account for hassle free book keeping 
+
+
+8. Help Desk
+
+ * Manage product-wise Knowledge Base articles/FAQ
+
+ * Associate Articles with trouble tickets and products
+
+ * Provide public access to the Knowledge Base only after approval
+
+ * Update Articles/FAQ in vtiger CRM as based customer suggestions & comments
+
+
+9. E-mail Integration
+
+ * Configure incoming E-mail servers on per user basis. Each user can retrieve his own E-mails 
+
+ * Fetch E-mail messages through POP and IMAP services
+
+ * Setup multiple incoming E-mail servers 
+
+ * Seamless integration between incoming E-mail messages and the corresponding contacts in vtiger CRM with a single click
+
+ * Fetch incoming E-mail messages as RSS feed in RSS module
+
+ * Send E-mail notification to the users when records are assigned to them or there is a deadline coming up
+
+ * Ready-to use E-mail templates
+
+ * Populate vtiger CRM user related fields in E-mail templates
+
+ * Export E-mail messages into CSV file
+
+ * Fetch inbound E-mails and associate to the contacts or create E-mails directly into vtiger CRM
+
+ * Send mass E-mails to the contacts and other users
+
+10. Other Features
+
+ * Lead conversion feature within module access scope
+
+ * Generate quotes and sales orders, from the potentials
+
+*****************
+B. Bug Fixes
+*****************
+
+1. FORUM:1545 - Quotes, orders - working or not ? 
+
+2. FORUM:1560 - Can not change user password & problem with ordering system
+
+3. FORUM:5512 - In custom fields calendar, when a calendar field in created, the calendar drop down does not appear
+
+4. FORUM:5553 - Contact with apostrophe ' in name cannot own a ticket
+
+5. FORUM:5795 - If you change the name of admin passwords are lost !!!
+
+6. FORUM:5810 - In contacts module Brithdate shown as 0000-00-00
+
+7. FORUM:4501 - Error message while associating user to a group
+
+8. FORUM:4550 - Issue related to custom drop-down list order
+
+9. FORUM:4039- Issue with duplicating a contact
+
+10. FORUM:4073 - Normal user with no access to the settings is anyway able to change the profile of a role.
+
+11. FORUM:1409 - Report Export to PDF
+
+12. FORUM:1818 - Outlook Sync applies makes Calendar appointments 2020
+
+13. FORUM:606 File Missing: testemailtemplateusage.php 
+
+14. FORUM:1294 - Problem with e-mail templates
+
+15. FORUM:1050 - Subject of emails not imported - Need confirmation
+
+16. FORUM:1276 - Converting Leads and assigning to user
+
+17. FORUM:1270 - Bug in e-mail module
+
+18. ORUM:1742 - Bug when assigning product from 2nd page to potential
+
+19. FORUM:1772 - Bug: wrong date format when converting leads
+
+20. FORUM:1559 - Tasks not working in Leads
+
+21. FORUM: 5247 - Account search doesn't work
+
+22. FORUM:5096 - Phone search
+
+23. FORUM:5715 - Currency Support
+
+24. FORUM:5795 - Roles and Passwords
+
+25. SF1102842 - CSV import, problem with ä,ö,ü
+
+26. SF1097215 - Mass Delete in Accounts, Contacts and Opportunities
+
+27. SF1025603 - Phone in Task
+
+28. SF1093989 - picklists - I18N
+
+29. SF1090963 - wrong header caption in activities, history
+
+30. SF1090711 - Duplicate entries in language translation
+
+31. SF1095038 - Import Leads - No Mapping Fields
+
+32. SF1093132 - Lead Import Fails - v3.2
+
+33. SF1094944 - The leads dropdown list does not update
+
+34. SF1090715 - Error on importing contacts from cvs file
+
+35. SF1073179 - Importing .xls files but missing one of the column header
+
+36. SF1073159 - Importing Problem
+
+37. SF1087482 - user not deleted
+
+38. SF1094950 - New E-mail - Error Message
+
+39. SF1090721 - Meeting Contact - Unable to remove
+
+40. SF 1090717 - New Note: Field Name missing
+
+41. SF 1230595 - Custom Calendar in Tickets not working
+
+42. SF 1221170 - Sort Notes 
+
+43. SF 1221036 - Orders 
+
+44. SF 1214401 - Contact birthday translation 
+
+45. SF 1214396 - Task start date and Calendar date scrambled 
+
+46. SF 1218633 - Phone Search not working 
+
+47. SF 1231325 - Error with open tickets link on home page
+
+48. Create users without associating to any of the groups
+
+49. Non-editable user name
+
+50. Mandatory fields checks while configuring currency fields
+
+51. Mandatory fields checks while configuring database backup server
+
+52. The currency symbol which is set in Currency configuration, it is not reflected in dashboard graphs.
+
+53. Field accessibility support not provided for Potential fields
+
+
+*****************
+3. Known Issues
+*****************
+
+1. FORUM:1816 - Outlook Plugin error in Outlook
+
+2. FORUM:1818 - Outlook Sync applies makes Calendar appointments 2020
+
+3. FORUM:1293 - Leads have disappeared - We turned off Leads for all users in the Sales profile. Now we have turned them back on in Settings and they still don't appear. When have restarted the server to completely restart all services just in case but that didn't fix it. Any ideas?
+
+4. FORUM:1752 - Bug: Decimals lost in custom currency fields in products
+
+5. FORUM:1831- Import Error CSV Leads (File size more than 2MB cannot be imported)
+
+6. PDF report overlaps if the number of columns are more than the paper size and last few columns are hidden
+
+7. While creating a new event from Ticket related list, ticket name is not displayed under Activity page
+
+8. In Products related Price Book if edit link will point to Price Book edit view instead of Edit product list price
+
+9. If an event is assigned to Group then in the users list the group members name is displayed
+
+10. If an event is assigned to a team, if the team name is empty then also the event is being saved
+
+11. In Lead Conversion, the type of custom field is not taken into consideration
+
+12. If any of the events associated with recurring event is closed, all the related recurring events are also closed 
+
+13. In Reports, The Date fields in "Filter Options" will not be retained after clicking the 'Apply Filter' button
+
+14. When a New Sales Order, Purchase Order, Invoice and Quotes are created from a Product Detail View, Account Name and Potential Name will not be populated.
+
+15. In a Product Detail View if 'Add to Price Book' hyperlink is clicked and if no Price Book is present in the list, and if 'Add to Product' is selected, vtiger Home page will be displayed. 
+
+16. While generating reports the fields selected in 'Columns to Total' will not be displayed.
+
+Limitations
+
+1. Security is not implemented for Reports and Dashboards.
+
+2. GIF images are not supported while generating PDF documents such as Quotes,Orders and Invoice.
+
+
+NOTE: For more details about vtiger CRM 4.2 Release Notes, Please refer to the following URL:
+
+http://www.vtiger.com/wiki/index.php/Vtiger_CRM_4_2_Release_Notes
+ 
+-----------------------------------------------------------------------------------------------
 vtiger CRM 4.2 Alpha
 May 31, 2005
 
