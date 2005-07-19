@@ -186,10 +186,6 @@ if($num_rows == 1)
 }
 //Getting the logo
 
-
-
-//$companyaddress = Array('AdventNet, Inc.','11 Sarathy Nagar','Velachery','Vijayanagar','Chennai - 600042');
-
 //getting the Product Data
 $query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$id;
 
