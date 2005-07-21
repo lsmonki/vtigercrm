@@ -248,7 +248,7 @@ $comboFieldArray = getComboArray($comboFieldNames);
 $the_form .= get_left_form_header("New Event");
 $the_form .= <<<EOQ
 
-		<form name="EventSave" method="POST" action="index.php" onSubmit="return verify_data(ActivitySave)">
+		<form name="EventSave" method="POST" action="index.php" onSubmit="return verify_data(EventSave)">
 			<input type="hidden" name="module" value="Activities">
 			<input type="hidden" name="record" value="">
 			<input type="hidden" name="activity_mode" value="Events">
