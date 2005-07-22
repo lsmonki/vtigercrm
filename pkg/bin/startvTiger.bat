@@ -100,7 +100,7 @@ goto checkdatabase
 echo ""
 echo "Starting MySQL on port specified by the user"
 echo ""
-start mysqld -b .. --datadir=../data --port=%mysql_port%
+start mysqld-nt -b .. --datadir=../data --port=%mysql_port%
 %SLEEP_STR% -n 11 127.0.0.1>nul
 mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases" > NUL
 IF ERRORLEVEL 1 goto notstarted
