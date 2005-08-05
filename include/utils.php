@@ -4245,8 +4245,8 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$qty_var = 'txtQty'.$i;
 		$list_price_var = 'txtListPrice'.$i;	
 		$total_var = 'total'.$i;
-
-		if($num_rows%2 == 0)
+		
+		if($i%2 == 0)
 		{
 			$row_class = "evenListRow";
 		}
@@ -4346,6 +4346,8 @@ function getDetailAssociatedProducts($module,$focus)
 	$vtlog->logthis("in getDetailAssociatedProducts. Module is  ".$module,'debug');
 
 	$output = '';
+	$output .= '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
+	$output .=  '<tr><td  class="formBorder">';
 	$output .= '<div style="padding:2 0 2 0"><strong>Product Details</strong></div> <div id="productList">';
     $output .= '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formBorder">';
     $output .= '<tr class="moduleListTitle" height="20" id="tablehead">';
@@ -4442,9 +4444,11 @@ function getDetailAssociatedProducts($module,$focus)
 */		
 
 	}
+	$output .= '<tr id="tableheadline">';
+        $output .= '<td colspan="14" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 	$output .= '</table>';
   	$output .= '</div>';
-	$output .= '<table width="100%" border="0" cellspacing="2" cellpadding="2">';
+	$output .= '<table width="100%" border="0" cellspacing="2" cellpadding="2" bgcolor="#FFFFFF">';
         $output .= '<tr>'; 
 	$output .= '<td width="150"></td>';
       	$output .= '<td><div align="right"><b>Sub Total:</b></div></td>';
@@ -4466,6 +4470,7 @@ function getDetailAssociatedProducts($module,$focus)
       $output .= '<td width="150"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnGrandTotal'].'</div></td>';
     $output .= '</tr>';
     $output .= '</table>';
+    $output .= '</td></tr></table>';	
 
 /*	
 		$output .= '<tr><td width="15%" class="dataLabel" colspan="4">Sub Total:</td><td width="15%" class="dataLabel">'.$focus->column_fields['hdnSubTotal'].'</td></tr>';
