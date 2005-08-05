@@ -47,14 +47,15 @@ echo get_form_footer();
 
 
 
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
+$other_text = '<table border="0" cellpadding="1" cellspacing="0">
 	<form name="addToPB" method="POST">
 	<tr>
 	<input name="product_id" type="hidden" value="'.$productid.'">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden">';
         $other_text .='<td><input class="button" type="submit" value="Add To PriceBook" onclick="return addtopricebook()"/></td>';
-		$other_text .='</tr></table>';
+	$other_text .='<td>&nbsp;<input title="'.$app_strings[LBL_CANCEL_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CANCEL_BUTTON_KEY].'" class="button" onclick="window.history.back()" type="button" name="button" value="'.$app_strings[LBL_CANCEL_BUTTON_LABEL].'"></td>';
+	$other_text .='</tr></table>';
 
 //Retreive the list from Database
 
