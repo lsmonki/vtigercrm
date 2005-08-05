@@ -4663,5 +4663,11 @@ function getInventoryTotal($return_module,$id)
 	return $total;
 }
 
+function updateProductQty($product_id, $upd_qty)
+{
+	global $adb;
+	$query= "update products set qtyinstock=".$upd_qty." where productid=".$product_id;
+        $adb->query($query);
 
+}
 ?>
