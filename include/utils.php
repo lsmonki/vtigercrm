@@ -883,7 +883,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		if($value=='')
                 {
-			if($fieldname != 'birthday')
+			if($fieldname != 'birthday' && $fieldname != 'due_date')
                         	$disp_value=getNewDisplayDate();
                 }
                 else
