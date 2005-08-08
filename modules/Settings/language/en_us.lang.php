@@ -499,6 +499,9 @@ t, contact, or potential fields. These mappings will be used when you convert le
 'LBL_POTENTIAL_FIELD'=>'Potential Field',
 'CUSTOMFIELDMAPPING'=>'Custom Field Mapping',
 
+//After 4.2 GA
+'LBL_TEXT_AREA'=>'Text Area',
+
 );
 
 ?>
