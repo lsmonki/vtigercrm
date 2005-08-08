@@ -78,7 +78,7 @@ $sql1="select crmentity.crmid, pricebookproductrel.pricebookid,products.unit_pri
 $res1 = $adb->query($sql1);
 $num_prod_rows = $adb->num_rows($res1);
 $pbk_array = Array();
-$unit_price = $adb->query_result($res1,0,"unit_price");
+$unit_price = getUnitPrice($productid);
 for($i=0; $i<$num_prod_rows; $i++)
 {
 	$pbkid=$adb->query_result($res1,$i,"pricebookid"); 
