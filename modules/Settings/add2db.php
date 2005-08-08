@@ -18,9 +18,10 @@ $vtigerpath = $_SERVER['REQUEST_URI'];
 $vtigerpath = str_replace("/index.php?module=Settings&action=add2db", "", $vtigerpath);
 $uploaddir = $root_directory ."/test/logo/" ;// set this to wherever
 $saveflag="true";
-
+$nologo_specified="true";
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
+	$nologo_specified="false";
 	$binFile = $_FILES['binFile']['name'];
 	$filename = basename($binFile);
 	$filetype= $_FILES['binFile']['type'];
@@ -34,18 +35,13 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 			if($result!=false)
 			{
 				$savelogo="true";
+				
 			}
 		}
-	/*	else if($filetype_array[1] == "gif")
-		{
-			$savelogo="false";
-                        $errormessage = "<font color='red'><B> Logo has to be either jpeg/png file </B></font>";
-		}
-	*/
 		else
 		{
 			$savelogo="false";
-			$errormessage = "<font color='red'><B> Logo has to be an Image </B></font>";
+			$errormessage = "<font color='red'><B> Logo has to be an Image of type jpeg/png</B></font>";
 		}
 		
 	}
@@ -62,22 +58,26 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 } 
 else 
 {
+
 	$errorCode =  $_FILES['binFile']['error'];
 	if($errorCode == 4)
 	{
-	    	$savelogo="true";	    	
+	    	$savelogo="false";	    	
 		$errorcode="";
 		$saveflag="true";
+		$nologo_specified="true";
 	}
 	else if($errorCode == 2)
 	{
 	    	$errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 1000000 bytes</font></B> <br>";
 	    	$savelogo="false";	    	
+	$nologo_specified="false";
 	}
-	else if($errorCode == 3)
+	else if($errorCode == 3 )
 	{
 		$errormessage = "<b>Problems in file upload. Please try again! </b><br>";
 	  	$savelogo="false";
+	$nologo_specified="false";
 	}
 	  
 }
@@ -100,6 +100,7 @@ if($saveflag=="true")
 	$organization_fax=$_REQUEST['organization_fax'];
 	$organization_website=$_REQUEST['organization_website'];
 	$organization_logo=$_REQUEST['organization_logo'];
+
 	$organization_logoname=$filename;
 	if(!isset($organization_logoname))
 		$organization_logoname="";
@@ -107,6 +108,7 @@ if($saveflag=="true")
 	$sql="select * from organizationdetails where organizationame = '".$org_name."'";
 	$result = $adb->query($sql);
 	$org_name = $adb->query_result($result,0,'organizationame');
+	$org_logo = $adb->query_result($result,0,'logoname'); 
 
 
 	if($org_name=='')
@@ -119,7 +121,12 @@ if($saveflag=="true")
 		{
 			$organization_logoname="";
 		}
-	
+		if($nologo_specified=="true")
+		{
+			$savelogo="true";
+			$organization_logoname=$org_logo;
+		}
+
 		$sql="update organizationdetails set organizationame = '".$organization_name."', address = '".$organization_address."', city = '".$organization_city."', state = '".$organization_state."',  code = '".$organization_code."', country = '".$organization_country."' ,  phone = '".$organization_phone."' ,  fax = '".$organization_fax."',  website = '".$organization_website."', logoname = '". $organization_logoname ."' where organizationame = '".$org_name."'";
 	}
 	$adb->query($sql);
