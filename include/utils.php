@@ -4336,6 +4336,18 @@ function getListPrice($productid,$pbid)
 	return $lp;
 }
 
+function getUnitPrice($productid)
+{
+        global $vtlog;
+        $vtlog->logthis("in getUnitPrice productid ".$productid,'info');
+
+        global $adb;
+        $query = "select unit_price from products where productid=".$productid;
+        $result = $adb->query($query);
+        $up = $adb->query_result($result,0,'unit_price');
+        return $up;
+}
+
 function getDetailAssociatedProducts($module,$focus)
 {
 	global $adb;
