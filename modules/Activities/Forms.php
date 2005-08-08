@@ -254,10 +254,11 @@ $the_form .= <<<EOQ
 			<input type="hidden" name="activity_mode" value="Events">
 			<input type="hidden" name="assigned_user_id" value="${user_id}">
 			<input type="hidden" name="action" value="Save">
+		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Subject<br>
 		<input name='subject' type="text" value=""><br>
 		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Start Date & Time&nbsp;<br>
-		<input name="date_start" id="jscal_field_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$dis_value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_date_start">&nbsp; <input name="time_start" tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
+		<input name="date_start" id="jscal_field_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$dis_value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_event_date_start">&nbsp; <input name="time_start" tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
 		<font size=1><em old="(yyyy-mm-dd 24:00)">($current_user->date_format 24:00)</em></font><br>
 		Activity Type<br>
 		<select name='activitytype'>
@@ -278,8 +279,10 @@ $the_form .= <<<EOQ
 		</form>
 		<script type="text/javascript">
 		Calendar.setup ({
-			inputField : "jscal_field_date_start", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+			inputField : "jscal_field_date_start", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger_event_date_start", singleClick : true, step : 1
 		});
+		
+		
 		</script>
 EOQ;
 $the_form .= get_left_form_footer();
