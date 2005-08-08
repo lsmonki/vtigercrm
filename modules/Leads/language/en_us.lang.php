@@ -70,6 +70,9 @@ $mod_strings = Array(
 'LBL_ACCOUNT_NAME'=>'Account Name',
 'LBL_POTENTIAL_NAME'=>'Potential Name',
 'LBL_POTENTIAL_CLOSE_DATE'=>'Potential Close Date',
+'LBL_POTENTIAL_AMOUNT'=>'Potential Amount',
+'LBL_POTENTIAL_SALES_STAGE'=>'Potential Sales Stage',
+
 
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
 'NTC_REMOVE_CONFIRMATION'=>'Are you sure you want to remove this contact from this case?',
