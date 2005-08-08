@@ -130,6 +130,15 @@ if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_
 if (isset($_REQUEST['email_id'])) $xtpl->assign("EMAILID", $_REQUEST['email_id']);
 if (isset($_REQUEST['ticket_id'])) $xtpl->assign("TICKETID", $_REQUEST['ticket_id']);
 if (isset($_REQUEST['fileid'])) $xtpl->assign("FILEID", $_REQUEST['fileid']);
+if (isset($_REQUEST['record']))
+{
+	 $xtpl->assign("CANCELACTION", "DetailView");
+}
+else
+{
+	 $xtpl->assign("CANCELACTION", "index");
+}
+
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
