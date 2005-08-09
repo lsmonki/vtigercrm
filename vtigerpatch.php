@@ -46,25 +46,115 @@ if(!$patch_applied)
   
 	require_once('include/database/PearDatabase.php');
 	$db = new PearDatabase();
-	echo "<br><b>Following Modification made in vtigercrm4 database tables</b><br><br>";
-	$db->query("alter table loginhistory change logout_time lo_time timestamp(14)");
-	$db->query("alter table loginhistory change login_time logout_time timestamp(14);");
-	$db->query("alter table loginhistory change lo_time login_time timestamp(14);");
-        echo "a) Login History table fields modified.<br>";
-	$db->query("update field set typeofdata='V~M',fieldname='ticket_title' where tabid = 13 and fieldname='title';");
-	$db->query("update field set fieldname='subject' where tabid = 10 and fieldname='name';");
-	echo "b) Email and Trouble ticket table fields modified.<br>";
-	$fieldid = $db->getUniqueID("field");
-	$db->query("insert into field values (16,".$fieldid.",'eventstatus','activity',1,'15','eventstatus','Status',1,0,0,100,9,1,1,'V~O');");
-	$db->query("insert into profile2field values(1,16,".$fieldid.",0,1)");
-	$db->query("insert into profile2field values(2,16,".$fieldid.",0,1)");
-	$db->query("insert into profile2field values(3,16,".$fieldid.",0,1)");
-	$db->query("insert into profile2field values(4,16,".$fieldid.",0,1)");
-	$db->query("insert into field values (9,".$db->getUniqueID("field").",'eventstatus','activity',1,'15','eventstatus','Status',1,0,0,100,9,1,1,'V~O');");
-	$db->query("alter table activity add column eventstatus varchar(50) after status");
+	$query1 = "update field set typeofdata='I~O' where fieldname='noofemployees' and tablename='leaddetails' and columnname='noofemployees'";
+	echo '<BR> '.$query1.'<BR>';
+	$db->query($query1);
+
+	//Increasing the website field length in leadsubdetails table
+	$query2 = "alter table leadsubdetails change website website VARCHAR(255)";
+	echo '<BR> '.$query2.'<BR>';
+	$db->query($query2);
+
+	//Integrating the performance fix by microwe 
+	$query = "ALTER TABLE `account` ADD INDEX ( `account_type` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+
+	$query = "ALTER TABLE `activity` ADD INDEX ( `activitytype`,`date_start` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `activity` ADD INDEX ( `date_start`,`due_date` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `activity` ADD INDEX ( `date_start`,`time_start` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `activity` ADD INDEX ( `eventstatus` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `activity` ADD INDEX ( `status`,`eventstatus` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `attachments` ADD INDEX ( `attachmentsid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `attachments` ADD INDEX ( `description`,`name`,`type`,`attachmentsid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `crmentity` ADD INDEX ( `deleted`,`smownerid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `crmentity` ADD INDEX ( `smownerid`,`deleted` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `customaction` ADD INDEX ( `cvid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `customview` ADD INDEX ( `cvid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `cvadvfilter` ADD INDEX ( `cvid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `cvcolumnlist` ADD INDEX ( `columnindex` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `cvstdfilter` ADD INDEX ( `cvid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `def_org_field` ADD INDEX ( `tabid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `def_org_field` ADD INDEX ( `visible`,`fieldid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `field` ADD INDEX ( `fieldname` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `field` ADD INDEX ( `tabid`,`block`,`displaytype` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `leaddetails` ADD INDEX ( `converted`,`leadstatus` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `potential` ADD INDEX ( `potentialid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `potential` ADD INDEX ( `sales_stage` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `profile2field` ADD INDEX ( `tabid`,`profileid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `profile2field` ADD INDEX ( `visible`,`profileid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `quotes` ADD INDEX ( `quotestage` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `seactivityrel` ADD INDEX ( `crmid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `seattachmentsrel` ADD INDEX ( `attachmentsid`,`crmid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `tab` ADD INDEX ( `tabid` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE `troubletickets` ADD INDEX ( `status` )";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+	$query = "ALTER TABLE potential MODIFY probability decimal(7,3)";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+
+	$query = "UPDATE field SET typeofdata='N~O~3,3~LE~100' WHERE tablename='potential' and columnname = 'probability' and fieldname='probability'";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+
+	echo '<BR> <BR>';
+	echo "<font color=red><center> *** DataBase modified Successfully!!!  *** </center></font>";
 	
-	echo "c) Activity and Events table modified for adding event status field.<br>";
-	echo "<br><b>Table modification completed.</b><br>";
 }
 else
 {
