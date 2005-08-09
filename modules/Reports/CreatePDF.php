@@ -330,7 +330,13 @@ if(isset($arr_val))
         {
                 foreach($warray_value as $whd=>$wvalue)
                 {
-			$w_inner_array[] = strlen($wvalue);
+			if(strlen($wvalue) < strlen($whd))
+			{
+				$w_inner_array[] = strlen($whd);	
+			}else
+			{
+				$w_inner_array[] = strlen($wvalue);
+			}
                 }
 		$warr_val[] = $w_inner_array;
 		unset($w_inner_array);
