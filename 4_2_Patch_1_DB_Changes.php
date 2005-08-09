@@ -114,6 +114,8 @@ echo '<BR> '.$query.'<BR>';
 $dbconn->query($query);
 
 
-echo "DataBase Successfully modified!!!";
+echo '<BR> <BR>';
+echo "<font color=red><center> *** DataBase Successfully modified!!!  *** </center></font>";
+
 
 ?>
