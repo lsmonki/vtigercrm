@@ -316,10 +316,12 @@ if(! isset($createpotential) || ! $createpotential == "on")
   $adb->query($sql_crmentity);
 
 
-	if(!isset($potential_amount))
+	if(!isset($potential_amount) || $potential_amount == null)
+	{
 		$potential_amount=0;
+        }
 
-	$sql_insert_opp = "INSERT INTO potential (potentialid,accountid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (".$oppid.",".$crmid .",'".$potential_name."','".$row['leadsource']."','".$close_date."','$potential_sales_stage',$potential_amount)";
+	$sql_insert_opp = "INSERT INTO potential (potentialid,accountid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (".$oppid.",".$crmid .",'".$potential_name."','".$row['leadsource']."','".$close_date."','".$potential_sales_stage."',".$potential_amount.")";
 
 	$adb->query($sql_insert_opp);
 
