@@ -179,7 +179,7 @@ function renderRelatedOrders($query,$id,$sid="product_id")
 	$list = GetRelatedList('Vendor','Orders',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
-function renderProductPurchaseOrders($query,$id,$vendid='')
+function renderProductPurchaseOrders($query,$id,$vendid='',$cntid='')
 {
 	require_once('modules/Orders/Order.php');
         global $mod_strings;
@@ -190,6 +190,9 @@ function renderProductPurchaseOrders($query,$id,$vendid='')
 	{
         	$hidden .= '<input type="hidden" name="vendor_id" value="'.$vendid.'">';
 	}
+	if($cntid!=0 && $cntid!='')
+        $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
+
         echo $hidden;
 
         $focus = new Order();
@@ -219,6 +222,7 @@ function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
 		if($parent_module == "Accounts")
         	$hidden .= '<input type="hidden" name="account_id" value="'.$prtid.'">';
 	}
+	if($cntid!=0 && $cntid!='')
         $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
 
         echo $hidden;
@@ -271,6 +275,7 @@ function renderRelatedQuotes($query,$id,$cntid='',$prtid='',$sid="product_id")
 		if($parent_module == "Accounts")
         	$hidden .= '<input type="hidden" name="account_id" value="'.$prtid.'">';
 	}
+	if($cntid!=0 && $cntid!='')
         $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
 	echo $hidden;
 	
