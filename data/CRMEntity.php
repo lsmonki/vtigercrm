@@ -420,7 +420,7 @@ $vtlog->logthis("module is =".$module,'info');
 		  {
 			  if($uitype == 56)
 			  {
-				  if($this->column_fields[$fieldname] == 'on')
+				  if($this->column_fields[$fieldname] == 'on' || $this->column_fields[$fieldname] == 1)
 				  {
 					  $fldvalue = 1;
 				  }
@@ -685,7 +685,8 @@ $vtlog->logthis("in insertIntoTicketCommentTable  ".$table_name."    module is  
 	else
 		$ownertype = 'customer';
 
-	$sql = "insert into ticketcomments values('',".$this->id.",'".$_REQUEST['comments']."','".$current_user->id."','".$ownertype."','".$current_time."')";
+	$comment = addslashes($_REQUEST['comments']);
+	$sql = "insert into ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."','".$current_time."')";
         $adb->query($sql);
 }
 function insertIntoFAQCommentTable($table_name, $module)
@@ -696,7 +697,8 @@ $vtlog->logthis("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$
 
         $current_time = date('Y-m-d H:i:s');
 
-	$sql = "insert into faqcomments values('',".$this->id.",'".$_REQUEST['comments']."','".$current_time."')";
+	$comment = addslashes($_REQUEST['comments']);
+	$sql = "insert into faqcomments values('',".$this->id.",'".$comment."','".$current_time."')";
 	$adb->query($sql);
 }
 function insertIntoReminderTable($table_name,$module,$recurid)
