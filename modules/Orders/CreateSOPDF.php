@@ -437,5 +437,5 @@ $pdf->setAddress($bdata,$sdata);
 $pdf->setCustomerDetails($iCustHeadDtls,$iCustData);
 $pdf->setProductDetails($iHeadDtls,$iDataDtls);
 $pdf->setTotal($price_total,$conditions);
-$pdf->Output();
+$pdf->Output('SOOrder.pdf','D');
 ?>
