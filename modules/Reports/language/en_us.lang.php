@@ -76,7 +76,7 @@ $mod_strings = Array(
 'LBL_GRAND_TOTAL'=>'Grand Total',
 
 //Added for 4.2 Patch I
-'LBL_EXPORTXL_BUTTON'=>'Export To PDF',
+'LBL_EXPORTXL_BUTTON'=>'Export To Excel',
 
 
 );
