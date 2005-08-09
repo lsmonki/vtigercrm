@@ -104,4 +104,16 @@ $query = "ALTER TABLE `troubletickets` ADD INDEX ( `status` )";
 echo '<BR> '.$query.'<BR>';
 $dbconn->query($query);
 
+$query = "ALTER TABLE potential MODIFY probability decimal(7,3)";
+echo '<BR> '.$query.'<BR>';
+$dbconn->query($query);
+
+
+$query = "UPDATE field SET typeofdata='N~O~3,3~LE~100' WHERE tablename='potential' and columnname = 'probability' and fieldname='probability'";
+echo '<BR> '.$query.'<BR>';
+$dbconn->query($query);
+
+
+echo "DataBase Successfully modified!!!";
+
 ?>
