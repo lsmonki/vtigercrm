@@ -4,6 +4,15 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once('include/database/PearDatabase.php');
 require_once('modules/Users/UserInfoUtil.php');
+require_once('vtigerversion.php');
+if($patch_version !='')
+{
+	$patch_string = $vtiger_version . " Patch " . $patch_version;
+}
+else
+{
+	$patch_string = "--None--";
+}
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
@@ -23,19 +32,24 @@ global $mod_strings;
 <td class="dataField" height="30 px">&nbsp;<?php echo $vtiger_version; ?></td>
 </tr>
 <tr>
+<td class="dataLabel" height="30 px" width="40%"><font face="Helvetica, sans-serif"><b>Applied Patch Version:&nbsp;</b></font></td>
+<td class="dataField" height="30 px">&nbsp;<?php echo $patch_string; ?></td>
+</tr>
+
+<tr>
 <td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>4.2 Release Date:&nbsp;</b></td>
 <td class="dataField" height="30 px">&nbsp;<?php echo $release_date; ?><span class="gensmall"> (Currrent version)</span></td>
 	</tr>
 
 <tr>
 <td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>4.0.1 Release Date:&nbsp;</b></td>
-<td class="dataField" height="30 px">&nbsp;April 29, 2005</font></td>
+<td class="dataField" height="30 px">&nbsp;04-29-2005</font></td>
                 </tr>
 		
 	
 <tr>
 <td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>4.0 Release Date:&nbsp;</b></td>
-<td class="dataField" height="30 px">&nbsp;04-29-2005</font></td>
+<td class="dataField" height="30 px">&nbsp;03-29-2005</font></td>
 	        </tr>
 		<tr>
 		<td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>3.2 Release Date:&nbsp;</b></td>
