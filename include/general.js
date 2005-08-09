@@ -614,6 +614,16 @@ function numValidate(fldName,fldLabel,format,neg) {
            return false
        } else return true
    } else {
+	
+	   var splitval=val.split(".")
+
+                if(splitval[0]>2147483647)
+                {
+                        alert( fldLabel + " exceeds the maximum limit ");
+                        return false;
+                }
+
+
        if (neg==true)
            var re=/^(-|)\d+(\.\d\d*)*$/
        else
@@ -629,11 +639,22 @@ function numValidate(fldName,fldLabel,format,neg) {
 
 function intValidate(fldName,fldLabel) {
 	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-	if (isNaN(val) || val.indexOf(".")!=-1) {
+	if (isNaN(val) || val.indexOf(".")!=-1) 
+	{
 		alert("Invalid "+fldLabel)
 		getObj(fldName).focus()
 		return false
-	} else return true
+	} 
+        else if( val < -2147483648 || val > 2147483647)
+        {
+                alert(fldLabel +" is out of range");
+                return false;
+        }
+
+	else
+	{
+		return true
+	}
 }
 
 function numConstComp(fldName,fldLabel,type,constval) {
