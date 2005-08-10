@@ -344,14 +344,20 @@ $vtlog->logthis("module is =".$module,'info');
     $old_priority = $adb->query_result($tktresult,0,"priority");
     $old_severity = $adb->query_result($tktresult,0,"severity");
     $old_category = $adb->query_result($tktresult,0,"category");
-    if($old_user_id != $this->column_fields['assigned_user_id'] || $old_status != $this->column_fields['ticketstatus'] || $old_priority != $this->column_fields['ticketpriorities'] || $old_severity != $this->column_fields['ticketseverities'] || $old_category != $this->column_fields['ticketcategories'])
+    if($_REQUEST['old_smownerid'] != $old_user_id || $old_status != $this->column_fields['ticketstatus'] || $old_priority != $this->column_fields['ticketpriorities'] || $old_severity != $this->column_fields['ticketseverities'] || $old_category != $this->column_fields['ticketcategories'] || $old_userid == 0)
     {
       $updatelog .= date("l dS F Y h:i:s A").' by '.$current_user->user_name.'--//--';
     }	
-    if($old_user_id != $this->column_fields['assigned_user_id'])
+    if($_REQUEST['old_smownerid'] != $old_user_id && $old_user_id != 0)
     {
       $user_name = getUserName($this->column_fields['assigned_user_id']);
-      $updatelog .= ' Transferred to '.$assigned_user_name.'\.';
+      $updatelog .= ' Transferred to '.$user_name.'\.';
+    }
+    elseif($old_user_id == 0)
+    {
+	$group_name = getGroupName($ticketid,'HelpDesk');
+	if($group_name != $_REQUEST['assigned_group_name'])
+		$updatelog .= ' Transferred to group '.$_REQUEST['assigned_group_name'].'\.';
     }
     if($old_status != $this->column_fields['ticketstatus'])
     {
@@ -514,7 +520,11 @@ $vtlog->logthis("module is =".$module,'info');
 			  {
 				  global $current_user;
 				  $fldvalue = date("l dS F Y h:i:s A").' by '.$current_user->user_name;
-				  if($this->column_fields['assigned_user_id'] != '')
+				  if($_REQUEST['assigned_group_name'] != '' && $_REQUEST['assigntype'] == 'T')
+                                  {
+                                        $group_name = $_REQUEST['assigned_group_name'];
+                                  }
+				  elseif($this->column_fields['assigned_user_id'] != '')
 				  {
 					  $tkt_ownerid = $this->column_fields['assigned_user_id'];
 				  }
@@ -522,7 +532,10 @@ $vtlog->logthis("module is =".$module,'info');
 				  {
 					  $tkt_ownerid = $current_user->id;
 				  }
-				  $tkt_ownername = getUserName($tkt_ownerid);	
+				  if($group_name != '')
+					  $tkt_ownername = $group_name;
+				  else
+					  $tkt_ownername = getUserName($tkt_ownerid);	
 				  $fldvalue .= "--//--Ticket created. Assigned to ".$tkt_ownername."--//--";
 				  $fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
 				  //echo ' updatevalue is ............. ' .$fldvalue;
