@@ -1732,7 +1732,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$user_id = $col_fields[$fieldname];
 		if($user_id != 0)
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].$app_strings['LBL_USER'].' :</td>';
+			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].' '.$app_strings['LBL_USER'].' :</td>';
 			$user_name = getUserName($user_id);
 			if(is_admin($current_user))
 			{
@@ -1745,7 +1745,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}
 		elseif($user_id == 0)
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].$app_strings['LBL_GROUP'].' :</td>';
+			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].' '.$app_strings['LBL_GROUP'].' :</td>';
 			$id = $col_fields["record_id"];	
 			$module = $col_fields["record_module"];
 			$groupname = getGroupName($id, $module);
