@@ -39,8 +39,12 @@ if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
 
 	$adb->query($sql);
 }
-
-if($_REQUEST['module'] == $_REQUEST['return_module'] || $_REQUEST['return_module'] == "Contacts")
+if($_REQUEST['return_module'] == "Contacts")
+{
+	$sql = "UPDATE products set contactid = '' where productid = ".$_REQUEST['record'];
+	$adb->query($sql);
+}
+if($_REQUEST['module'] == $_REQUEST['return_module'])
 	$focus->mark_deleted($_REQUEST['record']);
 
 if(isset($_REQUEST['activity_mode']))
