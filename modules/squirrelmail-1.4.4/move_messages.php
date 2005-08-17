@@ -217,20 +217,24 @@ elseif (!isset($moveButton) )
 			{
 				$message = sqimap_get_message($imapConnection, $id[$k], $mailbox);
 				$header = $message->rfc822_header;
-				/*
+				
 				$from = $message->rfc822_header->getAddr_s('from');
 				$date = getLongDateString($message->rfc822_header->date);
-				
+                                $date1 =($message->rfc822_header->date);
+                                /* 
 				$subject = trim($rfc822_header->subject);
 				$cc = $message->rfc822_header->getAddr_s('cc');
 				$to = $message->rfc822_header->getAddr_s('to');
-
+                                
+                                echo 'date is ' .$date;
 				echo 'cc is '.$cc;
 				echo 'to is '.$to;
-				
+				echo 'subject is ' .$header->subject;
 				print_r($header);
 				exit;
-				*/
+                                */
+                                $date= $adb->formatString("crmentity","createdtime",$date);
+                                // echo $date;
 				$fromemail = $header->from[0]->mailbox .'@'.$header->from[0]->host;
 				$subject  = $header->subject ;
 				$msgsubject[$k]=$subject;
@@ -239,7 +243,7 @@ elseif (!isset($moveButton) )
 		      	$tempidlist = implode(",", $id); 
 			$fromemail = implode(",",$msgfromemail);
 			$subject = implode(",",$msgsubject);
-			header("Location: index.php?module=Emails&action=Save&fromemail=".$fromemail."&subject=".$subject."&idlist=".$tempidlist);      
+			header("Location: index.php?module=Emails&action=Save&fromemail=".$fromemail."&subject=".$subject."&idlist=".$tempidlist."&adddate=".$date);      
 			return;
 		}
     
