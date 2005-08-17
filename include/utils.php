@@ -1352,15 +1352,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		}
 		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>';
-                $custfld .= '<OPTION value="Leads" '.$lead_selected.'>'.$app_strings['COMBO_LEADS'].'</OPTION>';
-                $custfld .= '<OPTION value="Accounts" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
-                $custfld .= '<OPTION value="Potentials" '.$contact_selected.'>'.$app_strings['COMBO_POTENTIALS'].'</OPTION>';
-		$custfld .= '<OPTION value="Products" '.$product_selected.'>'.$app_strings['COMBO_PRODUCTS'].'</OPTION>';
-		$custfld .= '<OPTION value="Invoice" '.$Invoice_selected.'>'.$app_strings['COMBO_INVOICES'].'</OPTION>';
-                $custfld .= '<OPTION value="Orders" '.$porder_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
-                $custfld .= '<OPTION value="Orders" '.$sorder_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION></select></td>';
+                $custfld .= '<OPTION value="Leads&action=Popup" '.$lead_selected.'>'.$app_strings['COMBO_LEADS'].'</OPTION>';
+                $custfld .= '<OPTION value="Accounts&action=Popup" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
+                $custfld .= '<OPTION value="Potentials&action=Popup" '.$contact_selected.'>'.$app_strings['COMBO_POTENTIALS'].'</OPTION>';
+		$custfld .= '<OPTION value="Products&action=Popup" '.$product_selected.'>'.$app_strings['COMBO_PRODUCTS'].'</OPTION>';
+		$custfld .= '<OPTION value="Invoice&action=Popup" '.$Invoice_selected.'>'.$app_strings['COMBO_INVOICES'].'</OPTION>';
+                $custfld .= '<OPTION value="Orders&action=Popup" '.$porder_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
+                $custfld .= '<OPTION value="Orders&action=PopupSalesOrder" '.$sorder_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION></select></td>';
 
-	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
+	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
 
         }
         elseif($uitype == 66)
@@ -1435,19 +1435,19 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		}
 		$custfld .= '<td width="20%" class="dataLabel"><select name="parent_type" onChange=\'document.EditView.parent_name.value=""; document.EditView.parent_id.value=""\'>';
-                $custfld .= '<OPTION value="Leads" '.$lead_selected.'>'.$app_strings['COMBO_LEADS'].'</OPTION>';
-                $custfld .= '<OPTION value="Accounts" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
-                $custfld .= '<OPTION value="Potentials" '.$contact_selected.'>'.$app_strings['COMBO_POTENTIALS'].'</OPTION>';
+                $custfld .= '<OPTION value="Leads&action=Popup" '.$lead_selected.'>'.$app_strings['COMBO_LEADS'].'</OPTION>';
+                $custfld .= '<OPTION value="Accounts&action=Popup" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
+                $custfld .= '<OPTION value="Potentials&action=Popup" '.$contact_selected.'>'.$app_strings['COMBO_POTENTIALS'].'</OPTION>';
 		if($act_mode == "Task")
                 {
-			$custfld .= '<OPTION value="Quotes" '.$quote_selected.'>'.$app_strings['COMBO_QUOTES'].'</OPTION>';
-                        $custfld .= '<OPTION value="Orders" '.$purchase_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
-                        $custfld .= '<OPTION value="Orders" '.$sales_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION>';
-                        $custfld .= '<OPTION value="Invoice" '.$invoice_selected.'>'.$app_strings['COMBO_INVOICES'].'</OPTION>';
+			$custfld .= '<OPTION value="Quotes&action=Popup" '.$quote_selected.'>'.$app_strings['COMBO_QUOTES'].'</OPTION>';
+                        $custfld .= '<OPTION value="Orders&action=Popup" '.$purchase_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
+                        $custfld .= '<OPTION value="Orders&action=PopupSalesOrder" '.$sales_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION>';
+                        $custfld .= '<OPTION value="Invoice&action=Popup" '.$invoice_selected.'>'.$app_strings['COMBO_INVOICES'].'</OPTION>';
                 }
                 $custfld .='</select></td>';
 
-	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
+	        $custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="'.$app_strings['LBL_CHANGE_BUTTON_LABEL'].'" name="button" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\'></td>';
 
         }
         elseif($uitype == 67)
@@ -1898,7 +1898,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$result = $adb->query($sql);
 				$sordername= $adb->query_result($result,0,"subject");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a></td>';
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a></td>';
 			}
 			elseif($parent_module == "Invoice")
 			{
@@ -1977,7 +1977,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                                 $result = $adb->query($sql);
                                 $sordername = $adb->query_result($result,0,"subject");
 
-                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a></td>';
+                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a></td>';
                         }
 			elseif($parent_module == "Invoice")
                         {
@@ -2727,6 +2727,7 @@ function getRelatedToEntity($module,$list_result,$rset)
 
 	global $adb;
 	$seid = $adb->query_result($list_result,$rset,"relatedto");
+	$action = "DetailView";
 
 	if(isset($seid) && $seid != '')
 	{
@@ -2766,6 +2767,8 @@ function getRelatedToEntity($module,$list_result,$rset)
 			$parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$seid;
 			$parent_result = $adb->query($parent_query);
 			$parent_name = $adb->query_result($parent_result,0,"subject");
+			$parent_module = "Orders";
+			$action = "SalesOrderDetailView";
 		}
 		if($parent_module == 'Invoice')
 		{
@@ -2774,7 +2777,7 @@ function getRelatedToEntity($module,$list_result,$rset)
 			$parent_name = $adb->query_result($parent_result,0,"subject");
 		}
 
-		$parent_value = "<a href='index.php?module=".$parent_module."&action=DetailView&record=".$seid."'>".$parent_name."</a>"; 
+		$parent_value = "<a href='index.php?module=".$parent_module."&action=".$action."&record=".$seid."'>".$parent_name."</a>"; 
 	}
 	else
 	{
@@ -2820,6 +2823,8 @@ function getRelatedTo($module,$list_result,$rset)
                 global $theme;
                 $module_icon = '<img src="themes/'.$theme.'/images/'.$parent_module.'.gif" alt="" border=0 align=center title='.$parent_module.'> ';
         }
+	
+	$action = "DetailView";
         if($parent_module == 'Accounts')
         {
                 $parent_query = "SELECT accountname FROM account WHERE accountid=".$parent_id;
@@ -2868,6 +2873,7 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"subject");
 		$action = "SalesOrderDetailView";
+		$parent_module = "Orders";
         }
 	if($parent_module == 'Contacts' && ($module == 'Emails' || $module == 'HelpDesk'))
         {
