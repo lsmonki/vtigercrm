@@ -80,8 +80,19 @@ $total = count($emailids);
 		{
 			//echo 'contact not found in db!';
 		}
+		global $current_user;
+
 		$focus->column_fields['subject']=$subjects[$m];
 		$focus->column_fields["activitytype"]="Emails";
+		$focus->column_fields["parent_id"]=$ctctExists;
+		//this line has been added to get the related list data in the contact description
+		$focus->column_fields["assigned_user_id"]=$current_user->id;
+		//$date_var = strtotime($_REQUEST['adddate']);
+		//echo 'date_var ' .$date_var;
+		//exit;
+		$focus->column_fields["date_start"]=$_REQUEST['adddate'];
+		$focus->column_fields["time_start"]=$_REQUEST['adddate'];
+
 		$focus->save("Emails");
 		$return_id = $focus->id;
 		$return_module='Emails';	
@@ -95,7 +106,8 @@ $total = count($emailids);
   function checkIfContactExists($mailid)
   {
     global $adb;
-    $sql = "select contactid from contactdetails where email= '".$mailid ."'";
+    //query being changed so that the deleted contacts are not considered
+        $sql = "select contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and email= '".$mailid ."' ";
     // echo $sql;
     $result = $adb->query($sql);
     $numRows = $adb->num_rows($result);
