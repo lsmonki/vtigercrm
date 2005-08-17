@@ -14,8 +14,6 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils.php');
 
 
-$vtigerpath = $_SERVER['REQUEST_URI'];
-$vtigerpath = str_replace("/index.php?module=Settings&action=add2db", "", $vtigerpath);
 $uploaddir = $root_directory ."/test/logo/" ;// set this to wherever
 $saveflag="true";
 $nologo_specified="true";
@@ -26,16 +24,16 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 	$filename = basename($binFile);
 	$filetype= $_FILES['binFile']['type'];
 	$filesize = $_FILES['binFile']['size'];
-
 	$filetype_array=explode("/",$filetype); 
+	$file_type_val=strtolower($filetype_array[1]);
+
 	if($filesize != 0)
 	{
-		if (($filetype_array[1] == "jpeg" ) || ($filetype_array[1] == "png")) //Checking whether the file is an image or not
+		if (($file_type_val == "jpeg" ) || ($file_type_val == "png")) //Checking whether the file is an image or not
 		{
 			if($result!=false)
 			{
 				$savelogo="true";
-				
 			}
 		}
 		else
