@@ -75,6 +75,9 @@ $allow_charset_search     = true;
 $uid_support              = true;
 
 
+$plugins[4] = 'info';
+
+
 $theme_css = '';
 $theme_default = 0;
 $theme[0]['PATH'] = SM_PATH . 'themes/default_theme.php';
