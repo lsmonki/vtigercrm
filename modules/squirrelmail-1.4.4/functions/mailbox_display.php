@@ -690,7 +690,7 @@ function mail_message_listing_beginning ($imapConnection,
     echo $moveFields;
 	echo '<table border="0" width="90%" cellpadding="5"  cellspacing="0" class="formOuterBorder" style="background-color: #F5F5F5;">
 		   <tr>
-		   		<td>'.$paginator.'&nbsp; | &nbsp; <a href="index.php?module=squirrelmail-1.4.4&action=options_highlight">'.$mod_strings['LNK_OPTIONS'].'</a></td>
+		   		<td>'.$paginator.'&nbsp; | &nbsp; <a href="index.php?module=squirrelmail-1.4.4&action=options">'.$mod_strings['LNK_OPTIONS'].'</a></td>
 		   		<td align="right">'.$msg_cnt_str.'</td>
 		   </tr>
 		 </table><br>';
