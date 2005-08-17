@@ -56,9 +56,19 @@ for($i = 0; $i <= 9; $i++){
 
 /* END GLOBALS */
 //Richie
-//echo '>>>>>>>>>>>>>>>>>>';
-//$imap_stream = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
-//$caps_array = get_caps($imap_stream);
+global $current_user;
+require_once('modules/Users/UserInfoUtil.php');
+$mailInfo = getMailServerInfo($current_user);
+$temprow = $adb->fetch_array($mailInfo);
+
+$secretkey=$temprow["mail_password"];
+$key = OneTimePadEncrypt($secretkey, $onetimepad);
+
+$imapServerAddress=$temprow["mail_servername"];
+$imapPort="143";
+
+$imap_stream = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
+$caps_array = get_caps($imap_stream);
 $list = array (
                'TEST_0',
                'TEST_1',
