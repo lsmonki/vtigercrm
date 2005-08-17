@@ -84,7 +84,7 @@ $total = count($emailids);
 
 		$focus->column_fields['subject']=$subjects[$m];
 		$focus->column_fields["activitytype"]="Emails";
-		$focus->column_fields["parent_id"]=$ctctExists;
+	//	$focus->column_fields["parent_id"]=$ctctExists;
 		//this line has been added to get the related list data in the contact description
 		$focus->column_fields["assigned_user_id"]=$current_user->id;
 		//$date_var = strtotime($_REQUEST['adddate']);
