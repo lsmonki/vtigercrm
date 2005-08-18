@@ -24,12 +24,14 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 	$filename = basename($binFile);
 	$filetype= $_FILES['binFile']['type'];
 	$filesize = $_FILES['binFile']['size'];
+	
 	$filetype_array=explode("/",$filetype); 
+
 	$file_type_val=strtolower($filetype_array[1]);
 
 	if($filesize != 0)
 	{
-		if (($file_type_val == "jpeg" ) || ($file_type_val == "png")) //Checking whether the file is an image or not
+		if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) ||  ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") ) //Checking whether the file is an image or not
 		{
 			if($result!=false)
 			{
