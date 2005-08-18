@@ -22,7 +22,7 @@ function info_opt() {
 
     $optpage_blocks[] = array(
         'name' => _("IMAP server information"),
-        'url'  => '../plugins/info/options.php',
+        'url'  => 'index.php?module=squirrelmail-1.4.4&action=plugins/info/options',
         'desc' => _("Run some test IMAP commands, displaying both the command and the result. These tests use the SquirrelMail IMAP commands and your current SquirrelMail configuration. Custom command strings can be used."),
         'js'   => false
     );
