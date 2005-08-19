@@ -9,7 +9,8 @@
 *
  ********************************************************************************/
 
-$filename = './vtigerversion.php';
+include('config.php');
+$filename = $root_directory.'vtigerversion.php';
 $patch_applied=false;
 $handle = @fopen($filename, "r+");
 $newbuf = '';
