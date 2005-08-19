@@ -1296,7 +1296,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
-				$parent_name = $first_name.' '.$last_name;
+				$parent_name = $last_name.' '.$first_name;
 				$lead_selected = "selected";
 
 			}
@@ -1379,7 +1379,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
-				$parent_name = $first_name.' '.$last_name;
+				$parent_name = $last_name.' '.$first_name;
 				$lead_selected = "selected";
 
 			}
@@ -1464,7 +1464,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
-				$parent_name = $first_name.' '.$last_name;
+				$parent_name = $last_name.' '.$first_name;
 				$lead_selected = "selected";
 
 			}
@@ -1474,7 +1474,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
-				$parent_name = $first_name.' '.$last_name;
+				$parent_name = $last_name.' '.$first_name;
 				$contact_selected = "selected";
 
 			}
@@ -1500,7 +1500,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
-				$parent_name = $first_name.' '.$last_name;
+				$parent_name = $last_name.' '.$first_name;
 				$contact_selected = "selected";
 
 			}
@@ -1853,7 +1853,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$first_name.' '.$last_name.'</a></td>';
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
 			}
 			elseif($parent_module == "Accounts")
 			{
@@ -1932,7 +1932,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$first_name.' '.$last_name.'</a></td>';
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
 			}
 			elseif($parent_module == "Accounts")
 			{
@@ -2010,7 +2010,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$first_name.' '.$last_name.'</a></td>';
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
 			}
 			elseif($parent_module == "Contacts")
 			{
@@ -2020,7 +2020,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$first_name = $adb->query_result($result,0,"firstname");
                                 $last_name = $adb->query_result($result,0,"lastname");
 
-                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$first_name.' '.$last_name.'</a></td>';
+                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
 			}
 		}
 		else
@@ -2043,7 +2043,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$first_name = $adb->query_result($result,0,"firstname");
                                 $last_name = $adb->query_result($result,0,"lastname");
 
-                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$first_name.' '.$last_name.'</a></td>';
+                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
 			}
 			elseif($parent_module == "Accounts")
 			{
@@ -2256,7 +2256,7 @@ $vtlog->logthis("in getContactName ".$contact_id,'info');
         $result = $adb->query($sql);
         $firstname = $adb->query_result($result,0,"firstname");
         $lastname = $adb->query_result($result,0,"lastname");
-        $contact_name = $firstname.' '.$lastname;
+        $contact_name = $lastname.' '.$firstname;
         return $contact_name;
 }
 
@@ -2742,7 +2742,7 @@ function getRelatedToEntity($module,$list_result,$rset)
 		{
 			$parent_query = "SELECT firstname,lastname FROM leaddetails WHERE leadid=".$seid;
 			$parent_result = $adb->query($parent_query);
-			$parent_name = $adb->query_result($parent_result,0,"firstname") ." " .$adb->query_result($parent_result,0,"lastname");
+			$parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
 		}
 		if($parent_module == 'Potentials')
 		{
@@ -2835,7 +2835,7 @@ function getRelatedTo($module,$list_result,$rset)
         {
                 $parent_query = "SELECT firstname,lastname FROM leaddetails WHERE leadid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
-                $parent_name = $adb->query_result($parent_result,0,"firstname") ." " .$adb->query_result($parent_result,0,"lastname");
+                $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
         }
         if($parent_module == 'Potentials')
         {
@@ -2879,7 +2879,7 @@ function getRelatedTo($module,$list_result,$rset)
         {
                 $parent_query = "SELECT firstname,lastname FROM contactdetails WHERE contactid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
-                $parent_name = $adb->query_result($parent_result,0,"firstname") ." " .$adb->query_result($parent_result,0,"lastname");
+                $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
         }
 
         $parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=".$action."&record=".$parent_id."'>".$parent_name."</a>";
@@ -2989,10 +2989,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							$contact_id = $adb->query_result($list_result,$i-1,"contactid");
 							$contact_name = "";
 							$value="";
-							if($first_name != 'NULL')
-								$contact_name .= $first_name;
 							if($last_name != 'NULL')
-								$contact_name .= " ".$last_name;
+								$contact_name .= $last_name;
+							if($first_name != 'NULL')
+								$contact_name .= " ".$first_name;
+							
 							if(($contact_name != "") && ($contact_id !='NULL'))
 								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
 						}
@@ -3194,10 +3195,10 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 							$contact_id = $adb->query_result($list_result,$i-1,"contactid");
 							$contact_name = "";
 							$value="";
-							if($first_name != 'NULL')
-								$contact_name .= $first_name;
 							if($last_name != 'NULL')
-								$contact_name .= " ".$last_name;
+                                                                $contact_name .= $last_name;
+                                                        if($first_name != 'NULL')
+                                                                $contact_name .= " ".$first_name;
 							if(($contact_name != "") && ($contact_id !='NULL'))
 								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
 						}
@@ -3526,7 +3527,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                                         if($colname == "lastname" && $module == 'Contacts')
 					{
                                                $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
-                                        	$temp_val =$firstname.' '.$temp_val;
+                                        	$temp_val =$temp_val.' '.$firstname;
 					}
 
 					$temp_val = str_replace("'",'\"',$temp_val);
@@ -3537,7 +3538,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                                 {
                                         if($colname == "lastname" && $module == 'Contacts')
                                                $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
-                                        $temp_val =$firstname.' '.$temp_val;
+                                        $temp_val =$temp_val.' '.$firstname;
 
 					$focus->record_id = $_REQUEST['recordid'];
                                         $value = '<a href="a" LANGUAGE=javascript onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
@@ -3593,7 +3594,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				{
 					if($colname == "lastname")
                                                 $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
-                                        $temp_val =$firstname.' '.$temp_val;
+                                        $temp_val =$temp_val.' '.$firstname;
 
 					$temp_val = str_replace("'",'\"',$temp_val);
 	
@@ -3606,7 +3607,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				{
 			                if($colname == "lastname")
 			                        $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
-			                $temp_val =$firstname.' '.$temp_val;
+			                $temp_val =$temp_val.' '.$firstname;
 					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'">'.$temp_val.'</a>';
 				}
 				elseif($module == "Activities")

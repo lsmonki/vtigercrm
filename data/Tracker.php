@@ -79,7 +79,7 @@ $vtlog->logthis("in  track view method ".$current_module,'info');
             $result = $this->db->query($query);
             $firstname = $adb->query_result($result,0,'firstname');
             $lastname =  $adb->query_result($result,0,'lastname');
-            $item_summary = $firstname .' ' .$lastname;
+            $item_summary = $lastname.' '.$firstname;
           }
           elseif ($current_module =='Accounts')
           {
@@ -95,7 +95,7 @@ $vtlog->logthis("in  track view method ".$current_module,'info');
             $result = $this->db->query($query);
             $firstname = $adb->query_result($result,0,'firstname');
             $lastname =  $adb->query_result($result,0,'lastname');
-            $item_summary = $firstname .' ' .$lastname;
+            $item_summary = $lastname.' '.$firstname;
             
           }
           elseif($current_module =='Potentials')
@@ -149,7 +149,7 @@ $vtlog->logthis("in  track view method ".$current_module,'info');
             $result = $this->db->query($query);
             $firstname = $adb->query_result($result,0,'first_name');
             $lastname = $adb->query_result($result,0,'last_name');
-            $item_summary = $firstname .' '. $lastname;
+            $item_summary = $lastname.' '.$firstname;
           }
 	  elseif($current_module =='Invoice')
           {
@@ -227,7 +227,6 @@ $vtlog->logthis("in  track view method ".$current_module,'info');
 	$query = "SELECT * from $this->table_name inner join crmentity on crmentity.crmid=tracker.item_id WHERE user_id='$user_id' and crmentity.deleted=0 ORDER BY id DESC";
         $this->log->debug("About to retrieve list: $query");
         $result = $this->db->query($query, true);
-
         $list = Array();
         while($row = $this->db->fetchByAssoc($result, -1, false))
         {
