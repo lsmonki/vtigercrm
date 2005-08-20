@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: ar.js
  * 	Arabic language file.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-03-01 17:26:17
  * 
  * File Authors:
  * 		Abdul-Aziz Abdul-Kareem Al-Oraij (http://aziz.oraij.com)
@@ -44,6 +41,8 @@ RemoveLink			: "إزالة رابط",
 Anchor				: "إدراج/تحرير إشارة مرجعية",
 InsertImageLbl		: "صورة",
 InsertImage			: "إدراج/تحرير صورة",
+InsertFlashLbl		: "فلاش",
+InsertFlash			: "إدراج/تحرير فيلم فلاش",
 InsertTableLbl		: "جدول",
 InsertTable			: "إدراج/تحرير جدول",
 InsertLineLbl		: "خط فاصل",
@@ -108,6 +107,7 @@ SplitCell			: "تقسيم خلية",
 CellProperties		: "خصائص الخلية",
 TableProperties		: "خصائص الجدول",
 ImageProperties		: "خصائص الصورة",
+FlashProperties		: "خصائص فيلم الفلاش",
 
 AnchorProp			: "خصائص الإشارة المرجعية",
 ButtonProp			: "خصائص زر الضغط",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "خصائص القائمة المنسدلة",
 TextareaProp		: "خصائص ناحية النص",
 FormProp			: "خصائص النموذج",
 
-FontFormats			: "عادي;منسّق;دوس;العنوان 1;العنوان  2;العنوان  3;العنوان  4;العنوان  5;العنوان  6",	// 2.0: The last entry has been added.
+FontFormats			: "عادي;منسّق;دوس;العنوان 1;العنوان  2;العنوان  3;العنوان  4;العنوان  5;العنوان  6",
 
 // Alerts and Messages
 ProcessingXHTML		: "انتظر قليلاً ريثما تتم   معالَجة‏ XHTML. لن يستغرق طويلاً...",
@@ -139,6 +139,8 @@ DlgBtnClose			: "إغلاق",
 DlgBtnBrowseServer	: "تصفح الخادم",
 DlgAdvancedTag		: "متقدم",
 DlgOpOther			: "&lt;أخرى&gt;",
+DlgInfoTab			: "معلومات",
+DlgAlertUrl			: "الرجاء كتابة عنوان الإنترنت",
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;بدون تحديد&gt;",
@@ -183,6 +185,17 @@ DlgImgAlignTextTop	: "أعلى النص",
 DlgImgAlignTop		: "أعلى",
 DlgImgPreview		: "معاينة",
 DlgImgAlertUrl		: "فضلاً اكتب الموقع الذي توجد عليه هذه الصورة.",
+DlgImgLinkTab		: "الرابط",
+
+// Flash Dialog
+DlgFlashTitle		: "خصائص فيلم الفلاش",
+DlgFlashChkPlay		: "تشغيل تلقائي",
+DlgFlashChkLoop		: "تكرار",
+DlgFlashChkMenu		: "تمكين قائمة فيلم الفلاش",
+DlgFlashScale		: "الحجم",
+DlgFlashScaleAll	: "إظهار الكل",
+DlgFlashScaleNoBorder	: "بلا حدود",
+DlgFlashScaleFit	: "ضبط تام",
 
 // Link Dialog
 DlgLnkWindowTitle	: "ارتباط تشعبي",
@@ -312,7 +325,11 @@ PasteErrorCopy	: "الإعدادات الأمنية للمتصفح الذي تس
 PasteAsText		: "لصق كنص بسيط",
 PasteFromWord	: "لصق من وورد",
 
-DlgPasteMsg		: "لم يتمكن المحرر من القيام باللصق تلقائياً، نظراً <STRONG>لإعدادت متصفحك الأمنية</STRONG>.<BR>فضلاً إلصق داخل المربع التالي باستخدام لوحة المفاتيح (<STRONG>Ctrl+V</STRONG>) ثم اضغط <STRONG>موافق</STRONG>.",
+DlgPasteMsg2	: "الصق داخل الصندوق باستخدام زرّي (<STRONG>Ctrl+V</STRONG>) في لوحة المفاتيح، ثم اضغط زر  <STRONG>موافق</STRONG>.",
+DlgPasteIgnoreFont		: "تجاهل تعريفات أسماء الخطوط",
+DlgPasteRemoveStyles	: "إزالة تعريفات الأنماط",
+DlgPasteCleanBox		: "نظّف محتوى الصندوق",
+
 
 // Color Picker
 ColorAutomatic	: "تلقائي",
@@ -438,6 +455,13 @@ DlgDocMeDescr		: "وصف الصفحة",
 DlgDocMeAuthor		: "الكاتب",
 DlgDocMeCopy		: "المالك",
 DlgDocPreview		: "معاينة",
+
+// Templates Dialog
+Templates			: "القوالب",
+DlgTemplatesTitle	: "قوالب المحتوى",
+DlgTemplatesSelMsg	: "اختر القالب الذي تود وضعه في المحرر <br>(سيتم فقدان المحتوى الحالي):",
+DlgTemplatesLoading	: "جاري تحميل قائمة القوالب، الرجاء الانتظار...",
+DlgTemplatesNoTpl	: "(لم يتم تعريف أي قالب)",
 
 // About Dialog
 DlgAboutAboutTab	: "نبذة",

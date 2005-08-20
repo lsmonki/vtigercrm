@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: lt.js
  * 	Lithuanian language file.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-03-01 17:26:17
  * 
  * File Authors:
  * 		Tauras Paliulis (tauras.paliulis@tauras.com)
@@ -44,6 +41,8 @@ RemoveLink			: "Panaikinti nuorodą",
 Anchor				: "Įterpti/modifikuoti žymę",
 InsertImageLbl		: "Vaizdas",
 InsertImage			: "Įterpti/taisyti vaizdą",
+InsertFlashLbl		: "Flash",
+InsertFlash			: "Įterpti/taisyti Flash",
 InsertTableLbl		: "Lentelė",
 InsertTable			: "Įterpti/taisyti lentelę",
 InsertLineLbl		: "Linija",
@@ -108,6 +107,7 @@ SplitCell			: "Skaidyti langelius",
 CellProperties		: "Langelio savybės",
 TableProperties		: "Lentelės savybės",
 ImageProperties		: "Vaizdo savybės",
+FlashProperties		: "Flash savybės",
 
 AnchorProp			: "Žymės savybės",
 ButtonProp			: "Mygtuko savybės",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Atrankos lauko savybės",
 TextareaProp		: "Teksto srities savybės",
 FormProp			: "Formos savybės",
 
-FontFormats			: "Normalus;Formuotas;Kreipinio;Antraštinis 1;Antraštinis 2;Antraštinis 3;Antraštinis 4;Antraštinis 5;Antraštinis 6",	// 2.0: The last entry has been added.
+FontFormats			: "Normalus;Formuotas;Kreipinio;Antraštinis 1;Antraštinis 2;Antraštinis 3;Antraštinis 4;Antraštinis 5;Antraštinis 6",
 
 // Alerts and Messages
 ProcessingXHTML		: "Apdorojamas XHTML. Prašome palaukti...",
@@ -139,6 +139,8 @@ DlgBtnClose			: "Uždaryti",
 DlgBtnBrowseServer	: "Naršyti po serverį",
 DlgAdvancedTag		: "Papildomas",
 DlgOpOther			: "&lt;Kita&gt;",
+DlgInfoTab			: "Informacija",
+DlgAlertUrl			: "Prašome įrašyti URL",
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;nėra nustatyta&gt;",
@@ -183,6 +185,17 @@ DlgImgAlignTextTop	: "Teksto viršūnę",
 DlgImgAlignTop		: "Viršūnę",
 DlgImgPreview		: "Peržiūra",
 DlgImgAlertUrl		: "Prašome įvesti vaizdo URL",
+DlgImgLinkTab		: "Nuoroda",
+
+// Flash Dialog
+DlgFlashTitle		: "Flash savybės",
+DlgFlashChkPlay		: "Automatinis paleidimas",
+DlgFlashChkLoop		: "Ciklas",
+DlgFlashChkMenu		: "Leisti Flash meniu",
+DlgFlashScale		: "Mastelis",
+DlgFlashScaleAll	: "Rodyti visą",
+DlgFlashScaleNoBorder	: "Be rėmelio",
+DlgFlashScaleFit	: "Tikslus atitikimas",
 
 // Link Dialog
 DlgLnkWindowTitle	: "Nuoroda",
@@ -312,7 +325,11 @@ PasteErrorCopy	: "Jūsų naršyklės saugumo nustatymai neleidžia redaktoriui a
 PasteAsText		: "Įdėti kaip gryną tekstą",
 PasteFromWord	: "Įdėti iš Word",
 
-DlgPasteMsg		: "Redaktorius nesugeba automatiškai įvykdyti įdėjimo dėl <STRONG>saugumo nustatymų</STRONG> jūsų naršyklėje.<BR>Prašome įdėti tekstą šiame langelyje naudojantis klaviatūra (<STRONG>Ctrl+V</STRONG>) ir paspauskite <STRONG>OK</STRONG>.",
+DlgPasteMsg2	: "Žemiau esančiame įvedimo lauke įdėkite tekstą, naudodami klaviatūrą (<STRONG>Ctrl+V</STRONG>) ir spūstelkite mygtuką <STRONG>OK</STRONG>.",
+DlgPasteIgnoreFont		: "Ignoruoti šriftų nustatymus",
+DlgPasteRemoveStyles	: "Pašalinti stilių nustatymus",
+DlgPasteCleanBox		: "Trinti įvedimo lauką",
+
 
 // Color Picker
 ColorAutomatic	: "Automatinis",
@@ -438,6 +455,13 @@ DlgDocMeDescr		: "Dokumento apibūdinimas",
 DlgDocMeAuthor		: "Autorius",
 DlgDocMeCopy		: "Autorinės teisės",
 DlgDocPreview		: "Peržiūra",
+
+// Templates Dialog
+Templates			: "Šablonai",
+DlgTemplatesTitle	: "Turinio šablonai",
+DlgTemplatesSelMsg	: "Pasirinkite norimą šabloną<br>(<b>Dėmesio!</b> esamas turinys bus prarastas):",
+DlgTemplatesLoading	: "Įkeliamas šablonų sąrašas. Prašome palaukti...",
+DlgTemplatesNoTpl	: "(Šablonų sąrašas tuščias)",
 
 // About Dialog
 DlgAboutAboutTab	: "Apie",

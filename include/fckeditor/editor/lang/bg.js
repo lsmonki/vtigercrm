@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: bg.js
  * 	Bulgarian language file.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-03-01 17:26:17
  * 
  * File Authors:
  * 		Miroslav Ivanov (miro@primal-chaos.net)
@@ -44,6 +41,8 @@ RemoveLink			: "Изтрий връзка",
 Anchor				: "Добави/Редактирай котва",
 InsertImageLbl		: "Изображение",
 InsertImage			: "Добави/Редактирай изображение",
+InsertFlashLbl		: "Flash",
+InsertFlash			: "Добави/Редактиай Flash обект",
 InsertTableLbl		: "Таблица",
 InsertTable			: "Добави/Редактирай таблица",
 InsertLineLbl		: "Линия",
@@ -108,6 +107,7 @@ SplitCell			: "Раздели клетката",
 CellProperties		: "Параметри на клетката",
 TableProperties		: "Параметри на таблицата",
 ImageProperties		: "Параметри на изображението",
+FlashProperties		: "Параметри на Flash обекта",
 
 AnchorProp			: "Параметри на котвата",
 ButtonProp			: "Параметри на бутона",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Параметри на падащото меню с оп�
 TextareaProp		: "Параметри на текстовата област",
 FormProp			: "Параметри на формуляра",
 
-FontFormats			: "Нормален;Форматиран;Адрес;Заглавие 1;Заглавие 2;Заглавие 3;Заглавие 4;Заглавие 5;Заглавие 6;Параграф (DIV)",	// 2.0: The last entry has been added.
+FontFormats			: "Нормален;Форматиран;Адрес;Заглавие 1;Заглавие 2;Заглавие 3;Заглавие 4;Заглавие 5;Заглавие 6;Параграф (DIV)",
 
 // Alerts and Messages
 ProcessingXHTML		: "Обработка на XHTML. Моля изчакайте...",
@@ -139,6 +139,8 @@ DlgBtnClose			: "Затвори",
 DlgBtnBrowseServer	: "Разгледай сървъра",
 DlgAdvancedTag		: "Подробности...",
 DlgOpOther			: "&lt;Друго&gt;",
+DlgInfoTab			: "Информация",
+DlgAlertUrl			: "Моля, въведете пълния път (URL)",
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;не е настроен&gt;",
@@ -183,6 +185,17 @@ DlgImgAlignTextTop	: "Върху текста",
 DlgImgAlignTop		: "Отгоре",
 DlgImgPreview		: "Изглед",
 DlgImgAlertUrl		: "Моля, въведете пълния път до изображението",
+DlgImgLinkTab		: "Връзка",
+
+// Flash Dialog
+DlgFlashTitle		: "Параметри на Flash обекта",
+DlgFlashChkPlay		: "Автоматично стартиране",
+DlgFlashChkLoop		: "Ново стартиране след завършването",
+DlgFlashChkMenu		: "Разрешено Flash меню",
+DlgFlashScale		: "Оразмеряване",
+DlgFlashScaleAll	: "Покажи целия обект",
+DlgFlashScaleNoBorder	: "Без рамка",
+DlgFlashScaleFit	: "Според мястото",
 
 // Link Dialog
 DlgLnkWindowTitle	: "Връзка",
@@ -193,7 +206,7 @@ DlgLnkType			: "Вид на връзката",
 DlgLnkTypeURL		: "Пълен път (URL)",
 DlgLnkTypeAnchor	: "Котва в текущата страница",
 DlgLnkTypeEMail		: "Е-поща",
-DlgLnkProto			: "Прокотол",
+DlgLnkProto			: "Протокол",
 DlgLnkProtoOther	: "&lt;друго&gt;",
 DlgLnkURL			: "Пълен път (URL)",
 DlgLnkAnchorSel		: "Изберете котва",
@@ -213,7 +226,7 @@ DlgLnkTargetBlank	: "Нов прозорец (_blank)",
 DlgLnkTargetParent	: "Родителски прозорец (_parent)",
 DlgLnkTargetSelf	: "Активния прозорец (_self)",
 DlgLnkTargetTop		: "Целия прозорец (_top)",
-DlgLnkTargetFrameName	: "Име на целиевия прозорец",
+DlgLnkTargetFrameName	: "Име на целевия прозорец",
 DlgLnkPopWinName	: "Име на дъщерния прозорец",
 DlgLnkPopWinFeat	: "Параметри на дъщерния прозорец",
 DlgLnkPopResize		: "С променливи размери",
@@ -312,7 +325,11 @@ PasteErrorCopy	: "Настройките за сигурност на вашия
 PasteAsText		: "Вмъкни като чист текст",
 PasteFromWord	: "Вмъкни от MS Word",
 
-DlgPasteMsg		: "Редакторът не успя да изпълни автоматичното вмъкване заради <STRONG>настройките за сигурност</STRONG> на вашия браузър.<BR>Моля, изпълнете вмъкването, използвайки клавиатурата (<STRONG>Ctrl+V</STRONG>), след което изберете <STRONG>OK</STRONG>.",
+DlgPasteMsg2	: "Вмъкнете тук съдъжанието с клавиатуарата (<STRONG>Ctrl+V</STRONG>) и натиснете <STRONG>OK</STRONG>.",
+DlgPasteIgnoreFont		: "Игнорирай шрифтовите дефиниции",
+DlgPasteRemoveStyles	: "Изтрий стиловите дефиниции",
+DlgPasteCleanBox		: "Изчисти",
+
 
 // Color Picker
 ColorAutomatic	: "По подразбиране",
@@ -439,10 +456,17 @@ DlgDocMeAuthor		: "Автор",
 DlgDocMeCopy		: "Авторски права",
 DlgDocPreview		: "Изглед",
 
+// Templates Dialog
+Templates			: "Шаблони",
+DlgTemplatesTitle	: "Шаблони",
+DlgTemplatesSelMsg	: "Изберете шаблон <br>(текущото съдържание на редактора ще бъде загубено):",
+DlgTemplatesLoading	: "Зареждане на списъка с шаблоните. Моля изчакайте...",
+DlgTemplatesNoTpl	: "(Няма дефинирани шаблони)",
+
 // About Dialog
 DlgAboutAboutTab	: "За",
 DlgAboutBrowserInfoTab	: "Информация за браузъра",
 DlgAboutVersion		: "версия",
 DlgAboutLicense		: "Лиценз по условията на GNU Lesser General Public License",
-DlgAboutInfo		: "За повече информация отидете на"
+DlgAboutInfo		: "За повече информация посетете"
 }

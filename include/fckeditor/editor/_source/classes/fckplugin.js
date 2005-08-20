@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: fckplugin.js
  * 	FCKPlugin Class: Represents a single plugin.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-01-19 17:27:15
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)

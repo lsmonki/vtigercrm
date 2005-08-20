@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,9 +11,6 @@
  * File Name: fcktablecommand.js
  * 	FCKPastePlainTextCommand Class: represents the 
  * 	"Paste as Plain Text" command.
- * 
- * Version:  2.0 RC3
- * Modified: 2004-11-22 15:41:58
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -26,6 +23,8 @@ var FCKTableCommand = function( command )
 
 FCKTableCommand.prototype.Execute = function()
 {
+	FCKUndo.SaveUndoStep() ;
+	
 	switch ( this.Name )
 	{
 		case 'TableInsertRow' :

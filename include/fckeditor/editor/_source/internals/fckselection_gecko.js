@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: fckselection_gecko.js
  * 	Active selection functions. (Gecko specific implementation)
- * 
- * Version:  2.0 RC3
- * Modified: 2005-01-19 07:50:24
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -25,7 +22,7 @@ FCKSelection.GetType = function()
 //	{
 		// By default set the type to "Text".
 		this._Type = 'Text' ;
-		
+
 		// Check if the actual selection is a Control (IMG, TABLE, HR, etc...).
 		var oSel = FCK.EditorWindow.getSelection() ;
 		if ( oSel && oSel.rangeCount == 1 )
@@ -38,7 +35,7 @@ FCKSelection.GetType = function()
 	return this._Type ;
 }
 
-// Retrieves the selected element (if any), just in the case that a single 
+// Retrieves the selected element (if any), just in the case that a single
 // element (object like and image or a table) is selected.
 FCKSelection.GetSelectedElement = function()
 {
@@ -68,17 +65,26 @@ FCKSelection.GetParentElement = function()
 	}
 }
 
-FCKSelection.MoveToNode = function( node )
+FCKSelection.SelectNode = function( element )
+{
+	FCK.Focus() ;
+
+	var oRange = FCK.EditorDocument.createRange() ;
+	oRange.selectNode( element ) ;
+
+	var oSel = FCK.EditorWindow.getSelection() ;
+	oSel.removeAllRanges() ;
+	oSel.addRange( oRange ) ;
+}
+
+FCKSelection.Collapse = function( toStart )
 {
 	var oSel = FCK.EditorWindow.getSelection() ;
-
-	for ( i = oSel.rangeCount - 1 ; i >= 0 ; i-- )
-	{
-		if ( i == 0 )
-			oSel.getRangeAt(i).selectNodeContents( node ) ;
-		else
-			oSel.removeRange( oSel.getRangeAt(i) ) ;
-	}
+	
+	if ( toStart == null || toStart === true )
+		oSel.collapseToStart() ;
+	else
+		oSel.collapseToEnd() ;
 }
 
 // The "nodeTagName" parameter must be Upper Case.
@@ -104,7 +110,7 @@ FCKSelection.HasAncestorNode = function( nodeTagName )
 FCKSelection.MoveToAncestorNode = function( nodeTagName )
 {
 	var oNode ;
-	
+
 	var oContainer = this.GetSelectedElement() ;
 	if ( ! oContainer )
 		oContainer = FCK.EditorWindow.getSelection().getRangeAt(0).startContainer ;
@@ -126,16 +132,6 @@ FCKSelection.Delete = function()
 	{
 		oSel.getRangeAt(i).deleteContents() ;
 	}
-	
-	return oSel ;
-}
 
-FCKSelection.SelectElement = function( element )
-{
-	var oRange = FCK.EditorDocument.createRange() ;
-	oRange.selectNode( element ) ;
-	
-	var oSel = FCK.EditorWindow.getSelection() ;
-	oSel.removeAllRanges() ;
-	oSel.addRange( oRange ) ;
+	return oSel ;
 }

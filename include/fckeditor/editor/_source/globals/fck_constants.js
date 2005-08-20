@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,9 +11,6 @@
  * File Name: fck_constants.js
  * 	Defines some constants used by the editor. These constants are also 
  * 	globally available in the page where the editor is placed.
- * 
- * Version:  2.0 RC3
- * Modified: 2004-05-31 23:07:48
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)

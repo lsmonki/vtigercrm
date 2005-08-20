@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: eo.js
  * 	Esperanto language file.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-03-01 17:26:17
  * 
  * File Authors:
  * 		Tim Morley (timsk@openoffice.org)
@@ -44,6 +41,8 @@ RemoveLink			: "Forigi Ligilon",
 Anchor				: "Enmeti/Ŝanĝi Ankron",
 InsertImageLbl		: "Bildo",
 InsertImage			: "Enmeti/Ŝanĝi Bildon",
+InsertFlashLbl		: "Flash",	//MISSING
+InsertFlash			: "Insert/Edit Flash",	//MISSING
 InsertTableLbl		: "Tabelo",
 InsertTable			: "Enmeti/Ŝanĝi Tabelon",
 InsertLineLbl		: "Horizonta Linio",
@@ -108,6 +107,7 @@ SplitCell			: "Dividi Ĉelojn",
 CellProperties		: "Atributoj de Ĉelo",
 TableProperties		: "Atributoj de Tabelo",
 ImageProperties		: "Atributoj de Bildo",
+FlashProperties		: "Flash Properties",	//MISSING
 
 AnchorProp			: "Ankraj Atributoj",
 ButtonProp			: "Butonaj Atributoj",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Atributoj de Elekta Kampo",
 TextareaProp		: "Atributoj de Teksta Areo",
 FormProp			: "Formularaj Atributoj",
 
-FontFormats			: "Normala;Formatita;Adreso;Titolo 1;Titolo 2;Titolo 3;Titolo 4;Titolo 5;Titolo 6;Paragrafo (DIV)",	// 2.0: The last entry has been added.
+FontFormats			: "Normala;Formatita;Adreso;Titolo 1;Titolo 2;Titolo 3;Titolo 4;Titolo 5;Titolo 6;Paragrafo (DIV)",
 
 // Alerts and Messages
 ProcessingXHTML		: "Traktado de XHTML. Bonvolu pacienci...",
@@ -139,6 +139,8 @@ DlgBtnClose			: "Fermi",
 DlgBtnBrowseServer	: "Foliumi en la Servilo",
 DlgAdvancedTag		: "Speciala",
 DlgOpOther			: "&lt;Alia&gt;",
+DlgInfoTab			: "Info",	//MISSING
+DlgAlertUrl			: "Please insert the URL",	//MISSING
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;Defaŭlta&gt;",
@@ -183,6 +185,17 @@ DlgImgAlignTextTop	: "Je Supro de Teksto",
 DlgImgAlignTop		: "Supre",
 DlgImgPreview		: "Vidigi Aspekton",
 DlgImgAlertUrl		: "Bonvolu tajpi la URL de la bildo",
+DlgImgLinkTab		: "Link",	//MISSING
+
+// Flash Dialog
+DlgFlashTitle		: "Flash Properties",	//MISSING
+DlgFlashChkPlay		: "Auto Play",	//MISSING
+DlgFlashChkLoop		: "Loop",	//MISSING
+DlgFlashChkMenu		: "Enable Flash Menu",	//MISSING
+DlgFlashScale		: "Scale",	//MISSING
+DlgFlashScaleAll	: "Show all",	//MISSING
+DlgFlashScaleNoBorder	: "No Border",	//MISSING
+DlgFlashScaleFit	: "Exact Fit",	//MISSING
 
 // Link Dialog
 DlgLnkWindowTitle	: "Ligilo",
@@ -312,7 +325,11 @@ PasteErrorCopy	: "La sekurecagordo de via TTT-legilo ne permesas, ke la redaktil
 PasteAsText		: "Interglui kiel Tekston",
 PasteFromWord	: "Interglui el Word",
 
-DlgPasteMsg		: "La redaktilo ne povis aŭtomate interglui pro la <STRONG>sekurecagordo</STRONG> de via TTT-legilo.<BR>Bonvolu interglui viajn datumojn en la ĉi suban tekstozonon per la klavaro (<STRONG>Ctrl-V</STRONG>) kaj musklaku la butonon <STRONG>Akceptita</STRONG>.",
+DlgPasteMsg2	: "Please paste inside the following box using the keyboard (<STRONG>Ctrl+V</STRONG>) and hit <STRONG>OK</STRONG>.",	//MISSING
+DlgPasteIgnoreFont		: "Ignore Font Face definitions",	//MISSING
+DlgPasteRemoveStyles	: "Remove Styles definitions",	//MISSING
+DlgPasteCleanBox		: "Clean Up Box",	//MISSING
+
 
 // Color Picker
 ColorAutomatic	: "Aŭtomata",
@@ -438,6 +455,13 @@ DlgDocMeDescr		: "Dokumenta Priskribo",
 DlgDocMeAuthor		: "Verkinto",
 DlgDocMeCopy		: "Kopirajto",
 DlgDocPreview		: "Aspekto",
+
+// Templates Dialog
+Templates			: "Templates",	//MISSING
+DlgTemplatesTitle	: "Content Templates",	//MISSING
+DlgTemplatesSelMsg	: "Please select the template to open in the editor<br>(the actual contents will be lost):",	//MISSING
+DlgTemplatesLoading	: "Loading templates list. Please wait...",	//MISSING
+DlgTemplatesNoTpl	: "(No templates defined)",	//MISSING
 
 // About Dialog
 DlgAboutAboutTab	: "Pri",

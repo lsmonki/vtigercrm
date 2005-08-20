@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -11,9 +11,6 @@
  * File Name: fckcontextmenugroup.js
  * 	FCKContextMenuGroup Class: represents a group of items in the context 
  * 	menu. Generaly a group of items is directly dependent of the same rules.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-02-09 19:35:56
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)

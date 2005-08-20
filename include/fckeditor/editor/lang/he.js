@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: he.js
  * 	Hebrew language file.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-03-01 17:26:17
  * 
  * File Authors:
  * 		Ophir Radnitz (ophir@liqweed.net)
@@ -44,6 +41,8 @@ RemoveLink			: "הסרת הקישור",
 Anchor				: "Insert/Edit Anchor",	//MISSING
 InsertImageLbl		: "תמונה",
 InsertImage			: "הוספת/עריכת תמונה",
+InsertFlashLbl		: "Flash",	//MISSING
+InsertFlash			: "Insert/Edit Flash",	//MISSING
 InsertTableLbl		: "טבלה",
 InsertTable			: "הוספת/עריכת טבלה",
 InsertLineLbl		: "קו",
@@ -108,6 +107,7 @@ SplitCell			: "פיצול תאים",
 CellProperties		: "תכונות התא",
 TableProperties		: "תכונות הטבלה",
 ImageProperties		: "תכונות התמונה",
+FlashProperties		: "Flash Properties",	//MISSING
 
 AnchorProp			: "Anchor Properties",	//MISSING
 ButtonProp			: "Button Properties",	//MISSING
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Selection Field Properties",	//MISSING
 TextareaProp		: "Textarea Properties",	//MISSING
 FormProp			: "Form Properties",	//MISSING
 
-FontFormats			: "נורמלי;קוד;כתובת;כותרת;כותרת 2;כותרת 3;כותרת 4;כותרת 5;כותרת 6",	// 2.0: The last entry has been added.
+FontFormats			: "נורמלי;קוד;כתובת;כותרת;כותרת 2;כותרת 3;כותרת 4;כותרת 5;כותרת 6",
 
 // Alerts and Messages
 ProcessingXHTML		: "מעבד XHTML, נא להמתין...",
@@ -139,6 +139,8 @@ DlgBtnClose			: "סגירה",
 DlgBtnBrowseServer	: "Browse Server",	//MISSING
 DlgAdvancedTag		: "אפשרויות מתקדמות",
 DlgOpOther			: "&lt;Other&gt;",	//MISSING
+DlgInfoTab			: "Info",	//MISSING
+DlgAlertUrl			: "Please insert the URL",	//MISSING
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;לא נקבע&gt;",
@@ -183,6 +185,17 @@ DlgImgAlignTextTop	: "לראש הטקסט",
 DlgImgAlignTop		: "למעלה",
 DlgImgPreview		: "תצוגה מקדימה",
 DlgImgAlertUrl		: "נא להקליד את כתובת התמונה",
+DlgImgLinkTab		: "Link",	//MISSING
+
+// Flash Dialog
+DlgFlashTitle		: "Flash Properties",	//MISSING
+DlgFlashChkPlay		: "Auto Play",	//MISSING
+DlgFlashChkLoop		: "Loop",	//MISSING
+DlgFlashChkMenu		: "Enable Flash Menu",	//MISSING
+DlgFlashScale		: "Scale",	//MISSING
+DlgFlashScaleAll	: "Show all",	//MISSING
+DlgFlashScaleNoBorder	: "No Border",	//MISSING
+DlgFlashScaleFit	: "Exact Fit",	//MISSING
 
 // Link Dialog
 DlgLnkWindowTitle	: "קישור",
@@ -312,7 +325,11 @@ PasteErrorCopy	: "הגדרות האבטחה בדפדפן שלך לא מאפשר�
 PasteAsText		: "הדבקה כטקסט פשוט",
 PasteFromWord	: "הדבקה מ-Word",
 
-DlgPasteMsg		: "העורך לא הצליח לבצע הדבקה אוטומטית בגלל<STRONG>הגדרות האבטחה</STRONG> של הדפדפן שלך.<BR>נא להדביק לתוך התיבה הבאה באמצעות המקלדת (<STRONG>Ctrl+V</STRONG>) וללחוץ על <STRONG>אישור</STRONG>.",
+DlgPasteMsg2	: "Please paste inside the following box using the keyboard (<STRONG>Ctrl+V</STRONG>) and hit <STRONG>OK</STRONG>.",	//MISSING
+DlgPasteIgnoreFont		: "Ignore Font Face definitions",	//MISSING
+DlgPasteRemoveStyles	: "Remove Styles definitions",	//MISSING
+DlgPasteCleanBox		: "Clean Up Box",	//MISSING
+
 
 // Color Picker
 ColorAutomatic	: "אוטומטי",
@@ -438,6 +455,13 @@ DlgDocMeDescr		: "Document Description",	//MISSING
 DlgDocMeAuthor		: "Author",	//MISSING
 DlgDocMeCopy		: "Copyright",	//MISSING
 DlgDocPreview		: "Preview",	//MISSING
+
+// Templates Dialog
+Templates			: "Templates",	//MISSING
+DlgTemplatesTitle	: "Content Templates",	//MISSING
+DlgTemplatesSelMsg	: "Please select the template to open in the editor<br>(the actual contents will be lost):",	//MISSING
+DlgTemplatesLoading	: "Loading templates list. Please wait...",	//MISSING
+DlgTemplatesNoTpl	: "(No templates defined)",	//MISSING
 
 // About Dialog
 DlgAboutAboutTab	: "About",	//MISSING

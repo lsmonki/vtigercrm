@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -9,10 +9,7 @@
  * 		http://www.fckeditor.net/
  * 
  * File Name: ja.js
- * 	English language file.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-03-01 17:26:17
+ * 	Japanese language file.
  * 
  * File Authors:
  * 		Takashi Yamaguchi (jack@omakase.net)
@@ -44,6 +41,8 @@ RemoveLink			: "リンク削除",
 Anchor				: "アンカー挿入/編集",
 InsertImageLbl		: "イメージ",
 InsertImage			: "イメージ挿入/編集",
+InsertFlashLbl		: "Flash",
+InsertFlash			: "Flash挿入/編集",
 InsertTableLbl		: "テーブル",
 InsertTable			: "テーブル挿入/編集",
 InsertLineLbl		: "ライン",
@@ -108,6 +107,7 @@ SplitCell			: "セル分割",
 CellProperties		: "セル プロパティ",
 TableProperties		: "テーブル プロパティ",
 ImageProperties		: "イメージ プロパティ",
+FlashProperties		: "Flash プロパティ",
 
 AnchorProp			: "アンカー プロパティ",
 ButtonProp			: "ボタン プロパティ",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "選択フィールド プロパティ",
 TextareaProp		: "テキストエリア プロパティ",
 FormProp			: "フォーム プロパティ",
 
-FontFormats			: "Normal;Formatted;Address;Heading 1;Heading 2;Heading 3;Heading 4;Heading 5;Heading 6;Paragraph (DIV)",	// 2.0: The last entry has been added.
+FontFormats			: "Normal;Formatted;Address;Heading 1;Heading 2;Heading 3;Heading 4;Heading 5;Heading 6;Paragraph (DIV)",
 
 // Alerts and Messages
 ProcessingXHTML		: "XHTML処理中. しばらくお待ちください...",
@@ -139,6 +139,8 @@ DlgBtnClose			: "閉じる",
 DlgBtnBrowseServer	: "サーバーブラウザー",
 DlgAdvancedTag		: "高度な設定",
 DlgOpOther			: "&lt;その他&gt;",
+DlgInfoTab			: "情報",
+DlgAlertUrl			: "URLを挿入してください",
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;なし&gt;",
@@ -183,6 +185,17 @@ DlgImgAlignTextTop	: "テキスト上部",
 DlgImgAlignTop		: "上",
 DlgImgPreview		: "プレビュー",
 DlgImgAlertUrl		: "イメージのURLを入力してください。",
+DlgImgLinkTab		: "リンク",
+
+// Flash Dialog
+DlgFlashTitle		: "Flash プロパティ",
+DlgFlashChkPlay		: "再生",
+DlgFlashChkLoop		: "ループ再生",
+DlgFlashChkMenu		: "Flashメニュー可能",
+DlgFlashScale		: "拡大縮小設定",
+DlgFlashScaleAll	: "すべて表示",
+DlgFlashScaleNoBorder	: "外が見えない様に拡大",
+DlgFlashScaleFit	: "上下左右にフィット",
 
 // Link Dialog
 DlgLnkWindowTitle	: "ハイパーリンク",
@@ -312,7 +325,11 @@ PasteErrorCopy	: "ブラウザーのセキュリティ設定によりエディ�
 PasteAsText		: "プレーンテキスト貼り付け",
 PasteFromWord	: "ワード文章から貼り付け",
 
-DlgPasteMsg		: "ブラウザーの<STRONG>セキュリティ設定</STRONG>によりエディタの貼り付け操作が自動で実行することができません。<BR>実行するには手動でキーボードの(<STRONG>Ctrl+V</STRONG>)を実行して<STRONG>OK</STRONG>を押してください。",
+DlgPasteMsg2	: "キーボード(<STRONG>Ctrl+V</STRONG>)を使用して、次の入力エリア内で貼って、<STRONG>OK</STRONG>を押してください。",
+DlgPasteIgnoreFont		: "FontタグのFace属性を無視します。",
+DlgPasteRemoveStyles	: "スタイル定義を削除します。",
+DlgPasteCleanBox		: "入力エリアクリア",
+
 
 // Color Picker
 ColorAutomatic	: "自動",
@@ -438,6 +455,13 @@ DlgDocMeDescr		: "文書の概要",
 DlgDocMeAuthor		: "文書の作者",
 DlgDocMeCopy		: "文書の著作権",
 DlgDocPreview		: "プレビュー",
+
+// Templates Dialog
+Templates			: "テンプレート(雛形)",
+DlgTemplatesTitle	: "テンプレート内容",
+DlgTemplatesSelMsg	: "エディターで使用するテンプレートを選択してください。<br>(現在のエディタの内容は失われます):",
+DlgTemplatesLoading	: "テンプレート一覧読み込み中. しばらくお待ちください...",
+DlgTemplatesNoTpl	: "(テンプレートが定義されていません)",
 
 // About Dialog
 DlgAboutAboutTab	: "バージョン情報",

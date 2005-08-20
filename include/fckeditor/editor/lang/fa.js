@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: fa.js
  * 	Persian language file.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-03-01 17:26:17
  * 
  * File Authors:
  * 		Hamed Taj-Abadi (hamed@ranginkaman.com)
@@ -44,6 +41,8 @@ RemoveLink			: "برداشتن لينک",
 Anchor				: "درج/ويرايش لنگر",
 InsertImageLbl		: "تصوير",
 InsertImage			: "درج/ويرايش تصوير",
+InsertFlashLbl		: "Flash",	//MISSING
+InsertFlash			: "Insert/Edit Flash",	//MISSING
 InsertTableLbl		: "جدول",
 InsertTable			: "درج/ويرايش جدول",
 InsertLineLbl		: "خط",
@@ -108,6 +107,7 @@ SplitCell			: "تفکيک سلول",
 CellProperties		: "ويژگيهای سلول",
 TableProperties		: "ويژگيهای جدول",
 ImageProperties		: "ويژگيهای تصوير",
+FlashProperties		: "Flash Properties",	//MISSING
 
 AnchorProp			: "ويژگيهای لنگر",
 ButtonProp			: "ويژگيهای دکمه",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "ويژگيهای فيلد انتخابی",
 TextareaProp		: "ويژگيهای ناحيه متنی",
 FormProp			: "ويژگيهای فرم",
 
-FontFormats			: "نرمال;فرمت شده;آدرس;سرنويس 1;سرنويس 2;سرنويس 3;سرنويس 4;سرنويس 5;سرنويس 6;بند;(DIV)",	// 2.0: The last entry has been added.
+FontFormats			: "نرمال;فرمت شده;آدرس;سرنويس 1;سرنويس 2;سرنويس 3;سرنويس 4;سرنويس 5;سرنويس 6;بند;(DIV)",
 
 // Alerts and Messages
 ProcessingXHTML		: "پردازش XHTML. لطفا صبر کنيد...",
@@ -139,6 +139,8 @@ DlgBtnClose			: "بستن",
 DlgBtnBrowseServer	: "فهرست نمايی سرور",
 DlgAdvancedTag		: "پيشرفته",
 DlgOpOther			: "&lt;غيره&gt;",
+DlgInfoTab			: "Info",	//MISSING
+DlgAlertUrl			: "Please insert the URL",	//MISSING
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;تعين نشده&gt;",
@@ -183,6 +185,17 @@ DlgImgAlignTextTop	: "متن بالا",
 DlgImgAlignTop		: "بالا",
 DlgImgPreview		: "پيش نمايش",
 DlgImgAlertUrl		: "لطفا URL تصوير را انتخاب کنيد",
+DlgImgLinkTab		: "لينک",
+
+// Flash Dialog
+DlgFlashTitle		: "Flash Properties",	//MISSING
+DlgFlashChkPlay		: "Auto Play",	//MISSING
+DlgFlashChkLoop		: "Loop",	//MISSING
+DlgFlashChkMenu		: "Enable Flash Menu",	//MISSING
+DlgFlashScale		: "Scale",	//MISSING
+DlgFlashScaleAll	: "Show all",	//MISSING
+DlgFlashScaleNoBorder	: "No Border",	//MISSING
+DlgFlashScaleFit	: "Exact Fit",	//MISSING
 
 // Link Dialog
 DlgLnkWindowTitle	: "لينک",
@@ -312,7 +325,11 @@ PasteErrorCopy	: "تنظيمات امنيتی مرورگر شما اجازه ن�
 PasteAsText		: "چسباندن به عنوان متن ساده",
 PasteFromWord	: "چسباندن از Word",
 
-DlgPasteMsg		: "به خاطر <STRONG>تنظيمات امنيتی</STRONG> مرورگر شما، ويرايشگر نتوانست به طور خودکار عملکرد چسباندن را به انجام برساند.<BR>لطفا به کمک کليد  (<STRONG>Ctrl+V</STRONG>) متن را درون جهبه زير بچسبانيد و دکمه <STRONG>تائيد</STRONG> را فشار دهيد.",
+DlgPasteMsg2	: "Please paste inside the following box using the keyboard (<STRONG>Ctrl+V</STRONG>) and hit <STRONG>OK</STRONG>.",	//MISSING
+DlgPasteIgnoreFont		: "Ignore Font Face definitions",	//MISSING
+DlgPasteRemoveStyles	: "Remove Styles definitions",	//MISSING
+DlgPasteCleanBox		: "Clean Up Box",	//MISSING
+
 
 // Color Picker
 ColorAutomatic	: "خودکار",
@@ -438,6 +455,13 @@ DlgDocMeDescr		: "سند",
 DlgDocMeAuthor		: "نويسنده",
 DlgDocMeCopy		: "کپی رايت",
 DlgDocPreview		: "پيش نمايش",
+
+// Templates Dialog
+Templates			: "الگوها",
+DlgTemplatesTitle	: "الگوهای محتويات",
+DlgTemplatesSelMsg	: "لطفا الگوی مورد نظر را برای باز کردن در ويرايشگر انتخاب نمائيد<br>(محتويات اصلی از دست خواهند رفت):",
+DlgTemplatesLoading	: "بارگذاری فهرست الگوها. لطفا صبر کنيد...",
+DlgTemplatesNoTpl	: "(الگوئی تعريف نشده است)",
 
 // About Dialog
 DlgAboutAboutTab	: "درباره",

@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: pt.js
  * 	Portuguese language file.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-03-01 17:26:18
  * 
  * File Authors:
  * 		Francisco Pereira (fjpereira@netcabo.pt)
@@ -44,6 +41,8 @@ RemoveLink			: "Eliminar Hiperligação",
 Anchor				: " Inserir/Editar Âncora",
 InsertImageLbl		: "Imagem",
 InsertImage			: "Inserir/Editar Imagem",
+InsertFlashLbl		: "Flash",	//MISSING
+InsertFlash			: "Insert/Edit Flash",	//MISSING
 InsertTableLbl		: "Tabela",
 InsertTable			: "Inserir/Editar Tabela",
 InsertLineLbl		: "Linha",
@@ -108,6 +107,7 @@ SplitCell			: "Dividir Célula",
 CellProperties		: "Propriedades da Célula",
 TableProperties		: "Propriedades da Tabela",
 ImageProperties		: "Propriedades da Imagem",
+FlashProperties		: "Flash Properties",	//MISSING
 
 AnchorProp			: "Propriedades da Âncora",
 ButtonProp			: "Propriedades do Botão",
@@ -120,7 +120,7 @@ SelectionFieldProp	: "Propriedades da Caixa de Combinação",
 TextareaProp		: "Propriedades da Área de Texto",
 FormProp			: "Propriedades do Formulário",
 
-FontFormats			: "Normal;Formatado;Endereço;Título 1;Título 2;Título 3;Título 4;Título 5;Título 6",	// 2.0: The last entry has been added.
+FontFormats			: "Normal;Formatado;Endereço;Título 1;Título 2;Título 3;Título 4;Título 5;Título 6",
 
 // Alerts and Messages
 ProcessingXHTML		: "A Processar XHTML. Por favor, espere...",
@@ -139,6 +139,8 @@ DlgBtnClose			: "Fechar",
 DlgBtnBrowseServer	: "Navegar no Servidor",
 DlgAdvancedTag		: "Avançado",
 DlgOpOther			: "&lt;Outro&gt;",
+DlgInfoTab			: "Info",	//MISSING
+DlgAlertUrl			: "Please insert the URL",	//MISSING
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;Não definido&gt;",
@@ -183,6 +185,17 @@ DlgImgAlignTextTop	: "Topo do texto",
 DlgImgAlignTop		: "Topo",
 DlgImgPreview		: "Pré-visualizar",
 DlgImgAlertUrl		: "Por favor introduza o URL da imagem",
+DlgImgLinkTab		: "Hiperligação",
+
+// Flash Dialog
+DlgFlashTitle		: "Flash Properties",	//MISSING
+DlgFlashChkPlay		: "Auto Play",	//MISSING
+DlgFlashChkLoop		: "Loop",	//MISSING
+DlgFlashChkMenu		: "Enable Flash Menu",	//MISSING
+DlgFlashScale		: "Scale",	//MISSING
+DlgFlashScaleAll	: "Show all",	//MISSING
+DlgFlashScaleNoBorder	: "No Border",	//MISSING
+DlgFlashScaleFit	: "Exact Fit",	//MISSING
 
 // Link Dialog
 DlgLnkWindowTitle	: "Hiperligação",
@@ -312,7 +325,11 @@ PasteErrorCopy	: "A configuração de segurança do navegador não permite a exe
 PasteAsText		: "Colar como Texto Simples",
 PasteFromWord	: "Colar do Word",
 
-DlgPasteMsg		: "O editor não pode executar automaticamente o colar devido à <STRONG>configuração de segurança</STRONG> do navegador.<BR>Por favor cole dentro do seguinte quadro usando o teclado (<STRONG>Ctrl+V</STRONG>) e pressione <STRONG>OK</STRONG>.",
+DlgPasteMsg2	: "Please paste inside the following box using the keyboard (<STRONG>Ctrl+V</STRONG>) and hit <STRONG>OK</STRONG>.",	//MISSING
+DlgPasteIgnoreFont		: "Ignore Font Face definitions",	//MISSING
+DlgPasteRemoveStyles	: "Remove Styles definitions",	//MISSING
+DlgPasteCleanBox		: "Clean Up Box",	//MISSING
+
 
 // Color Picker
 ColorAutomatic	: "Automático",
@@ -438,6 +455,13 @@ DlgDocMeDescr		: "Descrição do Documento",
 DlgDocMeAuthor		: "Autor",
 DlgDocMeCopy		: "Direitos de Autor",
 DlgDocPreview		: "Pré-visualizar",
+
+// Templates Dialog
+Templates			: "Modelos",
+DlgTemplatesTitle	: "Modelo de Conteúdo",
+DlgTemplatesSelMsg	: "Por favor, seleccione o modelo a abrir no editor<br>(o conteúdo actual será perdido):",
+DlgTemplatesLoading	: "A carregar a lista de modelos. Aguarde por favor...",
+DlgTemplatesNoTpl	: "(Sem modelos definidos)",
 
 // About Dialog
 DlgAboutAboutTab	: "Acerca",

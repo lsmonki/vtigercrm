@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: hr.js
  * 	Croatian language file.
- * 
- * Version:  2.0 RC3
- * Modified: 2005-03-01 17:26:17
  * 
  * File Authors:
  * 		Alex Varga (avarga@globaldizajn.hr)
@@ -44,17 +41,19 @@ RemoveLink			: "Ukloni link",
 Anchor				: "Ubaci/promjeni sidro",
 InsertImageLbl		: "Slika",
 InsertImage			: "Ubaci/promjeni sliku",
+InsertFlashLbl		: "Flash",
+InsertFlash			: "Ubaci/promjeni Flash",
 InsertTableLbl		: "Tablica",
 InsertTable			: "Ubaci/promjeni tablicu",
 InsertLineLbl		: "Linija",
 InsertLine			: "Ubaci vodoravnu liniju",
 InsertSpecialCharLbl: "Posebni karakteri",
-InsertSpecialChar	: "Ubaci posebne karaktere",
+InsertSpecialChar	: "Ubaci posebne znakove",
 InsertSmileyLbl		: "Smješko",
 InsertSmiley		: "Ubaci smješka",
 About				: "O FCKeditoru",
-Bold				: "Bold",
-Italic				: "Italic",
+Bold				: "Podebljaj",
+Italic				: "Ukosi",
 Underline			: "Podcrtano",
 StrikeThrough		: "Precrtano",
 Subscript			: "Subscript",
@@ -108,6 +107,7 @@ SplitCell			: "Razdvoji ćelije",
 CellProperties		: "Svojstva ćelije",
 TableProperties		: "Svojstva tablice",
 ImageProperties		: "Svojstva slike",
+FlashProperties		: "Flash svojstva",
 
 AnchorProp			: "Svojstva sidra",
 ButtonProp			: "Image Button svojstva",
@@ -120,14 +120,14 @@ SelectionFieldProp	: "Selection svojstva",
 TextareaProp		: "Textarea svojstva",
 FormProp			: "Form svojstva",
 
-FontFormats			: "Normal;Formatirano;Adresa;Heading 1;Heading 2;Heading 3;Heading 4;Heading 5;Heading 6",	// 2.0: The last entry has been added.
+FontFormats			: "Normal;Formatirano;Adresa;Heading 1;Heading 2;Heading 3;Heading 4;Heading 5;Heading 6",
 
 // Alerts and Messages
 ProcessingXHTML		: "Obrađujem XHTML. Molimo pričekajte...",
 Done				: "Završio",
 PasteWordConfirm	: "Tekst koji želite zalijepiti čini se da je kopiran iz Worda. Želite li prije očistiti tekst?",
 NotCompatiblePaste	: "Ova naredba je dostupna samo u Internet Exploreru 5.5 ili novijem. Želite li nastaviti bez čišćenja?",
-UnknownToolbarItem	: "Nepoznata član trake s alatima \"%1\"",
+UnknownToolbarItem	: "Nepoznati član trake s alatima \"%1\"",
 UnknownCommand		: "Nepoznata naredba \"%1\"",
 NotImplemented		: "Naredba nije implementirana",
 UnknownToolbarSet	: "Traka s alatima \"%1\" ne postoji",
@@ -139,6 +139,8 @@ DlgBtnClose			: "Zatvori",
 DlgBtnBrowseServer	: "Pretraži server",
 DlgAdvancedTag		: "Napredno",
 DlgOpOther			: "&lt;Drugo&gt;",
+DlgInfoTab			: "Info",
+DlgAlertUrl			: "Molimo unesite URL",
 
 // General Dialogs Labels
 DlgGenNotSet		: "&lt;nije postavljeno&gt;",
@@ -154,7 +156,7 @@ DlgGenLongDescr		: "Dugački opis URL",
 DlgGenClass			: "Stylesheet klase",
 DlgGenTitle			: "Advisory naslov",
 DlgGenContType		: "Advisory vrsta sadržaja",
-DlgGenLinkCharset	: "Linked Resource Charset",
+DlgGenLinkCharset	: "Kodna stranica povezanih resursa",
 DlgGenStyle			: "Stil",
 
 // Image Dialog
@@ -183,6 +185,17 @@ DlgImgAlignTextTop	: "Vrh teksta",
 DlgImgAlignTop		: "Vrh",
 DlgImgPreview		: "Pregledaj",
 DlgImgAlertUrl		: "Unesite URL slike",
+DlgImgLinkTab		: "Link",
+
+// Flash Dialog
+DlgFlashTitle		: "Flash svojstva",
+DlgFlashChkPlay		: "Auto Play",
+DlgFlashChkLoop		: "Ponavljaj",
+DlgFlashChkMenu		: "Omogući Flash izbornik",
+DlgFlashScale		: "Omjer",
+DlgFlashScaleAll	: "Prikaži sve",
+DlgFlashScaleNoBorder	: "Bez okvira",
+DlgFlashScaleFit	: "Točna veličina",
 
 // Link Dialog
 DlgLnkWindowTitle	: "Link",
@@ -215,7 +228,7 @@ DlgLnkTargetSelf	: "Isti prozor (_self)",
 DlgLnkTargetTop		: "Vršni prozor (_top)",
 DlgLnkTargetFrameName	: "Ime ciljnog okvira",
 DlgLnkPopWinName	: "Naziv popup prozora",
-DlgLnkPopWinFeat	: "Mogućnosti popup prozora",
+DlgLnkPopWinFeat	: "Mogučnosti popup prozora",
 DlgLnkPopResize		: "Promjenjljive veličine",
 DlgLnkPopLocation	: "Traka za lokaciju",
 DlgLnkPopMenu		: "Izborna traka",
@@ -312,7 +325,11 @@ PasteErrorCopy	: "Sigurnosne postavke Vašeg pretraživača ne dozvoljavaju oper
 PasteAsText		: "Zalijepi kao čisti tekst",
 PasteFromWord	: "Zalijepi iz Worda",
 
-DlgPasteMsg		: "Editor nije mogao automatski zalijepiti zbog  <STRONG>sigurnosnih postavki</STRONG> Vašeg pretraživača.<BR>Molimo zalijepite unutar sljedeće kocke koristeći tipkovnicu (<STRONG>Ctrl+V</STRONG>) i pritisnite na <STRONG>OK</STRONG>.",
+DlgPasteMsg2	: "Molimo zaljepite unutar doljnjeg okvira koristeći tipkovnicu (<STRONG>Ctrl+V</STRONG>) i kliknite <STRONG>OK</STRONG>.",
+DlgPasteIgnoreFont		: "Zanemari definiciju vrste fonta",
+DlgPasteRemoveStyles	: "Ukloni definicije stilova",
+DlgPasteCleanBox		: "Očisti okvir",
+
 
 // Color Picker
 ColorAutomatic	: "Automatski",
@@ -336,7 +353,7 @@ DlgSpellBtnReplaceAll	: "Zamijeni sve",
 DlgSpellBtnUndo			: "Vrati",
 DlgSpellNoSuggestions	: "-Nema preporuke-",
 DlgSpellProgress		: "Provjera u tijeku...",
-DlgSpellNoMispell		: "Provjera završena: Nema greaka",
+DlgSpellNoMispell		: "Provjera završena: Nema grešaka",
 DlgSpellNoChanges		: "Provjera završena: Nije napravljena promjena",
 DlgSpellOneChange		: "Provjera završena: Jedna riječ promjenjena",
 DlgSpellManyChanges		: "Provjera završena: Promjenjeno %1 riječi",
@@ -439,10 +456,17 @@ DlgDocMeAuthor		: "Autor",
 DlgDocMeCopy		: "Autorska prava",
 DlgDocPreview		: "Pregledaj",
 
+// Templates Dialog
+Templates			: "Predlošci",
+DlgTemplatesTitle	: "Predlošci sadržaja",
+DlgTemplatesSelMsg	: "Molimo odaberite predložak koji želite otvoriti<br>(stvarni sadržaj će biti izgubljen):",
+DlgTemplatesLoading	: "Učitavam listu predložaka. Molimo pričekajte...",
+DlgTemplatesNoTpl	: "(Nema definiranih predložaka)",
+
 // About Dialog
 DlgAboutAboutTab	: "O FCKEditoru",
 DlgAboutBrowserInfoTab	: "Podaci o pretraživaču",
 DlgAboutVersion		: "inačica",
-DlgAboutLicense		: "Licencirano pod uvijetima GNU Lesser General Public License",
+DlgAboutLicense		: "Licencirano pod uvjetima GNU Lesser General Public License",
 DlgAboutInfo		: "Za više informacija posjetite"
 }

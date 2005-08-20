@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
@@ -10,9 +10,6 @@
  * 
  * File Name: fcktablehandler.js
  * 	Manage table operations.
- * 
- * Version:  2.0 RC3
- * Modified: 2004-12-16 00:41:05
  * 
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
@@ -94,7 +91,9 @@ FCKTableHandler.InsertColumn = function()
 		
 		// Create the new cell element to be added.
 		oCell = FCK.EditorDocument.createElement('TD') ;
-		oCell.innerHTML = '&nbsp;' ;
+		if ( FCKBrowserInfo.IsGecko )
+			oCell.innerHTML = '<br _moz_editor_bogus_node="TRUE">' ;
+//		oCell.innerHTML = '&nbsp;' ;
 		
 		// Get the cell that is placed in the new cell place.
 		var oBaseCell = oRow.cells[iIndex] ;
@@ -154,7 +153,9 @@ FCKTableHandler.InsertCell = function( cell )
 
 	// Create the new cell element to be added.
 	var oNewCell = FCK.EditorDocument.createElement("TD");
-	oNewCell.innerHTML = "&nbsp;" ;
+	if ( FCKBrowserInfo.IsGecko )
+		oNewCell.innerHTML = '<br _moz_editor_bogus_node="TRUE">' ;
+//	oNewCell.innerHTML = "&nbsp;" ;
 
 	// If it is the last cell in the row.
 	if ( oCell.cellIndex == oCell.parentNode.cells.lenght - 1 )
@@ -345,9 +346,12 @@ FCKTableHandler.ClearRow = function( tr )
 	// Get the array of row's cells.
 	var aCells = tr.cells ;
 
-	// Replace the contents of each cell with "nbsp;".
+	// Replace the contents of each cell with "nothing".
 	for ( var i = 0 ; i < aCells.length ; i++ ) 
 	{
-		aCells[i].innerHTML = '&nbsp;' ;
+		if ( FCKBrowserInfo.IsGecko )
+			aCells[i].innerHTML = '<br _moz_editor_bogus_node="TRUE">' ;
+		else
+			aCells[i].innerHTML = '' ;
 	}
 }
