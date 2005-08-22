@@ -61,13 +61,13 @@ for($i=0;$i<$noofrows;$i++)
                                      'status' => $adb->query_result($list_result,$i,'status'),
                                      'firstname' => $adb->query_result($list_result,$i,'firstname'),
                                      'lastname' => $adb->query_result($list_result,$i,'lastname'),
- 					'accountname' => $adb->query_result($list_result,$i,'accountname'),
+ 				     'accountname' => $adb->query_result($list_result,$i,'accountname'),
 				     'accountid' => $adb->query_result($list_result, $i, 'accountid'),
                                      'contactid' => $adb->query_result($list_result,$i,'contactid'),
                                      'date_start' => getDisplayDate($adb->query_result($list_result,$i,'date_start')),
 				     'due_date' => getDisplayDate($adb->query_result($list_result,$i,'due_date')),
-				      'recurringtype' => getDisplayDate($adb->query_result($list_result,$i,'recurringtype')),
-				      'recurringdate' => getDisplayDate($adb->query_result($list_result,$i,'recurringdate')),
+				     'recurringtype' => getDisplayDate($adb->query_result($list_result,$i,'recurringtype')),
+				     'recurringdate' => getDisplayDate($adb->query_result($list_result,$i,'recurringdate')),
 
 				     'parent'=> $parent_name,	
                                      );
@@ -82,7 +82,8 @@ $later_day = getDisplayDate(date("Y-m-d", strtotime("$today + 7 days")));
 echo get_form_header($current_module_strings['LBL_UPCOMING'], "<table><tr><td nowrap>".$current_module_strings['LBL_TODAY'].$later_day."</td></tr></table>", false);
 
 $xtpl->assign("IMAGE_PATH", $image_path);
-$xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=" . ((is_object($focus)) ? $focus->id : ""));
+
+$xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=" .((is_object($focus)) ? $focus->id : ""));
 
 $oddRow = true;
 #if (count($open_activity_list) > 0) $open_activity_list = array_csort($open_activity_list, 'date_start', 'time_start', SORT_ASC);
@@ -95,6 +96,7 @@ foreach($open_activity_list as $event)
 	$activity_fields = array(
 		'ID' => $event['id'],
 		'CONTACT_ID' => $event['contactid'],
+		'ACCOUNT_ID' => $event['accountid'],
 		'NAME' => $event['name'],
 		'TYPE' => $event['type'],
 		'MODULE' => $event['module'],
