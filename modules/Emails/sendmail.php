@@ -52,7 +52,7 @@ global $adb,$root_directory,$mod_strings;
 
 		$DESCRIPTION = $adb->query_result($result1,0,"description");
 		$DESCRIPTION .= '<br><br>';
-		$DESCRIPTION .= '<font color=darkgrey>'.$adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"signature").'</font>';
+		$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"signature")).'</font>';
 
                 $mail->Body    = nl2br($DESCRIPTION);
 		$initialfrom = $from;
