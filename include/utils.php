@@ -91,9 +91,10 @@ function get_assigned_user_name(&$assigned_user_id)
 	return "";
 }
 
-function get_user_array($add_blank=true, $status="Active", $assigned_user="")
+function get_user_array($add_blank=true, $status="Active", $assigned_user="",$private="")
 {
 	global $log;
+	global $current_user;
 	static $user_array = null;
 
 
@@ -107,7 +108,14 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="")
 				$query = "SELECT id, user_name from users";
 		}
 		else {
-				$query = "SELECT id, user_name from users WHERE status='$status'";
+				if($private == 'private')
+				{
+					$query = "SELECT id, user_name from users WHERE id='$current_user->id' and status='$status'";
+				}
+				else
+				{
+					$query = "SELECT id, user_name from users WHERE status='$status'";
+				}
 		}
 		if (!empty($assigned_user)) {
 			 $query .= " OR id='$assigned_user'";
@@ -1004,7 +1012,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$combo_lbl_name = 'assigned_user_id1';
 		}
 
-		$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+		global $others_permission_id;
+		if($fieldlabel == 'Assigned To' && $others_permission_id == 3)
+		{
+			$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
+		}
+		else
+		{
+			$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+		}
                 $custfld .= '<td width="30%"><select name="'.$combo_lbl_name.'">'.$users_combo.'</select></td>';
 	}
 	elseif($uitype == 53)     
@@ -1046,9 +1062,19 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		  	  $team_style='display:none';
 		  }	
 	  }
-         
+        
+	global $others_permission_id;
+	if($fieldlabel == 'Assigned To' && $others_permission_id == 3)
+	{
+		$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
+	}
+	else
+	{
+		$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+	}
+ 
           
-          $users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+          //$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
           
           $GROUP_SELECT_OPTION = '<td width=30%><input type="radio"
           name="assigntype" value="U" '.$user_checked.'
