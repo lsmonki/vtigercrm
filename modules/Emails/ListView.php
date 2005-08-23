@@ -162,8 +162,12 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_status" type="hidden">
-		<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>
-   		</td>';
+		<td>';
+if(isPermitted('Emails',2,'') == 'yes')
+{
+	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+}
+$other_text .= 	'</td>';
 
 if($viewid == 0)
 {
