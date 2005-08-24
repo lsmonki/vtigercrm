@@ -191,18 +191,18 @@ $product_tables = Array('products','productcf','productcollaterals');
 if($errormessage==2)
 {
 	$msg =$mod_strings['LBL_MAXIMUM_LIMIT_ERROR'];
-        $errormessage ="<B><font color='red'>".$msg."</font></B> <br>";
+        $errormessage ="<B><font color='red'>".$msg."</font></B> <br><br>";
 }
 else if($errormessage==3)
 {
         $msg = $mod_strings['LBL_UPLOAD_ERROR'];
-        $errormessage ="<B><font color='red'>".$msg."</font></B> <br>";
+        $errormessage ="<B><font color='red'>".$msg."</font></B> <br><br>";
 	
 }
 else if($errormessage=="image")
 {
         $msg = $mod_strings['LBL_IMAGE_ERROR'];
-        $errormessage ="<B><font color='red'>".$msg."</font></B> <br>";
+        $errormessage ="<B><font color='red'>".$msg."</font></B> <br><br>";
 }
 else
 {
