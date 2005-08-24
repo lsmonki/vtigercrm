@@ -478,7 +478,7 @@ $vtlog->logthis("module is =".$module,'info');
 			  }
 			  if($table_name == 'products' && $columname == 'imagename')
 			  {
-				  //Product Image Handling done
+			/*	  //Product Image Handling done
 				  if($_FILES['imagename']['name'] != '')
 				  {
 
@@ -499,6 +499,7 @@ $vtlog->logthis("module is =".$module,'info');
 				  {
 					  $fldvalue ="'".getProductImageName($this->id)."'";
 				  }
+		      */		  
 
 			  }
 			  if($table_name != 'ticketcomments')
@@ -543,7 +544,7 @@ $vtlog->logthis("module is =".$module,'info');
 			  elseif($table_name == 'products' && $columname == 'imagename')
 			  {
 				  //Product Image Handling done
-				  if($_FILES['imagename']['name'] != '')
+			/*	  if($_FILES['imagename']['name'] != '')
 				  {
 
 					  $prd_img_arr = upload_product_image_file("create",$this->id);
@@ -563,6 +564,7 @@ $vtlog->logthis("module is =".$module,'info');
 				  {
 					  $fldvalue ="''";
 				  }
+			*/	  
 
 			  }
 			  //code by shankar ends
