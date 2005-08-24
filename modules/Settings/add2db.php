@@ -69,7 +69,7 @@ else
 	}
 	else if($errorCode == 2)
 	{
-	    	$errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 1000000 bytes</font></B> <br>";
+	    	$errormessage = "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 800000 bytes</font></B> <br>";
 	    	$savelogo="false";	    	
 	$nologo_specified="false";
 	}
