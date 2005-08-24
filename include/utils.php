@@ -960,6 +960,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		}
 		$custfld .= '</td>';
 	}
+	elseif($uitype == 17)
+	{
+		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+		$custfld .= '<td>&nbsp;&nbsp;http://<input type=text name="'.$fieldname.'" size="19">'.$value.'</td>';
+	}
 	elseif($uitype == 19 || $uitype == 20)
 	{
 		if(isset($_REQUEST['body']))
