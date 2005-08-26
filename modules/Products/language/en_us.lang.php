@@ -167,7 +167,7 @@ $mod_strings = Array(
 //Added for 4.2 patch2 release
 'LBL_MAXIMUM_LIMIT_ERROR'=>'Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 800000 bytes',
 'LBL_UPLOAD_ERROR'=>'Problems in file upload. Please try again!',
-'LBL_IMAGE_ERROR'=>'The given file is not of type image',
+'LBL_IMAGE_ERROR'=>'The given file is not of type image(.gif/.jpg/.png)',
 
 );
 
