@@ -1,3 +1,136 @@
+vtiger CRM 4.2 Patch 1
+Aug 10, 2005
+
+New Feature:
+
+Reports can be exported in Excel Format.
+
+Bug Fixes:
+
+1. Forum Post ID 6550: Can not add new product
+
+2. SF ID1159916: settings-Company details 
+
+3. SF ID1160084: Task - End Date 
+
+4. SF ID1161317: date accept 0 value 
+
+5. SF ID1161326: Lead Conversion 
+
+6. Forum Topic ID 2038: Please fix these Bugs in 4.2
+
+7. Internal: Make QuickActivityRegister have enddate(duedate)
+
+8. Forum Topic ID 1696: Calendar bug fix for non-admin user
+
+9. Forum Topic ID 1648: Converting a lead 
+
+10. SF ID 1161344: probability is not validate if we give greater value 
+
+11. Forum Topic ID 2223: Editing Company information
+
+12. Interna: Calendar in Quick create in events
+
+13. Forum Topic ID 1803: chips impossible to add more activity (task/event)
+
+14. Forum Post ID 6733: Missing required field in New Event shortcut
+
+15. Internal: Lead Conversion form validation
+
+16. Forum Topic ID 2038:Please fix these Bugs in 4.2
+
+17. SF ID 1161223: Export to PDF
+
+18. Forum Topic ID 1693:Bad PDF output
+
+19. Forum Topic ID 2012:Report Customization iNot working in IE
+
+20. Forum Topic ID 1823: Translation Issue 2
+
+21. Forum Topic ID 2038: Please fix these Bugs in 4.2
+
+22. Internal: Invoice Qty & inventory issues in 4.2 GA
+
+23. Forum Topic ID 1717: bug report in new sales order and PDF invoice on
+online demo
+
+24. Internal: Inventory Mgmt
+
+25. Internal: Detail View Ui for Products Relateion in inventory is imporper 
+
+26. Internal: SO - Popup Account - table issue 
+
+27. Internal: Notes - Cancel/ back 
+
+28. Internal: No of Employees Field not validated 
+
+29. Internal: Filling with Todays date 
+
+30. Internal: Security - Default Organization for Activities 
+
+31. Internal: Security - Activity delete 
+
+32. Internal: Inventory Mgmt Logging 
+
+33. Internal: URL and URL name 
+
+34. Internal: Feild level access for task
+
+35. Forum Topic ID 1823: Custom Date field not working?
+
+36. Internal: Support for Text Area Custom Field
+
+37. Forum Topic ID 1643: Any user can change onw role for admin role? 
+
+38. Internal: Class not set in inventory product UI
+
+39. Forum Topic ID 2258: Nasty security bug in latest 4.2!
+
+40. Code Contribution: Indexing code by Microwe integrated
+
+41. Internal: Title doesn't show up
+
+42. Forum Topic ID 1997: Fixing bugs.
+
+43. Forum Topic ID 822:Translation-Issue
+
+44. Forum Topic ID 1768: Contact address pulled from Acccount
+
+45. Forum Topic ID 1753: VtigerCRM 4.0 Character causing troubles
+
+46. 1161351: Inventory Mgmt Related List 
+
+47. 1161347: Inventory Related List 
+
+48. 1161415:Contacts - Related Lists - Deleting Products
+
+49. 1161406: Assigned ToUser in Leads can be Assigned to User
+
+50. Forum Topic ID 2092: Product Popup in New Quotes
+
+51. Forum Topic ID 1980: Account Pop Http 404 when pickup a account in New
+Sales Order
+
+52. Forum Topic ID 2003: Pricebook bug
+
+53. 1161337: Price Book Product Select
+
+54. Forum Topic ID 2088: Address Information Won't Export
+
+55. Forum Topic ID 1582: Importing Checkbox Values when importing leads
+
+56. 1161356:Email - quick create date and time sent date not validated
+
+57. 1160290: Potentials incorrectly pulls up deleted notes in related
+
+58. Internal: Form Validation for Add Business Card
+
+59. Internal: Single, double quotes problem in ticket comments and FAQ
+comments
+
+60. Forum Topic ID 1612: Misbehaviour on validation of number fields
+
+
 vtiger CRM 4.2 GA
 July 18, 2005
 

@@ -1446,7 +1446,7 @@ function GETTABLEID($module)
 
 
 //Commented by Mickie to avoid the repeated entry of troubletickets solution,comments in field table
-/*
+
 		$sql172="insert into field values (13,".$oldconn->getUniqueID("field").",'solution','troubletickets',1,'19','solution','Solution',1,0,0,100,1,4,1,'V~O')";
 		echo '<br> '.$sql172 .' <br> ';
 		$res172 = $oldconn->query($sql172);
@@ -1458,7 +1458,7 @@ function GETTABLEID($module)
 		$sql172 = "update field set typeofdata='I~O' where tabid=4 and columnname='accountid'";
 		echo '<br>'.$sql172.'<br>';
 		$res172 = $oldconn->query($sql172);
-*/
+
 		$sql176="insert into field values (14,".$oldconn->getUniqueID("field").",'imagename','products',1,'69','imagename','Product Image',1,0,0,100,1,6,1,'V~O')"; 
 		echo '<br> DON'.$sql176 .' <br> ';
 		$res176 = $oldconn->query($sql176);

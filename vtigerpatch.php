@@ -11,7 +11,7 @@
 
 $filename = './vtigerversion.php';
 $patch_applied=false;
-$handle = @fopen($filename, "r");
+$handle = @fopen($filename, "r+");
 $newbuf = '';
 if($handle)
 {
@@ -167,7 +167,7 @@ fputs($handle, $newbuf);
 }
 else
 {
-	echo "File <b>$filename</b> does not exist";
+	echo "File <b>$filename</b> does not exist or it may not have write permission.";
 }
 
 ?>
