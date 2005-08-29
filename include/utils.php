@@ -1725,12 +1725,18 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$custfld .= '<td width="30%" valign="top" class="dataField"><a href="http://'.$col_fields[$fieldname].'" target="_blank">'.$col_fields[$fieldname].'</a></td>';
 	}
-        elseif($uitype == 19 || $uitype == 20 || $uitype == 21 || $uitype == 22 || $uitype == 24)
-        {
-                $col_fields[$fieldname]=nl2br($col_fields[$fieldname]);
-                $custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
-                $custfld .= '<td valign="top" class="dataField">'.$col_fields[$fieldname].'</td>';
-        }
+	elseif($uitype == 19)
+	{
+		$col_fields[$fieldname]=nl2br($col_fields[$fieldname]);
+		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+		$custfld .= '<td colspan="3" valign="top" class="dataField">'.$col_fields[$fieldname].'</td>'; // Armando LC<scher 10.08.2005 -> B'descriptionSpan -> Desc: inserted colspan="3"
+	}
+	elseif($uitype == 20 || $uitype == 21 || $uitype == 22 || $uitype == 24) // Armando LC<scher 11.08.2005 -> B'descriptionSpan -> Desc: removed $uitype == 19 and made an aditional elseif above
+	{
+		$col_fields[$fieldname]=nl2br($col_fields[$fieldname]);
+		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+		$custfld .= '<td valign="top" class="dataField">'.$col_fields[$fieldname].'</td>'; // Armando LC<scher 10.08.2005 -> B'descriptionSpan -> Desc: inserted colspan="3"
+	}
 	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{
 		$account_id = $col_fields[$fieldname];
