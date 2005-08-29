@@ -56,6 +56,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	// we have a query
 	$url_string .="&query=true";
 	if (isset($_REQUEST['ticket_title'])) $name = $_REQUEST['ticket_title'];
+	if (isset($_REQUEST['ticket_id'])) $ticket_id_val = $_REQUEST['ticket_id'];
 	if (isset($_REQUEST['contact_name'])) $contact_name = $_REQUEST['contact_name'];
 	if (isset($_REQUEST['priority'])) $priority = $_REQUEST['priority'];
 	if (isset($_REQUEST['status'])) $status = $_REQUEST['status'];
@@ -147,6 +148,15 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		$search_query .= array_push($where_clauses,"crmentity.smownerid='".$current_user->id."'");
 	}
 
+	// begin: Armando LC<scher 16.08.2005 -> B'searchTicketId
+	// Desc: Added this so when something is written into the TicketId box it will be added to the where clause
+	if(isset($_REQUEST['ticket_id']) && $_REQUEST['ticket_id'] != '')
+	{
+		array_push($where_clauses, "troubletickets.ticketid = ".$_REQUEST['ticket_id']);
+		$url_string .= "&ticket_id=".$_REQUEST['ticket_id'];
+	}
+	// end: Armando LC<scher 16.08.2005 -> B'searchTicketId
+
 	$where = "";
 	foreach($where_clauses as $clause)                                                                            {
 	{
@@ -202,6 +212,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("ADVANCE_LINK", "index.php?module=HelpDesk&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewid);
 
 	if (isset($name)) $search_form->assign("SUBJECT", $name);
+	if (isset($ticket_id_val)) $search_form->assign("TICKETID", $ticket_id_val);
 	if (isset($contact_name)) $search_form->assign("CONTACT_NAME", $contact_name);
 	//if (isset($priority)) $search_form->assign("PRIORITY", $priority);
 	if (isset($priority)) $search_form->assign("PRIORITY", get_select_options($comboFieldArray['ticketpriorities_dom'], $priority, $clearsearch));
