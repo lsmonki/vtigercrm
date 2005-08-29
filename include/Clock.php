@@ -389,8 +389,14 @@ function ClockAndAssign(){
 	document.getElementById("amOrPm").firstChild.data=ampm;
 	
 //	if (hr.toString().length==1) hr="0"+hr
-	if (hr==0) hr=12
-	else if (hr>11) hr-=12;
+	if (hr==0)
+	{
+		 hr=12
+	}
+	else if (hr>12)
+	{
+		 hr-=12;
+	}
 	
 	if (mins.toString().length==1) mins="0"+mins;
 	
