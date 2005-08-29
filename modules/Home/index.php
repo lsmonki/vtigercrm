@@ -57,6 +57,18 @@ if($tab_per_Data[9] == 0)
 ?>
 <br>
 <?php
+
+
+	//Added to support the inclusion of the Top Accounts in the Home Page. 
+	//Fix given by Mike Crowe
+   if($tab_per_Data[2] == 0)
+           {
+                    if($permissionData[2][3] == 0)
+                    {
+                      include("modules/Accounts/ListViewTop.php");
+                    }
+	   }  
+	
 if($tab_per_Data[2] == 0)
 {
 	if($permissionData[2][3] == 0)

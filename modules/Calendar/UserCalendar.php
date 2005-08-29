@@ -45,7 +45,6 @@ class UserCalendar extends CRMEntity {
 	var $subject;
 	var $date_entered;
 	var $modified_user_id;
-	var $contact_id;
 	var $creator;
 	var $id;
 

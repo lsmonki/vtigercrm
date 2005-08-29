@@ -51,9 +51,26 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record']))
     $focus->lastname=$focus->column_fields['lastname'];
 
 }
-if(isset($_REQUEST['account_id']))
+if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['record']=='')
 {
+        require_once('modules/Accounts/Account.php');
         $focus->column_fields['account_id'] = $_REQUEST['account_id'];
+        $acct_focus = new Account();
+        $acct_focus->retrieve_entity_info($_REQUEST['account_id'],"Accounts");
+        $focus->column_fields['fax']=$acct_focus->column_fields['fax'];
+        $focus->column_fields['otherphone']=$acct_focus->column_fields['phone'];
+        $focus->column_fields['mailingcity']=$acct_focus->column_fields['bill_city'];
+        $focus->column_fields['othercity']=$acct_focus->column_fields['ship_city'];
+        $focus->column_fields['mailingstreet']=$acct_focus->column_fields['bill_street'];
+        $focus->column_fields['otherstreet']=$acct_focus->column_fields['ship_street'];
+        $focus->column_fields['mailingstate']=$acct_focus->column_fields['bill_state'];
+        $focus->column_fields['otherstate']=$acct_focus->column_fields['ship_state'];
+        $focus->column_fields['mailingzip']=$acct_focus->column_fields['bill_code'];
+        $focus->column_fields['otherzip']=$acct_focus->column_fields['ship_code'];
+        $focus->column_fields['mailingcountry']=$acct_focus->column_fields['bill_country'];
+        $focus->column_fields['othercountry']=$acct_focus->column_fields['ship_country'];
+        $vtlog->logthis("Accountid Id from the request is ".$_REQUEST['account_id'],'debug');
+
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
 {

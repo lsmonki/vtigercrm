@@ -79,11 +79,13 @@ echo get_module_title($mod_strings['LBL_MODULE_NAME'], $ogReport->reportname, fa
 <br>
     <table align='center' border="0" cellspacing="2" cellpadding="2">
         <tr><td>
-	    <input id="btnExport" name="btnExport" value="<?php echo $mod_strings['LBL_EXPORTPDF_BUTTON']?>" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=CreatePDF&record=<?php echo $reportid; ?>')" title="Export To PDF">
+	    <input id="btnExport" name="btnExport" value="<?php echo $mod_strings['LBL_EXPORTPDF_BUTTON']?>" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=CreatePDF&record=<?php echo $reportid; ?>')" title="<?php echo $mod_strings['LBL_EXPORTPDF_BUTTON']?>">
 
-            <input value="<?php echo $mod_strings['LBL_CUSTOMIZE_BUTTON'];?>" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=NewReport1&record=<?php echo $reportid; ?>' )" title="Customize">
+	    <input id="btnExport" name="btnExport" value="<?php echo $mod_strings['LBL_EXPORTXL_BUTTON']?>" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=CreateXL&record=<?php echo $reportid; ?>')" title="<?php echo $mod_strings['LBL_EXPORTXL_BUTTON']?>">
 
-	    <input value="<?php echo $mod_strings['LBL_APPLYFILTER_BUTTON'];?>" class="button" type="submit" title="Apply filter"/>
+            <input value="<?php echo $mod_strings['LBL_CUSTOMIZE_BUTTON'];?>" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=NewReport1&record=<?php echo $reportid; ?>' )" title="<?php echo $mod_strings['LBL_CUSTOMIZE_BUTTON'];?>">
+
+	    <input value="<?php echo $mod_strings['LBL_APPLYFILTER_BUTTON'];?>" class="button" type="submit" title="<?php echo $mod_strings['LBL_APPLYFILTER_BUTTON'];?>"/>
 
         </td></tr>        
     </table>    

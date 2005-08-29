@@ -148,16 +148,16 @@ function productImg()
 </script -->
 <script>
 	
-	var fieldname = new Array({VALIDATION_DATA_FIELDNAME});
-	var fieldlabel = new Array({VALIDATION_DATA_FIELDLABEL});
-	var fielddatatype = new Array({VALIDATION_DATA_FIELDDATATYPE});
-	var extensiontype = new Array(".jpg", ".png", ".gif");
+	var fieldname = new Array({VALIDATION_DATA_FIELDNAME})
+	var fieldlabel = new Array({VALIDATION_DATA_FIELDLABEL})
+	var fielddatatype = new Array({VALIDATION_DATA_FIELDDATATYPE})
+	var extensiontype = new Array(".jpg", ".png", ".gif")
 </script>
 <script>
 function validate() {
 
-		status = 'false';
-		imageType = document.EditView.imagename.value;
+		status = false
+		imageType = document.EditView.imagename.value
 
 		if(imageType != '')
 		{
@@ -165,23 +165,23 @@ function validate() {
 			{
 				if (imageType.indexOf(extensiontype[i]) >= 0 )
 				{
-					status = 'true';	
+					status = true	
 				}	
 			}
 		}
 		else
 		{
-			status = 'true'; 
+			status = true 
 		}
-		if(status == 'true')
+		if(status)
 		{
 			if(!formValidate())
-				return false;
+				return false
 		}
 		else
 		{
-			alert("Kindly specify a valid Product Image File of type .jpg, .png or .gif");
-			return false;
+			alert("Kindly specify a valid Product Image File of type .jpg, .png or .gif")
+			return false
 		}
 
 		

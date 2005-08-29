@@ -111,6 +111,7 @@ $xtpl->assign("ID", $focus->id);
 if($focus->mode == 'edit')
 {
         $xtpl->assign("MODE", $focus->mode);
+        $xtpl->assign("OLDSMOWNERID", $focus->column_fields['assigned_user_id']);
 }
 
 if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);

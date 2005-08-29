@@ -23,6 +23,8 @@ $close_date = getDBInsertDateValue($_REQUEST["closedate"]);
 $current_user_id = $_REQUEST["current_user_id"];
 $assigned_user_id = $_REQUEST["assigned_user_id"];
 $accountname = $_REQUEST['account_name'];
+$potential_amount = $_REQUEST['potential_amount'];
+$potential_sales_stage = $_REQUEST['potential_sales_stage'];
 
 global $vtlog;
 $vtlog->logthis("id is ".$id,'debug'); 
@@ -314,7 +316,12 @@ if(! isset($createpotential) || ! $createpotential == "on")
   $adb->query($sql_crmentity);
 
 
-	$sql_insert_opp = "INSERT INTO potential (potentialid,accountid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (".$oppid.",".$crmid .",'".$potential_name."','".$row['leadsource']."','".$close_date."','Prospecting',0)";
+	if(!isset($potential_amount) || $potential_amount == null)
+	{
+		$potential_amount=0;
+        }
+
+	$sql_insert_opp = "INSERT INTO potential (potentialid,accountid,potentialname,leadsource,closingdate,sales_stage,amount) VALUES (".$oppid.",".$crmid .",'".$potential_name."','".$row['leadsource']."','".$close_date."','".$potential_sales_stage."',".$potential_amount.")";
 
 	$adb->query($sql_insert_opp);
 

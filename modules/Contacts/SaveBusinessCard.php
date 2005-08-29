@@ -15,7 +15,8 @@
 
 global $adb;
 
-$idholder=0;
+$idholderaccount=0;
+$idholdercontact=0;
 
 //account info
 
@@ -64,7 +65,7 @@ if(($acctname != '') && ($lastname != ''))
   //echo 'both acct and contact are not empty';
 
   $account_id = $adb->getUniqueID("crmentity");
-  $idholder = $account_id;
+  $idholderaccount = $account_id;
   $sql = "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$account_id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'Accounts','created from business card','','','',0,0".")";
   $adb->query($sql);
  
@@ -99,6 +100,7 @@ if(($acctname != '') && ($lastname != ''))
   //insert into contactdetails now
 
   $contact_id = $adb->getUniqueID("crmentity");
+  $idholdercontact = $contact_id;
   $sql = "insert into crmentity (crmid,smcreatorid,smownerid,modifiedby,setype,description,createdtime,modifiedtime,viewedtime,presence,deleted) values(".$contact_id.",".$current_user->id.",".$current_user->id.",".$current_user->id.",'Contacts','created from business card','','','',0,0".")";
   $adb->query($sql);
  
@@ -250,11 +252,17 @@ elseif($lastname != '' && $acctname == '')
       
     }*/
     
-
-    if($idholder != '')
+    //Save the activity relationship with the account
+    if($idholderaccount != 0)
     {
-      $sql_seactivityrel = "insert into seactivityrel values(".$idholder.",".$id.")";
+      $sql_seactivityrel = "insert into seactivityrel values(".$idholderaccount.",".$id.")";
       $adb->query($sql_seactivityrel);
+    }
+    //Save the activity relationship with the contact
+    if($idholdercontact != 0)
+    {
+	$sql_seactivityrel = "insert into cntactivityrel values(".$idholdercontact.",".$id.")";
+	$adb->query($sql_seactivityrel);
     }
     
     

@@ -165,13 +165,16 @@ function trim(s) {
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (trim(form.name.value) == "") {
+	if (trim(form.subject.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_subject";
 	}
 	if (form.date_start.value==false) {
 		isError = true;
 		errorMessage += "\\n$lbl_date";
+	}
+	else if (isDate(form.date_start.value) == false) {
+		return false;
 	}
 	if (isTime(form.time_start.value)==false) {
 		isError = true;
@@ -241,7 +244,7 @@ $the_form .= <<<EOQ
 			<input type="hidden" name="parent_type" value="${default_parent_type}">
 			<input type="hidden" name="assigned_user_id" value='${user_id}'>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_subject<br>
-		<input name='name' type="text"><br>
+		<input name='subject' type="text"><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date&nbsp;<font size="1"><em old='ntc_date_format'>$current_user->date_format</em></font><br>
 		<input name='date_start' id='jscal_field' type="text" maxlength="10" value="$default_date_start"> <img src="themes/$theme/images/calendar.gif" id="jscal_trigger"><br>
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_time&nbsp;<font size="1"><em>$ntc_time_format</em></font><br>
