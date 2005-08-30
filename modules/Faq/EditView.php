@@ -81,9 +81,32 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("BLOCK3", $block_3);
-$xtpl->assign("BLOCK4_COMMENTS", $comments);
-$xtpl->assign("BLOCK4", $block_4);
-$xtpl->assign("BLOCK4_HEADER", $block_4_header);
+if($block_4 != '')
+{
+	$block_4_ui = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+			   <tr><td>
+				<table width="100%" border="0" cellspacing="1" cellpadding="2">'.$block_4.'
+				</table>
+			   </td></tr>
+			</table>
+		      ';
+	$xtpl->assign("BLOCK4", $block_4_ui);
+}
+if($comments != '')
+{
+	$block_4_comments = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+				<tr><td>';
+	$block_4_comments .= 		$block_4_header;
+	$block_4_comments .= 			'<table width="100%" border="0" cellspacing="1" cellpadding="2">';
+	$block_4_comments .= 				$comments;
+	$block_4_comments .= 			'</table>
+				</td></tr>
+			     </table>
+			    ';
+	//$xtpl->assign("BLOCK4_COMMENTS", $comments);
+	//$xtpl->assign("BLOCK4_HEADER", $block_4_header);
+	$xtpl->assign("BLOCK4_COMMENTS_BLOCK", $block_4_comments);
+}
 
 if($focus->mode == 'edit')
 {
