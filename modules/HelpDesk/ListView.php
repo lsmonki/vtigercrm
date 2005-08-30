@@ -118,21 +118,22 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	if (isset($date) && $date !='')
 	{
 		$date_criteria = $_REQUEST['date_crit'];
+		$format_date = getDBInsertDateValue($date);
 		if($date_criteria == 'is')
 		{
-			array_push($where_clauses, "crmentity.createdtime like '%".$date."%'");
+			array_push($where_clauses, "crmentity.createdtime like '%".$format_date."%'");
 		}
 		if($date_criteria == 'isnot')
 		{
-			array_push($where_clauses, "crmentity.createdtime not like '".$date."%'");
+			array_push($where_clauses, "crmentity.createdtime not like '".$format_date."%'");
 		}
 		if($date_criteria == 'before')
 		{
-			array_push($where_clauses,"crmentity.createdtime < '".$date." 23:59:59'");
+			array_push($where_clauses,"crmentity.createdtime < '".$format_date."'");
 		}
 		if($date_criteria == 'after')
 		{
-			array_push($where_clauses, "crmentity.createdtime > '".$date." 00:00:00'");
+			array_push($where_clauses, "crmentity.createdtime > '".++$format_date."'");
 		}
 		$url_string .= "&date=".$date;
 		$url_string .= "&date_crit=".$date_criteria;
@@ -192,6 +193,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         $search_form=new XTemplate ('modules/HelpDesk/SearchForm.html');
         $search_form->assign("MOD", $current_module_strings);
         $search_form->assign("APP", $app_strings);
+        $search_form->assign("IMAGE_PATH", $image_path);
 	$clearsearch = 'true';
 
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
@@ -200,6 +202,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("VIEWID",$viewid);
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
+	$search_form->assign("CALENDAR_LANG", "en");
+        $search_form->assign("DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 	if($order_by != '') {
 		$ordby = "&order_by=".$order_by;
@@ -263,13 +267,16 @@ echo get_form_footer();
 echo '<br>';
 
 }
-
+if($viewid != 0)
+{
+        $CActionDtls = $oCustomView->getCustomActionDetails($viewid);
+}
 // Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden">';
+	<input name="viewname" type="hidden" value="'.$viewid.'">';
 if(isPermitted('HelpDesk',2,'') == 'yes')
 {
         $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
