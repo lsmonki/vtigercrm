@@ -38,7 +38,7 @@ global $current_user;
 // global $cal_codes;
 
 
-echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
+//echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
 $sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
 echo '<br>';
@@ -97,8 +97,6 @@ echo '<br>';
  </table>
  <br>
 <?
-
-
 
 
 $focus = new Email();
