@@ -248,6 +248,8 @@ if($actionid == 3)
 
 if(isset($QuickCreateForm) && $QuickCreateForm == 'true')
 {
+	if($now_module == 'Faq')
+                $currentModule = $now_module;
 
         require_once("modules/".$currentModule."/Forms.php");
         if (function_exists('get_new_record_form'))
