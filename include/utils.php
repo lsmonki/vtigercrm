@@ -878,7 +878,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	global $mod_strings;
 	global $app_strings;
 	global $current_user;
-	$value = $col_fields[$fieldname];
+	$value = htmlentities($col_fields[$fieldname]);
 	$custfld = '';
 
 	if($generatedtype == 2)
@@ -3030,6 +3030,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								$contact_name .= $last_name;
 							if($first_name != 'NULL')
 								$contact_name .= " ".$first_name;
+							//Added to get the contactname for activities custom view - t=2190
+                                                        if($contact_id != '' && $last_name == '')
+                                                        {
+                                                                $contact_name = getContactName($contact_id);
+                                                        }
 							
 							if(($contact_name != "") && ($contact_id !='NULL'))
 								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
