@@ -199,6 +199,13 @@ $config .= "//World clock & Calculator will be displayed if these variables are 
 $config .= "\$WORLD_CLOCK_DISPLAY = 'true';\n";
 $config .= "\$CALCULATOR_DISPLAY = 'true';\n\n";
 
+$config .= "//This is the URL for customer portal.\n";
+$config .= "\$PORTAL_URL = 'http://www.vtiger.com/portal';\n\n";
+
+$config .= "//These two are the HelpDesk support email id and the support name.\n";
+$config .= "\$HELPDESK_SUPPORT_EMAIL_ID = 'support@vtiger.com';\n";
+$config .= "\$HELPDESK_SUPPORT_NAME = 'vtiger Support';\n";
+
 $config .= "/* Database configuration\n";
 
 $config .= "      db_host_name:     MySQL Database Hostname\n";
