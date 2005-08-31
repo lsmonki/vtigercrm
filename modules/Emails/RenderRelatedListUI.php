@@ -79,7 +79,7 @@ function renderRelatedUsers($query)
   $id = $_REQUEST['record'];
 
   $result=$adb->query($query);   
-  
+
   $list .= '<br><br>';
   $list .= '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
   $list .= '<form border="0" action="index.php" method="post" name="form" id="form">';
@@ -100,6 +100,7 @@ function renderRelatedUsers($query)
   $list .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_USER_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Users&return_module=Emails&action=Popup&popuptype=detailview&form=EditView&form_submit=true&return_id='.$_REQUEST["record"].'&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;</td>';
 
   $list .= '</td></tr></form></tbody></table>';
+  $list .= '</td></table>';
 
   $list .= '<table border="0" cellpadding="0" cellspacing="0" class="formHeaderULine" width="100%">';
   $list .= '<tr height=1><td height=1></td></tr></table>';
