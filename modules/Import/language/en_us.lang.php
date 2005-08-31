@@ -117,6 +117,7 @@ $mod_strings = Array(
 'LBL_ACCOUNTS_NOTE_1'=>'Account Name must be mapped.',
 'LBL_ACCOUNTS_NOTE_2'=>'Fields ending in Address Street 2 and Address Street 3 are concatenated together with the main Address Street Field when inserted into the database.',
 'LBL_POTENTIALS_NOTE_1'=>'Potential Name, Account Name, Date Closed, and Sales Stage are required fields.',
+'LBL_OPPORTUNITIES_NOTE_1'=>'Opportunity Name, Account Name, Date Closed, and Sales Stage are required fields.',
 'LBL_LEADS_NOTE_1'=>'Last Name must be mapped.',
 'LBL_LEADS_NOTE_2'=>'Company Name must be mapped.',
 'LBL_IMPORT_NOW'=>'Import Now',
@@ -228,7 +229,7 @@ $mod_list_strings = Array(
 	,"otherzip"=>"Other Address Postalcode"
 	,"othercountry"=>"Other Address Country"
 	,"description"=>"Description"
-
+	,"assigned_user_id"=>"Assigned To"
 	),
 
 'accounts_import_fields' => Array(
@@ -265,7 +266,8 @@ $mod_list_strings = Array(
 	"ship_state"=>"Shipping Address State",
 	"ship_code"=>"Shipping Address Postalcode",
 	"ship_country"=>"Shipping Address Country",
-	"description"=>"Description"
+	"description"=>"Description",
+	"assigned_user_id"=>"Assigned To"
 	),
 
 'potentials_import_fields' => Array(
@@ -280,7 +282,9 @@ $mod_list_strings = Array(
                 , "sales_stage"=>"Sales Stage"
                 , "probability"=>"Probability"
                 , "description"=>"Description"
-                ),
+		,"assigned_user_id"=>"Assigned To"
+	),
+
 
 'leads_import_fields' => Array(
 		"salutationtype"=>"Salutation",
@@ -308,7 +312,8 @@ $mod_list_strings = Array(
 		"country"=>"Country",
 		"state"=>"State",
 		"description"=>"Description"
-                )
+		,"assigned_user_id"=>"Assigned To"
+    ),
 
 );
 
