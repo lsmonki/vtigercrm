@@ -76,6 +76,8 @@ $uid_support              = true;
 
 
 $plugins[4] = 'info';
+$plugins[0] = 'mail_fetch';
+
 
 
 $theme_css = '';
