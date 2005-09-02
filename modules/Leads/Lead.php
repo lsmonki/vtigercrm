@@ -452,7 +452,7 @@ return $exists;
 		
 		
 	}
-	function get_lead_feild_options($list_option)
+	function get_lead_field_options($list_option)
 	{
 		$comboFieldArray = getComboArray($this->combofieldNames);
 		return $comboFieldArray[$list_option];
