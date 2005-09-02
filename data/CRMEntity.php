@@ -45,6 +45,8 @@ class CRMEntity extends SugarBean
   function saveentity($module,$migration='')
   {
     global $current_user;
+    $insertion_mode = $this->mode;
+
     $this->db->println("TRANS saveentity starts");
     $this->db->startTransaction();
 	
@@ -71,6 +73,11 @@ class CRMEntity extends SugarBean
         {
           $this->insertIntoEntityTable($table_name, $module);
         }
+        elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+        {
+                $this->deleteRelation($table_name);
+        }
+
       }
       elseif($table_name ==  "cntactivityrel")
       {
@@ -78,6 +85,11 @@ class CRMEntity extends SugarBean
         {
           $this->insertIntoEntityTable($table_name, $module);
         }
+        elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
+        {
+          $this->deleteRelation($table_name);
+        }
+
       }
       elseif($table_name ==  "ticketcomments" && $_REQUEST['comments'] != '')
       {
@@ -670,6 +682,20 @@ $vtlog->logthis("module is =".$module,'info');
 	  }
 
   }
+function deleteRelation($table_name)
+{
+         global $adb;
+         $check_query = "select * from ".$table_name." where ".$this->tab_name_index[$table_name]."=".$this->id;
+         $check_result=$adb->query($check_query);
+         $num_rows = $adb->num_rows($check_result);
+
+         if($num_rows == 1)
+         {
+                $del_query = "DELETE from ".$table_name." where ".$this->tab_name_index[$table_name]."=".$this->id;
+                $adb->query($del_query);
+         }
+
+}
 function getOldFileName($notesid)
 {
 	global $vtlog;
