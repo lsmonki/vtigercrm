@@ -314,6 +314,38 @@ $mod_list_strings = Array(
 		"description"=>"Description"
 		,"assigned_user_id"=>"Assigned To"
     ),
+ 
+ 'products_import_fields' => Array(
+ 	'productname'=>'Product Name',
+ 	'productcode'=>'Product Code',
+ 	'productcategory'=>'Product Category',
+ 	'manufacturer'=>'Manufacturer',
+ 	'product_description'=>'Product Description',
+ 	'qty_per_unit'=>'Quantity Per/Unit',
+ 	'unit_price'=>'Unit Price',
+ 	'weight'=>'Weight',
+ 	'pack_size'=>'Pack Size',
+ 	'start_date'=>'Start Date',
+ 	'expiry_date'=>'Expiration Date',
+ 	'cost_factor'=>'Cost Factor',
+ 	'commissionmethod'=>'Commission Method',
+ 	'discontinued'=>'Discontinued',
+ 	'commissionrate'=>'Commission Rate',
+	'sales_start_date'=>'Sales Start Date',
+	'sales_end_date'=>'Sales End Date',
+	'usageunit'=>'Usage Unit',
+	'serialno'=>'Serial No',
+	'currency'=>'currency',
+	'reorderlevel'=>'Reorder Level',
+	'website'=>'Web Site',
+	'taxclass'=>'Tax Class',
+	'mfr_part_no'=>'Manufacture Part No',
+	'vendor_part_no'=>'Vendor Part No',
+	'qtyinstock'=>'Quantity in Stock',
+	'productsheet'=>'Product Sheet',
+	'qtyindemand'=>'Quantity in Demand',
+	'glacct'=>'GL Account'
+	 )
 
 );
 
