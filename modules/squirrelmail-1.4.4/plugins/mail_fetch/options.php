@@ -11,7 +11,8 @@
  * $Id$
  */
 
-define('SM_PATH','../../');
+//define('SM_PATH','../../');
+define('SM_PATH','modules/squirrelmail-1.4.4/');
 
 require_once(SM_PATH . 'include/validate.php');
 require_once(SM_PATH . 'functions/imap.php');
