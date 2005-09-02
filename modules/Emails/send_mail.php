@@ -116,28 +116,30 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 	$mail->WordWrap = 50;                                 // set word wrap to 50 characters
 
 	if($_REQUEST['return_id'] != '')
+	{
 		$dbQuery = 'SELECT emails.*, attachments.*, seattachmentsrel.crmid from emails left join seattachmentsrel on seattachmentsrel.crmid=emails.emailid left join attachments on seattachmentsrel.attachmentsid=attachments.attachmentsid where emails.emailid = '.$_REQUEST['return_id'].' order by attachmentsid DESC';
 
-        if(!@$result1 = $adb->query($dbQuery)){}// or die("Couldn't get file list");
-if($result1 != '')
-{
-	$temparray = $adb->fetch_array($result1);
-	//store this to the hard disk and give that url
-	if($adb->num_rows($result1) != 0)
-	{
-		$fileContent = $temparray['attachmentcontents'];
-		$filename=$temparray['name'];
-		$filesize=$temparray['attachmentsize'];
+        	if(!@$result1 = $adb->query($dbQuery)){}// or die("Couldn't get file list");
+		if($result1 != '')
+		{
+			$temparray = $adb->fetch_array($result1);
+			//store this to the hard disk and give that url
+			if($adb->num_rows($result1) != 0)
+			{
+				$fileContent = $temparray['attachmentcontents'];
+				$filename=$temparray['name'];
+				$filesize=$temparray['attachmentsize'];
 
-		if(!@$handle = fopen($root_directory."/test/upload/".$filename,"wb")){}//temparray['filename'],"wb")
-		//chmod("/home/rajeshkannan/test/".$fileContent,0755);
-		if(!@fwrite($handle,base64_decode($fileContent),$filesize)){}
-		if(!@fclose($handle)){}
+				if(!@$handle = fopen($root_directory."/test/upload/".$filename,"wb")){}
+				//chmod("/home/rajeshkannan/test/".$fileContent,0755);
+				if(!@fwrite($handle,base64_decode($fileContent),$filesize)){}
+				if(!@fclose($handle)){}
+			}
+
+			$mail->AddAttachment($root_directory."/test/upload/".$filename);//temparray['filename']) 
+			$vtlog->logthis("File '".$filename."' is attached with the mail.",'debug');
+		}
 	}
-
-	$mail->AddAttachment($root_directory."/test/upload/".$filename);//temparray['filename']) //add attachments
-	$vtlog->logthis("Attachment Files are Attached with the mail.",'debug');
-}
 	//$mail->AddAttachment("/var/tmp/file.tar.gz");         // add attachments
 	//$mail->AddAttachment("/tmp/image.jpg", "new.jpg");    // optional name
 	$mail->IsHTML(true);                                  // set email format to HTML
