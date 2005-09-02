@@ -202,40 +202,50 @@ if($noofrows == 0)
 }
 else
 {
+// begin: Armando Lüscher 15.07.2005 -> §scrollableTables
+// Desc: class="blackLine" deleted because of vertical line in title <tr>
 	$list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
 	$list .= '<tr class="ModuleListTitle" height=20>';
 
 	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td class="moduleListTitle">';
+	$list .= '<td width="30%" class="moduleListTitle">';
 
 	$list .= $app_strings['LBL_TITLE_OR_DESCRIPTION'].'</td>';
-	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td width="%" class="moduleListTitle">';
+	$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td width="10%" class="moduleListTitle">';
 
 	$list .= $app_strings['LBL_ENTITY_TYPE'].'</td>';
-	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td width="%" class="moduleListTitle">';
+	$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td width="15%" class="moduleListTitle">';
 
 	$list .= $app_strings['LBL_FILENAME'].'</td>';
-	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td width="%" class="moduleListTitle">';
+	$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td width="15%" class="moduleListTitle">';
 
 	$list .= $app_strings['LBL_TYPE'].'</td>';
-	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td width="%" class="moduleListTitle">';
+	$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td width="20%" class="moduleListTitle">';
 
 	$list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
-	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td class="moduleListTitle" height="21">';
+	$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td width="10%" class="moduleListTitle" height="21">';
 
 	$list .= $app_strings['LBL_ACTION'].'</td>';
-	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td width="%" class="moduleListTitle">';
+	$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td class="moduleListTitle">';
 
 	$list .= '</td>';
 	$list .= '</tr>';
-
 	$list .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
+//	$list .= '</table>';
+// end: Armando Lüscher 15.07.2005 -> scrollableTables
+
+// begin: Armando Lüscher 14.07.2005 -> §scrollableTables
+// Desc: 'Y'
+//			 Insert new table with 1 cell where all entries are in a new table.
+//			 This cell will be scrollable when too many entries exist
+	$list .= ($noofrows>15) ? '<tr><td colspan="20"><div style="overflow:auto;height:315px;width:100%;"><table cellspacing="0" cellpadding="0" border="0" width="100%">':'';
+// end: Armando Lüscher 14.07.2005 -> §scrollableTables
 
 	$i=1;
 	while($row = $adb->fetch_array($result))
@@ -304,6 +314,11 @@ else
 		$list .= '</tr>';
 		$i++;
 	}
+	
+// begin: Armando Lüscher 14.07.2005 -> §scrollableTables
+// Desc: Close table from 'Y'
+		$list .= ($noofrows>15) ? '</table></div></td></tr>':'';
+// end: Armando Lüscher 14.07.2005 -> scrollableTables
 
 	$list .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
 	$list .= '</table>';
@@ -349,45 +364,56 @@ function getHistory($parentmodule,$query,$id)
 	}
 	else
 	{
-		$list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
+		$list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%" >';
 		$list .= '<tr class="ModuleListTitle" height=20>';
 
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td class="moduleListTitle"></td>';
+		$list .= '<td width="4%" class="moduleListTitle"></td>';
+
+// Armando Lüscher 15.07.2005 -> §scrollableTables
+// Desc: class="blackLine" deleted because of vertical line in title <tr>
 
 //		$list .= $app_strings['LBL_ICON'].'Icon</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="%" class="moduleListTitle">';
+		$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td width="25%" class="moduleListTitle">';
 	
 		$list .= $app_strings['LBL_SUBJECT'].'</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="%" class="moduleListTitle">';
+		$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td width="10%" class="moduleListTitle">';
 	
 		$list .= $app_strings['LBL_STATUS'].'</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="%" class="moduleListTitle">';
+		$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td width="18%" class="moduleListTitle">';
 	
 		$list .= $app_strings['LBL_LIST_CONTACT_NAME'].'</td>';
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="%" class="moduleListTitle">';
+		$list .= '<td width="18%" class="moduleListTitle">';
 
 		$list .= $app_strings['LBL_RELATED_TO'].'</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="%" class="moduleListTitle">';
+		$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td width="15%" class="moduleListTitle">';
 	
 		$list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td class="moduleListTitle" height="21">';
+		$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td width="10%" class="moduleListTitle" height="21">';
 
 		$list .= $app_strings['LBL_ACTION'].'</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="%" class="moduleListTitle">';
+		$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td class="moduleListTitle">';
 
 		$list .= '</td>';
+		$list .= '<td style="width:20px">&nbsp;&nbsp&nbsp;&nbsp;</td>';
 		$list .= '</tr>';
 	
 		$list .= '<tr><td COLSPAN="14" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
-	
+
+// begin: Armando Lüscher 14.07.2005 -> §scrollableTables
+// Desc: 'X'
+//			 Insert new table with 1 cell where all entries are in a new table.
+//			 This cell will be scrollable when too many entries exist
+		$list .= ($noofrows>15) ? '<tr><td colspan="21"><div style="overflow:auto;height:315px;width:100%;"><table cellspacing="0" cellpadding="0" border="0" width="100%">':'';
+// end: Armando Lüscher 14.07.2005 -> §scrollableTablEs
+
 		$i=1;
 		while($row = $adb->fetch_array($result))
 		{
@@ -460,11 +486,20 @@ function getHistory($parentmodule,$query,$id)
 			}
 	
 			$list .= '</td>';
+			
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 
 			$list .= '</tr>';
 			$i++;
 		}
-	
+
+// begin: Armando Lüscher 14.07.2005 -> §scrollableTables
+// Desc: Close table from 
+		$list .= ($noofrows>15) ? '</table></div></td></tr>':'';
+// end: Armando Lüscher 14.07.2005 -> §scrollableTables
+
+		$list .= '<tr><td colspan="14" class="blackLine"></td></tr>';
+
 		$list .= '</table>';
 		echo $list;
 	}
