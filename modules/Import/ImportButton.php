@@ -21,7 +21,8 @@ global $allow_exports;
 <tr>
 -->
 <?php 
-if ($_REQUEST['module'] == 'Contacts' ||
+if ($_REQUEST['module'] == 'Products' ||
+	$_REQUEST['module'] == 'Contacts' ||
 	$_REQUEST['module'] == 'Potentials' ||
 	$_REQUEST['module'] == 'Accounts' ||
 	$_REQUEST['module'] == 'Leads')

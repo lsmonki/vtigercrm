@@ -28,6 +28,7 @@ require_once('modules/Import/ImportOpportunity.php');
 require_once('modules/Import/ImportLead.php');
 require_once('modules/Import/Forms.php');
 require_once('modules/Import/ImportMap.php');
+require_once('modules/Import/ImportProduct.php');
 
 global $mod_strings;
 global $app_list_strings;
@@ -67,6 +68,11 @@ else if ( $_REQUEST['module'] == 'Leads')
 {
 	$focus = new ImportLead();
 }
+else if ( $_REQUEST['module'] == 'Products')
+{
+	$focus = new ImportProduct();
+}
+
 else
 {
  echo "Imports aren't set up for this module type\n";
