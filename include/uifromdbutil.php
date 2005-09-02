@@ -30,42 +30,10 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 		$vtlog->logthis("module is ".$module,'info');  
 		
 			$mvAdd_flag = true;
-			// Armando Lscher 09.08.2005 -> addressInherit -> from version 4.0.1
-			$moveAddress = "<td rowspan='5' valign='middle' align='center'>
-								<input title='Copy billing address to shipping address'  
-		class='button' onclick='return copyAddressRight(EditView)'
-		type='button' name='copyright' value='&raquo;'
-		style='padding:0px 2px 0px 2px;font-size:12px'>";
-						   // Button only appears, if no account is selected or if module is
-			                           // account
-		   if ($module == 'Accounts'|| $col_fields['account_id'] == 0) {
-		     $moveAddress.="<input title='Copy shipping address to billing address' 
-		    	 class='button' onclick='return copyAddressLeft(EditView)' 
-			 type='button' name='copyleft' value='&laquo;' 
-			 style='padding:0px 2px 0px 2px;font-size:12px'></td>";
+			$moveAddress = "<td rowspan='5' valign='middle' align='center'><input title='Copy billing address to shipping address'  class='button' onclick='return copyAddressRight(EditView)'  type='button' name='copyright' value='&raquo;' style='padding:0px 2px 0px 2px;font-size:12px'><br><br>
+				<input title='Copy shipping address to billing address'  class='button' onclick='return copyAddressLeft(EditView)'  type='button' name='copyleft' value='&laquo;' style='padding:0px 2px 0px 2px;font-size:12px'></td>";
 	}
 	
-	// Fredy Klammsteiner, 20.06.2005, §addressInherit
-            // Set the mailing address to the accountaddress
-            if ($module == 'Contacts' && $col_fields['account_id'] != null)
-            {
-                $sql_account_address="select * from accountbillads where accountaddressid = "
-                    .$col_fields['account_id'];
-                $result_acc_addr = $adb->query($sql_account_address);
-                $city = $adb->query_result($result_acc_addr, 0, "city");
-                $code = $adb->query_result($result_acc_addr, 0, "code");
-                $state = $adb->query_result($result_acc_addr, 0, "state");
-                $country = $adb->query_result($result_acc_addr, 0, "country");
-                $street = $adb->query_result($result_acc_addr, 0, "street");
-                $col_fields['mailingcity'] = $city;
-                $col_fields['mailingzip'] = $code;
-                $col_fields['mailingstate'] = $state;
-                $col_fields['mailingcountry'] = $country;
-                $col_fields['mailingstreet'] = $street;
-            }
-	}
-	
-
 
 	for($i=0; $i<$noofrows; $i++)
 	{
