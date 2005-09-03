@@ -805,9 +805,10 @@ function from_html($string, $encode=true){
 
 function get_group_options()
 {
-	global $adb;
+	global $adb,$noof_group_rows;;
 	$sql = "select name from groups";
 	$result = $adb->query($sql);
+	$noof_group_rows=$adb->num_rows($result);
 	return $result;
 }
 
@@ -878,7 +879,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	global $mod_strings;
 	global $app_strings;
 	global $current_user;
-	global $theme;
+	global $theme,$noof_group_rows;
         $theme_path="themes/".$theme."/";
         $image_path=$theme_path."images/";
 
@@ -1087,15 +1088,25 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
           
           $GROUP_SELECT_OPTION = '<td width=30%><input type="radio"
           name="assigntype" value="U" '.$user_checked.'
-          onclick="toggleAssignType(this.value)">'.$app_strings['LBL_USER'].'<input
+          onclick="toggleAssignType(this.value)">'.$app_strings['LBL_USER'];
+		
+	if($noof_group_rows!=0)
+	{
+	
+          $GROUP_SELECT_OPTION .= '<input
           type="radio" name="assigntype" value="T"'.$team_checked.'
-          onclick="toggleAssignType(this.value)">'.$app_strings['LBL_TEAM'].'<br><span
+          onclick="toggleAssignType(this.value)">'.$app_strings['LBL_TEAM'];
+	}
+	
+          $GROUP_SELECT_OPTION .='<br><span
           id="assign_user" style="'.$user_style.'"><select name="assigned_user_id">';
           
           $GROUP_SELECT_OPTION .= $users_combo;
           
           $GROUP_SELECT_OPTION .= '</select></span>';
           
+	if($noof_group_rows!=0)
+	{
           $GROUP_SELECT_OPTION .='<span id="assign_team" style="'.$team_style.'"><select name="assigned_group_name">';
           
           
@@ -1115,6 +1126,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
           }while($nameArray = $adb->fetch_array($result));
 //          $GROUP_SELECT_OPTION .='<option value=none>'.$app_strings['LBL_NONE_NO_LINE'].'</option>';
           $GROUP_SELECT_OPTION .= ' </select></td>';
+	}
           
           $custfld .= $GROUP_SELECT_OPTION;
           
