@@ -61,29 +61,24 @@ $the_script  = <<<EOQ
 var fieldname,fieldlabel,fielddatatype;	
 function verify_data(form) 
 {
-	
 	var form_name=form.name;
 	if(form_name=='ActivitySave')
         {
                 form.due_date.value=form.date_start.value;
-                fieldname = new Array('task_subject','jscal_field_date_start','task_time_start');
-                fieldlabel = new Array('Subject','Start Date & Time','Time Start');
-                fielddatatype = new Array('V~M','DT~M~time_start','T~O');
-
-		if(fieldname)
-		{
-			return formValidate();	
-		}
+                fieldname = new Array('task_subject','jscal_field_date_start');
+                fieldlabel = new Array('Subject','Start Date & Time');
+                fielddatatype = new Array('V~M','DT~M~task_time_start');
         }
         else
         {
                 form.due_date.value=form.date_start.value;
-		fieldname = new Array('event_subject','jscal_field_event_date_start','event_time_start','duration_hours')
-                fieldlabel = new Array('Subject','Start Date & Time','Time Start','Duration')
-                fielddatatype = new Array('V~M','DT~M~time_start','T~O','I~M')
-		return formValidate();
+		fieldname = new Array('event_subject','jscal_field_event_date_start','duration_hours')
+                fieldlabel = new Array('Subject','Start Date & Time','Duration')
+                fielddatatype = new Array('V~M','DT~M~event_time_start','I~M')
         }
 
+	var ret = formValidate();
+	return ret;
 }
 // end hiding contents from old browsers  -->
 </script>
