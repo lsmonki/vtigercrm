@@ -10,10 +10,12 @@
 -->
 <!-- BEGIN: main -->
 <script language="javascript">
+prod_array = new Array();
 function addtopricebook()
 {
 
 	x = document.addToPB.selected_id.length;
+	prod_array = new Array(x);
 	idstring = "";
 
 	if ( x == undefined)
@@ -37,13 +39,43 @@ function addtopricebook()
 		{
 			if(document.addToPB.selected_id[i].checked)
 			{
-				idstring = document.addToPB.selected_id[i].value +";"+idstring
-			xx++	
+				idstring = document.addToPB.selected_id[i].value +";"+idstring;
+				prod_array[xx] = document.addToPB.selected_id[i].value;
+
+				xx++;	
 			}
 		}
 		if (xx != 0)
 		{
 			document.addToPB.idlist.value=idstring;
+			var elem = document.addToPB.elements;
+			var ele_len =elem.length;
+			var i=0,j=0;
+
+			//	alert( "ttttttt" + document.addToPB.idlist.value);
+			for(i=0; i<ele_len; i++)
+			{	
+				for(j=0; j < xx; j++)
+				{		
+					//alert(prod_array[j]);
+					var xy= prod_array[j]+"_listprice";
+					if(elem[i].name == xy)
+					{
+						if(elem[i].value=="")
+						{
+							alert("Product List price cannot be Empty");
+							return false;
+						}
+					}	
+					//alert(xy);
+					//alert(document.addToPB.xy.value);
+
+				}
+							
+			}
+
+			//
+
 			//alert(document.massdelete.idlist.value);
 		}
 		else
@@ -57,7 +89,15 @@ document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&re
 
 function updateListPrice(unitprice,fieldname)
 {
-	document.addToPB.elements[fieldname].value=unitprice;
+	var elem=document.addToPB.elements;
+	var i;	
+	for(i=0; i<elem.length; i++)
+	{
+		if(elem[i].name== fieldname)
+		{
+			elem[i].value=unitprice;	
+		}
+	}
 }
 
 </script>
