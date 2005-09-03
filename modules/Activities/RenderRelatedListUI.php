@@ -112,6 +112,7 @@ function renderRelatedProducts($query,$id)
 	{
 		global $adb,$image_path,$vtlog;
 		$avail_flag="false";
+		$avail_date=getDBInsertDateValue($avail_date);
 		if( $owner != $userid)
 		{
 			
@@ -146,6 +147,37 @@ function renderRelatedProducts($query,$id)
 				}
 			}
 		}
+		if($avail_flag!="true")
+		{
+			$recur_query="SELECT activity.activityid, activity.time_start, activity.duration_hours, activity.duration_minutes , crmentity.smownerid, recurringevents.recurringid, recurringevents.recurringdate as date_start from activity inner join crmentity on activity.activityid = crmentity.crmid inner join recurringevents on activity.activityid=recurringevents.activityid where ('".$avail_date."' like recurringevents.recurringdate) and crmentity.smownerid=".$userid." and activity.activityid !=94 group by crmid";
+			
+			$result_cal=$adb->query($recur_query);   
+			$noofrows_cal = $adb->num_rows($result_cal);
+			$avail_flag="false";
+
+			if($noofrows_cal!=0)
+			{
+				while($row_cal = $adb->fetch_array($result_cal)) 
+				{
+					$usr_date_start=$row_cal['date_start'];
+					$usr_time_start=$row_cal['time_start'];
+					$usr_hour_dur=$row_cal['duration_hours'];
+					$usr_mins_dur=$row_cal['duration_minutes'];
+					$user_start_time=time_to_number($usr_time_start);	
+					$user_end_time=get_duration($usr_time_start,$usr_hour_dur,$usr_mins_dur);
+
+					if( ( ($user_start_time > $activity_start_time) && ( $user_start_time < $activity_end_time) ) || ( ( $user_end_time > $activity_start_time) && ( $user_end_time < $activity_end_time) ) || ( ( $activity_start_time == $user_start_time ) || ($activity_end_time == $user_end_time) ) )
+					{
+						$availability= 'busy';
+						$avail_flag="true";
+						$vtlog->logthis("user start time-- ".$user_start_time."user end time".$user_end_time,'info');
+						$vtlog->logthis("Availability ".$availability,'info');
+					}
+				}
+			}
+
+			
+		}	
 	 	if($avail_flag == "true")
                 {
                         $availability=' <IMG SRC="'.$image_path.'/busy.gif">';
@@ -367,7 +399,7 @@ function renderRelatedUsers($query,$id)
 		$avail_table.="<tr>";
 		while($row_recur = $adb->fetch_array($recur_result))
 		{
-			$recur_dates=$row_recur['recurringdate'];
+			$recur_dates=getDBInsertDateValue($row_recur['recurringdate']);
 			$availability=status_availability($owner,$userid,$activity_id,$recur_dates,$activity_start_time,$activity_end_time);	
 			$vtlog->logthis("activity start time ".$activity_start_time."activity end time".$activity_end_time."Available date".$recur_dates,'info');
 			$avail_table.="<td>$availability</td>";
