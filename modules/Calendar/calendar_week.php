@@ -195,16 +195,8 @@ require_once('modules/Calendar/UserCalendar.php');
 			   continue;
 			 }
 			 if ( !$hastable ) {
-			if($class=="groupevent")
-			{
-				$class="groupevent";
-			}	
-			else
-			{
-				$class="event";
-			}
 				
-			   echo "<table width=\"100%\" class=\".$class.\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">\n";
+			   echo "<table width=\"100%\" class=\"event\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">\n";
 			   $hastable = true;
 			 } else {
 			   echo "  <tr><td class=\"eventSep\" colspan=\"3\"><img src=\"". $image_path ."blank.gif\" width=\"100%\" height=\"1\"></td></tr>\n";
