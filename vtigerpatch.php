@@ -153,6 +153,61 @@ if(!$patch_applied)
 	echo '<BR> '.$query.'<BR>';
 	$db->query($query);
 
+	//Added for patch2
+	$query = "update field set sequence=9 where tabid=14 and fieldname='manufacturer' and tablename='products' and columnname='manufacturer'";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+
+	$query = "update field set fieldlabel='Billing City' where tabid=6 and tablename='accountbillads' and fieldlabel='City'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Billing State' where tabid=6 and tablename='accountbillads' and fieldlabel='State'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Billing Code' where tabid=6 and tablename='accountbillads' and fieldlabel='Code'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Billing Country' where tabid=6 and tablename='accountbillads' and fieldlabel='Country'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Shipping City' where tabid=6 and tablename='accountshipads' and fieldlabel='City'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Shipping Country' where tabid=6 and tablename='accountshipads' and fieldlabel='Country'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Shipping State' where tabid=6 and tablename='accountshipads' and fieldlabel='State'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Shipping Code' where tabid=6 and tablename='accountshipads' and fieldlabel='Code'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "update field set fieldlabel='Mailing City' where tabid=4 and tablename='contactaddress' and fieldname='mailingcity'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Other City' where tabid=4 and tablename='contactaddress' and fieldname='othercity'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Mailing State' where tabid=4 and tablename='contactaddress' and fieldname='mailingstate'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Mailing Zip' where tabid=4 and tablename='contactaddress' and fieldname='mailingzip'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Mailing Country' where tabid=4 and tablename='contactaddress' and fieldname='mailingcountry'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Other State' where tabid=4 and tablename='contactaddress' and fieldname='otherstate'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Other Zip' where tabid=4 and tablename='contactaddress' and fieldname='otherzip'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Other Country' where tabid=4 and tablename='contactaddress' and fieldname='othercountry'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
 	echo '<BR> <BR>';
 	echo "<font color=red><center> *** DataBase modified Successfully!!!  *** </center></font>";
 	
