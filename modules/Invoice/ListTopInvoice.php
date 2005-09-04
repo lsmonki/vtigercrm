@@ -71,7 +71,9 @@ $xtpl->assign("IMAGE_PATH",$image_path);
 //<<<<<<<<<customview>>>>>>>>>
 $date_var = date('Y-m-d');
 
-$where = ' and crmentity.smownerid='.$current_user->id.' and  invoice.duedate >= \''.$date_var.'\' ORDER BY total DESC';
+//$where = ' and crmentity.smownerid='.$current_user->id.' and  invoice.duedate >= \''.$date_var.'\' ORDER BY total DESC';
+//Changed for Patch 2 by Don
+$where = ' and crmentity.smownerid='.$current_user->id.' and  invoice.invoicestatus != \'Paid\' ORDER BY total DESC';
 $query = getListQuery("Invoice",$where);
 
 //<<<<<<<<customview>>>>>>>>>
