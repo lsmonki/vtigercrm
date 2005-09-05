@@ -1633,7 +1633,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$potential_name = getPotentialName($value);
 	       }		 	
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
-		$custfld .= '<td width="30%"><input name="potential_name" readonly type="text" value="'.$potential_name.'"><input name="potential_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" LANGUAGE=javascript onClick="this.form.potential_id.value=\'\';this.form.potential_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+		$custfld .= '<td width="30%"><input name="potential_name" readonly type="text" value="'.$potential_name.'"><input name="potential_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" LANGUAGE=javascript onClick="this.form.potential_id.value=\'\';this.form.potential_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 	}
 	elseif($uitype == 78)
 	{
@@ -3642,6 +3642,17 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'"); window.close()\'>'.$temp_val.'</a>';
 
 				}
+				elseif($popuptype == "specific_potential_account_address")
+                                {
+                                        $acntid = $adb->query_result($list_result,$list_result_count,"accountid");
+                                        require_once('modules/Accounts/Account.php');
+                                        $acct_focus = new Account();
+                                        $acct_focus->retrieve_entity_info($acntid,"Accounts");
+                                        $account_name = getAccountName($acntid);
+
+                                        $value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$acntid.'", "'.br2nl($account_name).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'"); window.close()\'>'.$temp_val.'</a>';
+
+                                }
 				elseif($popuptype == "specific_vendor_address")
 				{
 					require_once('modules/Products/Vendor.php');
