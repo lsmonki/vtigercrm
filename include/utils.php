@@ -4776,4 +4776,13 @@ function br2nl($str) {
    return $str;
 }
 
+function get_account_info($parent_id)
+{
+        global $adb;
+        $query = "select accountid from potential where potentialid=".$parent_id;
+        $result = $adb->query($query);
+        $accountid=$adb->query_result($result,0,'accountid');
+        return $accountid;
+}
+
 ?>
