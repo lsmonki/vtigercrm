@@ -275,7 +275,7 @@
 		<field name="otherphone" type="C" size="30"></field>
 		<field name="email1" type="C" size="100"></field>
 		<field name="email2" type="C" size="100"></field>
-		<field name="website" type="C" size="30"></field>
+		<field name="website" type="C" size="100"></field>
 		<field name="fax" type="C" size="30"></field>
 		<field name="employees" type="I" size="10">
 			<DEFAULT value="0"/>
@@ -5309,7 +5309,7 @@ E</constraint>
 		<field name="code" type="C" size="30"></field>
 		<field name="phone" type="C" size="30"></field>
 		<field name="fax" type="C" size="30"></field>
-		<field name="website" type="C" size="50"></field>
+		<field name="website" type="C" size="100"></field>
 		<field name="logoname" type="C" size="50"></field>
 		<field name="logo" type="X"></field>
 		<opt>Type=InnoDB</opt>
