@@ -91,7 +91,10 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 	if(isset($name) && $name != "")
 	{
-		array_push($where_clauses, "troubletickets.title like '%".$name."%'");
+		if($_REQUEST['button'] == 'Search')
+			array_push($where_clauses, "troubletickets.title like '%".$name."%'");
+		else
+			array_push($where_clauses, "troubletickets.title like '".$name."%'");
 		$url_string .= "&ticket_title=".$name;
 	}
 	if(isset($contact_name) && $contact_name != "")
