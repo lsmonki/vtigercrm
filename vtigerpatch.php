@@ -16,37 +16,54 @@ $handle = @fopen($filename, "r+");
 $newbuf = '';
 if($handle)
 {
-	
+	$pv = '';
+	$patch_applied = 'false';
+
 	while (!feof($handle)) {
 
 	    $buffer = fgets($handle, 5200);
 
 	    list($starter, $tmp) = explode(" = ", $buffer);
-	    if($starter == '$patch_version')
+	    if($starter == '$patch_version' && stristr($tmp,'2'))
     	    {
-		$newbuf .= "\$patch_version = '1';\n";
+		$pv = 2;
+    	    } 
+	    elseif($starter == '$patch_version' && stristr($tmp,'1'))
+    	    {
+		$newbuf .= "\$patch_version = '2';\n";
+		$pv = 1;
+    	    } 
+	    elseif($starter == '$patch_version')
+    	    {
+		$newbuf .= "\$patch_version = '2';\n";
+    	    }
+	    elseif($starter == '$vtiger_current_version' && !stristr($tmp,'4.2'))
+    	    {
+		die("<font color=red><center> *** This Patch cannot be applied for vtigerCRM versions other than 4.2! *** </center></font>");   
+    	    }
+	    elseif($starter == '$modified_database' && stristr($tmp,'true'))
+    	    {
+        	$newbuf .= "\$modified_database = 'true';\n";
+		$patch_applied = true;
     	    }
 	    elseif($starter == '$modified_database')
     	    {
         	$newbuf .= "\$modified_database = 'true';\n";
     	    }
     	    else
-    	    {
-    		$newbuf .= $buffer;
-    	    }
-
-		if($starter == '$modified_database' && stristr($tmp,'true'))
-		$patch_applied = true;
-
+	    {	
+		$newbuf .= $buffer;
+	    }
 	}
 fclose($handle);
 
 // Check whether patch is applied and then execute Alter table commands
-if(!$patch_applied)
+if(!$patch_applied && $pv == '')
 {
   
 	require_once('include/database/PearDatabase.php');
 	$db = new PearDatabase();
+
 	$query1 = "update field set typeofdata='I~O' where fieldname='noofemployees' and tablename='leaddetails' and columnname='noofemployees'";
 	echo '<BR> '.$query1.'<BR>';
 	$db->query($query1);
@@ -208,13 +225,100 @@ if(!$patch_applied)
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
 
+	$query = "alter table users change signature signature varchar(250)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "insert into relatedlists values (60,9,0,'get_users',1,'Users',0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "insert into relatedlists values (61,9,4,'get_contacts',2,'Contacts',0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
 	echo '<BR> <BR>';
-	echo "<font color=red><center> *** DataBase modified Successfully!!!  *** </center></font>";
-	
+	echo "<font color=blue><center> *** DataBase modified Successfully for vtigerCRM 4.2 Patch !!!  *** </center></font>";
+}
+elseif($patch_applied && $pv == 1)
+{
+	// Applying Patch 2 Db changes	
+
+	require_once('include/database/PearDatabase.php');
+	$db = new PearDatabase();
+
+	$query = "update field set sequence=9 where tabid=14 and fieldname='manufacturer' and tablename='products' and columnname='manufacturer'";
+	echo '<BR> '.$query.'<BR>';
+	$db->query($query);
+
+	$query = "update field set fieldlabel='Billing City' where tabid=6 and tablename='accountbillads' and fieldlabel='City'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Billing State' where tabid=6 and tablename='accountbillads' and fieldlabel='State'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Billing Code' where tabid=6 and tablename='accountbillads' and fieldlabel='Code'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Billing Country' where tabid=6 and tablename='accountbillads' and fieldlabel='Country'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Shipping City' where tabid=6 and tablename='accountshipads' and fieldlabel='City'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Shipping Country' where tabid=6 and tablename='accountshipads' and fieldlabel='Country'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Shipping State' where tabid=6 and tablename='accountshipads' and fieldlabel='State'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Shipping Code' where tabid=6 and tablename='accountshipads' and fieldlabel='Code'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "update field set fieldlabel='Mailing City' where tabid=4 and tablename='contactaddress' and fieldname='mailingcity'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Other City' where tabid=4 and tablename='contactaddress' and fieldname='othercity'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Mailing State' where tabid=4 and tablename='contactaddress' and fieldname='mailingstate'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Mailing Zip' where tabid=4 and tablename='contactaddress' and fieldname='mailingzip'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Mailing Country' where tabid=4 and tablename='contactaddress' and fieldname='mailingcountry'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Other State' where tabid=4 and tablename='contactaddress' and fieldname='otherstate'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Other Zip' where tabid=4 and tablename='contactaddress' and fieldname='otherzip'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	$query = "update field set fieldlabel='Other Country' where tabid=4 and tablename='contactaddress' and fieldname='othercountry'";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "alter table users change signature signature varchar(250)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "insert into relatedlists values (60,9,0,'get_users',1,'Users',0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "insert into relatedlists values (61,9,4,'get_contacts',2,'Contacts',0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	echo '<BR> <BR>';
+	echo "<font color=blue><center> *** Database modified Successfully for vtigerCRM 4.2 Patch 2 !!!  *** </center></font>";
 }
 else
 {
-	echo "Database changes for patch 1 has been applied already";
+	echo "<font color=green><center> *** Database changes for vtigerCRM patches has been applied already! *** </center></font>";
 }
 
 $handle = fopen($filename, "w");
@@ -223,7 +327,7 @@ fputs($handle, $newbuf);
 }
 else
 {
-	echo "File <b>$filename</b> does not exist or it may not have write permission.";
+	echo "<font color=red><center> *** File <b>$filename</b> does not exist or it may not have write permission. *** </center></font>";
 }
 
 ?>
