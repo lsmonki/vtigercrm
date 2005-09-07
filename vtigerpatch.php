@@ -26,6 +26,7 @@ if($handle)
 	    list($starter, $tmp) = explode(" = ", $buffer);
 	    if($starter == '$patch_version' && stristr($tmp,'2'))
     	    {
+		$newbuf .= "\$patch_version = '2';\n";
 		$pv = 2;
     	    } 
 	    elseif($starter == '$patch_version' && stristr($tmp,'1'))
