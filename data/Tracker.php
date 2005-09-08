@@ -18,7 +18,7 @@
  * last viewed records on a per user basis.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
- * Contributor(s): ______________________________________..
+ * Contributor(s): DrSlump <imontes@netxusfoundries.com>
  ********************************************************************************/
 
 include_once('config.php');
@@ -29,7 +29,7 @@ require_once('include/database/PearDatabase.php');
  * It is intended to be called by each module when rendering the detail form.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
- * Contributor(s): ______________________________________..
+ * Contributor(s): DrSlump <imontes@netxusfoundries.com>
 */
 class Tracker {
     var $log;
@@ -48,293 +48,171 @@ class Tracker {
     function Tracker()
     {
         $this->log = LoggerManager::getLogger('Tracker');
-	//$this->db = new PearDatabase();
-	global $adb;
-        $this->db = $adb;
+        $this->db = $GLOBALS['adb'];
     }
 
     /**
-     * Add this new item to the tracker table.  If there are too many items (global config for now)
-     * then remove the oldest item.  If there is more than one extra item, log an error.
-     * If the new item is the same as the most recent item then do not change the list
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+	 * All Rights Reserved.
+	 * Contributor(s): DrSlump <imontes@netxusfoundries.com>
      */
-    function track_view($user_id, $current_module, $item_id, $item_summary)
+    function track_view($user_id, $current_module, $item_id, $item_summary='')
     {
-      global $adb;
-      $this->delete_history($user_id, $item_id);
-global $vtlog;
-$vtlog->logthis("in  track view method ".$current_module,'info');
-      // Add a new item to the user's list
-
-        $esc_item_id = addslashes($item_id);
-        
-
-         //get the first name and last name from the respective modules
-          if($current_module =='Leads')
-          {
-            $query = 'select firstname,lastname from leaddetails where leadid=' .$item_id;
-            $result = $this->db->query($query);
-            $firstname = $adb->query_result($result,0,'firstname');
-            $lastname =  $adb->query_result($result,0,'lastname');
-            $item_summary = $lastname.' '.$firstname;
-          }
-          elseif ($current_module =='Accounts')
-          {
-            $query = 'select accountname from account where accountid=' .$item_id;
-            $result = $this->db->query($query);
-            $accountname = $adb->query_result($result,0,'accountname');
-            $item_summary = $accountname;
-            
-          }
-          elseif($current_module =='Contacts')
-          {
-            $query = 'select firstname,lastname from contactdetails where contactid=' .$item_id;
-            $result = $this->db->query($query);
-            $firstname = $adb->query_result($result,0,'firstname');
-            $lastname =  $adb->query_result($result,0,'lastname');
-            $item_summary = $lastname.' '.$firstname;
-            
-          }
-          elseif($current_module =='Potentials')
-          {
-            $query = 'select potentialname from potential where potentialid=' .$item_id;
-            $result = $this->db->query($query);
-            $potentialname =  $adb->query_result($result,0,'potentialname');
-            $item_summary = $potentialname;
-          }
-          elseif($current_module =='Notes')
-          {
-            $query = 'select title from notes where notesid=' .$item_id;
-            $result = $this->db->query($query);
-            $title = $adb->query_result($result,0,'title');
-            $item_summary = $title;
-            
-          }
-          elseif($current_module =='HelpDesk')
-          {
-            $query = 'select title from troubletickets where ticketid=' .$item_id;
-            $result = $this->db->query($query);
-            $title = $adb->query_result($result,0,'title');
-            $item_summary = $title;
-          }
-          elseif($current_module =='Activities')
-          {
-            //$query = 'select name from calls where callid=' .$item_id;
-	    $query = 'select subject from activity where activityid=' .$item_id;
-            $result = $this->db->query($query);
-            $name = $adb->query_result($result,0,'subject');
-            $item_summary = $name;
-          }
-          elseif($current_module =='Emails')
-          {
-            //$query = 'select name from emails where emailid=' .$item_id;
-	    $query = 'select subject from activity where activityid=' .$item_id;
-            $result = $this->db->query($query);
-            $name = $adb->query_result($result,0,'subject');
-            $item_summary = $name;
-          }
-          elseif($current_module =='Products')
-          {
-            $query = 'select productname from products where productid=' .$item_id;
-            $result = $this->db->query($query);
-            $productname = $adb->query_result($result,0,'productname');
-            $item_summary = $productname;
-          }
-          elseif($current_module =='Users')
-          {
-            $query = 'select first_name,last_name from users where id=' .$item_id;
-            $result = $this->db->query($query);
-            $firstname = $adb->query_result($result,0,'first_name');
-            $lastname = $adb->query_result($result,0,'last_name');
-            $item_summary = $lastname.' '.$firstname;
-          }
-	  elseif($current_module =='Invoice')
-          {
-            $query = 'select subject from invoice where invoiceid=' .$item_id;
-            $result = $this->db->query($query);
-            $invoice = $adb->query_result($result,0,'subject');
-            $item_summary = $invoice;
-          }
-          elseif($current_module =='Quotes')
-          {
-            $query = 'select subject from quotes where quoteid=' .$item_id;
-            $result = $this->db->query($query);
-            $quote = $adb->query_result($result,0,'subject');
-            $item_summary = $quote;
-          }
-	  elseif($current_module =='Orders')
-          {
-            $query = 'select subject from purchaseorder where purchaseorderid=' .$item_id;
-            $result = $this->db->query($query);
-            $po = $adb->query_result($result,0,'subject');
-            $item_summary = $po;
-          }
-	  elseif($current_module =='SalesOrder')
-          {
-            $query = 'select subject from salesorder where salesorderid=' .$item_id;
-            $result = $this->db->query($query);
-            $so = $adb->query_result($result,0,'subject');
-            $item_summary = $so;
-          }
-	  elseif($current_module =='Vendor')
-          {
-            $query = 'select vendorname from vendor where vendorid=' .$item_id;
-            $result = $this->db->query($query);
-            $vendor = $adb->query_result($result,0,'vendorname');
-            $item_summary = $vendor;
-          }
-	  elseif($current_module =='PriceBook')
-          {
-            $query = 'select bookname from pricebook where pricebookid=' .$item_id;
-            $result = $this->db->query($query);
-            $pb = $adb->query_result($result,0,'bookname');
-            $item_summary = $pb;
-          }	
-
-	 
-	 #if condition added to skip faq in last viewed history
-	  if ($current_module != 'Faq')
-	  {		
-          $query = "INSERT into $this->table_name (user_id, module_name, item_id, item_summary) values ('$user_id', '$current_module', '$esc_item_id', ".$this->db->formatString($this->table_name,'item_summary',$item_summary).")";
-          
-          $this->log->info("Track Item View: ".$query);
-          
-          $this->db->query($query, true);
-          
-          
-          $this->prune_history($user_id);
-	  }
+		global $adb;
+		
+		$modulesDetDesc = array(
+			'Leads' 	=> "CONCAT(firstname,' ',lastname) as summary FROM leaddetails WHERE leadid=",
+			'Accounts'	=> "accountname as summary FROM account WHERE accountid=",
+			'Contacts'	=> "CONCAT(firstname,' ',lastname) as summary FROM contactdetails WHERE contactid=",
+			'Potentials'=> "potentialname as summary FROM potential WHERE potentialid=",
+			'Notes'		=> "title as summary FROM notes WHERE notesid=",
+			'HelpDesk'	=> "title as summary FROM troubletickets WHERE ticketid=",
+			"Activities"=> "subject as summary FROM activity WHERE activityid=",
+			"Emails"	=> "subject as summary FROM activity WHERE activityid=",
+			"Products"	=> "productname as summary FROM products WHERE productid=",
+			"Users"		=> "CONCAT(first_name,' ',last_name) as summary FROM users WHERE id=",
+		);
+			
+		if ($item_summary || isset($modulesDetDesc[$current_module])) {
+			//remove this item from the tracker stack if it was there already
+			$this->delete_history($user_id, $item_id);
+				
+			if (! $item_summary) {
+				//fetch the item name
+				$item_summary = $this->db->getOne('SELECT '.$modulesDetDesc[$current_module].$item_id);
+			}
+			
+			//add the item to the tracker
+			$sql = "INSERT INTO %s (user_id, module_name, item_id, item_summary) VALUES ('%s', '%s', '%s', '%s')";
+			$sql = sprintf($sql, $this->table_name, $user_id, $current_module, $item_id, str_replace("'","\\'", $item_summary));
+			$this->db->query($sql, true);
+			
+			//drop old items
+	        $this->prune_history($user_id);
+		}		
     }
+
 
     /**
      * param $user_id - The id of the user to retrive the history for
      * param $module_name - Filter the history to only return records from the specified module.  If not specified all records are returned
      * return - return the array of result set rows from the query.  All of the table fields are included
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+	 * All Rights Reserved.
+	 * Contributor(s): DrSlump <imontes@netxusfoundries.com>
      */
     function get_recently_viewed($user_id, $module_name = "")
     {
-    	if (empty($user_id)) {
-    		return;
-    	}
-
-//        $query = "SELECT * from $this->table_name WHERE user_id='$user_id' ORDER BY id DESC";
-	$query = "SELECT * from $this->table_name inner join crmentity on crmentity.crmid=tracker.item_id WHERE user_id='$user_id' and crmentity.deleted=0 ORDER BY id DESC";
-        $this->log->debug("About to retrieve list: $query");
-        $result = $this->db->query($query, true);
-        $list = Array();
-        while($row = $this->db->fetchByAssoc($result, -1, false))
-        {
-		//echo "while loppp";
-		//echo '<BR>';
-
-
-            // If the module was not specified or the module matches the module of the row, add the row to the list
-            if($module_name == "" || $row[module_name] == $module_name)
-            {
-		//Adding Security check
-		require_once('include/utils.php');
-		require_once('modules/Users/UserInfoUtil.php');
-		$entity_id = $row['item_id'];
-		$module = $row['module_name'];
-		//echo "module is ".$module."  id is      ".$entity_id;
-		//echo '<BR>';
-		if($module == "Users")
-		{
-			global $current_user;
-			if(is_admin($current_user))
-			{
-				$per = 'yes';
-			}	
-		}
-		else
-		{
+		//Needed for Security check
+		include_once('include/utils.php');
+		include_once('modules/Users/UserInfoUtil.php');
+		
+		$sql = "SELECT tracker.item_id, tracker.module_name, tracker.item_summary FROM %s INNER JOIN crmentity ON crmentity.crmid=tracker.item_id WHERE tracker.user_id='%s' %s AND crmentity.deleted=0 ORDER BY tracker.id DESC";
+		$sql = sprintf($sql, $this->table_name, $user_id, $module_name?"AND module_name='$module_name'":'');
+		
+        $this->log->debug("About to retrieve track list: $query");
+        $result = $this->db->query($sql, true);
+		
+        $list = Array(); $num = 1;
+        while ($row = $this->db->fetchByAssoc($result, -1, false)) {
+			//Unfortunatly the Users module is no integrated with the permission
+            //system, so we need to do a dirty check for it
+			if($row['module_name'] == "Users") {
+				$per = is_admin($GLOBALS['current_user'])?'yes':'no';
+			} else {
+				$per = isPermitted($row['module_name'], 4, $row['item_id']);
+			}
 			
-			$per = isPermitted($module,4,$entity_id);
-			//echo "permission is".$per;
-			//echo "<BR>";
-			//echo "<BR>";
-			
+			if($per == 'yes') {
+				$list[] = $row;
+				//check if we have got enough items already
+				if (++$num > $GLOBALS['history_max_viewed']) break;
+			}
 		}
-		if($per == 'yes')
-		{
-            		$list[] = $row;
+		
+		return $list;
+	}
+
+	/**
+	 * Returns an associative array with names of modules as keys and the
+     * number times it appears in an user tracker. In other words, this
+     * gives the popularity of a module for an user.
+     *
+     * @author: DrSlump <imontes@netxusfoundries.com
+	 */	
+	function get_popular_modules($user_id) {
+		$sql = "SELECT  COUNT(*) as popularity, module_name FROM  `tracker` WHERE user_id = '%s' GROUP BY module_name ORDER BY popularity DESC";
+		$rs = $this->db->query( sprintf($sql, $user_id) );
+		$mods = array();
+		while ($row = $this->db->fetchByAssoc($rs, -1, false)) {
+			$mods[ $row['module_name'] ] = $row['popularity'];
 		}
-            }
-        }
-
-        return $list;
-    }
-
-
+		return $mods;
+	}
 
     /**
      * INTERNAL -- This method cleans out any entry for a record for a user.
      * It is used to remove old occurances of previously viewed items.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ 	 * All Rights Reserved.
+	 * Contributor(s): DrSlump <imontes@netxusfoundries.com>
      */
     function delete_history( $user_id, $item_id)
     {
-        $query = "DELETE from $this->table_name WHERE user_id='$user_id' and item_id='$item_id'";
-       $this->db->query($query, true);
+		$query = "DELETE from $this->table_name WHERE user_id='$user_id' and item_id='$item_id'";
+		$this->db->query($query, true);
     }
 
     /**
      * INTERNAL -- This method cleans out any entry for a record.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+	 * All Rights Reserved.
+	 * Contributor(s): ______________________________________..
      */
     function delete_item_history($item_id)
     {
         $query = "DELETE from $this->table_name WHERE item_id='$item_id'";
-       $this->db->query($query, true);
-
+		$this->db->query($query, true);
     }
 
     /**
      * INTERNAL -- This function will clean out old history records for this user if necessary.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
+	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+	 * All Rights Reserved.
+	 * Contributor(s): DrSlump <imontes@netxusfoundries.com>
+     *
+     * DrSlump:
+     *   Now it uses a pseudo garbage collector, get_recently_viewed() now
+     *   checks for $history_max_viewed so we don't need to do the cleanup
+     *   on each insert
      */
     function prune_history($user_id)
     {
-        global $history_max_viewed;
-
-        // Check to see if the number of items in the list is now greater than the config max.
-        $query = "SELECT count(*) from $this->table_name WHERE user_id='$user_id'";
-
-        $this->log->debug("About to verify history size: $query");
-
-        $count = $this->db->getOne($query);
-
-
-        $this->log->debug("history size: (current, max)($count, $history_max_viewed)");
-        while($count > $history_max_viewed)
-        {
-            // delete the last one.  This assumes that entries are added one at a time.
-            // we should never add a bunch of entries
-            $query = "SELECT * from $this->table_name WHERE user_id='$user_id' ORDER BY id ASC";
-            $this->log->debug("About to try and find oldest item: $query");
-            $result =  $this->db->limitQuery($query,0,1);
-
-            $oldest_item = $this->db->fetchByAssoc($result, -1, false);
-            $query = "DELETE from $this->table_name WHERE id='{$oldest_item['id']}'";
-            $this->log->debug("About to delete oldest item: ");
-
-            $result = $this->db->query($query, true);
-
-
-            $count--;
-        }
+		//we have a 10% probability it'll be 0 and the cleanup is run
+		if (! rand(0,10)) {
+			
+			//get all modules which have passed the maximum history for the given user
+			$sql = "SELECT module_name FROM %s WHERE user_id=%s GROUP BY module_name HAVING COUNT(*) > %d";
+			$rs = $this->db->query( sprintf($sql, $this->table_name, $user_id, $GLOBALS['history_max_viewed']) );
+			$modules = array();
+			while (list($module) = $this->db->getNextRow($rs)) {
+				$modules[] = $module;
+			}
+			
+			foreach ($mods as $module) {
+				
+				//we need to find the ID of the first tracker item over the
+                //max history. This means we have to delete all the IDs smaller
+                //than the guessed one.
+                $sql = "SELECT id FROM %s WHERE user_id=%s AND module_name='%s' ORDER BY id DESC";
+				$sql = sprintf($sql, $this->table_name, $user_id, $module);
+				$rs = $this->db->limitQuery($sql, 1, $GLOBALS['history_max_viewed']);
+				list($id) = $this->db->fetchByAssoc($rs, -1, false);
+				
+				$sql = "DELETE FROM %s WHERE user_id=%s AND module_name='%s' AND id < %s";
+				$this->db->query( sprintf($sql, $this->table_name, $user_id, $module, $id) );
+			}
+		}		
     }
 
 	function create_tables() {
