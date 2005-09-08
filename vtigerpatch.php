@@ -9,7 +9,7 @@
 *
  ********************************************************************************/
 
-include('config.php');
+require_once('config.php');
 $filename = $root_directory.'vtigerversion.php';
 $patch_applied=false;
 $handle = @fopen($filename, "r+");
@@ -359,6 +359,59 @@ fputs($handle, $newbuf);
 else
 {
 	echo "<font color=red><center> *** File <b>$filename</b> does not exist or it may not have write permission. *** </center></font>";
+}
+
+$filename = $root_directory.'config.php';
+$new_filename = $root_directory.'new_config.php';
+$handle = @fopen($filename, "r+");
+$newbuf = '';
+if($handle)
+{
+	$filecontents = file_get_contents($filename);
+	//To check whether the file is already rewrited with the variables
+	$exist = strstr($filecontents,'$PORTAL_URL');
+
+	if(!$exist)
+	{
+		while (!feof($handle)) 
+		{
+			$buffer = fgets($handle, 4096);
+			list($starter, $tmp) = explode(" = ", $buffer);
+			if($starter == '$CALCULATOR_DISPLAY')
+			{
+				$newbuf .= "\$CALCULATOR_DISPLAY = 'true';\n\n";
+				$newbuf .= "//This is the URL for customer portal. (Ex. http://vtiger.com/portal)\n";
+				$newbuf .= "\$PORTAL_URL = 'http://your-domain.com/customerportal';\n\n";
+				$newbuf .= "//These two are the HelpDesk support email id and the support name. ";
+				$newbuf .= "(Ex. 'support@vtiger.com' and 'vtiger Support')\n";
+				$newbuf .= "\$HELPDESK_SUPPORT_EMAIL_ID = 'support@your-domain.com';\n";
+				$newbuf .= "\$HELPDESK_SUPPORT_NAME = 'your-domain Name';\n";
+			}
+			else
+			{
+				$newbuf .= $buffer;
+			}
+		}
+		fclose($handle);
+
+		//Open the file new_conf.php and write the new contents of conf.php file
+		$new_handle = fopen($new_filename, "w");
+		fputs($new_handle, $newbuf);
+		fclose($new_handle);
+
+		//Rename the original config.php to bkp_config.php & rename the new_config.php file to config.php
+		rename($root_directory."config.php",$root_directory."bkp_config.php");
+		rename($root_directory."new_config.php",$root_directory."config.php");
+		echo '<br><b> config.php file is rewrited.</b>';
+	}
+	else
+	{
+		echo '<br><b> config.php file is already rewrited.</b>';
+	}
+}
+else
+{
+	echo "<br><b> Could not read the file config.php. Please give write permission to this file.</b>";
 }
 
 ?>
