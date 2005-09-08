@@ -734,6 +734,8 @@ $app_strings = Array(
 'LBL_HOME_METRICS'=>'Metrics',
 'LBL_HOME_COUNT'=>'Count',
 
+//Added for 4.2 patch 2
+'LBL_JSCALENDAR_LANG'=>'en',
 
 );
 
