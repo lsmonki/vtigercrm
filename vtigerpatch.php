@@ -235,7 +235,23 @@ if(!$patch_applied && $pv == '')
 	$query = "insert into relatedlists values (61,9,4,'get_contacts',2,'Contacts',0)";
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
-
+	
+	$query = "insert into relatedlists values(".$adb->getUniqueID('relatedlists').",".getTabid("Potentials").",".getTabid("Activities").",'get_history',8,'History',0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	
+	$query = "insert into relatedlists values(".$adb->getUniqueID('relatedlists').",".getTabid("Orders").",".getTabid("Activities").",'get_history',3,'History',0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	
+	$query = "insert into relatedlists values(".$adb->getUniqueID('relatedlists').",".getTabid("SalesOrder").",".getTabid("Activities").",'get_history',4,'History',0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	
+	$query = "insert into relatedlists values(".$adb->getUniqueID('relatedlists').",".getTabid("Invoice").",".getTabid("Activities").",'get_history',3,'History',0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	
 	echo '<BR> <BR>';
 	echo "<font color=blue><center> *** DataBase modified Successfully for vtigerCRM 4.2 Patch !!!  *** </center></font>";
 }
@@ -309,6 +325,22 @@ elseif($patch_applied && $pv == 1)
         $db->query($query);
 
 	$query = "insert into relatedlists values (61,9,4,'get_contacts',2,'Contacts',0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	
+	$query = "insert into relatedlists values(".$adb->getUniqueID('relatedlists').",".getTabid("Potentials").",".getTabid("Activities").",'get_history',8,'History',0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	
+	$query = "insert into relatedlists values(".$adb->getUniqueID('relatedlists').",".getTabid("Orders").",".getTabid("Activities").",'get_history',3,'History',0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	
+	$query = "insert into relatedlists values(".$adb->getUniqueID('relatedlists').",".getTabid("SalesOrder").",".getTabid("Activities").",'get_history',4,'History',0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	
+	$query = "insert into relatedlists values(".$adb->getUniqueID('relatedlists').",".getTabid("Invoice").",".getTabid("Activities").",'get_history',3,'History',0)";
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
 
