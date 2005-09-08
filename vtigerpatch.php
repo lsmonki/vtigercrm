@@ -17,8 +17,6 @@ $newbuf = '';
 if($handle)
 {
 	$pv = '';
-	$patch_applied = 'false';
-
 	while (!feof($handle)) {
 
 	    $buffer = fgets($handle, 5200);
