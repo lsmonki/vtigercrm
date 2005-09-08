@@ -113,7 +113,7 @@ $value=date('Y-m-d');
 $dis_value=getNewDisplayDate();
 $curr_time = date('H:i');
 
-$the_form = get_left_form_header("New Task");
+$the_form = get_left_form_header($app_strings['LBL_NEW_TASK']);
 $the_form .= <<<EOQ
 
 		<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
@@ -150,7 +150,7 @@ $the_form .= '<br>';
 $comboFieldNames = Array('activitytype'=>'activitytype_dom',
 			 'duration_minutes'=>'duration_minutes_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
-$the_form .= get_left_form_header("New Event");
+$the_form .= get_left_form_header($app_strings['LBL_NEW_EVENT']);
 $the_form .= <<<EOQ
 
 		<form name="EventSave" method="POST" action="index.php" onSubmit="return verify_data(this)">
