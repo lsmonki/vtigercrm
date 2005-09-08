@@ -228,7 +228,7 @@ function HomeTickets($result)
                         $ticketlist .= '<td class="tblData">'.$result[$i]['modifiedtime'].'</td>';
                         $ticketlist .= '<td class="tblData">'.$result[$i]['createdtime'].'</td></tr>';
 
-			if($result[$i]['status'] == 'Closed')
+			if($result[$i]['status'] == $mod_strings['LBL_STATUS_CLOSED'])
 				$closedlist .= $ticketlist;
 			elseif($result[$i]['status'] != '')
 				$list .= $ticketlist;
@@ -368,7 +368,7 @@ function GetDetailView($result,$ticketid)
 	
 	for($i=0;$i<$outercount;$i++)
 	{
-		if($result[$i]['ticketid'] == $ticketid && $result[$i]['status'] != 'Closed')
+		if($result[$i]['ticketid'] == $ticketid && $result[$i]['status'] != $mod_strings['LBL_STATUS_CLOSED'])
 		{
 			$close_this_ticket = '<td class="pageTitle uline" align="right"><a href=general.php?action=UserTickets&fun=close_ticket&ticketid='.$ticketid.'>'.$mod_strings['LBL_CLOSE_TICKET'].'</a>&nbsp;&nbsp;&nbsp;</td>';
 		}
@@ -438,7 +438,7 @@ function GetDetailView($result,$ticketid)
                 }
 	}
 
-	if($ticket_status != 'Closed')
+	if($ticket_status != $mod_strings['LBL_STATUS_CLOSED'])
 	{
 		$list .= '<form name="form" action="#" method="post">';
 		$list .= '<input type=hidden name=updatecomment value=true>';

@@ -106,6 +106,9 @@ $mod_strings = Array(
 'LNK_CUSTOMER_PORTAL_LOGIN'=>'Customer Portal Login',
 'KBASE_DETAILS'=>'The knowledge base is organized based on both categories and products, please select a category or product that you are interested in.
 Additionally, you can also search the entire knowledge base by entering keywords below.',
+
+//Added after 4.2GA patch1
+'LBL_STATUS_CLOSED'=>'Closed',//Do not convert this label. This is used to check the status. If the status 'Closed' is changed in vtigerCRM server side then you will give the exact value of status 'Closed' which is in vtigerCRM server.
 );
 
 
