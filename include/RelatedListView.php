@@ -329,6 +329,7 @@ else
 
 function getHistory($parentmodule,$query,$id)
 {
+	$parentaction = $_REQUEST['action'];
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
@@ -477,12 +478,12 @@ function getHistory($parentmodule,$query,$id)
 			if(isPermitted("Activities",1,$row["activityid"]) == 'yes')
                 	{
 	
-				$list .= '<a href="index.php?module=Activities&action=EditView&return_module='.$parentmodule.'&return_action=DetailView&activity_mode='.$activitymode.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>  |  ';
+				$list .= '<a href="index.php?module=Activities&action=EditView&return_module='.$parentmodule.'&return_action='.$parentaction.'&activity_mode='.$activitymode.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>  |  ';
 			}
 	
 			if(isPermitted("Activities",2,$row["activityid"]) == 'yes')
                 	{
-				$list .= '<a href="index.php?module=Activities&action=Delete&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
+				$list .= '<a href="index.php?module=Activities&action=Delete&return_module='.$parentmodule.'&return_action='.$parentaction.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
 			}
 	
 			$list .= '</td>';
