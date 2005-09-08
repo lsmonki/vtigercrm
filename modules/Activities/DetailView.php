@@ -135,10 +135,11 @@ $xtpl->parse("main");
 $xtpl->out("main");
 if($_REQUEST['activity_mode'] == 'Events')
 {
-	include('modules/Activities/RenderRelatedListUI.php');
-	$focus->get_users($focus->id);
-	$focus->get_contacts($focus->id);
-	$focus->get_products($focus->id);
+	global $profile_id;
+        $tab_per_Data = getAllTabsPermission($profile_id);
+        $permissionData = $_SESSION['action_permission_set'];
+
+        getRelatedLists("Activities",$focus);
 }
 
 ?>
