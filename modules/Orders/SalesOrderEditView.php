@@ -133,6 +133,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 if(isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] !='')
 {
         $focus->column_fields['potential_id'] = $_REQUEST['potential_id'];
+	$_REQUEST['account_id'] = get_account_info($_REQUEST['potential_id']);
 	$vtlog->logthis("Sales Order EditView: Potential Id from the request is ".$_REQUEST['potential_id'],'debug');
 	$num_of_products = getNoOfAssocProducts("Potentials",$focus,$focus->column_fields['potential_id']);
         $associated_prod = getAssociatedProducts("Potentials",$focus,$focus->column_fields['potential_id']);

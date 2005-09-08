@@ -221,6 +221,8 @@ function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
 		$parent_module = getSalesEntityType($prtid);
 		if($parent_module == "Accounts")
         	$hidden .= '<input type="hidden" name="account_id" value="'.$prtid.'">';
+		if($parent_module == "Potentials")
+                $hidden .= '<input type="hidden" name="potential_id" value="'.$prtid.'">';
 	}
 	if($cntid!=0 && $cntid!='')
         $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
