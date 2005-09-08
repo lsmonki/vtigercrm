@@ -72,7 +72,7 @@ require_once($theme_path.'layout_utils.php');
 $xtpl=new XTemplate ('modules/HelpDesk/EditView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
-$xtpl->assign("CALENDAR_LANG", "en");
+$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("BLOCK3", $block_3);
