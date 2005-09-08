@@ -283,6 +283,8 @@ $mod_strings = Array(
 'LBL_USER_FIELDS'=>'User Fields',
 'LBL_NOTE_DO_NOT_REMOVE_INFO'=>'Note: Donot remove or alter the values within {  }',
 
+//Added for patch2
+'LBL_FILE_INFORMATION'=>'File Information',
 );
 
 ?>
