@@ -91,9 +91,13 @@ $query = "select leaddetails.leadid as id,leaddetails.lastname as name,leadgroup
   $log->info("Here is the where clause for the list view: $query");
 	$result = $adb->limitquery($query,0,5) or die("Couldn't get the group listing");
 
-echo get_form_header($app_strings['LBL_GROUP_ALLOCATION_TITLE'], "", false);
-
-$list = '<table width="100%" cellpadding="0" cellspacing="0"><tr>';
+//echo get_form_header($app_strings['LBL_GROUP_ALLOCATION_TITLE'], "", false);
+$list ='<table border=0 cellspacing=0 cellpadding=0 width=100%>
+<tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont(\'home_mygrp\');"><td nowrap><img src="'.$image_path.'myGroupAllocation.gif" style="padding:5px"></td><td width=100%><b>'.$app_strings['LBL_GROUP_ALLOCATION_TITLE'].'</b> </td><td nowrap><img src="themes/images/toggle2.gif" id="img_home_mygrp" border=0></td></tr>';
+$list .= '<tr><td colspan=3 bgcolor="#000000" style="height:1px;"></td></tr>';
+$list .= '<tr><td colspan=3>';
+$list .= '<div id="home_mygrp" style="display:block;">';
+$list .= '<table width="100%" cellpadding="0" cellspacing="0"><tr>';
 $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 $list .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px">';
 $list .= $app_strings['LBL_ENTITY_NAME'].'</td>';
@@ -157,6 +161,10 @@ while($row = $adb->fetch_array($result))
 }
 
         $list .= '<tr><td WIDTH="1" colspan="6" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr></table>';
+	$list .= '</div></td></tr></table>';
+$list .= '<script language=\'Javascript\'>
+        var leftpanelistarray=new Array(\'home_mygrp\');
+  setExpandCollapse_gen()</script>';
 
 echo $list;
 function getActivityType($id)
