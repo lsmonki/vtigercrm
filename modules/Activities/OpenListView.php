@@ -79,7 +79,9 @@ $xtpl->assign("APP", $app_strings);
 
 // Stick the form header out there.
 $later_day = getDisplayDate(date("Y-m-d", strtotime("$today + 7 days")));
-echo get_form_header($current_module_strings['LBL_UPCOMING'], "<table><tr><td nowrap>".$current_module_strings['LBL_TODAY'].$later_day."</td></tr></table>", false);
+//echo get_form_header($current_module_strings['LBL_UPCOMING'], "<table><tr><td nowrap>".$current_module_strings['LBL_TODAY'].$later_day."</td></tr></table>", false);
+
+$xtpl->assign("ENDDATE", $later_day);
 
 $xtpl->assign("IMAGE_PATH", $image_path);
 
@@ -188,8 +190,9 @@ foreach($open_activity_list as $event)
 }
 
 $xtpl->parse("open_activity");
-if (count($open_activity_list)>0) $xtpl->out("open_activity");
-else echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
+$xtpl->out("open_activity");
+//if (count($open_activity_list)>0) $xtpl->out("open_activity");
+//else echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
 echo "<BR>";
 // Stick on the form footer
 echo get_form_footer();
