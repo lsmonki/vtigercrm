@@ -72,6 +72,11 @@ function massDelete()
         document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Quotes&return_action=index";
 }
 </script>
+<table border=0 cellspacing=0 cellpadding=0 width=100%>
+<tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('home_mytopinv');"><td nowrap><img src="{IMAGE_PATH}myTopInvoices.gif" style="padding:5px"></td><td width=100%><b>{MYTOPINV}</b> </td><td nowrap><img src="themes/images/toggle2.gif" id="img_home_mytopinv" border=0></td></tr>
+<tr><td colspan=3 bgcolor="#000000" style="height:1px;"></td></tr>
+<tr><td colspan=3>
+<div id="home_mytopinv" style="display:block;">
 <table cellpadding="0" cellspacing="0" width="100%" border="0">
 <tbody>
 
@@ -81,7 +86,12 @@ function massDelete()
 	{LISTENTITY}
 	</form>
 </table>
+</div>
+</td></tr>
+</table>
+<script language='Javascript'>
+        var leftpanelistarray=new Array('home_mytopinv');
+  setExpandCollapse_gen()</script>
 <br>
 
 <!-- END: main -->
-</table>

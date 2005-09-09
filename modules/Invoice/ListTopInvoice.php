@@ -58,7 +58,7 @@ if(isset($_REQUEST['viewname']) == false || $_REQUEST['viewname']=='')
 }
 $focus = new Invoice();
 
-echo get_form_header($current_module_strings['LBL_MY_TOP_INVOICE'],$other_text, false);
+//echo get_form_header($current_module_strings['LBL_MY_TOP_INVOICE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Invoice/ListTopInvoice.html');
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -66,6 +66,7 @@ $image_path=$theme_path."images/";
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH",$image_path);
+$xtpl->assign("MYTOPINV",$current_module_strings['LBL_MY_TOP_INVOICE']);
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
