@@ -10,6 +10,7 @@
  ********************************************************************************/
 
 require_once('config.php');
+require_once('include/utils.php');
 $filename = $root_directory.'vtigerversion.php';
 $patch_applied=false;
 $handle = @fopen($filename, "r+");
