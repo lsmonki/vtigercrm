@@ -403,11 +403,11 @@ if($handle)
 		//Rename the original config.php to bkp_config.php & rename the new_config.php file to config.php
 		rename($root_directory."config.php",$root_directory."bkp_config.php");
 		rename($root_directory."new_config.php",$root_directory."config.php");
-		echo '<br><b> config.php file is rewrited.</b>';
+		echo '<br><b> config.php file has been updated.</b>';
 	}
 	else
 	{
-		echo '<br><b> config.php file is already rewrited.</b>';
+		echo '<br><b> config.php file has been updated already.</b>';
 	}
 }
 else
