@@ -58,7 +58,7 @@ if(isset($_REQUEST['viewname']) == false || $_REQUEST['viewname']=='')
 }
 $focus = new SalesOrder();
 
-echo get_form_header($current_module_strings['LBL_MY_TOP_SO'],$other_text, false);
+//echo get_form_header($current_module_strings['LBL_MY_TOP_SO'],$other_text, false);
 $xtpl=new XTemplate ('modules/Orders/ListTopSalesOrder.html');
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -66,6 +66,7 @@ $image_path=$theme_path."images/";
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH",$image_path);
+$xtpl->assign("MYTOPSO",$current_module_strings['LBL_MY_TOP_SO']);
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
