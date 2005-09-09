@@ -305,17 +305,17 @@ if(isPermitted('Potentials',2,'') == 'yes')
 
 if($viewid == 0)
 {
-$cvHTML = '<span class="bodyText disabled">Edit</span>
+$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
 <span class="sep">|</span>
-<span class="bodyText disabled">Delete</span><span class="sep">|</span>
-<a href="index.php?module=Potentials&action=CustomView" class="link">Create View</a>';
+<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
+<a href="index.php?module=Potentials&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }else
 {
-$cvHTML = '<a href="index.php?module=Potentials&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+$cvHTML = '<a href="index.php?module=Potentials&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
 <span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Potentials&record='.$viewid.'" class="link">Delete</a>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Potentials&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
 <span class="sep">|</span>
-<a href="index.php?module=Potentials&action=CustomView" class="link">Create View</a>';
+<a href="index.php?module=Potentials&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 
 $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
