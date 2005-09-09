@@ -375,35 +375,35 @@ function getHistory($parentmodule,$query,$id)
 // Desc: class="blackLine" deleted because of vertical line in title <tr>
 
 //		$list .= $app_strings['LBL_ICON'].'Icon</td>';
-		$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="25%" class="moduleListTitle">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td width="25%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_SUBJECT'].'</td>';
-		$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="10%" class="moduleListTitle">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_STATUS'].'</td>';
-		$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="18%" class="moduleListTitle">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td width="18%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_LIST_CONTACT_NAME'].'</td>';
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="18%" class="moduleListTitle">';
+		$list .= '<td width="18%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 
 		$list .= $app_strings['LBL_RELATED_TO'].'</td>';
-		$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="15%" class="moduleListTitle">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
-		$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="10%" class="moduleListTitle" height="21">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td width="10%" class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">';
 
 		$list .= $app_strings['LBL_ACTION'].'</td>';
-		$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td class="moduleListTitle">';
 
 		$list .= '</td>';
-		$list .= '<td style="width:20px">&nbsp;&nbsp&nbsp;&nbsp;</td>';
+	//	$list .= '<td style="width:20px">&nbsp;&nbsp&nbsp;&nbsp;</td>';
 		$list .= '</tr>';
 	
 		$list .= '<tr><td COLSPAN="14" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
@@ -442,12 +442,12 @@ function getHistory($parentmodule,$query,$id)
 
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 			$list .= '<td width="25%" height="21" style="padding:0px 3px 0px 3px;">';
-			$list .= '<a href="index.php?module=Activities&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'" title="'.$row['description'].'">'.$row['subject'].'</td>';
+			$list .= '<a href="index.php?module=Activities&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'" title="'.$row['description'].'">'.$row['subject'].'</a></td>';
 			$list .= '</td>';
 	
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 			$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-			$list .= $status.'</a>';
+			$list .= $status;
 			$list .= '</td>';
 
 			if($row['firstname'] != 'NULL')	
