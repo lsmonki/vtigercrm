@@ -73,11 +73,10 @@ if($file_name!="")
 	$filetype_array=explode("/",$filetype);
 
 	$file_type_val=strtolower($filetype_array[0]);
+	$file_type_val=strtolower($filetype_array[1]);
 	//checking the uploaded image is if an image type or not
-	if($file_type_val=="image")
+	if(!$move_upload_status) //if any error during file uploading  
 	{
-		if(!$move_upload_status) //if any error during file uploading  
-		{
 			$errorCode =  $_FILES['imagename']['error'];
 			if($errorCode == 4)
 			{
@@ -97,18 +96,30 @@ if($file_name!="")
 				$saveimage="false";
 				$image_error="true";
 			}
-		}
-		else 
-		{
-			$saveimage="true";
-			$image_error="false";
-		}
 	}
-	else
-	{	
-		$saveimage="false";
-		$image_error="true";
-		$errormessage = "image";
+	else 
+	{
+		if($filesize != 0)
+		{
+			if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) || ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") ) //Checking whether the file is an image or not
+			{
+					$saveimage="true";
+					$image_error="false";
+			}
+			else
+			{
+				$savelogo="false";
+				$image_error="true";
+				$errormessage = "image";
+			}
+
+		}
+		else
+		{	$savelogo="false";
+			$image_error="true";
+			$errormessage = "invalid";
+		}
+
 	}
 }
 else //if image is not given
