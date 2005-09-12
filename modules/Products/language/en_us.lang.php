@@ -169,6 +169,7 @@ $mod_strings = Array(
 'LBL_MAXIMUM_LIMIT_ERROR'=>'Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 800000 bytes',
 'LBL_UPLOAD_ERROR'=>'Problems in file upload. Please try again!',
 'LBL_IMAGE_ERROR'=>'The given file is not of type image(.gif/.jpg/.png)',
+'LBL_INVALID_IMAGE'=>'Invalid file OR File has no data',
 
 );
 
