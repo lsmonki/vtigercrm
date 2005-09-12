@@ -189,6 +189,7 @@ $product_tables = Array('products','productcf','productcollaterals');
      	}
    }
  }
+
 if($errormessage==2)
 {
 	$msg =$mod_strings['LBL_MAXIMUM_LIMIT_ERROR'];
@@ -203,6 +204,11 @@ else if($errormessage==3)
 else if($errormessage=="image")
 {
         $msg = $mod_strings['LBL_IMAGE_ERROR'];
+        $errormessage ="<B><font color='red'>".$msg."</font></B> <br><br>";
+}
+else if($errormessage =="invalid")
+{
+        $msg = $mod_strings['LBL_INVALID_IMAGE'];
         $errormessage ="<B><font color='red'>".$msg."</font></B> <br><br>";
 }
 else
