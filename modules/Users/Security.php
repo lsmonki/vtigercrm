@@ -1233,6 +1233,8 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2utility values (".$profile1_id.",7,8,0)");
                 $this->db->query("insert into profile2utility values (".$profile1_id.",6,8,0)");
                 $this->db->query("insert into profile2utility values (".$profile1_id.",4,8,0)");
+		$this->db->query("insert into profile2utility values (".$profile1_id.",14,5,0)");
+                $this->db->query("insert into profile2utility values (".$profile1_id.",14,6,0)");
 
 		//Inserting into profile2utility Sales Profile
 		//Import Export Not Allowed.	
@@ -1250,6 +1252,8 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
                 $this->db->query("insert into profile2utility values (".$profile2_id.",7,8,0)");
                 $this->db->query("insert into profile2utility values (".$profile2_id.",6,8,0)");
                 $this->db->query("insert into profile2utility values (".$profile2_id.",4,8,0)");
+		$this->db->query("insert into profile2utility values (".$profile2_id.",14,5,1)");
+                $this->db->query("insert into profile2utility values (".$profile2_id.",14,6,1)");
 
 		//Inserting into profile2utility Support Profile
 		//Import Export Not Allowed.	
@@ -1267,6 +1271,8 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
                 $this->db->query("insert into profile2utility values (".$profile3_id.",7,8,0)");
                 $this->db->query("insert into profile2utility values (".$profile3_id.",6,8,0)");
                 $this->db->query("insert into profile2utility values (".$profile3_id.",4,8,0)");
+		$this->db->query("insert into profile2utility values (".$profile3_id.",14,5,1)");
+                $this->db->query("insert into profile2utility values (".$profile3_id.",14,6,1)");
 
 		//Inserting into profile2utility Guest Profile Read-Only
 		//Import Export BusinessCar Not Allowed.	
@@ -1284,6 +1290,8 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
                 $this->db->query("insert into profile2utility values (".$profile4_id.",7,8,1)");
                 $this->db->query("insert into profile2utility values (".$profile4_id.",6,8,1)");
                 $this->db->query("insert into profile2utility values (".$profile4_id.",4,8,1)");		
+		$this->db->query("insert into profile2utility values (".$profile4_id.",14,5,1)");
+                $this->db->query("insert into profile2utility values (".$profile4_id.",14,6,1)");		
 
 			
 		//Insert into default_org_sharingrule
