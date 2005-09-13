@@ -26,13 +26,13 @@ if($handle)
 	    if($starter == '$patch_version' && stristr($tmp,'2'))
     	    {
 		$newbuf .= "\$patch_version = '2';\n";
-		$newbuf .= "\$patch_release_date = '12 September 2005';\n";
+		$newbuf .= "\$patch_release_date = '14 September 2005';\n";
 		$pv = 2;
     	    } 
 	    elseif($starter == '$patch_version' && stristr($tmp,'1'))
     	    {
 		$newbuf .= "\$patch_version = '2';\n";
-		$newbuf .= "\$patch_release_date = '12 September 2005';\n";
+		$newbuf .= "\$patch_release_date = '14 September 2005';\n";
 		$pv = 1;
     	    } 
 	    elseif($starter == '$patch_version')
