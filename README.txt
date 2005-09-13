@@ -1,5 +1,177 @@
+vtiger CRM 4.2 Patch 2
+Sep 14, 2005
+
+******************************************
+I. Code Contributions by vtiger Community
+******************************************
+
+Thanks to Bela, Fredy, JLee, MikeCrowe, and Sholmi for their valuable
+contributions to vtiger CRM development. 
+
+Following contributions were made at vtiger Discussions under "vtiger CRM -
+Code Contributions" forum:
+
+1. T2025  - 2 bugs - JLee
+
+2. T2324  - Modification to the Aqua theme - Bela
+
+3. T2406  - Description spaned over all columns - Fredy
+
+4. T2431  - Search by TicketId field in HelpDesk - Fredy
+
+5. T2524  - Scrollable related lists - Fredy
+
+6. P9578  - Import/Export Products - JLee
+
+7. T2196  - Fix for World Clock Bug - JLee
+
+8. T2139  - Bug in: EditView.html - Shlomi
+ 
+9. T2000  - Add "Assigned To" as a choice when Importing - MikeCrowe
+
+10. T1585 - Improved Calendar - Fredy
+  
+****************
+II. New Features
+****************
+
+1. Import/Export Products
+
+**************
+III. Bug Fixes
+**************
+
+--------------------------
+A. Sourceforge Bug Tracker
+--------------------------
+
+1. 1160153  - Security - Activity delete 
+
+2. 1160198  - Security - Default Organization for Activities
+
+3. 1161399 -  Product Related list - Add to Pricebook - Form validation 
+
+4. 1161346  - Price Book - Select Product list price 
+
+5. 1161211  - UI for New Product creation not proper
+
+6. 1161231  - better icons for the inv mgmt modules 
+
+7. 1161343  - Field positioning Sales/Support Start dates 
+ 
+8. 1161322  - Alignment is not proper for Total and sub total
+
+9. 1159934  - Modified time and created time are 0 in Add Business Card  
+
+10. 1161414 - Activity History in Purchase Order Related List
+ 
+11. 1161407 - Activity History not present in product related list 
+
+12. 1161329 - FAQ - Quick Create Removed
+
+13. 1161301 - Ticket - Create 
+
+14. 1161260 - without entering any value in global search if we click on
+search then the n an empty page is displayed.
+
+15. 1159998 - Ticket Search - Calendar Icon in date field 
+
+16. 1159923 - HelpDesk - Ticket Cumulative Statists - UI 
+
+17. 1159852 - Email - Edit View - Copyright info dislocated
+
+18. 1161379 - Sales Order - Selecting Potential Address fields are not
+populated.
+
+19. 1161345 - Quote from Product - Potential Name not populated - Selecting
+Potential Address fields are not populated.
+
+20. 1160278 - Sorting Name in Leads 
+
+21. 1160128 - Product related list, in Activity has been removed 
+
+--------------------------------
+vtiger Discussions - Bug Tracker
+--------------------------------
+
+22. P8330   - 2 bugs.
+
+23. P8180   - Little typo in function get_lead_feild_options
+
+24. P8098   - Vendor pick list not working in Purchase order
+
+25. T2003   - Pricebook bug
+
+26. P8293   - Double entries in 'Default Organization Sharing Access'
+
+27. P8180   - Little typo in function get_lead_feild_options
+
+28. T1707   - Customer Portal language bug - i18N fix
+
+29. T2080   - Email doesn't work
+
+30. P8047   - Change Status Not Updating Modify Date
+
+31. P8004   - BUG modules/HelpDesk/Save.php - i18N fix
+
+32. P8301   - Additional Info to Helpdesk-Issue
+
+33. P8449   - Calendar icon missing at HelpDesk Search
+
+34. P8306   - Missing values in Cumulative Statistics
+
+35. T1802   - Still not possible to delete a contact - account relation
+
+36. T1398   - Issues in Contacts - not possible to delete a contact - account
+relation
+
+37. T1694   - Email Editor Add Link doesn't work
+
+38. T1742   - Bug when assigning product from 2nd page to potential
+
+39. T2003   - Pricebook bug
+
+40. 2313    - New Task Bug
+
+41. P8170   - Quotes popup trouble
+
+------------
+Other Bugs
+------------
+
+42. PDF fixes in Inventory
+
+43. Footer alignment changed
+
+44. Indexing for Patch 2
+
+45. To little characters allowed for user signature
+	
+46. FAQ - quick create removed
+
+47. After delte tickets it displays empty list
+
+48. Clock is dislocated after delete a record
+
+49. HelpDesk quick create- title not saved
+
+50. Activities CustomView ? contact not displayed
+
+51. After mass delete FAQ ? control goes to HelpDesk
+
+52. History in Potential, PO, SO and Invoice
+
+53. Have an invoice that I created, invoice shows up correctly in the "My Top
+Open Invoice" area once the invoice was marked 
+paid I expected it to come off the list since it is no longer in an open
+status how do you get a paid invoice off the "My Top
+Open Invoice" list? 
+
+
+***********************
 vtiger CRM 4.2 Patch 1
 Aug 10, 2005
+**********************
 
 New Feature:
 
