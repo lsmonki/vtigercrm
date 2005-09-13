@@ -144,6 +144,8 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 	{
 		$mailserverresult=$adb->query("select * from systems where server_type='email'");
 		$mail_server=$adb->query_result($mailserverresult,0,'server');
+		$mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
+		$mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
 		$_REQUEST['server']=$mail_server;
 	}	
 
