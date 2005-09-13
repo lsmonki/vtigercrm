@@ -41,7 +41,7 @@ if($handle)
     	    }
 	    elseif($starter == '$vtiger_current_version' && !stristr($tmp,'4.2'))
     	    {
-		die("<font color=red><center> *** This Patch cannot be applied for vtigerCRM versions other than 4.2! *** </center></font>");   
+		die("<font color=red><center> *** This Patch cannot be applied for vtiger CRM versions other than 4.2! *** </center></font>");   
     	    }
 	    elseif($starter == '$modified_database' && stristr($tmp,'true'))
     	    {
@@ -255,8 +255,40 @@ if(!$patch_applied && $pv == '')
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
 	
+	$query = "insert into profile2utility values (1,14,5,0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "insert into profile2utility values (1,14,6,0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	
+	$query = "insert into profile2utility values (2,14,5,1)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "insert into profile2utility values (2,14,6,1)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+		
+	$query = "insert into profile2utility values (3,14,5,1)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "insert into profile2utility values (3,14,6,1)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	
+	$query = "insert into profile2utility values (4,14,5,1)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "insert into profile2utility values (4,14,6,1)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
 	echo '<BR> <BR>';
-	echo "<font color=blue><center> *** DataBase modified Successfully for vtigerCRM 4.2 Patch !!!  *** </center></font>";
+	echo "<font color=blue><center> *** DataBase modified Successfully for vtiger CRM 4.2 Patch !!!  *** </center></font>";
 }
 elseif($patch_applied && $pv == 1)
 {
@@ -346,13 +378,46 @@ elseif($patch_applied && $pv == 1)
 	$query = "insert into relatedlists values(".$adb->getUniqueID('relatedlists').",".getTabid("Invoice").",".getTabid("Activities").",'get_history',3,'History',0)";
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
+	
+	$query = "insert into profile2utility values (1,14,5,0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "insert into profile2utility values (1,14,6,0)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	
+	$query = "insert into profile2utility values (2,14,5,1)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "insert into profile2utility values (2,14,6,1)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+		
+	$query = "insert into profile2utility values (3,14,5,1)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "insert into profile2utility values (3,14,6,1)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+	
+	$query = "insert into profile2utility values (4,14,5,1)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
+	$query = "insert into profile2utility values (4,14,6,1)";
+	echo '<BR> '.$query.'<BR>';
+        $db->query($query);
+
 
 	echo '<BR> <BR>';
-	echo "<font color=blue><center> *** Database modified Successfully for vtigerCRM 4.2 Patch 2 !!!  *** </center></font>";
+	echo "<font color=blue><center> *** Database modified Successfully for vtiger CRM 4.2 Patch 2 !!!  *** </center></font>";
 }
 else
 {
-	echo "<font color=green><center> *** Database changes for vtigerCRM patches has been applied already! *** </center></font>";
+	echo "<font color=green><center> *** Database changes for vtiger CRM 4.2 patches have been applied already! *** </center></font>";
 }
 
 $handle = fopen($filename, "w");
