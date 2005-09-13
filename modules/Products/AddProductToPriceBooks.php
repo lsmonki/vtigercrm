@@ -85,13 +85,28 @@ for($i=0; $i<$num_prod_rows; $i++)
 	$pbk_array[$pbkid] = $pbkid;
 }
 
+$field_name_array=array();
+for($i=0; $i<$num_rows; $i++)
+{	
+	
+	$entity_id = $adb->query_result($list_result,$i,"crmid");
+	if(! array_key_exists($entity_id, $pbk_array))
+	{
+		$field_name=$entity_id."_listprice";
+		$field_name_array[]="'".$field_name."'";
+	}
+}
+
+$xtpl->assign("FIELD_NAME_ARRAY",implode(",",$field_name_array));
+
+
 //Retreive the List View Table Header
 
 
 $list_header = '';
 $list_header .= '<tr class="moduleListTitle" height=20>';
 $list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>';
+$list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall" onClick=\'toggleSelect(this.checked,"selected_id");updateAllListPrice("'.$unit_price.'") \'></td>';
 $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
 $list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_PRICEBOOK'].'</td>';
 $list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
