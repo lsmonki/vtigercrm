@@ -18,7 +18,6 @@ function addtopricebook()
 
 	if ( x == undefined)
 	{
-	
 		if (document.addToPB.selected_id.checked)
 		{
 			document.addToPB.idlist.value=document.addToPB.selected_id.value;
@@ -40,7 +39,7 @@ function addtopricebook()
 				idstring = document.addToPB.selected_id[i].value +";"+idstring;
 				 prod_array[xx] = document.addToPB.selected_id[i].value;
 				
-			xx++;	
+				xx++;	
 			}
 		}
 		if (xx != 0)
@@ -89,6 +88,18 @@ function updateListPrice(unitprice,fieldname)
                 }
         }
 
+}
+
+function updateAllListPrice(unitprice)
+{
+        var fieldname_array = new Array({FIELD_NAME_ARRAY});
+        var unitprice,fieldname;
+
+        for(j=0; j<fieldname_array.length; j++)
+        {
+                fieldname=fieldname_array[j];
+                updateListPrice(unitprice,fieldname);
+        }
 }
 
 </script>
