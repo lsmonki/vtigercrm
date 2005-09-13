@@ -51,13 +51,10 @@ function addtopricebook()
 			var elem = document.addToPB.elements;
 			var ele_len =elem.length;
 			var i=0,j=0;
-
-			//	alert( "ttttttt" + document.addToPB.idlist.value);
 			for(i=0; i<ele_len; i++)
 			{	
 				for(j=0; j < xx; j++)
 				{		
-					//alert(prod_array[j]);
 					var xy= prod_array[j]+"_listprice";
 					if(elem[i].name == xy)
 					{
@@ -67,16 +64,9 @@ function addtopricebook()
 							return false;
 						}
 					}	
-					//alert(xy);
-					//alert(document.addToPB.xy.value);
-
 				}
 							
 			}
-
-			//
-
-			//alert(document.massdelete.idlist.value);
 		}
 		else
 		{
@@ -99,6 +89,24 @@ function updateListPrice(unitprice,fieldname)
 		}
 	}
 }
+
+
+function updateAllListPrice()
+{
+        var unitprice_array = new Array({UNIT_PRICE_ARRAY});
+        var fieldname_array = new Array({FIELD_NAME_ARRAY});
+
+	var n=unitprice_array.length;	
+	var unitprice,fieldname;
+	for(j=0; j<unitprice_array.length; j++)
+	{
+		unitprice=unitprice_array[j];
+		fieldname=fieldname_array[j];	
+		updateListPrice(unitprice,fieldname);
+	}
+}
+
+
 
 </script>
 
