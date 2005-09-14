@@ -139,7 +139,9 @@ $mod_strings = Array(
 'LBL_FINISHED'=>'Finished',
 'LBL_UNDO_LAST_IMPORT'=>'Undo Last Import',
 
-
+//Added for patch2 - Products Import Notes
+'LBL_PRODUCTS_NOTE_1'=>'Product Name must be mapped',
+'LBL_PRODUCTS_NOTE_2'=>'Before import please check whether a single column has been mapped twice'
 
 );
 
