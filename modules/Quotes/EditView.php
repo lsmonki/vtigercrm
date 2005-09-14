@@ -56,6 +56,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 if(isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] !='')
 {
         $focus->column_fields['potential_id'] = $_REQUEST['potential_id'];
+	$_REQUEST['account_id'] = get_account_info($focus->column_fields['potential_id']);
     	$vtlog->logthis("Quotes EditView: Potential Id from the request is ".$_REQUEST['potential_id'],'debug');
 	$num_of_products = getNoOfAssocProducts("Potentials",$focus,$focus->column_fields['potential_id']);
         $associated_prod = getAssociatedProducts("Potentials",$focus,$focus->column_fields['potential_id']);
@@ -63,7 +64,6 @@ if(isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] !='')
 if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 {
         $focus->column_fields['product_id'] = $_REQUEST['product_id'];
-	$_REQUEST['account_id'] = get_account_info($focus->column_fields['potential_id']);
 	$vtlog->logthis("Productid Id from the request is ".$_REQUEST['product_id'],'debug');
         $num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
         $associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
