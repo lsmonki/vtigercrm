@@ -117,6 +117,13 @@ if($noofrows == 0)
 else
 {
 	$listview_header = getListViewHeader($focus,$relatedmodule,'','','','relatedlist');//"Accounts");
+        
+	if ($noofrows > 15)
+        {
+                $xtpl->assign('SCROLLSTART','<div style="overflow:auto;height:315px;width:100%;">');
+                $xtpl->assign('SCROLLSTOP','</div>');
+        }
+
 	$xtpl->assign("LISTHEADER", $listview_header);
 
 	if($module == 'PriceBook' && $relatedmodule == 'Products')
