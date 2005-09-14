@@ -15,13 +15,16 @@ function addtopricebook()
 	x = document.addToPB.selected_id.length;
 	prod_array = new Array(x);
 	idstring = "";
-
 	if ( x == undefined)
 	{
 		if (document.addToPB.selected_id.checked)
 		{
+			yy = document.addToPB.selected_id.value+"_listprice";
 			document.addToPB.idlist.value=document.addToPB.selected_id.value;
-			//alert(document.massdelete.idlist.value);
+			if(!emptyCheck(yy,'List Price'))
+			{
+				return false;
+			}
 		}
 		else 
 		{
