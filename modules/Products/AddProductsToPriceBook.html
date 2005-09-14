@@ -24,7 +24,7 @@ function addtopricebook()
 		{
 			yy = document.addToPB.selected_id.value+"_listprice";
 			document.addToPB.idlist.value=document.addToPB.selected_id.value;
-                        if(!emptyCheck(yy,'List Price'))
+                        if(!emptyCheck(yy,'List Price',"text"))
                         {
                                 return false;
                         }
@@ -61,11 +61,11 @@ function addtopricebook()
 					var xy= prod_array[j]+"_listprice";
 					if(elem[i].name == xy)
 					{
-						if(elem[i].value=="")
-						{
-							alert("Product List price cannot be Empty");
-							return false;
-						}
+						var elem_name=elem[i].name;
+						 if(!emptyCheck(elem_name,'List Price',"text"))
+                                                {
+                                                        return false;
+                                                }
 					}	
 				}
 							
