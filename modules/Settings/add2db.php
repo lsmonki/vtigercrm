@@ -33,7 +33,12 @@ if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile
 	{
 		if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) ||  ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") ) //Checking whether the file is an image or not
 		{
-			if($result!=false)
+			if(stristr($binFile, '.gif') != FALSE)
+			{
+				$savelogo="false";
+				$errormessage = "<font color='red'><B> Logo has to be an Image of type jpeg/png</B></font>";
+			}		
+			else if($result!=false)
 			{
 				$savelogo="true";
 			}
