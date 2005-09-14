@@ -344,7 +344,8 @@ $mod_list_strings = Array(
 	'qtyinstock'=>'Quantity in Stock',
 	'productsheet'=>'Product Sheet',
 	'qtyindemand'=>'Quantity in Demand',
-	'glacct'=>'GL Account'
+	'glacct'=>'GL Account',
+	'assigned_user_id'=>'Assigned To'
 	 )
 
 );
