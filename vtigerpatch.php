@@ -231,11 +231,11 @@ if(!$patch_applied && $pv == '')
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
 
-	$query = "insert into relatedlists values (60,9,0,'get_users',1,'Users',0)";
+	$query = "insert into relatedlists values (".$adb->getUniqueID('relatedlists').",9,0,'get_users',1,'Users',0)";
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
 
-	$query = "insert into relatedlists values (61,9,4,'get_contacts',2,'Contacts',0)";
+	$query = "insert into relatedlists values (".$adb->getUniqueID('relatedlists').",9,4,'get_contacts',2,'Contacts',0)";
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
 	
@@ -355,11 +355,11 @@ elseif($patch_applied && $pv == 1)
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
 
-	$query = "insert into relatedlists values (60,9,0,'get_users',1,'Users',0)";
+	$query = "insert into relatedlists values (".$adb->getUniqueID('relatedlists').",9,0,'get_users',1,'Users',0)";
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
 
-	$query = "insert into relatedlists values (61,9,4,'get_contacts',2,'Contacts',0)";
+	$query = "insert into relatedlists values (".$adb->getUniqueID('relatedlists').",9,4,'get_contacts',2,'Contacts',0)";
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
 	
