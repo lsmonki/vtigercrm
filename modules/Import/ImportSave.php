@@ -6,6 +6,15 @@ $skip_required_count = 0;
 function InsertImportRecords($rows,$rows1,$focus,$ret_field_count,$col_pos_to_field,$start,$recordcount,$module,$totalnoofrows,$skip_required_count)
 {
 	global $current_user;
+	global $adb;
+
+// MWC ** Getting users
+$temp = get_user_array(FALSE);
+foreach ( $temp as $key=>$data)
+	$my_users[$data] = $key;
+p(print_r(my_users,1));
+$adb->println("Users List : ");
+$adb->println($my_users);
 
 if($start == 0)
 {
@@ -17,10 +26,13 @@ $ii = $start;
 // go thru each row, process and save()
 foreach ($rows1 as $row)
 {
-	global $adb;
+	$adb->println("Going to Save the row ".$ii." =====> ");
+	$adb->println($row);
 	global $mod_strings;
 
 	$do_save = 1;
+	//MWC
+	$my_userid = $current_user->id;
 
 	for($field_count = 0; $field_count < $ret_field_count; $field_count++)
 	{
@@ -44,6 +56,12 @@ foreach ($rows1 as $row)
 				p("setting custfld".$field."=".$row[$field_count]);
 				$resCustFldArray[$field] = $row[$field_count]; 
         		}
+			//MWC
+			elseif ( $field == "assignedto" || $field == "assigned_user_id" )
+			{
+				$focus->column_fields[$field] = $my_users[$row[$field_count]];	
+				p("setting my_userid=$my_userid for user=".$row[$field_count]);
+			}
 			else
 			{
 				//$focus->$field = $row[$field_count];
@@ -82,7 +100,9 @@ foreach ($rows1 as $row)
 	
 		if ( ! isset($focus->column_fields["assigned_user_id"]) || $focus->column_fields["assigned_user_id"]=='')
 		{
-			$focus->column_fields["assigned_user_id"] = $current_user->id;
+			//$focus->column_fields["assigned_user_id"] = $current_user->id;
+			//MWC
+			$focus->column_fields["assigned_user_id"] = $my_userid;
 		}	
 
 		// now do any special processing
