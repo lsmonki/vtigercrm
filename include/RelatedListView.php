@@ -210,31 +210,41 @@ else
 	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td width="30%" class="moduleListTitle">';
 
+	$class_black="";
+	if($noofrows<15)
+	{
+		$class_black='class="blackLine"';
+	}
 	$list .= $app_strings['LBL_TITLE_OR_DESCRIPTION'].'</td>';
-	$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td width="10%" class="moduleListTitle">';
 
 	$list .= $app_strings['LBL_ENTITY_TYPE'].'</td>';
-	$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td width="15%" class="moduleListTitle">';
 
 	$list .= $app_strings['LBL_FILENAME'].'</td>';
-	$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td width="15%" class="moduleListTitle">';
 
 	$list .= $app_strings['LBL_TYPE'].'</td>';
-	$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td width="20%" class="moduleListTitle">';
 
 	$list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
-	$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td width="10%" class="moduleListTitle" height="21">';
 
 	$list .= $app_strings['LBL_ACTION'].'</td>';
-	$list .= '<td WIDTH="1"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td class="moduleListTitle">';
 
 	$list .= '</td>';
+	if($noofrows>15)
+	{
+		$list .= '<td style="width:20px">&nbsp;&nbsp&nbsp;&nbsp;</td>';
+	}
+
 	$list .= '</tr>';
 	$list .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
 //	$list .= '</table>';
@@ -375,35 +385,44 @@ function getHistory($parentmodule,$query,$id)
 // Desc: class="blackLine" deleted because of vertical line in title <tr>
 
 //		$list .= $app_strings['LBL_ICON'].'Icon</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$class_black="";
+		if($noofrows<15)
+		{
+			$class_black='class="blackLine"';	
+		}
+
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="25%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_SUBJECT'].'</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_STATUS'].'</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="18%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_LIST_CONTACT_NAME'].'</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="18%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 
 		$list .= $app_strings['LBL_RELATED_TO'].'</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="10%" class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">';
 
 		$list .= $app_strings['LBL_ACTION'].'</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td class="moduleListTitle">';
 
 		$list .= '</td>';
-	//	$list .= '<td style="width:20px">&nbsp;&nbsp&nbsp;&nbsp;</td>';
+		if($noofrows>15)
+		{
+			$list .= '<td style="width:20px">&nbsp;&nbsp&nbsp;&nbsp;</td>';
+		}
 		$list .= '</tr>';
 	
 		$list .= '<tr><td COLSPAN="14" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
