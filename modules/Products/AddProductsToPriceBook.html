@@ -36,8 +36,15 @@ function addtopricebook()
 					{
 						alert("List Price cannot be empty");
 			               		return false;	
-					}	
+					}
+					else if(isNaN(elem[i].value))
+					{
+						alert("Invalid List Price");
+						return false;	
+					}
+	
 				}
+				
 			}		
 		}
 		else 
@@ -74,9 +81,16 @@ function addtopricebook()
 					{
 						if (elem[i].value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0) 
 						{
+		
 							alert("List Price cannot be empty");
 			                		return false;	
-						}	
+						}
+						else if(isNaN(elem[i].value))
+						{
+							alert("Invalid List Price");
+			                		return false;	
+							
+						}
 					}	
 				}
 							
