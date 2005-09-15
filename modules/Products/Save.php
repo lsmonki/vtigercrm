@@ -233,7 +233,7 @@ Thanks,
 function SendMailToCustomer($to,$current_user_id,$subject,$contents)
 {
         global $vtlog;
-        $vtlog->logthis("Inside SendMailToCustomer function.",'debug');
+        $vtlog->logthis("Inside SendMailToCustomer function(Products/Save.php).",'debug');
         require_once("modules/Emails/class.phpmailer.php");
 
         $mail = new PHPMailer();
@@ -249,13 +249,17 @@ function SendMailToCustomer($to,$current_user_id,$subject,$contents)
                 $result = $adb->query($sql);
                 $from = $adb->query_result($result,0,'email1');
                 $initialfrom = $adb->query_result($result,0,'user_name');
+		$vtlog->logthis("Mail sending process : From Name & email id (selected from db) => '".$initialfrom."','".$from."'",'info');
         }
         if($mail_server=='')
         {
                 global $adb;
                 $mailserverresult=$adb->query("select * from systems where server_type='email'");
                 $mail_server=$adb->query_result($mailserverresult,0,'server');
+		$mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
+                $mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
                 $_REQUEST['server']=$mail_server;
+		$vtlog->logthis("Mail Server Details => '".$mail_server."','".$mail_server_username."','".$mail_server_password."'","info");
         }
         $mail->Host = $mail_server;
         $mail->SMTPAuth = true;
@@ -265,6 +269,7 @@ function SendMailToCustomer($to,$current_user_id,$subject,$contents)
         $mail->FromName = $initialfrom;
 
         $mail->AddAddress($to);
+	$vtlog->logthis("Mail sending process : To Email id = '".$to."' (set in the mail object)",'info');
         $mail->AddReplyTo($from);
         $mail->WordWrap = 50;
 
@@ -274,8 +279,14 @@ function SendMailToCustomer($to,$current_user_id,$subject,$contents)
 
         if(!$mail->Send())
         {
+		$vtlog->logthis("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'",'info');
                 $errormsg = "Mail Could not be sent...";
         }
+	else
+	{
+		$vtlog->logthis("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'",'info');
+	}
+	$vtlog->logthis("After executing the mail->Send() function.",'info');
 }
 
 //function to check whether same product name exists 
