@@ -96,6 +96,7 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 	global $log;
 	global $current_user;
 	static $user_array = null;
+	global $vtlog;
 
 
 	if($user_array == null)
@@ -110,10 +111,12 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 		else {
 				if($private == 'private')
 				{
+					$vtlog->logthis("Sharing is Private. Only the current user should be listed",'debug');
 					$query = "SELECT id, user_name from users WHERE id='$current_user->id' and status='$status'";
 				}
 				else
 				{
+					$vtlog->logthis("Sharing is Public. All users should be listed",'debug');
 					$query = "SELECT id, user_name from users WHERE status='$status'";
 				}
 		}
