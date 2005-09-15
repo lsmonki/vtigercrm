@@ -101,7 +101,7 @@ if($file_name!="")
 	{
 		if($filesize != 0)
 		{
-			if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) || ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") ) //Checking whether the file is an image or not
+			if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) || ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") || ($file_type_val == "gif")) //Checking whether the file is an image or not
 			{
 					$saveimage="true";
 					$image_error="false";
