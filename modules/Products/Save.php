@@ -24,17 +24,20 @@
 require_once('modules/Products/Product.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
+global $vtlog;
 
 $focus = new Product();
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];
 	$record_id=$focus->id;
+	$vtlog->logthis("Record Id is present during Saving the product :->".$record_id,'info');
 }
 if(isset($_REQUEST['mode']))
 {
 	$focus->mode = $_REQUEST['mode'];
   	$mode=$focus->mode;
+	$vtlog->logthis("Type of 'mode' during Product Save is ".$mode,'info');
 }
 foreach($focus->column_fields as $fieldname => $val)
 {
@@ -43,12 +46,12 @@ foreach($focus->column_fields as $fieldname => $val)
 		$value = $_REQUEST[$fieldname];
 		$focus->column_fields[$fieldname] = $value;
 	}
-		
 }
 
 //Checking If image is given or not 
 
 $uploaddir = $root_directory."test/product/" ;//set this to which location you need to give the product image
+$vtlog->logthis("The Location to Save the Product Image is ".$uploaddir,'info');
 $file_path_name = $_FILES['imagename']['name'];
 $image_error="false";
 $saveimage="true";
@@ -57,6 +60,7 @@ $file_name = basename($file_path_name);
 //if the image is given
 if($file_name!="")
 {
+        $vtlog->logthis("Product Image is given for uploading ",'debug');
 	$image_name_val=file_exist_fn($file_name,0);
 
 	$encode_field_values="";
@@ -72,11 +76,13 @@ if($file_name!="")
 
 	$filetype_array=explode("/",$filetype);
 
-	$file_type_val=strtolower($filetype_array[0]);
+	$file_type_val_image=strtolower($filetype_array[0]);
 	$file_type_val=strtolower($filetype_array[1]);
+	$vtlog->logthis("The File type of the Product Image is :: ".$file_type_val,'info');
 	//checking the uploaded image is if an image type or not
 	if(!$move_upload_status) //if any error during file uploading  
 	{
+       		 $vtlog->logthis("Error is present in uploading product Image.",'debug');
 			$errorCode =  $_FILES['imagename']['error'];
 			if($errorCode == 4)
 			{
@@ -99,9 +105,10 @@ if($file_name!="")
 	}
 	else 
 	{
+       		 $vtlog->logthis("Successfully uploaded the product Image.",'debug');
 		if($filesize != 0)
 		{
-			if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) || ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") || ($file_type_val == "gif")) //Checking whether the file is an image or not
+			if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) || ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") || ($file_type_val == "gif") ) //Checking whether the file is an image or not
 			{
 					$saveimage="true";
 					$image_error="false";
@@ -124,6 +131,7 @@ if($file_name!="")
 }
 else //if image is not given
 {
+        $vtlog->logthis("Product Image is not given for uploading.",'debug');
 	if($mode=="edit" && $image_error=="false" )
 	{
 		$image_name_val=getProductImageName($record_id);	
@@ -136,11 +144,13 @@ else //if image is not given
 }	
 if($image_error=="true") //If there is any error in the file upload then moving all the data to EditView.
 {
+        $vtlog->logthis("There is an error during the upload of product image.",'debug');
 	$field_values_passed.="";
 	foreach($focus->column_fields as $fieldname => $val)
 	{
 		if(isset($_REQUEST[$fieldname]))
 		{
+        		$vtlog->logthis("Assigning the previous values given for the product to respective fields ",'debug');
 			$field_values_passed.="&";
 			$value = $_REQUEST[$fieldname];
 			$focus->column_fields[$fieldname] = $value;
@@ -169,6 +179,7 @@ if($image_error=="true") //If there is any error in the file upload then moving 
 if($saveimage=="true")
 {
 	$focus->column_fields['imagename']=$image_name_val;
+        $vtlog->logthis("Assign the Image name to the field name ",'debug');
 }
 //Saving the product
 if($image_error=="false")
