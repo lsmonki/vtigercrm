@@ -877,7 +877,7 @@ function getTabid($module)
 
 function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype)
 {
-	global $adb;
+	global $adb,$vtlog;
 	global $theme;
 	global $mod_strings;
 	global $app_strings;
@@ -894,7 +894,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 	if($uitype == 5 || $uitype == 6 || $uitype ==23)
 	{	
-          global $vtlog;
           $vtlog->logthis("uitype is ".$uitype,'info');  
 
 		if($value=='')
