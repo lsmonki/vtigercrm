@@ -138,7 +138,8 @@ elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mo
 	$contents .= 'Your Customer Portal Login details are given below:';
 //	$contents .= '<br>Customer Portal URL:';
 	$contents .= "<br><br>User Id : ".$_REQUEST['email'];
-	$contents .= '<br>Password : '.$password.'';
+	$contents .= '<br>Password : '.$password;
+	$contents .= "<br><br><a href='".$PORTAL_URL."/cp_index.php'>Please Login Here</a>";
 
 	$contents .= '<br><br><b>Note : </b>We suggest you to change your password after logging in first time.';
 	$contents .= '<br><br>Support Team';
