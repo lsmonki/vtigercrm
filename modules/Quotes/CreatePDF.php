@@ -24,7 +24,7 @@ $iData[] = date('Y-m-d');
 //setting the Customer Data
 $iCustData[] = $account_name;
 
-if($focus->column_fields["duedate"] != '')
+if($focus->column_fields["validtill"] != '')
 {
 	$due_date = $focus->column_fields["validtill"];
 }
