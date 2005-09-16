@@ -1095,7 +1095,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	if($noof_group_rows!=0)
 	{
 	
-          $vtlog->logthis("Has a Group, get the Radio button");  
+          $vtlog->logthis("Has a Group, get the Radio button",'debug');  
           $GROUP_SELECT_OPTION .= '<input
           type="radio" name="assigntype" value="T"'.$team_checked.'
           onclick="toggleAssignType(this.value)">'.$app_strings['LBL_TEAM'];
@@ -1110,7 +1110,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
           
 	if($noof_group_rows!=0)
 	{
-          $vtlog->logthis("Has a Group, getting the group names ");  
+          $vtlog->logthis("Has a Group, getting the group names ",'debug');  
           $GROUP_SELECT_OPTION .='<span id="assign_team" style="'.$team_style.'"><select name="assigned_group_name">';
           
           
