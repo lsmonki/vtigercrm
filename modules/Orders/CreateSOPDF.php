@@ -210,10 +210,6 @@ if($num_rows == 1)
 }
 //Getting the logo
 
-
-
-//$companyaddress = Array('AdventNet, Inc.','11 Sarathy Nagar','Velachery','Vijayanagar','Chennai - 600042');
-
 //getting the Product Data
 $query="select products.productname,products.unit_price,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$id;
 
@@ -420,11 +416,8 @@ function setTotal($price_total="",$conditions="")
 	$this->Cell(0,8,$conditions,0,0,'L',0);
 }
 }
-//$bdata = array("aaaaaaaaa","48/1,Katcherry Street","Rasipuram","Namakkal (D.T)");
-//$sdata = array("bbbbbb","48/9","","mmmm","Don City");
 $iHead = array("Company","Sales Order No.","Date","Quote Name.");
 $iCustHeadDtls = array("Customer Name","Purchase Order","Due Date");
-//$iCustData = array("Nortel Networks","usc-107565","26-05-2005");
 $iHeadDtls = array("Product Name","Quantity","List Price","Unit Price","Total");
 
 $pdf = new PDF('P','mm','A4');
