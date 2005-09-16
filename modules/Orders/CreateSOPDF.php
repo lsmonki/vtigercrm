@@ -32,7 +32,7 @@ else
 
 $iData[] = $qt_name;	
 
-$iData[] = $qtname;
+//$iData[] = $qtname;
 
 //setting the Customer Data
 $iCustData[] = $account_name;
