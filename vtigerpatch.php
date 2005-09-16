@@ -38,6 +38,7 @@ if($handle)
 	    elseif($starter == '$patch_version')
     	    {
 		$newbuf .= "\$patch_version = '2';\n";
+		$newbuf .= "\$patch_release_date = '16 September 2005';\n";
     	    }
 	    elseif($starter == '$vtiger_current_version' && !stristr($tmp,'4.2'))
     	    {
