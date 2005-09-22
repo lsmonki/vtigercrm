@@ -38,7 +38,7 @@ global $mod_strings;
 
 <tr>
 <td class="dataLabel" height="30 px"><font face="Helvetica, sans-serif"><b>4.2 Release Date:&nbsp;</b></td>
-<td class="dataField" height="30 px">&nbsp;<?php echo $release_date; ?><span class="gensmall"> (Currrent version)</span></td>
+<td class="dataField" height="30 px">&nbsp;<?php echo $release_date; ?><span class="gensmall"> (Current version)</span></td>
 	</tr>
 
 <tr>

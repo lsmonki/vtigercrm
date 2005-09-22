@@ -221,6 +221,8 @@ function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
 		$parent_module = getSalesEntityType($prtid);
 		if($parent_module == "Accounts")
         	$hidden .= '<input type="hidden" name="account_id" value="'.$prtid.'">';
+		if($parent_module == "Potentials")
+                $hidden .= '<input type="hidden" name="potential_id" value="'.$prtid.'">';
 	}
 	if($cntid!=0 && $cntid!='')
         $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
@@ -274,6 +276,8 @@ function renderRelatedQuotes($query,$id,$cntid='',$prtid='',$sid="product_id")
 		$parent_module = getSalesEntityType($prtid);
 		if($parent_module == "Accounts")
         	$hidden .= '<input type="hidden" name="account_id" value="'.$prtid.'">';
+		if($parent_module == "Potentials")
+        	$hidden .= '<input type="hidden" name="potential_id" value="'.$prtid.'">';
 	}
 	if($cntid!=0 && $cntid!='')
         $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
@@ -328,9 +332,8 @@ function renderProductRelatedPriceBooks($query,$id)
 	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
 	
 	$focus = new PriceBook();
-	
 	$button = '';
-	if(isPermitted("PriceBook",3,"") == 'yes')
+	if(isPermitted("PriceBook",3,"") == 'yes' && $focus->get_pricebook_noproduct($id))
         {
 		$button .= '<input title="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_TITLE'].'" accessyKey="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'AddProductToPriceBooks\';this.form.module.value=\'Products\'" type="submit" name="button" value="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_LABEL'].'">&nbsp;</td>';
 

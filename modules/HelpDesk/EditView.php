@@ -72,7 +72,7 @@ require_once($theme_path.'layout_utils.php');
 $xtpl=new XTemplate ('modules/HelpDesk/EditView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
-$xtpl->assign("CALENDAR_LANG", "en");
+$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("BLOCK3", $block_3);
@@ -83,20 +83,46 @@ if($focus->mode == 'edit')
 {
 	$block_4 = getBlockInformation("HelpDesk",4,$focus->mode,$focus->column_fields);
 	$block_4_header = getBlockTableHeader("LBL_TICKET_RESOLUTION");
-	$xtpl->assign("BLOCK4", $block_4);
-	$xtpl->assign("BLOCK4_HEADER", $block_4_header);
+
+	$block_4_ui = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+			   <tr><td>'.$block_4_header.'
+				<table width="100%" border="0" cellspacing="1" cellpadding="2">'.$block_4.'
+			   	</table>
+			   </td></tr>
+		       </table>
+		      ';
+	$xtpl->assign("BLOCK4_UI", $block_4_ui);
+	//$xtpl->assign("BLOCK4", $block_4);
+	//$xtpl->assign("BLOCK4_HEADER", $block_4_header);
 
 	$block_7 = getCommentInformation($focus->id);
 	if($block_7 != '')
 	{
 		$block_7_header = getBlockTableHeader("LBL_COMMENTS");
-		$xtpl->assign("BLOCK7", $block_7);
-		$xtpl->assign("BLOCK7_HEADER", $block_7_header);
+		$block_7_ui = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+				   <tr><td>'.$block_7_header.'
+					<table width="100%" border="0" cellspacing="1" cellpadding="2">'.$block_7.'</table>
+				   </td></tr>
+			       </table>
+			      ';
+		$xtpl->assign("BLOCK7_UI", $block_7_ui);
+		//$xtpl->assign("BLOCK7", $block_7);
+		//$xtpl->assign("BLOCK7_HEADER", $block_7_header);
 	}
 
 	$block_6 = getBlockInformation("HelpDesk",6,$focus->mode,$focus->column_fields);
         $block_6_header = getBlockTableHeader("LBL_COMMENTS");
-        $xtpl->assign("BLOCK6", $block_6);
+	if($block_6 != '')
+	{
+		$block_6_ui = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
+				   <tr><td>
+					<table width="100%" border="0" cellspacing="1" cellpadding="2">'.$block_6.'</table>
+				   </td></tr>
+			       </table>
+			      ';
+	        $xtpl->assign("BLOCK6_UI", $block_6_ui);
+	        //$xtpl->assign("BLOCK6", $block_6);
+	}
         $xtpl->assign("BLOCK6_HEADER", $block_6_header);
 }
 

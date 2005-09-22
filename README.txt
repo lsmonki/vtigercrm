@@ -1,5 +1,196 @@
+####################################################
+vtiger CRM 4.2 Patch 2
+Sep 15, 2005
+####################################################
+
+We are pleased to announce the consolidated patch for vtiger CRM 4.2. This release includes many code contributions from vtiger community and bug fixes!
+
+******************************************
+I. Code Contributions by vtiger Community
+******************************************
+
+Thanks to Bela, Fredy, JLee, MikeCrowe, and Sholmi for their valuable contributions to the vtiger CRM development. 
+
+Following contributions were made at vtiger Discussions under "vtiger CRM - Code Contributions" forum:
+
+1. T2025  - 2 bugs - JLee (Same as P8180 in vtiger Discussions " Little typo in function get_lead_feild_options")
+
+2. T2324  - Modification to the Aqua theme - Bela (Note: We have included the fix for all the themes except blue theme)  
+
+3. T2406  - Description spanned over all columns - Fredy
+
+4. T2431  - Search by TicketId field in HelpDesk - Fredy
+
+5. T2524  - Scrollable related lists - Fredy
+
+6. P9578  - Import/Export Products - JLee
+
+7. T2196  - Fix for World Clock Bug - JLee
+
+8. T2139  - Bug in: EditView.html - Shlomi
+ 
+9. T2000  - Add "Assigned To" as a choice when Importing - MikeCrowe
+
+10. T1585 - Improved Calendar - Fredy
+  
+****************
+II. New Features
+****************
+
+1. Import/Export Products
+
+2. Scrollable List View for related Lists
+
+***************
+III. Bug Fixes
+***************
+
+--------------------------
+A. http://bugs.vtiger.com
+--------------------------
+
+-------------------------------------
+S.No ID    Subject
+-------------------------------------
+1.   67  - Inventory Mgmt Related List
+
+2.   70  - Activities - Quick Create
+
+3.   81  - Price Book - Select Product list price
+
+4.   82  - Inventory Mgmt Related List Issue
+
+5.   96  - Alignment is not proper for Total and sub total
+
+6.  108  - Without entering any value in global search if we click on search then the n an empty page is displayed
+
+7.  113  - Security UI not good enough
+
+8.  114  - Better icons for the inv mgmt modules
+
+9. 428 - User Signature Issue
+
+10. 125  - UI for New Product creation not proper
+
+11. 129  - Advanced search requires some fields (SF.Net ID: 
+
+12. 131  - Sorting Name in Leads
+
+13. 143  - Product related list in Activity can be removed
+
+14. 149  - New Ticket Creation - Group empty
+
+15. 160  - Modified time and created time are 0 in Add Business Card
+
+16.  406 - Clock is dislocated after delete a record
+
+17.  407 - HelpDesk quick create- title not saved
+
+18.  408 - Activities CustomView contact not displayed
+
+19. 409 - After mass delete FAQ control goes to HelpDesk
+
+20. 410 - Footer alignment changed
+
+21. 411 - New Event Creation
+
+22. 405 - FAQ quick create
+
+23. 412 - Security - Activity delete
+
+24. 413 - Security - Default Organization for Activities
+
+25. 414 - Field positioning Sales/Support Start dates
+
+26. 415 - Inventory Related List
+
+27. 416 - Inventory RL
+
+28. 417 - Inventory RL - Activity History missing
+
+29. 418 - Ticket - Create
+
+30. 419 - Email - Edit View
+
+31. 420 - Availability of user
+
+32. 421 - Adding Products to Price book Validations
+
+33. 422 - New Activity Creation - Group empty
+
+34. 424 - History in Potential, PO, SO and Invoice
+
+35. 425 - After delete tickets it displays empty list
+
+36. 426 - Invoice Display in Home Page
+
+37.  86 - File Size validation for the product image
+
+38.  78 - Adding pricebook to products
+
+39.  81 - IE 6 Pricebook Validations
+ 
+-----------------------------------
+B. vtiger Discussions - Bug Tracker
+-----------------------------------
+
+-------------------------------------
+S.No ID        Subject
+-------------------------------------
+
+40.  T1707   - Customer Portal language bug
+
+41.  T2080   - Email doesn't work
+
+42.  P8047   - Change Status Not Updating Modify Date
+
+43.  P8004   - BUG modules/HelpDesk/Save.php
+
+44.  P8301   - Additional Info to Helpdesk-Issue
+
+45.  P8449   - Calendar icon missing at HelpDesk
+
+46.  P8306   - Missing values in Cumulative Statistics
+
+47.  T1802   - Still not possible to delete a contact - account relation
+
+48.  T1398   - Issues in Contacts 
+
+49.  T1694   - Email Editor Add Link doesn't work
+
+50.  T1742   - Bug when assigning product from 2nd page to potential
+
+51.  T2025   - 2 bugs
+
+52.  T2313   - New Task Bug
+
+53.  P8170   - Quotes popup trouble
+
+54.  P8098   - Vendor pick list not working in Purchase order
+
+55.  T1862   - Customize Quote Template
+
+56.  P8159   - New Calendar Bug
+
+57.  T2038   - Please fix these Bugs in 4.2
+
+58.  T1696   - Accounts Website url fix
+
+59.  T2003   - Pricebook bug 
+
+60.  P8293   - Double entries in 'Default Organization Sharing Access'
+
+61.  T2512   - Home upcoming activities
+
+62.  P8030   - Meetings not held must not be shown in upcoming activities
+
+
+####################################################
+
 vtiger CRM 4.2 Patch 1
 Aug 10, 2005
+
+####################################################
 
 New Feature:
 
@@ -131,8 +322,12 @@ comments
 60. Forum Topic ID 1612: Misbehaviour on validation of number fields
 
 
+#######################
+
 vtiger CRM 4.2 GA
 July 18, 2005
+
+#######################
 
 We are pleased to announce the latest version of vtiger CRM. This release includes many new features and few bug fixes!
 
@@ -248,7 +443,6 @@ A. New Features
  * Provide public access to the Knowledge Base only after approval
 
  * Update Articles/FAQ in vtiger CRM as based customer suggestions & comments
-
 
 9. E-mail Integration
 
@@ -440,9 +634,12 @@ NOTE: For more details about vtiger CRM 4.2 Release Notes, Please refer to the f
 
 http://www.vtiger.com/wiki/index.php/Vtiger_CRM_4_2_Release_Notes
  
------------------------------------------------------------------------------------------------
+#######################
+
 vtiger CRM 4.2 Alpha
 May 31, 2005
+
+#######################
 
 We are pleased to announce the latest version of vtiger CRM. This release includes many new features and few bug fixes!
 

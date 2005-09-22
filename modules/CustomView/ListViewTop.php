@@ -65,7 +65,7 @@ $vtlog->logthis("Metrics :: Successfully build the Metrics","info");
 
 //print_r($metriclists);
 // Stick the form header out there.
-echo get_form_header($app_strings['LBL_HOME_KEY_METRICS'], '', false);
+//echo get_form_header($app_strings['LBL_HOME_KEY_METRICS'], '', false);
 
 if(isset($metriclists))
 {

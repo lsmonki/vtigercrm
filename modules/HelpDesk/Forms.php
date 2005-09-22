@@ -55,7 +55,7 @@ function trim(s) {
 function verify_data(form) {
 	var isError = false;
 	var errorMessage = "";
-	if (trim(form.title.value) == "") {
+	if (trim(form.ticket_title.value) == "") {
 		isError = true;
 		errorMessage += "\\n$lbl_subject";
 	}
@@ -113,7 +113,7 @@ $the_form .= <<<EOQ
 			<input type="hidden" name="action" value="Save">
 			<input type="hidden" name="return_action" value="DetailView">
 		<FONT class="required">$lbl_required_symbol</FONT>
-               $lbl_ticket_title<br><input name='title' maxlength='255' type="text" value=""><br>
+               $lbl_ticket_title<br><input name='ticket_title' maxlength='255' type="text" value=""><br>
                $lbl_ticket_description<br><input name='description' maxlength='255' type="text" value=""><br>
               $lbl_ticket_priority<br><select name='ticketpriorities'>
 EOQ;

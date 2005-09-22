@@ -29,6 +29,7 @@ require_once('modules/Activities/Activity.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Users/User.php');
+require_once('modules/Products/Product.php');
 
 global $allow_exports;
 session_start();
@@ -172,6 +173,10 @@ function export_all($type)
 	{
 		$focus = new Email;
 	}
+	else if ($type == "Products")
+        {
+                $focus = new Product;
+        }
 
 	$log = LoggerManager::getLogger('export_'.$type);
 	$db = new PearDatabase();

@@ -145,7 +145,12 @@ function renderRelatedStageHistory($query,$id)
 	        echo 'Sales Stage Never Changed';
 	}
 	else
-	{
+	{	
+		if ($noofrows > 15)
+		{
+			$list .= '<div style="overflow:auto;height:315px;width:100%;">';
+		}
+
 		$list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
 		$list .= '<tr class="ModuleListTitle" height=20>';
 
@@ -217,7 +222,13 @@ function renderRelatedStageHistory($query,$id)
 			$i++;
 		}
 
+		$list .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
 		$list .= '</table>';
+		if ($noofrows > 15)
+		{
+			$list .= '</div>';
+		}
+
 		echo $list;
 	}
 	echo "<BR>\n";

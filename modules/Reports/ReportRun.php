@@ -1055,9 +1055,9 @@ class ReportRun extends CRMEntity
 				inner join crmentity as crmentityHelpDesk 
 				on crmentityHelpDesk.crmid=troubletickets.ticketid 
 				inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid
-				left join crmentity as crmentityHelpDeskRel on crmentityHelpDeskRel.crmid = troubletickets.parent_id 
-				left join ticketcomments on ticketcomments.ticketid = troubletickets.ticketid
-				left join products as productsRel on productsRel.productid = troubletickets.product_id
+				left join crmentity as crmentityHelpDeskRel on crmentityHelpDeskRel.crmid = troubletickets.parent_id ".
+//				left join ticketcomments on ticketcomments.ticketid = troubletickets.ticketid -- for patch2
+				"left join products as productsRel on productsRel.productid = troubletickets.product_id
 				left join users as usersHelpDesk on crmentityHelpDesk.smownerid=usersHelpDesk.id 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityHelpDesk.deleted=0 ";

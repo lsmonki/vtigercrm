@@ -56,6 +56,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	// we have a query
 	$url_string .="&query=true";
 	if (isset($_REQUEST['ticket_title'])) $name = $_REQUEST['ticket_title'];
+	if (isset($_REQUEST['ticket_id'])) $ticket_id_val = $_REQUEST['ticket_id'];
 	if (isset($_REQUEST['contact_name'])) $contact_name = $_REQUEST['contact_name'];
 	if (isset($_REQUEST['priority'])) $priority = $_REQUEST['priority'];
 	if (isset($_REQUEST['status'])) $status = $_REQUEST['status'];
@@ -90,7 +91,10 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 	if(isset($name) && $name != "")
 	{
-		array_push($where_clauses, "troubletickets.title like '%".$name."%'");
+		if($_REQUEST['button'] == 'Search')
+			array_push($where_clauses, "troubletickets.title like '%".$name."%'");
+		else
+			array_push($where_clauses, "troubletickets.title like '".$name."%'");
 		$url_string .= "&ticket_title=".$name;
 	}
 	if(isset($contact_name) && $contact_name != "")
@@ -117,21 +121,22 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	if (isset($date) && $date !='')
 	{
 		$date_criteria = $_REQUEST['date_crit'];
+		$format_date = getDBInsertDateValue($date);
 		if($date_criteria == 'is')
 		{
-			array_push($where_clauses, "crmentity.createdtime like '%".$date."%'");
+			array_push($where_clauses, "crmentity.createdtime like '%".$format_date."%'");
 		}
 		if($date_criteria == 'isnot')
 		{
-			array_push($where_clauses, "crmentity.createdtime not like '".$date."%'");
+			array_push($where_clauses, "crmentity.createdtime not like '".$format_date."%'");
 		}
 		if($date_criteria == 'before')
 		{
-			array_push($where_clauses,"crmentity.createdtime < '".$date." 23:59:59'");
+			array_push($where_clauses,"crmentity.createdtime < '".$format_date."'");
 		}
 		if($date_criteria == 'after')
 		{
-			array_push($where_clauses, "crmentity.createdtime > '".$date." 00:00:00'");
+			array_push($where_clauses, "crmentity.createdtime > '".++$format_date."'");
 		}
 		$url_string .= "&date=".$date;
 		$url_string .= "&date_crit=".$date_criteria;
@@ -146,6 +151,15 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		$search_query .= array_push($where_clauses," troubletickets.status != 'Closed'");
 		$search_query .= array_push($where_clauses,"crmentity.smownerid='".$current_user->id."'");
 	}
+
+	// begin: Armando LC<scher 16.08.2005 -> B'searchTicketId
+	// Desc: Added this so when something is written into the TicketId box it will be added to the where clause
+	if(isset($_REQUEST['ticket_id']) && $_REQUEST['ticket_id'] != '')
+	{
+		array_push($where_clauses, "troubletickets.ticketid = ".$_REQUEST['ticket_id']);
+		$url_string .= "&ticket_id=".$_REQUEST['ticket_id'];
+	}
+	// end: Armando LC<scher 16.08.2005 -> B'searchTicketId
 
 	$where = "";
 	foreach($where_clauses as $clause)                                                                            {
@@ -182,6 +196,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         $search_form=new XTemplate ('modules/HelpDesk/SearchForm.html');
         $search_form->assign("MOD", $current_module_strings);
         $search_form->assign("APP", $app_strings);
+        $search_form->assign("IMAGE_PATH", $image_path);
 	$clearsearch = 'true';
 
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
@@ -190,6 +205,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("VIEWID",$viewid);
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
+	$search_form->assign("CALENDAR_LANG", "en");
+        $search_form->assign("DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 	if($order_by != '') {
 		$ordby = "&order_by=".$order_by;
@@ -202,6 +219,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("ADVANCE_LINK", "index.php?module=HelpDesk&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewid);
 
 	if (isset($name)) $search_form->assign("SUBJECT", $name);
+	if (isset($ticket_id_val)) $search_form->assign("TICKETID", $ticket_id_val);
 	if (isset($contact_name)) $search_form->assign("CONTACT_NAME", $contact_name);
 	//if (isset($priority)) $search_form->assign("PRIORITY", $priority);
 	if (isset($priority)) $search_form->assign("PRIORITY", get_select_options($comboFieldArray['ticketpriorities_dom'], $priority, $clearsearch));
@@ -252,13 +270,16 @@ echo get_form_footer();
 echo '<br>';
 
 }
-
+if($viewid != 0)
+{
+        $CActionDtls = $oCustomView->getCustomActionDetails($viewid);
+}
 // Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden">';
+	<input name="viewname" type="hidden" value="'.$viewid.'">';
 if(isPermitted('HelpDesk',2,'') == 'yes')
 {
         $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
@@ -277,17 +298,17 @@ if(isPermitted('HelpDesk',2,'') == 'yes')
 
 if($viewid == 0)
 {
-$cvHTML = '<span class="bodyText disabled">Edit</span>
+$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
 <span class="sep">|</span>
-<span class="bodyText disabled">Delete</span><span class="sep">|</span>
-<a href="index.php?module=HelpDesk&action=CustomView" class="link">Create View</a>';
+<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
+<a href="index.php?module=HelpDesk&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }else
 {
-$cvHTML = '<a href="index.php?module=HelpDesk&action=CustomView&record='.$viewid.'" class="link">Edit</a>
+$cvHTML = '<a href="index.php?module=HelpDesk&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
 <span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=HelpDesk&record='.$viewid.'" class="link">Delete</a>
+<a href="index.php?module=CustomView&action=Delete&dmodule=HelpDesk&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
 <span class="sep">|</span>
-<a href="index.php?module=HelpDesk&action=CustomView" class="link">Create View</a>';
+<a href="index.php?module=HelpDesk&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 
 $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'

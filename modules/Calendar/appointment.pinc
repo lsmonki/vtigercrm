@@ -283,52 +283,53 @@ function cal_parse_options(&$user,&$teamname) {
  * List all appointments
  * cols > 0  make sperate rows with cols columns for each appointment
  */
-function showApps(&$user,&$obj,$cols,$ext = 0,$rows = 0) {
-  global $tutos, $lang;
+	function showApps(&$user,&$obj,$cols,$ext = 0,$rows = 0) 
+	{
+		global $tutos, $lang;
 
-  $n = 1;
-  $xx = $obj->applist;
-  $x = count($xx);
+		$n = 1;
+		$xx = $obj->applist;
+		$x = count($xx);
 
-  if ( $rows == 0 ) {
-    $rows = $tutos[maxshort];
-  }
-  if ( $rows == -1 ) {
-    $rows = count($obj->applist);
-  }
+		if ( $rows == 0 ) {
+			$rows = $tutos[maxshort];
+		}
+		if ( $rows == -1 ) {
+			$rows = count($obj->applist);
+		}
 
-  @reset ($xx);
-  while ( list ($i,$f) = @each ($xx) ) {
-    if ( $cols > 0 ) {
-      echo "<tr><td colspan=\"". $cols ."\">\n";
-    }
-    if ( ($n >= $rows) && ( $x > $rows ) ) {
-      echo  "  ". $user->layout->theme->getImage(folder,'list') ." ". makelink("app_overview.php?link_id=". $obj->id,sprintf($lang['AllEntries'], count($obj->applist)));
-      if ( $cols > 0 ) {
-        echo "</td></tr>\n";
-      }
-      break;
-    }
-    echo $f->getLink();
-    if ( ($ext == 1) && ($f->product->id != -1) ) {
-      echo "&nbsp;&#8594;&nbsp;". $f->product->getLink();
-    }
-    if ( ($ext == 2) && ($f->visitor != -1) ) {
-      echo "&nbsp;";
-      if ( $f->outside ) {
-        echo $lang['VisitAt'] .":&nbsp;";
-      } else {
-        echo $lang['VisitFrom'] .":&nbsp;";
-      }
-      echo $f->visitor->getLink();
-    }
-    echo "<br />\n";
-    if ( $cols > 0 ) {
-      echo "</td></tr>\n";
-    }
-    $n++;
-  }
-}
+		@reset ($xx);
+		while ( list ($i,$f) = @each ($xx) ) {
+			if ( $cols > 0 ) {
+				echo "<tr><td colspan=\"". $cols ."\">\n";
+			}
+			if ( ($n >= $rows) && ( $x > $rows ) ) {
+				echo  "  ". $user->layout->theme->getImage(folder,'list') ." ". makelink("app_overview.php?link_id=". $obj->id,sprintf($lang['AllEntries'], count($obj->applist)));
+				if ( $cols > 0 ) {
+					echo "</td></tr>\n";
+				}
+				break;
+			}
+			echo $f->getLink();
+			if ( ($ext == 1) && ($f->product->id != -1) ) {
+				echo "&nbsp;&#8594;&nbsp;". $f->product->getLink();
+			}
+			if ( ($ext == 2) && ($f->visitor != -1) ) {
+				echo "&nbsp;";
+				if ( $f->outside ) {
+					echo $lang['VisitAt'] .":&nbsp;";
+				} else {
+					echo $lang['VisitFrom'] .":&nbsp;";
+				}
+				echo $f->visitor->getLink();
+			}
+			echo "<br />\n";
+			if ( $cols > 0 ) {
+				echo "</td></tr>\n";
+			}
+			$n++;
+		}
+	}
 
 
 /**
@@ -406,98 +407,111 @@ class appointment extends tutos_base {
   }
 
 // srini read_result
-  function read_result ($val_array, $pos=-1) {
-  //  print("<br>GS --> read_result pos=".$pos);
-   // print_r($val_array);
-    if($pos!=-1) return;
-    //print("GS --> continuing");
-    $fmt_sthr='';
-    $fmt_stm='';
-    list($sthr,$stmn,$stsc) = split(":",$val_array["time_start"]);
-    if($sthr <= 9 && strlen(trim($sthr)) < 2) 
-    {
-	$fmt_sthr= '0'.$sthr;
-    }
-    else
-    {
-	$fmt_sthr= $sthr;
-    }
-    if($stmn <= 9 && strlen(trim($stmn)) < 2) 
-    {
-	$fmt_stm= '0'.$stmn;
-    }
-    else
-    {
-	$fmt_stm = $stmn;
-    }
-    $startdate = $val_array["date_start"] .' ' . $fmt_sthr .":" . $fmt_stm .":00";
-        
-    //end time calculation
-    $endhr = 0;
-    $endmin = $stmn + $val_array["duration_minutes"];
-    if($endmin <= 9) $endmin= '0'.$endmin;
-    if($endmin >= 60)
-    {
-	$endmin = $endmin%60;
-        if($endmin <= 9) $endmin= '0'.$endmin;
-        $endhr++;
-    }
-    $endhr = $endhr + $sthr + $val_array["duration_hours"];
-    if($endhr <= 9) $endhr= '0'.$endhr;
-    if ($endhr > 23) $endhr = 23;
-    $enddate = $val_array["date_start"] .' ' . $endhr .":" . $endmin .":00";
-    //
-    $this->t_ignore    = $val_array["t_ignore"];
-    $this->descr       = $val_array["subject"];
-    $this->start       = new DateTime($startdate);
-// For  getting the account name by Fredy
-    $this->account_name = $val_array["accountname"];    // fk
-    $this->account_id   = $val_array["accountid"];      // fk
-    $this->eventstatus  = $val_array["eventstatus"];    // fk
-// For  getting the account name by Fredy
-    $this->end         = new DateTime($enddate);
-    $this->subject     = $val_array["subject"];
-    $this->module_name = $val_array["activitytype"];
-    $this->record_id   = $val_array["activityid"];
-    #$this->creator = getObject($this->dbconn,$r->get($pos, "creator"));
-    $obj->creator->id = $val_array["smownerid"];
-    #$this->creator = $val_array["creator"];
-    $this->creator = getUserName($val_array["smownerid"]);
-    //print("GS -> subject=".$this->subject);
+  	function read_result ($val_array, $pos=-1) 
+	{
+		//  print("<br>GS --> read_result pos=".$pos);
+		// print_r($val_array);
+		if($pos!=-1) return;
+		//print("GS --> continuing");
+		$fmt_sthr='';
+		$fmt_stm='';
+		list($sthr,$stmn,$stsc) = split(":",$val_array["time_start"]);
+		if($sthr <= 9 && strlen(trim($sthr)) < 2) 
+		{
+			$fmt_sthr= '0'.$sthr;
+		}
+		else
+		{
+			$fmt_sthr= $sthr;
+		}
+		if($stmn <= 9 && strlen(trim($stmn)) < 2) 
+		{
+			$fmt_stm= '0'.$stmn;
+		}
+		else
+		{
+			$fmt_stm = $stmn;
+		}
+		$startdate = $val_array["date_start"] .' ' . $fmt_sthr .":" . $fmt_stm .":00";
 
-    $this->outside     = $val_array["location"];
+		//end time calculation
+		$endhr = 0;
+		$endmin = $stmn + $val_array["duration_minutes"];
+		if($endmin <= 9) $endmin= '0'.$endmin;
+		if($endmin >= 60)
+		{
+			$endmin = $endmin%60;
+			if($endmin <= 9) $endmin= '0'.$endmin;
+			$endhr++;
+		}
+		$endhr = $endhr + $sthr + $val_array["duration_hours"];
+		if($endhr <= 9) $endhr= '0'.$endhr;
+		if ($endhr > 23) $endhr = 23;
+		$enddate = $val_array["date_start"] .' ' . $endhr .":" . $endmin .":00";
+		//
+		$this->t_ignore    = $val_array["t_ignore"];
+		$this->descr       = $val_array["subject"];
+		$this->start       = new DateTime($startdate);
+		// For  getting the account name by Fredy
+		$this->account_name = $val_array["accountname"];    // fk
+		$this->account_id   = $val_array["accountid"];      // fk
+		$this->eventstatus  = $val_array["eventstatus"];    // fk
+		// For  getting the account name by Fredy
+		$this->end         = new DateTime($enddate);
+		$this->subject     = $val_array["subject"];
+		$this->module_name = $val_array["activitytype"];
+		$this->record_id   = $val_array["activityid"];
+	#$this->creator = getObject($this->dbconn,$r->get($pos, "creator"));
+		$obj->creator->id = $val_array["smownerid"];
 
-    # Checks
-    if ( $this->remembered == "" ) {
-      $this->remembered  = 0;
-    }
-    if ( ($this->repeat == "") || ( $this->repeat > 4 ) ) {
-      $this->repeat = APP_NOREP;
-    }
-    # This should work with different timezones ????
-    # but we do not exactly know what date !!
-    $x1 = new DateTime();
-    $x2 = new DateTime();
-    $x1->setDateTimeTS($this->start->ts_def);
-    $x2->setDateTimeTS($this->end->ts_def);
-    if ( $this->t_ignore   == "0" ) {
-      if ( ( $x1->hour == $x2->hour )
-        && ( $x1->min  == $x2->min  )
-        && ( $x1->min    == "00" )
-        && ( $x1->hour   == "00" )
-      ) {
-        $this->t_ignore = 1;
-      } else {
-        $this->t_ignore = 0;
-      }
-    }
-	/*$this->read_custom_result($r,$pos,"appointment1");
-    parent::read_result($r,$pos);
-    $this->read_participants();*/
-    parent::read_result($val_array);
-    //print_r($val_array);
-    return;
-  } 
+		#$this->creator = $val_array["creator"];
+		$this->creator = getUserName($val_array["smownerid"]);
+
+		//For displaying the group name in the calendar -Jaguar
+		if($val_array["smownerid"]==0)
+		{
+			$this->assignedto ="groupevent";
+			$this->creator = $val_array["groupname"];
+		}
+
+		//print("GS -> subject=".$this->subject);
+
+		$this->outside     = $val_array["location"];
+
+# Checks
+		if ( $this->remembered == "" ) {
+			$this->remembered  = 0;
+		}
+		if ( ($this->repeat == "") || ( $this->repeat > 4 ) ) {
+			$this->repeat = APP_NOREP;
+		}
+
+# This should work with different timezones ????
+# but we do not exactly know what date !!
+
+		$x1 = new DateTime();
+		$x2 = new DateTime();
+		$x1->setDateTimeTS($this->start->ts_def);
+		$x2->setDateTimeTS($this->end->ts_def);
+		if ( $this->t_ignore   == "0" ) {
+			if ( ( $x1->hour == $x2->hour )
+					&& ( $x1->min  == $x2->min  )
+					&& ( $x1->min    == "00" )
+					&& ( $x1->hour   == "00" )
+			   ) {
+				$this->t_ignore = 1;
+			} else {
+				$this->t_ignore = 0;
+			}
+		}
+
+		/*$this->read_custom_result($r,$pos,"appointment1");
+		  parent::read_result($r,$pos);
+		  $this->read_participants();*/
+		parent::read_result($val_array);
+		//print_r($val_array);
+		return;
+	} 
   /**
    * read a list of the participants of this app
    */
@@ -550,20 +564,21 @@ class appointment extends tutos_base {
   /**
    * delete the appointment in the database
    */
-  function delete() {
-    global $current_user;
+  	function delete() 
+	{
+		global $current_user;
 
-    $msg = "";
+		$msg = "";
 
-    $q = "DELETE FROM ". $this->tablename ." WHERE id = ". $this->id;
-    $this->dbconn->Exec($q);
+		$q = "DELETE FROM ". $this->tablename ." WHERE id = ". $this->id;
+		$this->dbconn->Exec($q);
 
-    $q = "DELETE FROM ". $this->tablename2 ." WHERE app_id = ". $this->id;
-    $this->dbconn->Exec($q);
+		$q = "DELETE FROM ". $this->tablename2 ." WHERE app_id = ". $this->id;
+		$this->dbconn->Exec($q);
 
-    $msg .= parent::delete();
-    return $msg;
-  }
+		$msg .= parent::delete();
+		return $msg;
+  	}
   /**
    * Replaces the strings in the mail body
    */
@@ -1313,150 +1328,195 @@ class appointment extends tutos_base {
   /**
    * put aout the formatted appointment
    */
-  function formatted () {
-    global $lang,$tutos,$current_user,$theme;
+  	function formatted () 
+	{
+		global $lang,$tutos,$current_user,$theme;
 
-    $theme_path="themes/".$theme."/";
-    $image_path=$theme_path."images/";
+		$theme_path="themes/".$theme."/";
+		$image_path=$theme_path."images/";
 
-    if ( $this->mod_allow == 3 ) {
-      $class = "privapp";
-    } else {
-      $class = "app".$this->outside;
-    }
-	//included from Fredy's patch 
-    if ($this->eventstatus == 'Held') {
-            $class = "heldmeeting";
-    }
-	
-    if ( $this->repeat != APP_NOREP ) {
-      $start = $this->start->getTime();
-      $end = $this->end->getTime();
-    } else {
-      if ( $this->s_out == 1 ) {
-        $start = "&lt;&lt;";
-      } else {
-        $start = $this->start->getTime();
-      }
-      if ( $this->e_out == 1 ) {
-        $end = "&gt;&gt;";
-      } else {
-        $end = $this->end->getTime();
-      }
-    }
-    if ($start == $end) {
-      if ( $this->t_ignore != 0 ) {
-        $duration = "&gt;&gt;%s&lt;&lt;";
-      } else {
-        $duration = "%s ". $start;
-      }
-    } else {
-      if ( $this->t_ignore != 0 ) {
-        $duration = "&lt;&lt;%s&gt;&gt;";
-      } else {
-        $duration = "%s ". $start ." - ". $end;
-      }
-    }
-    if ( $this->repeat != APP_NOREP ) {
-      $duration = sprintf($duration,"®");
-    } else {
-      $duration = sprintf($duration," ");
-    }
+		if ( $this->mod_allow == 3 ) 
+		{
+			$class = "privapp";
+		} 
+		else 
+		{
+			$class = "app".$this->outside;
+		}
+		//included from Fredy's patch 
+		if ($this->eventstatus == 'Held') 
+		{
+			$class = "heldmeeting";
+		}
+		if ($this->assignedto =="groupevent")
+		{
+			$class = "groupevent";	
+		}	
 
-    echo "  <tr>\n";
-    echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" colspan=\"3\"><b> ". $this->getLink($duration) ."</b></td>\n";
+		if ( $this->repeat != APP_NOREP ) 
+		{
+			$start = $this->start->getTime();
+			$end = $this->end->getTime();
+		} 
+		else 
+		{
+			if ( $this->s_out == 1 ) 
+			{
+				$start = "&lt;&lt;";
+			} 
+			else 
+			{
+				$start = $this->start->getTime();
+			}
+			if ( $this->e_out == 1 ) 
+			{
+				$end = "&gt;&gt;";
+			}
+			else 
+			{
+				$end = $this->end->getTime();
+			}
+		}
+		if ($start == $end) 
+		{
+			if ( $this->t_ignore != 0 ) 
+			{
+				$duration = "&gt;&gt;%s&lt;&lt;";
+			} 
+			else 
+			{
+				$duration = "%s ". $start;
+			}
+		}
+		else 
+		{
+			if ( $this->t_ignore != 0 ) 
+			{
+				$duration = "&lt;&lt;%s&gt;&gt;";
+			}
+			else 
+			{
+				$duration = "%s ". $start ." - ". $end;
+			}
+		}
+		if ( $this->repeat != APP_NOREP ) 
+		{
+			$duration = sprintf($duration,"®");
+		} 
+		else 
+		{
+			$duration = sprintf($duration," ");
+		}
 
- 	//added from Fredy's patch	
-   echo "  <td class=\"". $class ."\" align=\"right\">". $this->creator ."&nbsp;</td>\n";
-    #echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"right\"><b>". $this->getLocation() ."</b></td>\n";
-    #echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"right\"><b>". $this->outside ."</b></td>\n";
-    echo "  </tr>\n";
+		echo " <tr>\n";
+		echo " <td nowrap=\"nowrap\" class=\"". $class ."\" colspan=\"3\"><b>". $this->getLink($duration) ."</b></td>\n";
 
-	//added account names to the calendar entry given by Fredy
-    if ($this->account_id != null) {
-        echo "  <tr>\n";
-            echo " <td class=\"". $class ."\" colspan=\"4\"><b> "."<a href=index.php?module=Accounts&action=DetailView&record="
-            .$this->account_id.">".$this->account_name."</a></b></td>\n";
-            echo "  </tr>\n";
-    }
+		//added from Fredy's patch	
+		echo "  <td class=\"". $class ."\" align=\"right\">". $this->creator ."&nbsp; </td>\n";
+		#echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"right\"><b>". $this->getLocation() ."</b></td>\n";
+		#echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"right\"><b>". $this->outside ."</b></td>\n";
+		echo "  </tr>\n";
+
+		//added account names to the calendar entry given by Fredy
+		if ($this->account_id != null) 
+		{
+			echo "  <tr>\n";
+			echo " <td class=\"". $class ."\" colspan=\"4\"><b> "."<a href=index.php?module=Accounts&action=DetailView&record=".$this->account_id.">".$this->account_name."</a></b></td>\n";
+			echo "  </tr> \n";
+		}
 
 
-    $myself = false;
-    foreach ( $this->participant as $i => $fp) {
-      $fp = &$this->participant[$i];
-      echo "  <tr>\n";
-      if ( ($this->trace == 1) && ( ($fp->gettype() == "address") || ($fp->gettype() == "user") )) {
-        $cols = 3;
-      } else {
-        $cols = 4;
-      }
-      if ( ($fp->gettype() == "address") || ($fp->gettype() == "user") ) {
-        echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"left\" \"  width=\"100%\" colspan=\"". $cols ."\">";
-        /* for adresses show link with first + last name */
-        echo $fp->getLink( $fp->getShortName());
-        if ($fp->id == $current_user->id) {
-          $myself = true;
-        }
-      } else if ( $fp->gettype() == "team" ) {
-        echo "   <td class=\"". $class ."\" width=\"100%\" colspan=\"". $cols ."\">";
-        /* for teams show link name */
-        echo $fp->getLink();
-      } else {
-        echo "   <td class=\"". $class ."\" width=\"100%\" colspan=\"". $cols ."\">";
-        echo gettype($fp);
-      }
-      echo "</td>\n";
-      if ( ($this->trace == 1) && ( ($fp->gettype() == "address") || ($fp->gettype() == "user") ) ) {
-        $s = sprintf("text%d",$this->participant_state[$i]);
-        echo "   <td class=\"". $class ."\" align=\"right\"><span class=\"". $s ."\">";
-        if ( $fp->id == $current_user->id ) {
-          echo makelink("app_vote.php?id=". $this->id ."&adr_id=". $fp->id,$lang['AppState'][$this->participant_state[$i]],$lang['AppVoteInfo']);
-        } else {
-          echo $lang['AppState'][$this->participant_state[$i]];
-        }
-        echo "</span></td>\n";
-      }
-      echo "  </tr>\n";
-      unset($fp);
-    }
- 
-    //Added for description 
-      $descr = eregi_replace("\n","<br />",$this->descr);
-      if ($descr != "" ) {
-        echo "  <tr><td width=\"16\" align=\"right\" valign=\"top\"><img src=\""
-		.$image_path."".$this->module_name."s.gif\" border=\"0\">&nbsp;</td><td class=\""
-		. $class ."\" colspan=\"2\">". urlReplace($descr) ."&nbsp;</td></tr>\n";
-	//echo "  <tr><td class=\"". $class ."\" colspan=\"3\">". $this->creator ."&nbsp;</td></tr>\n";
+    		$myself = false;
+		foreach ( $this->participant as $i => $fp) 
+		{
+		      $fp = &$this->participant[$i];
+		      echo "  <tr>\n";
+		      	if ( ($this->trace == 1) && ( ($fp->gettype() == "address") || ($fp->gettype() == "user") )) 	
+			{
+		      	  	$cols = 3;
+		      	}
+		 	else 
+			{
+			        $cols = 4;
+			}
+      			if ( ($fp->gettype() == "address") || ($fp->gettype() == "user") ) 
+			{
+				echo "   <td nowrap=\"nowrap\" class=\"". $class ."\" align=\"left\" \"  width=\"100%\" colspan=\"". $cols ."\">";
+				/* for adresses show link with first + last name */
+				echo $fp->getLink( $fp->getShortName());
+				if ($fp->id == $current_user->id) 
+				{
+					$myself = true;
+				}
+			} 
+			else if ( $fp->gettype() == "team" ) 
+			{
+				echo "   <td class=\"". $class ."\" width=\"100%\" colspan=\"". $cols ."\">";
+				/* for teams show link name */
+				echo $fp->getLink();
+			}
+			else 
+			{
+				echo "   <td class=\"". $class ."\" width=\"100%\" colspan=\"". $cols ."\">";
+				echo gettype($fp);
+			}
+			echo "</td>\n";
+			if ( ($this->trace == 1) && ( ($fp->gettype() == "address") || ($fp->gettype() == "user") ) ) 	
+			{
+				$s = sprintf("text%d",$this->participant_state[$i]);
+				echo "   <td class=\"". $class ."\" align=\"right\"><span class=\"". $s ."\">";
+				if ( $fp->id == $current_user->id ) 
+				{
+					echo makelink("app_vote.php?id=". $this->id ."&adr_id=". $fp->id,$lang['AppState'][$this->participant_state[$i]],$lang['AppVoteInfo']);
+				}
+				else 
+				{
+					echo $lang['AppState'][$this->participant_state[$i]];
+				}
+				echo "</span></td>\n";
+			}
+			echo "  </tr>\n";
+			unset($fp);
+		}
 
-      }
+		//Added for description 
+		$descr = eregi_replace("\n","<br />",$this->descr);
+		if ($descr != "" ) {
+			echo "  <tr><td colspan=2 class=\"".$class."\" width=\"16\" align=\"right\" valign=\"top\"><img src=\"".$image_path."".$this->module_name."s.gif\" border=\"0\">&nbsp;</td><td class=\"". $class ."\" colspan=\"2\">". urlReplace($descr) ."&nbsp;</td></tr>\n";
+			//echo "  <tr><td class=\"". $class ."\" colspan=\"3\">". $this->creator ."&nbsp;</td></tr>\n";
 
-   //
+		}
 
-    if ( ($tutos[applocdesc][$this->outside] == 1) 
-         || ( ($myself == true) && ($tutos[applocdesc][$this->outside] == 2))
-       ) {
-      $descr = eregi_replace("\n","<br />",$this->descr);
-      if ($descr != "" ) {
-        echo "  <tr><td class=\"". $class ."\" colspan=\"3\">". urlReplace($descr) ."</td></tr>\n";
-      }
-      if ( $this->visitor != -1 ) {
-        echo "  <tr><td class=\"". $class ."\" colspan=\"3\">";
-        if ( $this->outside ) {
-          echo $lang['VisitAt'] .":";
-        } else {
-          echo $lang['VisitFrom'] .":";
-        }
-        echo "<br />". $this->visitor->getLink() ."</td></tr>\n";
-      }
+		if ( ($tutos[applocdesc][$this->outside] == 1) 
+				|| ( ($myself == true) && ($tutos[applocdesc][$this->outside] == 2))) 
+		{
+			$descr = eregi_replace("\n","<br />",$this->descr);
+			if ($descr != "" ) 
+			{
+				echo "  <tr><td class=\"". $class ."\" colspan=\"3\"> ". urlReplace($descr) ."</td></tr>\n";
+			}
+			if ( $this->visitor != -1 ) 
+			{
+				echo "  <tr><td class=\"". $class ."\" colspan=\"3\">";
+				if ( $this->outside ) 
+				{
+					echo $lang['VisitAt'] .":";
+				}
+				else 
+				{
+					echo $lang['VisitFrom'] .":";
+				}
+				echo "<br />". $this->visitor->getLink() ."</td></tr>\n";
+			}
 
-      /*product::small_infolist($current_user,$this,3,$class);
-      foreach($tutos[activemodules] as $i => $f) {
-        $x = new $tutos[modules][$f][name]($this->dbconn);
-        $x->small_infolist($current_user,$this,3,$class);
-      }*/
-    }
-    return;
-  }
+			/*product::small_infolist($current_user,$this,3,$class);
+			  foreach($tutos[activemodules] as $i => $f) {
+			  $x = new $tutos[modules][$f][name]($this->dbconn);
+			  $x->small_infolist($current_user,$this,3,$class);
+			  }*/
+		}
+		return;
+	}
   /**
    * get the timespan
    */
@@ -1637,18 +1697,19 @@ class appointment extends tutos_base {
   /**
    * create a link to a search page
    */
-  function getSelectLink (&$user,$text = "") {
-    global $lang,$tutos;
-    #if ( ! $user->feature_ok(usecalendar,PERM_SEL) ) {
-      return;
-    #}
-    return array( url => "app_select.php",
-                  image => $user->layout->theme->getImage(appointment::getHtmlIcon(),'menu'),
-                  text => ($text == "" ?  $lang['Search']: $text),
-                  info => $lang['SearchForApp'],
-                  category => array("search","app")
-                );
-  }
+  	function getSelectLink (&$user,$text = "") 
+	{
+		global $lang,$tutos;
+		#if ( ! $user->feature_ok(usecalendar,PERM_SEL) ) 	{
+			return;
+		#}
+		return array( url => "app_select.php",
+			image => $user->layout->theme->getImage(appointment::getHtmlIcon(),'menu'),
+			text => ($text == "" ?  $lang['Search']: $text),
+			info => $lang['SearchForApp'],
+			category => array("search","app")
+		    );
+	}
   /**
    * Read a list of appointments
    */
@@ -1821,255 +1882,304 @@ class appointment extends tutos_base {
    * given object
    * from and to are TUTOS DateTime objects
    */
-  function readCal(&$obj, &$from, &$to) {
-    global $msg,$current_user,$table,$db;
+  	function readCal(&$obj, &$from, &$to) 
+	{
+		global $msg,$current_user,$table,$db;
 
-    //if ( ! $current_user->feature_ok(usecalendar,PERM_SEE) ) {
-    //  return;
-    //}
+		//if ( ! $current_user->feature_ok(usecalendar,PERM_SEE) ) {
+		//  return;
+		//}
 
-    $from->setDateTime($from->getYYYYMMDD());
-    $to->setDateTime($to->getYYYYMMDD());
+		$from->setDateTime($from->getYYYYMMDD());
+		$to->setDateTime($to->getYYYYMMDD());
 
-    if ($from->getDate() == $to->getDate()) {
-      $to->addDays(1);
-    }
-    
-/*
-    $x1 = DateTime1($from);
-    $x2 = DateTime1($to);
-*/
-    $x1 = sprintf ("%04d-%02d-%02d %02d:%02d:%02d",$from->year,$from->month,$from->day,$from->hour,$from->min,$from->sec);
+		if ($from->getDate() == $to->getDate()) 
+		{
+			$to->addDays(1);
+		}
 
-    $x2 = sprintf ("%04d-%02d-%02d %02d:%02d:%02d",$to->year,$to->month,$to->day,$to->hour,$to->min,$to->sec);
+		/*
+		   $x1 = DateTime1($from);
+		   $x2 = DateTime1($to);
+		 */
+		$x1 = sprintf ("%04d-%02d-%02d %02d:%02d:%02d",$from->year,$from->month,$from->day,$from->hour,$from->min,$from->sec);
 
-    list($sx1,$sx1time) = split(" ",$x1);
-    list($sx2,$sx2time) = split(" ",$x2);
+		$x2 = sprintf ("%04d-%02d-%02d %02d:%02d:%02d",$to->year,$to->month,$to->day,$to->hour,$to->min,$to->sec);
 
-    $from->ts_def -= $current_user->offset;
-    $to->ts_def -= $current_user->offset;
+		list($sx1,$sx1time) = split(" ",$x1);
+		list($sx2,$sx2time) = split(" ",$x2);
 
-// Query created by Raj
-    #
-    # First query ( Get Call appointments )
-    #
-    #
-	// query extended for fetching the accountname from Fredy's patch	
-    $q=" Select activity.*,crmentity.*,account.accountname,account.accountid FROM ";
-    $q.=" activity inner join crmentity on activity.activityid = crmentity.crmid left join"; 
-    $q.=" cntactivityrel on activity.activityid = cntactivityrel.activityid left join "; 
-    $q.=" contactdetails on cntactivityrel.contactid = contactdetails.contactid left join"; 
-    $q.=" account  on contactdetails.accountid = account.accountid";
-    $q.=" inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid"; //  When adding the users to the event then to show it in the users Calendar of particular user - Jaguar	
-    $q.=" WHERE ";
-    $q.=" activity.activitytype in ('Call','Meeting') AND ";
-    if(!is_admin($current_user))
-    {
-	$q .= " ( ";
-    }
+		$from->ts_def -= $current_user->offset;
+		$to->ts_def -= $current_user->offset;
+
+		// Query created by Raj
+		#
+		# First query ( Get Call appointments )
+		#
+		#
+		// query extended for fetching the accountname from Fredy's patch	
+		$q=" Select activity.*,crmentity.*,account.accountname,account.accountid,activitygrouprelation.groupname FROM ";
+		$q.=" activity inner join crmentity on activity.activityid = crmentity.crmid ";
+		$q.=" left outer join activitygrouprelation on activitygrouprelation.activityid=activity.activityid";	
+		$q.=" left join cntactivityrel on activity.activityid = cntactivityrel.activityid left join "; 
+		$q.=" contactdetails on cntactivityrel.contactid = contactdetails.contactid left join"; 
+		$q.=" account  on contactdetails.accountid = account.accountid";
+		$q.=" inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid"; //  When adding the users to the event then to show it in the users Calendar of particular user - Jaguar	
+		$q.=" WHERE ";
+		$q.=" activity.activitytype in ('Call','Meeting') AND ";
+		if(!is_admin($current_user))
+		{
+			$q .= " ( ";
+		}
+
+		$q.=" ((activity.date_start < '". $sx2 ."' AND activity.date_start >= '". $sx1."')";
+		$q.=" and (activity.date_start like (activity.due_date) or (activity.date_start != '0000-00-00' ))";//query modified by Jag
+		#$q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
+		#$q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
+		#$q .= " OR (date_start < ". $sx1 .")";
 	
-    $q.=" ((activity.date_start < '". $sx2 ."' AND activity.date_start >= '". $sx1."')";
-    $q.=" and (activity.date_start like (activity.due_date) or (activity.date_start != '0000-00-00' ))";//query modified by Jag
-    #$q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
-    #$q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
-    #$q .= " OR (date_start < ". $sx1 .")";
+		if(!is_admin($current_user))
+		{
+			$q .= "  ) AND (crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."') ";
+		}
+		$q .= " AND crmentity.deleted = 0)";
+		$q .= " ORDER by activity.date_start,activity.time_start";
+		$r = $this->db->query($q);
+		$n = $this->db->getRowCount($r);
+		$a = 0;
+		// print("GS --> ".$n." q=".$q);
 
-    if(!is_admin($current_user))
-    {
-	$q .= "  ) AND (crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."') ";
-    }
-    $q .= " AND crmentity.deleted = 0)";
-    $q .= " ORDER by activity.date_start,activity.time_start";
+		while ( $a < $n ) 
+		{
+			$o = &new appointment();
+			$result = $this->db->fetchByAssoc($r);
+			//print_r($result);
+			//$o->read_result($r,$a);
+			$o->read_result($result);
+			$a++;
+			if ( $o->see_ok() ) { 
+				/* Get all participants */
+				//$o->read_participants();
+				//print("GS --> see");
+				$obj->callist[$o->record_id] = &$o;
+			}
+			unset($o);
+		}
+		//
 
-    $r = $this->db->query($q);
-    $n = $this->db->getRowCount($r);
-    $a = 0;
-   // print("GS --> ".$n." q=".$q);
-   
-    while ( $a < $n ) {
-      $o = &new appointment();
-      $result = $this->db->fetchByAssoc($r);
-      //print_r($result);
-      //$o->read_result($r,$a);
-	$o->read_result($result);
-      $a++;
-      if ( $o->see_ok() ) { 
-        /* Get all participants */
-        //$o->read_participants();
-        //print("GS --> see");
-        $obj->callist[$o->record_id] = &$o;
-      }
-      unset($o);
-    }
-//
+		// Query created by Jaguar
+		#
+		# Second query ( Get Recurring appointments )
+		#
+		#
+		$q = "SELECT activity.activityid, activity.subject, activity.activitytype, activity.description, activity.time_start, activity.duration_hours, activity.duration_minutes, activity.priority, activity.location,activity.eventstatus, crmentity.*, recurringevents.recurringid, recurringevents.recurringdate as date_start ,recurringevents.recurringtype,account.accountname,account.accountid,activitygrouprelation.groupname from activity inner join crmentity on activity.activityid = crmentity.crmid inner join recurringevents on activity.activityid=recurringevents.activityid left outer join activitygrouprelation on activitygrouprelation.activityid=activity.activityid left join cntactivityrel on activity.activityid = cntactivityrel.activityid left join contactdetails on cntactivityrel.contactid = contactdetails.contactid left join account  on contactdetails.accountid = account.accountid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid";
 
-// Query created by Jaguar
-    #
-    # Second query ( Get Recurring appointments )
-    #
-    #
-   $q = "SELECT activity.activityid, activity.subject, activity.activitytype, activity.description, activity.time_start, activity.duration_hours, activity.duration_minutes, activity.priority, activity.location,activity.eventstatus, crmentity.*, recurringevents.recurringid, recurringevents.recurringdate as date_start ,recurringevents.recurringtype,account.accountname,account.accountid from activity inner join crmentity on activity.activityid = crmentity.crmid inner join recurringevents on activity.activityid=recurringevents.activityid  left join cntactivityrel on activity.activityid = cntactivityrel.activityid left join contactdetails on cntactivityrel.contactid = contactdetails.contactid left join account  on contactdetails.accountid = account.accountid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid";
+		$q.=" where ( activity.activitytype in ('Call','Meeting') AND "; 
+		if(!is_admin($current_user))
+		{
+			$q .= " ( ";
+		}
+		$q .= "  (recurringdate < '". $sx2 ."' AND recurringdate >= '". $sx1 . "') ";
+		if(!is_admin($current_user))
+		{
+			$q .= " ) AND (crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."' ) ";
+		}
+		$q .= " AND crmentity.deleted = 0 )" ; 
+		$q .= " ORDER by recurringid";
+		$r = $this->db->query($q);
+		$n = $this->db->getRowCount($r);
+		$a = 0;
+		//   print("<br>GS --> ".$n." q=".$q);
+		while ( $a < $n ) 
+		{
+			$o = &new appointment();
+			$result = $this->db->fetchByAssoc($r);
+			//print_r($result);
+			//$o->read_result($r,$a);
+			$o->read_result($result);
+			$a++;
+			if ( $o->see_ok() ) { 
+				/* Get all participants */
+				//$o->read_participants();
+				//print("GS --> see");
+				$obj->callist[$o->record_id] = &$o;
+			}
+			unset($o);
+		}
 
-   $q.=" where ( activity.activitytype in ('Call','Meeting') AND "; 
-    if(!is_admin($current_user))
-    {
-	$q .= " ( ";
-    }
-    $q .= "  (recurringdate < '". $sx2 ."' AND recurringdate >= '". $sx1 . "') ";
-    if(!is_admin($current_user))
-    {
-	$q .= " ) AND (crmentity.smownerid ='".$current_user->id."' and salesmanactivityrel.smid = '".$current_user->id."' ) ";
-    }
-    $q .= " AND crmentity.deleted = 0 )" ; 
-    $q .= " ORDER by recurringid";
-    $r = $this->db->query($q);
-    $n = $this->db->getRowCount($r);
-    $a = 0;
- //   print("<br>GS --> ".$n." q=".$q);
-    while ( $a < $n ) {
-      $o = &new appointment();
-      $result = $this->db->fetchByAssoc($r);
-      //print_r($result);
-      //$o->read_result($r,$a);
-	$o->read_result($result);
-      $a++;
-      if ( $o->see_ok() ) { 
-        /* Get all participants */
-        //$o->read_participants();
-        //print("GS --> see");
-        $obj->callist[$o->record_id] = &$o;
-      }
-      unset($o);
-    }
+		//
 
-//
+		// Query created by Jagaur
+		#  query ( Get Group activities in the calendar )
+		#
+		//if(!is_admin($current_user))
+		//{
+		$q=" Select activity.*,crmentity.*,account.accountname,account.accountid,activitygrouprelation.groupname FROM ";
+		$q.=" activity inner join crmentity on activity.activityid = crmentity.crmid "; 
+		$q.=" inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid"; 
+		$q.=" inner join users2group on users2group.groupname=activitygrouprelation.groupname "; 
+		$q.=" left join cntactivityrel on activity.activityid = cntactivityrel.activityid left join "; 
+		$q.=" contactdetails on cntactivityrel.contactid = contactdetails.contactid left join"; 
+		$q.=" account  on contactdetails.accountid = account.accountid";
+		$q.=" inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid";
+		$q.=" WHERE ";
+		$q.=" activity.activitytype in ('Call','Meeting') AND ";
 
+		$q.=" ((activity.date_start < '". $sx2 ."' AND activity.date_start >= '". $sx1."')";
+		$q.=" and (activity.date_start like (activity.due_date) or (activity.date_start != '0000-00-00' ))";//query modified by Jag
 
-/*    #
-    # First query ( non repeating appointments )
-    #
-    $q = "SELECT * FROM ". $this->tablename." WHERE ";
-    $q .= " (";
-    if(!is_admin($current_user))
-    {
-	$q .= " ( ";
-    }
-    $q .= "  (a_start < ". $x2 ." AND a_start >= ". $x1 .")";
-    $q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
-    $q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
-    if(!is_admin($current_user))
-    {
-	$q .= " ) AND ( creator = '".$current_user->id."' ) ";
-    }
-    $q .= " )";
-    $q .= " ORDER by a_start";
+		$q .= " AND crmentity.deleted = 0)";
+		$q .= " and crmentity.smownerid=0 and users2group.userid=".$current_user->id;	
+		$q .= " ORDER by activity.date_start,activity.time_start";
 
-	//print("GS --> allowed ".is_admin($current_user)." q=".$q);
-    # always at the end of query
-   # check_dbacl( $q, $current_user->id);
-   
-	// srini cal appoint 
-    $r = $this->db->query($q);
-    $n = $this->db->getRowCount($r);
-    $a = 0;
-    //print("GS --> ".$n." q=".$q);
-    while ( $a < $n ) {
-      $o = &new appointment();
-      $result = mysql_fetch_assoc($r);
-      //$o->read_result($r,$a);
-	$o->read_result($result);
-      $a++;
-      if ( $o->see_ok() ) { */
-        /* Get all participants */
-    /*    //$o->read_participants();
-        //print("GS --> see");
-        $obj->callist[$o->id] = &$o;
-      }
-      unset($o);
-    }
-    //$r->free();
+		//echo $q;
+		$r = $this->db->query($q);
+		$n = $this->db->getRowCount($r);
+		$a = 0;
+		// print("GS --> ".$n." q=".$q);
 
-*/
-    $x = new DateTime();
-    $x->setDateTimeTS($from->ts);
+		while ( $a < $n ) {
+			$o = &new appointment();
+			$result = $this->db->fetchByAssoc($r);
+			$o->read_result($result);
+			$a++;
+			if ( $o->see_ok() ) { 
+				$obj->callist[$o->record_id] = &$o;
+			}
+			unset($o);
+		}
+		//}
+		//
 
-    $wd =  "'". Date("w",$x->getTimeStamp()) ."'";
-    $md =  "'". Date("j",$x->getTimeStamp()) ."'";
-    $ymd = "'". Date("j/n",$x->getTimeStamp()) ."'";
-    $x->addDays(1);
-    $pre = ",";
-    while ( $x->getTimeStamp() < $to->getTimeStamp() ) {
-      $wd .=  $pre ."'". Date("w",$x->getTimeStamp()) ."'";
-      $md .=  $pre ."'". Date("j",$x->getTimeStamp()) ."'";
-      $ymd .= $pre ."'". Date("j/n",$x->getTimeStamp()) ."'";
-      $x->addDays(1);
-    }
-    #
-    # Second query ( repeating appointments w/o end )
-    #
-/*    $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
-    $q .= " r_ignore = 1 AND (";
-    $q .= "   ( repeat = 1 AND  r_arg in (". $wd .") )";
-    $q .= " OR ( repeat = 2 AND  r_arg in (". $md .") )";
-    $q .= " OR ( repeat = 3 AND  r_arg in (". $ymd .") )";
-    $q .= " OR ( repeat = 4 )";
-    $q .= " ) AND ( a_start <= ". $x2 ." )";
-    $q .= "";
-    $q .= " ORDER by a_start";
+		/*    #
+			# First query ( non repeating appointments )
+			#
+			$q = "SELECT * FROM ". $this->tablename." WHERE ";
+			$q .= " (";
+			if(!is_admin($current_user))
+			{
+			$q .= " ( ";
+			}
+			$q .= "  (a_start < ". $x2 ." AND a_start >= ". $x1 .")";
+			$q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
+			$q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
+			if(!is_admin($current_user))
+			{
+			$q .= " ) AND ( creator = '".$current_user->id."' ) ";
+			}
+			$q .= " )";
+			$q .= " ORDER by a_start";
 
-*/
-    # always at the end of query
- #   check_dbacl( $q, $current_user->id);
+			//print("GS --> allowed ".is_admin($current_user)." q=".$q);
+			# always at the end of query
+			# check_dbacl( $q, $current_user->id);
 
- #   $r = $obj->dbconn->Exec($q);
- #   $n = $r->numrows();
- #   $a = 0;
- #   while ( $a < $n ) {
- #     $o = &new appointment($obj->dbconn);
- #     $o->read_result($r,$a);
- #     $a++;
- #     if ( $o->see_ok() ) { 
-        /* Get all participants */
- #       $o->read_participants();
- #       $obj->callist[$o->id] = &$o;
- #     }
- #     unset($o);
- #   }
- #   $r->free();
+			// srini cal appoint 
+			$r = $this->db->query($q);
+			$n = $this->db->getRowCount($r);
+			$a = 0;
+			//print("GS --> ".$n." q=".$q);
+			while ( $a < $n ) 
+			{	
 
-    #
-    # Third query ( repeating appointments with end )
-    #
- /*   $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
-    $q .= " r_ignore = 0 AND (";
-    $q .= "   ( repeat = 1 AND  r_arg in (". $wd .") )";
-    $q .= " OR ( repeat = 2 AND  r_arg in (". $md .") )";
-    $q .= " OR ( repeat = 3 AND  r_arg in (". $ymd .") )";
-    $q .= " OR ( repeat = 4 )";
-    $q .= ") AND ( (a_start < ". $x2 ." AND a_start >= ". $x1 .")";
-    $q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
-    $q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
-    $q .= ")";
-    $q .= " ORDER by a_start";
-*/
- #   $r = $obj->dbconn->Exec($q);
- #   $n = $r->numrows();
- #   $a = 0;
- #   while ( $a < $n ) {
- #     $o = &new appointment($obj->dbconn);
- #     $o->read_result($r,$a);
- #     $a++;
- #     if ( $o->see_ok() ) { 
-        /* Get all participants */
- #       $o->read_participants();
- #       $obj->callist[$o->id] = &$o;
- #     }
- #     unset($o);
- #   }
- #   $r->free();
+				$o = &new appointment();
+				$result = mysql_fetch_assoc($r);
+				//$o->read_result($r,$a);
+				$o->read_result($result);
+				$a++;
+				if ( $o->see_ok() ) 
+				{ */
+					/* Get all participants */
+					/*    //$o->read_participants();
+					//print("GS --> see");
+					$obj->callist[$o->id] = &$o;
+				}
+				unset($o);
+			}
+		//$r->free();
 
-    return;
-  }
+					 */
+		$x = new DateTime();
+		$x->setDateTimeTS($from->ts);
+
+		$wd =  "'". Date("w",$x->getTimeStamp()) ."'";
+		$md =  "'". Date("j",$x->getTimeStamp()) ."'";
+		$ymd = "'". Date("j/n",$x->getTimeStamp()) ."'";
+		$x->addDays(1);
+		$pre = ",";
+		while ( $x->getTimeStamp() < $to->getTimeStamp() ) 
+		{
+			$wd .=  $pre ."'". Date("w",$x->getTimeStamp()) ."'";
+			$md .=  $pre ."'". Date("j",$x->getTimeStamp()) ."'";
+			$ymd .= $pre ."'". Date("j/n",$x->getTimeStamp()) ."'";
+			$x->addDays(1);
+		}
+		#
+		# Second query ( repeating appointments w/o end )
+		#
+		/*    $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
+		      $q .= " r_ignore = 1 AND (";
+		      $q .= "   ( repeat = 1 AND  r_arg in (". $wd .") )";
+		      $q .= " OR ( repeat = 2 AND  r_arg in (". $md .") )";
+		      $q .= " OR ( repeat = 3 AND  r_arg in (". $ymd .") )";
+		      $q .= " OR ( repeat = 4 )";
+		      $q .= " ) AND ( a_start <= ". $x2 ." )";
+		      $q .= "";
+		      $q .= " ORDER by a_start";
+
+ 		*/
+		# always at the end of query
+		#   check_dbacl( $q, $current_user->id);
+
+		#   $r = $obj->dbconn->Exec($q);
+		#   $n = $r->numrows();
+		#   $a = 0;
+		#   while ( $a < $n ) {
+		#     $o = &new appointment($obj->dbconn);
+		#     $o->read_result($r,$a);
+		#     $a++;
+		#     if ( $o->see_ok() ) { 
+			/* Get all participants */
+		#       $o->read_participants();
+		#       $obj->callist[$o->id] = &$o;
+		#     }
+		#     unset($o);
+		#   }
+		#   $r->free();
+
+		#
+		# Third query ( repeating appointments with end )
+		#
+		/*   $q = "SELECT c.* FROM ". $obj->dbconn->prefix .$table['appointment1'][name]." c WHERE ";
+		     $q .= " r_ignore = 0 AND (";
+		     $q .= "   ( repeat = 1 AND  r_arg in (". $wd .") )";
+		     $q .= " OR ( repeat = 2 AND  r_arg in (". $md .") )";
+		     $q .= " OR ( repeat = 3 AND  r_arg in (". $ymd .") )";
+		     $q .= " OR ( repeat = 4 )";
+		     $q .= ") AND ( (a_start < ". $x2 ." AND a_start >= ". $x1 .")";
+		     $q .= " OR (a_end < ". $x2 ." AND a_end   >= ". $x1 .")";
+		     $q .= " OR (a_start < ". $x1 ." AND a_end   >= ". $x2 .")";
+		     $q .= ")";
+		     $q .= " ORDER by a_start";
+		 */
+		#   $r = $obj->dbconn->Exec($q);
+		#   $n = $r->numrows();
+		#   $a = 0;
+		#   while ( $a < $n ) {
+		#     $o = &new appointment($obj->dbconn);
+		#     $o->read_result($r,$a);
+		#     $a++;
+		#     if ( $o->see_ok() ) { 
+			/* Get all participants */
+		#       $o->read_participants();
+		#       $obj->callist[$o->id] = &$o;
+		#     }
+		#     unset($o);
+		#   }
+		#   $r->free();
+
+		return;	
+	}
   /**
    * get the help index
    */

@@ -118,7 +118,8 @@ $xtpl->assign("STATUS_OPTIONS", get_select_options_with_id($app_list_strings['ca
 
 $ticketid;
 //Updating the Custom Field
-$xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
+$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 $xtpl->assign("ESTIMATED_FINISHING_DATE", $focus->estimated_finishing_date);
 $xtpl->assign("ESTIMATED_FINISHING_TIME", $focus->estimated_finishing_time); 
 

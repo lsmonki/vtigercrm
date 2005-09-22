@@ -159,10 +159,14 @@ $mod_strings = Array(
 'Modified Time'=>'Modified Time',
 'Mailing Street'=>'Mailing Street',
 'Other Street'=>'Other Street',
-'City'=>'City',
-'State'=>'State',
-'Zip'=>'Zip',
-'Country'=>'Country',
+'Mailing City'=>'Mailing City',
+'Mailing State'=>'Mailing State',
+'Mailing Zip'=>'Mailing Zip',
+'Mailing Country'=>'Mailing Country',
+'Other City'=>'Other City',
+'Other State'=>'Other State',
+'Other Zip'=>'Other Zip',
+'Other Country'=>'Other Country',
 'Description'=>'Description',
 
 // Added fields for Add Business Card

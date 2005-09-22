@@ -23,6 +23,7 @@
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'Products',
 'LBL_LIST_PRODUCT_NAME'=>'Product Name',
+'LBL_TOOL_FORM_TITLE'=>'Product Tools',
 'LBL_SEARCH_FORM_TITLE'=>'Product Search',
 'LBL_PRODUCT_NAME'=>'Product Name:',
 'LBL_VENDOR_NAME'=>'Vendor Name:',
@@ -163,6 +164,12 @@ $mod_strings = Array(
 'LBL_ADD_PRICEBOOK_BUTTON_LABEL'=>'Add To Price Books',
 'LBL_ADD_PRODUCT_PRICEBOOKS'=>'Add Product to PriceBooks',
 'LBL_ADD_PRODUCTS_PRICEBOOK'=>'Add Products to PriceBook',
+
+//Added for 4.2 patch2 release
+'LBL_MAXIMUM_LIMIT_ERROR'=>'Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 800000 bytes',
+'LBL_UPLOAD_ERROR'=>'Problems in file upload. Please try again!',
+'LBL_IMAGE_ERROR'=>'The given file is not of type image(.gif/.jpg/.png)',
+'LBL_INVALID_IMAGE'=>'Invalid file OR File has no data',
 
 );
 

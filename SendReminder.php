@@ -128,6 +128,8 @@ if($adb->num_rows($result) >= 1)
 function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password)
 {
 	global $adb;
+	global $vtlog;
+	$vtlog->logthis("This is send_mail function in SendReminder.php(vtiger home).","info");
 	global $root_directory;
 
 	$mail = new PHPMailer();
@@ -144,7 +146,10 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 	{
 		$mailserverresult=$adb->query("select * from systems where server_type='email'");
 		$mail_server=$adb->query_result($mailserverresult,0,'server');
+		$mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
+		$mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
 		$_REQUEST['server']=$mail_server;
+		$vtlog->logthis("Mail Server Details => '".$mail_server."','".$mail_server_username."','".$mail_server_password."'","info");
 	}	
 
 	$mail->Host = $mail_server;  // specify main and backup server
@@ -153,10 +158,12 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 	$mail->Password = $mail_server_password ;//$smtp_password; // SMTP password
 	$mail->From = $from;
 	$mail->FromName = $initialfrom;
+	$vtlog->logthis("Mail sending process : From Name & email id => '".$initialfrom."','".$from."'",'info');
 	
 	foreach($to as $pos=>$addr)
 	{
 		$mail->AddAddress($addr);                  // name is optional
+		$vtlog->logthis("Mail sending process : To Email id = '".$addr."' (set in the mail object)",'info');
 	}
 	//$mail->AddReplyTo($from);
 	$mail->WordWrap = 50;                                 // set word wrap to 50 characters
@@ -166,17 +173,20 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
 
 	$flag = MailSend($mail);
-
+	$vtlog->logthis("After executing the mail->Send() function.",'info');
 }
 
 function MailSend($mail)
 {
+	global $vtlog;
         if(!$mail->Send())
         {
+	   $vtlog->logthis("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'",'info');
            $msg = $mail->ErrorInfo;
         }
 	else
        	{	
+		$vtlog->logthis("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'",'info');
 		return true;
 	}		
 }

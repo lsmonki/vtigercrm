@@ -24,6 +24,9 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
+echo get_module_title("HelpDesk", $mod_strings['LBL_TICKETS'].": ".$mod_strings['LBL_STATISTICS'] , true);
+echo '<br>';
+
 $totTickets = getTotalNoofTickets();
 if($totTickets == 0)
 {

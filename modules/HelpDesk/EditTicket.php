@@ -148,7 +148,8 @@ if(isset($last_name) && $last_name != '')
    $xtpl->assign("DESCRIPTION", $adb->query_result($ticketresult,0,'description'));
 
 //Updating the Custom Field
-$xtpl->assign("CALENDAR_LANG", "en");$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
+$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 require_once('include/CustomFieldUtil.php');
 $custfld = CustomFieldEditView($ticketid, "HelpDesk", "ticketcf", "ticketid", $app_strings, $theme);
 $xtpl->assign("CUSTOMFIELD", $custfld);

@@ -31,6 +31,7 @@ require_once('modules/Import/parse_utils.php');
 require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('modules/Import/ImportSave.php');
+require_once('modules/Import/ImportProduct.php');
 
 set_time_limit(0);
 ini_set("display_errors",'0');
@@ -106,6 +107,10 @@ else if ( $_REQUEST['module'] == 'Potentials')
 else if ( $_REQUEST['module'] == 'Leads')
 {
 	$current_bean_type = "ImportLead";
+}
+else if ( $_REQUEST['module'] == 'Products')
+{
+ 	$current_bean_type = "ImportProduct";
 }
 $focus = new $current_bean_type();
 //Constructing the custom field Array

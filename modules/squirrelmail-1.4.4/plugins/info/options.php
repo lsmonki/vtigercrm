@@ -13,7 +13,8 @@
  * 
  */
 
-define('SM_PATH','../../');
+//define('SM_PATH','../../');
+define('SM_PATH','modules/squirrelmail-1.4.4/');
 
 /* SquirrelMail required files. */
 require_once(SM_PATH . 'include/validate.php');
@@ -54,6 +55,17 @@ for($i = 0; $i <= 9; $i++){
 }
 
 /* END GLOBALS */
+//Richie
+global $current_user;
+require_once('modules/Users/UserInfoUtil.php');
+$mailInfo = getMailServerInfo($current_user);
+$temprow = $adb->fetch_array($mailInfo);
+
+$secretkey=$temprow["mail_password"];
+$key = OneTimePadEncrypt($secretkey, $onetimepad);
+
+$imapServerAddress=$temprow["mail_servername"];
+$imapPort="143";
 
 $imap_stream = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 $caps_array = get_caps($imap_stream);
@@ -74,9 +86,9 @@ print "<CENTER><TABLE BGCOLOR=".$color[3]." WIDTH=\"100%\" BORDER=1 CELLPADDING=
 print "<CENTER><TABLE WIDTH=\"95%\" BORDER=1 BGCOLOR=".$color[3].">\n";
 print "<TR><TD BGCOLOR=".$color[4]."><B>Server Capability response:</B><BR>\n";
 
-foreach($caps_array[0] as $value) {
-    print htmlspecialchars($value);
-}
+//foreach($caps_array[0] as $value) {
+  //  print htmlspecialchars($value);
+//}
 
 print "</TD></TR><TR><TD>\n";
 
@@ -127,7 +139,7 @@ elseif (!$submit || $submit == 'default')  {
         'TEST_9' => "");
 }
 
-print "<FORM ACTION=\"options.php\" METHOD=POST>\n";
+print "<FORM ACTION=\"index.php?module=squirrelmail-1.4.4&action=plugins/info/options\" METHOD=POST>\n";
 print "<CENTER><TABLE BORDER=1>\n";
 print "<TR><TH>Select</TH><TH>Test Name</TH><TH>IMAP command string</TH>\n";
 print "</TR><TR><TD>\n";

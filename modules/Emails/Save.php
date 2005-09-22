@@ -47,8 +47,7 @@ if($_FILES["filename"]["size"] == 0 && $_FILES["filename"]["name"] != '')
 }
 
 
-//check if the contact already exists by using the email address as criteria
-//if contact exists, then add the email to that contact
+/*
 if((isset($_REQUEST['sname']) && $_REQUEST['sname'] != null) && ((isset($_REQUEST['uname']) && $_REQUEST['uname'] != null)))
 {
 $ServerName = $_REQUEST['sname'];
@@ -56,6 +55,8 @@ $UserName = $_REQUEST['uname'];
 $PassWord = $_REQUEST['passwd'];
 $mbox = imap_open($ServerName, $UserName,$PassWord) or die("Could not open Mailbox - try again later!");
 }
+*/
+
 if((isset($_REQUEST['deletebox']) && $_REQUEST['deletebox'] != null) && $_REQUEST['addbox'] == null)
 {
   imap_delete($mbox,$_REQUEST['deletebox']);
@@ -65,37 +66,57 @@ exit();
 }
 if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
 {
-	//get the list of data from the comma separated array
-	$emailids = explode(",",$_REQUEST['fromemail']);
-	$subjects = explode(",",$_REQUEST['subject']);
-$total = count($emailids);
-	for($m=0;$m<$total;$m++)
-	{
-		$ctctExists = checkIfContactExists($emailids[$m]);
-		if($ctctExists > 0)
-		{
-			$focus->column_fields['parent_id']=$ctctExists;
-		}
-		else
-		{
-			//echo 'contact not found in db!';
-		}
-		$focus->column_fields['subject']=$subjects[$m];
-		$focus->column_fields["activitytype"]="Emails";
-		$focus->save("Emails");
-		$return_id = $focus->id;
-		$return_module='Emails';	
-		$return_action='DetailView';	
-	}
-	header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
-	return;
+ 
+  //get the list of data from the comma separated array
+  $emailids = explode(",",$_REQUEST['fromemail']);
+  $subjects = explode(",",$_REQUEST['subject']);
+  $descriptions = explode(",",$_REQUEST['detail']);
+  $total = count($emailids);
+  for($m=0;$m<$total;$m++)
+  {
+    $ctctExists = checkIfContactExists($emailids[$m]);
+    if($ctctExists > 0)
+    {
+      $focus->column_fields['parent_id']=$ctctExists;
+    }
+    else
+    {
+      //echo 'contact not found in db!';
+    }
+    global $current_user;
+
+    $focus->column_fields['subject']=$subjects[$m];
+    $focus->column_fields["activitytype"]="Emails";
+    //	$focus->column_fields["parent_id"]=$ctctExists;
+    //this line has been added to get the related list data in the contact description
+    $focus->column_fields["assigned_user_id"]=$current_user->id;
+    //$date_var = strtotime($_REQUEST['adddate']);
+    //echo 'date_var ' .$date_var;
+    //exit;
+    $focus->column_fields["date_start"]=$_REQUEST['adddate'];
+    $focus->column_fields["time_start"]=$_REQUEST['adddate'];
+
+    //this string has : in it, so , need to replace that with new line
+                
+    $mbody = explode(":",$descriptions[$m]);
+    $mbody = implode("\n",$mbody);
+                
+    $focus->column_fields["description"]=$mbody;
+    $focus->save("Emails");
+    $return_id = $focus->id;
+    $return_module='Emails';	
+    $return_action='DetailView';	
+  }
+  header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
+  return;
 }
 
 
   function checkIfContactExists($mailid)
   {
     global $adb;
-    $sql = "select contactid from contactdetails where email= '".$mailid ."'";
+    //query being changed so that the deleted contacts are not considered
+        $sql = "select contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and email= '".$mailid ."' ";
     // echo $sql;
     $result = $adb->query($sql);
     $numRows = $adb->num_rows($result);

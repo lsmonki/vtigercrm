@@ -10,6 +10,7 @@
     **
     **  $Id$
     **/
+define('SM_PATH','modules/squirrelmail-1.4.4/');
 
     require_once(SM_PATH . 'plugins/mail_fetch/functions.php' );
 
@@ -225,7 +226,7 @@
 
       $optpage_blocks[] = array(
          'name' => _("POP3 Fetch Mail"),
-         'url'  => '../plugins/mail_fetch/options.php',
+         'url'  => 'index.php?module=squirrelmail-1.4.4&action=plugins/mail_fetch/options',
          'desc' => _("This configures settings for downloading email from a POP3 mailbox to your account on this server."),
          'js'   => false
       );

@@ -11,7 +11,8 @@
  * $Id$
  */
 
-define('SM_PATH','../../');
+//define('SM_PATH','../../');
+define('SM_PATH','modules/squirrelmail-1.4.4/');
 
 require_once(SM_PATH . 'include/validate.php');
 require_once(SM_PATH . 'functions/imap.php');
@@ -175,7 +176,22 @@ sqgetGlobalVar('submit_mailfetch', $submit_mailfetch, SQ_POST);
                     'right' )
                 ) ,
             'center', '', 'width="95%"' );
+	//It seems it is mandatory for having the imap running else Squirrelmail will not fetch the mails    
+	global $current_user;
+	require_once('modules/Users/UserInfoUtil.php');
+	$mailInfo = getMailServerInfo($current_user);
+	$temprow = $adb->fetch_array($mailInfo);
 
+	$login_username= $temprow["mail_username"];
+	$secretkey=$temprow["mail_password"];
+	$imapServerAddress=$temprow["mail_servername"];
+	$imapPort="143";
+ $onetimepad = OneTimePadCreate(strlen($secretkey));
+     $key = OneTimePadEncrypt($secretkey, $onetimepad);
+
+	
+//echo 'username ' .$username . ' key '.$key .' address '.$imapServerAddress .' port '.$imapPort;
+  
     switch( $mf_action ) {
     case 'config':
         echo html_tag( 'table', '', 'center', '', 'width="70%" cellpadding="5" cellspacing="1"' ) .
@@ -211,7 +227,8 @@ sqgetGlobalVar('submit_mailfetch', $submit_mailfetch, SQ_POST);
                 html_tag( 'tr' ) .
                     html_tag( 'th', _("Store in Folder:"), 'right' ) .
                     html_tag( 'td', '', 'left' );
-        $imapConnection = sqimap_login ($username, $key, $imapServerAddress, $imapPort, 0);
+		    
+      $imapConnection = sqimap_login ($username, $key, $imapServerAddress, $imapPort, 0);
         $boxes = sqimap_mailbox_list($imapConnection);
         echo '<select name="mf_subfolder">';
 
