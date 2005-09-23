@@ -101,8 +101,18 @@ class ReportRun extends CRMEntity
 		}*/
 		if($fieldname == "parent_id")
 		{
-			$querycolumn = "crmentityRel.setype Entity_type";
-			//$querycolumn = "case crmentityRel.setype when 'Accounts' then accountRel.accountname when 'Leads' then leaddetailsRel.lastname when 'Potentials' then potentialRel.potentialname End"." ".$selectedfields[2].", crmentityRel.setype Entity_type";
+			if($this->primarymodule == "HelpDesk")
+			{
+				$querycolumn = "case crmentityRelHelpDesk.setype when 'Accounts' then accountRelHelpDesk.accountname when 'Contacts' then contactdetailsRelHelpDesk.lastname End"." '".$selectedfields[2]."', crmentityRelHelpDesk.setype 'Entity_type'";
+			}
+			if($this->primarymodule == "Products" || $this->secondarymodule == "Products")
+			{
+				$querycolumn = "case crmentityRelProducts.setype when 'Accounts' then accountRelProducts.accountname when 'Leads' then leaddetailsRelProducts.lastname when 'Potentials' then potentialRelProducts.potentialname End"." '".$selectedfields[2]."', crmentityRelProducts.setype 'Entity_type'";
+			}
+			if($this->primarymodule == "Activities" || $this->secondarymodule == "Activities")
+			{
+				$querycolumn = "case crmentityRelActivities.setype when 'Accounts' then accountRelActivities.accountname when 'Leads' then leaddetailsRelActivities.lastname when 'Potentials' then potentialRelActivities.potentialname when 'Quotes' then quotesRelActivities.subject when 'Orders' then purchaseorderRelActivities.subject when 'Invoice' then invoiceRelActivities.subject End"." '".$selectedfields[2]."', crmentityRelActivities.setype 'Entity_type'";
+			}
 		}
 		/*if($fieldname == "contact_id")
 		{
@@ -214,7 +224,7 @@ class ReportRun extends CRMEntity
                         $rtvalue = " < ".PearDatabase::quote($value);
                 }
                 if($comparator == "g")
-		{
+								{
                         $rtvalue = " > ".PearDatabase::quote($value);
                 }
                 if($comparator == "m")
@@ -953,13 +963,13 @@ class ReportRun extends CRMEntity
                                 left join crmentity as crmentityProducts on crmentityProducts.crmid=products.productid
                                 left join productcf on products.productid = productcf.productid
                                 left join users as usersProducts on usersProducts.id = crmentityProducts.smownerid
-				left join contactdetails as contactdetailsProducts on contactdetailsProducts.contactid = products.contactid 
+																left join contactdetails as contactdetailsProducts on contactdetailsProducts.contactid = products.contactid 
                                 left join vendor as vendorRel on vendorRel.vendorid = products.vendor_id
                                 left join seproductsrel on seproductsrel.productid = products.productid
-                                left join crmentity as crmentityRel on crmentityRel.crmid = seproductsrel.crmid
-                                left join account as accountRel on accountRel.accountid=crmentityRel.crmid
-                                left join leaddetails as leaddetailsRel on leaddetailsRel.leadid = crmentityRel.crmid
-                                left join potential as potentialRel on potentialRel.potentialid = crmentityRel.crmid ";
+                                left join crmentity as crmentityRelProducts on crmentityRelProducts.crmid = seproductsrel.crmid
+                                left join account as accountRelProducts on accountRelProducts.accountid=seproductsrel.crmid
+                                left join leaddetails as leaddetailsRelProducts on leaddetailsRelProducts.leadid = seproductsrel.crmid
+                                left join potential as potentialRelProducts on potentialRelProducts.potentialid = seproductsrel.crmid ";
 			}
 		}
 		if($module == "Activities")
@@ -1041,10 +1051,10 @@ class ReportRun extends CRMEntity
 				left join contactdetails as contactdetailsProducts on contactdetailsProducts.contactid = products.contactid
 				left join vendor as vendorRel on vendorRel.vendorid = products.vendor_id  
 				left join seproductsrel on seproductsrel.productid = products.productid 
-				left join crmentity as crmentityRel on crmentityRel.crmid = seproductsrel.crmid 
-				left join account as accountRel on accountRel.accountid=crmentityRel.crmid 
-				left join leaddetails as leaddetailsRel on leaddetailsRel.leadid = crmentityRel.crmid 
-				left join potential as potentialRel on potentialRel.potentialid = crmentityRel.crmid 
+				left join crmentity as crmentityRelProducts on crmentityRelProducts.crmid = seproductsrel.crmid 
+				left join account as accountRelProducts on accountRelProducts.accountid=crmentityRelProducts.crmid 
+				left join leaddetails as leaddetailsRelProducts on leaddetailsRelProducts.leadid = crmentityRelProducts.crmid 
+				left join potential as potentialRelProducts on potentialRelProducts.potentialid = crmentityRelProducts.crmid 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityProducts.deleted=0 ";
 		}
@@ -1055,9 +1065,10 @@ class ReportRun extends CRMEntity
 				inner join crmentity as crmentityHelpDesk 
 				on crmentityHelpDesk.crmid=troubletickets.ticketid 
 				inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid
-				left join crmentity as crmentityHelpDeskRel on crmentityHelpDeskRel.crmid = troubletickets.parent_id ".
-//				left join ticketcomments on ticketcomments.ticketid = troubletickets.ticketid -- for patch2
-				"left join products as productsRel on productsRel.productid = troubletickets.product_id
+        left join crmentity as crmentityRelHelpDesk on crmentityRelHelpDesk.crmid = troubletickets.parent_id
+				left join account as accountRelHelpDesk on accountRelHelpDesk.accountid=crmentityRelHelpDesk.crmid 
+				left join contactdetails as contactdetailsRelHelpDesk on contactdetailsRelHelpDesk.contactid= crmentityRelHelpDesk.crmid
+				left join products as productsRel on productsRel.productid = crmentityRelHelpDesk.crmid
 				left join users as usersHelpDesk on crmentityHelpDesk.smownerid=usersHelpDesk.id 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				where crmentityHelpDesk.deleted=0 ";
@@ -1071,10 +1082,13 @@ class ReportRun extends CRMEntity
 				left join contactdetails as contactdetailsActivities on contactdetailsActivities.contactid= cntactivityrel.contactid
 				left join users as usersActivities on usersActivities.id = crmentityActivities.smownerid
 				left join seactivityrel on seactivityrel.activityid = activity.activityid
-				left join crmentity as crmentityRel on crmentityRel.crmid = seactivityrel.crmid
-				left join account as accountRel on accountRel.accountid=crmentityRel.crmid
-				left join leaddetails as leaddetailsRel on leaddetailsRel.leadid = crmentityRel.crmid
-				left join potential as potentialRel on potentialRel.potentialid = crmentityRel.crmid
+				left join crmentity as crmentityRelActivities on crmentityRelActivities.crmid = seactivityrel.crmid
+				left join account as accountRelActivities on accountRelActivities.accountid=crmentityRelActivities.crmid
+				left join leaddetails as leaddetailsRelActivities on leaddetailsRelActivities.leadid = crmentityRelActivities.crmid
+				left join potential as potentialRelActivities on potentialRelActivities.potentialid = crmentityRelActivities.crmid
+				left join quotes as quotesRelActivities on quotesRelActivities.quoteid = crmentityRelActivities.crmid
+				left join purchaseorder as purchaseorderRelActivities on purchaseorderRelActivities.purchaseorderid = crmentityRelActivities.crmid
+				left join invoice as invoiceRelActivities on invoiceRelActivities.invoiceid = crmentityRelActivities.crmid
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
 				WHERE crmentityActivities.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')";
 		}

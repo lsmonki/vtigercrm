@@ -374,6 +374,11 @@ class Reports extends CRMEntity{
 				$fieldtablename = "contactdetails".$module;
 				$fieldcolname = "lastname";
 			}
+			if($fieldname == "parent_id")
+			{
+  				$fieldtablename = "crmentityRel".$module;
+					$fieldcolname = "setype";
+			}
 			if($fieldname == "vendor_id")
 	                {
                         	$fieldtablename = "vendorRel";
