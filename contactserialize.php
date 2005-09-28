@@ -1551,7 +1551,7 @@ function authenticate_user($username,$password)
 {
 	global $adb;
 	$current_date = date("Y-m-d");
-	$sql = "select id, user_name, user_password,last_login_time, support_start_date, support_end_date from PortalInfo inner join CustomerDetails on PortalInfo.id=CustomerDetails.customerid where user_name='".$username."' and user_password = '".$password."' and isactive=1 and CustomerDetails.support_end_date >= ".$current_date;
+	$sql = "select id, user_name, user_password,last_login_time, support_start_date, support_end_date from PortalInfo inner join CustomerDetails on PortalInfo.id=CustomerDetails.customerid where user_name='".$username."' and user_password = '".$password."' and isactive=1 and CustomerDetails.support_end_date >= '".$current_date."'";
 	$result = $adb->query($sql);	
 	$list['id'] = $adb->query_result($result,0,'id');
 	$list['user_name'] = $adb->query_result($result,0,'user_name');
