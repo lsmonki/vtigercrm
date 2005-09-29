@@ -452,6 +452,14 @@ $server->register(
 	array('title'=>'xsd:string','description'=>'xsd:string','priority'=>'xsd:string','severity'=>'xsd:string','category'=>'xsd:string','user_name'=>'xsd:string','parent_id'=>'xsd:string','product_id'=>'xsd:string'),
 	array('return'=>'tns:tickets_list_array'),
 	$NAMESPACE);
+//for vtiger toolbar
+$server->register(
+	'create_ticket_from_toolbar',
+	array('title'=>'xsd:string','description'=>'xsd:string','priority'=>'xsd:string','severity'=>'xsd:string','category'=>'xsd:string','user_name'=>'xsd:string','parent_id'=>'xsd:string','product_id'=>'xsd:string'),
+	array('return'=>'xsd:string'),
+	$NAMESPACE);
+ 
+//end
  
 $server->register(
 	'get_tickets_list',
@@ -704,7 +712,15 @@ $server->register(
     array('user_name'=>'xsd:string', 'id'=>'xsd:string'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
-        
+
+//for vtiger toolbar
+$server->register(
+	'create_account',
+    array('username'=>'xsd:string', 'accountname'=>'xsd:string', 'email'=>'xsd:string', 'phone'=>'xsd:string','$primary_address_street'=>'xsd:string','$primary_address_city'=>'xsd:string','$primary_address_state'=>'xsd:string','$primary_address_postalcode'=>'xsd:string','$primary_address_country'=>'xsd:string'),
+    array('return'=>'xsd:string'),
+    $NAMESPACE);
+//mangai
+		        
 //calendar   
 
 function get_tickets_columns($user_name, $password)
@@ -776,6 +792,33 @@ function get_contacts_count($user_name, $password)
    
     return $contact->getCount($user_name);
 }
+
+
+//for vtiger toolbar -mangai
+
+function create_account($username,$accountname,$email,$phone,$primary_address_street,$primary_address_city,$primary_address_state,$primary_address_postalcode,$primary_address_country)
+{
+	global $current_user;
+	require_once("modules/Users/User.php");
+	$seed_user=new User();
+	$user_id=$seed_user->retrieve_user_id($username);
+	$current_user=$seed_user;
+	$current_user->retrieve($user_id);
+	require_once("modules/Accounts/Account.php");
+	$account=new Account();
+	$account->column_fields['accountname']=$accountname;
+	$account->column_fields['email1']=$email;
+	$account->column_fields['phone']=$phone;
+	$account->column_fields['bill_street']=$primary_address_street;
+	$account->column_fields['bill_city']=$primary_address_city;
+	$account->column_fields['bill_state']=$primary_address_state;
+	$account->column_fields['bill_code']=$primary_address_postalcode;
+	$account->column_fields['bill_country']=$primary_address_country;
+	$account->column_fields['assigned_user_id']=$user_id;
+	$account->save('Accounts');
+	return $account->id;
+}
+//end
 
 function create_contacts($user_name,$output_list)
 {
@@ -1490,6 +1533,37 @@ function create_contact1($user_name, $first_name, $last_name, $email_address ,$a
 	return $contact->id;
 }
 
+//for vtiger toolbar-mangai
+function create_ticket_from_toolbar($title,$description,$priority,$severity,$category,$user_name,$parent_id,$product_id)
+{
+	require_once('modules/Users/User.php');
+        $seed_user = new User();
+        $user_id = $seed_user->retrieve_user_id($user_name);
+
+	
+        $seed_ticket = new HelpDesk();
+        $output_list = Array();
+   
+	require_once('modules/HelpDesk/HelpDesk.php');
+	$ticket = new HelpDesk();
+	
+    	$ticket->column_fields[ticket_title] = $title;
+	$ticket->column_fields[description]=$description;
+	$ticket->column_fields[ticketpriorities]=$priority;
+	$ticket->column_fields[ticketseverities]=$severity;
+	$ticket->column_fields[ticketcategories]=$category;
+	$ticket->column_fields[ticketstatus]='Open';
+
+	$ticket->column_fields[parent_id]=$parent_id;
+	$ticket->column_fields[product_id]=$product_id;
+	$ticket->column_fields[assigned_user_id]=$user_id;
+    	//$ticket->saveentity("HelpDesk");
+    	$ticket->save("HelpDesk");
+
+	return $ticket->id;
+}
+//end
+
 function create_ticket($title,$description,$priority,$severity,$category,$user_name,$parent_id,$product_id)
 {
 /*	require_once('modules/Users/User.php');
@@ -1521,7 +1595,7 @@ function create_ticket($title,$description,$priority,$severity,$category,$user_n
 	$_REQUEST['description'] = $body.$description;
 	$_REQUEST['return_module'] = 'HelpDesk';
 	$_REQUEST['parent_id'] = $parent_id; 
-	$_REQUEST['assigned_user_id'] = $parnet_id; 
+	$_REQUEST['assigned_user_id'] = $parent_id; 
 	require_once('modules/Emails/send_mail.php');
 
 	return get_tickets_list($user_name,$parent_id); 
