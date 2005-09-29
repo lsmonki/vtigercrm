@@ -1374,13 +1374,11 @@
 
 	<table name="users2group">
 		<field name="groupname" type="C" size="100">
+			<KEY/>
 		</field>
 		<field name="userid" type="C" size="50">
+			<KEY/>
 		</field>
-		<index name="idx_users2group">
-			<col>groupname</col>
-			<col>userid</col>
-		</index>
 		<data>
 		</data>
 	</table>
@@ -2127,14 +2125,11 @@
 
 	<table name="leadgrouprelation">
 		<field name="leadid" type="I" size="19">
+			<KEY/>
 		</field>
 		<field name="groupname" type="C" size="100">
 		</field>		
 		<opt>Type=InnoDB</opt>
-
-	       	<index name="leadgrouprelation_IDX0">
-			<col>leadid</col>
-		</index>
 
 		<index name="leadgrouprelation_IDX1">
 			<col>groupname</col>
@@ -2169,6 +2164,7 @@
 
 	<table name="activitygrouprelation">
 		<field name="activityid" type="I" size="19">
+		<KEY/>
 		</field>
 		<field name="groupname" type="C" size="100">
 		</field>		
@@ -2210,6 +2206,7 @@
 
         <table name="ticketgrouprelation">
                 <field name="ticketid" type="I" size="19">
+		<KEY/>
                 </field>
                 <field name="groupname" type="C" size="100">
 		</field>
@@ -2511,52 +2508,9 @@
 
 
 
-	<table name="role2action">
-		<field name="rolename" type="C" size="50">
-		</field>
-		<field name="tabid" type="I" size="11">
-			<DEFAULT value="0"/>
-		</field>
-		<field name="actionname" type="C" size="100">
-		</field>
-		<field name="action_permission" type="I" size="4">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="description" type="C" size="100">
-		</field>
-		<index name="idx_role2action_name">
-			<col>rolename</col>
-			<col>tabid</col>
-			<col>actionname</col>
-		</index>
-		<data>
-		
-		</data>
-	</table>
-	<table name="role2tab">
-		<field name="rolename" type="C" size="100">
-		</field>
-		<field name="tabid" type="I" size="11">
-			<DEFAULT value="0"/>
-		</field>
-		<field name="module_permission" type="I" size="4">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="description" type="C" size="100">
-		</field>
-		<index name="idx_role2tab_name">
-			<col>rolename</col>
-			<col>tabid</col>
-		</index>
-		<data>
-		
-		</data>
-	</table>
-
 <table name="ticketstracktime">
 		<field name="ticket_id" type="I" size="11">
+			<KEY/>
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
@@ -3591,23 +3545,28 @@
 	</table>
 
 	<table name="profile2standardpermissions">
-		<field name="profileid" type="I" size="11"></field>
-		<field name="tabid" type="I" size="10"></field>
-		<field name="Operation" type="I" size="10"></field>
+		<field name="profileid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="tabid" type="I" size="10">
+			<KEY/>
+		</field>
+		<field name="Operation" type="I" size="10">
+			<KEY/>
+		</field>
 		<field name="permissions" type="I" size="1"></field>
-		<index name="idx_prof2stad">
-			<col>profileid</col>
-			<col>tabid</col>
-			<col>Operation</col>
-		</index>
 		<data>
 		</data>
 	</table>
 
 	<table name="profile2field">
-			<field name="profileid" type="I" size="11"></field>
+			<field name="profileid" type="I" size="11">
+				<KEY/>
+			</field>
                 	<field name="tabid" type="I" size="10"></field>
-                	<field name="fieldid" type="I" size="19"></field>
+                	<field name="fieldid" type="I" size="19">
+				<KEY/>
+			</field>
 	                <field name="visible" type="I" size="19"></field>
         	        <field name="readonly" type="I" size="19"></field>
 			<index name="idx_prof2fileid">
@@ -3657,7 +3616,9 @@
 
 	<table name="def_org_field">
                 	<field name="tabid" type="I" size="10"></field>
-                	<field name="fieldid" type="I" size="19"></field>
+                	<field name="fieldid" type="I" size="19">
+				<KEY/>
+			</field>
 	                <field name="visible" type="I" size="19"></field>
         	        <field name="readonly" type="I" size="19"></field>
 			<index name="idx_def_org_field">
@@ -3676,16 +3637,17 @@
 	</table>
 
 	<table name="profile2utility">
-		<field name="profileid" type="I" size="11"></field>
-		<field name="tabid" type="I" size="11"></field>
-		<field name="activityid" type="I" size="11"></field>
+		<field name="profileid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="tabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="activityid" type="I" size="11">
+			<KEY/>
+		</field>
 		<field name="permission" type="I" size="1"></field>
 
-		<index name="idx_prof2utility">
-                        <col>profileid</col>
-                        <col>tabid</col>
-                        <col>activityid</col>
-                </index>
 		<data>
 		
 		</data>
@@ -4717,6 +4679,7 @@
 		
 	<table name="activity_reminder">
                 <field name="activity_id" type="I" size="11">
+			<KEY/>
                         <NOTNULL/>
                 </field>
                 <field name="reminder_time" type="I" size="11">
@@ -4726,6 +4689,7 @@
                         <NOTNULL/>
 		</field>
 		<field name="recurringid" type="I" size="19">
+			<KEY/>
 			<NOTNULL/>
 		</field>
                 <data>
@@ -4758,8 +4722,10 @@
 
 	<table name="cvcolumnlist">
 		<field name="cvid" type="I" size="19">
+		<KEY/>
 		</field>
 		<field name="columnindex" type="I" size="11">
+		     <KEY/>	
 		     <NOTNULL/>
 		</field>
 		<field name="columnname" type="C" size="250">
@@ -4783,6 +4749,7 @@
 
 	<table name="cvstdfilter">
 		<field name="cvid" type="I" size="19">
+		<KEY/>
 		</field>
 		<field name="columnname" type="C" size="250">
 			<DEFAULT value=""/>
@@ -4811,8 +4778,10 @@
 
 	<table name="cvadvfilter">
 		<field name="cvid" type="I" size="19">
+			<KEY/>
 		</field>
 		<field name="columnindex" type="I" size="11">
+			<KEY/>
 			<NOTNULL/>
 		</field>
 		<field name="columnname" type="C" size="250">
@@ -4880,8 +4849,10 @@ E</constraint>
 
 	<table name="selectcolumn">
 		<field name="queryid" type="I" size="19">
+		<KEY/>
 		</field>
 		<field name="columnindex" type="I" size="11">
+		     <KEY/>	
 		     <NOTNULL/>
 		     <DEFAULT value="0"/>
 		</field>
@@ -4903,8 +4874,10 @@ E</constraint>
 
 	<table name="relcriteria">
 		<field name="queryid" type="I" size="19">
+		<KEY/>
 		</field>
 		<field name="columnindex" type="I" size="11">
+			<KEY/>
 			<NOTNULL/>
 		</field>
 		<field name="columnname" type="C" size="250">
@@ -5022,10 +4995,12 @@ E</constraint>
 
 	<table name="reportsortcol">
 		<field name="sortcolid" type="I" size="19">
+			<KEY/>
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
 		<field name="reportid" type="I" size="19">
+			<KEY/>
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
@@ -5049,6 +5024,7 @@ E</constraint>
 
 	<table name="reportdatefilter">
 		<field name="datefilterid" type="I" size="19">
+			<KEY/>
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
@@ -5078,14 +5054,17 @@ E</constraint>
 	
 	<table name="reportsummary">
 		<field name="reportsummaryid" type="I" size="19">
+			<KEY/>
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
 		<field name="summarytype" type="I" size="19">
+			<KEY/>
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
 		<field name="columnname" type="C" size="250">
+			<KEY/>
 			<DEFAULT value=""/>
 		</field>
 		<index name="reportsummary_IDX0">
@@ -5301,7 +5280,9 @@ E</constraint>
 	</table>
 
 	<table name="organizationdetails">
-		<field name="organizationame" type="C" size="60"></field>
+		<field name="organizationame" type="C" size="60">
+			<KEY/>
+		</field>
 		<field name="address" type="C" size="150"></field>
 		<field name="city" type="C" size="100"></field>
 		<field name="state" type="C" size="100"></field>
