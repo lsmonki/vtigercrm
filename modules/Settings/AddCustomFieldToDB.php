@@ -290,6 +290,10 @@ else
 		/*$query = "create table ".$fldmodule."_".$columnName." (".$columnName." varchar(255) NOT NULL)";
 		mysql_query($query);*/
 		$adb->createTable($columnName, $columnName." C(255)");
+		//Adding Primary Key
+		$qur = "ALTER table ".$columnName." ADD PRIMARY KEY (". $columnName.")";
+		$adb->query($qur);
+
 		$fldPickList =  $_REQUEST['fldPickList'];
 		$pickArray = explode("\n",$fldPickList);
 		$count = count($pickArray);
