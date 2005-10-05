@@ -5372,7 +5372,39 @@ E</constraint>
 		<data>
 		</data>
 	</table>
+	
+	<table name="profile2globalpermissions">
+		<field name="profileid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="globalactionid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="globalactionpermission" type="I" size="19"></field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
 
+	<table name="profile2globalpermissions" alter="true">
+	<constraint>ADD CONSTRAINT fk_profile2globalpermissions FOREIGN KEY (profileid) REFERENCES profile(profileid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>	
 
+	<table name="actionmapping">
+		<field name="actionid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="actionname" type="C" size="200">
+			<KEY/>
+		</field>
+		<field name="securitycheck" type="I" size="19">
+		</field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
 
 </schema>
