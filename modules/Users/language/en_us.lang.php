@@ -285,6 +285,34 @@ $mod_strings = Array(
 
 //Added for patch2
 'LBL_FILE_INFORMATION'=>'File Information',
+
+//Added after pathc2
+'LBL_LEAD_FIELD_ACCESS'=>'Lead Field Access',
+
+'LBL_ACCOUNT_FIELD_ACCESS'=>'Account Field Access',
+
+'LBL_CONTACT_FIELD_ACCESS'=>'Contact Field Access',
+
+'LBL_OPPORTUNITY_FIELD_ACCESS'=>'Potential Field Access',
+
+'LBL_HELPDESK_FIELD_ACCESS'=>'HelpDesk Field Access',
+
+'LBL_PRODUCT_FIELD_ACCESS'=>'Product Field Access',
+
+'LBL_NOTE_FIELD_ACCESS'=>'Note Field Access',
+
+'LBL_EMAIL_FIELD_ACCESS'=>'Email Field Access',
+
+'LBL_TASK_FIELD_ACCESS'=>'Task Field Access',
+
+'LBL_EVENT_FIELD_ACCESS'=>'Event Field Access',
+'LBL_VENDOR_FIELD_ACCESS'=>'Vendor Field Access',
+'LBL_PB_FIELD_ACCESS'=>'PriceBook Field Access',
+'LBL_QUOTE_FIELD_ACCESS'=>'Quote Field Access',
+'LBL_PO_FIELD_ACCESS'=>'Purchase Order Field Access',
+'LBL_SO_FIELD_ACCESS'=>'Sales Order Access',
+'LBL_INVOICE_FIELD_ACCESS'=>'Invoice Field Access'
+
 );
 
 ?>
