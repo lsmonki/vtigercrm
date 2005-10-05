@@ -103,7 +103,7 @@ function getAllTabsPermission($profileid)
 function getTabsPermission($profileid)
 {
 	global $adb;
-	$sql = "select * from profile2tab where profileid=" .$profileid ;
+	$sql = "select * from profile2tab where profileid=" .$profileid." and tabid not in(15)";
 	$result = $adb->query($sql);
 	$tab_perr_array = Array();
 	$num_rows = $adb->num_rows($result);
@@ -111,7 +111,7 @@ function getTabsPermission($profileid)
 	{
 		$tabid= $adb->query_result($result,$i,'tabid');
 		$tab_per= $adb->query_result($result,$i,'permissions');
-		if($tabid != 1 && $tabid != 3 && $tabid != 16 && $tab_id != 15 && $tab_id != 17 && $tab_id != 18 && $tab_id != 19 && $tab_id != 22)
+		if($tabid != 3 && $tabid != 16 && $tab_id != 15)
 		{
 			$tab_perr_array[$tabid] = $tab_per;
 		}
@@ -123,69 +123,62 @@ function getTabsPermission($profileid)
 function getTabsActionPermission($profileid)
 {
 	global $adb;
-	$check = Array(); 	
-	$sql1 = "select tabid from profile2tab where profileid=" .$profileid;
+	$check = Array();
+	$temp_tabid = Array();	
+	$sql1 = "select * from profile2standardpermissions where profileid=".$profileid." and tabid not in(15,16) order by(tabid)";
+	//echo $sql1.'<BR>';
 	$result1 = $adb->query($sql1);
-	$num_rows1 = $adb->num_rows($result1);
-	for($i=0; $i<$num_rows1; $i++)
-	{
-		$access = Array();
+        $num_rows1 = $adb->num_rows($result1);
+        for($i=0; $i<$num_rows1; $i++)
+        {
 		$tab_id = $adb->query_result($result1,$i,'tabid');
-
-		if($tab_id != 1 && $tab_id != 3 && $tab_id != 15 && $tab_id !=16  && $tab_id != 17 && $tab_id != 18 && $tab_id != 19 && $tab_id != 22)
-		{
-			//Inserting the Standard Actions into the Array	
-			$sql= "select * from profile2standardpermissions where profileid =".$profileid." and tabid=".$tab_id;
-			$result = $adb->query($sql);
-			$num_rows = $adb->num_rows($result);
-			for($j=0; $j<$num_rows; $j++)
-			{
-				$action_id = $adb->query_result($result,$j,'operation');
-				$per_id = $adb->query_result($result,$j,'permissions');
-				$access[$action_id] = $per_id;
-			}
-
-			//Inserting into the global Array
-			$check[$tab_id] = $access;
+		if(! in_array($tab_id,$temp_tabid))
+		{	
+			$temp_tabid[] = $tab_id;
+			$access = Array(); 
 		}
 
-	}			
+		$action_id = $adb->query_result($result1,$i,'operation');
+		$per_id = $adb->query_result($result1,$i,'permissions');
+		$access[$action_id] = $per_id;
+		$check[$tab_id] = $access;	
 
+
+	}
+
+ 	
 	return $check;
 }
 
 function getTabsUtilityActionPermission($profileid)
 {
+
 	global $adb;
-	$check = Array(); 	
-	$sql1 = "select tabid from profile2tab where profileid=" .$profileid;
+	$check = Array();
+	$temp_tabid = Array();	
+	$sql1 = "select * from profile2utility where profileid=".$profileid." order by(tabid)";
+	//echo $sql1.'<BR>';
 	$result1 = $adb->query($sql1);
-	$num_rows1 = $adb->num_rows($result1);
-	for($i=0; $i<$num_rows1; $i++)
-	{
-		$access = Array();
+        $num_rows1 = $adb->num_rows($result1);
+        for($i=0; $i<$num_rows1; $i++)
+        {
 		$tab_id = $adb->query_result($result1,$i,'tabid');
-
-		if($tab_id != 1 && $tab_id != 3 && $tab_id != 16 && $tab_id != 15  && $tab_id != 17 && $tab_id != 18 && $tab_id != 19 && $tab_id != 22)
-		{
-			//Inserting the Standard Actions into the Array	
-			$sql= "select * from profile2utility where profileid =".$profileid." and tabid=".$tab_id;
-			$result = $adb->query($sql);
-			$num_rows = $adb->num_rows($result);
-			for($j=0; $j<$num_rows; $j++)
-			{
-				$action_id = $adb->query_result($result,$j,'activityid');
-				$per_id = $adb->query_result($result,$j,'permission');
-				$access[$action_id] = $per_id;
-			}
-
-			//Inserting into the global Array
-			$check[$tab_id] = $access;
+		if(! in_array($tab_id,$temp_tabid))
+		{	
+			$temp_tabid[] = $tab_id;
+			$access = Array(); 
 		}
 
-	}			
+		$action_id = $adb->query_result($result1,$i,'activityid');
+		$per_id = $adb->query_result($result1,$i,'permission');
+		$access[$action_id] = $per_id;
+		$check[$tab_id] = $access;	
+
+
+	}
 
 	return $check;
+
 }
 
 function getDefaultSharingAction()
@@ -901,4 +894,155 @@ function isAllowed_Outlook($module,$action,$user_id,$record_id)
 	return $permission;
 
 }
+
+function setGlobalProfilePermission2Session($profileid)
+{
+  global $adb;
+  $sql = "select * from profile2globalpermissions where profileid=".$profileid ;
+  $result = $adb->query($sql);
+  $num_rows = $adb->num_rows($result);
+
+  for($i=0; $i<$num_rows; $i++)
+  {
+	$act_id = $adb->query_result($result,$i,"globalactionid");
+	$per_id = $adb->query_result($result,$i,"globalactionpermission");
+	$copy[$act_id] = $per_id;
+  }	 
+
+  $_SESSION['global_permission_set']=$copy;
+  
+}
+
+function getProfileGlobalPermission($profileid)
+{
+  global $adb;
+  $sql = "select * from profile2globalpermissions where profileid=".$profileid ;
+  $result = $adb->query($sql);
+  $num_rows = $adb->num_rows($result);
+
+  for($i=0; $i<$num_rows; $i++)
+  {
+	$act_id = $adb->query_result($result,$i,"globalactionid");
+	$per_id = $adb->query_result($result,$i,"globalactionpermission");
+	$copy[$act_id] = $per_id;
+  }	 
+
+   return $copy;
+  
+}
+
+function createProfile($profilename,$parentProfileId)
+{
+	global $adb;
+	//Inserting values into Profile Table
+	$sql1 = "insert into profile values('','".$profilename."')";
+	$adb->query($sql1);
+
+	//Retreiving the profileid
+	$sql2 = "select max(profileid) as current_id from profile";
+	$result2 = $adb->query($sql2);
+	$current_profile_id = $adb->query_result($result2,0,'current_id');
+
+	//Inserting values into profile2globalpermissions
+	$sql3 = "select * from profile2globalpermissions where profileid=".$parentProfileId;
+	$result3= $adb->query($sql3);
+	$p2tab_rows = $adb->num_rows($result3);
+	for($i=0; $i<$p2tab_rows; $i++)
+	{
+		$act_id=$adb->query_result($result3,$i,'globalactionid');
+		$permissions=$adb->query_result($result3,$i,'globalactionpermission');
+		$sql4="insert into profile2globalpermissions values(".$current_profile_id.", ".$act_id.", ".$permissions.")";
+		$adb->query($sql4);	
+	}
+
+	//Inserting values into Profile2tab table
+	$sql3 = "select * from profile2tab where profileid=".$parentProfileId;
+	$result3= $adb->query($sql3);
+	$p2tab_rows = $adb->num_rows($result3);
+	for($i=0; $i<$p2tab_rows; $i++)
+	{
+		$tab_id=$adb->query_result($result3,$i,'tabid');
+		$permissions=$adb->query_result($result3,$i,'permissions');
+		$sql4="insert into profile2tab values(".$current_profile_id.", ".$tab_id.", ".$permissions.")";
+		$adb->query($sql4);	
+	}
+
+	//Inserting values into Profile2standard table
+	$sql6 = "select * from profile2standardpermissions where profileid=".$parentProfileId;
+	$result6= $adb->query($sql6);
+	$p2per_rows = $adb->num_rows($result6);
+	for($i=0; $i<$p2per_rows; $i++)
+	{
+		$tab_id=$adb->query_result($result6,$i,'tabid');
+		$action_id=$adb->query_result($result6,$i,'operation');	
+		$permissions=$adb->query_result($result6,$i,'permissions');
+		$sql7="insert into profile2standardpermissions values(".$current_profile_id.", ".$tab_id.", ".$action_id.", ".$permissions.")";
+		$adb->query($sql7);	
+	}
+
+	//Inserting values into Profile2Utility table
+	$sql8 = "select * from profile2utility where profileid=".$parentProfileId;
+	$result8= $adb->query($sql8);
+	$p2util_rows = $adb->num_rows($result8);
+	for($i=0; $i<$p2util_rows; $i++)
+	{
+		$tab_id=$adb->query_result($result8,$i,'tabid');
+		$action_id=$adb->query_result($result8,$i,'activityid');	
+		$permissions=$adb->query_result($result8,$i,'permission');
+		$sql9="insert into profile2utility values(".$current_profile_id.", ".$tab_id.", ".$action_id.", ".$permissions.")";
+		$adb->query($sql9);	
+	}
+
+	//Inserting values into Profile2field table
+	$sql10 = "select * from profile2field where profileid=".$parentProfileId;
+	$result10= $adb->query($sql10);
+	$p2field_rows = $adb->num_rows($result10);
+	for($i=0; $i<$p2field_rows; $i++)
+	{
+		$tab_id=$adb->query_result($result10,$i,'tabid');
+		$fieldid=$adb->query_result($result10,$i,'fieldid');	
+		$permissions=$adb->query_result($result10,$i,'visible');
+		$readonly=$adb->query_result($result10,$i,'readonly');
+		$sql11="insert into profile2field values(".$current_profile_id.", ".$tab_id.", ".$fieldid.", ".$permissions." ,".$readonly.")";
+		$adb->query($sql11);	
+	}
+}
+
+function deleteProfile($prof_id,$transfer_profileid='')
+{
+	global $adb;
+	//delete from profile2global permissions
+	$sql4 = "delete from profile2globalpermissions where profileid=".$prof_id;
+	$adb->query($sql4);
+
+	//deleting from profile 2 tab;
+	$sql4 = "delete from profile2tab where profileid=".$prof_id;
+	$adb->query($sql4);
+
+	//deleting from profile2standardpermissions table
+	$sql5 = "delete from profile2standardpermissions where profileid=".$prof_id;
+	$adb->query($sql5);
+
+	//deleting from profile2field
+	$sql6 ="delete from profile2field where profileid=".$prof_id;
+	$adb->query($sql6);
+
+	//deleting from profile2utility
+	$sql7 ="delete from profile2utility where profileid=".$prof_id;
+	$adb->query($sql7);
+
+
+	//updating role2profile
+	if(isset($transfer_profileid) && $transfer_profileid != '')
+	{
+		$sql8 = "update role2profile set profileid=".$transfer_profileid." where profileid=".$prof_id;
+		$adb->query($sql8);
+	}
+
+	//delete from profile table;
+	$sql9 = "delete from profile where profileid=".$prof_id;
+	$adb->query($sql9);	
+
+}
+
 ?>

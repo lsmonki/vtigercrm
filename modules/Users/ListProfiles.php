@@ -21,7 +21,7 @@ global $app_strings;
 global $app_list_strings;
 
 echo '<form action="index.php" method="post" name="new" id="form">';
-echo get_module_title("Users",' Profiles', true);
+echo get_module_title("Users",' Profiles List', true);
 
 global $adb;
 global $theme;
@@ -45,7 +45,8 @@ function getStdOutput($profileListResult, $noofrows, $mod_strings)
 	$standCustFld= '';
 	$standCustFld .= '<input type="hidden" name="module" value="Users">';
 	$standCustFld .= '<input type="hidden" name="action" value="CreateProfile">';
-	$standCustFld .= '<br><input title="New" accessKey="C" class="button" type="submit" name="New" value="New Profile">';
+	$standCustFld .= '<br><input title="New" accessKey="C" class="button" type="submit" name="New" value="New Profile">&nbsp;&nbsp;';
+	$standCustFld .= '<input title="Back" accessKey="C" class="button" onclick="this.form.action.value=\'index\';this.form.module.value=\'Settings\'" type="submit" name="New" value="Back">';
 	$standCustFld .= '<br><BR>'; 
 	$standCustFld .= '<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="40%">';
 	$standCustFld .=  '<tr height=20>';

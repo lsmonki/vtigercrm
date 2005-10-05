@@ -21,8 +21,10 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
+$profileid = $_REQUEST["profileid"];
+$profilename = getProfileName($profileid);
 echo '<form action="index.php" method="post" name="new" id="form">';
-echo get_module_title("Users", 'Profile Information', true);
+echo get_module_title("Users", 'Profile Information: '.$profilename, true);
 
 global $adb;
 global $theme;
@@ -30,26 +32,99 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$profileid = $_REQUEST["profileid"];
 //Retreiving the tabs permisson array
 $tab_perr_array = getTabsPermission($profileid);
 $act_perr_arry = getTabsActionPermission($profileid);
 $act_utility_arry = getTabsUtilityActionPermission($profileid);
-
-
+$global_per_arry = getProfileGlobalPermission($profileid);
 $xtpl=new XTemplate ('modules/Users/ProfileDetailView.html');
 
 
-$standCustFld = getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,$profileid);
+$standCustFld = getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,$profileid,$global_per_arry);
 
 //Standard PickList Fields
-function getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,$profileid)
+function getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,$profileid,$global_per_arry)
 {
 	global $adb;
+	global $app_strings;
 	$standCustFld= '';
 	$standCustFld .= '<input type="hidden" name="module" value="Users">';
 	$standCustFld .= '<input type="hidden" name="profileid" value="'.$profileid.'">';
 	$standCustFld .= '<input type="hidden" name="action" value="UpdateProfile">';
+	$standCustFld .= '<BR><BR>';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" width="60%"><tr><td>';
+	$standCustFld .=  get_form_header("Profile Global Access Information", "", false );
+	$standCustFld .= '</td></tr></table>';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="60%">';
+	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
+	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;">View All</td>';
+	$view_all_per = $global_per_arry[1];
+	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">'.getGlobalDisplayOutput($view_all_per,1).'</div></td>';
+	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Edit All</div></td>';
+	$edit_all_per = $global_per_arry[2];
+	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">'.getGlobalDisplayOutput($edit_all_per,2).'</div></td>';
+	$standCustFld .=  '</tr>';
+
+	$standCustFld .='</table>';
+
+
+	$standCustFld .= '<BR><BR>';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" width="60%"><tr><td>';
+	$standCustFld .=  get_form_header("Profile Tab Access Information", "", false );
+	$standCustFld .= '</td></tr></table>';
+	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="60%">';
+	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
+	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Entity</td>';
+	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Allow</div></td>';
+	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Entity</td>';
+	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Allow</div></td>';
+	$standCustFld .=  '</tr>';
+
+	$i = 1;
+	$rowclass='';
+	$no_of_tabs =  sizeof($tab_perr_array);	
+	foreach($tab_perr_array as $tabid=>$tab_perr)
+	{
+		$entity_name = getTabname($tabid);
+		//Tab Permission
+		$tab_allow_per_id = $tab_perr_array[$tabid];
+		$tab_allow_per = getDisplayOutput($tab_allow_per_id,$tabid,'');
+	
+		if ($i%2==0)
+		{
+			$trowclass = 'evenListRow';
+		}
+		else
+		{
+			if($rowclass == '')
+			{	
+				$trowclass = 'oddListRow';
+				$rowclass = 'evenListRow';	
+			}
+			elseif($rowclass == 'evenListRow')
+			{
+				$trowclass = 'evenListRow';
+                                $rowclass = 'oddListRow';
+			}
+			elseif($rowclass == 'oddListRow')
+			{
+				$trowclass = 'oddListRow';
+                                $rowclass = 'evenListRow';
+			}	
+			$standCustFld .= '<tr class="'.$trowclass.'">';
+		}
+
+		
+		$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$entity_name.'</td>';
+		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_allow_per.'</div></td>';
+		if ($i%2==0)
+		{
+			$standCustFld .= '</tr>';
+		}
+		$i++;
+	}
+	$standCustFld .='</table>';
+
 	$standCustFld .= '<BR><BR>';
 	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" width="60%"><tr><td>';
 	$standCustFld .=  get_form_header("Profile Standard Access Information", "", false );
@@ -57,7 +132,6 @@ function getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,$profil
 	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="60%">';
 	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
 	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;">Entity</td>';
-	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Allow</div></td>';
 	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Create/Edit</div></td>';
 	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Delete</div></td>';
 	$standCustFld .=  '<td width="" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">View</div></td>';
@@ -67,9 +141,6 @@ function getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,$profil
 	foreach($act_perr_arry as $tabid=>$action_array)
 	{
 		$entity_name = getTabname($tabid);
-		//Tab Permission
-		$tab_allow_per_id = $tab_perr_array[$tabid];
-		$tab_allow_per = getDisplayOutput($tab_allow_per_id,$tabid,'');
 		//Create/Edit Permission
 		$tab_create_per_id = $action_array['1'];
 		$tab_create_per = getDisplayOutput($tab_create_per_id,$tabid,'1');
@@ -92,7 +163,6 @@ function getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,$profil
 		$standCustFld .= '<tr class="'.$trowclass.'">';
 		
 		$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$entity_name.'</td>';
-		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_allow_per.'</div></td>';
 		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_create_per.'</div></td>';
 		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_delete_per.'</div></td>';
 		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_view_per.'</div></td>';
@@ -108,43 +178,70 @@ function getStdOutput($tab_perr_array, $act_perr_arry, $act_utility_arry,$profil
 	$standCustFld .=  get_form_header("Profile Utility Access Information", "", false );
 	$standCustFld .= '</td></tr></table>';
 	$standCustFld .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="60%">';
-	$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
-	$standCustFld .=  '<td width="40%" class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">Entity</td>';
-	$standCustFld .=  '<td width="30%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Import</div></td>';
-	$standCustFld .=  '<td width="30%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center">Export</div></td>';
-	$standCustFld .=  '</tr>';
 
-	$i = 1;	
 	foreach($act_utility_arry as $tabid=>$action_array)
 	{
+		
 		$entity_name = getTabname($tabid);
-		//Import Permission
-		$tab_import_per_id = $action_array['5'];
-		$tab_import_per = getDisplayOutput($tab_import_per_id,$tabid,'5');
-		//Export Permission
-		$tab_export_per_id = $action_array['6'];
-		$tab_export_per = getDisplayOutput($tab_export_per_id,$tabid,'6');
-		
-		if ($i%2==0)
-		{
-			$trowclass = 'evenListRow';
-		}
-		else
-		{	
-			$trowclass = 'oddListRow';
-		}
+		$standCustFld .=  '<tr class="ModuleListTitle" height=20>';
+		$standCustFld .=  '<td width="40%" class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$entity_name.'</td>';
+		$standCustFld .=  '<td width="30%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center"></div></td>';
+		$standCustFld .=  '<td width="30%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center"></div></td>';
+		$standCustFld .=  '<td width="30%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><div align="center"></div></td>';
+		$standCustFld .=  '</tr>';
 
-		$standCustFld .= '<tr class="'.$trowclass.'">';
 		
-		$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$entity_name.'</td>';
-		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_import_per.'</div></td>';
-		$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_export_per.'</div></td>';
+		$i = 1;	
+		$rowclass = '';
+		
+		$no_of_actions=sizeof($action_array);	
+		foreach($action_array as $action_id=>$act_per)
+		{
 			
-		$standCustFld .= '</tr>';
-		$i++;
+
+			if ($i%2==0)
+			{
+				$trowclass = 'evenListRow';
+			}
+			else
+			{
+				if($rowclass == '')
+				{	
+					$trowclass = 'oddListRow';
+					$rowclass = 'evenListRow';	
+				}
+				elseif($rowclass == 'evenListRow')
+				{
+					$trowclass = 'evenListRow';
+					$rowclass = 'oddListRow';
+				}
+				elseif($rowclass == 'oddListRow')
+				{
+					$trowclass = 'oddListRow';
+					$rowclass = 'evenListRow';
+				}	
+				$standCustFld .= '<tr class="'.$trowclass.'">';
+			 }
+			//Import Permission
+			$action_name = getActionName($action_id);
+			$tab_util_act_per = $action_array[$action_id];
+			$tab_util_per = getDisplayOutput($tab_util_act_per,$tabid,$action_id);
+		
+		
+			$standCustFld .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$action_name.' </td>';
+			$standCustFld .= '<td style="padding:0px 3px 0px 3px;"><div align="center">'.$tab_util_per.'</div></td>';
+
+			if ($i%2==0)
+			{
+				$standCustFld .= '</tr>';
+			}
+			$i++;
+
+		}
+			
 	}
 	$standCustFld .='</table>';
-	$standCustFld .= '<br><div align="center" style="width:60%"><input title="Edit" accessKey="C" class="button" type="submit" name="Save" value="Save"></div>';
+	$standCustFld .= '<br><div align="center" style="width:60%"><input title="Edit" accessKey="C" class="button" type="submit" name="Save" value="Save">&nbsp;&nbsp; <input title="'.$app_strings["LBL_CANCEL_BUTTON_TITLE"].'" accessKey="'.$app_strings["LBL_CANCEL_BUTTON_KEY"].'" class="button" onclick="window.history.back()" type="button" name="button" value="  '.$app_strings["LBL_CANCEL_BUTTON_LABEL"].'  ">&nbsp;&nbsp;</div>';
 	$standCustFld .='</form>';		
 	return $standCustFld;
 }
@@ -173,6 +270,34 @@ function getDisplayOutput($id,$tabid,$actionid)
 	{
 		$value = '';
 	}
+	elseif($id == 0)
+	{
+		$value = '<input type="checkbox" name="'.$name.'" checked>'; 
+	}
+	elseif($id == 1)
+	{
+		$value = '<input type="checkbox" name="'.$name.'">';
+	}
+	return $value;
+		
+}
+
+function getGlobalDisplayOutput($id,$actionid)
+{
+	if($actionid == '1')
+	{
+		$name = 'view_all';
+	}
+	elseif($actionid == '2')
+	{
+		
+		$name = 'edit_all';
+	}
+
+	if($id == '')
+        {
+                $value = '';
+        }
 	elseif($id == 0)
 	{
 		$value = '<input type="checkbox" name="'.$name.'" checked>'; 

@@ -70,6 +70,7 @@ if($focus->is_authenticated())
 
 	
 	$_SESSION['authenticated_user_profileid'] = $profileid;
+	setGlobalProfilePermission2Session($profileid);
         setPermittedTabs2Session($profileid);
 	setPermittedActions2Session($profileid);
 	setPermittedDefaultSharingAction2Session($profileid);
