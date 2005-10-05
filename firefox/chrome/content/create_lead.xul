@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!--/* ********************************************************************************
+* The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+******************************************************************************* */-->
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	title="vtigerCRM Create Lead"
+	id="vtigercrmleadconfig"
+	onload="get_vtigercrmconfig()"
+	style="padding-top:0px; padding-left:0px; padding-right:0px;">
+	
+	<script type="application/x-javascript" src="chrome://vtiger/content/vtigercrm_toolbar.js"/>
+
+
+<vbox flex="1" style="margin:5px">
+<groupbox flex="1">
+	<caption style="font-weight: bold" label="vtigerCRM Create Lead"/>
+	   <vbox>
+		
+		<hbox>
+		  <spacer flex="1"/>
+		  <label style="color:red" value="*"/>	
+		  <label value="Last Name:" style="padding: 0px;margin-top: 3px;" />
+		  <hbox style="width: 25em">
+			 <textbox id="txtleadname" flex="1"/>
+		  </hbox>
+	  	</hbox>
+	  
+		<hbox>
+		  <spacer flex="1"/>
+		  <label style="padding: 0px;margin-top: 3px;" value="Email:"/>
+		  <hbox style="width: 25em">
+			  <textbox id="txtleademail" flex="1"/>
+		  </hbox>
+	  	</hbox>
+	  
+		<hbox>
+		  <spacer flex="1"/>
+		  <label style="padding: 0px;margin-top: 3px;" value="Phone:"/>
+		  <hbox style="width: 25em">
+			  <textbox id="txtleadphone" flex="1"/>
+		  </hbox>
+	        </hbox>
+	  
+	    	<hbox>
+		  <spacer flex="1"/>
+		  <label style="color:red" value="*"/>
+		  <label style="padding: 0px;margin-top: 3px;" value="Company:"/>
+		  <hbox style="width: 25em">
+			  <textbox id="txtleadcompany" flex="1"/>
+		  </hbox>
+	  	</hbox>
+		
+	
+	  
+	        <hbox>
+		  <spacer flex="1"/>
+		  <label style="padding: 0px;margin-top: 3px;" value="Description"/>
+		  <hbox style="width: 25em">
+			  <textbox id="txtdescription" flex="1" multiline="true" rows="5"/>
+		  </hbox>
+	  	</hbox>
+	  	  
+	</vbox>
+</groupbox>
+	<hbox>
+		  <spacer flex="1"/>
+		  <hbox style="width:25em" align="left">
+			  <label style="color:red" value="*"/>
+			  <label value="Indicates mandatory feilds"/>
+		  </hbox>	
+	</hbox>
+
+	<hbox id="commandbar" flex="1" align="right">
+		<hbox>
+			<button label="Add as Lead" oncommand="add_lead_to_vtigercrm();"/>
+			<button label="Cancel" oncommand="window.close();"/>
+		</hbox>
+	</hbox>
+</vbox>
+</window>

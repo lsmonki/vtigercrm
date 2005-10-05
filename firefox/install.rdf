@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--/* ********************************************************************************
+* The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+******************************************************************************* */-->
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+
+      <em:id>{C37F0C52-7B57-4df8-8E86-6FA3BA508585}</em:id>
+      <em:name>vtigerCRM Toolbar</em:name>
+      <em:version>1.0</em:version>
+      <em:description>Toolbar for vtigerCRM</em:description>
+      <em:creator>vtiger.com</em:creator>
+      <em:homepageURL>http://www.vtiger.com/</em:homepageURL>
+      <em:iconURL>chrome://vtiger/skin/vtigerToolbar32x32.png</em:iconURL>
+      <em:updateURL>http://www.vtiger.com/update.rdf</em:updateURL>
+      <!--<em:optionsURL>chrome://vtiger/content/preferenceDialog.xul</em:optionsURL>-->
+
+    <em:file>
+        <Description about="urn:mozilla:extension:file:vtiger.jar">
+		<em:package>content/</em:package>
+		<em:skin>skin/</em:skin>
+	<!--<em:locale>locale/en-US/</em:locale>-->
+      </Description>
+    </em:file>
+
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>0.8</em:minVersion>
+        <em:maxVersion>1.0+</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+    <em:targetApplication>
+      <Description>
+        <em:id>{86c18b42-e466-45a9-ae7a-9b95ba6f5640}</em:id>
+        <em:minVersion>1.5</em:minVersion>
+        <em:maxVersion>1.8</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+    <em:targetApplication>
+      <Description>
+        <em:id>{3db10fab-e461-4c80-8b97-957ad5f8ea47}</em:id>
+        <em:minVersion>8.0</em:minVersion>
+        <em:maxVersion>8.0.2</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+  </Description>
+</RDF>

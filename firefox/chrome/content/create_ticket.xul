@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!--/* ********************************************************************************
+* The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+******************************************************************************* */-->
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	title="vtigerCRM Create Ticket" 
+	id="vtigercrmaccountconfig"
+	onload="get_vtigercrmconfig()"
+	style="padding-top:0px; padding-left:0px; padding-right:0px;">
+	
+	<script type="application/x-javascript" src="chrome://vtiger/content/vtigercrm_toolbar.js"/>
+	
+<vbox flex="1" style="margin:5px">
+<caption style="font-weight: bold" label="vtigerCRM Create Ticket"/>
+<vbox>
+   <groupbox flex="1">
+			   <caption label="Ticket Information"/>
+			   <grid flex="1">
+				   <columns>
+					   <column flex="1"/>
+					   <column flex="3"/>
+				   </columns>
+				   <rows>
+					   <row>
+						 <hbox>
+						   <spacer flex="1"/>
+						   <label style="color:red" value="*"/>
+						   <label value="Title:" style="padding: 0px;margin-top: 3px;" />
+						   <hbox style="width: 20em">
+			                                 <textbox id="txtticket_title" flex="1" multiline="true" rows="2"/>
+						   </hbox>
+				   		 </hbox>
+					   </row>		 
+					   <row>
+						<hbox>
+		 				   <spacer flex="1"/>
+						   <label value="Priority:" style="padding: 0px;margin-top: 3px;" />
+						   <hbox style="width: 20em">
+			                                  <textbox id="txtticket_priority" flex="1" multiline="false"/>
+						  </hbox>
+				                </hbox>
+					   </row>
+					   <row>
+						<hbox>
+		 				  <spacer flex="1"/>
+						  <label value="Severity:" style="padding: 0px;margin-top: 3px;" />
+		  			 	  <hbox style="width: 20em">
+			                 		<textbox id="txtticket_severity" flex="1" />
+						  </hbox>
+				  		</hbox>
+					   </row>
+					   <row>
+						<hbox>
+		 				  <spacer flex="1"/>
+		 		        	  <label value="Category:" style="padding: 0px;margin-top: 3px;" />
+		 			 	  <hbox style="width: 20em">
+			 			 	<textbox id="txtticket_category" flex="1"/>
+   	                                          </hbox>
+	                                        </hbox>
+					    </row>	
+				</rows>
+			   </grid>
+		   </groupbox>
+<groupbox flex="1">
+   <caption label="Description Information"/>
+   <grid flex="1">
+   <columns>
+	   <cloumn flex="1"/>
+	   <cloumn flex="3"/>
+   </columns>
+   <rows>
+	 <hbox>
+		<spacer flex="1"/>
+     	 	<label value="Description:" style="padding: 0px;margin-top: 3px;"/>
+ 		<hbox style="width: 20em">
+	    		<textbox id="txtticket_description" flex="1" multiline="true" rows="5"/>
+		</hbox>
+          </hbox>	
+   		  
+   </rows>
+   </grid>
+</groupbox>
+</vbox>
+	   
+	<hbox align="left">
+		  <spacer flex="1"/>
+		  <hbox style="width:25em">
+			  <label style="color:red" value="*"/>
+			  <label value="Indicates mandatory feilds"/>
+		  </hbox>
+	</hbox>		  
+	<hbox id="commandbar" flex="1" align="right">
+		<hbox>
+			<button label="Add as Ticket" oncommand="add_ticket_to_vtigercrm();"/>
+			<button label="Cancel" oncommand="window.close();"/>
+		</hbox>
+	</hbox>
+</vbox>
+</window>
+		
+
+	
+

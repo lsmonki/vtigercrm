@@ -1,0 +1,48 @@
+/* ********************************************************************************
+* The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+******************************************************************************* */
+
+#VTIGER-MainMenu {
+    list-style-image: url("chrome://vtiger/skin/vtigerToolbar16x16.png");
+}
+
+#VTIGER-LEAD {
+    list-style-image: url("chrome://vtiger/skin/Leads.gif");
+}
+
+
+#VTIGER-CONTACT{
+   list-style-image:url("chrome://vtiger/skin/Contacts.gif");	
+}
+
+#VTIGER-ACCOUNT{
+   list-style-image:url("chrome://vtiger/skin/Accounts.gif");
+}
+
+#VTIGER-FORUM{
+   list-style-image:url("chrome://vtiger/skin/forums.gif");
+}
+
+
+#VTIGER-SEARCH-ICON{
+	list-style-image:url("chrome://vtiger/skin/search.gif");
+}
+
+#VTIGER-TICKET{
+	list-style-image:url("chrome://vtiger/skin/Tickets.gif");
+}
+
+
+
+
+
+
+
+
+
