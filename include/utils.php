@@ -3919,6 +3919,9 @@ $vtlog->logthis("get Actionid ".$action,'info');
 function getActionname($actionid)
 {
 	global $vtlog;
+	global $adb;
+
+	$query = 
 	$vtlog->logthis("getActionName   ".$actionid ,'info');  
 
 	$actionname = '';
@@ -3957,6 +3960,10 @@ function getActionname($actionid)
 	else if($actionid == 8)
 	{
 		$actionname= 'Merge';
+	}
+	else if($actionid == 9)
+	{
+		$actionname= 'ConvertLead';
 	}
 	return $actionname;
 }
