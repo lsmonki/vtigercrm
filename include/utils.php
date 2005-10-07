@@ -1750,7 +1750,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	}
 	elseif($uitype == 19)
 	{
-		$col_fields[$fieldname]=nl2br($col_fields[$fieldname]);
+		$col_fields[$fieldname]= make_clickable(nl2br($col_fields[$fieldname]));
 		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
 		$custfld .= '<td colspan="3" valign="top" class="dataField">'.$col_fields[$fieldname].'</td>'; // Armando LC<scher 10.08.2005 -> B'descriptionSpan -> Desc: inserted colspan="3"
 	}
@@ -4794,6 +4794,36 @@ function get_account_info($parent_id)
         $result = $adb->query($query);
         $accountid=$adb->query_result($result,0,'accountid');
         return $accountid;
+}
+
+function make_clickable($text)
+{
+   $text = preg_replace('#(script|about|applet|activex|chrome):#is', "\\1&#058;", $text);
+   // pad it with a space so we can match things at the start of the 1st line.
+   $ret = ' ' . $text;
+
+   // matches an "xxxx://yyyy" URL at the start of a line, or after a space.
+   // xxxx can only be alpha characters.
+   // yyyy is anything up to the first space, newline, comma, double quote or <
+   $ret = preg_replace("#(^|[\n ])([\w]+?://.*?[^ \"\n\r\t<]*)#is", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $ret);
+
+   // matches a "www|ftp.xxxx.yyyy[/zzzz]" kinda lazy URL thing
+   // Must contain at least 2 dots. xxxx contains either alphanum, or "-"
+   // zzzz is optional.. will contain everything up to the first space, newline,
+   // comma, double quote or <.
+   $ret = preg_replace("#(^|[\n ])((www|ftp)\.[\w\-]+\.[\w\-.\~]+(?:/[^ \"\t\n\r<]*)?)#is", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $ret);
+
+   // matches an email@domain type address at the start of a line, or after a space.
+   // Note: Only the followed chars are valid; alphanums, "-", "_" and or ".".
+   $ret = preg_replace("#(^|[\n ])([a-z0-9&\-_.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i", "\\1<a href=\"mailto:\\2@\\3\">\\2@\\3</a>", $ret);
+
+   // Remove our padding..
+   $ret = substr($ret, 1);
+
+   //remove comma, fullstop at the end of url
+   $ret = preg_replace("#,\"|\.\"|\)\"|\)\.\"|\.\)\"#", "\"", $ret);
+
+   return($ret);
 }
 
 ?>
