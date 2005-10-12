@@ -57,7 +57,8 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 	$mail->Subject = $subject;
 	$mail->Body    = nl2br($contents);//"This is the HTML message body <b>in bold!</b>";
 
-	$initialfrom = $from;
+	global $current_user;
+        $initialfrom = $current_user->first_name." ".$current_user->last_name;
 
 	$sql="select email1 from users where user_name='" .$from ."'" ;
 
