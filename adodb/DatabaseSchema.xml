@@ -219,6 +219,15 @@
 
 		<field name="typeofdata" type="C" size="100">
 		</field>
+			<!--new-->
+		<field name="quickcreate" type="I" size="10">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		
+		<field name="quickcreatesequence" type="I" size="19">
+			</field>
+	         
 		 <index name="Field_IDX0">
 			<col>tabid</col>
 			</index>
