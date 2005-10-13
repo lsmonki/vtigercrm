@@ -71,7 +71,15 @@ echo get_module_title($mod_strings['LBL_MODULE_NAME'], $ogReport->reportname, fa
           </td>
         </tr>
     </table>
-    <input type="hidden" name="booleanoperator" value="5"/>
+//Code given by Ceaser for Reports Standard Filter    
+<SCRIPT LANGUAGE=JavaScript>
+function CrearEnlace(tipo,id){
+return "index.php?module=Reports&action="+tipo+"&record="+id+"&stdDateFilterField="+document.NewReport.stdDateFilterField.options  [document.NewReport.stdDateFilterField.selectedIndex].value+"&stdDateFilter="+document.NewReport.stdDateFilter.options[document.NewReport.stdDateFilter.selectedIndex].value+"&startdate="+document.NewReport.startdate.value+"&enddate="+document.NewReport.enddate.value;
+
+}
+</SCRIPT>
+//end of code given by Ceaser
+    input type="hidden" name="booleanoperator" value="5"/>
     <input type="hidden" name="record" value="<?php echo $reportid?>"/>
     <input type="hidden" name="reload" value=""/>    
     <input type="hidden" name="module" value="Reports"/>
@@ -79,10 +87,11 @@ echo get_module_title($mod_strings['LBL_MODULE_NAME'], $ogReport->reportname, fa
 <br>
     <table align='center' border="0" cellspacing="2" cellpadding="2">
         <tr><td>
-	    <input id="btnExport" name="btnExport" value="<?php echo $mod_strings['LBL_EXPORTPDF_BUTTON']?>" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=CreatePDF&record=<?php echo $reportid; ?>')" title="<?php echo $mod_strings['LBL_EXPORTPDF_BUTTON']?>">
+//Code for Reports Filter by Ceaser
+	    <input id="btnExport" name="btnExport" value="<?php echo $mod_strings['LBL_EXPORTPDF_BUTTON']?>" class="button" type="button" onClick="goToURL(CrearEnlace('CreatePDF',<?php echo $reportid; ?>));" title="<?php echo $mod_strings['LBL_EXPORTPDF_BUTTON']?>">
 
-	    <input id="btnExport" name="btnExport" value="<?php echo $mod_strings['LBL_EXPORTXL_BUTTON']?>" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=CreateXL&record=<?php echo $reportid; ?>')" title="<?php echo $mod_strings['LBL_EXPORTXL_BUTTON']?>">
-
+	    <input id="btnExport" name="btnExport" value="<?php echo $mod_strings['LBL_EXPORTXL_BUTTON']?>" class="button" type="button" onClick="goToURL(CrearEnlace('CreateXL',<?php echo $reportid; ?>));" title="<?php echo $mod_strings['LBL_EXPORTXL_BUTTON']?>">
+//end of code by Ceaser
             <input value="<?php echo $mod_strings['LBL_CUSTOMIZE_BUTTON'];?>" class="button" type="button" onClick="goToURL( 'index.php?module=Reports&action=NewReport1&record=<?php echo $reportid; ?>' )" title="<?php echo $mod_strings['LBL_CUSTOMIZE_BUTTON'];?>">
 
 	    <input value="<?php echo $mod_strings['LBL_APPLYFILTER_BUTTON'];?>" class="button" type="submit" title="<?php echo $mod_strings['LBL_APPLYFILTER_BUTTON'];?>"/>
