@@ -28,6 +28,9 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  */
+
+require_once('include/utils.php'); //new
+
 function get_validate_record_js () {
 global $mod_strings;
 global $app_strings;
@@ -207,6 +210,9 @@ global $app_strings;
 global $app_list_strings;
 global $current_user;
 global $theme;
+global $adb;//for dynamic quickcreateform construction
+
+
 // Unimplemented until jscalendar language files are fixed
 // global $current_language;
 // global $default_language;
@@ -230,39 +236,110 @@ $user_id = $current_user->id;
 $cal_lang = "en";
 $cal_dateformat = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 
-$the_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
-$the_form .= <<<EOQ
+$qcreate_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 
-		<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
-		<script type="text/javascript" src="jscalendar/calendar.js"></script>
-		<script type="text/javascript" src="jscalendar/lang/calendar-{$cal_lang}.js"></script>
-		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-		<form name="EmailSave" onSubmit="return verify_data(EmailSave)" method="POST" action="index.php">
-			<input type="hidden" name="module" value="Emails">
-			<input type="hidden" name="record" value="">
-			<input type="hidden" name="action" value="Save">
-			<input type="hidden" name="parent_type" value="${default_parent_type}">
-			<input type="hidden" name="assigned_user_id" value='${user_id}'>
-		<FONT class="required">$lbl_required_symbol</FONT>$lbl_subject<br>
-		<input name='subject' type="text"><br>
-		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date&nbsp;<font size="1"><em old='ntc_date_format'>$current_user->date_format</em></font><br>
-		<input name='date_start' id='jscal_field' type="text" maxlength="10" value="$default_date_start"> <img src="themes/$theme/images/calendar.gif" id="jscal_trigger"><br>
-		<FONT class="required">$lbl_required_symbol</FONT>$lbl_time&nbsp;<font size="1"><em>$ntc_time_format</em></font><br>
-		<input name='time_start' maxlength='5' type="text" value="$default_time_start"><br><br>
-		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >
-		</form>
-		<script type="text/javascript">
+
+$qcreate_get_field="select * from field where tabid=10 and quickcreate=0 order by quickcreatesequence";
+$qcreate_get_result=$adb->query($qcreate_get_field);
+$qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
+
+$fieldName_array = Array();//for validation 
+
+$qcreate_form.='<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">';
+$qcreate_form.='<script type="text/javascript" src="jscalendar/calendar.js"></script>';
+$qcreate_form.='<script type="text/javascript" src="jscalendar/lang/calendar-'.$cal_lang.'.js"></script>';
+$qcreate_form.='<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>';
+$qcreate_form.='<form name="EmailSave" onSubmit="return formValidate()" method="POST" action="index.php">';
+$qcreate_form.='<input type="hidden" name="module" value="Emails">';
+$qcreate_form.='<input type="hidden" name="record" value="">';
+$qcreate_form.='<input type="hidden" name="action" value="Save">';
+$qcreate_form.='<input type="hidden" name="parent_type" value="'.$default_parent_type.'">';
+$qcreate_form.='<input type="hidden" name="assigned_user_id" value="'.$user_id.'">';
+
+
+$qcreate_form.='<table>';
+
+for($j=0;$j<$qcreate_get_noofrows;$j++)
+{
+	$qcreate_form.='<tr>';
+	$fieldlabel=$adb->query_result($qcreate_get_result,$j,'fieldlabel');
+	$uitype=$adb->query_result($qcreate_get_result,$j,'uitype');
+	$tabid=$adb->query_result($qcreate_get_result,$j,'tabid');
+	
+	$fieldname=$adb->query_result($qcreate_get_result,$j,'fieldname');//for validation
+	$typeofdata=$adb->query_result($qcreate_get_result,$j,'typeofdata');//for validation
+       	$qcreate_form .= get_quickcreate_form($fieldlabel,$uitype,$fieldname,$tabid);
+
+	
+	//to get validationdata
+	//start
+	$fldLabel_array = Array();
+        $fldLabel_array[$fieldlabel] = $typeofdata;
+        $fieldName_array['QCK_'.$fieldname] = $fldLabel_array;
+	
+	//end
+	
+	$qcreate_form.='</tr>';
+	
+}
+
+//for validation
+$validationData = $fieldName_array;
+$fieldName = '';
+$fieldLabel = '';
+$fldDataType = '';
+
+$rows = count($validationData);
+foreach($validationData as $fldName => $fldLabel_array)
+{
+   if($fieldName == '')
+   {
+     $fieldName="'".$fldName."'";
+   }
+   else
+   {
+     $fieldName .= ",'".$fldName ."'";
+   }
+   foreach($fldLabel_array as $fldLabel => $datatype)
+   {
+	if($fieldLabel == '')
+	{
+			
+     		$fieldLabel = "'".$fldLabel ."'";
+	}		
+        else
+        {
+       		$fieldLabel .= ",'".$fldLabel ."'";
+        }
+ 	if($fldDataType == '')
+        {
+      		$fldDataType = "'".$datatype ."'";
+    	}
+	else
+        {
+       		$fldDataType .= ",'".$datatype ."'";
+     	}
+   }
+ }
+ 
+$qcreate_form.='</table>';
+
+$qcreate_form.='<input title="'.$lbl_save_button_title.'" accessKey="'.$lbl_save_button_key.'" class="button" type="submit" name="button" value="'.$lbl_save_button_label.'" >';
+$qcreate_form.='</form>';
+$qcreate_form.='<script type="text/javascript">
 		Calendar.setup ({
-			inputField : "jscal_field", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
+			inputField : "QCK_date_start", ifFormat : "'.$cal_dateformat.'", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
 		});
-		</script>
 
-EOQ;
+		var fieldname = new Array('.$fieldName.')
+		var fieldlabel = new Array('.$fieldLabel.')
+		var fielddatatype = new Array('.$fldDataType.')
+		
+		</script>';
 
-$the_form .= get_left_form_footer();
-$the_form .= get_validate_record_js();
+$qcreate_form .= get_left_form_footer();
+return $qcreate_form;
 
-return $the_form;
 }
 
 ?>
