@@ -411,6 +411,7 @@ else
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
 // Setting the record count string
+/*
 if ($navigation_array['start'] == 1)
 {
 	if($noofrows != 0)
@@ -440,6 +441,13 @@ else
 		$end_rec = $noofrows;
 	}
 }
+*/
+// Setting the record count string
+//modified by rdhital
+$start_rec = $navigation_array['start'];
+$end_rec = $navigation_array['end_val']; 
+//By Raju Ends
+
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header
