@@ -59,22 +59,23 @@ $the_script  = <<<EOQ
 // Declaring valid date character, minimum year and maximum year
 
 var fieldname,fieldlabel,fielddatatype;	
-function verify_data(form) 
+function verify_data(form,fname,flabel,fdatatype) 
 {
 	var form_name=form.name;
 	if(form_name=='ActivitySave')
         {
-                form.due_date.value=form.date_start.value;
-                fieldname = new Array('task_subject','jscal_field_date_start');
-                fieldlabel = new Array('Subject','Start Date & Time');
-                fielddatatype = new Array('V~M','DT~M~task_time_start');
+               form.due_date.value=form.date_start.value;
+	       fieldname =fname.split(",");
+	       fieldlabel = flabel.split(",");
+               fielddatatype = fdatatype.split(",");
         }
         else
         {
-                form.due_date.value=form.date_start.value;
-		fieldname = new Array('event_subject','jscal_field_event_date_start','duration_hours')
-                fieldlabel = new Array('Subject','Start Date & Time','Duration')
-                fielddatatype = new Array('V~M','DT~M~event_time_start','I~M')
+              form.due_date.value=form.date_start.value;
+	      fieldname = fname.split(",");
+              fieldlabel = flabel.split(",");
+              fielddatatype = fdatatype.split(",");
+        
         }
 
 	var ret = formValidate();
@@ -99,6 +100,8 @@ function get_new_record_form () {
 global $app_strings, $mod_strings, $app_list_strings;
 global $current_user;
 global $theme;
+global $adb;//for dynamic quickcreateform construction
+
 // Unimplemented until jscalendar language files are fixed
 // global $current_language;
 // global $default_language;
@@ -113,93 +116,229 @@ $value=date('Y-m-d');
 $dis_value=getNewDisplayDate();
 $curr_time = date('H:i');
 
-$the_form = get_left_form_header($app_strings['LBL_NEW_TASK']);
-$the_form .= <<<EOQ
+//for task
+$qcreate_form = get_left_form_header($app_strings['LBL_NEW_TASK']);
+$fieldName_task = '';
+$fieldLabel_task = '';
+$fldDataType_task = '';
 
-		<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
-		<script type="text/javascript" src="jscalendar/calendar.js"></script>
-		<script type="text/javascript" src="jscalendar/lang/calendar-{$cal_lang}.js"></script>
-		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-		<form name="ActivitySave" onsubmit="return verify_data(this)" method="POST" action="index.php">
-			<input type="hidden" name="module" value="Activities">
-			<input type="hidden" name="record" value="">
-			<input type="hidden" name="activity_mode" value="Task">
-			<input type="hidden" name="assigned_user_id" value="${user_id}">
-			<input type="hidden" name="action" value="Save">
+$qcreate_get_field="select * from field where tabid=9 and quickcreate=0 order by quickcreatesequence";
+$qcreate_get_result=$adb->query($qcreate_get_field);
+$qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
+$fieldName_array_task = Array();//for validation
 
-			<input type="hidden" name="due_date" value="">
+$qcreate_form .='<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">';
+$qcreate_form .='<script type="text/javascript" src="jscalendar/calendar.js"></script>';
+$qcreate_form .='<script type="text/javascript" src="jscalendar/lang/calendar-'.$cal_lang.'.js"></script>';
+$qcreate_form .='<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>';
+$qcreate_form .='<form name="ActivitySave" method="POST" action="index.php">';
+$qcreate_form .='<input type="hidden" name="module" value="Activities">';
+$qcreate_form .='<input type="hidden" name="record" value="">';
+$qcreate_form .='<input type="hidden" name="activity_mode" value="Task">';
+$qcreate_form .='<input type="hidden" name="assigned_user_id" value="'.$user_id.'">';
+$qcreate_form .='<input type="hidden" name="action" value="Save">';
+$qcreate_form .='<input type="hidden" name="due_date" value="">';
 
-		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Subject<br>
-		<input name='subject' id='task_subject' type="text" value=""><br>
-		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Start Date & Time&nbsp;<br>
-		<input name="date_start" id="jscal_field_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$dis_value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_date_start">&nbsp; 
-		<input name="time_start" id='task_time_start' tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
-		<font size=1><em old="(yyyy-mm-dd 24:00)">($current_user->date_format 24:00)</em></font><br><br>
-		<input title="${app_strings['LBL_SAVE_BUTTON_TITLE']}" accessKey="${app_strings['LBL_SAVE_BUTTON_KEY']}" class="button" type="submit" name="button" value="${app_strings['LBL_SAVE_BUTTON_LABEL']}" >
-		</form>
-		<script type="text/javascript">
+$qcreate_form.='<table>';
+
+for($j=0;$j<$qcreate_get_noofrows;$j++)
+{
+	$qcreate_form.='<tr>';
+	$fieldlabel=$adb->query_result($qcreate_get_result,$j,'fieldlabel');
+	$uitype=$adb->query_result($qcreate_get_result,$j,'uitype');
+	$tabid=$adb->query_result($qcreate_get_result,$j,'tabid');
+	
+	$fieldname=$adb->query_result($qcreate_get_result,$j,'fieldname');//for validation
+	$typeofdata=$adb->query_result($qcreate_get_result,$j,'typeofdata');//for validation
+       	$qcreate_form .= get_quickcreate_form($fieldlabel,$uitype,$fieldname,$tabid);
+	if($fieldname == "date_start")
+	{
+		$typeofdata = 'DT~M~task_time_start';
+	}
+	
+	//to get validationdata
+	//start
+	$fldLabel_array_task = Array();
+        $fldLabel_array_task[$fieldlabel] = $typeofdata;
+        $fieldName_array_task['QCK_T_'.$fieldname] = $fldLabel_array_task;
+	
+	//end
+	
+	$qcreate_form.='</tr>';
+}
+
+//for validation
+$validationData = $fieldName_array_task;
+
+$rows = count($validationData);
+foreach($validationData as $fldName => $fldLabel_array_task)
+{
+   if($fieldName_task == '')
+   {
+     $fieldName_task="'".$fldName;
+   }
+   else
+   {
+     $fieldName_task .= ",".$fldName;
+   }
+   foreach($fldLabel_array_task as $fldLabel => $datatype)
+   {
+	if($fieldLabel_task == '')
+	{
+			
+     		$fieldLabel_task = "'".$fldLabel;
+	}		
+        else
+        {
+       		$fieldLabel_task .= ",".$fldLabel;
+        }
+ 	if($fldDataType_task == '')
+        {
+      		$fldDataType_task = "'".$datatype;
+    	}
+	else
+        {
+       		$fldDataType_task .= ",".$datatype;
+     	}
+   }
+ }
+   $fieldName_task .= "'";
+   $fieldLabel_task .= "'";
+   $fldDataType_task .= "'";
+     
+    
+     
+
+
+$qcreate_form.='</table>';
+
+$qcreate_form.='<input title="'.$app_strings["LBL_SAVE_BUTTON_TITLE"].'" accessKey="'.$app_strings["LBL_SAVE_BUTTON_KEY"].'" class="button" onclick="return verify_data(ActivitySave,'.$fieldName_task.','.$fieldLabel_task.','.$fldDataType_task.')" type="submit" name="button" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" >';
+$qcreate_form.='</form>';
+$qcreate_form.='<script type="text/javascript">
 		Calendar.setup ({
-			inputField : "jscal_field_date_start", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
+			inputField : "QCK_T_date_start", ifFormat : "'.$cal_dateformat.'", showsTime : false, button : "jscal_trigger_date_start", singleClick : true, step : 1
 		});
 		
-		</script>
-EOQ;
+		</script>';
+		
 
-$the_form .= get_left_form_footer();
-$the_form .= '<br>';
+//for event
+$qcreate_form .= get_left_form_footer();
+$qcreate_form .='<br>';
+
 $comboFieldNames = Array('activitytype'=>'activitytype_dom',
 			 'duration_minutes'=>'duration_minutes_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
-$the_form .= get_left_form_header($app_strings['LBL_NEW_EVENT']);
-$the_form .= <<<EOQ
 
-		<form name="EventSave" method="POST" action="index.php" onSubmit="return verify_data(this)">
-			<input type="hidden" name="module" value="Activities">
-			<input type="hidden" name="record" value="">
-			<input type="hidden" name="activity_mode" value="Events">
-			<input type="hidden" name="assigned_user_id" value="${user_id}">
-			<input type="hidden" name="action" value="Save">
+$qcreate_form .= get_left_form_header($app_strings['LBL_NEW_EVENT']);
+$fieldName = '';
+$fieldLabel = '';
+$fldDataType = '';
 
-			<input type="hidden" name="due_date" value="">
+$qcreate_get_field="select * from field where tabid=16 and quickcreate=0 order by quickcreatesequence";
+$qcreate_get_result=$adb->query($qcreate_get_field);
+$qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
 
+$fieldName_array = Array();//for validation
+
+$qcreate_form.='<form name="EventSave" method="POST" action="index.php">'; 
+$qcreate_form.='<input type="hidden" name="module" value="Activities">';
+$qcreate_form.='<input type="hidden" name="record" value="">';
+$qcreate_form.='<input type="hidden" name="activity_mode" value="Events">';
+$qcreate_form.='<input type="hidden" name="assigned_user_id" value="'.$user_id.'">';
+$qcreate_form.='<input type="hidden" name="action" value="Save">';
+$qcreate_form.='<input type="hidden" name="due_date" value="">';
+$qcreate_form.='<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>';
+
+$qcreate_form.='<table>';
+
+for($j=0;$j<$qcreate_get_noofrows;$j++)
+{
+	
+	$qcreate_form.='<tr>';
+	$fieldlabel=$adb->query_result($qcreate_get_result,$j,'fieldlabel');
+	$uitype=$adb->query_result($qcreate_get_result,$j,'uitype');
+	$tabid=$adb->query_result($qcreate_get_result,$j,'tabid');
+	
+	$fieldname=$adb->query_result($qcreate_get_result,$j,'fieldname');//for validation
+	$typeofdata=$adb->query_result($qcreate_get_result,$j,'typeofdata');//for validation
+       	$qcreate_form .= get_quickcreate_form($fieldlabel,$uitype,$fieldname,$tabid);
+
+	if($fieldname == "date_start")
+	{
+		$typeofdata = 'DT~M~event_time_start';
+	}
+	
+	//to get validationdata
+	//start
+	$fldLabel_array = Array();
+        $fldLabel_array[$fieldlabel] = $typeofdata;
+        $fieldName_array['QCK_E_'.$fieldname] = $fldLabel_array;
+	
+	//end
+	
+	$qcreate_form.='</tr>';
+
+}
+
+//for validation
+$validationData = $fieldName_array;
+
+$rows = count($validationData);
+foreach($validationData as $fldName => $fldLabel_array)
+{
+   if($fieldName == '')
+   {
+     $fieldName="'".$fldName;
+   }
+   else
+   {
+     $fieldName .=",".$fldName;
+   }
+   foreach($fldLabel_array as $fldLabel => $datatype)
+   {
+	if($fieldLabel == '')
+	{
 			
-		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Subject<br>
-		<input name='subject' id='event_subject' type="text" value=""><br>
-		<FONT class="required">${app_strings['LBL_REQUIRED_SYMBOL']}</FONT>Start Date & Time&nbsp;<br>
-		<input name="date_start" id="jscal_field_event_date_start" type="text" tabindex="2" size="11" maxlength="10" value="{$dis_value}"> <img src="themes/{$theme}/images/calendar.gif" id="jscal_trigger_event_date_start">&nbsp; 
-		<input name="time_start" id='event_time_start' tabindex="1" size="5" maxlength="5" type="text" value="{$curr_time}"><br>
-		<font size=1><em old="(yyyy-mm-dd 24:00)">($current_user->date_format 24:00)</em></font><br>
-		Activity Type<br>
-		<select name='activitytype'>
-EOQ;
+     		$fieldLabel = "'".$fldLabel;
+	}		
+        else
+        {
+       		$fieldLabel .= ",".$fldLabel;
+        }
+ 	if($fldDataType == '')
+        {
+      		$fldDataType = "'".$datatype;
+    	}
+	else
+        {
+       		$fldDataType .= ",".$datatype;
+     	}
+   }
+ }
+   $fieldName .= "'";
+   $fieldLabel .= "'";
+   $fldDataType .= "'";
+ 
+$qcreate_form.='</table>';
 
-$the_form .= get_select_options_with_id($comboFieldArray['activitytype_dom'], "");
-$the_form .= <<<EOQ
-                </select><br>
-		Duration<br>
-		<input name="duration_hours" type="text" size="2" value="1">&nbsp;
-		<select name='duration_minutes'>
-EOQ;
+$qcreate_form.='<input title="'.$app_strings["LBL_SAVE_BUTTON_TITLE"].'" accessKey="'.$app_strings["LBL_SAVE_BUTTON_KEY"].'" class="button" onclick="return verify_data(EventSave,'.$fieldName.','.$fieldLabel.','.$fldDataType.')" type="submit" name="button" value="'.$app_strings["LBL_SAVE_BUTTON_LABEL"].'" >';
+$qcreate_form.='</form>';
 
-$the_form .= get_select_options_with_id($comboFieldArray['duration_minutes_dom'], "");
-$the_form .= <<<EOQ
-                </select>(hours/minutes)<br>	
-		<br>
-		<input title="${app_strings['LBL_SAVE_BUTTON_TITLE']}" accessKey="${app_strings['LBL_SAVE_BUTTON_KEY']}" class="button" type="submit" name="button" value="${app_strings['LBL_SAVE_BUTTON_LABEL']}" >
-		</form>
-		<script type="text/javascript">
+$qcreate_form.='<script type="text/javascript">
 		Calendar.setup ({
-			inputField : "jscal_field_event_date_start", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger_event_date_start", singleClick : true, step : 1
+			inputField : "QCK_E_date_start", ifFormat : "'.$cal_dateformat.'", showsTime : false, button : "jscal_trigger_event_date_start", singleClick : true, step : 1
 		});
+				
+		</script>';
 
-		
-		</script>
-EOQ;
-$the_form .= get_left_form_footer();
-$the_form .= get_validate_record_js();
+$qcreate_form .= get_left_form_footer();
+$qcreate_form .= get_validate_record_js();
+
+return $qcreate_form;
 
 
-return $the_form;
+
+
 }
 ?>
