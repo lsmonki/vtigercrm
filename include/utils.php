@@ -32,7 +32,7 @@
   */
 
   require_once('include/database/PearDatabase.php');
-  
+  require_once('include/ComboUtil.php'); //new
 function return_name(&$row, $first_column, $last_column)
 {
 	$first_name = "";
@@ -4824,6 +4824,289 @@ function make_clickable($text)
    $ret = preg_replace("#,\"|\.\"|\)\"|\)\.\"|\.\)\"#", "\"", $ret);
 
    return($ret);
+}
+//for Quickcreate-Form
+
+function get_quickcreate_form($fieldlabel,$uitype,$fieldname,$tabid)
+{
+	$return_field ='';
+	switch($uitype)	
+	{
+		case 1: $return_field .=get_textField($fieldlabel,$fieldname);
+			return $return_field;
+			break;
+		case 2: $return_field .=get_textmanField($fieldlabel,$fieldname,$tabid);
+			return $return_field;
+			break;
+		case 6: $return_field .=get_textdateField($fieldlabel,$fieldname,$tabid);
+			return $return_field;
+			break;
+		case 11: $return_field .=get_textField($fieldlabel,$fieldname);
+			return $return_field;
+			break;
+		case 13: $return_field .=get_textField($fieldlabel,$fieldname);
+			return $return_field;	
+			break;
+		case 15: $return_field .=get_textcomboField($fieldlabel,$fieldname);
+			return $return_field;	
+			break;
+		case 16: $return_field .=get_textcomboField($fieldlabel,$fieldname);
+			return $return_field;	
+			break;
+		case 17: $return_field .=get_textwebField($fieldlabel,$fieldname);
+			return $return_field;
+			break;
+		case 19: $return_field .=get_textField($fieldlabel,$fieldname);
+			return $return_field;	
+			break;
+		case 22: $return_field .=get_textmanField($fieldlabel,$fieldname,$tabid);
+			return $return_field;
+			break;
+		case 23: $return_field .=get_textdateField($fieldlabel,$fieldname,$tabid);
+			return $return_field;
+			break;
+		case 50: $return_field .=get_textaccField($fieldlabel,$fieldname,$tabid);
+			return $return_field;
+			break;
+		case 51: $return_field .=get_textaccField($fieldlabel,$fieldname,$tabid);
+			return $return_field;
+			break;
+		case 55: $return_field .=get_textField($fieldlabel,$fieldname);
+			return $return_field;
+			break;
+		case 63: $return_field .=get_textdurationField($fieldlabel,$fieldname,$tabid);
+			return $return_field;
+			break;
+		case 71: $return_field .=get_textField($fieldlabel,$fieldname);
+			return $return_field;
+			break;
+	}
+}	
+		
+function get_textmanField($label,$name,$tid)
+{
+	$form_field='';
+	if($tid == 9)
+	{
+		$form_field .='<td>';
+		$form_field .= '<font color="red">*</font>';
+		$form_field .= $label.':<br>';
+		$form_field .='<input name="'.$name.'" id="QCK_T_'.$name.'" type="text" size="20" maxlength="" value=""></td>';
+		return $form_field;	
+	}
+	if($tid == 16)
+	{
+		$form_field .='<td>';
+		$form_field .= '<font color="red">*</font>';
+		$form_field .= $label.':<br>';
+		$form_field .='<input name="'.$name.'" id="QCK_E_'.$name.'" type="text" size="20" maxlength="" value=""></td>';
+		return $form_field;	
+	}
+	else
+	{
+		$form_field .='<td>';
+		$form_field .= '<font color="red">*</font>';
+		$form_field .= $label.':<br>';
+		$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="text" size="20" maxlength="" value=""></td>';
+		return $form_field;	
+	}	
+	
+}	
+
+function get_textwebField($label,$name)
+{
+
+	$form_field='';
+	$form_field .='<td>';
+	$form_field .= $label.':<br>http://<br>';
+	$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="text" size="20" maxlength="" value=""></td>';
+	return $form_field;
+	
+}
+
+function get_textField($label,$name)
+{
+	$form_field='';
+	if($name == "amount")
+	{
+		$form_field .='<td>';
+		$form_field .= $label.':(U.S Dollar:$)<br>';
+		$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="text" size="20" maxlength="" value=""></td>';
+		return $form_field;
+	}
+	else
+	{
+		
+		$form_field .='<td>';
+		$form_field .= $label.':<br>';
+		$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="text" size="20" maxlength="" value=""></td>';
+		return $form_field;
+	}
+	
+}
+
+function get_textaccField($label,$name,$tid)
+{
+	
+	global $app_strings;
+
+	$form_field='';
+	if($tid == 2)
+	{
+		$form_field .='<td>';
+		$form_field .= '<font color="red">*</font>';
+		$form_field .= $label.':<br>';
+		$form_field .='<input name="account_name" type="text" size="20" maxlength="" id="account_name" value="" readonly><br>';
+		$form_field .='<input name="account_id" id="QCK_'.$name.'" type="hidden" value="">&nbsp;<input title="'.$app_strings[LBL_CHANGE_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CHANGE_BUTTON_KEY].'" type="button" tabindex="3" class="button" value="'.$app_strings[LBL_CHANGE_BUTTON_LABEL].'" name="btn1" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';
+		return $form_field;
+	}
+	else
+	{	
+		$form_field .='<td>';
+		$form_field .= $label.':<br>';
+		$form_field .='<input name="account_name" type="text" size="20" maxlength="" value="" readonly><br>';
+		$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="hidden" value="">&nbsp;<input title="'.$app_strings[LBL_CHANGE_BUTTON_TITLE].'" accessKey="'.$app_strings[LBL_CHANGE_BUTTON_KEY].'" type="button" tabindex="3" class="button" value="'.$app_strings[LBL_CHANGE_BUTTON_LABEL].'" name="btn1" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\'></td>';
+		return $form_field;
+	}	
+		
+}
+function get_textcomboField($label,$name)
+{
+	$form_field='';
+	if($name == "sales_stage")
+	{
+		$comboFieldNames = Array('leadsource'=>'leadsource_dom'
+                      ,'opportunity_type'=>'opportunity_type_dom'
+                      ,'sales_stage'=>'sales_stage_dom');
+		$comboFieldArray = getComboArray($comboFieldNames);
+		$form_field .='<td>';
+		$form_field .= '<font color="red">*</font>';
+		$form_field .= $label.':<br>';
+		$form_field .='<select name="'.$name.'">';
+		$form_field .=get_select_options_with_id($comboFieldArray['sales_stage_dom'], "");
+		$form_field .='</select></td>';
+		return $form_field;
+		
+	}
+	if($name == "productcategory")
+	{
+		$comboFieldNames = Array('productcategory'=>'productcategory_dom');
+		$comboFieldArray = getComboArray($comboFieldNames);
+		$form_field .='<td>';
+		$form_field .= $label.':<br>';
+		$form_field .='<select name="'.$name.'">';
+		$form_field .=get_select_options_with_id($comboFieldArray['productcategory_dom'], "");
+		$form_field .='</select></td>';
+		return $form_field;	
+		
+	}
+	if($name == "ticketpriorities")
+	{
+		$comboFieldNames = Array('ticketpriorities'=>'ticketpriorities_dom');
+		$comboFieldArray = getComboArray($comboFieldNames);	
+		$form_field .='<td>';
+		$form_field .= $label.':<br>';
+		$form_field .='<select name="'.$name.'">';
+		$form_field .=get_select_options_with_id($comboFieldArray['ticketpriorities_dom'], "");
+		$form_field .='</select></td>';
+		return $form_field;
+	}
+	if($name == "activitytype")
+	{
+		$comboFieldNames = Array('activitytype'=>'activitytype_dom',
+			 'duration_minutes'=>'duration_minutes_dom');
+		$comboFieldArray = getComboArray($comboFieldNames);
+		$form_field .='<td>';
+		$form_field .= $label.'<br>';
+		$form_field .='<select name="'.$name.'">';
+		$form_field .=get_select_options_with_id($comboFieldArray['activitytype_dom'], "");
+		$form_field .='</select></td>';
+		return $form_field;
+		
+		
+	}
+	
+}
+
+
+function get_textdateField($label,$name,$tid)
+{
+	global $theme;
+	global $app_strings;
+	global $current_user;
+
+	$ntc_date_format = $app_strings['NTC_DATE_FORMAT'];
+	$ntc_time_format = $app_strings['NTC_TIME_FORMAT'];
+	
+	$form_field='';
+	$default_date_start = date('Y-m-d');
+	$default_time_start = date('H:i');
+	$dis_value=getNewDisplayDate();
+	
+	if($tid == 2)
+	{
+		$form_field .='<td>';
+		$form_field .= '<font color="red">*</font>';
+		$form_field .= $label.':<br>';
+		$form_field .='<font size="1"><em old="ntc_date_format">('.$current_user->date_format.')</em></font><br>';
+		$form_field .='<input name="'.$name.'"  size="12" maxlength="10" id="QCK_'.$name.'" type="text" value="">&nbsp';
+	       	$form_field .='<img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger"></td>';
+		return $form_field;
+			
+	}
+	if($tid == 9)
+	{
+		$form_field .='<td>';
+		$form_field .= '<font color="red">*</font>';
+		$form_field .= $label.':<br>';
+		$form_field .='<input name="'.$name.'" id="QCK_T_'.$name.'" tabindex="2" type="text" size="10" maxlength="10" value="'.$default_date_start.'">&nbsp';
+		$form_field.= '<img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_date_start">&nbsp';
+		$form_field.='<input name="time_start" id="task_time_start" tabindex="1" type="text" size="5" maxlength="5" type="text" value="'.$default_time_start.'"><br><font size="1"><em old="ntc_date_format">('.$current_user->date_format.')</em></font>&nbsp<font size="1"><em>'.$ntc_time_format.'</em></font></td>';
+		return $form_field;	
+	}
+	if($tid == 16)
+	{
+		$form_field .='<td>';
+		$form_field .= '<font color="red">*</font>';
+		$form_field .= $label.':<br>';
+		$form_field .='<input name="'.$name.'" id="QCK_E_'.$name.'" tabindex="2" type="text" size="10" maxlength="10" value="'.$default_date_start.'">&nbsp';
+		$form_field.= '<img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_event_date_start">&nbsp';
+		$form_field.='<input name="time_start" id="event_time_start" tabindex="1" type="text" size="5" maxlength="5" type="text" value="'.$default_time_start.'"><br><font size="1"><em old="ntc_date_format">('.$current_user->date_format.')</em></font>&nbsp<font size="1"><em>'.$ntc_time_format.'</em></font></td>';
+		return $form_field;	
+	}
+	
+	else
+	{
+		$form_field .='<td>';
+		$form_field .= '<font color="red">*</font>';
+		$form_field .= $label.':<br>';
+		$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="text" size="10" maxlength="10" value="'.$default_date_start.'">&nbsp';
+		$form_field.= '<img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger">&nbsp';
+		$form_field.='<input name="time_start" type="text" size="5" maxlength="5" type="text" value="'.$default_time_start.'"><br><font size="1"><em old="ntc_date_format">('.$current_user->date_format.')</em></font>&nbsp<font size="1"><em>'.$ntc_time_format.'</em></font></td>';
+		return $form_field;	
+	}
+	
+}
+
+
+function get_textdurationField($label,$name,$tid)
+{
+	$form_field='';
+	if($tid == 16)
+	{
+		
+		$comboFieldNames = Array('activitytype'=>'activitytype_dom',
+			 'duration_minutes'=>'duration_minutes_dom');
+		$comboFieldArray = getComboArray($comboFieldNames);
+	
+		$form_field .='<td>';
+		$form_field .= $label.'<br>';
+		$form_field .='<input name="'.$name.'" id="QCK_'.$name.'" type="text" size="2" value="1">&nbsp;';
+		$form_field .='<select name="duration_minutes">';
+		$form_field .=get_select_options_with_id($comboFieldArray['duration_minutes_dom'], "");
+		$form_field .='</select><br>(hours/minutes)<br></td>';
+		return $form_field;
+	}	
 }
 
 ?>
