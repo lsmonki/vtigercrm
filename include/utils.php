@@ -2469,6 +2469,8 @@ $vtlog->logthis("in getUserId_Ol ".$username,'info');
 	return $user_id;
 }	
 //outlook security
+
+/*
 function getNavigationValues($start, $noofrows, $list_max_entries_per_page)
 {
 	$navigation_array = Array();	
@@ -2532,7 +2534,69 @@ function getNavigationValues($start, $noofrows, $list_max_entries_per_page)
 	return $navigation_array;
 
 } 		
-
+*/
+//changed by rdhital/Raju to improve the pagination
+function getNavigationValues($display, $noofrows, $limit)
+{
+	$navigation_array = Array();   
+	global $limitpage_navigation;
+	if(isset($_REQUEST['allflag']) && $_REQUEST['allflag'] == 'All'){
+		$navigation_array['start'] =1;
+		$navigation_array['first'] = 1;
+		$navigation_array['end'] = 1;
+		$navigation_array['prev'] =0;
+		$navigation_array['next'] =0;
+		$navigation_array['end_val'] =$noofrows;
+		$navigation_array['current'] =1;
+		$navigation_array['allflag'] ='Normal';
+		$navigation_array['verylast'] =1;
+		return $navigation_array;
+	}
+	$start = ((($display * $limit) - $limit)+1);
+	$end = $start + ($limit-1);
+	if($end > $noofrows)
+	{
+		$end = $noofrows;
+	}
+	$paging = ceil ($noofrows / $limit);
+	// Display the navigation
+	if ($display > 1) {
+		$previous = $display - 1;
+	}
+	else {
+		$previous=0;
+	}
+	if ($noofrows != $limit) {
+		$last = $paging;
+		$first = 1;
+		if ($paging > $limitpage_navigation) {
+			$first = $display-floor(($limitpage_navigation/2));
+			if ($first<1) $first=1;
+			$last = ($limitpage_navigation - 1) + $first;
+		}
+		if ($last > $paging ) {
+			$first = $paging - ($limitpage_navigation - 1);
+			$last = $paging;
+		}
+	}
+	if ($display < $paging) {
+		$next = $display + 1;
+	}
+	else {
+		$next=0;
+	}
+	$navigation_array['start'] = $start;
+	$navigation_array['first'] = $first;
+	$navigation_array['end'] = $last;
+	$navigation_array['prev'] = $previous;
+	$navigation_array['next'] = $next;
+	$navigation_array['end_val'] = $end;
+	$navigation_array['current'] = $display;
+	$navigation_array['allflag'] ='All';
+	$navigation_array['verylast'] =$paging;
+	return $navigation_array;
+}
+//Code given by Raju Ends
 function getURLstring($focus)
 {
 	$qry = "";
