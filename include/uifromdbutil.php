@@ -132,6 +132,7 @@ function getBlockTableHeader($header_label)
 
 }
 //added $viewid for customview to retain the sameview 27/5
+/*
 function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='index',$viewid='')
 {
 	global $theme;
@@ -163,6 +164,50 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	}
 	$output .= '</td>';
 	return $output;
-}
+	}
+ */
+
+//modified rdhital/Raju to improve the pagination
+function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='index',$viewid='')
+{
+	global $theme;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+	$output = '<td align="right">';
+	$dir_name=getModuleDirName($module);
+	$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'&allflag='.$navigation_array['allflag'].'" >'.$navigation_array['allflag'].'</a>&nbsp;';
+	if(($navigation_array['prev']) != 0)
+	{
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'&viewname='.$viewid.'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+
+	}
+	else
+	{
+		$output .= '<img src="'.$image_path.'start_disabled.gif" border="0" align="absmiddle">&nbsp;';
+		$output .= '<img src="'.$image_path.'previous_disabled.gif" border="0" align="absmiddle">&nbsp;';
+	}
+	for ($i=$navigation_array['first'];$i<=$navigation_array['end'];$i++){
+		if ($navigation_array['current']==$i){
+			$output .='<b>'.$i.'</b>&nbsp;';
+		}
+		else{
+			$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$i.'&viewname='.$viewid.'" >'.$i.'</a>&nbsp;';
+		}
+	}
+	if(($navigation_array['next']) !=0)
+	{
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'&viewname='.$viewid.'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['verylast'].'&viewname='.$viewid.'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+	}
+	else
+	{
+		$output .= '<img src="'.$image_path.'next_disabled.gif" border="0" align="absmiddle">&nbsp;';
+		$output .= '<img src="'.$image_path.'end_disabled.gif" border="0" align="absmiddle">&nbsp;';
+	}
+	$output .= '</td>';
+	return $output;
+} 
+
 
 ?>
