@@ -42,6 +42,10 @@ $list_max_entries_per_page = '10';
 
 $history_max_viewed = '10';
 
+//For Navigation by rdhital/Raju
+$limitpage_navigation = '9';//change this number to whatever you want. This is the number of pages that will appear in the pagination.
+
+
 //define list of menu tabs
 //$moduleList = Array('Home', 'Dashboard', 'Leads', 'Contacts', 'Accounts', 'Opportunities', 'Cases', 'Notes', 'Calls', 'Emails', 'Meetings', 'Tasks');
 
