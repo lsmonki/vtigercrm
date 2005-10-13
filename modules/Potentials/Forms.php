@@ -26,6 +26,8 @@
  * Contributor(s): ______________________________________..
  */
 require_once('include/ComboUtil.php');
+require_once('include/utils.php'); //new
+
 function get_validate_record_js () {
 global $mod_strings;
 global $app_strings;
@@ -199,6 +201,8 @@ global $app_strings;
 global $app_list_strings;
 global $theme;
 global $current_user;
+global $adb;//for dynamic quickcreateform construction
+
 // Unimplemented until jscalendar language files are fixed
 // global $current_language;
 // global $default_language;
@@ -227,54 +231,110 @@ $comboFieldNames = Array('leadsource'=>'leadsource_dom'
                       ,'sales_stage'=>'sales_stage_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
-$the_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
-$the_form .= <<<EOQ
+$qcreate_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
 
-		<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
-		<script type="text/javascript" src="jscalendar/calendar.js"></script>
-		<script type="text/javascript" src="jscalendar/lang/calendar-{$cal_lang}.js"></script>
-		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-		<form name="EditView" onSubmit="return formValidate()" method="POST" action="index.php">
-			<input type="hidden" name="module" value="Potentials">
-			<input type="hidden" name="record" value="">
-			<input type="hidden" name="assigned_user_id" value='${user_id}'>
-			<input type="hidden" name="action" value="Save">
-		<FONT class="required">$lbl_required_symbol</FONT>$lbl_opportunity_name<br>
-		<input name='potentialname' id="quick_potentialname" type="text" value=""><br>
-		<FONT class="required">$lbl_required_symbol</FONT>$lbl_account_name<br>
-		<input name='account_name' type="text" id="account_name"  value="" readonly>
-		<input name="account_id" id="quick_account_id"  type="hidden" value="">&nbsp;<input title="Change" accessKey="Change" type="button" tabindex="3" class="button" value="Change" name="btn1" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=EditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");'>
-		<br>
+$qcreate_get_field="select * from field where tabid=2 and quickcreate=0 order by quickcreatesequence";
+$qcreate_get_result=$adb->query($qcreate_get_field);
+$qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
 
-		<FONT class="required">$lbl_required_symbol</FONT>$lbl_date_closed <br><font size="1"><em old='ntc_date_format'>($current_user->date_format)</em></font><br>
-		<input name='closingdate'  size='12' maxlength='10' id='jscal_field' type="text" value=""> <img src="themes/$theme/images/calendar.gif" id="jscal_trigger"><br>
-		<FONT class="required">$lbl_required_symbol</FONT>$lbl_sales_stage<br>
-		<select name='sales_stage'>
-EOQ;
-$the_form .= get_select_options_with_id($comboFieldArray['sales_stage_dom'], "");
-$the_form .= <<<EOQ
-		</select><br>
-		$lbl_amount<br>
-		<input name='amount' id='amount' type="text" value=''><br><br>
-		<input title="$lbl_save_button_title" accessKey="$lbl_save_button_key" class="button" type="submit" name="button" value="  $lbl_save_button_label  " >
-		</form>
-		<script type="text/javascript">
+$fieldName_array = Array();//for validation 
+
+$qcreate_form.='<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">';
+$qcreate_form.='<script type="text/javascript" src="jscalendar/calendar.js"></script>';
+$qcreate_form.='<script type="text/javascript" src="jscalendar/lang/calendar-'.$cal_lang.'.js"></script>';
+$qcreate_form.='<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>';
+$qcreate_form.='<form name="EditView" onSubmit="return formValidate()" method="POST" action="index.php">';
+$qcreate_form.='<input type="hidden" name="module" value="Potentials">';
+$qcreate_form.='<input type="hidden" name="record" value="">';
+$qcreate_form.='<input type="hidden" name="assigned_user_id" value="'.$user_id.'">';
+$qcreate_form.='<input type="hidden" name="action" value="Save">';
+
+$qcreate_form.='<table>';
+for($j=0;$j<$qcreate_get_noofrows;$j++)
+{
+	$qcreate_form.='<tr>';
+	$fieldlabel=$adb->query_result($qcreate_get_result,$j,'fieldlabel');
+	$uitype=$adb->query_result($qcreate_get_result,$j,'uitype');
+	$tabid=$adb->query_result($qcreate_get_result,$j,'tabid');
+	
+	$fieldname=$adb->query_result($qcreate_get_result,$j,'fieldname');//for validation
+	$typeofdata=$adb->query_result($qcreate_get_result,$j,'typeofdata');//for validation
+       	$qcreate_form .= get_quickcreate_form($fieldlabel,$uitype,$fieldname,$tabid);
+
+	
+	//to get validationdata
+	//start
+	$fldLabel_array = Array();
+        $fldLabel_array[$fieldlabel] = $typeofdata;
+        $fieldName_array['QCK_'.$fieldname] = $fldLabel_array;
+	
+	//end
+	
+	$qcreate_form.='</tr>';
+}
+
+
+//for validation
+$validationData = $fieldName_array;
+$fieldName = '';
+$fieldLabel = '';
+$fldDataType = '';
+
+$rows = count($validationData);
+foreach($validationData as $fldName => $fldLabel_array)
+{
+   if($fieldName == '')
+   {
+     $fieldName="'".$fldName."'";
+   }
+   else
+   {
+     $fieldName .= ",'".$fldName ."'";
+   }
+   foreach($fldLabel_array as $fldLabel => $datatype)
+   {
+	if($fieldLabel == '')
+	{
+			
+     		$fieldLabel = "'".$fldLabel ."'";
+	}		
+        else
+        {
+       		$fieldLabel .= ",'".$fldLabel ."'";
+        }
+ 	if($fldDataType == '')
+        {
+      		$fldDataType = "'".$datatype ."'";
+    	}
+	else
+        {
+       		$fldDataType .= ",'".$datatype ."'";
+     	}
+   }
+ }
+
+
+
+$qcreate_form.='</table>';
+
+$qcreate_form.='<input title="'.$lbl_save_button_title.'" accessKey="'.$lbl_save_button_key.'" class="button" type="submit" name="button" value="'.$lbl_save_button_label.'" >';
+$qcreate_form.='</form>';
+$qcreate_form.='<script type="text/javascript">
 		Calendar.setup ({
-			inputField : "jscal_field", ifFormat : "$cal_dateformat", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
+			inputField : "QCK_closingdate", ifFormat : "'.$cal_dateformat.'", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1
 		});
-		
-	var fieldname = new Array('quick_potentialname','quick_account_id','closingdate','sales_stage','amount')
-	var fieldlabel = new Array('Potential Name','Account Name','Expected Close Date','Sales Stage','Amount')
-	var fielddatatype = new Array('V~M','V~M','D~M','V~O','N~O')	
+	var fieldname = new Array('.$fieldName.')
+	var fieldlabel = new Array('.$fieldLabel.')
+	var fielddatatype = new Array('.$fldDataType.')
 
-		</script>
 
-EOQ;
+		</script>';
+$qcreate_form .= get_left_form_footer();
 
-$the_form .= get_left_form_footer();
-//$the_form .= get_validate_record_js();
+return $qcreate_form;
 
-return $the_form;
+
+
 }
 
 ?>
