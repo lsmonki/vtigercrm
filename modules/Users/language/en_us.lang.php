@@ -311,7 +311,11 @@ $mod_strings = Array(
 'LBL_QUOTE_FIELD_ACCESS'=>'Quote Field Access',
 'LBL_PO_FIELD_ACCESS'=>'Purchase Order Field Access',
 'LBL_SO_FIELD_ACCESS'=>'Sales Order Access',
-'LBL_INVOICE_FIELD_ACCESS'=>'Invoice Field Access'
+'LBL_INVOICE_FIELD_ACCESS'=>'Invoice Field Access',
+
+//given for calendar color for an user user
+'LBL_COLOR'=>'Color in Calendar'
+
 
 );
 
