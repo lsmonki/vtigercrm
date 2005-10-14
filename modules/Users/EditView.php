@@ -212,7 +212,8 @@ if (is_admin($current_user)) {
                    
                    $xtpl->assign("GROUP_NAME", $GROUP_SELECT_OPTION);
 
-	  
+ 		$xtpl->assign("CAL_COLOR",'<INPUT TYPE="text" NAME="cal_color" SIZE="10" VALUE="'.$focus->cal_color.'" style="background-color:'.$focus->cal_color.';"> <img src="include/images/bgcolor.gif" onClick="cp2.select(document.EditView.cal_color,\'pick2\');return false;" NAME="pick2" ID="pick2" align="middle">');
+		 
 
 }
 
