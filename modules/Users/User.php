@@ -32,6 +32,7 @@ class User extends SugarBean {
 	var $id;
 	var $user_name;
 	var $user_password;
+	var $cal_color;
 	var $first_name;
 	var $last_name;
 	var $date_entered;
@@ -77,6 +78,7 @@ class User extends SugarBean {
 	var $column_fields = Array("id"
 		,"user_name"
 		,"user_password"
+		,"cal_color"
 		,"first_name"
 		,"last_name"
 		,"description"
