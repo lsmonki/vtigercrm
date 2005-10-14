@@ -175,7 +175,7 @@ $xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php
 
 
 
-$contact_tables = Array('contactdetails','crmentity','contactsubdetails','contactscf','contactaddress'); 
+$contact_tables = Array('contactdetails','crmentity','contactsubdetails','contactscf','contactaddress','CustomerDetails'); 
 
  $tabid = getTabid("Contacts");
  $validationData = getDBValidationData($contact_tables,$tabid);
