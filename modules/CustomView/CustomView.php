@@ -130,6 +130,11 @@ class CustomView extends CRMEntity{
 
 		$result = $adb->query($sql);
                 $noofrows = $adb->num_rows($result);
+		//Added on 14-10-2005 -- added ticket id in list
+                if($module == 'HelpDesk' && $block == 1)
+                {
+                        $module_columnlist['crmentity:crmid::HelpDesk_Ticket ID:I'] = 'Ticket ID';
+                }
                 for($i=0; $i<$noofrows; $i++)
                 {
                         $fieldtablename = $adb->query_result($result,$i,"tablename");
@@ -659,7 +664,15 @@ class CustomView extends CRMEntity{
 		}
 		else if($fieldname == "crmid" || $fieldname == "parent_id")
 		{
-			$value = $tablename.".".$fieldname." in (".$this->getSalesEntityId($value).") ";
+			//Added on 14-10-2005 -- for HelpDesk
+			if($this->customviewmodule == 'HelpDesk' && $fieldname == "crmid")
+			{
+				$value = $tablename.".".$fieldname.$this->getAdvComparator($comparator,$value);
+			}
+			else
+			{
+				$value = $tablename.".".$fieldname." in (".$this->getSalesEntityId($value).") ";
+			}
 		}
 		else
 		{
