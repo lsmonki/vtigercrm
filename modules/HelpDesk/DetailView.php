@@ -163,7 +163,7 @@ function getCommentInformation($ticketid)
 		if($adb->query_result($result,$i,'comments') != '')
 		{
                         $list .= '<div valign="top" width="70%"class="dataField">';
-                        $list .= nl2br($adb->query_result($result,$i,'comments'));
+			$list .= make_clickable(nl2br($adb->query_result($result,$i,'comments')));
 
 			$list .= '</div><div valign="top" width="20%" class="dataLabel"><font color=darkred>';
         	        $list .= $mod_strings['LBL_AUTHOR'].' : ';
