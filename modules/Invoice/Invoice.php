@@ -56,7 +56,7 @@ class Invoice extends CRMEntity {
 
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('subject','crmid');		
+	var $sortby_fields = Array('subject','crmid','invoicestatus');		
 
 	// This is used to retrieve related fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'smownerid', 'opportunity_id', 'case_id', 'contact_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id', 'parent_name', 'member_id' );
@@ -66,6 +66,7 @@ class Invoice extends CRMEntity {
 				'Invoice Id'=>Array('crmentity'=>'crmid'),
 				'Subject'=>Array('invoice'=>'subject'),
 				'Sales Order'=>Array('invoice'=>'salesorderid'),
+				'Status'=>Array('invoice'=>'invoicestatus'),
 				'Total'=>Array('invoice'=>'total'),
 				'Assigned To'=>Array('crmentity'=>'smownerid')
 				);
@@ -74,6 +75,7 @@ class Invoice extends CRMEntity {
 				        'Invoice Id'=>'',
 				        'Subject'=>'subject',
 				        'Sales Order'=>'salesorder_id',
+					'Status'=>'invoicestatus',
 				        'Total'=>'hdnGrandTotal',
 				        'Assigned To'=>'assigned_user_id'
 				      );
