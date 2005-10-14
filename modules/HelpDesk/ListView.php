@@ -388,9 +388,21 @@ $view_script = "<script language='javascript'>
 	set_selected();
 	</script>";
 
+//Changed here -- 14-10-2005 -- sort by "assignedto" and default sort by "ticketid"(DESC)
 if(isset($order_by) && $order_by != '')
 {
-        $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
+	if($order_by == 'smownerid')
+	{
+		$list_query .= ' ORDER BY users.user_name '.$sorder;
+	}
+	else
+	{
+	        $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
+	}
+}
+else
+{
+	$list_query .= ' order by troubletickets.ticketid DESC';
 }
 
 

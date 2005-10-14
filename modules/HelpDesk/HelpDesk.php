@@ -20,7 +20,7 @@ class HelpDesk extends CRMEntity {
 	var $tab_name_index = Array('crmentity'=>'crmid','troubletickets'=>'ticketid','seticketsrel'=>'ticketid','ticketcf'=>'ticketid','ticketcomments'=>'ticketid');
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('title','status','priority','crmid','firstname');
+	var $sortby_fields = Array('title','status','priority','crmid','firstname','smownerid');
 
 	var $list_fields = Array(
 	'Ticket ID'=>Array('crmentity'=>'crmid'),
