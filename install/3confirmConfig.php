@@ -308,7 +308,7 @@ if($mysql_status == 'false')
           </tr>
 	  <tr>
 		<td>
-			<font color=brown><b><P>Error Message: Unable to connect to database Sever with the specified connection parameters. This may be due to the following reasons:<P>
+			<font color=brown><b><P>Error Message: Unable to connect to database Server with the specified connection parameters. This may be due to the following reasons:<P>
 
 			-  specified database user, password , hostname or port is invalid.<BR>
                         -  specified database user does not have access to connect to the database server from the host</b></font>
