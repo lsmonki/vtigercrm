@@ -99,7 +99,7 @@ class Contact extends CRMEntity {
 
 	var $column_fields = Array();
 	
-	var $sortby_fields = Array('lastname','title','email','phone');
+	var $sortby_fields = Array('lastname','title','email','phone','smownerid');
 
 	// This is used to retrieve related fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'account_name', 'account_id', 'opportunity_id', 'case_id', 'task_id', 'note_id', 'meeting_id', 'call_id', 'email_id');		

@@ -308,7 +308,14 @@ $view_script = "<script language='javascript'>
 
 if(isset($order_by) && $order_by != '')
 {
-        $query .= ' ORDER BY '.$order_by.' '.$sorder;
+	if($order_by == 'smownerid')
+        {
+                $query .= ' ORDER BY user_name '.$sorder;
+        }
+        else
+        {
+                $query .= ' ORDER BY '.$order_by.' '.$sorder;
+        }
 }
 
 $list_result = $adb->query($query);

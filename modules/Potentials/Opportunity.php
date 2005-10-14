@@ -78,7 +78,7 @@ class Potential extends CRMEntity {
 	
 	var $column_fields = Array();
 
-        var $sortby_fields = Array('potentialname','amount','closingdate');
+        var $sortby_fields = Array('potentialname','amount','closingdate','smownerid');
 
 	// This is used to retrieve related fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'accountname', 'accountid', 'productname', 'productid', 'contactid', 'taskid', 'notesid', 'meetingid', 'callid', 'emailid');
