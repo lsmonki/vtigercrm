@@ -10,6 +10,9 @@
 		<field name="user_name" type="C" size="20"></field>
 		<field name="user_password" type="C" size="30"></field>
 		<field name="user_hash" type="C" size="32"></field>
+		<field name="cal_color" type="C" size="25">
+			<DEFAULT value="#E6FAD8"/>
+		</field>
 		<field name="first_name" type="C" size="30"></field>
 		<field name="last_name" type="C" size="30"></field>
 		<field name="reports_to_id" type="C" size="36"></field>
