@@ -192,6 +192,12 @@ $array = Array(
 
                     <td align="right"><?php echo (is_writable('./test/upload/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable <br>You might experience problems with the file attachments feature. You might visit the following link for more details : <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>attachment issue</a></font></strong>"; ?></td>
                  </tr>
+		 <tr>
+		 	<td bgcolor="#EEEEEE"><strong>Images Directory 	(cache/images/)</strong></td>
+			
+	                <td align="right"><?php echo (is_writable('./cache/images/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable <br>You might experience problems with dynamic images such as 'My Pipeline'. You might visit the following link for more details : <a href=\"http://www.vtiger.com/discussions/viewtopic.php?t=371&highlight=jpgraph+cache+error\">JpGraph Error</a></font></strong>"; ?></td>
+				
+ 		</tr>
 		<tr>
 		    <td bgcolor="#EEEEEE"><strong>Email Templates Directory (modules/Emails/templates/)</strong></td>
 
