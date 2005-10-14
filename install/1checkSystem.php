@@ -183,19 +183,16 @@ $array = Array(
                     <td align="right"><?php echo (is_writable('./cache/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</font></strong>"; ?></td>
                  </tr>
 		<tr>
-		 <tr>
 		    <td bgcolor="#EEEEEE"><strong>Mail Merge Template Directory (test/wordtemplatedownload/)</strong></td>
 
                     <td align="right"><?php echo (is_writable('./test/wordtemplatedownload/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable<br> You might experience issues with the word template feature. You might visit the link for more details : <a href=\"http://www.vtiger.com/discussions/viewtopic.php?p=2200#2200\" target=\"_blank\">forums</a> </font></strong>"; ?></td>
                  </tr>
 		<tr>
-		 <tr>
 		    <td bgcolor="#EEEEEE"><strong>Uploads Directory (test/upload/)</strong></td>
 
                     <td align="right"><?php echo (is_writable('./test/upload/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable <br>You might experience problems with the file attachments feature. You might visit the following link for more details : <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>attachment issue</a></font></strong>"; ?></td>
                  </tr>
 		<tr>
-		 <tr>
 		    <td bgcolor="#EEEEEE"><strong>Email Templates Directory (modules/Emails/templates/)</strong></td>
 
                     <td align="right"><?php echo (is_writable('./modules/Emails/templates/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable. You might experience problems with the email templates feature. You might refer to the following link for more details :<a href= http://www.vtiger.com/forums/viewtopic.php?t=388&highlight=permission>email templates issue </a> </font></strong>"; ?></td>
