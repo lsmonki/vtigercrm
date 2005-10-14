@@ -9,5 +9,38 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
+{HR}
 {ROLES}
+<script>
+function showhide(argg)
+{
+	var harray=argg.split(",");
+	var harrlen = harray.length;
+	var i;
+	for(i=0; i<harrlen; i++)
+	{
+        	var x=document.getElementById(harray[i]).style
+        	if (x.display=="none")
+        	{
+                	x.display="block"
+
+        	}
+        	else
+		{
+                        x.display="none"
+                }
+	}
+}
+function showx(argg)
+{
+	var x=document.getElementById(argg).style;
+	x.display="block";
+	x.position="relative";
+}
+function hidex(argg)
+{
+	var x=document.getElementById(argg).style;
+	x.display="none";
+}
+</script>
 <!-- END: main -->

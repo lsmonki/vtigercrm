@@ -89,7 +89,109 @@ function getStdOutput($roleListResult, $noofrows, $mod_strings)
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("ROLES", $standCustFld);
 
+//Retreiving the hierarchy
+$hquery = "select * from test_role order by parentrole asc";
+$hr_res = $adb->query($hquery);
+$num_rows = $adb->num_rows($hr_res);
+$hrarray= Array();
 
+for($l=0; $l<$num_rows; $l++)
+{
+	$roleid = $adb->query_result($hr_res,$l,'roleid');
+	$parent = $adb->query_result($hr_res,$l,'parentrole');
+	$temp_list = explode('::',$parent);
+	$size = sizeof($temp_list);
+	$i=0;
+	$k= Array();
+	$y=$hrarray;
+	if(sizeof($hrarray) == 0)
+	{
+		$hrarray[$temp_list[0]]= Array();
+	}
+	else
+	{
+		while($i<$size-1)
+		{
+			$y=$y[$temp_list[$i]];
+			$k[$temp_list[$i]] = $y;
+			$i++;
+
+		}
+		//echo '<BR> Now the last array is';
+		//print_r($y);
+		//echo '<BR>';
+		$y[$roleid] = Array();
+		//print_r($y);
+		//echo '<BR>';
+		$k[$roleid] = Array();
+		//print_r($k);
+
+		//Reversing the Array
+		$rev_temp_list=array_reverse($temp_list);
+		$j=0;
+		//Now adding this into the main array
+		foreach($rev_temp_list as $value)
+		{
+			if($j == $size-1)
+			{
+				$hrarray[$value]=$k[$value];
+			}
+			else
+			{
+				$k[$rev_temp_list[$j+1]][$value]=$k[$value];
+				//print_r($k);
+			}
+			$j++;
+		}
+	}
+
+
+	//echo '<BR> Final Array is <BR>';
+	//print_r($hrarray);
+	//echo '<BR>';
+
+}
+//print_r($hrarray);
+//Constructing the Roledetails array
+$role_det = getAllRoleDetails();
+$query = "select * from temp_role";
+$result = $adb->query($query);
+$num_rows=$adb->num_rows($result);
+
+
+
+$roleout='';
+indent($hrarray,$roleout,$role_det);
+function indent($hrarray,$roleout,$role_det)
+{
+	foreach($hrarray as $roleid => $value)
+	{
+		//retreiving the role details
+		$role_det_arr=$role_det[$roleid];
+		$roleid_arr=$role_det_arr[2];
+		$rolename = $role_det_arr[0]; 
+		echo '<ul class="small" id="'.$roleid.'" style="display:block">';
+		echo '<li>';
+		//echo '<li><a href="#" onClick="showhide(\''.$roleid_arr.'\')">'.$rolename.'</a>';
+		echo '<table onMouseOver="showx(\''.$roleid.'tools\')" onMouseOut="hidex(\''.$roleid.'tools\')" border=0 cellspacing=0 cellpadding=2 class=small >';
+		echo '<tr style="height:20px">';
+
+		echo '<td valign=top><a href="#" style="width:100%" onClick="showhide(\''.$roleid_arr.'\')" >'.$rolename.'</a></td>';
+		echo '<td style="width:5px"></td>';
+		echo '<td valign=top><span id="'.$roleid.'tools" style="display:none"> <a href="createnewrole.php">Add</a> | <a href="editrole.php">Edit</a> | Delete </span></td>';
+		echo '</tr>';
+		echo '</table>';
+		if(sizeof($value) > 0 )
+		{
+			indent($value,$roleout,$role_det);
+		}
+
+		echo '</ul>';
+	}
+	
+
+}
+$xtpl->assign("HR", $roleout);
 $xtpl->parse("main");
 $xtpl->out("main");
 
