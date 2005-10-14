@@ -68,7 +68,8 @@ require_once('modules/Calendar/UserCalendar.php');
 
    }
    Function info() {
-     global $lang,$tutos,$calpath,$callink,$image_path,$mod_strings;
+  //   global $lang,$tutos,$calpath,$callink,$image_path,$mod_strings;
+	global $lang,$tutos,$calpath,$callink,$image_path,$mod_strings,$adb;
 
      //$adr = $this->user;
      //$adr = $this->pref;
@@ -194,21 +195,43 @@ require_once('modules/Calendar/UserCalendar.php');
 
 			   continue;
 			 }
-			 if ( !$hastable ) {
+			if ( !$hastable ) 
+			{
 				
-			   echo "<table width=\"100%\" class=\"event\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">\n";
-			   $hastable = true;
-			 } else {
-			   echo "  <tr><td class=\"eventSep\" colspan=\"3\"><img src=\"". $image_path ."blank.gif\" width=\"100%\" height=\"1\"></td></tr>\n";
-			 }
-			 // Show appointments or task or whatever
-			 $this->pref->callist[$idx]->formatted();
+			  	echo "<table width=\"100%\" class=\"event\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">\n";
+			   	$hastable = true;
+			} 
+			else 
+			{
+			   	echo "  <tr><td class=\"eventSep\" colspan=\"3\"><img src=\"". $image_path ."blank.gif\" width=\"100%\" height=\"1\"></td></tr>\n";
+				
+			}
+			// Show appointments or task or whatever
+			$color = "";
+			$username=$this->pref->callist[$idx]->creator;
+			if ($username!="")
+			{
+				$query="SELECT cal_color FROM users where user_name = '$username'";
+
+				$result=$adb->query($query);
+				if($adb->getRowCount($result)!=0)
+				{
+					$res = $adb->fetchByAssoc($result, -1, false);
+					$usercolor = $res['cal_color'];
+					$color="style=\"background: ".$usercolor.";\"";
+				}
+			}
+			echo "\n<tr><td><table width=\"100%\" class=\"event\" $color cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
+			$this->pref->callist[$idx]->formatted();
+			echo "\n</table></td></tr>";
 
 		   }
-	
-		   if ( $hastable ) {
+		   if ( $hastable ) 
+		   {
 			 echo " </table>\n";
-		   } else {
+		   }
+		   else 
+		   {
 			  echo "<br/><br/><br/><br/>\n";
 		   }
 	

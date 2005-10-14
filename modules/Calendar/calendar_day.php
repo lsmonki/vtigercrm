@@ -7,7 +7,8 @@
  * @modulegroup appointment
  * @module calendar_day
  */
- 
+ require_once('modules/Users/User.php');
+
  global $calpath,$callink;
  $calpath = 'modules/Calendar/';
  $callink = 'index.php?module=Calendar&action=';
@@ -17,6 +18,9 @@
  $image_path=$theme_path."images/";
  require_once ($theme_path."layout_utils.php");
  global $mod_strings,$app_strings,$current_user;
+
+
+
 
  echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'], true); 
 echo "\n<BR>\n";
@@ -63,7 +67,7 @@ require_once('modules/Calendar/UserCalendar.php');
     * the data display part
     */
    Function info() {
-     global $lang,$tutos,$callink,$calpath,$image_path,$mod_strings,$current_user;
+     global $lang,$tutos,$callink,$calpath,$image_path,$mod_strings,$current_user,$adb;
 ?>
 <script type="text/javascript" language="Javascript" src="include/general.js"></script>
 <script type="text/javascript" language="Javascript">
@@ -296,11 +300,23 @@ function check_form()
        echo "&nbsp;</th>\n";
        
        for ($c = 0 ; $c < $maxcol ; $c++ ) {
-         if ( isset ( $table[$i][$c] ) ) {
+         if ( isset ( $table[$i][$c] ) ) { 
            if ( is_object ( $table[$i][$c] ) ) {
              echo " <td class=\"line". (1+($i % 2)) ."\" valign=\"top\" rowspan=\"". $rowspan[$i][$c]."\">";
              //echo "<img height=\"1\" width=\"100%\" src=\"". $image_path ."black.png\" alt=\"--------\"/>";
-             echo "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\" class=\"event\">\n";
+            $color = "";
+	          $username=$table[$i][$c]->creator;
+	          if ($username!=""){
+              $query="SELECT cal_color FROM users where user_name = '$username'";
+           
+  		        $result=$adb->query($query);
+  		        if($adb->getRowCount($result)!=0){
+  			         $res = $adb->fetchByAssoc($result, -1, false);
+  				       $usercolor = $res['cal_color'];
+  				       $color="style=\"background: ".$usercolor.";\"";
+  		        }
+             }
+             echo "<table border=\"0\" cellpadding=\"3\" cellspacing=\"0\" class=\"event\" $color>\n";
              echo $table[$i][$c]->formatted();
              echo " </table></td>\n";
            } else if ( $table[$i][$c] = -1 ) {
