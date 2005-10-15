@@ -316,7 +316,11 @@ $mod_strings = Array(
 'LBL_FIELD_ACCESSIBILITY'=>'Field Accessibility',
 
 'LBL_SETTING_FIELD_ACCESSIBILITY'=>' - Setting Field Accessibility for each profiles',
+//<<<<<<<<for edit ordering blocks>>>>>>
+'LBL_FIELD_ORDERING_DESC'=>'Edit Field Order',
 
+'LBL_FIELD_ORDERING'=>'Edit Field Blocks',
+//<<<<<<<<<<end>>>>>>>>>>>>>
 'LBL_LEAD_FIELD_ACCESS'=>'Lead Field Access',
 
 'LBL_ACCOUNT_FIELD_ACCESS'=>'Account Field Access',
@@ -501,6 +505,8 @@ t, contact, or potential fields. These mappings will be used when you convert le
 
 //After 4.2 GA
 'LBL_TEXT_AREA'=>'Text Area',
+//for Edit ordering the blocks
+'NOTESCUSTOMFIELDS'=>'Notes Custom Fields',
 
 );
 
