@@ -481,7 +481,7 @@ $server->register(
 
 $server->register(
 	'get_KBase_details',
-	array(''=>''),
+	array('id'=>'xsd:string'),
 	array('return'=>'tns:KBase_array'),
 	$NAMESPACE);
 
@@ -501,15 +501,16 @@ $server->register(
 	array('faqid'=>'xsd:string','comments'=>'xsd:string'),
 	array('return'=>'tns:KBase_array'),
 	$NAMESPACE);
-
+//ContactSerialise fix by CraigF
 $server->register(
 	'update_ticket_comment',
-	array('ticketid'=>'xsd:string'),
-	array('ownerid'=>'xsd:string'),
-	array('createdtime'=>'xsd:string'),
-	array('comments'=>'xsd:string'),
+	array('ticketid'=>'xsd:string',
+              'ownerid'=>'xsd:string',
+              'createdtime'=>'xsd:string',
+              'comments'=>'xsd:string'),
 	array('return'=>'tns:ticket_update_comment_array'),
 	$NAMESPACE);
+//End 
 $server->register(
         'close_current_ticket',
         array('ticketid'=>'xsd:string'),
