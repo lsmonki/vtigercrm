@@ -1,0 +1,22 @@
+ul.sortable li {
+	position: relative;
+}
+
+ul.boxy {
+	list-style-type: none;
+	padding: 2px 2px 0 2px;
+	margin: 0px;
+	width: 10em;
+	font-size: 9px;
+	font-family: Tahoma;
+	border: 1px solid #ccc;
+}
+ul.boxy li {
+	cursor:move;
+	font-size: 9px;
+	font-family: Arial;
+	margin-bottom: 1px;
+	padding: 1px 1px;
+	border: 1px solid #ccc;
+	background-color: #eee;
+}
