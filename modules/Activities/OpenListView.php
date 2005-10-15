@@ -69,7 +69,9 @@ for($i=0;$i<$noofrows;$i++)
 				     'recurringtype' => getDisplayDate($adb->query_result($list_result,$i,'recurringtype')),
 				     'recurringdate' => getDisplayDate($adb->query_result($list_result,$i,'recurringdate')),
 
-				     'parent'=> $parent_name,	
+				     'parent'=> $parent_name,
+				     // Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+				     'priority' => $adb->query_result($list_result,$i,'priority'), // Armando Lüscher 04.07.2005 -> §priority -> Desc: Get priority from db
                                      );
 }
 
@@ -84,12 +86,10 @@ $later_day = getDisplayDate(date("Y-m-d", strtotime("$today + 7 days")));
 $xtpl->assign("ENDDATE", $later_day);
 
 $xtpl->assign("IMAGE_PATH", $image_path);
-
-$xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=" .((is_object($focus)) ? $focus->id : ""));
+$xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=" . ((is_object($focus)) ? $focus->id : ""));
 
 $oddRow = true;
 #if (count($open_activity_list) > 0) $open_activity_list = array_csort($open_activity_list, 'date_start', 'time_start', SORT_ASC);
-
 foreach($open_activity_list as $event)
 {
 	$recur_date=ereg_replace('--','',$event['recurringdate']);
@@ -110,18 +110,42 @@ foreach($open_activity_list as $event)
 		'DUEDATE' => ereg_replace('--','',$event['due_date']),
 		'RECURRINGDATE' => ereg_replace('--','',$event['recurringdate']),
 		'PARENT_NAME' => $event['parent'],
+		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+		'PARENT_NAME' => $event['parent'],
 	);
+	
+	// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+	// begin: Armando Lüscher 04.07.2005 -> §priority
+	// Desc: Set priority colors
+	$font_color_high = "color:#00DD00;";
+	$font_color_medium = "color:#DD00DD;";
+
+	switch ($event['priority'])
+	{
+		case 'High':
+			$xtpl->assign("P_FONT_COLOR", $font_color_high);
+			break;
+		case 'Medium':
+			$xtpl->assign("P_FONT_COLOR", $font_color_medium);
+			break;
+		default:
+			$xtpl->assign("P_FONT_COLOR", '');
+	}
+	// end: Armando Lüscher 04.07.2005 -> §priority
+	
+	
 	$end_date=$event['due_date']; //included for getting the OverDue Activities in the Upcoming Activities
 	$start_date=$event['date_start'];
 
 	switch ($event['type']) {
 		case 'Call':
-			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&eventstatus=Held'>X</a>";
+			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&eventstatus=Held' style='{P_FONT_COLOR}'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 		break;
 		case 'Meeting':
-			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&eventstatus=Held'>X</a>";
+			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&eventstatus=Held' style='{P_FONT_COLOR}'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+
 		case 'Task':
-			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed'>X</a>";
+			$activity_fields['SET_COMPLETE'] = "<a href='index.php?return_module=Home&return_action=index&return_id=$focus->activityid&action=Save&module=Activities&record=".$event['id']."&activity_type=".$event['type']."&change_status=true&status=Completed' style='{P_FONT_COLOR}'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 			break;
 	}
 
