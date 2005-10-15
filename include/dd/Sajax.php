@@ -1,4 +1,3 @@
-//File contributed by Mike Crowe for Ordering Fields
 <?php	
 if (!isset($SAJAX_INCLUDED)) {
 
