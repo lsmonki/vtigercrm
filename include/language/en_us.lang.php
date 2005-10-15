@@ -434,6 +434,8 @@ $app_strings = Array(
 
 'LBL_LAST_MODIFIED'=>'Last Modified',
 
+'LBL_CREATED'=>'Created', // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Added
+
 'LBL_DESCRIPTION'=>'Description',
 
 
