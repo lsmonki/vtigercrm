@@ -3055,6 +3055,27 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
 		$owner_id = $adb->query_result($list_result,$i-1,"smownerid");
 
+		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+		// begin: Armando Lüscher 05.07.2005 -> §priority
+		// Code contri buted by fredy Desc: Set Priority color
+		$priority = $adb->query_result($list_result,$i-1,"priority");
+
+		$font_color_high = "color:#00DD00;";
+		$font_color_medium = "color:#DD00DD;";
+		$P_FONT_COLOR = "";
+		switch ($priority)
+		{
+			case 'High':
+				$P_FONT_COLOR = $font_color_high;
+				break;
+			case 'Medium':
+				$P_FONT_COLOR = $font_color_medium;
+				break;
+			default:
+				$P_FONT_COLOR = "";
+		}
+		//end: Armando Lüscher 05.07.2005 -> §priority
+
 		if($relatedlist == '')
 		{
 			$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
@@ -3124,7 +3145,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                                         }
 							
 							if(($contact_name != "") && ($contact_id !='NULL'))
-								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
+								//$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
+								// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}
 						if ($name == 'Close')
 						{
@@ -3142,7 +3165,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                                                 $evt_status='&eventstatus=Held';
 								if(isPermitted("Activities",1,$activityid) == 'yes')
                         					{
-                                                                	$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
+                                                                	//$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
+                                                                	// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+                                                                	$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 								}
 								else
 								{
@@ -3167,12 +3192,16 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                                 {
                                                 	$account_id = $adb->query_result($list_result,$i-1,"crmid");
                                                 	$account_name = getAccountName($account_id);
-                                                	$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+                                                	//$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+                                                	// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+                                                	$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
                                                 }else
                                                 {
                                                 	$account_id = $adb->query_result($list_result,$i-1,"accountid");
                                                 	$account_name = getAccountName($account_id);
-                                                	$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+                                                	//$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+                                                	// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+                                                	$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
                                                 }
 					}
 					elseif(($module == 'PriceBook' || $module == 'Quotes' || $module == 'Orders' || $module == 'Faq') && $name == 'Product Name')
@@ -3217,7 +3246,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				}
 				else
 				{
-					$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
+					//$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
+					// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+					$list_header .= '<td height="21" style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'.$value.'</td>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
 					$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 				}
 				if($fieldname=='filename')
@@ -3239,20 +3270,24 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			else
 				$returnset .= '&activity_mode=Events';
 		}
-		$list_header .= '<td style="padding:0px 3px 0px 3px;">';
+		//$list_header .= '<td style="padding:0px 3px 0px 3px;">';
+		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+		$list_header .= '<td style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
 		$mod_dir=getModuleDirName($module);
 		if(isPermitted($module,1,$entity_id) == 'yes')
 		{
-			
-			
-			$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
+			//$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
+			// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+			$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'" style="'.$P_FONT_COLOR.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 		}
 		if(isPermitted($module,2,$entity_id) == 'yes')
 		{
 			$del_param = 'index.php?action='.$del_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset;
 			$list_header .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
 		}
-		$list_header .= '<td>';
+		//$list_header .= '<td>';
+		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+		$list_header .= '</td>'; // Armando Lüscher 05.07.2005 -> Changed from <td> to </td>
 		$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 		$list_header .= '</tr>';
 	}
