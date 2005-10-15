@@ -259,7 +259,7 @@ $vtlog->logthis("module is ".$module,'info');
     }
                 
     //This check is done for products.
-    if($module == 'Products' || $module == 'Notes' || $module =='Faq')
+    if($module == 'Products' || $module == 'Notes' || $module =='Faq' || $module == 'Vendor' || $module == 'PriceBook')
     {
 $vtlog->logthis("module is =".$module,'info');  
       $ownerid = $current_user->id;
