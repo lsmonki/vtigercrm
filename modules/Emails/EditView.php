@@ -143,6 +143,7 @@ $block_1 = getBlockInformation("Emails",1,$focus->mode,$focus->column_fields);
 $block_2 = getBlockInformation("Emails",2,$focus->mode,$focus->column_fields);
 $block_3 = getBlockInformation("Emails",3,$focus->mode,$focus->column_fields);
 $block_4 = getBlockInformation("Emails",4,$focus->mode,$focus->column_fields);
+$block_5 = getBlockInformation("Emails",5,$focus->mode,$focus->column_fields);
 
 //needed when creating a new email with default values passed in
 if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) {
@@ -185,6 +186,7 @@ $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("BLOCK3", $block_3);
 $xtpl->assign("BLOCK4", $block_4);
+$xtpl->assign("BLOCK5", $block_5);
 $block_1_header = getBlockTableHeader("LBL_EMAIL_INFORMATION");
 $xtpl->assign("BLOCK1_HEADER", $block_1_header);
 
