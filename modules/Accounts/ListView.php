@@ -323,15 +323,21 @@ if($viewid != 0)
 {
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
+//Modified by Raju
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<form name="massdelete" method="POST">
+	
 	<tr>
+	<td ><div class="button"><a href="index.php?module=Accounts&action=EditView&return_module=Accounts&return_action=DetailView">'.$app_strings['LBL_ADD_ITEM'].'</a></div></td>
+	<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden" value="'.$viewid.'">'; //give the viewid to hidden //customview
+//Raju	
 if(isPermitted('Accounts',2,'') == 'yes')
 {
         $other_text .=	'<td width="10"><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
+		$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>';
+
 if(isset($CActionDtls))
 {
 	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return massMail()"/>';
