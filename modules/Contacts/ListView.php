@@ -309,7 +309,6 @@ if($viewid != 0)
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-//code added by raju for better emailing exp(6 lines)
 	<tr>
 	<td ><div class="button"><a href="index.php?module=Contacts&action=EditView&return_module=Contacts&return_action=DetailView">'.$app_strings['LBL_ADD_ITEM'].'</a></div></td>
 	<form name="massdelete" method="POST">
