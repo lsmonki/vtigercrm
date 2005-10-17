@@ -309,8 +309,10 @@ if($viewid != 0)
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<form name="massdelete" method="POST">
+//code added by raju for better emailing exp(6 lines)
 	<tr>
+	<td ><div class="button"><a href="index.php?module=Contacts&action=EditView&return_module=Contacts&return_action=DetailView">'.$app_strings['LBL_ADD_ITEM'].'</a></div></td>
+	<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden" value='.$viewid.'>
 	<input name="change_status" type="hidden">';
@@ -319,6 +321,8 @@ if(isPermitted('Contacts',2,'') == 'yes')
 {
 $other_text .='<td width="12"><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
 }
+$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>';
+
 if(isset($CActionDtls))
 {
 	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return massMail()"/>';
