@@ -132,15 +132,6 @@ if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
 
   }
 
-
-
-
-
-
-
-
-
-
 //Added for retrieve the old existing attachments when duplicated without new attachment
 if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
 {
@@ -341,7 +332,8 @@ if($file_upload_error)
 }
 elseif( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
 {
-	include("modules/Emails/send_mail.php");
+//changed by rdhital to direct it to a new mailing function
+	include("modules/Emails/mysend_mail.php");
 }
 elseif(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'mailbox')
 {
@@ -350,6 +342,6 @@ elseif(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'mailb
 else
 {
 //echo ' 333333 the overwriting might happen here '.$return_id;
-	header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
+header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
 }
 ?>
