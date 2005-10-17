@@ -413,6 +413,9 @@ $app_strings = Array(
 'LBL_CHANGE_STATUS'=>'Change Status',
 
 'LBL_MASS_DELETE'=>'Delete',
+//added by raju
+'LBL_ADD_ITEM'=>'Add',
+
 
 
 
@@ -429,6 +432,10 @@ $app_strings = Array(
 'LBL_SUBJECT'=>'Subject',
 
 'LBL_RELATED_TO'=>'Related To',
+
+//added by raju for emails
+'LBL_MULTIPLE'=>'Multiple',
+
 
 'LBL_DUE_DATE'=>'Due Date',
 
