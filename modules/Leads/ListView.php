@@ -295,18 +295,23 @@ if($viewid != 0)
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
 // Buttons and View options
+//Modified by Raju
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<form name="massdelete" method="POST">
 	<tr>
+	<td ><div class="button"><a href="index.php?module=Leads&action=EditView&return_module=Leads&return_action=DetailView">&nbsp;'.$app_strings['LBL_ADD_ITEM'].'&nbsp;</a></div></td>
+	<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_owner" type="hidden">
 	<input name="change_status" type="hidden">
 	<td>';
+//raju
 if(isPermitted('Leads',2,'') == 'yes')
 {
 	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>&nbsp;';
 }
+$other_text .='<input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>&nbsp;';
+
 if(isPermitted('Leads',1,'') == 'yes')
 {
    	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
