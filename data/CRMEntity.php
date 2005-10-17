@@ -44,7 +44,7 @@ class CRMEntity extends SugarBean
 
   function saveentity($module,$migration='')
   {
-    global $current_user;
+    global $current_user, $adb;//$adb added by raju for mass mailing
     $insertion_mode = $this->mode;
 
     $this->db->println("TRANS saveentity starts");
@@ -56,7 +56,6 @@ class CRMEntity extends SugarBean
     else
     	$recur_type='';	
 	// Code included by Jaguar - Ends
-
     foreach($this->tab_name as $table_name)
     {
       if($table_name == "crmentity")
@@ -67,9 +66,49 @@ class CRMEntity extends SugarBean
       {
         $this->insertIntoSmActivityRel($module);
       }
-      elseif($table_name == "seticketsrel" || $table_name == "seactivityrel" || $table_name ==  "seproductsrel" || $table_name ==  "senotesrel" || $table_name == "sefaqrel")
+	  //added by raju
+	  
+	  elseif($table_name=="seactivityrel" ){
+	  	if ($module=="Emails")
+		{
+	  	     if ($_REQUEST['currentid']!='')
+			 {
+			 	$actid=$_REQUEST['currentid'];
+			 }
+			 else 
+			 {
+			 	$actid=$_REQUEST['record'];
+			 }
+			 	
+
+			$parentid=$_REQUEST['parent_id'];
+			//echo $parentid;
+			$myids=explode("|",$parentid);
+			//echo count($myids).'count';
+			for ($i=0;$i<(count($myids)-1);$i++)
+			{
+				$realid=explode("@",$myids[$i]);
+				$mycrmid=$realid[0];
+				//echo $mycrmid.' '.$i.'<br>';
+				$mysql='insert into seactivityrel values('.$mycrmid.','.$actid.')';
+				$adb->query($mysql);
+			}
+	   	}
+		else
+		{
+			if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+			{
+			  $this->insertIntoEntityTable($table_name, $module);
+			}
+			elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+			{
+					$this->deleteRelation($table_name);
+			}
+		}			
+	  }
+      elseif($table_name == "seticketsrel" || $table_name ==  "seproductsrel" || $table_name ==  "senotesrel" || $table_name == "sefaqrel")
       {
-        if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+        if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '') //Code added by raju for mass mailing ends
         {
           $this->insertIntoEntityTable($table_name, $module);
         }
@@ -206,7 +245,6 @@ $vtlog->logthis("module is ".$module,'info');
         }
       }
       $current_id = $adb->getUniqueID("crmentity");
-
       if($module=='Emails') { $idname='emailid';      $tablename='emails';    $descname='description';}
       else                  { $idname='notesid';      $tablename='notes';     $descname='notecontent';}
 
@@ -279,6 +317,8 @@ $vtlog->logthis("module is =".$module,'info');
     {
       //if this is the create mode and the group allocation is chosen, then do the following
       $current_id = $adb->getUniqueID("crmentity");
+	  $_REQUEST['currentid']=$current_id;
+
   if($migration != '')
 		{
 		$sql = "select * from Migrator where oldid='".$this->id ."'";
