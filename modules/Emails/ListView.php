@@ -157,8 +157,9 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 // Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<form name="massdelete" method="POST">
 	<tr>
+	<td ><div class="button"><a href="index.php?module=Emails&action=EditView&return_module=Emails&return_action=DetailView">'.$app_strings['LBL_ADD_ITEM'].'</a></div></td>
+	<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_status" type="hidden">
