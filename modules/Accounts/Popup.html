@@ -25,6 +25,10 @@
 			<table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
 				<form name="massdelete" method="POST">
+				<input name="module" type="hidden" value="Emails">
+				<input name="action" type="hidden" value="ChooseEmail">
+				<input name="pmodule" type="hidden" value="Accounts">
+				<input name="entityid" type="hidden" value="">
 				<input name='action' type='hidden' value='Convert'>
 			   			
 			   <td>&nbsp; {RECORD_COUNTS}</td>
@@ -41,6 +45,13 @@
 </table>
 <br>
 <script type='text/javascript' language='JavaScript'>
+//added by rdhital/Raju for better emails
+function set_return_emails(entity_id,email_id,parentname,emailadd){
+		window.opener.document.EditView.parent_id.value = window.opener.document.EditView.parent_id.value+entity_id+'@'+email_id+'|';
+		window.opener.document.EditView.parent_name.value = window.opener.document.EditView.parent_name.value+parentname+'<'+emailadd+'>; ';
+}		
+		
+//Raju
 function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_name.value = product_name;
         window.opener.document.EditView.parent_id.value = product_id;
@@ -71,6 +82,11 @@ function set_return_address(account_id, account_name, bill_street, ship_street, 
         window.opener.document.EditView.bill_country.value = bill_country;
         window.opener.document.EditView.ship_country.value = ship_country;
 }
+//added by rdhital/Raju for emails
+function submitform(id){
+		document.massdelete.entityid.value=id;
+		document.massdelete.submit();
+}	
 
 </script>
 <!-- END: main -->
