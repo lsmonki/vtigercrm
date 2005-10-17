@@ -25,6 +25,10 @@
 			<table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
 				<form name="massdelete" method="POST">
+				<input name="module" type="hidden" value="Emails">
+				<input name="action" type="hidden" value="ChooseEmail">
+				<input name="pmodule" type="hidden" value="Contacts">
+				<input name="entityid" type="hidden" value="">
 				<input name='action' type='hidden' value='Convert'>
 			   			
 			   <td>&nbsp;{RECORD_COUNTS}</td>
@@ -51,6 +55,17 @@ function add_data_to_relatedlist(entity_id,recordid) {
 
         opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Contacts&entityid="+entity_id+"&parid="+recordid;
 }
+//added by rdhital for better emails
+function set_return_emails(entity_id,email_id,parentname,emailadd){
+		window.opener.document.EditView.parent_id.value = window.opener.document.EditView.parent_id.value+entity_id+'@'+email_id+'|';
+		window.opener.document.EditView.parent_name.value = window.opener.document.EditView.parent_name.value+parentname+'<'+emailadd+'>; ';
+}	
+//added by raju for emails
+function submitform(id){
+		document.massdelete.entityid.value=id;
+		document.massdelete.submit();
+}	
+
 </script>
 </table>
 
