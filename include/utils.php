@@ -1500,7 +1500,114 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 
         }
-        elseif($uitype == 67)
+		//added by rdhital/Raju for better email support
+        elseif($uitype == 357)
+        {
+        	if(isset($_REQUEST['emailids']) && $_REQUEST['emailids'] != '')
+			{
+            	$parent_id = $_REQUEST['emailids'];
+				$parent_name='';
+				$pmodule=$_REQUEST['pmodule'];
+				
+				$myids=explode("|",$parent_id);
+				for ($i=0;$i<(count($myids)-1);$i++)
+				{
+					$realid=explode("@",$myids[$i]);
+					$entityid=$realid[0];
+					$nemail=count($realid);
+										
+					if ($pmodule=='Accounts'){
+						require_once('modules/Accounts/Account.php');
+						$myfocus = new Account();
+						$myfocus->retrieve_entity_info($entityid,"Accounts");
+						$fullname=br2nl($myfocus->column_fields['accountname']);
+					}
+					elseif ($pmodule=='Contacts'){
+						require_once('modules/Contacts/Contact.php');
+						$myfocus = new Contact();
+						$myfocus->retrieve_entity_info($entityid,"Contacts");
+						$fname=br2nl($myfocus->column_fields['firstname']);
+						$lname=br2nl($myfocus->column_fields['lastname']);
+						$fullname=$lname.' '.$fname;
+					}
+					elseif ($pmodule=='Leads'){
+						require_once('modules/Leads/Lead.php');
+						$myfocus = new Lead();
+						$myfocus->retrieve_entity_info($entityid,"Leads");
+						$fname=br2nl($myfocus->column_fields['firstname']);
+						$lname=br2nl($myfocus->column_fields['lastname']);
+						$fullname=$lname.' '.$fname;
+					}
+					for ($j=1;$j<$nemail;$j++){
+						$querystr='select columnname from field where fieldid='.$realid[$j].';';
+						$result=$adb->query($querystr);
+						$temp=$adb->query_result($result,0,'columnname');
+						$temp1=br2nl($myfocus->column_fields[$temp]);
+						$parent_name.=$fullname.'<'.$temp1.'>; ';
+					}
+				}
+			}
+			else
+			{
+				$parent_name='';
+				$parent_id='';
+				$myemailid= $_REQUEST['record'];
+				$mysql = "select crmid from seactivityrel where activityid=".$myemailid;
+				$myresult = $adb->query($mysql);
+				$mycount=$adb->num_rows($myresult);
+				if($mycount >0)
+				{
+					for ($i=0;$i<$mycount;$i++)
+					{	
+						$mycrmid=$adb->query_result($myresult,$i,'crmid');
+						$parent_module = getSalesEntityType($mycrmid);
+						//echo $mycrmid.'id<br>'.$parent_module;
+						if($parent_module == "Leads")
+						{
+							$sql = "select firstname,lastname,email from leaddetails where leadid=".$mycrmid;
+							$result = $adb->query($sql);
+							$first_name = $adb->query_result($result,0,"firstname");
+							$last_name = $adb->query_result($result,0,"lastname");
+							$myemail=$adb->query_result($result,0,"email");
+							$parent_id .=$mycrmid.'@0|' ; //make it such that the email adress sent is remebered and only that one is retrived
+							$parent_name .= $last_name.' '.$first_name.'<'.$myemail.'>; ';
+						}
+						elseif($parent_module == "Contacts")
+						{
+							$sql = "select * from  contactdetails where contactid=".$mycrmid;
+							$result = $adb->query($sql);
+							$first_name = $adb->query_result($result,0,"firstname");
+							$last_name = $adb->query_result($result,0,"lastname");
+							$myemail=$adb->query_result($result,0,"email");
+							$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
+							$parent_name .= $last_name.' '.$first_name.'<'.$myemail.'>; ';
+						}
+						elseif($parent_module == "Accounts")
+						{
+							$sql = "select * from  account where accountid=".$mycrmid;
+							$result = $adb->query($sql);
+							$account_name = $adb->query_result($result,0,"accountname");
+							$myemail=$adb->query_result($result,0,"email1");
+							$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
+							$parent_name .= $account_name.'<'.$myemail.'>; ';
+						}
+					}
+				}
+			}
+		$custfld .= '<td width="20%" class="dataLabel">To:&nbsp;</td>';
+       	$custfld .= '<td width="90%" colspan="3"><input name="parent_id" type="hidden" value="'.$parent_id.'"><textarea readonly name="parent_name" cols="70" rows="2">'.$parent_name.'</textarea>&nbsp;<select name="parent_type" >';
+        $custfld .= '<OPTION value="Contacts" selected>'.$app_strings['COMBO_CONTACTS'].'</OPTION>';
+        $custfld .= '<OPTION value="Accounts" >'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
+		$custfld .= '<OPTION value="Leads" >'.$app_strings['COMBO_LEADS'].'</OPTION></select><img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&popuptype=set_return_emails&form=EmailEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+        }
+        //end of rdhital/Raju
+		
+		
+		
+		
+		
+		
+	elseif($uitype == 67)
         {
                 if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
                         $value = $_REQUEST['parent_id'];
@@ -2089,6 +2196,61 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$custfld .= '<td width="30%" valign="top" class="dataField">'.$value.'</td>';
 		}
 	}
+	//added by raju/rdhital for better emails
+	elseif($uitype == 357)
+	{
+		$value = $col_fields[$fieldname];
+		if($value != '')
+		{
+			$parent_name='';
+			$parent_id='';
+			$myemailid= $_REQUEST['record'];
+			$mysql = "select crmid from seactivityrel where activityid=".$myemailid;
+			$myresult = $adb->query($mysql);
+			$mycount=$adb->num_rows($myresult);
+			if ($mycount>1){
+				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_RELATED_TO'].':</td>';
+				$custfld .= '<td width="30%" valign="top" class="dataField">'.$app_strings['LBL_MULTIPLE'].'</td>';
+			}
+			else
+			{
+				$parent_module = getSalesEntityType($value);
+				if($parent_module == "Leads")
+				{
+					$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_LEAD_NAME'].':</td>';
+					$sql = "select * from leaddetails where leadid=".$value;
+					$result = $adb->query($sql);
+					$first_name = $adb->query_result($result,0,"firstname");
+					$last_name = $adb->query_result($result,0,"lastname");
+					$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
+				}
+				elseif($parent_module == "Contacts")
+				{
+					$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_CONTACT_NAME'].':</td>';
+					$sql = "select * from  contactdetails where contactid=".$value;
+					$result = $adb->query($sql);
+					$first_name = $adb->query_result($result,0,"firstname");
+					$last_name = $adb->query_result($result,0,"lastname");
+					$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
+				}
+				elseif($parent_module == "Accounts")
+				{
+					$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_ACCOUNT_NAME'].':</td>';
+					$sql = "select * from  account where accountid=".$value;
+					$result = $adb->query($sql);
+					$accountname = $adb->query_result($result,0,"accountname");
+					$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$accountname.'</a></td>';
+				}
+
+			}
+		}
+		else
+		{
+			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+			$custfld .= '<td width="30%" valign="top" class="dataField">'.$value.'</td>';
+		}
+	}//Code added by raju for better email ends
+
 	elseif($uitype == 68)
 	{
 		$value = $col_fields[$fieldname];
@@ -2858,6 +3020,16 @@ function getRelatedToEntity($module,$list_result,$rset)
 		$parent_module = $parent_module = getSalesEntityType($seid);
 		if($parent_module == 'Accounts')
 		{
+		$numrows= $adb->num_rows($evt_result);
+		
+		$parent_module = $adb->query_result($evt_result,0,'setype');
+        $parent_id = $adb->query_result($evt_result,0,'crmid');
+		
+		if ($numrows>1){
+		$parent_module ='Multiple';
+		$parent_name=$app_strings['LBL_MULTIPLE'];
+        }
+        //Raju -- Ends
 			$parent_query = "SELECT accountname FROM account WHERE accountid=".$seid;
 			$parent_result = $adb->query($parent_query);
 			$parent_name = $adb->query_result($parent_result,0,"accountname");
@@ -2915,6 +3087,7 @@ function getRelatedTo($module,$list_result,$rset)
 {
 
         global $adb;
+		global $app_strings;
 	if($module == "Notes")
         {
                 $notesid = $adb->query_result($list_result,$rset,"notesid");
@@ -2939,9 +3112,18 @@ function getRelatedTo($module,$list_result,$rset)
 				$evt_query = "select * from crmentity where crmid=".$activity_id;
 		}
 	}
+	//added by raju to change the related to in emails inot multiple if email is for more than one contact
         $evt_result = $adb->query($evt_query);
-        $parent_module = $adb->query_result($evt_result,0,'setype');
+		$numrows= $adb->num_rows($evt_result);
+		
+		$parent_module = $adb->query_result($evt_result,0,'setype');
         $parent_id = $adb->query_result($evt_result,0,'crmid');
+		
+		if ($numrows>1){
+		$parent_module ='Multiple';
+		$parent_name=$app_strings['LBL_MULTIPLE'];
+        }
+        //Raju -- Ends
 	if($module == 'HelpDesk' && ($parent_module == 'Accounts' || $parent_module == 'Contacts'))
         {
                 global $theme;
@@ -3005,8 +3187,16 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
         }
-
-        $parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=".$action."&record=".$parent_id."'>".$parent_name."</a>";
+	//added by rdhital for better emails - Raju
+	if ($parent_module == 'Multiple')
+	{
+		$parent_value = $parent_name;
+	}
+	else
+	{
+		$parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=".$action."&record=".$parent_id."'>".$parent_name."</a>";
+	}
+	//code added by raju ends
         return $parent_value;
 
 
@@ -3756,6 +3946,32 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                                         $value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$acntid.'", "'.br2nl($account_name).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'"); window.close()\'>'.$temp_val.'</a>';
 
                                 }
+//added by rdhital/Raju for better emails 
+					elseif($popuptype == "set_return_emails")
+					{
+						if ($module=='Accounts')
+						{
+							//$emailadd = $adb->query_result($list_result,$list_result_count,'email1');
+							$accid =$adb->query_result($list_result,$list_result_count,'accountid');
+							//if ($emailadd1!='')
+							//$emailadd .= '>; '. $temp_val. '<'.$emailadd1;
+							$value = '<a href="javascript: submitform('.$accid.');">'.$temp_val.'</a>';
+						}
+						elseif ($module=='Contacts' || $modules=='Leads')
+						{
+							$firstname=$adb->query_result($list_result,$list_result_count,"firstname");
+							$lastname=$adb->query_result($list_result,$list_result_count,"lastname");
+							$name=$lastname.' '.$firstname;
+							//$emailadd = $adb->query_result($list_result,$list_result_count,'email');
+							//$emailadd1 =$adb->query_result($list_result,$list_result_count,'otheremail');
+							//if ($emailadd1!='')
+							//	$emailadd .= '>; '. $name. '<'.$emailadd1;
+	
+							$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
+						}
+			
+					}
+//code added by raju ends
 				elseif($popuptype == "specific_vendor_address")
 				{
 					require_once('modules/Products/Vendor.php');
@@ -3884,8 +4100,9 @@ function getListQuery($module,$where='')
         {
                 //$query = "select crmentity.crmid,crmentity.smownerid, emails.emailid, emails.filename, activity.subject, activity.activityid, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid = crmentity.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid WHERE crmentity.deleted=0";
 		//Query modified to sort by assigned to
-		$query = "select crmentity.crmid,crmentity.smownerid, emails.emailid, emails.filename, activity.subject, activity.activityid, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from emails inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid = crmentity.crmid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid WHERE crmentity.deleted=0";
-        }
+		$query = "select distinct crmentity.crmid,crmentity.smownerid, emails.emailid, emails.filename, activity.subject, activity.activityid, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from emails inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid = crmentity.crmid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid WHERE crmentity.deleted=0";
+	}
+
 	if($module == "Faq")
 	{
 		$query = "select crmentity.crmid, faq.*, crmentity.createdtime, crmentity.modifiedtime from faq inner join crmentity on crmentity.crmid=faq.id left join products on faq.product_id=products.productid where crmentity.deleted=0";
