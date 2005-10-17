@@ -602,7 +602,7 @@ for($i=0;$i<6;$i++)
 		$event->column_fields["activitytype"]	= "Meeting";	
 		$event->column_fields["due_date"]	= $recur_week_date;	
 	}
-	else
+	elseif($i>1) 
 	{
 		$event->column_fields["activitytype"]	= "Call";	
 	}
