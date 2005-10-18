@@ -3957,7 +3957,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 							//$emailadd .= '>; '. $temp_val. '<'.$emailadd1;
 							$value = '<a href="javascript: submitform('.$accid.');">'.$temp_val.'</a>';
 						}
-						elseif ($module=='Contacts' || $modules=='Leads')
+						elseif ($module=='Contacts' || $module=='Leads')
 						{
 							$firstname=$adb->query_result($list_result,$list_result_count,"firstname");
 							$lastname=$adb->query_result($list_result,$list_result_count,"lastname");
