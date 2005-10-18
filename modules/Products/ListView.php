@@ -82,9 +82,11 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 	        if(isset($customfield[$i]) && $customfield[$i] != '')
 	        {
 			if($uitype[$i] == 56)
-                                $str=" productcf.".$column[$i]." = 1";
+                                $str = " productcf.".$column[$i]." = 1";
+			elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2
+	                        $str = " productcf.".$column[$i]." = '".$customfield[$i]."'";
                         else
-			        $str=" productcf.".$column[$i]." like '$customfield[$i]%'";
+			        $str = " productcf.".$column[$i]." like '$customfield[$i]%'";
 		        array_push($where_clauses, $str);
 	       	//	  $search_query .= ' and '.$str;
 			$url_string .="&".$column[$i]."=".$customfield[$i];

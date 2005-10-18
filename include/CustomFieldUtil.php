@@ -313,8 +313,10 @@ function getCustomFieldTrans($module, $trans_array)
 
 function CustomFieldSearch($customfieldarray, $fldModule, $tableName,$colidName,$app_strings,$theme,$fieldlabel,$column)
 {
-global $adb;
-//for($i=0;$i<count($customfieldarray);$i++){echo '<br> Custom Field : '.$i.'...'.$customfieldarray[$i];}
+	global $adb;
+	$adb->println("function CustomFieldSearch to display the customfields in search -- include/CustomFieldUtil.php");
+	//for($i=0;$i<count($customfieldarray);$i++){echo '<br> Custom Field : '.$i.'...'.$customfieldarray[$i];}
+
         //Custom Field Addition
         $dbquery = "select  * from field  where tablename='".$fldModule."' order by fieldlabel";
         $result = $adb->query($dbquery);
@@ -343,6 +345,37 @@ global $adb;
 		                        $custfld .='<td width="30%"><input name="'.$setName.'" type="checkbox"></td>';
                 		}
 		        }
+			elseif($uitype[$i] == 15)
+                        {
+				//This elseif part is added to handle the picklist values in search -- after 4.2 patch2 
+                                $pick_query="select * from ".$setName;
+                                $pickListResult = $adb->query($pick_query);
+                                $noofpickrows = $adb->num_rows($pickListResult);
+
+                                $custfld .= '<td width="20%" class="dataLabel">'.$colName.':</td>';
+                                $custfld .= '<td width="30%"><select name="'.$setName.'" tabindex="1">';
+				//Set --None-- as default when search value for this field is empty
+				if($customfieldarray[$i] != '')
+				{
+					$default_selected = 'selected';
+				}
+				$custfld .= '<OPTION value="" '.$default_selected.'>--None--</OPTION>';
+                                for($j = 0; $j < $noofpickrows; $j++)
+                                {
+                                        $pickListValue=$adb->query_result($pickListResult,$j,strtolower($setName));
+                                        if($customfieldarray[$i] == $pickListValue)
+                                        {
+                                                $chk_val = "selected";
+                                        }
+                                        else
+                                        {
+                                                $chk_val = '';
+                                        }
+
+                                        $custfld .= '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
+                                }
+                                $custfld .= '</td>';
+                        }
 			else
 			{
 	                        $custfld .= '<td width="20%" class="dataLabel">'.$colName.':</td>';

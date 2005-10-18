@@ -93,9 +93,11 @@ for($i=0;$i<$adb->num_rows($result);$i++)
         if(isset($customfield[$i]) && $customfield[$i] != '')
         {
 		if($uitype[$i] == 56)
-			$str=" accountscf.".$column[$i]." = 1";
+			$str = " accountscf.".$column[$i]." = 1";
+		elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2
+                        $str = " accountscf.".$column[$i]." = '".$customfield[$i]."'";
 		else
-	                $str=" accountscf.".$column[$i]." like '$customfield[$i]%'";
+	                $str = " accountscf.".$column[$i]." like '$customfield[$i]%'";
                 array_push($where_clauses, $str);
 		$url_string .="&".$column[$i]."=".$customfield[$i];
         }
