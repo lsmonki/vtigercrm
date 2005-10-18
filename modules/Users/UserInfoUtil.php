@@ -61,7 +61,7 @@ function fetchUserProfileId($userid)
 	$roleid=  $adb->query_result($result,0,"roleid");
 
 
-	$sql1 = "select profileid from role2profile where roleid=" .$roleid;
+	$sql1 = "select profileid from role2profile where roleid='" .$roleid."'";
         $result1 = $adb->query($sql1);
 	$profileid=  $adb->query_result($result1,0,"profileid");
 	return $profileid;
@@ -297,15 +297,62 @@ function setPermittedDefaultSharingAction2Session($profileid)
 
 }
 
-function createNewRole($roleName,$parentRoleName)
+function createRole($roleName,$parentRoleId,$roleProfileArray)
 {
-  global $adb;
-  $sql = "insert into role(name) values('" .$roleName ."')";
-  $result = $adb->query($sql); 
-  populatePermissions4NewRole($parentRoleName,$roleName);
-  header("Location: index.php?module=Users&action=listroles");
+	global $adb;
+	$parentRoleDetails=getRoleInformation($parentRoleId);
+	$parentRoleInfo=$parentRoleDetails[$parentRoleId];
+	$roleid_no=$adb->getUniqueId("role");
+        $roleId='H'.$roleid_no;
+        $parentRoleHr=$parentRoleInfo[1];
+        $parentRoleDepth=$parentRoleInfo[2];
+        $nowParentRoleHr=$parentRoleHr.'::'.$roleId;
+        $nowRoleDepth=$parentRoleDepth + 1;
+
+	//Inserting role into db
+	$query="insert into role values('".$roleId."','".$roleName."','".$nowParentRoleHr."',".$nowRoleDepth.")";
+	$adb->query($query);
+
+	//Inserting into role2profile table
+	foreach($roleProfileArray as $profileId)
+        {
+                if($profileId != '')
+                {
+                        insertRole2ProfileRelation($roleId,$profileId);
+                }
+        }
+
+	return $roleId;
+
 }
 
+function updateRole($roleId,$roleName,$roleProfileArray)
+{
+	global $adb;
+	$sql1 = "update role set rolename='".$roleName."' where roleid='".$roleId."'";
+        $adb->query($sql1);
+	//Updating the Role2Profile relation
+	$sql2 = "delete from role2profile where roleId='".$roleId."'";
+	$adb->query($sql1);
+
+	foreach($roleProfileArray as $profileId)
+        {
+                if($profileId != '')
+                {
+                        insertRole2ProfileRelation($roleId,$profileId);
+                }
+        }
+	
+	
+}
+
+function insertRole2ProfileRelation($roleId,$profileId)
+{
+	global $adb;
+	$query="insert into role2profile values('".$roleId."',".$profileId.")";
+	$adb->query($query);	
+	
+}
 
 function createNewGroup($groupName,$groupDescription)
 {
@@ -388,7 +435,7 @@ function fetchRoleId($rolename)
 {
 
   global $adb;
-  $sqlfetchroleid = "select roleid from role where name='".$rolename ."'";
+  $sqlfetchroleid = "select roleid from role where rolename='".$rolename ."'";
   $resultroleid = $adb->query($sqlfetchroleid);
   $role_id = $adb->query_result($resultroleid,0,"roleid");
   return $role_id;
@@ -405,7 +452,7 @@ function updateUser2RoleMapping($roleid,$userid)
   	$sqldelete = "delete from user2role where userid=".$userid;
   	$result_delete = $adb->query($sqldelete);
   }	
-  $sql = "insert into user2role(userid,roleid) values(" .$userid ."," .$roleid .")";
+  $sql = "insert into user2role(userid,roleid) values(" .$userid .",'" .$roleid ."')";
   $result = $adb->query($sql);
 
 }
@@ -654,9 +701,9 @@ function getRecordOwnerId($module, $record)
 function getRoleName($roleid)
 {
 	global $adb;
-	$sql1 = "select * from role where roleid=".$roleid;
+	$sql1 = "select * from role where roleid='".$roleid."'";
 	$result = $adb->query($sql1);
-	$rolename = $adb->query_result($result,0,"name");
+	$rolename = $adb->query_result($result,0,"rolename");
 	return $rolename;	
 }
 
@@ -1042,6 +1089,153 @@ function deleteProfile($prof_id,$transfer_profileid='')
 	//delete from profile table;
 	$sql9 = "delete from profile where profileid=".$prof_id;
 	$adb->query($sql9);	
+
+}
+
+function getAllRoleDetails()
+{
+	global $adb;
+	$role_det = Array();
+	$query = "select * from role";
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0; $i<$num_rows;$i++)
+	{
+		$each_role_det = Array();
+		$roleid=$adb->query_result($result,$i,'roleid');
+		$rolename=$adb->query_result($result,$i,'rolename');
+		$roledepth=$adb->query_result($result,$i,'depth');
+		$sub_roledepth=$roledepth + 1;
+		$parentrole=$adb->query_result($result,$i,'parentrole');
+		$sub_role='';
+		
+		//getting the immediate subordinates
+		$query1="select * from role where parentrole like '".$parentrole."::%' and depth=".$sub_roledepth;
+		$res1 = $adb->query($query1);
+		$num_roles = $adb->num_rows($res1);
+		if($num_roles > 0)
+		{
+			for($j=0; $j<$num_roles; $j++)
+			{
+				if($j == 0)
+				{
+					$sub_role .= $adb->query_result($res1,$j,'roleid');
+				}
+				else
+				{
+					$sub_role .= ','.$adb->query_result($res1,$j,'roleid');
+				}
+			}
+		}
+			
+
+		$each_role_det[]=$rolename;
+		$each_role_det[]=$roledepth;
+		$each_role_det[]=$sub_role;
+		$role_det[$roleid]=$each_role_det;	
+		
+	}
+	return $role_det;
+}
+
+function getAllProfileInfo()
+{
+	global $adb;
+	$query="select * from profile";
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	$prof_details=Array();
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$profileid=$adb->query_result($result,$i,'profileid');
+		$profilename=$adb->query_result($result,$i,'profilename');
+		$prof_details[$profileid]=$profilename;
+		
+	}
+	return $prof_details;	
+}
+
+function getRoleInformation($roleid)
+{
+	global $adb;
+	$query = "select * from role where roleid='".$roleid."'";
+	$result = $adb->query($query);
+	$rolename=$adb->query_result($result,0,'rolename');
+	$parentrole=$adb->query_result($result,0,'parentrole');
+	$roledepth=$adb->query_result($result,0,'depth');
+	$parentRoleArr=explode('::',$parentrole);
+	$immediateParent=$parentRoleArr[sizeof($parentRoleArr)-2];
+	$roleDet=Array();
+	$roleDet[]=$rolename;
+	$roleDet[]=$parentrole;
+	$roleDet[]=$roledepth;
+	$roleDet[]=$immediateParent;
+	$roleInfo=Array();
+	$roleInfo[$roleid]=$roleDet;
+	return $roleInfo;	
+}
+
+function getRoleRelatedProfiles($roleId)
+{
+	global $adb;
+	$query = "select role2profile.*,profile.profilename from role2profile inner join profile on profile.profileid=role2profile.profileid where roleid='".$roleId."'";
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	$roleRelatedProfiles=Array();
+	for($i=0; $i<$num_rows; $i++)
+	{
+		$roleRelatedProfiles[$adb->query_result($result,$i,'profileid')]=$adb->query_result($result,$i,'profilename');
+	}	
+	return $roleRelatedProfiles;	
+}
+
+function getRoleAndSubordinatesInformation($roleId)
+{
+	global $adb;
+	$roleDetails=getRoleInformation($roleId);
+	$roleInfo=$roleDetails[$roleId];
+	$roleParentSeq=$roleInfo[1];
+	
+	$query="select * from role where parentrole like '".$roleParentSeq."%' order by parentrole asc";
+	$result=$adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	$roleInfo=Array();
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$roleid=$adb->query_result($result,$i,'roleid');
+                $rolename=$adb->query_result($result,$i,'rolename');
+                $roledepth=$adb->query_result($result,$i,'depth');
+                $parentRoleSeq=$adb->query_result($result,$i,'parentrole');
+		$roleDet=Array();
+		$roleDet[]=$rolename;
+		$roleDet[]=$parentrole;
+		$roleDet[]=$roledepth;
+		$roleInfo[$roleid]=$roleDet;
+		
+	}
+	return $roleInfo;	
+
+}
+
+
+function deleteRole($roleId,$transferRoleId)
+{
+	global $adb;
+	$roleInfo=getRoleAndSubordinatesInformation($roleId);
+	foreach($roleInfo as $roleid=>$roleDetArr)
+	{
+		
+		$sql1 = "update user2role set roleid='".$transferRoleId."' where roleid='".$roleid."'";
+		$adb->query($sql1);
+
+		//Deleteing from role2profile table
+		$sql2 = "delete from role2profile where roleid='".$roleid."'";
+		$adb->query($sql2);
+
+		//delete from role table;
+		$sql9 = "delete from role where roleid='".$roleid."'";
+		$adb->query($sql9);		
+	}
 
 }
 

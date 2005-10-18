@@ -28,111 +28,217 @@ require_once('include/utils.php');
             <script language="javascript">
     function validate()
     {
+	formSelectColumnString();
         if( !emptyCheck( "roleName", "Role Name" ) )
-            return false;    
-            
+            return false;
+
+	//alert(document.newRoleForm.selectedColumnsString.value);
+	if(document.newRoleForm.selectedColumnsString.value.replace(/^\s+/g, '').replace(/\s+$/g, '').length==0)
+	{
+
+                        alert('Role should have atlease one profile');
+			return false;
+	}
         return true;
     }
-    
-    function cancelNewRoleCreation( roleId )
-    {
-    
-    }
+             </script>
 	<?
 		global $adb;
+		$profDetails=getAllProfileInfo();
 		if(isset($_REQUEST['roleid']) && $_REQUEST['roleid'] != '')
 		{	
 			$roleid= $_REQUEST['roleid'];
-			$sql = "select * from role where roleid=".$roleid;
-			$roleResult = $adb->query($sql);
 			$mode = $_REQUEST['mode'];
-			$rolename = $adb->query_result($roleResult,0,"name");
-
+			$roleInfo=getRoleInformation($roleid);
+			$thisRoleDet=$roleInfo[$roleid];
+			$rolename = $thisRoleDet[0]; 
+			$parent = $thisRoleDet[3]; 
 			//retreiving the profileid
-			$sql1 = "select profile.* from role2profile inner join profile on profile.profileid=role2profile.profileid where roleid=".$roleid;
-		        $result1 = $adb->query($sql1);
-			$selected_profileid = $adb->query_result($result1,0,'profileid');
-			echo 'select profileid is'.$selected_profileid;
+			$roleRelatedProfiles=getRoleRelatedProfiles($roleid);
+			
 		}
+		elseif(isset($_REQUEST['parent']) && $_REQUEST['parent'] != '')
+		{
+			$mode = 'create';
+			$parent=$_REQUEST['parent'];
+		}
+			
+		$parentname=getRoleName($parent);
 	?>
     
-             </script>
             <div class="bodyText mandatory"> </div>
             <form name="newRoleForm" action="index.php">
                     <input type="hidden" name="module" value="Users">
                     <input type="hidden" name="action" value="SaveRole">
                     <input type="hidden" name="roleid" value="<?php echo $roleid;    ?>">
-                    <input type="hidden" name="mode" value="<?php echo $mode;    ?>">
-              <table width="100%" border="0" cellpadding="0" cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td class="moduleTitle hline"><?php echo $mod_strings['LBL_HDR_ROLE_NAME'];?></td>
-                  </tr>
-                </tbody>
-              </table>
-              <p></p>
-              <table width="40%" border="0" cellpadding="0" cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td>
-                    <div><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL']; ?></font><?php echo $mod_strings['LBL_INDICATES_REQUIRED_FIELD']; ?> </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <table width="40%" border="0" cellpadding="5"
- cellspacing="1" class="formOuterBorder">
-                <tbody>
-                  <tr>
-                    <td class="formSecHeader" colspan="2"><?php echo $mod_strings['LBL_TITLE_ROLE_NAME'];?></td>
-                  </tr>
-                  <tr>
-                    <td class="dataLabel mandatory"><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL'];?></font><?php echo $mod_strings['LBL_ROLE_NAME']; ?></td>
-                    <td class="value"><input class="textField" type="text" name="roleName" value="<?php echo $rolename;  ?>"></td>
-                  </tr>
-                  <tr>
-                    <td class="dataLabel mandatory"><font class="required"><?php echo $app_strings['LBL_REQUIRED_SYMBOL'];?></font><?php echo $mod_strings['LBL_ROLE_PROFILE_NAME'];?></td>
-                    <td class="value">
-                    <select class="select" name="profileId">
-            <?php
-             $sql = "select * from profile";
-                  $result = $adb->query($sql);
-                  $temprow = $adb->fetch_array($result);
-                  do
-                  {
-		    $selected = '';	
-                    $name=$temprow["profilename"];
-		    $profileid=$temprow["profileid"];
-		    if($profileid == $selected_profileid)
-		    {
-			$selected = 'selected';
-		    }		
-                    ?>
-                      
-                    <option value="<?php echo $profileid ?>" <?php echo $selected;  ?>><?php echo $temprow["profilename"] ?></option>
-                       <?php
-                    }while($temprow = $adb->fetch_array($result));
-                     ?>
-                    
-                    </select>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <p></p>
-              <table width="40%" border="0" cellpadding="0"
- cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td>
-                     <div align="center">
-                   
- <input type="submit" class="button" name="save" value="<?php echo $app_strings['LBL_SAVE_BUTTON_LABEL'] ?>" tabindex="2" onclick="return validate()">
-  <input name="cancel" class="button" type="button" value="<?php echo $app_strings['LBL_CANCEL_BUTTON_LABEL'] ?>" onclick="window.history.back()">
-</form> </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-</body>
+                    <input type="hidden" name="mode" value="<?php echo $mode;   ?>">
+                    <input type="hidden" name="parent" value="<?php echo $parent; ?>">
+		<table border=0 cellspacing=0 cellpadding=5 width=100% >
+			<tr>
+				<td class=small><font class=big><b>Settings</b></font><br><font class=h2><b>Roles > Add Role</b></font></td>
+			</tr>
+		</table>
+			
+			<hr noshade size=2>
+			<br>
+
+			
+			<table border=0 cellspacing=1 cellpadding=5 class=small width=100%>  
+			<tr bgcolor=white>
+				<td nowrap class=small align=left valign=top>
+				<!-- basic details-->
+				<table border=0 cellspacing=0 cellpadding=3 width=100% class=big><tr><td style="height:2px;background-color:#dadada"><b>Role Details</b></td></tr></table>
+
+				<table border=0 cellspacing=0 cellpadding=5 width=100% class=small>
+				<tr>
+					<td align=right width=20%><b><?php echo 'Role Name'; ?></b></td>
+
+					<td width=50%><input type="text" name="roleName" class=small style="width:400px;background-color:#ffffef" value="<?php echo $rolename ?>"></td>
+					<td width=30%>(<i>Use A-Z, a-z, 1-9</i>)</td>
+				</tr>
+				<tr>
+					<td valign=top align=right>Select Profiles<br> </td>
+					<td valign=top >
+
+						<select id="availList" name="availList" rows=7 class=small multiple style="width:200px;height:200px">
+						<?php
+							foreach($profDetails as $profId=>$profName)
+							{
+						?>
+						<option value="<?php echo $profId; ?>"><?php echo $profName; ?></option>
+						<?php
+							}
+						?>
+						</select><br>
+
+						
+					</td>
+					<input type="hidden" name="selectedColumnsString"/>
+					<td><table border="0" align="center" cellpadding="0" cellspacing="5">
+            				<tr> 
+                				<td><div align="center"> 
+				                    <input type="button" name="Button" value="Add" class="button" onClick="addColumn()">
+
+			                </div></td>
+            				</tr>
+					<tr> 
+                				<td><div align="center"> 
+				                    <input type="button" name="Button1" value="Remove" class="button" onClick="delColumn()">
+
+			                </div></td>
+            				</tr>
+				        </table>
+					</td>
+					<td valign=top>
+						<select id="selectedColumns" name="selectedColumns" rows=7 class=small multiple style="width:200px;height:200px">
+						<?php
+						if($mode == 'edit')
+						{
+							foreach($roleRelatedProfiles as $relProfId=>$relProfName)
+							{
+						?>
+								<option value="<?php echo $relProfId; ?>"><?php echo $relProfName; ?></option>
+						<?php
+							}
+						}
+						?>
+                                                </select><br>		
+					
+					</td>
+					<td valign=top>(Use CTRL to select multiple)</td>
+				</tr>
+				<tr>
+					<td valign=top align=right>Reports to </td>
+					<td valign=top ><b><?php echo $parentname;?><b></td>
+
+					<td valign=top></td>
+				</tr>
+				</table>
+				
+				<!-- Buttons -->
+				<table border=0 cellspacing=0 cellpadding=5 width=100% bgcolor="#efefef">
+				<tr>
+					<td align=center>
+						<input type="submit" class="button" name="add" value="Add Role" onClick="return validate()">
+						<input type="button" class="button" name="cancel" value="Cancel" onClick="window.history.back()">
+					
+					</td>
+
+				</tr>
+				</table>
+				</td>
+			</tr>
+			</table>
+<script language="JavaScript" type="text/JavaScript">    
+        var moveupLinkObj,moveupDisabledObj,movedownLinkObj,movedownDisabledObj;
+        function setObjects() 
+        {
+            availListObj=getObj("availList")
+            selectedColumnsObj=getObj("selectedColumns")
+
+        }
+
+        function addColumn() 
+        {
+            for (i=0;i<selectedColumnsObj.length;i++) 
+            {
+                selectedColumnsObj.options[i].selected=false
+            }
+
+            for (i=0;i<availListObj.length;i++) 
+            {
+                if (availListObj.options[i].selected==true) 
+                {
+                    for (j=0;j<selectedColumnsObj.length;j++) 
+                    {
+                        if (selectedColumnsObj.options[j].value==availListObj.options[i].value) 
+                        {
+                            var rowFound=true
+                            var existingObj=selectedColumnsObj.options[j]
+                            break
+                        }
+                    }
+
+                    if (rowFound!=true) 
+                    {
+                        var newColObj=document.createElement("OPTION")
+                        newColObj.value=availListObj.options[i].value
+                        if (browser_ie) newColObj.innerText=availListObj.options[i].innerText
+                        else if (browser_nn4 || browser_nn6) newColObj.text=availListObj.options[i].text
+                        selectedColumnsObj.appendChild(newColObj)
+                        availListObj.options[i].selected=false
+                        newColObj.selected=true
+                        rowFound=false
+                    } 
+                    else 
+                    {
+                        existingObj.selected=true
+                    }
+                }
+            }
+        }
+
+        function delColumn() 
+        {
+            for (i=0;i<=selectedColumnsObj.options.length;i++) 
+            {
+                if (selectedColumnsObj.options.selectedIndex>=0)
+                selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)
+            }
+        }
+                        
+        function formSelectColumnString()
+        {
+            var selectedColStr = "";
+            for (i=0;i<selectedColumnsObj.options.length;i++) 
+            {
+                selectedColStr += selectedColumnsObj.options[i].value + ";";
+            }
+            document.newRoleForm.selectedColumnsString.value = selectedColStr;
+        }
+	setObjects();			
+</script>				
+		</form>
+              </body>
+		
 </html>
