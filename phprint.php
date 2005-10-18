@@ -99,10 +99,10 @@ IMG { display: none; }
 </style>
 </head>
 <body>
-<a href="<?php echo $url; ?>"><< <?php echo $app_strings['LBL_BACK']; ?></a><br><br>
+<!--a href="<?php echo $url; ?>"><< <?php echo $app_strings['LBL_BACK']; ?></a><br><br-->
 <?php
 echo $page_str;
 ?>
-<br><br><a href="<?php echo $url; ?>"><< <?php echo $app_strings['LBL_BACK']; ?></a>
+<br><br><!--a href="<?php echo $url; ?>"><< <?php echo $app_strings['LBL_BACK']; ?></a-->
 </body>
 </html>
