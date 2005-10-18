@@ -1319,24 +1319,25 @@
 
 
 	<table name="role">
-                <field name="roleid" type="I" size="11">
+                <field name="roleid" type="C" size="255">
                         <KEY/>
-                        <AUTOINCREMENT/></field>
-                <field name="name" type="C" size="60">
                 </field>
-                <field name="description" type="C" size="100"></field>
-		<opt>Type=InnoDB</opt>
+                <field name="rolename" type="C" size="200">
+                </field>
+                <field name="parentrole" type="C" size="255">
+                </field>
+                <field name="depth" type="I" size="19">
+                </field>
+                <opt>Type=InnoDB</opt>
                 <data>
-
                 </data>
         </table>
-
 
 	<table name="user2role">
 		<field name="userid" type="I" size="11">
 			<KEY/>
 		</field>
-		<field name="roleid" type="I" size="11">
+		<field name="roleid" type="C" size="255">
 			<NOTNULL/>
 		</field>
 	        <opt>Type=InnoDB</opt>	
@@ -3598,10 +3599,11 @@
 	</table>
 	
 	<table name="role2profile">
-		<field name="roleid" type="I" size="11">
+		<field name="roleid" type="C" size="255">
 			<KEY/>
 		</field>
 		<field name="profileid" type="I" size="11">
+			<KEY/>
 		</field>
 		
 		<data>
