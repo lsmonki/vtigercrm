@@ -32,13 +32,16 @@ class Security extends CRMEntity {
 
 		$role1_id = $this->db->getUniqueID("role");
 		$role2_id = $this->db->getUniqueID("role");
+		$role3_id = $this->db->getUniqueID("role");
+
 		$profile1_id = $this->db->getUniqueID("profile");
 		$profile2_id = $this->db->getUniqueID("profile");
 		$profile3_id = $this->db->getUniqueID("profile");
 		$profile4_id = $this->db->getUniqueID("profile");
 
-                $this->db->query("insert into role values(".$role1_id.",'administrator','')");
-		$this->db->query("insert into role values(".$role2_id.",'standard_user','')");
+                $this->db->query("insert into role values('H".$role1_id."','Organisation','H".$role1_id."',0)");
+                $this->db->query("insert into role values('H".$role2_id."','administrator','H".$role1_id."::H".$role2_id."',1)");
+                $this->db->query("insert into role values('H".$role3_id."','standard_user','H".$role1_id."::H".$role2_id."::H".$role3_id."',2)");
                 
                 $table_name="user2role";
                 $table_name="role2tab";
@@ -1280,8 +1283,8 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2standardpermissions values (".$profile4_id.",23,4,0)");	
 
 		//Insert into role2profile
-		$this->db->query("insert into role2profile values (".$role1_id.",".$profile1_id.")");
-		$this->db->query("insert into role2profile values (".$role2_id.",".$profile2_id.")");
+		$this->db->query("insert into role2profile values ('H".$role2_id."',".$profile1_id.")");
+		$this->db->query("insert into role2profile values ('H".$role3_id."',".$profile2_id.")");
 	
 		//Insert into profile2field
 			
