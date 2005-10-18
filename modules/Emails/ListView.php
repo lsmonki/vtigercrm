@@ -103,7 +103,7 @@ global $image_path;
 global $theme;
 
 $url_string = ''; // assigning http url string
-$sorder = 'ASC';  // Default sort order
+$sorder = 'DESC';  // Default sort order changed by stema
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
 $sorder = $_REQUEST['sorder'];
 
@@ -284,12 +284,14 @@ if(isset($where) && $where != '')
 {
 	$list_query .= " AND " .$where;
 }
-$list_result = $adb->query($list_query);
-
+//$list_result = $adb->query($list_query);
+$sorder = 'DESC';  // Default sort order    	//stema
+$order_by = 'date_start';
 if(isset($order_by) && $order_by != '')
 {
         $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
 }
+$list_result = $adb->query($list_query);
 
 //Constructing the list view
 $view_script = "<script language='javascript'>
