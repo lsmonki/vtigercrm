@@ -62,7 +62,7 @@ function load_addmsgtovtiger()
 	  var mo = oDate.getMonth() + 1;
      	  var d = oDate.getDate();
 	  gdate = y + "-" + mo + "-" + d ; 
-	  window.openDialog('chrome://vtiger/content/addtovtiger.xul','','chrome,resizable=no,titlebar,modal,centerscreen');
+	  //window.openDialog('chrome://vtiger/content/addtovtiger.xul','','chrome,resizable=no,titlebar,modal,centerscreen');
   }else
   {
 	alert_message("Pls, Select a Message and Add to vtiger CRM.");
