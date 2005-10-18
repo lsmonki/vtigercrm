@@ -195,6 +195,7 @@ function vaddemailtovtigerCRM()
 					if(oResp.body.childNodes.item(0).childNodes.item(0).childNodes.item(0).nodeValue!="")
 					{
 						alert_message("Successfully added message to the vtiger CRM");
+						window.close();
 					}else
 					{
 						alert_message("Can not add message to the vtiger CRM");
