@@ -208,12 +208,16 @@ function renderRelatedStageHistory($query,$id)
 
                         $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
                         $list .= '<td width="25%" height="21" style="padding:0px 3px 0px 3px;">';
-                        $list .= $row['closedate'];
+			//changed to show the close date as user date format -- after 4.2 patch2
+			$closedate = getDisplayDate($row['closedate']);
+                        $list .= $closedate;
                         $list .= '</td>';
 
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 			$list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-			$list .= $row['lastmodified'];
+			//changed to show the last modified date as user date format -- after 4.2 patch2
+			$lastmodified = getDisplayDate($row['lastmodified']);
+			$list .= $lastmodified;
 			$list .= '</td>';
 
 			$list .= '</td>';
