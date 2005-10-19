@@ -32,21 +32,21 @@ $dbQuery .= "WHERE attachmentsid = " .$attachmentsid ;
 $result = $adb->query($dbQuery) or die("Couldn't get file list");
 if($adb->num_rows($result) == 1)
 {
-$fileType = @$adb->query_result($result, 0, "type");
-$name = @$adb->query_result($result, 0, "name");
-//echo 'filetype is ' .$fileType;
-$fileContent = @$adb->query_result($result, 0, "attachmentcontents");
-$size = @$adb->query_result($result, 0, "attachmentsize");
-header("Content-type: $fileType");
-//header("Content-length: $size");
-header("Cache-Control: private");
-header("Content-Disposition: attachment; filename=$name");
-header("Content-Description: PHP Generated Data");
-echo base64_decode($fileContent);
+	$fileType = @$adb->query_result($result, 0, "type");
+	$name = @$adb->query_result($result, 0, "name");
+	//echo 'filetype is ' .$fileType;
+	$fileContent = @$adb->query_result($result, 0, "attachmentcontents");
+	$size = @$adb->query_result($result, 0, "attachmentsize");
+	header("Content-type: $fileType");
+	//header("Content-length: $size");
+	header("Cache-Control: private");
+	header("Content-Disposition: attachment; filename=$name");
+	header("Content-Description: PHP Generated Data");
+	echo base64_decode($fileContent);
 }
 else
 {
-echo "Record doesn't exist.";
+	echo "Record doesn't exist.";
 }
 ?>
 
