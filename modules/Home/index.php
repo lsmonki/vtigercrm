@@ -47,6 +47,29 @@ $task_title = $mod_strings['LBL_OPEN_TASKS'];
 <tr>
 <td valign="top">
 <?php
+
+// MWC Home Order Sorting functions given by mike
+global $adb;
+global $current_user;
+
+$query = "SELECT users.homeorder FROM users WHERE id=".$current_user->id;
+$result =& $adb->query($query, true,"Error getting home order");
+$row = $adb->fetchByAssoc($result);
+
+if($row != null)
+{
+	$home_section_order = $row['homeorder'];
+}
+if( count($home_section_order) < 1 )
+{
+	$home_section_order = array("ALVT","PLVT","QLTQ","CVLVT","HLT","OLV","GRT","OLTSO","ILTI");
+}
+
+foreach ( explode(",",$home_section_order) as $section )
+{
+	switch( $section )
+	{
+		case 'OLV':
 if($tab_per_Data[9] == 0)
 {
 	if($permissionData[9][3] == 0)
@@ -54,9 +77,8 @@ if($tab_per_Data[9] == 0)
 		include("modules/Activities/OpenListView.php") ;
 	}
 }
-?>
-<br>
-<?php
+            break;
+        case 'ALVT':
 
 
 	//Added to support the inclusion of the Top Accounts in the Home Page. 
@@ -67,8 +89,9 @@ if($tab_per_Data[9] == 0)
                     {
                       include("modules/Accounts/ListViewTop.php");
                     }
-	   }  
-	
+	   }   
+            break;
+        case 'PLVT':
 if($tab_per_Data[2] == 0)
 {
 	if($permissionData[2][3] == 0)
@@ -76,9 +99,8 @@ if($tab_per_Data[2] == 0)
 		 include("modules/Potentials/ListViewTop.php");
 	}
 }
- ?>
-<br>
-<?php
+            break;
+        case 'GRT':
 //get all the group relation tasks
 global $current_user;
 $userid= $current_user->id;
@@ -167,6 +189,8 @@ $list .= '<script language=\'Javascript\'>
   setExpandCollapse_gen()</script>';
 
 echo $list;
+            break;
+        case 'HLT':
 function getActivityType($id)
 {
 	global $adb;
@@ -186,9 +210,11 @@ if($tab_per_Data[13] == 0)
 		require_once('modules/HelpDesk/ListTickets.php');
 	}
 }
-echo '<BR><BR>';
+        	break;
+        case 'CVLVT':
 include("modules/CustomView/ListViewTop.php");
-echo '<BR>';
+        	break;
+        case 'QLTQ':
 if($tab_per_Data[20] == 0)
 {
         if($permissionData[20][3] == 0)
@@ -196,7 +222,8 @@ if($tab_per_Data[20] == 0)
 		require_once('modules/Quotes/ListTopQuotes.php');
 	}
 }
-echo '<BR>';
+        	break;
+        case 'OLTSO':
 if($tab_per_Data[22] == 0)
 {
         if($permissionData[22][3] == 0)
@@ -204,7 +231,8 @@ if($tab_per_Data[22] == 0)
 		require_once('modules/Orders/ListTopSalesOrder.php');
 	}
 }
-echo '<BR>';
+        	break;
+        case 'ILTI':
 if($tab_per_Data[23] == 0)
 {
         if($permissionData[23][3] == 0)
@@ -212,20 +240,25 @@ if($tab_per_Data[23] == 0)
 		require_once('modules/Invoice/ListTopInvoice.php');
 	}
 }
+        	break;
+    }
+	echo '<BR>';
+}
+
 global $current_language;
 $current_module_strings = return_module_language($current_language, 'Calendar');
 
 $t=Date("Ymd");
 ?>
 </td>
-<td width="300" valign="top" align="center">
+<td width="25%" valign="top" align="center">
             <?php include("modules/Calendar/minical.php"); ?>
             <form name="minc" method="GET" action="index.php">
                 <input type="hidden" name="module" value="Calendar">
                 <input type="hidden" name="action">
                 <input type="hidden" name="t">
                 <!--<input title="<? echo $current_module_strings['LBL_DAY_BUTTON_TITLE']?>" accessKey="<? echo $current_module_strings['LBL_DAY_BUTTON_KEY']?>" onclick="this.form.action.value='calendar_day';this.form.t.value='<? echo $t?>'" type="image" src="<? echo $image_path ?>day.gif" name="button" value="  <? echo $current_module_strings['LBL_DAY']?>  " >
-                <input title="<? echo $current_module_strings['LBL_WEEK_BUTTON_TITLE']?>" accessKey="<? echo $current_module_strings['LBL_WEEK_BUTTON_KEY']?>" onclick="this.form.action.value='calendar_week';this.form.t.value='<? echo $t?>'" type="image" src="<? echo $image_path ?>week.gif" name="button" value="  <? echo $current_module_strings['LBL_WEEK']?>  " >
+                      	break;  <input title="<? echo $current_module_strings['LBL_WEEK_BUTTON_TITLE']?>" accessKey="<? echo $current_module_strings['LBL_WEEK_BUTTON_KEY']?>" onclick="this.form.action.value='calendar_week';this.form.t.value='<? echo $t?>'" type="image" src="<? echo $image_path ?>week.gif" name="button" value="  <? echo $current_module_strings['LBL_WEEK']?>  " >
                 <input title="<? echo $current_module_strings['LBL_MON_BUTTON_TITLE']?>" accessKey="<? echo $current_module_strings['LBL_MON_BUTTON_KEY']?>" onclick="this.form.action.value='calendar_month';this.form.t.value='<? echo $t?>'" type="image" src="<? echo $image_path ?>month.gif" name="button" value="  <? echo $current_module_strings['LBL_MON']?>  " >-->
             </form>
 <?php echo get_left_form_header($mod_strings['LBL_PIPELINE_FORM_TITLE']);
