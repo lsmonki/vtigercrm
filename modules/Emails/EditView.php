@@ -119,7 +119,7 @@ if(isset($_REQUEST['record'])) {
 	$focus->mode = 'edit';
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
 		$vtlog->logthis("Entity info successfully retrieved for EditView.",'info');
-        $focus->name=$focus->column_fields['name'];		
+        $focus->name=$focus->column_fields['subject'];		
 }
 //$old_id = '';
 if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
