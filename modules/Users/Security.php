@@ -655,7 +655,12 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'customerno','invoice',1,'1','customerno','Customer No',1,0,0,100,3,1,1,'V~O',1,'')");	
 
 // $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'notes','invoice',1,'1','notes','Notes',1,0,0,100,4,1,1,'V~O')");	
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'invoicedate','invoice',1,'5','invoicedate','Invoice Date',1,0,0,100,5,1,1,'D~O',1,'')");
+ 
+//to include contact name field in Invoice-start
+$this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'contactid','invoice',1,'57','contact_id','Contact Name',1,0,0,100,4,1,1,'I~O',1,'')");
+//end
+
+$this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'invoicedate','invoice',1,'5','invoicedate','Invoice Date',1,0,0,100,5,1,1,'D~O',1,'')");
  $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'duedate','invoice',1,'5','duedate','Due Date',1,0,0,100,6,1,1,'D~O',1,'')");
  //$this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'invoiceterms','invoice',1,'1','invoiceterms','Invoice Terms',1,0,0,100,7,1,1,'V~O')");
 $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'purchaseorder','invoice',1,'1','purchaseorder','Purchase Order',1,0,0,100,8,1,1,'V~O',1,'')");
