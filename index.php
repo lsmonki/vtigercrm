@@ -772,73 +772,73 @@ if(!$skipFooters)
 	}
 if(!$viewAttachment)
 {
-// Under the SPL you do not have the right to remove this copyright statement.	
-$copyrightstatement="<style>
-        .bggray
-        {
-        background-color: #dfdfdf;
-        }
-        .bgwhite
-        {
-        background-color: #FFFFFF;
-        }
+	// Under the SPL you do not have the right to remove this copyright statement.	
+	$copyrightstatement="<style>
+		.bggray
+		{
+			background-color: #dfdfdf;
+		}
+	.bgwhite
+	{
+		background-color: #FFFFFF;
+	}
 	.copy
-        {
-        font-size:9px;
-        font-family: Verdana, Arial, Helvetica, Sans-serif;
-        }
-        </style>
-	<script language=javascript>
-         function LogOut(e)
-         {
-                 var nav4 = window.Event ? true : false;
-                 var iX,iY;
-                 if (nav4)
-                 {
-                         iX = e.pageX;
-                         iY = e.pageY;
-                 }
-                 else
-                 {
-                         iX = event.clientX + document.body.scrollLeft;
-                         iY = event.clientY + document.body.scrollTop;
+	{
+		font-size:9px;
+		font-family: Verdana, Arial, Helvetica, Sans-serif;
+	}
+	</style>
+		<script language=javascript>
+		function LogOut(e)
+		{
+			var nav4 = window.Event ? true : false;
+			var iX,iY;
+			if (nav4)
+			{
+				iX = e.pageX;
+				iY = e.pageY;
+			}
+			else
+			{
+				iX = event.clientX + document.body.scrollLeft;
+				iY = event.clientY + document.body.scrollTop;
 
-                 }
-                 if (iX <= 30 && iY < 0 )
-                 {
-                         w=window.open(\"index.php?action=Logout&module=Users\");
-                         w.close();
-                 }
-         }
-         //window.onunload=LogOut
-       </script>
-";
+			}
+			if (iX <= 30 && iY < 0 )
+			{
+				w=window.open(\"index.php?action=Logout&module=Users\");
+				w.close();
+			}
+		}
+	//window.onunload=LogOut
+	</script>
+		";
 
-echo $copyrightstatement;
-if($action != "about_us")
-{
-echo "<table width=60% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n";
-echo "<table width=100% border=0 cellspacing=1 cellpadding=0 class=\"bgwhite\" align=center><tr><td align=center class=\"copy\">\n";
-echo("&copy; This software is a collective work consisting of the following major Open Source components: Apache software, MySQL server, PHP, SugarCRM, phpBB, TUTOS, phpSysinfo, SquirrelMail, and PHPMailer each licensed under a separate Open Source License. vtiger.com is not affiliated with nor endorsed by any of the above providers. See <a href='http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt' class=\"copy\" target=\"_blank\">Copyrights </a> for details.<br>\n");
-echo "</td></tr></table></td></tr></table>\n";
+	echo $copyrightstatement;
+	if($action != "about_us")
+	{
+		echo "<table width=60% border=0 cellspacing=1 cellpadding=0 class=\"bggray\" align=center><tr><td align=center>\n";
+		echo "<table width=100% border=0 cellspacing=1 cellpadding=0 class=\"bgwhite\" align=center><tr><td align=center class=\"copy\">\n";
+		echo("&copy; This software is a collective work consisting of the following major Open Source components: Apache software, MySQL server, PHP, SugarCRM, phpBB, TUTOS, phpSysinfo, SquirrelMail, and PHPMailer each licensed under a separate Open Source License. vtiger.com is not affiliated with nor endorsed by any of the above providers. See <a href='http://www.vtiger.com/copyrights/LICENSE_AGREEMENT.txt' class=\"copy\" target=\"_blank\">Copyrights </a> for details.<br>\n");
+		echo "</td></tr></table></td></tr></table>\n";
 
-echo "<table align='center'><tr><td align='center'>";
-// Under the Sugar Public License referenced above, you are required to leave in all copyright statements in both
-// the code and end-user application.
-//echo("<br>&copy; 2004 <a href='http://www.sugarcrm.com' target='_blank'>SugarCRM Inc.</a> All Rights Reserved.<BR />");	
-if($calculate_response_time)
-{
-    $endTime = microtime();
+		echo "<table align='center'><tr><td align='center'>";
+		// Under the Sugar Public License referenced above, you are required to leave in all copyright statements in both
+		// the code and end-user application.
+		//echo("<br>&copy; 2004 <a href='http://www.sugarcrm.com' target='_blank'>SugarCRM Inc.</a> All Rights Reserved.<BR />");	
+		if($calculate_response_time)
+		{
+			$endTime = microtime();
 
-    $deltaTime = microtime_diff($startTime, $endTime);
-    echo('&nbsp;Server response time: '.$deltaTime.' seconds.');
+			$deltaTime = microtime_diff($startTime, $endTime);
+			echo('&nbsp;Server response time: '.$deltaTime.' seconds.');
+		}
+		echo "</td></tr></table>\n";
+	}
+	?>
+		<script>
+			var userDateFormat = "<? echo $current_user->date_format ?>";
+		</script>
+<?php
 }
-echo "</td></tr></table>\n";
-}
-}
-
-
 ?>
-<script>
-var userDateFormat = "<? echo $current_user->date_format ?>";
-</script>
