@@ -83,6 +83,7 @@ if($focus->is_authenticated())
 	session_unregister('login_user_name');
 
 	$_SESSION['authenticated_user_id'] = $focus->id;
+	$_SESSION['app_unique_key'] = $application_unique_key;
 
 	// store the user's theme in the session
 	if (isset($_REQUEST['login_theme'])) {

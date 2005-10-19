@@ -397,7 +397,13 @@ if(isset($_REQUEST['module']))
 	$module = $_REQUEST['module'];	
 }
 // Check to see if there is an authenticated user in the session.
-if(isset($_SESSION["authenticated_user_id"]))
+$use_current_login = false;
+if(isset($_SESSION["authenticated_user_id"]) && (isset($_SESSION["app_unique_key"]) && $_SESSION["app_unique_key"] == $application_unique_key))
+{
+        $use_current_login = true;
+}
+
+if($use_current_login)
 {
 	$log->debug("We have an authenticated user id: ".$_SESSION["authenticated_user_id"]);
 }
@@ -519,7 +525,8 @@ $lang_crm = (isset($_SESSION['authenticated_user_language'])) ? $_SESSION['authe
 $GLOBALS['request_string'] = "&module=$module&action=$action&record=$record&lang_crm=$lang_crm";
 
 $current_user = new User();
-if(isset($_SESSION['authenticated_user_id']))
+
+if($use_current_login)
 {
 	$result = $current_user->retrieve($_SESSION['authenticated_user_id']);
 	if($result == null)
@@ -699,7 +706,7 @@ if (isset($_SESSION['authenticated_user_language'])) {
 if(!$skipHeaders) {
 	$log->debug("including headers");
 	//include('themes/'.$theme.'/header.php');
-	if(isset($_SESSION["authenticated_user_id"]))
+	if($use_current_login)
 	{
 		include('themes/'.$theme.'/header.php');
 	}
