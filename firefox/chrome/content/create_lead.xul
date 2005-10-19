@@ -74,7 +74,7 @@
 		  <spacer flex="1"/>
 		  <hbox style="width:25em" align="left">
 			  <label style="color:red" value="*"/>
-			  <label value="Indicates mandatory feilds"/>
+			  <label value="Indicates mandatory fields"/>
 		  </hbox>	
 	</hbox>
 
