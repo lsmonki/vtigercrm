@@ -23,14 +23,14 @@ $iData[] = date('Y-m-d');
 //newly added for Sales Order No.
 if($focus->column_fields["requisition_no"] != '')
 {
-	$reqno = $focus->column_fields["requisition_no"];
+	$qtname = $focus->column_fields["requisition_no"];
 }
 else
 {
-	$reqno = ' ';
+	$qtname = ' ';
 }	
 
-$iData[] = $reqno;
+$iData[] = $qtname;
 
 //setting the Customer Data
 $iCustData[] = $vendor_name;
