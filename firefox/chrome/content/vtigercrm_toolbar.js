@@ -312,6 +312,7 @@ function add_contact_to_vtigercrm()
 
 	
 	//get the contact's information to save it to vtigerCRM
+	var save_contact_fname = trim(document.getElementById("txtcontact_fname").value);
 	var save_contact_lname = trim(document.getElementById("txtcontact_lname").value);
 	var save_contact_phone = trim(document.getElementById("txtcontact_phone").value);
 	var save_contact_mobile = trim(document.getElementById("txtcontact_mobile").value);
@@ -338,7 +339,7 @@ function add_contact_to_vtigercrm()
 			{
 				var h=new Array();
 				h[0] = new SOAPParameter(get_username,"user_name");
-				h[1] = new SOAPParameter("","first_name");
+				h[1] = new SOAPParameter(save_contact_fname,"first_name");
 				h[2] = new SOAPParameter(save_contact_lname,"last_name");
 				h[3] = new SOAPParameter(save_contact_email,"email_address");
 				h[4] = new SOAPParameter("","account_name");
