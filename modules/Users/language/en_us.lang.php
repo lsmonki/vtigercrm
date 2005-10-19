@@ -194,6 +194,10 @@ $mod_strings = Array(
 'LBL_TAB_MENU_UPDATED'=>'Tab Menu Updated! kindly go to ',
 'LBL_TO_VIEW_CHANGES'=>' to view the changes',
 
+// Added to change homepage order
+'LBL_CHANGE_HOMEPAGE_LABEL'=>'Homepage Order',
+'LBL_CHANGE_HOMEPAGE_TITLE'=>'Homepage',
+
 // Added fields in binaryfilelist.php
 'LBL_OERATION'=>'Operation',
 
@@ -314,7 +318,20 @@ $mod_strings = Array(
 'LBL_INVOICE_FIELD_ACCESS'=>'Invoice Field Access',
 
 //given for calendar color for an user user
-'LBL_COLOR'=>'Color in Calendar'
+'LBL_COLOR'=>'Color in Calendar',
+//Added to change Home page order
+'LBL_HOMEPAGE_ORDER_UPDATE'=>'Update Home Page Block Order',
+'LBL_HOMEPAGE_ID'=>'Block Order',
+'ERR_INVALID_USER'=>'Invalid access--Please call from My Accounts',
+'ALVT'=>'Top Accounts',
+'PLVT'=>'Top Potentials',
+'QLTQ'=>'Top Quotes',
+'CVLVT'=>'Key Metrics',
+'HLT'=>'HelpDesk Top Tickets',
+'OLV'=>'Top Open Activities',
+'GRT'=>'Top Group Tasks',
+'OLTSO'=>'Top Sales Orders',
+'ILTI'=>'Top Invoices'
 
 
 );
