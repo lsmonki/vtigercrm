@@ -4535,6 +4535,9 @@
 		<field name="subject" type="C" size="100"></field>
 		<field name="salesorderid" type="I" size="19"></field>
 		<field name="customerno" type="C" size="100"></field>
+                <!--to include contact name field in Invoice-start-->
+		<field name="contactid" type="I" size="19"></field>
+		<!--end-->
 		<field name="notes" type="C" size="100"></field>
 		<field name="invoicedate" type="D"></field>
 		<field name="duedate" type="D"></field>
