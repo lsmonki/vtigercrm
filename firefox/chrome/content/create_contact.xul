@@ -32,6 +32,18 @@
 					  
 				   </columns>
 				   <rows>
+
+					<row>
+						  
+						<hbox>
+						   <spacer flex="1"/>
+						   <label value="First Name:" style="padding: 0px;margin-top: 3px;" />
+						   <hbox style="width: 20em">
+			                                  <textbox id="txtcontact_fname" flex="1"/>
+						  </hbox>
+				  		</hbox> 
+					   </row>
+
 					   <row>
 						  
 						<hbox>
@@ -143,7 +155,7 @@
 		  <spacer flex="1"/>
 		  <hbox style="width:25em">
 			  <label style="color:red" value="*"/>
-			  <label value="Indicates mandatory feilds"/>
+			  <label value="Indicates mandatory fields"/>
 		  </hbox>
 	</hbox>		  
 	<hbox id="commandbar" flex="1" align="right">
