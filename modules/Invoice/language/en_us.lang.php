@@ -120,6 +120,7 @@ $mod_strings = Array(
 'Quote Name'=>'Quote Name',
 'Vendor Name'=>'Vendor Name',
 'Invoice Terms'=>'Invoice Terms',
+'Contact Name'=>'Contact Name',//to include contact name field in Invoice
 'Invoice Date'=>'Invoice Date',
 'Sub Total'=>'Sub Total',
 'Due Date'=>'Due Date',
