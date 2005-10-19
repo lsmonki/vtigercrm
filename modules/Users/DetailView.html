@@ -21,7 +21,7 @@
 <tr>
     <td vAlign="middle" align="left"><IMG src="{IMAGE_PATH}Users.gif" border="0"></td>
     <td class="moduleTitle" vAlign="middle" align="left" noWrap width="100%" height="20">{MOD.LBL_USER}  {FIRST_NAME} {LAST_NAME} ({USER_NAME})</td>
-	<td nowrap class='bodySmall' align='right'>[ <A href="{PRINT_URL}" target="_blank">{APP.LNK_PRINT}</A> ]</td>
+	<td nowrap class='bodySmall' align='right'>[ <A href={PRINT_URL}>{APP.LNK_PRINT}</A> ]</td>
 	<td nowrap class='bodySmall' align='right'>[ <A href='http://www.vtiger.com/products/crm/document.html' target='_blank'>{APP.LNK_HELP}</A> ]</td>
 </tr>
 <tr><td colspan="4"><div class="hline"><img height='1' src='include/images/blank.gif'></div></td></tr></table>
@@ -43,8 +43,16 @@
 			<input type="hidden" name="return_id">
 			<input type="hidden" name="forumDisplay">			
 		<tr>
-		{BUTTONS}
-		</tr></table>
+            <td>
+				{EDIT_BUTTON}
+				{CHANGE_PW_BUTTON}
+				{LOGIN_HISTORY_BUTTON}
+				{LIST_MAILSERVER_BUTTON}
+				{DUPLICATE_BUTTON}
+				{TABCUSTOMIZE_BUTTON}
+				{DELETE_BUTTON}
+				{LISTROLES_BUTTON}
+				{CHANGE_HOMEPAGE_BUTTON}
 	</td>
 	</form>
 </tr>
@@ -133,13 +141,9 @@
 <tr>
 	<td width="20%" valign="top" class="dataLabel">{MOD.LBL_GROUP_NAME}:</td>
 	<td width="30%" valign="top" class="dataField">{GROUPASSIGNED}</td>
-
-
         <td  width="20%" valign="top" class="dataLabel">{MOD.LBL_COLOR}:</td>
         <td width="30%" valign="top" class="dataField">{COLORASSIGNED}</td>
-
-
-</tr>
+	</tr>
 
 	<td width="20%" valign="top" valign="top" class="dataLabel">{MOD.LBL_NOTES}:</td>
 	<td colspan="3" class="dataField">{DESCRIPTION}</td>
