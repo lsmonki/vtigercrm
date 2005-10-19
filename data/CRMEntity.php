@@ -640,7 +640,9 @@ $vtlog->logthis("module is =".$module,'info');
 			  {
 				  $date_var = date('YmdHis');
 				  //$sql = "insert into potstagehistory values('',".$this->id.",".$_REQUEST['amount'].",'".$_REQUEST['sales_stage']."',".$_REQUEST['probability'].",".$_REQUEST['expectedrevenue'].",".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
-				  $sql = "insert into potstagehistory values('',".$this->id.",'".$_REQUEST['amount']."','".$sales_stage."','".$_REQUEST['probability']."',0,".$adb->formatString("potstagehistory","closedate",$_REQUEST['closingdate']).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
+				  //Changed to insert the close date based on user date format - after 4.2 patch2
+				  $closingdate = getDBInsertDateValue($_REQUEST['closingdate']);
+				  $sql = "insert into potstagehistory values('',".$this->id.",'".$_REQUEST['amount']."','".$sales_stage."','".$_REQUEST['probability']."',0,".$adb->formatString("potstagehistory","closedate",$closingdate).",".$adb->formatString("potstagehistory","lastmodified",$date_var).")";
 				  $adb->query($sql);
 			  }
 		  }
