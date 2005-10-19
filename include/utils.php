@@ -4974,6 +4974,7 @@ function getConvertSoToInvoice($focus,$so_focus,$soid)
 	$focus->column_fields['subject'] = $so_focus->column_fields['subject'];
 	$focus->column_fields['customerno'] = $so_focus->column_fields['customerno'];
 	$focus->column_fields['duedate'] = $so_focus->column_fields['duedate'];
+	$focus->column_fields['contact_id'] = $so_focus->column_fields['contact_id'];//to include contact name in Invoice
 	$focus->column_fields['account_id'] = $so_focus->column_fields['account_id'];
 	$focus->column_fields['exciseduty'] = $so_focus->column_fields['exciseduty'];
 	$focus->column_fields['salescommission'] = $so_focus->column_fields['salescommission'];
