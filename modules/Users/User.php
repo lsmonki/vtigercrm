@@ -64,6 +64,8 @@ class User extends SugarBean {
 	var $error_string;
 	var $is_admin;
 	var $date_format;
+	var $deleted;
+	var $homeorder;
 	
 	var $reports_to_name;
 	var $reports_to_id;
