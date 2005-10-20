@@ -20,7 +20,20 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  ********************************************************************************/
-
+define('SM_PATH','modules/squirrelmail-1.4.4/');
+/* SquirrelMail required files. */
+require_once(SM_PATH . 'functions/strings.php');
+require_once(SM_PATH . 'functions/imap_general.php');
+require_once(SM_PATH . 'functions/imap_messages.php');
+require_once(SM_PATH . 'functions/i18n.php');
+require_once(SM_PATH . 'functions/mime.php');
+				require_once(SM_PATH .'include/load_prefs.php');
+//require_once(SM_PATH . 'class/mime/Message.class.php');
+require_once(SM_PATH . 'class/mime.class.php');
+sqgetGlobalVar('key',       $key,           SQ_COOKIE);
+sqgetGlobalVar('username',  $username,      SQ_SESSION);
+sqgetGlobalVar('onetimepad',$onetimepad,    SQ_SESSION);
+$mailbox = 'INBOX';
 require_once('modules/Emails/Email.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
@@ -66,49 +79,79 @@ exit();
 }
 if(isset($_REQUEST['fromemail']) && $_REQUEST['fromemail'] != null)
 {
- 
-  //get the list of data from the comma separated array
-  $emailids = explode(",",$_REQUEST['fromemail']);
-  $subjects = explode(",",$_REQUEST['subject']);
-  $descriptions = explode(",",$_REQUEST['detail']);
-  $total = count($emailids);
-  for($m=0;$m<$total;$m++)
-  {
-    $ctctExists = checkIfContactExists($emailids[$m]);
-    if($ctctExists > 0)
-    {
-      $focus->column_fields['parent_id']=$ctctExists;
-    }
-    else
-    {
-      //echo 'contact not found in db!';
-    }
-    global $current_user;
+	//get the list of data from the comma separated array
+	$emailids = explode(",",$_REQUEST['fromemail']);
+	$subjects = explode(",",$_REQUEST['subject']);
+	$ids = explode(",",$_REQUEST['idlist']);
+	$total = count($ids);
+	for($z=0;$z<$total;$z++)
+	{
+			$msgData='';
+			global $current_user;
+			require_once('modules/Users/UserInfoUtil.php');
+			$mailInfo = getMailServerInfo($current_user);
+			$temprow = $adb->fetch_array($mailInfo);
 
-    $focus->column_fields['subject']=$subjects[$m];
-    $focus->column_fields["activitytype"]="Emails";
-    //	$focus->column_fields["parent_id"]=$ctctExists;
-    //this line has been added to get the related list data in the contact description
-    $focus->column_fields["assigned_user_id"]=$current_user->id;
-    //$date_var = strtotime($_REQUEST['adddate']);
-    //echo 'date_var ' .$date_var;
-    //exit;
-    $focus->column_fields["date_start"]=$_REQUEST['adddate'];
-    $focus->column_fields["time_start"]=$_REQUEST['adddate'];
+			$secretkey=$temprow["mail_password"];
+			$imapServerAddress=$temprow["mail_servername"];
+			$imapPort="143";
 
-    //this string has : in it, so , need to replace that with new line
-                
-    $mbody = explode(":",$descriptions[$m]);
-    $mbody = implode("\n",$mbody);
-                
-    $focus->column_fields["description"]=$mbody;
-    $focus->save("Emails");
-    $return_id = $focus->id;
-    $return_module='Emails';	
-    $return_action='DetailView';	
-  }
-  header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
-  return;
+
+			$key = OneTimePadEncrypt($secretkey, $onetimepad);
+			$imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
+			$mbx_response=sqimap_mailbox_select($imapConnection, $mailbox);
+
+			
+			$message = sqimap_get_message($imapConnection, $ids[$z], $mailbox);
+			$header = $message->rfc822_header;
+			$ent_ar = $message->findDisplayEntity(array(), array('text/plain'));
+			$cnt = count($ent_ar);
+			global $color;
+			for ($u = 0; $u < $cnt; $u++)
+			{
+				$messagebody .= formatBody($imapConnection, $message, $color, $wrap_at, $ent_ar[$u], $ids[$z], $mailbox);
+				$msgData = $messagebody;
+			}
+
+	//for every id that is passed, check if the contact exists
+	//$total = count($emailids);
+	//for($m=0;$m<$total;$m++)
+	//{
+		$ctctExists = checkIfContactExists($emailids[$z]);
+		if($ctctExists > 0)
+		{
+			$focus->column_fields['parent_id']=$ctctExists;
+		}
+		else
+		{
+			//echo 'contact not found in db!';
+		}
+		global $current_user;
+
+		$focus->column_fields['subject']=$subjects[$z];
+		$focus->column_fields["activitytype"]="Emails";
+		//	$focus->column_fields["parent_id"]=$ctctExists;
+		//this line has been added to get the related list data in the contact description
+		$focus->column_fields["assigned_user_id"]=$current_user->id;
+		//$date_var = strtotime($_REQUEST['adddate']);
+		//echo 'date_var ' .$date_var;
+		//exit;
+		$focus->column_fields["date_start"]=$_REQUEST['adddate'];
+		$focus->column_fields["time_start"]=$_REQUEST['adddate'];
+
+		//this string has : in it, so , need to replace that with new line
+
+		// $mbody = explode(":",$descriptions[$m]);
+		//$mbody = implode("\n",$mbody);
+		$focus->column_fields["description"]=$msgData;
+		$focus->save("Emails");
+		$return_id = $focus->id;
+		$return_module='Emails';	
+		$return_action='DetailView';	
+	//}
+	}
+	header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
+	return;
 }
 
 
