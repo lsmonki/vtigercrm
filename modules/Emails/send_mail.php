@@ -112,6 +112,17 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 			$vtlog->logthis("CC mail id is added => '".$ccmail[$i]."'",'info');
 		}
         }
+	//Added to send mail to Bcc addresss -- after 4.2 patch2
+        if($_REQUEST['bccmail'] != '')
+        {
+		//Here seperator is ,
+                $bccmail = explode(",",$_REQUEST['bccmail']);
+                for($i=0;$i<count($bccmail);$i++)
+                {
+                        $mail->AddBCC($bccmail[$i]);
+                        $vtlog->logthis("BCC mail id is added => '".$bccmail[$i]."'",'info');
+                }
+        }
 
 	$mail->AddReplyTo($from);
 	$mail->WordWrap = 50;                                 // set word wrap to 50 characters

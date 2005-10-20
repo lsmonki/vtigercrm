@@ -28,6 +28,8 @@ $assigned=$_REQUEST['assigned_user_id'];
 $contents=$_REQUEST['description'];
 $subject=$_REQUEST['name'];
 $ccmail=$_REQUEST['ccmail'];
+$bccmail=$_REQUEST['bccmail'];
+
 $from=$current_user->user_name;
 $sql="select email1 from users where id='" .$assigned ."'" ;
 $vtlog->logthis("Query to select the Emailid of assigned_to user : ",'debug');
@@ -74,8 +76,9 @@ if($_REQUEST['return_id'] != '')
 		$attachpath=$root_directory."/test/upload/".$filename;
 	}
 }
-send_mail($assigned,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password,$attachpath,$ccmail);
+send_mail($assigned,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password,$attachpath,$ccmail,$bccmail);
 $ccmail='';
+$bccmail='';
 
 $parentid= $_REQUEST['parent_id'];
 $myids=explode("|",$parentid);
@@ -112,7 +115,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 	}	
 }
 
-function send_mail($mailto,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password,$attachpath,$ccmail)
+function send_mail($mailto,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password,$attachpath,$ccmail,$bccmail='')
 {
 	global $vtlog;
 	global $adb;
@@ -143,6 +146,17 @@ function send_mail($mailto,$from,$subject,$contents,$mail_server,$mail_server_us
 			$vtlog->logthis("CC mail id is added => '".$ccmail[$i]."'",'info');
 		}
 	 }
+	//Added to send mail to Bcc addresss -- after 4.2 patch2
+        if($bccmail != '')
+        {
+		//Here seperator is ;
+                $bccmail = explode(";",$bccmail);
+                for($i=0;$i<count($bccmail);$i++)
+                {
+                        $mail->AddBCC($bccmail[$i]);
+                        $vtlog->logthis("BCC mail id is added => '".$bccmail[$i]."'",'info');
+                }
+        }
 	$mail->AddReplyTo($from);					
 	$mail->WordWrap = 50;                                 // set word wrap to 50 characters
 	//$mail->AddAttachment("/var/tmp/file.tar.gz");         // add attachments
