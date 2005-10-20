@@ -23,6 +23,7 @@
 require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/User.php');
+require_once('modules/Users/UserInfoUtil.php');
 require_once('modules/Users/Forms.php');
 require_once('include/database/PearDatabase.php');
 
@@ -146,40 +147,30 @@ if (is_admin($current_user)) {
         $ROLE_SELECT_OPTION = '<select name="user_role">';
         if($focus->id != '')
         {
-          $sql = "select * from role inner join user2role on user2role.roleid=role.roleid  where user2role.userid=" .$focus->id ;
-	   $result = $adb->query($sql);
-           $rolenameArray = $adb->fetch_array($result);
-           $roleselected = $rolenameArray["name"];
-	   $roleselectedid = $rolenameArray["roleid"];
-         }
-	/*
-        else
-        {
-          $sql = "select * from role";
+
+		$roleselectedid=fetchUserRole($focus->id);
+		$roleselected=getRoleName($roleselectedid);
+
         }
-	*/
-          
-                
-               $sql = "select * from role";
-               $result = $adb->query($sql);
-               $temprow = $adb->fetch_array($result);
-                   do
-                   {
-                    $rolename=$temprow["name"];
-                    $roleid=$temprow["roleid"]; 
-   		    $selected = '';
-		       if($roleselected != '' && $rolename == $roleselected)
+               
+		$allRoleDetails=getAllRoleDetails();
+		foreach($allRoleDetails as $roleid=>$roleInfoArr)
+		{
+			$rolename=$roleInfoArr[0];
+			$selected = '';
+		        if($roleselected != '' && $rolename == $roleselected)
 	        	{
 		                $selected = 'selected';
         		}
         
                     $ROLE_SELECT_OPTION .= '<option value="'.$roleid .'" '.$selected .'>';
-                    $ROLE_SELECT_OPTION .= $temprow["name"];
+                    $ROLE_SELECT_OPTION .= $rolename;
                     $ROLE_SELECT_OPTION .= '</option>';
-                   }while($temprow = $adb->fetch_array($result));
-                                  
-                   $ROLE_SELECT_OPTION .= ' </select>';
-                   
+						
+	
+		}
+		$ROLE_SELECT_OPTION .= ' </select>';
+		 
                    $xtpl->assign("USER_ROLE", $ROLE_SELECT_OPTION);
 
 
