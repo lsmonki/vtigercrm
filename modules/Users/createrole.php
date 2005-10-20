@@ -70,6 +70,7 @@ require_once('include/utils.php');
             <form name="newRoleForm" action="index.php">
                     <input type="hidden" name="module" value="Users">
                     <input type="hidden" name="action" value="SaveRole">
+                    <input type="hidden" name="returnaction" value="<?php echo $_REQUEST['returnaction']?>">
                     <input type="hidden" name="roleid" value="<?php echo $roleid;    ?>">
                     <input type="hidden" name="mode" value="<?php echo $mode;   ?>">
                     <input type="hidden" name="parent" value="<?php echo $parent; ?>">

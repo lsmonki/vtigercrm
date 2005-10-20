@@ -1189,6 +1189,22 @@ function getRoleRelatedProfiles($roleId)
 	return $roleRelatedProfiles;	
 }
 
+function getRoleUsers($roleId)
+{
+	global $adb;
+	$query = "select user2role.*,users.user_name from user2role inner join users on users.id=user2role.userid where roleid='".$roleId."'";
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	$roleRelatedUsers=Array();
+	for($i=0; $i<$num_rows; $i++)
+	{
+		$roleRelatedUsers[$adb->query_result($result,$i,'userid')]=$adb->query_result($result,$i,'user_name');
+	}
+	return $roleRelatedUsers;
+	
+
+}
+
 function getRoleAndSubordinatesInformation($roleId)
 {
 	global $adb;

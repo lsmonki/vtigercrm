@@ -126,18 +126,19 @@ function indent($hrarray,$roleout,$role_det)
 		echo '<table  border=0 cellspacing=0 cellpadding=2 class=small >';
 		echo '<tr style="height:20px">';
   		echo '<td style="width:20px"><a href=\'#\' onClick="showhide(\''.$roleid_arr.'\')"><img src="'.$image_path.'/plus.gif" border="0" width="16" height="16" alt="Expand/Collapse" title="Expand/Collapse"></a></td>';
-		echo '<td id="li_'.$roleid.'" valign=top onMouseDown="startDrag(\'li_'.$roleid.'\',\''.$rolename.'\')" onMouseMove="doItemMove(event)" onMouseUp="endItemMove(event)"><a href="#" style="width:100%" onClick="showhide(\''.$roleid_arr.'\')" >'.$rolename.'</a></td>';
+		echo '<td id="li_'.$roleid.'" valign=top onMouseDown="startDrag(\'li_'.$roleid.'\',\''.$rolename.'\')" onMouseMove="doItemMove(event)" onMouseUp="endItemMove(event)"><a href="#" style="width:100%" onClick="showhide(\''.$roleid_arr.'\')" ><b>'.$rolename.'</b></a></td>';
 		echo '<td style="width:5px"></td>';
 		if(! $roledepth == 0)
 		{
-			echo '<td valign=top><span id="'.$roleid.'tools" style="display:block"> <a href="index.php?module=Users&action=createrole&parent='.$roleid.'">Add</a> | <a href="index.php?module=Users&action=createrole&roleid='.$roleid.'&mode=edit">Edit</a> | <a href="index.php?module=Users&action=RoleDeleteStep1&roleid='.$roleid.'">Delete</a> </span></td>';
+			echo '<td valign=top><span id="'.$roleid.'tools" style="display:block"> <a href="index.php?module=Users&action=createrole&parent='.$roleid.'">Add</a> | <a href="index.php?module=Users&action=createrole&roleid='.$roleid.'&mode=edit">Edit</a> | <a href="index.php?module=Users&action=RoleDeleteStep1&roleid='.$roleid.'">Delete</a> | <a href="index.php?module=Users&action=RoleDetailView&roleid='.$roleid.'">View</a></span></td>';
 		}
 		else
 		{
 			
 			echo '<td valign=top><span id="'.$roleid.'tools" style="display:block"> <a href="index.php?module=Users&action=createrole&parent='.$roleid.'">Add</a></span></td>';
 		}
-                                                   
+                  
+		echo '</tr>';
 		echo '</table>';
 		echo '</li>';
 		if(sizeof($value) > 0 )
