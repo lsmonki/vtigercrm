@@ -288,7 +288,12 @@ class ImportContact extends Contact {
 		}*/
 		
 		//$query = "select * from {$focus->table_name} WHERE accountname='{$acc_name}' left join crmentity on crmentity.crmid =account.accountid";
-		$acc_name = addslashes($acc_name);
+
+		//Modified to remove the spaces at first and last in account name -- after 4.2 patch 2
+		$adb->println("Account name in csv file related to contact - to be search =>'".$acc_name."'");
+		$acc_name = trim(addslashes($acc_name));
+		$adb->println("Account name going to search in database after addslashes, trim =>'".$acc_name."'");
+
 		$query = "select crmentity.deleted, account.* from account,crmentity WHERE accountname='{$acc_name}' and crmentity.crmid =account.accountid";
 
                 $this->log->info($query);
