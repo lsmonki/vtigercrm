@@ -37,6 +37,12 @@ global $current_user;
 // global $default_language;
 // global $cal_codes;
 
+global $theme;
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+require_once($theme_path.'layout_utils.php');
+
+
 
 //echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
@@ -119,7 +125,7 @@ if(isset($_REQUEST['record'])) {
 	$focus->mode = 'edit';
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
 		$vtlog->logthis("Entity info successfully retrieved for EditView.",'info');
-        $focus->name=$focus->column_fields['subject'];		
+        $focus->name=$focus->column_fields['name'];		
 }
 //$old_id = '';
 if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')
@@ -137,6 +143,58 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
         $focus->id = "";
 	$focus->mode = "";
 }
+
+
+//WEBMAIL FUNCTIONS
+define('SM_PATH','modules/squirrelmail-1.4.4/');
+//get the webmail id and get the subject of the mail given the mail id
+/* SquirrelMail required files. */
+require_once(SM_PATH . 'functions/strings.php');
+require_once(SM_PATH . 'functions/imap_general.php');
+require_once(SM_PATH . 'functions/imap_messages.php');
+require_once(SM_PATH . 'functions/i18n.php');
+require_once(SM_PATH . 'functions/mime.php');
+require_once(SM_PATH .'include/load_prefs.php');
+//require_once(SM_PATH . 'class/mime/Message.class.php');
+require_once(SM_PATH . 'class/mime.class.php');
+sqgetGlobalVar('key',       $key,           SQ_COOKIE);
+sqgetGlobalVar('username',  $username,      SQ_SESSION);
+sqgetGlobalVar('onetimepad',$onetimepad,    SQ_SESSION);
+$mailbox = 'INBOX';
+
+
+$msgData='';
+global $current_user;
+require_once('modules/Users/UserInfoUtil.php');
+$mailInfo = getMailServerInfo($current_user);
+$temprow = $adb->fetch_array($mailInfo);
+
+$secretkey=$temprow["mail_password"];
+$imapServerAddress=$temprow["mail_servername"];
+$imapPort="143";
+
+$key = OneTimePadEncrypt($secretkey, $onetimepad);
+$imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
+$mbx_response=sqimap_mailbox_select($imapConnection, $mailbox);
+$message = sqimap_get_message($imapConnection, $_REQUEST['msg_id_num'], $mailbox);
+$header = $message->rfc822_header;
+$ent_ar = $message->findDisplayEntity(array(), array('text/plain'));
+$cnt = count($ent_ar);
+global $color;
+
+for ($u = 0; $u < $cnt; $u++)
+{
+	$messagebody .= formatBody($imapConnection, $message, $color, $wrap_at, $ent_ar[$u],$_REQUEST['msg_id_num'] , $mailbox);
+	$msgData = $messagebody;
+}
+if($msgData != '')
+{
+	$focus->column_fields['description'] = $msgData;
+}
+
+
+
+
 
 //get Email Information
 $block_1 = getBlockInformation("Emails",1,$focus->mode,$focus->column_fields);
@@ -167,11 +225,6 @@ if (isset($_REQUEST['filename']) && $_REQUEST['isDuplicate'] != 'true') {
 elseif (is_null($focus->parent_type)) {
 	$focus->parent_type = $app_list_strings['record_type_default_key'];
 }
-
-global $theme;
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
 
 $log->info("Email detail view");
 
@@ -288,13 +341,6 @@ if ($focus->parent_type == "Account") $xtpl->assign("DEFAULT_SEARCH", "&query=tr
 $xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
 $xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
-
-
-
-
-
-
-
 
 $xtpl->parse("main");
 
