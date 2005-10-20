@@ -100,18 +100,18 @@ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").
 $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'street','accountbillads',1,'21','bill_street','Billing Address',1,0,0,100,1,2,1,'V~O',1,'')");
  $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'street','accountshipads',1,'21','ship_street','Shipping Address',1,0,0,100,2,2,1,'V~O',1,'')");
 
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'city','accountbillads',1,'1','bill_city','City',1,0,0,100,3,2,1,'V~O',1,'')");
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'city','accountshipads',1,'1','ship_city','City',1,0,0,100,4,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'city','accountbillads',1,'1','bill_city','Billing City',1,0,0,100,3,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'city','accountshipads',1,'1','ship_city','Shipping City',1,0,0,100,4,2,1,'V~O',1,'')");
 
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'state','accountbillads',1,'1','bill_state','State',1,0,0,100,5,2,1,'V~O',1,'')");
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'state','accountshipads',1,'1','ship_state','State',1,0,0,100,6,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'state','accountbillads',1,'1','bill_state','Billing State',1,0,0,100,5,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'state','accountshipads',1,'1','ship_state','Shipping State',1,0,0,100,6,2,1,'V~O',1,'')");
 
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'code','accountbillads',1,'1','bill_code','Code',1,0,0,100,7,2,1,'V~O',1,'')");
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'code','accountshipads',1,'1','ship_code','Code',1,0,0,100,8,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'code','accountbillads',1,'1','bill_code','Billing Code',1,0,0,100,7,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'code','accountshipads',1,'1','ship_code','Shipping Code',1,0,0,100,8,2,1,'V~O',1,'')");
 
 
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'country','accountbillads',1,'1','bill_country','Country',1,0,0,100,9,2,1,'V~O',1,'')");
- $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'country','accountshipads',1,'1','ship_country','Country',1,0,0,100,10,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'country','accountbillads',1,'1','bill_country','Billing Country',1,0,0,100,9,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (6,".$this->db->getUniqueID("field").",'country','accountshipads',1,'1','ship_country','Shipping Country',1,0,0,100,10,2,1,'V~O',1,'')");
 
 
 
@@ -211,14 +211,14 @@ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").
 
 $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mailingstreet','contactaddress',1,'21','mailingstreet','Mailing Street',1,0,0,100,1,2,1,'V~O',1,'')");
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'otherstreet','contactaddress',1,'21','otherstreet','Other Street',1,0,0,100,2,2,1,'V~O',1,'')");
- $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mailingcity','contactaddress',1,'1','mailingcity','City',1,0,0,100,3,2,1,'V~O',1,'')");
- $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'othercity','contactaddress',1,'1','othercity','City',1,0,0,100,4,2,1,'V~O',1,'')");
- $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mailingstate','contactaddress',1,'1','mailingstate','State',1,0,0,100,5,2,1,'V~O',1,'')");
- $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'otherstate','contactaddress',1,'1','otherstate','State',1,0,0,100,6,2,1,'V~O',1,'')");
- $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mailingzip','contactaddress',1,'1','mailingzip','Zip',1,0,0,100,7,2,1,'V~O',1,'')");
- $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'otherzip','contactaddress',1,'1','otherzip','Zip',1,0,0,100,8,2,1,'V~O',1,'')");
- $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mailingcountry','contactaddress',1,'1','mailingcountry','Country',1,0,0,100,9,2,1,'V~O',1,'')");
- $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'othercountry','contactaddress',1,'1','othercountry','Country',1,0,0,100,10,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mailingcity','contactaddress',1,'1','mailingcity','Mailing City',1,0,0,100,3,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'othercity','contactaddress',1,'1','othercity','Other City',1,0,0,100,4,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mailingstate','contactaddress',1,'1','mailingstate','Mailing State',1,0,0,100,5,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'otherstate','contactaddress',1,'1','otherstate','Other State',1,0,0,100,6,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mailingzip','contactaddress',1,'1','mailingzip','Mailing Zip',1,0,0,100,7,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'otherzip','contactaddress',1,'1','otherzip','Other Zip',1,0,0,100,8,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mailingcountry','contactaddress',1,'1','mailingcountry','Mailing Country',1,0,0,100,9,2,1,'V~O',1,'')");
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'othercountry','contactaddress',1,'1','othercountry','Other Country',1,0,0,100,10,2,1,'V~O',1,'')");
 
 //Block2 -- End
 
