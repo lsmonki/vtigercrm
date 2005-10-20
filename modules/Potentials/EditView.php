@@ -68,7 +68,8 @@ $block_2 = getBlockInformation("Potentials",2,$focus->mode,$focus->column_fields
 //$block_3 = getBlockInformation("Potentials",3,$focus->mode,$focus->column_fields);
 
 $block_1_header = getBlockTableHeader("LBL_OPPORTUNITY_INFORMATION");
-$block_2_header = getBlockTableHeader("LBL_ADDRESS_INFORMATION");
+//$block_2_header = getBlockTableHeader("LBL_ADDRESS_INFORMATION");
+$block_2_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
 
 //get Custom Field Information
 $block_5 = getBlockInformation("Potentials",5,$focus->mode,$focus->column_fields);
