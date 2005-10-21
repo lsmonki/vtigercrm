@@ -370,6 +370,11 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
+//Cambiado code to add close button in custom field
+if (($viewid!=0)&&($viewid!="")){
+  if (!isset($oCustomView->list_fields['Close'])) $oCustomView->list_fields['Close']=array ( 'activity' => 'status' );
+  if (!isset($oCustomView->list_fields_name['Close'])) $oCustomView->list_fields_name['Close']='status';
+}
 $listview_header = getListViewHeader($focus,"Activities",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
 
