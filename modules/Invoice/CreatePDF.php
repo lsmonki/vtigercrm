@@ -367,8 +367,16 @@ function setProductDetails($ivHeader,$ivData)
     //Header
     foreach($ivHeader as $value)
     {
-        $this->Cell(38,7,$value,0,0,'L',0);
-    }
+    	if( $value == "Product Name"){
+ 		$this->Cell(70,7,$value,0,0,'L',0); // 50 widens product name field
+ 		}else if ($value == "Unit Price"){
+ 		$this->Cell(26,7,$value,0,0,'L',0); // 26 reduces unit price field
+ 		}else if ($value == "Total"){
+ 		$this->Cell(38,7,$value,0,0,'R',0); // total field is right-aligned
+ 		}else{
+ 		$this->Cell(28,7,$value,0,0,'L',0);// quantity & list price fall here
+ 		}    
+	}
     $this->Ln();
     $this->SetDrawColor(0,0,0);
     $this->SetLineWidth(.5);
@@ -380,10 +388,10 @@ function setProductDetails($ivHeader,$ivData)
     $fill=0;
     	foreach($ivData as $key=>$value)
 	{
-    		$this->Cell(38,6,$value['productname'],0,0,'L',0);
-		$this->Cell(38,6,$value['qty'],0,0,'L',0);
-		$this->Cell(38,6,$value['unitprice'],0,0,'L',0);
-		$this->Cell(38,6,$value['listprice'],0,0,'L',0);
+    	$this->Cell(70,6,$value['productname'],0,0,'L',0);
+		$this->Cell(28,6,$value['qty'],0,0,'L',0);
+		$this->Cell(26,6,$value['unitprice'],0,0,'L',0);
+		$this->Cell(28,6,$value['listprice'],0,0,'L',0);
 		$this->Cell(38,6,$value['total'],0,0,'R',0);
 		$this->Ln();
 	}
