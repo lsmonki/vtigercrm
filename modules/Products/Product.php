@@ -98,10 +98,36 @@ class Product extends CRMEntity {
   		
 	function get_attachments($id)
         {
-	
-		$query = "select notes.title,'Notes      ' ActivityType, notes.filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0 left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid=".$id;
-                $query .= ' union all ';
-                $query .= "select attachments.description title ,'Attachments'  ActivityType, attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified, attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid inner join crmentity on crmentity.crmid= seattachmentsrel.crmid inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid where crmentity.crmid=".$id;	
+		// Armando Lüscher 18.10.2005 -> §visibleDescription
+		// Desc: Inserted crmentity.createdtime, notes.notecontent description, users.user_name
+		// Inserted inner join users on crmentity.smcreatorid= users.id
+		$query = "select notes.title,'Notes      ' ActivityType, notes.filename,
+			attachments.type  FileType,crm2.modifiedtime  lastmodified,
+			seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid,
+			crmentity.createdtime, notes.notecontent description, users.user_name
+		from notes
+			inner join senotesrel on senotesrel.notesid= notes.notesid
+			inner join crmentity on crmentity.crmid= senotesrel.crmid
+			inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0
+			left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid
+			left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid
+			inner join users on crmentity.smcreatorid= users.id
+		where crmentity.crmid=".$id;
+		$query .= ' union all ';
+		// Armando Lüscher 18.10.2005 -> §visibleDescription
+		// Desc: Inserted crmentity.createdtime, attachments.description, users.user_name
+		// Inserted inner join users on crmentity.smcreatorid= users.id
+		// Inserted order by createdtime desc
+		$query .= "select attachments.description title ,'Attachments'  ActivityType,
+			attachments.name  filename, attachments.type  FileType,crm2.modifiedtime  lastmodified,
+			attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid,
+			crmentity.createdtime, attachments.description, users.user_name
+		from attachments
+			inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid
+			inner join crmentity on crmentity.crmid= seattachmentsrel.crmid
+			inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
+			inner join users on crmentity.smcreatorid= users.id
+		where crmentity.crmid=".$id;	
 
 		renderRelatedAttachments($query,$id);
         }

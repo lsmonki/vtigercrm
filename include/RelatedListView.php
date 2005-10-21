@@ -212,29 +212,30 @@ else
 	$list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
 	$list .= '<tr class="ModuleListTitle" height=20>';
 
-	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td width="30%" class="moduleListTitle">';
+	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+	$list .= '<td width="90" class="moduleListTitle" noWrap>'; // Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Changed width from 30% to 90, inserted noWrap
 
 	$class_black="";
-	if($noofrows<15)
+	if($noofrows<=15)
 	{
 		$class_black='class="blackLine"';
+		$colspan = 'colspan="3"';
 	}
-	$list .= $app_strings['LBL_TITLE_OR_DESCRIPTION'].'</td>';
-	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td width="10%" class="moduleListTitle">';
+	$list .= $app_strings['LBL_CREATED'].'</td>'; // Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Replaced LBL_TITLE_OR_DESCRIPTION with LBL_CREATED
+	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+	$list .= '<td '.$colspan.' width="30%" class="moduleListTitle" noWrap>'; // Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Changed width from 10% to 30%, inserted '.$colspan.' noWrap
 
-	$list .= $app_strings['LBL_ENTITY_TYPE'].'</td>';
-	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td width="15%" class="moduleListTitle">';
+	$list .= $app_strings['LBL_SUBJECT'].'</td>'; // Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Replaced LBL_ENTITY_TYPE with LBL_SUBJECT
+	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+	$list .= '<td width="70%" class="moduleListTitle" noWrap>'; // Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Changed width from 15% to 70%, inserted noWrap
 
-	$list .= $app_strings['LBL_FILENAME'].'</td>';
-	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td width="15%" class="moduleListTitle">';
+	$list .= $app_strings['LBL_DESCRIPTION'].'</td>'; // Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Replaced LBL_FILENAME with LBL_DESCRIPTION
+	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+	$list .= '<td width="80" class="moduleListTitle" noWrap>'; // Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Changed width from 15% to 80, inserted noWrap
 
-	$list .= $app_strings['LBL_TYPE'].'</td>';
-	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td width="20%" class="moduleListTitle">';
+	$list .= $app_strings['LBL_ACTION'].'</td>'; // Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Replaced LBL_TYPE with LBL_ACTION
+	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+/*	$list .= '<td width="20%" class="moduleListTitle">';
 
 	$list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
 	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
@@ -243,7 +244,7 @@ else
 	$list .= $app_strings['LBL_ACTION'].'</td>';
 	$list .= '<td WIDTH="1" '.$class_black .'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td class="moduleListTitle">';
-
+*/
 	$list .= '</td>';
 	if($noofrows>15)
 	{
@@ -265,13 +266,13 @@ else
 	$i=1;
 	while($row = $adb->fetch_array($result))
 	{
-        	if($row[1] == 'Notes')
+        	if($row['activitytype'] == 'Notes')
 	        {
         	        $module = 'Notes';
                 	$editaction = 'EditView';
 	                $deleteaction = 'Delete';
         	}
-	        elseif($row[1] == 'Attachments')
+	        elseif($row['activitytype'] == 'Attachments')
 	        {
 	                $module = 'uploads';
 	                $editaction = 'upload';
@@ -283,37 +284,89 @@ else
 		else
 			$trowclass = 'oddListRow';
 
+		if($row['createdtime'] != '0000-00-00 00:00:00')
+		{
+			$created_arr = explode(" ",getDisplayDate($row['createdtime']));
+			$created_date = $created_arr[0];
+			$created_time = substr($created_arr[1],0,5);
+		}
+		else
+		{
+			$created_date = '';
+			$created_time = '';
+		}
+
 		$list .= '<tr class="'. $trowclass.'">';
 
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 
+		// begin: Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Added
+		$list .= '<td width="90" height="21" class="VisibleDescriptionLink" style="padding:0px 3px 0px 3px;">';
+		$list .= $created_date;
+		$list .= '</td>';
+		// end: Armando Lüscher 27.09.2005 -> §visibleDescription
+
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+		$list .= '<td colspan="3" width="30%" height="21" class="VisibleDescriptionLink">'; // Armando Lüscher 27.09.2005 -> §visibleDescripion -> Desc: Inserted class="VisibleDescriptionLink"
 		if($module == 'Notes')
-			$list .= '<td width="30%"><a href="index.php?module='.$module.'&action=DetailView&return_module='.$returnmodule.'&return_action='.$returnaction.'&record='.$row["crmid"] .'&return_id='.$_REQUEST['record'].'">'.$row[0].'</td>';
+			$list .= '<a href="index.php?module='.$module.'&action=DetailView&return_module='.$returnmodule.'&return_action='.$returnaction.'&record='.$row["crmid"] .'&return_id='.$_REQUEST['record'].'">'.$row['title'].'</a>';
 		elseif($module == 'uploads')
-			$list .= '<td width="30%">'.$row[0].'</td>';
-
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-		$list .= $row[1];
+			$list .= '<a href="index.php?module=uploads&action=downloadfile&return_module=Accounts&activity_type='.$row['ActivityType'].'&fileid='.$row['attachmentsid'].'&filename='.$row['filename'].'">'.$row['filename'].'</a>';
 		$list .= '</td>';
 
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-		$list .= '<a href = "index.php?module=uploads&action=downloadfile&return_module=Accounts&activity_type='.$row[1].'&fileid='.$row[5].'&filename='.$row[2].'">'.$row[2].'</a>';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+		$list .= '<td valign="top" rowspan="2" width="70%" class="VisibleDescription" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Changed width from 10% to 70%, inserted valign="top" rowspan="2" class="VisibleDescription"
+		$list .= nl2br($row['description']);
 		$list .= '</td>';
 
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-		$list .= $row[3];
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+		$list .= '<td width="80" height="21" style="padding: 0px 3px 0px 3px;" noWrap>';
+		if($row['activitytype'] == 'Notes')
+			$list .= '<a href="index.php?module='.$module.'&action='.$editaction.'&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&fileid='.$row['attachmentsid'].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>';
 		$list .= '</td>';
 
+		// begin: Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Added
+		$list .= '</tr><tr class="'.$trowclass.'">';
+		// end: Armando Lüscher 27.09.2005 -> §visibleDescription
+
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+		$list .= '<td align="right" valign="top" width="90" style="padding:0px 3px 0px 3px;">';	// Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Changed width from 15% to 90, inserted align="right" valign="top"
+		$list .= $created_time;
+		$list .= '</td>';
+		
+		// begin: Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Added
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+		$list .= '<td valign="top" width="8%" style="padding: 0px 3px 0px 3px;" noWrap>';
+		$list .= $row['activitytype'];
+		$list .= '</td>';
+		
+		$list .= '<td valign="top" width="18%" style="padding: 0px 3px 0px 3px;" noWrap>';
+		// Armando Lüscher 18.10.2005 -> §visibleDescription -> Desc: Inserted because this link is displayed in this position only if it is a note else it is shown where the subject normally is
+		if($module == 'Notes')
+			$list .= '<a href = "index.php?module=uploads&action=downloadfile&return_module=Accounts&activity_type='.$row['ActivityType'].'&fileid='.$row['attachmentsid'].'&filename='.$row['filename'].'">'.$row['filename'].'</a>';
+		$list .= '</td>';
+		
+		$list .= '<td valign="top" width="4%" style="padding: 0px 3px 0px 3px;" noWrap>';
+		$list .= $row['user_name'];
+		$list .= '</td>';
+
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+		
+		// Description comes here
+		
+		$del_param = 'index.php?module='.$module.'&action='.$deleteaction.'&return_module='.$parentmodule.'&return_action='.$return_action.'&record='.$row["crmid"].'&filename='.$row['filename'].'&return_id='.$_REQUEST["record"];
+
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+		$list .= '<td valign="top" width="80" style="padding: 0px 3px 0px 3px;" noWrap>';
+		$list .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
+		$list .= '</td>';
+
+		// end: Armando Lüscher 27.09.2005 -> §visibleDescription
+
+/*
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
 
-		if($row[4] != '0000-00-00 00:00:00')
-			$list .= $row[4];
-		else
-                        $list .= '';
 
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
@@ -325,8 +378,13 @@ else
                 $list .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
 
 		$list .= '</td>';
-
+*/
 		$list .= '</tr>';
+		
+		// begin: Armando Lüscher 27.09.2005 -> §visibleDescription -> Desc: Added
+		$list .= '<tr height="1"><td colspan="14" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
+		// end: Armando Lüscher 27.09.2005 -> §visibleDescription
+		
 		$i++;
 	}
 	
@@ -383,36 +441,39 @@ function getHistory($parentmodule,$query,$id)
 		$list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%" >';
 		$list .= '<tr class="ModuleListTitle" height=20>';
 
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="4%" class="moduleListTitle"></td>';
+//		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+//		$list .= '<td width="4%" class="moduleListTitle"></td>';
 
 // Armando Lüscher 15.07.2005 -> §scrollableTables
 // Desc: class="blackLine" deleted because of vertical line in title <tr>
 
 //		$list .= $app_strings['LBL_ICON'].'Icon</td>';
 		$class_black="";
-		if($noofrows<15)
+		if($noofrows<=15)
 		{
 			$class_black='class="blackLine"';	
+			$colspan = 'colspan=2';
 		}
 
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="25%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
-	
-		$list .= $app_strings['LBL_SUBJECT'].'</td>';
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
-	
-		$list .= $app_strings['LBL_STATUS'].'</td>';
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="18%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
-	
-		$list .= $app_strings['LBL_LIST_CONTACT_NAME'].'</td>';
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-		$list .= '<td width="18%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
+		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+		$list .= '<td width="90" '.$colspan.' class="moduleListTitle" style="padding:0px 3px 0px 3px;" noWrap>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 25% to 90, inserted noWrap
 
-		$list .= $app_strings['LBL_RELATED_TO'].'</td>';
-		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+		$colspan = ($noofrows<=15)?'colspan="3"':''; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Inserted
+		$list .= $app_strings['LBL_CREATED'].'</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed LBL_SUBJECT to LBL_CREATED
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+		$list .= '<td '.$colspan.' width="30%" class="moduleListTitle" style="padding:0px 3px 0px 3px;" noWrap>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 10% to 30%, inserted '.$colspan.' noWrap
+	
+		$list .= $app_strings['LBL_SUBJECT'].'</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed LBL_STATUS to LBL_SUBJECT
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+		$list .= '<td width="70%" class="moduleListTitle" style="padding:0px 3px 0px 3px;" noWrap>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 18% to 70%, inserted noWrap
+
+		$list .= $app_strings['LBL_DESCRIPTION'].'</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed LBL_LIST_CONTACT_NAME to LBL_DESCRIPTION
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+		$list .= '<td width="80" class="moduleListTitle" style="padding:0px 3px 0px 3px;" noWrap>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 18% to 80, inserted noWrap
+
+		$list .= $app_strings['LBL_ACTION'].'</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed LBL_RELATED_TO to LBL_ACTION
+		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+/* // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Commented out because this is not used for the title row
 		$list .= '<td width="15%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">';
 	
 		$list .= $app_strings['LBL_LAST_MODIFIED'].'</td>';
@@ -422,22 +483,24 @@ function getHistory($parentmodule,$query,$id)
 		$list .= $app_strings['LBL_ACTION'].'</td>';
 		$list .= '<td WIDTH="1" '.$class_black.'><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td class="moduleListTitle">';
-
+*/
 		$list .= '</td>';
+		$colspan = 9;
 		if($noofrows>15)
 		{
 			$list .= '<td style="width:20px">&nbsp;&nbsp&nbsp;&nbsp;</td>';
+			$colspan = 11;
 		}
 		$list .= '</tr>';
 	
-		$list .= '<tr><td COLSPAN="14" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
+		$list .= '<tr><td COLSPAN="'.$colspan.'" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
 
 // begin: Armando Lüscher 14.07.2005 -> §scrollableTables
 // Desc: 'X'
 //			 Insert new table with 1 cell where all entries are in a new table.
 //			 This cell will be scrollable when too many entries exist
-		$list .= ($noofrows>15) ? '<tr><td colspan="21"><div style="overflow:auto;height:315px;width:100%;"><table cellspacing="0" cellpadding="0" border="0" width="100%">':'';
-// end: Armando Lüscher 14.07.2005 -> §scrollableTablEs
+		$list .= ($noofrows>15) ? '<tr><td colspan="'.$colspan.'"><div style="overflow:auto;height:315px;width:100%;"><table cellspacing="0" cellpadding="0" border="0" width="100%">':'';
+// end: Armando Lüscher 14.07.2005 -> §scrollableTables
 
 		$i=1;
 		while($row = $adb->fetch_array($result))
@@ -459,19 +522,23 @@ function getHistory($parentmodule,$query,$id)
 			else
 				$trowclass = 'oddListRow';
 	
+			$created_arr = explode(" ",getDisplayDate($row['createdtime']));
+			$created_date = $created_arr[0];
+			$created_time = substr($created_arr[1],0,5);
+
 			$list .= '<tr class="'. $trowclass.'">';
 	
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td width="4%"><IMG SRC="'.$image_path.'/'.$icon.'"></td>';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+			$list .= '<td colspan="2" valign="top" class="visibleDescriptionLink" width="90" style="padding:0px 3px 0px 3px;" noWrap>'.$created_date.'</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 4% to 90, inserted colspan="2" align="right" valign="top" class="visibleDescriptionLink" style="padding:0px 3px 0px 3px;" noWrap, replaced <IMG SRC="'.$image_path.'/'.$icon.'"> with $created_date
 
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td width="25%" height="21" style="padding:0px 3px 0px 3px;">';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+			$list .= '<td valign="top" colspan="3" width="30%" height="21" class="visibleDescriptionLink" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 25% to 30%, inserted colspan="3" valign="top" class="visibleDescriptionLink"
 			$list .= '<a href="index.php?module=Activities&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["activityid"] .'&activity_mode='.$activitymode.'&return_id='.$_REQUEST['record'].'" title="'.$row['description'].'">'.$row['subject'].'</a></td>';
 			$list .= '</td>';
 	
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-			$list .= $status;
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+			$list .= '<td valign="top" rowspan="2" width="70%" height="21" class="visibleDescription" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 10% to 70%, inserted rowspan="2" valign="top" class="visibleDescription"
+			$list .= nl2br($row['description']); // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Replaced $status with nl2br($row['description'])
 			$list .= '</td>';
 
 			if($row['firstname'] != 'NULL')	
@@ -480,25 +547,64 @@ function getHistory($parentmodule,$query,$id)
 				$contactname .= $row['lastname'];
 
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td width="18%" height="21" style="padding:0px 3px 0px 3px;">';
-			$list .= '<a href="index.php?module=Contacts&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["contactid"].'&return_id='.$_REQUEST['record'].'">'.$contactname;
+			$list .= '<td valign="top" width="80" height="21" style="padding:0px 3px 0px 3px;" noWrap>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 18% to 80, inserted valign="top" noWrap
+//			$list .= '<a href="index.php?module=Contacts&action=DetailView&return_module='.$parentmodule.'&return_action=DetailView&record='.$row["contactid"].'&return_id='.$_REQUEST['record'].'">'.$contactname;
+			// Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: This if-statement replaces the line above
+			if(isPermitted("Activities",1,$row["activityid"]) == 'yes')
+			{
+				$list .= '<a href="index.php?module=Activities&action=EditView&return_module='.$parentmodule.'&return_action='.$parentaction.'&activity_mode='.$activitymode.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_EDIT'].'</a>';
+			}
 			$list .= '</td>';
+
+			// begin: Armando Lüscher 26.09.2005 -> §visibleDescription
+			// Desc: Inserted because entries are displayed on 2 rows
+			$list .= '</tr><tr class="'.$trowclass.'">';
+			// end: Armando Lüscher 26.09.2005 -> §visibleDescription 
 
 			$parentname = getRelatedTo('Activities',$result,$i-1);
 
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td width="18%" height="21" style="padding:0px 3px 0px 3px;">';
-			$list .= $parentname;
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+			
+			// begin: Armando Lüscher 26.09.2005 -> §visibleDescription
+			// Desc: Added
+			$list .= '<td valign="top" width="20" style="padding:0px 0px 0px 10px;">';
+			$list .= '<IMG SRC="'.$image_path.'/'.$icon.'">';
+			$list .= '</td>';
+			// end: Armando Lüscher 26.09.2005 -> §visibleDescription
+	
+			$list .= '<td align="right" valign="top" width="70" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 18% to 70, inserted align="right" valign="top"
+			$list .= $created_time; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Replaced $parentname with $created_time
 			$list .= '</td>';
 	
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">';
-			$modifiedtime = getDisplayDate($row['modifiedtime']);
-			$list .= $modifiedtime;
-	
-			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-			$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+			$list .= '<td valign="top" width="8%" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 15% to 8%, inserted valign="top"
+//			$modifiedtime = getDisplayDate($row['modifiedtime']);
+			$list .= $status; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Replaced $modifiedtime with $status
+			$list .= '</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Inserted
 
+//			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
+			$list .= '<td valign="top" width="18%" style="padding:0px 3px 0px 3px;">'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Changed width from 10% to 18%, inserted valign="top"
+			$list .= $parentname; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Inserted
+			$list .= '</td>'; // Armando Lüscher 26.09.2005 -> §visibleDescription -> Desc: Inserted
+			
+			// begin: Armando Lüscher 26.09.2005 -> §visibleDescription
+			// Desc: Added
+			$list .= '<td valign="top" width="4%" style="padding:0px 3px 0px 3px;">';
+			$list .= $row['user_name'];
+			$list .= '</td>';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+			
+			// the description is in this space
+			
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
+			$list .= '<td valign="top" width="80" style="padding:0px 3px 0px 3px;">';
+			if(isPermitted("Activities",2,$row["activityid"]) == 'yes')
+			{
+				$list .= '<a href="index.php?module=Activities&action=Delete&return_module='.$parentmodule.'&return_action='.$parentaction.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
+			}
+			// end: Armando Lüscher 26.09.2005 -> §visibleDescription
+
+/*
 			if(isPermitted("Activities",1,$row["activityid"]) == 'yes')
                 	{
 	
@@ -509,12 +615,15 @@ function getHistory($parentmodule,$query,$id)
                 	{
 				$list .= '<a href="index.php?module=Activities&action=Delete&return_module='.$parentmodule.'&return_action='.$parentaction.'&record='.$row["activityid"].'&return_id='.$_REQUEST["record"].'">'.$app_strings['LNK_DELETE'].'</a>';
 			}
-	
+	*/
 			$list .= '</td>';
 			
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 
 			$list .= '</tr>';
+
+			$list .= '<tr width="'.$colspan.'"><td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
+
 			$i++;
 		}
 

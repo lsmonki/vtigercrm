@@ -1219,13 +1219,12 @@ IMG.list {
    margin: 0px;
 }
 
-.uil {
-        list-style:none;
-        line-height:20px;
-        padding-left:20px;
-        margin-left:0px;
-        font-weight:normal;
-        /*border-top:1px dotted #dadada; */
-
+/*begin: Armando Lüscher 10.08.2005 -> §visibleDescription
+	Desc: Style for entries and their description*/
+.visibleDescription {
+   font-size: 11px;
 }
-
+.visibleDescriptionLink {
+	 font-weight: bold;
+}
+/*end: Armando Lüscher 10.08.2005 -> §visibleDescription*/

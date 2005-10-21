@@ -184,7 +184,24 @@ class Quote extends CRMEntity {
 	}
 	function get_history($id)
 	{
-		$query = "SELECT activity.activityid, activity.subject, activity.status, activity.eventstatus, activity.activitytype, activity.description, contactdetails.contactid, contactdetails.firstname, contactdetails.lastname, crmentity.modifiedtime from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') and (activity.status='Completed' or activity.eventstatus='Held') and seactivityrel.crmid=".$id;
+		// Armando Lüscher 18.10.2005 -> §visibleDescription
+		// Desc: Inserted crm2.createdtime, activity.description, users.user_name
+		// Inserted inner join users on crm2.smcreatorid=users.id
+		// Inserted order by createdtime desc
+		$query = "SELECT activity.activityid, activity.subject, activity.status,
+			activity.eventstatus, activity.activitytype, contactdetails.contactid,
+			contactdetails.firstname,	contactdetails.lastname, crmentity.modifiedtime,
+			crm2.createdtime, activity.description, users.user_name
+		from activity
+			inner join seactivityrel on seactivityrel.activityid=activity.activityid
+			inner join crmentity on crmentity.crmid=activity.activityid
+			left join cntactivityrel on cntactivityrel.activityid= activity.activityid
+			left join contactdetails on contactdetails.contactid= cntactivityrel.contactid
+			inner join users on crm2.smcreatorid= users.id
+		where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
+			and (activity.status='Completed' or activity.eventstatus='Held')
+			and seactivityrel.crmid=".$id."
+		order by createdtime desc";
 		renderRelatedHistory($query,$id);
 	}
 }
