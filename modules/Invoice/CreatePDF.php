@@ -178,9 +178,14 @@ if($num_rows == 1)
 	{
 		$companyaddress[] =  $org_name;
 	}
-	if($org_address != '' || $org_city != '' || $org_state != '')
+	//code added to break the address line
+	if($org_address != '' )
 	{
-		$companyaddress[] = $org_address.' '.$org_city.' '.$org_state;
+		$companyaddress[] = $org_address;
+	}
+	if($org_city != '' || $org_state != '')
+	{
+		$companyaddress[] = $org_city.' '.$org_state;
 	}
 	if($org_country != '' || $org_code!= '')
 	{
@@ -257,7 +262,8 @@ function setInvoiceTitle($title,$logo_name,$caddress)
 		{
 
 			$this->Ln();
-			$this->Cell(40);
+//code changed to prevent overlaping of company logo with the company details
+			$this->Cell(60);
 			$this->SetFont('','',10);
 			$this->Cell(0,5,$caddress[$i],0,0,'L',0);
 		}
