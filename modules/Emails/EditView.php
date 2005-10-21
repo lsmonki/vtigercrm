@@ -37,12 +37,6 @@ global $current_user;
 // global $default_language;
 // global $cal_codes;
 
-global $theme;
-$theme_path="themes/".$theme."/";
-$image_path=$theme_path."images/";
-require_once($theme_path.'layout_utils.php');
-
-
 
 //echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
@@ -143,6 +137,11 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
         $focus->id = "";
 	$focus->mode = "";
 }
+global $theme;
+
+$theme_path="themes/".$theme."/";
+$image_path=$theme_path."images/";
+require_once($theme_path.'layout_utils.php');
 
 
 //WEBMAIL FUNCTIONS
@@ -176,7 +175,9 @@ $imapPort="143";
 $key = OneTimePadEncrypt($secretkey, $onetimepad);
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 $mbx_response=sqimap_mailbox_select($imapConnection, $mailbox);
-$message = sqimap_get_message($imapConnection, $_REQUEST['msg_id_num'], $mailbox);
+
+
+$message = sqimap_get_message($imapConnection, $_REQUEST['passed_id'], $mailbox);
 $header = $message->rfc822_header;
 $ent_ar = $message->findDisplayEntity(array(), array('text/plain'));
 $cnt = count($ent_ar);
@@ -184,13 +185,29 @@ global $color;
 
 for ($u = 0; $u < $cnt; $u++)
 {
-	$messagebody .= formatBody($imapConnection, $message, $color, $wrap_at, $ent_ar[$u],$_REQUEST['msg_id_num'] , $mailbox);
+  //echo 'message id number is ' .$_REQUEST['passed_id']. '     imapConnection  ' .$imapConnection .'  color ' .$color. ' wrap at ' .$wrap_at . '   ent   '.$ent_ar[$u].' mailbox  '.$mailbox;
+	$messagebody .= formatBody($imapConnection, $message, $color, $wrap_at, $ent_ar[$u],$_REQUEST['passed_id'] , $mailbox);
 	$msgData = $messagebody;
 }
 if($msgData != '')
 {
 	$focus->column_fields['description'] = $msgData;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -225,6 +242,7 @@ if (isset($_REQUEST['filename']) && $_REQUEST['isDuplicate'] != 'true') {
 elseif (is_null($focus->parent_type)) {
 	$focus->parent_type = $app_list_strings['record_type_default_key'];
 }
+
 
 $log->info("Email detail view");
 
@@ -341,6 +359,13 @@ if ($focus->parent_type == "Account") $xtpl->assign("DEFAULT_SEARCH", "&query=tr
 $xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
 $xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
+
+
+
+
+
+
+
 
 $xtpl->parse("main");
 
