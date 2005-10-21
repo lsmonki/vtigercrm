@@ -54,6 +54,9 @@
 		<field name="workdays" type="C" size="30"></field>
 	 	<field name="weekstart" type="I" size="11"></field>
 		<field name="date_format" type="C" size="30"></field>
+		<field name="homeorder" type="C" size="255">
+			<DEFAULT value="ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI"/>
+		</field>
 		<field name="deleted" type="I" size="1">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
