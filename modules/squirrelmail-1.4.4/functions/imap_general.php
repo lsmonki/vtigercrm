@@ -572,16 +572,18 @@ function sqimap_login ($username, $password, $imap_server_address, $imap_port, $
                  * the user selects language and logs out
                  */
 
-                set_up_language($squirrelmail_language, true);
-                include_once(SM_PATH . 'functions/display_messages.php' );
-                sqsession_destroy();
-                /* terminate the session nicely */
-                sqimap_logout($imap_stream);
-                logout_error( _("Unknown user or password incorrect.") );
-                exit;
+              set_up_language($squirrelmail_language, true);
+              header("Location: index.php?module=Settings&action=ListMailAccount&problem=true");
+              return;
+              //include_once(SM_PATH . 'functions/display_messages.php' );
+              //sqsession_destroy();
+              /* terminate the session nicely */
+              //sqimap_logout($imap_stream);
+              //logout_error( _("Unknown user or password incorrect.") );
+              //exit;
             }
         } else {
-            exit;
+          exit;
         }
     }
     return $imap_stream;
