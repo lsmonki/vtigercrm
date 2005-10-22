@@ -538,8 +538,19 @@ class CustomView extends CRMEntity{
 				if($value != "")
 				{
 					$list = explode(":",$value);
-					$sqllist[] = $list[0].".".$list[1];
-
+					//$sqllist[] = $list[0].".".$list[1];
+					//Added For getting status for Activities -Jaguar
+					$sqllist_column = $list[0].".".$list[1];
+                                        if($this->customviewmodule == "Activities")
+                                        {
+                                                if($list[1] == "status")
+                                                {
+                                                        $sqllist_column = "case when (activity.status not like '') then activity.status else activity.eventstatus end as activitystatus";
+                                                }
+                                        }
+	                                $sqllist[] = $sqllist_column;
+				
+					//Ends
 					$tablefield[$list[0]] = $list[1];
 					$fieldlabel = trim(str_replace($this->escapemodule," ",$list[3]));
 					$this->list_fields[$fieldlabel] = $tablefield;
@@ -617,7 +628,15 @@ class CustomView extends CRMEntity{
 							$advfiltersql[] = " (".$advorsqls.") ";
 						}else
 						{
-							$advfiltersql[] = $this->getRealValues($columns[0],$columns[1],$advfltrow["comparator"],trim($advfltrow["value"]));
+							//Added for getting activity Status -Jaguar
+							 if($this->customviewmodule == "Activities" && $columns[1] == "status")
+                                                        {
+                                                                $advfiltersql[] = "case when (activity.status not like '') then activity.status else activity.eventstatus end".$this->getAdvComparator($advfltrow["comparator"],trim($advfltrow["value"]));
+                                                        }
+                                                        else
+							{
+								$advfiltersql[] = $this->getRealValues($columns[0],$columns[1],$advfltrow["comparator"],trim($advfltrow["value"]));
+							}
 						}
 					}
 				}
