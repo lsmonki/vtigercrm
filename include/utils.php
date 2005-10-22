@@ -3599,6 +3599,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	$uitype = $adb->query_result($field_result,0,"uitype");
 	
 	$colname = $adb->query_result($field_result,0,"columnname");
+
+	//added for getting event status in Custom view - Jaguar
+	if($module == 'Activities' && $colname == "status")
+	{
+		$colname="activitystatus";
+	}
+	//Ends
 	$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
 
 	if(strlen($temp_val) > 40)
