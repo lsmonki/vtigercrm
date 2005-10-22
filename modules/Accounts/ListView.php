@@ -77,6 +77,8 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	if (isset($_REQUEST['bill_code'])) $address_postalcode = $_REQUEST['bill_code'];
 	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
+	//Added field emailoptout in search after 4.2 patch 2
+	if (isset($_REQUEST['emailoptout'])) $emailoptout = $_REQUEST['emailoptout'];
 
 	$where_clauses = Array();
 
@@ -153,6 +155,12 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	{
 		array_push($where_clauses, "(accountbillads.country like ".PearDatabase::quote($address_country."%")." OR accountshipads.country like ".PearDatabase::quote($address_country."%").")");
 		$url_string .= "&bill_country=".$address_country;
+	}
+	//Added field emailoptout after 4.2 patch 2
+	if(isset($emailoptout) && $emailoptout != "")
+	{
+		array_push($where_clauses, " account.emailoptout =1");//".$emailoptout);
+		$url_string .= "&emailoptout=".$emailoptout;
 	}
 	if(isset($email) && $email != "")
 	{
@@ -281,6 +289,9 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		if (isset($address_state)) $search_form->assign("ADDRESS_STATE", $address_state);
 		if (isset($address_country)) $search_form->assign("ADDRESS_COUNTRY", $address_country);
 		if (isset($address_postalcode)) $search_form->assign("ADDRESS_POSTALCODE", $address_postalcode);
+		//Added field emailoptout after 4.2 patch 2
+		if (isset($emailoptout)) $search_form->assign("EMAIL_OPT_OUT", "CHECKED");
+
 		if (isset($email)) $search_form->assign("EMAIL", $email);
 		if (isset($ownership)) $search_form->assign("OWNERSHIP", $ownership);
 		if (isset($rating)) $search_form->assign("RATING", $rating);

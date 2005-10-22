@@ -142,6 +142,10 @@ $mod_strings = Array(
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
 'Description'=>'Description',
+
+//Added after 4.2 patch 2
+'Email Opt Out'=>'Email Opt Out',
+'LBL_EMAIL_OPT_OUT'=>'Email Opt Out:',
 );
 
 ?>
