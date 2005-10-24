@@ -5430,4 +5430,21 @@ E</constraint>
 		</data>
 	</table>
 
+	<table name="moduleowners">
+                <field name="tabid" type="I" size="19">
+			<KEY/>
+                        <UNIQUE/>
+                        <DEFAULT value="0"/>
+                </field>
+                <field name="user_id" type="C" size="11">
+                        <NOTNULL/>
+                </field>
+        </table>
+        <table name="moduleowners" alter="true">
+        <constraint>ADD CONSTRAINT fk_ModuleOwners FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
 </schema>
