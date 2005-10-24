@@ -1,0 +1,38 @@
+<!--*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+* 
+ ********************************************************************************/
+-->
+<!-- BEGIN: main -->
+<form name="support_owners" method="POST" action="index.php">
+	<input type="hidden" name="module" value="Settings">
+	<input type="hidden" name="action" value="SaveModuleOwners">
+	<input type="hidden" name="return_module" value="Settings">
+	<input type="hidden" name="return_action" value="ListModuleOwners">
+	<input type="hidden" name="modules_list" value="{MODULES_LIST}">
+
+	<table border="0" cellpadding="5" cellspacing="1" class="FormBorder" width="30%">
+		<tr height=20>
+                   <td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;"><div align="center"><b>{MOD.LBL_MODULE}</b></div></td>
+                   <td class="ModuleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>{MOD.LBL_OWNER}</b></td>
+                </tr>
+		<tr>
+			{USER_LIST}
+		</tr>
+		<tr>
+			<td align="right">
+				<input title="{APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" onclick="this.form.action.value='SaveModuleOwners';" type="submit" name="button" value="{APP.LBL_SAVE_BUTTON_LABEL}" >
+			</td>
+			<td>
+				<input title="{APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" onclick="window.history.back()" type="button" name="button" value="  {APP.LBL_CANCEL_BUTTON_LABEL}  ">
+			</td>
+		</tr>
+	
+	</table>
+</form>
+<!-- END: main -->
