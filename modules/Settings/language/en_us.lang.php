@@ -508,6 +508,12 @@ t, contact, or potential fields. These mappings will be used when you convert le
 //for Edit ordering the blocks
 'NOTESCUSTOMFIELDS'=>'Notes Custom Fields',
 
+//Added fields after 4.2 ptach 2
+'LBL_ASSIGN_MODULE_OWNERS'=>'Assign Module Owners',
+'LBL_ASSIGN_MODULE_OWNERS_INFO'=>' - Assign Owners for each modules',
+'LBL_MODULE'=>'Module',
+'LBL_OWNER'=>'Owner'
+
 );
 
 ?>
