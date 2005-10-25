@@ -22,6 +22,14 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
+
+//to display the search Headings-start
+echo get_module_title("Orders", "Order" , true);
+echo '<BR>';
+echo get_form_header("Purchase Order Search", "", false);
+//end
+
+
 $xtpl=new XTemplate ('modules/Orders/Popup.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
@@ -31,6 +39,8 @@ $xtpl->assign("THEME_PATH",$theme_path);
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
         $xtpl->assign("RETURN_MODULE",$_REQUEST['return_module']);
 
+
+if (!isset($where)) $where = "";
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
 $xtpl->assign("POPUPTYPE",$popuptype);
@@ -44,6 +54,142 @@ if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
 $sorder = $_REQUEST['sorder'];
 
 if($popuptype!='') $url_string .= "&popuptype=".$popuptype;
+
+//for  Popup search
+if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
+{
+         $url_string .="&query=true";
+         if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
+         if (isset($_REQUEST['vendorname'])) $vendorname = $_REQUEST['vendorname'];
+         if (isset($_REQUEST['trackingno'])) $trackingno = $_REQUEST['trackingno'];
+
+         if ($order_by !='') $xtpl->assign("ORDER_BY", $order_by);
+         if ($sorder !='') $xtpl->assign("SORDER", $sorder);
+
+         $where_clauses = Array();
+         if(isset($subject) && $subject != '')
+         {
+               array_push($where_clauses, "purchaseorder.subject like ".PearDatabase::quote($subject."%"));
+               $url_string .= "&subject=".$subject;
+
+         }
+       if(isset($vendorname) && $vendorname != "")
+        {
+                array_push($where_clauses, "vendor.vendorname like ".PearDatabase::quote("%".$vendorname."%"))
+;
+                $url_string .= "&vendorname=".$vendorname;
+        }
+        if(isset($trackingno) && $trackingno != "")
+        {
+                array_push($where_clauses, "purchaseorder.tracking_no like ".PearDatabase::quote("%".$tracking
+no."%"));
+                $url_string .= "&trackingno=".$trackingno;
+        }
+
+        $where = "";
+        foreach($where_clauses as $clause)
+        {
+                if($where != "")
+                $where .= " and ";
+                $where .= $clause;
+        }
+        if (!empty($assigned_user_id)) {
+                if (!empty($where)) {
+                        $where .= " AND ";
+                }
+                $where .= "crmentity.smownerid IN(";
+                foreach ($assigned_user_id as $key => $val) {
+                        $where .= PearDatabase::quote($val);
+                        $where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
+                }
+        }
+
+
+
+        $log->info("Here is the where clause for the list view: $where");
+
+
+}
+//end
+
+
+//Constructing the Search Form
+if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
+        // Stick the form header out there.
+        $search_form=new XTemplate ('modules/Orders/PopupSearchForm.html');
+        $search_form->assign("MOD", $mod_strings);
+        $search_form->assign("APP", $app_strings);
+        $search_form->assign("POPUPTYPE",$popuptype);
+        $clearsearch = 'true';
+
+        if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
+        if ($sorder !='') $search_form->assign("SORDER", $sorder);
+
+        $search_form->assign("VIEWID",$viewid);
+
+        $search_form->assign("JAVASCRIPT", get_clear_form_js());
+
+        if($order_by != '') {
+                $ordby = "&order_by=".$order_by;
+        }
+        else
+        {
+               $ordby ='';
+        }
+
+
+        $search_form->assign("BASIC_LINK", "index.php?module=Orders".$ordby."&action=index".$url_string."&sorder=".$sorder);
+        $search_form->assign("ADVANCE_LINK", "index.php?module=Orders&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
+
+
+        if ($subject !='') $search_form->assign("SUBJECT", $subject);
+        if ($vendorname !='') $search_form->assign("VENTORNAME", $vendorname);
+        if ($trackingno !='') $search_form->assign("TRACKINGNO", $trackingno);
+
+
+//Combo Fields for Manufacturer and Category are moved from advanced to Basic Search
+        if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true')
+        {
+                $url_string .="&advanced=true";
+                $search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','Popup','subject','true','adva
+nced',$popuptype,"","","",$viewid));
+
+                $search_form->assign("SUPPORT_START_DATE",$_REQUEST['start_date']);
+                $search_form->assign("SUPPORT_EXPIRY_DATE",$_REQUEST['expiry_date']);
+                $search_form->assign("PURCHASE_DATE",$_REQUEST['purchase_date']);
+                $search_form->assign("DATE_FORMAT", $current_user->date_format);
+
+                //Added for Custom Field Search
+                $sql="select * from field where tablename='purchaseordercf' order by fieldlabel";
+                $result=$adb->query($sql);
+                for($i=0;$i<$adb->num_rows($result);$i++)
+                {
+                        $column[$i]=$adb->query_result($result,$i,'columnname');
+                        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
+                        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
+                }
+                require_once('include/CustomFieldUtil.php');
+                $custfld = CustomFieldSearch($customfield, "purchaseordercf", "purchaseordercf", "purchaseorde
+rid", $app_strings,$theme,$column,$fieldlabel);
+                $search_form->assign("CUSTOMFIELD", $custfld);
+                //upto this added for Custom Field
+
+
+                $search_form->parse("advanced");
+                $search_form->out("advanced");
+        }
+        else
+        {
+                $search_form->assign("ALPHABETICAL",AlphabeticalSearch('Orders','Popup','subject','true','basic',$popuptype,"","","",$viewid));
+                $search_form->parse("main");
+                $search_form->out("main");
+        }
+echo get_form_footer();
+//echo '<br><br>';
+}
+
+
+
 /*
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
@@ -89,9 +235,9 @@ $focus = new Order();
 //Retreive the list from Database
 $query = getListQuery("Orders");
 
-if(isset($search_query) && $search_query!='')
+if(isset($where) && $where!='')
 {
-	$query .= $search_query;
+	$query .= $where;
 }
 
 if(isset($order_by) && $order_by != '')
