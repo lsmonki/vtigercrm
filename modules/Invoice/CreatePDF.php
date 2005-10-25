@@ -428,7 +428,7 @@ function setTotal($price_total="",$conditions="")
 	$this->Cell(0,8,$conditions,0,0,'L',0);
 }
 }
-$iHead = array("Company","Invoice No.","Date","Sales Order No.");
+$iHead = array("Company","Invoice No.","Date","Sales Order Name.");
 $iCustHeadDtls = array("Customer Name","Purchase Order","Due Date");
 $iHeadDtls = array("Product Name","Quantity","List Price","Unit Price","Total");
 
