@@ -636,6 +636,10 @@ class Account extends CRMEntity {
 			}
         
 	         }
+		if($numRows>0)
+		{
+			$sql3=$sql3.',';
+		}
 	return $sql3;
 
 	}
@@ -666,7 +670,7 @@ return $exists;
 		if($this->checkIfCustomTableExists())
 		{
           
-  $query = $this->constructCustomQueryAddendum() . ", 
+  $query = $this->constructCustomQueryAddendum() . " 
 			account.*, ".$this->entity_table.".*, accountbillads.city  billing_city, accountbillads.country  billing_country, accountbillads.code  billing_code, accountbillads.state  billing_state, accountbillads.street  billing_street, accountshipads.city  shipping_city, accountshipads.country  shipping_country, accountshipads.code  shipping_code, accountshipads.state  shipping_state,  accountshipads.street  shipping_street,
                         users.user_name, users.status  user_status
                         FROM ".$this->entity_table."

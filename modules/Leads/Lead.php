@@ -182,6 +182,10 @@ class Lead extends CRMEntity {
 			}
         
 	         }
+		if ($numRows > 0)
+		{
+			$sql3=$sql3.',';
+		}
 	return $sql3;
 
 	}
@@ -210,7 +214,7 @@ return $exists;
 		if($this->checkIfCustomTableExists())
 		{
           
-  $query = $this->constructCustomQueryAddendum() . ", 
+  $query = $this->constructCustomQueryAddendum() . " 
 			leaddetails.*, ".$this->entity_table.".*, leadsubdetails.*,leadaddress.city city, leadaddress.state state,leadaddress.code code,leadaddress.country country, leadaddress.phone phone, users.user_name, users.status user_status
                         FROM ".$this->entity_table."
                         INNER JOIN leaddetails
@@ -310,13 +314,14 @@ return $exists;
 		$query = "SELECT activity.activityid, activity.subject, activity.status,
 			activity.eventstatus, activity.activitytype, contactdetails.contactid,
 			contactdetails.firstname, contactdetails.lastname, crmentity.modifiedtime,
-			crm2.createdtime, activity.description, users.user_name
+			crmentity.createdtime, activity.description, users.user_name,activitygrouprelation.groupname
 		from activity
 			inner join seactivityrel on seactivityrel.activityid=activity.activityid
 			inner join crmentity on crmentity.crmid=activity.activityid
 			left join cntactivityrel on cntactivityrel.activityid= activity.activityid
 			left join contactdetails on contactdetails.contactid= cntactivityrel.contactid
-			inner join users on crm2.smcreatorid= users.id
+			left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid 
+			left join users on crmentity.smownerid= users.id
 		where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
 			and (activity.status='Completed' or activity.eventstatus='Held')
 			and seactivityrel.crmid=".$id."

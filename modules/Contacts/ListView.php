@@ -326,7 +326,7 @@ $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL
 
 if(isset($CActionDtls))
 {
-	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return massMail()"/>';
+	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
 }
 if($viewid == 0)
 {

@@ -141,7 +141,7 @@ if(isset($_POST['order']))
 	$data = parse_data($_POST['order']);
 	update_db($data, ""); //"AND (`set` = 'left_col' OR `set` = 'right_col' OR `set` = 'center')");
 	// redirect so refresh doesnt reset order to last save
-	header("http://localhost:8888/index.php?module=Settings&action=index");
+	header("index.php?module=Settings&action=index");
 	exit;
 }
 
@@ -240,7 +240,7 @@ sajax_show_javascript();
 <link rel="stylesheet" href="include/dd/dd_files/lists.css" type="text/css">
 	<br>
 	<?php
-		echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_SETTINGS'].' : Update Field Order', true);
+		echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'].' : '.$app_strings['LBL_UPD_FIELD_ORD'], true);
 		//echo '<br><br>';
 	?>
 

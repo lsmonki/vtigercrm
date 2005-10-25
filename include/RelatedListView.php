@@ -590,7 +590,14 @@ function getHistory($parentmodule,$query,$id)
 			// begin: Armando Lüscher 26.09.2005 -> §visibleDescription
 			// Desc: Added
 			$list .= '<td valign="top" width="4%" style="padding:0px 3px 0px 3px;">';
-			$list .= $row['user_name'];
+			if($row['user_name']==NULL && $row['groupname']!=NULL)
+			{
+				$list .= $row['groupname'];
+			}
+			else
+			{
+				$list .= $row['user_name'];
+			}
 			$list .= '</td>';
 			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td>';
 			

@@ -882,7 +882,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	global $mod_strings;
 	global $app_strings;
 	global $current_user;
-	global $theme,$noof_group_rows;
+	global $noof_group_rows;
         $theme_path="themes/".$theme."/";
         $image_path=$theme_path."images/";
 

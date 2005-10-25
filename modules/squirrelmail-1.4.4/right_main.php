@@ -19,7 +19,7 @@
  */
 
 echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true);
-$submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
+$submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=index','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
 $sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails');
 echo '<br>';
 ?>
@@ -51,7 +51,7 @@ echo '<br>';
 			if(stristr($label,"EMAILS"))
 			{
 
-				echo '<td class="tabOff" nowrap><a href="index.php?module=Emails&action=ListView&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';
+				echo '<td class="tabOff" nowrap><a href="index.php?module=Emails&action=index&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';
 
 				$listView = $filename;
 				$classname = "tabOff";

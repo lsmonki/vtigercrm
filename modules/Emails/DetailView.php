@@ -86,8 +86,8 @@ require_once($theme_path.'layout_utils.php');
 
 $log->info("Email detail view");
 
-$submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
-$sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
+$submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=index','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
+$sec_arr = array('index.php?module=Emails&action=index'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
 echo '<br>';
 ?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -117,14 +117,14 @@ echo '<br>';
 			if(stristr($label,"EMAILS"))
 			{
 
-				echo '<td class="tabOn" nowrap><a href="index.php?module=Emails&action=ListView" class="tabLink">'.$mod_strings[$label].'</a></td>';
+				echo '<td class="tabOn" nowrap><a href="index.php?module=Emails&action=index" class="tabLink">'.$mod_strings[$label].'</a></td>';
 
 				$listView = $filename;
 				$classname = "tabOff";
 			}
 			elseif(stristr($label,$_REQUEST['smodule']))
 			{
-				echo '<td class="tabOn" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$_REQUEST['smodule'].'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
+				echo '<td class="tabOn" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
 				$listView = $filename;
 				$classname = "tabOff";
 			}
