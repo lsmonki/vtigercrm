@@ -4078,7 +4078,7 @@ function getListQuery($module,$where='')
 	}
 	if($module == "Products")
 	{
-		$query = "select crmentity.crmid, products.*, productcf.* from products inner join crmentity on crmentity.crmid=products.productid left join productcf on products.productid = productcf.productid left join seproductsrel on seproductsrel.productid = products.productid where crmentity.deleted=0";
+		$query = "select distinct(crmentity.crmid), products.*, productcf.* from products inner join crmentity on crmentity.crmid=products.productid left join productcf on products.productid = productcf.productid left join seproductsrel on seproductsrel.productid = products.productid where crmentity.deleted=0";
 	}
         if($module == "Notes")
         {
