@@ -81,8 +81,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
         }
         if(isset($trackingno) && $trackingno != "")
         {
-                array_push($where_clauses, "purchaseorder.tracking_no like ".PearDatabase::quote("%".$tracking
-no."%"));
+                array_push($where_clauses, "purchaseorder.tracking_no like ".PearDatabase::quote("%".$trackingno."%"));
                 $url_string .= "&trackingno=".$trackingno;
         }
 
