@@ -1379,8 +1379,10 @@
 
 
 	<table name="groups">
-		<field name="name" type="C" size="100">
+		<field name="groupid" type="I" size="19">
 			<KEY/>
+		</field>
+		<field name="groupname" type="C" size="100">
 		</field>
 		<field name="description" type="X"></field>
 		
@@ -1392,10 +1394,10 @@
 
 
 	<table name="users2group">
-		<field name="groupname" type="C" size="100">
+		<field name="groupid" type="I" size="19">
 			<KEY/>
 		</field>
-		<field name="userid" type="C" size="50">
+		<field name="userid" type="I" size="19">
 			<KEY/>
 		</field>
 		<data>
@@ -1404,7 +1406,108 @@
 
 	<table name="users2group" alter="true">
 		
-		<constraint>ADD CONSTRAINT fk_users2group FOREIGN KEY (groupname) REFERENCES groups(name) ON DELETE CASCADE </constraint>
+		<constraint>ADD CONSTRAINT fk_users2group1 FOREIGN KEY (groupid) REFERENCES groups(groupid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="users2group" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_users2group2 FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="group2grouprel">
+		<field name="groupid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="containsgroupid" type="I" size="19">
+			<KEY/>
+		</field>
+		<data>
+		</data>
+	</table>
+
+	<table name="group2grouprel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_group2grouprel1 FOREIGN KEY (groupid) REFERENCES groups(groupid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+	<table name="group2grouprel" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_group2grouprel2 FOREIGN KEY (containsgroupid) REFERENCES groups(groupid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="group2role">
+		<field name="groupid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="roleid" type="C" size="255">
+			<KEY/>
+		</field>
+		<data>
+		</data>
+	</table>
+
+	<table name="group2role" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_group2role1 FOREIGN KEY (groupid) REFERENCES groups(groupid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+	<table name="group2role" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_group2role2 FOREIGN KEY (roleid) REFERENCES role(roleid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="group2rs">
+		<field name="groupid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="roleandsubid" type="C" size="255">
+			<KEY/>
+		</field>
+		<data>
+		</data>
+	</table>
+
+	<table name="group2rs" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_group2rs1 FOREIGN KEY (groupid) REFERENCES groups(groupid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+	<table name="group2rs" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_group2rs2 FOREIGN KEY (roleandsubid) REFERENCES role(roleid) ON DELETE CASCADE </constraint>
 		
 		<opt>Type=InnoDB</opt>
 		
