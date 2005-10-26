@@ -65,13 +65,17 @@ function renderRelatedTickets($query,$id)
 }
 
 
-function renderRelatedActivities($query,$id)
+function renderRelatedActivities($query,$id,$cntid='')
 {
 	global $mod_strings;
         global $app_strings;
 
         $hidden = getHiddenValues($id);
 	$hidden .= '<input type="hidden" name="activity_mode">';	
+        //to populate contact name
+        if($cntid!=0 && $cntid!='')
+        $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
+
         echo $hidden;
 
         $focus = new Activity();
@@ -89,10 +93,14 @@ function renderRelatedActivities($query,$id)
 	echo '</form>';
 }
 
-function renderRelatedAttachments($query,$id)
+function renderRelatedAttachments($query,$id,$cntid='')
 {
         $hidden = getHiddenValues($id);
 	$hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
+        //to populate contact name
+        if($cntid!=0 && $cntid!='')
+        $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
+
         echo $hidden;
 
         getAttachmentsAndNotes('Products',$query,$id);
@@ -295,7 +303,7 @@ function renderRelatedQuotes($query,$id,$cntid='',$prtid='',$sid="product_id")
 	$list = GetRelatedList('Products','Quotes',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
-function renderRelatedInvoices($query,$id,$prtid='')
+function renderRelatedInvoices($query,$id,$cntid='',$prtid='')
 {
 	global $mod_strings;
 	global $app_strings;
@@ -308,6 +316,9 @@ function renderRelatedInvoices($query,$id,$prtid='')
 		if($parent_module == "Accounts")
         	$hidden .= '<input type="hidden" name="account_id" value="'.$prtid.'">';
 	}
+        //to populate contact name
+	if($cntid!=0 && $cntid!='')
+        $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
 
 	echo $hidden;
 	
