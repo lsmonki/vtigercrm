@@ -129,7 +129,7 @@ class Product extends CRMEntity {
 			inner join users on crmentity.smcreatorid= users.id
 		where crmentity.crmid=".$id;	
 
-		renderRelatedAttachments($query,$id);
+                renderRelatedAttachments($query,$id,$this->column_fields['contact_id']);
         }
 
 	function get_opportunities($id)
@@ -155,7 +155,7 @@ class Product extends CRMEntity {
 	{
 		//$query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
-		renderRelatedActivities($query,$id);
+              renderRelatedActivities($query,$id,$this->column_fields['contact_id']);
 	}
 	function get_quotes($id)
  	{
@@ -175,7 +175,7 @@ class Product extends CRMEntity {
 	function get_invoices($id)
 	{
 		$query = "select crmentity.*, invoice.*, invoiceproductrel.quantity, account.accountname from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join invoiceproductrel on invoiceproductrel.invoiceid=invoice.invoiceid where crmentity.deleted=0 and invoiceproductrel.productid=".$id;
-		renderRelatedInvoices($query,$id,$this->column_fields['parent_id']);
+                renderRelatedInvoices($query,$id,$this->column_fields['contact_id'],$this->column_fields['parent_id']);
 	}
 	function get_product_pricebooks($id)
         {                                                                                                                     
