@@ -48,11 +48,87 @@ foreach($pieces as $val)
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 4.2 Installer: Step 1</title>
+<title>vtiger CRM 4.2 Configuration Wizard</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
-<table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
+
+<!-- Master table -->
+<table border=0 cellspacing=0 cellpadding=0 width=100%>
+<tr>
+	<td align=center>
+	<br><br>
+	<!--  Top Header -->
+	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
+	<tr>
+		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
+		<td align=right><img src="install/images/cwTopRight.gif" alt="v4.2" title="v4.2"></td>
+	</tr>
+	</table>
+	
+	<br><br>
+	
+	<!-- Welcome note -->
+	<table border="0" cellspacing="0" cellpadding="5" width="70%" class=small> 
+	<tr>	
+		<td colspan="2"><img src="install/images/cwTitle.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
+	</tr>
+	<tr>
+		<td style="color:#333399" width="70%"><span style="text-alignment:justify">This Configuration Wizard will create vtiger CRM 4.2 databases and tables and configuration files you need to start. The entire process should
+				take about four minutes. Click the Start button when you are ready.</span> <br><br>
+				<span style="color:#555555">- vtiger CRM 4.2 is tested on mySQL 4.0.X, PHP 4.3.8 and Apache 2.0.40<br>
+				- Support for PHP5 will be added in future<br></span>
+		</td>
+		<td align="center" width="70%">
+		<form action="install.php" method="post" name="form" id="form">
+                <input type="hidden" name="file" value="1checkSystem.php" />
+				<input type="image" src="install/images/cwBtnStart.gif" onClick="window.location='install.php'">
+		</form>
+		</td>
+	</tr>
+	</table>
+	
+	<br><br><br><br>
+	
+	<!-- Horizontal Shade -->
+	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwShadeBg.gif) repeat-x;">
+	<tr>
+		<td><img src="install/images/cwShadeLeft.gif"></td>
+		<td align=right><img src="install/images/cwShadeRight.gif"></td>
+	</tr>
+	</table>
+		
+	
+<!--	<table border="0" cellspacing="0" cellpadding="5" width="80%" class=small> 
+	<tr>	
+		<td ><img align="left" src="install/images/cwRegVCRM.gif" alt="Register vtiger CRM " title="Register vtiger CRM "> (Optional)</td>
+	</tr>
+	<tr>
+		<td><span style="color:#999999">Please take a moment to register your copy of vtiger CRM. Though this is optional, we encourage you to register. Only your name and email 
+		address are required for registration. We do not sell, rent, share or otherwise, distribute your information to third parties.<br></span>
+		
+		</td>
+	</tr>
+	<tr>
+		<td align=center>
+<IFRAME src="http://www.vtiger.com/products/crm/registration.html" width="500" height=325 scrolling='no' frameborder="0">
+  [Your user agent does not support frames or is currently configured
+  not to display frames. However, you may visit
+  <A href="http://www.vtiger.com/products/crm/registration.html">the related document.</A>] 
+  </IFRAME> 		</td>
+	</tr>
+	</table>
+	
+		
+	
+	
+	</td>
+</tr>
+</table>
+<!-- Master table closes -->
+
+
+<!-- <table width="75%" border="0" cellpadding="3" cellspacing="0" align="center" style="border-bottom: 1px dotted #CCCCCC;"><tbody>
   <tr>
       <td align="left"><a href="http://www.vtiger.com" target="_blank" title="vtiger CRM"><IMG alt="vtiger CRM" border="0" src="include/images/vtiger_crmlogo.gif"/></a></td>
       <td align="right"><h2>Step 1 of 5</h2></td>
@@ -95,8 +171,7 @@ foreach($pieces as $val)
 Please take a moment and register with vtiger CRM. Your name and email address are the only required fields for registration. All other fields are optional, but very helpful. We do not sell, rent, share, or otherwise distribute the information collected here to third parties.
 <P>
 Please see <a href="http://www.vtigercrm.com" target="_blank">http://www.vtigercrm.com</a> for information on additional functionality, support requests…
-</td></tr>
-	<tr>
+</td></tr>	<tr>
        <td align="right">
 	    <form action="install.php" method="post" name="form" id="form">
 		<input type="hidden" name="file" value="1checkSystem.php" />
@@ -105,11 +180,11 @@ Please see <a href="http://www.vtigercrm.com" target="_blank">http://www.vtigerc
 <tr><td align='center' colspan='3'>  <IFRAME src="http://www.vtiger.com/products/crm/registration.html" width="100%" height=325 scrolling='no' frameborder="0">
   [Your user agent does not support frames or is currently configured
   not to display frames. However, you may visit
-  <A href="http://www.vtiger.com/products/crm/registration.html">the related document.</A>]
+  <A href="http://www.vtiger.com/products/crm/registration.html">the related document.</A>] 
   </IFRAME>
 </td></tr>
 	</tbody>
 
-</form>
+</form> -->
 </body>
 </html>
