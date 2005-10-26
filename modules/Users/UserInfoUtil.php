@@ -1255,4 +1255,329 @@ function deleteRole($roleId,$transferRoleId)
 
 }
 
+function getAllUserName()
+{
+	global $adb;
+	$query="select * from users where deleted=0";
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	$user_details=Array();
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$userid=$adb->query_result($result,$i,'id');
+		$username=$adb->query_result($result,$i,'user_name');
+		$user_details[$userid]=$username;
+		
+	}
+	return $user_details;
+
+}
+
+function getAllGroupName()
+{
+	global $adb;
+	$query="select * from groups";
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	$group_details=Array();
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$grpid=$adb->query_result($result,$i,'groupid');
+		$grpname=$adb->query_result($result,$i,'groupname');
+		$group_details[$grpid]=$grpname;
+		
+	}
+	return $group_details;
+
+}
+
+function getAllGroupInfo()
+{
+	global $adb;
+	$query="select * from groups";
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	$group_details=Array();
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$grpInfo=Array();
+		$grpid=$adb->query_result($result,$i,'groupid');
+		$grpname=$adb->query_result($result,$i,'groupname');
+		$description=$adb->query_result($result,$i,'description');
+		$grpInfo[0]=$grpname;
+		$grpInfo[1]=$description;
+		$group_details[$grpid]=$grpInfo;
+		
+	}
+	return $group_details;
+
+}
+
+
+function createGroup($groupName,$groupMemberArray,$description)
+{
+	global $adb;
+	$groupId=$adb->getUniqueId("groups");
+	//Insert into group table
+	$query = "insert into groups values(".$groupId.",'".$groupName."','".$description."')";
+	$adb->query($query);
+
+	//Insert Group to Group Relation
+	$groupArray=$groupMemberArray['groups'];
+	$roleArray=$groupMemberArray['roles'];
+	$rsArray=$groupMemberArray['rs'];
+	$userArray=$groupMemberArray['users'];
+
+	foreach($groupArray as $group_id)
+	{
+		insertGroupToGroupRelation($groupId,$group_id);
+	}
+	 
+	//Insert Group to Role Relation
+	foreach($roleArray as $roleId)
+	{
+		insertGroupToRoleRelation($groupId,$roleId);
+	}
+
+	//Insert Group to RoleAndSubordinate Relation
+	foreach($rsArray as $rsId)
+	{
+		insertGroupToRsRelation($groupId,$rsId);
+	}
+
+	//Insert Group to Role Relation
+	foreach($userArray as $userId)
+	{
+		insertGroupToUserRelation($groupId,$userId);
+	}
+	return $groupId;	
+}
+
+function insertGroupToGroupRelation($groupId,$containsGroupId)
+{
+	global $adb;
+	$query="insert into group2grouprel values(".$groupId.",".$containsGroupId.")";
+	$adb->query($query);
+}
+
+function insertGroupToRoleRelation($groupId,$roleId)
+{
+	global $adb;
+	$query="insert into group2role values(".$groupId.",'".$roleId."')";
+	$adb->query($query);
+}
+
+function insertGroupToRsRelation($groupId,$rsId)
+{
+	global $adb;
+	$query="insert into group2rs values(".$groupId.",'".$rsId."')";
+	$adb->query($query);
+}
+
+function insertGroupToUserRelation($groupId,$userId)
+{
+	global $adb;
+	$query="insert into users2group values(".$groupId.",".$userId.")";
+	$adb->query($query);
+}
+
+function getGroupInfo($groupId)
+{
+	global $adb;
+	$groupDetailArr=Array();
+	$groupMemberArr=Array();
+	//Retreving the group Info
+	$query="select * from groups where groupid=".$groupId;
+	$result = $adb->query($query);
+	$groupName=$adb->query_result($result,0,'groupname');
+	$description=$adb->query_result($result,0,'description');
+	
+	//Retreving the Group RelatedMembers
+	$groupMemberArr=getGroupMembers($groupId);
+	$groupDetailArr[]=$groupName;
+	$groupDetailArr[]=$description;
+	$groupDetailArr[]=$groupMemberArr;
+
+	//Returning the Group Detail Array
+	return $groupDetailArr;
+	 
+
+}
+function fetchGroupName($groupId)
+{
+
+	global $adb;
+	//Retreving the group Info
+	$query="select * from groups where groupid=".$groupId;
+	$result = $adb->query($query);
+	$groupName=$adb->query_result($result,0,'groupname');
+	return $groupName;
+	
+}
+
+function getGroupMembers($groupId)
+{
+	$groupMemberArr=Array();
+	$roleGroupArr=getGroupRelatedRoles($groupId);
+	$rsGroupArr=getGroupRelatedRoleSubordinates($groupId);
+	$groupGroupArr=getGroupRelatedGroups($groupId);
+	$userGroupArr=getGroupRelatedUsers($groupId);
+	
+	$groupMemberArr['groups']=$groupGroupArr;
+	$groupMemberArr['roles']=$roleGroupArr;
+	$groupMemberArr['rs']=$rsGroupArr;
+	$groupMemberArr['users']=$userGroupArr;
+	
+	return($groupMemberArr);
+}
+
+
+function getGroupRelatedRoles($groupId)
+{
+	global $adb;
+	$roleGroupArr=Array();
+	$query="select * from group2role where groupid=".$groupId;
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$roleId=$adb->query_result($result,$i,'roleid');
+		$roleGroupArr[]=$roleId;
+	}
+	return $roleGroupArr;	
+			
+}
+
+function getGroupRelatedRoleSubordinates($groupId)
+{
+	global $adb;
+	$rsGroupArr=Array();
+	$query="select * from group2rs where groupid=".$groupId;
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$roleSubId=$adb->query_result($result,$i,'roleandsubid');
+		$rsGroupArr[]=$roleSubId;
+	}
+	return $rsGroupArr;
+}
+
+function getGroupRelatedGroups($groupId)
+{
+	global $adb;
+	$groupGroupArr=Array();
+	$query="select * from group2grouprel where groupid=".$groupId;
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$relGroupId=$adb->query_result($result,$i,'containsgroupid');
+		$groupGroupArr[]=$relGroupId;
+	}
+	return $groupGroupArr;	
+			
+}
+
+function getGroupRelatedUsers($groupId)
+{
+	global $adb;
+	$userGroupArr=Array();
+	$query="select * from users2group where groupid=".$groupId;
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$userId=$adb->query_result($result,$i,'userid');
+		$userGroupArr[]=$userId;
+	}
+	return $userGroupArr;	
+			
+}
+
+function updateGroup($groupId,$groupName,$groupMemberArray,$description)
+{
+	global $adb;
+	$query="update groups set groupname='".$groupName."',description='".$description."' where groupid=".$groupId;
+	$adb->query($query);
+
+	//Deleting the Group Member Relation
+	deleteGroupRelatedGroups($groupId);	
+	deleteGroupRelatedRoles($groupId);	
+	deleteGroupRelatedRolesAndSubordinates($groupId);	
+	deleteGroupRelatedUsers($groupId);	
+
+	//Inserting the Group Member Entries
+	$groupArray=$groupMemberArray['groups'];
+	$roleArray=$groupMemberArray['roles'];
+	$rsArray=$groupMemberArray['rs'];
+	$userArray=$groupMemberArray['users'];
+
+	foreach($groupArray as $group_id)
+	{
+		insertGroupToGroupRelation($groupId,$group_id);
+	}
+	 
+	//Insert Group to Role Relation
+	foreach($roleArray as $roleId)
+	{
+		insertGroupToRoleRelation($groupId,$roleId);
+	}
+
+	//Insert Group to RoleAndSubordinate Relation
+	foreach($rsArray as $rsId)
+	{
+		insertGroupToRsRelation($groupId,$rsId);
+	}
+
+	//Insert Group to Role Relation
+	foreach($userArray as $userId)
+	{
+		insertGroupToUserRelation($groupId,$userId);
+	}
+		
+
+}
+
+function deleteGroup($groupId)
+{
+	global $adb;
+	$query="delete from groups where groupid=".$groupId;
+	$adb->query($query);
+
+	deleteGroupRelatedGroups($groupId);
+	deleteGroupRelatedRoles($groupId);
+	deleteGroupRelatedRolesAndSubordinates($groupId);
+	deleteGroupRelatedUsers($groupId);	
+
+}
+
+
+function deleteGroupRelatedGroups($groupId)
+{
+	global $adb;
+	$query="delete from group2grouprel where groupid=".$groupId;
+	$adb->query($query);
+}
+
+function deleteGroupRelatedRoles($groupId)
+{
+	global $adb;
+	$query="delete from group2role where groupid=".$groupId;
+	$adb->query($query);
+}
+
+function deleteGroupRelatedRolesAndSubordinates($groupId)
+{
+	global $adb;
+	$query="delete from group2rs where groupid=".$groupId;
+	$adb->query($query);
+}
+
+function deleteGroupRelatedUsers($groupId)
+{
+	global $adb;
+	$query="delete from users2group where groupid=".$groupId;
+	$adb->query($query);
+}
 ?>
