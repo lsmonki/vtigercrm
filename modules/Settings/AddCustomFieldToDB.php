@@ -262,7 +262,7 @@ else
 	$custfld_fieldid=$adb->getUniqueID("field");
 	$custfld_sequece=$adb->getUniqueId("customfield_sequence");
     
-        $query = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",5,1,'".$uichekdata."')";
+        $query = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",5,1,'".$uichekdata."',1,0)";
 	
         $adb->query($query);
 
