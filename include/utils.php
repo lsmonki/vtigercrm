@@ -5358,6 +5358,32 @@ function get_textcomboField($label,$name)
 		
 		
 	}
+        if($name == "eventstatus")
+        {
+                $comboFieldNames = Array('eventstatus'=>'eventstatus_dom');
+                $comboFieldArray = getComboArray($comboFieldNames);
+                $form_field .='<td>';
+                $form_field .= $label.'<br>';
+                $form_field .='<select name="'.$name.'">';
+                $form_field .=get_select_options_with_id($comboFieldArray['eventstatus_dom'], "");
+                $form_field .='</select></td>';
+                return $form_field;
+
+
+        }
+        if($name == "taskstatus")
+        {
+                $comboFieldNames = Array('taskstatus'=>'taskstatus_dom');
+                $comboFieldArray = getComboArray($comboFieldNames);
+                $form_field .='<td>';
+                $form_field .= $label.'<br>';
+                $form_field .='<select name="'.$name.'">';
+                $form_field .=get_select_options_with_id($comboFieldArray['taskstatus_dom'], "");
+                $form_field .='</select></td>';
+                return $form_field;
+        }
+
+
 	
 }
 
