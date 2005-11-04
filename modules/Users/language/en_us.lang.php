@@ -266,8 +266,10 @@ $mod_strings = Array(
 'LBL_LIST_MAILSERVER_BUTTON_TITLE'=>'List Mail Server',
 'LBL_LIST_MAILSERVER_BUTTON_KEY'=>'L',
 'LBL_LIST_MAILSERVER_BUTTON_LABEL'=>'List Mail Server',
-
-
+//added for inventory terms and conditions
+'INV_TANDC'=>'Terms & Coditions',
+'INV_TERMSANDCONDITIONS'=>'Inventory Terms & Coditions',
+'LBL_INV_TERMSANDCONDITIONS'=>'Inventory Management', 
 
 
 'INVENTORYNOTIFICATION'=>'Inventory Notifications',
