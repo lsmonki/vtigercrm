@@ -5483,6 +5483,15 @@ E</constraint>
                 </data>
 	</table>
 
+       <table name="inventory_tandc">
+             <field name="id" type="I" size="19">
+              <KEY/></field>
+             <field name="type" type="C" size="30">
+              <NOTNULL/></field>
+             <field name="tandc" type="X"></field>
+        </table>
+
+
 	<table name="convertleadmapping">
 		<field name="cfmid" type="I" size="19">
 			<KEY/>
