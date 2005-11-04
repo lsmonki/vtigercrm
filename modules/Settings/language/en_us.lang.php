@@ -309,7 +309,7 @@ $mod_strings = Array(
 
 'LBL_DEFAULT_ORGANIZATION_FIELDS'=>'Default Organization Fields Access',
 
-'LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS'=>'Setting Default Field Access within the Organization',
+'LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS'=>' - Setting Default Field Access within the Organization',
 
 'LBL_SETTING_DEFAULT_SHARING_ACCESS'=>'- Setting Default Sharing Access within the Organization',
 
@@ -317,7 +317,7 @@ $mod_strings = Array(
 
 'LBL_SETTING_FIELD_ACCESSIBILITY'=>' - Setting Field Accessibility for each profiles',
 //<<<<<<<<for edit ordering blocks>>>>>>
-'LBL_FIELD_ORDERING_DESC'=>'Edit Field Order',
+'LBL_FIELD_ORDERING_DESC'=>' - Edit Field Order',
 
 'LBL_FIELD_ORDERING'=>'Edit Field Blocks',
 //<<<<<<<<<<end>>>>>>>>>>>>>
@@ -481,7 +481,10 @@ $mod_strings = Array(
 'LBL_SO_FIELD_ACCESS'=>'Sales Order Access',
 'LBL_INVOICE_FIELD_ACCESS'=>'Invoice Field Access',
 'INVENTORYNOTIFICATION'=>'Inventory Notifications',
-'LBL_INVENTORY_NOTIFICATIONS'=>'Edit Inventory Email Notifications',
+'LBL_INVENTORY_NOTIFICATIONS'=>' - Edit Inventory Email Notifications',
+'INVENTORYTERMSANDCONDITIONS'=>'Inventory Terms & Conditions',//newly added for Inventory terms and conditions
+'LBL_INVENTORY_TERMSANDCONDITIONS'=>' - Edit Inventory Terms & Conditions',//newly added
+
 'LBL_INV_NOT_DESC'=>'The following is the list of notifications that are sent to the product handler regarding the demand and the current quantity in hand during the creation of a Quote, SalesOrder and Invoice.',
 
 'InvoiceNotification'=>'Product Stock Notification during Invoice Generation',
