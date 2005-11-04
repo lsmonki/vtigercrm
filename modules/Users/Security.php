@@ -1852,7 +1852,9 @@ title';
 	       //Insert into organizationdetails table 
 	       $this->db->query("insert into organizationdetails(organizationame,address,city,state,country,code,phone,fax,website,logoname) values ('vtiger',' 40-41-42, Sivasundar Apartments, Flat D-II, Shastri Street, Velachery','Chennai','Tamil Nadu','India','600 042','+91-44-5202-1990','+91-44-5202-1990','www.vtiger.com','vtiger-crm-logo.jpg')");
 
-		
+  //Insert into inventory_tandc table
+               $this->db->query("insert into inventory_tandc values('".$this->db->getUniqueID('inventory_tandc')."','Inventory','')");
+
 	$this->db->query("insert into actionmapping values(0,'Save',0)");
 	$this->db->query("insert into actionmapping values(1,'EditView',0)");
 	$this->db->query("insert into actionmapping values(2,'Delete',0)");
