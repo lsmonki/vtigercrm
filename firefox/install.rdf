@@ -21,7 +21,6 @@
       <em:creator>vtiger.com</em:creator>
       <em:homepageURL>http://www.vtiger.com/</em:homepageURL>
       <em:iconURL>chrome://vtiger/skin/vtigerToolbar32x32.png</em:iconURL>
-      <em:updateURL>http://www.vtiger.com/update.rdf</em:updateURL>
       <!--<em:optionsURL>chrome://vtiger/content/preferenceDialog.xul</em:optionsURL>-->
 
     <em:file>
