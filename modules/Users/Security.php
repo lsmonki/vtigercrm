@@ -376,7 +376,7 @@ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'due_date','activity',1,'23','due_date','Due Date',1,0,0,100,5,1,1,'D~M~OTH~GE~date_start~Start Date & Time',1,'')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'crmid','seactivityrel',1,'66','parent_id','Related To',1,0,0,100,7,1,1,'I~O',1,'')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'contactid','cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,8,1,1,'I~O',1,'')");
- $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'status','activity',1,'15','taskstatus','Status',1,0,0,100,9,1,1,'V~O',1,3)");
+ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'status','activity',1,'15','taskstatus','Status',1,0,0,100,9,1,1,'V~O',0,3)");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'eventstatus','activity',1,'15','eventstatus','Status',1,0,0,100,9,1,3,'V~O',1,'')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'priority','activity',1,'15','taskpriority','Priority',1,0,0,100,10,1,1,'V~O',1,'')");
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'sendnotification','activity',1,'56','sendnotification','Send Notification',1,0,0,100,11,1,1,'C~O',1,'')");
@@ -412,7 +412,7 @@ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'duration_minutes','activity',1,'15','duration_minutes','Duration Minutes',1,0,0,100,8,1,3,'O~O',1,'')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'crmid','seactivityrel',1,'66','parent_id','Related To',1,0,0,100,9,1,1,'I~O',1,'')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'contactid','cntactivityrel',1,'57','contact_id','Contact Name',1,0,0,100,10,1,1,'V~O',1,'')");
- $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'eventstatus','activity',1,'15','eventstatus','Status',1,0,0,100,11,1,1,'V~O',1,3)");
+ $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'eventstatus','activity',1,'15','eventstatus','Status',1,0,0,100,11,1,1,'V~O',0,3)");
 //Priority not needed in events
 # $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'priority','activity',1,'15','taskpriority','Priority',1,0,0,100,10,1,1,'V~O')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'sendnotification','activity',1,'56','sendnotification','Send Notification',1,0,0,100,12,1,1,'C~O',1,'')");
