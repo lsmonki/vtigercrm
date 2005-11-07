@@ -20,7 +20,6 @@ $Id:
         <em:creator>vtiger.com</em:creator>
 		  <em:iconURL>chrome://vtiger/skin/vtiger32.png</em:iconURL>
         <em:homepageURL>http://www.vtiger.com</em:homepageURL>
-		  <em:updateURL>http://www.vtiger.com/products/crm/downloads/tbird/update.rdf</em:updateURL>
         <em:file>
             <Description about="urn:mozilla:extension:file:vtiger.jar">
 					<em:package>content/vtiger/</em:package>
