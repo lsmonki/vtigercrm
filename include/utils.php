@@ -984,6 +984,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 {
                         $custfld .= '<font color="red">*</font>';
                 }
+		if($fieldlabel == 'Terms & Conditions')//for default Terms & Conditions
+                {
+                       $value=getTermsandConditions();
+                }
 
 		$custfld .= $mod_strings[$fieldlabel].':</td>';
         	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" cols="70" rows="8">'.$value.'</textarea></td>';
@@ -4543,6 +4547,15 @@ function getCurrencySymbol()
 	$result = $adb->query($sql1);
 	$curr_symbol = $adb->query_result($result,0,"currency_symbol");
 	return $curr_symbol;
+}
+
+function getTermsandConditions()
+{
+        global $adb;
+        $sql1 = "select * from inventory_tandc";
+        $result = $adb->query($sql1);
+        $tandc = $adb->query_result($result,0,"tandc");
+        return $tandc;
 }
 
 function getRelatedLists($module,$focus)
