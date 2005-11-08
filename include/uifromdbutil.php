@@ -42,7 +42,7 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 		$uitype = $adb->query_result($result,$i,"uitype");	
 		$fieldname = $adb->query_result($result,$i,"fieldname");	
 		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
-		$maxlength = $adb->query_result($result,$i,"maxlength");
+		$maxlength = $adb->query_result($result,$i,"maximumlength");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");				
 
 		$output .= '<tr>';
@@ -59,7 +59,7 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 			$uitype = $adb->query_result($result,$i,"uitype");	
 			$fieldname = $adb->query_result($result,$i,"fieldname");	
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
-			$maxlength = $adb->query_result($result,$i,"maxlength");
+			$maxlength = $adb->query_result($result,$i,"maximumlength");
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
 			$output .= '';
 			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype);
@@ -94,7 +94,7 @@ function getDetailBlockInformation($module, $block, $col_fields)
 		$uitype = $adb->query_result($result,$i,"uitype");	
 		$fieldname = $adb->query_result($result,$i,"fieldname");	
 		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
-		$maxlength = $adb->query_result($result,$i,"maxlength");
+		$maxlength = $adb->query_result($result,$i,"maximumlength");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");
 		$output .= '<tr>';
 		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype);
@@ -107,7 +107,7 @@ function getDetailBlockInformation($module, $block, $col_fields)
 			$uitype = $adb->query_result($result,$i,"uitype");	
 			$fieldname = $adb->query_result($result,$i,"fieldname");	
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
-			$maxlength = $adb->query_result($result,$i,"maxlength");
+			$maxlength = $adb->query_result($result,$i,"maximumlength");
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
 
 			$output .= '';
