@@ -61,6 +61,9 @@ function renderRelatedEmails($query,$id)
 	$hidden .="<input type=\"hidden\" name=\"email_directing_module\">";
 	$hidden .="<input type=\"hidden\" name=\"record\">";
 
+	//Added to pass the parents list as hidden for Emails -- 09-11-2005
+	$hidden .= getEmailParentsList('Leads',$id);
+
         echo $hidden;
 
         $focus = new Email();

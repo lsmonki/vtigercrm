@@ -128,6 +128,9 @@ if(isPermitted("Leads",2,$_REQUEST['record']) == 'yes')
 
 if(isPermitted("Emails",1,'') == 'yes')
 {
+	//Added to pass the parents list as hidden for Emails -- 09-11-2005
+	$parent_email = getEmailParentsList('Leads',$_REQUEST['record']);
+        $xtpl->assign("HIDDEN_PARENTS_LIST",$parent_email);
 	$xtpl->assign("SENDMAILBUTTON","<td><input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.module.value='Emails';this.form.email_directing_module.value='leads';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\"></td>");
 }
 
