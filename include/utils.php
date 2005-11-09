@@ -809,7 +809,7 @@ function from_html($string, $encode=true){
 function get_group_options()
 {
 	global $adb,$noof_group_rows;;
-	$sql = "select name from groups";
+	$sql = "select groupname from groups";
 	$result = $adb->query($sql);
 	$noof_group_rows=$adb->num_rows($result);
 	return $result;
