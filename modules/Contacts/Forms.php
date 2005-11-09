@@ -127,8 +127,8 @@ $qcreate_form.='<input type="hidden" name="record" value="">';
 $qcreate_form.='<input type="hidden" name="assigned_user_id" value="'.$user_id.'">';
 $qcreate_form.='<input type="hidden" name="email2" value="">';		
 $qcreate_form.='<input type="hidden" name="action" value="Save">';
-$qcreate_form.='<input type="hidden" name="return_action" value="index">';
-$qcreate_form.='<input type="hidden" name="return_module" value="Contacts">';
+//$qcreate_form.='<input type="hidden" name="return_action" value="index">';
+//$qcreate_form.='<input type="hidden" name="return_module" value="Contacts">';
 
 $qcreate_form.='<table>';
 
