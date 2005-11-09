@@ -312,7 +312,6 @@ if($viewid != 0)
 }
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<tr>
-	<td ><div class="button"><a href="index.php?module=Contacts&action=EditView&return_module=Contacts&return_action=DetailView">'.$app_strings['LBL_ADD_ITEM'].'</a></div></td>
 	<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden" value='.$viewid.'>
