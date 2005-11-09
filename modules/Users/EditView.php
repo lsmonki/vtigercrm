@@ -182,7 +182,7 @@ if (is_admin($current_user)) {
                   $result = $adb->query($sql);
 		$groupnameArray = $adb->fetch_array($result);
 		$groupselected = $groupnameArray["groupname"];
-		$sql2 = "select name from groups";
+		$sql2 = "select groupname from groups";
                   $result_name = $adb->query($sql2);
                   $temprow = $adb->fetch_array($result_name);
                    do
