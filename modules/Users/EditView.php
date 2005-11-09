@@ -178,7 +178,7 @@ if (is_admin($current_user)) {
                    
         $GROUP_SELECT_OPTION = '<select name="group_name">';
 		$GROUP_SELECT_OPTION .= '<option value="">--None--</option>';
-               $sql = "select groupname from users2group where userid='" .$focus->id ."'";
+               $sql = "select groupname from users2group inner join groups on groups.groupid=users2group.groupid where userid='" .$focus->id ."'";
                   $result = $adb->query($sql);
 		$groupnameArray = $adb->fetch_array($result);
 		$groupselected = $groupnameArray["groupname"];
@@ -189,13 +189,13 @@ if (is_admin($current_user)) {
                    {
           		  $selected = '';
 
-                    $groupname=$temprow["name"];
+                    $groupname=$temprow["groupname"];
 		       if($groupselected != '' && $groupname == $groupselected)
 	        	{
 		                $selected = 'selected';
         		}
                     $GROUP_SELECT_OPTION .= '<option value="'.$groupname.'" '.$selected.'>';
-                    $GROUP_SELECT_OPTION .= $temprow["name"];
+                    $GROUP_SELECT_OPTION .= $temprow["groupname"];
                     $GROUP_SELECT_OPTION .= '</option>';
                    }while($temprow = $adb->fetch_array($result_name));
                                   

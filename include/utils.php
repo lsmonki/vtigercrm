@@ -1120,7 +1120,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
           
           do
           {
-            $groupname=$nameArray["name"];
+            $groupname=$nameArray["groupname"];
 	    $selected = '';	
 	    if($groupname == $selected_groupname)
 	    {
@@ -1129,7 +1129,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
             $GROUP_SELECT_OPTION .= '<option value="';
             $GROUP_SELECT_OPTION .=  $groupname;
             $GROUP_SELECT_OPTION .=  '" '.$selected.'>';
-            $GROUP_SELECT_OPTION .= $nameArray["name"];
+            $GROUP_SELECT_OPTION .= $nameArray["groupname"];
             $GROUP_SELECT_OPTION .= '</option>';
           }while($nameArray = $adb->fetch_array($result));
 //          $GROUP_SELECT_OPTION .='<option value=none>'.$app_strings['LBL_NONE_NO_LINE'].'</option>';

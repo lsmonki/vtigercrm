@@ -98,9 +98,11 @@ foreach($metriclists as $metriclist)
 }
 }
 $xtpl->parse("main");
-if (count($metriclists)>0) $xtpl->out("main");
-else echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
-echo "<BR>";
+$xtpl->out("main");
+
+#if (count($metriclists)>0) $xtpl->out("main");
+#else echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
+#echo "<BR>";
 // Stick on the form footer
 echo get_form_footer();
 

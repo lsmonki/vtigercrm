@@ -70,7 +70,7 @@ function fetchUserProfileId($userid)
 function fetchUserGroups($userid)
 {
 	global $adb;
-	$sql= "select groupname from users2group where userid='" .$userid ."'";
+	$sql= "select groupname from users2group inner join groups on groups.groupid=users2group.groupid where userid='" .$userid ."'";
         //echo $sql;
         $result = $adb->query($sql);
         //store the groupnames in a comma separated string
