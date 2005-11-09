@@ -177,13 +177,13 @@ class Order extends CRMEntity {
 		// Inserted order by createdtime desc
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid,
 			activity.* ,seactivityrel.*, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime,
-			crm2.createdtime, activity.description, users.user_name
+			crmentity.createdtime, activity.description, users.user_name
 		from activity
 			inner join seactivityrel on seactivityrel.activityid=activity.activityid
 			inner join crmentity on crmentity.crmid=activity.activityid
 			left join cntactivityrel on cntactivityrel.activityid= activity.activityid
 			left join contactdetails on contactdetails.contactid = cntactivityrel.contactid
-			inner join users on crm2.smcreatorid= users.id
+			inner join users on crmentity.smcreatorid= users.id
 		where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
 			and (activity.status='Completed' or activity.eventstatus='Held')
 			and seactivityrel.crmid=".$id."
