@@ -5481,4 +5481,27 @@ function get_textdurationField($label,$name,$tid)
 	}	
 }
 
+//Added to get the parents list as hidden for Emails -- 09-11-2005
+function getEmailParentsList($module,$id)
+{
+        global $adb;
+	if($module == 'Contacts')
+		$focus = new Contact();
+	if($module == 'Leads')
+		$focus = new Lead();
+        
+	$focus->retrieve_entity_info($id,$module);
+        $fieldid = 0;
+        $fieldname = 'email';
+        if($focus->column_fields['email'] == '' && $focus->column_fields['yahooid'] != '')
+                $fieldname = 'yahooid';
+
+        $res = $adb->query("select * from field where tabid = 4 and fieldname='".$fieldname."'");
+        $fieldid = $adb->query_result($res,0,'fieldid');
+
+        $hidden .= '<input type="hidden" name="emailids" value="'.$id.'@'.$fieldid.'|">';
+        $hidden .= '<input type="hidden" name="pmodule" value="'.$module.'">';
+
+	return $hidden;
+}
 ?>
