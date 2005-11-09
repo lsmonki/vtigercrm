@@ -34,7 +34,7 @@ $customviews = Array(Array('viewname'=>'Hot Leads',
                            'setdefault'=>'0','setmetrics'=>'0',
                            'cvmodule'=>'Contacts','stdfilterid'=>'2','advfilterid'=>''),
 
-		     Array('viewname'=>'Potentails Won',
+		     Array('viewname'=>'Potentials Won',
                            'setdefault'=>'0','setmetrics'=>'1',
                            'cvmodule'=>'Potentials','stdfilterid'=>'','advfilterid'=>'2'),
 
