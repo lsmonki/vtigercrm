@@ -13,7 +13,7 @@ function get_calc($image_path) {
 $the_calc = <<<EOQ
 <script language="JavaScript" type="text/javascript" src="include/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/calc.js"></script>
-<table border="0" cellspacing="0" cellpadding="0" style="margin-top:0;margin-left:0; align="center">
+<table border="0" cellspacing="0" cellpadding="0" style="margin-top:0;margin-left:0;" align="center">
   <!--tr>
     <!-- td width="7" height="6"><img src="$image_path/calc_top_left.gif"></td -->
     <!-- td height="6" class="calcBg"><img src="$image_path/blank.gif"></td -->
