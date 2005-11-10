@@ -88,7 +88,7 @@ $local_log->debug("Saved record with id of ".$return_id);
 //BEGIN -- Code for Create Customer Portal Users password and Send Mail 
 if($_REQUEST['portal'] == '' && $_REQUEST['mode'] == 'edit')
 {
-	$sql = "update PortalInfo set user_name='".$_REQUEST['email']."',isactive=0 where id=".$_REQUEST['record'];
+	$sql = "update portalinfo set user_name='".$_REQUEST['email']."',isactive=0 where id=".$_REQUEST['record'];
 	$adb->query($sql);
 }
 elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mode'] != 'edit')
@@ -99,7 +99,7 @@ elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mo
 	if($_REQUEST['mode'] != 'edit')
 		$insert = 'true';
 
-	$sql = "select id,user_name,user_password,isactive from PortalInfo";
+	$sql = "select id,user_name,user_password,isactive from portalinfo";
 	$result = $adb->query($sql);
 
 	for($i=0;$i<$adb->num_rows($result);$i++)
@@ -113,7 +113,7 @@ elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mo
 				$flag = 'true';
 			else
 			{
-				$sql = "update PortalInfo set user_name='".$username."', isactive=1 where id=".$id;
+				$sql = "update portalinfo set user_name='".$username."', isactive=1 where id=".$id;
 				$adb->query($sql);
 				$update = 'true';
 				$flag = 'true';
@@ -129,7 +129,7 @@ elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mo
 	if($insert == 'true')
 	{
 		$password = makeRandomPassword();
-		$sql = "insert into PortalInfo (id,user_name,user_password,type,isactive) values(".$focus->id.",'".$username."','".$password."','C',1)";
+		$sql = "insert into portalinfo (id,user_name,user_password,type,isactive) values(".$focus->id.",'".$username."','".$password."','C',1)";
                 $adb->query($sql);
 	}
 

@@ -1626,7 +1626,7 @@ function authenticate_user($username,$password)
 {
 	global $adb;
 	$current_date = date("Y-m-d");
-	$sql = "select id, user_name, user_password,last_login_time, support_start_date, support_end_date from PortalInfo inner join CustomerDetails on PortalInfo.id=CustomerDetails.customerid where user_name='".$username."' and user_password = '".$password."' and isactive=1 and CustomerDetails.support_end_date >= '".$current_date."'";
+	$sql = "select id, user_name, user_password,last_login_time, support_start_date, support_end_date from portalinfo inner join customerdetails on portalinfo.id=customerdetails.customerid where user_name='".$username."' and user_password = '".$password."' and isactive=1 and customerdetails.support_end_date >= '".$current_date."'";
 	$result = $adb->query($sql);	
 	$list['id'] = $adb->query_result($result,0,'id');
 	$list['user_name'] = $adb->query_result($result,0,'user_name');
@@ -1640,7 +1640,7 @@ function authenticate_user($username,$password)
 function change_password($id,$username,$password)
 {
 	global $adb;
-	$sql = "update PortalInfo set user_password='".$password."' where id=".$id." and user_name='".$username."'";
+	$sql = "update portalinfo set user_password='".$password."' where id=".$id." and user_name='".$username."'";
 	$result = $adb->query($sql);
 
 	$list = authenticate_user($username,$password);
@@ -1654,17 +1654,17 @@ function update_login_details($id,$flag)
 
 	if($flag == 'login')
 	{
-	        $sql = "update PortalInfo set login_time='".$current_time."' where id=".$id;
+	        $sql = "update portalinfo set login_time='".$current_time."' where id=".$id;
 	        $result = $adb->query($sql);
 	}
 	elseif($flag == 'logout')
 	{
-		$sql = "select * from PortalInfo where id=".$id;
+		$sql = "select * from portalinfo where id=".$id;
                 $result = $adb->query($sql);
                 if($adb->num_rows($result) != 0)
                         $last_login = $adb->query_result($result,0,'login_time');
 
-		$sql = "update PortalInfo set logout_time = '".$current_time."', last_login_time='".$last_login."' where id=".$id;
+		$sql = "update portalinfo set logout_time = '".$current_time."', last_login_time='".$last_login."' where id=".$id;
 		$result = $adb->query($sql);
 	}
 
@@ -1675,7 +1675,7 @@ function send_mail_for_password($mailid)
 	global $adb;
         include("modules/Emails/class.phpmailer.php");
 
-	$sql = "select * from PortalInfo  where user_name='".$mailid."'";
+	$sql = "select * from portalinfo  where user_name='".$mailid."'";
 	$user_name = $adb->query_result($adb->query($sql),0,'user_name');
 	$password = $adb->query_result($adb->query($sql),0,'user_password');
 	$isactive = $adb->query_result($adb->query($sql),0,'isactive');

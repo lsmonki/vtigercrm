@@ -131,7 +131,7 @@ class HelpDesk extends CRMEntity {
                                 $name = getUserName($ownerid);
                         elseif($ownertype == 'customer')
                         {
-                                $sql1 = 'select * from PortalInfo where id='.$ownerid;
+                                $sql1 = 'select * from portalinfo where id='.$ownerid;
                                 $name = $this->db->query_result($this->db->query($sql1),0,'user_name');
                         }
 

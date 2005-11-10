@@ -183,7 +183,7 @@ function getCommentInformation($ticketid)
 function getCustomerName($id)
 {
 	global $adb;
-	$sql = "select * from PortalInfo inner join troubletickets on troubletickets.parent_id = PortalInfo.id where troubletickets.ticketid=".$id;
+	$sql = "select * from portalinfo inner join troubletickets on troubletickets.parent_id = portalinfo.id where troubletickets.ticketid=".$id;
 	$result = $adb->query($sql);
 	$customername = $adb->query_result($result,0,'user_name');
 	return $customername;

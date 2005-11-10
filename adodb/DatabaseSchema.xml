@@ -534,7 +534,7 @@
 		</data>
 	</table>
 
-	<table name="PortalInfo">
+	<table name="portalinfo">
 		<field name="id" type="I" size="11">
                         <KEY/>
 		</field>
@@ -552,9 +552,9 @@
                 </field>
 		<field name="isactive" type="I" size="1"></field>
 	</table>
-	<table name="PortalInfo" alter="true">
+	<table name="portalinfo" alter="true">
 
-                <constraint>ADD CONSTRAINT fk_PortalInfo FOREIGN KEY (id) REFERENCES contactdetails(contactid)  ON DELETE CASCADE </constraint>
+                <constraint>ADD CONSTRAINT fk_portalinfo FOREIGN KEY (id) REFERENCES contactdetails(contactid)  ON DELETE CASCADE </constraint>
 
                 <opt>Type=InnoDB</opt>
 
@@ -562,7 +562,7 @@
                 </data>
         </table>
 
-	<table name="CustomerDetails">
+	<table name="customerdetails">
 		<field name="customerid" type="I" size="19">
 			<KEY/>
                 </field>
@@ -570,9 +570,9 @@
 		<field name="support_start_date" type="D"></field>
 		<field name="support_end_date" type="D"></field>
 	</table>
-	<table name="CustomerDetails" alter="true">
+	<table name="customerdetails" alter="true">
 
-                <constraint>ADD CONSTRAINT fk_CustomerDetails FOREIGN KEY (customerid) REFERENCES contactdetails(contactid) ON DELETE CASCADE </constraint>
+                <constraint>ADD CONSTRAINT fk_customerdetails FOREIGN KEY (customerid) REFERENCES contactdetails(contactid) ON DELETE CASCADE </constraint>
 
                 <opt>Type=InnoDB</opt>
 

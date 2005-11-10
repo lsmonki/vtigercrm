@@ -79,7 +79,7 @@ if($focus->column_fields['parent_id'] != '')
 }
 if($contact_mailid != '')
 {
-	$sql = "select * from PortalInfo where user_name='".$contact_mailid."'";
+	$sql = "select * from portalinfo where user_name='".$contact_mailid."'";
 	$isactive = $adb->query_result($adb->query($sql),0,'isactive');
 }
 if($isactive == 1)

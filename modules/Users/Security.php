@@ -203,9 +203,9 @@ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").
 
 //Block - Begin Customer Portal
 
-$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'portal','CustomerDetails',1,'56','portal','Portal User',1,0,0,100,1,4,1,'C~O',1,'')");
-$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'support_start_date','CustomerDetails',1,'5','support_start_date','Support Start Date',1,0,0,100,2,4,1,'D~O',1,'')");
-$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'support_end_date','CustomerDetails',1,'5','support_end_date','Support End Date',1,0,0,100,3,4,1,'D~O~OTH~GE~support_start_date~Support Start Date',1,'')");
+$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'portal','customerdetails',1,'56','portal','Portal User',1,0,0,100,1,4,1,'C~O',1,'')");
+$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'support_start_date','customerdetails',1,'5','support_start_date','Support Start Date',1,0,0,100,2,4,1,'D~O',1,'')");
+$this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'support_end_date','customerdetails',1,'5','support_end_date','Support End Date',1,0,0,100,3,4,1,'D~O~OTH~GE~support_start_date~Support Start Date',1,'')");
 
 //Block - End Customer Portal
 
