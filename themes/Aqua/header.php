@@ -80,6 +80,209 @@ if ($action == "EditView" || $action == "Login") $xtpl->assign("ONLOAD", 'onload
 // Loop through the module list.
 // For each tab that is off, parse a tab_off.
 // For the current tab, parse a tab_on
+
+
+//<<<<<<<<<<<<<<<< start of owner notify>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+$query = "select crmentity.setype,crmentity.crmid from crmentity inner join ownernotify on crmentity.crmid=ownernotify.crmid where 
+ownernotify.smownerid=".$current_user->id;
+$result = $adb->query($query);
+$notify_values=array('Accounts'=>'Accounts:&nbsp&nbsp&nbsp;','Potentials'=>'Potentials:&nbsp&nbsp&nbsp;','Contacts'=>'Contacts:&nbsp&nbsp&nbsp;','Leads'=>'Leads:&nbsp&nbsp&nbsp;','SalesOrder'=>'SalesOrders:&nbsp&nbsp&nbsp;','Orders'=>'PurchaseOrders:&nbsp&nbsp&nbsp;','Products'=>'Products:&nbsp&nbsp&nbsp;','Emails'=>'Emails:&nbsp&nbsp&nbsp;','HelpDesk'=>'HelpDesk:&nbsp&nbsp&nbsp;','Activities'=>'Activities:&nbsp&nbsp&nbsp;','Quotes'=>'Quotes:&nbsp&nbsp&nbsp;','Invoice'=>'Invoice:&nbsp&nbsp&nbsp;');
+
+for($i=0;$i<$adb->num_rows($result);$i++)
+{
+	    $mod_notify[$i] = $adb->fetch_array($result);
+		if($mod_notify[$i]['setype']=='Accounts')
+		{
+			$tempquery='select accountname from account where accountid='.$mod_notify[$i]['crmid'];
+			$tempresult=$adb->query($tempquery);
+			$account_name=$adb->fetch_array($tempresult);
+			$notify_values['Accounts'].='<a href="index.php?module=Accounts&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$account_name['accountname'].'</a>,&nbsp;';	
+		}else if($mod_notify[$i]['setype']=='Potentials')
+		{
+			$tempquery='select potentialname from potential where potentialid='.$mod_notify[$i]['crmid'];
+			$tempresult=$adb->query($tempquery);
+			$potential_name=$adb->fetch_array($tempresult);
+			$notify_values['Potentials'].='<a href="index.php?module=Potentials&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$potential_name['potentialname'].'</a>,&nbsp;';
+		}else if($mod_notify[$i]['setype']=='Contacts')
+		{
+			$tempquery='select lastname from contactdetails where contactid='.$mod_notify[$i]['crmid'];
+			$tempresult=$adb->query($tempquery);
+			$contact_name=$adb->fetch_array($tempresult);
+			$notify_values['Contacts'].='<a href="index.php?module=Contacts&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$contact_name['lastname'].'</a>,&nbsp;';
+
+		}else if($mod_notify[$i]['setype']=='Leads')
+		{
+			$tempquery='select lastname from leaddetails where leadid='.$mod_notify[$i]['crmid'];
+			$tempresult=$adb->query($tempquery);
+			$lead_name=$adb->fetch_array($tempresult);
+			$notify_values['Leads'].='<a href="index.php?module=Leads&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$lead_name["lastname"].'</a>,';
+		}else if($mod_notify[$i]['setype']=='SalesOrder')
+		{
+			$tempquery='select subject from salesorder where salesorderid='.$mod_notify[$i]['crmid'];
+			$tempresult=$adb->query($tempquery);
+			$sales_subject=$adb->fetch_array($tempresult);
+			$notify_values['SalesOrder'].='<a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$mod_notify[$i]["crmid"].'">'.$sales_subject['subject'].'</a>,&nbsp;';
+
+		}else if($mod_notify[$i]['setype']=='Orders')
+		{
+			$tempquery='select subject from purchaseorder where purchaseorderid='.$mod_notify[$i]['crmid'];
+			$tempresult=$adb->query($tempquery);
+			$purchase_subject=$adb->fetch_array($tempresult);
+			$notify_values['Orders'].='<a href="index.php?module=Orders&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$purchase_subject['subject'].'</a>,&nbsp;';
+
+		}else if($mod_notify[$i]['setype']=='Products')
+		{
+			$tempquery='select productname from products where productid='.$mod_notify[$i]['crmid'];
+			$tempresult=$adb->query($tempquery);
+			$product_name=$adb->fetch_array($tempresult);
+			$notify_values['Products'].='<a href="index.php?module=Products&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$product_name['productname'].'</a>,&nbsp;';
+		}else if($mod_notify[$i]['setype']=='Emails')
+		{
+			$tempquery='select subject from activity where activityid='.$mod_notify[$i]['crmid'];
+			$tempresult=$adb->query($tempquery);
+			$email_subject=$adb->fetch_array($tempresult);
+			$notify_values['Emails'].='<a href="index.php?module=Emails&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$email_subject['subject'].'</a>,&nbsp;';
+
+		}else if($mod_notify[$i]['setype']=='HelpDesk')
+		{
+			$tempquery='select title from troubletickets where ticketid='.$mod_notify[$i]['crmid'];
+			$tempresult=$adb->query($tempquery);
+			$HelpDesk_title=$adb->fetch_array($tempresult);
+			$notify_values['HelpDesk'].='<a href="index.php?module=HelpDesk&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$HelpDesk_title['title'].'</a>,&nbsp;';
+		}else if($mod_notify[$i]['setype']=='Activities')
+		{
+			$tempquery='select subject from activity where activityid='.$mod_notify[$i]['crmid'];
+			$tempresult=$adb->query($tempquery);
+			$Activity_subject=$adb->fetch_array($tempresult);
+			$notify_values['Activities'].=$Activity_subject['subject'].'</a>,&nbsp;';
+		}else if($mod_notify[$i]['setype']=='Quotes')
+		{
+			$tempquery='select subject from quotes where quoteid='.$mod_notify[$i]['crmid'];
+			$tempresult=$adb->query($tempquery);
+			$quote_subject=$adb->fetch_array($tempresult);
+			$notify_values['Quotes'].='<a href="index.php?module=Quotes&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$quote_subject['subject'].'</a>,&nbsp;';
+		}else if($mod_notify[$i]['setype']=='Invoice')
+		{
+			$tempquery='select subject from invoice where invoiceid='.$mod_notify[$i]['crmid'];
+			$tempresult=$adb->query($tempquery);
+			$invoice_subject=$adb->fetch_array($tempresult);
+			$notify_values['Invoice'].='<a href="index.php?module=Invoice&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$invoice_subject["subject"].'</a>,';
+		}
+
+
+}
+
+if($notify_values['Accounts']!='Accounts:&nbsp&nbsp&nbsp;')
+	$allnotification.=$notify_values['Accounts'];
+if($notify_values['Potentials']!='Potentials:&nbsp&nbsp&nbsp;')
+	$allnotification.=$notify_values['Potentials'];
+if($notify_values['Contacts']!='Contacts:&nbsp&nbsp&nbsp;')
+	$allnotification.=$notify_values['Contacts'];
+if($notify_values['Leads']!='Leads:&nbsp&nbsp&nbsp;')
+	$allnotification.=$notify_values['Leads'];
+if($notify_values['SalesOrder']!='SalesOrders:&nbsp&nbsp&nbsp;')
+	$allnotification.=$notify_values['SalesOrder'];
+if($notify_values['Orders']!='PurchaseOrders:&nbsp&nbsp&nbsp;')
+	$allnotification.=$notify_values['Orders'];
+if($notify_values['Products']!='Products:&nbsp&nbsp&nbsp;')
+	$allnotification.=$notify_values['Products'];
+if($notify_values['Emails']!='Emails:&nbsp&nbsp&nbsp;')
+	$allnotification.=$notify_values['Emails'];
+if($notify_values['Activities']!='Activities:&nbsp&nbsp&nbsp;')
+	$allnotification.=$notify_values['Activities'];
+if($notify_values['Quotes']!='Quotes:&nbsp&nbsp&nbsp;')
+	$allnotification.=$notify_values['Quotes'];
+if($notify_values['Invoice']!='Invoice:&nbsp&nbsp&nbsp;')
+	$allnotification.=$notify_values['Invoice'];
+
+$allnotification='Notifications for '.$current_user->user_name.':'.$allnotification;
+//echo $allnotification;
+//die;
+echo '<script language="JavaScript1.2">
+
+//Specify the marquee\'s width (in pixels)
+var marqueewidth="1024px"
+//Specify the marquee\'s height
+var marqueeheight="15px"
+//Specify the marquee\'s marquee speed (larger is faster 1-10)
+var marqueespeed=2
+//configure background color:
+var marqueebgcolor="#7DBEFF"
+//Pause marquee onMousever (0=no. 1=yes)?
+var pauseit=1
+
+//Specify the marquee\'s content (don\'t delete <nobr> tag)
+//Keep all content on ONE line, and backslash any single quotations (ie: that\'s great):
+
+var marqueecontent=\'<nobr><font face="Arial">'.$allnotification.'</font></nobr>\'
+
+
+////NO NEED TO EDIT BELOW THIS LINE////////////
+marqueespeed=(document.all)? marqueespeed : Math.max(1, marqueespeed-1) //slow speed down by 1 for NS
+var copyspeed=marqueespeed
+var pausespeed=(pauseit==0)? copyspeed: 0
+var iedom=document.all||document.getElementById
+if (iedom)
+document.write(\'<span id="temp" style="visibility:hidden;position:absolute;top:-100px;left:-9000px">\'+marqueecontent+\'</span>\')
+var actualwidth=\'\'
+var cross_marquee, ns_marquee
+
+function populate(){
+if (iedom){
+cross_marquee=document.getElementById? document.getElementById("iemarquee") : document.all.iemarquee
+cross_marquee.style.left=parseInt(marqueewidth)+8+"px"
+cross_marquee.innerHTML=marqueecontent
+actualwidth=document.all? temp.offsetWidth : document.getElementById("temp").offsetWidth
+}
+else if (document.layers){
+ns_marquee=document.ns_marquee.document.ns_marquee2
+ns_marquee.left=parseInt(marqueewidth)+8
+ns_marquee.document.write(marqueecontent)
+ns_marquee.document.close()
+actualwidth=ns_marquee.document.width
+}
+lefttime=setInterval("scrollmarquee()",20)
+}
+window.onload=populate
+
+function scrollmarquee(){
+if (iedom){
+if (parseInt(cross_marquee.style.left)>(actualwidth*(-1)+8))
+cross_marquee.style.left=parseInt(cross_marquee.style.left)-copyspeed+"px"
+else
+cross_marquee.style.left=parseInt(marqueewidth)+8+"px"
+
+}
+else if (document.layers){
+if (ns_marquee.left>(actualwidth*(-1)+8))
+ns_marquee.left-=copyspeed
+else
+ns_marquee.left=parseInt(marqueewidth)+8
+}
+}
+
+if (iedom||document.layers){
+with (document){
+document.write(\'<table border="0" cellspacing="0" cellpadding="0"><td>\')
+if (iedom){
+write(\'<div style="position:relative;width:\'+marqueewidth+\';height:\'+marqueeheight+\';overflow:hidden">\')
+write(\'<div style="position:absolute;width:\'+marqueewidth+\';height:\'+marqueeheight+\';background-color:\'+marqueebgcolor+\'" onMouseover="copyspeed=pausespeed" onMouseout="copyspeed=marqueespeed">\')
+write(\'<div id="iemarquee" style="position:absolute;left:0px;top:0px"></div>\')
+write(\'</div></div>\')
+}
+else if (document.layers){
+write(\'<ilayer width=\'+marqueewidth+\' height=\'+marqueeheight+\' name="ns_marquee" bgColor=\'+marqueebgcolor+\'>\')
+write(\'<layer name="ns_marquee2" left=0 top=0 onMouseover="copyspeed=pausespeed" onMouseout="copyspeed=marqueespeed"></layer>\')
+write(\'</ilayer>\')
+}
+document.write(\'</td></table>\')
+}
+}
+</script>';
+
+///end of code for notification
+
+
 foreach($moduleList as $module_name)
 {
 	$xtpl->assign("MODULE_NAME", $app_list_strings['moduleList'][$module_name]);

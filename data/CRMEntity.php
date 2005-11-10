@@ -312,6 +312,17 @@ $vtlog->logthis("module is =".$module,'info');
 	$sql = "update crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
 			
       $adb->query($sql);
+	  $sql1 ="delete from ownernotify where crmid=".$this->id;
+      $adb->query($sql1);
+      if($ownerid != $current_user->id)
+      {
+            $sql1 = "insert into ownernotify values(".$this->id.",".$ownerid.",'')";
+            $adb->query($sql1);
+      }
+
+
+
+	  
     }
     else
     {
