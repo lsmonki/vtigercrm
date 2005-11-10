@@ -5558,5 +5558,16 @@ E</constraint>
                 <data>
                 </data>
         </table>
+	<table name="ownernotify">
+        <field name="crmid" type="I" size="19">
+        </field>
+        <field name="smownerid" type="I" size="19">
+        </field>
+        <field name="flag" type="I" size="3">
+        </field>
+        <opt>Type=InnoDB</opt>
+        <data>
+        </data>
+    </table>	
 
 </schema>
