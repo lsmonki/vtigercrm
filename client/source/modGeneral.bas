@@ -14,8 +14,8 @@ Option Explicit
 Private Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 
 'Registry Path for vtigerCRM OfficeEdtion
-Public Const REG_PATH As String = "Software\vtiger\vtiger CRM Office Plug-in\4.0"
-Public Const REG_LANG_PATH As String = "Software\vtigerCRM Office Plug-in 1.0"
+Public Const REG_PATH As String = "Software\vtiger\vtigerCRM Office Plug-in\4.2"
+Public Const REG_LANG_PATH As String = "Software\vtigerCRM Office Plug-in 4.2"
 
 'Registry Key Names
 Public Const R_KEY_APP_PATH As String = "applicationpath"
@@ -51,6 +51,8 @@ Public oWordAppObj As Object
 Public a() As String
 Public a_acnt() As String
 Public a_lead() As String
+Public a_tickets() As String
+Public a_user() As String
 
 ''Public Sub ExecuteInShell(ByRef url As String)
 ''On Error Resume Next
@@ -58,19 +60,20 @@ Public a_lead() As String
 ''End Sub
 
 Sub Main()
-On Error GoTo ERROR_EXIT_ROUTINE
 
-If Not bCreateRegPath() Then GoTo ERROR_EXIT_ROUTINE
-
-If Not bGetRegInitValues() Then GoTo ERROR_EXIT_ROUTINE
-
-If Not bGetRegKeyValues() Then GoTo ERROR_EXIT_ROUTINE
-
-If Not bLoadLang() Then GoTo ERROR_EXIT_ROUTINE
-
-ERROR_EXIT_ROUTINE:
-
-EXIT_ROUTINE:
+'On Error GoTo ERROR_EXIT_ROUTINE
+'
+'If Not bCreateRegPath() Then GoTo ERROR_EXIT_ROUTINE
+'
+'If Not bGetRegInitValues() Then GoTo ERROR_EXIT_ROUTINE
+'
+'If Not bGetRegKeyValues() Then GoTo ERROR_EXIT_ROUTINE
+'
+'If Not bLoadLang() Then GoTo ERROR_EXIT_ROUTINE
+'
+'ERROR_EXIT_ROUTINE:
+'
+'EXIT_ROUTINE:
 
 End Sub
 
@@ -159,13 +162,12 @@ On Error GoTo ERROR_EXIT_ROUTINE
 Dim sErrStr As String
 
 sErrStr = gMsg001
-
+ 
 Dim oSoap As New PocketSOAP.CoEnvelope12
 Dim oSoapHttp As New PocketSOAP.HTTPTransport
 Dim svtigerURL As String
 Dim sValue As String
 Dim sArrayvalue(20) As String
-Dim oSoapNode
 
 oSoap.MethodName = "create_session"
 
@@ -181,8 +183,8 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
     End If
     
     sErrStr = gMsg002
-    oSoapHttp.send svtigerURL, oSoap.Serialize
-    oSoap.parse oSoapHttp
+    oSoapHttp.Send svtigerURL, oSoap.Serialize
+    oSoap.Parse oSoapHttp
     
     sErrStr = gMsg005
     If oSoap.Parameters.ItemByName("return").Value = "TempSessionID" Then
@@ -236,8 +238,8 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
     End If
     
      sErrStr = gMsg002
-    oSoapHttp.send svtigerURL, oSoap.Serialize
-    oSoap.parse oSoapHttp
+    oSoapHttp.Send svtigerURL, oSoap.Serialize
+    oSoap.Parse oSoapHttp
     
     sErrStr = gMsg005
     If oSoap.Parameters.ItemByName("return").Value = "Success" Then
@@ -271,6 +273,8 @@ Dim i As Integer
 lstFields.AddItem "Contact Fields", 0
 lstFields.AddItem "Account Fields", 1
 lstFields.AddItem "Lead Fields", 2
+lstFields.AddItem "Ticket Fields", 3
+lstFields.AddItem "User Fields", 4
 Set lstFields = Nothing
 End Function
 
@@ -308,8 +312,8 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
     End If
 
     sErrStr = gMsg005
-    oSoapHttp.send svtigerURL, oSoap.Serialize
-    oSoap.parse oSoapHttp
+    oSoapHttp.Send svtigerURL, oSoap.Serialize
+    oSoap.Parse oSoapHttp
     
     If oSoap.Serialize <> "" Then
         Call sParseXML(oSoap.Serialize)
@@ -343,11 +347,11 @@ Dim sErrStr As String
 
 sErrStr = gMsg001
 
-Dim oXMLDoc As New MSXML2.DOMDocument30
-Dim oXMLElmt_Root As MSXML2.IXMLDOMElement
-Dim oXMLBody As MSXML2.IXMLDOMElement
-Dim oXMLReturnElmt As MSXML2.IXMLDOMNode
-Dim oXMLFieldNode As MSXML2.IXMLDOMNode
+Dim oXMLDoc As New MSXML.DOMDocument
+Dim oXMLElmt_Root As MSXML.IXMLDOMElement
+Dim oXMLBody As MSXML.IXMLDOMElement
+Dim oXMLReturnElmt As MSXML.IXMLDOMNode
+Dim oXMLFieldNode As MSXML.IXMLDOMNode
 Dim i As Integer
 
 
@@ -412,8 +416,8 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
     End If
     
     sErrStr = gMsg005
-    oSoapHttp.send svtigerURL, oSoap.Serialize
-    oSoap.parse oSoapHttp
+    oSoapHttp.Send svtigerURL, oSoap.Serialize
+    oSoap.Parse oSoapHttp
     
     If oSoap.Serialize <> "" Then
         Call sParseXML_Acnt(oSoap.Serialize)
@@ -446,11 +450,11 @@ Dim sErrStr As String
 
 sErrStr = gMsg001
 
-Dim oXMLDoc As New MSXML2.DOMDocument30
-Dim oXMLElmt_Root As MSXML2.IXMLDOMElement
-Dim oXMLBody As MSXML2.IXMLDOMElement
-Dim oXMLReturnElmt As MSXML2.IXMLDOMNode
-Dim oXMLFieldNode As MSXML2.IXMLDOMNode
+Dim oXMLDoc As New MSXML.DOMDocument
+Dim oXMLElmt_Root As MSXML.IXMLDOMElement
+Dim oXMLBody As MSXML.IXMLDOMElement
+Dim oXMLReturnElmt As MSXML.IXMLDOMNode
+Dim oXMLFieldNode As MSXML.IXMLDOMNode
 Dim i As Integer
 
 
@@ -486,6 +490,61 @@ Set oXMLReturnElmt = Nothing
 Set oXMLFieldNode = Nothing
 End Function
 
+Public Function bGetFieldValues_User() As Boolean
+
+On Error GoTo ERROR_EXIT_ROUTINE
+Dim sErrStr As String
+
+sErrStr = gMsg001
+
+Dim oSoap As New PocketSOAP.CoEnvelope12
+Dim oSoapHttp As New PocketSOAP.HTTPTransport
+Dim svtigerURL As String
+Dim sValue As String
+Dim sArrayvalue(20) As String
+Dim oSoapNode
+
+oSoap.MethodName = "get_user_columns"
+
+If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
+
+    oSoap.Parameters.Create "user_name", gvtigerusername
+    oSoap.Parameters.Create "password", gvtigerpassword
+    svtigerURL = gvtigerurl & "contactserialize.php"
+    
+    If gproxyenabled = "1" Then
+        oSoapHttp.SetProxy gproxyaddress, CInt(gproxyport)
+        oSoapHttp.ProxyAuthentication gproxyusername, gproxypassword
+    End If
+    
+    sErrStr = gMsg005
+    oSoapHttp.Send svtigerURL, oSoap.Serialize
+    oSoap.Parse oSoapHttp
+
+    If oSoap.Serialize <> "" Then
+        Call sParseXML_User(oSoap.Serialize)
+    Else
+        GoTo ERROR_EXIT_ROUTINE
+    End If
+    
+Else
+    sErrStr = ""
+    GoTo ERROR_EXIT_ROUTINE
+End If
+
+bGetFieldValues_User = True
+GoTo EXIT_ROUTINE
+
+ERROR_EXIT_ROUTINE:
+    bGetFieldValues_User = False
+    If sErrStr <> "" Then
+        Call sErrorDlg(sErrStr)
+    End If
+EXIT_ROUTINE:
+    Set oSoap = Nothing
+    Set oSoapHttp = Nothing
+End Function
+
 Public Function bGetFieldValues_Lead() As Boolean
 
 On Error GoTo ERROR_EXIT_ROUTINE
@@ -514,8 +573,8 @@ If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
     End If
     
     sErrStr = gMsg005
-    oSoapHttp.send svtigerURL, oSoap.Serialize
-    oSoap.parse oSoapHttp
+    oSoapHttp.Send svtigerURL, oSoap.Serialize
+    oSoap.Parse oSoapHttp
     
     If oSoap.Serialize <> "" Then
         Call sParseXML_Lead(oSoap.Serialize)
@@ -541,6 +600,153 @@ EXIT_ROUTINE:
     Set oSoapHttp = Nothing
 End Function
 
+Public Function bGetFieldValues_Tickets() As Boolean
+
+On Error GoTo ERROR_EXIT_ROUTINE
+Dim sErrStr As String
+
+sErrStr = gMsg001
+
+Dim oSoap As New PocketSOAP.CoEnvelope12
+Dim oSoapHttp As New PocketSOAP.HTTPTransport
+Dim svtigerURL As String
+Dim sValue As String
+Dim sArrayvalue(20) As String
+Dim oSoapNode
+
+oSoap.MethodName = "get_tickets_columns"
+
+If gvtigerusername <> "" And gvtigerpassword <> "" And gvtigerurl <> "" Then
+
+    oSoap.Parameters.Create "user_name", gvtigerusername
+    oSoap.Parameters.Create "password", gvtigerpassword
+    svtigerURL = gvtigerurl & "contactserialize.php"
+    
+    If gproxyenabled = "1" Then
+        oSoapHttp.SetProxy gproxyaddress, CInt(gproxyport)
+        oSoapHttp.ProxyAuthentication gproxyusername, gproxypassword
+    End If
+    
+    sErrStr = gMsg005
+    oSoapHttp.Send svtigerURL, oSoap.Serialize
+    oSoap.Parse oSoapHttp
+    
+    If oSoap.Serialize <> "" Then
+        Call sParseXML_Tickets(oSoap.Serialize)
+    Else
+        GoTo ERROR_EXIT_ROUTINE
+    End If
+    
+Else
+    sErrStr = ""
+    GoTo ERROR_EXIT_ROUTINE
+End If
+
+bGetFieldValues_Tickets = True
+GoTo EXIT_ROUTINE
+
+ERROR_EXIT_ROUTINE:
+    bGetFieldValues_Tickets = False
+    If sErrStr <> "" Then
+        Call sErrorDlg(sErrStr)
+    End If
+EXIT_ROUTINE:
+    Set oSoap = Nothing
+    Set oSoapHttp = Nothing
+End Function
+Public Function sParseXML_User(sXMLString)
+
+On Error GoTo ERROR_EXIT_ROUTINE
+Dim sErrStr As String
+
+sErrStr = gMsg001
+
+Dim oXMLDoc As New MSXML.DOMDocument
+Dim oXMLElmt_Root As MSXML.IXMLDOMElement
+Dim oXMLBody As MSXML.IXMLDOMElement
+Dim oXMLReturnElmt As MSXML.IXMLDOMNode
+Dim oXMLFieldNode As MSXML.IXMLDOMNode
+Dim i As Integer
+
+
+If oXMLDoc.loadXML(sXMLString) Then
+    sErrStr = gMsg005
+    
+    Set oXMLElmt_Root = oXMLDoc.documentElement
+    Set oXMLBody = oXMLElmt_Root.childNodes(0)
+    
+    Set oXMLReturnElmt = oXMLBody.selectSingleNode("//E:get_user_columnsResponse/return")
+    
+    ReDim a_user(oXMLReturnElmt.childNodes.Length - 1) As String
+    
+    For i = 0 To oXMLReturnElmt.childNodes.Length - 1
+        Set oXMLFieldNode = oXMLReturnElmt.childNodes(i)
+        a_user(i) = oXMLFieldNode.childNodes(0).Text
+    Next i
+Else
+    sErrStr = gMsg005
+End If
+
+GoTo EXIT_ROUTINE
+
+ERROR_EXIT_ROUTINE:
+   If sErrStr <> "" Then
+        Call sErrorDlg(sErrStr & Err.Description)
+    End If
+EXIT_ROUTINE:
+Set oXMLDoc = Nothing
+Set oXMLElmt_Root = Nothing
+Set oXMLBody = Nothing
+Set oXMLReturnElmt = Nothing
+Set oXMLFieldNode = Nothing
+End Function
+
+Public Function sParseXML_Tickets(sXMLString)
+
+On Error GoTo ERROR_EXIT_ROUTINE
+Dim sErrStr As String
+
+sErrStr = gMsg001
+
+Dim oXMLDoc As New MSXML.DOMDocument
+Dim oXMLElmt_Root As MSXML.IXMLDOMElement
+Dim oXMLBody As MSXML.IXMLDOMElement
+Dim oXMLReturnElmt As MSXML.IXMLDOMNode
+Dim oXMLFieldNode As MSXML.IXMLDOMNode
+Dim i As Integer
+
+
+If oXMLDoc.loadXML(sXMLString) Then
+    sErrStr = gMsg005
+    
+    Set oXMLElmt_Root = oXMLDoc.documentElement
+    Set oXMLBody = oXMLElmt_Root.childNodes(0)
+    
+    Set oXMLReturnElmt = oXMLBody.selectSingleNode("//E:get_tickets_columnsResponse/return")
+    
+    ReDim a_tickets(oXMLReturnElmt.childNodes.Length - 1) As String
+    
+    For i = 0 To oXMLReturnElmt.childNodes.Length - 1
+        Set oXMLFieldNode = oXMLReturnElmt.childNodes(i)
+        a_tickets(i) = oXMLFieldNode.childNodes(0).Text
+    Next i
+Else
+    sErrStr = gMsg005
+End If
+
+GoTo EXIT_ROUTINE
+
+ERROR_EXIT_ROUTINE:
+   If sErrStr <> "" Then
+        Call sErrorDlg(sErrStr)
+    End If
+EXIT_ROUTINE:
+Set oXMLDoc = Nothing
+Set oXMLElmt_Root = Nothing
+Set oXMLBody = Nothing
+Set oXMLReturnElmt = Nothing
+Set oXMLFieldNode = Nothing
+End Function
 Public Function sParseXML_Lead(sXMLString)
 
 On Error GoTo ERROR_EXIT_ROUTINE
@@ -548,11 +754,11 @@ Dim sErrStr As String
 
 sErrStr = gMsg001
 
-Dim oXMLDoc As New MSXML2.DOMDocument30
-Dim oXMLElmt_Root As MSXML2.IXMLDOMElement
-Dim oXMLBody As MSXML2.IXMLDOMElement
-Dim oXMLReturnElmt As MSXML2.IXMLDOMNode
-Dim oXMLFieldNode As MSXML2.IXMLDOMNode
+Dim oXMLDoc As New MSXML.DOMDocument
+Dim oXMLElmt_Root As MSXML.IXMLDOMElement
+Dim oXMLBody As MSXML.IXMLDOMElement
+Dim oXMLReturnElmt As MSXML.IXMLDOMNode
+Dim oXMLFieldNode As MSXML.IXMLDOMNode
 Dim i As Integer
 
 

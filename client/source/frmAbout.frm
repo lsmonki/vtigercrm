@@ -2,59 +2,59 @@ VERSION 5.00
 Begin VB.Form frmAbout 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "About vtigerCRM Word Add-In"
-   ClientHeight    =   1545
+   ClientHeight    =   2400
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   5520
+   ClientWidth     =   4560
    Icon            =   "frmAbout.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   1545
-   ScaleWidth      =   5520
+   ScaleHeight     =   2400
+   ScaleWidth      =   4560
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
    Begin VB.PictureBox Picture1 
       BorderStyle     =   0  'None
-      Height          =   975
-      Left            =   200
+      Height          =   735
+      Left            =   960
       Picture         =   "frmAbout.frx":038A
-      ScaleHeight     =   975
-      ScaleWidth      =   735
+      ScaleHeight     =   735
+      ScaleWidth      =   2535
       TabIndex        =   4
-      Top             =   240
-      Width           =   735
+      Top             =   120
+      Width           =   2535
    End
    Begin VB.CommandButton OKButton 
       Caption         =   "OK"
       Height          =   375
-      Left            =   4200
+      Left            =   3240
       TabIndex        =   3
-      Top             =   1080
+      Top             =   1920
       Width           =   1215
    End
    Begin VB.Label Label3 
       Caption         =   "Word Version 9.0"
-      Height          =   375
-      Left            =   1080
+      Height          =   255
+      Left            =   120
       TabIndex        =   2
-      Top             =   960
+      Top             =   1920
       Width           =   3015
    End
    Begin VB.Label Label2 
       Caption         =   "Copyright © 2004-2005 vtiger.com. All rights reserverd."
-      Height          =   375
-      Left            =   1080
+      Height          =   615
+      Left            =   120
       TabIndex        =   1
-      Top             =   360
+      Top             =   1200
       Width           =   4335
    End
    Begin VB.Label Label1 
       Caption         =   "Word Add-In Version 1.0"
       Height          =   255
-      Left            =   1080
+      Left            =   120
       TabIndex        =   0
-      Top             =   120
+      Top             =   960
       Width           =   4335
    End
 End

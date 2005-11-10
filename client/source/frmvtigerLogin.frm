@@ -2,16 +2,16 @@ VERSION 5.00
 Begin VB.Form frmvtigerLogin 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "vtigerCRM Word Add-In"
-   ClientHeight    =   1485
+   ClientHeight    =   1665
    ClientLeft      =   2175
    ClientTop       =   1935
-   ClientWidth     =   5130
+   ClientWidth     =   4380
    Icon            =   "frmvtigerLogin.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   1485
-   ScaleWidth      =   5130
+   ScaleHeight     =   1665
+   ScaleWidth      =   4380
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
 End

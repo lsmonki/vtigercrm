@@ -1,11 +1,11 @@
 VERSION 5.00
 Begin {AC0714F6-3D04-11D1-AE7D-00A0C90F26F4} Connect 
-   ClientHeight    =   10020
+   ClientHeight    =   9630
    ClientLeft      =   1740
    ClientTop       =   1545
-   ClientWidth     =   11415
-   _ExtentX        =   20135
-   _ExtentY        =   17674
+   ClientWidth     =   10560
+   _ExtentX        =   18627
+   _ExtentY        =   16986
    _Version        =   393216
    Description     =   "vtigerCRM MSOffice Add-In"
    DisplayName     =   "vtigerCRM MSOffice Add-In"
@@ -59,17 +59,16 @@ Attribute oInsertMergerCmdBar.VB_VarHelpID = -1
 Dim WithEvents oAboutCmdBar As Office.CommandBarButton
 Attribute oAboutCmdBar.VB_VarHelpID = -1
 
-Private Sub IDTExtensibility_OnStartupComplete(custom() As Variant)
+Private Sub IDTExtensibility2_OnAddInsUpdate(custom() As Variant)
+
+End Sub
+
+Private Sub IDTExtensibility2_OnStartupComplete(custom() As Variant)
     If GetSetting(App.Title, "Settings", "DisplayOnConnect", "0") = "1" Then
         'set this to display the form on connect
         Me.Show
     End If
 End Sub
-
-Private Sub IDTExtensibility2_OnAddInsUpdate(custom() As Variant)
-
-End Sub
-
 Private Sub IDTExtensibility2_OnBeginShutdown(custom() As Variant)
 Set oWordAppObj = Nothing
 Set oWordApp = Nothing
@@ -82,8 +81,21 @@ Set oAboutCmdBar = Nothing
 End Sub
 
 Private Sub IDTExtensibility2_OnConnection(ByVal Application As Object, ByVal ConnectMode As AddInDesignerObjects.ext_ConnectMode, ByVal AddInInst As Object, custom() As Variant)
+On Error GoTo ERROR_EXIT_ROUTINE
+
 Set oWordAppObj = Application
+
+If Not bCreateRegPath() Then GoTo ERROR_EXIT_ROUTINE
+
+If Not bGetRegInitValues() Then GoTo ERROR_EXIT_ROUTINE
+
+If Not bGetRegKeyValues() Then GoTo ERROR_EXIT_ROUTINE
+
+If Not bLoadLang() Then GoTo ERROR_EXIT_ROUTINE
+
 Call IntiCmdBar(Application)
+ERROR_EXIT_ROUTINE:
+EXIT_ROUTINE:
 End Sub
 
 Private Sub IDTExtensibility2_OnDisconnection(ByVal RemoveMode As AddInDesignerObjects.ext_DisconnectMode, custom() As Variant)
@@ -96,11 +108,6 @@ Set oLogoutCmdBar = Nothing
 Set oInsertMergerCmdBar = Nothing
 Set oAboutCmdBar = Nothing
 End Sub
-
-Private Sub IDTExtensibility2_OnStartupComplete(custom() As Variant)
-'MsgBox oWordApp.CommandBars.Count
-End Sub
-
 'this event fires when the menu is clicked in the IDE
 Private Sub MenuHandler_Click(ByVal CommandBarControl As Object, handled As Boolean, CancelDefault As Boolean)
     Me.Show
@@ -299,6 +306,8 @@ Private Sub oInsertMergerCmdBar_Click(ByVal Ctrl As Office.CommandBarButton, Can
 If Not bGetFieldValues Then GoTo ERROR_EXIT_ROUTINE
 If Not bGetFieldValues_Acnt Then GoTo ERROR_EXIT_ROUTINE
 If Not bGetFieldValues_Lead Then GoTo ERROR_EXIT_ROUTINE
+If Not bGetFieldValues_Tickets Then GoTo ERROR_EXIT_ROUTINE
+If Not bGetFieldValues_User Then GoTo ERROR_EXIT_ROUTINE
 frmvtigerMerge.Show vbModal
 ERROR_EXIT_ROUTINE:
 End Sub

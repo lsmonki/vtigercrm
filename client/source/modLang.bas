@@ -18,9 +18,11 @@ Private Const MAX_PATH = 260
 'Gloabal Constants for Language Settings
 Public Const sEnglish_IniFileName As String = "english.ini"
 Public Const sGerman_IniFileName As String = "german.ini"
+Public Const sFrench_IniFileName As String = "french.ini"
 
 Public Const LangEnglish As String = "en"
 Public Const LangGerman As String = "de"
+Public Const LangFrench As String = "fr"
 
 Public Const sSec_Common As String = "vtigerCRM_Common"
 Public Const sSec_WordMenu As String = "vtigerCRM_WordMenu"
@@ -136,6 +138,8 @@ If sRegLangValue = LangEnglish Then
     sLangAppPath = gapppath & "\Language\" & sEnglish_IniFileName
 ElseIf sRegLangValue = LangGerman Then
     sLangAppPath = gapppath & "\Language\" & sGerman_IniFileName
+ElseIf sRegLangValue = LangFrench Then
+    sLangAppPath = gapppath & "\Language\" & sFrench_IniFileName
 End If
 
 sGetLangFilePath = sLangAppPath

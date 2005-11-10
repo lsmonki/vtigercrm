@@ -1,5 +1,5 @@
 [Root]
-Most Recent Package=Dep File 1
+Most Recent Package=Standard Setup Package 1
 
 
 [Package|Dep File 1|Root]
@@ -73,5 +73,101 @@ PackageFolder=C:\vtigerCRM\06122004\vtigerCRMWordMerge\Bin
 ProjectFolder=C:\vtigerCRM\06122004\vtigerCRMWordMerge\Source
 ServerSideCab=
 File1=C:\vtigerCRM\06122004\vtigerCRMWordMerge\Bin\vtigerCRMOfficePlugin.DEP
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|Standard Setup Package 1|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=D:\wesat-server\vtiger_crm\wordintegration\client\source\Package
+
+[Package|Standard Setup Package 1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Standard Setup Package 1|Files Found]
+
+[Package|Standard Setup Package 1|Files Released]
+
+[Package|Standard Setup Package 1|Missing Dependency Information]
+C:\WINNT\system32\msxml.dll=
+C:\Program Files\vtigerCRM\OfficePlugin\pocketHTTP.dll=
+C:\Program Files\vtigerCRM\OfficePlugin\pSOAP32.dll=
+C:\Program Files\Microsoft Office\Office\MSWORD9.OLB=
+C:\Program Files\Common Files\Microsoft Shared\OFFICE11\MSO.DLL=
+C:\PocketSOAP.1.5.2\pocketHTTP.dll=
+C:\PocketSOAP.1.5.2\pSOAP32.dll=
+
+[Package|Standard Setup Package 1|Out-of-Date Dependency Information]
+
+[Package|Standard Setup Package 1|Files Added]
+
+[Package|Standard Setup Package 1|Files Removed]
+c:\program files\common files\microsoft shared\office11\mso.dll=
+c:\program files\microsoft office\office\msword9.olb=
+
+[Package|Standard Setup Package 1|Files In Project]
+D:\wesat-server\vtiger_crm\wordintegration\client\bin\vtigerCRMWordPlugin.dll=Yes
+C:\WINNT\system32\MSVBVM60.DLL=Yes
+C:\WINNT\system32\OLEAUT32.DLL=Yes
+C:\WINNT\system32\OLEPRO32.DLL=Yes
+C:\WINNT\system32\ASYCFILT.DLL=Yes
+C:\WINNT\system32\STDOLE2.TLB=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\Program Files\Common Files\Microsoft Shared\OFFICE11\MSO.DLL=No
+C:\Program Files\Microsoft Office\Office\MSWORD9.OLB=No
+C:\WINNT\system32\msxml.dll=Yes
+C:\WINNT\system32\COMCTL32.OCX=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINNT\system32\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\PocketSOAP.1.5.2\pSOAP32.dll=Yes
+C:\PocketSOAP.1.5.2\pocketHTTP.dll=Yes
+
+[Package|Standard Setup Package 1|Configure Registry Files]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure Remote Servers]
+Applicable=No
+
+[Package|Standard Setup Package 1|Install Locations]
+D:\wesat-server\vtiger_crm\wordintegration\client\bin\vtigerCRMWordPlugin.dll=$(AppPath)
+C:\WINNT\system32\MSVBVM60.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\Program Files\vtigerCRM\OfficePlugin\pSOAP32.dll=$(WinSysPath)
+C:\Program Files\vtigerCRM\OfficePlugin\pocketHTTP.dll=$(WinSysPath)
+C:\WINNT\system32\msxml.dll=$(WinSysPath)
+C:\WINNT\system32\COMCTL32.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINNT\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\PocketSOAP.1.5.2\pSOAP32.dll=$(WinSysPath)
+C:\PocketSOAP.1.5.2\pocketHTTP.dll=$(WinSysPath)
+
+[Package|Standard Setup Package 1|Configure Shared Files]
+Applicable=Yes
+D:\wesat-server\vtiger_crm\wordintegration\client\bin\vtigerCRMWordPlugin.dll=Yes
+
+[Package|Standard Setup Package 1|Distribution]
+Type=single
+Size=
+Title=vtigerCRM Word Plugin 4.2
+
+[Package|Standard Setup Package 1|Package]
+PackageFolder=D:\wesat-server\vtiger_crm\wordintegration\client\source\Package
+ProjectFolder=D:\wesat-server\vtiger_crm\wordintegration\client\source
+ServerSideCab=
+File1=D:\wesat-server\vtiger_crm\wordintegration\client\source\Package\setup.exe
+File2=D:\wesat-server\vtiger_crm\wordintegration\client\source\Package\Setup.Lst
+File3=D:\wesat-server\vtiger_crm\wordintegration\client\source\Package\vtigerCRMWordPlugin.CAB
 Handler1=PDWizard.FolderDplySubWiz
 Handler2=PDWizard.WebPostDplySubWiz

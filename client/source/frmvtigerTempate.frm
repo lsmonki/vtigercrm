@@ -158,6 +158,19 @@ If lstColumns.Selected(lstColumns.ListIndex) = True Then
                 lstFields.AddItem Replace(lstColumns.Text, " Fields", "") & ": " & a_lead(i), i
             Next i
         End If
+    Case 3:
+        If UBound(a_tickets) <> 0 Then
+            For i = 0 To UBound(a_tickets)
+                lstFields.AddItem Replace(lstColumns.Text, " Fields", "") & ": " & a_tickets(i), i
+            Next i
+        End If
+    Case 4:
+        If UBound(a_user) <> 0 Then
+            For i = 0 To UBound(a_user)
+                lstFields.AddItem Replace(lstColumns.Text, " Fields", "") & ": " & a_user(i), i
+            Next i
+        End If
+        
     End Select
 End If
 End Sub
