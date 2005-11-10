@@ -1445,7 +1445,7 @@ function GETTABLEID($module)
 		$res176 = $oldconn->query($sql176);
 
 
-//Commented by Mickie to avoid the repeated entry of troubletickets solution,comments in field table
+//Comment removeded by Mickie to put the entry of troubletickets solution,comments in field table
 
 		$sql172="insert into field values (13,".$oldconn->getUniqueID("field").",'solution','troubletickets',1,'19','solution','Solution',1,0,0,100,1,4,1,'V~O')";
 		echo '<br> '.$sql172 .' <br> ';
@@ -1539,10 +1539,10 @@ function GETTABLEID($module)
 
 
 
-
-		$sql172 = "update field set uitype=52 where columnname='smownerid' and tablename='crmentity' and fieldlabel='Assigned To' and typeofdata='V~M' and tabid=9";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
+		//Commented by Mickie to avoid the change of uitype to 52 -- aug-24
+		//$sql172 = "update field set uitype=52 where columnname='smownerid' and tablename='crmentity' and fieldlabel='Assigned To' and typeofdata='V~M' and tabid=9";
+		//echo '<br> '.$sql172 .' <br> ';
+		//$res172 = $oldconn->query($sql172);
 
 
 		$sql172 = "update field set displaytype=3 where columnname='eventstatus' and tablename='activity' and fieldlabel='Status' and typeofdata='V~O' and tabid=9";
@@ -1563,10 +1563,10 @@ function GETTABLEID($module)
 
 
 
-
-		$sql172 = "update field set uitype=52 where columnname='smownerid' and tablename='crmentity' and fieldlabel='Assigned To' and typeofdata='I~O' and tabid=16";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
+		//Commented by Mickie to avoid the chage of uitype to 52 -- aug-24
+		//$sql172 = "update field set uitype=52 where columnname='smownerid' and tablename='crmentity' and fieldlabel='Assigned To' and typeofdata='I~O' and tabid=16";
+		//echo '<br> '.$sql172 .' <br> ';
+		//$res172 = $oldconn->query($sql172);
 
 
 
@@ -1712,687 +1712,76 @@ function GETTABLEID($module)
 		echo '<br> '.$sql108 .' <br> ';
 		$res108 = $oldconn->query($sql108);
 
-		$profile1_id= $oldconn->query_result($res108,0,'profileid');
-
-		$sql112="insert into profile2tab values (".$profile1_id.",18,0)";
-		echo '<br> '.$sql112 .' <br> ';
-		$res112 = $oldconn->query($sql112);
-
-		$sql113="insert into profile2tab values (".$profile1_id.",19,0)";
-		echo '<br> '.$sql113 .' <br> ';
-		$res113 = $oldconn->query($sql113);
-
-		$sql114="insert into profile2tab values (".$profile1_id.",20,0)";
-		echo '<br> '.$sql114 .' <br> ';
-		$res114 = $oldconn->query($sql114);
-
-		$sql115="insert into profile2tab values (".$profile1_id.",21,0)";
-		echo '<br> '.$sql115 .' <br> ';
-		$res115 = $oldconn->query($sql115);
-
-		$sql116="insert into profile2tab values (".$profile1_id.",22,0)";
-		echo '<br> '.$sql116 .' <br> ';
-		$res116 = $oldconn->query($sql116);
-
-		$sql117="insert into profile2tab values (".$profile1_id.",23,0)";
-		echo '<br> '.$sql117 .' <br> ';
-		$res117 = $oldconn->query($sql117);
-
-		$sql118="insert into profile2tab values (".$profile1_id.",24,0)";
-		echo '<br> '.$sql118 .' <br> ';
-		$res118 = $oldconn->query($sql118);
-
-		$sql119="insert into profile2tab values (".$profile1_id.",25,0)";
-		echo '<br> '.$sql119 .' <br> ';
-		$res119 = $oldconn->query($sql119);
-
-
-
-
-		$sql109="select profileid from profile where profilename='Sales Profile'";
-		echo '<br> '.$sql109 .' <br> ';
-		$res109 = $oldconn->query($sql109);
-		$profile2_id= $oldconn->query_result($res109,0,'profileid');                        
-
-
-
-
-
-		$sql120="insert into profile2tab values (".$profile2_id.",18,0)";
-		echo '<br> '.$sql120 .' <br> ';
-		$res120 = $oldconn->query($sql120);
-
-
-		$sql121="insert into profile2tab values (".$profile2_id.",19,0)";
-		echo '<br> '.$sql121 .' <br> ';
-		$res121 = $oldconn->query($sql121);
-
-
-		$sql122="insert into profile2tab values (".$profile2_id.",20,0)";
-		echo '<br> '.$sql122 .' <br> ';
-		$res122 = $oldconn->query($sql122);
-
-
-		$sql123="insert into profile2tab values (".$profile2_id.",21,0)";
-		echo '<br> '.$sql123 .' <br> ';
-		$res123 = $oldconn->query($sql123);
-
-
-		$sql124="insert into profile2tab values (".$profile2_id.",22,0)";
-		echo '<br> '.$sql124 .' <br> ';
-		$res124 = $oldconn->query($sql124);
-
-
-		$sql="insert into profile2tab values (".$profile2_id.",23,0)";
-		echo '<br> '.$sql119 .' <br> ';
-		$res119 = $oldconn->query($sql119);
-
-
-		$sql125="insert into profile2tab values (".$profile2_id.",24,0)";
-		echo '<br> '.$sql125 .' <br> ';
-		$res125 = $oldconn->query($sql125);
-
-
-		$sql126="insert into profile2tab values (".$profile2_id.",25,0)";
-		echo '<br> '.$sql126 .' <br> ';
-		$res126 = $oldconn->query($sql126);
-
-		$sql110="select profileid from profile where profilename='Support Profile'";
-		echo '<br> '.$sql110 .' <br> ';
-		$res110 = $oldconn->query($sql110);
-		$profile3_id= $oldconn->query_result($res110,0,'profileid');                        
-
-
-
-		$sql127="insert into profile2tab values (".$profile3_id.",18,0)";
-		echo '<br> '.$sql127 .' <br> ';
-		$res127 = $oldconn->query($sql127);
-
-		$sql128="insert into profile2tab values (".$profile3_id.",19,0)";
-		echo '<br> '.$sql128 .' <br> ';
-		$res128 = $oldconn->query($sql128);
-
-		$sql129="insert into profile2tab values (".$profile3_id.",20,0)";
-		echo '<br> '.$sql129 .' <br> ';
-		$res129 = $oldconn->query($sql129);
-
-		$sql130="insert into profile2tab values (".$profile3_id.",21,0)";
-		echo '<br> '.$sql130 .' <br> ';
-		$res130 = $oldconn->query($sql130);
-
-		$sql131="insert into profile2tab values (".$profile3_id.",22,0)";
-		echo '<br> '.$sql131 .' <br> ';
-		$res131 = $oldconn->query($sql131);
-
-		$sql132="insert into profile2tab values (".$profile3_id.",23,0)";
-		echo '<br> '.$sql132 .' <br> ';
-		$res132 = $oldconn->query($sql132);
-
-		$sql133="insert into profile2tab values (".$profile3_id.",24,0)";
-		echo '<br> '.$sql133 .' <br> ';
-		$res133 = $oldconn->query($sql133);
-
-		$sql134="insert into profile2tab values (".$profile3_id.",25,0)";
-		echo '<br> '.$sql134 .' <br> ';
-		$res134 = $oldconn->query($sql134);
-
-
-
-
-
-		$sql111="select profileid from profile where profilename='Guest Profile'";
-		echo '<br> '.$sql111 .' <br> ';
-		$res111 = $oldconn->query($sql111);
-		$profile4_id= $oldconn->query_result($res111,0,'profileid');                        
-
-
-
-		$sql135="insert into profile2tab values (".$profile4_id.",18,0)";
-		echo '<br> '.$sql135 .' <br> ';
-		$res135 = $oldconn->query($sql135);
-
-		$sql136="insert into profile2tab values (".$profile4_id.",19,0)";
-		echo '<br> '.$sql136 .' <br> ';
-		$res136 = $oldconn->query($sql136);
-
-
-		$sql137="insert into profile2tab values (".$profile4_id.",20,0)";
-		echo '<br> '.$sql137 .' <br> ';
-		$res137 = $oldconn->query($sql137);
-
-
-		$sql138="insert into profile2tab values (".$profile4_id.",21,0)";
-		echo '<br> '.$sql138 .' <br> ';
-		$res138 = $oldconn->query($sql138);
-
-
-		$sql139="insert into profile2tab values (".$profile4_id.",22,0)";
-		echo '<br> '.$sql139 .' <br> ';
-		$res139 = $oldconn->query($sql139);
-
-
-		$sql140="insert into profile2tab values (".$profile4_id.",23,0)";
-		echo '<br> '.$sql140 .' <br> ';
-		$res1140 = $oldconn->query($sql140);
-
-
-		$sql141="insert into profile2tab values (".$profile4_id.",24,0)";
-		echo '<br> '.$sql141 .' <br> ';
-		$res141 = $oldconn->query($sql141);
-
-
-		$sql142="insert into profile2tab values (".$profile4_id.",25,0)";
-		echo '<br> '.$sql142 .' <br> ';
-		$res142 = $oldconn->query($sql142);
-
-
-
-
-		$sql143="insert into profile2standardpermissions values (".$profile1_id.",18,0,0)";
+//Modified by Mickie to enter the profile2tab values -- aug-24
+//		$profile1_id= $oldconn->query_result($res108,0,'profileid');
+
+$sql = 'select * from profile';
+$res = $this->oldconn->query($sql);
+$noofprofiles = $this->oldconn->num_rows($res);
+
+for($i=0;$i<$noofprofiles;$i++)
+{                                    
+    $profile1_id = $this->oldconn->query_result($res,$i,'profileid');
+
+    $sql112="insert into profile2tab values (".$profile1_id.",18,0)";
+    echo '<br> '.$sql112 .' <br> ';
+    $res112 = $this->oldconn->query($sql112);
+                                    
+    $sql113="insert into profile2tab values (".$profile1_id.",19,0)";
+    echo '<br> '.$sql113 .' <br> ';
+    $res113 = $this->oldconn->query($sql113);
+                                    
+    $sql114="insert into profile2tab values (".$profile1_id.",20,0)";
+    echo '<br> '.$sql114 .' <br> ';
+    $res114 = $this->oldconn->query($sql114);
+                                    
+    $sql115="insert into profile2tab values (".$profile1_id.",21,0)";
+    echo '<br> '.$sql115 .' <br> ';
+    $res115 = $this->oldconn->query($sql115);
+                                    
+    $sql116="insert into profile2tab values (".$profile1_id.",22,0)";
+    echo '<br> '.$sql116 .' <br> ';
+    $res116 = $this->oldconn->query($sql116);
+                                    
+    $sql117="insert into profile2tab values (".$profile1_id.",23,0)";
+    echo '<br> '.$sql117 .' <br> ';
+    $res117 = $this->oldconn->query($sql117);
+                                    
+    $sql118="insert into profile2tab values (".$profile1_id.",24,0)";
+    echo '<br> '.$sql118 .' <br> ';
+    $res118 = $this->oldconn->query($sql118);
+                                    
+    $sql119="insert into profile2tab values (".$profile1_id.",25,0)";
+    echo '<br> '.$sql119 .' <br> ';
+    $res119 = $this->oldconn->query($sql119);
+}
+                                    
+//Modified by Mickie to enter the standard profiles correctly.
+$sql = 'select * from profile';
+$profile_res = $this->oldconn->query($sql);
+$noofprofiles = $this->oldconn->num_rows($profile_res);
+
+for($i=0;$i<$noofprofiles;$i++)
+{
+    $profile_id = $this->oldconn->query_result($profile_res,$i,'profileid');
+    for($tabid=18;$tabid<=23;$tabid++)
+    {
+	for($actionid=0;$actionid<=4;$actionid++)
+	{
+	 	//for guest profile - create/edit and delete permissions for Quotes, Orders, Invoice are 1
+		if($profile_id == 4 && ($actionid == 0 || $actionid ==1 || $actionid == 2))		
+		{
+		     $sql143="insert into profile2standardpermissions values (".$profile_id.",".$tabid.",".$actionid.",1)";
+		}
+		else
+		{
+		     $sql143="insert into profile2standardpermissions values (".$profile_id.",".$tabid.",".$actionid.",0)";
+		}
 		echo '<br> '.$sql143 .' <br> ';
-		$res143 = $oldconn->query($sql143);
-
-		$sql144="insert into profile2standardpermissions values (".$profile1_id.",18,1,0)";
-		echo '<br> '.$sql144 .' <br> ';
-		$res144 = $oldconn->query($sql144);
-
-		$sql145="insert into profile2standardpermissions values (".$profile1_id.",18,2,0)";
-		echo '<br> '.$sql145 .' <br> ';
-		$res145 = $oldconn->query($sql145);
-
-		$sql146="insert into profile2standardpermissions values (".$profile1_id.",18,3,0)";
-		echo '<br> '.$sql146 .' <br> ';
-		$res146 = $oldconn->query($sql146);
-
-		$sql147="insert into profile2standardpermissions values (".$profile1_id.",18,4,0)";
-		echo '<br> '.$sql147 .' <br> ';
-		$res147 = $oldconn->query($sql147);
-
-
-		$sql148="insert into profile2standardpermissions values (".$profile1_id.",19,0,0)";
-		echo '<br> '.$sql148 .' <br> ';
-		$res148 = $oldconn->query($sql148);
-
-		$sql149="insert into profile2standardpermissions values (".$profile1_id.",19,1,0)";
-		echo '<br> '.$sql149 .' <br> ';
-		$res149 = $oldconn->query($sql149);
-
-		$sql150="insert into profile2standardpermissions values (".$profile1_id.",19,2,0)";
-		echo '<br> '.$sql150 .' <br> ';
-		$res150 = $oldconn->query($sql150);
-
-
-		$sql151="insert into profile2standardpermissions values (".$profile1_id.",19,3,0)";
-		echo '<br> '.$sql151 .' <br> ';
-		$res151 = $oldconn->query($sql151);
-
-		$sql152="insert into profile2standardpermissions values (".$profile1_id.",19,4,0)";
-		echo '<br> '.$sql152 .' <br> ';
-		$res152 = $oldconn->query($sql152);
-
-
-		$sql153="insert into profile2standardpermissions values (".$profile1_id.",20,0,0)";
-		echo '<br> '.$sql153 .' <br> ';
-		$res153 = $oldconn->query($sql153);
-
-		$sql154="insert into profile2standardpermissions values (".$profile1_id.",20,1,0)";
-		echo '<br> '.$sql154 .' <br> ';
-		$res154 = $oldconn->query($sql154);
-
-		$sql155="insert into profile2standardpermissions values (".$profile1_id.",20,2,0)";
-		echo '<br> '.$sql155 .' <br> ';
-		$res155 = $oldconn->query($sql155);
-
-		$sql156="insert into profile2standardpermissions values (".$profile1_id.",20,3,0)";
-		echo '<br> '.$sql155 .' <br> ';
-		$res155 = $oldconn->query($sql155);
-
-		$sql="insert into profile2standardpermissions values (".$profile1_id.",20,4,0)";
-		echo '<br> '.$sql155 .' <br> ';
-		$res155 = $oldconn->query($sql155);
-
-
-		$sql156="insert into profile2standardpermissions values (".$profile1_id.",21,0,0)";
-		echo '<br> '.$sql156 .' <br> ';
-		$res156 = $oldconn->query($sql156);
-
-		$sql157="insert into profile2standardpermissions values (".$profile1_id.",21,1,0)";
-		echo '<br> '.$sql157 .' <br> ';
-		$res157 = $oldconn->query($sql157);
-
-		$sql158="insert into profile2standardpermissions values (".$profile1_id.",21,2,0)";
-		echo '<br> '.$sql158 .' <br> ';
-		$res158 = $oldconn->query($sql158);
-
-		$sql159="insert into profile2standardpermissions values (".$profile1_id.",21,3,0)";
-		echo '<br> '.$sql159 .' <br> ';
-		$res159 = $oldconn->query($sql159);
-
-		$sql160="insert into profile2standardpermissions values (".$profile1_id.",21,4,0)";
-		echo '<br> '.$sql160 .' <br> ';
-		$res160 = $oldconn->query($sql160);
-
-
-		$sql161="insert into profile2standardpermissions values (".$profile1_id.",22,0,0)";
-		echo '<br> '.$sql161 .' <br> ';
-		$res161 = $oldconn->query($sql161);
-
-		$sql162="insert into profile2standardpermissions values (".$profile1_id.",22,1,0)";
-		echo '<br> '.$sql162 .' <br> ';
-		$res162 = $oldconn->query($sql162);
-
-		$sql163="insert into profile2standardpermissions values (".$profile1_id.",22,2,0)";
-		echo '<br> '.$sql163 .' <br> ';
-		$res163 = $oldconn->query($sql163);
-
-		$sql164="insert into profile2standardpermissions values (".$profile1_id.",22,3,0)";
-		echo '<br> '.$sql164 .' <br> ';
-		$res164 = $oldconn->query($sql164);
-
-		$sql165="insert into profile2standardpermissions values (".$profile1_id.",22,4,0)";
-		echo '<br> '.$sql165 .' <br> ';
-		$res165 = $oldconn->query($sql165);
-
-
-		$sql166="insert into profile2standardpermissions values (".$profile1_id.",23,0,0)";
-		echo '<br> '.$sql166 .' <br> ';
-		$res166 = $oldconn->query($sql166);
-
-		$sql167="insert into profile2standardpermissions values (".$profile1_id.",23,1,0)";
-		echo '<br> '.$sql167 .' <br> ';
-		$res167 = $oldconn->query($sql167);
-
-		$sql168="insert into profile2standardpermissions values (".$profile1_id.",23,2,0)";
-		echo '<br> '.$sql168 .' <br> ';
-		$res168 = $oldconn->query($sql168);
-
-		$sql169="insert into profile2standardpermissions values (".$profile1_id.",23,3,0)";
-		echo '<br> '.$sql169 .' <br> ';
-		$res169 = $oldconn->query($sql169);
-
-		$sql170="insert into profile2standardpermissions values (".$profile1_id.",23,4,0)";
-		echo '<br> '.$sql170 .' <br> ';
-		$res170 = $oldconn->query($sql170);
-
-
-
-		$sql171="insert into profile2standardpermissions values (".$profile2_id.",18,0,0)";
-		echo '<br> '.$sql171 .' <br> ';
-		$res171 = $oldconn->query($sql171);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",18,1,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",18,2,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",18,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",18,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",19,0,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",19,1,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",19,2,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",19,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",19,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",20,0,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",20,1,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",20,2,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",20,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",20,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",21,0,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",21,1,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",21,2,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",21,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",21,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",22,0,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",22,1,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",22,2,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",22,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",22,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",23,0,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",23,1,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",23,2,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",23,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile2_id.",23,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",18,0,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",18,1,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",18,2,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",18,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",18,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",19,0,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",19,1,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",19,2,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",19,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",19,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",20,0,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",20,1,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",20,2,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",20,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",20,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",21,0,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",21,1,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",21,2,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",21,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",21,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",22,0,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",22,1,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",22,2,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",22,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",22,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",23,0,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",23,1,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",23,2,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",23,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile3_id.",23,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",18,0,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",18,1,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",18,2,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",18,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",18,4,0)";	
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",19,0,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",19,1,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",19,2,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",19,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",19,4,0)";	
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",20,0,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",20,1,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",20,2,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",20,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",20,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",21,0,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",21,1,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",21,2,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",21,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",21,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",22,0,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",22,1,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",22,2,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",22,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",22,4,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",23,0,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",23,1,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",23,2,1)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",23,3,0)";
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
-		$sql172="insert into profile2standardpermissions values (".$profile4_id.",23,4,0)";	
-		echo '<br> '.$sql172 .' <br> ';
-		$res172 = $oldconn->query($sql172);
-
+		$res143 = $this->oldconn->query($sql143);
+	}
+    }
+}
 
 
 		//def_org_share entries
