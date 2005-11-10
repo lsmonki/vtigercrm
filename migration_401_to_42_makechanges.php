@@ -1716,54 +1716,54 @@ function GETTABLEID($module)
 //		$profile1_id= $oldconn->query_result($res108,0,'profileid');
 
 $sql = 'select * from profile';
-$res = $this->oldconn->query($sql);
-$noofprofiles = $this->oldconn->num_rows($res);
+$res = $oldconn->query($sql);
+$noofprofiles = $oldconn->num_rows($res);
 
 for($i=0;$i<$noofprofiles;$i++)
 {                                    
-    $profile1_id = $this->oldconn->query_result($res,$i,'profileid');
+    $profile1_id = $oldconn->query_result($res,$i,'profileid');
 
     $sql112="insert into profile2tab values (".$profile1_id.",18,0)";
     echo '<br> '.$sql112 .' <br> ';
-    $res112 = $this->oldconn->query($sql112);
+    $res112 = $oldconn->query($sql112);
                                     
     $sql113="insert into profile2tab values (".$profile1_id.",19,0)";
     echo '<br> '.$sql113 .' <br> ';
-    $res113 = $this->oldconn->query($sql113);
+    $res113 = $oldconn->query($sql113);
                                     
     $sql114="insert into profile2tab values (".$profile1_id.",20,0)";
     echo '<br> '.$sql114 .' <br> ';
-    $res114 = $this->oldconn->query($sql114);
+    $res114 = $oldconn->query($sql114);
                                     
     $sql115="insert into profile2tab values (".$profile1_id.",21,0)";
     echo '<br> '.$sql115 .' <br> ';
-    $res115 = $this->oldconn->query($sql115);
+    $res115 = $oldconn->query($sql115);
                                     
     $sql116="insert into profile2tab values (".$profile1_id.",22,0)";
     echo '<br> '.$sql116 .' <br> ';
-    $res116 = $this->oldconn->query($sql116);
+    $res116 = $oldconn->query($sql116);
                                     
     $sql117="insert into profile2tab values (".$profile1_id.",23,0)";
     echo '<br> '.$sql117 .' <br> ';
-    $res117 = $this->oldconn->query($sql117);
+    $res117 = $oldconn->query($sql117);
                                     
     $sql118="insert into profile2tab values (".$profile1_id.",24,0)";
     echo '<br> '.$sql118 .' <br> ';
-    $res118 = $this->oldconn->query($sql118);
+    $res118 = $oldconn->query($sql118);
                                     
     $sql119="insert into profile2tab values (".$profile1_id.",25,0)";
     echo '<br> '.$sql119 .' <br> ';
-    $res119 = $this->oldconn->query($sql119);
+    $res119 = $oldconn->query($sql119);
 }
                                     
 //Modified by Mickie to enter the standard profiles correctly.
 $sql = 'select * from profile';
-$profile_res = $this->oldconn->query($sql);
-$noofprofiles = $this->oldconn->num_rows($profile_res);
+$profile_res = $oldconn->query($sql);
+$noofprofiles = $oldconn->num_rows($profile_res);
 
 for($i=0;$i<$noofprofiles;$i++)
 {
-    $profile_id = $this->oldconn->query_result($profile_res,$i,'profileid');
+    $profile_id = $oldconn->query_result($profile_res,$i,'profileid');
     for($tabid=18;$tabid<=23;$tabid++)
     {
 	for($actionid=0;$actionid<=4;$actionid++)
@@ -1778,7 +1778,7 @@ for($i=0;$i<$noofprofiles;$i++)
 		     $sql143="insert into profile2standardpermissions values (".$profile_id.",".$tabid.",".$actionid.",0)";
 		}
 		echo '<br> '.$sql143 .' <br> ';
-		$res143 = $this->oldconn->query($sql143);
+		$res143 = $oldconn->query($sql143);
 	}
     }
 }
