@@ -165,10 +165,11 @@ class Order extends CRMEntity {
 		return $this->name;
 	}
 	function get_activities($id)
-	{
-		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held')";
-		renderRelatedActivities($query,$id);
-	}
+        {
+               $query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid,activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus != '' &&  activity.eventstatus = 'Planned')";
+                renderRelatedActivities($query,$id);
+        }
+
 	function get_history($id)
 	{
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
@@ -185,7 +186,7 @@ class Order extends CRMEntity {
 			left join contactdetails on contactdetails.contactid = cntactivityrel.contactid
 			inner join users on crmentity.smcreatorid= users.id
 		where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
-			and (activity.status='Completed' or activity.eventstatus='Held')
+			and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != '' ))
 			and seactivityrel.crmid=".$id."
 		order by createdtime desc";
 		renderRelatedHistory($query,$id);
