@@ -76,7 +76,7 @@ Handler2=PDWizard.FolderDplySubWiz
 
 [Package|Internet Package 2|Root]
 SubWizProgID=PDWizard.InetCABPkgSubWiz
-BuildFolder=C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\source\Package
+BuildFolder=d:\wesat-server\vtiger_crm\wordintegration\bin
 
 [Package|Internet Package 2|Configure DAO ISAMs]
 Applicable=No
@@ -102,7 +102,6 @@ c:\program files\microsoft office\office\msword9.olb=
 c:\winnt\system32\urlmon.dll=
 
 [Package|Internet Package 2|Files In Project]
-C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\bin\vtigerCRM.dll=Yes
 C:\WINNT\system32\MSVBVM60.DLL=Yes
 C:\WINNT\system32\OLEAUT32.DLL=Yes
 C:\WINNT\system32\OLEPRO32.DLL=Yes
@@ -111,6 +110,7 @@ C:\WINNT\system32\STDOLE2.TLB=Yes
 C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
 C:\WINNT\system32\urlmon.dll=No
 C:\Program Files\Microsoft Office\Office\MSWORD9.OLB=No
+D:\wesat-server\vtiger_crm\wordintegration\server\bin\vtigerCRM.dll=Yes
 
 [Package|Internet Package 2|Configure Registry Files]
 Applicable=No
@@ -136,10 +136,10 @@ COMCAT.DLL=thiscab
 Activex=true;true
 
 [Package|Internet Package 2|Package]
-PackageFolder=C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\source\Package
-ProjectFolder=C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\source
-ServerSideCab=C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\source\Package\vtigerCRM.CAB
-File1=C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\source\Package\vtigerCRM.CAB
-File2=C:\AdventNet\WorkingFolder\vtiger_crm\wordintegration\server\source\Package\vtigerCRM.HTM
+PackageFolder=d:\wesat-server\vtiger_crm\wordintegration\bin
+ProjectFolder=D:\wesat-server\vtiger_crm\wordintegration\server\source
+ServerSideCab=d:\wesat-server\vtiger_crm\wordintegration\bin\vtigerCRM.CAB
+File1=d:\wesat-server\vtiger_crm\wordintegration\bin\vtigerCRM.CAB
+File2=d:\wesat-server\vtiger_crm\wordintegration\bin\vtigerCRM.HTM
 Handler1=PDWizard.WebPostDplySubWiz
 Handler2=PDWizard.FolderDplySubWiz

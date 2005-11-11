@@ -1,6 +1,6 @@
 Type=OleDll
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\WINNT\system32\stdole2.tlb#OLE Automation
-Reference=*\G{00020905-0000-0000-C000-000000000046}#8.1#0#..\..\..\..\..\..\Program Files\Microsoft Office\Office\MSWORD9.OLB#Microsoft Word 9.0 Object Library
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\WINNT\System32\STDOLE2.TLB#OLE Automation
+Reference=*\G{00020905-0000-0000-C000-000000000046}#8.1#0#C:\Program Files\Microsoft Office\Office\MSWORD9.OLB#Microsoft Word 9.0 Object Library
 Class=Activex; ActiveX.cls
 Startup="(None)"
 HelpFile=""
@@ -14,7 +14,7 @@ Description="vtiger ActiveX Control"
 CompatibleMode="1"
 CompatibleEXE32="..\bin\vtigerCRM.dll"
 MajorVer=1
-MinorVer=2
+MinorVer=3
 RevisionVer=0
 AutoIncrementVer=0
 ServerSupportFiles=0
@@ -38,3 +38,6 @@ Retained=0
 ThreadPerObject=0
 MaxNumberOfThreads=1
 ThreadingModel=1
+
+[MS Transaction Server]
+AutoRefresh=1
