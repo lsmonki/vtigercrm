@@ -344,6 +344,7 @@ $server->wsdl->addComplexType(
                 'ticketpriorities' => array('name'=>'ticketpriorities','type'=>'tns:xsd:string'),
                 'ticketseverities' => array('name'=>'ticketseverities','type'=>'tns:xsd:string'),
                 'ticketcategories' => array('name'=>'ticketcategories','type'=>'tns:xsd:string'),
+                'moduleslist' => array('name'=>'moduleslist','type'=>'tns:xsd:string'),
              )
 );	
 $server->wsdl->addComplexType(
@@ -449,7 +450,7 @@ $server->register(
   
 $server->register(
 	'create_ticket',
-	array('title'=>'xsd:string','description'=>'xsd:string','priority'=>'xsd:string','severity'=>'xsd:string','category'=>'xsd:string','user_name'=>'xsd:string','parent_id'=>'xsd:string','product_id'=>'xsd:string'),
+	array('title'=>'xsd:string','description'=>'xsd:string','priority'=>'xsd:string','severity'=>'xsd:string','category'=>'xsd:string','user_name'=>'xsd:string','parent_id'=>'xsd:string','product_id'=>'xsd:string','module'=>'xsd:string'),
 	array('return'=>'tns:tickets_list_array'),
 	$NAMESPACE);
 //for vtiger toolbar
@@ -953,6 +954,15 @@ function get_combo_values($id)
         {
                 $output['ticketcategories']['ticketcategories'][$i] = $adb->query_result($result3,$i,"ticketcategories");
         }
+
+	//Added to get the modules list -- september 10 2005
+        $sql2 = "select moduleowners.*,tab.name from moduleowners inner join tab on moduleowners.tabid = tab.tabid order by tab.tabsequence";
+        $result4 = $adb->query($sql2);
+	for($i=0;$i<$adb->num_rows($result4);$i++)
+        {
+		$output['moduleslist']['moduleslist'][$i] = $adb->query_result($result4,$i,"name");
+        }
+
 	return $output;
 }
 function get_KBase_details($id='')
@@ -1565,7 +1575,7 @@ function create_ticket_from_toolbar($title,$description,$priority,$severity,$cat
 }
 //end
 
-function create_ticket($title,$description,$priority,$severity,$category,$user_name,$parent_id,$product_id)
+function create_ticket($title,$description,$priority,$severity,$category,$user_name,$parent_id,$product_id,$module)
 {
 /*	require_once('modules/Users/User.php');
         $seed_user = new User();
@@ -1587,7 +1597,21 @@ function create_ticket($title,$description,$priority,$severity,$category,$user_n
 
 	$ticket->column_fields[parent_id]=$parent_id;
 	$ticket->column_fields[product_id]=$product_id;
-//	$ticket->column_fields[assigned_user_id]=$user_id;
+
+	//Added to get the user based on module from moduleowners -- 10-11-2005
+	global $adb;
+	$user_id = 1;//Default admin user id
+	if($module != '')
+	{
+		$res = $adb->query("select moduleowners.*, tab.name from moduleowners inner join tab on moduleowners.tabid = tab.tabid where name='".$module."'");
+		if($adb->num_rows($res) > 0)
+		{
+			$user_id = $adb->query_result($res,0,"user_id");
+		}
+	}
+	$ticket->column_fields[assigned_user_id]=$user_id;
+
+	$adb->println($ticket->column_fields);
     	//$ticket->saveentity("HelpDesk");
     	$ticket->save("HelpDesk");
 
@@ -1596,10 +1620,29 @@ function create_ticket($title,$description,$priority,$severity,$category,$user_n
 	$_REQUEST['description'] = $body.$description;
 	$_REQUEST['return_module'] = 'HelpDesk';
 	$_REQUEST['parent_id'] = $parent_id; 
-	$_REQUEST['assigned_user_id'] = $parent_id; 
+	$_REQUEST['assigned_user_id'] = $user_id; //This is set to send mail to this user
 	require_once('modules/Emails/send_mail.php');
 
-	return get_tickets_list($user_name,$parent_id); 
+	$tickets_list =  get_tickets_list($user_name,$parent_id); 
+	foreach($tickets_list as $ticket_array)
+	{
+		if($ticket->id == $ticket_array['ticketid'])
+		{
+			$record_save = 1;
+			$record_array[0]['new_ticket'] = $ticket_array;
+		}
+	}
+	if($record_save == 1)
+	{
+		$adb->println("Ticket from Portal is saved with id => ".$ticket->id);
+		return $record_array;
+	}
+	else
+	{
+		$adb->println("There may be error in saving the ticket.");
+		return $tickets_list;
+	}
+	//return $tickets_list;
 	//return $ticket->id;
 }
 function update_ticket_comment($ticketid,$ownerid,$createdtime,$comments)
