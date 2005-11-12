@@ -109,6 +109,9 @@ Additionally, you can also search the entire knowledge base by entering keywords
 
 //Added after 4.2GA patch1
 'LBL_STATUS_CLOSED'=>'Closed',//Do not convert this label. This is used to check the status. If the status 'Closed' is changed in vtigerCRM server side then you will give the exact value of status 'Closed' which is in vtigerCRM server.
+
+//Added to display the module -- 10-11-2005
+'LBL_MODULE'=>'Module',
 );
 
 

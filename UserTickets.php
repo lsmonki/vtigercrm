@@ -278,6 +278,12 @@ function CreateTicket()
 		{
 			$ticketcategories = $result[$i]['ticketcategories'];
 		}
+		//Added to display the module -- 10-11-2005
+		if($result[$i]['moduleslist'] != '')
+		{
+			$moduleslist = $result[$i]['moduleslist'];
+		}
+
 	}
 
 	$noofrows = count($productslist[0]);
@@ -341,6 +347,16 @@ $list .=  '<td valign="center">
                 $list .= '<OPTION value="'.$ticketcategories[$i].'">'.$ticketcategories[$i].'</OPTION>';
         }
 	$list .= '</select></td></tr>';
+
+	//Added to display the module -- 10-11-2005
+	$list .= '<tr><td align="right">'.$mod_strings['LBL_MODULE'].': </td>';
+        $list .= '<td><select name="module">';
+	$list .= '<OPTION value="General">General</OPTION>';
+        for($i=0;$i<count($moduleslist);$i++)
+        {
+                $list .= '<OPTION value="'.$moduleslist[$i].'">'.$moduleslist[$i].'</OPTION>';
+        }
+        $list .= '</select></td></tr>';
 
 	$list .= '<tr><td align="right" valign="top">'.$mod_strings['LBL_DESCRIPTION'].': </td>';
 	//$list .= '<td><input name="description" maxlength="255" type="text" value=""></td></tr>';
@@ -489,6 +505,9 @@ function SaveTicket($ticket,$username)
 	$parent_id = $_SESSION['customer_id'];
 	$productid = $_SESSION['combolist'][0]['productid'][$_REQUEST['productid']];
 
+	//Added to display the module -- 10-11-2005
+	$module = $_REQUEST['module'];
+
 	$params = array(
 			'title'=>"$title",
 			'description'=>"$description",
@@ -497,12 +516,29 @@ function SaveTicket($ticket,$username)
 			'category'=>"$category",
 			'user_name' => "$username",
 			'parent_id'=>"$parent_id",
-			'product_id'=>"$productid");
+			'product_id'=>"$productid",
+			'module'=>"$module"
+		       );
 
-	$result = $client->call('create_ticket', $params);
+	$record_result = $client->call('create_ticket', $params);
+	if(isset($record_result[0]['new_ticket']) && $record_result[0]['new_ticket']['ticketid'] != '')
+	{
+		$new_record = 1;
+		$ticket_id = $record_result[0]['new_ticket']['ticketid'];
+	}
 
 	//$list = GetTicketsList($result);
-	$list = HomeTickets($result);
+	$params_list = array('user_name' => "$username", 'id' => "$parent_id");
+        $result = $client->call('get_tickets_list', $params_list, $Server_Path, $Server_Path);
+	
+	if($new_record == 1)
+	{
+		$list = GetDetailView($result,$ticket_id);
+	}
+	else
+	{
+		$list = HomeTickets($result);
+	}
 	echo $list;
 
 //	foreach($ticket as $key => $val)
@@ -662,7 +698,9 @@ if($_REQUEST['fun'] == 'save')
 			'description'=>'description',
 			'priority'=>'priority',
 			'category'=>'category',
-			'owner'=>'owner');
+			'owner'=>'owner',
+			'module'=>'module'
+		       );
 
 	foreach($ticket as $key => $val)
 		$ticket[$key] = $_REQUEST[$key];
