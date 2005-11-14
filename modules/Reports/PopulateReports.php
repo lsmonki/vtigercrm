@@ -14,7 +14,7 @@ global $adb;
 
 $rptfolder = Array(Array('Account and Contact Reports'=>'Account and Contact Reports'),
 		   Array('Lead Reports'=>'Lead Reports'),
-                   Array('Potential Reports'=>'Potential Reports'),
+           Array('Potential Reports'=>'Potential Reports'),
 		   Array('Activity Reports'=>'Activity Reports'),
 		   Array('HelpDesk Reports'=>'HelpDesk Reports'),
 		   Array('Product Reports'=>'Product Reports'),
@@ -242,7 +242,7 @@ $reports = Array(Array('reportname'=>'Contacts by Accounts',
                        'reporttype'=>'tabular',
                        'sortid'=>'','stdfilterid'=>'','advfilterid'=>''),
 
-		 Array('reportname'=>'Tickets by Priotiry',
+		 Array('reportname'=>'Tickets by Priority',
                        'reportfolder'=>'HelpDesk Reports',
                        'description'=>'Tickets by Priority',
                        'reporttype'=>'summary',
