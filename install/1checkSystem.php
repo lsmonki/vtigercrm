@@ -172,11 +172,11 @@ $array = Array(
 	    <table cellpadding="10" cellspacing="1" width="90%" border="0" class="small" style="background-color:#cccccc">
 		<tr bgcolor="#efefef"><td colspan=2><span style="color:#003399"><strong>Core Components</strong></span></td></tr>
 		<tr bgcolor="#fafafa">
-			<td valign=top ><strong>PHP version 4.2.x or 4.3.x.</strong><BR>(Note: Charts are not supported in PHP5)</td>
-			<td  valign=top bgcolor="white"><?php $php_version = phpversion(); echo (str_replace(".", "", $php_version) < "420") ? "<strong><font color=\"#FF0000\">Failed.</strong><br> Invalid version ($php_version) Installed</font>" : "<strong><font color=\"#0066CC\">Passed</strong><br>Version $php_version Installed</font>"; ?></td>
+			<td valign=top ><strong>PHP version  4.3.x.</strong><BR>(Note: Charts are not supported in PHP5)</td>
+			<td  valign=top bgcolor="white"><?php $php_version = phpversion(); echo (str_replace(".", "", $php_version) < "430") ? "<strong><font color=\"#FF0000\">Failed.</strong><br> Invalid version ($php_version) Installed</font>" : "<strong><font color=\"#0066CC\">Passed</strong><br>Version $php_version Installed</font>"; ?></td>
     	</tr>
 		<tr bgcolor="#fafafa">
-			<td valign=top ><strong>mySQL Database</strong></td>
+			<td valign=top ><strong>MySQL Database Connection Availability</strong></td>
         	<td valign=top bgcolor=white><?php echo function_exists('mysql_connect')?"<strong><font color=\"#0066CC\">Passed</strong><br>Database available</font>":"<strong><font color=\"#FF0000\">Failed</strong><br>Not Available</font>";?></td>
 	    </tr>
 		<tr bgcolor="#fafafa">
@@ -229,11 +229,29 @@ $array = Array(
             <td valign=top bgcolor="white"><?php echo (is_writable('./test/upload/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the file attachments feature. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File attachments issue</a> for more details </font>"; ?></td>
         </tr>
 		<tr bgcolor="#fafafa">
+		    <td valign=top ><strong>Logo Directory</strong><br> (test/logo/)</td>
+            <td valign=top bgcolor="white"><?php echo (is_writable('./test/logo/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with the company logo in the pdf generation. Refer <a href=http://www.vtiger.com/forums/viewtopic.php?t=24&highlight=permission>File attachments issue</a> for more details </font>"; ?></td>
+        </tr>
+
+		<tr bgcolor="#fafafa">
 		    <td valign=top ><strong>Email Templates Directory</strong><br> (modules/Emails/templates/)</td>
 			<td valign=top bgcolor="white"><?php echo (is_writable('./modules/Emails/templates/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience problems with the email templates feature. Refer <a href= http://www.vtiger.com/forums/viewtopic.php?t=388&highlight=permission>Email templates issue </a> for more details  </font>"; ?></td>
 		</tr>
+
+
+		<tr bgcolor="#fafafa">
+		    <td valign=top ><strong>Squirrelmail Permissions</strong><br> (modules/squirrelmail-1.4.4/data/)</td>
+            <td valign=top bgcolor="white"><?php echo (is_writable('./modules/squirrelmail-1.4.4/data/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with email client features>";?></td>
+        </tr>
+
+
+
        </tbody>
 	   </table>
+
+            
+
+
 		<!-- System Check -->
 			
 		</td>
