@@ -4142,17 +4142,17 @@ function getListQuery($module,$where='')
 	if($module == "Quotes")
 	{
 		//Query modified to sort by assigned to
-		$query = "select crmentity.*, quotes.*, quotesbillads.*, quotesshipads.*,potential.potentialname,account.accountname from quotes inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0".$where;
+		$query = "select crmentity.*, quotes.*, quotesbillads.*, quotesshipads.*,potential.potentialname,account.accountname from quotes inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid left join quotescf on quotes.quoteid = quotescf.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0".$where;
 	}
 	if($module == "Orders")
         {
 		//Query modified to sort by assigned to
-                $query = "select crmentity.*, purchaseorder.*, pobillads.*, poshipads.*,vendor.vendorname from purchaseorder inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid where crmentity.deleted=0";
+                $query = "select crmentity.*, purchaseorder.*, pobillads.*, poshipads.*,vendor.vendorname from purchaseorder inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid left join purchaseordercf on purchaseordercf.purchaseorderid = purchaseorder.purchaseorderid where crmentity.deleted=0";
         }
         if($module == "SalesOrder")
         {
 		//Query modified to sort by assigned to
-                $query = "select crmentity.*, salesorder.*, sobillads.*, soshipads.*,quotes.subject as quotename, account.accountname from salesorder inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0".$where;
+                $query = "select crmentity.*, salesorder.*, sobillads.*, soshipads.*,quotes.subject as quotename, account.accountname from salesorder inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid left join salesordercf on salesordercf.salesorderid = salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0".$where;
         }
 	if($module == "Invoice")
 	{
