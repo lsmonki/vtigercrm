@@ -3686,14 +3686,27 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		else
 			$value='';
 	}
-        elseif($uitype == 61)
-        {
-                global $adb;
+	//Added By *Raj* for the Issue ProductName not displayed in CustomView of HelpDesk
+	elseif($uitype == 59)
+	{
+		if($temp_val != '')
+		{
+			$value = getProductName($temp_val);
+		}
+		else
+		{
+			$value = '';
+		}
+	}
+	//End
+	elseif($uitype == 61)
+	{
+			global $adb;
 
-		$attachmentid=$adb->query_result($adb->query("select * from seattachmentsrel where crmid = ".$entity_id),0,'attachmentsid');
-		$value = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$module.'&fileid='.$attachmentid.'&filename='.$temp_val.'">'.$temp_val.'</a>';
+	$attachmentid=$adb->query_result($adb->query("select * from seattachmentsrel where crmid = ".$entity_id),0,'attachmentsid');
+	$value = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$module.'&fileid='.$attachmentid.'&filename='.$temp_val.'">'.$temp_val.'</a>';
 
-        }
+	}
 	elseif($uitype == 62)
 	{
 		global $adb;
