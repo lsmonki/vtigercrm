@@ -30,23 +30,9 @@ class ReportRun extends CRMEntity
 
 	var $selectcolumns;
 	var $groupbylist;
-        var $reporttype;
-	
-	var $reportsql = Array("Leads"=>"from crmentity as crmentityLeads inner join leaddetails on crmentityLeads.crmid=leaddetails.leadid left join leadsubdetails on leadsubscriptionid = leaddetails.leadid left join leadaddress on leadaddress.leadaddressid = leaddetails.leadid left join leadscf on leadscf.leadid = leaddetails.leadid",
+    var $reporttype;
+	var $reportname;
 
-			       "Contacts"=>"from crmentity as crmentityContacts inner join contactdetails on crmentityContacts.crmid = contactdetails.contactid left join contactsubdetails on contactsubdetails.contactsubscriptionid = contactdetails.contactid left join contactaddress on contactaddress.contactaddressid = contactdetails.contactid left join contactscf on contactscf.contactid = contactdetails.contactid",
-
-			       "Accounts"=>"from crmentity as crmentityAccounts inner join account on account.accountid = crmentityAccounts.crmid left join accountbillads on accountbillads.accountaddressid = account.accountid left join accountshipads on accountshipads.accountaddressid = account.accountid left join accountscf on accountscf.accountid = account.accountid",
-
-			       "Potentials"=>"from crmentity as crmentityPotentials inner join potential on potential.potentialid = crmentity.crmid left join potentialscf on potentialscf.potentialid = potential.potentialid",
-
-			       "Notes"=>"from crmentity as crmentityNotes inner join notes on notes.notesid = crmentityNotes.crmid left join senotesrel on senotesrel.notesid = notes.notesid",
-				
-			       "Emails"=>"from crmentity as crmentityEmails inner join emails on emails.emailid = crmentityEmails.crmid left join activity on activity.activityid = seactivityrel.activityid left join seactivityrel on seactivityrel.crmid = emails.emailid"
-
-			       );
-
-	
 	function ReportRun($reportid)
 	{
 		$oReport = new Reports($reportid);
@@ -54,6 +40,7 @@ class ReportRun extends CRMEntity
 		$this->primarymodule = $oReport->primodule;
 		$this->secondarymodule = $oReport->secmodule; 
 		$this->reporttype = $oReport->reporttype;
+		$this->reportname = $oReport->reportname;
 	}
 	
 	function getQueryColumnsList($reportid)
@@ -687,23 +674,6 @@ class ReportRun extends CRMEntity
 		return $sSQL;
 	}
 
-	function getSQLforPrimaryModule($module)
-	{
-	   global $vtlog;
-
-	   if($module != "")
-	   {
-		foreach($this->reportsql as $reportmodule=>$reportquery)
-		{
-			if($reportmodule == $module)
-			{
-				$sql = $reportquery;
-			}
-		}
-	   }
-	   $vtlog->logthis("ReportRun :: Successfully returned getSQLforPrimaryModule".$module,"info");
-	   return $sql;
-	}
 	function getRelatedModulesQuery($module,$secmodule)
 	{
 		global $vtlog;
@@ -1333,7 +1303,7 @@ class ReportRun extends CRMEntity
 				<body>
 				 <table cellpadding="0" cellspacing="0" border="0" class="rptTable">
 				 <tr>
-				 	<td class="rptTitle" colspan="'.$y.'">'.$mod_strings['LBL_GENERATED_REPORT'].'</td>
+				 	<td class="rptTitle" colspan="'.$y.'">'.$this->reportname.'</td>
 				 </tr>
 				  <tr>'. 
 				   $header
