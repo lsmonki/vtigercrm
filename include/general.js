@@ -811,6 +811,68 @@ function formValidate() {
 					break;
 		}
 	}
+       //added to check Start Date & Time,if Activity Status is Planned.//start
+        for (var j=0; j<fieldname.length; j++)
+        {
+            if(fieldname[j] == "date_start")
+            {
+               var datelabel = fieldlabel[j]
+               var datefield = fieldname[j]
+               var startdatevalue = getObj(datefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+            }
+            if(fieldname[j] == "time_start")
+            {
+                var timelabel = fieldlabel[j]
+                var timefield = fieldname[j]
+                var timeval=getObj(timefield).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+            }
+            if(fieldname[j] == "eventstatus" || fieldname[j] == "taskstatus")
+            {
+               var statusvalue = getObj(fieldname[j]).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
+               var statuslabel = fieldlabel[j++]
+            }
+
+        }
+	if(statusvalue == "Planned")
+        {
+                var dateelements=splitDateVal(startdatevalue)
+
+                var hourval=parseInt(timeval.substring(0,timeval.indexOf(":")))
+                var minval=parseInt(timeval.substring(timeval.indexOf(":")+1,timeval.length))
+
+
+               dd=dateelements[0]
+               mm=dateelements[1]
+               yyyy=dateelements[2]
+
+               var currdate=new Date()
+               var chkdate=new Date()
+               chkdate.setYear(yyyy)
+               chkdate.setMonth(mm-1)
+               chkdate.setDate(dd)
+
+               chktime = new Date()
+
+               chktime.setYear(yyyy)
+               chktime.setMonth(mm-1)
+               chktime.setDate(dd)
+               chktime.setHours(hourval)
+               chktime.setMinutes(minval)
+               //chkdate.setHours(hourval)
+               //chkdate.setMinutes(minval)
+                if (!compareDates(chkdate,datelabel,currdate,"Current date & time for Activities with status as Planned","GE")) {
+                        getObj(datefield).focus()
+                        return false
+                }
+                else if(!compareDates(chktime,timelabel,currdate,"Current Time for Activities with status as Planned","GE"))
+                {
+                        getObj(timefield).focus()
+                        return false
+                }
+                else return true
+
+	 }//end
+
 
 	return true
 }
