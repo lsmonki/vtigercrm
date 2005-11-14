@@ -898,7 +898,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		if($value=='')
                 {
-			if($fieldname != 'birthday' && $fieldname != 'due_date')
+			if($fieldname != 'birthday')// && $fieldname != 'due_date')//due date is today's date by default
                         	$disp_value=getNewDisplayDate();
                 }
                 else
@@ -908,7 +908,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		$custfld .= '<td width="20%" class="dataLabel">';
 
-		if($uitype == 6 || $uitype == 23)
+		if($uitype == 6 || ($uitype == 23 && $fieldname =='closingdate'))
 			$custfld .= '<font color="red">*</font>';
 
 		$custfld .= $mod_strings[$fieldlabel].':</td>';
