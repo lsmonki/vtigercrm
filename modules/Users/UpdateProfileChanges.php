@@ -67,6 +67,8 @@ elseif($secmodule=='tab_priv')
 			}
 		}
 	}
+	$loc = "Location: index.php?action=profilePrivileges&module=Users&secmodule=tab_priv&mode=view&profileid=".$profileid;
+	header($loc);
 		
 }
 elseif($secmodule=='stand_priv')
