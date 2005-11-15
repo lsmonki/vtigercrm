@@ -3361,7 +3361,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                         					{
                                                                 	//$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
                                                                 	// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-                                                                	$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+                                                                	$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 								}
 								else
 								{
@@ -3452,17 +3452,20 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			}
 
 		}
-
+		$varreturnset = '';
 		if($returnset=='')
-			$returnset = '&return_module='.$module.'&return_action=index';
+			$varreturnset = '&return_module='.$module.'&return_action=index';
+		else
+			$varreturnset = $returnset;
+			
 
 		if($module == 'Activities')
 		{
 			$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
 			if($actvity_type == 'Task')
-				$returnset .= '&activity_mode=Task';
+				$varreturnset .= '&activity_mode=Task';
 			else
-				$returnset .= '&activity_mode=Events';
+				$varreturnset .= '&activity_mode=Events';
 		}
 		//$list_header .= '<td style="padding:0px 3px 0px 3px;">';
 		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
@@ -3472,11 +3475,11 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		{
 			//$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
 			// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-			$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'" style="'.$P_FONT_COLOR.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+			$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&return_viewname='.$oCv->setdefaultviewid.'&record='.$entity_id.$varreturnset.'&filename='.$filename.'" style="'.$P_FONT_COLOR.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 		}
 		if(isPermitted($module,2,$entity_id) == 'yes')
 		{
-			$del_param = 'index.php?action='.$del_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset;
+			$del_param = 'index.php?action='.$del_action.'&module='.$mod_dir.'&record='.$entity_id.$varreturnset.'&return_viewname='.$oCv->setdefaultviewid;
 			$list_header .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
 		}
 		//$list_header .= '<td>';
