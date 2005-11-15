@@ -63,6 +63,7 @@ if(isset($_REQUEST['viewname']) == false)
 }else
 {
 	$viewid =  $_REQUEST['viewname'];
+	$oCustomView->setdefaultviewid = $viewid;
 }
 //<<<<<customview>>>>>
 
@@ -175,6 +176,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	<input name="viewname" type="hidden">
 	<input name="change_owner" type="hidden">
 	<input name="change_status" type="hidden">
+	
 		<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>
    		<!--input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
 	       <input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_STATUS].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/--></td>

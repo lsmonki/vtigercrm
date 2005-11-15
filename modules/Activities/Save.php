@@ -104,6 +104,8 @@ else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
 if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module'] == 'HelpDesk') || ($_REQUEST['return_module']== 'Products')  ))
+
+
 {
 	if($_REQUEST['ticket_id'] != '')
 		$crmid = $_REQUEST['ticket_id'];
@@ -118,6 +120,8 @@ if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module'] == 'HelpDesk') ||
 
 $activemode = "";
 if($activity_mode != '') $activemode = "&activity_mode=".$activity_mode;
-
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id$activemode");
+ //code added for returning back to the current view after edit from list view
+if($_REQUEST['return_viewname'] == '') $return_viewname='0';
+if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id$activemode&viewname=$return_viewname");
 ?>

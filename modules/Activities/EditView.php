@@ -115,6 +115,7 @@ if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST[
 if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
 if (isset($_REQUEST['ticket_id'])) $xtpl->assign("TICKETID", $_REQUEST['ticket_id']);
 if (isset($_REQUEST['product_id'])) $xtpl->assign("PRODUCTID", $_REQUEST['product_id']);
+if (isset($_REQUEST['return_viewname'])) $xtpl->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
