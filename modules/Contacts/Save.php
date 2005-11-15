@@ -225,7 +225,10 @@ function makeRandomPassword()
 }
 //END -- Code for Create Customer Portal Users password and Send Mail
 $vtlog->logthis("This Page is redirected to : ".$return_module." / ".$return_action."& return id =".$return_id,'info');
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&activity_mode=$activitymode");
+//code added for returning back to the current view after edit from list view
+if($_REQUEST['return_viewname'] == '') $return_viewname='0';
+if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&activity_mode=$activitymode&viewname=$return_viewname");
 //Code to save the custom field info into database
 function save_customfields($entity_id)
 {
