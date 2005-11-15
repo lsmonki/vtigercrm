@@ -639,7 +639,7 @@ function numValidate(fldName,fldLabel,format,neg) {
 
 function intValidate(fldName,fldLabel) {
 	var val=getObj(fldName).value.replace(/^\s+/g, '').replace(/\s+$/g, '')
-	if (isNaN(val) || val.indexOf(".")!=-1) 
+	if (isNaN(val) || (val.indexOf(".")!=-1 && fldName != 'potential_amount')) 
 	{
 		alert("Invalid "+fldLabel)
 		getObj(fldName).focus()
