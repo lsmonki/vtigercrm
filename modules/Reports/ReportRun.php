@@ -32,6 +32,7 @@ class ReportRun extends CRMEntity
 	var $groupbylist;
     var $reporttype;
 	var $reportname;
+	var $totallist;
 
 	function ReportRun($reportid)
 	{
@@ -1107,7 +1108,7 @@ class ReportRun extends CRMEntity
 		return $query;
 	}
 
-	function sGetSQLforReport($reportid,$filterlist)
+	function sGetSQLforReport($reportid,$filterlist,$type='')
 	{
 		global $vtlog;
 
@@ -1116,6 +1117,7 @@ class ReportRun extends CRMEntity
 		$stdfilterlist = $this->getStdFilterList($reportid);
 		$columnstotallist = $this->getColumnsTotal($reportid);
 		$advfilterlist = $this->getAdvFilterList($reportid);
+		$this->totallist = $columnstotallist;
 
 		if($this->reporttype == "summary")
 		{
@@ -1156,31 +1158,48 @@ class ReportRun extends CRMEntity
 		//columns to total list
 		if(isset($columnstotallist))
 		{
-			//      print_r($columnstotal);
+	       $columnstotalsql = implode(", ",$columnstotallist);
 		}
 		//advanced filterlist
 		if(isset($advfilterlist))
 		{
 			$advfiltersql = implode(" and ",$advfilterlist);
 		}
-
 		if($stdfiltersql != "")
 		{
 			$wheresql = " and ".$stdfiltersql;
 		}
-
 		if($advfiltersql != "")
-	        {
-                	$wheresql .= " and ".$advfiltersql;
-        	}
+		{
+				$wheresql .= " and ".$advfiltersql;
+		}
+		
 		$reportquery = $this->getReportsQuery($this->primarymodule);
 
-		if(trim($groupsquery) != "")
+		if($type == 'COLUMNSTOTOTAL')
 		{
-			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql. " order by ".$groupsquery;
+			if(trim($groupsquery) != "")
+			{
+				if($columnstotalsql != '')
+				{
+					$reportquery = "select ".$columnstotalsql." ".$reportquery." ".$wheresql. " order by ".$groupsquery;
+				}
+			}else
+			{
+				if($columnstotalsql != '')
+				{
+					$reportquery = "select ".$columnstotalsql." ".$reportquery." ".$wheresql;
+				}
+			}
 		}else
 		{
-			$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
+			if(trim($groupsquery) != "")
+			{
+				$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql. " order by ".$groupsquery;
+			}else
+			{
+				$reportquery = "select ".$selectedcolumns." ".$reportquery." ".$wheresql;
+			}
 		}
 		$vtlog->logthis("ReportRun :: Successfully returned sGetSQLforReport".$reportid,"info");
 		return $reportquery;
@@ -1353,27 +1372,77 @@ class ReportRun extends CRMEntity
 			}
 		}elseif($outputformat == "TOTALHTML")
 		{
-			
-			global $adb;
-			
-			$sSQL = $this->sGetSQLforReport("TOTAL",$filterlist);
-			if($sSQL != "")
+			$escapedchars = Array('_SUM','_AVG','_MIN','_MAX');
+			$sSQL = $this->sGetSQLforReport($this->reportid,$filterlist,"COLUMNSTOTOTAL");
+			if(isset($this->totallist))
 			{
-				//$modules = array("Leads_", "Accounts_", "Potentials_", "Contacts_","_");
-				$result = $adb->query($sSQL);
-				$y=$adb->num_fields($result);
-				$custom_field_values = $adb->fetch_array($result);
-				$coltotalhtml .= "<table border=1><tr><td>Totals</td><td>SUM</td></tr>";
-				for($i =0 ;$i<$y;$i++)
+				//print_r($this->totallist);
+				if($sSQL != "")
 				{
-					$fld = $adb->field_name($result, $i);
-					$coltotalhtml .= '<tr valign=top><td>'.$fld->name.'</td>
-						<td>'.$custom_field_values[$i].'</td>
-					</tr>';
+					$result = $adb->query($sSQL);
+					$y=$adb->num_fields($result);
+					$custom_field_values = $adb->fetch_array($result);
+
+					$coltotalhtml .= "<table width='60%' cellpadding='0' cellspacing='0' border='0' class='formOuterBorder'><tr><td class='rptHead'>Totals</td><td class='rptHead'>SUM</td><td class='rptHead'>AVG</td><td class='rptHead'>MIN</td><td class='rptHead'>MAX</td></tr>";
+
+					foreach($this->totallist as $key=>$value)
+					{
+						$fieldlist = explode(":",$key);
+						$totclmnflds[str_replace($escapedchars," ",$fieldlist[3])] = str_replace($escapedchars," ",$fieldlist[3]);
+					}
+
+					for($i =0;$i<$y;$i++)
+					{
+						$fld = $adb->field_name($result, $i);
+						$keyhdr[$fld->name] = $custom_field_values[$i];
+					}
+					foreach($totclmnflds as $key=>$value)
+					{
+						
+						$coltotalhtml .= '<tr class="rptGrpHead" valign=top><td class="rptData">'.str_replace($modules," ",$value).'</td>';
+						$arraykey = trim($value).'_SUM';
+						if(isset($keyhdr[$arraykey]))
+						{
+							$coltotalhtml .= '<td class="rptData">'.$keyhdr[$arraykey].'</td>';
+						}else
+						{
+							$coltotalhtml .= '<td class="rptData">&nbsp;</td>';
+						}
+
+						$arraykey = trim($value).'_AVG';
+						if(isset($keyhdr[$arraykey]))
+						{
+							$coltotalhtml .= '<td class="rptData">'.$keyhdr[$arraykey].'</td>';
+						}else
+						{
+							$coltotalhtml .= '<td class="rptData">&nbsp;</td>';
+						}
+
+						$arraykey = trim($value).'_MIN';
+						if(isset($keyhdr[$arraykey]))
+						{
+							$coltotalhtml .= '<td class="rptData">'.$keyhdr[$arraykey].'</td>';
+						}else
+						{
+							$coltotalhtml .= '<td class="rptData">&nbsp;</td>';
+						}
+
+						$arraykey = trim($value).'_MAX';
+						if(isset($keyhdr[$arraykey]))
+						{
+							$coltotalhtml .= '<td class="rptData">'.$keyhdr[$arraykey].'</td>';
+						}else
+						{
+							$coltotalhtml .= '<td class="rptData">&nbsp;</td>';
+						}
+
+						$coltotalhtml .= '<tr>';
+					}
+
+//					print_r($keyhdr);
+					$coltotalhtml .= "</table>";
 				}
-				$coltotalhtml .= "</table>";
-			}
-			
+			}			
 			return $coltotalhtml;
 		}
 	}
@@ -1386,37 +1455,36 @@ class ReportRun extends CRMEntity
 		global $vtlog;
 
 		$coltotalsql = "select reportsummary.* from report";
-                $coltotalsql .= " inner join reportsummary on report.reportid = reportsummary.reportsummaryid";
-                $coltotalsql .= " where report.reportid =".$reportid;
+        $coltotalsql .= " inner join reportsummary on report.reportid = reportsummary.reportsummaryid";
+        $coltotalsql .= " where report.reportid =".$reportid;
 
-                $result = $adb->query($coltotalsql);
+        $result = $adb->query($coltotalsql);
 		
 		while($coltotalrow = $adb->fetch_array($result))
 		{
 			$fieldcolname = $coltotalrow["columnname"];
 			
 			if($fieldcolname != "none")
-                        {
-                                $fieldlist = explode(":",$fieldcolname);
-                                if($fieldlist[4] == 2)
-                                {
-                                  $stdfilterlist[$fieldcolname] = "sum(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
-                                }
-                                if($fieldlist[4] == 3)
-                                {
-                                  $stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
-                                }
-                                if($fieldlist[4] == 4)
-                                {
-                                  $stdfilterlist[$fieldcolname] = "min(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
-                                }
-                                if($fieldlist[4] == 5)
-                                {
-                                  $stdfilterlist[$fieldcolname] = "max(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
-                                }
-                        }
+			{
+					$fieldlist = explode(":",$fieldcolname);
+					if($fieldlist[4] == 2)
+					{
+					  $stdfilterlist[$fieldcolname] = "sum(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					}
+					if($fieldlist[4] == 3)
+					{
+					  $stdfilterlist[$fieldcolname] = "avg(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					}
+					if($fieldlist[4] == 4)
+					{
+					  $stdfilterlist[$fieldcolname] = "min(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					}
+					if($fieldlist[4] == 5)
+					{
+					  $stdfilterlist[$fieldcolname] = "max(".$fieldlist[1].".".$fieldlist[2].") ".$fieldlist[3];
+					}
+			}
 		}
-
 		$vtlog->logthis("ReportRun :: Successfully returned getColumnsTotal".$reportid,"info");
 		return $stdfilterlist;
 	}
