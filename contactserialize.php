@@ -1615,13 +1615,23 @@ function create_ticket($title,$description,$priority,$severity,$category,$user_n
     	//$ticket->saveentity("HelpDesk");
     	$ticket->save("HelpDesk");
 
-	$_REQUEST['name'] = '[ Ticket ID : '.$ticket->id.' ] '.$title;
-	$body = ' Ticket ID : '.$ticket->id.'<br> Ticket Title : '.$title.'<br><br>';
-	$_REQUEST['description'] = $body.$description;
-	$_REQUEST['return_module'] = 'HelpDesk';
-	$_REQUEST['parent_id'] = $parent_id; 
-	$_REQUEST['assigned_user_id'] = $user_id; //This is set to send mail to this user
-	require_once('modules/Emails/send_mail.php');
+	$subject = '[From Portal][ Ticket ID : '.$ticket->id.' ] '.$title;
+	$contents = ' Ticket ID : '.$ticket->id.'<br> Ticket Title : '.$title.'<br><br>'.$description;
+
+	require_once('modules/Emails/mail.php');
+	//get the contact email id who creates the ticket from portal and use this email as from email id in email
+	$result = $adb->query("select email from contactdetails where contactid=".$parent_id);
+	$contact_email = $adb->query_result($result,0,'email');
+	$from_email = $contact_email;
+
+	//send mail to assigned to user
+	$to_email = getUserEmailId('id',$user_id);
+	$adb->println("Send mail to the user who is the owner of the module about the portal ticket");
+	$mail_status = send_mail('HelpDesk',$to_email,'',$from_email,$subject,$contents);
+
+	//send mail to the customer(contact who creates the ticket from portal)
+	$adb->println("Send mail to the customer(contact) who creates the portal ticket");
+	$mail_status = send_mail('Contacts',$contact_email,'',$from_email,$subject,$contents);
 
 	$tickets_list =  get_tickets_list($user_name,$parent_id); 
 	foreach($tickets_list as $ticket_array)
