@@ -38,7 +38,10 @@ if(isset($_REQUEST['record'])) {
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
 		$vtlog->logthis("Entity info successfully retrieved for DetailView.",'info');
 	$focus->id = $_REQUEST['record'];
-        $focus->name=$focus->column_fields['name'];		
+	if($focus->column_fields['name'] != '')
+	        $focus->name = $focus->column_fields['name'];		
+	else
+		$focus->name = $focus->column_fields['subject'];
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
