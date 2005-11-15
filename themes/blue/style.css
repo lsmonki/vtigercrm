@@ -1228,6 +1228,43 @@ IMG.list {
    margin: 0px;
 }
 
+.uil {
+        list-style:none;
+        line-height:20px;
+        padding-left:20px;
+        margin-left:0px;
+        font-weight:normal;
+        /*border-top:1px dotted #dadada; */
+
+}
+
+.prvPrfTopBg {
+        background-color:#ebebeb;
+}
+
+.prvPrfBottomBg {
+        background-color:#ebebeb;
+}
+
+.prvPrfOutline {
+        border:1px solid #ebebeb;
+}
+
+.prvPrfSelectedTab {
+        background:url(images/prvPrfSelectedTab.gif) repeat-x;
+
+}
+
+.prvPrfUnSelectedTab {
+        background:url(images/prvPrfUnSelectedTab.gif) repeat-x;
+
+}
+
+.prvPrfTexture {
+        background:url(images/prvPrfTexture1.gif);
+
+}
+
 /*begin: Armando Lüscher 10.08.2005 -> §visibleDescription
 	Desc: Style for entries and their description*/
 .visibleDescription {
