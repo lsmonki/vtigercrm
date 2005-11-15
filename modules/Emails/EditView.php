@@ -106,13 +106,13 @@ if($_REQUEST['upload_error'] == true)
         echo '<br><b><font color="red"> The selected file has no data or a invalid file.</font></b><br>';
 }
 
-$message = substr($_REQUEST['message'],0,49);
-if(isset($_REQUEST['message']) && $_REQUEST['message']== 'Language string failed to load: connect_host')
-	echo '<h3><b><font color=red>'.$mod_strings['MESSAGE_CHECK_MAIL_SERVER_NAME'].'</font></b></h3>';
-if(isset($_REQUEST['message']) && (($_REQUEST['message']=='Language string failed to load: recipients_failed') || ($message == 'Language string failed to load: recipients_failed')) )
-	echo '<h3><b><font color=red>'.$mod_strings['MESSAGE_CHECK_MAIL_ID'].'</font></b></h3>';
-if(@strstr($_REQUEST['message'],'Language string failed to load: from_failed'))
-	echo '<h3><b><font color=red>Please check the "From" mail id.</font></b></h3>';
+//Email Error handling
+if($_REQUEST['mail_error'] != '') 
+{
+	require_once("modules/Emails/mail.php");
+	echo parseEmailErrorString($_REQUEST['mail_error']);
+}
+
 
 if(isset($_REQUEST['record'])) {
 	$focus->id = $_REQUEST['record'];

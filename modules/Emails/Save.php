@@ -364,13 +364,6 @@ function deleteFile($dir,$filename)
 {
    unlink($dir.$filename);	
 }
-$_REQUEST['return_id']=$return_id;
-if($_REQUEST['return_module'] != 'Emails' && $_REQUEST['record'] != '')
-	{
-        	$return_id = $_REQUEST['record'];
-	}
-
-        //echo 'return..'.$return_module.'/'.$return_action.'<br>parent id='.$parent_id.'<br>return id = '.$return_id.'/'.$filename;
 
 if($file_upload_error)
 {
@@ -382,7 +375,8 @@ if($file_upload_error)
 elseif( isset($_REQUEST['send_mail']) && $_REQUEST['send_mail'])
 {
 //changed by rdhital to direct it to a new mailing function
-	include("modules/Emails/mysend_mail.php");
+//	include("modules/Emails/mysend_mail.php");
+	include("modules/Emails/mailsend.php");
 }
 elseif(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'mailbox')
 {
