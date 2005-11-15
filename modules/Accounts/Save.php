@@ -82,7 +82,11 @@ if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $
 
 $local_log->debug("Saved record with id of ".$return_id);
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+
+//code added for returning back to the current view after edit from list view
+if($_REQUEST['return_viewname'] == '') $return_viewname='0';
+if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
 //Code to save the custom field info into database
 function save_customfields($entity_id)
 {
