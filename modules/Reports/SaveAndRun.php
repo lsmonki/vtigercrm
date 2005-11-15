@@ -43,6 +43,7 @@ $oReportRun = new ReportRun($reportid);
 $filterlist = $oReportRun->RunTimeFilter($filtercolumn,$filter,$startdate,$enddate);
 //print_r($filterlist);
 $sshtml = $oReportRun->GenerateReport("HTML",$filterlist);
+$totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
 
 ?>
 <html>
@@ -102,7 +103,8 @@ return "index.php?module=Reports&action="+tipo+"&record="+id+"&stdDateFilterFiel
 <table> 
 <tr>
     <td class='bodyText'>
-        <?php echo $sshtml; ?>
+        <?php echo $sshtml; ?><br>
+		<?php echo $totalhtml; ?>
     </td>
 </tr>
 </table>    
