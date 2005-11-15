@@ -575,13 +575,13 @@ class CustomView extends CRMEntity{
 				if($columnname == "columnname")
 				{
 					$filtercolumn = $value;
-				}elseif($columnname = "stdfilter")
+				}elseif($columnname == "stdfilter")
 				{
 					$filtertype = $value;
-				}elseif($columnname = "startdate")
+				}elseif($columnname == "startdate")
 				{
 					$startdate = $value;
-				}elseif($columnname = "enddate")
+				}elseif($columnname == "enddate")
 				{
 					$enddate = $value;
 				}
