@@ -27,16 +27,10 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 }
 
 //Added code for Error display in sending mail to assigned to user when ticket is created or updated.
-if($_REQUEST['message'] != '' && $_REQUEST['message'] != 1 && $focus->column_fields['assigned_user_id'] != 0)
+if($_REQUEST['mail_error'] != '')
 {
-        $error_message = '<h4><b><font color=red>Mail could not be sent to "Assigned To" user. ';
-        if(@strstr($_REQUEST['message'],'Language string failed to load: connect_host'))
-                $error_message .= 'Please check the mail server.';
-        elseif(@strstr($_REQUEST['message'],'Language string failed to load: recipients_failed'))
-                $error_message .= 'Please check the "Assigned to" email id.';
-
-        $error_message .= '</font></b></h4>';
-        echo $error_message;
+        require_once("modules/Emails/mail.php");
+        echo parseEmailErrorString($_REQUEST['mail_error']);
 }
 
 global $app_strings;
