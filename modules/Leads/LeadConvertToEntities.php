@@ -270,7 +270,7 @@ $adb->query($sql_crmentity1);
 $contact_id = $crmcontactid;
 $vtlog->logthis("contact id is ".$contact_id,'debug');
 
- $sql_insert_contact = "INSERT INTO contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (".$contact_id.",".$crmid.",'".$row["salutation"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["title"] ."','".$row["fax"] ."','".$row['yahooid']."')";
+ $sql_insert_contact = "INSERT INTO contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (".$contact_id.",".$crmid.",'".$row["salutation"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["designation"] ."','".$row["fax"] ."','".$row['yahooid']."')";
 
 $adb->query($sql_insert_contact);
 
