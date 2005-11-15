@@ -50,5 +50,9 @@ if($_REQUEST['module'] == $_REQUEST['return_module'])
 if(isset($_REQUEST['activity_mode']))
 	$activitymode = '&activity_mode='.$_REQUEST['activity_mode'];
 
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id'].$activitymode);
+//code added for returning back to the current view after delete from list view
+if($_REQUEST['return_viewname'] == '') $return_viewname='0';
+if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+
+header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id'].$activitymode."&viewname=".$return_viewname);
 ?>

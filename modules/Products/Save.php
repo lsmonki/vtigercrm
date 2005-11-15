@@ -142,6 +142,11 @@ else //if image is not given
 		$focus->column_fields['imagename']="";
 	}
 }	
+
+ //code added for returning back to the current view after edit from list view
+if($_REQUEST['return_viewname'] == '') $return_viewname='0';
+if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+
 if($image_error=="true") //If there is any error in the file upload then moving all the data to EditView.
 {
         $vtlog->logthis("There is an error during the upload of product image.",'debug');
@@ -173,7 +178,7 @@ if($image_error=="true") //If there is any error in the file upload then moving 
 	{
 		$return_id=$_REQUEST['record'];
 	}
-	header("location: index.php?action=$return_action&module=$return_module&record=$return_id&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values");
+	header("location: index.php?action=$return_action&module=$return_module&record=$return_id&return_viewname=$return_viewname&viewname=$return_viewname&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values");
 
 }
 if($saveimage=="true")
@@ -227,7 +232,7 @@ Thanks,
 	if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 	if(isset($_REQUEST['activity_mode'])) $return_action .= '&activity_mode='.$_REQUEST['activity_mode'];
 
-	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
 
 }
 function SendMailToCustomer($to,$current_user_id,$subject,$contents)
