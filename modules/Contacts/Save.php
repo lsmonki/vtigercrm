@@ -148,66 +148,11 @@ elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mo
 
 	if($insert == 'true' || $update == 'true')
 	{
-		SendMailToCustomer('Contacts',$focus->id,$_REQUEST['email'],$current_user->id,$subject,$contents);
+		//Removed the function SendMailToCustomer and used the send_mail function to send mail to the customer
+		require_once("modules/Emails/mail.php");
+		$mail_status = send_mail('Contacts',$_REQUEST['email'],$current_user->user_name,'',$subject,$contents);
 	}
 	$vtlog->logthis("After return from the SendMailToCustomer function. Now control will go to the header.",'info');
-}
-function SendMailToCustomer($module,$id,$to,$current_user_id,$subject,$contents)
-{
-	global $vtlog;
-	include("modules/Emails/class.phpmailer.php");
-
-	$mail = new PHPMailer();
-	
-	$mail->Subject = $subject;
-	$mail->Body    = nl2br($contents);	
-	$mail->IsSMTP();
-
-	if($current_user_id != '')
-	{
-		global $adb;
-		$sql = "select * from users where id= ".$current_user_id;
-		$result = $adb->query($sql);
-		$from = $adb->query_result($result,0,'email1');
-		$initialfrom = $adb->query_result($result,0,'user_name');
-		$vtlog->logthis("Mail sending process : From Name & email id (selected from db) => '".$initialfrom."','".$from."'",'info');
-	}
-	if($mail_server=='')
-        {
-		global $adb;
-                $mailserverresult=$adb->query("select * from systems where server_type='email'");
-                $mail_server=$adb->query_result($mailserverresult,0,'server');
-                $mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
-                $mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
-                $_REQUEST['server']=$mail_server;
-		$vtlog->logthis("Mail Server Details => '".$mail_server."','".$mail_server_username."','".$mail_server_password."'","info");
-        }
-	$mail->Host = $mail_server;
-        $mail->SMTPAuth = true;
-        $mail->Username = $mail_server_username;
-        $mail->Password = $mail_server_password;
-	$mail->From = $from;
-	$mail->FromName = $initialfrom;
-
-	$mail->AddAddress($to);
-	$vtlog->logthis("Mail sending process : To Email id = '".$to."' (set in the mail object)",'info');
-	$mail->AddReplyTo($from);
-	$mail->WordWrap = 50;
-
-	$mail->IsHTML(true);
-
-	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
-
-	if(!$mail->Send())
-	{
-		$vtlog->logthis("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'",'info');
-		$errormsg = "Mail Could not be sent...";	
-	}
-	else
-	{
-		$vtlog->logthis("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'",'info');
-	}
-	$vtlog->logthis("After executing the mail->Send() function.",'info');
 }
 function makeRandomPassword() 
 {
