@@ -80,7 +80,7 @@ if($secondaryModule == 'global_priv')
 			$xtpl->assign("EDIT_SAVE", $edit_save);
 
 			$global_per_arry = getProfileGlobalPermission($profileId);
-			print_r($global_per_arry);
+			//print_r($global_per_arry);
 			$view_all_per = $global_per_arry[1];
 			$edit_all_per = $global_per_arry[2];
 
