@@ -29,12 +29,6 @@ require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 global $vtlog;
-if($_REQUEST['sendnotification'] == 'on')
-{
-$vtlog->logthis("send notification is on",'info');  
-	include("modules/Emails/send_mail.php");
-	send_mail('users',$_REQUEST['assigned_user_id'],$current_user->user_name,$_REQUEST['subject'],$_REQUEST['description'],$mail_server,$mail_server_username,$mail_server_password,$filename);
-}
 
 $focus = new Activity();
 
@@ -104,8 +98,6 @@ else $return_action = "DetailView";
 if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $_REQUEST['return_id'];
 
 if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module'] == 'HelpDesk') || ($_REQUEST['return_module']== 'Products')  ))
-
-
 {
 	if($_REQUEST['ticket_id'] != '')
 		$crmid = $_REQUEST['ticket_id'];
@@ -120,6 +112,17 @@ if($_REQUEST['mode'] != 'edit' && (($_REQUEST['return_module'] == 'HelpDesk') ||
 
 $activemode = "";
 if($activity_mode != '') $activemode = "&activity_mode=".$activity_mode;
+
+//Added code to send mail to the assigned to user about the details of the activity
+if($_REQUEST['sendnotification'] == 'on')
+{
+	global $current_user;
+        $vtlog->logthis("send notification is on",'info');
+        require_once("modules/Emails/mail.php");
+        $to_email = getUserEmailId('id',$_REQUEST['assigned_user_id']);
+        $mail_status  = send_mail('Activities',$to_email,$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description']);
+}
+
  //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
