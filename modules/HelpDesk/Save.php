@@ -62,8 +62,9 @@ else
 	$reply = '';
 
 $_REQUEST['name'] = '[ Ticket ID : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
-$bodysubject = ' Subject : '.$focus->id.' : '.$_REQUEST['ticket_title'].'<br><br>';
+$bodysubject = ' Subject : '.$focus->id.' : '.$_REQUEST['ticket_title'];
 
+$emailoptout = 0;
 if($focus->column_fields['parent_id'] != '')
 {
 	$query = "select * from crmentity where crmid=".$focus->column_fields['parent_id'];
@@ -94,7 +95,7 @@ if($isactive == 1)
 	$bodydetails .= "<a href='".$PORTAL_URL."/general.php?action=UserTickets&ticketid=".$focus->id."&fun=detail'>Ticket Details</a>";
 	$bodydetails .= "<br><br>Thanks,<br><br> Vtiger Support Team ";
 
-	$_REQUEST['description'] = $bodysubject.$bodydetails;
+	$_REQUEST['description'] = $bodysubject.'<br><br>'.$bodydetails;
 }
 else
 {
@@ -120,14 +121,28 @@ if($_REQUEST['product_id'] != '' && $focus->id != '' && $_REQUEST['mode'] != 'ed
         $return_id = $_REQUEST['product_id'];
 }
 
-if($emailoptout == 0)
+//send mail to the assigned to user and the parent to whom this ticket is assigned
+require_once('modules/Emails/mail.php');
+$user_emailid = getUserEmailId('id',$focus->column_fields['assigned_user_id']);
+if($user_emailid != '')
 {
-	require_once('modules/Emails/send_mail.php');
+	$mail_status = send_mail('HelpDesk',$user_emailid,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$bodysubject,$bodydetails);
+	$mail_status_str = $user_emailid."=".$mail_status."&&&";
 }
 else
 {
-	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+	$mail_status_str = "'".$to_email."'=0&&&";
 }
+//added condition to check the emailoptout(this is only for contacts.)
+if($emailoptout == 0)
+{
+	//send mail to parent
+	$parent_email = getParentMailId($return_module,$return_id);	
+	$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$bodysubject,$bodydetails);
+	$mail_status_str .= $parent_email."=".$mail_status."&&&";
+}
+$mail_error_status = getMailErrorString($mail_status_str);
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&$mail_error_status");
 
 function getTicketComments($ticketid)
 {
