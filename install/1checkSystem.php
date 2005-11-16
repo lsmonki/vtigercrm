@@ -152,7 +152,7 @@ $array = Array(
 
 <!-- Master table -->
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
-
+<!--
 Licence :
 <tr>
 <table width=100% border=0 cellspacing=0>
@@ -2622,6 +2622,7 @@ providing such a beautiful utilities.<br>
 <br>
 <br>
 </tr>
+-->
 <tr>
 	<td align=center>
 	<br><br>
@@ -2743,6 +2744,7 @@ providing such a beautiful utilities.<br>
 
 
 </table>
+<!--
 <table>
 	<td></td>
 		<td valign="top" align=center>
@@ -2762,16 +2764,14 @@ providing such a beautiful utilities.<br>
             
 
 
-		<!-- System Check -->
 			
 		</td>
 	</tr>
 	</table>
-	
+-->	
 	<br><br>
 
 	
-<!-- -->
 	<table border=0 cellspacing=0 cellpadding=0 width=70% class=small>
 	<tr>
 		<td><img src="install/images/cwURL.gif"></td>
