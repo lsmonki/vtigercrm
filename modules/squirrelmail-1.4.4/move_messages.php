@@ -141,7 +141,6 @@ $secretkey=$temprow["mail_password"];
 $imapServerAddress=$temprow["mail_servername"];
 $imapPort="143";
 
-
 $key = OneTimePadEncrypt($secretkey, $onetimepad);
 $imapConnection = sqimap_login($username, $key, $imapServerAddress, $imapPort, 0);
 $mbx_response=sqimap_mailbox_select($imapConnection, $mailbox);
@@ -228,22 +227,9 @@ elseif (!isset($moveButton) )
                     {
                       $messagebody .= formatBody($imapConnection, $message, $color, $wrap_at, $ent_ar[$u], $id[$k], $mailbox);
                       $msgData = $messagebody;
-                      /*
-                      if ($i != $cnt-1)
-                      {
-                        $messagebody .= '<hr noshade size=1>';
-                      }
-                      */
                     }
-		      //echo ' in move_messages '.$msgData;
-	  	$messagebody='';
-		    //i do not remember why i did this
-                    //$explodedmessage= explode("\n",$messagebody);
-                    //$implodedmessage = implode(":",$explodedmessage);
-		    //echo $implodedmessage;
+		     	  	$messagebody='';
                     $from = $message->rfc822_header->getAddr_s('from');
-                    
-                    //$date = getLongDateString($message->rfc822_header->date);
                     //Richie : Changed the format to suit the Email part
                     $date = getVTigerLongDateString($message->rfc822_header->date);
                     /* 
@@ -262,25 +248,13 @@ elseif (!isset($moveButton) )
                     $subject  = $header->subject ;
                     $msgsubject[$k]=$subject;
                     $msgfromemail[$k]=$fromemail;
-                    //$mbodies[$k] = $implodedmessage;
-		    //remove extra whitespace from message body
-		  //  echo 'untrimmed data ' .$msgData;
-		    //echo '\n trimmed data '.trim($msgData,"\t");
                     $mbodies[$k] = $msgData;
-		  //  print_r($mbodies);
                   }
                   $tempidlist = implode(",", $id); 
                   $fromemail = implode(",",$msgfromemail);
                   $subject = implode(",",$msgsubject);
                   $detail = implode(",",$mbodies);
-		  //send details as hidden
-
-
-//just pass the ids to the Email/Save.php and then get the data. That will be a lot more easier than this way. Here, one cannot send too much data in the message body that too as a url data
-//	echo 'tempidlist ' .$tempidlist;
-		  //echo 'details are >>>>> ' .$detail;
-                  header("Location: index.php?module=Emails&action=Save&fromemail=".$fromemail."&subject=".$subject."&idlist=".$tempidlist."&adddate=".$date."&addFlag=true");      
-                  //header("Location: index.php?module=Emails&action=Save&fromemail=".$fromemail."&subject=".$subject."&idlist=".$tempidlist."&adddate=".$date."&detail=".$detail);      
+                  header("Location: index.php?module=Emails&action=Save&fromemail=".$fromemail."&subject=".$subject."&idlist=".$tempidlist."&adddate=".$date."&addFlag=true&smodule=webmails");      
                   return;
                 }
     
