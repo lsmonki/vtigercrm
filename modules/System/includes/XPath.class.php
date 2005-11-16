@@ -158,7 +158,7 @@
  * @author  S.Blum / N.Swinson / D.Allen / (P.Mehl)
  * @link    http://sourceforge.net/projects/phpxpath/
  * @version 3.4
- * @CVS $Id: XPath.class.php,v 1.1 2005/03/14 07:43:20 shankarr Exp $
+ * @CVS $Id: XPath.class.php,v 1.1 2005/03/14 07:43:20 richie Exp $
  */
 
 /************************************************************************************************

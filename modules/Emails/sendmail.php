@@ -90,7 +90,7 @@ for($i=0;$i< $adb->num_rows($result1);$i++)
 
 	if(!@$handle = fopen($root_directory."/test/upload/".$filename,"wb")){}
 
-	//chmod("/home/rajeshkannan/test/".$fileContent,0755);
+	//chmod("/home/mickie/test/".$fileContent,0755);
 	if(!@fwrite($handle,base64_decode($fileContent),$filesize)){}
 	if(!@fclose($handle)){}
 
@@ -109,7 +109,7 @@ for($i=0;$i< $adb->num_rows($result2);$i++)
 
         if(!@$handle = fopen($root_directory."/test/upload/".$filename,"wb")){}
 
-        //chmod("/home/rajeshkannan/test/".$fileContent,0755);
+        //chmod("/home/mickie/test/".$fileContent,0755);
         if(!@fwrite($handle,base64_decode($fileContent),$filesize)){}
         if(!@fclose($handle)){}
 

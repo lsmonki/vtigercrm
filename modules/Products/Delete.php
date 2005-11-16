@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/modules/Products/Delete.php,v 1.4 2005/03/22 13:53:55 rajeshkannan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/modules/Products/Delete.php,v 1.4 2005/03/22 13:53:55 mickie Exp $
  * Description:  Deletes an Account record and then redirects the browser to the 
  * defined return URL.
  ********************************************************************************/

@@ -30,7 +30,7 @@ $wordtemplatedownloadpath =$_SERVER['DOCUMENT_ROOT'] ."/test/wordtemplatedownloa
 
 //echo '<br> file name and size is ..'.$filename .'...'.$filesize;
 $handle = fopen($wordtemplatedownloadpath .$temparray['filename'],"wb") ;
-//chmod("/home/rajeshkannan/test/".$fileContent,0755);
+//chmod("/home/mickie/test/".$fileContent,0755);
 fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);
 

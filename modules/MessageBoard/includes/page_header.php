@@ -511,9 +511,9 @@ function swapImage1($ocolumn,$orig_ocoloumn,$otype)
 $use_lang = ( !file_exists($phpbb_root_path . 'language/lang_' . $board_config['default_lang'] . '/lang_weblog_main.'.$phpEx) ) ? 'english' : $board_config['default_lang'];
 include_once($phpbb_root_path . 'language/lang_' . $use_lang . '/lang_weblog_main.' . $phpEx);
 
-//code by Shankar
+//code by richie
 $myEx="";
-//code by Shankar
+//code by richie
 
 //
 // The following assigns all _common_ variables that may be used at any point

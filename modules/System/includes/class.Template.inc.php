@@ -15,7 +15,7 @@
  */
 
 /**
- * $Id: class.Template.inc.php,v 1.1 2005/03/14 07:43:20 shankarr Exp $
+ * $Id: class.Template.inc.php,v 1.1 2005/03/14 07:43:20 richie Exp $
  */
 
 class Template {

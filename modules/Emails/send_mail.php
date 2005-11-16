@@ -19,7 +19,7 @@
  */
 
 
-//file modified by shankar
+//file modified by richie
 
 require("class.phpmailer.php");
 //require('include/database/PearDatabase.php');
@@ -143,7 +143,7 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 				$filesize=$temparray['attachmentsize'];
 
 				if(!@$handle = fopen($root_directory."/test/upload/".$filename,"wb")){}
-				//chmod("/home/rajeshkannan/test/".$fileContent,0755);
+				//chmod("/home/mickie/test/".$fileContent,0755);
 				if(!@fwrite($handle,base64_decode($fileContent),$filesize)){}
 				if(!@fclose($handle)){}
 			}

@@ -200,7 +200,7 @@ if ( isset( $_REQUEST['source_id']))
 
 	//$mapping_file->retrieve_entity_info( $_REQUEST['source_id'],$_REQUEST['return_module']);
 	$mapping_file->retrieve( $_REQUEST['source_id'],false);
-	$adb->println("Shankar : ".$mapping_file->toString());
+	$adb->println("richie : ".$mapping_file->toString());
 
 	$mapping_content = $mapping_file->content;
 

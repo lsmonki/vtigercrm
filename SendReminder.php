@@ -19,7 +19,7 @@
  */
 
 
-//file modified by shankar
+//file modified by richie
 
 require("modules/Emails/class.phpmailer.php");
 require("include/database/PearDatabase.php");

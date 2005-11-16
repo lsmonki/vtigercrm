@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-// $Id: common_functions.php,v 1.1 2005/03/14 07:43:20 shankarr Exp $
+// $Id: common_functions.php,v 1.1 2005/03/14 07:43:20 richie Exp $
 // HTML/XML Comment
 function created_by () {
   global $VERSION;

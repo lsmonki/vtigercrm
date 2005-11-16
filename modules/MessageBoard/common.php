@@ -141,7 +141,7 @@ if( !defined("PHPBB_INSTALLED") )
 	header("Location: install/install.$phpEx");
 	exit;
 }
-// $phpbb_root_path='/home/shankarr/buildtest/Oct181434/vtiger/apache/htdocs/vtiger_crm/modules/MessageBoard/';
+// $phpbb_root_path='/home/richie/buildtest/Oct181434/vtiger/apache/htdocs/vtiger_crm/modules/MessageBoard/';
 // $phpEx="php";
 include($phpbb_root_path . 'includes/constants.'.$phpEx);
 include($phpbb_root_path . 'includes/template.'.$phpEx);

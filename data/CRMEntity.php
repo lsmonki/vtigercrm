@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/data/CRMEntity.php,v 1.16 2005/04/29 04:21:31 rajeshkannan Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/data/CRMEntity.php,v 1.16 2005/04/29 04:21:31 mickie Exp $
  * Description:  Defines the base class for all data entities used throughout the 
  * application.  The base class including its methods and variables is designed to 
  * be overloaded with module-specific methods and variables particular to the 
@@ -392,7 +392,7 @@ $vtlog->logthis("module is =".$module,'info');
     $adb->query($sql_qry);
 
   }
-  //code added by shankar starts
+  //code added by richie starts
   function constructUpdateLog($id)
   {
     global $adb;
@@ -444,7 +444,7 @@ $vtlog->logthis("module is =".$module,'info');
     }
     return $updatelog;
   }
-  //code added by shankar ends
+  //code added by richie ends
   function insertIntoEntityTable($table_name, $module)
   {
 	  global $vtlog;	
@@ -527,13 +527,13 @@ $vtlog->logthis("module is =".$module,'info');
 		  if($fldvalue=='') $fldvalue ="''";
 		  if($insertion_mode == 'edit')
 		  {
-			  //code by shankar starts
+			  //code by richie starts
 			  if(($table_name == "troubletickets") && ($columname == "update_log"))
 			  {
 				  $fldvalue = $this->constructUpdateLog($this->id);
 				  $fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
 			  }
-			  //code by shankar ends
+			  //code by richie ends
 
 			  if($table_name == 'notes' && $columname == 'filename' && $_FILES['filename']['name'] == '')
 			  {
@@ -579,7 +579,7 @@ $vtlog->logthis("module is =".$module,'info');
 		  }
 		  else
 		  {
-			  //code by shankar starts
+			  //code by richie starts
 			  if(($table_name == "troubletickets") && ($columname == "update_log"))
 			  {
 				  global $current_user;
@@ -630,7 +630,7 @@ $vtlog->logthis("module is =".$module,'info');
 			*/	  
 
 			  }
-			  //code by shankar ends
+			  //code by richie ends
 			  $column .= ", ".$columname;
 			  $value .= ", ".$fldvalue."";
 		  }

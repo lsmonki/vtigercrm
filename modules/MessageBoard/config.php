@@ -5,7 +5,7 @@
 // Do not change anything in this file!
 
 $dbms = 'mysql';
-$dbhost = 'shankarr:5001';
+$dbhost = 'richie:5001';
 $dbname = 'vtigercrm3_0';
 $dbuser = 'root';
 $dbpasswd = '';
