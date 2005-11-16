@@ -2758,7 +2758,7 @@ providing such a beautiful utilities.<br>
 <tr> <td valign=top ><strong>error_reporting = E_WARNING & ~E_NOTICE</strong></tr>
 <tr> <td valign=top ><strong>allow_call_time_reference = On</strong></tr>
 <tr> <td valign=top ><strong>output_buffering= On</strong></tr>
-<tr>  <td valign=top ><a href=http://www.vtiger.com/products/crm/help/vtiger_CRM_Linux_Dependencies.pdf </a>Linux installation pre-requesites</tr>
+<tr>  <td valign=top ><a href="http://www.vtiger.com/products/crm/help/vtiger_CRM_Linux_Dependencies.pdf">Linux installation pre-requesites</a></tr>
             
 
 
