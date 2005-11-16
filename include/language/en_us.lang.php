@@ -250,6 +250,8 @@ $app_strings = Array(
 
 'LNK_HELP'=>'Help',
 
+'LNK_VTDOCS'=>'vtiger Docs',
+
 'LNK_ABOUT'=>'About',
 
 'LNK_OUTLOOK'=>'./include/images/outlook_download.gif',
