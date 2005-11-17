@@ -74,5 +74,8 @@ elseif($_REQUEST['return_module'] == "Products")
 
 }
 	
-header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&smodule=SO&record=".$_REQUEST['return_id']);
+ //code added for returning back to the current view after delete from list view
+ if($_REQUEST['return_viewname'] == '') $return_viewname='0';
+ if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&smodule=SO&record=".$_REQUEST['return_id']."&viewname=".$return_viewname);
 ?>

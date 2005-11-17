@@ -140,6 +140,7 @@ if(isset($_REQUEST['viewname']) == false || $_REQUEST['viewname']=='')
 }else
 {
 	$viewid =  $_REQUEST['viewname'];
+	$oCustomView->setdefaultviewid = $viewid;
 }
 //<<<<<customview>>>>>
 
