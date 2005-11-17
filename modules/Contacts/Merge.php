@@ -24,7 +24,7 @@ else if (document.layers || (!document.all && document.getElementById))
 }
 else if(document.all)
 {
-	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,2,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
+	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,3,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
 }
 </script>
 <?php
@@ -53,111 +53,155 @@ if($mergeFileName == "")
 die("Select Mail Merge Template");
 }
 $handle = fopen($wordtemplatedownloadpath .$temparray['filename'],"wb");
-//chmod("/home/mickie/test/".$fileContent,0755);
+//chmod("/home/rajeshkannan/test/".$fileContent,0755);
 fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);
 
-//for mass merge
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<for mass merge>>>>>>>>>>>>>>>>>>>>>>>>
 $mass_merge = $_REQUEST['idlist'];
+$single_record = $_REQUEST['record'];
 
 if($mass_merge != "")
+{	
+	$mass_merge = explode(";",$mass_merge);
+	$temp_mass_merge = $mass_merge;
+	if(array_pop($temp_mass_merge)=="")
+		array_pop($mass_merge);
+	$mass_merge = implode(",",$mass_merge);
+}else if($single_record != "")
 {
-  $mass_merge = explode(";",$mass_merge);
+	$mass_merge = $single_record;	
+}else
+{
+	die("Record Id is not found, cannot merge the document");
+}
+
+//<<<<<<<<<<<<<<<<header for csv and select columns for query>>>>>>>>>>>>>>>>>>>>>>>>
+$query1="select tab.name,field.tablename,field.columnname,field.fieldlabel from field inner join tab on tab.tabid = field.tabid where field.tabid in (4,6) and field.block <> 4 order by field.tablename";
+
+$result = $adb->query($query1);
+$y=$adb->num_rows($result);
+	
+for ($x=0; $x<$y; $x++)
+{ 
+  $tablename = $adb->query_result($result,$x,"tablename");
+  $columnname = $adb->query_result($result,$x,"columnname");
+  $modulename = $adb->query_result($result,$x,"name");
   
-  for($i=0;$i < count($mass_merge) - 1;$i++)
+	if($tablename == "crmentity")
   {
-  	$query = "SELECT * FROM contactdetails inner join contactsubdetails on contactsubdetails.contactsubscriptionid=contactdetails.contactid inner join contactaddress on contactaddress.contactaddressid=contactdetails.contactid and contactdetails.contactid = '".$mass_merge[$i]."'";
-    
-    $result = $adb->query($query);
-    $y=$adb->num_fields($result); 
-    $columnValues = $adb->fetch_array($result);
-    
-    for ($x=0; $x<$y; $x++)
+  	if($modulename == "Accounts")
+  	{
+  		$tablename = "crmentityAccounts";
+  	}
+  }
+  $querycolumns[$x] = $tablename.".".$columnname;
+  if($columnname == "smownerid")
+  {
+    if($modulename == "Accounts")
     {
-        $columnValString[$x] = $columnValues[$x];
+			$querycolumns[$x]="concat(usersAccounts.last_name,' ',usersAccounts.first_name) as username";
     }
-    //for custom fields
-  	$sql2 = "select contactscf.* from contactscf inner join contactdetails on contactdetails.contactid = contactscf.contactid where contactdetails.contactid = '".$mass_merge[$i]."'";
-    $result2 = $adb->query($sql2);
-    $numRows2 = $adb->num_fields($result2);
-    $custom_field_values = $adb->fetch_array($result2);
-    for ($z=1; $z<$numRows2; $z++)
+		if($modulename == "Contacts")
     {
-      $custom_values_str[$z] = $custom_field_values[$z];
-    }
-    //end custom fields
-    $merged_columnValString = array_merge($columnValString,$custom_values_str);
-    
-		$mass_columnString = implode(",",$merged_columnValString);
-    $mass_columnValString = $mass_columnValString.$mass_columnString;
-    if($i < count($mass_merge) - 2)
-    {
-    	$mass_columnValString = $mass_columnValString."###";
+    	$querycolumns[$x]="concat(users.last_name,' ',users.first_name) as usercname,users.first_name,users.last_name,users.user_name,users.yahoo_id,users.title,users.phone_work,users.department,users.phone_mobile,users.phone_other,users.phone_fax,users.email1,users.phone_home,users.email2,users.address_street,users.address_city,users.address_state,users.address_postalcode,users.address_country";
     }
   }
-$columnValString = $mass_columnValString;
+	if($columnname == "parentid")
+	{
+		$querycolumns[$x] = "accountAccounts.accountname";
+	}
+	if($columnname == "accountid")
+	{
+		$querycolumns[$x] = "accountContacts.accountname";
+	}
+	if($columnname == "reportsto")
+	{
+		$querycolumns[$x] = "contactdetailsContacts.lastname";
+	}
+	
+	
+	if($modulename == "Accounts")
+  {
+  	$field_label[$x] = "ACCOUNT_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
+  }
+	
+	if($modulename == "Contacts")
+  {
+  	$field_label[$x] = "CONTACT_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
+  	if($columnname == "smownerid")
+  		{
+  			$field_label[$x] = $field_label[$x].",USER_FIRSTNAME,USER_LASTNAME,USER_USERNAME,USER_YAHOOID,USER_TITLE,USER_OFFICEPHONE,USER_DEPARTMENT,USER_MOBILE,USER_OTHERPHONE,USER_FAX,USER_EMAIL,USER_HOMEPHONE,USER_OTHEREMAIL,USER_PRIMARYADDRESS,USER_CITY,USER_STATE,USER_POSTALCODE,USER_COUNTRY";
+  		}
+  }
+    
+	
 }
-//end for mass merge
-$query = "SELECT * FROM contactdetails inner join contactsubdetails on contactsubdetails.contactsubscriptionid=contactdetails.contactid inner join contactaddress on contactaddress.contactaddressid=contactdetails.contactid and contactdetails.contactid = '".$_REQUEST['record'] ."'";
+$csvheader = implode(",",$field_label);
+//echo $csvheader;
+//<<<<<<<<<<<<<<<<End>>>>>>>>>>>>>>>>>>>>>>>>
+	
+if(count($querycolumns) > 0)
+{
+	$selectcolumns = implode($querycolumns,",");
+	
 
-//$query = "SELECT * FROM contactdetails,contactsubdetails,contactaddress where contactid = '".$_REQUEST['record'] ."'";
-//echo $query;
+$query = "select ".$selectcolumns." from contactdetails
+				inner join crmentity on crmentity.crmid = contactdetails.contactid 
+				inner join contactaddress on contactdetails.contactid = contactaddress.contactaddressid 
+				inner join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid 
+				inner join contactscf on contactdetails.contactid = contactscf.contactid 
+				left join contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
+				left join account as accountContacts on accountContacts.accountid = contactdetails.accountid 
+				left join users on users.id = crmentity.smownerid
+				left join account on account.accountid = contactdetails.accountid
+				left join crmentity as crmentityAccounts on crmentityAccounts.crmid=account.accountid
+				left join accountbillads on account.accountid=accountbillads.accountaddressid
+				left join accountshipads on account.accountid=accountshipads.accountaddressid
+				left join accountscf on account.accountid = accountscf.accountid
+				left join account as accountAccounts on accountAccounts.accountid = account.parentid
+				left join users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid 
+				where crmentity.deleted=0 and (crmentityAccounts.deleted <> 1) and contactdetails.contactid in(".$mass_merge.")";
+				
+
 $result = $adb->query($query);
 
-$y=$adb->num_fields($result);
-
-for ($x=0; $x<$y; $x++)
+while($columnValues = $adb->fetch_array($result))
 {
-		$fld = $adb->field_name($result, $x);
-    $columnNames[$x] = "CONTACT_".strtoupper($fld->name);
-}
-
-//condition added for mass merge		 
-if($mass_merge == "")
-{
-  $columnValues = $adb->fetch_array($result);
-  for ($x=0; $x<$y; $x++)
+	$y=$adb->num_fields($result);
+	for($x=0; $x<$y; $x++)
   {
-      $columnValString[$x] = str_replace(","," ",$columnValues[$x]);
+  	$value = $columnValues[$x];
+  	//<<<<<<<<<<<<<<< For blank Fields >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  	if($value == "0")
+  	{
+  		$value = "";
+  	}
+  	if(trim($value) == "--None--" || trim($value) == "--none--")
+  	{
+  		$value = "";
+  	}
+		//<<<<<<<<<<<<<<< End >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  	$actual_values[$x] = $value;
+		$actual_values[$x] = preg_replace("/(\r\n)/"," ",$value);
+		$actual_values[$x] = str_replace(","," ",$actual_values[$x]);
+		$actual_values[$x] = str_replace("'"," ",$actual_values[$x]);
+		$actual_values[$x] = str_replace('"'," ",$actual_values[$x]);
   }
-	//$columnValString = implode(",",$columnValString);
-
-  //<<<<<<<<<<<<<<<<to fetch values of custom fields>>>>>>>>>>>>>>>>>>>>>>
-  $sql2 = "select contactscf.* from contactscf inner join contactdetails on contactdetails.contactid = contactscf.contactid where contactdetails.contactid = '".$_REQUEST['record'] ."'";
-  $result2 = $adb->query($sql2);
-  $numRows2 = $adb->num_fields($result2);
-  $custom_field_values = $adb->fetch_array($result2);
-  for ($i=1; $i<$numRows2; $i++)
-  {
-    $custom_values_str[$i] = $custom_field_values[$i];
-  }
-  //<<<<<<<<<<<<<<<<end fetch values of custom fields>>>>>>>>>>>>>>>>>>>>>>
-  $columnValString = array_merge($columnValString,$custom_values_str);
-  $columnValString = implode(",",$columnValString);
+  
+  $mergevalue[] = implode($actual_values,",");  	
 }
-//end condition added for mass merge
-
-//start custom fields
-$sql1 = "select fieldlabel from field where generatedtype=2 and tabid=4";
-$result = $adb->query($sql1);
-$numRows = $adb->num_rows($result);
-for($i=0; $i < $numRows;$i++)
+$csvdata = implode($mergevalue,"###");
+}else
 {
-$custom_fields[$i] = "CONTACT_".strtoupper(str_replace(" ","",$adb->query_result($result,$i,"fieldlabel")));
-}
-$column_string = array_merge($columnNames,$custom_fields);
-//end custom fields
-
-$columnString = implode(",",$column_string);
-//echo $columnString;
-//echo $columnValString;
-
+	die("No fields to do Merge");
+}	
 echo"<script type=\"text/javascript\">
-var dHdr = '$columnString';
-var dSrc = '$columnValString';
+var dHdr = '$csvheader';
+var dSrc = '$csvdata';
 </script>";
 //echo $site_URL."/test/wordtemplatedownload/".$filename;
-
 ?>
 <script>
 if (window.ActiveXObject){
@@ -199,4 +243,3 @@ if (window.ActiveXObject){
 </script>
 </body>
 </html>
-
