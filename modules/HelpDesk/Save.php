@@ -142,7 +142,10 @@ if($emailoptout == 0)
 	$mail_status_str .= $parent_email."=".$mail_status."&&&";
 }
 $mail_error_status = getMailErrorString($mail_status_str);
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&$mail_error_status");
+//code added for returning back to the current view after edit from list view
+if($_REQUEST['return_viewname'] == '') $return_viewname='0';
+if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&$mail_error_status&viewname=$return_viewname");
 
 function getTicketComments($ticketid)
 {
