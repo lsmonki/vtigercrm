@@ -173,6 +173,9 @@ $xtpl->assign("BLOCK2", $block_2);
 $block_3 = getDetailBlockInformation("Emails",4,$focus->column_fields);
 $xtpl->assign("BLOCK4", $block_3);
 $block_4 = getDetailBlockInformation("Emails",5,$focus->column_fields);
+//replacing the brs in order to maintain the exact state of the data
+$block_4 = preg_replace("/<br \/\>/", " ", $block_4);
+
 $xtpl->assign("BLOCK5", $block_4);
 
 $vtlog->logthis("Detail Block Informations successfully retrieved.",'info');
