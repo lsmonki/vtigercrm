@@ -172,6 +172,8 @@ $block_2 = getDetailBlockInformation("Emails",2,$focus->column_fields);
 $xtpl->assign("BLOCK2", $block_2);
 $block_3 = getDetailBlockInformation("Emails",4,$focus->column_fields);
 $xtpl->assign("BLOCK4", $block_3);
+$block_4 = getDetailBlockInformation("Emails",5,$focus->column_fields);
+$xtpl->assign("BLOCK5", $block_4);
 
 $vtlog->logthis("Detail Block Informations successfully retrieved.",'info');
 
