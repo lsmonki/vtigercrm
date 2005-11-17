@@ -149,6 +149,12 @@ if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewnam
 
 if($image_error=="true") //If there is any error in the file upload then moving all the data to EditView.
 {
+	//re diverting the page and reassigning the same values as image error occurs	
+	if($_REQUEST['activity_mode'] != '')$activity_mode=$_REQUEST['activity_mode'];
+	if($_REQUEST['return_module'] != '')$return_module=$_REQUEST['return_module'];
+	if($_REQUEST['return_action'] != '')$return_action=$_REQUEST['return_action'];
+	if($_REQUEST['return_id'] != '')$return_id=$_REQUEST['return_id'];
+
         $vtlog->logthis("There is an error during the upload of product image.",'debug');
 	$field_values_passed.="";
 	foreach($focus->column_fields as $fieldname => $val)
@@ -166,8 +172,8 @@ if($image_error=="true") //If there is any error in the file upload then moving 
 	$values_pass=$field_values_passed;
 	$encode_field_values=base64_encode($values_pass);
 
-	$return_module = "Products";
-	$return_action = "EditView";
+	$error_module = "Products";
+	$error_action = "EditView";
 
 	if(isset($_request['return_id']) && $_request['return_id'] != "")
 		$return_id = $_request['return_id'];
@@ -178,7 +184,7 @@ if($image_error=="true") //If there is any error in the file upload then moving 
 	{
 		$return_id=$_REQUEST['record'];
 	}
-	header("location: index.php?action=$return_action&module=$return_module&record=$return_id&return_viewname=$return_viewname&viewname=$return_viewname&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values");
+	header("location: index.php?action=$error_action&module=$error_module&record=$return_id&return_id=$return_id&return_action=$return_action&return_module=$return_module&activity_mode=$activity_mode&return_viewname=$return_viewname&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values");
 
 }
 if($saveimage=="true")
