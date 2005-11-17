@@ -385,6 +385,9 @@ elseif(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] == 'mailb
 else
 {
 //echo ' 333333 the overwriting might happen here '.$return_id;
-header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename");
+//code added for returning back to the current view after edit from list view
+if($_REQUEST['return_viewname'] == '') $return_viewname='0';
+if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+header("Location: index.php?action=$return_action&module=$return_module&parent_id=$parent_id&record=$return_id&filename=$filename&viewname=$return_viewname");
 }
 ?>
