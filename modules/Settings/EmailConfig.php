@@ -15,7 +15,16 @@ global $app_strings;
 global $app_list_strings;
 
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_NAME'].' : '.$mod_strings['LBL_EMAIL_CONFIG'], true);
-echo '<br><br>';
+echo '<br>';
+
+//Display the mail send status
+if($_REQUEST['mail_error'] != '')
+{
+        require_once("modules/Emails/mail.php");
+        $error_msg = strip_tags(parseEmailErrorString($_REQUEST['mail_error']));
+	echo '<b><font color="purple">Test Mail status : '.$error_msg.'</font></b><br>';
+}
+echo '<br>';
 
 global $adb;
 global $theme;
