@@ -23,18 +23,18 @@ require("class.phpmailer.php");
 
 //Add these lines in wherever we want to use this function
 //include("modules/Emails/mail.php");
-//send_mail('Emails',$to_email,$current_user->user_name,'',$subject,$body,$ccmail,$bccmail);
+//send_mail('Emails',$to_email,$from_name,$from_email,$subject,$body,$ccmail,$bccmail);
 
-/* Function used to send email 
-   $module 		-- current module 
-   $to_email 		-- to email address 
-   $from_name		-- currently loggedin user name
-   $from_email		-- currently loggedin users's email id. please give as '' if you are not in HelpDesk module
-   $subject		-- subject of the email you want to send
-   $contents		-- body of the email you want to send
-   $cc			-- add email ids with comma seperated. - optional 
-   $bcc			-- add email ids with comma seperated. - optional.
-*/
+/**   Function used to send email 
+  *   $module 		-- current module 
+  *   $to_email 	-- to email address 
+  *   $from_name	-- currently loggedin user name
+  *   $from_email	-- currently loggedin users's email id. you can give as '' if you are not in HelpDesk module
+  *   $subject		-- subject of the email you want to send
+  *   $contents		-- body of the email you want to send
+  *   $cc		-- add email ids with comma seperated. - optional 
+  *   $bcc		-- add email ids with comma seperated. - optional.
+  */
 function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='')
 {
 
@@ -53,10 +53,8 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 	if($from_email == '')//$module != 'HelpDesk')
 		$from_email = getUserEmailId('user_name',$from_name);
 
-	//Add the signature with the contents of the email
 	$contents = addSignature($contents,$from_name);
 
-	//Create new PHPMailer object and set all the values in that object
 	$mail = new PHPMailer();
 
 	setMailerProperties(&$mail,$subject,$contents,$from_email,$from_name,$to_email);
@@ -65,7 +63,6 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 
 	$mail_status = MailSend(&$mail);
 
-	//This is to get the correct mail error
 	if($mail_status != 1)
 	{
 		$mail_error = getMailError(&$mail,$mail_status,$mailto);
@@ -91,11 +88,12 @@ return $mail_error;
 		}
 	}
 	*/
-
-//	header("Location: index.php?action=$returnaction&module=$returnmodule&parent_id=$parent_id&record=$return_id&filename=$filename&message=$error_info");
-
 }
 
+/**	Function to get the user Email id based on column name and column value
+  *	$name -- column name of the users table 
+  *	$val  -- column value 
+  */
 function getUserEmailId($name,$val)
 {
 	global $adb;
@@ -122,6 +120,11 @@ function getUserEmailId($name,$val)
 		return '';
 	}
 }
+
+/**	Funtion to add the user's signature with the content passed
+  *	$contents -- where we want to add the signature
+  *	$fromname -- which user's signature will be added to the contents
+  */
 function addSignature($contents, $fromname)
 {
 	global $adb;
@@ -140,6 +143,10 @@ function addSignature($contents, $fromname)
 	return $contents;
 }
 
+/**	Function to set all the Mailer properties
+  *	$mail -- reference of the mail object
+  *	other parameters are same as passed in send_mail function
+  */
 function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email)
 {
 	global $adb;
@@ -154,7 +161,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	setMailServerProperties(&$mail);	
 	$mail->SMTPAuth = true;     // turn on SMTP authentication
 
-	//TODO -- handle the from name and email for HelpDesk
+	//Handle the from name and email for HelpDesk
 	$mail->From = $from_email;
 	$mail->FromName = $from_name;
 
@@ -163,16 +170,19 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	$mail->AddReplyTo($from_email);
 	$mail->WordWrap = 50;
 
-	//TODO -- handling the attachments here
+	//Handling the attachments here
 	addAttachments(&$mail,$_REQUEST['record'],$_REQUEST['filename']);
 
 	$mail->IsHTML(true);		// set email format to HTML
 
 	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
 
-        //echo '<pre>';print_r($_REQUEST);echo '</pre>';
 	return;
 }
+
+/**	Function to set the Mail Server Properties in the object passed
+  *	$mail -- reference of the mailobject
+  */
 function setMailServerProperties($mail)
 {
 	global $adb;
@@ -191,6 +201,12 @@ function setMailServerProperties($mail)
 
 	return;
 }
+
+/**	Function to add the file as attachment with the mail object
+  *	$mail -- reference of the mail object
+  *	$record -- not used now. If we want to add all the attachments then this record will be useful to get the all attachments
+  *	$filename -- filename which is going to added with the mail
+  */
 function addAttachments($mail,$record,$filename)
 {
 	global $adb, $root_directory;
@@ -202,6 +218,12 @@ function addAttachments($mail,$record,$filename)
 		$mail->AddAttachment($root_directory."test/upload/".$filename);//temparray['filename']) 
 	}
 }
+
+/**	Function to set the CC or BCC addresses in the mail
+  *	$mail -- reference of the mail object
+  *	$cc_mod -- mode to set the address ie., cc or bcc
+  *	$cc_val -- addresss with comma seperated to set as CC or BCC in the mail
+  */
 function setCCAddress($mail,$cc_mod,$cc_val)
 {
 	global $adb;
@@ -221,6 +243,10 @@ function setCCAddress($mail,$cc_mod,$cc_val)
 		}
 	}
 }
+
+/**	Function to send the mail which will be called after set all the mal object values
+  *	$mail -- reference of the mail object
+  */
 function MailSend($mail)
 {
 	global $vtlog;
@@ -228,9 +254,7 @@ function MailSend($mail)
         if(!$mail->Send())
         {
 		$vtlog->logthis("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'",'debug');
-		//$info = explode(":",$mail->ErrorInfo);
-		//$msg = trim($info[1]);
-		return $mail->ErrorInfo;//$msg;
+		return $mail->ErrorInfo;
         }
 	else 
 	{
@@ -239,6 +263,10 @@ function MailSend($mail)
 	}
 }
 
+/**	Function to get the Parent email id for email
+  *	$returnmodule -- Parent module value. Leads and Contact for email
+  *	$parentid -- id of the parent ie., lead or contact
+  */
 function getParentMailId($returnmodule,$parentid)
 {
 	global $adb;
@@ -271,13 +299,17 @@ function getParentMailId($returnmodule,$parentid)
 	return $mailid;
 }
 
-//Added function to parse the mail error and return the correct error
+/**	Function to parse the mail error and return the correct error
+  *	$mail -- reference of the mail object
+  *	$mail_status -- status of the mail which is sent or not
+  *	$to -- the email address to whom we sent the mail and failes
+  */
 function getMailError($mail,$mail_status,$to)
 {
 	//Error types in class.phpmailer.php
 	/*
-	provide_address, mailer_not_supported, execute, instantiate, from_failed, recipients_failed, data_not_accepted, authenticate, 
-	connect_host, file_access, file_open, encoding
+	provide_address, mailer_not_supported, execute, instantiate, file_access, file_open, encoding, data_not_accepted, authenticate, 
+	connect_host, recipients_failed, from_failed
 	*/
 
 	global $adb;
@@ -293,18 +325,25 @@ function getMailError($mail,$mail_status,$to)
 	}
 	elseif(strstr($msg,'from_failed'))
 	{
-		$error_msg = $msg;//."&&&".$mail->from;
+		$error_msg = $msg;
 	}
 	elseif(strstr($msg,'recipients_failed'))
 	{
-		$error_msg = $msg;//."&&&".$to;
+		$error_msg = $msg;
+	}
+	else
+	{
+		$adb->println("Mail error is not as connect_host or from_failed or recipients_failed");
+		//$error_msg = $msg;
 	}
 
 	$adb->println("return error => ".$error_msg);
 	return $error_msg;
 }
 
-//Function to get the mail status string(string of all mail status) and return the error status only as a encoded string
+/**	Function to get the mail status string(string of all mail status) and return the error status only as a encoded string
+  *	$mail_status_str -- concatenated string with all the error messages with &&& seperation
+  */
 function getMailErrorString($mail_status_str)
 {
 	global $adb;
@@ -331,9 +370,12 @@ function getMailErrorString($mail_status_str)
 	return $mail_error_str;
 }
 
-//Function to parse the error string and return the display message
+/**	Function to parse the error string and return the display message
+  *	$mail_error_str -- base64 encoded string which contains the mail sending errors as concatenated with &&&
+  */
 function parseEmailErrorString($mail_error_str)
 {
+	//TODO -- we can modify this function for better email error handling in future
 	global $adb, $mod_strings;
 	$adb->println("Inside the parseEmailErrorString function.\n encoded mail error string ==> ".$mail_error_str);
 
