@@ -1,4 +1,13 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
+
 include("modules/Emails/mail.php");
 
 global $adb;
@@ -24,9 +33,8 @@ if($to_email != '')
 {
 	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['name'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail']);
 	//set the errorheader1 to 1 if the mail has not been sent to the assigned to user
-	if($mail_status != 1)//== 'connect_host')
+	if($mail_status != 1)
 	{
-		//$adb->println("Email server configuration is not correct. Page will be redirected to Emails/EditView");
 		$errorheader1 = 1;
 	}
 	$mail_status_str = $to_email."=".$mail_status."&&&";
@@ -74,7 +82,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 		{
 			$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$focus->column_fields['description']);
 			$mail_status_str .= $emailadd."=".$mail_status."&&&";
-			//added to get remail the EditView if an error occurs in mail sending
+			//added to get remain the EditView page if an error occurs in mail sending
 			if($mail_status != 1)
 			{
 				$errorheader2 = 1;
