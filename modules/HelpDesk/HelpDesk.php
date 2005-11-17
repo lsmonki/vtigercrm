@@ -1,4 +1,17 @@
 <?php
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of txhe License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
 include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
@@ -182,20 +195,22 @@ class HelpDesk extends CRMEntity {
 	        return $response;
 	}
 
- function getColumnNames_Hd()
- {
-       $table1flds = $this->db->getColumnNames("troubletickets");
-       $sql1 = "select fieldlabel from field where generatedtype=2 and tabid=13";
-                 $result = $this->db->query($sql1);
-                 $numRows = $this->db->num_rows($result);
-                 for($i=0; $i < $numRows;$i++)
-                 {
-                        $custom_fields[$i] = $this->db->query_result($result,$i,"fieldlabel");
-                 }
-
-                 $mergeflds = array_merge($table1flds,$custom_fields);
-       return $mergeflds;
+//Used By vtigerCRM Word Plugin
+function getColumnNames_Hd()
+{
+	$sql1 = "select fieldlabel from field where tabid=13 and block <> 6 ";
+	$result = $this->db->query($sql1);
+	$numRows = $this->db->num_rows($result);
+	for($i=0; $i < $numRows;$i++)
+	{
+   	$custom_fields[$i] = $this->db->query_result($result,$i,"fieldlabel");
+   	$custom_fields[$i] = ereg_replace(" ","",$custom_fields[$i]);
+   	$custom_fields[$i] = strtoupper($custom_fields[$i]);
+	}
+	$mergeflds = $custom_fields;
+	return $mergeflds;
 }
+//End
 
 }
 ?>
