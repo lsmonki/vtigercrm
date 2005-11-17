@@ -24,15 +24,12 @@ else if (document.layers || (!document.all && document.getElementById))
 }
 else if(document.all)
 {
-	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,2,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
+	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,3,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
 }
 </script>
 <?php
 require_once('include/database/PearDatabase.php');
 require_once('config.php');
-//echo 'id is ....... ' .$_REQUEST['record'];
-
-//echo 'merge file name is ...' .$_REQUEST['mergefile'];
 
 $mergeFileName = $_REQUEST['mergefile'];
 //get the particular file from db and store it in the local hard disk.
@@ -50,113 +47,105 @@ $wordtemplatedownloadpath =$root_directory ."/test/wordtemplatedownload/";
 //echo '<br> file name and size is ..'.$filename .'...'.$filesize;
 if($mergeFileName == "")
 {
-die("Select Mail Merge Template");
+	die("Select Mail Merge Template");
 }
 
 $handle = fopen($wordtemplatedownloadpath .$temparray['filename'],"wb");
-//chmod("/home/mickie/test/".$fileContent,0755);
 fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);
 
 //for mass merge
 $mass_merge = $_REQUEST['idlist'];
+$single_record = $_REQUEST['record'];
 
 if($mass_merge != "")
+{	
+	$mass_merge = explode(";",$mass_merge);
+	//array_pop($mass_merge);
+	$temp_mass_merge = $mass_merge;
+	if(array_pop($temp_mass_merge)=="")
+		array_pop($mass_merge);
+	$mass_merge = implode(",",$mass_merge);
+}else if($single_record != "")
 {
-  $mass_merge = explode(";",$mass_merge);
-  
-  for($i=0;$i < count($mass_merge) - 1;$i++)
-  {
-  	$query = "SELECT * FROM leaddetails inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leaddetails.leadid and leaddetails.leadid = '".$mass_merge[$i]."'";
-    
-    $result = $adb->query($query);
-    $y=$adb->num_fields($result); 
-    $columnValues = $adb->fetch_array($result);
-    
-    for ($x=0; $x<$y; $x++)
-    {
-        $columnValString[$x] = $columnValues[$x];
-    }
-    //for custom fields
-  	$sql2 = "select leadscf.* from leadscf inner join leaddetails on leaddetails.leadid = leadscf.leadid where leaddetails.leadid = '".$mass_merge[$i]."'";
-    $result2 = $adb->query($sql2);
-    $numRows2 = $adb->num_fields($result2);
-    $custom_field_values = $adb->fetch_array($result2);
-    for ($z=1; $z<$numRows2; $z++)
-    {
-      $custom_values_str[$z] = $custom_field_values[$z];
-    }
-    //end custom fields
-    $merged_columnValString = array_merge($columnValString,$custom_values_str);
-    
-		$mass_columnString = implode(",",$merged_columnValString);
-    $mass_columnValString = $mass_columnValString.$mass_columnString;
-    if($i < count($mass_merge) - 2)
-    {
-    	$mass_columnValString = $mass_columnValString."###";
-    }
-  }
-$columnValString = $mass_columnValString;
+	$mass_merge = $single_record;	
+}else
+{
+	die("Record Id is not found");
 }
-//end for mass merge
 
-$query = "SELECT * FROM leaddetails inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leaddetails.leadid and leaddetails.leadid = '".$_REQUEST['record'] ."'";
-//$query = "SELECT * FROM leaddetails,leadsubdetails,leadaddress where leadid = '".$_REQUEST['record'] ."'";
-//echo $query;
-$result = $adb->query($query);
-
-$y=$adb->num_fields($result);
-
+//<<<<<<<<<<<<<<<<header for csv and select columns for query>>>>>>>>>>>>>>>>>>>>>>>>
+$query1="select tablename,columnname,fieldlabel from field where tabid=7 order by tablename";
+$result = $adb->query($query1);
+$y=$adb->num_rows($result);
+	
 for ($x=0; $x<$y; $x++)
-{
-    $fld = $adb->field_name($result, $x);
-		$columnNames[$x] = "LEAD_".strtoupper($fld->name);
-} 
-
-//condition added for mass merge		 
-if($mass_merge == "")
-{
-  $columnValues = $adb->fetch_array($result);
-  for ($x=0; $x<$y; $x++)
+{ 
+  $tablename = $adb->query_result($result,$x,"tablename");
+  $columnname = $adb->query_result($result,$x,"columnname");
+	$querycolumns[$x] = $tablename.".".$columnname;
+  if($columnname == "smownerid")
   {
-      $columnValString[$x] = str_replace(","," ",$columnValues[$x]);
+    $querycolumns[$x] = "concat(users.last_name,' ',users.first_name) as username,users.first_name,users.last_name,users.user_name,users.yahoo_id,users.title,users.phone_work,users.department,users.phone_mobile,users.phone_other,users.phone_fax,users.email1,users.phone_home,users.email2,users.address_street,users.address_city,users.address_state,users.address_postalcode,users.address_country";
   }
-	//$columnValString = implode(",",$columnValString);
-
-  //<<<<<<<<<<<<<<<<to fetch values of custom fields>>>>>>>>>>>>>>>>>>>>>>
-  $sql2 = "select leadscf.* from leadscf inner join leaddetails on leaddetails.leadid = leadscf.leadid where leaddetails.leadid = '".$_REQUEST['record'] ."'";
-  $result2 = $adb->query($sql2);
-  $numRows2 = $adb->num_fields($result2);
-  $custom_field_values = $adb->fetch_array($result2);
-  for ($i=1; $i<$numRows2; $i++)
-  {
-    $custom_values_str[$i] = $custom_field_values[$i];
-  }
-  //<<<<<<<<<<<<<<<<end fetch values of custom fields>>>>>>>>>>>>>>>>>>>>>>
-  $columnValString = array_merge($columnValString,$custom_values_str);
-  $columnValString = implode(",",$columnValString);
+  $field_label[$x] = "LEAD_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
+	if($columnname == "smownerid")
+  		{
+  			$field_label[$x] = $field_label[$x].",USER_FIRSTNAME,USER_LASTNAME,USER_USERNAME,USER_YAHOOID,USER_TITLE,USER_OFFICEPHONE,USER_DEPARTMENT,USER_MOBILE,USER_OTHERPHONE,USER_FAX,USER_EMAIL,USER_HOMEPHONE,USER_OTHEREMAIL,USER_PRIMARYADDRESS,USER_CITY,USER_STATE,USER_POSTALCODE,USER_COUNTRY";
+  		}
 }
-//end condition added for mass merge
-
-//start custom fields
-$sql1 = "select fieldlabel from field where generatedtype=2 and tabid=7";
-$result = $adb->query($sql1);
-$numRows = $adb->num_rows($result);
-for($i=0; $i < $numRows;$i++)
+$csvheader = implode(",",$field_label);
+//<<<<<<<<<<<<<<<<End>>>>>>>>>>>>>>>>>>>>>>>>
+	
+if(count($querycolumns) > 0)
 {
-$custom_fields[$i] = "LEAD_".strtoupper(str_replace(" ","",$adb->query_result($result,$i,"fieldlabel")));
+	$selectcolumns = implode($querycolumns,",");
+
+$query = "select ".$selectcolumns." from leaddetails 
+  inner join crmentity on crmentity.crmid=leaddetails.leadid 
+  inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid 
+  inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid 
+  inner join leadscf on leaddetails.leadid = leadscf.leadid 
+  left join users on users.id = crmentity.smownerid
+  where crmentity.deleted=0 and leaddetails.leadid in (".$mass_merge.")";
+		
+$result = $adb->query($query);
+	
+while($columnValues = $adb->fetch_array($result))
+{
+	$y=$adb->num_fields($result);
+  for($x=0; $x<$y; $x++)
+  {
+		$value = $columnValues[$x];
+  	//<<<<<<<<<<<<<<< For Blank Fields >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		if($value == "0")
+  	{
+  		$value = "";
+  	}
+  	if(trim($value) == "--None--" || trim($value) == "--none--")
+  	{
+  		$value = "";
+  	}
+		//<<<<<<<<<<<<<<< End >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		$actual_values[$x] = $value;
+		$actual_values[$x] = preg_replace("/(\r\n)/"," ",$value);
+		$actual_values[$x] = str_replace(","," ",$actual_values[$x]);
+		$actual_values[$x] = str_replace("'"," ",$actual_values[$x]);
+		$actual_values[$x] = str_replace('"'," ",$actual_values[$x]);
+  }
+	$mergevalue[] = implode($actual_values,",");  	
 }
-$column_string = array_merge($columnNames,$custom_fields);
-//end custom fields
-
-$columnString = implode(",",$column_string);
-//$columnValString = implode(",",$columnValString);
-
+$csvdata = implode($mergevalue,"###");
+}else
+{
+	die("No fields to do Merge");
+}	
 echo"<script type=\"text/javascript\">
-var dHdr = '$columnString';
-var dSrc = '$columnValString';
+var dHdr = '$csvheader';
+var dSrc = '$csvdata';
 </script>";
 ?>
+
 <script>
 if (window.ActiveXObject){
 	try 
@@ -170,7 +159,7 @@ if (window.ActiveXObject){
         		if(objMMPage.bDLTempDoc("<?php echo $site_URL?>/test/wordtemplatedownload/<?php echo $filename?>","MMTemplate.doc"))
         		{
         			try
-        			{
+        			{ 
         				if(objMMPage.Init())
         				{
         					objMMPage.vLTemplateDoc();
@@ -180,7 +169,7 @@ if (window.ActiveXObject){
         					window.history.back();
         				}		
         			}catch(errorObject)
-        			{
+        			{	
         				document.write("Error while processing mail merge operation");
         			}
         		}else
@@ -197,4 +186,3 @@ if (window.ActiveXObject){
 </script>
 </body>
 </html>
-
