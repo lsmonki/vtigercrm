@@ -276,5 +276,8 @@ function SendMailToCustomer($to,$current_user_id,$subject,$contents)
 	}
 }
 
-header("Location: index.php?action=$return_action&module=$return_module&record=$return_id");
+//code added for returning back to the current view after edit from list view
+if($_REQUEST['return_viewname'] == '') $return_viewname='0';
+if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
 ?>
