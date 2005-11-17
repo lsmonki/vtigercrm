@@ -828,26 +828,23 @@ return $exists;
 }
 
 
-
- function getColumnNames()
- {
-       $table1flds = $this->db->getColumnNames("contactdetails");
-       $table2flds = $this->db->getColumnNames("contactsubdetails");
-       $table3flds = $this->db->getColumnNames("contactaddress");
-       $sql1 = "select fieldlabel from field where generatedtype=2 and tabid=4";
-		 $result = $this->db->query($sql1);
-		 $numRows = $this->db->num_rows($result);
-		 for($i=0; $i < $numRows;$i++)
-		 {
-			$custom_fields[$i] = $this->db->query_result($result,$i,"fieldlabel");
-		 }
-		 
-		 $mergeflds = array_merge($table1flds,$table2flds,$table3flds,$custom_fields);
-       return $mergeflds;
+//Used By vtigerCRM Word Plugin
+function getColumnNames()
+{
+	$sql1 = "select fieldlabel from field where tabid=4 and block <> 4";
+	$result = $this->db->query($sql1);
+	$numRows = $this->db->num_rows($result);
+	for($i=0; $i < $numRows;$i++)
+	{
+	$custom_fields[$i] = $this->db->query_result($result,$i,"fieldlabel");
+	$custom_fields[$i] = ereg_replace(" ","",$custom_fields[$i]);
+	$custom_fields[$i] = strtoupper($custom_fields[$i]);
+	}
+	$mergeflds = $custom_fields;
+	return $mergeflds;
 }
+//End 
 
 }
-
-
 
 ?>

@@ -514,21 +514,23 @@ return $exists;
 
         }
 
+//Used By vtigerCRM Word Plugin
 function getColumnNames_Lead()
- {
- 	$table1flds = $this->db->getColumnNames("leaddetails");
-	$table2flds = $this->db->getColumnNames("leadsubdetails");
-	$table3flds = $this->db->getColumnNames("leadaddress");
-	$sql1 = "select fieldlabel from field where generatedtype=2 and tabid=7";
+{
+	$sql1 = "select fieldlabel from field where tabid=7";
 	$result = $this->db->query($sql1);
 	$numRows = $this->db->num_rows($result);
 	for($i=0; $i < $numRows;$i++)
 	{
    	$custom_fields[$i] = $this->db->query_result($result,$i,"fieldlabel");
+   	$custom_fields[$i] = ereg_replace(" ","",$custom_fields[$i]);
+   	$custom_fields[$i] = strtoupper($custom_fields[$i]);
 	}
-	$mergeflds = array_merge($table1flds,$table2flds,$table3flds,$custom_fields);
+	$mergeflds = $custom_fields;
 	return $mergeflds;
- }
+}
+//End
+
 }
 
 ?>
