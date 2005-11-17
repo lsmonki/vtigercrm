@@ -130,7 +130,7 @@ function addSignature($contents, $fromname)
 	$sign = $adb->query_result($adb->query("select signature from users where user_name='".$fromname."'"),0,"signature");
 	if($sign != '')
 	{
-		$contents .= '<br><br><font color=darkgrey>'.nl2br($sign).'</font>';
+		$contents .= '<br><br><font color=darkgrey>'.$sign.'</font>';
 		$adb->println("Signature is added with the body => '.".$sign."'");
 	}
 	else
@@ -291,11 +291,11 @@ function getMailError($mail,$mail_status,$to)
 	{
 		$error_msg =  $msg;
 	}
-	elseif($msg == 'from_failed')
+	elseif(strstr($msg,'from_failed'))
 	{
 		$error_msg = $msg;//."&&&".$mail->from;
 	}
-	elseif($msg == 'recipients_failed')
+	elseif(strstr($msg,'recipients_failed'))
 	{
 		$error_msg = $msg;//."&&&".$to;
 	}
@@ -308,7 +308,7 @@ function getMailError($mail,$mail_status,$to)
 function getMailErrorString($mail_status_str)
 {
 	global $adb;
-	$adb->println("Inside parseMailError function.\nMail status string ==> ".$mail_status_str);
+	$adb->println("Inside getMailErrorString function.\nMail status string ==> ".$mail_status_str);
 
 	$mail_status_str = trim($mail_status_str,"&&&");
 	$mail_status_array = explode("&&&",$mail_status_str);
@@ -335,7 +335,7 @@ function getMailErrorString($mail_status_str)
 function parseEmailErrorString($mail_error_str)
 {
 	global $adb, $mod_strings;
-	$adb->println("Inside the parseEmailErrorStringfunction.\n encoded mail error string ==> ".$mail_error_str);
+	$adb->println("Inside the parseEmailErrorString function.\n encoded mail error string ==> ".$mail_error_str);
 
 	$mail_error = base64_decode($mail_error_str);
 	$adb->println("Original error string => ".$mail_error);
@@ -343,19 +343,32 @@ function parseEmailErrorString($mail_error_str)
 	foreach($mail_status as $key => $val)
 	{
 		$status_str = explode("=",$val);
-		$adb->println($status_str[0].'.........'.$status_str[1]);
+		$adb->println('Mail id => "'.$status_str[0].'".........status => "'.$status_str[1].'"');
 		if($status_str[1] != 1 && $status_str[1] != '')
 		{
 			$adb->println("Error in mail sending");
 			if($status_str[1] == 'connect_host')
 			{
-				$errorstr .= '<br><b><font color=red> '.$mod_strings['MESSAGE_CHECK_MAIL_SERVER_NAME'].' </font></b>';
+				$adb->println("if part - Mail sever is not configured");
+				$errorstr .= '<br><b><font color=red>Please Check the Mail Server Name...</font></b>';
 				break;
 			}
-			elseif($status_str[1] == 0)
-				echo '<br><b><font color=red> Mail could not be sent to the assigned to user. Please check the assigned to user email id...</font></b>';
+			elseif($status_str[1] == '0')
+			{
+				$adb->println("first elseif part - status will be 0 which is the case of assigned to users's email is empty.");
+				$errorstr .= '<br><b><font color=red> Mail could not be sent to the assigned to user. Please check the assigned to user email id...</font></b>';
+			}
+			elseif(strstr($status_str[1],'from_failed'))
+			{
+				$adb->println("second elseif part - from email id is failed.");
+				$from = explode('from_failed',$status_str[1]);
+				$errorstr .= "<br><b><font color=red>Please check the from email id '".$from[1]."'</font></b>";
+			}
 			else
-				$errorstr .= '<br><b><font color=red> Mail could not be sent to this email id ==> '.$status_str[0].'. Please check this mail id...</font></b>';
+			{
+				$adb->println("else part - mail send process failed due to the following reason.");
+				$errorstr .= "<br><b><font color=red> Mail could not be sent to this email id '".$status_str[0]."'. Please check this mail id...</font></b>";	
+			}
 		}
 	}
 	$adb->println("Return Error string => ".$errorstr);
