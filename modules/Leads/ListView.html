@@ -211,7 +211,59 @@ function changeStatus()
 	document.massdelete.action="index.php?module=Users&action=massChangeStatus&viewname="+viewid;
 }
 
+//to merge to a list of leads
+function massMerge()
+{
 
+	x = document.massdelete.selected_id.length;
+	var viewid = document.massdelete.viewname.value;
+	idstring = "";
+
+	if ( x == undefined)
+	{
+	
+		if (document.massdelete.selected_id.checked)
+		{
+			document.massdelete.idlist.value=document.massdelete.selected_id.value;
+			//alert(document.massdelete.idlist.value);
+			//alert("if if");
+		}
+		else 
+		{
+			alert("Please select atleast one entity");
+			return false;
+		}
+	}
+	else
+	{
+		xx = 0;
+		for(i = 0; i < x ; i++)
+		{
+			if(document.massdelete.selected_id[i].checked)
+			{
+				idstring = document.massdelete.selected_id[i].value +";"+idstring
+			xx++	
+			//alert(idstring);
+			}
+		}
+		if (xx != 0)
+		{
+			document.massdelete.idlist.value=idstring;
+			//alert(document.massdelete.idlist.value);
+		}
+		else
+		{
+			alert("Please select atleast one entity");
+			return false;
+		}
+	}	
+	if(getObj('selectall').checked == true)
+		{
+				getObj('idlist').value = getObj('allids').value;
+		}
+	document.massdelete.action="index.php?module=Leads&action=Merge&return_module=Leads&return_action=index&viewname="+viewid;
+}
+//end for mass merge
 </script>
 
 
@@ -232,11 +284,18 @@ function changeStatus()
 	{LISTHEADER}
 	<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
 	{LISTENTITY}
-</form>
+</table>
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder">
+<tr>
+	<td>
+	{WORDTEMPLATEOPTIONS}
+	{MERGEBUTTON}
+	</td>
+</tr>
 </table>
 <br>
-
 {SELECT_SCRIPT}
+</form>
 <!-- END: main -->
 
 
