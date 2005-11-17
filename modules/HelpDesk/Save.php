@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/modules/HelpDesk/Save.php,v 1.8 2005/04/25 05:21:46 mickie Exp $
+ * $Header: /advent/projects/wesat/vtiger_crm/vtigercrm/modules/HelpDesk/Save.php,v 1.8 2005/04/25 05:21:46 rajeshkannan Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -61,8 +61,8 @@ if($_REQUEST['mode'] == 'edit')
 else
 	$reply = '';
 
-$_REQUEST['name'] = '[ Ticket ID : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
-$bodysubject = ' Subject : '.$focus->id.' : '.$_REQUEST['ticket_title'];
+$subject = '[ Ticket ID : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
+$bodysubject = ' Ticket ID : '.$focus->id.'<br> Subject : '.$_REQUEST['ticket_title'];
 
 $emailoptout = 0;
 if($focus->column_fields['parent_id'] != '')
@@ -95,7 +95,7 @@ if($isactive == 1)
 	$bodydetails .= "<a href='".$PORTAL_URL."/general.php?action=UserTickets&ticketid=".$focus->id."&fun=detail'>Ticket Details</a>";
 	$bodydetails .= "<br><br>Thanks,<br><br> Vtiger Support Team ";
 
-	$_REQUEST['description'] = $bodysubject.'<br><br>'.$bodydetails;
+	$email_body = $bodysubject.'<br><br>'.$bodydetails;
 }
 else
 {
@@ -109,7 +109,7 @@ else
 	$desc .= '<br><br>Solution : <br>'.$focus->column_fields['solution'];
 	$desc .= getTicketComments($focus->id);
 
-	$_REQUEST['description'] = $desc;
+	$email_body = $desc;
 }
 //$_REQUEST['parent_id'] = $_REQUEST['contact_id'];
 $_REQUEST['return_id'] = $return_id;
@@ -126,7 +126,7 @@ require_once('modules/Emails/mail.php');
 $user_emailid = getUserEmailId('id',$focus->column_fields['assigned_user_id']);
 if($user_emailid != '')
 {
-	$mail_status = send_mail('HelpDesk',$user_emailid,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$bodysubject,$bodydetails);
+	$mail_status = send_mail('HelpDesk',$user_emailid,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 	$mail_status_str = $user_emailid."=".$mail_status."&&&";
 }
 else
@@ -138,7 +138,7 @@ if($emailoptout == 0)
 {
 	//send mail to parent
 	$parent_email = getParentMailId($return_module,$return_id);	
-	$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$bodysubject,$bodydetails);
+	$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 	$mail_status_str .= $parent_email."=".$mail_status."&&&";
 }
 $mail_error_status = getMailErrorString($mail_status_str);
