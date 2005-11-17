@@ -38,6 +38,9 @@ class CRMEntity extends SugarBean
    * All Rights Reserved.
    * Contributor(s): ______________________________________..
    */
+
+
+ 
 	
   var $new_schema = false;
   var $new_with_id = false;
@@ -67,45 +70,46 @@ class CRMEntity extends SugarBean
         $this->insertIntoSmActivityRel($module);
       }
 	  //added by raju
-	  
-	  elseif($table_name=="seactivityrel" ){
-	  	if ($module=="Emails")
-		{
-	  	     if ($_REQUEST['currentid']!='')
-			 {
-			 	$actid=$_REQUEST['currentid'];
-			 }
-			 else 
-			 {
-			 	$actid=$_REQUEST['record'];
-			 }
-			 	
-
-			$parentid=$_REQUEST['parent_id'];
-			//echo $parentid;
-			$myids=explode("|",$parentid);
-			//echo count($myids).'count';
-			for ($i=0;$i<(count($myids)-1);$i++)
-			{
-				$realid=explode("@",$myids[$i]);
-				$mycrmid=$realid[0];
-				//echo $mycrmid.' '.$i.'<br>';
-				$mysql='insert into seactivityrel values('.$mycrmid.','.$actid.')';
-				$adb->query($mysql);
-			}
-	   	}
-		else
-		{
-			if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
-			{
-			  $this->insertIntoEntityTable($table_name, $module);
-			}
-			elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
-			{
-					$this->deleteRelation($table_name);
-			}
-		}			
-	  }
+      elseif($table_name=="seactivityrel" )
+        {
+          //echo '--------------------------------- saveentity '.$_REQUEST['smodule'];
+          //if($module=="Emails" & $_REQUEST['smodule']!='webmails')
+          //modified by Richie as raju's implementation broke the feature for addition of webmail to crmentity.need to be more careful in future while integrating code
+          if($_REQUEST['smodule']!='webmails')
+            {
+              if($_REQUEST['currentid']!='')
+                {
+                  $actid=$_REQUEST['currentid'];
+                }
+              else 
+                {
+                  $actid=$_REQUEST['record'];
+                }
+              $parentid=$_REQUEST['parent_id'];
+              // echo 'parent id is ----------> ' .$parentid .'  actid ' .$actid;
+              $myids=explode("|",$parentid);  //2@71|
+              // echo '<br> myid count is   '.count($myids);
+              for ($i=0;$i<(count($myids)-1);$i++)
+                {
+                  $realid=explode("@",$myids[$i]);
+                  $mycrmid=$realid[0];
+                  //  echo 'mycrmid is  '.$mycrmid.' '.$i.'<br>';
+                  $mysql='insert into seactivityrel values('.$mycrmid.','.$actid.')';
+                  $adb->query($mysql);
+                }
+            }
+          else
+            {
+              if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+                {
+                  $this->insertIntoEntityTable($table_name, $module);
+                }
+              elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+                {
+                  $this->deleteRelation($table_name);
+                }
+            }			
+        }
       elseif($table_name == "seticketsrel" || $table_name ==  "seproductsrel" || $table_name ==  "senotesrel" || $table_name == "sefaqrel")
       {
         if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '') //Code added by raju for mass mailing ends
