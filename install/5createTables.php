@@ -211,6 +211,53 @@ function create_default_users()
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>vtiger CRM 4.2 Installer: Step 5</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
+<style type="text/css"><!--
+
+div {
+ margin: 1px;
+ height: 20px;
+ padding: 1px;
+ border: 1px solid #000;
+ width: 275px;
+ background: #fff;
+ color: #f0f;
+ float: left;
+ clear: right;
+ top: 38px;
+ z-index: 9
+}
+
+.percents {
+ background: #0FF;
+ border: 1px solid #CCC;
+ margin: 1px;
+ height: 20px;
+ position:absolute;
+ width:575px;
+ z-index:10;
+ left: 10px;
+ top: 38px;
+ text-align: center;
+}
+
+.blocks {
+ background: #00f;
+ border: 1px solid #CCC;
+ margin: 1px;
+ height: 20px;
+ width: 10px;
+ position: absolute;
+ z-index:11;
+ left: 12px;
+ top: 38px;
+ filter: alpha(opacity=50);
+ -moz-opacity: 0.5;
+ opacity: 0.5;
+ -khtml-opacity: .5
+}
+
+-->
+</style>
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 
@@ -280,7 +327,26 @@ $focus = 0;
 // temporary
 require_once('config.php');
 
- $success = $db->createTables("adodb/DatabaseSchema.xml");
+if (ob_get_level() == 0) {
+   ob_start();
+}
+echo str_pad('Loading... ',4096)."<br />\n";
+for ($i = 0; $i < 48; $i++) {
+   $d = $d + 11;
+   $m=$d+10;
+   //This div will show loading percents
+   echo '<div class="percents">' . $i*2 . '%&nbsp;complete</div>';
+   //This div will show progress bar
+   echo '<div class="blocks" style="left: '.$d.'px">&nbsp;</div>';
+   flush();
+   ob_flush();
+   sleep(1);
+}
+ob_end_flush();
+?>
+<div class="percents" style="z-index:12">Done.</div>
+<?
+   $success = $db->createTables("adodb/DatabaseSchema.xml");
 
 // TODO HTML
 if($success==0)
@@ -473,6 +539,7 @@ mysql_query("insert into role2permission(roleid,permissionid,module,module_actio
 
 //populate Calendar data
 //include("modules/Calendar/admin/scheme.php");
+
 
 ?>
 		<br><br>
