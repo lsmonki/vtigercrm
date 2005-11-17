@@ -69,8 +69,8 @@ $hide_sm_attributions     = false;
 $default_use_mdn          = true;
 $edit_identity            = true;
 $edit_name                = true;
-$allow_thread_sort        = false;
-$allow_server_sort        = false;
+$allow_thread_sort        = true;
+$allow_server_sort        = true;
 $allow_charset_search     = true;
 $uid_support              = true;
 
