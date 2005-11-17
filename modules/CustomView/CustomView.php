@@ -153,6 +153,10 @@ class CustomView extends CRMEntity{
 				{
 					$fieldlabel = "Related to";
 				}
+				if($fieldlabel == "Start Date & Time")
+                                {
+                                        $fieldlabel = "Start Date";
+                                }
                         $fieldlabel1 = str_replace(" ","_",$fieldlabel);
                         $optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
                         $module_columnlist[$optionvalue] = $fieldlabel;
