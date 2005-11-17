@@ -461,6 +461,30 @@ else
 }
 */
 
+//mass merge for word templates -- *Raj*17/11
+while($row = $adb->fetch_array($list_result))
+{
+	$ids[] = $row["crmid"];
+}
+if(isset($ids))
+{
+	echo "<input name='allids' type='hidden' value='".implode($ids,";")."'>";
+}
+if(isPermitted("Leads",8,'') == 'yes') 
+{
+	$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+	$wordTemplateResult = fetchWordTemplateList("Leads");
+	$tempCount = $adb->num_rows($wordTemplateResult);
+	$tempVal = $adb->fetch_array($wordTemplateResult);
+	for($templateCount=0;$templateCount<$tempCount;$templateCount++)
+	{
+		$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
+		$tempVal = $adb->fetch_array($wordTemplateResult);
+	}
+	$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
+}
+//mass merge for word templates
+
 // Setting the record count string
 //modified by rdhital
 $start_rec = $navigation_array['start'];
