@@ -36,6 +36,10 @@ $vtlog->logthis("assigned user id is ".$assigned_user_id,'debug');
 $vtlog->logthis("accountname is ".$accountname,'debug');
 $vtlog->logthis("module is ".$module,'debug');
 
+$check_unit = explode("-",$potential_name);
+if($check_unit[1] == "")
+        $potential_name = $check_unit[0];
+
 //Retrieve info from all the tables related to leads
   $focus = new Lead();
  $focus->retrieve_entity_info($id,"Leads");
