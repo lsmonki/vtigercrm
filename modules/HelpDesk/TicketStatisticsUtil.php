@@ -13,6 +13,7 @@ require_once('include/database/PearDatabase.php');
 function getTotalNoofTickets()
 {
 	global $adb;
+    //table name made all small as per suggestion by tigerincanada
 	$query = "select count(*) as totalticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0";
 	$result = $adb->query($query);
 	$totTickets = $adb->query_result($result,0,"totalticketcount");
@@ -22,18 +23,20 @@ function getTotalNoofTickets()
 function getTotalNoofOpenTickets()
 {
 	global $adb;
-	$query = "select count(*) as totalOpenticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0 and troubletickets.status !='Closed'";
+    //table name made all small as per suggestion by tigerincanada
+	$query = "select count(*) as totalopenticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0 and troubletickets.status !='Closed'";
 	$result = $adb->query($query);
-	$totOpenTickets = $adb->query_result($result,0,"totalOpenticketcount");
+	$totOpenTickets = $adb->query_result($result,0,"totalopenticketcount");
 	return $totOpenTickets;
 }
 
 function getTotalNoofClosedTickets()
 {
 	global $adb;
-	$query = "select count(*) as totalClosedticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0 and troubletickets.status ='Closed'";
+    //table name made all small as per suggestion by tigerincanada
+	$query = "select count(*) as totalclosedticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0 and troubletickets.status ='Closed'";
 	$result = $adb->query($query);
-	$totClosedTickets = $adb->query_result($result,0,"totalClosedticketcount");
+	$totClosedTickets = $adb->query_result($result,0,"totalclosedticketcount");
 	return $totClosedTickets;
 }
 
@@ -45,7 +48,9 @@ function outBar($val,$image_path,$singleUnit) {
         }
         $scale = $percent * 0.8;*/
 	$scale = round($val*$singleUnit);
-	if($scale < 1 && scale > 0)
+    //changed as per fixes by suggestions by tigerincanada post id
+    //http://forums.vtiger.com/viewtopic.php?t=3598
+	if($scale < 1 && $scale > 0)
 	{
 		$scale = 1;
 	}
