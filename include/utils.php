@@ -579,7 +579,7 @@ function get_themes() {
  * Contributor(s): ______________________________________..
  */
 function get_select_options (&$option_list, $selected, $advsearch='false') {
-	return get_select_options_with_id(&$option_list, $selected, $advsearch);
+	return get_select_options_with_id($option_list, $selected, $advsearch);
 }
 
 /**
