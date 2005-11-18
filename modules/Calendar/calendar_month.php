@@ -372,7 +372,11 @@ while ( $go == 1 )
  		}
  		$a++;
  		$w++;
- 		$ts += 86400;
+        //	$ts += 86400;
+
+        //changed for fixing the Daylight Saving Time issue as per suggestion by Bushwack post id
+        //http://forums.vtiger.com/viewtopic.php?p=14967#14967
+        $ts = strtotime('+1 day', $ts);
 }
 if ( $n == 1 ) 
 {
