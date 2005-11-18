@@ -3729,11 +3729,19 @@
 		<field name="tabid" type="I" size="11">
 			<NOTNULL/>
 		</field>
-		<field name="permission" type="I" size="10">
+		<field name="permission" type="I" size="19">
+		</field>
+		<field name="editstatus" type="I" size="19">
 		</field>
 
 		<data>
 		
+		</data>
+	</table>
+	<table name="def_org_share" alter="true">
+		<constraint>ADD CONSTRAINT fk_def_org_share FOREIGN KEY (permission) REFERENCES org_share_action_mapping(share_action_id) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
 		</data>
 	</table>
 
@@ -5541,6 +5549,44 @@ E</constraint>
 		<data>
 		</data>
 	</table>
+
+	<table name="org_share_action_mapping">
+		<field name="share_action_id" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="share_action_name" type="C" size="200">
+			<KEY/>
+		</field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="org_share_action2tab">
+		<field name="share_action_id" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="tabid" type="I" size="19">
+			<KEY/>
+		</field>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+	<table name="org_share_action2tab" alter="true">
+		<constraint>ADD CONSTRAINT fk_org_share_action2tab FOREIGN KEY (share_action_id) REFERENCES org_share_action_mapping(share_action_id) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
+	<table name="org_share_action2tab" alter="true">
+		<constraint>ADD CONSTRAINT fk_org_share_action2tab1 FOREIGN KEY (tab) REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+		<opt>Type=InnoDB</opt>
+		<data>
+		</data>
+	</table>
+
 
 	<table name="moduleowners">
                 <field name="tabid" type="I" size="19">
