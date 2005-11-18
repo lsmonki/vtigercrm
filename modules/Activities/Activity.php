@@ -465,8 +465,40 @@ function save_relationship_changes($is_update)
 		}
       		$this->db->query($query,true,"Error in processing table $this->reminder_table");
 	}
-	
 
+//Used for vtigerCRM Outlook Add-In
+function get_tasksforol($username)
+{
+	$query = "select activity.subject,activity.date_start startdate,
+			 activity.activityid as taskid,activity.status,
+			 activity.description,activity.priority as priority,activity.due_date as duedate,
+			 contactdetails.firstname, contactdetails.lastname 
+			 from activity inner join crmentity on crmentity.crmid=activity.activityid 
+			 inner join users on users.id = crmentity.smownerid 
+			 left join cntactivityrel on cntactivityrel.activityid=activity.activityid 
+			 left join contactdetails on contactdetails.contactid=cntactivityrel.contactid 
+			 where users.user_name='".$username."' and crmentity.deleted=0 and activity.activitytype='Task'";
+		 
+	return $query;
+}
+
+function get_calendarsforol($user_name)
+{
+	  $query = "select activity.location, activity.duration_hours as duehours, 
+				activity.duration_minutes as dueminutes,activity.time_start as startime, 
+				activity.subject,activity.date_start as startdate,activity.activityid as clndrid,
+				activity.description,activity.due_date as duedate ,
+				contactdetails.firstname, contactdetails.lastname from activity 
+				inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid 
+				inner join users on users.id=salesmanactivityrel.smid 
+				left join cntactivityrel on cntactivityrel.activityid=activity.activityid 
+				left join contactdetails on contactdetails.contactid=cntactivityrel.contactid 
+				inner join crmentity on crmentity.crmid=activity.activityid 
+				where users.user_name='".$user_name."' and crmentity.deleted=0 and activity.activitytype='Meeting'";
+
+	return $query;
+}
+//End
 
 }
 ?>
