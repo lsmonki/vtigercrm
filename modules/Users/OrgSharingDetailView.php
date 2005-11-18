@@ -39,24 +39,15 @@ foreach($defSharingPermissionData as $tab_id => $def_perr)
 {
 
 	$entity_name = getTabname($tab_id);
-	if($entity_name != "Notes" && $entity_name != "Products" && $entity_name != "Faq" && $entity_name != "Vendor" && $entity_name != "PriceBook" && $entity_name != 'Events' && $entity_name != 'SalesOrder')
-	{	
-		if($def_perr == 0)
-		{
-			$entity_perr = $mod_strings['LBL_READ_ONLY'];
-		}
-		elseif($def_perr == 1)
-		{
-			$entity_perr = $mod_strings['LBL_EDIT_CREATE_ONLY'];
-		}	
-		elseif($def_perr == 2)
-		{
-			$entity_perr = $mod_strings['LBL_READ_CREATE_EDIT_DEL'];
-		}
-		elseif($def_perr == 3)
-		{
-			$entity_perr = $mod_strings['LBL_PRIVATE'];
-		}
+	if($tab_id == 6)
+        {
+                $cont_name = getTabname(4);
+                $entity_name .= ' & '.$cont_name;
+        }
+
+	$entity_perr = getDefOrgShareActionName($def_perr);
+	//if($entity_name != "Notes" && $entity_name != "Products" && $entity_name != "Faq" && $entity_name != "Vendor" && $entity_name != "PriceBook" && $entity_name != 'Events' && $entity_name != 'SalesOrder')
+	//{	
 
 		if ($row%2==0)
 			$output .=   '<tr class="evenListRow">';
@@ -68,7 +59,7 @@ foreach($defSharingPermissionData as $tab_id => $def_perr)
 		$output .=  '</tr>';
 
 		$row++;
-	}
+	//}
 }
 
 

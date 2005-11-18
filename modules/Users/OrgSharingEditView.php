@@ -14,7 +14,7 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-echo '<form action="index.php" method="post" name="new" id="form">';
+echo '<form action="index.php" method="post" name="def_org_share" id="form">';
 echo get_module_title("Security", "Default Organisation Sharing Privileges", true);
 
 global $theme;
@@ -24,7 +24,7 @@ require_once($theme_path.'layout_utils.php');
 
 $xtpl=new XTemplate ('modules/Users/OrgSharingEditView.html');
 
-$defSharingPermissionData = getDefaultSharingAction();
+$defSharingPermissionData = getDefaultSharingEditAction();
 $output = '';
 $output .= '<input type="hidden" name="module" value="Users">';
 $output .= '<input type="hidden" name="action" value="SaveOrgSharing">';
@@ -38,34 +38,19 @@ $output .=  '</tr>';
 $row=1;
 foreach($defSharingPermissionData as $tab_id => $def_perr)
 {
-	if($tab_id != 8 && $tab_id != 14 && $tab_id != 15 && $tab_id != 18 && $tab_id != 19 && $tab_id != 16 && $tab_id != 22)
-	{
-		$selected_a = '';
-		$selected_b = '';
-		$selected_c = '';
-		$selected_d = '';
+//	if($tab_id != 8 && $tab_id != 14 && $tab_id != 15 && $tab_id != 18 && $tab_id != 19 && $tab_id != 16 && $tab_id != 22)
+//	{
+	
+	
 		$entity_name = getTabname($tab_id);
-		if($def_perr == 0)
+		if($tab_id == 6)
 		{
-			$entity_perr = $mod_stings['LBL_READ_ONLY'];
-			$selected_a = 'selected';
+			$cont_name = getTabname(4);
+			$entity_name .= ' & '.$cont_name;
+		}
 
-		}
-		elseif($def_perr == 1)
-		{
-			$entity_perr = $mod_strings['LBL_EDIT_CREATE_ONLY'];
-			$selected_b = 'selected';
-		}	
-		elseif($def_perr == 2)
-		{
-			$entity_perr = $mod_strings['LBL_READ_CREATE_EDIT_DEL'];
-			$selected_c = 'selected';
-		}
-		elseif($def_perr == 3)
-		{
-			$entity_perr = $mod_strings['LBL_PRIVATE'];;
-			$selected_d = 'selected';
-		}
+		//$entity_perr= getDefOrgShareActionName($deff_perr)
+		$defActionArr=getModuleSharingActionArray($tab_id);
 
 		if ($row%2==0)
 			$output .=   '<tr class="evenListRow">';
@@ -75,17 +60,33 @@ foreach($defSharingPermissionData as $tab_id => $def_perr)
 		$output .=   '<TD width="40%" height="21" noWrap style="padding:0px 3px 0px 3px;" >'.$entity_name.'</TD>';
 		$output .=  '<TD width="60%" height="21" noWrap style="padding:0px 3px 0px 3px;">';
 
-		$output .= '<select class="select" name="'.$tab_id.'_per">';
-		$output .= '<option value="0" '.$selected_a. '>'.$mod_strings['LBL_READ_ONLY'].'</option>';
-		$output .= '<option value="1" '.$selected_b.'>'.$mod_strings['LBL_EDIT_CREATE_ONLY'].'</option>';
-		$output .= '<option value="2" '.$selected_c.'>'.$mod_strings['LBL_READ_CREATE_EDIT_DEL'].'</option>';
-		$output .= '<option value="3" '.$selected_d.'>'.$mod_strings['LBL_PRIVATE'].'</option>';
+		if($tab_id != 6)
+		{
+			$output .= '<select class="select" name="'.$tab_id.'_per">';
+		}
+		else
+		{
+			$output .= '<select class="select" name="'.$tab_id.'_per" onchange="checkAccessPermission(this.value)">';
+		}
+		
+		foreach($defActionArr as $shareActId=>$shareActName)
+		{
+			$selected='';
+			if($shareActId == $def_perr)
+			{
+				$selected='selected';
+			}
+			$output .= '<option value="'.$shareActId.'" '.$selected. '>'.$shareActName.'</option>';
+				
+		}
+
+
 		$output .= '</select>';
 		$output .= '</div></TD>';
 		$output .=  '</tr>';
 
 		$row++;
-	}
+//	}
 }
 
 
