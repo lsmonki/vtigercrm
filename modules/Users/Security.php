@@ -1388,29 +1388,55 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 		$this->db->query("insert into profile2utility values (".$profile4_id.",4,7,0)");
                 $this->db->query("insert into profile2utility values (".$profile4_id.",7,9,0)");
 
-			
+		//Inserting values into org share action mapping
+                $this->db->query("insert into org_share_action_mapping values(0,'Public: Read Only')");
+                $this->db->query("insert into org_share_action_mapping values(1,'Public: Read, Create/Edit')");
+                $this->db->query("insert into org_share_action_mapping values(2,'Public: Read, Create/Edit, Delete')");
+                $this->db->query("insert into org_share_action_mapping values(3,'Private')");
+
+                $this->db->query("insert into org_share_action_mapping values(4,'Hide Details')");
+                $this->db->query("insert into org_share_action_mapping values(5,'Hide Details and Add Events')");
+                $this->db->query("insert into org_share_action_mapping values(6,'Show Details')");
+                $this->db->query("insert into org_share_action_mapping values(7,'Show Details and Add Events')");
+
+
+		//Inserting for all tabs
+                $def_org_tabid= Array(2,4,6,7,9,10,13,16,20,21,22,23);
+
+                foreach($def_org_tabid as $def_tabid)
+                {
+                        $this->db->query("insert into org_share_action2tab values(0,".$def_tabid.")");
+                        $this->db->query("insert into org_share_action2tab values(1,".$def_tabid.")");
+                        $this->db->query("insert into org_share_action2tab values(2,".$def_tabid.")");
+                        $this->db->query("insert into org_share_action2tab values(3,".$def_tabid.")");
+                }
+
+                $this->db->query("insert into org_share_action2tab values(4,17)");
+                $this->db->query("insert into org_share_action2tab values(5,17)");
+                $this->db->query("insert into org_share_action2tab values(6,17)");
+                $this->db->query("insert into org_share_action2tab values(7,17)");
+
 		//Insert into default_org_sharingrule
-		$this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",2,2)");
-		
-		$this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",4,2)");
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",2,2,0)");
 
-		$this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",6,2)");
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",4,2,2)");
 
-		$this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",7,2)");
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",6,2,0)");
 
-		$this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",8,2)");
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",9,2)");
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",10,2)");
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",13,2)");
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",14,2)");
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",15,2)");
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",16,2)");
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",18,2)");		
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",19,2)");		
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",20,2)");			
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",21,2)");			
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",22,2)");			
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",23,2)");			
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",7,2,0)");
+
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",9,3,1)");
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",10,2,0)");
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",13,2,0)");
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",16,3,2)");
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",17,7,0)");
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",20,2,0)");
+                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",21,2,0)");
+                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",22,2,0)");
+                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",23,2,0)");
+
+			
+					
   // New Secutity End
 
                 $table_name="groups";
