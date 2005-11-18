@@ -180,12 +180,49 @@ function getTabsUtilityActionPermission($profileid)
 	return $check;
 
 }
+/**This Function returns the Default Organisation Sharing Action Array for all modules whose sharing actions are editable
+  * The result array will be in the following format:
+  * Arr=(tabid1=>Sharing Action Id,
+  *      tabid2=>SharingAction Id,
+  *            |
+  *            |
+  *            |
+  *      tabid3=>SharingAcion Id)  
+  */       
 
+function getDefaultSharingEditAction()
+{
+	global $adb;
+	//retreiving the standard permissions	
+	$sql= "select * from def_org_share where editstatus=0";
+	$result = $adb->query($sql);
+	$permissionRow=$adb->fetch_array($result);
+	do
+	{
+		for($j=0;$j<count($permissionRow);$j++)
+		{
+			$copy[$permissionRow[1]]=$permissionRow[2];
+		}
+
+	}while($permissionRow=$adb->fetch_array($result));
+
+	return $copy;
+
+}
+/**This Function returns the Default Organisation Sharing Action Array for all modules 
+  * The result array will be in the following format:
+  * Arr=(tabid1=>Sharing Action Id,
+  *      tabid2=>SharingAction Id,
+  *            |
+  *            |
+  *            |
+  *      tabid3=>SharingAcion Id)  
+  */
 function getDefaultSharingAction()
 {
 	global $adb;
 	//retreiving the standard permissions	
-	$sql= "select * from def_org_share";
+	$sql= "select * from def_org_share where editstatus in(0,1)";
 	$result = $adb->query($sql);
 	$permissionRow=$adb->fetch_array($result);
 	do
@@ -1580,4 +1617,45 @@ function deleteGroupRelatedUsers($groupId)
 	$query="delete from users2group where groupid=".$groupId;
 	$adb->query($query);
 }
+
+/** This function returns the Default Organisation Sharing Action Name
+  * It takes the Default Organisation Sharing ActionId as input
+  */
+function getDefOrgShareActionName($share_action_id)
+{
+	global $adb;
+	$query="select * from org_share_action_mapping where share_action_id=".$share_action_id;
+	$result=$adb->query($query);
+	$share_action_name=$adb->query_result($result,0,"share_action_name");
+	return $share_action_name;		
+
+
+}
+/** This function returns the Default Organisation Sharing Action Array for the specified Module
+  * It takes the module tabid as input and constructs the array. 
+  * The output array consists of the 'Default Organisation Sharing Id'=>'Default Organisation Sharing Action' mapping for all the sharing actions available for the specifed module
+  * The output Array will be in the following format:
+  *    Array = (Default Org ActionId1=>Default Org ActionName1,
+  *             Default Org ActionId2=>Default Org ActionName2,
+  *			|
+  *                     |
+  *              Default Org ActionIdn=>Default Org ActionNamen)
+  */
+function getModuleSharingActionArray($tabid)
+{
+	global $adb;
+	$share_action_arr=Array();
+	$query = "select org_share_action_mapping.share_action_name,org_share_action2tab.share_action_id from org_share_action2tab inner join org_share_action_mapping on org_share_action2tab.share_action_id=org_share_action_mapping.share_action_id where org_share_action2tab.tabid=".$tabid;
+	$result=$adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0; $i<$num_rows; $i++)
+	{
+		$share_action_name=$adb->query_result($result,$i,"share_action_name");
+		$share_action_id=$adb->query_result($result,$i,"share_action_id");
+		$share_action_arr[$share_action_id] = $share_action_name;
+	}
+	return $share_action_arr;
+	
+}
+
 ?>
