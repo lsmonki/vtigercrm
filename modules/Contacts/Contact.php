@@ -828,7 +828,7 @@ return $exists;
 }
 
 
-//Used By vtigerCRM Word Plugin
+//Used By vtigerCRM Word Add-In
 function getColumnNames()
 {
 	$sql1 = "select fieldlabel from field where tabid=4 and block <> 4";
@@ -844,6 +844,51 @@ function getColumnNames()
 	return $mergeflds;
 }
 //End 
+
+//Used By vtigerCRM Outlook Add-In
+function get_searchbyemailid($username,$emailaddress)
+{
+	$query = "select contactdetails.lastname as last_name,contactdetails.firstname as first_name,
+						contactdetails.contactid as id, contactdetails.salutation as salutation, 
+						contactdetails.email as email1,contactdetails.title as title,
+						contactdetails.mobile as phone_mobile,account.accountname as account_name,
+						account.accountid as account_id  from contactdetails 
+						inner join crmentity on crmentity.crmid=contactdetails.contactid 
+						inner join users on users.id=crmentity.smownerid  
+						left join account on account.accountid=contactdetails.accountid 
+						left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid 
+						where user_name='" .$username ."' and crmentity.deleted=0  and contactdetails.email like '%".$emailaddress."%'";
+						
+	return $this->process_list_query1($query);
+}
+
+function get_contactsforol($user_name)
+{
+	$query = "select contactdetails.department department, contactdetails.phone, 
+						contactdetails.fax, contactsubdetails.assistant assistant_name,
+						contactsubdetails.assistantphone,  
+						contactsubdetails.otherphone, contactsubdetails.homephone,
+						contactsubdetails.birthday birthdate, contactdetails.lastname last_name,
+						contactdetails.firstname first_name,contactdetails.contactid as id, 
+						contactdetails.salutation, contactdetails.email,
+						contactdetails.title,contactdetails.mobile,
+						account.accountname as account_name,account.accountid as account_id, 
+						contactaddress.mailingcity, contactaddress.mailingstreet, 
+						contactaddress.mailingcountry, contactaddress.mailingstate, 
+						contactaddress.mailingzip, contactaddress.othercity,
+						contactaddress.otherstreet, contactaddress.othercountry,
+						contactaddress.otherstate, contactaddress.otherzip   
+						from contactdetails 
+						inner join crmentity on crmentity.crmid=contactdetails.contactid 
+						inner join users on users.id=crmentity.smownerid 
+						left join account on account.accountid=contactdetails.accountid 
+						left join contactaddress on contactaddress.contactaddressid=contactdetails.contactid 
+						left join contactsubdetails on contactsubdetails.contactsubscriptionid = contactdetails.contactid 
+						where users.user_name='" .$user_name ."' and crmentity.deleted=0";
+						
+	return $query;
+}
+//End
 
 }
 
