@@ -14,11 +14,13 @@
  ********************************************************************************/
 
 require_once('include/logging.php');
-include('adodb/adodb.inc.php');
+//include('adodb/adodb.inc.php');
+include_once('adodb/adodb.inc.php');
 require_once("adodb/adodb-xmlschema.inc.php");
 	
 		require_once('vtiger_logger.php');
 		global $vtlog;
+	if ( !$vtlog )
 		$vtlog = new vtiger_logger();
 
 class PearDatabase{
@@ -47,11 +49,13 @@ class PearDatabase{
 		$log1 =& LoggerManager::getLogger('VT');
 		if(is_array($msg))
 		{
-			$log1->fatal("PearDatabse ->".print_r($msg,true));
+			//$log1->fatal("PearDatabse ->".print_r($msg,true));
+            $log1->info("PearDatabse ->".print_r($msg,true));
 		}
 		else
 		{
-			$log1->fatal("PearDatabase ->".$msg);
+			//$log1->fatal("PearDatabase ->".$msg);
+            $log1->info("PearDatabase ->".$msg);
 		}
 		return $msg;
 	}
@@ -161,13 +165,13 @@ class PearDatabase{
 		
 		if($this->dieOnError || $dieOnError)
 		{
-         		$this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg());	
+            $this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg());	
 			die ($msg."ADODB error ".$msg."->".$this->database->ErrorMsg());
 		}
 		else
 		{
-			$this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg());
-
+			//$this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg());
+            $this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg()." (SQL=".$this->sql.")");
 		}
 		return false;
 	}
@@ -205,7 +209,7 @@ global $vtlog;
 			else
 			{
 		//		$this->println("checkconnect using old connection");
-				 $vtlog->logthis('checkconnect using old connection','info');
+                $vtlog->logthis('checkconnect using old connection','info');
 			}
 	}
 
@@ -233,8 +237,13 @@ global $vtlog;
 		global $vtlog;
 		//$this->println("ADODB query ".$sql);		
 		$vtlog->logthis('query being executed : '.$sql,'debug');
+        $mytime["start"] = $this->microtime_float();
 		$this->checkConnection();
 		$result = & $this->database->Execute($sql);
+        $mytime["execute"] = $this->microtime_float();
+        $mytime["total"] = $mytime["execute"]-$mytime["start"];
+        if ( $mytime["total"] > 0.5 )
+            $vtlog->logthis("TIME: sql statement $sql took {$mytime['total']} seconds.","error");
 		$this->lastmysqlrow = -1;
 		if(!$result)$this->checkError($msg.' Query Failed:' . $sql . '::', $dieOnError);
 		return $result;		
@@ -423,13 +432,23 @@ global $vtlog;
 			//$this->println("ADODB fetch_array return null");
 			return NULL;
 		}		
-		return $this->change_key_case($result->FetchRow());
+		//return $this->change_key_case($result->FetchRow());
+        $ret = @ $this->change_key_case($result->FetchRow());
+        if ( !is_array($ret) )
+		{
+			$this->println( "ERROR: SQL (".$this->sql.")" );
+			$this->println( print_r($result,1) );
+			//die;
+		}
+		return $ret;
+
 	}
 
 	/* ADODB newly added. replacement for mysql_result() */
 
 	function query_result(&$result, $row, $col=0)
-	{		
+	{
+        if ( !$result ) return;
 		//$this->println("ADODB query_result r=".$row." c=".$col);
 		$result->Move($row);
 		$rowdata = $this->change_key_case($result->FetchRow());
@@ -591,6 +610,12 @@ global $vtlog;
 		return $result->FetchField($col);
 	}
 	
+    function microtime_float()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return ((float)$usec + (float)$sec);
+    }
+
 	function getQueryTime(){
 		return $this->query_time;	
 	}
