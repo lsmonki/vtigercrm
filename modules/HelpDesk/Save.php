@@ -65,19 +65,28 @@ $subject = '[ Ticket ID : '.$focus->id.' ] '.$reply.$_REQUEST['ticket_title'];
 $bodysubject = ' Ticket ID : '.$focus->id.'<br> Subject : '.$_REQUEST['ticket_title'];
 
 $emailoptout = 0;
+
+//To get the emailoptout field value and then decide whether send mail about the tickets or not
 if($focus->column_fields['parent_id'] != '')
 {
-	$query = "select * from crmentity where crmid=".$focus->column_fields['parent_id'];
-	$parent_module = $adb->query_result($adb->query($query),0,'setype');
+	$parent_module = getSalesEntityType($focus->column_fields['parent_id']);
 	if($parent_module == 'Contacts')
 	{
-		$sql = "select * from contactdetails where contactid=".$focus->column_fields['parent_id'];
-		$result = $adb->query($sql);
+		$result = $adb->query("select * from contactdetails where contactid=".$focus->column_fields['parent_id']);
 		$emailoptout = $adb->query_result($result,0,'emailoptout');
 		$contactname = $adb->query_result($result,0,'firstname').' '.$adb->query_result($result,0,'lastname');
+		$parentname = $contactname;
 		$contact_mailid = $adb->query_result($result,0,'email');
 	}
+	if($parent_module == 'Accounts')
+	{
+		$result = $adb->query("select * from account where accountid=".$focus->column_fields['parent_id']);
+		$emailoptout = $adb->query_result($result,0,'emailoptout');
+		$parentname = $adb->query_result($result,0,'accountname');
+	}
 }
+
+//Get the status of the portal user. if the customer is active then send the portal link in the mail
 if($contact_mailid != '')
 {
 	$sql = "select * from portalinfo where user_name='".$contact_mailid."'";
@@ -100,7 +109,7 @@ if($isactive == 1)
 else
 {
 	$desc = 'Ticket ID : '.$focus->id.'<br> Ticket Title : '.$reply.$_REQUEST['ticket_title'];
-	$desc .= "<br><br>Dear ".$contactname.",<br><br>The Ticket is replied and the details are : <br>";
+	$desc .= "<br><br>Dear ".$parentname.",<br><br>The Ticket is replied and the details are : <br>";
 	$desc .= "<br> Status : ".$focus->column_fields['ticketstatus'];
 	$desc .= "<br> Category : ".$focus->column_fields['ticketcategories'];
 	$desc .= "<br> Severity : ".$focus->column_fields['ticketseverities'];
@@ -133,14 +142,24 @@ else
 {
 	$mail_status_str = "'".$to_email."'=0&&&";
 }
-//added condition to check the emailoptout(this is only for contacts.)
+//added condition to check the emailoptout(this is for contacts and accounts.)
 if($emailoptout == 0)
 {
 	//send mail to parent
-	$parent_email = getParentMailId($return_module,$return_id);	
+	if($_REQUEST['parent_id'] != '' && $_REQUEST['parent_type'] != '')
+        {
+                $parentmodule = $_REQUEST['parent_type'];
+                $parentid = $_REQUEST['parent_id'];
+        }
+	$parent_email = getParentMailId($parentmodule,$parentid);	
 	$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
 	$mail_status_str .= $parent_email."=".$mail_status."&&&";
 }
+else
+{
+	$adb->println("'".$parentname."' is not want to get the email about the ticket details as emailoptout is selected");
+}
+
 $mail_error_status = getMailErrorString($mail_status_str);
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
