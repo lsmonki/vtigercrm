@@ -5571,6 +5571,15 @@ function getProductQtyInStock($product_id)
 
 
 }
-
+/** Function to seperate the Date and Time
+  * This function accepts a sting with date and time and
+  * returns an array of two elements.The first element
+  * contains the date and the second one contains the time
+  */
+function getDateFromDateAndtime($date_time)
+{
+    $result = explode(" ",$date_time);
+    return $result;
+}
 
 ?>
