@@ -20,7 +20,8 @@ $focus->retrieve_entity_info($_REQUEST['record'],"Orders");
 $vendor_name = getVendorName($focus->column_fields[vendor_id]);
 $iData[] = $vendor_name;
 $iData[] = $id;
-$iData[] = getDisplayDate(date('Y-m-d'));
+$created_time = getDateFromDateAndTime($focus->column_fields['createdtime']);
+$iData[] = getDisplayDate($created_time[0]);
 //newly added for Sales Order No.
 if($focus->column_fields["requisition_no"] != '')
 {

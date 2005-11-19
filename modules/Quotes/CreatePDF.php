@@ -20,7 +20,8 @@ $focus->retrieve_entity_info($_REQUEST['record'],"Quotes");
 $account_name = getAccountName($focus->column_fields[account_id]);
 $iData[] = $account_name;
 $iData[] = $id;
-$iData[] = getDisplayDate(date('Y-m-d'));
+$created_time = getDateFromDateAndTime($focus->column_fields['createdtime']);
+$iData[] = getDisplayDate($created_time[0]);
 
 //setting the Customer Data
 $iCustData[] = $account_name;
