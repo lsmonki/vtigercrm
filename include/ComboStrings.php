@@ -256,7 +256,8 @@ $combo_strings = Array(
 'postatus_dom' => Array('Created'=>'Created',
 			'Approved'=>'Approved',
 			'Delivered'=>'Delivered',
-			'Canceled'=>'Canceled'
+			'Canceled'=>'Canceled',
+			'Received Shipment'=>'Received Shipment'
 			),
 
 'sostatus_dom' => Array('Created'=>'Created',
