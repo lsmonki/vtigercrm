@@ -238,7 +238,7 @@ else
         {	 
                  $uitype = 56;	 
                  //$type = "varchar(255)";	 
-                 $type = "C(3)"; //adodb type	 
+                 $type = "C(3) default 0"; //adodb type	 
                  $uichekdata='C~0';	 
         }
 	elseif($fldType == 'TextArea')	 
