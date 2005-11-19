@@ -13,27 +13,30 @@
 class vtiger_logger{
 
 	var $debug_status; 
-
+  	var $log1;
 	function logthis($msg,$loglevel)
         {
 		if($this->debug_status)
 		{
-                	require_once('include/logging.php');
+          //	require_once('include/logging.php');
                 	$log1 =& LoggerManager::getLogger('VT');
                 	if(is_array($msg))
                 	{
-                        	$log1->$loglevel("Message".print_r($msg,true));
+                      //	$log1->$loglevel("Message".print_r($msg,true));
+                      $this->log1->$loglevel("Message".print_r($msg,true));
                 	}
                 	else
                 	{
-                        	$log1->$loglevel("Message ->".$msg);
+                      //$log1->$loglevel("Message ->".$msg);
+                      	$this->log1->$loglevel("Message ->".$msg);
                 	}
                 	return $msg;
 		}
         }
 	function vtiger_logger()
 	{
-		$this->debug_status= true;
+      $this->debug_status= true;
+      $this->log1 =& LoggerManager::getLogger('VT');
 	}
 
 }
