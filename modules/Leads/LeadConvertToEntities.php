@@ -46,7 +46,6 @@ if($check_unit[1] == "")
 
 //get all the lead related columns 
 $row = $focus->column_fields;
-
 $date_entered;
 $date_modified;
 
@@ -274,12 +273,12 @@ $adb->query($sql_crmentity1);
 $contact_id = $crmcontactid;
 $vtlog->logthis("contact id is ".$contact_id,'debug');
 
- $sql_insert_contact = "INSERT INTO contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (".$contact_id.",".$crmid.",'".$row["salutation"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["designation"] ."','".$row["fax"] ."','".$row['yahooid']."')";
+ $sql_insert_contact = "INSERT INTO contactdetails (contactid,accountid,salutation,firstname,lastname,email,phone,mobile,title,fax,yahooid) VALUES (".$contact_id.",".$crmid.",'".$row["salutationtype"] ."','" .$row["firstname"] ."','" .$row["lastname"] ."','" .$row["email"] ."','" .$row["phone"]. "','" .$row["mobile"] ."','" .$row["designation"] ."','".$row["fax"] ."','".$row['yahooid']."')";
 
 $adb->query($sql_insert_contact);
 
 
- $sql_insert_contactsubdetails = "INSERT INTO contactsubdetails (contactsubscriptionid,homephone,otherphone,leadsource) VALUES (".$contact_id.",'".$row["phone"] ."','" .$row["phone"] ."','".$row['leadsource']."')";
+ $sql_insert_contactsubdetails = "INSERT INTO contactsubdetails (contactsubscriptionid,homephone,otherphone,leadsource) VALUES (".$contact_id.",'','','".$row['leadsource']."')";
 
 $adb->query($sql_insert_contactsubdetails);
 
