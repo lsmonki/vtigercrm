@@ -944,9 +944,9 @@
 			<NOTNULL/>
 		</field>
 
-		<field name="sendnotification" type="C" size="50">
+		<field name="sendnotification" type="C" size="3">
 			<NOTNULL/>
-			<DEFAULT value="false"/>
+			<DEFAULT value="0"/>
 		</field>
                 <field name="duration_hours" type="C" size="2"></field> 
                 <field name="duration_minutes" type="C" size="2"></field> 
