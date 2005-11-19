@@ -5517,7 +5517,7 @@ function getEmailParentsList($module,$id)
         if($focus->column_fields['email'] == '' && $focus->column_fields['yahooid'] != '')
                 $fieldname = 'yahooid';
 
-        $res = $adb->query("select * from field where tabid = 4 and fieldname='".$fieldname."'");
+        $res = $adb->query("select * from field where tabid = ".getTabid($module)." and fieldname='".$fieldname."'");
         $fieldid = $adb->query_result($res,0,'fieldid');
 
         $hidden .= '<input type="hidden" name="emailids" value="'.$id.'@'.$fieldid.'|">';
