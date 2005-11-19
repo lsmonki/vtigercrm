@@ -2517,11 +2517,16 @@ $vtlog->logthis("in getPriceBookName ".$pricebookid,'info');
         $pricebook_name = $adb->query_result($result,0,"bookname");
         return $pricebook_name;
 }
+
+/** This Function returns the  Purchase Order Name.
+  * The following is the input parameter for the function
+  *  $po_id --> Purchase Order Id, Type:Integer
+  */
 function getPoName($po_id)
 {
 
-global $vtlog;
-$vtlog->logthis("in getPoName ".$po_id,'info');  
+	global $vtlog;
+	$vtlog->logthis("in getPoName ".$po_id,'info');  
 
         global $adb;
         $sql = "select * from purchaseorder where purchaseorderid=".$po_id;
@@ -5520,4 +5525,52 @@ function getEmailParentsList($module,$id)
 
 	return $hidden;
 }
+
+/** This Function returns the current status of the specified Purchase Order.
+  * The following is the input parameter for the function
+  *  $po_id --> Purchase Order Id, Type:Integer
+  */
+function getPoStatus($po_id)
+{
+
+	global $vtlog;
+	$vtlog->logthis("in getPoName ".$po_id,'info');  
+
+        global $adb;
+        $sql = "select postatus from purchaseorder where purchaseorderid=".$po_id;
+        $result = $adb->query($sql);
+        $po_status = $adb->query_result($result,0,"postatus");
+        return $po_status;
+}
+
+/** This Function adds the specified product quantity to the Product Quantity in Stock in the Warehouse 
+  * The following is the input parameter for the function:
+  *  $productId --> ProductId, Type:Integer
+  *  $qty --> Quantity to be added, Type:Integer
+  */
+function addToProductStock($productId,$qty)
+{
+	global $adb;
+	$qtyInStck=getProductQtyInStock($productId);
+	$updQty=$qtyInStck + $qty;
+	$sql = "UPDATE products set qtyinstock=$updQty where productid=".$productId;
+	$adb->query($sql);
+	
+}
+/** This Function returns the current product quantity in stock.
+  * The following is the input parameter for the function:
+  *  $product_id --> ProductId, Type:Integer
+  */
+function getProductQtyInStock($product_id)
+{
+        global $adb;
+        $query1 = "select qtyinstock from products where productid=".$product_id;
+        $result=$adb->query($query1);
+        $qtyinstck= $adb->query_result($result,0,"qtyinstock");
+        return $qtyinstck;
+
+
+}
+
+
 ?>
