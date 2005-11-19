@@ -72,22 +72,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 		$mail_error = $mail_status;
 	}
 
-return $mail_error;
-
-	/*//This functionality is changed to multi parent by Raju
-	//TODO -- get the Parent mail id and add it with the mail object
-	if($_REQUEST['module'] != 'Emails')
-	{
-	        $parent_mail = getParentMailId($_REQUEST['return_module'],$_REQUEST['parent_id']);
-		if($parent_mail != '')
-		{
-			$mail->ClearAddresses();
-			$mail->AddAddress($mailto);
-			$mail_status = MailSend(&$mail);
-			echo 'Parent Mail sending status => '.$mail_status;
-		}
-	}
-	*/
+	return $mail_error;
 }
 
 /**	Function to get the user Email id based on column name and column value
@@ -263,39 +248,38 @@ function MailSend($mail)
 	}
 }
 
-/**	Function to get the Parent email id for email
-  *	$returnmodule -- Parent module value. Leads and Contact for email
-  *	$parentid -- id of the parent ie., lead or contact
+/**	Function to get the Parent email id from HelpDesk to send the details about the ticket via email
+  *	$returnmodule -- Parent module value. Contact or Account for send email about the ticket details
+  *	$parentid -- id of the parent ie., contact or account
   */
-function getParentMailId($returnmodule,$parentid)
+function getParentMailId($parentmodule,$parentid)
 {
 	global $adb;
-	global $vtlog;
-        if($returnmodule == 'Leads')
+	$adb->println("Inside the function getParentMailId. \n parent module and id => ".$parentmodule."&".$parentid);
+
+        if($parentmodule == 'Contacts')
         {
-                $tablename = 'leaddetails';
-                $idname = 'leadid';
-        }
-        if($returnmodule == 'Contacts' || $returnmodule == 'HelpDesk')
-        {
-		if($returnmodule == 'HelpDesk')
-			$parentid = $_REQUEST['parent_id'];
                 $tablename = 'contactdetails';
                 $idname = 'contactid';
+		$first_email = 'email';
+		$second_email = 'yahooid';
+        }
+        if($parentmodule == 'Accounts')
+        {
+                $tablename = 'account';
+                $idname = 'accountid';
+		$first_email = 'email1';
+		$second_email = 'email2';
         }
 	if($parentid != '')
 	{
 	        $query = 'select * from '.$tablename.' where '.$idname.' = '.$parentid;
-	        $mailid = $adb->query_result($adb->query($query),0,'email');
-		$vtlog->logthis("Return Module in send_mail page : ".$returnmodule,'info');
-		$vtlog->logthis("Email id of parent (Lead/Contact) is selected => ".$mailid,'info');
+	        $mailid = $adb->query_result($adb->query($query),0,$first_email);
+		$mailid2 = $adb->query_result($adb->query($query),0,$second_email);
 	}
-        if($mailid == '' && $returnmodule =='Contacts')
-        {
-                $mailid = $adb->query_result($adb->query($query),0,'otheremail');
-                if($mailid == '')
-                        $mailid = $adb->query_result($adb->query($query),0,'yahooid');
-        }
+        if($mailid == '' && $mailid2 != '')
+        	$mailid = $mailid2;
+
 	return $mailid;
 }
 
@@ -352,7 +336,7 @@ function getMailErrorString($mail_status_str)
 	$mail_status_str = trim($mail_status_str,"&&&");
 	$mail_status_array = explode("&&&",$mail_status_str);
 	$adb->println("All Mail status ==>\n".$mail_status_str."\n");
-	//$adb->println($mail_status_array);
+
 	foreach($mail_status_array as $key => $val)
 	{
 		$list = explode("=",$val);
