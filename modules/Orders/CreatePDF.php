@@ -10,6 +10,7 @@
  ********************************************************************************/
 require('include/fpdf/fpdf.php');
 require_once('modules/Orders/Order.php');
+require_once('include/utils.php');
 
 $id = $_REQUEST['record'];
 global $adb;
@@ -19,7 +20,7 @@ $focus->retrieve_entity_info($_REQUEST['record'],"Orders");
 $vendor_name = getVendorName($focus->column_fields[vendor_id]);
 $iData[] = $vendor_name;
 $iData[] = $id;
-$iData[] = date('Y-m-d');
+$iData[] = getDisplayDate(date('Y-m-d'));
 //newly added for Sales Order No.
 if($focus->column_fields["requisition_no"] != '')
 {

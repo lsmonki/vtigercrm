@@ -10,6 +10,7 @@
  ********************************************************************************/
 require('include/fpdf/fpdf.php');
 require_once('modules/Quotes/Quote.php');
+require_once('include/utils.php');
 
 $id = $_REQUEST['record'];
 global $adb;
@@ -19,7 +20,7 @@ $focus->retrieve_entity_info($_REQUEST['record'],"Quotes");
 $account_name = getAccountName($focus->column_fields[account_id]);
 $iData[] = $account_name;
 $iData[] = $id;
-$iData[] = date('Y-m-d');
+$iData[] = getDisplayDate(date('Y-m-d'));
 
 //setting the Customer Data
 $iCustData[] = $account_name;
