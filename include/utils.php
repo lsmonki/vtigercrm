@@ -3434,7 +3434,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						$field_result = $adb->query($query);
 						$list_result_count = $i-1;
 
-						$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset);
+						$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
 					}
 				}
 				//Added condition to hide the close symbol in Related Lists
@@ -3605,7 +3605,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	return $list_header;
 }
 
-function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='')
+function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
 {
 	global $adb;
 	$uitype = $adb->query_result($field_result,0,"uitype");
@@ -4030,7 +4030,8 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				{
 			                if($colname == "lastname")
 			                        $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
-			                $temp_val =$temp_val.' '.$firstname;
+			              //condition to add lastname and first name only for default view on 20-11-05 
+						   if($viewid =='' || $viewid =='0') $temp_val =$temp_val.' '.$firstname;
 					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'">'.$temp_val.'</a>';
 				}
 				elseif($module == "Activities")
