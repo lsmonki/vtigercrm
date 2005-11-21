@@ -160,7 +160,13 @@ if(is_admin($current_user))
 
 if(is_admin($current_user))
 {
-	$xtpl->assign("GROUPASSIGNED","<a href='index.php?module=Users&action=UserInfoUtil&groupname=".$group."'>".$group."</a>");
+//code modified to view the grouplists related to the current user
+	$groupnames = explode(",",$group);
+	for($i=0;$i < count($groupnames);$i++)
+		$grouplists[$i] ="<a href='index.php?module=Users&action=UserInfoUtil&groupname=".$groupnames[$i]."'>".$groupnames[$i]."</a>";
+		
+	$group_lists = implode(",",$grouplists);
+	$xtpl->assign("GROUPASSIGNED",$group_lists);
 }
 else
 {

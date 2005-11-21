@@ -67,16 +67,26 @@ function fetchUserProfileId($userid)
 	return $profileid;
 }
 
+/** Function to get the lists of groupnames releated with an user
+ * This function accepts the user id as arguments and 
+ * returns the groupnames related with the user id
+ * as a comma seperated string
+*/
 function fetchUserGroups($userid)
 {
 	global $adb;
 	$sql= "select groupname from users2group inner join groups on groups.groupid=users2group.groupid where userid='" .$userid ."'";
         //echo $sql;
         $result = $adb->query($sql);
-        //store the groupnames in a comma separated string
-        //echo 'count is ' .count($result);
-	if($adb->num_rows($result)!=0)	$groupname=  $adb->query_result($result,0,"groupname");
-	return $groupname;
+	//code changed to return a list of groups related to the userid as comma seperated	
+	if($adb->num_rows($result)!=0)
+		{
+		for($i=0;$i<$adb->num_rows($result);$i++)	
+			$groupname[]=  $adb->query_result($result,$i,"groupname");
+		
+		}	
+	$grouplists = implode (",",$groupname);
+	return $grouplists;
 }
 
 function getAllTabsPermission($profileid)
