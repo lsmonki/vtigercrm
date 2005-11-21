@@ -104,22 +104,22 @@ if($tab_per_Data[2] == 0)
 //get all the group relation tasks
 global $current_user;
 $userid= $current_user->id;
-$groupName = fetchUserGroups($userid);
-if($groupName !='')
+$groupids = fetchUserGroupids($userid);
+if($groupids !='')
 {
 //code modified to list the groups associates to a user om 21-11-05
-	$grouplists = explode(",",$groupName);
-	for($i = 0;$i < count($grouplists);$i++)
-		$quotesgroup[$i] = "'".$grouplists[$i]."'";
-	$quotesgrouplists = implode(",",$quotesgroup);	
+	//$grouplists = explode(",",$groupName);
+	//for($i = 0;$i < count($grouplists);$i++)
+	//	$quotesgroup[$i] = "'".$grouplists[$i]."'";
+	//$quotesgrouplists = implode(",",$quotesgroup);	
 	//Get the leads assigned to group
-	$query = "select leaddetails.leadid as id,leaddetails.lastname as name,leadgrouprelation.groupname as groupname, 'Leads     ' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where  crmentity.deleted=0  and leadgrouprelation.groupname is not null and leadgrouprelation.groupname in (".$quotesgrouplists.")";
+	$query = "select leaddetails.leadid as id,leaddetails.lastname as name,leadgrouprelation.groupname as groupname, 'Leads     ' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid inner join groups on leadgrouprelation.groupname=groups.groupname where  crmentity.deleted=0  and leadgrouprelation.groupname is not null and groups.groupid in (".$groupids.")";
 	$query .= " union all ";
 	//Get the activities assigned to group
-	$query .= "select activity.activityid,activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid where  crmentity.deleted=0 and ((activity.eventstatus !='held'and (activity.status is null or activity.status ='')) or (activity.status !='completed' and (activity.eventstatus is null or activity.eventstatus=''))) and activitygrouprelation.groupname is not null and groupname in (".$quotesgrouplists.")";
+	$query .= "select activity.activityid id,activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid inner join groups on activitygrouprelation.groupname=groups.groupname where  crmentity.deleted=0 and ((activity.eventstatus !='held'and (activity.status is null or activity.status ='')) or (activity.status !='completed' and (activity.eventstatus is null or activity.eventstatus=''))) and activitygrouprelation.groupname is not null and groups.groupid in (".$groupids.")";
 	$query .= " union all ";
 	//Get the tickets assigned to group (status not Closed -- hardcoded value)
-	$query .= "select troubletickets.ticketid,troubletickets.title,ticketgrouprelation.groupname,'Tickets   ' as Type from troubletickets inner join ticketgrouprelation on ticketgrouprelation.ticketid=troubletickets.ticketid inner join crmentity on crmentity.crmid = troubletickets.ticketid and crmentity.deleted=0 and troubletickets.status != 'Closed' and ticketgrouprelation.groupname is not null and ticketgrouprelation.groupname in (".$quotesgrouplists.")";
+	$query .= "select troubletickets.ticketid,troubletickets.title,ticketgrouprelation.groupname,'Tickets   ' as Type from troubletickets inner join ticketgrouprelation on ticketgrouprelation.ticketid=troubletickets.ticketid inner join crmentity on crmentity.crmid = troubletickets.ticketid inner join groups on ticketgrouprelation.groupname=groups.groupname where crmentity.deleted=0 and troubletickets.status != 'Closed' and ticketgrouprelation.groupname is not null and groups.groupid in (".$groupids.")";
 
 
 	//$query = "select leaddetails.lastname,leadgrouprelation.groupname, 'Leads' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where  crmentity.deleted=0 union all select activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid where  crmentity.deleted=0 union all select troubletickets.ticketid,troubletickets.groupname,'Tickets' as Type from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.ticketid where troubletickets.groupname is not null and crmentity.deleted=0";
@@ -148,7 +148,7 @@ if($groupName !='')
 
 
 
-	if($groupName !='')
+	if($groupids !='')
 	{
 		$i=1;
 		while($row = $adb->fetch_array($result))
