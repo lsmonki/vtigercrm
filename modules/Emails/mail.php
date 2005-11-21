@@ -150,7 +150,10 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	$mail->From = $from_email;
 	$mail->FromName = $from_name;
 
-	$mail->AddAddress($to_email);
+	if($to_email != '')
+	{
+		$mail->AddAddress($to_email);
+	}
 
 	$mail->AddReplyTo($from_email);
 	$mail->WordWrap = 50;
@@ -383,6 +386,12 @@ function parseEmailErrorString($mail_error_str)
 			{
 				$adb->println("first elseif part - status will be 0 which is the case of assigned to users's email is empty.");
 				$errorstr .= '<br><b><font color=red> Mail could not be sent to the assigned to user. Please check the assigned to user email id...</font></b>';
+				//Added to display the message about the CC && BCC mail sending status
+				if($status_str[0] == 'cc_success')
+				{
+                                        $cc_msg = 'But the mail has been sent to CC & BCC addresses.';
+					$errorstr .= '<br><b><font color=purple>'.$cc_msg.'</font></b>';
+				}
 			}
 			elseif(strstr($status_str[1],'from_failed'))
 			{

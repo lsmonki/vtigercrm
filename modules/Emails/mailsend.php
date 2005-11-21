@@ -27,23 +27,34 @@ else
 
 
 $adb->println("\n\nMail Sending Process has been started.");
-//This function call is used to send mail to the assigned to user
+//This function call is used to send mail to the assigned to user. In this mail CC and BCC addresses will be added.
 $to_email = getUserEmailId('id',$focus->column_fields["assigned_user_id"]);
-if($to_email != '')
+$cc = $_REQUEST['ccmail'];
+$bcc = $_REQUEST['bccmail'];
+if($to_email == '' && $cc == '' && $bcc == '')
 {
-	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['name'],$_REQUEST['description'],$_REQUEST['ccmail'],$_REQUEST['bccmail']);
-	//set the errorheader1 to 1 if the mail has not been sent to the assigned to user
-	if($mail_status != 1)
-	{
-		$errorheader1 = 1;
-	}
-	$mail_status_str = $to_email."=".$mail_status."&&&";
+	$adb->println("Mail Error : send_mail function not called because To email id of assigned to user, CC and BCC are empty");
+	$mail_status_str = "'".$to_email."'=0&&&";
+	$errorheader1 = 1;
 }
 else
 {
-	$adb->println("Mail Error : send_mail function not called because email id for assigned to user is empty");
-	$mail_status_str = "'".$to_email."'=0&&&";
-	$errorheader1 = 1;
+	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['name'],$_REQUEST['description'],$cc,$bcc);
+	//set the errorheader1 to 1 if the mail has not been sent to the assigned to user
+	if($mail_status != 1)//when mail send fails
+	{
+		$errorheader1 = 1;
+		$mail_status_str = $to_email."=".$mail_status."&&&";
+	}
+	elseif($mail_status == 1 && $to_email == '')//Mail send success only for CC and BCC but the 'to' email is empty 
+	{
+		$errorheader1 = 1;
+		$mail_status_str = "cc_success=0&&&";
+	}
+	else
+	{
+		$mail_status_str = $to_email."=".$mail_status."&&&";
+	}
 }
 
 
