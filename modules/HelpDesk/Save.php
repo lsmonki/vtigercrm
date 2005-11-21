@@ -150,10 +150,11 @@ if($emailoptout == 0)
         {
                 $parentmodule = $_REQUEST['parent_type'];
                 $parentid = $_REQUEST['parent_id'];
+
+		$parent_email = getParentMailId($parentmodule,$parentid);	
+		$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
+		$mail_status_str .= $parent_email."=".$mail_status."&&&";
         }
-	$parent_email = getParentMailId($parentmodule,$parentid);	
-	$mail_status = send_mail('HelpDesk',$parent_email,$HELPDESK_SUPPORT_NAME,$HELPDESK_SUPPORT_EMAIL_ID,$subject,$email_body);
-	$mail_status_str .= $parent_email."=".$mail_status."&&&";
 }
 else
 {
