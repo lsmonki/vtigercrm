@@ -25,10 +25,12 @@ require_once('data/Tracker.php');
 require_once('modules/Users/User.php');
 require_once('include/utils.php');
 require_once('modules/Users/UserInfoUtil.php');
+require_once('include/database/PearDatabase.php');
+
 global $current_user;
 global $theme;
 global $default_language;
-
+global $adb;
 
 global $app_strings;
 global $mod_strings;
@@ -62,7 +64,7 @@ $rolename =  getRoleName($role);
 //the user might belong to multiple groups
 if($focus->id != 1)
 {
- $group = fetchUserGroups($focus->id);
+ $groupids = fetchUserGroupids($focus->id);
 }
 $log->info("User detail view");
 
@@ -160,11 +162,14 @@ if(is_admin($current_user))
 
 if(is_admin($current_user))
 {
-//code modified to view the grouplists related to the current user
-	$groupnames = explode(",",$group);
-	for($i=0;$i < count($groupnames);$i++)
-		$grouplists[$i] ="<a href='index.php?module=Users&action=UserInfoUtil&groupname=".$groupnames[$i]."'>".$groupnames[$i]."</a>";
-		
+	$query ="select groupname from groups where groupid in (".fetchUserGroupids($current_user->id).")";
+	$result = $adb->query($query);
+	$num_rows = $adb->num_rows($result);
+	for($i=0;$i < $num_rows;$i++)
+	{
+		$groupname = $adb->query_result($result,$i,'groupname');
+		$grouplists[$i] ="<a href='index.php?module=Users&action=UserInfoUtil&groupname=".$groupname."'>".$groupname."</a>";
+	}
 	$group_lists = implode(",",$grouplists);
 	$xtpl->assign("GROUPASSIGNED",$group_lists);
 }
