@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en">
 <head>
-  <title>vtiger CRM 4.5 Milestone 2: Release Notes</title>
+  <title>vtiger CRM 4.5 Milestone 3: Release Notes</title>
   <style>
 p {  font-family: Arial, Helvetica, sans-serif; font-size: 10pt}
 td{  font-family: Arial, Helvetica, sans-serif; font-size: 10pt}
@@ -10,7 +10,7 @@ h1{  font-family: Arial, Helvetica, sans-serif; font-size: 16pt}
 h2{  font-family: Arial, Helvetica, sans-serif; font-size: 14pt}
 h3{  font-family: Arial, Helvetica, sans-serif; font-size: 12pt}
 .background{
-background-image: url(./themes/images/vtiger-paw.jpg);
+background-image: url(themes/images/vtiger-paw.jpg);
 background-repeat: no-repeat;
 background-position: bottom center;
 background-attachment: fixed;
@@ -18,336 +18,486 @@ background-attachment: fixed;
   </style>
 </head>
 <body class="background">
-<h1><img src="./themes/images/vtiger.jpg" width="112" height="48"></h1>
+<p><img src="themes/images/vtiger.jpg" width="112" height="48"></p>
 <h1>vtiger CRM 4.5 : Development Version 3 - Release Notes</h1>
-<p><b>Date: November 16, 2005</b></p>
+<p><b>Date: November 23, 2005</b></p>
 <p><b><a name="TOC3"></a>Table of Contents</b></p>
 <ol>
   <li><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#Summary3">Summary</a></li>
+ href="#Summary3">Summary</a></li>
   <li><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#Features2">Features</a></li>
+ href="#Features3">Features</a></li>
   <li><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#Size">Product
-Size</a></li>
+ href="#Size3">Product Size</a></li>
   <li><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#Bugs2">Bug
-Fixes</a></li>
-  <li>Code Contributions<br>
+ href="#Bugs3">Bug Fixes</a></li>
+  <li><a href="#Code3">Code Contributions</a><br>
   </li>
   <li><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#DBMigration2">Database
-Migration</a></li>
-  <li>vtiger CRM - PHP Documentation</li>
-  <li>Product Documentation</li>
-  <li>Source Code Label<br>
-  </li>
+ href="#DBMigration2">Database Migration</a></li>
   <li><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#KI2">Known
-Issues</a></li>
+ href="#KI3">Known Issues</a></li>
   <li><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#v451tov452">List
-of Files Changed from V 4.5 Development 2 to V 4.5 Development 3<br>
+ href="#v452tov453">List of Files Changed from V 4.5 Development 2 to V 4.5 Development 
+    3<br>
     </a></li>
   <li><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#v42p2tov452">List
-of Files Changed from V 4.2 Patch 2 to V 4.5 Development 3<br>
+ href="#v451p2Tov453">List of Files Changed from V 4.2 Patch 2 to V 4.5 Development 
+    3<br>
     </a></li>
 </ol>
 <h3><a name="Summary3"></a>1. Summary</h3>
 <table cellpadding="5" cellspacing="0" border="1" width="50%">
-  <tbody>
-    <tr bgcolor="#ccccff">
-      <td width="10%"><b><font color="#990000">S. No</font></b></td>
-      <td width="53%"><b><font color="#990000">Item</font></b></td>
-      <td width="18%"><b><font color="#990000">Status</font></b></td>
-    </tr>
-    <tr>
-      <td style="vertical-align: top;">1<br>
-      </td>
-      <td style="vertical-align: top;">Summary<br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-    </tr>
-    <tr>
-      <td width="10%">2<br>
-      </td>
-      <td width="53%">Features</td>
-      <td width="18%">
+  <tbody> 
+  <tr bgcolor="#ccccff"> 
+    <td width="10%"><b><font color="#990000">S. No</font></b></td>
+    <td width="53%"><b><font color="#990000">Item</font></b></td>
+    <td width="18%"><b><font color="#990000">Status</font></b></td>
+  </tr>
+  <tr> 
+    <td width="10%">1<br>
+    </td>
+    <td width="53%">Features</td>
+    <td width="18%"> 
       <p> </p>
       <br>
-      </td>
-    </tr>
-    <tr>
-      <td width="10%">3<br>
-      </td>
-      <td width="53%">Product Size</td>
-      <td width="18%">Windows - 31MB<br>
-Linux - 41MB</td>
-    </tr>
-    <tr>
-      <td width="10%">4<br>
-      </td>
-      <td width="53%">Bug Fixes</td>
-      <td width="18%"><br>
-      </td>
-    </tr>
-    <tr>
-      <td width="10%">5<br>
-      </td>
-      <td width="53%">Code Contributions</td>
-      <td width="18%"><br>
-      </td>
-    </tr>
-    <tr>
-      <td style="vertical-align: top;">6<br>
-      </td>
-      <td style="vertical-align: top;">Database Migration<br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-    </tr>
-    <tr>
-      <td width="10%">7<br>
-      </td>
-      <td width="53%">vtiger CRM - PHP Documentation</td>
-      <td width="18%">Bundled with Product</td>
-    </tr>
-    <tr>
-      <td width="10%">8</td>
-      <td width="53%">Product Documentation</td>
-      <td width="18%">Available at <a
+    </td>
+  </tr>
+  <tr> 
+    <td width="10%">2<br>
+    </td>
+    <td width="53%">Product Size</td>
+    <td width="18%">Windows - 31MB<br>
+      Linux - 41MB</td>
+  </tr>
+  <tr> 
+    <td width="10%">3<br>
+    </td>
+    <td width="53%">Bug Fixes</td>
+    <td width="18%"><br>
+    </td>
+  </tr>
+  <tr> 
+    <td width="10%">4<br>
+    </td>
+    <td width="53%">Code Contributions</td>
+    <td width="18%">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td >5<br>
+    </td>
+    <td >Database Migration<br>
+    </td>
+    <td >&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="10%">6<br>
+    </td>
+    <td width="53%">vtiger CRM - PHP Documentation</td>
+    <td width="18%">Bundled with Product</td>
+  </tr>
+  <tr> 
+    <td width="10%">7</td>
+    <td width="53%">Product Documentation</td>
+    <td width="18%">Available at <a
  href="http://www.vtiger.com/wiki/index.php/Main_Page">Wiki</a></td>
-    </tr>
-    <tr>
-      <td width="10%">9</td>
-      <td width="53%">Source Code Label</td>
-      <td width="18%">VTIGERCRM_4_5_M3</td>
-    </tr>
-    <tr>
-      <td style="vertical-align: top;">10<br>
-      </td>
-      <td style="vertical-align: top;">Known Issues<br>
-      </td>
-      <td style="vertical-align: top;"><br>
-      </td>
-    </tr>
-    <tr>
-      <td width="10%">11<br>
-      </td>
-      <td width="53%">List of Files Changed from V 4.5 Development 2 to
-V 4.5 Development 3<br>
-      </td>
-      <td width="18%"><br>
-      </td>
-    </tr>
-    <tr>
-      <td width="10%">12</td>
-      <td width="53%">List of Files Changed from V 4.2 Patch 2 to V 4.5
-Development 3<br>
-      </td>
-      <td width="18%"><br>
-      </td>
-    </tr>
-  </tbody>
+  </tr>
+  <tr> 
+    <td width="10%">8</td>
+    <td width="53%">Source Code Label</td>
+    <td width="18%">VTIGERCRM_4_5_M3</td>
+  </tr>
+  <tr> 
+    <td >9<br>
+    </td>
+    <td >Known Issues</td>
+    <td >&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="10%">10<br>
+    </td>
+    <td width="53%">List of Files Changed from V 4.5 Development 2 to V 4.5 Development 
+      3</td>
+    <td width="18%">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="10%">11</td>
+    <td width="53%">List of Files Changed from V 4.2 Patch 2 to V 4.5 Development 
+      3</td>
+    <td width="18%">&nbsp;</td>
+  </tr>
+  </tbody> 
 </table>
 <p align="right"><b><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#TOC3">Back
+ href="#TOC3">Back
 to Top</a></b></p>
-<h3><a name="Features2"></a>2. Features</h3>
+<h3><a name="Features3"></a>2. Features</h3>
 <table cellspacing="0" cellpadding="4" border="1" width="80%">
-  <tbody>
-    <tr bgcolor="#ccccff">
-      <td width="56"><b><font color="#990000">S. No </font></b></td>
-      <td width="764"><b><font color="#990000">Subject</font></b></td>
-    </tr>
-    <tr>
-      <td width="56"><br>
-      </td>
-      <td>
-      <p><br>
-      </p>
-      </td>
-    </tr>
-  </tbody>
+  <tbody> 
+  <tr bgcolor="#ccccff"> 
+    <td width="56"><b><font color="#990000">S. No </font></b></td>
+    <td width="764"><b><font color="#990000">Subject</font></b></td>
+  </tr>
+  <tr> 
+    <td width="56">1</td>
+    <td> 
+      <p> Progress bar display during the vtiger CRM database creation in Installation 
+        wizard. </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="56">2</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">3</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">4</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">5</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">6</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">7</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">8</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">9</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="56">10</td>
+    <td>&nbsp;</td>
+  </tr>
+  </tbody> 
 </table>
 <div align="right">
-<p><b><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#TOC">Back
-to Top</a></b>
-</p>
+  <p><b><a
+ href="#TOC">Back to Top</a></b> </p>
 </div>
-<h3><a name="Size"></a>3. Product Size</h3>
+<h3><a name="Size3"></a>3. Product Size</h3>
 <table style="text-align: left; width: 80%;" border="1" cellspacing="2"
  cellpadding="2">
   <tbody>
     <tr bgcolor="#ccccff">
       <td><b><font color="#990000">Distribution</font></b></td>
       <td><font color="#990000"><b>Version 4.2 Build Size </b></font></td>
-      <td><b><font color="#990000">Version 4.2 Build Size</font></b></td>
+      
+    <td><b><font color="#990000">Version 4.5 Milestone 3 Build Size</font></b></td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">Windows (EXE)</td>
-      <td style="vertical-align: top;">42 MB
+      <td >Windows (EXE)</td>
+      <td >42 MB
       <p> </p>
       </td>
-      <td style="vertical-align: top;"><b>31 MB</b>
-      <p> </p>
-      </td>
+      
+    <td ><b>31 MB</b></td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">Linux (BIN)</td>
-      <td style="vertical-align: top;">39 MB
+      <td >Linux (BIN)</td>
+      <td >39 MB
       <p> </p>
       </td>
-      <td style="vertical-align: top;"><b>41 MB</b></td>
+      <td ><b>41 MB</b></td>
     </tr>
   </tbody>
 </table>
 <div align="right">
-<p><b><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#TOC">Back
-to Top</a></b>
-</p>
+  <p><b><a
+ href="#TOC3">Back to Top</a></b> </p>
 </div>
-<h3><a name="Bugs2"></a>4. Bug Fixes</h3>
+<h3><a name="Bugs3"></a>4. Bug Fixes</h3>
 <table cellspacing="0" cellpadding="4" border="1" width="80%">
-  <tbody>
-    <tr bgcolor="#ccccff">
-      <td width="56"><b><font color="#990000">S. No </font></b></td>
-      <td width="110"><b><font color="#990000">Bug ID</font></b></td>
-      <td width="764"><b><font color="#990000">Subject</font></b></td>
-    </tr>
-    <tr>
-      <td width="56"><br>
-      </td>
-      <td><br>
-      </td>
-      <td>
-      <p><br>
-      </p>
-      </td>
-    </tr>
-  </tbody>
+  <tbody> 
+  <tr bgcolor="#ccccff"> 
+    <td width="56"><b><font color="#990000">S. No </font></b></td>
+    <td width="110"><b><font color="#990000">Bug ID</font></b></td>
+    <td width="764"><b><font color="#990000">Subject</font></b></td>
+  </tr>
+  <tr> 
+    <td width="56">1</td>
+    <td>&nbsp;</td>
+    <td> 
+      <p>&nbsp;</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="56">2</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">3</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">4</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">5</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">6</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">7</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">8</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">9</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">10</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">11</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">12</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">13</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">14</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">15</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">16</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">17</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">18</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">19</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="56">20</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  </tbody> 
 </table>
 <div align="right">
 <p>&nbsp;
 </p>
 </div>
 <div align="right">
-<p><b><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#TOC">Back
-to Top</a><br>
-</b></p>
-<p><b><br>
-<br>
-</b></p>
+  <p><b><a
+ href="#TOC3">Back to Top</a></b></p>
 </div>
-<h3>5. Code Contributions<br>
+<h3><a name="Code3"></a>5. Code Contributions<br>
 </h3>
 <table cellspacing="0" cellpadding="4" border="1" width="80%">
-  <tbody>
-    <tr bgcolor="#ccccff">
-      <td width="56"><b><font color="#990000">S. No </font></b></td>
-      <td width="110"><b><font color="#990000">Forum Id<br>
+  <tbody> 
+  <tr bgcolor="#ccccff"> 
+    <td width="56"><b><font color="#990000">S. No </font></b></td>
+    <td width="110"><b><font color="#990000">Forum ID<br>
       </font></b></td>
-      <td width="764"><b><font color="#990000">Subject</font></b></td>
-    </tr>
-    <tr>
-      <td width="56"><br>
-      </td>
-      <td><br>
-      </td>
-      <td>
-      <p><br>
-      </p>
-      </td>
-    </tr>
-  </tbody>
+    <td width="764"><b><font color="#990000">Subject</font></b></td>
+  </tr>
+  <tr> 
+    <td width="56">1</td>
+    <td>&nbsp;</td>
+    <td> 
+      <p>&nbsp;</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="56">2</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">3</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">4</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">5</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">6</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="56">7</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  </tbody> 
 </table>
+<p>For more details please refer to the <a href="http://www.vtiger.com/wiki/index.php/Vtiger_CRM_Code_Contributions%20">Code 
+  Contributions</a> page in vtiger Wiki.</p>
 <div align="right">
 <p>&nbsp;
 </p>
 </div>
-<div align="right">
-<p><br>
-</p>
+<div align="right"> 
+  <p><b><a
+ href="#TOC3">Back to Top</a></b><br>
+  </p>
 </div>
-<h3><a name="DBMigration2"></a>6. Database Migration</h3>
+<h3><a name="DBMigration3"></a>6. Database Migration</h3>
 <p>Database migration support is provided for the following versions:
 </p>
 <p></p>
 <ul>
-  <li>From vtigerCRM 4.2 Patch2 to vtigerCRM Developer Version 3<br>
+  <li>From vtiger CRM 4.2 Patch2 to vtiger CRM Developer Version 3<br>
   </li>
-  <li> From vtigerCRM Developer Version 2 to vtigerCRM Developer
-Version 2<br>
+  <li> From vtiger CRM Developer Version 2 to vtiger CRM Developer Version 3<br>
   </li>
 </ul>
 <p><b>Database Migration Procedure:</b></p>
 <ol>
-  <li>Download the attached Migration zip and extract to the
-&lt;vtigerCRM home&gt; directory (Migration42p2_to_45dev3.zip)</li>
+  <li>Download the attached Migration zip and extract to the &lt;vtiger CRM home&gt; 
+    directory (Migration42p2_to_45dev3.zip)</li>
   <li> Access the <b>dev_index.php</b> file through the browser.</li>
   <li> Select the versions to migrate.<br>
   </li>
 </ol>
 <div align="right">
-<p><b><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#TOC">Back
-to Top</a></b>
-</p>
+  <p><b><a
+ href="#TOC3">Back to Top</a></b> </p>
 </div>
-<h3>7. vtiger CRM - PHP Documentation</h3>
+<h3><a name="phpdoc3"></a>7. vtiger CRM - PHP Documentation</h3>
 <br>
-<h3>8. Product Documentation<br>
+<h3><a name="docs3"></a>8. Product Documentation<br>
 </h3>
 <br>
-<h3>9. Source Code Label</h3>
+<h3><a name="label3"></a>9. Source Code Label</h3>
 <h3><br>
 </h3>
-<h3><a name="KI2"></a>10. Known Issues</h3>
+<h3><a name="KI3"></a>10. Known Issues</h3>
 <table cellspacing="0" cellpadding="4" border="1" width="80%">
-  <tbody>
-    <tr bgcolor="#ccccff">
-      <td width="56"><b><font color="#990000">S. No </font></b></td>
-      <td width="764"><b><font color="#990000">Subject</font></b></td>
-    </tr>
-    <tr>
-      <td width="56"><br>
-      </td>
-      <td>
-      <p><br>
-      </p>
-      </td>
-    </tr>
-  </tbody>
+  <tbody> 
+  <tr bgcolor="#ccccff"> 
+    <td width="56"><b><font color="#990000">S. No </font></b></td>
+    <td width="764"><b><font color="#990000">Subject</font></b></td>
+  </tr>
+  <tr> 
+    <td width="56">1<br>
+    </td>
+    <td> 
+      <p>&nbsp;</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="56">2</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">3</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="56">4</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="56">5</td>
+    <td>&nbsp;</td>
+  </tr>
+  </tbody> 
 </table>
 <div align="right">
-<p><b><a
- href="file:///home/rakeebk/vtiger/week_rel/vtigerCRM4_2/apache/htdocs/vtigerCRM/Release_Notes.html#TOC">Back
-to Top</a></b>
-</p>
+  <p><b><a
+ href="#TOC3">Back to Top</a></b> </p>
 </div>
-<h3><a name="v451tov452"></a>11. List of Files Changed from V 4.5
-Development 2 to V 4.5 Development 3<br>
-</h3>
-<h1>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - New Files</h1>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-- List of Changed files<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; - Files Moved to Attic<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; - Merged Files <br>
-&nbsp;&nbsp; <br>
-<h3><a name="v451tov452"></a>12. List of Files Changed from vtigerCRM
-4.2 Patch 2 to V 4.5 Development 3<br>
-</h3>
-<h1>&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - New Files</h1>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-- List of Changed files<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; - Files Moved to Attic<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; - Merged Files <br>
-&nbsp; <br>
+<h3><a name="v452tov453"></a>11. List of Files Changed from V 4.5 Development 
+  2 to V 4.5 Development 3</h3>
+<ul>
+  <li>New Files</li>
+  <li>List of Changed files</li>
+  <li>Files Moved to Attic</li>
+  <li>Merged Files </li>
+</ul>
+<p><b>New Files</b></p>
+<p>&nbsp;</p>
+<p><b>List of Changed files</b></p>
+<p>&nbsp;</p>
+<p><b>Files Moved to Attic</b></p>
+<p>&nbsp;</p>
+<p><b>Merged Files </b>
+</p>
+<p align="right"><b><a
+ href="#TOC3">Back to Top</a></b></p>
+<h3><a name="v451p2Tov453"></a>12. List of Files Changed from vtiger CRM 4.2 Patch 
+  2 to V 4.5 Development 3</h3>
+<ul>
+  <li>List of Changed files</li>
+  <li>Files Moved to Attic</li>
+  <li>Merged Files<br>
+  </li>
+</ul>
+<p><b>List of Changed Files</b></p>
+<p>&nbsp;</p>
+<p><b>Files Moved to Attic</b></p>
+<p>&nbsp;</p>
+<p><b>Merged Files</b></p>
+<p align="right"><b><a
+ href="#TOC3">Back to Top</a></b></p>
+<hr>
 <br>
 <h1>vtiger CRM 4.5 : Development Version 2 - Release Notes</h1>
 <p><b>Date: November 16, 2005</b></p>
@@ -464,23 +614,24 @@ bundled with the product. (Present under vtigerCRM_docs directory)</td>
     <tr bgcolor="#ccccff">
       <td><b><font color="#990000">Distribution</font></b></td>
       <td><font color="#990000"><b>Version 4.2 Build Size </b></font></td>
-      <td><b><font color="#990000">Version 4.2 Build Size</font></b></td>
+      
+    <td><b><font color="#990000">Version 4.5 Milestone 2 Build Size</font></b></td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">Windows (EXE)</td>
-      <td style="vertical-align: top;">42 MB
+      <td >Windows (EXE)</td>
+      <td >42 MB
       <p> </p>
       </td>
-      <td style="vertical-align: top;"><b>31 MB</b>
+      <td ><b>31 MB</b>
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">Linux (BIN)</td>
-      <td style="vertical-align: top;">39 MB
+      <td >Linux (BIN)</td>
+      <td >39 MB
       <p> </p>
       </td>
-      <td style="vertical-align: top;"><b>41 MB</b></td>
+      <td ><b>41 MB</b></td>
     </tr>
   </tbody>
 </table>
@@ -641,14 +792,14 @@ tickets instead of new ticket's detail view(in customerportal)</td>
       <td width="764">E-mail title is missing in E-mail DetailView</td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">24
+      <td >24
       <p> </p>
       </td>
-      <td style="vertical-align: top;">
+      <td >
       <p> </p>
       <br>
       </td>
-      <td style="vertical-align: top;">nusoap version upgraded to 0.7.1
+      <td >nusoap version upgraded to 0.7.1
       <p> </p>
       </td>
     </tr>
@@ -1493,73 +1644,73 @@ missing. Its also not possible to filter by ticket id's.</td>
  style="width: 100%; text-align: left;">
   <tbody>
     <tr bgcolor="#990000">
-      <td width="5%" style="vertical-align: top;"><b><font
+      <td width="5%" ><b><font
  color="#ffffff">S. No</font></b>
       <p><b><font color="#ffffff"> </font></b></p>
       </td>
-      <td width="52%" style="vertical-align: top;"><b><font
+      <td width="52%" ><b><font
  color="#ffffff">Forums</font></b>
       <p><b><font color="#ffffff"> </font></b></p>
       </td>
-      <td width="43%" style="vertical-align: top;"><b><font
+      <td width="43%" ><b><font
  color="#ffffff">Description</font></b></td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">1
+      <td width="5%" >1
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=1954"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=1954">http://www.vtiger.com/discussions/viewtopic.php?t=1954</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">GUI
+      <td width="43%" >GUI
       <p>rearrange fields within blocks? </p>
       <p>Drag and drop for the fields with different blocks</p>
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">2
+      <td width="5%" >2
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2750"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2750">http://www.vtiger.com/discussions/viewtopic.php?t=2750</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">Appropriate
+      <td width="43%" >Appropriate
       <p>tabindex for edit fields. </p>
       <p>One more column is added to the fields table to get the tab</p>
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">3
+      <td width="5%" >3
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2368"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2368">http://www.vtiger.com/discussions/viewtopic.php?t=2368</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">Release Relations in
+      <td width="43%" >Release Relations in
 Contacts and Accounts</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">4
+      <td width="5%" >4
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2852"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2852">http://www.vtiger.com/discussions/viewtopic.php?t=2852</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">Change the status of
+      <td width="43%" >Change the status of
 the activities in CustomViews from Activities module</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">5
+      <td width="5%" >5
       <p> </p>
       </td>
       <td><a
@@ -1572,77 +1723,77 @@ the PDF
 on the right side of the page.</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">6
+      <td width="5%" >6
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=1689"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=1689">http://www.vtiger.com/discussions/viewtopic.php?t=1689</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">LDAP and Active
+      <td width="43%" >LDAP and Active
 Directory Support Patch</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">7
+      <td width="5%" >7
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2364"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2364">http://www.vtiger.com/discussions/viewtopic.php?t=2364</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">Description
+      <td width="43%" >Description
       <p>visible for History and Notes in Acc/Cnts List view.</p>
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">8
+      <td width="5%" >8
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2748"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2748">http://www.vtiger.com/discussions/viewtopic.php?t=2748</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">Make a note before
+      <td width="43%" >Make a note before
 closing the activity in Home Page</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">9
+      <td width="5%" >9
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?p=13502#13502"
  href="http://forums.vtiger.com/viewtopic.php?p=13502#13502">http://forums.vtiger.com/viewtopic.php?p=13502#13502</a>
       </td>
-      <td width="43%" style="vertical-align: top;">Post subject: Bug
+      <td width="43%" >Post subject: Bug
 resolved (Ticket ID 773): TicketId for dropdown lists... </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">10
+      <td width="5%" >10
       <p> </p>
       </td>
       <td><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=1692"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=1692">http://www.vtiger.com/discussions/viewtopic.php?t=1692</a></td>
-      <td width="43%" style="vertical-align: top;">Adding
+      <td width="43%" >Adding
       <p>priority to Events </p>
 - Feature</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">11
+      <td width="5%" >11
       <p> </p>
       </td>
       <td><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2617"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2617">http://www.vtiger.com/discussions/viewtopic.php?t=2617</a></td>
-      <td width="43%" style="vertical-align: top;">PDF's output
+      <td width="43%" >PDF's output
 formatting. </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">12
+      <td width="5%" >12
       <p> </p>
       </td>
       <td>
@@ -1650,40 +1801,40 @@ formatting. </td>
  title="http://www.vtiger.com/discussions/viewtopic.php?t=1530"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=1530">http://www.vtiger.com/discussions/viewtopic.php?t=1530</a></p>
       </td>
-      <td width="43%" style="vertical-align: top;">Revised Tracker</td>
+      <td width="43%" >Revised Tracker</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">13
+      <td width="5%" >13
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?p=13396#13396"
  href="http://forums.vtiger.com/viewtopic.php?p=13396#13396">http://forums.vtiger.com/viewtopic.php?p=13396#13396</a>
       </td>
-      <td width="43%" style="vertical-align: top;">New pdf from matt </td>
+      <td width="43%" >New pdf from matt </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">14
+      <td width="5%" >14
       <p> </p>
       </td>
       <td><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=1585"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=1585">http://www.vtiger.com/discussions/viewtopic.php?t=1585</a></td>
-      <td width="43%" style="vertical-align: top;">Displaying the
+      <td width="43%" >Displaying the
 meeting in the calendar, Present in 4.2GA</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">15
+      <td width="5%" >15
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2029"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2029">http://www.vtiger.com/discussions/viewtopic.php?t=2029</a></td>
-      <td width="43%" style="vertical-align: top;">Import and Export
+      <td width="43%" >Import and Export
 Products</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">16
+      <td width="5%" >16
       <p> </p>
       </td>
       <td>
@@ -1691,25 +1842,25 @@ Products</td>
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2000"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2000">http://www.vtiger.com/discussions/viewtopic.php?t=2000</a></p>
       </td>
-      <td width="43%" style="vertical-align: top;"> During
+      <td width="43%" > During
       <p>'Import', the person who is importing the CSV files
 'user_name' in is </p>
 assigned&nbsp; to 'Assigned to' field</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">17
+      <td width="5%" >17
       <p> </p>
       </td>
       <td><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2139"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2139">http://www.vtiger.com/discussions/viewtopic.php?t=2139</a></td>
-      <td width="43%" style="vertical-align: top;">When creating a 'New
+      <td width="43%" >When creating a 'New
       <p>Product'&nbsp; there was an error in javascript. This is
 integrated in </p>
 patch1</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">18
+      <td width="5%" >18
       <p> </p>
       </td>
       <td>
@@ -1717,34 +1868,34 @@ patch1</td>
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2196"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2196">http://www.vtiger.com/discussions/viewtopic.php?t=2196</a></p>
       </td>
-      <td width="43%" style="vertical-align: top;">The world clock
+      <td width="43%" >The world clock
 doesn't show 12pm correctly. It was showing 00pm</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">19
+      <td width="5%" >19
       <p> </p>
       </td>
       <td><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2524"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2524">http://www.vtiger.com/discussions/viewtopic.php?t=2524</a></td>
-      <td width="43%" style="vertical-align: top;">Scroll bars are
+      <td width="43%" >Scroll bars are
 added to the
       <p>'Related List' of Account and contacts for 'Attachments &amp;
 Notes' </p>
 and 'History'</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">20
+      <td width="5%" >20
       <p> </p>
       </td>
       <td><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2431"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2431">http://www.vtiger.com/discussions/viewtopic.php?t=2431</a></td>
-      <td width="43%" style="vertical-align: top;">Search ny Ticket id
+      <td width="43%" >Search ny Ticket id
 in HelpDesk</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">21
+      <td width="5%" >21
       <p> </p>
       </td>
       <td>
@@ -1752,14 +1903,14 @@ in HelpDesk</td>
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2406"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2406">http://www.vtiger.com/discussions/viewtopic.php?t=2406</a></p>
       </td>
-      <td width="43%" style="vertical-align: top;">If you write a
+      <td width="43%" >If you write a
       <p>long description in an activity, it takes off a lot of space
 because the text field is one column wide only. </p>
       <p> </p>
 With this fix, the descriptions are spaned over all columns,</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">22
+      <td width="5%" >22
       <p> </p>
       </td>
       <td>
@@ -1767,13 +1918,13 @@ With this fix, the descriptions are spaned over all columns,</td>
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2324"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2324">http://www.vtiger.com/discussions/viewtopic.php?t=2324</a></font></p>
       </td>
-      <td width="43%" style="vertical-align: top;">This will move
+      <td width="43%" >This will move
       <p>the vTiger logo upwards and the tabs will start from the left
 of the page. I've applied this all the themes </p>
 except 'blue' theme</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">23
+      <td width="5%" >23
       <p> </p>
       </td>
       <td><font color="#ff0000"><font color="#000000"></font></font>
@@ -1783,7 +1934,7 @@ except 'blue' theme</td>
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2025">ttp://www.vtiger.com/discussions/viewtopic.php?t=2025</a>
       </p>
       </td>
-      <td width="43%" style="vertical-align: top;">The date
+      <td width="43%" >The date
       <p>format required is YYYY-mm-dd however the popup uses
 mm-dd-YYYY, </p>
       <p>A diffeent format. Upon trying to submit changes, a date error
@@ -1791,124 +1942,124 @@ mm-dd-YYYY, </p>
 alert) pops up stating invalid month</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">24
+      <td width="5%" >24
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"> <a
+      <td width="52%" > <a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2744"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2744">http://www.vtiger.com/discussions/viewtopic.php?t=2744</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">All users in a
+      <td width="43%" >All users in a
 activity can view it in Calendar</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">25
+      <td width="5%" >25
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=3105"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=3105">http://www.vtiger.com/discussions/viewtopic.php?t=3105</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Imporved Emailing
+      <td width="43%" > Imporved Emailing
 system with easy mass mail support- given by <strong>Raju</strong>
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">26
+      <td width="5%" >26
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=3100"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=3100">http://www.vtiger.com/discussions/viewtopic.php?t=3100</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">One color by user in
+      <td width="43%" >One color by user in
 Calendar
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">27
+      <td width="5%" >27
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=3149"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=3149">http://www.vtiger.com/discussions/viewtopic.php?t=3149</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Vtiger php
+      <td width="43%" > Vtiger php
 installer script multilanguage
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">28
+      <td width="5%" >28
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=3143"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=3143">http://www.vtiger.com/discussions/viewtopic.php?t=3143</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Fun with Google Maps
+      <td width="43%" > Fun with Google Maps
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">29
+      <td width="5%" >29
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=3045"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=3045">http://www.vtiger.com/discussions/viewtopic.php?t=3045</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Automatic Inventory
+      <td width="43%" > Automatic Inventory
 Updating
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">30
+      <td width="5%" >30
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2681"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2681">http://www.vtiger.com/discussions/viewtopic.php?t=2681</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">Helpdesk Navigation.
+      <td width="43%" >Helpdesk Navigation.
       <p>In helpdesk, the navigation below the list view.</p>
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">31
+      <td width="5%" >31
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=2005"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=2005">http://www.vtiger.com/discussions/viewtopic.php?t=2005</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Patches- activity
+      <td width="43%" > Patches- activity
 rows on Home tab, custom activity view fix
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">32
+      <td width="5%" >32
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://www.vtiger.com/discussions/viewtopic.php?t=1770"
  href="http://www.vtiger.com/discussions/viewtopic.php?t=1770">http://www.vtiger.com/discussions/viewtopic.php?t=1770</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Make
+      <td width="43%" > Make
 QuickActivityRegister have enddate(duedate)
       <p>To have an end date,when creating an activity from the
 calendar </p>
@@ -1916,269 +2067,269 @@ calendar </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">33
+      <td width="5%" >33
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?p=13390#13390"
  href="http://forums.vtiger.com/viewtopic.php?p=13390#13390">http://forums.vtiger.com/viewtopic.php?p=13390#13390</a>
       </td>
-      <td width="43%" style="vertical-align: top;">UI improvement:
+      <td width="43%" >UI improvement:
 Tabbed details and related lists </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">34
+      <td width="5%" >34
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3251"
  href="http://forums.vtiger.com/viewtopic.php?t=3251">http://forums.vtiger.com/viewtopic.php?t=3251</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Improved pagination
+      <td width="43%" > Improved pagination
 in List View
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">35
+      <td width="5%" >35
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3359"
  href="http://forums.vtiger.com/viewtopic.php?t=3359">http://forums.vtiger.com/viewtopic.php?t=3359</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Tickets sorted by
+      <td width="43%" > Tickets sorted by
 ticket id desc
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">36
+      <td width="5%" >36
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=2482"
  href="http://forums.vtiger.com/viewtopic.php?t=2482">http://forums.vtiger.com/viewtopic.php?t=2482</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> First release of
+      <td width="43%" > First release of
 Communications and Mass Mailing
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">37
+      <td width="5%" >37
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3105"
  href="http://forums.vtiger.com/viewtopic.php?t=3105">http://forums.vtiger.com/viewtopic.php?t=3105</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Imporved Emailing
+      <td width="43%" > Imporved Emailing
 system with easy mass mail support
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">38
+      <td width="5%" >38
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3226"
  href="http://forums.vtiger.com/viewtopic.php?t=3226">http://forums.vtiger.com/viewtopic.php?t=3226</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Full Telephony
+      <td width="43%" > Full Telephony
 Integration
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">39
+      <td width="5%" >39
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3342"
  href="http://forums.vtiger.com/viewtopic.php?t=3342">http://forums.vtiger.com/viewtopic.php?t=3342</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Report Filters in
+      <td width="43%" > Report Filters in
 PDF And Excel exports
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">40
+      <td width="5%" >40
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3079"
  href="http://forums.vtiger.com/viewtopic.php?t=3079">http://forums.vtiger.com/viewtopic.php?t=3079</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Export Activities
+      <td width="43%" > Export Activities
 to Palm
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">41
+      <td width="5%" >41
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3376"
  href="http://forums.vtiger.com/viewtopic.php?t=3376">http://forums.vtiger.com/viewtopic.php?t=3376</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> custom invoice view
+      <td width="43%" > custom invoice view
 using custom fields fix (4.2 Patch 2)
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">42
+      <td width="5%" >42
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3367"
  href="http://forums.vtiger.com/viewtopic.php?t=3367">http://forums.vtiger.com/viewtopic.php?t=3367</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">contactserialize.php
+      <td width="43%" >contactserialize.php
 fixes (4.2 Patch 2)
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">43
+      <td width="5%" >43
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=1954"
  href="http://forums.vtiger.com/viewtopic.php?t=1954">http://forums.vtiger.com/viewtopic.php?t=1954</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> GUI rearrange
+      <td width="43%" > GUI rearrange
 fields within blocks
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">44
+      <td width="5%" >44
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3390"
  href="http://forums.vtiger.com/viewtopic.php?t=3390">http://forums.vtiger.com/viewtopic.php?t=3390</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;"> Hierarchical rights
+      <td width="43%" > Hierarchical rights
       <p> </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">45
+      <td width="5%" >45
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3143"
  href="http://forums.vtiger.com/viewtopic.php?t=3143">http://forums.vtiger.com/viewtopic.php?t=3143</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">
+      <td width="43%" >
       <p>Fun with Google Maps </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">46
+      <td width="5%" >46
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3247"
  href="http://forums.vtiger.com/viewtopic.php?t=3247">http://forums.vtiger.com/viewtopic.php?t=3247</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">
+      <td width="43%" >
       <p>Simple Drupal Integration </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">47
+      <td width="5%" >47
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3290"
  href="http://forums.vtiger.com/viewtopic.php?t=3290">http://forums.vtiger.com/viewtopic.php?t=3290</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">
+      <td width="43%" >
       <p>Expenses Module Integration </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">48
+      <td width="5%" >48
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3548"
  href="http://forums.vtiger.com/viewtopic.php?t=3548">http://forums.vtiger.com/viewtopic.php?t=3548</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">Activities and Notes
+      <td width="43%" >Activities and Notes
 fixes for 4.2 patch 2 </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">49
+      <td width="5%" >49
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3545"
  href="http://forums.vtiger.com/viewtopic.php?t=3545">http://forums.vtiger.com/viewtopic.php?t=3545</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">Invoice &amp; Quotes
+      <td width="43%" >Invoice &amp; Quotes
 layout fixes </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">50
+      <td width="5%" >50
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=2597"
  href="http://forums.vtiger.com/viewtopic.php?t=2597">http://forums.vtiger.com/viewtopic.php?t=2597</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">
+      <td width="43%" >
       <p>Postgres Support </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">51
+      <td width="5%" >51
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://sourceforge.net/mailarchive/forum.php?thread_id=8380546&amp;forum_id=44763"
  href="http://sourceforge.net/mailarchive/forum.php?thread_id=8380546&amp;forum_id=44763">http://sourceforge.net/mailarchive/forum.php?thread_id=8380546&amp;forum_id=44763</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">
+      <td width="43%" >
       <p>Patch for customer Portal- Michael </p>
       <p>fixed some typos </p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">52
+      <td width="5%" >52
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://sourceforge.net/mailarchive/forum.php?thread_id=8365518&amp;forum_id=44763"
  href="http://sourceforge.net/mailarchive/forum.php?thread_id=8365518&amp;forum_id=44763">http://sourceforge.net/mailarchive/forum.php?thread_id=8365518&amp;forum_id=44763</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">
+      <td width="43%" >
       <p>Patch for Install - Michael </p>
 * fixed some typos and invalid html
       <p>* additional permissions check - prevent </p>
@@ -2186,111 +2337,111 @@ layout fixes </td>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">53
+      <td width="5%" >53
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://sourceforge.net/mailarchive/forum.php?thread_id=8365518&amp;forum_id=44763"
  href="http://sourceforge.net/mailarchive/forum.php?thread_id=8365518&amp;forum_id=44763">http://sourceforge.net/mailarchive/forum.php?thread_id=8365518&amp;forum_id=44763</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">
+      <td width="43%" >
       <p>Patch for vtigercrm nusoap - Michael </p>
-      <pre> The following patch upgrades the version of <p>nusoap library from 0.67 to </p><p> 0.69.</p><p></p></pre>
+       The following patch upgrades the version of <p>nusoap library from 0.67 to </p><p> 0.69.</p><p></p>
       </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">54
+      <td width="5%" >54
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3053&amp;highlight=stema"
  href="http://forums.vtiger.com/viewtopic.php?t=3053&amp;highlight=stema">http://forums.vtiger.com/viewtopic.php?t=3053&amp;highlight=stema</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">Arrange emails by
+      <td width="43%" >Arrange emails by
 sent date </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">55
+      <td width="5%" >55
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;">
+      <td width="52%" >
       <p> </p>
       <br>
       </td>
-      <td width="43%" style="vertical-align: top;">Enchanced PDF in
+      <td width="43%" >Enchanced PDF in
 Quotes </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">56
+      <td width="5%" >56
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;"><a
+      <td width="52%" ><a
  title="http://forums.vtiger.com/viewtopic.php?t=3509&amp;highlight=vip"
  href="http://forums.vtiger.com/viewtopic.php?t=3509&amp;highlight=vip">http://forums.vtiger.com/viewtopic.php?t=3509&amp;highlight=vip</a>
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">Change Home Page
+      <td width="43%" >Change Home Page
 Order </td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">57
+      <td width="5%" >57
       <p> </p>
       </td>
-      <td width="52%" style="vertical-align: top;">Overlapping of
+      <td width="52%" >Overlapping of
 company logo and product name while exporting in Invoice
       <p> </p>
       </td>
-      <td width="43%" style="vertical-align: top;">&nbsp;</td>
+      <td width="43%" >&nbsp;</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">58</td>
-      <td width="52%" style="vertical-align: top;">overlapping of
+      <td width="5%" >58</td>
+      <td width="52%" >overlapping of
 company logo and product name while exporting in Invoice </td>
-      <td width="43%" style="vertical-align: top;">&nbsp;</td>
+      <td width="43%" >&nbsp;</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">59</td>
-      <td width="52%" style="vertical-align: top;">Description visible
+      <td width="5%" >59</td>
+      <td width="52%" >Description visible
 for History and Notes in Acc/Cnts List view.</td>
-      <td width="43%" style="vertical-align: top;">&nbsp;</td>
+      <td width="43%" >&nbsp;</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">60</td>
-      <td width="52%" style="vertical-align: top;">Change the status of
+      <td width="5%" >60</td>
+      <td width="52%" >Change the status of
 the activities in CustomViews from Activities module</td>
-      <td width="43%" style="vertical-align: top;">&nbsp;</td>
+      <td width="43%" >&nbsp;</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">61</td>
-      <td width="52%" style="vertical-align: top;">Invoice &amp; Quotes
+      <td width="5%" >61</td>
+      <td width="52%" >Invoice &amp; Quotes
 layout fixes</td>
-      <td width="43%" style="vertical-align: top;">&nbsp;</td>
+      <td width="43%" >&nbsp;</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">62</td>
-      <td width="52%" style="vertical-align: top;">Arranging the home
+      <td width="5%" >62</td>
+      <td width="52%" >Arranging the home
 page contributed by Mike has been integrated (Bug ID: 291)</td>
-      <td width="43%" style="vertical-align: top;">&nbsp;</td>
+      <td width="43%" >&nbsp;</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">63</td>
-      <td width="52%" style="vertical-align: top;">Imporved Emailing
+      <td width="5%" >63</td>
+      <td width="52%" >Imporved Emailing
 system with easy mass mail support(Raju) (Bug ID: 500)</td>
-      <td width="43%" style="vertical-align: top;">&nbsp;</td>
+      <td width="43%" >&nbsp;</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">64</td>
-      <td width="52%" style="vertical-align: top;">Displaying Emails by
+      <td width="5%" >64</td>
+      <td width="52%" >Displaying Emails by
 Sent date order(Rcleeve)(Bug ID: 687 )</td>
-      <td width="43%" style="vertical-align: top;">&nbsp;</td>
+      <td width="43%" >&nbsp;</td>
     </tr>
     <tr>
-      <td width="5%" style="vertical-align: top;">65</td>
-      <td width="52%" style="vertical-align: top;">Arranging the blocks
+      <td width="5%" >65</td>
+      <td width="52%" >Arranging the blocks
 in settings page(comes under a code contribution) (Bug ID: 648 ) </td>
-      <td width="43%" style="vertical-align: top;">&nbsp;</td>
+      <td width="43%" >&nbsp;</td>
     </tr>
   </tbody>
 </table>
@@ -2313,6 +2464,253 @@ sent to mutiple recipients the entries will be displayed twice.</p>
 </p>
 <h3>List of Files Changed Between 4.2 Patch 2 and vtigerCRM 4.5
 Development version 1&nbsp; </h3>
-<pre>Changed Files:<p>---------------</p><p>adodb/DatabaseSchema.xml </p><p>config.php </p><p>contactserialize.php </p><p>data/CRMEntity.php </p><p>include/CustomFieldUtil.php </p><p>include/language/en_us.lang.php </p><p>include/RelatedListView.php </p><p>include/uifromdbutil.php </p><p>include/utils.php </p><p>index.php </p><p>install/0welcome.php </p><p>install/1checkSystem.php </p><p>install/2setConfig.php </p><p>install/3confirmConfig.php </p><p>install/4createConfigFile.php </p><p>install/5createTables.php </p><p>install/install.css </p><p>install/populateSeedData.php </p><p>modules/Accounts/Account.php </p><p>modules/Accounts/DetailView.html </p><p>modules/Accounts/Forms.php </p><p>modules/Accounts/language/en_us.lang.php </p><p>modules/Accounts/ListView.html </p><p>modules/Accounts/ListView.php </p><p>modules/Accounts/ListViewTop.php </p><p>modules/Accounts/Popup.html </p><p>modules/Accounts/SearchForm.html </p><p>modules/Activities/DetailView.html </p><p>modules/Activities/Forms.php </p><p>modules/Activities/ListView.php </p><p>modules/Activities/OpenListView.html </p><p>modules/Activities/OpenListView.php </p><p>modules/Calendar/calendar_day.php </p><p>modules/Calendar/calendar_month.php </p><p>modules/Calendar/calendar_week.php </p><p>modules/Contacts/AddBusinessCard.php </p><p>modules/Contacts/Contact.php </p><p>modules/Contacts/DetailView.html </p><p>modules/Contacts/EditView.php </p><p>modules/Contacts/Forms.php </p><p>modules/Contacts/ListView.html </p><p>modules/Contacts/ListView.php </p><p>modules/Contacts/Popup.html </p><p>modules/CustomView/CustomView.php </p><p>modules/CustomView/ListViewTop.php </p><p>modules/Emails/DetailView.html </p><p>modules/Emails/DetailView.php </p><p>modules/Emails/EditView.html </p><p>modules/Emails/EditView.php </p><p>modules/Emails/Email.php </p><p>modules/Emails/Forms.php </p><p>modules/Emails/ListView.html </p><p>modules/Emails/ListView.php </p><p>modules/Emails/Save.php </p><p>modules/Emails/send_mail.php </p><p>modules/Faq/DetailView.html </p><p>modules/Faq/ListView.php </p><p>modules/HelpDesk/DetailView.html </p><p>modules/HelpDesk/DetailView.php </p><p>modules/HelpDesk/Forms.php </p><p>modules/HelpDesk/HelpDesk.php </p><p>modules/HelpDesk/ListTickets.php </p><p>modules/HelpDesk/ListView.php </p><p>modules/Home/index.php </p><p>modules/Import/ImportContact.php </p><p>modules/Invoice/CreatePDF.php </p><p>modules/Invoice/DetailView.html </p><p>modules/Invoice/Invoice.php </p><p>modules/Invoice/language/en_us.lang.php </p><p>modules/Invoice/ListView.php </p><p>modules/Leads/DetailView.html </p><p>modules/Leads/Forms.php </p><p>modules/Leads/Lead.php </p><p>modules/Leads/ListView.html </p><p>modules/Leads/ListView.php </p><p>modules/Leads/Popup.html </p><p>modules/Notes/DetailView.html </p><p>modules/Notes/EditView.html </p><p>modules/Notes/Forms.php </p><p>modules/Notes/ListView.php </p><p>modules/Orders/CreatePDF.php </p><p>modules/Orders/DetailView.html </p><p>modules/Orders/ListView.php </p><p>modules/Orders/Order.php </p><p>modules/Orders/Popup.php </p><p>modules/Orders/SalesOrderDetailView.html </p><p>modules/Orders/SalesOrderListView.php </p><p>modules/Orders/SalesOrder.php </p><p>modules/Potentials/DetailView.html </p><p>modules/Potentials/EditView.php </p><p>modules/Potentials/Forms.php </p><p>modules/Potentials/ListView.php </p><p>modules/Potentials/ListViewTop.php </p><p>modules/Potentials/Opportunity.php </p><p>modules/Potentials/RenderRelatedListUI.php </p><p>modules/Products/DetailView.html </p><p>modules/Products/Forms.php </p><p>modules/Products/ListView.php </p><p>modules/Products/PriceBookDetailView.html </p><p>modules/Products/PriceBookListView.php </p><p>modules/Products/ProductDetailView.html </p><p>modules/Products/Product.php </p><p>modules/Products/RenderRelatedListUI.php </p><p>modules/Products/VendorDetailView.html </p><p>modules/Products/VendorListView.php </p><p>modules/Quotes/DetailView.html </p><p>modules/Quotes/ListView.php </p><p>modules/Quotes/Quote.php </p><p>modules/Reports/CreatePDF.php </p><p>modules/Reports/CreateXL.php </p><p>modules/Reports/SaveAndRun.php </p><p>modules/Settings/AddCustomFieldToDB.php </p><p>modules/Settings/Forms.php </p><p>modules/Settings/index.html </p><p>modules/Settings/language/en_us.lang.php </p><p>modules/Settings/ListMailAccount.php </p><p>modules/squirrelmail-1.4.4/functions/imap_general.php </p><p>modules/squirrelmail-1.4.4/move_messages.php </p><p>modules/squirrelmail-1.4.4/read_body.php </p><p>modules/squirrelmail-1.4.4/right_main.php </p><p>modules/uploads/downloadfile.php </p><p>modules/Users/Authenticate.php </p><p>modules/Users/createnewgroup.php </p><p>modules/Users/createrole.php </p><p>modules/Users/DeleteProfile.php </p><p>modules/Users/DetailView.html </p><p>modules/Users/DetailView.php </p><p>modules/Users/EditView.html </p><p>modules/Users/EditView.php </p><p>modules/Users/language/en_us.lang.php </p><p>modules/Users/listgroups.php </p><p>modules/Users/ListProfiles.php </p><p>modules/Users/listroles.html </p><p>modules/Users/listroles.php </p><p>modules/Users/ProfileDetailView.php </p><p>modules/Users/ProfileEditView.php </p><p>modules/Users/RoleDeleteStep1.php </p><p>modules/Users/RoleDetailView.php </p><p>modules/Users/Save.php </p><p>modules/Users/SaveProfile.php </p><p>modules/Users/SaveRole.php </p><p>modules/Users/Security.php </p><p>modules/Users/UpdateProfile.php </p><p>modules/Users/UserInfoUtil.php </p><p>modules/Users/User.php </p><p>phprint.php </p><p>themes/Aqua/style.css </p><p>themes/blue/style.css </p><p>themes/nature/style.css </p><p>themes/orange/style.css </p><p>vtigerpatch.php </p><p>Newly Added Files / Directories:</p><p>-------------------------------<br><br>include/ColorPicker2.js</p><p>include/dd</p><p>include/images/bgcolor.gif</p><p>install/images</p><p>modules/Calls</p><p>modules/Cases</p><p>modules/Emails/ChooseEmail.php</p><p>modules/Emails/Choose.php</p><p>modules/Emails/mysend_mail.php</p><p>modules/Emails/SelectEmails.php</p><p>modules/Orders/PopupSearchForm.html</p><p>modules/Meetings</p><p>modules/Settings/EditFieldBlock.php</p><p>modules/Settings/EditModuleOwners.html</p><p>modules/squirrelmail-1.4.4/themes</p><p>modules/Settings/ListModuleOwners.html</p><p>modules/Settings/ListModuleOwners.php</p><p>modules/Settings/SaveModuleOwners.php</p><p>modules/squirrelmail-1.4.4/contrib</p><p>modules/Tasks</p><p>modules/Users/DeleteGroup.php</p><p>modules/Users/EditHomeOrder.php</p><p>modules/Users/EditTermsandConditions.html</p><p>modules/Users/EditTermsandConditions.php</p><p>modules/Users/GroupDetailView.html</p><p>modules/Users/GroupDetailView.php</p><p>modules/Users/OrganizationTermsandConditions.html</p><p>modules/Users/OrganizationTermsandConditions.php</p><p>modules/Users/SaveGroup.php</p><p>modules/Users/savetermsandconditions.php</p><p>modules/Settings/EditModuleOwners.php</p></pre>
+<p><b>Changed Files</b></p> 
+<ol>
+  <li>adodb/DatabaseSchema.xml </li>
+  <li>config.php </li>
+  <li>contactserialize.php </li>
+  <li>data/CRMEntity.php </li>
+  <li>include/CustomFieldUtil.php </li>
+  <li>include/language/en_us.lang.php </li>
+  <li>include/RelatedListView.php </li>
+  <li>include/uifromdbutil.php </li>
+  <li>include/utils.php </li>
+  <li>index.php </li>
+  <li>install/0welcome.php </li>
+  <li>install/1checkSystem.php </li>
+  <li>install/2setConfig.php </li>
+  <li>install/3confirmConfig.php </li>
+  <li>install/4createConfigFile.php </li>
+  <li>install/5createTables.php </li>
+  <li>install/install.css </li>
+  <li>install/populateSeedData.php </li>
+  <li>modules/Accounts/Account.php </li>
+  <li>modules/Accounts/DetailView.html </li>
+  <li>modules/Accounts/Forms.php </li>
+  <li>modules/Accounts/language/en_us.lang.php </li>
+  <li>modules/Accounts/ListView.html </li>
+  <li>modules/Accounts/ListView.php </li>
+  <li>modules/Accounts/ListViewTop.php </li>
+  <li>modules/Accounts/Popup.html </li>
+  <li>modules/Accounts/SearchForm.html </li>
+  <li>modules/Activities/DetailView.html </li>
+  <li>modules/Activities/Forms.php </li>
+  <li>modules/Activities/ListView.php </li>
+  <li>modules/Activities/OpenListView.html </li>
+  <li>modules/Activities/OpenListView.php </li>
+  <li>modules/Calendar/calendar_day.php </li>
+  <li>modules/Calendar/calendar_month.php </li>
+  <li>modules/Calendar/calendar_week.php </li>
+  <li>modules/Contacts/AddBusinessCard.php </li>
+  <li>modules/Contacts/Contact.php </li>
+  <li>modules/Contacts/DetailView.html </li>
+  <li>modules/Contacts/EditView.php </li>
+  <li>modules/Contacts/Forms.php </li>
+  <li>modules/Contacts/ListView.html </li>
+  <li>modules/Contacts/ListView.php </li>
+  <li>modules/Contacts/Popup.html </li>
+  <li>modules/CustomView/CustomView.php </li>
+  <li>modules/CustomView/ListViewTop.php </li>
+  <li>modules/Emails/DetailView.html </li>
+  <li>modules/Emails/DetailView.php </li>
+  <li>modules/Emails/EditView.html </li>
+  <li>modules/Emails/EditView.php </li>
+  <li>modules/Emails/Email.php </li>
+  <li>modules/Emails/Forms.php </li>
+  <li>modules/Emails/ListView.html </li>
+  <li>modules/Emails/ListView.php </li>
+  <li>modules/Emails/Save.php </li>
+  <li>modules/Emails/send_mail.php </li>
+  <li>modules/Faq/DetailView.html </li>
+  <li>modules/Faq/ListView.php </li>
+  <li>modules/HelpDesk/DetailView.html </li>
+  <li>modules/HelpDesk/DetailView.php </li>
+  <li>modules/HelpDesk/Forms.php </li>
+  <li>modules/HelpDesk/HelpDesk.php </li>
+  <li>modules/HelpDesk/ListTickets.php </li>
+  <li>modules/HelpDesk/ListView.php </li>
+  <li>modules/Home/index.php </li>
+  <li>modules/Import/ImportContact.php </li>
+  <li>modules/Invoice/CreatePDF.php </li>
+  <li>modules/Invoice/DetailView.html </li>
+  <li>modules/Invoice/Invoice.php </li>
+  <li>modules/Invoice/language/en_us.lang.php </li>
+  <li>modules/Invoice/ListView.php </li>
+  <li>modules/Leads/DetailView.html </li>
+  <li>modules/Leads/Forms.php </li>
+  <li>modules/Leads/Lead.php </li>
+  <li>modules/Leads/ListView.html </li>
+  <li>modules/Leads/ListView.php </li>
+  <li>modules/Leads/Popup.html </li>
+  <li>modules/Notes/DetailView.html </li>
+  <li>modules/Notes/EditView.html </li>
+  <li>modules/Notes/Forms.php </li>
+  <li>modules/Notes/ListView.php </li>
+  <li>modules/Orders/CreatePDF.php </li>
+  <li>modules/Orders/DetailView.html </li>
+  <li>modules/Orders/ListView.php </li>
+  <li>modules/Orders/Order.php </li>
+  <li>modules/Orders/Popup.php </li>
+  <li>modules/Orders/SalesOrderDetailView.html </li>
+  <li>modules/Orders/SalesOrderListView.php </li>
+  <li>modules/Orders/SalesOrder.php </li>
+  <li>modules/Potentials/DetailView.html </li>
+  <li>modules/Potentials/EditView.php </li>
+  <li>modules/Potentials/Forms.php </li>
+  <li>modules/Potentials/ListView.php </li>
+  <li>modules/Potentials/ListViewTop.php </li>
+  <li>modules/Potentials/Opportunity.php </li>
+  <li>modules/Potentials/RenderRelatedListUI.php </li>
+  <li>modules/Products/DetailView.html </li>
+  <li>modules/Products/Forms.php </li>
+  <li>modules/Products/ListView.php </li>
+  <li>modules/Products/PriceBookDetailView.html </li>
+  <li>modules/Products/PriceBookListView.php </li>
+  <li>modules/Products/ProductDetailView.html </li>
+  <li>modules/Products/Product.php </li>
+  <li>modules/Products/RenderRelatedListUI.php </li>
+  <li>modules/Products/VendorDetailView.html </li>
+  <li>modules/Products/VendorListView.php </li>
+  <li>modules/Quotes/DetailView.html </li>
+  <li>modules/Quotes/ListView.php </li>
+  <li>modules/Quotes/Quote.php </li>
+  <li>modules/Reports/CreatePDF.php </li>
+  <li>modules/Reports/CreateXL.php </li>
+  <li>modules/Reports/SaveAndRun.php </li>
+  <li>modules/Settings/AddCustomFieldToDB.php </li>
+  <li>modules/Settings/Forms.php </li>
+  <li>modules/Settings/index.html </li>
+  <li>modules/Settings/language/en_us.lang.php </li>
+  <li>modules/Settings/ListMailAccount.php </li>
+  <li>modules/squirrelmail-1.4.4/functions/imap_general.php </li>
+  <li>modules/squirrelmail-1.4.4/move_messages.php </li>
+  <li>modules/squirrelmail-1.4.4/read_body.php </li>
+  <li>modules/squirrelmail-1.4.4/right_main.php </li>
+  <li>modules/uploads/downloadfile.php </li>
+  <li>modules/Users/Authenticate.php </li>
+  <li>modules/Users/createnewgroup.php </li>
+  <li>modules/Users/createrole.php </li>
+  <li>modules/Users/DeleteProfile.php </li>
+  <li>modules/Users/DetailView.html </li>
+  <li>modules/Users/DetailView.php </li>
+  <li>modules/Users/EditView.html </li>
+  <li>modules/Users/EditView.php </li>
+  <li>modules/Users/language/en_us.lang.php </li>
+  <li>modules/Users/listgroups.php </li>
+  <li>modules/Users/ListProfiles.php </li>
+  <li>modules/Users/listroles.html </li>
+  <li>modules/Users/listroles.php </li>
+  <li>modules/Users/ProfileDetailView.php </li>
+  <li>modules/Users/ProfileEditView.php </li>
+  <li>modules/Users/RoleDeleteStep1.php </li>
+  <li>modules/Users/RoleDetailView.php </li>
+  <li>modules/Users/Save.php </li>
+  <li>modules/Users/SaveProfile.php </li>
+  <li>modules/Users/SaveRole.php </li>
+  <li>modules/Users/Security.php </li>
+  <li>modules/Users/UpdateProfile.php </li>
+  <li>modules/Users/UserInfoUtil.php </li>
+  <li>modules/Users/User.php </li>
+  <li>phprint.php </li>
+  <li>themes/Aqua/style.css </li>
+  <li>themes/blue/style.css </li>
+  <li>themes/nature/style.css </li>
+  <li>themes/orange/style.css </li>
+  <li>vtigerpatch.php </li>
+</ol>
+<h3>Newly Added Files / Directories:</h3>
+<ol>
+  <li>include/ColorPicker2.js</li>
+  <li> 
+    include/dd
+  </li>
+  <li> 
+    include/images/bgcolor.gif
+  </li>
+  <li> 
+    install/images
+  </li>
+  <li> 
+    modules/Calls
+  </li>
+  <li> 
+    modules/Cases
+  </li>
+  <li> 
+    modules/Emails/ChooseEmail.php
+  </li>
+  <li> 
+    modules/Emails/Choose.php
+  </li>
+  <li> 
+    modules/Emails/mysend_mail.php
+  </li>
+  <li> 
+    modules/Emails/SelectEmails.php
+  </li>
+  <li> 
+    modules/Orders/PopupSearchForm.html
+  </li>
+  <li> 
+    modules/Meetings
+  </li>
+  <li> 
+    modules/Settings/EditFieldBlock.php
+  </li>
+  <li> 
+    modules/Settings/EditModuleOwners.html
+  </li>
+  <li> 
+    modules/squirrelmail-1.4.4/themes
+  </li>
+  <li> 
+    modules/Settings/ListModuleOwners.html
+  </li>
+  <li> 
+    modules/Settings/ListModuleOwners.php
+  </li>
+  <li> 
+    modules/Settings/SaveModuleOwners.php
+  </li>
+  <li> 
+    modules/squirrelmail-1.4.4/contrib
+  </li>
+  <li> 
+    modules/Tasks
+  </li>
+  <li> 
+    modules/Users/DeleteGroup.php
+  </li>
+  <li> 
+    modules/Users/EditHomeOrder.php
+  </li>
+  <li> 
+    modules/Users/EditTermsandConditions.html
+  </li>
+  <li> 
+    modules/Users/EditTermsandConditions.php
+  </li>
+  <li> 
+    modules/Users/GroupDetailView.html
+  </li>
+  <li> 
+    modules/Users/GroupDetailView.php
+  </li>
+  <li> 
+    modules/Users/OrganizationTermsandConditions.html
+  </li>
+  <li> 
+    modules/Users/OrganizationTermsandConditions.php
+  </li>
+  <li> 
+    modules/Users/SaveGroup.php
+  </li>
+  <li> 
+    modules/Users/savetermsandconditions.php
+  </li>
+  <li> 
+    modules/Settings/EditModuleOwners.php
+  </li>
+</ol>
 </body>
 </html>
