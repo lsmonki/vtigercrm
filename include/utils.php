@@ -2825,8 +2825,27 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 	if($relatedlist == '')
 	{
-		$list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>';
-		$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+		if($module == "Accounts")
+                {
+                        $list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall_acc" onClick=toggleSelect(this.checked,"selected_id_acc")></td>';
+                        $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+                }
+                elseif($module == "Contacts")
+                {
+                        $list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall_con" onClick=toggleSelect(this.checked,"selected_id_con")></td>';
+                        $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+                }
+		elseif($module == "Potentials")
+                {
+                        $list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall_pot" onClick=toggleSelect(this.checked,"selected_id_pot")></td>';
+                        $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+                }
+
+		else
+		{
+			$list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>';
+			$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+		}
 	}
 
 	//Get the tabid of the module
@@ -3276,9 +3295,27 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		//end: Armando Lüscher 05.07.2005 -> §priority
 
 		if($relatedlist == '')
-		{
-			$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-			$list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall")></td>';
+		{       
+			if($module =='Accounts')
+                        {
+                                $list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+                                $list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id_acc" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall_acc")></td>';
+                        }
+			elseif($module == 'Contacts')
+                        {
+                                $list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+                                $list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id_con" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall_con")></td>';
+                        }
+			elseif($module == 'Potentials')
+                        {
+                                $list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+                                $list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id_pot" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall_pot")></td>';
+                        }
+			else
+			{
+				$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+				$list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall")></td>';
+			}
 		}
 		$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 		foreach($focus->list_fields as $name=>$tableinfo)
