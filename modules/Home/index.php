@@ -110,91 +110,92 @@ if($groupName !='')
 	$query = "select leaddetails.leadid as id,leaddetails.lastname as name,leadgrouprelation.groupname as groupname, 'Leads     ' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where  crmentity.deleted=0  and leadgrouprelation.groupname is not null and leadgrouprelation.groupname='".$groupName."' union all select activity.activityid,activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid where  crmentity.deleted=0 and ((activity.eventstatus !='held'and (activity.status is null or activity.status ='')) or (activity.status !='completed' and (activity.eventstatus is null or activity.eventstatus=''))) and activitygrouprelation.groupname is not null and groupname ='".$groupName."' union all select troubletickets.ticketid,troubletickets.title,ticketgrouprelation.groupname,'Tickets   ' as Type from troubletickets inner join ticketgrouprelation on ticketgrouprelation.ticketid=troubletickets.ticketid inner join crmentity on crmentity.crmid = troubletickets.ticketid and crmentity.deleted=0 and ticketgrouprelation.groupname is not null and ticketgrouprelation.groupname='".$groupName."'";
 
 
-//$query = "select leaddetails.lastname,leadgrouprelation.groupname, 'Leads' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where  crmentity.deleted=0 union all select activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid where  crmentity.deleted=0 union all select troubletickets.ticketid,troubletickets.groupname,'Tickets' as Type from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.ticketid where troubletickets.groupname is not null and crmentity.deleted=0";
+	//$query = "select leaddetails.lastname,leadgrouprelation.groupname, 'Leads' as Type from leaddetails inner join leadgrouprelation on leaddetails.leadid=leadgrouprelation.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where  crmentity.deleted=0 union all select activity.subject,activitygrouprelation.groupname,'Activities' as Type from activity inner join activitygrouprelation on activitygrouprelation.activityid=activity.activityid inner join crmentity on crmentity.crmid = activity.activityid where  crmentity.deleted=0 union all select troubletickets.ticketid,troubletickets.groupname,'Tickets' as Type from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.ticketid where troubletickets.groupname is not null and crmentity.deleted=0";
 
-  $log->info("Here is the where clause for the list view: $query");
+  	$log->info("Here is the where clause for the list view: $query");
 	$result = $adb->limitquery($query,0,5) or die("Couldn't get the group listing");
-}
-//echo get_form_header($app_strings['LBL_GROUP_ALLOCATION_TITLE'], "", false);
-$list ='<table border=0 cellspacing=0 cellpadding=0 width=100%>
-<tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont(\'home_mygrp\');"><td nowrap><img src="'.$image_path.'myGroupAllocation.gif" style="padding:5px"></td><td width=100%><b>'.$app_strings['LBL_GROUP_ALLOCATION_TITLE'].'</b> </td><td nowrap><img src="themes/images/toggle2.gif" id="img_home_mygrp" border=0></td></tr>';
-$list .= '<tr><td colspan=3 bgcolor="#000000" style="height:1px;"></td></tr>';
-$list .= '<tr><td colspan=3>';
-$list .= '<div id="home_mygrp" style="display:block;">';
-$list .= '<table width="100%" cellpadding="0" cellspacing="0"><tr>';
-$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px">';
-$list .= $app_strings['LBL_ENTITY_NAME'].'</td>';
-$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list .= '<td class="moduleListTitle" style="padding:0px 3px 0px 3px"> ';
-$list .= $app_strings['LBL_GROUP_NAME'].'</td>';
-$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list .= '<td class="moduleListTitle" style="padding:0px 3px 0px 3px"> ';
-$list .= $app_strings['LBL_ENTITY_TYPE'].'</td>';
-$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
-$list .= ' ';
+	
+	//echo get_form_header($app_strings['LBL_GROUP_ALLOCATION_TITLE'], "", false);
+	$list ='<table border=0 cellspacing=0 cellpadding=0 width=100%>
+	<tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont(\'home_mygrp\');"><td nowrap><img src="'.$image_path.'myGroupAllocation.gif" style="padding:5px"></td><td width=100%><b>'.$app_strings['LBL_GROUP_ALLOCATION_TITLE'].'</b> </td><td nowrap><img src="themes/images/toggle2.gif" id="img_home_mygrp" border=0></td></tr>';
+	$list .= '<tr><td colspan=3 bgcolor="#000000" style="height:1px;"></td></tr>';
+	$list .= '<tr><td colspan=3>';
+	$list .= '<div id="home_mygrp" style="display:block;">';
+	$list .= '<table width="100%" cellpadding="0" cellspacing="0"><tr>';
+	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+	$list .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px">';
+	$list .= $app_strings['LBL_ENTITY_NAME'].'</td>';
+	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+	$list .= '<td class="moduleListTitle" style="padding:0px 3px 0px 3px"> ';
+	$list .= $app_strings['LBL_GROUP_NAME'].'</td>';
+	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+	$list .= '<td class="moduleListTitle" style="padding:0px 3px 0px 3px"> ';
+	$list .= $app_strings['LBL_ENTITY_TYPE'].'</td>';
+	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
+	$list .= ' ';
 
 
 
-if($groupName !='')
-{
-	$i=1;
-	while($row = $adb->fetch_array($result))
+	if($groupName !='')
 	{
-		if ($i%2==0)
-			$trowclass = 'evenListRow';
-		else
-			$trowclass = 'oddListRow';
-		$list .= '<tr class="'. $trowclass.'">';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		if($row["type"] == "Tickets")
+		$i=1;
+		while($row = $adb->fetch_array($result))
 		{
-			$list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module=HelpDesk';
-		}
-		elseif($row["type"] == "Activities")
-		{
-			$acti_type = getActivityType($row["id"]);
-			$list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module='.$row["type"];
-			if($acti_type == 'Task')
-			{
-				$list .= '&activity_mode=Task';
+			if ($i%2==0)
+				$trowclass = 'evenListRow';
+			else
+				$trowclass = 'oddListRow';
+			$list .= '<tr class="'. $trowclass.'">';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+			if($row["type"] == "Tickets")
+			{	
+				$list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module=HelpDesk';
 			}
-			elseif($acti_type == 'Call' || $acti_type == 'Meeting')
+			elseif($row["type"] == "Activities")
 			{
-				$list .= '&activity_mode=Events';
+				$acti_type = getActivityType($row["id"]);
+				$list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module='.$row["type"];
+				if($acti_type == 'Task')
+				{
+					$list .= '&activity_mode=Task';
+				}
+				elseif($acti_type == 'Call' || $acti_type == 'Meeting')
+				{
+					$list .= '&activity_mode=Events';
+				}
 			}
-		}
-		else
-		{
-			$list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module='.$row["type"];
-		}
+			else
+			{
+				$list .= '<td height="21" style="padding:0px 3px 0px 3px"><a href=index.php?module='.$row["type"];
+			}
 
-		$list .= '&action=DetailView&record=';
-		$list .= $row["id"] ;
-		$list .='>';
-		$list .= $row["name"];
-		$list .= '</a></td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list .= '<td height="21"  style="padding:0px 3px 0px 3px">';
-		$list .= $row["groupname"];
-		$list .= '</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list .= '<td height="21"  style="padding:0px 3px 0px 3px">';
-		$list .= $row["type"];
-		$list .= '</td>';
-		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list .= '</tr>';
-		$i++;
+			$list .= '&action=DetailView&record=';
+			$list .= $row["id"] ;
+			$list .='>';
+			$list .= $row["name"];
+			$list .= '</a></td>';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+			$list .= '<td height="21"  style="padding:0px 3px 0px 3px">';
+			$list .= $row["groupname"];
+			$list .= '</td>';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+			$list .= '<td height="21"  style="padding:0px 3px 0px 3px">';
+			$list .= $row["type"];
+			$list .= '</td>';
+			$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+			$list .= '</tr>';
+			$i++;
+		}
 	}
-}
-        $list .= '<tr><td WIDTH="1" colspan="6" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr></table>';
+    $list .= '<tr><td WIDTH="1" colspan="6" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr></table>';
 	$list .= '</div></td></tr></table>';
-$list .= '<script language=\'Javascript\'>
-        var leftpanelistarray=new Array(\'home_mygrp\');
-  setExpandCollapse_gen()</script>';
+	$list .= '<script language=\'Javascript\'>
+    var leftpanelistarray=new Array(\'home_mygrp\');
+  	setExpandCollapse_gen()</script>';
 
-echo $list;
-            break;
+	echo $list;
+}   
+   break;
         case 'HLT':
 function getActivityType($id)
 {
