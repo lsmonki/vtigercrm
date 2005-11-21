@@ -5616,4 +5616,402 @@ E</constraint>
         </data>
     </table>	
 
+	<table name="dateshare_module_rel">
+                <field name="shareid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="tabid" type="I" size="19">
+                        <NOTNULL/>
+                </field>
+		<opt>Type=InnoDB</opt>
+		<index name="idx_dateshare_module_rel_tabid">
+                        <col>tabid</col>
+                </index>
+		
+        </table>
+	<table name="dateshare_module_rel" alter="true">
+        <constraint>ADD CONSTRAINT fk_dateshare_module_rel FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
+	<table name="datashare_grp2grp">
+                <field name="shareid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="share_groupid" type="I" size="19">
+                </field>
+		<field name="to_groupid" type="I" size="19">
+                </field>
+		<field name="permission" type="I" size="19">
+                </field>
+		<opt>Type=InnoDB</opt>
+		<index name="idx_datashare_grp2grp_share_groupid">
+                        <col>share_groupid</col>
+                </index>
+		<index name="idx_datashare_grp2grp_to_groupid">
+                        <col>to_groupid</col>
+                </index>	
+        </table>
+        <table name="datashare_grp2grp" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_grp2grp FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_grp2grp" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_grp2grp1 FOREIGN KEY (share_groupid) REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_grp2grp" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_grp2grp2 FOREIGN KEY (to_groupid) REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
+
+	<table name="datashare_grp2role">
+                <field name="shareid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="share_groupid" type="I" size="19">
+                </field>
+		<field name="to_roleid" type="C" size="255">
+                </field>
+		<field name="permission" type="I" size="19">
+                </field>
+		<opt>Type=InnoDB</opt>
+		<index name="idx_datashare_grp2role_share_groupid">
+                        <col>share_groupid</col>
+                </index>
+		<index name="idx_datashare_grp2role_to_roleid">
+                        <col>to_roleid</col>
+                </index>	
+        </table>
+        <table name="datashare_grp2role" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_grp2role FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_grp2role" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_grp2role1 FOREIGN KEY (share_groupid) REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_grp2role" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_grp2role2 FOREIGN KEY (to_roleid) REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
+	<table name="datashare_grp2rs">
+                <field name="shareid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="share_groupid" type="I" size="19">
+                </field>
+		<field name="to_roleandsubid" type="C" size="255">
+                </field>
+		<field name="permission" type="I" size="19">
+                </field>
+		<opt>Type=InnoDB</opt>
+		<index name="idx_datashare_grp2rs_share_groupid">
+                        <col>share_groupid</col>
+                </index>
+		<index name="idx_datashare_grp2rs_to_roleandsubid">
+                        <col>to_roleandsubid</col>
+                </index>	
+        </table>
+        <table name="datashare_grp2rs" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_grp2rs FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_grp2rs" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_grp2rs1 FOREIGN KEY (share_groupid) REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_grp2rs" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_grp2rs3 FOREIGN KEY (to_roleandsubid) REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
+	<table name="datashare_role2group">
+                <field name="shareid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="share_roleid" type="C" size="255">
+                </field>
+		<field name="to_groupid" type="I" size="19">
+                </field>
+		<field name="permission" type="I" size="19">
+                </field>
+		<opt>Type=InnoDB</opt>
+		<index name="idx_datashare_role2group_share_roleid">
+                        <col>share_roleid</col>
+                </index>
+		<index name="idx_datashare_role2group_to_groupid">
+                        <col>to_groupid</col>
+                </index>	
+        </table>
+        <table name="datashare_role2group" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_role2group FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_role2group" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_role2group1 FOREIGN KEY (share_roleid) REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_role2group" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_role2group3 FOREIGN KEY (to_groupid) REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
+
+	<table name="datashare_role2role">
+                <field name="shareid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="share_roleid" type="C" size="255">
+                </field>
+		<field name="to_roleid" type="C" size="255">
+                </field>
+		<field name="permission" type="I" size="19">
+                </field>
+		<opt>Type=InnoDB</opt>
+		<index name="idx_datashare_role2role_share_roleid">
+                        <col>share_roleid</col>
+                </index>
+		<index name="idx_datashare_role2role_to_roleid">
+                        <col>to_roleid</col>
+                </index>	
+        </table>
+        <table name="datashare_role2role" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_role2role FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_role2role" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_role2role1 FOREIGN KEY (share_roleid) REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_role2role" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_role2role3 FOREIGN KEY (to_roleid) REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
+
+	<table name="datashare_role2rs">
+                <field name="shareid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="share_roleid" type="C" size="255">
+                </field>
+		<field name="to_roleandsubid" type="C" size="255">
+                </field>
+		<field name="permission" type="I" size="19">
+                </field>
+		<opt>Type=InnoDB</opt>
+		<index name="idx_datashare_role2s_share_roleid">
+                        <col>share_roleid</col>
+                </index>
+		<index name="idx_datashare_role2s_to_roleandsubid">
+                        <col>to_roleandsubid</col>
+                </index>	
+        </table>
+        <table name="datashare_role2rs" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_role2rs FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_role2rs" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_role2rs1 FOREIGN KEY (share_roleid) REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_role2rs" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_role2rs3 FOREIGN KEY (to_roleandsubid) REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
+	<table name="datashare_rs2grp">
+                <field name="shareid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="share_roleandsubid" type="C" size="255">
+                </field>
+		<field name="to_groupid" type="I" size="19">
+                </field>
+		<field name="permission" type="I" size="19">
+                </field>
+		<opt>Type=InnoDB</opt>
+		<index name="idx_datashare_rs2grp_share_roleandsubid">
+                        <col>share_roleandsubid</col>
+                </index>
+		<index name="idx_datashare_rs2grp_to_groupid">
+                        <col>to_groupid</col>
+                </index>	
+        </table>
+        <table name="datashare_rs2grp" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_rs2grp FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_rs2grp" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_rs2grp1 FOREIGN KEY (share_roleandsubid) REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_rs2grp" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_rs2grp2 FOREIGN KEY (to_groupid) REFERENCES groups(groupid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
+	<table name="datashare_rs2role">
+                <field name="shareid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="share_roleandsubid" type="C" size="255">
+                </field>
+		<field name="to_roleid" type="C" size="255">
+                </field>
+		<field name="permission" type="I" size="19">
+                </field>
+		<opt>Type=InnoDB</opt>
+		<index name="idx_datashare_rs2role_share_roleandsubid">
+                        <col>share_roleandsubid</col>
+                </index>
+		<index name="idx_datashare_rs2role_to_roleid">
+                        <col>to_roleid</col>
+                </index>	
+        </table>
+        <table name="datashare_rs2role" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_rs2role FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_rs2role" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_rs2role1 FOREIGN KEY (share_roleandsubid) REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_rs2role" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_rs2role2 FOREIGN KEY (to_roleid) REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
+	<table name="datashare_rs2rs">
+                <field name="shareid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="share_roleandsubid" type="C" size="255">
+                </field>
+		<field name="to_roleandsubid" type="C" size="255">
+                </field>
+		<field name="permission" type="I" size="19">
+                </field>
+		<opt>Type=InnoDB</opt>
+		<index name="idx_datashare_rs2rs_share_roleandsubid">
+                        <col>share_roleandsubid</col>
+                </index>
+		<index name="idx_datashare_rs2rs_to_roleandsubid">
+                        <col>to_roleandsubid</col>
+                </index>	
+        </table>
+        <table name="datashare_rs2rs" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_rs2rs FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_rs2rs" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_rs2rs1 FOREIGN KEY (share_roleandsubid) REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_rs2rs" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_rs2rs2 FOREIGN KEY (to_roleandsubid) REFERENCES role(roleid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
+	<table name="datashare_relatedmodules">
+                <field name="datashare_relatedmodule_id" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="tabid" type="I" size="19">
+                </field>
+		<field name="relatedto_tabid" type="I" size="19">
+                </field>
+		<opt>Type=InnoDB</opt>
+		<index name="idx_datashare_relatedmodules_tabid">
+                        <col>tabid</col>
+                </index>
+		<index name="idx_datashare_relatedmodules_relatedto_tabid">
+                        <col>relatedto_tabid</col>
+                </index>	
+        </table>
+        <table name="datashare_relatedmodules" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_relatedmodules FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+	<table name="datashare_relatedmodules" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_relatedmodules1 FOREIGN KEY (relatedto_tabid) REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
+	<table name="datashare_relatedmodule_permission">
+                <field name="shareid" type="I" size="19">
+			<KEY/>
+                </field>
+                <field name="datashare_relatedmodule_id" type="I" size="19">
+			<KEY/>
+                </field>
+		<field name="permission" type="I" size="19">
+                </field>
+        </table>
+        
+
+
 </schema>
