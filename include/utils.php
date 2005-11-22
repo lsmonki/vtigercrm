@@ -954,15 +954,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$pickListValue=$adb->query_result($pickListResult,$j,strtolower($fieldname));
 
-			if($value == $pickListValue)
-			{
-				$chk_val = "selected";	
-			}
-			else
-			{	
-				$chk_val = '';
-			}
-
+			$chk_val = (html_entity_decode($value) == $pickListValue) ? ' selected="selected"' : '';
+			
 			$custfld .= '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
 		}
 		$custfld .= '</td>';
