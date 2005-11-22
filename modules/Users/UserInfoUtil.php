@@ -80,11 +80,11 @@ function fetchUserGroupids($userid)
 	//code changed to return a list of groups related to the userid as comma seperated	
 	if($adb->num_rows($result)!=0)
 		{
-		for($i=0;$i<$adb->num_rows($result);$i++)	
-			$groupid[]=  $adb->query_result($result,$i,"groupid");
+			for($i=0;$i<$adb->num_rows($result);$i++)	
+				$groupid[]=  $adb->query_result($result,$i,"groupid");
 		
+			$groupidlists = implode (",",$groupid);
 		}
-	$groupidlists = implode (",",$groupid);
 	return $groupidlists;
 }
 
