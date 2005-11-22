@@ -1157,14 +1157,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		}
 		elseif($uitype == 51 && $module_name == 'Accounts')
                 {
-                        $custfld .= '<td width="30%" valign="top"  class="dataField"><input readonly name="acc
-ount_name" type="text" value="'.$account_name.'"><input name="account_id" type="hidden" value="'.$value.'">&nb
-sp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return windo
-w.open("index.php?module=Accounts&action=Popup&popuptype=specific_account_address&form=TasksEditView&form_subm
-it=false","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cur
-sor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAG
-E=javascript onClick="this.form.account_id.value=\'\';this.form.account_name.value=\'\';return false;" align="
-absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+                        $custfld .= '<td width="30%" valign="top"  class="dataField"><input readonly name="account_name" type="text" value="'.$account_name.'"><input name="account_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific_account_address&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.account_id.value=\'\';this.form.account_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 
                 }
 		else
