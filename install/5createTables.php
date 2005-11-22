@@ -213,43 +213,30 @@ function create_default_users()
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 <style type="text/css"><!--
 
-div {
- margin: 1px;
- height: 20px;
- padding: 1px;
- border: 1px solid #000;
- width: 275px;
- background: #fff;
- color: #f0f;
- float: left;
- clear: right;
- top: 38px;
- z-index: 9
-}
 
 .percents {
- background: #0FF;
- border: 1px solid #CCC;
- margin: 1px;
+ background: #eeeeee;
+ border: 1px solid #dddddd;
+ margin-left: 260px;
  height: 20px;
  position:absolute;
  width:575px;
  z-index:10;
  left: 10px;
- top: 38px;
+ top: 203px;
  text-align: center;
 }
 
 .blocks {
- background: #00f;
- border: 1px solid #CCC;
- margin: 1px;
+ background: #aaaaaa;
+ border: 1px solid #a1a1a1;
+ margin-left: 260px;
  height: 20px;
  width: 10px;
  position: absolute;
  z-index:11;
  left: 12px;
- top: 38px;
+ top: 203px;
  filter: alpha(opacity=50);
  -moz-opacity: 0.5;
  opacity: 0.5;
@@ -262,7 +249,7 @@ div {
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
 
 
-<table border=1 cellspacing=0 cellpadding=0 width=100%>
+<table border=0 cellspacing=0 cellpadding=0 width=100%>
 <tr>
 	<td align=center>
 	<br><br>
@@ -373,11 +360,11 @@ foreach ( $modules as $module )
 
                 if ($existed)
                 {
-                        echo "<font color=red>Dropped existing ".$focus->table_name." table</font><BR>\n";
+                        echo "<font color=red>Dropped existing <b>".$focus->table_name." </b>  table</font><BR>\n";
                 }
                 else
                 {
-                        echo "<font color=green>Table ".$focus->table_name." does not exist</font><BR>\n";
+                        echo "<font color=green>Table <b>".$focus->table_name." </b> does not exist</font><BR>\n";
                 }
         }
 
@@ -385,7 +372,7 @@ foreach ( $modules as $module )
 
         if ( $success)
         {
-                echo "<font color=green>Created new ".$focus->table_name." table</font><BR>\n";
+                echo "<font color=green>Created new <b>".$focus->table_name." </b> table</font><BR>\n";
                 if ( $module == "User")
                 {
                         $new_tables = 1;
@@ -393,7 +380,7 @@ foreach ( $modules as $module )
         }
         else
         {
-		echo "Table ".$focus->table_name." already exists<BR>\n";
+		echo "Table <b>".$focus->table_name." </b>already exists<BR>\n";
         }*/
 
  	$focus->create_tables(); // inserts only rows
@@ -543,14 +530,23 @@ mysql_query("insert into role2permission(roleid,permissionid,module,module_actio
 
 ?>
 		<br><br>
-		<div style="background-color:#33dd33;padding:10px" align=center>
-		<b>The database tables are now set up.</b><br>Total time: <?php echo "$deltaTime"; ?> seconds.
-		</div>
 		
-		
-		
-		
-		<br>Your system is now installed and configured for use.  You need to log in for the first time using the "admin" user name and the password you entered in step 2.<br><br>
+		<table borde=0 cellspacing=0 cellpadding=5 width=100% style="background-color:#EEFFEE; border:1px dashed #ccddcc;">
+		<tr>
+			<td align=center class=small>
+			<b>The database tables are now set up.</b>
+			<br>Total time taken: <?php echo "$deltaTime"; ?> seconds.
+			<hr noshade size=1>
+			<div style="width:100%;padding:10px; "align=left>
+			<ul>
+			<li>Your system is now installed and configured for use.  
+			<li>You need to log in for the first time using the "admin" user name and the password you entered in step 2.
+			</ul>
+			</div>
+
+			</td>
+		</tr>
+		</table>
 		
 		</td></tr>
 		<tr><td colspan=2 align="center">
