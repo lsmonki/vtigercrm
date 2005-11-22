@@ -82,6 +82,22 @@ function set_return_address(account_id, account_name, bill_street, ship_street, 
         window.opener.document.EditView.bill_country.value = bill_country;
         window.opener.document.EditView.ship_country.value = ship_country;
 }
+//added to populate address
+function set_return_contact_address(account_id, account_name, bill_street, ship_street, bill_city, ship_city, bill_state, ship_state, bill_code, ship_code, bill_country, ship_country) {
+        window.opener.document.EditView.account_name.value = account_name;
+        window.opener.document.EditView.account_id.value = account_id;
+        window.opener.document.EditView.mailingstreet.value = bill_street;
+        window.opener.document.EditView.otherstreet.value = ship_street;
+        window.opener.document.EditView.mailingcity.value = bill_city;
+        window.opener.document.EditView.othercity.value = ship_city;
+        window.opener.document.EditView.mailingstate.value = bill_state;
+        window.opener.document.EditView.otherstate.value = ship_state;
+        window.opener.document.EditView.mailingzip.value = bill_code;
+        window.opener.document.EditView.otherzip.evalue = ship_code;
+        window.opener.document.EditView.mailingcountry.value = bill_country;
+        window.opener.document.EditView.othercountry.value = ship_country;
+}
+
 //added by rdhital/Raju for emails
 function submitform(id){
 		document.massdelete.entityid.value=id;
