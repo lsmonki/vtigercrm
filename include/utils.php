@@ -3692,9 +3692,10 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	elseif($uitype == 71 || $uitype == 72)
 	{
 		if($temp_val != '' && $temp_val != 0)
-		{
-			$symbol = getCurrencySymbol();
-			$value = $symbol.' '.$temp_val;  
+		{       //changes made to remove currency symbol infront of each potential amount
+			//$symbol = getCurrencySymbol();
+                        //$value = $symbol.' '.$temp_val;
+                        $value = $temp_val;
 		}
 		else
 		{
