@@ -46,7 +46,7 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");				
 
 		$output .= '<tr>';
-		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype);
+		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);
 		$output .= $custfld;	
 		if ($mvAdd_flag == true)
 		$output .= $moveAddress;
@@ -62,7 +62,7 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 			$maxlength = $adb->query_result($result,$i,"maximumlength");
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
 			$output .= '';
-			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype);
+			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);
 			$output .= $custfld;	
 		}
 		$output .= '</tr>';
