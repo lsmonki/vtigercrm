@@ -170,7 +170,10 @@ if(is_admin($current_user))
 		$groupname = $adb->query_result($result,$i,'groupname');
 		$grouplists[$i] ="<a href='index.php?module=Users&action=UserInfoUtil&groupname=".$groupname."'>".$groupname."</a>";
 	}
-	$group_lists = implode(",",$grouplists);
+	if($grouplists != '')
+	{	
+		$group_lists = implode(",",$grouplists);
+	}
 	$xtpl->assign("GROUPASSIGNED",$group_lists);
 }
 else
