@@ -515,7 +515,9 @@ t, contact, or potential fields. These mappings will be used when you convert le
 'LBL_ASSIGN_MODULE_OWNERS'=>'Assign Module Owners',
 'LBL_ASSIGN_MODULE_OWNERS_INFO'=>' - Assign Owners for each modules',
 'LBL_MODULE'=>'Module',
-'LBL_OWNER'=>'Owner'
+'LBL_OWNER'=>'Owner',
+'LBL_MIGRATION'=>'Migrate from Previous Version',
+'LBL_MIGRATION_INFO'=>' - Migration from previous Version of vTiger'
 
 );
 
