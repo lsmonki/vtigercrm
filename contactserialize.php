@@ -811,6 +811,14 @@ function get_leads_columns($user_name, $password)
     $lead = new Lead();
     return $lead->getColumnNames_Lead();
 }
+
+function get_user_columns($user_name, $password)
+{
+    require_once('modules/Users/User.php');
+    $user = new User();
+    return $user->getColumnNames_User();
+}
+
 //end code for mail merge
 
 function get_contacts_count($user_name, $password)
