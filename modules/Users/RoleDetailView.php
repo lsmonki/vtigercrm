@@ -55,7 +55,7 @@ function getStdOutput($roleid)
 		{
 			$profileList .= ', ';
 		}
-		$profileList .= '<a href="index.php?module=Users&action=ProfileDetailView&profileid='.$profileId.'">'.$profileName.'</a>';
+		$profileList .= '<a href="index.php?module=Users&action=profilePrivileges&profileid='.$profileId.'">'.$profileName.'</a>';
 		$i++;	
 	}
 	//Constructing the Users List
