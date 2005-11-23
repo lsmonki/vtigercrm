@@ -14,8 +14,8 @@ Option Explicit
 Private Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 
 'Registry Path for vtigerCRM OfficeEdtion
-Public Const REG_PATH As String = "Software\vtiger\vtigerCRM Office Plug-in\4.2"
-Public Const REG_LANG_PATH As String = "Software\vtigerCRM Office Plug-in 4.2"
+Public Const REG_PATH As String = "Software\vtiger\vtigerCRM Office Plug-in\4.5"
+Public Const REG_LANG_PATH As String = "Software\vtigerCRM Office Plug-in 4.5"
 
 'Registry Key Names
 Public Const R_KEY_APP_PATH As String = "applicationpath"

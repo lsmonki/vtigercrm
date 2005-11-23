@@ -1,8 +1,8 @@
 frmvtigerLogin = 132, 132, 732, 580, C, 22, 22, 622, 470, C
 Connect = 58, 93, 658, 541, C, 44, 44, 756, 713, C
-frmvtigerMerge = 176, 176, 709, 624, Z, 176, 176, 776, 624, C
-modRegistry = 0, 0, 533, 448, C
-modGeneral = 25, 64, 558, 512, C
+frmvtigerMerge = 176, 176, 709, 624, C, 176, 176, 776, 624, C
+modRegistry = 0, 0, 533, 448, 
+modGeneral = 25, 64, 558, 512, Z
 frmConf = 44, 44, 611, 546, C, 0, 0, 533, 448, C
 frmAbout = 110, 110, 643, 558, C, 22, 22, 555, 470, C
-modLang = 44, 44, 585, 492, C
+modLang = 44, 44, 585, 492, 
