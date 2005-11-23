@@ -525,6 +525,15 @@ class User extends SugarBean {
 		
 	}
 	
+	function getColumnNames_User()
+  {
+  	
+  	$mergeflds = array("FIRSTNAME","LASTNAME","USERNAME","YAHOOID","TITLE","OFFICEPHONE","DEPARTMENT",
+											 "MOBILE","OTHERPHONE","FAX","EMAIL",
+											 "HOMEPHONE","OTHEREMAIL","PRIMARYADDRESS",
+											 "CITY","STATE","POSTALCODE","COUNTRY");	
+  	return $mergeflds;
+  }
 }
 
 ?>
