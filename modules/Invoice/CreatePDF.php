@@ -49,7 +49,7 @@ $iCustData[] = $po_name;
 
 if($focus->column_fields["duedate"] != '')
 {
-	$due_date = $focus->column_fields["duedate"];
+	$due_date = getDisplayDate($focus->column_fields["duedate"]);
 }
 else
 {
