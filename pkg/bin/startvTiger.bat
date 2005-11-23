@@ -43,18 +43,18 @@ goto checkmysql
 echo ""
 echo "making an attempt to kill any existing vtigercrm service"
 echo ""
-bin\apache -k stop -n vtigercrm4_2
-bin\apache -k uninstall -n vtigercrm4_2
+bin\apache -k stop -n vtigercrm4_5
+bin\apache -k uninstall -n vtigercrm4_5
 echo ""
 echo ""
-echo "installing vtigercrm4_2 apache service"
+echo "installing vtigercrm4_5 apache service"
 echo ""
 echo ""
-bin\apache -k install -n vtigercrm4_2 -f conf\httpd.conf
+bin\apache -k install -n vtigercrm4_5 -f conf\httpd.conf
 echo ""
-echo "Starting  vtigercrm4_2 apache service"
+echo "Starting  vtigercrm4_5 apache service"
 echo ""
-bin\apache -n vtigercrm4_2 -k start
+bin\apache -n vtigercrm4_5 -k start
 IF ERRORLEVEL 1 goto stopservice
 goto checkmysql
 
@@ -112,27 +112,27 @@ goto checkdatabase
 
 :checkdatabase
 echo ""
-echo "check to see if vtigercrm4_2 database already exists"
+echo "check to see if vtigercrm4_5 database already exists"
 echo ""
-mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm4_2'" | "%WINDIR%\system32\find.exe" "vtigercrm4_2" > NUL
+mysql --port=%mysql_port% --user=%mysql_username% --password=%mysql_password% -e "show databases like 'vtigercrm4_5'" | "%WINDIR%\system32\find.exe" "vtigercrm4_5" > NUL
 IF ERRORLEVEL 1 goto dbnotexists
 echo ""
-ECHO  "vtigercrm4_2 database exists"
+ECHO  "vtigercrm4_5 database exists"
 echo ""
 goto end
 
 
 :dbnotexists
 echo ""
-ECHO "vtigercrm4_2 database does not exist"
+ECHO "vtigercrm4_5 database does not exist"
 echo ""
 echo %cd%
 echo ""
-echo "Proceeding to create database vtigercrm4_2 and populate the same"
+echo "Proceeding to create database vtigercrm4_5 and populate the same"
 echo ""
-mysql --user=%mysql_username% --password=%mysql_password% --port=%mysql_port% -e "create database if not exists vtigercrm4_2"
+mysql --user=%mysql_username% --password=%mysql_password% --port=%mysql_port% -e "create database if not exists vtigercrm4_5"
 echo ""
-echo "vtigercrm4_2 database created"
+echo "vtigercrm4_5 database created"
 echo ""
 goto end
 
