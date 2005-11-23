@@ -392,10 +392,36 @@ if(isset($_REQUEST['action']))
 	$action = $_REQUEST['action'];
 }
 
+//Code added for 'Path Traversal/File Disclosure' security fix 
+$is_module = false;
 if(isset($_REQUEST['module']))
 {
 	$module = $_REQUEST['module'];	
+	if ($dir = @opendir("./modules")) 
+	{
+		while (($file = readdir($dir)) !== false) 
+		{
+           		if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic") 
+			{
+			   	if(is_dir("./modules/".$file)) 
+				{
+					if(!($file[0] == '.')) 
+					{
+						if($file=="$module")
+						{
+							$is_module = true;
+						}					
+					}
+				}
+			}
+		}
+	}
+	if(!$is_module)
+	{
+		die("Hacking Attempt");
+	}
 }
+
 // Check to see if there is an authenticated user in the session.
 $use_current_login = false;
 if(isset($_SESSION["authenticated_user_id"]) && (isset($_SESSION["app_unique_key"]) && $_SESSION["app_unique_key"] == $application_unique_key))
