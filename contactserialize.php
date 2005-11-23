@@ -296,6 +296,33 @@ $server->wsdl->addComplexType(
     )
 );
 
+$server->wsdl->addComplexType(
+    'user_column_detail',
+    'complexType',
+    'array',
+    '',
+    array(
+ 	'firstname' => array('name'=>'firstname','type'=>'xsd:string'),
+    	'lastname' => array('name'=>'lastname','type'=>'xsd:string'),
+        'username' => array('name'=>'username','type'=>'xsd:string'),
+        'yahooid' => array('name'=>'yahooid','type'=>'xsd:string'),
+        'title' => array('name'=>'title','type'=>'xsd:string'),
+        'workphone' => array('name'=>'workphone','type'=>'xsd:string'),
+        'department' => array('name'=>'department','type'=>'xsd:string'), 
+        'mobilephone' => array('name'=>'mobilephone','type'=>'xsd:string'),
+        'otherphone'=> array('name'=>'otherphone','type'=>'xsd:string'), 
+        'fax' => array('name'=>'fax','type'=>'xsd:string'),
+        'email' => array('name'=>'email','type'=>'xsd:string'),
+        'homephone' => array('name'=>'homephone','type'=>'xsd:string'),
+        'otheremail' => array('name'=>'otheremail','type'=>'xsd:string'),
+        'street' => array('name'=>'street','type'=>'xsd:string'),
+        'city' => array('name'=>'city','type'=>'xsd:string'),
+        'state' => array('name'=>'state','type'=>'xsd:string'),
+        'code' => array('name'=>'code','type'=>'xsd:string'),
+        'country' => array('name'=>'country','type'=>'xsd:string'),
+	)
+);
+
 //end code for mail merge
 
 //Field array for troubletickets
@@ -671,7 +698,13 @@ $server->register(
     array('user_name'=>'xsd:string','password'=>'xsd:string'),
     array('return'=>'tns:lead_column_detail'),
     $NAMESPACE);
-	 
+
+$server->register(
+    'get_user_columns',
+    array('user_name'=>'xsd:string','password'=>'xsd:string'),
+    array('return'=>'tns:user_column_detail'),
+    $NAMESPACE);
+
 //calendar
 $server->register(
     'get_calendar_count',
