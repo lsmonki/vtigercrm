@@ -87,7 +87,14 @@ class CRMEntity extends SugarBean
                 }
               $parentid=$_REQUEST['parent_id'];
               // echo 'parent id is ----------> ' .$parentid .'  actid ' .$actid;
-              $myids=explode("|",$parentid);  //2@71|
+              if($_REQUEST['module'] != 'Emails')
+			  {
+				  $mysql='insert into seactivityrel values('.$parentid.','.$actid.')';
+				  $adb->query($mysql);
+			  }
+			  else
+			  {	  
+			  $myids=explode("|",$parentid);  //2@71|
               // echo '<br> myid count is   '.count($myids);
               for ($i=0;$i<(count($myids)-1);$i++)
                 {
@@ -98,6 +105,7 @@ class CRMEntity extends SugarBean
                   $adb->query($mysql);
                 }
             }
+			}
           else
             {
               if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
