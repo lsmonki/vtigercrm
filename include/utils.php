@@ -886,7 +886,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         $theme_path="themes/".$theme."/";
         $image_path=$theme_path."images/";
 
-	$value = htmlentities($col_fields[$fieldname]);
+	//Commented for vulnerability fix as the convertion is added in Peardatabase - Philip
+        //$value = htmlentities($col_fields[$fieldname]);
+        $value = $col_fields[$fieldname];
 	$custfld = '';
 
 	if($generatedtype == 2)
