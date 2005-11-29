@@ -392,7 +392,7 @@ if(isset($_REQUEST['action']))
 	$action = $_REQUEST['action'];
 }
 
-//Code added for 'Path Traversal/File Disclosure' security fix 
+//Code added for 'Path Traversal/File Disclosure' security fix - Philip
 $is_module = false;
 if(isset($_REQUEST['module']))
 {
@@ -420,6 +420,11 @@ if(isset($_REQUEST['module']))
 	{
 		die("Hacking Attempt");
 	}
+}
+//Code added for 'Multiple SQL Injection Vulnerabilities & XSS issue' fixes - Philip
+if(isset($_REQUEST['record']) && !is_numeric($_REQUEST['record']))
+{
+        die("An invalid record number specified to view details.");
 }
 
 // Check to see if there is an authenticated user in the session.
