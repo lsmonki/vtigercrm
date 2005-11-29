@@ -31,10 +31,10 @@ else if(document.all)
 require_once('include/database/PearDatabase.php');
 require_once('config.php');
 
-$mergeFileName = $_REQUEST['mergefile'];
+$templateid = $_REQUEST['mergefile'];
 //get the particular file from db and store it in the local hard disk.
 //store the path to the location where the file is stored and pass it  as parameter to the method 
-$sql = "select filename,data,filesize from wordtemplates where filename='".$mergeFileName."'";
+$sql = "select filename,data,filesize from wordtemplates where templateid=".$templateid;
 
 $result = $adb->query($sql);
 $temparray = $adb->fetch_array($result);
@@ -45,7 +45,7 @@ $filesize=$temparray['filesize'];
 $wordtemplatedownloadpath =$root_directory ."/test/wordtemplatedownload/";
 
 //echo '<br> file name and size is ..'.$filename .'...'.$filesize;
-if($mergeFileName == "")
+if($templateid == "")
 {
 	die("Select Mail Merge Template");
 }
