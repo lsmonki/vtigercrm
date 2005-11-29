@@ -10,6 +10,7 @@
  ********************************************************************************/
 require_once('XTemplate/xtpl.php');
 require_once('include/utils.php');
+require_once('modules/Users/UserInfoUtil.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
@@ -66,7 +67,104 @@ foreach($defSharingPermissionData as $tab_id => $def_perr)
 $output .=  '</TABLE></form><br>';
 
 $xtpl->assign("DEFAULT_SHARING", $output);
+//Lead Sharing
+$mod_output = '';
+$mod_output .= '<BR><BR>';
+$mod_output .= get_module_title("Security", "Lead Sharing Privileges", true);
+$mod_output .= '<BR>';
+$mod_output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="FormBorder">';
+$mod_output .= '<form action="index.php" method="post" name="Leads" id="form">';
+$mod_output .= '<input type="hidden" name="module" value="Users">';
+$mod_output .= '<input type="hidden" name="action" value="CreateSharingRule">';
+$mod_output .= '<input type="hidden" name="sharing_module" value="Leads">';
+$mod_output .= '<input type="hidden" name="mode" value="create">';
+$mod_output .= '<tr></td><input title="New" accessKey="E" class="button" type="submit" name="Create" value="New"></td></tr>';
+$mod_output .= '</table>';
+$mod_output .= '<BR><BR>';
+$mod_output .= getSharingRuleList('Leads');
+
+$xtpl->assign("MODSHARING", $mod_output);
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->parse("main");
 $xtpl->out("main");
+
+function getSharingRuleList($module)
+{
+	global $adb;
+	$output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="FormBorder">';
+	$output .= '<tr>';
+	$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>Operation</b></td>';
+	$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>Owned By</b></td>';
+	$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>Shared With</b></td>';
+	$output .= '<td class="moduleListTitle" height="20" style="padding:0px 3px 0px 3px;"><b>'.$module.' Access</b></td>';
+	$output .=  '</tr>';
+
+	$tabid=getTabid($module);
+	$dataShareTableArray=getDataShareTableandColumnArray();
+	
+	$i=1;
+	foreach($dataShareTableArray as $table_name => $colName)
+	{
+
+		$colNameArr=explode("::",$colName);
+		$query = "select ".$table_name.".* from ".$table_name." inner join datashare_module_rel on ".$table_name.".shareid=datashare_module_rel.shareid where datashare_module_rel.tabid=".$tabid;
+		//echo $query.'<BR>';
+		$result=$adb->query($query);
+		$num_rows=$adb->num_rows($result);
+
+		$share_colName=$colNameArr[0];
+		$share_modType=getEntityTypeFromCol($share_colName);
+		//echo '          '.$share_colName.'             '.$share_modType.'<BR>';
+
+		$to_colName=$colNameArr[1];
+		$to_modType=getEntityTypeFromCol($to_colName);
+		//echo '          '.$to_colName.'             '.$to_modType.'<BR>';
+
+		for($j=0;$j<$num_rows;$j++)
+		{
+			echo $i;
+			echo '<BR>';
+			$shareid=$adb->query_result($result,$j,"shareid");
+			$share_id=$adb->query_result($result,$j,$share_colName);
+			$to_id=$adb->query_result($result,$j,$to_colName);
+			$permission = $adb->query_result($result,$j,'permission');
+		//	echo '<BR>';
+		//	echo '          '.$shareid.'             '.$share_id.'              '.$to_id.'             '.$permission.'<BR>';
+		//	echo '<BR>';
+
+			if ($i%2==0)
+				$output .=   '<tr class="evenListRow">';
+			else
+				$output .=   '<tr class="oddListRow">';
+
+			$edit_del =" <a href='index.php?module=Users&action=CreateSharingRule&returnaction=OrgSharingDetailView&shareid=".$shareid."&mode=edit'> edit </a> | <a href='index.php?module=Users&action=DeleteSharingRule&shareid=".$shareid."'> del </a>";
+
+			$share_ent_disp = getEntityDisplayLink($share_modType,$share_id);
+			$to_ent_disp = getEntityDisplayLink($to_modType,$to_id);
+
+			if($permission == 0)
+			{
+				$perr_out = 'Read Only';
+			}
+			elseif($permission == 1)
+			{
+				$perr_out = 'Read Write';
+			}
+
+			$output .=   '<TD width="25%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$edit_del.'</TD>';
+			$output .=  '<TD width="25%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$share_ent_disp.'</TD>';
+			$output .=  '<TD width="25%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$to_ent_disp.'</TD>';
+			$output .=  '<TD width="25%" height="21" noWrap style="padding:0px 3px 0px 3px;">'.$perr_out.'</TD>';
+			$output .=  '</tr>';
+
+			$i++;
+		}
+
+	}
+
+	$output .=  '</TABLE></form><br>';
+	return $output;
+}
+
+
 ?>
