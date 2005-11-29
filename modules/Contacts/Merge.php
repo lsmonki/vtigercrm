@@ -24,7 +24,7 @@ else if (document.layers || (!document.all && document.getElementById))
 }
 else if(document.all)
 {
-	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,3,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
+	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,4,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
 }
 </script>
 <?php
@@ -182,12 +182,15 @@ while($columnValues = $adb->fetch_array($result))
   	{
   		$value = "";
   	}
-		//<<<<<<<<<<<<<<< End >>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  	$actual_values[$x] = $value;
-		$actual_values[$x] = preg_replace("/(\r\n)/"," ",$value);
-		$actual_values[$x] = str_replace(","," ",$actual_values[$x]);
-		$actual_values[$x] = str_replace("'"," ",$actual_values[$x]);
+	//<<<<<<<<<<<<<<< End >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		$actual_values[$x] = $value;
 		$actual_values[$x] = str_replace('"'," ",$actual_values[$x]);
+		//if value contains any line feed or carriage return replace the value with ".value."
+		if (preg_match ("/(\r\n)/", $actual_values[$x])) 
+		{
+			$actual_values[$x] = '"'.$actual_values[$x].'"';
+		}
+		$actual_values[$x] = str_replace(","," ",$actual_values[$x]);
   }
   
   $mergevalue[] = implode($actual_values,",");  	
@@ -197,11 +200,12 @@ $csvdata = implode($mergevalue,"###");
 {
 	die("No fields to do Merge");
 }	
-echo"<script type=\"text/javascript\">
-var dHdr = '$csvheader';
-var dSrc = '$csvdata';
-</script>";
-//echo $site_URL."/test/wordtemplatedownload/".$filename;
+
+$handle = fopen($wordtemplatedownloadpath."datasrc.csv","wb");
+fwrite($handle,$csvheader."\r\n");
+fwrite($handle,str_replace("###","\r\n",$csvdata));
+fclose($handle);
+
 ?>
 <script>
 if (window.ActiveXObject){
@@ -220,7 +224,7 @@ if (window.ActiveXObject){
         				if(objMMPage.Init())
         				{
         					objMMPage.vLTemplateDoc();
-        					objMMPage.vBulkHDSrc(dHdr,dSrc);
+        					objMMPage.bBulkHDSrc("<?php echo $site_URL;?>/test/wordtemplatedownload/datasrc.csv");
         					objMMPage.vBulkOpenDoc();
         					objMMPage.UnInit()
         					window.history.back();
