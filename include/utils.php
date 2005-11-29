@@ -862,6 +862,17 @@ function getTabname($tabid)
 
 }
 
+function getTabModuleName($tabid)
+{
+        global $vtlog;
+        $vtlog->logthis("tab id is ".$tabid,'info');
+        global $adb;
+        $sql = "select name from tab where tabid='".$tabid."'";
+        $result = $adb->query($sql);
+        $tabname=  $adb->query_result($result,0,"name");
+        return $tabname;
+}
+
 function getTabid($module)
 {
 	global $vtlog;
