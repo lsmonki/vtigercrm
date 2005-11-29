@@ -2721,8 +2721,11 @@
 
 
 	<table name="wordtemplates">
-		<field name="filename" type="C" size="100">
+		<field name="templateid" type="I" size="19">
 			<KEY/>
+		</field>
+		<field name="filename" type="C" size="100">
+			<NOTNULL/>
 		</field>
 		<field name="module" type="C" size="30">
 			<NOTNULL/>
