@@ -79,9 +79,135 @@ $mod_output .= '<input type="hidden" name="action" value="CreateSharingRule">';
 $mod_output .= '<input type="hidden" name="sharing_module" value="Leads">';
 $mod_output .= '<input type="hidden" name="mode" value="create">';
 $mod_output .= '<tr></td><input title="New" accessKey="E" class="button" type="submit" name="Create" value="New"></td></tr>';
-$mod_output .= '</table>';
-$mod_output .= '<BR><BR>';
+$mod_output .= '</form></table>';
+$mod_output .= '<BR>';
 $mod_output .= getSharingRuleList('Leads');
+
+//Account Sharing
+$mod_output .= '<BR><BR>';
+$mod_output .= get_module_title("Security", "Account Sharing Privileges", true);
+$mod_output .= '<BR>';
+$mod_output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="FormBorder">';
+$mod_output .= '<form action="index.php" method="post" name="Accounts" id="form">';
+$mod_output .= '<input type="hidden" name="module" value="Users">';
+$mod_output .= '<input type="hidden" name="action" value="CreateSharingRule">';
+$mod_output .= '<input type="hidden" name="sharing_module" value="Accounts">';
+$mod_output .= '<input type="hidden" name="mode" value="create">';
+$mod_output .= '<tr></td><input title="New" accessKey="E" class="button" type="submit" name="Create" value="New"></td></tr>';
+$mod_output .= '</form></table>';
+$mod_output .= '<BR>';
+$mod_output .= getSharingRuleList('Accounts');
+
+
+
+
+//Potential Sharing
+$mod_output .= '<BR><BR>';
+$mod_output .= get_module_title("Security", "Potential Sharing Privileges", true);
+$mod_output .= '<BR>';
+$mod_output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="FormBorder">';
+$mod_output .= '<form action="index.php" method="post" name="Potentials" id="form">';
+$mod_output .= '<input type="hidden" name="module" value="Users">';
+$mod_output .= '<input type="hidden" name="action" value="CreateSharingRule">';
+$mod_output .= '<input type="hidden" name="sharing_module" value="Potentials">';
+$mod_output .= '<input type="hidden" name="mode" value="create">';
+$mod_output .= '<tr></td><input title="New" accessKey="E" class="button" type="submit" name="Create" value="New"></td></tr>';
+$mod_output .= '</form></table>';
+$mod_output .= '<BR>';
+$mod_output .= getSharingRuleList('Potentials');
+
+//HelpDesk Sharing
+$mod_output .= '<BR><BR>';
+$mod_output .= get_module_title("Security", "HelpDesk Sharing Privileges", true);
+$mod_output .= '<BR>';
+$mod_output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="FormBorder">';
+$mod_output .= '<form action="index.php" method="post" name="HelpDesk" id="form">';
+$mod_output .= '<input type="hidden" name="module" value="Users">';
+$mod_output .= '<input type="hidden" name="action" value="CreateSharingRule">';
+$mod_output .= '<input type="hidden" name="sharing_module" value="HelpDesk">';
+$mod_output .= '<input type="hidden" name="mode" value="create">';
+$mod_output .= '<tr></td><input title="New" accessKey="E" class="button" type="submit" name="Create" value="New"></td></tr>';
+$mod_output .= '</form></table>';
+$mod_output .= '<BR>';
+$mod_output .= getSharingRuleList('HelpDesk');
+
+
+
+//Email Sharing
+$mod_output .= '<BR><BR>';
+$mod_output .= get_module_title("Security", "Email Sharing Privileges", true);
+$mod_output .= '<BR>';
+$mod_output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="FormBorder">';
+$mod_output .= '<form action="index.php" method="post" name="Emails" id="form">';
+$mod_output .= '<input type="hidden" name="module" value="Users">';
+$mod_output .= '<input type="hidden" name="action" value="CreateSharingRule">';
+$mod_output .= '<input type="hidden" name="sharing_module" value="Emails">';
+$mod_output .= '<input type="hidden" name="mode" value="create">';
+$mod_output .= '<tr></td><input title="New" accessKey="E" class="button" type="submit" name="Create" value="New"></td></tr>';
+$mod_output .= '</form></table>';
+$mod_output .= '<BR>';
+$mod_output .= getSharingRuleList('Emails');
+
+
+//Quotes Sharing
+$mod_output .= '<BR><BR>';
+$mod_output .= get_module_title("Security", "Quote Sharing Privileges", true);
+$mod_output .= '<BR>';
+$mod_output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="FormBorder">';
+$mod_output .= '<form action="index.php" method="post" name="Quotes" id="form">';
+$mod_output .= '<input type="hidden" name="module" value="Users">';
+$mod_output .= '<input type="hidden" name="action" value="CreateSharingRule">';
+$mod_output .= '<input type="hidden" name="sharing_module" value="Quotes">';
+$mod_output .= '<input type="hidden" name="mode" value="create">';
+$mod_output .= '<tr></td><input title="New" accessKey="E" class="button" type="submit" name="Create" value="New"></td></tr>';
+$mod_output .= '</form></table>';
+$mod_output .= '<BR>';
+$mod_output .= getSharingRuleList('Quotes');
+
+//Purchase Order Sharing
+$mod_output .= '<BR><BR>';
+$mod_output .= get_module_title("Security", "Purchase Order Sharing Privileges", true);
+$mod_output .= '<BR>';
+$mod_output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="FormBorder">';
+$mod_output .= '<form action="index.php" method="post" name="Orders" id="form">';
+$mod_output .= '<input type="hidden" name="module" value="Users">';
+$mod_output .= '<input type="hidden" name="action" value="CreateSharingRule">';
+$mod_output .= '<input type="hidden" name="sharing_module" value="Orders">';
+$mod_output .= '<input type="hidden" name="mode" value="create">';
+$mod_output .= '<tr></td><input title="New" accessKey="E" class="button" type="submit" name="Create" value="New"></td></tr>';
+$mod_output .= '</form></table>';
+$mod_output .= '<BR>';
+$mod_output .= getSharingRuleList('Orders');
+
+//Sales Order Sharing
+$mod_output .= '<BR><BR>';
+$mod_output .= get_module_title("Security", "Sales Order Sharing Privileges", true);
+$mod_output .= '<BR>';
+$mod_output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="FormBorder">';
+$mod_output .= '<form action="index.php" method="post" name="SalesOrder" id="form">';
+$mod_output .= '<input type="hidden" name="module" value="Users">';
+$mod_output .= '<input type="hidden" name="action" value="CreateSharingRule">';
+$mod_output .= '<input type="hidden" name="sharing_module" value="SalesOrder">';
+$mod_output .= '<input type="hidden" name="mode" value="create">';
+$mod_output .= '<tr></td><input title="New" accessKey="E" class="button" type="submit" name="Create" value="New"></td></tr>';
+$mod_output .= '</form></table>';
+$mod_output .= '<BR>';
+$mod_output .= getSharingRuleList('SalesOrder');
+
+//Invoice Sharing
+$mod_output .= '<BR><BR>';
+$mod_output .= get_module_title("Security", "Invoice Sharing Privileges", true);
+$mod_output .= '<BR>';
+$mod_output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="FormBorder">';
+$mod_output .= '<form action="index.php" method="post" name="Invoice" id="form">';
+$mod_output .= '<input type="hidden" name="module" value="Users">';
+$mod_output .= '<input type="hidden" name="action" value="CreateSharingRule">';
+$mod_output .= '<input type="hidden" name="sharing_module" value="Invoice">';
+$mod_output .= '<input type="hidden" name="mode" value="create">';
+$mod_output .= '<tr></td><input title="New" accessKey="E" class="button" type="submit" name="Create" value="New"></td></tr>';
+$mod_output .= '</form></table>';
+$mod_output .= '<BR>';
+$mod_output .= getSharingRuleList('Invoice');
 
 $xtpl->assign("MODSHARING", $mod_output);
 $xtpl->assign("MOD", $mod_strings);
@@ -122,8 +248,6 @@ function getSharingRuleList($module)
 
 		for($j=0;$j<$num_rows;$j++)
 		{
-			echo $i;
-			echo '<BR>';
 			$shareid=$adb->query_result($result,$j,"shareid");
 			$share_id=$adb->query_result($result,$j,$share_colName);
 			$to_id=$adb->query_result($result,$j,$to_colName);
@@ -162,7 +286,7 @@ function getSharingRuleList($module)
 
 	}
 
-	$output .=  '</TABLE></form><br>';
+	$output .=  '</TABLE><br>';
 	return $output;
 }
 

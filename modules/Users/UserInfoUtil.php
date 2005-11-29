@@ -1987,4 +1987,111 @@ function getSharingRuleInfo($shareId)
 	
 	
 }
+
+/** This function is to retreive the list of related sharing modules for the specifed module 
+  * It takes the following input parameters:
+  *     $tabid -- The module tabid:: Type Integer
+  */
+
+function getRelatedSharingModules($tabid)
+{
+	global $adb;
+	$relatedSharingModuleArray=Array();
+	$query="select * from datashare_relatedmodules where tabid=".$tabid;
+	$result=$adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$ds_relmod_id=$adb->query_result($result,$i,'datashare_relatedmodule_id');
+		$rel_tabid=$adb->query_result($result,$i,'relatedto_tabid');
+		$relatedSharingModuleArray[$rel_tabid]=$ds_relmod_id;
+		
+	}
+	return $relatedSharingModuleArray;
+	
+}
+
+
+/** This function is to add the related module sharing permission for a particulare Sharing Rule 
+  * It takes the following input parameters:
+  *     $shareid -- The Sharing Rule Id:: Type Integer
+  *     $tabid -- The module tabid:: Type Integer
+  *     $relatedtabid -- The related module tabid:: Type Integer
+  * 	$sharePermisson -- This can have the following values:
+  *                       0 - Read Only
+  *                       1 - Read/Write
+  */
+
+function addRelatedModuleSharingPermission($shareid,$tabid,$relatedtabid,$sharePermission)
+{
+	global $adb;
+	$relatedModuleSharingId=getRelatedModuleSharingId($tabid,$relatedtabid);	
+	$query="insert into datashare_relatedmodule_permission values(".$shareid.", ".$relatedModuleSharingId.", ".$sharePermission.")" ;
+	$result=$adb->query($query);
+}
+
+/** This function is to update the related module sharing permission for a particulare Sharing Rule 
+  * It takes the following input parameters:
+  *     $shareid -- The Sharing Rule Id:: Type Integer
+  *     $tabid -- The module tabid:: Type Integer
+  *     $relatedtabid -- The related module tabid:: Type Integer
+  * 	$sharePermisson -- This can have the following values:
+  *                       0 - Read Only
+  *                       1 - Read/Write
+  */
+
+function updateRelatedModuleSharingPermission($shareid,$tabid,$relatedtabid,$sharePermission)
+{
+	global $adb;
+	$relatedModuleSharingId=getRelatedModuleSharingId($tabid,$relatedtabid);
+	$query="update datashare_relatedmodule_permission set permission=".$sharePermission." where shareid=".$shareid." and datashare_relatedmodule_id=".$relatedModuleSharingId;		
+	$result=$adb->query($query);
+}
+
+/** This function is to retreive the Related Module Sharing Id
+  * It takes the following input parameters:
+  *     $tabid -- The module tabid:: Type Integer
+  *     $related_tabid -- The related module tabid:: Type Integer
+  * This function returns the Related Module Sharing Id
+  */
+
+function getRelatedModuleSharingId($tabid,$related_tabid)
+{
+	global $adb;
+	$query="select datashare_relatedmodule_id from datashare_relatedmodules where tabid=".$tabid." and relatedto_tabid=".$related_tabid ;
+	$result=$adb->query($query);
+	$relatedModuleSharingId=$adb->query_result($result,0,'datashare_relatedmodule_id');
+	return $relatedModuleSharingId;
+	
+}
+
+/** This function is to retreive the Related Module Sharing Permissions for the specified Sharing Rule 
+  * It takes the following input parameters:
+  *     $shareid -- The Sharing Rule Id:: Type Integer
+  *This function will return the Related Module Sharing permissions in an Array in the following format:
+  *     $PermissionArray=($relatedTabid1=>$sharingPermission1,
+  *			  $relatedTabid2=>$sharingPermission2,
+  *					|
+  *                                     |
+  *                       $relatedTabid-n=>$sharingPermission-n) 
+  */
+function getRelatedModuleSharingPermission($shareid)
+{
+	global $adb;
+	$relatedSharingModulePermissionArray=Array();
+	$query="select datashare_relatedmodules.*,datashare_relatedmodule_permission.permission from datashare_relatedmodules inner join datashare_relatedmodule_permission on datashare_relatedmodule_permission.datashare_relatedmodule_id=datashare_relatedmodules.datashare_relatedmodule_id where datashare_relatedmodule_permission.shareid=".$shareid;
+	$result=$adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$relatedto_tabid=$adb->query_result($result,$i,'relatedto_tabid');
+		$permission=$adb->query_result($result,$i,'permission');
+		$relatedSharingModulePermissionArray[$relatedto_tabid]=$permission;
+		
+	
+	}
+	return $relatedSharingModulePermissionArray;	
+	
+}
+
 ?>

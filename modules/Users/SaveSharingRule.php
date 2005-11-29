@@ -27,15 +27,35 @@ echo $share_entity_type;
 echo '<BR>';
 echo $to_entity_type;
 */
+
+$relatedShareModuleArr=getRelatedSharingModules($tabid);
 if($mode == 'create')
 {
-	addSharingRule($tabid,$share_entity_type,$to_entity_type,$share_entity_id,$to_entity_id,$module_sharing_access);
+	$shareId=addSharingRule($tabid,$share_entity_type,$to_entity_type,$share_entity_id,$to_entity_id,$module_sharing_access);
+
+	//Adding the Related ModulePermission Sharing
+	foreach($relatedShareModuleArr as $reltabid=>$ds_rm_id)
+	{
+		$reltabname=getTabModuleName($reltabid);
+		$relSharePermission=$_REQUEST[$reltabname.'_access'];	
+		addRelatedModuleSharingPermission($shareId,$tabid,$reltabid,$relSharePermission);	
+	}
+	
 }
 elseif($mode == 'edit')
 {
 	$shareId=$_REQUEST['shareId'];
-	updateSharingRule($shareId,$tabid,$share_entity_type,$to_entity_type,$share_entity_id,$to_entity_id,$module_sharing_access);	
+	updateSharingRule($shareId,$tabid,$share_entity_type,$to_entity_type,$share_entity_id,$to_entity_id,$module_sharing_access);
+	//Adding the Related ModulePermission Sharing
+	foreach($relatedShareModuleArr as $reltabid=>$ds_rm_id)
+	{
+		$reltabname=getTabModuleName($reltabid);
+		$relSharePermission=$_REQUEST[$reltabname.'_access'];	
+		updateRelatedModuleSharingPermission($shareId,$tabid,$reltabid,$relSharePermission);	
+	}	
 }
+
+
 
 $loc = "Location: index.php?action=OrgSharingDetailView&module=Users";
 header($loc);
