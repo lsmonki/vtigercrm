@@ -77,7 +77,7 @@ class LoggerAppenderFile extends LoggerAppenderSkeleton {
         $this->fp = @fopen($fileName, ($this->getAppend()? 'a':'w'));
 	
 	// Denying read option for log file. Added for Vulnerability fix
-        if (is_readable($fileName)) chmod ($fileName,0200);
+        if (is_readable($fileName)) chmod ($fileName,0600);
 
         if ($this->fp) {
             if ($this->getAppend())
