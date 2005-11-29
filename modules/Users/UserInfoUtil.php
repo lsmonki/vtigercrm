@@ -1667,4 +1667,324 @@ function getModuleSharingActionArray($tabid)
 	
 }
 
+/** This function adds a organisation level sharing rule for the specified Module
+  * It takes the following input parameters:
+  * 	$tabid -- Module tabid - Datatype::Integer
+  * 	$shareEntityType -- The Entity Type may be groups,roles,rs and users - Datatype::String
+  * 	$toEntityType -- The Entity Type may be groups,roles,rs and users - Datatype::String
+  * 	$shareEntityId -- The id of the group,role,rs,user to be shared 
+  * 	$toEntityId -- The id of the group,role,rs,user to which the specified entity is to be shared
+  * 	$sharePermisson -- This can have the following values:
+  *                       0 - Read Only
+  *                       1 - Read/Write
+  * This function will return the shareid as output
+  */
+function addSharingRule($tabid,$shareEntityType,$toEntityType,$shareEntityId,$toEntityId,$sharePermission)
+{
+	
+	global $adb;
+	$shareid=$adb->getUniqueId("datashare_module_rel");
+	
+
+	if($shareEntityType == 'groups' && $toEntityType == 'groups')
+	{
+		$type_string='GRP::GRP';
+		$query = "insert into datashare_grp2grp values(".$shareid.", ".$shareEntityId.", ".$toEntityId.", ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'groups' && $toEntityType == 'roles')
+	{
+		
+		$type_string='GRP::ROLES';
+		$query = "insert into datashare_grp2role values(".$shareid.", ".$shareEntityId.", '".$toEntityId."', ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'groups' && $toEntityType == 'rs')
+	{
+		
+		$type_string='GRP::RS';
+		$query = "insert into datashare_grp2rs values(".$shareid.", ".$shareEntityId.", '".$toEntityId."', ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'roles' && $toEntityType == 'groups')
+	{
+		
+		$type_string='ROLE::GRP';
+		$query = "insert into datashare_role2group values(".$shareid.", '".$shareEntityId."', ".$toEntityId.", ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'roles' && $toEntityType == 'roles')
+	{
+		
+		$type_string='ROLE::ROLE';
+		$query = "insert into datashare_role2role values(".$shareid.", '".$shareEntityId."', '".$toEntityId."', ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'roles' && $toEntityType == 'rs')
+	{
+		
+		$type_string='ROLE::RS';
+		$query = "insert into datashare_role2rs values(".$shareid.", '".$shareEntityId."', '".$toEntityId."', ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'rs' && $toEntityType == 'groups')
+	{
+		
+		$type_string='RS::GRP';
+		$query = "insert into datashare_rs2grp values(".$shareid.", '".$shareEntityId."', ".$toEntityId.", ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'rs' && $toEntityType == 'roles')
+	{
+		
+		$type_string='RS::ROLE';
+		$query = "insert into datashare_rs2role values(".$shareid.", '".$shareEntityId."', '".$toEntityId."', ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'rs' && $toEntityType == 'rs')
+	{
+		
+		$type_string='RS::RS';
+		$query = "insert into datashare_rs2rs values(".$shareid.", '".$shareEntityId."', '".$toEntityId."', ".$sharePermission.")";
+	}
+	$query1 = "insert into datashare_module_rel values(".$shareid.",".$tabid.",'".$type_string."')";
+	$adb->query($query1);		
+	$adb->query($query);	
+	return $shareid;	
+	
+}
+
+
+/** This function is to update the organisation level sharing rule 
+  * It takes the following input parameters:
+  *     $shareid -- Id of the Sharing Rule to be updated
+  * 	$tabid -- Module tabid - Datatype::Integer
+  * 	$shareEntityType -- The Entity Type may be groups,roles,rs and users - Datatype::String
+  * 	$toEntityType -- The Entity Type may be groups,roles,rs and users - Datatype::String
+  * 	$shareEntityId -- The id of the group,role,rs,user to be shared 
+  * 	$toEntityId -- The id of the group,role,rs,user to which the specified entity is to be shared
+  * 	$sharePermisson -- This can have the following values:
+  *                       0 - Read Only
+  *                       1 - Read/Write
+  * This function will return the shareid as output
+  */
+function updateSharingRule($shareid,$tabid,$shareEntityType,$toEntityType,$shareEntityId,$toEntityId,$sharePermission)
+{
+	
+	global $adb;
+	$query2="select * from datashare_module_rel where shareid=".$shareid;
+	$res=$adb->query($query2);
+	$typestr=$adb->query_result($res,0,'relationtype');
+	$tabname=getDSTableNameForType($typestr);
+	$query3="delete from ".$tabname." where shareid=".$shareid;
+	$adb->query($query3);
+		
+
+	if($shareEntityType == 'groups' && $toEntityType == 'groups')
+	{
+		$type_string='GRP::GRP';
+		$query = "insert into datashare_grp2grp values(".$shareid.", ".$shareEntityId.", ".$toEntityId.", ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'groups' && $toEntityType == 'roles')
+	{
+		
+		$type_string='GRP::ROLES';
+		$query = "insert into datashare_grp2role values(".$shareid.", ".$shareEntityId.", '".$toEntityId."', ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'groups' && $toEntityType == 'rs')
+	{
+		
+		$type_string='GRP::RS';
+		$query = "insert into datashare_grp2rs values(".$shareid.", ".$shareEntityId.", '".$toEntityId."', ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'roles' && $toEntityType == 'groups')
+	{
+		
+		$type_string='ROLE::GRP';
+		$query = "insert into datashare_role2group values(".$shareid.", '".$shareEntityId."', ".$toEntityId.", ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'roles' && $toEntityType == 'roles')
+	{
+		
+		$type_string='ROLE::ROLE';
+		$query = "insert into datashare_role2role values(".$shareid.", '".$shareEntityId."', '".$toEntityId."', ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'roles' && $toEntityType == 'rs')
+	{
+		
+		$type_string='ROLE::RS';
+		$query = "insert into datashare_role2rs values(".$shareid.", '".$shareEntityId."', '".$toEntityId."', ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'rs' && $toEntityType == 'groups')
+	{
+		
+		$type_string='RS::GRP';
+		$query = "insert into datashare_rs2grp values(".$shareid.", '".$shareEntityId."', ".$toEntityId.", ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'rs' && $toEntityType == 'roles')
+	{
+		
+		$type_string='RS::ROLE';
+		$query = "insert into datashare_rs2role values(".$shareid.", '".$shareEntityId."', '".$toEntityId."', ".$sharePermission.")";
+	}
+	elseif($shareEntityType == 'rs' && $toEntityType == 'rs')
+	{
+		
+		$type_string='RS::RS';
+		$query = "insert into datashare_rs2rs values(".$shareid.", '".$shareEntityId."', '".$toEntityId."', ".$sharePermission.")";
+	}
+	
+	$query1 = "update datashare_module_rel set relationtype='".$type_string."' where shareid=".$shareid;
+	$adb->query($query1);		
+	$adb->query($query);	
+	return $shareid;	
+	
+}
+
+/** This function is to delete the organisation level sharing rule 
+  * It takes the following input parameters:
+  *     $shareid -- Id of the Sharing Rule to be updated
+  */
+
+function deleteSharingRule($shareid)
+{
+	global $adb;
+	$query2="select * from datashare_module_rel where shareid=".$shareid;
+	$res=$adb->query($query2);
+	$typestr=$adb->query_result($res,0,'relationtype');
+	$tabname=getDSTableNameForType($typestr);
+	$query3="delete from ".$tabname." where shareid=".$shareid;
+	$adb->query($query3);
+	$query4="delete from datashare_module_rel where shareid=".$shareid;
+	$adb->query($query4);
+	
+}
+
+
+function getDataShareTableandColumnArray()
+{
+	$dataShareTableColArr=Array('datashare_grp2grp'=>'share_groupid::to_groupid',
+				    'datashare_grp2role'=>'share_groupid::to_roleid',
+				    'datashare_grp2rs'=>'share_groupid::to_roleandsubid',
+				    'datashare_role2group'=>'share_roleid::to_groupid',
+				    'datashare_role2role'=>'share_roleid::to_roleid',
+				    'datashare_role2rs'=>'share_roleid::to_roleandsubid',
+				    'datashare_rs2grp'=>'share_roleandsubid::to_groupid',
+				    'datashare_rs2role'=>'share_roleandsubid::to_roleid',
+				    'datashare_rs2rs'=>'share_roleandsubid::to_roleandsubid');
+	return $dataShareTableColArr;	
+					
+}
+
+function getDSTableColumns($tableName)
+{
+	$dataShareTableColArr=getDataShareTableandColumnArray();
+	
+	$dsTableCols=$dataShareTableColArr[$tableName];
+	$dsTableColsArr=explode('::',$dsTableCols);	
+	return $dsTableColsArr;	
+					
+}
+
+function getDataShareTableName()
+{
+	$dataShareTableColArr=Array('GRP::GRP'=>'datashare_grp2grp',
+				    'GRP::ROLE'=>'datashare_grp2role',
+				    'GRP::RS'=>'datashare_grp2rs',
+				    'ROLE::GRP'=>'datashare_role2group',
+				    'ROLE::ROLE'=>'datashare_role2role',
+				    'ROLE::RS'=>'datashare_role2rs',
+				    'RS::GRP'=>'datashare_rs2grp',
+				    'RS::ROLE'=>'datashare_rs2role',
+				    'RS::RS'=>'share_roleandsubid::to_roleandsubid');
+	return $dataShareTableColArr;	
+					
+}
+
+function getDSTableNameForType($typeString)
+{
+	$dataShareTableColArr=getDataShareTableName();
+	$tableName=$dataShareTableColArr[$typeString];
+	return $tableName;	
+					
+}
+
+function getEntityTypeFromCol($colName)
+{
+
+        if($colName == 'share_groupid' || $colName == 'to_groupid')
+        {
+                $entity_type='groups';
+        }
+        elseif($colName =='share_roleid' || $colName =='to_roleid')
+        {
+                $entity_type='roles';
+        }
+	elseif($colName == 'share_roleandsubid' || $colName == 'to_roleandsubid')
+        {
+                $entity_type='rs';
+        }
+	
+	return $entity_type;
+
+}
+
+function getEntityDisplayLink($entityType,$entityid)
+{
+	if($entityType == 'groups')
+	{
+		$groupNameArr = getGroupInfo($entityid); 
+		$display_out = "<a href='index.php?module=Users&action=GroupDetailView&returnaction=OrgSharingDetailView&groupId=".$entityid."'>Group::". $groupNameArr[0]." </a>";			
+	}
+	elseif($entityType == 'roles')
+	{
+		$roleName=getRoleName($entityid);	
+		$display_out = "<a href='index.php?module=Users&action=RoleDetailView&returnaction=OrgSharingDetailView&roleid=".$entityid."'>Role::".$roleName. "</a>";			
+	}
+	elseif($entityType == 'rs')
+	{
+		$roleName=getRoleName($entityid);	
+		$display_out = "<a href='index.php?module=Users&action=RoleDetailView&returnaction=OrgSharingDetailView&roleid=".$entityid."'>RoleAndSubordinate::".$roleName. "</a>";			
+	}
+	return $display_out;
+	
+}
+
+function getSharingRuleInfo($shareId)
+{
+	global $adb;
+	global $vtlog;
+	$shareRuleInfoArr=Array();
+	$query="select * from datashare_module_rel where shareid=".$shareId;
+	$result=$adb->query($query);
+	//Retreving the Sharing Tabid
+	$tabid=$adb->query_result($result,0,'tabid');
+	$type=$adb->query_result($result,0,'relationtype');
+	
+	//Retreiving the Sharing Table Name
+	$tableName=getDSTableNameForType($type);
+
+	//Retreiving the Sharing Col Names
+	$dsTableColArr=getDSTableColumns($tableName);
+	$share_ent_col=$dsTableColArr[0];
+	$to_ent_col=$dsTableColArr[1];
+
+	//Retreiving the Sharing Entity Col Types
+	$share_ent_type=getEntityTypeFromCol($share_ent_col);
+	$to_ent_type=getEntityTypeFromCol($to_ent_col);
+
+	//Retreiving the Value from Table
+	$query1="select * from ".$tableName." where shareid=".$shareId;
+	$result1=$adb->query($query1);
+	$share_id=$adb->query_result($result1,0,$share_ent_col);
+	$to_id=$adb->query_result($result1,0,$to_ent_col);
+	$permission=$adb->query_result($result1,0,'permission');
+
+	//Constructing the Array
+	$shareRuleInfoArr[]=$shareId;
+	$shareRuleInfoArr[]=$tabid;
+	$shareRuleInfoArr[]=$type;
+	$shareRuleInfoArr[]=$share_ent_type;
+	$shareRuleInfoArr[]=$to_ent_type;
+	$shareRuleInfoArr[]=$share_id;
+	$shareRuleInfoArr[]=$to_id;
+	$shareRuleInfoArr[]=$permission;
+		
+	return $shareRuleInfoArr;	
+		
+	
+	
+}
 ?>
