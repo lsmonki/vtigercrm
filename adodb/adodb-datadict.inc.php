@@ -257,14 +257,20 @@ class ADODB_DataDict {
 	function println($msg)
         {
                 require_once('include/logging.php');
-                $log1 =& LoggerManager::getLogger('VT');
+                $log1 =& LoggerManager::getLogger('VT-INSTALL');
                 if(is_array($msg))
                 {
-                        $log1->fatal("Install ->".print_r($msg,true));
+			//fatal->debug
+                        $log1->debug("....    ".print_r($msg,true));
                 }
+		else if($msg == '')
+		{
+			//done to avoid the additional print with no data in thelogs
+		}
                 else
                 {
-                        $log1->fatal("Install ->".$msg);
+			//fatal->debug	
+                        $log1->debug("....    ".$msg);
                 }
                 return $msg;
         }
