@@ -5616,21 +5616,23 @@ E</constraint>
         </data>
     </table>	
 
-	<table name="dateshare_module_rel">
+	<table name="datashare_module_rel">
                 <field name="shareid" type="I" size="19">
 			<KEY/>
                 </field>
                 <field name="tabid" type="I" size="19">
                         <NOTNULL/>
                 </field>
+		<field name="relationtype" type="C" size="200">
+                </field>
 		<opt>Type=InnoDB</opt>
-		<index name="idx_dateshare_module_rel_tabid">
+		<index name="idx_datashare_module_rel_tabid">
                         <col>tabid</col>
                 </index>
 		
         </table>
-	<table name="dateshare_module_rel" alter="true">
-        <constraint>ADD CONSTRAINT fk_dateshare_module_rel FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
+	<table name="datashare_module_rel" alter="true">
+        <constraint>ADD CONSTRAINT fk_datashare_module_rel FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE</constraint>
                 <opt>Type=InnoDB</opt>
                 <data>
                 </data>
@@ -5655,7 +5657,7 @@ E</constraint>
                 </index>	
         </table>
         <table name="datashare_grp2grp" alter="true">
-        <constraint>ADD CONSTRAINT fk_datashare_grp2grp FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+        <constraint>ADD CONSTRAINT fk_datashare_grp2grp FOREIGN KEY (shareid) REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
                 <opt>Type=InnoDB</opt>
                 <data>
                 </data>
@@ -5693,7 +5695,7 @@ E</constraint>
                 </index>	
         </table>
         <table name="datashare_grp2role" alter="true">
-        <constraint>ADD CONSTRAINT fk_datashare_grp2role FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+        <constraint>ADD CONSTRAINT fk_datashare_grp2role FOREIGN KEY (shareid) REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
                 <opt>Type=InnoDB</opt>
                 <data>
                 </data>
@@ -5730,7 +5732,7 @@ E</constraint>
                 </index>	
         </table>
         <table name="datashare_grp2rs" alter="true">
-        <constraint>ADD CONSTRAINT fk_datashare_grp2rs FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+        <constraint>ADD CONSTRAINT fk_datashare_grp2rs FOREIGN KEY (shareid) REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
                 <opt>Type=InnoDB</opt>
                 <data>
                 </data>
@@ -5767,7 +5769,7 @@ E</constraint>
                 </index>	
         </table>
         <table name="datashare_role2group" alter="true">
-        <constraint>ADD CONSTRAINT fk_datashare_role2group FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+        <constraint>ADD CONSTRAINT fk_datashare_role2group FOREIGN KEY (shareid) REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
                 <opt>Type=InnoDB</opt>
                 <data>
                 </data>
@@ -5805,7 +5807,7 @@ E</constraint>
                 </index>	
         </table>
         <table name="datashare_role2role" alter="true">
-        <constraint>ADD CONSTRAINT fk_datashare_role2role FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+        <constraint>ADD CONSTRAINT fk_datashare_role2role FOREIGN KEY (shareid) REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
                 <opt>Type=InnoDB</opt>
                 <data>
                 </data>
@@ -5843,7 +5845,7 @@ E</constraint>
                 </index>	
         </table>
         <table name="datashare_role2rs" alter="true">
-        <constraint>ADD CONSTRAINT fk_datashare_role2rs FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+        <constraint>ADD CONSTRAINT fk_datashare_role2rs FOREIGN KEY (shareid) REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
                 <opt>Type=InnoDB</opt>
                 <data>
                 </data>
@@ -5880,7 +5882,7 @@ E</constraint>
                 </index>	
         </table>
         <table name="datashare_rs2grp" alter="true">
-        <constraint>ADD CONSTRAINT fk_datashare_rs2grp FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+        <constraint>ADD CONSTRAINT fk_datashare_rs2grp FOREIGN KEY (shareid) REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
                 <opt>Type=InnoDB</opt>
                 <data>
                 </data>
@@ -5917,7 +5919,7 @@ E</constraint>
                 </index>	
         </table>
         <table name="datashare_rs2role" alter="true">
-        <constraint>ADD CONSTRAINT fk_datashare_rs2role FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+        <constraint>ADD CONSTRAINT fk_datashare_rs2role FOREIGN KEY (shareid) REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
                 <opt>Type=InnoDB</opt>
                 <data>
                 </data>
@@ -5954,7 +5956,7 @@ E</constraint>
                 </index>	
         </table>
         <table name="datashare_rs2rs" alter="true">
-        <constraint>ADD CONSTRAINT fk_datashare_rs2rs FOREIGN KEY (shareid) REFERENCES dateshare_module_rel(shareid) ON DELETE CASCADE</constraint>
+        <constraint>ADD CONSTRAINT fk_datashare_rs2rs FOREIGN KEY (shareid) REFERENCES datashare_module_rel(shareid) ON DELETE CASCADE</constraint>
                 <opt>Type=InnoDB</opt>
                 <data>
                 </data>
