@@ -10,8 +10,8 @@
  ********************************************************************************/
 //include('include/database/PearDatabase.php');
 global $adb;
-$filename = $_REQUEST["filename"];
-$sql = "delete from wordtemplates where filename = '".$filename ."'";
+$templateid = $_REQUEST["record"];
+$sql = "delete from wordtemplates where templateid=".$templateid;
 $adb->query($sql);
 
 header("Location:index.php?module=Users&action=listwordtemplates");
