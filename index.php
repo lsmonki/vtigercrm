@@ -422,7 +422,7 @@ if(isset($_REQUEST['module']))
 	}
 }
 //Code added for 'Multiple SQL Injection Vulnerabilities & XSS issue' fixes - Philip
-if(isset($_REQUEST['record']) && !is_numeric($_REQUEST['record']))
+if(isset($_REQUEST['record']) && !is_numeric($_REQUEST['record']) && $_REQUEST['record']!='')
 {
         die("An invalid record number specified to view details.");
 }
