@@ -913,6 +913,16 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 {
 			if($fieldname != 'birthday')// && $fieldname != 'due_date')//due date is today's date by default
                         	$disp_value=getNewDisplayDate();
+
+			//Added to display the Contact - Support End Date as one year future instead of today's date -- 30-11-2005
+                        if($fieldname == 'support_end_date' && $_REQUEST['module'] == 'Contacts')
+                        {
+                        	$addyear = strtotime("+1 year");
+                                global $current_user;
+                                $dat_fmt = (($current_user->date_format == '')?('dd-mm-yyyy'):($current_user->date_format));
+
+                                $disp_value = (($dat_fmt == 'dd-mm-yyyy')?(date('d-m-Y',$addyear)):(($dat_fmt == 'mm-dd-yyyy')?(date('m-d-Y',$addyear)):(($dat_fmt == 'yyyy-mm-dd')?(date('Y-m-d', $addyear)):(''))));
+			}
                 }
                 else
                 {
