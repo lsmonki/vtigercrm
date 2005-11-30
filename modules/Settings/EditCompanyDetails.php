@@ -14,14 +14,21 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-
-$filename=$_REQUEST['file_name'];
 $filetype=$_REQUEST['file_type'];
 $filesize=$_REQUEST['file_size'];
 $logo_value=$_REQUEST['logo_value'];
 
 echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_SETTINGS'].' : '. $mod_strings['LBL_COMPANY_INFO'], true);
 echo '<br><br>';
+//error handling
+$flag = $_REQUEST['flag'];
+if($flag ==1)echo "<font color='red'><B> Logo has to be an Image of type jpeg/png</B></font>"; 
+	
+if($flag == 3)echo "<B><font color='red'>Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 800000 bytes</font></B> <br>";
+
+if($flag == 4 )echo "<b>Problems in file upload. Please try again! </b><br>";
+
+if($flag == 2)echo "<font color='red'><B>Error Message<ul><li><font color='red'>Invalid file OR</font><li><font color='red'>File has no data</font></ul></B></font> <br>";
 
 global $adb;
 global $theme;
@@ -74,7 +81,9 @@ if (isset($organization_fax))
 	$xtpl->assign("ORGANIZATIONFAX",$organization_fax);
 if (isset($organization_website))
 	$xtpl->assign("ORGANIZATIONWEBSITE",$organization_website);
-if (isset($organization_logoname))
+if ($organization_logoname == '') 
+	$organization_logoname = $_REQUEST['prev_name'];
+if (isset($organization_logoname)) 
 	$xtpl->assign("ORGANIZATIONLOGONAME",$organization_logoname);
 
 
