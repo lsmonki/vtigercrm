@@ -209,7 +209,8 @@ global $vtlog;
 			else
 			{
 		//		$this->println("checkconnect using old connection");
-                $vtlog->logthis('checkconnect using old connection','info');
+                //commenting as the above log will suffice. this was filling up the logs too much
+		//$vtlog->logthis('checkconnect using old connection','info');
 			}
 	}
 
