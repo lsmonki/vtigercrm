@@ -96,6 +96,8 @@ else {
 ?>
 <style type="text/css" media="all">
 IMG { display: none; }
+.bodySmall{display: none;}
+input{ display:none; }
 </style>
 </head>
 <body>
