@@ -29,7 +29,6 @@ $new_tables = 0;
  require_once('include/database/PearDatabase.php');
  require_once('include/logging.php');
  require_once('modules/Leads/Lead.php');
- require_once('modules/Settings/FileStorage.php');
 //require_once('modules/imports/Headers.php');
  require_once('modules/Contacts/Contact.php');
  require_once('modules/Accounts/Account.php');
@@ -43,7 +42,6 @@ $new_tables = 0;
  require_once('modules/Import/UsersLastImport.php');
  require_once('modules/Users/TabMenu.php');
  require_once('modules/Users/LoginHistory.php');
- require_once('modules/Settings/FileStorage.php');
  require_once('data/Tracker.php');
  require_once('include/utils.php');
  require_once('modules/Users/Security.php');
@@ -296,7 +294,6 @@ $modules = array(
 ,"Tab"
 ,"Security"
 ,"LoginHistory"
-,"FileStorage"
 ,"User"
 ,"Tracker"
 ,"Activity"
