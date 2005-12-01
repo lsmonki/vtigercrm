@@ -896,6 +896,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	global $noof_group_rows;
         $theme_path="themes/".$theme."/";
         $image_path=$theme_path."images/";
+	$fieldlabel = from_html($fieldlabel);
 
 	//Commented for vulnerability fix as the convertion is added in Peardatabase - Philip
         //$value = htmlentities($col_fields[$fieldname]);
