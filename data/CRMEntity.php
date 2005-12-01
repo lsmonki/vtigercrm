@@ -75,7 +75,7 @@ class CRMEntity extends SugarBean
           //echo '--------------------------------- saveentity '.$_REQUEST['smodule'];
           //if($module=="Emails" & $_REQUEST['smodule']!='webmails')
           //modified by Richie as raju's implementation broke the feature for addition of webmail to crmentity.need to be more careful in future while integrating code
-          if($_REQUEST['smodule']!='webmails')
+          if($_REQUEST['smodule']!='webmails' && $_REQUEST['smodule'] != '')
             {
               if($_REQUEST['currentid']!='')
                 {
