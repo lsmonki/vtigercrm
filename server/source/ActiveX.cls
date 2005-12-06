@@ -28,13 +28,35 @@ Dim oDoc As Object
 Dim sDocPath As String
 Dim sHeadSrc() As String
 Dim sDataSrc() As String
-'Dim s
+
+'**************************************************************************
+'                       API FOR GETTING TEMPORAY PATH
+'**************************************************************************
+Private Const MAX_PATH = 255
+
+Private Declare Function GetTempPath Lib "Kernel32" Alias "GetTempPathA" _
+(ByVal nBufferLength As Long, ByVal lpBuffer As String) As Long
+
+'**************************************************************************
+'                       API TO DOWNLOAD THE FILE FROM URL
+'**************************************************************************
 Private Declare Function URLDownloadToFile Lib "urlmon" Alias _
     "URLDownloadToFileA" (ByVal pCaller As Long, ByVal szURL As String, _
     ByVal szFileName As String, ByVal dwReserved As Long, _
     ByVal lpfnCB As Long) As Long
     
-Private Declare Function DeleteFile Lib "kernel32" Alias "DeleteFileA" (ByVal lpFileName As String) As Long
+'**************************************************************************
+'                       API TO DELETE THE FILE
+'**************************************************************************
+Private Declare Function DeleteFile Lib "Kernel32" Alias "DeleteFileA" (ByVal lpFileName As String) As Long
+Public Function GetTempDir() As String
+    Dim sRet As String, lngLen As Long
+    'create buffer
+    sRet = String(MAX_PATH, 0)
+    lngLen = GetTempPath(MAX_PATH, sRet)
+    If lngLen = 0 Then Err.Raise Err.LastDllError
+    GetTempDir = Left$(sRet, lngLen)
+End Function
 Public Function Init() As Boolean
     On Error GoTo ERROR_EXIT_ROUTINE
     Dim sErrMsg As String
@@ -49,20 +71,11 @@ Public Function Init() As Boolean
 ERROR_EXIT_ROUTINE:
     MsgBox sErrMsg, vbExclamation, "vtiger CRM"
     Init = False
-'    If IsObject(oWord) Then
-'        oWord.Quit
-'        Set oDoc = Nothing
-'        Set oWord = Nothing
-'    End If
 EXIT_ROUTINE:
 End Function
 Public Function vGetHDSrc(ByVal sHSrc As String, ByVal sDSrc As String)
 On Error GoTo ERROR_EXIT_ROUTINE
 If sDSrc <> "" And sHSrc <> "" Then
-''    Open ("C:\DataSrc.csv") For Output As #1
-''    Print #1, sHSrc
-''    Print #1, sDSrc
-''    Close #1
 sHeadSrc = Split(sHSrc, ",")
 sDataSrc = Split(sDSrc, ",")
 bBulkData = False
@@ -121,9 +134,9 @@ Public Function bDLTempDoc(ByVal sWebFilePath As String, ByVal sFileName As Stri
     Dim errcode As Long
 
     If sWebFilePath <> "" And sFileName <> "" Then
-        errcode = URLDownloadToFile(0, sWebFilePath, App.Path & "\" & sFileName, 0, 0)
+        errcode = URLDownloadToFile(0, sWebFilePath, GetTempDir & sFileName, 0, 0)
         If errcode <> 0 Then
-            sErrMsg = "vtiger CRM Can not download template document"
+            sErrMsg = "vtiger CRM cannot download template document"
             GoTo ERROR_EXIT_ROUTINE
         End If
     Else
@@ -144,8 +157,8 @@ Public Function vLTemplateDoc()
     On Error GoTo ERROR_EXIT_ROUTINE
     Dim sErrMsg As String
     
-    sErrMsg = "vtiger CRM Can not access template document"
-    Set oDoc = oWord.Documents.Open(App.Path & "\" & sDocPath)
+    sErrMsg = "vtiger CRM cannot access template document"
+    Set oDoc = oWord.Documents.Open(GetTempDir & sDocPath)
     'Init = True
     
     GoTo EXIT_ROUTINE
@@ -160,21 +173,27 @@ ERROR_EXIT_ROUTINE:
 EXIT_ROUTINE:
 End Function
 
-Public Function vBulkHDSrc(ByVal sHSrc As String, ByVal sDSrc As String)
+Public Function bBulkHDSrc(ByVal sWebFilePath As String) As Boolean
 On Error GoTo ERROR_EXIT_ROUTINE
-'Dim sBulkDataSrc() As String
-'Dim I As Integer
-
-'sDSrc = Replace(sDSrc, Chr(13), "")
-
-If sDSrc <> "" And sHSrc <> "" Then
-    Open (App.Path & "\DataSrc.csv") For Output As #1
-    Print #1, sHSrc
-    Print #1, Replace(sDSrc, "###", vbCrLf)
-    Close #1
-End If
-GoTo EXIT_ROUTINE
+    Dim sDownLoad As String
+    Dim sErrMsg As String
+    Dim errcode As Long
+    
+    If sWebFilePath <> "" Then
+        errcode = URLDownloadToFile(0, sWebFilePath, GetTempDir & "DataSrc.csv", 0, 0)
+        If errcode <> 0 Then
+            sErrMsg = "vtigerCRM cannot download data source"
+            GoTo ERROR_EXIT_ROUTINE
+        End If
+    Else
+        sErrMsg = "Invalid data source file path"
+        GoTo ERROR_EXIT_ROUTINE
+    End If
+    bBulkHDSrc = True
+    GoTo EXIT_ROUTINE
 ERROR_EXIT_ROUTINE:
+    MsgBox sErrMsg, vbExclamation, "vtiger CRM"
+    bBulkHDSrc = False
 EXIT_ROUTINE:
 End Function
 
@@ -183,7 +202,7 @@ Public Function vBulkOpenDoc()
     On Error GoTo ERROR_EXIT_ROUTINE
     oWord.DisplayAlerts = wdAlertsNone
     
-    oDoc.MailMerge.OpenDataSource Name:=App.Path & "\DataSrc.csv", LinkToSource:=False
+    oDoc.MailMerge.OpenDataSource Name:=GetTempDir & "DataSrc.csv", LinkToSource:=False
     oDoc.MailMerge.Destination = wdSendToNewDocument
     oDoc.MailMerge.Execute Pause:=False
 
@@ -219,12 +238,12 @@ Dim lErrCode As Long
 Dim lErrCode1 As Long
 
 If bBulkData Then
-    sErrMsg = "vtiger CRM Can not delete source document"
-    lErrCode1 = DeleteFile(App.Path & "\DataSrc.csv")
+    sErrMsg = "vtiger CRM cannot delete source document"
+    lErrCode1 = DeleteFile(GetTempDir & "DataSrc.csv")
     If lErrCode1 <> 1 Then GoTo ERROR_EXIT_ROUTINE
 
-    sErrMsg = "vtiger CRM Can not delete template document"
-    lErrCode = DeleteFile(App.Path & "\" & sDocPath)
+    sErrMsg = "vtiger CRM cannot delete template document"
+    lErrCode = DeleteFile(GetTempDir & sDocPath)
     If lErrCode <> 1 Then GoTo ERROR_EXIT_ROUTINE
 End If
 
