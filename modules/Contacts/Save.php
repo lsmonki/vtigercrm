@@ -26,7 +26,7 @@ require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
-global $vtlog;
+global $log;
 $focus = new Contact();
 if(isset($_REQUEST['record']))
 {
@@ -144,15 +144,14 @@ elseif($_REQUEST['portal'] != '' && $_REQUEST['email'] != '')// && $_REQUEST['mo
 	$contents .= '<br><br><b>Note : </b>We suggest you to change your password after logging in first time.';
 	$contents .= '<br><br>Support Team';
 
-	$vtlog->logthis("Customer Portal Information Updated in database and details are going to send => '".$_REQUEST['email']."'",'info');
-
+ $log->info("Customer Portal Information Updated in database and details are going to send => '".$_REQUEST['email']."'");
 	if($insert == 'true' || $update == 'true')
 	{
 		//Removed the function SendMailToCustomer and used the send_mail function to send mail to the customer
 		require_once("modules/Emails/mail.php");
 		$mail_status = send_mail('Contacts',$_REQUEST['email'],$current_user->user_name,'',$subject,$contents);
 	}
-	$vtlog->logthis("After return from the SendMailToCustomer function. Now control will go to the header.",'info');
+   $log->info("After return from the SendMailToCustomer function. Now control will go to the header.");
 }
 function makeRandomPassword() 
 {
@@ -169,7 +168,7 @@ function makeRandomPassword()
       return $pass;
 }
 //END -- Code for Create Customer Portal Users password and Send Mail
-$vtlog->logthis("This Page is redirected to : ".$return_module." / ".$return_action."& return id =".$return_id,'info');
+$log->info("This Page is redirected to : ".$return_module." / ".$return_action."& return id =".$return_id);
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];

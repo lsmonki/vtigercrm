@@ -29,7 +29,7 @@ require_once('include/ComboUtil.php');
 require_once('include/uifromdbutil.php');
 require_once('include/FormValidationUtil.php');
 
-global $vtlog;
+global $log;
 global $mod_strings;
 global $app_list_strings;
 global $app_strings;
@@ -46,7 +46,7 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record']))
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit';
     $focus->retrieve_entity_info($_REQUEST['record'],"Contacts");
-	$vtlog->logthis("Entity info successfully retrieved for EditView.",'info');
+    $log->info("Entity info successfully retrieved for EditView.");
     $focus->firstname=$focus->column_fields['firstname'];
     $focus->lastname=$focus->column_fields['lastname'];
 
@@ -69,7 +69,7 @@ if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['r
         $focus->column_fields['otherzip']=$acct_focus->column_fields['ship_code'];
         $focus->column_fields['mailingcountry']=$acct_focus->column_fields['bill_country'];
         $focus->column_fields['othercountry']=$acct_focus->column_fields['ship_country'];
-        $vtlog->logthis("Accountid Id from the request is ".$_REQUEST['account_id'],'debug');
+        $log->debug("Accountid Id from the request is ".$_REQUEST['account_id']);
 
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 

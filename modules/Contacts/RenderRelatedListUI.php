@@ -33,7 +33,7 @@ function getHiddenValues($id)
 
 function renderRelatedPotentials($query,$id)
 {
-	global $vtlog;
+	global $log;
 	global $mod_strings;
         global $app_strings;
         require_once('include/RelatedListView.php');
@@ -52,13 +52,13 @@ function renderRelatedPotentials($query,$id)
         $returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
         $list = GetRelatedList('Contacts','Potentials',$focus,$query,$button,$returnset);
-	$vtlog->logthis("Potential Related List for Contact Displayed",'info');
+	 $log->info("Potential Related List for Contact Displayed");
 	echo '</form>';
 }
 
 function renderRelatedTasks($query,$id)
 {
-	global $vtlog;
+	global $log;
 	global $adb;
 	global $mod_strings;
 	global $app_strings;
@@ -80,13 +80,13 @@ function renderRelatedTasks($query,$id)
 	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
 	$list = GetRelatedList('Contacts','Activities',$focus,$query,$button,$returnset);
-	$vtlog->logthis("Activity Related List for Contact Displayed",'info');
+	$log->info("Activity Related List for Contact Displayed");
 	echo '</form>';
 }
 
 function renderRelatedEmails($query,$id)
 {
-	global $vtlog;
+	global $log;
 	global $mod_strings;
 	global $app_strings;
 	
@@ -110,7 +110,7 @@ function renderRelatedEmails($query,$id)
 	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
 	$list = GetRelatedList('Contacts','Emails',$focus,$query,$button,$returnset);
-	$vtlog->logthis("Email Related List for Contact Displayed",'info');
+	 $log->info("Email Related List for Contact Displayed");
 	echo '</form>';
 }
 
@@ -122,7 +122,7 @@ function renderRelatedHistory($query,$id)
 
 function renderRelatedTickets($query,$id)
 {
-	global $vtlog;
+	global $log;
         global $mod_strings;
         global $app_strings;
 
@@ -136,18 +136,18 @@ function renderRelatedTickets($query,$id)
         $returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
         $list = GetRelatedList('Contacts','HelpDesk',$focus,$query,$button,$returnset);
-	$vtlog->logthis("Ticket Related List for Contact Displayed",'info');
-        echo '</form>';
+         $log->info("Ticket Related List for Contact Displayed");
+	echo '</form>';
 }
 
 function renderRelatedAttachments($query,$id)
 {
-	global $vtlog;
+	global $log;
 	$hidden = getHiddenValues($id);
         echo $hidden;
 
 	getAttachmentsAndNotes('Contacts',$query,$id);
-	$vtlog->logthis("Notes&Attachmenmts for Contact Displayed",'info');
+	$log->info("Notes&Attachmenmts for Contact Displayed");
 	echo '</form>';
 }
 function renderRelatedProducts($query,$id)

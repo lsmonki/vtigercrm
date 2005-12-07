@@ -35,7 +35,7 @@ require_once('include/FormValidationUtil.php');
 global $app_strings;
 global $mod_strings;
 global $current_user;
-global $vtlog;
+global $log;
 
 $focus = new Invoice();
 
@@ -146,7 +146,7 @@ if(isset($_REQUEST['opportunity_id']) && $_REQUEST['opportunity_id'] !='')
 }
 if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') {
         $focus->column_fields['product_id'] = $_REQUEST['product_id'];
-	$vtlog->logthis("Invoice EditView: Product Id from the request is ".$_REQUEST['product_id'],'debug');
+	  $log->debug("Invoice EditView: Product Id from the request is ".$_REQUEST['product_id']);
 	$num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
 	$associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 } 
