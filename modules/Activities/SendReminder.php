@@ -173,13 +173,13 @@ function MailSend($mail)
 {
         if(!$mail->Send())
         {
-$vtlog->logthis("error in sending mail ",'fatal');  	
-           $msg = $mail->ErrorInfo;
+        $log->fatal("error in sending mail ");   
+	$msg = $mail->ErrorInfo;
            //header("Location: index.php?action=$returnaction&module=".$_REQUEST['return_module']."&parent_id=$parent_id&record=".$_REQUEST['return_id']."&filename=$filename&message=$msg");
         }
 	else 
 	{
-			$vtlog->logthis("mail sent successfully! ",'info');  	
+			 $log->info("mail sent successfully! ");
 			return true;
 	}
 }
@@ -211,7 +211,7 @@ function getParentMailId($returnmodule,$parentid)
                         $mailid = $adb->query_result($adb->query($query),0,'yahooid');
         }
 
-$vtlog->logthis("mailid is  ".$mailid,'debug');  	
+$log->debug("mailid is  ".$mailid);
 	return $mailid;
 }
 

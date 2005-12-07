@@ -28,7 +28,6 @@ require_once("config.php");
 require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
-global $vtlog;
 
 $focus = new Activity();
 
@@ -47,7 +46,7 @@ elseif($activity_mode == 'Events')
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];
-$vtlog->logthis("id is ".$id,'debug');  	
+$local_log->debug("id is ".$id);
 }
 if(isset($_REQUEST['mode']))
 {
@@ -117,7 +116,7 @@ if($activity_mode != '') $activemode = "&activity_mode=".$activity_mode;
 if($_REQUEST['sendnotification'] == 'on' && $_REQUEST['assigntype'] == 'U')
 {
 	global $current_user;
-        $vtlog->logthis("send notification is on",'info');
+	$local_log->info("send notification is on");
         require_once("modules/Emails/mail.php");
         $to_email = getUserEmailId('id',$_REQUEST['assigned_user_id']);
 
