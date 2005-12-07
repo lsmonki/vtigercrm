@@ -55,7 +55,6 @@ class Email extends CRMEntity {
 	// This is the list of fields that are in the lists.
         var $list_fields = Array(
        'Subject'=>Array('activity'=>'subject'),
-      // 'Contact Name'=>Array('contactdetails'=>'lastname'),
        'Related to'=>Array('seactivityrel'=>'activityid'),
        'Date Sent'=>Array('activity'=>'date_start'),
        'Assigned To'=>Array('crmentity','smownerid')
@@ -63,7 +62,6 @@ class Email extends CRMEntity {
 
        var $list_fields_name = Array(
        'Subject'=>'subject',
-     //  'Contact Name'=>'lastname',
        'Related to'=>'activityid',
        'Date Sent'=>'date_start',
        'Assigned To'=>'assigned_user_id');
@@ -90,55 +88,35 @@ class Email extends CRMEntity {
 
 	var $new_schema = true;
 
-	function create_tables () {
-
-	}
-
-	function drop_tables () {
-	}
-
-
 	/** Returns a list of the associated contacts
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-  function get_contacts($id)
-  {
-    // First, get the list of IDs.
-	$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
-    renderRelatedContacts($query,$id);
-  }
+	function get_contacts($id)
+	{
+		// First, get the list of IDs.
+		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
+		renderRelatedContacts($query,$id);
+	}
 	
 	/** Returns a list of the associated users
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
 	 * All Rights Reserved..
 	 * Contributor(s): ______________________________________..
 	*/
-  function get_users($id)
-  {
-    // First, get the list of IDs.
-	$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
-    //include_once('modules/Emails/RenderRelatedListUI.php');
-    renderRelatedUsers($query);
-  }
-  
-  function get_leads($id)
-  {
-    // First, get the list of IDs.
-	$query = 'SELECT leaddetails.leadid, leaddetails.firstname,leaddetails.lastname, leaddetails.leadstatus, crmentity.modifiedtime from leaddetails inner join seactivityrel on seactivityrel.crmid=leaddetails.leadid inner join crmentity on crmentity.crmid = leaddetails.leadid where seactivityrel.activityid='.$id;
-    //include_once('modules/Emails/RenderRelatedListUI.php');
-    renderRelatedLeads($query);
-  }
+	function get_users($id)
+	{
+		// First, get the list of IDs.
+		$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
+		renderRelatedUsers($query);
+	}
 
-  function get_potentials($id)
-  {
-          // First, get the list of IDs.
-	$query = 'SELECT potential.potentialid, potential.potentialname, potential.potentialtype, potential.amount, potential.closingdate, crmentity.modifiedtime from potential inner join seactivityrel on seactivityrel.crmid=potential.potentialid inner join crmentity on crmentity.crmid = potential.potentialid where seactivityrel.activityid='.$id;
-          renderRelatedPotentials($query);
-  }
-  function get_attachments($id)
-  {
+	/**
+	  * Returns a list of the associated attachments and notes of the Email
+	  */
+	function get_attachments($id)
+	{
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
 		// Desc: Inserted crm2.createdtime, notes.notecontent description, users.user_name
 		// Inserted inner join users on crm2.smcreatorid= users.id
@@ -170,116 +148,12 @@ class Email extends CRMEntity {
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".$id;
 
-    renderRelatedAttachments($query,$id);
-  }
-
-
-
-
-
-
-
-
-
-	
-	
-	function save_relationship_changes($is_update)
-    {
-		if($this->account_id != "")
-    	{
-    		$this->set_emails_account_relationship($this->id, $this->account_id);    	
-    	}
-		if($this->opportunity_id != "")
-    	{
-    		$this->set_emails_opportunity_relationship($this->id, $this->opportunity_id);    	
-    	}
-		if($this->case_id != "")
-    	{
-    		$this->set_emails_case_relationship($this->id, $this->case_id);    	
-    	}
-		if($this->contact_id != "")
-    	{
-    		$this->set_emails_contact_invitee_relationship($this->id, $this->contact_id);
-			$this->set_emails_se_invitee_relationship($this->id, $this->contact_id);    				
-    	}
-		if($this->user_id != "")
-    	{
-    		$this->set_emails_user_invitee_relationship($this->id, $this->user_id);    	
-    	}
-    }
-	
-	function set_emails_account_relationship($email_id, $account_id)
-	{
-		$query = "insert into $this->rel_accounts_table (id,account_id,email_id) values ('".create_guid()."', '$account_id', '$email_id')";
-		$this->db->query($query,true,"Error setting email to account relationship: "."<BR>$query");
+		renderRelatedAttachments($query,$id);
 	}
 
-	function set_emails_opportunity_relationship($email_id, $opportunity_id)
-	{
-		$query = "insert into $this->rel_opportunities_table (id, opportunity_id, email_id) values ('".create_guid()."','$opportunity_id','$email_id')";
-		$this->db->query($query,true,"Error setting email to opportunity relationship: "."<BR>$query");
-	}
-
-	function set_emails_case_relationship($email_id, $case_id)
-	{
-		$query = "insert into $this->rel_cases_table (id,case_id,email_id) values ('".create_guid()."','$case_id','$email_id')";
-		$this->db->query($query,true,"Error setting email to case relationship: "."<BR>$query");
-	}
-
-        function set_emails_contact_invitee_relationship($email_id, $contact_id)
-        {
-        //      $query = "insert into $this->rel_contacts_table (id,contact_id,email_id) values('".create_guid()."','$contact_id','$email_id')";
-                $query = "insert into $this->rel_contacts_table (contactid,activityid) values('$contact_id','$email_id')";
-                $this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
-        }
-		  
-		  function set_emails_se_invitee_relationship($email_id, $contact_id)
-        {
-        //      $query = "insert into $this->rel_contacts_table (id,contact_id,email_id) values('".create_guid()."','$contact_id','$email_id')";
-                $query = "insert into $this->rel_serel_table (crmid,activityid) values('$contact_id','$email_id')";
-                $this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
-        }
-
-        function set_emails_user_invitee_relationship($email_id, $user_id)
-        {
-                //$query = "insert into $this->rel_users_table (id,user_id,email_id) values ('".create_guid()."', '$user_id', '$email_id')";
-                $query = "insert into $this->rel_users_table (smid,activityid) values ('$user_id', '$email_id')";
-                $this->db->query($query,true,"Error setting email to user relationship: "."<BR>$query");
-        }
-
-	function get_summary_text()
-	{
-		return "$this->name";
-	}
-
-	function create_list_query(&$order_by, &$where)
-	{
-		$contact_required = ereg("contacts", $where);
-
-		if($contact_required)
-		{
-			$query = "SELECT emails.emailid,  emails.date_start, emails.time_start, contacts.first_name, contacts.last_name FROM contacts, emails, emails_contacts ";
-			$where_auto = "emails_contacts.contact_id = contacts.id AND emails_contacts.email_id = emails.emailid AND emails.deleted=0 AND contacts.deleted=0";
-		}
-		else 
-		{
-                  $query="SELECT emails.emailid, emails.name, crmentity.smcreatorid FROM emails inner join crmentity on crmentity.crmid=emails.emailid ";
-                  $where_auto = " emails.deleted=0 ";
-                  
-		}
-		
-		if($where != "")
-			$query .= "where $where AND ".$where_auto;
-		else 
-			$query .= "where ".$where_auto;		
-
-		if($order_by != "")
-			$query .= " ORDER BY $order_by";
-		else 
-			$query .= " ORDER BY emails.name";			
-		return $query;
-	}
-
+        /**
+          * Returns a list of the Emails to be export
+          */
 	function create_export_query(&$order_by, &$where)
         {
                 $contact_required = ereg("contacts", $where);
@@ -296,174 +170,5 @@ class Email extends CRMEntity {
 
                 return $query;
         }
-
-
-
-	function fill_in_additional_list_fields()
-	{
-		$this->fill_in_additional_detail_fields();	
-	}
-	
-	function fill_in_additional_detail_fields()
-	{
-		// Fill in the assigned_user_name
-		$this->assigned_user_name = get_assigned_user_name($this->assigned_user_id);
-
-		$query  = "SELECT c.firstname, c.lastname, c.phone, c.email, c.contactid FROM contactdetails c, seactivityrel s ";
-		$query .= "WHERE s.crmid=c.contactid AND s.activityid='$this->id' AND c.deleted=0";
-		$result =$this->db->query($query,true," Error filling in additional detail fields: ");
-
-		// Get the id and the name.
-		$row = $this->db->fetchByAssoc($result);
-		
-		$this->log->info($row);
-		
-		if($row != null)
-		{
-			$this->contact_name = return_name($row, 'first_name', 'last_name');				
-			$this->contact_phone = $row['phone_work'];
-			$this->contact_id = $row['id'];
-			$this->contact_email = $row['email1'];
-			$this->log->debug("Call($this->id): contact_name = $this->contact_name");
-			$this->log->debug("Call($this->id): contact_phone = $this->contact_phone");
-			$this->log->debug("Call($this->id): contact_id = $this->contact_id");
-			$this->log->debug("Call($this->id): contact_email1 = $this->contact_email");
-		}
-		else {
-			$this->contact_name = '';
-			$this->contact_phone = '';
-			$this->contact_id = '';
-			$this->contact_email = '';
-			$this->log->debug("Call($this->id): contact_name = $this->contact_name");
-			$this->log->debug("Call($this->id): contact_phone = $this->contact_phone");
-			$this->log->debug("Call($this->id): contact_id = $this->contact_id");
-			$this->log->debug("Call($this->id): contact_email1 = $this->contact_email");
-		}
-
-		if ($this->parent_type == "Opportunities") {
-			require_once("modules/Opportunities/Opportunity.php");
-			$parent = new Opportunity();
-			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
-			$result =$this->db->query($query,true," Error filling in additional detail fields: ");
-	
-			// Get the id and the name.
-			$row = $this->db->fetchByAssoc($result);
-			
-			if($row != null)
-			{
-				$this->parent_name = stripslashes($row['name']);
-			}
-		}
-		elseif ($this->parent_type == "Cases") {
-			require_once("modules/Cases/Case.php");
-			$parent = new aCase();
-			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
-			$result =$this->db->query($query,true," Error filling in additional detail fields: ");
-	
-			// Get the id and the name.
-			$row = $this->db->fetchByAssoc($result);
-			
-			if($row != null)
-			{
-				$this->parent_name = stripslashes($row['name']);
-			}
-		}
-		elseif ($this->parent_type == "Accounts") {
-			require_once("modules/Accounts/Account.php");
-			$parent = new Account();
-			$query = "SELECT name from $parent->table_name where id = '$this->parent_id'";
-			$result =$this->db->query($query,true," Error filling in additional detail fields: ");
-	
-			// Get the id and the name.
-			$row = $this->db->fetchByAssoc($result);
-			
-			if($row != null)
-			{
-				$this->parent_name = stripslashes($row['name']);
-			}
-		}	
-		else {
-			$this->parent_name = '';
-		}
-	}
-	
-	function mark_relationships_deleted($id)
-	{
-		$query = "UPDATE $this->rel_users_table set deleted=1 where email_id='$id'";
-		$this->db->query($query,true,"Error marking record deleted: ");
-
-		$query = "UPDATE $this->rel_contacts_table set deleted=1 where email_id='$id'";
-		$this->db->query($query,true,"Error marking record deleted: ");
-		/*
-		$query = "UPDATE $this->rel_cases_table set deleted=1 where email_id='$id'";
-		$this->db->query($query,true,"Error marking record deleted: ");
-		$query = "UPDATE $this->rel_accounts_table set deleted=1 where email_id='$id'";
-		$this->db->query($query,true,"Error marking record deleted: ");
-		$query = "UPDATE $this->rel_opportunities_table set deleted=1 where email_id='$id'";
-		$this->db->query($query,true,"Error marking record deleted: ");
-		*/
-		
-	}
-	
-	function mark_email_contact_relationship_deleted($contact_id, $email_id)
-	{
-		$query = "UPDATE $this->rel_contacts_table set deleted=1 where contact_id='$contact_id' and email_id='$email_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing email to contact relationship: ");
-	}
-
-	function mark_email_user_relationship_deleted($user_id, $email_id)
-	{
-		$query = "UPDATE $this->rel_users_table set deleted=1 where user_id='$user_id' and email_id='$email_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing email to user relationship: ");
-	}
-	function mark_email_case_relationship_deleted($id, $email_id)
-	{
-	/*
-		$query = "UPDATE $this->rel_cases_table set deleted=1 where case_id='$id' and email_id='$email_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing email to user relationship: ");
-	*/
-	}
-	function mark_email_account_relationship_deleted($id, $email_id)
-	{
-	/*
-		$query = "UPDATE $this->rel_accounts_table set deleted=1 where account_id='$id' and email_id='$email_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing email to user relationship: ");
-	*/
-	}
-	function mark_email_opportunity_relationship_deleted($id, $email_id)
-	{
-	/*
-		$query = "UPDATE $this->rel_opportunities_table set deleted=1 where opportunity_id='$id' and email_id='$email_id' and deleted=0";
-		$this->db->query($query,true,"Error clearing email to user relationship: ");
-	*/
-	}
-	function get_list_view_data(){
-		$email_fields = $this->get_list_view_array();
-		global $app_list_strings;
-		if (isset($this->parent_type) && $this->parent_type != "") 
-			$email_fields['PARENT_MODULE'] = $this->parent_type;
-		return $email_fields;
-	}
-	
-	/** Returns a list of the associated opportunities
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	*/
-	
-	/** Returns a list of the associated accounts
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	*/
-
-
-  function get_accounts($id)
-  {
-	$query = 'SELECT account.accountid, account.accountname, account.account_type, crmentity.modifiedtime from account inner join seactivityrel on seactivityrel.crmid=account.accountid inner join crmentity on crmentity.crmid=account.accountid and seactivityrel.activityid='.$id;
-    renderRelatedAccounts($query);
-  }
-	
-  
 }
 ?>

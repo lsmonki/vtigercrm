@@ -27,16 +27,15 @@ $focus = new Email();
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the email.");
 
-$sql='delete from seactivityrel where activityid="'.$_REQUEST['record'].'" and "'.$_REQUEST['record'].'"';
+$sql='delete from seactivityrel where activityid='.$_REQUEST['record'];
 $adb->query($sql);
 
-$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
-$adb->query($sql_recentviewed);
 if($_REQUEST['module'] == $_REQUEST['return_module'])
 	$focus->mark_deleted($_REQUEST['record']);
 
 //code added for returning back to the current view after delete from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&viewname=".$return_viewname);
 ?>

@@ -34,51 +34,65 @@ global $mod_strings;
 
 $focus = new Email();
 
-if(isset($_REQUEST['record'])) {
+if(isset($_REQUEST['record'])) 
+{
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
-		$vtlog->logthis("Entity info successfully retrieved for DetailView.",'info');
+	$vtlog->logthis("Entity info successfully retrieved for DetailView.",'info');
+
 	$focus->id = $_REQUEST['record'];
 	if($focus->column_fields['name'] != '')
 	        $focus->name = $focus->column_fields['name'];		
 	else
 		$focus->name = $focus->column_fields['subject'];
 }
-if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
+{
 	$focus->id = "";
 } 
 
 //needed when creating a new email with default values passed in 
-if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) {
+if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) 
+{
 	$focus->contact_name = $_REQUEST['contact_name'];
 }
-if (isset($_REQUEST['contact_id']) && is_null($focus->contact_id)) {
+if (isset($_REQUEST['contact_id']) && is_null($focus->contact_id)) 
+{
 	$focus->contact_id = $_REQUEST['contact_id'];
 }
-if (isset($_REQUEST['opportunity_name']) && is_null($focus->parent_name)) {
+if (isset($_REQUEST['opportunity_name']) && is_null($focus->parent_name)) 
+{
 	$focus->parent_name = $_REQUEST['opportunity_name'];
 }
-if (isset($_REQUEST['opportunity_id']) && is_null($focus->parent_id)) {
+if (isset($_REQUEST['opportunity_id']) && is_null($focus->parent_id)) 
+{
 	$focus->parent_id = $_REQUEST['opportunity_id'];
 }
-if (isset($_REQUEST['account_name']) && is_null($focus->parent_name)) {
+if (isset($_REQUEST['account_name']) && is_null($focus->parent_name)) 
+{
 	$focus->parent_name = $_REQUEST['account_name'];
 }
-if (isset($_REQUEST['account_id']) && is_null($focus->parent_id)) {
+if (isset($_REQUEST['account_id']) && is_null($focus->parent_id)) 
+{
 	$focus->parent_id = $_REQUEST['account_id'];
 }
-if (isset($_REQUEST['parent_name'])) {
+if (isset($_REQUEST['parent_name'])) 
+{
         $focus->parent_name = $_REQUEST['parent_name'];
 }
-if (isset($_REQUEST['parent_id'])) {
+if (isset($_REQUEST['parent_id'])) 
+{
         $focus->parent_id = $_REQUEST['parent_id'];
 }
-if (isset($_REQUEST['parent_type'])) {
+if (isset($_REQUEST['parent_type'])) 
+{
         $focus->parent_type = $_REQUEST['parent_type'];
 }
-if (isset($_REQUEST['filename']) && is_null($focus->filename)) {
+if (isset($_REQUEST['filename']) && is_null($focus->filename)) 
+{
         $focus->filename = $_REQUEST['filename'];
 }
-elseif (is_null($focus->parent_type)) {
+elseif (is_null($focus->parent_type)) 
+{
         $focus->parent_type = $app_list_strings['record_type_default_key'];
 }
 
@@ -121,7 +135,6 @@ echo '<br>';
 			{
 
 				echo '<td class="tabOn" nowrap><a href="index.php?module=Emails&action=index" class="tabLink">'.$mod_strings[$label].'</a></td>';
-
 				$listView = $filename;
 				$classname = "tabOff";
 			}
@@ -185,20 +198,11 @@ $xtpl->assign("BLOCK1_HEADER", $block_1_header);
 
 $xtpl->assign("ID", $focus->id);
 
-/*
-$sql = "select * from email_attachments where parent_id ='".$_REQUEST['record'] ."'";
-$value = $adb->query($sql);
-$valueArray = $adb->fetch_array($value);
-$filename= $valueArray["filename"];
-$xtpl->assign("FILENAME",$filename);
-*/
  
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Emails",1,$_REQUEST['record']) == 'yes')
 {
 	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
-
-
 	$xtpl->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
 }
 
@@ -223,22 +227,4 @@ $permissionData = $_SESSION['action_permission_set'];
 //Constructing the Related Lists from here
 getRelatedLists("Emails",$focus);
 
-/*
-if($tab_per_Data[4] == 0)
-{
-        if($permissionData[4][3] == 0)
-        {
-		$focus->get_contacts($focus->id);
-	}
-}
-
-$focus->get_users($focus->id);
-if($tab_per_Data[8] == 0)
-{
-        if($permissionData[8][3] == 0)
-        {
-		$focus->get_attachments($focus->id);
-	}
-}
-*/
 ?>

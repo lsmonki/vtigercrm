@@ -67,28 +67,32 @@ for ($i=0;$i<(count($myids)-1);$i++)
 	$nemail=count($realid);
 	$mycrmid=$realid[0];
 	$pmodule=getSalesEntityType($mycrmid);
-	for ($j=1;$j<$nemail;$j++){
+	for ($j=1;$j<$nemail;$j++)
+	{
 		$temp=$realid[$j];
 		$myquery='Select columnname from field where fieldid='.$temp;
 		$fresult=$adb->query($myquery);			
-		if ($pmodule=='Contacts'){
+		if ($pmodule=='Contacts')
+		{
 			require_once('modules/Contacts/Contact.php');
 			$myfocus = new Contact();
 			$myfocus->retrieve_entity_info($mycrmid,"Contacts");
 		}
-		elseif ($pmodule=='Accounts'){
+		elseif ($pmodule=='Accounts')
+		{
 			require_once('modules/Accounts/Account.php');
 			$myfocus = new Account();
 			$myfocus->retrieve_entity_info($mycrmid,"Accounts");
 		} 
-		elseif ($pmodule=='Leads'){
+		elseif ($pmodule=='Leads')
+		{
 			require_once('modules/Leads/Lead.php');
 			$myfocus = new Lead();
 			$myfocus->retrieve_entity_info($mycrmid,"Leads");
 		}
 		$fldname=$adb->query_result($fresult,0,"columnname");
 		$emailadd=br2nl($myfocus->column_fields[$fldname]);
-		//send_mail($emailadd,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password,$attachpath,$ccmail);
+
 		if($emailadd != '')
 		{
 			$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$focus->column_fields['description']);
@@ -124,8 +128,6 @@ $mail_error_str = getMailErrorString($mail_status_str);
 $adb->println("Mail Sending Process has been finished.\n\n");
 
 header("Location:index.php?module=$returnmodule&action=$returnaction&record=$returnid&$returnset&$mail_error_str");
-
-
 
 
 ?>

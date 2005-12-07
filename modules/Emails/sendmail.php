@@ -31,7 +31,7 @@ sendmail($_REQUEST['assigned_user_id'],$current_user->user_name,$_REQUEST['name'
 
 function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password)
 {
-global $adb,$root_directory,$mod_strings, $vtlog;
+	global $adb,$root_directory,$mod_strings, $vtlog;
 
 	$sql = $_REQUEST['query'];
 	$result= $adb->query($sql);
@@ -75,7 +75,6 @@ global $adb,$root_directory,$mod_strings, $vtlog;
 		$mail->Password = $mail_server_password;
 		$mail->From = $adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"email1");
 		$mail->FromName = $initialfrom;
-//		$mail->AddAddress($to);
 		$mail->AddReplyTo($from);
 		$mail->WordWrap = 50;
 		$vtlog->logthis("From name & id are set in mail object => '".$mail->FromName."<".$mail->From.">' ",'info');
@@ -90,15 +89,11 @@ for($i=0;$i< $adb->num_rows($result1);$i++)
 
 	if(!@$handle = fopen($root_directory."/test/upload/".$filename,"wb")){}
 
-	//chmod("/home/mickie/test/".$fileContent,0755);
 	if(!@fwrite($handle,base64_decode($fileContent),$filesize)){}
 	if(!@fclose($handle)){}
 
-	//select 
 	$mail->AddAttachment($root_directory."/test/upload/".$filename);//temparray['filename']) // add attachments
 	$vtlog->logthis("File '".$filename."' is attached with the mail.",'info');
-//	$mail->IsHTML(true);
-//	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
 }
 
 for($i=0;$i< $adb->num_rows($result2);$i++)
@@ -109,11 +104,9 @@ for($i=0;$i< $adb->num_rows($result2);$i++)
 
         if(!@$handle = fopen($root_directory."/test/upload/".$filename,"wb")){}
 
-        //chmod("/home/mickie/test/".$fileContent,0755);
         if(!@fwrite($handle,base64_decode($fileContent),$filesize)){}
         if(!@fclose($handle)){}
 
-        //select
         $mail->AddAttachment($root_directory."/test/upload/".$filename);//temparray['filename']) // add attachments
 	$vtlog->logthis("File '".$filename."' is attached with the mail.",'info');
 }

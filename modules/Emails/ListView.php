@@ -54,13 +54,10 @@ echo '<br>';
 
 		if($tab_per_Data[$cur_tabid] == 0)
 		{
-
 			list($lbl,$sname,$title)=split("_",$label);
 			if(stristr($label,"EMAILS"))
 			{
-
 				echo '<td class="tabOn" nowrap><a href="index.php?module=Emails&action=ListView" class="tabLink">'.$mod_strings[$label].'</a></td>';
-
 				$listView = $filename;
 				$classname = "tabOff";
 			}
@@ -105,12 +102,10 @@ global $theme;
 $url_string = ''; // assigning http url string
 $sorder = 'DESC';  // Default sort order changed by stema
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
+	$sorder = $_REQUEST['sorder'];
 
 // focus_list is the means of passing data to a ListView.
 global $focus_list;
-
-if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Emails");
@@ -120,33 +115,35 @@ if(isset($_REQUEST['viewname']) == false)
 	if($oCustomView->setdefaultviewid != "")
 	{
 		$viewid = $oCustomView->setdefaultviewid;
-	}else
+	}
+	else
 	{
 		$viewid = "0";
 	}
-}else
+}
+else
 {
 	$viewid =  $_REQUEST['viewname'];
 	$oCustomView->setdefaultviewid = $viewid;
 }
 //<<<<<customview>>>>>
 
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
+if(!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') 
+{
 	// Stick the form header out there.
 	$search_form=new XTemplate ('modules/Emails/SearchForm.html');
 	$search_form->assign("MOD", $mod_strings);
 	$search_form->assign("APP", $app_strings);
 
 	$search_form->assign("VIEWID",$viewid);
-
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-
 	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Emails','index','subject','true','basic',"","","","",$viewid));
 
-	if(isset($_REQUEST['query'])) {
+	if(isset($_REQUEST['query'])) 
+	{
 		if(isset($_REQUEST['subject'])) $search_form->assign("NAME", $_REQUEST['subject']);
 		if(isset($_REQUEST['contactname'])) $search_form->assign("CONTACT_NAME", $_REQUEST['contactname']);
-		if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
+		if(isset($_REQUEST['current_user_only'])) $search_form->assign("CURRENT_USER_ONLY", "checked");
 	}
 	$search_form->parse("main");
 
@@ -172,17 +169,18 @@ $other_text .= 	'</td>';
 
 if($viewid == 0)
 {
-$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=Emails&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
-}else
+	$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
+		<span class="sep">|</span>
+		<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
+		<a href="index.php?module=Emails&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+}
+else
 {
-$cvHTML = '<a href="index.php?module=Emails&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Emails&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=Emails&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+	$cvHTML = '<a href="index.php?module=Emails&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
+		<span class="sep">|</span>
+		<a href="index.php?module=CustomView&action=Delete&dmodule=Emails&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
+		<span class="sep">|</span>
+		<a href="index.php?module=Emails&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 
 $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
@@ -196,8 +194,6 @@ $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
         </table>';
 
 
-
-
 $where = "";
 
 $focus = new Email();
@@ -208,12 +204,12 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	$url_string .="&query=true";
 	if (isset($_REQUEST['subject'])) $name = $_REQUEST['subject'];
 	if (isset($_REQUEST['contactname'])) $contactname = $_REQUEST['contactname'];
-	if (isset($_REQUEST['date_start'])) $date_start = $_REQUEST['date_start'];
-	if (isset($_REQUEST['location'])) $location = $_REQUEST['location'];
+	if(isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 
 	$where_clauses = Array();
 
-	if(isset($current_user_only) && $current_user_only != ""){
+	if(isset($current_user_only) && $current_user_only != "")
+	{
 		array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
 		$url_string .= "&current_user_only=".$current_user_only;
 	}
@@ -227,41 +223,20 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	{
 		array_push($where_clauses, "(contactdetails.firstname like ".PearDatabase::quote($contactname.'%')." OR contactdetails.lastname like ".PearDatabase::quote($contactname.'%').")");
 		$url_string .= "&contactname=".$contactname;
-
-	}
-	if(isset($date_start) && $date_start != '')
-	{
-		array_push($where_clauses, "events.eventdatestart like ".PearDatabase::quote($date_start.'%')."");
-	}
-	if(isset($location) && $location != '')
-	{
-		$each_location = explode("--", $location);
-
-		$the_where_clause = "(";
-		$val = reset($each_location);
-		do
-		{
-			$the_where_clause .= "location = ".PearDatabase::quote($val)."";
-			$val = next($each_location);
-			if ($val) $the_where_clause .= " OR ";
-		} while($val);
-		$the_where_clause .= ")";
-		array_push($where_clauses, $the_where_clause);
 	}
 
 	$where = "";
-	if (isset($where_clauses)) {
+	if (isset($where_clauses)) 
+	{
 		foreach($where_clauses as $clause)
 		{
 			if($where != "")
-			$where .= " and ";
+				$where .= " and ";
 			$where .= $clause;
 		}
 	}
 	$log->info("Here is the where clause for the list view: $where");
-
 }
-
 
 global $email_title;
 $display_title = $mod_strings['LBL_LIST_FORM_TITLE'];
@@ -273,7 +248,8 @@ if($viewid != "0")
 {
 	$listquery = getListQuery("Emails");
 	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Emails");
-}else
+}
+else
 {
 	$list_query = getListQuery("Emails");
 }
@@ -284,8 +260,7 @@ if(isset($where) && $where != '')
 {
 	$list_query .= " AND " .$where;
 }
-//$list_result = $adb->query($list_query);
-$sorder = 'DESC';  // Default sort order    	//stema
+
 $order_by = 'date_start';
 if(isset($order_by) && $order_by != '')
 {
@@ -329,39 +304,6 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
-/*
-// Setting the record count string
-if ($navigation_array['start'] == 1)
-{
-	if($noofrows != 0)
-	$start_rec = $navigation_array['start'];
-	else
-	$start_rec = 0;
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
-	}
-	else
-	{
-		$end_rec = $noofrows;
-	}
-
-}
-else
-{
-	if($navigation_array['next'] > $list_max_entries_per_page)
-	{
-		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
-		$end_rec = $navigation_array['next'] - 1;
-	}
-	else
-	{
-		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
-		$end_rec = $noofrows;
-	}
-}
-*/
-
 // Setting the record count string
 //modified by rdhital
 $start_rec = $navigation_array['start'];
@@ -372,7 +314,7 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 //Retreive the List View Table Header
 if($viewid !='')
-$url_string .="&viewname=".$viewid;
+	$url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Emails",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
@@ -382,9 +324,9 @@ $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 
 if($order_by !='')
-$url_string .="&order_by=".$order_by;
+	$url_string .="&order_by=".$order_by;
 if($sorder !='')
-$url_string .="&sorder=".$sorder;
+	$url_string .="&sorder=".$sorder;
 
 $navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Emails","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);

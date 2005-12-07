@@ -12,7 +12,6 @@
 require_once('include/database/PearDatabase.php');
 global $adb;
 
-//if($_REQUEST['module']=='Users')
 if(isset($_REQUEST['user_id']) && $_REQUEST['user_id'] != '')
 {
 	$record = $_REQUEST['record'];
@@ -25,11 +24,6 @@ else
 }
 
 $adb->query($sql);
- header("Location: index.php?action=DetailView&module=Emails&record=".$record);
-
-
-
-
-
+header("Location: index.php?action=DetailView&module=Emails&record=".$record);
 
 ?>

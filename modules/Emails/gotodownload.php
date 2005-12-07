@@ -1,14 +1,24 @@
 <?
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/
+
 $msgno = $_REQUEST['msgno'];
 $download = $_REQUEST['download'];
 $file = $_REQUEST['file'];
 
-   $ServerName = "{localhost/imap:143/notls}INBOX"; // For a IMAP connection    (PORT 143)
-   $UserName = "user";
-   $PassWord = "password";
-   $mbox = imap_open($ServerName, $UserName,$PassWord) or die("Could not open Mailbox - try again later!");
+$ServerName = "{localhost/imap:143/notls}INBOX"; // For a IMAP connection    (PORT 143)
+$UserName = "user";
+$PassWord = "password";
+$mbox = imap_open($ServerName, $UserName,$PassWord) or die("Could not open Mailbox - try again later!");
 
-if ($download == "1") {
+if ($download == "1") 
+{
 	echo "attribute=";
 	print_r($att);
 	$strFileName = $att[$file]->parameters[0]->value;
@@ -16,7 +26,8 @@ if ($download == "1") {
 	$fileContent = imap_fetchbody($mbox,$msgno,$file+2);
 }
 
-function downloadFile($strFileType,$strFileName,$fileContent) {
+function downloadFile($strFileType,$strFileName,$fileContent) 
+{
 	$ContentType = "application/octet-stream";
 
 	if ($strFileType == ".asf") 
@@ -62,5 +73,5 @@ function downloadFile($strFileType,$strFileName,$fileContent) {
 	header ("Content-Disposition: attachment; filename=$strFileName");    
 	echo imap_base64($fileContent);
 	#echo base64_decode($fileContent);
-}	
+}
 ?>
