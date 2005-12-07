@@ -321,6 +321,8 @@ $mod_strings = Array(
 
 //given for calendar color for an user user
 'LBL_COLOR'=>'Color in Calendar',
+//added for activity view in home page
+'LBL_ACTIVITY_VIEW'=>'Default Activity View',
 //Added to change Home page order
 'LBL_HOMEPAGE_ORDER_UPDATE'=>'Update Home Page Block Order',
 'LBL_HOMEPAGE_ID'=>'Block Order',

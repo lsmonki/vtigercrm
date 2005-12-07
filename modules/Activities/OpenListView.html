@@ -17,9 +17,20 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: open_activity -->
+<script>
+
+function showActivityView(selectactivity_view)
+{
+	//script to reload the page with the view type when the combo values are changed
+	View_name = selectactivity_view.options[selectactivity_view.options.selectedIndex].value;
+	document.frmOpenLstView.action = "index.php?module=Home&action=index&activity_view="+View_name;
+	document.frmOpenLstView.submit();
+}	
+</script>
+<form name="frmOpenLstView" method="post">
 <div id="{DIVID}" style="display:block;">
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
-<tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('home_myact');"><td nowrap><img src="{IMAGE_PATH}myUpcoPendAct.gif" style="padding:5px"></td><td width=100%><b>{MOD.LBL_UPCOMING}</b> ({MOD.LBL_TODAY} {ENDDATE})</b></td><td nowrap><img src="themes/images/toggle2.gif" id="img_home_myact" border=0></td></tr>
+<tr><td nowrap style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('home_myact');"><img src="{IMAGE_PATH}myUpcoPendAct.gif" style="padding:5px"></td><td width=100% style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('home_myact');"><b>{MOD.LBL_UPCOMING}</b> ({MOD.LBL_TODAY} {ENDDATE})</b></td><td nowrap >{ACTIVITY_VIEW}</td><td nowrap style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('home_myact');"><img src="themes/images/toggle2.gif" id="img_home_myact" border=0></td></tr>
 <tr><td colspan=3 bgcolor="#000000" style="height:1px;"></td></tr>
 <tr><td colspan=3>
 <div id="home_myact" style="display:block;">
@@ -69,7 +80,7 @@
 
 	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
 	<td valign=center class={ROW_COLOR} style="{P_COLOR};padding:0px 3px 0px 3px;">{ACTIVITY.PARENT_NAME}</td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+   	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
 	<td nowrap valign=center class={ROW_COLOR} style="{P_FONT_COLOR};padding:0px 3px 0px 3px;">{ACTIVITY.TIME}</td>
 	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
 	<td nowrap valign=center class={ROW_COLOR} style="{P_FONT_COLOR};padding:0px 3px 0px 3px;">{ACTIVITY.RECURRINGTYPE}</td>
@@ -81,6 +92,7 @@
 	<tr><td COLSPAN="17" class="blackLine"><IMG SRC="{IMAGE_PATH}/blank.gif"></td></tr>
 </table></div>
 </div>
+</form>
 </td></tr>
 </table>
 <script language='Javascript'>

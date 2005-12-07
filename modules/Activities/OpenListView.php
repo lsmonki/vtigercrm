@@ -37,16 +37,71 @@ $current_module_strings = return_module_language($current_language, 'Activities'
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
+//code added to customize upcomming and pending activities
+if($_REQUEST['activity_view']=='')
+{	
+	$query = "select activity_view from users where id ='{$current_user->id}'";
+	$result=$adb->query($query);
+	$activity_view=$adb->query_result($result,0,'activity_view');
+}
+else
+	$activity_view=$_REQUEST['activity_view'];
 
 $today = date("Y-m-d", time());
-$later = date("Y-m-d", strtotime("$today + 7 days"));
 
-//$activity = new Activity();
-//change made as requested by community by shaw
- $list_query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held') and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Not Held' ) AND (((date_start >= '$today' AND date_start < '$later') OR (date_start < '$today'))  OR (recurringevents.recurringdate between '$today' and '$later') ) AND crmentity.smownerid !=0 AND salesmanactivityrel.smid ='{$current_user->id}'";
+if($activity_view == 'Today')
+{	
+	$later = date("Y-m-d",strtotime("$today + 1 day"));
+	$selected1 = 'selected';
+}	
+else if($activity_view == 'This Week')
+{
+	$later = date("Y-m-d", strtotime("$today + 7 days"));
+	$selected2 = 'selected';
+}
+else if($activity_view == 'This Month')
+{	
+	$later = date("Y-m-d", strtotime("$today + 1 month"));
+	$selected3 = 'selected';
+}	
+else if($activity_view == 'This Year')	
+{
+	$later = date("Y-m-d", strtotime("$today + 1 year"));
+	$selected4 = 'selected';
+}
+else if($activity_view == 'OverDue')	
+{
+	$later = date("Y-m-d", strtotime("$today +1 day"));
+	$selected5 = 'selected';
+}
 
-//$list_query = getListQuery("Activities",$where);
-//echo $list_query."<h3>END</h3>";
+//constructing the combo values for activities
+$ACTIVITY_VIEW_SELECT_OPTION = '<select name="activity_view" onchange="showActivityView(this)">';
+$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="Today" '.$selected1.'>';
+$ACTIVITY_VIEW_SELECT_OPTION .= 'Today';
+$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Week" '.$selected2.'>';
+$ACTIVITY_VIEW_SELECT_OPTION .= 'This Week';
+$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Month" '.$selected3.'>';
+$ACTIVITY_VIEW_SELECT_OPTION .= 'This Month';
+$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Year" '.$selected4.'>';
+$ACTIVITY_VIEW_SELECT_OPTION .= 'This Year';
+$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="OverDue" '.$selected5.'>';
+$ACTIVITY_VIEW_SELECT_OPTION .= 'OverDue';
+$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+$ACTIVITY_VIEW_SELECT_OPTION .= '</select>';
+
+if($activity_view != 'OverDue')
+{
+ 	$list_query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held') and (activity.eventstatus is NULL ||  activity.eventstatus != 'Not Held' ) AND (((date_start >= '$today' AND date_start < '$later') OR (date_start < '$today'))  OR (recurringevents.recurringdate between '$today' and '$later') ) AND crmentity.smownerid !=0 AND salesmanactivityrel.smid ='{$current_user->id}'";
+}	
+else
+{
+ 	$list_query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL || activity.status != 'Completed' ) and (  activity.eventstatus is NULL ||  activity.eventstatus != 'Held') and (activity.eventstatus is NULL ||  activity.eventstatus != 'Not Held' ) AND (due_date < '$today') OR (recurringevents.recurringdate < '$today') AND crmentity.smownerid !=0 AND salesmanactivityrel.smid ='{$current_user->id}'";
+}
 $list_result = $adb->limitQuery($list_query,0,5);
 $open_activity_list = array();
 $noofrows = $adb->num_rows($list_result);
@@ -55,41 +110,40 @@ for($i=0;$i<$noofrows;$i++)
 {
   $parent_name=getRelatedTo("Activities",$list_result,$i);
   $open_activity_list[] = Array('name' => $adb->query_result($list_result,$i,'subject'),
-                                     'id' => $adb->query_result($list_result,$i,'activityid'),
-                                     'type' => $adb->query_result($list_result,$i,'activitytype'),
-                                     'module' => $adb->query_result($list_result,$i,'setype'),
-                                     'status' => $adb->query_result($list_result,$i,'status'),
-                                     'firstname' => $adb->query_result($list_result,$i,'firstname'),
-                                     'lastname' => $adb->query_result($list_result,$i,'lastname'),
- 				     'accountname' => $adb->query_result($list_result,$i,'accountname'),
-				     'accountid' => $adb->query_result($list_result, $i, 'accountid'),
-                                     'contactid' => $adb->query_result($list_result,$i,'contactid'),
-                                     'date_start' => getDisplayDate($adb->query_result($list_result,$i,'date_start')),
-				     'due_date' => getDisplayDate($adb->query_result($list_result,$i,'due_date')),
-				     'recurringtype' => getDisplayDate($adb->query_result($list_result,$i,'recurringtype')),
-				     'recurringdate' => getDisplayDate($adb->query_result($list_result,$i,'recurringdate')),
-
-				     'parent'=> $parent_name,
-				     // Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-				     'priority' => $adb->query_result($list_result,$i,'priority'), // Armando Lüscher 04.07.2005 -> §priority -> Desc: Get priority from db
-                                     );
+                                'id' => $adb->query_result($list_result,$i,'activityid'),
+                                 'type' => $adb->query_result($list_result,$i,'activitytype'),
+                                 'module' => $adb->query_result($list_result,$i,'setype'),
+                                 'status' => $adb->query_result($list_result,$i,'status'),
+                                 'firstname' => $adb->query_result($list_result,$i,'firstname'),
+                                 'lastname' => $adb->query_result($list_result,$i,'lastname'),
+	                         'accountname' => $adb->query_result($list_result,$i,'accountname'),
+				 'accountid' => $adb->query_result($list_result, $i, 'accountid'),
+                                 'contactid' => $adb->query_result($list_result,$i,'contactid'),
+                                 'date_start' => getDisplayDate($adb->query_result($list_result,$i,'date_start')),
+				 'due_date' => getDisplayDate($adb->query_result($list_result,$i,'due_date')),
+				 'recurringtype' => getDisplayDate($adb->query_result($list_result,$i,'recurringtype')),
+				 'recurringdate' => getDisplayDate($adb->query_result($list_result,$i,'recurringdate')),
+				 'parent'=> $parent_name,
+				 // Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+				 'priority' => $adb->query_result($list_result,$i,'priority'), // Armando Lüscher 04.07.2005 -> §priority -> Desc: Get priority from db
+                                );
 }
 
 $xtpl=new XTemplate ('modules/Activities/OpenListView.html');
 $xtpl->assign("MOD", $current_module_strings);
 $xtpl->assign("APP", $app_strings);
 
+//activity select options
+$xtpl->assign("ACTIVITY_VIEW", $ACTIVITY_VIEW_SELECT_OPTION);
+
 // Stick the form header out there.
-$later_day = getDisplayDate(date("Y-m-d", strtotime("$today + 7 days")));
-//echo get_form_header($current_module_strings['LBL_UPCOMING'], "<table><tr><td nowrap>".$current_module_strings['LBL_TODAY'].$later_day."</td></tr></table>", false);
+$later_day = getDisplayDate(date("Y-m-d", strtotime("$later -1 day ")));
 
 $xtpl->assign("ENDDATE", $later_day);
-
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("RETURN_URL", "&return_module=$currentModule&return_action=DetailView&return_id=" . ((is_object($focus)) ? $focus->id : ""));
 
 $oddRow = true;
-#if (count($open_activity_list) > 0) $open_activity_list = array_csort($open_activity_list, 'date_start', 'time_start', SORT_ASC);
 foreach($open_activity_list as $event)
 {
 	$recur_date=ereg_replace('--','',$event['recurringdate']);

@@ -203,6 +203,47 @@ if (is_admin($current_user)) {
                    
                    $xtpl->assign("GROUP_NAME", $GROUP_SELECT_OPTION);
 
+$ACTIVITY_VIEW_SELECT_OPTION = '<select name="activity_view">';
+if($focus->activity_view == 'Today')
+{
+	$activity_selected1 = 'selected';
+}
+elseif($focus->activity_view == 'This Week ')
+{
+	$activity_selected2 = 'selected';
+}
+elseif($focus->activity_view == 'This Month')
+{
+	$activity_selected3 = 'selected';
+}
+elseif($focus->activity_view == 'This Year')
+{
+	$activity_selected4 = 'selected';
+}
+elseif($focus->activity_view == 'OverDue')
+{
+	$activity_selected5 = 'selected';
+}
+
+$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="Today" '.$activity_selected1.'>';
+$ACTIVITY_VIEW_SELECT_OPTION .= 'Today';
+$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Week" '.$activity_selected2.'>';
+$ACTIVITY_VIEW_SELECT_OPTION .= 'This Week';
+$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Month" '.$activity_selected3.'>';
+$ACTIVITY_VIEW_SELECT_OPTION .= 'This Month';
+$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Year" '.$activity_selected4.'>';
+$ACTIVITY_VIEW_SELECT_OPTION .= 'This Year';
+$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="OverDue" '.$activity_selected5.'>';
+$ACTIVITY_VIEW_SELECT_OPTION .= 'OverDue';
+$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+$ACTIVITY_VIEW_SELECT_OPTION .= ' </select>';
+$xtpl->assign("ACTIVITY_VIEW", $ACTIVITY_VIEW_SELECT_OPTION);
+
+
 		if($focus->cal_color == '') $focus->cal_color = '#E6FAD8';
 
  		$xtpl->assign("CAL_COLOR",'<INPUT TYPE="text" readonly NAME="cal_color" SIZE="10" VALUE="'.$focus->cal_color.'" style="background-color:'.$focus->cal_color.';"> <img src="include/images/bgcolor.gif" onClick="cp2.select(document.EditView.cal_color,\'pick2\');return false;" NAME="pick2" ID="pick2" align="middle">');

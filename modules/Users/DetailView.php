@@ -183,6 +183,7 @@ else
 $xtpl->assign("COLORASSIGNED", "<div style='background-color:".$focus->cal_color.";'>".$focus->cal_color."</div>");
 
 
+$xtpl->assign("ACTIVITY_VIEW", $focus->activity_view);
 $xtpl->assign("TITLE", $focus->title);
 $xtpl->assign("DEPARTMENT", $focus->department);
 $xtpl->assign("REPORTS_TO_ID", $focus->reports_to_id);

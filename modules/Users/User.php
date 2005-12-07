@@ -77,6 +77,7 @@ class User extends SugarBean {
 
 	var $object_name = "User";
 	var $user_preferences;
+	var $activity_view;
 	var $column_fields = Array("id"
 		,"user_name"
 		,"user_password"
@@ -112,6 +113,7 @@ class User extends SugarBean {
 		,"weekstart"
 		,"status"
 		,"date_format"
+		,"activity_view"
 		);
 
 	var $encodeFields = Array("first_name", "last_name", "description");
