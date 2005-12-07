@@ -29,7 +29,7 @@ require_once('include/uifromdbutil.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
-global $vtlog;
+global $log;
 
 $focus = new Account();
 //$focus->set_strings();
@@ -38,8 +38,8 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"Accounts");
     $focus->id = $_REQUEST['record'];	
     $focus->name=$focus->column_fields['accountname'];
-$vtlog->logthis("id is  ".$focus->id,'debug'); 
-$vtlog->logthis("name is ".$focus->name,'debug'); 
+$log->debug("id is  ".$focus->id);
+$log->debug("name is ".$focus->name);
 }
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
