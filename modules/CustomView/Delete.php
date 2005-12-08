@@ -11,7 +11,6 @@
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 global $adb;
-global $vtlog;
 
 $cvid = $_REQUEST["record"];
 $module = $_REQUEST["dmodule"];

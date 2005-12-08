@@ -27,7 +27,7 @@ require_once('include/ListView/ListView.php');
 
 global $app_strings;
 global $adb;
-global $vtlog;
+global $log;
 
 $metricviewnames = "'Hot Leads'";
 
@@ -40,8 +40,7 @@ $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH", $image_path);
 
 $metriclists = getMetricList();
-$vtlog->logthis("Metrics :: Successfully got MetricList to be displayed","info");
-
+$log->info("Metrics :: Successfully got MetricList to be displayed");
 if(isset($metriclists))
 {
 foreach ($metriclists as $key => $metriclist)
@@ -49,7 +48,7 @@ foreach ($metriclists as $key => $metriclist)
 	$listquery = getListQuery($metriclist['module']);
 	$oCustomView = new CustomView($metriclist['module']);
 	$metricsql = $oCustomView->getMetricsCvListQuery($metriclist['id'],$listquery,$metriclist['module']);
-	//$vtlog->logthis("Metrics :: Successfully got MetricSQL to be queried","info");
+	 //$log->info("Metrics :: Successfully got MetricSQL to be queried");
 	$metricresult = $adb->query($metricsql);
 	if($metricresult)
 	{
@@ -60,7 +59,7 @@ foreach ($metriclists as $key => $metriclist)
 		}
 	}
 }
-$vtlog->logthis("Metrics :: Successfully build the Metrics","info");
+$log->info("Metrics :: Successfully build the Metrics");
 }
 
 //print_r($metriclists);

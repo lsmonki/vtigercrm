@@ -715,8 +715,8 @@ class CustomView extends CRMEntity{
 	
 	function getSalesEntityId($setype)
 	{
-		global $vtlog;
-		$vtlog->logthis("in getSalesEntityId ".$setype,'info');
+                global $log;
+                $log->info("in getSalesEntityId ".$setype);
 		global $adb;
 		$sql = "select crmid from crmentity where setype='".$setype."' and deleted = 0";
 		$result = $adb->query($sql);
@@ -736,8 +736,8 @@ class CustomView extends CRMEntity{
 
 	function getSoId($so_name)
 	{
-		global $vtlog;
-		$vtlog->logthis("in getSoId ".$so_name,'info');
+		global $log;
+                $log->info("in getSoId ".$so_name);
 		global $adb;
 		if($so_name != '')
 		{
@@ -750,9 +750,8 @@ class CustomView extends CRMEntity{
 
 	function getProductId($product_name)
 	{
-
-		global $vtlog;
-		$vtlog->logthis("in getProductId ".$product_name,'info');
+		global $log;
+                $log->info("in getProductId ".$product_name);
 		global $adb;
 		if($product_name != '')
 		{
@@ -765,8 +764,8 @@ class CustomView extends CRMEntity{
 
 	function getQuoteId($quote_name)
 	{
-		global $vtlog;
-		$vtlog->logthis("in getQuoteId ".$quote_name,'info');
+		global $log;
+                $log->info("in getQuoteId ".$quote_name);
 		global $adb;
 		if($quote_name != '')
 		{
@@ -779,8 +778,8 @@ class CustomView extends CRMEntity{
 
 	function getPotentialId($pot_name)
 	{
-		global $vtlog;
-		$vtlog->logthis("in getPotentialId ".$pot_name,'info');
+		 global $log;
+                $log->info("in getPotentialId ".$pot_name);
 		global $adb;
 		if($pot_name != '')
 		{
@@ -792,8 +791,8 @@ class CustomView extends CRMEntity{
 	}
 	function getVendorId($vendor_name)
 	{
-		global $vtlog;
-		$vtlog->logthis("in getVendorId ".$vendor_name,'info');
+		 global $log;
+                $log->info("in getVendorId ".$vendor_name);
 		global $adb;
 		if($vendor_name != '')
 		{
@@ -806,8 +805,8 @@ class CustomView extends CRMEntity{
 	
 	function getContactId($contact_name)
 	{
-		global $vtlog;
-		$vtlog->logthis("in getContactId ".$contact_name,'info');
+		global $log;
+                $log->info("in getContactId ".$contact_name);
 		global $adb;
 		if($contact_name != '')
 		{
@@ -820,9 +819,8 @@ class CustomView extends CRMEntity{
 
 	function getAccountId($account_name)
 	{
-		global $vtlog;
-		$vtlog->logthis("in getAccountId ".$account_name,'info');
-
+		 global $log;
+                $log->info("in getAccountId ".$account_name);
 		global $adb;
 		if($account_name != '')
 		{
