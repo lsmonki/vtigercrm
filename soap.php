@@ -23,7 +23,6 @@ require_once('include/nusoap/nusoap.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Accounts/Account.php');
 require_once('modules/Opportunities/Opportunity.php');
-require_once('modules/Cases/Case.php');
 
 global $HTTP_RAW_POST_DATA;
 
