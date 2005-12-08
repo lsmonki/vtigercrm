@@ -185,7 +185,7 @@ class CRMEntity extends SugarBean
     // global $current_user;
     global $adb;
     //global $root_directory;
-	global $vtlog;
+	global $log;
 
     $ownerid = $user_id;
 		
@@ -199,7 +199,7 @@ class CRMEntity extends SugarBean
 
     if($module=='Emails') 
     { 
-$vtlog->logthis("module is ".$module,'info');  
+	$log->info("module is ".$module);
       $idname='emailid';      $tablename='emails';    $descname='description';}
     else     
     { 
@@ -307,7 +307,7 @@ $vtlog->logthis("module is ".$module,'info');
   {
     global $adb;
     global $current_user;
-    global $vtlog;	
+    global $log;	
                 
     $date_var = date('YmdHis');
     if($_REQUEST['assigntype'] == 'T')
@@ -322,7 +322,7 @@ $vtlog->logthis("module is ".$module,'info');
     //This check is done for products.
     if($module == 'Products' || $module == 'Notes' || $module =='Faq' || $module == 'Vendor' || $module == 'PriceBook')
     {
-$vtlog->logthis("module is =".$module,'info');  
+	$log->info("module is =".$module);
       $ownerid = $current_user->id;
     }
     if($module == 'Events')
@@ -470,8 +470,8 @@ $vtlog->logthis("module is =".$module,'info');
   //code added by richie ends
   function insertIntoEntityTable($table_name, $module)
   {
-	  global $vtlog;	
-	  $vtlog->logthis("function insertIntoCrmEntity ".$module.' table name ' .$table_name,'info');  
+	  global $log;	
+	   $log->info("function insertIntoCrmEntity ".$module.' table name ' .$table_name);
 	  global $adb;
 	  $insertion_mode = $this->mode;
 
@@ -774,8 +774,8 @@ function deleteRelation($table_name)
 }
 function getOldFileName($notesid)
 {
-	global $vtlog;
-$vtlog->logthis("in getOldFileName  ".$notesid,'info');  
+	   global $log;
+$log->info("in getOldFileName  ".$notesid);
 	global $adb;
 	$query1 = "select * from seattachmentsrel where crmid=".$notesid;
 	$result = $adb->query($query1);
@@ -791,8 +791,8 @@ $vtlog->logthis("in getOldFileName  ".$notesid,'info');
 }
 function insertIntoTicketCommentTable($table_name, $module)
 {
-	global $vtlog;
-$vtlog->logthis("in insertIntoTicketCommentTable  ".$table_name."    module is  ".$module,'info');  
+	global $log;
+$log->info("in insertIntoTicketCommentTable  ".$table_name."    module is  ".$module);
         global $adb;
 	global $current_user;
 
@@ -808,8 +808,8 @@ $vtlog->logthis("in insertIntoTicketCommentTable  ".$table_name."    module is  
 }
 function insertIntoFAQCommentTable($table_name, $module)
 {
-	global $vtlog;
-$vtlog->logthis("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$module,'info');  
+	 global $log;
+$log->info("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$module);
         global $adb;
 
         $current_time = date('Y-m-d H:i:s');
@@ -820,19 +820,19 @@ $vtlog->logthis("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$
 }
 function insertIntoReminderTable($table_name,$module,$recurid)
 {
-	global $vtlog;
-$vtlog->logthis("in insertIntoReminderTable  ".$table_name."    module is  ".$module,'info');  
+	 global $log;
+$log->info("in insertIntoReminderTable  ".$table_name."    module is  ".$module);
 	if($_REQUEST['set_reminder'] == 'Yes')
 	{
-$vtlog->logthis("set reminder is set",'debug');  
+$log->debug("set reminder is set");
 		$rem_days = $_REQUEST['remdays'];
-$vtlog->logthis("rem_days is ".$rem_days,'debug');  
+$log->debug("rem_days is ".$rem_days);
 		$rem_hrs = $_REQUEST['remhrs'];
-$vtlog->logthis("rem_hrs is ".$rem_hrs,'debug');  
+$log->debug("rem_hrs is ".$rem_hrs);
 		$rem_min = $_REQUEST['remmin'];
-$vtlog->logthis("rem_minutes is ".$rem_min,'debug');  
+$log->debug("rem_minutes is ".$rem_min);
 		$reminder_time = $rem_days * 24 * 60 + $rem_hrs * 60 + $rem_min;
-$vtlog->logthis("reminder_time is ".$reminder_time,'debug');  
+$log->debug("reminder_time is ".$reminder_time);
 		if ($recurid == "")
 		{
 			if($_REQUEST['mode'] == 'edit')
@@ -858,20 +858,20 @@ $vtlog->logthis("reminder_time is ".$reminder_time,'debug');
 // Code included by Jaguar - starts 
 function insertIntoRecurringTable($table_name,$module)
 {
-	global $vtlog;
-$vtlog->logthis("in insertIntoRecurringTable  ".$table_name."    module is  ".$module,'info');  
-	global $adb;
-	$st_date = getDBInsertDateValue($_REQUEST["date_start"]);	
-$vtlog->logthis("st_date ".$st_date,'debug');  
-	$end_date = getDBInsertDateValue($_REQUEST["due_date"]);
-$vtlog->logthis("end_date is set ".$end_date,'debug');  
-	$st=explode("-",$st_date);
-$vtlog->logthis("exploding string is ".$st,'debug');  
-	$end=explode("-",$end_date);
-$vtlog->logthis("exploding string again is ".$end,'debug');  
-	$type = trim($_REQUEST['recurringtype']);
-$vtlog->logthis("type is ".$type,'debug');  
-	$flag="true";
+	global $log;
+$log->info("in insertIntoRecurringTable  ".$table_name."    module is  ".$module);
+        global $adb;
+        $st_date = getDBInsertDateValue($_REQUEST["date_start"]);
+$log->debug("st_date ".$st_date);
+        $end_date = getDBInsertDateValue($_REQUEST["due_date"]);
+$log->debug("end_date is set ".$end_date);
+        $st=explode("-",$st_date);
+$log->debug("exploding string is ".$st);
+        $end=explode("-",$end_date);
+$log->debug("exploding string again is ".$end);
+        $type = trim($_REQUEST['recurringtype']);
+$log->debug("type is ".$type);
+        $flag="true";
 
 	if($_REQUEST['mode'] == 'edit')
 	{
@@ -1001,8 +1001,8 @@ $vtlog->logthis("type is ".$type,'debug');
 
   function save($module_name) 
   {
-	global $vtlog;
-	$vtlog->logthis("module name is ".$module_name,'debug');  
+	  global $log;
+        $log->debug("module name is ".$module_name);
     //GS Save entity being called with the modulename as parameter
       $this->saveentity($module_name,$migration);
   }
