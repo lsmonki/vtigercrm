@@ -28,7 +28,7 @@ require_once('include/upload_file.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/uifromdbutil.php');
 
-global $vtlog;
+global $log;
 global $app_strings;
 global $mod_strings;
 
@@ -37,8 +37,7 @@ $focus = new Email();
 if(isset($_REQUEST['record'])) 
 {
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
-	$vtlog->logthis("Entity info successfully retrieved for DetailView.",'info');
-
+	 $log->info("Entity info successfully retrieved for DetailView.");
 	$focus->id = $_REQUEST['record'];
 	if($focus->column_fields['name'] != '')
 	        $focus->name = $focus->column_fields['name'];		
@@ -191,7 +190,7 @@ $block_4 = preg_replace("/<br \/\>/", " ", $block_4);
 
 $xtpl->assign("BLOCK5", $block_4);
 
-$vtlog->logthis("Detail Block Informations successfully retrieved.",'info');
+$log->info("Detail Block Informations successfully retrieved.");
 
 $block_1_header = getBlockTableHeader("LBL_EMAIL_INFORMATION");
 $xtpl->assign("BLOCK1_HEADER", $block_1_header);

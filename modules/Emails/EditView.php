@@ -27,7 +27,7 @@ require_once('modules/Emails/Forms.php');
 require_once('include/uifromdbutil.php');
 require_once('include/FormValidationUtil.php');
 
-global $vtlog;
+global $log;
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
@@ -117,8 +117,8 @@ if(isset($_REQUEST['record']))
 	$focus->id = $_REQUEST['record'];
 	$focus->mode = 'edit';
 	$focus->retrieve_entity_info($_REQUEST['record'],"Emails");
-	$vtlog->logthis("Entity info successfully retrieved for EditView.",'info');
-        $focus->name=$focus->column_fields['name'];		
+         $log->info("Entity info successfully retrieved for EditView.");
+	$focus->name=$focus->column_fields['name'];		
 }
 //$old_id = '';
 if(isset($_REQUEST['parent_id']) && $_REQUEST['parent_id'] != '')

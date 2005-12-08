@@ -31,7 +31,7 @@ sendmail($_REQUEST['assigned_user_id'],$current_user->user_name,$_REQUEST['name'
 
 function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password)
 {
-	global $adb,$root_directory,$mod_strings, $vtlog;
+	global $adb,$root_directory,$mod_strings, $log;
 
 	$sql = $_REQUEST['query'];
 	$result= $adb->query($sql);
@@ -65,9 +65,9 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 		$mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
                 $mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
 		$_REQUEST['server']=$mail_server;
-		$vtlog->logthis("Mail Server is selected => '".$mail_server."'",'info');
-                $vtlog->logthis("Mail Server UserName is selected => '".$mail_server_username."'",'info');
-                $vtlog->logthis("Mail Server Password is selected => '".$mail_server_password."'",'info');
+		 $log->info("Mail Server is selected => '".$mail_server."'");
+                $log->info("Mail Server UserName is selected => '".$mail_server_username."'");
+                $log->info("Mail Server Password is selected => '".$mail_server_password."'");
 	}
 		$mail->Host = $mail_server;
 		$mail->SMTPAuth = true;
@@ -77,7 +77,7 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 		$mail->FromName = $initialfrom;
 		$mail->AddReplyTo($from);
 		$mail->WordWrap = 50;
-		$vtlog->logthis("From name & id are set in mail object => '".$mail->FromName."<".$mail->From.">' ",'info');
+		$log->info("From name & id are set in mail object => '".$mail->FromName."<".$mail->From.">' ");
 
 //store this to the hard disk and give that url
 
@@ -93,7 +93,7 @@ for($i=0;$i< $adb->num_rows($result1);$i++)
 	if(!@fclose($handle)){}
 
 	$mail->AddAttachment($root_directory."/test/upload/".$filename);//temparray['filename']) // add attachments
-	$vtlog->logthis("File '".$filename."' is attached with the mail.",'info');
+	 $log->info("File '".$filename."' is attached with the mail.");
 }
 
 for($i=0;$i< $adb->num_rows($result2);$i++)
@@ -108,7 +108,7 @@ for($i=0;$i< $adb->num_rows($result2);$i++)
         if(!@fclose($handle)){}
 
         $mail->AddAttachment($root_directory."/test/upload/".$filename);//temparray['filename']) // add attachments
-	$vtlog->logthis("File '".$filename."' is attached with the mail.",'info');
+	$log->info("File '".$filename."' is attached with the mail.");
 }
 $mail->IsHTML(true);
 $mail->AltBody = "This is the body in plain text for non-HTML mail clients";
@@ -129,14 +129,14 @@ for($i=0;$i< $noofrows;$i++)
 		$to=$adb->query_result($result,$i,"email");
 
 	$mail->AddAddress($to);
-	$vtlog->logthis("To email address is added in the mail object => '".$to."'",'info');
+	 $log->info("To email address is added in the mail object => '".$to."'");
 	$emailoptout = $adb->query_result($result,$i,"emailoptout");
 	if($emailoptout == 1 && $to != '')
 	{
 		$mail->ClearAddresses();
 		$mail->AddAddress("");
 		$emailoptout_error = true;
-		$vtlog->logthis("Email opt out (contact) value is set. So To email id address cleared(empty).",'info');
+	$log->info("Email opt out (contact) value is set. So To email id address cleared(empty).");
 	}
 
 	$j=$i+1;
@@ -154,11 +154,11 @@ for($i=0;$i< $noofrows;$i++)
 				echo '<tr><b><h3>'.$mod_strings['MESSAGE_MAIL_HAS_SENT_TO_CONTACTS'].' </h3></b></tr>';
 		}
                 echo '<center><tr align="left"><b><h3>'.$j.' . '.$to.'</h3></b></tr></center>';
-		$vtlog->logthis("Mail has been sent from vtiger system. Status => '".$mail->ErrorInfo."'",'info');
-	}
+	  $log->info("Mail has been sent from vtiger system. Status => '".$mail->ErrorInfo."'");
+}
 	else
 	{
-		$vtlog->logthis("Error block : Mail sending process failed. Status => '".$mail->ErrorInfo."'",'info');
+		$log->info("Error block : Mail sending process failed. Status => '".$mail->ErrorInfo."'");
 		$message = substr($mail->ErrorInfo,0,49);
 		$flag = false;
 		if($message=='Language string failed to load: connect_host')

@@ -38,7 +38,7 @@ require("class.phpmailer.php");
 function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='')
 {
 
-	global $adb, $vtlog;
+	global $adb, $log;
 	global $root_directory;
 	global $HELPDESK_SUPPORT_EMAIL_ID, $HELPDESK_SUPPORT_NAME;
 
@@ -237,16 +237,16 @@ function setCCAddress($mail,$cc_mod,$cc_val)
   */
 function MailSend($mail)
 {
-	global $vtlog;
-	$vtlog->logthis("Inside of Send Mail function.",'info');
-        if(!$mail->Send())
+	global $log;
+         $log->info("Inside of Send Mail function.");
+	if(!$mail->Send())
         {
-		$vtlog->logthis("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'",'debug');
+		$log->debug("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'");
 		return $mail->ErrorInfo;
         }
 	else 
 	{
-		$vtlog->logthis("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'",'info');
+		 $log->info("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'");
 		return 1;
 	}
 }
