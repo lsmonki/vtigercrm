@@ -19,7 +19,7 @@ require_once('include/database/PearDatabase.php');
 require_once('modules/Users/UserInfoUtil.php');
 
 $local_log =& LoggerManager::getLogger('index');
-global $vtlog;
+global $log;
 $focus = new Lead();
 
 if(isset($_REQUEST['record']))
@@ -66,8 +66,8 @@ foreach($focus->column_fields as $fieldname => $val)
   	if(isset($_REQUEST[$fieldname]))
 	{
           $value = $_REQUEST[$fieldname];
-	  $vtlog->logthis("the value is ".$value,'info');  
-          //echo '<BR>';
+            $log->info("the value is ".$value);
+	  //echo '<BR>';
           //echo $fieldname."         ".$value;
           //echo '<BR>';
           $focus->column_fields[$fieldname] = $value;
@@ -129,7 +129,7 @@ updateLeadGroupRelation($focus->id,'');
 $focus->save("Leads");
 
 $return_id = $focus->id;
-	  $vtlog->logthis("the return id is ".$return_id,'info');  
+	 $log->info("the return id is ".$return_id);
 /*
 if($createLeadFlag)
 {
@@ -157,7 +157,7 @@ header("Location: index.php?action=$return_action&module=$return_module&record=$
 //Code to save the custom field info into database
 function save_customfields($entity_id)
 {
-	  $vtlog->logthis("save custom field invoked ".$entity_id,'debug');  
+	 $log->debug("save custom field invoked ".$entity_id);
 	global $adb;
 	$dbquery="select * from customfields where module='Leads'";
 	$result = $adb->query($dbquery);
@@ -177,7 +177,7 @@ function save_customfields($entity_id)
 			if(isset($_REQUEST[$colName]))
 			{
 				$fldvalue=$_REQUEST[$colName];
-	  $vtlog->logthis("the columnName is ".$fldvalue,'info');  
+				 $log->info("the columnName is ".$fldvalue);
 				if(get_magic_quotes_gpc() == 1)
                 		{
                         		$fldvalue = stripslashes($fldvalue);
