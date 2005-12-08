@@ -231,8 +231,6 @@ $config .= "\$history_max_viewed = '5';\n\n";
 $config .= "// change this number to whatever you want. This is the number of pages that will appear in the pagination. by Raju \n";
 $config .= "\$limitpage_navigation = '9';\n\n";
 
-$config .= "//define list of menu tabs\n";
-$config .= "//\$moduleList = Array('Home', 'Dashboard', 'Contacts', 'Accounts', 'Opportunities', 'Cases', 'Notes', 'Calls', 'Emails', 'Meetings', 'Tasks','MessageBoard');\n\n";
 $config .= "// Map Sugar language codes to jscalendar language codes\n";
 $config .= "// Unimplemented until jscalendar language files are fixed\n";
 $config .= "// \$cal_codes = array('en_us'=>'en', 'ja'=>'jp', 'sp_ve'=>'sp', 'it_it'=>'it', 'tw_zh'=>'zh', 'pt_br'=>'pt', 'se'=>'sv', 'cn_zh'=>'zh', 'ge_ge'=>'de', 'ge_ch'=>'de', 'fr'=>'fr');\n\n";
