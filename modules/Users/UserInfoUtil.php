@@ -14,7 +14,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/utils.php');
 include('config.php');
-global $vtlog;
+global $log;
 if(isset($_REQUEST['groupname']))
 {
   $groupname = $_REQUEST['groupname'];
@@ -570,8 +570,8 @@ function fetchEmailTemplateInfo($templateName)
 //template file 
 function substituteTokens($filename,$globals)
 {
-	global $vtlog;
-	$vtlog->logthis("in substituteTokens method  with filename ".$filename.' and content globals as '.$globals,'debug');  
+	global $log;
+	$log->debug("in substituteTokens method  with filename ".$filename.' and content globals as '.$globals);
 
 	global $root_directory;
 	//$globals = implode(",\\$",$tokens);
@@ -579,18 +579,18 @@ function substituteTokens($filename,$globals)
 	if (!$filename)
 	 {
 
-	$vtlog->logthis("filename is not set in substituteTokens",'debug');  
+	$log->debug("filename is not set in substituteTokens");
 		 $filename = $this->filename;
-	$vtlog->logthis("filename is not set in substituteTokens so taking default filename",'debug');  
+	$log->debug("filename is not set in substituteTokens so taking default filename");
 	 }
 	
     if (!$dump = file ($filename))
 	 {
-	$vtlog->logthis("not able to create the file or get access to the file with filename ".$filename." so returning 0",'debug');  
+		 $log->debug("not able to create the file or get access to the file with filename ".$filename." so returning 0");
      		 return 0;
     	 }	
 
-	$vtlog->logthis("about to start replacing the tokens",'debug');  
+	 $log->debug("about to start replacing the tokens");
       require_once($root_directory .'/modules/Emails/templates/testemailtemplateusage.php');
       eval ("global $globals; ");
     while (list($key,$val) = each($dump))
@@ -599,14 +599,14 @@ function substituteTokens($filename,$globals)
       if (ereg( "\$",$val)) 
 	{
         $val = addslashes ($val);      
-	$vtlog->logthis("token is ".$val,'debug');  
+	$log->debug("token is ".$val);
         eval(  "\$val = \"$val\";");
         $val = stripslashes ($val);
 	$replacedString .= $val;
       }
     }
 
-	$vtlog->logthis("the replacedString  is ".$replacedString,'debug');  
+	$log->debug("the replacedString  is ".$replacedString);
 	return $replacedString;
 }
 
@@ -1945,7 +1945,7 @@ function getEntityDisplayLink($entityType,$entityid)
 function getSharingRuleInfo($shareId)
 {
 	global $adb;
-	global $vtlog;
+	global $log;
 	$shareRuleInfoArr=Array();
 	$query="select * from datashare_module_rel where shareid=".$shareId;
 	$result=$adb->query($query);
