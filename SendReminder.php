@@ -28,10 +28,8 @@ require("config.php");
 // Get the list of activity for which reminder needs to be sent
 
 global $adb;
-require_once('vtiger_logger.php');
-$vtlog = new vtiger_logger();
-
-$vtlog->logthis(" invoked SendReminder ",'debug');
+global $log;
+$log->debug(" invoked SendReminder ");
 
 //modified query for recurring events -Jag
  	$query="select crmentity.crmid,activity.*,activity_reminder.reminder_time,activity_reminder.reminder_sent,activity_reminder.recurringid,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id left outer join recurringevents on activity.activityid=recurringevents.activityid where DATE_FORMAT(activity.date_start,'%Y-%m-%d, %H:%i:%s') >= '".date('Y-m-d')."' and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0 group by activity.activityid,recurringevents.recurringid ;";
@@ -67,7 +65,7 @@ if($adb->num_rows($result) >= 1)
 
 		if (($activity_time - $curr_time) > 0 && ($activity_time - $curr_time) == $reminder_time)
 		{
-			$vtlog->logthis(" InSide  REMINDER",'debug');
+			$log->debug(" InSide  REMINDER");
 			$query_user="SELECT users.email1,salesmanactivityrel.smid FROM salesmanactivityrel inner join users on users.id=salesmanactivityrel.smid where salesmanactivityrel.activityid =".$activity_id." and users.deleted=0"; 
 			$user_result = $adb->query($query_user);		
 			if($adb->num_rows($user_result)>=1)
@@ -128,8 +126,8 @@ if($adb->num_rows($result) >= 1)
 function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password)
 {
 	global $adb;
-	global $vtlog;
-	$vtlog->logthis("This is send_mail function in SendReminder.php(vtiger home).","info");
+	 global $log;
+        $log->info("This is send_mail function in SendReminder.php(vtiger home).");
 	global $root_directory;
 
 	$mail = new PHPMailer();
@@ -149,7 +147,8 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 		$mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
 		$mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
 		$_REQUEST['server']=$mail_server;
-		$vtlog->logthis("Mail Server Details => '".$mail_server."','".$mail_server_username."','".$mail_server_password."'","info");
+		$log->info("Mail Server Details => '".$mail_server."','".$mail_server_username."','".$mail_server_password."'");
+
 	}	
 
 	$mail->Host = $mail_server;  // specify main and backup server
@@ -158,12 +157,12 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 	$mail->Password = $mail_server_password ;//$smtp_password; // SMTP password
 	$mail->From = $from;
 	$mail->FromName = $initialfrom;
-	$vtlog->logthis("Mail sending process : From Name & email id => '".$initialfrom."','".$from."'",'info');
-	
+	$log->info("Mail sending process : From Name & email id => '".$initialfrom."','".$from."'");
 	foreach($to as $pos=>$addr)
 	{
 		$mail->AddAddress($addr);                  // name is optional
-		$vtlog->logthis("Mail sending process : To Email id = '".$addr."' (set in the mail object)",'info');
+		$log->info("Mail sending process : To Email id = '".$addr."' (set in the mail object)");
+
 	}
 	//$mail->AddReplyTo($from);
 	$mail->WordWrap = 50;                                 // set word wrap to 50 characters
@@ -173,20 +172,20 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 	$mail->AltBody = "This is the body in plain text for non-HTML mail clients";
 
 	$flag = MailSend($mail);
-	$vtlog->logthis("After executing the mail->Send() function.",'info');
+	$log->info("After executing the mail->Send() function.");
 }
 
 function MailSend($mail)
 {
-	global $vtlog;
+	global $log;
         if(!$mail->Send())
         {
-	   $vtlog->logthis("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'",'info');
+		$log->info("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'");
            $msg = $mail->ErrorInfo;
         }
 	else
        	{	
-		$vtlog->logthis("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'",'info');
+		$log->info("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'");
 		return true;
 	}		
 }
