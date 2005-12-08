@@ -241,7 +241,6 @@ function CloseTag($tag)
         $this->Ln();
     }
     if($tag=='TABLE') { // TABLE-END
-        //$this->Ln();
         $this->tableborder=0;
     }
 
@@ -316,7 +315,6 @@ if($columnlength > 0 && $columnlength <= 4)
         $pdf = new Html2PDF('L','mm','A3');
 }
 
-//$pdf=new Html2PDF('L','mm','A3');
 $pdf->AddPage();
 
 $pdf->SetFillColor(224,235,255);

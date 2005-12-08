@@ -95,76 +95,30 @@ $adv_report->assign("BLOCK3", $BLOCK1);
 $adv_report->assign("BLOCK4", $BLOCK1);
 $adv_report->assign("BLOCK5", $BLOCK1);
 
-//$FILTEROPTION = getAdvCriteriaHTML();
-//$adv_report->assign("FOPTION1",$FILTEROPTION);
-//$adv_report->assign("FOPTION2",$FILTEROPTION);
-//$adv_report->assign("FOPTION3",$FILTEROPTION);
-//$adv_report->assign("FOPTION4",$FILTEROPTION);
-//$adv_report->assign("FOPTION5",$FILTEROPTION);
-
 }
+
+/** Function to get primary columns for an advanced filter
+ *  This function accepts The module as an argument
+ *  This generate columns of the primary modules for the advanced filter 
+ *  It returns a HTML string of combo values 
+ */
 
 function getPrimaryColumns_AdvFilterHTML($module,$selected="")
 {
         global $ogReport;
-	global $app_list_strings;
+		global $app_list_strings;
         global $current_language;
 
-	$mod_strings = return_module_language($current_language,$module);
+		$mod_strings = return_module_language($current_language,$module);
 
         foreach($ogReport->module_list[$module] as $key=>$value)
         {
             $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".$key."\" class=\"select\" style=\"border:none\">";
-	    if(isset($ogReport->pri_module_columnslist[$module][$key]))
-	    {
-		foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
-		{
-			if(isset($mod_strings[$fieldlabel]))
-			{
-				if($selected == $field)
+	    	if(isset($ogReport->pri_module_columnslist[$module][$key]))
+	    	{
+				foreach($ogReport->pri_module_columnslist[$module][$key] as $field=>$fieldlabel)
 				{
-					$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-				}else
-				{
-					$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
-				}
-			}else
-			{
-				if($selected == $field)
-				{
-					$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
-				}else
-				{
-					$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
-				}
-			}
-		}
-           }
-        }
-        return $shtml;
-}
-
-
-function getSecondaryColumns_AdvFilterHTML($module,$selected="")
-{
-        global $ogReport;
-	global $app_list_strings;
-        global $current_language;
-
-        if($module != "")
-        {
-        $secmodule = explode(":",$module);
-        for($i=0;$i < count($secmodule) ;$i++)
-        {
-                $mod_strings = return_module_language($current_language,$secmodule[$i]);
-		foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
-                {
-                        $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".$key."\" class=\"select\" style=\"border:none\">";
-			if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
-			{
-				foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
-				{
-					if(isset($mod_strings[$fieldlable]))
+					if(isset($mod_strings[$fieldlabel]))
 					{
 						if($selected == $field)
 						{
@@ -184,12 +138,72 @@ function getSecondaryColumns_AdvFilterHTML($module,$selected="")
 						}
 					}
 				}
-			}
-                }
-        }
+           }
         }
         return $shtml;
 }
+
+
+
+/** Function to get Secondary columns for an advanced filter
+ *  This function accepts The module as an argument
+ *  This generate columns of the secondary module for the advanced filter 
+ *  It returns a HTML string of combo values
+ */
+
+function getSecondaryColumns_AdvFilterHTML($module,$selected="")
+{
+        global $ogReport;
+		global $app_list_strings;
+        global $current_language;
+
+        if($module != "")
+        {
+        	$secmodule = explode(":",$module);
+        	for($i=0;$i < count($secmodule) ;$i++)
+        	{
+                $mod_strings = return_module_language($current_language,$secmodule[$i]);
+				foreach($ogReport->module_list[$secmodule[$i]] as $key=>$value)
+                {
+                	$shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$secmodule[$i]]." ".$key."\" class=\"select\" style=\"border:none\">";
+					if(isset($ogReport->sec_module_columnslist[$secmodule[$i]][$key]))
+					{
+					  foreach($ogReport->sec_module_columnslist[$secmodule[$i]][$key] as $field=>$fieldlabel)
+					  {
+						if(isset($mod_strings[$fieldlable]))
+						{
+							if($selected == $field)
+							{
+								$shtml .= "<option selected value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+							}else
+							{
+								$shtml .= "<option value=\"".$field."\">".$mod_strings[$fieldlabel]."</option>";
+							}
+						}else
+						{
+							if($selected == $field)
+							{
+								$shtml .= "<option selected value=\"".$field."\">".$fieldlabel."</option>";
+							}else
+							{
+								$shtml .= "<option value=\"".$field."\">".$fieldlabel."</option>";
+							}
+						}
+					  }
+					}
+                }
+        	}
+        }
+        return $shtml;
+}
+
+
+/** Function to get the  advanced filter criteria for an option
+ *  This function accepts The option in the advenced filter as an argument
+ *  This generate filter criteria for the advanced filter 
+ *  It returns a HTML string of combo values
+ */
+
 
 function getAdvCriteriaHTML($selected="")
 {
@@ -206,7 +220,7 @@ function getAdvCriteriaHTML($selected="")
 		}
 	 }
 	
-         return $shtml;
+    return $shtml;
 }
 
 $adv_report->parse("main");
