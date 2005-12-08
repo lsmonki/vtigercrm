@@ -25,7 +25,7 @@ global $urlPrefix;
 
 
 global $theme;
-global $vtlog;
+global $log;
 $pricebook_id = $_REQUEST['pricebook_id'];
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -333,7 +333,7 @@ $list_body ='';
 for($i=0; $i<$num_rows; $i++)
 {
 	
-	$vtlog->logthis("Products :: Showing the List of products to be added in price book","info");
+	 $log->info("Products :: Showing the List of products to be added in price book");
 	$entity_id = $adb->query_result($list_result,$i,"crmid");
 	if(! array_key_exists($entity_id, $prod_array))
 	{

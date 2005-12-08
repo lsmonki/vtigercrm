@@ -25,7 +25,7 @@ global $urlPrefix;
 
 
 global $theme;
-global $vtlog;
+global $log;
 $productid = $_REQUEST['return_id'];
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -121,8 +121,8 @@ $xtpl->assign("LISTHEADER", $list_header);
 $list_body ='';
 for($i=0; $i<$num_rows; $i++)
 {	
-	
-	$vtlog->logthis("Products :: Showing Price Books to be added in the product","info");
+
+	$log->info("Products :: Showing Price Books to be added in the product");
 	$entity_id = $adb->query_result($list_result,$i,"crmid");
 	if(! array_key_exists($entity_id, $pbk_array))
 	{

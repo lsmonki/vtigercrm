@@ -14,7 +14,7 @@ require_once('include/database/PearDatabase.php');
 
 function getAttachmentsList($id,$theme)
 {
-global $app_strings,$adb,$vtlog;
+global $app_strings,$adb,$log;
 
 	$dbQuery = "SELECT productid,filename,filesize,filetype,description ";
 
@@ -70,7 +70,7 @@ while($row = $adb->fetch_array($result))
 {
 
 
-$vtlog->logthis("Attachments :: Retriving attachments","info");
+$log->info("Attachments :: Retriving attachments");
 if ($i%2==0)
 $trowclass = 'evenListRow';
 else

@@ -24,20 +24,20 @@
 require_once('modules/Products/Product.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-global $vtlog;
+global $log;
 
 $focus = new Product();
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];
 	$record_id=$focus->id;
-	$vtlog->logthis("Record Id is present during Saving the product :->".$record_id,'info');
+	$log->info("Record Id is present during Saving the product :->".$record_id);
 }
 if(isset($_REQUEST['mode']))
 {
 	$focus->mode = $_REQUEST['mode'];
   	$mode=$focus->mode;
-	$vtlog->logthis("Type of 'mode' during Product Save is ".$mode,'info');
+	  $log->info("Type of 'mode' during Product Save is ".$mode);
 }
 foreach($focus->column_fields as $fieldname => $val)
 {
@@ -51,7 +51,7 @@ foreach($focus->column_fields as $fieldname => $val)
 //Checking If image is given or not 
 
 $uploaddir = $root_directory."test/product/" ;//set this to which location you need to give the product image
-$vtlog->logthis("The Location to Save the Product Image is ".$uploaddir,'info');
+$log->info("The Location to Save the Product Image is ".$uploaddir);
 $file_path_name = $_FILES['imagename']['name'];
 $image_error="false";
 $saveimage="true";
@@ -60,7 +60,7 @@ $file_name = basename($file_path_name);
 //if the image is given
 if($file_name!="")
 {
-        $vtlog->logthis("Product Image is given for uploading ",'debug');
+	 $log->debug("Product Image is given for uploading");
 	$image_name_val=file_exist_fn($file_name,0);
 
 	$encode_field_values="";
@@ -78,12 +78,12 @@ if($file_name!="")
 
 	$file_type_val_image=strtolower($filetype_array[0]);
 	$file_type_val=strtolower($filetype_array[1]);
-	$vtlog->logthis("The File type of the Product Image is :: ".$file_type_val,'info');
+	  $log->info("The File type of the Product Image is :: ".$file_type_val);
 	//checking the uploaded image is if an image type or not
 	if(!$move_upload_status) //if any error during file uploading  
 	{
-       		 $vtlog->logthis("Error is present in uploading product Image.",'debug');
-			$errorCode =  $_FILES['imagename']['error'];
+		$log->debug("Error is present in uploading product Image.");	
+		$errorCode =  $_FILES['imagename']['error'];
 			if($errorCode == 4)
 			{
 				$errorcode="no-image";
@@ -105,7 +105,7 @@ if($file_name!="")
 	}
 	else 
 	{
-       		 $vtlog->logthis("Successfully uploaded the product Image.",'debug');
+		 $log->debug("Successfully uploaded the product Image.");
 		if($filesize != 0)
 		{
 			if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) || ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") || ($file_type_val == "gif") ) //Checking whether the file is an image or not
@@ -131,7 +131,7 @@ if($file_name!="")
 }
 else //if image is not given
 {
-        $vtlog->logthis("Product Image is not given for uploading.",'debug');
+	$log->debug("Product Image is not given for uploading.");
 	if($mode=="edit" && $image_error=="false" )
 	{
 		$image_name_val=getProductImageName($record_id);	
@@ -155,13 +155,13 @@ if($image_error=="true") //If there is any error in the file upload then moving 
 	if($_REQUEST['return_action'] != '')$return_action=$_REQUEST['return_action'];
 	if($_REQUEST['return_id'] != '')$return_id=$_REQUEST['return_id'];
 
-        $vtlog->logthis("There is an error during the upload of product image.",'debug');
+	 $log->debug("There is an error during the upload of product image.");
 	$field_values_passed.="";
 	foreach($focus->column_fields as $fieldname => $val)
 	{
 		if(isset($_REQUEST[$fieldname]))
 		{
-        		$vtlog->logthis("Assigning the previous values given for the product to respective fields ",'debug');
+			 $log->debug("Assigning the previous values given for the product to respective fields ");
 			$field_values_passed.="&";
 			$value = $_REQUEST[$fieldname];
 			$focus->column_fields[$fieldname] = $value;
@@ -190,7 +190,7 @@ if($image_error=="true") //If there is any error in the file upload then moving 
 if($saveimage=="true")
 {
 	$focus->column_fields['imagename']=$image_name_val;
-        $vtlog->logthis("Assign the Image name to the field name ",'debug');
+	$log->debug("Assign the Image name to the field name ");
 }
 //Saving the product
 if($image_error=="false")
@@ -243,9 +243,9 @@ Thanks,
 }
 function SendMailToCustomer($to,$current_user_id,$subject,$contents)
 {
-        global $vtlog;
-        $vtlog->logthis("Inside SendMailToCustomer function(Products/Save.php).",'debug');
-        require_once("modules/Emails/class.phpmailer.php");
+        global $log;
+        $log->debug("Inside SendMailToCustomer function(Products/Save.php).");
+	require_once("modules/Emails/class.phpmailer.php");
 
         $mail = new PHPMailer();
 
@@ -260,8 +260,8 @@ function SendMailToCustomer($to,$current_user_id,$subject,$contents)
                 $result = $adb->query($sql);
                 $from = $adb->query_result($result,0,'email1');
                 $initialfrom = $adb->query_result($result,0,'user_name');
-		$vtlog->logthis("Mail sending process : From Name & email id (selected from db) => '".$initialfrom."','".$from."'",'info');
-        }
+        	 $log->info("Mail sending process : From Name & email id (selected from db) => '".$initialfrom."','".$from."'");
+	}
         if($mail_server=='')
         {
                 global $adb;
@@ -270,7 +270,8 @@ function SendMailToCustomer($to,$current_user_id,$subject,$contents)
 		$mail_server_username=$adb->query_result($mailserverresult,0,'server_username');
                 $mail_server_password=$adb->query_result($mailserverresult,0,'server_password');
                 $_REQUEST['server']=$mail_server;
-		$vtlog->logthis("Mail Server Details => '".$mail_server."','".$mail_server_username."','".$mail_server_password."'","info");
+		$log->info("Mail Server Details => '".$mail_server."','".$mail_server_username."','".$mail_server_password."'");
+
         }
         $mail->Host = $mail_server;
         $mail->SMTPAuth = true;
@@ -280,7 +281,7 @@ function SendMailToCustomer($to,$current_user_id,$subject,$contents)
         $mail->FromName = $initialfrom;
 
         $mail->AddAddress($to);
-	$vtlog->logthis("Mail sending process : To Email id = '".$to."' (set in the mail object)",'info');
+	$log->info("Mail sending process : To Email id = '".$to."' (set in the mail object)");
         $mail->AddReplyTo($from);
         $mail->WordWrap = 50;
 
@@ -290,14 +291,14 @@ function SendMailToCustomer($to,$current_user_id,$subject,$contents)
 
         if(!$mail->Send())
         {
-		$vtlog->logthis("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'",'info');
-                $errormsg = "Mail Could not be sent...";
+                 $log->info("Error in Mail Sending : Error log = '".$mail->ErrorInfo."'");
+		$errormsg = "Mail Could not be sent...";
         }
 	else
 	{
-		$vtlog->logthis("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'",'info');
+		$log->info("Mail has been sent from the vtigerCRM system : Status : '".$mail->ErrorInfo."'");
 	}
-	$vtlog->logthis("After executing the mail->Send() function.",'info');
+	$log->info("After executing the mail->Send() function.");
 }
 
 //function to check whether same product name exists 
