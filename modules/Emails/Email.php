@@ -80,6 +80,9 @@ class Email extends CRMEntity {
 
 	var $column_fields = Array();
 
+	function create_tables () {
+
+        }
 	function Email() {
 		$this->log = LoggerManager::getLogger('email');
 		$this->db = new PearDatabase();
