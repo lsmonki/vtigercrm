@@ -13,7 +13,7 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 
 global $adb;
-global $vtlog;
+global $log;
 
 $reportid = $_REQUEST["record"];
 
@@ -96,7 +96,7 @@ if($reportid == "")
 	{
 		$iquerysql = "insert into selectquery (QUERYID,STARTINDEX,NUMOFOBJECTS) values (".$genQueryId.",0,0)";
 		$iquerysqlresult = $adb->query($iquerysql);
-		$vtlog->logthis("Reports :: Save->Successfully saved selectquery","info");
+		 $log->info("Reports :: Save->Successfully saved selectquery");
 		if($iquerysqlresult!=false)
 		{
 			//<<<<step2 selectcolumn>>>>>>>>
@@ -109,7 +109,7 @@ if($reportid == "")
 					$icolumnsqlresult = $adb->query($icolumnsql);
 				}
 			}
-			$vtlog->logthis("Reports :: Save->Successfully saved selectcolumn","info");
+			$log->info("Reports :: Save->Successfully saved selectcolumn");
 			//<<<<step2 selectcolumn>>>>>>>>
 
 		       //$genReportMId = $adb->getUniqueID("reportmodules");
@@ -119,13 +119,13 @@ if($reportid == "")
 				$ireportsql = "insert into report (REPORTID,FOLDERID,REPORTNAME,DESCRIPTION,REPORTTYPE,QUERYID,STATE)";
 				$ireportsql .= " values (".$genQueryId.",".$folderid.",'".$reportname."','".$reportdescription."','".$reporttype."',".$genQueryId.",'CUSTOM')";
 				$ireportresult = $adb->query($ireportsql);
-				$vtlog->logthis("Reports :: Save->Successfully saved report","info");
-			       	if($ireportresult!=false)
+			       	$log->info("Reports :: Save->Successfully saved report");
+				if($ireportresult!=false)
 				{
 					//<<<<reportmodules>>>>>>>
 					$ireportmodulesql = "insert into reportmodules (REPORTMODULESID,PRIMARYMODULE,SECONDARYMODULES) values (".$genQueryId.",'".$pmodule."','".$smodule."')";
 					$ireportmoduleresult = $adb->query($ireportmodulesql);
-					$vtlog->logthis("Reports :: Save->Successfully saved reportmodules","info");
+					$log->info("Reports :: Save->Successfully saved reportmodules");
 					//<<<<reportmodules>>>>>>>
 
 					//<<<<step3 reportsortcol>>>>>>>
@@ -144,13 +144,13 @@ if($reportid == "")
 						$sort_by3sql = "insert into reportsortcol (SORTCOLID,REPORTID,COLUMNNAME,SORTORDER) values (3,".$genQueryId.",'".$sort_by3."','".$sort_order3."')";
 						$sort_by3result = $adb->query($sort_by3sql);
 					}
-					$vtlog->logthis("Reports :: Save->Successfully saved reportsortcol","info");
+					$log->info("Reports :: Save->Successfully saved reportsortcol");
 					//<<<<step3 reportsortcol>>>>>>>
 
 					//<<<<step5 standarfilder>>>>>>>
 					$ireportmodulesql = "insert into reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$genQueryId.",'".$stdDateFilterField."','".$stdDateFilter."','".$startdate."','".$enddate."')";
 					$ireportmoduleresult = $adb->query($ireportmodulesql);
-					$vtlog->logthis("Reports :: Save->Successfully saved reportdatefilter","info");
+					$log->info("Reports :: Save->Successfully saved reportdatefilter");
 					//<<<<step5 standarfilder>>>>>>>
 
 					//<<<<step4 columnstototal>>>>>>>
@@ -159,7 +159,7 @@ if($reportid == "")
 						$ireportsummarysql = "insert into reportsummary (REPORTSUMMARYID,SUMMARYTYPE,COLUMNNAME) values (".$genQueryId.",".$i.",'".$columnstototal[$i]."')";
 						$ireportsummaryresult = $adb->query($ireportsummarysql);
 					}
-					$vtlog->logthis("Reports :: Save->Successfully saved reportsummary","info");
+					$log->info("Reports :: Save->Successfully saved reportsummary");
 					//<<<<step4 columnstototal>>>>>>>
 
 					//<<<<step5 advancedfilter>>>>>>>
@@ -170,7 +170,7 @@ if($reportid == "")
 
                                                 $irelcriteriaresult = $adb->query($irelcriteriasql);
                                         }
-					$vtlog->logthis("Reports :: Save->Successfully saved relcriteria","info");
+					$log->info("Reports :: Save->Successfully saved relcriteria");
                                         //<<<<step5 advancedfilter>>>>>>>
 
 				}else
@@ -219,12 +219,12 @@ if($reportid == "")
 		$ireportsql .= " REPORTTYPE='".$reporttype."'";
 		$ireportsql .= " where REPORTID=".$reportid;
 		$ireportresult = $adb->query($ireportsql);
-		$vtlog->logthis("Reports :: Save->Successfully saved report","info");
+		$log->info("Reports :: Save->Successfully saved report");
 		//echo $ireportsql;
 
 		$idelreportsortcolsql = "delete from reportsortcol where reportid=".$reportid;
 		$idelreportsortcolsqlresult = $adb->query($idelreportsortcolsql);
-		$vtlog->logthis("Reports :: Save->Successfully deleted reportsortcol","info");
+		$log->info("Reports :: Save->Successfully deleted reportsortcol");
 		//echo $idelreportsortcolsql;
 
 		if($idelreportsortcolsqlresult!=false)
@@ -246,7 +246,7 @@ if($reportid == "")
 				$sort_by3sql = "insert into reportsortcol (SORTCOLID,REPORTID,COLUMNNAME,SORTORDER) values (3,".$reportid.",'".$sort_by3."','".$sort_order3."')";
 				$sort_by3result = $adb->query($sort_by3sql);
 			}
-			$vtlog->logthis("Reports :: Save->Successfully saved reportsortcol","info");
+			$log->info("Reports :: Save->Successfully saved reportsortcol");
 			//<<<<step3 reportsortcol>>>>>>>
 
 			$idelreportdatefiltersql = "delete from reportdatefilter where datefilterid=".$reportid;
@@ -256,7 +256,7 @@ if($reportid == "")
 			//<<<<step5 standarfilder>>>>>>>
 			$ireportmodulesql = "insert into reportdatefilter (DATEFILTERID,DATECOLUMNNAME,DATEFILTER,STARTDATE,ENDDATE) values (".$reportid.",'".$stdDateFilterField."','".$stdDateFilter."','".$startdate."','".$enddate."')";
 			$ireportmoduleresult = $adb->query($ireportmodulesql);
-			$vtlog->logthis("Reports :: Save->Successfully saved reportdatefilter","info");
+			$log->info("Reports :: Save->Successfully saved reportdatefilter");
 			//<<<<step5 standarfilder>>>>>>>
 
 			//<<<<step4 columnstototal>>>>>>>
@@ -268,7 +268,7 @@ if($reportid == "")
 				$ireportsummarysql = "insert into reportsummary (REPORTSUMMARYID,SUMMARYTYPE,COLUMNNAME) values (".$reportid.",".$i.",'".$columnstototal[$i]."')";
 				$ireportsummaryresult = $adb->query($ireportsummarysql);
 			}
-			$vtlog->logthis("Reports :: Save->Successfully saved reportsummary","info");
+			 $log->info("Reports :: Save->Successfully saved reportsummary");
 			//<<<<step4 columnstototal>>>>>>>
 
 
@@ -282,8 +282,8 @@ if($reportid == "")
                                 $irelcriteriasql = "insert into relcriteria(QUERYID,COLUMNINDEX,COLUMNNAME,COMPARATOR,VALUE) values (".$reportid.",".$i.",'".$adv_filter_col[$i]."','".$adv_filter_option[$i]."','".$adv_filter_value[$i]."')";
                                 $irelcriteriaresult = $adb->query($irelcriteriasql);
                         }
-			$vtlog->logthis("Reports :: Save->Successfully saved relcriteria","info");
-                        //<<<<step5 advancedfilter>>>>>>>
+                        $log->info("Reports :: Save->Successfully saved relcriteria");
+			//<<<<step5 advancedfilter>>>>>>>
 
 		}else
 		{
