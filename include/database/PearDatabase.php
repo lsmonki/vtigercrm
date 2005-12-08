@@ -18,10 +18,7 @@ require_once('include/logging.php');
 include_once('adodb/adodb.inc.php');
 require_once("adodb/adodb-xmlschema.inc.php");
 	
-		require_once('vtiger_logger.php');
-		global $vtlog;
-	if ( !$vtlog )
-		$vtlog = new vtiger_logger();
+$log1 =& LoggerManager::getLogger('VT');
 
 class PearDatabase{
 	var $database = null;
@@ -192,7 +189,7 @@ class PearDatabase{
 	 * Contributor(s): ______________________________________..
 	*/
 	function checkConnection(){
-global $vtlog;
+global $log1;
 			if(!isset($this->database))
 			{
 				$this->println("TRANS creating new connection");
@@ -210,8 +207,8 @@ global $vtlog;
 			{
 		//		$this->println("checkconnect using old connection");
                 //commenting as the above log will suffice. this was filling up the logs too much
-		//$vtlog->logthis('checkconnect using old connection','info');
-			}
+		//$log1->info('checkconnect using old connection');
+		}
 	}
 
 	/* ADODB converted	
@@ -235,16 +232,16 @@ global $vtlog;
 
 	function query($sql, $dieOnError=false, $msg='')
 	{
-		global $vtlog;
+		global $log1;
 		//$this->println("ADODB query ".$sql);		
-		$vtlog->logthis('query being executed : '.$sql,'debug');
+		 $log1->debug('query being executed : '.$sql);
         $mytime["start"] = $this->microtime_float();
 		$this->checkConnection();
 		$result = & $this->database->Execute($sql);
         $mytime["execute"] = $this->microtime_float();
         $mytime["total"] = $mytime["execute"]-$mytime["start"];
         if ( $mytime["total"] > 0.5 )
-            $vtlog->logthis("TIME: sql statement $sql took {$mytime['total']} seconds.","error");
+		$log1->error("TIME: sql statement $sql took {$mytime['total']} seconds.");
 		$this->lastmysqlrow = -1;
 		if(!$result)$this->checkError($msg.' Query Failed:' . $sql . '::', $dieOnError);
 		return $result;		
@@ -286,9 +283,9 @@ global $vtlog;
 	
 	function limitQuery($sql,$start,$count, $dieOnError=false, $msg='')
 	{
-		global $vtlog;
+		global $log1;
 		//$this->println("ADODB limitQuery sql=".$sql." st=".$start." co=".$count);
-		$vtlog->logthis(' limitQuery sql = '.$sql .' st = '.$start .' co = '.$count,'debug');
+		$log1->debug(' limitQuery sql = '.$sql .' st = '.$start .' co = '.$count);
 		$this->checkConnection();
 		$result =& $this->database->SelectLimit($sql,$count,$start);
 		if(!$result) $this->checkError($msg.' Limit Query Failed:' . $sql . '::', $dieOnError);
@@ -401,12 +398,12 @@ global $vtlog;
 	*/
 	
 	function getRowCount(&$result){
-		global $vtlog;
+		global $log1;
 		//$this->println("ADODB getRowCount");
 		if(isset($result) && !empty($result))
 			$rows= $result->RecordCount();			
 		//$this->println("ADODB getRowCount rows=".$rows);	
-		$vtlog->logthis('getRowCount rows= '.$rows,'debug');
+		$log1->debug('getRowCount rows= '.$rows);
 		return $rows;			
 	}
 
@@ -473,12 +470,12 @@ global $vtlog;
 	}*/
 
 	function getAffectedRowCount(&$result){
-		global $vtlog;
+		global $log1;
 //		$this->println("ADODB getAffectedRowCount");
-	$vtlog->logthis('getAffectedRowCount','debug');
+	$log1->debug('getAffectedRowCount');
 		$rows =$this->database->Affected_Rows(); 
 	//	$this->println("ADODB getAffectedRowCount rows=".rows);
-	$vtlog->logthis('getAffectedRowCount rows = '.$rows,'debug');
+	$log1->info('getAffectedRowCount rows = '.$rows);
 		return $rows;
 	}
 			
@@ -588,10 +585,10 @@ global $vtlog;
 	*/
 	
 	function getNextRow(&$result, $encode=true){
-		global $vtlog;
+		global $log1;
 
 		//$this->println("ADODB getNextRow");
-		$vtlog->logthis('getNextRow','info');
+		$log1->info('getNextRow');
 		if(isset($result)){
 			$row = $this->change_key_case($result->FetchRow());
 			if($row && $encode&& is_array($row))return array_map('to_html', $row);	

@@ -23,8 +23,8 @@ class PopulateComboValues
   function insertComboValues($values, $tableName)
 	{
           global $adb;
-//	  global $vtlog;
-//	  $vtlog->logthis("in  insertComboValues ".$tableName ,'info');  
+//        global $log;
+//        $log->info("in  insertComboValues ".$tableName);
           $i=0;
           foreach ($values as $val => $cal)
           {

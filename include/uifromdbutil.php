@@ -26,9 +26,9 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 	$output='';
 	if (($module == 'Accounts' || $module == 'Contacts' || $module == 'Quotes' || $module == 'Orders' || $module == 'SalesOrder'|| $module == 'Invoice') && $block == 2)
 	{
-		global $vtlog;
-		$vtlog->logthis("module is ".$module,'info');  
-		
+		 global $log;
+                $log->info("module is ".$module);
+
 			$mvAdd_flag = true;
 			$moveAddress = "<td rowspan='5' valign='middle' align='center'><input title='Copy billing address to shipping address'  class='button' onclick='return copyAddressRight(EditView)'  type='button' name='copyright' value='&raquo;' style='padding:0px 2px 0px 2px;font-size:12px'><br><br>
 				<input title='Copy shipping address to billing address'  class='button' onclick='return copyAddressLeft(EditView)'  type='button' name='copyleft' value='&laquo;' style='padding:0px 2px 0px 2px;font-size:12px'></td>";
