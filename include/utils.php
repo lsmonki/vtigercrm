@@ -96,7 +96,7 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 	global $log;
 	global $current_user;
 	static $user_array = null;
-	global $vtlog;
+	global $log;
 
 
 	if($user_array == null)
@@ -111,12 +111,12 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 		else {
 				if($private == 'private')
 				{
-					$vtlog->logthis("Sharing is Private. Only the current user should be listed",'debug');
+					$log->debug("Sharing is Private. Only the current user should be listed");
 					$query = "SELECT id, user_name from users WHERE id='$current_user->id' and status='$status'";
 				}
 				else
 				{
-					$vtlog->logthis("Sharing is Public. All users should be listed",'debug');
+					$log->debug("Sharing is Public. All users should be listed");
 					$query = "SELECT id, user_name from users WHERE status='$status'";
 				}
 		}
@@ -852,8 +852,8 @@ function get_assigned_user_or_group_name($id,$module)
 
 function getTabname($tabid)
 {
-	global $vtlog;
-	$vtlog->logthis("tab id is ".$tabid,'info');  
+	global $log;
+        $log->info("tab id is ".$tabid);
         global $adb;
 	$sql = "select tablabel from tab where tabid='".$tabid."'";
 	$result = $adb->query($sql);
@@ -864,8 +864,8 @@ function getTabname($tabid)
 
 function getTabModuleName($tabid)
 {
-        global $vtlog;
-        $vtlog->logthis("tab id is ".$tabid,'info');
+	global $log;
+        $log->info("tab id is ".$tabid);
         global $adb;
         $sql = "select name from tab where tabid='".$tabid."'";
         $result = $adb->query($sql);
@@ -875,9 +875,8 @@ function getTabModuleName($tabid)
 
 function getTabid($module)
 {
-	global $vtlog;
-	$vtlog->logthis("module  is ".$module,'info');  
-        
+        global $log;
+        $log->info("module  is ".$module);
         global $adb;
 	$sql = "select tabid from tab where name='".$module."'";
 	$result = $adb->query($sql);
@@ -888,7 +887,7 @@ function getTabid($module)
 
 function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module_name)
 {
-	global $adb,$vtlog;
+	global $adb,$log;
 	global $theme;
 	global $mod_strings;
 	global $app_strings;
@@ -908,8 +907,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 	if($uitype == 5 || $uitype == 6 || $uitype ==23)
 	{	
-          $vtlog->logthis("uitype is ".$uitype,'info');  
-
+		$log->info("uitype is ".$uitype);
 		if($value=='')
                 {
 			if($fieldname != 'birthday')// && $fieldname != 'due_date')//due date is today's date by default
@@ -962,7 +960,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 15 || $uitype == 16)
 	{
-	#$vtlog->logthis("uitype selected is  ".$uitype,'info');  
+		#$log->info("uitype selected is  ".$uitype);
 		$custfld .= '<td width="20%" class="dataLabel">';
 
 		if($uitype == 16)
@@ -1115,8 +1113,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		
 	if($noof_group_rows!=0)
 	{
-	
-          $vtlog->logthis("Has a Group, get the Radio button",'debug');  
+
+          $log->debug("Has a Group, get the Radio button");
           $GROUP_SELECT_OPTION .= '<input
           type="radio" name="assigntype" value="T"'.$team_checked.'
           onclick="toggleAssignType(this.value)">'.$app_strings['LBL_TEAM'];
@@ -1131,7 +1129,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
           
 	if($noof_group_rows!=0)
 	{
-          $vtlog->logthis("Has a Group, getting the group names ",'debug');  
+          $log->debug("Has a Group, getting the group names ");
           $GROUP_SELECT_OPTION .='<span id="assign_team" style="'.$team_style.'"><select name="assigned_group_name">';
           
           
@@ -1867,6 +1865,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	global $mod_strings;
 	global $app_strings;
 	global $current_user;
+	$fieldlabel = from_html($fieldlabel);
 	$custfld = '';
 	$value ='';
 
@@ -2453,9 +2452,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 function getSalesEntityType($crmid)
 {
-global $vtlog;
-$vtlog->logthis("in getSalesEntityType ".$crmid,'info');  
-	
+	global $log;
+	$log->info("in getSalesEntityType ".$crmid);
 	global $adb;
 	$sql = "select * from crmentity where crmid=".$crmid;
         $result = $adb->query($sql);
@@ -2465,8 +2463,8 @@ $vtlog->logthis("in getSalesEntityType ".$crmid,'info');
 
 function getAccountName($account_id)
 {
-global $vtlog;
-$vtlog->logthis("in getAccountName ".$account_id,'info');  
+global $log;
+$log->info("in getAccountName ".$account_id);
 
 	global $adb;
 	if($account_id != '')
@@ -2480,8 +2478,8 @@ $vtlog->logthis("in getAccountName ".$account_id,'info');
 function getProductName($product_id)
 {
 
-global $vtlog;
-$vtlog->logthis("in getproductname ".$product_id,'info');  
+global $log;
+$log->info("in getproductname ".$product_id);
 
 	global $adb;
 	$sql = "select productname from products where productid=".$product_id;
@@ -2491,8 +2489,9 @@ $vtlog->logthis("in getproductname ".$product_id,'info');
 }
 function getPotentialName($potential_id)
 {
-global $vtlog;
-$vtlog->logthis("in getPotentialName ".$potential_id,'info');  
+	global $log;
+$log->info("in getPotentialName ".$potential_id);
+
 	global $adb;
 	$sql = "select potentialname from potential where potentialid=".$potential_id;
         $result = $adb->query($sql);
@@ -2502,8 +2501,9 @@ $vtlog->logthis("in getPotentialName ".$potential_id,'info');
 
 function getContactName($contact_id)
 {
-global $vtlog;
-$vtlog->logthis("in getContactName ".$contact_id,'info');  
+global $log;
+$log->info("in getContactName ".$contact_id);
+
         global $adb;
         $sql = "select * from contactdetails where contactid=".$contact_id;
         $result = $adb->query($sql);
@@ -2515,8 +2515,8 @@ $vtlog->logthis("in getContactName ".$contact_id,'info');
 
 function getVendorName($vendor_id)
 {
-global $vtlog;
-$vtlog->logthis("in getVendorName ".$vendor_id,'info');  
+global $log;
+$log->info("in getVendorName ".$vendor_id);
         global $adb;
         $sql = "select * from vendor where vendorid=".$vendor_id;
         $result = $adb->query($sql);
@@ -2526,8 +2526,8 @@ $vtlog->logthis("in getVendorName ".$vendor_id,'info');
 
 function getQuoteName($quote_id)
 {
-global $vtlog;
-$vtlog->logthis("in getQuoteName ".$quote_id,'info');  
+global $log;
+$log->info("in getQuoteName ".$quote_id);
         global $adb;
         $sql = "select * from quotes where quoteid=".$quote_id;
         $result = $adb->query($sql);
@@ -2536,8 +2536,8 @@ $vtlog->logthis("in getQuoteName ".$quote_id,'info');
 }
 function getPriceBookName($pricebookid)
 {
-global $vtlog;
-$vtlog->logthis("in getPriceBookName ".$pricebookid,'info');  
+global $log;
+$log->info("in getPriceBookName ".$pricebookid);
         global $adb;
         $sql = "select * from pricebook where pricebookid=".$pricebookid;
         $result = $adb->query($sql);
@@ -2552,8 +2552,8 @@ $vtlog->logthis("in getPriceBookName ".$pricebookid,'info');
 function getPoName($po_id)
 {
 
-	global $vtlog;
-	$vtlog->logthis("in getPoName ".$po_id,'info');  
+global $log;
+        $log->info("in getPoName ".$po_id);
 
         global $adb;
         $sql = "select * from purchaseorder where purchaseorderid=".$po_id;
@@ -2564,9 +2564,9 @@ function getPoName($po_id)
 
 function getSoName($so_id)
 {
-global $vtlog;
-$vtlog->logthis("in getSoName ".$so_id,'info');  
-        global $adb;
+        global $log;
+$log->info("in getSoName ".$so_id);
+	global $adb;
         $sql = "select * from salesorder where salesorderid=".$so_id;
         $result = $adb->query($sql);
         $so_name = $adb->query_result($result,0,"subject");
@@ -2574,8 +2574,8 @@ $vtlog->logthis("in getSoName ".$so_id,'info');
 }
 function getGroupName($id, $module)
 {
-global $vtlog;
-$vtlog->logthis("in getGroupName ".$id.'  module is    '.$module,'info');  
+	global $log;
+$log->info("in getGroupName ".$id.'  module is    '.$module);
 	global $adb;
 	if($module == 'Leads')
 	{
@@ -2601,8 +2601,8 @@ $vtlog->logthis("in getGroupName ".$id.'  module is    '.$module,'info');
 
 function getColumnFields($module)
 {
-global $vtlog;
-$vtlog->logthis("in getColumnFields ".$module,'info');  
+	global $log;
+$log->info("in getColumnFields ".$module);
 	global $adb;
 	$column_fld = Array();
         $tabid = getTabid($module);
@@ -2619,8 +2619,8 @@ $vtlog->logthis("in getColumnFields ".$module,'info');
 
 function getUserName($userid)
 {
-global $vtlog;
-$vtlog->logthis("in getUserName ".$userid,'info');  
+global $log;
+$log->info("in getUserName ".$userid);
 
 	global $adb;
 	if($userid != '')
@@ -2634,8 +2634,8 @@ $vtlog->logthis("in getUserName ".$userid,'info');
 
 function getUserEmail($userid)
 {
-global $vtlog;
-$vtlog->logthis("in getUserEmail ".$userid,'info');  
+global $log;
+$log->info("in getUserEmail ".$userid);
 
         global $adb;
         if($userid != '')
@@ -2649,8 +2649,8 @@ $vtlog->logthis("in getUserEmail ".$userid,'info');
 //outlook security
 function getUserId_Ol($username)
 {
-global $vtlog;
-$vtlog->logthis("in getUserId_Ol ".$username,'info');  
+global $log;
+$log->info("in getUserId_Ol ".$username);
 
 	global $adb;
 	$sql = "select id from users where user_name='".$username."'";
@@ -4270,8 +4270,8 @@ function getListQuery($module,$where='')
 
 function getActionid($action)
 {
-global $vtlog;
-$vtlog->logthis("get Actionid ".$action,'info');  
+global $log;
+$log->info("get Actionid ".$action);
 
 	$actionid = '';
 	if($action == 'Save')
@@ -4358,17 +4358,17 @@ $vtlog->logthis("get Actionid ".$action,'info');
         {
                 $actionid= 1;
         }
-	$vtlog->logthis("action id selected is ".$actionid ,'info');  
+	$log->info("action id selected is ".$actionid );
 	return $actionid;
 }
 
 function getActionname($actionid)
 {
-	global $vtlog;
+	global $log;
 	global $adb;
 
 	$query = 
-	$vtlog->logthis("getActionName   ".$actionid ,'info');  
+	$log->info("getActionName   ".$actionid);
 
 	$actionname = '';
 	if($actionid == 0)
@@ -4417,8 +4417,8 @@ function getActionname($actionid)
 
 function getUserId($record)
 {
-	global $vtlog;
-	$vtlog->logthis("in getUserId ".$record,'info');  
+	global $log;
+        $log->info("in getUserId ".$record);
 
 	global $adb;
         $user_id=$adb->query_result($adb->query("select * from crmentity where crmid = ".$record),0,'smownerid');
@@ -4427,9 +4427,9 @@ function getUserId($record)
 
 function insertProfile2field($profileid)
 {
-	global $vtlog;
-	$vtlog->logthis("in insertProfile2field ".$profileid,'info');  
-	
+	 global $log;
+        $log->info("in insertProfile2field ".$profileid);
+
 	global $adb;
 	$adb->database->SetFetchMode(ADODB_FETCH_ASSOC); 
 	$fld_result = $adb->query("select * from field where generatedtype=1 and displaytype in (1,2)");
@@ -4458,8 +4458,8 @@ function insert_def_org_field()
 
 function getProfile2FieldList($fld_module, $profileid)
 {
-	global $vtlog;
-	$vtlog->logthis("in getProfile2FieldList ".$fld_module. ' profile id is  '.$profileid,'info');  
+	 global $log;
+        $log->info("in getProfile2FieldList ".$fld_module. ' profile id is  '.$profileid);
 
 	global $adb;
 	$tabid = getTabid($fld_module);
@@ -4470,8 +4470,8 @@ function getProfile2FieldList($fld_module, $profileid)
 }
 function getDefOrgFieldList($fld_module)
 {
-	global $vtlog;
-	$vtlog->logthis("in getDefOrgFieldList ".$fld_module,'info');  
+	global $log;
+        $log->info("in getDefOrgFieldList ".$fld_module);
 
 	global $adb;
 	$tabid = getTabid($fld_module);
@@ -4503,8 +4503,8 @@ function getQuickCreate($tabid,$actionid)
 }
 function ChangeStatus($status,$activityid,$activity_mode='')
  {
-	global $vtlog;
-	$vtlog->logthis("in ChangeStatus ".$status. ' activityid is  '.$activityid,'info');  
+	global $log;
+        $log->info("in ChangeStatus ".$status. ' activityid is  '.$activityid);
 
         global $adb;
         if ($activity_mode == 'Task')
@@ -4581,8 +4581,8 @@ function getDisplayDate($cur_date_val)
 
 function getNewDisplayDate()
 {
-	global $vtlog;
-	$vtlog->logthis("in getNewDisplayDate ",'info');  
+	global $log;
+        $log->info("in getNewDisplayDate ");
 
 	global $current_user;
 	$dat_fmt = $current_user->date_format;
@@ -4873,8 +4873,8 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 
 function getListPrice($productid,$pbid)
 {
-	global $vtlog;
-	$vtlog->logthis("in getListPrice productid ".$productid,'info');  
+	global $log;
+        $log->info("in getListPrice productid ".$productid);
 
 	global $adb;
 	$query = "select listprice from pricebookproductrel where pricebookid=".$pbid." and productid=".$productid;
@@ -4885,8 +4885,8 @@ function getListPrice($productid,$pbid)
 
 function getUnitPrice($productid)
 {
-        global $vtlog;
-        $vtlog->logthis("in getUnitPrice productid ".$productid,'info');
+	global $log;
+        $log->info("in getUnitPrice productid ".$productid);
 
         global $adb;
         $query = "select unit_price from products where productid=".$productid;
@@ -4899,10 +4899,10 @@ function getDetailAssociatedProducts($module,$focus)
 {
 	global $adb;
 	global $theme;
-	global $vtlog;
+	global $log;
         $theme_path="themes/".$theme."/";
         $image_path=$theme_path."images/";
-	$vtlog->logthis("in getDetailAssociatedProducts. Module is  ".$module,'debug');
+	 $log->debug("in getDetailAssociatedProducts. Module is  ".$module);
 
 	$output = '';
 	$output .= '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
@@ -5044,8 +5044,8 @@ function getDetailAssociatedProducts($module,$focus)
 
 function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 {
-	global $vtlog;
-	$vtlog->logthis("in getConvertQuoteToSoObject ".$quoteid,'info');  
+	global $log;
+        $log->info("in getConvertQuoteToSoObject ".$quoteid);
 
         $focus->column_fields['quote_id'] = $quoteid;
         $focus->column_fields['subject'] = $quote_focus->column_fields['subject'];
@@ -5072,8 +5072,8 @@ function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 
 function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 {
-	global $vtlog;
-	$vtlog->logthis("in getConvertQuoteToInvoice ".$quoteid,'info'); 
+	global $log;
+        $log->info("in getConvertQuoteToInvoice ".$quoteid);
 
 	$focus->column_fields['subject'] = $quote_focus->column_fields['subject'];
 	$focus->column_fields['account_id'] = $quote_focus->column_fields['account_id'];
@@ -5097,8 +5097,8 @@ function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 
 function getConvertSoToInvoice($focus,$so_focus,$soid)
 {
-	global $vtlog;
-	$vtlog->logthis("in getConvertSoToInvoice ".$soid,'info');  
+	global $log;
+        $log->info("in getConvertSoToInvoice ".$soid);
 
 	$focus->column_fields['salesorder_id'] = $soid;
 	$focus->column_fields['subject'] = $so_focus->column_fields['subject'];
@@ -5129,8 +5129,8 @@ function getConvertSoToInvoice($focus,$so_focus,$soid)
 function upload_product_image_file($mode,$id)
 {
 	global $root_directory;
-	global $vtlog;
-	$vtlog->logthis("Inside upload_product_image_file. The id is ".$id,'debug');
+	global $log;
+        $log->debug("Inside upload_product_image_file. The id is ".$id);
 	$uploaddir = $root_directory ."/test/product/";
 
 	$file_path_name = $_FILES['imagename']['name'];
@@ -5176,11 +5176,11 @@ function upload_product_image_file($mode,$id)
 function getProductImageName($id)
 {
 	global $adb;
-	global $vtlog;
+	global $log;
 	$query = "select imagename from products where productid=".$id;
 	$result = $adb->query($query);
 	$image_name = $adb->query_result($result,0,"imagename");
-	$vtlog->logthis("Inside getProductImageName. The image_name is ".$image_name,'debug');
+	$log->debug("Inside getProductImageName. The image_name is ".$image_name);
 	return $image_name;
 	
 }
@@ -5622,8 +5622,8 @@ function getEmailParentsList($module,$id)
 function getPoStatus($po_id)
 {
 
-	global $vtlog;
-	$vtlog->logthis("in getPoName ".$po_id,'info');  
+	global $log;
+        $log->info("in getPoName ".$po_id);
 
         global $adb;
         $sql = "select postatus from purchaseorder where purchaseorderid=".$po_id;
