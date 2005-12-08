@@ -170,7 +170,6 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty)
 {
         global $current_user;
         global $adb;
-        global $vtlog;
 	$reorderlevel = getPrdReOrderLevel($product_id);
 	if($upd_qty < $reorderlevel)
 	{
