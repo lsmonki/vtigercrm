@@ -28,20 +28,20 @@ require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
 
-global $vtlog;
+global $log;
 
-$vtlog->logthis("Inside Quote Save",'debug');
+$log->debug("Inside Quote Save");
 
 $focus = new Quote();
 if(isset($_REQUEST['record']))
 {
 	$focus->id = $_REQUEST['record'];
-	$vtlog->logthis("Quote ID ".$focus->id,'debug');
+	$log->debug("Quote ID ".$focus->id);
 }
 if(isset($_REQUEST['mode']))
 {
 	$focus->mode = $_REQUEST['mode'];
-	$vtlog->logthis("Mode is  ".$focus->mode,'debug');
+	  $log->debug("Mode is  ".$focus->mode);
 }
 
 
@@ -60,8 +60,7 @@ foreach($focus->column_fields as $fieldname => $val)
 	}
 		
 }
-$vtlog->logthis("The Field Value Array -----> ".$focus->column_fields ,'debug');
-
+$log->debug("The Field Value Array -----> ".$focus->column_fields);
 $focus->save("Quotes");
 
 $ext_prod_arr = Array();
@@ -77,7 +76,7 @@ if($focus->mode == 'edit')
 		$ext_prod_arr[$pro_id] = $pro_qty;	
 	}
 	
-	$vtlog->logthis("Deleting from quotesproductrel table ",'debug');
+	 $log->debug("Deleting from quotesproductrel table ");
 	$query1 = "delete from quotesproductrel where quoteid=".$focus->id;
 	//echo $query1;
 	$adb->query($query1);
@@ -85,8 +84,7 @@ if($focus->mode == 'edit')
 }
 //Printing the total Number of rows
 $tot_no_prod = $_REQUEST['totalProductCount'];
-$vtlog->logthis("The total Product Count is  ".$tot_no_prod,'debug');
-
+$log->debug("The total Product Count is  ".$tot_no_prod);
 for($i=1; $i<=$tot_no_prod; $i++)
 {
 	$product_id_var = 'hdnProductId'.$i;
@@ -131,16 +129,16 @@ $local_log->debug("Saved record with id of ".$return_id);
 
 function updateStk($product_id,$qty,$mode,$ext_prod_arr)
 {
-	global $vtlog;
+	global $log;
 	global $adb;
 	global $current_user;
-	$vtlog->logthis("Inside Quote updateStk function.",'debug');
-	$vtlog->logthis("Product Id is".$product_id,'debug');
-	$vtlog->logthis("Qty is".$qty,'debug');
+	 $log->debug("Inside Quote updateStk function.");
+        $log->debug("Product Id is".$product_id);
+        $log->debug("Qty is".$qty);
 
 	$prod_name = getProductName($product_id);
 	$qtyinstk= getPrdQtyInStck($product_id);
-	$vtlog->logthis("Prd Qty in Stock ".$qtyinstk,'debug');
+	$log->debug("Prd Qty in Stock ".$qtyinstk);
 	if($mode == 'edit')
 	{
 		if(array_key_exists($product_id,$ext_prod_arr))
@@ -188,19 +186,19 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty)
 {
 	global $current_user;
 	global $adb;
-	global $vtlog;
+	global $log;
 	$reorderlevel = getPrdReOrderLevel($product_id);
-        $vtlog->logthis("Prd reorder level ".$reorderlevel,'debug');
-        if($upd_qty < $reorderlevel)
+        $log->debug("Prd reorder level ".$reorderlevel);
+	if($upd_qty < $reorderlevel)
         {
 
                 //send mail to the handler
-                $vtlog->logthis("Sending mail to handler ",'debug');
+		$log->debug("Sending mail to handler ")
                 $handler=getPrdHandler($product_id);
                 $handler_name = getUserName($handler);
-                $vtlog->logthis("Handler Name is ".$handler_name,'debug');
+		$log->debug("Handler Name is ".$handler_name);
                 $to_address= getUserEmail($handler);
-                $vtlog->logthis("Handler Email is ".$to_address,'debug');
+		$log->debug("Handler Email is ".$to_address);
                 //Get the email details from database;
                 $query = "select * from inventorynotification where notificationname='QuoteNotification'";
                 $result = $adb->query($query);
@@ -253,8 +251,8 @@ function getPrdHandler($product_id)
 
 function SendMailToCustomer($to,$current_user_id,$subject,$contents)
 {
-	global $vtlog;
-	$vtlog->logthis("Inside SendMailToCustomer function.",'debug');		
+	global $log;
+	$log->debug("Inside SendMailToCustomer function.");
 	require_once("modules/Emails/class.phpmailer.php");
 
 	$mail = new PHPMailer();

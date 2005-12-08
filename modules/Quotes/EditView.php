@@ -32,23 +32,23 @@ require_once('include/FormValidationUtil.php');
 global $app_strings;
 global $mod_strings;
 global $current_user;
-global $vtlog;
+global $log;
 
-$vtlog->logthis("Inside Quote EditView",'debug');
-		
+$log->debug("Inside Quote EditView");
+
 $focus = new Quote();
 
 if(isset($_REQUEST['record'])) 
 {
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit'; 
-    $vtlog->logthis("Mode is Edit. Quoteid is ".$focus->id,'debug');		
+    $log->debug("Mode is Edit. Quoteid is ".$focus->id);
     $focus->retrieve_entity_info($_REQUEST['record'],"Quotes");		
     $focus->name=$focus->column_fields['subject']; 
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$num_of_products = getNoOfAssocProducts($module,$focus);
-    	$vtlog->logthis("Mode is Duplicate. Quoteid to be duplicated is ".$focus->id,'debug');		
+	 $log->debug("Mode is Duplicate. Quoteid to be duplicated is ".$focus->id);
         $associated_prod = getAssociatedProducts("Quotes",$focus);
 	$focus->id = "";
     	$focus->mode = ''; 	
@@ -57,15 +57,15 @@ if(isset($_REQUEST['potential_id']) && $_REQUEST['potential_id'] !='')
 {
         $focus->column_fields['potential_id'] = $_REQUEST['potential_id'];
 	$_REQUEST['account_id'] = get_account_info($focus->column_fields['potential_id']);
-    	$vtlog->logthis("Quotes EditView: Potential Id from the request is ".$_REQUEST['potential_id'],'debug');
+	 $log->debug("Quotes EditView: Potential Id from the request is ".$_REQUEST['potential_id']);
 	$num_of_products = getNoOfAssocProducts("Potentials",$focus,$focus->column_fields['potential_id']);
         $associated_prod = getAssociatedProducts("Potentials",$focus,$focus->column_fields['potential_id']);
 }
 if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 {
         $focus->column_fields['product_id'] = $_REQUEST['product_id'];
-	$vtlog->logthis("Productid Id from the request is ".$_REQUEST['product_id'],'debug');
-        $num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
+        $log->debug("Productid Id from the request is ".$_REQUEST['product_id']);
+	$num_of_products = getNoOfAssocProducts("Products",$focus,$focus->column_fields['product_id']);
         $associated_prod = getAssociatedProducts("Products",$focus,$focus->column_fields['product_id']);
 }
 
@@ -84,8 +84,7 @@ if(isset($_REQUEST['account_id']) && $_REQUEST['account_id']!='' && $_REQUEST['r
 	$focus->column_fields['ship_code']=$acct_focus->column_fields['ship_code'];
 	$focus->column_fields['bill_country']=$acct_focus->column_fields['bill_country'];
 	$focus->column_fields['ship_country']=$acct_focus->column_fields['ship_country'];
-	$vtlog->logthis("Accountid Id from the request is ".$_REQUEST['account_id'],'debug');
-
+	 $log->debug("Accountid Id from the request is ".$_REQUEST['account_id']);
 }
 
 //get Block 1 Information
@@ -157,8 +156,8 @@ else $xtpl->assign("NAME", "");
 
 if(isset($cust_fld))
 {
-	
-    	$vtlog->logthis("Custom Field is present",'debug');		
+
+	 $log->debug("Custom Field is present");
         $xtpl->assign("CUSTOMFIELD", $cust_fld);
 }
 
@@ -203,7 +202,7 @@ else
 	$xtpl->assign("TAXVALUE", '0');
 	$xtpl->assign("ADJUSTMENTVALUE", '0');
 	//Setting the first row
-    	$vtlog->logthis("Setting the first product row when the mode is create",'debug');		
+	 $log->debug("Setting the first product row when the mode is create");
 	$output ='';
 	$output .= '<tr id="row1" class="oddListRow">';
         $output .= '<td height="25" style="padding:3px;" nowrap><input id="txtProduct1" name="txtProduct1" type="text" readonly> <img src="'.$image_path.'search.gif" onClick=\'productPickList(this)\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
