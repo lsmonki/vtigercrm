@@ -30,6 +30,12 @@ global $focus_list;
 echo get_module_title($mod_strings['LBL_MODULE_NAME'],$mod_strings['LBL_CREATE_REPORT'], true);
 echo "\n<BR>\n";
 
+
+/** Function to get the primary module list in reports
+ *  This function generates the list of primary modules in reports
+ *  and returns the module in a combo HTML values
+ */
+
 function getPrimaryModuleList()
 {
 	global $adb;
@@ -50,6 +56,12 @@ function getPrimaryModuleList()
 	
 	return $shtml;
 }
+
+/** Function to get the Related module list in reports
+ *  This function generates the list of secondary modules in reports
+ *  and returns the related module in a combo HTML values
+ */
+
 function getRelatedModuleList()
 {
 	global $app_list_strings;

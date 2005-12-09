@@ -52,6 +52,12 @@ if(isset($_REQUEST["record"]))
 	
 }
 
+/** Function to formulate the fields for the primary modules 
+ *  This function accepts the module name 
+ *  as arguments and generates the fields for the primary module as
+ *  a HTML Combo values
+ */
+
 function getPrimaryColumnsHTML($module)
 {
         global $ogReport;
@@ -59,7 +65,6 @@ function getPrimaryColumnsHTML($module)
 	global $current_language;
 
 	$mod_strings = return_module_language($current_language,$module);
-	//print_r($mod_strings);
 	foreach($ogReport->module_list[$module] as $key=>$value)
         {
             $shtml .= "<optgroup label=\"".$app_list_strings['moduleList'][$module]." ".$key."\" class=\"select\" style=\"border:none\">";
@@ -79,6 +84,13 @@ function getPrimaryColumnsHTML($module)
         }
 	return $shtml;
 }
+
+/** Function to formulate the fields for the secondary modules
+ *  This function accepts the module name
+ *  as arguments and generates the fields for the secondary module as
+ *  a HTML Combo values
+ */
+
 
 function getSecondaryColumnsHTML($module)
 {

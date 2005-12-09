@@ -14,7 +14,7 @@ global $adb;
 
 $rptfolder = Array(Array('Account and Contact Reports'=>'Account and Contact Reports'),
 		   Array('Lead Reports'=>'Lead Reports'),
-           Array('Potential Reports'=>'Potential Reports'),
+	           Array('Potential Reports'=>'Potential Reports'),
 		   Array('Activity Reports'=>'Activity Reports'),
 		   Array('HelpDesk Reports'=>'HelpDesk Reports'),
 		   Array('Product Reports'=>'Product Reports'),
@@ -394,7 +394,6 @@ foreach($reports as $key=>$report)
 	if(isset($stdfilters[$report['stdfilterid']]))
 	{
 		$i = $report['stdfilterid'];
-		//print_r($stdfilters[$report['stdfilterid']]);
 		insertStdFilter($queryid,$stdfilters[$i]['columnname'],$stdfilters[$i]['datefilter'],$stdfilters[$i]['startdate'],$stdfilters[$i]['enddate']);
 	}
 
@@ -409,6 +408,11 @@ foreach($reports as $key=>$report)
 	}
 }
 
+/** Function to store the foldername and folderdescription to database
+ *  This function accepts the given folder name and description
+ *  ans store it in db as SAVED
+ */
+
 function PopulateReportFolder($fldrname,$fldrdescription)
 {
 	global $adb;
@@ -418,6 +422,10 @@ function PopulateReportFolder($fldrname,$fldrdescription)
 	$result = $adb->query($sql);
 }
 
+/** Function to add an entry in selestquery table 
+ *
+ */
+
 function insertSelectQuery()
 {
 	global $adb;
@@ -425,12 +433,16 @@ function insertSelectQuery()
         if($genQueryId != "")
         {
 		$iquerysql = "insert into selectquery (QUERYID,STARTINDEX,NUMOFOBJECTS) values (".$genQueryId.",0,0)";
-		//echo "<<<<<<<QUERY>>>>>>><br>".$iquerysql;
 		$iquerysqlresult = $adb->query($iquerysql);
 	}
 
 	return $genQueryId;
 }
+
+/** Function to store the field names selected for a report to a database
+ *  
+ *  
+ */
 
 function insertSelectColumns($queryid,$columnname)
 {
@@ -440,11 +452,16 @@ function insertSelectColumns($queryid,$columnname)
 		for($i=0;$i < count($columnname);$i++)
 		{
 			$icolumnsql = "insert into selectcolumn (QUERYID,COLUMNINDEX,COLUMNNAME) values (".$queryid.",".$i.",'".$columnname[$i]."')";
-			//echo "<<<<<<<OLUMNS>>>>>>><br>".$icolumnsql;
 			$icolumnsqlresult = $adb->query($icolumnsql);	
 		}
 	}
 }
+
+
+/** Function to store the report details to database
+ *  This function accepts queryid,folderid,reportname,description,reporttype
+ *  as arguments and store the informations in report table
+ */
 
 function insertReports($queryid,$folderid,$reportname,$description,$reporttype)
 {
@@ -453,10 +470,15 @@ function insertReports($queryid,$folderid,$reportname,$description,$reporttype)
 	{
 		$ireportsql = "insert into report (REPORTID,FOLDERID,REPORTNAME,DESCRIPTION,REPORTTYPE,QUERYID,STATE)";
                 $ireportsql .= " values (".$queryid.",".$folderid.",'".$reportname."','".$description."','".$reporttype."',".$queryid.",'SAVED')";
-		//echo "<<<<<<<REPORTS>>>>>>><br>".$ireportsql;
 		$ireportresult = $adb->query($ireportsql);
 	}
 }
+
+/** Function to store the report modules to database
+ *  This function accepts queryid,primary module and secondary module
+ *  as arguments and store the informations in reportmodules table
+ */
+
 
 function insertReportModules($queryid,$primarymodule,$secondarymodule)
 {
@@ -464,10 +486,17 @@ function insertReportModules($queryid,$primarymodule,$secondarymodule)
 	if($queryid != "")
 	{
 		$ireportmodulesql = "insert into reportmodules (REPORTMODULESID,PRIMARYMODULE,SECONDARYMODULES) values (".$queryid.",'".$primarymodule."','".$secondarymodule."')";
-		//echo "<<<<<<<REPORT MODULES>>>>>>><br>".$ireportmodulesql;	
 		$ireportmoduleresult = $adb->query($ireportmodulesql);
 	}
 }
+
+
+/** Function to store the report sortorder to database
+ *  This function accepts queryid,sortlists
+ *  as arguments and store the informations sort columns and
+ *  and sortorder in reportsortcol table
+ */
+
 
 function insertSortColumns($queryid,$sortlists)
 {
@@ -484,6 +513,13 @@ function insertSortColumns($queryid,$sortlists)
 
 }
 
+
+/** Function to store the report sort date details to database
+ *  This function accepts queryid,filtercolumn,datefilter,startdate,enddate
+ *  as arguments and store the informations in reportdatefilter table
+ */
+
+
 function insertStdFilter($queryid,$filtercolumn,$datefilter,$startdate,$enddate)
 {
 	global $adb;
@@ -494,6 +530,12 @@ function insertStdFilter($queryid,$filtercolumn,$datefilter,$startdate,$enddate)
 	}
 
 }
+
+/** Function to store the report conditions to database
+ *  This function accepts queryid,filters
+ *  as arguments and store the informations in relcriteria table
+ */
+
 
 function insertAdvFilter($queryid,$filters)
 {
