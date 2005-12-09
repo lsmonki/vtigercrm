@@ -273,8 +273,13 @@ $config .= "// Translation String Prefix - This will add the language pack name 
 $config .= "\$translation_string_prefix = ".return_session_value_or_default('translation_string_prefix','false').";\n";
 
 $config .= "// Generating Unique Application Key\n";
-$config .= "\$application_unique_key = '".md5($root_directory)."';\n";
+$config .= "\$application_unique_key = '".md5($root_directory)."';\n\n";
 
+$config .= "//Option to cache tabs permissions for speed.\n";
+$config .= "\$cache_tab_perms = true;\n\n";
+
+$config .= "//Option to hide empty home blocks if no entries.\n";
+$config .= "\$display_empty_home_blocks = false;\n\n";
 //$config .= "// Forum Configurations\n";
 //$config .= "\$dbms = 'mysql';\n";
 //$config .= "\$dbhost = '".$db_host_name."';\n\n";
