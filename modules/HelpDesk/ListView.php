@@ -12,7 +12,6 @@
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-global $mod_strings;
 
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('include/database/PearDatabase.php');
@@ -40,20 +39,18 @@ global $currentModule;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-//require_once($theme_path.'layout_utils.php');
 
 $focus = new HelpDesk();
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+if(isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
 $url_string = ''; // assigning http url string
 $sorder = 'ASC';  // Default sort order
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
+	$sorder = $_REQUEST['sorder'];
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
-	// we have a query
 	$url_string .="&query=true";
 	if (isset($_REQUEST['ticket_title'])) $name = $_REQUEST['ticket_title'];
 	if (isset($_REQUEST['ticket_id'])) $ticket_id_val = $_REQUEST['ticket_id'];
@@ -80,7 +77,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	        {
 			if($uitype[$i] == 56)
 				$str = " ticketcf.".$column[$i]." = 1";
-			elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2
+			elseif($uitype[$i] == 15)
 	                        $str = " ticketcf.".$column[$i]." = '".$customfield[$i]."'";
 			else
 		                $str = " ticketcf.".$column[$i]." like '$customfield[$i]%'";
@@ -153,22 +150,18 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		$search_query .= array_push($where_clauses," troubletickets.status != 'Closed'");
 		$search_query .= array_push($where_clauses,"crmentity.smownerid='".$current_user->id."'");
 	}
-
-	// begin: Armando LC<scher 16.08.2005 -> B'searchTicketId
-	// Desc: Added this so when something is written into the TicketId box it will be added to the where clause
 	if(isset($_REQUEST['ticket_id']) && $_REQUEST['ticket_id'] != '')
 	{
 		array_push($where_clauses, "troubletickets.ticketid = ".$_REQUEST['ticket_id']);
 		$url_string .= "&ticket_id=".$_REQUEST['ticket_id'];
 	}
-	// end: Armando LC<scher 16.08.2005 -> B'searchTicketId
 
 	$where = "";
-	foreach($where_clauses as $clause)                                                                            {
+	foreach($where_clauses as $clause)
 	{
 		if($where != "")
-		$where .= " and ";
-		$where .= $clause;                                                                                    }
+			$where .= " and ";
+		$where .= $clause;
 	}
 }
 
@@ -180,11 +173,13 @@ if(isset($_REQUEST['viewname']) == false)
 	if($oCustomView->setdefaultviewid != "")
 	{
 		$viewid = $oCustomView->setdefaultviewid;
-	}else
+	}
+	else
 	{
 		$viewid = "0";
 	}
-}else
+}
+else
 {
 	$viewid =  $_REQUEST['viewname'];
 	$oCustomView->setdefaultviewid = $viewid;
@@ -193,7 +188,8 @@ if(isset($_REQUEST['viewname']) == false)
 
 
 //Constructing the Search Form
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
+if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') 
+{
         // Stick the form header out there.
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'],'', false);
         $search_form=new XTemplate ('modules/HelpDesk/SearchForm.html');
@@ -208,31 +204,38 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("VIEWID",$viewid);
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	$search_form->assign("CALENDAR_LANG", "en");
+	$search_form->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
         $search_form->assign("DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
-	if($order_by != '') {
+	if($order_by != '') 
+	{
 		$ordby = "&order_by=".$order_by;
 	}
 	else
 	{
 		$ordby ='';
 	}
+
 	$search_form->assign("BASIC_LINK", "index.php?module=HelpDesk".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewid);
 	$search_form->assign("ADVANCE_LINK", "index.php?module=HelpDesk&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewid);
 
 	if (isset($name)) $search_form->assign("SUBJECT", $name);
 	if (isset($ticket_id_val)) $search_form->assign("TICKETID", $ticket_id_val);
 	if (isset($contact_name)) $search_form->assign("CONTACT_NAME", $contact_name);
-	//if (isset($priority)) $search_form->assign("PRIORITY", $priority);
-	if (isset($priority)) $search_form->assign("PRIORITY", get_select_options($comboFieldArray['ticketpriorities_dom'], $priority, $clearsearch));
-        else $search_form->assign("PRIORITY", get_select_options($comboFieldArray['ticketpriorities_dom'], '', $clearsearch));
-	//if (isset($status)) $search_form->assign("STATUS", $status);
-	if (isset($status)) $search_form->assign("STATUS", get_select_options($comboFieldArray['ticketstatus_dom'], $status, $clearsearch));
-        else $search_form->assign("STATUS", get_select_options($comboFieldArray['ticketstatus_dom'], '', $clearsearch));
-	//if (isset($category)) $search_form->assign("CATEGORY", $category);
-	if (isset($category)) $search_form->assign("CATEGORY", get_select_options($comboFieldArray['ticketcategories_dom'], $category, $clearsearch));
-        else $search_form->assign("CATEGORY", get_select_options($comboFieldArray['ticketcategories_dom'], '', $clearsearch));
+
+	if (isset($priority)) 
+		$search_form->assign("PRIORITY", get_select_options($comboFieldArray['ticketpriorities_dom'], $priority, $clearsearch));
+        else
+		$search_form->assign("PRIORITY", get_select_options($comboFieldArray['ticketpriorities_dom'], '', $clearsearch));
+	if (isset($status)) 
+		$search_form->assign("STATUS", get_select_options($comboFieldArray['ticketstatus_dom'], $status, $clearsearch));
+        else 
+		$search_form->assign("STATUS", get_select_options($comboFieldArray['ticketstatus_dom'], '', $clearsearch));
+	if (isset($category)) 
+		$search_form->assign("CATEGORY", get_select_options($comboFieldArray['ticketcategories_dom'], $category, $clearsearch));
+        else 
+		$search_form->assign("CATEGORY", get_select_options($comboFieldArray['ticketcategories_dom'], '', $clearsearch));
+
 	if ($date_criteria == 'is' && $date != '') $search_form->assign("IS", 'selected');
 	if ($date_criteria == 'isnot' && $date != '') $search_form->assign("ISNOT", 'selected');
 	if ($date_criteria == 'before' && $date != '') $search_form->assign("BEFORE", 'selected');
@@ -253,7 +256,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		{
 		        $column[$i]=$adb->query_result($result,$i,'columnname');
 		        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-		        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
+		        if (isset($_REQUEST[$column[$i]])) 
+				$customfield[$i] = $_REQUEST[$column[$i]];
 		}
 		require_once('include/CustomFieldUtil.php');
 		$custfld = CustomFieldSearch($customfield, "ticketcf", "ticketcf", "ticketid", $app_strings,$theme,$column,$fieldlabel);
@@ -269,9 +273,9 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 		$search_form->parse("main");
 	        $search_form->out("main");
 	}
-echo get_form_footer();
-echo '<br>';
 
+	echo get_form_footer();
+	echo '<br>';
 }
 if($viewid != 0)
 {
@@ -287,31 +291,21 @@ if(isPermitted('HelpDesk',2,'') == 'yes')
 {
         $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
-		/*$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
-			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
-				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_LOW].'">'.$mod_strings[LBL_LOW].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_MEDIUM].'">'.$mod_strings[LBL_MEDIUM].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_HIGH].'">'.$mod_strings[LBL_HIGH].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_CRITICAL].'">'.$mod_strings[LBL_CRITICAL].'</option>
-			</SELECT>
-		</td>
-	</tr>
-	</table>';*/
 
 if($viewid == 0)
 {
-$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=HelpDesk&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
-}else
+	$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
+		<span class="sep">|</span>
+		<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
+		<a href="index.php?module=HelpDesk&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+}
+else
 {
-$cvHTML = '<a href="index.php?module=HelpDesk&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=HelpDesk&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=HelpDesk&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+	$cvHTML = '<a href="index.php?module=HelpDesk&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
+		<span class="sep">|</span>
+		<a href="index.php?module=CustomView&action=Delete&dmodule=HelpDesk&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
+		<span class="sep">|</span>
+		<a href="index.php?module=HelpDesk&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 
 $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
@@ -323,7 +317,6 @@ $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
 		</td>
 	</tr>
 	</table>';
-//
 
 $focus = new HelpDesk();
 
@@ -339,7 +332,8 @@ if($viewid != "0")
 {
 	$listquery = getListQuery("HelpDesk");
 	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"HelpDesk");
-}else
+}
+else
 {
 	$list_query = getListQuery("HelpDesk");
 }
@@ -350,48 +344,20 @@ if(isset($where) && $where != '')
 	$list_query .= ' and '.$where;
 }
 
-/*if(isset($_REQUEST['viewname']))
-{
-	if($_REQUEST['viewname'] == 'All')
-	   {
-           $defaultcv_criteria = '';
-      }
-        else
-    {
-           $defaultcv_criteria = $_REQUEST['viewname'];
-       }
-
-  	$list_query .= " and priority like "."'%" .$defaultcv_criteria ."%'";
-	$viewname = $_REQUEST['viewname'];
-  	$view_script = "<script language='javascript'>
-		function set_selected()
-		{
-			len=document.massdelete.view.length;
-			for(i=0;i<len;i++)
+$view_script = "<script language='javascript'>
+			function set_selected()
 			{
-				if(document.massdelete.view[i].value == '$viewname')
-					document.massdelete.view[i].selected = true;
+				len=document.massdelete.view.length;
+				for(i=0;i<len;i++)
+				{
+					if(document.massdelete.view[i].value == '$viewid')
+						document.massdelete.view[i].selected = true;
+				}
 			}
-		}
-		set_selected();
+			set_selected();
 		</script>";
 
-}*/
-
-$view_script = "<script language='javascript'>
-	function set_selected()
-	{
-		len=document.massdelete.view.length;
-		for(i=0;i<len;i++)
-		{
-			if(document.massdelete.view[i].value == '$viewid')
-				document.massdelete.view[i].selected = true;
-		}
-	}
-	set_selected();
-	</script>";
-
-//Changed here -- 14-10-2005 -- sort by "assignedto" and default sort by "ticketid"(DESC)
+//sort by "assignedto" and default sort by "ticketid"(DESC)
 if(isset($order_by) && $order_by != '')
 {
 	if($order_by == 'smownerid')
@@ -428,38 +394,7 @@ else
 }
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-/*
-// Setting the record count string
-if ($navigation_array['start'] == 1)
-{
-	if($noofrows != 0)
-	$start_rec = $navigation_array['start'];
-	else
-	$start_rec = 0;
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
-	}
-	else
-	{
-		$end_rec = $noofrows;
-	}
 
-}
-else
-{
-	if($navigation_array['next'] > $list_max_entries_per_page)
-	{
-		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
-		$end_rec = $navigation_array['next'] - 1;
-	}
-	else
-	{
-		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
-		$end_rec = $noofrows;
-	}
-}
-*/
 // Setting the record count string
 //modified by rdhital
 $start_rec = $navigation_array['start'];
@@ -494,7 +429,7 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 //Retreive the List View Table Header
 if($viewid !='')
-$url_string .="&viewname=".$viewid;
+	$url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"HelpDesk",$url_string,$sorder,$order_by,"",$oCustomView);
 $xtpl->assign("LISTHEADER", $listview_header);
@@ -504,9 +439,9 @@ $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 
 if($order_by !='')
-$url_string .="&order_by=".$order_by;
+	$url_string .="&order_by=".$order_by;
 if($sorder !='')
-$url_string .="&sorder=".$sorder;
+	$url_string .="&sorder=".$sorder;
 
 $xtpl->assign("SELECT_SCRIPT", $view_script);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"HelpDesk","index",$viewid);

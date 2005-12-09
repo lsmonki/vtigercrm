@@ -45,8 +45,6 @@ foreach($focus->column_fields as $fieldname => $val)
 		
 }
 
-
-//$focus->saveentity("HelpDesk");
 $focus->save("HelpDesk");
 $return_id = $focus->id;
 
@@ -98,9 +96,6 @@ if($isactive == 1)
 	$bodydetails .= 'There is a reply to <b>'.$_REQUEST['ticket_title'].'</b> in the "Customer Portal" at VTiger.';
 	$bodydetails .= "You can use the following link to view the replies made:<br>";
 
-	//Provide your customer portal url
-	//$PORTAL_URL = "<customerportal-url:port>";//e.g : vtigercrm:90/customerportal
-	//PORTAL_URL is configured in config.php
 	$bodydetails .= "<a href='".$PORTAL_URL."/general.php?action=UserTickets&ticketid=".$focus->id."&fun=detail'>Ticket Details</a>";
 	$bodydetails .= "<br><br>Thanks,<br><br> Vtiger Support Team ";
 
@@ -120,7 +115,6 @@ else
 
 	$email_body = $desc;
 }
-//$_REQUEST['parent_id'] = $_REQUEST['contact_id'];
 $_REQUEST['return_id'] = $return_id;
 
 if($_REQUEST['product_id'] != '' && $focus->id != '' && $_REQUEST['mode'] != 'edit')
@@ -162,6 +156,7 @@ else
 }
 
 $mail_error_status = getMailErrorString($mail_status_str);
+
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];

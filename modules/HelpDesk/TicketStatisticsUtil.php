@@ -10,56 +10,67 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 
+
+/**	Function to get the total number of tickets ie.. count of all tickets 
+ *	@return int $totTickets - total count of tickets
+**/
 function getTotalNoofTickets()
 {
 	global $adb;
-    //table name made all small as per suggestion by tigerincanada
 	$query = "select count(*) as totalticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0";
 	$result = $adb->query($query);
 	$totTickets = $adb->query_result($result,0,"totalticketcount");
 	return $totTickets;
 }
 
+/**     Function to get the total number of tickets which are not Closed
+ *      @return int $totTickets - total count of not Closed tickets
+**/
 function getTotalNoofOpenTickets()
 {
 	global $adb;
-    //table name made all small as per suggestion by tigerincanada
 	$query = "select count(*) as totalopenticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0 and troubletickets.status !='Closed'";
 	$result = $adb->query($query);
 	$totOpenTickets = $adb->query_result($result,0,"totalopenticketcount");
 	return $totOpenTickets;
 }
 
+/**     Function to get the total number of Closed tickets
+ *      @return int $totTickets - total count of Closed tickets
+**/
 function getTotalNoofClosedTickets()
 {
 	global $adb;
-    //table name made all small as per suggestion by tigerincanada
 	$query = "select count(*) as totalclosedticketcount from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid where crmentity.deleted=0 and troubletickets.status ='Closed'";
 	$result = $adb->query($query);
 	$totClosedTickets = $adb->query_result($result,0,"totalclosedticketcount");
 	return $totClosedTickets;
 }
 
-function outBar($val,$image_path,$singleUnit) {
-        /*if($totalVal == 0) {
-                $percent = 0;
-        } else {
-                $percent = round(($val/$totalVal)*100);
-        }
-        $scale = $percent * 0.8;*/
+/**     Function to get the length of the bar to be displayed for the given value
+ *	@param  int $val - the number of tickets value
+ *	@param  string $image_path - image path of the bar per theme basis
+ *	@param  int $singleUnit - the single bar length value which is calculated as 80/total no. of tickets
+ *      @return int $out - the bar length value to be displayed which is calculated based on the $val parameter
+**/
+function outBar($val,$image_path,$singleUnit) 
+{
 	$scale = round($val*$singleUnit);
-    //changed as per fixes by suggestions by tigerincanada post id
-    //http://forums.vtiger.com/viewtopic.php?t=3598
 	if($scale < 1 && $scale > 0)
 	{
 		$scale = 1;
 	}
         $out = '<img src='.$image_path.'bl_bar.jpg height=10 width='. $scale .'%>';
         $out .= str_pad($val, (3-strlen(strval($val)))*12 + strlen(strval($val)), "&nbsp;&nbsp;", STR_PAD_LEFT);
+
 	return $out;
 }
 
-
+/**     Function to display the statistics based on the Priority ie., will display all the Priorities and the no. of tickets per Priority
+ *      @param  string $image_path - image path of the bar per theme basis
+ *      @param  int $singleUnit - the single bar length value which is calculated as 80/total no. of tickets
+ *      @return void. 
+**/
 function showPriorities($image_path, $singleUnit)
 {
 	global $adb;
@@ -95,10 +106,13 @@ function showPriorities($image_path, $singleUnit)
 		
 	}
 	return $prOut;
-		
-	
 }
 
+/**     Function to display the statistics based on the Category ie., will display all the Categories and the no. of tickets per Category
+ *      @param  string $image_path - image path of the bar per theme basis
+ *      @param  int $singleUnit - the single bar length value which is calculated as 80/total no. of tickets
+ *      @return void.
+**/
 function showCategories($image_path, $singleUnit)
 {
 	global $adb;
@@ -138,6 +152,11 @@ function showCategories($image_path, $singleUnit)
 	
 }
 
+/**     Function to display the statistics based on the Users ie., will display all the users and the no. of tickets per user
+ *      @param  string $image_path - image path of the bar per theme basis
+ *      @param  int $singleUnit - the single bar length value which is calculated as 80/total no. of tickets
+ *      @return void.
+**/
 function showUserBased($image_path, $singleUnit)
 {
 	global $adb;
@@ -178,6 +197,10 @@ function showUserBased($image_path, $singleUnit)
 	
 }
 
+/**     Function to retrieve all values from the table which is passed as the parameter
+ *      @param  string $tableName - table name in which we want to get the result
+ *      @return result $result - the result of the query "select * from $tableName" will be return
+**/
 function getFromDB($tableName)
 {
 	global $adb;
@@ -186,6 +209,12 @@ function getFromDB($tableName)
 	return $result;
 }
 
+/**     Function to get the number of tickets based on the User or Priority or Category which is passed as a parameter
+ *      @param  string $mode - the status of the ticket ie., Open or Closed. if Total then all tickets count will be retrieved
+ *      @param  string $priority_val - the value based on which we get tickets ie., id of the user or ticketcategories or ticketpriorities
+ *      @param  int $critColName - smownerid or category or priority which is the fieldname of the table in which we check $priority_val
+ *      @return void.
+**/
 function getTicketCount($mode, $priority_val, $critColName)
 {
 	if($critColName == "smownerid")

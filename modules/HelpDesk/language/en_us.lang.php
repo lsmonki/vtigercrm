@@ -149,6 +149,8 @@ $mod_strings = Array(
 
 'LBL_TICKETS'=>'Tickets',
 
+//Added on 09-12-2005
+'LBL_CUMULATIVE_STATISTICS'=>'Cumulative Statistics',
 );
 
 ?>

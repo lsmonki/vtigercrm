@@ -45,8 +45,11 @@ if($_REQUEST['return_module'] == 'Products')
 	$sql = "update troubletickets set product_id='' where ticketid=".$_REQUEST['record'];
 	$adb->query($sql);
 }
- //code added for returning back to the current view after delete from list view
- if($_REQUEST['return_viewname'] == '') $return_viewname='0';
- if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+
+//code added for returning back to the current view after delete from list view
+if($_REQUEST['return_viewname'] == '') $return_viewname='0';
+if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+
 header("Location: index.php?module=".$_REQUEST['return_module']."&action=".$_REQUEST['return_action']."&record=".$_REQUEST['return_id']."&viewname=".$return_viewname);
+
 ?>

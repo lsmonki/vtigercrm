@@ -29,52 +29,59 @@
  * Contributor(s): ______________________________________..
  */
 
-require_once('include/utils.php'); //new
-
+require_once('include/utils.php');
 require_once('include/ComboUtil.php');
-function get_validate_record_js () {
-global $mod_strings;
-global $app_strings;
 
-$lbl_subject = $mod_strings['LBL_TICKET_TITLE'];
-$err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
+function get_validate_record_js () 
+{
+	global $mod_strings;
+	global $app_strings;
 
-$the_script  = <<<EOQ
+	$lbl_subject = $mod_strings['LBL_TICKET_TITLE'];
+	$err_missing_required_fields = $app_strings['ERR_MISSING_REQUIRED_FIELDS'];
 
-<script type="text/javascript" language="Javascript">
-<!--  to hide script contents from old browsers
+	$the_script  = <<<EOQ
 
-function trim(s) {
-	while (s.substring(0,1) == " ") {
-		s = s.substring(1, s.length);
-	}
-	while (s.substring(s.length-1, s.length) == ' ') {
-		s = s.substring(0,s.length-1);
-	}
+		<script type="text/javascript" language="Javascript">
+		<!--  to hide script contents from old browsers
 
-	return s;
-}
+		function trim(s) 
+		{
+			while (s.substring(0,1) == " ") 
+			{
+				s = s.substring(1, s.length);
+			}
+			while (s.substring(s.length-1, s.length) == ' ') 
+			{
+				s = s.substring(0,s.length-1);
+			}
 
-function verify_data(form) {
-	var isError = false;
-	var errorMessage = "";
-	if (trim(form.ticket_title.value) == "") {
-		isError = true;
-		errorMessage += "\\n$lbl_subject";
-	}
-	// Here we decide whether to submit the form.
-	if (isError == true) {
-		alert("$err_missing_required_fields" + errorMessage);
-		return false;
-	}
-	return true;
-}
-// end hiding contents from old browsers  -->
-</script>
+			return s;
+		}
+
+		function verify_data(form) 
+		{
+			var isError = false;
+			var errorMessage = "";
+			if (trim(form.ticket_title.value) == "") 
+			{
+				isError = true;
+				errorMessage += "\\n$lbl_subject";
+			}
+			// Here we decide whether to submit the form.
+			if (isError == true) 
+			{
+				alert("$err_missing_required_fields" + errorMessage);
+				return false;
+			}
+			return true;
+		}
+	// end hiding contents from old browsers  -->
+	</script>
 
 EOQ;
 
-return $the_script;
+	return $the_script;
 }
 
 /**
@@ -83,125 +90,123 @@ return $the_script;
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  */
-function get_new_record_form () {
-global $mod_strings;
-global $app_strings;
-global $app_list_strings;
-global $current_user;
-global $adb;//for dynamic quickcreateform construction
-
-
-$lbl_required_symbol = $app_strings['LBL_REQUIRED_SYMBOL'];
-$lbl_ticket_title = $mod_strings['LBL_TICKET_TITLE'];
-$lbl_ticket_description = $mod_strings['LBL_TICKET_DESCRIPTION'];
-$lbl_ticket_category = $mod_strings['LBL_TICKET_CATEGORY'];
-$lbl_ticket_priority = $mod_strings['LBL_TICKET_PRIORITY'];
-$lbl_save_button_title = $app_strings['LBL_SAVE_BUTTON_TITLE'];
-$lbl_save_button_key = $app_strings['LBL_SAVE_BUTTON_KEY'];
-$lbl_save_button_label = $app_strings['LBL_SAVE_BUTTON_LABEL'];
-$default_parent_type= $app_list_strings['record_type_default_key'];
-
-$comboFieldNames = Array('ticketpriorities'=>'ticketpriorities_dom');
-$comboFieldArray = getComboArray($comboFieldNames);
-$user_id = $current_user->id;
-
-$qcreate_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
-
-
-$qcreate_get_field="select * from field where tabid=13 and quickcreate=0 order by quickcreatesequence";
-$qcreate_get_result=$adb->query($qcreate_get_field);
-$qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
-
-$fieldName_array = Array();//for validation
-
-$qcreate_form.='<form name="TicketSave" onSubmit="return formValidate()" method="POST" action="index.php">';
-$qcreate_form.='<input type="hidden" name="module" value="HelpDesk">';
-$qcreate_form.='<input type="hidden" name="return_module" value="HelpDesk">';
-$qcreate_form.='<input type="hidden" name="record" value="">';
-$qcreate_form.='<input type="hidden" name="parent_type" value="'.$default_parent_type.'">';
-$qcreate_form.='<input type="hidden" name="assigned_user_id" value="'.$user_id.'">';
-$qcreate_form.='<input type="hidden" name="action" value="Save">';
-$qcreate_form.='<input type="hidden" name="return_action" value="DetailView">';
-
-$qcreate_form.='<table>';
-
-for($j=0;$j<$qcreate_get_noofrows;$j++)
+function get_new_record_form () 
 {
-	$qcreate_form.='<tr>';
-	$fieldlabel=$adb->query_result($qcreate_get_result,$j,'fieldlabel');
-	$uitype=$adb->query_result($qcreate_get_result,$j,'uitype');
-	$tabid=$adb->query_result($qcreate_get_result,$j,'tabid');
-	
-	$fieldname=$adb->query_result($qcreate_get_result,$j,'fieldname');//for validation
-	$typeofdata=$adb->query_result($qcreate_get_result,$j,'typeofdata');//for validation
-       	$qcreate_form .= get_quickcreate_form($fieldlabel,$uitype,$fieldname,$tabid);
+	global $mod_strings;
+	global $app_strings;
+	global $app_list_strings;
+	global $current_user;
+	global $adb;//for dynamic quickcreateform construction
 
-	
-	//to get validationdata
-	//start
-	$fldLabel_array = Array();
-        $fldLabel_array[$fieldlabel] = $typeofdata;
-        $fieldName_array['QCK_'.$fieldname] = $fldLabel_array;
-	
-	//end
-	
-	$qcreate_form.='</tr>';
-}
 
-//for validation
-$validationData = $fieldName_array;
-$fieldName = '';
-$fieldLabel = '';
-$fldDataType = '';
+	$lbl_required_symbol = $app_strings['LBL_REQUIRED_SYMBOL'];
+	$lbl_ticket_title = $mod_strings['LBL_TICKET_TITLE'];
+	$lbl_ticket_description = $mod_strings['LBL_TICKET_DESCRIPTION'];
+	$lbl_ticket_category = $mod_strings['LBL_TICKET_CATEGORY'];
+	$lbl_ticket_priority = $mod_strings['LBL_TICKET_PRIORITY'];
+	$lbl_save_button_title = $app_strings['LBL_SAVE_BUTTON_TITLE'];
+	$lbl_save_button_key = $app_strings['LBL_SAVE_BUTTON_KEY'];
+	$lbl_save_button_label = $app_strings['LBL_SAVE_BUTTON_LABEL'];
+	$default_parent_type= $app_list_strings['record_type_default_key'];
 
-$rows = count($validationData);
-foreach($validationData as $fldName => $fldLabel_array)
-{
-   if($fieldName == '')
-   {
-     $fieldName="'".$fldName."'";
-   }
-   else
-   {
-     $fieldName .= ",'".$fldName ."'";
-   }
-   foreach($fldLabel_array as $fldLabel => $datatype)
-   {
-	if($fieldLabel == '')
+	$comboFieldNames = Array('ticketpriorities'=>'ticketpriorities_dom');
+	$comboFieldArray = getComboArray($comboFieldNames);
+	$user_id = $current_user->id;
+
+	$qcreate_form = get_left_form_header($mod_strings['LBL_NEW_FORM_TITLE']);
+
+
+	$qcreate_get_field="select * from field where tabid=13 and quickcreate=0 order by quickcreatesequence";
+	$qcreate_get_result=$adb->query($qcreate_get_field);
+	$qcreate_get_noofrows=$adb->num_rows($qcreate_get_result);
+
+	$fieldName_array = Array();//for validation
+
+	$qcreate_form.='<form name="TicketSave" onSubmit="return formValidate()" method="POST" action="index.php">';
+	$qcreate_form.='<input type="hidden" name="module" value="HelpDesk">';
+	$qcreate_form.='<input type="hidden" name="return_module" value="HelpDesk">';
+	$qcreate_form.='<input type="hidden" name="record" value="">';
+	$qcreate_form.='<input type="hidden" name="parent_type" value="'.$default_parent_type.'">';
+	$qcreate_form.='<input type="hidden" name="assigned_user_id" value="'.$user_id.'">';
+	$qcreate_form.='<input type="hidden" name="action" value="Save">';
+	$qcreate_form.='<input type="hidden" name="return_action" value="DetailView">';
+
+	$qcreate_form.='<table>';
+
+	for($j=0;$j<$qcreate_get_noofrows;$j++)
 	{
-			
-     		$fieldLabel = "'".$fldLabel ."'";
-	}		
-        else
-        {
-       		$fieldLabel .= ",'".$fldLabel ."'";
-        }
- 	if($fldDataType == '')
-        {
-      		$fldDataType = "'".$datatype ."'";
-    	}
-	else
-        {
-       		$fldDataType .= ",'".$datatype ."'";
-     	}
-   }
- }
+		$qcreate_form.='<tr>';
+		$fieldlabel=$adb->query_result($qcreate_get_result,$j,'fieldlabel');
+		$uitype=$adb->query_result($qcreate_get_result,$j,'uitype');
+		$tabid=$adb->query_result($qcreate_get_result,$j,'tabid');
 
-$qcreate_form.='</table>';
+		$fieldname=$adb->query_result($qcreate_get_result,$j,'fieldname');//for validation
+		$typeofdata=$adb->query_result($qcreate_get_result,$j,'typeofdata');//for validation
+		$qcreate_form .= get_quickcreate_form($fieldlabel,$uitype,$fieldname,$tabid);
 
-$qcreate_form.='<input title="'.$lbl_save_button_title.'" accessKey="'.$lbl_save_button_key.'" class="button" type="submit" name="button" value="'.$lbl_save_button_label.'" >';
-$qcreate_form.='</form>';
-$qcreate_form.='<script type="text/javascript">
-		
-	var fieldname = new Array('.$fieldName.')
-	var fieldlabel = new Array('.$fieldLabel.')
-	var fielddatatype = new Array('.$fldDataType.')
 
-		</script>';
+		//to get validationdata
+		$fldLabel_array = Array();
+		$fldLabel_array[$fieldlabel] = $typeofdata;
+		$fieldName_array['QCK_'.$fieldname] = $fldLabel_array;
 
-$qcreate_form .= get_left_form_footer();
+		$qcreate_form.='</tr>';
+	}
 
-return $qcreate_form;
+	//for validation
+	$validationData = $fieldName_array;
+	$fieldName = '';
+	$fieldLabel = '';
+	$fldDataType = '';
 
+	$rows = count($validationData);
+	foreach($validationData as $fldName => $fldLabel_array)
+	{
+		if($fieldName == '')
+		{
+			$fieldName="'".$fldName."'";
+		}
+		else
+		{
+			$fieldName .= ",'".$fldName ."'";
+		}
+		foreach($fldLabel_array as $fldLabel => $datatype)
+		{
+			if($fieldLabel == '')
+			{
+
+				$fieldLabel = "'".$fldLabel ."'";
+			}		
+			else
+			{
+				$fieldLabel .= ",'".$fldLabel ."'";
+			}
+			if($fldDataType == '')
+			{
+				$fldDataType = "'".$datatype ."'";
+			}
+			else
+			{
+				$fldDataType .= ",'".$datatype ."'";
+			}
+		}
+	}
+
+	$qcreate_form.='</table>';
+
+	$qcreate_form.='<input title="'.$lbl_save_button_title.'" accessKey="'.$lbl_save_button_key.'" class="button" type="submit" name="button" value="'.$lbl_save_button_label.'" >';
+	$qcreate_form.='</form>';
+	$qcreate_form.='<script type="text/javascript">
+
+				var fieldname = new Array('.$fieldName.')
+				var fieldlabel = new Array('.$fieldLabel.')
+				var fielddatatype = new Array('.$fldDataType.')
+
+			</script>';
+
+	$qcreate_form .= get_left_form_footer();
+
+	return $qcreate_form;
 }
+
 ?>
