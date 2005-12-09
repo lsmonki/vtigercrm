@@ -430,10 +430,6 @@ class CRMEntity extends SugarBean
     $old_priority = $adb->query_result($tktresult,0,"priority");
     $old_severity = $adb->query_result($tktresult,0,"severity");
     $old_category = $adb->query_result($tktresult,0,"category");
-    if($_REQUEST['old_smownerid'] != $old_user_id || $old_status != $this->column_fields['ticketstatus'] || $old_priority != $this->column_fields['ticketpriorities'] || $old_severity != $this->column_fields['ticketseverities'] || $old_category != $this->column_fields['ticketcategories'] || $old_userid == 0)
-    {
-      $updatelog .= date("l dS F Y h:i:s A").' by '.$current_user->user_name.'--//--';
-    }	
     if($_REQUEST['old_smownerid'] != $old_user_id && $old_user_id != 0)
     {
       $user_name = getUserName($this->column_fields['assigned_user_id']);
@@ -461,10 +457,15 @@ class CRMEntity extends SugarBean
     {
       $updatelog .= ' Category Changed to '.$this->column_fields['ticketcategories'].'\.';
     }
-    if($old_user_id != $this->column_fields['assigned_user_id'] || $old_status != $this->column_fields['ticketstatus'] || $old_priority != $this->column_fields['ticketpriorities'])
+    if($_REQUEST['old_smownerid'] != $old_user_id || $old_status != $this->column_fields['ticketstatus'] || $old_priority != $this->column_fields['ticketpriorities'] || $old_severity != $this->column_fields['ticketseverities'] || $old_category != $this->column_fields['ticketcategories'] || $old_userid == 0)
     {
-      $updatelog .= '--//--';
+      $updatelog .= ' -- '.date("l dS F Y h:i:s A").' by '.$current_user->user_name.'--//--';
     }
+    else
+    {
+        $update_log .= '--//--';
+    }
+
     return $updatelog;
   }
   //code added by richie ends
@@ -623,7 +624,7 @@ class CRMEntity extends SugarBean
 					  $tkt_ownername = $group_name;
 				  else
 					  $tkt_ownername = getUserName($tkt_ownerid);	
-				  $fldvalue .= "--//--Ticket created. Assigned to ".$tkt_ownername."--//--";
+				  $fldvalue .= " Ticket created. Assigned to ".$tkt_ownername." -- ".$fldvalue."--//--";
 				  $fldvalue = from_html($adb->formatString($table_name,$columname,$fldvalue),($insertion_mode == 'edit')?true:false);
 				  //echo ' updatevalue is ............. ' .$fldvalue;
 			  }
