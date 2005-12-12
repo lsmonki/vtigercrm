@@ -33,15 +33,17 @@ require_once($theme_path.'layout_utils.php');
 
 $focus = new Faq();
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+if(isset($_REQUEST['order_by'])) 
+	$order_by = $_REQUEST['order_by'];
 
-$url_string = ''; // assigning http url string
-$sorder = 'ASC';  // Default sort order
+$url_string = ''; 
+$sorder = 'ASC'; 
 if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
+	$sorder = $_REQUEST['sorder'];
 
 //Constructing the Search Form
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
+if(!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') 
+{
         // Stick the form header out there.
         $search_form=new XTemplate ('modules/Faq/SearchForm.html');
         $search_form->assign("MOD", $mod_strings);
@@ -52,7 +54,6 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
-
 }
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
@@ -68,42 +69,41 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 		array_push($where_clauses, "faq.question like '%".$question."%'");
 		$url_string .= "&question=".$question;
 		$search_form->assign("QUESTION", $question);
-
 	}
 	if(isset($faqcategories) && $faqcategories != "")
 	{
 		array_push($where_clauses, "faq.category like '%".$faqcategories."%'"); 
 		$url_string .= "&faqcategories=".$faqcategories;
 		$search_form->assign("FAQCATEGORIES", $faqcategories);
-
 	}
 
 	$where = "";
-	foreach($where_clauses as $clause)                                                                            {
+	foreach($where_clauses as $clause)
+	{
 		$where .= " and ";
-		$where .= $clause;                                                                                    }
+		$where .= $clause;
+	}
 }
 
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
+if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') 
+{
 	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Faq','index','question','true','basic'));
        	$search_form->parse("main");
         $search_form->out("main");
 	echo get_form_footer();
 	echo "\n<BR>\n";
-
 }
+
 // Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<form name="massdelete" method="POST">
-	<tr>
-	<input name="idlist" type="hidden">';
+		<form name="massdelete" method="POST">
+		<tr>
+			<input name="idlist" type="hidden">';
 
-        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>
-   		</td>
-		<td align="right">&nbsp;</td>
-	</tr>
-	</table>';
-//
+$other_text .='   <td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>
+		  <td align="right">&nbsp;</td>
+		</tr>
+	       </table>';
 
 //Retreive the list from Database
 $list_query = getListQuery("Faq");
@@ -144,47 +144,14 @@ else
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
 // Setting the record count string
-/* by Raju
-if ($navigation_array['start'] == 1)
-{
-	if($noofrows != 0)
-	$start_rec = $navigation_array['start'];
-	else
-	$start_rec = 0;
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
-	}
-	else
-	{
-		$end_rec = $noofrows;
-	}
-	
-}
-else
-{
-	if($navigation_array['next'] > $list_max_entries_per_page)
-	{
-		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
-		$end_rec = $navigation_array['next'] - 1;
-	}
-	else
-	{
-		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
-		$end_rec = $noofrows;
-	}
-}
-*/
-
-// Setting the record count string
 //modified by rdhital
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
 // Raju Ends
+
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 
 //Retreive the List View Table Header
-
 $listview_header = getListViewHeader($focus,"Faq",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
 
@@ -193,9 +160,9 @@ $xtpl->assign("LISTHEADER", $listview_header);
 $xtpl->assign("LISTENTITY", $listview_entries);
 
 if($order_by !='')
-$url_string .="&order_by=".$order_by;
+	$url_string .="&order_by=".$order_by;
 if($sorder !='')
-$url_string .="&sorder=".$sorder;
+	$url_string .="&sorder=".$sorder;
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Faq");
 $xtpl->assign("NAVIGATION", $navigationOutput);

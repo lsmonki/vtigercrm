@@ -23,7 +23,6 @@
 
 require_once('modules/Faq/Faq.php');
 require_once('include/logging.php');
-//require_once('database/DatabaseConnection.php');
 require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');
@@ -38,23 +37,15 @@ if(isset($_REQUEST['mode']))
 	$focus->mode = $_REQUEST['mode'];
 }
 
-//$focus->retrieve($_REQUEST['record']);
-
 foreach($focus->column_fields as $fieldname => $val)
 {
 	if(isset($_REQUEST[$fieldname]))
 	{
 		$value = $_REQUEST[$fieldname];
-		//echo '<BR>';
-		//echo $fieldname."         ".$value;
-		//echo '<BR>';
 		$focus->column_fields[$fieldname] = $value;
 	}
-		
 }
 
-
-//$focus->saveentity("Faq");
 $focus->save("Faq");
 $return_id = $focus->id;
 

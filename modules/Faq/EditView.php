@@ -21,7 +21,6 @@
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
-#require_once('data/Tracker.php'); // Commented for Tracker issue
 require_once('modules/Faq/Faq.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
@@ -46,17 +45,12 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 } 
 
 //get Block 1 Information
-
 $block_1 = getBlockInformation("Faq",1,$focus->mode,$focus->column_fields);
 
-
-
 //get Address Information
-
 $block_2 = getBlockInformation("Faq",2,$focus->mode,$focus->column_fields);
 
 //get Description Information
-
 $block_3 = getBlockInformation("Faq",3,$focus->mode,$focus->column_fields);
 
 //get Custom Field Information
@@ -71,7 +65,6 @@ if($focus->mode == 'edit')
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-
 
 require_once($theme_path.'layout_utils.php');
 
@@ -103,8 +96,6 @@ if($comments != '')
 				</td></tr>
 			     </table>
 			    ';
-	//$xtpl->assign("BLOCK4_COMMENTS", $comments);
-	//$xtpl->assign("BLOCK4_HEADER", $block_4_header);
 	$xtpl->assign("BLOCK4_COMMENTS_BLOCK", $block_4_comments);
 }
 
@@ -128,50 +119,47 @@ $xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_F
 
 $faq_tables = Array('faq'); 
 
- $validationData = getDBValidationData($faq_tables);
- $fieldName = '';
- $fieldLabel = '';
- $fldDataType = '';
+$validationData = getDBValidationData($faq_tables);
+$fieldName = '';
+$fieldLabel = '';
+$fldDataType = '';
 
- $rows = count($validationData);
- foreach($validationData as $fldName => $fldLabel_array)
- {
-   if($fieldName == '')
-   {
-     $fieldName="'".$fldName."'";
-   }
-   else
-   {
-     $fieldName .= ",'".$fldName ."'";
-   }
-   foreach($fldLabel_array as $fldLabel => $datatype)
-   {
-	if($fieldLabel == '')
+$rows = count($validationData);
+foreach($validationData as $fldName => $fldLabel_array)
+{
+	if($fieldName == '')
 	{
-			
-     		$fieldLabel = "'".$fldLabel ."'";
-	}		
-      else
-       {
-      $fieldLabel .= ",'".$fldLabel ."'";
-        }
- 	if($fldDataType == '')
-         {
-      		$fldDataType = "'".$datatype ."'";
-    	}
-	 else
-        {
-       		$fldDataType .= ",'".$datatype ."'";
-     	}
-   }
- }
+		$fieldName="'".$fldName."'";
+	}
+	else
+	{
+		$fieldName .= ",'".$fldName ."'";
+	}
+	foreach($fldLabel_array as $fldLabel => $datatype)
+	{
+		if($fieldLabel == '')
+		{
 
-
+			$fieldLabel = "'".$fldLabel ."'";
+		}		
+		else
+		{
+			$fieldLabel .= ",'".$fldLabel ."'";
+		}
+		if($fldDataType == '')
+		{
+			$fldDataType = "'".$datatype ."'";
+		}
+		else
+		{
+			$fldDataType .= ",'".$datatype ."'";
+		}
+	}
+}
 
 $xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
 $xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
-
 
 $xtpl->parse("main");
 

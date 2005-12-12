@@ -21,25 +21,25 @@
  ********************************************************************************/
 
 require_once('XTemplate/xtpl.php');
-#require_once('data/Tracker.php'); //Commented for tracker issue
 require_once('modules/Faq/Faq.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/uifromdbutil.php');
+
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
 $focus = new Faq();
-//$focus->set_strings();
-//var_dump($focus);
 
-if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
+if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
+{
     $focus->retrieve_entity_info($_REQUEST['record'],"Faq");
     $focus->id = $_REQUEST['record'];	
 }
 
-if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
+{
 	$focus->id = "";
 } 
 
@@ -54,28 +54,25 @@ $xtpl=new XTemplate ('modules/Faq/DetailView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 
-if(isset($focus->column_fields[question]))$xtpl->assign("FAQ_TITLE", $focus->column_fields[question]);
+if(isset($focus->column_fields[question]))
+	$xtpl->assign("FAQ_TITLE", $focus->column_fields[question]);
 
 $xtpl->assign("THEME", $theme);
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
 //get Block 1 Information
-
 $block_1 = getDetailBlockInformation("Faq",1,$focus->column_fields);
 $xtpl->assign("BLOCK1", $block_1);
 
 //get Address Information
-
 $block_2 = getDetailBlockInformation("Faq",2,$focus->column_fields);
 $xtpl->assign("BLOCK2", $block_2);
-//get Description Information
 
+//get Description Information
 $block_3 = getDetailBlockInformation("Faq",3,$focus->column_fields);
 $xtpl->assign("BLOCK3", $block_3);
 
-//$block_4 = getDetailBlockInformation("Faq",4,$focus->column_fields);
-//$xtpl->assign("BLOCK4", $block_4);
 $block_4_header = getBlockTableHeader("LBL_COMMENT_INFORMATION");
 $commentlist = $focus->getFAQComments($focus->id);
 $xtpl->assign("BLOCK4", $commentlist);
@@ -86,10 +83,8 @@ if(isPermitted("Faq",1,$_REQUEST['record']) == 'yes')
 {
         $xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
 
-
         $xtpl->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
 }
-
 
 
 if(isPermitted("Faq",2,$_REQUEST['record']) == 'yes')

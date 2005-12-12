@@ -117,6 +117,10 @@ $mod_strings = Array(
 'Add Comment'=>'Add Comment',
 'LBL_COMMENT_INFORMATION'=>'Comment Information',
 'Status'=>'Status',
+
+//Added on 10-12-2005
+'LBL_QUESTION'=>'Question',
+'LBL_CATEGORY'=>'Category',
 );
 
 ?>

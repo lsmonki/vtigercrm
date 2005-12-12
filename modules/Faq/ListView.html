@@ -21,7 +21,6 @@ function massDelete()
 		if (document.massdelete.selected_id.checked)
 		{
 			document.massdelete.idlist.value=document.massdelete.selected_id.value;
-			//alert(document.massdelete.idlist.value);
 		}
 		else 
 		{
@@ -43,7 +42,6 @@ function massDelete()
 		if (xx != 0)
 		{
 			document.massdelete.idlist.value=idstring;
-			//alert(document.massdelete.idlist.value);
 		}
 		else
 		{
@@ -51,38 +49,44 @@ function massDelete()
 			return false;
 		}
 	}
-document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Faq&return_action=index"
+	document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Faq&return_action=index"
 }
 
 
 </script>
 <script type="text/javascript" language="JavaScript">
-function clear_form(form) {
-	for (j = 0; j < form.elements.length; j++) {
-		if (form.elements[j].type == 'text' || form.elements[j].type == 'select-one') {
+function clear_form(form) 
+{
+	for (j = 0; j < form.elements.length; j++) 
+	{
+		if (form.elements[j].type == 'text' || form.elements[j].type == 'select-one') 
+		{
 			form.elements[j].value = '';
 		}
 	}
 }
 </script>
-<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
 
-	<tr height="20">
-		<td COLSPAN="30" class="listFormHeaderLinks">
-			<table border="0" cellpadding="0" cellspacing="0" width="100%">
-			<tr>
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
+   <tr height="20">
+	<td COLSPAN="30" class="listFormHeaderLinks">
+		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+		   <tr>
 			<td>&nbsp; {RECORD_COUNTS}</td>
 			   {NAVIGATION}
-			</tr>
-			</table>
-		</td>
-	</tr>
-	<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
-	{LISTHEADER}
-		<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
-	{LISTENTITY}
-	</form>
+		   </tr>
+		</table>
+	</td>
+   </tr>
+   <tr>
+	<td colspan="30" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+   </tr>
+   {LISTHEADER}
+   <tr>
+	<td colspan="30" height="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+   </tr>
+   {LISTENTITY}
+   </form>
 </table>
 <br>
 <!-- END: main -->
-

@@ -85,15 +85,21 @@ class Faq extends CRMEntity {
 		$this->db = new PearDatabase();
 		$this->column_fields = getColumnFields('Faq');
 	}
-	
+
+	/**     Function to get the list of comments for the given FAQ id
+         *      @param  int  $faqid - FAQ id
+         *      @return list $list - the list of comments which are formed as boxed info with div tags.
+        **/	
 	function getFAQComments($faqid)
 	{
 		global $mod_strings;
 		$sql = "select * from faqcomments where faqid=".$faqid;
 		$result = $this->db->query($sql);
 		$noofrows = $this->db->num_rows($result);
+
 		if($noofrows == 0)
 			return '';
+
 		$list .= '<div style="overflow: scroll;height:150;width:100%;">';
 		for($i=0;$i<$noofrows;$i++)
 		{
