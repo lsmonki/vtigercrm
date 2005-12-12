@@ -17,7 +17,7 @@ require_once('include/logging.php');
 //include('adodb/adodb.inc.php');
 include_once('adodb/adodb.inc.php');
 require_once("adodb/adodb-xmlschema.inc.php");
-	
+
 $log1 =& LoggerManager::getLogger('VT');
 
 class PearDatabase{
@@ -162,13 +162,13 @@ class PearDatabase{
 		
 		if($this->dieOnError || $dieOnError)
 		{
-            $this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg());	
+            		$this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg(),'error');	
 			die ($msg."ADODB error ".$msg."->".$this->database->ErrorMsg());
 		}
 		else
 		{
 			//$this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg());
-            $this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg()." (SQL=".$this->sql.")");
+            $this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg()." (SQL=".$this->sql.")",'error');
 		}
 		return false;
 	}
