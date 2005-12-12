@@ -279,6 +279,7 @@ function verify_data(form) {
 		<td valign="top" align=center>
 		<!-- System Configuration-->
 
+			<form action="install.php" method="post" name="form" id="form" name="setConfig" id="form">
 
 			<table width="100%" cellpadding="5"  cellspacing="1" border="0" class=small><tbody>
 			<tr>
@@ -309,15 +310,15 @@ function verify_data(form) {
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>User Name</strong> <sup><font color=red>*</font></sup></td>
-               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_user_name" readonly value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" /></td>
+               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>Password</strong> <sup><font color=red>*</font></sup></td>
-               <td bgcolor="white" align="left"><input type="password" class="dataInput" name="db_password" readonly value="<?php if (isset($db_password)) echo "$db_password"; ?>" /></td>
+               <td bgcolor="white" align="left"><input type="password" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" /></td>
               </tr>
               <tr>
                <td nowrap bgcolor="#F5F5F5"><strong>Database Name</strong> <sup><font color=red>*</font></sup></td>
-               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_name" readonly value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
+               <td bgcolor="white" align="left"><input type="text" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" /></td>
 
 			<input type="hidden" name="dbtype" value="<?php
                 if(isset($dbconfig['db_type']) && $dbconfig['db_type'] != '')
@@ -334,26 +335,6 @@ function verify_data(form) {
 			
 			<br><br>
 			
-			<!-- URL Configuration -->
-			<table width="90%" cellpadding="5" cellspacing="1" border="0" class="small" style="background-color:#cccccc">
-			<tr>
-				<td colspan=2><strong>URL Configuration</strong></td>
-			</tr>
-            <tr>
-				<td width="25%" bgcolor="#F5F5F5" ><strong>URL</strong> <sup><font color=red>*</font></sup></td>
-				<td width="75%" align="left" bgcolor="white"><input class="dataInput" type="text" name="site_URL" value="<?php if (isset($site_URL)) echo $site_URL; ?>" size="40" />		  	</td>
-			</tr>
-			<tr>
-				<td bgcolor="#F5F5F5"><strong>Path</strong> <sup><font color=red>*</font></sup></td>
-				<td align="left" bgcolor="White"><input class="dataInput" type="text" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" size="40" /> </td>
-			</tr>
-			<tr valign="top">
-				<td bgcolor="#F5F5F5"><strong>Path to Cache Directory  <sup><font color=red>*</font></sup><br>(must be writable)</td>
-				<td align="left" bgcolor="White"><?php echo $root_directory; ?><input class="dataInput" type="text" name="cache_dir" size='14' value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" size="40" /> </td>
-          </tr>
-          </table>
-		  <br><br>
-		  
 		  <!-- Web site configuration -->
 		<table width="90%" cellpadding="5" border="0" style="background-color:#cccccc" cellspacing="1" class="small"><tbody>
             <tr>
@@ -408,18 +389,8 @@ function verify_data(form) {
 	<tr>
 		<td><img src="install/images/cwURL.gif"></td>
 		<td align=right>
-			<form action="install.php" method="post" name="form" id="form" name="setConfig" id="form">
-		<!-- <form action="install.php" method="post" onsubmit="return verify_data(setConfig);" name="setConfig" id="form"> -->
 			<input type="hidden" name="file" value="3confirmConfig.php" />
 
-			<input type="hidden" class="dataInput" name="db_host_name" value="<?php if (isset($db_host_name)) echo "$db_host_name"; ?>" />
-			<input type="hidden" class="dataInput" name="db_user_name" value="<?php if (isset($db_user_name)) echo "$db_user_name"; ?>" />
-			<input type="hidden" class="dataInput" name="db_password" value="<?php if (isset($db_password)) echo "$db_password"; ?>" />
-			<input type="hidden" class="dataInput" name="db_name" value="<?php if (isset($db_name)) echo "$db_name"; ?>" />
-			<input type="hidden" class="dataInput" name="site_URL" value="<?php if (isset($site_URL)) echo "$site_URL"; ?>" />
-			<input type="hidden" class="dataInput" name="root_directory" value="<?php if (isset($root_directory)) echo "$root_directory"; ?>" />
-			<input type="hidden" class="dataInput" name="admin_password" value="<?php if (isset($admin_password)) echo "$admin_password"; else echo "admin";?>" />
-			<input type="hidden" class="dataInput" name="cache_dir" value="<?php if (isset($cache_dir)) echo $cache_dir; ?>" />
 			<input type="hidden" name="dbtype" value="<?php 
 									if(isset($dbconfig['db_type']) && $dbconfig['db_type'] != '')
 									{
