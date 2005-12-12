@@ -142,11 +142,11 @@ class CRMEntity extends SugarBean
         }
 
       }
-      elseif($table_name ==  "ticketcomments" && $_REQUEST['comments'] != '')
+      elseif($table_name ==  "ticketcomments")
       {
                 $this->insertIntoTicketCommentTable($table_name, $module);
       }
-      elseif($table_name ==  "faqcomments" && $_REQUEST['comments'] != '')
+      elseif($table_name ==  "faqcomments")
       {
                 $this->insertIntoFAQCommentTable($table_name, $module);
       }
@@ -793,7 +793,7 @@ $log->info("in getOldFileName  ".$notesid);
 function insertIntoTicketCommentTable($table_name, $module)
 {
 	global $log;
-$log->info("in insertIntoTicketCommentTable  ".$table_name."    module is  ".$module);
+	$log->info("in insertIntoTicketCommentTable  ".$table_name."    module is  ".$module);
         global $adb;
 	global $current_user;
 
@@ -803,21 +803,27 @@ $log->info("in insertIntoTicketCommentTable  ".$table_name."    module is  ".$mo
 	else
 		$ownertype = 'customer';
 
-	$comment = addslashes($_REQUEST['comments']);
-	$sql = "insert into ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."','".$current_time."')";
-        $adb->query($sql);
+	if($_REQUEST['comments'] != '')
+	{
+		$comment = addslashes($_REQUEST['comments']);
+		$sql = "insert into ticketcomments values('',".$this->id.",'".$comment."','".$current_user->id."','".$ownertype."','".$current_time."')";
+	        $adb->query($sql);
+	}
 }
 function insertIntoFAQCommentTable($table_name, $module)
 {
 	 global $log;
-$log->info("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$module);
+	$log->info("in insertIntoFAQCommentTable  ".$table_name."    module is  ".$module);
         global $adb;
 
         $current_time = date('Y-m-d H:i:s');
 
-	$comment = addslashes($_REQUEST['comments']);
-	$sql = "insert into faqcomments values('',".$this->id.",'".$comment."','".$current_time."')";
-	$adb->query($sql);
+	if($_REQUEST['comments'] != '')
+	{
+		$comment = addslashes($_REQUEST['comments']);
+		$sql = "insert into faqcomments values('',".$this->id.",'".$comment."','".$current_time."')";
+		$adb->query($sql);
+	}
 }
 function insertIntoReminderTable($table_name,$module,$recurid)
 {
