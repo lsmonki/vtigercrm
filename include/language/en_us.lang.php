@@ -64,8 +64,6 @@ $app_strings = Array(
 
 'NTC_WELCOME'=>'Welcome',
 
-'NTC_SUPPORT_SUGARCRM'=>"Support the SugarCRM open source project with a donation through PayPal - it's fast, free and secure!",
-
 'NTC_NO_ITEMS_DISPLAY'=>'none',
 
 'LBL_ALT_HOT_KEY'=>'Alt+',
