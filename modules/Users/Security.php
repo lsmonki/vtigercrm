@@ -394,6 +394,7 @@ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").
  
  $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").",'recurringtype','recurringevents',1,'15','recurringtype','Recurrence',1,0,0,100,6,1,3,'O~O',1,'')");
 
+ $this->db->query("Insert into field values (9,".$this->db->getUniqueID("field").",'notime','activity',1,56,'notime','No Time',1,0,0,100,20,1,3,'C~O',1,'')");
 //Block1 -- End
 //Task Details -- END
 
@@ -422,7 +423,7 @@ $this->db->query("insert into field values (9,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,16,1,2,'T~O',1,'')");
  $this->db->query("Insert into field values (16,".$this->db->getUniqueID("field").",'priority','activity',1,15,'taskpriority','Priority',1,0,
 0,100,17,1,1,'V~O',1,'')");
-
+ $this->db->query("Insert into field values (16,".$this->db->getUniqueID("field").",'notime','activity',1,56,'notime','No Time',1,0,0,100,18,1,1,'C~O',1,'')");
  
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'description','activity',1,'19','description','Description',1,0,0,100,1,2,1,'V~O',1,'')");
  $this->db->query("insert into field values (16,".$this->db->getUniqueID("field").",'reminder_time','activity_reminder',1,'30','reminder_time','Send Reminder',1,0,0,100,1,7,1,'I~O',1,'')");
