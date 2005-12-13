@@ -129,6 +129,21 @@ function set_values(form) {
 	}
 
 }
+function toggleTime()
+{
+	if(getObj("notime").checked)
+	{
+		getObj("notime").value = 'on';
+		getObj("duration_hours").disabled = true;
+		getObj("duration_minutes").disabled = true;
+	}
+	else
+	{
+		getObj("notime").value = 'off';
+        getObj("duration_minutes").disabled = false;
+		getObj("duration_hours").disabled = false;
+	}
+}
 
 </script>
 <script type="text/javascript" language="JavaScript">
@@ -184,4 +199,7 @@ function toggleAssignType(currType)
 	var fielddatatype = new Array({VALIDATION_DATA_FIELDDATATYPE})
 
 </script>
+<script>toggleTime() </script>
+
+
 <!-- END: main -->
