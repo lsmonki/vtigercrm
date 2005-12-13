@@ -40,16 +40,19 @@ $query = "SELECT users.homeorder FROM users WHERE id=$record";
 $result =& $adb->query($query, false,"Error getting home order");
 $row = $adb->fetchByAssoc($result);
 
+$default_home_section_order = array('ALVT','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI');
+
 if($row != null)
 {
-	$home_section_order = $row['homeorder'];
+        $home_section_order = $row['homeorder'];
 }
 else
 {
-	$home_section_order = array('ALVT','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI');
+        $home_section_order = $default_home_section_order;
 }
 
 $blocks = explode(",",$home_section_order);
+$hblocks = array_diff($default_home_section_order,$blocks);
 
 function parse_data($data)
 {
@@ -123,6 +126,7 @@ if(isset($_POST['order']))
 <!-- BEGIN: main -->
 <style type="text/css">
 #block {    width: 180px;    float: center;    margin-left: 5px; }
+#hidden {    width: 180px;    float: center;    margin-left: 5px; }
 
 form {
   clear: left;
@@ -221,17 +225,41 @@ echo $fblock;
 			</table>
 		</td>
 	</tr>
+	<tr  cellspacing="2" cellpadding="2" style="leftFormHeader">
+                <td width="25%" class="leftFormHeader" border="1">
+                        <?php echo $mod_strings['LBL_HOMEPAGE_HIDDEN']; ?>
+                </td>
+                <td>
+                        <table class=UserTableClass  width="100%">
+                                <tr align="center">
+                                        <td valign="top">
+                                                <ul id="hidden" class="sortable boxy">
+<?php
+$fblock = "";
+foreach ( $hblocks as $block ) {
+        $fblock .= "<li id='$block'>".$mod_strings[$block]."</li>\n";
+}
+echo $fblock;
+?>
+                                                </ul>
+                                                <div style="clear: left;">
+                                                </div>
+                                        </td>
+                                </tr>
+                        </table>
+                </td>
+        </tr>
 </table>
 <p><p><p align="center">
 <form align="center" action="" method="post">
-	 <input type="hidden" name="order" id="order" value="">
-	<div align="center">
-		<input type="button" onclick="showValue()" value="Update System">
-	</div>
-	<br>
+         <input type="hidden" name="order" id="order" value="">
+        <div align="center">
+                <input type="button" onclick="showValue()" value="Update System">
+        </div>
+        <br>
 </form>
 <p><p>
 <script language="JavaScript" type="text/javascript"><!--
-	loadMe();
+        loadMe();
 //-->
 </script>
