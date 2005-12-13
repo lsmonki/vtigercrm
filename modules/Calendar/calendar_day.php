@@ -131,6 +131,7 @@ function check_form()
         <input name='due_date' maxlength='10' type="hidden" value=""></td>
 
 	<input name='time_start' type="hidden" maxlength='5' value="">
+	<input name='notime' type="hidden" value="">
 	<input name='time_end' type="hidden" maxlength='5' value=""></td>
         <script type="text/javascript">
 //		Calendar.setup ({
@@ -283,16 +284,16 @@ function check_form()
      for ($i = -1 ; $i <24 ; $i++ ) {
        echo " <tr>\n";
 
-       /*
-       if ( $i == -1 ) {
+       
+       /*if ( $i == -1 ) {
          echo  $this->pref->menulink($callink . "app_new&t=".$this->t, "NOTIME",$mod_strings['LBL_NEW_APPNT_INFO']);
        } else {
          echo  $this->pref->menulink($callink . "app_new&start=". $this->t.sprintf("%02d",$i)."00&amp;end=".$this->t.sprintf("%02d",$i)."59" ,sprintf("%02d", $i).":00",$mod_strings['LBL_NEW_APPNT_INFO']);
-       }
-	   */
+       }*/
+	  
        if ( $i == -1 ) {
-        echo " <th id=\"time_".$this->t."\" class=\"daytime\" width=\"10%\" align=\"right\" valign=\"top\">&nbsp;\n";
-      //   echo  $this->pref->menulink("javascript:showCreateBox('".$this->t."')", "NOTIME",$mod_strings['LBL_NEW_APPNT_INFO']);
+       echo " <th id=\"time_".$this->t."\" class=\"daytime\" width=\"10%\" align=\"right\" valign=\"top\">&nbsp;\n";
+       echo  $this->pref->menulink("javascript:showCreateBox('".$this->t."')", "NOTIME",$mod_strings['LBL_NEW_APPNT_INFO']);
        } else {
 	   	 echo " <th id=\"time_".$this->t.sprintf("%02d",$i)."00\" class=\"daytime\" width=\"10%\" align=\"right\" valign=\"top\">\n";
          echo  $this->pref->menulink("javascript:showCreateBox('".$this->t.sprintf("%02d",$i)."00','".$this->t.sprintf("%02d",$i)."59')", sprintf("%02d", $i).":00",$mod_strings['LBL_NEW_APPNT_INFO']);
@@ -442,8 +443,15 @@ function showCreateBox(start,end) {
 
 	document.appSave.date_start.value=<?php echo $a;?>+"-"+<?php echo $b;?>+"-"+<?php echo $c;?>;
 	document.appSave.due_date.value=<?php echo $a;?>+"-"+<?php echo $b;?>+"-"+<?php echo $c;?>;	
-
-	document.appSave.time_start.value=event_st_hr+":"+event_st_min
+	if(!end)
+	{
+	       document.appSave.time_start.value='';
+	       document.appSave.notime.value='1';
+	}
+	else
+	{
+	       document.appSave.time_start.value=event_st_hr+":"+event_st_min
+	}
 
 	createBoxObj=getObj("createBox")
 	var currObj=getObj("time_"+start)

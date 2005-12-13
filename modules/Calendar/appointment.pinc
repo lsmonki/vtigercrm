@@ -415,40 +415,48 @@ class appointment extends tutos_base {
 		//print("GS --> continuing");
 		$fmt_sthr='';
 		$fmt_stm='';
-		list($sthr,$stmn,$stsc) = split(":",$val_array["time_start"]);
-		if($sthr <= 9 && strlen(trim($sthr)) < 2) 
+		if ($val_array["time_start"]!='')
 		{
-			$fmt_sthr= '0'.$sthr;
-		}
-		else
-		{
-			$fmt_sthr= $sthr;
-		}
-		if($stmn <= 9 && strlen(trim($stmn)) < 2) 
-		{
-			$fmt_stm= '0'.$stmn;
-		}
-		else
-		{
-			$fmt_stm = $stmn;
-		}
-		$startdate = $val_array["date_start"] .' ' . $fmt_sthr .":" . $fmt_stm .":00";
+			list($sthr,$stmn,$stsc) = split(":",$val_array["time_start"]);
+			if($sthr <= 9 && strlen(trim($sthr)) < 2) 
+			{
+				$fmt_sthr= '0'.$sthr;
+			}
+			else
+			{
+				$fmt_sthr= $sthr;
+			}
+			if($stmn <= 9 && strlen(trim($stmn)) < 2) 
+			{
+				$fmt_stm= '0'.$stmn;
+			}
+			else
+			{
+				$fmt_stm = $stmn;
+			}
+			$startdate = $val_array["date_start"] .' ' . $fmt_sthr .":" . $fmt_stm .":00";
 
-		//end time calculation
-		$endhr = 0;
-		$endmin = $stmn + $val_array["duration_minutes"];
-		if($endmin <= 9) $endmin= '0'.$endmin;
-		if($endmin >= 60)
-		{
-			$endmin = $endmin%60;
+			//end time calculation
+			$endhr = 0;
+			$endmin = $stmn + $val_array["duration_minutes"];
 			if($endmin <= 9) $endmin= '0'.$endmin;
-			$endhr++;
+			if($endmin >= 60)
+			{
+				$endmin = $endmin%60;
+				if($endmin <= 9) $endmin= '0'.$endmin;
+				$endhr++;
+			}
+			$endhr = $endhr + $sthr + $val_array["duration_hours"];
+			if($endhr <= 9) $endhr= '0'.$endhr;
+			if ($endhr > 23) $endhr = 23;
+			$enddate = $val_array["date_start"] .' ' . $endhr .":" . $endmin .":00";
 		}
-		$endhr = $endhr + $sthr + $val_array["duration_hours"];
-		if($endhr <= 9) $endhr= '0'.$endhr;
-		if ($endhr > 23) $endhr = 23;
-		$enddate = $val_array["date_start"] .' ' . $endhr .":" . $endmin .":00";
-		//
+		else
+		{
+			$startdate = $val_array["date_start"].' '. "00:00:00";
+			$enddate = $val_array["date_start"].' '. "00:00:00";
+			$val_array["t_ignore"] = 1;
+		}	//
 		$this->t_ignore    = $val_array["t_ignore"];
 		$this->descr       = $val_array["subject"];
 		$this->start       = new DateTime($startdate);
