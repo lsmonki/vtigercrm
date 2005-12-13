@@ -960,7 +960,10 @@
 		<field name="priority" type="C" size="150"></field>     
                 <field name="location" type="C" size="150"></field>     
 
-                
+        <field name="notime" type="C" size="3">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
 			<opt>Type=InnoDB</opt>
 		 <index name="Activity_IDX0">
 			<col>activityid</col>
