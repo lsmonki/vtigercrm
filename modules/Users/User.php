@@ -12,6 +12,14 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  ********************************************************************************/
+
+/*********************************************
+ * With modifications by
+ * Daniel Jabbour
+ * iWebPress Incorporated, www.iwebpress.com
+ * djabbour - a t - iwebpress - d o t - com
+ ********************************************/
+
 /*********************************************************************************
  * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/modules/Users/User.php,v 1.10 2005/04/19 14:40:48 ray Exp $
  * Description: TODO:  To be written.
@@ -312,6 +320,54 @@ class User extends SugarBean {
 		}
 		
 	}
+/**
+	 * Checks the config.php AUTHCFG value for login type and forks off to the proper module
+	 *
+	 * @param string $user_password - The password of the user to authenticate
+	 * @return true if the user is authenticated, false otherwise
+	 */
+	function doLogin($user_password) {
+		global $AUTHCFG;
+	
+		switch (strtoupper($AUTHCFG['authType'])) {
+			case 'LDAP':
+				$this->log->debug("Using LDAP authentication");
+				require_once('modules/Users/authTypes/LDAP.php');
+				$result = ldapAuthenticate($this->user_name, $user_password);
+				if ($result == NULL) {
+					return false;
+				} else {
+					return true;
+				}
+				break;
+				
+			case 'AD':
+				$this->log->debug("Using Active Directory authentication");
+				require_once('modules/Users/authTypes/adLDAP.php');
+				$adldap = new adLDAP();
+				if ($adldap->authenticate($this->user_name,$user_password)) {
+					return true;
+				} else {
+					return false;
+				}
+				break;
+				
+			default:
+				$this->log->debug("Using integrated/SQL authentication");
+				$encrypted_password = $this->encrypt_password($user_password);
+				$query = "SELECT * from $this->table_name where user_name='$this->user_name' AND user_password='$encrypted_password'";
+				$result = $this->db->requireSingleResult($query, false);
+				if (empty($result)) {
+					return false;
+				} else {
+					return true;
+				}
+				break;
+		}
+		return false;
+	}
+
+
 	/** 
 	 * Load a user based on the user_name in $this
 	 * @return -- this if load was successul and null if load failed.
@@ -340,15 +396,18 @@ class User extends SugarBean {
 		if($this->validation_check('aW5jbHVkZS9pbWFnZXMvcG93ZXJlZF9ieV9zdWdhcmNybS5naWY=' , '3d49c9768de467925daabf242fe93cce') == -1)$validation = -1;
 		if($this->authorization_check('aW5kZXgucGhw' , 'PEEgaHJlZj0naHR0cDovL3d3dy5zdWdhcmNybS5jb20nIHRhcmdldD0nX2JsYW5rJz48aW1nIGJvcmRlcj0nMCcgc3JjPSdpbmNsdWRlL2ltYWdlcy9wb3dlcmVkX2J5X3N1Z2FyY3JtLmdpZicgYWx0PSdQb3dlcmVkIEJ5IFN1Z2FyQ1JNJz48L2E+', 1) == -1)$validation = -1;
 		$encrypted_password = $this->encrypt_password($user_password);
-			
-		$query = "SELECT * from $this->table_name where user_name='$this->user_name' AND user_password='$encrypted_password'";
-		$result = $this->db->requireSingleResult($query, false);
-		if(empty($result))
+	
+		$authCheck = false;
+		$authCheck = $this->doLogin($user_password);
+		
+		if(!$authCheck)
 		{
 			$this->log->warn("User authentication for $this->user_name failed");
 			return null;
 		}
 		
+		$query = "SELECT * from $this->table_name where user_name='$this->user_name'";
+		$result = $this->db->requireSingleResult($query, false);
 
 		// Get the fields for the user
 		$row = $this->db->fetchByAssoc($result);
