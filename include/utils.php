@@ -972,15 +972,35 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
 		$custfld .= '<td width="30%"><select name="'.$fieldname.'">';
+		
+		//Mikecrowe fix to correctly default for custom pick lists
+		$options = array();
+		$found = false;
 		for($j = 0; $j < $noofpickrows; $j++)
 		{
 			$pickListValue=$adb->query_result($pickListResult,$j,strtolower($fieldname));
-
-			$chk_val = (html_entity_decode($value) == $pickListValue) ? ' selected="selected"' : '';
 			
-			$custfld .= '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
-		}
-		$custfld .= '</td>';
+			if($value == $pickListValue)
+ 			{
+ 				$chk_val = "selected";	
+                 		$found = true;
+ 			}
+ 			else
+ 			{	
+ 				$chk_val = '';
+ 			}
+  			
+ 			$options[] = '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
+             		if ( $j == 0 )
+                 		$soption = '<OPTION value="'.$pickListValue.'" selected>'.$pickListValue.'</OPTION>';
+  		}
+         	if ( !$found ) $options[0] = $soption;
+ 		$custfld .= implode('',$options).'</td>';
+	
+		//$chk_val = (html_entity_decode($value) == $pickListValue) ? ' selected="selected"' : '';
+		//	$custfld .= '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
+		//}
+		//$custfld .= '</td>';
 	}
 	elseif($uitype == 17)
 	{
@@ -1854,6 +1874,16 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= $mod_strings[$fieldlabel].':</td>';
 
 		$custfld .= '<td width="30%"><input name="'.$fieldname.'" type="text" size="25" maxlength="'.$maxlength.'" value="'.$value.'"></td>';
+	}
+	
+	// Mike Crowe Mod --------------------------------------------------------force numerics right justified.
+	if ( !eregi("id=",$custfld) )
+		$custfld = preg_replace("/<input/iS","<input id='$fieldname' ",$custfld);
+ 
+	if ( in_array($uitype,array(71,72,7,9,90)) )
+	{
+		$custfld = preg_replace("/<input/iS","<input align=right ",$custfld);
+		//"align='right'"
 	}
 
 	return $custfld;
@@ -4161,6 +4191,13 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		}
 	}
 //	$value .= $returnset;
+	
+	// Mike Crowe Mod --------------------------------------------------------Make right justified and currency value
+	if ( in_array($uitype,array(71,72,7,9,90)) )
+	{
+		$value = '<span align="right">'.$value.'</div>';
+	}
+
 	return $value; 
 }
 
@@ -4519,7 +4556,7 @@ function ChangeStatus($status,$activityid,$activity_mode='')
  }
 
 //parameter $viewid added for customview 27/5
-function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='',$recordid='',$return_module='',$append_url='',$viewid='')
+function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='',$recordid='',$return_module='',$append_url='',$viewid='',$groupid='')
 {
 	if($type=='advanced')
 		$flag='&advanced=true';
@@ -4533,7 +4570,8 @@ function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='
                 $returnvalue .= '&return_module='.$return_module;
 
 	for($var='A',$i =1;$i<=26;$i++,$var++)
-		$list .= '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&viewname='.$viewid.'&query='.$query.'&'.$fieldname.'='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$var.'</a></td>';
+	// Mike Crowe Mod --------------------------------------------------------added groupid to url
+		$list .= '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&viewname='.$viewid.'&gname='.$groupid.'&query='.$query.'&'.$fieldname.'='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$var.'</a></td>';
 
 	return $list;
 }
