@@ -109,6 +109,9 @@ if(isPermitted("HelpDesk",2,$_REQUEST['record']) == 'yes')
 	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='HelpDesk'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
 }
 
+//Added button for Convert the ticket to FAQ
+$xtpl->assign("CONVERTASFAQ","<td><input title=\"$mod_strings[LBL_CONVERT_AS_FAQ_BUTTON_TITLE]\" accessKey=\"$mod_strings[LBL_CONVERT_AS_FAQ_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.action.value='ConvertAsFAQ'; \" type=\"submit\" name=\"ConvertAsFAQ\" value=\"$mod_strings[LBL_CONVERT_AS_FAQ_BUTTON_LABEL]\"></td>");
+
 $xtpl->assign("IMAGE_PATH", $image_path);
 $xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $xtpl->assign("ID", $_REQUEST['record']);

@@ -151,6 +151,12 @@ $mod_strings = Array(
 
 //Added on 09-12-2005
 'LBL_CUMULATIVE_STATISTICS'=>'Cumulative Statistics',
+
+//Added on 12-12-2005
+'LBL_CONVERT_AS_FAQ_BUTTON_TITLE'=>'Convert As FAQ',
+'LBL_CONVERT_AS_FAQ_BUTTON_KEY'=>'C',
+'LBL_CONVERT_AS_FAQ_BUTTON_LABEL'=>'Convert As FAQ',
+
 );
 
 ?>
