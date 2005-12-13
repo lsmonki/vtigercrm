@@ -80,13 +80,15 @@ else
 		{
 			$value = $_REQUEST[$fieldname];
 			$focus->column_fields[$fieldname] = $value;
+			if(($fieldname == 'notime') && ($focus->column_fields[$fieldname]))
+			{	
+				$focus->column_fields['time_start'] = '';
+				$focus->column_fields['duration_hours'] = '';
+				$focus->column_fields['duration_minutes'] = '';
+			}	
 		}
 		
 	}
-
-	//print_r($focus->column_fields);
-
-	//$focus->saveentity($tab_type);
 	$focus->save($tab_type);
 	$return_id = $focus->id;
 }
