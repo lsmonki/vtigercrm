@@ -980,10 +980,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$pickListValue=$adb->query_result($pickListResult,$j,strtolower($fieldname));
 			
-			if($value == $pickListValue)
+			if(html_entity_decode($value) == $pickListValue)
  			{
  				$chk_val = "selected";	
-                 		$found = true;
+               	$found = true;
  			}
  			else
  			{	
@@ -1327,14 +1327,32 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 56)
 	{
 		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-		if($value == 1)
+
+		//code added on 12-12-05 for notime option in events
+		if($fieldname == 'notime' && $module_name =='Events' )
 		{
-			$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox"  checked></td>';
+			if($value == 1)
+			{
+				$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox"  onclick="toggleTime()" checked></td>';
+			}
+			else
+			{
+				$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox" onclick="toggleTime()" ></td>';
+			}
 		}
 		else
 		{
-			$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox"></td>';
+			if($value == 1)
+			{
+				$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox"  checked></td>';
+			}else
+			{
+				$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox"></td>';
+			}
+			
 		}
+		
+			
 	}
 	elseif($uitype == 57)
 	{
