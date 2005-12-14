@@ -333,6 +333,7 @@
 		<field name="country" type="C" size="30"></field>
 		<field name="state" type="C" size="30"></field>
 		<field name="street" type="C" size="250"></field>
+		<field name="pobox" type="C" size="30"></field>
 		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
@@ -359,6 +360,7 @@
 		<field name="code" type="C" size="30"></field>
 		<field name="country" type="C" size="30"></field>
 		<field name="state" type="C" size="30"></field>
+		<field name="pobox" type="C" size="30"></field>
 		<field name="street" type="C" size="250"></field>
 		<opt>Type=InnoDB</opt> 
 		<data>
@@ -496,11 +498,13 @@
 		<field name="mailingcountry" type="C" size="40"></field>
 		<field name="othercountry" type="C" size="30"></field>
 		<field name="mailingstate" type="C" size="30"></field>
+		<field name="mailingpobox" type="C" size="30"></field>
 		<field name="othercity" type="C" size="40"></field>
 		<field name="otherstate" type="C" size="50"></field>
 		<field name="mailingzip" type="C" size="30"></field>
 		<field name="otherzip" type="C" size="30"></field>
 		<field name="otherstreet" type="C" size="250"></field>
+		<field name="otherpobox" type="C" size="30"></field>
 		<opt>Type=InnoDB</opt>
 		<data>
 		</data>
@@ -693,6 +697,7 @@
 		<field name="city" type="C" size="30"></field>
 		<field name="code" type="C" size="30"></field>
 		<field name="state" type="C" size="30"></field>
+		<field name="pobox" type="C" size="30"></field>
 		<field name="country" type="C" size="30"></field>
 		<field name="phone" type="C" size="50"></field>
 		<field name="mobile" type="C" size="50"></field>
@@ -3972,10 +3977,10 @@
 		<field name="street" type="X"></field>
 		<field name="city" type="C" size="30"></field>
 		<field name="state" type="C" size="30"></field>
+		<field name="pobox" type="C" size="30"></field>
 		<field name="postalcode" type="C" size="100"></field>
 		<field name="country" type="C" size="100"></field>
 		<field name="description" type="X"></field>
-		
                   
 <opt>Type=InnoDB</opt>
 		<data>
@@ -4192,6 +4197,7 @@
 		<field name="bill_country" type="C" size="30"></field>
 		<field name="bill_state" type="C" size="30"></field>
 		<field name="bill_street" type="C" size="250"></field>
+		<field name="bill_pobox" type="C" size="30"></field>
 		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
@@ -4219,6 +4225,7 @@
 		<field name="ship_country" type="C" size="30"></field>
 		<field name="ship_state" type="C" size="30"></field>
 		<field name="ship_street" type="C" size="250"></field>
+		<field name="ship_pobox" type="C" size="30"></field>
 		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
@@ -4368,6 +4375,7 @@
 		<field name="bill_country" type="C" size="30"></field>
 		<field name="bill_state" type="C" size="30"></field>
 		<field name="bill_street" type="C" size="250"></field>
+		<field name="bill_pobox" type="C" size="30"></field>
 		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
@@ -4395,6 +4403,7 @@
 		<field name="ship_country" type="C" size="30"></field>
 		<field name="ship_state" type="C" size="30"></field>
 		<field name="ship_street" type="C" size="250"></field>
+		<field name="ship_pobox" type="C" size="30"></field>
 		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
@@ -4547,6 +4556,7 @@
 		<field name="bill_country" type="C" size="30"></field>
 		<field name="bill_state" type="C" size="30"></field>
 		<field name="bill_street" type="C" size="250"></field>
+		<field name="bill_pobox" type="C" size="30"></field>
 		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
@@ -4574,6 +4584,7 @@
 		<field name="ship_country" type="C" size="30"></field>
 		<field name="ship_state" type="C" size="30"></field>
 		<field name="ship_street" type="C" size="250"></field>
+		<field name="ship_pobox" type="C" size="30"></field>
 		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
@@ -4714,6 +4725,7 @@
 		<field name="bill_country" type="C" size="30"></field>
 		<field name="bill_state" type="C" size="30"></field>
 		<field name="bill_street" type="C" size="250"></field>
+		<field name="bill_pobox" type="C" size="30"></field>
 		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
@@ -4741,6 +4753,7 @@
 		<field name="ship_country" type="C" size="30"></field>
 		<field name="ship_state" type="C" size="30"></field>
 		<field name="ship_street" type="C" size="250"></field>
+		<field name="ship_pobox" type="C" size="30"></field>
 		<opt>Type=InnoDB</opt> 
 		<data>
 		</data>
