@@ -1353,6 +1353,25 @@ function getRoleUsers($roleId)
 
 }
 
+function getRoleAndSubordinateUsers($roleId)
+{
+        global $adb;
+        $roleInfoArr=getRoleInformation($roleId);
+        $parentRole=$roleInfoArr[1];
+        $query = "select user2role.*,users.user_name from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$parentRole."%'";
+        $result = $adb->query($query);
+        $num_rows=$adb->num_rows($result);
+        $roleRelatedUsers=Array();
+        for($i=0; $i<$num_rows; $i++)
+        {
+                $roleRelatedUsers[$adb->query_result($result,$i,'userid')]=$adb->query_result($result,$i,'user_name');
+        }
+        return $roleRelatedUsers;
+
+
+}
+
+
 function getRoleAndSubordinatesInformation($roleId)
 {
 	global $adb;
@@ -2350,6 +2369,26 @@ function getCombinedUserActionPermissions($userId)
 	return $actionPerrArr;
 
 }
+/** To retreive the parent role of the specified role
+  * @param $roleid -- The Role Id:: Type varchar
+  * @returns  parent role array in the following format:
+  *     $parentRoleArray=(roleid1,roleid2,.......,roleidn);
+ */
+function getParentRole($roleId)
+{
+        $roleInfo=getRoleInformation($roleId);
+        $parentRole=$roleInfo[$roleId][1];
+        $tempParentRoleArr=explode('::',$parentRole);
+        $parentRoleArr=Array();
+        foreach($tempParentRoleArr as $role_id)
+        {
+                if($role_id != $roleId)
+                {
+                        $parentRoleArr[]=$role_id;
+                }
+        }
+        return $parentRoleArr;
 
+}
 
 ?>
