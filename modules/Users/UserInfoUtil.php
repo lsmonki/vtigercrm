@@ -61,54 +61,109 @@ function fetchUserGroupids($userid)
         $result = $adb->query($sql);
 	//code changed to return a list of groups related to the userid as comma seperated	
 	if($adb->num_rows($result)!=0)
-		{
-			for($i=0;$i<$adb->num_rows($result);$i++)	
-				$groupid[]=  $adb->query_result($result,$i,"groupid");
-		
+	{
+		for($i=0;$i<$adb->num_rows($result);$i++)	
+			$groupid[]=  $adb->query_result($result,$i,"groupid");
 			$groupidlists = implode (",",$groupid);
-		}
+	}
 	return $groupidlists;
+}
+
+function loadAllPerms()
+		{
+	global $adb,$MAX_TAB_PER;
+	global $persistPermArray;
+		
+	$persistPermArray = Array();
+	$profiles = Array();
+	$sql = "select distinct profileid from profile2tab";
+	$result = $adb->query($sql);
+	$num_rows = $adb->num_rows($result);
+	for ( $i=0; $i < $num_rows; $i++ )
+		$profiles[] = $adb->query_result($result,$i,'profileid');
+
+	$persistPermArray = Array();
+	foreach ( $profiles as $profileid )
+	{
+		$sql = "select * from profile2tab where profileid=" .$profileid ;
+		$result = $adb->query($sql);
+		if($MAX_TAB_PER !='')
+		{
+			$persistPermArray[$profileid] = array_fill(0,$MAX_TAB_PER,0);
+		}
+		$num_rows = $adb->num_rows($result);
+		for($i=0; $i<$num_rows; $i++)
+		{
+			$tabid= $adb->query_result($result,$i,'tabid');
+			$tab_per= $adb->query_result($result,$i,'permissions');
+			$persistPermArray[$profileid][$tabid] = $tab_per;
+		}		
+	}
 }
 
 function getAllTabsPermission($profileid)
 {
+	global $persistPermArray;
 	global $adb,$MAX_TAB_PER;
-	$sql = "select * from profile2tab where profileid=" .$profileid ;
-	$result = $adb->query($sql);
-	$tab_perr_array = Array();
-	if($MAX_TAB_PER !='')
+	// Mike Crowe Mod --------------------------------------------------------	
+	if ( $cache_tab_perms )
 	{
-		$tab_perr_array = array_fill(0,$MAX_TAB_PER,0);
+		if ( count($persistPermArray) == 0 )
+			loadAllPerms();
+		return $persistPermArray[$profileid];
 	}
-	$num_rows = $adb->num_rows($result);
-	for($i=0; $i<$num_rows; $i++)
+	else
 	{
-		$tabid= $adb->query_result($result,$i,'tabid');
-		$tab_per= $adb->query_result($result,$i,'permissions');
-		$tab_perr_array[$tabid] = $tab_per;
-	}		
-	return $tab_perr_array; 
-
+		$sql = "select * from profile2tab where profileid=" .$profileid ;
+		$result = $adb->query($sql);
+		$tab_perr_array = Array();
+		if($MAX_TAB_PER !='')
+		{
+			$tab_perr_array = array_fill(0,$MAX_TAB_PER,0);
+		}
+		$num_rows = $adb->num_rows($result);
+		for($i=0; $i<$num_rows; $i++)
+		{
+			$tabid= $adb->query_result($result,$i,'tabid');
+			$tab_per= $adb->query_result($result,$i,'permissions');	
+			$tab_perr_array[$tabid] = $tab_per;
+		}		
+		return $tab_perr_array; 
+	}
+	// Mike Crowe Mod ----------------------------------------------------------------
 }
 
 function getTabsPermission($profileid)
 {
+	global $persistPermArray;
 	global $adb;
-	$sql = "select * from profile2tab where profileid=" .$profileid." and tabid not in(15)";
-	$result = $adb->query($sql);
-	$tab_perr_array = Array();
-	$num_rows = $adb->num_rows($result);
-	for($i=0; $i<$num_rows; $i++)
+	// Mike Crowe Mod -------------------------------------------------------
+	if ( $cache_tab_perms )
+	{	
+		if ( count($persistPermArray) == 0 )
+			loadAllPerms();
+		$tab_perr_array = $persistPermArray;
+		foreach( array(1,3,16,15) as $tabid )
+			$tab_perr_array[$tabid] = 0;
+		return $tab_perr_array; 
+	}
+	else
 	{
-		$tabid= $adb->query_result($result,$i,'tabid');
-		$tab_per= $adb->query_result($result,$i,'permissions');
-		if($tabid != 3 && $tabid != 16 && $tab_id != 15)
+		$sql = "select * from profile2tab where profileid=" .$profileid." and tabid not in(15)";
+		$result = $adb->query($sql);
+		$tab_perr_array = Array();
+		$num_rows = $adb->num_rows($result);
+		for($i=0; $i<$num_rows; $i++)
 		{
-			$tab_perr_array[$tabid] = $tab_per;
-		}
-	}		
-	return $tab_perr_array; 
-
+			$tabid= $adb->query_result($result,$i,'tabid');
+			$tab_per= $adb->query_result($result,$i,'permissions');
+			if($tabid != 3 && $tabid != 16 && $tab_id != 15)
+			{
+				$tab_perr_array[$tabid] = $tab_per;
+			}
+		}		
+		return $tab_perr_array; 
+	}
 }
 
 function getTabsActionPermission($profileid)
