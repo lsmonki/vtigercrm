@@ -193,7 +193,7 @@ function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty)
         {
 
                 //send mail to the handler
-		$log->debug("Sending mail to handler ")
+		$log->debug("Sending mail to handler ");
                 $handler=getPrdHandler($product_id);
                 $handler_name = getUserName($handler);
 		$log->debug("Handler Name is ".$handler_name);
