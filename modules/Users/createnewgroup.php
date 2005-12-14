@@ -26,6 +26,29 @@ require_once('include/utils.php');
 <body>
 
 <?php
+
+
+global $adb;
+$parentGroupArray=Array();
+if(isset($_REQUEST['groupId']) && $_REQUEST['groupId'] != '')
+{	
+	$mode = 'edit';
+	$groupId=$_REQUEST['groupId'];
+	$groupInfo=getGroupInfo($groupId);
+	require_once('include/utils/GetParentGroups.php');
+	$parGroups = new GetParentGroups();
+	$parGroups->parent_groups[]=$groupId;
+	$parGroups->getAllParentGroups($groupId);
+	$parentGroupArray=$parGroups->parent_groups;	
+	
+
+}
+else
+{
+	$mode = 'create';
+}
+			
+
 //Constructing the Role Array
 $roleDetails=getAllRoleDetails();
 $i=0;
@@ -76,6 +99,8 @@ $m=0;
 $grpDetails=getAllGroupName();
 foreach($grpDetails as $grpId=>$grpName)
 {
+	if(! in_array($grpId,$parentGroupArray))
+	{
 		if($m !=0)
 		{
 			$grpIdStr .= ", ";
@@ -85,7 +110,8 @@ foreach($grpDetails as $grpId=>$grpName)
 		$grpIdStr .= "'".$grpId."'";
 		$grpNameStr .= "'".$grpName."'";
 	
-	$m++;	
+	$m++;
+	}	
 }
 
 ?>
@@ -200,23 +226,7 @@ function validate()
 	return true;
 }
 </script>
-	<?
-		global $adb;
-		if(isset($_REQUEST['groupId']) && $_REQUEST['groupId'] != '')
-		{	
-			$mode = 'edit';
-			$groupId=$_REQUEST['groupId'];
-			$groupInfo=getGroupInfo($groupId);
-			
-			
-		}
-		else
-		{
-			$mode = 'create';
-		}
-			
-	?>
-    
+	    
             <div class="bodyText mandatory"> </div>
             <form name="newGroupForm" action="index.php" method="post">
                     <input type="hidden" name="module" value="Users">
