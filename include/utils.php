@@ -2974,23 +2974,23 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
 			{
+				//Added on 14-12-2005 to avoid if and else check for every list field for arrow image and change order
+				$change_sorder = array('ASC'=>'DESC','DESC'=>'ASC');
+				$arrow_gif = array('ASC'=>'arrow_down.gif','DESC'=>'arrow_up.gif');
+
 				foreach($focus->list_fields[$name] as $tab=>$col)
 				{
 					if(in_array($col,$focus->sortby_fields))
 					{
 						if($order_by == $col)
                                         	{
-                                                	if($sorder == 'ASC')
-                                                	{
-                                                        	$sorder = "DESC";
-	                                                        $arrow = "<img src ='".$image_path."arrow_down.gif' border='0'>";
-        	 	                                 }
-                        	                        else
-                                	                {
-                                        	                $sorder = 'ASC';
-                                                	        $arrow = "<img src ='".$image_path."arrow_up.gif' border='0'>";
-                                                	}
+							$temp_sorder = $change_sorder[$sorder];
+							$arrow = "<img src ='".$image_path.$arrow_gif[$sorder]."' border='0'>";
                                         	}
+						else
+						{
+							$temp_sorder = 'ASC';
+						}
 						if($relatedlist !='')
                                                 {
 							if($app_strings[$name])
@@ -3019,7 +3019,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                                                                         $lbl_name .=': (in '.$curr_symbol.')';
                                                                 }
 
-                                                                $name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+                                                                $name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
                                                                 $arrow = '';
                                                 }
                                         }
