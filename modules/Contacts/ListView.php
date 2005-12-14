@@ -140,7 +140,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	}
 	if(isset($assistant) && $assistant != "") {
 			array_push($where_clauses, "contactsubdetails.assistant like ".PearDatabase::quote($assistant.'%')."");
-			$url_string .= "&yahooid=".$yahooid;
+			$url_string .= "&assistant=".$assistant;
 	}
 	if(isset($mailingstreet) && $mailingstreet != "") {
 			array_push($where_clauses, "(contactaddress.mailingstreet like ".PearDatabase::quote($mailingstreet.'%')." OR contactaddress.otherstreet like ".PearDatabase::quote($mailingstreet.'%').")");
