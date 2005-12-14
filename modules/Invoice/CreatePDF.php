@@ -65,6 +65,11 @@ if($focus->column_fields["bill_street"] != '')
 	$bdata[] = $bill_street;
 	
 }
+if($focus->column_fields["bill_pobox"] != '')
+{
+        $bill_pobox = $focus->column_fields["bill_pobox"];
+        $bdata[] = $bill_pobox;
+}
 
 if($focus->column_fields["bill_city"] != '')
 {
@@ -93,7 +98,7 @@ if($focus->column_fields["bill_country"] != '')
 	$bdata[] = $bill_country;
 }
 
-for($i =0; $i <5; $i++)
+for($i =0; $i <6; $i++)
 {
 	if(sizeof($bdata) < 6)
 	{
@@ -108,7 +113,11 @@ if($focus->column_fields["ship_street"] != '')
         $ship_street = $focus->column_fields["ship_street"];
 	$sdata[] = $ship_street;
 }
-
+if($focus->column_fields["ship_pobox"] != '')
+{
+        $ship_pobox = $focus->column_fields["ship_pobox"];
+        $sdata[] = $ship_pobox;
+}
 if($focus->column_fields["ship_city"] != '')
 {
         $ship_city = $focus->column_fields["ship_city"];
@@ -136,7 +145,7 @@ if($focus->column_fields["ship_country"] != '')
 	$sdata[] = $ship_country;
 }
 
-for($i =0; $i <5; $i++)
+for($i =0; $i <6; $i++)
 {
 	if(sizeof($sdata) < 6)
 	{
