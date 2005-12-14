@@ -144,6 +144,7 @@ $mod_strings = Array(
 'Created Time'=>'Created Time',
 'Modified Time'=>'Modified Time',
 'Description'=>'Description',
+'Shipping Po Box'=>'Shipping Po Box',
 
 //Added after 4.2 patch 2
 'Email Opt Out'=>'Email Opt Out',
