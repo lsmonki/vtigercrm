@@ -54,7 +54,7 @@ $list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gi
 $list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['LBL_ASSIGNED_TO'].'</td>';
 $list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 $list.='<tr>';
-
+$noofrows = $adb->num_rows($tktresult);
 for ($i=0; $i<$adb->num_rows($tktresult); $i++)
 {
 	if (($i%2)==0)
@@ -98,7 +98,14 @@ $list .= '<script language=\'Javascript\'>
 		var leftpanelistarray=new Array(\'home_mytkt\');
 		setExpandCollapse_gen()
 	  </script>';
+
+// Mike Crowe Mod --------------------------------------------------------
+if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )
 echo $list;
+else 
+	echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
+echo "<BR>";
+// Mike Crowe Mod --------------------------------------------------------
 
 function getParentLink($parent_id)
 {
