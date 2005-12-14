@@ -15,25 +15,7 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils.php');
 include('config.php');
 global $log;
-if(isset($_REQUEST['groupname']))
-{
-  $groupname = $_REQUEST['groupname'];
-  $sql= "select user_name from users2group inner join users on users.id= users2group.userid where groupname='" .$_REQUEST['groupname'] ."'";
-  $result = $adb->query($sql);
-  $groupnameList = "";
-$numRows=$adb->num_rows($result);
-  if($numRows == 0)
-    {
-     header("Location: index.php?module=Users&action=listgroupmembers&nameofgroup=$groupname&groupmembers=0");
-    }
-		
-  while($groupList=$adb->fetch_array($result))
-  {
-    $groupnameList = $groupnameList .$groupList['user_name'] .",";
-  }
-  //CAUTION: The url exceeded was happening because the variable names were the same and would have been set in session thereby getting into an infinite loop
-  header("Location: index.php?module=Users&action=listgroupmembers&nameofgroup=$groupname&groupmembers=$groupnameList");
-}
+
 function getMailServerInfo($user)
 {
 	global $adb;
@@ -1022,6 +1004,71 @@ function getProfileGlobalPermission($profileid)
 
    return $copy;
   
+}
+
+function getProfileTabsPermission($profileid)
+{
+  global $adb;
+  $sql = "select * from profile2tab where profileid=".$profileid ;
+  $result = $adb->query($sql);
+  $num_rows = $adb->num_rows($result);
+
+  for($i=0; $i<$num_rows; $i++)
+  {
+	$tab_id = $adb->query_result($result,$i,"tabid");
+	$per_id = $adb->query_result($result,$i,"permissions");
+	$copy[$tab_id] = $per_id;
+  }	 
+
+   return $copy;
+  
+}
+
+function getProfileActionPermission($profileid)
+{
+	global $adb;
+	$check = Array();
+	$temp_tabid = Array();	
+	$sql1 = "select * from profile2standardpermissions where profileid=".$profileid;
+	//echo $sql1.'<BR>';
+	$result1 = $adb->query($sql1);
+        $num_rows1 = $adb->num_rows($result1);
+        for($i=0; $i<$num_rows1; $i++)
+        {
+		$tab_id = $adb->query_result($result1,$i,'tabid');
+		if(! in_array($tab_id,$temp_tabid))
+		{	
+			$temp_tabid[] = $tab_id;
+			$access = Array(); 
+		}
+
+		$action_id = $adb->query_result($result1,$i,'operation');
+		$per_id = $adb->query_result($result1,$i,'permissions');
+		$access[$action_id] = $per_id;
+		$check[$tab_id] = $access;	
+
+
+	}
+
+ 	
+	return $check;
+}
+
+function getProfileAllActionPermission($profileid)
+{
+	global $adb;
+	$actionArr=getProfileActionPermission($profileid);
+	$utilArr=getTabsUtilityActionPermission($profileid);
+	foreach($utilArr as $tabid=>$act_arr)
+	{
+		$act_tab_arr=$actionArr[$tabid];
+		foreach($act_arr as $utilid=>$util_perr)
+		{
+			$act_tab_arr[$utilid]=$util_perr;	
+		}
+		$actionArr[$tabid]=$act_tab_arr;
+	}
+	return $actionArr;
 }
 
 function createProfile($profilename,$parentProfileId)
@@ -2093,5 +2140,161 @@ function getRelatedModuleSharingPermission($shareid)
 	return $relatedSharingModulePermissionArray;	
 	
 }
+
+
+/** This function is to retreive the profiles associated with the  the specified user 
+  * It takes the following input parameters:
+  *     $userid -- The User Id:: Type Integer
+  *This function will return the profiles associated to the specified users in an Array in the following format:
+  *     $userProfileArray=(profileid1,profileid2,profileid3,...,profileidn);
+  */
+function getUserProfile($userId)
+{
+	global $adb;
+	$roleId=fetchUserRole($userId);
+	$profArr=Array();	
+	$sql1 = "select profileid from role2profile where roleid='" .$roleId."'";
+        $result1 = $adb->query($sql1);
+	$num_rows=$adb->num_rows($result1);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		
+        	$profileid=  $adb->query_result($result1,$i,"profileid");
+		$profArr[]=$profileid;
+	}
+        return $profArr;	
+	
+}
+
+/** To retreive the global permission of the specifed user from the various profiles associated with the user  
+  * @param $userid -- The User Id:: Type Integer
+  * @returns  user global permission  array in the following format:
+  *     $gloabalPerrArray=(view all action id=>permission,
+			   edit all action id=>permission)							);
+  */
+function getCombinedUserGlobalPermissions($userId)
+{
+	global $adb;
+	$profArr=getUserProfile($userId);
+	$no_of_profiles=sizeof($profArr);
+	$userGlobalPerrArr=Array();
+	
+	$userGlobalPerrArr=getProfileGlobalPermission($profArr[0]);			
+	if($no_of_profiles != 1)
+	{
+			for($i=1;$i<$no_of_profiles;$i++)
+		{
+			$tempUserGlobalPerrArr=getProfileGlobalPermission($profArr[$i]);
+		
+			foreach($userGlobalPerrArr as $globalActionId=>$globalActionPermission)
+			{
+				if($globalActionPermission == 1)
+				{
+					$now_permission = $tempUserGlobalPerrArr[$globalActionId];
+					if($now_permission == 0)
+					{
+						$userGlobalPerrArr[$globalActionId]=$now_permission;
+					}
+ 			
+	
+				}
+		
+			}	
+			
+		}
+
+	}
+			
+	return $userGlobalPerrArr;
+
+}
+
+/** To retreive the tab permissions of the specifed user from the various profiles associated with the user  
+  * @param $userid -- The User Id:: Type Integer
+  * @returns  user global permission  array in the following format:
+  *     $tabPerrArray=(tabid1=>permission,
+  *			   tabid2=>permission)							);
+  */
+function getCombinedUserTabsPermissions($userId)
+{
+	global $adb;
+	$profArr=getUserProfile($userId);
+	$no_of_profiles=sizeof($profArr);
+	$userTabPerrArr=Array();
+
+	$userTabPerrArr=getProfileTabsPermission($profArr[0]);
+	if($no_of_profiles != 1)
+	{
+		for($i=1;$i<$no_of_profiles;$i++)
+		{
+			$tempUserTabPerrArr=getProfileTabsPermission($profArr[$i]);
+
+			foreach($userTabPerrArr as $tabId=>$tabPermission)
+			{
+				if($tabPermission == 1)
+				{
+					$now_permission = $tempUserTabPerrArr[$tabId];
+					if($now_permission == 0)
+					{
+						$userTabPerrArr[$tabId]=$now_permission;
+					}
+
+
+				}
+
+			}	
+
+		}
+
+	}
+	return $userTabPerrArr;
+
+}
+
+/** To retreive the tab acion permissions of the specifed user from the various profiles associated with the user  
+  * @param $userid -- The User Id:: Type Integer
+  * @returns  user global permission  array in the following format:
+  *     $actionPerrArray=(tabid1=>permission,
+  *			   tabid2=>permission);
+ */
+function getCombinedUserActionPermissions($userId)
+{
+	global $adb;
+	$profArr=getUserProfile($userId);
+	$no_of_profiles=sizeof($profArr);
+	$actionPerrArr=Array();
+
+	$actionPerrArr=getProfileAllActionPermission($profArr[0]);
+	if($no_of_profiles != 1)
+	{
+		for($i=1;$i<$no_of_profiles;$i++)
+		{
+			$tempActionPerrArr=getProfileAllActionPermission($profArr[$i]);
+
+			foreach($actionPerrArr as $tabId=>$perArr)
+			{
+				foreach($perArr as $actionid=>$per)
+				{	
+					if($per == 1)
+					{
+						$now_permission = $tempActionPerrArr[$tabId][$actionid];
+						if($now_permission == 0)
+						{
+							$actionPerrArr[$tabId][$actionid]=$now_permission;
+						}
+
+
+					}
+				}
+
+			}	
+
+		}
+
+	}
+	return $actionPerrArr;
+
+}
+
 
 ?>
