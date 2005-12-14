@@ -20,7 +20,7 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
-require_once('include/ComboUtil.php');
+require_once('include/ComboUtil.php')
 require_once('include/utils.php');
 require_once('include/uifromdbutil.php');
 require_once('modules/CustomView/CustomView.php');
@@ -140,6 +140,12 @@ $xtpl->assign("LISTENTITY", $listview_entries);
 
 
 $xtpl->parse("main");
+// Mike Crowe Mod --------------------------------------------------------
+if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )
 $xtpl->out("main");
+else 
+	echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
+echo "<BR>";
+// Mike Crowe Mod --------------------------------------------------------
 
 ?>

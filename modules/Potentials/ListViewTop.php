@@ -30,7 +30,7 @@ $current_module_strings = return_module_language($current_language, "Potentials"
 $log = LoggerManager::getLogger('top opportunity_list');
 
 
-$where = "AND potential.sales_stage <> 'Closed Won' AND potential.sales_stage <> 'Closed Lost' AND crmentity.smownerid='".$current_user->id."' ORDER BY amount DESC";
+$where = "AND potential.sales_stage <> '".$app_strings['LBL_CLOSE_WON']."' AND potential.sales_stage <> '".$app_strings['LBL_CLOSE_LOST']."' AND crmentity.smownerid='".$current_user->id."' ORDER BY amount DESC";
 
 $list_query = getListQuery("Potentials",$where);
 $list_result = $adb->limitQuery($list_query,0,5);
@@ -93,10 +93,16 @@ foreach($open_potentials_list as $potential)
 }
 
 $xtpl->parse("main");
-$xtpl->out("main");
+
+// Mike Crowe Mod --------------------------------------------------------
+if ( ($display_empty_home_blocks && count($open_potentials_list) == 0 ) || (count($open_potentials_list)>0) )
+	$xtpl->out("main");
+else 
+	if ( $display_empty_home_blocks ) echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
+echo "<BR>";
+// Mike Crowe Mod --------------------------------------------------------
 #if (count($open_potentials_list)>0) $xtpl->out("main");
 #else echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
-echo "<BR>";
 // Stick on the form footer
 echo get_form_footer();
 

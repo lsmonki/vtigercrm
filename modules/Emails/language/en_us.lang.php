@@ -18,6 +18,9 @@
  ********************************************************************************/
  
 $mod_strings = Array(
+// Mike Crowe Mod --------------------------------------------------------added for general search
+'LBL_GENERAL_INFORMATION'=>'General Information',
+
 'LBL_MODULE_NAME'=>'Emails',
 'LBL_MODULE_TITLE'=>'Emails: Home',
 'LBL_SEARCH_FORM_TITLE'=>'Email Search',

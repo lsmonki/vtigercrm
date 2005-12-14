@@ -268,10 +268,14 @@ foreach($open_activity_list as $event)
 }
 
 $xtpl->parse("open_activity");
-$xtpl->out("open_activity");
-//if (count($open_activity_list)>0) $xtpl->out("open_activity");
-//else echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
+// Mike Crowe Mod --------------------------------------------------------
+if ( ($display_empty_home_blocks && count($open_activity_list) == 0 ) || (count($open_activity_list)>0) )
+	$xtpl->out("open_activity");
+else 
+	if ( $display_empty_home_blocks ) echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
 echo "<BR>";
+// Mike Crowe Mod --------------------------------------------------------
+
 // Stick on the form footer
 echo get_form_footer();
 

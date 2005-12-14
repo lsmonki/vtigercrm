@@ -82,11 +82,15 @@ foreach($open_accounts_list as $account)
 }
 
 $xtpl->parse("main");
+// Mike Crowe Mod --------------------------------------------------------
+if ( ($display_empty_home_blocks && count($open_accounts_list) == 0 ) || (count($open_accounts_list)>0) )
 $xtpl->out("main");
-
+else 
+	echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
+if ( !$display_empty_home_blocks ) echo "<BR>";
+// Mike Crowe Mod --------------------------------------------------------
 #if (count($open_accounts_list)>0) $xtpl->out("main");
 #else echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
-echo "<BR>";
 // Stick on the form footer
 echo get_form_footer();
 

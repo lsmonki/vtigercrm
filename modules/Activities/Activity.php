@@ -46,8 +46,14 @@ class Activity extends CRMEntity {
 	var $duration_minutes;
 
 	var $table_name = "activity";
+	#var $object_name = "activity";	
+		// Mike Crowe Mod --------------------------------------------------------Renamed to match tab
+	var $object_name = "Activities";
+	// Mike Crowe Mod --------------------------------------------------------added for general search
+    var $base_table_name = "activity";
+    var $cf_table_name = "";
+	var $module_id = "activityid";
 
-	var $object_name = "activity";	
 	
 	var $reminder_table = "activity_reminder";
 	
@@ -119,6 +125,23 @@ class Activity extends CRMEntity {
 
 	function drop_tables () {
 	}
+
+	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	function getSortOrder()
+	{	
+		if(isset($_REQUEST['sorder'])) $sorder = $_REQUEST['sorder'];
+		if ($sorder == '') $sorder = 'ASC';  // Default sort order
+		return $sorder;
+	}
+	
+	function getOrderBy()
+	{
+		if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+		if ($order_by == '') $order_by = "due_date";
+		return $order_by;
+	}	
+	// Mike Crowe Mod --------------------------------------------------------
+
 
 
 //Function Call for Related List -- Start

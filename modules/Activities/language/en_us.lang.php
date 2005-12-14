@@ -114,7 +114,8 @@ $mod_strings = Array(
 'Recurring Type'=> 'Recurring Type',
 //Activities - Notification Error
 'LBL_NOTIFICATION_ERROR'=>'Mail Error : Please check your outgoing mail server configuration in Settings->Outgoing Mail Server Configuration OR MailId for the present user is not Configured',
-
+// Mike Crowe Mod --------------------------------------------------------added for generic search
+'LBL_GENERAL_INFORMATION'=>'General Information',
 
 );
 

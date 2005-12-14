@@ -529,6 +529,9 @@ $app_strings = Array(
 'LBL_SELECT_PRODUCT_BUTTON_LABEL'=>'Select Product',
 
 'LBL_VIEW'=>'View:',
+// Mike Crowe Mod --------------------------------------------------------Added for group sort
+'LBL_GROUP_VIEW'=>'Group',
+
 
 'LBL_SALES_STAGE'=>'Sales Stage',
 
@@ -542,7 +545,8 @@ $app_strings = Array(
 
 'LBL_CALCULATOR'=>'Calculator',
 
-
+'LBL_CLOSE_WON' =>'Closed-Won',			# 'Closed Won'
+'LBL_CLOSE_LOST'=>'Closed-Lost',					# 'Closed Lost'
 
 'LBL_USER'=>'User',
 

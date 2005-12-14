@@ -48,28 +48,30 @@ global $focus_list;
 
 if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 
+$focus = new Activity();
+
+//<<<<<<< sort ordering >>>>>>>>>>>>>
+$sorder = $focus->getSortOrder();
+$order_by = $focus->getOrderBy();
+//<<<<<<< sort ordering >>>>>>>>>>>>>
+
+
+
+
 //<<<<cutomview>>>>>>>
-$oCustomView = new CustomView("Activities");
+$oCustomView = new CustomView($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']) == false)
-{
-	if($oCustomView->setdefaultviewid != "")
-	{
-		$viewid = $oCustomView->setdefaultviewid;
-	}else
-	{
-		$viewid = "0";
-	}
-}else
-{
-	$viewid =  $_REQUEST['viewname'];
-	$oCustomView->setdefaultviewid = $viewid;
-}
+$viewid = $oCustomView->getViewId($currentModule);
 //<<<<<customview>>>>>
 
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
+ // Mike Crowe Mod --------------------------------------------------------
+	require_once('include/SearchBlock.php');
+    $search_form = BuildSearchForm($focus);
+    // Mike Crowe Mod --------------------------------------------------------
+    
 	// Stick the form header out there.
-	$search_form=new XTemplate ('modules/Activities/SearchForm.html');
+	#$search_form=new XTemplate ('modules/Activities/SearchForm.html');
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
 
@@ -96,15 +98,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 $where = "";
 
-
-$focus = new Activity();
-
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
-
 $url_string = ''; // assigning http url string
-$sorder = 'ASC';  // Default sort order
-if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {

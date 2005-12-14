@@ -138,6 +138,12 @@ $xtpl->assign("LISTENTITY", $listview_entries);
 
 
 $xtpl->parse("main");
-$xtpl->out("main");
 
+// Mike Crowe Mod --------------------------------------------------------
+if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )
+$xtpl->out("main");
+else 
+	echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
+if ( !$display_empty_home_blocks) echo "<BR>";
+// Mike Crowe Mod --------------------------------------------------------
 ?>

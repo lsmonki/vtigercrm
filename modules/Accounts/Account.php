@@ -65,7 +65,11 @@ class Account extends CRMEntity {
 	
 	var $billadr_table = "accountbillads";
 
-	var $object_name = "Account";
+	#var $object_name = "Account";
+	var $object_name = "Accounts";
+	// Mike Crowe Mod --------------------------------------------------------added for general search
+	var $base_table_name = "account";
+    	var $cf_table_name = "accountscf";
 
 	var $new_schema = true;
 	
@@ -119,6 +123,25 @@ class Account extends CRMEntity {
 		$this->column_fields = getColumnFields('Accounts');
 	}
 
+	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
+	function getSortOrder()
+	{	
+		if(isset($_REQUEST['sorder'])) $sorder = $_REQUEST['sorder'];
+		if ($sorder == '') $sorder = 'ASC';  // Default sort order
+		return $sorder;
+	}
+	
+	function getOrderBy()
+	{
+		if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+		if ($order_by == '') $order_by = $this->sortby_fields[0];
+		return $order_by;
+	}	
+	// Mike Crowe Mod --------------------------------------------------------
+
+
+
+	
 	function create_tables () {
           /*
 		$query = 'CREATE TABLE '.$this->table_name.' ( ';

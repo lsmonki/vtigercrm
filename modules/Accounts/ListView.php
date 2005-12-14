@@ -47,12 +47,21 @@ global $focus_list;
 
 if (!isset($where)) $where = "";
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
-
 $url_string = '';
-$sorder = 'ASC';
-if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
+
+$focus = new Account();
+
+//<<<<<<< sort ordering >>>>>>>>>>>>>
+$sorder = $focus->getSortOrder();
+$order_by = $focus->getOrderBy();
+//<<<<<<< sort ordering >>>>>>>>>>>>>
+
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView($currentModule);
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+$viewid = $oCustomView->getViewId($currentModule);
+$groupid = $oCustomView->getGroupId($currentModule);
+//<<<<<customview>>>>>
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
@@ -223,7 +232,7 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	$log->info("Here is the where clause for the list view: $where");
 
 }
-
+/*
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Accounts");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
@@ -242,17 +251,22 @@ if(isset($_REQUEST['viewname']) == false)
 	$oCustomView->setdefaultviewid = $viewid;
 }
 //<<<<<customview>>>>>
-
+*/
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
-	// Stick the form header out there.
-	$search_form=new XTemplate ('modules/Accounts/SearchForm.html');
+    // Mike Crowe Mod --------------------------------------------------------
+	require_once('include/SearchBlock.php');
+    $search_form = BuildSearchForm($focus);
+    // Mike Crowe Mod --------------------------------------------------------
+	//$search_form=new XTemplate ('modules/Accounts/SearchForm.html');
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
 
 	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
 	if ($sorder !='') $search_form->assign("SORDER", $sorder);
+	$search_form->assign("MODULE",$currentModule);
 
 	$search_form->assign("VIEWID",$viewid);
+	$search_form->assign("GROUPID",$groupid);
 	
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if($order_by != '') {
@@ -326,9 +340,10 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 	}
 	else {  //customview //
 		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','basic',"","","","",$viewid));
+	}
+		
 		$search_form->parse("main");
 		$search_form->out("main");
-	}
 	echo get_form_footer();
 	echo "\n<BR>\n";
 }
@@ -343,6 +358,7 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<tr>
 	<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
+	<input name="gname" type="hidden" value="'.$groupid.'">
 	<input name="viewname" type="hidden" value="'.$viewid.'">'; //give the viewid to hidden //customview
 //Raju	
 if(isPermitted('Accounts',2,'') == 'yes')
@@ -399,8 +415,6 @@ $ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE']);
 $ListView->setQuery($where, "", "accountname", "ACCOUNT");
 $ListView->processListView($seedAccount, "main", "ACCOUNT");
 */
-
-$focus = new Account();
 
 echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Accounts/ListView.html');

@@ -205,7 +205,13 @@ if($groupids !='')
     var leftpanelistarray=new Array(\'home_mygrp\');
   	setExpandCollapse_gen()</script>';
 
+	// Mike Crowe Mod --------------------------------------------------------
+			if ( ($display_empty_home_blocks && $i == 1 ) || ($i>1) )
 	echo $list;
+			else 
+				echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
+			echo "<BR><BR>";
+			// Mike Crowe Mod ----------------
 }   
    break;
         case 'HLT':
