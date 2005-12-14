@@ -140,6 +140,7 @@ $mod_strings = Array(
 'Postal Code'=>'Postal Code',
 'Country'=>'Country',
 'Description'=>'Description',
+'Po Box'=>'Po Box',
 
 //Mapping for price book
 'Price Book Name'=>'Price Book Name',

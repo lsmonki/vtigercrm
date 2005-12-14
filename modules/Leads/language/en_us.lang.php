@@ -153,6 +153,7 @@ $mod_strings = Array(
 'Country'=>'Country',
 'State'=>'State',
 'Description'=>'Description',
+'Po Box'=>'Po Box',
 //Added for CustomView 4.2 Release
 'Name'=>'Name',
 );
