@@ -93,7 +93,7 @@ function set_return_specific(vendor_id, vendor_name) {
         window.opener.document.EditView.vendor_id.value = vendor_id;
 }
 
-function set_return_address(vendor_id, vendor_name, street, city, state, code, country) {
+function set_return_address(vendor_id, vendor_name, street, city, state, code, country,pobox ) {
         window.opener.document.EditView.vendor_name.value = vendor_name;
         window.opener.document.EditView.vendor_id.value = vendor_id;
         window.opener.document.EditView.bill_street.value = street;
@@ -106,6 +106,8 @@ function set_return_address(vendor_id, vendor_name, street, city, state, code, c
         window.opener.document.EditView.ship_code.value = code;
         window.opener.document.EditView.bill_country.value = country;
         window.opener.document.EditView.ship_country.value = country;
+        window.opener.document.EditView.bill_pobox.value = pobox;
+        window.opener.document.EditView.ship_pobox.value = pobox;
 }
 </script>
 <!-- END: main -->

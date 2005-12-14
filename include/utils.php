@@ -4090,7 +4090,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$acct_focus = new Account();
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
 					
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'"); window.close()\'>'.$temp_val.'</a>';
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'"); window.close()\'>'.$temp_val.'</a>';
 
 				}
 				elseif($popuptype == "specific_contact_account_address")
@@ -4099,7 +4099,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                                         $acct_focus = new Account();
                                         $acct_focus->retrieve_entity_info($entity_id,"Accounts");
 
-                                        $value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_contact_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'"); window.close()\'>'.$temp_val.'</a>';
+                                        $value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_contact_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'"); window.close()\'>'.$temp_val.'</a>';
 
                                 }
 
@@ -4111,7 +4111,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                                         $acct_focus->retrieve_entity_info($acntid,"Accounts");
                                         $account_name = getAccountName($acntid);
 
-                                        $value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$acntid.'", "'.br2nl($account_name).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'"); window.close()\'>'.$temp_val.'</a>';
+                                        $value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$acntid.'", "'.br2nl($account_name).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'"); window.close()\'>'.$temp_val.'</a>';
 
                                 }
 //added by rdhital/Raju for better emails 
@@ -4146,7 +4146,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					$acct_focus = new Vendor();
 					$acct_focus->retrieve_entity_info($entity_id,"Vendor");
 					
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['treet']).'", "'.br2nl($acct_focus->column_fields['city']).'", "'.br2nl($acct_focus->column_fields['state']).'", "'.br2nl($acct_focus->column_fields['postalcode']).'", "'.br2nl($acct_focus->column_fields['country']).'"); window.close()\'>'.$temp_val.'</a>';
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['treet']).'", "'.br2nl($acct_focus->column_fields['city']).'", "'.br2nl($acct_focus->column_fields['state']).'", "'.br2nl($acct_focus->column_fields['postalcode']).'", "'.br2nl($acct_focus->column_fields['country']).'","'.br2nl($acct_focus->column_fields['pobox']).'"); window.close()\'>'.$temp_val.'</a>';
 
 				}
 				else
