@@ -498,14 +498,14 @@ $mod_strings = Array(
 
 //For Custom Fields
 'LBL_LEAD_MAP_CUSTOM_FIELD'=>'Map Lead Custom Fields',
-'leadCustomFieldDescription'=>'Map each of your organizations lead custom fields to each of your custom accoun
-t, contact, or potential fields. These mappings will be used when you convert leads',
+'leadCustomFieldDescription'=>'Map each of your organizations lead custom fields to each of your custom account
+,contact, or potential fields. These mappings will be used when you convert leads',
 'LBL_MAPPING_INFO'=>'Mapping Information',
 'LBL_ACCOUNT_FIELD'=>'Account Field',
 'LBL_CONTACT_FIELD'=>'Contact Field',
 'LBL_POTENTIAL_FIELD'=>'Potential Field',
 'CUSTOMFIELDMAPPING'=>'Custom Field Mapping',
-
+'LBL_LEAD_FIELD'=>'Lead Field',
 //After 4.2 GA
 'LBL_TEXT_AREA'=>'Text Area',
 //for Edit ordering the blocks

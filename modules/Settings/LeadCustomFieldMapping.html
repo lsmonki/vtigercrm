@@ -38,7 +38,7 @@
 <td align="center"> 
 	<input title="{APP.LBL_SAVE_BUTTON_LABEL}" accessKey="{APP.LBL_SAVE_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_SAVE_BUTTON_LABEL}" onclick ="return validateCustomFieldAccounts();">
 
-        <input title="{APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" type="submit" name="button" value="{APP.LBL_CANCEL_BUTTON_LABEL}"></td>
+        <input title="{APP.LBL_CANCEL_BUTTON_LABEL}>" accessKey="{APP.LBL_CANCEL_BUTTON_KEY}" class="button" type="button" name="button" onclick = "gotourl('index.php?action=CustomFieldList&module=Settings&fld_module=Leads')" value="{APP.LBL_CANCEL_BUTTON_LABEL}"></td>
 	
 </td>
 </tr>
@@ -110,7 +110,14 @@
 
 		}
 	}
-	
+
+
+function gotourl(url)
+{
+	        document.location.href=url;
+}
+
+
 </script>
 
 

@@ -47,6 +47,6 @@ require_once('include/utils.php');
 
 		$adb->query($update_sql);
 	}
-	 header("Location: index.php?module=Settings&action=CustomFieldList&fld_module=Leads");
+	 header("Location: index.php?module=Settings&action=ListLeadCustomFieldMapping");
 	
 ?>
