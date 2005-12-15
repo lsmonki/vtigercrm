@@ -5119,7 +5119,9 @@ function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
         $focus->column_fields['ship_code'] = $quote_focus->column_fields['ship_code'];
         $focus->column_fields['bill_country'] = $quote_focus->column_fields['bill_country'];
         $focus->column_fields['ship_country'] = $quote_focus->column_fields['ship_country'];
-        $focus->column_fields['description'] = $quote_focus->column_fields['description'];
+        $focus->column_fields['bill_pobox'] = $quote_focus->column_fields['bill_pobox'];
+        $focus->column_fields['ship_pobox'] = $quote_focus->column_fields['ship_pobox'];
+		$focus->column_fields['description'] = $quote_focus->column_fields['description'];
         $focus->column_fields['terms_conditions'] = $quote_focus->column_fields['terms_conditions'];
 
         return $focus;
@@ -5143,6 +5145,8 @@ function getConvertQuoteToInvoice($focus,$quote_focus,$quoteid)
 	$focus->column_fields['ship_code'] = $quote_focus->column_fields['ship_code'];
 	$focus->column_fields['bill_country'] = $quote_focus->column_fields['bill_country'];
 	$focus->column_fields['ship_country'] = $quote_focus->column_fields['ship_country'];
+	$focus->column_fields['bill_pobox'] = $quote_focus->column_fields['bill_pobox'];
+    $focus->column_fields['ship_pobox'] = $quote_focus->column_fields['ship_pobox'];
 	$focus->column_fields['description'] = $quote_focus->column_fields['description'];
 	$focus->column_fields['terms_conditions'] = $quote_focus->column_fields['terms_conditions'];
 
@@ -5175,6 +5179,8 @@ function getConvertSoToInvoice($focus,$so_focus,$soid)
 	$focus->column_fields['ship_code'] = $so_focus->column_fields['ship_code'];
 	$focus->column_fields['bill_country'] = $so_focus->column_fields['bill_country'];
 	$focus->column_fields['ship_country'] = $so_focus->column_fields['ship_country'];
+	$focus->column_fields['bill_pobox'] = $so_focus->column_fields['bill_pobox'];
+    $focus->column_fields['ship_pobox'] = $so_focus->column_fields['ship_pobox'];
 	$focus->column_fields['description'] = $so_focus->column_fields['description'];
 	$focus->column_fields['terms_conditions'] = $so_focus->column_fields['terms_conditions'];
 
