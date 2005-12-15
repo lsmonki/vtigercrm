@@ -132,6 +132,8 @@ function copyAddressRight(form) {
 
 	form.othercountry.value = form.mailingcountry.value;
 
+	form.otherpobox.value = form.mailingpobox.value;
+	
 	return true;
 
 }
@@ -148,6 +150,8 @@ function copyAddressLeft(form) {
 
 	form.mailingcountry.value = form.othercountry.value;
 
+	form.mailingpobox.value = form.otherpobox.value;
+	
 	return true;
 
 }
