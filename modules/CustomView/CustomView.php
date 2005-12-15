@@ -70,9 +70,61 @@ class CustomView extends CRMEntity{
 
 	function CustomView($module="")
 	{
+		global $current_user,$adb;
 		$this->customviewmodule = $module;
 		$this->escapemodule[] =	$module."_";
 		$this->escapemodule[] = "_";
+		$this->smownerid = $current_user->id;
+	}
+
+	// Mike Crowe Mod --------------------------------------------------------getViewId
+	function getViewId($module)
+	{
+		if(isset($_REQUEST['viewname']) == false)
+		{
+			if ( isset($_SESSION["cv$module"]) )
+			{
+				$viewid = $_SESSION["cv$module"];
+			}
+			elseif($this->setdefaultviewid != "")
+			{
+				$viewid = $this->setdefaultviewid;
+			}else
+			{
+				$viewid = "0";
+			}
+		}
+		else
+		{
+			$viewid =  $_REQUEST['viewname'];
+		}
+		$_SESSION["cv$module"] = $viewid;
+		return $viewid;
+	}
+	
+	// Mike Crowe Mod --------------------------------------------------------getGroupId
+	function getGroupId($module)
+	{
+		if(isset($_REQUEST['gname']) == false)
+		{
+			if ( isset($_SESSION["cg$module"]) )
+			{
+				$groupid = $_SESSION["cg$module"];
+			}
+			elseif($this->setdefaultgroupid != "")
+			{
+				$groupid = $this->setdefaultgroupid;
+			}else
+			{
+				$groupid = "0";
+			}
+		}
+		else
+		{
+			$groupid =  $_REQUEST['gname'];
+		}
+		$_SESSION["cg$module"] = $groupid;
+		return $groupid;
 	}
 
 	// to get the available customviews for a module
