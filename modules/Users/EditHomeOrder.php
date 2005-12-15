@@ -167,7 +167,7 @@ sajax_show_javascript();
 
 	function loadMe() {        
 		var list;
-		var panes = new Array("block");
+		var panes = new Array("block","hidden");
 		
 		while ( pane = panes.shift() ) {
 			list = document.getElementById(pane);
