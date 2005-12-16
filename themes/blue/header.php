@@ -72,8 +72,8 @@ require_once('include/Menu.php');
 
 global $module_menu;
 
-require_once("include/Clock.php");
-require_once("include/Calc.php");
+require_once("include/clock/Clock.php");
+require_once("include/calculator/Calc.php");
 
 $xtpl=new XTemplate ($theme_path."header.html");
 
