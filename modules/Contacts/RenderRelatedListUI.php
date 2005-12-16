@@ -175,7 +175,7 @@ function renderRelatedProducts($query,$id)
 }
 function renderRelatedSalesOrders($query,$id,$sid="product_id")
 {
-	require_once('modules/PurchaseOrder/SalesOrder.php');
+	require_once('modules/SalesOrder/SalesOrder.php');
         global $mod_strings;
         global $app_strings;
 
