@@ -39,7 +39,9 @@ global $app_strings;
 	  <A href="index.php?module=Calendar&action=index"><?php echo $app_list_strings['moduleList']['Calendar']; ?></A>
 	  <br>
 	  <A href="index.php?module=Quotes&action=index"><?php echo $app_list_strings['moduleList']['Quotes']; ?></A> |
-	  <A href="index.php?module=Orders&action=index"><?php echo $app_list_strings['moduleList']['Orders']; ?></A> |
+	  <A href="index.php?module=PurchaseOrder&action=index"><?php echo $app_list_strings['moduleList']['PurchaseOrder']; ?></A> |
+          <A href="index.php?module=SalesOrder&action=index"><?php echo $app_list_strings['moduleList']['SalesOrder']; ?></A> |
+
 	  <A href="index.php?module=Invoice&action=index"><?php echo $app_list_strings['moduleList']['Invoice']; ?></A> |
 	  
           <A href="index.php?module=Rss&action=index"><?php echo $app_list_strings['moduleList']['Rss']; ?></A> |

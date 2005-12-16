@@ -252,7 +252,7 @@ if($tab_per_Data[22] == 0)
 {
         if($permissionData[22][3] == 0)
         {
-		require_once('modules/Orders/ListTopSalesOrder.php');
+		require_once('modules/SalesOrder/ListTopSalesOrder.php');
 	}
 }
         	break;

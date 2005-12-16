@@ -165,7 +165,7 @@ $log->info("in  track view method ".$current_module);
             $quote = $adb->query_result($result,0,'subject');
             $item_summary = $quote;
           }
-	  elseif($current_module =='Orders')
+	  elseif($current_module =='PurchaseOrder')
           {
             $query = 'select subject from purchaseorder where purchaseorderid=' .$item_id;
             $result = $this->db->query($query);
