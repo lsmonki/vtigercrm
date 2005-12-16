@@ -42,14 +42,25 @@ $comboFieldNames = Array('manufacturer'=>'manufacturer_dom'
                       ,'productcategory'=>'productcategory_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
+$url_string = '&smodule=PRODUCTS'; // assigning http url string
+
 $focus = new Product();
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+//<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
+if($_REQUEST['order_by'] != '')
+	$order_by = $_REQUEST['order_by'];
+else
+	$order_by = (($_SESSION['PRODUCTS_ORDER_BY'] != '')?($_SESSION['PRODUCTS_ORDER_BY']):($focus->default_order_by));
 
-$url_string = '&smodule=PRODUCTS'; // assigning http url string
-$sorder = 'ASC';  // Default sort order
-if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
+if($_REQUEST['sorder'] != '')
+	$sorder = $_REQUEST['sorder'];
+else
+	$sorder = (($_SESSION['PRODUCTS_SORT_ORDER'] != '')?($_SESSION['PRODUCTS_SORT_ORDER']):($focus->default_sort_order));
+
+$_SESSION['PRODUCTS_ORDER_BY'] = $order_by;
+$_SESSION['PRODUCTS_SORT_ORDER'] = $sorder;
+//<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
+
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
@@ -199,22 +210,12 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         $search_form->assign("APP", $app_strings);
 	$clearsearch = 'true';
 
-	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
-	if ($sorder !='') $search_form->assign("SORDER", $sorder);
-	
 	$search_form->assign("VIEWID",$viewid);
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	if($order_by != '') {
-		$ordby = "&order_by=".$order_by;
-	}
-	else
-	{
-		$ordby ='';
-	}
 
-	$search_form->assign("BASIC_LINK", "index.php?module=Products".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewid);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Products&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewid);
+	$search_form->assign("BASIC_LINK", "index.php?module=Products&action=index".$url_string."&viewname=".$viewid);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Products&action=index&advanced=true".$url_string."&viewname=".$viewid);
 
 	if ($productname !='') $search_form->assign("PRODUCT_NAME", $productname);
 	if ($commissionrate !='') $search_form->assign("COMMISSION_RATE", $commissionrate);
@@ -327,7 +328,10 @@ $xtpl->assign("PRODUCTLISTHEADER", get_form_header($current_module_strings['LBL_
 
 if(isset($order_by) && $order_by != '')
 {
-        $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
+	$tablename = getTableNameForField('Products',$order_by);
+	$tablename = (($tablename != '')?($tablename."."):'');
+
+        $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
 
 $list_result = $adb->query($list_query);
@@ -413,11 +417,6 @@ $xtpl->assign("LISTHEADER", $listview_header);
 $listview_entries = getListViewEntries($focus,"Products",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
-
-if($order_by !='')
-$url_string .="&order_by=".$order_by;
-if($sorder !='')
-$url_string .="&sorder=".$sorder;
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Products","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);

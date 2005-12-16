@@ -100,9 +100,24 @@ global $image_path;
 global $theme;
 
 $url_string = ''; // assigning http url string
-$sorder = 'DESC';  // Default sort order changed by stema
-if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
+
+$focus = new Email();
+
+//<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
+if($_REQUEST['order_by'] != '')
+	$order_by = $_REQUEST['order_by'];
+else
+	$order_by = (($_SESSION['EMAILS_ORDER_BY'] != '')?($_SESSION['EMAILS_ORDER_BY']):($focus->default_order_by));
+
+if($_REQUEST['sorder'] != '')
 	$sorder = $_REQUEST['sorder'];
+else
+	$sorder = (($_SESSION['EMAILS_SORT_ORDER'] != '')?($_SESSION['EMAILS_SORT_ORDER']):($focus->default_sort_order));
+
+$_SESSION['EMAILS_ORDER_BY'] = $order_by;
+$_SESSION['EMAILS_SORT_ORDER'] = $sorder;
+//<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
+
 
 // focus_list is the means of passing data to a ListView.
 global $focus_list;
@@ -196,7 +211,6 @@ $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
 
 $where = "";
 
-$focus = new Email();
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
@@ -261,10 +275,12 @@ if(isset($where) && $where != '')
 	$list_query .= " AND " .$where;
 }
 
-$order_by = 'date_start';
 if(isset($order_by) && $order_by != '')
 {
-        $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
+	$tablename = getTableNameForField('Emails',$order_by);
+	$tablename = (($tablename != '')?($tablename."."):'');
+
+        $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
 $list_result = $adb->query($list_query);
 
@@ -322,11 +338,6 @@ $xtpl->assign("LISTHEADER", $listview_header);
 $listview_entries = getListViewEntries($focus,"Emails",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
-
-if($order_by !='')
-	$url_string .="&order_by=".$order_by;
-if($sorder !='')
-	$url_string .="&sorder=".$sorder;
 
 $navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Emails","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);

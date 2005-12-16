@@ -46,12 +46,22 @@ $focus = new Vendor();
 
 if (!isset($where)) $where = "";
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
-
 $url_string = '&smodule=VENDOR'; // assigning http url string
-$sorder = 'ASC';  // Default sort order
-if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
+
+//<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
+if($_REQUEST['order_by'] != '')
+	$order_by = $_REQUEST['order_by'];
+else
+	$order_by = (($_SESSION['VENDORS_ORDER_BY'] != '')?($_SESSION['VENDORS_ORDER_BY']):($focus->default_order_by));
+
+if($_REQUEST['sorder'] != '')
+	$sorder = $_REQUEST['sorder'];
+else
+	$sorder = (($_SESSION['VENDORS_SORT_ORDER'] != '')?($_SESSION['VENDORS_SORT_ORDER']):($focus->default_sort_order));
+
+$_SESSION['VENDORS_ORDER_BY'] = $order_by;
+$_SESSION['VENDORS_SORT_ORDER'] = $sorder;
+//<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
@@ -200,22 +210,12 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         $search_form->assign("APP", $app_strings);
 	$clearsearch = 'true';
 
-	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
-	if ($sorder !='') $search_form->assign("SORDER", $sorder);
-
 	$search_form->assign("VIEWID",$viewid);
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 
-	if($order_by != '') {
-		$ordby = "&order_by=".$order_by;
-	}
-	else
-	{
-		$ordby ='';
-	}
-	$search_form->assign("BASIC_LINK", "index.php?module=Products".$ordby."&action=index".$url_string."&sorder=".$sorder);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Products&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder);
+	$search_form->assign("BASIC_LINK", "index.php?module=Products&action=index".$url_string);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Products&action=index&advanced=true".$url_string);
 
 	if ($vendorname !='') $search_form->assign("VENDOR_NAME", $vendorname);
 	if ($email !='') $search_form->assign("EMAIL", $email);
@@ -330,7 +330,10 @@ $xtpl->assign("VENDORLISTHEADER", get_form_header($current_module_strings['LBL_L
 
 if(isset($order_by) && $order_by != '')
 {
-        $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
+	$tablename = getTableNameForField('Vendor',$order_by);
+	$tablename = (($tablename != '')?($tablename."."):'');
+
+        $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
 
 $list_result = $adb->query($list_query);
@@ -414,11 +417,6 @@ $xtpl->assign("LISTHEADER", $listview_header);
 $listview_entries = getListViewEntries($focus,"Vendor",$list_result,$navigation_array,'','&return_module=Products&return_action=index','VendorEditView','DeleteVendor',$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
-
-if($order_by !='')
-$url_string .="&order_by=".$order_by;
-if($sorder !='')
-$url_string .="&sorder=".$sorder;
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Vendor","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);

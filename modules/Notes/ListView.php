@@ -94,12 +94,25 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 
 if (!isset($where)) $where = "";
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
-
 $url_string = ''; // assigning http url string
-$sorder = 'ASC';  // Default sort order
-if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
+
+$focus = new Note();
+
+//<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
+if($_REQUEST['order_by'] != '')
+	$order_by = $_REQUEST['order_by'];
+else
+	$order_by = (($_SESSION['NOTES_ORDER_BY'] != '')?($_SESSION['NOTES_ORDER_BY']):($focus->default_order_by));
+
+if($_REQUEST['sorder'] != '')
+	$sorder = $_REQUEST['sorder'];
+else
+	$sorder = (($_SESSION['NOTES_SORT_ORDER'] != '')?($_SESSION['NOTES_SORT_ORDER']):($focus->default_sort_order));
+
+$_SESSION['NOTES_ORDER_BY'] = $order_by;
+$_SESSION['NOTES_SORT_ORDER'] = $sorder;
+//<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
+
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
@@ -185,8 +198,6 @@ $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
         </table>';
 //
 
-$focus = new Note();
-
 echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Notes/ListView.html');
 global $theme;
@@ -217,12 +228,12 @@ $query .= ' group by notes.notesid';
 
 if(isset($order_by) && $order_by != '')
 {
-        $query .= ' ORDER BY '.$order_by.' '.$sorder;
+	$tablename = getTableNameForField('Notes',$order_by);
+	$tablename = (($tablename != '')?($tablename."."):'');
+
+        $query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
-else
-{
-        $query .= ' order by crmentity.modifiedtime ASC';
-}
+
 $list_result = $adb->query($query);
 
 //Retreiving the no of rows
@@ -308,11 +319,6 @@ $xtpl->assign("LISTHEADER", $listview_header);
 $listview_entries = getListViewEntries($focus,"Notes",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
-
-if($order_by !='')
-$url_string .="&order_by=".$order_by;
-if($sorder !='')
-$url_string .="&sorder=".$sorder;
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Notes","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
