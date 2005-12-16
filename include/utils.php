@@ -5707,4 +5707,26 @@ function getDateFromDateAndtime($date_time)
     return $result;
 }
 
+/**     Function to get the table name from 'field' table for the input field based on the module
+ *      @param  : string $module - current module value
+ *      @param  : string $fieldname - fieldname to which we want the tablename
+ *      @return : string $tablename - tablename in which $fieldname is a column, which is retrieved from 'field' table per $module basis
+ */
+function getTableNameForField($module,$fieldname)
+{
+	global $adb;
+	$tabid = getTabid($module);
+
+	$sql = "select tablename from field where tabid=".$tabid." and fieldname like '%".$fieldname."%'";
+	$res = $adb->query($sql);
+
+	$tablename = '';
+	if($adb->num_rows($res) > 0)
+	{
+		$tablename = $adb->query_result($res,0,'tablename');
+	}
+
+	return $tablename;
+}
+
 ?>
