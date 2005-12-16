@@ -492,7 +492,7 @@ elseif($secondaryModule == 'field_priv')
 					'Vendor'=>'LBL_VENDOR_FIELD_ACCESS',
 					'PriceBook'=>'LBL_PB_FIELD_ACCESS',
 					'Quotes'=>'LBL_QUOTE_FIELD_ACCESS',
-					'Orders'=>'LBL_PO_FIELD_ACCESS',
+					'PurchaseOrder'=>'LBL_PO_FIELD_ACCESS',
 					'SalesOrder'=>'LBL_SO_FIELD_ACCESS',
 					'Invoice'=>'LBL_INVOICE_FIELD_ACCESS'
 					);

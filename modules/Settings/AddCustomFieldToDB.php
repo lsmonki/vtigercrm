@@ -138,7 +138,7 @@ else
 	{
 		$tableName='quotescf';
 	}
-	elseif($fldmodule == 'Orders')
+	elseif($fldmodule == 'PurchaseOrder')
 	{
 		$tableName='purchaseordercf';
 	}

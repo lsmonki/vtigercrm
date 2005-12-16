@@ -48,7 +48,7 @@ class CustomView extends CRMEntity{
 				 "Emails"=>Array("Information"=>'1,2',"Description"=>4),
 				 "HelpDesk"=>Array("Information"=>'1,2',"Description"=>3,"Custom Information"=>5),
 				 "Quotes"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-				 "Orders"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
+				 "PurchaseOrder"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
 				 "SalesOrder"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
 				 "Invoice"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5)
 				);

@@ -113,7 +113,7 @@ elseif($fld_module == 'Quotes')
 			);
 	$standCustFld = getStdOutput($custFldArray, $mod_strings);
 }
-elseif($fld_module == 'Orders')
+elseif($fld_module == 'PurchaseOrder')
 {
 	$custFldArray = Array($mod_strings['LBL_CARRIER']=>'carrier'
 			);

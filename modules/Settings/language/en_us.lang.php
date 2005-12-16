@@ -492,7 +492,7 @@ $mod_strings = Array(
 'Vendor'=>'Vendor',
 'PriceBook'=>'PriceBook',
 'Quotes'=>'Quote',
-'Orders'=>'Purchase Order',
+'PurchaseOrder'=>'Purchase Order',
 'SalesOrder'=>'SalesOrder',
 'Invoice'=>'Invoice',
 

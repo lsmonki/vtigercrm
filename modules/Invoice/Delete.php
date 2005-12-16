@@ -35,7 +35,7 @@ if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module
 {
 	$focus->mark_deleted($_REQUEST['record']);
 }
-elseif($_REQUEST['return_module']=="Orders")
+elseif($_REQUEST['return_module']=="SalesOrder")
 {
 	$relation_query = "UPDATE invoice set salesorderid='' where invoiceid=".$_REQUEST['record'];
 	$adb->query($relation_query);
