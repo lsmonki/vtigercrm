@@ -67,10 +67,6 @@ function fetchPermissionData($module,$action)
         {
                 $tabid = getTabid('PriceBook');
         }
-        elseif($action == 'SalesOrderEditView' || $action == 'SalesOrderDetailView' || $action == 'DeleteSalesOrder' || $action == 'SaveSalesOrder')
-        {
-                $tabid = getTabid('SalesOrder');
-        }
         else
         {
 		$tabid = getTabid($module);
@@ -603,7 +599,7 @@ $mod_strings = return_module_language($current_language, $currentModule);
 $app_list_strings['record_type_module'] = array('Account' => 'Accounts','Potential' => 'Potentials', 'Case' => 'Cases');
 
 //If DetailView, set focus to record passed in
-if($action == "DetailView" || $action == "SalesOrderDetailView" || $action == "VendorDetailView" || $action == "PriceBookDetailView")
+if($action == "DetailView" || $action == "VendorDetailView" || $action == "PriceBookDetailView")
 {
 	if(!isset($_REQUEST['record']))
 		die("A record number must be specified to view details.");
@@ -679,19 +675,15 @@ if($action == "DetailView" || $action == "SalesOrderDetailView" || $action == "V
 			require_once("modules/$currentModule/Quote.php");
 			$focus = new Quote();
 			break;
-		case 'Orders':
-			if($action == 'DetailView')
-			{
-				require_once("modules/$currentModule/Order.php");
-				$focus = new Order();
-			}
-			elseif($action == 'SalesOrderDetailView')
-			{
-				require_once("modules/$currentModule/SalesOrder.php");
-				$focus = new SalesOrder();
-				$actualModule = 'SalesOrder';
-			}
-			break;
+		case 'PurchaseOrder':
+                        require_once("modules/$currentModule/PurchaseOrder.php");
+                        $focus = new Order();
+                        break;
+                case 'SalesOrder':
+                        require_once("modules/$currentModule/SalesOrder.php");
+                        $focus = new SalesOrder();
+                        break;
+
 		case 'Invoice':
 			require_once("modules/$currentModule/Invoice.php");
 			$focus = new Invoice();

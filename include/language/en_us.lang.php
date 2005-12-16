@@ -670,7 +670,8 @@ $app_strings = Array(
 'Activities'=>'Activities',
 'Quotes'=>'Quotes',
 'PriceBook'=>'Price Books',
-'Orders'=>'Orders',
+'PurchaseOrder'=>'Purchase Orders',
+'SalesOrder'=> 'Sales Orders',
 'Invoice'=>'Invoice',
 
 'LBL_SELECT_TEMPLATE_TO_MAIL_MERGE'=>'Select template to Mail Merge:',
@@ -799,7 +800,7 @@ $app_list_strings = Array(
 
 				, 'Quotes'=>'Quotes'
 		
-				, 'Orders'=>'Orders'
+				, 'PurchaseOrder'=>'PurchaseOrder'
 
 				, 'Invoice'=>'Invoice'
 
@@ -809,7 +810,7 @@ $app_list_strings = Array(
 				
 				, 'Vendor'=>'Vendor'
 
-				, 'SalesOrder'=>'Sales Order'
+				, 'SalesOrder'=>'SalesOrder'
 				
 				),
 

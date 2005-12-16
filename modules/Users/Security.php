@@ -63,8 +63,8 @@ class Security extends CRMEntity {
  $this->db->query("INSERT INTO tab VALUES (18,'Vendor',2,15,'Vendor','','',1)");
  $this->db->query("INSERT INTO tab VALUES (19,'PriceBook',2,16,'PriceBook','','',1)");
  $this->db->query("INSERT INTO tab VALUES (20,'Quotes',0,17,'Quotes','','',1)");
- $this->db->query("INSERT INTO tab VALUES (21,'Orders',0,18,'Orders','','',1)");
- $this->db->query("INSERT INTO tab VALUES (22,'SalesOrder',2,19,'SalesOrder','','',1)");
+ $this->db->query("INSERT INTO tab VALUES (21,'PurchaseOrder',0,18,'PurchaseOrder','','',1)");
+ $this->db->query("INSERT INTO tab VALUES (22,'SalesOrder',0,19,'SalesOrder','','',1)");
  $this->db->query("INSERT INTO tab VALUES (23,'Invoice',0,20,'Invoice','','',1)");
  $this->db->query("INSERT INTO tab VALUES (24,'Rss',0,21,'Rss','','',1)");
  $this->db->query("INSERT INTO tab VALUES (25,'Reports',0,22,'Reports','','',1)");
@@ -1511,7 +1511,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Contacts").",".getTabid("Quotes").",'get_quotes',5,'Quotes',0)");
 	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Contacts").",".getTabid("Orders").",'get_purchase_orders',6,'Purchase Order',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Contacts").",".getTabid("PurchaseOrder").",'get_purchase_orders',6,'Purchase Order',0)");
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Contacts").",".getTabid("SalesOrder").",'get_salesorder',7,'Sales Order',0)");
 	
@@ -1553,7 +1553,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",".getTabid("Quotes").",'get_quotes',4,'Quotes',0)");
 	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",".getTabid("Orders").",'get_purchase_orders',5,'Purchase Order',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",".getTabid("PurchaseOrder").",'get_purchase_orders',5,'Purchase Order',0)");
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",".getTabid("SalesOrder").",'get_salesorder',6,'Sales Order',0)");
 	
@@ -1597,11 +1597,11 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 
 	// Inserting Purchase order Related Lists
 
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Orders").",9,'get_activities',1,'Activities',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("PurchaseOrder").",9,'get_activities',1,'Activities',0)");
 	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Orders").",0,'get_attachments',2,'Attachments',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("PurchaseOrder").",0,'get_attachments',2,'Attachments',0)");
 	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Orders").",".getTabid("Activities").",'get_history',3,'History',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("PurchaseOrder").",".getTabid("Activities").",'get_history',3,'History',0)");
 	
 	// Inserting Sales order Related Lists
 
@@ -1913,14 +1913,10 @@ title';
 	$this->db->query("insert into actionmapping values(4,'PriceBookDetailView',0)");
 	$this->db->query("insert into actionmapping values(0,'SavePriceBook',0)");
 	$this->db->query("insert into actionmapping values(2,'DeletePriceBook',0)");
-	$this->db->query("insert into actionmapping values(1,'SalesOrderEditView',0)");
-	$this->db->query("insert into actionmapping values(4,'SalesOrderDetailView',0)");
-	$this->db->query("insert into actionmapping values(0,'SaveSalesOrder',0)");
-	$this->db->query("insert into actionmapping values(2,'DeleteSalesOrder',0)");
 	$this->db->query("insert into actionmapping values(9,'ConvertLead',0)");
 
 	//Insert values for moduleowners table which contains the modules and their users. default user id admin - after 4.2 patch 2
-	$module_array = Array('Potentials','Contacts','Accounts','Leads','Notes','Activities','Emails','HelpDesk','Products','Faq','Vendor','PriceBook','Quotes','Orders','SalesOrder','Invoice','Reports');
+	$module_array = Array('Potentials','Contacts','Accounts','Leads','Notes','Activities','Emails','HelpDesk','Products','Faq','Vendor','PriceBook','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports');
 	foreach($module_array as $mod)
 	{
 		$this->db->query("insert into moduleowners values(".getTabid($mod).",1)");

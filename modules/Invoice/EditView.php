@@ -24,7 +24,7 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Invoice/Invoice.php');
 require_once('modules/Quotes/Quote.php');
-require_once('modules/Orders/SalesOrder.php');
+require_once('modules/SalesOrder/SalesOrder.php');
 require_once('modules/Invoice/Forms.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('include/CustomFieldUtil.php');

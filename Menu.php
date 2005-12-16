@@ -41,7 +41,7 @@ $module_menu_array = Array('Contacts' => $app_strings['LNK_NEW_CONTACT'],
 	                   'Vendor' => $app_strings['LNK_NEW_VENDOR'],
 	                   'PriceBook' => $app_strings['LNK_NEW_PRICEBOOK'],
 			   'Quotes' => $app_strings['LNK_NEW_QUOTE'],	
-			   'Orders' => $app_strings['LNK_NEW_PO'],	
+			   'PurchaseOrder' => $app_strings['LNK_NEW_PO'],	
 			   'SalesOrder' => $app_strings['LNK_NEW_SO'],	
 			   'Invoice' => $app_strings['LNK_NEW_INVOICE']	
 	                    );
@@ -65,14 +65,6 @@ foreach($module_menu_array as $module1 => $label)
                 $add_url = "&activity_mode=Task";
 		$tabid = getTabid("Activities");
 	}
-	elseif($module1 == 'SalesOrder')
-	{
-		$module_display = 'Orders';
-		$tabid = getTabid("SalesOrder");
-		$curr_action = 'SalesOrderEditView';
-		$ret_action = 'SalesOrderDetailView';	
-		
-	}
 	elseif($module1 == 'Vendor')
 	{
 		$module_display = 'Products';
@@ -95,7 +87,7 @@ foreach($module_menu_array as $module1 => $label)
 		$tabid = getTabid($module1);
 	}
 
-	if($module1 == 'Vendor' || $module1 == 'PriceBook' || $module1 == 'SalesOrder')
+	if($module1 == 'Vendor' || $module1 == 'PriceBook')
 	{
 		$profile_id = $_SESSION['authenticated_user_profileid'];
 	        $tab_per_Data = getAllTabsPermission($profile_id);

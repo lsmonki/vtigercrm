@@ -1441,7 +1441,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$product_selected = "selected";
 
 			}
-			elseif($parent_module == "Orders")
+			elseif($parent_module == "PurchaseOrder")
                         {
                                 $sql = "select * from  purchaseorder where purchaseorderid=".$value;
                                 $result = $adb->query($sql);
@@ -1474,8 +1474,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 $custfld .= '<OPTION value="Potentials&action=Popup" '.$contact_selected.'>'.$app_strings['COMBO_POTENTIALS'].'</OPTION>';
 		$custfld .= '<OPTION value="Products&action=Popup" '.$product_selected.'>'.$app_strings['COMBO_PRODUCTS'].'</OPTION>';
 		$custfld .= '<OPTION value="Invoice&action=Popup" '.$Invoice_selected.'>'.$app_strings['COMBO_INVOICES'].'</OPTION>';
-                $custfld .= '<OPTION value="Orders&action=Popup" '.$porder_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
-                $custfld .= '<OPTION value="Orders&action=PopupSalesOrder" '.$sorder_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION></select></td>';
+                $custfld .= '<OPTION value="PurchaseOrder&action=Popup" '.$porder_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
+                $custfld .= '<OPTION value="SalesOrder&action=Popup" '.$sorder_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION></select></td>';
 
  		$custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 
@@ -1526,7 +1526,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                         }
 			elseif($act_mode == "Task")
                         {
-                                if($parent_module == "Orders")
+                                if($parent_module == "PurchaseOrder")
                                 {
                                         $sql = "select * from purchaseorder where purchaseorderid=".$value;
                                         $result = $adb->query($sql);
@@ -1558,8 +1558,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		if($act_mode == "Task")
                 {
 			$custfld .= '<OPTION value="Quotes&action=Popup" '.$quote_selected.'>'.$app_strings['COMBO_QUOTES'].'</OPTION>';
-                        $custfld .= '<OPTION value="Orders&action=Popup" '.$purchase_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
-                        $custfld .= '<OPTION value="Orders&action=PopupSalesOrder" '.$sales_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION>';
+                        $custfld .= '<OPTION value="PurchaseOrder&action=Popup" '.$purchase_selected.'>'.$app_strings['COMBO_PORDER'].'</OPTION>';
+                        $custfld .= '<OPTION value="SalesOrder&action=Popup" '.$sales_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION>';
                         $custfld .= '<OPTION value="Invoice&action=Popup" '.$invoice_selected.'>'.$app_strings['COMBO_INVOICES'].'</OPTION>';
                 }
                 $custfld .='</select></td>';
@@ -1841,7 +1841,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$purchaseorder_name = getPoName($value);
 	       }		 	
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
-		$custfld .= '<td width="30%"><input name="purchaseorder_name" readonly type="text" value="'.$purchaseorder_name.'"><input name="purchaseorder_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Orders&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.purchaseorder_id.value=\'\';this.form.purchaseorder_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+		$custfld .= '<td width="30%"><input name="purchaseorder_name" readonly type="text" value="'.$purchaseorder_name.'"><input name="purchaseorder_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=PurchaseOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.purchaseorder_id.value=\'\';this.form.purchaseorder_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 	}
 	elseif($uitype == 80)
 	{
@@ -1856,7 +1856,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$salesorder_name = getSoName($value);
 	       }		 	
 		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
-		$custfld .= '<td width="30%"><input name="salesorder_name" readonly type="text" value="'.$salesorder_name.'"><input name="salesorder_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Orders&action=PopupSalesOrder&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.salesorder_id.value=\'\';this.form.salesorder_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+		$custfld .= '<td width="30%"><input name="salesorder_name" readonly type="text" value="'.$salesorder_name.'"><input name="salesorder_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.salesorder_id.value=\'\';this.form.salesorder_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 	}
 	elseif($uitype == 30)
 	{
@@ -2127,7 +2127,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$productname.'</a></td>';
 			}
-			elseif($parent_module == "Orders")
+			elseif($parent_module == "PurchaseOrder")
 			{
 				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_PORDER_NAME'].':</td>';
 				$sql = "select * from  purchaseorder where purchaseorderid=".$value;
@@ -2143,7 +2143,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$result = $adb->query($sql);
 				$sordername= $adb->query_result($result,0,"subject");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a></td>';
+				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=SalesOrder&action=DetailView&record='.$value.'">'.$sordername.'</a></td>';
 			}
 			elseif($parent_module == "Invoice")
 			{
@@ -2206,7 +2206,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
                                 $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$quotename.'</a></td>';
                         }
-			elseif($parent_module == "Orders")
+			elseif($parent_module == "PurchaseOrder")
                         {
                                 $custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_PORDER_NAME'].':</td>';
                                 $sql = "select * from  purchaseorder where purchaseorderid=".$value;
@@ -2222,7 +2222,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                                 $result = $adb->query($sql);
                                 $sordername = $adb->query_result($result,0,"subject");
 
-                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a></td>';
+                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=SalesOrder&action=DetailView&record='.$value.'">'.$sordername.'</a></td>';
                         }
 			elseif($parent_module == "Invoice")
                         {
@@ -2456,7 +2456,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                         $purchaseorder_name = getPoName($purchaseorder_id);
                 }
 
-                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Orders&action=DetailView&record='.$purchaseorder_id.'">'.$purchaseorder_name.'</a></td>';
+                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=PurchaseOrder&action=DetailView&record='.$purchaseorder_id.'">'.$purchaseorder_name.'</a></td>';
         }
 	elseif($uitype == 80)
         {
@@ -2467,7 +2467,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                         $salesorder_name = getSoName($salesorder_id);
                 }
 
-                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$salesorder_id.'">'.$salesorder_name.'</a></td>';
+                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=SalesOrder&action=DetailView&record='.$salesorder_id.'">'.$salesorder_name.'</a></td>';
         }
 	elseif($uitype == 30)
 	{
@@ -3168,7 +3168,7 @@ function getRelatedToEntity($module,$list_result,$rset)
 			$parent_result = $adb->query($parent_query);
 			$parent_name = $adb->query_result($parent_result,0,"productname");
 		}
-		if($parent_module == 'Orders')
+		if($parent_module == 'PurchaseOrder')
 		{
 			$parent_query = "SELECT subject FROM purchaseorder WHERE purchaseorderid=".$seid;
 			$parent_result = $adb->query($parent_query);
@@ -3179,8 +3179,6 @@ function getRelatedToEntity($module,$list_result,$rset)
 			$parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$seid;
 			$parent_result = $adb->query($parent_query);
 			$parent_name = $adb->query_result($parent_result,0,"subject");
-			$parent_module = "Orders";
-			$action = "SalesOrderDetailView";
 		}
 		if($parent_module == 'Invoice')
 		{
@@ -3277,7 +3275,7 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"subject");
         }
-	if($parent_module == 'Orders')
+	if($parent_module == 'PurchaseOrder')
         {
                 $parent_query = "SELECT subject FROM purchaseorder WHERE purchaseorderid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
@@ -3294,8 +3292,6 @@ function getRelatedTo($module,$list_result,$rset)
                 $parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$parent_id;
                 $parent_result = $adb->query($parent_query);
                 $parent_name = $adb->query_result($parent_result,0,"subject");
-		$action = "SalesOrderDetailView";
-		$parent_module = "Orders";
         }
 	if($parent_module == 'Contacts' && ($module == 'Emails' || $module == 'HelpDesk'))
         {
@@ -3528,7 +3524,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                                                 	$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
                                                 }
 					}
-					elseif(($module == 'PriceBook' || $module == 'Quotes' || $module == 'Orders' || $module == 'Faq') && $name == 'Product Name')
+					elseif(($module == 'PriceBook' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'Faq') && $name == 'Product Name')
 					{
 						if($module == 'Faq')
 							$product_id = $adb->query_result($list_result,$i-1,"product_id");
@@ -3995,7 +3991,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $purchaseorder_name = getPoName($temp_val);
-			$value= '<a href=index.php?module=Orders&action=DetailView&record='.$temp_val.'>'.$purchaseorder_name.'</a>';
+			$value= '<a href=index.php?module=PurchaseOrder&action=DetailView&record='.$temp_val.'>'.$purchaseorder_name.'</a>';
 		}
 		else
 			$value='';
@@ -4008,7 +4004,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $salesorder_name = getSoName($temp_val);
-			$value= '<a href=index.php?module=Orders&action=SalesOrderDetailView&record='.$temp_val.'>'.$salesorder_name.'</a>';
+			$value= '<a href=index.php?module=SalesOrder&action=DetailView&record='.$temp_val.'>'.$salesorder_name.'</a>';
 		}
 		else
 			$value='';
@@ -4195,7 +4191,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				elseif($module == "SalesOrder")
 				{
 						
-                                        $value = '<a href="index.php?action=SalesOrderDetailView&module=Orders&record='.$entity_id.'">'.$temp_val.'</a>';
+                                        $value = '<a href="index.php?action=DetailView&module=SalesOrder&record='.$entity_id.'">'.$temp_val.'</a>';
 				}
                                 else
                                 {
@@ -4296,7 +4292,7 @@ function getListQuery($module,$where='')
 		//Query modified to sort by assigned to
 		$query = "select crmentity.*, quotes.*, quotesbillads.*, quotesshipads.*,potential.potentialname,account.accountname from quotes inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid left join quotescf on quotes.quoteid = quotescf.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0".$where;
 	}
-	if($module == "Orders")
+	if($module == "PurchaseOrder")
         {
 		//Query modified to sort by assigned to
                 $query = "select crmentity.*, purchaseorder.*, pobillads.*, poshipads.*,vendor.vendorname from purchaseorder inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid left join purchaseordercf on purchaseordercf.purchaseorderid = purchaseorder.purchaseorderid where crmentity.deleted=0";
@@ -4394,22 +4390,6 @@ $log->info("get Actionid ".$action);
                 $actionid= 0;
         }
         else if($action == 'DeletePriceBook')
-        {
-                $actionid= 1;
-        }
-	else if($action == 'SalesOrderEditView')
-        {
-                $actionid= 1;
-        }
-        else if($action == 'SalesOrderDetailView')
-        {
-                $actionid= 4;
-        }
-        else if($action == 'SaveSalesOrder')
-        {
-                $actionid= 0;
-        }
-        else if($action == 'DeleteSalesOrder')
         {
                 $actionid= 1;
         }
@@ -4766,10 +4746,6 @@ function getModuleDirName($module)
 	{
 		$dir_name = 'Products';	
 	}
-	elseif($module == 'SalesOrder')
-	{
-		$dir_name = 'Orders';
-	}
 	else
 	{
 		$dir_name = $module;
@@ -4806,7 +4782,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 	{
 		$query="select products.productname,products.unit_price,products.qtyinstock,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
 	}
-	elseif($module == 'Orders')
+	elseif($module == 'PurchaseOrder')
 	{
 		$query="select products.productname,products.unit_price,products.qtyinstock,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
 	}
@@ -4861,7 +4837,7 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$output .= '<tr id="row'.$i.'" class="'.$row_class.'">';
 		$output .= '<td height="25" style="padding:3px;" nowrap><input id="txtProduct'.$i.'" name="txtProduct'.$i.'" type="text" readonly value="'.$productname.'"> <img src="'.$image_path.'search.gif" onClick=\'productPickList(this)\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		if($module != 'Orders' && $focus->object_name != 'Order')
+		if($module != 'PurchaseOrder' && $focus->object_name != 'Order')
 		{
 			$output .= '<td style="padding:3px;"><div id="qtyInStock'.$i.'">'.$qtyinstock.'</div>&nbsp;</td>';
 			$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
@@ -4900,7 +4876,7 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 	{
 		$query="select products.productname,products.unit_price,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
 	}
-	elseif($module == 'Orders')
+	elseif($module == 'PurchaseOrder')
 	{
 		$query="select products.productname,products.unit_price,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
 	}
@@ -4968,7 +4944,7 @@ function getDetailAssociatedProducts($module,$focus)
     $output .= '<tr class="moduleListTitle" height="20" id="tablehead">';
     $output .= '<td width="20%" style="padding:3px;">Product</td>';
     $output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-    if($module != 'Orders')
+    if($module != 'PurchaseOrder')
     {
     	$output .= '<td width="12%" style="padding:3px;">Qty In Stock</td>';
     	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
@@ -4994,7 +4970,7 @@ function getDetailAssociatedProducts($module,$focus)
 	{
 		$query="select products.productname,products.unit_price,products.qtyinstock,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
 	}
-	elseif($module == 'Orders')
+	elseif($module == 'PurchaseOrder')
 	{
 		$query="select products.productname,products.unit_price,products.qtyinstock,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
 	}
@@ -5030,7 +5006,7 @@ function getDetailAssociatedProducts($module,$focus)
 		$output .= '<tr class="'.$row_class.'">';
         	$output .= '<td height="25" style="padding:3px;" nowrap>'.$productname.'</td>';
         	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		if($module != 'Orders')
+		if($module != 'PurchaseOrder')
 		{	
                 	$output .= '<td style="padding:3px;">'.$qtyinstock.'</td>';
 	        	$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
