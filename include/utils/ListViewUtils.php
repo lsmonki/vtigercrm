@@ -1,0 +1,1635 @@
+<?php
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+ ********************************************************************************/
+/*********************************************************************************
+ * $Header$
+ * Description:  Includes generic helper functions used throughout the application.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________..
+ ********************************************************************************/
+
+
+
+/** This function returns the name of the person.
+  * It currently returns "first last".  It should not put the space if either name is not available.
+  * It should not return errors if either name is not available.
+  * If no names are present, it will return ""
+  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+  * All Rights Reserved.
+  * Contributor(s): ______________________________________..
+  */
+
+  
+require_once('include/database/PearDatabase.php');
+require_once('include/ComboUtil.php'); //new
+require_once('include/utils/CommonUtils.php'); //new
+
+function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='')
+{
+	global $adb;
+	global $theme;
+	global $app_strings;
+	global $mod_strings;
+	//Seggregating between module and smodule
+        if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'VENDOR')
+        {
+                $smodule = 'Vendor';
+        }
+        elseif(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'PRICEBOOK')
+        {
+                $smodule = 'PriceBook';
+        }
+        else
+        {
+                $smodule = $module;
+        }
+
+	$arrow='';
+	$qry = getURLstring($focus);
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+	$list_header = '<tr class="moduleListTitle" height=20>';
+	$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+	if($relatedlist == '')
+	{
+		if($module == "Accounts")
+                {
+                        $list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall_acc" onClick=toggleSelect(this.checked,"selected_id_acc")></td>';
+                        $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+                }
+                elseif($module == "Contacts")
+                {
+                        $list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall_con" onClick=toggleSelect(this.checked,"selected_id_con")></td>';
+                        $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+                }
+		elseif($module == "Potentials")
+                {
+                        $list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall_pot" onClick=toggleSelect(this.checked,"selected_id_pot")></td>';
+                        $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+                }
+
+		else
+		{
+			$list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>';
+			$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+		}
+	}
+
+	//Get the tabid of the module
+	//require_once('include/utils/UserInfoUtil.php')
+	$tabid = getTabid($smodule);
+	global $profile_id;
+        if($profile_id == '')
+        {
+                global $current_user;
+                $profile_id = fetchUserProfileId($current_user->id);
+        }
+	//added for customview 27/5
+	if($oCv)
+        {
+                if(isset($oCv->list_fields))
+                {
+                        $focus->list_fields = $oCv->list_fields;
+                }
+        }
+
+	//modified for customview 27/5 - $app_strings change to $mod_strings
+	foreach($focus->list_fields as $name=>$tableinfo)
+	{
+		//$fieldname = $focus->list_fields_name[$name];  //commented for customview 27/5
+		//added for customview 27/5
+		if($oCv)
+                {
+                        if(isset($oCv->list_fields_name))
+                        {
+                                $fieldname = $oCv->list_fields_name[$name];
+                        }else
+                        {
+                                $fieldname = $focus->list_fields_name[$name];
+                        }
+                }else
+		{
+			$fieldname = $focus->list_fields_name[$name];
+		}
+
+		//Getting the Entries from Profile2 field table
+		$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
+		$result = $adb->query($query);
+
+		//Getting the Entries from def_org_field table
+		$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
+		$result_def = $adb->query($query1);
+
+
+		if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
+		{
+
+			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
+			{
+				//Added on 14-12-2005 to avoid if and else check for every list field for arrow image and change order
+				$change_sorder = array('ASC'=>'DESC','DESC'=>'ASC');
+				$arrow_gif = array('ASC'=>'arrow_down.gif','DESC'=>'arrow_up.gif');
+
+				foreach($focus->list_fields[$name] as $tab=>$col)
+				{
+					if(in_array($col,$focus->sortby_fields))
+					{
+						if($order_by == $col)
+                                        	{
+							$temp_sorder = $change_sorder[$sorder];
+							$arrow = "<img src ='".$image_path.$arrow_gif[$sorder]."' border='0'>";
+                                        	}
+						else
+						{
+							$temp_sorder = 'ASC';
+						}
+						if($relatedlist !='')
+                                                {
+							if($app_strings[$name])
+                                                        {
+                                                                $name = $app_strings[$name];
+                                                        }
+                                                        else
+                                                        {
+                                                                $name = $mod_strings[$name];
+                                                        }
+                                                }
+                                                else
+                                                {
+                                                        if($app_strings[$name])
+                                                        {
+                                                                $lbl_name = $app_strings[$name];
+                                                        }
+                                                        else
+                                                        {
+                                                                $lbl_name = $mod_strings[$name];
+                                                        }
+							//added to display currency symbol in listview header
+							  if($lbl_name =='Amount')
+                                                               {
+                                                                        $curr_symbol = getCurrencySymbol();
+                                                                        $lbl_name .=': (in '.$curr_symbol.')';
+                                                                }
+
+                                                                $name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+                                                                $arrow = '';
+                                                }
+                                        }
+                                        else
+                                        {       if($app_strings[$name])
+                                                {
+                                                        $name = $app_strings[$name];
+                                                }
+                                                elseif($mod_strings[$name])
+                                                {
+                                                        $name = $mod_strings[$name];
+                                                }
+                                        }
+
+				}
+			}
+			//added to display currency symbol in related listview header
+                        if($name =='Amount' && $relatedlist !='' )
+                        {
+                                $curr_symbol = getCurrencySymbol();
+                                $name .=': (in '.$curr_symbol.')';
+                        }
+
+			//Added condition to hide the close column in Related Lists
+			if($name == 'Close' && $relatedlist != '')
+			{
+				$list_header .= '';
+			}
+			else
+			{
+				$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
+				$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+			}
+		}
+	}
+	$list_header .='<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">'.$app_strings['LBL_EDIT'].' | '.$app_strings['LBL_DELETE'].'</td>';
+	$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+	$list_header .= '</tr>';
+	return $list_header;
+
+}
+
+
+
+
+
+function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='')
+{
+	global $adb;
+	global $theme;
+	global $app_strings;
+        global $mod_strings;
+        $arrow='';
+
+	//$theme = $focus->current_theme;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";		
+	$list_header = '<tr class="moduleListTitle" height=20>';
+	$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+	foreach($focus->search_fields as $name=>$tableinfo)
+	{
+		$fieldname = $focus->search_fields_name[$name];
+		global $profile_id;
+		$tabid = getTabid($module);
+		$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
+		$result = $adb->query($query);
+
+		//Getting the Entries from def_org_field table
+		$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
+		$result_def = $adb->query($query1);
+
+		if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
+		{
+			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
+                        {
+                                foreach($focus->search_fields[$name] as $tab=>$col)
+                                {
+                                        if(in_array($col,$focus->sortby_fields))
+                                        {
+                                                if($order_by == $col)
+                                                {
+                                                        if($sorder == 'ASC')
+                                                        {
+                                                                $sorder = "DESC";
+                                                                $arrow = "<img src ='".$image_path."arrow_down.gif' border='0'>";
+                                                         }
+                                                        else
+                                                        {
+                                                                $sorder = 'ASC';
+                                                                $arrow = "<img src ='".$image_path."arrow_up.gif' border='0'>";
+                                                        }
+                                                }
+                                                $name = "<a href='index.php?module=".$module."&action=Popup".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$app_strings[$name]."&nbsp;".$arrow."</a>";
+                                                $arrow = '';
+                                        }
+                                        else
+                                                $name = $app_strings[$name];
+                                }
+                        }
+			$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
+			$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+		}
+	}	
+	$list_header .= '</tr>';
+	return $list_header;
+
+}
+
+
+
+//code contributed by raju for improved pagination
+function getNavigationValues($display, $noofrows, $limit)
+{
+	$navigation_array = Array();   
+	global $limitpage_navigation;
+	if(isset($_REQUEST['allflag']) && $_REQUEST['allflag'] == 'All'){
+		$navigation_array['start'] =1;
+		$navigation_array['first'] = 1;
+		$navigation_array['end'] = 1;
+		$navigation_array['prev'] =0;
+		$navigation_array['next'] =0;
+		$navigation_array['end_val'] =$noofrows;
+		$navigation_array['current'] =1;
+		$navigation_array['allflag'] ='Normal';
+		$navigation_array['verylast'] =1;
+		return $navigation_array;
+	}
+	$start = ((($display * $limit) - $limit)+1);
+	$end = $start + ($limit-1);
+	if($end > $noofrows)
+	{
+		$end = $noofrows;
+	}
+	$paging = ceil ($noofrows / $limit);
+	// Display the navigation
+	if ($display > 1) {
+		$previous = $display - 1;
+	}
+	else {
+		$previous=0;
+	}
+	if ($noofrows != $limit) {
+		$last = $paging;
+		$first = 1;
+		if ($paging > $limitpage_navigation) {
+			$first = $display-floor(($limitpage_navigation/2));
+			if ($first<1) $first=1;
+			$last = ($limitpage_navigation - 1) + $first;
+		}
+		if ($last > $paging ) {
+			$first = $paging - ($limitpage_navigation - 1);
+			$last = $paging;
+		}
+	}
+	if ($display < $paging) {
+		$next = $display + 1;
+	}
+	else {
+		$next=0;
+	}
+	$navigation_array['start'] = $start;
+	$navigation_array['first'] = $first;
+	$navigation_array['end'] = $last;
+	$navigation_array['prev'] = $previous;
+	$navigation_array['next'] = $next;
+	$navigation_array['end_val'] = $end;
+	$navigation_array['current'] = $display;
+	$navigation_array['allflag'] ='All';
+	$navigation_array['verylast'] =$paging;
+	return $navigation_array;
+}
+
+
+//End of code contributed by raju for improved pagination
+
+
+
+
+
+
+
+//parameter added for customview $oCv 27/5
+function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
+{
+	global $adb;
+	global $app_strings;
+	$noofrows = $adb->num_rows($list_result);
+	$list_header = '<script>
+			function confirmdelete(url)
+			{
+				if(confirm("Are you sure?"))
+				{
+					document.location.href=url;
+				}
+			}
+		</script>';
+	global $theme;
+	$evt_status;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+
+	//getting the fieldtable entries from database
+	$tabid = getTabid($module);
+	
+	//added for customview 27/5
+	if($oCv)
+        {
+                if(isset($oCv->list_fields))
+                {
+                        $focus->list_fields = $oCv->list_fields;
+                }
+        }
+
+	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
+	{
+		if (($i%2)==0)
+			$list_header .= '<tr height=20 class=evenListRow>';
+		else
+			$list_header .= '<tr height=20 class=oddListRow>';
+
+		//Getting the entityid
+		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
+		$owner_id = $adb->query_result($list_result,$i-1,"smownerid");
+
+		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+		// begin: Armando Lüscher 05.07.2005 -> §priority
+		// Code contri buted by fredy Desc: Set Priority color
+		$priority = $adb->query_result($list_result,$i-1,"priority");
+
+		$font_color_high = "color:#00DD00;";
+		$font_color_medium = "color:#DD00DD;";
+		$P_FONT_COLOR = "";
+		switch ($priority)
+		{
+			case 'High':
+				$P_FONT_COLOR = $font_color_high;
+				break;
+			case 'Medium':
+				$P_FONT_COLOR = $font_color_medium;
+				break;
+			default:
+				$P_FONT_COLOR = "";
+		}
+		//end: Armando Lüscher 05.07.2005 -> §priority
+
+		if($relatedlist == '')
+		{       
+			if($module =='Accounts')
+                        {
+                                $list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+                                $list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id_acc" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall_acc")></td>';
+                        }
+			elseif($module == 'Contacts')
+                        {
+                                $list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+                                $list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id_con" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall_con")></td>';
+                        }
+			elseif($module == 'Potentials')
+                        {
+                                $list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+                                $list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id_pot" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall_pot")></td>';
+                        }
+			else
+			{
+				$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+				$list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall")></td>';
+			}
+		}
+		$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		foreach($focus->list_fields as $name=>$tableinfo)
+		{
+			$fieldname = $focus->list_fields_name[$name];
+			
+			//added for customview 27/5
+			if($oCv)
+                        {
+                                if(isset($oCv->list_fields_name))
+                                {
+                                        $fieldname = $oCv->list_fields_name[$name];
+                                }
+                        }
+
+			global $profile_id;
+			$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
+			$result = $adb->query($query);
+
+
+			//Getting the Entries from def_org_field table
+			$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
+			$result_def = $adb->query($query1);
+
+			if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
+			{
+				if($fieldname == '')
+				{
+					$table_name = '';
+					$column_name = '';
+					foreach($tableinfo as $tablename=>$colname)
+					{
+						$table_name=$tablename;
+						$column_name = $colname;
+					}
+					$value = $adb->query_result($list_result,$i-1,$colname);
+				}
+				else
+				{
+
+					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
+					{
+						$status = $adb->query_result($list_result,$i-1,"status");
+						if($status == '')
+                                                $status = $adb->query_result($list_result,$i-1,"eventstatus");
+						if ($name=='Related to')
+							$value=getRelatedTo($module,$list_result,$i-1);
+						if($name=='Contact Name')
+						{
+							$first_name = $adb->query_result($list_result,$i-1,"firstname");
+							$last_name = $adb->query_result($list_result,$i-1,"lastname");
+							$contact_id = $adb->query_result($list_result,$i-1,"contactid");
+							$contact_name = "";
+							$value="";
+							if($last_name != 'NULL')
+								$contact_name .= $last_name;
+							if($first_name != 'NULL')
+								$contact_name .= " ".$first_name;
+							//Added to get the contactname for activities custom view - t=2190
+                                                        if($contact_id != '' && $last_name == '')
+                                                        {
+                                                                $contact_name = getContactName($contact_id);
+                                                        }
+							
+							if(($contact_name != "") && ($contact_id !='NULL'))
+								//$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
+								// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+						}
+						if ($name == 'Close')
+						{
+							if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '')
+							{
+								$value="";
+							}
+							else
+							{
+								$activityid = $adb->query_result($list_result,$i-1,"activityid");
+								$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
+                                                                if($activitytype=='Task')
+                                                                $evt_status='&status=Completed';
+                                                                else
+                                                                $evt_status='&eventstatus=Held';
+								if(isPermitted("Activities",1,$activityid) == 'yes')
+                        					{
+                                                                	//$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
+                                                                	// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+                                                                	$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+								}
+								else
+								{
+									$value = "";
+								}
+								
+							}
+						}
+					}
+					elseif($module == "Products" && $name == "Related to")
+                                        {
+                                                $value=getRelatedTo($module,$list_result,$i-1);
+                                        }
+					elseif($module == 'Notes' && $name=='Related to')
+					{
+						$value=getRelatedTo($module,$list_result,$i-1);
+					}
+					elseif($name=='Account Name')
+					{
+						//modified for customview 27/5
+						if($module == 'Accounts')
+                                                {
+                                                	$account_id = $adb->query_result($list_result,$i-1,"crmid");
+                                                	$account_name = getAccountName($account_id);
+                                                	//$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+                                                	// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+                                                	$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+                                                }else
+                                                {
+                                                	$account_id = $adb->query_result($list_result,$i-1,"accountid");
+                                                	$account_name = getAccountName($account_id);
+                                                	//$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+                                                	// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+                                                	$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+                                                }
+					}
+					elseif(($module == 'PriceBook' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'Faq') && $name == 'Product Name')
+					{
+						if($module == 'Faq')
+							$product_id = $adb->query_result($list_result,$i-1,"product_id");
+						else
+							$product_id = $adb->query_result($list_result,$i-1,"productid");
+
+						if($product_id != '')
+							$product_name = getProductName($product_id);
+						else
+                                                        $product_name = '';
+
+						$value = '<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
+					}
+					elseif($module == 'Quotes' && $name == 'Potential Name')
+					{
+						$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
+						$potential_name = getPotentialName($potential_id);
+						$value = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
+					}
+					elseif($owner_id == 0 && $name == 'Assigned To')
+                                        {
+                                               $value = getGroupName($entity_id, $module);
+                                       }
+					else
+					{
+
+						$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
+						$field_result = $adb->query($query);
+						$list_result_count = $i-1;
+
+						$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
+					}
+				}
+				//Added condition to hide the close symbol in Related Lists
+//				if($relatedlist != '' && $value == "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>")
+				if($name == 'Close' && $relatedlist != '')
+				{
+					$list_header .= '';
+				}
+				else
+				{
+					//$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
+					// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+					$list_header .= '<td height="21" style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'.$value.'</td>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
+					$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+				}
+				if($fieldname=='filename')
+				{
+					$filename = $adb->query_result($list_result,$list_result_count,$fieldname);
+				}
+			}
+
+		}
+		$varreturnset = '';
+		if($returnset=='')
+			$varreturnset = '&return_module='.$module.'&return_action=index';
+		else
+			$varreturnset = $returnset;
+			
+
+		if($module == 'Activities')
+		{
+			$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
+			if($actvity_type == 'Task')
+				$varreturnset .= '&activity_mode=Task';
+			else
+				$varreturnset .= '&activity_mode=Events';
+		}
+		//$list_header .= '<td style="padding:0px 3px 0px 3px;">';
+		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+		$list_header .= '<td style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
+		$mod_dir=getModuleDirName($module);
+		if(isPermitted($module,1,$entity_id) == 'yes')
+		{
+			//$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
+			// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+			$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&return_viewname='.$oCv->setdefaultviewid.'&record='.$entity_id.$varreturnset.'&filename='.$filename.'" style="'.$P_FONT_COLOR.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+		}
+		if(isPermitted($module,2,$entity_id) == 'yes')
+		{
+			$del_param = 'index.php?action='.$del_action.'&module='.$mod_dir.'&record='.$entity_id.$varreturnset.'&return_viewname='.$oCv->setdefaultviewid;
+			$list_header .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
+		}
+		//$list_header .= '<td>';
+		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+		$list_header .= '</td>'; // Armando Lüscher 05.07.2005 -> Changed from <td> to </td>
+		$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$list_header .= '</tr>';
+	}
+	$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
+	return $list_header;
+}
+
+
+function getSearchListViewEntries($focus, $module,$list_result,$navigation_array)
+{
+	global $adb;
+	$noofrows = $adb->num_rows($list_result);
+	$list_header = '';
+	global $theme;	
+	//$theme = $focus->current_theme;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+
+	//getting the fieldtable entries from database
+	$tabid = getTabid($module);
+
+	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
+	{
+		if (($i%2)==0)
+			$list_header .= '<tr height=20 class=evenListRow>';
+		else
+			$list_header .= '<tr height=20 class=oddListRow>';
+
+		//Getting the entityid
+		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
+
+		$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		foreach($focus->search_fields as $name=>$tableinfo)
+		{
+			$fieldname = $focus->search_fields_name[$name];
+			global $profile_id;
+			$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
+			$result = $adb->query($query);
+	
+			//Getting the Entries from def_org_field table
+			$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
+			$result_def = $adb->query($query1);
+
+
+			if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
+			{
+
+				if($fieldname == '')
+				{
+					$table_name = '';
+					$column_name = '';
+					foreach($tableinfo as $tablename=>$colname)
+					{
+						$table_name=$tablename;
+						$column_name = $colname;
+					}
+					$value = $adb->query_result($list_result,$i-1,$colname); 
+				}
+				else
+				{
+					if(($module == 'Calls' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails') && (($name=='Related to') || ($name=='Contact Name')))
+					{
+						if ($name=='Related to')
+							$value=getRelatedTo($module,$list_result,$i-1);
+						if($name=='Contact Name')
+						{
+							$first_name = $adb->query_result($list_result,$i-1,"firstname");
+							$last_name = $adb->query_result($list_result,$i-1,"lastname");
+							$contact_id = $adb->query_result($list_result,$i-1,"contactid");
+							$contact_name = "";
+							$value="";
+							if($last_name != 'NULL')
+                                                                $contact_name .= $last_name;
+                                                        if($first_name != 'NULL')
+                                                                $contact_name .= " ".$first_name;
+							if(($contact_name != "") && ($contact_id !='NULL'))
+								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
+						}
+					}
+					elseif(($module == 'Faq' || $module == 'Notes') && $name=='Related to')
+					{
+						$value=getRelatedToEntity($module,$list_result,$i-1);
+					}
+					elseif($name=='Account Name' && ($module == 'Potentials' || $module == 'SalesOrder' || $module == 'Quotes'))
+                                        {
+                                                $account_id = $adb->query_result($list_result,$i-1,"accountid");
+                                                $account_name = getAccountName($account_id);
+                                                $value = $account_name;
+                                        }
+					elseif($name=='Quote Name' && $module == 'SalesOrder')
+                                        {
+                                                $quote_id = $adb->query_result($list_result,$i-1,"quoteid");
+                                                $quotename = getQuoteName($quote_id);
+                                                $value = $quotename;
+                                        }
+					else
+					{
+						$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
+						$field_result = $adb->query($query);
+						$list_result_count = $i-1;
+
+						$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"search",$focus->popup_type);
+					}
+
+				}
+			$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
+			$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+			}
+		}	
+		$list_header .= '</tr>';
+	}
+	$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
+	return $list_header;
+}
+
+
+
+
+
+function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
+{
+	global $adb;
+	$uitype = $adb->query_result($field_result,0,"uitype");
+	
+	$colname = $adb->query_result($field_result,0,"columnname");
+
+	//added for getting event status in Custom view - Jaguar
+	if($module == 'Activities' && $colname == "status")
+	{
+		$colname="activitystatus";
+	}
+	//Ends
+	$temp_val = $adb->query_result($list_result,$list_result_count,$colname);
+
+	if(strlen($temp_val) > 40)
+        {
+                $temp_val = substr($temp_val,0,40).'...';
+        }
+		
+	if($uitype == 52 || $uitype == 53 || $uitype == 77)
+	{
+                $user_name = getUserName($temp_val);
+		$value = $user_name;
+	}
+	elseif($uitype == 5 || $uitype == 6 || $uitype == 23 || $uitype == 70)
+	{
+		if($temp_val != '' && $temp_val != '0000-00-00')
+		{
+			$value = getDisplayDate($temp_val);  
+		}
+		elseif($temp_val == '0000-00-00')
+		{
+			$value = '';
+		}
+		else
+		{
+			$value = $temp_val;
+		}
+		
+	}
+	elseif($uitype == 71 || $uitype == 72)
+	{
+		if($temp_val != '' && $temp_val != 0)
+		{       //changes made to remove currency symbol infront of each potential amount
+			//$symbol = getCurrencySymbol();
+                        //$value = $symbol.' '.$temp_val;
+                        $value = $temp_val;
+		}
+		else
+		{
+			$value = '';
+		}
+		
+	}
+	elseif($uitype == 17)
+	{
+		$value = '<a href="http://'.$temp_val.'" target="_blank">'.$temp_val.'</a>';
+	}
+	elseif($uitype == 13)
+        {
+                $value = '<a href="mailto:'.$temp_val.'">'.$temp_val.'</a>';
+        }
+	elseif($uitype == 56)
+	{
+		if($temp_val == 1)
+		{
+			$value = 'yes';
+		}
+		else
+		{
+			$value = '';
+		}
+	}	
+	elseif($uitype == 57)
+	{
+		global $adb;
+		if($temp_val != '')
+                {
+			$sql="select * from contactdetails where contactid=".$temp_val;		
+			$result=$adb->query($sql);
+			$firstname=$adb->query_result($result,0,"firstname");
+			$lastname=$adb->query_result($result,0,"lastname");
+			$name=$lastname.' '.$firstname;
+
+			$value= '<a href=index.php?module=Contacts&action=DetailView&record='.$temp_val.'>'.$name.'</a>';
+		}
+		else
+			$value='';
+	}
+	//Added By *Raj* for the Issue ProductName not displayed in CustomView of HelpDesk
+	elseif($uitype == 59)
+	{
+		if($temp_val != '')
+		{
+			$value = getProductName($temp_val);
+		}
+		else
+		{
+			$value = '';
+		}
+	}
+	//End
+	elseif($uitype == 61)
+	{
+			global $adb;
+
+	$attachmentid=$adb->query_result($adb->query("select * from seattachmentsrel where crmid = ".$entity_id),0,'attachmentsid');
+	$value = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$module.'&fileid='.$attachmentid.'&filename='.$temp_val.'">'.$temp_val.'</a>';
+
+	}
+	elseif($uitype == 62)
+	{
+		global $adb;
+
+		$parentid = $adb->query_result($list_result,$list_result_count,"parent_id");
+		$parenttype = $adb->query_result($list_result,$list_result_count,"parent_type");
+
+		if($parenttype == "Leads")	
+		{
+			$tablename = "leaddetails";	$fieldname = "lastname";	$idname="leadid";	
+		}
+		if($parenttype == "Accounts")	
+		{
+			$tablename = "account";		$fieldname = "accountname";     $idname="accountid";
+		}
+		if($parenttype == "Products")	
+		{
+			$tablename = "products";	$fieldname = "productname";     $idname="productid";
+		}
+		if($parenttype == "HelpDesk")	
+		{
+			$tablename = "troubletickets";	$fieldname = "title";        	$idname="crmid";
+		}
+		if($parenttype == "Products")	
+		{
+			$tablename = "products";	$fieldname = "productname";     $idname="productid";
+		}
+		if($parenttype == "Invoice")	
+		{
+			$tablename = "invoice";	$fieldname = "subject";     $idname="invoiceid";
+		}
+
+
+		if($parentid != '')
+                {
+			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
+			//echo '<br> query : .. '.$sql;
+			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
+			//echo '<br><br> val : '.$fieldvalue;
+
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'>'.$fieldvalue.'</a>';
+		}
+		else
+			$value='';
+	}
+	elseif($uitype == 66)
+	{
+		global $adb;
+
+		$parentid = $adb->query_result($list_result,$list_result_count,"parent_id");
+		$parenttype = $adb->query_result($list_result,$list_result_count,"parent_type");
+
+		if($parenttype == "Leads")	
+		{
+			$tablename = "leaddetails";	$fieldname = "lastname";	$idname="leadid";	
+		}
+		if($parenttype == "Accounts")	
+		{
+			$tablename = "account";		$fieldname = "accountname";     $idname="accountid";
+		}
+		if($parenttype == "HelpDesk")	
+		{
+			$tablename = "troubletickets";	$fieldname = "title";        	$idname="crmid";
+		}
+		if($parentid != '')
+                {
+			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
+			//echo '<br> query : .. '.$sql;
+			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
+			//echo '<br><br> val : '.$fieldvalue;
+
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'>'.$fieldvalue.'</a>';
+		}
+		else
+			$value='';
+	}
+	elseif($uitype == 67)
+	{
+		global $adb;
+
+		$parentid = $adb->query_result($list_result,$list_result_count,"parent_id");
+		$parenttype = $adb->query_result($list_result,$list_result_count,"parent_type");
+
+		if($parenttype == "Leads")	
+		{
+			$tablename = "leaddetails";	$fieldname = "lastname";	$idname="leadid";	
+		}
+		if($parenttype == "Contacts")	
+		{
+			$tablename = "contactdetails";		$fieldname = "contactname";     $idname="contactid";
+		}
+		if($parentid != '')
+                {
+			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
+			//echo '<br> query : .. '.$sql;
+			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
+			//echo '<br><br> val : '.$fieldvalue;
+
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'>'.$fieldvalue.'</a>';
+		}
+		else
+			$value='';
+	}
+	elseif($uitype == 68)
+	{
+		global $adb;
+
+		$parentid = $adb->query_result($list_result,$list_result_count,"parent_id");
+		$parenttype = $adb->query_result($list_result,$list_result_count,"parent_type");
+
+		if($parenttype == '' && $parentid != '')
+                        $parenttype = getSalesEntityType($parentid);
+
+		if($parenttype == "Contacts")	
+		{
+			$tablename = "contactdetails";		$fieldname = "contactname";     $idname="contactid";
+		}
+		if($parenttype == "Accounts")	
+		{
+			$tablename = "account";	$fieldname = "accountname";	$idname="accountid";	
+		}
+		if($parentid != '')
+                {
+			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
+			//echo '<br> query : .. '.$sql;
+			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
+			//echo '<br><br> val : '.$fieldvalue;
+
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'>'.$fieldvalue.'</a>';
+		}
+		else
+			$value='';
+	}
+	elseif($uitype == 78)
+        {
+
+		global $adb;
+		if($temp_val != '')
+                {
+			
+                        $quote_name = getQuoteName($temp_val);
+			$value= '<a href=index.php?module=Quotes&action=DetailView&record='.$temp_val.'>'.$quote_name.'</a>';
+		}
+		else
+			$value='';
+        }
+	elseif($uitype == 79)
+        {
+
+		global $adb;
+		if($temp_val != '')
+                {
+			
+                        $purchaseorder_name = getPoName($temp_val);
+			$value= '<a href=index.php?module=PurchaseOrder&action=DetailView&record='.$temp_val.'>'.$purchaseorder_name.'</a>';
+		}
+		else
+			$value='';
+        }
+	elseif($uitype == 80)
+        {
+
+		global $adb;
+		if($temp_val != '')
+                {
+			
+                        $salesorder_name = getSoName($temp_val);
+			$value= '<a href=index.php?module=SalesOrder&action=DetailView&record='.$temp_val.'>'.$salesorder_name.'</a>';
+		}
+		else
+			$value='';
+        }
+	elseif($uitype == 75 || $uitype == 81)
+        {
+
+		global $adb;
+		if($temp_val != '')
+                {
+			
+                        $vendor_name = getVendorName($temp_val);
+			$value= '<a href=index.php?module=Products&action=VendorDetailView&record='.$temp_val.'>'.$vendor_name.'</a>';
+		}
+		else
+			$value='';
+        }
+	else
+	{
+	
+		if($fieldname == $focus->list_link_field)
+		{
+			if($mode == "search")
+			{
+				if($popuptype == "specific")
+				{
+					// Added for get the first name of contact in Popup window
+                                        if($colname == "lastname" && $module == 'Contacts')
+					{
+                                               $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
+                                        	$temp_val =$temp_val.' '.$firstname;
+					}
+
+					$temp_val = str_replace("'",'\"',$temp_val);
+			
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
+				}
+				elseif($popuptype == "detailview")
+                                {
+                                        if($colname == "lastname" && $module == 'Contacts')
+                                               $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
+                                        $temp_val =$temp_val.' '.$firstname;
+
+					$focus->record_id = $_REQUEST['recordid'];
+                                        $value = '<a href="a" LANGUAGE=javascript onclick=\'add_data_to_relatedlist("'.$entity_id.'","'.$focus->record_id.'"); window.close()\'>'.$temp_val.'</a>';
+                                }
+				elseif($popuptype == "formname_specific")
+				{
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_formname_specific("'.$_REQUEST['form'].'", "'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
+				}
+				elseif($popuptype == "inventory_prod")
+				{
+					$row_id = $_REQUEST['curr_row'];
+					
+					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
+					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$qty_stock.'", "'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
+				}
+				elseif($popuptype == "inventory_prod_po")
+				{
+					$row_id = $_REQUEST['curr_row'];
+
+					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
+					//$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory_po("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
+				}
+				elseif($popuptype == "inventory_pb")
+				{
+
+					$prod_id = $_REQUEST['productid'];
+					$flname =  $_REQUEST['fldname'];
+					$listprice=getListPrice($prod_id,$entity_id);	
+					
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory_pb("'.$listprice.'", "'.$flname.'"); window.close()\'>'.$temp_val.'</a>';
+				}
+				elseif($popuptype == "specific_account_address")
+				{
+					require_once('modules/Accounts/Account.php');
+					$acct_focus = new Account();
+					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
+					
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'"); window.close()\'>'.$temp_val.'</a>';
+
+				}
+				elseif($popuptype == "specific_contact_account_address")
+                                {
+                                        require_once('modules/Accounts/Account.php');
+                                        $acct_focus = new Account();
+                                        $acct_focus->retrieve_entity_info($entity_id,"Accounts");
+
+                                        $value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_contact_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'"); window.close()\'>'.$temp_val.'</a>';
+
+                                }
+
+				elseif($popuptype == "specific_potential_account_address")
+                                {
+                                        $acntid = $adb->query_result($list_result,$list_result_count,"accountid");
+                                        require_once('modules/Accounts/Account.php');
+                                        $acct_focus = new Account();
+                                        $acct_focus->retrieve_entity_info($acntid,"Accounts");
+                                        $account_name = getAccountName($acntid);
+
+                                        $value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$acntid.'", "'.br2nl($account_name).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'","'.br2nl($acct_focus->column_fields['bill_pobox']).'", "'.br2nl($acct_focus->column_fields['ship_pobox']).'"); window.close()\'>'.$temp_val.'</a>';
+
+                                }
+//added by rdhital/Raju for better emails 
+					elseif($popuptype == "set_return_emails")
+					{
+						if ($module=='Accounts')
+						{
+							//$emailadd = $adb->query_result($list_result,$list_result_count,'email1');
+							$accid =$adb->query_result($list_result,$list_result_count,'accountid');
+							//if ($emailadd1!='')
+							//$emailadd .= '>; '. $temp_val. '<'.$emailadd1;
+							$value = '<a href="javascript: submitform('.$accid.');">'.$temp_val.'</a>';
+						}
+						elseif ($module=='Contacts' || $module=='Leads')
+						{
+							$firstname=$adb->query_result($list_result,$list_result_count,"firstname");
+							$lastname=$adb->query_result($list_result,$list_result_count,"lastname");
+							$name=$lastname.' '.$firstname;
+							//$emailadd = $adb->query_result($list_result,$list_result_count,'email');
+							//$emailadd1 =$adb->query_result($list_result,$list_result_count,'otheremail');
+							//if ($emailadd1!='')
+							//	$emailadd .= '>; '. $name. '<'.$emailadd1;
+	
+							$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
+						}
+			
+					}
+//code added by raju ends
+				elseif($popuptype == "specific_vendor_address")
+				{
+					require_once('modules/Products/Vendor.php');
+					$acct_focus = new Vendor();
+					$acct_focus->retrieve_entity_info($entity_id,"Vendor");
+					
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['treet']).'", "'.br2nl($acct_focus->column_fields['city']).'", "'.br2nl($acct_focus->column_fields['state']).'", "'.br2nl($acct_focus->column_fields['postalcode']).'", "'.br2nl($acct_focus->column_fields['country']).'","'.br2nl($acct_focus->column_fields['pobox']).'"); window.close()\'>'.$temp_val.'</a>';
+
+				}
+				else
+				{
+					if($colname == "lastname")
+                                                $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
+                                        $temp_val =$temp_val.' '.$firstname;
+
+					$temp_val = str_replace("'",'\"',$temp_val);
+	
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
+				}
+			}
+			else
+			{
+				if(($module == "Leads" && $colname == "lastname") || ($module == "Contacts" && $colname == "lastname"))
+				{
+			                if($colname == "lastname")
+			                        $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
+			              //condition to add lastname and first name only for default view on 20-11-05 
+						   if($viewid =='' || $viewid =='0') $temp_val =$temp_val.' '.$firstname;
+					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'">'.$temp_val.'</a>';
+				}
+				elseif($module == "Activities")
+                                {
+                                        $actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
+                                        if($actvity_type == "Task")
+                                        {
+                                               $value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Task">'.$temp_val.'</a>';
+                                        }
+                                        else
+                                        {
+                                                $value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Events">'.$temp_val.'</a>';
+                                        }
+                                }
+				elseif($module == "Vendor")
+				{
+						
+                                        $value = '<a href="index.php?action=VendorDetailView&module=Products&record='.$entity_id.'">'.$temp_val.'</a>';
+				}
+				elseif($module == "PriceBook")
+				{
+						
+                                        $value = '<a href="index.php?action=PriceBookDetailView&module=Products&record='.$entity_id.'">'.$temp_val.'</a>';
+				}
+				elseif($module == "SalesOrder")
+				{
+						
+                                        $value = '<a href="index.php?action=DetailView&module=SalesOrder&record='.$entity_id.'">'.$temp_val.'</a>';
+				}
+                                else
+                                {
+                                        $value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'">'.$temp_val.'</a>';
+                                }
+			}
+		}
+		else
+		{
+			$value = $temp_val;
+		}
+	}
+//	$value .= $returnset;
+	
+	// Mike Crowe Mod --------------------------------------------------------Make right justified and currency value
+	if ( in_array($uitype,array(71,72,7,9,90)) )
+	{
+		$value = '<span align="right">'.$value.'</div>';
+	}
+
+	return $value; 
+}
+
+
+function getListQuery($module,$where='')
+{
+	if($module == "HelpDesk")
+	{
+		$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.contactid, troubletickets.parent_id, contactdetails.firstname, contactdetails.lastname, account.accountid, account.accountname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.parent_id=contactdetails.contactid left join account on account.accountid=troubletickets.parent_id left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentity.deleted=0";
+		//$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid  left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id where crmentity.deleted=0";
+	}
+	if($module == "Accounts")
+	{
+		//$query = "select crmentity.crmid, account.accountname,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.*  from account, accountbillads, accountshipads, accountscf  inner join crmentity on crmentity.crmid=account.accountid and account.accountid=accountbillads.accountaddressid and account.accountid = accountscf.accountid and account.accountid=accountshipads.accountaddressid where crmentity.deleted=0";
+		//Query modified to sort by assigned to
+		$query = "select crmentity.crmid, account.accountname,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.* from account inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid where crmentity.deleted=0";
+	}
+	if ($module == "Potentials")
+	{
+		 //$query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.*, potentialscf.* from potential , account, potentialscf inner join crmentity on crmentity.crmid=potential.potentialid and potential.accountid = account.accountid and potentialscf.potentialid = potential.potentialid where crmentity.deleted=0 ".$where;
+		//Query modified to sort by assigned to
+		 $query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.accountid,potential.potentialname,potential.sales_stage,potential.amount,potential.currency,potential.closingdate,potential.typeofrevenue, potentialscf.* from potential inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=potential.potentialid inner join account on potential.accountid = account.accountid inner join potentialscf on potentialscf.potentialid = potential.potentialid where crmentity.deleted=0 ".$where;
+
+	}
+	if($module == "Leads")
+	{
+		//$query = "select crmentity.crmid, leaddetails.firstname, leaddetails.lastname, leaddetails.company, leadaddress.phone, leadsubdetails.website, leaddetails.email, crmentity.smownerid, leadscf.* from leaddetails, leadaddress, leadsubdetails, leadscf  inner join crmentity on crmentity.crmid=leaddetails.leadid and leaddetails.leadid=leadaddressid and leaddetails.leadid = leadscf.leadid and leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid where crmentity.deleted=0 and leaddetails.converted=0";
+		$query = "select crmentity.crmid, leaddetails.firstname, leaddetails.lastname, leaddetails.company, leadaddress.phone, leadsubdetails.website, leaddetails.email, crmentity.smownerid, leadscf.* from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid where crmentity.deleted=0 and leaddetails.converted=0";
+	}
+	if($module == "Products")
+	{
+		$query = "select distinct(crmentity.crmid), products.*, productcf.* from products inner join crmentity on crmentity.crmid=products.productid left join productcf on products.productid = productcf.productid left join seproductsrel on seproductsrel.productid = products.productid where crmentity.deleted=0";
+	}
+        if($module == "Notes")
+        {
+		$query="select crmentity.crmid, notes.title, notes.contact_id, notes.filename, crmentity.modifiedtime,senotesrel.crmid as relatedto, contactdetails.firstname, contactdetails.lastname, notes.* from notes inner join crmentity on crmentity.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentity.deleted=0";
+        }
+        if($module == "Calls")
+        {
+		$query = "select crmentity.crmid, crmentity.smownerid, seactivityrel.activityid, calls.* from calls inner join crmentity on crmentity.crmid = calls.callid left join seactivityrel on seactivityrel.activityid = calls.callid where crmentity.deleted=0";
+        }
+	if($module == "Contacts")
+        {
+		//Query modified to sort by assigned to
+		$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid left join account on account.accountid = contactdetails.accountid where crmentity.deleted=0";
+		//$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf,crmentity,account where crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid and account.accountid = contactdetails.accountid and crmentity.deleted=0";
+        }
+	if($module == "Meetings")
+        {
+		$query = "select crmentity.crmid,crmentity.smownerid, meetings.*, activity.subject, activity.activityid, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid from meetings inner join crmentity on crmentity.crmid=meetings.meetingid inner join activity on activity.activityid= crmentity.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid WHERE crmentity.deleted=0";
+        }
+	if($module == "Activities")
+        {
+		$query = " select crmentity.crmid,crmentity.smownerid,crmentity.setype, activity.*, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, account.accountid, account.accountname, recurringevents.recurringtype from activity inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join seactivityrel on seactivityrel.activityid = activity.activityid left outer join account on account.accountid = contactdetails.accountid left outer join recurringevents on recurringevents.activityid=activity.activityid WHERE crmentity.deleted=0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') ".$where  ;
+		//included by Jaguar
+        }
+	if($module == "Emails")
+        {
+                //$query = "select crmentity.crmid,crmentity.smownerid, emails.emailid, emails.filename, activity.subject, activity.activityid, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid = crmentity.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid WHERE crmentity.deleted=0";
+		//Query modified to sort by assigned to
+		$query = "select distinct crmentity.crmid,crmentity.smownerid, emails.emailid, emails.filename, activity.subject, activity.activityid, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from emails inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid = crmentity.crmid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid WHERE crmentity.deleted=0";
+	}
+
+	if($module == "Faq")
+	{
+		$query = "select crmentity.crmid, faq.*, crmentity.createdtime, crmentity.modifiedtime from faq inner join crmentity on crmentity.crmid=faq.id left join products on faq.product_id=products.productid where crmentity.deleted=0";
+	}
+	if($module == "Vendor")
+	{
+		$query = "select crmentity.crmid, vendor.* from vendor inner join crmentity on crmentity.crmid=vendor.vendorid where crmentity.deleted=0";
+	}
+	if($module == "PriceBook")
+	{
+		$query = "select crmentity.crmid, pricebook.* from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid where crmentity.deleted=0";
+	}
+	if($module == "Quotes")
+	{
+		//Query modified to sort by assigned to
+		$query = "select crmentity.*, quotes.*, quotesbillads.*, quotesshipads.*,potential.potentialname,account.accountname from quotes inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid left join quotescf on quotes.quoteid = quotescf.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0".$where;
+	}
+	if($module == "PurchaseOrder")
+        {
+		//Query modified to sort by assigned to
+                $query = "select crmentity.*, purchaseorder.*, pobillads.*, poshipads.*,vendor.vendorname from purchaseorder inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid left join purchaseordercf on purchaseordercf.purchaseorderid = purchaseorder.purchaseorderid where crmentity.deleted=0";
+        }
+        if($module == "SalesOrder")
+        {
+		//Query modified to sort by assigned to
+                $query = "select crmentity.*, salesorder.*, sobillads.*, soshipads.*,quotes.subject as quotename, account.accountname from salesorder inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid left join salesordercf on salesordercf.salesorderid = salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0".$where;
+        }
+	if($module == "Invoice")
+	{
+		//Query modified to sort by assigned to
+		//query modified -Code contribute by Geoff(http://forums.vtiger.com/viewtopic.php?t=3376)
+		$query = "select crmentity.*, invoice.*, invoicebillads.*, invoiceshipads.*,salesorder.subject as salessubject from invoice inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=invoice.invoiceid inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid inner join invoicecf on invoice.invoiceid = invoicecf.invoiceid where crmentity.deleted=0".$where;
+	}
+	//Appending the Security parameters by DON
+	global $others_permission_id;
+	global $current_user;	
+	if($others_permission_id == 3 && $module != 'Notes' && $module != 'Products' && $module != 'Faq' && $module!= 'Vendor' && $module != 'PriceBook')
+	{
+		$query .= " and crmentity.smownerid in(".$current_user->id .",0)";
+	}
+
+	return $query;
+}
+
+
+
+//parameter $viewid added for customview 27/5
+function AlphabeticalSearch($module,$action,$fieldname,$query,$type,$popuptype='',$recordid='',$return_module='',$append_url='',$viewid='',$groupid='')
+{
+	if($type=='advanced')
+		$flag='&advanced=true';
+
+	if($popuptype != '')
+		$popuptypevalue = "&popuptype=".$popuptype;
+
+        if($recordid != '')
+                $returnvalue = '&recordid='.$recordid;
+        if($return_module != '')
+                $returnvalue .= '&return_module='.$return_module;
+
+	for($var='A',$i =1;$i<=26;$i++,$var++)
+	// Mike Crowe Mod --------------------------------------------------------added groupid to url
+		$list .= '<td class="alphaBg"><a href="index.php?module='.$module.'&action='.$action.'&viewname='.$viewid.'&gname='.$groupid.'&query='.$query.'&'.$fieldname.'='.$var.$flag.$popuptypevalue.$returnvalue.$append_url.'">'.$var.'</a></td>';
+
+	return $list;
+}
+
+
+function getRelatedToEntity($module,$list_result,$rset)
+{
+
+	global $adb;
+	$seid = $adb->query_result($list_result,$rset,"relatedto");
+	$action = "DetailView";
+
+	if(isset($seid) && $seid != '')
+	{
+		$parent_module = $parent_module = getSalesEntityType($seid);
+		if($parent_module == 'Accounts')
+		{
+		$numrows= $adb->num_rows($evt_result);
+		
+		$parent_module = $adb->query_result($evt_result,0,'setype');
+        $parent_id = $adb->query_result($evt_result,0,'crmid');
+		
+		if ($numrows>1){
+		$parent_module ='Multiple';
+		$parent_name=$app_strings['LBL_MULTIPLE'];
+        }
+        //Raju -- Ends
+			$parent_query = "SELECT accountname FROM account WHERE accountid=".$seid;
+			$parent_result = $adb->query($parent_query);
+			$parent_name = $adb->query_result($parent_result,0,"accountname");
+		}
+		if($parent_module == 'Leads')
+		{
+			$parent_query = "SELECT firstname,lastname FROM leaddetails WHERE leadid=".$seid;
+			$parent_result = $adb->query($parent_query);
+			$parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
+		}
+		if($parent_module == 'Potentials')
+		{
+			$parent_query = "SELECT potentialname FROM potential WHERE potentialid=".$seid;
+			$parent_result = $adb->query($parent_query);
+			$parent_name = $adb->query_result($parent_result,0,"potentialname");
+		}
+		if($parent_module == 'Products')
+		{
+			$parent_query = "SELECT productname FROM products WHERE productid=".$seid;
+			$parent_result = $adb->query($parent_query);
+			$parent_name = $adb->query_result($parent_result,0,"productname");
+		}
+		if($parent_module == 'PurchaseOrder')
+		{
+			$parent_query = "SELECT subject FROM purchaseorder WHERE purchaseorderid=".$seid;
+			$parent_result = $adb->query($parent_query);
+			$parent_name = $adb->query_result($parent_result,0,"subject");
+		}
+		if($parent_module == 'SalesOrder')
+		{
+			$parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$seid;
+			$parent_result = $adb->query($parent_query);
+			$parent_name = $adb->query_result($parent_result,0,"subject");
+		}
+		if($parent_module == 'Invoice')
+		{
+			$parent_query = "SELECT subject FROM invoice WHERE invoiceid=".$seid;
+			$parent_result = $adb->query($parent_query);
+			$parent_name = $adb->query_result($parent_result,0,"subject");
+		}
+
+		$parent_value = "<a href='index.php?module=".$parent_module."&action=".$action."&record=".$seid."'>".$parent_name."</a>"; 
+	}
+	else
+	{
+		$parent_value = '';
+	}
+	return $parent_value;
+
+}
+
+
+//used in home page listTop files
+function getRelatedTo($module,$list_result,$rset)
+{
+
+        global $adb;
+		global $app_strings;
+	if($module == "Notes")
+        {
+                $notesid = $adb->query_result($list_result,$rset,"notesid");
+                $action = "DetailView";
+                $evt_query="select senotesrel.crmid,crmentity.setype from senotesrel, crmentity where senotesrel.notesid ='".$notesid."' and senotesrel.crmid = crmentity.crmid";
+	}else if($module == "Products")
+	{
+		$productid = $adb->query_result($list_result,$rset,"productid");
+                $action = "DetailView";
+                $evt_query="select seproductsrel.crmid,crmentity.setype from seproductsrel, crmentity where seproductsrel.productid ='".$productid."' and seproductsrel.crmid = crmentity.crmid";
+
+	}else
+	{
+		$activity_id = $adb->query_result($list_result,$rset,"activityid");
+		$action = "DetailView";
+		$evt_query="select seactivityrel.crmid,crmentity.setype from seactivityrel, crmentity where seactivityrel.activityid='".$activity_id."' and seactivityrel.crmid = crmentity.crmid";
+
+		if($module == 'HelpDesk')
+		{
+			$activity_id = $adb->query_result($list_result,$rset,"parent_id");
+			if($activity_id != '')
+				$evt_query = "select * from crmentity where crmid=".$activity_id;
+		}
+	}
+	//added by raju to change the related to in emails inot multiple if email is for more than one contact
+        $evt_result = $adb->query($evt_query);
+		$numrows= $adb->num_rows($evt_result);
+		
+		$parent_module = $adb->query_result($evt_result,0,'setype');
+        $parent_id = $adb->query_result($evt_result,0,'crmid');
+		
+		if ($numrows>1){
+		$parent_module ='Multiple';
+		$parent_name=$app_strings['LBL_MULTIPLE'];
+        }
+        //Raju -- Ends
+	if($module == 'HelpDesk' && ($parent_module == 'Accounts' || $parent_module == 'Contacts'))
+        {
+                global $theme;
+                $module_icon = '<img src="themes/'.$theme.'/images/'.$parent_module.'.gif" alt="" border=0 align=center title='.$parent_module.'> ';
+        }
+	
+	$action = "DetailView";
+        if($parent_module == 'Accounts')
+        {
+                $parent_query = "SELECT accountname FROM account WHERE accountid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"accountname");
+        }
+        if($parent_module == 'Leads')
+        {
+                $parent_query = "SELECT firstname,lastname FROM leaddetails WHERE leadid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
+        }
+        if($parent_module == 'Potentials')
+        {
+                $parent_query = "SELECT potentialname FROM potential WHERE potentialid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"potentialname");
+        }
+        if($parent_module == 'Products')
+        {
+                $parent_query = "SELECT productname FROM products WHERE productid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"productname");
+        }
+	if($parent_module == 'Quotes')
+        {
+                $parent_query = "SELECT subject FROM quotes WHERE quoteid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"subject");
+        }
+	if($parent_module == 'PurchaseOrder')
+        {
+                $parent_query = "SELECT subject FROM purchaseorder WHERE purchaseorderid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"subject");
+        }
+	if($parent_module == 'Invoice')
+        {
+                $parent_query = "SELECT subject FROM invoice WHERE invoiceid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"subject");
+        }
+        if($parent_module == 'SalesOrder')
+        {
+                $parent_query = "SELECT subject FROM salesorder WHERE salesorderid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"subject");
+        }
+	if($parent_module == 'Contacts' && ($module == 'Emails' || $module == 'HelpDesk'))
+        {
+                $parent_query = "SELECT firstname,lastname FROM contactdetails WHERE contactid=".$parent_id;
+                $parent_result = $adb->query($parent_query);
+                $parent_name = $adb->query_result($parent_result,0,"lastname")." ".$adb->query_result($parent_result,0,"firstname");
+        }
+	//added by rdhital for better emails - Raju
+	if ($parent_module == 'Multiple')
+	{
+		$parent_value = $parent_name;
+	}
+	else
+	{
+		$parent_value = $module_icon."<a href='index.php?module=".$parent_module."&action=".$action."&record=".$parent_id."'>".$parent_name."</a>";
+	}
+	//code added by raju ends
+        return $parent_value;
+
+
+}
+
+
+function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action_val='index',$viewid='')
+{
+	global $theme;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+	$output = '<td align="right">';
+	$dir_name=getModuleDirName($module);
+	$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'&allflag='.$navigation_array['allflag'].'" >'.$navigation_array['allflag'].'</a>&nbsp;';
+	if(($navigation_array['prev']) != 0)
+	{
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'" title="First"><img src="'.$image_path.'start.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['prev'].'&viewname='.$viewid.'"><img src="'.$image_path.'previous.gif" border="0" align="absmiddle"></a>&nbsp;';
+
+	}
+	else
+	{
+		$output .= '<img src="'.$image_path.'start_disabled.gif" border="0" align="absmiddle">&nbsp;';
+		$output .= '<img src="'.$image_path.'previous_disabled.gif" border="0" align="absmiddle">&nbsp;';
+	}
+	for ($i=$navigation_array['first'];$i<=$navigation_array['end'];$i++){
+		if ($navigation_array['current']==$i){
+			$output .='<b>'.$i.'</b>&nbsp;';
+		}
+		else{
+			$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$i.'&viewname='.$viewid.'" >'.$i.'</a>&nbsp;';
+		}
+	}
+	if(($navigation_array['next']) !=0)
+	{
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['next'].'&viewname='.$viewid.'"><img src="'.$image_path.'next.gif" border="0" align="absmiddle"></a>&nbsp;';
+		$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start='.$navigation_array['verylast'].'&viewname='.$viewid.'"><img src="'.$image_path.'end.gif" border="0" align="absmiddle"></a>&nbsp;';
+	}
+	else
+	{
+		$output .= '<img src="'.$image_path.'next_disabled.gif" border="0" align="absmiddle">&nbsp;';
+		$output .= '<img src="'.$image_path.'end_disabled.gif" border="0" align="absmiddle">&nbsp;';
+	}
+	$output .= '</td>';
+	return $output;
+} 
+
+?>
