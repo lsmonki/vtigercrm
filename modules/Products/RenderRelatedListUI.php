@@ -165,7 +165,7 @@ function renderRelatedProducts($query,$id,$sid="product_id")
 }
 function renderRelatedOrders($query,$id,$sid="product_id")
 {
-	require_once('modules/Orders/Order.php');
+	require_once('modules/PurchaseOrder/PurchaseOrder.php');
         global $mod_strings;
         global $app_strings;
 
@@ -177,19 +177,19 @@ function renderRelatedOrders($query,$id,$sid="product_id")
  
 	$button = '';
 
-        if(isPermitted("Orders",1,"") == 'yes')
+        if(isPermitted("PurchaseOrder",1,"") == 'yes')
         {
  
-		$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Orders\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'VendorDetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
+		$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'PurchaseOrder\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'VendorDetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
 	}
 	$returnset = '&return_module=Products&smodule=VENDOR&return_action=VendorDetailView&return_id='.$id;
 
-	$list = GetRelatedList('Vendor','Orders',$focus,$query,$button,$returnset);
+	$list = GetRelatedList('Vendor','PurchaseOrder',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
 function renderProductPurchaseOrders($query,$id,$vendid='',$cntid='')
 {
-	require_once('modules/Orders/Order.php');
+	require_once('modules/PurchaseOrder/PurchaseOrder.php');
         global $mod_strings;
         global $app_strings;
 
@@ -207,19 +207,19 @@ function renderProductPurchaseOrders($query,$id,$vendid='',$cntid='')
  
 	$button = '';
 
-        if(isPermitted("Orders",1,"") == 'yes')
+        if(isPermitted("PurchaseOrder",1,"") == 'yes')
         {
  
-		$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Orders\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
+		$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'PurchaseOrder\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
 	}
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Products','Orders',$focus,$query,$button,$returnset);
+	$list = GetRelatedList('Products','PurchaseOrder',$focus,$query,$button,$returnset);
 	echo '</form>';
 } 
 function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
 {
-	require_once('modules/Orders/SalesOrder.php');
+	require_once('modules/SalesOrder/SalesOrder.php');
         global $mod_strings;
         global $app_strings;
 
@@ -242,7 +242,7 @@ function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
 	$button = '';
 	if(isPermitted("SalesOrder",1,"") == 'yes')
         {
-		$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_SORDER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'SalesOrderEditView\';this.form.module.value=\'Orders\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;</td>';
+		$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_SORDER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'SalesOrder\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;</td>';
 	}
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 

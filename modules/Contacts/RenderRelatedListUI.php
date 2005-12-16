@@ -175,7 +175,7 @@ function renderRelatedProducts($query,$id)
 }
 function renderRelatedSalesOrders($query,$id,$sid="product_id")
 {
-	require_once('modules/Orders/SalesOrder.php');
+	require_once('modules/PurchaseOrder/SalesOrder.php');
         global $mod_strings;
         global $app_strings;
 
@@ -189,7 +189,7 @@ function renderRelatedSalesOrders($query,$id,$sid="product_id")
         if(isPermitted("SalesOrder",1,"") == 'yes')
         {
  
-		$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'SalesOrderEditView\';this.form.module.value=\'Orders\';this.form.return_module.value=\'Contacts\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;';
+		$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'SalesOrder\';this.form.return_module.value=\'Contacts\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;';
 	}
 	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
@@ -199,7 +199,7 @@ function renderRelatedSalesOrders($query,$id,$sid="product_id")
 
 function renderRelatedOrders($query,$id)
 {
-	require_once('modules/Orders/Order.php');
+	require_once('modules/PurchaseOrder/PurchaseOrder.php');
         global $mod_strings;
         global $app_strings;
 
@@ -210,14 +210,14 @@ function renderRelatedOrders($query,$id)
  
 	$button = '';
 
-        if(isPermitted("Orders",1,"") == 'yes')
+        if(isPermitted("PurchaseOrder",1,"") == 'yes')
         {
  
-		$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Orders\';this.form.return_module.value=\'Contacts\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
+		$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'PurchaseOrder\';this.form.return_module.value=\'Contacts\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
 	}
 	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Contacts','Orders',$focus,$query,$button,$returnset);
+	$list = GetRelatedList('Contacts','PurchaseOrder',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
 function renderRelatedQuotes($query,$id)

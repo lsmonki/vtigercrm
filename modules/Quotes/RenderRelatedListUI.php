@@ -54,7 +54,7 @@ function renderRelatedActivities($query,$id)
 
 function renderRelatedOrders($query,$id)
 {
-	require_once('modules/Orders/SalesOrder.php');
+	require_once('modules/SalesOrder/SalesOrder.php');
         global $mod_strings;
         global $app_strings;
 

@@ -173,7 +173,7 @@ function renderRelatedInvoices($query,$id)
 }
 function renderRelatedOrders($query,$id)
 {
-	require_once('modules/Orders/SalesOrder.php');
+	require_once('modules/SalesOrder/SalesOrder.php');
         global $mod_strings;
         global $app_strings;
 
@@ -185,7 +185,7 @@ function renderRelatedOrders($query,$id)
 	$button = '';
 	if(isPermitted("SalesOrder",1,"") == 'yes')
         {
-		$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_SORDER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'SalesOrderEditView\';this.form.module.value=\'Orders\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;</td>';
+		$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_SORDER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'SalesOrder\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;</td>';
 	}
 
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
