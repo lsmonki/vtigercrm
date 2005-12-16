@@ -470,7 +470,7 @@ function getSessionVariableName($localVarName,$varName){
 
 		$_SESSION['export_where'] = $this->query_where;
 
-		$export_link = "<a target=\"_blank\" href=\"export.php?module=".$this->local_current_module."\" class=\"listFormHeaderLinks\">".$this->local_app_strings['LBL_EXPORT']."</a>";
+		$export_link = "<a target=\"_blank\" href=\"include\export.php?module=".$this->local_current_module."\" class=\"listFormHeaderLinks\">".$this->local_app_strings['LBL_EXPORT']."</a>";
 
 		if ($_REQUEST['module']== 'Home' || 
 			$this->local_current_module == 'Import' ||
