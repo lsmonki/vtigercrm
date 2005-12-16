@@ -39,7 +39,7 @@ if($to_email == '' && $cc == '' && $bcc == '')
 }
 else
 {
-	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['name'],$_REQUEST['description'],$cc,$bcc);
+	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$cc,$bcc);
 	//set the errorheader1 to 1 if the mail has not been sent to the assigned to user
 	if($mail_status != 1)//when mail send fails
 	{
