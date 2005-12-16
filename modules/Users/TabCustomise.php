@@ -280,6 +280,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
                                                 $clid = "cl".$keycolumncount;
                                                 $selectedTabID = $selectedtab[$j]['tabid'];
                                                 $tabName = $selectedtab[$j]['name'];
+						if ( ($j % 7) == 0 ) echo "</tr><tr>";
                                                 if ($keycolumncount == 1)
                                                         $unchangable = $tabName;
                                 ?>
