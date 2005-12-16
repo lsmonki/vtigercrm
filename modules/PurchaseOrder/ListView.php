@@ -47,12 +47,25 @@ global $focus_list;
 
 if (!isset($where)) $where = "";
 
-if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
-
 $url_string = '&smodule=PO';
-$sorder = 'ASC';
-if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
-$sorder = $_REQUEST['sorder'];
+
+$focus = new Order();
+
+//<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
+if($_REQUEST['order_by'] != '')
+	$order_by = $_REQUEST['order_by'];
+else
+	$order_by = (($_SESSION['PURCHASEORDER_ORDER_BY'] != '')?($_SESSION['PURCHASEORDER_ORDER_BY']):($focus->default_order_by));
+
+if($_REQUEST['sorder'] != '')
+	$sorder = $_REQUEST['sorder'];
+else
+	$sorder = (($_SESSION['PURCHASEORDER_SORT_ORDER'] != '')?($_SESSION['PURCHASEORDER_SORT_ORDER']):($focus->default_sort_order));
+
+$_SESSION['PURCHASEORDER_ORDER_BY'] = $order_by;
+$_SESSION['PURCHASEORDER_SORT_ORDER'] = $sorder;
+//<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
+
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
@@ -150,22 +163,12 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
 	
-	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
-	if ($sorder !='') $search_form->assign("SORDER", $sorder);
-	
 	$search_form->assign("VIEWID",$viewid);
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	
-	if($order_by != '') {
-		$ordby = "&order_by=".$order_by;
-	}
-	else
-	{
-		$ordby ='';
-	}
-	$search_form->assign("BASIC_LINK", "index.php?module=PurchaseOrder".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewid);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=PurchaseOrder&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewid);
+	$search_form->assign("BASIC_LINK", "index.php?module=PurchaseOrder&action=index".$url_string."&viewname=".$viewid);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=PurchaseOrder&action=index&advanced=true".$url_string."&viewname=".$viewid);
 
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
@@ -252,9 +255,6 @@ $cvHTML = '<a href="index.php?module=PurchaseOrder&action=CustomView&record='.$v
         </table>';
 
 
-$focus = new Order();
-
-
 echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $xtpl=new XTemplate ('modules/PurchaseOrder/ListView.html');
 global $theme;
@@ -304,7 +304,10 @@ if(isset($order_by) && $order_by != '')
         }
         else
         {
-                $query .= ' ORDER BY '.$order_by.' '.$sorder;
+		$tablename = getTableNameForField('PurchaseOrder',$order_by);
+		$tablename = (($tablename != '')?($tablename."."):'');
+
+                $query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
         }
 }
 
@@ -347,11 +350,6 @@ $xtpl->assign("LISTHEADER", $listview_header);
 $listview_entries = getListViewEntries($focus,"PurchaseOrder",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
-
-if($order_by !='')
-$url_string .="&order_by=".$order_by;
-if($sorder !='')
-$url_string .="&sorder=".$sorder;
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"PurchaseOrder","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);

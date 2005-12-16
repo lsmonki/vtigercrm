@@ -54,6 +54,9 @@ $focus = new Account();
 //<<<<<<< sort ordering >>>>>>>>>>>>>
 $sorder = $focus->getSortOrder();
 $order_by = $focus->getOrderBy();
+
+$_SESSION['ACCOUNTS_ORDER_BY'] = $order_by;
+$_SESSION['ACCOUNTS_SORT_ORDER'] = $sorder;
 //<<<<<<< sort ordering >>>>>>>>>>>>>
 
 //<<<<cutomview>>>>>>>
@@ -261,25 +264,16 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	$search_form->assign("MOD", $current_module_strings);
 	$search_form->assign("APP", $app_strings);
 
-	if ($order_by !='') $search_form->assign("ORDER_BY", $order_by);
-	if ($sorder !='') $search_form->assign("SORDER", $sorder);
 	$search_form->assign("MODULE",$currentModule);
 
 	$search_form->assign("VIEWID",$viewid);
 	$search_form->assign("GROUPID",$groupid);
 	
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	if($order_by != '') {
-		$ordby = "&order_by=".$order_by;
-	}
-	else
-	{
-		$ordby ='';
-	}
 
 	//added querysting viewname to display the selected view<<<<<<<customview>>>>>>
-	$search_form->assign("BASIC_LINK", "index.php?module=Accounts".$ordby."&action=index".$url_string."&sorder=".$sorder."&viewname=".$viewid);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Accounts&action=index".$ordby."&advanced=true".$url_string."&sorder=".$sorder."&viewname=".$viewid);
+	$search_form->assign("BASIC_LINK", "index.php?module=Accounts&action=index".$url_string."&viewname=".$viewid);
+	$search_form->assign("ADVANCE_LINK", "index.php?module=Accounts&action=index&advanced=true".$url_string."&viewname=".$viewid);
 
 	$search_form->assign("JAVASCRIPT", get_clear_form_js());
 	if (isset($name)) $search_form->assign("NAME", $name);
@@ -465,7 +459,10 @@ if(isset($order_by) && $order_by != '')
         }
         else
         {
-                $query .= ' ORDER BY '.$order_by.' '.$sorder;
+		$tablename = getTableNameForField('Accounts',$order_by);
+		$tablename = (($tablename != '')?($tablename."."):'');
+
+                $query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
         }
 }
 
@@ -564,11 +561,6 @@ $xtpl->assign("LISTHEADER", $listview_header);
 $listview_entries = getListViewEntries($focus,"Accounts",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
-
-if($order_by !='')
-$url_string .="&order_by=".$order_by;
-if($sorder !='')
-$url_string .="&sorder=".$sorder;
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Accounts","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);

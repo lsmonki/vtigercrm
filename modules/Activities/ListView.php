@@ -53,9 +53,10 @@ $focus = new Activity();
 //<<<<<<< sort ordering >>>>>>>>>>>>>
 $sorder = $focus->getSortOrder();
 $order_by = $focus->getOrderBy();
+
+$_SESSION['ACTIVITIES_ORDER_BY'] = $order_by;
+$_SESSION['ACTIVITIES_SORT_ORDER'] = $sorder;
 //<<<<<<< sort ordering >>>>>>>>>>>>>
-
-
 
 
 //<<<<cutomview>>>>>>>
@@ -290,7 +291,10 @@ $list_query .= ' GROUP BY crmentity.crmid'; //Appeding for the recurring event b
 
 if(isset($order_by) && $order_by != '')
 {
-        $list_query .= ' ORDER BY '.$order_by.' '.$sorder;
+	$tablename = getTableNameForField('Activities',$order_by);
+	$tablename = (($tablename != '')?($tablename."."):'');
+
+        $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
 
 $list_result = $adb->query($list_query);
@@ -377,11 +381,6 @@ $xtpl->assign("LISTHEADER", $listview_header);
 $listview_entries = getListViewEntries($focus,"Activities",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $xtpl->assign("LISTENTITY", $listview_entries);
 $xtpl->assign("SELECT_SCRIPT", $view_script);
-
-if($order_by !='')
-$url_string .="&order_by=".$order_by;
-if($sorder !='')
-$url_string .="&sorder=".$sorder;
 
 $navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Activities","index",$viewid);
 $xtpl->assign("NAVIGATION", $navigationOutput);
