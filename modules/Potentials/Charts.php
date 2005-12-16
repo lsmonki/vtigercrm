@@ -21,7 +21,7 @@ require_once('config.php');
 require_once('include/logging.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once("jpgraph/src/jpgraph.php");
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 require_once('include/logging.php');
 
 

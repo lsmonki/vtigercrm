@@ -8,7 +8,7 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 require_once('modules/Emails/templates/testemailtemplateusage.php');
 $replacedString = substituteTokens("".$_REQUEST["templatename"],$globals);
 ?>

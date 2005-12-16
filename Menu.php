@@ -24,7 +24,7 @@ global $mod_strings;
 global $app_strings;
 global $moduleList;
 //print_r($moduleList);
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 $permissionData = $_SESSION['action_permission_set'];
 
 $module_menu_array = Array('Contacts' => $app_strings['LNK_NEW_CONTACT'],

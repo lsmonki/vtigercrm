@@ -16,7 +16,7 @@
 require_once('modules/Leads/Lead.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 
 $local_log =& LoggerManager::getLogger('index');
 global $log;

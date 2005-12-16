@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 require_once('include/logging.php');
 require_once("modules/Potentials/Charts.php");
 require_once("modules/Dashboard/Forms.php");

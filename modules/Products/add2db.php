@@ -12,7 +12,7 @@
 
 
 require_once('include/database/PearDatabase.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 $vtigerpath = $_SERVER['REQUEST_URI'];
 $productid = $_REQUEST['productid'];
 $vtigerpath = str_replace("index.php?module=Products&action=add2db", "", $vtigerpath);

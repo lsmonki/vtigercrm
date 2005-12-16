@@ -10,9 +10,9 @@
  ********************************************************************************/
 //File Contributed by Mike Crowe for Ordering Field Blocks in Settings
 require_once('XTemplate/xtpl.php');
-require_once('modules/Users/UserInfoUtil.php');
-require_once("include/utils.php");
-include('include/uifromdbutil.php');
+require_once('include/utils/UserInfoUtil.php');
+require_once("include/utils/utils.php");
+include('include/utils/utils.php');
 
 global $app_strings;
 global $app_list_strings;

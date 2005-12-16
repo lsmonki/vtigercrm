@@ -10,8 +10,8 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-require_once('modules/Users/UserInfoUtil.php');
-require_once('include/utils.php');
+require_once('include/utils/UserInfoUtil.php');
+require_once('include/utils/utils.php');
 global $adb;
 $profileid = $_REQUEST['profileid'];
 $secmodule = $_REQUEST['secmodule'];

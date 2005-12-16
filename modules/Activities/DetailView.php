@@ -26,8 +26,8 @@ require_once('modules/Activities/Activity.php');
 require_once('modules/Activities/Forms.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
-require_once('include/utils.php');
-require_once('include/uifromdbutil.php');
+require_once('include/utils/utils.php');
+require_once('include/utils/utils.php');
 global $mod_strings;
 if( $_SESSION['mail_send_error']!="")
 {

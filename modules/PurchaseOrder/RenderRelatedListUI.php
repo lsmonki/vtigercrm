@@ -12,7 +12,7 @@
 require_once('include/RelatedListView.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/Activities/Activity.php');
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 
 /** Function to get the lists of hidden tags related with purchaseorder
  * This function accepts the id and purchaseorderid as arguments and

@@ -37,8 +37,6 @@ if (isset($_REQUEST['dbtype'])) $dbtype	= $_REQUEST['dbtype'];
 
 //Checking for mysql connection parameters
 
-
-
 $mysql_status = '';
 $mysql_db_status = '';
 if($dbtype != 'mysql' || $dbtype =='')

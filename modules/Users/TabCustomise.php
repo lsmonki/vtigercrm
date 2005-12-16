@@ -15,7 +15,7 @@
 require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Users/User.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 require_once('include/database/PearDatabase.php');
 
 global $current_user;
@@ -65,7 +65,7 @@ if ((is_admin($current_user) || $_REQUEST['record'] == $current_user->id) && $fo
 
 
 ?>
-<script type="text/javascript" language="JavaScript" src="include/general.js"></script>
+<script type="text/javascript" language="JavaScript" src="include/js/general.js"></script>
 <style>
 	.field {
     font-family: Verdana, Arial, Helvetica, San-serif;

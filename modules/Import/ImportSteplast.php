@@ -27,7 +27,7 @@ require_once('modules/Import/UsersLastImport.php');
 require_once('modules/Import/parse_utils.php');
 require_once('include/ListView/ListView.php');
 require_once('modules/Contacts/Contact.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 
 global $mod_strings;
 global $app_list_strings;

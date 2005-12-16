@@ -24,7 +24,7 @@
  * Contributor(s): ______________________________________..
  */
 
-require_once('include/utils.php'); //new
+require_once('include/utils/utils.php'); //new
 
 
 function get_validate_record_js () {

@@ -9,7 +9,7 @@
 *
  ********************************************************************************/
 
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 global $adb;
 $del_id =  $_REQUEST['groupId'];
 

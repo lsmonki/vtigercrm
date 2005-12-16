@@ -22,7 +22,7 @@
 global $entityDel;
 global $display;
 
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 //$phpbb_root_path='./modules/MessageBoard/';
 if (substr(phpversion(), 0, 1) == "5") {
         ini_set("zend.ze1_compatibility_mode", "1");
@@ -57,7 +57,7 @@ function fetchPermissionData($module,$action)
 	global $actionid;
 	global $profile_id;
 
-	require_once('modules/Users/UserInfoUtil.php');
+	require_once('include/utils/UserInfoUtil.php');
 	//Changing the tabid if the module is vendor,pricebook or salesorder
         if($action == 'VendorEditView' || $action == 'VendorDetailView' || $action == 'DeleteVendor' || $action == 'SaveVendor')
         {

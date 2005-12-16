@@ -24,7 +24,7 @@ require_once('XTemplate/xtpl.php');
 require_once('modules/Faq/Faq.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
-require_once('include/uifromdbutil.php');
+require_once('include/utils/utils.php');
 
 global $mod_strings;
 global $app_strings;

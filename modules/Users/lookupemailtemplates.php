@@ -11,7 +11,7 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -40,7 +40,7 @@ $theme_path="themes/".$theme."/";
    $temprow = $adb->fetch_array($result);
 $cnt=1;
 
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 do
 {
   //$name=$temprow["name"];

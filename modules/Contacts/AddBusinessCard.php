@@ -38,7 +38,7 @@ function toggleDisplay(id){
   <script type="text/javascript" src="jscalendar/calendar.js"></script>
   <script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>
   <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-  <script type="text/javascript" src="include/general.js"></script>
+  <script type="text/javascript" src="include/js/general.js"></script>
   <table width="70%" cellpadding="0" cellspacing="1" border="0" class="formOuterBorder">
     <tbody>
       <tr> 

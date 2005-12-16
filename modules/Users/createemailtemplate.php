@@ -10,7 +10,7 @@
  ********************************************************************************/
 require_once('database/DatabaseConnection.php');
 require_once('XTemplate/xtpl.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 
 
 

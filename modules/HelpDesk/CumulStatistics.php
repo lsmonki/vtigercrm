@@ -10,7 +10,7 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('XTemplate/xtpl.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 require_once('TicketStatisticsUtil.php');
 
 global $app_strings;

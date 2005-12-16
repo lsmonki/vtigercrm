@@ -17,7 +17,7 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 
 
 class HelpDesk extends CRMEntity {

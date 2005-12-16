@@ -17,7 +17,7 @@ require_once('modules/Reports/Reports.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once("modules/Reports/ReportRun.php");
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 include('themes/'.$theme.'/header.php');
 
 global $adb;
@@ -48,7 +48,7 @@ $totalhtml = $oReportRun->GenerateReport("TOTALHTML",$filterlist);
 ?>
 <html>
 <head>
-<script language="JavaScript" type="text/javascript" src="include/general.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script type="text/javascript" language="JavaScript">
     function goToURL( url )
     {

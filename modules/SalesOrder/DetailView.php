@@ -25,7 +25,7 @@ require_once('data/Tracker.php');
 require_once('modules/SalesOrder/SalesOrder.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
-require_once('include/uifromdbutil.php');
+require_once('include/utils/utils.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;

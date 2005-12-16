@@ -29,7 +29,7 @@ require_once('modules/Invoice/Forms.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
-require_once('include/uifromdbutil.php');
+require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings;

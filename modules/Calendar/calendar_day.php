@@ -69,7 +69,7 @@ require_once('modules/Calendar/UserCalendar.php');
    Function info() {
      global $lang,$tutos,$callink,$calpath,$image_path,$mod_strings,$current_user,$adb;
 ?>
-<script type="text/javascript" language="Javascript" src="include/general.js"></script>
+<script type="text/javascript" language="Javascript" src="include/js/general.js"></script>
 <script type="text/javascript" language="Javascript">
 function trim(s) {
         while (s.substring(0,1) == " ") {

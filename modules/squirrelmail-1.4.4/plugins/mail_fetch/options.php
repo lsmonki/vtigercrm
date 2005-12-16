@@ -178,7 +178,7 @@ sqgetGlobalVar('submit_mailfetch', $submit_mailfetch, SQ_POST);
             'center', '', 'width="95%"' );
 	//It seems it is mandatory for having the imap running else Squirrelmail will not fetch the mails    
 	global $current_user;
-	require_once('modules/Users/UserInfoUtil.php');
+	require_once('include/utils/UserInfoUtil.php');
 	$mailInfo = getMailServerInfo($current_user);
 	$temprow = $adb->fetch_array($mailInfo);
 

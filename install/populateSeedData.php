@@ -26,7 +26,7 @@ require_once('modules/Accounts/Account.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Activities/Activity.php');
 require_once('include/database/PearDatabase.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 require_once('include/language/en_us.lang.php');
 require_once('include/ComboStrings.php');
 require_once('include/ComboUtil.php');

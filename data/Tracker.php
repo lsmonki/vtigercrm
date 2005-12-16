@@ -238,8 +238,8 @@ $log->info("in  track view method ".$current_module);
             if($module_name == "" || $row[module_name] == $module_name)
             {
 		//Adding Security check
-		require_once('include/utils.php');
-		require_once('modules/Users/UserInfoUtil.php');
+		require_once('include/utils/utils.php');
+		require_once('include/utils/UserInfoUtil.php');
 		$entity_id = $row['item_id'];
 		$module = $row['module_name'];
 		//echo "module is ".$module."  id is      ".$entity_id;

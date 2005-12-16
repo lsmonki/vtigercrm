@@ -32,7 +32,7 @@ global $app_strings;
 global $image_path;
 
 $the_script='
-<script language="JavaScript" type="text/javascript" src="include/general.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script type="text/javascript" language="Javascript">
 function toggleRSSFolder(id) {
 	if (document.getElementById(id+"_feeds").style.display=="none") {

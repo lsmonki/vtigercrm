@@ -11,7 +11,7 @@
 require_once('include/database/PearDatabase.php');
 //require_once('HelpDeskUtil.php');
 require_once('XTemplate/xtpl.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 
 //Retreiving the id from the request:
 $productid = $_REQUEST['record'];

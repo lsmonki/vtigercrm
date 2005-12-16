@@ -10,7 +10,7 @@
 /** Class to retreive all the Parent Groups of the specified Group
  *
  */
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 require_once('include/utils/GetParentGroups.php');
 
 class GetUserGroups { 

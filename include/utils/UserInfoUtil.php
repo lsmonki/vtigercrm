@@ -12,7 +12,7 @@
 
 
 require_once('include/database/PearDatabase.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 include('config.php');
 global $log;
 

@@ -29,7 +29,7 @@ require_once('modules/Contacts/Contact.php');
 require_once('modules/Activities/Activity.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 
 // potential is used to store customer information.
 class Potential extends CRMEntity {

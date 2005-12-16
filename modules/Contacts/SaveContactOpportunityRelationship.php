@@ -19,7 +19,7 @@
 
 require_once('modules/Contacts/ContactOpportunityRelationship.php');
 require_once('include/logging.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 
 $log =& LoggerManager::getLogger('save');
 

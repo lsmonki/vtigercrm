@@ -10,7 +10,7 @@
  ********************************************************************************/
 require('include/fpdf/fpdf.php');
 require_once('modules/Invoice/Invoice.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 
 $id = $_REQUEST['record'];
 global $adb;

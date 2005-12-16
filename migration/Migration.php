@@ -605,7 +605,7 @@ class Migration
 		$status5 = $conn->query($query5);
 		echo '<br>'.$status5.' ==> '.$query5;
 
-		include("modules/Users/UserInfoUtil.php");
+		include("include/utils/UserInfoUtil.php");
 		//Create role based on role_map_array values and form the new_role_map_array with old roleid and new roleid
 		foreach($role_map_array as $roleid => $rolename)
 		{

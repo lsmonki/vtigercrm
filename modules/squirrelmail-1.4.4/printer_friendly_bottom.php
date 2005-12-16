@@ -34,7 +34,7 @@ sqgetGlobalVar('passed_id', $passed_id, SQ_GET);
 sqgetGlobalVar('mailbox', $mailbox, SQ_GET);
 
 global $current_user;
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 $mailInfo = getMailServerInfo($current_user);
 $temprow = $adb->fetch_array($mailInfo);
 $secretkey=$temprow["mail_password"];

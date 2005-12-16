@@ -52,7 +52,7 @@ if($focus->is_authenticated())
 	// save the user information into the session
 	// go to the home screen
 	//Security related entries start
-	require_once('modules/Users/UserInfoUtil.php');
+	require_once('include/utils/UserInfoUtil.php');
 	//$rolename = fetchUserRole($focus->id);
 	//$profilename = fetchUserProfile($focus->id);
 	$profileid = fetchUserProfileId($focus->id);	

@@ -9,8 +9,8 @@
 *
  ********************************************************************************/
 require_once('XTemplate/xtpl.php');
-require_once('include/utils.php');
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/utils.php');
+require_once('include/utils/UserInfoUtil.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;

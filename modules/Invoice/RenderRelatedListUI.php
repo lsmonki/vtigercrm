@@ -11,7 +11,7 @@
 
 require_once('include/RelatedListView.php');
 require_once('modules/Activities/Activity.php');
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 
 function getHiddenValues($id)
 {

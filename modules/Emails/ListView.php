@@ -25,7 +25,7 @@ require_once("data/Tracker.php");
 require_once('modules/Emails/Email.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
-require_once('include/uifromdbutil.php');
+require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.php','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');

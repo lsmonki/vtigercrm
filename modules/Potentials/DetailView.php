@@ -25,7 +25,7 @@ require_once('data/Tracker.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Potentials/Forms.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/uifromdbutil.php');
+require_once('include/utils/utils.php');
 
 global $mod_strings;
 global $app_strings;

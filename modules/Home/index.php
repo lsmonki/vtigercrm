@@ -25,7 +25,7 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 require_once('include/database/PearDatabase.php');
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;

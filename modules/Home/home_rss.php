@@ -1,7 +1,7 @@
 <?php
 require_once('include/database/PearDatabase.php');
 require_once('config.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 global $current_user;
 global $adb;
 $db = new PearDatabase();

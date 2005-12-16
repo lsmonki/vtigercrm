@@ -774,7 +774,7 @@ function get_contacts_columns($user_name, $password)
 
 function authorize_module($user_name,$module_name,$action)
 {
-	require_once('modules/Users/UserInfoUtil.php');
+	require_once('include/utils/UserInfoUtil.php');
 	if($module_name == "Tasks")
 	{
 		$module_name = "Activities";

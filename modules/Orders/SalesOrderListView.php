@@ -11,8 +11,8 @@
 require_once('include/database/PearDatabase.php');
 require_once('XTemplate/xtpl.php');
 require_once('modules/Orders/SalesOrder.php');
-require_once('include/utils.php');
-require_once('include/uifromdbutil.php');
+require_once('include/utils/utils.php');
+require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;

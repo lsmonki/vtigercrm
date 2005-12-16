@@ -15,7 +15,7 @@
 /**
  * Create javascript to validate the data entered into a record.
  */
- require_once('include/utils.php'); //new
+ require_once('include/utils/utils.php'); //new
 
  
 function get_validate_record_js () {

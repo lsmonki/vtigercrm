@@ -18,8 +18,8 @@ require_once('modules/Leads/Lead.php');
 require_once('modules/Leads/Forms.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/uifromdbutil.php');
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/utils.php');
+require_once('include/utils/UserInfoUtil.php');
 
 global $mod_strings;
 global $app_strings;

@@ -11,7 +11,7 @@
  ********************************************************************************/
 
 require_once('include/database/PearDatabase.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 
 
 	$uploaddir = $root_directory ."/test/logo/" ;// set this to wherever

@@ -24,7 +24,7 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Notes/Forms.php');
-require_once('include/uifromdbutil.php');
+require_once('include/utils/utils.php');
 
 global $app_strings;
 global $app_list_strings;

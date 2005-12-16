@@ -1,6 +1,6 @@
 <?php
-require_once('modules/Users/UserInfoUtil.php');
-require_once("include/utils.php");
+require_once('include/utils/UserInfoUtil.php');
+require_once("include/utils/utils.php");
 
 function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,$edit_val='',$del_val='')
 {

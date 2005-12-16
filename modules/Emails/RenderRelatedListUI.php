@@ -10,7 +10,7 @@
  ********************************************************************************/
 
 require_once('include/RelatedListView.php');
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 
 /**	Function to get the needed hidden values which will be useful when create new entity from the Email Related List
  *	input  : Email id 

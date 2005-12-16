@@ -10,7 +10,7 @@
  ********************************************************************************/
 
 
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 require_once 'Excel/reader.php';
 require_once('modules/Users/User.php');
 require_once('include/database/PearDatabase.php');

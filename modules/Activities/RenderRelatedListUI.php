@@ -12,7 +12,7 @@
 require_once('include/RelatedListView.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Products/Product.php');
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 //$availbale_images_path="include/images/";
 
 function getHiddenValues($id)

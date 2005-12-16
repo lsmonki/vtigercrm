@@ -9,7 +9,7 @@
 *
  ********************************************************************************/
 
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 require_once('include/database/PearDatabase.php');
 function getBlockInformation($module, $block, $mode, $col_fields)
 {

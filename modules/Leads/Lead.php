@@ -22,7 +22,7 @@ require_once('modules/Activities/Activity.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Emails/Email.php');
 require_once('include/ComboUtil.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 
 class Lead extends CRMEntity {
 	var $log;

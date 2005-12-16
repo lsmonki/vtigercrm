@@ -1,8 +1,8 @@
 <?php
 require_once('config.php');
 require_once('modules/Users/User.php');
-require_once('modules/Users/UserInfoUtil.php');
-require_once('include/utils.php');
+require_once('include/utils/UserInfoUtil.php');
+require_once('include/utils/utils.php');
 
 
 //$userid=1;

@@ -12,7 +12,7 @@
 
 require_once('XTemplate/xtpl.php');
 //require_once('data/Tracker.php');
-//require_once('modules/Users/UserInfoUtil.php');
+//require_once('include/utils/UserInfoUtil.php');
 require_once('include/database/PearDatabase.php');
 
 global $mod_strings;

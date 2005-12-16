@@ -139,7 +139,7 @@ if ( !sqgetGlobalVar('composenew', $composenew, SQ_GET) ) {
     $composenew = false;
 }
 global $current_user;
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 $mailInfo = getMailServerInfo($current_user);
 $temprow = $adb->fetch_array($mailInfo);
 $secretkey=$temprow["mail_password"];

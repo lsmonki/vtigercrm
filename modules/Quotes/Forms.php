@@ -24,7 +24,7 @@
  * Contributor(s): ______________________________________..
  */
 require_once('include/ComboUtil.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 function get_validate_record_js () {
 global $mod_strings;
 global $app_strings;

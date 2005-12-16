@@ -21,7 +21,7 @@ require_once('include/logging.php');
 /*
 require_once('database/DatabaseConnection.php');
 require_once('data/SugarBean.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Cases/Case.php');
 require_once('modules/Tasks/Task.php');

@@ -24,7 +24,7 @@ require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/Emails/Forms.php');
-require_once('include/uifromdbutil.php');
+require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 
 global $log;
@@ -167,7 +167,7 @@ if($_REQUEST['reply'])
 
 	$msgData='';
 	global $current_user;
-	require_once('modules/Users/UserInfoUtil.php');
+	require_once('include/utils/UserInfoUtil.php');
 	$mailInfo = getMailServerInfo($current_user);
 	$temprow = $adb->fetch_array($mailInfo);
 

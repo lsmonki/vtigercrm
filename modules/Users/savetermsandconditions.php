@@ -9,7 +9,7 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 
 $inv_type=$_REQUEST['inventory_type'];
 $inv_tandc=$_REQUEST['inventory_tandc'];

@@ -26,7 +26,7 @@ require_once('modules/Emails/Email.php');
 require_once('modules/Emails/Forms.php');
 require_once('include/upload_file.php');
 require_once('include/database/PearDatabase.php');
-require_once('include/uifromdbutil.php');
+require_once('include/utils/utils.php');
 
 global $log;
 global $app_strings;

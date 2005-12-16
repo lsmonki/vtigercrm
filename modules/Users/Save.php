@@ -22,7 +22,7 @@
 
 require_once('modules/Users/User.php');
 require_once('include/logging.php');
-require_once('modules/Users/UserInfoUtil.php');
+require_once('include/utils/UserInfoUtil.php');
 $log =& LoggerManager::getLogger('index');
 
 

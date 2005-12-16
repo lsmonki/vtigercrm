@@ -43,7 +43,7 @@ $new_tables = 0;
  require_once('modules/Users/TabMenu.php');
  require_once('modules/Users/LoginHistory.php');
  require_once('data/Tracker.php');
- require_once('include/utils.php');
+ require_once('include/utils/utils.php');
  require_once('modules/Users/Security.php');
 // load up the config_override.php file.  This is used to provide default user settings
 if (is_file("config_override.php")) {

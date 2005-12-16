@@ -11,9 +11,9 @@
 
 require_once('include/database/PearDatabase.php');
 require_once('XTemplate/xtpl.php');
-require_once('include/utils.php');
+require_once('include/utils/utils.php');
 require_once('modules/HelpDesk/HelpDesk.php');
-require_once('include/uifromdbutil.php');
+require_once('include/utils/utils.php');
 
 $focus = new HelpDesk();
 
@@ -120,7 +120,7 @@ if(isPermitted("HelpDesk",8,'') == 'yes')
 {
 	$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 
-        require_once('modules/Users/UserInfoUtil.php');
+        require_once('include/utils/UserInfoUtil.php');
         $wordTemplateResult = fetchWordTemplateList("HelpDesk");
         $tempCount = $adb->num_rows($wordTemplateResult);
         $tempVal = $adb->fetch_array($wordTemplateResult);
