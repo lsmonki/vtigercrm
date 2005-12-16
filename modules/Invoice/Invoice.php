@@ -98,6 +98,10 @@ class Invoice extends CRMEntity {
 	// This is the list of fields that are required.
 	var $required_fields =  array("accountname"=>1);
 
+	//Added these variables which are used as default order by and sortorder in ListView
+	var $default_order_by = 'crmid';
+	var $default_sort_order = 'ASC';
+
 	function Invoice() {
 		$this->log =LoggerManager::getLogger('Invoice');
 		$this->db = new PearDatabase();

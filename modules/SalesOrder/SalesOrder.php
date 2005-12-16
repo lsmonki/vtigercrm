@@ -102,6 +102,10 @@ class SalesOrder extends CRMEntity {
 	// This is the list of fields that are required.
 	var $required_fields =  array("accountname"=>1);
 
+	//Added these variables which are used as default order by and sortorder in ListView
+	var $default_order_by = 'subject';
+	var $default_sort_order = 'ASC';
+
 /** Constructor Function for SalesOrder class
  *  This function creates an instance of LoggerManager class using getLogger method
  *  creates an instance for PearDatabase class and get values for column_fields array of SalesOrder class.
