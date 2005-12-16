@@ -68,7 +68,7 @@ global $app_strings;
 
 $module_path="modules/".$currentModule."/";
 
-require_once('Menu.php');
+require_once('include/Menu.php');
 
 global $module_menu;
 
