@@ -22,8 +22,8 @@ require_once('database/DatabaseConnection.php');
 require_once('modules/Users/LoginHistory.php');
 require_once('modules/Users/User.php');
 require_once('config.php');
-require_once('include/backup.php');
-require_once('include/ftp.php');
+require_once('include/db_backup/backup.php');
+require_once('include/db_backup/ftp.php');
 require_once('include/database/PearDatabase.php');
 
 $ftpserver = '';
