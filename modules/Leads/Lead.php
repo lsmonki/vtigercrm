@@ -139,6 +139,10 @@ class Lead extends CRMEntity {
 
 	var $required_fields =  array("lastname"=>1, 'company'=>1);
 
+	//Added these variables which are used as default order by and sortorder in ListView
+	var $default_order_by = 'lastname';
+	var $default_sort_order = 'ASC';
+
 	function Lead() {
 		$this->log = LoggerManager::getLogger('lead');
 		$this->db = new PearDatabase();

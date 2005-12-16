@@ -64,6 +64,10 @@ class Vendor extends CRMEntity {
                       ,'productcategory'=>'productcategory_dom');
 */
 
+	//Added these variables which are used as default order by and sortorder in ListView
+	var $default_order_by = 'vendorname';
+	var $default_sort_order = 'ASC';
+
 	function Vendor() {
 		$this->log =LoggerManager::getLogger('vendor');
 		$this->db = new PearDatabase();

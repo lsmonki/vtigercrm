@@ -128,6 +128,9 @@ class Potential extends CRMEntity {
 				"amount"=>1
 );
 
+	//Added these variables which are used as default order by and sortorder in ListView
+	var $default_order_by = 'potentialname';
+	var $default_sort_order = 'ASC';
 
 	function potential() {
 		$this->log = LoggerManager::getLogger('potential');

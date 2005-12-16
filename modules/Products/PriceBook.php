@@ -58,6 +58,10 @@ class PriceBook extends CRMEntity {
                       ,'productcategory'=>'productcategory_dom');
 */
 
+	//Added these variables which are used as default order by and sortorder in ListView
+	var $default_order_by = 'bookname';
+	var $default_sort_order = 'ASC';
+
 	function PriceBook() {
 		$this->log =LoggerManager::getLogger('pricebook');
 		$this->db = new PearDatabase();

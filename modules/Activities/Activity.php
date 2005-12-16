@@ -110,6 +110,9 @@ class Activity extends CRMEntity {
 
        var $list_link_field= 'subject';
 	
+	//Added these variables which are used as default order by and sortorder in ListView
+	var $default_order_by = 'subject';
+	var $default_sort_order = 'ASC';
 
 	function Activity() {
 		$this->log = LoggerManager::getLogger('Activities');

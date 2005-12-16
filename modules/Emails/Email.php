@@ -80,6 +80,10 @@ class Email extends CRMEntity {
 
 	var $column_fields = Array();
 
+	//Added these variables which are used as default order by and sortorder in ListView
+	var $default_order_by = 'subject';
+	var $default_sort_order = 'ASC';
+
 	function create_tables () {
 
         }

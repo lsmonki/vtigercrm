@@ -82,6 +82,10 @@ class Note extends CRMEntity {
 				     );	
 	var $list_link_field= 'title';
 
+	//Added these variables which are used as default order by and sortorder in ListView
+	var $default_order_by = 'modifiedtime';
+	var $default_sort_order = 'ASC';
+
 	function Note() {
 		$this->log = LoggerManager::getLogger('notes');
 		$this->db = new PearDatabase();

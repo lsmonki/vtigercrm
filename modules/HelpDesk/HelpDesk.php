@@ -72,6 +72,10 @@ class HelpDesk extends CRMEntity {
 		'createdtime'
 		);
 
+	//Added these variables which are used as default order by and sortorder in ListView
+	var $default_order_by = 'crmid';
+	var $default_sort_order = 'DESC';
+
 	function HelpDesk() 
 	{
 		$this->log =LoggerManager::getLogger('helpdesk');

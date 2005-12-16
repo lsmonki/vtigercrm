@@ -79,6 +79,9 @@ class Faq extends CRMEntity {
 				        'City'=>'bill_city',
 				      );
 
+	//Added these variables which are used as default order by and sortorder in ListView
+	var $default_order_by = 'id';
+	var $default_sort_order = 'DESC';
 
 	function Faq() {
 		$this->log =LoggerManager::getLogger('account');
