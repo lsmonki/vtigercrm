@@ -130,15 +130,21 @@ class Account extends CRMEntity {
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	function getSortOrder()
 	{	
-		if(isset($_REQUEST['sorder'])) $sorder = $_REQUEST['sorder'];
-		if ($sorder == '') $sorder = 'ASC';  // Default sort order
+		if(isset($_REQUEST['sorder'])) 
+			$sorder = $_REQUEST['sorder'];
+		else
+			$sorder = (($_SESSION['ACCOUNTS_SORT_ORDER'] != '')?($_SESSION['ACCOUNTS_SORT_ORDER']):($this->default_sort_order));
+
 		return $sorder;
 	}
 	
 	function getOrderBy()
 	{
-		if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
-		if ($order_by == '') $order_by = $this->sortby_fields[0];
+		if (isset($_REQUEST['order_by'])) 
+			$order_by = $_REQUEST['order_by'];
+		else
+			 $order_by = (($_SESSION['ACCOUNTS_ORDER_BY'] != '')?($_SESSION['ACCOUNTS_ORDER_BY']):($this->default_order_by));
+
 		return $order_by;
 	}	
 	// Mike Crowe Mod --------------------------------------------------------

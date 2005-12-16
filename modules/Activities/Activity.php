@@ -111,7 +111,7 @@ class Activity extends CRMEntity {
        var $list_link_field= 'subject';
 	
 	//Added these variables which are used as default order by and sortorder in ListView
-	var $default_order_by = 'subject';
+	var $default_order_by = 'due_date';
 	var $default_sort_order = 'ASC';
 
 	function Activity() {
@@ -132,15 +132,21 @@ class Activity extends CRMEntity {
 	// Mike Crowe Mod --------------------------------------------------------Default ordering for us
 	function getSortOrder()
 	{	
-		if(isset($_REQUEST['sorder'])) $sorder = $_REQUEST['sorder'];
-		if ($sorder == '') $sorder = 'ASC';  // Default sort order
+		if(isset($_REQUEST['sorder'])) 
+			$sorder = $_REQUEST['sorder'];
+		else
+			$sorder = (($_SESSION['ACTIVITIES_SORT_ORDER'] != '')?($_SESSION['ACTIVITIES_SORT_ORDER']):($this->default_sort_order));
+
 		return $sorder;
 	}
 	
 	function getOrderBy()
 	{
-		if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
-		if ($order_by == '') $order_by = "due_date";
+		if (isset($_REQUEST['order_by'])) 
+			$order_by = $_REQUEST['order_by'];
+		else
+			$order_by = (($_SESSION['ACTIVITIES_ORDER_BY'] != '')?($_SESSION['ACTIVITIES_ORDER_BY']):($this->default_order_by));
+
 		return $order_by;
 	}	
 	// Mike Crowe Mod --------------------------------------------------------
