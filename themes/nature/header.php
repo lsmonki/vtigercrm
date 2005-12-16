@@ -76,7 +76,7 @@ if ($action == "EditView" || $action == "Login") $xtpl->assign("ONLOAD", 'onload
 $query = "select crmentity.setype,crmentity.crmid from crmentity inner join ownernotify on crmentity.crmid=ownernotify.crmid where 
 ownernotify.smownerid=".$current_user->id;
 $result = $adb->query($query);
-$notify_values=array('Accounts'=>'Accounts:&nbsp&nbsp&nbsp;','Potentials'=>'Potentials:&nbsp&nbsp&nbsp;','Contacts'=>'Contacts:&nbsp&nbsp&nbsp;','Leads'=>'Leads:&nbsp&nbsp&nbsp;','SalesOrder'=>'SalesOrders:&nbsp&nbsp&nbsp;','Orders'=>'PurchaseOrders:&nbsp&nbsp&nbsp;','Products'=>'Products:&nbsp&nbsp&nbsp;','Emails'=>'Emails:&nbsp&nbsp&nbsp;','HelpDesk'=>'HelpDesk:&nbsp&nbsp&nbsp;','Activities'=>'Activities:&nbsp&nbsp&nbsp;','Quotes'=>'Quotes:&nbsp&nbsp&nbsp;','Invoice'=>'Invoice:&nbsp&nbsp&nbsp;');
+$notify_values=array('Accounts'=>'Accounts:&nbsp&nbsp&nbsp;','Potentials'=>'Potentials:&nbsp&nbsp&nbsp;','Contacts'=>'Contacts:&nbsp&nbsp&nbsp;','Leads'=>'Leads:&nbsp&nbsp&nbsp;','SalesOrder'=>'SalesOrders:&nbsp&nbsp&nbsp;','PurchaseOrder'=>'PurchaseOrders:&nbsp&nbsp&nbsp;','Products'=>'Products:&nbsp&nbsp&nbsp;','Emails'=>'Emails:&nbsp&nbsp&nbsp;','HelpDesk'=>'HelpDesk:&nbsp&nbsp&nbsp;','Activities'=>'Activities:&nbsp&nbsp&nbsp;','Quotes'=>'Quotes:&nbsp&nbsp&nbsp;','Invoice'=>'Invoice:&nbsp&nbsp&nbsp;');
 
 for($i=0;$i<$adb->num_rows($result);$i++)
 {
@@ -111,14 +111,14 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 			$tempquery='select subject from salesorder where salesorderid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$sales_subject=$adb->fetch_array($tempresult);
-			$notify_values['SalesOrder'].='<a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$mod_notify[$i]["crmid"].'">'.$sales_subject['subject'].'</a>,&nbsp;';
+			$notify_values['SalesOrder'].='<a href="index.php?module=SalesOrder&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$sales_subject['subject'].'</a>,&nbsp;';
 
-		}else if($mod_notify[$i]['setype']=='Orders')
+		}else if($mod_notify[$i]['setype']=='PurchaseOrder')
 		{
 			$tempquery='select subject from purchaseorder where purchaseorderid='.$mod_notify[$i]['crmid'];
 			$tempresult=$adb->query($tempquery);
 			$purchase_subject=$adb->fetch_array($tempresult);
-			$notify_values['Orders'].='<a href="index.php?module=Orders&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$purchase_subject['subject'].'</a>,&nbsp;';
+			$notify_values['PurchaseOrder'].='<a href="index.php?module=PurchaseOrder&action=DetailView&record='.$mod_notify[$i]["crmid"].'">'.$purchase_subject['subject'].'</a>,&nbsp;';
 
 		}else if($mod_notify[$i]['setype']=='Products')
 		{
@@ -172,8 +172,8 @@ if($notify_values['Leads']!='Leads:&nbsp&nbsp&nbsp;')
 	$allnotification.=$notify_values['Leads'];
 if($notify_values['SalesOrder']!='SalesOrders:&nbsp&nbsp&nbsp;')
 	$allnotification.=$notify_values['SalesOrder'];
-if($notify_values['Orders']!='PurchaseOrders:&nbsp&nbsp&nbsp;')
-	$allnotification.=$notify_values['Orders'];
+if($notify_values['PurchaseOrder']!='PurchaseOrders:&nbsp&nbsp&nbsp;')
+	$allnotification.=$notify_values['PurchaseOrder'];
 if($notify_values['Products']!='Products:&nbsp&nbsp&nbsp;')
 	$allnotification.=$notify_values['Products'];
 if($notify_values['Emails']!='Emails:&nbsp&nbsp&nbsp;')
@@ -374,17 +374,7 @@ if (count($history) > 0) {
 		$url_module = $row['module_name'];
 		$url_action = 'DetailView';
 
-		if($row['module_name']=='Orders')
-		{		
-			$xtpl->assign("MODULE_IMAGE_NAME","purchase_order");
-		}
-		elseif($row['module_name']=='SalesOrder')
-		{		
-			$xtpl->assign("MODULE_IMAGE_NAME","sales_order");
-			$url_module = 'Orders';
-			$url_action = 'SalesOrderDetailView';
-		}
-		elseif($row['module_name']=='Vendor')
+		if($row['module_name']=='Vendor')
 		{		
 			$xtpl->assign("MODULE_IMAGE_NAME","vendor");
 			$url_module = 'Products';
