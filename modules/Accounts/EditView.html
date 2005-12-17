@@ -58,11 +58,13 @@
 		
 	       <link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
 
-	       <script type="text/javascript" src="jscalendar/calendar.js"></script>
+	    <script type="text/javascript" src="jscalendar/calendar.js"></script>
 
-               <script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
+        <script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
 
 		<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
+
+		<script type="text/javascript" src="modules/Accounts/Account.js"></script>
 
 			<form name="EditView" method="POST" action="index.php">
 
@@ -162,61 +164,18 @@
 
 </form>
 
-<script type="text/javascript" language="Javascript">
-
-function copyAddressRight(form) {
-
-	form.ship_street.value = form.bill_street.value;
-
-	form.ship_city.value = form.bill_city.value;
-
-	form.ship_state.value = form.bill_state.value;
-
-	form.ship_code.value = form.bill_code.value;
-
-	form.ship_country.value = form.bill_country.value;
-
-	form.ship_pobox.value = form.bill_pobox.value;
-	
-	return true;
-
-}
-
-function copyAddressLeft(form) {
-
-	form.bill_street.value = form.ship_street.value;
-
-	form.bill_city.value = form.ship_city.value;
-
-	form.bill_state.value = form.ship_state.value;
-
-	form.bill_code.value =	form.ship_code.value;
-
-	form.bill_country.value = form.ship_country.value;
-
-	form.bill_pobox.value = form.ship_pobox.value;
-
-	return true;
-
-}
-
-</script>
-
 <script>
 
-	
 
-	var fieldname = new Array({VALIDATION_DATA_FIELDNAME})
 
-	var fieldlabel = new Array({VALIDATION_DATA_FIELDLABEL})
+        var fieldname = new Array({VALIDATION_DATA_FIELDNAME})
 
-	var fielddatatype = new Array({VALIDATION_DATA_FIELDDATATYPE})
+        var fieldlabel = new Array({VALIDATION_DATA_FIELDLABEL})
+
+        var fielddatatype = new Array({VALIDATION_DATA_FIELDDATATYPE})
 
 </script>
-
-
-
-
+						
 
 {JAVASCRIPT}
 
