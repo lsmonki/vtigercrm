@@ -38,7 +38,6 @@
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
 <script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
-<script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
 <form name="EditView" method="POST" action="index.php">
   <input type="hidden" name="module" value="Activities">
   <input type="hidden" name="record" value="{ID}">
@@ -84,12 +83,6 @@
         </div></td>
     </tr>
   </table>
-  <script type="text/javascript" defer="1">
-  var oFCKeditor = null;
-  oFCKeditor = new FCKeditor( "description" ) ;
-  oFCKeditor.BasePath   = "include/fckeditor/" ;
-  oFCKeditor.ReplaceTextarea() ;
-  </script>
 </form>
 <script type="text/javascript" language="JavaScript">
 function set_values(form) {
