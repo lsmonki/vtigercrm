@@ -13,6 +13,7 @@
 <script type="text/javascript" src="jscalendar/calendar.js"></script>
 <script type="text/javascript" src="jscalendar/lang/calendar-en.js"></script>
 <script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
+<script type="text/javascript" src="modules/CustomView/CustomView.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/calculator/calc.js"></script>
 <form enctype="multipart/form-data" name="CustomView" method="POST" action="index.php" onsubmit="return mandatoryCheck();">
 <input type="hidden" name="module" value="CustomView">
@@ -42,64 +43,11 @@ fLabels['m'] = 'less or equal';
 fLabels['h'] = 'greater or equal';
 var noneLabel;
 
-function trimfValues(value)
+function goto_CustomAction(module)
 {
-    var string_array;
-    string_array = value.split(":");
-    return string_array[4];
+        document.location.href = "index.php?module="+module+"&action=CustomAction&record={CUSTOMVIEWID}";
 }
 
-function updatefOptions(sel, opSelName) {
-    var selObj = document.getElementById(opSelName);
-    var fieldtype = null ;
-
-    var currOption = selObj.options[selObj.selectedIndex];
-    var currField = sel.options[sel.selectedIndex];
-
-    if(currField.value != null && currField.value.length != 0)
-    {
-	fieldtype = trimfValues(currField.value);
-	ops = typeofdata[fieldtype];
-	var off = 0;
-	if(ops != null)
-	{
-
-		var nMaxVal = selObj.length;
-		for(nLoop = 0; nLoop < nMaxVal; nLoop++)
-		{
-			selObj.remove(0);
-		}
-		selObj.options[0] = new Option ('None', '');
-		if (currField.value == '') {
-			selObj.options[0].selected = true;
-		}
-		off = 1;
-		for (var i = 0; i < ops.length; i++)
-		{
-			var label = fLabels[ops[i]];
-			if (label == null) continue;
-			var option = new Option (fLabels[ops[i]], ops[i]);
-			selObj.options[i + off] = option;
-			if (currOption != null && currOption.value == option.value)
-			{
-				option.selected = true;
-			}
-		}
-	}
-    }else
-    {
-	var nMaxVal = selObj.length;
-	for(nLoop = 0; nLoop < nMaxVal; nLoop++)
-	{
-		selObj.remove(0);
-	}
-	selObj.options[0] = new Option ('None', '');
-	if (currField.value == '') {
-		selObj.options[0].selected = true;
-	}
-    }
-
-}
 function mandatoryCheck()
 {
 	//return verify_data();
@@ -153,36 +101,7 @@ function mandatoryCheck()
 
 	return false;
 }
-function trim(s) {
-	while (s.substring(0,1) == " ") {
-		s = s.substring(1, s.length);
-	}
-	while (s.substring(s.length-1, s.length) == ' ') {
-		s = s.substring(0,s.length-1);
-	}
 
-	return s;
-}
-
-function verify_data() {
-	var isError = false;
-	var errorMessage = "";
-	if (trim(document.CustomView.viewName.value) == "") {
-		isError = true;
-		errorMessage += "\nView Name";
-	}
-	// Here we decide whether to submit the form.
-	if (isError == true) {
-		alert("Missing required fields:" + errorMessage);
-		return false;
-	}
-	//return true;
-}
-
-function goto_CustomAction(module)
-{
-        document.location.href = "index.php?module="+module+"&action=CustomAction&record={CUSTOMVIEWID}";
-}
 
 </script>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
@@ -348,13 +267,6 @@ function goto_CustomAction(module)
           <td> <ul>
               <li>{MOD.LBL_AF_HDR2}</li>
               <li>{MOD.LBL_AF_HDR3}</li>
-              <!--<li>{MOD.LBL_AF_HDR4}</li>-->
-              <!--<li>Place quotation marks around data that includes commas. For
-                example, &quot;200,000&quot;,&quot;1,000,000&quot; searches for
-                200,000 or 1,000,000.</li>
-              <li>For fields that can be set on or off, use &quot;0&quot; for
-                no and &quot;1&quot; for yes, e.g., &quot;Active equals 1&quot;
-                or &quot;Converted equals 0.&quot;</li>-->
             </ul></td>
         </tr>
 	<tr><td>&nbsp;</td></tr>

@@ -10,14 +10,8 @@
 -->
 <!-- BEGIN: main -->
 <script type="text/javascript" src="include/fckeditor/fckeditor.js"></script>
-<script language="javascript">
-function CancelForm()
-{
-var cvmodule = document.templatecreate.cvmodule.value;
-var viewid = document.templatecreate.cvid.value;
-document.location.href = "index.php?module="+cvmodule+"&action=index&viewname="+viewid;
-}
-</script>
+<script type="text/javascript" src="modules/CustomView/CustomView.js"></script>
+
 <body>
 <form action="index.php" method="post" name="templatecreate" onsubmit="return check4null(templatecreate);">  
 <input type="hidden" name="action" value="SaveAction.php">
@@ -59,41 +53,6 @@ document.location.href = "index.php?module="+cvmodule+"&action=index&viewname="+
 </body>
 </html>
 
-<script>
-function trim(s)
-{
-        while (s.substring(0,1) == " ") {
-                s = s.substring(1, s.length);
-        }
-        while (s.substring(s.length-1, s.length) == ' ') {
-                s = s.substring(0,s.length-1);
-        }
-
-        return s;
-}
-
-
-function check4null(form)
-{
-        var isError = false;
-        var errorMessage = "";
-        // Here we decide whether to submit the form.
-        if (trim(form.subject.value) =='') {
-                isError = true;
-                errorMessage += "\n subject";
-                form.subject.focus();
-        }
-
-        // Here we decide whether to submit the form.
-        if (isError == true) {
-                alert("Missing required fields: " + errorMessage);
-                return false;
-        }
- return true;
-}
-
-
-</script>
 <script type="text/javascript" defer="1">
 var oFCKeditor = null;
 oFCKeditor = new FCKeditor( "body" ) ;
