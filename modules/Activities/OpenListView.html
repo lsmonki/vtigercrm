@@ -17,16 +17,7 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: open_activity -->
-<script>
-
-function showActivityView(selectactivity_view)
-{
-	//script to reload the page with the view type when the combo values are changed
-	View_name = selectactivity_view.options[selectactivity_view.options.selectedIndex].value;
-	document.frmOpenLstView.action = "index.php?module=Home&action=index&activity_view="+View_name;
-	document.frmOpenLstView.submit();
-}	
-</script>
+<script type="text/javascript" src="modules/Activities/Activity.js"></script>
 <form name="frmOpenLstView" method="post">
 <div id="{DIVID}" style="display:block;">
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
