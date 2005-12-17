@@ -423,6 +423,9 @@ $noofrows = $adb->num_rows($list_result);
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
 	$start = $_REQUEST['start'];
+
+	//added to remain the navigation when sort
+	$url_string = "&start=".$_REQUEST['start'];
 }
 else
 {

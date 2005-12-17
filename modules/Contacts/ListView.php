@@ -419,7 +419,7 @@ if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
 	$start = $_REQUEST['start'];
 
-	//added on 14-12-2005 to remain the navigation when sort
+	//added to remain the navigation when sort
 	$url_string = "&start=".$_REQUEST['start'];
 }
 else
