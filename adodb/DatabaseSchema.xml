@@ -2428,30 +2428,6 @@
 	</table>
 
 
-	<table name="emails">
-		<field name="emailid" type="I" size="19">
-			<KEY/>
-		</field>
-			<field name="filename" type="C" size="50">
-                </field>
-		<field name="description" type="X"></field>
-		<data>
-		</data>
-	</table>
-
-
-
-
-	<table name="emails" alter="true">
-		
-		<constraint>ADD CONSTRAINT fk_emails FOREIGN KEY (emailid) REFERENCES activity(activityid) ON DELETE CASCADE</constraint>
-		<opt>Type=InnoDB</opt>
-		
-		<data>
-		</data>
-	</table>
-
-
 
 	<table name="emailtemplates">
 		<field name="foldername" type="C" size="100">
