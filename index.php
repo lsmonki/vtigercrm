@@ -417,6 +417,11 @@ if(isset($_REQUEST['module']))
 		die("Hacking Attempt");
 	}
 }
+if($action == 'Export')
+{
+	export($module);
+}
+
 //Code added for 'Multiple SQL Injection Vulnerabilities & XSS issue' fixes - Philip
 if(isset($_REQUEST['record']) && !is_numeric($_REQUEST['record']) && $_REQUEST['record']!='')
 {
