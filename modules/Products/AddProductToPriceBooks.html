@@ -102,20 +102,6 @@ function addtopricebook()
 document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=DetailView&return_id={RETURN_ID}"
 }
 
-function updateListPrice(unitprice,fieldname)
-{
-	//document.addToPB.elements[fieldname].value=unitprice;
-	var elem=document.addToPB.elements;
-        var i;
-        for(i=0; i<elem.length; i++)
-        {
-                if(elem[i].name== fieldname)
-                {
-                        elem[i].value=unitprice;
-                }
-        }
-
-}
 
 function updateAllListPrice(unitprice)
 {
@@ -130,16 +116,7 @@ function updateAllListPrice(unitprice)
 }
 
 </script>
-
-<script type="text/javascript" language="JavaScript">
-function clear_form(form) {
-	for (j = 0; j < form.elements.length; j++) {
-		if (form.elements[j].type == 'text' || form.elements[j].type == 'select-one') {
-			form.elements[j].value = '';
-		}
-	}
-}
-</script>
+<script language="javascript" src="modules/Products/Product.js"></script>
 <BR>
 <BR>
 {PRICEBOOKLISTHEADER}

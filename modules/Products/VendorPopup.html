@@ -10,62 +10,8 @@
 -->
 <!-- BEGIN: main -->
 <link rel="stylesheet" type="text/css" href="{THEME_PATH}style.css"/>
-<script language="javascript">
-function massDelete()
-{
+<script language="JavaScript" type="text/javascript" src='modules/Products/Vendor.js'></script>
 
-	x = document.massdelete.selected_id.length;
-	idstring = "";
-
-	if ( x == undefined)
-	{
-	
-		if (document.massdelete.selected_id.checked)
-		{
-			document.massdelete.idlist.value=document.massdelete.selected_id.value;
-			//alert(document.massdelete.idlist.value);
-		}
-		else 
-		{
-			alert("Please select atleast one entity");
-			return false;
-		}
-	}
-	else
-	{
-		xx = 0;
-		for(i = 0; i < x ; i++)
-		{
-			if(document.massdelete.selected_id[i].checked)
-			{
-				idstring = document.massdelete.selected_id[i].value +";"+idstring
-			xx++	
-			}
-		}
-		if (xx != 0)
-		{
-			document.massdelete.idlist.value=idstring;
-			//alert(document.massdelete.idlist.value);
-		}
-		else
-		{
-			alert("Please select atleast one entity");
-			return false;
-		}
-	}
-document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Products&return_action=index"
-}
-</script>
-
-<script type="text/javascript" language="JavaScript">
-function clear_form(form) {
-	for (j = 0; j < form.elements.length; j++) {
-		if (form.elements[j].type == 'text' || form.elements[j].type == 'select-one') {
-			form.elements[j].value = '';
-		}
-	}
-}
-</script>
 <BR>
 <BR>
 {VENDORLISTHEADER}
@@ -87,29 +33,6 @@ function clear_form(form) {
    </form>
 </table>
 <br>
-<script type='text/javascript' language='JavaScript'>
-function set_return_specific(vendor_id, vendor_name) {
-        window.opener.document.EditView.vendor_name.value = vendor_name;
-        window.opener.document.EditView.vendor_id.value = vendor_id;
-}
-
-function set_return_address(vendor_id, vendor_name, street, city, state, code, country,pobox ) {
-        window.opener.document.EditView.vendor_name.value = vendor_name;
-        window.opener.document.EditView.vendor_id.value = vendor_id;
-        window.opener.document.EditView.bill_street.value = street;
-        window.opener.document.EditView.ship_street.value = street;
-        window.opener.document.EditView.bill_city.value = city;
-        window.opener.document.EditView.ship_city.value = city;
-        window.opener.document.EditView.bill_state.value = state;
-        window.opener.document.EditView.ship_state.value = state;
-        window.opener.document.EditView.bill_code.value = code;
-        window.opener.document.EditView.ship_code.value = code;
-        window.opener.document.EditView.bill_country.value = country;
-        window.opener.document.EditView.ship_country.value = country;
-        window.opener.document.EditView.bill_pobox.value = pobox;
-        window.opener.document.EditView.ship_pobox.value = pobox;
-}
-</script>
 <!-- END: main -->
 </form>
 </table>

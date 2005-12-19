@@ -79,48 +79,7 @@
   </table>
 </form>
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
-<script language="JavaScript" type="text/javascript">
-function set_focus()
-{
-}
-function cancelForm(frm)
-{
-	window.history.back();
-}
-	
-function trim(s) 
-{                                                                                                                     
-while (s.substring(0,1) == " ") {
-s = s.substring(1, s.length);
-}
-return s;
-} 
-
-function check4null(form)
-{
-  var isError = false;
-  var errorMessage = "";
-  if (trim(form.productname.value) =='') {
-			 isError = true;
-			 errorMessage += "\n Product Name";
-			 form.productname.focus();
-  }
-  if (isError == true) {
-			 alert("Missing required fields: " + errorMessage);
-			 return false;
-  }
-  return true;
-}
-</script>
-<!--a href="javascript:productImg();">Attach Product Image</a>
-<script>
-function productImg()
-{
-	$vtigerPath = ' <?php echo $_SERVER['REQUEST_URI'] ?>';
-	alert($vtigerPath);
-	window.open(vtigerPath+"/uploads/upload.php","productImg","top=100,left=100,height=300,width=200")	
-}
-</script -->
+<script language="JavaScript" type="text/javascript" src='modules/Products/PriceBook.js'></script>
 <script>
 	
 	var fieldname = new Array({VALIDATION_DATA_FIELDNAME})
