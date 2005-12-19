@@ -42,8 +42,35 @@ if(!empty($_REQUEST['record'])) {
 }
 else
 {
-        header("Location: index.php?module=Users&action=ListView");
+ //       header("Location: index.php?module=Users&action=ListView");
+
+    echo "
+        <script type='text/javascript'>
+            window.location = 'index.php?module=Users&action=ListView';
+        </script>
+        ";
 }
+
+if( $focus->user_name == "" )
+{  
+   
+    echo "
+            <table>
+                <tr>
+                    <td>
+                        <b>User does not exist.</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href='index.php?module=Users&action=ListView'>List Users</a>
+                    </td>
+                </tr>
+            </table>
+        ";
+    exit;  
+}
+
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
