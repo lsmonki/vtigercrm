@@ -1,4 +1,12 @@
-		
+/*********************************************************************************
+
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+ ********************************************************************************/		
 		
 		
 		
@@ -262,10 +270,6 @@ function set_return(product_id, product_name) {
 function set_return_specific(product_id, product_name) {
         window.opener.document.EditView.contact_name.value = product_name;
         window.opener.document.EditView.contact_id.value = product_id;
-}
-function add_data_to_relatedlist(entity_id,recordid) {
-
-        opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Contacts&entityid="+entity_id+"&parid="+recordid;
 }
 //added by rdhital for better emails
 function set_return_emails(entity_id,email_id,parentname,emailadd){

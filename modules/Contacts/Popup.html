@@ -43,5 +43,10 @@
 	</form>
 </table>
 <script type="text/javascript" src="modules/Contacts/Contact.js"></script>
+<script type="text/javascript">
+function add_data_to_relatedlist(entity_id,recordid) {
 
+        opener.document.location.href="index.php?module={RETURN_MODULE}&action=updateRelations&smodule={SMODULE}&destination_module=Contacts&entityid="+entity_id+"&parid="+recordid;
+}
+</script>
 <!-- END: main -->
