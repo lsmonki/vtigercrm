@@ -60,7 +60,8 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	$qry = getURLstring($focus);
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	$list_header = '<tr class="moduleListTitle" height=20>';
+	$list_header = Array();
+	/*$list_header = '<tr class="moduleListTitle" height=20>';
 	$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 	if($relatedlist == '')
 	{
@@ -85,7 +86,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			$list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>';
 			$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
 		}
-	}
+	}*/
 
 	//Get the tabid of the module
 	//require_once('include/utils/UserInfoUtil.php')
@@ -210,18 +211,20 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			//Added condition to hide the close column in Related Lists
 			if($name == 'Close' && $relatedlist != '')
 			{
-				$list_header .= '';
+				//$list_header .= '';
+				 $list_header[] = '';
 			}
 			else
 			{
-				$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
-				$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+				 $list_header[]=$name;
+				//$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
+				//$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
 			}
 		}
 	}
-	$list_header .='<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">'.$app_strings['LBL_EDIT'].' | '.$app_strings['LBL_DELETE'].'</td>';
-	$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-	$list_header .= '</tr>';
+	//$list_header .='<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">'.$app_strings['LBL_EDIT'].' | '.$app_strings['LBL_DELETE'].'</td>';
+	//$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+	//$list_header .= '</tr>';
 	return $list_header;
 
 }
@@ -371,7 +374,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	global $adb;
 	global $app_strings;
 	$noofrows = $adb->num_rows($list_result);
-	$list_header = '<script>
+	/*$list_header = '<script>
 			function confirmdelete(url)
 			{
 				if(confirm("Are you sure?"))
@@ -379,7 +382,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					document.location.href=url;
 				}
 			}
-		</script>';
+		</script>';*/
+	$list_block = Array();
 	global $theme;
 	$evt_status;
 	$theme_path="themes/".$theme."/";
@@ -399,11 +403,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
-		if (($i%2)==0)
+		/*if (($i%2)==0)
 			$list_header .= '<tr height=20 class=evenListRow>';
 		else
-			$list_header .= '<tr height=20 class=oddListRow>';
+			$list_header .= '<tr height=20 class=oddListRow>';*/
 
+		$list_header =Array();
 		//Getting the entityid
 		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
 		$owner_id = $adb->query_result($list_result,$i-1,"smownerid");
@@ -429,7 +434,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		}
 		//end: Armando Lüscher 05.07.2005 -> §priority
 
-		if($relatedlist == '')
+		/*if($relatedlist == '')
 		{       
 			if($module =='Accounts')
                         {
@@ -451,8 +456,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 				$list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall")></td>';
 			}
-		}
-		$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		}*/
+		//$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 		foreach($focus->list_fields as $name=>$tableinfo)
 		{
 			$fieldname = $focus->list_fields_name[$name];
@@ -613,14 +618,15 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 //				if($relatedlist != '' && $value == "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>")
 				if($name == 'Close' && $relatedlist != '')
 				{
-					$list_header .= '';
+					$list_header[]= '';
 				}
 				else
 				{
 					//$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
 					// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-					$list_header .= '<td height="21" style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'.$value.'</td>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
-					$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+					//$list_header .= '<td height="21" style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'.$value.'</td>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
+					//$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+					 $list_header[] = $value;
 				}
 				if($fieldname=='filename')
 				{
@@ -648,7 +654,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 		$list_header .= '<td style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
 		$mod_dir=getModuleDirName($module);
-		if(isPermitted($module,1,$entity_id) == 'yes')
+		/*if(isPermitted($module,1,$entity_id) == 'yes')
 		{
 			//$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
 			// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
@@ -663,10 +669,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 		$list_header .= '</td>'; // Armando Lüscher 05.07.2005 -> Changed from <td> to </td>
 		$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_header .= '</tr>';
+		$list_header .= '</tr>';*/
+		$list_block[] = $list_header;
+
 	}
 	$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
-	return $list_header;
+	return $list_block;
 }
 
 
