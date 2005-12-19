@@ -52,54 +52,6 @@ if (is_file("config_override.php")) {
  $db = new PearDatabase();
  $log =& LoggerManager::getLogger('create_table');
 
-function createSchemaTable () {
-	global $log;
-	// create the schema tables
-	$query = "CREATE TABLE modules (id int(11) NOT NULL auto_increment, name text,PRIMARY KEY ( ID ))";
-
-	$this->query($query);
-}
-
-
-function createObjectTable () {
-	global $log;
-	// create the object tables
-	$query = "CREATE TABLE objects (
-		module_id int(11),
-		name text,
-		PRIMARY KEY ( module_id, name ))";
-
-	$this->query($query);
-}
-
-function createAttributesTable () {
-	global $log;
-	// create the attributes tables
-	$query = "CREATE TABLE attributes (
-		module_id int(11),
-		object_name text,
-		name text,
-
-		PRIMARY KEY ( module_id, object_name ))";
-	// fk module_id, object_name -> object table.
-
-	$this->query($query);
-}
-
-function createLabelsTable () {
-	global $log;
-	// create the translation tables
-	$query = "CREATE TABLE labels (
-		module_id int(11),
-		name text,
-		value text,
-		value_long text,
-		value_popup text,
-		PRIMARY KEY ( module_id, name ))";
-
-	$this->query($query);
-}
-
 //Drop old tables if table exists and told to drop it
 function drop_table_install(&$focus)
 {
