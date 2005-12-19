@@ -11,26 +11,8 @@
 <!-- BEGIN: main -->
 <html>
 <head>
-    <script language="JavaScript" type="text/JavaScript">
-        function showRelatedModules(currmodule) 
-        {
-            for (i=0;i<getObj("primarymodule").length;i++) 
-            {
-                var moduleopt=getObj("primarymodule")[i].value
-                if (currmodule==i) 
-                    getObj(moduleopt+"relatedmodule").style.display="block"
-                else
-                    getObj(moduleopt+"relatedmodule").style.display="none"
-            }
-        }
-        
-        function selectAction( url )
-        {
-            document.NewReport.action = url;
-            document.NewReport.submit();
-        }
-    </script>
-</head>
+   <script language="javascript" type="text/javascript" src="modules/Reports/Report.js"></script> 
+	</head>
 <body>
 <form name="NewReport" action="index.php">
         

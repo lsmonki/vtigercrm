@@ -49,32 +49,7 @@
     </table>
 <br><br>    
 </body>
-<script language="javascript">
-function trim(s) {
-	while (s.substring(0,1) == " ") {
-		s = s.substring(1, s.length);
-	}
-	while (s.substring(s.length-1, s.length) == ' ') {
-		s = s.substring(0,s.length-1);
-	}
+<script language="javascript" type="text/javascript" src="modules/Reports/Report.js"></script>
 
-	return s;
-}
-
-function verify_data(form) {
-	var isError = false;
-	var errorMessage = "";
-	if (trim(form.folderName.value) == "") {
-		isError = true;
-		errorMessage += "\nFolder Name";
-	}
-	// Here we decide whether to submit the form.
-	if (isError == true) {
-		alert("Missing required fields:" + errorMessage);
-		return false;
-	}
-	return true;
-}
-</script>
 </form>
 <!-- END: main -->

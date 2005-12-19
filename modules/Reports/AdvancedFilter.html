@@ -12,7 +12,7 @@
 <link href="styles/elegant.css" rel="stylesheet" type="text/css">
 <script language="JavaScript" type="text/javaScript" src="include/js/general.js"></script>
 <script type="text/javascript" language="javaScript" src="include/cal.js"></script>
-<script language="javascript" type="text/javascript">
+<script language="javascript" type="text/javascript" src="modules/Reports/Report.js">
 var typeofdata = new Array();
 typeofdata['V'] = ['e','n','s','c','k'];
 typeofdata['N'] = ['e','n','l','g','m','h'];
@@ -33,68 +33,8 @@ fLabels['m'] = 'less or equal';
 fLabels['h'] = 'greater or equal';
 var noneLabel;
 
-function trimfValues(value)
-{
-    var string_array;
-    string_array = value.split(":");
-    return string_array[4];
-}
-
-function updatefOptions(sel, opSelName) {
-    var selObj = document.getElementById(opSelName);
-    var fieldtype = null ;
-
-    var currOption = selObj.options[selObj.selectedIndex];
-    var currField = sel.options[sel.selectedIndex];
-
-    if(currField.value != null && currField.value.length != 0)
-    {
-	fieldtype = trimfValues(currField.value);
-	ops = typeofdata[fieldtype];
-	var off = 0;
-	if(ops != null)
-	{
-
-		var nMaxVal = selObj.length;
-		for(nLoop = 0; nLoop < nMaxVal; nLoop++)
-		{
-			selObj.remove(0);
-		}
-		selObj.options[0] = new Option ('None', '');
-		if (currField.value == '') {
-			selObj.options[0].selected = true;
-		}
-		off = 1;
-		for (var i = 0; i < ops.length; i++)
-		{
-			var label = fLabels[ops[i]];
-			if (label == null) continue;
-			var option = new Option (fLabels[ops[i]], ops[i]);
-			selObj.options[i + off] = option;
-			if (currOption != null && currOption.value == option.value)
-			{
-				option.selected = true;
-			}
-		}
-	}
-    }else
-    {
-	var nMaxVal = selObj.length;
-	for(nLoop = 0; nLoop < nMaxVal; nLoop++)
-	{
-		selObj.remove(0);
-	}
-	selObj.options[0] = new Option ('None', '');
-	if (currField.value == '') {
-		selObj.options[0].selected = true;
-	}
-    }
-
-}
 </script>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="secContent">
-  <!--<tr>
-    <td> <table width="100%" border=0 cellspacing=0 cellpadding=0>-->
         <tr>
           <td height="25">{MOD.LBL_AF_HDR1}</td>
         </tr>
@@ -157,7 +97,5 @@ function updatefOptions(sel, opSelName) {
 	      <input name="fval5" id="fval5" type="text" size=20 maxlength=80 value="{VALUE5}">
 	  </TD>
         </TR>
-      <!--</table></td>
-  </tr>-->
 </table>
 <!-- END: main -->

@@ -11,69 +11,7 @@
 <!-- BEGIN: main -->
 <html>
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
-<script type="text/javascript" language="JavaScript"> 
-function getOpenerObj(n) {
-
-   return getObj(n,opener.document)
-
-}
-    function saveReport( dlgType )
-    {
-       if( !emptyCheck( "reportName", "Report Name" ) )
-       return false;    
-                
-        var repNameObj = getOpenerObj( "reportName" );
-        var repDescObj = getOpenerObj( "reportDesc" );
-        var folderObj = getOpenerObj( "folder" );
-        var actionObj = getOpenerObj( "actionItem" );
-        var formObj = getOpenerObj( "NewReport" );
-        if( dlgType == "save" )
-        {
-           formObj = getOpenerObj( "NewReport" );
-            if( getOpenerObj( 'reportId' ) != null )
-            {
-                formObj.removeChild( getOpenerObj( 'reportId' ) );
-            }
-        }
-        else
-        {
-//            formObj = getOpenerObj( "SaveAsForm" );
-            actionObj.value = "saveAs";
-        }
-        
-        repNameObj.value = document.NewReport.reportName.value;
-        repDescObj.value = document.NewReport.reportDesc.value;
-        folderObj.value = document.NewReport.folder.value;        
-        formObj.submit();
-        
-        window.self.close();
-        return false;
-    }   
- function trim(s) {
-        while (s.substring(0,1) == " ") {
-                s = s.substring(1, s.length);
-        }
-        while (s.substring(s.length-1, s.length) == ' ') {
-                s = s.substring(0,s.length-1);
-        }
-        return s;
-}
-function verify_data(form) {
-        var isError = false;
-        var errorMessage = "";
-        if (trim(form.reportName.value) == "") {
-                isError = true;
-                errorMessage += "\nReport Name";
-        }
-        // Here we decide whether to submit the form.
-        if (isError == true) {
-                alert("Missing required fields:" + errorMessage);
-                return false;
-        }
-        return true;
-}
-
-</script>
+<script type="text/javascript" language="JavaScript" src="modules/Reports/Report.js"></script> 
 <head>
 <title></title>
 <!--meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
