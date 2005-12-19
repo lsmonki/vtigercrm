@@ -96,61 +96,6 @@
         </script>
 {JAVASCRIPT} 
 <script type="text/javascript" language="Javascript" src="include/js/general.js"></script>
-<script type="text/javascript" language="Javascript">
+<script type="text/javascript" language="Javascript" src="modules/Leads/Lead.js"></script>
 
-function verify_data(form) {
-	if(! form.createpotential.checked == true)
-	{
-        	if (form.potential_name.value == "")
-		{
-                	alert("Opportunity Name field cannot be empty");
-			return false;	
-		}
-		if (form.closedate.value == "")
-		{
-                	alert("Close Date field cannot be empty");
-			return false;	
-		}
-		x = dateValidate('closedate','Potential Close Date','GECD');
-		intval= intValidate('potential_amount','Potential Amount');
-
-		if(!x)
-		{
-			return false;
-		}
-		if(!intval)
-		{
-			return false;
-		}
-        }
-	else
-	{	
-
-		return true;
-	}
-	
-}
-
-function togglePotFields(form)
-{
-	if (form.createpotential.checked == true)
-	{
-		form.potential_name.disabled = true;
-		form.closedate.disabled = true;
-		form.potential_amount.disabled = true;
-		form.potential_sales_stage.disabled = true;
-		
-	}
-	else
-	{
-		form.potential_name.disabled = false;
-		form.closedate.disabled = false;
-		form.potential_amount.disabled = false;
-		form.potential_sales_stage.disabled = false;
-		form.potential_sales_stage.value="";
-	}	
-
-}
-
-</script>
 <!-- END: main -->
