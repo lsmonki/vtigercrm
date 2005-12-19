@@ -419,7 +419,7 @@ if(isset($_REQUEST['module']))
 }
 if($action == 'Export')
 {
-	export($module);
+	include ('include/utils/export.php');
 }
 
 //Code added for 'Multiple SQL Injection Vulnerabilities & XSS issue' fixes - Philip
