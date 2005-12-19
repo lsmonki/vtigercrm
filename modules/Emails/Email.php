@@ -30,7 +30,6 @@ require_once('modules/Accounts/Account.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Users/User.php');
 
-
 // Email is used to store customer information.
 class Email extends CRMEntity {
 	var $log;
@@ -48,9 +47,9 @@ class Email extends CRMEntity {
   	var $module_id="emailid";
 	var $default_email_name_values = array('Assemble catalogs', 'Make travel arrangements', 'Send a letter', 'Send contract', 'Send fax', 'Send a follow-up letter', 'Send literature', 'Send proposal', 'Send quote');
 
-	var $table_name = "emails";
-	var $tab_name = Array('crmentity','activity','emails','seactivityrel','cntactivityrel');
-        var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','emails'=>'emailid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid');
+	var $table_name = "activity";
+	var $tab_name = Array('crmentity','activity','seactivityrel','cntactivityrel');
+        var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid');
 
 	// This is the list of fields that are in the lists.
         var $list_fields = Array(
@@ -71,9 +70,6 @@ class Email extends CRMEntity {
 
 	var $rel_users_table = "salesmanactivityrel";
 	var $rel_contacts_table = "cntactivityrel";
-	var $rel_cases_table = "emails_cases";
-	var $rel_accounts_table = "emails_accounts";
-	var $rel_opportunities_table = "emails_opportunities";
 	var $rel_serel_table = "seactivityrel";
 
 	var $object_name = "Email";
@@ -104,7 +100,6 @@ class Email extends CRMEntity {
 	*/
 	function get_contacts($id)
 	{
-		// First, get the list of IDs.
 		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
 		renderRelatedContacts($query,$id);
 	}
@@ -116,7 +111,6 @@ class Email extends CRMEntity {
 	*/
 	function get_users($id)
 	{
-		// First, get the list of IDs.
 		$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
 		renderRelatedUsers($query);
 	}
@@ -126,9 +120,6 @@ class Email extends CRMEntity {
 	  */
 	function get_attachments($id)
 	{
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crm2.createdtime, notes.notecontent description, users.user_name
-		// Inserted inner join users on crm2.smcreatorid= users.id
 		$query = "select notes.title,'Notes      '  ActivityType, notes.filename,
 			attachments.type  FileType,crm2.modifiedtime lastmodified,
 			seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid,
@@ -142,10 +133,6 @@ class Email extends CRMEntity {
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".$id;
 		$query .= ' union all ';
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crm2.createdtime, attachments.description, users.user_name
-		// Inserted inner join users on crm2.smcreatorid= users.id
-		// Inserted order by createdtime desc
 		$query .= "select attachments.description title ,'Attachments'  ActivityType,
 			attachments.name filename, attachments.type FileType,crm2.modifiedtime lastmodified,
 			attachments.attachmentsid  attachmentsid,	seattachmentsrel.attachmentsid crmid,
@@ -161,21 +148,11 @@ class Email extends CRMEntity {
 	}
 
         /**
-          * Returns a list of the Emails to be export
+          * Returns a list of the Emails to be exported
           */
 	function create_export_query(&$order_by, &$where)
         {
-                $contact_required = ereg("contacts", $where);
-
-                if($contact_required)
-                {
-			$query = 'SELECT emails.emailid,emails.filename,emails.description as email_content,activity.*,contactdetails.firstname, contactdetails.lastname FROM emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid=crmentity.crmid left join seactivityrel on seactivityrel.activityid = emails.emailid inner join contactdetails on contactdetails.contactid=seactivityrel.crmid where crmentity.deleted=0 ';
-                }
-                else
-                {
-			$query = 'SELECT emails.emailid,emails.filename,emails.description as email_content,activity.* FROM emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid=crmentity.crmid where crmentity.deleted=0 ';
-
-                }
+		$query = 'SELECT activity.activityid, activity.subject, activity.activitytype, attachments.name as filename, crmentity.description as email_content FROM activity inner join crmentity on crmentity.crmid=activity.activityid left join seattachmentsrel on activity.activityid=seattachmentsrel.crmid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where activity.activitytype="Emails" and crmentity.deleted=0';
 
                 return $query;
         }

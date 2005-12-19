@@ -47,132 +47,136 @@ class CRMEntity extends SugarBean
 
   function saveentity($module,$migration='')
   {
-    global $current_user, $adb;//$adb added by raju for mass mailing
-    $insertion_mode = $this->mode;
+	global $current_user, $adb;//$adb added by raju for mass mailing
+	$insertion_mode = $this->mode;
 
-    $this->db->println("TRANS saveentity starts");
-    $this->db->startTransaction();
+	$this->db->println("TRANS saveentity starts");
+	$this->db->startTransaction();
 	
 	// Code included by Jaguar - starts    
-    if(isset($_REQUEST['recurringtype']) && $_REQUEST['recurringtype']!='')
-	    $recur_type = trim($_REQUEST['recurringtype']);
-    else
-    	$recur_type='';	
-	// Code included by Jaguar - Ends
-    foreach($this->tab_name as $table_name)
-    {
-      if($table_name == "crmentity")
-      {
-        $this->insertIntoCrmEntity($module,$migration);
-      }
-      elseif($table_name == "salesmanactivityrel")
-      {
-        $this->insertIntoSmActivityRel($module);
-      }
-	  //added by raju
-      elseif($table_name=="seactivityrel" )
-        {
-          //echo '--------------------------------- saveentity '.$_REQUEST['smodule'];
-          //if($module=="Emails" & $_REQUEST['smodule']!='webmails')
-          //modified by Richie as raju's implementation broke the feature for addition of webmail to crmentity.need to be more careful in future while integrating code
-          if($_REQUEST['smodule']!='webmails' && $_REQUEST['smodule'] != '')
-            {
-              if($_REQUEST['currentid']!='')
-                {
-                  $actid=$_REQUEST['currentid'];
-                }
-              else 
-                {
-                  $actid=$_REQUEST['record'];
-                }
-              $parentid=$_REQUEST['parent_id'];
-              // echo 'parent id is ----------> ' .$parentid .'  actid ' .$actid;
-              if($_REQUEST['module'] != 'Emails')
-			  {
-				  $mysql='insert into seactivityrel values('.$parentid.','.$actid.')';
-				  $adb->query($mysql);
-			  }
-			  else
-			  {	  
-			  $myids=explode("|",$parentid);  //2@71|
-              // echo '<br> myid count is   '.count($myids);
-              for ($i=0;$i<(count($myids)-1);$i++)
-                {
-                  $realid=explode("@",$myids[$i]);
-                  $mycrmid=$realid[0];
-                  //  echo 'mycrmid is  '.$mycrmid.' '.$i.'<br>';
-                  $mysql='insert into seactivityrel values('.$mycrmid.','.$actid.')';
-                  $adb->query($mysql);
-                }
-            }
-			}
-          else
-            {
-              if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
-                {
-                  $this->insertIntoEntityTable($table_name, $module);
-                }
-              elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
-                {
-                  $this->deleteRelation($table_name);
-                }
-            }			
-        }
-      elseif($table_name == "seticketsrel" || $table_name ==  "seproductsrel" || $table_name ==  "senotesrel" || $table_name == "sefaqrel")
-      {
-        if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '') //Code added by raju for mass mailing ends
-        {
-          $this->insertIntoEntityTable($table_name, $module);
-        }
-        elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
-        {
-                $this->deleteRelation($table_name);
-        }
-
-      }
-      elseif($table_name ==  "cntactivityrel")
-      {
-        if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
-        {
-          $this->insertIntoEntityTable($table_name, $module);
-        }
-        elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
-        {
-          $this->deleteRelation($table_name);
-        }
-
-      }
-      elseif($table_name ==  "ticketcomments")
-      {
-                $this->insertIntoTicketCommentTable($table_name, $module);
-      }
-      elseif($table_name ==  "faqcomments")
-      {
-                $this->insertIntoFAQCommentTable($table_name, $module);
-      }
-      elseif($table_name == "activity_reminder")
-      {
-	      if($recur_type == "--None--")
-	      {
-		      $this->insertIntoReminderTable($table_name,$module,"");
-	      }
-      }
-      elseif($table_name == "recurringevents") // Code included by Jaguar -  starts
-      {
+	if(isset($_REQUEST['recurringtype']) && $_REQUEST['recurringtype']!='')
 		$recur_type = trim($_REQUEST['recurringtype']);
-		if($recur_type != "--None--"  && $recur_type != '')
-	      	{		   
-	      		$this->insertIntoRecurringTable($table_name,$module);
-		}		
-      }// Code included by Jaguar - Ends
-      else
-      {
-        $this->insertIntoEntityTable($table_name, $module);			
-      }
-    }
-    if($module == 'Emails' || $module == 'Notes')
-      if(isset($_FILES['filename']['name']) && $_FILES['filename']['name']!='')
-        $this->insertIntoAttachment($this->id,$module);
+	else
+    		$recur_type='';	
+	// Code included by Jaguar - Ends
+
+	foreach($this->tab_name as $table_name)
+	{
+		if($table_name == "crmentity")
+		{
+			$this->insertIntoCrmEntity($module,$migration);
+		}
+		elseif($table_name == "salesmanactivityrel")
+		{
+			$this->insertIntoSmActivityRel($module);
+		}
+		//added by raju
+		elseif($table_name=="seactivityrel" )
+		{
+			if($module=="Emails" && $_REQUEST['smodule']!='webmails')
+			//modified by Richie as raju's implementation broke the feature for addition of webmail to crmentity.need to be more careful in future while integrating code
+			//if($_REQUEST['smodule']!='webmails' && $_REQUEST['smodule'] != '')
+			{
+				if($_REQUEST['currentid']!='')
+				{
+					$actid=$_REQUEST['currentid'];
+				}
+				else 
+				{
+					$actid=$_REQUEST['record'];
+				}
+				$parentid=$_REQUEST['parent_id'];
+
+				if($_REQUEST['module'] != 'Emails')
+				{
+					$mysql='insert into seactivityrel values('.$parentid.','.$actid.')';
+					$adb->query($mysql);
+				}
+				else
+				{	  
+					$myids=explode("|",$parentid);  //2@71|
+					for ($i=0;$i<(count($myids)-1);$i++)
+					{
+						$realid=explode("@",$myids[$i]);
+						$mycrmid=$realid[0];
+
+						$mysql='insert into seactivityrel values('.$mycrmid.','.$actid.')';
+						$adb->query($mysql);
+					}
+				}
+			}
+			else
+			{
+				if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')
+				{
+					$this->insertIntoEntityTable($table_name, $module);
+				}
+				elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+				{
+					$this->deleteRelation($table_name);
+				}
+			}			
+		}
+		elseif($table_name == "seticketsrel" || $table_name ==  "seproductsrel" || $table_name ==  "senotesrel")
+		{
+			if(isset($this->column_fields['parent_id']) && $this->column_fields['parent_id'] != '')//raju - mass mailing ends
+			{
+				$this->insertIntoEntityTable($table_name, $module);
+			}
+			elseif($this->column_fields['parent_id']=='' && $insertion_mode=="edit")
+			{
+				$this->deleteRelation($table_name);
+			}
+		}
+		elseif($table_name ==  "cntactivityrel")
+		{
+			if(isset($this->column_fields['contact_id']) && $this->column_fields['contact_id'] != '')
+			{
+				$this->insertIntoEntityTable($table_name, $module);
+			}
+			elseif($this->column_fields['contact_id'] =='' && $insertion_mode=="edit")
+			{
+				$this->deleteRelation($table_name);
+			}
+
+		}
+		elseif($table_name ==  "ticketcomments")
+		{
+                	$this->insertIntoTicketCommentTable($table_name, $module);
+		}
+		elseif($table_name ==  "faqcomments")
+		{
+                	$this->insertIntoFAQCommentTable($table_name, $module);
+		}
+		elseif($table_name == "activity_reminder")
+		{
+			if($recur_type == "--None--")
+			{
+				$this->insertIntoReminderTable($table_name,$module,"");
+			}
+		}
+		elseif($table_name == "recurringevents") // Code included by Jaguar -  starts
+		{
+			$recur_type = trim($_REQUEST['recurringtype']);
+			if($recur_type != "--None--"  && $recur_type != '')
+		      	{		   
+	      			$this->insertIntoRecurringTable($table_name,$module);
+			}		
+		}// Code included by Jaguar - Ends
+		else
+		{
+			$this->insertIntoEntityTable($table_name, $module);			
+		}
+	}
+
+
+	if($module == 'Emails' || $module == 'Notes')
+	{
+		if(isset($_FILES['filename']['name']) && $_FILES['filename']['name']!='')
+		{
+			$this->insertIntoAttachment($this->id,$module);
+		}
+	}
 
 	$this->db->completeTransaction();
         $this->db->println("TRANS saveentity ends");

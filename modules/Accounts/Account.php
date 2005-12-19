@@ -312,10 +312,8 @@ class Account extends CRMEntity {
 	*/
 	function get_emails($id)
 	{
-//          $query="select activity.subject,emails.description,emails.filename from emails inner join activity on activity.activityid=emails.emailid inner join seactivityrel on seactivityrel.activityid=emails.emailid inner join crmentity on crmentity.crmid=seactivityrel.crmid and crmentity.deleted=0 where crmentity.crmid=".$id."";
-	$query ="select activity.subject,emails.emailid, emails.filename,semodule,activitytype,date_start,activity.status,priority,crmentity.crmid,crmentity.smownerid,crmentity.modifiedtime, users.user_name  from emails inner join activity on activity.activityid=emails.emailid inner join seactivityrel on seactivityrel.activityid=emails.emailid inner join crmentity on crmentity.crmid=emails.emailid inner join users on  users.id=crmentity.smownerid where seactivityrel.crmid=".$id;
-          renderRelatedEmails($query,$id);
-          //return $this->build_related_list($query, new Email());
+		$query ="select activity.activityid, activity.subject, activity.semodule, activity.activitytype, activity.date_start, activity.status, activity.priority, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join users on users.id=crmentity.smownerid where activity.activitytype='Emails' and crmentity.deleted=0 and seactivityrel.crmid=".$id;
+		renderRelatedEmails($query,$id);
 	}
 
 	function get_history($id)

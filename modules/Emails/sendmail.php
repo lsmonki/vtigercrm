@@ -38,7 +38,7 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 	
 	$noofrows = $adb->num_rows($result);
 
-	$dbQuery = 'select attachments.*, activity.subject, emails.description  from emails inner join crmentity on crmentity.crmid = emails.emailid inner join activity on activity.activityid = crmentity.crmid left join seattachmentsrel on seattachmentsrel.crmid = emails.emailid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid = '.$_REQUEST['return_id'];
+	$dbQuery = 'select attachments.*, activity.subject, crmentity.description  from activity inner join crmentity on crmentity.crmid = activity.activityid left join seattachmentsrel on seattachmentsrel.crmid = activity.activityid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid = '.$_REQUEST['return_id'];
 
         $result1 = $adb->query($dbQuery) or die("Couldn't get file list");
 	$temparray = $adb->fetch_array($result1);

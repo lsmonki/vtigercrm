@@ -1325,9 +1325,7 @@ function getListQuery($module,$where='')
         }
 	if($module == "Emails")
         {
-                //$query = "select crmentity.crmid,crmentity.smownerid, emails.emailid, emails.filename, activity.subject, activity.activityid, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from emails inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid = crmentity.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid WHERE crmentity.deleted=0";
-		//Query modified to sort by assigned to
-		$query = "select distinct crmentity.crmid,crmentity.smownerid, emails.emailid, emails.filename, activity.subject, activity.activityid, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from emails inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=emails.emailid inner join activity on activity.activityid = crmentity.crmid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid WHERE crmentity.deleted=0";
+		$query = "select distinct crmentity.crmid, crmentity.smownerid, activity.activityid, activity.subject, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from activity inner join crmentity on crmentity.crmid=activity.activityid inner join users on users.id=crmentity.smownerid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid WHERE activity.activitytype='Emails' and crmentity.deleted=0";
 	}
 
 	if($module == "Faq")
