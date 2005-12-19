@@ -66,7 +66,7 @@ if  ( $allow_exports=='all' ||
 </form>
 -->
 <li>
-	<a href="include\export.php?module=<?php echo $_REQUEST['module']; ?>&action=Export&all=1"><?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?></a>
+	<a href="index.php?module=<?php echo $_REQUEST['module']; ?>&action=Export&all=1"><?php echo $app_strings['LBL_EXPORT_ALL']?> <?php echo $mod_strings['LBL_MODULE_NAME']?></a>
 </li>
 <?php
 			}
