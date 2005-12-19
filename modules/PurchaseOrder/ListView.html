@@ -17,59 +17,8 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
-<script language="javascript">
+<script language="JavaScript" type="text/javascript" src="modules/PurchaseOrder/PurchaseOrder.js"></script>
 
-function showDefaultCustomView(selectView)
-{
-viewName = selectView.options[selectView.options.selectedIndex].value;
-document.massdelete.viewname.value=viewName;
-document.massdelete.action="index.php?module=PurchaseOrder&action=index&return_module=PurchaseOrder&return_action=index&viewname="+viewName;
-document.massdelete.submit();
-}
-
-function massDelete()
-{
-        x = document.massdelete.selected_id.length;
-	var viewid = document.massdelete.viewname.value;
-        idstring = "";
-
-        if ( x == undefined)
-        {
-
-                if (document.massdelete.selected_id.checked)
-                {
-                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
-                }
-                else
-                {
-                        alert("Please select atleast one entity");
-                        return false;
-                }
-        }
-        else
-        {
-                xx = 0;
-                for(i = 0; i < x ; i++)
-                {
-                        if(document.massdelete.selected_id[i].checked)
-                        {
-                                idstring = document.massdelete.selected_id[i].value +";"+idstring
-                        xx++
-                        }
-                }
-                if (xx != 0)
-                {
-                        document.massdelete.idlist.value=idstring;
-                }
-               else
-                {
-                        alert("Please select atleast one entity");
-                        return false;
-                }
-        }
-        document.massdelete.action="index.php?module=Users&action=massdelete&return_module=PurchaseOrder&return_action=index";
-}
-</script>
 <table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder">
 <tbody>
 

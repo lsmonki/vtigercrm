@@ -10,15 +10,8 @@
 -->
 <!-- BEGIN: main -->
 <link rel="stylesheet" type="text/css" href="{THEME_PATH}style.css"/>
-<script type="text/javascript" language="JavaScript">
-function clear_form(form) {
-	for (j = 0; j < form.elements.length; j++) {
-		if (form.elements[j].type == 'text' || form.elements[j].type == 'select-one') {
-			form.elements[j].value = '';
-		}
-	}
-}
-</script>
+<script language="JavaScript" type="text/javascript" src="modules/PurchaseOrder/PurchaseOrder.js"></script>
+
 <BR>
 <BR>
 {POLISTHEADER}
@@ -44,18 +37,6 @@ function clear_form(form) {
 </table>
 <br>
 <script type='text/javascript' language='JavaScript'>
-function set_return(product_id, product_name) {
-        window.opener.document.EditView.parent_name.value = product_name;
-        window.opener.document.EditView.parent_id.value = product_id;
-}
-function set_return_specific(product_id, product_name) {
-        window.opener.document.EditView.purchaseorder_name.value = product_name;
-        window.opener.document.EditView.purchaseorder_id.value = product_id;
-}
-function set_return_formname_specific(formname, product_id, product_name) {
-        window.opener.document.EditView1.purchaseorder_name.value = product_name;
-        window.opener.document.EditView1.purchaseorder_id.value = product_id;
-}
 
 function add_data_to_relatedlist(entity_id,recordid) {
 
