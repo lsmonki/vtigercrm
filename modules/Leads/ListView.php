@@ -17,7 +17,8 @@
  * Description:  TODO: To be written.
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+//require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('modules/Leads/Lead.php');
 require_once('themes/'.$theme.'/layout_utils.php');
@@ -218,7 +219,8 @@ if(isset($_REQUEST['viewname']) == false)
 	$oCustomView->setdefaultviewid = $viewid;
 }
 //<<<<<customview>>>>>
-
+/******************commented by mangai for new UI *****************/
+/*
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	// Stick the form header out there.
 	$search_form=new XTemplate ('modules/Leads/SearchForm.html');
@@ -295,7 +297,7 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 	}
 	echo get_form_footer();
 	echo "\n<BR>\n";
-}
+}*/
 
 if($viewid != 0)
 {
@@ -309,23 +311,21 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_owner" type="hidden">
-	<input name="change_status" type="hidden">
-	<td>';
+	<input name="change_status" type="hidden">';
 //raju
 if(isPermitted('Leads',2,'') == 'yes')
 {
-	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>&nbsp;';
+	$other_text .=	'<td width="10"><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
-$other_text .='<input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>&nbsp;';
+$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/></td>';
 
 if(isPermitted('Leads',1,'') == 'yes')
 {
-   	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
-	       <input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_STATUS].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/>';
+   	$other_text .=	'<td><input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/></td><td><input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_STATUS].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/></td>';
 }
 if(isset($CActionDtls))
 {
-	$other_text .='&nbsp;<input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
+	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/></td>';
 }
 	/*$other_text .=	'</td>
 			<td align="right">'.$app_strings[LBL_VIEW].'
@@ -342,10 +342,10 @@ if(isset($CActionDtls))
 
 if($viewid == 0)
 {
-$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
+$cvHTML = '<span disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
 <span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=Leads&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+<span disabled>'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
+<a href="index.php?module=Leads&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }else
 {
 $cvHTML = '<a href="index.php?module=Leads&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
@@ -365,14 +365,21 @@ $cvHTML = '<a href="index.php?module=Leads&action=CustomView&record='.$viewid.'"
         </table>';
 
 
-echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$xtpl=new XTemplate ('modules/Leads/ListView.html');
+$custom= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
+//$xtpl=new XTemplate ('modules/Leads/ListView.html');
+$smarty = new vtigerCRM_Smarty;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-$xtpl->assign("MOD", $mod_strings);
+/*$xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMAGE_PATH",$image_path);
+$xtpl->assign("IMAGE_PATH",$image_path);*/
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("CUSTOMVIEW",$custom);
+$smarty->assign("MODULE",$currentModule);
+
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
@@ -478,7 +485,8 @@ if(isset($ids))
 }
 if(isPermitted("Leads",8,'') == 'yes') 
 {
-	$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+	//$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 	$wordTemplateResult = fetchWordTemplateList("Leads");
 	$tempCount = $adb->num_rows($wordTemplateResult);
 	$tempVal = $adb->fetch_array($wordTemplateResult);
@@ -487,7 +495,8 @@ if(isPermitted("Leads",8,'') == 'yes')
 		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
-	$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
+	//$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
+	$smarty->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
 }
 //mass merge for word templates
 
@@ -504,17 +513,23 @@ if($viewid !='')
 $url_string .= "&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Leads",$url_string,$sorder,$order_by,"",$oCustomView);
-$xtpl->assign("LISTHEADER", $listview_header);
+//$xtpl->assign("LISTHEADER", $listview_header);
+$smarty->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"Leads",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
-$xtpl->assign("LISTENTITY", $listview_entries);
-$xtpl->assign("SELECT_SCRIPT", $view_script);
+/*$xtpl->assign("LISTENTITY", $listview_entries);
+$xtpl->assign("SELECT_SCRIPT", $view_script);*/
+$smarty->assign("LISTENTITY", $listview_entries);
+$smarty->assign("SELECT_SCRIPT", $view_script);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Leads","index",$viewid);
-$xtpl->assign("NAVIGATION", $navigationOutput);
+/*$xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 
 $xtpl->parse("main");
-$xtpl->out("main");
+$xtpl->out("main");*/
+$smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("RECORD_COUNTS", $record_string);
+$smarty->display("ListView.tpl");
 
 ?>

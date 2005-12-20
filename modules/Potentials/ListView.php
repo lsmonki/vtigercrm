@@ -13,7 +13,8 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+//require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('modules/Potentials/Opportunity.php');
 require_once('include/utils/utils.php');
@@ -210,7 +211,8 @@ if(isset($_REQUEST['viewname']) == false)
 	$oCustomView->setdefaultviewid = $viewid;
 }
 //<<<<<customview>>>>>
-
+/***********changed for new UI and Smarty --by mangai**************/
+/*
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	// Stick the form header out there.
 	$search_form=new XTemplate ('modules/Potentials/SearchForm.html');
@@ -282,7 +284,7 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 	}
 	echo get_form_footer();
 	echo "\n<BR>\n";
-}
+}*/
 
 
 
@@ -410,11 +412,20 @@ $list_result = $adb->query($list_query);
 
 //Constructing the list view
 
-echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
+/*echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $xtpl=new XTemplate ('modules/Potentials/ListView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMAGE_PATH",$image_path);
+$xtpl->assign("IMAGE_PATH",$image_path);*/
+$custom = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
+$smarty = new vtigerCRM_Smarty();
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("CUSTOMVIEW", $custom);
+$smarty->assign("MODULE",$currentModule);
+
+
 
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
@@ -481,20 +492,30 @@ if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Potentials",$url_string,$sorder,$order_by,"",$oCustomView);
-$xtpl->assign("LISTHEADER", $listview_header);
+//$xtpl->assign("LISTHEADER", $listview_header);
+$smarty->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"Potentials",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
-$xtpl->assign("LISTHEADER", $listview_header);
-$xtpl->assign("LISTENTITY", $listview_entries);
+//$xtpl->assign("LISTHEADER", $listview_header);
+//$xtpl->assign("LISTENTITY", $listview_entries);
+$smarty->assign("LISTHEADER", $listview_header);
+$smarty->assign("LISTENTITY", $listview_entries);
+
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Potentials","index",$viewid);
-$xtpl->assign("NAVIGATION", $navigationOutput);
+/*$xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
-$xtpl->assign("SELECT_SCRIPT", $view_script);
+$xtpl->assign("SELECT_SCRIPT", $view_script);*/
+$smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("RECORD_COUNTS", $record_string);
+$smarty->assign("SELECT_SCRIPT", $view_script);
 
-$xtpl->parse("main");
 
-$xtpl->out("main");
+//$xtpl->parse("main");
+
+//$xtpl->out("main");
+$smarty->display("ListView.tpl");
+
 
 /*$ListView = new ListView();
 $ListView->initNewXTemplate( 'modules/Potentials/ListView.html',$current_module_strings);
