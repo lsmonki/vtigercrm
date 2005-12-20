@@ -25,7 +25,7 @@ $billText=$bill_street."\n".$bill_city.", ".$bill_state." ".$bill_code."\n".$bil
 $pdf->addTextBlock("Billing Address:",$billText, $billPositions);
 
 // totals
-$totalBlock=array("155","235","4", "110");
+$totalBlock=array("145","235","10", "110");
 $totalText="SubTotal:      ".$price_subtotal."\n".
 	   "Tax:              ".$price_tax."\n".
 	   "Adjustment:  ".$price_adjustment."\n".
