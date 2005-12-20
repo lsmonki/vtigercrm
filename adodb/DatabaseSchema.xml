@@ -938,8 +938,6 @@
 		<field name="activitytype" type="C" size="50">
 			<NOTNULL/>
 		</field>
-         	<field name="description" type="X">
-		</field>
 
        		<field name="date_start" type="D">      
 			<NOTNULL/>
