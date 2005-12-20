@@ -1153,6 +1153,103 @@ function getConvertQuoteToSoObject($focus,$quote_focus,$quoteid)
 }
 
 
+function getAssociatedProducts($module,$focus,$seid='')
+{
+	global $adb;
+	$output = '';
+	global $theme;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+	if($module == 'Quotes')
+	{
+		$query="select products.productname,products.unit_price,products.qtyinstock,quotesproductrel.* from quotesproductrel inner join products on products.productid=quotesproductrel.productid where quoteid=".$focus->id;
+	}
+	elseif($module == 'Orders')
+	{
+		$query="select products.productname,products.unit_price,products.qtyinstock,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$focus->id;
+	}
+	elseif($module == 'SalesOrder')
+	{
+		$query="select products.productname,products.unit_price,products.qtyinstock,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$focus->id;
+	}
+	elseif($module == 'Invoice')
+	{
+		$query="select products.productname,products.unit_price,products.qtyinstock,invoiceproductrel.* from invoiceproductrel inner join products on products.productid=invoiceproductrel.productid where invoiceid=".$focus->id;
+	}
+	elseif($module == 'Potentials')
+	{
+		$query="select products.productname,products.unit_price,products.qtyinstock,seproductsrel.* from products inner join seproductsrel on seproductsrel.productid=products.productid where crmid=".$seid;
+	}
+	elseif($module == 'Products')
+	{
+		$query="select products.productid,products.productname,products.unit_price,products.qtyinstock,crmentity.* from products inner join crmentity on crmentity.crmid=products.productid where crmentity.deleted=0 and productid=".$seid;
+	}
+
+	$result = $adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=1;$i<=$num_rows;$i++)
+	{
+		$productname=$adb->query_result($result,$i-1,'productname');
+		$unitprice=$adb->query_result($result,$i-1,'unit_price');
+		$qtyinstock=$adb->query_result($result,$i-1,'qtyinstock');
+		$productid=$adb->query_result($result,$i-1,'productid');
+		$qty=$adb->query_result($result,$i-1,'quantity');
+		$listprice=$adb->query_result($result,$i-1,'listprice');
+		if($listprice == '')
+			$listprice = $unitprice;
+		if($qty =='')
+			$qty = 1;
+		$total = $qty*$listprice;
+
+		$product_id_var = 'hdnProductId'.$i;
+		$status_var = 'hdnRowStatus'.$i;
+		$qty_var = 'txtQty'.$i;
+		$list_price_var = 'txtListPrice'.$i;	
+		$total_var = 'total'.$i;
+		
+		if($i%2 == 0)
+		{
+			$row_class = "evenListRow";
+		}
+		else
+		{
+			$row_class = "oddListRow";
+		}
+
+		$output .= '<tr id="row'.$i.'" class="'.$row_class.'">';
+		$output .= '<td height="25" style="padding:3px;" nowrap><input id="txtProduct'.$i.'" name="txtProduct'.$i.'" type="text" readonly value="'.$productname.'"> <img src="'.$image_path.'search.gif" onClick=\'productPickList(this)\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		if($module != 'Orders' && $focus->object_name != 'Order')
+		{
+			$output .= '<td style="padding:3px;"><div id="qtyInStock'.$i.'">'.$qtyinstock.'</div>&nbsp;</td>';
+			$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		}	
+		$output .= '<td style="padding:3px;"><input type=text id="txtQty'.$i.'" name="txtQty'.$i.'" size="7" value="'.$qty.'" onBlur=\'calcTotal(this)\'></td>';
+		$output .='<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$output .= '<td style="padding:3px;"><div id="unitPrice'.$i.'">'.$unitprice.'</div>&nbsp;</td>';
+		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$output .= '<td style="padding:3px;"><input type=text id="txtListPrice'.$i.'" name="txtListPrice'.$i.'" value="'.$listprice.'" size="12" onBlur="calcTotal(this)"> <img src="'.$image_path.'pricebook.gif" onClick=\'priceBookPickList(this)\' align="absmiddle" style="cursor:hand;cursor:pointer" title="Price Book"></td>';
+		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$output .= '<td style="padding:3px;"><div id="total'.$i.'" align="right">'.$total.'</div></td>';
+		$output .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+
+		if($i != 1)
+		{
+			$output .= '<td style="padding:0px 3px 0px 3px;" align="center" width="50"><a id="delRow'.$i.'" href=\'javascript:;\' onclick=\'delRow(this.id)\'>Del</a>';
+		}
+		else
+		{
+			$output .= '<td style="padding:0px 3px 0px 3px;" align="center" width="50">';
+		}
+		$output .= '<input type="hidden" id="hdnProductId'.$i.'" name="hdnProductId'.$i.'" value="'.$productid.'">';
+		$output .= '<input type="hidden" id="hdnRowStatus'.$i.'" name="hdnRowStatus'.$i.'">';
+		$output .= '<input type="hidden" id="hdnTotal'.$i.'" name="hdnTotal'.$i.'" value="'.$total.'">';
+		$output .= '</td></tr>';	
+
+	}
+	return $output;
+
+}
 
 function getNoOfAssocProducts($module,$focus,$seid='')
 {
