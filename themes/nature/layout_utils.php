@@ -64,7 +64,7 @@ global $image_path;
 global $app_strings;
 
 $the_form = <<<EOQ
-<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
+<!--table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 	  <td>
        <table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
       <!--<td class="formHeader" vAlign="top" align="left" height="20">
@@ -73,7 +73,7 @@ $the_form = <<<EOQ
         <!--<td  class="formHeader" vAlign="top" align="right" height="20">
 	  	  <IMG height="5" src="$image_path/right_arc.gif" width="5" border="0"></td>-->
 		</tr></tbody></table>
-      </td>
+      </td-->
 EOQ;
 
 if ($other_text) {

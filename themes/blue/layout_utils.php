@@ -63,11 +63,11 @@ global $image_path;
 global $app_strings;
 
 $the_form = <<<EOQ
-<table width="100%" cellpadding="0" cellspacing="0" border="0" class="formHeaderULine"><tbody><tr>
+<!--table width="100%" cellpadding="0" cellspacing="0" border="0" class="formHeaderULine"><tbody><tr>
 	  <td valign="bottom">
        <table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>
 		<td vAlign="middle" class="formHeader" align="left" noWrap height="15">$form_title&nbsp;</td>
-        </tr></tbody></table></td>
+        </tr></tbody></table></td-->
 EOQ;
 
 if ($other_text) {
