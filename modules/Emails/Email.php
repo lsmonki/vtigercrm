@@ -100,7 +100,9 @@ class Email extends CRMEntity {
 	*/
 	function get_contacts($id)
 	{
-		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
+		//$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
+		//SQL injectiong given by Chris is added
+		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.PearDatabase::quote($id).' and crmentity.deleted=0';
 		renderRelatedContacts($query,$id);
 	}
 	
@@ -111,7 +113,8 @@ class Email extends CRMEntity {
 	*/
 	function get_users($id)
 	{
-		$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
+		//$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
+		$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.PearDatabase::quote($id);
 		renderRelatedUsers($query);
 	}
 
@@ -131,7 +134,8 @@ class Email extends CRMEntity {
 			left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid
 			left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid
 			inner join users on crm2.smcreatorid= users.id
-		where crmentity.crmid=".$id;
+		where crmentity.crmid=".PearDatabase::quote($id);
+		//where crmentity.crmid=".$id;
 		$query .= ' union all ';
 		$query .= "select attachments.description title ,'Attachments'  ActivityType,
 			attachments.name filename, attachments.type FileType,crm2.modifiedtime lastmodified,
@@ -142,7 +146,8 @@ class Email extends CRMEntity {
 			inner join crmentity on crmentity.crmid= seattachmentsrel.crmid
 			inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
 			inner join users on crm2.smcreatorid= users.id
-		where crmentity.crmid=".$id;
+		where crmentity.crmid=".PearDatabase::quote($id);
+		//where crmentity.crmid=".$id;
 
 		renderRelatedAttachments($query,$id);
 	}
