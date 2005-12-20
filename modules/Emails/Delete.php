@@ -27,7 +27,8 @@ $focus = new Email();
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the email.");
 
-$sql='delete from seactivityrel where activityid='.$_REQUEST['record'];
+	//$sql='delete from seactivityrel where activityid='.$_REQUEST['record'];
+	$sql='delete from seactivityrel where activityid='.PearDatabase::quote($_REQUEST['record']);
 $adb->query($sql);
 
 if($_REQUEST['module'] == $_REQUEST['return_module'])
