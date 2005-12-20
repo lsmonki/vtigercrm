@@ -1274,3 +1274,293 @@ IMG.list {
 	 font-weight: bold;
 }
 /*end: Armando Lüscher 10.08.2005 -> §visibleDescription*/
+
+/*** Added for New UI ***/
+/* added for new UI */
+
+.small {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        line-height: 14px;
+        color: #000000;
+}
+.big {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        line-height: 18px;
+        color: #aaaaaa;
+        font-weight:bold;
+}
+.moduleName {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 18px;
+        color: #000000;
+        font-weight:bold;
+}
+
+.rssDisplayPanel {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        line-height: 12px;
+        color: #ABABAB;
+
+
+
+}
+
+.hdrNameBg {
+
+        background:url(images/topBg.gif);
+}
+
+.hdrTabBg {
+        background:#bbbbbb url(images/tabUnSelectedBg.gif) repeat-x ;
+}
+
+.tabSelected {
+        background:#bbbbbb url(images/tabSelectedBg.gif) repeat-x;
+        font-family:  Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        padding-left:15px;
+        padding-right:15px;
+        padding-top:2px;
+        padding-bottom:2px;
+
+}
+
+.tabUnSelected {
+        background:#bbbbbb url(images/tabUnSelectedBg.gif) repeat-x;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        padding-left:15px;
+        padding-right:15px;
+        padding-top:2px;
+        padding-bottom:2px;
+}
+
+.tabSeperator {
+        background:#bbbbbb url(images/tabSeperatorBg.gif) repeat-x;
+
+
+}
+.level2text {
+        background:#bbbbbb url(images/level2Bg.gif) repeat-x;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        padding-left:20px;
+        padding-right:20px;
+        padding-top:5px;
+        padding-bottom:5px;
+        font-weight:bold;
+        color:white;
+}
+
+.level2text a{
+        text-decoration:none;
+        color:white;
+
+}
+
+.level2text a:hover {
+        text-decoration:underline;
+        color:white;
+
+}
+
+
+
+.level2Bg {
+        background:#bbbbbb url(images/level2Bg.gif) repeat-x;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+
+}
+
+.tabLiner {
+        background:#9abffc url(images/moduleSelectorBg.gif) bottom repeat-x;
+        padding:0px;
+
+
+}
+.sep1 {
+        background:#999999;
+}
+
+
+.showPanelBg {
+        background:url(images/showPanelTopBg.gif) repeat-x;
+}
+
+a {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        text-decoration:none;
+        color:#333333;
+
+}
+
+a:hover {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        text-decoration:underline;
+        color:#333333;
+
+}
+
+
+.searchBox {
+        border: 0px solid #999999;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        padding-left:2px;
+        width:100px;
+        background-color:#ffffef;
+
+}
+.searchBtn {
+        border : 1px #cccccc solid;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        width:30px;
+        height:19px;
+        background-color:#cccccc;
+}
+
+.lvtBg {
+        background-color:#cccccc;
+
+}
+.lvtHeaderText {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        font-weight:bold;
+}
+.lvtCol {
+        border-top:1px solid #eeeeee;
+        border-left:1px solid #eeeeee;
+        border-right:1px solid #999999;
+        border-bottom:1px solid #999999;
+        background-color:#dadada;
+        color:#666666;
+        font-weight:bold;
+}
+
+.lvtColData {
+        background-color:#fafafa;
+}
+
+.lvtColDataHover {
+background-color:#efefef;
+}
+.dvtSelectedCell {
+        border-left:1px solid #cacaca;
+        border-top:3px solid #999999;
+        border-right:1px solid #cacaca;
+        padding-left:20px;
+        padding-right:20px;
+        background-color:white;
+        font-weight:bold;
+}
+.dvtUnSelectedCell {
+        border-left:1px solid #cacaca;
+        border-top:1px solid #cacaca;
+        border-right:1px solid #cacaca;
+        border-bottom:1px solid #cacaca;
+        padding-left:20px;
+        padding-right:20px;
+        background-color:#efefef;
+}
+.dvtTabCache {
+        border-bottom:1px solid #cacaca;
+}
+
+.dvtContentSpace {
+        border-left:1px solid #cacaca;
+        border-right:1px solid #cacaca;
+        border-bottom:1px solid #cacaca;
+        padding-left:0px;
+}
+.rightAddInfo {
+        border-left:1px solid #a2a2a2;
+        border-right:1px solid #dddddd;
+        border-bottom:1px solid #dddddd;
+        border-top:1px solid #a2a2a2;
+        background-color:#fafafa;
+        padding:5px;
+}
+.dvtCellLabel {
+background-color:#f6f6f6;
+padding-right:10px;
+border-bottom:1px solid #eaeaea;
+color:#737373;
+}
+
+.dvtCellInfo {
+padding-left:10px;
+border-bottom:1px solid #eaeaea;
+}
+
+.rightMailMerge {
+    border:1px solid #dddddd
+}
+
+.rightMailMergeHeader {
+    border-bottom:1px solid #dddddd;
+    padding:5px;
+    background-color:#eaeaea;
+
+}
+
+.rightMailMergeContent {
+    padding:5px;
+    background-color:#fafafa;
+
+}
+
+.rightUpcomingActivitiesHeader{
+    border-bottom:1px solid #ddddcc;
+    padding:5px;
+    background-color:#ffffdd;
+}
+
+.rightUpcomingActivitiesContent {
+    padding:5px;
+    background-color:#ffffef;
+}
+.detailedViewHeader{
+border-bottom:1px solid #999999;
+padding:5px;
+background-color:#e5e5e5;
+
+}
+.detailedViewTextBox {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #000000;
+    border:1px solid #bababa;
+    padding-left:5px;
+    width:90%;
+    background-color:#ffffff;
+}
+.detailedViewTextBoxOn {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #000000;
+    border:1px solid #bababa;
+    padding-left:5px;
+    width:90%;
+    background-color:#ffffdd;
+}
+.detailedViewTextArea {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #000000;
+    border:1px solid #bababa;
+    padding-left:5px;
+    width:95%;
+    height:100px;
+    background-color:#ffffff;
+    text-align:left;
+}
+
+
