@@ -153,23 +153,20 @@ class SalesOrder extends CRMEntity {
 */
 	function get_history($id)
 	{
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crmentity.createdtime, activity.description, users.user_name
-		// Inserted inner join users on crmentity.smcreatorid=users.id
-		// Inserted order by createdtime desc
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid,
-			activity.*, seactivityrel.*, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime,
-			crmentity.createdtime, activity.description, users.user_name
-		from activity
-			inner join seactivityrel on seactivityrel.activityid=activity.activityid
-			inner join crmentity on crmentity.crmid=activity.activityid
-			left join cntactivityrel on cntactivityrel.activityid= activity.activityid
-			left join contactdetails on contactdetails.contactid = cntactivityrel.contactid
-			inner join users on crmentity.smcreatorid=users.id
-		where (activitytype='Task' or activitytype='Call' or activitytype='Meeting')
-			and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus !='Planned' and activity.eventstatus != ''))
-			and seactivityrel.crmid=".$id."
-		order by createdtime desc";
+				activity.*, seactivityrel.*, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime,
+				crmentity.createdtime, crmentity.description, users.user_name
+			from activity
+				inner join seactivityrel on seactivityrel.activityid=activity.activityid
+				inner join crmentity on crmentity.crmid=activity.activityid
+				left join cntactivityrel on cntactivityrel.activityid= activity.activityid
+				left join contactdetails on contactdetails.contactid = cntactivityrel.contactid
+				inner join users on crmentity.smcreatorid=users.id
+			where (activitytype='Task' or activitytype='Call' or activitytype='Meeting')
+				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus !='Planned' and activity.eventstatus != ''))
+				and seactivityrel.crmid=".$id;
+		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
+
 		renderRelatedHistory($query,$id);
 	}
 

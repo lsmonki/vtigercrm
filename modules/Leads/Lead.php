@@ -309,25 +309,22 @@ return $exists;
         }
 	function get_history($id)
 	{
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crm2.createdtime, activity.description, users.user_name
-		// Inserted inner join users on crm2.smcreatorid=users.id
-		// Inserted order by createdtime desc
 		$query = "SELECT activity.activityid, activity.subject, activity.status,
-			activity.eventstatus, activity.activitytype, contactdetails.contactid,
-			contactdetails.firstname, contactdetails.lastname, crmentity.modifiedtime,
-			crmentity.createdtime, activity.description, users.user_name,activitygrouprelation.groupname
-		from activity
-			inner join seactivityrel on seactivityrel.activityid=activity.activityid
-			inner join crmentity on crmentity.crmid=activity.activityid
-			left join cntactivityrel on cntactivityrel.activityid= activity.activityid
-			left join contactdetails on contactdetails.contactid= cntactivityrel.contactid
-			left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid 
-			left join users on crmentity.smownerid= users.id
-		where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
-			and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
-			and seactivityrel.crmid=".$id."
-		order by createdtime desc";
+				activity.eventstatus, activity.activitytype, contactdetails.contactid,
+				contactdetails.firstname, contactdetails.lastname, crmentity.modifiedtime,
+				crmentity.createdtime, crmentity.description, users.user_name,activitygrouprelation.groupname
+			from activity
+				inner join seactivityrel on seactivityrel.activityid=activity.activityid
+				inner join crmentity on crmentity.crmid=activity.activityid
+				left join cntactivityrel on cntactivityrel.activityid= activity.activityid
+				left join contactdetails on contactdetails.contactid= cntactivityrel.contactid
+				left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid 
+				left join users on crmentity.smownerid= users.id
+			where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
+				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
+				and seactivityrel.crmid=".$id;
+		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
+
 		renderRelatedHistory($query,$id);
 	}
 

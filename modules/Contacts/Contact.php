@@ -361,24 +361,21 @@ class Contact extends CRMEntity {
 
 	function get_history($id)
 	{
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crmentity.createdtime, activity.description, users.user_name
-		// Inserted inner join users on crmentity.smcreatorid=users.id
-		// Inserted order by createdtime desc
 		$query = "SELECT activity.activityid, activity.subject, activity.status, activity.eventstatus,
-			activity.activitytype, contactdetails.contactid, contactdetails.firstname,
-			contactdetails.lastname, crmentity.modifiedtime,
-			crmentity.createdtime, activity.description, users.user_name
-		from activity
-			inner join cntactivityrel on cntactivityrel.activityid= activity.activityid
-			inner join contactdetails on contactdetails.contactid= cntactivityrel.contactid
-			inner join crmentity on crmentity.crmid=activity.activityid
-			left join seactivityrel on seactivityrel.activityid=activity.activityid
-			inner join users on crmentity.smcreatorid= users.id
-		where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
-			 and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
-			and cntactivityrel.contactid=".$id."
-		order by createdtime desc";
+				activity.activitytype, contactdetails.contactid, contactdetails.firstname,
+				contactdetails.lastname, crmentity.modifiedtime,
+				crmentity.createdtime, crmentity.description, users.user_name
+			from activity
+				inner join cntactivityrel on cntactivityrel.activityid= activity.activityid
+				inner join contactdetails on contactdetails.contactid= cntactivityrel.contactid
+				inner join crmentity on crmentity.crmid=activity.activityid
+				left join seactivityrel on seactivityrel.activityid=activity.activityid
+				inner join users on crmentity.smcreatorid= users.id
+			where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
+				 and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
+				and cntactivityrel.contactid=".$id;
+		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
+
 		renderRelatedHistory($query,$id);
 	}
 	function get_tickets($id)

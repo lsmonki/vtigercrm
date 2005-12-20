@@ -363,7 +363,7 @@ class Activity extends CRMEntity {
    
     function get_calendars($user_name,$from_index,$offset)
     {   
-		$query = "select activity.location as location,activity.duration_hours as duehours, activity.duration_minutes as dueminutes,activity.time_start as time_start, activity.subject as name,crmentity.modifiedtime as date_modified, activity.date_start start_date,activity.activityid as id,activity.status as status,activity.description as description, activity.priority as priority, activity.due_date as date_due ,contactdetails.firstname cfn, contactdetails.lastname cln from activity inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid left join cntactivityrel on cntactivityrel.activityid=activity.activityid left join contactdetails on contactdetails.contactid=cntactivityrel.contactid inner join crmentity on crmentity.crmid=activity.activityid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Meeting' limit " .$from_index ."," .$offset;
+		$query = "select activity.location as location,activity.duration_hours as duehours, activity.duration_minutes as dueminutes,activity.time_start as time_start, activity.subject as name,crmentity.modifiedtime as date_modified, activity.date_start start_date,activity.activityid as id,activity.status as status, crmentity.description as description, activity.priority as priority, activity.due_date as date_due ,contactdetails.firstname cfn, contactdetails.lastname cln from activity inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid left join cntactivityrel on cntactivityrel.activityid=activity.activityid left join contactdetails on contactdetails.contactid=cntactivityrel.contactid inner join crmentity on crmentity.crmid=activity.activityid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Meeting' limit " .$from_index ."," .$offset;
 	    return $this->process_list_query1($query);   
     }       
 //calendarsync
@@ -384,7 +384,7 @@ class Activity extends CRMEntity {
     {   
 //         $query = "select tasks.*, contacts.first_name cfn, contacts.last_name cln from tasks inner join users on users.id=tasks.assigned_user_id left join contacts on contacts.id=tasks.contact_id  where user_name='" .$user_name ."' and tasks.deleted=0 limit " .$from_index ."," .$offset;
 
-	 $query = "select activity.subject as name,crmentity.modifiedtime as date_modified, activity.date_start start_date,activity.activityid as id,activity.status as status,activity.description as description, activity.priority as priority, activity.due_date as date_due ,contactdetails.firstname cfn, contactdetails.lastname cln from activity inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid left join cntactivityrel on cntactivityrel.activityid=activity.activityid left join contactdetails on contactdetails.contactid=cntactivityrel.contactid inner join crmentity on crmentity.crmid=activity.activityid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Task' limit " .$from_index ."," .$offset;
+	 $query = "select activity.subject as name,crmentity.modifiedtime as date_modified, activity.date_start start_date,activity.activityid as id,activity.status as status, crmentity.description as description, activity.priority as priority, activity.due_date as date_due ,contactdetails.firstname cfn, contactdetails.lastname cln from activity inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid inner join users on users.id=salesmanactivityrel.smid left join cntactivityrel on cntactivityrel.activityid=activity.activityid left join contactdetails on contactdetails.contactid=cntactivityrel.contactid inner join crmentity on crmentity.crmid=activity.activityid where user_name='" .$user_name ."' and crmentity.deleted=0 and activity.activitytype='Task' limit " .$from_index ."," .$offset;
 
     return $this->process_list_query1($query);
     
@@ -503,7 +503,7 @@ function get_tasksforol($username)
 {
 	$query = "select activity.subject,activity.date_start startdate,
 			 activity.activityid as taskid,activity.status,
-			 activity.description,activity.priority as priority,activity.due_date as duedate,
+			 crmentity.description,activity.priority as priority,activity.due_date as duedate,
 			 contactdetails.firstname, contactdetails.lastname 
 			 from activity inner join crmentity on crmentity.crmid=activity.activityid 
 			 inner join users on users.id = crmentity.smownerid 
@@ -519,7 +519,7 @@ function get_calendarsforol($user_name)
 	  $query = "select activity.location, activity.duration_hours as duehours, 
 				activity.duration_minutes as dueminutes,activity.time_start as startime, 
 				activity.subject,activity.date_start as startdate,activity.activityid as clndrid,
-				activity.description,activity.due_date as duedate ,
+				crmentity.description,activity.due_date as duedate ,
 				contactdetails.firstname, contactdetails.lastname from activity 
 				inner join salesmanactivityrel on salesmanactivityrel.activityid=activity.activityid 
 				inner join users on users.id=salesmanactivityrel.smid 
