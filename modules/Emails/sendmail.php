@@ -38,12 +38,14 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 	
 	$noofrows = $adb->num_rows($result);
 
-	$dbQuery = 'select attachments.*, activity.subject, crmentity.description  from activity inner join crmentity on crmentity.crmid = activity.activityid left join seattachmentsrel on seattachmentsrel.crmid = activity.activityid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid = '.$_REQUEST['return_id'];
+	//$dbQuery = 'select attachments.*, activity.subject, crmentity.description  from activity inner join crmentity on crmentity.crmid = activity.activityid left join seattachmentsrel on seattachmentsrel.crmid = activity.activityid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid = '.$_REQUEST['return_id'];
+	$dbQuery = 'select attachments.*, activity.subject, crmentity.description  from activity inner join crmentity on crmentity.crmid = activity.activityid left join seattachmentsrel on seattachmentsrel.crmid = activity.activityid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid = '.PearDatabase::quote($_REQUEST['return_id']);
 
         $result1 = $adb->query($dbQuery) or die("Couldn't get file list");
 	$temparray = $adb->fetch_array($result1);
 
-	$notequery = 'select  attachments.*, notes.notesid, notes.filename,notes.notecontent  from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$_REQUEST['return_id'];
+	//$notequery = 'select  attachments.*, notes.notesid, notes.filename,notes.notecontent  from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.$_REQUEST['return_id'];
+	$notequery = 'select  attachments.*, notes.notesid, notes.filename,notes.notecontent  from notes inner join senotesrel on senotesrel.notesid= notes.notesid inner join crmentity on crmentity.crmid= senotesrel.crmid left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid where crmentity.crmid='.PearDatabase::quote($_REQUEST['return_id']);
 	$result2 = $adb->query($notequery) or die("Couldn't get file list");
 
 	$mail = new PHPMailer();
@@ -52,7 +54,8 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 
 	$DESCRIPTION = $adb->query_result($result1,0,"description");
 	$DESCRIPTION .= '<br><br>';
-	$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"signature")).'</font>';
+	//$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"signature")).'</font>';
+	$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from users where user_name=".PearDatabase::quote($from).),0,"signature")).'</font>';
 
         $mail->Body    = nl2br($DESCRIPTION);
 	$initialfrom = $from;
@@ -73,7 +76,9 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 		$mail->SMTPAuth = true;
 		$mail->Username = $mail_server_username;
 		$mail->Password = $mail_server_password;
-		$mail->From = $adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"email1");
+		//$mail->From = $adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"email1");
+
+		$mail->From = $adb->query_result($adb->query("select * from users where user_name=".PearDatabase::quote($from).),0,"email1");
 		$mail->FromName = $initialfrom;
 		$mail->AddReplyTo($from);
 		$mail->WordWrap = 50;

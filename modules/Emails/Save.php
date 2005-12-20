@@ -136,7 +136,8 @@ function checkIfContactExists($mailid)
 {
 	global $adb;
 	//query being changed so that the deleted contacts are not considered
-	$sql = "select contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and email= '".$mailid ."' ";
+	//$sql = "select contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and email= '".$mailid ."' ";
+	$sql = "select contactid from contactdetails inner join crmentity on crmentity.crmid=contactdetails.contactid where crmentity.deleted=0 and email= ".PearDatabase::quote($mailid);
 	$result = $adb->query($sql);
 	$numRows = $adb->num_rows($result);
 	if($numRows > 0)
@@ -154,14 +155,15 @@ function checkIfContactExists($mailid)
 //But the update blob will fail because of tmp_name. this update blob is added after save function called.
 if($_FILES['filename']['name'] == '' && $_REQUEST['mode'] != 'edit' && $_REQUEST['old_id'] != '')
 {
-	$sql = "select attachments.attachmentsid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid=attachments.attachmentsid where seattachmentsrel.crmid= ".$_REQUEST['old_id'];
+	//$sql = "select attachments.attachmentsid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid=attachments.attachmentsid where seattachmentsrel.crmid= ".$_REQUEST['old_id'];
+	$sql = "select attachments.attachmentsid from attachments inner join seattachmentsrel on seattachmentsrel.attachmentsid=attachments.attachmentsid where seattachmentsrel.crmid= ".PearDatabase::quote($_REQUEST['old_id']);
 
 	$result = $adb->query($sql);
 	if($adb->num_rows($result) != 0)
 		$attachmentid = $adb->query_result($result,0,'attachmentsid');
 	if($attachmentid != '')
 	{
-		$attachquery = "select * from attachments where attachmentsid = ".$attachmentid;
+		$attachquery = "select * from attachments where attachmentsid = ".PearDatabase::quote($attachmentid);
 		$result = $adb->query($attachquery);
 		$filename = $adb->query_result($result,0,'name');
 		$filetype = $adb->query_result($result,0,'type');
@@ -195,9 +197,11 @@ $email_id = $return_id;
 //this is to update the blob with the data retrieved from the database
 if($attachmentid != '')
 {
-	$sql = "select attachmentsid from seattachmentsrel where crmid=".$focus->id;
+	//$sql = "select attachmentsid from seattachmentsrel where crmid=".$focus->id;
+	$sql = "select attachmentsid from seattachmentsrel where crmid=".PearDatabase::quote($focus->id);
 	$attachmentid = $adb->query_result($adb->query($sql),0,'attachmentsid');
-	$result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$attachmentid."' and name='".$filename."'",$data);
+	//$result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$attachmentid."' and name='".$filename."'",$data);
+	$result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".PearDatabase::quote($attachmentid)."' and name='".PearDatabase::quote($filename)."'",$data);
 }
 
 $focus->retrieve_entity_info($return_id,"Emails");

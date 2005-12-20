@@ -85,7 +85,8 @@ function getUserEmailId($name,$val)
 	$adb->println("Inside the function getUserEmailId. --- ".$name." = '".$val."'");
 	if($val != '')
 	{
-		$sql = "select email1, email2, yahoo_id from users where ".$name." = '".$val."'";
+		//$sql = "select email1, email2, yahoo_id from users where ".$name." = '".$val."'";
+		$sql = "select email1, email2, yahoo_id from users where ".$name." = ".PearDatabase::quote($val);
 		$res = $adb->query($sql);
 		$email = $adb->query_result($res,0,'email1');
 		if($email == '')
@@ -115,7 +116,7 @@ function addSignature($contents, $fromname)
 	global $adb;
 	$adb->println("Inside the function addSignature");
 
-	$sign = $adb->query_result($adb->query("select signature from users where user_name='".$fromname."'"),0,"signature");
+	$sign = $adb->query_result($adb->query("select signature from users where user_name=".PearDatabase::quote($fromname)),0,"signature");
 	if($sign != '')
 	{
 		$contents .= '<br><br><font color=darkgrey>'.$sign.'</font>';
@@ -276,7 +277,8 @@ function getParentMailId($parentmodule,$parentid)
         }
 	if($parentid != '')
 	{
-	        $query = 'select * from '.$tablename.' where '.$idname.' = '.$parentid;
+	        //$query = 'select * from '.$tablename.' where '.$idname.' = '.$parentid;
+	        $query = 'select * from '.$tablename.' where '. $idname.' = '.PearDatabase::quote($parentid);
 	        $mailid = $adb->query_result($adb->query($query),0,$first_email);
 		$mailid2 = $adb->query_result($adb->query($query),0,$second_email);
 	}

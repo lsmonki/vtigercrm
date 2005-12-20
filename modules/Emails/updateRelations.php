@@ -15,12 +15,14 @@ global $adb;
 if(isset($_REQUEST['user_id']) && $_REQUEST['user_id'] != '')
 {
 	$record = $_REQUEST['record'];
-	$sql = "insert into salesmanactivityrel values (". $_REQUEST["user_id"] .",".$_REQUEST["record"] .")";
+	//$sql = "insert into salesmanactivityrel values (". $_REQUEST["user_id"] .",".$_REQUEST["record"] .")";
+	$sql = "insert into salesmanactivityrel values (".PearDatabase::quote($_REQUEST["user_id"]).",".PearDatabase::quote($_REQUEST["record"]).")";
 }
 else
 {
 	$record = $_REQUEST["parid"];
-	$sql = "insert into seactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
+	//$sql = "insert into seactivityrel values (". $_REQUEST["entityid"] .",".$_REQUEST["parid"] .")";
+	$sql = "insert into seactivityrel values (". PearDatabase::quote($_REQUEST["entityid"]).",".PearDatabase::quote($_REQUEST["parid"]) .")";
 }
 
 $adb->query($sql);
