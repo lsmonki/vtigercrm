@@ -74,6 +74,8 @@ function copyAddressRight(form) {
 
 	form.ship_country.value = form.bill_country.value;
 
+	form.ship_pobox.value = form.bill_pobox.value;
+
 	return true;
 
 }
@@ -89,6 +91,8 @@ function copyAddressLeft(form) {
 	form.bill_code.value =	form.ship_code.value;
 
 	form.bill_country.value = form.ship_country.value;
+
+	form.bill_pobox.value = form.ship_pobox.value;
 
 	return true;
 
