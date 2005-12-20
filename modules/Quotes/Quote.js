@@ -294,7 +294,6 @@ function massDelete()
         }
         document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Quotes&return_action=index&viewname="+viewid;
 }
-<script type='text/javascript' language='JavaScript'>
 function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_name.value = product_name;
         window.opener.document.EditView.parent_id.value = product_id;
