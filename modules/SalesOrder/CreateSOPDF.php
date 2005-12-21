@@ -1,16 +1,24 @@
 <?php
-/*********************************************************************************
-** The contents of this file are subject to the vtiger CRM Public License Version 1.0
- * ("License"); You may not use this file except in compliance with the License
- * The Original Code is:  vtiger CRM Open Source
- * The Initial Developer of the Original Code is vtiger.
- * Portions created by vtiger are Copyright (C) vtiger.
- * All Rights Reserved.
-*
- ********************************************************************************/
 require('include/fpdf/fpdf.php');
-require_once('modules/SalesOrder/SalesOrder.php');
-require_once('include/utils/utils.php');
+require_once('modules/Orders/SalesOrder.php');
+require_once('include/database/PearDatabase.php');
+
+//define('EURO', chr(128) );
+//define('EURO_VAL', 6.55957 );
+//define('USD',"�");
+
+//Curency Settings By OpenCRM
+global $adb;
+global $app_strings;
+
+$sql="select currency_symbol from currency_info";
+$result = $adb->query($sql);
+$currency_symbol = $adb->query_result($result,0,'currency_symbol');
+
+// would you like and end page?  1 for yes 0 for no
+$endpage="1";
+global $products_per_page;
+$products_per_page="6";
 
 $id = $_REQUEST['record'];
 global $adb;
@@ -18,427 +26,578 @@ global $adb;
 $focus = new SalesOrder();
 $focus->retrieve_entity_info($_REQUEST['record'],"SalesOrder");
 $account_name = getAccountName($focus->column_fields[account_id]);
-$iData[] = $account_name;
-$iData[] = $id;
-$created_time = getDateFromDateAndTime($focus->column_fields['createdtime']);
-$iData[] = getDisplayDate($created_time[0]);
-//newly added for Sales Order No.
-if($focus->column_fields["quote_id"] != '')
-{
-        $qt_name = getQuoteName($focus->column_fields["quote_id"]);
-}
-else
-{
-        $qt_name = ' ';
-}
 
-$iData[] = $qt_name;	
-
-//setting the Customer Data
-$iCustData[] = $account_name;
-
-if($focus->column_fields["purchaseorder"] != '')
-{
-        $po_name = $focus->column_fields["purchaseorder"];
-}
-else
-{
-        $po_name = ' ';
-}
-
-$iCustData[] = $po_name;
-
-if($focus->column_fields["duedate"] != '')
-{
-        $due_date = getDisplayDate($focus->column_fields["duedate"]);
-}
-else
-{
-	$due_date = ' ';
-}
-$iCustData[] = $due_date;
-
-//setting the billing address
-$bdata[] = $account_name;
-if($focus->column_fields["bill_street"] != '')
-{
-        $bill_street = $focus->column_fields["bill_street"];
-	$bdata[] = $bill_street;
-	
-}
-if($focus->column_fields["bill_pobox"] != '')
-{
-        $bill_pobox = $focus->column_fields["bill_pobox"];
-        $bdata[] = $bill_pobox;
-}
-if($focus->column_fields["bill_city"] != '')
-{
-        $bill_city = $focus->column_fields["bill_city"];
-	$bdata[] = $bill_city;
-}
-
-
-if($focus->column_fields["bill_state"] != '')
-{
-        $bill_state = $focus->column_fields["bill_state"];
-	$bdata[] = $bill_state;
-}
-
-
-if($focus->column_fields["bill_code"] != '')
-{
-        $bill_code = $focus->column_fields["bill_code"];
-	$bdata[] = $bill_code;
-}
-
-
-if($focus->column_fields["bill_country"] != '')
-{
-        $bill_country = $focus->column_fields["bill_country"];
-	$bdata[] = $bill_country;
-}
-
-for($i =0; $i <6; $i++)
-{
-	if(sizeof($bdata) < 6)
-	{
-		$bdata[] = ' '; 
-	}
-}
-
-//setting the shipping address
-$sdata[] = $account_name;
-if($focus->column_fields["ship_street"] != '')
-{
-        $ship_street = $focus->column_fields["ship_street"];
-	$sdata[] = $ship_street;
-}
-if($focus->column_fields["ship_pobox"] != '')
-{
-        $ship_pobox = $focus->column_fields["ship_pobox"];
-        $sdata[] = $ship_pobox;
-}
-
-if($focus->column_fields["ship_city"] != '')
-{
-        $ship_city = $focus->column_fields["ship_city"];
-	$sdata[] = $ship_city;
-}
-
-
-if($focus->column_fields["ship_state"] != '')
-{
-        $ship_state = $focus->column_fields["ship_state"];
-	$sdata[] = $ship_state;
-}
-
-
-if($focus->column_fields["ship_code"] != '')
-{
-        $ship_code = $focus->column_fields["ship_code"];
-	$sdata[] = $ship_code;
-}
-
-
-if($focus->column_fields["ship_country"] != '')
-{
-        $ship_country = $focus->column_fields["ship_country"];
-	$sdata[] = $ship_country;
-}
-
-for($i =0; $i <6; $i++)
-{
-	if(sizeof($sdata) < 6)
-	{
-		$sdata[] = ' '; 
-	}
-}
-
-//Getting the terms_conditions
-
-if($focus->column_fields["terms_conditions"] != '')
-{
-        $conditions = $focus->column_fields["terms_conditions"];
-}
-else
-{
-        $conditions = ' ';
-}
-
-//Getting the Company Address
-$add_query = "select * from organizationdetails";
-$result = $adb->query($add_query);
-$num_rows = $adb->num_rows($result);
-$org_field_array = Array('organizationame','address','city','state','country','code','phone','fax','website');
-
-$companyaddress = Array();
-$logo_name = '';
-	
-if($num_rows == 1)
-{
-	$org_name = $adb->query_result($result,0,"organizationame");
-	$org_address = $adb->query_result($result,0,"address");
-	$org_city = $adb->query_result($result,0,"city");
-	$org_state = $adb->query_result($result,0,"state");
-	$org_country = $adb->query_result($result,0,"country");
-	$org_code = $adb->query_result($result,0,"code");
-	$org_phone = $adb->query_result($result,0,"phone");
-	$org_fax = $adb->query_result($result,0,"fax");
-	$org_website = $adb->query_result($result,0,"website");
-
-	if($org_name != '')
-	{
-		$companyaddress[] =  $org_name;
-	}
-	if($org_address != '' || $org_city != '' || $org_state != '')
-	{
-		$companyaddress[] = $org_address.' '.$org_city.' '.$org_state;
-	}
-	if($org_country != '' || $org_code!= '')
-	{
-		$companyaddress[] = $org_country.' '.$org_code;
-	}
-	if($org_phone != '' || $org_fax != '')
-	{
-		$companyaddress[] = $org_phone.' '.$org_fax;
-	}
-	if($org_website != '')
-	{
-		$companyaddress[] = $org_website;
-	}
-	
-	for($i =0; $i < 4; $i++)
-	{
-		if(sizeof($companyaddress) < 5)
-		{
-			$companyaddress[] = ' '; 
-		}
-	}	
-
-	$logo_name = $adb->query_result($result,0,"logoname");
-}
-//Getting the logo
-
-//getting the Product Data
-$query="select products.productname,products.unit_price,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$id;
-
-$result = $adb->query($query);
-$num_rows=$adb->num_rows($result);
-for($i=1;$i<=$num_rows;$i++)
-{
-	$temp_data = Array();
-        $productname=$adb->query_result($result,$i-1,'productname');
-        $unitprice=$adb->query_result($result,$i-1,'unit_price');
-        $productid=$adb->query_result($result,$i-1,'productid');
-        $qty=$adb->query_result($result,$i-1,'quantity');
-        $listprice=$adb->query_result($result,$i-1,'listprice');
-        $total = $qty*$listprice;
-
-	$temp_data['productname'] = $productname;
-	$temp_data['qty'] = $qty;
-	$temp_data['unitprice'] = $unitprice;
-	$temp_data['listprice'] = $listprice;
-	$temp_data['total'] = $total;
-	$iDataDtls[] = $temp_data;
-
-}
-//getting the Total Array
-$price_total[] = $focus->column_fields["hdnSubTotal"];
-$price_total[] = $focus->column_fields["txtTax"];
-$price_total[] = $focus->column_fields["txtAdjustment"];
-$price_total[] = $focus->column_fields["hdnGrandTotal"];
-
+// Xavier Nicolay 2004
+// Version 1.01
 class PDF extends FPDF
 {
+// private variables
+var $columns;
+var $format;
+var $angle=0;
 
-// Invoice Title
-function setInvoiceTitle($title,$logo_name,$caddress)
+// private functions
+function RoundedRect($x, $y, $w, $h, $r, $style = '')
 {
-	if($title != "")
+	$k = $this->k;
+	$hp = $this->h;
+	if($style=='F')
+		$op='f';
+	elseif($style=='FD' or $style=='DF')
+		$op='B';
+	else
+		$op='S';
+	$MyArc = 4/3 * (sqrt(2) - 1);
+	$this->_out(sprintf('%.2f %.2f m',($x+$r)*$k,($hp-$y)*$k ));
+	$xc = $x+$w-$r ;
+	$yc = $y+$r;
+	$this->_out(sprintf('%.2f %.2f l', $xc*$k,($hp-$y)*$k ));
+
+	$this->_Arc($xc + $r*$MyArc, $yc - $r, $xc + $r, $yc - $r*$MyArc, $xc + $r, $yc);
+	$xc = $x+$w-$r ;
+	$yc = $y+$h-$r;
+	$this->_out(sprintf('%.2f %.2f l',($x+$w)*$k,($hp-$yc)*$k));
+	$this->_Arc($xc + $r, $yc + $r*$MyArc, $xc + $r*$MyArc, $yc + $r, $xc, $yc + $r);
+	$xc = $x+$r ;
+	$yc = $y+$h-$r;
+	$this->_out(sprintf('%.2f %.2f l',$xc*$k,($hp-($y+$h))*$k));
+	$this->_Arc($xc - $r*$MyArc, $yc + $r, $xc - $r, $yc + $r*$MyArc, $xc - $r, $yc);
+	$xc = $x+$r ;
+	$yc = $y+$r;
+	$this->_out(sprintf('%.2f %.2f l',($x)*$k,($hp-$yc)*$k ));
+	$this->_Arc($xc - $r, $yc - $r*$MyArc, $xc - $r*$MyArc, $yc - $r, $xc, $yc - $r);
+	$this->_out($op);
+}
+
+function _Arc($x1, $y1, $x2, $y2, $x3, $y3)
+{
+	$h = $this->h;
+	$this->_out(sprintf('%.2f %.2f %.2f %.2f %.2f %.2f c ', $x1*$this->k, ($h-$y1)*$this->k,
+						$x2*$this->k, ($h-$y2)*$this->k, $x3*$this->k, ($h-$y3)*$this->k));
+}
+
+function Rotate($angle,$x=-1,$y=-1)
+{
+	if($x==-1)
+		$x=$this->x;
+	if($y==-1)
+		$y=$this->y;
+	if($this->angle!=0)
+		$this->_out('Q');
+	$this->angle=$angle;
+	if($angle!=0)
 	{
-		if(isset($logo_name) && $logo_name != '')
+		$angle*=M_PI/180;
+		$c=cos($angle);
+		$s=sin($angle);
+		$cx=$x*$this->k;
+		$cy=($this->h-$y)*$this->k;
+		$this->_out(sprintf('q %.5f %.5f %.5f %.5f %.2f %.2f cm 1 0 0 1 %.2f %.2f cm',$c,$s,-$s,$c,$cx,$cy,-$cx,-$cy));
+	}
+}
+
+function _endpage()
+{
+	if($this->angle!=0)
+	{
+		$this->angle=0;
+		$this->_out('Q');
+	}
+	parent::_endpage();
+}
+
+// public functions
+function sizeOfText( $text, $largeur )
+{
+	$index    = 0;
+	$nb_lines = 0;
+	$loop     = TRUE;
+	while ( $loop )
+	{
+		$pos = strpos($text, "\n");
+		if (!$pos)
 		{
-			$this->Image('test/logo/'.$logo_name,10,10,0,0);
+			$loop  = FALSE;
+			$line = $text;
 		}
 		else
 		{
-			//$this->Image('themes/Aqua/images/blank.jpg',10,10,0,0);
+			$line  = substr( $text, $index, $pos);
+			$text = substr( $text, $pos+1 );
 		}
-		for($i=0;$i<count($caddress);$i++)
-		{
-
-			$this->Ln();
-			$this->Cell(40);
-			$this->SetFont('','',10);
-			$this->Cell(0,5,$caddress[$i],0,0,'L',0);
-		}
-		$this->Ln();
-		$this->SetFillColor(224,235,255);
-    		$this->SetTextColor(0);
-    		$this->SetFont('','B',18);
-    		$this->Cell(0,10,$title,0,0,'C',0);
-
+		$length = floor( $this->GetStringWidth( $line ) );
+		$res = 1 + floor( $length / $largeur) ;
+		$nb_lines += $res;
 	}
+	return $nb_lines;
 }
-//Invoice Address
-function setAddress($billing="",$shipping="")
-{
-	
-	$this->Ln();
-	$this->SetFillColor(224,235,255);
- 	$this->SetTextColor(0);
-    	$this->SetFont('','B',10);
-	$this->Cell(130,10,"Bill To:",0,0,'L',0);
- 	$this->Cell(0,10,"Ship To:",0,0,'L',0);
-	for($i=0;$i<count($billing);$i++)
+
+// addImage
+// $logo_name = name of logo, no path needed.
+// $location = array ('x','y','width','height')
+// Default will place vtiger in the top left corner
+function addImage( $logo_name, $location=array('10','10','0','0') ) {
+	if($logo_name)//error checking just in case, by OpenCRM
 	{
-		$this->Cell(17);
-		$this->SetFont('','',10);
-		$this->Cell(130,5,$billing[$i],0,0,'L',0);
-		$this->Cell(0,5,$shipping[$i],0,0,'L',0);
-		$this->Ln();
+		$x1 = $location[0];
+		$y1 = $location[1];
+		$stretchx = $location[2];
+		$stretchy = $location[3];
+		$this->Image('test/logo/'.$logo_name,$x1,$y1,$stretchx,$stretchy);
 	}
-
-}
-//Invoice from
-function setInvoiceDetails($iHeader,$iData)
-{
-    $this->Ln();
-    $this->SetFillColor(162,200,243);
-    $this->SetTextColor(0);
-    $this->SetDrawColor(61,121,206);
-    //$this->SetLineWidth(.3);
-    $this->SetFont('Arial','B',10);
-    //Header
-    $this->Cell(15);
-    foreach($iHeader as $value)
-    {
-        $this->Cell(40,7,$value,1,0,'L',1);
-    }
-    $this->Ln();
-    $this->SetFillColor(233,241,253);
-    $this->SetTextColor(0);
-    $this->SetFont('');
-    //Data
-    $this->Cell(15);
-    $fill=0;
-    foreach($iData as $value)
-    {
-		$this->Cell(40,6,$value,1,0,'L',0);
-    }
-    $this->Ln();
 }
 
-//customer Details
-function setCustomerDetails($iCHeader,$iCData)
+// Company
+function addCompany( $nom, $address, $location='' )
 {
-    $this->Ln();
-    //$this->Cell(0);
-    $this->SetFillColor(162,200,243);
-    $this->SetTextColor(0);
-    $this->SetDrawColor(61,121,206);
-    //$this->SetLineWidth(.3);
-    $this->SetFont('Arial','B',10);
-    //Header
-    //$this->Cell(15);
-    foreach($iCHeader as $value)
-    {
-        $this->Cell(63,7,$value,1,0,'L',1);
-    }
-    $this->Ln();
-    $this->SetFillColor(233,241,253);
-    $this->SetTextColor(0);
-    $this->SetFont('');
-    //Data
-    //$this->Cell(15);
-    $fill=0;
-    foreach($iCData as $value)
-    {
-		$this->Cell(63,6,$value,1,0,'L',0);
-    }
-    $this->Ln();
+	$x1 = $location[0];
+	$y1 = $location[1];
+	//Positionnement en bas
+	$this->SetXY( $x1, $y1 );
+	$this->SetFont('Arial','B',12);
+	$length = $this->GetStringWidth( $nom );
+	$this->Cell( $length, 2, $nom);
+	$this->SetXY( $x1, $y1 + 4 );
+	$this->SetFont('Arial','',10);
+	$length = $this->GetStringWidth( $address );
+	//Coordonnées de la société
+	$lines = $this->sizeOfText( $address, $length) ;
+	$this->MultiCell($length, 4, $address);
 }
 
-//Product Details
-function setProductDetails($ivHeader,$ivData)
+// bubble blocks
+function title ($label, $total, $position)
 {
-    $this->Ln();
-    $this->Ln();
-    $this->SetFillColor(162,200,243);
-    $this->SetTextColor(0);
-    $this->SetDrawColor(61,121,206);
-    $this->SetLineWidth(.3);
-    $this->SetFont('Arial','B',10);
-    //Header
-    foreach($ivHeader as $value)
-    {
-        $this->Cell(38,7,$value,0,0,'L',0);
-    }
-    $this->Ln();
-    $this->SetDrawColor(0,0,0);
-    $this->SetLineWidth(.5);
-    $this->line(10,140,200,140);
-    $this->SetFillColor(233,241,253);
-    $this->SetTextColor(0);
-    $this->SetFont('');
-    //Data
-    $fill=0;
-    	foreach($ivData as $key=>$value)
+	$r1  = $position[0];
+	$r2  = $r1 + 19 + $position[2] ;
+	$y1  = $position[1];
+	$y2  = $y1;
+	$mid = $y1 + ($y2 / 2);
+	$width=10;
+	$this->SetFillColor(192);
+	//$this->RoundedRect($r1-16, $y1-1, (strlen($label." ".$total)*8)+4, $y2+1, 2.5, 'DF');
+	$this->RoundedRect($r1-16, $y1-1, 52, $y2+1, 2.5, 'DF');
+	$this->SetXY( $r1 + 4, $y1+1 );
+	$this->SetFont( "Helvetica", "B", 15);
+	$this->Cell($width,5, $label." ".$total, 0, 0, "C");
+}
+
+/*
+// Label and number of invoice/estimate
+function title( $label, $num, $position )
+{
+	$length =strlen($label.$num);
+	$r1  = $position[0];
+	$r2  = $r1 + ($length*2.5);
+	$y1  = 6;
+	$y2  = $y1 + 2;
+	$mid = $r1 + $r2;
+
+	$text  = $label ." ". $num;
+	$szfont = 23;
+
+	$this->SetFont( "Helvetica", "", $szfont );
+	$sz = $this->GetStringWidth( $text );
+
+	$this->SetLineWidth(0.1);
+	$this->SetFillColor(192);
+	//$this->RoundedRect($r1, $position[1], ($r2 - $r1), $y2, 2.5, 'DF');
+	$this->RoundedRect($r1-15, $position[1]-3, $sz+5, 12, 2.5, 'DF');
+	$this->SetXY($r1, $position[1]+1);
+	$this->Cell($r2-$r1 -1,5, $text, 0, 0, "C" );
+}
+*/
+
+// text block, non-wrapped
+function addTextBlock( $title,$text,$positions )
+{
+	$r1  = $positions[0];
+	$y1  = $positions[1];
+	$this->SetXY( $r1, $y1);
+	$this->SetFont( "Helvetica", "B", 10);
+	$this->Cell( $positions[2], 4,$title);
+	$this->SetXY( $r1, $y1+4);
+	$this->SetFont( "Helvetica", "", 10);
+	$this->MultiCell( $positions[2], 4, $text);
+}
+
+function tableWrapper($position)
+{
+	$r1  = $position[0];
+	$r2  = $r1 + 19 + $position[2] ;
+	$y1  = $position[1];
+	if($position[3])
+		$y2  = $position[3];
+	else
+		$y2  = 17;
+
+	$mid = $y1 + (13 / 2);
+	$width=10;
+	$this->RoundedRect($r1, $y1, ($r2 - $r1), $y2, 4.5, 'D');
+	$this->Line( $r1, $mid, $r2, $mid);
+	$this->SetXY( $r1 + ($r2-$r1)/2 - 3, $y1+3 );
+	$this->SetXY( $r1 + ($r2-$r1)/2 - 5, $y1 + 9 );
+}
+
+function addBubble($page,$title,$position)
+{
+	$r1  = $position[0];
+	$r2  = $r1 + 19 + $position[2] ;
+	$y1  = $position[1];
+	if($position[3])
+		$y2  = 17*$position[3];
+	else
+		$y2  = 17;
+
+	$mid = $y1 + (19 / 2);
+	$width=10;
+	$this->RoundedRect($r1, $y1, ($r2 - $r1), $y2, 4.5, 'D');
+	$this->Line( $r1, $mid, $r2, $mid);
+	$this->SetXY( $r1 + ($r2-$r1)/2 - 3, $y1+3 );
+	$this->SetFont( "Helvetica", "B", 10);
+	$this->Cell($width,5, $title, 0, 0, "C");
+	$this->SetXY( $r1 + ($r2-$r1)/2 - 5, $y1 + 9 );
+	$this->SetFont( "Helvetica", "", 10);
+	$this->MultiCell($width,5,$page, 0,0, "C");
+}
+
+// bubble blocks
+function addBubbleBlock ($page, $title, $position)
+{
+	$r1  = $position[0];
+	$r2  = $r1 + 19 + $position[2] ;
+	$y1  = $position[1];
+	$y2  = 17;
+
+	$mid = $y1 + ($y2 / 2);
+	$width=10;
+	$this->RoundedRect($r1, $y1, ($r2 - $r1), $y2, 4.5, 'D');
+	$this->Line( $r1, $mid, $r2, $mid);
+	$this->SetXY( $r1 + ($r2-$r1)/2 - 5, $y1+3 );
+	$this->SetFont( "Helvetica", "B", 10);
+	$this->Cell($width,5, $title, 0, 0, "C");
+	$this->SetXY( $r1 + ($r2-$r1)/2 - 5, $y1 + 9 );
+	$this->SetFont( "Helvetica", "", 10);
+	$this->Cell($width,5,$page, 0,0, "C");
+}
+
+// record blocks
+function addRecBlock( $data, $title, $postion )
+{
+	$lengthtitle = strlen($title);
+	$lengthdata = strlen($data);
+	$length=$lengthtitle;
+	$r1  = $postion[0];
+	$r2  = $r1 + 40 + $length;
+	$y1  = $postion[1];
+	$y2  = $y1+10;
+	$mid = $y1 + (($y2-$y1) / 2);
+
+	$this->RoundedRect($r1, $y1, ($r2 - $r1), ($y2-$y1), 2.5, 'D');
+	$this->Line( $r1, $mid, $r2, $mid);
+	$this->SetXY( $r1 + ($r2-$r1)/2 -5 , $y1+1 );
+	$this->SetFont( "Helvetica", "B", 10);
+	$this->Cell(10,4, $title, 0, 0, "C");
+	$this->SetXY( $r1 + ($r2-$r1)/2 -5 , $y1 + 5 );
+	$this->SetFont( "Helvetica", "", 10);
+	$this->Cell(10,4,$data, 0, 0, "C");
+}
+
+// description blocks
+function addDescBlock( $data, $title, $position )
+{
+	$lengthtitle = strlen($title);
+	$lengthdata= $position[3];
+
+	$length=$position[2];
+	$r1  = $position[0];
+	$r2  = $r1 + 40 + $length;
+	$y1  = $position[1];
+	$y2  = $y1+10;
+	$mid = $y1 + (($y2-$y1) / 2);
+
+	$this->RoundedRect($r1,$y1, ($length + 40), ($lengthdata/140*30), 2.5, 'D');
+	$this->Line( $r1, $mid, $r2, $mid);
+	$this->SetXY( $position[0]+2 , $y1 + 1 );
+	$this->SetFont( "Helvetica", "B", 10);
+	$this->Cell(10,4, $title);
+	$this->SetXY( $position[0]+2 , $y1 + 6 );
+	$this->SetFont( "Helvetica", "", 10);
+	$this->MultiCell(($length+36),4,$data);
+}
+
+function drawLine($positions)
+{
+	$x=$positions[0];
+	$y=$positions[1];
+	$width=$positions[2];
+	$this->Line( $x, $y, $x+$width, $y);
+}
+
+// add columns to table
+function addCols( $tab ,$positions ,$bottom)
+{
+	global $columns;
+
+	$r1  = 10;
+	$r2  = $this->w - ($r1 * 2) ;
+	$y1  = 80;
+	$x1  = $positions[1];
+	//$y2  = $this->h - $x1 - $y1 - 17;
+	$y2  = $bottom;
+	$this->SetXY( $r1, $y1 );
+	$this->SetFont( "Helvetica", "", 10);
+	//$this->Rect( $r1, $y1, $r2, $y2, "D");
+
+	$colX = $r1;
+	$columns = $tab;
+	while ( list( $lib, $pos ) = each ($tab) )
 	{
-    		$this->Cell(38,6,$value['productname'],0,0,'L',0);
-		$this->Cell(38,6,$value['qty'],0,0,'L',0);
-		$this->Cell(38,6,$value['unitprice'],0,0,'L',0);
-		$this->Cell(38,6,$value['listprice'],0,0,'L',0);
-		$this->Cell(38,6,$value['total'],0,0,'R',0);
-		$this->Ln();
+		$this->SetXY( $colX, $y1+3 );
+		$this->Cell( $pos, 1, $lib, 0, 0, "C");
+		$colX += $pos;
+	switch($lib) {
+	  case 'Total':
+	  break;
+	  default:
+			$this->Line( $colX, $y1, $colX, $y1+$y2);
+	  break;
 	}
-    $this->Ln();
+	}
 }
 
-function setTotal($price_total="",$conditions="")
+function addLineFormat( $tab )
 {
-	$this->Ln();
-	$this->SetDrawColor(0,0,0);
-	$this->SetLineWidth(.3);
-//	$this->line(10,200,200,200);
-	$this->SetFillColor(224,235,255);
- 	$this->SetTextColor(0);
-    	$this->SetFont('','B',10);
-	$this->Cell(140,6,"Sub Total: ",0,0,'R',0);
- 	$this->Cell(0,6,$price_total[0],1,0,'R',0);
-    	$this->Ln(4);
-	$this->Ln(4);
-	$this->Cell(140,6,"Tax: ",0,0,'R',0);
- 	$this->Cell(0,6,$price_total[1],1,0,'R',0);
-	$this->Ln(4);
-	$this->Ln(4);
-	$this->Cell(140,6,"Adjustment: ",0,0,'R',0);
- 	$this->Cell(0,6,$price_total[2],1,0,'R',0);
-    	$this->Ln(4);
-	$this->Ln(4);
-	$this->Cell(140,6,"Grand total: ",0,0,'R',0);
- 	$this->Cell(0,6,$price_total[3],1,0,'R',0);
-	$this->Ln();
-	$this->Ln();
-	$this->Cell(0,8,"Terms & Conditions: ",0,0,'L',0);
-	$this->Ln();
-	$this->Cell(0,8,$conditions,0,0,'L',0);
-}
-}
-$iHead = array("Company","Sales Order No.","Date","Quote Name.");
-$iCustHeadDtls = array("Customer Name","Purchase Order","Due Date");
-$iHeadDtls = array("Product Name","Quantity","List Price","Unit Price","Total");
+	global $format, $columns;
 
-$pdf = new PDF('P','mm','A4');
-$pdf->SetFont('Arial','',10);
-$pdf->AddPage();
-$pdf->setInvoiceTitle("Sales Order",$logo_name,$companyaddress);
-$pdf->Ln();
-$pdf->setInvoiceDetails($iHead,$iData);
-$pdf->setAddress($bdata,$sdata);
-$pdf->setCustomerDetails($iCustHeadDtls,$iCustData);
-$pdf->setProductDetails($iHeadDtls,$iDataDtls);
-$pdf->setTotal($price_total,$conditions);
-$pdf->Output('SOOrder.pdf','D');
-exit;
+	while ( list( $lib, $pos ) = each ($columns) )
+	{
+		if ( isset( $tab["$lib"] ) )
+			$format[ $lib ] = $tab["$lib"];
+	}
+}
+
+// add a line to the invoice/estimate
+/*    $line = array( 	"Product Name" 	=> prodname,
+						"Description" 	=> descr,
+						"Qty" 		=> rty,
+						"List Price" 	=> listprice,
+						"Unit Price" 	=> unitprice,
+			"total" 	=> total);
+*/
+function addProductLine( $line, $tab )
+{
+	global $columns, $format;
+
+	$ordonnee     = 10;
+	$maxSize      = $line;
+
+	reset( $columns );
+	while ( list( $lib, $pos ) = each ($columns) )
+	{
+		$longCell  = $pos -2;
+		$text    = $tab[ $lib ];
+		$length    = $this->GetStringWidth( $text );
+		$formText  = $format[ $lib ];
+		$this->SetXY( $ordonnee, $line);
+		$this->MultiCell( $longCell, 3 , $text, 3, $formText);
+		if ( $maxSize < ($this->GetY()  ) )
+			$maxSize = $this->GetY() ;
+		$ordonnee += $pos;
+	}
+	return ( $maxSize - $line );
+}
+
+function addTotalsRec($names, $totals, $positions)
+{
+	$this->SetFont( "Arial", "B", 8);
+	$r1  = $positions[0];
+	$r2  = $r1 + 90;
+	$y1  = $positions[1];
+	$y2  = $y1+10;
+	$this->RoundedRect($r1, $y1, ($r2 - $r1), ($y2-$y1), 2.5, 'D');
+	$this->Line( $r1, $y1+4, $r2, $y1+4);
+	$this->Line( $r1+27, $y1, $r1+27, $y2);  // avant Subtotal
+	$this->Line( $r1+43, $y1, $r1+43, $y2);  // avant Tax
+	$this->Line( $r1+66, $y1, $r1+66, $y2);  // avant Adjustment
+
+	$this->SetXY( $r1+2, $y1);
+	$this->Cell(10,4, $names[0]);
+	$this->SetX( $r1+29,$y1 );
+	$this->Cell(10,4, $names[1]);
+	$this->SetX( $r1+45 );
+	$this->Cell(10,4, $names[2]);
+	$this->SetX( $r1+66 );
+	$this->Cell(10,4, $names[3]);
+
+
+	$this->SetXY( $r1+2, $y1+5 );
+	$this->Cell( 10,4, $totals[0] );
+	$this->SetXY( $r1+29, $y1+5 );
+	$this->Cell( 10,4, $totals[1] );
+	$this->SetXY( $r1+44, $y1+5 );
+	$this->Cell( 10,4, $totals[2] );
+	$this->SetXY( $r1+66, $y1+5 );
+	$this->Cell( 10,4, $totals[3] );
+
+	$this->SetFont( "Arial", "B", 6);
+	$this->SetXY( $r1+90, $y2 - 8 );
+	$this->SetFont( "Helvetica", "", 10);
+}
+
+// add a watermark (temporary estimate, DUPLICATA...)
+// call this method first
+function watermark( $text, $positions, $rotate = array('45','50','180') )
+{
+	$this->SetFont('Arial','B',50);
+	$this->SetTextColor(230,230,230);
+	$this->Rotate($rotate[0],$rotate[1],$rotate[2]);
+	$this->Text($positions[0],$positions[1],$text);
+	$this->Rotate(0);
+	$this->SetTextColor(0,0,0);
+}
+
+}
+
+function StripLastZero($string)
+{
+	$count=strlen($string);
+	$ret=substr($string,0,($count-1));
+	return $ret;
+}
+
+
+// **************** BEGIN POPULATE DATA ********************
+
+
+// populate data
+$quote_name = getQuoteName($focus->column_fields["quote_id"]);
+$po_name = $focus->column_fields["purchaseorder"];
+$subject = $focus->column_fields["subject"];
+
+$valid_till = $focus->column_fields["duedate"];
+$valid_till = getDisplayDate($valid_till);
+$bill_street = $focus->column_fields["bill_street"];
+$bill_city = $focus->column_fields["bill_city"];
+$bill_state = $focus->column_fields["bill_state"];
+$bill_code = $focus->column_fields["bill_code"];
+$bill_country = $focus->column_fields["bill_country"];
+
+$ship_street = $focus->column_fields["ship_street"];
+$ship_city = $focus->column_fields["ship_city"];
+$ship_state = $focus->column_fields["ship_state"];
+$ship_code = $focus->column_fields["ship_code"];
+$ship_country = $focus->column_fields["ship_country"];
+
+$conditions = $focus->column_fields["terms_conditions"];
+$description = $focus->column_fields["description"];
+$status = $focus->column_fields["sostatus"];
+
+// Company information
+$add_query = "select * from organizationdetails";
+$result = $adb->query($add_query);
+$num_rows = $adb->num_rows($result);
+
+if($num_rows == 1)
+{
+		$org_name = $adb->query_result($result,0,"organizationame");
+		$org_address = $adb->query_result($result,0,"address");
+		$org_city = $adb->query_result($result,0,"city");
+		$org_state = $adb->query_result($result,0,"state");
+		$org_country = $adb->query_result($result,0,"country");
+		$org_code = $adb->query_result($result,0,"code");
+		$org_phone = $adb->query_result($result,0,"phone");
+		$org_fax = $adb->query_result($result,0,"fax");
+		$org_website = $adb->query_result($result,0,"website");
+
+		$logo_name = $adb->query_result($result,0,"logoname");
+}
+
+//getting the Total Array
+$price_subtotal = $currency_symbol.number_format(StripLastZero($focus->column_fields["hdnSubTotal"]),2,'.',',');
+$price_tax = $currency_symbol.number_format(StripLastZero($focus->column_fields["txtTax"]),2,'.',',');
+$price_adjustment = $currency_symbol.number_format(StripLastZero($focus->column_fields["txtAdjustment"]),2,'.',',');
+$price_total = $currency_symbol.number_format(StripLastZero($focus->column_fields["hdnGrandTotal"]),2,'.',',');
+
+//getting the Product Data
+$query="select products.productname,products.unit_price,products.product_description,soproductrel.* from soproductrel inner join products on products.productid=soproductrel.productid where salesorderid=".$id;
+
+global $result;
+$result = $adb->query($query);
+$num_products=$adb->num_rows($result);
+for($i=0;$i<$num_products;$i++) {
+		$product_name[$i]=$adb->query_result($result,$i,'productname');
+		$prod_description[$i]=$adb->query_result($result,$i,'product_description');
+		$product_id[$i]=$adb->query_result($result,$i,'productid');
+		$qty[$i]=$adb->query_result($result,$i,'quantity');
+
+		$unit_price[$i]= $currency_symbol.number_format($adb->query_result($result,$i,'unit_price'),2,'.',',');
+		$list_price[$i]= $currency_symbol.number_format(StripLastZero($adb->query_result($result,$i,'listprice')),2,'.',',');
+		$list_pricet[$i]= $adb->query_result($result,$i,'listprice');
+		$prod_total[$i]= $qty[$i]*$list_pricet[$i];
+
+
+		$product_line[] = array( "Product Name"    => $product_name[$i],
+				"Description"  => $prod_description[$i],
+				"Qty"     => $qty[$i],
+				"List Price"      => $list_price[$i],
+				"Unit Price" => $unit_price[$i],
+				"Total" => $currency_symbol.number_format($prod_total[$i]),2,'.',',');
+}
+
+	$total[]=array("Unit Price" => $app_strings['LBL_SUB_TOTAL'],
+		"Total" => $price_subtotal);
+
+	$total[]=array("Unit Price" => $app_strings['LBL_ADJUSTMENT'],
+		"Total" => $price_adjustment);
+
+	$total[]=array("Unit Price" => $app_strings['LBL_TAX'],
+		"Total" => $price_tax);
+
+	$total[]=array("Unit Price" => $app_strings['LBL_GRAND_TOTAL'],
+		"Total" => $price_total);
+
+
+// ************************ END POPULATE DATA ***************************8
+
+$page_num='1';
+$pdf = new PDF( 'P', 'mm', 'A4' );
+$pdf->Open();
+//$pdf->AddPage();
+
+$num_pages=ceil(($num_products/$products_per_page));
+
+
+$current_product=0;
+for($l=0;$l<$num_pages;$l++)
+{
+	$line=array();
+	if($num_pages == $page_num)
+		$lastpage=1;
+
+	while($current_product != $page_num*$products_per_page)
+	{
+		$line[]=$product_line[$current_product];
+		$current_product++;
+	}
+
+	$pdf->AddPage();
+	include("pdf_templates/header.php");
+	include("pdf_templates/body.php");
+	include("pdf_templates/footer.php");
+
+	$page_num++;
+
+	if (($endpage) && ($lastpage))
+	{
+		$pdf->AddPage();
+		include("pdf_templates/header.php");
+		include("pdf_templates/lastpage/body.php");
+		include("pdf_templates/lastpage/footer.php");
+	}
+}
+
+
+$pdf->Output('SalesOrder.pdf','D'); //added file name to make it work in IE, also forces the download giving the user the option to save
+
 ?>
