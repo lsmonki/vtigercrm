@@ -160,7 +160,7 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	$mail->WordWrap = 50;
 
 	//Handling the attachments here
-	addAttachments(&$mail,$_REQUEST['record'],$_REQUEST['filename']);
+	addAttachments(&$mail,$_REQUEST['record'],$_FILES['filename']['name']);
 
 	$mail->IsHTML(true);		// set email format to HTML
 
@@ -200,11 +200,12 @@ function addAttachments($mail,$record,$filename)
 {
 	global $adb, $root_directory;
 	$adb->println("Inside the function addAttachments");
+	$adb->println("The file name is => '".$filename."'");
 
 	//TODO -- if the file is unlinked and available in database then we will open and write the file and then attach
 	if($filename != '')
 	{
-		$mail->AddAttachment($root_directory."test/upload/".$filename);//temparray['filename']) 
+		$mail->AddAttachment($root_directory."test/upload/".$filename);
 	}
 }
 
