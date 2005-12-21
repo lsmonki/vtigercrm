@@ -652,7 +652,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		}
 		//$list_header .= '<td style="padding:0px 3px 0px 3px;">';
 		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-		$list_header .= '<td style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
+		//$list_header .= '<td style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
 		$mod_dir=getModuleDirName($module);
 		/*if(isPermitted($module,1,$entity_id) == 'yes')
 		{
@@ -673,7 +673,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		$list_block[] = $list_header;
 
 	}
-	$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
+	//$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 	return $list_block;
 }
 
