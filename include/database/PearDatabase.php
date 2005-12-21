@@ -14,11 +14,12 @@
  ********************************************************************************/
 
 require_once('include/logging.php');
-//include('adodb/adodb.inc.php');
-include_once('adodb/adodb.inc.php');
+include('adodb/adodb.inc.php');
 require_once("adodb/adodb-xmlschema.inc.php");
-
-$log1 =& LoggerManager::getLogger('VT');
+	
+		require_once('vtiger_logger.php');
+		global $vtlog;
+		$vtlog = new vtiger_logger();
 
 class PearDatabase{
 	var $database = null;
@@ -46,13 +47,11 @@ class PearDatabase{
 		$log1 =& LoggerManager::getLogger('VT');
 		if(is_array($msg))
 		{
-			//$log1->fatal("PearDatabse ->".print_r($msg,true));
-            $log1->info("PearDatabse ->".print_r($msg,true));
+			$log1->fatal("PearDatabse ->".print_r($msg,true));
 		}
 		else
 		{
-			//$log1->fatal("PearDatabase ->".$msg);
-            $log1->info("PearDatabase ->".$msg);
+			$log1->fatal("PearDatabase ->".$msg);
 		}
 		return $msg;
 	}
@@ -162,13 +161,13 @@ class PearDatabase{
 		
 		if($this->dieOnError || $dieOnError)
 		{
-            		$this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg(),'error');	
+         		$this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg());	
 			die ($msg."ADODB error ".$msg."->".$this->database->ErrorMsg());
 		}
 		else
 		{
-			//$this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg());
-            $this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg()." (SQL=".$this->sql.")",'error');
+			$this->println("ADODB error ".$msg."->[".$this->database->ErrorNo()."]".$this->database->ErrorMsg());
+
 		}
 		return false;
 	}
@@ -189,7 +188,7 @@ class PearDatabase{
 	 * Contributor(s): ______________________________________..
 	*/
 	function checkConnection(){
-global $log1;
+global $vtlog;
 			if(!isset($this->database))
 			{
 				$this->println("TRANS creating new connection");
@@ -206,9 +205,8 @@ global $log1;
 			else
 			{
 		//		$this->println("checkconnect using old connection");
-                //commenting as the above log will suffice. this was filling up the logs too much
-		//$log1->info('checkconnect using old connection');
-		}
+				 $vtlog->logthis('checkconnect using old connection','info');
+			}
 	}
 
 	/* ADODB converted	
@@ -232,16 +230,11 @@ global $log1;
 
 	function query($sql, $dieOnError=false, $msg='')
 	{
-		global $log1;
+		global $vtlog;
 		//$this->println("ADODB query ".$sql);		
-		 $log1->debug('query being executed : '.$sql);
-        $mytime["start"] = $this->microtime_float();
+		$vtlog->logthis('query being executed : '.$sql,'debug');
 		$this->checkConnection();
 		$result = & $this->database->Execute($sql);
-        $mytime["execute"] = $this->microtime_float();
-        $mytime["total"] = $mytime["execute"]-$mytime["start"];
-        if ( $mytime["total"] > 0.5 )
-		$log1->error("TIME: sql statement $sql took {$mytime['total']} seconds.");
 		$this->lastmysqlrow = -1;
 		if(!$result)$this->checkError($msg.' Query Failed:' . $sql . '::', $dieOnError);
 		return $result;		
@@ -283,9 +276,9 @@ global $log1;
 	
 	function limitQuery($sql,$start,$count, $dieOnError=false, $msg='')
 	{
-		global $log1;
+		global $vtlog;
 		//$this->println("ADODB limitQuery sql=".$sql." st=".$start." co=".$count);
-		$log1->debug(' limitQuery sql = '.$sql .' st = '.$start .' co = '.$count);
+		$vtlog->logthis(' limitQuery sql = '.$sql .' st = '.$start .' co = '.$count,'debug');
 		$this->checkConnection();
 		$result =& $this->database->SelectLimit($sql,$count,$start);
 		if(!$result) $this->checkError($msg.' Limit Query Failed:' . $sql . '::', $dieOnError);
@@ -398,12 +391,12 @@ global $log1;
 	*/
 	
 	function getRowCount(&$result){
-		global $log1;
+		global $vtlog;
 		//$this->println("ADODB getRowCount");
 		if(isset($result) && !empty($result))
 			$rows= $result->RecordCount();			
 		//$this->println("ADODB getRowCount rows=".$rows);	
-		$log1->debug('getRowCount rows= '.$rows);
+		$vtlog->logthis('getRowCount rows= '.$rows,'debug');
 		return $rows;			
 	}
 
@@ -430,23 +423,13 @@ global $log1;
 			//$this->println("ADODB fetch_array return null");
 			return NULL;
 		}		
-		//return $this->change_key_case($result->FetchRow());
-        $ret = @ $this->change_key_case($result->FetchRow());
-        if ( !is_array($ret) )
-		{
-			$this->println( "ERROR: SQL (".$this->sql.")" );
-			$this->println( print_r($result,1) );
-			//die;
-		}
-		return $ret;
-
+		return $this->change_key_case($result->FetchRow());
 	}
 
 	/* ADODB newly added. replacement for mysql_result() */
 
 	function query_result(&$result, $row, $col=0)
-	{
-        if ( !$result ) return;
+	{		
 		//$this->println("ADODB query_result r=".$row." c=".$col);
 		$result->Move($row);
 		$rowdata = $this->change_key_case($result->FetchRow());
@@ -470,12 +453,12 @@ global $log1;
 	}*/
 
 	function getAffectedRowCount(&$result){
-		global $log1;
+		global $vtlog;
 //		$this->println("ADODB getAffectedRowCount");
-	$log1->debug('getAffectedRowCount');
+	$vtlog->logthis('getAffectedRowCount','debug');
 		$rows =$this->database->Affected_Rows(); 
 	//	$this->println("ADODB getAffectedRowCount rows=".rows);
-	$log1->info('getAffectedRowCount rows = '.$rows);
+	$vtlog->logthis('getAffectedRowCount rows = '.$rows,'debug');
 		return $rows;
 	}
 			
@@ -585,10 +568,10 @@ global $log1;
 	*/
 	
 	function getNextRow(&$result, $encode=true){
-		global $log1;
+		global $vtlog;
 
 		//$this->println("ADODB getNextRow");
-		$log1->info('getNextRow');
+		$vtlog->logthis('getNextRow','info');
 		if(isset($result)){
 			$row = $this->change_key_case($result->FetchRow());
 			if($row && $encode&& is_array($row))return array_map('to_html', $row);	
@@ -608,12 +591,6 @@ global $log1;
 		return $result->FetchField($col);
 	}
 	
-    function microtime_float()
-    {
-        list($usec, $sec) = explode(" ", microtime());
-        return ((float)$usec + (float)$sec);
-    }
-
 	function getQueryTime(){
 		return $this->query_time;	
 	}
@@ -856,7 +833,7 @@ function alterTable($tablename, $flds, $oper)
 	$this->println("ADODB alterTableTable table=".$tablename." flds=".$flds." oper=".$oper);
 	//$dict = NewDataDictionary(ADONewConnection($this->dbType));
 	$this->checkConnection();
-	$dict = NewDataDictionary($this->database);
+	$dict = NewDataDictionary(&$this->database);
 	//$sqlarray = new Array(); 
 	
 	if($oper == 'Add_Column')

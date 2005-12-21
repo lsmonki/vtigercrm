@@ -882,11 +882,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	global $mod_strings;
 	global $app_strings;
 	global $current_user;
-	global $theme,$noof_group_rows;
+	global $noof_group_rows;
         $theme_path="themes/".$theme."/";
         $image_path=$theme_path."images/";
+	$fieldlabel = from_html($fieldlabel);
 
-	$value = htmlentities($col_fields[$fieldname]);
+	//Commented for vulnerability fix as the convertion is added in Peardatabase - Philip
+        //$value = htmlentities($col_fields[$fieldname]);
+        $value = $col_fields[$fieldname];
 	$custfld = '';
 
 	if($generatedtype == 2)

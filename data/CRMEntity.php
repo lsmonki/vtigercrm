@@ -180,6 +180,7 @@ $vtlog->logthis("module is ".$module,'info');
     global $current_user;
     global $adb;
     global $root_directory;
+    global $upload_badext;
 
     $ownerid = $this->column_fields['assigned_user_id'];
     $adb->println("insertattach ownerid=".$ownerid." mod=".$module);
@@ -187,14 +188,26 @@ $vtlog->logthis("module is ".$module,'info');
 
 	if(!isset($ownerid) || $ownerid=='')            $ownerid = $current_user->id;
     $uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
+    
+    // Arbitrary File Upload Vulnerability fix - Philip
     $binFile = $_FILES['filename']['name'];
+    $ext_pos = strrpos($binFile, ".");
+
+    $ext = substr($binFile, $ext_pos + 1);
+
+    if (in_array($ext, $upload_badext))
+    {
+           $binFile .= ".txt";
+    }
+    // Vulnerability fix ends
+
     $filename = basename($binFile);
     $filetype= $_FILES['filename']['type'];
     $filesize = $_FILES['filename']['size'];
 
     if($binFile != '')
     {
-      if(move_uploaded_file($_FILES["filename"]["tmp_name"],$uploaddir.$_FILES["filename"]["name"]))
+      if(move_uploaded_file($_FILES["filename"]["tmp_name"],$uploaddir.$binFile))
       {
         //                      $binFile = $_FILES['filename']['name'];
         //                      $filename = basename($binFile);

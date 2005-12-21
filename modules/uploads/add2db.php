@@ -12,7 +12,7 @@
 
 
 require_once('include/database/PearDatabase.php');
-require_once('include/utils/utils.php');
+require_once('include/utils.php');
 $vtigerpath = $_SERVER['REQUEST_URI'];
 $vtigerpath = str_replace("/index.php?module=uploads&action=add2db", "", $vtigerpath);
 $uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
@@ -28,8 +28,10 @@ $binFile = $_FILES['binFile']['name'];
         }
 $_FILES["binFile"]["name"] = $binFile;
 // Vulnerability fix ends
+
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
+	$binFile = $_FILES['binFile']['name'];
 	$filename = basename($binFile);
 	$filetype= $_FILES['binFile']['type'];
 	$filesize = $_FILES['binFile']['size'];

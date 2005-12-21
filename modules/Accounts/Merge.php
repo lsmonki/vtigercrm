@@ -24,17 +24,24 @@ else if (document.layers || (!document.all && document.getElementById))
 }
 else if(document.all)
 {
-	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,5,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
+	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,2,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
 }
 </script>
 <?php
+//require_once('database/DatabaseConnection.php');
 require_once('include/database/PearDatabase.php');
 require_once('config.php');
+//echo 'id is ....... ' .$_REQUEST['record'];
+
+//echo 'merge file name is ...' .$_REQUEST['mergefile'];
 
 $templateid = $_REQUEST['mergefile'];
 //get the particular file from db and store it in the local hard disk.
 //store the path to the location where the file is stored and pass it  as parameter to the method 
 $sql = "select filename,data,filesize from wordtemplates where templateid=".$templateid;
+
+//$result = mysql_query($sql);
+//$temparray = mysql_fetch_array($result);
 
 $result = $adb->query($sql);
 $temparray = $adb->fetch_array($result);
@@ -46,175 +53,114 @@ $wordtemplatedownloadpath =$root_directory ."/test/wordtemplatedownload/";
 
 if($templateid == "")
 {
-	die("Select Mail Merge Template");
+     die("Select Mail Merge Template");
 }
-
-$handle = fopen($wordtemplatedownloadpath.$temparray['filename'],"wb");
+$handle = fopen($wordtemplatedownloadpath .$temparray['filename'],"wb");
+//chmod("/home/rajeshkannan/test/".$fileContent,0755);
 fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<for mass merge>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//for mass merge
 $mass_merge = $_REQUEST['idlist'];
-$single_record = $_REQUEST['record'];
 
 if($mass_merge != "")
-{	
-	$mass_merge = explode(";",$mass_merge);
-	$temp_mass_merge = $mass_merge;
-	if(array_pop($temp_mass_merge)=="")
-		array_pop($mass_merge);
-	$mass_merge = implode(",",$mass_merge);
-}else if($single_record != "")
 {
-	$mass_merge = $single_record;	
-}else
-{
-	die("Record Id is not found, cannot merge the document");
-}
-
-//echo $mass_merge;
-//die;
-//for setting accountid=0 for the contacts which are deleted
-$ct_query = "select crmid from crmentity where setype='Contacts' and deleted=1";
-$result = $adb->query($ct_query);
-
-while($row = $adb->fetch_array($result))
-{
-	$deleted_id[] = $row['crmid'];
-}
-
-if(count($deleted_id) > 0)
-{
-	$deleted_id = implode(",",$deleted_id);
-	$update_query = "update contactdetails set accountid = 0 where contactid in (".$deleted_id.")";
-	$result = $adb->query($update_query);
-}
-//End setting accountid=0 for the contacts which are deleted
-
-//<<<<<<<<<<<<<<<<header for csv and select columns for query>>>>>>>>>>>>>>>>>>>>>>>>
-$query1="select tab.name,field.tablename,field.columnname,field.fieldlabel from field inner join tab on tab.tabid = field.tabid where field.tabid in (4,6) and field.block <> 4 order by field.tablename";
-
-$result = $adb->query($query1);
-$y=$adb->num_rows($result);
-	
-for ($x=0; $x<$y; $x++)
-{ 
-  $tablename = $adb->query_result($result,$x,"tablename");
-  $columnname = $adb->query_result($result,$x,"columnname");
-  $modulename = $adb->query_result($result,$x,"name");
+  $mass_merge = explode(";",$mass_merge);
   
-  if($tablename == "crmentity")
+  for($i=0;$i < count($mass_merge) - 1;$i++)
   {
-  	if($modulename == "Contacts")
-  	{
-  		$tablename = "crmentityContacts";
-  	}
+  	$query = "SELECT * FROM account inner join accountbillads on accountbillads.accountaddressid=account.accountid inner join accountshipads on accountshipads.accountaddressid=account.accountid and account.accountid = '".$mass_merge[$i]."'";
+    
+    $result = $adb->query($query);
+    $y=$adb->num_fields($result); 
+    $columnValues = $adb->fetch_array($result);
+    
+    for ($x=0; $x<$y; $x++)
+    {
+        $columnValString[$x] = $columnValues[$x];
+    }
+    //for custom fields
+  	$sql2 = "select accountscf.* from accountscf inner join account on account.accountid = accountscf.accountid where account.accountid = '".$mass_merge[$i]."'";
+    $result2 = $adb->query($sql2);
+    $numRows2 = $adb->num_fields($result2);
+    $custom_field_values = $adb->fetch_array($result2);
+    for ($z=1; $z<$numRows2; $z++)
+    {
+      $custom_values_str[$z] = $custom_field_values[$z];
+    }
+    //end custom fields
+    $merged_columnValString = array_merge($columnValString,$custom_values_str);
+    
+		$mass_columnString = implode(",",$merged_columnValString);
+    $mass_columnValString = $mass_columnValString.$mass_columnString;
+    if($i < count($mass_merge) - 2)
+    {
+    	$mass_columnValString = $mass_columnValString."###";
+    }
   }
-  $querycolumns[$x] = $tablename.".".$columnname;
-	if($columnname == "smownerid")
-  {
-      if($modulename == "Accounts")
-      {
-  			$querycolumns[$x] = "concat(users.last_name,' ',users.first_name) as userjoinname,users.first_name,users.last_name,users.user_name,users.yahoo_id,users.title,users.phone_work,users.department,users.phone_mobile,users.phone_other,users.phone_fax,users.email1,users.phone_home,users.email2,users.address_street,users.address_city,users.address_state,users.address_postalcode,users.address_country";
-      }
-  		if($modulename == "Contacts")
-      {
-      	$querycolumns[$x] = "concat(usersContacts.last_name,' ',usersContacts.first_name) as userjoincname";
-      }
-  }
-	if($columnname == "parentid")
-	{
-		$querycolumns[$x] = "accountAccount.accountname";
-	}
-	if($columnname == "accountid")
-	{
-		$querycolumns[$x] = "accountContacts.accountname";
-	}
-	if($columnname == "reportsto")
-	{
-		$querycolumns[$x] = "contactdetailsContacts.lastname";
-	}
-
-	if($modulename == "Accounts")
-  {
-    	$field_label[$x] = "ACCOUNT_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
-  		if($columnname == "smownerid")
-  		{
-  		$field_label[$x] = $field_label[$x].",USER_FIRSTNAME,USER_LASTNAME,USER_USERNAME,USER_YAHOOID,USER_TITLE,USER_OFFICEPHONE,USER_DEPARTMENT,USER_MOBILE,USER_OTHERPHONE,USER_FAX,USER_EMAIL,USER_HOMEPHONE,USER_OTHEREMAIL,USER_PRIMARYADDRESS,USER_CITY,USER_STATE,USER_POSTALCODE,USER_COUNTRY";
-  		}
-	}
-	
-	if($modulename == "Contacts")
-  {
-  	$field_label[$x] = "CONTACT_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
-  }
-  
+$columnValString = $mass_columnValString;
 }
+//end for mass merge
 
-$csvheader = implode(",",$field_label);
-//<<<<<<<<<<<<<<<<End>>>>>>>>>>>>>>>>>>>>>>>>
-	
-if(count($querycolumns) > 0)
-{
-	$selectcolumns = implode($querycolumns,",");
 
-$query = "select  ".$selectcolumns." from account 
-				inner join crmentity on crmentity.crmid=account.accountid 
-				inner join accountbillads on account.accountid=accountbillads.accountaddressid 
-				inner join accountshipads on account.accountid=accountshipads.accountaddressid 
-				inner join accountscf on account.accountid = accountscf.accountid 
-				left join account as accountAccount on accountAccount.accountid = account.parentid
-				left join users on users.id = crmentity.smownerid
-				left join contactdetails on contactdetails.accountid=account.accountid
-				left join crmentity as crmentityContacts on crmentityContacts.crmid = contactdetails.contactid 
-				left join contactaddress on contactdetails.contactid = contactaddress.contactaddressid 
-				left join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid 
-				left join contactscf on contactdetails.contactid = contactscf.contactid 
-				left join contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
-				left join account as accountContacts on accountContacts.accountid = contactdetails.accountid 
-				left join users as usersContacts on usersContacts.id = crmentityContacts.smownerid
-				where crmentity.deleted=0 and (crmentityContacts.deleted=0 || crmentityContacts.deleted is null) and account.accountid in(".$mass_merge.")";
-//echo $query;
-//die;	
+$query = "SELECT * FROM account inner join accountbillads on accountbillads.accountaddressid=account.accountid inner join accountshipads on accountshipads.accountaddressid=account.accountid and account.accountid = '".$_REQUEST['record'] ."'";
+//$query = "SELECT * FROM account where accountid = '".$_REQUEST['record'] ."'";
+
+//$result = mysql_query($query);
 $result = $adb->query($query);
-	
-while($columnValues = $adb->fetch_array($result))
-{
-	$y=$adb->num_fields($result);
-  for($x=0; $x<$y; $x++)
-  {
-  	$value = $columnValues[$x];
-  	//<<<<<<<<<<<<<<<for modifing default values>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	if($value == "0")
-  	{
-  		$value = "";
-  	}
-  	if(trim($value) == "--None--" || trim($value) == "--none--")
-  	{
-  		$value = "";
-  	}
-	//<<<<<<<<<<<<<<<End>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		$actual_values[$x] = $value;
-		$actual_values[$x] = str_replace('"'," ",$actual_values[$x]);
-		//if value contains any line feed or carriage return replace the value with ".value."
-		if (preg_match ("/(\r\n)/", $actual_values[$x])) 
-		{
-			$actual_values[$x] = '"'.$actual_values[$x].'"';
-		}
-		$actual_values[$x] = str_replace(","," ",$actual_values[$x]);
-  }
-	$mergevalue[] = implode($actual_values,",");  	
-}
-$csvdata = implode($mergevalue,"###");
-}else
-{
-	die("No fields to do Merge");
-}
 
-$handle = fopen($wordtemplatedownloadpath."datasrc.csv","wb");
-fwrite($handle,$csvheader."\r\n");
-fwrite($handle,str_replace("###","\r\n",$csvdata));
-fclose($handle);
+//$y=mysql_num_fields($result);
+$y=$adb->num_fields($result);
+for ($x=0; $x<$y; $x++)
+{
+  //$columnNames[$x] = "ACCOUNT_".strtoupper(mysql_field_name($result, $x));
+ $fld = $adb->field_name($result, $x);
+ $columnNames[$x] = "ACCOUNT_".strtoupper($fld->name);
+} 
+
+//condition added for mass merge		 
+if($mass_merge == "")
+{
+  $columnValues = $adb->fetch_array($result);
+  for ($x=0; $x<$y; $x++)
+  {
+      $columnValString[$x] = $columnValues[$x];
+  }
+	//$columnValString = implode(",",$columnValString);
+
+  //<<<<<<<<<<<<<<<<to fetch values of custom fields>>>>>>>>>>>>>>>>>>>>>>
+  $sql2 = "select accountscf.* from accountscf inner join account on account.accountid = accountscf.accountid where account.accountid = '".$_REQUEST['record'] ."'";
+  $result2 = $adb->query($sql2);
+  $numRows2 = $adb->num_fields($result2);
+  $custom_field_values = $adb->fetch_array($result2);
+  for ($i=1; $i<$numRows2; $i++)
+  {
+    $custom_values_str[$i] = str_replace(","," ",$custom_field_values[$i]);
+  }
+  //<<<<<<<<<<<<<<<<end fetch values of custom fields>>>>>>>>>>>>>>>>>>>>>>
+  $columnValString = array_merge($columnValString,$custom_values_str);
+  $columnValString = implode(",",$columnValString);
+}
+//end condition added for mass merge
+
+//start custom fields names
+$sql1 = "select fieldlabel from field where generatedtype=2 and tabid=6";
+$result = $adb->query($sql1);
+$numRows = $adb->num_rows($result);
+for($i=0; $i < $numRows;$i++)
+{
+$custom_fields[$i] = "ACCOUNT_".strtoupper(str_replace(" ","",$adb->query_result($result,$i,"fieldlabel")));
+}
+$column_string = array_merge($columnNames,$custom_fields);
+//end custom fields names
+
+$columnString = implode(",",$column_string);
+//$columnValString = implode(",",$columnValString);
+
+echo"<script type=\"text/javascript\">
+var dHdr = '$columnString';
+var dSrc = '$columnValString';
+</script>";
 ?>
 <script>
 if (window.ActiveXObject){
@@ -226,14 +172,14 @@ if (window.ActiveXObject){
         	var filename = "<?php echo $filename?>";
         	if(filename != "")
         	{
-        		if(objMMPage.bDLTempDoc("<?php echo $site_URL;?>/test/wordtemplatedownload/<?php echo $filename; ?>","MMTemplate.doc"))
+        		if(objMMPage.bDLTempDoc("<?php echo $site_URL?>/test/wordtemplatedownload/<?php echo $filename?>","MMTemplate.doc"))
         		{
         			try
         			{
         				if(objMMPage.Init())
         				{
         					objMMPage.vLTemplateDoc();
-        					objMMPage.bBulkHDSrc("<?php echo $site_URL;?>/test/wordtemplatedownload/datasrc.csv");
+        					objMMPage.vBulkHDSrc(dHdr,dSrc);
         					objMMPage.vBulkOpenDoc();
         					objMMPage.UnInit()
         					window.history.back();
@@ -256,3 +202,4 @@ if (window.ActiveXObject){
 </script>
 </body>
 </html>
+

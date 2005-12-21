@@ -288,6 +288,24 @@ if(!$patch_applied && $pv == '')
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
 
+	$db->query("alter table wordtemplates drop PRIMARY KEY");
+
+	$db->query("alter table wordtemplates add column templateid int(19) FIRST");
+
+	$temp_result = $db->query("select * from wordtemplates");
+	$rows= $db->num_rows($temp_result);
+	if($rows >=1)
+	{
+		for($j=0; $j<$rows;$j++)
+		{
+			$fname = $db->query_result($temp_result,$j,"filename");
+			$templateid = $db->getUniqueID("wordtemplates");
+			$db->query("update wordtemplates set templateid=$templateid where filename ='$fname'");	
+		}	
+	}
+	$db->query("alter table wordtemplates add PRIMARY KEY (templateid)");
+	echo "Table 'wordtemplates' modified";
+
 	echo '<BR> <BR>';
 	echo "<font color=blue><center> *** DataBase modified Successfully for vtiger CRM 4.2 Patch !!!  *** </center></font>";
 }
@@ -412,6 +430,23 @@ elseif($patch_applied && $pv == 1)
 	echo '<BR> '.$query.'<BR>';
         $db->query($query);
 
+	$db->query("alter table wordtemplates drop PRIMARY KEY");
+
+	$db->query("alter table wordtemplates add column templateid int(19) FIRST");
+
+	$temp_result = $db->query("select * from wordtemplates");
+	$rows= $db->num_rows($temp_result);
+	if($rows >=1)
+	{
+		for($j=0; $j<$rows;$j++)
+		{
+			$fname = $db->query_result($temp_result,$j,"filename");
+			$templateid = $db->getUniqueID("wordtemplates");
+			$db->query("update wordtemplates set templateid=$templateid where filename ='$fname'");	
+		}	
+	}
+	$db->query("alter table wordtemplates add PRIMARY KEY (templateid)");
+	echo "Table 'wordtemplates' modified";
 
 	echo '<BR> <BR>';
 	echo "<font color=blue><center> *** Database modified Successfully for vtiger CRM 4.2 Patch 2 !!!  *** </center></font>";

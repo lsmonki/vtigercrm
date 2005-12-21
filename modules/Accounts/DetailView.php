@@ -25,11 +25,11 @@ require_once('data/Tracker.php');
 require_once('modules/Accounts/Account.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
-require_once('include/utils/utils.php');
+require_once('include/uifromdbutil.php');
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
-global $log;
+global $vtlog;
 
 $focus = new Account();
 //$focus->set_strings();
@@ -38,8 +38,8 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"Accounts");
     $focus->id = $_REQUEST['record'];	
     $focus->name=$focus->column_fields['accountname'];
-$log->debug("id is  ".$focus->id);
-$log->debug("name is ".$focus->name);
+$vtlog->logthis("id is  ".$focus->id,'debug'); 
+$vtlog->logthis("name is ".$focus->name,'debug'); 
 }
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
@@ -134,7 +134,7 @@ if(isPermitted("Accounts",8,'') == 'yes')
 	$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 
 
-	require_once('include/utils/UserInfoUtil.php');
+	require_once('modules/Users/UserInfoUtil.php');
 	$wordTemplateResult = fetchWordTemplateList("Accounts");
 	//$tempCount = mysql_num_rows($wordTemplateResult);
 	//$tempVal = mysql_fetch_array($wordTemplateResult);
@@ -142,7 +142,7 @@ if(isPermitted("Accounts",8,'') == 'yes')
 	$tempVal = $adb->fetch_array($wordTemplateResult);
 	for($templateCount=0;$templateCount<$tempCount;$templateCount++)
 	{
-		$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
+		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 		//$tempVal = mysql_fetch_array($wordTemplateResult);
 	}

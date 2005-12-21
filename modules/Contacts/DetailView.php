@@ -26,9 +26,9 @@ require_once('modules/Contacts/Contact.php');
 require_once('modules/Contacts/Forms.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/database/PearDatabase.php');
-require_once('include/utils/utils.php');
+require_once('include/uifromdbutil.php');
 
-global $log;
+global $vtlog;
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
@@ -39,7 +39,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 
         $focus->id=$_REQUEST['record'];
         $focus->retrieve_entity_info($_REQUEST['record'],'Contacts');
-	 $log->info("Entity info successfully retrieved for Contact DetailView.");
+	$vtlog->logthis("Entity info successfully retrieved for Contact DetailView.",'info');
 	$focus->firstname=$focus->column_fields['firstname'];
         $focus->lastname=$focus->column_fields['lastname'];
 }
@@ -93,7 +93,7 @@ $xtpl->assign("BLOCK3_HEADER", $block_3_header);
 $xtpl->assign("BLOCK4_HEADER", $block_4_header);
 
 $block_5 = getDetailBlockInformation("Contacts",5,$focus->column_fields);
-$log->info("Detail Block Informations successfully retrieved.");
+$vtlog->logthis("Detail Block Informations successfully retrieved.",'info');
 if(trim($block_5) != '')
 {
         $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
@@ -128,9 +128,6 @@ if(isPermitted("Contacts",2,$_REQUEST['record']) == 'yes')
 }
 if(isPermitted("Emails",1,'') == 'yes')
 {
-	//Added to pass the parents list as hidden for Emails -- 09-11-2005
-	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
-        $xtpl->assign("HIDDEN_PARENTS_LIST",$parent_email);
 	$xtpl->assign("SENDMAILBUTTON","<td><input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.module.value='Emails';this.form.email_directing_module.value='contacts';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\"></td>");
 }
 
@@ -143,13 +140,13 @@ if(isPermitted("Contacts",8,'') == 'yes')
 {
 	$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 
-	require_once('include/utils/UserInfoUtil.php');
+	require_once('modules/Users/UserInfoUtil.php');
 	$wordTemplateResult = fetchWordTemplateList("Contacts");
 	$tempCount = $adb->num_rows($wordTemplateResult);
 	$tempVal = $adb->fetch_array($wordTemplateResult);
 	for($templateCount=0;$templateCount<$tempCount;$templateCount++)
 	{
-		$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
+		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
 	$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");

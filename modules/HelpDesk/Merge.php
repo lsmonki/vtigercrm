@@ -12,20 +12,27 @@
 <html>
 <body>
 <script>
-if (document.layers || (!document.all && document.getElementById))
+if (document.layers)
 {
 	document.write("This feature requires IE 5.5 or higher for Windows on Microsoft Windows 2000, Windows NT4 SP6, Windows XP.");
 	document.write("<br><br>Click <a href='#' onclick='window.history.back();'>here</a> to return to the previous page");
+}	
+else if (document.layers || (!document.all && document.getElementById))
+{
+	document.write("This feature requires IE 5.5 or higher for Windows on Microsoft Windows 2000, Windows NT4 SP6, Windows XP.");
+	document.write("<br><br>Click <a href='#' onclick='window.history.back();'>here</a> to return to the previous page");	
 }
 else if(document.all)
 {
-	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,5,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
+	document.write("<OBJECT Name='vtigerCRM' codebase='modules/Settings/vtigerCRM.CAB#version=1,2,0,0' id='objMMPage' classid='clsid:0FC436C2-2E62-46EF-A3FB-E68E94705126' width=0 height=0></object>");
 }
 </script>
 <?php
-
 require_once('include/database/PearDatabase.php');
 require_once('config.php');
+//echo 'id is ....... ' .$_REQUEST['record'];
+
+//echo 'merge file name is ...' .$_REQUEST['mergefile'];
 
 $templateid = $_REQUEST['mergefile'];
 //get the particular file from db and store it in the local hard disk.
@@ -40,235 +47,156 @@ $filename=$temparray['filename'];
 $filesize=$temparray['filesize'];
 $wordtemplatedownloadpath =$root_directory ."/test/wordtemplatedownload/";
 
+//echo '<br> file name and size is ..'.$filename .'...'.$filesize;
 if($templateid == "")
 {
-	die("Select Mail Merge Template");
+     die("Select Mail Merge Template");
 }
 $handle = fopen($wordtemplatedownloadpath .$temparray['filename'],"wb");
+//chmod("/home/rajeshkannan/test/".$fileContent,0755);
 fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);
 
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<for mass merge>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//for mass merge
 $mass_merge = $_REQUEST['idlist'];
-$single_record = $_REQUEST['record'];
 
 if($mass_merge != "")
-{	
-	$mass_merge = explode(";",$mass_merge);
-	$temp_mass_merge = $mass_merge;
-	if(array_pop($temp_mass_merge)=="")
-		array_pop($mass_merge);
-	$mass_merge = implode(",",$mass_merge);
-}
-else if($single_record != "")
 {
-	$mass_merge = $single_record;	
+  $mass_merge = explode(";",$mass_merge);
+  
+  for($i=0;$i < count($mass_merge) - 1;$i++)
+  {
+  	$query = "SELECT * FROM contactdetails inner join contactsubdetails on contactsubdetails.contactsubscriptionid=contactdetails.contactid inner join contactaddress on contactaddress.contactaddressid=contactdetails.contactid and contactdetails.contactid = '".$mass_merge[$i]."'";
+    
+    $result = $adb->query($query);
+    $y=$adb->num_fields($result); 
+    $columnValues = $adb->fetch_array($result);
+    
+    for ($x=0; $x<$y; $x++)
+    {
+        $columnValString[$x] = $columnValues[$x];
+    }
+    //for custom fields
+  	$sql2 = "select contactscf.* from contactscf inner join contactdetails on contactdetails.contactid = contactscf.contactid where contactdetails.contactid = '".$mass_merge[$i]."'";
+    $result2 = $adb->query($sql2);
+    $numRows2 = $adb->num_fields($result2);
+    $custom_field_values = $adb->fetch_array($result2);
+    for ($z=1; $z<$numRows2; $z++)
+    {
+      $custom_values_str[$z] = $custom_field_values[$z];
+    }
+    //end custom fields
+    $merged_columnValString = array_merge($columnValString,$custom_values_str);
+    
+		$mass_columnString = implode(",",$merged_columnValString);
+    $mass_columnValString = $mass_columnValString.$mass_columnString;
+    if($i < count($mass_merge) - 2)
+    {
+    	$mass_columnValString = $mass_columnValString."###";
+    }
+  }
+$columnValString = $mass_columnValString;
 }
-else
-{
-	die("Record Id is not found, cannot merge the document");
-}
+//end for mass merge
+$query = "SELECT * FROM troubletickets where troubletickets.ticketid = '".$_REQUEST['record'] ."'";
 
-//<<<<<<<<<<<<<<<<header for csv and select columns for query>>>>>>>>>>>>>>>>>>>>>>>>
-$query1="select tab.name,field.tablename,field.columnname,field.fieldlabel from field inner join tab on tab.tabid = field.tabid where field.tabid in (13,4,6) and (field.tablename <>'CustomerDetails' and block <> 6) order by field.tablename";
+//$query = "SELECT * FROM contactdetails,contactsubdetails,contactaddress where contactid = '".$_REQUEST['record'] ."'";
+//echo $query;
+$result = $adb->query($query);
 
-$result = $adb->query($query1);
-$y=$adb->num_rows($result);
-	
+$y=$adb->num_fields($result);
+
 for ($x=0; $x<$y; $x++)
-{ 
-	$tablename = $adb->query_result($result,$x,"tablename");
-	$columnname = $adb->query_result($result,$x,"columnname");
-	$modulename = $adb->query_result($result,$x,"name");
-
-	$column_name = $tablename.".".$columnname;
-
-	if($columnname == "parent_id")
-	{
-		$column_name = "case crmentityRelHelpDesk.setype when 'Accounts' then accountRelHelpDesk.accountname when 'Contacts' then concat(contactdetailsRelHelpDesk.firstname,' ',contactdetailsRelHelpDesk.lastname) End";
-	}
-	if($columnname == "product_id")
-	{
-		$column_name = "productsRel.productname";
-	}
-	if($tablename == "crmentity")
-	{
-		if($modulename == "Contacts")
-		{
-			$tablename = "crmentityContacts";
-			$column_name = $tablename.".".$columnname;
-		}
-		if($modulename == "Accounts")
-		{
-			$tablename = "crmentityAccounts";
-			$column_name = $tablename.".".$columnname;
-		}
-
-	}
-
-	if($columnname == "smownerid")
-	{
-		if($modulename == "Accounts")
-		{
-			$column_name = "concat(usersAccounts.last_name,' ',usersAccounts.first_name) as username";
-		}
-		if($modulename == "Contacts")
-		{
-			$column_name = "concat(usersContacts.last_name,' ',usersContacts.first_name) as usercname";
-		}
-		if($modulename == "HelpDesk")
-		{
-			$column_name = "concat(users.last_name,' ',users.first_name) as userhelpname,users.first_name,users.last_name,users.user_name,users.yahoo_id,users.title,users.phone_work,users.department,users.phone_mobile,users.phone_other,users.phone_fax,users.email1,users.phone_home,users.email2,users.address_street,users.address_city,users.address_state,users.address_postalcode,users.address_country";
-		}
-	}
-	if($columnname == "parentid")
-	{
-		$column_name = "accountAccount.accountname";
-	}
-	if($columnname == "accountid")
-	{
-		$column_name = "accountContacts.accountname";
-	}
-	if($columnname == "reportsto")
-	{
-		$column_name = "contactdetailsContacts.lastname";
-	}
-
-	$querycolumns[$x] = $column_name;
-
-	if($modulename == "Accounts")
-	{
-		$field_label[$x] = "ACCOUNT_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
-	}
-	if($modulename == "Contacts")
-	{
-		$field_label[$x] = "CONTACT_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
-	}
-	if($modulename == "HelpDesk")
-	{
-		$field_label[$x] = "TICKET_".strtoupper(str_replace(" ","",$adb->query_result($result,$x,"fieldlabel")));
-		if($columnname == "smownerid")
-		{
-			$field_label[$x] = $field_label[$x].",USER_FIRSTNAME,USER_LASTNAME,USER_USERNAME,USER_YAHOOID,USER_TITLE,USER_OFFICEPHONE,USER_DEPARTMENT,USER_MOBILE,USER_OTHERPHONE,USER_FAX,USER_EMAIL,USER_HOMEPHONE,USER_OTHEREMAIL,USER_PRIMARYADDRESS,USER_CITY,USER_STATE,USER_POSTALCODE,USER_COUNTRY";
-		}
-	}
-
-}
-$csvheader = implode(",",$field_label);
-//<<<<<<<<<<<<<<<<End>>>>>>>>>>>>>>>>>>>>>>>>
-
-if(count($querycolumns) > 0)
 {
-	$selectcolumns = implode($querycolumns,",");
-
-	$query ="select ".$selectcolumns." from troubletickets
-			inner join crmentity on crmentity.crmid=troubletickets.ticketid
-			inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid
-			left join crmentity as crmentityRelHelpDesk on crmentityRelHelpDesk.crmid = troubletickets.parent_id
-			left join account as accountRelHelpDesk on accountRelHelpDesk.accountid=crmentityRelHelpDesk.crmid
-			left join contactdetails as contactdetailsRelHelpDesk on contactdetailsRelHelpDesk.contactid= crmentityRelHelpDesk.crmid
-			left join products as productsRel on productsRel.productid = troubletickets.product_id
-			left join users on crmentity.smownerid=users.id
-			left join account on account.accountid = troubletickets.parent_id               
-			left join crmentity as crmentityAccounts on crmentityAccounts.crmid = account.accountid 
-			left join accountbillads on accountbillads.accountaddressid = account.accountid
-			left join accountshipads on accountshipads.accountaddressid = account.accountid
-			left join accountscf on accountbillads.accountaddressid = accountscf.accountid 
-			left join account as accountAccount on accountAccount.accountid = troubletickets.parent_id
-			left join users as usersAccounts on usersAccounts.id = crmentityAccounts.smownerid
-			left join contactdetails on contactdetails.contactid = troubletickets.parent_id               
-			left join crmentity as crmentityContacts on crmentityContacts.crmid = contactdetails.contactid 
-			left join contactaddress on contactdetails.contactid = contactaddress.contactaddressid 
-			left join contactsubdetails on contactdetails.contactid = contactsubdetails.contactsubscriptionid 
-			left join contactscf on contactdetails.contactid = contactscf.contactid 
-			left join contactdetails as contactdetailsContacts on contactdetailsContacts.contactid = contactdetails.reportsto
-			left join account as accountContacts on accountContacts.accountid = contactdetails.accountid 
-			left join users as usersContacts on usersContacts.id = crmentityContacts.smownerid
-			where crmentity.deleted=0 and ((crmentityContacts.deleted=0 || crmentityContacts.deleted is null)||(crmentityAccounts.deleted=0 || crmentityAccounts.deleted is null)) 
-			and troubletickets.ticketid in (".$mass_merge.")";
-
-	$result = $adb->query($query);
-
-	while($columnValues = $adb->fetch_array($result))
-	{
-		$y=$adb->num_fields($result);
-		for($x=0; $x<$y; $x++)
-		{
-			$value = $columnValues[$x];
-			//<<<<<<<<<<<<<<<for blank fields>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-			if($value == "0")
-			{
-				$value = "";
-			}
-			if(trim($value) == "--None--" || trim($value) == "--none--")
-			{
-				$value = "";
-			}
-			//<<<<<<<<<<<<<<<End>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-			$actual_values[$x] = $value;
-			$actual_values[$x] = str_replace('"'," ",$actual_values[$x]);
-			//if value contains any line feed or carriage return replace the value with ".value."
-			if (preg_match ("/(\r\n)/", $actual_values[$x])) 
-			{
-				$actual_values[$x] = '"'.$actual_values[$x].'"';
-			}
-			$actual_values[$x] = str_replace(","," ",$actual_values[$x]);
-		}
-		$mergevalue[] = implode($actual_values,",");  	
-	}
-	$csvdata = implode($mergevalue,"###");
+		$fld = $adb->field_name($result, $x);
+    $columnNames[$x] = "TICKET_".strtoupper($fld->name);
 }
-else
-{
-	die("No fields to do Merge");
-}	
 
-$handle = fopen($wordtemplatedownloadpath."datasrc.csv","wb");
-fwrite($handle,$csvheader."\r\n");
-fwrite($handle,str_replace("###","\r\n",$csvdata));
-fclose($handle);
+//condition added for mass merge		 
+if($mass_merge == "")
+{
+  $columnValues = $adb->fetch_array($result);
+  for ($x=0; $x<$y; $x++)
+  {
+      $columnValString[$x] = str_replace(","," ",$columnValues[$x]);
+  }
+	//$columnValString = implode(",",$columnValString);
+
+  //<<<<<<<<<<<<<<<<to fetch values of custom fields>>>>>>>>>>>>>>>>>>>>>>
+  $sql2 = "select ticketcf.* from ticketcf inner join troubletickets on troubletickets.ticketid = ticketcf.ticketid where troubletickets.ticketid = '".$_REQUEST['record'] ."'";
+  $result2 = $adb->query($sql2);
+  $numRows2 = $adb->num_fields($result2);
+  $custom_field_values = $adb->fetch_array($result2);
+  for ($i=1; $i<$numRows2; $i++)
+  {
+    $custom_values_str[$i] = $custom_field_values[$i];
+  }
+  //<<<<<<<<<<<<<<<<end fetch values of custom fields>>>>>>>>>>>>>>>>>>>>>>
+  $columnValString = array_merge($columnValString,$custom_values_str);
+  $columnValString = implode(",",$columnValString);
+}
+//end condition added for mass merge
+
+//start custom fields
+$sql1 = "select fieldlabel from field where generatedtype=2 and tabid=13";
+$result = $adb->query($sql1);
+$numRows = $adb->num_rows($result);
+for($i=0; $i < $numRows;$i++)
+{
+$custom_fields[$i] = "TICKET_".strtoupper(str_replace(" ","",$adb->query_result($result,$i,"fieldlabel")));
+}
+$column_string = array_merge($columnNames,$custom_fields);
+//end custom fields
+
+$columnString = implode(",",$column_string);
+//echo $columnString;
+//echo $columnValString;
+
+echo"<script type=\"text/javascript\">
+var dHdr = '$columnString';
+var dSrc = '$columnValString';
+</script>";
+//echo $site_URL."/test/wordtemplatedownload/".$filename;
 
 ?>
 <script>
-if (window.ActiveXObject)
-{
+if (window.ActiveXObject){
 	try 
 	{
   		ovtigerVM = eval("new ActiveXObject('vtigerCRM.ActiveX');");
   		if(ovtigerVM)
-		{
-			var filename = "<?php echo $filename?>";
-			if(filename != "")
-			{
-				if(objMMPage.bDLTempDoc("<?php echo $site_URL?>/test/wordtemplatedownload/<?php echo $filename?>","MMTemplate.doc"))
-				{
-					try
-					{
-						if(objMMPage.Init())
-						{
-							objMMPage.vLTemplateDoc();
-							objMMPage.bBulkHDSrc("<?php echo $site_URL;?>/test/wordtemplatedownload/datasrc.csv");
-							objMMPage.vBulkOpenDoc();
-							objMMPage.UnInit()
-								window.history.back();
-						}		
-					}catch(errorObject)
-					{
-						document.write("Error while processing mail merge operation");
-					}
-				}
-				else
-				{
-					document.write("Cannot get template document");
-				}
-			}
+  		{
+        	var filename = "<?php echo $filename?>";
+        	if(filename != "")
+        	{
+        		if(objMMPage.bDLTempDoc("<?php echo $site_URL?>/test/wordtemplatedownload/<?php echo $filename?>","MMTemplate.doc"))
+        		{
+        			try
+        			{
+        				if(objMMPage.Init())
+        				{
+        					objMMPage.vLTemplateDoc();
+        					objMMPage.vBulkHDSrc(dHdr,dSrc);
+        					objMMPage.vBulkOpenDoc();
+        					objMMPage.UnInit()
+        					window.history.back();
+        				}		
+        			}catch(errorObject)
+        			{
+        				document.write("Error while processing mail merge operation");
+        			}
+        		}else
+        		{
+        			document.write("Cannot get template document");
+        		}
+        	}
+  		}
 		}
-	}
-	catch(e)
-	{
+	catch(e) {
 		document.write("Requires to download ActiveX Control from vtigerCRM. Please, ensure that you have administration privilage");
 	}
 }
 </script>
 </body>
 </html>
+

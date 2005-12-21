@@ -18,14 +18,14 @@ require_once('modules/Leads/Lead.php');
 require_once('modules/Leads/Forms.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/CustomFieldUtil.php');
-require_once('include/utils/utils.php');
-require_once('include/utils/UserInfoUtil.php');
+require_once('include/uifromdbutil.php');
+require_once('modules/Users/UserInfoUtil.php');
 
 global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-    global $log;
+    global $vtlog;
 $focus = new Lead();
 
 if(isset($_REQUEST['record']))
@@ -34,7 +34,7 @@ if(isset($_REQUEST['record']))
 
     $focus->retrieve_entity_info($_REQUEST['record'],"Leads");
     $focus->id = $_REQUEST['record'];
-     $log->debug("id is ".$focus->id);
+    $vtlog->logthis("id is ".$focus->id ,'debug'); 
     $focus->firstname=$focus->column_fields['firstname'];
     $focus->lastname=$focus->column_fields['lastname'];
 	
@@ -128,9 +128,6 @@ if(isPermitted("Leads",2,$_REQUEST['record']) == 'yes')
 
 if(isPermitted("Emails",1,'') == 'yes')
 {
-	//Added to pass the parents list as hidden for Emails -- 09-11-2005
-	$parent_email = getEmailParentsList('Leads',$_REQUEST['record']);
-        $xtpl->assign("HIDDEN_PARENTS_LIST",$parent_email);
 	$xtpl->assign("SENDMAILBUTTON","<td><input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.module.value='Emails';this.form.email_directing_module.value='leads';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\"></td>");
 }
 
@@ -142,7 +139,7 @@ if(isPermitted("Leads",8,'') == 'yes')
 	$tempVal = $adb->fetch_array($wordTemplateResult);
 	for($templateCount=0;$templateCount<$tempCount;$templateCount++)
 	{
-		$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
+		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
 	$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
