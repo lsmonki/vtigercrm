@@ -20,7 +20,8 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+//require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('modules/Notes/Note.php');
 require_once('themes/'.$theme.'/layout_utils.php');
@@ -67,7 +68,7 @@ if(isset($_REQUEST['viewname']) == false)
 }
 //<<<<<customview>>>>>
 
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
+/*if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	// Stick the form header out there.
 	$search_form=new XTemplate ('modules/Notes/SearchForm.html');
 	$search_form->assign("MOD", $mod_strings);
@@ -91,7 +92,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	echo get_form_footer();
 	echo "\n<BR>\n";
 }
-
+*/
 if (!isset($where)) $where = "";
 
 $url_string = ''; // assigning http url string
@@ -198,15 +199,20 @@ $other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
         </table>';
 //
 
-echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$xtpl=new XTemplate ('modules/Notes/ListView.html');
+$customview= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
+//$xtpl=new XTemplate ('modules/Notes/ListView.html');
+$smarty = new vtigerCRM_Smarty;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMAGE_PATH",$image_path);
-
+//$xtpl->assign("MOD", $mod_strings);
+//$xtpl->assign("APP", $app_strings);
+//$xtpl->assign("IMAGE_PATH",$image_path);
+$smarty->assign("CUSTOMVIEW",$customview);
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("MODULE",$currentModule);
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
 if($viewid != "0")
@@ -315,19 +321,23 @@ if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Notes",$url_string,$sorder,$order_by,"",$oCustomView);
-$xtpl->assign("LISTHEADER", $listview_header);
-
+//$xtpl->assign("LISTHEADER", $listview_header);
+$smarty->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"Notes",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
-$xtpl->assign("LISTENTITY", $listview_entries);
-$xtpl->assign("SELECT_SCRIPT", $view_script);
+//$xtpl->assign("LISTENTITY", $listview_entries);
+//$xtpl->assign("SELECT_SCRIPT", $view_script);
+$smarty->assign("LISTENTITY", $listview_entries);
+$smarty->assign("SELECT_SCRIPT", $view_script);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Notes","index",$viewid);
-$xtpl->assign("NAVIGATION", $navigationOutput);
-$xtpl->assign("RECORD_COUNTS", $record_string);
+//$xtpl->assign("NAVIGATION", $navigationOutput);
+//$xtpl->assign("RECORD_COUNTS", $record_string);
+$smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("RECORD_COUNTS", $record_string);
 
-$xtpl->parse("main");
-$xtpl->out("main");
+//$xtpl->parse("main");
+//$xtpl->out("main");
 
-
+$smarty->display("ListView.tpl");
 ?>

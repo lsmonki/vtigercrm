@@ -20,7 +20,8 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+//require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('modules/Emails/Email.php');
 require_once('themes/'.$theme.'/layout_utils.php');
@@ -143,7 +144,7 @@ else
 }
 //<<<<<customview>>>>>
 
-if(!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') 
+/*if(!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') 
 {
 	// Stick the form header out there.
 	$search_form=new XTemplate ('modules/Emails/SearchForm.html');
@@ -167,7 +168,7 @@ if(!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false')
 	echo get_form_footer();
 	echo "\n<BR>\n";
 }
-
+*/
 // Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<tr>
@@ -298,12 +299,17 @@ $view_script = "<script language='javascript'>
 	set_selected();
 	</script>";
 
-echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$xtpl=new XTemplate ('modules/Emails/ListView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMAGE_PATH",$image_path);
-
+$customview= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
+//$xtpl=new XTemplate ('modules/Emails/ListView.html');
+//$xtpl->assign("MOD", $mod_strings);
+//$xtpl->assign("APP", $app_strings);
+//$xtpl->assign("IMAGE_PATH",$image_path);
+$smarty = new vtigerCRM_Smarty;
+$smarty->assign("CUSTOMVIEW",$customview);
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("MODULE",$currentModule);
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 
@@ -335,18 +341,23 @@ if($viewid !='')
 	$url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Emails",$url_string,$sorder,$order_by,"",$oCustomView);
-$xtpl->assign("LISTHEADER", $listview_header);
+//$xtpl->assign("LISTHEADER", $listview_header);
+$smarty->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"Emails",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
-$xtpl->assign("LISTENTITY", $listview_entries);
-$xtpl->assign("SELECT_SCRIPT", $view_script);
+//$xtpl->assign("LISTENTITY", $listview_entries);
+//$xtpl->assign("SELECT_SCRIPT", $view_script);
+$smarty->assign("LISTENTITY", $listview_entries);                                                                          $smarty->assign("SELECT_SCRIPT", $view_script);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Emails","index",$viewid);
-$xtpl->assign("NAVIGATION", $navigationOutput);
-$xtpl->assign("RECORD_COUNTS", $record_string);
+//$xtpl->assign("NAVIGATION", $navigationOutput);
+//$xtpl->assign("RECORD_COUNTS", $record_string);
+$smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("RECORD_COUNTS", $record_string);
 
-$xtpl->parse("main");
+//$xtpl->parse("main");
 
-$xtpl->out("main");
+//$xtpl->out("main");
 
+$smarty->display("ListView.tpl");
 ?>

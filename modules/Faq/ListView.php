@@ -16,7 +16,8 @@ global $mod_strings;
 
 require_once('modules/Faq/Faq.php');
 require_once('include/database/PearDatabase.php');
-require_once('XTemplate/xtpl.php');
+//require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 require_once('modules/Faq/Faq.php');
 require_once('themes/'.$theme.'/layout_utils.php');
@@ -27,6 +28,8 @@ global $mod_strings;
 $current_module_strings = return_module_language($current_language, 'Faq');
 
 global $theme;
+global $currentModule;
+
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
@@ -51,6 +54,7 @@ $_SESSION['FAQ_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 
 //Constructing the Search Form
+/*
 if(!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') 
 {
         // Stick the form header out there.
@@ -62,6 +66,7 @@ if(!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false')
 
 	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
 }
+
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
@@ -100,7 +105,7 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false')
 	echo get_form_footer();
 	echo "\n<BR>\n";
 }
-
+*/
 // Buttons and View options
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 		<form name="massdelete" method="POST">
@@ -131,12 +136,18 @@ $list_result = $adb->query($list_query);
 
 //Constructing the list view 
 
-echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$xtpl=new XTemplate ('modules/Faq/ListView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMAGE_PATH",$image_path);
-
+//echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
+$customView = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
+//$xtpl=new XTemplate ('modules/Faq/ListView.html');
+//$xtpl->assign("MOD", $mod_strings);
+//$xtpl->assign("APP", $app_strings);
+//$xtpl->assign("IMAGE_PATH",$image_path);
+$smarty = new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("MODULE",$currentModule);
+$smarty->assign("CUSTOMVIEW",$customView);
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 
@@ -163,16 +174,20 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 
 //Retreive the List View Table Header
 $listview_header = getListViewHeader($focus,"Faq",$url_string,$sorder,$order_by);
-$xtpl->assign("LISTHEADER", $listview_header);
-
+//$xtpl->assign("LISTHEADER", $listview_header);
+$smarty->assign("LISTHEADER", $listview_header);
 $listview_entries = getListViewEntries($focus,"Faq",$list_result,$navigation_array);
-$xtpl->assign("LISTHEADER", $listview_header);
-$xtpl->assign("LISTENTITY", $listview_entries);
-
+//$xtpl->assign("LISTHEADER", $listview_header);
+//$xtpl->assign("LISTENTITY", $listview_entries);
+$smarty->assign("LISTHEADER", $listview_header);
+$smarty->assign("LISTENTITY", $listview_entries);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Faq");
-$xtpl->assign("NAVIGATION", $navigationOutput);
-$xtpl->assign("RECORD_COUNTS", $record_string);
+//$xtpl->assign("NAVIGATION", $navigationOutput);
+//$xtpl->assign("RECORD_COUNTS", $record_string);
+$smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("RECORD_COUNTS", $record_string);
 
-$xtpl->parse("main");
-$xtpl->out("main");
+//$xtpl->parse("main");
+//$xtpl->out("main");
+$smarty->display("ListView.tpl");
 ?>

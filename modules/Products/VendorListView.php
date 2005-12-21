@@ -9,7 +9,8 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-require_once('XTemplate/xtpl.php');
+//require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('modules/Products/Vendor.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/utils.php');
@@ -22,7 +23,7 @@ $current_module_strings = return_module_language($current_language, 'Products');
 
 global $list_max_entries_per_page;
 global $urlPrefix;
-
+global $currentModule;
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -32,11 +33,15 @@ require_once($theme_path.'layout_utils.php');
 echo "<br>";
 //echo get_form_header("Product Search", "", false);
 
-$xtpl=new XTemplate ('modules/Products/VendorListView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMAGE_PATH",$image_path);
-
+//$xtpl=new XTemplate ('modules/Products/VendorListView.html');
+//$xtpl->assign("MOD", $mod_strings);
+//$xtpl->assign("APP", $app_strings);
+//$xtpl->assign("IMAGE_PATH",$image_path);
+$smarty = new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("MODULE",$currentModule);
 /*
 $comboFieldNames = Array('manufacturer'=>'manufacturer_dom'
                       ,'productcategory'=>'productcategory_dom');
@@ -326,8 +331,8 @@ if(isset($where) && $where != '')
         $list_query .= ' and '.$where;
 }
 
-$xtpl->assign("VENDORLISTHEADER", get_form_header($current_module_strings['LBL_LIST_VENDOR_FORM_TITLE'], $other_text, false ));
-
+//$xtpl->assign("VENDORLISTHEADER", get_form_header($current_module_strings['LBL_LIST_VENDOR_FORM_TITLE'], $other_text, false ));
+$smarty->assign("VENDORLISTHEADER", get_form_header($current_module_strings['LBL_LIST_VENDOR_FORM_TITLE'], $other_text, false ));
 if(isset($order_by) && $order_by != '')
 {
 	$tablename = getTableNameForField('Vendor',$order_by);
@@ -412,19 +417,22 @@ if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Products",$url_string,$sorder,$order_by,"",$oCustomView);
-$xtpl->assign("LISTHEADER", $listview_header);
-
+//$xtpl->assign("LISTHEADER", $listview_header);
+$smarty->assign("LISTHEADER", $listview_header);
 $listview_entries = getListViewEntries($focus,"Vendor",$list_result,$navigation_array,'','&return_module=Products&return_action=index','VendorEditView','DeleteVendor',$oCustomView);
-$xtpl->assign("LISTENTITY", $listview_entries);
-$xtpl->assign("SELECT_SCRIPT", $view_script);
-
+//$xtpl->assign("LISTENTITY", $listview_entries);
+//$xtpl->assign("SELECT_SCRIPT", $view_script);
+$smarty->assign("LISTENTITY", $listview_entries);
+$smarty->assign("SELECT_SCRIPT", $view_script);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Vendor","index",$viewid);
-$xtpl->assign("NAVIGATION", $navigationOutput);
-$xtpl->assign("RECORD_COUNTS", $record_string);
+//$xtpl->assign("NAVIGATION", $navigationOutput);
+//$xtpl->assign("RECORD_COUNTS", $record_string);
+$smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("RECORD_COUNTS", $record_string);
 
-$xtpl->parse("main");
-$xtpl->out("main");
+//$xtpl->parse("main");
+//$xtpl->out("main");
 
-
+$smarty->display("ListView.tpl");
 
 ?>
