@@ -9,9 +9,7 @@
  *
  ********************************************************************************/
 
-//include('include/database/PearDatabase.php');
 include("config.php");
-//include("migration_401_to_42_functions.php");
 
 $old_version = $_REQUEST['old_version'];
 $latest_version = $_REQUEST['latest_version'];
@@ -39,7 +37,7 @@ $newconn = @mysql_connect($new_host_name,$new_mysql_username,$new_mysql_password
 
 if(!$oldconn)
 {
-	echo '<br> 4.2 Database Server can not be connected';
+	echo '<br> Source Database Server can not be connected';
 	$continue1 = 0;
 }
 elseif(!$newconn)
@@ -60,7 +58,7 @@ if($continue1 == 1)
 	//$newdb_exist = @mysql_select_db($new_dbname,$oldconn);
 	if(!$olddb_exist)
 	{
-		echo '<br> 4.2 Database is not exist';
+		echo '<br> Source Database is not exist';
 		$continue2 = 0;
 	}
 	//elseif(!$newdb_exist)
@@ -83,7 +81,7 @@ if($continue2 == 1)
 
 	if(!$old_tables)
 	{
-		echo '<br> Tables are not exist in 4.2 Database';
+		echo '<br> Tables are not exist in Source Database';
 		$continue3 = 0;
 	}
 /*	if(!$new_tables)
@@ -128,14 +126,14 @@ if($continue1 == 1 && $continue2 == 1 && $continue3 == 1 && $continue4 == 1)
 
 	echo '<br>';
 	echo '<br>*************************************************************';
-	echo '<br><b>4.2 Database Parameters : </b>
+	echo '<br><b>Source Database Parameters : </b>
 		<br> Host Name : '.$old_host_name.'
 		<br> MySql Port : '.$old_mysql_port.'
 		<br> MySql User Name : '.$old_mysql_username.'
 		<br> MySql Password : '.$old_mysql_password.'
 		<br> DB Name : '.$old_dbname;
 	echo '<br>*************************************************************';
-	echo '<br><b>4.5(Alpha) Database Parameters : </b>
+	echo '<br><b>Current Database Parameters : </b>
 		<br> Host Name : '.$new_host[0].'
 		<br> MySql Port : '.$new_host[1].'
 		<br> MySql User Name : '.$new_mysql_username.'

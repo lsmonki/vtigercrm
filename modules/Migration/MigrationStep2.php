@@ -13,29 +13,29 @@ include("modules/Migration/Migration.php");
 
 if($_REQUEST['pre_action'] == 'MigrationStep1')
 {
-	//The control will comes here when the 4.5 MySQL could not be found itself. 
-	$mysql_install_4_5 = $_REQUEST['mysql_install_4_5'];
-	$mysqlpath_4_5 = $_REQUEST['mysqlpath_4_5'];
-	$dump_filename_4_5 = $_REQUEST['dump_filename_4_5'];
+	//The control will comes here when the Current installation's MySQL path could not be found itself. 
+	$current_mysql_install = $_REQUEST['current_mysql_install'];
+	$current_mysqlpath = $_REQUEST['current_mysqlpath'];
+	$old_dump_filename = $_REQUEST['old_dump_filename'];
 
-	if($dump_filename_4_5 != '' && is_file($dump_filename_4_5))
+	if($old_dump_filename != '' && is_file($old_dump_filename))
 	{
 		$gotostep1 = 0;
 		//apply this dump file to the new database
 		$checkDumpFileAndApply = 1;
 	}
-	elseif($mysql_install_4_5 == 'same' && is_file(trim($mysqlpath_4_5."/")."/bin/mysqldump"))
+	elseif($current_mysql_install == 'same' && is_file(trim($current_mysqlpath."/")."/bin/mysqldump"))
 	{
-		$get4_2_Params = 1;
+		$getOld_Params = 1;
 	}
 	else
 	{
 		$gotostep1 = 1;
-		if($dump_filename_4_5 != '' && !is_file($dump_filename_4_5))
+		if($old_dump_filename != '' && !is_file($old_dump_filename))
 		{
 			$invalid_dump = 1;
 		}
-		if($mysqlpath_4_5 != '' && !is_file(trim($mysqlpath_4_5."/")."/bin/mysqldump"))
+		if($current_mysqlpath != '' && !is_file(trim($current_mysqlpath."/")."/bin/mysqldump"))
 		{
 			$mysqldumpNotExist = 1;
 		}
@@ -45,7 +45,7 @@ if($_REQUEST['pre_action'] == 'MigrationStep1')
 //This is to redirect the page to Step1 to re-get the parameters as given dump file is not a file or mysqldump file is not exist
 if($gotostep1 == 1)
 {
-	if($invalid_dump == 1 && $mysqldumpNotExist == 1 && $mysql_install_4_5 == 'same')
+	if($invalid_dump == 1 && $mysqldumpNotExist == 1 && $current_mysql_install == 'same')
 	{
 		echo '<br> Please Enter the correct MySQL Path (or) Enter a valid Dump file.';
 	}
@@ -56,7 +56,7 @@ if($gotostep1 == 1)
 	elseif($mysqldumpNotExist == 1)
 	{
 		echo '<br><b>mysqldump</b> file is not exist in the given MySQL path. 
-			<br>Please Take a Dump of 4.2 Database and enter the Dump file.';
+			<br>Please Take a Dump of Source Database and enter the Dump file.';
 	}
 	else
 	{
@@ -64,10 +64,10 @@ if($gotostep1 == 1)
 	}
 	include("modules/Migration/MigrationStep1.php");
 }
-elseif($get4_2_Params == 1)
+elseif($getOld_Params == 1)
 {
-	//Go to step1 and get the 4.2 parameters
-	$getparams_4_2 = 1;
+	//Go to step1 and get the Source Database parameters
+	$getOldParams = 1;
 	include("modules/Migration/MigrationStep1.php");
 }
 elseif($checkDumpFileAndApply == 1)
@@ -101,18 +101,18 @@ elseif($checkDumpFileAndApply == 1)
                 $obj->createDatabase($conn,$new_dbname);
 
 		$conn->println("Going to apply the old database dump to the new database.");
-                $obj->applyDumpData($temp_new_host_name,$new_mysql_port,$new_mysql_username,$new_mysql_password,$new_dbname,$dump_filename_4_5);
+                $obj->applyDumpData($temp_new_host_name,$new_mysql_port,$new_mysql_username,$new_mysql_password,$new_dbname,$old_dump_filename);
 
 		$conn->println("Going to modify the current database which is now as old database setup");
-                $obj->modifyDatabase42P2_to_45Alpha($conn);
+                $obj->modifyDatabase($conn);
 
                 $conn->println("Database Modifications Ends......");
-                $conn->println("Database Migration from 4.2 Patch2 to 4.5(Alpha) Finished.");
+                $conn->println("Database Migration from Source Database to Current Database has been Finished.");
 	}
 }
 //elseif($takeDump == 1)
 //{
-//	//TODO - Go to this given path and Get the MySQL Dump of 4.2 Database and Proceed with the regular process
+//	//TODO - Go to this given path and Get the MySQL Dump of Source Database and Proceed with the regular process
 //	echo '<br> MySQL path has been given. Go to this path and take dump and the proceed.'; 
 //}
 

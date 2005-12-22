@@ -15,15 +15,15 @@
 
 
 $mod_strings = Array(
-'LBL_MIGRATE_INFO'=>'Enter Values to Migrate Data from <b><i> vtiger CRM 4_2 </i></b> to <b><i> vtiger CRM 4_5(Alpha)</i></b>',
-'LBL_VT_4_5_MYSQL_EXIST'=>'vtiger 4.5 MySQL Exist in',
+'LBL_MIGRATE_INFO'=>'Enter Values to Migrate Data from <b><i> Source </i></b> to <b><i> Current (Latest) vtigerCRM </i></b>',
+'LBL_CURRENT_VT_MYSQL_EXIST'=>'Current vtiger\'s MySQL Exist in',
 'LBL_THIS_MACHINE'=>'This Machine',
 'LBL_DIFFERENT_MACHINE'=>'Different Machine',
-'LBL_VT_4_5_MYSQL_PATH'=>'vtiger 4.5 MySQL path',
-'LBL_VT_4_2_MYSQL_DUMPFILE'=>'vtiger <b>4.2</b> Dump File name',
+'LBL_CURRENT_VT_MYSQL_PATH'=>'Current vtiger\'s MySQL path',
+'LBL_SOURCE_VT_MYSQL_DUMPFILE'=>'vtiger <b>Source</b> Dump File name',
 'LBL_NOTE_TITLE'=>'Note:',
-'LBL_NOTES_LIST1'=>'If 4.5 MySQL Exist in the Same Machine then enter the MySQL Path (or) you can enter the Dump file if you have.',
-'LBL_NOTES_LIST2'=>'If 4.5 MySQL Exist in different Machine then enter the 4.2 Dump filename with the full Path.',
+'LBL_NOTES_LIST1'=>'If Current MySQL Exist in the Same Machine then enter the MySQL Path (or) you can enter the Dump file if you have.',
+'LBL_NOTES_LIST2'=>'If Current MySQL Exist in different Machine then enter the (Source) Dump filename with the full Path.',
 'LBL_NOTES_DUMP_PROCESS'=>'To take Database dump please execute the following command
 			   <br><b>mysqldump --user="mysql_username"  --password="mysql-password" -h "hostname"  --port="mysql_port" "database_name" > dump_filename</b>
 			   <br>add <b>SET_FOREIGN_KEY_CHECKS = 0;</b> -- at the start of the dump file
@@ -31,13 +31,13 @@ $mod_strings = Array(
 'LBL_NOTES_LIST3'=>'Give the MySQL path like <b>/home/crm/vtigerCRM4_5/mysql</b>',
 'LBL_NOTES_LIST4'=>'Give the Dump filename with full Path like <b>/home/fullpath/4_2_dump.txt</b>',
 
-'LBL_MYSQL_4_5_PATH_FOUND'=>'4.5 MySQL path has been found.',
-'LBL_4_2_HOST_NAME'=>'4.2 Host Name :',
-'LBL_4_2_MYSQL_PORT_NO'=>'4.2 MySql Port No :',
-'LBL_4_2_MYSQL_USER_NAME'=>'4.2 MySql User Name :',
-'LBL_4_2_MYSQL_PASSWORD'=>'4.2 MySql Password :',
-'LBL_4_2_DB_NAME'=>'4.2 Database Name :',
-'LBL_MIGRATE'=>'Migrate to 4.5 Alpha',
+'LBL_CURRENT_MYSQL_PATH_FOUND'=>'Current installation\'s MySQL path has been found.',
+'LBL_SOURCE_HOST_NAME'=>'Source Host Name :',
+'LBL_SOURCE_MYSQL_PORT_NO'=>'Source MySql Port No :',
+'LBL_SOURCE_MYSQL_USER_NAME'=>'Source MySql User Name :',
+'LBL_SOURCE_MYSQL_PASSWORD'=>'Source MySql Password :',
+'LBL_SOURCE_DB_NAME'=>'Source Database Name :',
+'LBL_MIGRATE'=>'Migrate to Current Version',
 
 );
 
