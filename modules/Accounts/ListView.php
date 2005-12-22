@@ -13,7 +13,6 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('modules/Accounts/Account.php');
@@ -412,15 +411,11 @@ $ListView->processListView($seedAccount, "main", "ACCOUNT");
 */
 
 //echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-//$xtpl=new XTemplate ('modules/Accounts/ListView.html');
 $smarty = new vtigerCRM_Smarty;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 $custom= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-/*$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMAGE_PATH",$image_path);*/
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
@@ -547,7 +542,6 @@ if(isset($ids))
 }
 if(isPermitted("Accounts",8,'') == 'yes') 
 {
-	//$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 	$smarty->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 	$wordTemplateResult = fetchWordTemplateList("Accounts");
 	$tempCount = $adb->num_rows($wordTemplateResult);
@@ -557,7 +551,6 @@ if(isPermitted("Accounts",8,'') == 'yes')
 		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
-	//$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
 	$smarty->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
 }
 //mass merge for word templates
@@ -569,23 +562,16 @@ if($viewid !='')
 $url_string .= "&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Accounts",$url_string,$sorder,$order_by,"",$oCustomView);
-//$xtpl->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTHEADER", $listview_header);
 
 
 $listview_entries = getListViewEntries($focus,"Accounts",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
-//$xtpl->assign("LISTENTITY", $listview_entries);
-//$xtpl->assign("SELECT_SCRIPT", $view_script);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Accounts","index",$viewid);
-//$xtpl->assign("NAVIGATION", $navigationOutput);
-//$xtpl->assign("RECORD_COUNTS", $record_string);
 
-//$xtpl->parse("main");
-//$xtpl->out("main");
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 
