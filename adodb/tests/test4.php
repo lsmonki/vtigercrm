@@ -117,6 +117,16 @@ if ($conn->Affected_Rows() != 1)print "<p><b>Error 2</b>: Rows Affected=".$conn-
 $rs = $conn->Execute("select * from ADOXYZ where lastname like 'Sm%'");
 //adodb_pr($rs);
 rs2html($rs);
+
+$record["firstName"] = "Carol-new-".rand();
+$record["lasTname"] = "Smithy"; // Update Caroline's lastname from Miranda to Smith
+$record["creAted"] = '2002-12-'.(rand()%30+1);
+$record['num'] = 331;
+
+$conn->AutoExecute('ADOXYZ',$record,'UPDATE', "lastname like 'Sm%'");
+$rs = $conn->Execute("select * from ADOXYZ where lastname like 'Sm%'");
+//adodb_pr($rs);
+rs2html($rs);
 }
 
 
