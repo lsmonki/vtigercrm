@@ -9,7 +9,6 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once('modules/SalesOrder/SalesOrder.php');
 require_once('include/utils/utils.php');
@@ -32,10 +31,6 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 echo "<br>";
 
-//$xtpl=new XTemplate ('modules/SalesOrder/ListView.html');
-//$xtpl->assign("MOD", $mod_strings);
-//$xtpl->assign("APP", $app_strings);
-//$xtpl->assign("IMAGE_PATH",$image_path);
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -257,7 +252,6 @@ if(isset($where) && $where != '')
         $list_query .= ' and '.$where;
 }
 
-//$xtpl->assign("SOLISTHEADER", get_form_header($current_module_strings['LBL_LIST_SO_FORM_TITLE'], $other_text, false ));
 $smarty->assign("SOLISTHEADER", get_form_header($current_module_strings['LBL_LIST_SO_FORM_TITLE'], $other_text, false ));
 
 if(isset($order_by) && $order_by != '')
@@ -323,23 +317,15 @@ if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"SalesOrder",$url_string,$sorder,$order_by,"",$oCustomView);
-//$xtpl->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"SalesOrder",$list_result,$navigation_array,'','&return_module=SalesOrder&return_action=index','EditView','Delete',$oCustomView);
-//$xtpl->assign("LISTENTITY", $listview_entries);
-//$xtpl->assign("SELECT_SCRIPT", $view_script);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"SalesOrder",'index',$viewid);
-//$xtpl->assign("NAVIGATION", $navigationOutput);
-//$xtpl->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
-
-//$xtpl->parse("main");
-//$xtpl->out("main");
 
 $smarty->display("ListView.tpl");
 
