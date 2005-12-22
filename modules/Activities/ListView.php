@@ -20,7 +20,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('modules/Activities/Activity.php');
@@ -304,10 +303,6 @@ $list_result = $adb->query($list_query);
 
 $smarty = new vtigerCRM_Smarty;
 //echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-//$xtpl=new XTemplate ('modules/Activities/ListView.html');
-//$xtpl->assign("MOD", $mod_strings);
-//$xtpl->assign("APP", $app_strings);
-//$xtpl->assign("IMAGE_PATH",$image_path);
 $customview=get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $smarty->assign("CUSTOMVIEW", $customview);
 $smarty->assign("MOD", $mod_strings);
@@ -387,12 +382,9 @@ if (($viewid!=0)&&($viewid!="")){
   if (!isset($oCustomView->list_fields_name['Close'])) $oCustomView->list_fields_name['Close']='status';
 }
 $listview_header = getListViewHeader($focus,"Activities",$url_string,$sorder,$order_by,"",$oCustomView);
-//$xtpl->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"Activities",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
-//$xtpl->assign("LISTENTITY", $listview_entries);
-//$xtpl->assign("SELECT_SCRIPT", $view_script);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
@@ -400,9 +392,7 @@ $navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Acti
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 
-//$xtpl->parse("main");
 
-//$xtpl->out("main");
 
 $smarty->display("ListView.tpl");
 ?>

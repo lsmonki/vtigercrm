@@ -13,7 +13,6 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('modules/Potentials/Opportunity.php');
@@ -412,11 +411,7 @@ $list_result = $adb->query($list_query);
 
 //Constructing the list view
 
-/*echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$xtpl=new XTemplate ('modules/Potentials/ListView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMAGE_PATH",$image_path);*/
+//echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $custom = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $smarty = new vtigerCRM_Smarty();
 $smarty->assign("MOD", $mod_strings);
@@ -492,28 +487,19 @@ if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Potentials",$url_string,$sorder,$order_by,"",$oCustomView);
-//$xtpl->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"Potentials",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
-//$xtpl->assign("LISTHEADER", $listview_header);
-//$xtpl->assign("LISTENTITY", $listview_entries);
 $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTENTITY", $listview_entries);
 
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Potentials","index",$viewid);
-/*$xtpl->assign("NAVIGATION", $navigationOutput);
-$xtpl->assign("RECORD_COUNTS", $record_string);
-$xtpl->assign("SELECT_SCRIPT", $view_script);*/
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
 
-//$xtpl->parse("main");
-
-//$xtpl->out("main");
 $smarty->display("ListView.tpl");
 
 
