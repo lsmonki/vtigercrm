@@ -9,7 +9,6 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once('modules/Products/PriceBook.php');
 require_once('include/utils/utils.php');
@@ -33,10 +32,6 @@ require_once($theme_path.'layout_utils.php');
 echo "<br>";
 //echo get_form_header("Product Search", "", false);
 
-//$xtpl=new XTemplate ('modules/Products/PriceBookListView.html');
-//$xtpl->assign("MOD", $mod_strings);
-//$xtpl->assign("APP", $app_strings);
-//$xtpl->assign("IMAGE_PATH",$image_path);
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -128,6 +123,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 }
 
 //Constructing the Search Form
+/*
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         // Stick the form header out there.
 	echo get_form_header($current_module_strings['LBL_PRICEBOOK_SEARCH_FORM_TITLE'],'', false);
@@ -181,6 +177,7 @@ echo get_form_footer();
 //echo '<br><br>';
 
 }
+*/
 
 //<<<<cutomview>>>>>>>
 /*$oCustomView = new CustomView("PriceBook");
@@ -240,7 +237,6 @@ if(isset($where) && $where != '')
         $list_query .= ' and '.$where;
 }
 
-//$xtpl->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'], $other_text, false ));
 $smarty->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'], $other_text, false ));
 if(isset($order_by) && $order_by != '')
 {
@@ -312,20 +308,14 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 //Retreive the List View Table Header
 
 $listview_header = getListViewHeader($focus,"Products",$url_string,$sorder,$order_by,"",$oCustomView);
-//$xtpl->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"PriceBook",$list_result,$navigation_array,'','&return_module=Products&return_action=index&smodule=PRICEBOOK','PriceBookEditView','DeletePriceBook',$oCustomView);
-//$xtpl->assign("LISTENTITY", $listview_entries);
 $smarty->assign("LISTENTITY", $listview_entries);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"PriceBook","index",$viewid);
-//$xtpl->assign("NAVIGATION", $navigationOutput);
-//$xtpl->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 
-//$xtpl->parse("main");
-//$xtpl->out("main");
 $smarty->display("ListView.tpl");
 
 
