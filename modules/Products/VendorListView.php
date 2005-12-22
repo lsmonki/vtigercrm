@@ -9,7 +9,6 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once('modules/Products/Vendor.php');
 require_once('include/utils/utils.php');
@@ -33,10 +32,6 @@ require_once($theme_path.'layout_utils.php');
 echo "<br>";
 //echo get_form_header("Product Search", "", false);
 
-//$xtpl=new XTemplate ('modules/Products/VendorListView.html');
-//$xtpl->assign("MOD", $mod_strings);
-//$xtpl->assign("APP", $app_strings);
-//$xtpl->assign("IMAGE_PATH",$image_path);
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -207,6 +202,8 @@ if(isset($_REQUEST['viewname']) == false)
 //<<<<<customview>>>>>
 
 //Constructing the Search Form
+
+/* -- Commented the search part by - Jaguar
 if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         // Stick the form header out there.
 	echo get_form_header($current_module_strings['LBL_VENDOR_SEARCH_FORM_TITLE'],'', false);
@@ -225,6 +222,9 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	if ($vendorname !='') $search_form->assign("VENDOR_NAME", $vendorname);
 	if ($email !='') $search_form->assign("EMAIL", $email);
 	if ($category !='') $search_form->assign("CATEGORY", $category);
+
+ -- Commented the search part by Ends- Jaguar */
+
 /*	if ($qtyperunit !='') $search_form->assign("QTYPERUNIT", $qtyperunit);
 	if ($unitprice !='') $search_form->assign("UNITPRICE", $unitprice);
 	if (isset($_REQUEST['manufacturer'])) $manufacturer = $_REQUEST['manufacturer'];
@@ -239,6 +239,8 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         if (isset($productcategory)) $search_form->assign("PRODUCTCATEGORY", get_select_options($comboFieldArray['productcategory_dom'], $productcategoty, $clearsearch));
         else $search_form->assign("PRODUCTCATEGORY", get_select_options($comboFieldArray['productcategory_dom'], '', $clearsearch));
 */
+
+/* -- Commented the search part by - Jaguar starts
         if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true')
 	{
 		$url_string .="&advanced=true";
@@ -276,6 +278,8 @@ echo get_form_footer();
 //echo '<br><br>';
 
 }
+ -- Commented the search part by - Jaguar -ends
+*/
 
 
 // Buttons and View options
@@ -331,7 +335,6 @@ if(isset($where) && $where != '')
         $list_query .= ' and '.$where;
 }
 
-//$xtpl->assign("VENDORLISTHEADER", get_form_header($current_module_strings['LBL_LIST_VENDOR_FORM_TITLE'], $other_text, false ));
 $smarty->assign("VENDORLISTHEADER", get_form_header($current_module_strings['LBL_LIST_VENDOR_FORM_TITLE'], $other_text, false ));
 if(isset($order_by) && $order_by != '')
 {
@@ -417,21 +420,14 @@ if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Products",$url_string,$sorder,$order_by,"",$oCustomView);
-//$xtpl->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTHEADER", $listview_header);
 $listview_entries = getListViewEntries($focus,"Vendor",$list_result,$navigation_array,'','&return_module=Products&return_action=index','VendorEditView','DeleteVendor',$oCustomView);
-//$xtpl->assign("LISTENTITY", $listview_entries);
-//$xtpl->assign("SELECT_SCRIPT", $view_script);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Vendor","index",$viewid);
-//$xtpl->assign("NAVIGATION", $navigationOutput);
-//$xtpl->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 
-//$xtpl->parse("main");
-//$xtpl->out("main");
 
 $smarty->display("ListView.tpl");
 
