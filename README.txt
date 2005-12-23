@@ -1,4 +1,50 @@
 ####################################################
+vtiger CRM 4.2.3
+Dec 23, 2005
+####################################################
+We are pleased to announce the vtigerCRM 4.2.3 release. This release is a consolidated with earlier patches (1 & 2 - refer below section for the list of fixes) and Multiple vulnerablity fixes. 
+
+Note: First Time vtiger CRM users can directly install the source in their
+vtiger suported version of LAMP / WAMP. 
+
+**************************************************************************************************************
+*   IMPORTANT NOTICE                                                                                         *
+**************************************************************************************************************
+* The vtigerCRM 4.2.3 is ONLY for the first time vtiger users and not for                                    *
+* the existing users. The existing v4.2 users are recomended to upgrade their system by applying v4.2 patch  *
+* 2 and vulnerability fixes patch. You can download the patches from the                                     *
+* following urls.                                                                                            *
+* http://forums.vtiger.com/viewtopic.php?t=2903								     *
+* http://forums.vtiger.com/viewtopic.php?t=4166                                                              *
+**************************************************************************************************************
+
+Software requirements : PHP 4.3.x, MySQL 4.0.x (4.0.20 prefered), Apache 1.3.x
+or 2.0.x 
+
+For more details refer to http://www.vtiger.com/wiki/index.php/Vtiger_CRM_4.2.3_-_Installation_Guide
+
+
+***********************
+I. Vulnerability fixes
+***********************
+
+Posted by D.Fabian / SEC-CONSULT/ ww.sec-consult.com
+
+a) Multiple SQL Injection Vulnerabilities
+b) Cross Site Scripting
+c) Path Traversal/File Disclosure
+d) Arbitrary File Upload
+e) Remote Code Execution
+
+Posted by Christopher Kunz / www.hardened-php.net
+
+a) Arbitrary File Upload
+b) Authentication ByPass
+c) Unsafe File Inclusion
+d) Arbitrary code execution
+
+
+####################################################
 vtiger CRM 4.2 Patch 2
 Sep 15, 2005
 ####################################################
@@ -68,7 +114,7 @@ S.No ID    Subject
 
 8.  114  - Better icons for the inv mgmt modules
 
-9. 428 - User Signature Issue
+9.  428 - User Signature Issue
 
 10. 125  - UI for New Product creation not proper
 
