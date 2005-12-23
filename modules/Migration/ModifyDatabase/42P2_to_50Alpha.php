@@ -221,17 +221,35 @@ $status = $conn->query($alter_query1);
 echo '<br>'.$status.' ==> '.$alter_query1;
 
 //code contributed by Fredy for color priority
-$insert_query1 = "insert into field values (16,".$conn->getUniqueID("field").",'priority','activity',1,15,'taskpriority','Priority',1,0,0,100,17,1,1,'V~O',1,'')";
+$newfieldid = $conn->getUniqueID("field");
+$insert_query1 = "insert into field values (16,".$newfieldid.",'priority','activity',1,15,'taskpriority','Priority',1,0,0,100,17,1,1,'V~O',1,'')";
 $status = $conn->query($insert_query1);
 echo '<br>'.$status.' ==> '.$insert_query1;
 
+//Added on 23-12-2005 which is missed from Fredy's contribution for Color priority
+populateFieldForSecurity('16',$newfieldid);
+$activity_alter_query = "alter table activity add column priority varchar(150) default NULL";
+$status = $conn->query($activity_alter_query);
+echo '<br>'.$status.' ==> '.$activity_alter_query;
+
 //Code contributed by Raju for better emailing 
+/*
 $insert_array1 = Array(
 		"insert into field values (10,".$conn->getUniqueID("field").",'crmid','seactivityrel',1,'357','parent_id','Related To',1,0,0,100,1,2,1,'I~O',1,'')",
 		"insert into field values (10,".$conn->getUniqueID("field").",'subject','activity',1,'2','subject','Subject',1,0,0,100,1,3,1,'V~M',0,1)",
 		"insert into field values (10,".$conn->getUniqueID("field").",'filename','emails',1,'61','filename','Attachment',1,0,0,100,1,4,1,'V~O',1,'')",
 		"insert into field values (10,".$conn->getUniqueID("field").",'description','emails',1,'19','description','Description',1,0,0,100,1,5,1,'V~O',1,'')",
 		);
+*/
+//commented the above array as that queries are wrong queries -- changed on 23-12-2005
+$insert_array1 = array(
+			"update field set uitype='357' where tabid=10 and fieldname='parent_id' and tablename='seactivityrel'",
+			"update field set sequence=1 where tabid=10 and fieldname in ('parent_id','subject','filename','description')",
+			"update field set block=2 where tabid=10 and fieldname='parent_id'",
+			"update field set block=3 where tabid=10 and fieldname='subject'",
+			"update field set block=4 where tabid=10 and fieldname='filename'",
+			"update field set block=5 where tabid=10 and fieldname='description'",
+		      );
 foreach($insert_array1 as $query)
 {
 	$status = $conn->query($query);
@@ -249,9 +267,12 @@ $alter_query3 = "ALTER TABLE invoice ADD column contactid int(19) after customer
 $status = $conn->query($alter_query3);
 echo '<br>'.$status.' ==> '.$alter_query3;
 
-$insert_query2 = "insert into field values (23,".$conn->getUniqueID("field").",'contactid','invoice',1,'57','contact_id','Contact Name',1,0,0,100,4,1,1,'I~O',1,'')";
+$newfieldid = $conn->getUniqueID("field");
+$insert_query2 = "insert into field values (23,".$newfieldid.",'contactid','invoice',1,'57','contact_id','Contact Name',1,0,0,100,4,1,1,'I~O',1,'')";
 $status = $conn->query($insert_query2);
 echo '<br>'.$status.' ==> '.$insert_query2;
+//Added on 23-12-2005 because we must populate field entries in profile2field and def_org_field if we add a field in field table
+populateFieldForSecurity('23',$newfieldid);
 
 //changes made to fix the bug in Address Information block of Accounts and Contacs module
 $update_array2 = Array(
@@ -283,9 +304,18 @@ foreach($update_array2 as $query)
 
 
 //Added field emailoptout in account table
-$insert_query3 = "insert into field values (6,".$conn->getUniqueID("field").",'emailoptout','account',1,'56','emailoptout','Email Opt Out',1,0,0,100,17,1,1,'C~O',1,'')";
+$newfieldid = $conn->getUniqueID("field");
+$insert_query3 = "insert into field values (6,".$newfieldid.",'emailoptout','account',1,'56','emailoptout','Email Opt Out',1,0,0,100,17,1,1,'C~O',1,'')";
 $status = $conn->query($insert_query3);
 echo '<br>'.$status.' ==> '.$insert_query3;
+
+//Added on 23-12-2005 because we must populate field entries in profile2field and def_org_field if we add a field in field table
+populateFieldForSecurity('6',$newfieldid);
+
+//Added on 22-12-2005
+$alter_query4 = "alter table account add column emailoptout varchar(3) default 0";
+$status = $conn->query($alter_query4);
+echo '<br>'.$status.' ==> '.$alter_query4;
 
 $update_array3 = Array(
 		"update field set sequence=18 where tabid=6 and fieldname ='assigned_user_id'",
@@ -577,6 +607,38 @@ foreach($alter_query_array4 as $query)
 	echo '<br>'.$status.' ==> '.$query;
 }
 
+
+//Moved the create table queries for group2grouprel, group2role, group2rs from the end of this block
+$query8 = "CREATE TABLE `group2grouprel` 
+(
+ `groupid` int(19) NOT NULL default '0',
+ `containsgroupid` int(19) NOT NULL default '0',
+ PRIMARY KEY (`groupid`,`containsgroupid`),
+ CONSTRAINT `fk_group2grouprel1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
+) TYPE=InnoDB";
+$status8 = $conn->query($query8);
+echo '<br>'.$status8.' ==> '.$query8;
+
+$query9 = "CREATE TABLE `group2role` 
+(
+ `groupid` int(19) NOT NULL default '0',
+ `roleid` varchar(255) NOT NULL default '',
+ PRIMARY KEY (`groupid`,`roleid`),
+ CONSTRAINT `fk_group2role1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
+) TYPE=InnoDB";
+$status9 = $conn->query($query9);
+echo '<br>'.$status9.' ==> '.$query9;
+
+$query10 = "CREATE TABLE `group2rs` 
+(
+ `groupid` int(19) NOT NULL default '0',
+ `roleandsubid` varchar(255) NOT NULL default '',
+ PRIMARY KEY (`groupid`,`roleandsubid`),
+ CONSTRAINT `fk_group2rs1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
+) TYPE=InnoDB";
+$status10 = $conn->query($query10);
+echo '<br>'.$status10.' ==> '.$query10;
+
 //Insert all the retrieved old values to the new groups table ie., create new groups
 foreach($group_map_array as $groupname => $description)
 {
@@ -629,38 +691,8 @@ foreach($alter_query_array5 as $query)
 	$status = $conn->query($query);
 	echo '<br>'.$status.' ==> '.$query;
 }
+//Moved the create table queries for group2grouprel, group2role, group2rs to before creatinf the Group ie., before call the createGroup
 
-
-$query8 = "CREATE TABLE `group2grouprel` 
-(
- `groupid` int(19) NOT NULL default '0',
- `containsgroupid` int(19) NOT NULL default '0',
- PRIMARY KEY (`groupid`,`containsgroupid`),
- CONSTRAINT `fk_group2grouprel1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
-) TYPE=InnoDB";
-$status8 = $conn->query($query8);
-echo '<br>'.$status8.' ==> '.$query8;
-
-
-$query9 = "CREATE TABLE `group2role` 
-(
- `groupid` int(19) NOT NULL default '0',
- `roleid` varchar(255) NOT NULL default '',
- PRIMARY KEY (`groupid`,`roleid`),
- CONSTRAINT `fk_group2role1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
-) TYPE=InnoDB";
-$status9 = $conn->query($query9);
-echo '<br>'.$status9.' ==> '.$query9;
-
-$query10 = "CREATE TABLE `group2rs` 
-(
- `groupid` int(19) NOT NULL default '0',
- `roleandsubid` varchar(255) NOT NULL default '',
- PRIMARY KEY (`groupid`,`roleandsubid`),
- CONSTRAINT `fk_group2rs1` FOREIGN KEY (`groupid`) REFERENCES `groups` (`groupid`) ON DELETE CASCADE
-) TYPE=InnoDB";
-$status10 = $conn->query($query10);
-echo '<br>'.$status10.' ==> '.$query10;
 
 /***Added to include decimal places for amount field in potential table  --by Mangai 15-Nov-2005***/
 
@@ -786,6 +818,29 @@ foreach($query_array1 as $query)
 
 $conn->println("Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Dev 3 ends here.");
 echo "<br><br><b>Database Modifications for 4.2 Patch2 ==> 5.0(Alpha) Ends here.....</b><br>";
+
+
+//Added on 23-12-2005 which is used to populate the profile2field and def_org_field table entries for the field per tab
+//if we enter a field in field table then we must populate that field in these table for security access
+function populateFieldForSecurity($tabid,$fieldid)
+{
+	global $conn;
+
+	$profileresult = $conn->query("select * from profile");
+	$countprofiles = $conn->num_rows($profileresult);
+	for ($i=0;$i<$countprofiles;$i++)
+	{
+        	$profileid = $conn->query_result($profileresult,$i,'profileid');
+	        $sqlProf2FieldInsert[$i] = 'insert into profile2field values ('.$profileid.','.$tabid.','.$fieldid.',0,1)';
+        	$status = $conn->query($sqlProf2FieldInsert[$i]);
+	        echo '<br>'.$status.' ==> '.$sqlProf2FieldInsert[$i];
+	}
+	$def_query = "insert into def_org_field values (".$tabid.",".$fieldid.",0,1)";
+	$status = $conn->query($def_query);
+	echo '<br>'.$status.' ==> '.$def_query;
+}
+
+
 
 
 ?>
