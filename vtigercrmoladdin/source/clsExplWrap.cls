@@ -181,7 +181,7 @@ Public Sub RefreshToolbar(objFolder As Outlook.MAPIFolder)
                 objSyncClndrButton.Enabled = False
                 objSyncClndrMenu.Enabled = False
             End If
-            objLoginMenu.Enabled = False
+            'objLoginMenu.Enabled = False
             objPrefMenu.Enabled = True
         End If
     End If

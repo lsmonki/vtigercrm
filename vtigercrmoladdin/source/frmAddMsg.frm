@@ -93,19 +93,19 @@ Begin VB.Form frmAddMsg
       TabCaption(1)   =   " Edit Message"
       TabPicture(1)   =   "frmAddMsg.frx":0A02
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "txtMsg"
+      Tab(1).Control(0)=   "Label3"
       Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "Label3"
+      Tab(1).Control(1)=   "txtMsg"
       Tab(1).Control(1).Enabled=   0   'False
       Tab(1).ControlCount=   2
       TabCaption(2)   =   "Attachments"
       TabPicture(2)   =   "frmAddMsg.frx":0ACE
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "Label4"
+      Tab(2).Control(0)=   "FlxGrdDtls2"
       Tab(2).Control(0).Enabled=   0   'False
       Tab(2).Control(1)=   "lblNote"
       Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "FlxGrdDtls2"
+      Tab(2).Control(2)=   "Label4"
       Tab(2).Control(2).Enabled=   0   'False
       Tab(2).ControlCount=   3
       Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlxGrdDtls2 
@@ -302,6 +302,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
     Dim oFS As New Scripting.FileSystemObject
     Dim oFolder As Folder
     Dim oFiles As File
+    Dim objBASE64 As New Base64Class
     
     If gsContactId <> "" Then
       
@@ -319,7 +320,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
                     Open oFiles.Path For Binary Access Read As #1
                         Get #1, , sBinFile
                     Close #1
-                    sFile64Encode = Encode64(sBinFile)
+                    sFile64Encode = objBASE64.EncodeString(sBinFile)
                     sFileSize = oFiles.Size
                     Call bAddEmailAttachment(sEmailId, oFiles.Name, sFile64Encode, sFileSize, sFileType)
                     oFiles.Delete (True)
@@ -343,6 +344,7 @@ ERROR_EXIT_ROUTINE:
     LogTheMessage ("cmdAddvtiger_Click" & Err.Description)
 EXIT_ROUTINE:
     Set oFS = Nothing
+    Set objBASE64 = Nothing
 End Sub
 
 Private Sub cmdClose_Click()
