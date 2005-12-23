@@ -203,7 +203,7 @@ oXMLHttp.setRequestHeader "Content-Type", "text/xml"
 oXMLHttp.send oPSoap.Serialize
 
 sErrMsg = gMsg003
-If oXMLDoc.loadXML(oPSoap.Serialize) = False Then GoTo ERROR_EXIT_ROUTINE
+If oXMLDoc.loadXML(oXMLHttp.responseText) = False Then GoTo ERROR_EXIT_ROUTINE
 Set oXMLDocElmnt = oXMLDoc.documentElement
 
 If Not oXMLDocElmnt.selectSingleNode("//ns1:AddMessageToContactResponse/return") Is Nothing Then
@@ -269,7 +269,7 @@ oXMLHttp.setRequestHeader "Content-Type", "text/xml"
 oXMLHttp.send oPSoap.Serialize
 
 sErrMsg = gMsg003
-oXMLDoc.loadXML (oPSoap.Serialize)
+If oXMLDoc.loadXML(oXMLHttp.responseText) = False Then GoTo ERROR_EXIT_ROUTINE
 Set oXMLDocElmnt = oXMLDoc.documentElement
 
 If Not oXMLDocElmnt.selectSingleNode("//ns1:AddEmailAttachmentResponse/return") Is Nothing Then
@@ -326,7 +326,7 @@ sErrMsg = gMsg003
 If oXMLDoc.loadXML(oXMLHttp.responseText) = False Then GoTo ERROR_EXIT_ROUTINE
 Set oXMLDocElmnt = oXMLDoc.documentElement
 
-If (oXMLDocElmnt.selectSingleNode("//ns1:GetContactsResponse").childNodes(0).childNodes.Length > 0) Then
+If (oXMLDocElmnt.selectSingleNode("//ns1:GetContactsResponse").childNodes.Length > 0) Then
     sErrMsg = gMsg004
     If Not oXMLDocElmnt.selectNodes("//ns1:GetContactsResponse/return") Is Nothing Then
         sResult = sDeSerializeVtXML("CONTACTS", oXMLDocElmnt.selectNodes("//ns1:GetContactsResponse/return"))
@@ -686,7 +686,7 @@ sErrMsg = gMsg003
 If oXMLDoc.loadXML(oXMLHttp.responseText) = False Then GoTo ERROR_EXIT_ROUTINE
 Set oXMLDocElmnt = oXMLDoc.documentElement
 
-If (oXMLDocElmnt.selectSingleNode("//ns1:GetTasksResponse").childNodes(0).childNodes.Length > 0) Then
+If (oXMLDocElmnt.selectSingleNode("//ns1:GetTasksResponse").childNodes.Length > 0) Then
     sErrMsg = gMsg004
     If Not oXMLDocElmnt.selectNodes("//ns1:GetTasksResponse/return") Is Nothing Then
         sResult = sDeSerializeVtXML("TASKS", oXMLDocElmnt.selectNodes("//ns1:GetTasksResponse/return"))
@@ -913,10 +913,11 @@ oXMLHttp.setRequestHeader "Content-Type", "text/xml; charset=UTF-8"
 oXMLHttp.send oPSoap.Serialize
 
 sErrMsg = gMsg003
+
 If oXMLDoc.loadXML(oXMLHttp.responseText) = False Then GoTo ERROR_EXIT_ROUTINE
 Set oXMLDocElmnt = oXMLDoc.documentElement
 
-If (oXMLDocElmnt.selectSingleNode("//ns1:GetClndrResponse").childNodes(0).childNodes.Length > 0) Then
+If (oXMLDocElmnt.selectSingleNode("//ns1:GetClndrResponse").childNodes.Length > 0) Then
     sErrMsg = gMsg004
     If Not oXMLDocElmnt.selectNodes("//ns1:GetClndrResponse/return") Is Nothing Then
         sResult = sDeSerializeVtXML("CALENDAR", oXMLDocElmnt.selectNodes("//ns1:GetClndrResponse/return"))
@@ -926,7 +927,6 @@ If (oXMLDocElmnt.selectSingleNode("//ns1:GetClndrResponse").childNodes(0).childN
 Else
     sResult = ""
 End If
-'MsgBox sResult
 svTigerSoGetClndr = sResult
 GoTo EXIT_ROUTINE
 ERROR_EXIT_ROUTINE:

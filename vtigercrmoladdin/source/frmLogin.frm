@@ -180,7 +180,7 @@ Attribute VB_Exposed = False
 ' * The Initial Developer of the Original Code is vtiger.
 ' * Portions created by vtiger are Copyright (C) vtiger.
 '* © 2003-2005 vtiger.com. All rights reserved.
-' ********************************************************************************/
+'********************************************************************************/
 Option Explicit
 Private Sub cmdCancel_Click()
     Unload frmLogin

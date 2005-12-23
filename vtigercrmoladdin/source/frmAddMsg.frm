@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{0D452EE1-E08F-101A-852E-02608C4D0BB4}#2.0#0"; "FM20.DLL"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Object = "{0ECD9B60-23AA-11D0-B351-00A0C9055D8E}#6.0#0"; "MSHFLXGD.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmAddMsg 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Add Message to vtigerCRM"
@@ -94,14 +94,19 @@ Begin VB.Form frmAddMsg
       TabPicture(1)   =   "frmAddMsg.frx":0A02
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "txtMsg"
+      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "Label3"
+      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).ControlCount=   2
       TabCaption(2)   =   "Attachments"
       TabPicture(2)   =   "frmAddMsg.frx":0ACE
       Tab(2).ControlEnabled=   0   'False
       Tab(2).Control(0)=   "Label4"
+      Tab(2).Control(0).Enabled=   0   'False
       Tab(2).Control(1)=   "lblNote"
+      Tab(2).Control(1).Enabled=   0   'False
       Tab(2).Control(2)=   "FlxGrdDtls2"
+      Tab(2).Control(2).Enabled=   0   'False
       Tab(2).ControlCount=   3
       Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlxGrdDtls2 
          Height          =   3855
@@ -280,7 +285,6 @@ Attribute VB_Exposed = False
 '* © 2003-2005 vtiger.com. All rights reserved.
 ' ********************************************************************************/
 Option Explicit
-'For adding Messages to ZohoCRM
 Dim gsSubject As String
 Dim gsDate As String
 Dim gsMailId As String
@@ -301,7 +305,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
     
     If gsContactId <> "" Then
       
-        sEmailId = sAddMessageToContact(gsVtUserId, gsContactId, HTMLEncode(gsSubject), HTMLEncode(txtMsg.Text), gsDate)
+        sEmailId = sAddMessageToContact(gsVtUserId, gsContactId, HTMLEncode(gsSubject), txtMsg.Text, gsDate)
       
         If sEmailId <> "" Then
             If oFS.FolderExists(gsVtUserFolder & "\Attachments") = True Then
@@ -454,7 +458,9 @@ If IsObject(oOlApp.Explorers) Then
                         If Not sGetMailId(oMailItem) Then GoTo ERROR_EXIT_ROUTINE
                         
                         txtAddress.Text = gsMailId
-                        If Trim(oMailItem.Body) <> "" Then
+                        If Trim(oMailItem.HTMLBody) <> "" Then
+                            txtMsg.Text = oMailItem.HTMLBody
+                        Else
                             txtMsg.Text = oMailItem.Body
                         End If
                         

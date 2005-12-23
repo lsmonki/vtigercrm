@@ -57,7 +57,7 @@ Begin VB.Form frmOlForum
    End
    Begin VB.ListBox List1 
       Height          =   2985
-      Left            =   80
+      Left            =   120
       TabIndex        =   0
       Top             =   1080
       Width           =   6820

@@ -9,6 +9,14 @@ Attribute VB_Name = "modvtigerUtils"
 ' ********************************************************************************/
 Option Explicit
 
+'For Outlook Explorer
+Public golApp As Outlook.Application
+Public gstrProgID As String
+Public gcolExplWrap As New Collection
+Public gblnNewExpl As Boolean
+Dim nID As Integer
+Dim blnActivate As Boolean
+
 'Date formats
 Public Const DB_DATE_TIME_SEC_FORMAT As String = "YYYY-MM-DD"
 Public Const DB_DATE_TIME_LOG_SEC_FORMAT As String = "DDD MMM YYYY HH:MM:SS"
@@ -298,7 +306,7 @@ Public Function OpenURL( _
   InternetCloseHandle hInet
 End Function
 
-Public Function sGetPathAsString(ByRef oMapiFldr As MAPIFolder) As String
+Public Function sGetPathAsString(ByVal oMapiFldr As Outlook.MAPIFolder) As String
 Dim sPath As String
 Dim sFlag As Boolean
 sFlag = False
@@ -314,10 +322,108 @@ On Error GoTo EXIT_LOOP
 Set oMapiFldr = oMapiFldr.Parent
 Loop
 EXIT_LOOP:
+Set oMapiFldr = Nothing
 sGetPathAsString = sPath
 End Function
 
 Public Function Sh_Execute(ByVal url As String)
 Dim hHandle As Long
 ShellExecute hHandle, vbNullString, url, vbNullString, vbNullString, 0
+End Function
+
+
+Public Sub AddExpl(Explorer As Outlook.Explorer)
+    Dim objExplWrap As New clsExplWrap
+    
+    objExplWrap.Explorer = Explorer
+    
+    objExplWrap.Key = nID
+    gcolExplWrap.Add objExplWrap, CStr(nID)
+    nID = nID + 1
+End Sub
+
+Public Sub KillExpl(anID As Integer, objExplWrap As clsExplWrap)
+    Dim objExplWrap2 As clsExplWrap
+    
+    Set objExplWrap2 = gcolExplWrap.Item(CStr(anID))
+    ' checks to make sure we're removing the
+    ' right Explorer from the collection
+    If Not objExplWrap2 Is objExplWrap Then
+        Err.Raise 1, Description:="Unexpected Error in KillExpl"
+        Exit Sub
+    End If
+    
+    gcolExplWrap.Remove CStr(anID)
+End Sub
+
+Public Function CreateAddInCommandBarButton _
+    (strProgID As String, objCommandBar As CommandBar, _
+    strCaption As String, strTag As String, strTip As String, _
+    intFaceID As Integer, blnBeginGroup As Boolean, intStyle As Integer) _
+    As Office.CommandBarButton
+    
+    Dim ctlBtnAddin As CommandBarButton
+    On Error Resume Next
+    ' Test to determine if button exists on command bar.
+    Set ctlBtnAddin = objCommandBar.FindControl(Tag:=strTag)
+    If ctlBtnAddin Is Nothing Then
+        ' Add new button.
+        Set ctlBtnAddin = objCommandBar.Controls.Add(Type:=msoControlButton, _
+            Parameter:=strTag)
+        ' Set button's Caption, Tag, Style, and OnAction properties.
+        With ctlBtnAddin
+            .Caption = strCaption
+            .Tag = strTag
+            If intStyle <> msoButtonCaption Then
+                .FaceId = intFaceID
+            End If
+            .Style = intStyle
+            .ToolTipText = strTip
+            .BeginGroup = blnBeginGroup
+            ' Set the OnAction property with ProgID of Add-In
+            .OnAction = "<!" & strProgID & ">"
+        End With
+    End If
+    
+    ' Return reference to new commandbar button.
+    Set CreateAddInCommandBarButton = ctlBtnAddin
+
+End Function
+
+Public Function CreateAddInPopupButton _
+    (strProgID As String, objCommandBar As CommandBarPopup, _
+    strCaption As String, strTag As String, strTip As String, _
+    intFaceID As Integer, blnBeginGroup As Boolean, intStyle As Integer) _
+    As Office.CommandBarButton
+    
+    On Error Resume Next
+    
+    Dim ctlBtnAddin As CommandBarButton
+    Dim i As Integer
+    
+    For i = 1 To objCommandBar.Controls.Count
+        If objCommandBar.Controls.Item(i).Tag = strTag Then
+            Set ctlBtnAddin = objCommandBar.Controls.Item(i)
+        End If
+    Next i
+            
+    If ctlBtnAddin Is Nothing Then
+        Set ctlBtnAddin = objCommandBar.Controls.Add(Type:=msoControlButton, _
+            Parameter:=strTag)
+        With ctlBtnAddin
+            .Caption = strCaption
+            .Tag = strTag
+            If intStyle <> msoButtonCaption Then
+                .FaceId = intFaceID
+            End If
+            .Style = intStyle
+            .ToolTipText = strTip
+            .BeginGroup = blnBeginGroup
+            .OnAction = "<!" & strProgID & ">"
+        End With
+    End If
+    
+    ' Return reference to new commandbar button.
+    Set CreateAddInPopupButton = ctlBtnAddin
+
 End Function

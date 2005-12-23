@@ -179,10 +179,10 @@ If Not oXMLVtElement Is Nothing Then
     
     oOlAppt.Save
       
-    If sGetPathAsString(oOlApp.GetNamespace("MAPI").GetDefaultFolder(olFolderCalendar)) <> gsClndrSyncFolder Then
-        Set oOlFolder = oOlApp.GetNamespace("MAPI").GetFolderFromID(gsClndrSyncFolderId)
-        oOlAppt.Move oOlFolder
-    End If
+'    If sGetPathAsString(oOlApp.GetNamespace("MAPI").GetDefaultFolder(olFolderCalendar)) <> gsClndrSyncFolder Then
+'        Set oOlFolder = oOlApp.GetNamespace("MAPI").GetFolderFromID(gsClndrSyncFolderId)
+'        oOlAppt.Move oOlFolder
+'    End If
     
     sCrmId = oXMLVtElement.getAttribute("crmid")
     
