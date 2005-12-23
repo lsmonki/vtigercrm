@@ -1,9 +1,9 @@
-The vtiger Public License Version 1.0 is based on the Mozilla Public License Version 1.1
+The vtiger Public License Version 1.1 is based on the Mozilla Public License Version 1.1
 
 vtiger Public License
-Version 1.0
+Version 1.1
 
-Copyright (c) 2004 www.vtiger.com All rights reserved.
+Copyright (c) 2004-2005 www.vtiger.com All rights reserved.
 
 PLEASE READ THE FOLLOWING LICENSE AGREEMENT CAREFULLY. ANY USE OF SOFTWARE DOWNLOADED OR ORDERED FROM VTIGER IS PERMITTED ONLY UNDER LICENSE WITH VTIGER. BY DOWNLOADING THIS SOFTWARE YOU AGREE TO BE BOUND BY THE TERMS OF THIS LICENSE AGREEMENT. 
 
@@ -64,7 +64,6 @@ PLEASE READ THE FOLLOWING LICENSE AGREEMENT CAREFULLY. ANY USE OF SOFTWARE DOWNL
 
             (d) Notwithstanding Section 2.2(b) above, no patent license is granted: 1) for any code that Contributor has deleted from the Contributor Version; 2)  separate from the Contributor Version;  3)  for infringements caused by: i) third party modifications of Contributor Version or ii)  the combination of Modifications made by that Contributor with other software  (except as part of the Contributor Version) or other devices; or 4) under Patent Claims infringed by Covered Code in the absence of Modifications made by that Contributor.
 
-
 3. Distribution Obligations.
 
       3.1. Application of License.
@@ -107,13 +106,13 @@ This License applies to code to which the Initial Developer has attached the not
 6. Versions of the License.
 
       6.1. New Versions.
-      Netscape Communications Corporation (''Netscape'') may publish revised and/or new versions of the License from time to time. Each version will be given a distinguishing version number.
+     vtiger may publish revised and/or new versions of the License from time to time. Each version will be given a distinguishing version number. 
 
       6.2. Effect of New Versions.
-      Once Covered Code has been published under a particular version of the License, You may always continue to use it under the terms of that version. You may also choose to use such Covered Code under the terms of any subsequent version of the License published by Netscape. No one other than Netscape has the right to modify the terms applicable to Covered Code created under this License.
+      Once Covered Code has been published under a particular version of the License, You may always continue to use it under the terms of that version. You may also choose to use such Covered Code under the terms of any subsequent version of the License published by vtiger. No one other than vtiger has the right to modify the terms applicable to Covered Code created under this License.
 
       6.3. Derivative Works.
-      If You create or use a modified version of this License (which you may only do in order to apply it to code which is not already Covered Code governed by this License), You must (a) rename Your license so that the phrases ''vtiger'', ''vtigerPL'', ''MOZPL'', ''Netscape'', "MPL", ''NPL'' or any confusingly similar phrase do not appear in your license (except to note that your license differs from this License) and (b) otherwise make it clear that Your version of the license contains terms which differ from the vtiger Public License and Netscape Public License. (Filling in the name of the Initial Developer, Original Code or Contributor in the notice described in Exhibit A shall not of themselves be deemed to be modifications of this License.)
+     If You create or use a modified version of this License (which you may only do in order to apply it to code which is not already Covered Code governed by this License), You must (a) rename Your license so that the phrases ''vtiger'or any confusingly similar phrase do not appear in your license (except to note that your license differs from this License) and (b) otherwise make it clear that Your version of the license contains terms which differ from the vtiger Public License. (Filling in the name of the Initial Developer, Original Code or Contributor in the notice described in Exhibit A shall not of themselves be deemed to be modifications of this License.)
 
 7. DISCLAIMER OF WARRANTY.
 
@@ -143,7 +142,7 @@ The Covered Code is a ''commercial item,'' as that term is defined in 48 C.F.R. 
 
 11. MISCELLANEOUS.
 
-This License represents the complete agreement concerning subject matter hereof. If any provision of this License is held to be unenforceable, such provision shall be reformed only to the extent necessary to make it enforceable. This License shall be governed by California law provisions (except to the extent applicable law, if any, provides otherwise), excluding its conflict-of-law provisions. With respect to disputes in which at least one party is a citizen of, or an entity chartered or registered to do business in the United States of America, any litigation relating to this License shall be subject to the jurisdiction of the Federal Courts of the Northern District of California, with venue lying in Santa Clara County, California, with the losing party responsible for costs, including without limitation, court costs and reasonable attorneys' fees and expenses. The application of the United Nations Convention on Contracts for the International Sale of Goods is expressly excluded. Any law or regulation which provides that the language of a contract shall be construed against the drafter shall not apply to this License. 
+This License represents the complete agreement concerning subject matter hereof. If any provision of this License is held to be unenforceable, such provision shall be reformed only to the extent necessary to make it enforceable. This License shall be governed by Indian laws (except to the extent applicable law, if any, provides otherwise), excluding its conflict-of-law provisions. With respect to disputes in which at least one party is a citizen of, or an entity chartered or registered to do business in India, any litigation relating to this License shall be subject to the jurisdiction of the Courts in Chennai, with venue lying in Tamil Nadu State, India, with the losing party responsible for costs, including without limitation, court costs and reasonable attorneys' fees and expenses. The application of the United Nations Convention on Contracts for the International Sale of Goods is expressly excluded. Any law or regulation which provides that the language of a contract shall be construed against the drafter shall not apply to this License.  
 
 12. RESPONSIBILITY FOR CLAIMS.
 
@@ -156,7 +155,7 @@ Initial Developer may designate portions of the Covered Code as “Multiple-Licens
 
 EXHIBIT A -vtiger Public License.
 
-"The contents of this file are subject to the vtiger Public License Version 1.0 (the "License"); you may not use this file except in compliance with the License."
+"The contents of this file are subject to the vtiger Public License Version 1.1 (the "License"); you may not use this file except in compliance with the License."
 
 Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for the specific language governing rights and limitations under the License.
 
