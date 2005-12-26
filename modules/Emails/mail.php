@@ -34,8 +34,9 @@ require("class.phpmailer.php");
   *   $contents		-- body of the email you want to send
   *   $cc		-- add email ids with comma seperated. - optional 
   *   $bcc		-- add email ids with comma seperated. - optional.
+  *   $attachment	-- whether we want to attach the currently selected file or all files.[values = current,all] - optional
   */
-function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='')
+function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='',$attachment='')
 {
 
 	global $adb, $log;
@@ -57,7 +58,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 
 	$mail = new PHPMailer();
 
-	setMailerProperties(&$mail,$subject,$contents,$from_email,$from_name,$to_email);
+	setMailerProperties(&$mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment);
 	setCCAddress(&$mail,'cc',$cc);
 	setCCAddress(&$mail,'bcc',$bcc);
 
@@ -133,7 +134,7 @@ function addSignature($contents, $fromname)
   *	$mail -- reference of the mail object
   *	other parameters are same as passed in send_mail function
   */
-function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email)
+function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment='')
 {
 	global $adb;
 	$adb->println("Inside the function setMailerProperties");
@@ -159,8 +160,17 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	$mail->AddReplyTo($from_email);
 	$mail->WordWrap = 50;
 
-	//Handling the attachments here
-	addAttachments(&$mail,$_REQUEST['record'],$_FILES['filename']['name']);
+	//If we want to add the currently selected file only then we will use the following function
+	if($attachment == 'current')
+	{
+		addAttachment(&$mail,$_FILES['filename']['name'],$_REQUEST['record']);
+	}
+
+	//This will add all the files which are related to this record or email
+	if($attachment == 'all')
+	{
+		addAllAttachments(&$mail,$_REQUEST['record']);
+	}
 
 	$mail->IsHTML(true);		// set email format to HTML
 
@@ -193,19 +203,58 @@ function setMailServerProperties($mail)
 
 /**	Function to add the file as attachment with the mail object
   *	$mail -- reference of the mail object
-  *	$record -- not used now. If we want to add all the attachments then this record will be useful to get the all attachments
   *	$filename -- filename which is going to added with the mail
+  *	$record -- id of the record - optional 
   */
-function addAttachments($mail,$record,$filename)
+function addAttachment($mail,$filename,$record)
 {
 	global $adb, $root_directory;
-	$adb->println("Inside the function addAttachments");
+	$adb->println("Inside the function addAttachment");
 	$adb->println("The file name is => '".$filename."'");
 
-	//TODO -- if the file is unlinked and available in database then we will open and write the file and then attach
-	if($filename != '')
+	//This is the file which has been selected in Email EditView
+        if(is_file($filename) && $filename != '')
+        {
+                $mail->AddAttachment($root_directory."test/upload/".$filename);
+        }
+}
+
+/**     Function to add all the files as attachment with the mail object
+  *     $mail -- reference of the mail object
+  *     $record -- email id ie., record id which is used to get the all attachments from database
+  */
+function addAllAttachments($mail,$record)
+{
+	global $adb, $root_directory;
+        $adb->println("Inside the function addAllAttachments");
+
+	//Retrieve the files from database where avoid the file which has been currently selected
+	$sql = "select attachments.* from attachments inner join seattachmentsrel on attachments.attachmentsid = seattachmentsrel.attachmentsid inner join crmentity on crmentity.crmid = attachments.attachmentsid where crmentity.deleted=0 and seattachmentsrel.crmid=".$record;
+	$res = $adb->query($sql);
+	$count = $adb->num_rows($res);
+
+	for($i=0;$i<$count;$i++)
 	{
-		$mail->AddAttachment($root_directory."test/upload/".$filename);
+		$filename = $adb->query_result($res,$i,'name');
+		$filewithpath = $root_directory."test/upload/".$filename;
+
+		//if the file is exist in test/upload directory then we will add directly
+		//else get the contents of the file and write it as a file and then attach (this will occur when we unlink the file)
+		if(is_file($filewithpath))
+		{
+			$mail->AddAttachment($filewithpath);
+		}
+		elseif($filename != '')
+		{
+			$contents = $adb->query_result($res,$i,'attachmentcontents');
+			$size = $adb->query_result($res,$i,'attachmentsize');
+
+			@$handle = fopen($filewithpath,'wb');
+			@fwrite($handle,base64_decode($contents),$size);
+			@fclose($handle);
+
+			$mail->AddAttachment($filewithpath);
+		}
 	}
 }
 

@@ -39,7 +39,7 @@ if($to_email == '' && $cc == '' && $bcc == '')
 }
 else
 {
-	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$cc,$bcc);
+	$mail_status = send_mail('Emails',$to_email,$current_user->user_name,'',$_REQUEST['subject'],$_REQUEST['description'],$cc,$bcc,'all');
 	//set the errorheader1 to 1 if the mail has not been sent to the assigned to user
 	if($mail_status != 1)//when mail send fails
 	{
@@ -96,7 +96,7 @@ for ($i=0;$i<(count($myids)-1);$i++)
 
 		if($emailadd != '')
 		{
-			$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$focus->column_fields['description']);
+			$mail_status = send_mail('Emails',$emailadd,$current_user->user_name,'',$focus->column_fields['subject'],$focus->column_fields['description'],'','','all');
 			$mail_status_str .= $emailadd."=".$mail_status."&&&";
 			//added to get remain the EditView page if an error occurs in mail sending
 			if($mail_status != 1)
