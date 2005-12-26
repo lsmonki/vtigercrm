@@ -39,7 +39,6 @@ function renderRelatedPotentials($query,$id)
         require_once('include/RelatedListView.php');
 
         $hidden = getHiddenValues($id);
-        echo $hidden;
 
         $focus = new Potential();
 	$button = '';
@@ -51,9 +50,8 @@ function renderRelatedPotentials($query,$id)
 	}
         $returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
-        $list = GetRelatedList('Contacts','Potentials',$focus,$query,$button,$returnset);
+        return GetRelatedList('Contacts','Potentials',$focus,$query,$button,$returnset);
 	 $log->info("Potential Related List for Contact Displayed");
-	echo '</form>';
 }
 
 function renderRelatedTasks($query,$id)
@@ -66,7 +64,6 @@ function renderRelatedTasks($query,$id)
 
         $hidden = getHiddenValues($id);
 	$hidden .= '<input type="hidden" name="activity_mode">';
-        echo $hidden;
 
         $focus = new Activity();
 
@@ -79,9 +76,8 @@ function renderRelatedTasks($query,$id)
 	}
 	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Contacts','Activities',$focus,$query,$button,$returnset);
+	return GetRelatedList('Contacts','Activities',$focus,$query,$button,$returnset);
 	$log->info("Activity Related List for Contact Displayed");
-	echo '</form>';
 }
 
 function renderRelatedEmails($query,$id)
@@ -97,7 +93,6 @@ function renderRelatedEmails($query,$id)
 	//Added to pass the parents list as hidden for Emails -- 09-11-2005
 	$hidden .= getEmailParentsList('Contacts',$id);
 
-	echo $hidden;
 
 	$focus = new Email();
 
@@ -109,15 +104,13 @@ function renderRelatedEmails($query,$id)
 	}
 	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Contacts','Emails',$focus,$query,$button,$returnset);
+	return GetRelatedList('Contacts','Emails',$focus,$query,$button,$returnset);
 	 $log->info("Email Related List for Contact Displayed");
-	echo '</form>';
 }
 
 function renderRelatedHistory($query,$id)
 {
-	getHistory('Contacts',$query,$id);
-	echo '<br><br>';
+        return getHistory('Contacts',$query,$id);
 }
 
 function renderRelatedTickets($query,$id)
@@ -127,7 +120,6 @@ function renderRelatedTickets($query,$id)
         global $app_strings;
 
         $hidden = getHiddenValues($id);
-        echo $hidden;
 
         $focus = new HelpDesk();
 
@@ -135,20 +127,17 @@ function renderRelatedTickets($query,$id)
 	$button .= '<td valign="bottom" align="right"><input title="New Ticket" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
         $returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
-        $list = GetRelatedList('Contacts','HelpDesk',$focus,$query,$button,$returnset);
+        return GetRelatedList('Contacts','HelpDesk',$focus,$query,$button,$returnset);
          $log->info("Ticket Related List for Contact Displayed");
-	echo '</form>';
 }
 
 function renderRelatedAttachments($query,$id)
 {
 	global $log;
 	$hidden = getHiddenValues($id);
-        echo $hidden;
 
-	getAttachmentsAndNotes('Contacts',$query,$id);
+	return getAttachmentsAndNotes('Contacts',$query,$id);
 	$log->info("Notes&Attachmenmts for Contact Displayed");
-	echo '</form>';
 }
 function renderRelatedProducts($query,$id)
 {
@@ -157,7 +146,6 @@ function renderRelatedProducts($query,$id)
         global $app_strings;
 
         $hidden = getHiddenValues($id,$sid);
-        echo $hidden;
 
         $focus = new Product();
  
@@ -170,8 +158,7 @@ function renderRelatedProducts($query,$id)
 	}
 	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Contacts','Products',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Contacts','Products',$focus,$query,$button,$returnset);
 }
 function renderRelatedSalesOrders($query,$id,$sid="product_id")
 {
@@ -180,7 +167,6 @@ function renderRelatedSalesOrders($query,$id,$sid="product_id")
         global $app_strings;
 
         $hidden = getHiddenValues($id,$sid);
-        echo $hidden;
 
         $focus = new SalesOrder();
  
@@ -193,8 +179,7 @@ function renderRelatedSalesOrders($query,$id,$sid="product_id")
 	}
 	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Contacts','SalesOrder',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Contacts','SalesOrder',$focus,$query,$button,$returnset);
 }
 
 function renderRelatedOrders($query,$id)
@@ -204,7 +189,6 @@ function renderRelatedOrders($query,$id)
         global $app_strings;
 
         $hidden = getHiddenValues($id);
-        echo $hidden;
 
         $focus = new Order();
  
@@ -217,8 +201,7 @@ function renderRelatedOrders($query,$id)
 	}
 	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Contacts','PurchaseOrder',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Contacts','PurchaseOrder',$focus,$query,$button,$returnset);
 }
 function renderRelatedQuotes($query,$id)
 {
@@ -226,7 +209,7 @@ function renderRelatedQuotes($query,$id)
 	global $app_strings;
 	require_once('modules/Quotes/Quote.php');
 
-	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
+	$hidden = getHiddenValues($id);                                                                                        
 	
 	$focus = new Quote();
 	
@@ -237,12 +220,10 @@ function renderRelatedQuotes($query,$id)
 	}
 	$returnset = '&return_module=Contacts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Contacts','Quotes',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Contacts','Quotes',$focus,$query,$button,$returnset);
 }
 
 
-echo get_form_footer();
 
 
 ?>

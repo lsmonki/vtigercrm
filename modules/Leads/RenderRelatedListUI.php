@@ -34,7 +34,6 @@ function renderRelatedTasks($query, $id)
 
         $hidden = getHiddenValues($id);
         $hidden .= '<input type="hidden" name="activity_mode">';
-        echo $hidden;
 
         $focus = new Activity();
 	$button = '';
@@ -46,8 +45,7 @@ function renderRelatedTasks($query, $id)
 	}
         $returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
 
-        $list = GetRelatedList('Leads','Activities',$focus,$query,$button,$returnset);
-	echo '</form>';
+       return  GetRelatedList('Leads','Activities',$focus,$query,$button,$returnset);
 }
 
 function renderRelatedEmails($query,$id)
@@ -64,7 +62,6 @@ function renderRelatedEmails($query,$id)
 	//Added to pass the parents list as hidden for Emails -- 09-11-2005
 	$hidden .= getEmailParentsList('Leads',$id);
 
-        echo $hidden;
 
         $focus = new Email();
 
@@ -77,8 +74,7 @@ function renderRelatedEmails($query,$id)
 	}
         $returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
 
-        $list = GetRelatedList('Leads','Emails',$focus,$query,$button,$returnset);
-	echo '</form>';
+        return GetRelatedList('Leads','Emails',$focus,$query,$button,$returnset);
 }
 function renderRelatedProducts($query,$id)
 {
@@ -87,7 +83,6 @@ function renderRelatedProducts($query,$id)
         global $app_strings;
 
         $hidden = getHiddenValues($id);
-        echo $hidden;
 
         $focus = new Product();
  
@@ -101,23 +96,19 @@ function renderRelatedProducts($query,$id)
 	}
 	$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Leads','Products',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return  GetRelatedList('Leads','Products',$focus,$query,$button,$returnset);
 }
 
 function renderRelatedHistory($query,$id)
 {
-	getHistory('Leads',$query,$id);
+	return getHistory('Leads',$query,$id);
 }
 
 function renderRelatedAttachments($query,$id)
 {
 	$hidden = getHiddenValues($id);
-	echo $hidden;
-	getAttachmentsAndNotes('Leads',$query,$id);
-	echo '</form>';
+	return getAttachmentsAndNotes('Leads',$query,$id);
 }
 
-echo get_form_footer();
 
 ?>

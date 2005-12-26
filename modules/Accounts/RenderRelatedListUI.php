@@ -14,11 +14,6 @@ require_once('include/utils/UserInfoUtil.php');
 
 function getHiddenValues($id)
 {
-//	global $theme;
-//	$theme_path="themes/".$theme."/";
-//	$image_path=$theme_path."images/";
-//	require_once ($theme_path."layout_utils.php");
-
 	$hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
 	$hidden .= '<input type="hidden" name="module">';
 	$hidden .= '<input type="hidden" name="mode">';
@@ -48,8 +43,7 @@ function renderRelatedPotentials($query,$id)
 	}
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Accounts','Potentials',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Accounts','Potentials',$focus,$query,$button,$returnset);
 }
 
 function renderRelatedContacts($query,$id)
@@ -58,7 +52,7 @@ function renderRelatedContacts($query,$id)
 	global $app_strings;
 	require_once('include/RelatedListView.php');
 
-	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
+	$hidden = getHiddenValues($id);                                                                                            // echo $hidden;
 	
 	$focus = new Contact();
 	
@@ -69,8 +63,8 @@ function renderRelatedContacts($query,$id)
 	}
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Accounts','Contacts',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Accounts','Contacts',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 
 function renderRelatedTasks($query,$id)
@@ -94,22 +88,19 @@ function renderRelatedTasks($query,$id)
 	}
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-        $list = GetRelatedList('Accounts','Activities',$focus,$query,$button,$returnset);
-	echo '</form>';
+        return GetRelatedList('Accounts','Activities',$focus,$query,$button,$returnset);
 }
 
 function renderRelatedHistory($query,$id)
 {
-	getHistory('Accounts',$query,$id);
+	return getHistory('Accounts',$query,$id);
 }
 
 function renderRelatedAttachments($query,$id)
 {
         $hidden = getHiddenValues($id);
-        echo $hidden;
 
-	getAttachmentsAndNotes('Accounts',$query,$id);
-	echo '</form>';
+	return getAttachmentsAndNotes('Accounts',$query,$id);
 }
 
 
@@ -128,8 +119,8 @@ function renderRelatedTickets($query,$id)
 	$button .= '<td valign="bottom" align="right"><input title="New TICKET" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-        $list = GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
-        echo '</form>';
+        return GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
+        //echo '</form>';
 }
 function renderRelatedQuotes($query,$id)
 {
@@ -148,8 +139,8 @@ function renderRelatedQuotes($query,$id)
 	}
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Accounts','Quotes',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Accounts','Quotes',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 function renderRelatedInvoices($query,$id)
 {
@@ -168,8 +159,8 @@ function renderRelatedInvoices($query,$id)
 	}
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Accounts','Invoice',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Accounts','Invoice',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 function renderRelatedOrders($query,$id)
 {
@@ -190,8 +181,8 @@ function renderRelatedOrders($query,$id)
 
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Accounts','SalesOrder',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Accounts','SalesOrder',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 function renderRelatedProducts($query,$id)
 {
@@ -214,11 +205,8 @@ function renderRelatedProducts($query,$id)
 	}
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Accounts','Products',$focus,$query,$button,$returnset);
+	return GetRelatedList('Accounts','Products',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
-
-
-echo get_form_footer();
 
 ?>

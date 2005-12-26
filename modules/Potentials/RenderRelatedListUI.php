@@ -34,7 +34,6 @@ function renderRelatedActivities($query,$id)
 
         $hidden = getHiddenValues($id);
         $hidden .= '<input type="hidden" name="activity_mode">';
-        echo $hidden;
 
         $focus = new Activity();
   
@@ -48,8 +47,7 @@ function renderRelatedActivities($query,$id)
 	}
 	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 	
-	$list = GetRelatedList('Potentials','Activities',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Potentials','Activities',$focus,$query,$button,$returnset);
 }
 
 function renderRelatedContacts($query,$id)
@@ -58,7 +56,6 @@ function renderRelatedContacts($query,$id)
         global $app_strings;
 
         $hidden = getHiddenValues($id);
-	echo $hidden;
 	
 	$focus = new Contact();
  
@@ -72,8 +69,7 @@ function renderRelatedContacts($query,$id)
 	}
 	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Potentials','Contacts',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Potentials','Contacts',$focus,$query,$button,$returnset);
 }
 
 
@@ -84,7 +80,6 @@ function renderRelatedProducts($query,$id)
         global $app_strings;
 
         $hidden = getHiddenValues($id);
-        echo $hidden;
 
         $focus = new Product();
  
@@ -102,24 +97,20 @@ function renderRelatedProducts($query,$id)
 	}
 	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Potentials','Products',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Potentials','Products',$focus,$query,$button,$returnset);
 }
 
 function renderRelatedAttachments($query,$id)
 {
         $hidden = getHiddenValues($id);
-        echo $hidden;
 
-        getAttachmentsAndNotes('Potentials',$query,$id);
+       return getAttachmentsAndNotes('Potentials',$query,$id);
 
-        echo '</form>';
 }
 
 function renderRelatedHistory($query,$id)
 {
-	getHistory('Potentials',$query,$id);
-	echo '<br><br>';
+	return getHistory('Potentials',$query,$id);
 }
 
 function renderRelatedStageHistory($query,$id)
@@ -137,12 +128,9 @@ function renderRelatedStageHistory($query,$id)
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
 
-	echo '<br>';
-	echo get_form_header($app_strings['LBL_SALES_STAGE'].' '.$app_strings['LBL_HISTORY'],'', false);
 
 	if($noofrows == 0)
 	{
-	        echo 'Sales Stage Never Changed';
 	}
 	else
 	{	
@@ -233,9 +221,7 @@ function renderRelatedStageHistory($query,$id)
 			$list .= '</div>';
 		}
 
-		echo $list;
 	}
-	echo "<BR>\n";
 }
 function renderRelatedQuotes($query,$id,$acntid='')
 {
@@ -245,7 +231,6 @@ function renderRelatedQuotes($query,$id,$acntid='')
 
 	$hidden = getHiddenValues($id);
 	$hidden .='<input type="hidden" name="account_id" value="'.$acntid.'">';
-	echo $hidden;
 	if($acntid!='')
 	$focus = new Quote();
 	
@@ -256,8 +241,7 @@ function renderRelatedQuotes($query,$id,$acntid='')
 	}
 	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Potentials','Quotes',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return  GetRelatedList('Potentials','Quotes',$focus,$query,$button,$returnset);
 }
 
 function renderRelatedSalesOrders($query,$id,$acntid='')
@@ -268,7 +252,6 @@ function renderRelatedSalesOrders($query,$id,$acntid='')
 
         $hidden = getHiddenValues($id);
 	$hidden .='<input type="hidden" name="account_id" value="'.$acntid.'">';
-        echo $hidden;
 
         $focus = new SalesOrder();
  
@@ -280,12 +263,10 @@ function renderRelatedSalesOrders($query,$id,$acntid='')
 
 	$returnset = '&return_module=Potentials&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Potentials','SalesOrder',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Potentials','SalesOrder',$focus,$query,$button,$returnset);
 }
 
 
-echo get_form_footer();
 
 
 ?>
