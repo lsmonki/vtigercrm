@@ -273,6 +273,9 @@ $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'update_log','troubletickets',1,'15','update_log','Update History',1,0,0,100,9,1,3,'V~O',1,'')");
 $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,10,1,2,'T~O',1,'')");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,11,1,2,'T~O',1,'')");
+ //Added on 26-12-2005 to add attachment in ticket editview
+ $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'filename','attachments',1,'61','filename','Attachment',1,0,0,100,12,1,1,'V~O',0,1)");
+
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'title','troubletickets',1,'22','ticket_title','Title',1,0,0,100,1,2,1,'V~M',0,1)");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'description','troubletickets',1,'19','description','Description',1,0,0,100,1,3,1,'V~O',0,2)");
  $this->db->query("insert into field values (13,".$this->db->getUniqueID("field").",'solution','troubletickets',1,'19','solution','Solution',1,0,0,100,1,4,1,'V~O',1,'')");

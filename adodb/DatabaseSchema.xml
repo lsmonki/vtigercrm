@@ -1911,6 +1911,7 @@
 		<field name="title" type="C" size="255">
 			<NOTNULL/>
 		</field>
+		<field name="filename" type="C" size="50"></field>
 		<field name="description" type="X"></field>
 		<field name="solution" type="X"></field>
 		<field name="update_log" type="X"></field>

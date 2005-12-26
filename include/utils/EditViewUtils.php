@@ -545,7 +545,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 if($value!='')
                         $filename=' [ '.$value. ' ]';
 		$custfld .= '<td width="20%" valign="top" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
-                $custfld .='<td colspan="3"><input name="'.$fieldname.'" type="file" size="60" value="'.$value.
+                $custfld .='<td colspan="3"><input name="'.$fieldname.'" type="file" size="20" value="'.$value.
 '"/><input type="hidden" name="filename" value=""/><input type="hidden" name="id" value=""/>'.$filename.'</td>';
         }
         elseif($uitype == 62)

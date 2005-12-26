@@ -170,7 +170,7 @@ class CRMEntity extends SugarBean
 	}
 
 
-	if($module == 'Emails' || $module == 'Notes')
+	if($module == 'Emails' || $module == 'Notes' || $module == 'HelpDesk')
 	{
 		if(isset($_FILES['filename']['name']) && $_FILES['filename']['name']!='')
 		{
