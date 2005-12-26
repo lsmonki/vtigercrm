@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Potentials/Opportunity.php');
 require_once('modules/Potentials/Forms.php');
@@ -38,6 +38,7 @@ global $current_user;
 // global $cal_codes;
 
 $focus = new Potential();
+$smarty = new vtigerCRM_Smarty();
 
 if(isset($_REQUEST['record'])) {
     $focus->id = $_REQUEST['record'];
@@ -53,40 +54,11 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = ''; 	
 }
-//get Block 1 Information
 
-$block_1 = getBlockInformation("Potentials",1,$focus->mode,$focus->column_fields);
-
-
-
-//get Description Information
-
-$block_2 = getBlockInformation("Potentials",2,$focus->mode,$focus->column_fields);
-
-//get Description Information
-
-//$block_3 = getBlockInformation("Potentials",3,$focus->mode,$focus->column_fields);
-
-$block_1_header = getBlockTableHeader("LBL_OPPORTUNITY_INFORMATION");
-//$block_2_header = getBlockTableHeader("LBL_ADDRESS_INFORMATION");
-$block_2_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
-
-//get Custom Field Information
-$block_5 = getBlockInformation("Potentials",5,$focus->mode,$focus->column_fields);
-if(trim($block_5) != '')
-{
-        $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
-        $cust_fld .=  '<tr><td>';
-	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
-        $cust_fld .= $block_5_header;
-        $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= $block_5;
-        $cust_fld .= '</table>';
-        $cust_fld .= '</td></tr></table>';
-        $cust_fld .='<BR>';
-}
-
-
+$disp_view = getView($focus->mode);
+//echo '<pre>';print_r(getBlocks("Potentials",$disp_view,$mode,$focus->column_fields));echo '</pre>';
+$smarty->assign("BLOCKS",getBlocks("Potentials",$disp_view,$mode,$focus->column_fields));
+$smarty->assign("OP_MODE",$disp_view);
 
 //needed when creating a new opportunity with a default account value passed in
 if (isset($_REQUEST['accountname']) && is_null($focus->accountname)) {
@@ -111,72 +83,43 @@ $comboFieldArray = getComboArray($comboFieldNames);
 require_once($theme_path.'layout_utils.php');
 
 $log->info("Potential detail view");
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
 
-$xtpl=new XTemplate ('modules/Potentials/EditView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("BLOCK1", $block_1);
-$xtpl->assign("BLOCK2", $block_2);
-$xtpl->assign("BLOCK3", $block_3);
-$xtpl->assign("BLOCK1_HEADER", $block_1_header);
-$xtpl->assign("BLOCK2_HEADER", $block_2_header);
-
-if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
-else $xtpl->assign("NAME", "");
+if (isset($focus->name)) 
+$smarty->assign("NAME", $focus->name);
+else 
+$smarty->assign("NAME", "");
 
 if(isset($cust_fld))
 {
-        $xtpl->assign("CUSTOMFIELD", $cust_fld);
+        $smarty->assign("CUSTOMFIELD", $cust_fld);
 }
 if($focus->mode == 'edit')
 {
-	$xtpl->assign("MODE", $focus->mode);
+	$smarty->assign("MODE", $focus->mode);
 }		
 
 
 
 // Unimplemented until jscalendar language files are fixed
-// $xtpl->assign("CALENDAR_LANG", ((empty($cal_codes[$current_language])) ? $cal_codes[$default_language] : $cal_codes[$current_language]));
-$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
-$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+$smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
+$smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
-if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
-if (isset($_REQUEST['return_viewname'])) $xtpl->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
-$xtpl->assign("ID", $focus->id);
-/*
-$xtpl->assign("ACCOUNTNAME", $focus->accountname);
-$xtpl->assign("ACCOUNTID", $focus->accountid);
-$xtpl->assign("CONTACTID", $focus->contactid);
-if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
-else $xtpl->assign("NAME", "");
-$xtpl->assign("AMOUNT", $focus->amount);
-$xtpl->assign("DATE_ENTERED", $focus->date_entered);
-$xtpl->assign("DATE_CLOSED", $focus->date_closed);
-$xtpl->assign("NEXT_STEP", $focus->next_step);
-$xtpl->assign("PROBABILITY", $focus->probability);
-$xtpl->assign("PRODUCTID", $focus->product_id);
-$xtpl->assign("PRODUCTNAME", $focus->product_name);
-$xtpl->assign("DESCRIPTION", $focus->description);
-if ($focus->assigned_user_id == '' && (!isset($focus->id) || $focus->id=0)) $focus->assigned_user_id = $current_user->id;
-$xtpl->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active", $focus->assigned_user_id), $focus->assigned_user_id));
-
-$xtpl->assign("LEAD_SOURCE_OPTIONS", get_select_options_with_id($comboFieldArray['leadsource_dom'], $focus->leadsource));
-$xtpl->assign("TYPE_OPTIONS", get_select_options_with_id($comboFieldArray['opportunity_type_dom'], $focus->opportunity_type));
-$xtpl->assign("SALES_STAGE_OPTIONS", get_select_options_with_id($comboFieldArray['sales_stage_dom'], $focus->sales_stage));
-
-//CustomField
-$custfld = CustomFieldEditView($focus->id, "Potentials", "opportunitycf", "opportunityid", $app_strings, $theme);
-$xtpl->assign("CUSTOMFIELD", $custfld);
-
-*/
-
-
-
+if (isset($_REQUEST['return_module'])) 
+$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if (isset($_REQUEST['return_action'])) 
+$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if (isset($_REQUEST['return_id'])) 
+$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+if (isset($_REQUEST['return_viewname'])) 
+$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+$smarty->assign("ID", $focus->id);
+$smarty->assign("MODULE",$currentModule);
+$smarty->assign("SINGLE_MOD","Potential");
 
 
  $potential_tables = Array('potential','crmentity','potentialscf'); 
@@ -220,17 +163,10 @@ $xtpl->assign("CUSTOMFIELD", $custfld);
  }
 
 
-$xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
-$xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
-$xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
 
-
-
-
-
-
-$xtpl->parse("main");
-
-$xtpl->out("main");
+$smarty->display("salesEditView.tpl");
 
 ?>

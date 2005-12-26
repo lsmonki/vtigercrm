@@ -9,7 +9,7 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/HelpDesk/Forms.php');
@@ -21,6 +21,7 @@ global $mod_strings;
 global $current_user;
 
 $focus = new HelpDesk();
+$smarty = new vtigerCRM_Smarty();
 
 if(isset($_REQUEST['record'])) 
 {
@@ -35,47 +36,23 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
     	$focus->mode = ''; 	
 } 
 
-//get Block 1 Information
-$block_1 = getBlockInformation("HelpDesk",1,$focus->mode,$focus->column_fields);
-$block_1_header = getBlockTableHeader("LBL_TICKET_INFORMATION");
-
-//get Subject Information
-$block_2 = getBlockInformation("HelpDesk",2,$focus->mode,$focus->column_fields);
-
-//get Description Information
-$block_3 = getBlockInformation("HelpDesk",3,$focus->mode,$focus->column_fields);
-$block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
-
-//get Custom Field Information
-$block_5 = getBlockInformation("HelpDesk",5,$focus->mode,$focus->column_fields);
-if(trim($block_5) != '')
-{
-        $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
-        $cust_fld .=  '<tr><td>';
-	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
-        $cust_fld .= $block_5_header;
-        $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= $block_5;
-        $cust_fld .= '</table>';
-        $cust_fld .= '</td></tr></table>';
-        $cust_fld .='<BR>';
-}
-
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-$xtpl=new XTemplate ('modules/HelpDesk/EditView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
-$xtpl->assign("BLOCK1", $block_1);
-$xtpl->assign("BLOCK2", $block_2);
-$xtpl->assign("BLOCK3", $block_3);
-$xtpl->assign("BLOCK1_HEADER", $block_1_header);
-$xtpl->assign("BLOCK3_HEADER", $block_3_header);
+$disp_view = getView($focus->mode);
+$smarty->assign("BLOCKS",getBlocks("HelpDesk",$disp_view,$mode,$focus->column_fields));
+$smarty->assign("OP_MODE",$disp_view);
 
+$smarty->assign("MODULE",$currentModule);
+$smarty->assign("SINGLE_MOD","Ticket");
+
+
+
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 if($focus->mode == 'edit')
 {
 	$block_4 = getBlockInformation("HelpDesk",4,$focus->mode,$focus->column_fields);
@@ -88,7 +65,7 @@ if($focus->mode == 'edit')
 			   </td></tr>
 		       </table>
 		      ';
-	$xtpl->assign("BLOCK4_UI", $block_4_ui);
+	$smarty->assign("BLOCK4_UI", $block_4_ui);
 
 	$block_7 = $focus->getCommentInformation($focus->id);
 	if($block_7 != '')
@@ -100,7 +77,7 @@ if($focus->mode == 'edit')
 				   </td></tr>
 			       </table>
 			      ';
-		$xtpl->assign("BLOCK7_UI", $block_7_ui);
+		$smarty->assign("BLOCK7_UI", $block_7_ui);
 	}
 
 	$block_6 = getBlockInformation("HelpDesk",6,$focus->mode,$focus->column_fields);
@@ -113,34 +90,42 @@ if($focus->mode == 'edit')
 				   </td></tr>
 			       </table>
 			      ';
-	        $xtpl->assign("BLOCK6_UI", $block_6_ui);
+	        $smarty->assign("BLOCK6_UI", $block_6_ui);
 	}
-        $xtpl->assign("BLOCK6_HEADER", $block_6_header);
+        $smarty->assign("BLOCK6_HEADER", $block_6_header);
 }
 
-if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
-else $xtpl->assign("NAME", "");
+if (isset($focus->name)) 
+$smarty->assign("NAME", $focus->name);
+else 
+$smarty->assign("NAME", "");
 
 if(isset($cust_fld))
 {
-        $xtpl->assign("CUSTOMFIELD", $cust_fld);
+        $smarty->assign("CUSTOMFIELD", $cust_fld);
 }
-$xtpl->assign("ID", $focus->id);
+$smarty->assign("ID", $focus->id);
 if($focus->mode == 'edit')
 {
-        $xtpl->assign("MODE", $focus->mode);
-        $xtpl->assign("OLDSMOWNERID", $focus->column_fields['assigned_user_id']);
+        $smarty->assign("MODE", $focus->mode);
+        $smarty->assign("OLDSMOWNERID", $focus->column_fields['assigned_user_id']);
 }
 
-if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if(isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if(isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
-if(isset($_REQUEST['product_id'])) $xtpl->assign("PRODUCTID", $_REQUEST['product_id']);
-if (isset($_REQUEST['return_viewname'])) $xtpl->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+if(isset($_REQUEST['return_module'])) 
+$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if(isset($_REQUEST['return_action'])) 
+$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if(isset($_REQUEST['return_id'])) 
+$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+if(isset($_REQUEST['product_id'])) 
+$smarty->assign("PRODUCTID", $_REQUEST['product_id']);
+if (isset($_REQUEST['return_viewname'])) 
+$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
 
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 
 
 $ticket_tables = Array('troubletickets','crmentity');
@@ -183,12 +168,10 @@ foreach($validationData as $fldName => $fldLabel_array)
 	}
 }
 
-$xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
-$xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
-$xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
 
-$xtpl->parse("main");
-$xtpl->out("main");
-
+$smarty->display("salesEditView.tpl");
 
 ?>
