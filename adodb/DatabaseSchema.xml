@@ -177,6 +177,43 @@
 		</data>
 	</table>
 
+	<table name="blocks">
+                <field name="blockid" type="I" size="19">
+                        <KEY/>
+                        <NOTNULL/>
+                </field>
+                <field name="tabid" type="I" size="19">
+                        <NOTNULL/>
+                </field>
+                <field name="blocklabel" type="C" size="100">
+                        <NOTNULL/>
+                </field>
+                <field name="sequence" type="I" size="10"></field>
+                <field name="show_title" type="I" size="2"></field>
+                <field name="visible" type="I" size="2">
+                        <NOTNULL/>
+                        <DEFAULT value="0"/>
+                </field>
+                <field name="create_view" type="I" size="2">
+                        <NOTNULL/>
+                        <DEFAULT value="0"/>
+                </field>
+                <field name="edit_view" type="I" size="2">
+                        <NOTNULL/>
+                        <DEFAULT value="0"/>
+                </field>
+                <field name="detail_view" type="I" size="2">
+                        <NOTNULL/>
+                        <DEFAULT value="0"/>
+                </field>
+                <index name="block_tabid">
+                        <col>tabid</col>
+                </index>
+                <data>
+
+                </data>
+        </table>
+
 
               <table name="field">
 		<field name="tabid" type="I" size="19">
