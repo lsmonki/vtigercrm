@@ -20,7 +20,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Accounts/Account.php');
@@ -33,8 +32,6 @@ global $app_list_strings;
 global $log;
 
 $focus = new Account();
-//$focus->set_strings();
-//var_dump($focus);
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"Accounts");
     $focus->id = $_REQUEST['record'];	
@@ -102,7 +99,6 @@ if(isPermitted("Accounts",8,'') == 'yes')
 	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
         $smarty->assign("TOPTIONS",$optionString);
 }
-echo "<BR>\n";
 
 
 //Security check for related list

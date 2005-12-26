@@ -20,7 +20,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Potentials/Opportunity.php');

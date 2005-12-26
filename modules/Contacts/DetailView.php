@@ -20,7 +20,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Contacts/Contact.php');
@@ -114,8 +113,6 @@ if(isPermitted("Contacts",8,'') == 'yes')
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
-
-//getRelatedLists("Contacts",$focus);
 
 $smarty->assign("MODULE","Contacts");
 $smarty->display("DetailView.tpl");

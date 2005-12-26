@@ -59,6 +59,11 @@ $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint
 $smarty->assign("ID", $focus->id);
 $smarty->assign("SINGLE_MOD","Lead");
 
+ 
+/*if (isset($focus->firstname)) $smarty->assign("FIRST_NAME", $focus->firstname);
+else $smaty->assign("FIRST_NAME", "");
+$smarty->assign("LAST_NAME", $focus->lastname);*/
+
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 
 $smarty->assign("BLOCKS", getBlocks("Leads","detail_view",'',$focus->column_fields));
