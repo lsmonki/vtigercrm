@@ -20,7 +20,8 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+//require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Contacts/Forms.php');
@@ -54,94 +55,47 @@ require_once($theme_path.'layout_utils.php');
 
 $log->info("Contact detail view");
 
-$xtpl=new XTemplate ('modules/Contacts/DetailView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
+$smarty = new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
 
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string'
-]);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-if (isset($focus->firstname)) $xtpl->assign("FIRST_NAME", $focus->firstname);
-else $xtpl->assign("FIRST_NAME", "");
-$xtpl->assign("LAST_NAME", $focus->lastname);
+$smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 
-
-//get Block 1 Information
-$block_1 = getDetailBlockInformation("Contacts",1,$focus->column_fields);
-$xtpl->assign("BLOCK1", $block_1);
-
-//get Address Information
-$block_2 = getDetailBlockInformation("Contacts",2,$focus->column_fields);
-$xtpl->assign("BLOCK2", $block_2);
-
-//get Description Information
-$block_3 = getDetailBlockInformation("Contacts",3,$focus->column_fields);
-$xtpl->assign("BLOCK3", $block_3);
-
-//get CustomerPortal Information
-$block_4 = getDetailBlockInformation("Contacts",4,$focus->column_fields);
-$xtpl->assign("BLOCK4", $block_4);
-
-$block_1_header = getBlockTableHeader("LBL_CONTACT_INFORMATION");
-$block_2_header = getBlockTableHeader("LBL_ADDRESS_INFORMATION");
-$block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
-$block_4_header = getBlockTableHeader("LBL_CUSTOMER_PORTAL_INFORMATION");
-$xtpl->assign("BLOCK1_HEADER", $block_1_header);
-$xtpl->assign("BLOCK2_HEADER", $block_2_header);
-$xtpl->assign("BLOCK3_HEADER", $block_3_header);
-$xtpl->assign("BLOCK4_HEADER", $block_4_header);
-
-$block_5 = getDetailBlockInformation("Contacts",5,$focus->column_fields);
 $log->info("Detail Block Informations successfully retrieved.");
-if(trim($block_5) != '')
-{
-        $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
-        $cust_fld .=  '<tr><td>';
-	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
-        $cust_fld .= $block_5_header;
-        $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= $block_5;
-        $cust_fld .= '</table>';
-        $cust_fld .= '</td></tr></table>';
-        $cust_fld .= '<BR>';
+$smarty->assign("BLOCKS", getBlocks("Contacts","detail_view",'',$focus->column_fields));
+$smarty->assign("CUSTOMFIELD", $cust_fld);
+$smarty->assign("SINGLE_MOD","Contact");
 
-}
-
-$xtpl->assign("CUSTOMFIELD", $cust_fld);
-
-$xtpl->assign("ID", $_REQUEST['record']);
-
+$smarty->assign("ID", $_REQUEST['record']);
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Contacts",1,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
+	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">");
 
 
-	$xtpl->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">");
 }
 
 
 if(isPermitted("Contacts",2,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">");
 }
 if(isPermitted("Emails",1,'') == 'yes')
 {
 	//Added to pass the parents list as hidden for Emails -- 09-11-2005
 	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
-        $xtpl->assign("HIDDEN_PARENTS_LIST",$parent_email);
-	$xtpl->assign("SENDMAILBUTTON","<td><input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.module.value='Emails';this.form.email_directing_module.value='contacts';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\"></td>");
+	$smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
+	$smarty->assign("SENDMAILBUTTON","<input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.module.value='Emails';this.form.email_directing_module.value='contacts';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\">");
 }
 
-//$browser = getenv("HTTP_USER_AGENT");
-//$pos1 = strrpos($testString,'Windows');
-//$local=explode(';',$browser);
-//$test=strrpos($local[2],"Windows");
-//if($test == true)
 if(isPermitted("Contacts",8,'') == 'yes')
 {
-	$xtpl->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\">");
 
 	require_once('include/utils/UserInfoUtil.php');
 	$wordTemplateResult = fetchWordTemplateList("Contacts");
@@ -149,71 +103,21 @@ if(isPermitted("Contacts",8,'') == 'yes')
 	$tempVal = $adb->fetch_array($wordTemplateResult);
 	for($templateCount=0;$templateCount<$tempCount;$templateCount++)
 	{
-		$optionString .="<option value=\"".$tempVal["filename"]."\">" .$tempVal["filename"] ."</option>";
+		$optionString []=$tempVal["filename"];
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
-	$xtpl->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
+	$smarty->assign("WORDTEMPLATEOPTIONS",$app_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']);
+        $smarty->assign("TOPTIONS",$optionString);
 }
-$xtpl->parse("main");
-$xtpl->out("main");
-
-echo "<BR>\n";
-
-/*
-// Now get the list of direct reports that match this one.
-$focus_list = & $focus->get_direct_reports();
-
-*/
-
 
 //Security check for related list
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
 
-getRelatedLists("Contacts",$focus);
+//getRelatedLists("Contacts",$focus);
 
-/*
-//Constructing the Related Lists from here
-include('modules/Contacts/RenderRelatedListUI.php');
-
-// Now get the list of opportunities that match this one.
-
-if($tab_per_Data[2] == 0)
-{
-        if($permissionData[2][3] == 0)
-        {
-		$focus_list = & $focus->get_opportunities($focus->id);
-	}
-}
-
-if($tab_per_Data[9] == 0)
-{
-        if($permissionData[9][3] == 0)
-        {
- 		$focus_activities_list = & $focus->get_activities($focus->id);
-	}
-}
-
-if($tab_per_Data[10] == 0)
-{
-        if($permissionData[10][3] == 0)
-        {
- 		$focus_emails_list = & $focus->get_emails($focus->id);
-	}
-}
-
-$focus_tickets_list = & $focus->get_tickets($focus->id);
-$focus_history_list =  $focus->get_history($focus->id);
-
-if($tab_per_Data[8] == 0)
-{
-        if($permissionData[8][3] == 0)
-        {
- 		$focus_attachments_list = & $focus->get_attachments($focus->id);
-	}
-}
-
-*/
+$smarty->assign("MODULE","Contacts");
+$smarty->display("DetailView.tpl");
 ?>
 
