@@ -428,7 +428,13 @@ $app_strings = Array(
 
 'LBL_HISTORY'=>'History',
 
+'LBL_ATTACHMENTS'=>'Attachments',
 
+'LBL_TYPE'=>'Type',
+
+'LBL_ASSIGNED_TO'=>'Assigned To',
+
+'LBL_TIME'=>'Time',
 
 'LBL_ACTION'=>'Action',
 
@@ -755,8 +761,7 @@ $app_strings = Array(
 'LBL_JSCALENDAR_LANG'=>'en',
 'LNK_CV_EDIT'=>'Edit',
 'LNK_CV_DELETE'=>'Delete',
-'LNK_CV_CREATEVIEW'=>'New',
-//'LNK_CV_CREATEVIEW'=>'Create View',
+'LNK_CV_CREATEVIEW'=>'Create View',
 //Added for 5.0
 'LBL_UPD_FIELD_ORD'=>'Update Field Order',
 'LBL_SEND_CUSTOM_MAIL_BUTTON'=>'Send Custom Mail',
