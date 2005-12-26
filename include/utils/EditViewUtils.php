@@ -46,11 +46,13 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         $theme_path="themes/".$theme."/";
         $image_path=$theme_path."images/";
 	$fieldlabel = from_html($fieldlabel);
-
+	$fieldvalue = Array();
+	$final_arr = Array();
 	//Commented for vulnerability fix as the convertion is added in Peardatabase - Philip
-        //$value = htmlentities($col_fields[$fieldname]);
         $value = $col_fields[$fieldname];
 	$custfld = '';
+	$ui_type[]= $uitype;
+	$editview_fldname[] = $fieldname;
 
 	if($generatedtype == 2)
 		$mod_strings[$fieldlabel] = $fieldlabel;
@@ -83,7 +85,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		if($uitype == 6 || ($uitype == 23 && $fieldname =='closingdate'))
 			$custfld .= '<font color="red">*</font>';
 
-		$custfld .= $mod_strings[$fieldlabel].':</td>';
+		//$custfld .= $mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
 		$date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 		$custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field_'.$fieldname.'" type="text" size="11" maxlength="10" value="'.$disp_value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_'.$fieldname.'">';
 		if($uitype == 6)
@@ -107,17 +110,16 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$custfld .= 'inputField : "jscal_field_'.$fieldname.'", ifFormat : "'.$date_format.'", showsTime : false, button : "jscal_trigger_'.$fieldname.'", singleClick : true, step : 1';
 				$custfld .= '});';
 		$custfld .= '</script>';
+		$fieldvalue[] = array($disp_value => $curr_time) ;
 	}
 	elseif($uitype == 15 || $uitype == 16)
 	{
-		#$log->info("uitype selected is  ".$uitype);
 		$custfld .= '<td width="20%" class="dataLabel">';
 
 		if($uitype == 16)
 			$custfld .= '<font color="red">*</font>';
 
-		$custfld .= $mod_strings[$fieldlabel].':</td>';
-		//$pick_query="select * from ".$fieldname." order by sortorderid";
+		$editview_label[]=$mod_strings[$fieldlabel];
 		$pick_query="select * from ".$fieldname;
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
@@ -133,28 +135,23 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			if(html_entity_decode($value) == $pickListValue)
  			{
  				$chk_val = "selected";	
-               	$found = true;
+               			$found = true;
  			}
  			else
  			{	
  				$chk_val = '';
  			}
-  			
- 			$options[] = '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
+  			$options[] = array($pickListValue=>$chk_val );	
              		if ( $j == 0 )
                  		$soption = '<OPTION value="'.$pickListValue.'" selected>'.$pickListValue.'</OPTION>';
   		}
-         	if ( !$found ) $options[0] = $soption;
- 		$custfld .= implode('',$options).'</td>';
-	
-		//$chk_val = (html_entity_decode($value) == $pickListValue) ? ' selected="selected"' : '';
-		//	$custfld .= '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
-		//$custfld .= '</td>';
+		$fieldvalue [] = $options;
 	}
 	elseif($uitype == 17)
 	{
-		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
 		$custfld .= '<td>&nbsp;&nbsp;http://<input type=text name="'.$fieldname.'" size="19" value="'.$value.'"></td>';
+		$fieldvalue [] = $value;
 	}
 	elseif($uitype == 19 || $uitype == 20)
 	{
@@ -173,8 +170,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                        $value=getTermsandConditions();
                 }
 
-		$custfld .= $mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
         	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" cols="70" rows="8">'.$value.'</textarea></td>';
+		$fieldvalue [] = $value;
 	}
 	elseif($uitype == 21 || $uitype == 24)
 	{
@@ -183,17 +181,18 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 {
                         $custfld .= '<font color="red">*</font>';
                 }
-		$custfld .= $mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
         	$custfld .= '<td><textarea name="'.$fieldname.'" cols="30" rows="2">'.$value.'</textarea></td>';
 	}
 	elseif($uitype == 22)
 	{
-		$custfld .= '<td width="20%" class="dataLabel" valign="top"><font color="red">*</font> '.$mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
         	$custfld .= '<td><textarea name="'.$fieldname.'" cols="30" rows="2">'.$value.'</textarea></td>';
+		$fieldvalue [] = $value;
 	}
 	elseif($uitype == 52 || $uitype == 77)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
 		global $current_user;
 		if($value != '')
 		{
@@ -222,10 +221,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
 		}
                 $custfld .= '<td width="30%"><select name="'.$combo_lbl_name.'">'.$users_combo.'</select></td>';
+		$fieldvalue [] = $users_combo;
 	}
 	elseif($uitype == 53)     
 	{  
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
           
           $result = get_group_options();
           $nameArray = $adb->fetch_array($result);
@@ -273,9 +273,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
 	}
  
-          
-          //$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
-          
           $GROUP_SELECT_OPTION = '<td width=30%><input type="radio"
           name="assigntype" value="U" '.$user_checked.'
           onclick="toggleAssignType(this.value)">'.$app_strings['LBL_USER'];
@@ -316,13 +313,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
             $GROUP_SELECT_OPTION .= $nameArray["groupname"];
             $GROUP_SELECT_OPTION .= '</option>';
           }while($nameArray = $adb->fetch_array($result));
-//          $GROUP_SELECT_OPTION .='<option value=none>'.$app_strings['LBL_NONE_NO_LINE'].'</option>';
           $GROUP_SELECT_OPTION .= ' </select></td>';
 	}
           
           $custfld .= $GROUP_SELECT_OPTION;
           
-          
+        	$fieldvalue[]=$users_combo;  
         }
 	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{
@@ -339,7 +335,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<td width="20%" class="dataLabel">';
 		if($uitype==50 || $uitype==73)
 			$custfld .= '<font color="red">*</font>';
-		$custfld .= $mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
 
 		if($uitype == 73)
 		{
@@ -360,10 +356,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 		$custfld .= '<td width="30%" valign="top"  class="dataField"><input readonly name="account_name" type="text" value="'.$account_name.'"><input name="account_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific_contact_account_address&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.account_id.value=\'\';this.form.account_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 		}	
+		$fieldvalue[]=$account_name;
 	}
 	elseif($uitype == 54)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$options =Array();
+		$editview_label[]=$mod_strings[$fieldlabel];
 		$pick_query="select * from groups";
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
@@ -381,16 +379,17 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			{	
 				$chk_val = '';	
 			}
-
+			$options[] = array($pickListValue => $chk_val );
 			$custfld .= '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
 		}
 		$custfld .= '</td>';
+		$fieldvalue[] = $options;
 		
 	}
 	elseif($uitype == 55)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-
+		$editview_label[]=$mod_strings[$fieldlabel];
+		$options = Array();
 		$pick_query="select * from salutationtype order by sortorderid";
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
@@ -408,10 +407,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			{	
 				$chk_val = '';	
 			}
-
+			$options[] = array($pickListValue => $chk_val );
 			$custfld .= '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
 		}
 		$custfld .= '</select><input name="'.$fieldname.'" type="text" size="25" maxlength="'.$maxlength.'" value="'.$value.'"></td>';
+		$fieldvalue[] = $options;
+		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 59)
 	{
@@ -428,15 +429,16 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$product_name = getProductName($value);	
 		}
                $custfld .= '<td width="20%" class="dataLabel">';
-               $custfld .= $mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
                $custfld .= '<td width="30%"><input name="product_id" type="hidden" value="'.$value.'"><input name="product_name" readonly type="text" value="'.$product_name.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.product_id.value=\'\';this.form.product_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
-
+	$fieldvalue[]='none';
 	}
 	elseif($uitype == 63)
         {
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
                 if($value=='')
                 $value=1;
+		$options = Array();
                 $custfld .= '<td width="30%"><input name="'.$fieldname.'" type="text" size="2" maxlength="'.$maxlength.'" value="'.$value.'">&nbsp;';
                 $pick_query="select * from duration_minutes order by sortorderid";
                 $pickListResult = $adb->query($pick_query);
@@ -455,16 +457,17 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                         {
                                 $chk_val = '';
                         }
-
+			$options[] = array($pickListValue => $chk_val );
                         $custfld .= '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
                 }
                 $custfld .= '</select>';
                 $custfld .= $app_strings['LBL_HOUR_AND_MINUTE'].'</td>';
+		$fieldvalue[]='none';
         }
 	elseif($uitype == 64)
         {
                 $custfld .= '<td width="20%" class="dataLabel">';
-                $custfld .= $mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
                 $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
                 $custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field" type="text" size="11" readonly maxlength="10" value="'.$value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger">&nbsp;<input name="duetime" size="5" maxlength="5" readonly type="text" value=""> <input name="duedate_flag" type="checkbox" language="javascript" onclick="set_values(this.form)" checked>'.$mod_strings["LBL_NONE"].'<br><font size="1"><em>'.$mod_strings["DATE_FORMAT"].'</em></font></td>';
                 $custfld .= '<script type="text/javascript">';
@@ -472,10 +475,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                                 $custfld .= 'inputField : "jscal_field", ifFormat : "'.$date_format.'", showsTime : false, button : "jscal_trigger", singleClick : true, step : 1';
                                 $custfld .= '});';
                 $custfld .= '</script>';
+		$fieldvalue[] = $value;
         }
 	elseif($uitype == 56)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
 
 		//code added on 12-12-05 for notime option in events
 		if($fieldname == 'notime' && $module_name =='Events' )
@@ -501,13 +505,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			
 		}
 		
-			
+		
+		$fieldvalue[] = $value;	
 	}
 	elseif($uitype == 57)
 	{
-		//if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != '')
-		//	$value = $_REQUEST['contact_id'];
-
 	       if($value != '')
                {
                        $contact_name = getContactName($value);
@@ -528,8 +530,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	
 		//Checking for contacts duplicate
 					 	
-		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
 		$custfld .= '<td width="30%"><input name="contact_name" readonly type="text" value="'.$contact_name.'"><input name="contact_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.contact_id.value=\'\';this.form.contact_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+		$fieldvalue[] = $contact_name;
 	}
         elseif($uitype == 61 || $uitype == 69)
         {
@@ -544,9 +547,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 }
                 if($value!='')
                         $filename=' [ '.$value. ' ]';
-		$custfld .= '<td width="20%" valign="top" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
                 $custfld .='<td colspan="3"><input name="'.$fieldname.'" type="file" size="20" value="'.$value.
 '"/><input type="hidden" name="filename" value=""/><input type="hidden" name="id" value=""/>'.$filename.'</td>';
+		$fieldvalue[] = $filename;
         }
         elseif($uitype == 62)
         {
@@ -627,7 +631,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 $custfld .= '<OPTION value="SalesOrder&action=Popup" '.$sorder_selected.'>'.$app_strings['COMBO_SORDER'].'</OPTION></select></td>';
 
  		$custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
-
+		$fieldvalue[] = '';
         }
         elseif($uitype == 66)
         {
@@ -714,7 +718,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 $custfld .='</select></td>';
 
 		$custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
-
+		$fieldvalue[] = '';
         }
 		//added by rdhital/Raju for better email support
         elseif($uitype == 357)
@@ -815,7 +819,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         $custfld .= '<OPTION value="Contacts" selected>'.$app_strings['COMBO_CONTACTS'].'</OPTION>';
         $custfld .= '<OPTION value="Accounts" >'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
 		$custfld .= '<OPTION value="Leads" >'.$app_strings['COMBO_LEADS'].'</OPTION></select><img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&popuptype=set_return_emails&form=EmailEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
-        }
+        $fieldvalue[] = '';
+		}
         //end of rdhital/Raju
 		
 		
@@ -857,7 +862,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 $custfld .= '<OPTION value="Contacts" '.$contact_selected.'>'.$app_strings['COMBO_CONTACTS'].'</OPTION>';
 
        		$custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
-
+		$fieldvalue[] = $parent_name;
         }
         elseif($uitype == 68)
         {
@@ -891,7 +896,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 $custfld .= '<OPTION value="Accounts" '.$account_selected.'>'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
 
 		$custfld .= '<td width="30%"><input name="parent_id" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" value="'.$parent_name.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
-
+			$fieldvalue[] = $perent_name;
         }
 
 	elseif($uitype == 65)
@@ -904,6 +909,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 <OPTION value="Products">'.$app_strings['COMBO_PRODUCTS'].'</OPTION></select></td>';
 
 		$custfld .= '<td width="30%"><input name="parent_id" type="hidden" value=""><input name="parent_name" readonly type="text" value="">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value + "&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+		$fieldvalue[] = '';
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
@@ -916,9 +922,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		$disp_currency = getDisplayCurrency();
 
-		$custfld .= $mod_strings[$fieldlabel].': ('.$disp_currency.')</td>';
+		//$custfld .= $mod_strings[$fieldlabel].': ('.$disp_currency.')</td>';
+		$editview_label[]=$mod_strings[$fieldlabel].': ('.$disp_currency.')';
 
 		$custfld .= '<td width="30%"><input name="'.$fieldname.'" type="text" size="25" maxlength="'.$maxlength.'" value="'.$value.'"></td>';
+		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 75 || $uitype ==81)
 	{
@@ -939,13 +947,15 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$custfld .= '<font color="red">*</font>';
 			$pop_type = 'specific_vendor_address';
 		}
-		$custfld .= $mod_strings[$fieldlabel].'</td>';
+		//$custfld .= $mod_strings[$fieldlabel].'</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
 		
 		$custfld .= '<td width="30%"><input name="vendor_name" readonly type="text" value="'.$vendor_name.'"><input name="vendor_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=VendorPopup&html=Popup_picker&popuptype='.$pop_type.'&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>';
 		if($uitype == 75)
                 {
                         $custfld .='&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.vendor_id.value=\'\';this.form.vendor_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
                 }
+		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 76)
 	{
@@ -959,8 +969,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value = $_REQUEST['potental_id'];
 			$potential_name = getPotentialName($value);
 	       }		 	
-		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+		//$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
 		$custfld .= '<td width="30%"><input name="potential_name" readonly type="text" value="'.$potential_name.'"><input name="potential_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.potential_id.value=\'\';this.form.potential_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 78)
 	{
@@ -974,8 +986,10 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value = $_REQUEST['quote_id'];
 			$potential_name = getQuoteName($value);
 	       }		 	
-		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+		//$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
 		$custfld .= '<td width="30%"><input name="quote_name" readonly type="text" value="'.$quote_name.'"><input name="quote_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.quote_id.value=\'\';this.form.quote_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 79)
 	{
@@ -989,8 +1003,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value = $_REQUEST['purchaseorder_id'];
 			$purchaseorder_name = getPoName($value);
 	       }		 	
-		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
 		$custfld .= '<td width="30%"><input name="purchaseorder_name" readonly type="text" value="'.$purchaseorder_name.'"><input name="purchaseorder_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=PurchaseOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.purchaseorder_id.value=\'\';this.form.purchaseorder_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 80)
 	{
@@ -1004,8 +1019,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$value = $_REQUEST['salesorder_id'];
 			$salesorder_name = getSoName($value);
 	       }		 	
-		$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
 		$custfld .= '<td width="30%"><input name="salesorder_name" readonly type="text" value="'.$salesorder_name.'"><input name="salesorder_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.salesorder_id.value=\'\';this.form.salesorder_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
+		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 30)
 	{
@@ -1018,13 +1034,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$rem_hrs = floor(($col_fields[$fieldname]-$rem_days*24*60)/60);
 		$rem_min = ($col_fields[$fieldname]-$rem_days*24*60)%60;
 
-                $custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
                 $custfld .= '<td valign="top" colspan=3>&nbsp;<input type="radio" name="set_reminder" value="Yes" '.$SET_REM.'>&nbsp;'.$mod_strings['LBL_YES'].'&nbsp;<input type="radio" name="set_reminder" value="No">&nbsp;'.$mod_strings['LBL_NO'].'&nbsp;';
 		$day_options = getReminderSelectOption(0,31,'remdays',$rem_days);
 		$hr_options = getReminderSelectOption(0,23,'remhrs',$rem_hrs);
 		$min_options = getReminderSelectOption(1,59,'remmin',$rem_min);
 		$custfld .= '&nbsp;&nbsp;'.$day_options.' &nbsp;'.$mod_strings['LBL_DAYS'].'&nbsp;&nbsp;'.$hr_options.'&nbsp;'.$mod_strings['LBL_HOURS'].'&nbsp;&nbsp;'.$min_options.'&nbsp;'.$mod_strings['LBL_MINUTES'].'&nbsp;&nbsp;'.$mod_strings['LBL_BEFORE_EVENT'].'</td>';
 		$SET_REM = '';
+		$fieldvalue[] = '';
 	}
 	else
 	{
@@ -1038,9 +1055,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		if($uitype == 2)
 			$custfld .= '<font color="red">*</font>';
 
-		$custfld .= $mod_strings[$fieldlabel].':</td>';
+		//$custfld .= $mod_strings[$fieldlabel].':</td>';
+		$editview_label[]=$mod_strings[$fieldlabel];
 
 		$custfld .= '<td width="30%"><input name="'.$fieldname.'" type="text" size="25" maxlength="'.$maxlength.'" value="'.$value.'"></td>';
+		$fieldvalue[] = $value;
 	}
 	
 	// Mike Crowe Mod --------------------------------------------------------force numerics right justified.
@@ -1052,8 +1071,13 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld = preg_replace("/<input/iS","<input align=right ",$custfld);
 		//"align='right'"
 	}
-
-	return $custfld;
+	$final_arr[]=$ui_type;
+	$final_arr[]=$editview_label;
+	$final_arr[]=$editview_fldname;
+	$final_arr[]=$fieldvalue;
+	//return $custfld;
+	//return $uitype;
+	return $final_arr;
 }
 
 
@@ -1290,19 +1314,17 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 
 
 
-function getBlockInformation($module, $block, $mode, $col_fields)
+function getBlockInformation($module, $block, $mode, $col_fields,$tabid)
 {
-	//retreive the tabid	
 	global $adb;
-	$tabid = getTabid($module);
 	global $profile_id;
+	$editview_arr = Array();
 
 	$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid  where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 and profile2field.visible=0 and def_org_field.visible=0 and profile2field.profileid=".$profile_id." order by sequence";
 	
 
         $result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
-	$output='';
 	if (($module == 'Accounts' || $module == 'Contacts' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'SalesOrder'|| $module == 'Invoice') && $block == 2)
 	{
 		 global $log;
@@ -1324,11 +1346,9 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 		$maxlength = $adb->query_result($result,$i,"maximumlength");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");				
 
-		$output .= '<tr>';
 		$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);
-		$output .= $custfld;	
+		$editview_arr[]=$custfld;
 		if ($mvAdd_flag == true)
-		$output .= $moveAddress;
 		$mvAdd_flag = false;
 		$i++;
 		if($i<$noofrows)
@@ -1340,14 +1360,26 @@ function getBlockInformation($module, $block, $mode, $col_fields)
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$maxlength = $adb->query_result($result,$i,"maximumlength");
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
-			$output .= '';
-			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);
-			$output .= $custfld;	
+			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,$module);			
+			$editview_arr[]=$custfld;
 		}
-		$output .= '</tr>';
 			
 	}
-	return $output;
+	for ($i=0,$j=0;$i<count($editview_arr);$i=$i+2,$j++)
+        {
+                $key1=$editview_arr[$i];
+                if(is_array($editview_arr[$i+1]))
+                {
+                        $key2=$editview_arr[$i+1];
+                }
+		else
+		{
+			$key2 ='';
+		}
+                $return_data[$j]=array(0 => $key1,1 => $key2);
+        }
+        return $return_data;	
+		
 		
 }
 

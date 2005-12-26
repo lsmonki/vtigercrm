@@ -61,33 +61,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$list_header = Array();
-	/*$list_header = '<tr class="moduleListTitle" height=20>';
-	$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-	if($relatedlist == '')
-	{
-		if($module == "Accounts")
-                {
-                        $list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall_acc" onClick=toggleSelect(this.checked,"selected_id_acc")></td>';
-                        $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-                }
-                elseif($module == "Contacts")
-                {
-                        $list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall_con" onClick=toggleSelect(this.checked,"selected_id_con")></td>';
-                        $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-                }
-		elseif($module == "Potentials")
-                {
-                        $list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall_pot" onClick=toggleSelect(this.checked,"selected_id_pot")></td>';
-                        $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-                }
-
-		else
-		{
-			$list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>';
-			$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-		}
-	}*/
-
+	
 	//Get the tabid of the module
 	//require_once('include/utils/UserInfoUtil.php')
 	$tabid = getTabid($smodule);
@@ -212,19 +186,14 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 			if($name == 'Close' && $relatedlist != '')
 			{
 				//$list_header .= '';
-				 $list_header[] = '';
+				// $list_header[] = '';
 			}
 			else
 			{
 				 $list_header[]=$name;
-				//$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
-				//$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
 			}
 		}
 	}
-	//$list_header .='<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">'.$app_strings['LBL_EDIT'].' | '.$app_strings['LBL_DELETE'].'</td>';
-	//$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-	//$list_header .= '</tr>';
 	return $list_header;
 
 }
@@ -434,31 +403,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		}
 		//end: Armando Lüscher 05.07.2005 -> §priority
 
-		/*if($relatedlist == '')
-		{       
-			if($module =='Accounts')
-                        {
-                                $list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-                                $list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id_acc" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall_acc")></td>';
-                        }
-			elseif($module == 'Contacts')
-                        {
-                                $list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-                                $list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id_con" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall_con")></td>';
-                        }
-			elseif($module == 'Potentials')
-                        {
-                                $list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-                                $list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id_pot" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall_pot")></td>';
-                        }
-			else
-			{
-				$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-				$list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall")></td>';
-			}
-		}*/
-		//$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		foreach($focus->list_fields as $name=>$tableinfo)
+			foreach($focus->list_fields as $name=>$tableinfo)
 		{
 			$fieldname = $focus->list_fields_name[$name];
 			
@@ -618,7 +563,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 //				if($relatedlist != '' && $value == "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>")
 				if($name == 'Close' && $relatedlist != '')
 				{
-					$list_header[]= '';
+					//$list_header[]= '';
 				}
 				else
 				{
@@ -673,7 +618,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		$list_block[] = $list_header;
 
 	}
-	//$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
+//	$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 	return $list_block;
 }
 
@@ -1284,24 +1229,20 @@ function getListQuery($module,$where='')
 	if($module == "HelpDesk")
 	{
 		$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.contactid, troubletickets.parent_id, contactdetails.firstname, contactdetails.lastname, account.accountid, account.accountname, ticketcf.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on troubletickets.parent_id=contactdetails.contactid left join account on account.accountid=troubletickets.parent_id left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentity.deleted=0";
-		//$query = "select crmentity.crmid,troubletickets.title,troubletickets.status,troubletickets.priority,crmentity.smownerid, contactdetails.firstname, contactdetails.lastname, ticketcf.* from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid  left join contactdetails on troubletickets.contact_id=contactdetails.contactid left join users on crmentity.smownerid=users.id where crmentity.deleted=0";
 	}
 	if($module == "Accounts")
 	{
-		//$query = "select crmentity.crmid, account.accountname,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.*  from account, accountbillads, accountshipads, accountscf  inner join crmentity on crmentity.crmid=account.accountid and account.accountid=accountbillads.accountaddressid and account.accountid = accountscf.accountid and account.accountid=accountshipads.accountaddressid where crmentity.deleted=0";
 		//Query modified to sort by assigned to
 		$query = "select crmentity.crmid, account.accountname,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.* from account inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid where crmentity.deleted=0";
 	}
 	if ($module == "Potentials")
 	{
-		 //$query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.*, potentialscf.* from potential , account, potentialscf inner join crmentity on crmentity.crmid=potential.potentialid and potential.accountid = account.accountid and potentialscf.potentialid = potential.potentialid where crmentity.deleted=0 ".$where;
 		//Query modified to sort by assigned to
 		 $query = "select crmentity.crmid, crmentity.smownerid,account.accountname, potential.accountid,potential.potentialname,potential.sales_stage,potential.amount,potential.currency,potential.closingdate,potential.typeofrevenue, potentialscf.* from potential inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=potential.potentialid inner join account on potential.accountid = account.accountid inner join potentialscf on potentialscf.potentialid = potential.potentialid where crmentity.deleted=0 ".$where;
 
 	}
 	if($module == "Leads")
 	{
-		//$query = "select crmentity.crmid, leaddetails.firstname, leaddetails.lastname, leaddetails.company, leadaddress.phone, leadsubdetails.website, leaddetails.email, crmentity.smownerid, leadscf.* from leaddetails, leadaddress, leadsubdetails, leadscf  inner join crmentity on crmentity.crmid=leaddetails.leadid and leaddetails.leadid=leadaddressid and leaddetails.leadid = leadscf.leadid and leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid where crmentity.deleted=0 and leaddetails.converted=0";
 		$query = "select crmentity.crmid, leaddetails.firstname, leaddetails.lastname, leaddetails.company, leadaddress.phone, leadsubdetails.website, leaddetails.email, crmentity.smownerid, leadscf.* from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid where crmentity.deleted=0 and leaddetails.converted=0";
 	}
 	if($module == "Products")
@@ -1320,7 +1261,6 @@ function getListQuery($module,$where='')
         {
 		//Query modified to sort by assigned to
 		$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid left join account on account.accountid = contactdetails.accountid where crmentity.deleted=0";
-		//$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf,crmentity,account where crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid and account.accountid = contactdetails.accountid and crmentity.deleted=0";
         }
 	if($module == "Meetings")
         {

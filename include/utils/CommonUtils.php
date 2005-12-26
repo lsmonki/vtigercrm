@@ -33,6 +33,7 @@
 
   require_once('include/database/PearDatabase.php');
   require_once('include/ComboUtil.php'); //new
+  require_once('include/utils/utils.php'); //new
 
 
 
@@ -113,10 +114,11 @@ function get_select_options_with_id_separate_key (&$label_list, &$key_list, $sel
 		$html_value = $option_key;
 
 		$select_options .= "\n<OPTION ".$selected_string."value='$html_value'>$label_list[$option_key]</OPTION>";
+		$options[]=array($label_list[$option_key]=>$selected_string);
 	}
 	$select_options = preg_replace($pattern, $replacement, $select_options);
 
-	return $select_options;
+	return $options;
 }
 
 
@@ -563,6 +565,57 @@ function make_clickable($text)
 
    return($ret);
 }
+function getBlocks($module,$disp_view,$mode,$col_fields='')
+{
+        global $adb;
+        global $mod_strings;
+        global $log;
+        $tabid = getTabid($module);
+        $block_detail = Array();
+        $query="select blockid,blocklabel,show_title from blocks where tabid=$tabid and $disp_view=0 and visible = 0 order by sequence";
 
+        $result = $adb->query($query);
+        $noofrows = $adb->num_rows($result);
+	$prev_header = "";
+        for($i=0; $i<$noofrows; $i++)
+        {
+		$block_title = $mod_strings[$adb->query_result($result,$i,"blocklabel")];
+		if($block_title !='')
+		{
+			$prev_header = $block_title;
+			if($disp_view == "detail_view")
+			{
+                		$block_detail[$block_title]=getDetailBlockInformation($module,$adb->query_result($result,$i,"blockid"),$col_fields,$tabid);
+			}
+			else
+			{
+                		$block_detail[$block_title]=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid);
+			}
+			
+		}	
+		else
+                {
+			if($disp_view == "detail_view")
+			{
+				array_push($block_detail[$prev_header],getDetailBlockInformation($module,$adb->query_result($result,$i,"blockid"),$col_fields,$tabid));
+			}
+			else
+			{
+				array_push($block_detail[$prev_header],getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid));
+			}
 
+		}
+
+        }
+        return $block_detail;
+}
+
+function getView($mode)
+{	
+	if($mode=="edit")	
+	$disp_view = "edit_view";
+	else
+	$disp_view = "create_view";
+	return $disp_view;
+}
 ?>

@@ -703,8 +703,6 @@ function get_assigned_user_or_group_name($id,$module)
 
   if($module == 'Leads')
   {
-	 //$sql = "select (case when (user_name is null) then  (users2group.groupname) else (user_name) end) as name from leads left join users on users.id= assigned_user_id left join users2group on users2group.groupname=leads.assigned_user_id where leads.id='" .$id ."'";
-    //$sql = "select (case when (user_name is null) then  (groups.name) else (user_name) end) as name from leads left join users on users.id= assigned_user_id left join groups on groups.name=leads.assigned_user_id where leads.id='" .$id ."'";
 
    $sql="select (case when (user_name is null) then  (leadgrouprelation.groupname) else (user_name) end) as name from leads left join users on users.id= assigned_user_id left join leadgrouprelation on leadgrouprelation.leadid=leads.id where leads.deleted=0 and leads.id='". $id ."'";
    
@@ -712,16 +710,10 @@ function get_assigned_user_or_group_name($id,$module)
   else if($module == 'Tasks')
   {
        $sql="select (case when (user_name is null) then  (taskgrouprelation.groupname) else (user_name) end) as name from tasks left join users on users.id= assigned_user_id left join taskgrouprelation on taskgrouprelation.taskid=tasks.id where tasks.deleted=0 and tasks.id='". $id ."'";
-
-       //$sql = "select (case when (user_name is null) then  (groups.name) else (user_name) end) as name from tasks left join users on users.id= assigned_user_id left join groups on groups.name=tasks.assigned_user_id where tasks.id='" .$id ."'";
-
   }
   else if($module == 'Calls')
   {
        $sql="select (case when (user_name is null) then  (callgrouprelation.groupname) else (user_name) end) as name from calls left join users on users.id= assigned_user_id left join callgrouprelation on callgrouprelation.callid=calls.id where calls.deleted=0 and calls.id='". $id ."'";
-
-       //     $sql = "select (case when (user_name is null) then  (groups.name) else (user_name) end) as name from calls left join users on users.id= assigned_user_id left join groups on groups.name=calls.assigned_user_id where calls.id='" .$id ."'";
-
   }
 
 	$result = $adb->query($sql);
@@ -1600,9 +1592,7 @@ function getBlockTableHeader($header_label)
 {
 	global $mod_strings;
 	$label = $mod_strings[$header_label];
-	$output = '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-	$output .= '<tr><th align="left" class="formSecHeader">'.$label.'</th></tr>';
-	$output .= '</table>';
+	$output = $label;
 	return $output;
 
 }

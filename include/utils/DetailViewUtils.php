@@ -36,8 +36,6 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
-
-
 function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype)
 {
 	global $adb;
@@ -47,6 +45,9 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	$fieldlabel = from_html($fieldlabel);
 	$custfld = '';
 	$value ='';
+	$arr_data =Array();
+	$label_fld = Array();
+	$data_fld = Array();
 
 	if($generatedtype == 2)
 		$mod_strings[$fieldlabel] = $fieldlabel;
@@ -56,25 +57,25 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	
 	if($uitype == 13)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-		$custfld .= '<td width="30%" valign="top" class="dataField"><a href="mailto:'.$col_fields[$fieldname].'">'.$col_fields[$fieldname].'</a></td>';
+		$label_fld[] = $mod_strings[$fieldlabel];
+		$label_fld[] = '<a href="mailto:'.$col_fields[$fieldname].'">'.$col_fields[$fieldname].'</a>';
 	}
 	elseif($uitype == 17)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-		$custfld .= '<td width="30%" valign="top" class="dataField"><a href="http://'.$col_fields[$fieldname].'" target="_blank">'.$col_fields[$fieldname].'</a></td>';
+		$label_fld[] = $mod_strings[$fieldlabel];
+		$label_fld[] = '<a href="http://'.$col_fields[$fieldname].'" target="_blank">'.$col_fields[$fieldname].'</a>';
 	}
 	elseif($uitype == 19)
 	{
 		$col_fields[$fieldname]= make_clickable(nl2br($col_fields[$fieldname]));
-		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
-		$custfld .= '<td colspan="3" valign="top" class="dataField">'.$col_fields[$fieldname].'</td>'; // Armando LC<scher 10.08.2005 -> B'descriptionSpan -> Desc: inserted colspan="3"
+		$label_fld[] = $mod_strings[$fieldlabel];
+		$label_fld[] = $col_fields[$fieldname];
 	}
 	elseif($uitype == 20 || $uitype == 21 || $uitype == 22 || $uitype == 24) // Armando LC<scher 11.08.2005 -> B'descriptionSpan -> Desc: removed $uitype == 19 and made an aditional elseif above
 	{
 		$col_fields[$fieldname]=nl2br($col_fields[$fieldname]);
-		$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
-		$custfld .= '<td valign="top" class="dataField">'.$col_fields[$fieldname].'</td>'; // Armando LC<scher 10.08.2005 -> B'descriptionSpan -> Desc: inserted colspan="3"
+		$label_fld[] = $mod_strings[$fieldlabel];
+		$label_fld[] = $col_fields[$fieldname];
 	}
 	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{
@@ -84,23 +85,23 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$account_name = getAccountName($account_id);
 		}
 		//Account Name View	
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-		$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a></td>';
+		$label_fld[] = $mod_strings[$fieldlabel];
+		$label_fld[] ='<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
 		
 
 	}
 	elseif($uitype == 52 || $uitype == 77)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] = $mod_strings[$fieldlabel];
 		$user_id = $col_fields[$fieldname];
 		$user_name = getUserName($user_id);
 		if(is_admin($current_user))
 		{
-			$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Users&action=DetailView&record='.$user_id.'">'.$user_name.'</a></td>';
+			$label_fld[] ='<a href="index.php?module=Users&action=DetailView&record='.$user_id.'">'.$user_name.'</a>';
 		}
 		else
 		{
-			$custfld .= '<td width="30%" valign="top" class="dataField">'.$user_name.'</td>';
+			$label_fld[] =$user_name;
 		}
 	}
 	elseif($uitype == 53)
@@ -108,48 +109,49 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$user_id = $col_fields[$fieldname];
 		if($user_id != 0)
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].' '.$app_strings['LBL_USER'].' :</td>';
+			$label_fld[] =$mod_strings[$fieldlabel].' '.$app_strings['LBL_USER'];
 			$user_name = getUserName($user_id);
 			if(is_admin($current_user))
 			{
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Users&action=DetailView&record='.$user_id.'">'.$user_name.'</a></td>';
+				$label_fld[] ='<a href="index.php?module=Users&action=DetailView&record='.$user_id.'">'.$user_name.'</a>';
 			}
 			else
 			{
-				$custfld .= '<td width="30%" valign="top" class="dataField">'.$user_name.'</td>';
+				$label_fld[] =$user_name;
 			}
 		}
 		elseif($user_id == 0)
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].' '.$app_strings['LBL_GROUP'].' :</td>';
+			$label_fld[] =$mod_strings[$fieldlabel].' '.$app_strings['LBL_GROUP'];
+
 			$id = $col_fields["record_id"];	
 			$module = $col_fields["record_module"];
 			$groupname = getGroupName($id, $module);
 			if(is_admin($current_user))
                         {
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Users&action=UserInfoUtil&groupname='.$groupname.'">'.$groupname.'</a></td>';
+				$label_fld[] ='<a href="index.php?module=Users&action=UserInfoUtil&groupname='.$groupname.'">'.$groupname.'</a>';
 			}
 			else
 			{
-				$custfld .= '<td width="30%" valign="top" class="dataField">'.$groupname.'</td>';
+				$label_fld[] =$groupname;
 			}			
 		}
 		
 	}
 	elseif($uitype == 55)
         {
-                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
                 $value = $col_fields[$fieldname];
                 $sal_value = $col_fields["salutationtype"];
                 if($sal_value == '--None--')
                 {
                         $sal_value='';
                 }
-                $custfld .= '<td width="30%" valign="top" class="dataField">'.$sal_value.' '.$value.'</td>';
+		$label_fld[] =$sal_value.' '.$value;
         }
 	elseif($uitype == 56)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
 		$value = $col_fields[$fieldname];
 		if($value == 1)
 		{
@@ -159,18 +161,18 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$display_val = '';
 		}
-		$custfld .= '<td width="30%" valign="top" class="dataField">'.$display_val.'</td>';
+		$label_fld[] = $display_val;
 	}
 	elseif($uitype == 57)
         {
-                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
                 $contact_id = $col_fields[$fieldname];
                 if($contact_id != '')
                 {
                         $contact_name = getContactName($contact_id);
                 }
 
-                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Contacts&action=DetailView&record='.$contact_id.'">'.$contact_name.'</a></td>';
+		$label_fld[] ='<a href="index.php?module=Contacts&action=DetailView&record='.$contact_id.'">'.$contact_name.'</a>';
         }
 	elseif($uitype == 59)
 	{
@@ -180,8 +182,8 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$product_name = getProductName($product_id);
 		}
 		//Account Name View	
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-		$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a></td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
+		$label_fld[] ='<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
 		
 	}
         elseif($uitype == 61)
@@ -196,22 +198,23 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}
                 $custfldval = '<a href = "index.php?module=uploads&action=downloadfile&return_module='.$col_fields['record_module'].'&fileid='.$attachmentid.'&filename='.$col_fields[$fieldname].'">'.$col_fields[$fieldname].'</a>';
 
-                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-                $custfld .= '<td width="30%" valign="top" class="dataField">'.$custfldval.'</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
+
+		$label_fld[] =$custfldval;
         }
 	elseif($uitype == 69)
 	{
 			
-                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
 		if($col_fields[$fieldname] != '')
 		{
 			$imgpath = "test/product/".$col_fields[$fieldname];
 			
-                	$custfld .= '<td width="30%" valign="top" class="dataField"><img src="'.$imgpath.'" border="0"></td>';
+			$label_fld[] ='<img src="'.$imgpath.'" border="0">';
 		}
 		else
 		{
-                	$custfld .= '<td width="30%" valign="top" class="dataField"></td>';
+			$label_fld[] ="";
 		}
 		
 	}
@@ -223,73 +226,73 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$parent_module = getSalesEntityType($value);
 			if($parent_module == "Leads")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_LEAD_NAME'].':</td>';
+				$label_fld[] =$app_strings['LBL_LEAD_NAME'];
 				$sql = "select * from leaddetails where leadid=".$value;
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
+				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
 			}
 			elseif($parent_module == "Accounts")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_ACCOUNT_NAME'].':</td>';
+				$label_fld[] = $app_strings['LBL_ACCOUNT_NAME'];
 				$sql = "select * from  account where accountid=".$value;
 				$result = $adb->query($sql);
 				$account_name = $adb->query_result($result,0,"accountname");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$account_name.'</a></td>';
-			}
+				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$account_name.'</a>';
+		}
 			elseif($parent_module == "Potentials")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_POTENTIAL_NAME'].':</td>';
+				$label_fld[] =$app_strings['LBL_POTENTIAL_NAME'];
 				$sql = "select * from  potential where potentialid=".$value;
 				$result = $adb->query($sql);
 				$potentialname = $adb->query_result($result,0,"potentialname");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$potentialname.'</a></td>';
+				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$potentialname.'</a>';
 			}
 			elseif($parent_module == "Products")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_PRODUCT_NAME'].':</td>';
+				$label_fld[] =$app_strings['LBL_PRODUCT_NAME'];
 				$sql = "select * from  products where productid=".$value;
 				$result = $adb->query($sql);
 				$productname= $adb->query_result($result,0,"productname");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$productname.'</a></td>';
+				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$productname.'</a>';
 			}
-			elseif($parent_module == "PurchaseOrder")
+			elseif($parent_module == "Orders")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_PORDER_NAME'].':</td>';
+				$label_fld[] =$app_strings['LBL_PORDER_NAME'];
 				$sql = "select * from  purchaseorder where purchaseorderid=".$value;
 				$result = $adb->query($sql);
 				$pordername= $adb->query_result($result,0,"subject");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$pordername.'</a></td>';
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$pordername.'</a>';
 			}
 			elseif($parent_module == "SalesOrder")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_SORDER_NAME'].':</td>';
+				$label_fld[] = $app_strings['LBL_SORDER_NAME'];
 				$sql = "select * from  salesorder where salesorderid=".$value;
 				$result = $adb->query($sql);
 				$sordername= $adb->query_result($result,0,"subject");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=SalesOrder&action=DetailView&record='.$value.'">'.$sordername.'</a></td>';
+				$label_fld[] ='<a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a>';
 			}
 			elseif($parent_module == "Invoice")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_INVOICE_NAME'].':</td>';
+				$label_fld[] = $app_strings['LBL_INVOICE_NAME'];
 				$sql = "select * from  invoice where invoiceid=".$value;
 				$result = $adb->query($sql);
 				$invoicename= $adb->query_result($result,0,"subject");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$invoicename.'</a></td>';
+				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$invoicename.'</a>';
 			}
 		}
 		else
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-			$custfld .= '<td width="30%" valign="top" class="dataField">'.$value.'</td>';
+			$label_fld[] = $mod_strings[$fieldlabel];
+			$label_fld[] = $value;
 		}
 
 
@@ -302,74 +305,74 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$parent_module = getSalesEntityType($value);
 			if($parent_module == "Leads")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_LEAD_NAME'].':</td>';
+				$label_fld[] =$app_strings['LBL_LEAD_NAME'];
 				$sql = "select * from leaddetails where leadid=".$value;
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
 			}
 			elseif($parent_module == "Accounts")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_ACCOUNT_NAME'].':</td>';
+				$label_fld[] = $app_strings['LBL_ACCOUNT_NAME'];
 				$sql = "select * from  account where accountid=".$value;
 				$result = $adb->query($sql);
 				$account_name = $adb->query_result($result,0,"accountname");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$account_name.'</a></td>';
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$account_name.'</a>';
 			}
 			elseif($parent_module == "Potentials")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_POTENTIAL_NAME'].':</td>';
+				$label_fld[] =$app_strings['LBL_POTENTIAL_NAME'];
 				$sql = "select * from  potential where potentialid=".$value;
 				$result = $adb->query($sql);
 				$potentialname = $adb->query_result($result,0,"potentialname");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$potentialname.'</a></td>';
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$potentialname.'</a>';
 			}
 			elseif($parent_module == "Quotes")
                         {
-                                $custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_QUOTE_NAME'].':</td>';
+				$label_fld[] =$app_strings['LBL_QUOTE_NAME'];
                                 $sql = "select * from  quotes where quoteid=".$value;
                                 $result = $adb->query($sql);
                                 $quotename = $adb->query_result($result,0,"subject");
 
-                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$quotename.'</a></td>';
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$quotename.'</a>';
                         }
-			elseif($parent_module == "PurchaseOrder")
+			elseif($parent_module == "Orders")
                         {
-                                $custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_PORDER_NAME'].':</td>';
+				$label_fld[] = $app_strings['LBL_PORDER_NAME'];
                                 $sql = "select * from  purchaseorder where purchaseorderid=".$value;
                                 $result = $adb->query($sql);
                                 $pordername = $adb->query_result($result,0,"subject");
 
-                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$pordername.'</a></td>';
+				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$pordername.'</a>';
                         }
                         elseif($parent_module == "SalesOrder")
                         {
-                                $custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_SORDER_NAME'].':</td>';
+				$label_fld[] = $app_strings['LBL_SORDER_NAME'];
                                 $sql = "select * from  salesorder where salesorderid=".$value;
                                 $result = $adb->query($sql);
                                 $sordername = $adb->query_result($result,0,"subject");
 
-                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=SalesOrder&action=DetailView&record='.$value.'">'.$sordername.'</a></td>';
+				$label_fld[] = '<a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a>';
                         }
 			elseif($parent_module == "Invoice")
                         {
-                                $custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_INVOICE_NAME'].':</td>';
+				$label_fld[] = $app_strings['LBL_INVOICE_NAME'];
                                 $sql = "select * from  invoice where invoiceid=".$value;
                                 $result = $adb->query($sql);
                                 $invoicename = $adb->query_result($result,0,"subject");
 
-                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$invoicename.'</a></td>';
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$invoicename.'</a>';
                         }
 
 		}
 		else
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-			$custfld .= '<td width="30%" valign="top" class="dataField">'.$value.'</td>';
+			$label_fld[] = $mod_strings[$fieldlabel];
+			$label_fld[] = $value;
 		}
 	}
 	elseif($uitype == 67)
@@ -380,29 +383,30 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$parent_module = getSalesEntityType($value);
 			if($parent_module == "Leads")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_LEAD_NAME'].':</td>';
+				$label_fld[] = $app_strings['LBL_LEAD_NAME'];
 				$sql = "select * from leaddetails where leadid=".$value;
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
 				$last_name = $adb->query_result($result,0,"lastname");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
 			}
 			elseif($parent_module == "Contacts")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_CONTACT_NAME'].':</td>';
+				$label_fld[] = $app_strings['LBL_CONTACT_NAME'];
 				$sql = "select * from  contactdetails where contactid=".$value;
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
                                 $last_name = $adb->query_result($result,0,"lastname");
 
-                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
 			}
 		}
 		else
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-			$custfld .= '<td width="30%" valign="top" class="dataField">'.$value.'</td>';
+			$label_fld[] = $mod_strings[$fieldlabel];
+			$label_fld[] = $value;
+			
 		}
 	}
 	//added by raju/rdhital for better emails
@@ -418,45 +422,45 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$myresult = $adb->query($mysql);
 			$mycount=$adb->num_rows($myresult);
 			if ($mycount>1){
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_RELATED_TO'].':</td>';
-				$custfld .= '<td width="30%" valign="top" class="dataField">'.$app_strings['LBL_MULTIPLE'].'</td>';
+				$label_fld[] = $app_strings['LBL_RELATED_TO'];
+				$label_fld[] =$app_strings['LBL_MULTIPLE'];
 			}
 			else
 			{
 				$parent_module = getSalesEntityType($value);
 				if($parent_module == "Leads")
 				{
-					$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_LEAD_NAME'].':</td>';
+					$label_fld[] = $app_strings['LBL_LEAD_NAME'];
 					$sql = "select * from leaddetails where leadid=".$value;
 					$result = $adb->query($sql);
 					$first_name = $adb->query_result($result,0,"firstname");
 					$last_name = $adb->query_result($result,0,"lastname");
-					$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
+					$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
 				}
 				elseif($parent_module == "Contacts")
 				{
-					$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_CONTACT_NAME'].':</td>';
+					$label_fld[] = $app_strings['LBL_CONTACT_NAME'];
 					$sql = "select * from  contactdetails where contactid=".$value;
 					$result = $adb->query($sql);
 					$first_name = $adb->query_result($result,0,"firstname");
 					$last_name = $adb->query_result($result,0,"lastname");
-					$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
+					$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
 				}
 				elseif($parent_module == "Accounts")
 				{
-					$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_ACCOUNT_NAME'].':</td>';
+					$label_fld[] = $app_strings['LBL_ACCOUNT_NAME'];
 					$sql = "select * from  account where accountid=".$value;
 					$result = $adb->query($sql);
 					$accountname = $adb->query_result($result,0,"accountname");
-					$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$accountname.'</a></td>';
+					$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$accountname.'</a>';
 				}
 
 			}
 		}
 		else
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-			$custfld .= '<td width="30%" valign="top" class="dataField">'.$value.'</td>';
+			$label_fld[] = $mod_strings[$fieldlabel];
+			$label_fld[] = $value;
 		}
 	}//Code added by raju for better email ends
 
@@ -468,41 +472,40 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$parent_module = getSalesEntityType($value);
 			if($parent_module == "Contacts")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_CONTACT_NAME'].':</td>';
+				$label_fld[] = $app_strings['LBL_CONTACT_NAME'];
 				$sql = "select * from  contactdetails where contactid=".$value;
 				$result = $adb->query($sql);
 				$first_name = $adb->query_result($result,0,"firstname");
                                 $last_name = $adb->query_result($result,0,"lastname");
 
-                                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a></td>';
+				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$last_name.' '.$first_name.'</a>';
 			}
 			elseif($parent_module == "Accounts")
 			{
-				$custfld .= '<td width="20%" class="dataLabel">'.$app_strings['LBL_ACCOUNT_NAME'].':</td>';
+				$label_fld[] = $app_strings['LBL_ACCOUNT_NAME'];
 				$sql = "select * from account where accountid=".$value;
 				$result = $adb->query($sql);
 				$account_name = $adb->query_result($result,0,"accountname");
 
-				$custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$account_name.'</a></td>';
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$account_name.'</a>';
 			}
 
 		}
 		else
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-			$custfld .= '<td width="30%" valign="top" class="dataField">'.$value.'</td>';
+			$label_fld[] = $mod_strings[$fieldlabel];
+			$label_fld[] = $value;
 		}
 	}
 
 	elseif($uitype==63)
         {
-	   $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';	
-           $custfld .= '<td width="30%" valign="top" class="dataField">'.$col_fields[$fieldname].'h&nbsp; '.$col_fields['duration_minutes'].'m</td>';
+	   $label_fld[] =$mod_strings[$fieldlabel];
+	   $label_fld[] = $col_fields[$fieldname].'h&nbsp; '.$col_fields['duration_minutes'].'m';
         }
 	elseif($uitype == 6)
         {
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
-	
+		$label_fld[] =$mod_strings[$fieldlabel];
           	if($col_fields[$fieldname]=='0')
                 $col_fields[$fieldname]='';
 		if($col_fields['time_start']!='')
@@ -518,11 +521,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			$displ_date = getDisplayDate($col_fields[$fieldname]);
 		}
 	
-          	$custfld .= '<td width="30%" valign="top" class="dataField">'.$displ_date.'&nbsp;'.$start_time.'</td>';
+		$label_fld[] = $displ_date.'&nbsp;'.$start_time;
 	}
 	elseif($uitype == 5 || $uitype == 23 || $uitype == 70)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
 		$cur_date_val = $col_fields[$fieldname];
 		if($cur_date_val == '0000-00-00')
 		{
@@ -532,73 +535,73 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		{
 			$display_val = getDisplayDate($cur_date_val);
 		}
-		$custfld .= '<td width="30%" valign="top" class="dataField">'.$display_val.'</td>';	
+		$label_fld[] = $display_val;
 	}
 	elseif($uitype == 71 || $uitype == 72)
 	{
-		$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
 		$display_val = '';
 		if($col_fields[$fieldname] != '' && $col_fields[$fieldname] != 0)
 		{	
 			$curr_symbol = getCurrencySymbol();
 			$display_val = $curr_symbol.' '.$col_fields[$fieldname];
 		}
-		$custfld .= '<td width="30%" valign="top" class="dataField">'.$display_val.'</td>';	
+		$label_fld[] = $display_val;
 	}
 	elseif($uitype == 75 || $uitype == 81)
         {
-                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
                 $vendor_id = $col_fields[$fieldname];
                 if($vendor_id != '')
                 {
                         $vendor_name = getVendorName($vendor_id);
                 }
 
-                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Products&action=VendorDetailView&record='.$vendor_id.'">'.$vendor_name.'</a></td>';
+		$label_fld[] = '<a href="index.php?module=Products&action=VendorDetailView&record='.$vendor_id.'">'.$vendor_name.'</a>';
         }
 	elseif($uitype == 76)
         {
-                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
                 $potential_id = $col_fields[$fieldname];
                 if($potential_id != '')
                 {
                         $potential_name = getPotentialName($potential_id);
                 }
 
-                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a></td>';
+		$label_fld[] = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
         }
 	elseif($uitype == 78)
         {
-                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
                 $quote_id = $col_fields[$fieldname];
                 if($quote_id != '')
                 {
                         $quote_name = getQuoteName($quote_id);
                 }
 
-                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=Quotes&action=DetailView&record='.$quote_id.'">'.$quote_name.'</a></td>';
+		$label_fld[] = '<a href="index.php?module=Quotes&action=DetailView&record='.$quote_id.'">'.$quote_name.'</a>';
         }
 	elseif($uitype == 79)
         {
-                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
                 $purchaseorder_id = $col_fields[$fieldname];
                 if($purchaseorder_id != '')
                 {
                         $purchaseorder_name = getPoName($purchaseorder_id);
                 }
 
-                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=PurchaseOrder&action=DetailView&record='.$purchaseorder_id.'">'.$purchaseorder_name.'</a></td>';
+		$label_fld[] = '<a href="index.php?module=Orders&action=DetailView&record='.$purchaseorder_id.'">'.$purchaseorder_name.'</a>';
         }
 	elseif($uitype == 80)
         {
-                $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
                 $salesorder_id = $col_fields[$fieldname];
                 if($salesorder_id != '')
                 {
                         $salesorder_name = getSoName($salesorder_id);
                 }
 
-                $custfld .= '<td width="30%" valign="top" class="dataField"><a href="index.php?module=SalesOrder&action=DetailView&record='.$salesorder_id.'">'.$salesorder_name.'</a></td>';
+		$label_fld[] = '<a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$salesorder_id.'">'.$salesorder_name.'</a>';
         }
 	elseif($uitype == 30)
 	{
@@ -610,26 +613,25 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$rem_hrs = floor(($col_fields[$fieldname]-$rem_days*24*60)/60);
 		$rem_min = ($col_fields[$fieldname]-$rem_days*24*60)%60;
                  
-                $custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
+		$label_fld[] =$mod_strings[$fieldlabel];
 		if($col_fields[$fieldname])
                 {
                         $reminder_str= $rem_days.'&nbsp;'.$mod_strings['LBL_DAYS'].'&nbsp;'.$rem_hrs.'&nbsp;'.$mod_strings['LBL_HOURS'].'&nbsp;'.$rem_min.'&nbsp;'.$mod_strings['LBL_MINUTES'].'&nbsp;&nbsp;'.$mod_strings['LBL_BEFORE_EVENT'];
                 }
-                $custfld .= '<td valign="top" colspan=3 class="datafield">&nbsp;'.$reminder_str.'</td>';
+		$label_fld[] = '&nbsp;'.$reminder_str;
 	}
 	else
 	{
-	  $custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 	
+	 $label_fld[] =$mod_strings[$fieldlabel];
           if($col_fields[$fieldname]=='0')
                 $col_fields[$fieldname]='';
 	
-          $custfld .= '<td width="30%" valign="top" class="dataField">'.$col_fields[$fieldname].'</td>';
+		$label_fld[] = $col_fields[$fieldname];
 	}
-	return $custfld;	
+	$label_fld[]=$uitype;
+	return $label_fld;
 }
-
-
 
 
 function getDetailAssociatedProducts($module,$focus)
@@ -772,39 +774,39 @@ function getRelatedLists($module,$focus)
 	{
 		$rel_tab_id = $adb->query_result($result,$i,"related_tabid");
 		$funtion_name = $adb->query_result($result,$i,"name");
+		$label = $adb->query_result($result,$i,"label");
 		if($rel_tab_id != 0)
 		{
 			if($tab_per_Data[$rel_tab_id] == 0)
 			{
 		        	if($permissionData[$rel_tab_id][3] == 0)
         			{
-		                	$focus_list = & $focus->$funtion_name($focus->id);
+		                	$focus_list[$label] = $focus->$funtion_name($focus->id);
         			}
 			}
 		}
 		else
 		{
-			$focus_list = & $focus->$funtion_name($focus->id);
+			$focus_list[$label] = $focus->$funtion_name($focus->id);
 		}
 	}
-
+	return $focus_list;
 }
 
 
-function getDetailBlockInformation($module, $block, $col_fields)
+function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 {
 	//retreive the tabid	
 	global $adb;
-	$tabid = getTabid($module);
+	#$tabid = getTabid($module);
         global $profile_id;
+	$label_data = Array();
 
 	//retreive the fields from database
 	
 	$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid=".$profile_id." order by sequence";
-	
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
-	$output='';
 	for($i=0; $i<$noofrows; $i++)
 	{
 		$fieldtablename = $adb->query_result($result,$i,"tablename");	
@@ -816,7 +818,7 @@ function getDetailBlockInformation($module, $block, $col_fields)
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");
 		$output .= '<tr>';
 		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype);
-		$output .= $custfld;
+		$label_data[] = array($custfld[0]=>array($custfld[1]=>$custfld[2]));
 		$i++;
 		if($i<$noofrows)
 		{
@@ -828,14 +830,24 @@ function getDetailBlockInformation($module, $block, $col_fields)
 			$maxlength = $adb->query_result($result,$i,"maximumlength");
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
 
-			$output .= '';
 			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype);
-			$output .= $custfld;	
+			$label_data[] = array($custfld[0]=>array($custfld[1]=>$custfld[2]));	
 		}
-		$output .= '</tr>';
 
 	}
-	return $output;
+	for ($i=0,$j=0;$i<count($label_data);$i=$i+2,$j++)
+	{
+		$keys=array_keys($label_data[$i]);
+                $key1=$keys[0];	
+		if(is_array($label_data[$i+1]))
+		{
+                	$keys=array_keys($label_data[$i+1]);
+                	$key2=$keys[0];
+		}
+		$return_data[$j]=array($key1 => $label_data[$i][$key1],$key2 => $label_data[$i+1][$key2]);
+	}
+	return $return_data;
+
 
 }
 
