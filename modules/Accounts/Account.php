@@ -153,49 +153,6 @@ class Account extends CRMEntity {
 
 	
 	function create_tables () {
-          /*
-		$query = 'CREATE TABLE '.$this->table_name.' ( ';
-		$query .='id char(36) NOT NULL';
-		$query .=', date_entered datetime NOT NULL';
-		$query .=', date_modified datetime NOT NULL';
-		$query .=', modified_user_id char(36) NOT NULL';
-		$query .=', assigned_user_id char(36)';
-		$query .=', name char(150)';
-		$query .=', parent_id char(36)';
-		$query .=', account_type char(25)';
-		$query .=', industry char(25)';
-		$query .=', annual_revenue char(25)';
-		$query .=', phone_fax char(25)';
-		$query .=', billing_address_street char(150)';
-		$query .=', billing_address_city char(100)';
-		$query .=', billing_address_state char(100)';
-		$query .=', billing_address_postalcode char(20)';
-		$query .=', billing_address_country char(100)';
-		$query .=', description text';
-		$query .=', rating char(25)';
-		$query .=', phone_office char(25)';
-		$query .=', phone_alternate char(25)';
-		$query .=', email1 char(100)';
-		$query .=', email2 char(100)';
-		$query .=', website char(255)';
-		$query .=', ownership char(100)';
-		$query .=', employees char(10)';
-		$query .=', sic_code char(10)';
-		$query .=', ticker_symbol char(10)';
-		$query .=', shipping_address_street char(150)';
-		$query .=', shipping_address_city char(100)';
-		$query .=', shipping_address_state char(100)';
-		$query .=', shipping_address_postalcode char(20)';
-		$query .=', shipping_address_country char(100)';
-		$query .=', deleted bool NOT NULL default 0';
-		$query .=', PRIMARY KEY ( id ) )';
-
-		
-
-		$this->db->query($query);
-	//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
-        */
-
 	}
 
 	function drop_tables () {
@@ -237,7 +194,7 @@ class Account extends CRMEntity {
 	function get_contacts($id)
 	{
 		$query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  where crmentity.deleted=0 and contactdetails.accountid = '.$id;
-          renderRelatedContacts($query,$id);
+          return renderRelatedContacts($query,$id);
         }
 
 	/** Returns a list of the associated opportunities
@@ -250,7 +207,7 @@ class Account extends CRMEntity {
 //	$query = "select products.productid, products.productname, products.productcode, potential.potentialid, potential.accountid, potential.potentialname, potential.amount, potential.closingdate, potential.potentialtype, crmentity.crmid from products,potential inner join seproductsrel on seproductsrel.crmid = potential.accountid and seproductsrel.productid=products.productid inner join crmentity on crmentity.crmid=potential.potentialid";
 	$query = 'select potential.potentialid, potential.accountid, potential.potentialname, potential.sales_stage, potential.potentialtype, potential.amount, potential.closingdate, potential.potentialtype, users.user_name, crmentity.crmid, crmentity.smownerid from potential inner join crmentity on crmentity.crmid= potential.potentialid left join users on crmentity.smownerid = users.id where crmentity.deleted=0 and potential.accountid= '.$id ;
     //include('modules/Accounts/RenderRelatedListUI.php');
-    renderRelatedPotentials($query,$id);
+    return renderRelatedPotentials($query,$id);
     // return $this->build_related_list($query, new potential());
   }
 
@@ -264,7 +221,7 @@ class Account extends CRMEntity {
           // First, get the list of IDs.
 //          $query = "SELECT activity.subject,semodule,activitytype,date_start,status,priority from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid where seactivityrel.crmid=".$id;
 	  $query = "SELECT activity.*,seactivityrel.*, contactdetails.contactid,contactdetails.lastname, contactdetails.firstname, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus !='' &&  activity.eventstatus = 'Planned')";
-          renderRelatedTasks($query,$id); //Query Changed by Jaguar
+          return renderRelatedTasks($query,$id); //Query Changed by Jaguar
 
           //return $this->build_related_list($query, new Task());
 	}
@@ -281,29 +238,6 @@ class Account extends CRMEntity {
 
 		return $this->build_related_list($query, new note());
 	}
-
-	/** Returns a list of the associated meetings
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	*/
-	function get_meetings($id)
-	{
-          $query="select meetings.name,meetings.location,meetings.duration_hours,meetings.duration_minutes from meetings inner join activity on activity.activityid=meetings.meetingid inner join seactivityrel on seactivityrel.activityid=meetings.meetingid join crmentity on crmentity.crmid=activity.activityid and crmentity.deleted=0 and crmentity.crmid =".$id;
-          renderRelatedMeetings($query,$id);
-        }
-
-	/** Returns a list of the associated calls
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	*/
-	function get_calls($id)
-	{
-          
-          $query="select calls.name,calls.duration_hours,calls.date_start,calls.status from calls inner join activity on activity.activityid=calls.callid inner join seactivityrel on seactivityrel.activityid=calls.callid inner join crmentity on crmentity.crmid=calls.callid and crmentity.deleted=0 and crmentity.crmid=".$id;
-          renderRelatedCalls($query,$id);
-        }
 
 	/** Returns a list of the associated emails
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
@@ -333,7 +267,7 @@ class Account extends CRMEntity {
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
-		renderRelatedHistory($query,$id);
+		return renderRelatedHistory($query,$id);
 	}
 
 	function get_attachments($id)
@@ -368,34 +302,34 @@ class Account extends CRMEntity {
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".$id."
 		order by createdtime desc";
-		renderRelatedAttachments($query,$id);
+		return renderRelatedAttachments($query,$id);
 	}
 	function get_quotes($id)
 	{
 		$query = "select crmentity.*, quotes.*,potential.potentialname,account.accountname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0 and account.accountid=".$id;
-		renderRelatedQuotes($query,$id);
+		return renderRelatedQuotes($query,$id);
 	}
 	function get_invoices($id)
 	{
 		$query = "select crmentity.*, invoice.*, account.accountname, salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid where crmentity.deleted=0 and account.accountid=".$id;
-		renderRelatedInvoices($query,$id);
+		return renderRelatedInvoices($query,$id);
 	}
 	function get_salesorder($id)
 	{
 		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0 and salesorder.accountid = ".$id;
-		renderRelatedOrders($query,$id);	
+		return renderRelatedOrders($query,$id);	
 	}
 	function get_tickets($id)
 	{
 		$query = "select users.user_name, users.id, troubletickets.title, troubletickets.ticketid as crmid, troubletickets.status, troubletickets.priority, troubletickets.parent_id, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join account on account.accountid=troubletickets.parent_id left join users on users.id=crmentity.smownerid where account.accountid =".$id;
 		$query .= " union all ";
 		$query .= "select users.user_name, users.id, troubletickets.title, troubletickets.ticketid as crmid, troubletickets.status, troubletickets.priority, troubletickets.parent_id, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join contactdetails on contactdetails.contactid = troubletickets.parent_id left join account on account.accountid=contactdetails.accountid left join users on users.id=crmentity.smownerid where account.accountid =".$id;
-		renderRelatedTickets($query,$id);
+		return renderRelatedTickets($query,$id);
 	}
 	function get_products($id)
 	{
 		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join account on account.accountid = seproductsrel.crmid  where account.accountid = '.$id.' and crmentity.deleted = 0';
-	      	renderRelatedProducts($query,$id);
+	      	return renderRelatedProducts($query,$id);
         }
 
 

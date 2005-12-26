@@ -569,7 +569,7 @@ return $exists;
 	function get_contacts($id)
 	{
 		$query = 'select contactdetails.accountid, potential.potentialid, potential.potentialname, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname, contactdetails.title, contactdetails.department, contactdetails.email, contactdetails.phone, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from potential inner join contpotentialrel on contpotentialrel.potentialid = potential.potentialid inner join contactdetails on contpotentialrel.contactid = contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where potential.potentialid = '.$id.' and crmentity.deleted=0';
-          renderRelatedContacts($query,$id);
+          return renderRelatedContacts($query,$id);
         }
 
 	/** Returns a list of the associated tasks
@@ -618,7 +618,7 @@ return $exists;
 	  $query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name, recurringevents.recurringtype, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus != '' &&  activity.eventstatus = 'Planned')";
 
           //include('modules/Potentials/RenderRelatedListUI.php');
-          renderRelatedActivities($query,$id);
+         return renderRelatedActivities($query,$id);
 	}
 
 	/** Returns a list of the associated emails
@@ -636,12 +636,12 @@ return $exists;
 	{
 		//$query = 'select potential.potentialid, potential.potentialname, products.productid, products.productname, products.qty_per_unit, products.unit_price, products.purchase_date from potential inner join crmentity on crmentity.crmid = potential.potentialid inner join seproductsrel on seproductsrel.productid = products.productid inner join products on seproductsrel.productid = products.productid where potential.potentialid='.$id;
 		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join potential on potential.potentialid = seproductsrel.crmid  where potential.potentialid = '.$id.' and crmentity.deleted = 0';
-	      	renderRelatedProducts($query,$id);
+	     return renderRelatedProducts($query,$id);
         }
 	function get_stage_history($id)
 	{
 		$query = 'select potstagehistory.*, potential.potentialname from potstagehistory inner join potential on potential.potentialid = potstagehistory.potentialid inner join crmentity on crmentity.crmid = potential.potentialid where crmentity.deleted = 0 and potential.potentialid = '.$id;
-		renderRelatedStageHistory($query,$id);
+	return renderRelatedStageHistory($query,$id);
 	}
 
 	function get_history($id)
@@ -661,7 +661,7 @@ return $exists;
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
-		renderRelatedHistory($query,$id);
+	return renderRelatedHistory($query,$id);
 	}
 
 	function get_attachments($id)
@@ -698,23 +698,22 @@ return $exists;
 		where crmentity.crmid=".$id."
 		order by createdtime desc";
 
-		renderRelatedAttachments($query,$id);
+		return renderRelatedAttachments($query,$id);
 	}
 
-	function get_tickets($id)
-	{
+	function get_tickets($id) {
 		$query = 'select users.user_name, users.id, seticketsrel.*, troubletickets.title, troubletickets.status, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime  from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.crmid inner join users on users.id=crmentity.smownerid where seticketsrel.crmid = '.$id; 
 		renderRelatedTickets($query);
 	}
 	function get_quotes($id)
 	{
 		$query = "select crmentity.*, quotes.*,potential.potentialname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0 and potential.potentialid=".$id;
-		renderRelatedQuotes($query,$id,$this->column_fields['account_id']);
+		return renderRelatedQuotes($query,$id,$this->column_fields['account_id']);
 	 }
 	 function get_salesorder($id)
 	 {
 	 	$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname, potential.potentialname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left outer join potential on potential.potentialid=salesorder.potentialid where crmentity.deleted=0 and potential.potentialid = ".$id;
-		renderRelatedSalesOrders($query,$id,$this->column_fields['account_id']);	
+		return renderRelatedSalesOrders($query,$id,$this->column_fields['account_id']);	
 	 }
 
 	function get_list_view_data(){

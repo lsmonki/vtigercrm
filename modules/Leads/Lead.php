@@ -270,7 +270,7 @@ return $exists;
           // First, get the list of IDs.
 	    $query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus !='' && activity.eventstatus = 'Planned')";
           //include('modules/Leads/RenderRelatedListUI.php');
-          renderRelatedTasks($query,$id);
+          return renderRelatedTasks($query,$id);
         }
 
 	/** Returns a list of the associated notes
@@ -305,7 +305,7 @@ return $exists;
 	function get_emails($id)
 	{
 		$query ="select activity.activityid, activity.subject, activity.semodule, activity.activitytype, activity.date_start, activity.status, activity.priority, crmentity.crmid,crmentity.smownerid,crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join users on  users.id=crmentity.smownerid where activity.activitytype='Emails' and crmentity.deleted=0 and seactivityrel.crmid=".$id;
-            renderRelatedEmails($query,$id);
+            return renderRelatedEmails($query,$id);
         }
 	function get_history($id)
 	{
@@ -325,7 +325,7 @@ return $exists;
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
-		renderRelatedHistory($query,$id);
+	  return renderRelatedHistory($query,$id);
 	}
 
   function get_attachments($id)
@@ -362,7 +362,7 @@ return $exists;
 			where crmentity.crmid=".$id."
 		order by createdtime desc";
 
-    renderRelatedAttachments($query,$id);
+    return renderRelatedAttachments($query,$id);
   }
   function get_tickets($id)
   {
@@ -373,7 +373,7 @@ return $exists;
 	function get_products($id)
 	{
 		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join leaddetails on leaddetails.leadid = seproductsrel.crmid  where leaddetails.leadid = '.$id.' and crmentity.deleted = 0';
-	      	renderRelatedProducts($query,$id);
+	      return renderRelatedProducts($query,$id);
         }
 
 

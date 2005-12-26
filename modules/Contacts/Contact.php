@@ -324,7 +324,7 @@ class Contact extends CRMEntity {
           //include('modules/Contacts/RenderRelatedListUI.php');
 	  $query = 'select contactdetails.accountid, contactdetails.contactid , potential.potentialid, potential.potentialname, potential.potentialtype, potential.sales_stage, potential.amount, potential.closingdate, crmentity.crmid, crmentity.smownerid from contactdetails inner join potential on contactdetails.accountid = potential.accountid inner join crmentity on crmentity.crmid = potential.potentialid where contactdetails.contactid = '.$id.' and crmentity.deleted=0';
 	  if($this->column_fields['account_id'] != 0)
-          	renderRelatedPotentials($query,$id);
+          return renderRelatedPotentials($query,$id);
           //return $this->build_related_list($query, new Opportunity());
 	}
 	
@@ -354,7 +354,7 @@ class Contact extends CRMEntity {
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname,  activity.activityid , activity.subject, activity.activitytype, activity.date_start, activity.due_date, cntactivityrel.contactid, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, recurringevents.recurringtype  from contactdetails inner join cntactivityrel on cntactivityrel.contactid = contactdetails.contactid inner join activity on cntactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid = cntactivityrel.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid where contactdetails.contactid=".$id." and crmentity.deleted = 0 and (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task') AND ( activity.status is NULL || activity.status != 'Completed' ) and ( activity.eventstatus is NULL || activity.eventstatus != 'Held') and ( activity.eventstatus is NULL || activity.eventstatus != 'Not Held' )";  //recurring type is added in Query -Jaguar
 		//query modified to display the activities corresponding to the given contactid
 
-		renderRelatedTasks($query,$id);		
+	   return renderRelatedTasks($query,$id);		
 
           //return $this->build_related_list($query, new Task());
 	}
@@ -376,12 +376,12 @@ class Contact extends CRMEntity {
 				and cntactivityrel.contactid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
-		renderRelatedHistory($query,$id);
+	return	renderRelatedHistory($query,$id);
 	}
 	function get_tickets($id)
 	{
 		$query = "select crmentity.crmid, troubletickets.title, contactdetails.contactid, troubletickets.parent_id, contactdetails.firstname, contactdetails.lastname, troubletickets.status, troubletickets.priority, crmentity.smownerid from troubletickets inner join crmentity on crmentity.crmid=troubletickets.ticketid left join contactdetails on contactdetails.contactid=troubletickets.parent_id left join users on users.id=crmentity.smownerid where crmentity.deleted=0 and contactdetails.contactid=".$id;
-		renderRelatedTickets($query,$id);
+	 return renderRelatedTickets($query,$id);
 	}
 
 	function get_attachments($id)
@@ -418,27 +418,27 @@ class Contact extends CRMEntity {
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".$id."
 		order by createdtime desc";
-                renderRelatedAttachments($query,$id);
+               return renderRelatedAttachments($query,$id);
 	  }
 	  function get_quotes($id)
 	  {
 		$query = "select crmentity.*, quotes.*,potential.potentialname,contactdetails.lastname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join contactdetails on contactdetails.contactid=quotes.contactid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0 and contactdetails.contactid=".$id;
-		renderRelatedQuotes($query,$id);
+	    return renderRelatedQuotes($query,$id);
 	  }
 	  function get_salesorder($id)
 	  {
 		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname, contactdetails.lastname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left outer join contactdetails on contactdetails.contactid=salesorder.contactid where crmentity.deleted=0 and salesorder.contactid = ".$id;
-		renderRelatedSalesOrders($query,$id);	
+	     return renderRelatedSalesOrders($query,$id);	
 	  }
 	  function get_products($id)
 	  {
 		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,contactdetails.lastname from products inner join crmentity on crmentity.crmid = products.productid left outer join contactdetails on contactdetails.contactid = products.contactid where contactdetails.contactid = '.$id.' and crmentity.deleted = 0';
-	      	renderRelatedProducts($query,$id);
+	    return renderRelatedProducts($query,$id);
           }
 	  function get_purchase_orders($id)
 	  {
 		$query = "select crmentity.*, purchaseorder.*,vendor.vendorname,contactdetails.lastname from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid left outer join contactdetails on contactdetails.contactid=purchaseorder.contactid where crmentity.deleted=0 and purchaseorder.contactid=".$id;
-	      	renderRelatedOrders($query,$id);
+	   return renderRelatedOrders($query,$id);
           }
 
 	/** Returns a list of the associated emails
@@ -449,7 +449,7 @@ class Contact extends CRMEntity {
 	function get_emails($id)
 	{
 		$query = 'select activity.activityid, activity.activityid, activity.subject, activity.activitytype, users.user_name, crmentity.modifiedtime, crmentity.crmid, crmentity.smownerid, activity.date_start from activity, seactivityrel, contactdetails, users, crmentity where seactivityrel.activityid = activity.activityid and contactdetails.contactid = seactivityrel.crmid and users.id=crmentity.smownerid and crmentity.crmid = activity.activityid  and contactdetails.contactid = '.$id.'  and activity.activitytype="Emails" and crmentity.deleted = 0';
-		renderRelatedEmails($query,$id);
+	return renderRelatedEmails($query,$id);
 	}
 
 	function create_list_query(&$order_by, &$where)
