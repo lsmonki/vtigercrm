@@ -62,6 +62,19 @@ using and worth using for long.
 
 We sincerely hope, we are able to live upto your expectations.
 
+
+
+
+vtiger does not believe in any big dollar marketing campaign 
+, but we do believe in providing a good service, a good product.
+If you feel we have lived upto your expectations,
+ please do consider spreading the word about vtiger by - telling a
+friend,  setting it up for someone, or blogging about us or in any
+other manner you are comfortable with.
+
+Again, thanks for taking out the time to try vtiger!
+We really appreciate it.
+
 <!-- Master table -->
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
 <tr>
