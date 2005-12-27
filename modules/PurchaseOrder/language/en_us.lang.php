@@ -22,7 +22,7 @@
  
 $mod_strings = Array(
 'LBL_MODULE_NAME'=>'PurchaseOrder',
-'LBL_RELATED_PRODUCTS'=>'Line Items',
+'LBL_RELATED_PRODUCTS'=>'Product Details',
 'LBL_MODULE_TITLE'=>'Purchase Order: Home',
 'LBL_SEARCH_FORM_TITLE'=>'Purchase Order Search',
 'LBL_LIST_FORM_TITLE'=>'Purchase Order List',
