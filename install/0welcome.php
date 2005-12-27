@@ -52,28 +52,7 @@ foreach($pieces as $val)
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
-Welcome!
-Thank you for trying out vtigerCRM and for making it a part of your experience.
-Every developer and contributor has added value to it either in the
-form of bug reports, bug fixes, feature contribution or for that
-matter providing the hosting machine or maintenance of the forge. This
-is a product of pure teamwork. We intend to create something worth
-using and worth using for long.
 
-We sincerely hope, we are able to live upto your expectations.
-
-
-
-
-vtiger does not believe in any big dollar marketing campaign 
-, but we do believe in providing a good service, a good product.
-If you feel we have lived upto your expectations,
- please do consider spreading the word about vtiger by - telling a
-friend,  setting it up for someone, or blogging about us or in any
-other manner you are comfortable with.
-
-Again, thanks for taking out the time to try vtiger!
-We really appreciate it.
 
 <!-- Master table -->
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
@@ -96,7 +75,51 @@ We really appreciate it.
 		<td colspan="2"><img src="install/images/cwTitle.gif" alt="vtiger CRM Configuration Wizard" title="vtiger CRM Configuration Wizard"></td>
 	</tr>
 	<tr>
-		<td style="color:#333399" width="70%"><span style="text-alignment:justify">This Configuration Wizard will create vtiger CRM 4.2 databases and tables and configuration files you need to start. The entire process should
+		<td style="color:#333399" width="70%"><span
+	style="text-alignment:justify">
+
+Welcome!<br><br>
+Thank you for trying out vtigerCRM and for making it a part of your experience.<br>
+Every developer and contributor has added value to vtiger either in the
+form of bug reports, bug fixes, feature contributions or for that
+matter, providing the hosting machine or maintenance of the forge. This
+is a product of pure teamwork and passion. We intend to create something worth
+using and worth using for long.<br><br>
+
+<i>We sincerely hope, we are able to live upto your expectations.</i>
+
+<br>
+<br>
+<bold>
+vtiger does not believe in any big dollar marketing campaign or model
+sponsor. But we do believe that <b>you</b> can and will make a
+difference.
+ <br>
+If you feel we have lived upto your expectations,
+ please do consider spreading the word about vtiger by - telling a
+friend,  setting it up for someone, or blogging about us or in any
+other manner you are comfortable with.
+<br>
+<br>
+<br>
+Again, thanks for taking out the time to try vtiger! <br><br>
+<b><i>We want you to know that we really appreciate it.</i></b>
+
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+This Configuration Wizard will create vtiger CRM 4.2 databases and tables and configuration files you need to start. The entire process should
 				take about four minutes. Click the Start button when you are ready.</span> <br><br>
 				<span style="color:#555555">- vtiger CRM 4.2 is tested on mySQL 4.0.X, PHP 4.3.8 and Apache 2.0.40<br>
 				- Support for PHP5 will be added in future<br></span>
