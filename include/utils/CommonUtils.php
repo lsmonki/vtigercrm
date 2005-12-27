@@ -618,4 +618,50 @@ function getView($mode)
 	$disp_view = "create_view";
 	return $disp_view;
 }
+function getHeaderArray()
+{
+	global $adb;
+	$query='select parenttabid from parenttab order by sequence';
+	$result = $adb->query($query);
+    $noofrows = $adb->num_rows($result);
+	for($i=0; $i<$noofrows; $i++)
+    {
+		$subtabs =array();
+		$parenttabid = $adb->query_result($result,$i,"parenttabid");
+		$query1 = 'select tabid from parenttabrel where parenttabid='.$parenttabid.' order by sequence';
+		$result1 = $adb->query($query1);
+		$noofsubtabs = $adb->num_rows($result1);
+		for($j=0; $j<$noofsubtabs; $j++)
+		{
+			$subtabid = $adb->query_result($result1,$j,"tabid");
+			$module = getTabModuleName($subtabid);
+			//$subtabs[] = getTabname($subtabid); 
+			$subtabs[] = $module;
+		}
+		$parenttab = getParentTabName($parenttabid);
+		if($parenttab == 'Settings')
+		{
+			$subtabs =array();
+			$subtabs[] = 'Settings';
+		}
+		$relatedtabs[$parenttab] = $subtabs;
+	}
+	return $relatedtabs;
+}
+function getParentTabName($parenttabid)
+{
+    global $adb;
+    $sql = "select parenttab_label from parenttab where parenttabid=".$parenttabid;
+    $result = $adb->query($sql);
+    $parent_tabname=  $adb->query_result($result,0,"parenttab_label");
+    return $parent_tabname;
+}
+function getParentTabFromModule($module)
+{
+	global $adb;
+	$sql = "select parenttab.* from parenttab inner join parenttabrel on parenttabrel.parenttabid=parenttab.parenttabid inner join tab on tab.tabid=parenttabrel.tabid where tab.name='".$module."'";
+	$result = $adb->query($sql);
+	$tab =  $adb->query_result($result,0,"parenttab_label");
+	return $tab;
+}
 ?>
