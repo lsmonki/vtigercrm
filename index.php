@@ -21,13 +21,17 @@
 
 global $entityDel;
 global $display;
-
+global $category;
 require_once('include/utils/utils.php');
 //$phpbb_root_path='./modules/MessageBoard/';
 if (substr(phpversion(), 0, 1) == "5") {
         ini_set("zend.ze1_compatibility_mode", "1");
 }
-
+global $currentModule;
+//if(!isset($category))
+  //  $category=getParentTabName(1);
+//else
+  //  $category=getParentTabName($currentModule);
 function fetchPermissionDataForTabList()
 {
   $permittedTabs = $_SESSION['tab_permission_set'];
@@ -731,6 +735,14 @@ if(!$skipHeaders) {
 	//include('themes/'.$theme.'/header.php');
 	if($use_current_login)
 	{
+		if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+		{
+			$category = $_REQUEST['category'];
+		}
+		else
+		{
+			$category = getParentTabFromModule($currentModule);
+		}
 		include('themes/'.$theme.'/header.php');
 	}
 	else 
