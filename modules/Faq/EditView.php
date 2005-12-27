@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('modules/Faq/Faq.php');
 require_once('include/CustomFieldUtil.php');
 require_once('include/ComboUtil.php');
@@ -32,6 +32,7 @@ global $mod_strings;
 global $current_user;
 
 $focus = new Faq();
+$smarty = new vtigerCRM_Smarty();
 
 if(isset($_REQUEST['record'])) 
 {
@@ -44,23 +45,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
     	$focus->mode = ''; 	
 } 
 
-//get Block 1 Information
-$block_1 = getBlockInformation("Faq",1,$focus->mode,$focus->column_fields);
-
-//get Address Information
-$block_2 = getBlockInformation("Faq",2,$focus->mode,$focus->column_fields);
-
-//get Description Information
-$block_3 = getBlockInformation("Faq",3,$focus->mode,$focus->column_fields);
-
-//get Custom Field Information
-if($focus->mode == 'edit')
-{
-	$focus->column_fields['comments'] = '';
-	$block_4 = getBlockInformation("Faq",4,$focus->mode,$focus->column_fields);
-	$comments = $focus->getFAQComments($focus->id);
-	$block_4_header = getBlockTableHeader("LBL_COMMENT_INFORMATION");
-}
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -68,53 +52,33 @@ $image_path=$theme_path."images/";
 
 require_once($theme_path.'layout_utils.php');
 
-$xtpl=new XTemplate ('modules/Faq/EditView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("BLOCK1", $block_1);
-$xtpl->assign("BLOCK2", $block_2);
-$xtpl->assign("BLOCK3", $block_3);
-if($block_4 != '')
-{
-	$block_4_ui = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
-			   <tr><td>
-				<table width="100%" border="0" cellspacing="1" cellpadding="2">'.$block_4.'
-				</table>
-			   </td></tr>
-			</table>
-		      ';
-	$xtpl->assign("BLOCK4", $block_4_ui);
-}
-if($comments != '')
-{
-	$block_4_comments = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">
-				<tr><td>';
-	$block_4_comments .= 		$block_4_header;
-	$block_4_comments .= 			'<table width="100%" border="0" cellspacing="1" cellpadding="2">';
-	$block_4_comments .= 				$comments;
-	$block_4_comments .= 			'</table>
-				</td></tr>
-			     </table>
-			    ';
-	$xtpl->assign("BLOCK4_COMMENTS_BLOCK", $block_4_comments);
-}
+$disp_view = getView($focus->mode);
+$smarty->assign("BLOCKS",getBlocks("Faq",$disp_view,$mode,$focus->column_fields));
+//echo '<pre>';print_r(getBlocks("Faq",$disp_view,$mode,$focus->column_fields));echo '</pre>';
+$smarty->assign("OP_MODE",$disp_view);
+
+$smarty->assign("MODULE",$currentModule);
+$smarty->assign("SINGLE_MOD","Faq");
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
 
 if($focus->mode == 'edit')
 {
-	$xtpl->assign("MODE", $focus->mode);
+	$smarty->assign("MODE", $focus->mode);
 }		
 
-if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
-else $xtpl->assign("RETURN_MODULE","Faq");
-if(isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
-else $xtpl->assign("RETURN_ACTION","index");
-if(isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$xtpl->assign("ID", $focus->id);
+if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+else $smarty->assign("RETURN_MODULE","Faq");
+if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+else $smarty->assign("RETURN_ACTION","index");
+if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBAL
+S['request_string']);
+$smarty->assign("ID", $focus->id);
 
-$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
-$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+$smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
+$smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
 
 $faq_tables = Array('faq'); 
@@ -157,12 +121,9 @@ foreach($validationData as $fldName => $fldLabel_array)
 	}
 }
 
-$xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
-$xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
-$xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
 
-$xtpl->parse("main");
-
-$xtpl->out("main");
-
+$smarty->display("salesEditView.tpl");
 ?>

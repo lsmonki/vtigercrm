@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Notes/Forms.php');
@@ -31,6 +31,7 @@ global $app_list_strings;
 global $mod_strings;
 
 $focus = new Note();
+$smarty = new vtigerCRM_Smarty();
 
 if($_REQUEST['upload_error'] == true)
 {
@@ -89,81 +90,86 @@ if (isset($_REQUEST['filename']) && $_REQUEST['isDuplicate'] != 'true') {
         $focus->filename = $_REQUEST['filename'];
 }
 
-//get Block 1 Information
-$block_1 = getBlockInformation("Notes",1,$focus->mode,$focus->column_fields);
 
-//get Address Information
-$block_2 = getBlockInformation("Notes",2,$focus->mode,$focus->column_fields);
-
-//get Description Information
-$block_3 = getBlockInformation("Notes",3,$focus->mode,$focus->column_fields);
 
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
+$disp_view = getView($focus->mode);
+$smarty->assign("BLOCKS",getBlocks("Notes",$disp_view,$mode,$focus->column_fields));
+//echo '<pre>';print_r(getBlocks("Notes",$disp_view,$mode,$focus->column_fields));echo '</pre>';
+$smarty->assign("OP_MODE",$disp_view);
+
+
 $log->info("Note detail view");
 
-$xtpl=new XTemplate ('modules/Notes/EditView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("BLOCK1", $block_1);
-$xtpl->assign("BLOCK2", $block_2);
-$xtpl->assign("BLOCK3", $block_3);
-$block_1_header = getBlockTableHeader("LBL_NOTE_INFORMATION");
-$xtpl->assign("BLOCK1_HEADER", $block_1_header);
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("MODULE",$currentModule);
+$smarty->assign("SINGLE_MOD","Note");
 
-if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
-else $xtpl->assign("NAME", "");
+if (isset($focus->name))
+$smarty->assign("NAME", $focus->name);
+else
+$smarty->assign("NAME", "");
 
 if($focus->mode == 'edit')
 {
-        $xtpl->assign("MODE", $focus->mode);
+        $smarty->assign("MODE", $focus->mode);
 }
 
-if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
-else $xtpl->assign("RETURN_MODULE","Notes");
-if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
-else $xtpl->assign("RETURN_ACTION","index");
-if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
-if (isset($_REQUEST['email_id'])) $xtpl->assign("EMAILID", $_REQUEST['email_id']);
+if (isset($_REQUEST['return_module']))
+$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+else
+$smarty->assign("RETURN_MODULE","Notes");
+if (isset($_REQUEST['return_action']))
+$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+else
+$smarty->assign("RETURN_ACTION","index");
+if (isset($_REQUEST['return_id']))
+$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+if (isset($_REQUEST['email_id']))
+$smarty->assign("EMAILID", $_REQUEST['email_id']);
 if (isset($_REQUEST['ticket_id'])) $xtpl->assign("TICKETID", $_REQUEST['ticket_id']);
-if (isset($_REQUEST['fileid'])) $xtpl->assign("FILEID", $_REQUEST['fileid']);
+if (isset($_REQUEST['fileid']))
+$smarty->assign("FILEID", $_REQUEST['fileid']);
 if (isset($_REQUEST['record']))
 {
-	 $xtpl->assign("CANCELACTION", "DetailView");
+         $smarty->assign("CANCELACTION", "DetailView");
 }
 else
 {
-	 $xtpl->assign("CANCELACTION", "index");
+         $smarty->assign("CANCELACTION", "index");
 }
-if (isset($_REQUEST['return_viewname'])) $xtpl->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
-$xtpl->assign("ID", $focus->id);
-$xtpl->assign("OLD_ID", $old_id );
+if (isset($_REQUEST['return_viewname']))
+$smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+$smarty->assign("ID", $focus->id);
+$smarty->assign("OLD_ID", $old_id );
 
 if ( empty($focus->filename))
 {
-	$xtpl->assign("FILENAME_TEXT", "");
-	$xtpl->assign("FILENAME", "");
+        $smarty->assign("FILENAME_TEXT", "");
+        $smarty->assign("FILENAME", "");
 }
 else
 {
-	$xtpl->assign("FILENAME_TEXT", "(".$focus->filename.")");
-	$xtpl->assign("FILENAME", $focus->filename);
+        $smarty->assign("FILENAME_TEXT", "(".$focus->filename.")");
+        $smarty->assign("FILENAME", $focus->filename);
 }
 
 if (isset($focus->parent_type) && $focus->parent_type != "") {
-	$change_parent_button = "<input title='".$app_strings['LBL_CHANGE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_CHANGE_BUTTON_KEY']."' tabindex='3' type='button' class='button' value='".$app_strings['LBL_CHANGE_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=\"+ document.EditView.parent_type.value + \"&action=Popup&html=Popup_picker&form=TasksEditView\",\"test\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
-	$xtpl->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
+        $change_parent_button = "<input title='".$app_strings['LBL_CHANGE_BUTTON_TITLE']."' accessKey='".$app_strings['LBL_CHANGE_BUTTON_KEY']."' tabindex='3' type='button' class='button' value='".$app_strings['LBL_CHANGE_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=\"+ document.EditView.parent_type.value + \"&action=Popup&html=Popup_picker&form=TasksEditView\",\"test\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
+        $smarty->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
 }
 if ($focus->parent_type == "Account") $xtpl->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=".urlencode($focus->parent_name));
 
-$xtpl->parse("main");
 
-$xtpl->out("main");
+$smarty->display("salesEditView.tpl");
 
 ?>
