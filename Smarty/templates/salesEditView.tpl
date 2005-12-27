@@ -141,31 +141,44 @@
 							{foreach key=label item=subdata from=$data}
 							<tr style="height:25px">
 							{foreach key=mainlabel item=maindata from=$subdata}
-							{if $maindata[0][0] eq 2}
-							<td width=20% class="dvtCellLabel" align=right><font color="red">*</font>{$maindata[1][0]}</td>
-							<td width=30% align=left class="dvtCellInfo"><input type="text" name="{$maindata[2][0]}" value="{$maindata[3][0]}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
-							{elseif $maindata[0][0] eq 11 || $maindata[0][0] eq 1 ||$maindata[0][0] eq 13 || $maindata[0][0] eq 7 || $maindata[0][0] eq 9}
-							<td width=20% class="dvtCellLabel" align=right>{$maindata[1][0]}</td>
-                                                        <td width=30% align=left class="dvtCellInfo"><input type="text" name="{$maindata[2][0]}"  value="{$maindata[3][0]}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'"></td>
-							{elseif $maindata[0][0] eq 19 || $maindata[0][0] eq 20}
+							   {assign var="uitype" value="$maindata[0][0]"}
+                                                           {assign var="fldlabel" value="$maindata[1][0]"}
+                                                           {assign var="fldname" value="$maindata[2][0]"}
+                                                           {assign var="fldvalue" value="$maindata[3][0]"}
+                                                           {assign var="secondvalue" value="$maindata[3][1]"}
+
+							{if $uitype eq 2}
+							<td width=20% class="dvtCellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
+							<td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
+							{elseif $uitype eq 11 || $uitype eq 1 || $uitype eq 13 || $uitype eq 7 || $uitype eq 9}
+							<td width=20% class="dvtCellLabel" align=right>{$fldlabel}</td>
+                                                        <td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}"  value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'"></td>
+							{elseif $uitype eq 19 || $uitype eq 20}
 							 <td width=20% class="dvtCellLabel" align=right>
-								{if $maindata[0][0] eq 20}<font color="red">*</font>{/if}
-								{$maindata[1][0]}</td>
-							 <td colspan=3><textarea class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" name="{$maindata[2][0]}"  onBlur="this.className='detailedViewTextBox'" cols="90" rows="8">
-                                                           {$maindata[3][0]}
+								{if $uitype eq 20}<font color="red">*</font>{/if}
+								{$fldlabel}</td>
+							 <td colspan=3><textarea class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" name="{$fldname}"  onBlur="this.className='detailedViewTextBox'" cols="90" rows="8">
+                                                           {$fldvalue}
                                                          </textarea>
                                                          </td>
-							{elseif $maindata[0][0] eq 21 || $maindata[0][0] eq 24}
-							  <td width=20% class="dvtCellLabel" align=right>{if $maindata[0][0] eq 24}<font color="red">*</font>{/if}{$maindata[1][0]}</td>
-                                                        <td width=30% align=left class="dvtCellInfo"><textarea value="{$maindata[3][0]}" name="{$maindata[2][0]}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" rows=2></textarea></td>
+							{elseif $uitype eq 21 || $uitype eq 24}
+							  <td width=20% class="dvtCellLabel" align=right>
+								{if $uitype eq 24}
+									<font color="red">*</font>
+								{/if}
+								{$fldlabel}
+							  </td>
+                                                        <td width=30% align=left class="dvtCellInfo"><textarea value="{$fldvalue}" name="{$fldname}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" rows=2></textarea></td>
 
-							{elseif $maindata[0][0] eq 15 || $maindata[0][0] eq 16}
+							{elseif $uitype eq 15 || $uitype eq 16}
 							<td width="20%" class="dvtCellLabel" align=right>
-								{if $maindata[0][0] eq 16}<font color="red">*</font>{/if}
-							{$maindata[1][0]}</td>
+								{if $uitype eq 16}
+									<font color="red">*</font>
+								{/if}
+							{$fldlabel}</td>
 							<td width="30%" align=left class="dvtCellInfo">
-							   <select name="{$maindata[2][0]}">
-								{foreach item=arr from=$maindata[3][0]}
+							   <select name="{$fldname}">
+								{foreach item=arr from=$fldvalue}
 									{foreach key=sel_value item=value from=$arr}
 										<option value={$sel_value} {$value}>{$sel_value}</option>
 									{/foreach}
@@ -174,11 +187,11 @@
 							   </select>
 							</td>
 
-							{elseif $maindata[0][0] eq 52 || $maindata[0][0] eq 53}
-                                                        <td width="20%" class="dvtCellLabel" align=right>{$maindata[1][0]}</td>
+							{elseif $uitype eq 52 || $uitype eq 53}
+                                                        <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
                                                         <td width="30%" align=left class="dvtCellInfo">
-                                                           <select name="{$maindata[2][0]}">
-                                                                {foreach item=arr from=$maindata[3][0]}
+                                                           <select name="{$fldname}">
+                                                                {foreach item=arr from=$fldvalue}
                                                                         {foreach key=sel_value item=value from=$arr}
                                                                                 <option value={$sel_value} {$value}>{$sel_value}</option>
                                                                         {/foreach}
@@ -186,70 +199,71 @@
                                                                 {/foreach}
                                                            </select>
                                                         </td>
-							{elseif $maindata[0][0] eq 51}
-							<td width="20%" class="dvtCellLabel" align=right>{$maindata[1][0]}</td>
-							<td width="30%" align=left class="dvtCellInfo"><input readonly name="account_name" style="border:1px solid #bababa;" type="text" value="{$maindata[3][0]}"><input name="{$maindata[2][0]}" type="hidden" value="'.$value.'">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific_account_address&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.account_id.value=\'\';this.form.account_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
+							{elseif $uitype eq 51}
+							<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
+							<td width="30%" align=left class="dvtCellInfo"><input readonly name="account_name" style="border:1px solid #bababa;" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="'.$value.'">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific_account_address&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.account_id.value=\'\';this.form.account_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
 							
-							{elseif $maindata[0][0] eq 50}
-							<td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$maindata[1][0]}</td>
-							<td width="30%" align=left class="dvtCellInfo"><input readonly name="account_name" type="text" value="{$maindata[3][0]}"><input name="{$maindata[2][0]}" type="hidden" value="'.$value.'">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
-							{elseif $maindata[0][0] eq 73}
-                                                        <td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$maindata[1][0]}</td>
-							<td width="30%" align=left class="dvtCellInfo"><input readonly name="account_name" type="text" value="{$maindata[3][0]}"><input name="{$maindata[2][0]}" type="hidden" value="'.$value.'">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific_account_address&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
+							{elseif $uitype eq 50}
+							<td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
+							<td width="30%" align=left class="dvtCellInfo"><input readonly name="account_name" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="'.$value.'">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
+							{elseif $uitype eq 73}
+                                                        <td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
+							<td width="30%" align=left class="dvtCellInfo"><input readonly name="account_name" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="'.$value.'">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific_account_address&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
 							
-							{elseif $maindata[0][0] eq 57}
-							<td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$maindata[1][0]}</td>
-							<td width="30%" align=left class="dvtCellInfo"><input name="contact_name" readonly type="text" style="border:1px solid #bababa;" value="{$maindata[3][0]}"><input name="{$maindata[2][0]}" type="hidden" value="'.$value.'">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.contact_id.value=\'\';this.form.contact_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
+							{elseif $uitype eq 57}
+							<td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
+							<td width="30%" align=left class="dvtCellInfo"><input name="contact_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="'.$value.'">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.contact_id.value=\'\';this.form.contact_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
 
-							{elseif $maindata[0][0] eq 17}
-							<td width="20%" class="dvtCellLabel" align=right>{$maindata[1][0]}</td>
-							<td width="30%" align=left class="dvtCellInfo">&nbsp;&nbsp;http://<input type="text" name="{$maindata[2][0]}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" value="{$maindata[3][0]}"></td>
+							{elseif $uitype eq 17}
+							<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
+							<td width="30%" align=left class="dvtCellInfo">&nbsp;&nbsp;http://<input type="text" name="{$fldname}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" value="{$fldvalue}"></td>
 							
-							{elseif $maindata[0][0] eq 71 || $maindata[0][0] eq 72}
+							{elseif $uitype eq 71 || $uitype eq 72}
 							<td width="20%" class="dvtCellLabel" align=right>
-							   {if $maindata[0][0] eq 72}
+							   {if $uitype eq 72}
 								<font color="red">*</font>
 							   {/if}
-							   {$maindata[1][0]}</td>
-							<td width="30%" align=left class="dvtCellInfo"><input name="{$maindata[2][0]}" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value="{$maindata[3][0]}"></td>
+							   {$fldlabel}</td>
+							<td width="30%" align=left class="dvtCellInfo"><input name="{$fldname}" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value="{$fldvalue}"></td>
 							
-							{elseif $maindata[0][0] eq 56}
-                                                        <td width="20%" class="dvtCellLabel" align=right>{$maindata[1][0]}</td>
-								{if $maindata[3][0] eq 1}
-							<td width="30%" align=left class="dvtCellInfo"><input name="{$maindata[2][0]}" type="checkbox"  checked></td>
+							{elseif $uitype eq 56}
+                                                        <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
+								{if $fldvalue eq 1}
+							<td width="30%" align=left class="dvtCellInfo"><input name="{$fldname}" type="checkbox"  checked></td>
 								{else}				
-							<td width="30%" align=left class="dvtCellInfo"><input name="{$maindata[2][0]}" type="checkbox"></td>
+							<td width="30%" align=left class="dvtCellInfo"><input name="{$fldname}" type="checkbox"></td>
 								{/if}
 
-							{elseif $maindata[0][0] eq 23 || $maindata[0][0] eq 5 || $maindata[0][0] eq 6}
-							<td width="20%" class="dvtCellLabel" align=right>{$maindata[1][0]}</td>
+							{elseif $uitype eq 23 || $uitype eq 5 || $uitype eq 6}
+							<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
 							<td width="30%" align=left class="dvtCellInfo">
-							   {foreach key=date_value item=time_value from=$maindata[3][0]}
+							   {foreach key=date_value item=time_value from=$fldvalue}
 								{assign var=date_val value="$date_value"}
 								{assign var=time_val value="$time_value"}
 							   {/foreach}
-							<input name="{$maindata[2][0]}" id="jscal_field" type="text" style="border:1px solid #bababa;" size="11" maxlength="10" value="{$date_val}">
+							<input name="{$fldname}" id="jscal_field" type="text" style="border:1px solid #bababa;" size="11" maxlength="10" value="{$date_val}">
 							<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger">
-							{if $maindata[0][0] eq 6}<input name="time_start" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">{/if}						
-
+							{if $uitype eq 6}
+							   <input name="time_start" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
+							{/if}
 							</td>
 		
-							{elseif $maindata[0][0] eq 55} 
-                                                          <td width="20%" class="dvtCellLabel" align=right>{$maindata[1][0]}</td>
+							{elseif $uitype eq 55} 
+                                                          <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
 							  <td width="30%" align=left class="dvtCellInfo"><select name="salutationtype">
-							  {foreach item=arr from=$maindata[3][0]}
+							  {foreach item=arr from=$fldvalue}
                                                               {foreach key=sel_value item=value from=$arr}
                                                               <option value={$sel_value} {$value}>{$sel_value}</option>
 							  {/foreach}
                                                         {/foreach}
                                                         </select>
-							<input type="text" name="{$maindata[2][0]}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value= "{$maindata[3][1]}">
+							<input type="text" name="{$fldname}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'" value= "{$secondvalue}">
                                                  </td>
 						 
-						{elseif $maindata[0][0] eq 22}
-                                                          <td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$maindata[1][0]}</td>
+						{elseif $uitype eq 22}
+                                                          <td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
 							  <td width="30%" align=left class="dvtCellInfo">
-								<textarea name="{$maindata[2][0]}" cols="30" rows="2">{$maindata[3][0]}</textarea>
+								<textarea name="{$fldname}" cols="30" rows="2">{$fldvalue}</textarea>
                                                  </td>
 
 
