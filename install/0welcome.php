@@ -52,6 +52,15 @@ foreach($pieces as $val)
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
+Welcome!
+Thank you for trying out vtigerCRM and for making it a part of your experience.
+Every developer and contributor has added value to it either in the
+form of bug reports, bug fixes, feature contribution or for that
+matter providing the hosting machine or maintenance of the forge. This
+is a product of pure teamwork. We intend to create something worth
+using and worth using for long.
+
+We sincerely hope, we are able to live upto your expectations.
 
 <!-- Master table -->
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
