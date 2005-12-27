@@ -94,7 +94,7 @@ class Security extends CRMEntity {
  $this->db->query("insert into blocks values (22,13,'',2,1,0,0,0,0)");
  $this->db->query("insert into blocks values (23,13,'LBL_DESCRIPTION_INFORMATION',3,0,0,0,0,0)");
  $this->db->query("insert into blocks values (24,13,'LBL_TICKET_RESOLUTION',4,0,0,1,0,0)");
- $this->db->query("insert into blocks values (25,13,'LBL_COMMENTS',5,0,2,1,0,0)");
+ $this->db->query("insert into blocks values (25,13,'LBL_COMMENTS',5,0,0,1,0,0)");
  $this->db->query("insert into blocks values (26,14,'LBL_PRODUCT_INFORMATION',1,0,0,0,0,0)");
  $this->db->query("insert into blocks values (27,14,'LBL_PRICING_INFORMATION',2,0,0,0,0,0)");
  $this->db->query("insert into blocks values (28,14,'LBL_STOCK_INFORMATION',3,0,0,0,0,0)");
