@@ -47,8 +47,8 @@ function renderRelatedContacts($query,$id)
 	}
 	$returnset = '&return_module=Activities&return_action=DetailView&activity_mode=Events&return_id='.$id;
 
-	$list = GetRelatedList('Activities','Contacts',$focus,$query,$button,$returnset);
-	echo '</form>';	
+	return GetRelatedList('Activities','Contacts',$focus,$query,$button,$returnset);
+	//echo '</form>';	
 }
 
 function renderRelatedProducts($query,$id)
@@ -203,6 +203,7 @@ function renderRelatedUsers($query,$id)
   require_once ($theme_path."layout_utils.php");
   $activity_id=$id;
   global $adb,$log;
+  
   global $mod_strings;
   global $app_strings;
 
@@ -236,23 +237,28 @@ function renderRelatedUsers($query,$id)
 
   $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
   $list .= '<td class="moduleListTitle">';
-
+ 
+  $header[] = $app_strings['LBL_LIST_NAME'];
   $list .= $app_strings['LBL_LIST_NAME'].'</td>';
   $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
   $list .= '<td class="moduleListTitle">';
 
+  $header[] = $app_strings['LBL_LIST_USER_NAME'];
   $list .= $app_strings['LBL_LIST_USER_NAME'].'</td>';
   $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
   $list .= '<td class="moduleListTitle">';
-
+  
+  $header[] = $app_strings['LBL_EMAIL'];
   $list .= $app_strings['LBL_EMAIL'].'</td>';
   $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
   $list .= '<td class="moduleListTitle">';
 
+  $header[] = $app_strings['LBL_PHONE']; 
   $list .= $app_strings['LBL_PHONE'].'</td>';
   $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
   $list .= '<td class="moduleListTitle" height="21">';
 
+ // $Header[] = $app_strings['LBL_ACTION'];
   $list .= $app_strings['LBL_ACTION'].'</td>';
   $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
   $list .= '<td class="moduleListTitle">';
@@ -260,6 +266,12 @@ function renderRelatedUsers($query,$id)
  // $list .= $app_strings['LBL_AVAILABLE'].'</td>';
   //$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
   //$list .= '<td class="moduleListTitle">';	
+
+/*	$Header[] = $app_strings['LBL_LIST_NAME'];
+	$Header[] = $app_strings['LBL_LIST_USER_NAME'];
+	$Header[] = $app_strings['LBL_EMAIL'];
+	$Header[] = $app_strings['LBL_PHONE'];
+	$Header[] = $app_strings['LBL_ACTION'];*/
 
   // To display the dates for the Group calendar starts -Jaguar
 	$recur_dates_qry='select distinct(recurringdate) from recurringevents where activityid='.$activity_id;
@@ -320,7 +332,9 @@ function renderRelatedUsers($query,$id)
   {
 	
     global $current_user;
-
+	
+    $entries = Array();	
+	
     if ($i%2==0)
       $trowclass = 'evenListRow';
     else
@@ -330,18 +344,20 @@ function renderRelatedUsers($query,$id)
     $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
     if(is_admin($current_user))
     {
-    	$list .= '<td width="30%"><a href="index.php?module=Users&action=DetailView&return_module=Activities&return_action=DetailView&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$row['last_name'].' '.$row['first_name'].'</td>';
+    	$entries[] = $row['last_name'].' '.$row['first_name'];
     }
     else
     {
-    	$list .= '<td width="30%">'.$row['last_name'].' '.$row['first_name'].'</td>';
+    	$entries[] = $row['last_name'].' '.$row['first_name'];
     }	
 
     $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
     $list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $row['user_name'];
 
-	$email = $row['email1'];
+   
+ $entries[] = $row['user_name'];
+
+	$entries[] = $row['email1'];
 	if($email == '')	$email = $row['email2'];
 	if($email == '')	$email = $row['yahoo_id'];
 
@@ -349,7 +365,7 @@ function renderRelatedUsers($query,$id)
     $list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
     $list .= '<a href=mailto:'.$email.'>'.$email.'</a>';
 
-	$phone = $row['phone_home'];
+	$entries[] = $row['phone_home'];
 	if($phone == '')	$phone = $row['phone_work'];
         if($phone == '')        $phone = $row['phone_other'];
         if($phone == '')	$phone = $row['phone_fax'];
@@ -381,7 +397,8 @@ function renderRelatedUsers($query,$id)
 	$act_due_date= getDBInsertDateValue($row['due_date']);
 
 	$act_time_start=$row['time_start'];
-	$act_hour_dur=$row['duration_hours'];
+//	$act_hour_dur=$rname,users.id  userid from users,crmentity where users.id=crmentity.smownerid and crmentity.crmid='.$id;
+//ow['duration_hours'];
 	$act_mins_dur=$row['duration_minutes'];
 
 	$activity_start_time=time_to_number($act_time_start);	
@@ -427,11 +444,12 @@ function renderRelatedUsers($query,$id)
 	$list .= '</td>';	
 		
 	
-
+	$entries_list[]=$entries;
     $list .= '</tr>';
     $i++;
   }
-
+//	print_r($header);
+//	print_r($entries_list);
   $list .= '<tr><td COLSPAN="10" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
   $list .= '</table>';
   if ($noofrows > 15)
@@ -440,7 +458,13 @@ function renderRelatedUsers($query,$id)
   }
   $list .= '</td></tr></table>';
 
-  echo $list;
+	if($entries_list != '')
+		$return_data = array('header'=>$header, 'entries'=>$entries_list);
+		return $return_data;
+	print_r($return_data);
+ // echo $list;
+
+
 
   echo "<BR>\n";
 }

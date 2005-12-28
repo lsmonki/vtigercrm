@@ -58,8 +58,8 @@ function renderSalesRelatedActivities($query,$id)
 	}
 	$returnset = '&return_module=SalesOrder&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('SalesOrder','Activities',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('SalesOrder','Activities',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 
 function renderRelatedOrders($query,$id)
@@ -91,8 +91,8 @@ function renderRelatedAttachments($query,$id,$sid='salesorderid')
         $hidden = getHiddenValues($id,$sid);
         echo $hidden;
 
-	getAttachmentsAndNotes('SalesOrder',$query,$id,$sid);
-	echo '</form>';
+	return getAttachmentsAndNotes('SalesOrder',$query,$id,$sid);
+	//echo '</form>';
 }
 
 /** Function to get the list of invoices associated with a salesorder
@@ -113,8 +113,8 @@ function renderRelatedInvoices($query,$id)
 	$button = '';
 	$returnset = '&return_module=SalesOrder&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('SalesOrder','Invoice',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('SalesOrder','Invoice',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 
 /** Function to get the history list related to a salesorder
@@ -123,7 +123,7 @@ function renderRelatedInvoices($query,$id)
 */
 function renderRelatedHistory($query,$id)
 {
-	getHistory('SalesOrder',$query,$id);
+	return getHistory('SalesOrder',$query,$id);
 }
 
 

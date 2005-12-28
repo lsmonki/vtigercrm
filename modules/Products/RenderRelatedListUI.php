@@ -60,8 +60,8 @@ function renderRelatedTickets($query,$id)
 	}
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Products','HelpDesk',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Products','HelpDesk',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 
 
@@ -89,8 +89,8 @@ function renderRelatedActivities($query,$id,$cntid='')
 	}
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Products','Activities',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Products','Activities',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 
 function renderRelatedAttachments($query,$id,$cntid='')
@@ -103,9 +103,9 @@ function renderRelatedAttachments($query,$id,$cntid='')
 
         echo $hidden;
 
-        getAttachmentsAndNotes('Products',$query,$id);
+        return getAttachmentsAndNotes('Products',$query,$id);
 
-        echo '</form>';
+        //echo '</form>';
 }
 function renderPriceBookRelatedProducts($query,$id)
 {
@@ -125,10 +125,10 @@ function renderPriceBookRelatedProducts($query,$id)
 	$returnset = '&return_module=Products&return_action=PriceBookDetailView&return_id='.$id;
 
 	//$list = GetRelatedList('PriceBook','Products',$focus,$query,$button,$returnset,'updatePbListPrice','DeletePbProductRel');
-	  $list = getPriceBookRelatedProducts($query,$focus,$returnset);
+	  return getPriceBookRelatedProducts($query,$focus,$returnset);
 
 		
-	echo '</form>';
+	//echo '</form>';
 }
 
 function renderRelatedProducts($query,$id,$sid="product_id")
@@ -214,8 +214,8 @@ function renderProductPurchaseOrders($query,$id,$vendid='',$cntid='')
 	}
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Products','PurchaseOrder',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Products','PurchaseOrder',$focus,$query,$button,$returnset);
+	//echo '</form>';
 } 
 function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
 {
@@ -246,8 +246,8 @@ function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
 	}
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Products','SalesOrder',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Products','SalesOrder',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 
 function renderRelatedContacts($query,$id)
@@ -331,8 +331,8 @@ function renderRelatedInvoices($query,$id,$cntid='',$prtid='')
 	}
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Products','Invoice',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Products','Invoice',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 function renderProductRelatedPriceBooks($query,$id)
 {

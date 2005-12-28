@@ -55,8 +55,8 @@ function renderRelatedActivities($query,$id)
 	}
 	$returnset = '&return_module=HelpDesk&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('HelpDesk','Activities',$focus,$query,$button,$returnset);
-        echo '</form>';
+	return GetRelatedList('HelpDesk','Activities',$focus,$query,$button,$returnset);
+        //echo '</form>';
 }
 
 /**     Function to display the Attachments and Notes which are related to the Ticket
@@ -69,9 +69,9 @@ function renderRelatedAttachments($query,$id)
        $hidden = getHiddenValues($id);
         echo $hidden;
 
-        getAttachmentsAndNotes('HelpDesk',$query,$id);
+        return getAttachmentsAndNotes('HelpDesk',$query,$id);
 
-        echo '</form>';
+        //echo '</form>';
 }
 
 /**     Function to display the History of the Ticket which just includes a file which contains the TicketHistory informations

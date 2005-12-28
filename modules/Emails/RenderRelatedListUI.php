@@ -53,9 +53,9 @@ function renderRelatedContacts($query,$id)
 	}
 	$returnset = '&return_module=Emails&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Emails','Contacts',$focus,$query,$button,$returnset);
+	return GetRelatedList('Emails','Contacts',$focus,$query,$button,$returnset);
 	 $log->info("Contact Related List for Email is Displayed");
-	echo '</form>';
+	//echo '</form>';
 }
 
 /**	Function to display the Attachments and Notes which are related to the Email
@@ -67,9 +67,9 @@ function renderRelatedAttachments($query,$id)
         $hidden = getHiddenValues($id);
         echo $hidden;
 
-        getAttachmentsAndNotes('Emails',$query,$id);
-	  $log->info("Notes&Attachments Related List for Email is Displayed");
-        echo '</form>';
+        return getAttachmentsAndNotes('Emails',$query,$id);
+        $log->info("Notes&Attachments Related List for Email is Displayed");
+       // echo '</form>';
 }
 
 /**	Function to display the Users who all are related to the Email
@@ -124,19 +124,23 @@ function renderRelatedUsers($query)
 
 	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td class="moduleListTitle">';
-
+        
+        $header[] = $app_strings['LBL_LIST_NAME'];
 	$list .= $app_strings['LBL_LIST_NAME'].'</td>';
 	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td class="moduleListTitle">';
 
+	$header = $app_strings['LBL_LIST_USER_NAME'];
 	$list .= $app_strings['LBL_LIST_USER_NAME'].'</td>';
 	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td class="moduleListTitle">';
 
+	$header = $app_strings['LBL_EMAIL'];
 	$list .= $app_strings['LBL_EMAIL'].'</td>';
 	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td class="moduleListTitle">';
 
+	$header = $app_strings['LBL_PHONE'];
 	$list .= $app_strings['LBL_PHONE'].'</td>';
 	$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td class="moduleListTitle" height="21">';
@@ -155,6 +159,8 @@ function renderRelatedUsers($query)
 	{
 
 		global $current_user;
+		
+		$entries = Array();
 
 		if ($i%2==0)
 			$trowclass = 'evenListRow';
@@ -165,18 +171,18 @@ function renderRelatedUsers($query)
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		if(is_admin($current_user))
 		{
-			$list .= '<td width="30%"><a href="index.php?module=Users&action=DetailView&return_module=Emails&return_action=DetailView&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$row['last_name'].' '.$row['first_name'].'</td>';
+			$entries[] = $row['last_name'].' '.$row['first_name'];
 		}
 		else
 		{
-			$list .= '<td width="30%">'.$row['last_name'].' '.$row['first_name'].'</td>';
+			$entries[] = $row['last_name'].' '.$row['first_name'];
 		}		
 
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-		$list .= $row['user_name'];
+		$entries[] = $row['user_name'];
 
-		$email = $row['email1'];
+		$entries[] = $row['email1'];
 		if($email == '')        $email = $row['email2'];
 		if($email == '')        $email = $row['yahoo_id'];
 
@@ -184,7 +190,7 @@ function renderRelatedUsers($query)
 		$list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
 		$list .= '<a href=mailto:'.$email.'>'.$email.'</a>';
 
-		$phone = $row['phone_home'];
+		$entries[] = $row['phone_home'];
 		if($phone == '')        $phone = $row['phone_work'];
 		if($phone == '')        $phone = $row['phone_mobile'];
 		if($phone == '')        $phone = $row['phone_other'];
@@ -199,12 +205,12 @@ function renderRelatedUsers($query)
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
 		//Adding Security Check for User
-		if(is_admin($current_user))
+/*		if(is_admin($current_user))
 		{	 			
 			$list .= '<a href="index.php?module=Users&action=EditView&return_module=Emails&return_action=DetailView&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_EDIT'].'</a>  |';
 		}		
-		$list .= '<a href="index.php?module=Users&action=Delete&return_module=Emails&return_action=DetailView&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_DELETE'].'</a>';
-
+		$list .= '<a href="index.php?module=Users&action=Delete&return_module=Emails&return_action=DetailView&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_DELETE'].'</a>';*/
+		$entries_list[] = entries;
 		$list .= '</tr>';
 		$i++;
 	}
@@ -215,6 +221,10 @@ function renderRelatedUsers($query)
 	{
 		$list .='</div>';
 	}
+
+	if($entries_list != '')
+		$return_data = array("header"=>$header, "entries"=>$entries);
+		return $return_data;
 
 	echo $list;
 

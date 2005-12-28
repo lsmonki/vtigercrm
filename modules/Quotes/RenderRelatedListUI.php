@@ -48,7 +48,7 @@ function renderRelatedActivities($query,$id)
 	}
 	$returnset = '&return_module=Quotes&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Quotes','Activities',$focus,$query,$button,$returnset);
+	return GetRelatedList('Quotes','Activities',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
 
@@ -67,12 +67,12 @@ function renderRelatedOrders($query,$id)
 
 	$returnset = '&return_module=Quotes&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Quotes','SalesOrder',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Quotes','SalesOrder',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 function renderRelatedHistory($query,$id)
 {
-	getHistory('Quotes',$query,$id);
+	return getHistory('Quotes',$query,$id);
 }
 
 

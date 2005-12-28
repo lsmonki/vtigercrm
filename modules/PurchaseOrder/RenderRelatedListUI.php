@@ -58,8 +58,8 @@ function renderRelatedActivities($query,$id,$sid='purchaseorderid')
 	}
 	$returnset = '&return_module=PurchaseOrder&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('PurchaseOrder','Activities',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('PurchaseOrder','Activities',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 
 
@@ -73,8 +73,8 @@ function renderRelatedAttachments($query,$id,$sid='purchaseorderid')
         $hidden = getHiddenValues($id,$sid);
         echo $hidden;
 
-	getAttachmentsAndNotes('PurchaseOrder',$query,$id,$sid);
-	echo '</form>';
+	return getAttachmentsAndNotes('PurchaseOrder',$query,$id,$sid);
+	//echo '</form>';
 }
 
 
@@ -84,7 +84,7 @@ function renderRelatedAttachments($query,$id,$sid='purchaseorderid')
 */
 function renderRelatedHistory($query,$id)
 {
-	getHistory('PurchaseOrder',$query,$id);
+	return getHistory('PurchaseOrder',$query,$id);
 }
 
 

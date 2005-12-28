@@ -46,8 +46,8 @@ function renderRelatedActivities($query,$id)
 	}
 	$returnset = '&return_module=Invoice&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Invoice','Activities',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return  GetRelatedList('Invoice','Activities',$focus,$query,$button,$returnset);
+	//echo '</form>';
 }
 
 function renderRelatedAttachments($query,$id)
@@ -55,13 +55,13 @@ function renderRelatedAttachments($query,$id)
         $hidden = getHiddenValues($id);
         echo $hidden;
 
-	getAttachmentsAndNotes('Invoice',$query,$id);
-	echo '</form>';
+	return getAttachmentsAndNotes('Invoice',$query,$id);
+	//echo '</form>';
 }
 
 function renderRelatedHistory($query,$id)
 {
-	getHistory('Invoice',$query,$id);
+	return getHistory('Invoice',$query,$id);
 }
 
 
