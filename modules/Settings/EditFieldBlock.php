@@ -12,7 +12,6 @@
 require_once('XTemplate/xtpl.php');
 require_once('include/utils/UserInfoUtil.php');
 require_once("include/utils/utils.php");
-include('include/utils/utils.php');
 
 global $app_strings;
 global $app_list_strings;
@@ -30,7 +29,7 @@ $mod_strings = return_module_language($current_language,$fld_module);
 
 $saveNames = array();
 
-function getBlocks($tabId) {
+function getBlocksFields($tabId) {
 	global $adb,$saveNames;
 
 	$b = array();	
@@ -49,7 +48,7 @@ function getBlocks($tabId) {
 	return $b;
 }
 
-$blocks = getBlocks($tabid);
+$blocks = getBlocksFields($tabid);
 $blockid = array(1,2,3,4,5,6,7,8,9);
 $blockids = implode(",",$blockid);
 
