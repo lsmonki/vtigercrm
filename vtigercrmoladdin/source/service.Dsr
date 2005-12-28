@@ -3,8 +3,8 @@ Begin {AC0714F6-3D04-11D1-AE7D-00A0C90F26F4} service
    ClientHeight    =   9630
    ClientLeft      =   1740
    ClientTop       =   1545
-   ClientWidth     =   11940
-   _ExtentX        =   21061
+   ClientWidth     =   10545
+   _ExtentX        =   18600
    _ExtentY        =   16986
    _Version        =   393216
    Description     =   "vtigerCRM Outlook Addin"
