@@ -92,7 +92,7 @@ class Lead extends CRMEntity {
 	//construct this from database;	
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('lastname','email','phone','company','smownerid');
+	var $sortby_fields = Array('lastname','firstname','email','phone','company','smownerid');
        
 	var $combofieldNames = Array('leadsource'=>'leadsource_dom'
                       ,'salutation'=>'salutation_dom'
@@ -107,7 +107,8 @@ class Lead extends CRMEntity {
 	
 	// This is the list of fields that are in the lists.
         var $list_fields = Array(
-                                'Name'=>Array('leaddetails'=>'lastname'),
+                                'Last Name'=>Array('leaddetails'=>'lastname'),
+                                'First Name'=>Array('leaddetails'=>'firstname'),
                                 'Company'=>Array('leaddetails'=>'company'),
                                 'Phone'=>Array('leadaddress'=>'phone'),
                                 'Website'=>Array('leadsubdetails'=>'website'),
@@ -115,7 +116,8 @@ class Lead extends CRMEntity {
                                 'Assigned To'=>Array('crmentity'=>'smownerid')
                                 );
         var $list_fields_name = Array(
-                                        'Name'=>'lastname',
+                                        'Last Name'=>'lastname',
+                                        'First Name'=>'firstname',
                                         'Company'=>'company',
                                         'Phone'=>'phone',
                                         'Website'=>'website',
