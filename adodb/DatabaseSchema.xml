@@ -6047,7 +6047,28 @@ E</constraint>
 		<field name="permission" type="I" size="19">
                 </field>
         </table>
-        
+		
+     <table name="parenttab">
+        <field name="parenttabid" type="I" size="19"><NOTNULL/>
+			<KEY/>
+        </field>
+		<field name="parenttab_label" type="C" size="100"><NOTNULL/>
+        </field>
+		<field name="sequence" type="I" size="10"><NOTNULL/>
+        </field>
+		<field name="visible" type="I" size="2"><NOTNULL/><DEFAULT value="0"/>
+        </field>
+     </table>
+  		
+		<table name="parenttabrel">
+        <field name="parenttabid" type="I" size="3"><NOTNULL/>
+        </field>
+		<field name="tabid" type="I" size="3"><NOTNULL/>
+		</field>
+		<field name="sequence" type="I" size="3"><NOTNULL/>
+        </field>
+     </table>
+ 
 
 
 </schema>
