@@ -135,7 +135,7 @@ function massDelete()
 
 				<tr>
 					<td style="padding-right:0px"><a href="index.php?module={$MODULE}&action=EditView"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
-					<td style="padding-right:0px"><a href="#" onClick="moveMe('searchAcc');showhide('searchAcc')" ><img src="{$IMAGE_PATH}btnL3Search.gif" alt="Search in {$MODULE}..." title="Search in {$MODULE}..." border=0></a></a></td>
+					 <td style="padding-right:0px"><a href="#" onClick="moveMe('searchAcc');showhide('searchAcc')" ><img src="{$IMAGE_PATH}btnL3Search.gif" alt="Search in {$MODULE}..." title="Search in {$MODULE}..." border=0></a></a></td>
 
 				</tr>
 				</table>
@@ -162,14 +162,18 @@ function massDelete()
 		</tr>
 		</table>
 	</td>
+	{if $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Accounts' || $MODULE eq 'Potentials' || $MODULE eq 'Products' || $MODULE eq 'Notes' || $MODULE eq 'Emails'}
 	<td class="sep1" style="width:1px"></td>
 	<td nowrap style="width:50%;padding:10px">
-
-		<a href="index.php?module={$MODULE}&action=Import&step=1&return_module={$MODULE}&return_action=index">Import {$MODULE}</a> | <a href="index.php?module={$MODULE}&action=Export&all=1">Export {$MODULE}</a>
+		{if $MODULE ne 'Notes' && $MODULE ne 'Emails'}	
+		<a href="index.php?module={$MODULE}&action=Import&step=1&return_module={$MODULE}&return_action=index">Import {$MODULE}</a> |	
+		{/if}
+		<a href="index.php?module={$MODULE}&action=Export&all=1">Export {$MODULE}</a>
 		{if $MODULE eq 'Contacts'}
 			&nbsp;|&nbsp;<a href='index.php?module={$MODULE}&action=AddBusinessCard&return_module={$MODULE}&return_action=ListView'>Add Business Card</a>
 		{/if}
 	</td>
+	{/if}
 </tr>
 <tr><td style="height:2px"></td></tr>
 
