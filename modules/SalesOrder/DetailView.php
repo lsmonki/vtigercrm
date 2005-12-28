@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/SalesOrder/SalesOrder.php');
 require_once('include/CustomFieldUtil.php');
@@ -49,96 +49,60 @@ require_once($theme_path.'layout_utils.php');
 
 $log->info("SalesOrder detail view");
 
-$xtpl=new XTemplate ('modules/SalesOrder/DetailView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
+$smarty = new vtigerCRM_Smarty;
 
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);
-$xtpl->assign("MODULE","SalesOrder");
-$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
-else $xtpl->assign("NAME", "");
-//get Block 1 Information
-$block_1_header = getBlockTableHeader("LBL_SO_INFORMATION");
-$block_1 = getDetailBlockInformation("SalesOrder",1,$focus->column_fields);
-$xtpl->assign("BLOCK1_HEADER", $block_1_header);
-$xtpl->assign("BLOCK1", $block_1);
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
 
-//get Address Information
-$block_2_header = getBlockTableHeader("LBL_ADDRESS_INFORMATION");
-$block_2 = getDetailBlockInformation("SalesOrder",2,$focus->column_fields);
-$xtpl->assign("BLOCK2_HEADER", $block_2_header);
-$xtpl->assign("BLOCK2", $block_2);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
-//get Description Information
-$block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
-$block_3 = getDetailBlockInformation("SalesOrder",3,$focus->column_fields);
-$xtpl->assign("BLOCK3_HEADER", $block_3_header);
-$xtpl->assign("BLOCK3", $block_3);
+if (isset($focus->name)) 
+$smarty->assign("NAME", $focus->name);
+else 
+$smarty->assign("NAME", "");
+$smarty->assign("BLOCKS", getBlocks("SalesOrder","detail_view",'',$focus->column_fields));
 
-//get Terms&Conditions
-$block_6_header = getBlockTableHeader("LBL_TERMS_INFORMATION");
-$block_6 = getDetailBlockInformation("SalesOrder",6,$focus->column_fields);
-$xtpl->assign("BLOCK6_HEADER", $block_6_header);
-$xtpl->assign("BLOCK6", $block_6);
 
-$block_4 = getDetailAssociatedProducts('SalesOrder',$focus);
-$xtpl->assign("BLOCK4", $block_4);
-
-$block_5 = getDetailBlockInformation("SalesOrder",5,$focus->column_fields);
-if(trim($block_5) != '')
-{
-        $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
-        $cust_fld .=  '<tr><td>';
-	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
-        $cust_fld .= $block_5_header;
-        $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= $block_5;
-        $cust_fld .= '</table>';
-        $cust_fld .= '</td></tr></table>';
-	$cust_fld .= '<BR>';
-
-}
-
-$xtpl->assign("CUSTOMFIELD", $cust_fld);
-
-$xtpl->assign("ID", $_REQUEST['record']);
-
+$smarty->assign("CUSTOMFIELD", $cust_fld);
+$smarty->assign("ID", $_REQUEST['record']);
+$smarty->assign("SINGLE_MOD", "SalesOrder");
 
 $permissionData = $_SESSION['action_permission_set'];
 
 if(isPermitted("SalesOrder",1,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView';this.form.module.value='SalesOrder'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
+	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView';this.form.module.value='SalesOrder'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">");
 
 
-	$xtpl->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.module.value='SalesOrder';this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.module.value='SalesOrder';this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">");
 }
 
-	$xtpl->assign("CREATEPDF","<td><input title=\"Export To PDF\" accessKey=\"Alt+e\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.module.value='SalesOrder';this.form.action.value='CreateSOPDF'\" type=\"submit\" name=\"$app_strings[LBL_EXPORT_TO_PDF]\" value=\"Export To PDF\"></td>");
+	$smarty->assign("CREATEPDF","<input title=\"Export To PDF\" accessKey=\"Alt+e\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.module.value='SalesOrder';this.form.action.value='CreateSOPDF'\" type=\"submit\" name=\"$app_strings[LBL_EXPORT_TO_PDF]\" value=\"Export To PDF\">");
 
 
 if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("CONVERTINVOICE","<td><input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Invoice'; this.form.return_action.value='DetailView'; this.form.convertmode.value='sotoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("CONVERTINVOICE","<input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Invoice'; this.form.return_action.value='DetailView'; this.form.convertmode.value='sotoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\">");
 }
 
 
 if(isPermitted("SalesOrder",2,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='index';this.form.module.value='SalesOrder'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='index';this.form.module.value='SalesOrder'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">");
 }
 
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty->assign("MODULE", $module);
+$smarty->display("DetailView.tpl");
+
 
 echo "<BR>\n";
 //Security check for related list
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
-getRelatedLists("SalesOrder",$focus);
+//getRelatedLists("SalesOrder",$focus);
 
 
 ?>
