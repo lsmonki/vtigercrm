@@ -717,16 +717,16 @@ if($currentModule == 'Faq')
 
 // set user, theme and language cookies so that login screen defaults to last values
 if (isset($_SESSION['authenticated_user_id'])) {
-        $log->debug("setting cookie ck_login_id to ".$_SESSION['authenticated_user_id']);
-        setcookie('ck_login_id', $_SESSION['authenticated_user_id']);
+        $log->debug("setting cookie ck_login_id_vtiger to ".$_SESSION['authenticated_user_id']);
+        setcookie('ck_login_id_vtiger', $_SESSION['authenticated_user_id']);
 }
 if (isset($_SESSION['authenticated_user_theme'])) {
-        $log->debug("setting cookie ck_login_theme to ".$_SESSION['authenticated_user_theme']);
-        setcookie('ck_login_theme', $_SESSION['authenticated_user_theme']);
+        $log->debug("setting cookie ck_login_theme_vtiger to ".$_SESSION['authenticated_user_theme']);
+        setcookie('ck_login_theme_vtiger', $_SESSION['authenticated_user_theme']);
 }
 if (isset($_SESSION['authenticated_user_language'])) {
-        $log->debug("setting cookie ck_login_language to ".$_SESSION['authenticated_user_language']);
-        setcookie('ck_login_language', $_SESSION['authenticated_user_language']);
+        $log->debug("setting cookie ck_login_language_vtiger to ".$_SESSION['authenticated_user_language']);
+        setcookie('ck_login_language_vtiger', $_SESSION['authenticated_user_language']);
 }
 
 //skip headers for popups, deleting, saving, importing and other actions

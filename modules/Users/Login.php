@@ -44,8 +44,8 @@ else
 	{
 		$login_user_name = $_REQUEST['default_user_name'];
 	}
-	elseif (isset($_REQUEST['ck_login_id'])) {
-		$login_user_name = get_assigned_user_name($_REQUEST['ck_login_id']);
+	elseif (isset($_REQUEST['ck_login_id_vtiger'])) {
+		$login_user_name = get_assigned_user_name($_REQUEST['ck_login_id_vtiger']);
 	}
 	else
 	{
@@ -189,15 +189,15 @@ else if(isset($login_error) && $login_error != "")
 <?php
 }
 
-if (isset($_REQUEST['ck_login_language'])) {
-	$display_language = $_REQUEST['ck_login_language'];
+if (isset($_REQUEST['ck_login_language_vtiger'])) {
+	$display_language = $_REQUEST['ck_login_language_vtiger'];
 }
 else {
 	$display_language = $default_language;
 }
 
-if (isset($_REQUEST['ck_login_theme'])) {
-	$display_theme = $_REQUEST['ck_login_theme'];
+if (isset($_REQUEST['ck_login_theme_vtiger'])) {
+	$display_theme = $_REQUEST['ck_login_theme_vtiger'];
 }
 else {
 	$display_theme = $default_theme;
