@@ -135,7 +135,7 @@ class Order extends CRMEntity {
 	function get_activities($id)
         {
                $query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid,activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus != '' &&  activity.eventstatus = 'Planned')";
-                renderRelatedActivities($query,$id);
+               return renderRelatedActivities($query,$id);
         }
 
 /** Function to get history associated with the id
@@ -158,7 +158,7 @@ class Order extends CRMEntity {
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
-		renderRelatedHistory($query,$id);
+	return renderRelatedHistory($query,$id);
 	}
 
 /** Function to get attachments associated with the id
@@ -198,7 +198,7 @@ class Order extends CRMEntity {
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".$id."
 		order by createdtime desc";
-		renderRelatedAttachments($query,$id);
+		return renderRelatedAttachments($query,$id);
 	}
 
 }

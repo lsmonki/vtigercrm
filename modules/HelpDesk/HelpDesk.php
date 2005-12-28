@@ -91,7 +91,7 @@ class HelpDesk extends CRMEntity {
 	function get_activities($id)
 	{
 		$query = "SELECT activity.*, crmentity.crmid, contactdetails.contactid, contactdetails.lastname, contactdetails.firstname, recurringevents.recurringtype, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left outer join recurringevents on recurringevents.activityid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
-		renderRelatedActivities($query,$id);
+	return renderRelatedActivities($query,$id);
 	}
 
 	/**	Function to form the query to get the list of attachments and notes
@@ -126,7 +126,7 @@ class HelpDesk extends CRMEntity {
 			inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".$id;	
-		renderRelatedAttachments($query,$id);	
+		return renderRelatedAttachments($query,$id);	
 	}
 
 	/**	Function to get the ticket comments as a array

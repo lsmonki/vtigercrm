@@ -103,7 +103,7 @@ class Email extends CRMEntity {
 		//$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
 		//SQL injectiong given by Chris is added
 		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.PearDatabase::quote($id).' and crmentity.deleted=0';
-		renderRelatedContacts($query,$id);
+	return renderRelatedContacts($query,$id);
 	}
 	
 	/** Returns a list of the associated users
@@ -115,7 +115,7 @@ class Email extends CRMEntity {
 	{
 		//$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
 		$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.PearDatabase::quote($id);
-		renderRelatedUsers($query);
+	return renderRelatedUsers($query);
 	}
 
 	/**
@@ -149,7 +149,7 @@ class Email extends CRMEntity {
 		where crmentity.crmid=".PearDatabase::quote($id);
 		//where crmentity.crmid=".$id;
 
-		renderRelatedAttachments($query,$id);
+	return	renderRelatedAttachments($query,$id);
 	}
 
         /**

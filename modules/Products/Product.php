@@ -132,7 +132,7 @@ class Product extends CRMEntity {
 			inner join users on crmentity.smcreatorid= users.id
 		where crmentity.crmid=".$id;	
 
-                renderRelatedAttachments($query,$id,$this->column_fields['contact_id']);
+               return renderRelatedAttachments($query,$id,$this->column_fields['contact_id']);
         }
 
 	function get_opportunities($id)
@@ -145,7 +145,7 @@ class Product extends CRMEntity {
         {
 		//$query = 'select users.user_name, users.id, products.productid,products.productname, troubletickets.ticketid, troubletickets.parent_id, troubletickets.title, troubletickets.status, troubletickets.priority, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from products  inner join seticketsrel on seticketsrel.crmid = products.productid inner join troubletickets on troubletickets.ticketid = seticketsrel.ticketid inner join crmentity on crmentity.crmid = troubletickets.ticketid left join users on users.id=crmentity.smownerid where products.productid= '.$id.' and crmentity.deleted=0';
 		$query = "select users.user_name, users.id, products.productid,products.productname, troubletickets.ticketid, troubletickets.parent_id, troubletickets.title, troubletickets.status, troubletickets.priority, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join products on products.productid=troubletickets.product_id left join users on users.id=crmentity.smownerid where crmentity.deleted=0 and products.productid=".$id;
-          renderRelatedTickets($query,$id);
+     	 return renderRelatedTickets($query,$id);
         }
 
 	function get_meetings($id)
@@ -158,32 +158,32 @@ class Product extends CRMEntity {
 	{
 		//$query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
-              renderRelatedActivities($query,$id,$this->column_fields['contact_id']);
+        return renderRelatedActivities($query,$id,$this->column_fields['contact_id']);
 	}
 	function get_quotes($id)
  	{
 		$query = "select crmentity.*, quotes.*,potential.potentialname,account.accountname,quotesproductrel.productid from quotes inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesproductrel on quotesproductrel.quoteid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0 and quotesproductrel.productid=".$id;
-		renderRelatedQuotes($query,$id,$this->column_fields['contact_id'],$this->column_fields['parent_id']);
+	return	renderRelatedQuotes($query,$id,$this->column_fields['contact_id'],$this->column_fields['parent_id']);
 	}
 	function get_purchase_orders($id)
 	{
 		$query = "select crmentity.*, purchaseorder.*,products.productname,poproductrel.productid from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join poproductrel on poproductrel.purchaseorderid=purchaseorder.purchaseorderid inner join products on products.productid=poproductrel.productid where crmentity.deleted=0 and products.productid=".$id;
-	      	renderProductPurchaseOrders($query,$id,$this->column_fields['vendor_id'],$this->column_fields['contact_id']);
+	return renderProductPurchaseOrders($query,$id,$this->column_fields['vendor_id'],$this->column_fields['contact_id']);
         }
 	function get_salesorder($id)
 	{
 		$query = "select crmentity.*, salesorder.*, products.productname as productname, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join soproductrel on soproductrel.salesorderid=salesorder.salesorderid inner join products on products.productid=soproductrel.productid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0 and products.productid = ".$id;
-		renderProductSalesOrders($query,$id,$this->column_fields['contact_id'],$this->column_fields['parent_id']);	
+	return renderProductSalesOrders($query,$id,$this->column_fields['contact_id'],$this->column_fields['parent_id']);	
 	}
 	function get_invoices($id)
 	{
 		$query = "select crmentity.*, invoice.*, invoiceproductrel.quantity, account.accountname from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join invoiceproductrel on invoiceproductrel.invoiceid=invoice.invoiceid where crmentity.deleted=0 and invoiceproductrel.productid=".$id;
-                renderRelatedInvoices($query,$id,$this->column_fields['contact_id'],$this->column_fields['parent_id']);
+        return renderRelatedInvoices($query,$id,$this->column_fields['contact_id'],$this->column_fields['parent_id']);
 	}
 	function get_product_pricebooks($id)
         {                                                                                                                     
        	 	$query = 'select crmentity.crmid, pricebook.*,pricebookproductrel.productid as prodid from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid inner join pricebookproductrel on pricebookproductrel.pricebookid=pricebook.pricebookid where crmentity.deleted=0 and pricebookproductrel.productid='.$id; 
-	 	renderProductRelatedPriceBooks($query,$id);                                                                  
+	return renderProductRelatedPriceBooks($query,$id);                                                                  
 	}
 	function product_novendor()
 	{

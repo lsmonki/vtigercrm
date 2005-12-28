@@ -144,7 +144,7 @@ class SalesOrder extends CRMEntity {
 	function get_activities($id)
 	{
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status !='Deferred') or (activity.eventstatus != '' &&  activity.eventstatus = 'Planned')";
-		renderSalesRelatedActivities($query,$id);
+	return renderSalesRelatedActivities($query,$id);
 	}
 
 /** Function to get history associated with the id
@@ -167,7 +167,7 @@ class SalesOrder extends CRMEntity {
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
-		renderRelatedHistory($query,$id);
+	return renderRelatedHistory($query,$id);
 	}
 
 /** Function to get attachments associated with the id
@@ -207,7 +207,7 @@ class SalesOrder extends CRMEntity {
 			inner join users on crmentity.smcreatorid= users.id
 		where crmentity.crmid=".$id."
 		order by createdtime desc";
-		renderRelatedAttachments($query,$id,$sid='salesorderid');
+	return renderRelatedAttachments($query,$id,$sid='salesorderid');
 	}
 
 /** Function to get invoices associated with the id
@@ -217,7 +217,7 @@ class SalesOrder extends CRMEntity {
 	function get_invoices($id)
 	{
 		$query = "select crmentity.*, invoice.*, account.accountname, salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join salesorder on salesorder.salesorderid=invoice.salesorderid where crmentity.deleted=0 and salesorder.salesorderid=".$id;
-		renderRelatedInvoices($query,$id);
+	return	renderRelatedInvoices($query,$id);
 	}
 
 }

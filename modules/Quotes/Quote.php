@@ -179,12 +179,12 @@ class Quote extends CRMEntity {
 	function get_salesorder($id)
 	{
 		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0 and salesorder.quoteid = ".$id;
-		renderRelatedOrders($query,$id);	
+	return	renderRelatedOrders($query,$id);	
 	}
 	function get_activities($id)
 	{
 		$query = "SELECT contactdetails.contactid, contactdetails.lastname, contactdetails.firstname, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus !='' && activity.eventstatus = 'Planned')";
-		renderRelatedActivities($query,$id);
+	return renderRelatedActivities($query,$id);
 	}
 	function get_history($id)
 	{
@@ -203,7 +203,7 @@ class Quote extends CRMEntity {
 	 	        	and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
-		renderRelatedHistory($query,$id);
+	return renderRelatedHistory($query,$id);
 	}
 }
 

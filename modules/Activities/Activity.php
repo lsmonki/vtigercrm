@@ -158,7 +158,7 @@ class Activity extends CRMEntity {
         {
                 //$query="select contactdetails.firstname,contactdetails.lastname,contactdetails.phone,contactdetails.email  from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid and seactivityrel.activityid=".$id."";
 		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
-                renderRelatedContacts($query,$id);
+               return renderRelatedContacts($query,$id);
         }
 
         function get_users($id)
@@ -166,7 +166,7 @@ class Activity extends CRMEntity {
                //$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id,  users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
 		$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax,activity.date_start,activity.due_date,activity.time_start,activity.duration_hours,activity.duration_minutes from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id  inner join activity on activity.activityid=salesmanactivityrel.activityid where activity.activityid='.$id;
 
-                renderRelatedUsers($query,$id);
+               return  renderRelatedUsers($query,$id);
         }
 
 	function get_products($id)
