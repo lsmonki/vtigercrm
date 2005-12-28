@@ -20,7 +20,7 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/Emails/Forms.php');
@@ -98,6 +98,7 @@ echo '<br>';
 
 
 $focus = new Email();
+$smarty = new vtigerCRM_Smarty();
 
 if($_REQUEST['upload_error'] == true)
 {
@@ -141,6 +142,15 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
+
+$disp_view = getView($focus->mode);
+$smarty->assign("BLOCKS",getBlocks("Emails",$disp_view,$mode,$focus->column_fields));
+//echo '<pre>';print_r(getBlocks("Emails",$disp_view,$mode,$focus->column_fields));echo '</pre>';
+$smarty->assign("OP_MODE",$disp_view);
+
+$smarty->assign("MODULE",$currentModule);
+$smarty->assign("SINGLE_MOD","Email");
+
 
 if($_REQUEST['reply'])
 {
@@ -201,11 +211,10 @@ if($_REQUEST['reply'])
 	$theme = $tmp_theme;
 }
 //get Email Information
-$block_1 = getBlockInformation("Emails",1,$focus->mode,$focus->column_fields);
-$block_2 = getBlockInformation("Emails",2,$focus->mode,$focus->column_fields);
-$block_3 = getBlockInformation("Emails",3,$focus->mode,$focus->column_fields);
-$block_4 = getBlockInformation("Emails",4,$focus->mode,$focus->column_fields);
-$block_5 = getBlockInformation("Emails",5,$focus->mode,$focus->column_fields);
+
+//$disp_view = getView($focus->mode);
+
+//echo "<pre>";print_r(getBlocks("Emails",$disp_view,$focus->mode,$focus->column_fields));echo "</pre>";
 
 //needed when creating a new email with default values passed in
 if (isset($_REQUEST['contact_name']) && is_null($focus->contact_name)) 
@@ -240,73 +249,64 @@ elseif (is_null($focus->parent_type))
 
 $log->info("Email detail view");
 
-$xtpl=new XTemplate ('modules/Emails/EditView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
-else $xtpl->assign("NAME", "");
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
+else $smarty->assign("NAME", "");
 
-$xtpl->assign("BLOCK1", $block_1);
-$xtpl->assign("BLOCK2", $block_2);
-$xtpl->assign("BLOCK3", $block_3);
-$xtpl->assign("BLOCK4", $block_4);
-$xtpl->assign("BLOCK5", $block_5);
-$block_1_header = getBlockTableHeader("LBL_EMAIL_INFORMATION");
-$xtpl->assign("BLOCK1_HEADER", $block_1_header);
 
 //Added to set the cc when click reply all
 if(isset($_REQUEST['msg_cc']) && $_REQUEST['msg_cc'] != '')
 {
-	$xtpl->assign("MAIL_MSG_CC", $_REQUEST['msg_cc']);
+        $smarty->assign("MAIL_MSG_CC", $_REQUEST['msg_cc']);
 }
 
 if($focus->mode == 'edit')
 {
-        $xtpl->assign("MODE", $focus->mode);
+        $smarty->assign("MODE", $focus->mode);
 }
 
 // Unimplemented until jscalendar language files are fixed
-// $xtpl->assign("CALENDAR_LANG", ((empty($cal_codes[$current_language])) ? $cal_codes[$default_language] : $cal_codes[$current_language]));
 
-$xtpl->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
-$xtpl->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
+$smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
+$smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
-if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
-else $xtpl->assign("RETURN_MODULE",'Emails');
-if(isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
-else $xtpl->assign("RETURN_ACTION",'index');
-if(isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
-if (isset($_REQUEST['return_viewname'])) $xtpl->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
+if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+else $smarty->assign("RETURN_MODULE",'Emails');
+if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+else $smarty->assign("RETURN_ACTION",'index');
+if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+if (isset($_REQUEST['return_viewname'])) $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
 
 
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);
-$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
-$xtpl->assign("ID", $focus->id);
-$xtpl->assign("ENTITY_ID", $_REQUEST["record"]);
-$xtpl->assign("ENTITY_TYPE",$_REQUEST["email_directing_module"]);
-$xtpl->assign("OLD_ID", $old_id );
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+$smarty->assign("ID", $focus->id);
+$smarty->assign("ENTITY_ID", $_REQUEST["record"]);
+$smarty->assign("ENTITY_TYPE",$_REQUEST["email_directing_module"]);
+$smarty->assign("OLD_ID", $old_id );
 
 if(empty($focus->filename))
 {
-        $xtpl->assign("FILENAME_TEXT", "");
-        $xtpl->assign("FILENAME", "");
+        $smarty->assign("FILENAME_TEXT", "");
+        $smarty->assign("FILENAME", "");
 }
 else
 {
-        $xtpl->assign("FILENAME_TEXT", "(".$focus->filename.")");
-        $xtpl->assign("FILENAME", $focus->filename);
+        $smarty->assign("FILENAME_TEXT", "(".$focus->filename.")");
+        $smarty->assign("FILENAME", $focus->filename);
 }
 
 if(isset($focus->parent_type) && $focus->parent_type != "") 
 {
 	$change_parent_button = "<input title='".$app_strings['LBL_CHANGE_BUTTON_TITLE']."' tabindex='2' accessKey='".$app_strings['LBL_CHANGE_BUTTON_KEY']."' type='button' class='button' value='".$app_strings['LBL_CHANGE_BUTTON_LABEL']."' name='button' LANGUAGE=javascript onclick='return window.open(\"index.php?module=\"+ document.EditView.parent_type.value + \"&action=Popup&html=Popup_picker&form=TasksEditView\",\"test\",\"width=600,height=400,resizable=1,scrollbars=1\");'>";
-	$xtpl->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
+	$smarty->assign("CHANGE_PARENT_BUTTON", $change_parent_button);
 }
 
 if($focus->parent_type == "Account") 
-	$xtpl->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=".urlencode($focus->parent_name));
+	$smarty->assign("DEFAULT_SEARCH", "&query=true&account_id=$focus->parent_id&account_name=".urlencode($focus->parent_name));
 
 
 $email_tables = Array('emails','crmentity','activity'); 
@@ -349,13 +349,10 @@ foreach($validationData as $fldName => $fldLabel_array)
 	}
 }
 
-$xtpl->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
-$xtpl->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
-$xtpl->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
+$smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
+$smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
+$smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
 
-
-$xtpl->parse("main");
-
-$xtpl->out("main");
+$smarty->display("salesEditView.tpl");
 
 ?>
