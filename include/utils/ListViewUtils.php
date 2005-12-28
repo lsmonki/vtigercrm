@@ -198,6 +198,169 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 
 }
 
+function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='') //Function to get the header values in the combo box of search - By Jaguar
+{
+        global $adb;
+        global $theme;
+        global $app_strings;
+        global $mod_strings;
+        //Seggregating between module and smodule
+        if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'VENDOR')
+        {
+                $smodule = 'Vendor';
+        }
+        elseif(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'PRICEBOOK')
+        {
+                $smodule = 'PriceBook';
+        }
+        else
+        {
+                $smodule = $module;
+        }
+
+        $arrow='';
+        $qry = getURLstring($focus);
+        $theme_path="themes/".$theme."/";
+        $image_path=$theme_path."images/";
+        $list_header = Array();
+
+        //Get the tabid of the module
+        //require_once('include/utils/UserInfoUtil.php')
+        $tabid = getTabid($smodule);
+        global $profile_id;
+        if($profile_id == '')
+        {
+                global $current_user;
+                $profile_id = fetchUserProfileId($current_user->id);
+        }
+        //added for customview 27/5
+        if($oCv)
+        {
+                if(isset($oCv->list_fields))
+		{
+                        $focus->list_fields = $oCv->list_fields;
+                }
+        }
+
+        //modified for customview 27/5 - $app_strings change to $mod_strings
+        foreach($focus->list_fields as $name=>$tableinfo)
+        {
+                //$fieldname = $focus->list_fields_name[$name];  //commented for customview 27/5
+                //added for customview 27/5
+                if($oCv)
+                {
+                        if(isset($oCv->list_fields_name))
+                        {
+                                $fieldname = $oCv->list_fields_name[$name];
+                        }else
+                        {
+                                $fieldname = $focus->list_fields_name[$name];
+                        }
+                }
+		else
+                {
+                        $fieldname = $focus->list_fields_name[$name];
+                }
+
+                //Getting the Entries from Profile2 field table
+                $query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
+                $result = $adb->query($query);
+
+                //Getting the Entries from def_org_field table
+                $query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
+                $result_def = $adb->query($query1);
+
+
+                if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
+                {
+			  if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
+                        {
+                                //Added on 14-12-2005 to avoid if and else check for every list field for arrow image and change order
+                                $change_sorder = array('ASC'=>'DESC','DESC'=>'ASC');
+                                $arrow_gif = array('ASC'=>'arrow_down.gif','DESC'=>'arrow_up.gif');
+
+                                foreach($focus->list_fields[$name] as $tab=>$col)
+                                {
+                                        if(in_array($col,$focus->sortby_fields))
+                                        {
+                                                if($order_by == $col)
+                                                {
+                                                        $temp_sorder = $change_sorder[$sorder];
+                                                        $arrow = "<img src ='".$image_path.$arrow_gif[$sorder]."' border='0'>";
+                                                }
+                                                else
+                                                {
+                                                        $temp_sorder = 'ASC';
+                                                }
+                                                if($relatedlist !='')
+                                                {
+                                                        if($app_strings[$name])
+                                                        {
+                                                                $name = $app_strings[$name];
+                                                        }
+                                                        else
+                                                        {
+                                                                $name = $mod_strings[$name];
+                                                        }
+                                                }
+                                                else
+                                                {
+                                                        if($app_strings[$name])
+                                                        {
+                                                                $lbl_name = $app_strings[$name];
+                                                        }
+                                                        else
+							{
+                                                                $lbl_name = $mod_strings[$name];
+                                                        }
+                                                        //added to display currency symbol in listview header
+                                                          if($lbl_name =='Amount')
+                                                               {
+                                                                        $curr_symbol = getCurrencySymbol();
+                                                                        $lbl_name .=': (in '.$curr_symbol.')';
+                                                                }
+
+                                                                $name = $lbl_name;
+                                                                $arrow = '';
+                                                }
+                                        }
+                                        else
+                                        {       if($app_strings[$name])
+                                                {
+                                                        $name = $app_strings[$name];
+                                                }
+                                                elseif($mod_strings[$name])
+                                                {
+                                                        $name = $mod_strings[$name];
+                                                }
+                                        }
+
+                                }
+                        }
+                        //added to display currency symbol in related listview header
+/* -- commented out by-Jaguar
+                        if($name =='Amount' && $relatedlist !='' )
+                        {
+                                $curr_symbol = getCurrencySymbol();
+                                $name .=': (in '.$curr_symbol.')';
+                        }
+
+*/
+                        //Added condition to hide the close column in Related Lists
+                        if($name == 'Close' && $relatedlist != '')
+			{
+                                //$list_header .= '';
+                                // $list_header[] = '';
+                        }
+                        else
+                        {
+                                 $list_header[]=$name;
+                        }
+                }
+        }
+        return $list_header;
+}
+
 
 
 
@@ -441,7 +604,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 				else
 				{
 
-					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
+					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close') || ($name == 'First Name')))
 					{
 						$status = $adb->query_result($list_result,$i-1,"status");
 						if($status == '')
@@ -470,6 +633,13 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 								// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}
+						if($name == "First Name")
+                                                {
+                                                        $first_name = $adb->query_result($list_result,$i-1,"firstname");
+                                                        $value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'">'.$first_name.'</a>';
+
+                                                }
+
 						if ($name == 'Close')
 						{
 							if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '')
@@ -1168,10 +1338,12 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			{
 				if(($module == "Leads" && $colname == "lastname") || ($module == "Contacts" && $colname == "lastname"))
 				{
-			                if($colname == "lastname")
+					//Commented to give link even to the first name - Jaguar
+			             /*   if($colname == "lastname")
 			                        $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
+					*/
 			              //condition to add lastname and first name only for default view on 20-11-05 
-						   if($viewid =='' || $viewid =='0') $temp_val =$temp_val.' '.$firstname;
+				//		   if($viewid =='' || $viewid =='0') $temp_val =$temp_val.' '.$firstname;
 					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'">'.$temp_val.'</a>';
 				}
 				elseif($module == "Activities")
