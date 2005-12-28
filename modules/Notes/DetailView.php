@@ -20,8 +20,9 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+//require_once('XTemplate/xtpl.php');
 require_once('data/Tracker.php');
+require_once('Smarty_setup.php');
 require_once('modules/Notes/Note.php');
 require_once('modules/Notes/Forms.php');
 require_once('include/upload_file.php');
@@ -68,58 +69,63 @@ require_once($theme_path.'layout_utils.php');
 
 $log->info("Note detail view");
 
-$xtpl=new XTemplate ('modules/Notes/DetailView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
+$smarty = new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+//echo '<pre>';print_r(getBlocks("Notes","detail_view",'',$focus->column_fields));echo'</pre>';
+$smarty->assign("BLOCKS", getBlocks("Notes","detail_view",'',$focus->column_fields));
 
+/*
 //get Note Information
 $block_1 = getDetailBlockInformation("Notes",1,$focus->column_fields);
 $block_2 = getDetailBlockInformation("Notes",2,$focus->column_fields);
 $block_3 = getDetailBlockInformation("Notes",3,$focus->column_fields);
 
-$xtpl->assign("BLOCK1", $block_1);
-$xtpl->assign("BLOCK2", $block_2);
-$xtpl->assign("BLOCK3", $block_3);
+$smarty->assign("BLOCK1", $block_1);
+$smarty->assign("BLOCK2", $block_2);
+$smarty->assign("BLOCK3", $block_3);
 
 $block_1_header = getBlockTableHeader("LBL_NOTE_INFORMATION");
-$xtpl->assign("BLOCK1_HEADER", $block_1_header);
-	
-if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
-else $xtpl->assign("NAME", "");
+$smarty->assign("BLOCK1_HEADER", $block_1_header);	
+*/
 
+if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
+else $smarty->assign("NAME", "");
 
-if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
+if (isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if (isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
 
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
-$xtpl->assign("ID", $focus->id);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+$smarty->assign("ID", $focus->id);
 
 if ( isset($focus->filename) && $focus->filename != '')
 {
         $fileurl = "<a href=\"".UploadFile::get_url($focus->filename,$focus->id)."\" target=\"_blank\">". $focus->filename ."</a>";
-        $xtpl->assign("FILELINK", $fileurl);
+	$smarty->assign("FILELINK", $fileurl);
 }
+
+$smarty->assign("SINGLE_MOD","Notes");
 
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Notes",1,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
+	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">");
 
 
-	$xtpl->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">");
 }
 
 
 if(isPermitted("Notes",2,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">");
 }
 
-$xtpl->parse("main");
 
-$xtpl->out("main");
+$smarty->assign("MODULE", $module);
+$smarty->display("DetailView.tpl");
 
 ?>

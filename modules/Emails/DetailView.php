@@ -20,7 +20,8 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+//require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
 require_once('modules/Emails/Forms.php');
@@ -160,61 +161,68 @@ echo '<br>';
  <br>
 <?
 
+$smarty = new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
 
-$xtpl=new XTemplate ('modules/Emails/DetailView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
+if (isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if (isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
 
-if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);
+if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
+else $smarty->assign("NAME", "");
 
-if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
-else $xtpl->assign("NAME", "");
+$smarty->assign("BLOCKS", getBlocks("Emails","detail_view",'',$focus->column_fields));
 
-$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-//$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+$smarty->assign("SINGLE_MOD","Email");
 
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+
+/*
 //get Email Information
 $block_1 = getDetailBlockInformation("Emails",1,$focus->column_fields);
-$xtpl->assign("BLOCK1", $block_1);
+//$xtpl->assign("BLOCK1", $block_1);
+$smarty->assign("BLOCK1", $block_1);
 $block_2 = getDetailBlockInformation("Emails",2,$focus->column_fields);
-$xtpl->assign("BLOCK2", $block_2);
+//$xtpl->assign("BLOCK2", $block_2);
+$smarty->assign("BLOCK2", $block_2);
 $block_3 = getDetailBlockInformation("Emails",4,$focus->column_fields);
-$xtpl->assign("BLOCK4", $block_3);
+//$xtpl->assign("BLOCK4", $block_3);
+$smarty->assign("BLOCK3", $block_3);
 $block_4 = getDetailBlockInformation("Emails",5,$focus->column_fields);
 //replacing the brs in order to maintain the exact state of the data
 $block_4 = preg_replace("/<br \/\>/", " ", $block_4);
 
-$xtpl->assign("BLOCK5", $block_4);
-
+//$xtpl->assign("BLOCK5", $block_4);
+$smarty->assign("BLOCK5", $block_4);
 $log->info("Detail Block Informations successfully retrieved.");
 
 $block_1_header = getBlockTableHeader("LBL_EMAIL_INFORMATION");
-$xtpl->assign("BLOCK1_HEADER", $block_1_header);
+//$xtpl->assign("BLOCK1_HEADER", $block_1_header);
 
-$xtpl->assign("ID", $focus->id);
+//$xtpl->assign("ID", $focus->id);
 
- 
+$smarty->assign("BLOCK1_HEADER", $block_1_header);
+*/
+
+$smarty->assign("ID", $_REQUEST['record']);
+
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Emails",1,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
-	$xtpl->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">");
+	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">");
 }
 
 
 if(isPermitted("Emails",2,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">");
 }
  
-$xtpl->parse("main");
-
-$xtpl->out("main");
-
 // Now get the list of invitees that match this one.
 
 //Security check for related list
@@ -224,6 +232,7 @@ $permissionData = $_SESSION['action_permission_set'];
 
 
 //Constructing the Related Lists from here
-getRelatedLists("Emails",$focus);
-
+//getRelatedLists("Emails",$focus);
+$smarty->assign("MODULE","Emails");
+$smarty->display("DetailView.tpl");
 ?>

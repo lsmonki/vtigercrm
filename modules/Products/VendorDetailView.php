@@ -10,7 +10,8 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 //require_once('HelpDeskUtil.php');
-require_once('XTemplate/xtpl.php');
+//require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 require_once('modules/Products/Vendor.php');
 require_once('include/utils/utils.php');
@@ -36,22 +37,25 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
+$smarty = new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
 
-$xtpl=new XTemplate ('modules/Products/VendorDetailView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
+$smarty->assign("BLOCKS", getBlocks("Vendor","detail_view",'',$focus->column_fields));
+
+/*
 $block_1 = getDetailBlockInformation("Vendor",1,$focus->column_fields);
-$xtpl->assign("BLOCK1", $block_1);
+$smarty->assign("BLOCK1", $block_1);
 $block_2 = getDetailBlockInformation("Vendor",2,$focus->column_fields);
-$xtpl->assign("BLOCK2", $block_2);
+$smarty->assign("BLOCK2", $block_2);
 $block_3 = getDetailBlockInformation("Vendor",3,$focus->column_fields);
-$xtpl->assign("BLOCK3", $block_3);
+$smarty->assign("BLOCK3", $block_3);
 $block_1_header = getBlockTableHeader("LBL_VENDOR_INFORMATION");
 $block_2_header = getBlockTableHeader("LBL_VENDOR_ADDRESS_INFORMATION");
 $block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
-$xtpl->assign("BLOCK1_HEADER", $block_1_header);
-$xtpl->assign("BLOCK2_HEADER", $block_2_header);
-$xtpl->assign("BLOCK3_HEADER", $block_3_header);
+$smarty->assign("BLOCK1_HEADER", $block_1_header);
+$smarty->assign("BLOCK2_HEADER", $block_2_header);
+$smarty->assign("BLOCK3_HEADER", $block_3_header);
 $block_5 = getDetailBlockInformation("Vendor",5,$focus->column_fields);
 if(trim($block_5) != '')
 {
@@ -66,29 +70,36 @@ if(trim($block_5) != '')
         $cust_fld .= '<BR>';
 
 }
-
-$xtpl->assign("CUSTOMFIELD", $cust_fld);
+*/
+$smarty->assign("CUSTOMFIELD", $cust_fld);
 
 if(isPermitted("Vendor",1,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Products'; this.form.return_action.value='VendorDetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='VendorEditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
+	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Products'; this.form.return_action.value='VendorDetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='VendorEditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">");
 
 
-	$xtpl->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Products'; this.form.return_action.value='VendorDetailView'; this.form.isDuplicate.value='true'; this.form.action.value='VendorEditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Products'; this.form.return_action.value='VendorDetailView'; this.form.isDuplicate.value='true'; this.form.action.value='VendorEditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">");
 }
 
 if(isPermitted("Vendor",2,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Products'; this.form.return_action.value='index'; this.form.action.value='DeleteVendor'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Products'; this.form.return_action.value='index'; this.form.action.value='DeleteVendor'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">");
 }
 
 
 
-$xtpl->assign("IMAGE_PATH", $image_path);
-$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$xtpl->assign("ID", $_REQUEST['record']);
-$xtpl->parse("main");
-$xtpl->out("main");
+//$xtpl->assign("IMAGE_PATH", $image_path);
+//$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+//$xtpl->assign("ID", $_REQUEST['record']);
+//$xtpl->parse("main");
+//$xtpl->out("main");
+
+
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
+$smarty->assign("ID", $_REQUEST['record']);
+$smarty->assign("MODULE", $module);
+$smarty->display("DetailView.tpl");
 
 /*
 require_once('modules/Products/binaryfilelist.php');
@@ -164,6 +175,6 @@ if($tab_per_Data[8] == 0)
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
-getRelatedLists("Vendor",$focus);
+//getRelatedLists("Vendor",$focus);
 
 ?>

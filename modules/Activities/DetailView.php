@@ -20,7 +20,8 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-require_once('XTemplate/xtpl.php');
+//require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Activities/Activity.php');
 require_once('modules/Activities/Forms.php');
@@ -85,54 +86,60 @@ require_once($theme_path.'layout_utils.php');
 
 $log->info("Activities detail view");
 
-$xtpl=new XTemplate ('modules/Activities/DetailView.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("ACTIVITY_MODE", $activity_mode);
+//$xtpl=new XTemplate ('modules/Activities/DetailView.html');
 
-if (isset($focus->name)) $xtpl->assign("NAME", $focus->name);
-else $xtpl->assign("NAME", "");
+$smarty = new vtigerCRM_Smarty;
 
-if (isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);
-if (isset($_REQUEST['return_action'])) $xtpl->assign("RETURN_ACTION", $_REQUEST['return_action']);
-if (isset($_REQUEST['return_id'])) $xtpl->assign("RETURN_ID", $_REQUEST['return_id']);
-$xtpl->assign("THEME", $theme);
-$xtpl->assign("IMAGE_PATH", $image_path);$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string'].'&activity_mode='.$activity_mode);
-$xtpl->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
-$xtpl->assign("ID", $focus->id);
-$xtpl->assign("NAME", $focus->name);
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("ACTIVITY_MODE", $activity_mode);
+
+if (isset($focus->name)) 
+$smarty->assign("NAME", $focus->name);
+else 
+$smarty->assign("NAME", "");
+
+if (isset($_REQUEST['return_module'])) 
+$smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
+if (isset($_REQUEST['return_action'])) 
+$smarty->assign("RETURN_ACTION", $_REQUEST['return_action']);
+if (isset($_REQUEST['return_id'])) 
+$smarty->assign("RETURN_ID", $_REQUEST['return_id']);
+$smarty->assign("THEME", $theme);
+$smarty->assign("IMAGE_PATH", $image_path);
+$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string'].'&activity_mode='.$activity_mode);
+$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+$smarty->assign("ID", $focus->id);
+$smarty->assign("NAME", $focus->name);
 //get Block 1 Information
-$block_1 = getDetailBlockInformation($tab_type,1,$focus->column_fields);
-$xtpl->assign("BLOCK1", $block_1);
+//$block_1 = getDetailBlockInformation($tab_type,1,$focus->column_fields);
 
-//get Reminder Information
-$block_7 = getDetailBlockInformation($tab_type,7,$focus->column_fields);
-$xtpl->assign("BLOCK7", $block_7);
+$smarty->assign("BLOCKS", getBlocks("Activities","detail_view",'',$focus->column_fields));
 
-//get Address Information
+$smarty->assign("CUSTOMFIELD", $cust_fld);
+$smarty->assign("ID", $_REQUEST['record']);
+$smarty->assign("SINGLE_MOD", "Activity");
 
-$block_2 = getDetailBlockInformation($tab_type,2,$focus->column_fields);
-$xtpl->assign("BLOCK2", $block_2);
 //get Description Information
 
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Activities",1,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Activities'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
+	$smarty->assign("EDITBUTTON","<td><input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Activities'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\"></td>");
 
 
-	$xtpl->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Activities'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("DUPLICATEBUTTON","<td><input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Activities'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\"></td>");
 }
 
 
 if(isPermitted("Activities",2,$_REQUEST['record']) == 'yes')
 {
-	$xtpl->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Activities'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Activities'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
 }
   
-$xtpl->parse("main");
+//$xtpl->parse("main");
 
-$xtpl->out("main");
+//$xtpl->out("main");
 if($_REQUEST['activity_mode'] == 'Events')
 {
 	global $profile_id;
@@ -141,5 +148,8 @@ if($_REQUEST['activity_mode'] == 'Events')
 
         getRelatedLists("Activities",$focus);
 }
+
+$smarty->assign("MODULE","Activities");
+$smarty->display("DetailView.tpl");
 
 ?>
