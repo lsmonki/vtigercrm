@@ -10,6 +10,7 @@
 	<body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0>
 	<!-- header -->
 	<!-- header-vtiger crm name & RSS -->
+	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 	<TABLE border=0 cellspacing=0 cellpadding=0 width=100% class="hdrNameBg">
 	<tr>
 		<td><img src="{$IMAGEPATH}/vtiger-crm.gif" alt="vtiger CRM" title="vtiger CRM" border=0></td>
