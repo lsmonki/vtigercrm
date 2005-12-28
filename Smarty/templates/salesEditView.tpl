@@ -147,6 +147,7 @@
                                                            {assign var="fldvalue" value="$maindata[3][0]"}
                                                            {assign var="secondvalue" value="$maindata[3][1]"}
 
+
 							{if $uitype eq 2}
 							<td width=20% class="dvtCellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
 							<td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}" value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"></td>
@@ -155,7 +156,7 @@
                                                         <td width=30% align=left class="dvtCellInfo"><input type="text" name="{$fldname}"  value="{$fldvalue}" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'"></td>
 							{elseif $uitype eq 19 || $uitype eq 20}
 							 <td width=20% class="dvtCellLabel" align=right>
-								{if $uitype eq 20}<font color="red">*</font>{/if}
+							    {if $uitype eq 20}<font color="red">*</font>{/if}
 								{$fldlabel}</td>
 							 <td colspan=3><textarea class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" name="{$fldname}"  onBlur="this.className='detailedViewTextBox'" cols="90" rows="8">
                                                            {$fldvalue}
@@ -163,19 +164,19 @@
                                                          </td>
 							{elseif $uitype eq 21 || $uitype eq 24}
 							  <td width=20% class="dvtCellLabel" align=right>
-								{if $uitype eq 24}
-									<font color="red">*</font>
-								{/if}
-								{$fldlabel}
+							     {if $uitype eq 24}
+								<font color="red">*</font>
+							     {/if}
+							     {$fldlabel}
 							  </td>
-                                                        <td width=30% align=left class="dvtCellInfo"><textarea value="{$fldvalue}" name="{$fldname}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" rows=2></textarea></td>
-
+                                                          <td width=30% align=left class="dvtCellInfo"><textarea value="{$fldvalue}" name="{$fldname}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" rows=2></textarea></td>
 							{elseif $uitype eq 15 || $uitype eq 16}
 							<td width="20%" class="dvtCellLabel" align=right>
 								{if $uitype eq 16}
-									<font color="red">*</font>
+							           <font color="red">*</font>
 								{/if}
-							{$fldlabel}</td>
+								{$fldlabel}
+							</td>
 							<td width="30%" align=left class="dvtCellInfo">
 							   <select name="{$fldname}">
 								{foreach item=arr from=$fldvalue}
@@ -187,8 +188,10 @@
 							   </select>
 							</td>
 
-							{elseif $uitype eq 52 || $uitype eq 53}
-                                                        <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
+							{elseif $uitype eq 52 || $uitype eq 53 || $uitype eq 77}
+                                                        <td width="20%" class="dvtCellLabel" align=right>
+							   {$fldlabel}
+							</td>
                                                         <td width="30%" align=left class="dvtCellInfo">
                                                            <select name="{$fldname}">
                                                                 {foreach item=arr from=$fldvalue}
@@ -210,9 +213,21 @@
                                                         <td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
 							<td width="30%" align=left class="dvtCellInfo"><input readonly name="account_name" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="'.$value.'">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Accounts&action=Popup&popuptype=specific_account_address&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
 							
+							{elseif $uitype eq 75 || $uitype eq 81}
+                                                          <td width="20%" class="dvtCellLabel" align=right>
+                                                                {if $uitype eq 81}                                                                                               <font color="red">*</font>                                                                                         {assign var="pop_type" value="specific_vendor_address"}                                                                                                                                                             {else}{assign var="pop_type" value="specific"}                                                                {/if}                                                                                                         {$fldlabel}                                                                                             </td>                                                                                                         <td width="30%" align=left class="dvtCellInfo"><input name="vendor_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="'.$value.'">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=VendorPopup&html=Popup_picker&popuptype='.$pop_type.'&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");align="absmiddle" style=\'cursor:hand;cursor:pointer\'>                                                                                                                                {if $uitype eq 75}                                                                                                    &nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.vendor_id.value=\'\';this.form.vendor_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>                                                                   {/if}
+
+
+
 							{elseif $uitype eq 57}
-							<td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
+							<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
 							<td width="30%" align=left class="dvtCellInfo"><input name="contact_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="'.$value.'">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.contact_id.value=\'\';this.form.contact_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
+
+							{elseif $uitype eq 80}                                                                                        <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>                                                                                                                                                           <td width="30%" align=left class="dvtCellInfo"><input name="salesorder_name" readonly type="text" style="border:1px solid #bababa;"><input name="{$fldname}" type="hidden" value="{$fldvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=SalesOrder&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.salesorder_id.value=\'\';this.form.salesorder_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>                                                                                                                                                                                                                     {elseif $uitype eq 78}                                                                                        <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>                                                                                                                                                           <td width="30%" align=left class="dvtCellInfo"><input name="quote_name" readonly type="text" style="border:1px solid #bababa;"><input name="{$fldname}" type="hidden" value="{$fldvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Quotes&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.quote_id.value=\'\';this.form.quote_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
+
+							{elseif $uitype eq 76}
+                                                        <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
+                                                        <td width="30%" align=left class="dvtCellInfo"><input name="potential_name" readonly type="text" style="border:1px solid #bababa;" ><input name="{$fldname}" type="hidden" value="{$fldvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Potentials&action=Popup&html=Popup_picker&popuptype=specific_potential_account_address&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.potential_id.value=\'\';this.form.potential_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
 
 							{elseif $uitype eq 17}
 							<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
@@ -247,6 +262,37 @@
 							   <input name="time_start" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
 							{/if}
 							</td>
+
+							{elseif $uitype eq 63}
+							  <td width="20%" class="dvtCellLabel" align=right>
+							        {$fldlabel}
+							  </td>
+							  <td width="30%" align=left class="dvtCellInfo">
+							        <input name="{$fldname}" type="text" size="2" value="{$secondvalue}">&nbsp;
+							        <select name="duration_minutes">
+						        	{foreach key=labelval item=selectval from=$fldvalue}
+								<option value={$labelval} {$selectval}>{$labelval}</option>
+								{/foreach}
+								</select>
+
+							{elseif $uitype eq 68 || $uitype eq 66 || $uitype eq 62 || $uitype eq 357}
+							  <td width="20%" class="dvtCellLabel" align=right>
+								<select name="parent_type" onChange='document.EditView.parent_name.value=""; document.EditView.parent_id.value=""'>
+								{foreach key=labelval item=selectval from=$fldlabel}
+								<option value={$labelval} {$selectval}>{$labelval}</option>
+								{/foreach}
+								</select>
+							  </td>
+							<td width="30%" align=left class="dvtCellInfo">
+							{if $uitype neq 357}
+							<input name="{$fldname}" type="hidden" value="'.$value.'"><input name="parent_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}">{/if}
+						&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200"); align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
+
+ 	                                                {elseif $uitype eq 59}
+                                                          <td width="20%" class="dvtCellLabel" align=right>
+                                                           {$fldlabel}</td>
+                                                          <td width="30%" align=left class="dvtCellInfo">
+                                                           <input name="{$fldname}" type="hidden" value="'.$value.'"><input name="product_name" readonly type="text" value="{$fldvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200"); align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.product_id.value=\'\';this.form.product_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>
 		
 							{elseif $uitype eq 55} 
                                                           <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
@@ -266,7 +312,9 @@
 								<textarea name="{$fldname}" cols="30" rows="2">{$fldvalue}</textarea>
                                                  </td>
 
-
+						{elseif $uitype eq 69 || $uitype eq 61}
+						<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
+						<td colspan="3" width="30%" align=left class="dvtCellInfo"><input name="{$fldname}"  type="file" value="'.$value.'"/><input type="hidden" name="filename" value=""/><input type="hidden" name="id" value=""/>{$fldvalue}</td>
 
 							{/if}
 							{/foreach}
