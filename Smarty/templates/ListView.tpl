@@ -125,7 +125,7 @@ function massDelete()
 
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>Sales > {$MODULE}</td>
+	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > {$MODULE}</td>
 	<td class="sep1" style="width:1px"></td>
 	<td class=small >
 		<table border=0 cellspacing=0 cellpadding=0>
@@ -215,15 +215,6 @@ itle="Basic Search" border=0></td>
                                                 {/foreach}
                                                 </select>
 
-					{*<select class=small>
-                                                <option selected>Account Name</option>
-                                                <option>Phone</option>
-                                                <option>Website</option>
-                                                <option>City</option>
-
-                                                <option>------------------</option>
-                                                <option>All </option>
-                                                </select>*}
                                         </td>
                                         <td><input type="button" class=small value="Search now" onClick="showhide('searchAcc');window.location='salesAccSearchResults.html'"></td>
                                         </tr>
@@ -358,19 +349,11 @@ itle="Basic Search" border=0></td>
 			<td >
 			  <table border=0 cellspacing=0 cellpadding=2 width=100%>
 				<tr>
-					{foreach item=view from=$CUSTOMVIEW}
-
-                                        <td>{$view}</td>
-                                        {/foreach}
-
-				</tr>
-           			<tr>
-					{*<td style="padding-right:20px" ><input type="button" value="Delete" class="small"></td>*}
+					<td style="padding-right:20px" nowrap> {$BUTTONS}</td>
 					<td style="padding-right:20px" nowrap>{$RECORD_COUNTS}</td>
-	
-        			        <td nowrap><table border=0 cellspacing=0 cellpadding=0><tr>{$NAVIGATION}</tr></table></td>
-					{*<td width=100% align=right>{$CUSTOMVIEW}</td>*}
-               			</tr>
+        	        		<td nowrap ><table border=0 cellspacing=0 cellpadding=0><tr>{$NAVIGATION}</tr></table></td>
+					<td align="right">{$CUSTOMVIEW}</td>	
+       		        	</tr>
 			</table>
 
 			<div  style="overflow:auto;width:100%;height:300px; border-top:1px solid #999999;border-bottom:1px solid #999999">
@@ -394,17 +377,6 @@ itle="Basic Search" border=0></td>
 			</table>
 			</div>
 
-			{*<table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
-               		<tr style="background-color:#efefef">
-                        <td >
-                          <table border=0 cellspacing=0 cellpadding=2 width=100%>
-                                <tr>
-                                        <td style="padding-right:20px" ><input type="button" value="Delete" class="small"></td>
-                                        <td style="padding-right:20px" nowrap>{$RECORD_COUNTS}</td>
-
-                                        <td nowrap><table border=0 cellspacing=0 cellpadding=0><tr>{$NAVIGATION}</tr></table></td>
-                                </tr>
-                        </table>*}
 
 </td></tr></table></div>
 
