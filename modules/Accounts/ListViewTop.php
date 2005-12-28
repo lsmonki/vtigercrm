@@ -23,7 +23,7 @@ require_once("data/Tracker.php");
 require_once('modules/Potentials/Opportunity.php');
 require_once('include/logging.php');
 require_once('include/ListView/ListView.php');
-
+require_once('XTemplate/xtpl.php');
 global $app_strings;
 global $current_user;
 $current_module_strings = return_module_language($current_language, "Accounts");
