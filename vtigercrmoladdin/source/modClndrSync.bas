@@ -461,11 +461,11 @@ If (bVtFlag = True And bLocalFlag = True) Then
        frmSync.PrgBarSync.Max = oXMLLocal_Root.childNodes.Length
        frmSync.PrgBarSync.Value = 0
        frmSync.lblSynStatus.Caption = "Reading Deletions...."
-        
+       DoEvents
         
        For i = 0 To oXMLLocal_Root.selectNodes("calendaritems").Length - 1
             
-            Set oXMLLocal_First = oXMLLocal_Root.selectNodes("calendaritems").Item(0)
+            Set oXMLLocal_First = oXMLLocal_Root.selectNodes("calendaritems").Item(i)
             sLocalCrmId = oXMLLocal_First.getAttribute("crmid") & vbNullString
             
             If sLocalCrmId <> "" Then
@@ -480,14 +480,12 @@ If (bVtFlag = True And bLocalFlag = True) Then
             End If
             frmSync.PrgBarSync.Value = frmSync.PrgBarSync.Value + 1
        Next i
-       'MsgBox oXMLLocalDoc.XML
        ''sCheckVtDeleteCalendars = oXMLLocalDoc.xml
     End If
 Else
     GoTo ERROR_EXIT_ROUTINE
 End If
 
-'sCheckVtDeleteContacts = True
 sCheckVtDeleteCalendars = oXMLLocalDoc.xml
 GoTo EXIT_ROUTINE
     

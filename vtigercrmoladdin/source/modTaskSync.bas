@@ -411,14 +411,14 @@ If (bVtFlag = True And bLocalFlag = True) Then
                 frmSync.PrgBarSync.Value = frmSync.PrgBarSync.Value + 1
        Next i
        'oXMLLocalVtDoc.Save (gsVtUserFolder & "\test.xml")
-       sCheckVtUpdateTasks = oXMLLocalVtDoc.xml
+       'sCheckVtUpdateTasks = oXMLLocalVtDoc.xml
     End If
 Else
     GoTo ERROR_EXIT_ROUTINE
 End If
 
 'bCheckZohoUpdateContacts = True
-'sCheckVtUpdateTasks = oXMLLocalVtDoc.xml
+sCheckVtUpdateTasks = oXMLLocalVtDoc.xml
 GoTo EXIT_ROUTINE
     
 ERROR_EXIT_ROUTINE:
@@ -469,11 +469,11 @@ If (bVtFlag = True And bLocalFlag = True) Then
        frmSync.PrgBarSync.Max = oXMLLocal_Root.childNodes.Length
        frmSync.PrgBarSync.Value = 0
        frmSync.lblSynStatus.Caption = "Reading Deletions...."
-        
+       DoEvents
         
        For i = 0 To oXMLLocal_Root.selectNodes("taskitems").Length - 1
             
-            Set oXMLLocal_First = oXMLLocal_Root.selectNodes("taskitems").Item(0)
+            Set oXMLLocal_First = oXMLLocal_Root.selectNodes("taskitems").Item(i)
             sLocalCrmId = oXMLLocal_First.getAttribute("crmid") & vbNullString
             
             If sLocalCrmId <> "" Then
@@ -488,15 +488,13 @@ If (bVtFlag = True And bLocalFlag = True) Then
             End If
             frmSync.PrgBarSync.Value = frmSync.PrgBarSync.Value + 1
        Next i
-       'MsgBox oXMLLocalDoc.XML
-       sCheckVtDeleteTasks = oXMLLocalDoc.xml
+       ''sCheckVtDeleteTasks = oXMLLocalDoc.xml
     End If
 Else
     GoTo ERROR_EXIT_ROUTINE
 End If
 
-'sCheckVtDeleteContacts = True
-'sCheckVtDeleteTasks = oXMLLocalDoc.xml
+sCheckVtDeleteTasks = oXMLLocalDoc.xml
 GoTo EXIT_ROUTINE
     
 ERROR_EXIT_ROUTINE:

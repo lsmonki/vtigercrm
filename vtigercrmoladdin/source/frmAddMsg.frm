@@ -93,19 +93,19 @@ Begin VB.Form frmAddMsg
       TabCaption(1)   =   " Edit Message"
       TabPicture(1)   =   "frmAddMsg.frx":0A02
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "Label3"
+      Tab(1).Control(0)=   "txtMsg"
       Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "txtMsg"
+      Tab(1).Control(1)=   "Label3"
       Tab(1).Control(1).Enabled=   0   'False
       Tab(1).ControlCount=   2
       TabCaption(2)   =   "Attachments"
       TabPicture(2)   =   "frmAddMsg.frx":0ACE
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "FlxGrdDtls2"
+      Tab(2).Control(0)=   "Label4"
       Tab(2).Control(0).Enabled=   0   'False
       Tab(2).Control(1)=   "lblNote"
       Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "Label4"
+      Tab(2).Control(2)=   "FlxGrdDtls2"
       Tab(2).Control(2).Enabled=   0   'False
       Tab(2).ControlCount=   3
       Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlxGrdDtls2 
@@ -306,7 +306,7 @@ On Error GoTo ERROR_EXIT_ROUTINE
     
     If gsContactId <> "" Then
       
-        sEmailId = sAddMessageToContact(gsVtUserId, gsContactId, HTMLEncode(gsSubject), txtMsg.Text, gsDate)
+        sEmailId = sAddMessageToContact(gsVtUserId, gsContactId, EncodeUTF8(gsSubject), EncodeUTF8(txtMsg.Text), gsDate)
       
         If sEmailId <> "" Then
             If oFS.FolderExists(gsVtUserFolder & "\Attachments") = True Then

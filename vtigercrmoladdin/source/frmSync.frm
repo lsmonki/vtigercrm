@@ -79,7 +79,7 @@ Begin VB.Form frmSync
          EndProperty
       End
       Begin VB.Label lblSynStatus 
-         Caption         =   "Reading Contacts....10% Completed"
+         Caption         =   "Reading...."
          Height          =   255
          Left            =   240
          TabIndex        =   3
