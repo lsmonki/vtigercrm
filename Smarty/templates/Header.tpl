@@ -51,7 +51,7 @@
 			<td style="padding-left:10px" nowrap>
 			
 			{foreach  key=maintabs item=detail from=$HEADERS}
-				{if $maintabs eq $MAINTAB}
+				{if $maintabs eq $CATEGORY}
 					<select class=small style="width:120px" title="Create New">
 					<option>Quick create...{$maintabs}</option>
 					{foreach  key=number item=module from=$detail}
