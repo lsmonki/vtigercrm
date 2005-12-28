@@ -16,8 +16,6 @@ require_once ($theme_path."layout_utils.php");
 
 global $mod_strings;
 
-echo get_module_title("HelpDesk", $mod_strings['LBL_TICKETS'].": Home" , true);
-echo "\n<BR>\n";
 ?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
    <tr>

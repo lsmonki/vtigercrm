@@ -27,7 +27,6 @@ if(isset($_REQUEST['mailconnect']))
 	 echo '<center><font color=red><b>'.$mod_strings['LBL_MAIL_CONNECT_ERROR_INFO'].'</b></color></center><br>';
 }
 
-echo get_module_title("Emails", $mod_strings['LBL_MODULE_TITLE'], true); 
 include ('modules/Emails/ListView.php'); 
 
 echo "<br><table width='250' cellpadding=0 cellspacing=0><tr><td>";

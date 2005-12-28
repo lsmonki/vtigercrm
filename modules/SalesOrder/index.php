@@ -52,9 +52,6 @@ require_once ($theme_path."layout_utils.php");
 
 global $mod_strings;
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_TITLE'], true); 
-
-echo "\n<BR>\n";
 include ('modules/SalesOrder/ListView.php');
 
 ?>

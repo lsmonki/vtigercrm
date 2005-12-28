@@ -13,9 +13,6 @@ global $mod_strings;
 global $app_strings;
 global $app_list_strings;
 
-echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_TITLE'], true);
-echo '<br>';
-
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";

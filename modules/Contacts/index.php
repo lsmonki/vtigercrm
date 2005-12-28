@@ -23,19 +23,6 @@ $image_path=$theme_path."images/";
 require_once ($theme_path."layout_utils.php");
 global $mod_strings;
 
-//changed for new UI --by mangai.
-/*echo get_module_title($mod_strings['LBL_MODULE_NAME'], $mod_strings['LBL_MODULE_TITLE'], true); 
-echo "\n<BR>\n";*/
 include ('modules/Contacts/ListView.php'); 
-
-/*echo "<br><table width='250' cellpadding=0 cellspacing=0><tr><td>";
-echo get_form_header($mod_strings['LBL_TOOL_FORM_TITLE'], "", false);
-echo "</td></tr>";
-echo "<tr><td class='formOuterBorder' style='padding: 10px'>";
-echo "<ul>";
-include('modules/Import/ImportButton.php');
-echo "<li><a href='index.php?module=Contacts&action=AddBusinessCard&return_module=Contacts&return_action=ListView'>".$mod_strings[LBL_ADD_BUSINESSCARD]."</a></li>";
-echo "</ul>";
-echo "</td></tr></table>";*/
 
 ?>

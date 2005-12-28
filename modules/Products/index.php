@@ -54,7 +54,7 @@ require_once('include/ComboUtil.php');
 global $mod_strings;
 
 
-echo get_module_title("Products", $mod_strings['LBL_MODULE_NAME'].": Home" , true);
+//echo get_module_title("Products", $mod_strings['LBL_MODULE_NAME'].": Home" , true);
 $submenu = array('LBL_PRODUCTS_TITLE'=>'ListView.php','LBL_VENDOR_TITLE'=>'VendorListView.php','LBL_PRICEBOOK_TITLE'=>'PriceBookListView.php');
 $sec_arr = array('ListView.php'=>'Products','VendorListView.php'=>'Vendor','PriceBookListView.php'=>'PriceBook'); 
 echo "\n<BR>\n";
