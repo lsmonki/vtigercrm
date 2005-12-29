@@ -31,12 +31,23 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 echo "<br>";
 
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+	$category = $_REQUEST['category'];
+}
+else
+{
+	$category = getParentTabFromModule($currentModule);
+}
+
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
-
+$smarty->assign("CUSTOMVIEW", $customstrings);
+$smarty->assign("BUTTONS", $other_text);
+$smarty->assign("CATEGORY", $category);
 
 $focus = new SalesOrder();
 
@@ -201,15 +212,13 @@ echo get_form_footer();
 */
 
 // Buttons and View options
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<form name="massdelete" method="POST">
-	<tr>
+$other_text =	'<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<td>';
 if(isPermitted('SalesOrder',2,'') == 'yes')
 {
-	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>&nbsp;';
+	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>&nbsp;</form>';
 }
 
 if($viewid == 0)
@@ -226,15 +235,13 @@ $cvHTML = '<a href="index.php?module=SalesOrder&action=CustomView&record='.$view
 <span class="sep">|</span>
 <a href="index.php?module=SalesOrder&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
-	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+	$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">
                                 <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
-                </td>
-        </tr>
-        </table>';
+                </td>';
 
 //<<<<<<<<<customview>>>>>>>>>
 if($viewid != "0")
