@@ -43,6 +43,15 @@ global $theme;
 $comboFieldNames = Array('quotestage'=>'quotestage_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+	$category = $_REQUEST['category'];
+}
+else
+{
+	$category = getParentTabFromModule($currentModule);
+}
+
 // focus_list is the means of passing data to a ListView.
 global $focus_list;
 
@@ -236,15 +245,13 @@ $search_form->assign("CUSTOMFIELD", $custfld);
 }
 */
 
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<form name="massdelete" method="POST">
-	<tr>
+$other_text = '<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<td>';
 if(isPermitted('Quotes',2,'') == 'yes')
 {
-        $other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td></form>';
 }
 
 if($viewid == 0)
@@ -261,15 +268,13 @@ $cvHTML = '<a href="index.php?module=Quotes&action=CustomView&record='.$viewid.'
 <span class="sep">|</span>
 <a href="index.php?module=Quotes&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
-	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+	$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">
                                 <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
-                </td>
-        </tr>
-        </table>';
+                </td>';
 
 
 //echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
@@ -286,7 +291,9 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("CUSTOMVIEW",$customView);
+$smarty->assign("CUSTOMVIEW",$customstrings);
+$smarty->assign("BUTTONS", $other_text);
+$smarty->assign("CATEGORY",$category);
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
