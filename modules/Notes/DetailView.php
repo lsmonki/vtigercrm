@@ -100,6 +100,15 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $smarty->assign("ID", $focus->id);
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+            $category = $_REQUEST['category'];
+}
+else
+{
+            $category = getParentTabFromModule($currentModule);
+}
+$smarty->assign("CATEGORY",$category);
 
 if ( isset($focus->filename) && $focus->filename != '')
 {

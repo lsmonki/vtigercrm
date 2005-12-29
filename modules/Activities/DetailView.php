@@ -89,6 +89,15 @@ $log->info("Activities detail view");
 //$xtpl=new XTemplate ('modules/Activities/DetailView.html');
 
 $smarty = new vtigerCRM_Smarty;
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+            $category = $_REQUEST['category'];
+}
+else
+{
+            $category = getParentTabFromModule($currentModule);
+}
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);

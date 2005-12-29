@@ -42,6 +42,15 @@ require_once($theme_path.'layout_utils.php');
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+            $category = $_REQUEST['category'];
+}
+else
+{
+            $category = getParentTabFromModule($currentModule);
+}
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("BLOCKS", getBlocks("PriceBook","detail_view",'',$focus->column_fields));
 /*

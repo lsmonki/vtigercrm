@@ -56,6 +56,15 @@ $smarty->assign("APP", $app_strings);
 
 if(isset($focus->column_fields[question]))
 	$smarty->assign("FAQ_TITLE", $focus->column_fields[question]);
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+            $category = $_REQUEST['category'];
+}
+else
+{
+            $category = getParentTabFromModule($currentModule);
+}
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);

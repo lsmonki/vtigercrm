@@ -170,6 +170,15 @@ if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUES
 if (isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+            $category = $_REQUEST['category'];
+}
+else
+{
+            $category = getParentTabFromModule($currentModule);
+}
+$smarty->assign("CATEGORY",$category);
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");

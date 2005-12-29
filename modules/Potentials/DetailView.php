@@ -66,6 +66,15 @@ $smarty->assign("BLOCKS", getBlocks("Potentials","detail_view",'',$focus->column
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD","Potential");
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+            $category = $_REQUEST['category'];
+}
+else
+{
+            $category = getParentTabFromModule($currentModule);
+}
+$smarty->assign("CATEGORY",$category);
 
 $permissionData = $_SESSION['action_permission_set'];
 

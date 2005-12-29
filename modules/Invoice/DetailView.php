@@ -70,6 +70,15 @@ $smarty->assign("BLOCKS", getBlocks("Invoice","detail_view",'',$focus->column_fi
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
 $smarty->assign("SINGLE_MOD", "Invoice");
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+            $category = $_REQUEST['category'];
+}
+else
+{
+            $category = getParentTabFromModule($currentModule);
+}
+$smarty->assign("CATEGORY",$category);
 
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')

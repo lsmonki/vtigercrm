@@ -94,6 +94,15 @@ if(isPermitted("Vendor",2,$_REQUEST['record']) == 'yes')
 //$xtpl->parse("main");
 //$xtpl->out("main");
 
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+            $category = $_REQUEST['category'];
+}
+else
+{
+            $category = getParentTabFromModule($currentModule);
+}
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);

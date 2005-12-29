@@ -46,6 +46,15 @@ if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 
 $smarty->assign("BLOCKS", getBlocks("Products","detail_view",'',$focus->column_fields));
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+            $category = $_REQUEST['category'];
+}
+else
+{
+            $category = getParentTabFromModule($currentModule);
+}
+$smarty->assign("CATEGORY",$category);
 
 /*
 $block_1 = getDetailBlockInformation("Products",1,$focus->column_fields);

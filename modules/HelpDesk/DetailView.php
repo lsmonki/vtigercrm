@@ -58,6 +58,15 @@ $smarty->assign("TICKETID", $_REQUEST['record']);
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD","HelpDesk");
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+            $category = $_REQUEST['category'];
+}
+else
+{
+            $category = getParentTabFromModule($currentModule);
+}
+$smarty->assign("CATEGORY",$category);
 
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("HelpDesk",1,$_REQUEST['record']) == 'yes')
