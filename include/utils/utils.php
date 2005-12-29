@@ -37,6 +37,7 @@
   require_once('include/utils/EditViewUtils.php');
   require_once('include/utils/DetailViewUtils.php');
   require_once('include/utils/CommonUtils.php');
+  require_once('include/utils/InventoryUtils.php');
   
 function return_name(&$row, $first_column, $last_column)
 {
