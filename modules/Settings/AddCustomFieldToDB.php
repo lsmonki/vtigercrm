@@ -261,60 +261,67 @@ else
 	//retreiving the sequence
 	$custfld_fieldid=$adb->getUniqueID("field");
 	$custfld_sequece=$adb->getUniqueId("customfield_sequence");
-    
-        $query = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",5,1,'".$uichekdata."',1,0)";
-	
-        $adb->query($query);
+    	
+	$blockid ='';
+        //get the blockid for this custom block
+        $blockid = getBlockId($tabid,'LBL_CUSTOM_INFORMATION');
 
-        $adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
-       
-	//Inserting values into profile2field tables
-	$sql1 = "select * from profile";
-	$sql1_result = $adb->query($sql1);
-	$sql1_num = $adb->num_rows($sql1_result);
-	for($i=0; $i<$sql1_num; $i++)
-	{
-		$profileid = $adb->query_result($sql1_result,$i,"profileid");
-		$sql2 = "insert into profile2field values(".$profileid.", ".$tabid.", ".$custfld_fieldid.", 0, 1)";
-		$adb->query($sql2);	 	
-	}
+        if(is_numeric($blockid))
+        {
 
-	//Inserting values into def_org tables
+		$query = "insert into field values(".$tabid.",".$custfld_fieldid.",'".$columnName."','".$tableName."',2,".$uitype.",'".$columnName."','".$fldlabel."',0,0,0,100,".$custfld_sequece.",$blockid,1,'".$uichekdata."',1,0)";
+
+		$adb->query($query);
+
+		$adb->alterTable($tableName, $columnName." ".$type, "Add_Column");
+
+		//Inserting values into profile2field tables
+		$sql1 = "select * from profile";
+		$sql1_result = $adb->query($sql1);
+		$sql1_num = $adb->num_rows($sql1_result);
+		for($i=0; $i<$sql1_num; $i++)
+		{
+			$profileid = $adb->query_result($sql1_result,$i,"profileid");
+			$sql2 = "insert into profile2field values(".$profileid.", ".$tabid.", ".$custfld_fieldid.", 0, 1)";
+			$adb->query($sql2);	 	
+		}
+
+		//Inserting values into def_org tables
 		$sql_def = "insert into def_org_field values(".$tabid.", ".$custfld_fieldid.", 0, 1)";
 		$adb->query($sql_def);
 
-          
-	if($fldType == 'Picklist')
-	{
-		// Creating the PickList Table and Populating Values
-		/*$query = "create table ".$fldmodule."_".$columnName." (".$columnName." varchar(255) NOT NULL)";
-		mysql_query($query);*/
-		$adb->createTable($columnName, $columnName." C(255)");
-		//Adding Primary Key
-		$qur = "ALTER table ".$columnName." ADD PRIMARY KEY (". $columnName.")";
-		$adb->query($qur);
 
-		$fldPickList =  $_REQUEST['fldPickList'];
-		$pickArray = explode("\n",$fldPickList);
-		$count = count($pickArray);
-		for($i = 0; $i < $count; $i++)
+		if($fldType == 'Picklist')
 		{
-			$pickArray[$i] = trim($pickArray[$i]);
-			if($pickArray[$i] != '')
+			// Creating the PickList Table and Populating Values
+			/*$query = "create table ".$fldmodule."_".$columnName." (".$columnName." varchar(255) NOT NULL)";
+			  mysql_query($query);*/
+			$adb->createTable($columnName, $columnName." C(255)");
+			//Adding Primary Key
+			$qur = "ALTER table ".$columnName." ADD PRIMARY KEY (". $columnName.")";
+			$adb->query($qur);
+
+			$fldPickList =  $_REQUEST['fldPickList'];
+			$pickArray = explode("\n",$fldPickList);
+			$count = count($pickArray);
+			for($i = 0; $i < $count; $i++)
 			{
-				$query = "insert into ".$columnName." values('".$pickArray[$i]."')";
-				$adb->query($query);
+				$pickArray[$i] = trim($pickArray[$i]);
+				if($pickArray[$i] != '')
+				{
+					$query = "insert into ".$columnName." values('".$pickArray[$i]."')";
+					$adb->query($query);
+				}
 			}
 		}
-	}
-	//Inserting into LeadMapping table - Jaguar
-	if($fldmodule == 'Leads')
-	{
+		//Inserting into LeadMapping table - Jaguar
+		if($fldmodule == 'Leads')
+		{
 
-		$sql_def = "insert into convertleadmapping (leadfid) values(".$custfld_fieldid.")";
-		$adb->query($sql_def);
+			$sql_def = "insert into convertleadmapping (leadfid) values(".$custfld_fieldid.")";
+			$adb->query($sql_def);
+		}
 	}
-
 	header("Location:index.php?module=Settings&action=CustomFieldList&fld_module=".$fldmodule);
 }
 ?>
