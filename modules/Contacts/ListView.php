@@ -45,6 +45,14 @@ global $theme;
 $comboFieldNames = Array('leadsource'=>'leadsource_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+	$category = $_REQUEST['category'];
+}
+else
+{
+	$category = getParentTabFromModule($currentModule);
+}
 $focus = new Contact();
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
@@ -314,9 +322,7 @@ if($viewid != 0)
 {
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<tr>
-	<form name="massdelete" method="POST">
+$other_text ='<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden" value='.$viewid.'>
 	<input name="change_status" type="hidden">';
@@ -329,7 +335,7 @@ $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL
 
 if(isset($CActionDtls))
 {
-	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
+	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/></form>';
 }
 if($viewid == 0)
 {
@@ -346,15 +352,13 @@ $cvHTML = '<a href="index.php?module=Contacts&action=CustomView&record='.$viewid
 <a href="index.php?module=Contacts&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 
-	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+	$customstrings ='<td align="right">'.$app_strings[LBL_VIEW].'
 		<SELECT NAME="view" onchange="showDefaultCustomView(this)">
 			<OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 			'.$customviewcombo_html.'
 		</SELECT>
 		'.$cvHTML.'
-	</td>
-</tr>
-</table>';
+	</td>';
 
 //
 
@@ -412,8 +416,9 @@ $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
-$smarty->assign("CUSTOMVIEW",$custom);
-
+$smarty->assign("CUSTOMVIEW",$customstrings);
+$smarty->assign("BUTTONS",$other_text);
+$smarty->assign("CATEGORY",$category);
 
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
