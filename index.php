@@ -377,6 +377,10 @@ global $currentModule;
 if($calculate_response_time) $startTime = microtime();
 
 $log =& LoggerManager::getLogger('index');
+
+global $seclog;
+$seclog =& LoggerManager::getLogger('SECURITY');
+
 if (isset($_REQUEST['PHPSESSID'])) $log->debug("****Starting for session ".$_REQUEST['PHPSESSID']);
 else $log->debug("****Starting for new session");
 
@@ -775,13 +779,33 @@ else
 {
 	$theme = $default_theme;
 }
+
+//logging the security Information
+$seclog->debug('########  Module -->  '.$module.'  :: Action --> '.$action.' ::  UserID --> '.$current_user->id.'  #######');
+
 if(!$skipSecurityCheck)
 {
-  fetchPermissionData($module,$action);
+	require_once('include/utils/UserInfoUtil.php');
+	if(isset($_REQUEST['record']) && $_REQUEST['record'] != '')
+	{
+		$display = isPermitted($module,$action,$_REQUEST['record']);
+	}
+	else
+	{
+		$display = isPermitted($module,$action);
+	}
+	$seclog->debug('########### Pemitted ---> '.$display.'  ##############');
+	//fetchPermissionData($module,$action);
 }
-if ($display == "No")
+else
 {
-	$display == "";
+	$seclog->debug('########### Pemitted ---> yes  ##############');
+}
+
+
+if($display == "no")
+{
+        echo "You are not permitted to execute this Operation";
 }
 else
 {
