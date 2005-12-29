@@ -351,9 +351,9 @@ itle="Basic Search" border=0></td>
 				<tr>
 					<td style="padding-right:20px" nowrap> {$BUTTONS}</td>
 					<td style="padding-right:20px" nowrap>{$RECORD_COUNTS}</td>
-        	        		<td nowrap ><table border=0 cellspacing=0 cellpadding=0><tr>{$NAVIGATION}</tr></table></td>
+        	        <td nowrap ><table border=0 cellspacing=0 cellpadding=0><tr>{$NAVIGATION}</tr></table></td>
 					<td align="right">{$CUSTOMVIEW}</td>	
-       		        	</tr>
+               	</tr>
 			</table>
 
 			<div  style="overflow:auto;width:100%;height:300px; border-top:1px solid #999999;border-bottom:1px solid #999999">
@@ -376,15 +376,17 @@ itle="Basic Search" border=0></td>
 			{/foreach}
 			</table>
 			</div>
-
+			<table border=0 cellspacing=0 cellpadding=2 width=100%>
+			<tr>
+			<td style="padding-right:20px" nowrap> {$BUTTONS}</td>
+			<td style="padding-right:20px" nowrap>{$RECORD_COUNTS}</td>
+			<td nowrap ><table border=0 cellspacing=0 cellpadding=0><tr>{$NAVIGATION}</tr></table></td>
+			<td align="right" nowrap>{$WORDTEMPLATEOPTIONS}{$MERGEBUTTON}</td>
+			</tr>
+			</table>
 
 </td></tr></table></div>
 
-<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder">
-<tr><td>
-{$WORDTEMPLATEOPTIONS}
-{$MERGEBUTTON}
-</td></tr></table>
 </td></tr></table>
 {$SELECT_SCRIPT}
 </form>
