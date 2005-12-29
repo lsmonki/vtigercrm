@@ -565,6 +565,12 @@ function make_clickable($text)
 
    return($ret);
 }
+/**
+ * This function returns the blocks and its related information for given module.
+ * Input Parameter are $module - module name, $disp_view = display view (edit,detail or create),$mode - edit, $col_fields - * column fields/
+ * This function returns an array
+ */
+
 function getBlocks($module,$disp_view,$mode,$col_fields='')
 {
         global $adb;
@@ -572,52 +578,108 @@ function getBlocks($module,$disp_view,$mode,$col_fields='')
         global $log;
         $tabid = getTabid($module);
         $block_detail = Array();
+        $getBlockinfo = "";
         $query="select blockid,blocklabel,show_title from blocks where tabid=$tabid and $disp_view=0 and visible = 0 order by sequence";
 
         $result = $adb->query($query);
         $noofrows = $adb->num_rows($result);
-	$prev_header = "";
+        $prev_header = "";
         for($i=0; $i<$noofrows; $i++)
         {
-		$block_title = $mod_strings[$adb->query_result($result,$i,"blocklabel")];
-		if($block_title !='')
-		{
-			$prev_header = $block_title;
-			if($disp_view == "detail_view")
-			{
-                		$block_detail[$block_title]=getDetailBlockInformation($module,$adb->query_result($result,$i,"blockid"),$col_fields,$tabid);
-			}
-			else
-			{
-                		$block_detail[$block_title]=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid);
-			}
-			
-		}	
-		else
+                $block_title = $mod_strings[$adb->query_result($result,$i,"blocklabel")];
+                if($block_title !='')
                 {
-			if($disp_view == "detail_view")
-			{
-				array_push($block_detail[$prev_header],getDetailBlockInformation($module,$adb->query_result($result,$i,"blockid"),$col_fields,$tabid));
-			}
-			else
-			{
-				array_push($block_detail[$prev_header],getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid));
-			}
+                        $prev_header = $block_title;
 
-		}
+                        if($disp_view == "detail_view")
+                        {
+                                if($block_title=='LBL_RELATED_PRODUCTS')
+                                {
+                                        $getBlockInfo=getProductDetails();
+                                }
+                                else
+				 {
+                                        $getBlockInfo=getDetailBlockInformation($module,$adb->query_result($result,$i,"blockid"),$col_fields,$tabid);
+                                }
+                        }
+                        else
+                        {
+                                $getBlockInfo=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid);
+                        }
+
+                        if(is_array($getBlockInfo))
+                        {
+                                $block_detail[$block_title] = $getBlockInfo;
+                        }
+                }
+                else
+                {
+                        if($disp_view == "detail_view")
+                        {
+                                $k=sizeof($block_detail[$prev_header]);
+                                $temp_headerless_arr=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid);
+                                foreach($temp_headerless_arr as $td_val=>$tr_val)
+                                {
+                                        $block_detail[$prev_header][$k]=$tr_val;
+                                        $k++;
+                                }
+
+                        }
+                        else
+                        {
+                                $k=sizeof($block_detail[$prev_header]);
+                                $temp_headerless_arr=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid);
+                                foreach($temp_headerless_arr as $td_val=>$tr_val)
+				{
+                                        $block_detail[$prev_header][$k]=$tr_val;
+                                        $k++;
+                                }
+
+
+
+                        }
+
+                }
 
         }
         return $block_detail;
 }
 
+/**
+ * This function is used to get the display type.
+ * Takes the input parameter as $mode - edit  (mostly)
+ * This returns string type value
+ */
+
 function getView($mode)
-{	
-	if($mode=="edit")	
-	$disp_view = "edit_view";
-	else
-	$disp_view = "create_view";
-	return $disp_view;
+{
+        if($mode=="edit")
+        $disp_view = "edit_view";
+        else
+        $disp_view = "create_view";
+        return $disp_view;
 }
+/**
+ * This function is used to get the blockid of the customblock for a given module.
+ * Takes the input parameter as $tabid - module tabid and $label - custom label
+ * This returns string type value
+ */
+
+function getBlockId($tabid,$label)
+{
+        global $adb;
+        $blockid = '';
+        $query = "select blockid from blocks where tabid=$tabid and blocklabel = '$label'";
+        $result = $adb->query($query);
+        $noofrows = $adb->num_rows($result);
+        if($noofrows == 1)
+        {
+                $blockid = $adb->query_result($result,0,"blockid");
+        }
+        return $blockid;
+}
+
+
 function getHeaderArray()
 {
 	global $adb;
