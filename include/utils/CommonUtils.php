@@ -617,7 +617,7 @@ function getBlocks($module,$disp_view,$mode,$col_fields='')
                         if($disp_view == "detail_view")
                         {
                                 $k=sizeof($block_detail[$prev_header]);
-                                $temp_headerless_arr=getBlockInformation($module,$adb->query_result($result,$i,"blockid"),$mode,$col_fields,$tabid);
+                                $temp_headerless_arr=getDetailBlockInformation($module,$adb->query_result($result,$i,"blockid"),$col_fields,$tabid);
                                 foreach($temp_headerless_arr as $td_val=>$tr_val)
                                 {
                                         $block_detail[$prev_header][$k]=$tr_val;
