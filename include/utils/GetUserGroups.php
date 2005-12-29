@@ -79,7 +79,6 @@ class GetUserGroups {
 					
 			}
                 }
-
 		foreach($this->user_groups as $grp_id)
 		{
 			//echo '<BR>'.$grp_id.'<BR>';
@@ -92,7 +91,7 @@ class GetUserGroups {
 			{
 				if(! in_array($par_grp_id,$this->user_groups))
 				{
-					$this->user_groups[]=$now_group_id;
+					$this->user_groups[]=$par_grp_id;
 					
 				}	
 			}
