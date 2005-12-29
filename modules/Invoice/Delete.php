@@ -29,40 +29,8 @@ $focus = new Invoice();
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
-$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
-$adb->query($sql_recentviewed);
-if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module'] == "Accounts")
-{
-	$focus->mark_deleted($_REQUEST['record']);
-}
-elseif($_REQUEST['return_module']=="SalesOrder")
-{
-	$relation_query = "UPDATE invoice set salesorderid='' where invoiceid=".$_REQUEST['record'];
-	$adb->query($relation_query);
-}
-elseif($_REQUEST['return_module']=="Products")
-{
-	//$relation_query = "DELETE from invoiceproductrel where productid=".$_REQUEST['return_id']." and invoiceid=".$_REQUEST['record'];
-	//$adb->query($relation_query);
-	//Removing the relation from the quotes product rel
-	$inv_query = "select * from invoiceproductrel where productid=".$_REQUEST['return_id'];
-	//echo $qt_query;
-	$result = $adb->query($inv_query);
-	$num_rows = $adb->num_rows($result);
-	for($i=0; $i< $num_rows; $i++)
-	{
-        	$invoice_id = $adb->query_result($result,$i,"invoiceid");
-	        $qty = $adb->query_result($result,$i,"quantity");
-	        $listprice = $adb->query_result($result,$i,"listprice");
-        	$prod_total = $qty * $listprice;
+DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
 
-	        //Get the current sub total from Quotes and update it with the new subtotal
-	        updateSubTotal("Invoices","invoice","subtotal","total","invoiceid",$invoice_id,$prod_total);
-	}
-	//delete the relation from quotes product rel
-	$del_query = "delete from invoiceproductrel where productid=".$_REQUEST['return_id']." and invoiceid=".$_REQUEST['record'];
-	$adb->query($del_query);
-}
 //code added for returning back to the current view after delete from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];

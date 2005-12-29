@@ -28,30 +28,7 @@ $focus = new Contact();
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
-if($_REQUEST['return_module'] == 'Accounts')
-{
-        $sql = 'update crmentity set deleted = 1 where crmid = '.$_REQUEST['record'];
-        $adb->query($sql);
-}
-if($_REQUEST['return_module'] == 'Potentials' && $_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
-{
-	$sql = 'delete from contpotentialrel where contactid='.$_REQUEST['record'].' and potentialid='.$_REQUEST['return_id'];
-	$adb->query($sql);
-}
-if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
-{
-	$sql = 'delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
-	$adb->query($sql);
-$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
-$adb->query($sql_recentviewed);
-}
-if($_REQUEST['return_module'] == 'Products')
-{
-	$sql = 'delete from vendorcontactrel where contactid='.$_REQUEST['record'].' and vendorid='.$_REQUEST['return_id'];
-	$adb->query($sql);
-}
-if($_REQUEST['return_module'] == $_REQUEST['module'])
-	$focus->mark_deleted($_REQUEST['record']);
+DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
 
 //code added for returning back to the current view after delete from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';

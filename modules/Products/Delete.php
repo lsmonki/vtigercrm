@@ -29,23 +29,7 @@ $focus = new Product();
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
-if($_REQUEST['record'] != '' && $_REQUEST['return_id'] != '')
-{
-	if($_REQUEST['return_module'] == 'Activities')
-        	$sql = 'delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
-
-	if($_REQUEST['return_module'] == 'Potentials' || $_REQUEST['return_module'] == 'Accounts' || $_REQUEST['return_module'] == 'Leads')
-		$sql = 'delete from seproductsrel where crmid = '.$_REQUEST['return_id'].' and productid = '.$_REQUEST['record'];
-
-	$adb->query($sql);
-}
-if($_REQUEST['return_module'] == "Contacts")
-{
-	$sql = "UPDATE products set contactid = '' where productid = ".$_REQUEST['record'];
-	$adb->query($sql);
-}
-if($_REQUEST['module'] == $_REQUEST['return_module'])
-	$focus->mark_deleted($_REQUEST['record']);
+DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
 
 if(isset($_REQUEST['activity_mode']))
 	$activitymode = '&activity_mode='.$_REQUEST['activity_mode'];

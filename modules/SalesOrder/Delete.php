@@ -29,49 +29,8 @@ $focus = new SalesOrder();
 if(!isset($_REQUEST['record']))
 	die($mod_strings['ERR_DELETE_RECORD']);
 
-$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
-$adb->query($sql_recentviewed);
-if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module'] == "Accounts")
-{
-	$focus->mark_deleted($_REQUEST['record']);
-}
-elseif($_REQUEST['return_module'] == "Quotes")
-{
-	$relation_query = "UPDATE salesorder set quoteid='' where salesorderid=".$_REQUEST['record'];
-	$adb->query($relation_query);
-}
-elseif($_REQUEST['return_module'] == "Potentials")
-{
-	$relation_query = "UPDATE salesorder set potentialid='' where salesorderid=".$_REQUEST['record'];
-	$adb->query($relation_query);
-}
-elseif($_REQUEST['return_module'] == "Contacts")
-{
-	$relation_query = "UPDATE salesorder set contactid='' where salesorderid=".$_REQUEST['record'];
-	$adb->query($relation_query);
-}
-elseif($_REQUEST['return_module'] == "Products")
-{
-	//Removing the relation from the so product rel
-	$so_query = "select * from soproductrel where productid=".$_REQUEST['return_id'];
-	$result = $adb->query($so_query);
-	$num_rows = $adb->num_rows($result);
-	for($i=0; $i< $num_rows; $i++)
-	{
-        	$so_id = $adb->query_result($result,$i,"salesorderid");
-	        $qty = $adb->query_result($result,$i,"quantity");
-        	$listprice = $adb->query_result($result,$i,"listprice");
-	        $prod_total = $qty * $listprice;
+DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
 
-        	//Get the current sub total from Quotes and update it with the new subtotal
-	        updateSubTotal("SalesOrder","salesorder","subtotal","total","salesorderid",$so_id,$prod_total);
-	}
-	//delete the relation from so product rel
-	$del_query = "delete from soproductrel where productid=".$_REQUEST['return_id']." and salesorderid=".$_REQUEST['record'];
-	$adb->query($del_query);
-
-}
-	
  //code added for returning back to the current view after delete from list view
  if($_REQUEST['return_viewname'] == '') $return_viewname='0';
  if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];

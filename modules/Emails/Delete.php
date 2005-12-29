@@ -27,12 +27,7 @@ $focus = new Email();
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the email.");
 
-	//$sql='delete from seactivityrel where activityid='.$_REQUEST['record'];
-	$sql='delete from seactivityrel where activityid='.PearDatabase::quote($_REQUEST['record']);
-$adb->query($sql);
-
-if($_REQUEST['module'] == $_REQUEST['return_module'])
-	$focus->mark_deleted($_REQUEST['record']);
+DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
 
 //code added for returning back to the current view after delete from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';

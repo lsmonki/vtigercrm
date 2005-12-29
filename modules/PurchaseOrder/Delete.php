@@ -24,55 +24,12 @@ global $mod_strings;
 require_once('include/logging.php');
 $log = LoggerManager::getLogger('order_delete');
 
-if($_REQUEST['module'] == 'PurchaseOrder')
-{
-	$focus = new Order();
+$focus = new Order();
 
-	if(!isset($_REQUEST['record']))
-		die($mod_strings['ERR_DELETE_RECORD']);
+if(!isset($_REQUEST['record']))
+	die($mod_strings['ERR_DELETE_RECORD']);
 
-	$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
-	$adb->query($sql_recentviewed);
-	if($_REQUEST['return_module'] == $_REQUEST['module'] || $_REQUEST['return_module'] == "Accounts")
-	{
-		$focus->mark_deleted($_REQUEST['record']);
-	}
-	elseif($_REQUEST['return_module'] == "Products")
-	{
-		if($_REQUEST['return_action'] == "VendorDetailView")
-		{	
-			$sql_req ='DELETE from purchaseorder where purchaseorderid= '.$_REQUEST['record'];
-			$adb->query($sql_req);
-		}
-		else
-		{	
-			//Removing the relation from the po product rel
-			$po_query = "select * from poproductrel where productid=".$_REQUEST['return_id'];
-			$result = $adb->query($po_query);
-			$num_rows = $adb->num_rows($result);
-			for($i=0; $i< $num_rows; $i++)
-			{
-			        $po_id = $adb->query_result($result,$i,"purchaseorderid");
-			        $qty = $adb->query_result($result,$i,"quantity");
-			        $listprice = $adb->query_result($result,$i,"listprice");
-			        $prod_total = $qty * $listprice;
-
-			        //Get the current sub total from Quotes and update it with the new subtotal
-			        updateSubTotal("PurchaseOrder","purchaseorder","subtotal","total","purchaseorderid",$po_id,$prod_total);
-			}
-			//delete the relation from po product rel
-			$del_query = "delete from poproductrel where productid=".$_REQUEST['return_id']." and purchaseorderid=".$_REQUEST['record'];
-			$adb->query($del_query);
-
-		}
-	}
-	elseif($_REQUEST['return_module'] == "Contacts")
-	{	
-		$sql_req ='UPDATE purchaseorder set contactid="" where purchaseorderid = '.$_REQUEST['record'];
-		$adb->query($sql_req);
-	}
-
-}
+DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
 
  //code added for returning back to the current view after delete from list view
  if($_REQUEST['return_viewname'] == '') $return_viewname='0';

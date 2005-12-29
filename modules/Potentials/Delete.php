@@ -27,18 +27,7 @@ $focus = new Potential();
 if(!isset($_REQUEST['record']))
 	die("A record number must be specified to delete the opportunity.");
 
-if($_REQUEST['return_module'] == 'Accounts')
-{
-	$sql = 'update crmentity set deleted = 1 where crmid = '.$_REQUEST['record'];
-	$adb->query($sql);
-}
-$sql ='delete from seactivityrel where crmid = '.$_REQUEST['record'].' and activityid = '.$_REQUEST['return_id'];
-$adb->query($sql);
-
-$sql_recentviewed ='delete from tracker where user_id = '.$current_user->id.' and item_id = '.$_REQUEST['record'];
-$adb->query($sql_recentviewed);
-if($_REQUEST['return_module'] == $_REQUEST['module'])
-        $focus->mark_deleted($_REQUEST['record']);
+DeleteEntity($_REQUEST['module'],$_REQUEST['return_module'],$focus,$_REQUEST['record'],$_REQUEST['return_id']);
 
 //code added for returning back to the current view after delete from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
