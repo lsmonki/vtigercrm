@@ -1528,9 +1528,33 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",16,3,2)");
                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",17,7,0)");
                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",20,2,0)");
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",21,2,0)");
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",22,2,0)");
-                $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",23,2,0)");
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",21,2,0)");
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",22,2,0)");
+               $this->db->query("insert into def_org_share values (".$this->db->getUniqueID('def_org_share').",23,2,0)");
+
+		//Populating the DataShare Related Modules
+
+		//Lead Related Module
+		$this->db->query("insert into datashare_relatedmodules values (".$this->db->getUniqueID('datashare_relatedmodules').",7,10)");
+
+		//Account Related Module
+		$this->db->query("insert into datashare_relatedmodules values (".$this->db->getUniqueID('datashare_relatedmodules').",6,2)");
+		$this->db->query("insert into datashare_relatedmodules values (".$this->db->getUniqueID('datashare_relatedmodules').",6,13)");
+		$this->db->query("insert into datashare_relatedmodules values (".$this->db->getUniqueID('datashare_relatedmodules').",6,20)");
+		$this->db->query("insert into datashare_relatedmodules values (".$this->db->getUniqueID('datashare_relatedmodules').",6,22)");
+		$this->db->query("insert into datashare_relatedmodules values (".$this->db->getUniqueID('datashare_relatedmodules').",6,23)");
+		$this->db->query("insert into datashare_relatedmodules values (".$this->db->getUniqueID('datashare_relatedmodules').",6,10)");
+
+		//Potential Related Module
+		$this->db->query("insert into datashare_relatedmodules values (".$this->db->getUniqueID('datashare_relatedmodules').",2,20)");
+		$this->db->query("insert into datashare_relatedmodules values (".$this->db->getUniqueID('datashare_relatedmodules').",2,22)");
+
+		//Quote Related Module
+		$this->db->query("insert into datashare_relatedmodules values (".$this->db->getUniqueID('datashare_relatedmodules').",20,22)");
+
+		//SO Related Module
+		$this->db->query("insert into datashare_relatedmodules values (".$this->db->getUniqueID('datashare_relatedmodules').",22,23)");	
+
 
 			
 					
