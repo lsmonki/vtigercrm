@@ -8,7 +8,7 @@
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>Sales > <a class="hdrLink" href="salesAccListView.html">{$MODULE}</a></td>
+	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > <a class="hdrLink" href="salesAccListView.html">{$MODULE}</a></td>
 	<td class="sep1" style="width:1px"></td>
 	<td class=small >
 		<table border=0 cellspacing=0 cellpadding=0>
@@ -71,7 +71,7 @@
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
 				<tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=DetailView&module={$MODULE}&record={$ID}">{$MODULE} Information</a></td>
+					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=DetailView&module={$MODULE}&record={$ID}&category={$CATEGORY}">{$MODULE} Information</a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 					<td class="dvtSelectedCell" align=center nowrap>More Information</td>
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>

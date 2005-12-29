@@ -12,7 +12,7 @@
 
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>Sales > <a class="hdrLink" href="salesAccListView.html">{$MODULE}</a></td>
+	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > <a class="hdrLink" href="salesAccListView.html">{$MODULE}</a></td>
 	<td class="sep1" style="width:1px"></td>
 	<td class=small >
 		<table border=0 cellspacing=0 cellpadding=0>
