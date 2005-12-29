@@ -172,12 +172,12 @@ $mod_output .= '<TABLE width="60%" border=0 cellPadding=5 cellSpacing=1 class="F
 $mod_output .= '<form action="index.php" method="post" name="Orders" id="form">';
 $mod_output .= '<input type="hidden" name="module" value="Users">';
 $mod_output .= '<input type="hidden" name="action" value="CreateSharingRule">';
-$mod_output .= '<input type="hidden" name="sharing_module" value="Orders">';
+$mod_output .= '<input type="hidden" name="sharing_module" value="PurchaseOrder">';
 $mod_output .= '<input type="hidden" name="mode" value="create">';
 $mod_output .= '<tr></td><input title="New" accessKey="E" class="button" type="submit" name="Create" value="New"></td></tr>';
 $mod_output .= '</form></table>';
 $mod_output .= '<BR>';
-$mod_output .= getSharingRuleList('Orders');
+$mod_output .= getSharingRuleList('PurchaseOrder');
 
 //Sales Order Sharing
 $mod_output .= '<BR><BR>';
