@@ -10,16 +10,6 @@
                         <input type="hidden" name="return_module">
                         <input type="hidden" name="return_action">
                         <input type="hidden" name="return_id">
-                        <input type="hidden" name="contact_id">
-                        <input type="hidden" name="member_id">
-                        <input type="hidden" name="opportunity_id">
-                        <input type="hidden" name="case_id">
-                        <input type="hidden" name="task_id">
-                        <input type="hidden" name="meeting_id">
-                        <input type="hidden" name="call_id">
-                        <input type="hidden" name="email_id">
-                        <input type="hidden" name="source_module">
-                        <input type="hidden" name="entity_id">
 		</table>	
 
 
