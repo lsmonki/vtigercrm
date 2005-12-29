@@ -41,6 +41,14 @@ global $theme;
 $comboFieldNames = Array('accounttype'=>'account_type_dom'
                       ,'industry'=>'industry_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+	$category = $_REQUEST['category'];
+}
+else
+{
+	$category = getParentTabFromModule($currentModule);
+}
 
 // focus_list is the means of passing data to a ListView.
 global $focus_list;
@@ -235,122 +243,12 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 	$log->info("Here is the where clause for the list view: $where");
 
 }
-/*
-//<<<<cutomview>>>>>>>
-$oCustomView = new CustomView("Accounts");
-$customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']) == false)
-{
-	if($oCustomView->setdefaultviewid != "")
-	{
-		$viewid = $oCustomView->setdefaultviewid;
-	}else
-	{
-		$viewid = "0";
-	}
-}else
-{
-	$viewid =  $_REQUEST['viewname'];
-	$oCustomView->setdefaultviewid = $viewid;
-}
-//<<<<<customview>>>>>
-*/
-/*if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
-    // Mike Crowe Mod --------------------------------------------------------
-	require_once('include/SearchBlock.php');
-    $search_form = BuildSearchForm($focus);
-    // Mike Crowe Mod --------------------------------------------------------
-	//$search_form=new XTemplate ('modules/Accounts/SearchForm.html');
-	$search_form->assign("MOD", $current_module_strings);
-	$search_form->assign("APP", $app_strings);
-
-	$search_form->assign("MODULE",$currentModule);
-
-	$search_form->assign("VIEWID",$viewid);
-	$search_form->assign("GROUPID",$groupid);
-	
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-
-	//added querysting viewname to display the selected view<<<<<<<customview>>>>>>
-	$search_form->assign("BASIC_LINK", "index.php?module=Accounts&action=index".$url_string."&viewname=".$viewid);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Accounts&action=index&advanced=true".$url_string."&viewname=".$viewid);
-
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	if (isset($name)) $search_form->assign("NAME", $name);
-	if (isset($website)) $search_form->assign("WEBSITE", $website);
-	if (isset($phone)) $search_form->assign("PHONE", $phone);
-	if (isset($address_city)) $search_form->assign("ADDRESS_CITY", $address_city);
-
-	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
-
-
-	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], '', false);
-
-
-	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
-
-	$url_string .="&advanced=true";     //addedparameter for AlphabeticalSeach $viewidforseach
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','advanced',"","","","",$viewid));
-
-		if (isset($annual_revenue)) $search_form->assign("ANNUAL_REVENUE", $annual_revenue);
-		if (isset($employees)) $search_form->assign("EMPLOYEES", $employees);
-		if (isset($address_street)) $search_form->assign("ADDRESS_STREET", $address_street);
-		if (isset($address_state)) $search_form->assign("ADDRESS_STATE", $address_state);
-		if (isset($address_country)) $search_form->assign("ADDRESS_COUNTRY", $address_country);
-		if (isset($address_postalcode)) $search_form->assign("ADDRESS_POSTALCODE", $address_postalcode);
-		//Added field emailoptout after 4.2 patch 2
-		if (isset($emailoptout)) $search_form->assign("EMAIL_OPT_OUT", "CHECKED");
-
-		if (isset($email)) $search_form->assign("EMAIL", $email);
-		if (isset($ownership)) $search_form->assign("OWNERSHIP", $ownership);
-		if (isset($rating)) $search_form->assign("RATING", $rating);
-		if (isset($sic_code)) $search_form->assign("SIC_CODE", $sic_code);
-		if (isset($ticker_symbol)) $search_form->assign("TICKER_SYMBOL", $ticker_symbol);
-
-		if (isset($industry)) $search_form->assign("INDUSTRY_OPTIONS", get_select_options($comboFieldArray['industry_dom'], $industry, $_REQUEST['advanced']));
-		else $search_form->assign("INDUSTRY_OPTIONS", get_select_options($comboFieldArray['industry_dom'], '', $_REQUEST['advanced']));
-		if (isset($account_type)) $search_form->assign("ACCOUNT_TYPE_OPTIONS", get_select_options($comboFieldArray['account_type_dom'], $account_type, $_REQUEST['advanced']));
-		else $search_form->assign("ACCOUNT_TYPE_OPTIONS", get_select_options_with_id($comboFieldArray['account_type_dom'], '', $_REQUEST['advanced']));
-
-		if (!empty($assigned_user_id)) $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), $assigned_user_id));
-		else $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), ''));
-
-//Added for Custom Field Search
-$sql="select * from field where tablename='accountscf' order by fieldlabel";
-$result=$adb->query($sql);
-for($i=0;$i<$adb->num_rows($result);$i++)
-{
-        $column[$i]=$adb->query_result($result,$i,'columnname');
-        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-}
-require_once('include/CustomFieldUtil.php');
-$custfld = CustomFieldSearch($customfield, "accountscf", "accountcf", "accountid", $app_strings,$theme,$column,$fieldlabel);
-$search_form->assign("CUSTOMFIELD", $custfld);
-//upto this added for Custom Field
-
-		$search_form->parse("advanced");
-		$search_form->out("advanced");
-	}
-	else {  //customview //
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Accounts','index','accountname','true','basic',"","","","",$viewid));
-	}
-		
-		$search_form->parse("main");
-		$search_form->out("main");
-	echo get_form_footer();
-	echo "\n<BR>\n";
-}*/
-
 if($viewid != 0)
 {
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
 //Modified by Raju
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	
-	<tr>
-	<form name="massdelete" method="POST">
+	$other_text='<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
 	<input name="gname" type="hidden" value="'.$groupid.'">
 	<input name="viewname" type="hidden" value="'.$viewid.'">'; //give the viewid to hidden //customview
@@ -363,19 +261,8 @@ if(isPermitted('Accounts',2,'') == 'yes')
 
 if(isset($CActionDtls))
 {
-	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
+	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/></form>';
 }
-	/*$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
-			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
-				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_PROSPECT].'">'.$mod_strings[LBL_PROSPECT].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_INVESTOR].'">'.$mod_strings[LBL_INVESTOR].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_RESELLER].'">'.$mod_strings[LBL_RESELLER].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_PARTNER].'">'.$mod_strings[LBL_PARTNER].'</option>
-			</SELECT>
-		</td>
-	</tr>
-	</table>';*/
 
 if($viewid == 0)
 {
@@ -391,35 +278,23 @@ $cvHTML='<a href="index.php?module=Accounts&action=CustomView&record='.$viewid.'
 	<span class="sep">|</span>
 	<a href="index.php?module=Accounts&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
-	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+	$customviewstrings='<td align="right">'.$app_strings[LBL_VIEW].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">
                                 <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
-                </td>
-        </tr>
-        </table>';
+                </td>';
 
-/*
-$ListView = new ListView();
-$ListView->initNewXTemplate('modules/Accounts/ListView.html',$current_module_strings);
-$ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE']);
-
-$ListView->setQuery($where, "", "accountname", "ACCOUNT");
-$ListView->processListView($seedAccount, "main", "ACCOUNT");
-*/
-
-//echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $smarty = new vtigerCRM_Smarty;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-$custom= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
-$smarty->assign("CUSTOMVIEW",$custom);
+$smarty->assign("CUSTOMVIEW",$customviewstrings);
+$smarty->assign("BUTTONS",$other_text);
 $smarty->assign("MODULE",$currentModule);
 
 
@@ -492,38 +367,6 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
-/*
-// Setting the record count string
-if ($navigation_array['start'] == 1)
-{
-	if($noofrows != 0)
-	$start_rec = $navigation_array['start'];
-	else
-	$start_rec = 0;
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
-	}
-	else
-	{
-		$end_rec = $noofrows;
-	}
-
-}
-else
-{
-	if($navigation_array['next'] > $list_max_entries_per_page)
-	{
-		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
-		$end_rec = $navigation_array['next'] - 1;
-	}
-	else
-	{
-		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
-		$end_rec = $noofrows;
-	}
-}
-*/
 
 // Setting the record count string
 //modified by rdhital
@@ -568,10 +411,9 @@ $smarty->assign("LISTHEADER", $listview_header);
 $listview_entries = getListViewEntries($focus,"Accounts",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
-
+$smarty->assign("CATEGORY",$category);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Accounts","index",$viewid);
-
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 
