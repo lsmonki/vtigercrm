@@ -1997,7 +1997,6 @@ title';
 	(1,'Home',1,0),
 	(2,'Sales',2,0),
 	(3,'Support',3,0),
-	(4,'Marketing',4,0),
 	(5,'Analytics',5,0),
 	(6,'Inventory',6,0),
 	(7,'Tools',7,0),
