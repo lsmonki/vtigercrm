@@ -99,6 +99,15 @@ global $currentModule;
 global $image_path;
 global $theme;
 
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+	$category = $_REQUEST['category'];
+}
+else
+{
+	$category = getParentTabFromModule($currentModule);
+}
+
 $url_string = ''; // assigning http url string
 
 $focus = new Email();
@@ -169,16 +178,14 @@ else
 }
 */
 // Buttons and View options
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<tr>
-	<form name="massdelete" method="POST">
+$other_text = '	<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_status" type="hidden">
 		<td>';
 if(isPermitted('Emails',2,'') == 'yes')
 {
-	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td></form>';
 }
 $other_text .= 	'</td>';
 
@@ -198,15 +205,13 @@ else
 		<a href="index.php?module=Emails&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 
-$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">
                                 <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
-                        </td>
-        </tr>
-        </table>';
+                        </td>';
 
 
 $where = "";
@@ -300,11 +305,14 @@ $view_script = "<script language='javascript'>
 
 $customview= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $smarty = new vtigerCRM_Smarty;
-$smarty->assign("CUSTOMVIEW",$customview);
+$smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
+$smarty->assign("BUTTONS",$other_text);
+$smarty->assign("CATEGORY",$category);
+
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 

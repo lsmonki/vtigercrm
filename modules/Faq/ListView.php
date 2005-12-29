@@ -33,6 +33,15 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+	$category = $_REQUEST['category'];
+}
+else
+{
+	$category = getParentTabFromModule($currentModule);
+}
+
 $focus = new Faq();
 
 $url_string = ''; 
@@ -106,15 +115,11 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false')
 }
 */
 // Buttons and View options
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-		<form name="massdelete" method="POST">
-		<tr>
-			<input name="idlist" type="hidden">';
+$other_text = '	<form name="massdelete" method="POST">
+		<input name="idlist" type="hidden">';
 
-$other_text .='   <td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>
-		  <td align="right">&nbsp;</td>
-		</tr>
-	       </table>';
+$other_text .='   <td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td></form>
+		  <td align="right">&nbsp;</td>';
 
 //Retreive the list from Database
 $list_query = getListQuery("Faq");
@@ -136,13 +141,17 @@ $list_result = $adb->query($list_query);
 //Constructing the list view 
 
 //echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$customView = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
+//$customView = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
+
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("CUSTOMVIEW",$customView);
+//$smarty->assign("CUSTOMVIEW",$customView);
+$smarty->assign("BUTTONS",$other_text);
+$smarty->assign("CATEGORY",$category);
+
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 

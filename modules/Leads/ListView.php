@@ -47,6 +47,15 @@ $comboFieldNames = Array('leadsource'=>'leadsource_dom'
                       ,'industry'=>'industry_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+	$category = $_REQUEST['category'];
+}
+else
+{
+	$category = getParentTabFromModule($currentModule);
+}
+
 if (!isset($where)) $where = "";
 
 $url_string = ''; // assigning http url string
@@ -304,9 +313,7 @@ if($viewid != 0)
 }
 // Buttons and View options
 //Modified by Raju
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<tr>
-	<form name="massdelete" method="POST">
+$other_text = '<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
 	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_owner" type="hidden">
@@ -324,7 +331,7 @@ if(isPermitted('Leads',1,'') == 'yes')
 }
 if(isset($CActionDtls))
 {
-	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/></td>';
+	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/></td></form>';
 }
 	/*$other_text .=	'</td>
 			<td align="right">'.$app_strings[LBL_VIEW].'
@@ -353,15 +360,13 @@ $cvHTML = '<a href="index.php?module=Leads&action=CustomView&record='.$viewid.'"
 <span class="sep">|</span>
 <a href="index.php?module=Leads&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
-	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+	$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">
                                 <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
-                </td>
-        </tr>
-        </table>';
+                </td>';
 
 
 $custom= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
@@ -372,8 +377,10 @@ $image_path=$theme_path."images/";
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
-$smarty->assign("CUSTOMVIEW",$custom);
+$smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("MODULE",$currentModule);
+$smarty->assign("BUTTONS",$other_text);
+$smarty->assign("CATEGORY",$category);
 
 
 //Retreive the list from Database
@@ -436,38 +443,6 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
-/*
-// Setting the record count string
-if ($navigation_array['start'] == 1)
-{
-	if($noofrows != 0)
-	$start_rec = $navigation_array['start'];
-	else
-	$start_rec = 0;
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
-	}
-	else
-	{
-		$end_rec = $noofrows;
-	}
-
-}
-else
-{
-	if($navigation_array['next'] > $list_max_entries_per_page)
-	{
-		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
-		$end_rec = $navigation_array['next'] - 1;
-	}
-	else
-	{
-		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
-		$end_rec = $noofrows;
-	}
-}
-*/
 
 //mass merge for word templates -- *Raj*17/11
 while($row = $adb->fetch_array($list_result))
