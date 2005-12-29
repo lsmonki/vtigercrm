@@ -799,7 +799,6 @@ $log->info("in getUserId_Ol ".$username);
 }	
 //outlook security
 
-
 function getActionid($action)
 {
 global $log;
@@ -878,12 +877,19 @@ $log->info("get Actionid ".$action);
 	return $actionid;
 }
 
+
+
 function getActionname($actionid)
 {
 	global $log;
 	global $adb;
 
-	$query = 
+	$actionname='';
+	$query="select * from actionmapping where actionid=".$actionid;
+	$result =$adb->query($query);
+	$actionname=$adb->query_result($result,0,"actionname");
+	return $actionname;
+	/*
 	$log->info("getActionName   ".$actionid);
 
 	$actionname = '';
@@ -928,6 +934,7 @@ function getActionname($actionid)
 		$actionname= 'ConvertLead';
 	}
 	return $actionname;
+	*/
 }
 
 
@@ -939,6 +946,43 @@ function getUserId($record)
 	global $adb;
         $user_id=$adb->query_result($adb->query("select * from crmentity where crmid = ".$record),0,'smownerid');
 	return $user_id;	
+}
+
+function getRecordOwnerId($record)
+{
+
+	global $adb;
+	$ownerArr=Array();
+	$query="select * from crmentity where crmid = ".$record;
+	$result=$adb->query($query);
+        $user_id=$adb->query_result($result,0,'smownerid');
+	if($user_id != 0)
+	{
+		$ownerArr['Users']=$user_id;
+			
+	}
+	elseif($user_id == 0)
+	{
+        	$module=$adb->query_result($result,0,'setype');
+		if($module == 'Leads')
+		{
+			$query1="select * from leadgrouprelation where leadid=".$record;
+		}
+		elseif($module == 'Activities')
+		{
+			$query1="select * from activitygrouprelation where activityid=".$record;
+		}
+		elseif($module == 'Tickets')
+		{
+			$query1="select * from ticketgrouprelation where ticketid=".$record;
+		}
+		$result1=$adb->query($query1);
+		$groupname=$adb->query_result($result1,0,'groupname');
+		$ownerArr['Groups']=$groupname;
+						
+	}	
+	return $ownerArr;
+	
 }
 
 function insertProfile2field($profileid)
@@ -1621,4 +1665,113 @@ function getTableNameForField($module,$fieldname)
 	return $tablename;
 }
 
+function getParentRecordOwner($tabid,$parModId,$record_id)
+{
+	$parentRecOwner=Array();
+	$parentTabName=getTabname($parModId);
+	$relTabName=getTabname($tabid);
+	$fn_name="get".$relTabName."Related".$parentTabName;
+	$ent_id=$fn_name($record_id);
+	if($ent_id != '')
+	{
+		$parentRecOwner=getRecordOwnerId($ent_id);	
+	}
+	return $parentRecOwner;
+}
+
+function getPotentialsRelatedAccounts($record_id)
+{
+	global $adb;
+	$query="select accountid from potential where potentialid=".$record_id;
+	$result=$adb->query($query);
+	$accountid=$adb->query_result($result,0,'accountid');
+	return $accountid;
+}
+
+function getEmailsRelatedAccounts($record_id)
+{
+	$accountid='';
+	return $accountid;
+}
+
+function getEmailsRelatedLeads($record_id)
+{
+	$leadid='';
+	return $leadid;
+}
+
+function getHelpDeskRelatedAccounts($record_id)
+{
+	global $adb;
+        $query="select parent_id from troubletickets inner join crmentity on crmentity.crmid=troubletickets.parent_id where ticketid=".$record_id." and crmentity.setype='Accounts'";
+        $result=$adb->query($query);
+        $accountid=$adb->query_result($result,0,'parent_id');
+        return $accountid;
+}
+
+
+function getQuotesRelatedAccounts($record_id)
+{
+	global $adb;
+        $query="select accountid from quotes where quoteid=".$record_id;
+        $result=$adb->query($query);
+        $accountid=$adb->query_result($result,0,'accountid');
+        return $accountid;
+}
+
+
+function getQuotesRelatedPotentials($record_id)
+{
+	global $adb;
+        $query="select potentialid from quotes where quoteid=".$record_id;
+        $result=$adb->query($query);
+        $potid=$adb->query_result($result,0,'potentialid');
+        return $potid;
+}
+
+function getSalesOrderRelatedAccounts($record_id)
+{
+	global $adb;
+        $query="select accountid from salesorder where salesorder=".$record_id;
+        $result=$adb->query($query);
+        $accountid=$adb->query_result($result,0,'accountid');
+        return $accountid;
+}
+
+
+function getSalesOrderRelatedPotentials($record_id)
+{
+	global $adb;
+        $query="select potentialid from salesorder where salesorder=".$record_id;
+        $result=$adb->query($query);
+        $potid=$adb->query_result($result,0,'potentialid');
+        return $potid;
+}
+
+function getSalesOrderRelatedQuotes($record_id)
+{
+	global $adb;
+        $query="select quoteid from salesorder where salesorder=".$record_id;
+        $result=$adb->query($query);
+        $qtid=$adb->query_result($result,0,'quoteid');
+        return $qtid;
+}
+
+function getInvoiceRelatedAccounts($record_id)
+{
+	global $adb;
+        $query="select accountid from invoice where invoiceid=".$record_id;
+        $result=$adb->query($query);
+        $accountid=$adb->query_result($result,0,'accountid');
+        return $accountid;
+}
+
+function getInvoiceRelatedSalesOrder($record_id)
+{
+	global $adb;
+        $query="select salesorderid from invoice where invoiceid=".$record_id;
+        $result=$adb->query($query);
+        $soid=$adb->query_result($result,0,'salesorderid');
+        return $soid;
+}
 ?>
