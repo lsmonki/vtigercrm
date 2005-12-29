@@ -21,7 +21,7 @@
  ********************************************************************************/
 
 require_once('modules/Users/User.php');
-//require_once('modules/Users/CreateUserPrivilegeFile.php');
+require_once('modules/Users/CreateUserPrivilegeFile.php');
 require_once('include/logging.php');
 //require_once('modules/Users/AccessControl.php');
 
@@ -69,7 +69,8 @@ if($focus->is_authenticated())
 	$_SESSION['access_privileges'] = $accessObj; 
 	*/
 
-	//createUserPrivilegesfile($focus->id);
+	createUserPrivilegesfile($focus->id);
+        createUserSharingPrivilegesfile($focus->id);	
 		
 	$_SESSION['authenticated_user_profileid'] = $profileid;
 	setGlobalProfilePermission2Session($profileid);
