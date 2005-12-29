@@ -35,6 +35,7 @@ $mod_strings = Array(
 'LBL_LIST_PHONE'=>'Phone',
 'LBL_LIST_EMAIL_ADDRESS'=>'Email Address',
 'LBL_LIST_CONTACT_NAME'=>'Contact Name',
+'LBL_FAQ_INFORMATION'=>'Faq Information',
 
 //DON'T CONVERT THESE THEY ARE MAPPINGS
 'db_name' => 'LBL_LIST_ACCOUNT_NAME',
