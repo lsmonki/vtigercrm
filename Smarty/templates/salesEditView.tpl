@@ -92,7 +92,11 @@
 
                         <input type="hidden" name="return_viewname" value="{$RETURN_VIEWNAME}">
 
+			<input type="hidden" name="old_smownerid" value="{$OLDSMOWNERID}">
 
+			<input type="hidden" name="convertmode">
+
+			<input type="hidden" name="totalProductCount">
 
 
 		{*<!-- Account details tabs -->*}
@@ -191,10 +195,17 @@
 							   {$fldlabel}
 							</td>
                                                         <td width="30%" align=left class="dvtCellInfo">
-                                                           <select name="{$fldname}">
+								{if $uitype eq 52}
+                                                           	   <select name="assigned_user_id">
+								{elseif $uitype eq 77}
+								   <select name="assigned_user_id1">
+								{else}
+								   <select name="{$fldname}">
+								{/if}
+
                                                                 {foreach item=arr from=$fldvalue}
                                                                         {foreach key=sel_value item=value from=$arr}
-                                                                                <option value={$sel_value} {$value}>{$sel_value}</option>
+                                                                                <option value="{$sel_value}" {$value}>{$sel_value}</option>
                                                                         {/foreach}
 
                                                                 {/foreach}
@@ -260,11 +271,18 @@
 								{assign var=date_val value="$date_value"}
 								{assign var=time_val value="$time_value"}
 							   {/foreach}
-							<input name="{$fldname}" id="jscal_field" type="text" style="border:1px solid #bababa;" size="11" maxlength="10" value="{$date_val}">
-							<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger">
+							<input name="{$fldname}" id="jscal_field_{$fldname}" type="text" style="border:1px solid #bababa;" size="11" maxlength="10" value="{$date_val}">
+							<img src="{$IMAGE_PATH}calendar.gif" id="jscal_trigger_{$fldname}">
 							{if $uitype eq 6}
 							   <input name="time_start" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
 							{/if}
+							<script type="text/javascript">
+                					Calendar.setup ({ldelim}
+								inputField : "jscal_field_{$fldname}", ifFormat : "{$secondvalue}", showsTime : false, button : "jscal_trigger_{$fldname}", singleClick : true, step : 1
+									{rdelim})
+     						        </script>
+
+							
 							</td>
 
 							{elseif $uitype eq 63}
@@ -279,7 +297,7 @@
 								{/foreach}
 								</select>
 
-							{elseif $uitype eq 68 || $uitype eq 66 || $uitype eq 62 || $uitype eq 357}
+							{elseif $uitype eq 68 || $uitype eq 66 || $uitype eq 62}
 							  <td width="20%" class="dvtCellLabel" align=right>
 								<select name="parent_type" onChange='document.EditView.parent_name.value=""; document.EditView.parent_id.value=""'>
 								{foreach key=labelval item=selectval from=$fldlabel}
@@ -288,10 +306,26 @@
 								</select>
 							  </td>
 							<td width="30%" align=left class="dvtCellInfo">
-							{if $uitype neq 357}
-							<input name="{$fldname}" type="hidden" value="{$secondvalue}"><input name="parent_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}">{/if}
+							<input name="{$fldname}" type="hidden" value="{$secondvalue}"><input name="parent_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}">
 						&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
-
+							
+							{elseif $uitype eq 357}
+								<td width="20%" class="dvtCellLabel" align=right>To:&nbsp;</td>
+								<td width="90%" colspan="3"><input name="{$fldname}" type="hidden" value="{$secondvalue}"><textarea readonly name="parent_name" cols="70" rows="2">{$fldvalue}</textarea>&nbsp;<select name="parent_type" >
+								{foreach key=labelval item=selectval from=$fldlabel}
+                                                                <option value={$labelval} {$selectval}>{$labelval}</option>
+                                                                {/foreach}
+                                                                </select>
+								&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+								<tr style="height:25px">
+								<td width="20%" class="dvtCellLabel" align=right>CC:&nbsp;</td>	
+								<td width="30%" align=left class="dvtCellInfo">
+								<input name="{$fldname}" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value="{$fldvalue}"></td>
+								<td width="20%" class="dvtCellLabel" align=right>BCC:&nbsp;</td>
+                                                                <td width="30%" align=left class="dvtCellInfo">
+                                                                <input name="bccmail" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value=""></td>
+								</tr>
+				
  	                                                {elseif $uitype eq 59}
                                                           <td width="20%" class="dvtCellLabel" align=right>
                                                            {$fldlabel}</td>
