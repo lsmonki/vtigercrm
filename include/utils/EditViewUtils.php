@@ -1023,7 +1023,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		//$custfld .= $mod_strings[$fieldlabel].'</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
 		
-		$custfld .= '<td width="30%"><input name="vendor_name" readonly type="text" value="'.$vendor_name.'"><input name="vendor_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=VendorPopup&html=Popup_picker&popuptype='.$pop_type.'&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>';
+		$custfld .= '<td width="30%"><input name="vendor_name" readonly type="text" value="'.$vendor_name.'"><input name="vendor_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Vendors&action=Popup&html=Popup_picker&popuptype='.$pop_type.'&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>';
 		if($uitype == 75)
                 {
                         $custfld .='&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.vendor_id.value=\'\';this.form.vendor_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';

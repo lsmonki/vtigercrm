@@ -62,19 +62,8 @@ function fetchPermissionData($module,$action)
 	global $profile_id;
 
 	require_once('include/utils/UserInfoUtil.php');
-	//Changing the tabid if the module is vendor,pricebook or salesorder
-        if($action == 'VendorEditView' || $action == 'VendorDetailView' || $action == 'DeleteVendor' || $action == 'SaveVendor')
-        {
-                $tabid = getTabid('Vendor');
-        }
-        elseif($action == 'PriceBookEditView' || $action == 'PriceBookDetailView' || $action == 'DeletePriceBook' || $action == 'SavePriceBook')
-        {
-                $tabid = getTabid('PriceBook');
-        }
-        else
-        {
-		$tabid = getTabid($module);
-	}
+	$tabid = getTabid($module);
+
 	//echo 'tab id isss  '.$tabid;
 	//echo '<BR>';
 
@@ -470,7 +459,7 @@ if(isset($action) && isset($module))
 {
 	$log->info("About to take action ".$action);
 	$log->debug("in $action");
-	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Choose", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action) || ereg("^app_ins",$action) || ereg("^minical",$action) || ereg("^minitimer",$action) || ereg("^app_del",$action) || ereg("^send_mail",$action) || ereg("^populatetemplate",$action) || ereg("^TemplateMerge",$action) || ereg("^testemailtemplateusage",$action) || ereg("^saveemailtemplate",$action) || ereg("^lookupemailtemplate",$action) || ereg("^deletewordtemplate",$action) || ereg("^deleteemailtemplate",$action) || ereg("^deleteattachments",$action) || ereg("^MassDeleteUsers",$action) || ereg("^UpdateFieldLevelAccess",$action) || ereg("^UpdateDefaultFieldLevelAccess",$action) || ereg("^UpdateProfile",$action)  || ereg("^updateRelations",$action) || ereg("^updateNotificationSchedulers",$action) || ereg("^VendorPopup",$action) || ereg("^Star",$action) || ereg("^addPbProductRelToDB",$action) || ereg("^UpdateListPrice",$action) || ereg("^PriceBookPopup",$action) || ereg("^PriceListPopup",$action) || ereg("^SalesOrderPopup",$action) || ereg("^CreatePDF",$action) || ereg("^CreateSOPDF",$action) || ereg("^redirect",$action) || ereg("^webmail",$action) || ereg("^left_main",$action) || ereg("^delete_message",$action) || ereg("^mime",$action) || ereg("^move_messages",$action) || ereg("^folders_create",$action) || ereg("^imap_general",$action) || ereg("^mime",$action) || ereg("^download",$action) || ereg("^about_us",$action) || ereg("^SendMailAction",$action) || ereg("^CreateXL",$action) || ereg("^savetermsandconditions",$action) || ereg("^home_rss",$action) || ereg("^ConvertAsFAQ",$action))
+	if(ereg("^Save", $action) || ereg("^Delete", $action) || ereg("^Choose", $action) || ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Authenticate", $action) || ereg("^Logout", $action) || ereg("^Export",$action) || ereg("^add2db", $action) || ereg("^result", $action) || ereg("^LeadConvertToEntities", $action) || ereg("^downloadfile", $action) || ereg("^massdelete", $action) || ereg("^updateLeadDBStatus",$action) || ereg("^AddCustomFieldToDB", $action) || ereg("^updateRole",$action) || ereg("^UserInfoUtil",$action) || ereg("^deleteRole",$action) || ereg("^UpdateComboValues",$action) || ereg("^fieldtypes",$action) || ereg("^app_ins",$action) || ereg("^minical",$action) || ereg("^minitimer",$action) || ereg("^app_del",$action) || ereg("^send_mail",$action) || ereg("^populatetemplate",$action) || ereg("^TemplateMerge",$action) || ereg("^testemailtemplateusage",$action) || ereg("^saveemailtemplate",$action) || ereg("^lookupemailtemplate",$action) || ereg("^deletewordtemplate",$action) || ereg("^deleteemailtemplate",$action) || ereg("^deleteattachments",$action) || ereg("^MassDeleteUsers",$action) || ereg("^UpdateFieldLevelAccess",$action) || ereg("^UpdateDefaultFieldLevelAccess",$action) || ereg("^UpdateProfile",$action)  || ereg("^updateRelations",$action) || ereg("^updateNotificationSchedulers",$action) || ereg("^Star",$action) || ereg("^addPbProductRelToDB",$action) || ereg("^UpdateListPrice",$action) || ereg("^PriceListPopup",$action) || ereg("^SalesOrderPopup",$action) || ereg("^CreatePDF",$action) || ereg("^CreateSOPDF",$action) || ereg("^redirect",$action) || ereg("^webmail",$action) || ereg("^left_main",$action) || ereg("^delete_message",$action) || ereg("^mime",$action) || ereg("^move_messages",$action) || ereg("^folders_create",$action) || ereg("^imap_general",$action) || ereg("^mime",$action) || ereg("^download",$action) || ereg("^about_us",$action) || ereg("^SendMailAction",$action) || ereg("^CreateXL",$action) || ereg("^savetermsandconditions",$action) || ereg("^home_rss",$action) || ereg("^ConvertAsFAQ",$action))
 	{
 		$skipHeaders=true;
 		if(ereg("^Popup", $action) || ereg("^ChangePassword", $action) || ereg("^Export", $action) || ereg("^downloadfile", $action) || ereg("^fieldtypes",$action) || ereg("^lookupemailtemplate",$action) || ereg("^about_us",$action) || ereg("^home_rss",$action))
@@ -612,7 +601,7 @@ $mod_strings = return_module_language($current_language, $currentModule);
 $app_list_strings['record_type_module'] = array('Account' => 'Accounts','Potential' => 'Potentials', 'Case' => 'Cases');
 
 //If DetailView, set focus to record passed in
-if($action == "DetailView" || $action == "VendorDetailView" || $action == "PriceBookDetailView")
+if($action == "DetailView")
 {
 	if(!isset($_REQUEST['record']))
 		die("A record number must be specified to view details.");
@@ -657,25 +646,19 @@ if($action == "DetailView" || $action == "VendorDetailView" || $action == "Price
 			$focus = new User();
 			break;
 		case 'Products':
-			if($action == 'DetailView')
-			{
-				require_once("modules/$currentModule/Product.php");
-				$focus = new Product();
-			}
-			elseif($action == 'VendorDetailView')
-			{
-				require_once("modules/$currentModule/Vendor.php");
-				$focus = new Vendor();
-				$actualModule = 'Vendor';
-			}
-			elseif($action == 'PriceBookDetailView')
-			{
-				require_once("modules/$currentModule/PriceBook.php");
-				$focus = new PriceBook();
-				$actualModule = 'PriceBook';
-			}
+			require_once("modules/$currentModule/Product.php");
+			$focus = new Product();
 			break;
-			
+		case 'Vendors':
+			require_once("modules/$currentModule/Vendor.php");
+			$focus = new Vendor();
+			$actualModule = 'Vendors';
+			break;
+		case 'PriceBooks':
+			require_once("modules/$currentModule/PriceBook.php");
+			$focus = new PriceBook();
+			$actualModule = 'PriceBooks';
+			break;
 		case 'HelpDesk':
 			require_once("modules/$currentModule/HelpDesk.php");
 			$focus = new HelpDesk();

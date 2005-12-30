@@ -635,11 +635,11 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	<tr>
 	<input name="action" type="hidden" value="AddProductsToPriceBook">
 	<input name="module" type="hidden" value="Products">
-	<input name="return_module" type="hidden" value="Products">
-	<input name="return_action" type="hidden" value="PriceBookDetailView">
+	<input name="return_module" type="hidden" value="PriceBooks">
+	<input name="return_action" type="hidden" value="DetailView">
 	<input name="pricebook_id" type="hidden" value="'.$_REQUEST["record"].'">';
 
-        $other_text .='<td><input title="Select Products" accessyKey="F" class="button" onclick="this.form.action.value=\'AddProductsToPriceBook\';this.form.module.value=\'Products\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'PriceBookDetailView\'" type="submit" name="button" value="'.$app_strings["LBL_SELECT_PRODUCT_BUTTON_LABEL"].'"></td>';
+        $other_text .='<td><input title="Select Products" accessyKey="F" class="button" onclick="this.form.action.value=\'AddProductsToPriceBook\';this.form.module.value=\'Products\';this.form.return_module.value=\'PriceBooks\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings["LBL_SELECT_PRODUCT_BUTTON_LABEL"].'"></td>';
 		$other_text .='</tr></table>';
 
 //Retreive the list from Database

@@ -23,7 +23,7 @@
 global $mod_strings;
 global $app_strings;
 global $moduleList;
-//print_r($moduleList);
+
 require_once('include/utils/utils.php');
 $permissionData = $_SESSION['action_permission_set'];
 
@@ -65,44 +65,13 @@ foreach($module_menu_array as $module1 => $label)
                 $add_url = "&activity_mode=Task";
 		$tabid = getTabid("Activities");
 	}
-	elseif($module1 == 'Vendor')
-	{
-		$module_display = 'Products';
-		$tabid = getTabid("Vendor");
-		$curr_action = 'VendorEditView';
-		$ret_action = 'VendorDetailView';	
-		
-	}
-	elseif($module1 == 'PriceBook')
-	{
-		$module_display = 'Products';
-		$tabid = getTabid("PriceBook");
-		$curr_action = 'PriceBookEditView';
-		$ret_action = 'PriceBookDetailView';	
-		
-	}
 	else
 	{
 		$module_display = $module1;
 		$tabid = getTabid($module1);
 	}
 
-	if($module1 == 'Vendor' || $module1 == 'PriceBook')
-	{
-		$profile_id = $_SESSION['authenticated_user_profileid'];
-	        $tab_per_Data = getAllTabsPermission($profile_id);
-		if($tab_per_Data[$tabid] == 0)
-		{
-			if($permissionData[$tabid][1] ==0)
-			{
-				$tempArray = Array("index.php?module=".$module_display."&action=".$curr_action."&return_module=".$module_display."&return_action=".$ret_action.$add_url, $label);
-				$module_menu[$i] = $tempArray;
-				$i++;
-			}
-		}
-	
-	}
-	elseif(in_array($module_display, $moduleList))
+	if(in_array($module_display, $moduleList))
 	{
 	
 		if($permissionData[$tabid][1] ==0)
@@ -121,20 +90,5 @@ foreach($module_menu_array as $module1 => $label)
 	
 }
 
-
-/*
-$module_menu = Array(
-	Array("index.php?module=Contacts&action=EditView&return_module=Contacts&return_action=DetailView", $app_strings['LNK_NEW_CONTACT']),
-	Array("index.php?module=Leads&action=EditView&return_module=Leads&return_action=DetailView", $app_strings['LNK_NEW_LEAD']),
-	Array("index.php?module=Accounts&action=EditView&return_module=Accounts&return_action=DetailView", $app_strings['LNK_NEW_ACCOUNT']),
-	Array("index.php?module=Potentials&action=EditView&return_module=Potentials&return_action=DetailView", $app_strings['LNK_NEW_OPPORTUNITY']),
-	Array("index.php?module=HelpDesk&action=EditView&return_module=HelpDesk&return_action=DetailView", $app_strings['LNK_NEW_HDESK']),
-	Array("index.php?module=Products&action=EditView&return_module=Products&return_action=DetailView", $app_strings['LNK_NEW_PRODUCT']),
-	Array("index.php?module=Notes&action=EditView&return_module=Notes&return_action=DetailView", $app_strings['LNK_NEW_NOTE']),
-	Array("index.php?module=Emails&action=EditView&return_module=Emails&return_action=DetailView", $app_strings['LNK_NEW_EMAIL']),
-	Array("index.php?module=Activities&action=EditView&return_module=Activities&activity_mode=Events&return_action=DetailView", $app_strings['LNK_NEW_EVENT']),
-	Array("index.php?module=Activities&action=EditView&return_module=Activities&activity_mode=Task&return_action=DetailView", $app_strings['LNK_NEW_TASK'])
-	);
-*/
 
 ?>

@@ -1195,7 +1195,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $vendor_name = getVendorName($temp_val);
-			$value= '<a href=index.php?module=Products&action=VendorDetailView&record='.$temp_val.'>'.$vendor_name.'</a>';
+			$value= '<a href=index.php?module=Vendors&action=DetailView&record='.$temp_val.'>'.$vendor_name.'</a>';
 		}
 		else
 			$value='';
@@ -1358,15 +1358,15 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                                                 $value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&activity_mode=Events">'.$temp_val.'</a>';
                                         }
                                 }
-				elseif($module == "Vendor")
+				elseif($module == "Vendors")
 				{
 						
-                                        $value = '<a href="index.php?action=VendorDetailView&module=Products&record='.$entity_id.'">'.$temp_val.'</a>';
+                                        $value = '<a href="index.php?action=DetailView&module=Vendors&record='.$entity_id.'">'.$temp_val.'</a>';
 				}
-				elseif($module == "PriceBook")
+				elseif($module == "PriceBooks")
 				{
 						
-                                        $value = '<a href="index.php?action=PriceBookDetailView&module=Products&record='.$entity_id.'">'.$temp_val.'</a>';
+                                        $value = '<a href="index.php?action=DetailView&module=PriceBooks&record='.$entity_id.'">'.$temp_val.'</a>';
 				}
 				elseif($module == "SalesOrder")
 				{
@@ -1452,11 +1452,11 @@ function getListQuery($module,$where='')
 	{
 		$query = "select crmentity.crmid, faq.*, crmentity.createdtime, crmentity.modifiedtime from faq inner join crmentity on crmentity.crmid=faq.id left join products on faq.product_id=products.productid where crmentity.deleted=0";
 	}
-	if($module == "Vendor")
+	if($module == "Vendors")
 	{
 		$query = "select crmentity.crmid, vendor.* from vendor inner join crmentity on crmentity.crmid=vendor.vendorid where crmentity.deleted=0";
 	}
-	if($module == "PriceBook")
+	if($module == "PriceBooks")
 	{
 		$query = "select crmentity.crmid, pricebook.* from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid where crmentity.deleted=0";
 	}

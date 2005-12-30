@@ -31,8 +31,8 @@ require_once('include/language/en_us.lang.php');
 require_once('include/ComboStrings.php');
 require_once('include/ComboUtil.php');
 require_once('modules/Products/Product.php');
-require_once('modules/Products/PriceBook.php');
-require_once('modules/Products/Vendor.php');
+require_once('modules/PriceBooks/PriceBook.php');
+require_once('modules/Vendors/Vendor.php');
 require_once('modules/Faq/Faq.php');
 require_once('modules/HelpDesk/HelpDesk.php');
 
