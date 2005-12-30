@@ -12,7 +12,6 @@ require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('modules/PriceBooks/PriceBook.php');
 require_once('include/utils/utils.php');
-require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
@@ -46,8 +45,6 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("CUSTOMVIEW",$customstrings);
-$smarty->assign("BUTTONS", $other_text);
 $smarty->assign("CATEGORY", $category);
 
 /*
@@ -58,8 +55,6 @@ $comboFieldArray = getComboArray($comboFieldNames);
 $focus = new PriceBook();
 
 if (!isset($where)) $where = "";
-
-$url_string = '&smodule=PRICEBOOK'; // assigning http url string
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 if($_REQUEST['order_by'] != '')
