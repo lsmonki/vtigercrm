@@ -30,12 +30,22 @@ require_once($theme_path.'layout_utils.php');
 //echo get_module_title("Vendors", $mod_strings['LBL_MODULE_NAME'].": Home" , true);
 echo "<br>";
 //echo get_form_header("Product Search", "", false);
+if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
+{
+	$category = $_REQUEST['category'];
+}
+else
+{
+	$category = getParentTabFromModule($currentModule);
+}
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
+$smarty->assign("CATEGORY", $category);
+
 /*
 $comboFieldNames = Array('manufacturer'=>'manufacturer_dom'
                       ,'productcategory'=>'productcategory_dom');
