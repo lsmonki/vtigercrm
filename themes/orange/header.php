@@ -386,23 +386,7 @@ if (count($history) > 0) {
 		$url_module = $row['module_name'];
 		$url_action = 'DetailView';
 
-		if($row['module_name']=='Vendor')
-		{		
-			$xtpl->assign("MODULE_IMAGE_NAME","vendor");
-			$url_module = 'Products';
-			$url_action = 'VendorDetailView';
-		}
-		elseif($row['module_name']=='PriceBook')
-		{		
-			$xtpl->assign("MODULE_IMAGE_NAME","pricebook");
-			$url_module = 'Products';
-			$url_action = 'PriceBookDetailView';
-		}
-		else
-		{
-			$xtpl->assign("MODULE_IMAGE_NAME",$row['module_name']);
-		}
-
+		$xtpl->assign("MODULE_IMAGE_NAME",$row['module_name']);
 		 
 
 		$xtpl->assign("RECENT_URL","index.php?module=$url_module&action=$url_action&record=$row[item_id]$activity_mode");	
