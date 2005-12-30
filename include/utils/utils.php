@@ -38,6 +38,7 @@
   require_once('include/utils/DetailViewUtils.php');
   require_once('include/utils/CommonUtils.php');
   require_once('include/utils/InventoryUtils.php');
+  require_once('include/utils/DeleteUtils.php');
   
 function return_name(&$row, $first_column, $last_column)
 {
