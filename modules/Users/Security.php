@@ -124,8 +124,8 @@ $this->db->query("insert into blocks values (51,20,'LBL_QUOTE_INFORMATION',1,0,0
 $this->db->query("insert into blocks values (52,20,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0)");
 $this->db->query("insert into blocks values (53,20,'LBL_ADDRESS_INFORMATION',3,0,0,0,0,0)");
 $this->db->query("insert into blocks values (54,20,'LBL_RELATED_PRODUCTS',4,0,0,0,0,0)");
-$this->db->query("insert into blocks values (55,20,'LBL_DESCRIPTION_INFORMATION',5,0,0,0,0,0)");
-$this->db->query("insert into blocks values (56,20,'LBL_TERMS_INFORMATION',6,0,0,0,0,0)");
+$this->db->query("insert into blocks values (55,20,'LBL_TERMS_INFORMATION',5,0,0,0,0,0)");
+$this->db->query("insert into blocks values (56,20,'LBL_DESCRIPTION_INFORMATION',6,0,0,0,0,0)");
 $this->db->query("insert into blocks values (57,21,'LBL_PO_INFORMATION',1,0,0,0,0,0)");
 $this->db->query("insert into blocks values (58,21,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0)");
 $this->db->query("insert into blocks values (59,21,'LBL_ADDRESS_INFORMATION',3,0,0,0,0,0)");
@@ -142,8 +142,8 @@ $this->db->query("insert into blocks values (69,23,'LBL_INVOICE_INFORMATION',1,0
 $this->db->query("insert into blocks values (70,23,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0)");
 $this->db->query("insert into blocks values (71,23,'LBL_ADDRESS_INFORMATION',3,0,0,0,0,0)");
 $this->db->query("insert into blocks values (72,23,'LBL_RELATED_PRODUCTS',4,0,0,0,0,0)");
-$this->db->query("insert into blocks values (73,23,'LBL_DESCRIPTION_INFORMATION',5,0,0,0,0,0)");
-$this->db->query("insert into blocks values (74,23,'LBL_TERMS_INFORMATION',6,0,0,0,0,0)");
+$this->db->query("insert into blocks values (73,23,'LBL_TERMS_INFORMATION',5,0,0,0,0,0)");
+$this->db->query("insert into blocks values (74,23,'LBL_DESCRIPTION_INFORMATION',6,0,0,0,0,0)");
 
 //
 
@@ -623,10 +623,10 @@ $this->db->query("insert into field values (20,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'ship_pobox','quotesshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,53,1,'V~O',1,'')");
  //Block55
 
-$this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,55,1,'V~O',1,'')");
+$this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,56,1,'V~O',1,'')");
 
 //Block 56
-$this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'terms_conditions','quotes',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,56,1,'V~O',1,'')");
+$this->db->query("insert into field values (20,".$this->db->getUniqueID("field").",'terms_conditions','quotes',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,55,1,'V~O',1,'')");
 
 
 //Quote Details -- END
@@ -679,10 +679,10 @@ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field")
   $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'ship_pobox','poshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,59,1,'V~O',1,'')");
   
  //Block61
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,61,1,'V~O',1,'')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,62,1,'V~O',1,'')");
 
  //Block62
- $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'terms_conditions','purchaseorder',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,62,1,'V~O',1,'')");
+ $this->db->query("insert into field values (21,".$this->db->getUniqueID("field").",'terms_conditions','purchaseorder',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,61,1,'V~O',1,'')");
 
 //Purchase Order Details -- END
 
@@ -737,10 +737,10 @@ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field")
   $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'ship_pobox','soshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,65,1,'V~O',1,'')");
   
 //Block67
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,67,1,'V~O',1,'')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,68,1,'V~O',1,'')");
 
  //Block68
- $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'terms_conditions','salesorder',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,68,1,'V~O',1,'')");
+ $this->db->query("insert into field values (22,".$this->db->getUniqueID("field").",'terms_conditions','salesorder',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,67,1,'V~O',1,'')");
 
 
 //Sales Order Details -- END
@@ -797,9 +797,9 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
   $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'ship_pobox','invoiceshipads',1,'1','ship_pobox','Shipping Po Box',1,0,0,100,4,71,1,'V~O',1,'')");
 
 //Block73
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,73,1,'V~O',1,'')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,74,1,'V~O',1,'')");
  //Block74
- $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'terms_conditions','invoice',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,74,1,'V~O',1,'')");
+ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field").",'terms_conditions','invoice',1,'19','terms_conditions','Terms & Conditions',1,0,0,100,1,73,1,'V~O',1,'')");
 
 
 //Invoice Details -- END
