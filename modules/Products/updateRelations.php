@@ -36,7 +36,7 @@ if($_REQUEST['destination_module']=='Contacts')
 
 	#$sql = "insert into seproductsrel values (". $_REQUEST["parid"] .",".$_REQUEST["entityid"] .")";
 #$adb->query($sql);
- header("Location:index.php?action=VendorDetailView&module=Products&record=".$_REQUEST["parid"]);
+ header("Location:index.php?action=DetailView&module=Vendors&record=".$_REQUEST["parid"]);
 
 
 

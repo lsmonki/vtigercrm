@@ -206,7 +206,7 @@ $the_form .= <<<EOQ
 		<FONT class="required">$lbl_required_symbol</FONT>$lbl_quote_subject<br>
 		<input name='subject' type="text" value=""><br>
 		$lbl_vendor_name<br>
-		<input name="vendor_name" readonly type="text"><input name="vendor_id" type="hidden">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Products&action=VendorPopup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");'><br>
+		<input name="vendor_name" readonly type="text"><input name="vendor_id" type="hidden">&nbsp;<input title="Change" accessKey="" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Vendors&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");'><br>
                 $lbl_acct_name<br>
 		<input name="account_id" type="hidden"><input name="account_name" readonly type="text"> <input title="Change [Alt+G]" accessKey="G" type="button" class="button" value="$lbl_change_button_label" name="Button" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");'><br><br>
 		

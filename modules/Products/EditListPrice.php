@@ -23,21 +23,21 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
-if(isset($_REQUEST['return_action']) && $_REQUEST['return_action']=="DetailView")
+if(isset($_REQUEST['return_module']) && $_REQUEST['return_module']=="PriceBooks")
+{
+	$pricebook_id = $_REQUEST['pricebook_id'];
+	$product_id = $_REQUEST['record'];
+	$listprice = $_REQUEST['listprice'];
+	$return_action = "DetailView";
+	$return_id = $_REQUEST['pricebook_id'];
+}
+else
 {
 	$product_id = $_REQUEST['return_id'];
 	$pricebook_id = $_REQUEST['record'];
 	$listprice = getListPrice($product_id,$pricebook_id);
 	$return_action = "DetailView";
 	$return_id = $_REQUEST['return_id'];
-}
-else
-{
-	$pricebook_id = $_REQUEST['pricebook_id'];
-	$product_id = $_REQUEST['record'];
-	$listprice = $_REQUEST['listprice'];
-	$return_action = "PriceBookDetailView";
-	$return_id = $_REQUEST['pricebook_id'];
 }
 $xtpl=new XTemplate ('modules/Products/EditListPrice.html');
 $xtpl->assign("MOD", $mod_strings);

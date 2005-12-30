@@ -35,7 +35,7 @@ require_once($theme_path.'layout_utils.php');
 //echo "<br>";
 //echo get_form_header("Product Search", "", false);
 
-$xtpl=new XTemplate ('modules/Products/PriceBookPopup.html');
+$xtpl=new XTemplate ('modules/Products/Popup.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
 $xtpl->assign("IMAGE_PATH",$image_path);

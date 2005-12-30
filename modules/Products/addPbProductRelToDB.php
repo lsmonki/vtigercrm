@@ -31,7 +31,7 @@ if(isset($_REQUEST['pricebook_id']) && $_REQUEST['pricebook_id']!='')
 		$query= "insert into pricebookproductrel (pricebookid,productid,listprice) values(".$pricebook_id.",".$id.",".$list_price.")";
 		$adb->query($query);
 	}
-	header("Location: index.php?module=Products&action=PriceBookDetailView&record=".$pricebook_id);
+	header("Location: index.php?module=PriceBooks&action=DetailView&record=".$pricebook_id);
 }
 elseif(isset($_REQUEST['product_id']) && $_REQUEST['product_id']!='')
 {
