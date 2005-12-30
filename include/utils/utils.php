@@ -803,78 +803,14 @@ $log->info("in getUserId_Ol ".$username);
 
 function getActionid($action)
 {
-global $log;
-$log->info("get Actionid ".$action);
+	global $log;
+	global $adb;
+	$log->info("get Actionid ".$action);
 
 	$actionid = '';
-	if($action == 'Save')
-	{
-		$actionid= 0;
-	}
-	else if($action == 'EditView')
-	{
-		$actionid= 1;
-	}
-	else if($action == 'Delete')
-	{
-		$actionid= 2;
-	}
-	else if($action == 'index')
-	{
-		$actionid= 3;
-	}
-	else if($action == 'DetailView')
-	{
-		$actionid= 4;
-	}		
-	else if($action == 'Import')
-	{
-		$actionid= 5;
-	}
-	else if($action == 'Export')
-	{
-		$actionid= 6;
-	}
-	else if($action == 'BusinessCard')
-	{
-		$actionid= 7;
-	}
-	else if($action == 'Merge')
-	{
-		$actionid= 8;
-	}
-	else if($action == 'VendorEditView')
-        {
-                $actionid= 1;
-        }
-        else if($action == 'VendorDetailView')
-        {
-                $actionid= 4;
-        }
-        else if($action == 'SaveVendor')
-        {
-                $actionid= 0;
-        }
-        else if($action == 'DeleteVendor')
-        {
-                $actionid= 1;
-        }
-	else if($action == 'PriceBookEditView')
-        {
-                $actionid= 1;
-        }
-        else if($action == 'PriceBookDetailView')
-        {
-                $actionid= 4;
-        }
-        else if($action == 'SavePriceBook')
-        {
-                $actionid= 0;
-        }
-        else if($action == 'DeletePriceBook')
-        {
-                $actionid= 1;
-        }
+	$query="select * from actionmapping where actionname='".$action."'";
+        $result =$adb->query($query);
+        $actionid=$adb->query_result($result,0,'actionid');
 	$log->info("action id selected is ".$actionid );
 	return $actionid;
 }
