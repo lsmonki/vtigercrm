@@ -98,12 +98,13 @@ $comboFieldNames = Array('accounttype'=>'account_type_dom'
 $comboFieldArray = getComboArray($comboFieldNames);
 
 $disp_view = getView($focus->mode);
-//echo '<pre>';print_r(getBlocks("Accounts",$disp_view,$mode,$focus->column_fields));echo '</pre>';
 $smarty->assign("BLOCKS",getBlocks("Quotes",$disp_view,$mode,$focus->column_fields));
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD","Quote");
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 
 require_once($theme_path.'layout_utils.php');

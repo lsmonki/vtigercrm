@@ -45,14 +45,6 @@ global $theme;
 $comboFieldNames = Array('leadsource'=>'leadsource_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-	$category = $_REQUEST['category'];
-}
-else
-{
-	$category = getParentTabFromModule($currentModule);
-}
 $focus = new Contact();
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
@@ -418,6 +410,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("BUTTONS",$other_text);
+$category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 //Retreiving the no of rows

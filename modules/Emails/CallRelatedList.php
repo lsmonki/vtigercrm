@@ -17,11 +17,12 @@ $log->debug("name is ".$focus->name);
 }
 
 $smarty = new vtigerCRM_Smarty;
-echo '**********'.$currentmodule.'*************';
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array=getRelatedLists("Emails",$focus);
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
+
 $smarty->assign("RELATEDLISTS", $related_array);
-//echo '<pre>';print_r($related_array);echo '</pre>';
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
 $smarty->display("RelatedLists.tpl");

@@ -156,68 +156,6 @@ if(isset($_REQUEST['viewname']) == false || $_REQUEST['viewname']=='')
 	$oCustomView->setdefaultviewid = $viewid;
 }
 //<<<<<customview>>>>>
-/*
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
-	// Stick the form header out there.
-//	$search_form=new XTemplate ('modules/PurchaseOrder/SearchForm.html');
-	$search_form->assign("MOD", $current_module_strings);
-	$search_form->assign("APP", $app_strings);
-	
-	$search_form->assign("VIEWID",$viewid);
-
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	
-	$search_form->assign("BASIC_LINK", "index.php?module=PurchaseOrder&action=index".$url_string."&viewname=".$viewid);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=PurchaseOrder&action=index&advanced=true".$url_string."&viewname=".$viewid);
-
-
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	if (isset($subject)) $search_form->assign("SUBJECT", $subject);
-	if (isset($vendorname)) $search_form->assign("VENDOR_NAME", $vendorname);
-	if (isset($trackingno)) $search_form->assign("TRACKINGNO", $trackingno);
-
-	
-	echo get_form_header($current_module_strings['LBL_PO_SEARCH_TITLE'], '', false);
-
-
-	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
-
-	$url_string .="&advanced=true";
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('PurchaseOrder','index','subject','true','advanced',"","","","",$viewid));
-
-		if (isset($annual_revenue)) $search_form->assign("ANNUAL_REVENUE", $annual_revenue);
-		if (isset($employees)) $search_form->assign("EMPLOYEES", $employees);
-
-
-		if (!empty($assigned_user_id)) $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), $assigned_user_id));
-		else $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), ''));
-
-//Added for Custom Field Search
-$sql="select * from field where tablename='purchaseordercf' order by fieldlabel";
-$result=$adb->query($sql);
-for($i=0;$i<$adb->num_rows($result);$i++)
-{
-        $column[$i]=$adb->query_result($result,$i,'columnname');
-        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-}
-require_once('include/CustomFieldUtil.php');
-$custfld = CustomFieldSearch($customfield, "purchaseordercf", "purchaseordercf", "purchaseorderid", $app_strings,$theme,$column,$fieldlabel);
-$search_form->assign("CUSTOMFIELD", $custfld);
-//upto this added for Custom Field
-
-		$search_form->parse("advanced");
-		$search_form->out("advanced");
-	}
-	else {
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('PurchaseOrder','index','subject','true','basic',"","","","",$viewid));
-		$search_form->parse("main");
-		$search_form->out("main");
-	}
-	echo get_form_footer();
-	echo "\n<BR>\n";
-}
-*/
 
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
@@ -268,6 +206,8 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 
 $smarty->assign("CUSTOMVIEW",$customView);
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>

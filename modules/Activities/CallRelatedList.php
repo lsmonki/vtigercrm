@@ -17,6 +17,8 @@ if (isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
 }
 
 $smarty = new vtigerCRM_Smarty;
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 

@@ -34,6 +34,9 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array=getRelatedLists("Products",$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
+
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
 $smarty->display("RelatedLists.tpl");

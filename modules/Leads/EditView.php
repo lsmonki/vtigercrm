@@ -58,11 +58,8 @@ $image_path=$theme_path."images/";
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
  
-/*if (isset($focus->firstname)) 
-$smarty->assign("FIRST_NAME", $focus->firstname);
-else 
-$smarty->assign("FIRST_NAME", "");
-$smarty->assign("LAST_NAME", $focus->lastname);*/
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 

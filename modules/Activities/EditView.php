@@ -34,9 +34,6 @@ global $app_list_strings;
 global $mod_strings;
 global $current_user;
 // Unimplemented until jscalendar language files are fixed
-// global $current_language;
-// global $default_language;
-// global $cal_codes;
 $activity_lbl='';
 $activity_mode = $_REQUEST['activity_mode'];
 if($activity_mode == 'Task')
@@ -65,7 +62,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 
 
 $disp_view = getView($focus->mode);
-//echo '<pre>';print_r(getBlocks($tab_type,$disp_view,$mode,$focus->column_fields));echo '</pre>';
 $smarty->assign("BLOCKS",getBlocks($tab_type,$disp_view,$mode,$focus->column_fields));
 
 $smarty->assign("MODULE",$currentModule);
@@ -93,6 +89,8 @@ if($focus->mode == 'edit')
         $smarty->assign("MODE", $focus->mode);
 }
 
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 // Unimplemented until jscalendar language files are fixed
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);

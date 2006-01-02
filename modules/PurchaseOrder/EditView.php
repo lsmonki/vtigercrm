@@ -91,6 +91,8 @@ $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD","PurchaseOrder");
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 
 $smarty->assign("MOD", $mod_strings);

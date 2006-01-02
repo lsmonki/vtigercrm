@@ -20,7 +20,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Invoice/Invoice.php');
@@ -32,8 +31,6 @@ global $app_strings;
 global $app_list_strings;
 global $currentModule;
 $focus = new Invoice();
-//$focus->set_strings();
-//var_dump($focus);
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"Invoice");
@@ -70,14 +67,7 @@ $smarty->assign("BLOCKS", getBlocks("Invoice","detail_view",'',$focus->column_fi
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
 $smarty->assign("SINGLE_MOD", "Invoice");
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-            $category = $_REQUEST['category'];
-}
-else
-{
-            $category = getParentTabFromModule($currentModule);
-}
+$category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 $permissionData = $_SESSION['action_permission_set'];

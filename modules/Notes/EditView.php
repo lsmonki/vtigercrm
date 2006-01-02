@@ -99,8 +99,9 @@ require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 $smarty->assign("BLOCKS",getBlocks("Notes",$disp_view,$mode,$focus->column_fields));
-//echo '<pre>';print_r(getBlocks("Notes",$disp_view,$mode,$focus->column_fields));echo '</pre>';
 $smarty->assign("OP_MODE",$disp_view);
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 
 $log->info("Note detail view");

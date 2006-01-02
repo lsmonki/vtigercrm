@@ -11,11 +11,8 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->id = $_REQUEST['record'];
     $focus->firstname=$focus->column_fields['firstname'];
     $focus->lastname=$focus->column_fields['lastname'];
-//$vtlog->logthis("id is ".$focus->id,'debug');
 $log->debug("id is ".$focus->id);
-//$vtlog->logthis("name is ".$focus->name,'debug');
 $log->debug("name is ".$focus->name);
-//$vtlog->logthis("name is ".$focus->name,'debug');
 }
 
 $smarty = new vtigerCRM_Smarty;
@@ -23,6 +20,9 @@ $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
         $focus->id = "";
 }
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
+
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 $related_array = getRelatedLists("Leads",$focus);
 $smarty->assign("RELATEDLISTS", $related_array);

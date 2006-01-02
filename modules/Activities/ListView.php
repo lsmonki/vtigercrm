@@ -65,37 +65,6 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
 //<<<<<customview>>>>>
 
-/*if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
- // Mike Crowe Mod --------------------------------------------------------
-	require_once('include/SearchBlock.php');
-    $search_form = BuildSearchForm($focus);
-    // Mike Crowe Mod --------------------------------------------------------
-    
-	// Stick the form header out there.
-	#$search_form=new XTemplate ('modules/Activities/SearchForm.html');
-	$search_form->assign("MOD", $current_module_strings);
-	$search_form->assign("APP", $app_strings);
-
-	//viewid is given to show the actual view<<<<<<<<<<customview>>>>>>>>
-	$search_form->assign("VIEWID",$viewid);
-	//<<<<<<<customview>>>>>>>>>>
-
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Activities','index','name','true','basic',"","","","",$viewid));
-
-	if(isset($_REQUEST['query'])) {
-		if (isset($_REQUEST['name'])) $search_form->assign("NAME", $_REQUEST['name']);
-		if (isset($_REQUEST['contactname'])) $search_form->assign("CONTACT_NAME", $_REQUEST['contactname']);
-		if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
-	}
-	$search_form->parse("main");
-
-	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
-	$search_form->out("main");
-	echo get_form_footer();
-	echo "\n<BR>\n";
-}*/
-
 
 $where = "";
 
@@ -124,11 +93,8 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	}
 	if(isset($contactname) && $contactname != '')
 	{
-		//$contactnames = explode(" ", $contactname);
-		//foreach ($contactnames as $name) {
 		array_push($where_clauses, "(contactdetails.firstname like ".PearDatabase::quote($contactname.'%')." OR contactdetails.lastname like ".PearDatabase::quote($contactname.'%').")");
 		$url_string .= "&contactname=".$contactname;
-		//}
 	}
 	if(isset($duedate) && $duedate != '')
 	{
@@ -163,29 +129,6 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 }
 
 
-// Buttons and View options
-/*$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<form name="massdelete" method="POST">
-	<tr>
-	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden">
-	<input name="change_owner" type="hidden">
-	<input name="change_status" type="hidden">
-	
-		<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>
-   		<!--input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
-	       <input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_STATUS].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/--></td>
-		<td align="right">'.$app_strings[LBL_VIEW].'
-			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
-				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_CALL].'">'.$mod_strings[LBL_CALL].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_MEETING].'">'.$mod_strings[LBL_MEETING].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_TASK].'">'.$mod_strings[LBL_TASK].'</option>
-			</SELECT>
-		</td>
-	</tr>
-	</table>';
-//*/
 if($viewid == 0)
 {
 $cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
@@ -248,32 +191,6 @@ if(isset($where) && $where != '')
 	$list_query .= " AND " .$where;
 }
 
-/*if(isset($_REQUEST['viewname']) && $_REQUEST['viewname']!='')
-{
-	if($_REQUEST['viewname'] == 'All')
-	   {
-	           $defaultcv_criteria = '';
-      }
-     else
-    {
-          $defaultcv_criteria = $_REQUEST['viewname'];
-       }
-
-  $list_query .= " and activitytype like "."'%" .$defaultcv_criteria ."%'";
-  $viewname = $_REQUEST['viewname'];
-  $view_script = "<script language='javascript'>
-		function set_selected()
-		{
-			len=document.massdelete.view.length;
-			for(i=0;i<len;i++)
-			{
-				if(document.massdelete.view[i].value == '$viewname')
-					document.massdelete.view[i].selected = true;
-			}
-		}
-		set_selected();
-		</script>";
-}*/
 $view_script = "<script language='javascript'>
 	function set_selected()
 	{
@@ -302,7 +219,6 @@ $list_result = $adb->query($list_query);
 //Constructing the list view
 
 $smarty = new vtigerCRM_Smarty;
-//echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $customview=get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $smarty->assign("CUSTOMVIEW", $customview);
 $smarty->assign("MOD", $mod_strings);
@@ -330,39 +246,6 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
-/*
-
-// Setting the record count string
-if ($navigation_array['start'] == 1)
-{
-	if($noofrows != 0)
-	$start_rec = $navigation_array['start'];
-	else
-	$start_rec = 0;
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
-	}
-	else
-	{
-		$end_rec = $noofrows;
-	}
-
-}
-else
-{
-	if($navigation_array['next'] > $list_max_entries_per_page)
-	{
-		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
-		$end_rec = $navigation_array['next'] - 1;
-	}
-	else
-	{
-		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
-		$end_rec = $noofrows;
-	}
-}
-*/
 // Setting the record count string
 //modified by rdhital
 $start_rec = $navigation_array['start'];
@@ -391,6 +274,8 @@ $smarty->assign("SELECT_SCRIPT", $view_script);
 $navigationOutput = getTableHeaderNavigation($navigation_array,$url_string,"Activities","index",$viewid);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 
 

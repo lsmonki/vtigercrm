@@ -98,6 +98,8 @@ if(isset($cust_fld))
         $smarty->assign("CUSTOMFIELD", $cust_fld);
 }
 $smarty->assign("ID", $focus->id);
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));

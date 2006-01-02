@@ -29,16 +29,6 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-echo "<br>";
-
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-	$category = $_REQUEST['category'];
-}
-else
-{
-	$category = getParentTabFromModule($currentModule);
-}
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
@@ -47,7 +37,8 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("CUSTOMVIEW", $customstrings);
 $smarty->assign("BUTTONS", $other_text);
-$smarty->assign("CATEGORY", $category);
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 $focus = new SalesOrder();
 

@@ -348,6 +348,8 @@ foreach($validationData as $fldName => $fldLabel_array)
 		}
 	}
 }
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);

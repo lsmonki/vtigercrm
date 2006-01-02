@@ -92,14 +92,7 @@ if(isPermitted("Leads",1,$_REQUEST['record']) == 'yes' && $tab_per_Data[getTabid
 {
 	$smarty->assign("CONVERTLEAD","<input title=\"$app_strings[LBL_CONVERT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.action.value='ConvertLead'\" type=\"submit\" name=\"Convert\" value=\"$app_strings[LBL_CONVERT_BUTTON_LABEL]\">");
 }
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-            $category = $_REQUEST['category'];
-}
-else
-{
-            $category = getParentTabFromModule($currentModule);
-}
+$category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 

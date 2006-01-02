@@ -65,14 +65,7 @@ $smarty->assign("BLOCKS", getBlocks("Accounts","detail_view",'',$focus->column_f
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
 $smarty->assign("SINGLE_MOD","Account");
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-            $category = $_REQUEST['category'];
-}
-else
-{
-            $category = getParentTabFromModule($currentModule);
-}
+$category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 

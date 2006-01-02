@@ -47,14 +47,7 @@ $comboFieldNames = Array('leadsource'=>'leadsource_dom'
                       ,'industry'=>'industry_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-	$category = $_REQUEST['category'];
-}
-else
-{
-	$category = getParentTabFromModule($currentModule);
-}
+$category = getParentTab();
 
 if (!isset($where)) $where = "";
 

@@ -20,7 +20,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Activities/Activity.php');
@@ -89,14 +88,7 @@ $log->info("Activities detail view");
 //$xtpl=new XTemplate ('modules/Activities/DetailView.html');
 
 $smarty = new vtigerCRM_Smarty;
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-            $category = $_REQUEST['category'];
-}
-else
-{
-            $category = getParentTabFromModule($currentModule);
-}
+$category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 $smarty->assign("MOD", $mod_strings);
@@ -146,9 +138,6 @@ if(isPermitted("Activities",2,$_REQUEST['record']) == 'yes')
 	$smarty->assign("DELETEBUTTON","<td><input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Activities'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
 }
   
-//$xtpl->parse("main");
-
-//$xtpl->out("main");
 if($_REQUEST['activity_mode'] == 'Events')
 {
 	global $profile_id;

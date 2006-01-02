@@ -13,7 +13,6 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once("data/Tracker.php");
 require_once('modules/Quotes/Quote.php');
@@ -42,15 +41,6 @@ global $theme;
 // Get _dom arrays from Database
 $comboFieldNames = Array('quotestage'=>'quotestage_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
-
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-	$category = $_REQUEST['category'];
-}
-else
-{
-	$category = getParentTabFromModule($currentModule);
-}
 
 // focus_list is the means of passing data to a ListView.
 global $focus_list;
@@ -173,77 +163,6 @@ if(isset($_REQUEST['viewname']) == false || $_REQUEST['viewname']=='')
 }
 //<<<<<customview>>>>>
 
-/*
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
-	// Stick the form header out there.
-//	$search_form=new XTemplate ('modules/Quotes/SearchForm.html');
-	$search_form->assign("MOD", $current_module_strings);
-	$search_form->assign("APP", $app_strings);
-	
-	$search_form->assign("VIEWID",$viewid);
-
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-
-	$search_form->assign("BASIC_LINK", "index.php?module=Quotes&action=index".$url_string."&viewname=".$viewid);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Quotes&action=index&advanced=true".$url_string."&viewname=".$viewid);
-
-
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	if (isset($subject)) $search_form->assign("SUBJECT", $subject);
-	if (isset($potentialname)) $search_form->assign("POTENTIALNAME", $potentialname);
-	if (isset($accountname)) $search_form->assign("ACCOUNTNAME", $accountname);
-	
-	if (isset($quotestage)) $search_form->assign("QUOTESTAGE", get_select_options($comboFieldArray['quotestage_dom'], $quotestage, $advsearch));
-	else $search_form->assign("QUOTESTAGE", get_select_options($comboFieldArray['quotestage_dom'], '', $advsearch));
-
-	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], '', false);
-
-	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
-
-	$url_string .="&advanced=true";
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Quotes','index','subject','true','advanced',"","","","",$viewid));
-
-		if (isset($annual_revenue)) $search_form->assign("ANNUAL_REVENUE", $annual_revenue);
-		if (isset($employees)) $search_form->assign("EMPLOYEES", $employees);
-		if (isset($address_street)) $search_form->assign("ADDRESS_STREET", $address_street);
-		if (isset($address_state)) $search_form->assign("ADDRESS_STATE", $address_state);
-		if (isset($address_country)) $search_form->assign("ADDRESS_COUNTRY", $address_country);
-		if (isset($address_postalcode)) $search_form->assign("ADDRESS_POSTALCODE", $address_postalcode);
-		if (isset($email)) $search_form->assign("EMAIL", $email);
-		if (isset($ownership)) $search_form->assign("OWNERSHIP", $ownership);
-		if (isset($rating)) $search_form->assign("RATING", $rating);
-		if (isset($sic_code)) $search_form->assign("SIC_CODE", $sic_code);
-		if (isset($ticker_symbol)) $search_form->assign("TICKER_SYMBOL", $ticker_symbol);
-
-		if (!empty($assigned_user_id)) $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), $assigned_user_id));
-		else $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), ''));
-
-//Added for Custom Field Search
-$sql="select * from field where tablename='quotescf' order by fieldlabel";
-$result=$adb->query($sql);
-for($i=0;$i<$adb->num_rows($result);$i++)
-{
-        $column[$i]=$adb->query_result($result,$i,'columnname');
-        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-}
-require_once('include/CustomFieldUtil.php');
-$custfld = CustomFieldSearch($customfield, "quotescf", "quotescf", "quoteid", $app_strings,$theme,$column,$fieldlabel);
-$search_form->assign("CUSTOMFIELD", $custfld);
-//upto this added for Custom Field
-
-		$search_form->parse("advanced");
-		$search_form->out("advanced");
-	}
-	else {
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Quotes','index','subject','true','basic',"","","","",$viewid));
-		$search_form->parse("main");
-		$search_form->out("main");
-	}
-	echo get_form_footer();
-	echo "\n<BR>\n";
-}
-*/
 
 $other_text = '<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
@@ -293,6 +212,7 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("BUTTONS", $other_text);
+$category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 //Retreive the list from Database

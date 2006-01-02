@@ -99,15 +99,6 @@ global $currentModule;
 global $image_path;
 global $theme;
 
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-	$category = $_REQUEST['category'];
-}
-else
-{
-	$category = getParentTabFromModule($currentModule);
-}
-
 $url_string = ''; // assigning http url string
 
 $focus = new Email();
@@ -152,31 +143,6 @@ else
 }
 //<<<<<customview>>>>>
 
-/*if(!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') 
-{
-	// Stick the form header out there.
-	$search_form=new XTemplate ('modules/Emails/SearchForm.html');
-	$search_form->assign("MOD", $mod_strings);
-	$search_form->assign("APP", $app_strings);
-
-	$search_form->assign("VIEWID",$viewid);
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Emails','index','subject','true','basic',"","","","",$viewid));
-
-	if(isset($_REQUEST['query'])) 
-	{
-		if(isset($_REQUEST['subject'])) $search_form->assign("NAME", $_REQUEST['subject']);
-		if(isset($_REQUEST['contactname'])) $search_form->assign("CONTACT_NAME", $_REQUEST['contactname']);
-		if(isset($_REQUEST['current_user_only'])) $search_form->assign("CURRENT_USER_ONLY", "checked");
-	}
-	$search_form->parse("main");
-
-	echo get_form_header($mod_strings['LBL_SEARCH_FORM_TITLE'], "", false);
-	$search_form->out("main");
-	echo get_form_footer();
-	echo "\n<BR>\n";
-}
-*/
 // Buttons and View options
 $other_text = '	<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
@@ -311,6 +277,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("BUTTONS",$other_text);
+$category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 //Retreiving the no of rows

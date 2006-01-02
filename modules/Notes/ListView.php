@@ -44,15 +44,8 @@ global $currentModule;
 
 global $image_path;
 global $theme;
+$category = getParentTab();
 
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-	$category = $_REQUEST['category'];
-}
-else
-{
-	$category = getParentTabFromModule($currentModule);
-}
 
 // focus_list is the means of passing data to a ListView.
 global $focus_list;

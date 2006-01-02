@@ -81,7 +81,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 
 $disp_view = getView($focus->mode);
 $smarty->assign("BLOCKS",getBlocks("Contacts",$disp_view,$mode,$focus->column_fields));
-//echo '<pre>';print_r(getBlocks("Contacts",$disp_view,$mode,$focus->column_fields));echo '</pre>';
 $smarty->assign("OP_MODE",$disp_view);
 
 //needed when creating a new contact with a default account value passed in
@@ -183,6 +182,8 @@ $contact_tables = Array('contactdetails','crmentity','contactsubdetails','contac
      	}
    }
  }
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);

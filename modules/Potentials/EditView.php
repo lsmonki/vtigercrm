@@ -56,9 +56,10 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 }
 
 $disp_view = getView($focus->mode);
-//echo '<pre>';print_r(getBlocks("Potentials",$disp_view,$mode,$focus->column_fields));echo '</pre>';
 $smarty->assign("BLOCKS",getBlocks("Potentials",$disp_view,$mode,$focus->column_fields));
 $smarty->assign("OP_MODE",$disp_view);
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 //needed when creating a new opportunity with a default account value passed in
 if (isset($_REQUEST['accountname']) && is_null($focus->accountname)) {

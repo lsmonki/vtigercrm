@@ -20,7 +20,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once('data/Tracker.php');
 require_once('modules/Emails/Email.php');
@@ -170,14 +169,7 @@ if (isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUES
 if (isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-            $category = $_REQUEST['category'];
-}
-else
-{
-            $category = getParentTabFromModule($currentModule);
-}
+$category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
@@ -189,33 +181,6 @@ $smarty->assign("SINGLE_MOD","Email");
 
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
-
-/*
-//get Email Information
-$block_1 = getDetailBlockInformation("Emails",1,$focus->column_fields);
-//$xtpl->assign("BLOCK1", $block_1);
-$smarty->assign("BLOCK1", $block_1);
-$block_2 = getDetailBlockInformation("Emails",2,$focus->column_fields);
-//$xtpl->assign("BLOCK2", $block_2);
-$smarty->assign("BLOCK2", $block_2);
-$block_3 = getDetailBlockInformation("Emails",4,$focus->column_fields);
-//$xtpl->assign("BLOCK4", $block_3);
-$smarty->assign("BLOCK3", $block_3);
-$block_4 = getDetailBlockInformation("Emails",5,$focus->column_fields);
-//replacing the brs in order to maintain the exact state of the data
-$block_4 = preg_replace("/<br \/\>/", " ", $block_4);
-
-//$xtpl->assign("BLOCK5", $block_4);
-$smarty->assign("BLOCK5", $block_4);
-$log->info("Detail Block Informations successfully retrieved.");
-
-$block_1_header = getBlockTableHeader("LBL_EMAIL_INFORMATION");
-//$xtpl->assign("BLOCK1_HEADER", $block_1_header);
-
-//$xtpl->assign("ID", $focus->id);
-
-$smarty->assign("BLOCK1_HEADER", $block_1_header);
-*/
 
 $smarty->assign("ID", $_REQUEST['record']);
 
@@ -241,7 +206,6 @@ $permissionData = $_SESSION['action_permission_set'];
 
 
 //Constructing the Related Lists from here
-//getRelatedLists("Emails",$focus);
 $smarty->assign("MODULE","Emails");
 $smarty->display("DetailView.tpl");
 ?>

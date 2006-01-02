@@ -22,6 +22,8 @@ $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
         $focus->id = "";
 }
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array=getRelatedLists("Accounts",$focus);

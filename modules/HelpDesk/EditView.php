@@ -49,6 +49,8 @@ $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD","Ticket");
 
 
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);

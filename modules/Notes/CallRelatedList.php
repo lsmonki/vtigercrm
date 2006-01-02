@@ -22,7 +22,9 @@ $smarty = new vtigerCRM_Smarty;
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 $related_array=getRelatedLists("Notes",$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
-//echo '<pre>';print_r($related_array);echo '</pre>';
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
+
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
 $smarty->display("RelatedLists.tpl");

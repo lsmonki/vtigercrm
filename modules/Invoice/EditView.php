@@ -358,6 +358,8 @@ $invoice_tables = Array('invoice','invoicebillads','invoiceshipads');
      	}
    }
  }
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);

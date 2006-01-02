@@ -179,6 +179,8 @@ $smarty->assign("SINGLE_MOD","SalesOrder");
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 
 require_once($theme_path.'layout_utils.php');

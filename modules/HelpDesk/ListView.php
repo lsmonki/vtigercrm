@@ -38,16 +38,8 @@ global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-	$category = $_REQUEST['category'];
-}
-else
-{
-	$category = getParentTabFromModule($currentModule);
-}
-
 $focus = new HelpDesk();
+$category = getParentTab();
 
 $url_string = ''; // assigning http url string
 
