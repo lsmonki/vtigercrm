@@ -114,7 +114,7 @@ function get_select_options_with_id_separate_key (&$label_list, &$key_list, $sel
 		$html_value = $option_key;
 
 		$select_options .= "\n<OPTION ".$selected_string."value='$html_value'>$label_list[$option_key]</OPTION>";
-		$options[]=array($label_list[$option_key]=>$selected_string);
+		$options[$html_value]=array($label_list[$option_key]=>$selected_string);
 	}
 	$select_options = preg_replace($pattern, $replacement, $select_options);
 
