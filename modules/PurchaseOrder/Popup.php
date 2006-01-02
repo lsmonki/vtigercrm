@@ -9,14 +9,13 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('modules/PurchaseOrder/PurchaseOrder.php');
-require_once('include/utils/utils.php');
 require_once('include/utils/utils.php');
 
 global $app_strings;
 global $mod_strings;
-
+global $currentModule;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -29,22 +28,23 @@ echo '<BR>';
 echo get_form_header("Purchase Order Search", "", false);
 //end
 
-
-$xtpl=new XTemplate ('modules/PurchaseOrder/Popup.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMAGE_PATH",$image_path);
-$xtpl->assign("THEME_PATH",$theme_path);
+$smarty = new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("THEME_PATH",$theme_path);
+$smarty->assign("MODULE",$currentModule);
+$smarty->assign("SINGLE_MOD",'PurchaseOrder');
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
-        $xtpl->assign("RETURN_MODULE",$_REQUEST['return_module']);
+        $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 
 
 if (!isset($where)) $where = "";
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
-$xtpl->assign("POPUPTYPE",$popuptype);
-$xtpl->assign("RECORDID",$_REQUEST['recordid']);
+$smarty->assign("POPUPTYPE",$popuptype);
+$smarty->assign("RECORDID",$_REQUEST['recordid']);
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
@@ -63,8 +63,8 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
          if (isset($_REQUEST['vendorname'])) $vendorname = $_REQUEST['vendorname'];
          if (isset($_REQUEST['trackingno'])) $trackingno = $_REQUEST['trackingno'];
 
-         if ($order_by !='') $xtpl->assign("ORDER_BY", $order_by);
-         if ($sorder !='') $xtpl->assign("SORDER", $sorder);
+         if ($order_by !='') $smarty->assign("ORDER_BY", $order_by);
+         if ($sorder !='') $smarty->assign("SORDER", $sorder);
 
          $where_clauses = Array();
          if(isset($subject) && $subject != '')
@@ -113,7 +113,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 
 
 //Constructing the Search Form
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
+/*if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         // Stick the form header out there.
         $search_form=new XTemplate ('modules/PurchaseOrder/PopupSearchForm.html');
         $search_form->assign("MOD", $mod_strings);
@@ -185,12 +185,12 @@ rid", $app_strings,$theme,$column,$fieldlabel);
         }
 echo get_form_footer();
 //echo '<br><br>';
-}
+}*/
 
 
 
 
-$xtpl->assign("POLISTHEADER", get_form_header("Purchase Order List", "", false ));
+$smarty->assign("POLISTHEADER", get_form_header("Purchase Order List", "", false ));
 
 $focus = new Order();
 
@@ -263,10 +263,10 @@ $focus->list_mode="search";
 $focus->popup_type=$popuptype;
 
 $listview_header = getSearchListViewHeader($focus,"PurchaseOrder",$url_string,$sorder,$order_by);
-$xtpl->assign("LISTHEADER", $listview_header);
+$smarty->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getSearchListViewEntries($focus,"PurchaseOrder",$list_result,$navigation_array);
-$xtpl->assign("LISTENTITY", $listview_entries);
+$smarty->assign("LISTENTITY", $listview_entries);
 
 if($order_by !='')
 $url_string .="&order_by=".$order_by;
@@ -274,11 +274,10 @@ if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"PurchaseOrder","Popup");
-$xtpl->assign("NAVIGATION", $navigationOutput);
-$xtpl->assign("RECORD_COUNTS", $record_string);
+$smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("RECORD_COUNTS", $record_string);
 
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty->display("Popup.tpl");
 
 
 

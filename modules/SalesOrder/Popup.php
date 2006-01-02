@@ -9,34 +9,36 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-require_once('XTemplate/xtpl.php');
+require_once('Smarty_setup.php');
 require_once('modules/SalesOrder/SalesOrder.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/utils.php');
 
 global $app_strings;
 global $mod_strings;
-
+global $currentModule;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
-echo get_module_title("SalesOrder", "SalesOrder" , true);
+/*echo get_module_title("SalesOrder", "SalesOrder" , true);
 echo '<BR>';
-echo get_form_header("Sales Order Search", "", false);
-$xtpl=new XTemplate ('modules/SalesOrder/Popup.html');
-$xtpl->assign("MOD", $mod_strings);
-$xtpl->assign("APP", $app_strings);
-$xtpl->assign("IMAGE_PATH",$image_path);
-$xtpl->assign("THEME_PATH",$theme_path);
+echo get_form_header("Sales Order Search", "", false);*/
+$smarty=new vtigerCRM_Smarty;
+$smarty->assign("MOD", $mod_strings);
+$smarty->assign("APP", $app_strings);
+$smarty->assign("IMAGE_PATH",$image_path);
+$smarty->assign("THEME_PATH",$theme_path);
+$smarty->assign("MODULE",$currentModule);
+$smarty->assign("SINGLE_MOD",'SalesOrder');
 
 if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
-        $xtpl->assign("RETURN_MODULE",$_REQUEST['return_module']);
+        $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 
 if (!isset($where)) $where = "";
 $popuptype = '';
 $popuptype = $_REQUEST["popuptype"];
-$xtpl->assign("RECORDID",$_REQUEST['recordid']);
+$smarty->assign("RECORDID",$_REQUEST['recordid']);
 
 if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 
@@ -54,8 +56,8 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
         if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
         if (isset($_REQUEST['quotename'])) $quotename = $_REQUEST['quotename'];
 	
-	if ($order_by !='') $xtpl->assign("ORDER_BY", $order_by);
-	if ($sorder !='') $xtpl->assign("SORDER", $sorder);
+	if ($order_by !='') $smarty->assign("ORDER_BY", $order_by);
+	if ($sorder !='') $smarty->assign("SORDER", $sorder);
 	
 	$where_clauses = Array();
 
@@ -92,7 +94,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 }
 
 //Constructing the Search Form
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
+/*if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
         // Stick the form header out there.
         $search_form=new XTemplate ('modules/SalesOrder/PopupSearchForm.html');
         $search_form->assign("MOD", $mod_strings);
@@ -157,11 +159,11 @@ if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
 	}
 echo get_form_footer();
 
-}
+}*/
 
 echo get_form_header("Sales Order List",'', false);
 
-$xtpl->assign("SOLISTHEADER", get_form_header("Sales Order List", "", false ));
+$smarty->assign("SOLISTHEADER", get_form_header("Sales Order List", "", false ));
 
 $focus = new SalesOrder();
 
@@ -234,10 +236,10 @@ $focus->list_mode="search";
 $focus->popup_type=$popuptype;
 
 $listview_header = getSearchListViewHeader($focus,"SalesOrder",$url_string,$sorder,$order_by);
-$xtpl->assign("LISTHEADER", $listview_header);
+$smarty->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getSearchListViewEntries($focus,"SalesOrder",$list_result,$navigation_array);
-$xtpl->assign("LISTENTITY", $listview_entries);
+$smarty->assign("LISTENTITY", $listview_entries);
 
 if($order_by !='')
 $url_string .="&order_by=".$order_by;
@@ -245,11 +247,10 @@ if($sorder !='')
 $url_string .="&sorder=".$sorder;
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"SalesOrder","Popup");
-$xtpl->assign("NAVIGATION", $navigationOutput);
-$xtpl->assign("RECORD_COUNTS", $record_string);
+$smarty->assign("NAVIGATION", $navigationOutput);
+$smarty->assign("RECORD_COUNTS", $record_string);
 
-$xtpl->parse("main");
-$xtpl->out("main");
+$smarty->display("Popup.tpl");
 
 
 
