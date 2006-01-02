@@ -726,4 +726,21 @@ function getParentTabFromModule($module)
 	$tab =  $adb->query_result($result,0,"parenttab_label");
 	return $tab;
 }
+
+/**
+ * This function returns the parenttab and for the given module.
+ */
+function getParentTab()
+{
+    if(isset($_REQUEST['parenttab']) && $_REQUEST['parenttab'] !='')
+    {
+               return $_REQUEST['parenttab'];
+    }
+    else
+    {
+                return getParentTabFromModule($_REQUEST['module']);
+    }
+
+}
+
 ?>
