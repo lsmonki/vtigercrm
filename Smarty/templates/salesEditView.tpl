@@ -129,9 +129,10 @@
 							<table border=0 cellspacing=0 cellpadding=0 width=100%>
 							<tr>
 								<td  colspan=4 style="padding:5px">
-
-								<input value="Save" class=small style="width:70px" onclick="this.form.action.value='Save';return formValidate()" type="submit">&nbsp;
+								<div align="center">
+								<input value="Save" class=small style="width:70px" onclick="this.form.action.value='Save';return formValidate()" type="submit" name="button">&nbsp;
 								<input type="button" value="Cancel" class=small style="width:70px" onclick="window.history.back()" name="button" >
+								</div>
 								</td>
 							</tr>
 							{foreach key=header item=data from=$BLOCKS}
@@ -203,17 +204,22 @@
 								   <select name="{$fldname}">
 								{/if}
 
-                                                                {foreach item=arr from=$fldvalue}
+                                                                {foreach key=key_one item=arr from=$fldvalue}
                                                                         {foreach key=sel_value item=value from=$arr}
-                                                                                <option value="{$sel_value}" {$value}>{$sel_value}</option>
+                                                                                <option value="{$key_one}" {$value}>{$sel_value}</option>
                                                                         {/foreach}
 
                                                                 {/foreach}
                                                            </select>
                                                         </td>
 							{elseif $uitype eq 51}
+								{if $MODULE eq 'Accounts'}
+									{assign var='popuptype' value = 'specific_account_address'}
+								{else}
+									{assign var='popuptype' value = 'specific_contact_account_address'}
+								{/if}
 							<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
-							<td width="30%" align=left class="dvtCellInfo"><input readonly name="account_name" style="border:1px solid #bababa;" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype=specific_account_address&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.account_id.value=''; this.form.account_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+							<td width="30%" align=left class="dvtCellInfo"><input readonly name="account_name" style="border:1px solid #bababa;" type="text" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Accounts&action=Popup&popuptype={$popuptype}&form=TasksEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.account_id.value=''; this.form.account_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
 							
 							{elseif $uitype eq 50}
 							<td width="20%" class="dvtCellLabel" align=right><font color="red">*</font>{$fldlabel}</td>
@@ -224,10 +230,17 @@
 							
 							{elseif $uitype eq 75 || $uitype eq 81}
                                                           <td width="20%" class="dvtCellLabel" align=right>
-                                                                {if $uitype eq 81}                                                                                               <font color="red">*</font>                                                                                         {assign var="pop_type" value="specific_vendor_address"}                                                                                                                                                             {else}{assign var="pop_type" value="specific"}                                                                {/if}                                                                                                         {$fldlabel}                                                                                             </td>                                                                                                         <td width="30%" align=left class="dvtCellInfo"><input name="vendor_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Vendors&action=Popup&html=Popup_picker&popuptype='.$pop_type.'&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>                                                                                                                                {if $uitype eq 75}                                                                                                    &nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.vendor_id.value='';this.form.vendor_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>                                                                   {/if}
-
-
-
+                                                                {if $uitype eq 81}
+								   <font color="red">*</font>
+									{assign var="pop_type" value="specific_vendor_address"}
+								{else}{assign var="pop_type" value="specific"}
+                                                                {/if}
+                                                                {$fldlabel}
+                                                          </td>
+                                                          <td width="30%" align=left class="dvtCellInfo"><input name="vendor_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Vendor&action=Popup&html=Popup_picker&popuptype={$pop_type}&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>
+							  {if $uitype eq 75}
+                                                           &nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.vendor_id.value='';this.form.vendor_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
+							  {/if}
 							{elseif $uitype eq 57}
 							<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
 							<td width="30%" align=left class="dvtCellInfo"><input name="contact_name" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue}"><input name="{$fldname}" type="hidden" value="{$secondvalue}">&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.contact_id.value=''; this.form.contact_name.value='';return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
@@ -352,7 +365,7 @@
 
 						{elseif $uitype eq 69 || $uitype eq 61}
 						<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
-						<td colspan="3" width="30%" align=left class="dvtCellInfo"><input name="{$fldname}"  type="file" value="{$secondvalue}"/><input type="hidden" name="filename" value=""/><input type="hidden" name="id" value=""/>{$fldvalue}</td>
+						<td colspan="3" width="30%" align=left class="dvtCellInfo"><input name="{$fldname}"  type="file" value="{$secondvalue}"/><input type="hidden" name="id" value=""/>{$fldvalue}</td>
 
 						{elseif $uitype eq 30}
                                                 <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
@@ -368,9 +381,10 @@
 							{/foreach}
 							<tr>
 								<td  colspan=4 style="padding:5px">
-
+								<div align="center">
 								<input type="submit" value="Save" class=small onclick="this.form.action.value='Save';return formValidate() "  style="width:70px">&nbsp;
 								<input type="button" onclick="window.history.back()" name="button" value="Cancel" class=small style="width:70px">
+								</div>
 								</td>
 							</tr>
 </table>
