@@ -372,12 +372,13 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 	global $app_strings;
         global $mod_strings;
         $arrow='';
+	$list_header = Array();
 
 	//$theme = $focus->current_theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";		
-	$list_header = '<tr class="moduleListTitle" height=20>';
-	$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+	//$list_header = '<tr class="moduleListTitle" height=20>';
+	//$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 	foreach($focus->search_fields as $name=>$tableinfo)
 	{
 		$fieldname = $focus->search_fields_name[$name];
@@ -418,11 +419,12 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
                                                 $name = $app_strings[$name];
                                 }
                         }
-			$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
-			$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
+			$list_header[]=$name;
+			//$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
+			//$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
 		}
 	}	
-	$list_header .= '</tr>';
+	//$list_header .= '</tr>';
 	return $list_header;
 
 }
@@ -802,21 +804,23 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 	//$theme = $focus->current_theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
+	$list_block = Array();
 
 	//getting the fieldtable entries from database
 	$tabid = getTabid($module);
 
 	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
-		if (($i%2)==0)
+		/*if (($i%2)==0)
 			$list_header .= '<tr height=20 class=evenListRow>';
 		else
-			$list_header .= '<tr height=20 class=oddListRow>';
+			$list_header .= '<tr height=20 class=oddListRow>';*/
 
 		//Getting the entityid
 		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
+		$list_header=Array();
 
-		$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
+		//$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
 		foreach($focus->search_fields as $name=>$tableinfo)
 		{
 			$fieldname = $focus->search_fields_name[$name];
@@ -890,13 +894,15 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 					}
 
 				}
-			$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
-			$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+			//$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
+			//$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+			  $list_header[]=$value;
 			}
 		}	
-		$list_header .= '</tr>';
+		//$list_header .= '</tr>';
+		$list_block[]=$list_header;
 	}
-	$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
+	//$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 	return $list_header;
 }
 
