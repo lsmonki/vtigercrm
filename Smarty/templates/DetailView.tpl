@@ -95,7 +95,7 @@
 					{else}
 					<td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} Informartion</td>	
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&category={$CATEGORY}">More Information</a></td>
+					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">More Information</a></td>
 
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 					{/if}
