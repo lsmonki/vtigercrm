@@ -9,10 +9,15 @@
 *
  ********************************************************************************/
 
-require_once('include/RelatedListView.php');
-require_once('modules/HelpDesk/HelpDesk.php');
-require_once('modules/Activities/Activity.php');
 require_once('include/utils/UserInfoUtil.php');
+require_once('include/RelatedListView.php');
+require_once('modules/Activities/Activity.php');
+require_once('modules/HelpDesk/HelpDesk.php');
+require_once('modules/PriceBooks/PriceBook.php');
+require_once('modules/PurchaseOrder/PurchaseOrder.php');
+require_once('modules/SalesOrder/SalesOrder.php');
+require_once('modules/Quotes/Quote.php');
+require_once('modules/Invoice/Invoice.php');
 
 function getHiddenValues($id,$sid="product_id")
 {
@@ -64,7 +69,6 @@ function renderRelatedTickets($query,$id)
 	//echo '</form>';
 }
 
-
 function renderRelatedActivities($query,$id,$cntid='')
 {
 	global $mod_strings;
@@ -107,89 +111,9 @@ function renderRelatedAttachments($query,$id,$cntid='')
 
         //echo '</form>';
 }
-function renderPriceBookRelatedProducts($query,$id)
-{
-	require_once('modules/Products/Product.php');
-        global $mod_strings;
-        global $app_strings;
 
-        $hidden = getPriceBookHiddenValues($id);
-        echo $hidden;
-
-        $focus = new Product();
- 
-	$button = '';
- 
-		$button .= '<input title="Select Products" accessyKey="F" class="button" onclick="this.form.action.value=\'AddProductsToPriceBook\';this.form.module.value=\'Products\';this.form.return_module.value=\'PriceBooks\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_SELECT_PRODUCT_BUTTON_LABEL'].'">&nbsp;';
-		//$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_PRODUCT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&return_module=Products&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
-	$returnset = '&return_module=PriceBooks&return_action=DetailView&return_id='.$id;
-
-	//$list = GetRelatedList('PriceBook','Products',$focus,$query,$button,$returnset,'updatePbListPrice','DeletePbProductRel');
-	  return getPriceBookRelatedProducts($query,$focus,$returnset);
-
-		
-	//echo '</form>';
-}
-
-function renderRelatedProducts($query,$id,$sid="product_id")
-{
-	require_once('modules/Products/Product.php');
-        global $mod_strings;
-        global $app_strings;
-
-        $hidden = getHiddenValues($id,$sid);
-        $hidden .= '<input type="hidden" name="smodule" value="VENDOR">';
-        echo $hidden;
-
-        $focus = new Product();
- 
-	$button = '';
-
-        if(isPermitted("Products",1,"") == 'yes')
-        {
-
- 
-		$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Vendors\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
-	}
-	if(isPermitted("Products",3,"") == 'yes')
-        {
-		if($focus->product_novendor() !=0)
-		{
-			$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_PRODUCT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&return_module=Vendors&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
-		}
-	}
-	$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
-
-	$list = GetRelatedList('Vendors','Products',$focus,$query,$button,$returnset);
-	echo '</form>';
-}
-function renderRelatedOrders($query,$id,$sid="product_id")
-{
-	require_once('modules/PurchaseOrder/PurchaseOrder.php');
-        global $mod_strings;
-        global $app_strings;
-
-        $hidden = getHiddenValues($id,$sid);
-        $hidden .= '<input type="hidden" name="smodule" value="VENDOR">';
-        echo $hidden;
-
-        $focus = new Order();
- 
-	$button = '';
-
-        if(isPermitted("PurchaseOrder",1,"") == 'yes')
-        {
- 
-		$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'PurchaseOrder\';this.form.return_module.value=\'Vendors\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
-	}
-	$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
-
-	$list = GetRelatedList('Vendors','PurchaseOrder',$focus,$query,$button,$returnset);
-	echo '</form>';
-}
 function renderProductPurchaseOrders($query,$id,$vendid='',$cntid='')
 {
-	require_once('modules/PurchaseOrder/PurchaseOrder.php');
         global $mod_strings;
         global $app_strings;
 
@@ -216,10 +140,10 @@ function renderProductPurchaseOrders($query,$id,$vendid='',$cntid='')
 
 	return GetRelatedList('Products','PurchaseOrder',$focus,$query,$button,$returnset);
 	//echo '</form>';
-} 
+}
+
 function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
 {
-	require_once('modules/SalesOrder/SalesOrder.php');
         global $mod_strings;
         global $app_strings;
 
@@ -250,33 +174,10 @@ function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
 	//echo '</form>';
 }
 
-function renderRelatedContacts($query,$id)
-{
-        global $mod_strings;
-        global $app_strings;
-        require_once('modules/Contacts/Contact.php');
-
-        $hidden = getHiddenValues($id);
-        $hidden .= '<input type="hidden" name="smodule" value="VENDOR">';
-	echo $hidden;
-
-        $focus = new Contact();
-
-        $button = '';
-        if(isPermitted("Contacts",1,"") == 'yes')
-        {
-                $button .= '<input title="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_TITLE'].'" accessKey="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_KEY'].'" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&return_module=Products&smodule=VENDOR&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
-        }
-        $returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
-
-        $list = GetRelatedList('Vendor','Contacts',$focus,$query,$button,$returnset);
-        echo '</form>';
-}
 function renderRelatedQuotes($query,$id,$cntid='',$prtid='',$sid="product_id")
 {
 	global $mod_strings;
 	global $app_strings;
-	require_once('modules/Quotes/Quote.php');
 	
 	$hidden = getHiddenValues($id,$sid); 
 	if($prtid!=0 && $prtid!='')
@@ -303,11 +204,11 @@ function renderRelatedQuotes($query,$id,$cntid='',$prtid='',$sid="product_id")
 	$list = GetRelatedList('Products','Quotes',$focus,$query,$button,$returnset);
 	echo '</form>';
 }
+
 function renderRelatedInvoices($query,$id,$cntid='',$prtid='')
 {
 	global $mod_strings;
 	global $app_strings;
-	require_once('modules/Invoice/Invoice.php');
 
 	$hidden = getHiddenValues($id);
 	if($prtid!=0 && $prtid!='')
@@ -334,11 +235,11 @@ function renderRelatedInvoices($query,$id,$cntid='',$prtid='')
 	return GetRelatedList('Products','Invoice',$focus,$query,$button,$returnset);
 	//echo '</form>';
 }
+
 function renderProductRelatedPriceBooks($query,$id)
 {
 	global $mod_strings;
 	global $app_strings;
-	require_once('modules/Products/PriceBook.php');
 
 	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
 	
