@@ -60,8 +60,8 @@ class Security extends CRMEntity {
  $this->db->query("INSERT INTO tab VALUES (15,'Faq',2,14,'Faq','','',1)");
  $this->db->query("INSERT INTO tab VALUES (16,'Events',2,13,'Events','','',1)");
  $this->db->query("INSERT INTO tab VALUES (17,'Calendar',0,2,'Calendar','','',1)");
- $this->db->query("INSERT INTO tab VALUES (18,'Vendor',2,15,'Vendor','','',1)");
- $this->db->query("INSERT INTO tab VALUES (19,'PriceBook',2,16,'PriceBook','','',1)");
+ $this->db->query("INSERT INTO tab VALUES (18,'Vendors',2,15,'Vendors','','',1)");
+ $this->db->query("INSERT INTO tab VALUES (19,'PriceBooks',2,16,'PriceBooks','','',1)");
  $this->db->query("INSERT INTO tab VALUES (20,'Quotes',0,17,'Quotes','','',1)");
  $this->db->query("INSERT INTO tab VALUES (21,'PurchaseOrder',0,18,'PurchaseOrder','','',1)");
  $this->db->query("INSERT INTO tab VALUES (22,'SalesOrder',0,19,'SalesOrder','','',1)");
@@ -1665,7 +1665,7 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",".getTabid("Invoice").",'get_invoices',7,'Invoice',0)");
 	
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",".getTabid("PriceBook").",'get_product_pricebooks',8,'PriceBook',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Products").",".getTabid("PriceBooks").",'get_product_pricebooks',8,'PriceBooks',0)");
 	
 		//Inserting Emails Related Lists	
 
@@ -1684,14 +1684,14 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 	
 	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("HelpDesk").",0,'get_attachments',2,'Attachments',0)");
 
-	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("PriceBook").",14,'get_pricebook_products',2,'Products',0)");
+	$this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("PriceBooks").",14,'get_pricebook_products',2,'Products',0)");
 
         // Inserting Vendor Related Lists
-        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendor").",14,'get_products',1,'Products',0)");
+        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendors").",14,'get_products',1,'Products',0)");
 
-        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendor").",21,'get_purchase_orders',2,'Products',0)");
+        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendors").",21,'get_purchase_orders',2,'Purchase Order',0)");
 
-        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendor").",4,'get_contacts',3,'Contacts',0)");
+        $this->db->query("insert into relatedlists values(".$this->db->getUniqueID('relatedlists').",".getTabid("Vendors").",4,'get_contacts',3,'Contacts',0)");
 
 	// Inserting Quotes Related Lists
 	
