@@ -36,21 +36,21 @@ class CustomView extends CRMEntity{
 
 
 
-	var $module_list = Array("Leads"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-				 "Contacts"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-				 "Accounts"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-				 "Potentials"=>Array("Information"=>1,"Description"=>2,"Custom Information"=>5),
-				 "Activities"=>Array("Information"=>1,"Description"=>2),
-				 "Products"=>Array("Information"=>1,"Description"=>2,"Custom Information"=>5),
-				 "Vendor"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-				 "PriceBook"=>Array("Information"=>1,"Description"=>2,"Custom Information"=>5),
-				 "Notes"=>Array("Information"=>1,"Description"=>3),
-				 "Emails"=>Array("Information"=>'1,2',"Description"=>4),
-				 "HelpDesk"=>Array("Information"=>'1,2',"Description"=>3,"Custom Information"=>5),
-				 "Quotes"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-				 "PurchaseOrder"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-				 "SalesOrder"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-				 "Invoice"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5)
+	var $module_list = Array("Leads"=>Array("Information"=>13,"Address"=>15,"Description"=>16,"Custom Information"=>14),
+				 "Contacts"=>Array("Information"=>4,"Address"=>7,"Description"=>8,"Custom Information"=>5),
+				 "Accounts"=>Array("Information"=>9,"Address"=>11,"Description"=>12,"Custom Information"=>10),
+				 "Potentials"=>Array("Information"=>1,"Description"=>3,"Custom Information"=>2),
+				 "Activities"=>Array("- Event Information"=>'41,42',"- Event Description"=>42,"- Task Information"=>19,"- Task Description"=>20),
+				 "Products"=>Array("Information"=>31,"Description"=>36,"Custom Information"=>34),
+				 "Vendors"=>Array("Information"=>44,"Address"=>46,"Description"=>47,"Custom Information"=>45),
+				 "PriceBooks"=>Array("Information"=>48,"Description"=>50,"Custom Information"=>49),
+				 "Notes"=>Array("Information"=>17,"Description"=>18),
+				 "Emails"=>Array("Information"=>'21,22,23',"Description"=>24),
+				 "HelpDesk"=>Array("Information"=>'25,26',"Description"=>28,"Custom Information"=>27),
+				 "Quotes"=>Array("Information"=>51,"Address"=>53,"Description"=>56,"Custom Information"=>52),
+				 "PurchaseOrder"=>Array("Information"=>57,"Address"=>59,"Description"=>62,"Custom Information"=>58),
+				 "SalesOrder"=>Array("Information"=>63,"Address"=>65,"Description"=>68,"Custom Information"=>64),
+				 "Invoice"=>Array("Information"=>69,"Address"=>71,"Description"=>74,"Custom Information"=>70)
 				);
 
 
