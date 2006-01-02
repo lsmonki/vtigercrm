@@ -77,6 +77,7 @@ function fetchPermissionData($module,$action)
 	$defSharingPermissionData = $_SESSION['defaultaction_sharing_permission_set'];
 	$others_permission_id = $defSharingPermissionData[$tabid];
 	
+/*
 	$i=0;
 
 	
@@ -156,81 +157,12 @@ function fetchPermissionData($module,$action)
 		return;
 	}
 
-	//checkDeletePermission($tabid);
-	//if the tabid is not present in the array then he is not permitted
-	//if the tabid is present, then check for the values of the action_permissions
-	//Check for the action mappings in the profile2standard permissions table
-	/* 
-	   echo 'module iss  '.$module;
-	   echo '<BR>';
-	   echo 'action iss  '.$action;
-	   echo '<BR>';
-	   echo sizeof($permissionData);
-	 */
-	/*
-	while($i<count($permissionData))
-	{
-		if($permissionData[$i][0] == $tabid )
-		{
-
-				
-				echo 'actionid is  '.$permissionData[$i][1];
-				echo '<BR>';
-				echo 'action permission iss  '.$permissionData[$i][2];
-				echo '<BR>';
-			 
-			$defSharingPermissionVal = $defSharingPermissionData[$tabid];
-			if($defSharingPermissionVal == 0)
-			{
-				$others_view='yes';
-				$others_create_edit='no';
-				$others_delete='no';
-			}
-			if($defSharingPermissionVal == 1)
-			{
-				$others_view='yes';
-				$others_create_edit='yes';
-				$others_delete='no';
-			}
-			if($defSharingPermissionVal == 2)
-			{
-				$others_view='yes';
-				$others_create_edit='yes';
-				$others_delete='yes';
-			}
-			if($defSharingPermissionVal == 3)
-			{
-				$others_view='no';
-				$others_create_edit='no';
-				$others_delete='no';
-			}
-
-			$accessFlag=true;
-			if($permissionData[$i][1]==$actionid)
-			{
-				$actionpermissionvalue=$permissionData[$i][2];
-				if($actionpermissionvalue != 0)
-				{
-					echo "You are not permitted to execute this operation";
-					$display = "No";
-				}
-				else
-				{
-					return;
-				}
-			}
-
-		}
-		$i++;
-	}
-	*/
-
-
 	if(!$accessFlag)
 	{
 		echo "You are not permitted to execute this operation";
 		$display = "No";
 	}
+*/
 }
 
 //we have to do this as there is no UI page for Delete. Hence, when the user clicks delete, it gets stuck halfway and the page looks ugly because the theme is not set
