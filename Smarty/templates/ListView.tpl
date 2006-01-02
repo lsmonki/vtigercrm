@@ -2,120 +2,16 @@
 <script language="JavaScript" type="text/javascript" src="include/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
 <script language="javascript">
-function showDefaultCustomView(selectView)
+
+function callSearch(searchtype)
 {ldelim}
-	viewName = selectView.options[selectView.options.selectedIndex].value;
-	document.massdelete.viewname.value=viewName;
-	document.massdelete.action="index.php?module={$MODULE}&action=index&return_module={$MODULE}&return_action=index&viewname="+viewName;
-	document.massdelete.submit();
-{rdelim}
 
-
-                        function confirmdelete(url)
-                        {ldelim}
-                                if(confirm("Are you sure?"))
-                                {ldelim}
-                                        document.location.href=url;
-                                {rdelim}
-                        {rdelim}
-
-function eMail()
-{ldelim}
-    x = document.massdelete.selected_id.length;
-        var viewid = document.massdelete.viewname.value;
-        idstring = "";
-
-        if ( x == undefined)
-        {ldelim}
-
-                if (document.massdelete.selected_id.checked)
-                {ldelim}
-                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
-                {rdelim}
-                else
-                {ldelim}
-                        alert("Please select atleast one entity");
-                        return false;
-                {rdelim}
-        {rdelim}
-        else
-        {ldelim}
-                xx = 0;
-                for(i = 0; i < x ; i++)
-                {ldelim}
-                        if(document.massdelete.selected_id.checked)
-                        {ldelim}
-                                idstring = document.massdelete.selected_id.value +";"+idstring
-                                xx++
-                        {rdelim}
-                {rdelim}
-                if (xx != 0)
-                {ldelim}
-                        document.massdelete.idlist.value=idstring;
-                {rdelim}
-                else
-                {ldelim}
-                        alert("Please select atleast one entity");
-                        return false;
-                {rdelim}
-        {rdelim}
-
-   document.massdelete.action="index.php?module=Emails&action=SelectEmails&return_module={$MODULE}&return_action=index";
-{rdelim}
-
-function massDelete()
-{ldelim}
-        x = document.massdelete.selected_id.length;
-        var viewid = document.massdelete.viewname.value;
-        idstring = "";
-
-        if ( x == undefined)
-        {ldelim}
-
-                if (document.massdelete.selected_id.checked)
-                {ldelim}
-                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
-                {rdelim}
-                else
-                {ldelim}
-                        alert("Please select atleast one entity");
-                        return false;
-                {rdelim}
-        {rdelim}
-        else
-        {ldelim}
-                xx = 0;
-                for(i = 0; i < x ; i++)
-                {ldelim}
-                        if(document.massdelete.selected_id.checked)
-                        {ldelim}
-                                idstring = document.massdelete.selected_id.value +";"+idstring
-                 	        xx++
-                        {rdelim}
-                {rdelim}
-                if (xx != 0)
-                {ldelim}
-                        document.massdelete.idlist.value=idstring;
-                {rdelim}
-               else
-		{ldelim}
-                        alert("Please select atleast one entity");
-                        return false;
-                {rdelim}
-        {rdelim}
-        if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
-        {ldelim}
-            document.massdelete.action="index.php?module=Users&action=massdelete&return_module={$MODULE}&return_action=index&viewname="+viewid;
-        {rdelim}
-        else
-        {ldelim}
-            return false;
-        {rdelim}
+        search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
+        search_type_val=document.basicSearch.searchtype.value;
+        search_txt_val=document.basicSearch.search_text.value;
+        document.basicSearch.action="index.php";
 
 {rdelim}
-
-
-
 
 </script>
 
@@ -186,6 +82,7 @@ function massDelete()
         <td class=small>
 
                 <table border=0 cellspacing=0 cellpadding=2 width=100%>
+		<form name="basicSearch" action="index.php">
                 <tr>
                         <td >
 
@@ -205,18 +102,19 @@ itle="Basic Search" border=0></td>
                                         <table border=0 cellspacing=0 cellpadding=5 align=center>
                                         <tr>
                                         <td nowrap>Search Accounts for </td>
-                                        <td><input type="text" style="width:150px" class=small></td>
+                                        <td><input type="text" style="width:150px" class=small name="search_text"></td>
 
                                         <td>in</td>
                                         <td>
-                                                <select class=small>
-                                                {foreach item=header from=$LISTHEADER}
-                                                        <option>{$header}</option>
-                                                {/foreach}
-                                                </select>
+						 {html_options  name="search_field" values="$SEARCHLISTHEADER" output=$SEARCHLISTHEADER}
+                                                <input type="hidden" name="searchtype" value="BasicSearch">
+                                                <input type="hidden" name="module" value={$MODULE}>
+                                                <input type="hidden" name="action" value="index">
+                                                <input type="hidden" name="query" value="true">
+
 
                                         </td>
-                                        <td><input type="button" class=small value="Search now" onClick="showhide('searchAcc');window.location='salesAccSearchResults.html'"></td>
+                                        <td><input type="submit" class=small value="Search now" onClick="callSearch('Basic');"></td>
                                         </tr>
                                         </table>
 
@@ -308,7 +206,7 @@ itle="Basic Search" border=0></td>
                                                         </div>
                                         </div>
                                         <table border=0 cellspacing=0 cellpadding=5 width=100%>
-                                        <tr><td align=center><input type="button" class=small value="Search now" onClick="showhide('searchAcc');window.location='salesAccSearchResults.html'"></td></tr></table>
+                                        <tr><td align=center><input type="submit" class=small value="Search now" onClick="callSearch('Basic');"></td></tr></table>
 
 
                                 </div>				
@@ -327,6 +225,7 @@ itle="Basic Search" border=0></td>
                         </td>
                 </tr>
                 </table>
+		</form>
         </td>
 </tr>
 </table>
