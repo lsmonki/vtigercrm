@@ -9,8 +9,6 @@
 *
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
-//require_once('HelpDeskUtil.php');
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 require_once('modules/Vendors/Vendor.php');
@@ -21,7 +19,6 @@ $focus = new Vendor();
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
   $focus->retrieve_entity_info($_REQUEST['record'],"Vendors");
   $focus->id = $_REQUEST['record'];
-  //$focus->name=$focus->column_fields['productname'];		
 }
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
@@ -43,34 +40,6 @@ $smarty->assign("APP", $app_strings);
 
 $smarty->assign("BLOCKS", getBlocks("Vendors","detail_view",'',$focus->column_fields));
 
-/*
-$block_1 = getDetailBlockInformation("Vendors",1,$focus->column_fields);
-$smarty->assign("BLOCK1", $block_1);
-$block_2 = getDetailBlockInformation("Vendors",2,$focus->column_fields);
-$smarty->assign("BLOCK2", $block_2);
-$block_3 = getDetailBlockInformation("Vendors",3,$focus->column_fields);
-$smarty->assign("BLOCK3", $block_3);
-$block_1_header = getBlockTableHeader("LBL_VENDOR_INFORMATION");
-$block_2_header = getBlockTableHeader("LBL_VENDOR_ADDRESS_INFORMATION");
-$block_3_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
-$smarty->assign("BLOCK1_HEADER", $block_1_header);
-$smarty->assign("BLOCK2_HEADER", $block_2_header);
-$smarty->assign("BLOCK3_HEADER", $block_3_header);
-$block_5 = getDetailBlockInformation("Vendors",5,$focus->column_fields);
-if(trim($block_5) != '')
-{
-        $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
-        $cust_fld .=  '<tr><td>';
-	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
-        $cust_fld .= $block_5_header;
-        $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= $block_5;
-        $cust_fld .= '</table>';
-        $cust_fld .= '</td></tr></table>';
-        $cust_fld .= '<BR>';
-
-}
-*/
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 
 if(isPermitted("Vendors",1,$_REQUEST['record']) == 'yes')
@@ -88,20 +57,7 @@ if(isPermitted("Vendors",2,$_REQUEST['record']) == 'yes')
 
 
 
-//$xtpl->assign("IMAGE_PATH", $image_path);
-//$xtpl->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-//$xtpl->assign("ID", $_REQUEST['record']);
-//$xtpl->parse("main");
-//$xtpl->out("main");
-
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-            $category = $_REQUEST['category'];
-}
-else
-{
-            $category = getParentTabFromModule($currentModule);
-}
+$category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 $smarty->assign("IMAGE_PATH", $image_path);
@@ -110,80 +66,8 @@ $smarty->assign("ID", $_REQUEST['record']);
 $smarty->assign("MODULE", $module);
 $smarty->display("DetailView.tpl");
 
-/*
-require_once('modules/Vendors/binaryfilelist.php');
-echo '<br><br>';
-echo '<table width="50%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
-echo '<form border="0" action="index.php" method="post" name="form" id="form">';
-
-echo '<input type="hidden" name="module">';
-echo '<input type="hidden" name="mode">';
-echo '<input type="hidden" name="return_module" value="'.$currentModule.'">';
-echo '<input type="hidden" name="return_id" value="'.$productid.'">';
-echo '<input type="hidden" name="action">';
-
-
-echo '<td>';
-echo '<table cellpadding="0" cellspacing="0" border="0"><tbody><tr>
-                <td class="formHeader" vAlign="top" align="left" height="20">
-         <img src="' .$image_path. '/left_arc.gif" border="0"></td>
-   <td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap width="100%" height="20">'.$mod_strings['LBL_ATTACHMENTS'].'</td>
-        <td  class="formHeader" vAlign="top" align="right" height="20">
-                  <img src="' .$image_path. '/right_arc.gif" border="0"></td>
-                </tr></tbody></table>
-      </td>';
-echo '<td>&nbsp;</td>';
-echo '<td>&nbsp;</td>';
-echo '<td valign="bottom"><input title="Attach File" accessyKey="F" class="button" onclick="this.form.action.value=\'upload\';this.form.module.value=\'Vendors\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_ATTACHMENT'].'"></td>';
-echo '<td width="50%"></td>';
-
-echo '</td></tr></form></tbody></table>';
-*/
-
-// $focus->get_attachments($focus->id);
-
-
-//Security check for related list
-/*
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
-getRelatedLists("Vendors",$focus);
-*/
-
-/*
-//Constructing the Related Lists from here
-include('modules/Vendors/RenderRelatedListUI.php');
-if($tab_per_Data[13] == 0)
-{
-        if($permissionData[13][3] == 0)
-        {
-		 $focus->get_tickets($focus->id);
-	}
-}
-// $focus->get_meetings($focus->id);
-if($tab_per_Data[9] == 0)
-{
-        if($permissionData[9][3] == 0)
-        {
-		 $focus->get_activities($focus->id);
-	}
-}
-if($tab_per_Data[8] == 0)
-{
-        if($permissionData[8][3] == 0)
-        {
-		 $focus->get_attachments($focus->id);
-	}
-}
-
-
-*/
-
-//Security check for related list
-global $profile_id;
-$tab_per_Data = getAllTabsPermission($profile_id);
-$permissionData = $_SESSION['action_permission_set'];
-//getRelatedLists("Vendors",$focus);
 
 ?>

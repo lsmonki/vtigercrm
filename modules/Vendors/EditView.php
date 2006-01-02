@@ -27,7 +27,6 @@ if(isset($_REQUEST['record']))
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit'; 	
     $focus->retrieve_entity_info($_REQUEST['record'],"Vendors");
-    //$focus->name=$focus->column_fields['productname'];		
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
@@ -41,7 +40,6 @@ require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 $smarty->assign("BLOCKS",getBlocks("Vendors",$disp_view,$mode,$focus->column_fields));
-//echo '<pre>';print_r(getBlocks("Vendors",$disp_view,$mode,$focus->column_fields));echo '</pre>';
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
@@ -50,10 +48,6 @@ $smarty->assign("SINGLE_MOD","Vendors");
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
-/*
-if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
-else $smarty->assign("NAME", "");
-*/
 if(isset($cust_fld))
 {
         $smarty->assign("CUSTOMFIELD", $cust_fld);
@@ -119,6 +113,8 @@ $vendor_tables = Array('vendor');
  }
 
 
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);

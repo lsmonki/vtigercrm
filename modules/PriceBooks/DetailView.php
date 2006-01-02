@@ -23,7 +23,6 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record']))
 	$focus->retrieve_entity_info($_REQUEST['record'],"PriceBooks");
 	$focus->id = $_REQUEST['record'];
 	$pricebookname = getPriceBookName($focus->id);
-	//$focus->name=$focus->column_fields['productname'];		
 }
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
@@ -55,32 +54,8 @@ else
 $smarty->assign("CATEGORY",$category);
 
 $smarty->assign("BLOCKS", getBlocks("PriceBooks","detail_view",'',$focus->column_fields));
-/*
-$block_1 = getDetailBlockInformation("PriceBooks",1,$focus->column_fields);
-$smarty->assign("BLOCK1", $block_1);
-$block_2 = getDetailBlockInformation("PriceBooks",2,$focus->column_fields);
-$smarty->assign("BLOCK2", $block_2);
-$block_1_header = getBlockTableHeader("LBL_PRICEBOOK_INFORMATION");
-$block_2_header = getBlockTableHeader("LBL_DESCRIPTION_INFORMATION");
-$smarty->assign("BLOCK1_HEADER", $block_1_header);
-$smarty->assign("BLOCK2_HEADER", $block_2_header);
-$block_5 = getDetailBlockInformation("PriceBooks",5,$focus->column_fields);
-if(trim($block_5) != '')
-{
-        $cust_fld = '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
-        $cust_fld .=  '<tr><td>';
-	$block_5_header = getBlockTableHeader("LBL_CUSTOM_INFORMATION");
-        $cust_fld .= $block_5_header;
-        $cust_fld .= '<table width="100%" border="0" cellspacing="1" cellpadding="0">';
-        $cust_fld .= $block_5;
-        $cust_fld .= '</table>';
-        $cust_fld .= '</td></tr></table>';
-        $cust_fld .= '<BR>';
-
-}
-
-//$xtpl->assign("CUSTOMFIELD", $cust_fld);
-*/
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 

@@ -27,7 +27,6 @@ if(isset($_REQUEST['record']))
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit'; 	
     $focus->retrieve_entity_info($_REQUEST['record'],"PriceBooks");
-    //$focus->name=$focus->column_fields['productname'];		
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
 {
@@ -50,10 +49,6 @@ $smarty->assign("SINGLE_MOD","Product");
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-/*
-if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
-else $smarty->assign("NAME", "");
-*/
 if(isset($cust_fld))
 {
         $smarty->assign("CUSTOMFIELD", $cust_fld);
@@ -118,6 +113,8 @@ foreach($validationData as $fldName => $fldLabel_array)
 }
 
 
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);

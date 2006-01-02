@@ -33,6 +33,8 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 $related_array=getRelatedLists("Vendors",$focus);
 
 $smarty = new vtigerCRM_Smarty;
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
 
 if(isset($focus->name))
 	$smarty->assign("NAME", $focus->name);

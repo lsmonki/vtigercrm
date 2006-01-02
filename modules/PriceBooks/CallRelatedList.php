@@ -36,6 +36,9 @@ $smarty = new vtigerCRM_Smarty;
 
 if(isset($focus->name))
 	$smarty->assign("NAME", $focus->name);
+$category = getParentTab();
+$smarty->assign("CATEGORY",$category);
+
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("RELATEDLISTS", $related_array);
