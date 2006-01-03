@@ -29,7 +29,6 @@ $new_tables = 0;
  require_once('include/database/PearDatabase.php');
  require_once('include/logging.php');
  require_once('modules/Leads/Lead.php');
-//require_once('modules/imports/Headers.php');
  require_once('modules/Contacts/Contact.php');
  require_once('modules/Accounts/Account.php');
  require_once('modules/Potentials/Opportunity.php');
@@ -45,7 +44,6 @@ $new_tables = 0;
  require_once('data/Tracker.php');
  require_once('include/utils/utils.php');
  require_once('modules/Users/Security.php');
-// load up the config_override.php file.  This is used to provide default user settings
 if (is_file("config_override.php")) {
 	require_once("config_override.php");
 }
@@ -121,9 +119,6 @@ function create_default_users()
          $user->save();
 
         // We need to change the admin user to a fixed id of 1.
-        //$query = "update users set id='1' where user_name='$user->user_name'";
-        //$result = $db->query($query, true, "Error updating admin user ID: ");
-
         $log->info("Created ".$user->table_name." table. for user $user->id");
 
         if($create_default_user)
@@ -263,7 +258,7 @@ $focus = 0;
 // temporary
 require_once('config.php');
 
-if (ob_get_level() == 0) {
+/*if (ob_get_level() == 0) {
    ob_start();
 }
 echo str_pad('Loading... ',4096)."<br />\n";
@@ -277,10 +272,10 @@ for ($i = 0; $i < 48; $i++) {
    flush();
    ob_flush();
    sleep(1);
-}
-ob_end_flush();
+   ob_end_flush();
+}*/
 ?>
-<div class="percents" style="z-index:12">Done.</div>
+<!--<div class="percents" style="z-index:12">Done.</div>-->
 <?
    $success = $db->createTables("adodb/DatabaseSchema.xml");
 
@@ -303,48 +298,11 @@ foreach ( $modules as $module )
 {
          $focus = new $module();
 
-        /*if ($db_drop_tables == true )
-        {
-                $existed = drop_table_install($focus);
-
-                if ($existed)
-                {
-                        echo "<font color=red>Dropped existing <b>".$focus->table_name." </b>  table</font><BR>\n";
-                }
-                else
-                {
-                        echo "<font color=green>Table <b>".$focus->table_name." </b> does not exist</font><BR>\n";
-                }
-        }
-
-        $success = create_table_install($focus);
-
-        if ( $success)
-        {
-                echo "<font color=green>Created new <b>".$focus->table_name." </b> table</font><BR>\n";
-                if ( $module == "User")
-                {
-                        $new_tables = 1;
-                }
-        }
-        else
-        {
-		echo "Table <b>".$focus->table_name." </b>already exists<BR>\n";
-        }*/
 
  	$focus->create_tables(); // inserts only rows
 
 }
-/*
-if ($new_tables)
-{
-        create_default_users();
-}*/
-
-/*if($success==2)
-{*/
 	create_default_users();
-//}
 
 //Populating users table
 $uid = $db->getUniqueID("users");
@@ -352,8 +310,6 @@ $sql_stmt1 = "insert into users(id,user_name,user_password,last_name,email1,date
 $db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
 
-//$sql_stmt1 = "insert into user2role values(1,1)";
-//$db->query($sql_stmt1) or die($app_strings['ERR_CREATING_TABLE'].mysql_error());
 
 
 $role_query = "select roleid from role where rolename='standard_user'";
@@ -381,10 +337,6 @@ require_once('modules/Reports/PopulateReports.php');
 //Default customview population//
 require_once('modules/CustomView/PopulateCustomView.php');
 
-//Creating and Populating PHPBB tables and data
-//require_once('include/PopulatePhpBBtables.php');
-//create_populate_phpbb();
-
 // populating the db with seed data
 if ($db_populate)
 {
@@ -395,24 +347,6 @@ if ($db_populate)
 
 //populating forums data
 global $log, $db;
-/*
-$db->query("update phpbb_config set config_value='".$admin_email."' where config_name='board_email'");
-
-$db->query("update phpbb_config set config_value='modules/MessageBoard/images/smiles' where config_name='smilies_path'");
-
-$db->query("update phpbb_config set config_value='".$server_name."' where config_name='server_name'");
-
-$db->query("update phpbb_config set config_value='".$server_port."' where config_name='server_port'");
-
-
-$db->query("update phpbb_config set config_value='modules/MessageBoard' where config_name='script_path'");
-
-$curr_time=time();
-$db->query("insert phpbb_config values('board_startdate','".$curr_time."')");
-
-$db->query("insert phpbb_config values('default_lang', 'english')");
-
-*/
 $endTime = microtime();
 
 $deltaTime = microtime_diff($startTime, $endTime);
@@ -483,7 +417,6 @@ rename("install/", $renamefile."install/");
 }
 
 //populate Calendar data
-//include("modules/Calendar/admin/scheme.php");
 
 
 ?>
