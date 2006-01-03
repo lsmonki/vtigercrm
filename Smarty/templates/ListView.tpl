@@ -101,12 +101,14 @@ itle="Basic Search" border=0></td>
 
                                         <table border=0 cellspacing=0 cellpadding=5 align=center>
                                         <tr>
-                                        <td nowrap>Search Accounts for </td>
+                                        <td nowrap>Search {$MODULE} for </td>
                                         <td><input type="text" style="width:150px" class=small name="search_text"></td>
 
                                         <td>in</td>
                                         <td>
-						 {html_options  name="search_field" values="$SEARCHLISTHEADER" output=$SEARCHLISTHEADER}
+						<select name ="search_field">
+						 {html_options  options=$SEARCHLISTHEADER }
+						</select>
                                                 <input type="hidden" name="searchtype" value="BasicSearch">
                                                 <input type="hidden" name="module" value={$MODULE}>
                                                 <input type="hidden" name="action" value="index">
