@@ -6068,7 +6068,454 @@ E</constraint>
 		<field name="sequence" type="I" size="3"><NOTNULL/>
         </field>
      </table>
- 
+
+	<table name="tmp_read_user_sharing_per">
+		<field name="userid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="tabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="shareduserid" type="I" size="11">
+			<KEY/>
+		</field>
+	        <opt>Type=InnoDB</opt>	
+		<data>
+		
+		</data>
+	</table>
+
+
+	<table name="tmp_read_user_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_user_sharing_per1 FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="tmp_read_user_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_user_sharing_per2 FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="tmp_read_user_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_user_sharing_per3 FOREIGN KEY (shareduserid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="tmp_read_group_sharing_per">
+		<field name="userid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="tabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="sharedgroupid" type="I" size="11">
+			<KEY/>
+		</field>
+	        <opt>Type=InnoDB</opt>	
+		<data>
+		
+		</data>
+	</table>
+
+
+	<table name="tmp_read_group_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_group_sharing_per1 FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="tmp_read_group_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_group_sharing_per2 FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table> 
+
+	<table name="tmp_read_group_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_group_sharing_per3 FOREIGN KEY (sharedgroupid) REFERENCES groups(groupid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table> 
+
+	
+	<table name="tmp_write_user_sharing_per">
+		<field name="userid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="tabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="shareduserid" type="I" size="11">
+			<KEY/>
+		</field>
+	        <opt>Type=InnoDB</opt>	
+		<data>
+		
+		</data>
+	</table>
+
+
+	<table name="tmp_write_user_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_user_sharing_per1 FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="tmp_write_user_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_user_sharing_per2 FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table> 
+
+	<table name="tmp_write_user_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_user_sharing_per3 FOREIGN KEY (shareduserid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="tmp_write_group_sharing_per">
+		<field name="userid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="tabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="sharedgroupid" type="I" size="11">
+			<KEY/>
+		</field>
+	        <opt>Type=InnoDB</opt>	
+		<data>
+		
+		</data>
+	</table>
+
+
+	<table name="tmp_write_group_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_group_sharing_per1 FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="tmp_write_group_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_group_sharing_per2 FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table> 
+
+	<table name="tmp_write_group_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_group_sharing_per3 FOREIGN KEY (sharedgroupid) REFERENCES groups(groupid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table> 
+
+
+
+	<table name="tmp_read_user_rel_sharing_per">
+		<field name="userid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="tabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="relatedtabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="shareduserid" type="I" size="11">
+			<KEY/>
+		</field>
+	        <opt>Type=InnoDB</opt>	
+		<data>
+		
+		</data>
+	</table>
+
+
+	<table name="tmp_read_user_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_user_rel_sharing_per1 FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="tmp_read_user_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_user_rel_sharing_per2 FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="tmp_read_user_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_user_rel_sharing_per4 FOREIGN KEY (relatedtabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table> 	 
+
+	<table name="tmp_read_user_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_user_rel_sharing_per3 FOREIGN KEY (shareduserid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="tmp_read_group_rel_sharing_per">
+		<field name="userid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="tabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="relatedtabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="sharedgroupid" type="I" size="11">
+			<KEY/>
+		</field>
+	        <opt>Type=InnoDB</opt>	
+		<data>
+		
+		</data>
+	</table>
+
+
+	<table name="tmp_read_group_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_group_rel_sharing_per1 FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="tmp_read_group_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_group_rel_sharing_per2 FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="tmp_read_group_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_group_rel_sharing_per4 FOREIGN KEY (relatedtabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table> 	 
+
+	<table name="tmp_read_group_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_read_group_rel_sharing_per3 FOREIGN KEY (sharedgroupid) REFERENCES groups(groupid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="tmp_write_user_rel_sharing_per">
+		<field name="userid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="tabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="relatedtabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="shareduserid" type="I" size="11">
+			<KEY/>
+		</field>
+	        <opt>Type=InnoDB</opt>	
+		<data>
+		
+		</data>
+	</table>
+
+
+	<table name="tmp_write_user_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_user_rel_sharing_per1 FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="tmp_write_user_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_user_rel_sharing_per2 FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="tmp_write_user_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_user_rel_sharing_per4 FOREIGN KEY (relatedtabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table> 	 
+
+	<table name="tmp_write_user_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_user_rel_sharing_per3 FOREIGN KEY (shareduserid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="tmp_write_group_rel_sharing_per">
+		<field name="userid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="tabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="relatedtabid" type="I" size="11">
+			<KEY/>
+		</field>
+		<field name="sharedgroupid" type="I" size="11">
+			<KEY/>
+		</field>
+	        <opt>Type=InnoDB</opt>	
+		<data>
+		
+		</data>
+	</table>
+
+
+	<table name="tmp_write_group_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_group_rel_sharing_per1 FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+	<table name="tmp_write_group_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_group_rel_sharing_per2 FOREIGN KEY (tabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="tmp_write_group_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_group_rel_sharing_per4 FOREIGN KEY (relatedtabid) REFERENCES tab(tabid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table> 	 
+
+	<table name="tmp_write_group_rel_sharing_per" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_tmp_write_group_rel_sharing_per3 FOREIGN KEY (sharedgroupid) REFERENCES groups(groupid) ON DELETE CASCADE </constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
 
 
 </schema>
