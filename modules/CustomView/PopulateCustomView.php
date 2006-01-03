@@ -123,7 +123,7 @@ $customviews = Array(Array('viewname'=>'All',
 $cvcolumns = Array(Array('leaddetails:lastname:lastname:Leads_Last_Name:V',
                          'leaddetails:firstname:firstname:Leads_First_Name:V',
                          'leaddetails:company:company:Leads_Company:V',
-			 'leadaddress:phone:phone:Leads_Phone:V');
+			 'leadaddress:phone:phone:Leads_Phone:V',
                          'leadsubdetails:website:website:Leads_Website:V',
                          'leaddetails:email:email:Leads_Email:V',
 			 'crmentity:smownerid:assigned_user_id:Leads_Assigned_To:V'),
