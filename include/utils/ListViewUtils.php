@@ -100,15 +100,14 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		}
 
 		//Getting the Entries from Profile2 field table
-		$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
+		global $current_user;	
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		$profileList = getCurrentUserProfileList();
+		$query = "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
+
 		$result = $adb->query($query);
 
-		//Getting the Entries from def_org_field table
-		$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
-		$result_def = $adb->query($query1);
-
-
-		if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
+		if($profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
 		{
 
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
@@ -262,17 +261,16 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                         $fieldname = $focus->list_fields_name[$name];
                 }
 
-                //Getting the Entries from Profile2 field table
-                $query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
+		global $current_user;
+                require('user_privileges/user_privileges_'.$current_user->id.'.php');
+                $profileList = getCurrentUserProfileList();
+                $query = "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
+
                 $result = $adb->query($query);
 
-                //Getting the Entries from def_org_field table
-                $query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
-                $result_def = $adb->query($query1);
-
-
-                if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
+                if($profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
                 {
+                
 			  if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
                         {
                                 //Added on 14-12-2005 to avoid if and else check for every list field for arrow image and change order
@@ -384,15 +382,17 @@ function getSearchListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_
 		$fieldname = $focus->search_fields_name[$name];
 		global $profile_id;
 		$tabid = getTabid($module);
-		$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
-		$result = $adb->query($query);
 
-		//Getting the Entries from def_org_field table
-		$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
-		$result_def = $adb->query($query1);
+		global $current_user;
+                require('user_privileges/user_privileges_'.$current_user->id.'.php');
+                $profileList = getCurrentUserProfileList();
+                $query = "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
 
-		if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
-		{
+                $result = $adb->query($query);
+
+                if($profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
+                {
+		
 			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
                         {
                                 foreach($focus->search_fields[$name] as $tab=>$col)
@@ -582,16 +582,18 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
                         }
 
 			global $profile_id;
-			$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
-			$result = $adb->query($query);
+			global $current_user;
+                require('user_privileges/user_privileges_'.$current_user->id.'.php');
+                $profileList = getCurrentUserProfileList();
+                $query = "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
 
+                $result = $adb->query($query);
 
-			//Getting the Entries from def_org_field table
-			$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
-			$result_def = $adb->query($query1);
+                	if($profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
+                	{
+	
 
-			if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
-			{
+			
 				if($fieldname == '')
 				{
 					$table_name = '';
