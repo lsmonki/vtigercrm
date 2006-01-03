@@ -810,8 +810,6 @@ function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 	{	
 				
 		$sql = "select field.* from field where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) order by sequence";
-		echo $sql;
-		echo '<BR>';	
 	}
 	else
 	{
