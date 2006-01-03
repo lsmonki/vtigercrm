@@ -710,7 +710,7 @@ if(!$skipSecurityCheck)
 		$display = isPermitted($module,$action);
 	}
 	$seclog->debug('########### Pemitted ---> '.$display.'  ##############');
-	//fetchPermissionData($module,$action);
+	fetchPermissionData($module,$action);
 }
 else
 {
