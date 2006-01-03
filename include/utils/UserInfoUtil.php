@@ -3270,4 +3270,24 @@ function getSubordinateRoleAndUsers($roleId)
 	return $subRoleAndUsers;	
 		
 }
+
+function getCurrentUserProfileList()
+{
+	global $current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	$profList ='(';
+	$i=0;	
+	foreach ($current_user_profiles as $profid)
+        {
+		if($i != 0)
+		{
+			$profList .= ', ';
+		}
+		$profList .= $profid;
+		$i++;	 
+        }
+	$profList .=')';
+	return $profList;
+	
+}
 ?>
