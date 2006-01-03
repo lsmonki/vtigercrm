@@ -12,6 +12,9 @@
 
 $mod_strings = array(
 
+'LBL_PRICEBOOK_INFORMATION'=>'Price Book Information:',
+'LBL_CUSTOM_INFORMATION'=>'Custom Information',
+'LBL_DESCRIPTION_INFORMATION'=>'Description Name:',
 //Mapping for price book
 'Price Book Name'=>'Price Book Name',
 'Product Name'=>'Product Name',

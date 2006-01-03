@@ -12,6 +12,12 @@
 
 $mod_strings = array(
 
+'LBL_VENDOR_INFORMATION'=>'Vendor Information:',
+'LBL_CUSTOM_INFORMATION'=>'Custom Information',
+'LBL_VENDOR_ADDRESS_INFORMATION'=>'Address Information:',
+'LBL_DESCRIPTION_INFORMATION'=>'Description Name:',
+
+
 'Vendor Name'=>'Vendor Name',
 'Name'=>'Name',
 'Company Name'=>'Company Name',
