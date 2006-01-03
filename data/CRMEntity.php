@@ -315,100 +315,96 @@ class CRMEntity extends SugarBean
 
   function insertIntoCrmEntity($module,$migration='')
   {
-    global $adb;
-    global $current_user;
-    global $log;	
+	global $adb;
+	global $current_user;
+	global $log;
                 
-    $date_var = date('YmdHis');
-    if($_REQUEST['assigntype'] == 'T')
-    {
-      $ownerid= 0;
-    }
-    else
-    {
-      $ownerid = $this->column_fields['assigned_user_id'];
-    }
+	$date_var = date('YmdHis');
+	if($_REQUEST['assigntype'] == 'T')
+	{
+		$ownerid= 0;
+	}
+	else
+	{
+		$ownerid = $this->column_fields['assigned_user_id'];
+	}
                 
-    //This check is done for products.
-    if($module == 'Products' || $module == 'Notes' || $module =='Faq' || $module == 'Vendor' || $module == 'PriceBook')
-    {
-	$log->info("module is =".$module);
-      $ownerid = $current_user->id;
-    }
-    if($module == 'Events')
-    {
-      $module = 'Activities';
-    }		
-    if($this->mode == 'edit')
-    {
-	$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-	$sql = "update crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
-			
-      $adb->query($sql);
-	  $sql1 ="delete from ownernotify where crmid=".$this->id;
-      $adb->query($sql1);
-      if($ownerid != $current_user->id)
-      {
-            $sql1 = "insert into ownernotify values(".$this->id.",".$ownerid.",'')";
-            $adb->query($sql1);
-      }
+	//This check is done for products.
+	if($module == 'Products' || $module == 'Notes' || $module =='Faq' || $module == 'Vendors' || $module == 'PriceBooks')
+	{
+		$log->info("module is =".$module);
+		$ownerid = $current_user->id;
+	}
+	if($module == 'Events')
+	{
+		$module = 'Activities';
+	}
+	if($this->mode == 'edit')
+	{
+		$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
+		$sql = "update crmentity set smownerid=".$ownerid.",modifiedby=".$current_user->id.",description=".$description_val.", modifiedtime=".$adb->formatString("crmentity","modifiedtime",$date_var)." where crmid=".$this->id;
 
-
-
-	  
-    }
-    else
-    {
-      //if this is the create mode and the group allocation is chosen, then do the following
-      $current_id = $adb->getUniqueID("crmentity");
-	  $_REQUEST['currentid']=$current_id;
-
-  if($migration != '')
+		$adb->query($sql);
+		$sql1 ="delete from ownernotify where crmid=".$this->id;
+		$adb->query($sql1);
+		if($ownerid != $current_user->id)
 		{
-		$sql = "select * from Migrator where oldid='".$this->id ."'";
-		
-      	$result = $adb->query($sql);
-	$id = $adb->query_result($result,0,"newid");
-	//get the corresponding newid for these assigned_user_id and modified_user_id
-	$modifierid = $adb->query_result($result,0,"assigned_user_id");
-	$id = $adb->query_result($result,0,"newid");
-	
-	$sql_modifierid = "select * from Migrator where oldid='".$modifierid ."'";
-      	$result_modifierid = $adb->query($sql_modifierid);
-	$modifierid = $adb->query_result($result_modifierid,0,"newid");
+			$sql1 = "insert into ownernotify values(".$this->id.",".$ownerid.",'')";
+			$adb->query($sql1);
+		}
+	}
+	else
+	{
+		//if this is the create mode and the group allocation is chosen, then do the following
+		$current_id = $adb->getUniqueID("crmentity");
+		$_REQUEST['currentid']=$current_id;
 
-	$creatorid =$adb->query_result($result,0,"modified_user_id");
+		if($migration != '')
+		{
+			$sql = "select * from Migrator where oldid='".$this->id ."'";
 
-	$sql_creatorid = "select * from Migrator where oldid='".$creatorid ."'";
-      	$result_creatorid = $adb->query($sql_creatorid);
-	$creatorid = $adb->query_result($result_creatorid,0,"newid");
+			$result = $adb->query($sql);
+			$id = $adb->query_result($result,0,"newid");
+			//get the corresponding newid for these assigned_user_id and modified_user_id
+			$modifierid = $adb->query_result($result,0,"assigned_user_id");
+			$id = $adb->query_result($result,0,"newid");
 
-	$createdtime = $adb->query_result($result,0,"createdtime");
-	$modifiedtime = $adb->query_result($result,0,"modifiedtime");
-	$deleted = $adb->query_result($result,0,"deleted");
-	$module = $adb->query_result($result,0,"module");
-	$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-	//get the values from this and set to the query below and then relax!
-      $sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime,deleted) values('".$id."','".$creatorid."','".$modifierid."','".$module."',".$description_val.",'".$createdtime."','".$modifiedtime ."',".$deleted.")";
-      $adb->query($sql);
-      $this->id = $id;
-	     	}		
+			$sql_modifierid = "select * from Migrator where oldid='".$modifierid ."'";
+			$result_modifierid = $adb->query($sql_modifierid);
+			$modifierid = $adb->query_result($result_modifierid,0,"newid");
+
+			$creatorid =$adb->query_result($result,0,"modified_user_id");
+
+			$sql_creatorid = "select * from Migrator where oldid='".$creatorid ."'";
+			$result_creatorid = $adb->query($sql_creatorid);
+			$creatorid = $adb->query_result($result_creatorid,0,"newid");
+
+			$createdtime = $adb->query_result($result,0,"createdtime");
+			$modifiedtime = $adb->query_result($result,0,"modifiedtime");
+			$deleted = $adb->query_result($result,0,"deleted");
+			$module = $adb->query_result($result,0,"module");
+			$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
+			//get the values from this and set to the query below and then relax!
+			$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime,deleted) values('".$id."','".$creatorid."','".$modifierid."','".$module."',".$description_val.",'".$createdtime."','".$modifiedtime ."',".$deleted.")";
+			$adb->query($sql);
+			$this->id = $id;
+		}
 		else
 		{
-      $description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
-      $sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",'".$date_var."','".$date_var."')";
-      $adb->query($sql);
-      $this->id = $current_id;
-                }
-    }
-                                               
+			$description_val = from_html($adb->formatString("crmentity","description",$this->column_fields['description']),($insertion_mode == 'edit')?true:false);
+			$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values('".$current_id."','".$current_user->id."','".$ownerid."','".$module."',".$description_val.",'".$date_var."','".$date_var."')";
+			$adb->query($sql);
+			$this->id = $current_id;
+		}
+	}
+
 	//$sql = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) values(".$current_id.",".$current_user->id.",".$ownerid.",'".$module."','".$this->column_fields['description']."',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
-      //$adb->query($sql);
-      //echo $sql;
-      //$this->id = $current_id;
+	//$adb->query($sql);
+	//echo $sql;
+	//$this->id = $current_id;
     }
-		
-  
+
+
 
   function insertIntoSmActivityRel($module)
   {
