@@ -146,6 +146,28 @@ function calcGrandTotal() {
 	getObj("grandTotal").innerHTML=getObj("hdnGrandTotal").value=roundValue(grandTotal.toString())
 }
 
+//Method changed as per advice by jon http://forums.vtiger.com/viewtopic.php?t=4162
+function roundValue(val) {
+   val = parseFloat(val);
+   val = Math.round(val*100)/100;
+   val = val.toString();
+   
+   if (val.indexOf(".")<0) {
+      val+=".00"
+   } else {
+      var dec=val.substring(val.indexOf(".")+1,val.length)
+      if (dec.length>2)
+         val=val.substring(0,val.indexOf("."))+"."+dec.substring(0,2)
+      else if (dec.length==1)
+         val=val+"0"
+   }
+   
+   return val;
+} 
+
+/*
+
+
 function roundValue(val) {
 	if (val.indexOf(".")<0) {
 		val+=".00"
@@ -159,7 +181,7 @@ function roundValue(val) {
 	
 	return val;
 }
-
+*/
 
 
 function copyAddressRight(form) {
