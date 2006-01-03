@@ -101,11 +101,11 @@ Begin VB.Form frmAddMsg
       TabCaption(2)   =   "Attachments"
       TabPicture(2)   =   "frmAddMsg.frx":0ACE
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "Label4"
+      Tab(2).Control(0)=   "FlxGrdDtls2"
       Tab(2).Control(0).Enabled=   0   'False
       Tab(2).Control(1)=   "lblNote"
       Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "FlxGrdDtls2"
+      Tab(2).Control(2)=   "Label4"
       Tab(2).Control(2).Enabled=   0   'False
       Tab(2).ControlCount=   3
       Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlxGrdDtls2 
@@ -303,10 +303,24 @@ On Error GoTo ERROR_EXIT_ROUTINE
     Dim oFolder As Folder
     Dim oFiles As File
     Dim objBASE64 As New Base64Class
-    
+    Dim oXMLDoc As New MSXML.DOMDocument
+    Dim oXMLElmnt_Root As MSXML.IXMLDOMElement
+    Dim oXMLInst As MSXML.IXMLDOMProcessingInstruction
+
+
     If gsContactId <> "" Then
       
-        sEmailId = sAddMessageToContact(gsVtUserId, gsContactId, EncodeUTF8(gsSubject), EncodeUTF8(txtMsg.Text), gsDate)
+        Set oXMLInst = oXMLDoc.createProcessingInstruction("xml", "version='1.0' encoding='UTF-8'")
+        oXMLDoc.insertBefore oXMLInst, oXMLDoc.firstChild
+        
+        Set oXMLElmnt_Root = oXMLDoc.createElement("msgdetails")
+        Set oXMLDoc.documentElement = oXMLElmnt_Root
+
+        Call AddChild(oXMLDoc, oXMLElmnt_Root, "subject", gsSubject)
+        Call AddChild(oXMLDoc, oXMLElmnt_Root, "body", txtMsg.Text)
+        Call AddChild(oXMLDoc, oXMLElmnt_Root, "datesent", gsDate)
+        
+        sEmailId = sAddMessageToContact(gsVtUserId, gsContactId, oXMLElmnt_Root)
       
         If sEmailId <> "" Then
             If oFS.FolderExists(gsVtUserFolder & "\Attachments") = True Then
@@ -345,6 +359,9 @@ ERROR_EXIT_ROUTINE:
 EXIT_ROUTINE:
     Set oFS = Nothing
     Set objBASE64 = Nothing
+    Set oXMLDoc = Nothing
+    Set oXMLElmnt_Root = Nothing
+    Set oXMLInst = Nothing
 End Sub
 
 Private Sub cmdClose_Click()

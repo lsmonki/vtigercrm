@@ -175,9 +175,7 @@ End Function
 '--------------------------------------------------------------
 Public Function sAddMessageToContact(ByVal sVtigerLoginId As String, _
                                      ByVal sContactId As String, _
-                                     ByVal sEmailSubject As String, _
-                                     ByVal sEmailBody As String, _
-                                     ByVal sDateSent As String) As String
+                                     ByVal oXML_Elmnt As MSXML.IXMLDOMElement) As String
                                      
 On Error GoTo ERROR_EXIT_ROUTINE
 Dim sErrMsg As String
@@ -190,16 +188,19 @@ Dim oXMLDoc As New MSXML.DOMDocument
 Dim oXMLDocElmnt As MSXML.IXMLDOMElement
 Dim sResult As String
 
+Dim aEmailMsgDtls() As Object
+
+Call mkAddEmailMsgStruct(oXML_Elmnt, aEmailMsgDtls)
+
 oPSoap.MethodName = "AddMessageToContact"
+
 oPSoap.Parameters.Create "username", sVtigerLoginId
 oPSoap.Parameters.Create "contactid", sContactId
-oPSoap.Parameters.Create "subject", sEmailSubject
-oPSoap.Parameters.Create "body", sEmailBody
-oPSoap.Parameters.Create "datesent", sDateSent
+oPSoap.Parameters.Create "msgdtls", aEmailMsgDtls
 
 oXMLHttp.Open "POST", gsVtUrl, False
 oXMLHttp.setRequestHeader "SOAPAction", "vtigerolservice"
-oXMLHttp.setRequestHeader "Content-Type", "text/xml"
+oXMLHttp.setRequestHeader "Content-Type", "text/xml; charset=UTF-8"
 oXMLHttp.send oPSoap.Serialize
 
 sErrMsg = gMsg003
@@ -234,6 +235,30 @@ Set oXMLHttp = Nothing
 Set oPSoap = Nothing
 Set oXMLDoc = Nothing
 Set oXMLDocElmnt = Nothing
+End Function
+
+Private Function mkAddEmailMsgStruct(ByVal oXML_Elmnt As MSXML.IXMLDOMElement, _
+                                     ByRef aEmailMsgArray() As Object)
+                                     
+On Error GoTo ERROR_EXIT_ROUTINE
+    
+    ReDim aEmailMsgArray(0) As Object
+    Dim ct As New CoSoapNode
+    Dim i As Integer
+    
+    For i = 0 To oXML_Elmnt.childNodes.Length - 1
+        With oXML_Elmnt.childNodes.Item(i)
+             ct.Nodes.Create .nodeName, .nodeTypedValue
+        End With
+    Next i
+        
+    Set aEmailMsgArray(0) = ct
+    Set ct = Nothing
+    GoTo EXIT_ROUTINE
+    
+ERROR_EXIT_ROUTINE:
+LogTheMessage ("mkAddEmailMsgStruct - " & Err.Description)
+EXIT_ROUTINE:
 End Function
 '-----------------------------------------------------------------
 'Adding EmailAttahment to vtigerCRM Added Emails Using SOAP Method
