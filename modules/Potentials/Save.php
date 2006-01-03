@@ -62,94 +62,51 @@ $local_log->debug("Saved record with id of ".$return_id);
 //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
+
+//Added to send mail to the potential-owner about the Potential
+$status = sendMailToOwner(&$focus);
+
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
-//Code to save the custom field info into database
-function save_customfields($entity_id)
+
+function sendMailToOwner($focus)
 {
-	global $adb;
-	$dbquery="select * from customfields where module='Potentials'";
-	$result = $adb->query($dbquery);
-	$custquery = "select * from potentialscf where potentialid='".$entity_id."'";
-        $cust_result = $adb->query($custquery);
-	if($adb->num_rows($result) != 0)
+	require_once("modules/Emails/mail.php");
+	global $current_user;
+
+	$ownername = getUserName($focus->column_fields['assigned_user_id']);
+	$ownermailid = getUserEmailId('id',$focus->column_fields['assigned_user_id']);
+
+	$description = 'Dear '.$ownername.',<br><br>';
+
+	if($focus->mode == 'edit')
 	{
-		
-		$columns='';
-		$values='';
-		$update='';
-		$noofrows = $adb->num_rows($result);
-		for($i=0; $i<$noofrows; $i++)
-		{
-			$fldName=$adb->query_result($result,$i,"fieldlabel");
-			$colName=$adb->query_result($result,$i,"column_name");
-			if(isset($_REQUEST[$colName]))
-			{
-				$fldvalue=$_REQUEST[$colName];
-				if(get_magic_quotes_gpc() == 1)
-                		{
-                        		$fldvalue = stripslashes($fldvalue);
-                		}
-			}
-			else
-			{
-				$fldvalue = '';
-			}
-			if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
-			{
-				//Update Block
-				if($i == 0)
-				{
-					$update = $colName.'="'.$fldvalue.'"';
-				}
-				else
-				{
-					$update .= ', '.$colName.'="'.$fldvalue.'"';
-				}
-			}
-			else
-			{
-				//Insert Block
-				if($i == 0)
-				{
-					$columns='potentialid, '.$colName;
-					$values='"'.$entity_id.'", "'.$fldvalue.'"';
-				}
-				else
-				{
-					$columns .= ', '.$colName;
-					$values .= ', "'.$fldvalue.'"';
-				}
-			}
-			
-				
-		}
-		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
-		{
-			//Update Block
-			$query = 'update potentialscf SET '.$update.' where potentialid="'.$entity_id.'"'; 
-			$adb->query($query);
-		}
-		else
-		{
-			//Insert Block
-			$query = 'insert into potentialscf ('.$columns.') values('.$values.')';
-			$adb->query($query);
-		}
-		
+		$subject = 'Regarding Potential updation - '.$focus->column_fields['potentialname'];
+		$description .= 'The Potential has been updated.';
 	}
-	/* srini patch
 	else
 	{
-		if(isset($_REQUEST['record']) && $_REQUEST['record'] != '' && $adb->num_rows($cust_result) !=0)
-		{
-			//Update Block
-		}
-		else
-		{
-			//Insert Block
-			$query = 'insert into opportunitycf ('.$columns.') values('.$values.')';
-			$adb->query($query);
-		}
-	}*/	
+		$subject = 'Regarding Potential assignment - '.$focus->column_fields['potentialname'];
+		$description .= 'The Potential has been assigned to you.';
+	}
+	$description .= 'The Potential details are:<br><br>';
+	$description .= 'Potential Id : '.$focus->id.'<br>';
+
+	$column_fields = array(
+				'potentialname'=>'Potential Name',
+				'amount'=>'Amount',
+				'closingdate'=>'Expected Close Date',
+				'opportunity_type'=>'Opportunity Type',
+				'description'=>'Description',
+			      );
+	foreach($column_fields as $fieldname => $fieldlabel)
+	{
+		$description .= $fieldlabel.' : <b>'.$focus->column_fields[$fieldname].'</b><br>';
+	}
+
+	$status = send_mail('Potentials',$ownermailid,$current_user->user_name,'',$subject,$description);
+	return $status;
 }
+
+
+
 ?>
