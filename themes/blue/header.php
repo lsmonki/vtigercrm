@@ -49,17 +49,13 @@ require_once("include/utils/utils.php");
 global $currentModule;
 
 global $moduleList;
-global $category;
 global $theme;
 $theme_path="themes/".$theme."/";
-//echo $category; 
 $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $smarty = new vtigerCRM_Smarty;
 $header_array = getHeaderArray();
-//echo '<pre>';print_r($header_array);echo '</pre>';
-//$smarty->assign("MAINTAB",$maintab);
 $smarty->assign("HEADERS",$header_array);
 $smarty->assign("THEME",$theme);
 $smarty->assign("IMAGEPATH",$image_path);
@@ -76,7 +72,7 @@ else $smarty->assign("CURRENT_USER", $current_user->user_name);
 
 $smarty->assign("CURRENT_USER_ID", $current_user->id);
 
-$smarty->assign("CATEGORY",$category);
+$smarty->assign("CATEGORY",getParentTab());
 
 if (is_admin($current_user)) $smarty->assign("ADMIN_LINK", "<a href='index.php?module=Settings&action=index'>".$app_strings['LBL_SETTINGS']."</a>");
 
