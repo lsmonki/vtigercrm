@@ -800,11 +800,25 @@ function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 	global $adb;
 	#$tabid = getTabid($module);
         global $profile_id;
+	global $current_user;
 	$label_data = Array();
 
-	//retreive the fields from database
+	//retreive the profileList from database
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	//Checking for field level security
+	if($profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
+	{	
+				
+		$sql = "select field.* from field where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) order by sequence";
+		echo $sql;
+		echo '<BR>';	
+	}
+	else
+	{
+		$profileList = getCurrentUserProfileList();
+		$sql = "select field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." group by field.fieldid order by sequence";
+	}
 	
-	$sql = "select * from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid=".$profile_id." order by sequence";
 	$result = $adb->query($sql);
 	$noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
