@@ -97,9 +97,37 @@ switch($currentModule)
 			        $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 			if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
 			break;
-
-
-			
+		case 'Products':
+			require_once("modules/$currentModule/Product.php");
+			$focus = new Product();
+			$smarty->assign("SINGLE_MOD",'Product');
+			if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
+			        $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+			if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] !='')
+			{
+			        $smarty->assign("SMODULE",$_REQUEST['smodule']);
+			        $smodule = $_REQUEST['smodule'];
+			        $url_string = '&smodule=VENDOR';
+			        $search_query .= " and vendor_id=''";
+			}
+			break;
+		case 'SalesOrder':
+			require_once("modules/$currentModule/SalesOrder.php");
+			$focus = new SalesOrder();
+			$smarty->assign("SINGLE_MOD",'SalesOrder');
+			if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
+			        $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+			if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+			break;
+		case 'PurchaseOrder':
+			require_once("modules/$currentModule/PurchaseOrder.php");
+			$focus = new Order();
+			$smarty->assign("SINGLE_MOD",'PurchaseOrder');
+			if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
+			        $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+			if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+			break;
+						
 
 	  }
 
@@ -250,7 +278,94 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
         	}
 
 	}
+	if($currentModule == 'Products')
+	{
+		if (isset($_REQUEST['productname'])) $productname = $_REQUEST['productname'];
+	        if (isset($_REQUEST['productcode'])) $productcode = $_REQUEST['productcode'];
+        	if (isset($_REQUEST['unitprice'])) $unitprice = $_REQUEST['unitprice'];
 
+	        if ($order_by !='') $smarty->assign("ORDER_BY", $order_by);
+        	if ($sorder !='') $smarty->assign("SORDER", $sorder);
+
+
+	        if (isset($productname) && $productname !='')
+        	{
+                	$search_query .= " and productname like '".$productname."%'";
+	                $url_string .= "&productname=".$productname;
+        	        $smarty->assign("PRODUCT_NAME", $productname);
+	        }
+	
+	        if (isset($productcode) && $productcode !='')
+	        {
+        	        $search_query .= " and productcode like '%".$productcode."%'";
+	                $url_string .= "&productcode=".$productcode;
+        	        $smarty->assign("PRODUCT_CODE", $productcode);
+	        }
+        	if (isset($unitprice) && $unitprice !='')
+	        {
+        	        $search_query .= " and unit_price like '%".$unitprice."%'";
+                	$url_string .= "&unitprice=".$unitprice;
+	                $smarty->assign("UNITPRICE", $unitprice);
+        	}
+
+	}
+	if($currentModule == 'PurchaseOrder')
+	{
+		if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
+         	if (isset($_REQUEST['vendorname'])) $vendorname = $_REQUEST['vendorname'];
+	         if (isset($_REQUEST['trackingno'])) $trackingno = $_REQUEST['trackingno'];
+
+        	 if ($order_by !='') $smarty->assign("ORDER_BY", $order_by);
+	         if ($sorder !='') $smarty->assign("SORDER", $sorder);
+
+        	 $where_clauses = Array();
+	         if(isset($subject) && $subject != '')
+        	 {
+	               array_push($where_clauses, "purchaseorder.subject like ".PearDatabase::quote($subject."%"));
+        	       $url_string .= "&subject=".$subject;
+	
+        	 }
+	       if(isset($vendorname) && $vendorname != "")
+        	{
+                	array_push($where_clauses, "vendor.vendorname like ".PearDatabase::quote("%".$vendorname."%"));
+	                $url_string .= "&vendorname=".$vendorname;
+        	}
+	        if(isset($trackingno) && $trackingno != "")
+        	{
+                	array_push($where_clauses, "purchaseorder.tracking_no like ".PearDatabase::quote("%".$trackingno."%"));
+	                $url_string .= "&trackingno=".$trackingno;
+        	}
+	}
+	if($currentModule == 'SalesOrder')
+        {
+		if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
+	        if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
+	        if (isset($_REQUEST['quotename'])) $quotename = $_REQUEST['quotename'];
+	
+	        if ($order_by !='') $smarty->assign("ORDER_BY", $order_by);
+	        if ($sorder !='') $smarty->assign("SORDER", $sorder);
+	
+        	$where_clauses = Array();
+	
+        	if (isset($subject) && $subject !='')
+	        {
+        	        array_push($where_clauses, "salesorder.subject like ".PearDatabase::quote($subject.'%'));
+                	$url_string .= "&subject=".$subject;
+	        }	
+
+        	if (isset($accountname) && $accountname !='')
+	        {
+        	        array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%'));
+                	$url_string .= "&accountname=".$accountname;
+	        }
+	
+        	if (isset($quotename) && $quotename !='')
+	        {
+        	        array_push($where_clauses, "quotes.subject like ".PearDatabase::quote($quotename.'%'));
+                	$url_string .= "&quotename=".$quotename;
+	        }
+
+        }
 
 
 	$where = "";
