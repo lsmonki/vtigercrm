@@ -716,8 +716,10 @@ echo '<br>'.$status11.' ==> '.$query11;
 /****************** 5.0(Alpha) dev version 3 Database changes -- Starts*********************/
 
 //Drop the column company_name from vendor table ---- modified by Mickie on 18-11-2005
-//alter table vendor drop column company_name -- This is not done
-
+$altersql1 = "alter table vendor drop column company_name";
+$status1 = $conn->query($altersql1);
+echo '<br>'.$status1.' ==> '.$altersql1;
+//TODO (check): Remove this company_name entry from the field table if it already exists
 
 //Migration for Default Organisation Share -- Added by Don on 20-11-2005
 

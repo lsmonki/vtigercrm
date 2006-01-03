@@ -359,10 +359,9 @@ for($i=0; $i<10; $i++)
 {
 	$vendor = new Vendor();
 	$vendor->column_fields["vendorname"] = ucfirst(strtolower($first_name_array[$i]));
-	$vendor->column_fields["company_name"] = ucfirst(strtolower($company_name_array[$i]));
 	$vendor->column_fields["phone"] = create_phone_number();
 	$vendor->column_fields["email"] = strtolower($vendor->column_fields["vendorname"])."@company.com";
-	$website = str_replace($whitespace, "", strtolower($vendor->column_fields["company_name"]));
+	$website = str_replace($whitespace, "", strtolower(ucfirst(strtolower($company_name_array[$i]))));
         $vendor->column_fields["website"] = "www.".$website.".com";
 
 	$vendor->column_fields["assigned_user_id"] = $assigned_user_id;
@@ -377,7 +376,7 @@ for($i=0; $i<10; $i++)
 	$vendor->column_fields["postalcode"] = '99999';
 	$vendor->column_fields["country"] = 'USA';	
 
-	$vendor->save("Vendor");
+	$vendor->save("Vendors");
 	$vendor_ids[] = $vendor->id;
 
 

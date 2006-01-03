@@ -96,13 +96,6 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
 		$url_string .= "&vendorname=".$vendorname;
 	}
 
-	if (isset($companyname) && $companyname !='')
-	{
-		array_push($where_clauses, "company_name like ".PearDatabase::quote($companyname.'%'));
-		//$search_query .= " and productcode like '".$productcode."%'";
-		$url_string .= "&companyname=".$companyname;
-	}
-	
 	if (isset($category) && $category !='')
 	{
 		array_push($where_clauses, "category like ".PearDatabase::quote($category.'%'));
