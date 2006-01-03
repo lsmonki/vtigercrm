@@ -787,7 +787,7 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		$list_header .= '</td>'; // Armando Lüscher 05.07.2005 -> Changed from <td> to </td>
 		$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 		$list_header .= '</tr>';*/
-		$list_block[] = $list_header;
+		$list_block[$entity_id] = $list_header;
 
 	}
 //	$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
@@ -903,7 +903,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 		$list_block[]=$list_header;
 	}
 	//$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
-	return $list_header;
+	return $list_block;
 }
 
 
