@@ -18,7 +18,8 @@
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > <a class="hdrLink" href="salesAccListView.html">{$MODULE}</a></td>
+	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > <a class="hdr
+Link" href="index.php?action=ListView&module={$MODULE}">{$MODULE}</a></td>
 	<td class="sep1" style="width:1px"></td>
 	<td class=small >
 		<table border=0 cellspacing=0 cellpadding=0>
