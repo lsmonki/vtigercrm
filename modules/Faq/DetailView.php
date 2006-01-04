@@ -55,7 +55,8 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
 if(isset($focus->column_fields[question]))
-	$smarty->assign("FAQ_TITLE", $focus->column_fields[question]);
+	$smarty->assign("NAME", $focus->column_fields[question]);
+
 if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
 {
             $category = $_REQUEST['category'];
@@ -75,7 +76,7 @@ $smarty->assign("SINGLE_MOD","Faq");
 $smarty->assign("ID", $_REQUEST['record']);
 if(isPermitted("Faq",1,$_REQUEST['record']) == 'yes')
 {
-        $smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">");
+        $smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.module.value='Faq'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">");
 
         $smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">");
 }
@@ -91,5 +92,6 @@ if(isPermitted("Faq",2,$_REQUEST['record']) == 'yes')
 
 //echo "<BR>\n";
 
+$smarty->assign("MODULE","Faq");
 $smarty->display("DetailView.tpl");
 ?>

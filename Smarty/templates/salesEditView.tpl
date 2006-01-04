@@ -61,7 +61,7 @@
 		<div class="small" style="padding:20px">
 		
 		 {if $OP_MODE eq 'edit_view'}   
-			 <span class="lvtHeaderText">{$NAME} -  Editing {$SINGLE_MOD} Information</span> <br>
+			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  Editing {$SINGLE_MOD} Information</span> <br>
 			 Updated 14 days ago (18 Nov 2005)
 		 {/if}
 		 {if $OP_MODE eq 'create_view'}

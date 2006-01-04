@@ -322,6 +322,7 @@ $is_module = false;
 if(isset($_REQUEST['module']))
 {
 	$module = $_REQUEST['module'];	
+
 	if ($dir = @opendir("./modules")) 
 	{
 		while (($file = readdir($dir)) !== false) 
@@ -629,10 +630,6 @@ if($action == "DetailView")
         }
 
 }	
-
-//Added to highlight the HelpDesk tab when create, edit or view the FAQ
-if($currentModule == 'Faq')
-        $currentModule = 'HelpDesk';
 
 // set user, theme and language cookies so that login screen defaults to last values
 if (isset($_SESSION['authenticated_user_id'])) {
