@@ -302,13 +302,9 @@ if($viewid != 0)
 {
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
-$other_text ='<form name="massdelete" method="POST">
-	<input name="idlist" type="hidden">
-	<input name="change_status" type="hidden">';
-
 if(isPermitted('Contacts',2,'') == 'yes')
 {
-$other_text .='<td width="12"><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+$other_text ='<td width="12"><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
 }
 $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>';
 

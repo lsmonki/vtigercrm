@@ -70,16 +70,16 @@ document.massdelete.submit();
 //code added by raju for better emiling
 function eMail()
 {
-    x = document.massdelete.selected_id_con.length;
+    x = document.massdelete.selected_id.length;
 	var viewid = document.massdelete.viewname.value;
 	idstring = "";
 
         if ( x == undefined)
         {
 
-                if (document.massdelete.selected_id_con.checked)
+                if (document.massdelete.selected_id.checked)
                 {
-                        document.massdelete.idlist.value=document.massdelete.selected_id_con.value;
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
                 }
                 else
                 {
@@ -92,9 +92,9 @@ function eMail()
                 xx = 0;
                 for(i = 0; i < x ; i++)
                 {
-                        if(document.massdelete.selected_id_con[i].checked)
+                        if(document.massdelete.selected_id[i].checked)
                         {
-                                idstring = document.massdelete.selected_id_con[i].value +";"+idstring
+                                idstring = document.massdelete.selected_id[i].value +";"+idstring
                                 xx++
                         }
                 }
@@ -114,16 +114,16 @@ function eMail()
 function massDelete()
 {
 
-        x = document.massdelete.selected_id_con.length;
+        x = document.massdelete.selected_id.length;
 	var viewid = document.massdelete.viewname.value;
         idstring = "";
 
         if ( x == undefined)
         {
 
-                if (document.massdelete.selected_id_con.checked)
+                if (document.massdelete.selected_id.checked)
                 {
-                        document.massdelete.idlist.value=document.massdelete.selected_id_con.value;
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
                 }
                 else
                 {
@@ -136,9 +136,9 @@ function massDelete()
                 xx = 0;
                 for(i = 0; i < x ; i++)
                 {
-                        if(document.massdelete.selected_id_con[i].checked)
+                        if(document.massdelete.selected_id[i].checked)
                         {
-                                idstring = document.massdelete.selected_id_con[i].value +";"+idstring
+                                idstring = document.massdelete.selected_id[i].value +";"+idstring
                         xx++
                         }
                 }
@@ -165,16 +165,16 @@ function massDelete()
 function massMail()
 {
 
-        x = document.massdelete.selected_id_con.length;
+        x = document.massdelete.selected_id.length;
 	var viewid = document.massdelete.viewname.value;
 	idstring = "";
 	
         if ( x == undefined)
         {
 
-                if (document.massdelete.selected_id_con.checked)
+                if (document.massdelete.selected_id.checked)
                 {
-                        document.massdelete.idlist.value=document.massdelete.selected_id_con.value;
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
                 }
                 else
                 {
@@ -187,9 +187,9 @@ function massMail()
                 xx = 0;
                 for(i = 0; i < x ; i++)
                 {
-                        if(document.massdelete.selected_id_con[i].checked)
+                        if(document.massdelete.selected_id[i].checked)
                         {
-                                idstring = document.massdelete.selected_id_con[i].value +";"+idstring
+                                idstring = document.massdelete.selected_id[i].value +";"+idstring
                                 xx++
                         }
                 }
@@ -210,16 +210,16 @@ function massMail()
 function massMerge()
 {
 
-        x = document.massdelete.selected_id_con.length;
+        x = document.massdelete.selected_id.length;
 	var viewid = document.massdelete.viewname.value;
         idstring = "";
 
         if ( x == undefined)
         {
 
-                if (document.massdelete.selected_id_con.checked)
+                if (document.massdelete.selected_id.checked)
                 {
-                        document.massdelete.idlist.value=document.massdelete.selected_id_con.value;
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
                 }
                 else
                 {
@@ -232,9 +232,9 @@ function massMerge()
                 xx = 0;
                 for(i = 0; i < x ; i++)
                 {
-                        if(document.massdelete.selected_id_con[i].checked)
+                        if(document.massdelete.selected_id[i].checked)
                         {
-                                idstring = document.massdelete.selected_id_con[i].value +";"+idstring
+                                idstring = document.massdelete.selected_id[i].value +";"+idstring
                         xx++
                         }
                 }
@@ -248,7 +248,7 @@ function massMerge()
                         return false;
                 }
         }
-        if(getObj('selectall_con').checked == true)
+        if(getObj('selectall').checked == true)
 				{
 						getObj('idlist').value = getObj('allids').value;
 				}

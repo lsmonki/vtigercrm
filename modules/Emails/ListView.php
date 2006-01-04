@@ -130,13 +130,9 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 // Buttons and View options
-$other_text = '	<form name="massdelete" method="POST">
-	<input name="idlist" type="hidden">
-	<input name="change_status" type="hidden">
-		<td>';
 if(isPermitted('Emails',2,'') == 'yes')
 {
-	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+	$other_text =	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
 $other_text .= 	'</td>';
 

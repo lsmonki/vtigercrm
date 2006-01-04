@@ -56,16 +56,16 @@ document.massdelete.submit();
 
 function eMail()
 {
-    x = document.massdelete.selected_id_acc.length;
+    x = document.massdelete.selected_id.length;
 	var viewid = document.massdelete.viewname.value;
 	idstring = "";
 
         if ( x == undefined)
         {
 
-                if (document.massdelete.selected_id_acc.checked)
+                if (document.massdelete.selected_id.checked)
                 {
-                        document.massdelete.idlist.value=document.massdelete.selected_id_acc.value;
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
                 }
                 else
                 {
@@ -78,9 +78,9 @@ function eMail()
                 xx = 0;
                 for(i = 0; i < x ; i++)
                 {
-                        if(document.massdelete.selected_id_acc[i].checked)
+                        if(document.massdelete.selected_id[i].checked)
                         {
-                                idstring = document.massdelete.selected_id_acc[i].value +";"+idstring
+                                idstring = document.massdelete.selected_id[i].value +";"+idstring
                                 xx++
                         }
                 }
@@ -106,16 +106,16 @@ function eMail()
 function massMail()
 {
 
-    x = document.massdelete.selected_id_acc.length;
+    x = document.massdelete.selected_id.length;
 	var viewid = document.massdelete.viewname.value;
 	idstring = "";
 
         if ( x == undefined)
         {
 
-                if (document.massdelete.selected_id_acc.checked)
+                if (document.massdelete.selected_id.checked)
                 {
-                        document.massdelete.idlist.value=document.massdelete.selected_id_acc.value;
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
                 }
                 else
                 {
@@ -128,9 +128,9 @@ function massMail()
                 xx = 0;
                 for(i = 0; i < x ; i++)
                 {
-                        if(document.massdelete.selected_id_acc[i].checked)
+                        if(document.massdelete.selected_id[i].checked)
                         {
-                                idstring = document.massdelete.selected_id_acc[i].value +";"+idstring
+                                idstring = document.massdelete.selected_id[i].value +";"+idstring
                                 xx++
                         }
                 }
@@ -149,16 +149,16 @@ function massMail()
 
 function massDelete()
 {
-        x = document.massdelete.selected_id_acc.length;
+        x = document.massdelete.selected_id.length;
 	var viewid = document.massdelete.viewname.value;
         idstring = "";
 
         if ( x == undefined)
         {
 
-                if (document.massdelete.selected_id_acc.checked)
+                if (document.massdelete.selected_id.checked)
                 {
-                        document.massdelete.idlist.value=document.massdelete.selected_id_acc.value;
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
                 }
                 else
                 {
@@ -171,9 +171,9 @@ function massDelete()
                 xx = 0;
                 for(i = 0; i < x ; i++)
                 {
-                        if(document.massdelete.selected_id_acc[i].checked)
+                        if(document.massdelete.selected_id[i].checked)
                         {
-                                idstring = document.massdelete.selected_id_acc[i].value +";"+idstring
+                                idstring = document.massdelete.selected_id[i].value +";"+idstring
                         xx++
                         }
                 }
@@ -201,16 +201,16 @@ function massDelete()
 //to merge a list of acounts with a template
 function massMerge()
 {
-        x = document.massdelete.selected_id_acc.length;
+        x = document.massdelete.selected_id.length;
 	var viewid = document.massdelete.viewname.value;
         idstring = "";
 
         if ( x == undefined)
         {
 
-                if (document.massdelete.selected_id_acc.checked)
+                if (document.massdelete.selected_id.checked)
                 {
-                        document.massdelete.idlist.value=document.massdelete.selected_id_acc.value;
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
                 }
                 else
                 {
@@ -224,9 +224,9 @@ function massMerge()
                 xx = 0;
                 for(i = 0; i < x ; i++)
                 {
-                        if(document.massdelete.selected_id_acc[i].checked)
+                        if(document.massdelete.selected_id[i].checked)
                         {
-                                idstring = document.massdelete.selected_id_acc[i].value +";"+idstring
+                                idstring = document.massdelete.selected_id[i].value +";"+idstring
                         xx++
                         }
                 }
@@ -242,7 +242,7 @@ function massMerge()
                 }
         }
         
-        if(getObj('selectall_acc').checked == true)
+        if(getObj('selectall').checked == true)
 				{
 						getObj('idlist').value = getObj('allids').value;
 				}

@@ -241,8 +241,7 @@ if($viewid != 0)
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
 //Modified by Raju
-	$other_text='<form name="massdelete" method="POST">
-	<input name="idlist" type="hidden">
+$other_text='
 	<input name="gname" type="hidden" value="'.$groupid.'">';
 
 	//Raju	
@@ -272,7 +271,7 @@ $cvHTML='<a href="index.php?module=Accounts&action=CustomView&record='.$viewid.'
 	<a href="index.php?module=Accounts&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 	$customviewstrings='<td align="right">'.$app_strings[LBL_VIEW].'
-                        <SELECT NAME="view" onchange="showDefaultCustomView(this)">
+                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'

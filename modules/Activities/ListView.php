@@ -146,16 +146,9 @@ $cvHTML = '<a href="index.php?module=Activities&action=CustomView&record='.$view
 <a href="index.php?module=Activities&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<form name="massdelete" method="POST">
-	<tr>
-	<input name="idlist" type="hidden">
-	<input name="change_owner" type="hidden">
-	<input name="change_status" type="hidden">
-		<td>';
 if(isPermitted("Activities",2,$_REQUEST['record']) == 'yes')
 {
-	$other_text .= '<input class="button" type="submit" value="'.$app_strings['LBL_MASS_DELETE'].'" onclick="return massDelete()"/>';
+	$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0"><input class="button" type="submit" value="'.$app_strings['LBL_MASS_DELETE'].'" onclick="return massDelete()"/>';
 }
    	$other_text .='<!--input class="button" type="submit" value="'.$app_strings['LBL_CHANGE_OWNER'].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
 	       <input class="button" type="submit" value="'.$app_strings['LBL_CHANGE_STATUS'].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/--></td>
