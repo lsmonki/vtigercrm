@@ -1423,7 +1423,7 @@ function getBlockInformation($module, $block, $mode, $col_fields,$tabid)
 
 	global $current_user;
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	if($profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
+	if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
         {
 
                 $sql = "select field.* from field where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype=1 order by sequence";

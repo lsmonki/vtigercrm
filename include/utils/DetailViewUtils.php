@@ -806,7 +806,7 @@ function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 	//retreive the profileList from database
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	//Checking for field level security
-	if($profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
+	if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0)
 	{	
 				
 		$sql = "select field.* from field where field.tabid=".$tabid." and field.block=".$block ." and field.displaytype in (1,2) order by sequence";
