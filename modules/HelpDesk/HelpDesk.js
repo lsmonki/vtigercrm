@@ -108,7 +108,15 @@ function massDelete()
 			return false;
 		}
 	}
+	if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+    {
 	document.massdelete.action="index.php?module=Users&action=massdelete&return_module=HelpDesk&return_action=index&viewname="+viewid;
+	}
+	else
+	{
+		return false;
+	}
+
 }
 
 //merge list of tickets with templates

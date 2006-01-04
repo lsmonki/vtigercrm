@@ -151,12 +151,9 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 
-$other_text = '<form name="massdelete" method="POST">
-	<input name="idlist" type="hidden">
-	<td>';
 if(isPermitted('Quotes',2,'') == 'yes')
 {
-        $other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text =	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
 
 if($viewnamedesc['viewname'] == 'All')
@@ -181,15 +178,10 @@ $cvHTML = '<a href="index.php?module=Quotes&action=CustomView&record='.$viewid.'
                 </td>';
 
 
-//echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $customView = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-//$xtpl=new XTemplate ('modules/Quotes/ListView.html');
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
-//$xtpl->assign("MOD", $mod_strings);
-//$xtpl->assign("APP", $app_strings);
-//$xtpl->assign("IMAGE_PATH",$image_path);
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -267,38 +259,6 @@ else
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
-// Setting the record count string
-/*
-if ($navigation_array['start'] == 1)
-{
-	if($noofrows != 0)
-	$start_rec = $navigation_array['start'];
-	else
-	$start_rec = 0;
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
-	}
-	else
-	{
-		$end_rec = $noofrows;
-	}
-	
-}
-else
-{
-	if($navigation_array['next'] > $list_max_entries_per_page)
-	{
-		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
-		$end_rec = $navigation_array['next'] - 1;
-	}
-	else
-	{
-		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
-		$end_rec = $noofrows;
-	}
-}
-*/
 
 // Setting the record count string
 //modified by rdhital
@@ -314,23 +274,15 @@ if($viewid !='')
 $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Quotes",$url_string,$sorder,$order_by,"",$oCustomView);
-//$xtpl->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_entries = getListViewEntries($focus,"Quotes",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
-//$xtpl->assign("LISTENTITY", $listview_entries);
-//$xtpl->assign("SELECT_SCRIPT", $view_script);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Quotes","index",$viewid);
-//$xtpl->assign("NAVIGATION", $navigationOutput);
-//$xtpl->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
-
-//$xtpl->parse("main");
-//$xtpl->out("main");
 
 $smarty->display("ListView.tpl");
 ?>

@@ -48,7 +48,14 @@ function massDelete()
 			return false;
 		}
 	}
-	document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Faq&return_action=index"
+	if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+    {
+	document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Faq&return_action=index";
+	}
+	else
+	{
+		return false;
+	}
 }
 
 

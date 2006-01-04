@@ -61,64 +61,7 @@ $_SESSION['FAQ_ORDER_BY'] = $order_by;
 $_SESSION['FAQ_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 
-//Constructing the Search Form
-/*
-if(!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') 
-{
-        // Stick the form header out there.
-        $search_form=new XTemplate ('modules/Faq/SearchForm.html');
-        $search_form->assign("MOD", $mod_strings);
-        $search_form->assign("APP", $app_strings);
-	
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-
-	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
-}
-
-
-if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
-{
-	$where_clauses = Array();
-	$url_string .="&query=true";
-	// we have a query
-	if (isset($_REQUEST['question'])) $question = $_REQUEST['question'];
-	if (isset($_REQUEST['faqcategories'])) $faqcategories = $_REQUEST['faqcategories'];
-
-	if(isset($question) && $question != "")
-	{
-		array_push($where_clauses, "faq.question like '%".$question."%'");
-		$url_string .= "&question=".$question;
-		$search_form->assign("QUESTION", $question);
-	}
-	if(isset($faqcategories) && $faqcategories != "")
-	{
-		array_push($where_clauses, "faq.category like '%".$faqcategories."%'"); 
-		$url_string .= "&faqcategories=".$faqcategories;
-		$search_form->assign("FAQCATEGORIES", $faqcategories);
-	}
-
-	$where = "";
-	foreach($where_clauses as $clause)
-	{
-		$where .= " and ";
-		$where .= $clause;
-	}
-}
-
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') 
-{
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Faq','index','question','true','basic'));
-       	$search_form->parse("main");
-        $search_form->out("main");
-	echo get_form_footer();
-	echo "\n<BR>\n";
-}
-*/
-// Buttons and View options
-$other_text = '	<form name="massdelete" method="POST">
-		<input name="idlist" type="hidden">';
-
-$other_text .='   <td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td></form>
+$other_text ='   <td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>
 		  <td align="right">&nbsp;</td>';
 
 //Retreive the list from Database
@@ -140,15 +83,12 @@ $list_result = $adb->query($list_query);
 
 //Constructing the list view 
 
-//echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-//$customView = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
-//$smarty->assign("CUSTOMVIEW",$customView);
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
 
@@ -185,6 +125,6 @@ $smarty->assign("LISTENTITY", $listview_entries);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Faq");
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
-
+$smarty->assign("SINGLE_MOD" ,'Faq');
 $smarty->display("ListView.tpl");
 ?>

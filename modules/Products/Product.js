@@ -81,7 +81,6 @@ function massDelete()
 		if (document.massdelete.selected_id.checked)
 		{
 			document.massdelete.idlist.value=document.massdelete.selected_id.value;
-			//alert(document.massdelete.idlist.value);
 		}
 		else 
 		{
@@ -103,7 +102,6 @@ function massDelete()
 		if (xx != 0)
 		{
 			document.massdelete.idlist.value=idstring;
-			//alert(document.massdelete.idlist.value);
 		}
 		else
 		{
@@ -111,7 +109,14 @@ function massDelete()
 			return false;
 		}
 	}
+	if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+    {
 document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Products&return_action=index&viewname"+viewid;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 function set_return(product_id, product_name) {

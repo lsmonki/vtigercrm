@@ -183,95 +183,14 @@ $viewid = $oCustomView->getViewId($currentModule);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
-
-//Constructing the Search Form
-/*if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') 
-{
-        // Stick the form header out there.
-	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'],'', false);
-        $search_form=new XTemplate ('modules/HelpDesk/SearchForm.html');
-        $search_form->assign("MOD", $current_module_strings);
-        $search_form->assign("APP", $app_strings);
-        $search_form->assign("IMAGE_PATH", $image_path);
-	$clearsearch = 'true';
-
-	$search_form->assign("VIEWID",$viewid);
-
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	$search_form->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
-        $search_form->assign("DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
-
-	$search_form->assign("BASIC_LINK", "index.php?module=HelpDesk&action=index".$url_string."&viewname=".$viewid);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=HelpDesk&action=index&advanced=true".$url_string."&viewname=".$viewid);
-
-	if (isset($name)) $search_form->assign("SUBJECT", $name);
-	if (isset($ticket_id_val)) $search_form->assign("TICKETID", $ticket_id_val);
-	if (isset($contact_name)) $search_form->assign("CONTACT_NAME", $contact_name);
-
-	if (isset($priority)) 
-		$search_form->assign("PRIORITY", get_select_options($comboFieldArray['ticketpriorities_dom'], $priority, $clearsearch));
-        else
-		$search_form->assign("PRIORITY", get_select_options($comboFieldArray['ticketpriorities_dom'], '', $clearsearch));
-	if (isset($status)) 
-		$search_form->assign("STATUS", get_select_options($comboFieldArray['ticketstatus_dom'], $status, $clearsearch));
-        else 
-		$search_form->assign("STATUS", get_select_options($comboFieldArray['ticketstatus_dom'], '', $clearsearch));
-	if (isset($category)) 
-		$search_form->assign("CATEGORY", get_select_options($comboFieldArray['ticketcategories_dom'], $category, $clearsearch));
-        else 
-		$search_form->assign("CATEGORY", get_select_options($comboFieldArray['ticketcategories_dom'], '', $clearsearch));
-
-	if ($date_criteria == 'is' && $date != '') $search_form->assign("IS", 'selected');
-	if ($date_criteria == 'isnot' && $date != '') $search_form->assign("ISNOT", 'selected');
-	if ($date_criteria == 'before' && $date != '') $search_form->assign("BEFORE", 'selected');
-	if ($date_criteria == 'after' && $date != '') $search_form->assign("AFTER", 'selected');
-	if ($date != '') $search_form->assign("DATE", $date);
-	if ($current_user_only != '')	$search_form->assign("CURRENT_USER_ONLY", "checked");
-
-        if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true')
-	{
-
-		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','ticket_title','true','advanced',"","","","",$viewid));
-
-		//Added for Custom Field Search
-		$sql="select * from field where tablename='ticketcf' order by fieldlabel";
-		$result=$adb->query($sql);
-		for($i=0;$i<$adb->num_rows($result);$i++)
-		{
-		        $column[$i]=$adb->query_result($result,$i,'columnname');
-		        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-		        if (isset($_REQUEST[$column[$i]])) 
-				$customfield[$i] = $_REQUEST[$column[$i]];
-		}
-		require_once('include/CustomFieldUtil.php');
-		$custfld = CustomFieldSearch($customfield, "ticketcf", "ticketcf", "ticketid", $app_strings,$theme,$column,$fieldlabel);
-		$search_form->assign("CUSTOMFIELD", $custfld);
-		//upto this added for Custom Field
-
-                $search_form->parse("advanced");
-                $search_form->out("advanced");
-	}
-	else
-	{
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('HelpDesk','index','ticket_title','true','basic',"","","","",$viewid));
-		$search_form->parse("main");
-	        $search_form->out("main");
-	}
-
-	echo get_form_footer();
-	echo '<br>';
-}*/
 if($viewid != 0)
 {
         $CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
 // Buttons and View options
-$other_text = '	<form name="massdelete" method="POST">
-	<input name="idlist" type="hidden">';
 if(isPermitted('HelpDesk',2,'') == 'yes')
 {
-        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text ='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
 
 if($viewnamedesc['viewname'] == 'All')

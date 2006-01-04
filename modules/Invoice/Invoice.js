@@ -284,7 +284,7 @@ document.massdelete.action="index.php?module=Invoice&action=index&return_module=
 function massDelete()
 {
         x = document.massdelete.selected_id.length;
-
+		var viewid = document.massdelete.viewname.value;
         idstring = "";
 
         if ( x == undefined)
@@ -321,7 +321,14 @@ function massDelete()
                         return false;
                 }
         }
+		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+	    {
         document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Invoice&return_action=index&viewname="+viewid;
+		}
+		else
+		{
+			return false;
+		}
 }
 
 

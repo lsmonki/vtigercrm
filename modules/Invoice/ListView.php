@@ -137,73 +137,10 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
-/*
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
-	// Stick the form header out there.
-//	$search_form=new XTemplate ('modules/Invoice/SearchForm.html');
-	$search_form->assign("MOD", $current_module_strings);
-	$search_form->assign("APP", $app_strings);
-	
-	$search_form->assign("VIEWID",$viewid);
-
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-
-	$search_form->assign("BASIC_LINK", "index.php?module=Invoice&action=index".$url_string."&viewname=".$viewid);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Invoice&action=index&advanced=true".$url_string."&viewname=".$viewid);
-
-
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-	if (isset($subject)) $search_form->assign("SUBJECT", $subject);
-	if (isset($salesorder)) $search_form->assign("SALESORDER", $salesorder);
-
-	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
-	
-	
-	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], '', false);
-
-
-	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
-
-	$url_string .="&advanced=true";
-	$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Invoice','index','subject','true','advanced',"","","","",$viewid));
-
-		if (isset($annual_revenue)) $search_form->assign("ANNUAL_REVENUE", $annual_revenue);
-		if (isset($employees)) $search_form->assign("EMPLOYEES", $employees);
-
-//Added for Custom Field Search
-$sql="select * from field where tablename='invoicecf' order by fieldlabel";
-$result=$adb->query($sql);
-for($i=0;$i<$adb->num_rows($result);$i++)
-{
-        $column[$i]=$adb->query_result($result,$i,'columnname');
-        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-}
-require_once('include/CustomFieldUtil.php');
-$custfld = CustomFieldSearch($customfield, "invoicecf", "invoicecf", "invoiceid", $app_strings,$theme,$column,$fieldlabel);
-$search_form->assign("CUSTOMFIELD", $custfld);
-//upto this added for Custom Field
-
-		$search_form->parse("advanced");
-		$search_form->out("advanced");
-	}
-	else {
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Invoice','index','subject','true','basic',"","","","",$viewid));
-		$search_form->parse("main");
-		$search_form->out("main");
-	}
-	echo get_form_footer();
-	echo "\n<BR>\n";
-}
-*/
-
-$other_text = '	<form name="massdelete" method="POST">
-	<input name="idlist" type="hidden">
-	<td>';
 
 if(isPermitted('Invoice',2,'') == 'yes')
 {
-        $other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text =	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
 
 if($viewnamedesc['viewname'] == 'All')
@@ -228,8 +165,6 @@ $cvHTML = '<a href="index.php?module=Invoice&action=CustomView&record='.$viewid.
                 </td>';
 
 
-//echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-//$customView = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -312,39 +247,6 @@ else
 
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-
-/*
-// Setting the record count string
-if ($navigation_array['start'] == 1)
-{
-	if($noofrows != 0)
-	$start_rec = $navigation_array['start'];
-	else
-	$start_rec = 0;
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
-	}
-	else
-	{
-		$end_rec = $noofrows;
-	}
-	
-}
-else
-{
-	if($navigation_array['next'] > $list_max_entries_per_page)
-	{
-		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
-		$end_rec = $navigation_array['next'] - 1;
-	}
-	else
-	{
-		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
-		$end_rec = $noofrows;
-	}
-}
-*/
 
 
 // Setting the record count string

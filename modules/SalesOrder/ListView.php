@@ -36,7 +36,6 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'SalesOrder');
-$smarty->assign("BUTTONS", $other_text);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
@@ -130,73 +129,10 @@ $viewid = $oCustomView->getViewId($currentModule);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
-//Constructing the Search Form
-/*
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
-        // Stick the form header out there.
-	echo get_form_header($current_module_strings['LBL_SO_SEARCH_TITLE'],'', false);
-  //      $search_form=new XTemplate ('modules/SalesOrder/SearchForm.html');
-        $search_form->assign("MOD", $mod_strings);
-        $search_form->assign("APP", $app_strings);
-	$clearsearch = 'true';
-	
-	$search_form->assign("VIEWID",$viewid);
-
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-
-	$search_form->assign("BASIC_LINK", "index.php?module=SalesOrder&action=index".$url_string."&viewname=".$viewid);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=SalesOrder&action=index&advanced=true".$url_string."&viewname=".$viewid);
-
-	if ($subject !='') $search_form->assign("SUBJECT", $subject);
-	if ($accountname !='') $search_form->assign("ACCOUNTNAME", $accountname);
-	if ($quotename !='') $search_form->assign("QUOTENAME", $quotename);
-
-//Combo Fields for Manufacturer and Category are moved from advanced to Basic Search
-        if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') 
-	{
-		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('SalesOrder','index&smodule=SO','subject','true','advanced',"","","","",$viewid));
-
-		$search_form->assign("SUPPORT_START_DATE",$_REQUEST['start_date']);
-		$search_form->assign("SUPPORT_EXPIRY_DATE",$_REQUEST['expiry_date']);
-		$search_form->assign("PURCHASE_DATE",$_REQUEST['purchase_date']);
-		$search_form->assign("DATE_FORMAT", $current_user->date_format);
-
-		//Added for Custom Field Search
-		$sql="select * from field where tablename='salesordercf' order by fieldlabel";
-		$result=$adb->query($sql);
-		for($i=0;$i<$adb->num_rows($result);$i++)
-		{
-		        $column[$i]=$adb->query_result($result,$i,'columnname');
-		        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-		        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-		}
-		require_once('include/CustomFieldUtil.php');
-		$custfld = CustomFieldSearch($customfield, "salesordercf", "salesordercf", "salesorderid", $app_strings,$theme,$column,$fieldlabel);
-		$search_form->assign("CUSTOMFIELD", $custfld);
-		//upto this added for Custom Field
-
-                $search_form->parse("advanced");
-                $search_form->out("advanced");
-	}
-	else
-	{        
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('SalesOrder','index&smodule=SO','subject','true','basic',"","","","",$viewid));
-		$search_form->parse("main");
-	        $search_form->out("main");
-	}
-echo get_form_footer();
-
-}
-*/
-
 // Buttons and View options
-$other_text =	'<form name="massdelete" method="POST">
-	<input name="idlist" type="hidden">
-	<td>';
 if(isPermitted('SalesOrder',2,'') == 'yes')
 {
-	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>&nbsp;';
+	$other_text ='<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>&nbsp;';
 }
 
 if($viewnamedesc['viewname'] == 'All')
@@ -311,7 +247,7 @@ $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Sal
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("CUSTOMVIEW", $customstrings);
-
+$smarty->assign("BUTTONS", $other_text);
 $smarty->display("ListView.tpl");
 
 ?>

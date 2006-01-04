@@ -292,7 +292,14 @@ function massDelete()
                         return false;
                 }
         }
+		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+		{
         document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Quotes&return_action=index&viewname="+viewid;
+		}
+		else
+		{
+			return false;
+		}
 }
 function set_return(product_id, product_name) {
         window.opener.document.EditView.parent_name.value = product_name;

@@ -21,16 +21,16 @@ document.massdelete.action="index.php?module=Potentials&action=index&return_modu
 function massDelete()
 {
 
-        x = document.massdelete.selected_id_pot.length;
+        x = document.massdelete.selected_id.length;
 	var viewid = document.massdelete.viewname.value;
         idstring = "";
 
         if ( x == undefined)
         {
 
-                if (document.massdelete.selected_id_pot.checked)
+                if (document.massdelete.selected_id.checked)
                 {
-                        document.massdelete.idlist.value=document.massdelete.selected_id_pot.value;
+                        document.massdelete.idlist.value=document.massdelete.selected_id.value;
                 }
                 else
                 {
@@ -43,9 +43,9 @@ function massDelete()
                 xx = 0;
                 for(i = 0; i < x ; i++)
                 {
-                        if(document.massdelete.selected_id_pot[i].checked)
+                        if(document.massdelete.selected_id[i].checked)
                         {
-                                idstring = document.massdelete.selected_id_pot[i].value +";"+idstring
+                                idstring = document.massdelete.selected_id[i].value +";"+idstring
                         xx++
                         }
                 }
@@ -59,7 +59,15 @@ function massDelete()
                         return false;
                 }
         }
+		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+		{
         document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Potentials&return_action=index&viewname="+viewid;
+		}
+		else
+		{
+			return false;
+		}
+
 }
 
 function set_return(product_id, product_name) {

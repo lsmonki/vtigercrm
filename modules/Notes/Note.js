@@ -55,7 +55,15 @@ function massDelete()
 			alert("Please select atleast one entity");
 			return false;
 		}
-	}	
+	}
+	if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+    {
 	document.massdelete.action="index.php?module=Users&action=massdelete&return_module=Notes&return_action=ListView&viewname="+viewid;
+	}
+	else
+	{
+		return false;
+	}
+
 }
 

@@ -145,15 +145,10 @@ $viewid = $oCustomView->getViewId($currentModule);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
-$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
-	<form name="massdelete" method="POST">
-	<tr>
-	<input name="idlist" type="hidden">
-	<td>';
 
 if(isPermitted('PurchaseOrder',2,'') == 'yes')
 {
-        $other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text ='<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
 
 if($viewnamedesc['viewname'] == 'All')
@@ -170,17 +165,15 @@ $cvHTML = '<a href="index.php?module=PurchaseOrder&action=CustomView&record='.$v
 <span class="sep">|</span>
 <a href="index.php?module=PurchaseOrder&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
-	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
+	$custom_view_strings='<td align="right">'.$app_strings[LBL_VIEW].'
                         <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
                 </td>
-        </tr>
-        </table>';
+        </tr>';
 
 
-//echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $customView = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -194,7 +187,8 @@ $smarty->assign("SINGLE_MOD",'PurchaseOrder');
 $smarty->assign("CUSTOMVIEW",$customView);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
-
+$smarty->assign("BUTTONS", $other_text);
+$smarty->assign("CUSTOMVIEW", $custom_view_strings);
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
 if($viewid != "0")

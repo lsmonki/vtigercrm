@@ -97,14 +97,10 @@ if($viewid != 0)
 }
 // Buttons and View options
 //Modified by Raju
-$other_text = '<form name="massdelete" method="POST">
-	<input name="idlist" type="hidden">
-	<input name="change_owner" type="hidden">
-	<input name="change_status" type="hidden">';
 //raju
 if(isPermitted('Leads',2,'') == 'yes')
 {
-	$other_text .=	'<td width="10"><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+	$other_text =	'<td width="10"><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
 $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/></td>';
 

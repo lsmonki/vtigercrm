@@ -277,7 +277,15 @@ function massDelete()
                         return false;
                 }
         }
+		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+	    {
         document.massdelete.action="index.php?module=Users&action=massdelete&return_module=PurchaseOrder&return_action=index";
+		}
+		else
+		{
+			return false;
+		}
+
 }
 
 

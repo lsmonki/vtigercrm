@@ -201,101 +201,12 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
-/***********changed for new UI and Smarty --by mangai**************/
-/*
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
-	// Stick the form header out there.
-	$search_form=new XTemplate ('modules/Potentials/SearchForm.html');
-	$search_form->assign("MOD", $current_module_strings);
-	$search_form->assign("APP", $app_strings);
-
-	$search_form->assign("VIEWID",$viewid);
-
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-
-	$search_form->assign("BASIC_LINK", "index.php?module=Potentials&action=index".$url_string."&viewname=".$viewid);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Potentials&action=index&advanced=true".$url_string."&viewname=".$viewid);
-
-	if (isset($name)) $search_form->assign("NAME", $name);
-	if (isset($accountname)) $search_form->assign("ACCOUNT_NAME", $accountname);
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-
-	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
-
-	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
-
-	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
-
-		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Potentials','index','potentialname','true','advanced',"","","","",$viewid));
-
-		if (isset($amount)) $search_form->assign("AMOUNT", $amount);
-		if (isset($date_entered)) $search_form->assign("DATE_ENTERED", $date_entered);
-		if (isset($date_closed)) $search_form->assign("DATE_CLOSED", $date_closed);
-		if (isset($nextstep)) $search_form->assign("NEXT_STEP", $nextstep);
-		if (isset($probability)) $search_form->assign("PROBABILITY", $probability);
-		if (isset($date_modified)) $search_form->assign("DATE_MODIFIED", $date_modified);
-		if (isset($modified_user_id)) $search_form->assign("MODIFIED_USER_ID", $modified_user_id);
-
-		if (isset($lead_source)) $search_form->assign("LEAD_SOURCE_OPTIONS", get_select_options($comboFieldArray['leadsource_dom'], $lead_source, $_REQUEST['advanced']));
-		else $search_form->assign("LEAD_SOURCE_OPTIONS", get_select_options($comboFieldArray['leadsource_dom'], '', $_REQUEST['advanced']));
-		if (isset($opportunity_type)) $search_form->assign("TYPE_OPTIONS", get_select_options($comboFieldArray['opportunity_type_dom'], $opportunity_type, $_REQUEST['advanced']));
-		else $search_form->assign("TYPE_OPTIONS", get_select_options($comboFieldArray['opportunity_type_dom'], '', $_REQUEST['advanced']));
-		$sales_stage_dom = & $comboFieldArray['sales_stage_dom'];
-		array_unshift($sales_stage_dom, '');
-		if (isset($sales_stage)) $search_form->assign("SALES_STAGE_OPTIONS", get_select_options_with_id($comboFieldArray['sales_stage_dom'], $sales_stage));
-		else $search_form->assign("SALES_STAGE_OPTIONS", get_select_options_with_id($comboFieldArray['sales_stage_dom'], ''));
-
-		if (!empty($assigned_user_id)) $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), $assigned_user_id));
-		else $search_form->assign("USER_FILTER", get_select_options_with_id(get_user_array(FALSE), ''));
-		$search_form->assign("DATE_FORMAT", $current_user->date_format);
-
-//Added for Custom Field Search
-$sql="select * from field where tablename='potentialscf' order by fieldlabel";
-$result=$adb->query($sql);
-for($i=0;$i<$adb->num_rows($result);$i++)
-{
-        $column[$i]=$adb->query_result($result,$i,'columnname');
-        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-}
-require_once('include/CustomFieldUtil.php');
-$custfld = CustomFieldSearch($customfield, "potentialscf", "potentialscf", "potentialid", $app_strings, $theme,$column,$fieldlabel);
-$search_form->assign("CUSTOMFIELD", $custfld);
-//upto this added for Custom Field
-
-		$search_form->parse("advanced");
-		$search_form->out("advanced");
-	}
-	else {
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Potentials','index','potentialname','true','basic',"","","","",$viewid));
-		$search_form->parse("main");
-		$search_form->out("main");
-	}
-	echo get_form_footer();
-	echo "\n<BR>\n";
-}*/
 
 
-
-$other_text = '<form name="massdelete" method="POST">
-	<input name="idlist" type="hidden">
-	';
 if(isPermitted('Potentials',2,'') == 'yes')
 {
-        $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text ='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
-	/*$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
-			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
-				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_WON].'">'.$mod_strings[LBL_WON].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_LOST].'">'.$mod_strings[LBL_LOST].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_VALUE_PROPOSITION].'">'.$mod_strings[LBL_VALUE_PROPOSITION].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_PROSPECTING].'">'.$mod_strings[LBL_PROSPECTING].'</option>
-			</SELECT>
-		</td>
-	</tr>
-	</table>';*/
 
 if($viewnamedesc['viewname'] == 'All')
 {
@@ -337,33 +248,6 @@ if(isset($where) && $where != '')
 	$list_query .= " AND ".$where;
 }
 
-/*if(isset($_REQUEST['viewname']))
-{
-	if($_REQUEST['viewname'] == 'All')
-	   {
-           $defaultcv_criteria = '';
-           }
-         else
-       {
-            $defaultcv_criteria = $_REQUEST['viewname'];
-       }
-
-  	$list_query .= " and sales_stage like "."'%" .$defaultcv_criteria ."%'";
-	$viewname = $_REQUEST['viewname'];
-        $view_script = "<script language='javascript'>
-                function set_selected()
-                {
-                        len=document.massdelete.view.length;
-                        for(i=0;i<len;i++)
-                        {
-                                if(document.massdelete.view[i].value == '$viewname')
-                                        document.massdelete.view[i].selected = true;
-                        }
-                }
-                set_selected();
-                </script>";
-}*/
-
 $view_script = "<script language='javascript'>
 	function set_selected()
 	{
@@ -397,8 +281,6 @@ $list_result = $adb->query($list_query);
 
 //Constructing the list view
 
-//echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-//$custom = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $smarty = new vtigerCRM_Smarty();
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -427,39 +309,6 @@ else
 }
 //Retreive the Navigation array
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
-
-/*
-// Setting the record count string
-if ($navigation_array['start'] == 1)
-{
-	if($noofrows != 0)
-	$start_rec = $navigation_array['start'];
-	else
-	$start_rec = 0;
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
-	}
-	else
-	{
-		$end_rec = $noofrows;
-	}
-
-}
-else
-{
-	if($navigation_array['next'] > $list_max_entries_per_page)
-	{
-		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
-		$end_rec = $navigation_array['next'] - 1;
-	}
-	else
-	{
-		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
-		$end_rec = $noofrows;
-	}
-}
-*/
 
 
 // Setting the record count string
@@ -495,10 +344,4 @@ $smarty->assign("SELECT_SCRIPT", $view_script);
 $smarty->display("ListView.tpl");
 
 
-/*$ListView = new ListView();
-$ListView->initNewXTemplate( 'modules/Potentials/ListView.html',$current_module_strings);
-$ListView->setHeaderTitle($current_module_strings['LBL_LIST_FORM_TITLE'] );
-$ListView->setQuery($where, "", "potentialname", "OPPORTUNITY");
-$ListView->processListView($seedOpportunity, "main", "OPPORTUNITY");
-*/
 ?>
