@@ -1324,7 +1324,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 //code added by raju ends
 				elseif($popuptype == "specific_vendor_address")
 				{
-					require_once('modules/Products/Vendor.php');
+					require_once('modules/Vendors/Vendor.php');
 					$acct_focus = new Vendor();
 					$acct_focus->retrieve_entity_info($entity_id,"Vendor");
 					
