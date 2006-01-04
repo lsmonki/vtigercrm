@@ -111,6 +111,14 @@ switch($currentModule)
 			        $search_query .= " and vendor_id=''";
 			}
 			break;
+		case 'Vendors':
+                        require_once("modules/$currentModule/Vendor.php");
+                        $focus = new Vendor();
+                        $smarty->assign("SINGLE_MOD",'Vendor');
+                        if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+                        if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
+                                $sorder = $_REQUEST['sorder'];
+                        break;
 		case 'SalesOrder':
 			require_once("modules/$currentModule/SalesOrder.php");
 			$focus = new SalesOrder();
@@ -366,7 +374,54 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	        }
 
         }
+	if($currentModule == 'Vendors')
+        {
+                if (isset($_REQUEST['vendorname'])) $vendorname = $_REQUEST['vendorname'];
+                if (isset($_REQUEST['companyname'])) $companyname = $_REQUEST['companyname'];
+                if (isset($_REQUEST['category'])) $category = $_REQUEST['category'];
+                $sql="select * from field where tablename='vendorcf' order by fieldlabel";
+                $result=$adb->query($sql);
+                for($i=0;$i<$adb->num_rows($result);$i++)
+                {
+                        $column[$i]=$adb->query_result($result,$i,'columnname');
+                        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
+                        $uitype[$i]=$adb->query_result($result,$i,'uitype');
 
+                        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
+
+                        if(isset($customfield[$i]) && $customfield[$i] != '')
+                        {
+                                if($uitype[$i] == 56)
+                                        $str=" vendorcf.".$column[$i]." = 1";
+                                else
+                                        $str="vendorcf.".$column[$i]." like '$customfield[$i]%'";
+                                array_push($where_clauses, $str);
+                        //        $search_query .= ' and '.$str;
+                               $url_string .="&".$column[$i]."=".$customfield[$i];
+                        }
+                }
+                 if (isset($vendorname) && $vendorname !='')
+                {
+                       array_push($where_clauses, "vendorname like ".PearDatabase::quote($vendorname.'%'));
+                        //$search_query .= " and productname like '".$productname."%'";
+                        $url_string .= "&vendorname=".$vendorname;
+                }
+
+		if (isset($companyname) && $companyname !='')
+                {
+                        array_push($where_clauses, "company_name like ".PearDatabase::quote($companyname.'%'));
+                        //$search_query .= " and productcode like '".$productcode."%'";
+                        $url_string .= "&companyname=".$companyname;
+                }
+
+                if (isset($category) && $category !='')
+                {
+                        array_push($where_clauses, "category like ".PearDatabase::quote($category.'%'));
+                        //$search_query .= " and productcode like '".$productcode."%'";
+                        $url_string .= "&category=".$category;
+                }
+
+        }
 
 	$where = "";
         foreach($where_clauses as $clause)
