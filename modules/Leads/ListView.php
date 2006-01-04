@@ -26,7 +26,6 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
-require_once('include/utils/SearchUtils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
@@ -72,132 +71,13 @@ $_SESSION['LEADS_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 
 
+
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
+ 	$where=Search($currentModule);
+
 	// we have a query
 	$url_string .="&query=true";
-	if (isset($_REQUEST['firstname'])) $firstname = $_REQUEST['firstname'];
-	if (isset($_REQUEST['lastname'])) $lastname = $_REQUEST['lastname'];
-	if (isset($_REQUEST['company'])) $company = $_REQUEST['company'];
-	if (isset($_REQUEST['leadsource'])) $leadsource = $_REQUEST['leadsource'];
-	if (isset($_REQUEST['industry'])) $industry = $_REQUEST['industry'];
-	if (isset($_REQUEST['phone'])) $phone = $_REQUEST['phone'];
-	if (isset($_REQUEST['email'])) $email = $_REQUEST['email'];
-	if (isset($_REQUEST['mobile'])) $mobile = $_REQUEST['mobile'];
-	if (isset($_REQUEST['lead_status'])) $leadstatus = $_REQUEST['lead_status'];
-	if (isset($_REQUEST['rating'])) $rating = $_REQUEST['rating'];
-	if (isset($_REQUEST['address_street'])) $address_street = $_REQUEST['address_street'];
-	if (isset($_REQUEST['address_city'])) $address_city = $_REQUEST['address_city'];
-	if (isset($_REQUEST['address_state'])) $address_state = $_REQUEST['address_state'];
-	if (isset($_REQUEST['address_postalcode'])) $address_postalcode = $_REQUEST['address_postalcode'];
-	if (isset($_REQUEST['address_country'])) $address_country = $_REQUEST['address_country'];
-	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
-	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
-
-
-	$where_clauses = Array();
-
-//Added for Custom Field Search
-$sql="select * from field  where tablename='leadscf' order by fieldlabel";
-$result=$adb->query($sql);
-for($i=0;$i<$adb->num_rows($result);$i++)
-{
-        $column[$i]=$adb->query_result($result,$i,'columnname');
-        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-        $uitype[$i]=$adb->query_result($result,$i,'uitype');
-        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-
-        if(isset($customfield[$i]) && $customfield[$i] != '')
-        {
-		if($uitype[$i] == 56)
-			$str = " leadscf.".$column[$i]." = 1";
-		elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2
-                        $str = " leadscf.".$column[$i]." = '".$customfield[$i]."'";
-		else
-	                $str = " leadscf.".$column[$i]." like '$customfield[$i]%'";
-                array_push($where_clauses, $str);
-		$url_string .="&".$column[$i]."=".$customfield[$i];
-        }
-}
-//upto this added for Custom Field
-
-
-	if(isset($lastname) && $lastname != ""){
-		array_push($where_clauses, "leaddetails.lastname like '$lastname%'");
-		$url_string .= "&lastname=".$lastname;
-	}
-	if(isset($firstname) && $firstname != ""){
-	 	array_push($where_clauses, "leaddetails.firstname like '$firstname%'");
-		$url_string .= "&firstname=".$firstname;
-	}
-	if(isset($company) && $company != ""){
-		array_push($where_clauses, "leaddetails.company like '$company%'");
-		$url_string .= "&company=".$company;
-	}
-	if(isset($leadsource) && $leadsource != ""){
-		array_push($where_clauses, "leaddetails.leadsource = '$leadsource'");
-		$url_string .= "&leadsource=".$leadsource;
-	}
-	if(isset($industry) && $industry != ""){
-	 	array_push($where_clauses, "leaddetails.industry = '$industry'");
-		$url_string .= "&industry=".$industry;
-	}
-	if(isset($phone) && $phone != ""){
-		array_push($where_clauses, "leadaddress.phone like '%$phone%'");
-		$url_string .= "&phone=".$phone;
-	}
-	if(isset($email) && $email != ""){
-		array_push($where_clauses, "leaddetails.email like '$email%'");
-		$url_string .= "&email=".$email;
-	}
-	if(isset($mobile) && $mobile != ""){
-		array_push($where_clauses, "leadaddress.mobile like '%$mobile%'");
-		$url_string .= "&mobile=".$mobile;
-	}
-	if(isset($leadstatus) && $leadstatus != ""){
-		array_push($where_clauses, "leaddetails.leadstatus =  '$leadstatus'");
-		$url_string .= "&lead_status=".$leadstatus;
-	}
-	if(isset($rating) && $rating != ""){
-		array_push($where_clauses, "leaddetails.rating = '$rating'");
-		$url_string .= "&rating=".$rating;
-	}
-	if(isset($address_street) && $address_street != ""){
-		array_push($where_clauses, "leadaddress.lane like '$address_street%'");
-		$url_string .= "&address_street=".$address_street;
-	}
-	if(isset($address_city) && $address_city != ""){
-		array_push($where_clauses, "leadaddress.city like '$address_city%'");
-		$url_string .= "&address_city=".$address_city;
-	}
-	if(isset($address_state) && $address_state != ""){
-		array_push($where_clauses, "leadaddress.state like '$address_state%'");
-		$url_string .= "&address_state=".$address_state;
-	}
-	if(isset($address_postalcode) && $address_postalcode != ""){
-		array_push($where_clauses, "leadaddress.code like '$address_postalcode%'");
-		$url_string .= "&address_postalcode=".$address_postalcode;
-	}
-	if(isset($address_country) && $address_country != ""){
-		array_push($where_clauses, "leadaddress.country like '$address_country%'");
-		$url_string .= "&address_country=".$address_country;
-	}
-	if(isset($current_user_only) && $current_user_only != ""){
-		array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-		$url_string .= "&current_user_only=".$current_user_only;
-	}
-	if(isset($assigned_user_id) && $assigned_user_id != ""){
-		array_push($where_clauses, "crmentity.smownerid = '$assigned_user_id'");
-		$url_string .= "&assigned_user_id=".$assigned_user_id;
-	}
-
-	$where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($where != "")
-		$where .= " and ";
-		$where .= $clause;
-	}
 
 	$log->info("Here is the where clause for the list view: $where");
 
@@ -222,84 +102,6 @@ if(isset($_REQUEST['viewname']) == false)
 }
 //<<<<<customview>>>>>
 /******************commented by mangai for new UI *****************/
-/*
-if (!isset($_REQUEST['search_form']) || $_REQUEST['search_form'] != 'false') {
-	// Stick the form header out there.
-	$search_form=new XTemplate ('modules/Leads/SearchForm.html');
-	$search_form->assign("MOD", $current_module_strings);
-	$search_form->assign("APP", $app_strings);
-
-	if (isset($firstname)) $search_form->assign("FIRST_NAME", $_REQUEST['firstname']);
-	if (isset($lastname)) $search_form->assign("LAST_NAME", $_REQUEST['lastname']);
-	if (isset($company)) $search_form->assign("COMPANY", $_REQUEST['company']);
-
-        $search_form->assign("VIEWID",$viewid);
-
-	$search_form->assign("JAVASCRIPT", get_clear_form_js());
-
-	$search_form->assign("BASIC_LINK", "index.php?module=Leads&action=index".$url_string."&viewname=".$viewid);
-	$search_form->assign("ADVANCE_LINK", "index.php?module=Leads&action=index&advanced=true".$url_string."&viewname=".$viewid);
-
-	echo get_form_header($current_module_strings['LBL_SEARCH_FORM_TITLE'], "", false);
-
-	if(isset($current_user_only)) $search_form->assign("CURRENT_USER_ONLY", "checked");
-
-	if (isset($_REQUEST['advanced']) && $_REQUEST['advanced'] == 'true') {
-		$url_string .="&advanced=true";
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Leads','index','lastname','true','advanced',"","","","",$viewid));
-		$advsearch = 'true';
-		//if(isset($date_entered)) $search_form->assign("DATE_ENTERED", $date_entered);
-		//if(isset($date_modified)) $search_form->assign("DATE_MODIFIED", $date_modified);
-		//if(isset($modified_user_id)) $search_form->assign("MODIFIED_USER_ID", $modified_user_id);
-		//if(isset($do_not_call)) $search_form->assign("DO_NOT_CALL", $do_not_call);
-		if(isset($phone)) $search_form->assign("PHONE", $phone);
-		if(isset($email)) $search_form->assign("EMAIL", $email);
-		if(isset($mobile)) $search_form->assign("MOBILE", $mobile);
-		if(isset($address_street)) $search_form->assign("ADDRESS_STREET", $address_street);
-		if(isset($address_city)) $search_form->assign("ADDRESS_CITY", $address_city);
-		if(isset($address_state)) $search_form->assign("ADDRESS_STATE", $address_state);
-		if(isset($address_postalcode)) $search_form->assign("ADDRESS_POSTALCODE", $address_postalcode);
-		if(isset($address_country)) $search_form->assign("ADDRESS_COUNTRY", $address_country);
-
-		if (isset($leadsource)) $search_form->assign("LEAD_SOURCE_OPTIONS", get_select_options($comboFieldArray['leadsource_dom'], $leadsource, $advsearch));
-		else $search_form->assign("LEAD_SOURCE_OPTIONS", get_select_options($comboFieldArray['leadsource_dom'], '', $advsearch));
-
-		if (isset($leadstatus)) $search_form->assign("LEAD_STATUS_OPTIONS", get_select_options($comboFieldArray['leadstatus_dom'], $leadstatus, $advsearch));
-		else $search_form->assign("LEAD_STATUS_OPTIONS", get_select_options($comboFieldArray['leadstatus_dom'], '', $advsearch));
-
-		if (isset($rating)) $search_form->assign("RATING_OPTIONS", get_select_options($comboFieldArray['rating_dom'], $rating, $advsearch));
-		else $search_form->assign("RATING_OPTIONS", get_select_options($comboFieldArray['rating_dom'], '', $advsearch));
-
-		if (isset($industry)) $search_form->assign("INDUSTRY_OPTIONS", get_select_options($comboFieldArray['industry_dom'], $industry, $advsearch));
-		else $search_form->assign("INDUSTRY_OPTIONS", get_select_options($comboFieldArray['industry_dom'], '', $advsearch));
-		if (isset($assigned_user_id)) $search_form->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active", $assigned_user_id), $assigned_user_id));
-		else $search_form->assign("ASSIGNED_USER_OPTIONS", get_select_options_with_id(get_user_array(TRUE, "Active",$assigned_user_id),$assigned_user_id));
-//Added for Custom Field Search
-$sql="select * from field  where tablename='leadscf' order by fieldlabel";
-$result=$adb->query($sql);
-for($i=0;$i<$adb->num_rows($result);$i++)
-{
-        $column[$i]=$adb->query_result($result,$i,'columnname');
-        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-}
-require_once('include/CustomFieldUtil.php');
-$custfld = CustomFieldSearch($customfield, "leadscf", "leadcf", "leadid", $app_strings, $theme,$column,$fieldlabel);
-$search_form->assign("CUSTOMFIELD", $custfld);
-//upto this added for Custom Field
-
-
-		$search_form->parse("advanced");
-		$search_form->out("advanced");
-	}
-	else {
-		$search_form->assign("ALPHABETICAL",AlphabeticalSearch('Leads','index','lastname','true','basic',"","","","",$viewid));
-		$search_form->parse("main");
-		$search_form->out("main");
-	}
-	echo get_form_footer();
-	echo "\n<BR>\n";
-}*/
 
 if($viewid != 0)
 {
@@ -415,7 +217,6 @@ if(isset($order_by) && $order_by != '')
 
         $query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
 }
-
 
 $list_result = $adb->query($query);
 
