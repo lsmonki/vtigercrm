@@ -13,6 +13,8 @@ require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/nusoap/nusoap.php');
 
+$log = &LoggerManager::getLogger('vtigerolservice');
+
 error_reporting(0);
 
 $NAMESPACE = 'http://www.vtigercrm.com/vtigercrm';
@@ -29,7 +31,7 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-				'id' => array('name'=>'id','type'=>'xsd:string'),
+	   'id' => array('name'=>'id','type'=>'xsd:string'),
         'title' => array('name'=>'title','type'=>'xsd:string'),
         'firstname' => array('name'=>'firstname','type'=>'xsd:string'),
         'middlename' => array('name'=>'middlename','type'=>'xsd:string'),
@@ -114,19 +116,16 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-    	'id'=>array('name'=>'id','type'=>'xsd:string'),
-    	'subject'=>array('name'=>'subject','type'=>'xsd:string'),
-        'startdate'=>array('name'=>'startdate','type'=>'xsd:string'),
-        'duedate'=>array('name'=>'duedate','type'=>'xsd:string'),
-        'location'=> array('name'=>'location','type'=>'xsd:string'),
-        'description'=>array('name'=>'description','type'=>'xsd:string'),
-	    'contactname'=>array('name'=>'contactname','type'=>'xsd:string'),
-	    'category'=>array('name'=>'category','type'=>'xsd:string'),
+          'id'=>array('name'=>'id','type'=>'xsd:string'),
+          'subject'=>array('name'=>'subject','type'=>'xsd:string'),
+          'startdate'=>array('name'=>'startdate','type'=>'xsd:string'),
+          'duedate'=>array('name'=>'duedate','type'=>'xsd:string'),
+          'location'=> array('name'=>'location','type'=>'xsd:string'),
+          'description'=>array('name'=>'description','type'=>'xsd:string'),
+          'contactname'=>array('name'=>'contactname','type'=>'xsd:string'),
+          'category'=>array('name'=>'category','type'=>'xsd:string'),
         )
 );
-
-/*'startime'=>array('name'=>'startdate','type'=>'xsd:string'),
-'duetime'=>array('name'=>'duedate','type'=>'xsd:string'),*/
 
 $server->wsdl->addComplexType(
     'clndrdetails',
@@ -140,6 +139,21 @@ $server->wsdl->addComplexType(
     ),
     'tns:clndrdetail'
 );
+
+$server->wsdl->addComplexType(
+    'emailmsgdetail',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+          'subject'=>array('name'=>'subject','type'=>'xsd:string'),
+          'body'=>array('name'=>'body','type'=>'xsd:string'),
+          'datesent'=>array('name'=>'datesent','type'=>'xsd:string'),
+         )
+);
+
+
 $server->register(
     'LoginToVtiger',
     array('userid'=>'xsd:string','password'=>'xsd:string'),
@@ -154,8 +168,7 @@ $server->register(
 
 $server->register(
     'AddMessageToContact',
-    array('username'=>'xsd:string','contactid'=>'xsd:string',
-					'subject'=>'xsd:string','body'=>'xsd:string','datesent'=>'xsd:string'),
+    array('username'=>'xsd:string','contactid'=>'xsd:string','msgdtls'=>'tns:emailmsgdetail'),
     array('return'=>'xsd:string'),
     $NAMESPACE);
 
@@ -247,63 +260,68 @@ $server->register(
 
 function SearchContactsByEmail($username,$emailaddress)
 {
-		require_once('modules/Contacts/Contact.php');
-		
-		$seed_contact = new Contact();
-    $output_list = Array();
-  
-    $response = $seed_contact->get_searchbyemailid($username,$emailaddress);
-    $contactList = $response['list'];
-
-    // create a return array of names and email addresses.
- 	  foreach($contactList as $contact)
-  	{
-        $output_list[] = Array(
-  						"id" => $contact[id],
-              "firstname" => $contact[first_name],
-              "lastname" => $contact[last_name],
-              "accountname" => $contact[account_name],
-  	    			"emailaddress" => $contact[email1],
-			  	);
-  	}
-  	
-    //to remove an erroneous compiler warning
-    $seed_contact = $seed_contact;
-    return $output_list;
+     require_once('modules/Contacts/Contact.php');
+     
+     $seed_contact = new Contact();
+     $output_list = Array();
+     
+     $response = $seed_contact->get_searchbyemailid($username,$emailaddress);
+     $contactList = $response['list'];
+     
+     // create a return array of names and email addresses.
+     foreach($contactList as $contact)
+     {
+          $output_list[] = Array(
+               "id" => $contact[id],
+               "firstname" => $contact[first_name],
+               "lastname" => $contact[last_name],
+               "accountname" => $contact[account_name],
+               "emailaddress" => $contact[email1],
+          );
+     }
+     
+     //to remove an erroneous compiler warning
+     $seed_contact = $seed_contact;
+     return $output_list;
 }    
 
-function AddMessageToContact($username,$contactid,$subject,$body,$datesent)
+function AddMessageToContact($username,$contactid,$msgdtls)
 {
-	require_once('modules/Users/User.php');
+	//global $log;
+     require_once('modules/Users/User.php');
 	require_once('modules/Emails/Email.php');
 	
 	$seed_user = new User();
 	$user_id = $seed_user->retrieve_user_id($username);
 	
-	$date_sent = getDisplayDate($datesent);
-
-	$email = new Email();
-
-	$email_body = str_replace("'", "''", $body);
-	$email_subject = str_replace("'", "''", $subject);
-	
-	$email->column_fields[subject]=$email_subject;
-	$email->column_fields[assigned_user_id] = $user_id;
-	$email->column_fields[date_start] = $date_sent;
-	$email->column_fields[description]  = $email_body;
-
-	$email->save("Emails");
-
-	$email->set_emails_contact_invitee_relationship($email->id, $contactid);
-	$email->set_emails_se_invitee_relationship($email->id,$contactid);
-	$email->set_emails_user_invitee_relationship($email->id, $user_id);
-	
-	return $email->id;
-}
-
-function odd($var)
-{
-   return($var % 2 == 1);
+	foreach($msgdtls as $msgdtl)
+	{
+     	if(isset($msgdtl))
+     	{    
+          	$email = new Email();
+               //$log->debug($msgdtls['contactid']);
+          	$email_body = str_replace("'", "''", $msgdtl['body']);
+          	$email_subject = str_replace("'", "''",$msgdtl['subject']);
+          	$date_sent = getDisplayDate($msgdtl['datesent']);
+                
+          	$email->column_fields[subject] = $email_subject;
+          	$email->column_fields[assigned_user_id] = $user_id;
+          	$email->column_fields[date_start] = $date_sent;
+          	$email->column_fields[description]  = $email_body;
+          
+          	$email->save("Emails");
+          
+          	$email->set_emails_contact_invitee_relationship($email->id,$contactid);
+          	$email->set_emails_se_invitee_relationship($email->id,$contactid);
+          	$email->set_emails_user_invitee_relationship($email->id,$user_id);
+          	
+          	return $email->id;
+          }
+          else
+          {
+               return "";
+          }
+     }
 }
 
 function LoginToVtiger($userid,$password)
@@ -337,54 +355,53 @@ function LoginToVtiger($userid,$password)
 
 function AddEmailAttachment($emailid,$filedata,$filename,$filesize,$filetype,$username)
 {
-    global $adb;
-    require_once('modules/Users/User.php');
-		$date_var = date('YmdHis');
-    
-    $seed_user = new User();
-	  $user_id = $seed_user->retrieve_user_id($username);
-				
-    $crmid = $adb->getUniqueID("crmentity");
-
-    $sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) 
-		values(".$crmid.",".$user_id.",".$user_id.",'Emails Attachment',' ',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
-   
-		$entityresult = $adb->query($sql1);	
-		$filetype="application/octet-stream";
-		
-		if($entityresult != false)
-		{
-			$sql2="insert into attachments(attachmentsid, name, description, type, attachmentsize, attachmentcontents) 
-			values(".$crmid.",'".$filename."',' ','".$filetype."','".$filesize."','".$adb->getEmptyBlob()."')";
-    
-			$result=$adb->query($sql2);
-
-    	if($result != false)
-    	{
-     		$result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$crmid."' and name='".$filename."'",addslashes($filedata));
-    	}
-
-    	$sql3='insert into seattachmentsrel values('.$emailid.','.$crmid.')';
-    	$adb->query($sql3);
-    	
-    	return $crmid;
-    	
+     global $adb;
+     require_once('modules/Users/User.php');
+     $date_var = date('YmdHis');
+     
+     $seed_user = new User();
+     $user_id = $seed_user->retrieve_user_id($username);
+     	
+     $crmid = $adb->getUniqueID("crmentity");
+     
+     $sql1 = "insert into crmentity (crmid,smcreatorid,smownerid,setype,description,createdtime,modifiedtime) 
+     values(".$crmid.",".$user_id.",".$user_id.",'Emails Attachment',' ',".$adb->formatString("crmentity","createdtime",$date_var).",".$adb->formatString("crmentity","modifiedtime",$date_var).")";
+     
+     $entityresult = $adb->query($sql1);	
+     $filetype="application/octet-stream";
+     
+     if($entityresult != false)
+     {
+     $sql2="insert into attachments(attachmentsid, name, description, type, attachmentsize, attachmentcontents) 
+     values(".$crmid.",'".$filename."',' ','".$filetype."','".$filesize."','".$adb->getEmptyBlob()."')";
+     
+     $result=$adb->query($sql2);
+     
+     if($result != false)
+     {
+     $result = $adb->updateBlob('attachments','attachmentcontents',"attachmentsid='".$crmid."' and name='".$filename."'",addslashes($filedata));
+     }
+     
+     $sql3='insert into seattachmentsrel values('.$emailid.','.$crmid.')';
+     $adb->query($sql3);
+     
+     return $crmid;   
    }
    else
    {
    		 //$server->setError("Invalid username and/or password"); 
-			 return "";
+          return "";
    }
 }
 
 function GetContacts($username)
 {
-		global $adb;
-		require_once('modules/Contacts/Contact.php');
-		
-		$seed_contact = new Contact();
+    global $adb;
+    require_once('modules/Contacts/Contact.php');
+     
+    $seed_contact = new Contact();
     $output_list = Array();
-  
+     
     $query = $seed_contact->get_contactsforol($username);
     $result = $adb->query($query);
     
@@ -487,13 +504,13 @@ function AddContacts($username,$cntdtls)
       	$contact->column_fields[title]=$cntrow["jobtitle"];
       	$contact->column_fields[department]=$cntrow["department"];
       	$contact->column_fields[account_id]= retrieve_account_id($cntrow["accountname"],$user_id);
-        $contact->column_fields[phone]= $cntrow["officephone"];
-        $contact->column_fields[homephone]= $cntrow["homephone"];
-        $contact->column_fields[otherphone]= $cntrow["otherphone"];
-        $contact->column_fields[fax]= $cntrow["fax"];
+          $contact->column_fields[phone]= $cntrow["officephone"];
+          $contact->column_fields[homephone]= $cntrow["homephone"];
+          $contact->column_fields[otherphone]= $cntrow["otherphone"];
+          $contact->column_fields[fax]= $cntrow["fax"];
       	$contact->column_fields[mobile]=$cntrow["mobile"];
       	$contact->column_fields[assistant]= $cntrow["asstname"];
-        $contact->column_fields[assistantphone]= $cntrow["asstphone"];     
+          $contact->column_fields[assistantphone]= $cntrow["asstphone"];     
       	//$contact->column_fields[reports_to_id] =retrievereportsto($reportsto,$user_id,$account_id);// NOT FIXED IN SAVEENTITY.PHP
       	$contact->column_fields[mailingstreet]=$cntrow["mailingstreet"];
       	$contact->column_fields[mailingcity]=$cntrow["mailingcity"];
@@ -505,8 +522,8 @@ function AddContacts($username,$cntdtls)
       	$contact->column_fields[otherstate]=$cntrow["otherstate"];
       	$contact->column_fields[otherzip]=$cntrow["otherzip"];
       	$contact->column_fields[othercountry]=$cntrow["othercountry"];    	
-        $contact->column_fields[assigned_user_id]=$user_id;   
-  		  $contact->column_fields[description]= $cntrow["description"];
+          $contact->column_fields[assigned_user_id]=$user_id;   
+  		$contact->column_fields[description]= $cntrow["description"];
        	$contact->save("Contacts");	
 			}	
 	}
