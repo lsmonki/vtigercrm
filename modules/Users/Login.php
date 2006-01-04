@@ -209,19 +209,19 @@ else {
 	<td class=small align=right>
 	<?php echo $current_module_strings['LBL_USER_NAME'] ?>
 		</td>
-		<td>
-		<input type="text"  name="user_name"  class=textbox value="<?php echo $login_user_name ?>">
+		<td class=small>
+		<input class=small type="text"  name="user_name"  class=textbox value="<?php echo $login_user_name ?>">
 		</td>
 	</tr>
 	<tr>
 	<td class=small align=right>
 	<?php echo $current_module_strings['LBL_PASSWORD'] ?>
 	</b></td><td class=small>
-	<input type="password" size='20' name="user_password" class=textbox value="<?php echo $login_password ?>">
+	<input class=small type="password" size='20' name="user_password" class=textbox value="<?php echo $login_password ?>">
 	</td>
 	</tr>
 	<tr>
-	<td align=right>
+	<td class=small align=right>
 	<?php echo $current_module_strings['LBL_THEME'] ?>
 	</b></td><td class=small>
 		<select class='small' name='login_theme' style="width:120px;">
@@ -244,7 +244,7 @@ else {
 	<tr>
 	<td></td>
 	<td>
-	<input title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" class="button" type="submit" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  " style="width:100; height:25;">
+	<input class=small title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" class="button" type="submit" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  " style="width:100; height:25;">
 	</b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </td>
 	</tr>
 	<tr><td>&nbsp</td></tr>
