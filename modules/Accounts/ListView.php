@@ -64,6 +64,7 @@ $_SESSION['ACCOUNTS_SORT_ORDER'] = $sorder;
 $oCustomView = new CustomView($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
+$viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 $groupid = $oCustomView->getGroupId($currentModule);
 //<<<<<customview>>>>>
 
@@ -257,7 +258,7 @@ if(isset($CActionDtls))
 	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/></form>';
 }
 
-if($viewid == 0)
+if($viewnamedesc['viewname'] == 'All')
 {
 $cvHTML='<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
 	<span class="sep">|</span>
@@ -273,7 +274,6 @@ $cvHTML='<a href="index.php?module=Accounts&action=CustomView&record='.$viewid.'
 }
 	$customviewstrings='<td align="right">'.$app_strings[LBL_VIEW].'
                         <SELECT NAME="view" onchange="showDefaultCustomView(this)">
-                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
