@@ -26,6 +26,7 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
+require_once('include/utils/SearchUtils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
