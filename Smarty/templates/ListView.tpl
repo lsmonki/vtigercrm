@@ -1,6 +1,7 @@
 {*<!-- module header -->*}
 <script language="JavaScript" type="text/javascript" src="include/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script language="javascript">
 
 function callSearch(searchtype)
@@ -252,7 +253,7 @@ itle="Basic Search" border=0></td>
 				<tr>
 					<td style="padding-right:20px" nowrap> {$BUTTONS}</td>
 					<td style="padding-right:20px" nowrap>{$RECORD_COUNTS}</td>
-        	        <td nowrap ><table border=0 cellspacing=0 cellpadding=0><tr>{$NAVIGATION}</tr></table></td>
+		        	        <td nowrap ><table border=0 cellspacing=0 cellpadding=0><tr>{$NAVIGATION}</tr></table></td>
 					<td align="right">{$CUSTOMVIEW}</td>	
                	</tr>
 			</table>
