@@ -24,7 +24,5 @@ require_once ($theme_path."layout_utils.php");
 global $mod_strings;
 
 include ('modules/Notes/ListView.php');
-
-include('modules/Import/ImportButton.php');
  
 ?>
