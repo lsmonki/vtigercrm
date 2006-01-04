@@ -234,12 +234,12 @@ function create_default_users()
 $startTime = microtime();
 
 $modules = array(
- "Contact"
+"Security"
+,"Contact"
 ,"Account"
 ,"potential"
 ,"Lead"
 ,"Tab"
-,"Security"
 ,"LoginHistory"
 ,"User"
 ,"Tracker"

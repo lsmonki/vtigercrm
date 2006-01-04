@@ -2022,7 +2022,7 @@ title';
 	$this->db->query("insert into actionmapping values(9,'ConvertLead',0)");
 
 	//Insert values for moduleowners table which contains the modules and their users. default user id admin - after 4.2 patch 2
-	$module_array = Array('Potentials','Contacts','Accounts','Leads','Notes','Activities','Emails','HelpDesk','Products','Faq','Vendor','PriceBook','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports');
+	$module_array = Array('Potentials','Contacts','Accounts','Leads','Notes','Activities','Emails','HelpDesk','Products','Faq','Vendors','PriceBooks','Quotes','PurchaseOrder','SalesOrder','Invoice','Reports');
 	foreach($module_array as $mod)
 	{
 		$this->db->query("insert into moduleowners values(".getTabid($mod).",1)");
