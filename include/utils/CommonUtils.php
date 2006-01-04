@@ -67,7 +67,7 @@ function get_select_options (&$option_list, $selected, $advsearch='false') {
 
 /**
  * Create HTML to display select options in a dropdown list.  To be used inside
- * of a select statement in a form.   This method expects the option list to have keys and values.  The keys are the ids.  The values are the display strings.
+ * of a select statement in a form.   This method expects the option list to have keys and values.  The keys are the ids.  The values is an array of the datas 
  * param $option_list - the array of strings to that contains the option list
  * param $selected - the string which contains the default value
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -78,10 +78,18 @@ function get_select_options_with_id (&$option_list, $selected_key, $advsearch='f
 	return get_select_options_with_id_separate_key($option_list, $option_list, $selected_key, $advsearch);
 }
 
+/**
+ * Create HTML to display select options in a dropdown list.  To be used inside
+ * of a select statement in a form.   This method expects the option list to have keys and values.  The keys are the ids.
+ * The values are the display strings.
+ */
+function get_select_options_login (&$option_list, $selected_key, $advsearch='false') {
+        return get_option_strings($option_list, $option_list, $selected_key, $advsearch);
+}
 
 /**
  * Create HTML to display select options in a dropdown list.  To be used inside
- * of a select statement in a form.   This method expects the option list to have keys and values.  The keys are the ids.  The values are the display strings.
+ * of a select statement in a form.   This method expects the option list to have keys and values.  The keys are the ids.  The value is an array of data
  * param $label_list - the array of strings to that contains the option list
  * param $key_list - the array of strings to that contains the values list
  * param $selected - the string which contains the default value
@@ -121,6 +129,39 @@ function get_select_options_with_id_separate_key (&$label_list, &$key_list, $sel
 	return $options;
 }
 
+/**
+ * Create HTML to display select options in a dropdown list.  To be used inside
+ * of a select statement in a form.   This method expects the option list to have keys and values.  The keys are the ids.
+ * The values are the display strings.
+ */
+
+function get_option_strings(&$label_list, &$key_list, $selected_key, $advsearch='false')
+{
+    global $app_strings;
+    if($advsearch=='true')
+    $select_options = "\n<OPTION value=''>--NA--</OPTION>";
+    else
+    $select_options = "";
+
+    $pattern = "/'0?'></";
+    $replacement = "''>".$app_strings['LBL_NONE']."<";
+    if (!is_array($selected_key)) $selected_key = array($selected_key);
+
+    foreach ($key_list as $option_key=>$option_value) {
+        $selected_string = '';
+        if (($option_key != '' && $selected_key == $option_key) || ($selected_key == '' && $option_key == '') || (in_array($option_key, $selected_key)))
+        {
+            $selected_string = 'selected ';
+        }
+
+        $html_value = $option_key;
+
+        $select_options .= "\n<OPTION ".$selected_string."value='$html_value'>$label_list[$option_key]</OPTION>";
+    }
+    $select_options = preg_replace($pattern, $replacement, $select_options);
+    return $select_options;
+
+}
 
 /**
  * Converts localized date format string to jscalendar format
