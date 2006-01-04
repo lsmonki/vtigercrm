@@ -161,5 +161,33 @@ class Email extends CRMEntity {
 
                 return $query;
         }
+        
+     /**
+     * Used to releate email and contacts -- Outlook Plugin
+     */  
+     function set_emails_contact_invitee_relationship($email_id, $contact_id)
+     {
+          $query = "insert into $this->rel_contacts_table (contactid,activityid) values('$contact_id','$email_id')";
+          $this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
+     }
+     
+     /**
+     * Used to releate email and salesentity -- Outlook Plugin
+     */
+     function set_emails_se_invitee_relationship($email_id, $contact_id)
+     {
+          $query = "insert into $this->rel_serel_table (crmid,activityid) values('$contact_id','$email_id')";
+          $this->db->query($query,true,"Error setting email to contact relationship: "."<BR>$query");
+     }
+     
+     /**
+     * Used to releate email and Users -- Outlook Plugin
+     */    
+     function set_emails_user_invitee_relationship($email_id, $user_id)
+     {
+          $query = "insert into $this->rel_users_table (smid,activityid) values ('$user_id', '$email_id')";
+          $this->db->query($query,true,"Error setting email to user relationship: "."<BR>$query");
+     }        
+
 }
 ?>
