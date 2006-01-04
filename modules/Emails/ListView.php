@@ -125,37 +125,22 @@ global $focus_list;
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Emails");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']) == false)
-{
-	if($oCustomView->setdefaultviewid != "")
-	{
-		$viewid = $oCustomView->setdefaultviewid;
-	}
-	else
-	{
-		$viewid = "0";
-	}
-}
-else
-{
-	$viewid =  $_REQUEST['viewname'];
-	$oCustomView->setdefaultviewid = $viewid;
-}
+$viewid = $oCustomView->getViewId($currentModule);
+$viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 // Buttons and View options
 $other_text = '	<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_status" type="hidden">
 		<td>';
 if(isPermitted('Emails',2,'') == 'yes')
 {
-	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td></form>';
+	$other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
 $other_text .= 	'</td>';
 
-if($viewid == 0)
+if($viewnamedesc['viewname'] == 'All')
 {
 	$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
 		<span class="sep">|</span>
@@ -172,8 +157,7 @@ else
 }
 
 $customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
-                        <SELECT NAME="view" onchange="showDefaultCustomView(this)">
-                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
@@ -259,11 +243,11 @@ $list_result = $adb->query($list_query);
 $view_script = "<script language='javascript'>
 	function set_selected()
 	{
-		len=document.massdelete.view.length;
+		len=document.massdelete.viewname.length;
 		for(i=0;i<len;i++)
 		{
-			if(document.massdelete.view[i].value == '$viewid')
-				document.massdelete.view[i].selected = true;
+			if(document.massdelete.viewname[i].value == '$viewid')
+				document.massdelete.viewname[i].selected = true;
 		}
 	}
 	set_selected();
@@ -276,6 +260,7 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
+$smarty->assign("SINGLE_MOD",'Email');
 $smarty->assign("BUTTONS",$other_text);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);

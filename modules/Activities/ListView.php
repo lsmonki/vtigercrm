@@ -63,6 +63,7 @@ $_SESSION['ACTIVITIES_SORT_ORDER'] = $sorder;
 $oCustomView = new CustomView($currentModule);
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
+$viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 
@@ -129,7 +130,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 }
 
 
-if($viewid == 0)
+if($viewnamedesc['viewname'] == 'All')
 {
 $cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
 <span class="sep">|</span>
@@ -149,7 +150,6 @@ $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_owner" type="hidden">
 	<input name="change_status" type="hidden">
 		<td>';
@@ -160,8 +160,7 @@ if(isPermitted("Activities",2,$_REQUEST['record']) == 'yes')
    	$other_text .='<!--input class="button" type="submit" value="'.$app_strings['LBL_CHANGE_OWNER'].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
 	       <input class="button" type="submit" value="'.$app_strings['LBL_CHANGE_STATUS'].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/--></td>
 		<td align="right">'.$app_strings['LBL_VIEW'].'
-			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
-				<OPTION VALUE="0">'.$mod_strings['LBL_ALL'].'</option>
+			<SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
 			</SELECT>
 			'.$cvHTML.'
@@ -194,11 +193,11 @@ if(isset($where) && $where != '')
 $view_script = "<script language='javascript'>
 	function set_selected()
 	{
-		len=document.massdelete.view.length;
+		len=document.massdelete.viewname.length;
 		for(i=0;i<len;i++)
 		{
-			if(document.massdelete.view[i].value == '$viewid')
-				document.massdelete.view[i].selected = true;
+			if(document.massdelete.viewname[i].value == '$viewid')
+				document.massdelete.viewname[i].selected = true;
 		}
 	}
 	set_selected();
@@ -225,6 +224,7 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
+$smarty->assign("SINGLE_MOD",'Activity');
 
 
 //Retreiving the no of rows

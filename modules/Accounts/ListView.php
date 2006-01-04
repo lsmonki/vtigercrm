@@ -22,7 +22,6 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
-require_once('include/utils/SearchUtils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
@@ -244,9 +243,9 @@ if($viewid != 0)
 //Modified by Raju
 	$other_text='<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
-	<input name="gname" type="hidden" value="'.$groupid.'">
-	<input name="viewname" type="hidden" value="'.$viewid.'">'; //give the viewid to hidden //customview
-//Raju	
+	<input name="gname" type="hidden" value="'.$groupid.'">';
+
+	//Raju	
 if(isPermitted('Accounts',2,'') == 'yes')
 {
         $other_text .=	'<td width="10"><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
@@ -255,7 +254,7 @@ if(isPermitted('Accounts',2,'') == 'yes')
 
 if(isset($CActionDtls))
 {
-	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/></form>';
+	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
 }
 
 if($viewnamedesc['viewname'] == 'All')
@@ -289,6 +288,7 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("CUSTOMVIEW",$customviewstrings);
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("MODULE",$currentModule);
+$smarty->assign("SINGLE_MOD",'Account');
 
 
 //Retreive the list from Database
@@ -311,11 +311,11 @@ if(isset($where) && $where != '')
 $view_script = "<script language='javascript'>
 	function set_selected()
 	{
-		len=document.massdelete.view.length;
+		len=document.massdelete.viewname.length;
 		for(i=0;i<len;i++)
 		{
-			if(document.massdelete.view[i].value == '$viewid')
-				document.massdelete.view[i].selected = true;
+			if(document.massdelete.viewname[i].value == '$viewid')
+				document.massdelete.viewname[i].selected = true;
 		}
 	}
 	set_selected();

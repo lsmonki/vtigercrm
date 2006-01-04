@@ -27,7 +27,6 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
-require_once('include/utils/SearchUtils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
@@ -215,20 +214,8 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Contacts");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']) == false)
-{
-	if($oCustomView->setdefaultviewid != "")
-	{
-		$viewid = $oCustomView->setdefaultviewid;
-	}else
-	{
-		$viewid = "0";
-	}
-}else
-{
-	$viewid =  $_REQUEST['viewname'];
-	$oCustomView->setdefaultviewid = $viewid;
-}
+$viewid = $oCustomView->getViewId($currentModule);
+$viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 /*****************changed for new UI and Smarty --by mangai *****************/
 /*
@@ -317,7 +304,6 @@ if($viewid != 0)
 }
 $other_text ='<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden" value='.$viewid.'>
 	<input name="change_status" type="hidden">';
 
 if(isPermitted('Contacts',2,'') == 'yes')
@@ -328,9 +314,9 @@ $other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL
 
 if(isset($CActionDtls))
 {
-	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/></form>';
+	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
 }
-if($viewid == 0)
+if($viewnamedesc['viewname'] == 'All')
 {
 $cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
 <span class="sep">|</span>
@@ -346,8 +332,7 @@ $cvHTML = '<a href="index.php?module=Contacts&action=CustomView&record='.$viewid
 }
 
 	$customstrings ='<td align="right">'.$app_strings[LBL_VIEW].'
-		<SELECT NAME="view" onchange="showDefaultCustomView(this)">
-			<OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+		<SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
 			'.$customviewcombo_html.'
 		</SELECT>
 		'.$cvHTML.'
@@ -392,11 +377,11 @@ $list_result = $adb->query($list_query);
 $view_script = "<script language='javascript'>
 	function set_selected()
 	{
-		len=document.massdelete.view.length;
+		len=document.massdelete.viewname.length;
 		for(i=0;i<len;i++)
 		{
-			if(document.massdelete.view[i].value == '$viewid')
-				document.massdelete.view[i].selected = true;
+			if(document.massdelete.viewname[i].value == '$viewid')
+				document.massdelete.viewname[i].selected = true;
 		}
 	}
 	set_selected();
@@ -517,11 +502,8 @@ $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Con
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("MODULE", $currentModule);
-
-
+$smarty->assign("SINGLE_MOD", 'Contact');
 
 $smarty->display("ListView.tpl");
-
-
 
 ?>
