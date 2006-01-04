@@ -27,6 +27,7 @@ require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/logging.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
+require_once('include/utils/SearchUtils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
@@ -502,6 +503,10 @@ $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Contacts",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
+
+$listview_header_search=getSearchListHeaderValues($focus,"Contacts",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER", $listview_header_search);
+
 
 $listview_entries = getListViewEntries($focus,"Contacts",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);

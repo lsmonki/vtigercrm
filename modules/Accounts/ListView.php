@@ -22,7 +22,7 @@ require_once('include/ListView/ListView.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
-require_once('include/utils/utils.php');
+require_once('include/utils/SearchUtils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
@@ -399,6 +399,10 @@ $url_string .= "&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Accounts",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
+
+$listview_header_search=getSearchListHeaderValues($focus,"Accounts",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER", $listview_header_search);
+
 
 
 $listview_entries = getListViewEntries($focus,"Accounts",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
