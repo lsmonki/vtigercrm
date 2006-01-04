@@ -1,14 +1,7 @@
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-<tr><td>&nbsp;</td>
-	<td>
-
-
-
-
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > <a class="hdrLink" href="salesAccListView.html">{$MODULE}</a></td>
+	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}">{$MODULE}</a></td>
 	<td class="sep1" style="width:1px"></td>
 	<td class=small >
 		<table border=0 cellspacing=0 cellpadding=0>
@@ -92,69 +85,83 @@
 					<td style="padding:10px">
 					   <!-- General details -->
 				        <table border=0 cellspacing=0 cellpadding=0 width=100%>
-							
+					{$HIDDEN}							
 					  {foreach key=header item=detail from=$RELATEDLISTS}
-					<table border=0 cellspacing=0 cellpadding=0 width=100% >
-					<tr >
-					<td  valign=bottom style="border-bottom:1px solid #999999;padding:5px;" ><b>{$header}</b> for {$NAME}</td>
-					<td align=right style="border-bottom:1px solid #999999;padding:5px;">
-					{if $header eq 'Potentials'}
-					<input type="button" value="New Potential" class=small></td>
-					{elseif $header eq 'Contacts'}
-					<input type="button" value="New Contact" class=small>
-					{elseif $header eq 'Activities'}
-					<input type="button" value="New Task" class=small>&nbsp;<input type="button" value="New Event" class=small></td>
-					{elseif $header eq 'HelpDesk'}
-					<input type="button" value="New Ticket" class=small>	
-					{elseif $header eq 'Attachments'}
-					<input type="button" value="Add new Note" class=small>&nbsp;<input type="button" value="Add new Attachment" class=small></td>
-					{elseif $header eq 'Quotes'}
-					<input type="button" value="New Quote" class=small>
-					{elseif $header eq 'Invoice'}
-					<input type="button" value="New Invoice" class=small>
-					{elseif $header eq 'Sales Order'}
-					<input type="button" value="New Sales Order" class=small>
-					{elseif $header eq 'Purchase Order'}
-                                        <input type="button" value="New Purchase Order" class=small>
-					{elseif $header eq 'Products'}
-					<input type="button" value="New Product" class=small>
-					{elseif $header eq 'Emails'}
-                                        <input type="button" value="New Email" class=small>
-					{/if}
-					</tr>
-					</table>	
-					    {if $detail ne ''} 
-				      	     {foreach key=header item=detail from=$detail}
-					      
-						{if $header eq 'header'}
-						<table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#eaeaea;">
-						<tr style="height:25px" bgcolor=white>	
-					          {foreach key=header item=headerfields from=$detail}	
-						    <td class="lvtCol">{$headerfields}</td> 
-					          {/foreach}			
-						</tr>
-					      {else $header eq 'entries'}	 
-					    	{foreach key=header item=detail from=$detail}
-						  <tr bgcolor=white>
-					            {foreach key=header item=listfields from=$detail}
-                                                      <td>{$listfields}</td>
-                                                    {/foreach}		
-						  </tr>	
-						{/foreach}	 
-					      {/if}	
-					    {/foreach}
-						</table>
-					   {else}
-						<table style="background-color:#eaeaea;color:eeeeee" border="0" cellpadding="3" cellspacing="1" width="100%">
-						<tbody><tr style="height: 25px;" bgcolor="white">
-						<td><i>None included</i></td>
-						</tr>
-						</tbody></table>
-								
-					   {/if}		
-				  	  <br><br>
-					{/foreach}	
+						<table border=0 cellspacing=0 cellpadding=0 width=100% >
+							<tr >
+							<td  valign=bottom style="border-bottom:1px solid #999999;padding:5px;" ><b>{$header}</b> for {$NAME}</td>
+							<td align=right style="border-bottom:1px solid #999999;padding:5px;">
+							{if $header eq 'Potentials'}
+						
+							<input title="New Potential" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Potentials'" type="submit" name="button" value="New Potential"></td>
 							
+							{elseif $header eq 'Contacts'}
+							<input title="New Contact" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Contacts'" type="submit" name="button" value="New Contact"></td>
+							{elseif $header eq 'Activities'}
+							<input type="hidden" name="activity_mode">
+							<input title="New Task" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Activities'; this.form.return_module.value='{$MODULE}'; this.form.activity_mode.value='Task'" type="submit" name="button" value="New Task">&nbsp;
+							<input title="New Event" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Activities'; this.form.return_module.value='{$MODULE}'; this.form.activity_mode.value='Events'" type="submit" name="button" value="New Event"></td>
+							{elseif $header eq 'HelpDesk'}
+							<input title="New Ticket" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='HelpDesk'" type="submit" name="button" value="New Ticket"></td>
+							{elseif $header eq 'Attachments'}
+							<input title="New Notes" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Notes'" type="submit" name="button" value="Add new Note">&nbsp;
+							<input type="hidden" name="fileid">
+							<input title="New Attachment" accessyKey="F" class="small" onclick="this.form.action.value='upload'; this.form.module.value='uploads'" type="submit" name="button" value="Add new Attachment"></td>
+							{elseif $header eq 'Quotes'}
+							<input title="New Quote" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Quotes'" type="submit" name="button" value="New Quote"></td>
+							{elseif $header eq 'Invoice'}
+							
+							<input title="New Invoice" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Invoice'" type="submit" name="button" value="New Invoice"></td>
+							{elseif $header eq 'Sales Order'}
+							<input title="New SalesOrder" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='SalesOrder'" type="submit" name="button" value="New Sales Order"></td>
+							{elseif $header eq 'Purchase Order'}
+							<input title="New Purchase Order" accessyKey="O" class="button" onclick="this.form.action.value='EditView'; this.form.module.value='PurchaseOrder'; this.form.return_module.value='{$MODULE}'; this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="New Purchase Order"></td>
+							{elseif $header eq 'Products'}
+							<input title="New Product" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="New Product"></td>
+							{elseif $header eq 'Emails'}
+							<input type="hidden" name="email_directing_module">
+							<input type="hidden" name="record">
+							<input title="New Email" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.module.value='Emails'; this.form.email_directing_module.value='contacts'; this.form.record.value='{$id}'; this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="New Email"></td>
+							{/if}
+							</tr>
+						</table>	
+	                                        {if $detail ne ''} 
+				      	   	  {foreach key=header item=detail from=$detail}
+					      
+							{if $header eq 'header'}
+								<table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#eaeaea;">
+								<tr style="height:25px" bgcolor=white>	
+							          {foreach key=header item=headerfields from=$detail}	
+								    <td class="lvtCol">{$headerfields}</td> 
+							          {/foreach}			
+								</tr>
+							{elseif $header eq 'entries'}	 
+					    			{foreach key=header item=detail from=$detail}
+								  <tr bgcolor=white>
+							            {foreach key=header item=listfields from=$detail}
+        	        	                                      <td>{$listfields}</td>
+                	        	                            {/foreach}		
+								  </tr>	
+								{/foreach}
+								</table>	 
+		                                        {/if}	
+						    {/foreach}
+						
+					   	{else}
+							<table style="background-color:#eaeaea;color:eeeeee" border="0" cellpadding="3" cellspacing="1" width="100%">
+							<tbody>
+								<tr style="height: 25px;" bgcolor="white">
+									<td><i>None included</i></td>
+								</tr>
+							</tbody>
+						
+							</table>
+								
+					   	{/if}		
+				  	  <br><br>
+					{/foreach}
+						</form>
+				</table>			
                     {*-- End of Blocks--*} 
 			</td>
                 </tr>
@@ -234,3 +241,4 @@
 </table>
 
 </td></tr></table>
+
