@@ -141,27 +141,14 @@ for($i=0;$i<$adb->num_rows($result);$i++)
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("PurchaseOrder");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']) == false || $_REQUEST['viewname']=='')
-{
-	if($oCustomView->setdefaultviewid != "")
-	{
-		$viewid = $oCustomView->setdefaultviewid;
-	}else
-	{
-		$viewid = "0";
-	}
-}else
-{
-	$viewid =  $_REQUEST['viewname'];
-	$oCustomView->setdefaultviewid = $viewid;
-}
+$viewid = $oCustomView->getViewId($currentModule);
+$viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
 $other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0">
 	<form name="massdelete" method="POST">
 	<tr>
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<td>';
 
 if(isPermitted('PurchaseOrder',2,'') == 'yes')
@@ -169,7 +156,7 @@ if(isPermitted('PurchaseOrder',2,'') == 'yes')
         $other_text .=	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
 }
 
-if($viewid == 0)
+if($viewnamedesc['viewname'] == 'All')
 {
 $cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
 <span class="sep">|</span>
@@ -184,8 +171,7 @@ $cvHTML = '<a href="index.php?module=PurchaseOrder&action=CustomView&record='.$v
 <a href="index.php?module=PurchaseOrder&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 	$other_text .='<td align="right">'.$app_strings[LBL_VIEW].'
-                        <SELECT NAME="view" onchange="showDefaultCustomView(this)">
-                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
@@ -204,7 +190,7 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
-
+$smarty->assign("SINGLE_MOD",'PurchaseOrder');
 $smarty->assign("CUSTOMVIEW",$customView);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
@@ -229,11 +215,11 @@ if(isset($where) && $where != '')
 $view_script = "<script language='javascript'>
 	function set_selected()
 	{
-		len=document.massdelete.view.length;
+		len=document.massdelete.viewname.length;
 		for(i=0;i<len;i++)
 		{
-			if(document.massdelete.view[i].value == '$viewid')
-				document.massdelete.view[i].selected = true;
+			if(document.massdelete.viewname[i].value == '$viewid')
+				document.massdelete.viewname[i].selected = true;
 		}
 	}
 	set_selected();

@@ -86,20 +86,8 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Leads");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
-if(isset($_REQUEST['viewname']) == false)
-{
-	if($oCustomView->setdefaultviewid != "")
-	{
-		$viewid = $oCustomView->setdefaultviewid;
-	}else
-	{
-		$viewid = "0";
-	}
-}else
-{
-	$viewid =  $_REQUEST['viewname'];
-	$oCustomView->setdefaultviewid = $viewid;
-}
+$viewid = $oCustomView->getViewId($currentModule);
+$viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 /******************commented by mangai for new UI *****************/
 
@@ -111,7 +99,6 @@ if($viewid != 0)
 //Modified by Raju
 $other_text = '<form name="massdelete" method="POST">
 	<input name="idlist" type="hidden">
-	<input name="viewname" type="hidden" value="'.$viewid.'">
 	<input name="change_owner" type="hidden">
 	<input name="change_status" type="hidden">';
 //raju
@@ -127,7 +114,7 @@ if(isPermitted('Leads',1,'') == 'yes')
 }
 if(isset($CActionDtls))
 {
-	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/></td></form>';
+	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/></td>';
 }
 	/*$other_text .=	'</td>
 			<td align="right">'.$app_strings[LBL_VIEW].'
@@ -142,7 +129,7 @@ if(isset($CActionDtls))
 	</tr>
 	</table>';*/
 
-if($viewid == 0)
+if($viewnamedesc['viewname'] == 'All')
 {
 $cvHTML = '<span disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
 <span class="sep">|</span>
@@ -157,8 +144,7 @@ $cvHTML = '<a href="index.php?module=Leads&action=CustomView&record='.$viewid.'"
 <a href="index.php?module=Leads&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 	$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
-                        <SELECT NAME="view" onchange="showDefaultCustomView(this)">
-                                <OPTION VALUE="0">'.$mod_strings[LBL_ALL].'</option>
+                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
                         </SELECT>
 			'.$cvHTML.'
@@ -175,6 +161,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("MODULE",$currentModule);
+$smarty->assign("SINGLE_MOD",'Lead');
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
 
@@ -199,11 +186,11 @@ if(isset($where) && $where != '')
 $view_script = "<script language='javascript'>
 	function set_selected()
 	{
-		len=document.massdelete.view.length;
+		len=document.massdelete.viewname.length;
 		for(i=0;i<len;i++)
 		{
-			if(document.massdelete.view[i].value == '$viewid')
-				document.massdelete.view[i].selected = true;
+			if(document.massdelete.viewname[i].value == '$viewid')
+				document.massdelete.viewname[i].selected = true;
 		}
 	}
 	set_selected();
