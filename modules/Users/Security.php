@@ -2029,7 +2029,7 @@ title';
 	}
 	//added by jeri for category view from db
 	$this->db->query("insert into parenttab values
-	(1,'Home',1,0),
+	(1,'My Home Page',1,0),
 	(2,'Sales',2,0),
 	(3,'Support',3,0),
 	(5,'Analytics',5,0),
