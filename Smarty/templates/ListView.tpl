@@ -250,6 +250,10 @@ itle="Basic Search" border=0></td>
 		<tr style="background-color:#efefef">
 			<td >
 			  <table border=0 cellspacing=0 cellpadding=2 width=100%>
+			  <form name="massdelete" method="POST">
+			  <input name="idlist" type="hidden">
+				<input name="change_owner" type="hidden">
+				    <input name="change_status" type="hidden">
 				<tr>
 					<td style="padding-right:20px" nowrap> {$BUTTONS}</td>
 					<td style="padding-right:20px" nowrap>{$RECORD_COUNTS}</td>
@@ -266,9 +270,9 @@ itle="Basic Search" border=0></td>
         			<td class="lvtCol">{$header}</td>
 			{/foreach}
 			</tr>
-			{foreach item=entity from=$LISTENTITY}
+			{foreach item=entity key=entity_id from=$LISTENTITY}
 				<tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'"  >
-				<td><input type="checkbox" NAME="selected_id" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall")></td>
+				<td><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
 				{foreach item=data from=$entity}	
 					<td>
 						{$data}
@@ -286,10 +290,9 @@ itle="Basic Search" border=0></td>
 			<td align="right" nowrap>{$WORDTEMPLATEOPTIONS}{$MERGEBUTTON}</td>
 			</tr>
 			</table>
-
+</form>
 </td></tr></table></div>
 
 </td></tr></table>
 {$SELECT_SCRIPT}
-</form>
 
