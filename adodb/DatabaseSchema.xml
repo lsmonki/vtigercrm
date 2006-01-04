@@ -6059,14 +6059,7 @@ E</constraint>
         </field>
      </table>
   		
-		<table name="parenttabrel">
-        <field name="parenttabid" type="I" size="3"><NOTNULL/>
-        </field>
-		<field name="tabid" type="I" size="3"><NOTNULL/>
-		</field>
-		<field name="sequence" type="I" size="3"><NOTNULL/>
-        </field>
-     </table>
+
 
 	<table name="tmp_read_user_sharing_per">
 		<field name="userid" type="I" size="11">
@@ -6515,6 +6508,13 @@ E</constraint>
 	</table>
 
 
-
+		<table name="parenttabrel">
+        <field name="parenttabid" type="I" size="3"><NOTNULL/>
+        </field>
+		<field name="tabid" type="I" size="3"><NOTNULL/>
+		</field>
+		<field name="sequence" type="I" size="3"><NOTNULL/>
+        </field>
+     </table>
 
 </schema>
