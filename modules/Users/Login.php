@@ -225,7 +225,7 @@ else {
 	<?php echo $current_module_strings['LBL_THEME'] ?>
 	</b></td><td class=small>
 		<select class='small' name='login_theme' style="width:120px;">
-		<?php echo get_select_options_with_id(get_themes(), $display_theme) ?>
+		<?php echo get_select_options_login(get_themes(), $display_theme) ?>
 		</select>
 	</td>
 	</tr>
@@ -237,7 +237,7 @@ else {
 	<td class=small>
 	
 	<select class='small' name='login_language' style="width:120px;">
-	<?php echo get_select_options_with_id(get_languages(), $display_language) ?>
+	<?php echo get_select_options_login(get_languages(), $display_language) ?>
 	</select>
 	</td>
 	</tr>
