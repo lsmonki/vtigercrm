@@ -1,14 +1,116 @@
 <?php
 
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
 
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
-//require_once('include/utils/UserInfoUtil.php'); //new
 	
-function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='') //Function to get the header values in the combo box of search - By Jaguar
+$column_array=array('assigned_user_id','accountid','contactid');
+$table_col_array=array('crmentity.smownerid','account.accountname','contact.firstname,contact.lastname');
+
+
+function Search($module)
 {
-		echo "inn seaaaaaaa";
+
+		
+	if(isset($_REQUEST['search_field']) && $_REQUEST['search_field'] !="")
+        {
+                $search_column=$_REQUEST['search_field'];
+        }
+        if(isset($_REQUEST['search_text']) && $_REQUEST['search_text']!="")
+        {
+                $search_string=$_REQUEST['search_text'];
+        }
+        if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="")
+        {
+
+
+                $search_type=$_REQUEST['searchtype'];
+
+                if($search_type == "BasicSearch")
+                {
+                        $where=BasicSearch($module,$search_column,$search_string);
+                }
+                else if ($search_type == "AdvanceSearch")
+                {
+                }
+                else //Global Search
+                {
+                }
+		
+		return $where;
+        }
+
+}
+
+
+function BasicSearch($module,$search_field,$search_string)
+{
+	global $adb;
+		
+	$qry="select field.columnname,tablename from tab inner join field on field.tabid=tab.tabid where name='".$module."' and fieldname='".$search_field."'";
+	$result = $adb->query($qry);
+	$noofrows = $adb->num_rows($result);
+	if($noofrows!=0)
+        {
+        	$column_name=$adb->query_result($result,0,'columnname');
+        	$table_name=$adb->query_result($result,0,'tablename');
+/*		
+		if($table_name == "crmentity" && $column_name == "smownerid")
+		{
+			$user_qry="select distinct(users.id)from users inner join crmentity on crmentity.smownerid=users.id where users.user_name like '%".$search_string."%' ";
+		//	echo $user_qry;
+			$user_result=$adb->query($user_qry);
+			$noofuser_rows=$adb->num_rows($user_result);
+	//		$user_id = array(); 			
+			$x=$noofuser_rows-1;
+			if($noofuser_rows!=0)
+			{
+				$cnt=0;
+				$where="(";
+				while($user_row = $adb->fetch_array($user_result))
+				{
+					$user_id=$user_row['id'];			
+					$cnt++;
+				
+					 $where .= "$table_name.$column_name =".$user_id;	
+					if($where !=")")
+					{
+						$where .= " or ";
+					}
+					
+
+				}
+				
+				$where.=")";				
+	
+			}	
+		}
+
+		else
+		{
+*/
+
+			$where="$table_name.$column_name like '%".$search_string."%'";
+//		}
+	}
+	return $where;
+	
+	
+}
+
+function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='')
+{
         global $adb;
         global $theme;
         global $app_strings;
@@ -16,7 +118,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
         //Seggregating between module and smodule
         if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'VENDOR')
         {
-		$smodule = 'Vendor';
+                $smodule = 'Vendor';
         }
         elseif(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'PRICEBOOK')
         {
@@ -46,8 +148,8 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
         if($oCv)
         {
                 if(isset($oCv->list_fields))
-                {
-			$focus->list_fields = $oCv->list_fields;
+		{
+                        $focus->list_fields = $oCv->list_fields;
                 }
         }
 
@@ -61,50 +163,38 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                         if(isset($oCv->list_fields_name))
                         {
                                 $fieldname = $oCv->list_fields_name[$name];
-                        }
-			else
+                        }else
                         {
-                        	$fieldname = $focus->list_fields_name[$name];
+                                $fieldname = $focus->list_fields_name[$name];
                         }
                 }
-                else
+		else
                 {
                         $fieldname = $focus->list_fields_name[$name];
                 }
 
-		global $current_user;
+                //Getting the Entries from Profile2 field table
+                global $current_user;
                 require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	 	if($is_admin == false)
+                if($is_admin == false)
                 {
 
-                	$profileList = getCurrentUserProfileList();
-	                $query = "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
-		
-                	$result = $adb->query($query);
-		}
+                        $profileList = getCurrentUserProfileList();
+                        $query  = "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
+                        $result = $adb->query($query);
+                }
 
 
-		if($profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
-                {
-			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
+                if($is_admin == true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
+		{
+                        if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
                         {
                                 //Added on 14-12-2005 to avoid if and else check for every list field for arrow image and change order
-                        	$change_sorder = array('ASC'=>'DESC','DESC'=>'ASC');
-                                $arrow_gif = array('ASC'=>'arrow_down.gif','DESC'=>'arrow_up.gif');
 
                                 foreach($focus->list_fields[$name] as $tab=>$col)
                                 {
                                         if(in_array($col,$focus->sortby_fields))
                                         {
-                                                if($order_by == $col)
-                                                {
-                                                        $temp_sorder = $change_sorder[$sorder];
-                                                        $arrow = "<img src ='".$image_path.$arrow_gif[$sorder]."' border='0'>";
-                                                }
-                                                else
-                                                {
-                                                        $temp_sorder = 'ASC';
-                                                }
                                                 if($relatedlist !='')
                                                 {
                                                         if($app_strings[$name])
@@ -126,14 +216,7 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                                                         {
 								 $lbl_name = $mod_strings[$name];
                                                         }
-                                                        //added to display currency symbol in listview header
-                                                        if($lbl_name =='Amount')
-                                                        {
-                                                                $curr_symbol = getCurrencySymbol();
-                                                               // $lbl_name .=': (in '.$curr_symbol.')';
-                                                        }
                                                         $name = $lbl_name;
-                                                        $arrow = '';
                                                 }
                                         }
                                         else
@@ -149,34 +232,26 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 
                                 }
                         }
-                        //added to display currency symbol in related listview header
-/* -- commented out by-Jaguar
-                        if($name =='Amount' && $relatedlist !='' )
-                        {
-                                $curr_symbol = getCurrencySymbol();
-                                $name .=': (in '.$curr_symbol.')';
-                        }
-
-*/
                         //Added condition to hide the close column in Related Lists
                         if($name == 'Close' && $relatedlist != '')
                         {
-                                //$search_header .= '';
-                                // $search_header[] = '';
-                        }
+                                //$list_header .= '';
+                                // $list_header[] = '';
+			 }
                         else
-			 {
-                                $col_name=$focus->list_fields_name[$name];
-                                $search_header[$col_name]=$name;
+                        {
+				$fld_name=$fieldname;
+                                $search_header[$fld_name]=$name;
+                                $list_header[]=$name;
                         }
                 }
         }
-	print_r($search_header);
         return $search_header;
+
 }
+
 
 
 								
 
 ?>
-
