@@ -113,7 +113,7 @@ if($_REQUEST['mail_error'] != '')
 }
 
 
-if(isset($_REQUEST['record'])) 
+if(isset($_REQUEST['record']) && $_REQUEST['record'] !='') 
 {
 	$focus->id = $_REQUEST['record'];
 	$focus->mode = 'edit';

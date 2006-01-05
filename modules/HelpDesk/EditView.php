@@ -23,7 +23,7 @@ global $current_user;
 $focus = new HelpDesk();
 $smarty = new vtigerCRM_Smarty();
 
-if(isset($_REQUEST['record'])) 
+if(isset($_REQUEST['record']) && $_REQUEST['record'] !='') 
 {
 	$focus->id = $_REQUEST['record'];
 	$focus->mode = 'edit'; 	
