@@ -814,7 +814,9 @@ $app_list_strings = Array(
 				
 				, 'Reports'=>'Reports'
 				
-				, 'Vendor'=>'Vendor'
+				, 'Vendors'=>'Vendors'
+				
+				, 'PriceBooks'=>'PriceBooks'
 
 				, 'SalesOrder'=>'SalesOrder'
 				
