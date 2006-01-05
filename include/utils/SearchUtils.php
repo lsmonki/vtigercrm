@@ -29,7 +29,7 @@ function Search($module)
         }
         if(isset($_REQUEST['search_text']) && $_REQUEST['search_text']!="")
         {
-                $search_string=$_REQUEST['search_text'];
+                $search_string=ltrim(rtrim($_REQUEST['search_text']));
         }
         if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="")
         {
@@ -53,6 +53,31 @@ function Search($module)
 
 }
 
+function get_usersid($table_name,$column_name,$search_string)
+{
+
+	global $adb;
+	$user_qry="select distinct(users.id)from users inner join crmentity on crmentity.smownerid=users.id where users.user_name like '%".$search_string."%' ";
+	$user_result=$adb->query($user_qry);
+	$noofuser_rows=$adb->num_rows($user_result);
+	$x=$noofuser_rows-1;
+	if($noofuser_rows!=0)
+	{
+		$where="(";
+		for($i=0;$i<$noofuser_rows;$i++)
+		{
+			$user_id=$adb->query_result($user_result,$i,'id');
+			$where .= "$table_name.$column_name =".$user_id;
+			if($i != $x)
+			{
+				$where .= " or ";
+			}
+		}
+		$where.=")";
+	}
+	return $where;	
+}
+
 
 function BasicSearch($module,$search_field,$search_string)
 {
@@ -65,44 +90,16 @@ function BasicSearch($module,$search_field,$search_string)
         {
         	$column_name=$adb->query_result($result,0,'columnname');
         	$table_name=$adb->query_result($result,0,'tablename');
-/*		
+		
 		if($table_name == "crmentity" && $column_name == "smownerid")
 		{
-			$user_qry="select distinct(users.id)from users inner join crmentity on crmentity.smownerid=users.id where users.user_name like '%".$search_string."%' ";
-		//	echo $user_qry;
-			$user_result=$adb->query($user_qry);
-			$noofuser_rows=$adb->num_rows($user_result);
-	//		$user_id = array(); 			
-			$x=$noofuser_rows-1;
-			if($noofuser_rows!=0)
-			{
-				$cnt=0;
-				$where="(";
-				while($user_row = $adb->fetch_array($user_result))
-				{
-					$user_id=$user_row['id'];			
-					$cnt++;
-				
-					 $where .= "$table_name.$column_name =".$user_id;	
-					if($where !=")")
-					{
-						$where .= " or ";
-					}
-					
-
-				}
-				
-				$where.=")";				
-	
-			}	
+			$where = get_usersid($table_name,$column_name,$search_string);
 		}
-
 		else
 		{
-*/
 
 			$where="$table_name.$column_name like '%".$search_string."%'";
-//		}
+		}
 	}
 	return $where;
 	
