@@ -13,29 +13,11 @@ require_once('include/RelatedListView.php');
 require_once('modules/Contacts/Contact.php');
 require_once('modules/Products/Product.php');
 require_once('include/utils/UserInfoUtil.php');
-//$availbale_images_path="include/images/";
-
-function getHiddenValues($id)
-{  
-  $hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-  $hidden .= '<input type="hidden" name="module">';
-  $hidden .= '<input type="hidden" name="mode">';
-  $hidden .= '<input type="hidden" name="activity_mode" value="Events">';
-  $hidden .= '<input type="hidden" name="return_module" value="Activities">';
-  $hidden .= '<input type="hidden" name="return_action" value="DetailView">';
-  $hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
-  $hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-  $hidden .= '<input type="hidden" name="action">';
-  return $hidden;
-}
 
 function renderRelatedContacts($query,$id)
 {
         global $mod_strings;
         global $app_strings;
-
-        $hidden = getHiddenValues($id);
-        echo $hidden;
 
         $focus = new Contact();
 	
@@ -48,7 +30,7 @@ function renderRelatedContacts($query,$id)
 	$returnset = '&return_module=Activities&return_action=DetailView&activity_mode=Events&return_id='.$id;
 
 	return GetRelatedList('Activities','Contacts',$focus,$query,$button,$returnset);
-	//echo '</form>';	
+
 }
 
 function renderRelatedProducts($query,$id)
@@ -56,9 +38,6 @@ function renderRelatedProducts($query,$id)
 	global $mod_strings;
 	global $app_strings;
 	
-	$hidden = getHiddenValues($id);
-        echo $hidden;
-
 	$focus = new Product();
  
 	$button = '';
@@ -212,14 +191,11 @@ function renderRelatedUsers($query,$id)
   $list .= '<br><br>';
   $list .= '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
 
-  $hidden = getHiddenValues($id);
-  echo $hidden;
   
   $list .= '<td>';
   $list .= '<table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="formHeader" vAlign="top" align="left" height="20"> <img src="' .$image_path. '/left_arc.gif" border="0"></td><td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap height="20">'.$app_strings['LBL_USER_TITLE'].'</td><td  class="formHeader" vAlign="top" align="right" height="20"><img src="' .$image_path. '/right_arc.gif" border="0"></td> ';
   $list .= '<td>&nbsp;</td>';
-//  $list .= '<td>&nbsp;</td>';
-//  $list .= '<td valign="bottom" align="right"><input title="Attach File" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Users\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_USER'].'">&nbsp;</td>';
+
   $list .= '<td valign="bottom" align="left"><input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_USER_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Users&return_module=Activities&return_action=DetailView&activity_mode=Events&action=Popup&popuptype=detailview&form=EditView&form_submit=true&return_id='.$_REQUEST["record"].'&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;</td>';
 
   $list .= '</td></tr></form></tbody></table>';
@@ -258,20 +234,11 @@ function renderRelatedUsers($query,$id)
   $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
   $list .= '<td class="moduleListTitle" height="21">';
 
- // $Header[] = $app_strings['LBL_ACTION'];
+
   $list .= $app_strings['LBL_ACTION'].'</td>';
   $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
   $list .= '<td class="moduleListTitle">';
 
- // $list .= $app_strings['LBL_AVAILABLE'].'</td>';
-  //$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  //$list .= '<td class="moduleListTitle">';	
-
-/*	$Header[] = $app_strings['LBL_LIST_NAME'];
-	$Header[] = $app_strings['LBL_LIST_USER_NAME'];
-	$Header[] = $app_strings['LBL_EMAIL'];
-	$Header[] = $app_strings['LBL_PHONE'];
-	$Header[] = $app_strings['LBL_ACTION'];*/
 
   // To display the dates for the Group calendar starts -Jaguar
 	$recur_dates_qry='select distinct(recurringdate) from recurringevents where activityid='.$activity_id;
@@ -391,14 +358,10 @@ function renderRelatedUsers($query,$id)
         $list .= '</td><td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 	$list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;" nowrap>';
 
-	//$act_date_start=$row['date_start'];
-	//$act_due_date=$row['due_date'];
 	$act_date_start= getDBInsertDateValue($row['date_start']); //getting the Date format - Jaguar
 	$act_due_date= getDBInsertDateValue($row['due_date']);
 
 	$act_time_start=$row['time_start'];
-//	$act_hour_dur=$rname,users.id  userid from users,crmentity where users.id=crmentity.smownerid and crmentity.crmid='.$id;
-//ow['duration_hours'];
 	$act_mins_dur=$row['duration_minutes'];
 
 	$activity_start_time=time_to_number($act_time_start);	
@@ -426,7 +389,7 @@ function renderRelatedUsers($query,$id)
 			$availability=status_availability($owner,$userid,$activity_id,$recur_dates,$activity_start_time,$activity_end_time);	
 			 $log->info("activity start time ".$activity_start_time."activity end time".$activity_end_time."Available date".$recur_dates);
 			$avail_table.="<td>$availability</td>";
-			//$list .= $availability;
+
 			
 		}
 		$avail_table.="</tr>";
@@ -448,8 +411,7 @@ function renderRelatedUsers($query,$id)
     $list .= '</tr>';
     $i++;
   }
-//	print_r($header);
-//	print_r($entries_list);
+
   $list .= '<tr><td COLSPAN="10" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
   $list .= '</table>';
   if ($noofrows > 15)
@@ -462,9 +424,6 @@ function renderRelatedUsers($query,$id)
 		$return_data = array('header'=>$header, 'entries'=>$entries_list);
 		return $return_data;
 	print_r($return_data);
- // echo $list;
-
-
 
   echo "<BR>\n";
 }

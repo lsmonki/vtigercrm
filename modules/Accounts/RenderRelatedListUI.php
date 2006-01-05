@@ -12,27 +12,11 @@
 require_once('include/RelatedListView.php');
 require_once('include/utils/UserInfoUtil.php');
 
-function getHiddenValues($id)
-{
-	$hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-	$hidden .= '<input type="hidden" name="module">';
-	$hidden .= '<input type="hidden" name="mode">';
-	$hidden .= '<input type="hidden" name="account_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="return_module" value="Accounts">';
-	$hidden .= '<input type="hidden" name="return_action" value="DetailView">';
-	$hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="action">';
-	return $hidden;
-}
 function renderRelatedPotentials($query,$id)
 {
 	global $mod_strings;
 	global $app_strings;
 	require_once('include/RelatedListView.php');
-
-	$hidden = getHiddenValues($id);
-	echo $hidden;
 
 	$focus = new Potential();
 	$button = '';
@@ -52,8 +36,6 @@ function renderRelatedContacts($query,$id)
 	global $app_strings;
 	require_once('include/RelatedListView.php');
 
-	$hidden = getHiddenValues($id);                                                                                            // echo $hidden;
-	
 	$focus = new Contact();
 	
 	$button = '';
@@ -64,7 +46,6 @@ function renderRelatedContacts($query,$id)
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 	return GetRelatedList('Accounts','Contacts',$focus,$query,$button,$returnset);
-	//echo '</form>';
 }
 
 function renderRelatedTasks($query,$id)
@@ -73,10 +54,6 @@ function renderRelatedTasks($query,$id)
 	global $mod_strings;
 	global $app_strings;
         require_once('include/RelatedListView.php');
-
-        $hidden = getHiddenValues($id); 
- 	$hidden .= '<input type="hidden" name="activity_mode">';
-        echo $hidden;
 
 	$focus = new Activity();
 	$button = '';
@@ -98,7 +75,6 @@ function renderRelatedHistory($query,$id)
 
 function renderRelatedAttachments($query,$id)
 {
-        $hidden = getHiddenValues($id);
 
 	return getAttachmentsAndNotes('Accounts',$query,$id);
 }
@@ -110,9 +86,6 @@ function renderRelatedTickets($query,$id)
         global $app_strings;
         require_once('include/RelatedListView.php');
 
-	$hidden = getHiddenValues($id);
-        echo $hidden;
-
 	$focus = new HelpDesk();
         $button = '';
 
@@ -120,7 +93,7 @@ function renderRelatedTickets($query,$id)
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
         return GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
-        //echo '</form>';
+
 }
 function renderRelatedQuotes($query,$id)
 {
@@ -128,8 +101,6 @@ function renderRelatedQuotes($query,$id)
 	global $app_strings;
 	require_once('modules/Quotes/Quote.php');
 
-	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
-	
 	$focus = new Quote();
 	
 	$button = '';
@@ -140,7 +111,7 @@ function renderRelatedQuotes($query,$id)
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 	return GetRelatedList('Accounts','Quotes',$focus,$query,$button,$returnset);
-	//echo '</form>';
+
 }
 function renderRelatedInvoices($query,$id)
 {
@@ -148,8 +119,6 @@ function renderRelatedInvoices($query,$id)
 	global $app_strings;
 	require_once('modules/Invoice/Invoice.php');
 
-	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
-	
 	$focus = new Invoice();
 	
 	$button = '';
@@ -160,16 +129,13 @@ function renderRelatedInvoices($query,$id)
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 	return GetRelatedList('Accounts','Invoice',$focus,$query,$button,$returnset);
-	//echo '</form>';
+
 }
 function renderRelatedOrders($query,$id)
 {
 	require_once('modules/SalesOrder/SalesOrder.php');
         global $mod_strings;
         global $app_strings;
-
-        $hidden = getHiddenValues($id);
-        echo $hidden;
 
         $focus = new SalesOrder();
  
@@ -182,16 +148,12 @@ function renderRelatedOrders($query,$id)
 	$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
 
 	return GetRelatedList('Accounts','SalesOrder',$focus,$query,$button,$returnset);
-	//echo '</form>';
 }
 function renderRelatedProducts($query,$id)
 {
 	require_once('modules/Products/Product.php');
         global $mod_strings;
         global $app_strings;
-
-        $hidden = getHiddenValues($id);
-        echo $hidden;
 
         $focus = new Product();
  
