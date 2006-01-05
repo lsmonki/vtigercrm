@@ -308,7 +308,7 @@ function set_return(product_id, product_name) {
 function set_return_specific(product_id, product_name) {
         window.opener.document.EditView.quote_name.value = product_name;
         window.opener.document.EditView.quote_id.value = product_id;
-        window.opener.document.EditView.action.value = 'SalesOrderEditView';
+        window.opener.document.EditView.action.value = 'EditView';
         window.opener.document.EditView.convertmode.value = 'update_quote_val';
 	window.opener.document.EditView.submit();
 	

@@ -48,12 +48,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	$fieldlabel = from_html($fieldlabel);
 	$fieldvalue = Array();
 	$final_arr = Array();
-	//echo '<pre>'; echo $uitype;echo '</pre>';
-	//echo '************************<br>';
-	//echo '<pre>';print_r($col_fields);echo '</pre>';
-	//echo '**********************<br>';
-	//Commented for vulnerability fix as the convertion is added in Peardatabase - Philip
-        //$value = htmlentities($col_fields[$fieldname]);
         $value = $col_fields[$fieldname];
 	$custfld = '';
 	$ui_type[]= $uitype;
@@ -90,7 +84,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		if($uitype == 6 || ($uitype == 23 && $fieldname =='closingdate'))
 			$custfld .= '<font color="red">*</font>';
 
-		//$custfld .= $mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
 		$custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field_'.$fieldname.'" type="text" size="11" maxlength="10" value="'.$disp_value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger_'.$fieldname.'">';
@@ -119,15 +112,12 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 15 || $uitype == 16)
 	{
-		#$log->info("uitype selected is  ".$uitype);
 		$custfld .= '<td width="20%" class="dataLabel">';
 
 		if($uitype == 16)
 			$custfld .= '<font color="red">*</font>';
 
-		//$custfld .= $mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
-		//$pick_query="select * from ".$fieldname." order by sortorderid";
 		$pick_query="select * from ".$fieldname;
 		$pickListResult = $adb->query($pick_query);
 		$noofpickrows = $adb->num_rows($pickListResult);
@@ -150,21 +140,13 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
  				$chk_val = '';
  			}
   			$options[] = array($pickListValue=>$chk_val );	
- 			//$options[] = '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
              		if ( $j == 0 )
                  		$soption = '<OPTION value="'.$pickListValue.'" selected>'.$pickListValue.'</OPTION>';
   		}
-         	//if ( !$found ) $options[0] = $soption;
- 		//$custfld .= implode('',$options).'</td>';
-	
-		//$chk_val = (html_entity_decode($value) == $pickListValue) ? ' selected="selected"' : '';
-		//	$custfld .= '<OPTION value="'.$pickListValue.'" '.$chk_val.'>'.$pickListValue.'</OPTION>';
-		//$custfld .= '</td>';
 		$fieldvalue [] = $options;
 	}
 	elseif($uitype == 17)
 	{
-		//$custfld .= '<td width="20%" class="dataLabel" valign="top">'.$mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$custfld .= '<td>&nbsp;&nbsp;http://<input type=text name="'.$fieldname.'" size="19" value="'.$value.'"></td>';
 		$fieldvalue [] = $value;
@@ -183,10 +165,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 }
 		if($fieldlabel == 'Terms & Conditions')//for default Terms & Conditions
                 {
-                       $value=getTermsandConditions();
+                       if($focus->mode=='edit') $value=getTermsandConditions();
                 }
 
-		//$custfld .= $mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
         	$custfld .= '<td colspan=3><textarea name="'.$fieldname.'" cols="70" rows="8">'.$value.'</textarea></td>';
 		$fieldvalue [] = $value;
@@ -198,21 +179,18 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 {
                         $custfld .= '<font color="red">*</font>';
                 }
-		//$custfld .= $mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
         	$fieldvalue [] = $value;
 		$custfld .= '<td><textarea name="'.$fieldname.'" cols="30" rows="2">'.$value.'</textarea></td>';
 	}
 	elseif($uitype == 22)
 	{
-		//$custfld .= '<td width="20%" class="dataLabel" valign="top"><font color="red">*</font> '.$mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
         	$custfld .= '<td><textarea name="'.$fieldname.'" cols="30" rows="2">'.$value.'</textarea></td>';
 		$fieldvalue[] = $value;
 	}
 	elseif($uitype == 52 || $uitype == 77)
 	{
-		//$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
 		global $current_user;
 		if($value != '')
@@ -246,7 +224,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 53)     
 	{  
-		//$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
           
           $result = get_group_options();
@@ -296,8 +273,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
  
           
-          //$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
-          
           $GROUP_SELECT_OPTION = '<td width=30%><input type="radio"
           name="assigntype" value="U" '.$user_checked.'
           onclick="toggleAssignType(this.value)">'.$app_strings['LBL_USER'];
@@ -338,7 +313,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
             $GROUP_SELECT_OPTION .= $nameArray["groupname"];
             $GROUP_SELECT_OPTION .= '</option>';
           }while($nameArray = $adb->fetch_array($result));
-//          $GROUP_SELECT_OPTION .='<option value=none>'.$app_strings['LBL_NONE_NO_LINE'].'</option>';
           $GROUP_SELECT_OPTION .= ' </select></td>';
 	}
           
@@ -361,7 +335,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<td width="20%" class="dataLabel">';
 		if($uitype==50 || $uitype==73)
 			$custfld .= '<font color="red">*</font>';
-		//$custfld .= $mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
 
 		if($uitype == 73)
@@ -388,7 +361,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 54)
 	{
-		//$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$options =Array();
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$pick_query="select * from groups";
@@ -417,7 +389,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 55)
 	{
-		//$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$options = Array();
 		$pick_query="select * from salutationtype order by sortorderid";
@@ -459,7 +430,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			$product_name = getProductName($value);	
 		}
                $custfld .= '<td width="20%" class="dataLabel">';
-               //$custfld .= $mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
                $custfld .= '<td width="30%"><input name="product_id" type="hidden" value="'.$value.'"><input name="product_name" readonly type="text" value="'.$product_name.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&html=Popup_picker&form=HelpDeskEditView&popuptype=specific","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.product_id.value=\'\';this.form.product_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 	$fieldvalue[]=$product_name;
@@ -501,7 +471,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 64)
         {
                 $custfld .= '<td width="20%" class="dataLabel">';
-                //$custfld .= $mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
                 $date_format = parse_calendardate($app_strings['NTC_DATE_FORMAT']);
                 $custfld .= '<td width="30%"><input name="'.$fieldname.'" id="jscal_field" type="text" size="11" readonly maxlength="10" value="'.$value.'"> <img src="themes/'.$theme.'/images/calendar.gif" id="jscal_trigger">&nbsp;<input name="duetime" size="5" maxlength="5" readonly type="text" value=""> <input name="duedate_flag" type="checkbox" language="javascript" onclick="set_values(this.form)" checked>'.$mod_strings["LBL_NONE"].'<br><font size="1"><em>'.$mod_strings["DATE_FORMAT"].'</em></font></td>';
@@ -514,10 +483,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
         }
 	elseif($uitype == 56)
 	{
-		//$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
 
-		//code added on 12-12-05 for notime option in events
 		if($fieldname == 'notime' && $module_name =='Events' )
 		{
 			if($value == 1)
@@ -546,8 +513,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 57)
 	{
-		//if(isset($_REQUEST['contact_id']) && $_REQUEST['contact_id'] != '')
-		//	$value = $_REQUEST['contact_id'];
 
 	       if($value != '')
                {
@@ -569,7 +534,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	
 		//Checking for contacts duplicate
 					 	
-		//$custfld .= '<td width="20%" valign="center" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
 		$custfld .= '<td width="30%"><input name="contact_name" readonly type="text" value="'.$contact_name.'"><input name="contact_id" type="hidden" value="'.$value.'">&nbsp;<img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&action=Popup&html=Popup_picker&popuptype=specific&form=EditView","test","width=600,height=400,resizable=1,scrollbars=1");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.contact_id.value=\'\';this.form.contact_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 		$fieldvalue[] = $contact_name;
@@ -588,7 +552,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 }
                 if($value!='')
                         $filename=' [ '.$value. ' ]';
-		//$custfld .= '<td width="20%" valign="top" class="dataLabel">'.$mod_strings[$fieldlabel].'</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
                 $custfld .='<td colspan="3"><input name="'.$fieldname.'" type="file" size="60" value="'.$value.'"/><input type="hidden" name="filename" value=""/><input type="hidden" name="id" value=""/>'.$filename.'</td>';
 		$fieldvalue[] = $filename;
