@@ -12,8 +12,7 @@
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > <a class="hdr
-Link" href="index.php?action=ListView&module={$MODULE}">{$MODULE}</a></td>
+	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}">{$MODULE}</a></td>
 	<td class="sep1" style="width:1px"></td>
 	<td class=small >
 		<table border=0 cellspacing=0 cellpadding=0>
@@ -73,7 +72,7 @@ Link" href="index.php?action=ListView&module={$MODULE}">{$MODULE}</a></td>
 		<div class="small" style="padding:20px">
 		
 		
-		 <span class="lvtHeaderText">{$NAME} -  {$SINGLE_MOD} Information</span> <br>
+		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} Information</span> <br>
 		 Updated 14 days ago (18 Nov 2005)
 		 <hr noshade size=1>
 		 <br> 
@@ -85,7 +84,7 @@ Link" href="index.php?action=ListView&module={$MODULE}">{$MODULE}</a></td>
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
 				<tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-					{if $MODULE eq 'Notes'}
+					{if $MODULE eq 'Notes' || $MODULE eq 'Faq'}
 					<td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} Information</td>
 					{else}
 					<td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} Information</td>	
