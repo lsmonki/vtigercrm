@@ -15,8 +15,8 @@ require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 	
-$column_array=array('accountid','contactid');
-$table_col_array=array('account.accountname','contact.firstname,contact.lastname');
+$column_array=array('accountid','contact_id');
+$table_col_array=array('account.accountname','contactdetails.firstname,contactdetails.lastname');
 
 
 
@@ -229,10 +229,29 @@ function getValuesforColumns($column_name,$search_string)
 	global $column_array,$table_col_array;
 	for($i=0; $i<count($column_array);$i++)
 	{
+		
 		if($column_name == $column_array[$i])
 		{
 			$val=$table_col_array[$i];
-			$where="$val like '%".$search_string ."%'";
+			$explode_column=explode(",",$val);
+			$x=count($explode_column);	
+			if($x == 1 )
+			{
+				$where="$val like '%".$search_string ."%'";
+			}
+			else 
+			{
+				$where="(";
+				for($j=0;$j<count($explode_column);$j++)
+				{
+					$where .= $explode_column[$j]." like '%".$search_string."%'";
+					if($j != $x-1)
+					{
+						$where .= " or ";
+					}
+				}
+				$where.=")";
+			}
 			break 1;
 		}
 	}
@@ -243,6 +262,7 @@ function BasicSearch($module,$search_field,$search_string)
 {
 	global $adb;
 	global $column_array,$table_col_array;
+
 		
 	$qry="select field.columnname,tablename from tab inner join field on field.tabid=tab.tabid where name='".$module."' and fieldname='".$search_field."'";
 	$result = $adb->query($qry);
@@ -251,7 +271,7 @@ function BasicSearch($module,$search_field,$search_string)
         {
         	$column_name=$adb->query_result($result,0,'columnname');
         	$table_name=$adb->query_result($result,0,'tablename');
-		$col_name=$column_name;
+		
 		if($table_name == "crmentity" && $column_name == "smownerid")
 		{
 			$where = get_usersid($table_name,$column_name,$search_string);
