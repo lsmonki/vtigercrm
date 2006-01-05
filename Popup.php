@@ -75,7 +75,7 @@ switch($currentModule)
                         		,'opportunity_type'=>'opportunity_type_dom'
 		                        ,'sales_stage'=>'sales_stage_dom');
 			$comboFieldArray = getComboArray($comboFieldNames);
-			$smarty->assign("SINGLE_MOD",'Potential');
+			$smarty->assign("SINGLE_MOD",'Opportunity');
 			if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
 			$sorder = $_REQUEST['sorder'];
 			break;
