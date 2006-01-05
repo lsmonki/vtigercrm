@@ -52,7 +52,7 @@
 		<div class="small" style="padding:20px">
 		
 		
-		 <span class="lvtHeaderText">{$NAME} -  {$MODULE} More Information</span> <br>
+		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$MODULE} More Information</span> <br>
 		 Updated 14 days ago (18 Nov 2005)
 		 <hr noshade size=1>
 		 <br> 
