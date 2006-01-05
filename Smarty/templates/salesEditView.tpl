@@ -172,7 +172,7 @@
 							     {/if}
 							     {$fldlabel}
 							  </td>
-                                                          <td width=30% align=left class="dvtCellInfo"><textarea value="{$fldvalue}" name="{$fldname}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" rows=2></textarea></td>
+                                                          <td width=30% align=left class="dvtCellInfo"><textarea value="{$fldvalue}" name="{$fldname}"  class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'"onBlur="this.className='detailedViewTextBox'" rows=2>{$fldvalue}</textarea></td>
 							{elseif $uitype eq 15 || $uitype eq 16}
 							<td width="20%" class="dvtCellLabel" align=right>
 								{if $uitype eq 16}
@@ -184,7 +184,7 @@
 							   <select name="{$fldname}">
 								{foreach item=arr from=$fldvalue}
 									{foreach key=sel_value item=value from=$arr}
-										<option value={$sel_value} {$value}>{$sel_value}</option>
+										<option value="{$sel_value}" {$value}>{$sel_value}</option>
 									{/foreach}
 									
 								{/foreach}
@@ -306,7 +306,7 @@
 							        <input name="{$fldname}" type="text" size="2" value="{$fldvalue}">&nbsp;
 							        <select name="duration_minutes">
 						        	{foreach key=labelval item=selectval from=$secondvalue}
-								<option value={$labelval} {$selectval}>{$labelval}</option>
+								<option value="{$labelval}" {$selectval}>{$labelval}</option>
 								{/foreach}
 								</select>
 
@@ -314,7 +314,7 @@
 							  <td width="20%" class="dvtCellLabel" align=right>
 								<select name="parent_type" onChange='document.EditView.parent_name.value=""; document.EditView.parent_id.value=""'>
 								{foreach key=labelval item=selectval from=$fldlabel}
-								<option value={$labelval} {$selectval}>{$labelval}</option>
+								<option value="{$labelval}" {$selectval}>{$labelval}</option>
 								{/foreach}
 								</select>
 							  </td>
@@ -326,7 +326,7 @@
 								<td width="20%" class="dvtCellLabel" align=right>To:&nbsp;</td>
 								<td width="90%" colspan="3"><input name="{$fldname}" type="hidden" value="{$secondvalue}"><textarea readonly name="parent_name" cols="70" rows="2">{$fldvalue}</textarea>&nbsp;<select name="parent_type" >
 								{foreach key=labelval item=selectval from=$fldlabel}
-                                                                <option value={$labelval} {$selectval}>{$labelval}</option>
+                                                                <option value="{$labelval}" {$selectval}>{$labelval}</option>
                                                                 {/foreach}
                                                                 </select>
 								&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
@@ -350,7 +350,7 @@
 							  <td width="30%" align=left class="dvtCellInfo"><select name="salutationtype">
 							  {foreach item=arr from=$fldvalue}
                                                               {foreach key=sel_value item=value from=$arr}
-                                                              <option value={$sel_value} {$value}>{$sel_value}</option>
+                                                              <option value="{$sel_value}" {$value}>{$sel_value}</option>
 							  {/foreach}
                                                         {/foreach}
                                                         </select>
