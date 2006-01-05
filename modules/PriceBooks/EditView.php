@@ -24,9 +24,10 @@ $smarty = new vtigerCRM_Smarty();
 
 if(isset($_REQUEST['record'])) 
 {
-    $focus->id = $_REQUEST['record'];
-    $focus->mode = 'edit'; 	
-    $focus->retrieve_entity_info($_REQUEST['record'],"PriceBooks");
+	$focus->id = $_REQUEST['record'];
+	$focus->mode = 'edit'; 	
+	$focus->retrieve_entity_info($_REQUEST['record'],"PriceBooks");
+	$focus->name = $focus->column_fields['bookname'];
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
 {
@@ -41,7 +42,6 @@ require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
 $smarty->assign("BLOCKS",getBlocks("PriceBooks",$disp_view,$mode,$focus->column_fields));
-//echo '<pre>';print_r(getBlocks("PriceBooks",$disp_view,$mode,$focus->column_fields));echo '</pre>';
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
@@ -55,6 +55,8 @@ if(isset($cust_fld))
 }
 
 $smarty->assign("ID", $focus->id);
+if(isset($focus->name))
+        $smarty->assign("NAME", $focus->name);
 
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
@@ -68,8 +70,6 @@ if(isset($_REQUEST['return_action'])) $smarty->assign("RETURN_ACTION", $_REQUEST
 if(isset($_REQUEST['return_id'])) $smarty->assign("RETURN_ID", $_REQUEST['return_id']);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-
-
 
 
 $pb_tables = Array('pricebook'); 

@@ -24,11 +24,13 @@ $smarty = new vtigerCRM_Smarty();
 
 if(isset($_REQUEST['record'])) 
 {
-    $focus->id = $_REQUEST['record'];
-    $focus->mode = 'edit'; 	
-    $focus->retrieve_entity_info($_REQUEST['record'],"Vendors");
+	$focus->id = $_REQUEST['record'];
+	$focus->mode = 'edit'; 	
+	$focus->retrieve_entity_info($_REQUEST['record'],"Vendors");
+	$focus->name = $focus->column_fields['vendorname'];
 }
-if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
+if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
+{
 	$focus->id = "";
     	$focus->mode = ''; 	
 } 
@@ -48,12 +50,14 @@ $smarty->assign("SINGLE_MOD","Vendors");
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
+$smarty->assign("ID", $focus->id);
+if(isset($focus->name))
+        $smarty->assign("NAME", $focus->name);
+
 if(isset($cust_fld))
 {
         $smarty->assign("CUSTOMFIELD", $cust_fld);
 }
-
-$smarty->assign("ID", $focus->id);
 
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
@@ -70,47 +74,45 @@ $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 
 
-
-
 $vendor_tables = Array('vendor'); 
 
- $validationData = getDBValidationData($vendor_tables);
- $fieldName = '';
- $fieldLabel = '';
- $fldDataType = '';
+$validationData = getDBValidationData($vendor_tables);
+$fieldName = '';
+$fieldLabel = '';
+$fldDataType = '';
 
- $rows = count($validationData);
- foreach($validationData as $fldName => $fldLabel_array)
- {
-   if($fieldName == '')
-   {
-     $fieldName="'".$fldName."'";
-   }
-   else
-   {
-     $fieldName .= ",'".$fldName ."'";
-   }
-   foreach($fldLabel_array as $fldLabel => $datatype)
-   {
-	if($fieldLabel == '')
+$rows = count($validationData);
+foreach($validationData as $fldName => $fldLabel_array)
+{
+	if($fieldName == '')
 	{
-			
-     		$fieldLabel = "'".$fldLabel ."'";
-	}		
-      else
-       {
-      $fieldLabel .= ",'".$fldLabel ."'";
-        }
- 	if($fldDataType == '')
-         {
-      		$fldDataType = "'".$datatype ."'";
-    	}
-	 else
-        {
-       		$fldDataType .= ",'".$datatype ."'";
-     	}
-   }
- }
+		$fieldName="'".$fldName."'";
+	}
+	else
+	{
+		$fieldName .= ",'".$fldName ."'";
+	}
+	foreach($fldLabel_array as $fldLabel => $datatype)
+	{
+		if($fieldLabel == '')
+		{
+
+			$fieldLabel = "'".$fldLabel ."'";
+		}		
+		else
+		{
+			$fieldLabel .= ",'".$fldLabel ."'";
+		}
+		if($fldDataType == '')
+		{
+			$fldDataType = "'".$datatype ."'";
+		}
+		else
+		{
+			$fldDataType .= ",'".$datatype ."'";
+		}
+	}
+}
 
 
 $category = getParentTab();

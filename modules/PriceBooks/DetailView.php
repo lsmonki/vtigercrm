@@ -20,7 +20,7 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record']))
 {
 	$focus->retrieve_entity_info($_REQUEST['record'],"PriceBooks");
 	$focus->id = $_REQUEST['record'];
-	$pricebookname = getPriceBookName($focus->id);
+	$focus->name = $focus->column_fields['bookname'];
 }
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
@@ -39,17 +39,9 @@ require_once($theme_path.'layout_utils.php');
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
-{
-            $category = $_REQUEST['category'];
-}
-else
-{
-            $category = getParentTabFromModule($currentModule);
-}
-$smarty->assign("CATEGORY",$category);
 
 $smarty->assign("BLOCKS", getBlocks("PriceBooks","detail_view",'',$focus->column_fields));
+
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
@@ -69,9 +61,10 @@ if(isPermitted("PriceBooks",2,$_REQUEST['record']) == 'yes')
 }
 
 $smarty->assign("IMAGE_PATH", $image_path);
-$smarty->assign("PRICEBOOKNAME", $pricebookname);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $_REQUEST['record']);
+$smarty->assign("NAME", $focus->name);
+
 //Security check for related list
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);

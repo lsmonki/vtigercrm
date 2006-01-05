@@ -16,13 +16,16 @@ require_once('include/utils/utils.php');
 
 $focus = new Vendor();
 
-if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
-  $focus->retrieve_entity_info($_REQUEST['record'],"Vendors");
-  $focus->id = $_REQUEST['record'];
+if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) 
+{
+	$focus->retrieve_entity_info($_REQUEST['record'],"Vendors");
+	$focus->id = $_REQUEST['record'];
+	$focus->name = $focus->column_fields['vendorname'];
 }
 
-if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
-        $focus->id = "";
+if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
+{
+	$focus->id = "";
 }
 
 global $app_strings;
@@ -36,6 +39,9 @@ $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
+if(isset($focus->name))
+	$smarty->assign("NAME", $focus->name);
+
 $smarty->assign("BLOCKS", getBlocks("Vendors","detail_view",'',$focus->column_fields));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
@@ -44,7 +50,6 @@ if(isPermitted("Vendors",1,$_REQUEST['record']) == 'yes')
 {
 	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Vendors'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">&nbsp;");
 
-
 	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Vendors'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">&nbsp;");
 }
 
@@ -52,7 +57,6 @@ if(isPermitted("Vendors",2,$_REQUEST['record']) == 'yes')
 {
 	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Vendors'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">&nbsp;");
 }
-
 
 
 $category = getParentTab();
