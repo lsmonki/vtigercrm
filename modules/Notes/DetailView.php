@@ -28,7 +28,6 @@ require_once('include/upload_file.php');
 require_once('include/utils/utils.php');
 global $app_strings;
 global $mod_strings;
-global $app_list_strings;
 
 $focus = new Note();
 
@@ -71,22 +70,8 @@ $log->info("Note detail view");
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-//echo '<pre>';print_r(getBlocks("Notes","detail_view",'',$focus->column_fields));echo'</pre>';
 $smarty->assign("BLOCKS", getBlocks("Notes","detail_view",'',$focus->column_fields));
 
-/*
-//get Note Information
-$block_1 = getDetailBlockInformation("Notes",1,$focus->column_fields);
-$block_2 = getDetailBlockInformation("Notes",2,$focus->column_fields);
-$block_3 = getDetailBlockInformation("Notes",3,$focus->column_fields);
-
-$smarty->assign("BLOCK1", $block_1);
-$smarty->assign("BLOCK2", $block_2);
-$smarty->assign("BLOCK3", $block_3);
-
-$block_1_header = getBlockTableHeader("LBL_NOTE_INFORMATION");
-$smarty->assign("BLOCK1_HEADER", $block_1_header);	
-*/
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
@@ -108,21 +93,21 @@ if ( isset($focus->filename) && $focus->filename != '')
 	$smarty->assign("FILELINK", $fileurl);
 }
 
-$smarty->assign("SINGLE_MOD","Notes");
+$smarty->assign("SINGLE_MOD","Note");
 
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Notes",1,$_REQUEST['record']) == 'yes')
 {
-	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">");
+	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">&nbsp;");
 
 
-	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">");
+	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">&nbsp;");
 }
 
 
 if(isPermitted("Notes",2,$_REQUEST['record']) == 'yes')
 {
-	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">");
+	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Notes'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">&nbsp;");
 }
 
 
