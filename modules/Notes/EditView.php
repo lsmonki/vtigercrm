@@ -38,7 +38,7 @@ if($_REQUEST['upload_error'] == true)
 	echo '<br><b><font color="red"> The selected file has no data or a invalid file.</font></b><br>';
 }
 
-if(isset($_REQUEST['record'])) 
+if(isset($_REQUEST['record']) && $_REQUEST['record'] !='') 
 {
 	$focus->id = $_REQUEST['record'];
 	$focus->mode = 'edit';
