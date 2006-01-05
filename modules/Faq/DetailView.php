@@ -20,7 +20,6 @@
  * Contributor(s): ______________________________________..
  ********************************************************************************/
 
-//require_once('XTemplate/xtpl.php');
 require_once('Smarty_setup.php');
 require_once('modules/Faq/Faq.php');
 require_once('include/CustomFieldUtil.php');
@@ -29,7 +28,6 @@ require_once('include/utils/utils.php');
 
 global $mod_strings;
 global $app_strings;
-global $app_list_strings;
 
 $focus = new Faq();
 
@@ -55,8 +53,7 @@ $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 
 if(isset($focus->column_fields[question]))
-	$smarty->assign("NAME", $focus->column_fields[question]);
-
+	$smarty->assign("FAQ_TITLE", $focus->column_fields[question]);
 if(isset($_REQUEST['category']) && $_REQUEST['category'] !='')
 {
             $category = $_REQUEST['category'];
@@ -72,26 +69,20 @@ $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("BLOCKS", getBlocks("Faq","detail_view",'',$focus->column_fields));
 $smarty->assign("SINGLE_MOD","Faq");
+$smarty->assign("MODULE","Faq");
 
 $smarty->assign("ID", $_REQUEST['record']);
 if(isPermitted("Faq",1,$_REQUEST['record']) == 'yes')
 {
-        $smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.module.value='Faq'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">");
+        $smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">&nbsp;");
 
-        $smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">");
+        $smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">&nbsp;");
 }
 
 
 if(isPermitted("Faq",2,$_REQUEST['record']) == 'yes')
 {
-              $smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\">");
+              $smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Faq'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\" $app_strings[LBL_DELETE_BUTTON_LABEL]\">&nbsp;");
 }
-
-//$xtpl->parse("main");
-//$xtpl->out("main");
-
-//echo "<BR>\n";
-
-$smarty->assign("MODULE","Faq");
 $smarty->display("DetailView.tpl");
 ?>

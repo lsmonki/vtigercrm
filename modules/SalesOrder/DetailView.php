@@ -28,7 +28,6 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 global $mod_strings;
 global $app_strings;
-global $app_list_strings;
 
 $focus = new SalesOrder();
 
@@ -75,36 +74,32 @@ $permissionData = $_SESSION['action_permission_set'];
 
 if(isPermitted("SalesOrder",1,$_REQUEST['record']) == 'yes')
 {
-	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView';this.form.module.value='SalesOrder'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">");
+	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView';this.form.module.value='SalesOrder'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">&nbsp;");
 
 
-	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.module.value='SalesOrder';this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">");
+	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.module.value='SalesOrder';this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">&nbsp;");
 }
 
-	$smarty->assign("CREATEPDF","<input title=\"Export To PDF\" accessKey=\"Alt+e\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.module.value='SalesOrder';this.form.action.value='CreateSOPDF'\" type=\"submit\" name=\"$app_strings[LBL_EXPORT_TO_PDF]\" value=\"Export To PDF\">");
+	$smarty->assign("CREATEPDF","<input title=\"Export To PDF\" accessKey=\"Alt+e\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.module.value='SalesOrder';this.form.action.value='CreateSOPDF'\" type=\"submit\" name=\"$app_strings[LBL_EXPORT_TO_PDF]\" value=\"Export To PDF\">&nbsp;");
 
 
 if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
 {
-	$smarty->assign("CONVERTINVOICE","<input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Invoice'; this.form.return_action.value='DetailView'; this.form.convertmode.value='sotoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\">");
+	$smarty->assign("CONVERTINVOICE","<input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Invoice'; this.form.return_action.value='DetailView'; this.form.convertmode.value='sotoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\">&nbsp;");
 }
 
 
 if(isPermitted("SalesOrder",2,$_REQUEST['record']) == 'yes')
 {
-	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='index';this.form.module.value='SalesOrder'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">");
+	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='index';this.form.module.value='SalesOrder'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">&nbsp;");
 }
 
 $smarty->assign("MODULE", $module);
 $smarty->display("DetailView.tpl");
-
-
-echo "<BR>\n";
 //Security check for related list
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
-//getRelatedLists("SalesOrder",$focus);
 
 
 ?>
