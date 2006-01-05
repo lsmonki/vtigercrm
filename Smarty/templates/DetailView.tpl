@@ -3,13 +3,7 @@
 <tr><td>&nbsp;</td>
 	<td>
                 <table cellpadding="0" cellspacing="5" border="0">
-                        <input type="hidden" name="module" value="{$MODULE}">
-                        <input type="hidden" name="record" value="{$ID}">
-                        <input type="hidden" name="isDuplicate" value=false>
-                        <input type="hidden" name="action">
-                        <input type="hidden" name="return_module">
-                        <input type="hidden" name="return_action">
-                        <input type="hidden" name="return_id">
+			{include file='DetailViewHidden.tpl'}
 		</table>	
 
 
@@ -27,8 +21,8 @@ Link" href="index.php?action=ListView&module={$MODULE}">{$MODULE}</a></td>
 			<td>
 				<table border=0 cellspacing=0 cellpadding=5>
 				<tr>
-					<td style="padding-right:0px"><a href="#"><img src="themes/blue/images/btnL3Add.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
-					<td style="padding-right:0px"><a href="#"><img src="themes/blue/images/btnL3Search.gif" alt="Search in {$MODULE}..." title="Search in {$MODULE}..." border=0></a></a></td>
+					<td style="padding-right:0px"><a href="index.php?module={$MODULE}&action=EditView"><img src="{$IMAGE_PATH}btnL3Add.gif"alt="Create {$SINGLE_MOD}..." title="Create {$SINGLE_MOD}..." border=0></a></td>
+					<td style="padding-right:0px"><a href="#"><img src="themes/blue/images/btnL3Search.gif" alt="Search in {$SINGLE_MOD}..." title="Search in {$SINGLE_MOD}..." border=0></a></a></td>
 				</tr>
 				</table>
 			</td>
@@ -123,12 +117,19 @@ Link" href="index.php?action=ListView&module={$MODULE}">{$MODULE}</a></td>
 								{$DUPLICATEBUTTON}
 								{$DELETEBUTTON}
 					
-							{if $MODULE ne 'Accounts' && $MODULE ne 'Potentials'}
-							
-								{$SENDMAILBUTTON}
-						
-							{/if}
-							{if $MODULE eq 'Potentials'}
+							{if $MODULE eq 'Leads' || $MODULE eq 'Contacts'}
+
+                                                                {$SENDMAILBUTTON}
+
+                                                        {/if}
+                                                        {if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
+                                                                {$CREATEPDF}
+                                                        {/if}
+							{if $MODULE eq 'Quotes'}
+                                                                {$CONVERTSALESORDER}
+                                                        {/if}
+
+                                                        {if $MODULE eq 'Potentials' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder'}
                                                                 {$CONVERTINVOICE}
                                                         {/if}
 							{if $MODULE eq 'Leads'}
