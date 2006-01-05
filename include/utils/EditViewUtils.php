@@ -200,7 +200,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                 }
 		//$custfld .= $mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
-        	$custfld .= '<td><textarea name="'.$fieldname.'" cols="30" rows="2">'.$value.'</textarea></td>';
+        	$fieldvalue [] = $value;
+		$custfld .= '<td><textarea name="'.$fieldname.'" cols="30" rows="2">'.$value.'</textarea></td>';
 	}
 	elseif($uitype == 22)
 	{
