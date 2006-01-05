@@ -161,9 +161,7 @@
 							 <td width=20% class="dvtCellLabel" align=right>
 							    {if $uitype eq 20}<font color="red">*</font>{/if}
 								{$fldlabel}</td>
-							 <td colspan=3><textarea class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" name="{$fldname}"  onBlur="this.className='detailedViewTextBox'" cols="90" rows="8">
-                                                           {$fldvalue}
-                                                         </textarea>
+							 <td colspan=3><textarea class="detailedViewTextBox" onFocus="this.className='detailedViewTextBoxOn'" name="{$fldname}"  onBlur="this.className='detailedViewTextBox'" cols="90" rows="8">{$fldvalue}</textarea>
                                                          </td>
 							{elseif $uitype eq 21 || $uitype eq 24}
 							  <td width=20% class="dvtCellLabel" align=right>
