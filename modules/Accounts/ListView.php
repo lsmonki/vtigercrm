@@ -69,170 +69,32 @@ $groupid = $oCustomView->getGroupId($currentModule);
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
+	$where=Search($currentModule);
 	// we have a query
 	$url_string .="&query=true";
-	if (isset($_REQUEST['accountname'])) $name = $_REQUEST['accountname'];
-	if (isset($_REQUEST['website'])) $website = $_REQUEST['website'];
-	if (isset($_REQUEST['phone'])) $phone = $_REQUEST['phone'];
-	if (isset($_REQUEST['annual_revenue'])) $annual_revenue = $_REQUEST['annual_revenue'];
-	if (isset($_REQUEST['email'])) $email = $_REQUEST['email'];
-	if (isset($_REQUEST['employees'])) $employees = $_REQUEST['employees'];
-	if (isset($_REQUEST['industry'])) $industry = $_REQUEST['industry'];
-	if (isset($_REQUEST['ownership'])) $ownership = $_REQUEST['ownership'];
-	if (isset($_REQUEST['rating'])) $rating = $_REQUEST['rating'];
-	if (isset($_REQUEST['siccode'])) $sic_code = $_REQUEST['siccode'];
-	if (isset($_REQUEST['tickersymbol'])) $ticker_symbol = $_REQUEST['tickersymbol'];
-	if (isset($_REQUEST['accounttype'])) $account_type = $_REQUEST['accounttype'];
-	if (isset($_REQUEST['address_street'])) $address_street = $_REQUEST['address_street'];
-	if (isset($_REQUEST['bill_city'])) $address_city = $_REQUEST['bill_city'];
-	if (isset($_REQUEST['bill_state'])) $address_state = $_REQUEST['bill_state'];
-	if (isset($_REQUEST['bill_country'])) $address_country = $_REQUEST['bill_country'];
-	if (isset($_REQUEST['bill_code'])) $address_postalcode = $_REQUEST['bill_code'];
-	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
-	if (isset($_REQUEST['assigned_user_id'])) $assigned_user_id = $_REQUEST['assigned_user_id'];
-	//Added field emailoptout in search after 4.2 patch 2
-	if (isset($_REQUEST['emailoptout'])) $emailoptout = $_REQUEST['emailoptout'];
+	//Added for Custom Field Search
+	$sql="select * from field where tablename='accountscf' order by fieldlabel";
+	$result=$adb->query($sql);
+	for($i=0;$i<$adb->num_rows($result);$i++)
+	{
+		$column[$i]=$adb->query_result($result,$i,'columnname');
+		$fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
+		$uitype[$i]=$adb->query_result($result,$i,'uitype');
+		if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
 
-	$where_clauses = Array();
-
-//Added for Custom Field Search
-$sql="select * from field where tablename='accountscf' order by fieldlabel";
-$result=$adb->query($sql);
-for($i=0;$i<$adb->num_rows($result);$i++)
-{
-        $column[$i]=$adb->query_result($result,$i,'columnname');
-        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-	$uitype[$i]=$adb->query_result($result,$i,'uitype');
-        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-
-        if(isset($customfield[$i]) && $customfield[$i] != '')
-        {
-		if($uitype[$i] == 56)
-			$str = " accountscf.".$column[$i]." = 1";
-		elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2
-                        $str = " accountscf.".$column[$i]." = '".$customfield[$i]."'";
-		else
-	                $str = " accountscf.".$column[$i]." like '$customfield[$i]%'";
-                array_push($where_clauses, $str);
-		$url_string .="&".$column[$i]."=".$customfield[$i];
-        }
-}
-//upto this added for Custom Field
-
-	if(isset($name) && $name != "")
-	{
-		array_push($where_clauses, "account.accountname like ".PearDatabase::quote($name."%"));
-		$url_string .= "&accountname=".$name;
-	}
-	if(isset($website) && $website != "")
-	{
-		array_push($where_clauses, "account.website like ".PearDatabase::quote("%".$website."%"));
-		$url_string .= "&website=".$website;
-	}
-	if(isset($phone) && $phone != "")
-	{
-		array_push($where_clauses, "(account.phone like ".PearDatabase::quote("%".$phone."%")." OR account.otherphone like ".PearDatabase::quote("%".$phone."%")." OR account.fax like ".PearDatabase::quote("%".$phone."%").")");
-		$url_string .= "&phone=".$phone;
-	}
-	if(isset($annual_revenue) && $annual_revenue != "")
-	{
-		array_push($where_clauses, "account.annualrevenue like ".PearDatabase::quote($annual_revenue."%"));
-		$url_string .= "&annual_revenue=".$annual_revenue;
-	}
-	if(isset($employees) && $employees != "")
-	{
-		array_push($where_clauses, "account.employees like ".PearDatabase::quote($employees."%"));
-		$url_string .= "&employees=".$employees;
-	}
-	if(isset($address_street) && $address_street != "")
-	{
-		array_push($where_clauses, "(accountbillads.street like ".PearDatabase::quote($address_street."%")." OR accountshipads.street like ".PearDatabase::quote($address_street."%").")");
-		$url_string .= "&address_street=".$address_street;
-	}
-	if(isset($address_city) && $address_city != "")
-	{
-		array_push($where_clauses, "(accountbillads.city like ".PearDatabase::quote($address_city."%")." OR accountshipads.city like ".PearDatabase::quote($address_city."%").")");
-		$url_string .= "&bill_city=".$address_city;
-	}
-	if(isset($address_state) && $address_state != "")
-	{
-		array_push($where_clauses, "(accountbillads.state like ".PearDatabase::quote($address_state."%")." OR accountshipads.state like ".PearDatabase::quote($address_state."%").")");
-		$url_string .= "&bill_state=".$address_state;
-	}
-	if(isset($address_postalcode) && $address_postalcode != "")
-	{
-		array_push($where_clauses, "(accountbillads.code like ".PearDatabase::quote($address_postalcode."%")." OR accountshipads.code like ".PearDatabase::quote($address_postalcode."%").")");
-		$url_string .= "&bill_code=".$address_postalcode;
-	}
-	if(isset($address_country) && $address_country != "")
-	{
-		array_push($where_clauses, "(accountbillads.country like ".PearDatabase::quote($address_country."%")." OR accountshipads.country like ".PearDatabase::quote($address_country."%").")");
-		$url_string .= "&bill_country=".$address_country;
-	}
-	//Added field emailoptout after 4.2 patch 2
-	if(isset($emailoptout) && $emailoptout != "")
-	{
-		array_push($where_clauses, " account.emailoptout =1");//".$emailoptout);
-		$url_string .= "&emailoptout=".$emailoptout;
-	}
-	if(isset($email) && $email != "")
-	{
-		array_push($where_clauses, "(account.email1 like ".PearDatabase::quote($email."%")." OR account.email2 like ".PearDatabase::quote($email."%").")");
-		$url_string .= "&email=".$email;
-	}
-	if(isset($industry) && $industry != "")
-	{
-		array_push($where_clauses, "account.industry = ".PearDatabase::quote($industry));
-		$url_string .= "&industry=".$industry;
-	}
-	if(isset($ownership) && $ownership != "")
-	{
-	 	array_push($where_clauses, "account.ownership like ".PearDatabase::quote($ownership."%"));
-		$url_string .= "&ownership=".$ownership;
-	}
-	if(isset($rating) && $rating != "") array_push($where_clauses, "account.rating like ".PearDatabase::quote($rating."%"));
-	if(isset($sic_code) && $sic_code != "")
-	{
-		array_push($where_clauses, "account.siccode like ".PearDatabase::quote($sic_code."%"));
-		$url_string .= "&siccode=".$sic_code;
-	}
-	if(isset($ticker_symbol) && $ticker_symbol != "")
-	{
-		array_push($where_clauses, "account.tickersymbol like ".PearDatabase::quote($ticker_symbol."%"));
-		$url_string .= "&tickersymbol=".$ticker_symbol;
-	}
-	if(isset($account_type) && $account_type != "")
-	{
-		array_push($where_clauses, "account.account_type = ".PearDatabase::quote($account_type));
-		$url_string .= "&accounttype=".$account_type;
-	}
-	if(isset($current_user_only) && $current_user_only != "")
-	{
-		array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-		$url_string .= "&current_user_only=".$current_user_only;
-	}
-	$where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($where != "")
-		$where .= " and ";
-		$where .= $clause;
-	}
-
-	if (!empty($assigned_user_id)) {
-		if (!empty($where)) {
-			$where .= " AND ";
-		}
-		$where .= "crmentity.smownerid IN(";
-		foreach ($assigned_user_id as $key => $val) {
-			$where .= PearDatabase::quote($val);
-			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
-			   // ACIPIA - to allow prev/next button to use criterias
-			  $url_string .= '&' . urlencode( 'assigned_user_id[]' ) . '=' . $val ;
-			   // ACIPIA 
+		if(isset($customfield[$i]) && $customfield[$i] != '')
+		{
+			if($uitype[$i] == 56)
+				$str = " accountscf.".$column[$i]." = 1";
+			elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2
+				$str = " accountscf.".$column[$i]." = '".$customfield[$i]."'";
+			else
+				$str = " accountscf.".$column[$i]." like '$customfield[$i]%'";
+			array_push($where_clauses, $str);
+			$url_string .="&".$column[$i]."=".$customfield[$i];
 		}
 	}
-
+	//upto this added for Custom Field
 	$log->info("Here is the where clause for the list view: $where");
 
 }
@@ -336,7 +198,6 @@ if(isset($order_by) && $order_by != '')
                 $query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
         }
 }
-
 $list_result = $adb->query($query);
 
 //Retreiving the no of rows
