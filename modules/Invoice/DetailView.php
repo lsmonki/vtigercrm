@@ -28,7 +28,6 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
 global $mod_strings;
 global $app_strings;
-global $app_list_strings;
 global $currentModule;
 $focus = new Invoice();
 
@@ -82,7 +81,7 @@ if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
 
 if(isPermitted("Invoice",2,$_REQUEST['record']) == 'yes')
 {
-	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Invoice'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Invoice'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">&nbsp;");
 }
 
 
