@@ -140,7 +140,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		{
 			$pickListValue=$adb->query_result($pickListResult,$j,strtolower($fieldname));
 			
-			if(html_entity_decode($value) == $pickListValue)
+			if($value == $pickListValue)
  			{
  				$chk_val = "selected";	
                			$found = true;
