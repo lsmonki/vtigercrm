@@ -59,11 +59,6 @@ $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint
 $smarty->assign("ID", $focus->id);
 $smarty->assign("SINGLE_MOD","Lead");
 
- 
-/*if (isset($focus->firstname)) $smarty->assign("FIRST_NAME", $focus->firstname);
-else $smaty->assign("FIRST_NAME", "");
-$smarty->assign("LAST_NAME", $focus->lastname);*/
-
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 
 $smarty->assign("BLOCKS", getBlocks("Leads","detail_view",'',$focus->column_fields));
@@ -75,10 +70,10 @@ $val = isPermitted("Leads",1,$_REQUEST['record']);
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Leads",1,$_REQUEST['record']) == 'yes')
 {
-	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">");
+	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">&nbsp;");
 
 
-	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">");
+	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">&nbsp;");
 
 	
 }
@@ -90,7 +85,7 @@ $permissionData = $_SESSION['action_permission_set'];
 
 if(isPermitted("Leads",1,$_REQUEST['record']) == 'yes' && $tab_per_Data[getTabid("Accounts")] == 0 && $tab_per_Data[getTabid("Contacts")] == 0 && $permissionData[getTabid("Accounts")][1] == 0 && $permissionData[getTabid("Contacts")][1] ==0)
 {
-	$smarty->assign("CONVERTLEAD","<input title=\"$app_strings[LBL_CONVERT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.action.value='ConvertLead'\" type=\"submit\" name=\"Convert\" value=\"$app_strings[LBL_CONVERT_BUTTON_LABEL]\">");
+	$smarty->assign("CONVERTLEAD","<input title=\"$app_strings[LBL_CONVERT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads';this.form.module.value='Leads'; this.form.action.value='ConvertLead'\" type=\"submit\" name=\"Convert\" value=\"$app_strings[LBL_CONVERT_BUTTON_LABEL]\">&nbsp;");
 }
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
@@ -98,7 +93,7 @@ $smarty->assign("CATEGORY",$category);
 
 if(isPermitted("Leads",2,$_REQUEST['record']) == 'yes')
 {
-	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">");
+	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">&nbsp;");
 }
 
 if(isPermitted("Emails",1,'') == 'yes')
@@ -106,12 +101,12 @@ if(isPermitted("Emails",1,'') == 'yes')
 	//Added to pass the parents list as hidden for Emails -- 09-11-2005
 	$parent_email = getEmailParentsList('Leads',$_REQUEST['record']);
         $smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
-	$smarty->assign("SENDMAILBUTTON","<input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.module.value='Emails';this.form.email_directing_module.value='leads';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\">");
+	$smarty->assign("SENDMAILBUTTON","<input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Leads'; this.form.module.value='Emails';this.form.email_directing_module.value='leads';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\">&nbsp;");
 }
 
 if(isPermitted("Leads",8,'') == 'yes') 
 {
-	$smarty->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\">&nbsp;");
 	$wordTemplateResult = fetchWordTemplateList("Leads");
 	$tempCount = $adb->num_rows($wordTemplateResult);
 	$tempVal = $adb->fetch_array($wordTemplateResult);
