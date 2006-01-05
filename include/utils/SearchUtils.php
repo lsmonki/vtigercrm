@@ -15,96 +15,11 @@ require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
 	
-$column_array=array('assigned_user_id','accountid','contactid');
-$table_col_array=array('crmentity.smownerid','account.accountname','contact.firstname,contact.lastname');
+$column_array=array('accountid','contactid');
+$table_col_array=array('account.accountname','contact.firstname,contact.lastname');
 
 
-function Search($module)
-{
 
-		
-	if(isset($_REQUEST['search_field']) && $_REQUEST['search_field'] !="")
-        {
-                $search_column=$_REQUEST['search_field'];
-        }
-        if(isset($_REQUEST['search_text']) && $_REQUEST['search_text']!="")
-        {
-                $search_string=ltrim(rtrim($_REQUEST['search_text']));
-        }
-        if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="")
-        {
-
-
-                $search_type=$_REQUEST['searchtype'];
-
-                if($search_type == "BasicSearch")
-                {
-                        $where=BasicSearch($module,$search_column,$search_string);
-                }
-                else if ($search_type == "AdvanceSearch")
-                {
-                }
-                else //Global Search
-                {
-                }
-		
-		return $where;
-        }
-
-}
-
-function get_usersid($table_name,$column_name,$search_string)
-{
-
-	global $adb;
-	$user_qry="select distinct(users.id)from users inner join crmentity on crmentity.smownerid=users.id where users.user_name like '%".$search_string."%' ";
-	$user_result=$adb->query($user_qry);
-	$noofuser_rows=$adb->num_rows($user_result);
-	$x=$noofuser_rows-1;
-	if($noofuser_rows!=0)
-	{
-		$where="(";
-		for($i=0;$i<$noofuser_rows;$i++)
-		{
-			$user_id=$adb->query_result($user_result,$i,'id');
-			$where .= "$table_name.$column_name =".$user_id;
-			if($i != $x)
-			{
-				$where .= " or ";
-			}
-		}
-		$where.=")";
-	}
-	return $where;	
-}
-
-
-function BasicSearch($module,$search_field,$search_string)
-{
-	global $adb;
-		
-	$qry="select field.columnname,tablename from tab inner join field on field.tabid=tab.tabid where name='".$module."' and fieldname='".$search_field."'";
-	$result = $adb->query($qry);
-	$noofrows = $adb->num_rows($result);
-	if($noofrows!=0)
-        {
-        	$column_name=$adb->query_result($result,0,'columnname');
-        	$table_name=$adb->query_result($result,0,'tablename');
-		
-		if($table_name == "crmentity" && $column_name == "smownerid")
-		{
-			$where = get_usersid($table_name,$column_name,$search_string);
-		}
-		else
-		{
-
-			$where="$table_name.$column_name like '%".$search_string."%'";
-		}
-	}
-	return $where;
-	
-	
-}
 
 function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='')
 {
@@ -226,7 +141,6 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                                                         $name = $mod_strings[$name];
                                                 }
                                         }
-
                                 }
                         }
                         //Added condition to hide the close column in Related Lists
@@ -239,7 +153,6 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                         {
 				$fld_name=$fieldname;
                                 $search_header[$fld_name]=$name;
-                                $list_header[]=$name;
                         }
                 }
         }
@@ -247,6 +160,113 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
 
 }
 
+
+function Search($module)
+{
+
+		
+	if(isset($_REQUEST['search_field']) && $_REQUEST['search_field'] !="")
+        {
+                $search_column=$_REQUEST['search_field'];
+        }
+        if(isset($_REQUEST['search_text']) && $_REQUEST['search_text']!="")
+        {
+                $search_string=ltrim(rtrim($_REQUEST['search_text']));
+        }
+        if(isset($_REQUEST['searchtype']) && $_REQUEST['searchtype']!="")
+        {
+
+
+                $search_type=$_REQUEST['searchtype'];
+
+                if($search_type == "BasicSearch")
+                {
+                        $where=BasicSearch($module,$search_column,$search_string);
+                }
+                else if ($search_type == "AdvanceSearch")
+                {
+                }
+                else //Global Search
+                {
+                }
+		
+		return $where;
+        }
+
+}
+
+function get_usersid($table_name,$column_name,$search_string)
+{
+
+	global $adb;
+	$user_qry="select distinct(users.id)from users inner join crmentity on crmentity.smownerid=users.id where users.user_name like '%".$search_string."%' ";
+	$user_result=$adb->query($user_qry);
+	$noofuser_rows=$adb->num_rows($user_result);
+	$x=$noofuser_rows-1;
+	if($noofuser_rows!=0)
+	{
+		$where="(";
+		for($i=0;$i<$noofuser_rows;$i++)
+		{
+			$user_id=$adb->query_result($user_result,$i,'id');
+			$where .= "$table_name.$column_name =".$user_id;
+			if($i != $x)
+			{
+				$where .= " or ";
+			}
+		}
+		$where.=")";
+	}
+	else
+	{
+		$where="$table_name.$column_name =''";
+	}	
+	return $where;	
+}
+
+function getValuesforColumns($column_name,$search_string)
+{
+	global $column_array,$table_col_array;
+	for($i=0; $i<count($column_array);$i++)
+	{
+		if($column_name == $column_array[$i])
+		{
+			$val=$table_col_array[$i];
+			$where="$val like '%".$search_string ."%'";
+			break 1;
+		}
+	}
+	return $where;
+}
+
+function BasicSearch($module,$search_field,$search_string)
+{
+	global $adb;
+	global $column_array,$table_col_array;
+		
+	$qry="select field.columnname,tablename from tab inner join field on field.tabid=tab.tabid where name='".$module."' and fieldname='".$search_field."'";
+	$result = $adb->query($qry);
+	$noofrows = $adb->num_rows($result);
+	if($noofrows!=0)
+        {
+        	$column_name=$adb->query_result($result,0,'columnname');
+        	$table_name=$adb->query_result($result,0,'tablename');
+		$col_name=$column_name;
+		if($table_name == "crmentity" && $column_name == "smownerid")
+		{
+			$where = get_usersid($table_name,$column_name,$search_string);
+		}
+		else if(in_array($column_name,$column_array))
+		{
+			$where = getValuesforColumns($column_name,$search_string);
+		}
+		else
+		{
+			$where="$table_name.$column_name like '%".$search_string."%'";
+		}
+	}
+	return $where;
+}
 
 
 								
