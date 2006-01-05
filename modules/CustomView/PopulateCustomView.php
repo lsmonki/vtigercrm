@@ -117,6 +117,11 @@ $customviews = Array(Array('viewname'=>'All',
 	            Array('viewname'=>'All',
                           'setdefault'=>'1','setmetrics'=>'0',
                           'cvmodule'=>'Vendors','stdfilterid'=>'','advfilterid'=>''),
+
+		    Array('viewname'=>'All',
+                          'setdefault'=>'1','setmetrics'=>'0',
+                          'cvmodule'=>'Faq','stdfilterid'=>'','advfilterid'=>''),
+
 		    );
 
 
@@ -297,6 +302,14 @@ $cvcolumns = Array(Array('leaddetails:lastname:lastname:Leads_Last_Name:V',
 			'vendor:phone:phone:Vendors_Phone:V',
 			'vendor:email:email:Vendors_Email:V',
                         'vendor:category:category:Vendors_Category:V'),
+
+		 Array('faq:id::Faq_FAQ_Id:I',
+		       'faq:question:question:Faq_Question:V',
+		       'faq:category:faqcategories:Faq_Category:V',
+		       'faq:product_id:product_id:Faq_Product_Name:I',
+		       'crmentity:createdtime:createdtime:Faq_Created_Time:D',
+                       'crmentity:modifiedtime:modifiedtime:Faq_Modified_Time:D'),
+
                   );
 
 $cvstdfilters = Array(Array('columnname'=>'crmentity:modifiedtime:modifiedtime:Leads_Modified_Time',

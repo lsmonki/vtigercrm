@@ -21,6 +21,7 @@ require_once('include/utils/utils.php');
 require_once('modules/Faq/Faq.php');
 require_once('themes/'.$theme.'/layout_utils.php');
 require_once('include/utils/utils.php');
+require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $mod_strings;
@@ -45,6 +46,12 @@ else
 $focus = new Faq();
 
 $url_string = ''; 
+//<<<<cutomview>>>>>>>
+$oCustomView = new CustomView("Faq");
+$customviewcombo_html = $oCustomView->getCustomViewCombo();
+$viewid = $oCustomView->getViewId($currentModule);
+$viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
+//<<<<<customview>>>>>
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 if($_REQUEST['order_by'] != '')
@@ -84,6 +91,12 @@ $list_result = $adb->query($list_query);
 //Constructing the list view 
 
 
+//$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
+//                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
+//                                '.$customviewcombo_html.'
+//                        </SELECT>
+//                </td>';
+
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -91,7 +104,8 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
-
+//$smarty->assign("CUSTOMVIEW",$customstrings);
+$smarty->assign("SINGLE_MOD",'Note');
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 
