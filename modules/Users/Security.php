@@ -60,8 +60,8 @@ class Security extends CRMEntity {
  $this->db->query("INSERT INTO tab VALUES (15,'Faq',2,14,'Faq','','',1)");
  $this->db->query("INSERT INTO tab VALUES (16,'Events',2,13,'Events','','',1)");
  $this->db->query("INSERT INTO tab VALUES (17,'Calendar',0,2,'Calendar','','',1)");
- $this->db->query("INSERT INTO tab VALUES (18,'Vendors',2,15,'Vendors','','',1)");
- $this->db->query("INSERT INTO tab VALUES (19,'PriceBooks',2,16,'PriceBooks','','',1)");
+ $this->db->query("INSERT INTO tab VALUES (18,'Vendors',0,15,'Vendors','','',1)");
+ $this->db->query("INSERT INTO tab VALUES (19,'PriceBooks',0,16,'PriceBooks','','',1)");
  $this->db->query("INSERT INTO tab VALUES (20,'Quotes',0,17,'Quotes','','',1)");
  $this->db->query("INSERT INTO tab VALUES (21,'PurchaseOrder',0,18,'PurchaseOrder','','',1)");
  $this->db->query("INSERT INTO tab VALUES (22,'SalesOrder',0,19,'SalesOrder','','',1)");
