@@ -12,24 +12,6 @@
 require_once('include/RelatedListView.php');
 require_once('include/utils/UserInfoUtil.php');
 
-function getHiddenValues($id)
-{
-	global $adb;
-	$sql = $adb->query('select accountid from contactdetails where contactid='.$id);
-	$accountid = $adb->query_result($sql,0,'accountid');
-	if($accountid == 0) $accountid='';
-	$hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-	$hidden .= '<input type="hidden" name="module">';
-	$hidden .= '<input type="hidden" name="mode">';
-	$hidden .= '<input type="hidden" name="contact_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="account_id" value="'.$accountid.'">';
-	$hidden .= '<input type="hidden" name="return_module" value="Contacts">';
-	$hidden .= '<input type="hidden" name="return_action" value="DetailView">';
-	$hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="action">';
-	return $hidden;
-}
 
 function renderRelatedPotentials($query,$id)
 {
@@ -37,8 +19,6 @@ function renderRelatedPotentials($query,$id)
 	global $mod_strings;
         global $app_strings;
         require_once('include/RelatedListView.php');
-
-        $hidden = getHiddenValues($id);
 
         $focus = new Potential();
 	$button = '';
@@ -62,9 +42,6 @@ function renderRelatedTasks($query,$id)
 	global $app_strings;
         require_once('include/RelatedListView.php');
 
-        $hidden = getHiddenValues($id);
-	$hidden .= '<input type="hidden" name="activity_mode">';
-
         $focus = new Activity();
 
 	$button = '';
@@ -86,13 +63,6 @@ function renderRelatedEmails($query,$id)
 	global $mod_strings;
 	global $app_strings;
 	
-	$hidden = getHiddenValues($id);
-	$hidden .="<input type=\"hidden\" name=\"email_directing_module\">";
-	$hidden .="<input type=\"hidden\" name=\"record\">";
-
-	//Added to pass the parents list as hidden for Emails -- 09-11-2005
-	$hidden .= getEmailParentsList('Contacts',$id);
-
 
 	$focus = new Email();
 
@@ -119,8 +89,6 @@ function renderRelatedTickets($query,$id)
         global $mod_strings;
         global $app_strings;
 
-        $hidden = getHiddenValues($id);
-
         $focus = new HelpDesk();
 
         $button = '';	
@@ -134,7 +102,6 @@ function renderRelatedTickets($query,$id)
 function renderRelatedAttachments($query,$id)
 {
 	global $log;
-	$hidden = getHiddenValues($id);
 
 	return getAttachmentsAndNotes('Contacts',$query,$id);
 	$log->info("Notes&Attachmenmts for Contact Displayed");
@@ -144,8 +111,6 @@ function renderRelatedProducts($query,$id)
 	require_once('modules/Products/Product.php');
         global $mod_strings;
         global $app_strings;
-
-        $hidden = getHiddenValues($id,$sid);
 
         $focus = new Product();
  
@@ -165,8 +130,6 @@ function renderRelatedSalesOrders($query,$id,$sid="product_id")
 	require_once('modules/SalesOrder/SalesOrder.php');
         global $mod_strings;
         global $app_strings;
-
-        $hidden = getHiddenValues($id,$sid);
 
         $focus = new SalesOrder();
  
@@ -188,8 +151,6 @@ function renderRelatedOrders($query,$id)
         global $mod_strings;
         global $app_strings;
 
-        $hidden = getHiddenValues($id);
-
         $focus = new Order();
  
 	$button = '';
@@ -209,7 +170,6 @@ function renderRelatedQuotes($query,$id)
 	global $app_strings;
 	require_once('modules/Quotes/Quote.php');
 
-	$hidden = getHiddenValues($id);                                                                                        
 	
 	$focus = new Quote();
 	
@@ -222,8 +182,6 @@ function renderRelatedQuotes($query,$id)
 
 	return GetRelatedList('Contacts','Quotes',$focus,$query,$button,$returnset);
 }
-
-
 
 
 ?>

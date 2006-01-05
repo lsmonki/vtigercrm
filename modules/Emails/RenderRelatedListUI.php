@@ -12,23 +12,6 @@
 require_once('include/RelatedListView.php');
 require_once('include/utils/UserInfoUtil.php');
 
-/**	Function to get the needed hidden values which will be useful when create new entity from the Email Related List
- *	input  : Email id 
- *	return : the list of hidden values with form itself
- */
-function getHiddenValues($id)
-{
-	$hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-	$hidden .= '<input type="hidden" name="module">';
-	$hidden .= '<input type="hidden" name="mode">';
-	$hidden .= '<input type="hidden" name="return_module" value="Emails">';
-	$hidden .= '<input type="hidden" name="return_action" value="DetailView">';
-	$hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="email_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="action">';
-	return $hidden;
-}
 
 /**	Function to display the Contacts which are related to the Email
  *	input : query to get the contacts which are related to this Email and the Email id
@@ -38,10 +21,6 @@ function renderRelatedContacts($query,$id)
 	global $log;
 	global $mod_strings;
 	global $app_strings;
-
-	$hidden = getHiddenValues($id);
-       	$hidden .= '<input type="hidden" name="query" value="'.$query.'">';
-	echo $hidden;
 
 	$focus = new Contact();
  
@@ -55,21 +34,17 @@ function renderRelatedContacts($query,$id)
 
 	return GetRelatedList('Emails','Contacts',$focus,$query,$button,$returnset);
 	 $log->info("Contact Related List for Email is Displayed");
-	//echo '</form>';
+
 }
 
-/**	Function to display the Attachments and Notes which are related to the Email
- *	input : query to get the attachments and notes which are related to this Email and the Email id
- */
+
 function renderRelatedAttachments($query,$id)
 {
 	global $log;
-        $hidden = getHiddenValues($id);
-        echo $hidden;
 
         return getAttachmentsAndNotes('Emails',$query,$id);
         $log->info("Notes&Attachments Related List for Email is Displayed");
-       // echo '</form>';
+
 }
 
 /**	Function to display the Users who all are related to the Email
@@ -205,11 +180,7 @@ function renderRelatedUsers($query)
 		$list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
 		$list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
 		//Adding Security Check for User
-/*		if(is_admin($current_user))
-		{	 			
-			$list .= '<a href="index.php?module=Users&action=EditView&return_module=Emails&return_action=DetailView&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_EDIT'].'</a>  |';
-		}		
-		$list .= '<a href="index.php?module=Users&action=Delete&return_module=Emails&return_action=DetailView&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_DELETE'].'</a>';*/
+
 		$entries_list[] = entries;
 		$list .= '</tr>';
 		$i++;

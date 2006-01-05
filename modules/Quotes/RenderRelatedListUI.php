@@ -14,29 +14,10 @@ require_once('modules/HelpDesk/HelpDesk.php');
 require_once('modules/Activities/Activity.php');
 require_once('include/utils/UserInfoUtil.php');
 
-function getHiddenValues($id)
-{
-        $hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-        $hidden .= '<input type="hidden" name="module">';
-        $hidden .= '<input type="hidden" name="mode">';
-        $hidden .= '<input type="hidden" name="quoteid" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="return_module" value="Quotes">';
-        $hidden .= '<input type="hidden" name="return_action" value="DetailView">';
-        $hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="action">';	
-	return $hidden;
-}
-
-
 function renderRelatedActivities($query,$id)
 {
 	global $mod_strings;
         global $app_strings;
-
-        $hidden = getHiddenValues($id);
-	$hidden .= '<input type="hidden" name="activity_mode">';	
-        echo $hidden;
 
         $focus = new Activity();
 
@@ -58,9 +39,6 @@ function renderRelatedOrders($query,$id)
         global $mod_strings;
         global $app_strings;
 
-        $hidden = getHiddenValues($id);
-        echo $hidden;
-
         $focus = new SalesOrder();
  
 	$button = '';
@@ -68,7 +46,7 @@ function renderRelatedOrders($query,$id)
 	$returnset = '&return_module=Quotes&return_action=DetailView&return_id='.$id;
 
 	return GetRelatedList('Quotes','SalesOrder',$focus,$query,$button,$returnset);
-	//echo '</form>';
+
 }
 function renderRelatedHistory($query,$id)
 {

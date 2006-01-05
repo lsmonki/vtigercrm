@@ -19,41 +19,12 @@ require_once('modules/SalesOrder/SalesOrder.php');
 require_once('modules/Quotes/Quote.php');
 require_once('modules/Invoice/Invoice.php');
 
-function getHiddenValues($id,$sid="product_id")
-{
-        $hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-        $hidden .= '<input type="hidden" name="module">';
-        $hidden .= '<input type="hidden" name="mode">';
-        $hidden .= '<input type="hidden" name="'.$sid.'" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="return_module" value="Products">';
-        $hidden .= '<input type="hidden" name="return_action" value="DetailView">';
-        $hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
-        //$hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="action">';	
-	return $hidden;
-}
-
-function getPriceBookHiddenValues($id)
-{
-        $hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-        $hidden .= '<input type="hidden" name="module">';
-        $hidden .= '<input type="hidden" name="mode">';
-        $hidden .= '<input type="hidden" name="pricebook_id" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="return_module" value="PriceBooks">';
-        $hidden .= '<input type="hidden" name="return_action" value="DetailView">';
-        $hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="action">';	
-	return $hidden;
-}
 
 function renderRelatedTickets($query,$id)
 {
 	global $mod_strings;
         global $app_strings;
 
-        $hidden = getHiddenValues($id);
-        echo $hidden;
 	echo '<input type="hidden" name="parent_id" value="">';
         $focus = new HelpDesk();
 
@@ -66,7 +37,7 @@ function renderRelatedTickets($query,$id)
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 	return GetRelatedList('Products','HelpDesk',$focus,$query,$button,$returnset);
-	//echo '</form>';
+
 }
 
 function renderRelatedActivities($query,$id,$cntid='')
@@ -74,13 +45,8 @@ function renderRelatedActivities($query,$id,$cntid='')
 	global $mod_strings;
         global $app_strings;
 
-        $hidden = getHiddenValues($id);
 	$hidden .= '<input type="hidden" name="activity_mode">';	
-        //to populate contact name
         if($cntid!=0 && $cntid!='')
-        $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
-
-        echo $hidden;
 
         $focus = new Activity();
 
@@ -94,22 +60,14 @@ function renderRelatedActivities($query,$id,$cntid='')
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 	return GetRelatedList('Products','Activities',$focus,$query,$button,$returnset);
-	//echo '</form>';
+
 }
 
 function renderRelatedAttachments($query,$id,$cntid='')
 {
-        $hidden = getHiddenValues($id);
-	$hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-        //to populate contact name
-        if($cntid!=0 && $cntid!='')
-        $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
-
-        echo $hidden;
 
         return getAttachmentsAndNotes('Products',$query,$id);
 
-        //echo '</form>';
 }
 
 function renderProductPurchaseOrders($query,$id,$vendid='',$cntid='')
@@ -117,15 +75,6 @@ function renderProductPurchaseOrders($query,$id,$vendid='',$cntid='')
         global $mod_strings;
         global $app_strings;
 
-        $hidden = getHiddenValues($id);
-	if($vendid!=0)
-	{
-        	$hidden .= '<input type="hidden" name="vendor_id" value="'.$vendid.'">';
-	}
-	if($cntid!=0 && $cntid!='')
-        $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
-
-        echo $hidden;
 
         $focus = new Order();
  
@@ -139,7 +88,7 @@ function renderProductPurchaseOrders($query,$id,$vendid='',$cntid='')
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 	return GetRelatedList('Products','PurchaseOrder',$focus,$query,$button,$returnset);
-	//echo '</form>';
+
 }
 
 function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
@@ -147,19 +96,6 @@ function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
         global $mod_strings;
         global $app_strings;
 
-        $hidden = getHiddenValues($id);
-	if($prtid!=0 && $prtid!='')
-	{
-		$parent_module = getSalesEntityType($prtid);
-		if($parent_module == "Accounts")
-        	$hidden .= '<input type="hidden" name="account_id" value="'.$prtid.'">';
-		if($parent_module == "Potentials")
-                $hidden .= '<input type="hidden" name="potential_id" value="'.$prtid.'">';
-	}
-	if($cntid!=0 && $cntid!='')
-        $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
-
-        echo $hidden;
 
         $focus = new SalesOrder();
  
@@ -171,26 +107,13 @@ function renderProductSalesOrders($query,$id,$cntid='',$prtid='')
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 	return GetRelatedList('Products','SalesOrder',$focus,$query,$button,$returnset);
-	//echo '</form>';
+
 }
 
 function renderRelatedQuotes($query,$id,$cntid='',$prtid='',$sid="product_id")
 {
 	global $mod_strings;
 	global $app_strings;
-	
-	$hidden = getHiddenValues($id,$sid); 
-	if($prtid!=0 && $prtid!='')
-	{
-		$parent_module = getSalesEntityType($prtid);
-		if($parent_module == "Accounts")
-        	$hidden .= '<input type="hidden" name="account_id" value="'.$prtid.'">';
-		if($parent_module == "Potentials")
-        	$hidden .= '<input type="hidden" name="potential_id" value="'.$prtid.'">';
-	}
-	if($cntid!=0 && $cntid!='')
-        $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
-	echo $hidden;
 	
 	$focus = new Quote();
 	
@@ -210,19 +133,6 @@ function renderRelatedInvoices($query,$id,$cntid='',$prtid='')
 	global $mod_strings;
 	global $app_strings;
 
-	$hidden = getHiddenValues($id);
-	if($prtid!=0 && $prtid!='')
-	{
-		$parent_module = getSalesEntityType($prtid);
-		if($parent_module == "Accounts")
-        	$hidden .= '<input type="hidden" name="account_id" value="'.$prtid.'">';
-	}
-        //to populate contact name
-	if($cntid!=0 && $cntid!='')
-        $hidden .= '<input type="hidden" name="contact_id" value="'.$cntid.'">';
-
-	echo $hidden;
-	
 	$focus = new Invoice();
 	
 	$button = '';
@@ -233,7 +143,7 @@ function renderRelatedInvoices($query,$id,$cntid='',$prtid='')
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
 	return GetRelatedList('Products','Invoice',$focus,$query,$button,$returnset);
-	//echo '</form>';
+
 }
 
 function renderProductRelatedPriceBooks($query,$id)
@@ -241,15 +151,12 @@ function renderProductRelatedPriceBooks($query,$id)
 	global $mod_strings;
 	global $app_strings;
 
-	$hidden = getHiddenValues($id);                                                                                             echo $hidden;
-	
 	$focus = new PriceBook();
 	$button = '';
 	if(isPermitted("PriceBook",3,"") == 'yes' && $focus->get_pricebook_noproduct($id))
         {
 		$button .= '<input title="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_TITLE'].'" accessyKey="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'AddProductToPriceBooks\';this.form.module.value=\'Products\'" type="submit" name="button" value="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_LABEL'].'">&nbsp;</td>';
 
-		//$button .= '<input title="'.$mod_strings['LBL_SELECT_PRICEBOOK_BUTTON_TITLE'].'" accessKey="'.$mod_strings['LBL_SELECT_PRICEBOOK_BUTTON_KEY'].'" type="button" class="button" value="'.$mod_strings['LBL_SELECT_PRICEBOOK_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Products&action=Popup&return_module=Potentials&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
 	}
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 

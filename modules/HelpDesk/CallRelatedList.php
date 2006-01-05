@@ -9,15 +9,24 @@ if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"HelpDesk");
     $focus->id = $_REQUEST['record'];
     $focus->name=$focus->column_fields['groupname'];
-//$vtlog->logthis("id is ".$focus->id,'debug');
+
 $log->debug("id is ".$focus->id);
-//$vtlog->logthis("name is ".$focus->name,'debug');
+
 $log->debug("name is ".$focus->name);
-//$vtlog->logthis("name is ".$focus->name,'debug');
+
 }
 
 $smarty = new vtigerCRM_Smarty;
 
+$hidden = '<form border="0" action="index.php" method="post" name="form" id="form">';
+        $hidden .= '<input type="hidden" name="module">';
+        $hidden .= '<input type="hidden" name="return_module" value="HelpDesk">';
+        $hidden .= '<input type="hidden" name="return_action" value="CallRelatedList">';
+        $hidden .= '<input type="hidden" name="return_id" value="'.$focus->id.'">';
+        $hidden .= '<input type="hidden" name="parent_id" value="'.$focus->id.'">';
+        $hidden .= '<input type="hidden" name="ticket_id" value="'.$focus->id.'">';
+        $hidden .= '<input type="hidden" name="action">';
+	$smarty->assign("HIDDEN",$hidden);
 
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
         $focus->id = "";
@@ -29,6 +38,7 @@ $smarty->assign("RELATEDLISTS", $related_array);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
+$smarty->assign("id",$focus->id);
 $smarty->assign("ID",$RECORD );
 $smarty->assign("MODULE",$currentmodule);
 $smarty->display("RelatedLists.tpl");

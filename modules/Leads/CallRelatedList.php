@@ -17,12 +17,23 @@ $log->debug("name is ".$focus->name);
 
 $smarty = new vtigerCRM_Smarty;
 
+$hidden = '<form border="0" action="index.php" method="post" name="form" id="form">';
+        $hidden .= '<input type="hidden" name="module">';
+        $hidden .= '<input type="hidden" name="mode">';
+        $hidden .= '<input type="hidden" name="'.$parent_id.'" value="'.$focus->id.'">';
+        $hidden .= '<input type="hidden" name="return_module" value="Leads">';
+        $hidden .= '<input type="hidden" name="return_action" value="DetailView">';
+        $hidden .= '<input type="hidden" name="return_id" value="'.$focus->id.'">';
+        $hidden .= '<input type="hidden" name="action">';
+	$smarty->assign("HIDDEN",$hidden);
+
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
         $focus->id = "";
 }
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
+$smarty->assign("id",$focus->id);
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 $related_array = getRelatedLists("Leads",$focus);
 $smarty->assign("RELATEDLISTS", $related_array);

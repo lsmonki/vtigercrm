@@ -13,23 +13,6 @@ require_once('include/RelatedListView.php');
 require_once('modules/Activities/Activity.php');
 require_once('include/utils/UserInfoUtil.php');
 
-/**     Function to get the needed hidden values which will be useful when create new entities from the HelpDesk Related List
- *      @param  int - Ticket id
- *      @return list of hidden values with form tag also
- */
-function getHiddenValues($id)
-{
-        $hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-        $hidden .= '<input type="hidden" name="module">';
-        $hidden .= '<input type="hidden" name="return_module" value="HelpDesk">';
-        $hidden .= '<input type="hidden" name="return_action" value="DetailView">';
-        $hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="ticket_id" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="action">';
-        return $hidden;
-}
-
 /**     Function to display the Activities which are related to the Ticket
  *      @param  string $query - query to get the Activities which are related to the Ticket
  *	@param  int $id - Ticket id
@@ -39,10 +22,6 @@ function renderRelatedActivities($query,$id)
 {
 	global $mod_strings;
 	global $app_strings;
-
-	$hidden = getHiddenValues($id);
-        $hidden .= '<input type="hidden" name="activity_mode">';
-        echo $hidden;
 
         $focus = new Activity();
 
@@ -56,7 +35,7 @@ function renderRelatedActivities($query,$id)
 	$returnset = '&return_module=HelpDesk&return_action=DetailView&return_id='.$id;
 
 	return GetRelatedList('HelpDesk','Activities',$focus,$query,$button,$returnset);
-        //echo '</form>';
+
 }
 
 /**     Function to display the Attachments and Notes which are related to the Ticket
@@ -66,12 +45,10 @@ function renderRelatedActivities($query,$id)
  */
 function renderRelatedAttachments($query,$id)
 {
-       $hidden = getHiddenValues($id);
-        echo $hidden;
 
         return getAttachmentsAndNotes('HelpDesk',$query,$id);
 
-        //echo '</form>';
+
 }
 
 /**     Function to display the History of the Ticket which just includes a file which contains the TicketHistory informations

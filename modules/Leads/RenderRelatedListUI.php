@@ -12,28 +12,12 @@
 require_once('include/RelatedListView.php');
 require_once('include/utils/UserInfoUtil.php');
 
-function getHiddenValues($id)
-{
-	$list .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-	$list .= '<input type="hidden" name="module">';
-	$list .= '<input type="hidden" name="mode">';
-	$list .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-	$list .= '<input type="hidden" name="return_module" value="Leads">';
-	$list .= '<input type="hidden" name="return_action" value="DetailView">';
-	$list .= '<input type="hidden" name="return_id" value="'.$id.'">';
-	$list .= '<input type="hidden" name="action">';
-	return $list;
-}
-
 function renderRelatedTasks($query, $id)
 {
 
         global $mod_strings;
         global $app_strings;
         require_once('include/RelatedListView.php');
-
-        $hidden = getHiddenValues($id);
-        $hidden .= '<input type="hidden" name="activity_mode">';
 
         $focus = new Activity();
 	$button = '';
@@ -54,15 +38,6 @@ function renderRelatedEmails($query,$id)
         global $app_strings;
         require_once('include/RelatedListView.php');
 
-        $hidden = getHiddenValues($id);
-        $hidden .= '<input type="hidden" name="activity_mode">';
-	$hidden .="<input type=\"hidden\" name=\"email_directing_module\">";
-	$hidden .="<input type=\"hidden\" name=\"record\">";
-
-	//Added to pass the parents list as hidden for Emails -- 09-11-2005
-	$hidden .= getEmailParentsList('Leads',$id);
-
-
         $focus = new Email();
 
 	$button = '';
@@ -81,8 +56,6 @@ function renderRelatedProducts($query,$id)
 	require_once('modules/Products/Product.php');
         global $mod_strings;
         global $app_strings;
-
-        $hidden = getHiddenValues($id);
 
         $focus = new Product();
  
@@ -106,9 +79,7 @@ function renderRelatedHistory($query,$id)
 
 function renderRelatedAttachments($query,$id)
 {
-	$hidden = getHiddenValues($id);
 	return getAttachmentsAndNotes('Leads',$query,$id);
 }
-
 
 ?>

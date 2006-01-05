@@ -15,27 +15,11 @@ require_once('modules/Contacts/Contact.php');
 require_once('modules/Products/Product.php');
 require_once('modules/PurchaseOrder/PurchaseOrder.php');
 
-function getHiddenValues($id,$sid="product_id")
-{
-        $hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-        $hidden .= '<input type="hidden" name="module">';
-        $hidden .= '<input type="hidden" name="mode">';
-        $hidden .= '<input type="hidden" name="'.$sid.'" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="return_module" value="Vendors">';
-        $hidden .= '<input type="hidden" name="return_action" value="DetailView">';
-        $hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
-        //$hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-        $hidden .= '<input type="hidden" name="action">';	
-	return $hidden;
-}
 
 function renderRelatedProducts($query,$id,$sid="product_id")
 {
         global $mod_strings;
         global $app_strings;
-
-        $hidden = getHiddenValues($id,$sid);
-        echo $hidden;
 
         $focus = new Product();
  
@@ -63,9 +47,6 @@ function renderRelatedOrders($query,$id,$sid="product_id")
         global $mod_strings;
         global $app_strings;
 
-        $hidden = getHiddenValues($id,$sid);
-        echo $hidden;
-
         $focus = new Order();
  
 	$button = '';
@@ -85,9 +66,6 @@ function renderRelatedContacts($query,$id)
 {
         global $mod_strings;
         global $app_strings;
-
-        $hidden = getHiddenValues($id);
-	echo $hidden;
 
         $focus = new Contact();
 

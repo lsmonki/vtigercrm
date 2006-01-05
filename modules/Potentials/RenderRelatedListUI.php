@@ -12,28 +12,10 @@
 require_once('include/RelatedListView.php');
 require_once('include/utils/UserInfoUtil.php');
 
-function getHiddenValues($id)
-{
-	$hidden .= '<form border="0" action="index.php" method="post" name="form" id="form">';
-	$hidden .= '<input type="hidden" name="module">';
-	$hidden .= '<input type="hidden" name="mode">';
-	$hidden .= '<input type="hidden" name="potential_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="contact_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="return_module" value="Potentials">';
-	$hidden .= '<input type="hidden" name="return_action" value="DetailView">';
-	$hidden .= '<input type="hidden" name="return_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="parent_id" value="'.$id.'">';
-	$hidden .= '<input type="hidden" name="action">';
-	return $hidden;
-}
-
 function renderRelatedActivities($query,$id)
 {
         global $mod_strings;
         global $app_strings;
-
-        $hidden = getHiddenValues($id);
-        $hidden .= '<input type="hidden" name="activity_mode">';
 
         $focus = new Activity();
   
@@ -55,8 +37,6 @@ function renderRelatedContacts($query,$id)
         global $mod_strings;
         global $app_strings;
 
-        $hidden = getHiddenValues($id);
-	
 	$focus = new Contact();
  
 	$button = '';
@@ -79,8 +59,6 @@ function renderRelatedProducts($query,$id)
         global $mod_strings;
         global $app_strings;
 
-        $hidden = getHiddenValues($id);
-
         $focus = new Product();
  
 	$button = '';
@@ -102,7 +80,6 @@ function renderRelatedProducts($query,$id)
 
 function renderRelatedAttachments($query,$id)
 {
-        $hidden = getHiddenValues($id);
 
        return getAttachmentsAndNotes('Potentials',$query,$id);
 
@@ -229,8 +206,6 @@ function renderRelatedQuotes($query,$id,$acntid='')
 	global $app_strings;
 	require_once('modules/Quotes/Quote.php');
 
-	$hidden = getHiddenValues($id);
-	$hidden .='<input type="hidden" name="account_id" value="'.$acntid.'">';
 	if($acntid!='')
 	$focus = new Quote();
 	
@@ -250,9 +225,6 @@ function renderRelatedSalesOrders($query,$id,$acntid='')
         global $mod_strings;
         global $app_strings;
 
-        $hidden = getHiddenValues($id);
-	$hidden .='<input type="hidden" name="account_id" value="'.$acntid.'">';
-
         $focus = new SalesOrder();
  
 	$button = '';
@@ -265,8 +237,5 @@ function renderRelatedSalesOrders($query,$id,$acntid='')
 
 	return GetRelatedList('Potentials','SalesOrder',$focus,$query,$button,$returnset);
 }
-
-
-
 
 ?>
