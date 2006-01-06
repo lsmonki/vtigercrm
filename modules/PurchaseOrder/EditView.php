@@ -38,7 +38,7 @@ global $log;
 $focus = new Order();
 $smarty = new vtigerCRM_Smarty();
 
-if(isset($_REQUEST['record'])) 
+if(isset($_REQUEST['record']) && $_REQUEST['record'] != '') 
 {
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit'; 	
@@ -61,7 +61,7 @@ if(isset($_REQUEST['product_id']) && $_REQUEST['product_id'] !='')
 
 // Get vendor address if vendorid is given
 if(isset($_REQUEST['vendor_id']) && $_REQUEST['vendor_id']!='' && $_REQUEST['record']==''){
-	require_once('modules/Products/Vendor.php');
+	require_once('modules/Vendors/Vendor.php');
 	$vend_focus = new Vendor();
 	$vend_focus->retrieve_entity_info($_REQUEST['vendor_id'],"Vendor");
 	$focus->column_fields['bill_city']=$vend_focus->column_fields['city'];
