@@ -73,7 +73,7 @@ if(isset($_REQUEST['change_status']) && $_REQUEST['change_status']=='true')
 		  <td class="dataLabel">Select New Status:</td>
           <td><select name='lead_status'>
               <?php
-			echo get_select_options_login($comboFieldArray['lead_status_dom'], $focus->lead_status);
+			echo get_select_options_with_id($comboFieldArray['lead_status_dom'], $focus->lead_status);
 		?>
             </select></td>
         </tr>
@@ -119,7 +119,7 @@ elseif(isset($_REQUEST['change_owner']) && $_REQUEST['change_owner']=='true')
 		  <td class="dataLabel">Select New Owner:</td>
           <td><select name='lead_owner'>
               <?php
-			echo get_select_options_login($usernamelist, $focus->lead_owner);
+			echo get_select_options_with_id($usernamelist, $focus->lead_owner);
 		?>
             </select></td>
         </tr>

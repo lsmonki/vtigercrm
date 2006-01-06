@@ -83,8 +83,8 @@ function get_select_options_with_id (&$option_list, $selected_key, $advsearch='f
  * of a select statement in a form.   This method expects the option list to have keys and values.  The keys are the ids.
  * The values are the display strings.
  */
-function get_select_options_login (&$option_list, $selected_key, $advsearch='false') {
-        return get_option_strings($option_list, $option_list, $selected_key, $advsearch);
+function get_select_options_array (&$option_list, $selected_key, $advsearch='false') {
+        return get_options_array_seperate_key($option_list, $option_list, $selected_key, $advsearch);
 }
 
 /**
@@ -97,7 +97,7 @@ function get_select_options_login (&$option_list, $selected_key, $advsearch='fal
  * All Rights Reserved.
  * Contributor(s): ______________________________________..
  */
-function get_select_options_with_id_separate_key (&$label_list, &$key_list, $selected_key, $advsearch='false') {
+function get_options_array_seperate_key (&$label_list, &$key_list, $selected_key, $advsearch='false') {
 	global $app_strings;
 	if($advsearch=='true')
 	$select_options = "\n<OPTION value=''>--NA--</OPTION>";
@@ -135,7 +135,7 @@ function get_select_options_with_id_separate_key (&$label_list, &$key_list, $sel
  * The values are the display strings.
  */
 
-function get_option_strings(&$label_list, &$key_list, $selected_key, $advsearch='false')
+function get_select_options_with_id_separate_key(&$label_list, &$key_list, $selected_key, $advsearch='false')
 {
     global $app_strings;
     if($advsearch=='true')

@@ -213,11 +213,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		global $others_permission_id;
 		if($fieldlabel == 'Assigned To' && $others_permission_id == 3)
 		{
-			$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
+			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
 		}
 		else
 		{
-			$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+			$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
 		}
                 $custfld .= '<td width="30%"><select name="'.$combo_lbl_name.'">'.$users_combo.'</select></td>';
 		$fieldvalue [] = $users_combo;
@@ -264,11 +264,11 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	global $others_permission_id;
 	if($fieldlabel == 'Assigned To' && $others_permission_id == 3)
 	{
-		$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
+		$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id,'private'), $assigned_user_id);
 	}
 	else
 	{
-		$users_combo = get_select_options_with_id(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
+		$users_combo = get_select_options_array(get_user_array(FALSE, "Active", $assigned_user_id), $assigned_user_id);
 	}
  
           
