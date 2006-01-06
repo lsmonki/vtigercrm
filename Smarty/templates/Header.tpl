@@ -7,7 +7,7 @@
 	<link REL="SHORTCUT ICON" HREF="include/images/vtigercrm_icon.ico">	
 	<style type="text/css">@import url("themes/{$THEME}/style.css");</style>
 </head>
-	<body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0>
+	<body leftmargin=0 topmargin=0 marginheight=0 marginwidth=0 class=small>
 	<!-- header -->
 	<!-- header-vtiger crm name & RSS -->
 	<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
