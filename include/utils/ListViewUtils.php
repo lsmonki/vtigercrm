@@ -38,7 +38,7 @@ require_once('include/utils/CommonUtils.php'); //new
 
 function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='')
 {
-	if($relatedlist='HomePage')
+	if($relatedlist=='HomePage')
 	{
 	global $adb;
 	global $theme;
@@ -539,7 +539,7 @@ function getNavigationValues($display, $noofrows, $limit)
 //parameter added for customview $oCv 27/5
 function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
 {
-	if($relatedlist='HomePage')
+	if($relatedlist=='HomePage')
 	{
 		global $adb;
 		global $app_strings;
