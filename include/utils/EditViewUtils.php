@@ -224,8 +224,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 53)     
 	{  
-		$editview_label[]=$mod_strings[$fieldlabel];
-          
+	  $editview_label[]=$mod_strings[$fieldlabel];
           $result = get_group_options();
           $nameArray = $adb->fetch_array($result);
 	  	
@@ -307,18 +306,14 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	    {
 		$selected = "selected";
             }	
-            $GROUP_SELECT_OPTION .= '<option value="';
-            $GROUP_SELECT_OPTION .=  $groupname;
-            $GROUP_SELECT_OPTION .=  '" '.$selected.'>';
-            $GROUP_SELECT_OPTION .= $nameArray["groupname"];
-            $GROUP_SELECT_OPTION .= '</option>';
+	    $group_option[] = array($groupname=>$selected);
+	
           }while($nameArray = $adb->fetch_array($result));
-          $GROUP_SELECT_OPTION .= ' </select></td>';
+
 	}
           
-          $custfld .= $GROUP_SELECT_OPTION;
-          
         	$fieldvalue[]=$users_combo;  
+                $fieldvalue[] = $group_option;
         }
 	elseif($uitype == 51 || $uitype == 50 || $uitype == 73)
 	{
