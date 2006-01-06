@@ -1,444 +1,502 @@
-style.csmall {
-		font-family: Arial, Helvetica, sans-serif;
-			font-size: 11px;
-				line-height: 14px;
-					color: #000000;
+.small {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
+color: #000000;
 }
 .big {
-		font-family: Arial, Helvetica, sans-serif;
-			font-size: 12px;
-				line-height: 18px;
-					color: #aaaaaa;
-						font-weight:bold;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+color: #aaaaaa;
+	   font-weight:bold;
 }
 .genHeaderBig{
-		font-family: Arial, Helvetica, sans-serif;
-			font-size: 16px;
-				line-height: 19px;
-					color: #000000;
-						font-weight:bold;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	line-height: 19px;
+color: #000000;
+	   font-weight:bold;
 }
 .genHeaderSmall{
-		font-family: Arial, Helvetica, sans-serif;
-			font-size: 14px;
-				line-height: 16px;
-					color: #000000;
-						font-weight:bold;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 16px;
+color: #000000;
+	   font-weight:bold;
 }
 
 .moduleName {
-		font-family: Arial, Helvetica, sans-serif;
-			font-size: 18px;
-				color: #000000;
-					font-weight:bold;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+color: #000000;
+	   font-weight:bold;
 }
 
 .rssDisplayPanel {
-		font-family: Arial, Helvetica, sans-serif;
-			font-size: 11px;
-				line-height: 12px;
-					color: #ABABAB;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 12px;
+color: #ABABAB;
 }
 
 
 
 .hdrNameBg {
 
-		background:url(images/topBg.gif);
+background:url(images/topBg.gif);
 }
 
 .hdrTabBg {
-		background:#bbbbbb url(images/tabUnSelectedBg.gif) repeat-x ;
+background:#bbbbbb url(images/tabUnSelectedBg.gif) repeat-x ;
 }
 
 .tabSelected {
-		background:#bbbbbb url(images/tabSelectedBg.gif) repeat-x;
-			font-family:  Arial, Helvetica, sans-serif;
-				font-size: 11px;
-					padding-left:15px;
-						padding-right:15px;
-							padding-top:2px;
-								padding-bottom:2px;
-									
+background:#bbbbbb url(images/tabSelectedBg.gif) repeat-x;
+		   font-family:  Arial, Helvetica, sans-serif;
+		   font-size: 11px;
+		   padding-left:15px;
+		   padding-right:15px;
+		   padding-top:2px;
+		   padding-bottom:2px;
+
 }
-	
-	.tabUnSelected {
-			background:#bbbbbb url(images/tabUnSelectedBg.gif) repeat-x;
-				font-family: Arial, Helvetica, sans-serif;
-					font-size: 11px;
-						padding-left:15px;
-							padding-right:15px;
-								padding-top:2px;
-									padding-bottom:2px;
-	}
 
-	.tabSeperator {
-			background:#bbbbbb url(images/tabSeperatorBg.gif) repeat-x;
+.tabUnSelected {
+background:#bbbbbb url(images/tabUnSelectedBg.gif) repeat-x;
+		   font-family: Arial, Helvetica, sans-serif;
+		   font-size: 11px;
+		   padding-left:15px;
+		   padding-right:15px;
+		   padding-top:2px;
+		   padding-bottom:2px;
+}
 
-
-	}
-
-	.level2text {
-			background:#bbbbbb url(images/level2Bg.gif) repeat-x;
-				font-family: Arial, Helvetica, sans-serif;
-					font-size: 11px;
-						padding-left:20px;
-							padding-right:20px;
-								padding-top:5px;
-									padding-bottom:5px;
-										font-weight:bold;
-											color:white;
-	}
-
-	.level2text a{
-			text-decoration:none;
-				color:white;
-
-	}
-
-	.level2text a:hover {
-			text-decoration:underline;
-				color:white;
-
-	}
+.tabSeperator {
+background:#bbbbbb url(images/tabSeperatorBg.gif) repeat-x;
 
 
+}
 
-	.level2Bg {
-			background:#bbbbbb url(images/level2Bg.gif) repeat-x;
-				font-family: Arial, Helvetica, sans-serif;
-					font-size: 11px;
+.level2text {
+background:#bbbbbb url(images/level2Bg.gif) repeat-x;
+		   font-family: Arial, Helvetica, sans-serif;
+		   font-size: 11px;
+		   padding-left:20px;
+		   padding-right:20px;
+		   padding-top:5px;
+		   padding-bottom:5px;
+		   font-weight:bold;
+color:white;
+}
 
-	}
+.level2text a{
+	text-decoration:none;
+color:white;
 
-	.tabLiner {
-			background:#9abffc url(images/moduleSelectorBg.gif) bottom repeat-x;
-				padding:0px;
-					
+}
 
-	}
-	.sep1 {
-			background:#999999;
-	}
+.level2text a:hover {
+	text-decoration:underline;
+color:white;
 
-
-	.showPanelBg {
-			background:url(images/showPanelTopBg.gif) repeat-x;
-	}
-
-	a {
-			font-family: Arial, Helvetica, sans-serif;
-				font-size: 11px;
-					text-decoration:none;
-						color:#333366;
-
-	}
-
-	a:hover {
-			font-family: Arial, Helvetica, sans-serif;
-				font-size: 11px;
-					text-decoration:underline;
-						color:#333333;
-
-	}
-
-	.hdrLink {
-			font-family: Arial, Helvetica, sans-serif;
-				font-size: 18px;
-					text-decoration:none;
-						color:#333333;
-							font-weight:bold;
-	}
+}
 
 
-	.hdrLink:hover {
-			font-family: Arial, Helvetica, sans-serif;
-				font-size: 18px;
-					text-decoration:underline;
-						color:#333333;
-							font-weight:bold;
-	}
+
+.level2Bg {
+background:#bbbbbb url(images/level2Bg.gif) repeat-x;
+		   font-family: Arial, Helvetica, sans-serif;
+		   font-size: 11px;
+
+}
+
+.tabLiner {
+background:#9abffc url(images/moduleSelectorBg.gif) bottom repeat-x;
+padding:0px;
 
 
-	.searchBox {
-			border: 0px solid #999999;
-				font-family: Arial, Helvetica, sans-serif;
-					font-size: 11px;
-						padding-left:2px;
-							width:100px;
-								background-color:#ffffef;
-									
-	}
-	.searchBtn {
-			border : 1px #cccccc solid;
-				font-family: Arial, Helvetica, sans-serif;
-					font-size: 11px;
-						width:30px;
-							height:19px;
-								background-color:#cccccc;
-	}
+}
+.sep1 {
+background:#999999;
+}
 
-	.lvtBg {
-			background-color:#cccccc;
 
-	}
-	.lvtHeaderText {
-			font-family: Arial, Helvetica, sans-serif;
-				font-size: 14px;
-					font-weight:bold;
-	}
-	.lvtCol {
-			border-top:1px solid #eeeeee;
-				border-left:1px solid #eeeeee;
-					border-right:1px solid #999999;
-						border-bottom:1px solid #999999;
-							background-color:#dadada;
-								color:#666666;
-									font-weight:bold;
-	}
+.showPanelBg {
+background:url(images/showPanelTopBg.gif) repeat-x;
+}
 
-	.lvtColData {
-			background-color:#fafafa;
-	}
+a {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	text-decoration:none;
+color:#333366;
 
-	.lvtColDataHover {
-		background-color:#efefef;
-	}
+}
 
-	.dvtSelectedCell {
-			border-left:1px solid #cacaca;
-				border-top:3px solid #999999;
-					border-right:1px solid #cacaca;
-						padding-left:20px;
-							padding-right:20px;
-								background-color:white;
-									font-weight:bold;
-	}
-	.dvtUnSelectedCell {
-			border-left:1px solid #cacaca;
-				border-top:1px solid #cacaca;
-					border-right:1px solid #cacaca;
-						border-bottom:1px solid #cacaca;
-							padding-left:20px;
-								padding-right:20px;
-									background-color:#efefef;
-	}
-	.dvtTabCache {
-			border-bottom:1px solid #cacaca;
-	}
+a:hover {
+	  font-family: Arial, Helvetica, sans-serif;
+	  font-size: 11px;
+	  text-decoration:underline;
+color:#333333;
 
-	.dvtContentSpace {
-			border-left:1px solid #cacaca;
-				border-right:1px solid #cacaca;
-					border-bottom:1px solid #cacaca;
-						padding-left:0px;
-	}
-	.rightAddInfo {
-			border-left:1px solid #a2a2a2;
-				border-right:1px solid #dddddd;
-					border-bottom:1px solid #dddddd;
-						border-top:1px solid #a2a2a2;
-							background-color:#fafafa;
-								padding:5px;
-	}
-	.dvtCellLabel {
-		background-color:#f6f6f6;
-		padding-right:10px;
-		border-bottom:1px solid #eaeaea;
-		color:#737373;
-	}
+  }
 
-	.dvtCellInfo {
-		padding-left:10px;
-		border-bottom:1px solid #eaeaea;
-	}
+.hdrLink {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	text-decoration:none;
+color:#333333;
+	  font-weight:bold;
+}
 
-	.rightMailMerge {
-			border:1px solid #dddddd
-	}
 
-	.rightMailMergeHeader {
-			border-bottom:1px solid #dddddd;
-				padding:5px;
-					background-color:#eaeaea;
+.hdrLink:hover {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	text-decoration:underline;
+color:#333333;
+	  font-weight:bold;
+}
 
-	}
 
-	.rightMailMergeContent {
-			padding:5px;
-				background-color:#fafafa;
+.searchBox {
+border: 0px solid #999999;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 11px;
+		padding-left:2px;
+width:100px;
+	  background-color:#ffffef;
 
-	}
+}
+.searchBtn {
+border : 1px #cccccc solid;
+		 font-family: Arial, Helvetica, sans-serif;
+		 font-size: 11px;
+width:30px;
+height:19px;
+	   background-color:#cccccc;
+}
 
-	.rightUpcomingActivitiesHeader{
-			border-bottom:1px solid #ddddcc;
-				padding:5px;
-					background-color:#ffffdd;
-	}
+.lvtBg {
+	background-color:#cccccc;
 
-	.rightUpcomingActivitiesContent {
-			padding:5px;
-				background-color:#ffffef;
-	}
+}
+.lvtHeaderText {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight:bold;
+}
+.lvtCol {
+	border-top:1px solid #eeeeee;
+	border-left:1px solid #eeeeee;
+	border-right:1px solid #999999;
+	border-bottom:1px solid #999999;
+	background-color:#dadada;
+color:#666666;
+	  font-weight:bold;
+}
 
-	.detailedViewHeader{
-		border-bottom:1px solid #999999;
-		padding:5px; 
+.lvtColData {
+	background-color:#fafafa;
+}
+
+.lvtColDataHover {
+	background-color:#efefef;
+}
+
+.dvtSelectedCell {
+	border-left:1px solid #cacaca;
+	border-top:3px solid #999999;
+	border-right:1px solid #cacaca;
+	padding-left:20px;
+	padding-right:20px;
+	background-color:white;
+	font-weight:bold;
+}
+.dvtUnSelectedCell {
+	border-left:1px solid #cacaca;
+	border-top:1px solid #cacaca;
+	border-right:1px solid #cacaca;
+	border-bottom:1px solid #cacaca;
+	padding-left:20px;
+	padding-right:20px;
+	background-color:#efefef;
+}
+.dvtTabCache {
+	border-bottom:1px solid #cacaca;
+}
+
+.dvtContentSpace {
+	border-left:1px solid #cacaca;
+	border-right:1px solid #cacaca;
+	border-bottom:1px solid #cacaca;
+	padding-left:0px;
+}
+.rightAddInfo {
+	border-left:1px solid #a2a2a2;
+	border-right:1px solid #dddddd;
+	border-bottom:1px solid #dddddd;
+	border-top:1px solid #a2a2a2;
+	background-color:#fafafa;
+padding:5px;
+}
+.dvtCellLabel {
+	background-color:#f6f6f6;
+	padding-right:10px;
+	border-bottom:1px solid #eaeaea;
+color:#737373;
+}
+
+.dvtCellInfo {
+	padding-left:10px;
+	border-bottom:1px solid #eaeaea;
+}
+
+.rightMailMerge {
+border:1px solid #dddddd
+}
+
+.rightMailMergeHeader {
+	border-bottom:1px solid #dddddd;
+padding:5px;
+		background-color:#eaeaea;
+
+}
+
+.rightMailMergeContent {
+padding:5px;
+		background-color:#fafafa;
+
+}
+
+.rightUpcomingActivitiesHeader{
+	border-bottom:1px solid #ddddcc;
+padding:5px;
+		background-color:#ffffdd;
+}
+
+.rightUpcomingActivitiesContent {
+padding:5px;
+		background-color:#ffffef;
+}
+
+.detailedViewHeader{
+	border-bottom:1px solid #999999;
+padding:5px; 
 		background-color:#e5e5e5;
 
-	}
-	.detailedViewTextBox {
-			font-family: Arial, Helvetica, sans-serif;
-				font-size: 11px;
-					color: #000000;
-						border:1px solid #bababa;
-							padding-left:5px;
-								width:90%;
-									background-color:#ffffff;
-	}
-	.detailedViewTextBoxOn {
-			font-family: Arial, Helvetica, sans-serif;
-				font-size: 11px;
-					color: #000000;
-						border:1px solid #bababa;
-							padding-left:5px;
-								width:90%;
-									background-color:#ffffdd;
-	}
-	.detailedViewTextArea {
-			font-family: Arial, Helvetica, sans-serif;
-				font-size: 11px;
-					color: #000000;
-						border:1px solid #bababa;
-							padding-left:5px;
-								width:95%;
-									height:100px;
-										background-color:#ffffff;
-											text-align:left;
-	}
+}
+.detailedViewTextBox {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+color: #000000;
+border:1px solid #bababa;
+	   padding-left:5px;
+width:90%;
+	  background-color:#ffffff;
+}
+.detailedViewTextBoxOn {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+color: #000000;
+border:1px solid #bababa;
+	   padding-left:5px;
+width:90%;
+	  background-color:#ffffdd;
+}
+.detailedViewTextArea {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+color: #000000;
+border:1px solid #bababa;
+	   padding-left:5px;
+width:95%;
+height:100px;
+	   background-color:#ffffff;
+	   text-align:left;
+}
 
-	.moduleSearch {
-			border:1px solid #dddddd;
-				background-color:#ffffef;
+.moduleSearch {
+border:1px solid #dddddd;
+	   background-color:#ffffef;
 
-	}
-	.searchHdrBox {
+}
+.searchHdrBox {
 
-			border-bottom:1px dashed #dddddd;
-	}
+	border-bottom:1px dashed #dddddd;
+}
 
-	.advSearch {
-			padding:10px;
-				border-left:1px solid #eaeaea; 
-					border-right:1px solid #eaeaea; 
-						border-bottom:1px solid #eaeaea; 	
-							overflow:auto;
-								width:600px;
-									height:150px;
-										background-color:#ffffef;
+.advSearch {
+padding:10px;
+		border-left:1px solid #eaeaea; 
+		border-right:1px solid #eaeaea; 
+		border-bottom:1px solid #eaeaea; 	
+overflow:auto;
+width:600px;
+height:150px;
+	   background-color:#ffffef;
 
-	}
-	.searchAlph {
-		border:1px solid #dadada;
-		background-color:#ffffff;
-		width:10px
+}
+.searchAlph {
+border:1px solid #dadada;
+	   background-color:#ffffff;
+width:10px
 
-	}
+}
 
-	.searchNotFound {
-			border:2px solid #ff3333;
-				background-color:#fafafa;
-					font-family: Arial, Helvetica, sans-serif;
-						font-size: 12px;
-							color: #ff0000;
-								height:50px;
-									width:640px;
+.searchNotFound {
+border:2px solid #ff3333;
+	   background-color:#fafafa;
+	   font-family: Arial, Helvetica, sans-serif;
+	   font-size: 12px;
+color: #ff0000;
+height:50px;
+width:640px;
 
-	}
+}
 
-	.hiliteBtn4Search {
-			border:1px solid #cccccc;
-				background-color:#fafafa;
-					line-height:37px;
-						height:40px;
-							padding:5px;
-	}
+.hiliteBtn4Search {
+border:1px solid #cccccc;
+	   background-color:#fafafa;
+	   line-height:37px;
+height:40px;
+padding:5px;
+}
 
-	.loginTopBg {
-			background:url(images/loginTopBg.gif) repeat-x;
-	}
+.loginTopBg {
+background:url(images/loginTopBg.gif) repeat-x;
+}
 
-	.loginTopShade {
-			background:url(images/loginTopShade.gif) repeat-x;
-	}
+.loginTopShade {
+background:url(images/loginTopShade.gif) repeat-x;
+}
 
-	.loginBg{
-			background:#448cEB url(images/loginBg.gif) repeat-x;
-	}
+.loginBg{
+background:#448cEB url(images/loginBg.gif) repeat-x;
+}
 
-	.textbox {
-			border:1px solid #999999;
-				background-color:#ffffff;
-					font-family: Arial, Helvetica, sans-serif;
-						font-size: 11px;
-							width:120px;
-								padding:2px;
+.textbox {
+border:1px solid #999999;
+	   background-color:#ffffff;
+	   font-family: Arial, Helvetica, sans-serif;
+	   font-size: 11px;
+width:120px;
+padding:2px;
 
-	}
-	.loginBottomBg {
-			background:url(images/loginBottomBg.gif) repeat-x;
-	}
-	.loginSignin {
-			font-family: Arial, Helvetica, sans-serif;
-				font-size: 18px;
-					color: #448ceb;
-						font-weight:bold;
-	}
+}
+.loginBottomBg {
+background:url(images/loginBottomBg.gif) repeat-x;
+}
+.loginSignin {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+color: #448ceb;
+	   font-weight:bold;
+}
 
-	.loginBillBoard {
-			font-family: Arial, Helvetica, sans-serif;
-				font-size: 11px;
-					color:#ffffff;
-	}
+.loginBillBoard {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+color:#ffffff;
+}
 
-	.mx {
-	}
+.mx {
+}
 
-	.calTopBg {
-			background:url(images/calBg.gif) repeat-x;
-	}
+.calTopBg {
+background:url(images/calBg.gif) repeat-x;
+}
 
-	.calDisplay {
-			border-left:1px solid #d0d0d0;
-				border-right:1px solid #d0d0d0;
-	}
-	.calBottomBg {
-			background:url(images/calBottomBg.gif) repeat-x;
-	}
+.calDisplay {
+	border-left:1px solid #d0d0d0;
+	border-right:1px solid #d0d0d0;
+}
+.calBottomBg {
+background:url(images/calBottomBg.gif) repeat-x;
+}
 
-	.calDayHourCell {
-			font-family: Arial, Helvetica, sans-serif;
-				font-size: 18px;
-	}
-	.calDayHour {
-			border-top:2px solid #dadada;
-	}
-	.calDiv {
-			overflow:auto; width:95%;height:320px;padding:0px;background-color:#ffffef;
-				border-top: 1px solid #bababa;
-					/*border-left: 1px solid #bababa;
-						border-right: 1px solid #eaeaea;
-							border-bottom: 1px solid #eaeaea; */
-								
+.calDayHourCell {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+}
+.calDayHour {
+	border-top:2px solid #dadada;
+}
+.calDiv {
+overflow:auto; width:95%;height:320px;padding:0px;background-color:#ffffef;
+		 border-top: 1px solid #bababa;
 
-	}
 
-	.calHourOccupied {
-			background-color:#bbeeff;
+}
 
-	}
+.calHourOccupied {
+	background-color:#bbeeff;
 
-	.calAddAct {
-			display:none;
-	}
+}
+
+.calAddAct {
+display:none;
+}
+
+.calAddEvent {
+position:absolute;
+		 z-index:1000000;
+width:500px;
+
+left:200px;
+top:150px;
+border:2px solid #999999;
+	   background-color:#ffffff;
+padding:5px;
+}
+
+.addEventHeader{
+	border-bottom:2px dotted #cccccc;
+}
+
+.addEventFooter{
+	border-top:2px dotted #cccccc;
+height:40px;
+}
+
+.addEventInnerBox {
+border:1px dotted #dadada;
+
+}
+
+.cellScheduled {
+	background-color:#ffffef;
+color:#7a7a7a;
+
+}
+
+.cellSchHover {
+	border-bottom:1px solid #999999;
+	border-right:1px solid #999999;
+	border-left:1px solid #dadada;
+	border-top:1px solid #dadada;
+	background-color:#ffffef;	
+color:#7a7a7a;	
+}
+.cellSch{
+border:0px;
+	   background-color:#ffffef;
+color:#7a7a7a;
+}
+
+
+.cellNormalHover {
+	border-bottom:1px solid #999999;
+	border-right:1px solid #999999;
+	border-left:1px solid #dadada;
+	border-top:1px solid #dadada;
+	background-color:#ffffff;	
+color:#7a7a7a;	
+}
+
+.cellNormal {
+border:0px;
+	   background-color:#ffffff;
+}
 
