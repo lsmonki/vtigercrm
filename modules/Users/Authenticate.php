@@ -125,6 +125,9 @@ if($focus->is_authenticated())
 	
 	$log->debug("authenticated_user_theme is $authenticated_user_theme");
 	$log->debug("authenticated_user_language is $authenticated_user_language");
+	$log->debug("authenticated_user_id is ". $focus->id);
+        $log->debug("app_unique_key is $application_unique_key");
+
 	
 // Clear all uploaded import files for this user if it exists
 
