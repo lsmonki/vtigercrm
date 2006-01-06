@@ -71,33 +71,7 @@
 		 <hr noshade size=1>
 		 <br> 
 		
-
-
-
-<form name="EditView" method="POST" action="index.php">
-
-                        <input type="hidden" name="module" value="{$MODULE}">
-
-                        <input type="hidden" name="record" value="{$ID}">
-
-                        <input type="hidden" name="mode" value="{$MODE}">
-
-                        <input type="hidden" name="action">
-
-                        <input type="hidden" name="return_module" value="{$RETURN_MODULE}">
-
-                        <input type="hidden" name="return_id" value="{$RETURN_ID}">
-
-                        <input type="hidden" name="return_action" value="{$RETURN_ACTION}">
-
-                        <input type="hidden" name="return_viewname" value="{$RETURN_VIEWNAME}">
-
-			<input type="hidden" name="old_smownerid" value="{$OLDSMOWNERID}">
-
-			<input type="hidden" name="convertmode">
-
-			<input type="hidden" name="totalProductCount">
-
+		{include file='EditViewHidden.tpl'}
 
 		{*<!-- Account details tabs -->*}
 		<table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
@@ -130,8 +104,8 @@
 							<tr>
 								<td  colspan=4 style="padding:5px">
 								<div align="center">
-								<input value="Save" class=small style="width:70px" onclick="this.form.action.value='Save';return formValidate()" type="submit" name="button">&nbsp;
-								<input type="button" value="Cancel" class=small style="width:70px" onclick="window.history.back()" name="button" >
+								<input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="small" onclick="this.form.action.value='Save';  return formValidate()" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+                                                                 <input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="small" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 								</div>
 								</td>
 							</tr>
@@ -189,7 +163,41 @@
 							   </select>
 							</td>
 
-							{elseif $uitype eq 52 || $uitype eq 53 || $uitype eq 77}
+							{elseif $uitype eq 53}
+                                                        <td width="20%" class="dvtCellLabel" align=right>
+                                                           {$fldlabel}
+                                                        </td>
+                                                        <td width="30%" align=left class="dvtCellInfo">
+                                                                <input type="radio" name="assigntype" value="U" onclick="toggleAssignType(this.value)">&nbsp;User
+                                                                {if $secondvalue neq ''}
+                                                                <input type="radio" name="assigntype" value="T" onclick="toggleAssignType(this.value)">&nbsp;Team
+                                                                {/if}
+
+                                                                <span id="assign_user" style="display:block">
+                                                                <select name="assigned_user_id">
+                                                                {foreach key=key_one item=arr from=$fldvalue}
+                                                                        {foreach key=sel_value item=value from=$arr}
+                                                                                <option value="{$key_one}" {$value}>{$sel_value}</option>
+                                                                        {/foreach}
+
+                                                                {/foreach}
+                                                                </select></span>
+                                                                {if $secondvalue neq ''}
+                                                                <span id="assign_team" style="display:none">
+                                                                <select name="assigned_group_name">';
+                                                                {foreach key=key_one item=arr from=$secondvalue}
+                                                                        {foreach key=sel_value item=value from=$arr}
+                                                                                <option value="{$sel_value}" {$value}>{$sel_value}</option>
+                                                                        {/foreach}
+
+                                                                {/foreach}
+
+                                                                </select></span>
+
+                                                                {/if}
+                                                        </td>
+
+							{elseif $uitype eq 52 || $uitype eq 77}
                                                         <td width="20%" class="dvtCellLabel" align=right>
 							   {$fldlabel}
 							</td>
@@ -380,8 +388,12 @@
 							<tr>
 								<td  colspan=4 style="padding:5px">
 								<div align="center">
-								<input type="submit" value="Save" class=small onclick="this.form.action.value='Save';return formValidate() "  style="width:70px">&nbsp;
-								<input type="button" onclick="window.history.back()" name="button" value="Cancel" class=small style="width:70px">
+								{if $MODULE eq 'Emails'}
+                                                                <input title="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE}" accessKey="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_KEY}" class="button" onclick="window.open('index.php?module=Users&action=lookupemailtemplates&entityid={$ENTITY_ID}&entity={$ENTITY_TYPE}','emailtemplate','top=100,left=200,height=400,width=300,menubar=no,addressbar=no,status=yes')" type="button" name="button" value="{$APP.LBL_SELECTEMAILTEMPLATE_BUTTON_LABEL}">
+                                                                <input title="{$MOD.LBL_SEND}" accessKey="{$MOD.LBL_SEND}" class="button" onclick="this.form.action.value='Save';this.form.send_mail.value='true'; return formValidate()" type="submit" name="button" value="  {$MOD.LBL_SEND}  " >
+                                                                {/if}
+                                                                <input title="{$APP.LBL_SAVE_BUTTON_TITLE}" accessKey="{$APP.LBL_SAVE_BUTTON_KEY}" class="small" onclick="this.form.action.value='Save';  return formValidate()" type="submit" name="button" value="  {$APP.LBL_SAVE_BUTTON_LABEL}  " style="width:70px" >
+                                                                <input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="small" onclick="window.history.back()" type="button" name="button" value="  {$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 								</div>
 								</td>
 							</tr>
