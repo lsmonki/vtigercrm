@@ -1,0 +1,64 @@
+{if $MODULE eq 'Emails'}	
+	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
+        <input type="hidden" name="form">
+        <input type="hidden" name="send_mail">
+        <input type="hidden" name="contact_id" value="{$CONTACT_ID}">
+        <input type="hidden" name="user_id" value="{$USER_ID}">
+        <input type="hidden" name="filename" value="{$FILENAME}">
+        <input type="hidden" name="old_id" value="{$OLD_ID}">
+
+{elseif $MODULE eq 'Contacts'}
+	<form name="EditView" method="POST" action="index.php">
+	<input type="hidden" name="activity_mode" value="{$ACTIVITYMODE}">
+	<input type="hidden" name="opportunity_id" value="{$OPPORTUNITY_ID}">
+	<input type="hidden" name="contact_role">
+	<input type="hidden" name="case_id" value="{$CASE_ID}">
+
+{elseif $MODULE eq 'Potentials'}
+	<form name="EditView" method="POST" action="index.php">
+	<input type="hidden" name="contact_id" value="{$CONTACT_ID}">
+
+{elseif $MODULE eq 'Activities'}
+	<form name="EditView" method="POST" action="index.php">
+	<input type="hidden" name="ticket_id" value="{$TICKETID}">
+	<input type="hidden" name="product_id" value="{$PRODUCTID}">
+
+{elseif $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice' || $MODULE eq 'Quotes'}
+	<form name="EditView" method="POST" action="index.php">
+	<input type="hidden" name="totalProductCount">
+	{if $MODULE eq 'Invoice'}
+       		 <input type="hidden" name="convertmode">
+	{/if}
+
+{elseif $MODULE eq 'HelpDesk'}
+	<script type="text/javascript" src="modules/{$MODULE}/{$MODULE}.js"></script>
+	<form name="EditView" method="POST" action="index.php">
+	<input type="hidden" name="old_smownerid" value="{$OLDSMOWNERID}">
+
+{elseif $MODULE eq 'Accounts' || $MODULE eq 'Faq' || $MODULE eq 'PriceBooks' || $MODULE eq 'Leads' || $MODULE eq 'Vendors'}
+	<form name="EditView" method="POST" action="index.php">
+
+{elseif $MODULE eq 'Notes'}
+	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
+	<input type="hidden" name="max_file_size" value="{$MAX_FILE_SIZE}">
+	<input type="hidden" name="filename" value="{$FILENAME}">
+	<input type="hidden" name="form">
+	<input type="hidden" name="email_id" value="{$EMAILID}">
+	<input type="hidden" name="ticket_id" value="{$TICKETID}">
+	<input type="hidden" name="fileid" value="{$FILEID}">
+	<input type="hidden" name="old_id" value="{$OLD_ID}">
+
+{elseif $MODULE eq 'Products'}
+	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
+	<input type="hidden" name="activity_mode" value="{$ACTIVITYMODE}">
+	<INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
+{/if}
+
+<input type="hidden" name="module" value="{$MODULE}">
+<input type="hidden" name="record" value="{$ID}">
+<input type="hidden" name="mode" value="{$MODE}">
+<input type="hidden" name="action">
+<input type="hidden" name="return_module" value="{$RETURN_MODULE}">
+<input type="hidden" name="return_id" value="{$RETURN_ID}">
+<input type="hidden" name="return_action" value="{$RETURN_ACTION}">
+<input type="hidden" name="return_viewname" value="{$RETURN_VIEWNAME}">
