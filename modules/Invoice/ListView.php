@@ -68,67 +68,11 @@ $_SESSION['INVOICE_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
+	$where=Search($currentModule);	
 	// we have a query
 	$url_string .="&query=true";
-	if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
-	if (isset($_REQUEST['salesorder'])) $salesorder = $_REQUEST['salesorder'];
-
-	$where_clauses = Array();
-
-//Added for Custom Field Search
-$sql="select * from field where tablename='invoicecf' order by fieldlabel";
-$result=$adb->query($sql);
-for($i=0;$i<$adb->num_rows($result);$i++)
-{
-        $column[$i]=$adb->query_result($result,$i,'columnname');
-        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-	$uitype[$i]=$adb->query_result($result,$i,'uitype');
-        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-
-        if(isset($customfield[$i]) && $customfield[$i] != '')
-        {
-		if($uitype[$i] == 56)
-			$str=" invoicecf.".$column[$i]." = 1";
-		else
-	                $str=" invoicecf.".$column[$i]." like '$customfield[$i]%'";
-                array_push($where_clauses, $str);
-		$url_string .="&".$column[$i]."=".$customfield[$i];
-        }
-}
-//upto this added for Custom Field
-	
-	if(isset($subject) && $subject != "") 
-	{
-		array_push($where_clauses, "invoice.subject like ".PearDatabase::quote($subject."%"));
-		$url_string .= "&subject=".$subject;
-	}
-	if(isset($salesorder) && $salesorder != "")
-	{
-		array_push($where_clauses, "salesorder.subject like ".PearDatabase::quote("%".$salesorder."%"));
-		$url_string .= "&salesorder=".$salesorder;
-	}
-	
-	$where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($where != "")
-		$where .= " and ";
-		$where .= $clause;
-	}
-
-	if (!empty($assigned_user_id)) {
-		if (!empty($where)) {
-			$where .= " AND ";
-		}
-		$where .= "crmentity.smownerid IN(";
-		foreach ($assigned_user_id as $key => $val) {
-			$where .= PearDatabase::quote($val);
-			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
-		}
-	}
 
 	$log->info("Here is the where clause for the list view: $where");
-
 }
 
 //<<<<cutomview>>>>>>>
@@ -263,6 +207,9 @@ $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Invoice",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
+
+$listview_header_search = getSearchListHeaderValues($focus,"Invoice",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Invoice",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);

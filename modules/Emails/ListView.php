@@ -160,46 +160,15 @@ $customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
                         </td>';
 
 
-$where = "";
-
-
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
+	$where=Search($currentModule);
 	// we have a query
 	$url_string .="&query=true";
 	if (isset($_REQUEST['subject'])) $name = $_REQUEST['subject'];
 	if (isset($_REQUEST['contactname'])) $contactname = $_REQUEST['contactname'];
 	if(isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 
-	$where_clauses = Array();
-
-	if(isset($current_user_only) && $current_user_only != "")
-	{
-		array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-		$url_string .= "&current_user_only=".$current_user_only;
-	}
-	if(isset($name) && $name != '')
-	{
-		array_push($where_clauses, "activity.subject like ".PearDatabase::quote($name.'%')."");
-		$url_string .= "&subject=".$name;
-
-	}
-	if(isset($contactname) && $contactname != '')
-	{
-		array_push($where_clauses, "(contactdetails.firstname like ".PearDatabase::quote($contactname.'%')." OR contactdetails.lastname like ".PearDatabase::quote($contactname.'%').")");
-		$url_string .= "&contactname=".$contactname;
-	}
-
-	$where = "";
-	if (isset($where_clauses)) 
-	{
-		foreach($where_clauses as $clause)
-		{
-			if($where != "")
-				$where .= " and ";
-			$where .= $clause;
-		}
-	}
 	$log->info("Here is the where clause for the list view: $where");
 }
 
@@ -293,6 +262,9 @@ if($viewid !='')
 
 $listview_header = getListViewHeader($focus,"Emails",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
+
+$listview_header = getSearchListHeaderValues($focus,"Emails",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Emails",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);                                                                          $smarty->assign("SELECT_SCRIPT", $view_script);

@@ -58,64 +58,15 @@ $_SESSION['VENDORS_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
+	$where=Search($currentModule);
+	
 	$url_string .="&query=true";
+
 	if (isset($_REQUEST['vendorname'])) $vendorname = $_REQUEST['vendorname'];
         if (isset($_REQUEST['email'])) $email = $_REQUEST['email'];
         if (isset($_REQUEST['category'])) $category = $_REQUEST['category'];
 	
-	$where_clauses = Array();
-	//$search_query='';
-
-	//Added for Custom Field Search
-	$sql="select * from field where tablename='vendorcf' order by fieldlabel";
-	$result=$adb->query($sql);
-	for($i=0;$i<$adb->num_rows($result);$i++)
-	{
-	        $column[$i]=$adb->query_result($result,$i,'columnname');
-	        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-		$uitype[$i]=$adb->query_result($result,$i,'uitype');
-
-	        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-
-	        if(isset($customfield[$i]) && $customfield[$i] != '')
-	        {
-			if($uitype[$i] == 56)
-                                $str=" vendorcf.".$column[$i]." = 1";
-                        else
-			        $str="vendorcf.".$column[$i]." like '$customfield[$i]%'";
-		        array_push($where_clauses, $str);
-			$url_string .="&".$column[$i]."=".$customfield[$i];
-	        }
-	}
-	//upto this added for Custom Field
-
-	if (isset($vendorname) && $vendorname !='')
-	{
-		array_push($where_clauses, "vendorname like ".PearDatabase::quote($vendorname.'%'));
-		$url_string .= "&vendorname=".$vendorname;
-	}
-
-	if (isset($email) && $email !='')
-	{
-		array_push($where_clauses, "email =".PearDatabase::quote($email));
-		$url_string .= "&email=".$email;
-	}
-	
-	if (isset($category) && $category !='')
-	{
-		array_push($where_clauses, "category like ".PearDatabase::quote($category.'%'));
-		$url_string .= "&category=".$category;
-	}
-	$where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($where != "")
-		$where .= " and ";
-		$where .= $clause;
-	}
-
 	$log->info("Here is the where clause for the list view: $where");
-
 
 }
 
@@ -225,6 +176,10 @@ $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Vendors",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
+
+$listview_header_search = getSearchListHeaderValues($focus,"Vendors",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER",$listview_header_search);
+
 $listview_entries = getListViewEntries($focus,"Vendors",$list_result,$navigation_array,'','&return_module=Vendors&return_action=index','EditView','Delete',$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);

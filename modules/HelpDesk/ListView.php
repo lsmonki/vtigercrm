@@ -62,7 +62,10 @@ $_SESSION['HELPDESK_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
+	$where=Search($currentModule);
+	
 	$url_string .="&query=true";
+
 	if (isset($_REQUEST['ticket_title'])) $name = $_REQUEST['ticket_title'];
 	if (isset($_REQUEST['ticket_id'])) $ticket_id_val = $_REQUEST['ticket_id'];
 	if (isset($_REQUEST['contact_name'])) $contact_name = $_REQUEST['contact_name'];
@@ -72,108 +75,6 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	if (isset($_REQUEST['date'])) $date = $_REQUEST['date'];
 	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 
-	$where_clauses = Array();
-
-	//Added for Custom Field Search
-	$sql="select * from field where tablename='ticketcf' order by fieldlabel";
-	$result=$adb->query($sql);
-	for($i=0;$i<$adb->num_rows($result);$i++)
-	{
-	        $column[$i]=$adb->query_result($result,$i,'columnname');
-	        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-	        $uitype[$i]=$adb->query_result($result,$i,'uitype');
-	        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-
-	        if(isset($customfield[$i]) && $customfield[$i] != '')
-	        {
-			if($uitype[$i] == 56)
-				$str = " ticketcf.".$column[$i]." = 1";
-			elseif($uitype[$i] == 15)
-	                        $str = " ticketcf.".$column[$i]." = '".$customfield[$i]."'";
-			else
-		                $str = " ticketcf.".$column[$i]." like '$customfield[$i]%'";
-	                array_push($where_clauses, $str);
-			$url_string .="&".$column[$i]."=".$customfield[$i];
-	        }
-	}
-	//upto this added for Custom Field
-
-
-	if(isset($name) && $name != "")
-	{
-		if($_REQUEST['button'] == 'Search')
-			array_push($where_clauses, "troubletickets.title like '%".$name."%'");
-		else
-			array_push($where_clauses, "troubletickets.title like '".$name."%'");
-		$url_string .= "&ticket_title=".$name;
-	}
-	if(isset($contact_name) && $contact_name != "")
-	{
-		array_push($where_clauses, "(contactdetails.firstname like".PearDatabase::quote($contact_name.'%')." OR contactdetails.lastname like ".PearDatabase::quote($contact_name.'%').")");
-		$url_string .= "&contact_name=".$contact_name;
-
-	}
-	if(isset($priority) && $priority != "")
-	{
-		array_push($where_clauses, "troubletickets.priority = '".$priority."'");
-		$url_string .= "&priority=".$priority;
-	}
-	if(isset($status) && $status != "")
-	{
-		array_push($where_clauses, "troubletickets.status = '".$status."'");
-		$url_string .= "&status=".$status;
-	}
-	if(isset($category) && $category != "")
-	{
-		array_push($where_clauses, "troubletickets.category = '".$category."'");
-		$url_string .= "&category=".$category;
-	}
-	if (isset($date) && $date !='')
-	{
-		$date_criteria = $_REQUEST['date_crit'];
-		$format_date = getDBInsertDateValue($date);
-		if($date_criteria == 'is')
-		{
-			array_push($where_clauses, "crmentity.createdtime like '%".$format_date."%'");
-		}
-		if($date_criteria == 'isnot')
-		{
-			array_push($where_clauses, "crmentity.createdtime not like '".$format_date."%'");
-		}
-		if($date_criteria == 'before')
-		{
-			array_push($where_clauses,"crmentity.createdtime < '".$format_date."'");
-		}
-		if($date_criteria == 'after')
-		{
-			array_push($where_clauses, "crmentity.createdtime > '".++$format_date."'");
-		}
-		$url_string .= "&date=".$date;
-		$url_string .= "&date_crit=".$date_criteria;
-	}
-	if (isset($current_user_only) && $current_user_only !='')
-	{
-		$search_query .= array_push($where_clauses,"crmentity.smownerid='".$current_user->id."'");
-		$url_string .= "&current_user_only=".$current_user_only;
-	}
-	if(isset($_REQUEST['my_open_tickets']) && $_REQUEST['my_open_tickets'] == true)
-	{
-		$search_query .= array_push($where_clauses," troubletickets.status != 'Closed'");
-		$search_query .= array_push($where_clauses,"crmentity.smownerid='".$current_user->id."'");
-	}
-	if(isset($_REQUEST['ticket_id']) && $_REQUEST['ticket_id'] != '')
-	{
-		array_push($where_clauses, "troubletickets.ticketid = ".$_REQUEST['ticket_id']);
-		$url_string .= "&ticket_id=".$_REQUEST['ticket_id'];
-	}
-
-	$where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($where != "")
-			$where .= " and ";
-		$where .= $clause;
-	}
 }
 
 //<<<<cutomview>>>>>>>
@@ -339,6 +240,10 @@ if($viewid !='')
 
 $listview_header = getListViewHeader($focus,"HelpDesk",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
+
+$listview_header_search = getSearchListHeaderValues($focus,"HelpDesk",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER",$listview_header_search);
+
 $listview_entries = getListViewEntries($focus,"HelpDesk",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);

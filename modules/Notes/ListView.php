@@ -81,36 +81,10 @@ $_SESSION['NOTES_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
+	$where=Search($currentModule);
 	// we have a query
 	$url_string .="&query=true";
-	if (isset($_REQUEST['title'])) $name = $_REQUEST['title'];
-	if (isset($_REQUEST['contact_name'])) $contact_name = $_REQUEST['contact_name'];
-
-	$where_clauses = Array();
-
-	if(isset($name) && $name != '')
-	{
-		array_push($where_clauses, "notes.title like ".PearDatabase::quote($name.'%')."");
-		$url_string .= "&title=".$name;
-	}
-	if(isset($contact_name) && $contact_name != '')
-	{
-		$contact_names = explode(" ", $contact_name);
-		foreach ($contact_names as $name) {
-			array_push($where_clauses, "(contactdetails.firstname like ".PearDatabase::quote($name.'%')." OR contactdetails.lastname like ".PearDatabase::quote($name.'%').")");
-		}
-		$url_string .= "&contact_name=".$contact_name;
-	}
-
-	$where = "";
-	if (isset($where_clauses)) {
-		foreach($where_clauses as $clause)
-		{
-			if($where != "")
-			$where .= " and ";
-			$where .= $clause;
-		}
-	}
+	
 	$log->info("Here is the where clause for the list view: $where");
 
 }
@@ -232,6 +206,9 @@ $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Notes",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
+
+$listview_header_search = getSearchListHeaderValues($focus,"Notes",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Notes",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);

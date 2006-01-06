@@ -67,78 +67,16 @@ $_SESSION['QUOTES_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
+	$where=Search($currentModule);
+
 	// we have a query
 	$url_string .="&query=true";
+	
 	if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
 	if (isset($_REQUEST['potentialname'])) $potentialname = $_REQUEST['potentialname'];
 	if (isset($_REQUEST['quotestage'])) $quotestage = $_REQUEST['quotestage'];
 	if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
-
-	$where_clauses = Array();
-
-//Added for Custom Field Search
-$sql="select * from field where tablename='quotescf' order by fieldlabel";
-$result=$adb->query($sql);
-for($i=0;$i<$adb->num_rows($result);$i++)
-{
-        $column[$i]=$adb->query_result($result,$i,'columnname');
-        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-	$uitype[$i]=$adb->query_result($result,$i,'uitype');
-        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-
-        if(isset($customfield[$i]) && $customfield[$i] != '')
-        {
-		if($uitype[$i] == 56)
-			$str=" quotescf.".$column[$i]." = 1";
-		else
-	                $str=" quotescf.".$column[$i]." like '$customfield[$i]%'";
-                array_push($where_clauses, $str);
-		$url_string .="&".$column[$i]."=".$customfield[$i];
-        }
-}
-//upto this added for Custom Field
 	
-	if(isset($subject) && $subject != "") 
-	{
-		array_push($where_clauses, "quotes.subject like ".PearDatabase::quote($subject."%"));
-		$url_string .= "&subject=".$subject;
-	}
-	if(isset($potentialname) && $potentialname != "")
-	{
-		array_push($where_clauses, "potential.potentialname like ".PearDatabase::quote("%".$potentialname."%"));
-		$url_string .= "&potentialname=".$potentialname;
-	}
-	if(isset($accountname) && $accountname != "")
-	{
-		array_push($where_clauses, "account.accountname like ".PearDatabase::quote("%".$accountname."%"));
-		$url_string .= "&accountname=".$accountname;
-	}
-
-	if(isset($quotestage) && $quotestage != "")
-	{
-		array_push($where_clauses, "quotes.quotestage like ".PearDatabase::quote("%".$quotestage."%"));
-		$url_string .= "&quotestage=".$quotestage;
-	}
-	
-	$where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($where != "")
-		$where .= " and ";
-		$where .= $clause;
-	}
-
-	if (!empty($assigned_user_id)) {
-		if (!empty($where)) {
-			$where .= " AND ";
-		}
-		$where .= "crmentity.smownerid IN(";
-		foreach ($assigned_user_id as $key => $val) {
-			$where .= PearDatabase::quote($val);
-			$where .= ($key == count($assigned_user_id) - 1) ? ")" : ", ";
-		}
-	}
-
 	$log->info("Here is the where clause for the list view: $where");
 
 }
@@ -275,6 +213,9 @@ $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Quotes",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
+
+$listview_header_search = getSearchListHeaderValues($focus,"Quotes",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Quotes",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);

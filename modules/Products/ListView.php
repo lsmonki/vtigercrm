@@ -67,7 +67,10 @@ $_SESSION['PRODUCTS_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
+	$where=Search($currentModule);
+	
 	$url_string .="&query=true";
+	
 	if (isset($_REQUEST['productname'])) $productname = $_REQUEST['productname'];
         if (isset($_REQUEST['productcode'])) $productcode = $_REQUEST['productcode'];
         if (isset($_REQUEST['commissionrate'])) $commissionrate = $_REQUEST['commissionrate'];
@@ -79,110 +82,7 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] =
         if (isset($_REQUEST['expiry_date'])) $expiry_date = $_REQUEST['expiry_date'];
         if (isset($_REQUEST['purchase_date'])) $purchase_date = $_REQUEST['purchase_date'];
 
-	$where_clauses = Array();
-	//$search_query='';
-
-	//Added for Custom Field Search
-	$sql="select * from field where tablename='productcf' order by fieldlabel";
-	$result=$adb->query($sql);
-	for($i=0;$i<$adb->num_rows($result);$i++)
-	{
-	        $column[$i]=$adb->query_result($result,$i,'columnname');
-	        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-		$uitype[$i]=$adb->query_result($result,$i,'uitype');
-
-	        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-	
-	        if(isset($customfield[$i]) && $customfield[$i] != '')
-	        {
-			if($uitype[$i] == 56)
-                                $str = " productcf.".$column[$i]." = 1";
-			elseif($uitype[$i] == 15)//Added to handle the picklist customfield - after 4.2 patch2
-	                        $str = " productcf.".$column[$i]." = '".$customfield[$i]."'";
-                        else
-			        $str = " productcf.".$column[$i]." like '$customfield[$i]%'";
-		        array_push($where_clauses, $str);
-	       	//	  $search_query .= ' and '.$str;
-			$url_string .="&".$column[$i]."=".$customfield[$i];
-	        }
-	}
-	//upto this added for Custom Field
-
-	if (isset($productname) && $productname !='')
-	{
-		array_push($where_clauses, "productname like ".PearDatabase::quote($productname.'%'));
-		//$search_query .= " and productname like '".$productname."%'";
-		$url_string .= "&productname=".$productname;
-	}
-	
-	if (isset($productcode) && $productcode !='')
-	{
-		array_push($where_clauses, "productcode like ".PearDatabase::quote($productcode.'%'));
-		//$search_query .= " and productcode like '".$productcode."%'";
-		$url_string .= "&productcode=".$productcode;
-	}
-
-	if (isset($commissionrate) && $commissionrate !='')
-	{
-		array_push($where_clauses, "commissionrate like ".PearDatabase::quote($commissionrate.'%'));
-		 //$search_query .= " and commissionrate like '".$commissionrate."%'";
-		 $url_string .= "&commissionrate=".$commissionrate;
-	}
-	
-	if (isset($qtyperunit) && $qtyperunit !='')
-	{
-		array_push($where_clauses, "qty_per_unit like ".PearDatabase::quote($qtyperunit.'%'));
-	 	//$search_query .= " and qty_per_unit like '".$qtyperunit."%'";
-		$url_string .= "&qtyperunit=".$qtyperunit;
-	}
-	
-	if (isset($unitprice) && $unitprice !='')
-	{
-		array_push($where_clauses, "unit_price like ".PearDatabase::quote($unitprice.'%'));
-	 //	$search_query .= " and unit_price like '".$unitprice."%'";
-		$url_string .= "&unitprice=".$unitprice;
-	}
-	if (isset($manufacturer) && $manufacturer !='' && $manufacturer !='--None--')
-        {
-		array_push($where_clauses, "manufacturer like ".PearDatabase::quote($manufacturer.'%'));
-        	//$search_query .= " and manufacturer like '".$manufacturer."%'";
-                $url_string .= "&manufacturer=".$manufacturer;
-	}
-	if (isset($productcategory) && $productcategory !='' && $productcategory !='--None--')
-        {
-		array_push($where_clauses, "productcategory like ".PearDatabase::quote($productcategory.'%'));
-        	//$search_query .= " and productcategory like '".$productcategory."%'";
-                $url_string .= "&productcategory=".$productcategory;
-	}
-	if (isset($start_date) && $start_date !='')
-        {
-		array_push($where_clauses, "start_date like ".PearDatabase::quote($start_date.'%'));
-                //$search_query .= " and start_date = '".$start_date."%'";
-                $url_string .= "&start_date=".$start_date;
-        } 
-	if (isset($expiry_date) && $expiry_date !='')
-        {
-		array_push($where_clauses, "expiry_date like ".PearDatabase::quote($expiry_date.'%'));
-                //$search_query .= " and expiry_date = '".$expiry_date."%'";
-                $url_string .= "&expiry_date=".$expiry_date;
-        } 
-	if (isset($purchase_date) && $purchase_date !='')
-        {
-		array_push($where_clauses, "purchase_date like ".PearDatabase::quote($purchase_date.'%'));
-                //$search_query .= " and purchase_date = '".$purchase_date."%'";
-                $url_string .= "&purchase_date=".$purchase_date;
-        }
-	$where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($where != "")
-		$where .= " and ";
-		$where .= $clause;
-	}
-
 	$log->info("Here is the where clause for the list view: $where");
- 
-
 }
 
 //<<<<cutomview>>>>>>>
@@ -292,6 +192,9 @@ $url_string .= "&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"Products",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
+
+$listview_header_search = getSearchListHeaderValues($focus,"Products",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Products",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
