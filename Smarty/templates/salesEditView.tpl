@@ -295,9 +295,18 @@
 							{if $uitype eq 6}
 							   <input name="time_start" style="border:1px solid #bababa;" size="5" maxlength="5" type="text" value="{$time_val}">
 							{/if}
+							{foreach key=date_format item=date_str from=$secondvalue}
+                                                                {assign var=dateFormat value="$date_format"}
+							        {assign var=dateStr value="$date_str"}
+							{/foreach}
+							{if $uitype eq 5 || $uitype eq 23}
+							   <br><font size=1><em old="(yyyy-mm-dd)">({$dateStr})</em></font>
+							   {else}
+							   <br><font size=1><em old="(yyyy-mm-dd)">({$dateStr})</em></font>
+							{/if}
 							<script type="text/javascript">
                 					Calendar.setup ({ldelim}
-								inputField : "jscal_field_{$fldname}", ifFormat : "{$secondvalue}", showsTime : false, button : "jscal_trigger_{$fldname}", singleClick : true, step : 1
+								inputField : "jscal_field_{$fldname}", ifFormat : "{$dateFormat}", showsTime : false, button : "jscal_trigger_{$fldname}", singleClick : true, step : 1
 									{rdelim})
      						        </script>
 
@@ -417,20 +426,3 @@
         var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
 
 </script>
-{$JAVASCRIPT}
-
-
-
-
-
-
-
-
-
-
-
-							
-
-
-
-
