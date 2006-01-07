@@ -5,8 +5,8 @@ require_once('modules/Quotes/Quote.php');
 $focus = new Quote();
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
-if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
-    $focus->retrieve_entity_info($_REQUEST['record'],"Quote");
+if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
+    $focus->retrieve_entity_info($_REQUEST['record'],"Quotes");
     $focus->id = $_REQUEST['record'];
     $focus->name=$focus->column_fields['subject'];
 $log->debug("id is ".$focus->id);
