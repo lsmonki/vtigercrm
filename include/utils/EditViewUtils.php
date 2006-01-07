@@ -99,17 +99,20 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
                         }
                         $custfld .= '&nbsp; <input name="time_start" size="5" maxlength="5" type="text" value="'.$curr_time.'">';
                 }
+		$fieldvalue[] = array($disp_value => $curr_time) ;
 		if($uitype == 5 || $uitype == 23)
-			$custfld .= '<br><font size=1><em old="(yyyy-mm-dd)">('.$current_user->date_format.')</em></font></td>';
+		{
+			$fieldvalue[] = array($date_format=>$current_user->date_format);
+		}
 		else
-			$custfld .= '<br><font size=1><em old="(yyyy-mm-dd 24:00)">('.$current_user->date_format.' '.$app_strings['YEAR_MONTH_DATE'].')</em></font></td>';
+		{
+			$fieldvalue[] = array($date_format=>$current_user->date_format.' '.$app_strings['YEAR_MONTH_DATE']);
+		}
 		$custfld .= '<script type="text/javascript">';
 		$custfld .= 'Calendar.setup ({';
 				$custfld .= 'inputField : "jscal_field_'.$fieldname.'", ifFormat : "'.$date_format.'", showsTime : false, button : "jscal_trigger_'.$fieldname.'", singleClick : true, step : 1';
 				$custfld .= '});';
 		$custfld .= '</script>';
-		$fieldvalue[] = array($disp_value => $curr_time);
-		$fieldvalue[] = $date_format;
 	}
 	elseif($uitype == 15 || $uitype == 16)
 	{
