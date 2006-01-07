@@ -108,7 +108,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 				$custfld .= 'inputField : "jscal_field_'.$fieldname.'", ifFormat : "'.$date_format.'", showsTime : false, button : "jscal_trigger_'.$fieldname.'", singleClick : true, step : 1';
 				$custfld .= '});';
 		$custfld .= '</script>';
-		$fieldvalue[] = array($disp_value => $curr_time) ;
+		$fieldvalue[] = array($disp_value => $curr_time);
+		$fieldvalue[] = $date_format;
 	}
 	elseif($uitype == 15 || $uitype == 16)
 	{
