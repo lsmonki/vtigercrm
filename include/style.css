@@ -15,7 +15,7 @@
     }
 
     .loginBg{
-        background:#448cEB url(images/loginBg.gif) repeat-x;
+        background:#818181 url(images/loginBg.gif) repeat-x;
     }
 
     .textbox {
@@ -33,7 +33,7 @@
     .loginSignin {
         font-family: Arial, Helvetica, sans-serif;
         font-size: 18px;
-        color: #448ceb;
+        color: #818181;
         font-weight:bold;
     }
 
