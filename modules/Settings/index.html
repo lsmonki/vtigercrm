@@ -20,79 +20,79 @@
     <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/user_mgmt.gif" align="absmiddle"></div></td>
     <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
 	<tr> 
-          <td><a href="index.php?module=Administration&action=index"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_USERS}</a><span class="dim"> 
+          <td><a href="index.php?module=Administration&action=index&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_USERS}</a><span class="dim"> 
             {MOD.LBL_CREATE_AND_MANAGE_USERS}</span></td>
         </tr>
 
         <tr> 
-          <td><a href="index.php?module=Users&action=listroles"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ROLES}</a><span class="dim"> 
+          <td><a href="index.php?module=Users&action=listroles&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ROLES}</a><span class="dim"> 
             {MOD.LBL_CREATE_AND_MANAGE_USER_ROLES} 
             </span></td>
         </tr>
         <tr> 
-          <td><a href="index.php?module=Users&action=ListProfiles"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PROFILES}</a><span class="dim"> 
+          <td><a href="index.php?module=Users&action=ListProfiles&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PROFILES}</a><span class="dim"> 
             {MOD.LBL_CREATE_AND_MANAGE_USER_PROFILES}</span></td>
         </tr>
         <tr> 
-          <td><a href="index.php?module=Users&action=listgroups"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.USERGROUPLIST}</a><span class="dim"> 
+          <td><a href="index.php?module=Users&action=listgroups&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.USERGROUPLIST}</a><span class="dim"> 
             {MOD.LBL_CREATE_AND_MANAGE_USER_GROUPS}</span></td>
         </tr>
 	<tr> 
-          <td><a href="index.php?module=Users&action=OrgSharingDetailView"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_DEFAULT_ORGANIZATION_SHARING_ACCESS}</a><span class="dim"> 
+          <td><a href="index.php?module=Users&action=OrgSharingDetailView&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_DEFAULT_ORGANIZATION_SHARING_ACCESS}</a><span class="dim"> 
             {MOD.LBL_SETTING_DEFAULT_SHARING_ACCESS}</span></td>
         </tr>
 	<tr>
          <td><a href="javascript:toggleSetting('def_field_access');"><img id="def_field_access_tgimg" src="{IMAGE_PATH}/plus.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_DEFAULT_ORGANIZATION_FIELDS}</a><span class="dim">{MOD.LBL_SETTING_DEFAULT_ORGANIZATION_FIELDS}</span><br> <div id="def_field_access" style="display:none;padding:3px 5px 5px 20px;"> 
               <table border="0" cellspacing="2" cellpadding="2">
                 <tr> 
-                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_LEAD_FIELD_ACCESS}
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Leads&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_LEAD_FIELD_ACCESS}
                     </a></td>
                   <td width="30">&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ACCOUNT_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Accounts&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ACCOUNT_FIELD_ACCESS} 
                     </a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_CONTACT_FIELD_ACCESS}
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Contacts&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_CONTACT_FIELD_ACCESS}
                     </a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_OPPORTUNITY_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Potentials&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_OPPORTUNITY_FIELD_ACCESS} 
                     </a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_HELPDESK_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=HelpDesk&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_HELPDESK_FIELD_ACCESS} 
                     </a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PRODUCT_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Products&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PRODUCT_FIELD_ACCESS} 
                     </a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Notes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_NOTE_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Notes&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_NOTE_FIELD_ACCESS} 
                     </a></td>
                   <td>&nbsp;</td>
                   <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Emails"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_FIELD_ACCESS} 
                     </a></td>
                 </tr>
                 <tr>
-                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Activities"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_TASK_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Activities&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_TASK_FIELD_ACCESS} 
                     </a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Events"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EVENT_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Events&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EVENT_FIELD_ACCESS} 
                     </a></td>
                 </tr>
 		<tr>
-                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Vendor"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_VENDOR_FIELD_ACCESS}</a></td>
+                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Vendor&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_VENDOR_FIELD_ACCESS}</a></td>
                   <td>&nbsp;</td>
-                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=PriceBook"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PB_FIELD_ACCESS}</a></td>
+                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=PriceBook&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PB_FIELD_ACCESS}</a></td>
                 </tr>
 		<tr>
-                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Quotes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_QUOTE_FIELD_ACCESS}</a></td>
+                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Quotes&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_QUOTE_FIELD_ACCESS}</a></td>
                   <td>&nbsp;</td>
-                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=PurchaseOrder"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PO_FIELD_ACCESS}</a></td>
+                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=PurchaseOrder&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PO_FIELD_ACCESS}</a></td>
                 </tr>
 		<tr>
-                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=SalesOrder"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_SO_FIELD_ACCESS}</a></td>
+                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=SalesOrder&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_SO_FIELD_ACCESS}</a></td>
                   <td>&nbsp;</td>
-                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Invoice"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_INVOICE_FIELD_ACCESS}</a></td>
+                <td><a href="index.php?module=Users&action=DefaultFieldPermissions&fld_module=Invoice&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_INVOICE_FIELD_ACCESS}</a></td>
                 </tr>	
 		</table>
             </div></td>
@@ -101,54 +101,54 @@
          <td><a href="javascript:toggleSetting('fieldaccess');"><img id="fieldaccess_tgimg" src="{IMAGE_PATH}/plus.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_FIELD_ACCESSIBILITY}</a><span class="dim">{MOD.LBL_SETTING_FIELD_ACCESSIBILITY}</span><br> <div id="fieldaccess" style="display:none;padding:3px 5px 5px 20px;"> 
               <table border="0" cellspacing="2" cellpadding="2">
                 <tr> 
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_LEAD_FIELD_ACCESS}
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Leads&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_LEAD_FIELD_ACCESS}
                     </a></td>
                   <td width="30">&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ACCOUNT_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Accounts&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ACCOUNT_FIELD_ACCESS} 
                     </a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_CONTACT_FIELD_ACCESS}
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Contacts&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_CONTACT_FIELD_ACCESS}
                     </a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_OPPORTUNITY_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Potentials&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_OPPORTUNITY_FIELD_ACCESS} 
                     </a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_HELPDESK_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=HelpDesk&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_HELPDESK_FIELD_ACCESS} 
                     </a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PRODUCT_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Products&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PRODUCT_FIELD_ACCESS} 
                     </a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Notes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_NOTE_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Notes&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_NOTE_FIELD_ACCESS} 
                     </a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Emails"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Emails&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_FIELD_ACCESS} 
                     </a></td>
                 </tr>
                 <tr>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Activities"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_TASK_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Activities&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_TASK_FIELD_ACCESS} 
                     </a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Events"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EVENT_FIELD_ACCESS} 
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Events&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EVENT_FIELD_ACCESS} 
                     </a></td>
                 </tr>
 		<tr>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Vendor"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_VENDOR_FIELD_ACCESS}</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Vendor&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_VENDOR_FIELD_ACCESS}</a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=PriceBook"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PB_FIELD_ACCESS}</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=PriceBook&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PB_FIELD_ACCESS}</a></td>
                 </tr>
 		<tr>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Quotes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_QUOTE_FIELD_ACCESS}</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Quotes&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_QUOTE_FIELD_ACCESS}</a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=PurchaseOrder"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PO_FIELD_ACCESS}</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=PurchaseOrder&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_PO_FIELD_ACCESS}</a></td>
                 </tr>
 		<tr>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=SalesOrder"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_SO_FIELD_ACCESS}</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=SalesOrder&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_SO_FIELD_ACCESS}</a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Invoice"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_INVOICE_FIELD_ACCESS}</a></td>
+                  <td><a href="index.php?module=Users&action=ListFldProfiles&fld_module=Invoice&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_INVOICE_FIELD_ACCESS}</a></td>
                 </tr>	
               </table>
             </div></td>
@@ -174,34 +174,34 @@
             </span><br> <div id="customfield" style="display:none;padding:3px 5px 5px 20px;"> 
               <table border="0" cellspacing="2" cellpadding="2">
                 <tr> 
-                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LEADCUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Leads&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LEADCUSTOMFIELDS}</a></td>
 				  <td width="30">&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.ACCOUNTCUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Accounts&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.ACCOUNTCUSTOMFIELDS}</a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.CONTACTCUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Contacts&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.CONTACTCUSTOMFIELDS}</a></td>
 				  <td width="30">&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.OPPORTUNITYCUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Potentials&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.OPPORTUNITYCUSTOMFIELDS}</a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.HELPDESKCUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=HelpDesk&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.HELPDESKCUSTOMFIELDS}</a></td>
 				  <td width="30">&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.PRODUCTCUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Products&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.PRODUCTCUSTOMFIELDS}</a></td>
                 </tr>
 		<tr> 
-                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Vendor"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.VENDORCUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Vendor&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.VENDORCUSTOMFIELDS}</a></td>
 				  <td width="30">&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=PriceBook"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.PRICEBOOKCUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=PriceBook&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.PRICEBOOKCUSTOMFIELDS}</a></td>
                 </tr>
 		<tr> 
-                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=PurchaseOrder"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.POCUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=PurchaseOrder&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.POCUSTOMFIELDS}</a></td>
 				  <td width="30">&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=SalesOrder"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.SOCUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=SalesOrder&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.SOCUSTOMFIELDS}</a></td>
                 </tr>
 		<tr> 
-                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Quotes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.QUOTESCUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Quotes&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.QUOTESCUSTOMFIELDS}</a></td>
 				  <td width="30">&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Invoice"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.INVOICECUSTOMFIELDS}</a></td>
+                  <td><a href="index.php?module=Settings&action=CustomFieldList&fld_module=Invoice&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.INVOICECUSTOMFIELDS}</a></td>
                 </tr>
 
               </table>
@@ -213,42 +213,42 @@
             <div id="picklist" style="display:none;padding:3px 5px 5px 20px;">
               <table border="0" cellspacing="4" cellpadding="2">
                 <tr> 
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITLEADPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Leads&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITLEADPICKLISTVALUES}</a></td>
                   <td width="30">&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITACCOUNTPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Accounts&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITACCOUNTPICKLISTVALUES}</a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITCONTACTPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Contacts&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITCONTACTPICKLISTVALUES}</a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITOPPORTUNITYPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Potentials&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITOPPORTUNITYPICKLISTVALUES}</a></td>
                 </tr>
                 <tr> 
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITHELPDESKPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=HelpDesk&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITHELPDESKPICKLISTVALUES}</a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITPRODUCTPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Products&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITPRODUCTPICKLISTVALUES}</a></td>
                 </tr>
                 <tr>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Events"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITEVENTPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Events&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITEVENTPICKLISTVALUES}</a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Activities"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITTASKPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Activities&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITTASKPICKLISTVALUES}</a></td>
                 </tr>
 		<tr>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Vendor"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITVENDORPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Vendor&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITVENDORPICKLISTVALUES}</a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=PriceBook"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITPBPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=PriceBook&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITPBPICKLISTVALUES}</a></td>
                 </tr>
 		<tr>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=PurchaseOrder"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITPOPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=PurchaseOrder&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITPOPICKLISTVALUES}</a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=SalesOrder"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITSOPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=SalesOrder&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITSOPICKLISTVALUES}</a></td>
                 </tr>
 		<tr>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Quotes"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITQUOTEPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Quotes&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITQUOTEPICKLISTVALUES}</a></td>
                   <td>&nbsp;</td>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Invoice"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITINVOICEPICKLISTVALUES}</a></td>
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Invoice&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITINVOICEPICKLISTVALUES}</a></td>
                 </tr>	
 		<tr>
-                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Rss"><img src="{IMAGE_PATH}/bul
+                  <td><a href="index.php?module=Settings&action=ComboFieldList&fld_module=Rss&parenttab=Settings"><img src="{IMAGE_PATH}/bul
 let.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITRSSPICKLISTVALUES}</a></td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
@@ -264,52 +264,52 @@ let.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITRSSPICKLISTVALUES}</a>
 				<div id="org_field_access" style="display:none;padding:3px 5px 5px 20px;">
 					<table border="0" cellspacing="2" cellpadding="2">
 						<tr>
-							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=7&amp;fld_module=Leads"><img src="{IMAGE_PATH}/bullet.gif" align=
+							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=7&amp;fld_module=Leads&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align=
 							"absmiddle" border="0" hspace="5">{MOD.LBL_LEAD_FIELD_ACCESS}</a> </td>
 
 							<td width="30">&nbsp;</td>
 
-							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=6&amp;fld_module=Accounts"><img src="{IMAGE_PATH}/bullet.gif" align=
+							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=6&amp;fld_module=Accounts&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align=
 							"absmiddle" border="0" hspace="5">{MOD.LBL_ACCOUNT_FIELD_ACCESS}</a> </td>
 						</tr>
 
 						<tr>
-							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=4&amp;fld_module=Contacts"><img src="{IMAGE_PATH}/bullet.gif" align=
+							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=4&amp;fld_module=Contacts&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align=
 							"absmiddle" border="0" hspace="5">{MOD.LBL_CONTACT_FIELD_ACCESS}</a> </td>
 
 							<td>&nbsp;</td>
 
-							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=2&amp;fld_module=Potentials"><img src="{IMAGE_PATH}/bullet.gif"
+							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=2&amp;fld_module=Potentials&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif"
 							align="absmiddle" border="0" hspace="5">{MOD.LBL_OPPORTUNITY_FIELD_ACCESS}</a> </td>
 						</tr>
 
 						<tr>
-							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=13&amp;fld_module=HelpDesk"><img src="{IMAGE_PATH}/bullet.gif"
+							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=13&amp;fld_module=HelpDesk&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif"
 							align="absmiddle" border="0" hspace="5">{MOD.LBL_HELPDESK_FIELD_ACCESS}</a> </td>
 
 							<td>&nbsp;</td>
 
-							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=14&amp;fld_module=Products"><img src="{IMAGE_PATH}/bullet.gif"
+							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=14&amp;fld_module=Products&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif"
 							align="absmiddle" border="0" hspace="5">{MOD.LBL_PRODUCT_FIELD_ACCESS}</a> </td>
 						</tr>
 
 						<tr>
-							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=8&amp;fld_module=Notes"><img src="{IMAGE_PATH}/bullet.gif" align=
+							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=8&amp;fld_module=Notes&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align=
 							"absmiddle" border="0" hspace="5">{MOD.LBL_NOTE_FIELD_ACCESS}</a> </td>
 
 							<td>&nbsp;</td>
 
-							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=10&amp;fld_module=Emails"><img src="{IMAGE_PATH}/bullet.gif" align=
+							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=10&amp;fld_module=Emails&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align=
 							"absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_FIELD_ACCESS}</a> </td>
 						</tr>
 
 						<tr>
-							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=9&amp;fld_module=Activities"><img src="{IMAGE_PATH}/bullet.gif"
+							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=9&amp;fld_module=Activities&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif"
 							align="absmiddle" border="0" hspace="5">{MOD.LBL_TASK_FIELD_ACCESS}</a> </td>
 
 							<td>&nbsp;</td>
 
-							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=16&amp;fld_module=Events"><img src="{IMAGE_PATH}/bullet.gif" align=
+							<td><a href="index.php?module=Settings&amp;action=EditFieldBlock&amp;tabid=16&amp;fld_module=Events&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align=
 							"absmiddle" border="0" hspace="5">{MOD.LBL_EVENT_FIELD_ACCESS}</a> </td>
 						</tr>
 							</table>
@@ -333,24 +333,24 @@ let.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITRSSPICKLISTVALUES}</a>
     <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/comm_temp.gif" align="absmiddle"></div></td>
     <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
         <tr> 
-          <td><a href="index.php?module=Users&action=listemailtemplates"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EMAILTEMPLATES}</a><span class="dim"> 
+          <td><a href="index.php?module=Users&action=listemailtemplates&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.EMAILTEMPLATES}</a><span class="dim"> 
             {MOD.LBL_CREATE_EMAIL_TEMPLATES}</span></td>
         </tr>
         <tr> 
-          <td><a href="index.php?module=Users&action=listwordtemplates"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.WORDINTEGRATION}</a><span class="dim"> 
+          <td><a href="index.php?module=Users&action=listwordtemplates&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.WORDINTEGRATION}</a><span class="dim"> 
             {MOD.LBL_UPLOAD_MSWORD_TEMPLATES}</span></td>
         </tr>
         <tr> 
-		<td><a href="index.php?module=Users&action=listnotificationschedulers"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.NOTIFICATIONSCHEDULERS}</a><span class="dim"> 
+		<td><a href="index.php?module=Users&action=listnotificationschedulers&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.NOTIFICATIONSCHEDULERS}</a><span class="dim"> 
             {MOD.LBL_SCHEDULE_EMAIL_NOTIFICATION}</span></td>
         </tr>
 	<tr> 
-		<td><a href="index.php?module=Users&action=listinventorynotifications"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.INVENTORYNOTIFICATION}</a><span class="dim"> 
+		<td><a href="index.php?module=Users&action=listinventorynotifications&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.INVENTORYNOTIFICATION}</a><span class="dim"> 
             {MOD.LBL_INVENTORY_NOTIFICATIONS}</span></td>
         </tr>	
 <!--to include Terms & Conditions -->
         <tr>
-               <td><a href="index.php?module=Users&action=OrganizationTermsandConditions"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.INVENTORYTERMSANDCONDITIONS}</a><span class="dim">
+               <td><a href="index.php?module=Users&action=OrganizationTermsandConditions&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.INVENTORYTERMSANDCONDITIONS}</a><span class="dim">
             {MOD.LBL_INVENTORY_TERMSANDCONDITIONS}</span>
                </td>
         </tr>
@@ -367,31 +367,31 @@ let.gif" align="absmiddle" border="0" hspace="5">{MOD.EDITRSSPICKLISTVALUES}</a>
     <td width="45" style="padding:5px" valign="top"><div align="center"><img src="{IMAGE_PATH}/config.gif" align="absmiddle"></div></td>
     <td><table width="100%" border="0" cellspacing="4" cellpadding="2">
     <tr>
-	    <td><a href="index.php?module=Settings&action=OrganizationConfig"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ORGANIZATION_DETAILS}</a><span class="dim">
+	    <td><a href="index.php?module=Settings&action=OrganizationConfig&parenttab=Settings"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ORGANIZATION_DETAILS}</a><span class="dim">
 	   {MOD.LBL_SPECIFY_COMPANY_DETAILS}</span></td>
     </tr>
 		    
         <tr> 
-          <td><a href="index.php?module=Settings&action=EmailConfig"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_CONFIG}</a><span class="dim"> 
+          <td><a href="index.php?module=Settings&action=EmailConfig&parenttab=Settings"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_EMAIL_CONFIG}</a><span class="dim"> 
             {MOD.LBL_CONFIGURE_MAIL_SERVER}</span></td>
         </tr>
         <tr> 
-          <td><a href="index.php?module=Settings&action=BackupServerConfig"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_BACKUP_SERVER_CONFIGURATION}</a><span class="dim">{MOD.LBL_CONFIGURE_BACKUP_SERVER}</span></td>
+          <td><a href="index.php?module=Settings&action=BackupServerConfig&parenttab=Settings"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_BACKUP_SERVER_CONFIGURATION}</a><span class="dim">{MOD.LBL_CONFIGURE_BACKUP_SERVER}</span></td>
   </tr>
      <tr>
-       <td><a href="index.php?module=System&action=systemconfig"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_SYSTEM_CONFIG}</a><span class="dim">
+       <td><a href="index.php?module=System&action=systemconfig&parenttab=Settings"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_SYSTEM_CONFIG}</a><span class="dim">
             {MOD.LBL_SYSTEM_CONFIGURATION}</span></td>
    </tr>
    <tr>
-       <td><a href="index.php?module=Settings&action=CurrencyInfo"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_CURRENCY_CONFIG}</a><span class="dim">
+       <td><a href="index.php?module=Settings&action=CurrencyInfo&parenttab=Settings"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_CURRENCY_CONFIG}</a><span class="dim">
             {MOD.LBL_CURRENCY_CONFIGURATION}</span></td>
    </tr>
    <tr>
-       <td><a href="index.php?module=Settings&action=ListModuleOwners"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ASSIGN_MODULE_OWNERS}</a><span class="dim">
+       <td><a href="index.php?module=Settings&action=ListModuleOwners&parenttab=Settings"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_ASSIGN_MODULE_OWNERS}</a><span class="dim">
             {MOD.LBL_ASSIGN_MODULE_OWNERS_INFO}</span></td>
    </tr>
    <tr>
-       <td><a href="index.php?module=Migration&action=MigrationStep1"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_MIGRATION}</a><span class="dim">{MOD.LBL_MIGRATION_INFO}</span></td>
+       <td><a href="index.php?module=Migration&action=MigrationStep1&parenttab=Settings"> <img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_MIGRATION}</a><span class="dim">{MOD.LBL_MIGRATION_INFO}</span></td>
    </tr>
     <tr>
        <!--td><a href="index.php?module=Settings&action=AddMailAccount"><img src="{IMAGE_PATH}/bullet.gif" align="absmiddle" border="0" hspace="5">{MOD.LBL_WEB_MAIL_CONFIG}</a><span class="dim">
