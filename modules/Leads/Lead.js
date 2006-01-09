@@ -63,21 +63,6 @@ function togglePotFields(form)
 
 }
 
-function toggleAssignType(currType)
-{
-	if (currType=="U")
-	{
-		getObj("assign_user").style.display="block"
-		getObj("assign_team").style.display="none"
-	}
-	else
-	{
-		getObj("assign_user").style.display="none"
-                getObj("assign_team").style.display="block"
-	}
-}
-
-
 function showDefaultCustomView(selectView)
 {
 viewName = selectView.options[selectView.options.selectedIndex].value;
