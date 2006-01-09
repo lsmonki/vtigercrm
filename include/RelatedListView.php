@@ -58,8 +58,25 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	//$query = getListQuery("Accounts");
 
 	//Appending the security parameter
+	if($relatedmodule != 'Notes' && $relatedmodule != 'Products' && $relatedmodule != 'Faq' && $relatedmodule != 'PriceBook' && $relatedmodule != 'Vendors') //Security fix by Don
+	{
+		//echo '<BR>*****************'.$relatedmodule.' ***************';
+		global $current_user;
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+        	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		$tab_id=getTabid($relatedmodule);
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+        	{
+        		$sec_parameter=getListViewSecurityParameter($relatedmodule);
+                	$query .= $sec_parameter;
+
+        	}
+	}
+	
+
+
+	/*
 	global $others_permission_id;
-	global $current_user;
 	$rel_tab_id = getTabid($relatedmodule);
 	$defSharingPermissionData = $_SESSION['defaultaction_sharing_permission_set'];
 	$others_rel_permission_id = $defSharingPermissionData[$rel_tab_id];
@@ -67,6 +84,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	{
 		$query .= " and crmentity.smownerid in(".$current_user->id .",0)";
 	}
+	*/
 
 	if(isset($where) && $where != '')
 	{
@@ -87,7 +105,6 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		$query .= ' ORDER BY '.$order_by;
 		$url_qry .="&order_by=".$order_by;
 	}
-
 	$list_result = $adb->query($query);
 	//Retreiving the no of rows
 	$noofrows = $adb->num_rows($list_result);
