@@ -31,7 +31,13 @@ function callSearch(searchtype)
 				<table border=0 cellspacing=0 cellpadding=5>
 
 				<tr>
-					<td style="padding-right:0px"><a href="index.php?module={$MODULE}&action=EditView"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
+					{if $MODULE eq 'Activities'}
+                                                <td style="padding-right:0px"><a href="#" id="showSubMenu"  on
+MouseOver="moveMe('subMenu');showhide('subMenu');"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Create {$MODULE}.
+.." title="Create {$MODULE}..." border=0></a></td>
+                                        {else}
+                                        <td style="padding-right:0px"><a href="index.php?module={$MODULE}&action=EditView&return_action=DetailView"><img src="{$IMAGE_PATH}btnL3Add.gif" alt="Create {$MODULE}..." title="Create {$MODULE}..." border=0></a></td>
+                                        {/if}
 					 <td style="padding-right:0px"><a href="#" onClick="moveMe('searchAcc');showhide('searchAcc')" ><img src="{$IMAGE_PATH}btnL3Search.gif" alt="Search in {$MODULE}..." title="Search in {$MODULE}..." border=0></a></a></td>
 
 				</tr>
@@ -75,6 +81,25 @@ function callSearch(searchtype)
 <tr><td style="height:2px"></td></tr>
 
 </TABLE>
+<div id="subMenuBg" class="subMenu" style="position:absolute;display:none;filter:Alpha(Opacity=90);-moz-opacit
+y:0.90;z-index:50"></div>
+<div id="subMenu" style="z-index:1;display:none;position:absolute;">
+<table border=0 cellspacing=0 cellpadding=0 width=100px align=center class="moduleSearch">
+  <tr>
+   <td class=small>
+       <table cellspacing="2" cellpadding="2" border="0">
+         <tr>
+            <td width=90% ><a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activit
+y_mode=Events&return_action=DetailView">{$NEW_EVENT}</a></td>
+         </tr>
+         <tr>
+            <td width=90% ><a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Task&return_action=DetailView">{$NEW_TASK}</a></td>
+         </tr>
+       </table>
+   </td>
+  </tr>
+</table>
+</div>
 
 {*<!-- Search  in Module -->*}
 <div id="searchAcc" style="z-index:1;display:none;position:absolute;">
