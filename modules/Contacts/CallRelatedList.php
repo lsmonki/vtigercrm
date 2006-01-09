@@ -50,6 +50,5 @@ $related_array = getrelatedlists("Contacts",$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("MODULE",$currentmodule);
 $smarty->assign("ID",$record );
-$smarty->display("relatedlists.tpl");
-
+$smarty->display("RelatedLists.tpl");
 ?>
