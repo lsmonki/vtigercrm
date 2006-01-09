@@ -218,6 +218,8 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Activity');
+$smarty->assign("NEW_EVENT",$app_strings['LNK_NEW_EVENT']);
+$smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 
 
 //Retreiving the no of rows
