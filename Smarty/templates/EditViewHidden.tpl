@@ -20,6 +20,7 @@
 
 {elseif $MODULE eq 'Activities'}
 	<form name="EditView" method="POST" action="index.php">
+	<input type="hidden" name="activity_mode" value="{$ACTIVITYMODE}">
 	<input type="hidden" name="ticket_id" value="{$TICKETID}">
 	<input type="hidden" name="product_id" value="{$PRODUCTID}">
 
