@@ -905,19 +905,20 @@ function getRecordOwnerId($record)
         	$module=$adb->query_result($result,0,'setype');
 		if($module == 'Leads')
 		{
-			$query1="select * from leadgrouprelation where leadid=".$record;
+			$query1="select groups.groupid from leadgrouprelation inner join groups on groups.groupname = leadgrouprelation.groupname where leadid=".$record;
 		}
 		elseif($module == 'Activities')
 		{
-			$query1="select * from activitygrouprelation where activityid=".$record;
+				
+			$query1="select groups.groupid from activitygrouprelation inner join groups on groups.groupname = activitygrouprelation.groupname where activityid=".$record;
 		}
 		elseif($module == 'Tickets')
 		{
-			$query1="select * from ticketgrouprelation where ticketid=".$record;
+			$query1="select groups.groupid from ticketgrouprelation inner join groups on groups.groupname = ticketgrouprelation.groupname where ticketid=".$record;
 		}
 		$result1=$adb->query($query1);
-		$groupname=$adb->query_result($result1,0,'groupname');
-		$ownerArr['Groups']=$groupname;
+		$groupid=$adb->query_result($result1,0,'groupid');
+		$ownerArr['Groups']=$groupid;
 						
 	}	
 	return $ownerArr;
