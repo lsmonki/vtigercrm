@@ -43,9 +43,6 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 }
 
 $disp_view = getView($focus->mode);
-//echo $disp_view;
-
-//echo '<pre>';print_r(getBlocks("Leads",$disp_view,$mode,$focus->column_fields));echo '</pre>';
 $smarty->assign("BLOCKS",getBlocks("Leads",$disp_view,$mode,$focus->column_fields));
 $smarty->assign("OP_MODE",$disp_view);
 
@@ -141,16 +138,6 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);
 $smarty->assign("VALIDATION_DATA_FIELDLABEL",$fieldLabel);
-
-
-//CustomField
-/*
-$custfld = CustomFieldEditView($focus->id, "Leads", "leadcf", "leadid", $app_strings, $theme);
-$xtpl->assign("CUSTOMFIELD", $custfld);
-*/
-//$xtpl->parse("main");
-
-//$xtpl->out("main");
 
 $smarty->display("salesEditView.tpl");
 
