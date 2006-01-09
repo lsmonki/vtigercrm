@@ -1236,7 +1236,7 @@ function isReadPermittedBySharing($module,$tabid,$actionid,$record_id)
 	elseif($ownertype == 'Groups')
 	{
 		$read_grp_per=$read_per_arr['GROUP'];
-		if(array_key_exists($owner_id,$read_grp_per))
+		if(array_key_exists($ownerid,$read_grp_per))
 		{
 			$sharePer='yes';
 			return $sharePer;
@@ -1359,7 +1359,7 @@ function isReadWritePermittedBySharing($module,$tabid,$actionid,$record_id)
 	elseif($ownertype == 'Groups')
 	{
 		$write_grp_per=$write_per_arr['GROUP'];
-		if(array_key_exists($owner_id,$write_grp_per))
+		if(array_key_exists($ownerid,$write_grp_per))
 		{
 			$sharePer='yes';
 			return $sharePer;
@@ -3273,21 +3273,182 @@ function getSubordinateRoleAndUsers($roleId)
 
 function getCurrentUserProfileList()
 {
-	global $current_user;
-	require('user_privileges/user_privileges_'.$current_user->id.'.php');
-	$profList ='(';
-	$i=0;	
-	foreach ($current_user_profiles as $profid)
+        global $current_user;
+        require('user_privileges/user_privileges_'.$current_user->id.'.php');
+        $profList ='(';
+        $i=0;
+        foreach ($current_user_profiles as $profid)
         {
-		if($i != 0)
-		{
-			$profList .= ', ';
-		}
-		$profList .= $profid;
-		$i++;	 
+                if($i != 0)
+                {
+                        $profList .= ', ';
+                }
+                $profList .= $profid;
+                $i++;
         }
-	$profList .=')';
-	return $profList;
-	
+        $profList .=')';
+        return $profList;
+
 }
+
+
+function getCurrentUserGroupList()
+{
+        global $current_user;
+        require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	$grpList='';
+	if(sizeof($current_user_groups) > 0)
+	{
+        	$grpList .='(';
+       	 	$i=0;
+        	foreach ($current_user_groups as $grpid)
+        	{
+                	if($i != 0)
+                	{
+                        	$grpList .= ', ';
+                	}
+                	$grpList .= $grpid;
+                	$i++;
+        	}
+        	$grpList .=')';
+	}
+       	 return $grpList;
+}
+
+function getSubordinateUsersList()
+{
+        global $current_user;
+	$user_array=Array();
+        require('user_privileges/user_privileges_'.$current_user->id.'.php');
+
+	if(sizeof($subordinate_roles_users) > 0)
+	{	
+        	foreach ($subordinate_roles_users as $roleid => $userArray)
+        	{
+			foreach($userArray as $userid)
+			{
+				if(! in_array($userid,$user_array))
+				{
+					$user_array[]=$userid;
+				}
+			}
+        	}
+	}
+	$subUserList = constructList($user_array,'INTEGER');	
+       	return $subUserList;
+
+}
+
+function getReadSharingUsersList($module)
+{
+	global $adb;
+	global $current_user;
+	$user_array=Array();
+	$tabid=getTabid($module);
+	$query = "select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid;
+	$result=$adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$user_id=$adb->query_result($result,$i,'shareduserid');
+		$user_array[]=$user_id;
+	}
+	$shareUserList=constructList($user_array,'INTEGER');
+	return $shareUserList;
+}
+
+function getReadSharingGroupsList($module)
+{
+	global $adb;
+	global $current_user;
+	$grp_array=Array();
+	$tabid=getTabid($module);
+	$query = "select sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid;
+	$result=$adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$grp_id=$adb->query_result($result,$i,'sharedgroupid');
+		$grp_array[]=$grp_id;
+	}
+	$shareGrpList=constructList($grp_array,'INTEGER');
+	return $shareGrpList;
+}
+
+function constructList($array,$data_type)
+{
+	$list="";
+	if(sizeof($array) > 0)
+	{
+		$i=0;
+		$list .= "(";
+		foreach($array as $value)
+		{
+			if($i != 0)
+			{
+				$list .= ", ";
+			}
+			if($data_type == "INTEGER")
+			{
+				$list .= $value;
+			}
+			elseif($data_type == "VARCHAR")
+			{
+				$list .= "'".$value."'"; 
+			}
+			$i++;		
+		}
+		$list.=")";
+	}
+	return $list;	
+}
+
+function getListViewSecurityParameter($module)
+{
+	global $adb;
+	global $current_user;
+
+	$tabid=getTabid($module);
+
+	//Current User	
+	$sec_query = " and (crmentity.smownerid=".$current_user->id;
+
+	//Subordinate User
+	$subUsersList=getSubordinateUsersList();
+	if($subUsersList != '')
+	{
+		$sec_query .= " or crmentity.smownerid in".$subUsersList;
+	}
+
+	//Shared User
+	$sharedUsersList=getReadSharingUsersList($module);
+	if($sharedUsersList != '')
+	{
+		$sec_query .= " or crmentity.smownerid in".$sharedUsersList;
+	}
+
+
+	//Current User Groups
+	if($module == 'Leads' or $module=='HelpDesk' or $module=='Tickets')
+	{
+		$userGroupsList=getCurrentUserGroupList();
+		if($userGroupsList != '')
+		{
+			$sec_query .= " or (crmentity.smownerid in(0) and groups.groupid in".$userGroupsList.")";
+		}
+
+		//Shared User Groups
+		$sharedGroupsList=getReadSharingGroupsList($module);
+		if($sharedGroupsList != '')
+		{
+			$sec_query .= " or (crmentity.smownerid in(0) and groups.groupid in".$sharedGroupsList.")";
+		}	
+
+
+	}
+		
+	$sec_query .=") ";
+	return $sec_query;	
+}
+
 ?>
