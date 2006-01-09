@@ -1,4 +1,4 @@
-	.small {
+.small {
 	
         font-family: Arial, Helvetica, sans-serif;
         font-size: 11px;
@@ -43,4 +43,18 @@
         color:#ffffff;
     }
 
+a {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	text-decoration:none;
+color:#333366;
 
+}
+
+a:hover {
+	  font-family: Arial, Helvetica, sans-serif;
+	  font-size: 11px;
+	  text-decoration:underline;
+color:#333333;
+
+  }

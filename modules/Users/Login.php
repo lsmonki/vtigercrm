@@ -86,16 +86,6 @@ function set_focus() {
 </script>
 
 
-
-
-<html>
-<head>
-	<title>vtiger CRM 5 - Alpha : The Commercial grade, free open source CRM</title>
-	<link rel="stylesheet" href="include/style.css">
-</head>
-
-<body class=small>
-
 <table border=0 cellspacing=0 cellpadding=0 width=100%>
 <tr>
 	<td align=center>
@@ -143,26 +133,7 @@ function set_focus() {
 						<table border=0 cellspacing=0 cellpadding=0 width=100%><tr><td align=left><img src="include/images/loginSITopLeft.gif"></td><td align=right><img src="include/images/loginSITopRight.gif"></td></tr></table>
 					
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table border=0 cellspacing=0 cellpadding=5 width=100%>
+						<table border=0 cellspacing=0 cellpadding=5 align=center width=90%>
 <form action="index.php" method="post" name="DetailView" id="form">
 
 			<input type="hidden" name="module" value="Users">
@@ -205,36 +176,40 @@ else {
 
 ?>
 	<tr>
-
+	<td colspan="2" class="loginSignin" style="border-bottom: 1px solid rgb(153, 153, 153); padding: 10px;" align="left">
+		Sign in
+	</td>
+	</tr>
+	<tr>
 	<td class=small align=right>
-	<?php echo $current_module_strings['LBL_USER_NAME'] ?>
+	<?php echo $current_module_strings['LBL_CRM_ID'] ?>
 		</td>
 		<td class=small>
-		<input class=small type="text"  name="user_name"  class=textbox value="<?php echo $login_user_name ?>">
+		<input class=textbox type="text"  name="user_name"  class=textbox value="<?php echo $login_user_name ?>">
 		</td>
 	</tr>
 	<tr>
 	<td class=small align=right>
 	<?php echo $current_module_strings['LBL_PASSWORD'] ?>
 	</b></td><td class=small>
-	<input class=small type="password" size='20' name="user_password" class=textbox value="<?php echo $login_password ?>">
+	<input class=textbox type="password" size='20' name="user_password" class=textbox value="<?php echo $login_password ?>">
 	</td>
 	</tr>
 	<tr>
-	<td class=small align=right>
+	<td class=small align=right style="background-color:#f5f5f5">
 	<?php echo $current_module_strings['LBL_THEME'] ?>
-	</b></td><td class=small>
+	</b></td><td class=small style="background-color:#f5f5f5">
 		<select class='small' name='login_theme' style="width:120px;">
 		<?php echo get_select_options_with_id(get_themes(), $display_theme) ?>
 		</select>
 	</td>
 	</tr>
 	<tr>
-	<td class=small align=right>
+	<td class=small align=right style="background-color:#f5f5f5">
 	<?php echo $current_module_strings['LBL_LANGUAGE'] ?>
 	</b>
 	</td>
-	<td class=small>
+	<td class=small style="background-color:#f5f5f5">
 	
 	<select class='small' name='login_language' style="width:120px;">
 	<?php echo get_select_options_with_id(get_languages(), $display_language) ?>
@@ -244,10 +219,9 @@ else {
 	<tr>
 	<td></td>
 	<td>
-	<input class=small title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" class="button" type="submit" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  " style="width:100; height:25;">
+	<input class=small title="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" accesskey="<?php echo $current_module_strings['LBL_LOGIN_BUTTON_TITLE'] ?>" class="button" type="image" src="include/images/loginBtnSignin.gif" name="Login" value="  <?php echo $current_module_strings['LBL_LOGIN_BUTTON_LABEL'] ?>  " style="width:100; height:25;">
 	</b> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </td>
 	</tr>
-	<tr><td>&nbsp</td></tr>
 	</table>
 		
 					<table border=0 cellspacing=0 cellpadding=0 width=100%><tr><td align=left><img src="include/images/loginSIBottomLeft.gif"></td><td align=right><img src="include/images/loginSIBottomRight.gif"></td><tr></table>
@@ -269,14 +243,13 @@ else {
 		<tr>
 			<td align=left><img src="include/images/loginBottomURL.gif" alt="vtiger CRM" title="vtiger CRM"></td>
 			<td align=right>
-			Released under <a href="#">LGPL Public License</a> 
+			<a href="#">License</a>
 			</td>
 		</tr>
 		</table>
 
 	</td>
 </table></td>
-<td bgcolor="#C9EBFF"> </td>
 </tr>
 </table>
 
