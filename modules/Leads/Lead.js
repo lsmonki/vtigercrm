@@ -252,7 +252,7 @@ function changeStatus()
 		}
 	}	
 
-	document.massdelete.action="index.php?module=Users&action=massChangeStatus&viewname="+viewid;
+	document.massdelete.action="index.php?module=Users&action=massChangeStatus&parenttab=Sales&viewname="+viewid;
 }
 
 //to merge to a list of leads
@@ -301,7 +301,7 @@ function massMerge()
 		{
 				getObj('idlist').value = getObj('allids').value;
 		}
-	document.massdelete.action="index.php?module=Leads&action=Merge&return_module=Leads&return_action=index&viewname="+viewid;
+	document.massdelete.action="index.php?module=Leads&action=Merge&return_module=Leads&return_action=index&parenttab=Sales&viewname="+viewid;
 }
 
 //added for massemail by raju
