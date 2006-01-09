@@ -64,7 +64,7 @@ if($currentModule == "Rss")
 	require_once("modules/".$currentModule."/Forms.php");
 	if (function_exists('get_rssfeeds_form'))
 	{
-		$rss_form->assign("RSSFEEDS_TITLE","<div style='float:left'>".$app_strings['LBL_RSS_FEEDS'].":</div><div style='float:right;'><a href='javascript:openPopUp(\"addRssFeedIns\",this,\"index.php?action=Popup&module=Rss\",\"addRssFeedWin\",350,150,\"menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes\");' title='".$app_strings['LBL_ADD_RSS_FEEDS']."'>Add<img src='".$image_path."/addrss.gif' border=0 align=absmiddle></a>&nbsp;</div>");
+		$rss_form->assign("RSSFEEDS_TITLE","<br><div style='float:left'><a href='javascript:openPopUp(\"addRssFeedIns\",this,\"index.php?action=Popup&module=Rss\",\"addRssFeedWin\",350,150,\"menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes\");' title='".$app_strings['LBL_ADD_RSS_FEEDS']."'>Add<img src='".$image_path."/addrss.gif' border=0 align=absmiddle></a>&nbsp;</div>");
 		$rss_form->assign("RSSFEEDS", get_rssfeeds_form());
 	}
 }
