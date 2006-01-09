@@ -98,6 +98,15 @@ $smarty->assign("NAME", $focus->name);
 else 
 $smarty->assign("NAME", "");
 
+if($activity_mode == 'Task')
+{
+        $tab_type = 'Activities';
+}
+elseif($activity_mode == 'Events')
+{
+        $tab_type = 'Events';
+}
+
 if (isset($_REQUEST['return_module'])) 
 $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if (isset($_REQUEST['return_action'])) 
@@ -111,7 +120,7 @@ $smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 $smarty->assign("ID", $focus->id);
 $smarty->assign("NAME", $focus->name);
 
-$smarty->assign("BLOCKS", getBlocks("Activities","detail_view",'',$focus->column_fields));
+$smarty->assign("BLOCKS", getBlocks($tab_type,"detail_view",'',$focus->column_fields));
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("ID", $_REQUEST['record']);
