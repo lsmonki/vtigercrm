@@ -739,15 +739,6 @@ else
         $theme = $default_theme;
 }
 
-
-
-
-if(!$skipFooters)
-//include('themes/'.$theme.'/footer.php');
-	if(isset($_SESSION["authenticated_user_id"]))
-	{
-		include('themes/'.$theme.'/footer.php');
-	}
 if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss'))
 {
 	// Under the SPL you do not have the right to remove this copyright statement.	
@@ -824,5 +815,7 @@ if((!$viewAttachment) && (!$viewAttachment && $action != 'home_rss'))
 		</script>
 <?php
 	}
+	if(!$skipFooters)
+	include('themes/'.$theme.'/footer.php');
 }
 ?>
