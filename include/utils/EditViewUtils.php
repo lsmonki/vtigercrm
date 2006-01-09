@@ -436,7 +436,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	}
 	elseif($uitype == 63)
         {
-		//$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].':</td>';
 		$editview_label[]=$mod_strings[$fieldlabel];
                 if($value=='')
                 $value=1;
@@ -1084,10 +1083,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$hr_options = getReminderSelectOption(0,23,'remhrs',$rem_hrs);
 		$min_options = getReminderSelectOption(1,59,'remmin',$rem_min);
 		$custfld .= '&nbsp;&nbsp;'.$day_options.' &nbsp;'.$mod_strings['LBL_DAYS'].'&nbsp;&nbsp;'.$hr_options.'&nbsp;'.$mod_strings['LBL_HOURS'].'&nbsp;&nbsp;'.$min_options.'&nbsp;'.$mod_strings['LBL_MINUTES'].'&nbsp;&nbsp;'.$mod_strings['LBL_BEFORE_EVENT'].'</td>';
+		$fieldvalue[] = array(array(0,32,'remdays','days',$rem_days),array(0,24,'remhrs','hours',$rem_hrs),array(1,60,'remmin','minutes  before event',$rem_min));
+                $fieldvalue[] = array($SET_REM,$mod_strings['LBL_YES'],$mod_strings['LBL_NO']);
 		$SET_REM = '';
-		$fieldvalue[] = array($rem_days=>array(0,31,'remdays'),
-				      $rem_hrs=>array(0,23,'remhrs'),
-				      $rem_min=>array(1,59,'remmin'));
 	}
 	else
 	{
