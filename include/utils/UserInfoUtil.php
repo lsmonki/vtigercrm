@@ -3429,7 +3429,7 @@ function getListViewSecurityParameter($module)
 
 
 	//Current User Groups
-	if($module == 'Leads' or $module=='HelpDesk' or $module=='Tickets')
+	if($module == 'Leads' or $module=='HelpDesk' or $module=='Activities')
 	{
 		$userGroupsList=getCurrentUserGroupList();
 		if($userGroupsList != '')
