@@ -40,6 +40,8 @@ function createUserPrivilegesfile($userid)
 			$tabsPermissionArr=getCombinedUserTabsPermissions($userid);
 			$actionPermissionArr=getCombinedUserActionPermissions($userid);
 			$user_role=fetchUserRole($userid);
+			$user_role_info=getRoleInformation($user_role);
+			$user_role_parent=$user_role_info[$user_role][1];
 			$userGroupFocus=new GetUserGroups();
 			$userGroupFocus->userRole=$user_role;
 			$userGroupFocus->getAllUserGroups($userid);
@@ -50,6 +52,8 @@ function createUserPrivilegesfile($userid)
 
 			
 			$newbuf .= "\$current_user_roles='".$user_role."';\n";
+			$newbuf .= "\n";
+			$newbuf .= "\$current_user_parent_role_seq='".$user_role_parent."';\n";
 			$newbuf .= "\n";
 			$newbuf .= "\$current_user_profiles=".constructSingleArray(getUserProfile($userid)).";\n";
 			$newbuf .= "\n";
@@ -135,8 +139,8 @@ function createUserSharingPrivilegesfile($userid)
 			$lead_share_write_per=$lead_share_per_array['write'];
 			$lead_sharingrule_members=$lead_share_per_array['sharingrules'];	
 
-			$newbuf .= "\$Leads_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($lead_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($lead_share_read_per['GROUP']).");\n\n";	
-			$newbuf .= "\$Leads_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($lead_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($lead_share_write_per['GROUP']).");\n\n";	
+			$newbuf .= "\$Leads_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($lead_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($lead_share_read_per['GROUP']).");\n\n";	
+			$newbuf .= "\$Leads_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($lead_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($lead_share_write_per['GROUP']).");\n\n";	
 
 			//Constructing the Lead Email Related Module Sharing Array
 			$lead_related_email=getRelatedModuleSharingArray("Leads","Emails",$lead_sharingrule_members,$lead_share_read_per,$lead_share_write_per,$def_org_share);
@@ -229,8 +233,8 @@ function createUserSharingPrivilegesfile($userid)
 			$pot_share_read_per=$pot_share_per_array['read'];
 			$pot_share_write_per=$pot_share_per_array['write'];
 			$pot_sharingrule_members=$pot_share_per_array['sharingrules'];
-			$newbuf .= "\$Potentials_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($pot_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($pot_share_read_per['GROUP']).");\n\n";	
-			$newbuf .= "\$Potentials_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($pot_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($pot_share_write_per['GROUP']).");\n\n";
+			$newbuf .= "\$Potentials_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($pot_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($pot_share_read_per['GROUP']).");\n\n";	
+			$newbuf .= "\$Potentials_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($pot_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($pot_share_write_per['GROUP']).");\n\n";
 
 			//Constructing the Potential Quotes Related Module Sharing Array
 			$pot_related_qt=getRelatedModuleSharingArray("Potentials","Quotes",$pot_sharingrule_members,$pot_share_read_per,$pot_share_write_per,$def_org_share);
@@ -252,32 +256,21 @@ function createUserSharingPrivilegesfile($userid)
 
 
 
-			//Constructing the Account SalesOrder Related Module Sharing Array
-			$acct_related_so=getRelatedModuleSharingArray("Accounts","SalesOrder",$account_sharingrule_members,$account_share_read_per,$account_share_write_per,$def_org_share);
-
-			$acc_so_share_read_per=$acct_related_so['read'];
-			$acc_so_share_write_per=$acct_related_so['write'];
-
-			$newbuf .= "\$Accounts_SalesOrder_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($acc_so_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($acc_so_share_read_per['GROUP']).");\n\n";	
-			$newbuf .= "\$Accounts_SalesOrder_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($acc_so_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($acc_so_share_write_per['GROUP']).");\n\n";
-
-
-
 
 			//Constructing HelpDesk Sharing Rules
 			$hd_share_per_array=getUserModuleSharingObjects("HelpDesk",$userid,$def_org_share,$current_user_roles,$parent_roles,$current_user_groups);
 			$hd_share_read_per=$hd_share_per_array['read'];
 			$hd_share_write_per=$hd_share_per_array['write'];
-			$newbuf .= "\$HelpDesk_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($hd_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($hd_share_read_per['GROUP']).");\n\n";	
-			$newbuf .= "\$HelpDesk_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($hd_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($hd_share_write_per['GROUP']).");\n\n";
+			$newbuf .= "\$HelpDesk_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($hd_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($hd_share_read_per['GROUP']).");\n\n";	
+			$newbuf .= "\$HelpDesk_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($hd_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($hd_share_write_per['GROUP']).");\n\n";
 	
 
 			//Constructing Emails Sharing Rules
 			$email_share_per_array=getUserModuleSharingObjects("Emails",$userid,$def_org_share,$current_user_roles,$parent_roles,$current_user_groups);
 			$email_share_read_per=$email_share_per_array['read'];
 			$email_share_write_per=$email_share_per_array['write'];
-			$newbuf .= "\$Emails_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($email_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($email_share_read_per['GROUP']).");\n\n";	
-			$newbuf .= "\$Emails_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($email_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($email_share_write_per['GROUP']).");\n\n";
+			$newbuf .= "\$Emails_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($email_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($email_share_read_per['GROUP']).");\n\n";	
+			$newbuf .= "\$Emails_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($email_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($email_share_write_per['GROUP']).");\n\n";
 	
 
 			//Constructing Quotes Sharing Rules
@@ -285,8 +278,8 @@ function createUserSharingPrivilegesfile($userid)
 			$quotes_share_read_per=$quotes_share_per_array['read'];
 			$quotes_share_write_per=$quotes_share_per_array['write'];
 			$quotes_sharingrule_members=$quotes_share_per_array['sharingrules'];
-			$newbuf .= "\$Quotes_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($quotes_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($quotes_share_read_per['GROUP']).");\n\n";	
-			$newbuf .= "\$Quotes_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($quotes_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($quotes_share_write_per['GROUP']).");\n\n";
+			$newbuf .= "\$Quotes_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($quotes_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($quotes_share_read_per['GROUP']).");\n\n";	
+			$newbuf .= "\$Quotes_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($quotes_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($quotes_share_write_per['GROUP']).");\n\n";
 
 			//Constructing the Quote SalesOrder Related Module Sharing Array
 			$qt_related_so=getRelatedModuleSharingArray("Quotes","SalesOrder",$quotes_sharingrule_members,$quotes_share_read_per,$quotes_share_write_per,$def_org_share);
@@ -304,16 +297,16 @@ function createUserSharingPrivilegesfile($userid)
 			$po_share_per_array=getUserModuleSharingObjects("PurchaseOrder",$userid,$def_org_share,$current_user_roles,$parent_roles,$current_user_groups);
 			$po_share_read_per=$po_share_per_array['read'];
 			$po_share_write_per=$po_share_per_array['write'];
-			$newbuf .= "\$PurchaseOrder_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($po_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($po_share_read_per['GROUP']).");\n\n";	
-			$newbuf .= "\$PurchaseOrder_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($po_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($po_share_write_per['GROUP']).");\n\n";
+			$newbuf .= "\$PurchaseOrder_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($po_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($po_share_read_per['GROUP']).");\n\n";	
+			$newbuf .= "\$PurchaseOrder_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($po_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($po_share_write_per['GROUP']).");\n\n";
 	
 			//Constructing Sales Order Sharing Rules
 			$so_share_per_array=getUserModuleSharingObjects("SalesOrder",$userid,$def_org_share,$current_user_roles,$parent_roles,$current_user_groups);
 			$so_share_read_per=$so_share_per_array['read'];
 			$so_share_write_per=$so_share_per_array['write'];
 			$so_sharingrule_members=$so_share_per_array['sharingrules'];
-			$newbuf .= "\$SalesOrder_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($so_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($so_share_read_per['GROUP']).");\n\n";	
-			$newbuf .= "\$SalesOrder_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($so_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($so_share_write_per['GROUP']).");\n\n";
+			$newbuf .= "\$SalesOrder_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($so_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($so_share_read_per['GROUP']).");\n\n";	
+			$newbuf .= "\$SalesOrder_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($so_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalValueArray($so_share_write_per['GROUP']).");\n\n";
 
 			//Constructing the SalesOrder Invoice Related Module Sharing Array
 			$so_related_inv=getRelatedModuleSharingArray("SalesOrder","Invoice",$so_sharingrule_members,$so_share_read_per,$so_share_write_per,$def_org_share);
@@ -330,13 +323,16 @@ function createUserSharingPrivilegesfile($userid)
 			$inv_share_per_array=getUserModuleSharingObjects("Invoice",$userid,$def_org_share,$current_user_roles,$parent_roles,$current_user_groups);
 			$inv_share_read_per=$inv_share_per_array['read'];
 			$inv_share_write_per=$inv_share_per_array['write'];
-			$newbuf .= "\$Invoice_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($inv_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($inv_share_read_per['GROUP']).");\n\n";	
-			$newbuf .= "\$Invoice_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleArray($inv_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($inv_share_write_per['GROUP']).");\n\n";
+			$newbuf .= "\$Invoice_share_read_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($inv_share_read_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($inv_share_read_per['GROUP']).");\n\n";	
+			$newbuf .= "\$Invoice_share_write_permission=array('ROLE'=>".constructTwoDimensionalCharIntSingleValueArray($inv_share_write_per['ROLE']).",'GROUP'=>".constructTwoDimensionalArray($inv_share_write_per['GROUP']).");\n\n";
 	
 
 			$newbuf .= "?>";
 			fputs($handle, $newbuf);
 			fclose($handle);
+
+			//Populating Temp Tables
+			populateSharingtmptables($userid);
 		}
 	}
 }
@@ -1076,6 +1072,8 @@ function getRelatedModuleSharingArray($par_mod,$share_mod,$mod_sharingrule_membe
 
 }
 
+
+
 function constructArray($var)
 {
 	if (is_array($var))
@@ -1192,5 +1190,225 @@ function constructTwoDimensionalCharIntSingleValueArray($var)
        		$code .= ")";
        		return $code;
    	}
+}
+
+
+function populateSharingtmptables($userid)
+{
+	global $adb;
+	require('user_privileges/sharing_privileges_'.$userid.'.php');
+	//Deleting from the existing tables
+	$table_arr=Array('tmp_read_user_sharing_per', 'tmp_write_user_sharing_per','tmp_read_group_sharing_per','tmp_write_group_sharing_per');
+	foreach($table_arr as $tabname)
+	{
+		$query = "delete from ".$tabname." where userid=".$userid;
+		$adb->query($query);
+	}
+
+	//Populating Values into the tmp sharing tables
+	$sharingArray=Array('Leads','Accounts','Contacts','Potentials','HelpDesk','Emails','Quotes','PurchaseOrder','SalesOrder','Invoice');
+	foreach($sharingArray as $module)
+	{
+		populateSharingPrivileges('USER',$userid,$module,'read');
+		populateSharingPrivileges('USER',$userid,$module,'write');
+		populateSharingPrivileges('GROUP',$userid,$module,'read');
+		populateSharingPrivileges('GROUP',$userid,$module,'write');
+	}
+	//Populating Values into the temp related sharing tables
+	foreach($related_module_share as $rel_tab_id => $tabid_arr)
+	{
+		$rel_tab_name=getTabname($rel_tab_id);
+		foreach($tabid_arr as $taid)
+		{
+			$tab_name=getTabname($taid);
+			populateRelatedSharingPrivileges('USER',$userid,$tab_name,$rel_tab_name,'read');
+                	populateRelatedSharingPrivileges('USER',$userid,$tab_name,$rel_tab_name,'write');
+                	populateRelatedSharingPrivileges('GROUP',$userid,$tab_name,$rel_tab_name,'read');
+                	populateRelatedSharingPrivileges('GROUP',$userid,$tab_name,$rel_tab_name,'write');
+			
+		}	
+	}			 
+}
+
+function populateSharingPrivileges($enttype,$userid,$module,$pertype)
+{
+	global $adb;	
+	require('user_privileges/sharing_privileges_'.$userid.'.php');
+	$tabid=getTabid($module);
+	//echo $module.'               '.$enttype.'                '.$pertype.'<BR>';                       
+	if($enttype=='USER')
+	{
+		if($pertype =='read')
+		{
+			$table_name='tmp_read_user_sharing_per';
+			$var_name=$module.'_share_read_permission';
+		}
+		elseif($pertype == 'write')
+		{
+			$table_name='tmp_write_user_sharing_per';
+			$var_name=$module.'_share_write_permission';
+		}
+		$var_name_arr=$$var_name;	
+		$user_arr=Array();
+		if(sizeof($var_name_arr['ROLE']) > 0)
+		{
+			//echo '<BR>';
+			//print_r('<pre>');
+			//print_r($var_name_arr['ROLE']);
+			//print_r('</pre>');
+			foreach($var_name_arr['ROLE'] as $roleid=>$roleusers)
+			{
+				
+				foreach($roleusers as $user_id)
+				{
+					if(! in_array($user_id,$user_arr))
+					{
+						$query="insert into ".$table_name." values(".$userid.",".$tabid.",".$user_id.")";
+						$adb->query($query);
+						$user_arr[]=$user_id;
+					}
+				}
+			}
+		}
+		if(sizeof($var_name_arr['GROUP']) > 0)
+		{
+			foreach($var_name_arr['GROUP'] as $grpid=>$grpusers)
+			{
+				foreach($grpusers as $user_id)
+				{
+					if(! in_array($user_id,$user_arr))
+					{
+						$query="insert into ".$table_name." values(".$userid.",".$tabid.",".$user_id.")";
+						$adb->query($query);
+						$user_arr[]=$user_id;
+					}
+				}
+			}
+		}
+
+
+	}
+	elseif($enttype=='GROUP')
+	{
+		if($pertype =='read')
+		{
+			$table_name='tmp_read_group_sharing_per';
+			$var_name=$module.'_share_read_permission';
+		}
+		elseif($pertype == 'write')
+		{
+			$table_name='tmp_write_group_sharing_per';
+			$var_name=$module.'_share_write_permission';
+		}
+		$var_name_arr=$$var_name;
+		$grp_arr=Array();
+		if(sizeof($var_name_arr['GROUP']) > 0)
+		{
+
+			foreach($var_name_arr['GROUP'] as $grpid=>$grpusers)
+			{
+				if(! in_array($grpid,$grp_arr))
+				{
+					$query="insert into ".$table_name." values(".$userid.",".$tabid.",".$grpid.")";
+					$adb->query($query);
+					$grp_arr[]=$grpid;
+				}
+			}
+		}
+
+	}
+
+}
+
+
+function populateRelatedSharingPrivileges($enttype,$userid,$module,$relmodule,$pertype)
+{
+	global $adb;	
+	require('user_privileges/sharing_privileges_'.$userid.'.php');
+	$tabid=getTabid($module);
+	$reltabid=getTabid($relmodule);
+	//echo $module.'               '.$enttype.'                '.$pertype.'<BR>';                       
+	if($enttype=='USER')
+	{
+		if($pertype =='read')
+		{
+			$table_name='tmp_read_user_rel_sharing_per';
+			$var_name=$module.'_'.$relmodule.'_share_read_permission';
+		}
+		elseif($pertype == 'write')
+		{
+			$table_name='tmp_write_user_rel_sharing_per';
+			$var_name=$module.'_'.$relmodule.'_share_write_permission';
+		}
+		$var_name_arr=$$var_name;	
+		$user_arr=Array();
+		if(sizeof($var_name_arr['ROLE']) > 0)
+		{
+			//echo '<BR>';
+			//print_r('<pre>');
+			//print_r($var_name_arr['ROLE']);
+			//print_r('</pre>');
+			foreach($var_name_arr['ROLE'] as $roleid=>$roleusers)
+			{
+				
+				foreach($roleusers as $user_id)
+				{
+					if(! in_array($user_id,$user_arr))
+					{
+						$query="insert into ".$table_name." values(".$userid.",".$tabid.",".$reltabid.",".$user_id.")";
+						$adb->query($query);
+						$user_arr[]=$user_id;
+					}
+				}
+			}
+		}
+		if(sizeof($var_name_arr['GROUP']) > 0)
+		{
+			foreach($var_name_arr['GROUP'] as $grpid=>$grpusers)
+			{
+				foreach($grpusers as $user_id)
+				{
+					if(! in_array($user_id,$user_arr))
+					{
+						$query="insert into ".$table_name." values(".$userid.",".$tabid.",".$reltabid.",".$user_id.")";
+						$adb->query($query);
+						$user_arr[]=$user_id;
+					}
+				}
+			}
+		}
+
+
+	}
+	elseif($enttype=='GROUP')
+	{
+		if($pertype =='read')
+		{
+			$table_name='tmp_read_group_rel_sharing_per';
+			$var_name=$module.'_'.$relmodule.'_share_read_permission';
+		}
+		elseif($pertype == 'write')
+		{
+			$table_name='tmp_write_group_rel_sharing_per';
+			$var_name=$module.'_'.$relmodule.'_share_write_permission';
+		}
+		$var_name_arr=$$var_name;
+		$grp_arr=Array();
+		if(sizeof($var_name_arr['GROUP']) > 0)
+		{
+
+			foreach($var_name_arr['GROUP'] as $grpid=>$grpusers)
+			{
+				if(! in_array($grpid,$grp_arr))
+				{
+					$query="insert into ".$table_name." values(".$userid.",".$tabid.",".$reltabid.",".$grpid.")";
+					$adb->query($query);
+					$grp_arr[]=$grpid;
+				}
+			}
+		}
+
+	}
+
 }
 ?>
