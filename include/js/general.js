@@ -1052,3 +1052,20 @@ function delete_cookie_gen ( cookie_name )
   document.cookie = cookie_name += "=; expires=" + cookie_date.toGMTString();
 }
 //end added for show/hide 10July
+
+/** This is Javascript Function which is used to toogle between
+  * assigntype user and group/team select options while assigning owner to entity.
+  */
+function toggleAssignType(currType)
+{
+        if (currType=="U")
+        {
+                getObj("assign_user").style.display="block"
+                getObj("assign_team").style.display="none"
+        }
+        else
+        {
+                getObj("assign_user").style.display="none"
+                getObj("assign_team").style.display="block"
+        }
+}
