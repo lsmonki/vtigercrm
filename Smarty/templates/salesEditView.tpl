@@ -385,7 +385,26 @@
 						{elseif $uitype eq 30}
                                                 <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
                                                 <td colspan="3" width="30%" align=left class="dvtCellInfo">
-                                                <input type="radio" name="set_reminder" value="Yes" selected>&nbsp;Yes&nbsp;<input type="radio" name="set_reminder" value="No">&nbsp;No&nbsp;
+							{assign var=check value=$secondvalue[0]}
+                                                        {assign var=yes_val value=$secondvalue[1]}
+                                                        {assign var=no_val value=$secondvalue[2]}
+                                                <input type="radio" name="set_reminder" value="Yes" {$check}>&nbsp;{$yes_val}&nbsp;<input type="radio" name="set_reminder" value="No">&nbsp;{$no_val}&nbsp;
+                                                {foreach item=val_arr from=$fldvalue}
+                                                        {assign var=start value="$val_arr[0]"}
+                                                        {assign var=end value="$val_arr[1]"}
+                                                        {assign var=sendname value="$val_arr[2]"}
+                                                        {assign var=disp_text value="$val_arr[3]"}
+                                                        {assign var=sel_val value="$val_arr[4]"}
+                                                          <select name="{$sendname}">
+                                                                {section name=reminder start=$start max=$end loop=$end step=1 }
+                                                                {if $smarty.section.reminder.index eq $sel_val}
+                                                                        {assign var=sel_value value="SELECTED"}
+                                                                {/if}
+                                                                <OPTION VALUE="{$smarty.section.reminder.index}" "{$sel_value}">{$smarty.section.reminder.index}</OPTION>
+                                                                {/section}
+                                                          </select>
+                                                        &nbsp;{$disp_text}
+                                                {/foreach}
                                                 </td>
 
 							{/if}
