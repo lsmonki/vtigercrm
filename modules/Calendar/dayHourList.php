@@ -21,7 +21,44 @@ if($hour_format=="24")
 			<table border=0 cellspacing=0 cellpadding=2 width=100%>
 			<tr>
 				<td onMouseOver="gshow('12am')"  onMouseOut="ghide('12am')"  valign=top style="border-left:1px dashed #dadada;height:50px" width=90%></td>
-				<td onMouseOver="gshow('12am')"  onMouseOut="ghide('12am')"  width=10%><input type="button" value="Add Event" onClick="gshow('addEvent')" class="small" style="display:none" id='12am' ></td>
+
+				<table border=0 cellspacing=0 cellpadding=2 class="calEventNormal" width=100%>
+                                        <tr >
+                                                <td width=16><img src="../images/cal16x16call.jpg" alt="Call" title="Call"></td>
+                                                <td width=16><img src="../images/cal16x16Linked.jpg" alt="This event spans across time slots" title="This event spans across time slots"></td>
+                                                <td align=left> <b>11.00pm to 2.00am</b></td>
+                                        </tr>
+                                        <tr>
+                                                <td colspan=2>&nbsp;</td>
+                                                <td align=left nowrap> <a href="#">Phone call to Jone Ballers,
+ 841-233-1293</a> </td>
+                                        </tr>
+                                        </table>
+
+                                        <table border=0 cellspacing=0 cellpadding=2 class="calEventCritical" width=100%>
+                                        <tr >
+                                                <td width=16><img src="../images/cal16x16Meeting.jpg" alt="Meeting" title="Meeting"></td>
+                                                <td width=16>&nbsp;</td>
+                                                <td align=left><b>12.00am to 12.30am</b></td>
+                                        </tr>
+                                        <tr>
+                                                <td colspan=2>&nbsp;</td>
+                                                <td align=left> <a href="#">Meet Rob Chanick at Block 3 </a> </td></tr>
+                                        </table>
+
+					<td onMouseOver="gshow('12am')"  onMouseOut="ghide('12am')"  width=10%>
+                                        <div id="12am" style="display:none">
+                                        <table border=0>
+                                        <tr>
+                                                <td><a onClick="gshow('addEvent')" href="javascript:void(0)"><img src="themes/blue/images/cal16x16CallAdd.jpg" alt="Add Call Event" title="Add Call Event" border=0></a></td>
+                                                <td><a onClick="gshow('addEvent')" href="javascript:void(0)"><img src="themes/blue/images/cal16x16MeetingAdd.jpg" alt="Add Meeting Event" title="Add Meeting Event" border=0></a></td>
+                                                <td><a onClick="gshow('addEvent')" href="javascript:void(0)"><img src="themes/blue/images/cal16x16ToDoAdd.jpg" alt="Add To Do" title="Add To Do" border=0></a></td>
+                                        </tr>
+                                        </table>
+                                        </div>
+
+                                </td>
+
 			</tr>
 			</table>
 		</td>
