@@ -443,7 +443,8 @@ class CRMEntity extends SugarBean
     }
     elseif($old_user_id == 0)
     {
-	$group_name = getGroupName($ticketid,'HelpDesk');
+	$group_info = getGroupName($ticketid,'HelpDesk');	
+	$group_name = $group_info[0];	
 	if($group_name != $_REQUEST['assigned_group_name'])
 		$updatelog .= ' Transferred to group '.$_REQUEST['assigned_group_name'].'\.';
     }
@@ -704,6 +705,14 @@ class CRMEntity extends SugarBean
 			  {
 				  updateLeadGroupRelation($this->id,$groupname);
 			  }
+                          elseif($module == 'Accounts' && $table_name == 'account')
+			  {
+				  updateAccountGroupRelation($this->id,$groupname);
+			  }
+			  elseif($module == 'Contacts' && $table_name == 'contactdetails')
+			  {
+				  updateContactGroupRelation($this->id,$groupname);
+			  }
 			  elseif($module == 'HelpDesk' && $table_name == 'troubletickets')
 			  {
 				  updateTicketGroupRelation($this->id,$groupname);
@@ -724,6 +733,14 @@ class CRMEntity extends SugarBean
 			  if($module == 'Leads' && $table_name == 'leaddetails')
 			  {
 				  updateLeadGroupRelation($this->id,'');
+			  }
+			  elseif($module == 'Accounts' && $table_name == 'account')
+			  {
+				  updateAccountGroupRelation($this->id,'');
+			  }
+			  elseif($module == 'Contacts' && $table_name == 'contactdetails')
+			  {
+				  updateContactGroupRelation($this->id,'');
 			  }
 			  elseif($module == 'HelpDesk' && $table_name == 'troubletickets')
 			  {

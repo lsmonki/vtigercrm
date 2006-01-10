@@ -351,28 +351,39 @@ $log->info("in getSoName ".$so_id);
 
 function getGroupName($id, $module)
 {
-	global $log;
-$log->info("in getGroupName ".$id.'  module is    '.$module);
-	global $adb;
-	if($module == 'Leads')
-	{
-		$sql = "select * from leadgrouprelation where leadid=".$id;
-	}
+	$group_info = Array();
+        global $log;
+        $log->info("in getGroupName ".$id.'  module is    '.$module);
+        global $adb;
+        if($module == 'Leads')
+        {
+               $sql = "select leadgrouprelation.groupname,groups.groupid from leadgrouprelation inner join groups on groups.groupname=leadgrouprelation.groupname where leadgrouprelation.leadid=".$id;
+        }
+        elseif($module == 'Accounts')
+        {
+               $sql = "select accountgrouprelation.groupname,groups.groupid from accountgrouprelation inner join groups on groups.groupname=accountgrouprelation.groupname where accountgrouprelation.accountid=".$id;
+        }
+        elseif($module == 'Contacts')
+        {
+               $sql = "select contactgrouprelation.groupname,groups.groupid from contactgrouprelation inner join groups on groups.groupname=contactgrouprelation.groupname where contactgrouprelation.contactid=".$id
+        }
         elseif($module == 'HelpDesk')
         {
-                $sql = "select * from ticketgrouprelation where ticketid=".$id;
+               $sql = "select ticketgrouprelation.groupname,groups.groupid from ticketgrouprelation inner join groups on groups.groupname=ticketgrouprelation.groupname where ticketgrouprelation.ticketid=".$id;
         }
-	elseif($module = 'Calls')
-	{
-		$sql = "select * from activitygrouprelation where activityid=".$id;
-	}
-	elseif($module = 'Tasks')
-	{
-		$sql = "select * from taskgrouprelation where taskid=".$id;
-	}
+        elseif($module == 'Calls')
+        {
+               $sql = "select activitygrouprelation.groupname,groups.groupid from activitygrouprelation inner join groups on groups.groupname=activitygrouprelation.groupname where activitygrouprelation.activityid=".$id;
+        }
+        elseif($module == 'Tasks')
+        {
+               $sql = "select taskgrouprelation.groupname,groups.groupid from taskgrouprelation inner join groups on groups.groupname=taskgrouprelation.groupname where taskgrouprelation.taskid=".$id;
+        }
 	$result = $adb->query($sql);
-	$groupname = $adb->query_result($result,0,"groupname");
-	return $groupname;
+        $group_info[] = $adb->query_result($result,0,"groupname");
+        $group_info[] = $adb->query_result($result,0,"groupid");
+        return $group_info;
+
 }
 
 

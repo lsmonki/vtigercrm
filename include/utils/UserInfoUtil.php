@@ -819,6 +819,37 @@ function updateLeadGroupRelation($leadid,$groupname)
   $adb->query($sql);
 
 }
+/** Function to update Account group relation
+  * @param $accountid -- Account Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+
+function updateAccountGroupRelation($accountid,$groupname)
+{
+ global $adb;
+  $sqldelete = "delete from accountgrouprelation where accountid=".$accountid;
+  $adb->query($sqldelete);
+  $sql = "insert into accountgrouprelation values (".$accountid .",'" .$groupname ."')";
+  $adb->query($sql);
+
+}
+
+/** Function to update contact group relation
+  * @param $contactid -- Contact Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+
+function updateContactGroupRelation($contactid,$groupname)
+{
+ global $adb;
+  $sqldelete = "delete from contactgrouprelation where contactid=".$contactid;
+  $adb->query($sqldelete);
+  $sql = "insert into contactgrouprelation values (".$contactid .",'" .$groupname ."')";
+  $adb->query($sql);
+
+}
 
 /** Function to update ticket group relation 
   * @param $ticketid -- Ticket Id:: Type integer

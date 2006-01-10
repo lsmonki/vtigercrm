@@ -2330,6 +2330,78 @@
 		</data>
 	</table>
 
+	<table name="accountgrouprelation">
+		<field name="accountid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="groupname" type="C" size="100">
+		</field>		
+		<opt>Type=InnoDB</opt>
+
+		<index name="accountgrouprelation_IDX1">
+			<col>groupname</col>
+		</index>
+		<data>		
+		</data>
+	</table>
+
+
+	<table name="accountgrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_accountgrouprelation FOREIGN KEY (accountid) REFERENCES account(accountid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+
+
+	<table name="accountgrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_accountgrouprelation2 FOREIGN KEY (groupname) REFERENCES groups(name) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+	
+	<table name="contactgrouprelation">
+		<field name="contactid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="groupname" type="C" size="100">
+		</field>		
+		<opt>Type=InnoDB</opt>
+
+		<index name="contactgrouprelation_IDX1">
+			<col>groupname</col>
+		</index>
+		<data>		
+		</data>
+	</table>
+
+	<table name="contactgrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_contactgrouprelation FOREIGN KEY (accountid) REFERENCES contactdetails(contactid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="contactgrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_contactgrouprelation2 FOREIGN KEY (groupname) REFERENCES groups(name) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
 
 	<table name="activitygrouprelation">
 		<field name="activityid" type="I" size="19">

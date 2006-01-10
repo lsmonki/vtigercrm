@@ -126,10 +126,12 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 			$id = $col_fields["record_id"];	
 			$module = $col_fields["record_module"];
-			$groupname = getGroupName($id, $module);
+			$group_info = getGroupName($id, $module);
+			$groupname = $group_info[0];
+			$groupid = $group_info[1];
 			if(is_admin($current_user))
                         {
-				$label_fld[] ='<a href="index.php?module=Users&action=UserInfoUtil&groupname='.$groupname.'">'.$groupname.'</a>';
+				$label_fld[] ='<a href="index.php?module=Users&action=GroupDetailView&groupId='.$groupid.'">'.$groupname.'</a>';
 			}
 			else
 			{

@@ -770,7 +770,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						}
 						elseif($owner_id == 0 && $name == 'Assigned To')
 						{
-							$value = getGroupName($entity_id, $module);
+							$group_info = getGroupName($entity_id, $module);
+                                               		$value = $group_info[0];
 						}
 						else
 						{
@@ -1062,7 +1063,8 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						}
 						elseif($owner_id == 0 && $name == 'Assigned To')
 						{
-							$value = getGroupName($entity_id, $module);
+							$group_info = getGroupName($entity_id, $module);
+                                               		$value = $group_info[0];
 						}
 						else
 						{
@@ -1766,7 +1768,7 @@ function getListQuery($module,$where='')
 	if($module == "Accounts")
 	{
 		//Query modified to sort by assigned to
-		$query = "select crmentity.crmid, account.accountname,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.* from account inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid where crmentity.deleted=0 ";
+		$query = "select crmentity.crmid, account.accountname,accountbillads.city,account.website,account.phone,crmentity.smownerid, accountscf.* from account left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid left join accountgrouprelation on accountscf.accountid=accountgrouprelation.accountid left join groups on groups.groupname=accountgrouprelation.groupname where crmentity.deleted=0";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);
@@ -1813,7 +1815,7 @@ function getListQuery($module,$where='')
 	if($module == "Contacts")
         {
 		//Query modified to sort by assigned to
-		$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf inner join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid left join account on account.accountid = contactdetails.accountid where crmentity.deleted=0 ";
+		$query = "select crmentity.crmid, crmentity.smownerid, contactdetails.*, contactaddress.*, contactsubdetails.*, contactscf.*, account.accountname from contactdetails, contactaddress, contactsubdetails, contactscf left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid left join account on account.accountid = contactdetails.accountid left join contactgrouprelation on contactscf.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname where crmentity.deleted=0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);

@@ -249,7 +249,8 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			  $record = $col_fields["record_id"];
 			  $module = $col_fields["record_module"];
 
-			  $selected_groupname = getGroupName($record, $module);
+			  $group_info = getGroupName($record, $module);
+                          $selected_groupname = $group_info[0];
 			  $user_checked = '';
 		          $team_checked = 'checked';
 			  $user_style='display:none';
