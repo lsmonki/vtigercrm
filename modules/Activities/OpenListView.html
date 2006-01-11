@@ -18,74 +18,63 @@
 -->
 <!-- BEGIN: open_activity -->
 <script type="text/javascript" src="modules/Activities/Activity.js"></script>
+<table class="tblPro1" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td>
+
 <form name="frmOpenLstView" method="post">
-<div id="{DIVID}" style="display:block;">
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-<tr><td nowrap style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('home_myact');"><img src="{IMAGE_PATH}myUpcoPendAct.gif" style="padding:5px"></td><td width=100% style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('home_myact');"><b>{MOD.LBL_UPCOMING}</b> ({MOD.LBL_TODAY} {ENDDATE})</b></td><td nowrap >{ACTIVITY_VIEW}</td><td nowrap style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('home_myact');"><img src="themes/images/toggle2.gif" id="img_home_myact" border=0></td></tr>
-<tr><td colspan=3 bgcolor="#000000" style="height:1px;"></td></tr>
-<tr><td colspan=3>
-<div id="home_myact" style="display:block;">
-<table cellpadding="0" cellspacing="0" width="100%" border="0"><tbody>
-	<tr height="20" class="moduleListTitle">
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="2%" class="moduleListTitle"></td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="7%" class="moduleListTitle">{MOD.LBL_LIST_CLOSE}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="28%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_SUBJECT}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="23%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_CONTACT}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
+<table border="0" cellpadding="5" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="tblPro1IconCell" align="center" width="50"><img src="{IMAGE_PATH}myUpcoPendAct.gif"></td>
+<td class="tblPro1HeadingCell" width="80%"><b>{MOD.LBL_UPCOMING}</b> ({MOD.LBL_TODAY} {ENDDATE})</b></td>
 
-	<td width="19%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_ACCOUNT}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-
-
-
-		<td width="30%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_RELATED_TO}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="10%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_DATE}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-			<td width="10%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_RECURRING_TYPE}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-	  </tr>
-	<tr><td COLSPAN="17" class="blackLine"><IMG SRC="{IMAGE_PATH}/blank.gif"></td></tr>
-
-
-<!-- BEGIN: row -->
-<tr height=20 class={ROW_COLOR}>
-		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td nowrap valign=center class={ROW_COLOR} style="padding:0px 3px 0px 3px;"><IMG src="{IMAGE_PATH}{ACTIVITY.TYPE}s.gif"></td>
-		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td nowrap valign=center align='center' class={ROW_COLOR} style="{P_FONT_COLOR} padding:0px 3px 0px 3px;">{ACTIVITY.SET_COMPLETE}</td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td valign=center class={ROW_COLOR} style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module={ACTIVITY.MODULE}&activity_mode={ACTIVITY.MODE}&record={ACTIVITY.ID}{RETURN_URL}" style="{P_FONT_COLOR};">{ACTIVITY.NAME}</a></td> 
-		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td valign=center class={ROW_COLOR} style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Contacts&record={ACTIVITY.CONTACT_ID}{RETURN_URL}" style="{P_FONT_COLOR};">{ACTIVITY.CONTACT_NAME}</a></td> 
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-	<td valign=center class={ROW_COLOR} style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Accounts&record={ACTIVITY.ACCOUNT_ID}{RETURN_URL}" style="{P_FONT_COLOR};">{ACTIVITY.ACCOUNT_NAME}</a></td> 
-
-
-
-
-
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-	<td valign=center class={ROW_COLOR} style="{P_COLOR};padding:0px 3px 0px 3px;">{ACTIVITY.PARENT_NAME}</td>
-   	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-	<td nowrap valign=center class={ROW_COLOR} style="{P_FONT_COLOR};padding:0px 3px 0px 3px;">{ACTIVITY.TIME}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-	<td nowrap valign=center class={ROW_COLOR} style="{P_FONT_COLOR};padding:0px 3px 0px 3px;">{ACTIVITY.RECURRINGTYPE}</td>
-
-
-	  	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+<td>{ACTIVITY_VIEW}</td>
+<td valign="top" width="24"><img src="themes/images/tblPro1BtnHide.gif" alt="Minimize / Maximize" border="0" onclick="javascript:expandCont('home_myact');"></td>
 </tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">
+
+
+
+<div id="home_myact" style="display: block;" class="divEventToDo">
+<table class="EventToDo" border="0" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td class="tblPro1ColHeader">&nbsp;</td>
+<td class="tblPro1ColHeader">&nbsp;{MOD.LBL_LIST_CLOSE}</td>
+<td class="tblPro1ColHeader" nowrap="nowrap">&nbsp;{MOD.LBL_LIST_SUBJECT}</td>
+<td class="tblPro1ColHeader" nowrap="nowrap">&nbsp;{MOD.LBL_LIST_CONTACT}</td>
+<td class="tblPro1ColHeader" nowrap="nowrap">&nbsp;{MOD.LBL_LIST_ACCOUNT}</td>
+<td class="tblPro1ColHeader" nowrap="nowrap">&nbsp;{MOD.LBL_LIST_RELATED_TO}</td>
+<td class="tblPro1ColHeader" nowrap="nowrap">&nbsp;{MOD.LBL_LIST_DATE}</td>
+<td class="tblPro1ColHeader" nowrap="nowrap">&nbsp;{MOD.LBL_LIST_RECURRING_TYPE}</td>
+</tr>
+<!-- BEGIN: row -->
+<tr>
+ <td class="tblPro1DataCell"><IMG src="{IMAGE_PATH}{ACTIVITY.TYPE}s.gif"></td>
+ <td class="tblPro1DataCell">{ACTIVITY.SET_COMPLETE}</td>
+<td class="tblPro1DataCell"><a href="{URL_PREFIX}index.php?action=DetailView&module={ACTIVITY.MODULE}&activity_mode={ACTIVITY.MODE}&record={ACTIVITY.ID}{RETURN_URL}" style="{P_FONT_COLOR};">{ACTIVITY.NAME}</a></td>
+<td class="tblPro1DataCell"><a href="{URL_PREFIX}index.php?action=
+DetailView&module=Contacts&record={ACTIVITY.CONTACT_ID}{RETURN_URL}" style="{P_FONT_COLOR};">{ACTIVITY.CONTACT_NAME}</a></td>
+<td class="tblPro1DataCell"><a href="{URL_PREFIX}index.php?action=DetailView&m
+odule=Accounts&record={ACTIVITY.ACCOUNT_ID}{RETURN_URL}" style="{P_FONT_COLOR};">{ACTIVITY.ACCOUNT_NAME}</a></td>
+<td class="tblPro1DataCell">{ACTIVITY.PARENT_NAME}</td>
+<td class="tblPro1DataCell">{ACTIVITY.TIME}</td>
+<td class="tblPro1DataCell">{ACTIVITY.RECURRINGTYPE}</td>
+</tr>
+
 <!-- END: row -->
-	<tr><td COLSPAN="17" class="blackLine"><IMG SRC="{IMAGE_PATH}/blank.gif"></td></tr>
-</table></div>
+</tbody></table>
 </div>
+</td>
+</tr>
+</tbody></table>
 </form>
-</td></tr>
-</table>
+<BR><BR>
+
 <script language='Javascript'>
         var leftpanelistarray=new Array('home_myact');
   setExpandCollapse_gen()</script>

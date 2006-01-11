@@ -17,34 +17,49 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
-<table border=0 cellspacing=0 cellpadding=0 width=100%>
-<tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont('home_myaccount');"><td nowrap><img src="{IMAGE_PATH}myTopAccounts.gif" style="padding:5px"></td><td width=100%><b>{MOD.LBL_TOP_ACCOUNTS}</b></td><td nowrap><img src="themes/images/toggle2.gif" id="img_home_myaccount" border=0></td></tr>
-<tr><td colspan=3 bgcolor="#000000" style="height:1px;"></td></tr>
-<tr><td colspan=3>
-<div id="home_myaccount" style="display:block;">
-<table cellpadding="0" cellspacing="0" width="100%" border="0" class="FormBorder"><tbody>
-	<tr height="20" class="moduleListTitle">
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="70%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_ACCOUNT_NAME}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-		<td width="30%" class="moduleListTitle">&nbsp;{MOD.LBL_LIST_AMOUNT}</td>
-	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif">
-	  </tr>
-	<tr><td COLSPAN="9" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td></tr>
-<!-- BEGIN: row -->
-<tr height=20 class={ROW_COLOR}>
-		<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td class="{ROW_COLOR}" valign=TOP style="padding:0px 3px 0px 3px;"><a href="{URL_PREFIX}index.php?action=DetailView&module=Accounts&record={ACCOUNT.ACCOUNT_ID}">{ACCOUNT.ACCOUNT_NAME}</A></td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
-    			<td class="{ROW_COLOR}" valign=TOP align=RIGHT style="padding:0px 3px 0px 3px;">{CURRENCY_SYMBOL}{ACCOUNT.AMOUNT}</td>
-    	<td WIDTH="1" class="blackLine"><IMG SRC="{IMAGE_PATH}blank.gif"></td>
+<td align=left valign=top width=70%>
+<table border=0 cellspacing=0 cellpadding=0 width=100% class="tblPro1">
+<tr>
+<td>
+
+
+<table border="0" cellpadding="5" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="tblPro1IconCell" align="center" width="50"><img src="{IMAGE_PATH}myUpcoPendAct.gif"></td>
+<td class="tblPro1HeadingCell" width="80%">{MOD.LBL_TOP_ACCOUNTS}</td>
+
+<td>&nbsp;</td>
+<td valign="top" width="24"><img src="themes/images/tblPro1BtnHide.gif" alt="Minimize / Maximize" border="0" onclick="javascript:expandCont('home_myaccount');"></td>
 </tr>
+</tbody></table>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">
+
+
+
+<div id="home_myaccount" style="display: block;" class="divEventToDo">
+<table class="EventToDo" border="0" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td class="tblPro1ColHeader">{MOD.LBL_LIST_ACCOUNT_NAME}</td>
+<td class="tblPro1ColHeader" nowrap="nowrap">{MOD.LBL_LIST_AMOUNT}</td>
+</tr>
+<!-- BEGIN: row -->
+<tr>
+ <td class="tblPro1DataCell"><a href="{URL_PREFIX}index.php?action=D
+ etailView&module=Accounts&record={ACCOUNT.ACCOUNT_ID}">{ACCOUNT.ACCOUNT_NAME}</A></td>
+ <td class="tblPro1DataCell">{CURRENCY_SYMBOL}{ACCOUNT.AMOUNT}</td>
+</tr>
+
 <!-- END: row -->
-<tr><td COLSPAN="9"></td></tr>
-</table>
+</tbody></table>
 </div>
-</td></tr>
-</table>
+</td>
+</tr>
+</tbody></table>
+
 <BR><BR>
 <script language='Javascript'>
         var leftpanelistarray=new Array('home_myaccount');
