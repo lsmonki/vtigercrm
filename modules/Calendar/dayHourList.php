@@ -20,12 +20,12 @@ if($hour_format=="24")
 		<td width=90% valign=top>
 			<table border=0 cellspacing=0 cellpadding=2 width=100%>
 			<tr>
-				<td onMouseOver="gshow('12am')"  onMouseOut="ghide('12am')"  valign=top style="border-left:1px dashed #dadada;height:50px" width=90%></td>
+				<td onMouseOver="gshow('12am')"  onMouseOut="ghide('12am')"  valign=top style="border-left:1px dashed #dadada;height:50px" width=90%>
 
 				<table border=0 cellspacing=0 cellpadding=2 class="calEventNormal" width=100%>
                                         <tr >
-                                                <td width=16><img src="../images/cal16x16call.jpg" alt="Call" title="Call"></td>
-                                                <td width=16><img src="../images/cal16x16Linked.jpg" alt="This event spans across time slots" title="This event spans across time slots"></td>
+                                                <td width=16><img src="themes/blue/images/cal16x16call.jpg" alt="Call" title="Call"></td>
+                                                <td width=16><img src="themes/blue/images/cal16x16Linked.jpg" alt="This event spans across time slots" title="This event spans across time slots"></td>
                                                 <td align=left> <b>11.00pm to 2.00am</b></td>
                                         </tr>
                                         <tr>
@@ -37,7 +37,7 @@ if($hour_format=="24")
 
                                         <table border=0 cellspacing=0 cellpadding=2 class="calEventCritical" width=100%>
                                         <tr >
-                                                <td width=16><img src="../images/cal16x16Meeting.jpg" alt="Meeting" title="Meeting"></td>
+                                                <td width=16><img src="themes/blue/images/cal16x16Meeting.jpg" alt="Meeting" title="Meeting"></td>
                                                 <td width=16>&nbsp;</td>
                                                 <td align=left><b>12.00am to 12.30am</b></td>
                                         </tr>
@@ -73,8 +73,18 @@ if($hour_format=="24")
 		<td width=90% valign=top>
 			<table border=0 cellspacing=0 cellpadding=2 width=100%>
 			<tr>
-				<td onMouseOver="gshow('<?echo $i?>am')"  onMouseOut="ghide('<?echo $i?>am')"  valign=top style="border-left:1px dashed #dadada;height:50px" width=90%></td>
-				<td onMouseOver="gshow('<?echo $i?>am')"  onMouseOut="ghide('<?echo $i?>am')"  width=10%><input type="button" value="Add Event" class="small" onClick="gshow('addEvent');" style="display:none" id=<? echo $i?>am ></td>
+				<td onMouseOver="gshow('<?echo $i?>am')"  onMouseOut="ghide('<?echo $i?>am')"  valign=top style="border-left:1px dashed #dadada;height:50px" width=90%>
+				<td onMouseOver="gshow('<?echo $i?>am')"  onMouseOut="ghide('<?echo $i?>am')"  width=10%>
+				<div id="<?echo $i;?>am" style="display:none">
+                                        <table border=0>
+                                        <tr>
+                                                <td><a onClick="gshow('addEvent')" href="javascript:void(0)"><img src="themes/blue/images/cal16x16CallAdd.jpg" alt="Add Call Event" title="Add Call Event" border=0></a></td>
+                                                <td><a onClick="gshow('addEvent')" href="javascript:void(0)"><img src="themes/blue/images/cal16x16MeetingAdd.jpg" alt="Add Meeting Event" title="Add Meeting Event" border=0></a></td>
+                                                <td><a onClick="gshow('addEvent')" href="javascript:void(0)"><img src="themes/blue/images/cal16x16ToDoAdd.jpg" alt="Add To Do" title="Add To Do" border=0></a></td>
+                                        </tr>
+                                        </table>
+                                        </div>
+                                <td>
 			</tr>
 			</table>
 		</td>
@@ -89,7 +99,17 @@ if($hour_format=="24")
 			<table border=0 cellspacing=0 cellpadding=2 width=100%>
 			<tr>
 				<td onMouseOver="gshow('12pm')"  onMouseOut="ghide('12pm')"  valign=top style="border-left:1px dashed #dadada;height:50px" width=90%></td>
-				<td onMouseOver="gshow('12pm')"  onMouseOut="ghide('12pm')"  width=10%><input type="button" value="Add Event" onClick="gshow('addEvent')" class="small" style="display:none" id='12pm' ></td>
+				<td onMouseOver="gshow('12pm')"  onMouseOut="ghide('12pm')"  width=10%>                                               <div id="12pm" style="display:none">
+                                        <table border=0>
+                                        <tr>
+                                                <td><a onClick="gshow('addEvent')" href="javascript:void(0)"><img src="themes/blue/images/cal16x16CallAdd.jpg" alt="Add Call Event" title="Add Call Event" border=0></a></td>
+                                                <td><a onClick="gshow('addEvent')" href="javascript:void(0)"><img src="themes/blue/images/cal16x16MeetingAdd.jpg" alt="Add Meeting Event" title="Add Meeting Event" border=0></a></td>
+                                                <td><a onClick="gshow('addEvent')" href="javascript:void(0)"><img src="themes/blue/images/cal16x16ToDoAdd.jpg" alt="Add To Do" title="Add To Do" border=0></a></td>
+                                        </tr>  
+                                        </table>
+                                        </div>
+
+                                </td>
 			</tr>
 			</table>
 		</td>
@@ -107,7 +127,18 @@ if($hour_format=="24")
 			<table border=0 cellspacing=0 cellpadding=2 width=100%>
 			<tr>
 				<td onMouseOver="gshow('<?echo $i?>pm')"  onMouseOut="ghide('<?echo $i?>pm')"  valign=top style="border-left:1px dashed #dadada;height:50px" width=90%></td>
-				<td onMouseOver="gshow('<?echo $i?>pm')"  onMouseOut="ghide('<?echo $i?>pm')"  width=10%><input type="button" value="Add Event" onClick="gshow('addEvent')" class="small" style="display:none" id='<? echo $i?>pm' ></td>
+				<td onMouseOver="gshow('<?echo $i?>pm')"  onMouseOut="ghide('<?echo $i?>pm')" width=10%>
+                                <div id="<?echo $i;?>pm" style="display:none">
+                                        <table border=0>
+                                        <tr>
+                                                <td><a onClick="gshow('addEvent')" href="javascript:void(0)"><img src="themes/blue/images/cal16x16CallAdd.jpg" alt="Add Call Event" title="Add Call Event" border=0></a></td>
+                                                <td><a onClick="gshow('addEvent')" href="javascript:void(0)"><img src="themes/blue/images/cal16x16MeetingAdd.jpg" alt="Add Meeting Event" title="Add Meeting Event" border=0></a></td>
+                                                <td><a onClick="gshow('addEvent')" href="javascript:void(0)"><img src="themes/blue/images/cal16x16ToDoAdd.jpg" alt="Add To Do" title="Add To Do" border=0></a></td>
+                                        </tr>
+                                        </table>
+                                        </div>
+                                <td>
+				
 			</tr>
 			</table>
 		</td>
