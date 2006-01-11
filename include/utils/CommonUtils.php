@@ -365,7 +365,7 @@ function getGroupName($id, $module)
         }
         elseif($module == 'Contacts')
         {
-               $sql = "select contactgrouprelation.groupname,groups.groupid from contactgrouprelation inner join groups on groups.groupname=contactgrouprelation.groupname where contactgrouprelation.contactid=".$id
+               $sql = "select contactgrouprelation.groupname,groups.groupid from contactgrouprelation inner join groups on groups.groupname=contactgrouprelation.groupname where contactgrouprelation.contactid=".$id;
         }
         elseif($module == 'HelpDesk')
         {
