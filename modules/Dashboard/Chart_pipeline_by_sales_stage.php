@@ -55,7 +55,7 @@ elseif (isset($_REQUEST['pbss_date_start']) && $_REQUEST['pbss_date_start'] != '
 	$log->debug($_SESSION['pbss_date_start']);
 }
 else {
-	$date_start = date("Y-m-d", time());
+	$date_start = "2001-01-01";
 }
 
 if (isset($_SESSION['pbss_date_end']) && $_SESSION['pbss_date_end'] != '' && !isset($_REQUEST['pbss_date_end'])) {
