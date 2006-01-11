@@ -2,152 +2,149 @@
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	line-height: 14px;
-color: #000000;
+	color: #000000;
 }
 .big {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	line-height: 18px;
-color: #aaaaaa;
-	   font-weight:bold;
+	color: #aaaaaa;
+	font-weight:bold;
 }
 .genHeaderBig{
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 16px;
 	line-height: 19px;
-color: #000000;
-	   font-weight:bold;
+	color: #000000;
+	font-weight:bold;
 }
 .genHeaderSmall{
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	line-height: 16px;
-color: #000000;
-	   font-weight:bold;
+	color: #000000;
+	font-weight:bold;
 }
 
 .moduleName {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 18px;
-color: #000000;
-	   font-weight:bold;
+	color: #000000;
+	font-weight:bold;
 }
 
 .rssDisplayPanel {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	line-height: 12px;
-color: #ABABAB;
+	color: #ABABAB;
 }
-
-
-
 .hdrNameBg {
 
-background:url(images/topBg.gif);
+	background:url(images/topBg.gif);
 }
 
 .hdrTabBg {
-background:#bbbbbb url(images/tabUnSelectedBg.gif) repeat-x ;
+	background:#bbbbbb url(images/tabUnSelectedBg.gif) repeat-x ;
 }
 
 .tabSelected {
-background:#bbbbbb url(images/tabSelectedBg.gif) repeat-x;
-		   font-family:  Arial, Helvetica, sans-serif;
-		   font-size: 11px;
-		   padding-left:15px;
-		   padding-right:15px;
-		   padding-top:2px;
-		   padding-bottom:2px;
+	background:#bbbbbb url(images/tabSelectedBg.gif) repeat-x;
+	font-family:  Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding-left:15px;
+	padding-right:15px;
+	padding-top:2px;
+	padding-bottom:2px;
 
 }
 
 .tabUnSelected {
-background:#bbbbbb url(images/tabUnSelectedBg.gif) repeat-x;
-		   font-family: Arial, Helvetica, sans-serif;
-		   font-size: 11px;
-		   padding-left:15px;
-		   padding-right:15px;
-		   padding-top:2px;
-		   padding-bottom:2px;
+	background:#bbbbbb url(images/tabUnSelectedBg.gif) repeat-x;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding-left:15px;
+	padding-right:15px;
+	padding-top:2px;
+	padding-bottom:2px;
 }
 
 .tabSeperator {
-background:#bbbbbb url(images/tabSeperatorBg.gif) repeat-x;
+	background:#bbbbbb url(images/tabSeperatorBg.gif) repeat-x;
 
 
 }
 
 .level2text {
-background:#bbbbbb url(images/level2Bg.gif) repeat-x;
-		   font-family: Arial, Helvetica, sans-serif;
-		   font-size: 11px;
-		   padding-left:20px;
-		   padding-right:20px;
-		   padding-top:5px;
-		   padding-bottom:5px;
-		   font-weight:bold;
-color:white;
+	background:#bbbbbb url(images/level2Bg.gif) repeat-x;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+	padding-left:20px;
+	padding-right:20px;
+	padding-top:5px;
+	padding-bottom:5px;
+	font-weight:bold;
+	color:white;
 }
 
 .level2text a{
 	text-decoration:none;
-color:white;
+	color:white;
 
 }
 
 .level2text a:hover {
 	text-decoration:underline;
-color:white;
+	color:white;
 
 }
 
 
 
 .level2Bg {
-background:#bbbbbb url(images/level2Bg.gif) repeat-x;
-		   font-family: Arial, Helvetica, sans-serif;
-		   font-size: 11px;
+	background:#bbbbbb url(images/level2Bg.gif) repeat-x;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
 
 }
 
 .tabLiner {
-background:#9abffc url(images/moduleSelectorBg.gif) bottom repeat-x;
-padding:0px;
+	background:#9abffc url(images/moduleSelectorBg.gif) bottom repeat-x;
+	padding:0px;
 
 
 }
 .sep1 {
-background:#999999;
+	background:#999999;
 }
 
 
 .showPanelBg {
-background:url(images/showPanelTopBg.gif) repeat-x;
+	background:url(images/showPanelTopBg.gif) repeat-x;
 }
 
 a {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	text-decoration:none;
-color:#333366;
+	color:#333366;
 
 }
 
 a:hover {
-	  font-family: Arial, Helvetica, sans-serif;
-	  font-size: 11px;
-	  text-decoration:underline;
-color:#333333;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	text-decoration:underline;
+	color:#333333;
 
-  }
+}
 
 .hdrLink {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 18px;
 	text-decoration:none;
-color:#333333;
-	  font-weight:bold;
+	color:#333333;
+	font-weight:bold;
 }
 
 
@@ -155,27 +152,27 @@ color:#333333;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 18px;
 	text-decoration:underline;
-color:#333333;
-	  font-weight:bold;
+	color:#333333;
+	font-weight:bold;
 }
 
 
 .searchBox {
-border: 0px solid #999999;
-		font-family: Arial, Helvetica, sans-serif;
-		font-size: 11px;
-		padding-left:2px;
-width:100px;
-	  background-color:#ffffef;
+	border: 0px solid #999999;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding-left:2px;
+	width:100px;
+	background-color:#ffffef;
 
 }
 .searchBtn {
-border : 1px #cccccc solid;
-		 font-family: Arial, Helvetica, sans-serif;
-		 font-size: 11px;
-width:30px;
-height:19px;
-	   background-color:#cccccc;
+	border : 1px #cccccc solid;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	width:30px;
+	height:19px;
+	background-color:#cccccc;
 }
 
 .lvtBg {
@@ -193,8 +190,8 @@ height:19px;
 	border-right:1px solid #999999;
 	border-bottom:1px solid #999999;
 	background-color:#dadada;
-color:#666666;
-	  font-weight:bold;
+	color:#666666;
+	font-weight:bold;
 }
 
 .lvtColData {
@@ -239,13 +236,13 @@ color:#666666;
 	border-bottom:1px solid #dddddd;
 	border-top:1px solid #a2a2a2;
 	background-color:#fafafa;
-padding:5px;
+	padding:5px;
 }
 .dvtCellLabel {
 	background-color:#f6f6f6;
 	padding-right:10px;
 	border-bottom:1px solid #eaeaea;
-color:#737373;
+	color:#737373;
 }
 
 .dvtCellInfo {
@@ -254,72 +251,72 @@ color:#737373;
 }
 
 .rightMailMerge {
-border:1px solid #dddddd
+	border:1px solid #dddddd
 }
 
 .rightMailMergeHeader {
 	border-bottom:1px solid #dddddd;
-padding:5px;
-		background-color:#eaeaea;
+	padding:5px;
+	background-color:#eaeaea;
 
 }
 
 .rightMailMergeContent {
-padding:5px;
-		background-color:#fafafa;
+	padding:5px;
+	background-color:#fafafa;
 
 }
 
 .rightUpcomingActivitiesHeader{
 	border-bottom:1px solid #ddddcc;
-padding:5px;
-		background-color:#ffffdd;
+	padding:5px;
+	background-color:#ffffdd;
 }
 
 .rightUpcomingActivitiesContent {
-padding:5px;
-		background-color:#ffffef;
+	padding:5px;
+	background-color:#ffffef;
 }
 
 .detailedViewHeader{
 	border-bottom:1px solid #999999;
-padding:5px; 
-		background-color:#e5e5e5;
+	padding:5px; 
+	background-color:#e5e5e5;
 
 }
 .detailedViewTextBox {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
-color: #000000;
-border:1px solid #bababa;
-	   padding-left:5px;
-width:90%;
-	  background-color:#ffffff;
+	color: #000000;
+	border:1px solid #bababa;
+	padding-left:5px;
+	width:90%;
+	background-color:#ffffff;
 }
 .detailedViewTextBoxOn {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
-color: #000000;
-border:1px solid #bababa;
-	   padding-left:5px;
-width:90%;
-	  background-color:#ffffdd;
+	color: #000000;
+	border:1px solid #bababa;
+	padding-left:5px;
+	width:90%;
+	background-color:#ffffdd;
 }
 .detailedViewTextArea {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
-color: #000000;
-border:1px solid #bababa;
-	   padding-left:5px;
-width:95%;
-height:100px;
-	   background-color:#ffffff;
-	   text-align:left;
+	color: #000000;
+	border:1px solid #bababa;
+	padding-left:5px;
+	width:95%;
+	height:100px;
+	background-color:#ffffff;
+	text-align:left;
 }
 
 .moduleSearch {
-border:1px solid #dddddd;
-	   background-color:#ffffef;
+	border:1px solid #dddddd;
+	background-color:#ffffef;
 
 }
 .searchHdrBox {
@@ -328,84 +325,84 @@ border:1px solid #dddddd;
 }
 
 .advSearch {
-padding:10px;
-		border-left:1px solid #eaeaea; 
-		border-right:1px solid #eaeaea; 
-		border-bottom:1px solid #eaeaea; 	
-overflow:auto;
-width:600px;
-height:150px;
-	   background-color:#ffffef;
+	padding:10px;
+	border-left:1px solid #eaeaea; 
+	border-right:1px solid #eaeaea; 
+	border-bottom:1px solid #eaeaea; 	
+	overflow:auto;
+	width:600px;
+	height:150px;
+	background-color:#ffffef;
 
 }
 .searchAlph {
-border:1px solid #dadada;
-	   background-color:#ffffff;
-width:10px
+	border:1px solid #dadada;
+	background-color:#ffffff;
+	width:10px
 
 }
 
 .searchNotFound {
-border:2px solid #ff3333;
-	   background-color:#fafafa;
-	   font-family: Arial, Helvetica, sans-serif;
-	   font-size: 12px;
-color: #ff0000;
-height:50px;
-width:640px;
+	border:2px solid #ff3333;
+	background-color:#fafafa;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #ff0000;
+	height:50px;
+	width:640px;
 
 }
 
 .hiliteBtn4Search {
-border:1px solid #cccccc;
-	   background-color:#fafafa;
-	   line-height:37px;
-height:40px;
-padding:5px;
+	border:1px solid #cccccc;
+	background-color:#fafafa;
+	line-height:37px;
+	height:40px;
+	padding:5px;
 }
 
 .loginTopBg {
-background:url(images/loginTopBg.gif) repeat-x;
+	background:url(images/loginTopBg.gif) repeat-x;
 }
 
 .loginTopShade {
-background:url(images/loginTopShade.gif) repeat-x;
+	background:url(images/loginTopShade.gif) repeat-x;
 }
 
 .loginBg{
-background:#448cEB url(images/loginBg.gif) repeat-x;
+	background:#448cEB url(images/loginBg.gif) repeat-x;
 }
 
 .textbox {
-border:1px solid #999999;
-	   background-color:#ffffff;
-	   font-family: Arial, Helvetica, sans-serif;
-	   font-size: 11px;
-width:120px;
-padding:2px;
+	border:1px solid #999999;
+	background-color:#ffffff;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	width:120px;
+	padding:2px;
 
 }
 .loginBottomBg {
-background:url(images/loginBottomBg.gif) repeat-x;
+	background:url(images/loginBottomBg.gif) repeat-x;
 }
 .loginSignin {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 18px;
-color: #448ceb;
-	   font-weight:bold;
+	color: #448ceb;
+	font-weight:bold;
 }
 
 .loginBillBoard {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
-color:#ffffff;
+	color:#ffffff;
 }
 
 .mx {
 }
 
 .calTopBg {
-background:url(images/calBg.gif) repeat-x;
+	background:url(images/calBg.gif) repeat-x;
 }
 
 .calDisplay {
@@ -413,7 +410,7 @@ background:url(images/calBg.gif) repeat-x;
 	border-right:1px solid #d0d0d0;
 }
 .calBottomBg {
-background:url(images/calBottomBg.gif) repeat-x;
+	background:url(images/calBottomBg.gif) repeat-x;
 }
 
 .calDayHourCell {
@@ -424,31 +421,28 @@ background:url(images/calBottomBg.gif) repeat-x;
 	border-top:2px solid #dadada;
 }
 .calDiv {
-overflow:auto; width:95%;height:320px;padding:0px;background-color:#ffffef;
-		 border-top: 1px solid #bababa;
+	overflow:auto; width:95%;height:320px;padding:0px;background-color:#fefefe;
+	border-top: 1px solid #bababa;
+	border-bottom: 1px solid #bababa;
 
 
 }
 
 .calHourOccupied {
-	background-color:#bbeeff;
+	background-color:#ffffbb;
 
-}
-
-.calAddAct {
-display:none;
 }
 
 .calAddEvent {
-position:absolute;
-		 z-index:1000000;
-width:500px;
+	position:absolute;
+	z-index:1000000;
+	width:500px;
 
-left:200px;
-top:150px;
-border:2px solid #999999;
-	   background-color:#ffffff;
-padding:5px;
+	left:200px;
+	top:150px;
+	border:2px solid #999999;
+	background-color:#ffffff;
+	padding:5px;
 }
 
 .addEventHeader{
@@ -457,17 +451,17 @@ padding:5px;
 
 .addEventFooter{
 	border-top:2px dotted #cccccc;
-height:40px;
+	height:40px;
 }
 
 .addEventInnerBox {
-border:1px dotted #dadada;
+	border:1px dotted #dadada;
 
 }
 
 .cellScheduled {
 	background-color:#ffffef;
-color:#7a7a7a;
+	color:#7a7a7a;
 
 }
 
@@ -477,12 +471,12 @@ color:#7a7a7a;
 	border-left:1px solid #dadada;
 	border-top:1px solid #dadada;
 	background-color:#ffffef;	
-color:#7a7a7a;	
+	color:#7a7a7a;	
 }
 .cellSch{
-border:0px;
-	   background-color:#ffffef;
-color:#7a7a7a;
+	border:0px;
+	background-color:#ffffef;
+	color:#7a7a7a;
 }
 
 
@@ -492,11 +486,22 @@ color:#7a7a7a;
 	border-left:1px solid #dadada;
 	border-top:1px solid #dadada;
 	background-color:#ffffff;	
-color:#7a7a7a;	
+	color:#7a7a7a;	
 }
 
 .cellNormal {
-border:0px;
-	   background-color:#ffffff;
+	border:0px;
+	background-color:#ffffff;
+}
+
+.calEventNormal {
+        border:1px solid #999999;
+        background-color:#99ffcc;
+
+}
+
+.calEventCritical {
+        border:1px solid #999999;
+        background-color:#FFCC33;
 }
 
