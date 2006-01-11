@@ -504,4 +504,40 @@ a:hover {
         border:1px solid #999999;
         background-color:#FFCC33;
 }
+.tblPro1 {
+
+border:2px solid #dadada;
+       background-color:white;
+
+
+}
+.tblPro1IconCell {
+    border-right:1px solid #dadada;
+}
+
+.tblPro1HeadingCell {
+    font-weight:bold;
+color:#4a4a4a;
+}
+
+.tblPro1ColHeader {
+    background-color:#dadada;
+    border-left:1px solid white;
+    border-right:1px solid #999999;
+    background-image:url(images/tblPro1ColBg.gif);
+}
+.tblPro1DataCell {
+    border-bottom:1px solid #f5f5f5;
+color:#5a5a5a;
+
+}
+.divEventToDo {
+overflow:auto;
+height:150px;
+border:1px solid #dadada;
+
+}
+.EventToDo{
+
+}
 
