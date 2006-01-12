@@ -336,8 +336,9 @@ $mod_strings = Array(
 'OLV'=>'Top Open Activities',
 'GRT'=>'Top Group Tasks',
 'OLTSO'=>'Top Sales Orders',
-'ILTI'=>'Top Invoices'
-
+'ILTI'=>'Top Invoices',
+//Added for 5.0 alpha
+'LBL_GROUP_NAME_ERROR'=>'Group Name already exists!'
 
 );
 

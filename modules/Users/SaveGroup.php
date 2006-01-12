@@ -14,78 +14,102 @@ global $adb;
 
 $groupName = $_REQUEST['groupName'];
 $description = $_REQUEST['description'];
-if(isset($_REQUEST['returnaction']) && $_REQUEST['returnaction'] != '')
-{
-	$returnaction=$_REQUEST['returnaction'].'&roleid='.$_REQUEST['roleid'];
-}
-else
-{
-	$returnaction='GroupDetailView';
-}
-
-//Inserting values into Role Table
-if(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'edit')
-{
-	$groupId = $_REQUEST['groupId'];
-	$selected_col_string = 	$_REQUEST['selectedColumnsString'];
-	$member_array = explode(';',$selected_col_string);
-	$groupMemberArray=constructGroupMemberArray($member_array);
-	updateGroup($groupId,$groupName,$groupMemberArray,$description);
-		
-}
-elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'create')
-{
-	$selected_col_string = 	$_REQUEST['selectedColumnsString'];
-	$member_array = explode(';',$selected_col_string);
-	$groupMemberArray=constructGroupMemberArray($member_array);
-	$groupId=createGroup($groupName,$groupMemberArray,$description);
-	//Inserting into role Table
-	//$roleId = createRole($rolename,$parentRoleId,$profile_array);
-	 	
+function groupexists($groupName)
+{	
+	global $adb;
+	$query = "select * from groups where groupname='".$groupName."'";
+	$result = $adb->query($query);
+	if($adb->query_result($result,0,"groupname")==$groupName)
+	{	
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 function constructGroupMemberArray($member_array)
-{
-	global $adb;
-	
-	$groupMemberArray=Array();
-	$roleArray=Array();
-	$roleSubordinateArray=Array();
-	$groupArray=Array();
-	$userArray=Array();
-
-	foreach($member_array as $member)
 	{
-		$memSubArray=explode('::',$member);
-		if($memSubArray[0] == 'groups')
+		global $adb;
+
+		$groupMemberArray=Array();
+		$roleArray=Array();
+		$roleSubordinateArray=Array();
+		$groupArray=Array();
+		$userArray=Array();
+
+		foreach($member_array as $member)
 		{
-			$groupArray[]=$memSubArray[1];			
+			$memSubArray=explode('::',$member);
+			if($memSubArray[0] == 'groups')
+			{
+				$groupArray[]=$memSubArray[1];			
+			}
+			if($memSubArray[0] == 'roles')
+			{
+				$roleArray[]=$memSubArray[1];			
+			}
+			if($memSubArray[0] == 'rs')
+			{
+				$roleSubordinateArray[]=$memSubArray[1];			
+			}
+			if($memSubArray[0] == 'users')
+			{
+				$userArray[]=$memSubArray[1];			
+			}
 		}
-		if($memSubArray[0] == 'roles')
-		{
-			$roleArray[]=$memSubArray[1];			
-		}
-		if($memSubArray[0] == 'rs')
-		{
-			$roleSubordinateArray[]=$memSubArray[1];			
-		}
-		if($memSubArray[0] == 'users')
-		{
-			$userArray[]=$memSubArray[1];			
-		}
+
+		$groupMemberArray['groups']=$groupArray;
+		$groupMemberArray['roles']=$roleArray;
+		$groupMemberArray['rs']=$roleSubordinateArray;
+		$groupMemberArray['users']=$userArray;
+
+		return $groupMemberArray;
+
 	}
 
-	$groupMemberArray['groups']=$groupArray;
-	$groupMemberArray['roles']=$roleArray;
-	$groupMemberArray['rs']=$roleSubordinateArray;
-	$groupMemberArray['users']=$userArray;
+if(!groupexists($groupName))
+{
+	if(isset($_REQUEST['returnaction']) && $_REQUEST['returnaction'] != '')
+	{
+		$returnaction=$_REQUEST['returnaction'].'&roleid='.$_REQUEST['roleid'];
+	}
+	else
+	{
+		$returnaction='GroupDetailView';
+	}
 
-	return $groupMemberArray;
+	//Inserting values into Role Table
+	if(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'edit')
+	{
+		$groupId = $_REQUEST['groupId'];
+		$selected_col_string = 	$_REQUEST['selectedColumnsString'];
+		$member_array = explode(';',$selected_col_string);
+		$groupMemberArray=constructGroupMemberArray($member_array);
+		updateGroup($groupId,$groupName,$groupMemberArray,$description);
+
+	}
+	elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'create')
+	{
+		$selected_col_string = 	$_REQUEST['selectedColumnsString'];
+		$member_array = explode(';',$selected_col_string);
+		$groupMemberArray=constructGroupMemberArray($member_array);
+		$groupId=createGroup($groupName,$groupMemberArray,$description);
+		//Inserting into role Table
+		//$roleId = createRole($rolename,$parentRoleId,$profile_array);
+
+	}
+
 	
+
+
+	$loc = "Location: index.php?action=".$returnaction."&module=Users&groupId=".$groupId;
+	header($loc);
 }
-
-
-
-$loc = "Location: index.php?action=".$returnaction."&module=Users&groupId=".$groupId;
-header($loc);
+else
+{
+	$loc = "Location: index.php?action=createnewgroup&module=Users&groupname=".$groupName."&desc=".$description."&error=true";
+	header($loc);
+}
 ?>

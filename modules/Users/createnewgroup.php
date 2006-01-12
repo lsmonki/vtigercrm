@@ -29,6 +29,7 @@ require_once('include/utils/utils.php');
 
 
 global $adb;
+$Err_msg;
 $parentGroupArray=Array();
 if(isset($_REQUEST['groupId']) && $_REQUEST['groupId'] != '')
 {	
@@ -46,6 +47,12 @@ if(isset($_REQUEST['groupId']) && $_REQUEST['groupId'] != '')
 else
 {
 	$mode = 'create';
+	if(isset($_REQUEST['error']) && ($_REQUEST['error']=='true'))
+	{
+		$Err_msg = "<center><font color='red'><b>".$mod_strings['LBL_GROUP_NAME_ERROR']."</b></font></center>";
+		$groupInfo[] = $_REQUEST['groupname'];
+		$groupInfo[] = $_REQUEST['desc'];
+	}
 }
 			
 
@@ -247,6 +254,7 @@ function validate()
 			<table border=0 cellspacing=1 cellpadding=5 class=small width=100%>  
 			<tr bgcolor=white>
 				<td nowrap class=small align=left valign=top>
+				<?php echo $Err_msg;?>
 				<!-- basic details-->
 				<table border=0 cellspacing=0 cellpadding=3 width=100% class=big><tr><td style="height:2px;background-color:#dadada"><b>Group Details</b></td></tr></table>
 
