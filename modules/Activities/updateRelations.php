@@ -25,7 +25,7 @@ else
 }
 
 $adb->query($sql);
- header("Location: index.php?action=DetailView&module=Activities&activity_mode=Events&record=".$record);
+ header("Location: index.php?action=CallRelatedList&module=Activities&activity_mode=Events&record=".$record);
 
 
 ?>
