@@ -1,3 +1,16 @@
+{*<!--
+
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
+-->*}
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 <tr><td style="height:2px"></td></tr>
 <tr>
@@ -64,7 +77,11 @@
 				<table border=0 cellspacing=0 cellpadding=3 width=100%>
 				<tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=DetailView&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$MODULE} Information</a></td>
+					{if $MODULE eq 'Activities'}
+                                                <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=DetailView&module={$MODULE}&record={$ID}&activity_mode={$ACTIVITY_MODE}&parenttab={$CATEGORY}">{$SINGLE_MOD} Information</a></td>
+                                        {else}
+                                        <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=DetailView&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">{$SINGLE_MOD} Information</a></td>
+                                        {/if}
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 					<td class="dvtSelectedCell" align=center nowrap>More Information</td>
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
@@ -85,43 +102,54 @@
 					<td style="padding:10px">
 					   <!-- General details -->
 				        <table border=0 cellspacing=0 cellpadding=0 width=100%>
-					{$HIDDEN}							
+
+					{include file='RelatedListsHidden.tpl'}
+
 					  {foreach key=header item=detail from=$RELATEDLISTS}
 						<table border=0 cellspacing=0 cellpadding=0 width=100% >
 							<tr >
-							<td  valign=bottom style="border-bottom:1px solid #999999;padding:5px;" ><b>{$header}</b> for {$NAME}</td>
+							<td  valign=bottom style="border-bottom:1px solid #999999;padding:5px;" ><b>{$header}</b></td>
 							<td align=right style="border-bottom:1px solid #999999;padding:5px;">
 							{if $header eq 'Potentials'}
 						
-							<input title="New Potential" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Potentials'" type="submit" name="button" value="New Potential"></td>
+							<input title="New Potential" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Potentials'" type="submit" name="button" value="Add new Potential"></td>
 							
 							{elseif $header eq 'Contacts'}
-							<input title="New Contact" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Contacts'" type="submit" name="button" value="New Contact"></td>
+							{if $MODULE eq 'Activities'}
+                                                        <input title="Change" accessKey="" class="small" value="Select Contact" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module=Activities&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid={$ID}","test","width=600,height=400,resizable=1,scrollbars=1");' type="button"  name="button">
+                                                        {else}
+                                                        <input title="New Contact" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Contacts'" type="submit" name="button" value="Add new Contact"></td>
+                                                        {/if}
 							{elseif $header eq 'Activities'}
 							<input type="hidden" name="activity_mode">
-							<input title="New Task" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Activities'; this.form.return_module.value='{$MODULE}'; this.form.activity_mode.value='Task'" type="submit" name="button" value="New Task">&nbsp;
-							<input title="New Event" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Activities'; this.form.return_module.value='{$MODULE}'; this.form.activity_mode.value='Events'" type="submit" name="button" value="New Event"></td>
+							<input title="New Task" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Activities'; this.form.return_module.value='{$MODULE}'; this.form.activity_mode.value='Task'" type="submit" name="button" value="Add new Task">&nbsp;
+							<input title="New Event" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Activities'; this.form.return_module.value='{$MODULE}'; this.form.activity_mode.value='Events'" type="submit" name="button" value="Add new Event"></td>
 							{elseif $header eq 'HelpDesk'}
-							<input title="New Ticket" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='HelpDesk'" type="submit" name="button" value="New Ticket"></td>
+							<input title="New Ticket" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='HelpDesk'" type="submit" name="button" value="Add new Ticket"></td>
 							{elseif $header eq 'Attachments'}
 							<input title="New Notes" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Notes'" type="submit" name="button" value="Add new Note">&nbsp;
 							<input type="hidden" name="fileid">
 							<input title="New Attachment" accessyKey="F" class="small" onclick="this.form.action.value='upload'; this.form.module.value='uploads'" type="submit" name="button" value="Add new Attachment"></td>
 							{elseif $header eq 'Quotes'}
-							<input title="New Quote" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Quotes'" type="submit" name="button" value="New Quote"></td>
+							<input title="New Quote" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Quotes'" type="submit" name="button" value="Add new Quote"></td>
 							{elseif $header eq 'Invoice'}
 							
-							<input title="New Invoice" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Invoice'" type="submit" name="button" value="New Invoice"></td>
+							<input title="New Invoice" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Invoice'" type="submit" name="button" value="Add new Invoice"></td>
 							{elseif $header eq 'Sales Order'}
-							<input title="New SalesOrder" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='SalesOrder'" type="submit" name="button" value="New Sales Order"></td>
+							<input title="New SalesOrder" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='SalesOrder'" type="submit" name="button" value="Add new Sales Order"></td>
 							{elseif $header eq 'Purchase Order'}
-							<input title="New Purchase Order" accessyKey="O" class="button" onclick="this.form.action.value='EditView'; this.form.module.value='PurchaseOrder'; this.form.return_module.value='{$MODULE}'; this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="New Purchase Order"></td>
+							<input title="New Purchase Order" accessyKey="O" class="small" onclick="this.form.action.value='EditView'; this.form.module.value='PurchaseOrder'; this.form.return_module.value='{$MODULE}'; this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="Add new Purchase Order"></td>
 							{elseif $header eq 'Products'}
-							<input title="New Product" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="New Product"></td>
+							<input title="New Product" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="Add new Product"></td>
 							{elseif $header eq 'Emails'}
 							<input type="hidden" name="email_directing_module">
 							<input type="hidden" name="record">
-							<input title="New Email" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.module.value='Emails'; this.form.email_directing_module.value='contacts'; this.form.record.value='{$id}'; this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="New Email"></td>
+							<input title="New Email" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.module.value='Emails'; this.form.email_directing_module.value='{$REDIR_MOD}'; this.form.record.value='{$id}'; this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="Add new Email"></td>
+							{elseif $header eq 'Users'}
+                                                                {if $MODULE eq 'Activities'}
+                                                                <input title="Change" accessKey="" tabindex="2" type="button" class="small" value="Select User" name="button" LANGUAGE=javascript onclick='return window.open("index.php?module=Users&return_module=Activities&return_action=CallRelatedList&activity_mode=Events&action=Popup&popuptype=detailview&form=EditView&form_submit=true&return_id={$id}&recordid={$ID}","test","width=600,height=400,resizable=1,scrollbars=1")';>
+                                                                {/if}
+
 							{/if}
 							</tr>
 						</table>	
