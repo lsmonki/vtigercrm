@@ -408,7 +408,7 @@ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field")
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'qty_per_unit','products',1,'1','qty_per_unit','Qty/Unit',1,0,0,100,2,33,1,'N~O',1,'')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'qtyinstock','products',1,'1','qtyinstock','Qty In Stock',1,0,0,100,3,33,1,'I~O',1,'')");
 $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'reorderlevel','products',1,'1','reorderlevel','Reorder Level',1,0,0,100,4,33,1,'I~O',1,'')");
- $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'handler','products',1,'53','assigned_user_id','Handler',1,0,0,100,5,33,1,'I~O',1,'')");
+ $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'handler','products',1,'52','assigned_user_id','Handler',1,0,0,100,5,33,1,'I~O',1,'')");
  $this->db->query("insert into field values (14,".$this->db->getUniqueID("field").",'qtyindemand','products',1,'1','qtyindemand','Qty In Demand',1,0,0,100,6,33,1,'I~O',1,'')");
 
 
