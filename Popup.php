@@ -42,6 +42,10 @@ switch($currentModule)
 			$comboFieldNames = Array('leadsource'=>'leadsource_dom');
 			$comboFieldArray = getComboArray($comboFieldNames);
 			$smarty->assign("SINGLE_MOD",'Contact');
+			if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
+                                $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
+                        else
+                        $smarty->assign("RETURN_MODULE",'Emails');
 			if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
                         break;
                 case 'Accounts':
