@@ -1,4 +1,27 @@
+{*<!--
+
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
+-->*}
+
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css"/>
+
+<script type="text/javascript">
+function add_data_to_relatedlist(entity_id,recordid) {ldelim}
+
+        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_mo
+dule=Contacts&entityid="+entity_id+"&parid="+recordid;
+{rdelim}
+</script>
+
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
 	<tr>
 	        <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
