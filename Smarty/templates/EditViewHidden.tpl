@@ -1,3 +1,17 @@
+{*<!--
+
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
+-->*}
+
 {if $MODULE eq 'Emails'}	
 	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
         <input type="hidden" name="form">
@@ -9,7 +23,7 @@
 
 {elseif $MODULE eq 'Contacts'}
 	<form name="EditView" method="POST" action="index.php">
-	<input type="hidden" name="activity_mode" value="{$ACTIVITYMODE}">
+	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<input type="hidden" name="opportunity_id" value="{$OPPORTUNITY_ID}">
 	<input type="hidden" name="contact_role">
 	<input type="hidden" name="case_id" value="{$CASE_ID}">
@@ -20,7 +34,7 @@
 
 {elseif $MODULE eq 'Activities'}
 	<form name="EditView" method="POST" action="index.php">
-	<input type="hidden" name="activity_mode" value="{$ACTIVITYMODE}">
+	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<input type="hidden" name="ticket_id" value="{$TICKETID}">
 	<input type="hidden" name="product_id" value="{$PRODUCTID}">
 
@@ -51,7 +65,7 @@
 
 {elseif $MODULE eq 'Products'}
 	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
-	<input type="hidden" name="activity_mode" value="{$ACTIVITYMODE}">
+	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
 {/if}
 
