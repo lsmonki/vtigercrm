@@ -819,6 +819,20 @@ function updateLeadGroupRelation($leadid,$groupname)
   $adb->query($sql);
 
 }
+
+/** Function to add Account group relation 
+  * @param $accountid -- Account Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+function insert2AccountGroupRelation($accountid,$groupname)
+{
+global $adb;
+  $sql = "insert into accountgrouprelation values (" .$accountid .",'".$groupname."')";
+  $adb->query($sql);
+
+}
+
 /** Function to update Account group relation
   * @param $accountid -- Account Id:: Type integer
   * @param $groupname -- Group Name:: Type varchar
@@ -835,6 +849,19 @@ function updateAccountGroupRelation($accountid,$groupname)
 
 }
 
+/** Function to add Contact group relation
+  * @param $contactid -- Contact Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+function insert2ContactGroupRelation($contactid,$groupname)
+{
+global $adb;
+  $sql = "insert into contactgrouprelation values (" .$contactid .",'".$groupname."')";
+  $adb->query($sql);
+
+}
+
 /** Function to update contact group relation
   * @param $contactid -- Contact Id:: Type integer
   * @param $groupname -- Group Name:: Type varchar
@@ -847,6 +874,63 @@ function updateContactGroupRelation($contactid,$groupname)
   $sqldelete = "delete from contactgrouprelation where contactid=".$contactid;
   $adb->query($sqldelete);
   $sql = "insert into contactgrouprelation values (".$contactid .",'" .$groupname ."')";
+  $adb->query($sql);
+
+}
+/** Function to add Potential group relation
+  * @param $potentialid -- Potential Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+function insert2PotentialGroupRelation($potentialid,$groupname)
+{
+global $adb;
+  $sql = "insert into potentialgrouprelation values (" .$potentialid .",'".$groupname."')";
+  $adb->query($sql);
+
+}
+
+/** Function to update Potential group relation
+  * @param $potentialid -- Potential Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+
+function updatePotentialGroupRelation($potentialid,$groupname)
+{
+ global $adb;
+  $sqldelete = "delete from potentialgrouprelation where potentialid=".$potentialid;
+  $adb->query($sqldelete);
+  $sql = "insert into potentialgrouprelation values (".$potentialid .",'" .$groupname ."')";
+  $adb->query($sql);
+
+}
+
+/** Function to add Potential group relation
+  * @param $potentialid -- Potential Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+function insert2QuoteGroupRelation($quoteid,$groupname)
+{
+global $adb;
+  $sql = "insert into quotegrouprelation values (" .$quoteid .",'".$groupname."')";
+  $adb->query($sql);
+
+}
+
+/** Function to update Potential group relation
+  * @param $potentialid -- Potential Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+
+function updateQuoteGroupRelation($quoteid,$groupname)
+{
+ global $adb;
+  $sqldelete = "delete from potentialgrouprelation where quoteid=".$quoteid;
+  $adb->query($sqldelete);
+  $sql = "insert into quotegrouprelation values (".$quoteid .",'" .$groupname ."')";
   $adb->query($sql);
 
 }

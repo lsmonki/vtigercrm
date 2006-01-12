@@ -2402,6 +2402,77 @@
 		<data>
 		</data>
 	</table>
+	
+	<table name="potentialgrouprelation">
+		<field name="potentialid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="groupname" type="C" size="100">
+		</field>		
+		<opt>Type=InnoDB</opt>
+
+		<index name="potentialgrouprelation_IDX1">
+			<col>groupname</col>
+		</index>
+		<data>		
+		</data>
+	</table>
+
+	<table name="potentialgrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_potentialgrouprelation FOREIGN KEY (potentialid) REFERENCES potential(potentialid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="potentialgrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_potentialgrouprelation2 FOREIGN KEY (groupname) REFERENCES groups(name) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+	
+	<table name="quotegrouprelation">
+		<field name="quoteid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="groupname" type="C" size="100">
+		</field>		
+		<opt>Type=InnoDB</opt>
+
+		<index name="quotegrouprelation_IDX1">
+			<col>groupname</col>
+		</index>
+		<data>		
+		</data>
+	</table>
+
+	<table name="quotegrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_quotegrouprelation FOREIGN KEY (quoteid) REFERENCES quotes(quoteid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="quotegrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_quotegrouprelation2 FOREIGN KEY (groupname) REFERENCES groups(name) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
 
 	<table name="activitygrouprelation">
 		<field name="activityid" type="I" size="19">

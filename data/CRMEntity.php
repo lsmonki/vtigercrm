@@ -713,6 +713,14 @@ class CRMEntity extends SugarBean
 			  {
 				  updateContactGroupRelation($this->id,$groupname);
 			  }
+			  elseif($module == 'Potentials' && $table_name == 'potential')
+			  {
+				  updatePotentialGroupRelation($this->id,$groupname);
+			  }
+			  elseif($module == 'Quotes' && $table_name == 'quotes')
+			  {
+				  updateQuoteGroupRelation($this->id,$groupname);
+			  }
 			  elseif($module == 'HelpDesk' && $table_name == 'troubletickets')
 			  {
 				  updateTicketGroupRelation($this->id,$groupname);
@@ -742,6 +750,14 @@ class CRMEntity extends SugarBean
 			  {
 				  updateContactGroupRelation($this->id,'');
 			  }
+			  elseif($module == 'Potentials' && $table_name == 'potential')
+			  {
+				  updatePotentialGroupRelation($this->id,'');
+			  }
+			  elseif($module == 'Quotes' && $table_name == 'quotes')
+			  {
+				  updateQuoteGroupRelation($this->id,$groupname);
+			  }
 			  elseif($module == 'HelpDesk' && $table_name == 'troubletickets')
 			  {
 				  updateTicketGroupRelation($this->id,'');
@@ -765,10 +781,23 @@ class CRMEntity extends SugarBean
 		  $groupname = $_REQUEST['assigned_group_name'];
 		  if($_REQUEST['assigntype'] == 'T' && $table_name == 'leaddetails')
 		  {
-			  if($table_name == 'leaddetails')
-			  {
-				  insert2LeadGroupRelation($this->id,$groupname);
-			  }
+			  insert2LeadGroupRelation($this->id,$groupname);
+		  }
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'account')
+		  {
+			  insert2AccountGroupRelation($this->id,$groupname);
+		  }
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'contactdetails')
+		  {
+			  insert2ContactGroupRelation($this->id,$groupname);
+		  }
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'potential')
+		  {
+			  insert2PotentialGroupRelation($this->id,$groupname);
+		  }
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'quotes')
+		  {
+			  insert2QuoteGroupRelation($this->id,$groupname);
 		  }
 		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'activity') 
 		  {

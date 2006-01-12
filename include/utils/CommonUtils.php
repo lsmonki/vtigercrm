@@ -353,7 +353,7 @@ function getGroupName($id, $module)
 {
 	$group_info = Array();
         global $log;
-        $log->info("in getGroupName ".$id.'  module is    '.$module);
+        $log->info("in getGroupName, entityid is ".$id.'  module is    '.$module);
         global $adb;
         if($module == 'Leads')
         {
@@ -366,6 +366,14 @@ function getGroupName($id, $module)
         elseif($module == 'Contacts')
         {
                $sql = "select contactgrouprelation.groupname,groups.groupid from contactgrouprelation inner join groups on groups.groupname=contactgrouprelation.groupname where contactgrouprelation.contactid=".$id;
+        }
+	elseif($module == 'Potentials')
+        {
+               $sql = "select potentialgrouprelation.groupname,groups.groupid from potentialgrouprelation inner join groups on groups.groupname=potentialgrouprelation.groupname where potentialgrouprelation.potentialid=".$id;
+        }
+	elseif($module == 'Quotes')
+        {
+               $sql = "select quotegrouprelation.groupname,groups.groupid from quotegrouprelation inner join groups on groups.groupname=quotegrouprelation.groupname where quotegrouprelation.quoteid=".$id;
         }
         elseif($module == 'HelpDesk')
         {
