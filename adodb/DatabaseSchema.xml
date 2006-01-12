@@ -2560,7 +2560,7 @@
 
 	<table name="pogrouprelation" alter="true">
 		
-		<constraint>ADD CONSTRAINT fk_pogrouprelation FOREIGN KEY (purchaseorderid) REFERENCES purchaseorderid(purchaseorderid) ON DELETE CASCADE</constraint>
+		<constraint>ADD CONSTRAINT fk_pogrouprelation FOREIGN KEY (purchaseorderid) REFERENCES purchaseorder(purchaseorderid) ON DELETE CASCADE</constraint>
 		
 		<opt>Type=InnoDB</opt>
 		
