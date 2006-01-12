@@ -1,16 +1,21 @@
 <?php
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
 require_once('Smarty_setup.php');
 require_once('modules/Contacts/Contact.php');
+require_once('include/utils/utils.php');
 
 $focus = new Contact();
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
-
-global $adb;
-$sql = $adb->query('select accountid from contactdetails where contactid='.$id);
-$accountid = $adb->query_result($sql,0,'accountid');
-if($accountid == 0) $accountid='';
-
 
 if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
     $focus->retrieve_entity_info($_REQUEST['record'],"Contacts");
@@ -23,24 +28,20 @@ $log->debug("name is ".$focus->name);
 
 }
 
-$smarty = new vtigerCRM_Smarty;
+global $adb;
+$sql = $adb->query('select accountid from contactdetails where contactid='.$focus->id);
+$accountid = $adb->query_result($sql,0,'accountid');
+if($accountid == 0) $accountid='';
 
-$hidden = '<form border="0" action="index.php" method="post" name="form" id="form">';
-	$hidden .= '<input type="hidden" name="module">';
-	$hidden .= '<input type="hidden" name="mode">';
-	$hidden .= '<input type="hidden" name="contact_id" value="'.$focus->id.'">';
-	$hidden .= '<input type="hidden" name="account_id" value="'.$accountid.'">';
-	$hidden .= '<input type="hidden" name="return_module" value="Contacts">';
-	$hidden .= '<input type="hidden" name="return_action" value="CallRelatedList">';
-	$hidden .= '<input type="hidden" name="return_id" value="'.$focus->id.'">';
-	$hidden .= '<input type="hidden" name="parent_id" value="'.$focus->id.'">';
-	$hidden .= '<input type="hidden" name="action">';
-	$smarty->assign("HIDDEN",$hidden);
+$smarty = new vtigerCRM_Smarty;
+$smarty->assign("accountid",$accountid);
 	
 
 if(isset($_request['isduplicate']) && $_request['isduplicate'] == 'true') {
         $focus->id = "";
 }
+$parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
+        $smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
 $category = getparenttab();
 $smarty->assign("CATEGORY",$category);
 
@@ -49,6 +50,7 @@ $smarty->assign("NAME",$focus->name);
 $related_array = getrelatedlists("Contacts",$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("MODULE",$currentmodule);
+$smarty->assign("SINGLE_MOD","Contact");
 $smarty->assign("ID",$record );
 $smarty->display("RelatedLists.tpl");
 ?>
