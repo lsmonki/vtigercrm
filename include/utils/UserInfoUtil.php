@@ -906,8 +906,8 @@ function updatePotentialGroupRelation($potentialid,$groupname)
 
 }
 
-/** Function to add Potential group relation
-  * @param $potentialid -- Potential Id:: Type integer
+/** Function to add Quote group relation
+  * @param $quoteid -- Quote Id:: Type integer
   * @param $groupname -- Group Name:: Type varchar
   *
  */
@@ -919,8 +919,8 @@ global $adb;
 
 }
 
-/** Function to update Potential group relation
-  * @param $potentialid -- Potential Id:: Type integer
+/** Function to update Quote group relation
+  * @param $quoteid -- Quote Id:: Type integer
   * @param $groupname -- Group Name:: Type varchar
   *
  */
@@ -928,12 +928,99 @@ global $adb;
 function updateQuoteGroupRelation($quoteid,$groupname)
 {
  global $adb;
-  $sqldelete = "delete from potentialgrouprelation where quoteid=".$quoteid;
+  $sqldelete = "delete from quotegrouprelation where quoteid=".$quoteid;
   $adb->query($sqldelete);
   $sql = "insert into quotegrouprelation values (".$quoteid .",'" .$groupname ."')";
   $adb->query($sql);
 
 }
+/** Function to add Salesorder group relation
+  * @param $salesorderid -- Salesorder Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+function insert2SoGroupRelation($salesorderid,$groupname)
+{
+global $adb;
+  $sql = "insert into sogrouprelation values (" .$salesorderid .",'".$groupname."')";
+  $adb->query($sql);
+
+}
+
+/** Function to update Salesorder group relation
+  * @param $salesorderid -- Salesorder Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+
+function updateSoGroupRelation($salesorderid,$groupname)
+{
+ global $adb;
+  $sqldelete = "delete from sogrouprelation where salesorderid=".$salesorderid;
+  $adb->query($sqldelete);
+  $sql = "insert into sogrouprelation values (".$salesorderid .",'" .$groupname ."')";
+  $adb->query($sql);
+
+}
+
+/** Function to add Invoice group relation
+  * @param $invoiceid -- Invoice Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+function insert2InvoiceGroupRelation($invoiceid,$groupname)
+{
+global $adb;
+  $sql = "insert into invoicegrouprelation values (" .$invoiceid .",'".$groupname."')";
+  $adb->query($sql);
+
+}
+
+/** Function to update Invoice group relation
+  * @param $invoiceid -- Invoice Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+
+function updateInvoiceGroupRelation($invoiceid,$groupname)
+{
+ global $adb;
+  $sqldelete = "delete from invoicegrouprelation where invoiceid=".$invoiceid;
+  $adb->query($sqldelete);
+  $sql = "insert into invoicegrouprelation values (".$invoiceid .",'" .$groupname ."')";
+  $adb->query($sql);
+
+}
+
+/** Function to add PurchaseOrder group relation
+  * @param $poid -- PurchaseOrder Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+function insert2PoGroupRelation($poid,$groupname)
+{
+global $adb;
+  $sql = "insert into pogrouprelation values (" .$poid .",'".$groupname."')";
+  $adb->query($sql);
+
+}
+
+/** Function to update PurchaseOrder group relation
+  * @param $poid -- Purchaseorder Id:: Type integer
+  * @param $groupname -- Group Name:: Type varchar
+  *
+ */
+
+function updatePoGroupRelation($poid,$groupname)
+{
+ global $adb;
+  $sqldelete = "delete from pogrouprelation where purchaseorderid=".$poid;
+  $adb->query($sqldelete);
+  $sql = "insert into pogrouprelation values (".$poid .",'" .$groupname ."')";
+  $adb->query($sql);
+
+}
+
 
 /** Function to update ticket group relation 
   * @param $ticketid -- Ticket Id:: Type integer

@@ -721,6 +721,18 @@ class CRMEntity extends SugarBean
 			  {
 				  updateQuoteGroupRelation($this->id,$groupname);
 			  }
+			  elseif($module == 'SalesOrder' && $table_name == 'salesorder')
+			  {
+				  updateSoGroupRelation($this->id,$groupname);
+			  }
+			  elseif($module == 'Invoice' && $table_name == 'invoice')
+			  {
+				  updateInvoiceGroupRelation($this->id,$groupname);
+			  }
+			  elseif($module == 'PurchaseOrder' && $table_name == 'purchaseorder')
+			  {
+				  updatePoGroupRelation($this->id,$groupname);
+			  }
 			  elseif($module == 'HelpDesk' && $table_name == 'troubletickets')
 			  {
 				  updateTicketGroupRelation($this->id,$groupname);
@@ -756,7 +768,19 @@ class CRMEntity extends SugarBean
 			  }
 			  elseif($module == 'Quotes' && $table_name == 'quotes')
 			  {
-				  updateQuoteGroupRelation($this->id,$groupname);
+				  updateQuoteGroupRelation($this->id,'');
+			  }
+			  elseif($module == 'SalesOrder' && $table_name == 'salesorder')
+			  {
+				  updateSoGroupRelation($this->id,'');
+			  }
+			  elseif($module == 'Invoice' && $table_name == 'invoice')
+			  {
+				  updateInvoiceGroupRelation($this->id,'');
+			  }
+			  elseif($module == 'PurchaseOrder' && $table_name == 'purchaseorder')
+			  {
+				  updatePoGroupRelation($this->id,'');
 			  }
 			  elseif($module == 'HelpDesk' && $table_name == 'troubletickets')
 			  {
@@ -798,6 +822,18 @@ class CRMEntity extends SugarBean
 		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'quotes')
 		  {
 			  insert2QuoteGroupRelation($this->id,$groupname);
+		  }
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'salesorder')
+		  {
+			  insert2SoGroupRelation($this->id,$groupname);
+		  }
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'invoice')
+		  {
+			  insert2InvoiceGroupRelation($this->id,$groupname);
+		  }
+		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'purchaseorder')
+		  {
+			  insert2PoGroupRelation($this->id,$groupname);
 		  }
 		  elseif($_REQUEST['assigntype'] == 'T' && $table_name == 'activity') 
 		  {

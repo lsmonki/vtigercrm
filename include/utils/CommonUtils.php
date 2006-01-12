@@ -375,6 +375,18 @@ function getGroupName($id, $module)
         {
                $sql = "select quotegrouprelation.groupname,groups.groupid from quotegrouprelation inner join groups on groups.groupname=quotegrouprelation.groupname where quotegrouprelation.quoteid=".$id;
         }
+	elseif($module == 'SalesOrder')
+        {
+               $sql = "select sogrouprelation.groupname,groups.groupid from sogrouprelation inner join groups on groups.groupname=sogrouprelation.groupname where sogrouprelation.salesorderid=".$id;
+        }
+	elseif($module == 'Invoice')
+        {
+               $sql = "select invoicegrouprelation.groupname,groups.groupid from invoicegrouprelation inner join groups on groups.groupname=invoicegrouprelation.groupname where invoicegrouprelation.invoiceid=".$id;
+        }
+	elseif($module == 'PurchaseOrder')
+        {
+               $sql = "select pogrouprelation.groupname,groups.groupid from pogrouprelation inner join groups on groups.groupname=pogrouprelation.groupname where pogrouprelation.purchaseorderid=".$id;
+        }
         elseif($module == 'HelpDesk')
         {
                $sql = "select ticketgrouprelation.groupname,groups.groupid from ticketgrouprelation inner join groups on groups.groupname=ticketgrouprelation.groupname where ticketgrouprelation.ticketid=".$id;

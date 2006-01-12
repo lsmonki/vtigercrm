@@ -2472,6 +2472,111 @@
 		<data>
 		</data>
 	</table>
+	
+	<table name="sogrouprelation">
+		<field name="salesorderid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="groupname" type="C" size="100">
+		</field>		
+		<opt>Type=InnoDB</opt>
+
+		<index name="sogrouprelation_IDX1">
+			<col>groupname</col>
+		</index>
+		<data>		
+		</data>
+	</table>
+
+	<table name="sogrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_sogrouprelation FOREIGN KEY (salesorderid) REFERENCES salesorder(salesorderid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="sogrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_sogrouprelation2 FOREIGN KEY (groupname) REFERENCES groups(name) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+	
+	<table name="invoicegrouprelation">
+		<field name="invoiceid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="groupname" type="C" size="100">
+		</field>		
+		<opt>Type=InnoDB</opt>
+
+		<index name="invoicegrouprelation_IDX1">
+			<col>groupname</col>
+		</index>
+		<data>		
+		</data>
+	</table>
+
+	<table name="invoicegrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_invoicegrouprelation FOREIGN KEY (invoiceid) REFERENCES invoices(invoiceid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="invoicegrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_invoicegrouprelation2 FOREIGN KEY (groupname) REFERENCES groups(name) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+	
+	<table name="pogrouprelation">
+		<field name="purchaseorderid" type="I" size="19">
+			<KEY/>
+		</field>
+		<field name="groupname" type="C" size="100">
+		</field>		
+		<opt>Type=InnoDB</opt>
+
+		<index name="pogrouprelation_IDX1">
+			<col>groupname</col>
+		</index>
+		<data>		
+		</data>
+	</table>
+
+	<table name="pogrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_pogrouprelation FOREIGN KEY (purchaseorderid) REFERENCES purchaseorderid(purchaseorderid) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
+
+	<table name="pogrouprelation" alter="true">
+		
+		<constraint>ADD CONSTRAINT fk_pogrouprelation2 FOREIGN KEY (groupname) REFERENCES groups(name) ON DELETE CASCADE</constraint>
+		
+		<opt>Type=InnoDB</opt>
+		
+		<data>
+		</data>
+	</table>
 
 
 	<table name="activitygrouprelation">
