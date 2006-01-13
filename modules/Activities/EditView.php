@@ -30,9 +30,7 @@ require_once('include/ComboUtil.php');
 require_once('include/utils/utils.php');
 require_once('include/FormValidationUtil.php');
 global $app_strings;
-global $app_list_strings;
 global $mod_strings;
-global $current_user;
 // Unimplemented until jscalendar language files are fixed
 $activity_lbl='';
 $activity_mode = $_REQUEST['activity_mode'];
@@ -49,7 +47,7 @@ elseif($activity_mode == 'Events')
 
 $focus = new Activity();
 $smarty =  new vtigerCRM_Smarty();
-if(isset($_REQUEST['record'])) {
+if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $focus->id = $_REQUEST['record'];
     $focus->mode = 'edit';
     $focus->retrieve_entity_info($_REQUEST['record'],$tab_type);		
@@ -63,9 +61,12 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 
 $disp_view = getView($focus->mode);
 $smarty->assign("BLOCKS",getBlocks($tab_type,$disp_view,$mode,$focus->column_fields));
+$smarty->assign("OP_MODE",$activity_mode);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",$tab_type);
+$smarty->assign("NEW_EVENT",$app_strings['LNK_NEW_EVENT']);
+$smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 
 global $theme;
 $theme_path="themes/".$theme."/";
@@ -76,8 +77,6 @@ $log->info("Activity detail view");
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-$smarty->assign("ACTIVITY_MODE", $activity_mode);
-$smarty->assign("ACTIVITY_INFORMATION",$activity_lbl);
 
 if (isset($focus->name))
 $smarty->assign("NAME", $focus->name);
