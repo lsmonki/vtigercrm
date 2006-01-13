@@ -534,7 +534,7 @@ $app_strings = Array(
 
 'LBL_SELECT_PRODUCT_BUTTON_LABEL'=>'Select Product',
 
-'LBL_VIEW'=>'View:',
+'LBL_VIEW'=>'Filters :',
 // Mike Crowe Mod --------------------------------------------------------Added for group sort
 'LBL_GROUP_VIEW'=>'Group',
 
@@ -761,7 +761,7 @@ $app_strings = Array(
 'LBL_JSCALENDAR_LANG'=>'en',
 'LNK_CV_EDIT'=>'Edit',
 'LNK_CV_DELETE'=>'Delete',
-'LNK_CV_CREATEVIEW'=>'Create View',
+'LNK_CV_CREATEVIEW'=>'New',
 //Added for 5.0
 'LBL_UPD_FIELD_ORD'=>'Update Field Order',
 'LBL_SEND_CUSTOM_MAIL_BUTTON'=>'Send Custom Mail',
