@@ -9,6 +9,8 @@
  ********************************************************************************/
 
 include("modules/Emails/mail.php");
+require_once("include/utils/GetGroupUsers.php");
+require_once("include/utils/UserInfoUtil.php");
 
 global $adb;
 global $current_user;
@@ -28,7 +30,37 @@ else
 
 $adb->println("\n\nMail Sending Process has been started.");
 //This function call is used to send mail to the assigned to user. In this mail CC and BCC addresses will be added.
-$to_email = getUserEmailId('id',$focus->column_fields["assigned_user_id"]);
+if($focus->column_fields["assigned_user_id"]==0 && $_REQUEST['assigned_group_name']!='')
+{
+	$grp_obj = new GetGroupUsers();
+	$grp_obj->getAllUsersInGroup(getGrpId($_REQUEST['assigned_group_name']));
+	$users_list = constructList($grp_obj->group_users,'INTEGER');
+	$sql = "select first_name, last_name, email1, email2, yahoo_id from users where id in ".$users_list;
+	$res = $adb->query($sql);
+	$user_email = '';
+	while ($user_info = $adb->fetch_array($res))
+	{
+		$email = $user_info['email1'];
+		if($email == '' || $email == 'NULL')
+		{
+			$email = $user_info['email2'];
+			if($email == '' || $email == 'NULL')
+			{
+				$email = $user_info['yahoo_id'];
+			}
+		}	
+		if($user_email=='')
+		$user_email .= $user_info['first_name']." ".$user_info['last_name']."<".$email.">";
+		else
+		$user_email .= ",".$user_info['first_name']." ".$user_info['last_name']."<".$email.">";
+		$email='';
+	}
+	$to_email = $user_email;
+}
+else
+{
+	$to_email = getUserEmailId('id',$focus->column_fields["assigned_user_id"]);
+}
 $cc = $_REQUEST['ccmail'];
 $bcc = $_REQUEST['bccmail'];
 if($to_email == '' && $cc == '' && $bcc == '')

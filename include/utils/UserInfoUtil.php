@@ -3653,4 +3653,17 @@ function getListViewSecurityParameter($module)
 	return $sec_query;	
 }
 
+/** Function to get the Group Id for a given group groupname
+ *  @param $groupname -- Groupname
+ *  @returns Group Id -- Type Integer
+ */
+
+function getGrpId($groupname)
+{
+	global $adb;
+	
+	$result = $adb->query("select groupid from groups where groupname='".$groupname."'");
+	$groupid = $adb->query_result($result,0,'groupid');
+	return $groupid;
+}
 ?>

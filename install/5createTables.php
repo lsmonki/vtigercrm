@@ -114,7 +114,10 @@ function create_default_users()
          $user->workdays = '0,1,2,3,4,5,6,';
          $user->weekstart = '1';
           $user->namedays = '';
-	 $user->date_format = 'yyyy-mm-dd';
+	 $user->date_format = 'yyyy-mm-dd';	
+        //added by philip for default default admin emailid
+	if($admin_email == '')
+	$admin_email ="admin@administrator.com";
          $user->email = $admin_email;
          $user->save();
 
