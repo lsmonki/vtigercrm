@@ -29,11 +29,7 @@ require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'Leads');
-
 global $list_max_entries_per_page;
-global $urlPrefix;
 
 $log = LoggerManager::getLogger('contact_list');
 
@@ -89,7 +85,6 @@ $customviewcombo_html = $oCustomView->getCustomViewCombo();
 $viewid = $oCustomView->getViewId($currentModule);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
-/******************commented by mangai for new UI *****************/
 
 if($viewid != 0)
 {
@@ -100,51 +95,40 @@ if($viewid != 0)
 //raju
 if(isPermitted('Leads',2,'') == 'yes')
 {
-	$other_text =	'<td width="10"><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+	$other_text =	'<input class="small" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
 }
-$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/></td>';
+$other_text .='<input class="small" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>';
 
 if(isPermitted('Leads',1,'') == 'yes')
 {
-   	$other_text .=	'<td><input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/></td><td><input class="button" type="submit" value="'.$app_strings[LBL_CHANGE_STATUS].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/></td>';
+   	$other_text .=	'<input class="small" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/><input class="small" type="submit" value="'.$app_strings[LBL_CHANGE_STATUS].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/>';
 }
 if(isset($CActionDtls))
 {
-	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/></td>';
+	$other_text .='<input class="small" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
 }
-	/*$other_text .=	'</td>
-			<td align="right">'.$app_strings[LBL_VIEW].'
-			<SELECT NAME="view" onchange="showDefaultCustomView(this)">
-				<OPTION VALUE="'.$mod_strings[MOD.LBL_ALL].'">'.$mod_strings[LBL_ALL].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_CONTACTED].'">'.$mod_strings[LBL_CONTACTED].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_LOST].'">'.$mod_strings[LBL_LOST].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_HOT].'">'.$mod_strings[LBL_HOT].'</option>
-				<OPTION VALUE="'.$mod_strings[LBL_COLD].'">'.$mod_strings[LBL_COLD].'</option>
-			</SELECT>
-		</td>
-	</tr>
-	</table>';*/
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<span disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="sep">|</span>
-<span disabled>'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=Leads&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=Leads&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<span disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
+<span class="small">|</span>
+<span disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }else
 {
-$cvHTML = '<a href="index.php?module=Leads&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Leads&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=Leads&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=Leads&action=CustomView" class="small">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=Leads&action=CustomView&record='.$viewid.'" class="small">'.$app_strings['LNK_CV_EDIT'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Leads&record='.$viewid.'" class="small">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
-	$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
-                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
+	$customstrings = '<td>'.$app_strings[LBL_VIEW].'</td>
+			<td style="padding-left:5px;padding-right:5px">
+                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
-                        </SELECT>
-			'.$cvHTML.'
-                </td>';
+                        </SELECT></td>
+			'.$cvHTML;
 
 
 $custom= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
@@ -233,7 +217,7 @@ if(isset($ids))
 }
 if(isPermitted("Leads",8,'') == 'yes') 
 {
-	$smarty->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("MERGEBUTTON","<td><input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"small\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 	$wordTemplateResult = fetchWordTemplateList("Leads");
 	$tempCount = $adb->num_rows($wordTemplateResult);
 	$tempVal = $adb->fetch_array($wordTemplateResult);
@@ -242,7 +226,7 @@ if(isPermitted("Leads",8,'') == 'yes')
 		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
-	$smarty->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
+	$smarty->assign("WORDTEMPLATEOPTIONS","<td>".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."</td><td style=\"padding-left:5px;padding-right:5px\"><select class=\"small\" name=\"mergefile\">".$optionString."</select></td>");
 }
 //mass merge for word templates
 

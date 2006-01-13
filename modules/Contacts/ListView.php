@@ -30,11 +30,7 @@ require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'Contacts');
-
 global $list_max_entries_per_page;
-global $urlPrefix;
 
 $log = LoggerManager::getLogger('contact_list');
 
@@ -114,35 +110,36 @@ if($viewid != 0)
 }
 if(isPermitted('Contacts',2,'') == 'yes')
 {
-$other_text ='<td width="12"><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+$other_text ='<input class="small" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
 }
-$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>';
+$other_text .='<input class="small" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>';
 
 if(isset($CActionDtls))
 {
-	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
+	$other_text .='<input class="small" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
 }
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=Contacts&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=Contacts&action=CustomView" class="small">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }else
 {
-$cvHTML = '<a href="index.php?module=Contacts&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Contacts&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=Contacts&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=Contacts&action=CustomView" class="small">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=Contacts&action=CustomView&record='.$viewid.'" class="small">'.$app_strings['LNK_CV_EDIT'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Contacts&record='.$viewid.'" class="small">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 
-	$customstrings ='<td align="right">'.$app_strings[LBL_VIEW].'
-		<SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
+	$customstrings ='<td>'.$app_strings[LBL_VIEW].'</td>
+		<td style="padding-left:5px;padding-right:5px">
+		<SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
 			'.$customviewcombo_html.'
-		</SELECT>
-		'.$cvHTML.'
-	</td>';
+		</SELECT></td>
+		'.$cvHTML;
 
 //
 
@@ -194,7 +191,6 @@ $view_script = "<script language='javascript'>
 	</script>";
 
 //Constructing the list view
-//echo get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $custom = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
@@ -225,38 +221,6 @@ else
 $navigation_array = getNavigationValues($start, $noofrows, $list_max_entries_per_page);
 
 // Setting the record count string
-/*
-if ($navigation_array['start'] == 1)
-{
-	if($noofrows != 0)
-	$start_rec = $navigation_array['start'];
-	else
-	$start_rec = 0;
-	if($noofrows > $list_max_entries_per_page)
-	{
-		$end_rec = $navigation_array['start'] + $list_max_entries_per_page - 1;
-	}
-	else
-	{
-		$end_rec = $noofrows;
-	}
-
-}
-else
-{
-	if($navigation_array['next'] > $list_max_entries_per_page)
-	{
-		$start_rec = $navigation_array['next'] - $list_max_entries_per_page;
-		$end_rec = $navigation_array['next'] - 1;
-	}
-	else
-	{
-		$start_rec = $navigation_array['prev'] + $list_max_entries_per_page;
-		$end_rec = $noofrows;
-	}
-}
-*/
-// Setting the record count string
 //modified by rdhital
 $start_rec = $navigation_array['start'];
 $end_rec = $navigation_array['end_val']; 
@@ -273,7 +237,7 @@ if(isset($ids))
 }
 if(isPermitted("Contacts",8,'') == 'yes') 
 {
-	$smarty->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("MERGEBUTTON","<td><input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"small\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 	$wordTemplateResult = fetchWordTemplateList("Contacts");
 	$tempCount = $adb->num_rows($wordTemplateResult);
 	$tempVal = $adb->fetch_array($wordTemplateResult);
@@ -282,7 +246,7 @@ if(isPermitted("Contacts",8,'') == 'yes')
 		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
-	$smarty->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
+	$smarty->assign("WORDTEMPLATEOPTIONS","<td>".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."</td><td style=\"padding-left:5px;padding-right:5px\"><select class=\"small\" name=\"mergefile\">".$optionString."</select></td>");
 }
 //mass merge for word templates
 
