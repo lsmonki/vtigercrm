@@ -74,10 +74,17 @@ function getSearchListHeaderValues($focus, $module,$sort_qry='',$sorder='',$orde
                 {
                         if(isset($oCv->list_fields_name))
                         {
-                                $fieldname = $oCv->list_fields_name[$name];
+				if( $oCv->list_fields_name[$name] == '')
+					$fieldname = 'crmid';
+				else
+					$fieldname = $oCv->list_fields_name[$name];
                         }else
                         {
-                                $fieldname = $focus->list_fields_name[$name];
+				if( $focus->list_fields_name[$name] == '')
+					$fieldname = 'crmid';
+				else
+					$fieldname = $focus->list_fields_name[$name];
+					
                         }
                 }
 		else
@@ -255,6 +262,7 @@ function getValuesforColumns($column_name,$search_string)
 			break 1;
 		}
 	}
+	
 	return $where;
 }
 
@@ -263,26 +271,33 @@ function BasicSearch($module,$search_field,$search_string)
 	global $adb;
 	global $column_array,$table_col_array;
 
-		
-	$qry="select field.columnname,tablename from tab inner join field on field.tabid=tab.tabid where name='".$module."' and fieldname='".$search_field."'";
-	$result = $adb->query($qry);
-	$noofrows = $adb->num_rows($result);
-	if($noofrows!=0)
-        {
-        	$column_name=$adb->query_result($result,0,'columnname');
-        	$table_name=$adb->query_result($result,0,'tablename');
-		
-		if($table_name == "crmentity" && $column_name == "smownerid")
+	if($search_field =='crmid')
+	{
+		$column_name='crmid';
+		$table_name='crmentity';
+		$where="$table_name.$column_name like '%".$search_string."%'";	
+	}else
+	{	
+		$qry="select field.columnname,tablename from tab inner join field on field.tabid=tab.tabid where name='".$module."' and fieldname='".$search_field."'";
+		$result = $adb->query($qry);
+		$noofrows = $adb->num_rows($result);
+		if($noofrows!=0)
 		{
-			$where = get_usersid($table_name,$column_name,$search_string);
-		}
-		else if(in_array($column_name,$column_array))
-		{
-			$where = getValuesforColumns($column_name,$search_string);
-		}
-		else
-		{
-			$where="$table_name.$column_name like '%".$search_string."%'";
+			$column_name=$adb->query_result($result,0,'columnname');
+			$table_name=$adb->query_result($result,0,'tablename');
+
+			if($table_name == "crmentity" && $column_name == "smownerid")
+			{
+				$where = get_usersid($table_name,$column_name,$search_string);
+			}
+			else if(in_array($column_name,$column_array))
+			{
+				$where = getValuesforColumns($column_name,$search_string);
+			}
+			else
+			{
+				$where="$table_name.$column_name like '%".$search_string."%'";
+			}
 		}
 	}
 	return $where;
