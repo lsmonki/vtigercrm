@@ -25,12 +25,7 @@ require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
-global $app_list_strings;
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'Potentials');
-
 global $list_max_entries_per_page;
-global $urlPrefix;
 
 $log = LoggerManager::getLogger('potential_list');
 
@@ -112,30 +107,31 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 
 if(isPermitted('Potentials',2,'') == 'yes')
 {
-        $other_text ='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text ='<input class="small" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
 }
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
+$cvHTML = '<td><a href="index.php?module=Potentials&action=CustomView" class="small">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
 <span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=Potentials&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span></td>';
 }else
 {
-$cvHTML = '<a href="index.php?module=Potentials&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
+$cvHTML = '<td><a href="index.php?module=Potentials&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
 <span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Potentials&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
+<a href="index.php?module=Potentials&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
 <span class="sep">|</span>
-<a href="index.php?module=Potentials&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+<a href="index.php?module=CustomView&action=Delete&dmodule=Potentials&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 
-$customstrings ='<td align="right">'.$app_strings[LBL_VIEW].'
-			<SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
-				'.$customviewcombo_html.'
-			</SELECT>
-			'.$cvHTML.'
-		</td>';
+$customstrings ='<td>'.$app_strings[LBL_VIEW].'<td>
+		<td style="padding-left:5px;padding-right:5px">
+		<SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
+			'.$customviewcombo_html.'
+		</SELECT></td>
+		'.$cvHTML;
 
 
 //Retreive the list from Database
