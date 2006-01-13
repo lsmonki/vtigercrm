@@ -25,11 +25,7 @@ require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'Accounts');
-
 global $list_max_entries_per_page;
-global $urlPrefix;
 
 $log = LoggerManager::getLogger('account_list');
 
@@ -109,35 +105,36 @@ $other_text='
 	//Raju	
 if(isPermitted('Accounts',2,'') == 'yes')
 {
-        $other_text .=	'<td width="10"><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text .=	'<input class="small" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
 }
-		$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>';
+		$other_text .='<input class="small" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>';
 
 if(isset($CActionDtls))
 {
-	$other_text .='<td><input class="button" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
+	$other_text .='<input class="small" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
 }
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML='<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-	<span class="sep">|</span>
-	<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-	<a href="index.php?module=Accounts&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML='<td><a href="index.php?module=Accounts&action=CustomView" class="small">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }else
 {
-$cvHTML='<a href="index.php?module=Accounts&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-	<span class="sep">|</span>
-	<a href="index.php?module=CustomView&action=Delete&dmodule=Accounts&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-	<span class="sep">|</span>
-	<a href="index.php?module=Accounts&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML='<td><a href="index.php?module=Accounts&action=CustomView" class="small">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=Accounts&action=CustomView&record='.$viewid.'" class="small">'.$app_strings['LNK_CV_EDIT'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Accounts&record='.$viewid.'" class="small">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
-	$customviewstrings='<td align="right">'.$app_strings[LBL_VIEW].'
-                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
+	$customviewstrings='<td>'.$app_strings[LBL_VIEW].'</td>
+			<td style="padding-left:5px;padding-right:5px">
+                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
-                        </SELECT>
-			'.$cvHTML.'
-                </td>';
+                        </SELECT></td>
+			'.$cvHTML;
 
 $smarty = new vtigerCRM_Smarty;
 global $theme;
@@ -181,8 +178,6 @@ $view_script = "<script language='javascript'>
 	}
 	set_selected();
 	</script>";
-
-//$url_qry = getURLstring($focus);
 
 if(isset($order_by) && $order_by != '')
 {	
@@ -238,7 +233,7 @@ if(isset($ids))
 }
 if(isPermitted("Accounts",8,'') == 'yes') 
 {
-	$smarty->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
+	$smarty->assign("MERGEBUTTON","<td><input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"small\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
 	$wordTemplateResult = fetchWordTemplateList("Accounts");
 	$tempCount = $adb->num_rows($wordTemplateResult);
 	$tempVal = $adb->fetch_array($wordTemplateResult);
@@ -247,7 +242,7 @@ if(isPermitted("Accounts",8,'') == 'yes')
 		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
 		$tempVal = $adb->fetch_array($wordTemplateResult);
 	}
-	$smarty->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
+	$smarty->assign("WORDTEMPLATEOPTIONS","<td>".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."</td><td style=\"padding-left:5px;padding-right:5px\"><select class=\"small\" name=\"mergefile\">".$optionString."</select></td>");
 }
 //mass merge for word templates
 
