@@ -257,6 +257,8 @@ a:hover {
 .rightMailMergeHeader {
 	border-bottom:1px solid #dddddd;
 	padding:5px;
+	font-size: 11px;
+        line-height: 14px;
 	background-color:#eaeaea;
 
 }
@@ -524,11 +526,15 @@ color:#4a4a4a;
     background-color:#dadada;
     border-left:1px solid white;
     border-right:1px solid #999999;
+    font-size: 11px;
+    line-height: 14px;
     background-image:url(images/tblPro1ColBg.gif);
 }
 .tblPro1DataCell {
     border-bottom:1px solid #f5f5f5;
-color:#5a5a5a;
+    color:#5a5a5a;
+    font-size: 11px;
+    line-height: 14px;
 
 }
 .divEventToDo {
