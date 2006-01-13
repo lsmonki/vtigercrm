@@ -8,11 +8,12 @@
  * All Rights Reserved.
 *
  ********************************************************************************/
-
-require_once($theme_path.'layout_utils.php');
-
+function getMyTickets()
+{
+global $current_user;
 global $theme;
 global $current_language;
+global $adb;
 $current_module_strings = return_module_language($current_language, 'HelpDesk');
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -31,82 +32,64 @@ $search_query="select troubletickets.ticketid, parent_id, priority, troubleticke
 		where crmentity.smownerid = ".$current_user->id." and crmentity.deleted = 0 and troubletickets.status <> 'Closed'  ORDER BY createdtime DESC";
 
 $resultcount = $adb->num_rows($adb->query($search_query));
-$tktresult = $adb->limitquery($search_query,0,5);
-
-$list .='<table border=0 cellspacing=0 cellpadding=0 width=100%><tr style="cursor:pointer;" unslectable="on" onclick="javascript:expandCont(\'home_mytkt\');"><td nowrap><img src="'.$image_path.'myTickets.gif" style="padding:5px"></td><td width=100%><b>'.$current_module_strings['LBL_MY_TICKETS'].'</b> </td><td nowrap><img src="themes/images/toggle2.gif" id="img_home_mytkt" border=0></td></tr>';
-$list .= '<tr><td colspan=3 bgcolor="#000000" style="height:1px;"></td></tr>';
-$list .= '<tr><td colspan=3>';
-$list .= '<div id="home_mytkt" style="display:block;">';
-$list.='<table width=100% cellpadding="0" cellspacing="0" border="0">';
-
-$list.='<tr height=20> ';
-$list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['LBL_TICKET_ID'].'</td>';
-$list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['LBL_SUBJECT'].'</td>';
-$list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['Related To'].'</td>';
-$list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['LBL_STATUS'].'</td>';
-$list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['LBL_CREATED_DATE'].'</td>';
-$list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list.='<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$current_module_strings['LBL_ASSIGNED_TO'].'</td>';
-$list.='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-$list.='<tr>';
-$noofrows = $adb->num_rows($tktresult);
-for ($i=0; $i<$adb->num_rows($tktresult); $i++)
+if($resultcount > 0)
 {
-	if (($i%2)==0)
-		$list .= '<tr height=20 class=evenListRow>';
-	else
-		$list .= '<tr height=20 class=oddListRow>';
+	$tktresult = $adb->limitquery($search_query,0,5);
+	$title=array();
+	$title[]='myTickets.gif';
+	$title[]=$current_module_strings['LBL_MY_TICKETS'];
+	$title[]='home_mytkt';
 
-	$list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-	$ticketid = $adb->query_result($tktresult,$i,"ticketid");
-	$list .= '<td style="padding:0px 3px 0px 3px;">'.$ticketid.'</td>';
+	$header=array();
+	$header[]=$current_module_strings['LBL_TICKET_ID'];
+	$header[]=$current_module_strings['LBL_SUBJECT'];
+	$header[]=$current_module_strings['Related To'];
+	$header[]=$current_module_strings['LBL_STATUS'];
+	$header[]=$current_module_strings['LBL_CREATED_DATE'];
+	$header[]=$current_module_strings['LBL_ASSIGNED_TO'];
 
-	$list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-	$subject = '<a href="index.php?action=DetailView&module=HelpDesk&record='.$adb->query_result($tktresult,$i,"ticketid").'">'.$adb->query_result($tktresult,$i,"title").'</a>';
-	$list .= '<td style="padding:0px 3px 0px 3px;">'.$subject.'</td>';
-	$list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-
-	$parent_id = $adb->query_result($tktresult,$i,"parent_id");
-	$parent_name = '';
-	if($parent_id != '' && $parent_id != NULL)
+	$noofrows = $adb->num_rows($tktresult);
+	for ($i=0; $i<$adb->num_rows($tktresult); $i++)
 	{
-		$parent_name = getParentLink($parent_id);
+		$value=array();
+		$ticketid = $adb->query_result($tktresult,$i,"ticketid");
+		$value[]=$ticketid;
+		$value[]= '<a href="index.php?action=DetailView&module=HelpDesk&record='.$adb->query_result($tktresult,$i,"ticketid").'">'.$adb->query_result($tktresult,$i,"title").'</a>';
+
+		$parent_id = $adb->query_result($tktresult,$i,"parent_id");
+		$parent_name = '';
+		if($parent_id != '' && $parent_id != NULL)
+		{
+			$parent_name = getParentLink($parent_id);
+		}
+
+		$value[]=$parent_name;
+		$value[]=$adb->query_result($tktresult,$i,"status");
+		$value[]=getDisplayDate($adb->query_result($tktresult,$i,"createdtime"));
+		$value[]=$adb->query_result($tktresult,$i,"user_name");
+		$entries[$ticketid]=$value;
 	}
-
-	$list .= '<td style="padding:0px 3px 0px 3px;">'.$parent_name.'</td>';
-	$list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-	$list .= '<td style="padding:0px 3px 0px 3px;">'.$adb->query_result($tktresult,$i,"status").'</td>';
-	$list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-	$list .= '<td style="padding:0px 3px 0px 3px;">'.getDisplayDate($adb->query_result($tktresult,$i,"createdtime")).'</td>';
-	$list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-	$list .= '<td style="padding:0px 3px 0px 3px;">'.$adb->query_result($tktresult,$i,"user_name").'</td>';
-	$list .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-	$list .= '</tr>';
+	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
+	return $values;
 }
+//if($resultcount > 5)
+  //      $list .= '</td></tr><tr><td colspan="11">&nbsp;</td><td align="right"><a href="index.php?action=index&module=HelpDesk&query=true&my_open_tickets=true">'.$current_module_strings['LBL_MORE'].'...&nbsp;&nbsp;</a></td></tr>';
 
-if($resultcount > 5)
-        $list .= '</td></tr><tr><td colspan="11">&nbsp;</td><td align="right"><a href="index.php?action=index&module=HelpDesk&query=true&my_open_tickets=true">'.$current_module_strings['LBL_MORE'].'...&nbsp;&nbsp;</a></td></tr>';
-
-$list .='<tr><td COLSPAN="15" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr></table>';
-$list .= '</div></td></tr></table>';
-$list .= '<script language=\'Javascript\'>
-		var leftpanelistarray=new Array(\'home_mytkt\');
-		setExpandCollapse_gen()
-	  </script>';
+//$list .='<tr><td COLSPAN="15" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr></table>';
+//$list .= '</div></td></tr></table>';
+//$list .= '<script language=\'Javascript\'>
+//		var leftpanelistarray=new Array(\'home_mytkt\');
+//		setExpandCollapse_gen()
+//	  </script>';
 
 // Mike Crowe Mod --------------------------------------------------------
-if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )
-echo $list;
-else 
-	echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
-echo "<BR>";
+//if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )
+//echo $list;
+//else 
+//	echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
+//echo "<BR>";
 // Mike Crowe Mod --------------------------------------------------------
-
+}
 function getParentLink($parent_id)
 {
 	global $adb;
@@ -130,5 +113,4 @@ function getParentLink($parent_id)
 
 	return $parent_name;
 }
-
 ?>
