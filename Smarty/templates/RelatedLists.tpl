@@ -65,7 +65,7 @@
 		<div class="small" style="padding:20px">
 		
 		
-		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$MODULE} More Information</span> <br>
+		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} More Information</span> <br>
 		 Updated 14 days ago (18 Nov 2005)
 		 <hr noshade size=1>
 		 <br> 
@@ -74,7 +74,7 @@
 		<table border=0 cellspacing=0 cellpadding=0 width=95% align=center>
 		<tr>
 			<td>
-				<table border=0 cellspacing=0 cellpadding=3 width=100%>
+				<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
 				<tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
 					{if $MODULE eq 'Activities'}
@@ -106,7 +106,7 @@
 					{include file='RelatedListsHidden.tpl'}
 
 					  {foreach key=header item=detail from=$RELATEDLISTS}
-						<table border=0 cellspacing=0 cellpadding=0 width=100% >
+						<table border=0 cellspacing=0 cellpadding=0 width=100% class="small">
 							<tr >
 							<td  valign=bottom style="border-bottom:1px solid #999999;padding:5px;" ><b>{$header}</b></td>
 							<td align=right style="border-bottom:1px solid #999999;padding:5px;">
@@ -149,6 +149,8 @@
                                                                 {if $MODULE eq 'Activities'}
                                                                 <input title="Change" accessKey="" tabindex="2" type="button" class="small" value="Select User" name="button" LANGUAGE=javascript onclick='return window.open("index.php?module=Users&return_module=Activities&return_action=CallRelatedList&activity_mode=Events&action=Popup&popuptype=detailview&form=EditView&form_submit=true&return_id={$id}&recordid={$ID}","test","width=600,height=400,resizable=1,scrollbars=1")';>
                                                                 {/if}
+							{elseif $header eq 'History'}
+                                                        &nbsp;</td>
 
 							{/if}
 							</tr>
@@ -157,7 +159,7 @@
 				      	   	  {foreach key=header item=detail from=$detail}
 					      
 							{if $header eq 'header'}
-								<table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#eaeaea;">
+								<table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#eaeaea;" class="small">
 								<tr style="height:25px" bgcolor=white>	
 							          {foreach key=header item=headerfields from=$detail}	
 								    <td class="lvtCol">{$headerfields}</td> 
@@ -176,7 +178,7 @@
 						    {/foreach}
 						
 					   	{else}
-							<table style="background-color:#eaeaea;color:eeeeee" border="0" cellpadding="3" cellspacing="1" width="100%">
+							<table style="background-color:#eaeaea;color:eeeeee" border="0" cellpadding="3" cellspacing="1" width="100%" class="small">
 							<tbody>
 								<tr style="height: 25px;" bgcolor="white">
 									<td><i>None included</i></td>
@@ -237,13 +239,13 @@
 
 						
 						<!-- Upcoming Activities / Calendar-->
-						<table border=0 cellspacing=0 cellpadding=0 width=100% style="border:1px solid #ddddcc">
+						<table border=0 cellspacing=0 cellpadding=0 width=100% style="border:1px solid #ddddcc" class="small">
 						<tr>
 							<td style="border-bottom:1px solid #ddddcc;padding:5px;background-color:#ffffdd;"><b> Upcoming Activities :</b></td>
 						</tr>
 						<tr style="height:25px">
 							<td style="padding:5px" bgcolor="#ffffef">
-								<table border=0 cellspacing=0 cellpadding=2 width=100%>
+								<table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
 								<tr><td valign=top >1.</td><td width=100% style="color:#727272"><b>API License renewal </b><br>On 23 Nov 2006 <br> <i>14 months 3 days to go</i></td></tr>
 								<tr><td></td><td style="border-top:1px dotted #e2e2e2"></td></tr>
 								</table>
