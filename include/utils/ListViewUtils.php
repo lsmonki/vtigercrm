@@ -38,238 +38,47 @@ require_once('include/utils/CommonUtils.php'); //new
 
 function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',$relatedlist='',$oCv='')
 {
-	if($relatedlist=='HomePage')
-	{
 	global $adb;
 	global $theme;
 	global $app_strings;
 	global $mod_strings;
 	//Seggregating between module and smodule
-        if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'VENDOR')
-        {
-                $smodule = 'Vendor';
-        }
-        elseif(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'PRICEBOOK')
-        {
-                $smodule = 'PriceBook';
-        }
-        else
-        {
-                $smodule = $module;
-        }
-
-	$arrow='';
-	$qry = getURLstring($focus);
-	$theme_path="themes/".$theme."/";
-	$image_path=$theme_path."images/";
-	$list_header = '<tr class="moduleListTitle" height=20>';
-	$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-	if($relatedlist == '')
+	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'VENDOR')
 	{
-		if($module == "Accounts")
-                {
-                        $list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall_acc" onClick=toggleSelect(this.checked,"selected_id_acc")></td>';
-                        $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-                }
-                elseif($module == "Contacts")
-                {
-                        $list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall_con" onClick=toggleSelect(this.checked,"selected_id_con")></td>';
-                        $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-                }
-		elseif($module == "Potentials")
-                {
-                        $list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall_pot" onClick=toggleSelect(this.checked,"selected_id_pot")></td>';
-                        $list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-                }
-
-		else
-		{
-			$list_header .='<td WIDTH="1" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><input type="checkbox" name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>';
-			$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-		}
+		$smodule = 'Vendor';
 	}
-
-	//Get the tabid of the module
-	//require_once('include/utils/UserInfoUtil.php')
-	$tabid = getTabid($smodule);
-	global $profile_id;
-        if($profile_id == '')
-        {
-                global $current_user;
-                $profile_id = fetchUserProfileId($current_user->id);
-        }
-	//added for customview 27/5
-	if($oCv)
-        {
-                if(isset($oCv->list_fields))
-                {
-                        $focus->list_fields = $oCv->list_fields;
-                }
-        }
-
-	//modified for customview 27/5 - $app_strings change to $mod_strings
-	foreach($focus->list_fields as $name=>$tableinfo)
+	elseif(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'PRICEBOOK')
 	{
-		//$fieldname = $focus->list_fields_name[$name];  //commented for customview 27/5
-		//added for customview 27/5
-		if($oCv)
-                {
-                        if(isset($oCv->list_fields_name))
-                        {
-                                $fieldname = $oCv->list_fields_name[$name];
-                        }else
-                        {
-                                $fieldname = $focus->list_fields_name[$name];
-                        }
-                }else
-		{
-			$fieldname = $focus->list_fields_name[$name];
-		}
-
-		//Getting the Entries from Profile2 field table
-		$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
-		$result = $adb->query($query);
-
-		//Getting the Entries from def_org_field table
-		$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
-		$result_def = $adb->query($query1);
-
-
-		if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
-		{
-
-			if(isset($focus->sortby_fields) && $focus->sortby_fields !='')
-			{
-				//Added on 14-12-2005 to avoid if and else check for every list field for arrow image and change order
-				$change_sorder = array('ASC'=>'DESC','DESC'=>'ASC');
-				$arrow_gif = array('ASC'=>'arrow_down.gif','DESC'=>'arrow_up.gif');
-
-				foreach($focus->list_fields[$name] as $tab=>$col)
-				{
-					if(in_array($col,$focus->sortby_fields))
-					{
-						if($order_by == $col)
-                                        	{
-							$temp_sorder = $change_sorder[$sorder];
-							$arrow = "<img src ='".$image_path.$arrow_gif[$sorder]."' border='0'>";
-                                        	}
-						else
-						{
-							$temp_sorder = 'ASC';
-						}
-						if($relatedlist !='')
-                                                {
-							if($app_strings[$name])
-                                                        {
-                                                                $name = $app_strings[$name];
-                                                        }
-                                                        else
-                                                        {
-                                                                $name = $mod_strings[$name];
-                                                        }
-                                                }
-                                                else
-                                                {
-                                                        if($app_strings[$name])
-                                                        {
-                                                                $lbl_name = $app_strings[$name];
-                                                        }
-                                                        else
-                                                        {
-                                                                $lbl_name = $mod_strings[$name];
-                                                        }
-							//added to display currency symbol in listview header
-							  if($lbl_name =='Amount')
-                                                               {
-                                                                        $curr_symbol = getCurrencySymbol();
-                                                                        $lbl_name .=': (in '.$curr_symbol.')';
-                                                                }
-
-                                                                $name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
-                                                                $arrow = '';
-                                                }
-                                        }
-                                        else
-                                        {       if($app_strings[$name])
-                                                {
-                                                        $name = $app_strings[$name];
-                                                }
-                                                elseif($mod_strings[$name])
-                                                {
-                                                        $name = $mod_strings[$name];
-                                                }
-                                        }
-
-				}
-			}
-			//added to display currency symbol in related listview header
-                        if($name =='Amount' && $relatedlist !='' )
-                        {
-                                $curr_symbol = getCurrencySymbol();
-                                $name .=': (in '.$curr_symbol.')';
-                        }
-
-			//Added condition to hide the close column in Related Lists
-			if($name == 'Close' && $relatedlist != '')
-			{
-				$list_header .= '';
-			}
-			else
-			{
-				$list_header .= '<td class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$name.'</td>';
-				$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-			}
-		}
-	}
-	$list_header .='<td class="moduleListTitle" style="padding:0px 3px 0px 3px;">'.$app_strings['LBL_EDIT'].' | '.$app_strings['LBL_DELETE'].'</td>';
-	$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-	$list_header .= '</tr>';
-	return $list_header;
-
+		$smodule = 'PriceBook';
 	}
 	else
 	{
-	global $adb;
-	global $theme;
-	global $app_strings;
-	global $mod_strings;
-	//Seggregating between module and smodule
-        if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'VENDOR')
-        {
-                $smodule = 'Vendor';
-        }
-        elseif(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] == 'PRICEBOOK')
-        {
-                $smodule = 'PriceBook';
-        }
-        else
-        {
-                $smodule = $module;
-        }
+		$smodule = $module;
+	}
 
 	$arrow='';
 	$qry = getURLstring($focus);
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
 	$list_header = Array();
-	
+
 	//Get the tabid of the module
 	//require_once('include/utils/UserInfoUtil.php')
 	$tabid = getTabid($smodule);
 	global $profile_id;
-        if($profile_id == '')
-        {
-                global $current_user;
-                $profile_id = fetchUserProfileId($current_user->id);
-        }
+	if($profile_id == '')
+	{
+		global $current_user;
+		$profile_id = fetchUserProfileId($current_user->id);
+	}
 	//added for customview 27/5
 	if($oCv)
-        {
-                if(isset($oCv->list_fields))
-                {
-                        $focus->list_fields = $oCv->list_fields;
-                }
-        }
+	{
+		if(isset($oCv->list_fields))
+		{
+			$focus->list_fields = $oCv->list_fields;
+		}
+	}
 
 	//modified for customview 27/5 - $app_strings change to $mod_strings
 	foreach($focus->list_fields as $name=>$tableinfo)
@@ -277,15 +86,15 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		//$fieldname = $focus->list_fields_name[$name];  //commented for customview 27/5
 		//added for customview 27/5
 		if($oCv)
-                {
-                        if(isset($oCv->list_fields_name))
-                        {
-                                $fieldname = $oCv->list_fields_name[$name];
-                        }else
-                        {
-                                $fieldname = $focus->list_fields_name[$name];
-                        }
-                }else
+		{
+			if(isset($oCv->list_fields_name))
+			{
+				$fieldname = $oCv->list_fields_name[$name];
+			}else
+			{
+				$fieldname = $focus->list_fields_name[$name];
+			}
+		}else
 		{
 			$fieldname = $focus->list_fields_name[$name];
 		}
@@ -295,7 +104,7 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');	
 		if($is_admin == false)		
 		{
-			
+
 			$profileList = getCurrentUserProfileList();
 			$query 	= "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
 			$result = $adb->query($query);
@@ -315,81 +124,80 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 					if(in_array($col,$focus->sortby_fields))
 					{
 						if($order_by == $col)
-                                        	{
+						{
 							$temp_sorder = $change_sorder[$sorder];
 							$arrow = "<img src ='".$image_path.$arrow_gif[$sorder]."' border='0'>";
-                                        	}
+						}
 						else
 						{
 							$temp_sorder = 'ASC';
 						}
 						if($relatedlist !='')
-                                                {
+						{
 							if($app_strings[$name])
-                                                        {
-                                                                $name = $app_strings[$name];
-                                                        }
-                                                        else
-                                                        {
-                                                                $name = $mod_strings[$name];
-                                                        }
-                                                }
-                                                else
-                                                {
-                                                        if($app_strings[$name])
-                                                        {
-                                                                $lbl_name = $app_strings[$name];
-                                                        }
-                                                        else
-                                                        {
-                                                                $lbl_name = $mod_strings[$name];
-                                                        }
+							{
+								$name = $app_strings[$name];
+							}
+							else
+							{
+								$name = $mod_strings[$name];
+							}
+						}
+						else
+						{
+							if($app_strings[$name])
+							{
+								$lbl_name = $app_strings[$name];
+							}
+							else
+							{
+								$lbl_name = $mod_strings[$name];
+							}
 							//added to display currency symbol in listview header
-							  if($lbl_name =='Amount')
-                                                               {
-                                                                        $curr_symbol = getCurrencySymbol();
-                                                                        $lbl_name .=': (in '.$curr_symbol.')';
-                                                                }
+							if($lbl_name =='Amount')
+							{
+								$curr_symbol = getCurrencySymbol();
+								$lbl_name .=': (in '.$curr_symbol.')';
+										}
 
-                                                                $name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
-                                                                $arrow = '';
-                                                }
-                                        }
-                                        else
-                                        {       if($app_strings[$name])
-                                                {
-                                                        $name = $app_strings[$name];
-                                                }
-                                                elseif($mod_strings[$name])
-                                                {
-                                                        $name = $mod_strings[$name];
-                                                }
-                                        }
+										$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
+										$arrow = '';
+										}
+										}
+										else
+										{       if($app_strings[$name])
+										{
+										$name = $app_strings[$name];
+										}
+										elseif($mod_strings[$name])
+										{
+										$name = $mod_strings[$name];
+										}
+										}
 
-				}
-			}
-			//added to display currency symbol in related listview header
-                        if($name =='Amount' && $relatedlist !='' )
-                        {
-                                $curr_symbol = getCurrencySymbol();
-                                $name .=': (in '.$curr_symbol.')';
-                        }
+										}
+										}
+										//added to display currency symbol in related listview header
+										if($name =='Amount' && $relatedlist !='' )
+										{
+											$curr_symbol = getCurrencySymbol();
+											$name .=': (in '.$curr_symbol.')';
+													}
 
-			//Added condition to hide the close column in Related Lists
-			if($name == 'Close' && $relatedlist != '')
-			{
-				//$list_header .= '';
-				// $list_header[] = '';
-			}
-			else
-			{
-				 $list_header[]=$name;
-			}
-		}
-	}
-	return $list_header;
-	}
-}
+													//Added condition to hide the close column in Related Lists
+													if($name == 'Close' && $relatedlist != '')
+													{
+													//$list_header .= '';
+													// $list_header[] = '';
+													}
+													else
+													{
+													$list_header[]=$name;
+													}
+													}
+													}
+													return $list_header;
+													}
 
 
 
@@ -539,605 +347,299 @@ function getNavigationValues($display, $noofrows, $limit)
 //parameter added for customview $oCv 27/5
 function getListViewEntries($focus, $module,$list_result,$navigation_array,$relatedlist='',$returnset='',$edit_action='EditView',$del_action='Delete',$oCv='')
 {
-	if($relatedlist=='HomePage')
+	global $adb;
+	global $app_strings;
+	$noofrows = $adb->num_rows($list_result);
+	/*$list_header = '<script>
+	  function confirmdelete(url)
+	  {
+	  if(confirm("Are you sure?"))
+	  {
+	  document.location.href=url;
+	  }
+	  }
+	  </script>';*/
+	$list_block = Array();
+	global $theme;
+	$evt_status;
+	$theme_path="themes/".$theme."/";
+	$image_path=$theme_path."images/";
+
+	//getting the fieldtable entries from database
+	$tabid = getTabid($module);
+
+	//added for customview 27/5
+	if($oCv)
 	{
-		global $adb;
-		global $app_strings;
-		$noofrows = $adb->num_rows($list_result);
-		$list_header = '<script>
-			function confirmdelete(url)
-			{
-				if(confirm("Are you sure?"))
-				{
-					document.location.href=url;
-				}
-			}
-		</script>';
-		global $theme;
-		$evt_status;
-		$theme_path="themes/".$theme."/";
-		$image_path=$theme_path."images/";
-
-		//getting the fieldtable entries from database
-		$tabid = getTabid($module);
-
-		//added for customview 27/5
-		if($oCv)
+		if(isset($oCv->list_fields))
 		{
-			if(isset($oCv->list_fields))
-			{
-				$focus->list_fields = $oCv->list_fields;
-			}
+			$focus->list_fields = $oCv->list_fields;
 		}
+	}
 
-		for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
+	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
+	{
+		/*if (($i%2)==0)
+		  $list_header .= '<tr height=20 class=evenListRow>';
+		  else
+		  $list_header .= '<tr height=20 class=oddListRow>';*/
+
+		$list_header =Array();
+		//Getting the entityid
+		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
+		$owner_id = $adb->query_result($list_result,$i-1,"smownerid");
+
+		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+		// begin: Armando Lüscher 05.07.2005 -> §priority
+		// Code contri buted by fredy Desc: Set Priority color
+		$priority = $adb->query_result($list_result,$i-1,"priority");
+
+		$font_color_high = "color:#00DD00;";
+		$font_color_medium = "color:#DD00DD;";
+		$P_FONT_COLOR = "";
+		switch ($priority)
 		{
-			if (($i%2)==0)
-				$list_header .= '<tr height=20 class=evenListRow>';
-			else
-				$list_header .= '<tr height=20 class=oddListRow>';
+			case 'High':
+				$P_FONT_COLOR = $font_color_high;
+				break;
+			case 'Medium':
+				$P_FONT_COLOR = $font_color_medium;
+				break;
+			default:
+				$P_FONT_COLOR = "";
+		}
+		//end: Armando Lüscher 05.07.2005 -> §priority
 
-			//Getting the entityid
-			$entity_id = $adb->query_result($list_result,$i-1,"crmid");
-			$owner_id = $adb->query_result($list_result,$i-1,"smownerid");
+		foreach($focus->list_fields as $name=>$tableinfo)
+		{
+			$fieldname = $focus->list_fields_name[$name];
 
-			// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-			// begin: Armando Lüscher 05.07.2005 -> §priority
-			// Code contri buted by fredy Desc: Set Priority color
-			$priority = $adb->query_result($list_result,$i-1,"priority");
-
-			$font_color_high = "color:#00DD00;";
-			$font_color_medium = "color:#DD00DD;";
-			$P_FONT_COLOR = "";
-			switch ($priority)
+			//added for customview 27/5
+			if($oCv)
 			{
-				case 'High':
-					$P_FONT_COLOR = $font_color_high;
-					break;
-				case 'Medium':
-					$P_FONT_COLOR = $font_color_medium;
-					break;
-				default:
-					$P_FONT_COLOR = "";
+				if(isset($oCv->list_fields_name))
+				{
+					$fieldname = $oCv->list_fields_name[$name];
+				}
 			}
-			//end: Armando Lüscher 05.07.2005 -> §priority
 
-			if($relatedlist == '')
-			{       
-				if($module =='Accounts')
+			global $profile_id;
+			global $current_user;	
+			require('user_privileges/user_privileges_'.$current_user->id.'.php');	
+			if($is_admin==false)	
+			{	
+				$profileList = getCurrentUserProfileList();
+				$query 	= "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
+
+				$result = $adb->query($query);	
+			}	
+
+			if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
+			{
+
+
+
+				if($fieldname == '')
 				{
-					$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-					$list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id_acc" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall_acc")></td>';
-				}
-				elseif($module == 'Contacts')
-				{
-					$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-					$list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id_con" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall_con")></td>';
-				}
-				elseif($module == 'Potentials')
-				{
-					$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-					$list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id_pot" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall_pot")></td>';
+					$table_name = '';
+					$column_name = '';
+					foreach($tableinfo as $tablename=>$colname)
+					{
+						$table_name=$tablename;
+						$column_name = $colname;
+					}
+					$value = $adb->query_result($list_result,$i-1,$colname);
 				}
 				else
 				{
-					$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-					$list_header .= '<td valign=TOP style="padding:0px 3px 0px 3px;"><INPUT type=checkbox NAME="selected_id" value= '.$entity_id.' onClick=toggleSelectAll(this.name,"selectall")></td>';
-				}
-			}
-			$list_header .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-			foreach($focus->list_fields as $name=>$tableinfo)
-			{
-				$fieldname = $focus->list_fields_name[$name];
 
-				//added for customview 27/5
-				if($oCv)
-				{
-					if(isset($oCv->list_fields_name))
+					if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close') || ($name == 'First Name')))
 					{
-						$fieldname = $oCv->list_fields_name[$name];
-					}
-				}
-
-				global $profile_id;
-				$query = "select profile2field.* from field inner join profile2field on field.fieldid=profile2field.fieldid where profile2field.tabid=".$tabid." and profile2field.profileid=".$profile_id." and field.fieldname='".$fieldname."'";
-				$result = $adb->query($query);
-
-
-				//Getting the Entries from def_org_field table
-				$query1 = "select def_org_field.* from field inner join def_org_field on field.fieldid=def_org_field.fieldid where def_org_field.tabid=".$tabid." and field.fieldname='".$fieldname."'";
-				$result_def = $adb->query($query1);
-
-				if($adb->query_result($result,0,"visible") == 0 && $adb->query_result($result_def,0,"visible") == 0)
-				{
-					if($fieldname == '')
-					{
-						$table_name = '';
-						$column_name = '';
-						foreach($tableinfo as $tablename=>$colname)
+						$status = $adb->query_result($list_result,$i-1,"status");
+						if($status == '')
+							$status = $adb->query_result($list_result,$i-1,"eventstatus");
+						if ($name=='Related to')
+							$value=getRelatedTo($module,$list_result,$i-1);
+						if($name=='Contact Name')
 						{
-							$table_name=$tablename;
-							$column_name = $colname;
-						}
-						$value = $adb->query_result($list_result,$i-1,$colname);
-					}
-					else
-					{
-
-						if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close')))
-						{
-							$status = $adb->query_result($list_result,$i-1,"status");
-							if($status == '')
-								$status = $adb->query_result($list_result,$i-1,"eventstatus");
-							if ($name=='Related to')
-								$value=getRelatedTo($module,$list_result,$i-1);
-							if($name=='Contact Name')
+							$first_name = $adb->query_result($list_result,$i-1,"firstname");
+							$last_name = $adb->query_result($list_result,$i-1,"lastname");
+							$contact_id = $adb->query_result($list_result,$i-1,"contactid");
+							$contact_name = "";
+							$value="";
+							if($last_name != 'NULL')
+								$contact_name .= $last_name;
+							if($first_name != 'NULL')
+								$contact_name .= " ".$first_name;
+							//Added to get the contactname for activities custom view - t=2190
+							if($contact_id != '' && $last_name == '')
 							{
-								$first_name = $adb->query_result($list_result,$i-1,"firstname");
-								$last_name = $adb->query_result($list_result,$i-1,"lastname");
-								$contact_id = $adb->query_result($list_result,$i-1,"contactid");
-								$contact_name = "";
-								$value="";
-								if($last_name != 'NULL')
-									$contact_name .= $last_name;
-								if($first_name != 'NULL')
-									$contact_name .= " ".$first_name;
-								//Added to get the contactname for activities custom view - t=2190
-								if($contact_id != '' && $last_name == '')
-								{
-									$contact_name = getContactName($contact_id);
-								}
-
-								if(($contact_name != "") && ($contact_id !='NULL'))
-									//$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
-									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-									$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+								$contact_name = getContactName($contact_id);
 							}
-							if ($name == 'Close')
+
+							if(($contact_name != "") && ($contact_id !='NULL'))
+								//$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
+								// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+						}
+						if($name == "First Name")
+						{
+							$first_name = $adb->query_result($list_result,$i-1,"firstname");
+							$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'">'.$first_name.'</a>';
+
+						}
+
+						if ($name == 'Close')
+						{
+							if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '')
 							{
-								if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '')
+								$value="";
+							}
+							else
+							{
+								$activityid = $adb->query_result($list_result,$i-1,"activityid");
+								$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
+								if($activitytype=='Task')
+									$evt_status='&status=Completed';
+								else
+									$evt_status='&eventstatus=Held';
+								if(isPermitted("Activities",1,$activityid) == 'yes')
 								{
-									$value="";
+									//$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
+									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+									$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 								}
 								else
 								{
-									$activityid = $adb->query_result($list_result,$i-1,"activityid");
-									$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
-									if($activitytype=='Task')
-										$evt_status='&status=Completed';
-									else
-										$evt_status='&eventstatus=Held';
-									if(isPermitted("Activities",1,$activityid) == 'yes')
-									{
-										//$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
-										// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-										$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-									}
-									else
-									{
-										$value = "";
-									}
-
+									$value = "";
 								}
+
 							}
 						}
-						elseif($module == "Products" && $name == "Related to")
+					}
+					elseif($module == "Products" && $name == "Related to")
+					{
+						$value=getRelatedTo($module,$list_result,$i-1);
+					}
+					elseif($module == 'Notes' && $name=='Related to')
+					{
+						$value=getRelatedTo($module,$list_result,$i-1);
+					}
+					elseif($name=='Account Name')
+					{
+						//modified for customview 27/5
+						if($module == 'Accounts')
 						{
-							$value=getRelatedTo($module,$list_result,$i-1);
-						}
-						elseif($module == 'Notes' && $name=='Related to')
+							$account_id = $adb->query_result($list_result,$i-1,"crmid");
+							$account_name = getAccountName($account_id);
+							//$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+							// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+						}else
 						{
-							$value=getRelatedTo($module,$list_result,$i-1);
+							$account_id = $adb->query_result($list_result,$i-1,"accountid");
+							$account_name = getAccountName($account_id);
+							//$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
+							// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}
-						elseif($name=='Account Name')
-						{
-							//modified for customview 27/5
-							if($module == 'Accounts')
-							{
-								$account_id = $adb->query_result($list_result,$i-1,"crmid");
-								$account_name = getAccountName($account_id);
-								//$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
-								// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-								$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-							}else
-							{
-								$account_id = $adb->query_result($list_result,$i-1,"accountid");
-								$account_name = getAccountName($account_id);
-								//$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
-								// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-								$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-							}
-						}
-						elseif(($module == 'PriceBook' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'Faq') && $name == 'Product Name')
-						{
-							if($module == 'Faq')
-								$product_id = $adb->query_result($list_result,$i-1,"product_id");
-							else
-								$product_id = $adb->query_result($list_result,$i-1,"productid");
-
-							if($product_id != '')
-								$product_name = getProductName($product_id);
-							else
-								$product_name = '';
-
-							$value = '<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
-						}
-						elseif($module == 'Quotes' && $name == 'Potential Name')
-						{
-							$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
-							$potential_name = getPotentialName($potential_id);
-							$value = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
-						}
-						elseif($owner_id == 0 && $name == 'Assigned To')
-						{
-							$group_info = getGroupName($entity_id, $module);
-                                               		$value = $group_info[0];
-						}
+					}
+					elseif(($module == 'PriceBook' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'Faq') && $name == 'Product Name')
+					{
+						if($module == 'Faq')
+							$product_id = $adb->query_result($list_result,$i-1,"product_id");
 						else
-						{
+							$product_id = $adb->query_result($list_result,$i-1,"productid");
 
-							$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
-							$field_result = $adb->query($query);
-							$list_result_count = $i-1;
-
-							$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
-						}
-					}
-					//Added condition to hide the close symbol in Related Lists
-					//				if($relatedlist != '' && $value == "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>")
-					if($name == 'Close' && $relatedlist != '')
-					{
-						$list_header .= '';
-					}
-					else
-					{
-						//$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
-						// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-						$list_header .= '<td height="21" style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'.$value.'</td>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
-						$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-					}
-					if($fieldname=='filename')
-					{
-						$filename = $adb->query_result($list_result,$list_result_count,$fieldname);
-					}
-				}
-
-			}
-			$varreturnset = '';
-			if($returnset=='')
-				$varreturnset = '&return_module='.$module.'&return_action=index';
-			else
-				$varreturnset = $returnset;
-
-
-			if($module == 'Activities')
-			{
-				$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
-				if($actvity_type == 'Task')
-					$varreturnset .= '&activity_mode=Task';
-				else
-					$varreturnset .= '&activity_mode=Events';
-			}
-			//$list_header .= '<td style="padding:0px 3px 0px 3px;">';
-			// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-			$list_header .= '<td style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
-			$mod_dir=getModuleDirName($module);
-			if(isPermitted($module,1,$entity_id) == 'yes')
-			{
-				//$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
-				// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-				$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&return_viewname='.$oCv->setdefaultviewid.'&record='.$entity_id.$varreturnset.'&filename='.$filename.'" style="'.$P_FONT_COLOR.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-			}
-			if(isPermitted($module,2,$entity_id) == 'yes')
-			{
-				$del_param = 'index.php?action='.$del_action.'&module='.$mod_dir.'&record='.$entity_id.$varreturnset.'&return_viewname='.$oCv->setdefaultviewid;
-				$list_header .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
-			}
-			//$list_header .= '<td>';
-			// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-			$list_header .= '</td>'; // Armando Lüscher 05.07.2005 -> Changed from <td> to </td>
-			$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-			$list_header .= '</tr>';
-		}
-		$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
-		return $list_header;
-	}
-	else
-	{	
-		global $adb;
-		global $app_strings;
-		$noofrows = $adb->num_rows($list_result);
-		/*$list_header = '<script>
-		  function confirmdelete(url)
-		  {
-		  if(confirm("Are you sure?"))
-		  {
-		  document.location.href=url;
-		  }
-		  }
-		  </script>';*/
-		$list_block = Array();
-		global $theme;
-		$evt_status;
-		$theme_path="themes/".$theme."/";
-		$image_path=$theme_path."images/";
-
-		//getting the fieldtable entries from database
-		$tabid = getTabid($module);
-
-		//added for customview 27/5
-		if($oCv)
-		{
-			if(isset($oCv->list_fields))
-			{
-				$focus->list_fields = $oCv->list_fields;
-			}
-		}
-
-		for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
-		{
-			/*if (($i%2)==0)
-			  $list_header .= '<tr height=20 class=evenListRow>';
-			  else
-			  $list_header .= '<tr height=20 class=oddListRow>';*/
-
-			$list_header =Array();
-			//Getting the entityid
-			$entity_id = $adb->query_result($list_result,$i-1,"crmid");
-			$owner_id = $adb->query_result($list_result,$i-1,"smownerid");
-
-			// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-			// begin: Armando Lüscher 05.07.2005 -> §priority
-			// Code contri buted by fredy Desc: Set Priority color
-			$priority = $adb->query_result($list_result,$i-1,"priority");
-
-			$font_color_high = "color:#00DD00;";
-			$font_color_medium = "color:#DD00DD;";
-			$P_FONT_COLOR = "";
-			switch ($priority)
-			{
-				case 'High':
-					$P_FONT_COLOR = $font_color_high;
-					break;
-				case 'Medium':
-					$P_FONT_COLOR = $font_color_medium;
-					break;
-				default:
-					$P_FONT_COLOR = "";
-			}
-			//end: Armando Lüscher 05.07.2005 -> §priority
-
-			foreach($focus->list_fields as $name=>$tableinfo)
-			{
-				$fieldname = $focus->list_fields_name[$name];
-
-				//added for customview 27/5
-				if($oCv)
-				{
-					if(isset($oCv->list_fields_name))
-					{
-						$fieldname = $oCv->list_fields_name[$name];
-					}
-				}
-
-				global $profile_id;
-				global $current_user;	
-				require('user_privileges/user_privileges_'.$current_user->id.'.php');	
-				if($is_admin==false)	
-				{	
-					$profileList = getCurrentUserProfileList();
-					$query 	= "select profile2field.* from field inner join profile2field on profile2field.fieldid=field.fieldid inner join def_org_field on def_org_field.fieldid=field.fieldid where field.tabid=".$tabid." and profile2field.visible=0 and def_org_field.visible=0  and profile2field.profileid in ".$profileList." and field.fieldname='".$fieldname."' group by field.fieldid";
-
-					$result = $adb->query($query);	
-				}	
-
-				if($is_admin==true || $profileGlobalPermission[1] == 0 || $profileGlobalPermission[2] ==0 || $adb->num_rows($result) == 1)
-				{
-
-
-
-					if($fieldname == '')
-					{
-						$table_name = '';
-						$column_name = '';
-						foreach($tableinfo as $tablename=>$colname)
-						{
-							$table_name=$tablename;
-							$column_name = $colname;
-						}
-						$value = $adb->query_result($list_result,$i-1,$colname);
-					}
-					else
-					{
-
-						if(($module == 'Activities' || $module == 'Tasks' || $module == 'Meetings' || $module == 'Emails' || $module == 'HelpDesk' || $module == 'Invoice' || $module == 'Leads' || $module == 'Contacts') && (($name=='Related to') || ($name=='Contact Name') || ($name=='Close') || ($name == 'First Name')))
-						{
-							$status = $adb->query_result($list_result,$i-1,"status");
-							if($status == '')
-								$status = $adb->query_result($list_result,$i-1,"eventstatus");
-							if ($name=='Related to')
-								$value=getRelatedTo($module,$list_result,$i-1);
-							if($name=='Contact Name')
-							{
-								$first_name = $adb->query_result($list_result,$i-1,"firstname");
-								$last_name = $adb->query_result($list_result,$i-1,"lastname");
-								$contact_id = $adb->query_result($list_result,$i-1,"contactid");
-								$contact_name = "";
-								$value="";
-								if($last_name != 'NULL')
-									$contact_name .= $last_name;
-								if($first_name != 'NULL')
-									$contact_name .= " ".$first_name;
-								//Added to get the contactname for activities custom view - t=2190
-								if($contact_id != '' && $last_name == '')
-								{
-									$contact_name = getContactName($contact_id);
-								}
-
-								if(($contact_name != "") && ($contact_id !='NULL'))
-									//$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
-									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-									$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-							}
-							if($name == "First Name")
-							{
-								$first_name = $adb->query_result($list_result,$i-1,"firstname");
-								$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'">'.$first_name.'</a>';
-
-							}
-
-							if ($name == 'Close')
-							{
-								if($status =='Deferred' || $status == 'Completed' || $status == 'Held' || $status == '')
-								{
-									$value="";
-								}
-								else
-								{
-									$activityid = $adb->query_result($list_result,$i-1,"activityid");
-									$activitytype = $adb->query_result($list_result,$i-1,"activitytype");
-									if($activitytype=='Task')
-										$evt_status='&status=Completed';
-									else
-										$evt_status='&eventstatus=Held';
-									if(isPermitted("Activities",1,$activityid) == 'yes')
-									{
-										//$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
-										// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-										$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-									}
-									else
-									{
-										$value = "";
-									}
-
-								}
-							}
-						}
-						elseif($module == "Products" && $name == "Related to")
-						{
-							$value=getRelatedTo($module,$list_result,$i-1);
-						}
-						elseif($module == 'Notes' && $name=='Related to')
-						{
-							$value=getRelatedTo($module,$list_result,$i-1);
-						}
-						elseif($name=='Account Name')
-						{
-							//modified for customview 27/5
-							if($module == 'Accounts')
-							{
-								$account_id = $adb->query_result($list_result,$i-1,"crmid");
-								$account_name = getAccountName($account_id);
-								//$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
-								// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-								$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-							}else
-							{
-								$account_id = $adb->query_result($list_result,$i-1,"accountid");
-								$account_name = getAccountName($account_id);
-								//$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
-								// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-								$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-							}
-						}
-						elseif(($module == 'PriceBook' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'Faq') && $name == 'Product Name')
-						{
-							if($module == 'Faq')
-								$product_id = $adb->query_result($list_result,$i-1,"product_id");
-							else
-								$product_id = $adb->query_result($list_result,$i-1,"productid");
-
-							if($product_id != '')
-								$product_name = getProductName($product_id);
-							else
-								$product_name = '';
-
-							$value = '<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
-						}
-						elseif($module == 'Quotes' && $name == 'Potential Name')
-						{
-							$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
-							$potential_name = getPotentialName($potential_id);
-							$value = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
-						}
-						elseif($owner_id == 0 && $name == 'Assigned To')
-						{
-							$group_info = getGroupName($entity_id, $module);
-                                               		$value = $group_info[0];
-						}
+						if($product_id != '')
+							$product_name = getProductName($product_id);
 						else
-						{
+							$product_name = '';
 
-							$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
-							$field_result = $adb->query($query);
-							$list_result_count = $i-1;
-
-							$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
-						}
+						$value = '<a href="index.php?module=Products&action=DetailView&record='.$product_id.'">'.$product_name.'</a>';
 					}
-					//Added condition to hide the close symbol in Related Lists
-					//				if($relatedlist != '' && $value == "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>")
-					if($name == 'Close' && $relatedlist != '')
+					elseif($module == 'Quotes' && $name == 'Potential Name')
 					{
-						//$list_header[]= '';
+						$potential_id = $adb->query_result($list_result,$i-1,"potentialid");
+						$potential_name = getPotentialName($potential_id);
+						$value = '<a href="index.php?module=Potentials&action=DetailView&record='.$potential_id.'">'.$potential_name.'</a>';
+					}
+					elseif($owner_id == 0 && $name == 'Assigned To')
+					{
+						$group_info = getGroupName($entity_id, $module);
+						$value = $group_info[0];
 					}
 					else
 					{
-						//$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
-						// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-						//$list_header .= '<td height="21" style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'.$value.'</td>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
-						//$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-						$list_header[] = $value;
-					}
-					if($fieldname=='filename')
-					{
-						$filename = $adb->query_result($list_result,$list_result_count,$fieldname);
+
+						$query = "select * from field where tabid=".$tabid." and fieldname='".$fieldname."'";
+						$field_result = $adb->query($query);
+						$list_result_count = $i-1;
+
+						$value = getValue($field_result,$list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,"list","",$returnset,$oCv->setdefaultviewid);
 					}
 				}
-
-			}
-			$varreturnset = '';
-			if($returnset=='')
-				$varreturnset = '&return_module='.$module.'&return_action=index';
-			else
-				$varreturnset = $returnset;
-
-
-			if($module == 'Activities')
-			{
-				$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
-				if($actvity_type == 'Task')
-					$varreturnset .= '&activity_mode=Task';
+				//Added condition to hide the close symbol in Related Lists
+				//				if($relatedlist != '' && $value == "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>")
+				if($name == 'Close' && $relatedlist != '')
+				{
+					//$list_header[]= '';
+				}
 				else
-					$varreturnset .= '&activity_mode=Events';
+				{
+					//$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
+					// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+					//$list_header .= '<td height="21" style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'.$value.'</td>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
+					//$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+					$list_header[] = $value;
+				}
+				if($fieldname=='filename')
+				{
+					$filename = $adb->query_result($list_result,$list_result_count,$fieldname);
+				}
 			}
-			//$list_header .= '<td style="padding:0px 3px 0px 3px;">';
-			// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-			//$list_header .= '<td style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
-			$mod_dir=getModuleDirName($module);
-			/*if(isPermitted($module,1,$entity_id) == 'yes')
-			  {
-			//$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
-			// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-			$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&return_viewname='.$oCv->setdefaultviewid.'&record='.$entity_id.$varreturnset.'&filename='.$filename.'" style="'.$P_FONT_COLOR.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-			}
-			if(isPermitted($module,2,$entity_id) == 'yes')
-			{
-			$del_param = 'index.php?action='.$del_action.'&module='.$mod_dir.'&record='.$entity_id.$varreturnset.'&return_viewname='.$oCv->setdefaultviewid;
-			$list_header .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
-			}
-			//$list_header .= '<td>';
-			// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-			$list_header .= '</td>'; // Armando Lüscher 05.07.2005 -> Changed from <td> to </td>
-			$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-			$list_header .= '</tr>';*/
-			$list_block[$entity_id] = $list_header;
 
 		}
-		//	$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
-		return $list_block;
+		$varreturnset = '';
+		if($returnset=='')
+			$varreturnset = '&return_module='.$module.'&return_action=index';
+		else
+			$varreturnset = $returnset;
+
+
+		if($module == 'Activities')
+		{
+			$actvity_type = $adb->query_result($list_result,$list_result_count,'activitytype');
+			if($actvity_type == 'Task')
+				$varreturnset .= '&activity_mode=Task';
+			else
+				$varreturnset .= '&activity_mode=Events';
+		}
+		//$list_header .= '<td style="padding:0px 3px 0px 3px;">';
+		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+		//$list_header .= '<td style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
+		$mod_dir=getModuleDirName($module);
+		/*if(isPermitted($module,1,$entity_id) == 'yes')
+		  {
+		//$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
+		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+		$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&return_viewname='.$oCv->setdefaultviewid.'&record='.$entity_id.$varreturnset.'&filename='.$filename.'" style="'.$P_FONT_COLOR.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
+		}
+		if(isPermitted($module,2,$entity_id) == 'yes')
+		{
+		$del_param = 'index.php?action='.$del_action.'&module='.$mod_dir.'&record='.$entity_id.$varreturnset.'&return_viewname='.$oCv->setdefaultviewid;
+		$list_header .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
+		}
+		//$list_header .= '<td>';
+		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
+		$list_header .= '</td>'; // Armando Lüscher 05.07.2005 -> Changed from <td> to </td>
+		$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
+		$list_header .= '</tr>';*/
+		$list_block[$entity_id] = $list_header;
+
 	}
+	//	$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
+	return $list_block;
 }
 
 
@@ -2135,7 +1637,7 @@ function getTableHeaderNavigation($navigation_array, $url_qry,$module='',$action
 	global $theme;
 	$theme_path="themes/".$theme."/";
 	$image_path=$theme_path."images/";
-	$output = '<td align="right">';
+	$output = '<td>';
 	$dir_name=getModuleDirName($module);
 	$output .= '<a href="index.php?module='.$dir_name.'&action='.$action_val.$url_qry.'&start=1&viewname='.$viewid.'&allflag='.$navigation_array['allflag'].'" >'.$navigation_array['allflag'].'</a>&nbsp;';
 	if(($navigation_array['prev']) != 0)
