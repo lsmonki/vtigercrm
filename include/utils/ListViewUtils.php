@@ -1310,10 +1310,6 @@ function getListQuery($module,$where='')
         {
 		$query="select crmentity.crmid, notes.title, notes.contact_id, notes.filename, crmentity.modifiedtime,senotesrel.crmid as relatedto, contactdetails.firstname, contactdetails.lastname, notes.* from notes inner join crmentity on crmentity.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentity.deleted=0";
         }
-        if($module == "Calls")
-        {
-		$query = "select crmentity.crmid, crmentity.smownerid, seactivityrel.activityid, calls.* from calls inner join crmentity on crmentity.crmid = calls.callid left join seactivityrel on seactivityrel.activityid = calls.callid where crmentity.deleted=0";
-        }
 	if($module == "Contacts")
         {
 		//Query modified to sort by assigned to
@@ -1323,10 +1319,6 @@ function getListQuery($module,$where='')
 			$sec_parameter=getListViewSecurityParameter($module);
 			$query .= $sec_parameter;
 		}
-        }
-	if($module == "Meetings")
-        {
-		$query = "select crmentity.crmid,crmentity.smownerid, meetings.*, activity.subject, activity.activityid, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid from meetings inner join crmentity on crmentity.crmid=meetings.meetingid inner join activity on activity.activityid= crmentity.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid WHERE crmentity.deleted=0";
         }
 	if($module == "Activities")
         {
@@ -1341,7 +1333,7 @@ function getListQuery($module,$where='')
         }
 	if($module == "Emails")
         {
-		$query = "select distinct crmentity.crmid, crmentity.smownerid, activity.activityid, activity.subject, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from activity inner join crmentity on crmentity.crmid=activity.activityid inner join users on users.id=crmentity.smownerid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid WHERE activity.activitytype='Emails' and crmentity.deleted=0 ";
+		$query = "select distinct crmentity.crmid, crmentity.smownerid, activity.activityid, activity.subject, contactdetails.lastname, contactdetails.firstname, contactdetails.contactid , activity.date_start from activity inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid left join seactivityrel on seactivityrel.activityid = activity.activityid left join contactdetails on contactdetails.contactid=seactivityrel.crmid left join cntactivityrel on cntactivityrel.activityid= activity.activityid and cntactivityrel.contactid=cntactivityrel.contactid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname WHERE activity.activitytype='Emails' and crmentity.deleted=0 ";
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
 		{
 			$sec_parameter=getListViewSecurityParameter($module);

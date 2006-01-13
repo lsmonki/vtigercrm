@@ -737,7 +737,7 @@ class CRMEntity extends SugarBean
 			  {
 				  updateTicketGroupRelation($this->id,$groupname);
 			  }
-			  elseif($module =='Activities' || $module =='Events'  )
+			  elseif($module =='Activities' || $module =='Events' || $module == 'Emails')
 			  {
 				 if($table_name == 'activity')
 				 {
@@ -786,7 +786,7 @@ class CRMEntity extends SugarBean
 			  {
 				  updateTicketGroupRelation($this->id,'');
 			  }
-			  elseif($module =='Activities' || $module =='Events')
+			  elseif($module =='Activities' || $module =='Events' || $module == 'Emails')
 			  {
 				  if($table_name == 'activity')
                                   {

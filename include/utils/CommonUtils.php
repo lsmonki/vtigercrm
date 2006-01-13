@@ -391,13 +391,9 @@ function getGroupName($id, $module)
         {
                $sql = "select ticketgrouprelation.groupname,groups.groupid from ticketgrouprelation inner join groups on groups.groupname=ticketgrouprelation.groupname where ticketgrouprelation.ticketid=".$id;
         }
-        elseif($module == 'Calls')
+        elseif($module == 'Activities' || $module == 'Emails' || $module == 'Events')
         {
                $sql = "select activitygrouprelation.groupname,groups.groupid from activitygrouprelation inner join groups on groups.groupname=activitygrouprelation.groupname where activitygrouprelation.activityid=".$id;
-        }
-        elseif($module == 'Tasks')
-        {
-               $sql = "select taskgrouprelation.groupname,groups.groupid from taskgrouprelation inner join groups on groups.groupname=taskgrouprelation.groupname where taskgrouprelation.taskid=".$id;
         }
 	$result = $adb->query($sql);
         $group_info[] = $adb->query_result($result,0,"groupname");
