@@ -125,6 +125,7 @@ function getTopSalesOrder()
 
 	$listview_entries = getListViewEntries($focus,"SalesOrder",$list_result,$navigation_array,"HomePage","","EditView","Delete",$oCustomView);
 	$values=Array('Title'=>$title,'Header'=>$listview_header,'Entries'=>$listview_entries);
-	return $values;
+	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	
+		return $values;
 }
 ?>
