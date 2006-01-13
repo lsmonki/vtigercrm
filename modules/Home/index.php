@@ -117,7 +117,6 @@ function getActivityType($id)
 
 }
 
-echo '<BR>';
 $list='';
 if($tab_per_Data[13] == 0)
 {
@@ -163,7 +162,6 @@ if($tab_per_Data[23] == 0)
 }
         	break;
     }
-	//echo '<BR>';
 }
 
 global $current_language;
