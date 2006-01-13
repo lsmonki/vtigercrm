@@ -17,7 +17,7 @@ $focus = new Lead();
 $MODULE = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
 $currentmodule = $_REQUEST['module'];
-if(isset($_REQUEST['record']) && isset($_REQUEST['record'])) {
+if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $focus->retrieve_entity_info($_REQUEST['record'],"Leads");
     $focus->id = $_REQUEST['record'];
     $focus->firstname=$focus->column_fields['firstname'];
