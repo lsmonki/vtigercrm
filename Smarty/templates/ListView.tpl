@@ -87,11 +87,10 @@ y:0.90;z-index:50"></div>
    <td class=small>
        <table cellspacing="2" cellpadding="2" border="0">
          <tr>
-            <td width=90% ><a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activit
-y_mode=Events&return_action=DetailView">{$NEW_EVENT}</a></td>
+            <td width=90% ><a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Events&return_action=DetailView&parenttab={$CATEGORY}">{$NEW_EVENT}</a></td>
          </tr>
          <tr>
-            <td width=90% ><a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Task&return_action=DetailView">{$NEW_TASK}</a></td>
+            <td width=90% ><a href="index.php?module={$MODULE}&action=EditView&return_module={$MODULE}&activity_mode=Task&return_action=DetailView&parenttab={$CATEGORY}">{$NEW_TASK}</a></td>
          </tr>
        </table>
    </td>
@@ -262,60 +261,79 @@ itle="Basic Search" border=0></td>
 
 {*<!-- Contents -->*}
 <table border=0 cellspacing=0 cellpadding=0 width=98% align=center>
-<tr>
-	<td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
+     <form name="massdelete" method="POST">
+     <input name="idlist" type="hidden">
+     <input name="change_owner" type="hidden">
+     <input name="change_status" type="hidden">
+     <tr>
+        <td valign=top><img src="{$IMAGE_PATH}showPanelTopLeft.gif"></td>
 
 	<td class="showPanelBg" valign=top width=100%>
-		<!-- PUBLIC CONTENTS STARTS-->
-		<div class="small" style="padding:20px">
+	   <!-- PUBLIC CONTENTS STARTS-->
+	   <div class="small" style="padding:20px">
+               <table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
+	            <tr style="background-color:#efefef">
+		      <td>
+		         <table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
+			      <tr>
+				 <td style="padding-right:20px" nowrap> {$BUTTONS}</td>
+				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
+		        	 <td nowrap >
+					<table border=0 cellspacing=0 cellpadding=0 class="small">
+					     <tr>{$NAVIGATION}</tr>
+					</table>
+                                 </td>
+				 <td width=100% align="right">
+				   <table border=0 cellspacing=0 cellpadding=0 class="small">
+					<tr>{$CUSTOMVIEW}</tr>
+				   </table>
+				 </td>	
+               		      </tr>
+			 </table>
+                         <div  style="overflow:auto;width:100%;height:300px; border-top:1px solid #999999;border-bottom:1px solid #999999">
+			 <table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#cccccc;" class="small">
+			      <tr>
+             			 <td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
+				 {foreach item=header from=$LISTHEADER}
+        			 <td class="lvtCol">{$header}</td>
+			         {/foreach}
+			      </tr>
+			      {foreach item=entity key=entity_id from=$LISTENTITY}
+			      <tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'"  >
+				 <td><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
+				 {foreach item=data from=$entity}	
+				 <td>{$data}</td>
+	                         {/foreach}
+			      </tr>
+			      {/foreach}
+			 </table>
+			 </div>
+			 <table border=0 cellspacing=0 cellpadding=2 width=100%>
+			      <tr>
+				 <td style="padding-right:20px" nowrap> {$BUTTONS}</td>
+				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
+				 <td nowrap >
+				    <table border=0 cellspacing=0 cellpadding=0 class="small">
+				         <tr>{$NAVIGATION}</tr>
+				     </table>
+				 </td>
+				 <td align="right" width=100%>
+				   <table border=0 cellspacing=0 cellpadding=0 class="small">
+					<tr>
+                                           {$WORDTEMPLATEOPTIONS}{$MERGEBUTTON}
+					</tr>
+				   </table>
+				 </td>
+			      </tr>
+              		 </table>
+		       </td>
+		   </tr>
+	    </table>
+	</div>
 
-		<table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
-		<tr style="background-color:#efefef">
-			<td >
-			  <table border=0 cellspacing=0 cellpadding=2 width=100%>
-			  <form name="massdelete" method="POST">
-			  <input name="idlist" type="hidden">
-				<input name="change_owner" type="hidden">
-				    <input name="change_status" type="hidden">
-				<tr>
-					<td style="padding-right:20px" nowrap> {$BUTTONS}</td>
-					<td style="padding-right:20px" nowrap>{$RECORD_COUNTS}</td>
-		        	        <td nowrap ><table border=0 cellspacing=0 cellpadding=0><tr>{$NAVIGATION}</tr></table></td>
-					<td align="right">{$CUSTOMVIEW}</td>	
-               	</tr>
-			</table>
-
-			<div  style="overflow:auto;width:100%;height:300px; border-top:1px solid #999999;border-bottom:1px solid #999999">
-			<table border=0 cellspacing=1 cellpadding=3 width=100% style="background-color:#cccccc;">
-			<tr>
-			<td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
-			{foreach item=header from=$LISTHEADER}
-        			<td class="lvtCol">{$header}</td>
-			{/foreach}
-			</tr>
-			{foreach item=entity key=entity_id from=$LISTENTITY}
-				<tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'"  >
-				<td><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
-				{foreach item=data from=$entity}	
-					<td>
-						{$data}
-					</td>
-				{/foreach}
-				</tr>
-			{/foreach}
-			</table>
-			</div>
-			<table border=0 cellspacing=0 cellpadding=2 width=100%>
-			<tr>
-			<td style="padding-right:20px" nowrap> {$BUTTONS}</td>
-			<td style="padding-right:20px" nowrap>{$RECORD_COUNTS}</td>
-			<td nowrap ><table border=0 cellspacing=0 cellpadding=0><tr>{$NAVIGATION}</tr></table></td>
-			<td align="right" nowrap>{$WORDTEMPLATEOPTIONS}{$MERGEBUTTON}</td>
-			</tr>
-			</table>
-</form>
-</td></tr></table></div>
-
-</td></tr></table>
+     </td>
+   </tr>
+   </form>	
+</table>
 {$SELECT_SCRIPT}
 
