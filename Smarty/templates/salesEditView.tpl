@@ -92,12 +92,21 @@
 
 		<tr>
 			<td>
-				<table border=0 cellspacing=0 cellpadding=3 width=100%>
+				<table border=0 cellspacing=0 cellpadding=3 width=100% class="small">
 				<tr>
 					<td class="dvtTabCache" style="width:10px" nowrap>&nbsp;</td>
-					<td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} Information</td>
-					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-		
+                                        {if $MODULE eq 'Notes' || $MODULE eq 'Faq'}
+                                        <td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} Information</td>
+                                        <td class="dvtTabCache" style="width:100%">&nbsp;</td>
+                                        {else}
+                                        <td class="dvtSelectedCell" align=center nowrap>{$SINGLE_MOD} Information</td>
+                                        <td class="dvtTabCache" style="width:10px">&nbsp;</td>
+                                        {if $OP_MODE neq 'create_view'}
+                                        <td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?action=CallRelatedList&module={$MODULE}&record={$ID}&parenttab={$CATEGORY}">More Information</a></td>
+                                        {/if}
+
+                                        <td class="dvtTabCache" style="width:100%">&nbsp;</td>
+                                        {/if}
 				</tr>
 				</table>
 			</td>
@@ -114,7 +123,7 @@
 					<tr>
 						<td style="padding:10px">
 							<!-- General details -->
-							<table border=0 cellspacing=0 cellpadding=0 width=100%>
+							<table border=0 cellspacing=0 cellpadding=0 width=100% class="small">
 							<tr>
 								<td  colspan=4 style="padding:5px">
 								<div align="center">
@@ -425,7 +434,7 @@
 							{/foreach}
 							</tr>
 							{/foreach}
-							 
+							 <tr style="height:25px"><td>&nbsp;</td></tr>
 							{/foreach}
 							<tr>
 								<td  colspan=4 style="padding:5px">
