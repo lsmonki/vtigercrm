@@ -172,7 +172,7 @@ $mod_strings = Array(
 'LBL_INVOICE_NAME'=>'Invoice Name:',
 'Purchase Order'=>'Purchase Order',
 'Status'=>'Status',
-
+'Id'=>'Invoice Id',
 );
 
 ?>
