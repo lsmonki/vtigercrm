@@ -540,6 +540,9 @@ for($i=0;$i<5;$i++)
 	//$rand_key = array_rand($s);
 	$helpdesk->column_fields["ticket_title"]	= $ticket_title_array[$i];
 	
+        $helpdesk->column_fields["assigned_user_id"] = $assigned_user_id;
+
+	
 	$helpdesk->save("HelpDesk");
 	$helpdesk_ids[] = $helpdesk->id;
 }
