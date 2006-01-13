@@ -12,7 +12,7 @@
 require_once('include/database/PearDatabase.php');
 global $adb;
 
-$groupName = $_REQUEST['groupName'];
+$groupName = trim($_REQUEST['groupName']);
 $description = $_REQUEST['description'];
 function groupexists($groupName)
 {	
