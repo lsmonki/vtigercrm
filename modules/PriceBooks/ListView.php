@@ -59,60 +59,13 @@ $_SESSION['PRICEBOOK_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
+	$where=Search($currentModule);
+	
 	$url_string .="&query=true";
 	if (isset($_REQUEST['bookname'])) $bookname = $_REQUEST['bookname'];
         if (isset($_REQUEST['active'])) $active = $_REQUEST['active'];
 
-	$where_clauses = Array();
-	//$search_query='';
-
-	//Added for Custom Field Search
-	$sql="select * from field where tablename='pricebookcf' order by fieldlabel";
-	$result=$adb->query($sql);
-	for($i=0;$i<$adb->num_rows($result);$i++)
-	{
-	        $column[$i]=$adb->query_result($result,$i,'columnname');
-	        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
-		$uitype[$i]=$adb->query_result($result,$i,'uitype');
-
-	        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
-
-	        if(isset($customfield[$i]) && $customfield[$i] != '')
-	        {
-			if($uitype[$i] == 56)
-                                $str=" pricebookcf.".$column[$i]." = 1";
-                        else
-			        $str=" pricebookcf.".$column[$i]." like '$customfield[$i]%'";
-		        array_push($where_clauses, $str);
-	       	//	  $search_query .= ' and '.$str;
-			$url_string .="&".$column[$i]."=".$customfield[$i];
-	        }
-	}
-	//upto this added for Custom Field
-
-	if (isset($bookname) && $bookname !='')
-	{
-		array_push($where_clauses, "bookname like ".PearDatabase::quote($bookname.'%'));
-		//$search_query .= " and productname like '".$productname."%'";
-		$url_string .= "&bookname=".$bookname;
-	}
-	
-	if (isset($active) && $active !='')
-	{
-		array_push($where_clauses, "active = 1");
-		//$search_query .= " and productcode like '".$productcode."%'";
-		$url_string .= "&active=".$active;
-	}
-	$where = "";
-	foreach($where_clauses as $clause)
-	{
-		if($where != "")
-		$where .= " and ";
-		$where .= $clause;
-	}
-
 	$log->info("Here is the where clause for the list view: $where");
- 
 
 }
 
@@ -218,6 +171,9 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 $listview_header = getListViewHeader($focus,"PriceBooks",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
 
+$listview_header_search = getSearchListHeaderValues($focus,"PriceBooks",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER",$listview_header_search);
+
 $listview_entries = getListViewEntries($focus,"PriceBooks",$list_result,$navigation_array,'','&return_module=PriceBooks&return_action=index','EditView','Delete',$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"PriceBooks","index",$viewid);
@@ -227,7 +183,5 @@ $smarty->assign("RECORD_COUNTS", $record_string);
 $smarty->assign("SELECT_SCRIPT", $view_script);
 $smarty->assign("BUTTONS", $other_text);
 $smarty->display("ListView.tpl");
-
-
 
 ?>

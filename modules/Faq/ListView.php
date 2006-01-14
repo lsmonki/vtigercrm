@@ -73,9 +73,13 @@ $other_text ='   <td><input class="button" type="submit" value="'.$app_strings[L
 
 //Retreive the list from Database
 $list_query = getListQuery("Faq");
+if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
+{
+	$where=Search($currentModule);
+}
 if(isset($where) && $where != '')
 {
-	$list_query .= $where;
+	$list_query .= ' and '.$where;
 }
 
 if(isset($order_by) && $order_by != '')
@@ -133,6 +137,10 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 //Retreive the List View Table Header
 $listview_header = getListViewHeader($focus,"Faq",$url_string,$sorder,$order_by);
 $smarty->assign("LISTHEADER", $listview_header);
+
+$listview_header_search = getSearchListHeaderValues($focus,"Faq",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER",$listview_header_search);
+
 $listview_entries = getListViewEntries($focus,"Faq",$list_result,$navigation_array);
 $smarty->assign("LISTHEADER", $listview_header);
 $smarty->assign("LISTENTITY", $listview_entries);
