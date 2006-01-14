@@ -188,6 +188,11 @@ function parse_calendardate($local_format) {
 	//return "%Y-%m-%d";
 }
 
+/**
+ * Decodes the given set of special character 
+ * input values $string - string to be converted, $encode - flag to decode
+ * returns the decoded value in string fromat
+ */
 
 function from_html($string, $encode=true){
         global $toHtml;
@@ -198,6 +203,11 @@ function from_html($string, $encode=true){
         return $string;
 }
 
+/**
+ * Function to fetch the list of groups from group table 
+ * Takes no value as input 
+ * returns the query result set object
+ */
 
 function get_group_options()
 {
@@ -208,6 +218,11 @@ function get_group_options()
 	return $result;
 }
 
+/**
+ * Function to get the tabid 
+ * Takes the input as $module - module name
+ * returns the tabid, integer type
+ */
 
 function getTabid($module)
 {
@@ -221,6 +236,12 @@ function getTabid($module)
 
 }
 
+/**
+ * Function to get the tabid 
+ * Takes the input as $module - module name
+ * returns the tabid, integer type
+ */
+
 function getSalesEntityType($crmid)
 {
 	global $log;
@@ -231,6 +252,12 @@ function getSalesEntityType($crmid)
 	$parent_module = $adb->query_result($result,0,"setype");
 	return $parent_module;
 }
+
+/**
+ * Function to get the AccountName when a account id is given 
+ * Takes the input as $acount_id - account id
+ * returns the account name in string format.
+ */
 
 function getAccountName($account_id)
 {
@@ -247,6 +274,12 @@ $log->info("in getAccountName ".$account_id);
 	return $accountname;
 }
 
+/**
+ * Function to get the ProductName when a product id is given 
+ * Takes the input as $product_id - product id
+ * returns the product name in string format.
+ */
+
 function getProductName($product_id)
 {
 
@@ -260,6 +293,11 @@ $log->info("in getproductname ".$product_id);
 	return $productname;
 }
 
+/**
+ * Function to get the Potentail Name when a potential id is given 
+ * Takes the input as $potential_id - potential id
+ * returns the potential name in string format.
+ */
 
 function getPotentialName($potential_id)
 {
@@ -273,6 +311,11 @@ $log->info("in getPotentialName ".$potential_id);
 	return $potentialname;
 }
 
+/**
+ * Function to get the Contact Name when a contact id is given 
+ * Takes the input as $contact_id - contact id
+ * returns the Contact Name in string format.
+ */
 
 function getContactName($contact_id)
 {
@@ -288,6 +331,12 @@ $log->info("in getContactName ".$contact_id);
         return $contact_name;
 }
 
+/**
+ * Function to get the Vendor Name when a vendor id is given 
+ * Takes the input as $vendor_id - vendor id
+ * returns the Vendor Name in string format.
+ */
+
 function getVendorName($vendor_id)
 {
 global $log;
@@ -299,6 +348,12 @@ $log->info("in getVendorName ".$vendor_id);
         return $vendor_name;
 }
 
+/**
+ * Function to get the Quote Name when a vendor id is given 
+ * Takes the input as $quote_id - quote id
+ * returns the Quote Name in string format.
+ */
+
 function getQuoteName($quote_id)
 {
 global $log;
@@ -309,6 +364,13 @@ $log->info("in getQuoteName ".$quote_id);
         $quote_name = $adb->query_result($result,0,"subject");
         return $quote_name;
 }
+
+/**
+ * Function to get the PriceBook Name when a pricebook id is given 
+ * Takes the input as $pricebook_id - pricebook id
+ * returns the PriceBook Name in string format.
+ */
+
 function getPriceBookName($pricebookid)
 {
 global $log;
@@ -336,6 +398,11 @@ global $log;
         $po_name = $adb->query_result($result,0,"subject");
         return $po_name;
 }
+/**
+ * Function to get the Sales Order Name when a salesorder id is given 
+ * Takes the input as $salesorder_id - salesorder id
+ * returns the Salesorder Name in string format.
+ */
 
 function getSoName($so_id)
 {
@@ -348,6 +415,11 @@ $log->info("in getSoName ".$so_id);
         return $so_name;
 }
 
+/**
+ * Function to get the Group Information for a given groupid  
+ * Takes the input $id - group id and $module - module name
+ * returns the group information in an array format.
+ */
 
 function getGroupName($id, $module)
 {
