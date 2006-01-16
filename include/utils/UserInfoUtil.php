@@ -526,7 +526,7 @@ function updateRole($roleId,$roleName,$roleProfileArray)
         $adb->query($sql1);
 	//Updating the Role2Profile relation
 	$sql2 = "delete from role2profile where roleId='".$roleId."'";
-	$adb->query($sql1);
+	$adb->query($sql2);
 
 	foreach($roleProfileArray as $profileId)
         {
@@ -2295,7 +2295,8 @@ function deleteRole($roleId,$transferRoleId)
 
 		//delete from role table;
 		$sql9 = "delete from role where roleid='".$roleid."'";
-		$adb->query($sql9);		
+		$adb->query($sql9);
+		//echo $sql1.'            '.$sql2.'           '.$sql9;		
 	}
 
 }
@@ -3577,6 +3578,24 @@ function getReadSharingGroupsList($module)
 	return $shareGrpList;
 }
 
+function getWriteSharingGroupsList($module)
+{
+	global $adb;
+	global $current_user;
+	$grp_array=Array();
+	$tabid=getTabid($module);
+	$query = "select sharedgroupid from tmp_write_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid;
+	$result=$adb->query($query);
+	$num_rows=$adb->num_rows($result);
+	for($i=0;$i<$num_rows;$i++)
+	{
+		$grp_id=$adb->query_result($result,$i,'sharedgroupid');
+		$grp_array[]=$grp_id;
+	}
+	$shareGrpList=constructList($grp_array,'INTEGER');
+	return $shareGrpList;
+}
+
 function constructList($array,$data_type)
 {
 	$list="";
@@ -3653,6 +3672,28 @@ function getListViewSecurityParameter($module)
 	return $sec_query;	
 }
 
+function get_current_user_access_groups($module)
+{
+	global $adb,$noof_group_rows;
+	$current_user_group_list=getCurrentUserGroupList();
+	$sharing_write_group_list=getWriteSharingGroupsList($module);
+	$query ="select groupname from groups";
+	if($current_user_group_list != '' && $sharing_write_group_list != '')
+	{
+		$query .= " where (groupid in".$current_user_group_list." or groupid in".$sharing_write_group_list.")";
+	}
+	elseif($current_user_group_list != '')
+	{
+		$query .= " where groupid in".$current_user_group_list;	
+	}
+	elseif($sharing_write_group_list != '')
+	{
+		$query .= " where groupid in".$sharing_write_group_list;
+	}
+	$result = $adb->query($query);
+	$noof_group_rows=$adb->num_rows($result);
+	return $result;	
+}
 /** Function to get the Group Id for a given group groupname
  *  @param $groupname -- Groupname
  *  @returns Group Id -- Type Integer
