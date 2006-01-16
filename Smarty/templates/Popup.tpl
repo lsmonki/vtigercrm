@@ -17,8 +17,7 @@
 <script type="text/javascript">
 function add_data_to_relatedlist(entity_id,recordid) {ldelim}
 
-        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_mo
-dule=Contacts&entityid="+entity_id+"&parid="+recordid;
+        opener.document.location.href="index.php?module={$RETURN_MODULE}&action=updateRelations&destination_module=Contacts&entityid="+entity_id+"&parid="+recordid;
 {rdelim}
 </script>
 
