@@ -10,7 +10,6 @@ function callSearch(searchtype)
         search_fld_val= document.basicSearch.search_field[document.basicSearch.search_field.selectedIndex].value;
         search_type_val=document.basicSearch.searchtype.value;
         search_txt_val=document.basicSearch.search_text.value;
-        document.basicSearch.action="index.php";
 
 {rdelim}
 
