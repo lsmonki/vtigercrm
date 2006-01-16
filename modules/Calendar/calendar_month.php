@@ -402,6 +402,6 @@ echo "<br>\n";
 
 ?>
 <!--
-    CVS Info:  $Id: calendar_month.php,v 1.4 2005/02/28 13:27:41 sarajkumar Exp $
-    $Author: sarajkumar $
+    CVS Info:  $Id: calendar_month.php,v 1.4 2005/02/28 13:27:41 saraj Exp $
+    $Author: saraj $
 -->
