@@ -259,8 +259,10 @@ $array = Array(
 		    <td valign=top ><strong>Email Templates Directory</strong><br> (modules/Emails/templates/)</td>
 			<td valign=top bgcolor="white"><?php echo (is_writable('./modules/Emails/templates/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You might experience problems with the email templates feature. Refer <a href= http://www.vtiger.com/forums/viewtopic.php?t=388&highlight=permission>Email templates issue </a> for more details  </font>"; ?></td>
 		</tr>
-
-
+		<tr bgcolor="#fafafa">
+           <td valign=top ><strong>User Privileges</strong><br> (user_privileges/)</td>
+           <td valign=top bgcolor="white"><?php echo (is_writable('./user_privileges/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong><br> You will not be able to login </font>"; ?></td>
+        </tr>
 		<tr bgcolor="#fafafa">
 		    <td valign=top ><strong>Squirrelmail Permissions</strong><br> (modules/squirrelmail-1.4.4/data/)</td>
             <td valign=top bgcolor="white"><?php echo (is_writable('./modules/squirrelmail-1.4.4/data/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with email client features>";?></td>
