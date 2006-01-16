@@ -242,9 +242,6 @@ else {
 <table border=0 cellspacing=0 cellpadding=0 width=720 >
 		<tr>
 			<td align=left><img src="include/images/loginBottomURL.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-			<td align=right>
-			<a href="#">License</a>
-			</td>
 		</tr>
 		</table>
 
