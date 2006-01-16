@@ -180,7 +180,7 @@ else {
 	</tr>
 	<tr>
 	<td class=small align=right>
-	<?php echo $current_module_strings['LBL_CRM_ID'] ?>
+	<?php echo $current_module_strings['LBL_USER_NAME'] ?>
 		</td>
 		<td class=small>
 		<input class=textbox type="text"  name="user_name"  class=textbox value="<?php echo $login_user_name ?>">
