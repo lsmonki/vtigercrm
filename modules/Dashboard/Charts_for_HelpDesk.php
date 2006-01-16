@@ -1,5 +1,15 @@
 <?php
 
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
 require_once('include/utils/utils.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/CommonUtils.php');
@@ -30,9 +40,10 @@ function helpDeskStatus_chart($user_id,$date_start,$end_date)
 {
 	global $adb;
 
-	$x=get_days_n_dates($st,$en);
+/*	$x=get_days_n_dates($st,$en);
 	$days=$x[0];
 	echo "<h2> No of Days$days </h2>";
+*/
 
 	$ticket_stat_qry="select ticketstatus from ticketstatus";
         $status_result=$adb->query($ticket_stat_qry);
