@@ -156,16 +156,19 @@ if (is_admin($current_user)) {
 		$allRoleDetails=getAllRoleDetails();
 		foreach($allRoleDetails as $roleid=>$roleInfoArr)
 		{
-			$rolename=$roleInfoArr[0];
-			$selected = '';
-		        if($roleselected != '' && $rolename == $roleselected)
-	        	{
-		                $selected = 'selected';
-        		}
+			if($roleid != 'H1')
+			{
+				$rolename=$roleInfoArr[0];
+				$selected = '';
+		        	if($roleselected != '' && $rolename == $roleselected)
+	        		{
+		                	$selected = 'selected';
+        			}
         
-                    $ROLE_SELECT_OPTION .= '<option value="'.$roleid .'" '.$selected .'>';
-                    $ROLE_SELECT_OPTION .= $rolename;
-                    $ROLE_SELECT_OPTION .= '</option>';
+                    		$ROLE_SELECT_OPTION .= '<option value="'.$roleid .'" '.$selected .'>';
+                    		$ROLE_SELECT_OPTION .= $rolename;
+                    		$ROLE_SELECT_OPTION .= '</option>';
+			}
 						
 	
 		}
