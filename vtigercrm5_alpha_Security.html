@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>vtiger CRM 5 Alpha - Security Management Implementation</title>
+  <style>
+p {  font-family: Arial, Helvetica, sans-serif; font-size: 10pt}
+td{  font-family: Arial, Helvetica, sans-serif; font-size: 10pt}
+li{  font-family: Arial, Helvetica, sans-serif; font-size: 10pt; margin-top: 12pt}
+h1{  font-family: Arial, Helvetica, sans-serif; font-size: 16pt}
+h2{  font-family: Arial, Helvetica, sans-serif; font-size: 14pt}
+h3{  font-family: Arial, Helvetica, sans-serif; font-size: 12pt}
+.background{
+background-image: url(themes/images/vtiger-paw.jpg);
+background-repeat: no-repeat;
+background-position: bottom center;
+background-attachment: fixed;
+} 
+</style>
+</head>
+<body bgcolor="#FFFFFF">
+<h1>vtiger CRM 5 Alpha - Security Management Implementation</h1>
+<P>Date: January 16, 2006
+<P>The following functions are incorporated in the vtiger CRM 5 Alpha Security 
+  Management implementation:
+<P>1. The Role is based on Organization Hierarchy.
+<P>2. The Roles can have one-to-multiple profiles.
+<P>3. Each User is associated with a role, which in turn associated with the profiles.
+<P>4. Profiles specify the access for various actions in each of the modules.
+<P>5. Group Support- Group can consists of:<br>
+<ul>
+  <li>Groups</li>
+  <li>Roles</li>
+  <li>Roles &amp; Subordinates</li>
+  <li> Users</li>
+</ul>
+<p><b>Note:</b> In vtiger CRM 5.0 Alpha group level security has been implemented 
+  only for the Leads, Tickets, FAQ, and Activities modules.</p>
+<p><b>6.&nbsp; Profiles override the Sharing Rules i.e. the Profile is the master:</b></p>
+<p>For example, one of the users has sharing privilege to view others accounts. 
+  But his profile does not allow him to view accounts. In this case,&nbsp; the 
+  user cannot view the accounts.<br>
+  <br>
+  <b>7. Default Organization Sharing Access:</b></p>
+<p>Your organization's 
+  sharing model sets the default access that users have to each other's data. 
+  The default sharing access levels are listed below.&nbsp; </p>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+  <tbody> 
+  <tr align="center" valign="middle"> 
+    <td class="columnHeadInactiveWhite" bgcolor="#999999"> <b>Type</b></td>
+    <td class="columnHeadInactiveWhite" bgcolor="#999999"> <b>Default Access Level</b></td>
+    <td class="columnHeadInactiveWhite" bgcolor="#999999"> <b>Controlled By</b></td>
+  </tr>
+  <tr bgcolor="#f9f9f9" > 
+    <td>Accounts</td>
+    <td>Public Read/Write </td>
+    <td>Organization-wide defaults</td>
+  </tr>
+  <tr bgcolor="#f9f9f9" > 
+    <td>Activities</td>
+    <td>Private</td>
+    <td>
+      <p>Access to other users' activities is based on your&nbsp; position in 
+        the hierarchy.</p>
+      <p>Note that access to events in a calendar view is controlled by the organization-wide 
+        calendar sharing.</p>
+    </td>
+  </tr>
+  <tr bgcolor="#f9f9f9" > 
+    <td>Calendar Access</td>
+    <td>Hide Details and Add Events</td>
+    <td>Organization-wide defaults</td>
+  </tr>
+  <tr bgcolor="#f9f9f9" > 
+    <td>Tickets</td>
+    <td>Public Read/Write</td>
+    <td>Organization-wide defaults</td>
+  </tr>
+  <tr bgcolor="#f9f9f9" > 
+    <td>Contacts</td>
+    <td>Public Read/Write </td>
+    <td>Organization-wide defaults</td>
+  </tr>
+  <tr bgcolor="#f9f9f9" > 
+    <td>Emails</td>
+    <td>Public Read/Write</td>
+    <td>Organization-wide defaults</td>
+  </tr>
+  <tr bgcolor="#f9f9f9" > 
+    <td>Leads</td>
+    <td>Public Read/Write</td>
+    <td>Organization-wide defaults</td>
+  </tr>
+  <tr bgcolor="#f9f9f9" > 
+    <td>Opportunities</td>
+    <td>Public Read Only</td>
+    <td>Organization-wide defaults</td>
+  </tr>
+  <tr><td >Quotes</td>
+    <td >Public Read/Write</td>
+    <td >Organization-wide defaults&nbsp; </td>
+  </tr>
+  <tr> 
+    <td >Sales Order</td>
+    <td >Public Read/Write</td>
+    <td >Organization-wide defaults </td>
+  </tr>
+  <tr> 
+    <td >Purchase Order</td>
+    <td >Public Read/Write</td>
+    <td >Organization-wide defaults</td>
+  </tr>
+  <tr> 
+    <td >Invoice</td>
+    <td >Public Read/Write</td>
+    <td >Organization-wide defaults&nbsp; </td>
+  </tr>
+  </tbody> 
+</table>
+<p>The following Sharing Permissions can be set :<span style="font-weight: bold;"></span><br>
+<br>
+<table border="1" cellpadding="3" cellspacing="0">
+  <tbody> 
+  <tr align="center" valign="middle"> 
+    <td class="columnHeadInactiveWhite" bgcolor="#999999"> <b>Field</b></td>
+    <td class="columnHeadInactiveWhite" bgcolor="#999999"> <b>Description</b></td>
+  </tr>
+  <tr bgcolor="#f9f9f9" > 
+    <td> Private</td>
+    <td>Only the record owner, and users above that role in the hierarchy, 
+        can view, edit, and report on those records. </td>
+  </tr>
+  <tr bgcolor="#f9f9f9" > 
+    <td> Public Read Only</td>
+    <td>All users can view and report on records but not edit them. Only the 
+        owner, and users above that role in the hierarchy, can edit those records.</td>
+  </tr>
+  <tr bgcolor="#f9f9f9" > 
+    <td> Public Read/Write</td>
+    <td>All users can view, edit all records.</td>
+  </tr>
+  <tr> 
+    <td >Public Read/Write/Delete</td>
+    <td >All users can view, edit and delete all records</td>
+  </tr>
+  </tbody> 
+</table>
+<p><b>Note:</b> When Account is Private, the Related Potential, Ticket, Quote, 
+  Sales Order, Purchase Order, and Invoice access is also set to private in Default 
+  Organization Sharing model. </p>
+<p><b>8.&nbsp; Sharing Rules Specification by Administrator:</b></p>
+<ul>
+  <li>Apart from the Default Organization Sharing Access, the administrator&nbsp; 
+    can also create Organization Level Sharing Rules for the following modules 
+    to share the data between Roles, Roles&amp;Subordinates and Groups : 
+    <ul>
+      <li>Leads</li>
+      <li> Accounts/Contacts</li>
+      <li> Potentials</li>
+      <li>Emails</li>
+      <li>HelpDesk</li>
+      <li>Quotes</li>
+      <li>SalesOrder</li>
+      <li>Purchase Order</li>
+      <li>Invoices</li>
+    </ul>
+  </li>
+  <li>Sharing Rules can only extend the visibility and cannot hide the visibility&nbsp; 
+    &nbsp;&nbsp;&nbsp; <br>
+  </li>
+  <li>On creating the Sharing Rules, Access for the Related modules can also be 
+    specified.<br>
+  </li>
+  <li>Sharing Rules are created to share data between Roles, Roles&amp;Subordinates 
+    and Groups</li>
+</ul>
+<p><b> Notes on Data Sharing:</b><br>
+</p>
+<ul>
+  <li>Regardless of the organization-wide defaults, users can always view and 
+    edit all data owned by or shared with users below them in the role hierarchy.</li>
+  <li>While your sharing model controls visibility to records, user permissions 
+    control what users can do to the records that are visible to them. For example, 
+    if you share an account with other users, those users can only see the account 
+    if they have the "Read" permission on accounts. Likewise, users who have the 
+    "Edit" permission on contacts may still not be able to edit contacts they 
+    do not own if they are working in a Private sharing model.</li>
+  <li>Administrators, and users with the "View All Data" or "Edit All Data" permissions, 
+    have access to view or edit all data.</li>
+  <li>Only Administrators have access to configure the Access Privileges &nbsp;&nbsp; 
+  </li>
+  <li>You must have at least read access to a record to be able to add activities 
+    or other associated records to it (for example associated products)</li>
+</ul>
+<p><b>IMPORTANT:</b></p>
+<p><b>The new security management support is provided for the following:</b></p>
+<ul>
+  <li>Home Page, Custom View, Reports, Dashboard, Activity History, and Calendar.<br>
+  </li>
+  <li> Delete Handling of Roles, Groups is not fully functional.<br>
+  </li>
+  <li> Editing of Groups will not function properly.<br>
+  </li>
+  <li> In ListView, Related List View, Popup List View &amp; Search List View 
+    Sharing Rules for Related Modules are not implemented.<br>
+  </li>
+  <li> Tab hiding in header is not implemented.<br>
+  </li>
+  <li> Group Level Security support is implemented only for the Leads, Activities 
+    and Tickets modules.<br>
+  </li>
+  <li> Parent Type Security Handling is not implemented for the Products and Notes 
+    modules. <br>
+  </li>
+  <li>Read Only Support in field level security is not implemented.</li>
+</ul>
+</body>
+</html>
