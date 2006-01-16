@@ -105,9 +105,14 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 {
 	global $log;
 	global $current_user;
+	if(isset($current_user) && $current_user->id != '')
+	{
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	}
 	static $user_array = null;
 	global $log;
-
+	$module=$_REQUEST['module'];
 
 	if($user_array == null)
 	{
@@ -122,7 +127,9 @@ function get_user_array($add_blank=true, $status="Active", $assigned_user="",$pr
 				if($private == 'private')
 				{
 					$log->debug("Sharing is Private. Only the current user should be listed");
-					$query = "SELECT id, user_name from users WHERE id='$current_user->id' and status='$status'";
+					//$query = "SELECT id, user_name from users WHERE id='$current_user->id' and status='$status'";
+					$query = "select id as id,user_name as user_name from users where id=".$current_user->id." and status='Active' union select user2role.userid as id,users.user_name as user_name from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%' and status='Active' union select shareduserid as id,users.user_name as user_name from tmp_read_user_sharing_per inner join users on users.id=tmp_read_user_sharing_per.shareduserid where status='Active' and tmp_read_user_sharing_per.userid=".$current_user->id." and tmp_read_user_sharing_per.tabid=".getTabid($module);	
+						
 				}
 				else
 				{
