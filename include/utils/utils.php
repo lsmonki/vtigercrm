@@ -541,7 +541,7 @@ function get_theme_display($theme) {
 function get_themes() {
    if ($dir = @opendir("./themes")) {
 		while (($file = readdir($dir)) !== false) {
-           if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic" && $file != "akodarkgem" && $file != "bushtree" && $file != "coolblue" && $file != "Amazon" && $file != "busthree") {
+           if ($file != ".." && $file != "." && $file != "CVS" && $file != "Attic" && $file != "akodarkgem" && $file != "bushtree" && $file != "coolblue" && $file != "Amazon" && $file != "busthree" && $file != "Aqua" && $file != "nature" && $file != "orange") {
 			   if(is_dir("./themes/".$file)) {
 				   if(!($file[0] == '.')) {
 				   	// set the initial theme name to the filename
