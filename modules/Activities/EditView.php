@@ -61,7 +61,8 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 
 $disp_view = getView($focus->mode);
 $smarty->assign("BLOCKS",getBlocks($tab_type,$disp_view,$mode,$focus->column_fields));
-$smarty->assign("OP_MODE",$activity_mode);
+$smarty->assign("OP_MODE",$disp_view);
+$smarty->assign("ACTIVITY_MODE",$activity_mode);
 
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",$tab_type);
