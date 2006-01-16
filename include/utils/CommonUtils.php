@@ -823,6 +823,8 @@ function getBlockId($tabid,$label)
 function getHeaderArray()
 {
 	global $adb;
+	global $current_user;
+        require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	$query='select parenttabid from parenttab order by sequence';
 	$result = $adb->query($query);
     $noofrows = $adb->num_rows($result);
@@ -841,12 +843,15 @@ function getHeaderArray()
 			$subtabs[] = $module;
 		}
 		$parenttab = getParentTabName($parenttabid);
-		if($parenttab == 'Settings')
+		if($parenttab == 'Settings' && $is_admin==true)
 		{
 			$subtabs =array();
 			$subtabs[] = 'Settings';
 		}
-		$relatedtabs[$parenttab] = $subtabs;
+		if($parenttab != 'Settings' ||($parenttab == 'Settings' && $is_admin==true))
+		{
+			$relatedtabs[$parenttab] = $subtabs;
+		}
 	}
 	return $relatedtabs;
 }
