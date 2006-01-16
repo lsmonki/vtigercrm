@@ -48,7 +48,7 @@ foreach($pieces as $val)
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 4.2 Configuration Wizard</title>
+<title>vtiger CRM 5 Alpha Configuration Wizard</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0">
@@ -63,7 +63,7 @@ foreach($pieces as $val)
 	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="install/images/cwTopRight.gif" alt="v4.2" title="v4.2"></td>
+		<td align=right><img src="install/images/cwTopRight.gif" alt="v5alpha" title="v5alpha"></td>
 	</tr>
 	</table>
 	
@@ -119,9 +119,9 @@ Again, thanks for taking out the time to try vtiger! <br><br>
 
 
 
-This Configuration Wizard will create vtiger CRM 4.2 databases and tables and configuration files you need to start. The entire process should
+This Configuration Wizard will create vtiger CRM 5 Aplha databases and tables and configuration files you need to start. The entire process should
 				take about four minutes. Click the Start button when you are ready.</span> <br><br>
-				<span style="color:#555555">- vtiger CRM 4.2 is tested on mySQL 4.0.X, PHP 4.3.8 and Apache 2.0.40<br>
+				<span style="color:#555555">- vtiger CRM 5 Alpha is tested on mySQL 4.0.X, PHP 4.3.8 and Apache 2.0.40<br>
 				- Support for PHP5 will be added in future<br></span>
 <br>
 		</td>
@@ -2667,12 +2667,12 @@ This Configuration Wizard will create vtiger CRM 4.2 databases and tables and co
 	  </td>
     </tr>
 	<tr><td><h4>Welcome to the vtiger CRM installation</h4><P>
-  			This installer creates the vtiger CRM 4.2 database tables and sets the configuration variables that you need to start.
+  			This installer creates the vtiger CRM 5 Alpha database tables and sets the configuration variables that you need to start.
 			The entire process should take about four minutes.
 
 			<p>
 
- <font color=red> <b>Kindly note vtiger CRM 4.2 is tested on mysql 4.0.x and PHP 4.3.8 and Apache 2.0.40 . Support for PHP 5 will be provided in future releases </b> </font>
+ <font color=red> <b>Kindly note vtiger CRM 5 Alpha is tested on mysql 4.0.x and PHP 4.3.8 and Apache 2.0.40 . Support for PHP 5 will be provided in future releases </b> </font>
 
 			
 			<P>For installation help, please visit the vtiger CRM <A href="http://www.vtiger.com/forums/index.php?c=3" target="_blank">support forums</A>.</td>
