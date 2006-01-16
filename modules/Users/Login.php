@@ -111,15 +111,13 @@ function set_focus() {
 				<div align=left style="padding:20px">
 				<span style="font-size:20px;color:white">Welcome to vtiger CRM 5 - Alpha</span><br><br>
 				
-				vtiger CRM 5, is now updated with business looks and is more user-friendly and sets the standard for all open-source commercial grade business applications now. <br><br>
+				vtiger CRM 5, is now updated with business looks and is more user-friendly and sets the standard for all open-source commercial grade business applications. <br><br>
 				
 				<b>New in version 5</b> <br>
-				- User friendly<br>
-				- Business looks <br>
-				- Commercial grade <br>
-				- Improved back-end <br>
-				- Kickstart deployment
-				
+				<li>New UI with improved usability</li>
+		                <li>Smarty integration</li>
+                		<li>Security feature</li>
+		                <li>Bug fixes</li>	 		
 				
 				</div>
 			
