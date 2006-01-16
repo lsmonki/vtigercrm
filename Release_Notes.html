@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en">
 <head>
-  <title>vtiger CRM 4.5 Milestone 3: Release Notes</title>
+  <title>vtiger CRM 5 Alpha: Release Notes</title>
   <style>
 p {  font-family: Arial, Helvetica, sans-serif; font-size: 10pt}
 td{  font-family: Arial, Helvetica, sans-serif; font-size: 10pt}
@@ -14,29 +14,139 @@ background-image: url(themes/images/vtiger-paw.jpg);
 background-repeat: no-repeat;
 background-position: bottom center;
 background-attachment: fixed;
-} 
+}
   </style>
 </head>
 <body class="background">
 <p><img src="themes/images/vtiger.jpg" height="48" width="112"></p>
+<h1>vtiger CRM 5.0 Alpha: Release Notes</h1>
+<p><b>Date: January 16, 2006</b></p>
+<p>vtiger CRM 5.0 Alpha release is only for the testing purpose. The complete 
+  front-end architecture has been redesigned using the Smarty Template Engine 
+  ( ) and some of the features and bugs fixed in earlier versions may not work. 
+  Please feel free to report bugs at:</p>
+<p><a href="http://bugs.vtiger.com"><b>http://bugs.vtiger.com</b></a></p>
+<p><b><a name="TOC3"></a>Table of Contents</b></p>
+<ol>
+  <li><a href="#Summary5_Alpha">Summary</a></li>
+  <li><a href="#Features5_Alpha">Features</a></li>
+  <li><a href="#BugFixes5_Alpha">Bug Fixes</a></li>
+  <li><a href="#KI5_Alpha">Known Issues</a></li>
+</ol>
+<h3><a name="Summary5_Alpha"></a>1. Summary</h3>
+<table border="1" cellpadding="5" cellspacing="0" width="65%">
+  <tbody> 
+  <tr bgcolor="#ccccff"> 
+    <td width="5%"><b><font color="#990000">S. No</font></b></td>
+    <td width="31%"><b><font color="#990000">Item</font></b></td>
+    <td width="64%"><b><font color="#990000">Status</font></b></td>
+  </tr>
+  <tr> 
+    <td width="5%">1<br>
+    </td>
+    <td width="31%">Features</td>
+    <td width="64%"> 
+      <p>3<br>
+      </p>
+      </td>
+  </tr>
+  <tr> 
+    <td width="5%">2<br>
+    </td>
+    <td width="31%">Product Size</td>
+    <td width="64%">Windows - <b>27.5 MB</b><br>
+      Linux - <b>39 MB</b><br>
+      Source - <b>9.8 MB</b></td>
+  </tr>
+  <tr> 
+    <td width="5%">3<br>
+    </td>
+    <td width="31%">Bug Fixes</td>
+    <td width="64%">103</td>
+  </tr>
+  <tr> 
+    <td width="5%">4<br>
+    </td>
+    <td width="31%">Code Contributions</td>
+    <td width="64%"><a
+ href="http://www.vtiger.com/wiki/index.php/Vtiger_CRM_Code_Contributions">http://www.vtiger.com/wiki/index.php/Vtiger_CRM_Code_Contributions</a> 
+    </td>
+  </tr>
+  <tr> 
+    <td width="5%">5<br>
+    </td>
+    <td width="31%">Database Migration<br>
+    </td>
+    <td width="64%"><b>Not Available</b></td>
+  </tr>
+  <tr> 
+    <td width="5%">6<br>
+    </td>
+    <td width="31%">vtiger CRM - PHP Documentation</td>
+    <td width="64%">Download from vtigercrm project in SF.net. <br>
+      URL: <a href="http://prdownloads.sourceforge.net/vtigercrmvtiger_CRM_5_Alpha_PhpDocs.zip?download">http://prdownloads.sourceforge.net/vtigercrmvtiger_CRM_5_Alpha_PhpDocs.zip?download</a></td>
+  </tr>
+  <tr> 
+    <td width="5%">7</td>
+    <td width="31%">Product Documentation</td>
+    <td width="64%">Available at the <a
+ href="http://www.vtiger.com/wiki/index.php/Main_Page">Wiki</a></td>
+  </tr>
+  <tr> 
+    <td width="5%">8</td>
+    <td width="31%">Source Code Label</td>
+    <td width="64%">VTIGERCRM_5_ALPHA</td>
+  </tr>
+  <tr> 
+    <td width="5%">9<br>
+    </td>
+    <td width="31%">Known Issues</td>
+    <td width="64%">10</td>
+  </tr>
+  </tbody> 
+</table>
+<p>&nbsp;</p>
+<h3><a name="Features5_Alpha"></a>2. Features</h3>
+<ul>
+  <li>UI interface has been redesigned based on Smarty template engine.</li>
+  <li>Bug fixes based on the Operation Consolidation list.</li>
+  <li>Security Management enhancements.</li>
+</ul>
+<h3><a name="Bugs5_Alpha"></a>3. Bug Fixes</h3>
+<p>Refer to the following links:</p>
+<ul>
+  <li><a href="#Bugs3">v.4.5 Dev 3 Bug Fixes</a></li>
+  <li><a href="#Bugs2">v4.5 Dev 2 Bug FIxes</a></li>
+  <li><a href="#Bugs1">v4.5 Dev 1Bug Fixes</a></li>
+</ul>
+<h3><a name="KI5_Alpha"></a>4. Known Issues</h3>
+<ul>
+  <li>Some of the features in the Inventory management related modules will not 
+    function properly. The Smarty templates are not applied fully.</li>
+  <li>In this release only one theme (blue) is supported. You cannot use the other 
+    bundled themes.</li>
+  <li>Some of the Related List View functions may not work properly.</li>
+  <li>In the Basic search, Search by Alphabets, and some of the field Search like 
+    Quote ID, Notes, Related To will not work.</li>
+  <li>Advance Search will not work in all the modules.</li>
+  <li>Calendar functionality is not functional, we are providing only the UI.</li>
+  <li>In home page pipeline and calendar will not be displayed.</li>
+  <li>Reports are not fully functional. You may experience some errors while working 
+    with reports.</li>
+  <li>Some of the Popup window may not function properly.</li>
+  <li>Quick create and global search are not supported.</li>
+</ul>
+<hr>
 <h1>vtiger CRM 4.5 : Development Version 3 - Release Notes</h1>
 <p><b>Date: November 23, 2005</b></p>
 <p><b><a name="TOC3"></a>Table of Contents</b></p>
 <ol>
   <li><a href="#Summary3">Summary</a></li>
   <li><a href="#Features3">Features</a></li>
-  <li><a href="#Size3">Product Size</a></li>
   <li><a href="#Bugs3">Bug Fixes</a></li>
   <li><a href="#KI3">Known Issues</a></li>
-  <li><a href="#v452tov453">List of Files Changed from V 4.5
-Development 2 to V 4.5 Development 3</a></li>
-  <li><a href="#v451tov453">List of Files Changed from V 4.5
-Development 1 to V 4.5 Development 3</a></li>
-  <li><a href="#v451p2Tov453">List of Files Changed from V 4.2 Patch 2
-to V 4.5 Development 3<br>
-    </a></li>
 </ol>
-<h3><a name="Summary3"></a>1. Summary</h3>
+<h3><a name="Summary5_Alpha"></a>1. Summary</h3>
 <table border="1" cellpadding="5" cellspacing="0" width="65%">
   <tbody>
     <tr bgcolor="#ccccff">
@@ -5035,7 +5145,7 @@ items, of our regular mail client, if such emails, need to be resent,
 the recipients to be selected again.</p>
 <h3>1. Features</h3>
 <p>Added BCC field in Emails</p>
-<h3>2. Bug Fixes</h3>
+<h3><a name="Bugs1"></a>2. Bug Fixes</h3>
 <table border="1" cellpadding="4" cellspacing="0" width="100%">
   <tbody>
     <tr bgcolor="#990000">
