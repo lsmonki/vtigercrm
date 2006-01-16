@@ -69,8 +69,6 @@ function constructGroupMemberArray($member_array)
 
 	}
 
-if(!groupexists($groupName))
-{
 	if(isset($_REQUEST['returnaction']) && $_REQUEST['returnaction'] != '')
 	{
 		$returnaction=$_REQUEST['returnaction'].'&roleid='.$_REQUEST['roleid'];
@@ -89,27 +87,26 @@ if(!groupexists($groupName))
 		$groupMemberArray=constructGroupMemberArray($member_array);
 		updateGroup($groupId,$groupName,$groupMemberArray,$description);
 
+		$loc = "Location: index.php?action=".$returnaction."&module=Users&groupId=".$groupId;
 	}
 	elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'create')
 	{
-		$selected_col_string = 	$_REQUEST['selectedColumnsString'];
-		$member_array = explode(';',$selected_col_string);
-		$groupMemberArray=constructGroupMemberArray($member_array);
-		$groupId=createGroup($groupName,$groupMemberArray,$description);
-		//Inserting into role Table
-		//$roleId = createRole($rolename,$parentRoleId,$profile_array);
+		if(!groupexists($groupName))
+		{
+			$selected_col_string = 	$_REQUEST['selectedColumnsString'];
+			$member_array = explode(';',$selected_col_string);
+			$groupMemberArray=constructGroupMemberArray($member_array);
+			$groupId=createGroup($groupName,$groupMemberArray,$description);
+			//Inserting into role Table
+			//$roleId = createRole($rolename,$parentRoleId,$profile_array);
+		}
+		else
+		{
+			$loc = "Location: index.php?action=createnewgroup&module=Users&groupname=".$groupName."&desc=".$description."&error=true";
+		}
+
 
 	}
 
-	
-
-
-	$loc = "Location: index.php?action=".$returnaction."&module=Users&groupId=".$groupId;
 	header($loc);
-}
-else
-{
-	$loc = "Location: index.php?action=createnewgroup&module=Users&groupname=".$groupName."&desc=".$description."&error=true";
-	header($loc);
-}
 ?>
