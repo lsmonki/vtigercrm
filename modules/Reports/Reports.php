@@ -102,18 +102,18 @@ class Reports extends CRMEntity{
         var $advft_option;
         var $advft_value;
 
-	var $module_list = Array("Leads"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-	 			 "Contacts"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-				 "Accounts"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-				 "Potentials"=>Array("Information"=>1,"Description"=>2,"Custom Information"=>5),
-				 "Activities"=>Array("Information"=>1,"Description"=>2),
-				 "Products"=>Array("Information"=>1,"Description"=>2,"Custom Information"=>5),
-				 "Notes"=>Array("Information"=>1,"Description"=>3),
-				 "Emails"=>Array("Information"=>1,"Description"=>2),
-				 "HelpDesk"=>Array("Information"=>'1,2',"Custom Information"=>5,"Description"=>3,"Solution"=>4),//patch2
-				 "Quotes"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-				 "Orders"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5),
-				 "Invoice"=>Array("Information"=>1,"Address"=>2,"Description"=>3,"Custom Information"=>5)
+	var $module_list = Array("Leads"=>Array("Information"=>13,"Address"=>15,"Description"=>16,"Custom Information"=>5),
+	 			 "Contacts"=>Array("Information"=>4,"- Portal Information"=>6,"Address"=>7,"Description"=>8,"Custom Information"=>5),
+				 "Accounts"=>Array("Information"=>9,"Address"=>11,"Description"=>12,"Custom Information"=>5),
+				 "Potentials"=>Array("Information"=>1,"Description"=>3,"Custom Information"=>5),
+				 "Activities"=>Array("Information"=>19,"Description"=>20),
+				 "Products"=>Array("Information"=>31,"Description"=>36,"Custom Information"=>5),
+				 "Notes"=>Array("Information"=>17,"Description"=>18),
+				 "Emails"=>Array("Information"=>1,"Description"=>24),
+				 "HelpDesk"=>Array("Information"=>'25,26',"Custom Information"=>5,"Description"=>28,"Solution"=>29),//patch2
+				 "Quotes"=>Array("Information"=>51,"Address"=>53,"Description"=>56,"Custom Information"=>5),
+				 "Orders"=>Array("Information"=>57,"Address"=>59,"Description"=>61,"Custom Information"=>5),
+				 "Invoice"=>Array("Information"=>69,"Address"=>71,"Description"=>74,"Custom Information"=>5)
 				);
 
 /** Function to set primodule,secmodule,reporttype,reportname,reportdescription,folderid for given reportid
