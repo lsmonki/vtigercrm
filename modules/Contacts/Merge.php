@@ -53,7 +53,6 @@ if($templateid == "")
 die("Select Mail Merge Template");
 }
 $handle = fopen($wordtemplatedownloadpath .$temparray['filename'],"wb");
-//chmod("/home/rajeshkannan/test/".$fileContent,0755);
 fwrite($handle,base64_decode($fileContent),$filesize);
 fclose($handle);
 
