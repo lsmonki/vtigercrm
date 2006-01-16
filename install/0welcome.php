@@ -119,7 +119,7 @@ Again, thanks for taking out the time to try vtiger! <br><br>
 
 
 
-This Configuration Wizard will create vtiger CRM 5 Aplha databases and tables and configuration files you need to start. The entire process should
+This Configuration Wizard will create vtiger CRM 5 Alpha databases and tables and configuration files you need to start. The entire process should
 				take about four minutes. Click the Start button when you are ready.</span> <br><br>
 				<span style="color:#555555">- vtiger CRM 5 Alpha is tested on mySQL 4.0.X, PHP 4.3.8 and Apache 2.0.40<br>
 				- Support for PHP5 will be added in future<br></span>
