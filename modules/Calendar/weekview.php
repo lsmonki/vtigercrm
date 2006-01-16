@@ -33,7 +33,6 @@ $image_path=$theme_path."images/";
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=month">Month</a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=year">Year</a></td>
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 				</tr>
 				</table>

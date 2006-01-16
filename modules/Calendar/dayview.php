@@ -51,7 +51,6 @@ $day_in_words=date("l", mktime(0, 0, 0, $month, $day, $year));
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
 					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=month">Month</a></td>
 					<td class="dvtTabCache" style="width:10px">&nbsp;</td>
-					<td class="dvtUnSelectedCell" align=center nowrap><a href="index.php?module=Calendar&action=new_calendar&sel=year">Year</a></td>
 					<td class="dvtTabCache" style="width:100%">&nbsp;</td>
 				</tr>
 				</table>
