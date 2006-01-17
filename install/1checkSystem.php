@@ -267,8 +267,14 @@ $array = Array(
 		    <td valign=top ><strong>Squirrelmail Permissions</strong><br> (modules/squirrelmail-1.4.4/data/)</td>
             <td valign=top bgcolor="white"><?php echo (is_writable('./modules/squirrelmail-1.4.4/data/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You might experience problems with email client features>";?></td>
         </tr>
-
-
+	<tr bgcolor="#fafafa">
+                <td valign=top ><strong>Smarty Compile Directory </strong><br> (Smarty/templates_c)</td>
+                <td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/templates_c/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong> <br>You will not able to login </font>";?></td>
+        </tr>
+	<tr bgcolor="#fafafa">
+                <td valign=top ><strong>Smarty Cache Directory </strong><br> (Smarty/cache)</td>
+                <td valign=top bgcolor="white"><?php echo (is_writable('./Smarty/cache/'))?"<strong><font color=\"#0066CC\">Writeable</font></strong>":"<strong><font color=\"#FF0000\">Not Writeable</strong>";?></td>
+        </tr>
 
        </tbody>
 	   </table>
