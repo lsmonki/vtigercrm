@@ -109,13 +109,13 @@ y:0.90;z-index:50"></div>
                         <td >
 
                                 {*<!-- Basic Search -->*}
-                                <div id="basicSearch">
+                                <div id="basicSearchdiv">
                                         <table border=0 cellspacing=0 cellpadding=2 width=100% class="searchHd
 rBox">
                                         <tr>
-                                                <td><img src="images/basicSearchLens.gif" alt="Basic Search" t
+                                                <td><img src="{$IMAGE_PATH}basicSearchLens.gif" alt="Basic Search" t
 itle="Basic Search" border=0></td>
-                                                <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="showhide('basicSearch');showhide('advSearch')">Go to Advanced Search</a></span></td>
+                                                <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="showhide('basicSearchdiv');showhide('advSearch')">Go to Advanced Search</a></span></td>
 
                                                 <td valign=top nowrap><a href="#" onClick="showhide('searchAcc')">[X] Close</a></td>
                                         </tr>
@@ -191,8 +191,8 @@ itle="Basic Search" border=0></td>
                                 <div id="advSearch" style="display:none;">
                                         <table border=0 cellspacing=0 cellpadding=2 width=100% class="searchHdrBox">
                                         <tr>
-                                                <td><img src="images/advancedSearchLens.gif" alt="Advanced Search" title="Advanced Search" border=0></td>
-                                                <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="showhide('basicSearch');showhide('advSearch')">Go to Basic Search</a></span></td>
+                                                <td><img src="{$IMAGE_PATH}advancedSearchLens.gif" alt="Advanced Search" title="Advanced Search" border=0></td>
+                                                <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="showhide('basicSearchdiv');showhide('advSearch')">Go to Basic Search</a></span></td>
                                                 <td valign=top nowrap><a href="#" onClick="showhide('searchAcc')">[X] Close</a></td>
                                         </tr>
 
