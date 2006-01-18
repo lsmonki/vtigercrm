@@ -26,6 +26,6 @@ else
 }
 
 $adb->query($sql);
-header("Location: index.php?action=DetailView&module=Emails&record=".$record);
+header("Location: index.php?action=CallRelatedList&module=Emails&record=".$record);
 
 ?>
