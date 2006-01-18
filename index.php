@@ -27,6 +27,15 @@ require_once('include/utils/utils.php');
 if (substr(phpversion(), 0, 1) == "5") {
         ini_set("zend.ze1_compatibility_mode", "1");
 }
+
+if (version_compare(phpversion(), '5.0') < 0) {
+    eval('
+    function clone($object) {
+      return $object;
+    }
+    ');
+  }
+
 global $currentModule;
 //if(!isset($category))
   //  $category=getParentTabName(1);
