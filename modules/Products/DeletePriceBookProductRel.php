@@ -17,5 +17,5 @@ else
 	$adb->query($query); 
 }
 
-header("Location: index.php?action=".$return_action."&module=Products&record=".$return_id);
+header("Location: index.php?action=".$return_action."&module=PriceBooks&record=".$return_id);
 ?>
