@@ -35,8 +35,9 @@ require("class.phpmailer.php");
   *   $cc		-- add email ids with comma seperated. - optional 
   *   $bcc		-- add email ids with comma seperated. - optional.
   *   $attachment	-- whether we want to attach the currently selected file or all files.[values = current,all] - optional
+  *   $emailid		-- id of the email object which will be used to get the attachments
   */
-function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='',$attachment='')
+function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$cc='',$bcc='',$attachment='',$emailid='')
 {
 
 	global $adb, $log;
@@ -58,7 +59,7 @@ function send_mail($module,$to_email,$from_name,$from_email,$subject,$contents,$
 
 	$mail = new PHPMailer();
 
-	setMailerProperties(&$mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment);
+	setMailerProperties(&$mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment,$emailid);
 	setCCAddress(&$mail,'cc',$cc);
 	setCCAddress(&$mail,'bcc',$bcc);
 
@@ -134,7 +135,7 @@ function addSignature($contents, $fromname)
   *	$mail -- reference of the mail object
   *	other parameters are same as passed in send_mail function
   */
-function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment='')
+function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to_email,$attachment='',$emailid='')
 {
 	global $adb;
 	$adb->println("Inside the function setMailerProperties");
@@ -163,13 +164,13 @@ function setMailerProperties($mail,$subject,$contents,$from_email,$from_name,$to
 	//If we want to add the currently selected file only then we will use the following function
 	if($attachment == 'current')
 	{
-		addAttachment(&$mail,$_FILES['filename']['name'],$_REQUEST['record']);
+		addAttachment(&$mail,$_FILES['filename']['name'],$emailid);
 	}
 
 	//This will add all the files which are related to this record or email
 	if($attachment == 'all')
 	{
-		addAllAttachments(&$mail,$_REQUEST['record']);
+		addAllAttachments(&$mail,$emailid);
 	}
 
 	$mail->IsHTML(true);		// set email format to HTML
