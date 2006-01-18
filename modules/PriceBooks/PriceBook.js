@@ -103,6 +103,14 @@ function addtopricebook()
 document.addToPB.action="index.php?module=Products&action=addPbProductRelToDB&return_module=Products&return_action=AddProductsToPriceBook"
 }
 
+function showDefaultCustomView(selectView)
+{
+viewName = selectView.options[selectView.options.selectedIndex].value;
+document.massdelete.viewname.value=viewName;
+document.massdelete.action="index.php?module=PriceBooks&action=index&return_module=PriceBooks&return_action=index&viewname="+viewName;
+document.massdelete.submit();
+}
+
 function updateListPrice(unitprice,fieldname)
 {
 	var elem=document.addToPB.elements;
