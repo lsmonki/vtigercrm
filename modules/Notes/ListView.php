@@ -31,13 +31,9 @@ require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
-global $app_list_strings;
 global $mod_strings;
-$current_module_strings = return_module_language($current_language, 'Notes');
 
 global $list_max_entries_per_page;
-global $urlPrefix;
-
 $log = LoggerManager::getLogger('note_list');
 
 global $currentModule;
@@ -62,6 +58,8 @@ if (!isset($where)) $where = "";
 $url_string = ''; // assigning http url string
 
 $focus = new Note();
+$smarty = new vtigerCRM_Smarty;
+$other_text = Array();
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 if($_REQUEST['order_by'] != '')
@@ -90,34 +88,33 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 }
 if(isPermitted('Notes',2,'') == 'yes')
 {
-        $other_text ='<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=Notes&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=Notes&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }else
 {
-$cvHTML = '<a href="index.php?module=Notes&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Notes&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=Notes&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=Notes&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=Notes&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Notes&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 
-$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
-                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
+$customstrings = '<td>'.$app_strings[LBL_VIEW].'</td>
+			<td style="padding-left:5px;padding-right:5px">
+                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
-                        </SELECT>
-			'.$cvHTML.'
-                </td>';
-//
+                        </SELECT></td>
+			'.$cvHTML;
 
-$customview= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$smarty = new vtigerCRM_Smarty;
+
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";

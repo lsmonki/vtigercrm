@@ -25,8 +25,6 @@ require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $mod_strings;
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'HelpDesk');
 
 $comboFieldNames = Array('ticketpriorities'=>'ticketpriorities_dom'
 			,'ticketstatus'=>'ticketstatus_dom'
@@ -39,7 +37,9 @@ $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
 
 $focus = new HelpDesk();
+$smarty = new vtigerCRM_Smarty;
 $category = getParentTab();
+$other_text = Array();
 
 $url_string = ''; // assigning http url string
 
@@ -90,35 +90,32 @@ if($viewid != 0)
 }
 // Buttons and View options
 if(isPermitted('HelpDesk',2,'') == 'yes')
-{
-        $other_text ='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
-}
+	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 
 if($viewnamedesc['viewname'] == 'All')
 {
-	$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-		<span class="sep">|</span>
-		<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-		<a href="index.php?module=HelpDesk&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+	$cvHTML = '<td><a href="index.php?module=HelpDesk&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+		<span class="small">|</span>
+		<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
+		<span class="small">|</span>
+		<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }
 else
 {
-	$cvHTML = '<a href="index.php?module=HelpDesk&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-		<span class="sep">|</span>
-		<a href="index.php?module=CustomView&action=Delete&dmodule=HelpDesk&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-		<span class="sep">|</span>
-		<a href="index.php?module=HelpDesk&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+	$cvHTML = '<td><a href="index.php?module=HelpDesk&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+		<span class="small">|</span>
+		<a href="index.php?module=HelpDesk&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
+		<span class="small">|</span>
+		<a href="index.php?module=CustomView&action=Delete&dmodule=HelpDesk&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 
-$customstrings ='<td align="right">'.$app_strings[LBL_VIEW].'
-			<SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
+$customstrings ='<td>'.$app_strings[LBL_VIEW].'</td>
+			<td style="padding-left:5px;padding-right:5px">
+			<SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
-			</SELECT>
-			'.$cvHTML.'
-		</td>';
+			</SELECT></td>
+			'.$cvHTML;
 
-$customview= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$smarty = new vtigerCRM_Smarty;
 $smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
