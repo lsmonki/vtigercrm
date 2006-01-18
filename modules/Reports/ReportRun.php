@@ -99,7 +99,7 @@ class ReportRun extends CRMEntity
 			}
 			if($this->primarymodule == "Activities" || $this->secondarymodule == "Activities")
 			{
-				$querycolumn = "case crmentityRelActivities.setype when 'Accounts' then accountRelActivities.accountname when 'Leads' then leaddetailsRelActivities.lastname when 'Potentials' then potentialRelActivities.potentialname when 'Quotes' then quotesRelActivities.subject when 'Orders' then purchaseorderRelActivities.subject when 'Invoice' then invoiceRelActivities.subject End"." '".$selectedfields[2]."', crmentityRelActivities.setype 'Entity_type'";
+				$querycolumn = "case crmentityRelActivities.setype when 'Accounts' then accountRelActivities.accountname when 'Leads' then leaddetailsRelActivities.lastname when 'Potentials' then potentialRelActivities.potentialname when 'Quotes' then quotesRelActivities.subject when 'PurchaseOrder' then purchaseorderRelActivities.subject when 'Invoice' then invoiceRelActivities.subject End"." '".$selectedfields[2]."', crmentityRelActivities.setype 'Entity_type'";
 			}
 		}
 		/*if($fieldname == "contact_id")
@@ -710,15 +710,15 @@ class ReportRun extends CRMEntity
                                 left join contactdetails as contactdetailsQuotes on contactdetailsQuotes.contactid = quotes.contactid
                                 left join account as accountQuotes on accountQuotes.accountid = quotes.accountid ";
                         }
-                        if($secmodule == "Orders")
+                        if($secmodule == "PurchaseOrder")
                         {
                                 $query = "left join purchaseorder on purchaseorder.contactid = contactdetails.contactid
-                                left join crmentity as crmentityOrders on crmentityOrders.crmid=purchaseorder.purchaseorderid
+                                left join crmentity as crmentityPurchaseOrder on crmentityPurchaseOrder.crmid=purchaseorder.purchaseorderid
                                 left join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid
                                 left join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid
-                                left join users as usersOrders on usersOrders.id = crmentityOrders.smownerid
+                                left join users as usersPurchaseOrder on usersPurchaseOrder.id = crmentityPurchaseOrder.smownerid
                                 left join vendor as vendorRel on vendorRel.vendorid = purchaseorder.vendorid
-                                left join contactdetails as contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid ";
+                                left join contactdetails as contactdetailsPurchaseOrder on contactdetailsPurchaseOrder.contactid = purchaseorder.contactid ";
                         }
 
 		}
@@ -756,15 +756,15 @@ class ReportRun extends CRMEntity
                                 left join contactdetails as contactdetailsQuotes on contactdetailsQuotes.contactid = quotes.contactid
                                 left join account as accountQuotes on accountQuotes.accountid = quotes.accountid ";
 			}
-			if($secmodule == "Orders")
+			if($secmodule == "PurchaseOrder")
 			{
 				$query = "left join purchaseorder on purchaseorder.accountid = account.accountid
-                                left join crmentity as crmentityOrders on crmentityOrders.crmid=purchaseorder.purchaseorderid
+                                left join crmentity as crmentityPurchaseOrder on crmentityPurchaseOrder.crmid=purchaseorder.purchaseorderid
                                 left join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid
                                 left join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid
-                                left join users as usersOrders on usersOrders.id = crmentityOrders.smownerid
+                                left join users as usersPurchaseOrder on usersPurchaseOrder.id = crmentityPurchaseOrder.smownerid
                                 left join vendor as vendorRel on vendorRel.vendorid = purchaseorder.vendorid
-                                left join contactdetails as contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid ";
+                                left join contactdetails as contactdetailsPurchaseOrder on contactdetailsPurchaseOrder.contactid = purchaseorder.contactid ";
 			}
 			if($secmodule == "Invoice")
 			{
@@ -824,7 +824,7 @@ class ReportRun extends CRMEntity
                         }
 
 		}
-		if($module == "Orders")
+		if($module == "PurchaseOrder")
 		{
 			if($secmodule == "Accounts")
                         {
@@ -1078,17 +1078,17 @@ class ReportRun extends CRMEntity
 				where crmentityQuotes.deleted=0";
 		}
 		
-		if($module == "Orders")
+		if($module == "PurchaseOrder")
 		{
 			$query = "from purchaseorder 
-				inner join crmentity as crmentityOrders on crmentityOrders.crmid=purchaseorder.purchaseorderid 
+				inner join crmentity as crmentityPurchaseOrder on crmentityPurchaseOrder.crmid=purchaseorder.purchaseorderid 
 				inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid 
 				inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid 
-				left join users as usersOrders on usersOrders.id = crmentityOrders.smownerid 
+				left join users as usersPurchaseOrder on usersPurchaseOrder.id = crmentityPurchaseOrder.smownerid 
 				left join vendor as vendorRel on vendorRel.vendorid = purchaseorder.vendorid 
-				left join contactdetails as contactdetailsOrders on contactdetailsOrders.contactid = purchaseorder.contactid 
+				left join contactdetails as contactdetailsPurchaseOrder on contactdetailsPurchaseOrder.contactid = purchaseorder.contactid 
 				".$this->getRelatedModulesQuery($module,$this->secondarymodule)."
-				where crmentityOrders.deleted=0";
+				where crmentityPurchaseOrder.deleted=0";
 		}
 
 		if($module == "Invoice")
@@ -1173,7 +1173,7 @@ class ReportRun extends CRMEntity
 		}
 		
 		$reportquery = $this->getReportsQuery($this->primarymodule);
-
+			
 		if($type == 'COLUMNSTOTOTAL')
 		{
 			if(trim($groupsquery) != "")
