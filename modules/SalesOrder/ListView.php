@@ -18,11 +18,7 @@ require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $mod_strings;
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'SalesOrder');
-
 global $list_max_entries_per_page;
-global $urlPrefix;
 
 global $currentModule;
 global $theme;
@@ -40,7 +36,7 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 $focus = new SalesOrder();
-
+$other_text = Array();
 $url_string = ''; // assigning http url string
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
@@ -61,15 +57,65 @@ $_SESSION['SALESORDER_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
-	$where=Search($currentModule);
-	
 	$url_string .="&query=true";
-	
 	if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
         if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
         if (isset($_REQUEST['quotename'])) $quotename = $_REQUEST['quotename'];
 
+	$where_clauses = Array();
+
+	//Added for Custom Field Search
+	$sql="select * from field where tablename='salesordercf' order by fieldlabel";
+	$result=$adb->query($sql);
+	for($i=0;$i<$adb->num_rows($result);$i++)
+	{
+	        $column[$i]=$adb->query_result($result,$i,'columnname');
+	        $fieldlabel[$i]=$adb->query_result($result,$i,'fieldlabel');
+		$uitype[$i]=$adb->query_result($result,$i,'uitype');
+
+	        if (isset($_REQUEST[$column[$i]])) $customfield[$i] = $_REQUEST[$column[$i]];
+	
+	        if(isset($customfield[$i]) && $customfield[$i] != '')
+	        {
+			if($uitype[$i] == 56)
+                                $str=" salesordercf.".$column[$i]." = 1";
+                        else
+			        $str=" salesordercf.".$column[$i]." like '$customfield[$i]%'";
+		        array_push($where_clauses, $str);
+			$url_string .="&".$column[$i]."=".$customfield[$i];
+	        }
+	}
+	//upto this added for Custom Field
+
+	if (isset($subject) && $subject !='')
+	{
+		array_push($where_clauses, "salesorder.subject like ".PearDatabase::quote($subject.'%'));
+		$url_string .= "&subject=".$subject;
+	}
+	
+	if (isset($accountname) && $accountname !='')
+	{
+		array_push($where_clauses, "account.accountname like ".PearDatabase::quote($accountname.'%'));
+		$url_string .= "&accountname=".$accountname;
+	}
+
+	if (isset($quotename) && $quotename !='')
+	{
+		array_push($where_clauses, "quotes.subject like ".PearDatabase::quote($quotename.'%'));
+		 $url_string .= "&quotename=".$quotename;
+	}
+	
+	$where = "";
+	foreach($where_clauses as $clause)
+	{
+		if($where != "")
+		$where .= " and ";
+		$where .= $clause;
+	}
+
 	$log->info("Here is the where clause for the list view: $where");
+ 
+
 }
 
 //<<<<cutomview>>>>>>>
@@ -82,29 +128,29 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 // Buttons and View options
 if(isPermitted('SalesOrder',2,'') == 'yes')
 {
-	$other_text ='<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>&nbsp;';
+	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=SalesOrder&action=CustomView&smodule=SO" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=SalesOrder&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
+<span class="small">|</span>
+<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }else
 {
-$cvHTML = '<a href="index.php?module=SalesOrder&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=SalesOrder&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=SalesOrder&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=SalesOrder&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=SalesOrder&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=CustomView&action=Delete&dmodule=SalesOrder&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
-	$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
-                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
+	$customstrings = '<td align="right" class="small">'.$app_strings[LBL_VIEW].'</td>
+			<td><SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
-                        </SELECT>
-			'.$cvHTML.'
-                </td>';
+                        </SELECT></td>
+			'.$cvHTML;
 
 //<<<<<<<<<customview>>>>>>>>>
 if($viewid != "0")
@@ -188,9 +234,6 @@ $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"SalesOrder",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
-
-$listview_header_search = getSearchListHeaderValues($focus,"SalesOrder",$url_string,$sorder,$order_by,"",$oCustomView);
-$smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"SalesOrder",$list_result,$navigation_array,'','&return_module=SalesOrder&return_action=index','EditView','Delete',$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);

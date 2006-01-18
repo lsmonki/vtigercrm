@@ -18,11 +18,7 @@ require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $mod_strings;
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'Products');
-
 global $list_max_entries_per_page;
-global $urlPrefix;
 global $currentModule;
 
 global $theme;
@@ -39,6 +35,7 @@ $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Product');
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
+$other_text = Array();
 
 
 $comboFieldNames = Array('manufacturer'=>'manufacturer_dom'
@@ -93,29 +90,29 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=Products&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=Products&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }else
 {
-$cvHTML = '<a href="index.php?module=Products&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Products&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=Products&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=Products&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=Products&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Products&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 
 if(isPermitted('Products',2,'') == 'yes')
 {
-        $other_text ='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
-	$customstrings ='<td align="right">'.$app_strings[LBL_VIEW].'
-                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
+	$customstrings ='<td align="right" class="small">'.$app_strings[LBL_VIEW].'</td>
+                        <td><SELECT NAME="viewname" class="small"  onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
-	                </SELECT>
-			'.$cvHTML.'
-                </td>';
+	                </SELECT></td>
+			'.$cvHTML;
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
@@ -135,7 +132,6 @@ if(isset($where) && $where != '')
         $list_query .= ' and '.$where;
 }
 
-$smarty->assign("PRODUCTLISTHEADER", get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'], $other_text, false ));
 
 if(isset($order_by) && $order_by != '')
 {

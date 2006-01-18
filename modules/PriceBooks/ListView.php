@@ -16,11 +16,8 @@ require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $mod_strings;
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'PriceBooks');
 
 global $list_max_entries_per_page;
-global $urlPrefix;
 global $currentModule;
 
 global $theme;
@@ -39,6 +36,7 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 $focus = new PriceBook();
+$other_text=Array();
 
 if (!isset($where)) $where = "";
 
@@ -76,28 +74,29 @@ $viewid = $oCustomView->getViewId($currentModule);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
-$other_text ='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML='<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-        <span class="sep">|</span>
-        <span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-        <a href="index.php?module=PriceBooks&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML='<td><a href="index.php?module=PriceBooks&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }else
 {
-$cvHTML='<a href="index.php?module=PriceBooks&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-        <span class="sep">|</span>
-        <a href="index.php?module=CustomView&action=Delete&dmodule=PriceBooks&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-        <span class="sep">|</span>
-        <a href="index.php?module=PriceBooks&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML='<td><a href="index.php?module=PriceBooks&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=PriceBooks&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=CustomView&action=Delete&dmodule=PriceBooks&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 
-$customviewstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
-                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
+$customviewstrings = '<td>'.$app_strings[LBL_VIEW].'</td>
+			<td style="padding-left:5px;padding-right:5px">
+                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
-                        </SELECT>
-			'.$cvHTML.'
-                </td>';
+                        </SELECT></td>
+			'.$cvHTML;
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
@@ -131,7 +130,6 @@ $view_script = "<script language='javascript'>
         set_selected();
         </script>";
 
-$smarty->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'], $other_text, false ));
 if(isset($order_by) && $order_by != '')
 {
 	$tablename = getTableNameForField('PriceBooks',$order_by);
