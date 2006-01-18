@@ -29,7 +29,6 @@ require_once('include/utils/utils.php');
 
 global $mod_strings;
 global $app_strings;
-global $app_list_strings;
 
 $focus = new Potential();
 $smarty = new vtigerCRM_Smarty;
@@ -72,26 +71,18 @@ $smarty->assign("CATEGORY",$category);
 $permissionData = $_SESSION['action_permission_set'];
 
 if(isPermitted("Potentials",1,$_REQUEST['record']) == 'yes')
-{
-	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Potentials'; this.form.return_action.value='DetailView'; this.form.module.value='Potentials'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">&nbsp;");
-
-
-	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Potentials'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.module.value='Potentials'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">&nbsp;");
-}
+	$smarty->assign("EDIT_DUPLICATE","permitted");
 if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
-{
-	$smarty->assign("CONVERTINVOICE","<input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Potentials'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."';this.form.convertmode.value='potentoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\">&nbsp;");
-}
+	$smarty->assign("CONVERTINVOICE","permitted");
 if(isPermitted("Potentials",2,$_REQUEST['record']) == 'yes')
-{
-	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Potentials'; this.form.return_action.value='index'; this.form.module.value='Potentials'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">&nbsp;");
-}
+	$smarty->assign("DELETE","permitted");
 
 
 //Security check for related list
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
+$smarty->assign("CONVERTMODE",'potentoinvoice');
 $smarty->assign("MODULE","Potentials");
 $smarty->display("DetailView.tpl");
 ?>

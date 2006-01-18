@@ -70,30 +70,24 @@ $smarty->assign("CATEGORY",$category);
 
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Quotes",1,$_REQUEST['record']) == 'yes')
-{
-	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Quotes'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."';this.form.module.value='Quotes'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">&nbsp;");
-
-
-	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Quotes'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='Quotes'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">&nbsp;");
-
-}
+	$smarty->assign("EDIT_DUPLICATE","permitted");
 
 	
-	$smarty->assign("CREATEPDF","<input title=\"Export To PDF\" accessKey=\"Alt+e\" class=\"button\" onclick=\"this.form.return_module.value='Quotes'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."';this.form.module.value='Quotes'; this.form.action.value='CreatePDF'\" type=\"submit\" name=\"Export To PDF\" value=\"Export To PDF\">&nbsp;");
+$smarty->assign("CREATEPDF","permitted");
 
-	if(isPermitted("SalesOrder",1,$_REQUEST['record']) == 'yes')
-	{
-		$smarty->assign("CONVERTSALESORDER","<input title=\"$app_strings[LBL_CONVERTSO_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTSO_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.convertmode.value='quotetoso';this.form.module.value='SalesOrder'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To SalesOrder\" value=\"$app_strings[LBL_CONVERTSO_BUTTON_LABEL]\">&nbsp;");
-	}
+if(isPermitted("SalesOrder",1,$_REQUEST['record']) == 'yes')
+	$smarty->assign("CONVERTSALESORDER","permitted");
 
-	if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
-        {
-		$smarty->assign("CONVERTINVOICE","<input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Invoice'; this.form.return_action.value='DetailView'; this.form.convertmode.value='quotetoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\">&nbsp;");
-	}
+if(isPermitted("Invoice",1,$_REQUEST['record']) == 'yes')
+{
+	$smarty->assign("CONVERTINVOICE","permitted");
+	//$smarty->assign("CONVERTINVOICE","<input title=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Invoice'; this.form.return_action.value='DetailView'; this.form.convertmode.value='quotetoinvoice';this.form.module.value='Invoice'; this.form.action.value='EditView'\" type=\"submit\" name=\"Convert To Invoice\" value=\"$app_strings[LBL_CONVERTINVOICE_BUTTON_LABEL]\">&nbsp;");
+}
 
 if(isPermitted("Quotes",2,$_REQUEST['record']) == 'yes')
 {
-	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Quotes'; this.form.return_action.value='ListView';this.form.module.value='Quotes'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">&nbsp;");
+	$smarty->assign("DELETE","permitted");
+	//$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Quotes'; this.form.return_action.value='ListView';this.form.module.value='Quotes'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">&nbsp;");
 }
 
 
@@ -101,6 +95,7 @@ if(isPermitted("Quotes",2,$_REQUEST['record']) == 'yes')
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
 $permissionData = $_SESSION['action_permission_set'];
+$smarty->assign("CONVERTMODE",'quotetoinvoice');
 $smarty->assign("MODULE", $currentModule);
 $smarty->display("DetailView.tpl");
 

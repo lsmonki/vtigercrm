@@ -31,7 +31,6 @@ require_once('include/utils/utils.php');
 global $log;
 global $mod_strings;
 global $app_strings;
-global $app_list_strings;
 
 $focus = new Contact();
 
@@ -68,34 +67,26 @@ $log->info("Detail Block Informations successfully retrieved.");
 $smarty->assign("BLOCKS", getBlocks("Contacts","detail_view",'',$focus->column_fields));
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD","Contact");
+$smarty->assign("REDIR_MOD","contacts");
 
 $smarty->assign("ID", $_REQUEST['record']);
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Contacts",1,$_REQUEST['record']) == 'yes')
-{
-	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">&nbsp;");
-
-
-	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">&nbsp;");
-}
-
+	$smarty->assign("EDIT_DUPLICATE","permitted");
 
 if(isPermitted("Contacts",2,$_REQUEST['record']) == 'yes')
-{
-	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">&nbsp;");
-}
+	$smarty->assign("DELETE","permitted");
 if(isPermitted("Emails",1,'') == 'yes')
 {
 	//Added to pass the parents list as hidden for Emails -- 09-11-2005
 	$parent_email = getEmailParentsList('Contacts',$_REQUEST['record']);
 	$smarty->assign("HIDDEN_PARENTS_LIST",$parent_email);
-	$smarty->assign("SENDMAILBUTTON","<input title=\"$app_strings[LBL_SENDMAIL_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_SENDMAIL_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Contacts'; this.form.module.value='Emails';this.form.email_directing_module.value='contacts';this.form.return_action.value='DetailView';this.form.action.value='EditView';\" type=\"submit\" name=\"SendMail\" value=\"$app_strings[LBL_SENDMAIL_BUTTON_LABEL]\">&nbsp;");
+	$smarty->assign("SENDMAILBUTTON","permitted");
 }
 
 if(isPermitted("Contacts",8,'') == 'yes')
 {
-	$smarty->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.action.value='Merge';\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\">&nbsp;");
-
+	$smarty->assign("MERGEBUTTON","permitted");
 	require_once('include/utils/UserInfoUtil.php');
 	$wordTemplateResult = fetchWordTemplateList("Contacts");
 	$tempCount = $adb->num_rows($wordTemplateResult);
