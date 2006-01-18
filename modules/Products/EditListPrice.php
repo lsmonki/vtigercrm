@@ -28,16 +28,16 @@ if(isset($_REQUEST['return_module']) && $_REQUEST['return_module']=="PriceBooks"
 	$pricebook_id = $_REQUEST['pricebook_id'];
 	$product_id = $_REQUEST['record'];
 	$listprice = $_REQUEST['listprice'];
-	$return_action = "DetailView";
+	$return_action = "CallRelatedList";
 	$return_id = $_REQUEST['pricebook_id'];
 }
 else
 {
-	$product_id = $_REQUEST['return_id'];
-	$pricebook_id = $_REQUEST['record'];
+	$product_id = $_REQUEST['record'];
+	$pricebook_id = $_REQUEST['pricebook_id'];
 	$listprice = getListPrice($product_id,$pricebook_id);
-	$return_action = "DetailView";
-	$return_id = $_REQUEST['return_id'];
+	$return_action = "CallRelatedList";
+	$return_id = $_REQUEST['pricebook_id'];
 }
 $xtpl=new XTemplate ('modules/Products/EditListPrice.html');
 $xtpl->assign("MOD", $mod_strings);
