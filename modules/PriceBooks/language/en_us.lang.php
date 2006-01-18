@@ -20,8 +20,11 @@ $mod_strings = array(
 'Product Name'=>'Product Name',
 'Active'=>'Active',
 'Description'=>'Description',
-
-
+'LBL_LIST_PRODUCT_NAME'=>'Product Name',
+'LBL_PRODUCT_CODE'=>'Product Code',
+'LBL_PRODUCT_UNIT_PRICE'=>'Unit Price',
+'LBL_PB_LIST_PRICE'=>'List Price',
+'LBL_ACTION'=>'Action',
 );
 
 
