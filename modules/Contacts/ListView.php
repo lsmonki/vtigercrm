@@ -42,6 +42,8 @@ $comboFieldNames = Array('leadsource'=>'leadsource_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
 
 $focus = new Contact();
+$smarty = new vtigerCRM_Smarty;
+$other_text = Array();
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 if($_REQUEST['order_by'] != '')
@@ -110,28 +112,28 @@ if($viewid != 0)
 }
 if(isPermitted('Contacts',2,'') == 'yes')
 {
-$other_text ='<input class="small" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
-$other_text .='<input class="small" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>';
+$other_text['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
 
 if(isset($CActionDtls))
 {
-	$other_text .='<input class="small" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
+	$other_text['s_cmail'] = $app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON];	
 }
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<td><a href="index.php?module=Contacts&action=CustomView" class="small">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+$cvHTML = '<td><a href="index.php?module=Contacts&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
 <span class="small">|</span>
 <span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
 <span class="small">|</span>
 <span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }else
 {
-$cvHTML = '<td><a href="index.php?module=Contacts&action=CustomView" class="small">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+$cvHTML = '<td><a href="index.php?module=Contacts&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
 <span class="small">|</span>
-<a href="index.php?module=Contacts&action=CustomView&record='.$viewid.'" class="small">'.$app_strings['LNK_CV_EDIT'].'</a>
+<a href="index.php?module=Contacts&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
 <span class="small">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Contacts&record='.$viewid.'" class="small">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
+<a href="index.php?module=CustomView&action=Delete&dmodule=Contacts&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 
 	$customstrings ='<td>'.$app_strings[LBL_VIEW].'</td>
@@ -192,7 +194,6 @@ $view_script = "<script language='javascript'>
 
 //Constructing the list view
 $custom = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);

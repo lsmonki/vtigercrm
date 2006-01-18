@@ -29,12 +29,7 @@ require_once('include/utils/utils.php');
 require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
-global $app_list_strings;
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'Activities');
-
 global $list_max_entries_per_page;
-global $urlPrefix;
 
 $log = LoggerManager::getLogger('task_list');
 
@@ -49,6 +44,8 @@ global $focus_list;
 if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 
 $focus = new Activity();
+$smarty = new vtigerCRM_Smarty;
+$other_text = Array();
 
 //<<<<<<< sort ordering >>>>>>>>>>>>>
 $sorder = $focus->getSortOrder();
@@ -132,34 +129,31 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=Activities&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=Activities&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }
 else
 {
-$cvHTML = '<a href="index.php?module=Activities&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Activities&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=Activities&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=Activities&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=Activities&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Activities&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 
 if(isPermitted("Activities",2,$_REQUEST['record']) == 'yes')
 {
-	$other_text = '<table width="100%" border="0" cellpadding="1" cellspacing="0"><input class="button" type="submit" value="'.$app_strings['LBL_MASS_DELETE'].'" onclick="return massDelete()"/>';
+	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
-   	$other_text .='<!--input class="button" type="submit" value="'.$app_strings['LBL_CHANGE_OWNER'].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/>
-	       <input class="button" type="submit" value="'.$app_strings['LBL_CHANGE_STATUS'].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/--></td>
-		<td align="right">'.$app_strings['LBL_VIEW'].'
-			<SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
+	$customviewstrings='<td>'.$app_strings['LBL_VIEW'].'</td>
+			<td style="padding-left:5px;padding-right:5px">
+			<SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
-			</SELECT>
-			'.$cvHTML.'
-		</td>
-	</tr>
-	</table>';
+			</SELECT></td>
+			'.$cvHTML;
 //
 
 global  $task_title;
@@ -210,14 +204,13 @@ $list_result = $adb->query($list_query);
 
 //Constructing the list view
 
-$smarty = new vtigerCRM_Smarty;
-$customview=get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$smarty->assign("CUSTOMVIEW", $customview);
+$smarty->assign("CUSTOMVIEW", $customviewstrings);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",$currentModule);
 $smarty->assign("SINGLE_MOD",'Activity');
+$smarty->assign("BUTTONS",$other_text);
 $smarty->assign("NEW_EVENT",$app_strings['LNK_NEW_EVENT']);
 $smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 

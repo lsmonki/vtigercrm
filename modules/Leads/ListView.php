@@ -50,7 +50,8 @@ if (!isset($where)) $where = "";
 $url_string = ''; // assigning http url string
 
 $focus = new Lead();
-
+$smarty = new vtigerCRM_Smarty;
+$other_text=Array();
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 if($_REQUEST['order_by'] != '')
 	$order_by = $_REQUEST['order_by'];
@@ -95,17 +96,19 @@ if($viewid != 0)
 //raju
 if(isPermitted('Leads',2,'') == 'yes')
 {
-	$other_text =	'<input class="small" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+	$other_text['del'] =	$app_strings[LBL_MASS_DELETE];	
+
 }
-$other_text .='<input class="small" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>';
+$other_text['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
 
 if(isPermitted('Leads',1,'') == 'yes')
 {
-   	$other_text .=	'<input class="small" type="submit" value="'.$app_strings[LBL_CHANGE_OWNER].'" onclick="this.form.change_owner.value=\'true\'; return changeStatus()"/><input class="small" type="submit" value="'.$app_strings[LBL_CHANGE_STATUS].'" onclick="this.form.change_status.value=\'true\'; return changeStatus()"/>';
+	$other_text['c_owner'] = $app_strings[LBL_CHANGE_OWNER];
+	$other_text['c_status'] = $app_strings[LBL_CHANGE_STATUS];
 }
 if(isset($CActionDtls))
 {
-	$other_text .='<input class="small" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
+	$other_text['s_cmail'] = $app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON];
 }
 
 if($viewnamedesc['viewname'] == 'All')
@@ -132,7 +135,6 @@ $cvHTML = '<td><a href="index.php?module=Leads&action=CustomView" class="small">
 
 
 $custom= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$smarty = new vtigerCRM_Smarty;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";

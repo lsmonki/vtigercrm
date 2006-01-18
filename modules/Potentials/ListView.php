@@ -45,6 +45,8 @@ if (!isset($where)) $where = "";
 $url_string = ''; // assigning http url string
 
 $focus = new Potential();
+$smarty = new vtigerCRM_Smarty();
+$other_text = Array();
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 if($_REQUEST['order_by'] != '')
@@ -107,26 +109,26 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 
 if(isPermitted('Potentials',2,'') == 'yes')
 {
-        $other_text ='<input class="small" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<td><a href="index.php?module=Potentials&action=CustomView" class="small">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+$cvHTML = '<td><a href="index.php?module=Potentials&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
 <span class="small">|</span>
 <span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span></td>';
+<span class="small">|</span>
+<span class="bodyText" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }else
 {
-$cvHTML = '<td><a href="index.php?module=Potentials&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=Potentials&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Potentials&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
+$cvHTML = '<td><a href="index.php?module=Potentials&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=Potentials&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Potentials&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 
-$customstrings ='<td>'.$app_strings[LBL_VIEW].'<td>
+$customstrings ='<td>'.$app_strings[LBL_VIEW].'</td>
 		<td style="padding-left:5px;padding-right:5px">
 		<SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
 			'.$customviewcombo_html.'
@@ -184,7 +186,6 @@ $list_result = $adb->query($list_query);
 
 //Constructing the list view
 
-$smarty = new vtigerCRM_Smarty();
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);

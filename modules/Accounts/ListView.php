@@ -46,6 +46,8 @@ if (!isset($where)) $where = "";
 $url_string = '';
 
 $focus = new Account();
+$smarty = new vtigerCRM_Smarty;
+$other_text = Array();
 
 //<<<<<<< sort ordering >>>>>>>>>>>>>
 $sorder = $focus->getSortOrder();
@@ -99,35 +101,33 @@ if($viewid != 0)
 	$CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
 //Modified by Raju
-$other_text='
-	<input name="gname" type="hidden" value="'.$groupid.'">';
+//$other_text='	<input name="gname" type="hidden" value="'.$groupid.'">';
 
 	//Raju	
 if(isPermitted('Accounts',2,'') == 'yes')
 {
-        $other_text .=	'<input class="small" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>';
+	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
-		$other_text .='<input class="small" type="submit" value="'.$app_strings[LBL_SEND_MAIL_BUTTON].'" onclick="return eMail()"/>';
-
+		$other_text['s_mail'] = $app_strings[LBL_SEND_MAIL_BUTTON];
 if(isset($CActionDtls))
 {
-	$other_text .='<input class="small" type="submit" value="'.$app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON].'" onclick="return massMail()"/>';
+	$other_text['s_cmail'] = $app_strings[LBL_SEND_CUSTOM_MAIL_BUTTON];
 }
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML='<td><a href="index.php?module=Accounts&action=CustomView" class="small">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+$cvHTML='<td><a href="index.php?module=Accounts&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
 <span class="small">|</span>
 <span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
 <span class="small">|</span>
 <span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }else
 {
-$cvHTML='<td><a href="index.php?module=Accounts&action=CustomView" class="small">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+$cvHTML='<td><a href="index.php?module=Accounts&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
 <span class="small">|</span>
-<a href="index.php?module=Accounts&action=CustomView&record='.$viewid.'" class="small">'.$app_strings['LNK_CV_EDIT'].'</a>
+<a href="index.php?module=Accounts&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
 <span class="small">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Accounts&record='.$viewid.'" class="small">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
+<a href="index.php?module=CustomView&action=Delete&dmodule=Accounts&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 	$customviewstrings='<td>'.$app_strings[LBL_VIEW].'</td>
 			<td style="padding-left:5px;padding-right:5px">
@@ -136,7 +136,6 @@ $cvHTML='<td><a href="index.php?module=Accounts&action=CustomView" class="small"
                         </SELECT></td>
 			'.$cvHTML;
 
-$smarty = new vtigerCRM_Smarty;
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
