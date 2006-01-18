@@ -81,9 +81,10 @@ class CustomView extends CRMEntity{
 	// Mike Crowe Mod --------------------------------------------------------getViewId
 	function getViewId($module)
 	{
+		global $adb;
 		if(isset($_REQUEST['viewname']) == false)
 		{
-			if ( isset($_SESSION["cv$module"]) )
+			if (isset($_SESSION["cv$module"]) && $_SESSION["cv$module"]!='')
 			{
 				$viewid = $_SESSION["cv$module"];
 			}
@@ -92,7 +93,9 @@ class CustomView extends CRMEntity{
 				$viewid = $this->setdefaultviewid;
 			}else
 			{
-				$viewid = "0";
+				$query="select cvid from customview where viewname='All' and entitytype='".$module."'";
+				$cvresult=$adb->query($query);
+				$viewid = $adb->query_result($cvresult,0,'cvid');;
 			}
 		}
 		else
