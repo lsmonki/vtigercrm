@@ -350,15 +350,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 	global $adb;
 	global $app_strings;
 	$noofrows = $adb->num_rows($list_result);
-	/*$list_header = '<script>
-	  function confirmdelete(url)
-	  {
-	  if(confirm("Are you sure?"))
-	  {
-	  document.location.href=url;
-	  }
-	  }
-	  </script>';*/
 	$list_block = Array();
 	global $theme;
 	$evt_status;
@@ -379,11 +370,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 
 	for ($i=$navigation_array['start']; $i<=$navigation_array['end_val']; $i++)
 	{
-		/*if (($i%2)==0)
-		  $list_header .= '<tr height=20 class=evenListRow>';
-		  else
-		  $list_header .= '<tr height=20 class=oddListRow>';*/
-
 		$list_header =Array();
 		//Getting the entityid
 		$entity_id = $adb->query_result($list_result,$i-1,"crmid");
@@ -619,22 +605,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 		//$list_header .= '<td style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
 		$mod_dir=getModuleDirName($module);
-		/*if(isPermitted($module,1,$entity_id) == 'yes')
-		  {
-		//$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&record='.$entity_id.$returnset.'&filename='.$filename.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;';
-		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-		$list_header .='<a href="index.php?action='.$edit_action.'&module='.$mod_dir.'&return_viewname='.$oCv->setdefaultviewid.'&record='.$entity_id.$varreturnset.'&filename='.$filename.'" style="'.$P_FONT_COLOR.'">'.$app_strings['LNK_EDIT'].'</a>&nbsp;|&nbsp;'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
-		}
-		if(isPermitted($module,2,$entity_id) == 'yes')
-		{
-		$del_param = 'index.php?action='.$del_action.'&module='.$mod_dir.'&record='.$entity_id.$varreturnset.'&return_viewname='.$oCv->setdefaultviewid;
-		$list_header .= '<a href="javascript:confirmdelete(\''.$del_param.'\')">'.$app_strings['LNK_DELETE'].'</a>';
-		}
-		//$list_header .= '<td>';
-		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-		$list_header .= '</td>'; // Armando Lüscher 05.07.2005 -> Changed from <td> to </td>
-		$list_header .= '<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_header .= '</tr>';*/
 		$list_block[$entity_id] = $list_header;
 
 	}
