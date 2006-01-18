@@ -16,11 +16,8 @@ require_once('modules/CustomView/CustomView.php');
 
 global $app_strings;
 global $mod_strings;
-global $current_language;
-$current_module_strings = return_module_language($current_language, 'Vendors');
 
 global $list_max_entries_per_page;
-global $urlPrefix;
 global $currentModule;
 
 global $theme;
@@ -38,6 +35,7 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 $focus = new Vendor();
+$other_text = Array();
 
 if (!isset($where)) $where = "";
 
@@ -80,31 +78,30 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 // Buttons and View options
 if(isPermitted('Vendors',2,'') == 'yes')
 {
-	$other_text ='<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/>&nbsp;';
+	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
 
 if($viewnamedesc['viewname'] == 'All')
 {
-$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-<span class="sep">|</span>
-<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-<a href="index.php?module=Vendors&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=Vendors&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
+<span class="small">|</span>
+<span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }else
 {
-$cvHTML = '<a href="index.php?module=Vendors&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=CustomView&action=Delete&dmodule=Vendors&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-<span class="sep">|</span>
-<a href="index.php?module=Vendors&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+$cvHTML = '<td><a href="index.php?module=Vendors&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=Vendors&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
+<span class="small">|</span>
+<a href="index.php?module=CustomView&action=Delete&dmodule=Vendors&record='.$viewid.'">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
-	$customviewstrings ='<td align="right">'.$app_strings[LBL_VIEW].'
-                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
+	$customviewstrings ='<td>'.$app_strings[LBL_VIEW].'</td>
+			<td style="padding-left:5px;padding-right:5px">
+                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
 				'.$customviewcombo_html.'
-                        </SELECT>
-			'.$cvHTML.'
-                </td>
-        </tr>
-        </table>';
+                        </SELECT></td>
+			'.$cvHTML;
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
@@ -123,7 +120,6 @@ if(isset($where) && $where != '')
         $list_query .= ' and '.$where;
 }
 
-$smarty->assign("VENDORLISTHEADER", get_form_header($current_module_strings['LBL_LIST_VENDOR_FORM_TITLE'], $other_text, false ));
 if(isset($order_by) && $order_by != '')
 {
 	$tablename = getTableNameForField('Vendors',$order_by);
