@@ -9,5 +9,5 @@ $query = "update pricebookproductrel set listprice=".$listprice." where priceboo
 //echo $query;
 $adb->query($query); 
 
-header("Location: index.php?action=$return_action&module=Products&record=$record");
+header("Location: index.php?action=$return_action&module=PriceBooks&record=$record");
 ?>
