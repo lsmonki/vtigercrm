@@ -707,12 +707,11 @@ for($i=0; $i<$num_rows; $i++)
 	$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 		$entries_list[] = $entries;
 }
-// begin: Armando Lüscher 14.07.2005 -> §scrollableTables
-// Desc: Close table from 
-// end: Armando Lüscher 14.07.2005 -> §scrollableTables
-
-		$return_data = array('header'=>$header,'entries'=>$entries_list);
-		return $return_data; 
+		if($num_rows>0)
+		{
+			$return_data = array('header'=>$header,'entries'=>$entries_list);
+			return $return_data; 
+		}
 }
 
 ?>

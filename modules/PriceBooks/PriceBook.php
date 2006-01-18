@@ -77,7 +77,7 @@ class PriceBook extends CRMEntity {
 	function get_pricebook_products($id)
          {                                                                                                                     
          $query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,pricebookproductrel.listprice from products inner join pricebookproductrel on products.productid = pricebookproductrel.productid inner join crmentity on crmentity.crmid = products.productid inner join pricebook on pricebook.pricebookid = pricebookproductrel.pricebookid  where pricebook.pricebookid = '.$id.' and crmentity.deleted = 0'; 
-	 renderPriceBookRelatedProducts($query,$id);                                                                  
+	 return renderPriceBookRelatedProducts($query,$id);                                                                  
 	}
 	function get_pricebook_noproduct($id)
         {
