@@ -11,6 +11,7 @@
  ********************************************************************************/
 
 -->*}
+<script language="JavaScript" type="text/javascript" src="modules/PriceBooks/PriceBook.js"></script>
 <TABLE border=0 cellspacing=0 cellpadding=0 width=100% class=small>
 <tr><td style="height:2px"></td></tr>
 <tr>
@@ -113,7 +114,19 @@
 							{if $header eq 'Potentials'}
 						
 							<input title="New Potential" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Potentials'" type="submit" name="button" value="Add new Potential"></td>
+							{elseif $header eq 'PriceBooks'}
+							{if $MODULE eq 'Products'}
+							<input title="Add to PriceBook" accessKey="" class="small" value="Add to PriceBook" LANGUAGE=javascript onclick="this.form.action.value='AddProductToPriceBooks';this.form.module.value='Products'"  type="submit" name="button">
+							{/if}
 							
+							{elseif $header eq 'Products'}
+							{if $MODULE eq 'PriceBooks'}
+							<input title="Select Product" accessKey="" class="small" value="Select Product" LANGUAGE=javascript onclick="this.form.action.value='AddProductsToPriceBook';this.form.module.value='Products';this.form.return_module.value='Products';this.form.return_action.value='PriceBookDetailView'"  type="submit" name="button"></td>
+
+							{else}
+							<input title="New Product" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="Add new Product"></td>				
+							{/if}	
+
 							{elseif $header eq 'Contacts'}
 							{if $MODULE eq 'Activities'}
                                                         <input title="Change" accessKey="" class="small" value="Select Contact" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module=Activities&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid={$ID}","test","width=600,height=400,resizable=1,scrollbars=1");' type="button"  name="button">
@@ -139,8 +152,9 @@
 							<input title="New SalesOrder" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='SalesOrder'" type="submit" name="button" value="Add new Sales Order"></td>
 							{elseif $header eq 'Purchase Order'}
 							<input title="New Purchase Order" accessyKey="O" class="small" onclick="this.form.action.value='EditView'; this.form.module.value='PurchaseOrder'; this.form.return_module.value='{$MODULE}'; this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="Add new Purchase Order"></td>
-							{elseif $header eq 'Products'}
-							<input title="New Product" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="Add new Product"></td>
+						{*      {elseif $header eq 'Products'}
+							<input title="New Product" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="Add new Product"></td> 
+						*}
 							{elseif $header eq 'Emails'}
 							<input type="hidden" name="email_directing_module">
 							<input type="hidden" name="record">
