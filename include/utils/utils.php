@@ -1721,4 +1721,106 @@ function getInvoiceRelatedSalesOrder($record_id)
         $soid=$adb->query_result($result,0,'salesorderid');
         return $soid;
 }
+
+
+//Function to get Days and Dates - Jaguar
+function get_days_n_dates($st,$en)
+{
+        $stdate_arr=explode("-",$st);
+        $endate_arr=explode("-",$en);
+
+        $dateDiff = mktime(0,0,0,$endate_arr[1],$endate_arr[2],$endate_arr[0]) - mktime(0,0,0,$stdate_arr[1],$stdate_arr[2],$stdate_arr[0]);//to get  dates difference
+
+        $days   =  floor($dateDiff/60/60/24)+1; //to calculate no of. days
+        for($i=0;$i<$days;$i++)
+        {
+                $day_date[] = date("Y-m-d",mktime(0,0,0,date("$stdate_arr[1]"),(date("$stdate_arr[2]")+($i)),date("$stdate_arr[0]")));
+        }
+        if(!isset($day_date))
+                $day_date=0;
+        $nodays_dates=array($days,$day_date);
+        return $nodays_dates; //passing no of days , days in between the days
+}//function end
+
+
+// Function to get the start and End Dates based upon the period which we give-Jaguar
+function start_end_dates($period)
+{
+        $st_thisweek= date("Y-m-d",mktime(0,0,0,date("n"),(date("j")-date("w")),date("Y")));
+        if($period=="tweek")
+        {
+                $st_date= date("Y-m-d",mktime(0,0,0,date("n"),(date("j")-date("w")),date("Y")));
+                $end_date = date("Y-m-d",mktime(0,0,0,date("n"),(date("j")-1),date("Y")));
+                $st_week= date("w",mktime(0,0,0,date("n"),date("j"),date("Y")));
+                if($st_week==0)
+                {
+                        $start_week=explode("-",$st_thisweek);
+                        $st_date = date("Y-m-d",mktime(0,0,0,date("$start_week[1]"),(date("$start_week[2]")-7),date("$start_week[0]")));
+                        $end_date = date("Y-m-d",mktime(0,0,0,date("$start_week[1]"),(date("$start_week[2]")-1),date("$start_week[0]")));
+                }
+                $period_type="week";
+                $width="360";
+        }
+        else if($period=="lweek")
+        {
+                $start_week=explode("-",$st_thisweek);
+                $st_date = date("Y-m-d",mktime(0,0,0,date("$start_week[1]"),(date("$start_week[2]")-7),date("$start_week[0]")));
+                $end_date = date("Y-m-d",mktime(0,0,0,date("$start_week[1]"),(date("$start_week[2]")-1),date("$start_week[0]")));
+                $st_week= date("w",mktime(0,0,0,date("n"),date("j"),date("Y")));
+                if($st_week==0)
+                {
+                        $start_week=explode("-",$st_thisweek);
+                        $st_date = date("Y-m-d",mktime(0,0,0,date("$start_week[1]"),(date("$start_week[2]")-14),date("$start_week[0]")));
+                        $end_date = date("Y-m-d",mktime(0,0,0,date("$start_week[1]"),(date("$start_week[2]")-8),date("$start_week[0]")));
+                }
+                $period_type="week";
+                $width="360";
+        }
+        else if($period=="tmon")
+        {
+		  $st_date=date("Y-m-d",mktime(0,0,0,date("n"),date("1"),date("Y")));
+                $end_date=date("Y-m-d",mktime(0,0,0,date("n"),date("j")+1,date("Y")));
+                $period_type="month";
+                $width="840";
+                $start_month=date("d",mktime(0,0,0,date("n"),date("j"),date("Y")));
+                if($start_month==1)
+                {
+                        $st_date=date("Y-m-d",mktime(0,0,0,date("n")-1,date("1"),date("Y")));
+                        $end_date = date("Y-m-d",mktime(0, 0, 1, date("n"), 0,date("Y")));
+                }
+
+        }
+        else if($period=="lmon")
+        {
+                $st_date=date("Y-m-d",mktime(0,0,0,date("n")-1,date("1"),date("Y")));
+                $end_date = date("Y-m-d",mktime(0, 0, 1, date("n"), 0,date("Y")));
+                $period_type="month";
+                $start_month=date("d",mktime(0,0,0,date("n"),date("j"),date("Y")));
+                if($start_month==1)
+                {
+                        $st_date=date("Y-m-d",mktime(0,0,0,date("n")-2,date("1"),date("Y")));
+                        $end_date = date("Y-m-d",mktime(0, 0, 1, date("n")-1, 0,date("Y")));
+                }
+
+                $width="840";
+        }
+        else
+        {
+                $curr_date=date("Y-m-d",mktime(0,0,0,date("m"),date("d"),date("Y")));
+                $today_date=explode("-",$curr_date);
+                $lastday_date=date("Y-m-d",mktime(0,0,0,date("$today_date[1]"),date("$today_date[2]")-1,date("$today_date[0]")));
+                $st_date=$lastday_date;
+                $end_date=$lastday_date;
+                $period_type="yday";
+		 $width="250";
+        }
+        if($period_type=="yday")
+                $height="160";
+        else
+                $height="250";
+        $datevalues=array($st_date,$end_date,$period_type,$width,$height);
+        return $datevalues;
+}//function ends
+
+
 ?>
