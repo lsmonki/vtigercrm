@@ -105,60 +105,6 @@ $log->info("Email detail view");
 $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=index','LBL_WEBMAILS_TITLE'=>'index.php?module=squirrelmail-1.4.4&action=redirect');
 $sec_arr = array('index.php?module=Emails&action=index'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
 echo '<br>';
-?>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
- <tr>
-   <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-   <tr>
-     <td class="tabStart">&nbsp;&nbsp;</td>
-<?
-	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
-	{
-		$classname = "tabOff";
-	}
-	else
-	{
-		$classname = "tabOn";
-	}
-	$listView = "ListView.php";
-	foreach($submenu as $label=>$filename)
-	{
-		$cur_mod = $sec_arr[$filename];
-		$cur_tabid = getTabid($cur_mod);
-
-		if($tab_per_Data[$cur_tabid] == 0)
-		{
-
-			list($lbl,$sname,$title)=split("_",$label);
-			if(stristr($label,"EMAILS"))
-			{
-
-				echo '<td class="tabOn" nowrap><a href="index.php?module=Emails&action=index" class="tabLink">'.$mod_strings[$label].'</a></td>';
-				$listView = $filename;
-				$classname = "tabOff";
-			}
-			elseif(stristr($label,$_REQUEST['smodule']))
-			{
-				echo '<td class="tabOn" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
-				$listView = $filename;
-				$classname = "tabOff";
-			}
-			else
-			{
-				echo '<td class="'.$classname.'" nowrap><a href="index.php?module=squirrelmail-1.4.4&action=redirect&smodule='.$sname.'" class="tabLink">'.$mod_strings[$label].'</a></td>';	
-			}
-			$classname = "tabOff";
-		}
-
-	}
-?>
-     <td width="100%" class="tabEnd">&nbsp;</td>
-   </tr>
- </table></td>
- </tr>
- </table>
- <br>
-<?
 
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
@@ -186,16 +132,10 @@ $smarty->assign("ID", $_REQUEST['record']);
 
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("Emails",1,$_REQUEST['record']) == 'yes')
-{
-	$smarty->assign("EDITBUTTON","<input title=\"$app_strings[LBL_EDIT_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_EDIT_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='DetailView'; this.form.return_id.value='".$_REQUEST['record']."'; this.form.action.value='EditView'\" type=\"submit\" name=\"Edit\" value=\"$app_strings[LBL_EDIT_BUTTON_LABEL]\">&nbsp;");
-	$smarty->assign("DUPLICATEBUTTON","<input title=\"$app_strings[LBL_DUPLICATE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DUPLICATE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true'; this.form.action.value='EditView'\" type=\"submit\" name=\"Duplicate\" value=\"$app_strings[LBL_DUPLICATE_BUTTON_LABEL]\">&nbsp;");
-}
-
+	$smarty->assign("EDIT_DUPLICATE","permitted");
 
 if(isPermitted("Emails",2,$_REQUEST['record']) == 'yes')
-{
-	$smarty->assign("DELETEBUTTON","<input title=\"$app_strings[LBL_DELETE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_DELETE_BUTTON_KEY]\" class=\"button\" onclick=\"this.form.return_module.value='Emails'; this.form.return_action.value='ListView'; this.form.action.value='Delete'; return confirm('$app_strings[NTC_DELETE_CONFIRMATION]')\" type=\"submit\" name=\"Delete\" value=\"$app_strings[LBL_DELETE_BUTTON_LABEL]\">&nbsp;");
-}
+	$smarty->assign("DELETE","permitted");
 //Security check for related list
 global $profile_id;
 $tab_per_Data = getAllTabsPermission($profile_id);
