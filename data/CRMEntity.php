@@ -1214,8 +1214,12 @@ $log->debug("type is ".$type);
 				 
 				 
 				
-
-				$list[] = $this;
+		//clone function added to resolvoe PHP5 compatibility issue in Dashboards
+		//If we do not use clone, while using PHP5, the memory address remains fixed but the
+	//data gets overridden hence all the rows that come in bear the same value. This in turn
+//provides a wrong display of the Dashboard graphs. The data is erroneously shown for a specific month alone
+//Added by Richie
+				$list[] = clone($this);
 			}
 		}
 
