@@ -464,7 +464,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							}
 
 							if(($contact_name != "") && ($contact_id !='NULL'))
-								//$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."'>".$contact_name."</a>";
 								// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 								$value =  "<a href='index.php?module=Contacts&action=DetailView&record=".$contact_id."' style='".$P_FONT_COLOR."'>".$contact_name."</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}
@@ -491,7 +490,6 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 									$evt_status='&eventstatus=Held';
 								if(isPermitted("Activities",1,$activityid) == 'yes')
 								{
-									//$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."'>X</a>";
 									// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 									$value = "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&return_viewname=".$oCv->setdefaultviewid."&action=Save&module=Activities&record=".$activityid."&change_status=true".$evt_status."' style='".$P_FONT_COLOR."'>X</a>"; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 								}
@@ -518,14 +516,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 						{
 							$account_id = $adb->query_result($list_result,$i-1,"crmid");
 							$account_name = getAccountName($account_id);
-							//$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
 							// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}else
 						{
 							$account_id = $adb->query_result($list_result,$i-1,"accountid");
 							$account_name = getAccountName($account_id);
-							//$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'">'.$account_name.'</a>';
 							// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}
@@ -566,17 +562,12 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 					}
 				}
 				//Added condition to hide the close symbol in Related Lists
-				//				if($relatedlist != '' && $value == "<a href='index.php?return_module=Activities&return_action=index&return_id=".$activityid."&action=Save&module=Activities&record=".$activityid."&change_status=true&status=Completed'>X</a>")
 				if($name == 'Close' && $relatedlist != '')
 				{
 					//$list_header[]= '';
 				}
 				else
 				{
-					//$list_header .= '<td height="21" style="padding:0px 3px 0px 3px;">'.$value.'</td>';
-					// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-					//$list_header .= '<td height="21" style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'.$value.'</td>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
-					//$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
 					$list_header[] = $value;
 				}
 				if($fieldname=='filename')
@@ -601,14 +592,10 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 			else
 				$varreturnset .= '&activity_mode=Events';
 		}
-		//$list_header .= '<td style="padding:0px 3px 0px 3px;">';
-		// Fredy Klammsteiner, 4.8.2005: changes from 4.0.1 migrated to 4.2
-		//$list_header .= '<td style="'.$P_FONT_COLOR.' padding:0px 3px 0px 3px;">'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted $P_FONT_COLOR
 		$mod_dir=getModuleDirName($module);
 		$list_block[$entity_id] = $list_header;
 
 	}
-	//	$list_header .= '<tr><td colspan="30" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 	return $list_block;
 }
 
@@ -731,6 +718,7 @@ function getSearchListViewEntries($focus, $module,$list_result,$navigation_array
 function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_id,$list_result_count,$mode,$popuptype,$returnset='',$viewid='')
 {
 	global $adb;
+	$tabname = getParentTab();	
 	$uitype = $adb->query_result($field_result,0,"uitype");
 	
 	$colname = $adb->query_result($field_result,0,"columnname");
@@ -773,8 +761,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		if($temp_val != '' && $temp_val != 0)
 		{       //changes made to remove currency symbol infront of each potential amount
-			//$symbol = getCurrencySymbol();
-                        //$value = $symbol.' '.$temp_val;
                         $value = $temp_val;
 		}
 		else
@@ -879,7 +865,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
 			//echo '<br><br> val : '.$fieldvalue;
 
-			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'>'.$fieldvalue.'</a>';
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
 		}
 		else
 			$value='';
@@ -910,7 +896,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
 			//echo '<br><br> val : '.$fieldvalue;
 
-			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'>'.$fieldvalue.'</a>';
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
 		}
 		else
 			$value='';
@@ -933,11 +919,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		if($parentid != '')
                 {
 			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
-			//echo '<br> query : .. '.$sql;
 			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
-			//echo '<br><br> val : '.$fieldvalue;
 
-			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'>'.$fieldvalue.'</a>';
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
 		}
 		else
 			$value='';
@@ -963,11 +947,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 		if($parentid != '')
                 {
 			$sql="select * from ".$tablename." where ".$idname." = ".$parentid;
-			//echo '<br> query : .. '.$sql;
 			$fieldvalue=$adb->query_result($adb->query($sql),0,$fieldname);
-			//echo '<br><br> val : '.$fieldvalue;
 
-			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'>'.$fieldvalue.'</a>';
+			$value='<a href=index.php?module='.$parenttype.'&action=DetailView&record='.$parentid.'&parenttab='.$tabname.'>'.$fieldvalue.'</a>';
 		}
 		else
 			$value='';
@@ -980,7 +962,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $quote_name = getQuoteName($temp_val);
-			$value= '<a href=index.php?module=Quotes&action=DetailView&record='.$temp_val.'>'.$quote_name.'</a>';
+			$value= '<a href=index.php?module=Quotes&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.$quote_name.'</a>';
 		}
 		else
 			$value='';
@@ -993,7 +975,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $purchaseorder_name = getPoName($temp_val);
-			$value= '<a href=index.php?module=PurchaseOrder&action=DetailView&record='.$temp_val.'>'.$purchaseorder_name.'</a>';
+			$value= '<a href=index.php?module=PurchaseOrder&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.$purchaseorder_name.'</a>';
 		}
 		else
 			$value='';
@@ -1006,7 +988,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $salesorder_name = getSoName($temp_val);
-			$value= '<a href=index.php?module=SalesOrder&action=DetailView&record='.$temp_val.'>'.$salesorder_name.'</a>';
+			$value= '<a href=index.php?module=SalesOrder&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.$salesorder_name.'</a>';
 		}
 		else
 			$value='';
@@ -1019,7 +1001,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                 {
 			
                         $vendor_name = getVendorName($temp_val);
-			$value= '<a href=index.php?module=Vendors&action=DetailView&record='.$temp_val.'>'.$vendor_name.'</a>';
+			$value= '<a href=index.php?module=Vendors&action=DetailView&record='.$temp_val.'&parenttab='.$tabname.'>'.$vendor_name.'</a>';
 		}
 		else
 			$value='';
@@ -1117,10 +1099,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					{
 						if ($module=='Accounts')
 						{
-							//$emailadd = $adb->query_result($list_result,$list_result_count,'email1');
 							$accid =$adb->query_result($list_result,$list_result_count,'accountid');
-							//if ($emailadd1!='')
-							//$emailadd .= '>; '. $temp_val. '<'.$emailadd1;
 							$value = '<a href="javascript: submitform('.$accid.');">'.$temp_val.'</a>';
 						}
 						elseif ($module=='Contacts' || $module=='Leads')
@@ -1128,10 +1107,6 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 							$firstname=$adb->query_result($list_result,$list_result_count,"firstname");
 							$lastname=$adb->query_result($list_result,$list_result_count,"lastname");
 							$name=$lastname.' '.$firstname;
-							//$emailadd = $adb->query_result($list_result,$list_result_count,'email');
-							//$emailadd1 =$adb->query_result($list_result,$list_result_count,'otheremail');
-							//if ($emailadd1!='')
-							//	$emailadd .= '>; '. $name. '<'.$emailadd1;
 	
 							$value = '<a href="javascript: submitform('.$entity_id.');">'.$name.'</a>';
 						}
@@ -1163,12 +1138,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				if(($module == "Leads" && $colname == "lastname") || ($module == "Contacts" && $colname == "lastname"))
 				{
 					//Commented to give link even to the first name - Jaguar
-			             /*   if($colname == "lastname")
-			                        $firstname=$adb->query_result($list_result,$list_result_count,'firstname');
-					*/
-			              //condition to add lastname and first name only for default view on 20-11-05 
-				//		   if($viewid =='' || $viewid =='0') $temp_val =$temp_val.' '.$firstname;
-					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'">'.$temp_val.'</a>';
+					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
 				}
 				elseif($module == "Activities")
                                 {
@@ -1185,21 +1155,21 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 				elseif($module == "Vendors")
 				{
 						
-                                        $value = '<a href="index.php?action=DetailView&module=Vendors&record='.$entity_id.'">'.$temp_val.'</a>';
+                                        $value = '<a href="index.php?action=DetailView&module=Vendors&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
 				}
 				elseif($module == "PriceBooks")
 				{
 						
-                                        $value = '<a href="index.php?action=DetailView&module=PriceBooks&record='.$entity_id.'">'.$temp_val.'</a>';
+                                        $value = '<a href="index.php?action=DetailView&module=PriceBooks&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
 				}
 				elseif($module == "SalesOrder")
 				{
 						
-                                        $value = '<a href="index.php?action=DetailView&module=SalesOrder&record='.$entity_id.'">'.$temp_val.'</a>';
+                                        $value = '<a href="index.php?action=DetailView&module=SalesOrder&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
 				}
                                 else
                                 {
-                                        $value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'">'.$temp_val.'</a>';
+                                        $value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
                                 }
 			}
 		}
