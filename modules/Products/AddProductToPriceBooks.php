@@ -10,7 +10,7 @@
  ********************************************************************************/
 require_once('include/database/PearDatabase.php');
 require_once('XTemplate/xtpl.php');
-require_once('modules/Products/PriceBook.php');
+require_once('modules/PriceBooks/PriceBook.php');
 require_once('include/utils/utils.php');
 require_once('include/utils/utils.php');
 require_once('include/ComboUtil.php');
@@ -60,8 +60,7 @@ $other_text = '<table border="0" cellpadding="1" cellspacing="0">
 //Retreive the list from Database
 
 //$list_query = $focus->get_nonproduct_pricebooks($productid);
-$list_query = getListQuery("PriceBook");
-
+$list_query = getListQuery("PriceBooks");
 $xtpl->assign("PRICEBOOKLISTHEADER", get_form_header($current_module_strings['LBL_LIST_PRICEBOOK_FORM_TITLE'], $other_text, false ));
 
 $list_query .= ' ORDER BY pricebookid DESC ';

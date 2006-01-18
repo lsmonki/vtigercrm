@@ -160,11 +160,8 @@ function renderProductRelatedPriceBooks($query,$id)
 	}
 	$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Products','PriceBook',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Products','PriceBooks',$focus,$query,$button,$returnset);
 }
-
-echo get_form_footer();
 
 
 ?>
