@@ -57,10 +57,10 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 	//Retreive the list from Database
 	//$query = getListQuery("Accounts");
 
+		//echo '<BR>*****************'.$relatedmodule.' ***************';
 	//Appending the security parameter
 	if($relatedmodule != 'Notes' && $relatedmodule != 'Products' && $relatedmodule != 'Faq' && $relatedmodule != 'PriceBook' && $relatedmodule != 'Vendors') //Security fix by Don
 	{
-		//echo '<BR>*****************'.$relatedmodule.' ***************';
 		global $current_user;
 		require('user_privileges/user_privileges_'.$current_user->id.'.php');
         	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
@@ -630,7 +630,7 @@ function getPriceBookRelatedProducts($query,$focus,$returnset='')
 	global $app_strings;
 	global $mod_strings;
 	global $current_language;
-	$current_module_strings = return_module_language($current_language, 'Products');
+	$current_module_strings = return_module_language($current_language, 'PriceBook');
 
 	global $list_max_entries_per_page;
 	global $urlPrefix;
@@ -675,24 +675,15 @@ $num_rows = $adb->num_rows($list_result);
 			$class_black='class="blackLine"';	
 		}
 
-$list_header = '';
-$list_header .= '<tr class="moduleListTitle" height=20>';
-$list_header .= '<td width="40%" class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_LIST_PRODUCT_NAME'].'</td>';
-$list_header .='<td WIDTH="1" '.$class_black.' NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-$list_header .= '<td width="15%" class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_PRODUCT_CODE'].'</td>';
-$list_header .='<td WIDTH="1" '.$class_black.' NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-$list_header .= '<td width="15%" class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_PRODUCT_UNIT_PRICE'].'</td>';
-$list_header .='<td WIDTH="1" '.$class_black.' NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-$list_header .= '<td width="15%" class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">'.$mod_strings['LBL_PB_LIST_PRICE'].'</td>';
-$list_header .='<td WIDTH="1" '.$class_black.' NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-$list_header .= '<td width="15%" class="moduleListTitle" height="21" style="padding:0px 3px 0px 3px;">Edit|Del</td>';
-$list_header .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="{IMAGE_PATH}blank.gif"></td>';
-
-$list_header .= '</tr>';
+$header=array();
+$header[]=$mod_strings['LBL_LIST_PRODUCT_NAME'];
+$header[]=$mod_strings['LBL_PRODUCT_CODE'];
+$header[]=$mod_strings['LBL_PRODUCT_UNIT_PRICE'];
+$header[]=$mod_strings['LBL_PB_LIST_PRICE'];
+$header[]=$mod_strings['LBL_ACTION'];
 
 $smarty->assign("LISTHEADER", $list_header);
 
-$list_body ='';
 // begin: Armando Lüscher 14.07.2005 -> §scrollableTables
 // Desc: 'X'
 //			 Insert new table with 1 cell where all entries are in a new table.
@@ -703,35 +694,25 @@ $list_body ='';
 for($i=0; $i<$num_rows; $i++)
 {
 	$entity_id = $adb->query_result($list_result,$i,"crmid");
-		if (($i%2)==0)
-			$list_body .= '<tr height=20 class=evenListRow>';
-		else
-			$list_body .= '<tr height=20 class=oddListRow>';
 
 		$unit_price = 	$adb->query_result($list_result,$i,"unit_price");
 		$listprice = $adb->query_result($list_result,$i,"listprice");
 		$field_name=$entity_id."_listprice";
-
-		$list_body .= '<td WIDTH="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_body .= '<td width="40%" height="21" style="padding:0px 3px 0px 3px;">'.$adb->query_result($list_result,$i,"productname").'</td>';
-		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_body .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">'.$adb->query_result($list_result,$i,"productcode").'</td>';
-		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_body .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">'.$unit_price.'</td>';
-		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_body .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;">'.$listprice.'</td>';
-		$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td>';
-		$list_body .= '<td width="15%" height="21" style="padding:0px 3px 0px 3px;"><a href="index.php?module=Products&action=EditListPrice&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&listprice='.$listprice.'">edit</a>&nbsp;|&nbsp;<a href="index.php?module=Products&action=DeletePriceBookProductRel'.$returnset.'&record='.$entity_id.'&pricebook_id='.$pricebook_id.'">del</a></td>';
+		$entries = Array();
+		$entries[] = $adb->query_result($list_result,$i,"productname");
+		$entries[] = $adb->query_result($list_result,$i,"productcode");
+		$entries[] = $unit_price;
+		$entries[] = $listprice;
+		$entries[] = '<a href="index.php?module=Products&action=EditListPrice&record='.$entity_id.'&pricebook_id='.$pricebook_id.'&listprice='.$listprice.'">edit</a>&nbsp;|&nbsp;<a href="index.php?module=Products&action=DeletePriceBookProductRel'.$returnset.'&record='.$entity_id.'&pricebook_id='.$pricebook_id.'">del</a>';
 	$list_body .='<td WIDTH="1" class="blackLine" NOWRAP><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
-	
+		$entries_list[] = $entries;
 }
 // begin: Armando Lüscher 14.07.2005 -> §scrollableTables
 // Desc: Close table from 
-		$list_body .= ($num_rows>15) ? '</table></div></td></tr>':'';
 // end: Armando Lüscher 14.07.2005 -> §scrollableTables
 
-	$list_body .= '<tr><td COLSPAN="12" class="blackLine"><IMG SRC="themes/'.$theme.'/images//blank.gif"></td></tr>';
-
+		$return_data = array('header'=>$header,'entries'=>$entries_list);
+		return $return_data; 
 }
 
 ?>
