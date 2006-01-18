@@ -1,3 +1,17 @@
+{*<!--
+
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
+-->*}
+
 {*<!-- module header -->*}
 <script language="JavaScript" type="text/javascript" src="include/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
@@ -113,8 +127,7 @@ y:0.90;z-index:50"></div>
                                         <table border=0 cellspacing=0 cellpadding=2 width=100% class="searchHd
 rBox">
                                         <tr>
-                                                <td><img src="{$IMAGE_PATH}basicSearchLens.gif" alt="Basic Search" t
-itle="Basic Search" border=0></td>
+                                                <td><img src="{$IMAGE_PATH}basicSearchLens.gif" alt="Basic Search" title="Basic Search" border=0></td>
                                                 <td width=90% > <span class="hiliteBtn4Search"><a href="#" onClick="showhide('basicSearchdiv');showhide('advSearch')">Go to Advanced Search</a></span></td>
 
                                                 <td valign=top nowrap><a href="#" onClick="showhide('searchAcc')">[X] Close</a></td>
@@ -276,7 +289,22 @@ itle="Basic Search" border=0></td>
 		      <td>
 		         <table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
 			      <tr>
-				 <td style="padding-right:20px" nowrap> {$BUTTONS}</td>
+				 <td style="padding-right:20px" nowrap>
+                                 {foreach key=button_check item=button_label from=$BUTTONS}
+                                        {if $button_check eq 'del'}
+                                             <input class="small" type="submit" value="{$button_label}" onclick="return massDelete()"/>
+                                        {elseif $button_check eq 's_mail'}
+                                             <input class="small" type="submit" value="{$button_label}" onclick="return eMail()"/>
+                                        {elseif $button_check eq 's_cmail'}
+                                             <input class="small" type="submit" value="{$button_label}" onclick="return massMail()"/>
+                                        {elseif $button_check eq 'c_owner'}
+                                             <input class="small" type="submit" value="{$button_label}" onclick="this.form.change_owner.value='true'; return changeStatus()"/>
+                                        {elseif $button_check eq 'c_status'}
+                                             <input class="small" type="submit" value="{$button_label}" onclick="this.form.change_status.value='true'; return changeStatus()"/>
+                                        {/if}
+
+                                 {/foreach}
+                                 </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 		        	 <td nowrap >
 					<table border=0 cellspacing=0 cellpadding=0 class="small">
@@ -310,7 +338,22 @@ itle="Basic Search" border=0></td>
 			 </div>
 			 <table border=0 cellspacing=0 cellpadding=2 width=100%>
 			      <tr>
-				 <td style="padding-right:20px" nowrap> {$BUTTONS}</td>
+				 <td style="padding-right:20px" nowrap>
+                                 {foreach key=button_check item=button_label from=$BUTTONS}
+                                        {if $button_check eq 'del'}
+                                             <input class="small" type="submit" value="{$button_label}" onclick="return massDelete()"/>
+                                        {elseif $button_check eq 's_mail'}
+                                             <input class="small" type="submit" value="{$button_label}" onclick="return eMail()"/>
+                                        {elseif $button_check eq 's_cmail'}
+                                             <input class="small" type="submit" value="{$button_label}" onclick="return massMail()"/>
+                                        {elseif $button_check eq 'c_owner'}
+                                             <input class="small" type="submit" value="{$button_label}" onclick="this.form.change_owner.value='true'; return changeStatus()"/>
+                                        {elseif $button_check eq 'c_status'}
+                                             <input class="small" type="submit" value="{$button_label}" onclick="this.form.change_status.value='true'; return changeStatus()"/>
+                                        {/if}
+
+                                 {/foreach}
+                                 </td>
 				 <td style="padding-right:20px" class="small" nowrap>{$RECORD_COUNTS}</td>
 				 <td nowrap >
 				    <table border=0 cellspacing=0 cellpadding=0 class="small">
