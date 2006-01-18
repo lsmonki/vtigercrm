@@ -827,9 +827,9 @@ function getHeaderArray()
         require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	$query='select parenttabid from parenttab order by sequence';
 	$result = $adb->query($query);
-    $noofrows = $adb->num_rows($result);
+    	$noofrows = $adb->num_rows($result);
 	for($i=0; $i<$noofrows; $i++)
-    {
+    	{
 		$subtabs =array();
 		$parenttabid = $adb->query_result($result,$i,"parenttabid");
 		$query1 = 'select tabid from parenttabrel where parenttabid='.$parenttabid.' order by sequence';
@@ -840,21 +840,26 @@ function getHeaderArray()
 			$subtabid = $adb->query_result($result1,$j,"tabid");
 			$module = getTabModuleName($subtabid);
 			//$subtabs[] = getTabname($subtabid); 
+			if($is_admin)
+			$subtabs[] = $module;
+			elseif($profileGlobalPermission[2]==0 ||$profileGlobalPermission[1]==0 || $profileTabsPermission[$subtabid]==0) 
 			$subtabs[] = $module;
 		}
 		$parenttab = getParentTabName($parenttabid);
-		if($parenttab == 'Settings' && $is_admin==true)
+		
+		if($parenttab == 'Settings' && $is_admin)
 		{
-			$subtabs =array();
 			$subtabs[] = 'Settings';
 		}
-		if($parenttab != 'Settings' ||($parenttab == 'Settings' && $is_admin==true))
+		if($parenttab != 'Settings' ||($parenttab == 'Settings' && $is_admin))
 		{
+			if(!empty($subtabs))
 			$relatedtabs[$parenttab] = $subtabs;
 		}
 	}
 	return $relatedtabs;
 }
+
 function getParentTabName($parenttabid)
 {
     global $adb;
