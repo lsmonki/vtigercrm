@@ -19,7 +19,7 @@ $rptfolder = Array(Array('Account and Contact Reports'=>'Account and Contact Rep
 		   Array('HelpDesk Reports'=>'HelpDesk Reports'),
 		   Array('Product Reports'=>'Product Reports'),
 		   Array('Quote Reports' =>'Quote Reports'),
-		   Array('Order Reports'=>'Order Reports'),
+		   Array('PurchaseOrder Reports'=>'PurchaseOrder Reports'),
 		   Array('Invoice Reports'=>'Invoice Reports')
                   );
 
@@ -39,8 +39,8 @@ $reportmodules = Array(Array('primarymodule'=>'Contacts','secondarymodule'=>'Acc
 		       Array('primarymodule'=>'Products','secondarymodule'=>'Contacts'),
 		       Array('primarymodule'=>'Quotes','secondarymodule'=>''),
 		       Array('primarymodule'=>'Quotes','secondarymodule'=>''),
-		       Array('primarymodule'=>'Orders','secondarymodule'=>'Contacts'),
-		       Array('primarymodule'=>'Orders','secondarymodule'=>''),
+		       Array('primarymodule'=>'PurchaseOrder','secondarymodule'=>'Contacts'),
+		       Array('primarymodule'=>'PurchaseOrder','secondarymodule'=>''),
 		       Array('primarymodule'=>'Invoice','secondarymodule'=>'')
 		      );
 
@@ -154,23 +154,23 @@ $selectcolumns = Array(Array('contactdetails:firstname:Contacts_First_Name:first
 			     'quotes:carrier:Quotes_Carrier:carrier:V',
 			     'quotes:shipping:Quotes_Shipping:shipping:V'),
 
-		       Array('purchaseorder:subject:Orders_Subject:subject:V',
-			     'vendorRel:vendorname:Orders_Vendor_Name:vendor_id:I',
-			     'purchaseorder:tracking_no:Orders_Tracking_Number:tracking_no:V',
+		       Array('purchaseorder:subject:PurchaseOrder_Subject:subject:V',
+			     'vendorRel:vendorname:PurchaseOrder_Vendor_Name:vendor_id:I',
+			     'purchaseorder:tracking_no:PurchaseOrder_Tracking_Number:tracking_no:V',
 			     'contactdetails:firstname:Contacts_First_Name:firstname:V',
 			     'contactdetails:lastname:Contacts_Last_Name:lastname:V',
 			     'contactsubdetails:leadsource:Contacts_Lead_Source:leadsource:V',
 			     'contactdetails:email:Contacts_Email:email:V'),
 
-		       Array('purchaseorder:subject:Orders_Subject:subject:V',
-			     'vendorRel:vendorname:Orders_Vendor_Name:vendor_id:I',
-			     'purchaseorder:requisition_no:Orders_Requisition_No:requisition_no:V',
-                             'purchaseorder:tracking_no:Orders_Tracking_Number:tracking_no:V',
-			     'contactdetailsOrders:lastname:Orders_Contact_Name:contact_id:I',
-			     'purchaseorder:carrier:Orders_Carrier:carrier:V',
-			     'purchaseorder:salescommission:Orders_Sales_Commission:salescommission:N',
-			     'purchaseorder:exciseduty:Orders_Excise_Duty:exciseduty:N',
-                             'usersOrders:user_name:Orders_Assigned_To:assigned_user_id:V'),
+		       Array('purchaseorder:subject:PurchaseOrder_Subject:subject:V',
+			     'vendorRel:vendorname:PurchaseOrder_Vendor_Name:vendor_id:I',
+			     'purchaseorder:requisition_no:PurchaseOrder_Requisition_No:requisition_no:V',
+                             'purchaseorder:tracking_no:PurchaseOrder_Tracking_Number:tracking_no:V',
+			     'contactdetailsPurchaseOrder:lastname:PurchaseOrder_Contact_Name:contact_id:I',
+			     'purchaseorder:carrier:PurchaseOrder_Carrier:carrier:V',
+			     'purchaseorder:salescommission:PurchaseOrder_Sales_Commission:salescommission:N',
+			     'purchaseorder:exciseduty:PurchaseOrder_Excise_Duty:exciseduty:N',
+                             'usersPurchaseOrder:user_name:PurchaseOrder_Assigned_To:assigned_user_id:V'),
 
 		       Array('invoice:subject:Invoice_Subject:subject:V',
 			     'invoice:salesorderid:Invoice_Sales_Order:salesorder_id:I',
@@ -278,15 +278,15 @@ $reports = Array(Array('reportname'=>'Contacts by Accounts',
                        'reporttype'=>'tabular',
                        'sortid'=>'','stdfilterid'=>'','advfilterid'=>''),
 
-		 Array('reportname'=>'Orders by Contacts',
-                       'reportfolder'=>'Order Reports',
-                       'description'=>'Orders related to Contacts',
+		 Array('reportname'=>'PurchaseOrder by Contacts',
+                       'reportfolder'=>'PurchaseOrder Reports',
+                       'description'=>'PurchaseOrder related to Contacts',
                        'reporttype'=>'tabular',
                        'sortid'=>'','stdfilterid'=>'','advfilterid'=>''),
 
-		 Array('reportname'=>'Orders Detailed Report',
-                       'reportfolder'=>'Order Reports',
-                       'description'=>'Orders detailed report',
+		 Array('reportname'=>'PurchaseOrder Detailed Report',
+                       'reportfolder'=>'PurchaseOrder Reports',
+                       'description'=>'PurchaseOrder detailed report',
                        'reporttype'=>'tabular',
                        'sortid'=>'','stdfilterid'=>'','advfilterid'=>''),
 
