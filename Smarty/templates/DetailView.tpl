@@ -127,27 +127,44 @@
 				                     <table border=0 cellspacing=0 cellpadding=0 width=100%>
 						     {strip}<tr nowrap>
 							<td  colspan=4 style="padding:5px">
-								{$EDITBUTTON}
-								{$DUPLICATEBUTTON}
-								{$DELETEBUTTON}
-					
-							{if $MODULE eq 'Leads' || $MODULE eq 'Contacts'}
+								{if $EDIT_DUPLICATE eq 'permitted'}
+                                                                <input title="{$APP.LBL_EDIT_BUTTON_TITLE}" accessKey="{$APP.LBL_EDIT_BUTTON_KEY}" class="small" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.module.value='{$MODULE}';this.form.action.value='EditView'" type="submit" name="Edit" value="{$APP.LBL_EDIT_BUTTON_LABEL}">&nbsp;
+                                                                <input title="{$APP.LBL_DUPLICATE_BUTTON_TITLE}" accessKey="{$APP.LBL_DUPLICATE_BUTTON_KEY}" class="small" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.isDuplicate.value='true';this.form.module.value='{$MODULE}'; this.form.action.value='EditView'" type="submit" name="Duplicate" value="{$APP.LBL_DUPLICATE_BUTTON_LABEL}">&nbsp;
+                                                                {/if}
+								{if $DELETE eq 'permitted'}
+                                                                <input title="{$APP.LBL_DELETE_BUTTON_TITLE}" accessKey="{$APP.LBL_DELETE_BUTTON_KEY}" class="small" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='index'; this.form.action.value='Delete'; return confirm('{$APP.NTC_DELETE_CONFIRMATION}')" type="submit" name="Delete" value="{$APP.LBL_DELETE_BUTTON_LABEL}">&nbsp;
+                                                                {/if}
 
-                                                                {$SENDMAILBUTTON}
-
+                                                        {if $MODULE eq 'Leads' || $MODULE eq 'Contacts'}
+                                                                {if $SENDMAILBUTTON eq 'permitted'}
+                                                                <input title="{$APP.LBL_SENDMAIL_BUTTON_TITLE}" accessKey="{$APP.LBL_SENDMAIL_BUTTON_KEY}" class="small" onclick="this.form.return_module.value='{$MODULE}'; this.form.module.value='Emails';this.form.email_directing_module.value='{$REDIR_MOD}';this.form.return_action.value='DetailView';this.form.action.value='EditView';" type="submit" name="SendMail" value="{$APP.LBL_SENDMAIL_BUTTON_LABEL}">&nbsp;
+                                                                {/if}
                                                         {/if}
                                                         {if $MODULE eq 'Quotes' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder' || $MODULE eq 'Invoice'}
-                                                                {$CREATEPDF}
+                                                                {if $CREATEPDF eq 'permitted'}
+                                                                <input title="Export To PDF" accessKey="Alt+e" class="small" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}'; this.form.module.value='{$MODULE}'; {if $MODULE eq 'SalesOrder'} this.form.action.value='CreateSOPDF'" {else} this.form.action.value='CreatePDF'" {/if} type="submit" name="Export To PDF" value="{$APP.LBL_EXPORT_TO_PDF}">&nbsp;
+                                                                {/if}
                                                         {/if}
-							{if $MODULE eq 'Quotes'}
-                                                                {$CONVERTSALESORDER}
+                                                        {if $MODULE eq 'Quotes'}
+                                                                {if $CONVERTSALESORDER eq 'permitted'}
+                                                                <input title="{$APP.LBL_CONVERTSO_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTSO_BUTTON_KEY}" class="small" onclick="this.form.return_module.value='SalesOrder'; this.form.return_action.value='DetailView'; this.form.convertmode.value='quotetoso';this.form.module.value='SalesOrder'; this.form.action.value='EditView'" type="submit" name="Convert To SalesOrder" value="{$APP.LBL_CONVERTSO_BUTTON_LABEL}">&nbsp;
+                                                                {/if}
+                                                        {/if}
+							{if $MODULE eq 'HelpDesk'}
+                                                                {if $CONVERTASFAQ eq 'permitted'}
+                                                                <input title="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_TITLE}" accessKey="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_KEY}" class="small" onclick="this.form.return_module.value='Faq'; this.form.return_action.value='DetailView'; this.form.action.value='ConvertAsFAQ';" type="submit" name="ConvertAsFAQ" value="{$MOD.LBL_CONVERT_AS_FAQ_BUTTON_LABEL}">&nbsp;
+                                                                {/if}
                                                         {/if}
 
-                                                        {if $MODULE eq 'Potentials' || $MODULE eq 'PurchaseOrder' || $MODULE eq 'SalesOrder'}
-                                                                {$CONVERTINVOICE}
+                                                        {if $MODULE eq 'Potentials' || $MODULE eq 'Quotes' || $MODULE eq 'SalesOrder'}
+                                                                {if $CONVERTINVOICE eq 'permitted'}
+                                                                <input title="{$APP.LBL_CONVERTINVOICE_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERTINVOICE_BUTTON_KEY}" class="small" onclick="this.form.return_module.value='{$MODULE}'; this.form.return_action.value='DetailView'; this.form.return_id.value='{$ID}';this.form.convertmode.value='{$CONVERTMODE}';this.form.module.value='Invoice'; this.form.action.value='EditView'" type="submit" name="Convert To Invoice" value="{$APP.LBL_CONVERTINVOICE_BUTTON_LABEL}">&nbsp;
+                                                                {/if}
                                                         {/if}
-							{if $MODULE eq 'Leads'}
-                                                                {$CONVERTLEAD}
+                                                        {if $MODULE eq 'Leads'}
+                                                                {if $CONVERTLEAD eq 'permitted'}
+                                                                <input title="{$APP.LBL_CONVERT_BUTTON_TITLE}" accessKey="{$APP.LBL_CONVERT_BUTTON_KEY}" class="small" onclick="this.form.return_module.value='{$MODULE}';this.form.module.value='{$MODULE}'; this.form.action.value='ConvertLead'" type="submit" name="Convert" value="{$APP.LBL_CONVERT_BUTTON_LABEL}">&nbsp;
+                                                                {/if}
                                                         {/if}
 							</td>
 
@@ -216,7 +233,9 @@
 								</tr>
 								<tr>
 								<td>
-								{$MERGEBUTTON} 
+								{if $MERGEBUTTON eq 'permitted'}
+                                                                <input title="{$APP.LBL_MERGE_BUTTON_TITLE}" accessKey="{$APP.LBL_MERGE_BUTTON_KEY}" class="small" onclick="this.form.action.value='Merge';" type="submit" name="Merge" value="{$APP.LBL_MERGE_BUTTON_LABEL}">&nbsp;
+                                                                {/if}
 								</td>
 								</tr>
 								</table>
