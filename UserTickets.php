@@ -28,7 +28,7 @@ $proxypassword = isset($_POST['proxypassword']) ? $_POST['proxypassword'] : $Pro
 global $Server_Path;
 global $client;
 
-$client = new soapclient($Server_Path."/contactserialize.php", false,
+$client = new soapclient($Server_Path."/vtigerservice.php?service=customerportal", false,
 						$proxyhost, $proxyport, $proxyusername, $proxypassword);
 $err = $client->getError();
 if ($err) 
@@ -378,11 +378,10 @@ function GetDetailView($result,$ticketid)
 	$params = Array('id'=>"$ticketid");
 	$commentresult = $client->call('get_ticket_comments', $params, $Server_Path, $Server_Path);	
 
-	$innerarray = $commentresult[0];
-	$outercount = count($result);
-	$innercount = count($innerarray);
-	
-	for($i=0;$i<$outercount;$i++)
+	$ticketscount = count($result);
+	$commentscount = count($commentresult);
+
+	for($i=0;$i<$ticketscount;$i++)
 	{
 		if($result[$i]['ticketid'] == $ticketid && $result[$i]['status'] != $mod_strings['LBL_STATUS_CLOSED'])
 		{
@@ -399,7 +398,7 @@ function GetDetailView($result,$ticketid)
 
 	$list .= '</tr></table>';
 	$list .= '<table border="0" cellspacing="4" cellpadding="2" style="margin-top:10px">';
-        for($i=0;$i<$outercount;$i++)
+        for($i=0;$i<$ticketscount;$i++)
         {
 	        if($result[$i]['ticketid'] == $ticketid)
                 {
@@ -432,19 +431,20 @@ function GetDetailView($result,$ticketid)
 			$list .= '<tr><td align="right" valign="top" nowrap>'.$mod_strings['LBL_RESOLUTION'].' : </td>';
                         $list .= '<td><b>'.nl2br($result[$i]['solution']).'</b></td></tr>';
 			
-			if($innercount > 1)
+			if($commentscount >= 1)
 			{
 				$list .= '<td align="right" valign="top" nowrap>'.$mod_strings['LBL_COMMENTS'].' : </td>';
 				$list .= '<td nowrap colspan="5"> <div class="commentArea">';
 			}
-		        for($j=0;$j<$innercount;$j++)
+
+		        for($j=0;$j<$commentscount;$j++)
                 	{
-                        	if($commentresult[0][$j] != '')
+                        	if($commentresult[$j]['comments'] != '')
 	                        {
-        	                        $list .= nl2br($commentresult[0][$j]);
+        	                        $list .= nl2br($commentresult[$j]['comments']);
 					$list .= '<div class="commentInfo"> '.$mod_strings['LBL_COMMENT_BY'].' : ';
-					$list .= $commentresult[1][$j].' '.$mod_strings['LBL_ON'].' ';
-					$list .= $commentresult[2][$j].'</div><br>';
+					$list .= $commentresult[$j]['owner'].' '.$mod_strings['LBL_ON'].' ';
+					$list .= $commentresult[$j]['createdtime'].'</div><br>';
 					$list .= '<div>';
 					for($k=0;$k<50;$k++) $list .= '---';
 					$list .= '</div>';
@@ -458,6 +458,7 @@ function GetDetailView($result,$ticketid)
 	{
 		$list .= '<form name="form" action="#" method="post">';
 		$list .= '<input type=hidden name=updatecomment value=true>';
+		$list .= '<input type=hidden name=ticketid value='.$ticketid.'>';
 		$list .= '<td align="right" valign="top" nowrap>'.$mod_strings['LBL_ADD_COMMENT'].' : </td>';
 		$list .= '<td nowrap colspan="5"><textarea name="comments" cols="85" rows="7"></textarea> </td></tr>';
 		$list .= '<tr><td/><td><input type=submit name=submit value='.$mod_strings['LBL_SUBMIT'].'></td>';
@@ -483,6 +484,15 @@ function UpdateComment()
 
         $params = Array('id'=>"$ticketid",'ownerid'=>"$ownerid",'createdtime'=>"$createdtime",'comments'=>"$comments");
         $commentresult = $client->call('update_ticket_comment', $params, $Server_Path, $Server_Path);
+
+	$_REQUEST['fun'] = 'detail';
+
+	$username = $_SESSION['customer_name'];
+	$parent_id = $_SESSION['customer_id'];
+	$params_list = array('user_name' => "$username", 'id' => "$parent_id");
+	$result = $client->call('get_tickets_list', $params_list, $Server_Path, $Server_Path);
+
+	GetDetailView($result, $ticketid);
 }
 /*
 function LogOut()

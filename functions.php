@@ -255,7 +255,7 @@ function getSearchResult($search_text,$search_value,$search_by)
                 for($i=0;$i<count($faq_array);$i++)
                 {
 			if($search_text != '')
-	                        $flag = @strstr($faq_array[$i]['question'],$search_text);
+	                        $flag = @stristr($faq_array[$i]['question'],$search_text);
 			else
 				$flag = true;
 
@@ -279,7 +279,7 @@ function getSearchResult($search_text,$search_value,$search_by)
                 for($i=0;$i<count($faq_array);$i++)
                 {
 			if($search_text != '')
-	                        $flag = @strstr($faq_array[$i]['question'],$search_text);
+	                        $flag = @stristr($faq_array[$i]['question'],$search_text);
 			else
 				$flag = true;
                         if($flag && $faq_array[$i]['category'] == $search_value)
@@ -306,7 +306,7 @@ function getSearchResult($search_text,$search_value,$search_by)
 				for($j=0;$j<count($faq_array);$j++)
        				{
 					if($search_text != '')
-		                                $flag = @strstr($faq_array[$j]['question'],$search_text);
+		                                $flag = @stristr($faq_array[$j]['question'],$search_text);
                 		        else
                                 		$flag = true;
 			        	if($flag && ($product_array[$i]['productid'] == $faq_array[$j]['product_id']))

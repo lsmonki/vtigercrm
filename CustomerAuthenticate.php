@@ -18,7 +18,7 @@ $proxyusername = isset($_POST['proxyusername']) ? $_POST['proxyusername'] : $Pro
 $proxypassword = isset($_POST['proxypassword']) ? $_POST['proxypassword'] : $Proxy_Password;
 global $client;
 global $Server_Path;
-$client = new soapclient($Server_Path."/contactserialize.php", false,
+$client = new soapclient($Server_Path."/vtigerservice.php?service=customerportal", false,
                                                 $proxyhost, $proxyport, $proxyusername, $proxypassword);
 $err = $client->getError();
 if ($err)

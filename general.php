@@ -21,7 +21,7 @@ $proxypassword = isset($_POST['proxypassword']) ? $_POST['proxypassword'] : $Pro
 global $Server_Path;
 global $client;
 
-$client = new soapclient($Server_Path."/contactserialize.php", false,
+$client = new soapclient($Server_Path."/vtigerservice.php?service=customerportal", false,
                                                 $proxyhost, $proxyport, $proxyusername, $proxypassword);
 
 if($_REQUEST['param'] == 'forgot_password')
