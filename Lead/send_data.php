@@ -9,21 +9,10 @@
 *
  ********************************************************************************/
 
-
+include("config.php");
 require_once('nusoap/lib/nusoap.php');
 
-//Configuration settings -- Start.
-
-$Server_Path = 'http://rajeshkannan'; //This is the path where have you run ther vtiger server.
-$proxyhost = '';       //This is the proxy host 
-$proxyport = '';       //This is proxy port 
-$proxyusername = '';   //This is the proxy setting user name 
-$proxypassword = '';   //This is the proxy setting password
-
-//Configuration settings -- End.
-
-
-$client = new soapclient($Server_Path."/contactserialize.php", false,
+$client = new soapclient($Server_Path."/vtigerservice.php?service=webforms", false,
                                                 $proxyhost, $proxyport, $proxyusername, $proxypassword);
 $err = $client->getError();
 
@@ -36,13 +25,16 @@ if($_REQUEST['create'] == 'lead')
 	$country = $_POST['country'];
 	$description = "WebForm : ".$_POST['description'];
 
-	$params = array('lastname' => "$lastname",
-	                'email'=>"$email",
-	                'phone'=>"$phone",
-	                'company'=>"$company",
-	                'country'=>"$country",
-	                'description'=>"$description"
+	$params = array(
+				'lastname' => "$lastname",
+		                'email'=>"$email",
+		                'phone'=>"$phone",
+	        	        'company'=>"$company",
+	                	'country'=>"$country",
+		                'description'=>"$description",
+		                'assigned_user_id'=>"$assigned_user_id"
 			);
+
 	if($lastname != '' && $company != '')
 	{
 		$result = $client->call('create_lead_from_webform', $params, $Server_Path, $Server_Path);
@@ -58,7 +50,7 @@ if($_REQUEST['create'] == 'lead')
 	}
 	else
 	{
-		$_REQUEST['error_message'] = "<h3>Last Name and Company must be entered to create a Lead.</h3>";
+		$error_message = "<h3>Last Name and Company must be entered to create a Lead.</h3>";
 		include("index.php");
 	}
 }

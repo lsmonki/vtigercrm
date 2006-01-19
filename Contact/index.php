@@ -10,8 +10,8 @@
  ********************************************************************************/
 
 
-if($_REQUEST['error_message'] != '')
-	echo '<h6><font color="purple">'.$_REQUEST['error_message'].'</font></h6>';
+if($error_message != '')
+	echo '<h6><font color="purple">'.$error_message.'</font></h6>';
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
