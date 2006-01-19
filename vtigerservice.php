@@ -9,28 +9,35 @@
 *
  ********************************************************************************/
  
-     if(isset($_REQUEST['service']))
-     {
-          if($_REQUEST['service'] == "outlook")
-          {
-               include("soap/vtigerolservice.php");
-          }
-          elseif($_REQUEST['service'] == "webportal")
-          {
-               include("soap/contactserialize.php");
-          }
-          else
-          {
-               echo "No Service Configured for $_REQUEST[service]";
-          }
-     }else
-     {
-          echo "<h1>vtigerCRM Soap Services</h1>";
-          echo "<li>vtigerCRM Outlook Plugin EndPoint URL -- Click <a href='vtigerservice.php?service=outlook'>here</a></li>";
-          echo "<li>vtigerCRM Word Plugin EndPoint URL -- Click <a href='vtigerservice.php?service=word'>here</a></li>";
-          echo "<li>vtigerCRM ThunderBird Extenstion EndPoint URL -- Click <a href='vtigerservice.php?service=thunderbird'>here</a></li>";
-          echo "<li>vtigerCRM Customer Portal EndPoint URL -- Click <a href='vtigerservice.php?service=webportal'>here</a></li>";
-          echo "<li>vtigerCRM WebForm EndPoint URL -- Click <a href='vtigerservice.php?service=webform'>here</a></li>";
-          echo "<li>vtigerCRM FireFox Extension EndPoint URL -- Click <a href='vtigerservice.php?service=firefox'>here</a></li>"; 
-     }
+if(isset($_REQUEST['service']))
+{
+	if($_REQUEST['service'] == "outlook")
+	{
+		include("soap/vtigerolservice.php");
+	}
+	elseif($_REQUEST['service'] == "customerportal")
+	{
+		include("soap/customerportal.php");
+	}
+	elseif($_REQUEST['service'] == "webforms")
+	{
+		include("soap/webforms.php");
+	}
+	else
+	{
+		echo "No Service Configured for $_REQUEST[service]";
+	}
+}
+else
+{
+	echo "<h1>vtigerCRM Soap Services</h1>";
+	echo "<li>vtigerCRM Outlook Plugin EndPoint URL -- Click <a href='vtigerservice.php?service=outlook'>here</a></li>";
+	echo "<li>vtigerCRM Word Plugin EndPoint URL -- Click <a href='vtigerservice.php?service=word'>here</a></li>";
+	echo "<li>vtigerCRM ThunderBird Extenstion EndPoint URL -- Click <a href='vtigerservice.php?service=thunderbird'>here</a></li>";
+	echo "<li>vtigerCRM Customer Portal EndPoint URL -- Click <a href='vtigerservice.php?service=customerportal'>here</a></li>";
+	echo "<li>vtigerCRM WebForm EndPoint URL -- Click <a href='vtigerservice.php?service=webforms'>here</a></li>";
+	echo "<li>vtigerCRM FireFox Extension EndPoint URL -- Click <a href='vtigerservice.php?service=firefox'>here</a></li>"; 
+}
+
+
 ?>
