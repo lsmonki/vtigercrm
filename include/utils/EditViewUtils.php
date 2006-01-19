@@ -1469,7 +1469,7 @@ function getBlockInformation($module, $block, $mode, $col_fields,$tabid)
                 }
 		else
 		{
-			$key2 ='';
+			$key2 =array();
 		}
                 $return_data[$j]=array(0 => $key1,1 => $key2);
         }
