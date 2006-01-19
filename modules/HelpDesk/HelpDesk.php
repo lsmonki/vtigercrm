@@ -140,7 +140,7 @@ class HelpDesk extends CRMEntity {
 	**/
         function get_ticket_comments_list($ticketid)
         {
-                $sql = "select * from ticketcomments where ticketid=".$ticketid;
+                $sql = "select * from ticketcomments where ticketid=".$ticketid." order by createdtime DESC";
                 $result = $this->db->query($sql);
                 $noofrows = $this->db->num_rows($result);
                 for($i=0;$i<$noofrows;$i++)
@@ -155,9 +155,9 @@ class HelpDesk extends CRMEntity {
                                 $name = $this->db->query_result($this->db->query($sql1),0,'user_name');
                         }
 
-                        $output['comments'][$i] = nl2br($this->db->query_result($result,$i,"comments"));
-			$output['owner'][$i] = $name;
-                        $output['createdtime'][$i] = $this->db->query_result($result,$i,"createdtime");
+                        $output[$i]['comments'] = nl2br($this->db->query_result($result,$i,"comments"));
+			$output[$i]['owner'] = $name;
+                        $output[$i]['createdtime'] = $this->db->query_result($result,$i,"createdtime");
                 }
                 return $output;
         }
