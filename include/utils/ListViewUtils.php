@@ -526,9 +526,9 @@ function getListViewEntries($focus, $module,$list_result,$navigation_array,$rela
 							$value = '<a href="index.php?module=Accounts&action=DetailView&record='.$account_id.'" style="'.$P_FONT_COLOR.'">'.$account_name.'</a>'; // Armando Lüscher 05.07.2005 -> §priority -> Desc: inserted style="$P_FONT_COLOR"
 						}
 					}
-					elseif(($module == 'PriceBook' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'Faq') && $name == 'Product Name')
+					elseif(( $module == 'HelpDesk' || $module == 'PriceBook' || $module == 'Quotes' || $module == 'PurchaseOrder' || $module == 'Faq') && $name == 'Product Name')
 					{
-						if($module == 'Faq')
+						if($module == 'HelpDesk' || $module == 'Faq')
 							$product_id = $adb->query_result($list_result,$i-1,"product_id");
 						else
 							$product_id = $adb->query_result($list_result,$i-1,"productid");
