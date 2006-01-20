@@ -1126,6 +1126,17 @@ function getProductImageName($id)
 	return $image_name;
 	
 }
+function getContactImageName($id)
+{
+        global $adb;
+        global $log;
+        $query = "select imagename from contactdetails where contactid=".$id;
+        $result = $adb->query($query);
+        $image_name = $adb->query_result($result,0,"imagename");
+        $log->debug("Inside getContactImageName. The image_name is ".$image_name);
+        return $image_name;
+
+}
 function updateSubTotal($module,$tablename,$colname,$colname1,$entid_fld,$entid,$prod_total)
 {
         global $adb;
