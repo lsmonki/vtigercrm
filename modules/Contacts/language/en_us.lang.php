@@ -96,6 +96,7 @@ $mod_strings = Array(
 'LBL_POSTAL_CODE'=>'Postal Code:',
 'LBL_COUNTRY'=>'Country:',
 'LBL_DESCRIPTION_INFORMATION'=>'Description Information',
+'LBL_IMAGE_INFORMATION'=>'Contact Image Information:',
 'LBL_ADDRESS_INFORMATION'=>'Address Information',
 'LBL_DESCRIPTION'=>'Description:',
 'LBL_CONTACT_ROLE'=>'Role:',
@@ -171,6 +172,7 @@ $mod_strings = Array(
 'Other State'=>'Other State',
 'Other Zip'=>'Other Zip',
 'Other Country'=>'Other Country',
+'Contact Image'=>'Contact Image',
 'Description'=>'Description',
 
 // Added fields for Add Business Card
@@ -192,6 +194,11 @@ $mod_strings = Array(
 //Added for 4.2 Release -- CustomView
 'Name'=>'Name',
 'LBL_ALL'=>'All',
+'LBL_MAXIMUM_LIMIT_ERROR'=>'Sorry, the uploaded file exceeds the maximum filesize limit. Please try a file smaller than 800000 bytes',
+'LBL_UPLOAD_ERROR'=>'Problems in file upload. Please try again!',
+'LBL_IMAGE_ERROR'=>'The given file is not of type image(.gif/.jpg/.png)',
+'LBL_INVALID_IMAGE'=>'Invalid file OR File has no data',
+
 );
 
 ?>
