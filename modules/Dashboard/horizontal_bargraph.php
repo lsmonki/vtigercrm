@@ -14,8 +14,16 @@ include ("../../jpgraph/src/jpgraph.php");
 include ("../../jpgraph/src/jpgraph_bar.php");
 
 
-$referdata=$HTTP_GET_VARS['referdata'];
-$refer_code=$HTTP_GET_VARS['refer_code'];
+$referdata=$_REQUEST['referdata'];
+$refer_code=$_REQUEST['refer_code'];
+$width=($_REQUEST['width'])?$_REQUEST['width']:410;
+$height=($_REQUEST['height'])?$_REQUEST['height']:270;
+$left=(isset($_REQUEST['left']))?$_REQUEST['left']:50;
+$right=(isset($_REQUEST['right']))?$_REQUEST['right']:30;
+$top=(isset($_REQUEST['top']))?$_REQUEST['top']:50;
+$bottom=(isset($_REQUEST['bottom']))?$_REQUEST['bottom']:50;
+$title=(isset($_REQUEST['title']))?$_REQUEST['title']:"Horizontal graph";
+$target_val=(isset($_REQUEST['target_val']))?$_REQUEST['target_val']:"";
 
 
 
@@ -55,14 +63,6 @@ $datax=$temp;
 
 //$datax=explode(",",$refer_code);
 
-$width=($HTTP_GET_VARS['width'])?$HTTP_GET_VARS['width']:410;
-$height=($HTTP_GET_VARS['height'])?$HTTP_GET_VARS['height']:270;
-$left=(isset($HTTP_GET_VARS['left']))?$HTTP_GET_VARS['left']:50;
-$right=(isset($HTTP_GET_VARS['right']))?$HTTP_GET_VARS['right']:30;
-$top=(isset($HTTP_GET_VARS['top']))?$HTTP_GET_VARS['top']:50;
-$bottom=(isset($HTTP_GET_VARS['bottom']))?$HTTP_GET_VARS['bottom']:50;
-$title=(isset($HTTP_GET_VARS['title']))?$HTTP_GET_VARS['title']:"Horizontal graph";
-$target_val=(isset($HTTP_GET_VARS['target_val']))?$HTTP_GET_VARS['target_val']:"";
 
 $target=explode(",",$target_val);
 
