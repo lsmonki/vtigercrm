@@ -22,11 +22,13 @@
         <input type="hidden" name="old_id" value="{$OLD_ID}">
 
 {elseif $MODULE eq 'Contacts'}
-	<form name="EditView" method="POST" action="index.php">
+	{$ERROR_MESSAGE}
+        <form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<input type="hidden" name="opportunity_id" value="{$OPPORTUNITY_ID}">
 	<input type="hidden" name="contact_role">
 	<input type="hidden" name="case_id" value="{$CASE_ID}">
+	<INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
 
 {elseif $MODULE eq 'Potentials'}
 	<form name="EditView" method="POST" action="index.php">
@@ -64,6 +66,7 @@
 	<input type="hidden" name="old_id" value="{$OLD_ID}">
 
 {elseif $MODULE eq 'Products'}
+	{$ERROR_MESSAGE}
 	<form name="EditView" method="POST" ENCTYPE="multipart/form-data" action="index.php">
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
 	<INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
