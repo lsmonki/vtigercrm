@@ -88,12 +88,13 @@ if(isset($_REQUEST['form_submit']) && $_REQUEST['popuptype'] == 'detailview' && 
 	$the_javascript  = "<script type='text/javascript' language='JavaScript'>\n";
 	$the_javascript .= "function set_return(user_id, user_name) {\n";
 	//$the_javascript .= 'opener.document.location.href="index.php?module='.$return_module.'&action=updateRelations&entityid="+user_id+"&parid='.$recordid.'"; \n';
-	$the_javascript .= "	window.opener.document.DetailView.user_id.value = user_id; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_module.value = window.opener.document.DetailView.return_module.value; \n";
+	$the_javascript .= "	window.opener.document.form.user_id.value = user_id; \n";
+	$the_javascript .= "	window.opener.document.form.return_module.value = window.opener.document.form.return_module.value; \n";
 	//$the_javascript .= "	window.opener.document.DetailView.return_action.value = 'DetailView'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.return_id.value = window.opener.document.DetailView.record.value; \n";
-	$the_javascript .= "	window.opener.document.DetailView.action.value = 'updateRelations'; \n";
-	$the_javascript .= "	window.opener.document.DetailView.submit(); \n";
+	$the_javascript .= "	window.opener.document.form.return_id.value = window.opener.document.form.record.value; \n";
+	$the_javascript .= "   window.opener.document.form.module.value = window.opener.document.form.return_module.value; \n";
+	$the_javascript .= "	window.opener.document.form.action.value = 'updateRelations'; \n";
+	$the_javascript .= "	window.opener.document.form.submit(); \n";
 	$the_javascript .= "}\n";
 	$the_javascript .= "</script>\n";
 }
