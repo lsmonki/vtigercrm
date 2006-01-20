@@ -469,6 +469,7 @@
 		<field name="currency" type="C" size="20">
 			<DEFAULT value="Dollars"/>
 		</field>
+		<field name="imagename" type="C" size="150"></field>
 
              		 
 		 <index name="ContactDetails_IDX1">
