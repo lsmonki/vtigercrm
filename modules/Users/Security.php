@@ -77,7 +77,7 @@ $this->db->query("insert into blocks values (4,4,'LBL_CONTACT_INFORMATION',1,0,0
 $this->db->query("insert into blocks values (5,4,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0)");
 $this->db->query("insert into blocks values (6,4,'LBL_CUSTOMER_PORTAL_INFORMATION',3,0,0,0,0,0)");
 $this->db->query("insert into blocks values (7,4,'LBL_ADDRESS_INFORMATION',4,0,0,0,0,0)");
-$this->db->query("insert into blocks values (8,4,'LBL_DESCRIPTION_INFORMATION',5,0,0,0,0,0)");
+$this->db->query("insert into blocks values (8,4,'LBL_DESCRIPTION_INFORMATION',6,0,0,0,0,0)");
 $this->db->query("insert into blocks values (9,6,'LBL_ACCOUNT_INFORMATION',1,0,0,0,0,0)");
 $this->db->query("insert into blocks values (10,6,'LBL_CUSTOM_INFORMATION',2,0,0,0,0,0)");
 $this->db->query("insert into blocks values (11,6,'LBL_ADDRESS_INFORMATION',3,0,0,0,0,0)");
@@ -144,6 +144,7 @@ $this->db->query("insert into blocks values (71,23,'LBL_ADDRESS_INFORMATION',3,0
 $this->db->query("insert into blocks values (72,23,'LBL_RELATED_PRODUCTS',4,0,0,0,0,0)");
 $this->db->query("insert into blocks values (73,23,'LBL_TERMS_INFORMATION',5,0,0,0,0,0)");
 $this->db->query("insert into blocks values (74,23,'LBL_DESCRIPTION_INFORMATION',6,0,0,0,0,0)");
+$this->db->query("insert into blocks values (75,4,'LBL_IMAGE_INFORMATION',5,0,0,0,0,0)");
 
 //
 
@@ -307,6 +308,10 @@ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").
 $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mailingpobox','contactaddress',1,'1','mailingpobox','Mailing Po Box',1,0,0,100,3,7,1,'V~O',1,'')");
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'otherpobox','contactaddress',1,'1','otherpobox','Other Po Box',1,0,0,100,4,7,1,'V~O',1,'')");
 //Block7 -- End
+
+//ContactImageInformation
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'imagename','contactdetails',1,'69','imagename','Contact Image',1,0,0,100,1,75,1,'V~O',1,'')");
+
 
 //Block8 -- Start
 $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,8,1,'V~O',1,'')");
