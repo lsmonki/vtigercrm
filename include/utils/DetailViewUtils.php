@@ -36,7 +36,7 @@
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
 require_once('include/utils/CommonUtils.php'); //new
-function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype)
+function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid='')
 {
 	global $adb;
 	global $mod_strings;
@@ -210,8 +210,11 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] =$mod_strings[$fieldlabel];
 		if($col_fields[$fieldname] != '')
 		{
-			$imgpath = "test/product/".$col_fields[$fieldname];
-			
+			if($tabid==14)
+                                $imgpath = "test/product/".$col_fields[$fieldname];
+                        if($tabid==4)
+                                $imgpath = "test/contact/".$col_fields[$fieldname];
+
 			$label_fld[] ='<img src="'.$imgpath.'" border="0">';
 		}
 		else
@@ -830,8 +833,9 @@ function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 		$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 		$maxlength = $adb->query_result($result,$i,"maximumlength");
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");
+		$tabid = $adb->query_result($result,$i,"tabid");
 		$output .= '<tr>';
-		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype);
+		$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
 		$label_data[] = array($custfld[0]=>array($custfld[1]=>$custfld[2]));
 		$i++;
 		if($i<$noofrows)
@@ -843,8 +847,9 @@ function getDetailBlockInformation($module, $block,$col_fields,$tabid)
 			$fieldlabel = $adb->query_result($result,$i,"fieldlabel");
 			$maxlength = $adb->query_result($result,$i,"maximumlength");
 			$generatedtype = $adb->query_result($result,$i,"generatedtype");
+			$tabid = $adb->query_result($result,$i,"tabid");
 
-			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype);
+			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
 			$label_data[] = array($custfld[0]=>array($custfld[1]=>$custfld[2]));	
 		}
 
