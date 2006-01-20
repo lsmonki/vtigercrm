@@ -32,13 +32,13 @@ $submenu = array('LBL_EMAILS_TITLE'=>'index.php?module=Emails&action=ListView.ph
 $sec_arr = array('index.php?module=Emails&action=ListView.php'=>'Emails','index.php?module=squirrelmail-1.4.4&action=redirect'=>'Emails'); 
 echo '<br>';
 ?>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<!--table width="100%" border="0" cellspacing="0" cellpadding="0">
  <tr>
    <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
    <tr>
-     <td class="tabStart">&nbsp;&nbsp;</td>
+     <td class="tabStart">&nbsp;&nbsp;</td-->
 <?
-	if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
+	/*if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
 	{
 		$classname = "tabOff";
 	}
@@ -74,24 +74,21 @@ echo '<br>';
 			$classname = "tabOff";
 		}
 
-	}
+	}*/
 ?>
-     <td width="100%" class="tabEnd">&nbsp;</td>
+     <!--td width="100%" class="tabEnd">&nbsp;</td>
    </tr>
  </table></td>
  </tr>
  </table>
- <br>
+ <br-->
 <?
 
 global $app_strings;
-global $app_list_strings;
 global $mod_strings;
 
 global $list_max_entries_per_page;
-global $urlPrefix;
 
-$current_module_strings = return_module_language($current_language, 'Emails');
 $log = LoggerManager::getLogger('email_list');
 
 global $currentModule;
@@ -102,6 +99,8 @@ global $theme;
 $url_string = ''; // assigning http url string
 
 $focus = new Email();
+$smarty = new vtigerCRM_Smarty;
+$other_text = Array();
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
 if($_REQUEST['order_by'] != '')
@@ -132,32 +131,32 @@ $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 // Buttons and View options
 if(isPermitted('Emails',2,'') == 'yes')
 {
-	$other_text =	'<input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+	$other_text['del'] = $app_strings[LBL_MASS_DELETE];
 }
-$other_text .= 	'</td>';
 
 if($viewnamedesc['viewname'] == 'All')
 {
-	$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-		<span class="sep">|</span>
-		<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-		<a href="index.php?module=Emails&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+	$cvHTML = '<td><a href="index.php?module=Emails&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+                <span class="small">|</span>
+                <span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
+                <span class="small">|</span>
+                <span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }
 else
 {
-	$cvHTML = '<a href="index.php?module=Emails&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-		<span class="sep">|</span>
-		<a href="index.php?module=CustomView&action=Delete&dmodule=Emails&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-		<span class="sep">|</span>
-		<a href="index.php?module=Emails&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+	$cvHTML = '<td><a href="index.php?module=Emails&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+                <span class="small">|</span>
+                <a href="index.php?module=Emails&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
+                <span class="small">|</span>
+                <a href="index.php?module=CustomView&action=Delete&dmodule=Emails&record='.$viewid.'" >'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 
-$customstrings = '<td align="right">'.$app_strings[LBL_VIEW].'
-                        <SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
-				'.$customviewcombo_html.'
-                        </SELECT>
-			'.$cvHTML.'
-                        </td>';
+$customstrings = '<td>'.$app_strings[LBL_VIEW].'</td>
+                  <td style="padding-left:5px;padding-right:5px">
+                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
+                                '.$customviewcombo_html.'
+                        </SELECT></td>
+                        '.$cvHTML;
 
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
@@ -218,8 +217,6 @@ $view_script = "<script language='javascript'>
 	set_selected();
 	</script>";
 
-$customview= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
-$smarty = new vtigerCRM_Smarty;
 $smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
