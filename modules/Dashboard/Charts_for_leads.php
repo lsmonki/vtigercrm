@@ -15,22 +15,13 @@ require_once('include/database/PearDatabase.php');
 require_once('include/utils/CommonUtils.php');
 
 
-if(isset($_REQUEST['date_start']) && $_REQUEST['date_start'] !="")
-{
-	$date_start=$_REQUEST['date_start'];
-}
-else
-{
-	$date_start ="2000-01-01";
-}
-if(isset($_REQUEST['end_date']) && $_REQUEST['end_date']!="")
-{
-	$end_date=ltrim(rtrim($_REQUEST['end_date']));
-}
-else
-{
-	$end_date="2010-01-01";
-}
+$period=($HTTP_GET_VARS['period'])?$HTTP_GET_VARS['period']:"tmon";
+	$dates_values=start_end_dates($period);
+        $date_start=$dates_values[0];
+        $end_date=$dates_values[1];
+        $period_type=$dates_values[2];
+        $width=$dates_values[3];
+         $height=$dates_values[4];
 
 
 $user_id=$current_user->id;
@@ -122,7 +113,13 @@ function leadStatus_chart($user_id,$date_start,$end_date)
 
 		<table border="0" cellspacing="0" cellpadding="5" ><tr><td>
 		<img src="modules/Dashboard/horizontal_bargraph.php?refer_code=$status_name&referdata=$status_val&target=$target_val&width=350&height=400&top=20&left=110&title=$title_of_graph" border="0">
-		</td></tr>
+
+		</td>
+		<td>
+                <img src="modules/Dashboard/pie_graph.php?refer_code=$status_name&referdata=$status_val&target=$target_val&width=650&height=300&title=$title_of_graph" border="0">
+		</td>
+		</tr>
+		
 		</table>
 END;
 
@@ -206,11 +203,17 @@ function leadSource_chart($user_id,$date_start,$end_date)
 
         echo <<< END
 
-                <table border="0" cellspacing="0" cellpadding="5" ><tr><td>
-                <img src="modules/Dashboard/pie_graph.php?refer_code=$source_name&referdata=$source_val&target=$target_val&width=630&height=300&title=$title_of_graph" border="0">
+                <table border="0" cellspacing="0" cellpadding="5" ><tr>
+		<td>
+		<img src="modules/Dashboard/horizontal_bargraph.php?refer_code=$source_name&referdata=$source_val&target=$target_val&width=350&height=400&top=20&left=120&title=$title_of_graph" border="0">
 
 		
-                </td></tr>
+                </td>
+		<td>
+                <img src="modules/Dashboard/pie_graph.php?refer_code=$source_name&referdata=$source_val&target=$target_val&width=630&height=300&title=$title_of_graph" border="0">
+
+		</td>
+		</tr>
                 </table>
 END;
 
@@ -221,7 +224,6 @@ END;
 
 leadStatus_chart($user_id,$date_start,$end_date);
 leadSource_chart($user_id,$date_start,$end_date);
-		// Graph test
 
 
 ?>
