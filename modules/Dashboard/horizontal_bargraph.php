@@ -143,7 +143,7 @@ $bplot->SetFillColor("aquamarine3");
 //$bplot->SetShadow();
 
 //You can change the width of the bars if you like
-//$bplot->SetWidth(0.5);
+$bplot->SetWidth(0.2);
 
 // We want to display the value of each bar at the top
 $bplot->value->Show();
@@ -154,17 +154,16 @@ $bplot->value->SetFormat('%d');
 
 $bplot->SetCSIMTargets($target,$datay);
 
-//Added by Jaguar
 $graph->SetBackgroundGradient('#E5E5E5','white',GRAD_VER,BGRAD_PLOT);
-$bplot->SetFillGradient("aquamarine3","aquamarine2",GRAD_MIDVER);
+//$bplot->SetFillGradient("aquamarine3","aquamarine2",GRAD_MIDVER);
+$bplot->SetFillGradient("navy","lightsteelblue",GRAD_MIDVER);
 
-//$graph->SetFrame(false);
+$graph->SetFrame(false);
 $graph->SetMarginColor('cadetblue2');
 $graph->ygrid->SetFill(true,'azure1','azure2');
 $graph->xgrid->Show();
 
 
-//Ends 
 
 // Add the bar to the graph
 $graph->Add($bplot);
