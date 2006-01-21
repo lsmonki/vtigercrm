@@ -87,6 +87,8 @@ function callSearch(searchtype)
 			&nbsp;|&nbsp;<a href='index.php?module={$MODULE}&action=AddBusinessCard&return_module={$MODULE}&return_action=ListView'>Add Business Card</a>
 		{/if}
 	</td>
+	{else}
+	<td nowrap style="width:50%;padding:10px">&nbsp;</td>
 	{/if}
 </tr>
 <tr><td style="height:2px"></td></tr>
