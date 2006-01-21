@@ -70,6 +70,8 @@
 			&nbsp;|&nbsp;<a href='index.php?module={$MODULE}&action=AddBusinessCard&return_module={$MODULE}&return_action=ListView'>Add Business Card</a>
 		{/if}
 		</td>
+		{else}
+			<td nowrap style="width:50%;padding:10px">&nbsp;</td>
 	{/if}
 
 </tr>
@@ -207,6 +209,7 @@
 						<!-- right side relevant info -->
 
 					<!-- Mail Merge-->
+					{if $MERGEBUTTON eq 'permitted'}
 					<table border=0 cellspacing=0 cellpadding=0 width=100% class="rightMailMerge">
 					<tr>
 					<td class="rightMailMergeHeader"><b>{$WORDTEMPLATEOPTIONS}</b></td>
@@ -244,7 +247,7 @@
 						</tr>
 						</table>
 						<br>
-
+						{/if}	
 						
 						<!-- Upcoming Activities / Calendar-->
 						<table border=0 cellspacing=0 cellpadding=0 width=100% style="border:1px solid #ddddcc" class="small">
