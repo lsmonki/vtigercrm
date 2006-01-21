@@ -74,9 +74,6 @@ function helpDeskStatus_chart($user_id,$date_start,$end_date)
 			if(!isset($status_totcnt_array[$tdate]))
 	                	$status_totcnt_array[$tdate]="0";
 
-			
-
-
 			for($i=0;$i<count($status_array);$i++)
 			{
 				$status_name=strtolower($status_array[$i]);
@@ -106,21 +103,11 @@ function helpDeskStatus_chart($user_id,$date_start,$end_date)
 
 		}
 		$date_val=explode("-",$date_array[$i]);
-		if($period_type=="month")   //to get the table format dates
-		{
-			$table_format=date("j",mktime(0,0,0,date($date_val[1]),(date($date_val[2])),date($date_val[0])));
-			$graph_format=date("D",mktime(0,0,0,date($date_val[1]),(date($date_val[2])),date($date_val[0])));
-		}
-		else if($period_type=="week")
-		{
-			$table_format=date("d/m",mktime(0,0,0,date($date_val[1]),(date($date_val[2])),date($date_val[0])));
-			$graph_format=date("D",mktime(0,0,0,date($date_val[1]),(date($date_val[2])),date($date_val[0])));
-		}
-		else if($period_type=="yday")
-		{
-			$table_format=date("j",mktime(0,0,0,date($date_val[1]),(date($date_val[2])),date($date_val[0])));
-			$graph_format=$table_format;
-		}
+
+		$values=Graph_n_table_format($period_type,$tdate);
+		$graph_format=$values[0];
+		$table_format=$values[1];
+
 		 $ticket_status_table .= "<th>$table_format</th>";
 		if($status_graph_date!="") 
 			$status_graph_date="$status_graph_date,$graph_format";
@@ -196,14 +183,14 @@ function helpDeskStatus_chart($user_id,$date_start,$end_date)
 
 
 	$ticket_status_table .= "</table>";
-	
+/*	
   	$value=explode("&",$urlstring);
         for($i=0;$i<count($value);$i++)
         {
               	$data=$value[$i];
                 $graph_data=explode(",",$data);
         }
-
+*/
         $title_of_graph ="Tickets total by Status is $total";
 
 	 echo <<< END
@@ -213,7 +200,7 @@ function helpDeskStatus_chart($user_id,$date_start,$end_date)
                 <img src="modules/Dashboard/pie_graph.php?refer_code=$status_name_graph&referdata=$status_val&target=$target_val&width=530&height=300&title=$title_of_graph" border="0">
                 </td>
                 <td>
-                <img src="modules/Dashboard/line_graph.php?refer_code=$status_graph_date&target=$target_val&width=530&height=300&title=$title_of_graph&datay=$datay&data1y=$data1y&data2y=$data2y&data3y=$data3y&datavalue=$urlstring&referdata=$status_name_graph" border="0">
+                <img src="modules/Dashboard/line_graph.php?refer_code=$status_graph_date&target=$target_val&width=530&height=300&title=$title_of_graph&datavalue=$urlstring&referdata=$status_name_graph" border="0">
                 </td></tr>
 		<tr>
 		<td>
