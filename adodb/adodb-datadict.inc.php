@@ -247,7 +247,32 @@ class ADODB_DataDict {
 		
 		return $name;
 	}
-	
+ // temporary for debuging vtiger - GS 	 
+  	 
+         function println($msg) 	 
+         { 	 
+                 require_once('include/logging.php'); 	 
+                 $log1 =& LoggerManager::getLogger('VT-INSTALL'); 	 
+                 if(is_array($msg)) 	 
+                 { 	 
+                         //fatal->debug 	 
+                         $log1->debug("....    ".print_r($msg,true)); 	 
+                 } 	 
+                 else if($msg == '') 	 
+                 { 	 
+                         //done to avoid the additional print with no data in thelogs 	 
+                 } 	 
+                 else 	 
+                 { 	 
+                         //fatal->debug 	 
+                         $log1->debug("....    ".$msg); 	 
+                 } 	 
+                 return $msg; 	 
+         } 	 
+  	 
+  	 
+ //----------------
+		
 	function TableName($name)
 	{
 		if ( $this->schema ) {
@@ -265,10 +290,17 @@ class ADODB_DataDict {
 		foreach($sql as $line) {
 			
 			if ($this->debug) $conn->debug = true;
+			$this->println($line);
 			$ok = $conn->Execute($line);
 			$conn->debug = $saved;
 			if (!$ok) {
-				if ($this->debug) ADOConnection::outp($conn->ErrorMsg());
+				$this->println("Table Creation Error: Query Failed");
+				$this->println(" "); 	 
+                                 if ($this->debug) 	 
+                                 {
+					$this->println("InstallError: ".$conn->ErrorMsg()); 	 
+                                         ADOConnection::outp($conn->ErrorMsg());
+				}
 				if (!$continueOnError) return 0;
 				$rez = 1;
 			}
