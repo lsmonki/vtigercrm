@@ -147,8 +147,8 @@ rBox">
 						 {html_options  options=$SEARCHLISTHEADER }
 						</select>
                                                 <input type="hidden" name="searchtype" value="BasicSearch">
-                                                <input type="hidden" name="module" value={$MODULE}>
-                                                <input type="hidden" name="parenttab" value={$CATEGORY}>
+                                                <input type="hidden" name="module" value="{$MODULE}">
+                                                <input type="hidden" name="parenttab" value="{$CATEGORY}">
 						<input type="hidden" name="action" value="index">
                                                 <input type="hidden" name="query" value="true">
 
