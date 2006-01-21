@@ -1833,5 +1833,30 @@ function start_end_dates($period)
         return $datevalues;
 }//function ends
 
+// Function to get the Graph and table format for a particular date - Jaguar
+function Graph_n_table_format($period_type,$date_value)
+{
+        $date_val=explode("-",$date_value);
+        if($period_type=="month")   //to get the table format dates
+        {
+                $table_format=date("j",mktime(0,0,0,date($date_val[1]),(date($date_val[2])),date($date_val[0])));
+                $graph_format=date("D",mktime(0,0,0,date($date_val[1]),(date($date_val[2])),date($date_val[0])));
+        }
+        else if($period_type=="week")
+        {
+                $table_format=date("d/m",mktime(0,0,0,date($date_val[1]),(date($date_val[2])),date($date_val[0])));
+                $graph_format=date("D",mktime(0,0,0,date($date_val[1]),(date($date_val[2])),date($date_val[0])));
+        }
+        else if($period_type=="yday")
+        {
+                $table_format=date("j",mktime(0,0,0,date($date_val[1]),(date($date_val[2])),date($date_val[0])));
+                $graph_format=$table_format;
+        }
+        $values=array($graph_format,$table_format);
+        return $values;
+}
+
+
+
 
 ?>
