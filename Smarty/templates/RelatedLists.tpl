@@ -228,62 +228,6 @@
                 </tr>
 		</table>
 		</td>
-		<td width=20% valign=top style="border-left:2px dashed #cccccc;padding:13px">
-						<!-- right side relevant info -->
-
-					<!-- Mail Merge-->
-					<table border=0 cellspacing=0 cellpadding=0 width=100% class="rightMailMerge">
-					<tr>
-					<td class="rightMailMergeHeader"><b>{$WORDTEMPLATEOPTIONS}</b></td>
-						</tr>
-						<tr style="height:25px">
-						<td class="rightMailMergeContent">
-							<table border=0 cellspacing=0 cellpadding=2 width=100%>
-								<tr>
-								<td >
-								<select class=small style="width:100%" name="mergefile">
-									<option>Select template...</option>
-									{html_options options=$TOPTIONS name=merge_option}
-								</select>
-								</td>
-								</tr>
-								<tr>
-								<td >
-  								[ <a href="#" onClick="showhide('mailMergeOptions')">Options...</a> ]
-								<div id="mailMergeOptions" align=left style="display:none">
-								<input type="checkbox" checked> Include Account Information <br>
-								<input type="checkbox" checked> Include More Information <br>
-								</div>
-								</td>
-								</tr>
-								<tr>
-								<td>
-								{$MERGEBUTTON} 
-								</td>
-								</tr>
-								</table>
-							</td>
-
-						</tr>
-						</table>
-						<br>
-
-						
-						<!-- Upcoming Activities / Calendar-->
-						<table border=0 cellspacing=0 cellpadding=0 width=100% style="border:1px solid #ddddcc" class="small">
-						<tr>
-							<td style="border-bottom:1px solid #ddddcc;padding:5px;background-color:#ffffdd;"><b> Upcoming Activities :</b></td>
-						</tr>
-						<tr style="height:25px">
-							<td style="padding:5px" bgcolor="#ffffef">
-								<table border=0 cellspacing=0 cellpadding=2 width=100% class="small">
-								<tr><td valign=top >1.</td><td width=100% style="color:#727272"><b>API License renewal </b><br>On 23 Nov 2006 <br> <i>14 months 3 days to go</i></td></tr>
-								<tr><td></td><td style="border-top:1px dotted #e2e2e2"></td></tr>
-								</table>
-							</td>
-						</tr>
-						</table>
-					</td>
 				</tr>
 				</table>
 				
