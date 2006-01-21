@@ -107,17 +107,6 @@ if($tab_per_Data[2] == 0)
 		$home_values[]=getGroupTaskLists();	   
    			break;
         case 'HLT':
-function getActivityType($id)
-{
-	global $adb;
-	$quer = "select activitytype from activity where activityid=".$id;
-	$res = $adb->query($quer);
-	$acti_type = $adb->query_result($res,0,"activitytype");
-	return $acti_type;
-
-}
-
-$list='';
 if($tab_per_Data[13] == 0)
 {
         if($permissionData[13][3] == 0)
@@ -162,6 +151,15 @@ if($tab_per_Data[23] == 0)
 }
         	break;
     }
+}
+function getActivityType($id)
+{
+	global $adb;
+	$quer = "select activitytype from activity where activityid=".$id;
+	$res = $adb->query($quer);
+	$acti_type = $adb->query_result($res,0,"activitytype");
+	return $acti_type;
+
 }
 
 global $current_language;
