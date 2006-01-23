@@ -32,7 +32,9 @@ if(isset($_REQUEST['smodule']) && ($_REQUEST['smodule']!=''))
 {
 	$smod = "&smodule=".$_REQUEST['smodule'];
 }
-header("Location: index.php?module=".$returnmodule."&action=index&viewname=".$viewid.$smod);
-
+if($returnmodule!='Faq')
+	header("Location: index.php?module=".$returnmodule."&action=index&viewname=".$viewid.$smod);
+else
+	header("Location: index.php?module=".$returnmodule."&action=index".$smod);
 ?>
 

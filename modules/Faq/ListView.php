@@ -44,7 +44,7 @@ else
 }
 
 $focus = new Faq();
-
+$other_text = Array();
 $url_string = ''; 
 //<<<<cutomview>>>>>>>
 $oCustomView = new CustomView("Faq");
@@ -67,9 +67,11 @@ else
 $_SESSION['FAQ_ORDER_BY'] = $order_by;
 $_SESSION['FAQ_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
+if(isPermitted('Faq',2,'') == 'yes')
+$other_text ['del'] = $app_strings[LBL_MASS_DELETE]; 
 
-$other_text ='   <td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>
-		  <td align="right">&nbsp;</td>';
+//$other_text ='   <td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>
+//		  <td align="right">&nbsp;</td>';
 
 //Retreive the list from Database
 $list_query = getListQuery("Faq");
