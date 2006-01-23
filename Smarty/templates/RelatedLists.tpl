@@ -152,7 +152,7 @@
                                                         {/if}
 
 							{elseif $header eq 'Activities'}
-							{if $MODULE eq 'PurchaseOrder' || $MODULE eq 'Invoice'}	
+							{if $MODULE eq 'PurchaseOrder' || $MODULE eq 'Invoice' || $MODULE eq 'SalesOrder'}	
 							<input type="hidden" name="activity_mode">
 							<input title="New Task" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Activities'; this.form.return_module.value='{$MODULE}'; this.form.activity_mode.value='Task'" type="submit" name="button" value="Add new Task"></td>
 							{else}
