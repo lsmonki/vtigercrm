@@ -62,7 +62,7 @@ function leadStatus_chart($user_id,$date_start,$end_date)
 		}
 	}
 
-	$where= " and crmentity.smownerid=".$user_id." and crmentity.modifiedtime between '%".$date_start."%' and '%".$end_date."%'" ;
+	$where= " and crmentity.smownerid=".$user_id." and crmentity.createdtime between '%".$date_start."%' and '%".$end_date."%'" ;
 	$query.=$where;
 
 	$result=$adb->query($query);
@@ -249,12 +249,12 @@ and '%".$end_date."%'" ;
 			$url_string="";
 		
 			$industry_cnt_table="<table border=0 cellspacing=1 cellpadding=3><tr>
-                                <th>Ticket Status</th>";
+                                <th>Industry</th>";
 							
 			//Assigning the Header values to the Graph
 			for($i=0; $i<$days; $i++)
 			{
-				$tdate=$date_array[$j];
+				$tdate=$date_array[$i];
 				$values=Graph_n_table_format($period_type,$tdate);	
 				$table_format=$values[1];
 				$industry_cnt_table.= "<th>$table_format</th>";
