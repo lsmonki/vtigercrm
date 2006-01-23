@@ -132,7 +132,10 @@ if($_REQUEST['sendnotification'] == 'on' && $_REQUEST['assigntype'] == 'U')
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
 if($_REQUEST['start'] !='')$page='&start='.$_REQUEST['start'];
-	
+if($_REQUEST['allflag'] !='All')
+	$page.='&allflag=All';	
+else
+	$page.='&allflag=Normal';
 header("Location: index.php?action=$return_action&module=$return_module&record=$return_id$activemode&viewname=$return_viewname$page");
 
 //Function to get the activity details for mail body
