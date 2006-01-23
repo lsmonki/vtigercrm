@@ -212,6 +212,7 @@ function getGroupTaskLists()
 			$i=1;
 			while($row = $adb->fetch_array($result))
 			{
+				$value=array();	
 				if($row["type"] == "Tickets")
 				{	
 					$list = '<a href=index.php?module=HelpDesk';
