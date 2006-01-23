@@ -8,6 +8,25 @@
  *
  ********************************************************************************/
 
+var typeofdata = new Array();
+typeofdata['V'] = ['e','n','s','c','k'];
+typeofdata['N'] = ['e','n','l','g','m','h'];
+typeofdata['T'] = ['e','n','l','g','m','h'];
+typeofdata['I'] = ['e','n','l','g','m','h'];
+typeofdata['C'] = ['e','n'];
+typeofdata['D'] = ['e','n','l','g','m','h'];
+
+var fLabels = new Array();
+fLabels['e'] = 'equals';
+fLabels['n'] = 'not equal to';
+fLabels['s'] = 'starts with';
+fLabels['c'] = 'contains';
+fLabels['k'] = 'does not contain';
+fLabels['l'] = 'less than';
+fLabels['g'] = 'greater than';
+fLabels['m'] = 'less or equal';
+fLabels['h'] = 'greater or equal';
+var noneLabel;
 
 function trimfValues(value)
 {
