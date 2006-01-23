@@ -81,17 +81,18 @@ class Vendor extends CRMEntity {
 	function get_products($id)
 	{
 		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,vendor.vendorname from products inner join crmentity on crmentity.crmid = products.productid left outer join vendor on vendor.vendorid = products.vendor_id where vendor.vendorid = '.$id.' and crmentity.deleted = 0';
-	      	renderRelatedProducts($query,$id,'vendor_id');
+	      	return renderRelatedProducts($query,$id,'vendor_id');
         }
 	function get_purchase_orders($id)
 	{
 		$query = "select crmentity.*, purchaseorder.*,vendor.vendorname from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid where crmentity.deleted=0 and purchaseorder.vendorid=".$id;
-	      	renderRelatedOrders($query,$id,'vendor_id');
+	      	return renderRelatedOrders($query,$id,'vendor_id');
         }
 	function get_contacts($id)
         {
  		$query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid,vendorcontactrel.vendorid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  inner join vendorcontactrel on vendorcontactrel.contactid=contactdetails.contactid where crmentity.deleted=0 and vendorcontactrel.vendorid = '.$id;
-               renderRelatedContacts($query,$id);
+             	
+		return renderRelatedContacts($query,$id);
        }
        function get_related_contacts($id)
        {

@@ -38,8 +38,7 @@ function renderRelatedProducts($query,$id,$sid="product_id")
 	}
 	$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Vendors','Products',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Vendors','Products',$focus,$query,$button,$returnset);
 }
 
 function renderRelatedOrders($query,$id,$sid="product_id")
@@ -58,8 +57,7 @@ function renderRelatedOrders($query,$id,$sid="product_id")
 	}
 	$returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
 
-	$list = GetRelatedList('Vendors','PurchaseOrder',$focus,$query,$button,$returnset);
-	echo '</form>';
+	return GetRelatedList('Vendors','PurchaseOrder',$focus,$query,$button,$returnset);
 }
 
 function renderRelatedContacts($query,$id)
@@ -76,8 +74,7 @@ function renderRelatedContacts($query,$id)
         }
         $returnset = '&return_module=Vendors&return_action=DetailView&return_id='.$id;
 
-        $list = GetRelatedList('Vendor','Contacts',$focus,$query,$button,$returnset);
-        echo '</form>';
+        return GetRelatedList('Vendor','Contacts',$focus,$query,$button,$returnset);
 }
 
 ?>
