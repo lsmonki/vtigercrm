@@ -191,12 +191,28 @@
                                                            {$fldlabel}
                                                         </td>
                                                         <td width="30%" align=left class="dvtCellInfo">
-                                                                <input type="radio" name="assigntype" value="U" onclick="toggleAssignType(this.value)">&nbsp;User
-                                                                {if $secondvalue neq ''}
-                                                                <input type="radio" name="assigntype" value="T" onclick="toggleAssignType(this.value)">&nbsp;Team
-                                                                {/if}
-
-                                                                <span id="assign_user" style="display:block">
+                                                                {assign var=check value=1}
+																{foreach key=key_one item=arr from=$fldvalue}
+																{foreach key=sel_value item=value from=$arr}
+																	{if $value ne ''}
+																		{assign var=check value=$check*0}
+																	{else}
+																		{assign var=check value=$check*1}
+																	{/if}
+																{/foreach}
+																{/foreach}
+																{if $check eq 0}
+																	{assign var=select_user value='checked'}
+																	{assign var=style_user value='display:block'}
+																	{assign var=style_group value='display:none'}
+																{else}
+																	{assign var=select_group value='checked'}
+																	{assign var=style_user value='display:none'}
+																	{assign var=style_group value='display:block'}
+																{/if}	
+																<input type="radio" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)">&nbsp;User
+                                                                <input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;Team
+																<span id="assign_user" style="{$style_user}">
                                                                 <select name="assigned_user_id">
                                                                 {foreach key=key_one item=arr from=$fldvalue}
                                                                         {foreach key=sel_value item=value from=$arr}
@@ -206,7 +222,7 @@
                                                                 {/foreach}
                                                                 </select></span>
                                                                 {if $secondvalue neq ''}
-                                                                <span id="assign_team" style="display:none">
+                                                                <span id="assign_team" style="{$style_group}">
                                                                 <select name="assigned_group_name">';
                                                                 {foreach key=key_one item=arr from=$secondvalue}
                                                                         {foreach key=sel_value item=value from=$arr}
@@ -219,7 +235,7 @@
 
                                                                 {/if}
                                                         </td>
-
+														
 							{elseif $uitype eq 52 || $uitype eq 77}
                                                         <td width="20%" class="dvtCellLabel" align=right>
 							   {$fldlabel}
