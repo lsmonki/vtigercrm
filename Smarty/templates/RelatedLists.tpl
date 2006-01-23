@@ -48,10 +48,21 @@
 		</tr>
 		</table>
 	</td>
+	{if $MODULE eq 'Contacts' || $MODULE eq 'Leads' || $MODULE eq 'Accounts' || $MODULE eq 'Potentials' || $MODULE eq 'Products' || $MODULE eq 'Notes' || $MODULE eq 'Emails'}
 	<td class="sep1" style="width:1px"></td>
 	<td nowrap style="width:50%;padding:10px">
-		<a href="#">Import {$MODULE}</a> | <a href="#">Export {$MODULE}</a>
+		{if $MODULE ne 'Notes' && $MODULE ne 'Emails'}
+			<a href="index.php?module={$MODULE}&action=Import&step=1&return_module={$MODULE}&return_action=index">Import {$MODULE}</a> | 
+		{/if}
+		<a href="index.php?module={$MODULE}&action=Export&all=1">Export {$MODULE}</a>
+		{if $MODULE eq 'Contacts'}
+			&nbsp;|&nbsp;<a href="index.php?module={$MODULE}&action=AddBusinessCard&return_module={$MODULE}&return_action=ListView">Add Business Card</a>
+		{/if}
 	</td>
+	{else}
+	<td nowrap style="width:50%;padding:10px">&nbsp;</td>
+	{/if}	
+	
 </tr>
 <tr><td style="height:2px"></td></tr>
 
@@ -139,10 +150,16 @@
 							{else}
                                                         <input title="New Contact" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Contacts'" type="submit" name="button" value="Add new Contact"></td>
                                                         {/if}
+
 							{elseif $header eq 'Activities'}
+							{if $MODULE eq 'PurchaseOrder' || $MODULE eq 'Invoice'}	
+							<input type="hidden" name="activity_mode">
+							<input title="New Task" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Activities'; this.form.return_module.value='{$MODULE}'; this.form.activity_mode.value='Task'" type="submit" name="button" value="Add new Task"></td>
+							{else}
 							<input type="hidden" name="activity_mode">
 							<input title="New Task" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Activities'; this.form.return_module.value='{$MODULE}'; this.form.activity_mode.value='Task'" type="submit" name="button" value="Add new Task">&nbsp;
 							<input title="New Event" accessyKey="F" class="small" onclick="this.form.action.value='EditView'; this.form.return_action.value='CallRelatedList'; this.form.module.value='Activities'; this.form.return_module.value='{$MODULE}'; this.form.activity_mode.value='Events'" type="submit" name="button" value="Add new Event"></td>
+							{/if}
 							{elseif $header eq 'HelpDesk'}
 							<input title="New Ticket" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='HelpDesk'" type="submit" name="button" value="Add new Ticket"></td>
 							{elseif $header eq 'Attachments'}
