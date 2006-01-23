@@ -17,12 +17,12 @@ include ("../../jpgraph/src/jpgraph_line.php");
 $refer_code=(isset($_REQUEST['width']))?$_REQUEST['refer_code']:"0,0";
 $datax=explode(",",$refer_code); //The values to the XAxis
 
-$status_value=(isset($_REQUEST['width']))?$_REQUEST['referdata']:"null"; //The Status Name 
-$status_value=explode(",",$status_value);
+$names_value=(isset($_REQUEST['referdata']))?$_REQUEST['referdata']:"null"; //The Status Name 
+$name_value=explode(",",$names_value);
 
 //Giving the colors to the Line graph
 $color_array=array("red","blue","orange","green","darkorchid","gold1","gray3","lightpink","burlywood2","cadetblue");
-$datavalue=$_REQUEST['datavalue'];
+$datavalue=(isset($_REQUEST['datavalue']))?$_REQUEST['datavalue']:"0,K,0";
 
 //Exploding the Ticket status 
 $datavalue=explode("K",$datavalue); 
@@ -64,14 +64,14 @@ for($i=0;$i<count($datavalue);$i++)
 {
 	$data=$datavalue[$i];
 	$graph_data=explode(",",$data);
-	$status_name=$status_value[$i];
+	$name=$name_value[$i];
 		
 	$color_val=$color_array[$i];
 	$temp="p".$i;
-	system("echo 'color value $tmp' >> /tmp/rama.tmp ");
+	system("echo 'data value $data' >> /tmp/rama.tmp ");
 	$$temp = new LinePlot($graph_data);
 	$$temp->SetColor($color_val);
-	$$temp->SetLegend($status_name);
+	$$temp->SetLegend($name);
 	$graph->Add($$temp);
 	
 }
