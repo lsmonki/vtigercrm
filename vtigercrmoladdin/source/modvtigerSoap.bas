@@ -157,7 +157,7 @@ If Not objXML_NodeList.Item(0) Is Nothing Then
     End If
 End If
 
-sDeSerializeXML = oXMLDoc.xml
+sDeSerializeXML = EncodeUTF8(oXMLDoc.xml)
 GoTo EXIT_ROUTINE
 ERROR_EXIT_ROUTINE:
 LogTheMessage ("sDeSerializeXML - " & Err.Description)
@@ -435,7 +435,7 @@ If Not objXML_NodeList.Item(0) Is Nothing Then
         Next i
     End If
 End If
-sDeSerializeVtXML = oXMLDoc.xml
+sDeSerializeVtXML = EncodeUTF8(oXMLDoc.xml)
 GoTo EXIT_ROUTINE
 ERROR_EXIT_ROUTINE:
 LogTheMessage ("sDeSerializeVtXML - " & Err.Description)

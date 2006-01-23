@@ -165,7 +165,7 @@ Begin VB.Form frmLogin
       NoFolders       =   0   'False
       Transparent     =   0   'False
       ViewID          =   "{0057D0E0-3573-11CF-AE69-08002B2E1262}"
-      Location        =   "http:///"
+      Location        =   ""
    End
 End
 Attribute VB_Name = "frmLogin"
@@ -218,8 +218,10 @@ Dim oNewLogin As New MSXML.DOMDocument
         oNewLogin.async = False
         
         'Check for WSDL to verify the vtigerURL
+        'If oNewLogin.Load(Trim(txtVtigerUrl.Text) & "/vtigerservice.php?service=outlook&wsdl") = True Then
         If oNewLogin.Load(Trim(txtVtigerUrl.Text) & "/vtigerolservice.php?wsdl") = True Then
-            
+        
+            'gsVtUrl = Trim(txtVtigerUrl.Text) & "/vtigerservice.php?service=outlook"
             gsVtUrl = Trim(txtVtigerUrl.Text) & "/vtigerolservice.php"
             
             sLoginReturn = sVtSoLogin(Trim(txtVtigerId.Text), Trim(txtVtigerPwd.Text))
@@ -251,6 +253,7 @@ If sVtigerUserId <> "" Then
     sErrMsg = "Error while initializing the logfile"
     If bIntializeLogFile(sVtigerUserId) = False Then GoTo ERROR_EXIT_ROUTINE
     
+    'gsVtUrl = Trim(txtVtigerUrl.Text) & "/vtigerservice.php?service=outlook"
     gsVtUrl = Trim(txtVtigerUrl.Text) & "/vtigerolservice.php"
     gsVtUserId = sVtigerUserId
     gsLoginSuccess = True
