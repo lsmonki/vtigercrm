@@ -109,62 +109,10 @@ class Invoice extends CRMEntity {
 	}
 
 	function create_tables () {
-          /*
-		$query = 'CREATE TABLE '.$this->table_name.' ( ';
-		$query .='id char(36) NOT NULL';
-		$query .=', date_entered datetime NOT NULL';
-		$query .=', date_modified datetime NOT NULL';
-		$query .=', modified_user_id char(36) NOT NULL';
-		$query .=', assigned_user_id char(36)';
-		$query .=', name char(150)';
-		$query .=', parent_id char(36)';
-		$query .=', account_type char(25)';
-		$query .=', industry char(25)';
-		$query .=', annual_revenue char(25)';
-		$query .=', phone_fax char(25)';
-		$query .=', billing_address_street char(150)';
-		$query .=', billing_address_city char(100)';
-		$query .=', billing_address_state char(100)';
-		$query .=', billing_address_postalcode char(20)';
-		$query .=', billing_address_country char(100)';
-		$query .=', description text';
-		$query .=', rating char(25)';
-		$query .=', phone_office char(25)';
-		$query .=', phone_alternate char(25)';
-		$query .=', email1 char(100)';
-		$query .=', email2 char(100)';
-		$query .=', website char(255)';
-		$query .=', ownership char(100)';
-		$query .=', employees char(10)';
-		$query .=', sic_code char(10)';
-		$query .=', ticker_symbol char(10)';
-		$query .=', shipping_address_street char(150)';
-		$query .=', shipping_address_city char(100)';
-		$query .=', shipping_address_state char(100)';
-		$query .=', shipping_address_postalcode char(20)';
-		$query .=', shipping_address_country char(100)';
-		$query .=', deleted bool NOT NULL default 0';
-		$query .=', PRIMARY KEY ( id ) )';
-
-		
-
-		$this->db->query($query);
-	//TODO Clint 4/27 - add exception handling logic here if the table can't be created.
-        */
-
-	}
+       	}
 
 	function drop_tables () {
-          /*
-		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
-
-		
-
-		$this->db->query($query);
-
-	//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
-        */
-	}
+       	}
 
 	function get_summary_text()
 	{
@@ -172,8 +120,20 @@ class Invoice extends CRMEntity {
 	}
 	function get_activities($id)
 	{
+		 global $app_strings;
+
+        $focus = new Activity();
+
+		$button = '';
+
+        if(isPermitted("Activities",1,"") == 'yes')
+        {
+		$button .= '<input title="'.$app_strings['LBL_NEW_TASK'].'" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.activity_mode.value=\'Task\';this.form.return_module.value=\'Invoice\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TASK'].'">&nbsp;';
+		}
+		$returnset = '&return_module=Invoice&return_action=DetailView&return_id='.$id;
+
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus != '' &&  activity.eventstatus = 'Planned')";
-	return renderRelatedActivities($query,$id);
+		return  GetRelatedList('Invoice','Activities',$focus,$query,$button,$returnset);
 	}
 	function get_history($id)
 	{
@@ -191,7 +151,7 @@ class Invoice extends CRMEntity {
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
-	return renderRelatedHistory($query,$id);
+		return getHistory('Invoice',$query,$id);
 	}
 	function get_attachments($id)
 	{
@@ -225,7 +185,7 @@ class Invoice extends CRMEntity {
 			inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".$id;
-	return	renderRelatedAttachments($query,$id);
+		return getAttachmentsAndNotes('Invoice',$query,$id);
 	}
 
 

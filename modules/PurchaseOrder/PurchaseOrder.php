@@ -133,10 +133,23 @@ class Order extends CRMEntity {
  *  and sends the query and the id as arguments to renderRelatedActivities() method 
 */
 	function get_activities($id)
-        {
-               $query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid,activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus != '' &&  activity.eventstatus = 'Planned')";
-               return renderRelatedActivities($query,$id);
-        }
+	{
+		global $app_strings;
+		require_once('modules/Activities/Activity.php');
+		$focus = new Activity();
+
+		$button = '';
+
+		if(isPermitted("Activities",1,"") == 'yes')
+		{
+			$button .= '<input title="'.$app_strings['LBL_NEW_TASK'].'" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.activity_mode.value=\'Task\';this.form.return_module.value=\'PurchaseOrder\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TASK'].'">&nbsp;';
+		}
+		$returnset = '&return_module=PurchaseOrder&return_action=DetailView&return_id='.$id;
+
+
+		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid,activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus != '' &&  activity.eventstatus = 'Planned')";
+		return GetRelatedList('PurchaseOrder','Activities',$focus,$query,$button,$returnset);
+	}
 
 /** Function to get history associated with the id
  *  This function accepts the id as arguments and execute the MySQL query using the id
@@ -158,7 +171,7 @@ class Order extends CRMEntity {
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
-	return renderRelatedHistory($query,$id);
+		return getHistory('PurchaseOrder',$query,$id);
 	}
 
 /** Function to get attachments associated with the id
@@ -198,7 +211,7 @@ class Order extends CRMEntity {
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".$id."
 		order by createdtime desc";
-		return renderRelatedAttachments($query,$id);
+		return getAttachmentsAndNotes('PurchaseOrder',$query,$id,$sid='purchaseorderid');
 	}
 
 }

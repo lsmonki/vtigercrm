@@ -65,7 +65,6 @@ class Account extends CRMEntity {
 	
 	var $billadr_table = "accountbillads";
 
-	#var $object_name = "Account";
 	var $object_name = "Accounts";
 	// Mike Crowe Mod --------------------------------------------------------added for general search
 	var $base_table_name = "account";
@@ -156,15 +155,6 @@ class Account extends CRMEntity {
 	}
 
 	function drop_tables () {
-          /*
-		$query = 'DROP TABLE IF EXISTS '.$this->table_name;
-
-		
-
-		$this->db->query($query);
-
-	//TODO Clint 4/27 - add exception handling logic here if the table can't be dropped.
-        */
 	}
 
 	function get_summary_text()
@@ -180,8 +170,7 @@ class Account extends CRMEntity {
 	function get_member_accounts()
 	{
 		// First, get the list of IDs.
-          //$query = "SELECT a1.id from accounts as a1, accounts as a2 where a2.id=a1.parent_id AND a2.id='$this->id' AND a1.deleted=0";
-             	$query = "SELECT a1.id from account a1, accounts  a2 where a2.id=a1.parent_id AND a2.id='$this->id' AND a1.deleted=0";
+        	$query = "SELECT a1.id from account a1, accounts  a2 where a2.id=a1.parent_id AND a2.id='$this->id' AND a1.deleted=0";
 
 		return $this->build_related_list($query, new Account());
 	}
@@ -192,10 +181,22 @@ class Account extends CRMEntity {
 	 * Contributor(s): ______________________________________..
 	*/
 	function get_contacts($id)
-	{
+	{	
+		global $mod_strings;
+
+		$focus = new Contact();
+
+		$button = '';
+		if(isPermitted("Contacts",1,"") == 'yes')
+		{
+			$button .= '<input title="New Contact" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Contacts\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_CONTACT'].'">&nbsp;</td>';
+		}
+		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+
 		$query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  where crmentity.deleted=0 and contactdetails.accountid = '.$id;
-          return renderRelatedContacts($query,$id);
-        }
+
+		return GetRelatedList('Accounts','Contacts',$focus,$query,$button,$returnset);
+	}
 
 	/** Returns a list of the associated opportunities
 	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
@@ -204,11 +205,20 @@ class Account extends CRMEntity {
 	*/
   function get_opportunities($id)
   {
-//	$query = "select products.productid, products.productname, products.productcode, potential.potentialid, potential.accountid, potential.potentialname, potential.amount, potential.closingdate, potential.potentialtype, crmentity.crmid from products,potential inner join seproductsrel on seproductsrel.crmid = potential.accountid and seproductsrel.productid=products.productid inner join crmentity on crmentity.crmid=potential.potentialid";
-	$query = 'select potential.potentialid, potential.accountid, potential.potentialname, potential.sales_stage, potential.potentialtype, potential.amount, potential.closingdate, potential.potentialtype, users.user_name, crmentity.crmid, crmentity.smownerid from potential inner join crmentity on crmentity.crmid= potential.potentialid left join users on crmentity.smownerid = users.id where crmentity.deleted=0 and potential.accountid= '.$id ;
-    //include('modules/Accounts/RenderRelatedListUI.php');
-    return renderRelatedPotentials($query,$id);
-    // return $this->build_related_list($query, new potential());
+	  global $mod_strings;
+
+	  $focus = new Potential();
+	  $button = '';
+
+	  if(isPermitted("Potentials",1,"") == 'yes')
+	  {
+		  $button .= '<input title="New Potential" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Potentials\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_POTENTIAL'].'">';
+	  }
+	  $returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+
+	  $query = 'select potential.potentialid, potential.accountid, potential.potentialname, potential.sales_stage, potential.potentialtype, potential.amount, potential.closingdate, potential.potentialtype, users.user_name, crmentity.crmid, crmentity.smownerid from potential inner join crmentity on crmentity.crmid= potential.potentialid left join users on crmentity.smownerid = users.id where crmentity.deleted=0 and potential.accountid= '.$id ;
+
+	  return GetRelatedList('Accounts','Potentials',$focus,$query,$button,$returnset);
   }
 
 	/** Returns a list of the associated tasks
@@ -218,12 +228,21 @@ class Account extends CRMEntity {
 	*/
 	function get_activities($id)
 	{
-          // First, get the list of IDs.
-//          $query = "SELECT activity.subject,semodule,activitytype,date_start,status,priority from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid where seactivityrel.crmid=".$id;
-	  $query = "SELECT activity.*,seactivityrel.*, contactdetails.contactid,contactdetails.lastname, contactdetails.firstname, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus !='' &&  activity.eventstatus = 'Planned')";
-          return renderRelatedTasks($query,$id); //Query Changed by Jaguar
+		global $mod_strings;
 
-          //return $this->build_related_list($query, new Task());
+		$focus = new Activity();
+		$button = '';
+		if(isPermitted("Activities",1,"") == 'yes')
+		{
+
+			$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Accounts\';this.form.activity_mode.value=\'Task\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
+			$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Accounts\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;</td>';
+		}
+		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+
+		$query = "SELECT activity.*,seactivityrel.*, contactdetails.contactid,contactdetails.lastname, contactdetails.firstname, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid= cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and crmentity.deleted=0 and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus !='' &&  activity.eventstatus = 'Planned')";
+		return GetRelatedList('Accounts','Activities',$focus,$query,$button,$returnset);
+
 	}
 
 	/** Returns a list of the associated notes
@@ -239,35 +258,25 @@ class Account extends CRMEntity {
 		return $this->build_related_list($query, new note());
 	}
 
-	/** Returns a list of the associated emails
-	 * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc..
-	 * All Rights Reserved..
-	 * Contributor(s): ______________________________________..
-	*/
-	function get_emails($id)
-	{
-		$query ="select activity.activityid, activity.subject, activity.semodule, activity.activitytype, activity.date_start, activity.status, activity.priority, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join users on users.id=crmentity.smownerid where activity.activitytype='Emails' and crmentity.deleted=0 and seactivityrel.crmid=".$id;
-		renderRelatedEmails($query,$id);
-	}
 
 	function get_history($id)
 	{
 		$query = "SELECT activity.activityid, activity.subject, activity.status, activity.eventstatus,
-				activity.activitytype, contactdetails.contactid, contactdetails.firstname,
-				contactdetails.lastname, crmentity.modifiedtime, crmentity.createdtime,
-				crmentity.description, users.user_name
-			from activity
+			activity.activitytype, contactdetails.contactid, contactdetails.firstname,
+			contactdetails.lastname, crmentity.modifiedtime, crmentity.createdtime,
+			crmentity.description, users.user_name
+				from activity
 				inner join seactivityrel on seactivityrel.activityid=activity.activityid
 				inner join crmentity on crmentity.crmid=activity.activityid
 				left join cntactivityrel on cntactivityrel.activityid= activity.activityid 
 				left join contactdetails on contactdetails.contactid= cntactivityrel.contactid
 				inner join users on crmentity.smcreatorid=users.id
-			where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
+				where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
 				and (activity.status='Completed' or activity.status = 'Deferred'  or (activity.eventstatus != 'Planned' and activity.eventstatus !=''))
 				and seactivityrel.crmid=".$id;
 		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
 
-		return renderRelatedHistory($query,$id);
+		return getHistory('Accounts',$query,$id);
 	}
 
 	function get_attachments($id)
@@ -276,16 +285,16 @@ class Account extends CRMEntity {
 		// Desc: Inserted crm2.createdtime, notes.notecontent description, users.user_name
 		// Inserted inner join users on crm2.smcreatorid= users.id
 		$query = "select notes.title,'Notes      '  ActivityType, notes.filename,	attachments.type  FileType,
-		crm2.modifiedtime lastmodified, seattachmentsrel.attachmentsid,	notes.notesid crmid,
-		crm2.createdtime, notes.notecontent description, users.user_name
-		from notes
-			inner join senotesrel on senotesrel.notesid= notes.notesid
-			inner join crmentity on crmentity.crmid= senotesrel.crmid
-			inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0
-			left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid
-			left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid
-			inner join users on crm2.smcreatorid= users.id
-		where crmentity.crmid=".$id;
+			crm2.modifiedtime lastmodified, seattachmentsrel.attachmentsid,	notes.notesid crmid,
+			crm2.createdtime, notes.notecontent description, users.user_name
+				from notes
+				inner join senotesrel on senotesrel.notesid= notes.notesid
+				inner join crmentity on crmentity.crmid= senotesrel.crmid
+				inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0
+				left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid
+				left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid
+				inner join users on crm2.smcreatorid= users.id
+				where crmentity.crmid=".$id;
 		$query .= ' union all ';
 		// Armando Lüscher 18.10.2005 -> §visibleDescription
 		// Desc: Inserted crm2.createdtime, attachments.description, users.user_name
@@ -295,53 +304,115 @@ class Account extends CRMEntity {
 			attachments.name filename, attachments.type FileType, crm2.modifiedtime lastmodified,
 			attachments.attachmentsid, seattachmentsrel.attachmentsid crmid,
 			crm2.createdtime, attachments.description, users.user_name
-		from attachments
-			inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid
-			inner join crmentity on crmentity.crmid= seattachmentsrel.crmid
-			inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
-			inner join users on crm2.smcreatorid= users.id
-		where crmentity.crmid=".$id."
-		order by createdtime desc";
-		return renderRelatedAttachments($query,$id);
+				from attachments
+				inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid
+				inner join crmentity on crmentity.crmid= seattachmentsrel.crmid
+				inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
+				inner join users on crm2.smcreatorid= users.id
+				where crmentity.crmid=".$id."
+				order by createdtime desc";
+
+		return getAttachmentsAndNotes('Accounts',$query,$id);
 	}
 	function get_quotes($id)
 	{
+		global $app_strings;
+		require_once('modules/Quotes/Quote.php');
+
+		$focus = new Quote();
+
+		$button = '';
+		if(isPermitted("Quotes",1,"") == 'yes')
+		{
+			$button .= '<input title="'.$app_strings['LBL_NEW_QUOTE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_QUOTE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Quotes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_QUOTE_BUTTON'].'">&nbsp;</td>';
+		}
+		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+
+
 		$query = "select crmentity.*, quotes.*,potential.potentialname,account.accountname from quotes inner join crmentity on crmentity.crmid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0 and account.accountid=".$id;
-		return renderRelatedQuotes($query,$id);
+		return GetRelatedList('Accounts','Quotes',$focus,$query,$button,$returnset);
 	}
 	function get_invoices($id)
 	{
+		global $app_strings;
+		require_once('modules/Invoice/Invoice.php');
+
+		$focus = new Invoice();
+
+		$button = '';
+		if(isPermitted("Invoice",1,"") == 'yes')
+		{
+			$button .= '<input title="'.$app_strings['LBL_NEW_INVOICE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_INVOICE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Invoice\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_INVOICE_BUTTON'].'">&nbsp;</td>';
+		}
+		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+
 		$query = "select crmentity.*, invoice.*, account.accountname, salesorder.subject as salessubject from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid where crmentity.deleted=0 and account.accountid=".$id;
-		return renderRelatedInvoices($query,$id);
+		return GetRelatedList('Accounts','Invoice',$focus,$query,$button,$returnset);
 	}
 	function get_salesorder($id)
 	{
+		require_once('modules/SalesOrder/SalesOrder.php');
+		global $app_strings;
+
+		$focus = new SalesOrder();
+
+		$button = '';
+		if(isPermitted("SalesOrder",1,"") == 'yes')
+		{
+			$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_SORDER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'SalesOrder\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;</td>';
+		}
+
+		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+
 		$query = "select crmentity.*, salesorder.*, quotes.subject as quotename, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0 and salesorder.accountid = ".$id;
-		return renderRelatedOrders($query,$id);	
+		return GetRelatedList('Accounts','SalesOrder',$focus,$query,$button,$returnset);
 	}
 	function get_tickets($id)
 	{
+		global $app_strings;
+
+		$focus = new HelpDesk();
+		$button = '';
+
+		$button .= '<td valign="bottom" align="right"><input title="New TICKET" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TICKET'].'">&nbsp;</td>';
+		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+
 		$query = "select users.user_name, users.id, troubletickets.title, troubletickets.ticketid as crmid, troubletickets.status, troubletickets.priority, troubletickets.parent_id, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join account on account.accountid=troubletickets.parent_id left join users on users.id=crmentity.smownerid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname where account.accountid =".$id ;
 		//Appending the security parameter
 		global $current_user;
-                require('user_privileges/user_privileges_'.$current_user->id.'.php');
-                require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
-                $tab_id=getTabid('HelpDesk');
-                if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
-                {
-                        $sec_parameter=getListViewSecurityParameter('HelpDesk');
-                        $query .= $sec_parameter;
+		require('user_privileges/user_privileges_'.$current_user->id.'.php');
+		require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+		$tab_id=getTabid('HelpDesk');
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+		{
+			$sec_parameter=getListViewSecurityParameter('HelpDesk');
+			$query .= $sec_parameter;
 
-                }
+		}
 		$query .= " union all ";
 		$query .= "select users.user_name, users.id, troubletickets.title, troubletickets.ticketid as crmid, troubletickets.status, troubletickets.priority, troubletickets.parent_id, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join contactdetails on contactdetails.contactid = troubletickets.parent_id left join account on account.accountid=contactdetails.accountid left join users on users.id=crmentity.smownerid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname where account.accountid =".$id;
-		return renderRelatedTickets($query,$id);
+		return GetRelatedList('Accounts','HelpDesk',$focus,$query,$button,$returnset);
 	}
 	function get_products($id)
 	{
+		require_once('modules/Products/Product.php');
+		global $app_strings;
+
+		$focus = new Product();
+
+		$button = '';
+
+		if(isPermitted("Products",1,"") == 'yes')
+		{
+
+
+			$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Accounts\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
+		}
+		$returnset = '&return_module=Accounts&return_action=DetailView&return_id='.$id;
+
 		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join account on account.accountid = seproductsrel.crmid  where account.accountid = '.$id.' and crmentity.deleted = 0';
-	      	return renderRelatedProducts($query,$id);
-        }
+		return GetRelatedList('Accounts','Products',$focus,$query,$button,$returnset);
+	}
 
 
 	function save_relationship_changes($is_update)

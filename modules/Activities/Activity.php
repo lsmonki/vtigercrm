@@ -23,6 +23,7 @@
 include_once('config.php');
 require_once('include/logging.php');
 require_once('include/database/PearDatabase.php');
+require_once('modules/Activities/RenderRelatedListUI.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 
@@ -155,26 +156,142 @@ class Activity extends CRMEntity {
 
 //Function Call for Related List -- Start
         function get_contacts($id)
-        {
-                //$query="select contactdetails.firstname,contactdetails.lastname,contactdetails.phone,contactdetails.email  from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid and seactivityrel.activityid=".$id."";
-		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
-               return renderRelatedContacts($query,$id);
+		{
+			global $app_strings;
+
+			$focus = new Contact();
+
+			$button = '';
+
+			if(isPermitted("Contacts",3,"") == 'yes')
+			{
+				$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&return_module=Activities&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
+			}
+			$returnset = '&return_module=Activities&return_action=DetailView&activity_mode=Events&return_id='.$id;
+
+
+			$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
+			return GetRelatedList('Activities','Contacts',$focus,$query,$button,$returnset);
         }
 
         function get_users($id)
-        {
-               //$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id,  users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
-		$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax,activity.date_start,activity.due_date,activity.time_start,activity.duration_hours,activity.duration_minutes from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id  inner join activity on activity.activityid=salesmanactivityrel.activityid where activity.activityid='.$id;
+		{
+			$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax,activity.date_start,activity.due_date,activity.time_start,activity.duration_hours,activity.duration_minutes from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id  inner join activity on activity.activityid=salesmanactivityrel.activityid where activity.activityid='.$id;
+			$activity_id=$id;
+			global $adb,$log;
 
-               return  renderRelatedUsers($query,$id);
-        }
+			global $mod_strings;
+			global $app_strings;
 
-	function get_products($id)
-	{
-		$query = 'select activity.activityid, products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from activity inner join seactivityrel on activity.activityid = seactivityrel.activityid inner join products on seactivityrel.crmid = products.productid inner join crmentity on crmentity.crmid = products.productid where activity.activityid = '.$id.' and crmentity.deleted = 0';
-		renderRelatedProducts($query,$id);
-	}
-//Function Call for Related List -- End
+			$result=$adb->query($query);   
+
+
+			$noofrows = $adb->num_rows($result);
+
+			$header[] = $app_strings['LBL_LIST_NAME'];
+			$header[] = $app_strings['LBL_LIST_USER_NAME'];
+			$header[] = $app_strings['LBL_EMAIL'];
+			$header[] = $app_strings['LBL_PHONE']; 
+
+
+			// To display the dates for the Group calendar starts -Jaguar
+			$recur_dates_qry='select distinct(recurringdate) from recurringevents where activityid='.$activity_id;
+			$recur_result=$adb->query($recur_dates_qry);
+			$noofrows_recur = $adb->num_rows($recur_result);
+			if($noofrows_recur==0)
+			{
+				$recur_dates_qry='select activity.date_start,recurringevents.* from activity left outer join recurringevents on activity.activityid=recurringevents.activityid where recurringevents.activityid is NULL and activity.activityid='.$activity_id .' group by activity.activityid';
+				$recur_result=$adb->query($recur_dates_qry);
+				$noofrows_recur = $adb->num_rows($recur_result);
+
+			}
+
+			while($row = $adb->fetch_array($result))
+			{
+
+				global $current_user;
+
+				$entries = Array();	
+
+				if(is_admin($current_user))
+				{
+					$entries[] = $row['last_name'].' '.$row['first_name'];
+				}
+				else
+				{
+					$entries[] = $row['last_name'].' '.$row['first_name'];
+				}	
+
+				$entries[] = $row['user_name'];
+
+				$entries[] = $row['email1'];
+				if($email == '')	$email = $row['email2'];
+				if($email == '')	$email = $row['yahoo_id'];
+				$entries[] = $row['phone_home'];
+				if($phone == '')	$phone = $row['phone_work'];
+				if($phone == '')        $phone = $row['phone_other'];
+				if($phone == '')	$phone = $row['phone_fax'];
+
+				if(is_admin($current_user))
+				{		
+					$list .= '<a href="index.php?module=Users&action=EditView&return_module=Activities&return_action=DetailView&activity_mode=Events&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_EDIT'].'</a>  | ';
+				}
+
+
+				//Added for Group Calendar -Jaguar
+
+
+				$act_date_start= getDBInsertDateValue($row['date_start']); //getting the Date format - Jaguar
+				$act_due_date= getDBInsertDateValue($row['due_date']);
+
+				$act_time_start=$row['time_start'];
+				$act_mins_dur=$row['duration_minutes'];
+
+				$activity_start_time=time_to_number($act_time_start);	
+				$activity_end_time=get_duration($act_time_start,$act_hour_dur,$act_mins_dur);	
+
+				$activity_owner_qry='select users.user_name,users.id  userid from users,crmentity where users.id=crmentity.smownerid and crmentity.crmid='.$id;
+				$result_owner=$adb->query($activity_owner_qry);
+
+				while($row_owner = $adb->fetch_array($result_owner))
+				{
+					$owner=$row_owner['userid'];
+				}
+
+				$recur_dates_qry='select recurringdate from recurringevents where activityid ='.$activity_id;
+				$recur_result=$adb->query($recur_dates_qry);
+				$noofrows_recur = $adb->num_rows($recur_result);
+				$userid=$row['id'];
+				if($noofrows_recur !=0)
+				{
+					while($row_recur = $adb->fetch_array($recur_result))
+					{
+						$recur_dates=getDBInsertDateValue($row_recur['recurringdate']);
+						$availability=status_availability($owner,$userid,$activity_id,$recur_dates,$activity_start_time,$activity_end_time);	
+						$log->info("activity start time ".$activity_start_time."activity end time".$activity_end_time."Available date".$recur_dates);
+
+
+					}
+				}
+				else
+				{
+					$recur_dates=$act_date_start;
+					$availability=status_availability($owner,$userid,$activity_id,$recur_dates,$activity_start_time,$activity_end_time);	
+					$log->info("activity start time ".$activity_start_time."activity end time".$activity_end_time."Available  date".$recur_dates);		
+				}
+				// Group Calendar coding	
+
+
+				$entries_list[]=$entries;
+			}
+
+
+			if($entries_list != '')
+				$return_data = array('header'=>$header, 'entries'=>$entries_list);
+			return $return_data;
+
+		}
+
 
 
 	function get_summary_text()

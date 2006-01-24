@@ -267,116 +267,125 @@ return $exists;
 	
 	/** Returns a list of the associated tasks
 	*/
-	function get_activities($id)
-	{
-          // First, get the list of IDs.
-	    $query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus !='' && activity.eventstatus = 'Planned')";
-          //include('modules/Leads/RenderRelatedListUI.php');
-          return renderRelatedTasks($query,$id);
-        }
+function get_activities($id)
+{
+	global $app_strings;
 
-	/** Returns a list of the associated notes
-         */
-	function get_notes($id)
-	{
-		// First, get the list of IDs.
-//          $query = "SELECT notes.title,notes.filename,notes.notecontent from notes inner join senotesrel on senotesrel.notesid=notes.notesid inner join crmentity on crmentity.crmid=senotesrel.notesid and crmentity.deleted=0 where senotesrel.crmid=".$id."";
-//          renderRelatedNotes($query,$id);
-        }
+	$focus = new Activity();
+	$button = '';
 
-	/** Returns a list of the associated meetings
-	*/
-	function get_meetings($id)
+	if(isPermitted("Activities",1,"") == 'yes')
 	{
-		// First, get the list of IDs.
-          $query ="select name,meetings.location,meetings.status,meetings.description from meetings inner join events on meetings.meetingid=events.eventid inner join activity on activity.activityid=events.eventid inner join seactivityrel on seactivityrel.activityid=meetings.meetingid where seactivityrel.crmid=".$id;
-          renderRelatedMeetings($query,$id);
-        }
+		$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';i;this.form.return_module.value=\'Leads\';this.form.activity_mode.value=\'Task\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TASK'].'">&nbsp;';
+		$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Leads\';this.form.activity_mode.value=\'Events\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;</td>';
+	}
+	$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
 
-	/** Returns a list of the associated calls
-	*/
-  function get_calls($id)
-  {
-    // First, get the list of IDs.
-    $query="select name,calls.description,calls.status,calls.date_start from calls inner join events on calls.callid=events.eventid inner join activity on activity.activityid=events.eventid inner join seactivityrel on seactivityrel.activityid=calls.callid where seactivityrel.crmid=".$id."";
-    renderRelatedCalls($query,$id);
-        }
+
+	// First, get the list of IDs.
+	$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting') and (activity.status is not NULL && activity.status != 'Completed') and (activity.status is not NULL && activity.status != 'Deferred') or (activity.eventstatus !='' && activity.eventstatus = 'Planned')";
+	return  GetRelatedList('Leads','Activities',$focus,$query,$button,$returnset);
+}
 
 	/** Returns a list of the associated emails
 	*/
-	function get_emails($id)
-	{
-		$query ="select activity.activityid, activity.subject, activity.semodule, activity.activitytype, activity.date_start, activity.status, activity.priority, crmentity.crmid,crmentity.smownerid,crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join users on  users.id=crmentity.smownerid where activity.activitytype='Emails' and crmentity.deleted=0 and seactivityrel.crmid=".$id;
-            return renderRelatedEmails($query,$id);
-        }
-	function get_history($id)
-	{
-		$query = "SELECT activity.activityid, activity.subject, activity.status,
-				activity.eventstatus, activity.activitytype, contactdetails.contactid,
-				contactdetails.firstname, contactdetails.lastname, crmentity.modifiedtime,
-				crmentity.createdtime, crmentity.description, users.user_name,activitygrouprelation.groupname
-			from activity
-				inner join seactivityrel on seactivityrel.activityid=activity.activityid
-				inner join crmentity on crmentity.crmid=activity.activityid
-				left join cntactivityrel on cntactivityrel.activityid= activity.activityid
-				left join contactdetails on contactdetails.contactid= cntactivityrel.contactid
-				left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid 
-				left join users on crmentity.smownerid= users.id
-			where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
-				and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
-				and seactivityrel.crmid=".$id;
-		//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
+function get_emails($id)
+{
+	global $mod_strings;
+	require_once('include/RelatedListView.php');
 
-	  return renderRelatedHistory($query,$id);
+	$focus = new Email();
+
+	$button = '';
+
+	if(isPermitted("Emails",1,"") == 'yes')
+	{
+
+		$button .= '<input title="New Email" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Emails\';this.form.email_directing_module.value=\'leads\';this.form.record.value='.$id.';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_EMAIL'].'">&nbsp;';
 	}
+	$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
 
-  function get_attachments($id)
-  {
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crm2.createdtime, notes.notecontent description, users.user_name
-		// Inserted inner join users on crm2.smcreatorid= users.id
-		$query = "select notes.title,'Notes      ' ActivityType, notes.filename,
-			attachments.type  FileType,crm2.modifiedtime lastmodified,
-			seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid,
-			crm2.createdtime, notes.notecontent description, users.user_name
-		from notes
+	$query ="select activity.activityid, activity.subject, activity.semodule, activity.activitytype, activity.date_start, activity.status, activity.priority, crmentity.crmid,crmentity.smownerid,crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid inner join users on  users.id=crmentity.smownerid where activity.activitytype='Emails' and crmentity.deleted=0 and seactivityrel.crmid=".$id;
+	return GetRelatedList('Leads','Emails',$focus,$query,$button,$returnset);
+}
+
+function get_history($id)
+{
+	$query = "SELECT activity.activityid, activity.subject, activity.status,
+		activity.eventstatus, activity.activitytype, contactdetails.contactid,
+		contactdetails.firstname, contactdetails.lastname, crmentity.modifiedtime,
+		crmentity.createdtime, crmentity.description, users.user_name,activitygrouprelation.groupname
+			from activity
+			inner join seactivityrel on seactivityrel.activityid=activity.activityid
+			inner join crmentity on crmentity.crmid=activity.activityid
+			left join cntactivityrel on cntactivityrel.activityid= activity.activityid
+			left join contactdetails on contactdetails.contactid= cntactivityrel.contactid
+			left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid 
+			left join users on crmentity.smownerid= users.id
+			where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
+			and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
+			and seactivityrel.crmid=".$id;
+	//Don't add order by, because, for security, one more condition will be added with this query in include/RelatedListView.php
+
+	return getHistory('Leads',$query,$id);
+}
+
+function get_attachments($id)
+{
+	// Armando Lüscher 18.10.2005 -> §visibleDescription
+	// Desc: Inserted crm2.createdtime, notes.notecontent description, users.user_name
+	// Inserted inner join users on crm2.smcreatorid= users.id
+	$query = "select notes.title,'Notes      ' ActivityType, notes.filename,
+		attachments.type  FileType,crm2.modifiedtime lastmodified,
+		seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid,
+		crm2.createdtime, notes.notecontent description, users.user_name
+			from notes
 			inner join senotesrel on senotesrel.notesid= notes.notesid
 			inner join crmentity on crmentity.crmid= senotesrel.crmid
 			inner join crmentity crm2 on crm2.crmid=notes.notesid and crm2.deleted=0
 			left join seattachmentsrel  on seattachmentsrel.crmid =notes.notesid
 			left join attachments on seattachmentsrel.attachmentsid = attachments.attachmentsid
 			inner join users on crm2.smcreatorid= users.id
-		where crmentity.crmid=".$id;
-		$query .= ' union all ';
-		// Armando Lüscher 18.10.2005 -> §visibleDescription
-		// Desc: Inserted crm2.createdtime, attachments.description, users.user_name
-		// Inserted inner join users on crm2.smcreatorid= users.id
-		// Inserted order by createdtime desc
-		$query .= "select attachments.description title ,'Attachments' ActivityType,
-			attachments.name filename, attachments.type FileType,crm2.modifiedtime lastmodified,
-			attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid,
-			crm2.createdtime, attachments.description, users.user_name
-		from attachments
+			where crmentity.crmid=".$id;
+	$query .= ' union all ';
+	// Armando Lüscher 18.10.2005 -> §visibleDescription
+	// Desc: Inserted crm2.createdtime, attachments.description, users.user_name
+	// Inserted inner join users on crm2.smcreatorid= users.id
+	// Inserted order by createdtime desc
+	$query .= "select attachments.description title ,'Attachments' ActivityType,
+		attachments.name filename, attachments.type FileType,crm2.modifiedtime lastmodified,
+		attachments.attachmentsid attachmentsid, seattachmentsrel.attachmentsid crmid,
+		crm2.createdtime, attachments.description, users.user_name
+			from attachments
 			inner join seattachmentsrel on seattachmentsrel.attachmentsid= attachments.attachmentsid
 			inner join crmentity on crmentity.crmid= seattachmentsrel.crmid
 			inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
 			inner join users on crm2.smcreatorid= users.id
 			where crmentity.crmid=".$id."
-		order by createdtime desc";
+			order by createdtime desc";
 
-    return renderRelatedAttachments($query,$id);
-  }
-  function get_tickets($id)
-  {
-	//	$query = 'select users.user_name, users.id, leaddetails.leadid,leaddetails.lastname, products.productid, products.productname, seticketsrel.*, troubletickets.ticketid, troubletickets.title, troubletickets.status, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from leaddetails inner join seproductsrel on seproductsrel.crmid = leaddetails.leadid inner join products on seproductsrel.productid = products.productid inner join users on users.id=crmentity.smownerid inner join seticketsrel on seticketsrel.crmid = leaddetails.leadid left join troubletickets on troubletickets.ticketid = seticketsrel.ticketid inner join crmentity on crmentity.crmid = leaddetails.leadid where leaddetails.leadid='.$id;
-		$query = 'select users.user_name, users.id, seticketsrel.*, troubletickets.title, troubletickets.status, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime  from troubletickets inner join seticketsrel on seticketsrel.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid = seticketsrel.crmid inner join users on users.id=crmentity.smownerid where seticketsrel.crmid = '.$id; 
-          renderRelatedTickets($query);
-  }
-	function get_products($id)
+	return getAttachmentsAndNotes('Leads',$query,$id);
+}
+	
+function get_products($id)
+{
+	require_once('modules/Products/Product.php');
+	global $mod_strings;
+	global $app_strings;
+
+	$focus = new Product();
+
+	$button = '';
+
+	if(isPermitted("Products",1,"") == 'yes')
 	{
-		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join leaddetails on leaddetails.leadid = seproductsrel.crmid  where leaddetails.leadid = '.$id.' and crmentity.deleted = 0';
-	      return renderRelatedProducts($query,$id);
-        }
+		$button .= '<input title="New Product" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Products\';this.form.return_module.value=\'Leads\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_PRODUCT'].'">&nbsp;';
+	}
+	$returnset = '&return_module=Leads&return_action=DetailView&return_id='.$id;
+
+	$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid from products inner join seproductsrel on products.productid = seproductsrel.productid inner join crmentity on crmentity.crmid = products.productid inner join leaddetails on leaddetails.leadid = seproductsrel.crmid  where leaddetails.leadid = '.$id.' and crmentity.deleted = 0';
+	return  GetRelatedList('Leads','Products',$focus,$query,$button,$returnset);
+}
 
 
 

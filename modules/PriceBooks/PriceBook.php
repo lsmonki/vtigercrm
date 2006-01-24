@@ -53,10 +53,6 @@ class PriceBook extends CRMEntity {
         var $search_fields_name = Array(
                                         'Price Book Name'=>'bookname',
                                      );
-/*	
-//	var $combofieldNames = Array('manufacturer'=>'manufacturer_dom'
-                      ,'productcategory'=>'productcategory_dom');
-*/
 
 	//Added these variables which are used as default order by and sortorder in ListView
 	var $default_order_by = 'bookname';
@@ -75,9 +71,20 @@ class PriceBook extends CRMEntity {
 
 	
 	function get_pricebook_products($id)
-         {                                                                                                                     
-         $query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,pricebookproductrel.listprice from products inner join pricebookproductrel on products.productid = pricebookproductrel.productid inner join crmentity on crmentity.crmid = products.productid inner join pricebook on pricebook.pricebookid = pricebookproductrel.pricebookid  where pricebook.pricebookid = '.$id.' and crmentity.deleted = 0'; 
-	 return renderPriceBookRelatedProducts($query,$id);                                                                  
+	{
+		global $app_strings;
+
+		$focus = new Product();
+
+		$button = '';
+
+		$button .= '<input title="Select Products" accessyKey="F" class="button" onclick="this.form.action.value=\'AddProductsToPriceBook\';this.form.module.value=\'Products\';this.form.return_module.value=\'PriceBooks\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_SELECT_PRODUCT_BUTTON_LABEL'].'">&nbsp;';
+
+		$returnset = '&return_module=PriceBooks&return_action=DetailView&return_id='.$id;
+
+
+		$query = 'select products.productid, products.productname, products.productcode, products.commissionrate, products.qty_per_unit, products.unit_price, crmentity.crmid, crmentity.smownerid,pricebookproductrel.listprice from products inner join pricebookproductrel on products.productid = pricebookproductrel.productid inner join crmentity on crmentity.crmid = products.productid inner join pricebook on pricebook.pricebookid = pricebookproductrel.pricebookid  where pricebook.pricebookid = '.$id.' and crmentity.deleted = 0'; 
+		return getPriceBookRelatedProducts($query,$focus,$returnset);
 	}
 	function get_pricebook_noproduct($id)
         {

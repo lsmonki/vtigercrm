@@ -132,8 +132,8 @@ class Product extends CRMEntity {
 			inner join users on crmentity.smcreatorid= users.id
 		where crmentity.crmid=".$id;	
 
-               return renderRelatedAttachments($query,$id,$this->column_fields['contact_id']);
-        }
+        	return getAttachmentsAndNotes('Products',$query,$id);
+		}
 
 	function get_opportunities($id)
         {
@@ -142,48 +142,131 @@ class Product extends CRMEntity {
         }
 
 	function get_tickets($id)
-        {
-		//$query = 'select users.user_name, users.id, products.productid,products.productname, troubletickets.ticketid, troubletickets.parent_id, troubletickets.title, troubletickets.status, troubletickets.priority, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from products  inner join seticketsrel on seticketsrel.crmid = products.productid inner join troubletickets on troubletickets.ticketid = seticketsrel.ticketid inner join crmentity on crmentity.crmid = troubletickets.ticketid left join users on users.id=crmentity.smownerid where products.productid= '.$id.' and crmentity.deleted=0';
-		$query = "select users.user_name, users.id, products.productid,products.productname, troubletickets.ticketid, troubletickets.parent_id, troubletickets.title, troubletickets.status, troubletickets.priority, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join products on products.productid=troubletickets.product_id left join users on users.id=crmentity.smownerid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname where crmentity.deleted=0 and products.productid=".$id;
-     	 return renderRelatedTickets($query,$id);
-        }
-
-	function get_meetings($id)
 	{
-		$query = "SELECT meetings.name,meetings.location,meetings.date_start from meetings inner join seactivityrel on seactivityrel.activityid=meetings.meetingid and seactivityrel.crmid=".$id."";
-		renderRelatedMeetings($query);
+		global $mod_strings;
+
+		$focus = new HelpDesk();
+
+		$button = '';
+
+		if(isPermitted("HelpDesk",1,"") == 'yes')
+		{
+			$button .= '<input title="New TICKET" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'HelpDesk\';this.form.return_action.value=\'DetailView\';this.form.return_module.value=\'Products\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_TICKET'].'">&nbsp;';
+		}
+		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+		$query = "select users.user_name, users.id, products.productid,products.productname, troubletickets.ticketid, troubletickets.parent_id, troubletickets.title, troubletickets.status, troubletickets.priority, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from troubletickets inner join crmentity on crmentity.crmid = troubletickets.ticketid left join products on products.productid=troubletickets.product_id left join users on users.id=crmentity.smownerid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname where crmentity.deleted=0 and products.productid=".$id;
+		return GetRelatedList('Products','HelpDesk',$focus,$query,$button,$returnset);
 	}
+
 
 	function get_activities($id)
 	{
-		//$query = "SELECT activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join users on users.id=crmentity.smownerid where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
+		global $app_strings;
+
+        if($this->column_fields['contact_id']!=0 && $this->column_fields['contact_id']!='')
+
+        $focus = new Activity();
+
+		$button = '';
+
+        if(isPermitted("Activities",1,"") == 'yes')
+        {
+		$button .= '<input title="New Task" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Activities\';this.form.activity_mode.value=\'Task\';this.form.return_module.value=\'Products\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_TASK'].'">&nbsp;';
+		$button .= '<input title="New Event" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.return_action.value=\'DetailView\';;this.form.activity_mode.value=\'Events\';this.form.module.value=\'Activities\';this.form.return_module.value=\'Products\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_EVENT'].'">&nbsp;';
+		}
+		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+
 		$query = "SELECT contactdetails.lastname, contactdetails.firstname, contactdetails.contactid, activity.*,seactivityrel.*,crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime, users.user_name,recurringevents.recurringtype from activity inner join seactivityrel on seactivityrel.activityid=activity.activityid inner join crmentity on crmentity.crmid=activity.activityid left join cntactivityrel on cntactivityrel.activityid= activity.activityid left join contactdetails on contactdetails.contactid = cntactivityrel.contactid left join users on users.id=crmentity.smownerid left outer join recurringevents on recurringevents.activityid=activity.activityid left join activitygrouprelation on activitygrouprelation.activityid=crmentity.crmid left join groups on groups.groupname=activitygrouprelation.groupname where seactivityrel.crmid=".$id." and (activitytype='Task' or activitytype='Call' or activitytype='Meeting')";
-        return renderRelatedActivities($query,$id,$this->column_fields['contact_id']);
+		return GetRelatedList('Products','Activities',$focus,$query,$button,$returnset);
 	}
 	function get_quotes($id)
  	{
+		global $app_strings;
+	
+		$focus = new Quote();
+	
+		$button = '';
+		if(isPermitted("Quotes",1,"") == 'yes')
+        {
+		$button .= '<input title="'.$app_strings['LBL_NEW_QUOTE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_QUOTE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Quotes\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_QUOTE_BUTTON'].'">&nbsp;</td>';
+		}
+		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+
 		$query = "select crmentity.*, quotes.*,potential.potentialname,account.accountname,quotesproductrel.productid from quotes inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesproductrel on quotesproductrel.quoteid=quotes.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid where crmentity.deleted=0 and quotesproductrel.productid=".$id;
-	return	renderRelatedQuotes($query,$id,$this->column_fields['contact_id'],$this->column_fields['parent_id']);
+		return GetRelatedList('Products','Quotes',$focus,$query,$button,$returnset);
 	}
 	function get_purchase_orders($id)
 	{
+		global $app_strings;
+
+		$focus = new Order();
+
+		$button = '';
+
+		if(isPermitted("PurchaseOrder",1,"") == 'yes')
+		{
+
+			$button .= '<input title="'.$app_strings['LBL_PORDER_BUTTON_TITLE'].'" accessyKey="O" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'PurchaseOrder\';this.form.return_module.value=\'Products\';this.form.return_action.value=\'DetailView\'" type="submit" name="button" value="'.$app_strings['LBL_PORDER_BUTTON'].'">&nbsp;';
+		}
+		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+
 		$query = "select crmentity.*, purchaseorder.*,products.productname,poproductrel.productid from purchaseorder inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid inner join poproductrel on poproductrel.purchaseorderid=purchaseorder.purchaseorderid inner join products on products.productid=poproductrel.productid where crmentity.deleted=0 and products.productid=".$id;
-	return renderProductPurchaseOrders($query,$id,$this->column_fields['vendor_id'],$this->column_fields['contact_id']);
-        }
+		return GetRelatedList('Products','PurchaseOrder',$focus,$query,$button,$returnset);
+	}
 	function get_salesorder($id)
 	{
+		global $app_strings;
+
+        $focus = new SalesOrder();
+ 
+		$button = '';
+		if(isPermitted("SalesOrder",1,"") == 'yes')
+        {
+		$button .= '<input title="'.$app_strings['LBL_NEW_SORDER_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_SORDER_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'SalesOrder\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_SORDER_BUTTON'].'">&nbsp;</td>';
+		}
+		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+
 		$query = "select crmentity.*, salesorder.*, products.productname as productname, account.accountname from salesorder inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join soproductrel on soproductrel.salesorderid=salesorder.salesorderid inner join products on products.productid=soproductrel.productid left outer join account on account.accountid=salesorder.accountid where crmentity.deleted=0 and products.productid = ".$id;
-	return renderProductSalesOrders($query,$id,$this->column_fields['contact_id'],$this->column_fields['parent_id']);	
+		return GetRelatedList('Products','SalesOrder',$focus,$query,$button,$returnset);
 	}
 	function get_invoices($id)
 	{
+		global $app_strings;
+
+		$focus = new Invoice();
+
+		$button = '';
+		if(isPermitted("Invoice",1,"") == 'yes')
+		{
+			$button .= '<input title="'.$app_strings['LBL_NEW_INVOICE_BUTTON_TITLE'].'" accessyKey="'.$app_strings['LBL_NEW_INVOICE_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Invoice\'" type="submit" name="button" value="'.$app_strings['LBL_NEW_INVOICE_BUTTON'].'">&nbsp;</td>';
+		}
+		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+
 		$query = "select crmentity.*, invoice.*, invoiceproductrel.quantity, account.accountname from invoice inner join crmentity on crmentity.crmid=invoice.invoiceid left outer join account on account.accountid=invoice.accountid inner join invoiceproductrel on invoiceproductrel.invoiceid=invoice.invoiceid where crmentity.deleted=0 and invoiceproductrel.productid=".$id;
-        return renderRelatedInvoices($query,$id,$this->column_fields['contact_id'],$this->column_fields['parent_id']);
+		return GetRelatedList('Products','Invoice',$focus,$query,$button,$returnset);
 	}
 	function get_product_pricebooks($id)
-        {                                                                                                                     
-       	 	$query = 'select crmentity.crmid, pricebook.*,pricebookproductrel.productid as prodid from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid inner join pricebookproductrel on pricebookproductrel.pricebookid=pricebook.pricebookid where crmentity.deleted=0 and pricebookproductrel.productid='.$id; 
-	return renderProductRelatedPriceBooks($query,$id);                                                                  
+	{     
+		global $mod_strings;
+
+		$focus = new PriceBook();
+		$button = '';
+		if(isPermitted("PriceBook",3,"") == 'yes' && $focus->get_pricebook_noproduct($id))
+		{
+			$button .= '<input title="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_TITLE'].'" accessyKey="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_KEY'].'" class="button" onclick="this.form.action.value=\'AddProductToPriceBooks\';this.form.module.value=\'Products\'" type="submit" name="button" value="'.$mod_strings['LBL_ADD_PRICEBOOK_BUTTON_LABEL'].'">&nbsp;</td>';
+
+		}
+		$returnset = '&return_module=Products&return_action=DetailView&return_id='.$id;
+
+
+		$query = 'select crmentity.crmid, pricebook.*,pricebookproductrel.productid as prodid from pricebook inner join crmentity on crmentity.crmid=pricebook.pricebookid inner join pricebookproductrel on pricebookproductrel.pricebookid=pricebook.pricebookid where crmentity.deleted=0 and pricebookproductrel.productid='.$id; 
+		return GetRelatedList('Products','PriceBooks',$focus,$query,$button,$returnset);
 	}
 	function product_novendor()
 	{

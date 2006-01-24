@@ -100,10 +100,23 @@ class Email extends CRMEntity {
 	*/
 	function get_contacts($id)
 	{
-		//$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.$id.' and crmentity.deleted=0';
-		//SQL injectiong given by Chris is added
+		global $log;
+		global $mod_strings;
+		global $app_strings;
+
+		$focus = new Contact();
+
+		$button .= '<input title="Bulk Mail" accessyKey="F" class="button" onclick="this.form.action.value=\'sendmail\';this.form.return_action.value=\'DetailView\';this.form.module.value=\'Emails\';this.form.return_module.value=\'Emails\';" type="submit" name="button" value="'.$mod_strings['LBL_BULK_MAILS'].'">&nbsp;';
+
+		if(isPermitted("Contacts",3,"") == 'yes')
+		{
+			$button .= '<input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_CONTACT_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Contacts&return_module=Emails&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;';
+		}
+		$returnset = '&return_module=Emails&return_action=DetailView&return_id='.$id;
+
 		$query = 'select contactdetails.accountid, contactdetails.contactid, contactdetails.firstname,contactdetails.lastname, contactdetails.department, contactdetails.title, contactdetails.email, contactdetails.phone, contactdetails.emailoptout, crmentity.crmid, crmentity.smownerid, crmentity.modifiedtime from contactdetails inner join seactivityrel on seactivityrel.crmid=contactdetails.contactid inner join crmentity on crmentity.crmid = contactdetails.contactid where seactivityrel.activityid='.PearDatabase::quote($id).' and crmentity.deleted=0';
-	return renderRelatedContacts($query,$id);
+		$log->info("Contact Related List for Email is Displayed");
+		return GetRelatedList('Emails','Contacts',$focus,$query,$button,$returnset);
 	}
 	
 	/** Returns a list of the associated users
@@ -113,9 +126,58 @@ class Email extends CRMEntity {
 	*/
 	function get_users($id)
 	{
-		//$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.$id;
+		global $adb;
+		global $mod_strings;
+		global $app_strings;
+
+		$id = $_REQUEST['record'];
+
 		$query = 'SELECT users.id, users.first_name,users.last_name, users.user_name, users.email1, users.email2, users.yahoo_id, users.phone_home, users.phone_work, users.phone_mobile, users.phone_other, users.phone_fax from users inner join salesmanactivityrel on salesmanactivityrel.smid=users.id and salesmanactivityrel.activityid='.PearDatabase::quote($id);
-	return renderRelatedUsers($query);
+		$result=$adb->query($query);   
+
+		$noofrows = $adb->num_rows($result);
+		$header[] = $app_strings['LBL_LIST_NAME'];
+
+		$header []= $app_strings['LBL_LIST_USER_NAME'];
+
+		$header []= $app_strings['LBL_EMAIL'];
+
+		$header []= $app_strings['LBL_PHONE'];
+		while($row = $adb->fetch_array($result))
+		{
+
+			global $current_user;
+
+			$entries = Array();
+
+			if(is_admin($current_user))
+			{
+				$entries[] = $row['last_name'].' '.$row['first_name'];
+			}
+			else
+			{
+				$entries[] = $row['last_name'].' '.$row['first_name'];
+			}		
+
+			$entries[] = $row['user_name'];
+			$entries[] = $row['email1'];
+			if($email == '')        $email = $row['email2'];
+			if($email == '')        $email = $row['yahoo_id'];
+
+			$entries[] = $row['phone_home'];
+			if($phone == '')        $phone = $row['phone_work'];
+			if($phone == '')        $phone = $row['phone_mobile'];
+			if($phone == '')        $phone = $row['phone_other'];
+			if($phone == '')        $phone = $row['phone_fax'];
+
+			//Adding Security Check for User
+
+			$entries_list[] = entries;
+		}
+
+		if($entries_list != '')
+			$return_data = array("header"=>$header, "entries"=>$entries);
+		return $return_data;
 	}
 
 	/**
@@ -123,6 +185,7 @@ class Email extends CRMEntity {
 	  */
 	function get_attachments($id)
 	{
+		global $log;
 		$query = "select notes.title,'Notes      '  ActivityType, notes.filename,
 			attachments.type  FileType,crm2.modifiedtime lastmodified,
 			seattachmentsrel.attachmentsid attachmentsid, notes.notesid crmid,
@@ -147,9 +210,9 @@ class Email extends CRMEntity {
 			inner join crmentity crm2 on crm2.crmid=attachments.attachmentsid
 			inner join users on crm2.smcreatorid= users.id
 		where crmentity.crmid=".PearDatabase::quote($id);
-		//where crmentity.crmid=".$id;
-
-	return	renderRelatedAttachments($query,$id);
+		
+		$log->info("Notes&Attachments Related List for Email is Displayed");
+		return getAttachmentsAndNotes('Emails',$query,$id);
 	}
 
         /**
