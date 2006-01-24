@@ -6766,4 +6766,43 @@ E</constraint>
         </field>
      </table>
 
+
+
+	<table name="campaign">
+                <field name="campaignname" type="C" size="255">
+			<KEY/>
+                </field>
+		<field name="type" type="C" size="255">
+                </field>
+		<field name="status" type="C" size="255">
+                </field>
+    <field name="expectedrevenue" type="N" size="11.3">
+                </field>
+    <field name="budgetedcost" type="N" size="11.3">
+                    </field>
+ <field name="actualcost" type="N" size="11.3">
+                    </field>
+ <field name="expectedresponse" type="N" size="10.0">
+                    </field>
+ <field name="numsent" type="N" size="11.0">
+                    </field>
+ <field name="campaignid" type="I" size="7">
+                    </field>
+
+
+		<opt>Type=InnoDB</opt>
+		<index name="idx_campaignid">
+                        <col>campaignid</col>
+                </index>
+		<index name="idx_campaignname">
+                        <col>campaignname</col>
+                </index>	
+        </table>
+        <table name="datashare_rs2rs" alter="true">
+        <constraint>ADD CONSTRAINT fk_campaign FOREIGN KEY (crmid) REFERENCES crmentity(crmid) ON DELETE CASCADE</constraint>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
 </schema>
