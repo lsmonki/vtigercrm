@@ -34,9 +34,9 @@ if($adb->num_rows($result) == 1)
 {
 	$fileType = @$adb->query_result($result, 0, "type");
 	$name = @$adb->query_result($result, 0, "name");
-	//echo 'filetype is ' .$fileType;
 	$fileContent = @$adb->query_result($result, 0, "attachmentcontents");
 	$size = @$adb->query_result($result, 0, "attachmentsize");
+
 	header("Content-type: $fileType");
 	//header("Content-length: $size");
 	header("Cache-Control: private");
@@ -49,4 +49,3 @@ else
 	echo "Record doesn't exist.";
 }
 ?>
-

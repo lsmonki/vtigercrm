@@ -1,5 +1,4 @@
 <?php
-
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -10,15 +9,17 @@
 * 
  ********************************************************************************/
 
-
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/utils.php');
+
 $vtigerpath = $_SERVER['REQUEST_URI'];
 $vtigerpath = str_replace("/index.php?module=uploads&action=add2db", "", $vtigerpath);
 $uploaddir = $root_directory ."/test/upload/" ;// set this to wherever
+
 // Arbitrary File Upload Vulnerability fix - Philip
 $binFile = $_FILES['binFile']['name'];
-    $ext_pos = strrpos($binFile, ".");
+
+	$ext_pos = strrpos($binFile, ".");
 
         $ext = substr($binFile, $ext_pos + 1);
 
@@ -26,8 +27,10 @@ $binFile = $_FILES['binFile']['name'];
         {
                 $binFile .= ".txt";
         }
+
 $_FILES["binFile"]["name"] = $binFile;
 // Vulnerability fix ends
+
 if(move_uploaded_file($_FILES["binFile"]["tmp_name"],$uploaddir.$_FILES["binFile"]["name"])) 
 {
 	$filename = basename($binFile);
@@ -108,5 +111,5 @@ function deleteFile($dir,$filename)
 {
    unlink($dir.$filename);	
 }
-?>
 
+?>
