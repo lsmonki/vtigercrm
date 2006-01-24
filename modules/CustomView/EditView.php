@@ -29,18 +29,8 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 require_once('modules/CustomView/CustomView.php');
 
-$submodule = array('VENDOR'=>'Vendor','PRICEBOOK'=>'PriceBook','PRODUCTS'=>'Products','PO'=>'Orders','SO'=>'SalesOrder');
+$cv_module = $_REQUEST['module'];
 
-if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] != '')
-{
-      $cv_module = $submodule[$_REQUEST['smodule']];
-}
-else
-{
-      $cv_module = $_REQUEST['module'];
-}
-
-//$cv_module = $_REQUEST['module'];
 $recordid = $_REQUEST['record'];
 
 $xtpl=new XTemplate ('modules/CustomView/EditView.html');
