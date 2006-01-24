@@ -266,7 +266,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$productname.'</a>';
 			}
-			elseif($parent_module == "Orders")
+			elseif($parent_module == "PurchaseOrder")
 			{
 				$label_fld[] =$app_strings['LBL_PORDER_NAME'];
 				$sql = "select * from  purchaseorder where purchaseorderid=".$value;
@@ -282,7 +282,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 				$result = $adb->query($sql);
 				$sordername= $adb->query_result($result,0,"subject");
 
-				$label_fld[] ='<a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a>';
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$sordername.'</a>';
 			}
 			elseif($parent_module == "Invoice")
 			{
@@ -345,14 +345,14 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 
 				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$quotename.'</a>';
                         }
-			elseif($parent_module == "Orders")
+			elseif($parent_module == "PurchaseOrder")
                         {
 				$label_fld[] = $app_strings['LBL_PORDER_NAME'];
                                 $sql = "select * from  purchaseorder where purchaseorderid=".$value;
                                 $result = $adb->query($sql);
                                 $pordername = $adb->query_result($result,0,"subject");
 
-				$label_fld[] ='<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$pordername.'</a>';
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$pordername.'</a>';
                         }
                         elseif($parent_module == "SalesOrder")
                         {
@@ -361,7 +361,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                                 $result = $adb->query($sql);
                                 $sordername = $adb->query_result($result,0,"subject");
 
-				$label_fld[] = '<a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$value.'">'.$sordername.'</a>';
+				$label_fld[] = '<a href="index.php?module='.$parent_module.'&action=DetailView&record='.$value.'">'.$sordername.'</a>';
                         }
 			elseif($parent_module == "Invoice")
                         {
@@ -595,7 +595,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                         $purchaseorder_name = getPoName($purchaseorder_id);
                 }
 
-		$label_fld[] = '<a href="index.php?module=Orders&action=DetailView&record='.$purchaseorder_id.'">'.$purchaseorder_name.'</a>';
+		$label_fld[] = '<a href="index.php?module=PurchaseOrder&action=DetailView&record='.$purchaseorder_id.'">'.$purchaseorder_name.'</a>';
         }
 	elseif($uitype == 80)
         {
@@ -606,7 +606,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
                         $salesorder_name = getSoName($salesorder_id);
                 }
 
-		$label_fld[] = '<a href="index.php?module=Orders&action=SalesOrderDetailView&record='.$salesorder_id.'">'.$salesorder_name.'</a>';
+		$label_fld[] = '<a href="index.php?module=SalesOrder&action=DetailView&record='.$salesorder_id.'">'.$salesorder_name.'</a>';
         }
 	elseif($uitype == 30)
 	{
