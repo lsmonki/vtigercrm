@@ -34,7 +34,6 @@ function account_by_industry($user_id,$date_start,$end_date)
 
         global $adb,$query;
         global $days,$date_array,$period_type;
-        $insdustry_query="select * from industry";
 
         $where= " and crmentity.smownerid=".$user_id." and crmentity.createdtime between '%".$date_start."%'
 and '%".$end_date."%'" ;
@@ -88,7 +87,7 @@ and '%".$end_date."%'" ;
                         $url_string="";
 
                         $industry_cnt_table="<table border=0 cellspacing=1 cellpadding=3><tr>
-                                <th>Ticket Status</th>";
+                                <th> Industry</th>";
 
                         //Assigning the Header values to the Graph
                         for($i=0; $i<$days; $i++)
@@ -151,7 +150,6 @@ and '%".$end_date."%'" ;
                                 if($industry_name_val!="") $industry_name_val.=",$industry";
                                 else $industry_name_val="$industry";
                                 //Passing count to graph
-				 //Passing count to graph
                                 if($industry_cnt_val!="") $industry_cnt_val.=",$industry_count_val";
                                 else $industry_cnt_val="$industry_count_val";
 
