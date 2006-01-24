@@ -140,7 +140,7 @@ else
 	}
 }
 
-$xtpl->assign("RETURN_MODULE", $cvmodule);
+$xtpl->assign("RETURN_MODULE", $cv_module);
 $xtpl->assign("RETURN_ACTION", "index");
 
 $xtpl->parse("main");
