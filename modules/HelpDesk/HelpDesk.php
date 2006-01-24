@@ -92,7 +92,7 @@ class HelpDesk extends CRMEntity {
 	{
 		global $mod_strings;
 		global $app_strings;
-
+		require_once('modules/Activities/Activity.php');
 		$focus = new Activity();
 
 		$button = '';

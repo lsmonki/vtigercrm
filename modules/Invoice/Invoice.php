@@ -121,7 +121,7 @@ class Invoice extends CRMEntity {
 	function get_activities($id)
 	{
 		 global $app_strings;
-
+		require_once('modules/Activities/Activity.php');
         $focus = new Activity();
 
 		$button = '';

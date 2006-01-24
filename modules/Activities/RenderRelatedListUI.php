@@ -188,57 +188,12 @@ function renderRelatedUsers($query,$id)
 
   $result=$adb->query($query);   
 
-  $list .= '<br><br>';
-  $list .= '<table width="100%" cellpadding="0" cellspacing="0" border="0"><tbody><tr>';
-
-  
-  $list .= '<td>';
-  $list .= '<table cellpadding="0" cellspacing="0" border="0"><tbody><tr><td class="formHeader" vAlign="top" align="left" height="20"> <img src="' .$image_path. '/left_arc.gif" border="0"></td><td class="formHeader" vAlign="middle" background="' . $image_path. '/header_tile.gif" align="left" noWrap height="20">'.$app_strings['LBL_USER_TITLE'].'</td><td  class="formHeader" vAlign="top" align="right" height="20"><img src="' .$image_path. '/right_arc.gif" border="0"></td> ';
-  $list .= '<td>&nbsp;</td>';
-
-  $list .= '<td valign="bottom" align="left"><input title="Change" accessKey="" tabindex="2" type="button" class="button" value="'.$app_strings['LBL_SELECT_USER_BUTTON_LABEL'].'" name="Button" LANGUAGE=javascript onclick=\'return window.open("index.php?module=Users&return_module=Activities&return_action=DetailView&activity_mode=Events&action=Popup&popuptype=detailview&form=EditView&form_submit=true&return_id='.$_REQUEST["record"].'&recordid='.$_REQUEST["record"].'","test","width=600,height=400,resizable=1,scrollbars=1");\'>&nbsp;</td>';
-
-  $list .= '</td></tr></form></tbody></table>';
-
-  $list .= '<table border="0" cellpadding="0" cellspacing="0" class="formHeaderULine" width="100%">';
-  $list .= '<tr height=1><td height=1></td></tr></table>';
 
   $noofrows = $adb->num_rows($result);
-  if ($noofrows > 15)
-  {
-	$list .= '<div style="overflow:auto;height:315px;width:100%;">';
-  }
-  $list .= '<table border="0" cellpadding="0" cellspacing="0" class="FormBorder" width="100%">';
-  $list .= '<tr class="ModuleListTitle" height=20>';
-
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
- 
   $header[] = $app_strings['LBL_LIST_NAME'];
-  $list .= $app_strings['LBL_LIST_NAME'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
   $header[] = $app_strings['LBL_LIST_USER_NAME'];
-  $list .= $app_strings['LBL_LIST_USER_NAME'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-  
   $header[] = $app_strings['LBL_EMAIL'];
-  $list .= $app_strings['LBL_EMAIL'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
   $header[] = $app_strings['LBL_PHONE']; 
-  $list .= $app_strings['LBL_PHONE'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle" height="21">';
-
-
-  $list .= $app_strings['LBL_ACTION'].'</td>';
-  $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-  $list .= '<td class="moduleListTitle">';
-
 
   // To display the dates for the Group calendar starts -Jaguar
 	$recur_dates_qry='select distinct(recurringdate) from recurringevents where activityid='.$activity_id;
@@ -283,18 +238,6 @@ function renderRelatedUsers($query,$id)
 		$recur_table.="</tr>";
 	}
 	$recur_table.="</table>";
-	$list .= $recur_table;
-  	// To display the dates for the Group calendar Ends -Jaguar
-	$list .= '</td><td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td class="moduleListTitle">';
-
-  $list .= '</td>';
-  $list .= '</tr>';
-  $list .= '<tr><td COLSPAN="10" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
-
-  $i=1;
-
-
   while($row = $adb->fetch_array($result))
   {
 	
@@ -302,13 +245,6 @@ function renderRelatedUsers($query,$id)
 	
     $entries = Array();	
 	
-    if ($i%2==0)
-      $trowclass = 'evenListRow';
-    else
-      $trowclass = 'oddListRow';
-    $list .= '<tr class="'. $trowclass.'">';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
     if(is_admin($current_user))
     {
     	$entries[] = $row['last_name'].' '.$row['first_name'];
@@ -318,45 +254,17 @@ function renderRelatedUsers($query,$id)
     	$entries[] = $row['last_name'].' '.$row['first_name'];
     }	
 
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-
-   
  $entries[] = $row['user_name'];
 
 	$entries[] = $row['email1'];
 	if($email == '')	$email = $row['email2'];
 	if($email == '')	$email = $row['yahoo_id'];
 
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= '<a href=mailto:'.$email.'>'.$email.'</a>';
 
 	$entries[] = $row['phone_home'];
 	if($phone == '')	$phone = $row['phone_work'];
         if($phone == '')        $phone = $row['phone_other'];
         if($phone == '')	$phone = $row['phone_fax'];
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;">';
-    $list .= $phone;
-
-    $list .= '</td>';
-
-    $list .= '<td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-    $list .= '<td width="10%" height="21" style="padding:0px 3px 0px 3px;">';
-    if(is_admin($current_user))
-    {		
-    $list .= '<a href="index.php?module=Users&action=EditView&return_module=Activities&return_action=DetailView&activity_mode=Events&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_EDIT'].'</a>  | ';
-    }
-
-    $list .= '<a href="index.php?module=Users&action=Delete&return_module=Activities&return_action=DetailView&activity_mode=Events&record='.$row["id"].'&return_id='.$_REQUEST['record'].'">'.$app_strings['LNK_DELETE'].'</a>';
-
-	//Added for Group Calendar -Jaguar
-	
-
-        $list .= '</td><td WIDTH="1" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif">';
-	$list .= '<td width="20%" height="21" style="padding:0px 3px 0px 3px;" nowrap>';
 
 	$act_date_start= getDBInsertDateValue($row['date_start']); //getting the Date format - Jaguar
 	$act_due_date= getDBInsertDateValue($row['due_date']);
@@ -392,9 +300,6 @@ function renderRelatedUsers($query,$id)
 
 			
 		}
-		$avail_table.="</tr>";
-		$avail_table.="</table>";
-	       $list .= $avail_table;
 	}
 	else
 	{
@@ -404,31 +309,16 @@ function renderRelatedUsers($query,$id)
 		$list .= $availability;
 	}
 	// Group Calendar coding	
-	$list .= '</td>';	
-		
 	
 	$entries_list[]=$entries;
-    $list .= '</tr>';
-    $i++;
   }
-
-  $list .= '<tr><td COLSPAN="10" class="blackLine"><IMG SRC="themes/'.$theme.'/images/blank.gif"></td></tr>';
-  $list .= '</table>';
-  if ($noofrows > 15)
-  {
-	  $list .='</div>';
-  }
-  $list .= '</td></tr></table>';
 
 	if($entries_list != '')
 		$return_data = array('header'=>$header, 'entries'=>$entries_list);
 		return $return_data;
-	print_r($return_data);
 
-  echo "<BR>\n";
 }
 
-echo get_form_footer();
 
 
 ?>

@@ -73,7 +73,7 @@ class PriceBook extends CRMEntity {
 	function get_pricebook_products($id)
 	{
 		global $app_strings;
-
+		require_once('modules/Products/Product.php');	
 		$focus = new Product();
 
 		$button = '';

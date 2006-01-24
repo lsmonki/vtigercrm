@@ -15,7 +15,7 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
-
+require_once('include/RelatedListView.php');
 
 class Product extends CRMEntity {
 	var $log;
@@ -144,7 +144,7 @@ class Product extends CRMEntity {
 	function get_tickets($id)
 	{
 		global $mod_strings;
-
+		require_once('modules/HelpDesk/HelpDesk.php');
 		$focus = new HelpDesk();
 
 		$button = '';
@@ -165,7 +165,7 @@ class Product extends CRMEntity {
 		global $app_strings;
 
         if($this->column_fields['contact_id']!=0 && $this->column_fields['contact_id']!='')
-
+		require_once('modules/Activities/Activity.php');	
         $focus = new Activity();
 
 		$button = '';
@@ -184,7 +184,7 @@ class Product extends CRMEntity {
 	function get_quotes($id)
  	{
 		global $app_strings;
-	
+		require_once('modules/Quotes/Quote.php');	
 		$focus = new Quote();
 	
 		$button = '';
@@ -201,7 +201,7 @@ class Product extends CRMEntity {
 	function get_purchase_orders($id)
 	{
 		global $app_strings;
-
+		require_once('modules/PurchaseOrder/PurchaseOrder.php');
 		$focus = new Order();
 
 		$button = '';
@@ -220,7 +220,7 @@ class Product extends CRMEntity {
 	function get_salesorder($id)
 	{
 		global $app_strings;
-
+		require_once('modules/SalesOrder/SalesOrder.php');
         $focus = new SalesOrder();
  
 		$button = '';
@@ -237,7 +237,7 @@ class Product extends CRMEntity {
 	function get_invoices($id)
 	{
 		global $app_strings;
-
+		require_once('modules/Invoice/Invoice.php');
 		$focus = new Invoice();
 
 		$button = '';
@@ -254,7 +254,7 @@ class Product extends CRMEntity {
 	function get_product_pricebooks($id)
 	{     
 		global $mod_strings;
-
+		require_once('modules/PriceBooks/PriceBook.php');
 		$focus = new PriceBook();
 		$button = '';
 		if(isPermitted("PriceBook",3,"") == 'yes' && $focus->get_pricebook_noproduct($id))

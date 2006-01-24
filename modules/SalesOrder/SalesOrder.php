@@ -144,8 +144,8 @@ class SalesOrder extends CRMEntity {
 	function get_activities($id)
 	{
 		global $app_strings;
-
-        $focus = new Activity();
+       	require_once('modules/Activities/Activity.php'); 
+		$focus = new Activity();
 
 		$button = '';
 
