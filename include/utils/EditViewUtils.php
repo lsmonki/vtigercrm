@@ -756,6 +756,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	//added by rdhital/Raju for better email support
 	elseif($uitype == 357)
 	{
+		$contact_selected = 'selected';
+		$account_selected = '';
+		$lead_selected = '';
 		if(isset($_REQUEST['emailids']) && $_REQUEST['emailids'] != '')
 		{
 			$parent_id = $_REQUEST['emailids'];
@@ -774,6 +777,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$myfocus = new Account();
 					$myfocus->retrieve_entity_info($entityid,"Accounts");
 					$fullname=br2nl($myfocus->column_fields['accountname']);
+					$account_selected = 'selected';
 				}
 				elseif ($pmodule=='Contacts'){
 					require_once('modules/Contacts/Contact.php');
@@ -782,6 +786,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$fname=br2nl($myfocus->column_fields['firstname']);
 					$lname=br2nl($myfocus->column_fields['lastname']);
 					$fullname=$lname.' '.$fname;
+					$contact_selected = 'selected';
 				}
 				elseif ($pmodule=='Leads'){
 					require_once('modules/Leads/Lead.php');
@@ -790,6 +795,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 					$fname=br2nl($myfocus->column_fields['firstname']);
 					$lname=br2nl($myfocus->column_fields['lastname']);
 					$fullname=$lname.' '.$fname;
+					$lead_selected = 'selected';
 				}
 				for ($j=1;$j<$nemail;$j++){
 					$querystr='select columnname from field where fieldid='.$realid[$j].';';
@@ -824,6 +830,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 						$myemail=$adb->query_result($result,0,"email");
 						$parent_id .=$mycrmid.'@0|' ; //make it such that the email adress sent is remebered and only that one is retrived
 						$parent_name .= $last_name.' '.$first_name.'<'.$myemail.'>; ';
+						$lead_selected = 'selected';
 					}
 					elseif($parent_module == "Contacts")
 					{
@@ -834,6 +841,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 						$myemail=$adb->query_result($result,0,"email");
 						$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
 						$parent_name .= $last_name.' '.$first_name.'<'.$myemail.'>; ';
+						$contact_selected = 'selected';
 					}
 					elseif($parent_module == "Accounts")
 					{
@@ -843,6 +851,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 						$myemail=$adb->query_result($result,0,"email1");
 						$parent_id .=$mycrmid.'@0|'  ;//make it such that the email adress sent is remebered and only that one is retrived
 						$parent_name .= $account_name.'<'.$myemail.'>; ';
+						$account_selected = 'selected';
 					}
 				}
 			}
@@ -853,9 +862,9 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 		$custfld .= '<OPTION value="Accounts" >'.$app_strings['COMBO_ACCOUNTS'].'</OPTION>';
 		$custfld .= '<OPTION value="Leads" >'.$app_strings['COMBO_LEADS'].'</OPTION></select><img src="'.$image_path.'select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick=\'return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&popuptype=set_return_emails&form=EmailEditView&form_submit=false","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");\' align="absmiddle" style=\'cursor:hand;cursor:pointer\'>&nbsp;<input type="image" src="'.$image_path.'clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=\'\';this.form.parent_name.value=\'\';return false;" align="absmiddle" style=\'cursor:hand;cursor:pointer\'></td>';
 		$editview_label[] = array(	 
-				$app_strings['COMBO_CONTACTS']=>'selected',
-				$app_strings['COMBO_ACCOUNTS']=>'',
-				$app_strings['COMBO_LEADS']=>''
+				$app_strings['COMBO_CONTACTS']=>$contact_selected,
+				$app_strings['COMBO_ACCOUNTS']=>$account_selected,
+				$app_strings['COMBO_LEADS']=>$lead_selected
 				);
 		$fieldvalue[] =$parent_name;
 		$fieldvalue[] = $parent_id;
