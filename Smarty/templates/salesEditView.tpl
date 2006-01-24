@@ -211,32 +211,29 @@
 																	{assign var=style_group value='display:block'}
 																{/if}	
 																<input type="radio" name="assigntype" {$select_user} value="U" onclick="toggleAssignType(this.value)">&nbsp;User
-                                                                <input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;Team
-																<span id="assign_user" style="{$style_user}">
-                                                                <select name="assigned_user_id">
-                                                                {foreach key=key_one item=arr from=$fldvalue}
-                                                                        {foreach key=sel_value item=value from=$arr}
-                                                                                <option value="{$key_one}" {$value}>{$sel_value}</option>
-                                                                        {/foreach}
-
-                                                                {/foreach}
-                                                                </select></span>
-                                                                {if $secondvalue neq ''}
-                                                                <span id="assign_team" style="{$style_group}">
-                                                                <select name="assigned_group_name">';
-                                                                {foreach key=key_one item=arr from=$secondvalue}
-                                                                        {foreach key=sel_value item=value from=$arr}
-                                                                                <option value="{$sel_value}" {$value}>{$sel_value}</option>
-                                                                        {/foreach}
-
-                                                                {/foreach}
-
-                                                                </select></span>
-
-                                                                {/if}
-                                                        </td>
-														
-							{elseif $uitype eq 52 || $uitype eq 77}
+     {if $secondvalue neq ''}
+	<input type="radio" name="assigntype" {$select_group} value="T" onclick="toggleAssignType(this.value)">&nbsp;Team
+     {/if}									
+	<span id="assign_user" style="{$style_user}">
+        <select name="assigned_user_id">
+        {foreach key=key_one item=arr from=$fldvalue}
+        {foreach key=sel_value item=value from=$arr}
+        <option value="{$key_one}" {$value}>{$sel_value}</option>
+        {/foreach}
+        {/foreach}
+        </select></span>
+        {if $secondvalue neq ''}
+        <span id="assign_team" style="{$style_group}">
+        <select name="assigned_group_name">';
+        {foreach key=key_one item=arr from=$secondvalue}
+        {foreach key=sel_value item=value from=$arr}
+        <option value="{$sel_value}" {$value}>{$sel_value}</option>
+        {/foreach}
+        {/foreach}
+        </select></span>
+        {/if}
+        </td>
+		{elseif $uitype eq 52 || $uitype eq 77}
                                                         <td width="20%" class="dvtCellLabel" align=right>
 							   {$fldlabel}
 							</td>
