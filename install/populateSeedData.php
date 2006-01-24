@@ -72,7 +72,7 @@ $phone = $phone; // This line is useless, but gets around a code analyzer warnin
 function create_date()
 {
 	$date = "";
-	$date .= "2005";
+	$date .= "2006";
 	$date .= "/";
 	$date .= rand(1,9);
 	$date .= "/";
