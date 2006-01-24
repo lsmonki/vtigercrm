@@ -168,7 +168,6 @@
 							<input title="New Attachment" accessyKey="F" class="small" onclick="this.form.action.value='upload'; this.form.module.value='uploads'" type="submit" name="button" value="Add new Attachment"></td>
 							{elseif $header eq 'Quotes'}
 							<input title="New Quote" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Quotes'" type="submit" name="button" value="Add new Quote"></td>
-							{elseif $header eq 'Invoice'}
 							
 							{elseif $header eq 'Invoice'}
 							{if $MODULE eq 'SalesOrder'}
@@ -186,9 +185,7 @@
 
 							{elseif $header eq 'Purchase Order'}
 							<input title="New Purchase Order" accessyKey="O" class="small" onclick="this.form.action.value='EditView'; this.form.module.value='PurchaseOrder'; this.form.return_module.value='{$MODULE}'; this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="Add new Purchase Order"></td>
-						{*      {elseif $header eq 'Products'}
-							<input title="New Product" accessyKey="F" class="small" onclick="this.form.action.value='EditView';this.form.module.value='Products';this.form.return_module.value='{$MODULE}';this.form.return_action.value='CallRelatedList'" type="submit" name="button" value="Add new Product"></td> 
-						*}
+							
 							{elseif $header eq 'Emails'}
 							<input type="hidden" name="email_directing_module">
 							<input type="hidden" name="record">
