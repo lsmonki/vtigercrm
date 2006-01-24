@@ -768,8 +768,6 @@ function getRelatedLists($module,$focus)
 	$mod_dir_name=getModuleDirName($module);
 	$tab_per_Data = getAllTabsPermission($profile_id);
 	$permissionData = $_SESSION['action_permission_set'];
-	$inc_file = 'modules/'.$mod_dir_name.'/RenderRelatedListUI.php';
-	include($inc_file);
 	$cur_tab_id = getTabid($module);
 
 	$sql1 = "select * from relatedlists where tabid=".$cur_tab_id;
