@@ -85,7 +85,9 @@ $graph->title->SetFont(FF_FONT1,FS_BOLD);
 
 $bplot->value->SetFormat('%d');
 $graph->yaxis->title->SetFont(FF_FONT1,FS_BOLD);
-$graph->xaxis->title->SetFont(FF_FONT1,FS_BOLD);
+$graph->xaxis->SetTickLabels($datax);
+//$graph->xaxis->SetLabelAngle(45);
+//$graph->xaxis->SetTextAlign('center','top');    
 
 // Display the graph
 $graph->Stroke();
