@@ -416,39 +416,39 @@ class database extends tutos_base {
 
     if ( $this->type == DB_TYPE_POSTGRES ) {
       # Postgres
-      require_once 'db/db_pg.pinc';
+      require_once 'modules/Calendar/db/db_pg.pinc';
       $dbconn = new db_pg($this);
       $dbconn->version = 1;
     } else if ( $this->type == 4 ) {
       # Postgres 7.1
-      require_once 'db/db_pg.pinc';
+      require_once 'modules/Calendar/db/db_pg.pinc';
       $dbconn = new db_pg($this);
       $dbconn->version = 2;
     } else if ( $this->type == DB_TYPE_MYSQL ) {
       # MySQL
-      require_once 'db/db_mysql.pinc';
+      require_once 'modules/Calendar/db/db_mysql.pinc';
       $dbconn = new db_mysql($this);
     } else if ( $this->type == DB_TYPE_ORACLE ) {
       # Oracle
-      require_once 'db/db_ora.pinc';
+      require_once 'modules/Calendar/db/db_ora.pinc';
       $dbconn = new db_ora($this);
       $dbconn->home = $this->home;
     } else if ( $this->type == DB_TYPE_OCI ) {
       # Oracle OCI
-      require_once 'db/db_oci.pinc';
+      require_once 'modules/Calendar/db/db_oci.pinc';
       $dbconn = new db_oci($this);
       $dbconn->home = $this->home;
     } else if ( $this->type == DB_TYPE_MSSQL ) {
       # MS SQL
-      require_once 'db/db_mssql.pinc';
+      require_once 'modules/Calendar/db/db_mssql.pinc';
       $dbconn = new db_mssql($this);
     } else if ( $this->type == 6 ) {
       # Sybase
-      require_once 'db/db_sybase.pinc';
+      require_once 'modules/Calendar/db/db_sybase.pinc';
       $dbconn = new db_sybase($this);
     } else if ( $this->type == DB_TYPE_INTERBASE ) {
       # Interbase
-      require_once 'db/db_interbase.pinc';
+      require_once 'modules/Calendar/db/db_interbase.pinc';
       $dbconn = new db_interbase($this);
     } else {
       Fatal_Error("Unknown Database type for '".$this->id ."'", "Type is '". $this->type ."'");

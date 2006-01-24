@@ -7,7 +7,7 @@
  * contributed by Markus Leist
  */
 
-require_once 'auth.pinc';
+require_once 'modules/Calendar/auth.pinc';
 /**
  * Authentification base class
  *

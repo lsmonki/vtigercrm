@@ -53,7 +53,6 @@ class classic_base extends layout_base {
     echo "<?xml version=\"1.0\"?>";
     echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"";
     echo "  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
-*/
 
     if (true) {
       echo "<?xml version=\"1.0\"?>\n";
@@ -65,6 +64,7 @@ class classic_base extends layout_base {
       $c = ">"; 
 	  $xml = false;
     }
+*/
     if ( isset($tutos[lang]) && $tutos[lang] != "" ) {
       #echo "<html dir=\"ltr\" lang=\"". $tutos[lang] ."\">\n";
     } else {

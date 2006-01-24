@@ -62,14 +62,14 @@
 
    # Read Custom Holidays , like company anniversary etc.
    if ( file_exists(getcwd()."/".$tutos['base']."/localization/holiday_custom.pinc") && is_readable(getcwd()."/".$tutos['base']."/localization/holiday_custom.pinc") ) {
-     include "localization/holiday_custom.pinc";
+     //include "modules/Calendar/localization/holiday_custom.pinc";
    }
 
    foreach($tutos[holiday] as $i => $f) {
      $i = strtolower($i);
      if ( ($f == 1) && ($current_user->holiday[$i] == 1) ) {
        error_reporting(E_ALL);
-       include "localization/holiday_". $i .".pinc";
+       include "modules/Calendar/localization/holiday_". $i .".pinc";
        error_reporting($tutos['error_reporting']);
      }
    }
@@ -88,7 +88,7 @@
    while( list ($i,$f) = @each ($tutos[nameday])) {
      $i = strtolower($i);
      if ( ($f == 1) && ($current_user->nameday[$i] == 1) ) {       
-       include "localization/namedays_". $i .".p3";
+       include "modules/Calendar/localization/namedays_". $i .".p3";
      }
    }
 

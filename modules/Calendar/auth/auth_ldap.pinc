@@ -9,7 +9,7 @@
  * Patches and ldap filter by Frederic Olivie <alf@club-internet.fr>
  */
 
-require_once 'auth.pinc';
+require_once 'modules/Calendar/auth.pinc';
 
 #
 # Globally diable PWLOST SUPPORT

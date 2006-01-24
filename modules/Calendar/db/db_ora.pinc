@@ -6,7 +6,7 @@
  *  $Author$
  */
 
-require_once 'db.pinc';
+require_once 'modules/Calendar/db.pinc';
 #
 # Register parse functions for datetime
 #

@@ -20,7 +20,7 @@ class auth {
    *
    * @param Object a database connection
    */
-  function auth() {
+  function auth() {	
     $this->pwlostsupport = true;
     $this->pwchangesupport = true;
   }

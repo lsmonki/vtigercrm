@@ -235,9 +235,9 @@ $info = array();
 
  $tutos['base'] = "../..";
  #ini_set("include_path","..");
- include_once 'webelements.p3';
- include_once 'permission.p3';
- require 'admin/mconfig.pinc';
+ include_once 'modules/Calendar/webelements.p3';
+ include_once 'modules/Calendar/permission.p3';
+ require 'modules/Calendar/admin/mconfig.pinc';
 
  $dbc = null;
  $x = new tutos_user($dbc);

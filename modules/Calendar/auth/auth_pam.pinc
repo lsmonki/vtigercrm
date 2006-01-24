@@ -6,7 +6,7 @@
  * $Author$
  */
 
-require_once 'auth.pinc';
+require_once 'modules/Calendar/auth.pinc';
 
 #
 # Globally diable PWLOST SUPPORT
