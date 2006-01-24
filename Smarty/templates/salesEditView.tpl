@@ -384,7 +384,7 @@
 								<tr style="height:25px">
 								<td width="20%" class="dvtCellLabel" align=right>CC:&nbsp;</td>	
 								<td width="30%" align=left class="dvtCellInfo">
-								<input name="{$fldname}" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value="{$fldvalue}"></td>
+								<input name="{$fldname}" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value=""></td>
 								<td width="20%" class="dvtCellLabel" align=right>BCC:&nbsp;</td>
                                                                 <td width="30%" align=left class="dvtCellInfo">
                                                                 <input name="bccmail" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value=""></td>
