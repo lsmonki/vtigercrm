@@ -62,7 +62,7 @@ class Activity extends CRMEntity {
 	var $tab_name_index = Array('crmentity'=>'crmid','activity'=>'activityid','seactivityrel'=>'activityid','cntactivityrel'=>'activityid','salesmanactivityrel'=>'activityid','activity_reminder'=>'activity_id','recurringevents'=>'activityid');
 
 	var $column_fields = Array();
-	var $sortby_fields = Array('subject','due_date','date_start');	//Sorting is added for due date and start date	
+	var $sortby_fields = Array('subject','due_date','date_start','smownerid');	//Sorting is added for due date and start date	
 
 	// This is used to retrieve related fields from form posts.
 	var $additional_column_fields = Array('assigned_user_name', 'assigned_user_id', 'contactname', 'contact_phone', 'contact_email', 'parent_name');
