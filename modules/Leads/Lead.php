@@ -250,7 +250,7 @@ return $exists;
 		}
 
                         $where_auto = " users.status='Active'
-                        AND crmentity.deleted=0 ";
+                        AND crmentity.deleted=0 AND leaddetails.converted =0";
 
                 if($where != "")
                         $query .= "where ($where) AND ".$where_auto;
