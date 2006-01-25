@@ -213,6 +213,12 @@ $server->register(
 	array('return'=>'xsd:string'),
 	$NAMESPACE);
 
+$server->register(
+        'get_ticket_creator',
+        array('id'=>'xsd:string'),
+        array('return'=>'xsd:string'),
+        $NAMESPACE);
+
 
 function get_ticket_comments($ticketid)
 {
@@ -466,7 +472,7 @@ function authenticate_user($username,$password)
 {
 	global $adb;
 	$current_date = date("Y-m-d");
-	$sql = "select id, user_name, user_password,last_login_time, support_start_date, support_end_date from portalinfo inner join customerdetails on portalinfo.id=customerdetails.customerid where user_name='".$username."' and user_password = '".$password."' and isactive=1 and customerdetails.support_end_date >= '".$current_date."'";
+	$sql = "select id, user_name, user_password,last_login_time, support_start_date, support_end_date from portalinfo inner join customerdetails on portalinfo.id=customerdetails.customerid inner join crmentity on crmentity.crmid=portalinfo.id where crmentity.deleted=0 and user_name='".$username."' and user_password = '".$password."' and isactive=1 and customerdetails.support_end_date >= '".$current_date."'";
 	$result = $adb->query($sql);	
 	$list['id'] = $adb->query_result($result,0,'id');
 	$list['user_name'] = $adb->query_result($result,0,'user_name');
@@ -574,6 +580,15 @@ function send_mail_for_password($mailid)
 
 }
 
+function get_ticket_creator($ticketid)
+{
+	global $adb;
+
+	$res = $adb->query("select smcreatorid from crmentity where crmid=".$ticketid);
+	$creator = $adb->query_result($res,0,'smcreatorid');
+
+	return $creator;
+}
 
 
 /* Begin the HTTP listener service and exit. */ 
