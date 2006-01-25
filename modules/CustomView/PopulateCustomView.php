@@ -308,9 +308,6 @@ $cvcolumns = Array(Array('leaddetails:lastname:lastname:Leads_Last_Name:V',
                         'vendor:category:category:Vendors_Category:V'),
 
 
- Array('campaign:campaignname:campaignname:Campaign_Campaign_Name:V',
-                        'campaign:campaignid:campaignid:Campaign_Campaign_ID:V',
-                                               'campaign:campaigntype:campaigntype:Campaign_Type:V'),
 
 
 		 Array('faq:id::Faq_FAQ_Id:I',
@@ -319,8 +316,13 @@ $cvcolumns = Array(Array('leaddetails:lastname:lastname:Leads_Last_Name:V',
 		       'faq:product_id:product_id:Faq_Product_Name:I',
 		       'crmentity:createdtime:createdtime:Faq_Created_Time:D',
                        'crmentity:modifiedtime:modifiedtime:Faq_Modified_Time:D'),
-
+		      //this sequence has to be maintained 
+ 		 Array('campaign:campaignname:campaignname:Campaign_Campaign_Name:V',
+                       'campaign:campaignid:campaignid:Campaign_Campaign_ID:V',
+                       'campaign:campaigntype:campaigntype:Campaign_Type:V'),
                   );
+
+
 
 $cvstdfilters = Array(Array('columnname'=>'crmentity:modifiedtime:modifiedtime:Leads_Modified_Time',
                             'datefilter'=>'thismonth',
