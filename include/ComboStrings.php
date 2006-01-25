@@ -265,6 +265,19 @@ $combo_strings = Array(
 			'Delivered'=>'Delivered',
 			'Canceled'=>'Canceled'
 			),
+
+'campaignstatus_dom' => Array('Planning'=>'Planning',
+			'Active'=>'Active',
+			'Inactive'=>'Inactive',
+                      'Canceled'=>'Canceled',
+                      'Complete'=>'Complete'
+			),
+
+'campaigntype_dom' => Array('Conference'=>'Conference',
+			'Podcast'=>'Podcast',
+			'Advertisement'=>'Advertisement',
+			'Email'=>'Email'
+			),
 		
 );
 
