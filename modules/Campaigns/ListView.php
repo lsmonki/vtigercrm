@@ -28,12 +28,12 @@ global $mod_strings;
 global $current_language;
 $current_module_strings = return_module_language($current_language, 'Campaigns');
 
-$comboFieldNames = Array('ticketpriorities'=>'ticketpriorities_dom'
-			,'ticketstatus'=>'ticketstatus_dom'
-			,'ticketcategories'=>'ticketcategories_dom');
+$comboFieldNames = Array('campaigntype'=>'campaigntype_dom'
+                         ,'campaignstatus'=>'campaignstatus_dom');
 $comboFieldArray = getComboArray($comboFieldNames);
-
 global $currentModule;
+
+
 global $theme;
 $theme_path="themes/".$theme."/";
 $image_path=$theme_path."images/";
@@ -44,6 +44,7 @@ $category = getParentTab();
 $url_string = ''; // assigning http url string
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
+/*
 if($_REQUEST['order_by'] != '')
 	$order_by = $_REQUEST['order_by'];
 else
@@ -57,7 +58,7 @@ else
 $_SESSION['HELPDESK_ORDER_BY'] = $order_by;
 $_SESSION['HELPDESK_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
-
+*/
 
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
@@ -66,23 +67,23 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	
 	$url_string .="&query=true";
 
-	if (isset($_REQUEST['ticket_title'])) $name = $_REQUEST['ticket_title'];
-	if (isset($_REQUEST['ticket_id'])) $ticket_id_val = $_REQUEST['ticket_id'];
-	if (isset($_REQUEST['contact_name'])) $contact_name = $_REQUEST['contact_name'];
-	if (isset($_REQUEST['priority'])) $priority = $_REQUEST['priority'];
-	if (isset($_REQUEST['status'])) $status = $_REQUEST['status'];
-	if (isset($_REQUEST['category'])) $category = $_REQUEST['category'];
-	if (isset($_REQUEST['date'])) $date = $_REQUEST['date'];
+	if (isset($_REQUEST['campaignid'])) $name = $_REQUEST['campaignid'];
+	if (isset($_REQUEST['campaignname'])) $contact_name = $_REQUEST['campaignname'];
+	if (isset($_REQUEST['campaigntype'])) $priority = $_REQUEST['campaigntype'];
+	if (isset($_REQUEST['campaignstatus'])) $status = $_REQUEST['campaignstatus'];
 	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 
 }
 
 //<<<<cutomview>>>>>>>
-$oCustomView = new CustomView("Campaign");
+$oCustomView = new CustomView("Campaigns");
 $customviewcombo_html = $oCustomView->getCustomViewCombo();
+
 $viewid = $oCustomView->getViewId($currentModule);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
+
 //<<<<<customview>>>>>
+
 
 if($viewid != 0)
 {
@@ -123,7 +124,7 @@ $smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("IMAGE_PATH",$image_path);
-$smarty->assign("MODULE",$currentModule);
+$smarty->assign("MODULE",'Campaigns');
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
 $smarty->assign("SINGLE_MOD",'Campaign');
@@ -176,7 +177,7 @@ if(isset($order_by) && $order_by != '')
 }
 else
 {
-	$list_query .= ' order by troubletickets.ticketid DESC';
+	$list_query .= ' order by campaign.campaignid DESC';
 }
 
 
