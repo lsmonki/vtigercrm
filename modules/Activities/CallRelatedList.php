@@ -17,16 +17,6 @@ global $app_strings;
 $focus = new Activity();
 $MODULE = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
-$activity_mode = $_REQUEST['activity_mode'];
-if($activity_mode == 'Task')
-{
-        $tab_type = 'Activities';
-}
-elseif($activity_mode == 'Events')
-{
-        $tab_type = 'Events';
-}
-
 
 if (isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 	$focus->retrieve_entity_info($_REQUEST['record'],"Activities");
@@ -51,7 +41,7 @@ $smarty->assign("id",$focus->id);
 $smarty->assign("RELATEDLISTS", $related_array);
 $smarty->assign("ID", $RECORD);
 $smarty->assign("SINGLE_MOD", "Activity");
-$smarty->assign("ACTIVITY_MODE", $activity_mode);
+$smarty->assign("ACTIVITY_MODE",'Events');
 $smarty->assign("MODULE", $MODULE);
 $smarty->display("RelatedLists.tpl");
 
