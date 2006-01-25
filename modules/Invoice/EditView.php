@@ -205,9 +205,9 @@ if(isset($_REQUEST['convertmode']) &&  $_REQUEST['convertmode'] == 'quotetoinvoi
 	/*$num_of_products = getNoOfAssocProducts("Quotes",$quote_focus);
 	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("Quotes",$quote_focus);
-	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);*/
 	$smarty->assign("MODE", $quote_focus->mode);
-	$smarty->assign("TAXVALUE", $quote_focus->column_fields['txtTax']);
+	/*$smarty->assign("TAXVALUE", $quote_focus->column_fields['txtTax']);
 	$smarty->assign("ADJUSTMENTVALUE", $quote_focus->column_fields['txtAdjustment']);
 	$smarty->assign("SUBTOTAL", $quote_focus->column_fields['hdnSubTotal']);
 	$smarty->assign("GRANDTOTAL", $quote_focus->column_fields['hdnGrandTotal']);*/
@@ -218,9 +218,9 @@ elseif(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'sotoinv
 	/*$num_of_products = getNoOfAssocProducts("SalesOrder",$so_focus);
 	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("SalesOrder",$so_focus);
-	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);*/
 	$smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", $so_focus->column_fields['txtTax']);
+	/*$smarty->assign("TAXVALUE", $so_focus->column_fields['txtTax']);
 	$smarty->assign("ADJUSTMENTVALUE", $so_focus->column_fields['txtAdjustment']);
 	$smarty->assign("SUBTOTAL", $so_focus->column_fields['hdnSubTotal']);
 	$smarty->assign("GRANDTOTAL", $so_focus->column_fields['hdnGrandTotal']);*/
@@ -231,9 +231,9 @@ elseif($focus->mode == 'edit')
 	/*$num_of_products = getNoOfAssocProducts("Invoice",$focus);
 	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("Invoice",$focus);
-	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);*/
 	$smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", $focus->column_fields['txtTax']);
+/*	$smarty->assign("TAXVALUE", $focus->column_fields['txtTax']);
 	$smarty->assign("ADJUSTMENTVALUE", $focus->column_fields['txtAdjustment']);
 	$smarty->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
 	$smarty->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);*/
@@ -242,9 +242,9 @@ elseif($focus->mode == 'edit')
 elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 {
 	/*$smarty->assign("ROWCOUNT", $num_of_products);
-	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
+	$smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);*/
 	$smarty->assign("MODE", $focus->mode);
-	$smarty->assign("TAXVALUE", $focus->column_fields['txtTax']);
+/*	$smarty->assign("TAXVALUE", $focus->column_fields['txtTax']);
 	$smarty->assign("ADJUSTMENTVALUE", $focus->column_fields['txtAdjustment']);
 	$smarty->assign("SUBTOTAL", $focus->column_fields['hdnSubTotal']);
 	$smarty->assign("GRANDTOTAL", $focus->column_fields['hdnGrandTotal']);*/
@@ -253,9 +253,9 @@ elseif(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true')
 elseif((isset($_REQUEST['product_id']) && $_REQUEST['product_id'] != '') || (isset($_REQUEST['opportunity_id']) && $_REQUEST['opportunity_id'] != '')) {
         /*$smarty->assign("ROWCOUNT", $num_of_products);
         $smarty->assign("ASSOCIATEDPRODUCTS", $associated_prod);
-	$InvTotal = getInventoryTotal($_REQUEST['return_module'],$_REQUEST['return_id']);
+	$InvTotal = getInventoryTotal($_REQUEST['return_module'],$_REQUEST['return_id']);*/
         $smarty->assign("MODE", $focus->mode);
-        $smarty->assign("TAXVALUE", "0.000");
+/*        $smarty->assign("TAXVALUE", "0.000");
         $smarty->assign("ADJUSTMENTVALUE", "0.000");
         $smarty->assign("SUBTOTAL", $InvTotal.".00");
         $smarty->assign("GRANDTOTAL", $InvTotal.".00");*/
