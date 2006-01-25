@@ -66,11 +66,11 @@ class layout_base {
     }
     if ( isset($user->theme) &&
          file_exists(getcwd()."/".$tutos['base'] ."/layout/theme_". $user->theme .".pinc")  ) {
-      require_once 'theme_'. $user->theme .'.pinc';
+      require_once 'modules/Calendar/layout/theme_'. $user->theme .'.pinc';
       $x = 'theme_'.$user->theme;
       $this->theme = new $x($user->theme);
     } else {
-      require_once 'theme_base.pinc';
+      require_once 'modules/Calendar/layout/theme_base.pinc';
       if (isset($user->theme)) {
         $this->theme = new theme_base($user->theme);
       } else {
