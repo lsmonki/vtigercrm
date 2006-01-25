@@ -431,7 +431,7 @@ function GetDetailView($result,$ticketid)
 			$list .= '<tr><td align="right" valign="top" nowrap>'.$mod_strings['LBL_RESOLUTION'].' : </td>';
                         $list .= '<td><b>'.nl2br($result[$i]['solution']).'</b></td></tr>';
 			
-			if($commentscount >= 1)
+			if($commentscount >= 1 && is_array($commentresult))
 			{
 				$list .= '<td align="right" valign="top" nowrap>'.$mod_strings['LBL_COMMENTS'].' : </td>';
 				$list .= '<td nowrap colspan="5"> <div class="commentArea">';
