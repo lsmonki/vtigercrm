@@ -627,6 +627,10 @@ if($action == "DetailView")
 			require_once("modules/$currentModule/Invoice.php");
 			$focus = new Invoice();
 			break;
+		case 'Campaigns':
+			require_once("modules/$currentModule/Campaign.php");
+			$focus = new Campaign();
+			break;
 		}
 	
 		
