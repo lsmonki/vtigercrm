@@ -24,7 +24,7 @@
 
 <tr><td style="height:2px"></td></tr>
 <tr>
-	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > <a class="hdrLink" href="salesAccListView.html">{$MODULE}</a></td>
+	<td style="padding-left:10px;padding-right:10px" class="moduleName" nowrap>{$CATEGORY} > <a class="hdrLink" href="index.php?action=ListView&module={$MODULE}">{$MODULE}</a></td>
 	<td class="sep1" style="width:1px"></td>
 	<td class=small >
 		<table border=0 cellspacing=0 cellpadding=0>
@@ -49,7 +49,7 @@
 				</tr>
 				</table>
 			</td>
-			
+			<td nowrap style="width:50%;padding:10px">&nbsp;</td>
 			<td>
 				<table border=0 cellspacing=0 cellpadding=5>
 
@@ -315,12 +315,19 @@
 							
 							{elseif $uitype eq 56}
                                                         <td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
-								{if $fldvalue eq 1}
-							<td width="30%" align=left class="dvtCellInfo"><input name="{$fldname}" type="checkbox"  checked></td>
-								{else}				
-							<td width="30%" align=left class="dvtCellInfo"><input name="{$fldname}" type="checkbox"></td>
-								{/if}
-
+							{if $fldname eq 'notime' && $ACTIVITY_MODE eq 'Events'}
+                                                                {if $fldvalue eq 1}
+                                                                <td width="30%" align=left class="dvtCellInfo"><input name="{$fldname}" type="checkbox"  onclick="toggleTime()" checked></td>
+                                                                {else}
+                                                                <td width="30%" align=left class="dvtCellInfo"><input name="{$fldname}" type="checkbox" onclick="toggleTime()" ></td>
+                                                                {/if}
+                                                        {else}
+                                                                {if $fldvalue eq 1}
+                                                        <td width="30%" align=left class="dvtCellInfo"><input name="{$fldname}" type="checkbox"  checked></td>
+                                                                {else}
+                                                        <td width="30%" align=left class="dvtCellInfo"><input name="{$fldname}" type="checkbox"></td>
+                                                                {/if}
+                                                        {/if}
 							{elseif $uitype eq 23 || $uitype eq 5 || $uitype eq 6}
 							<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
 							<td width="30%" align=left class="dvtCellInfo">
