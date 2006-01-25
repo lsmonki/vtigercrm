@@ -1333,6 +1333,18 @@ function getListQuery($module,$where='')
 			$query .= $sec_parameter;	
 		}
 	}
+
+	if($module == "Campaigns")
+	{
+		//Query modified to sort by assigned to
+		//query modified -Code contribute by Geoff(http://forums.vtiger.com/viewtopic.php?t=3376)
+		$query = "select crmentity.*,campaign.* from campaign inner join crmentity on crmentity.crmid = campaign.campaignid where crmentity.deleted=0".$where;
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+		{
+			$sec_parameter=getListViewSecurityParameter($module);
+			$query .= $sec_parameter;	
+		}
+	}
 	//Appending the Security parameters by DON
 	/*
 	global $others_permission_id;
