@@ -381,11 +381,20 @@ function GetDetailView($result,$ticketid)
 	$ticketscount = count($result);
 	$commentscount = count($commentresult);
 
+
 	for($i=0;$i<$ticketscount;$i++)
 	{
-		if($result[$i]['ticketid'] == $ticketid && $result[$i]['status'] != $mod_strings['LBL_STATUS_CLOSED'])
+		if($result[$i]['ticketid'] == $ticketid)
 		{
-			$close_this_ticket = '<td class="pageTitle uline" align="right"><a href=general.php?action=UserTickets&fun=close_ticket&ticketid='.$ticketid.'>'.$mod_strings['LBL_CLOSE_TICKET'].'</a>&nbsp;&nbsp;&nbsp;</td>';
+			$ticket_position_in_array = $i;
+			//Get the creator of this ticket
+			$creator = $client->call('get_ticket_creator', $params, $Server_Path, $Server_Path);	
+
+			//If the ticket is created by this customer or status is not Closed then allow him to Close this ticket otherwise not
+			if($creator == 0 && $result[$i]['status'] != $mod_strings['LBL_STATUS_CLOSED'])
+			{
+				$close_this_ticket = '<td class="pageTitle uline" align="right"><a href=general.php?action=UserTickets&fun=close_ticket&ticketid='.$ticketid.'>'.$mod_strings['LBL_CLOSE_TICKET'].'</a>&nbsp;&nbsp;&nbsp;</td>';
+			}
 		}
 	}
 
@@ -398,71 +407,75 @@ function GetDetailView($result,$ticketid)
 
 	$list .= '</tr></table>';
 	$list .= '<table border="0" cellspacing="4" cellpadding="2" style="margin-top:10px">';
-        for($i=0;$i<$ticketscount;$i++)
-        {
-	        if($result[$i]['ticketid'] == $ticketid)
-                {
-                	$list .= '<tr><td width="15%" align="right" nowrap>'.$mod_strings['LBL_TICKET_ID'].' : </td>';
-                	$list .= '<td width="15%"><b>'.$result[$i]['ticketid'].'</b></td>';
-                        $list .= '<td width="15%"align="right" nowrap>'.$mod_strings['LBL_PRIORITY'].' : </td>';
-                        $list .= '<td width="15%" nowrap><b>'.$result[$i]['priority'].'</b></td>';
-                        $list .= '<td width="15%" align="right" nowrap>'.$mod_strings['LBL_CREATED_TIME'].' : </td>';
-                        $list .= '<td width="15%" nowrap><b>'.$result[$i]['createdtime'].'</b></td>';
 
-			$list .= '<tr><td width="15%" align="right" nowrap>'.$mod_strings['LBL_CATEGORY'].' : </td>';
-                        $list .= '<td width="15%" nowrap><b>'.$result[$i]['category'].'</b></td>';
-                        $list .= '<td width="15%"align="right" nowrap>'.$mod_strings['LBL_STATUS'].' : </td>';
-                        $list .= '<td width="15%" nowrap><b>'.$result[$i]['status'].'</b></td>';
-			$ticket_status = $result[$i]['status'];
-			$list .= '<td width="15%" align="right" nowrap>'.$mod_strings['LBL_MODIFIED_TIME'].' : </td>';
-                        $list .= '<td width="15%"><b>'.$result[$i]['modifiedtime'].'</b></td>';
-
-			$list .= '<tr><td width="15%" align="right" nowrap>'.$mod_strings['LBL_SEVERITY'].' : </td>';
-                        $list .= '<td width="15%" nowrap><b>'.$result[$i]['severity'].'</b></td>';
-			$list .= '<td width="15%" align="right" nowrap>'.$mod_strings['LBL_PRODUCT_NAME'].' : </td>';
-                        $list .= '<td width="15%" nowrap><b>'.$result[$i]['productname'].'</b></td>';
-
-			$list .= '<tr><td align="right" nowrap>'.$mod_strings['LBL_TITLE'].' : </td>';
-                        $list .= '<td><b>'.$result[$i]['title'].'</b></td></tr>';
-
-			$list .= '<tr><td align="right" valign="top" nowrap>'.$mod_strings['LBL_DESCRIPTION'].' : </td>';
-                        $list .= '<td><b>'.nl2br($result[$i]['description']).'</b></td></tr>';
-
-			$list .= '<tr><td align="right" valign="top" nowrap>'.$mod_strings['LBL_RESOLUTION'].' : </td>';
-                        $list .= '<td><b>'.nl2br($result[$i]['solution']).'</b></td></tr>';
-			
-			if($commentscount >= 1 && is_array($commentresult))
-			{
-				$list .= '<td align="right" valign="top" nowrap>'.$mod_strings['LBL_COMMENTS'].' : </td>';
-				$list .= '<td nowrap colspan="5"> <div class="commentArea">';
-			}
-
-		        for($j=0;$j<$commentscount;$j++)
-                	{
-                        	if($commentresult[$j]['comments'] != '')
-	                        {
-        	                        $list .= nl2br($commentresult[$j]['comments']);
-					$list .= '<div class="commentInfo"> '.$mod_strings['LBL_COMMENT_BY'].' : ';
-					$list .= $commentresult[$j]['owner'].' '.$mod_strings['LBL_ON'].' ';
-					$list .= $commentresult[$j]['createdtime'].'</div><br>';
-					$list .= '<div>';
-					for($k=0;$k<50;$k++) $list .= '---';
-					$list .= '</div>';
-                	        }
-                	}
-			$list .= '</div></td></tr>';	
-                }
-	}
-
-	if($ticket_status != $mod_strings['LBL_STATUS_CLOSED'])
+	//assign the ticketposition(from $result) to the variable i. Now instead of search through the result we can get using this i
+	$i = $ticket_position_in_array;
+        if($result[$i]['ticketid'] == $ticketid)
 	{
-		$list .= '<form name="form" action="#" method="post">';
-		$list .= '<input type=hidden name=updatecomment value=true>';
-		$list .= '<input type=hidden name=ticketid value='.$ticketid.'>';
-		$list .= '<td align="right" valign="top" nowrap>'.$mod_strings['LBL_ADD_COMMENT'].' : </td>';
-		$list .= '<td nowrap colspan="5"><textarea name="comments" cols="85" rows="7"></textarea> </td></tr>';
-		$list .= '<tr><td/><td><input type=submit name=submit value='.$mod_strings['LBL_SUBMIT'].'></td>';
-		$list .= '</table></form>';
+		$list .= '<tr><td width="15%" align="right" nowrap>'.$mod_strings['LBL_TICKET_ID'].' : </td>';
+		$list .= '<td width="15%"><b>'.$result[$i]['ticketid'].'</b></td>';
+		$list .= '<td width="15%"align="right" nowrap>'.$mod_strings['LBL_PRIORITY'].' : </td>';
+		$list .= '<td width="15%" nowrap><b>'.$result[$i]['priority'].'</b></td>';
+		$list .= '<td width="15%" align="right" nowrap>'.$mod_strings['LBL_CREATED_TIME'].' : </td>';
+		$list .= '<td width="15%" nowrap><b>'.$result[$i]['createdtime'].'</b></td>';
+
+		$list .= '<tr><td width="15%" align="right" nowrap>'.$mod_strings['LBL_CATEGORY'].' : </td>';
+		$list .= '<td width="15%" nowrap><b>'.$result[$i]['category'].'</b></td>';
+		$list .= '<td width="15%"align="right" nowrap>'.$mod_strings['LBL_STATUS'].' : </td>';
+		$list .= '<td width="15%" nowrap><b>'.$result[$i]['status'].'</b></td>';
+		$ticket_status = $result[$i]['status'];
+		$list .= '<td width="15%" align="right" nowrap>'.$mod_strings['LBL_MODIFIED_TIME'].' : </td>';
+		$list .= '<td width="15%"><b>'.$result[$i]['modifiedtime'].'</b></td>';
+
+		$list .= '<tr><td width="15%" align="right" nowrap>'.$mod_strings['LBL_SEVERITY'].' : </td>';
+		$list .= '<td width="15%" nowrap><b>'.$result[$i]['severity'].'</b></td>';
+		$list .= '<td width="15%" align="right" nowrap>'.$mod_strings['LBL_PRODUCT_NAME'].' : </td>';
+		$list .= '<td width="15%" nowrap><b>'.$result[$i]['productname'].'</b></td>';
+
+		$list .= '<tr><td align="right" nowrap>'.$mod_strings['LBL_TITLE'].' : </td>';
+		$list .= '<td><b>'.$result[$i]['title'].'</b></td></tr>';
+
+		$list .= '<tr><td align="right" valign="top" nowrap>'.$mod_strings['LBL_DESCRIPTION'].' : </td>';
+		$list .= '<td><b>'.nl2br($result[$i]['description']).'</b></td></tr>';
+
+		$list .= '<tr><td align="right" valign="top" nowrap>'.$mod_strings['LBL_RESOLUTION'].' : </td>';
+		$list .= '<td><b>'.nl2br($result[$i]['solution']).'</b></td></tr>';
+
+		if($commentscount >= 1 && is_array($commentresult))
+		{
+			$list .= '<td align="right" valign="top" nowrap>'.$mod_strings['LBL_COMMENTS'].' : </td>';
+			$list .= '<td nowrap colspan="5"> <div class="commentArea">';
+		}
+
+		for($j=0;$j<$commentscount;$j++)
+		{
+			if($commentresult[$j]['comments'] != '')
+			{
+				$list .= nl2br($commentresult[$j]['comments']);
+				$list .= '<div class="commentInfo"> '.$mod_strings['LBL_COMMENT_BY'].' : ';
+				$list .= $commentresult[$j]['owner'].' '.$mod_strings['LBL_ON'].' ';
+				$list .= $commentresult[$j]['createdtime'].'</div><br>';
+				$list .= '<div>';
+				for($k=0;$k<50;$k++) $list .= '---';
+				$list .= '</div>';
+			}
+		}
+		$list .= '</div></td></tr>';	
+
+		if($ticket_status != $mod_strings['LBL_STATUS_CLOSED'])
+		{
+			$list .= '<form name="form" action="#" method="post">';
+			$list .= '<input type=hidden name=updatecomment value=true>';
+			$list .= '<input type=hidden name=ticketid value='.$ticketid.'>';
+			$list .= '<td align="right" valign="top" nowrap>'.$mod_strings['LBL_ADD_COMMENT'].' : </td>';
+			$list .= '<td nowrap colspan="5"><textarea name="comments" cols="85" rows="7"></textarea> </td></tr>';
+			$list .= '<tr><td/><td><input type=submit name=submit value='.$mod_strings['LBL_SUBMIT'].'></td>';
+			$list .= '</table></form>';
+		}
+	}
+	else
+	{
+		$list .= '<br><br>'.$mod_strings['LBL_NO_DETAILS_EXIST'];
 	}
 
 	return $list;

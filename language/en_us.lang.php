@@ -112,6 +112,8 @@ Additionally, you can also search the entire knowledge base by entering keywords
 
 //Added to display the module -- 10-11-2005
 'LBL_MODULE'=>'Module',
+'LBL_NO_DETAILS_EXIST'=>'There are no details exist for this ticket id.',
+
 );
 
 

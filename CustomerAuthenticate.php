@@ -54,7 +54,7 @@ if($result[1] == $username && $result[2] == $password)
 }
 else
 {
-	$_REQUEST['error_msg'] = '<br><font color=red><b> Please enter a valid Username and Password</b></font>';
+	$login_error_msg = '<br><font color=red><b> Please enter a valid Username and Password</b></font>';
 	include("cp_index.php");
 }
 /*

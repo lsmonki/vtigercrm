@@ -53,7 +53,7 @@ if($_REQUEST['close_window'] == 'true')
   </tr>
   <tr>
 
-  <tr><td>	<?php if($_REQUEST['error_msg'] != '') echo $_REQUEST['error_msg']; ?>    </td></tr>
+  <tr><td>	<?php if($login_error_msg != '') echo $login_error_msg; ?>    </td></tr>
 
     <td style="padding:10px"><FORM NAME="login" ACTION="<?php echo $Authenticate_Path ?>/CustomerAuthenticate.php" METHOD="POST" onSubmit="handleLogin();">
         <INPUT TYPE="hidden" NAME="un" VALUE="">
