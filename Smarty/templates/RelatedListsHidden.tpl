@@ -51,6 +51,8 @@
 	<input type="hidden" name="pricebook_id" value="{$id}">
 {elseif $MODULE eq 'Emails'}
         <input type="hidden" name="email_id" value="{$id}">
+	<input type="hidden" name="user_id" value="{$USER_ID}">
+	<input type="hidden" name="record" value="{$ID}">
 {elseif $MODULE eq 'HelpDesk'}
         <input type="hidden" name="ticket_id" value="{$id}">
 {/if}
