@@ -398,7 +398,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 			{
 				$chk_val = '';
 			}
-			$options[] = array($pickListValue => $chk_val );
+			$options[$pickListValue] = $chk_val;
 		}
 		$fieldvalue[]=$value;
 		$fieldvalue[]=$options;
@@ -412,31 +412,6 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 	elseif($uitype == 56)
 	{
 		$editview_label[]=$mod_strings[$fieldlabel];
-
-		if($fieldname == 'notime' && $module_name =='Events' )
-		{
-			if($value == 1)
-			{
-				$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox"  onclick="toggleTime()" checked></td>';
-			}
-			else
-			{
-				$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox" onclick="toggleTime()" ></td>';
-			}
-		}
-		else
-		{
-			if($value == 1)
-			{
-				$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox"  checked></td>';
-			}else
-			{
-				$custfld .='<td width="30%"><input name="'.$fieldname.'" type="checkbox"></td>';
-			}
-
-		}
-
-
 		$fieldvalue[] = $value;	
 	}
 	elseif($uitype == 57)
