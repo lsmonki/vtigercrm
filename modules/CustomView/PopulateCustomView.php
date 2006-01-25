@@ -122,6 +122,10 @@ $customviews = Array(Array('viewname'=>'All',
                           'setdefault'=>'1','setmetrics'=>'0',
                           'cvmodule'=>'Faq','stdfilterid'=>'','advfilterid'=>''),
 
+		    Array('viewname'=>'All',
+                          'setdefault'=>'1','setmetrics'=>'0',
+                          'cvmodule'=>'Campaigns','stdfilterid'=>'','advfilterid'=>''),
+
 		    );
 
 
@@ -302,6 +306,12 @@ $cvcolumns = Array(Array('leaddetails:lastname:lastname:Leads_Last_Name:V',
 			'vendor:phone:phone:Vendors_Phone:V',
 			'vendor:email:email:Vendors_Email:V',
                         'vendor:category:category:Vendors_Category:V'),
+
+
+ Array('campaign:campaignname:campaignname:Campaign_Campaign_Name:V',
+                        'campaign:campaignid:campaignid:Campaign_Campaign_ID:V',
+                                               'campaign:campaigntype:campaigntype:Campaign_Type:V'),
+
 
 		 Array('faq:id::Faq_FAQ_Id:I',
 		       'faq:question:question:Faq_Question:V',

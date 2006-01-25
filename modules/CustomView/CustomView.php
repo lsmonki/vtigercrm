@@ -41,6 +41,7 @@ class CustomView extends CRMEntity{
 				 "Accounts"=>Array("Information"=>9,"Address"=>11,"Description"=>12,"Custom Information"=>10),
 				 "Potentials"=>Array("Information"=>1,"Description"=>3,"Custom Information"=>2),
 				 "Activities"=>Array("Information"=>19,"Description"=>20),
+                 "Campaigns"=>Array("Information"=>19,"Description"=>20),
 				 "Products"=>Array("Information"=>31,"Description"=>36,"Custom Information"=>34),
 				 "Vendors"=>Array("Information"=>44,"Address"=>46,"Description"=>47,"Custom Information"=>45),
 				 "PriceBooks"=>Array("Information"=>48,"Description"=>50,"Custom Information"=>49),
@@ -81,7 +82,7 @@ class CustomView extends CRMEntity{
 	// Mike Crowe Mod --------------------------------------------------------getViewId
 	function getViewId($module)
 	{
-		global $adb;
+    		global $adb;
 		if(isset($_REQUEST['viewname']) == false)
 		{
 			if (isset($_SESSION["cv$module"]) && $_SESSION["cv$module"]!='')
@@ -156,7 +157,7 @@ class CustomView extends CRMEntity{
                 $tabid = getTabid($this->customviewmodule);
                 $ssql = "select customview.* from customview inner join tab on tab.name = customview.entitytype";
                 $ssql .= " where tab.tabid=".$tabid;
-		//echo $ssql;
+                //echo $ssql;
                 $result = $adb->query($ssql);
                 while($cvrow=$adb->fetch_array($result))
                 {
