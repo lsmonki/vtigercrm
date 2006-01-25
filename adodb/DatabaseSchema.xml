@@ -6772,9 +6772,9 @@ E</constraint>
                 <field name="campaignname" type="C" size="255">
 			<KEY/>
                 </field>
-		<field name="type" type="C" size="255">
+		<field name="campaigntype" type="C" size="255">
                 </field>
-		<field name="status" type="C" size="255">
+		<field name="campaignstatus" type="C" size="255">
                 </field>
     <field name="expectedrevenue" type="N" size="11.3">
                 </field>
@@ -6804,5 +6804,68 @@ E</constraint>
                 <data>
                 </data>
         </table>
+
+
+
+
+
+
+
+	<table name="campaigntype">
+		<field name="campaigntypeid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="campaigntype" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="Campaigntype_UK0">
+			<UNIQUE/>
+			<col>campaigntype</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+
+	<table name="campaignstatus">
+		<field name="campaignstatusid" type="I" size="19">
+			<KEY/>
+	<AUTOINCREMENT/>
+		
+		</field>
+		<field name="campaignstatus" type="C" size="200">
+			<NOTNULL/>
+		</field>
+		<field name="sortorderid" type="I" size="19">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="presence" type="I" size="1">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<opt>Type=InnoDB</opt> <index name="Campaigntype_UK0">
+			<UNIQUE/>
+			<col>campaigntype</col>
+		</index>
+		<data>
+		</data>
+	</table>
+
+
+
+
 
 </schema>
