@@ -44,7 +44,6 @@ $other_text = Array();
 $url_string = ''; // assigning http url string
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
-
 if($_REQUEST['order_by'] != '')
 	$order_by = $_REQUEST['order_by'];
 else
@@ -67,10 +66,10 @@ if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 	
 	$url_string .="&query=true";
 
-	if (isset($_REQUEST['campaignid'])) $name = $_REQUEST['campaignid'];
-	if (isset($_REQUEST['campaignname'])) $contact_name = $_REQUEST['campaignname'];
-	if (isset($_REQUEST['campaigntype'])) $priority = $_REQUEST['campaigntype'];
-	if (isset($_REQUEST['campaignstatus'])) $status = $_REQUEST['campaignstatus'];
+	if (isset($_REQUEST['campaignid'])) $campaignid = $_REQUEST['campaignid'];
+	if (isset($_REQUEST['campaignname'])) $campaignname = $_REQUEST['campaignname'];
+	if (isset($_REQUEST['campaigntype'])) $campaigntype = $_REQUEST['campaigntype'];
+	if (isset($_REQUEST['campaignstatus'])) $campaignstatus = $_REQUEST['campaignstatus'];
 	if (isset($_REQUEST['current_user_only'])) $current_user_only = $_REQUEST['current_user_only'];
 
 }
@@ -100,15 +99,15 @@ if($viewnamedesc['viewname'] == 'All')
 	$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
 		<span class="sep">|</span>
 		<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-		<a href="index.php?module=Campaign&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+		<a href="index.php?module=Campaigns&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 else
 {
-	$cvHTML = '<a href="index.php?module=Campaign&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
+	$cvHTML = '<a href="index.php?module=Campaigns&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
 		<span class="sep">|</span>
-		<a href="index.php?module=CustomView&action=Delete&dmodule=Campaign&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
+		<a href="index.php?module=CustomView&action=Delete&dmodule=Campaigns&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
 		<span class="sep">|</span>
-		<a href="index.php?module=Campaign&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+		<a href="index.php?module=Campaigns&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
 }
 
 $customstrings ='<td align="right">'.$app_strings[LBL_VIEW].'
@@ -141,6 +140,7 @@ else
 	$list_query = getListQuery("Campaigns");
 }
 //<<<<<<<<customview>>>>>>>>>
+//echo $listquery;
 
 if(isset($where) && $where != '')
 {
@@ -180,7 +180,6 @@ else
 }
 
 $list_result = $adb->query($list_query);
-
 //Constructing the list view
 
 //Retreiving the no of rows
@@ -215,20 +214,6 @@ if(isset($ids))
 {
 	echo "<input name='allids' type='hidden' value='".implode($ids,";")."'>";
 }
-if(isPermitted("Campaign",8,'') == 'yes') 
-{
-        $smarty->assign("MERGEBUTTON","<input title=\"$app_strings[LBL_MERGE_BUTTON_TITLE]\" accessKey=\"$app_strings[LBL_MERGE_BUTTON_KEY]\" class=\"button\" onclick=\"return massMerge()\" type=\"submit\" name=\"Merge\" value=\" $app_strings[LBL_MERGE_BUTTON_LABEL]\"></td>");
-	$wordTemplateResult = fetchWordTemplateList("Campaign");
-	$tempCount = $adb->num_rows($wordTemplateResult);
-	$tempVal = $adb->fetch_array($wordTemplateResult);
-	for($templateCount=0;$templateCount<$tempCount;$templateCount++)
-	{
-		$optionString .="<option value=\"".$tempVal["templateid"]."\">" .$tempVal["filename"] ."</option>";
-		$tempVal = $adb->fetch_array($wordTemplateResult);
-	}
-        $smarty->assign("WORDTEMPLATEOPTIONS","<td align=right>&nbsp;&nbsp;".$mod_strings['LBL_SELECT_TEMPLATE_TO_MAIL_MERGE']."<select name=\"mergefile\">".$optionString."</select>");
-}
-//mass merge for word templates
 
 $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$app_strings[LBL_LIST_OF] ." ".$noofrows;
 

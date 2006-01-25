@@ -12,13 +12,14 @@ require_once('include/database/PearDatabase.php');
 require_once('Smarty_setup.php');
 require_once('include/utils/utils.php');
 require_once('modules/Campaigns/Campaign.php');
-require_once('modules/Campaign/Forms.php');
 require_once('include/FormValidationUtil.php');
 
 global $app_strings;
 global $app_list_strings;
 global $mod_strings;
 global $current_user;
+global $currentModule;
+//echo '+++++++++++++++++'.$currentModule;
 
 $focus = new Campaign();
 $smarty = new vtigerCRM_Smarty();
@@ -42,11 +43,12 @@ $image_path=$theme_path."images/";
 require_once($theme_path.'layout_utils.php');
 
 $disp_view = getView($focus->mode);
-$smarty->assign("BLOCKS",getBlocks("Campaign",$disp_view,$mode,$focus->column_fields));
+$smarty->assign("BLOCKS",getBlocks("Campaigns",$disp_view,$mode,$focus->column_fields));
+//echo '<pre>';print_r(getBlocks("Campaigns",$disp_view,$mode,$focus->column_fields));echo'</pre>';
 $smarty->assign("OP_MODE",$disp_view);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD","Ticket");
+$smarty->assign("SINGLE_MOD","Campaign");
 
 
 $category = getParentTab();
@@ -86,7 +88,7 @@ $smarty->assign("RETURN_VIEWNAME", $_REQUEST['return_viewname']);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
-$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
+//$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 
 
 $ticket_tables = Array('troubletickets','crmentity');
