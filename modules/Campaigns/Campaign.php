@@ -33,23 +33,20 @@ class Campaign extends CRMEntity {
 	var $tab_name_index = Array('crmentity'=>'crmid','campaign'=>'campaignid');
 	var $column_fields = Array();
 
-	var $sortby_fields = Array('title','status','priority','crmid','firstname','smownerid');
+	var $sortby_fields = Array('campaignname','smownerid','expectedcost');
 
 	var $list_fields = Array(
 	'Campaign ID'=>Array('crmentity'=>'crmid'),
-	'Campaignname'=>Array('campaign'=>'campaignname'),	  			
-	'ExpectedCost'=>Array('campaign'=>'expectedcost')
+	'Campaign Name'=>Array('campaign'=>'campaignname'),	  			
+	'Expected Cost'=>Array('campaign'=>'expectedcost')
 	);
 
 	var $list_fields_name = Array(
-	'Ticket ID'=>'',
-	'Subject'=>'ticket_title',	  			
-	'Related to'=>'parent_id',	  			
-	'Status'=>'ticketstatus',
-	'Priority'=>'ticketpriorities',
-	'Assigned To'=>'assigned_user_id');
+	'Campaign ID'=>'',
+	'Campaign Name'=>'campaignname',	  			
+	'Expected Cost'=>'expectedcost');	  			
 
-	var $list_link_field= 'ticket_title';
+	var $list_link_field= 'campaignname';
 			
 	var $range_fields = Array(
 	        'ticketid',

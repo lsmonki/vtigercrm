@@ -40,25 +40,25 @@ $image_path=$theme_path."images/";
 
 $focus = new Campaign();
 $category = getParentTab();
-
+$other_text = Array();
 $url_string = ''; // assigning http url string
 
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
-/*
+
 if($_REQUEST['order_by'] != '')
 	$order_by = $_REQUEST['order_by'];
 else
-	$order_by = (($_SESSION['HELPDESK_ORDER_BY'] != '')?($_SESSION['HELPDESK_ORDER_BY']):($focus->default_order_by));
+	$order_by = (($_SESSION['CAMPAIGN_ORDER_BY'] != '')?($_SESSION['CAMPAIGN_ORDER_BY']):($focus->default_order_by));
 
 if($_REQUEST['sorder'] != '')
 	$sorder = $_REQUEST['sorder'];
 else
-	$sorder = (($_SESSION['HELPDESK_SORT_ORDER'] != '')?($_SESSION['HELPDESK_SORT_ORDER']):($focus->default_sort_order));
+	$sorder = (($_SESSION['CAMPAIGN_SORT_ORDER'] != '')?($_SESSION['CAMPAIGN_SORT_ORDER']):($focus->default_sort_order));
 
-$_SESSION['HELPDESK_ORDER_BY'] = $order_by;
-$_SESSION['HELPDESK_SORT_ORDER'] = $sorder;
+$_SESSION['CAMPAIGN_ORDER_BY'] = $order_by;
+$_SESSION['CAMPAIGN_SORT_ORDER'] = $sorder;
 //<<<<<<<<<<<<<<<<<<< sorting - stored in session >>>>>>>>>>>>>>>>>>>>
-*/
+
 
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
@@ -92,7 +92,7 @@ if($viewid != 0)
 // Buttons and View options
 if(isPermitted('Campaign',2,'') == 'yes')
 {
-        $other_text ='<td><input class="button" type="submit" value="'.$app_strings[LBL_MASS_DELETE].'" onclick="return massDelete()"/></td>';
+        $other_text ['del']=$app_strings[LBL_MASS_DELETE];
 }
 
 if($viewnamedesc['viewname'] == 'All')
@@ -127,18 +127,18 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",'Campaigns');
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
-$smarty->assign("SINGLE_MOD",'Campaign');
+$smarty->assign("SINGLE_MOD",'Campaigns');
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
 if($viewid != "0")
 {
-	$listquery = getListQuery("Campaign");
-	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Campaign");
+	$listquery = getListQuery("Campaigns");
+	$list_query = $oCustomView->getModifiedCvListQuery($viewid,$listquery,"Campaigns");
 }
 else
 {
-	$list_query = getListQuery("Campaign");
+	$list_query = getListQuery("Campaigns");
 }
 //<<<<<<<<customview>>>>>>>>>
 
@@ -146,7 +146,6 @@ if(isset($where) && $where != '')
 {
 	$list_query .= ' and '.$where;
 }
-
 $view_script = "<script language='javascript'>
 			function set_selected()
 			{
@@ -180,14 +179,12 @@ else
 	$list_query .= ' order by campaign.campaignid DESC';
 }
 
-
 $list_result = $adb->query($list_query);
 
 //Constructing the list view
 
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
-
 //Retreiving the start value from request
 if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
 {
@@ -239,7 +236,7 @@ $record_string= $app_strings[LBL_SHOWING]." " .$start_rec." - ".$end_rec." " .$a
 if($viewid !='')
 	$url_string .="&viewname=".$viewid;
 
-$listview_header = getListViewHeader($focus,"Campaign",$url_string,$sorder,$order_by,"",$oCustomView);
+$listview_header = getListViewHeader($focus,"Campaigns",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
 
 $listview_header_search = getSearchListHeaderValues($focus,"Campaign",$url_string,$sorder,$order_by,"",$oCustomView);
