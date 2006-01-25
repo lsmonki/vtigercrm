@@ -65,7 +65,7 @@ $smarty->assign("OP_MODE",$disp_view);
 $smarty->assign("ACTIVITY_MODE",$activity_mode);
 
 $smarty->assign("MODULE",$currentModule);
-$smarty->assign("SINGLE_MOD",$tab_type);
+$smarty->assign("SINGLE_MOD",'Activity');
 $smarty->assign("NEW_EVENT",$app_strings['LNK_NEW_EVENT']);
 $smarty->assign("NEW_TASK",$app_strings['LNK_NEW_TASK']);
 
