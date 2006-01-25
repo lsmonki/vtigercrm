@@ -377,16 +377,19 @@
 							
 							{elseif $uitype eq 357}
 								<td width="20%" class="dvtCellLabel" align=right>To:&nbsp;</td>
-								<td width="90%" colspan="3"><input name="{$fldname}" type="hidden" value="{$secondvalue}"><textarea readonly name="parent_name" cols="70" rows="2">{$fldvalue}</textarea>&nbsp;<select name="parent_type" >
-								{foreach key=labelval item=selectval from=$fldlabel}
-                                                                <option value="{$labelval}" {$selectval}>{$labelval}</option>
-                                                                {/foreach}
+								<td width="90%" colspan="3">
+								<input name="{$fldname}" type="hidden" value="{$secondvalue}">
+								<textarea readonly name="parent_name" cols="70" rows="2">{$fldvalue}</textarea>&nbsp;
+								<select name="parent_type">
+									{foreach key=labelval item=selectval from=$fldlabel}
+		                                                                <option value="{$labelval}" {$selectval}>{$labelval}</option>
+                	                                                {/foreach}
                                                                 </select>
 								&nbsp;<img src="{$IMAGE_PATH}select.gif" alt="Select" title="Select" LANGUAGE=javascript onclick='return window.open("index.php?module="+ document.EditView.parent_type.value +"&action=Popup&html=Popup_picker&form=HelpDeskEditView","test","width=600,height=400,resizable=1,scrollbars=1,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;<input type="image" src="{$IMAGE_PATH}clear_field.gif" alt="Clear" title="Clear" LANGUAGE=javascript onClick="this.form.parent_id.value=''; this.form.parent_name.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'></td>
 								<tr style="height:25px">
 								<td width="20%" class="dvtCellLabel" align=right>CC:&nbsp;</td>	
 								<td width="30%" align=left class="dvtCellInfo">
-								<input name="{$fldname}" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value=""></td>
+								<input name="ccmail" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value=""></td>
 								<td width="20%" class="dvtCellLabel" align=right>BCC:&nbsp;</td>
                                                                 <td width="30%" align=left class="dvtCellInfo">
                                                                 <input name="bccmail" type="text" class=detailedViewTextBox onFocus="this.className='detailedViewTextBoxOn'" onBlur="this.className='detailedViewTextBox'"  value=""></td>
