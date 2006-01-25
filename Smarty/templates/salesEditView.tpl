@@ -143,6 +143,8 @@
 							{foreach key=mainlabel item=maindata from=$subdata}
 							   {assign var="uitype" value="$maindata[0][0]"}
                                                            {assign var="fldlabel" value="$maindata[1][0]"}
+							   {assign var="fldlabel_sel" value="$maindata[1][1]"}
+                                                           {assign var="fldlabel_combo" value="$maindata[1][2]"}
                                                            {assign var="fldname" value="$maindata[2][0]"}
                                                            {assign var="fldvalue" value="$maindata[3][0]"}
                                                            {assign var="secondvalue" value="$maindata[3][1]"}
@@ -364,9 +366,9 @@
 							{elseif $uitype eq 68 || $uitype eq 66 || $uitype eq 62}
 							  <td width="20%" class="dvtCellLabel" align=right>
 								<select name="parent_type" onChange='document.EditView.parent_name.value=""; document.EditView.parent_id.value=""'>
-								{foreach key=labelval item=selectval from=$fldlabel}
-								<option value="{$labelval}" {$selectval}>{$labelval}</option>
-								{/foreach}
+								{section name=combo loop=$fldlabel}
+                                                                <option value="{$fldlabel_combo[combo]}" {$fldlabel_sel[combo]}>{$fldlabel[combo]}</option>
+                                                                {/section}
 								</select>
 							  </td>
 							<td width="30%" align=left class="dvtCellInfo">
