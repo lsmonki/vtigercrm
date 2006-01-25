@@ -145,7 +145,7 @@ $array = Array(
 <HTML>
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>vtiger CRM 4.2 Installer: Step 1</title>
+<title>vtiger CRM 5.0 Beta Installer: Step 1</title>
 <link rel="stylesheet" href="install/install.css" type="text/css" />
 </head>
 <body leftMargin="0" topMargin="0" marginheight="0" marginwidth="0" class="">
@@ -159,7 +159,7 @@ $array = Array(
 	<table border="0" cellspacing="0" cellpadding="0" width="80%" style="background:url(install/images/cwTopBg.gif) repeat-x;">
 	<tr>
 		<td><img src="install/images/cwTopLeft.gif" alt="vtiger CRM" title="vtiger CRM"></td>
-		<td align=right><img src="install/images/cwTopRight.gif" alt="v4.2" title="v4.2"></td>
+		<td align=right><img src="install/images/cwTopRight.gif" alt="v5beta" title="v5beta"></td>
 	</tr>
 	</table>
 	
