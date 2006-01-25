@@ -55,7 +55,7 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 	$DESCRIPTION = $adb->query_result($result1,0,"description");
 	$DESCRIPTION .= '<br><br>';
 	//$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"signature")).'</font>';
-	$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from users where user_name=".PearDatabase::quote($from).),0,"signature")).'</font>';
+	$DESCRIPTION .= '<font color=darkgrey>'.nl2br($adb->query_result($adb->query("select * from users where user_name=".PearDatabase::quote($from)),0,"signature")).'</font>';
 
         $mail->Body    = nl2br($DESCRIPTION);
 	$initialfrom = $from;
@@ -78,7 +78,7 @@ function sendmail($to,$from,$subject,$contents,$mail_server,$mail_server_usernam
 		$mail->Password = $mail_server_password;
 		//$mail->From = $adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"email1");
 
-		$mail->From = $adb->query_result($adb->query("select * from users where user_name=".PearDatabase::quote($from).),0,"email1");
+		$mail->From = $adb->query_result($adb->query("select * from users where user_name=".PearDatabase::quote($from)),0,"email1");
 		$mail->FromName = $initialfrom;
 		$mail->AddReplyTo($from);
 		$mail->WordWrap = 50;
