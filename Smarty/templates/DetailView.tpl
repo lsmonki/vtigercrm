@@ -89,7 +89,7 @@
 		
 		
 		 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  {$SINGLE_MOD} Information</span> <br>
-		 Updated 14 days ago (18 Nov 2005)
+		 {$UPDATEINFO}	 
 		 <hr noshade size=1>
 		 <br> 
 		

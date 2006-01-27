@@ -892,5 +892,36 @@ function getParentTab()
     }
 
 }
+/**
+ * This function is used to get the days in between the current time and the modified time of an entity .
+ * Takes the input parameter as $id - crmid  it will calculate the number of days in between the
+ * the current time and the modified time from the crmentity table and return the result as a string.
+ * The return format is updated <No of Days> day ago <(date when updated)>
+ */
+
+function updateInfo($id)
+{
+
+    global $adb;
+    global $app_strings;
+    $query='select modifiedtime from crmentity where crmid ='.$id ;
+    $result = $adb->query($query);
+    $modifiedtime = $adb->query_result($result,0,'modifiedtime');
+    $values=explode(' ',$modifiedtime);
+    $date_info=explode('-',$values[0]);
+    $time_info=explode(':',$values[1]);
+    $date = $date_info[2].' '.date("M", mktime(0, 0, 0, $date_info[1], $date_info[2],$date_info[0])).' '.$date_info[0];
+    $time_modified = mktime($time_info[0], $time_info[1], $time_info[2], $date_info[1], $date_info[2],$date_info[0]);
+    $time_now = time();
+    $days_diff = (int)(($time_now - $time_modified) / (60 * 60 * 24));
+    if($days_diff == 0)
+        $update_info = $app_strings['LBL_UPDATED_TODAY']." (".$date.")";
+    elseif($days_diff == 1)
+        $update_info = $app_strings['LBL_UPDATED']." ".$days_diff." ".$app_strings['LBL_DAY_AGO']." (".$date.")";
+    else
+        $update_info = $app_strings['LBL_UPDATED']." ".$days_diff." ".$app_strings['LBL_DAYS_AGO']." (".$date.")";
+
+    return $update_info;
+}
 
 ?>

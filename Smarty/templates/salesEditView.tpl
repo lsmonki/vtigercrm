@@ -76,7 +76,7 @@
 		
 		 {if $OP_MODE eq 'edit_view'}   
 			 <span class="lvtHeaderText"><font color="purple">[ {$ID} ] </font>{$NAME} -  Editing {$SINGLE_MOD} Information</span> <br>
-			 Updated 14 days ago (18 Nov 2005)
+			{$UPDATEINFO}	 
 		 {/if}
 		 {if $OP_MODE eq 'create_view'}
 			<span class="lvtHeaderText">Creating {$SINGLE_MOD}</span> <br>
