@@ -70,58 +70,10 @@ $url_string = ''; // assigning http url string
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'true')
 {
+	$where=Search($currentModule);
 	// we have a query
 	$url_string .="&query=true";
-	if (isset($_REQUEST['name'])) $name = $_REQUEST['name'];
-	if (isset($_REQUEST['contactname'])) $contactname = $_REQUEST['contactname'];
-	if (isset($_REQUEST['date_due'])) $date_due = $_REQUEST['date_due'];
-	if (isset($_REQUEST['status'])) $status = $_REQUEST['status'];
-
-	$where_clauses = Array();
-
-	if(isset($current_user_only) && $current_user_only != ""){
-		//fix as requested by Fredy for getting the proper behaviour in Activity Search
-		array_push($where_clauses, "crmentity.smownerid='$current_user->id'");
-		$url_string .= "&current_user_only=".$current_user_only;
-	}
-	if(isset($name) && $name != '')
-	{
-		array_push($where_clauses, "activity.subject like ".PearDatabase::quote($name.'%')."");
-		$url_string .= "&name=".$name;
-	}
-	if(isset($contactname) && $contactname != '')
-	{
-		array_push($where_clauses, "(contactdetails.firstname like ".PearDatabase::quote($contactname.'%')." OR contactdetails.lastname like ".PearDatabase::quote($contactname.'%').")");
-		$url_string .= "&contactname=".$contactname;
-	}
-	if(isset($duedate) && $duedate != '')
-	{
-		array_push($where_clauses, "activity.duedate like ".PearDatabase::quote($datedue.'%')."");
-	}
-	if(isset($status) && $status != '')
-	{
-		$each_status = explode("--", $status);
-
-		$the_where_clause = "(";
-		$val = reset($each_status);
-		do {
-			$the_where_clause .= "activity.status = ".PearDatabase::quote($val);
-			$val = next($each_status);
-			if ($val) $the_where_clause .= " OR ";
-		} while($val);
-		$the_where_clause .= ")";
-		array_push($where_clauses, $the_where_clause);
-	}
-
-	$where = "";
-	if (isset($where_clauses)) {
-		foreach($where_clauses as $clause)
-		{
-			if($where != "")
-			$where .= " and ";
-			$where .= $clause;
-		}
-	}
+	
 	$log->info("Here is the where clause for the list view: $where");
 
 }
@@ -254,6 +206,9 @@ if (($viewid!=0)&&($viewid!="")){
 }
 $listview_header = getListViewHeader($focus,"Activities",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
+
+$listview_header_search=getSearchListHeaderValues($focus,"Activities",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"Activities",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
