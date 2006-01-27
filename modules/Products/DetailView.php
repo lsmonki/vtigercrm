@@ -44,6 +44,7 @@ else $smarty->assign("NAME", "");
 $smarty->assign("BLOCKS", getBlocks("Products","detail_view",'',$focus->column_fields));
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 
 $smarty->assign("CUSTOMFIELD", $cust_fld);

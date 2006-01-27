@@ -42,6 +42,7 @@ $smarty->assign("APP", $app_strings);
 
 $smarty->assign("BLOCKS", getBlocks("PriceBooks","detail_view",'',$focus->column_fields));
 
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 

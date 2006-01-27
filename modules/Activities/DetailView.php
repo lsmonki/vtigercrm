@@ -97,7 +97,7 @@ if (isset($focus->name))
 $smarty->assign("NAME", $focus->name);
 else 
 $smarty->assign("NAME", "");
-
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 if($activity_mode == 'Task')
 {
         $tab_type = 'Activities';

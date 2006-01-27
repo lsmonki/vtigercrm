@@ -105,6 +105,7 @@ $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 if($focus->mode == 'edit')
 {
+	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
         $smarty->assign("MODE", $focus->mode);
 }
 

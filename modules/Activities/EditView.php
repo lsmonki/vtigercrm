@@ -52,6 +52,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
     $focus->mode = 'edit';
     $focus->retrieve_entity_info($_REQUEST['record'],$tab_type);		
     $focus->name=$focus->column_fields['subject'];		
+    $smarty->assign("UPDATEINFO",updateInfo($focus->id));
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";

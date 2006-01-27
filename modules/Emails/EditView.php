@@ -263,6 +263,7 @@ if(isset($_REQUEST['msg_cc']) && $_REQUEST['msg_cc'] != '')
 
 if($focus->mode == 'edit')
 {
+	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
         $smarty->assign("MODE", $focus->mode);
 }
 

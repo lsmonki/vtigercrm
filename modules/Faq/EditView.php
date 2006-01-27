@@ -70,6 +70,7 @@ $smarty->assign("CATEGORY",$category);
 
 if($focus->mode == 'edit')
 {
+	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 	$smarty->assign("MODE", $focus->mode);
 }		
 

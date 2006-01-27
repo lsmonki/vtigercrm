@@ -127,6 +127,7 @@ if(isset($cust_fld))
 
 if($focus->mode == 'edit')
 {
+	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 	$num_of_products = getNoOfAssocProducts($module,$focus);
 	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("Quotes",$focus);

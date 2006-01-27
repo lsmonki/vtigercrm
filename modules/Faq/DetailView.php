@@ -51,6 +51,7 @@ $log->info("Faq detail view");
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 if(isset($focus->column_fields[question]))
 	$smarty->assign("FAQ_TITLE", $focus->column_fields[question]);

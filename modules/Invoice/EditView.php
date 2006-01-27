@@ -228,6 +228,7 @@ elseif(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'sotoinv
 }
 elseif($focus->mode == 'edit')
 {
+	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 	/*$num_of_products = getNoOfAssocProducts("Invoice",$focus);
 	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("Invoice",$focus);

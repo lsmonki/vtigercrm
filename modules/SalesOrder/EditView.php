@@ -205,6 +205,7 @@ if(isset($_REQUEST['convertmode']) &&  ($_REQUEST['convertmode'] == 'quotetoso' 
 }
 elseif($focus->mode == 'edit')
 {
+	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 	$num_of_products = getNoOfAssocProducts("SalesOrder",$focus);
 	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("SalesOrder",$focus);

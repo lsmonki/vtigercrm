@@ -55,6 +55,7 @@ $smarty->assign("APP", $app_strings);
 $smarty->assign("THEME", $theme);
 $smarty->assign("IMAGE_PATH", $image_path);$smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $focus->id);
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 $smarty->assign("ACCOUNTID",$focus->column_fields['account_id']);
 

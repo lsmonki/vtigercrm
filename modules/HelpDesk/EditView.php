@@ -68,6 +68,7 @@ if(isset($cust_fld))
 $smarty->assign("ID", $focus->id);
 if($focus->mode == 'edit')
 {
+	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
         $smarty->assign("MODE", $focus->mode);
         $smarty->assign("OLDSMOWNERID", $focus->column_fields['assigned_user_id']);
 }

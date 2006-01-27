@@ -71,6 +71,7 @@ $smarty = new vtigerCRM_Smarty;
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
 $smarty->assign("BLOCKS", getBlocks("Notes","detail_view",'',$focus->column_fields));
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);

@@ -55,6 +55,7 @@ if(isPermitted("Vendors",2,$_REQUEST['record']) == 'yes')
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
 $smarty->assign("ID", $_REQUEST['record']);

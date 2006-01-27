@@ -61,6 +61,7 @@ $smarty->assign("REDIR_MOD","leads");
 
 $smarty->assign("NAME",$focus->lastname.' '.$focus->firstname);
 
+$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 $smarty->assign("BLOCKS", getBlocks("Leads","detail_view",'',$focus->column_fields));
 $smarty->assign("CUSTOMFIELD", $cust_fld);
 
