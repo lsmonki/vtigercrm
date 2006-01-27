@@ -50,14 +50,11 @@ $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 
 $permissionData = $_SESSION['action_permission_set'];
-if(isPermitted("Campaign",1,$_REQUEST['record']) == 'yes')
-{
-	$smarty->assign("EDITBUTTON","permitted");
-	$smarty->assign("DUPLICATEBUTTON","permitted");
-}
+if(isPermitted("Campaigns",1,$_REQUEST['record']) == 'yes')
+	$smarty->assign("EDIT_DUPLICATE","permitted");
 
-if(isPermitted("Campaign",2,$_REQUEST['record']) == 'yes')
-	$smarty->assign("DELETEBUTTON","permitted");
+if(isPermitted("Campaigns",2,$_REQUEST['record']) == 'yes')
+	$smarty->assign("DELETE","permitted");
 
 $smarty->assign("IMAGE_PATH", $image_path);
 $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_string']);
