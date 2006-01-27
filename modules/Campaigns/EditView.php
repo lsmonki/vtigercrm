@@ -28,7 +28,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record'] !='')
 {
 	$focus->id = $_REQUEST['record'];
 	$focus->mode = 'edit'; 	
-	$focus->retrieve_entity_info($_REQUEST['record'],"Campaign");
+	$focus->retrieve_entity_info($_REQUEST['record'],"Campaigns");
 	$focus->name=$focus->column_fields['ticket_title'];		
 }
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') 
@@ -91,9 +91,9 @@ $smarty->assign("PRINT_URL", "phprint.php?jt=".session_id().$GLOBALS['request_st
 //$smarty->assign("JAVASCRIPT", get_set_focus_js().get_validate_record_js());
 
 
-$ticket_tables = Array('troubletickets','crmentity');
-$tabid = getTabid("Campaign");
-$validationData = getDBValidationData($ticket_tables,$tabid);
+$campaign_tables = Array('campaign','crmentity');
+$tabid = getTabid("Campaigns");
+$validationData = getDBValidationData($campaign_tables,$tabid);
 $fieldName = '';
 $fieldLabel = '';
 $fldDataType = '';
