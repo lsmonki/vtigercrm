@@ -6778,7 +6778,7 @@ E</constraint>
                 </field>
     <field name="expectedrevenue" type="N" size="11.3">
                 </field>
-    <field name="budgetedcost" type="N" size="11.3">
+    <field name="budgetcost" type="N" size="11.3">
                     </field>
  <field name="actualcost" type="N" size="11.3">
                     </field>
@@ -6788,6 +6788,7 @@ E</constraint>
                     </field>
  <field name="campaignid" type="I" size="7">
                     </field>
+ <field name="closingdate" type="D"></field>
 
 
 		<opt>Type=InnoDB</opt>
