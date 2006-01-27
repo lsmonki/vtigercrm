@@ -39,7 +39,7 @@ $query = "SELECT users.homeorder FROM users WHERE id=$record";
 $result =& $adb->query($query, false,"Error getting home order");
 $row = $adb->fetchByAssoc($result);
 
-$default_home_section_order = array('ALVT','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI');
+$default_home_section_order = array('ALVT','PLVT','QLTQ','CVLVT','HLT','OLV','GRT','OLTSO','ILTI','MNL');
 
 if($row != null)
 {

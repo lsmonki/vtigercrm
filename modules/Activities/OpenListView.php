@@ -55,47 +55,23 @@ function getPendingActivities()
 	if($activity_view == 'Today')
 	{	
 		$later = date("Y-m-d",strtotime("$today + 1 day"));
-		$selected1 = 'selected';
 	}	
 	else if($activity_view == 'This Week')
 	{
 		$later = date("Y-m-d", strtotime("$today + 7 days"));
-		$selected2 = 'selected';
 	}
 	else if($activity_view == 'This Month')
 	{	
 		$later = date("Y-m-d", strtotime("$today + 1 month"));
-		$selected3 = 'selected';
 	}	
 	else if($activity_view == 'This Year')	
 	{
 		$later = date("Y-m-d", strtotime("$today + 1 year"));
-		$selected4 = 'selected';
 	}
 	else if($activity_view == 'OverDue')	
 	{
 		$later = date("Y-m-d", strtotime("$today +1 day"));
-		$selected5 = 'selected';
 	}
-
-	//constructing the combo values for activities
-	$ACTIVITY_VIEW_SELECT_OPTION = '<select class=small ame="activity_view" onchange="showActivityView(this)">';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="Today" '.$selected1.'>';
-	$ACTIVITY_VIEW_SELECT_OPTION .= 'Today';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Week" '.$selected2.'>';
-	$ACTIVITY_VIEW_SELECT_OPTION .= 'This Week';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Month" '.$selected3.'>';
-	$ACTIVITY_VIEW_SELECT_OPTION .= 'This Month';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Year" '.$selected4.'>';
-	$ACTIVITY_VIEW_SELECT_OPTION .= 'This Year';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="OverDue" '.$selected5.'>';
-	$ACTIVITY_VIEW_SELECT_OPTION .= 'OverDue';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
-	$ACTIVITY_VIEW_SELECT_OPTION .= '</select>';
 
 	if($activity_view != 'OverDue')
 	{
@@ -137,8 +113,11 @@ function getPendingActivities()
 	$title[]='myUpcoPendAct.gif';
 	$title[]=$current_module_strings["LBL_UPCOMING"].'('.$current_module_strings["LBL_TODAY"].' '.$later_day.')';
 	$title[]='home_myact';
-	$title[]=$ACTIVITY_VIEW_SELECT_OPTION;
-	
+	$title[]=getActivityView($activity_view);
+	$title[]='showActivityView';		
+	$title[]='MyUpcumingFrm';
+	$title[]='activity_view';
+
 	$header=array();
 	$header[] ='Type';
 	$header[] =$current_module_strings['LBL_LIST_CLOSE'];
@@ -253,7 +232,52 @@ function getPendingActivities()
 				);
 	}
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
-	if ( ($display_empty_home_blocks && count($open_activity_list) == 0 ) || (count($open_activity_list)>0) )
 		return $values;
+}
+function getActivityview($activity_view)	
+{	
+	$today = date("Y-m-d", time());
+
+	if($activity_view == 'Today')
+	{	
+		$selected1 = 'selected';
+	}	
+	else if($activity_view == 'This Week')
+	{
+		$selected2 = 'selected';
+	}
+	else if($activity_view == 'This Month')
+	{	
+		$selected3 = 'selected';
+	}	
+	else if($activity_view == 'This Year')	
+	{
+		$selected4 = 'selected';
+	}
+	else if($activity_view == 'OverDue')	
+	{
+		$selected5 = 'selected';
+	}
+
+	//constructing the combo values for activities
+	$ACTIVITY_VIEW_SELECT_OPTION = '<select class=small name="activity_view" onchange="showActivityView(this)">';
+	$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="Today" '.$selected1.'>';
+	$ACTIVITY_VIEW_SELECT_OPTION .= 'Today';
+	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+	$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Week" '.$selected2.'>';
+	$ACTIVITY_VIEW_SELECT_OPTION .= 'This Week';
+	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+	$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Month" '.$selected3.'>';
+	$ACTIVITY_VIEW_SELECT_OPTION .= 'This Month';
+	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+	$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="This Year" '.$selected4.'>';
+	$ACTIVITY_VIEW_SELECT_OPTION .= 'This Year';
+	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+	$ACTIVITY_VIEW_SELECT_OPTION .= '<option value="OverDue" '.$selected5.'>';
+	$ACTIVITY_VIEW_SELECT_OPTION .= 'OverDue';
+	$ACTIVITY_VIEW_SELECT_OPTION .= '</option>';
+	$ACTIVITY_VIEW_SELECT_OPTION .= '</select>';
+	
+	return $ACTIVITY_VIEW_SELECT_OPTION;
 }
 ?>

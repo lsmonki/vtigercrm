@@ -68,20 +68,6 @@ function getTopPotentials()
 		}
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
 
-	foreach($open_potentials_list as $potential)
-	{
-		$potential_fields = array(
-				'ID' => $potential['id'],
-				'NAME' => $potential['name'],
-				'ACCOUNT_ID' => $potential['accountid'],
-				'ACCOUNT_NAME' => $potential['accountname'],
-				'AMOUNT' => $potential['amount'],
-				'DATE_CLOSED' => $potential['closingdate'],
-				);
-
-	}
-
-
 	if ( ($display_empty_home_blocks && count($open_potentials_list) == 0 ) || (count($open_potentials_list)>0) )
 		return $values;		
 }

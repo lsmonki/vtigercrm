@@ -103,7 +103,19 @@ if($tab_per_Data[2] == 0)
 	}
 }
             break;
-        case 'GRT':
+
+        case 'MNL':
+if($tab_per_Data[7] == 0)
+{
+	if($permissionData[7][3] == 0)
+        {
+		 include("modules/Leads/ListViewTop.php");
+		 $home_values[]=getNewLeads();
+	}
+}
+            break;
+
+	case 'GRT':
 		$home_values[]=getGroupTaskLists();	   
    			break;
         case 'HLT':

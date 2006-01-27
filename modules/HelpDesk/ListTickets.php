@@ -70,25 +70,9 @@ if($resultcount > 0)
 		$entries[$ticketid]=$value;
 	}
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
-	return $values;
+	if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )	
+		return $values;
 }
-//if($resultcount > 5)
-  //      $list .= '</td></tr><tr><td colspan="11">&nbsp;</td><td align="right"><a href="index.php?action=index&module=HelpDesk&query=true&my_open_tickets=true">'.$current_module_strings['LBL_MORE'].'...&nbsp;&nbsp;</a></td></tr>';
-
-//$list .='<tr><td COLSPAN="15" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr></table>';
-//$list .= '</div></td></tr></table>';
-//$list .= '<script language=\'Javascript\'>
-//		var leftpanelistarray=new Array(\'home_mytkt\');
-//		setExpandCollapse_gen()
-//	  </script>';
-
-// Mike Crowe Mod --------------------------------------------------------
-//if ( ($display_empty_home_blocks && $noofrows == 0 ) || ($noofrows>0) )
-//echo $list;
-//else 
-//	echo "<em>".$current_module_strings['NTC_NONE_SCHEDULED']."</em>";
-//echo "<BR>";
-// Mike Crowe Mod --------------------------------------------------------
 }
 function getParentLink($parent_id)
 {

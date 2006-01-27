@@ -55,9 +55,12 @@
 	 	<field name="weekstart" type="I" size="11"></field>
 		<field name="date_format" type="C" size="30"></field>
 		<field name="homeorder" type="C" size="255">
-			<DEFAULT value="ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI"/>
+			<DEFAULT value="ALVT,PLVT,QLTQ,CVLVT,HLT,OLV,GRT,OLTSO,ILTI,MNL"/>
 		</field>
 		<field name="activity_view" type="C" size="25">
+			<DEFAULT value="Today"/>
+		</field>
+		<field name="lead_view" type="C" size="25">
 			<DEFAULT value="Today"/>
 		</field>
 		<field name="deleted" type="I" size="1">

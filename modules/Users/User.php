@@ -86,6 +86,7 @@ class User extends SugarBean {
 	var $object_name = "User";
 	var $user_preferences;
 	var $activity_view;
+	var $lead_view;
 	var $column_fields = Array("id"
 		,"user_name"
 		,"user_password"
@@ -122,6 +123,7 @@ class User extends SugarBean {
 		,"status"
 		,"date_format"
 		,"activity_view"
+		,"lead_view"
 		);
 
 	var $encodeFields = Array("first_name", "last_name", "description");

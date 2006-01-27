@@ -85,7 +85,8 @@ function getKeyMetrics()
 
 	}
 	$values=Array('Title'=>$title,'Header'=>$header,'Entries'=>$entries);
-	return $values;
+	if ( ($display_empty_home_blocks ) || (count($value)!= 0) )
+		return $values;
 
 }
 function getMetricList()

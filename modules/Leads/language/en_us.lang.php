@@ -156,6 +156,7 @@ $mod_strings = Array(
 'Po Box'=>'Po Box',
 //Added for CustomView 4.2 Release
 'Name'=>'Name',
+'LBL_NEW_LEADS'=>'My New Leads',
 );
 
 ?>

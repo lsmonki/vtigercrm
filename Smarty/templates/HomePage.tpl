@@ -49,7 +49,7 @@
 		<table border=0 cellspacing=0 cellpadding=10 width=100%>
 		<tr>
 		<td align=left valign=top width=70%>
-		
+		<br>	
 		<!-- block for each table !-->
 		{foreach key=table item=tabledetail from=$HOMEDETAILS}
 		{if $tabledetail ne ''}
@@ -61,7 +61,16 @@
 		<tr>
 			<td>
 			{if $tabledetail.Title[3] ne ''}	
-			<form name="frmOpenLstView" method="post">
+			<script>
+			function {$tabledetail.Title[4]}(selectactivity_view)
+			{ldelim}
+			//script to reload the page with the view type when the combo values are changed
+			View_name = selectactivity_view.options[selectactivity_view.options.selectedIndex].value;
+			document.{$tabledetail.Title[5]}.action = "index.php?module=Home&action=index&{$tabledetail.Title[6]}="+View_name;
+			document.{$tabledetail.Title[5]}.submit();
+			{rdelim}
+			</script>
+			<form name="{$tabledetail.Title[5]}" method="post">
 			{/if}
 			<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tbody>
@@ -108,8 +117,8 @@
 		</form>
 		{/if}
 		</tbody></table>
+		<br><br>
 		{/if}
-		<br></br>
 		{/foreach}
 		<!--end of block for each table !-->		
 		<br>	
@@ -124,12 +133,3 @@
 	<td valign=top><img src="{$IMAGE_PATH}showPanelTopRight.gif"></td>
 	</tr>
 </table>
-<script>
-function showActivityView(selectactivity_view)
-{ldelim}
-//script to reload the page with the view type when the combo values are changed
-View_name = selectactivity_view.options[selectactivity_view.options.selectedIndex].value;
-document.frmOpenLstView.action = "index.php?module=Home&action=index&activity_view="+View_name;
-document.frmOpenLstView.submit();
-{rdelim}
-</script>
