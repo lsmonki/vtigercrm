@@ -2,7 +2,7 @@ function showDefaultCustomView(selectView)
 {
 viewName = selectView.options[selectView.options.selectedIndex].value;
 document.massdelete.viewname.value=viewName;
-document.massdelete.action="index.php?module=Campaigns&action=index&return_module=Campaignsts&return_action=index&viewname="+viewName;
+document.massdelete.action="index.php?module=Campaigns&action=index&return_module=Campaigns&return_action=index&viewname="+viewName;
 document.massdelete.submit();
 }
 
