@@ -46,7 +46,7 @@ function getTopAccounts()
 		}
 
 	$title=array();
-	$title[]='myUpcoPendAct.gif';
+	$title[]='myTopAccounts.gif';
 	$title[]=$current_module_strings['LBL_TOP_ACCOUNTS'];
 	$title[]='home_myaccount';
 	
