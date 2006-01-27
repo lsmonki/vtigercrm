@@ -146,6 +146,8 @@ $this->db->query("insert into blocks values (72,23,'LBL_RELATED_PRODUCTS',4,0,0,
 $this->db->query("insert into blocks values (73,23,'LBL_TERMS_INFORMATION',5,0,0,0,0,0)");
 $this->db->query("insert into blocks values (74,23,'LBL_DESCRIPTION_INFORMATION',6,0,0,0,0,0)");
 $this->db->query("insert into blocks values (75,4,'LBL_IMAGE_INFORMATION',5,0,0,0,0,0)");
+$this->db->query("insert into blocks values (76,26,'LBL_CAMPAIGN_INFORMATION',1,0,0,0,0,0)");
+$this->db->query("insert into blocks values (77,26,'LBL_DESCRIPTION_INFORMATION',2,0,0,0,0,0)");
 
 //
 
@@ -342,61 +344,30 @@ $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").
 
  $this->db->query("insert into field values (2,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,3,1,'V~O',1,'')");
 
-
-
-
-
-
-
-
-
- //campaign entries being added
-
-
- $this->db->query("insert into field values
- (26,".$this->db->getUniqueID("field").",'campaignname','campaign',1,'2','campaignname','Campaign
- Name',1,0,0,100,1,1,1,'V~M',0,1)");	
- $this->db->query("insert into field values
- (26,".$this->db->getUniqueID("field").",'campaigntype','campaign',1,15,'campaigntype','Campaign
- Type',1,0,0,100,2,1,1,'N~O',0,5)");	
-
- $this->db->query("insert into field values
- (26,".$this->db->getUniqueID("field").",'campaignstatus','campaign',1,15,'campaignstatus','Campaign
- Status',1,0,0,100,2,1,1,'N~O',0,5)");
-
-
- $this->db->query("insert into field values
- (26,".$this->db->getUniqueID("field").",'campaignid','campaign',1,'50','campaignid','Campaign
- ID',1,0,0,100,3,1,1,'V~M',0,2)");	
- $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'closingdate','campaign',1,'23','closingdate','Expected Close Date',1,0,0,100,5,1,1,'D~M',0,3)");	
- $this->db->query("insert into field values
- (26,".$this->db->getUniqueID("field").",'expectedrevenue','campaign',1,'15','expectedrevenue','Expected
- Revenue',1,0,0,100,6,1,1,'V~O',1,'')");	
- $this->db->query("insert into field values
- (26,".$this->db->getUniqueID("field").",'budgetcost','campaign',1,'1','budgetcost','Budget
- Cost',1,0,0,100,7,1,1,'V~O',1,'')");
- $this->db->query("insert into field values
- (26,".$this->db->getUniqueID("field").",'actualcost','campaign',1,'15','actualcost','Actual
- Cost',1,0,0,100,8,1,1,'V~O',1,'')");	
- $this->db->query("insert into field values
- (26,".$this->db->getUniqueID("field").",'expectedresponse','campaign',1,'16','expectedresponse','Expected
- Response',1,0,0,100,9,1,1,'V~O',0,4)");
- $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,10,1,1,'V~M',1,'')");
- $this->db->query("insert into field values
- (26,".$this->db->getUniqueID("field").",'numsent','campaign',1,'9','numsent','Num
- Sent',1,0,0,100,11,1,1,'N~O',1,'')");
-$this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,13,1,2,'T~O',1,'')");
- $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,14,1,2,'T~O',1,'')");
- 
-//Campaign entries end
-
-
-
-
-
-
 //Block3 -- End
 //Potential Details -- END
+
+
+//campaign entries being added
+
+
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'campaignname','campaign',1,'2','campaignname','Campaign Name',1,0,0,100,1,76,1,'V~M',0,1)");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'campaigntype','campaign',1,15,'campaigntype','Campaign Type',1,0,0,100,2,76,1,'N~O',0,5)");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'campaignstatus','campaign',1,15,'campaignstatus','Campaign Status',1,0,0,100,3,76,1,'N~O',0,5)");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'campaignid','campaign',1,'50','campaignid','Campaign ID',1,0,0,100,4,76,1,'V~M',0,2)");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'closingdate','campaign',1,'23','closingdate','Expected Close Date',1,0,0,100,5,76,1,'D~M',0,3)");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'expectedrevenue','campaign',1,'15','expectedrevenue','Expected Revenue',1,0,0,100,6,76,1,'V~O',1,'')");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'budgetcost','campaign',1,'1','budgetcost','Budget Cost',1,0,0,100,7,76,1,'V~O',1,'')");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'actualcost','campaign',1,'15','actualcost','Actual Cost',1,0,0,100,8,76,1,'V~O',1,'')");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'expectedresponse','campaign',1,'16','expectedresponse','Expected Response',1,0,0,100,9,76,1,'V~O',0,4)");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'smownerid','crmentity',1,'53','assigned_user_id','Assigned To',1,0,0,100,10,76,1,'V~M',1,'')");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'numsent','campaign',1,'9','numsent','Num Sent',1,0,0,100,11,76,1,'N~O',1,'')");
+$this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'createdtime','crmentity',1,'70','createdtime','Created Time',1,0,0,100,13,76,2,'T~O',1,'')");
+ $this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'modifiedtime','crmentity',1,'70','modifiedtime','Modified Time',1,0,0,100,14,76,2,'T~O',1,'')");
+
+$this->db->query("insert into field values (26,".$this->db->getUniqueID("field").",'description','crmentity',1,'19','description','Description',1,0,0,100,1,77,1,'V~O',1,'')");
+
+//Campaign entries end
 
 
 //Ticket Details -- START
