@@ -108,6 +108,7 @@ else $smarty->assign("NAME", "");
 
 if($focus->mode == 'edit')
 {
+	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
 	$num_of_products = getNoOfAssocProducts("PurchaseOrder",$focus);
 	$smarty->assign("ROWCOUNT", $num_of_products);
 	$associated_prod = getAssociatedProducts("PurchaseOrder",$focus);
