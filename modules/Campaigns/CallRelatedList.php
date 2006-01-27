@@ -33,7 +33,7 @@ if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 }
 
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
-$related_array=getRelatedLists("HelpDesk",$focus);
+$related_array=getRelatedLists("Campaigns",$focus);
 $smarty->assign("RELATEDLISTS", $related_array);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
