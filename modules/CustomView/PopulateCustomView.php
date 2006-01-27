@@ -317,9 +317,9 @@ $cvcolumns = Array(Array('leaddetails:lastname:lastname:Leads_Last_Name:V',
 		       'crmentity:createdtime:createdtime:Faq_Created_Time:D',
                        'crmentity:modifiedtime:modifiedtime:Faq_Modified_Time:D'),
 		      //this sequence has to be maintained 
- 		 Array('campaign:campaignname:campaignname:Campaign_Campaign_Name:V',
-                       'campaign:campaignid:campaignid:Campaign_Campaign_ID:V',
-                       'campaign:campaigntype:campaigntype:Campaign_Type:V'),
+ 		 Array('campaign:campaignname:campaignname:Campaigns_Campaign_Name:V',
+                       'campaign:campaignid:campaignid:Campaigns_Campaign_ID:V',
+                       'campaign:campaigntype:campaigntype:Campaigns_Campaign_Type:V'),
                   );
 
 
