@@ -21,7 +21,25 @@
  ********************************************************************************/
 
 $mod_strings = Array(
-// Added in release 4.0
+// Added in release 5.0
+'LBL_CAMPAIGN_INFORMATION'=>'Campaign Information',
+'LBL_DESCRIPTION_INFORMATION'=>'Description Information',
+
+'Campaign Name'=>'Campaign Name',
+'Campaign Type'=>'Campaign Type',
+'Campaign Status'=>'Campaign Status',
+'Campaign ID'=>'Campaign ID',
+'Expected Close Date'=>'Expected Close Date',
+'Expected Revenue'=>'Expected Revenue',
+'Budget Cost'=>'Budget Cost',
+'Actual Cost'=>'Actual Cost',
+'Expected Response'=>'Expected Response',
+'Assigned To'=>'Assigned To',
+'Num Sent'=>'Num Sent',
+'Created Time'=>'Created Time',
+'Modified Time'=>'Modified Time',
+'Description'=>'Description',
+
 
 );
 
