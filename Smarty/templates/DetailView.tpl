@@ -227,7 +227,7 @@
 								</tr>
 								<tr>
 								<td >
-  								[ <a href="#" onClick="showhide('mailMergeOptions')">Options...</a> ]
+  								{*[ <a href="#" onClick="showhide('mailMergeOptions')">Options...</a> ]*}
 								<div id="mailMergeOptions" align=left style="display:none">
 								<input type="checkbox" checked> Include Account Information <br>
 								<input type="checkbox" checked> Include More Information <br>
