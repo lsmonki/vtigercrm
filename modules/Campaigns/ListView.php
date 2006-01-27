@@ -89,33 +89,34 @@ if($viewid != 0)
         $CActionDtls = $oCustomView->getCustomActionDetails($viewid);
 }
 // Buttons and View options
-if(isPermitted('Campaign',2,'') == 'yes')
+if(isPermitted('Campaigns',2,'') == 'yes')
 {
         $other_text ['del']=$app_strings[LBL_MASS_DELETE];
 }
 
 if($viewnamedesc['viewname'] == 'All')
 {
-	$cvHTML = '<span class="bodyText disabled">'.$app_strings['LNK_CV_EDIT'].'</span>
-		<span class="sep">|</span>
-		<span class="bodyText disabled">'.$app_strings['LNK_CV_DELETE'].'</span><span class="sep">|</span>
-		<a href="index.php?module=Campaigns&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+	$cvHTML = '<td><a href="index.php?module=Campaigns&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+		<span class="small">|</span>
+                <span class="small" disabled>'.$app_strings['LNK_CV_EDIT'].'</span>
+                <span class="small">|</span>
+                <span class="small" disabled>'.$app_strings['LNK_CV_DELETE'].'</span></td>';
 }
 else
 {
-	$cvHTML = '<a href="index.php?module=Campaigns&action=CustomView&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_EDIT'].'</a>
-		<span class="sep">|</span>
-		<a href="index.php?module=CustomView&action=Delete&dmodule=Campaigns&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a>
-		<span class="sep">|</span>
-		<a href="index.php?module=Campaigns&action=CustomView" class="link">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>';
+	$cvHTML = '<td><a href="index.php?module=Campaigns&action=CustomView">'.$app_strings['LNK_CV_CREATEVIEW'].'</a>
+		<span class="small">|</span>
+                <a href="index.php?module=Campaigns&action=CustomView&record='.$viewid.'">'.$app_strings['LNK_CV_EDIT'].'</a>
+                <span class="small">|</span>
+                <a href="index.php?module=CustomView&action=Delete&dmodule=Campaigns&record='.$viewid.'" class="link">'.$app_strings['LNK_CV_DELETE'].'</a></td>';
 }
 
-$customstrings ='<td align="right">'.$app_strings[LBL_VIEW].'
-			<SELECT NAME="viewname" onchange="showDefaultCustomView(this)">
-				'.$customviewcombo_html.'
-			</SELECT>
-			'.$cvHTML.'
-		</td>';
+$customstrings ='<td>'.$app_strings[LBL_VIEW].'
+                        <td style="padding-left:5px;padding-right:5px">
+                        <SELECT NAME="viewname" class="small" onchange="showDefaultCustomView(this)">
+                                '.$customviewcombo_html.'
+                        </SELECT></td>
+                        '.$cvHTML;
 
 $customview= get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $smarty = new vtigerCRM_Smarty;
@@ -126,7 +127,7 @@ $smarty->assign("IMAGE_PATH",$image_path);
 $smarty->assign("MODULE",'Campaigns');
 $smarty->assign("BUTTONS",$other_text);
 $smarty->assign("CATEGORY",$category);
-$smarty->assign("SINGLE_MOD",'Campaigns');
+$smarty->assign("SINGLE_MOD",'Campaign');
 
 //Retreive the list from Database
 //<<<<<<<<<customview>>>>>>>>>
@@ -168,7 +169,7 @@ if(isset($order_by) && $order_by != '')
 	}
 	else
 	{
-		$tablename = getTableNameForField('Campaign',$order_by);
+		$tablename = getTableNameForField('Campaigns',$order_by);
 		$tablename = (($tablename != '')?($tablename."."):'');
 
 	        $list_query .= ' ORDER BY '.$tablename.$order_by.' '.$sorder;
@@ -224,13 +225,13 @@ if($viewid !='')
 $listview_header = getListViewHeader($focus,"Campaigns",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
 
-$listview_header_search = getSearchListHeaderValues($focus,"Campaign",$url_string,$sorder,$order_by,"",$oCustomView);
+$listview_header_search = getSearchListHeaderValues($focus,"Campaigns",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("SEARCHLISTHEADER",$listview_header_search);
 
-$listview_entries = getListViewEntries($focus,"Campaign",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
+$listview_entries = getListViewEntries($focus,"Campaigns",$list_result,$navigation_array,"","","EditView","Delete",$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
 $smarty->assign("SELECT_SCRIPT", $view_script);
-$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Campaign","index",$viewid);
+$navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Campaigns","index",$viewid);
 $smarty->assign("NAVIGATION", $navigationOutput);
 $smarty->assign("RECORD_COUNTS", $record_string);
 
