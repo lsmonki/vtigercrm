@@ -34,6 +34,9 @@
 	<form name="EditView" method="POST" action="index.php">
 	<input type="hidden" name="contact_id" value="{$CONTACT_ID}">
 
+{elseif $MODULE eq 'Campaigns'}
+        <form name="EditView" method="POST" action="index.php">
+
 {elseif $MODULE eq 'Activities'}
 	<form name="EditView" method="POST" action="index.php">
 	<input type="hidden" name="activity_mode" value="{$ACTIVITY_MODE}">
