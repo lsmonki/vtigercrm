@@ -56,7 +56,7 @@ $smarty->assign("CUSTOMFIELD", $cust_fld);
 $smarty->assign("SINGLE_MOD","HelpDesk");
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
-$smarty->assign("UPDATEINFO",updateInfo($focus->id));
+$smarty->assign("UPDATEINFO",updateInfo($_REQUEST['record']));
 
 $permissionData = $_SESSION['action_permission_set'];
 if(isPermitted("HelpDesk",1,$_REQUEST['record']) == 'yes')
