@@ -1198,7 +1198,7 @@ function populateSharingtmptables($userid)
 	global $adb;
 	require('user_privileges/sharing_privileges_'.$userid.'.php');
 	//Deleting from the existing tables
-	$table_arr=Array('tmp_read_user_sharing_per', 'tmp_write_user_sharing_per','tmp_read_group_sharing_per','tmp_write_group_sharing_per');
+	$table_arr=Array('tmp_read_user_sharing_per', 'tmp_write_user_sharing_per','tmp_read_group_sharing_per','tmp_write_group_sharing_per','tmp_read_user_rel_sharing_per','tmp_write_user_rel_sharing_per','tmp_read_group_rel_sharing_per','tmp_write_group_rel_sharing_per');
 	foreach($table_arr as $tabname)
 	{
 		$query = "delete from ".$tabname." where userid=".$userid;
