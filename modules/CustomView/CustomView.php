@@ -188,12 +188,12 @@ class CustomView extends CRMEntity{
 		$result = $adb->query($sql);
                 $noofrows = $adb->num_rows($result);
 		//Added on 14-10-2005 -- added ticket id in list
-                if($module == 'HelpDesk' && $block == 1)
+                if($module == 'HelpDesk' && $block == 25)
                 {
                         $module_columnlist['crmentity:crmid::HelpDesk_Ticket ID:I'] = 'Ticket ID';
                 }
 		//Added to include activity type in activity customview list
-                if($module == 'Activities' && $block == 1)
+                if($module == 'Activities' && $block == 19)
                 {
                         $module_columnlist['activity:activitytype::Activities_Activity Type:C'] = 'Activity Type';
                 }
@@ -219,7 +219,7 @@ class CustomView extends CRMEntity{
 				if($fieldlabel == "Start Date & Time")
                                 {
                                         $fieldlabel = "Start Date";
-					  if($module == 'Activities' && $block == 1)
+					  if($module == 'Activities' && $block == 19)
 				               $module_columnlist['activity:time_start::Activities_Start Time:I'] = 'Start Time';
 
                                 }
