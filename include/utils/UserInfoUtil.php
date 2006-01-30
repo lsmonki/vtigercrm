@@ -3630,45 +3630,212 @@ function getListViewSecurityParameter($module)
 	global $current_user;
 
 	$tabid=getTabid($module);
-
-	//Current User	
-	$sec_query = " and (crmentity.smownerid=".$current_user->id;
-
-	//Subordinate User
-	$subUsersList=getSubordinateUsersList();
-	if($subUsersList != '')
+	global $current_user;
+	if($current_user)
 	{
-		$sec_query .= " or crmentity.smownerid in".$subUsersList;
+        	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+        	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 	}
 
-	//Shared User
-	$sharedUsersList=getReadSharingUsersList($module);
-	if($sharedUsersList != '')
+	if($module == 'Leads')
 	{
-		$sec_query .= " or crmentity.smownerid in".$sharedUsersList;
+		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.") or (crmentity.smownerid in (0) and (";
+
+                        if(sizeof($current_user_groups) > 0)
+                        {
+                              $sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                        }
+                         $sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";	
 	}
-
-
-	//Current User Groups
-	if($module == 'Leads' or $module=='HelpDesk' or $module=='Activities')
+	elseif($module == 'Accounts')
 	{
-		$userGroupsList=getCurrentUserGroupList();
-		if($userGroupsList != '')
+		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.") or (crmentity.smownerid in (0) and (";
+
+                if(sizeof($current_user_groups) > 0)
+                {
+                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                }
+		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+	
+	}
+	elseif($module == 'Contacts')
+	{
+		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.") or (crmentity.smownerid in (0) and (";
+
+                if(sizeof($current_user_groups) > 0)
+                {
+                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                }
+		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+	
+	}
+	elseif($module == 'Potentials')
+	{
+		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.") or potential.accountid in (select crmid from crmentity where setype='accounts' and crmentity.smownerid in(select shareduserid from tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid.")) or potential.accountid in (select crmid from crmentity left join accountgrouprelation on accountgrouprelation.accountid=crmentity.crmid inner join groups on groups.groupname=accountgrouprelation.groupname where setype='Accounts' and crmentity.smownerid=0 and groups.groupid in(select tmp_read_group_rel_sharing_per.sharedgroupid from tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid.")) or (crmentity.smownerid in (0) and (";
+
+                if(sizeof($current_user_groups) > 0)
+                {
+                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                }
+		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+	
+	}
+	elseif($module == 'HelpDesk')
+	{
+		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.") or troubletickets.parent_id in (select crmid from crmentity where setype='Accounts' and crmentity.smownerid in(select shareduserid from tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid.")) or troubletickets.parent_id in (select crmid from crmentity left join accountgrouprelation on accountgrouprelation.accountid=crmentity.crmid inner join groups on groups.groupname=accountgrouprelation.groupname where setype='Accounts' and crmentity.smownerid=0 and groups.groupid in(select tmp_read_group_rel_sharing_per.sharedgroupid from tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid.")) or (crmentity.smownerid in (0) and (";
+
+                if(sizeof($current_user_groups) > 0)
+                {
+                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                }
+		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+	
+	}
+	elseif($module == 'Emails')
+	{
+		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")";
+
+		//Adding crterial for account related emails sharing
+		 $sec_query .= "or seactivityrel.crmid in (select crmid from crmentity where setype='Accounts' and crmentity.smownerid in(select shareduserid from tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid.")) or seactivityrel.crmid in (select crmid from crmentity left join accountgrouprelation on accountgrouprelation.accountid=crmentity.crmid inner join groups on groups.groupname=accountgrouprelation.groupname where setype='Accounts' and crmentity.smownerid=0 and groups.groupid in(select tmp_read_group_rel_sharing_per.sharedgroupid from tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid."))";
+		//Adding crterial for lead related emails sharing
+		 $sec_query .= " or seactivityrel.crmid in (select crmid from crmentity where setype='Leads' and crmentity.smownerid in(select shareduserid from tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Leads')." and relatedtabid=".$tabid.")) or seactivityrel.crmid in (select crmid from crmentity left join leadgrouprelation on leadgrouprelation.leadid=crmentity.crmid inner join groups on groups.groupname=leadgrouprelation.groupname where setype='Leads' and crmentity.smownerid=0 and groups.groupid in(select tmp_read_group_rel_sharing_per.sharedgroupid from tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Leads')." and relatedtabid=".$tabid."))";
+	
+
+		//Adding crteria for group sharing
+		 $sec_query .= " or (crmentity.smownerid in (0) and (";
+
+                if(sizeof($current_user_groups) > 0)
+                {
+                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                }
+		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+	
+	}
+	if($module == 'Activities')
+	{
+		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%')";
+
+		if(sizeof($current_user_groups) > 0)
 		{
-			$sec_query .= " or (crmentity.smownerid in(0) and groups.groupid in".$userGroupsList.")";
+			$sec_query .= " or (crmentity.smownerid in (0) and (groups.groupid in".getCurrentUserGroupList()."))";
+		}
+		$sec_query .= ")";	
+	}
+	elseif($module == 'Quotes')
+	{
+		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")";
+
+		//Adding crterial for account related quotes sharing
+		 $sec_query .= "or quotes.accountid in (select crmid from crmentity where setype='Accounts' and crmentity.smownerid in(select shareduserid from tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid.")) or quotes.accountid in (select crmid from crmentity left join accountgrouprelation on accountgrouprelation.accountid=crmentity.crmid inner join groups on groups.groupname=accountgrouprelation.groupname where setype='Accounts' and crmentity.smownerid=0 and groups.groupid in(select tmp_read_group_rel_sharing_per.sharedgroupid from tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid."))";
+		//Adding crterial for potential related quotes sharing
+		 $sec_query .= " or quotes.potentialid in (select crmid from crmentity where setype='Potentials' and crmentity.smownerid in(select shareduserid from tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Potentials')." and relatedtabid=".$tabid.")) or quotes.potentialid in (select crmid from crmentity left join potentialgrouprelation on potentialgrouprelation.potentialid=crmentity.crmid inner join groups on groups.groupname=potentialgrouprelation.groupname where setype='Potentials' and crmentity.smownerid=0 and groups.groupid in(select tmp_read_group_rel_sharing_per.sharedgroupid from tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Potentials')." and relatedtabid=".$tabid."))";
+	
+
+		//Adding crteria for group sharing
+		 $sec_query .= " or (crmentity.smownerid in (0) and (";
+
+                if(sizeof($current_user_groups) > 0)
+                {
+                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                }
+		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+	
+	}	
+	elseif($module == 'PurchaseOrder')
+	{
+		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.") or (crmentity.smownerid in (0) and (";
+
+                if(sizeof($current_user_groups) > 0)
+                {
+                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                }
+		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+	
+	}
+	elseif($module == 'SalesOrder')
+	{
+		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")";
+
+		//Adding crterial for account related so sharing
+		 $sec_query .= "or salesorder.accountid in (select crmid from crmentity where setype='Accounts' and crmentity.smownerid in(select shareduserid from tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid.")) or salesorder.accountid in (select crmid from crmentity left join accountgrouprelation on accountgrouprelation.accountid=crmentity.crmid inner join groups on groups.groupname=accountgrouprelation.groupname where setype='Accounts' and crmentity.smownerid=0 and groups.groupid in(select tmp_read_group_rel_sharing_per.sharedgroupid from tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid."))";
+		//Adding crterial for potential related so sharing
+		 $sec_query .= " or salesorder.potentialid in (select crmid from crmentity where setype='Potentials' and crmentity.smownerid in(select shareduserid from tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Potentials')." and relatedtabid=".$tabid.")) or salesorder.potentialid in (select crmid from crmentity left join potentialgrouprelation on potentialgrouprelation.potentialid=crmentity.crmid inner join groups on groups.groupname=potentialgrouprelation.groupname where setype='Potentials' and crmentity.smownerid=0 and groups.groupid in(select tmp_read_group_rel_sharing_per.sharedgroupid from tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Potentials')." and relatedtabid=".$tabid."))";
+		//Adding crterial for quotes related so sharing
+		 $sec_query .= " or salesorder.quoteid in (select crmid from crmentity where setype='Quotes' and crmentity.smownerid in(select shareduserid from tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Quotes')." and relatedtabid=".$tabid.")) or salesorder.quoteid in (select crmid from crmentity left join quotegrouprelation on quotegrouprelation.quoteid=crmentity.crmid inner join groups on groups.groupname=quotegrouprelation.groupname where setype='Quotes' and crmentity.smownerid=0 and groups.groupid in(select tmp_read_group_rel_sharing_per.sharedgroupid from tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Quotes')." and relatedtabid=".$tabid."))";
+	
+
+		//Adding crteria for group sharing
+		 $sec_query .= " or (crmentity.smownerid in (0) and (";
+
+                if(sizeof($current_user_groups) > 0)
+                {
+                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                }
+		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+	
+	}
+	elseif($module == 'Invoice')
+	{
+		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")";
+
+		//Adding crterial for account related invoice sharing
+		 $sec_query .= "or invoice.accountid in (select crmid from crmentity where setype='Accounts' and crmentity.smownerid in(select shareduserid from tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid.")) or invoice.accountid in (select crmid from crmentity left join accountgrouprelation on accountgrouprelation.accountid=crmentity.crmid inner join groups on groups.groupname=accountgrouprelation.groupname where setype='Accounts' and crmentity.smownerid=0 and groups.groupid in(select tmp_read_group_rel_sharing_per.sharedgroupid from tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('Accounts')." and relatedtabid=".$tabid."))";
+		//Adding crterial for salesorder related invoice sharing
+		 $sec_query .= " or invoice.salesorderid in (select crmid from crmentity where setype='SalesOrder' and crmentity.smownerid in(select shareduserid from tmp_read_user_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('SalesOrder')." and relatedtabid=".$tabid.")) or invoice.salesorderid in(select crmid from crmentity left join sogrouprelation on sogrouprelation.salesorderid=crmentity.crmid inner join groups on groups.groupname=sogrouprelation.groupname where setype='SalesOrder' and crmentity.smownerid=0 and groups.groupid in(select tmp_read_group_rel_sharing_per.sharedgroupid from tmp_read_group_rel_sharing_per where userid=".$current_user->id." and tabid=".getTabid('SalesOrder')." and relatedtabid=".$tabid."))";
+	
+
+		//Adding crteria for group sharing
+		 $sec_query .= " or (crmentity.smownerid in (0) and (";
+
+                if(sizeof($current_user_groups) > 0)
+                {
+                	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
+                }
+		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+	
+	}	
+	else
+	{
+
+		//Current User	
+		$sec_query = " and (crmentity.smownerid=".$current_user->id;
+
+		//Subordinate User
+		$subUsersList=getSubordinateUsersList();
+		if($subUsersList != '')
+		{
+			$sec_query .= " or crmentity.smownerid in".$subUsersList;
 		}
 
-		//Shared User Groups
-		$sharedGroupsList=getReadSharingGroupsList($module);
-		if($sharedGroupsList != '')
+		//Shared User
+		$sharedUsersList=getReadSharingUsersList($module);
+		if($sharedUsersList != '')
 		{
-			$sec_query .= " or (crmentity.smownerid in(0) and groups.groupid in".$sharedGroupsList.")";
-		}	
+			$sec_query .= " or crmentity.smownerid in".$sharedUsersList;
+		}
 
 
+		//Current User Groups
+		if($module == 'Leads' or $module=='HelpDesk' or $module=='Activities')
+		{
+			$userGroupsList=getCurrentUserGroupList();
+			if($userGroupsList != '')
+			{
+				$sec_query .= " or (crmentity.smownerid in(0) and groups.groupid in".$userGroupsList.")";
+			}
+
+			//Shared User Groups
+			$sharedGroupsList=getReadSharingGroupsList($module);
+			if($sharedGroupsList != '')
+			{
+				$sec_query .= " or (crmentity.smownerid in(0) and groups.groupid in".$sharedGroupsList.")";
+			}	
+
+
+		}
+
+		$sec_query .=") ";
 	}
-		
-	$sec_query .=") ";
 	return $sec_query;	
 }
 
