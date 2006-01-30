@@ -901,36 +901,66 @@ function getRecordOwnerId($record)
 	$ownerArr=Array();
 	$query="select * from crmentity where crmid = ".$record;
 	$result=$adb->query($query);
-        $user_id=$adb->query_result($result,0,'smownerid');
+	$user_id=$adb->query_result($result,0,'smownerid');
 	if($user_id != 0)
 	{
 		$ownerArr['Users']=$user_id;
-			
+
 	}
 	elseif($user_id == 0)
 	{
-        	$module=$adb->query_result($result,0,'setype');
+		$module=$adb->query_result($result,0,'setype');
 		if($module == 'Leads')
 		{
 			$query1="select groups.groupid from leadgrouprelation inner join groups on groups.groupname = leadgrouprelation.groupname where leadid=".$record;
 		}
-		elseif($module == 'Activities')
+		elseif($module == 'Activities' || $module == 'Emails')
 		{
-				
+
 			$query1="select groups.groupid from activitygrouprelation inner join groups on groups.groupname = activitygrouprelation.groupname where activityid=".$record;
 		}
-		elseif($module == 'Tickets')
+		elseif($module == 'HelpDesk')
 		{
 			$query1="select groups.groupid from ticketgrouprelation inner join groups on groups.groupname = ticketgrouprelation.groupname where ticketid=".$record;
 		}
+		elseif($module == 'Accounts')
+		{
+			$query1="select groups.groupid from accountgrouprelation inner join groups on groups.groupname = accountgrouprelation.groupname where accountid=".$record;
+		}
+		elseif($module == 'Contacts')
+		{
+			$query1="select groups.groupid from contactgrouprelation inner join groups on groups.groupname = contactgrouprelation.groupname where contactid=".$record;
+		}
+		elseif($module == 'Potentials')
+		{
+			$query1="select groups.groupid from potentialgrouprelation inner join groups on groups.groupname = potentialgrouprelation.groupname where potentialid=".$record;
+		}
+		elseif($module == 'Quotes')
+		{
+			$query1="select groups.groupid from quotegrouprelation inner join groups on groups.groupname = quotegrouprelation.groupname where quoteid=".$record;
+		}
+		elseif($module == 'PurchaseOrder')
+		{
+			$query1="select groups.groupid from pogrouprelation inner join groups on groups.groupname = pogrouprelation.groupname where purchaseorderid=".$record;
+		}
+		elseif($module == 'SalesOrder')
+		{
+			$query1="select groups.groupid from sogrouprelation inner join groups on groups.groupname = sogrouprelation.groupname where salesorderid=".$record;
+		}
+		elseif($module == 'Invoice')
+		{
+			$query1="select groups.groupid from invoicegrouprelation inner join groups on groups.groupname = invoicegrouprelation.groupname where invoiceid=".$record;
+		}
+
 		$result1=$adb->query($query1);
 		$groupid=$adb->query_result($result1,0,'groupid');
 		$ownerArr['Groups']=$groupid;
-						
+
 	}	
 	return $ownerArr;
-	
+
 }
+
 
 function insertProfile2field($profileid)
 {
@@ -1648,13 +1678,19 @@ function getPotentialsRelatedAccounts($record_id)
 
 function getEmailsRelatedAccounts($record_id)
 {
-	$accountid='';
+	global $adb;
+	$query = "select seactivityrel.crmid from seactivityrel inner join crmentity on crmentity.crmid=seactivityrel.crmid where crmentity.setype='Accounts' and activityid=".$record_id;
+	$result = $adb->query($query);
+	$accountid=$adb->query_result($result,0,'crmid');
 	return $accountid;
 }
 
 function getEmailsRelatedLeads($record_id)
 {
-	$leadid='';
+	global $adb;
+	$query = "select seactivityrel.crmid from seactivityrel inner join crmentity on crmentity.crmid=seactivityrel.crmid where crmentity.setype='Leads' and activityid=".$record_id;
+	$result = $adb->query($query);
+	$leadid=$adb->query_result($result,0,'crmid');
 	return $leadid;
 }
 
