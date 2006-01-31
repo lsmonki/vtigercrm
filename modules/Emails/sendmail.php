@@ -20,7 +20,7 @@
 
 require_once('modules/Emails/Email.php');
 require_once('include/logging.php');
-require("class.phpmailer.php");
+require("modules/Emails/class.phpmailer.php");
 require_once('include/database/PearDatabase.php');
 
 $local_log =& LoggerManager::getLogger('index');

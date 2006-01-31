@@ -19,7 +19,7 @@
  */
 
 
-require("class.phpmailer.php");
+require("modules/Emails/class.phpmailer.php");
 
 //Add these lines in wherever we want to use this function
 //include("modules/Emails/mail.php");
