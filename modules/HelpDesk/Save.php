@@ -121,7 +121,9 @@ if($_REQUEST['product_id'] != '' && $focus->id != '' && $_REQUEST['mode'] != 'ed
 {
         $sql = 'insert into seticketsrel values('.$_REQUEST['product_id'].' , '.$focus->id.')';
         $adb->query($sql);
-        $return_id = $_REQUEST['product_id'];
+
+	if($_REQUEST['return_module'] == 'Products')
+	        $return_id = $_REQUEST['product_id'];
 }
 
 //send mail to the assigned to user and the parent to whom this ticket is assigned
