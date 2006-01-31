@@ -1178,9 +1178,9 @@ $log->debug("type is ".$type);
 
 
 				//$this->db->println("here is the bug");
-			
+				
 
-				$list[] = $this;
+				$list[] = clone($this);//added by Richie to support PHP5
 			}
 		}
 
@@ -1219,7 +1219,7 @@ $log->debug("type is ".$type);
 	//data gets overridden hence all the rows that come in bear the same value. This in turn
 //provides a wrong display of the Dashboard graphs. The data is erroneously shown for a specific month alone
 //Added by Richie
-				$list[] = clone($this);
+				$list[] = clone($this);//added by Richie to support PHP5
 			}
 		}
 
@@ -1348,7 +1348,7 @@ $log->debug("type is ".$type);
 			}	
 
 			// this copies the object into the array
-			$list[] = $copy;
+			$list[] = clone($copy);//added by Richie to support PHP5
 		}
 
 		return $list;
@@ -1515,7 +1515,7 @@ $sql='select distinct(t.topic_id), t.topic_title, c.cat_title, first.username as
  	                                         }
  	                                 }
  	 
- 	                    $list[] = $this;
+ 	                    $list[] = clone($this);//added by Richie to support PHP5
  	                         }
  	                 }
  	 
