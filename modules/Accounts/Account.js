@@ -336,8 +336,6 @@ function searchMapLocation(addressType)
                            +getObj("Shipping Country").value+' '
                            +getObj("Shipping Code").value
         }
-        document.DetailView.action="http://maps.google.com/maps?q="+mapParameter
-        document.DetailView.target="_blank"
-        document.DetailView.submit()
+	 window.open('http://maps.google.com/maps?q='+mapParameter,'goolemap','height=450,width=700,resizable=no,titlebar,location,top=200,left=250');
 }
 
