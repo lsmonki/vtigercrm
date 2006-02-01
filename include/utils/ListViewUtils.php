@@ -1136,8 +1136,20 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 			{
 				if(($module == "Leads" && $colname == "lastname") || ($module == "Contacts" && $colname == "lastname"))
 				{
+					if($module == "Contacts")
+                                        {
+                                                 $query="select contactdetails.imagename from contactdetails where lastname='".$temp_val."'";
+                                                //echo $query;
+                                                 $result = $adb->query($query);
+                                                 $imagename=$adb->query_result($result,0,'imagename');
+                                                 if($imagename != '')
+                                                 {
+                                                         $imgpath = "test/contact/".$imagename;
+                                                         $contact_image='&nbsp;&nbsp;<img src="'.$imgpath.'" width="20" height="20" border="0">';
+                                                 }
+                                        }
 					//Commented to give link even to the first name - Jaguar
-					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>';
+					$value = '<a href="index.php?action=DetailView&module='.$module.'&record='.$entity_id.'&parenttab='.$tabname.'">'.$temp_val.'</a>'.$contact_image;
 				}
 				elseif($module == "Activities")
                                 {
