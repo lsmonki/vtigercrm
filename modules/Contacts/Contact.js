@@ -282,5 +282,30 @@ function submitform(id){
 		document.massdelete.submit();
 }	
 
+function searchMapLocation(addressType)
+{
+        var mapParameter = '';
+        if (addressType == 'Main')
+        {
+                mapParameter = getObj("Mailing Street").value+' '
+                           +getObj("Mailing Po Box").value+' '
+                           +getObj("Mailing City").value+' '
+                           +getObj("Mailing State").value+' '
+                           +getObj("Mailing Country").value+' '
+                           +getObj("Mailing Zip").value
+        }
+        else if (addressType == 'Other')
+        {
+                mapParameter = getObj("Other Street").value+' '
+                           +getObj("Other Po Box").value+' '
+                           +getObj("Other City").value+' '
+                           +getObj("Other State").value+' '
+                           +getObj("Other Country").value+' '
+                           +getObj("Other Zip").value
+        }
+        document.DetailView.action="http://maps.google.com/maps?q="+mapParameter
+        document.DetailView.target="_blank"
+        document.DetailView.submit()
+}
 
 
