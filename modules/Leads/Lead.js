@@ -328,5 +328,21 @@ function submitform(id){
 		document.massdelete.submit();
 }	
 
+function searchMapLocation(addressType)
+{
+        var mapParameter = '';
+        if (addressType == 'Main')
+        {
+                mapParameter = getObj("Street").value+' '
+                           +getObj("Po Box").value+' '
+                           +getObj("City").value+' '
+                           +getObj("State").value+' '
+                           +getObj("Country").value+' '
+                           +getObj("Postal Code").value
+        }
+        document.DetailView.action="http://maps.google.com/maps?q="+mapParameter
+        document.DetailView.target="_blank"
+        document.DetailView.submit()
+}
 
 
