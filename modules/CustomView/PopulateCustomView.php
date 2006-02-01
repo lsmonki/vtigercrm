@@ -152,7 +152,7 @@ $cvcolumns = Array(Array('leaddetails:lastname:lastname:Leads_Last_Name:V',
                          'leaddetails:email:email:Leads_Email:V'),
 	
 		   Array('account:accountname:accountname:Accounts_Account_Name:V',
-                         'accountbillads:city:city:Accounts_City:V',
+                         'accountbillads:city:bill_city:Accounts_City:V',
                          'account:website:website:Accounts_Website:V',
                          'account:phone:phone:Accounts_Phone:V',
                          'crmentity:smownerid:assigned_user_id:Accounts_Assigned_To:V'),
