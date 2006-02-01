@@ -57,6 +57,8 @@ $_SESSION['SALESORDER_SORT_ORDER'] = $sorder;
 
 if(isset($_REQUEST['query']) && $_REQUEST['query'] != '' && $_REQUEST['query'] == 'true')
 {
+	$where=Search($currentModule);
+	
 	$url_string .="&query=true";
 	if (isset($_REQUEST['subject'])) $subject = $_REQUEST['subject'];
         if (isset($_REQUEST['accountname'])) $accountname = $_REQUEST['accountname'];
@@ -234,6 +236,9 @@ $url_string .="&viewname=".$viewid;
 
 $listview_header = getListViewHeader($focus,"SalesOrder",$url_string,$sorder,$order_by,"",$oCustomView);
 $smarty->assign("LISTHEADER", $listview_header);
+
+$listview_header_search=getSearchListHeaderValues($focus,"SalesOrder",$url_string,$sorder,$order_by,"",$oCustomView);
+$smarty->assign("SEARCHLISTHEADER", $listview_header_search);
 
 $listview_entries = getListViewEntries($focus,"SalesOrder",$list_result,$navigation_array,'','&return_module=SalesOrder&return_action=index','EditView','Delete',$oCustomView);
 $smarty->assign("LISTENTITY", $listview_entries);
