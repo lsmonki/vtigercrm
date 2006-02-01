@@ -174,6 +174,41 @@
 						     </tr>{/strip}	
 							{foreach key=header item=detail from=$BLOCKS}
 							<table border=0 cellspacing=0 cellpadding=0 width=100% class="small">
+							<tr>
+                                                        <td>&nbsp;</td>
+                                                        <td>&nbsp;</td>
+                                                        <td>&nbsp;</td>
+                                                        <td align=right>
+							{if $header eq 'Address Information' && ($MODULE eq 'Accounts' || $MODULE eq 'Contacts' || $MODULE eq 'Leads') }
+                                                        {if $MODULE eq 'Leads'}
+                                                        <input id="locateMap" name="locateMap" value="Locate Map" class="small" type="button" onClick="searchMapLocation( 'Main' )" title="Locate Map">
+                                                        {else}
+                                                                {if $MODULE eq 'Accounts'}
+                                                                       {assign var=address1 value='Billing'}
+                                                                       {assign var=address2 value='Shipping'}
+                                                                {/if}
+                                                                {if $MODULE eq 'Contacts'}
+                                                                       {assign var=address1 value='Mailing'}
+                                                                       {assign var=address2 value='Other'}
+                                                                {/if}
+                                                                <input id="locateMap" name="locateMap" value="Locate Map" class="small" type="button" onClick="javascript:showLocateMapMenu()" title="Locate Map">
+                                                        <div id="dropDownMenu" style="position:absolute;display:none;z-index:60">
+							<table border="0" cellspacing="0" cellpadding="4">
+                                                <tr bgcolor=white class="lvtColData" onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'" onClick="searchMapLocation( 'Main' )">
+                                                <td>{$address1} Address</td>
+                                                </tr>
+                                                <tr bgcolor=white class="lvtColData" onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'"  onClick="searchMapLocation( 'Other' )">
+                                                <td>{$address2} Address</td>
+                                                </tr>
+                                                </table>
+                                                </div>
+                                                {/if}
+                                                <script>
+                                                        document.onclick=hideLocateMapMenu;
+                                                </script>
+                                               {/if}
+                                                        </td>
+                                                        </tr>
 						     <tr>{strip}
 						     <td colspan=4 style="border-bottom:1px solid #999999;padding:5px;" bgcolor="#e5e5e5"><b>
 						        {$header}
