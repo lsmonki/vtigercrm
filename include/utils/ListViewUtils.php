@@ -1249,11 +1249,11 @@ function getListQuery($module,$where='')
 	}
 	if($module == "Products")
 	{
-		$query = "select distinct(crmentity.crmid), products.*, productcf.* from products inner join crmentity on crmentity.crmid=products.productid left join productcf on products.productid = productcf.productid left join seproductsrel on seproductsrel.productid = products.productid where crmentity.deleted=0";
+		$query = "select distinct(crmentity.crmid), products.*, productcf.* from products inner join crmentity on crmentity.crmid=products.productid left join productcf on products.productid = productcf.productid left join seproductsrel on seproductsrel.productid = products.productid where crmentity.deleted=0 and ((seproductsrel.crmid is NULL and (products.contactid=0 or products.contactid is NULL)) or seproductsrel.crmid in(".getReadEntityIds('Leads').") or seproductsrel.crmid in(".getReadEntityIds('Accounts').") or seproductsrel.crmid in(".getReadEntityIds('Potentials').") or products.contactid in(".getReadEntityIds('Contacts').")) ";
 	}
         if($module == "Notes")
         {
-		$query="select crmentity.crmid, notes.title, notes.contact_id, notes.filename, crmentity.modifiedtime,senotesrel.crmid as relatedto, contactdetails.firstname, contactdetails.lastname, notes.* from notes inner join crmentity on crmentity.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentity.deleted=0";
+		$query="select crmentity.crmid, notes.title, notes.contact_id, notes.filename, crmentity.modifiedtime,senotesrel.crmid as relatedto, contactdetails.firstname, contactdetails.lastname, notes.* from notes inner join crmentity on crmentity.crmid=notes.notesid left join senotesrel on senotesrel.notesid=notes.notesid left join contactdetails on contactdetails.contactid = notes.contact_id where crmentity.deleted=0  and ((senotesrel.crmid is NULL and (notes.contact_id=0 or notes.contact_id is NULL)) or senotesrel.crmid in(".getReadEntityIds('Leads').") or senotesrel.crmid in(".getReadEntityIds('Accounts').") or senotesrel.crmid in(".getReadEntityIds('Potentials').")  or senotesrel.crmid in(".getReadEntityIds('Products').") or senotesrel.crmid in(".getReadEntityIds('Invoice').") or senotesrel.crmid in(".getReadEntityIds('PurchaseOrder').") or senotesrel.crmid in(".getReadEntityIds('SalesOrder').") or notes.contact_id in(".getReadEntityIds('Contacts').")) ";
         }
 	if($module == "Contacts")
         {
@@ -1363,6 +1363,106 @@ function getListQuery($module,$where='')
 	return $query;
 }
 
+
+function getReadEntityIds($module)
+{
+	global $current_user;
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+	$tab_id = getTabid($module);
+
+	if($module == "Leads")
+	{
+               $query = "select crmentity.crmid from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid left join leadgrouprelation on leadscf.leadid=leadgrouprelation.leadid left join groups on groups.groupname=leadgrouprelation.groupname where crmentity.deleted=0 and leaddetails.converted=0 ";
+               if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+                {
+			$sec_parameter=getListViewSecurityParameter($module);
+			$query .= $sec_parameter;
+                }				
+
+	}
+
+
+	if($module == "Accounts")
+	{
+		//Query modified to sort by assigned to
+		$query = "select crmentity.crmid from account left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid left join accountgrouprelation on accountscf.accountid=accountgrouprelation.accountid left join groups on groups.groupname=accountgrouprelation.groupname where crmentity.deleted=0 ";
+
+	if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+                {
+                    $query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tab_id.") or (crmentity.smownerid in (0) and (";
+
+                        if(sizeof($current_user_groups) > 0)
+                        {
+                              $query .= "accountgrouprelation.groupname in(select groupname from groups where groupid in ".getCurrentUserGroupList().") or ";
+                        }
+                         $query .= "accountgrouprelation.groupname in(select groups.groupname from tmp_read_group_sharing_per inner join groups on groups.groupid=tmp_read_group_sharing_per.sharedgroupid where userid=".$current_user->id." and tabid=".$tab_id.")))) ";
+                }	
+		
+	}
+
+	if ($module == "Potentials")
+	{
+		//Query modified to sort by assigned to
+		$query = "select crmentity.crmid from potential left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=potential.potentialid inner join account on potential.accountid = account.accountid inner join potentialscf on potentialscf.potentialid = potential.potentialid left join potentialgrouprelation on potential.potentialid=potentialgrouprelation.potentialid left join groups on groups.groupname=potentialgrouprelation.groupname where crmentity.deleted=0 "; 
+
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+		{
+			$sec_parameter=getListViewSecurityParameter($module);
+			$query .= $sec_parameter;
+		}
+
+
+	}
+
+	if($module == "Contacts")
+        {
+		//Query modified to sort by assigned to
+		$query = "select crmentity.crmid from contactdetails, contactaddress, contactsubdetails, contactscf left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=contactdetails.contactid and contactdetails.contactid=contactaddress.contactaddressid and contactdetails.contactid = contactscf.contactid and contactaddress.contactaddressid=contactsubdetails.contactsubscriptionid left join account on account.accountid = contactdetails.accountid left join contactgrouprelation on contactscf.contactid=contactgrouprelation.contactid left join groups on groups.groupname=contactgrouprelation.groupname where crmentity.deleted=0 ";
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+		{
+			$sec_parameter=getListViewSecurityParameter($module);
+			$query .= $sec_parameter;
+		}
+        }
+	if($module == "Products")
+	{
+		$query = "select distinct(crmentity.crmid) from products inner join crmentity on crmentity.crmid=products.productid left join productcf on products.productid = productcf.productid left join seproductsrel on seproductsrel.productid = products.productid where crmentity.deleted=0 and ((seproductsrel.crmid is NULL or products.contactid=0 or products.contactid is NULL) or seproductsrel.crmid in(".getReadEntityIds('Leads').") or seproductsrel.crmid in(".getReadEntityIds('Accounts').") or seproductsrel.crmid in(".getReadEntityIds('Potentials').") or products.contactid in(".getReadEntityIds('Contacts').")) ";
+	}
+
+	if($module == "PurchaseOrder")
+        {
+		//Query modified to sort by assigned to
+                $query = "select crmentity.crmid from purchaseorder left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid left join purchaseordercf on purchaseordercf.purchaseorderid = purchaseorder.purchaseorderid left join pogrouprelation on purchaseorder.purchaseorderid=pogrouprelation.purchaseorderid left join groups on groups.groupname=pogrouprelation.groupname where crmentity.deleted=0 ";
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+		{
+			$sec_parameter=getListViewSecurityParameter($module);
+			$query .= $sec_parameter;	
+		}
+        }
+        if($module == "SalesOrder")
+        {
+		//Query modified to sort by assigned to
+                $query = "select crmentity.crmid from salesorder left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid left join salesordercf on salesordercf.salesorderid = salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 ".$where;
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+		{
+			$sec_parameter=getListViewSecurityParameter($module);
+			$query .= $sec_parameter;	
+		}
+        }
+	if($module == "Invoice")
+	{
+		$query = "select crmentity.crmid from invoice left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=invoice.invoiceid inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid inner join invoicecf on invoice.invoiceid = invoicecf.invoiceid left join invoicegrouprelation on invoice.invoiceid=invoicegrouprelation.invoiceid left join groups on groups.groupname=invoicegrouprelation.groupname where crmentity.deleted=0 ".$where;
+		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+		{
+			$sec_parameter=getListViewSecurityParameter($module);
+			$query .= $sec_parameter;	
+		}
+	}
+
+	return $query;
+
+}
 
 
 //parameter $viewid added for customview 27/5
