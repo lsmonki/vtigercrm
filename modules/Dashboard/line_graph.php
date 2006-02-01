@@ -14,7 +14,7 @@ include ("../../jpgraph/src/jpgraph.php");
 include ("../../jpgraph/src/jpgraph_line.php");
 
 
-$refer_code=(isset($_REQUEST['width']))?$_REQUEST['refer_code']:"0,0";
+$refer_code=(isset($_REQUEST['refer_code']))?$_REQUEST['refer_code']:"0,0";
 $datax=explode(",",$refer_code); //The values to the XAxis
 
 $names_value=(isset($_REQUEST['referdata']))?$_REQUEST['referdata']:"null"; //The Status Name 
@@ -33,7 +33,7 @@ $height=(isset($_REQUEST['height']))?$_REQUEST['height']:270;
 $left=(isset($_REQUEST['left']))?$_REQUEST['left']:50;
 $right=(isset($_REQUEST['right']))?$_REQUEST['right']:130;
 $top=(isset($_REQUEST['top']))?$_REQUEST['top']:50;
-$bottom=(isset($_REQUEST['bottom']))?$_REQUEST['bottom']:50;
+$bottom=(isset($_REQUEST['bottom']))?$_REQUEST['bottom']:60;
 $title=(isset($_REQUEST['title']))?$_REQUEST['title']:"Horizontal graph";
 $target_val=(isset($_REQUEST['target_val']))?$_REQUEST['target_val']:"";
 
@@ -44,43 +44,69 @@ $target_val=(isset($_REQUEST['target_val']))?$_REQUEST['target_val']:"";
 $graph = new Graph($width,$height);
 $graph->SetMarginColor('white');
 $graph->SetScale("textlin");
-$graph->SetFrame(false);
+//$graph->SetFrame(false);
 //$graph->SetMargin(30,50,30,30);
 $graph->SetMargin($left,$right,$top,$bottom);
 
 $graph->tabtitle->Set($title );
-//$graph->tabtitle->SetFont(FF_ARIAL,FS_BOLD,13);
 $graph->tabtitle->SetFont(FF_FONT2,FS_BOLD,13);
 
 
 $graph->yaxis->HideZeroLabel();
-$graph->ygrid->SetFill(true,'#EFEFEF@0.5','#BBCCFF@0.5');
+//$graph->ygrid->SetFill(true,'#EFEFEF@0.5','#BBCCFF@0.5');
+//$graph->ygrid->SetFill(true,'#E3FDFA@0.5','#F4FDF5@0.5');
 $graph->xgrid->Show();
+//$graph->xgrid->Show();
 
-//$graph->xaxis->SetTickLabels($gDateLocale->GetShortMonth());
-
+$thick=6;
 // Create the lines of the Graph
 for($i=0;$i<count($datavalue);$i++)
 {
 	$data=$datavalue[$i];
 	$graph_data=explode(",",$data);
+
 	$name=$name_value[$i];
-		
+	
+//	$lineplot ->SetWeight($i);	
 	$color_val=$color_array[$i];
 	$temp="p".$i;
-	system("echo 'data value $data' >> /tmp/rama.tmp ");
 	$$temp = new LinePlot($graph_data);
 	$$temp->SetColor($color_val);
 	$$temp->SetLegend($name);
+
+	$x_thick=$thick-$i;	
+	if($x_thick<=1)
+		$x_thick=1;
+
+	$$temp->SetWeight($x_thick);
 	$graph->Add($$temp);
-	
+
+	$max=0;
+	for($j=0;$j<count($graph_data); $j++)
+	{
+		$x=$graph_data[$j];
+		if($x>=$max)
+			$max=$x;
+		else
+			$max=$max;
+	}
 }
 
-//$graph->legend->SetShadow('gray@0.4',5);
-//$graph->legend->SetPos(0.1,0.1,'right','top');
-//$graph->legend->SetPos(0.1,0.1,'right','center');
+
+if($max>=5)
+{
+	$graph->yaxis->SetLabelFormat('%d');
+}
 $graph->legend->Pos(0,0.4,"right","center");
 
+// Set some other color then the boring default
+$graph->SetColor("#CCDFCC");
+$graph->SetMarginColor("#98C098");
+
+
+//$graph->xaxis->SetTextAlign('center','top');
+$graph->xaxis->SetTickLabels($datax);
+$graph->xaxis->SetLabelAngle(90);
 
 // Output line
 $graph->Stroke();

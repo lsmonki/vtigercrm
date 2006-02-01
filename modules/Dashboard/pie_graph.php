@@ -11,43 +11,76 @@
  ********************************************************************************/
 
 
-include ("../../jpgraph/src/jpgraph.php");
-include ("../../jpgraph/src/jpgraph_pie.php");
-include ("../../jpgraph/src/jpgraph_pie3d.php");
+//include ("../../jpgraph/src/jpgraph.php");
+//include ("../../jpgraph/src/jpgraph_pie.php");
+//include ("../../jpgraph/src/jpgraph_pie3d.php");
+//include ("jpgraph/src/jpgraph.php");
+include ("jpgraph/src/jpgraph_pie.php");
+include ("jpgraph/src/jpgraph_pie3d.php");
 
 
-$referdata=(isset($HTTP_GET_VARS['referdata']))?$HTTP_GET_VARS['referdata']:"0,0";
-$refer_code=(isset($HTTP_GET_VARS['refer_code']))?$HTTP_GET_VARS['refer_code']:"0,0";
+function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_image_name)
+{
+	
+
+	global $log,$root_directory;
+
+	//system("echo ' -- In pie charttttttttt>>>  ---------------- ' >> /tmp/rama.tmp ");
+	$datay=explode(",",$referdata);
+	$datax=explode(",",$refer_code);
+
+	$target_val=urldecode($target_val);
+	$target=explode(",",$target_val);
+
+	$alts=array();
+	for($i=0;$i<count($datax); $i++)
+	{
+		$name=$datax[$i];
+                $pos = substr_count($name," ");
+                $alts[]=$name."=%d";
+	}
+
+	$graph = new PieGraph($width,$height,"auto");
 
 
-$title=(isset($HTTP_GET_VARS['title']))?$HTTP_GET_VARS['title']:"Horizontal graph";
-$target_val=(isset($HTTP_GET_VARS['target_val']))?$HTTP_GET_VARS['target_val']:"";
-$width=($HTTP_GET_VARS['width'])?$HTTP_GET_VARS['width']:410;
-$height=($HTTP_GET_VARS['height'])?$HTTP_GET_VARS['height']:270;
-$title=(isset($HTTP_GET_VARS['title']))?$HTTP_GET_VARS['title']:"Pie graph";
+	$graph->SetShadow();
+
+	$graph->title->Set($title);
+	$graph->title->SetFont(FF_FONT1,FS_BOLD);
+
+	$p1 = new PiePlot3D($datay);
+	$p1->SetTheme("sand");
+	$p1->ExplodeSlice(1);
+	$p1->SetCenter(0.45);
+	//$p1->SetLegends($gDateLocale->GetShortMonth());
+	$p1->SetLegends($datax);
+	//$p1->ShowBorder(false);
 
 
-$datay=explode(",",$referdata);
-$datax=explode(",",$refer_code);
+	// Setup the labels
+	$p1->SetLabelType(PIE_VALUE_PER);    
+	$p1->value->Show();            
+	//$p1->value->SetFont(FF_ARIAL,FS_NORMAL,9);    
+	//$p1->value->SetFormat('%2.1f%%');        
+	$p1->value->SetFormat('%2.1f%%');        
+	//$p1->value->SetFormat("$datax\n$datay('%2.1f%')");
 
-$data = array(40,60,21,33);
 
-$graph = new PieGraph($width,$height,"auto");
+	$p1->SetCSIMTargets($target,$alts);
+	// Don't display the border
+	$graph->SetFrame(false);
 
+	$graph->Add($p1);
 
-$graph->SetShadow();
+	$graph-> Stroke( $cache_file_name );
+        $imgMap = $graph ->GetHTMLImageMap ($html_image_name);
+        save_image_map($cache_file_name.'.map', $imgMap);
+        $base_name_cache_file=basename($cache_file_name);
+        $ccc="cache/images/".$base_name_cache_file;
+        $img = "<img src=$ccc ismap usemap='#$html_image_name' border=0>" ;
+        $img.=$imgMap;
+        echo $img;
 
-$graph->title->Set($title);
-$graph->title->SetFont(FF_FONT1,FS_BOLD);
-
-$p1 = new PiePlot3D($datay);
-$p1->ExplodeSlice(1);
-$p1->SetCenter(0.45);
-//$p1->SetLegends($gDateLocale->GetShortMonth());
-$p1->SetLegends($datax);
-
-$graph->Add($p1);
-$graph->Stroke();
-
+}
 ?>
 
