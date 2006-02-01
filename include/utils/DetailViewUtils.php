@@ -142,7 +142,23 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 	}
 	elseif($uitype == 55)
         {
-		$label_fld[] =$mod_strings[$fieldlabel];
+		if($tabid == 4)
+                {
+                        $query="select contactdetails.imagename from contactdetails where contactid=".$col_fields['record_id'];
+                        $result = $adb->query($query);
+                        $imagename=$adb->query_result($result,0,'imagename');
+                        if($imagename != '')
+                        {
+                                $imgpath = "test/contact/".$imagename;
+                                $label_fld[] ='<div style="position:absolute;height=100px"><img class="thumbnail" src="'.$imgpath.'" width="80" height="75" border="0"></div>&nbsp;'.$mod_strings[$fieldlabel];
+                        }
+                        else
+                                $label_fld[] =$mod_strings[$fieldlabel];
+                }
+                else
+                {
+                        $label_fld[] =$mod_strings[$fieldlabel];
+                }
                 $value = $col_fields[$fieldname];
                 $sal_value = $col_fields["salutationtype"];
                 if($sal_value == '--None--')
