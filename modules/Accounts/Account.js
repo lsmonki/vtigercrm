@@ -315,3 +315,29 @@ function submitform(id){
 		document.massdelete.submit();
 }	
 
+function searchMapLocation(addressType)
+{
+        var mapParameter = '';
+        if (addressType == 'Main')
+        {
+                mapParameter = getObj("Billing Address").value+' '
+                           +getObj("Billing Po Box").value+' '
+                           +getObj("Billing City").value+' '
+                           +getObj("Billing State").value+' '
+                           +getObj("Billing Country").value+' '
+                           +getObj("Billing Code").value
+        }
+        else if (addressType == 'Other')
+        {
+                mapParameter = getObj("Shipping Address").value+' '
+                           +getObj("Shipping Po Box").value+' '
+                           +getObj("Shipping City").value+' '
+                           +getObj("Shipping State").value+' '
+                           +getObj("Shipping Country").value+' '
+                           +getObj("Shipping Code").value
+        }
+        document.DetailView.action="http://maps.google.com/maps?q="+mapParameter
+        document.DetailView.target="_blank"
+        document.DetailView.submit()
+}
+
