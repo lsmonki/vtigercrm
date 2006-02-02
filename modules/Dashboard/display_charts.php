@@ -1,4 +1,16 @@
 <?php
+
+/*********************************************************************************
+** The contents of this file are subject to the vtiger CRM Public License Version 1.0
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is:  vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
+*
+ ********************************************************************************/
+
+
 	include("modules/Dashboard/Entity_charts.php");
         include("modules/Dashboard/horizontal_bargraph.php");
         include("modules/Dashboard/vertical_bargraph.php");
@@ -7,26 +19,32 @@
 global $tmp_dir;
 
 
-$period=($_REQUEST['period'])?$_REQUEST['period']:"lmon";
+$period=($_REQUEST['period'])?$_REQUEST['period']:"lmon"; 
+// Period >> lmon- Last Month, tmon- This Month, lweek-LastWeek, tweek-ThisWeek
+// lday- Last Day 
 $type=($_REQUEST['type'])?$_REQUEST['type']:"leadsource";
-$dates_values=start_end_dates($period);
-$date_start=$dates_values[0];
-$end_date=$dates_values[1];
-$period_type=$dates_values[2];
+$dates_values=start_end_dates($period); //To get the stating and End dates for a given period 
+$date_start=$dates_values[0]; //Starting date 
+$end_date=$dates_values[1]; // Ending Date
+$period_type=$dates_values[2]; //Period type as MONTH,WEEK,LDAY
 $width=$dates_values[3];
 $height=$dates_values[4];
 
+//It gives all the dates in between the starting and ending dates and also gives the number of days,declared in utils.php
 $no_days_dates=get_days_n_dates($date_start,$end_date);
 $days=$no_days_dates[0];
-$date_array=$no_days_dates[1];
+$date_array=$no_days_dates[1]; //Array containig all the dates 
 $user_id=$current_user->id;
 
-
+// Query for Leads
 $leads_query="select crmentity.crmid,crmentity.createdtime, leaddetails.*, crmentity.smownerid, leadscf.* from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid left join leadgrouprelation on leadscf.leadid=leadgrouprelation.leadid left join groups on groups.groupname=leadgrouprelation.groupname where crmentity.deleted=0 and leaddetails.converted=0 ";
 
+
+//Query for Accounts
 $account_query="select crmentity.*, account.*, accountscf.* from account left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid left join accountgrouprelation on accountscf.accountid=accountgrouprelation.accountid left join groups on groups.groupname=accountgrouprelation.groupname where crmentity.deleted=0 ";
 
 
+//Query For Products
 $products_query="select distinct(crmentity.crmid),crmentity.createdtime,products.*, productcf.* from products inner join crmentity on crmentity.crmid=products.productid left join productcf on products.productid = productcf.productid left join seproductsrel on seproductsrel.productid = products.productid where crmentity.deleted=0 ";
 
 //Query for Potential
@@ -238,16 +256,20 @@ if($type == "ticketsbypriority")
 }
 
 
+ /**  This function returns  the values for the graph, for any type of graph needed	 
+        * Portions created by vtiger are Copyright (C) vtiger.
+        * All Rights Reserved.
+        * Contributor(s): ______________________________________..
+ */
 
-
-//Function  to get the graph details based upon the type of the graph
 function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 {
 	global $user_id,$date_start,$end_date,$type;
 
+	//Giving the Cached image name	
 	$cache_file_name=abs(crc32($user_id))."_".$type."_".crc32($date_start.$end_date).".png";
+        $html_imagename=$graph_by; //Html image name for the graph
 
-        $html_imagename=$graph_by;
         $graph_details=module_Chart($user_id,$date_start,$end_date,$query,$graph_by,$graph_title,$where,$module,$type);
 
         if($graph_details!=0)
@@ -259,6 +281,7 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
                 $graph_date=$graph_details[4];
                 $urlstring=$graph_details[5];
                 $cnt_table=$graph_details[6];
+                $test_target_val=$graph_details[7];
 
                 $width=350;
                 $height=400;
@@ -267,13 +290,21 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
                 $bottom=120;
                 $title=$graph_title;
 
-                get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring);
+                get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val);
         }
  
 }
 
+ /** Returns  the Horizontal,vertical, pie graphs and Accumulated Graphs 
+	for the details
+        * Portions created by vtiger are Copyright (C) vtiger.
+        * All Rights Reserved.
+        * Contributor(s): ______________________________________..
+ */
+
+
 // Function for get graphs
-function get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring)
+function get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val)
 {
 	global $tmp_dir;
 	echo <<< END
@@ -286,7 +317,7 @@ END;
 	echo <<< END
 		</td><td>
 END;
- 	render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");
+	render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");
 
 	echo <<< END
 		</td></tr>
@@ -299,10 +330,10 @@ END;
 		<tr><td>
 
 END;
+	//As the accumulated graph is not given as the function, it is called as the image 
+	echo <<< END
+        <img src="modules/Dashboard/accumulated_bargraph.php?refer_code=$graph_date&referdata=$name_val&width=350&height=600&left=70&datavalue=$urlstring&title=$lead_graph_title&test=$test_target_val" border="0">
 
-       // <img src="modules/Dashboard/accumulated_bargraph.php?refer_code=$graph_date&referdata=$name_val&width=350&height=600&left=110&datavalue=$urlstring&title=$lead_graph_title" border="0">
-
-	 echo <<< END
 	
         </td></tr>
 		</table>
@@ -311,12 +342,21 @@ END;
 
 }
 
+ /** Returns graph, if the cached image is present it'll display that image,
+	otherwise it will render the graph with the given details	
+	* Portions created by vtiger are Copyright (C) vtiger.
+	* All Rights Reserved.
+        * Contributor(s): ______________________________________..
+ */
 
-
+// Function to get the chached image if exists
 function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_type)
 {
+
+	//Checks whether the cached image is present or not
 	if (!file_exists($cache_file_name) || !file_exists($cache_file_name.'.map')) 
 	{
+		//If the Cached image is not present
 		if($graph_type=="horizontal")
 		{
 			horizontal_graph($cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_imagename);
@@ -333,6 +373,7 @@ function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width
 	}
 	else
 	{
+		//Getting the cached image
 		$imgMap_fp = fopen($cache_file_name.'.map', "rb");
 		$imgMap = fread($imgMap_fp, filesize($cache_file_name.'.map'));
 		fclose($imgMap_fp);

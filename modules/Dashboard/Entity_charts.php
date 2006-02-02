@@ -1,4 +1,5 @@
-<?
+<?php
+
 
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
@@ -14,6 +15,14 @@ require_once('include/utils/utils.php');
 require_once('include/database/PearDatabase.php');
 require_once('include/utils/CommonUtils.php');
 
+//To get the account names
+
+/*
+	Function to get the Account name for a given account id
+        * Portions created by vtiger are Copyright (C) vtiger.
+        * All Rights Reserved.
+         * Contributor(s): ______________________________________..
+ */
 
 function get_account_name($acc_id)
 {
@@ -36,6 +45,13 @@ function get_account_name($acc_id)
 	return $name;
 }
 
+/*   Function returns the values to render the graph for a particular type 
+        * Portions created by vtiger are Copyright (C) vtiger.
+        * All Rights Reserved.
+         * Contributor(s): ______________________________________..
+ */
+
+// TO get the Values for a particular graph type 
 function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$query,$graph_for,$title,$added_qry="",$module="",$graph_type)
 {
 		
@@ -58,17 +74,15 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
         $mod_cnt_crtd_date="";
 	$target_val="";
 	$bar_target_val="";
+	$test_target_val="";
 
         if($no_of_rows!=0)
         {
                 while($row = $adb->fetch_array($result))
                 {
-			
                         $mod_name= $row[$graph_for];
-			
                         if($mod_name=="")
                                 $mod_name="Un Assigned";
-
                         $crtd_time=$row['createdtime'];
                         $crtd_time_array=explode(" ",$crtd_time);
                         $crtd_date=$crtd_time_array[0];
@@ -80,15 +94,16 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 
                         if (in_array($mod_name,$mod_name_array) == false)
                         {
-                                array_push($mod_name_array,$mod_name); // getting all the unique mod into the array
+                                array_push($mod_name_array,$mod_name); // getting all the unique Names into the array
 			}
 			
+			//Counting the number of values for a type of graph
                         if(!isset($mod_count_array[$mod_name]))
                                 $mod_count_array[$mod_name]=0;
                         $mod_count_array[$mod_name]++;
 
+			//Counting the number of values for a type of graph for a particular date
                         if(!isset($count_by_date[$mod_name][$crtd_date]))
-
                                 $count_by_date[$mod_name][$crtd_date]=0;
 
                         $count_by_date[$mod_name][$crtd_date]+=1;
@@ -102,7 +117,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
                         $mod_cnt_table="<table border=0 cellspacing=1 cellpadding=3><tr>
                                 <th>  Status </th>";
 
-                        //Assigning the Header values to the Graph
+                        //Assigning the Header values to the table and giving the dates as graphformat 
                         for($i=0; $i<$days; $i++)
                         {
                                 $tdate=$date_array[$i];
@@ -114,6 +129,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
                         }
                         $mod_cnt_table .= "<th>Total</th></tr>" ;
 
+			//For all type of the array 
                         for ($i=0;$i<count($mod_name_array); $i++)
                         {
                                 $name=$mod_name_array[$i];
@@ -132,6 +148,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 
                                 $mod_cnt_table .= "<tr><td>$name_val_table</td>";
 				$mod_cnt_crtd_date="";
+				//For all the days
                                 for($j=0;$j<$days;$j++)
                                 {
                                  	$tdate=$date_array[$j];
@@ -188,7 +205,7 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 
 				if($module!="")
 				{
-
+					//Check for Ticket Priority 
 					if(($graph_type=="ticketsbypriority"))
 					{
 						$graph_for="ticketpriorities";
@@ -196,17 +213,25 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 
 					$link_val="index.php?module=".$module."&action=index&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true";
 
+					//Adding the links to the graph	
 					if($i==0)
 						$bar_target_val .=$link_val;
 					else
 						$bar_target_val .=",".$link_val;
 				}
+				//The data as per given date
                                 if($i==0)
                                         $urlstring .=$mod_cnt_crtd_date;
                                 else
                                         $urlstring .="K".$mod_cnt_crtd_date;
-                        }
-                         $mod_cnt_table .="</tr><tr><td class=\"$class\">Total</td>";
+
+				if($i==0)
+					$test_target_val.=$link_val;
+				else
+					 $test_target_val.="K".$link_val;
+                         }
+                        $mod_cnt_table .="</tr><tr><td class=\"$class\">Total</td>";
+			//For all Days getting the table 
                         for($k=0; $k<$days;$k++)
                         {
                                 $tdate=$date_array[$k];
@@ -221,24 +246,32 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
                         $mod_cnt_table.="</table>";
                         $title_of_graph="$title : $cnt_total";
 			$bar_target_val=urlencode($bar_target_val);
+			$test_target_val=urlencode($test_target_val);
 
 		
-                        $Prod_mod_val=array($mod_name_val,$mod_cnt_val,$title_of_graph,$bar_target_val,$mod_graph_date,$urlstring,$mod_cnt_table);	
+                        $Prod_mod_val=array($mod_name_val,$mod_cnt_val,$title_of_graph,$bar_target_val,$mod_graph_date,$urlstring,$mod_cnt_table,$test_target_val);	
                         return $Prod_mod_val;
                 }
                 else
                 {
                         $data=0;
                 }
+		 
         }
 	else
         {
                 $data=0;
-                echo "<h3> No ROWSSSSSSSSSSSSSSSSSS </h3>";
         }
          return $data;
 }
 
+
+/** Saving the images of the graph in the /cache/images
+        otherwise it will render the graph with the given details
+        * Portions created by vtiger are Copyright (C) vtiger.
+        * All Rights Reserved.
+        * Contributor(s): ______________________________________..
+ */
 
 
 function save_image_map($filename,$image_map)

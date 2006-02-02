@@ -10,22 +10,26 @@
 *
  ********************************************************************************/
 
-//include ("../../jpgraph/src/jpgraph.php");
-//include ("../../jpgraph/src/jpgraph_bar.php");
-
 include ("jpgraph/src/jpgraph.php");
 include ("jpgraph/src/jpgraph_bar.php");
 require_once('config.php');
 
 $tmp_dir=$root_directory."cache/images/";
 
+/** Function to render the Horizontal Graph
+        * Portions created by vtiger are Copyright (C) vtiger.
+        * All Rights Reserved.
+        * Contributor(s): ______________________________________..
+ */
 function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_image_name)
 {
 
 	global $log,$root_directory;
-	$datay=explode(",",$referdata);
-	$datax=explode(",",$refer_code);
+//We'll be getting the values in the form of a string separated by commas
+	$datay=explode(",",$referdata); // The datay values  
+	$datax=explode(",",$refer_code); // The datax values  
 
+// The links values are given as string in the encoded form, here we are decoding it
 	$target_val=urldecode($target_val);
 	$target=explode(",",$target_val);
 
@@ -36,7 +40,7 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 		$name=$datax[$i];
 		$pos = substr_count($name," ");
 		$alts[]=$name."=%d";
-
+//If the daatx value of a string is greater, adding '\n' to it so that it'll cme inh 2nd line
 		 if(strlen($name)>=14)
                         $name=substr($name, 0, 14);
 		if($pos>=2)
@@ -70,6 +74,7 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	$graph = new Graph($width,$height,'auto');
 	$graph->SetScale("textlin");
 
+	// To get a horizontal Graph	
 	$graph->Set90AndMargin($left,$right,$top,$bottom);
 
 	$graph->xaxis->SetPos('min');
@@ -147,6 +152,7 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	$bplot->value->SetColor("black","gray4");
 	$bplot->value->SetFormat('%d');
 
+	//Adding this top get usemap	
 	$bplot->SetCSIMTargets($target,$alts);
 
 	$graph->SetBackgroundGradient('#E5E5E5','white',GRAD_VER,BGRAD_PLOT);
@@ -160,6 +166,8 @@ function horizontal_graph($referdata,$refer_code,$width,$height,$left,$right,$to
 	// Add the bar to the graph
 	$graph->Add($bplot);
 
+
+	//Getting the graph in the form of html page	
 	$graph-> Stroke( $cache_file_name );
 	$imgMap = $graph ->GetHTMLImageMap ($html_image_name);
 	save_image_map($cache_file_name.'.map', $imgMap);

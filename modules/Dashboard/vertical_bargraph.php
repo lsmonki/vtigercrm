@@ -14,15 +14,22 @@
 include ("jpgraph/src/jpgraph_flags.php");
 include ("jpgraph/src/jpgraph_iconplot.php");
 
+/** Function to render the Vertical Bar Graph
+        * Portions created by vtiger are Copyright (C) vtiger.
+        * All Rights Reserved.
+        * Contributor(s): ______________________________________..
+ */
+
 function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_image_name)
 {
 
-	$datay=explode(",",$referdata);
-	$datax=explode(",",$refer_code);
-	$target_val=urldecode($target_val);
+	//We'll be getting the values in the form of a string separated by commas
+	$datay=explode(",",$referdata); //The datay values
+	$datax=explode(",",$refer_code); // The datax values
+	$target_val=urldecode($target_val);// The links values for bar are given as string in the encoded form, here we are decoding it
         $target=explode(",",$target_val);
 
-	$alts=array();
+	$alts=array(); //Array which contains the data which is displayed on the mouse over
 	$temp=array();
 	for($i=0;$i<count($datax);$i++)
 	{
@@ -116,9 +123,7 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 	// Display the graph
 //	$graph->Stroke(); 
 
-	system("echo '----------- In vErticalllllllllll  ----------------- ' >> /tmp/rama.tmp ");
-
-
+        //Getting the graph in the form of html page
 	$graph-> Stroke( $cache_file_name );
 	$imgMap = $graph ->GetHTMLImageMap ($html_image_name);
         save_image_map($cache_file_name.'.map', $imgMap);
@@ -127,7 +132,6 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
         $img= "<img src=$ccc ismap usemap='#$html_image_name' border=0>" ;
         $img.=$imgMap;
         echo $img;
-	system("echo '----------- In vertttttttttttttttIMAGGGGGGGGGGGGG  ---- $img------------- ' >> /tmp/rama.tmp ");
 
 }
 ?>

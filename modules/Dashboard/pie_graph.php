@@ -11,23 +11,23 @@
  ********************************************************************************/
 
 
-//include ("../../jpgraph/src/jpgraph.php");
-//include ("../../jpgraph/src/jpgraph_pie.php");
-//include ("../../jpgraph/src/jpgraph_pie3d.php");
-//include ("jpgraph/src/jpgraph.php");
 include ("jpgraph/src/jpgraph_pie.php");
 include ("jpgraph/src/jpgraph_pie3d.php");
 
 
+/** Function to render the Horizontal Graph
+        * Portions created by vtiger are Copyright (C) vtiger.
+        * All Rights Reserved.
+        * Contributor(s): ______________________________________..
+ */
 function pie_chart($referdata,$refer_code,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$cache_file_name,$html_image_name)
 {
 	
 
 	global $log,$root_directory;
-
-	//system("echo ' -- In pie charttttttttt>>>  ---------------- ' >> /tmp/rama.tmp ");
-	$datay=explode(",",$referdata);
-	$datax=explode(",",$refer_code);
+	//We'll be getting the values in the form of a string separated by commas
+	$datay=explode(",",$referdata); // The datay values
+	$datax=explode(",",$refer_code); // The datax values
 
 	$target_val=urldecode($target_val);
 	$target=explode(",",$target_val);
