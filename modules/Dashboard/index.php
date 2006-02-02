@@ -34,33 +34,84 @@ require_once('include/logging.php');
 $log = LoggerManager::getLogger('dashboard');
 
 
-?>
-<table width=100% align="left" cellpadding="5" cellspacing="5" border="0">
-<tr>
-<td valign="top">
-<?php echo get_left_form_header($mod_strings['LBL_SALES_STAGE_FORM_TITLE']);
+	echo <<< END
+		<table width=100% align="left" cellpadding="5" cellspacing="5" border="0">
+		<tr>
+		<td valign="top">
+END;
+ 	echo get_left_form_header($mod_strings['LBL_SALES_STAGE_FORM_TITLE']);
 	include ("modules/Dashboard/Chart_pipeline_by_sales_stage.php"); 
-	echo get_left_form_footer(); ?>
-</td>
-<td valign="top">
-<?php echo get_left_form_header($mod_strings['LBL_MONTH_BY_OUTCOME']);
+	echo get_left_form_footer(); 
+ 
+	echo <<< END
+		</td>
+		<td valign="top">
+END;
+        echo get_left_form_header($mod_strings['LBL_MONTH_BY_OUTCOME']);
 	include ("modules/Dashboard/Chart_outcome_by_month.php"); 
-	echo get_left_form_footer(); ?>
-</td>
-</tr><tr>
-<td valign="top">
-<?php echo get_left_form_header($mod_strings['LBL_LEAD_SOURCE_BY_OUTCOME']);
-	include ("modules/Dashboard/Chart_lead_source_by_outcome.php"); 
-	echo get_left_form_footer(); ?>
-</td>
-<td valign="top">
-<?php echo get_left_form_header($mod_strings['LBL_LEAD_SOURCE_FORM_TITLE']);
-	include ("modules/Dashboard/Chart_pipeline_by_lead_source.php"); 
-	echo get_left_form_footer(); ?>
-</td>
-</tr>
-</table>
+	echo get_left_form_footer(); 
 
-<?php 
+	echo <<< END
+	</td>
+	</tr><tr>
+	<td valign="top">
+END;
+	echo get_left_form_header($mod_strings['LBL_LEAD_SOURCE_BY_OUTCOME']);
+	include ("modules/Dashboard/Chart_lead_source_by_outcome.php"); 
+	echo get_left_form_footer(); 
+	
+	echo <<< END
+	</td>
+	<td valign="top">
+END;
+
+	echo get_left_form_header($mod_strings['LBL_LEAD_SOURCE_FORM_TITLE']);
+	include ("modules/Dashboard/Chart_pipeline_by_lead_source.php"); 
+	echo get_left_form_footer(); 
+
+	echo <<< END
+	</td>
+	</tr>
+	<tr><td>
+	<a href="index.php?module=Dashboard&action=display_charts&type=leadsource">Charts by LeadSource</a>  
+	</td></tr>
+	<tr><td>
+	<a href="index.php?module=Dashboard&action=display_charts&type=leadstatus">Charts by LeadStatus</a>  
+	</td></tr>
+	<tr><td>
+	<a href="index.php?module=Dashboard&action=display_charts&type=leadindustry">Charts for Leads by Industry</a>  
+	</td></tr>
+	 <tr><td>
+        <a href="index.php?module=Dashboard&action=display_charts&type=salesbyleadsource">Sales by LeadSource</a>
+        </td></tr>
+	<tr><td>
+	<a href="index.php?module=Dashboard&action=display_charts&type=salesbyaccount">Sales by Account</a>  
+	</td></tr><tr><td>
+	<a href="index.php?module=Dashboard&action=display_charts&type=accountindustry">Account  by Industry</a>  
+	</td></tr><tr><td>
+	<a href="index.php?module=Dashboard&action=display_charts&type=productcategory">Products by Category</a>  
+	</td></tr><tr><td>
+	<a href="index.php?module=Dashboard&action=display_charts&type=sobyaccounts">SalesOrder by Accounts</a>  
+	</td></tr><tr><td>
+	<a href="index.php?module=Dashboard&action=display_charts&type=sobystatus">SalesOrder by Status</a>  
+	</td></tr><tr><td>
+	<a href="index.php?module=Dashboard&action=display_charts&type=pobystatus">PurchaseOrder by Status</a>
+	</td></tr><tr><td>
+        <a href="index.php?module=Dashboard&action=display_charts&type=quotesbyaccounts">Quotes by Accounts</a>
+        </td></tr><tr><td>
+        <a href="index.php?module=Dashboard&action=display_charts&type=quotesbystage">Quotes by Stage</a>
+	 </td></tr><tr><td>
+        <a href="index.php?module=Dashboard&action=display_charts&type=invoicebyacnts">Invoices by Accounts</a>
+	</td></tr><tr><td>
+        <a href="index.php?module=Dashboard&action=display_charts&type=invoicebystatus">Invoices by Status</a>
+	</td></tr><tr><td>
+        <a href="index.php?module=Dashboard&action=display_charts&type=ticketsbystatus">Tickets by Status</a>
+	</td></tr><tr><td>
+        <a href="index.php?module=Dashboard&action=display_charts&type=ticketsbypriority">Tickets by Priority</a>
+
+	</table>
+
+END;
+ 
 ?>
 
