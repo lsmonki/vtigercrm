@@ -13,8 +13,8 @@ $right=(isset($_REQUEST['right']))?$_REQUEST['right']:20;
 $top=(isset($_REQUEST['top']))?$_REQUEST['top']:40;
 $bottom=(isset($_REQUEST['bottom']))?$_REQUEST['bottom']:50;
 $title=(isset($_REQUEST['title']))?$_REQUEST['title']:"Horizontal graph";
-$target_val=(isset($_REQUEST['target_val']))?$_REQUEST['target_val']:"";
-
+//$target_val=(isset($_REQUEST['target_val']))?$_REQUEST['target_val']:"";
+$target_val=(isset($_REQUEST['test']))?$_REQUEST['test']:"";
 /*
 function accumlated_graph($refer_code,$referdata,$datavalue,$title,$target_val,$width,$height,$left,$right,$top,$bottom)
 {
@@ -23,6 +23,12 @@ function accumlated_graph($refer_code,$referdata,$datavalue,$title,$target_val,$
 	$datavalue=explode("K",$datavalue);
 	$name_value=explode(",",$referdata);
 	$datax=explode(",",$refer_code); //The values to the XAxis
+	$target_val=urldecode($target_val);
+        $target_val=explode("K",$target_val);
+
+
+
+
 	$color_array=array("#FF8B8B","#8BFF8B","#A8A8FF","#FFFF6E","#C5FFFF","#FFA8FF","#FFE28B","lightpink","burlywood2","cadetblue");
 
 	// Create the graph. These two calls are always required
@@ -36,29 +42,28 @@ function accumlated_graph($refer_code,$referdata,$datavalue,$title,$target_val,$
 	for($i=0;$i<count($datavalue);$i++)
 	{
 		$data=$datavalue[$i];
-		$graph_data=explode(",",$data);
-		$name=$name_value[$i];
+		$target=$target_val[$i];
+	        $graph_data=explode(",",$data);
+        	$data[$i]=$data;
+	        $bplot[$i] = new BarPlot($graph_data);
+        	$bplot[$i]->SetFillColor($color_array[$i]);
+		$bplot[$i]->SetWidth(10);
 
-		$color_val=$color_array[$i];
-		$temp="bplot".$i;
-		//	system("echo 'temppppppppppppp   -- >>>  $yes----------------- ' >> /tmp/rama.tmp ");
-		$$temp = new BarPlot($graph_data);
-		$$temp->SetFillColor($color_val);
-		$$temp->SetColor($color_val);
+                $bplot[$i]->value->Show();
+                $bplot[$i]->value->SetFont(FF_FONT1,FS_NORMAL,8);
+                $bplot[$i]->value->SetColor("black");
+                $bplot[$i]->value->SetFormat('%d');
+                $bplot[$i]->SetValuePos('max');
 
-		$$temp->SetWidth(1.0);
-		$$temp->value->Show();
-		$$temp->value->SetFormat('%d');
-		$$temp->SetValuePos('top');
-
-		$$temp->value->SetColor('black');
-
-		$graph->Add($$temp);
 	}
 
+	$gbplot = new AccBarPlot($bplot);
+	$gbplot->SetWidth(0.7);
+
+        // Add the bar to the graph
+        $graph->Add($gbplot);
+
 	$graph->xaxis->SetTickLabels($datax);
-	//$graph->xaxis->SetFont(FF_FONT1,FS_NORMAL,8);
-	//$graph->xaxis->SetLabelAngle(45);
 
 	$graph->title->Set($title);
 
