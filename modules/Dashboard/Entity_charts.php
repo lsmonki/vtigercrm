@@ -36,7 +36,7 @@ function get_account_name($acc_id)
 	return $name;
 }
 
-function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$query,$graph_for,$title,$added_qry="",$module="")
+function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$query,$graph_for,$title,$added_qry="",$module="",$graph_type)
 {
 		
         global $adb;
@@ -46,7 +46,6 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
         $query.=$where;
 	if($added_qry!="")
 		$query.=$added_qry;
-
 
         $result=$adb->query($query);
         $no_of_rows=$adb->num_rows($result);
@@ -64,9 +63,9 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
         {
                 while($row = $adb->fetch_array($result))
                 {
+			
                         $mod_name= $row[$graph_for];
-
-
+			
                         if($mod_name=="")
                                 $mod_name="Un Assigned";
 
@@ -189,6 +188,12 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
 
 				if($module!="")
 				{
+
+					if(($graph_type=="ticketsbypriority"))
+					{
+						$graph_for="ticketpriorities";
+					}
+
 					$link_val="index.php?module=".$module."&action=index&search_text=".$name."&search_field=".$graph_for."&searchtype=BasicSearch&query=true";
 
 					if($i==0)
