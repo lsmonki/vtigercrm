@@ -38,7 +38,7 @@ function add_data_to_relatedlist(entity_id,recordid) {ldelim}
 		                                  <input name="action" type="hidden" value="ChooseEmail">
                   		                  <input name="pmodule" type="hidden" value="{$MODULE}">
 		                                  <input name="entityid" type="hidden" value="">
-                        	                  <td style="padding-right:20px" nowrap>&nbsp;{$RECORD_COUNTS}</td>
+                        	                  <td style="padding-right:20px" nowrap class="small">&nbsp;{$RECORD_COUNTS}</td>
 			                          <td nowrap>{$NAVIGATION}</td>
 						 </tr>
 						</table>
