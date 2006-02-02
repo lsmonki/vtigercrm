@@ -69,11 +69,13 @@ END;
 	include ("modules/Dashboard/Chart_pipeline_by_lead_source.php"); 
 	echo get_left_form_footer(); 
 
+//Added to get the graphs
 	echo <<< END
 	</td>
 	</tr>
 	<tr><td>
 	<a href="index.php?module=Dashboard&action=display_charts&type=leadsource">Charts by LeadSource</a>  
+
 	</td></tr>
 	<tr><td>
 	<a href="index.php?module=Dashboard&action=display_charts&type=leadstatus">Charts by LeadStatus</a>  
@@ -109,6 +111,7 @@ END;
 	</td></tr><tr><td>
         <a href="index.php?module=Dashboard&action=display_charts&type=ticketsbypriority">Tickets by Priority</a>
 
+	</td></tr>
 	</table>
 
 END;
