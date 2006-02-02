@@ -1,6 +1,4 @@
 <?php
-
-//	include("modules/Dashboard/Charts_for_Invoice.php");
 	include("modules/Dashboard/Entity_charts.php");
         include("modules/Dashboard/horizontal_bargraph.php");
         include("modules/Dashboard/vertical_bargraph.php");
@@ -9,7 +7,8 @@
 global $tmp_dir;
 
 
-$period=($HTTP_GET_VARS['period'])?$HTTP_GET_VARS['period']:"tmon";
+$period=($_REQUEST['period'])?$_REQUEST['period']:"lmon";
+$type=($_REQUEST['type'])?$_REQUEST['type']:"leadsource";
 $dates_values=start_end_dates($period);
 $date_start=$dates_values[0];
 $end_date=$dates_values[1];
@@ -23,68 +22,295 @@ $date_array=$no_days_dates[1];
 $user_id=$current_user->id;
 
 
-$leads_query="select crmentity.crmid,crmentity.createdtime, leaddetails.*, crmentity.smownerid, leadscf.* from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid left join leadgrouprelation on leadscf.leadid=leadgrouprelation.leadid left join groups on groups.groupname=leadgrouprelation.groupname where crmentity.deleted=0 and leaddetails.converted=0";
+$leads_query="select crmentity.crmid,crmentity.createdtime, leaddetails.*, crmentity.smownerid, leadscf.* from leaddetails inner join crmentity on crmentity.crmid=leaddetails.leadid inner join leadsubdetails on leadsubdetails.leadsubscriptionid=leaddetails.leadid inner join leadaddress on leadaddress.leadaddressid=leadsubdetails.leadsubscriptionid inner join leadscf on leaddetails.leadid = leadscf.leadid left join leadgrouprelation on leadscf.leadid=leadgrouprelation.leadid left join groups on groups.groupname=leadgrouprelation.groupname where crmentity.deleted=0 and leaddetails.converted=0 ";
 
-$leads_by="leadsource";
-$leads_title="Leads By Source";
-$module="Leads";
-$where="";
+$account_query="select crmentity.*, account.*, accountscf.* from account left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=account.accountid inner join accountbillads on account.accountid=accountbillads.accountaddressid inner join accountshipads on account.accountid=accountshipads.accountaddressid inner join accountscf on account.accountid = accountscf.accountid left join accountgrouprelation on accountscf.accountid=accountgrouprelation.accountid left join groups on groups.groupname=accountgrouprelation.groupname where crmentity.deleted=0 ";
 
-$cache_file_name=abs(crc32($user_id))."_".$leads_by."_".crc32($date_start.$end_date).".png";
 
-$cache_file_name=$cache_file_name;
+$products_query="select distinct(crmentity.crmid),crmentity.createdtime,products.*, productcf.* from products inner join crmentity on crmentity.crmid=products.productid left join productcf on products.productid = productcf.productid left join seproductsrel on seproductsrel.productid = products.productid where crmentity.deleted=0 ";
 
-$html_imagename=$leads_by;
-$Leads_by_source=module_Chart($user_id,$date_start,$end_date,$leads_query,$leads_by,$leads_title,$where,$module);
+//Query for Potential
+$potential_query= "select  crmentity.*,account.accountname, potential.*, potentialscf.* from potential left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=potential.potentialid inner join account on potential.accountid = account.accountid inner join potentialscf on potentialscf.potentialid = potential.potentialid left join potentialgrouprelation on potential.potentialid=potentialgrouprelation.potentialid left join groups on groups.groupname=potentialgrouprelation.groupname where crmentity.deleted=0 ";
 
-if($Leads_by_source!=0)
+//Query for Sales Order
+$so_query="select crmentity.*,salesorder.*,account.accountid,quotes.quoteid from salesorder left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=salesorder.salesorderid inner join sobillads on salesorder.salesorderid=sobillads.sobilladdressid inner join soshipads on salesorder.salesorderid=soshipads.soshipaddressid left join salesordercf on salesordercf.salesorderid = salesorder.salesorderid left outer join quotes on quotes.quoteid=salesorder.quoteid left outer join account on account.accountid=salesorder.accountid left join sogrouprelation on salesorder.salesorderid=sogrouprelation.salesorderid left join groups on groups.groupname=sogrouprelation.groupname where crmentity.deleted=0 ";
+
+
+//Query for Purchase Order
+
+$po_query="select crmentity.*,purchaseorder.* from purchaseorder left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=purchaseorder.purchaseorderid left outer join vendor on purchaseorder.vendorid=vendor.vendorid inner join pobillads on purchaseorder.purchaseorderid=pobillads.pobilladdressid inner join poshipads on purchaseorder.purchaseorderid=poshipads.poshipaddressid left join purchaseordercf on purchaseordercf.purchaseorderid = purchaseorder.purchaseorderid left join pogrouprelation on purchaseorder.purchaseorderid=pogrouprelation.purchaseorderid left join groups on groups.groupname=pogrouprelation.groupname where crmentity.deleted=0 ";
+
+// Query for Quotes
+$quotes_query="select crmentity.*,quotes.* from quotes left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=quotes.quoteid inner join quotesbillads on quotes.quoteid=quotesbillads.quotebilladdressid inner join quotesshipads on quotes.quoteid=quotesshipads.quoteshipaddressid left join quotescf on quotes.quoteid = quotescf.quoteid left outer join account on account.accountid=quotes.accountid left outer join potential on potential.potentialid=quotes.potentialid left join quotegrouprelation on quotes.quoteid=quotegrouprelation.quoteid left join groups on groups.groupname=quotegrouprelation.groupname where crmentity.deleted=0 ";
+
+//Query for Invoice
+$invoice_query="select crmentity.*,invoice.* from invoice left join users on users.id=crmentity.smownerid inner join crmentity on crmentity.crmid=invoice.invoiceid inner join invoicebillads on invoice.invoiceid=invoicebillads.invoicebilladdressid inner join invoiceshipads on invoice.invoiceid=invoiceshipads.invoiceshipaddressid left outer join salesorder on salesorder.salesorderid=invoice.salesorderid inner join invoicecf on invoice.invoiceid = invoicecf.invoiceid left join invoicegrouprelation on invoice.invoiceid=invoicegrouprelation.invoiceid left join groups on groups.groupname=invoicegrouprelation.groupname where crmentity.deleted=0 ";
+
+//Query for tickets
+$helpdesk_query=" select troubletickets.status ticketstatus, troubletickets.*,crmentity.* from troubletickets inner join ticketcf on ticketcf.ticketid = troubletickets.ticketid inner join crmentity on crmentity.crmid=troubletickets.ticketid left join ticketgrouprelation on troubletickets.ticketid=ticketgrouprelation.ticketid left join groups on groups.groupname=ticketgrouprelation.groupname left join contactdetails on troubletickets.parent_id=contactdetails.contactid left join account on account.accountid=troubletickets.parent_id left join users on crmentity.smownerid=users.id and troubletickets.ticketid = ticketcf.ticketid where crmentity.deleted=0";
+
+
+
+//Charts for Lead Source
+if($type == "leadsource")
 {
-	$lead_name_val=$Leads_by_source[0];
-	$lead_cnt_val=$Leads_by_source[1];
-	$lead_graph_title=$Leads_by_source[2];
-	$target_val=$Leads_by_source[3];	
-	$lead_graph_date=$Leads_by_source[4];
-	$urlstring=$Leads_by_source[5];
-	$lead_cnt_table=$Leads_by_source[6];
+	$graph_by="leadsource";
+	$graph_title="Leads By Source";
+	$module="Leads";
+	$where="";
+	$query=$leads_query;
 
-	$width=350;
-	$height=400;
-	$top=30;
-	$left=140;
-	$bottom=120;
-	$title=$lead_graph_title;
+	get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
 
+}
+// To display the charts  for Lead status
+
+if ($type == "leadstatus")
+{
+	$graph_by="leadstatus";
+	$graph_title="Leads By Status";
+	$module="Leads";
+	$where="";
+	$query=$leads_query;
+	get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+//Charts for Lead Industry
+if($type == "leadindustry")
+{
+	$graph_by="industry";
+        $graph_title="Leads By Industry";
+        $module="Leads";
+        $where="";
+        $query=$leads_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+//Sales by Lead Source
+if($type == "salesbyleadsource")
+{
+        $graph_by="leadsource";
+        $graph_title="Sales by LeadSource";
+        $module="Potentials";
+        $where=" and potential.sales_stage like '%Closed Won%' ";
+        $query=$potential_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+
+//Sales by Account
+if($type == "salesbyaccount")
+{
+	$graph_by="accountid";
+        $graph_title="Sales by Accounts";
+        $module="Potentials";
+        $where=" and potential.sales_stage like '%Closed Won%' ";
+        $query=$potential_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+
+
+//Charts for Account by Industry
+if($type == "accountindustry")
+{
+	$graph_by="industry";
+        $graph_title="Account By Industry";
+        $module="Accounts";
+        $where="";
+        $query=$account_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+//Charts for Products by Category
+if($type == "productcategory")
+{
+	$graph_by="productcategory";
+        $graph_title="Products by Category";
+        $module="Products";
+        $where="";
+        $query=$products_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+// Sales Order by Accounts
+if($type == "sobyaccounts")
+{
+	$graph_by="accountid";
+        $graph_title="Sales Order by Accounts";
+        $module="SalesOrder";
+        $where="";
+        $query=$so_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+//Sales Order by Status
+if($type == "sobystatus")
+{
+        $graph_by="sostatus";
+        $graph_title="Sales Order by Status";
+        $module="SalesOrder";
+        $where="";
+        $query=$so_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+//Purchase Order by Status
+if($type == "pobystatus")
+{
+        $graph_by="postatus";
+        $graph_title="Purchase Order by Status";
+        $module="PurchaseOrder";
+        $where="";
+        $query=$po_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+
+
+//Quotes by Accounts
+if($type == "quotesbyaccounts")
+{
+        $graph_by="accountid";
+        $graph_title="Quotes by Accounts";
+        $module="Quotes";
+        $where="";
+        $query=$quotes_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+
+//Quotes by Stage
+if($type == "quotesbystage")
+{
+        $graph_by="quotestage";
+        $graph_title="Quotes by Stage";
+        $module="Quotes";
+        $where="";
+        $query=$quotes_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+
+//Invoice by Accounts
+if($type == "invoicebyacnts")
+{
+        $graph_by="accountid";
+        $graph_title="Invoices by Accounts";
+        $module="Invoice";
+        $where="";
+        $query=$invoice_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+
+//Invoices by status
+if($type == "invoicebystatus")
+{
+        $graph_by="invoicestatus";
+        $graph_title="Invoices by status";
+        $module="Invoice";
+        $where="";
+        $query=$invoice_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+//Tickets by Status
+if($type == "ticketsbystatus")
+{
+        $graph_by="ticketstatus";
+        $graph_title="Tickets by status";
+        $module="HelpDesk";
+        $where="";
+        $query=$helpdesk_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+//Tickets by Priority
+if($type == "ticketsbypriority")
+{
+        $graph_by="priority";
+        $graph_title="Tickets by Priority";
+        $module="HelpDesk";
+        $where="";
+        $query=$helpdesk_query;
+        get_graph_by_type($graph_by,$graph_title,$module,$where,$query);
+}
+
+
+
+
+//Function  to get the graph details based upon the type of the graph
+function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
+{
+	global $user_id,$date_start,$end_date,$type;
+
+	$cache_file_name=abs(crc32($user_id))."_".$type."_".crc32($date_start.$end_date).".png";
+
+        $html_imagename=$graph_by;
+        $graph_details=module_Chart($user_id,$date_start,$end_date,$query,$graph_by,$graph_title,$where,$module,$type);
+
+        if($graph_details!=0)
+        {
+                $name_val=$graph_details[0];
+                $cnt_val=$graph_details[1];
+                $graph_title=$graph_details[2];
+                $target_val=$graph_details[3];
+                $graph_date=$graph_details[4];
+                $urlstring=$graph_details[5];
+                $cnt_table=$graph_details[6];
+
+                $width=350;
+                $height=400;
+                $top=30;
+                $left=140;
+                $bottom=120;
+                $title=$graph_title;
+
+                get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring);
+        }
+ 
+}
+
+// Function for get graphs
+function get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring)
+{
+	global $tmp_dir;
 	echo <<< END
 		<table border=0 cellspacing=0 cellpadding=1>
 		<tr><td>	
 END;
 
- 	render_graph($tmp_dir."hor_".$cache_file_name,$html_imagename."_hor",$lead_cnt_val,$lead_name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"horizontal");
+ 	render_graph($tmp_dir."hor_".$cache_file_name,$html_imagename."_hor",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"horizontal");
 
 	echo <<< END
 		</td><td>
 END;
- 	render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$lead_cnt_val,$lead_name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");
+ 	render_graph($tmp_dir."vert_".$cache_file_name,$html_imagename."_vert",$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"vertical");
 
 	echo <<< END
 		</td></tr>
 		<tr><td>
 END;
 
- 	render_graph($tmp_dir."pie_".$cache_file_name,$html_imagename."_pie",$lead_cnt_val,$lead_name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,"pie");
+ 	render_graph($tmp_dir."pie_".$cache_file_name,$html_imagename."_pie",$cnt_val,$name_val,450,300,40,$right,$top,$bottom,$title,$target_val,"pie");
 	echo <<< END
 		</td></tr>
 		<tr><td>
 
-        <img src="modules/Dashboard/accumulated_bargraph.php?refer_code=$lead_graph_date&referdata=$lead_name_val&width=350&height=600&left=110&datavalue=$urlstring&title=$lead_graph_title" border="0">
+END;
 
+       // <img src="modules/Dashboard/accumulated_bargraph.php?refer_code=$graph_date&referdata=$name_val&width=350&height=600&left=110&datavalue=$urlstring&title=$lead_graph_title" border="0">
+
+	 echo <<< END
 	
         </td></tr>
 		</table>
 END;
-	//accumlated_graph($lead_graph_date,$lead_name_val,$urlstring,$lead_graph_title,$target_val,350,600,110,$right,$top,$bottom)
+	//accumlated_graph($graph_date,$name_val,$urlstring,$lead_graph_title,$target_val,350,600,110,$right,$top,$bottom)
 
 }
+
 
 
 function render_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_type)
