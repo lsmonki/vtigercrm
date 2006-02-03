@@ -111,7 +111,7 @@ function vertical_graph($referdata,$refer_code,$width,$height,$left,$right,$top,
 
 	$graph->title->SetFont(FF_FONT1,FS_BOLD);
 
-	$img_path="test/logo/vtiger-crm.gif";
+	$img_path="test/logo/vtiger-crm-logo.jpg";
 
 	$icon = new IconPlot($img_path,0.7,0.3,1,30);
 	$icon->SetAnchor('center','center');
