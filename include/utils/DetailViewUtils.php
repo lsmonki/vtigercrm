@@ -563,9 +563,12 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$label_fld[] =$mod_strings[$fieldlabel];
 		$display_val = '';
 		if($col_fields[$fieldname] != '' && $col_fields[$fieldname] != 0)
-		{	
-			$curr_symbol = getCurrencySymbol();
-			$display_val = $curr_symbol.' '.$col_fields[$fieldname];
+		{
+			$currencyid=fetchCurrency($current_user->id);
+                        $curr_symbol=getCurrencySymbol($currencyid);
+                        $rate = getConversionRate($currencyid,$curr_symbol);
+                        $amount_user_specific=convertFromDollar($col_fields[$fieldname],$rate);
+                        $display_val = $curr_symbol.' '.$amount_user_specific;	
 		}
 		$label_fld[] = $display_val;
 	}
