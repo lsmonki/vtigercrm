@@ -20,6 +20,7 @@
 			<DEFAULT value="0"/>
 		</field>
 		<field name="currency_id" type="I" size="19">
+			<DEFAULT value="1"/>
                         <NOTNULL/>
                 </field>
 		<field name="description" type="X"></field>
