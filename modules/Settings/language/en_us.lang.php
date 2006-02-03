@@ -64,6 +64,18 @@ $mod_strings = Array(
 
 'LBL_NEW_FORM_TITLE'=>'New Contact',
 
+'LBL_NEW_CURRENCY'=>'New Currency',
+
+'LBL_CURRENCY_NAME'=>'Currency Name',
+
+'LBL_CURRENCY_CODE'=>'Currency Code',
+
+'LBL_CURRENCY_SYMBOL'=>'Currency Symbol',
+
+'LBL_CURRENCY_CRATE'=>'Conversion Rate',
+
+'LBL_CURRENCY_STATUS'=>'Status',
+
 
 
 'NTC_DELETE_CONFIRMATION'=>'Are you sure you want to delete this record?',
@@ -233,7 +245,10 @@ $mod_strings = Array(
 'WORDINTEGRATION'=>'Mail Merge Templates',
 
 'NOTIFICATIONSCHEDULERS'=>'Notification Schedulers',
+//currency status
+'LBL_ACTIVE'=>'Active',
 
+'LBL_INACTIVE'=>'Inactive',
 
 
 //Added fields for Title Informations -- after 4 Beta
