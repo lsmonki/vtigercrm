@@ -1856,8 +1856,8 @@ Thanks,
                $this->db->query("insert into inventorynotification(notificationid,notificationname,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("inventorynotification").",'SalesOrderNotification','Sales Order generated for {PRODUCTNAME}','".$so_body." ','SalesOrderNotificationDescription')");
 
 		//Insert into currency table
-		$this->db->query("insert into currency_info values('U.S Dollar','USD','$')");
-                 
+		$this->db->query("insert into currency_info values(".$this->db->getUniqueID("currency_info").",'U.S Dollar','USD','$',1,'Active',0)");
+                
 
 
 
