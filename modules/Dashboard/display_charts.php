@@ -19,9 +19,7 @@
 global $tmp_dir;
 
 
-$period=($_REQUEST['period'])?$_REQUEST['period']:"tmon"; 
-// Period >> lmon- Last Month, tmon- This Month, lweek-LastWeek, tweek-ThisWeek
-// lday- Last Day 
+$period=($_REQUEST['period'])?$_REQUEST['period']:"tmon"; // Period >> lmon- Last Month, tmon- This Month, lweek-LastWeek, tweek-ThisWeek; lday- Last Day 
 $type=($_REQUEST['type'])?$_REQUEST['type']:"leadsource";
 $dates_values=start_end_dates($period); //To get the stating and End dates for a given period 
 $date_start=$dates_values[0]; //Starting date 
@@ -281,7 +279,8 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
                 $graph_date=$graph_details[4];
                 $urlstring=$graph_details[5];
                 $cnt_table=$graph_details[6];
-                $test_target_val=$graph_details[7];
+	       	$test_target_val=$graph_details[7];
+
 
                 $width=350;
                 $height=400;
@@ -290,8 +289,12 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
                 $bottom=120;
                 $title=$graph_title;
 
-                get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val);
+                get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val,$date_start,$end_date);
         }
+	else
+	{
+	
+	}
  
 }
 
@@ -304,10 +307,17 @@ function get_graph_by_type($graph_by,$graph_title,$module,$where,$query)
 
 
 // Function for get graphs
-function get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val)
+function get_graph($cache_file_name,$html_imagename,$cnt_val,$name_val,$width,$height,$left,$right,$top,$bottom,$title,$target_val,$graph_date,$urlstring,$test_target_val,$date_start,$end_date)
 {
+
 	global $tmp_dir;
+
+		$val=explode(":",$title); 		
+		$display_title=$val[0];	
+			
+		echo "<h2><center>  $display_title in between  $date_start and  $end_date </center></h2>";
 	echo <<< END
+		
 		<table border=0 cellspacing=0 cellpadding=1>
 		<tr><td>	
 END;
