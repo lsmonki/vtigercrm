@@ -86,7 +86,7 @@ Begin VB.Form frmAbout
          Width           =   4935
       End
       Begin VB.Label Label2 
-         Caption         =   "vtigerCRM Outlook Addin (4.5 Dev III)"
+         Caption         =   "vtigerCRM Outlook Add-In 4.5"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
