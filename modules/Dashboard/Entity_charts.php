@@ -255,12 +255,14 @@ function module_Chart($user_id,$date_start="2000-01-01",$end_date="2017-01-01",$
                 else
                 {
                         $data=0;
+	
                 }
 		 
         }
 	else
         {
                 $data=0;
+		echo "<h3> The data is not available with the specified time period</h3>";
         }
          return $data;
 }
