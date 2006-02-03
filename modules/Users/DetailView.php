@@ -88,6 +88,8 @@ require_once($theme_path.'layout_utils.php');
 
 $role = fetchUserRole($focus->id);
 $rolename =  getRoleName($role);
+$currencyid=fetchCurrency($focus->id);
+$currency=getCurrencyName($currencyid);
 //the user might belong to multiple groups
 if($focus->id != 1)
 {
@@ -184,6 +186,7 @@ $xtpl->assign("DESCRIPTION", nl2br($focus->description));
 if(is_admin($current_user))
 {
 	$xtpl->assign("ROLEASSIGNED","<a href=index.php?module=Users&action=RoleDetailView&roleid=".$role .">" .$rolename ."</a>");
+	$xtpl->assign("CURRENCY_NAME",$currency);
 }
 
 
