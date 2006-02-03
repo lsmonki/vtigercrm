@@ -19,6 +19,9 @@
 		<field name="is_admin" type="C" size="3">
 			<DEFAULT value="0"/>
 		</field>
+		<field name="currency_id" type="I" size="19">
+                        <NOTNULL/>
+                </field>
 		<field name="description" type="X"></field>
 		<field name="date_entered" type="T">
 			<NOTNULL/>
@@ -2681,11 +2684,20 @@
         </table>
 
 	<table name="currency_info">
-                <field name="currency_name" type="C" size="100">
+                <field name="id" type="I" >
                         <KEY/>
+                <AUTOINCREMENT/>
+
                 </field>
-                <field name="currency_code" type="C" size="100"> </field>
+                <field name="currency_name" type="C" size="100"></field>
+                <field name="currency_code" type="C" size="100"></field>
                 <field name="currency_symbol" type="C" size="30"> </field>
+                <field name="conversion_rate" type="N" size="5.3"> </field>
+                <field name="currency_status" type="C" size="25"> </field>
+                <field name="deleted" type="I" size="1">
+                        <NOTNULL/>
+                        <DEFAULT value="0"/>
+                </field>
                 <data>
                 </data>
         </table>
