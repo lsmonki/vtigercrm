@@ -203,6 +203,35 @@ function from_html($string, $encode=true){
         return $string;
 }
 
+/** To get the Currency of the specified user
+  * @param $id -- The user Id:: Type integer
+  * @returns  currencyid :: Type integer
+ */
+function fetchCurrency($id)
+{
+        global $adb;
+        $sql = "select currency_id from users where id=" .$id;
+        $result = $adb->query($sql);
+        $currencyid=  $adb->query_result($result,0,"currency_id");
+        return $currencyid;
+}
+
+/** Function to get the Currency name from the currency_info
+  * @param $currencyid -- currencyid:: Type integer
+  * @returns $currencyname -- Currency Name:: Type varchar
+  *
+ */
+function getCurrencyName($currencyid)
+{
+        global $adb;
+        $sql1 = "select * from currency_info where id=".$currencyid;
+        $result = $adb->query($sql1);
+        $currencyname = $adb->query_result($result,0,"currency_name");
+        $curr_symbol = $adb->query_result($result,0,"currency_symbol");
+        return $currencyname.' : '.$curr_symbol;
+}
+
+
 /**
  * Function to fetch the list of groups from group table 
  * Takes no value as input 
@@ -593,27 +622,48 @@ function getNewDisplayDate()
 	return $display_date;
 }
 
-
 function getDisplayCurrency()
 {
-	global $adb;
-	$sql1 = "select * from currency_info";
-	$result = $adb->query($sql1);
-	$curr_name = $adb->query_result($result,0,"currency_name");
-	$curr_symbol = $adb->query_result($result,0,"currency_symbol");
-	$disp_curr = $curr_name.' : '.$curr_symbol;
-	return $disp_curr;
-}	
+        global $adb;
+        $curr_array = Array();
+        $sql1 = "select * from currency_info where currency_status='Active'";
+        $result = $adb->query($sql1);
+        $num_rows=$adb->num_rows($result);
+        for($i=0; $i<$num_rows;$i++)
+        {
+                $curr_id = $adb->query_result($result,$i,"id");
+                $curr_name = $adb->query_result($result,$i,"currency_name");
+                $curr_symbol = $adb->query_result($result,$i,"currency_symbol");
+                $curr_array[$curr_id] = $curr_name.' : '.$curr_symbol;
+        }
+        return $curr_array;
+}
 
+function convertToDollar($amount,$crate){
+                return $amount / $crate;
 
+        }
 
-function getCurrencySymbol()
+function convertFromDollar($amount,$crate){
+                return $amount * $crate;
+        }
+
+function getConversionRate($id,$symbol)
 {
-	global $adb;
-	$sql1 = "select * from currency_info";
-	$result = $adb->query($sql1);
-	$curr_symbol = $adb->query_result($result,0,"currency_symbol");
-	return $curr_symbol;
+        global $adb;
+        $sql1 = "select * from currency_info where id=".$id." and currency_symbol='".$symbol."'" ;
+        $result = $adb->query($sql1);
+        $rate = $adb->query_result($result,0,"conversion_rate");
+        return $rate;
+}
+
+function getCurrencySymbol($id)
+{
+        global $adb;
+        $sql1 = "select * from currency_info where id=".$id;
+        $result = $adb->query($sql1);
+        $curr_symbol = $adb->query_result($result,0,"currency_symbol");
+        return $curr_symbol;
 }
 
 function getTermsandConditions()
