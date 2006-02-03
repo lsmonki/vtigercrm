@@ -207,6 +207,28 @@ if (is_admin($current_user)) {
                    $GROUP_SELECT_OPTION .= ' </select>';
                    
                    $xtpl->assign("GROUP_NAME", $GROUP_SELECT_OPTION);
+	
+	$CURRENCY_SELECT_OPTION = '<select name="currency_id">';
+        if($focus->id != '')
+        {
+                $currencyselectedid=fetchCurrency($focus->id);
+                $currencyselected=getCurrencyName($currencyselectedid);
+        }
+        $allCurrency=getDisplayCurrency();
+        foreach($allCurrency as $id=>$currencyInfoArr)
+        {
+               $currencyname=$currencyInfoArr;
+               $selected = '';
+               if($currencyselected != '' && $currencyname == $currencyselected)
+               {
+                       $selected = 'selected';
+               }
+               $CURRENCY_SELECT_OPTION .= '<option value="'.$id .'" '.$selected .'>';
+               $CURRENCY_SELECT_OPTION .= $currencyname;
+               $CURRENCY_SELECT_OPTION .= '</option>';
+        }
+        $CURRENCY_SELECT_OPTION .= ' </select>';
+        $xtpl->assign("CURRENCY_NAME", $CURRENCY_SELECT_OPTION);
 
 }
 $xtpl->assign("ACTIVITY_VIEW", getActivityVIew($focus->activity_view));
@@ -216,7 +238,6 @@ $xtpl->assign("LEAD_VIEW", getLeadVIew($focus->lead_view));
 		if($focus->cal_color == '') $focus->cal_color = '#E6FAD8';
 
  		$xtpl->assign("CAL_COLOR",'<INPUT TYPE="text" readonly NAME="cal_color" SIZE="10" VALUE="'.$focus->cal_color.'" style="background-color:'.$focus->cal_color.';"> <img src="include/images/bgcolor.gif" onClick="cp2.select(document.EditView.cal_color,\'pick2\');return false;" NAME="pick2" ID="pick2" align="middle">');
-		 
 
 if (isset($default_user_name)
 	&& $default_user_name != ""
