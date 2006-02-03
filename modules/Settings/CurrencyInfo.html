@@ -19,6 +19,7 @@
   <tbody><form action="index.php" method="post" name="index" id="form">
   <input type="hidden" name="module" value="Settings">
   <input type="hidden" name="action" value="index">
+  <input type="hidden" name="record" value="{ID}">
   <input type="hidden" name="return_module" value="{RETURN_MODULE}">
   <input type="hidden" name="return_action" value="{RETURN_ACTION}">
   <tr><td colspan="2" class="formSecHeader">{MOD.LBL_CURRENCY_INFO}</td></tr>
@@ -29,12 +30,25 @@
   </tr>
   <tr>
     <td nowrap class="dataLabel"><font color="red">*</font> {MOD.LBL_CURRENCY_CODE}:</td>
-    <td align="left"> <input class="dataInput" type="text" name="currency_code" value="{CURRENCY_CODE}" size="25" /> 
+    <td align="left"> <input class="dataInput" type="text" name="currency_code" value="{CURRENCY_CODE}" size="5" /> 
     </td>
   </tr>
   <tr>
     <td nowrap class="dataLabel"><font color="red">*</font> {MOD.LBL_CURRENCY_SYMBOL}:</td>
-    <td align="left"><input class="dataInput" type="text" name="currency_symbol" value="{CURRENCY_SYMBOL}" size="25" /> 
+    <td align="left"><input class="dataInput" type="text" name="currency_symbol" value="{CURRENCY_SYMBOL}" size="5" /> 
+    </td>
+  </tr>
+  <tr>
+    <td nowrap class="dataLabel"><font color="red">*</font> {MOD.LBL_CURRENCY_CRATE}:</td>
+    <td align="left"><input class="dataInput" type="text" name="conversion_rate" value="{CONVERSION_RATE}" size="25" />
+    </td>
+  </tr>
+  <tr>
+    <td nowrap class="dataLabel"><font color="red">*</font> {MOD.LBL_CURRENCY_STATUS}:</td>
+    <td align="left"><select name="currency_status" tabindex="1" value="{CURRENCY_STATUS}">
+                <option value="Active" {SELECT}>{MOD.LBL_ACTIVE}</option>
+                <option value="Inactive" {SELECT}>{MOD.LBL_INACTIVE}</option>
+                </select>  
     </td>
   </tr>
 </table>
@@ -56,7 +70,9 @@
 		if (!emptyCheck("currency_name","Currency Name","text")) return false
 			if (!emptyCheck("currency_code","Currency Code","text")) return false
 				if (!emptyCheck("currency_symbol","Currency Symbol","text")) return false
-					return true;
+					if (!emptyCheck("conversion_rate","Conversion Rate","text")) return false
+                                                if (!emptyCheck("currency_status","Currency Status","text")) return false
+							return true;
 			
 	}
 </script>
