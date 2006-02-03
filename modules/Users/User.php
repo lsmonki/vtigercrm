@@ -50,6 +50,7 @@ class User extends SugarBean {
 	var $phone_home;
 	var $phone_mobile;
 	var $phone_work;
+	var $currency_id;
 	var $phone_other;
 	var $phone_fax;
 	var $email1;
@@ -100,6 +101,7 @@ class User extends SugarBean {
 		,"title"
 		,"department"
 		,"is_admin"
+		,"currency_id"
 		,"phone_home"
 		,"phone_mobile"
 		,"phone_work"
