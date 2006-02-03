@@ -27,6 +27,10 @@ require_once('include/database/PearDatabase.php');
 $local_log =& LoggerManager::getLogger('index');
 
 $focus = new Potential();
+global $current_user;
+$currencyid=fetchCurrency($current_user->id);
+$curr_symbol=getCurrencySymbol($currencyid);
+$rate = getConversionRate($currencyid,$curr_symbol);
 
 if(isset($_REQUEST['record']))
 {
@@ -44,6 +48,11 @@ foreach($focus->column_fields as $fieldname => $val)
 		$value = $_REQUEST[$fieldname];
 		$focus->column_fields[$fieldname] = $value;
 	}
+	if(isset($_REQUEST['amount']))
+        {
+                        $value = convertToDollar($_REQUEST['amount'],$rate);
+                        $focus->column_fields['amount'] = $value;
+        }
 		
 }
 
