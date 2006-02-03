@@ -52,7 +52,10 @@ function getTopAccounts()
 	
 	$header=array();
 	$header[]=$current_module_strings['LBL_LIST_ACCOUNT_NAME'];
-	$header[]=$current_module_strings['LBL_LIST_AMOUNT'].'('.getCurrencySymbol().')';
+	$currencyid=fetchCurrency($current_user->id);
+        $curr_symbol=getCurrencySymbol($currencyid);
+        $rate = getConversionRate($currencyid,$curr_symbol);
+        $header[]=$current_module_strings['LBL_LIST_AMOUNT'].'('.$curr_symbol.')';
 	
 	$entries=array();
 	foreach($open_accounts_list as $account)
@@ -65,7 +68,7 @@ function getTopAccounts()
 				);
 
 		$value[]='<a href="index.php?action=DetailView&module=Accounts&record='.$account['accountid'].'">'.$account['accountname'].'</a>';
-		$value[]=$account['amount'];
+		$value[]=convertFromDollar($account['amount'],$rate);
 
 
 
