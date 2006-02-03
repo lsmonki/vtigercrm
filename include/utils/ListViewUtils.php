@@ -156,9 +156,10 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 							//added to display currency symbol in listview header
 							if($lbl_name =='Amount')
 							{
-								$curr_symbol = getCurrencySymbol();
+								$currencyid=fetchCurrency($current_user->id);
+                                                                $curr_symbol=getCurrencySymbol($currencyid);
 								$lbl_name .=': (in '.$curr_symbol.')';
-										}
+								}
 
 										$name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$temp_sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
 										$arrow = '';
@@ -180,7 +181,8 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
 										//added to display currency symbol in related listview header
 										if($name =='Amount' && $relatedlist !='' )
 										{
-											$curr_symbol = getCurrencySymbol();
+											$currencyid=fetchCurrency($current_user->id);
+							                                $curr_symbol=getCurrencySymbol($currencyid);
 											$name .=': (in '.$curr_symbol.')';
 													}
 
