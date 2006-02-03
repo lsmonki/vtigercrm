@@ -1770,7 +1770,11 @@ function getInvoiceRelatedSalesOrder($record_id)
 }
 
 
-//Function to get Days and Dates - Jaguar
+/** Function to get Days and Dates in between the dates specified
+        * Portions created by vtiger are Copyright (C) vtiger.
+        * All Rights Reserved.
+        * Contributor(s): ______________________________________..
+ */
 function get_days_n_dates($st,$en)
 {
         $stdate_arr=explode("-",$st);
@@ -1790,7 +1794,11 @@ function get_days_n_dates($st,$en)
 }//function end
 
 
-// Function to get the start and End Dates based upon the period which we give-Jaguar
+/** Function to get the start and End Dates based upon the period which we give
+        * Portions created by vtiger are Copyright (C) vtiger.
+        * All Rights Reserved.
+        * Contributor(s): ______________________________________..
+ */
 function start_end_dates($period)
 {
         $st_thisweek= date("Y-m-d",mktime(0,0,0,date("n"),(date("j")-date("w")),date("Y")));
@@ -1869,7 +1877,13 @@ function start_end_dates($period)
         return $datevalues;
 }//function ends
 
-// Function to get the Graph and table format for a particular date - Jaguar
+
+/**   Function to get the Graph and table format for a particular date
+        based upon the period
+        * Portions created by vtiger are Copyright (C) vtiger.
+        * All Rights Reserved.
+        * Contributor(s): ______________________________________..
+ */
 function Graph_n_table_format($period_type,$date_value)
 {
         $date_val=explode("-",$date_value);
@@ -1891,8 +1905,5 @@ function Graph_n_table_format($period_type,$date_value)
         $values=array($graph_format,$table_format);
         return $values;
 }
-
-
-
 
 ?>
