@@ -41,7 +41,10 @@ function getTopPotentials()
 	$header=array();
 	$header[]=$current_module_strings['LBL_LIST_OPPORTUNITY_NAME'];
 	$header[]=$current_module_strings['LBL_LIST_ACCOUNT_NAME'];
-	$header[]=$current_module_strings['LBL_LIST_AMOUNT'].'('.getCurrencySymbol().')';
+	$currencyid=fetchCurrency($current_user->id);
+        $curr_symbol=getCurrencySymbol($currencyid);
+        $rate = getConversionRate($currencyid,$curr_symbol);
+        $header[]=$current_module_strings['LBL_LIST_AMOUNT'].'('.$curr_symbol.')';
 	$header[]=$current_module_strings['LBL_LIST_DATE_CLOSED'];
 	$list_query = getListQuery("Potentials",$where);
 	$list_result = $adb->limitQuery($list_query,0,5);
@@ -62,7 +65,7 @@ function getTopPotentials()
 			$value=array();
 			$value[]='<a href="index.php?action=DetailView&module=Potentials&record='.$adb->query_result($list_result,$i,"potentialid").'">'.$adb->query_result($list_result,$i,"potentialname").'</a>';
 			$value[]='<a href="index.php?action=DetailView&module=Accounts&record='.$adb->query_result($list_result,$i,'accountid').'">'.$adb->query_result($list_result,$i,"accountname").'</a>';
-			$value[]=$adb->query_result($list_result,$i,'amount');
+			$value[]=convertFromDollar($adb->query_result($list_result,$i,'amount'),$rate);
 			$value[]=getDisplayDate($adb->query_result($list_result,$i,'closingdate'));
 			$entries[$potentialid]=$value;
 		}
