@@ -21,6 +21,10 @@ require_once('include/utils/UserInfoUtil.php');
 $local_log =& LoggerManager::getLogger('index');
 global $log;
 $focus = new Lead();
+global $current_user;
+$currencyid=fetchCurrency($current_user->id);
+$curr_symbol=getCurrencySymbol($currencyid);
+$rate = getConversionRate($currencyid,$curr_symbol);
 
 if(isset($_REQUEST['record']))
 {
@@ -71,6 +75,11 @@ foreach($focus->column_fields as $fieldname => $val)
           //echo $fieldname."         ".$value;
           //echo '<BR>';
           $focus->column_fields[$fieldname] = $value;
+        }
+	if(isset($_REQUEST['annualrevenue']))
+        {
+                        $value = convertToDollar($_REQUEST['annualrevenue'],$rate);
+                        $focus->column_fields['annualrevenue'] = $value;
         }
         
 }
