@@ -19,7 +19,7 @@
 global $tmp_dir;
 
 
-$period=($_REQUEST['period'])?$_REQUEST['period']:"lmon"; 
+$period=($_REQUEST['period'])?$_REQUEST['period']:"tmon"; 
 // Period >> lmon- Last Month, tmon- This Month, lweek-LastWeek, tweek-ThisWeek
 // lday- Last Day 
 $type=($_REQUEST['type'])?$_REQUEST['type']:"leadsource";
