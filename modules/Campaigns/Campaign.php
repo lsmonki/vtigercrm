@@ -18,6 +18,8 @@ require_once('include/database/PearDatabase.php');
 require_once('data/SugarBean.php');
 require_once('data/CRMEntity.php');
 require_once('include/utils/utils.php');
+require_once('modules/Contacts/Contact.php');
+require_once('modules/Leads/Lead.php');
 
 
 class Campaign extends CRMEntity {
@@ -58,7 +60,40 @@ class Campaign extends CRMEntity {
 		$this->column_fields = getColumnFields('Campaigns');
 	}
 
+	function get_contacts($id)
+        {
+                global $mod_strings;
 
+                $focus = new Contact();
+                $button = '';
+                if(isPermitted("Contacts",1,"") == 'yes')
+                {
+                        $button .= '<input title="New Contact" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Contacts\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_CONTACT'].'">&nbsp;</td>';
+                }
+                $returnset = '&return_module=Campaigns&return_action=DetailView&return_id='.$id;
+
+                $query = 'SELECT contactdetails.*, crmentity.crmid, crmentity.smownerid from contactdetails inner join crmentity on crmentity.crmid = contactdetails.contactid  where crmentity.deleted=0 and contactdetails.campaignid = '.$id;
+                //echo $query;
+
+                return GetRelatedList('Campaigns','Contacts',$focus,$query,$button,$returnset);
+        }
+	function get_leads($id)
+        {
+                global $mod_strings;
+
+                $focus = new Lead();
+
+                $button = '';
+                if(isPermitted("Leads",1,"") == 'yes')
+                {
+                        $button .= '<input title="New Lead" accessyKey="F" class="button" onclick="this.form.action.value=\'EditView\';this.form.module.value=\'Leads\'" type="submit" name="button" value="'.$mod_strings['LBL_NEW_LEAD'].'">&nbsp;</td>';
+                }
+                $returnset = '&return_module=Campaigns&return_action=DetailView&return_id='.$id;
+
+                $query = 'SELECT leaddetails.*, crmentity.crmid, crmentity.smownerid from leaddetails inner join crmentity on crmentity.crmid = leaddetails.leadid  where crmentity.deleted=0 and leaddetails.campaignid = '.$id;
+
+                return GetRelatedList('Campaigns','Leads',$focus,$query,$button,$returnset);
+        }
 
 }
 ?>

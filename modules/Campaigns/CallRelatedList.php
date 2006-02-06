@@ -11,12 +11,12 @@
 
 
 require_once('Smarty_setup.php');
-require_once('modules/HelpDesk/HelpDesk.php');
-$focus = new HelpDesk();
+require_once('modules/Campaigns/Campaign.php');
+$focus = new Campaign();
 $currentmodule = $_REQUEST['module'];
 $RECORD = $_REQUEST['record'];
 if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
-    $focus->retrieve_entity_info($_REQUEST['record'],"HelpDesk");
+    $focus->retrieve_entity_info($_REQUEST['record'],"Campaigns");
     $focus->id = $_REQUEST['record'];
     $focus->name=$focus->column_fields['groupname'];
 
