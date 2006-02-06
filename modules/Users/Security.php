@@ -221,6 +221,7 @@ $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'lastname','leaddetails',1,'2','lastname','Last Name',1,0,0,100,4,13,1,'V~M',0,2)");	
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'mobile','leadaddress',1,'1','mobile','Mobile',1,0,0,100,5,13,1,'V~O',1,'')");	
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'company','leaddetails',1,'2','company','Company',1,0,0,100,6,13,1,'V~M',0,3)");
+ $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'campaignid','leaddetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,4,3,'I~O',1,'')");
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'fax','leadaddress',1,'1','fax','Fax',1,0,0,100,7,13,1,'V~O',1,'')");
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'designation','leaddetails',1,'1','designation','Designation',1,0,0,100,8,13,1,'V~O',1,'')");
  $this->db->query("insert into field values (7,".$this->db->getUniqueID("field").",'email','leaddetails',1,'13','email','Email',1,0,0,100,9,13,1,'E~O',0,5)");
@@ -268,6 +269,7 @@ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'lastname','contactdetails',1,'2','lastname','Last Name',1,0,0,100,4,4,1,'V~M',0,2)");	
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'mobile','contactdetails',1,'1','mobile','Mobile',1,0,0,100,5,4,1,'V~O',1,'')");	
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'accountid','contactdetails',1,'51','account_id','Account Name',1,0,0,100,6,4,1,'I~O',0,3)");	
+ $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'campaignid','contactdetails',1,'51','campaignid','Campaign Name',1,0,0,100,6,4,3,'I~O',1,'')");
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'homephone','contactsubdetails',1,'11','homephone','Home Phone',1,0,0,100,7,4,1,'V~O',1,'')");	
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'leadsource','contactsubdetails',1,'15','leadsource','Lead Source',1,0,0,100,8,4,1,'V~O',1,'')");	
  $this->db->query("insert into field values (4,".$this->db->getUniqueID("field").",'otherphone','contactsubdetails',1,'11','otherphone','Phone',1,0,0,100,9,4,1,'V~O',1,'')");
@@ -1795,6 +1797,11 @@ $this->db->query("insert into field values (23,".$this->db->getUniqueID("field")
 	
 	$this->db->query("insert into relatedlists values (".$this->db->getUniqueID('relatedlists').",".getTabid("Activities").",0,'get_users',1,'Users',0)");
 	$this->db->query("insert into relatedlists values (".$this->db->getUniqueID('relatedlists').",".getTabid("Activities").",4,'get_contacts',2,'Contacts',0)");
+
+	// Inserting Campaigns Related Lists
+
+         $this->db->query("insert into relatedlists values (".$this->db->getUniqueID('relatedlists').",".getTabid("Campaigns").",".getTabid("Contacts").",'get_contacts',1,'Contacts',0)");
+         $this->db->query("insert into relatedlists values (".$this->db->getUniqueID('relatedlists').",".getTabid("Campaigns").",".getTabid("Leads").",'get_leads',2,'Leads',0)");
 
                $this->db->query("insert into notificationscheduler(schedulednotificationid,schedulednotificationname,active,notificationsubject,notificationbody,label) values (".$this->db->getUniqueID("notificationscheduler").",'LBL_TASK_NOTIFICATION_DESCRITPION',1,'Task Delay Notification','Tasks delayed beyond 24 hrs ','LBL_TASK_NOTIFICATION')");
 
