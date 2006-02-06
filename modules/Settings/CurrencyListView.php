@@ -35,14 +35,13 @@ require_once('include/database/PearDatabase.php');
     <td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_CURRENCY_SYMBOL']; ?></b></td>
     <td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_CURRENCY_CRATE']; ?></b></td>
     <td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;"><b><?php echo $mod_strings['LBL_CURRENCY_STATUS']; ?></b></td>
+    <td width="10%" class="moduleListTitle" style="padding:0px 3px 0px 3px;">&nbsp;</td>
   </tr>
  <?php
    $sql = "select * from currency_info";
    $result = $adb->query($sql);
    $temprow = $adb->fetch_array($result);
-   $edit="Edit  ";
    $del="Del  ";
-   $bar="  | ";
    $cnt=1;
 
 require_once('include/utils/UserInfoUtil.php');
@@ -52,11 +51,16 @@ do
   printf("<tr class='evenListRow'> <td height='21' style='padding:0px 3px 0px 3px;'>");
   else
   printf("<tr class='oddListRow'> <td height='21' style='padding:0px 3px 0px 3px;'>");
-  printf("<a href=index.php?module=Settings&action=CurrencyDetailView&record=".$temprow["id"].">%s</a></td>",$temprow["currency_name"]);
+  if($temprow["defaultid"] == '-11')
+        printf("%s</td>",$temprow["currency_name"]);
+  else
+ 	printf("<a href=index.php?module=Settings&action=CurrencyDetailView&record=".$temprow["id"].">%s</a></td>",$temprow["currency_name"]);
   printf("<td style='padding:0px 3px 0px 3px;' nowrap>%s</td>",$temprow["currency_code"]);
   printf("<td style='padding:0px 3px 0px 3px;' nowrap>%s</td>",$temprow["currency_symbol"]);
   printf("<td style='padding:0px 3px 0px 3px;' nowrap>%s</td>",$temprow["conversion_rate"]);
   printf("<td style='padding:0px 3px 0px 3px;' nowrap>%s</td>",$temprow["currency_status"]);
+  if($temprow["defaultid"] != '-11')
+	printf("<td style='padding:0px 3px 0px 3px;' nowrap><a href=index.php?module=Settings&action=CurrencyDelete&record=".$temprow["id"].">%s</a></td>",$del);
   $cnt++;
 }while($temprow = $adb->fetch_array($result));
 ?>
