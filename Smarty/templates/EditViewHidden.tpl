@@ -29,6 +29,7 @@
 	<input type="hidden" name="contact_role">
 	<input type="hidden" name="case_id" value="{$CASE_ID}">
 	<INPUT TYPE="HIDDEN" NAME="MAX_FILE_SIZE" VALUE="800000">
+	<input type="hidden" name="campaignid" value="{$campaignid}">
 
 {elseif $MODULE eq 'Potentials'}
 	<form name="EditView" method="POST" action="index.php">
@@ -55,7 +56,11 @@
 	<form name="EditView" method="POST" action="index.php">
 	<input type="hidden" name="old_smownerid" value="{$OLDSMOWNERID}">
 
-{elseif $MODULE eq 'Accounts' || $MODULE eq 'Faq' || $MODULE eq 'PriceBooks' || $MODULE eq 'Leads' || $MODULE eq 'Vendors'}
+{elseif $MODULE eq 'Leads'}
+        <form name="EditView" method="POST" action="index.php">
+        <input type="hidden" name="campaignid" value="{$campaignid}">
+
+{elseif $MODULE eq 'Accounts' || $MODULE eq 'Faq' || $MODULE eq 'PriceBooks' || $MODULE eq 'Vendors'}
 	<form name="EditView" method="POST" action="index.php">
 
 {elseif $MODULE eq 'Notes'}
