@@ -164,6 +164,12 @@
                                                          </td>
 							{elseif $uitype eq 21 || $uitype eq 24}
 							  <td width=20% class="dvtCellLabel" align=right>
+							     {if $header== 'Address Information' && ($fldname=='otherstreet' || $fldname == 'ship_street')  && ($MODULE == 'Accounts' || $MODULE == 'Contacts' || $MODULE == 'Quotes' || $MODULE == 'PurchaseOrder' || $MODULE == 'SalesOrder'|| $MODULE == 'Invoice')}
+        	                                                 <div style="position:absolute;height=100px">
+	                                                         <input title='Copy billing address to shipping address'  class='small' onclick='return copyAddressRight(EditView)'  type='button' name='copyright' value='&raquo;' style='padding:0px 2px 0px 2px;font-size:12px'><br><br>
+								 <input title='Copy shipping address to billing address'  class='small' onclick='return copyAddressLeft(EditView)'  type='button' name='copyleft' value='&laquo;' style='padding:0px 2px 0px 2px;font-size:12px'>
+								</div>
+                                	                     {/if}
 							     {if $uitype eq 24}
 								<font color="red">*</font>
 							     {/if}
