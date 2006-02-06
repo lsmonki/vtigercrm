@@ -2770,10 +2770,10 @@
                 <field name="currency_symbol" type="C" size="30"> </field>
                 <field name="conversion_rate" type="N" size="5.3"> </field>
                 <field name="currency_status" type="C" size="25"> </field>
-                <field name="deleted" type="I" size="1">
+		<field name="defaultid" type="C" size="10">
                         <NOTNULL/>
                         <DEFAULT value="0"/>
-                </field>
+                        </field>
                 <data>
                 </data>
         </table>
