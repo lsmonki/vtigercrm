@@ -450,6 +450,7 @@
 			<DEFAULT value="0"/>
 		</field>
 		<field name="accountid" type="I" size="19"></field>
+		<field name="campaignid" type="I" size="19"></field>
 		<field name="salutation" type="C" size="50">
 			<DEFAULT value="Mr"/>
 		</field>
@@ -636,6 +637,7 @@
 		<field name="leadid" type="I" size="19">
 			<KEY/>
 		</field>
+		<field name="campaignid" type="I" size="19"></field>
 		<field name="email" type="C" size="100"></field>
 		<field name="interest" type="C" size="50"></field>
 		<field name="firstname" type="C" size="40"></field>
@@ -1612,6 +1614,79 @@
 		<data>
 		</data>
 	</table>
+
+	<table name="campaigncontrel">
+                <field name="campaignid" type="I" size="19">
+                         <KEY/>
+                        <DEFAULT value="0"/>
+                </field>
+                <field name="contactid" type="I" size="19">
+                        <NOTNULL/>
+                        <DEFAULT value="0"/>
+                </field>
+                                    
+	        <index name="CampaignContRel_IDX1">
+                        <col>contactid</col>
+                </index>
+                <opt>Type=InnoDB</opt>
+                <data> 
+                </data>
+        </table>
+	
+	<table name="campaigncontrel" alter="true">                                                                                                                                                                                         <constraint>ADD CONSTRAINT fk_CampaignContRel1 FOREIGN KEY (campaignid) REFERENCES campaign(contactid)  ON DELETE CASCADE</constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
+
+        <table name="campaigncontrel" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_CampaignContRel2 FOREIGN KEY (contactid) REFERENCES contactdetails(contactid)  ON DELETE CASCADE</constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
+
+	<table name="campaignleadrel">
+                <field name="campaignid" type="I" size="19">
+                        <KEY/>
+                        <DEFAULT value="0"/>
+                </field>
+                <field name="leadid" type="I" size="19">
+                        <NOTNULL/>
+                        <DEFAULT value="0"/>
+                </field>
+
+                <index name="CampaignLeadRel_IDX1">
+                        <col>leadid</col>
+                </index>
+                <opt>Type=InnoDB</opt>
+                <data>
+                </data>
+        </table>
+
+        <table name="campaignleadrel" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_CampaignContRel1 FOREIGN KEY (campaignid) REFERENCES campaign(campaignid)  ON DELETE CASCADE</constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
+	<table name="campaignleadrel" alter="true">
+
+                <constraint>ADD CONSTRAINT fk_CampaignLeadRel2 FOREIGN KEY (leadid) REFERENCES leaddetails(leadid)  ON DELETE CASCADE</constraint>
+
+                <opt>Type=InnoDB</opt>
+
+                <data>
+                </data>
+        </table>
 
 
 
