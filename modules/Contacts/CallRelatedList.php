@@ -33,8 +33,13 @@ $sql = $adb->query('select accountid from contactdetails where contactid='.$focu
 $accountid = $adb->query_result($sql,0,'accountid');
 if($accountid == 0) $accountid='';
 
+$sql1 = $adb->query('select campaignid from contactdetails where contactid='.$focus->id);
+$campaignid = $adb->query_result($sql1,0,'campaignid');
+if($campaignid == 0) $campaignid='';
+
 $smarty = new vtigerCRM_Smarty;
 $smarty->assign("accountid",$accountid);
+$smarty->assign("campaignid",$campaignid);
 	
 
 if(isset($_request['isduplicate']) && $_request['isduplicate'] == 'true') {

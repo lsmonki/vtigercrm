@@ -67,6 +67,7 @@ class Contact extends CRMEntity {
 	// These are for related fields
 	var $accountname;
 	var $accountid;
+	var $campaignid;
 	var $reports_to_name;
 	var $opportunity_role;
 	var $opportunity_rel_id;

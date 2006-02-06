@@ -150,6 +150,8 @@ if(isset($_REQUEST['activity_mode']) && $_REQUEST['activity_mode'] !='')
 $smarty->assign("CALENDAR_LANG", $app_strings['LBL_JSCALENDAR_LANG']);
 $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE_FORMAT']));
 
+if(isset($_REQUEST['campaignid']))
+$smarty->assign("campaignid",$_REQUEST['campaignid']);
 if (isset($_REQUEST['return_module']))
 $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 if (isset($_REQUEST['return_action']))
