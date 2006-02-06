@@ -47,6 +47,7 @@ switch($currentModule)
                         else
                         $smarty->assign("RETURN_MODULE",'Emails');
 			if (isset($_REQUEST['order_by'])) $order_by = $_REQUEST['order_by'];
+			if (isset($_REQUEST['select'])) $smarty->assign("SELECT",'enable');
                         break;
                 case 'Accounts':
                         require_once("modules/$currentModule/Account.php");
@@ -82,6 +83,8 @@ switch($currentModule)
 			$smarty->assign("SINGLE_MOD",'Opportunity');
 			if(isset($_REQUEST['sorder']) && $_REQUEST['sorder'] != '')
 			$sorder = $_REQUEST['sorder'];
+			if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
+                                $smarty->assign("RETURN_MODULE",$_REQUEST['return_module']);
 			break;
 		case 'Quotes':
 			require_once("modules/$currentModule/Quote.php");	

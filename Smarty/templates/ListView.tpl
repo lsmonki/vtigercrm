@@ -13,7 +13,7 @@
 -->*}
 
 {*<!-- module header -->*}
-<script language="JavaScript" type="text/javascript" src="include/general.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/search.js"></script>
 <script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script language="javascript">

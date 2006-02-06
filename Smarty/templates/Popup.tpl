@@ -13,7 +13,8 @@
 -->*}
 
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css"/>
-
+<script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
+<script language="JavaScript" type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
 <script type="text/javascript">
 function add_data_to_relatedlist(entity_id,recordid) {ldelim}
 
@@ -27,30 +28,40 @@ function add_data_to_relatedlist(entity_id,recordid) {ldelim}
 
         	<td class="showPanelBg" valign=top width=100%>
                 	<div class="small" style="padding:20px">
-			       <form name="massdelete" method="POST">
+			       <form name="selectall" method="POST">
 		               <table border=0 cellspacing=1 cellpadding=0 width=100% class="lvtBg">
                 		<tr style="background-color:#efefef">
                         		<td >
 						<table border=0 cellspacing=0 cellpadding=2 width=100%>
 		                                 <tr>
 						  <script type="text/javascript" src="modules/{$MODULE}/{$SINGLE_MOD}.js"></script>
-                  		                  <input name="module" type="hidden" value="Emails">
+                  		                  <input name="module" type="hidden" value="{$RETURN_MODULE}">
 		                                  <input name="action" type="hidden" value="ChooseEmail">
                   		                  <input name="pmodule" type="hidden" value="{$MODULE}">
 		                                  <input name="entityid" type="hidden" value="">
-                        	                  <td style="padding-right:20px" nowrap class="small">&nbsp;{$RECORD_COUNTS}</td>
+						{if $SELECT eq 'enable'}
+						  <td><input class="small" type="submit" value="Select All" onclick="return SelectAll()"/></td>
+						{/if}
+                        	                  <td style="padding-right:20px" nowrap>&nbsp;{$RECORD_COUNTS}</td>
 			                          <td nowrap>{$NAVIGATION}</td>
 						 </tr>
 						</table>
 						<div  style="overflow:auto;width:100%;height:300px; border-top:1px solid #999999;border-bottom:1px solid #999999">
 			                        <table border=0 cellspacing=1 cellpadding=3 width=100% class=small>
-                        				<tr>
-                        					{foreach item=header from=$LISTHEADER}
-				                                  <td class="lvtCol">{$header}</td>
-					                        {/foreach}
+                        				<tr>	
+							{if $SELECT eq 'enable'}
+								<td class="lvtCol"><input type="checkbox"  name="selectall" onClick=toggleSelect(this.checked,"selected_id")></td>
+							{/if}
+
+                        				{foreach item=header from=$LISTHEADER}
+							         <td class="lvtCol">{$header}</td>
+					                {/foreach}
 				                        </tr>
 							{foreach key=entity_id item=entity from=$LISTENTITY}
 			                                <tr bgcolor=white onMouseOver="this.className='lvtColDataHover'" onMouseOut="this.className='lvtColData'"  >
+							{if $SELECT eq 'enable'}
+								<td><input type="checkbox" NAME="selected_id" value= '{$entity_id}' onClick=toggleSelectAll(this.name,"selectall")></td>
+							{/if}
                                 				{foreach item=data from=$entity}
 			                                        <td>
                         			                        {$data}

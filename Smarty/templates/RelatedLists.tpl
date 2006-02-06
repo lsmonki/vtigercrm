@@ -140,7 +140,7 @@
 
 							{elseif $header eq 'Contacts' }
 							{if $MODULE eq 'Activities' || $MODULE eq 'Potentials' || $MODULE eq 'Vendors'}
-                                                        <input title="Change" accessKey="" class="small" value="Select Contact" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module={$MODULE}&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid={$ID}","test","width=600,height=400,resizable=1,scrollbars=1");' type="button"  name="button"></td>
+                                                        <input title="Change" accessKey="" class="small" value="Select Contact" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module={$MODULE}&action=Popup&popuptype=detailview&select=enable&form=EditView&form_submit=false&recordid={$ID}","test","width=600,height=400,resizable=1,scrollbars=1");' type="button"  name="button"></td>
 							{elseif $MODULE eq 'Emails'}
 							<input title="Bulk Mail" accessykey="F" class="small" onclick="this.form.action.value='sendmail';this.form.return_action.value='DetailView';this.form.module.value='Emails';this.form.return_module.value='Emails';" name="button" value="Bulk Mails" type="submit">&nbsp;
                                                         <input title="Change" accessKey="" class="small" value="Select Contact" LANGUAGE=javascript onclick='return window.open("index.php?module=Contacts&return_module=Emails&action=Popup&popuptype=detailview&form=EditView&form_submit=false&recordid={$ID}","test","width=600,height=400,resizable=1,scrollbars=1");' type="button"  name="button"></td>
