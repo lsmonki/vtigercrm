@@ -70,6 +70,8 @@ if($focus->mode == 'edit')
 	$smarty->assign("MODE", $focus->mode);
 }		
 
+if(isset($_REQUEST['campaignid']))
+$smarty->assign("campaignid",$_REQUEST['campaignid']);
 if (isset($_REQUEST['return_module'])) 
 $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
 else 

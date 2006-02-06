@@ -74,7 +74,7 @@ class Lead extends CRMEntity {
   var $accountid;
 	var $contactid;
   	var $potentialid;
-  	
+ 	var $campaignid; 	
 	var $module_id = "leadid";
 	//var $tab_name = Array('crmentity','account','accountbillads','accountshipads');
 

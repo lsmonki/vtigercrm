@@ -32,6 +32,11 @@ $smarty = new vtigerCRM_Smarty;
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
         $focus->id = "";
 }
+$sql1 = $adb->query('select campaignid from leaddetails where leadid='.$focus->id);
+$campaignid = $adb->query_result($sql1,0,'campaignid');
+if($campaignid == 0) $campaignid='';
+$smarty->assign("campaignid",$campaignid);
+
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
 $parent_email = getEmailParentsList('Leads',$focus->id);
