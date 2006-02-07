@@ -111,6 +111,59 @@ function eMail()
         document.massdelete.action="index.php?module=Emails&action=SelectEmails&return_module=Contacts&return_action=index";
 }
 //end of code by raju
+
+//Function added for Mass select in Popup - Philip
+function SelectAll()
+{
+
+        x = document.selectall.selected_id.length;
+	//var viewid = document.selectall.viewname.value;
+        idstring = "";
+
+        if ( x == undefined)
+        {
+
+                if (document.selectall.selected_id.checked)
+                {
+                        document.selectall.idlist.value=document.selectall.selected_id.value;
+                }
+                else
+                {
+                        alert("Please select atleast one entity");
+                        return false;
+                }
+        }
+        else
+        {
+                xx = 0;
+                for(i = 0; i < x ; i++)
+                {
+                        if(document.selectall.selected_id[i].checked)
+                        {
+                                idstring = document.selectall.selected_id[i].value +";"+idstring
+                        xx++
+                        }
+                }
+                if (xx != 0)
+                {
+                        document.selectall.idlist.value=idstring;
+                }
+                else
+                {
+                        alert("Please select atleast one entity");
+                        return false;
+                }
+	}
+		if(confirm("Are you sure you want to delete the selected "+xx+" records ?"))
+		{
+        document.selectall.action="index.php?module=Users&action=selectall&return_module=Contacts&return_action=ListView";
+		}
+		else
+		{
+			return false;
+		}
+}
+
 function massDelete()
 {
 
