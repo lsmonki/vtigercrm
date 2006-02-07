@@ -547,3 +547,13 @@ border:1px solid #dadada;
 
 }
 
+.thumbnail{
+    background-color:#ffffff;
+padding: 7px;
+border: 1px solid #ddd;
+float: left;
+	   margin-right: 10px;
+	   margin-bottom: 15px;
+}
+.thumbnailcaption
+{ font-size: 0.9em; padding-top: 0.2em ;	}

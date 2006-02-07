@@ -104,7 +104,6 @@ $viewid = $oCustomView->getViewId($currentModule);
 $viewnamedesc = $oCustomView->getCustomViewByCvid($viewid);
 //<<<<<customview>>>>>
 
-
 // Buttons and View options
 if($viewid != 0)
 {
@@ -193,6 +192,7 @@ $view_script = "<script language='javascript'>
 	</script>";
 
 //Constructing the list view
+
 $custom = get_form_header($current_module_strings['LBL_LIST_FORM_TITLE'],$other_text, false);
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
@@ -201,7 +201,7 @@ $smarty->assign("CUSTOMVIEW",$customstrings);
 $smarty->assign("BUTTONS",$other_text);
 $category = getParentTab();
 $smarty->assign("CATEGORY",$category);
-
+$smarty->assign("IMAGELISTS",getContactImages($category));
 //Retreiving the no of rows
 $noofrows = $adb->num_rows($list_result);
 

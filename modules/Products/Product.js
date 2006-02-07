@@ -7,7 +7,6 @@
  * All Rights Reserved.
  *
  ********************************************************************************/
-
 function clear_form(form) {
 	for (j = 0; j < form.elements.length; j++) {
 		if (form.elements[j].type == 'text' || form.elements[j].type == 'select-one') {
@@ -157,5 +156,17 @@ function set_return_inventory_po(product_id,product_name,unitprice,curr_row) {
 function set_return_product(product_id, product_name) {
     window.opener.document.EditView.product_name.value = product_name;
     window.opener.document.EditView.product_id.value = product_id;
+}
+function getImageListBody() {
+	if (browser_ie) {
+		var ImageListBody=getObj("ImageList")
+	} else if (browser_nn4 || browser_nn6) {
+		if (getObj("ImageList").childNodes.item(0).tagName=="TABLE") {
+			var ImageListBody=getObj("ImageList")
+		} else {
+			var ImageListBody=getObj("ImageList")
+		}
+	}
+	return ImageListBody;
 }
 

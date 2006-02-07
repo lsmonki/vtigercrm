@@ -89,7 +89,7 @@ $smarty->assign("SINGLE_MOD","Product");
 
 $smarty->assign("MOD", $mod_strings);
 $smarty->assign("APP", $app_strings);
-
+$smarty->assign("ROWCOUNT", getImageCount($focus->id));
 if (isset($focus->name)) $smarty->assign("NAME", $focus->name);
 else $smarty->assign("NAME", "");
 
@@ -106,7 +106,8 @@ $smarty->assign("CALENDAR_DATEFORMAT", parse_calendardate($app_strings['NTC_DATE
 if($focus->mode == 'edit')
 {
 	$smarty->assign("UPDATEINFO",updateInfo($focus->id));
-        $smarty->assign("MODE", $focus->mode);
+    $smarty->assign("MODE", $focus->mode);
+//	$smarty->assign("IMAGELISTS",getProductImages($focus->id));
 }
 
 if(isset($_REQUEST['return_module'])) $smarty->assign("RETURN_MODULE", $_REQUEST['return_module']);
@@ -189,7 +190,6 @@ if($errormessage!="")
 {
 	$smarty->assign("ERROR_MESSAGE",$errormessage);
 }
-
 
 $smarty->assign("VALIDATION_DATA_FIELDNAME",$fieldName);
 $smarty->assign("VALIDATION_DATA_FIELDDATATYPE",$fldDataType);

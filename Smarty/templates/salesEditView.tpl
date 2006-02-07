@@ -432,7 +432,34 @@
 								<textarea name="{$fldname}" cols="30" rows="2">{$fldvalue}</textarea>
                                                  </td>
 
-						{elseif $uitype eq 69 || $uitype eq 61}
+						{elseif $uitype eq 69}
+						<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
+						<td colspan="3" width="30%" align=left class="dvtCellInfo">
+						{if $MODULE eq 'Products'}
+						<input name="imagelist" type="hidden" value="">
+						<div id="files_list" style="border: 1px solid grey; width: 500px; padding: 5px; background: rgb(255, 255, 255) none repeat scroll 0%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; font-size: x-small">Files Maximum 6
+						<input id="my_file_element" type="file" name="file_1" >
+						{foreach key=num item=image from=$maindata[3]}
+						{if $image neq ''}
+						<div align="center">
+						<img src="test/product/{$image}" height="50">&nbsp;&nbsp;[{$image}]<input id="file_{$num}" value="Delete" type="button" onclick='this.parentNode.parentNode.removeChild(this.parentNode);delRowEmt("{$image}")'>
+						</div>
+						{/if}
+						{/foreach}
+						</div>
+						<script>
+						{*<!-- Create an instance of the multiSelector class, pass it the output target and the max number of files -->*}
+						var multi_selector = new MultiSelector( document.getElementById( 'files_list' ), 6 );
+						{*<!-- Pass in the file element -->*}
+						multi_selector.addElement( document.getElementById( 'my_file_element' ) );
+						</script>
+						</td>
+						</div>
+						{else}
+						<input name="{$fldname}"  type="file" value="{$secondvalue}"/><input type="hidden" name="id" value=""/>{$fldvalue}</td>
+						{/if}
+						{elseif $uitype eq 61}
+						
 						<td width="20%" class="dvtCellLabel" align=right>{$fldlabel}</td>
 						<td colspan="3" width="30%" align=left class="dvtCellInfo"><input name="{$fldname}"  type="file" value="{$secondvalue}"/><input type="hidden" name="id" value=""/>{$fldvalue}</td>
 
@@ -490,12 +517,24 @@
 </form>
 <script>
 
-
-
         var fieldname = new Array({$VALIDATION_DATA_FIELDNAME})
 
         var fieldlabel = new Array({$VALIDATION_DATA_FIELDLABEL})
 
         var fielddatatype = new Array({$VALIDATION_DATA_FIELDDATATYPE})
-
+var ProductImages=new Array();
+var count=0;
+function delRowEmt(imagename)
+{ldelim}
+	ProductImages[count++]=imagename;
+{rdelim}
+function displaydeleted()
+{ldelim}
+	var imagelists='';
+	for(var x = 0; x < ProductImages.length; x++)
+	{ldelim}
+		imagelists+=ProductImages[x]+'###';
+	{rdelim}
+	document.EditView.imagelist.value=imagelists
+{rdelim}
 </script>

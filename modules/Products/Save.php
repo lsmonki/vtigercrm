@@ -48,42 +48,52 @@ foreach($focus->column_fields as $fieldname => $val)
 	}
 }
 
-//Checking If image is given or not 
+if($_REQUEST['imagelist'] != '')
+{
+	$del_images = array();
+	$del_images = explode('###',$_REQUEST['imagelist']);
+	$del_image_array = array_slice($del_images,0,count($del_images)-1);
+}
 
+//Checking If image is given or not 
+//echo '<pre>';print_r($_FILES);echo '</pre>';
 $uploaddir = $root_directory."test/product/" ;//set this to which location you need to give the product image
 $log->info("The Location to Save the Product Image is ".$uploaddir);
-$file_path_name = $_FILES['imagename']['name'];
-$image_error="false";
-$saveimage="true";
-
-$file_name = basename($file_path_name);
-//if the image is given
-if($file_name!="")
+$image_lists=array();
+$count=0;
+foreach($_FILES as $files)
 {
-	 $log->debug("Product Image is given for uploading");
-	$image_name_val=file_exist_fn($file_name,0);
-
-	$encode_field_values="";
-	$errormessage="";
-
-	$move_upload_status=move_uploaded_file($_FILES["imagename"]["tmp_name"],$uploaddir.$image_name_val);
+	$file_path_name = $files['name'];
 	$image_error="false";
-
-	//if there is an error in the uploading of image
-
-	$filetype= $_FILES['imagename']['type'];
-	$filesize = $_FILES['imagename']['size'];
-
-	$filetype_array=explode("/",$filetype);
-
-	$file_type_val_image=strtolower($filetype_array[0]);
-	$file_type_val=strtolower($filetype_array[1]);
-	  $log->info("The File type of the Product Image is :: ".$file_type_val);
-	//checking the uploaded image is if an image type or not
-	if(!$move_upload_status) //if any error during file uploading  
+	$saveimage="true";
+	$file_name = basename($file_path_name);
+	//if the image is given
+	if($file_name!="")
 	{
-		$log->debug("Error is present in uploading product Image.");	
-		$errorCode =  $_FILES['imagename']['error'];
+		$log->debug("Product Image is given for uploading");
+		$image_name_val=file_exist_fn($file_name,0);
+		$image_lists[]=$image_name_val;
+		$encode_field_values="";
+		$errormessage="";
+
+		$move_upload_status=move_uploaded_file($files["tmp_name"],$uploaddir.$image_name_val);
+		$image_error="false";
+
+		//if there is an error in the uploading of image
+
+		$filetype= $files['type'];
+		$filesize = $files['size'];
+
+		$filetype_array=explode("/",$filetype);
+
+		$file_type_val_image=strtolower($filetype_array[0]);
+		$file_type_val=strtolower($filetype_array[1]);
+		$log->info("The File type of the Product Image is :: ".$file_type_val);
+		//checking the uploaded image is if an image type or not
+		if(!$move_upload_status) //if any error during file uploading  
+		{
+			$log->debug("Error is present in uploading product Image.");	
+			$errorCode =  $files['error'];
 			if($errorCode == 4)
 			{
 				$errorcode="no-image";
@@ -102,47 +112,43 @@ if($file_name!="")
 				$saveimage="false";
 				$image_error="true";
 			}
-	}
-	else 
-	{
-		 $log->debug("Successfully uploaded the product Image.");
-		if($filesize != 0)
+		}
+		else 
 		{
-			if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) || ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") || ($file_type_val == "gif") ) //Checking whether the file is an image or not
+			$log->debug("Successfully uploaded the product Image.");
+			if($filesize != 0)
 			{
+				if (($file_type_val == "jpeg" ) || ($file_type_val == "png") || ($file_type_val == "jpg" ) || ($file_type_val == "pjpeg" ) || ($file_type_val == "x-png") || ($file_type_val == "gif") ) //Checking whether the file is an image or not
+				{
 					$saveimage="true";
 					$image_error="false";
+				}
+				else
+				{
+					$savelogo="false";
+					$image_error="true";
+					$errormessage = "image";
+				}
+
 			}
 			else
-			{
-				$savelogo="false";
+			{	$savelogo="false";
 				$image_error="true";
-				$errormessage = "image";
+				$errormessage = "invalid";
 			}
 
 		}
-		else
-		{	$savelogo="false";
-			$image_error="true";
-			$errormessage = "invalid";
-		}
-
 	}
 }
-else //if image is not given
-{
-	$log->debug("Product Image is not given for uploading.");
-	if($mode=="edit" && $image_error=="false" )
-	{
-		$image_name_val=getProductImageName($record_id);	
-		$saveimage="true";
-	}
-	else
-	{
-		$focus->column_fields['imagename']="";
-	}
-}	
 
+//added to retain the pictures from db
+if($mode=="edit" && $image_error=="false" )
+{
+		$image_lists[]= getProductImageName($record_id,$del_image_array);
+		$saveimage="true";
+}
+
+//end of code to retain the pictures from db
  //code added for returning back to the current view after edit from list view
 if($_REQUEST['return_viewname'] == '') $return_viewname='0';
 if($_REQUEST['return_viewname'] != '')$return_viewname=$_REQUEST['return_viewname'];
@@ -187,9 +193,11 @@ if($image_error=="true") //If there is any error in the file upload then moving 
 	header("location: index.php?action=$error_action&module=$error_module&record=$return_id&return_id=$return_id&return_action=$return_action&return_module=$return_module&activity_mode=$activity_mode&return_viewname=$return_viewname&saveimage=$saveimage&error_msg=$errormessage&image_error=$image_error&encode_val=$encode_field_values");
 
 }
+//echo '<pre>';print_r($image_lists);echo '</pre>';
 if($saveimage=="true")
 {
-	$focus->column_fields['imagename']=$image_name_val;
+	$image_lists_db=implode("###",$image_lists);
+	$focus->column_fields['imagename']=$image_lists_db;
 	$log->debug("Assign the Image name to the field name ");
 }
 //Saving the product
@@ -229,8 +237,6 @@ Thanks,
 	
 }
 
-//if($image_error=="false")
-//{
 	if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] != "") $return_module = $_REQUEST['return_module'];
 	else $return_module = "Products";
 	if(isset($_REQUEST['return_action']) && $_REQUEST['return_action'] != "") $return_action = $_REQUEST['return_action'];
@@ -241,6 +247,7 @@ Thanks,
 	header("Location: index.php?action=$return_action&module=$return_module&record=$return_id&viewname=$return_viewname");
 
 }
+
 function SendMailToCustomer($to,$current_user_id,$subject,$contents)
 {
         global $log;

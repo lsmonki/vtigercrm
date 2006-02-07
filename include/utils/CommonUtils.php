@@ -974,4 +974,45 @@ function updateInfo($id)
     return $update_info;
 }
 
+function getContactImages($parenttab)
+{
+    global $adb;
+	$imagelists = '<script>var leftrightslide=new Array();';
+   	$i=0;
+    $query='select imagename,firstname,lastname,contactid from contactdetails inner join crmentity on contactdetails.contactid=crmentity.crmid where deleted = 0 ';
+    $result = $adb->query($query);
+    $noofimages = $adb->num_rows($result);
+	for($j=0; $j<$noofimages; $j++)
+    {
+		$imagename=$adb->query_result($result,$j,'imagename');
+		$imgpath = 'test/contact/'.$imagename;
+		$id = $adb->query_result($result,$j,'contactid');
+		$contactname=$adb->query_result($result,$j,'firstname').' '.$adb->query_result($result,$j,'lastname');
+		if($imagename != '')
+			$imagelists .= 'leftrightslide['.$i++.']= \'<div class=thumbnail><a href='.$imgpath.' target="_blank"><img src="'.$imgpath.'" border=1 height=50 width=80></a><div class="thumbnailcaption"><a href="index.php?action=DetailView&module=Contacts&record='.$id.'&parenttab='.$parenttab.'">'.$contactname.'</a></div></div>\';';
+	}
+	$imagelists.= '</script>';
+	if($i>0)	
+		return $imagelists;
+}
+
+function getProductImages($id)
+{
+    global $adb;
+	$image_lists=array();
+	$script_images=array();
+	$script = '<script>var ProductImages = new Array(';
+   	$i=0;
+	$query='select imagename from products where productid='.$id;
+	$result = $adb->query($query);
+	$imagename=$adb->query_result($result,0,'imagename');
+	$image_lists=explode('###',$imagename);
+	for($i=0;$i<count($image_lists);$i++)
+	{
+		$script_images[] = '"'.$image_lists[$i].'"';
+	}
+	$script .=implode(',',$script_images).');</script>';
+	if($imagename != '')
+		return $script;
+}	
 ?>

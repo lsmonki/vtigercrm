@@ -227,11 +227,25 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		if($col_fields[$fieldname] != '')
 		{
 			if($tabid==14)
-                                $imgpath = "test/product/".$col_fields[$fieldname];
-                        if($tabid==4)
-                                $imgpath = "test/contact/".$col_fields[$fieldname];
-
-			$label_fld[] ='<img src="'.$imgpath.'" border="0">';
+			{
+				$images=array();
+				$image_array=explode("###",$col_fields[$fieldname]);
+				$image_lists = '<div id="Carousel" style="position:relative;vertical-align: middle;">
+				<img src="modules/Products/placeholder.gif" width="371" height="227" style="position:relative;">
+				</div><script>Car_Image_Sources=new Array(';
+				$imgpath = "test/product/";
+				foreach($image_array as $image)
+				{
+					$images[]='"'.$imgpath.$image.'","'.$imgpath.$image.'"';
+				}	
+				$image_lists .=implode(',',$images).');</script>';	
+				$label_fld[] =$image_lists;
+			}	
+            if($tabid==4)
+            {
+				$imgpath = "test/contact/".$col_fields[$fieldname];
+				$label_fld[] ='<img src="'.$imgpath.'" border="0">';
+			}
 		}
 		else
 		{

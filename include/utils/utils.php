@@ -1906,4 +1906,18 @@ function Graph_n_table_format($period_type,$date_value)
         return $values;
 }
 
+
+function getImageCount($id)
+{
+	global $adb;
+	$image_lists=array();
+	$query="select imagename from products where productid=".$id;
+	$result=$adb->query($query);
+	$imagename=$adb->query_result($result,0,'imagename');
+	$image_lists=explode("###",$imagename);
+	return count($image_lists);
+
+}
+
+
 ?>

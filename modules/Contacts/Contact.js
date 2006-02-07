@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ********************************************************************************/		
 		
-		
+document.write("<script type='text/javascript' src='modules/Contacts/conveyor.js'></"+"script>");		
 		
 
 function copyAddressRight(form) {
