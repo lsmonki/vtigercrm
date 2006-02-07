@@ -1145,16 +1145,25 @@ function upload_product_image_file($mode,$id)
 
 }
 
-function getProductImageName($id)
+function getProductImageName($id,$deleted_array='')
 {
 	global $adb;
 	global $log;
+	$image_array=array();	
+	$log->debug("Inside getProductImageName. The image_name is ".$image_name);
 	$query = "select imagename from products where productid=".$id;
 	$result = $adb->query($query);
 	$image_name = $adb->query_result($result,0,"imagename");
-	$log->debug("Inside getProductImageName. The image_name is ".$image_name);
-	return $image_name;
-	
+	$image_array=explode("###",$image_name);
+	if($deleted_array!='')
+	{
+		$resultant_image = array();
+		$resultant_image=array_merge(array_diff($image_array,$deleted_array));
+		$imagelists=implode('###',$resultant_image);	
+		return	$imagelists;
+	}
+	else
+		return $imagename;	
 }
 function getContactImageName($id)
 {

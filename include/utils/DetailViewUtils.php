@@ -230,16 +230,28 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 			{
 				$images=array();
 				$image_array=explode("###",$col_fields[$fieldname]);
-				$image_lists = '<div id="Carousel" style="position:relative;vertical-align: middle;">
-				<img src="modules/Products/placeholder.gif" width="371" height="227" style="position:relative;">
-				</div><script>Car_Image_Sources=new Array(';
-				$imgpath = "test/product/";
-				foreach($image_array as $image)
+				$image_array = array_slice($image_array,0,count($image_array)-1);
+				if(count($image_array)>1)
 				{
-					$images[]='"'.$imgpath.$image.'","'.$imgpath.$image.'"';
-				}	
-				$image_lists .=implode(',',$images).');</script>';	
-				$label_fld[] =$image_lists;
+					if(count($image_array) < 4)
+						$sides=count($image_array)*2;
+					else
+						$sides=8;
+					$image_lists = '<div id="Carousel" style="position:relative;vertical-align: middle;">
+						<img src="modules/Products/placeholder.gif" width="371" height="227" style="position:relative;">
+						</div><script>var Car_NoOfSides='.$sides.'; Car_Image_Sources=new Array(';
+								$imgpath = "test/product/";
+								foreach($image_array as $image)
+								{
+								$images[]='"'.$imgpath.$image.'","'.$imgpath.$image.'"';
+								}	
+								$image_lists .=implode(',',$images).');</script>';	
+					$label_fld[] =$image_lists;
+				}else
+				{
+					$imgpath = "test/product/".$col_fields[$fieldname];
+					$label_fld[] ='<img src="'.$imgpath.'" border="0" width="450" height="300">';
+				}
 			}	
             if($tabid==4)
             {

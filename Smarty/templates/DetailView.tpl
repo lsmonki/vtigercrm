@@ -315,5 +315,9 @@
 	<td align=right valign=top><img src="themes/blue/images/showPanelTopRight.gif"></td>
 </tr>
 </table>
+{if $MODULE eq 'Products'}
+<script language="JavaScript" type="text/javascript" src="modules/Products/Productsslide.js"></script>
+<script language="JavaScript" type="text/javascript">Carousel();</script>
+{/if}
 
 </td></tr></table></form>

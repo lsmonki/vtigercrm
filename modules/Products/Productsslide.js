@@ -29,7 +29,6 @@ var Car_Border=true;		// true or false
 var Car_Border_Color="black";
 var Car_Speed=4;
 var Car_Direction=true;		// true or false
-var Car_NoOfSides=8;		// must be 4, 6, 8 or 12
 
 /* array to specify images and optional links. 
    For 4 sided carousel specify at least 2 images
