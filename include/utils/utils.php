@@ -1150,11 +1150,11 @@ function getProductImageName($id,$deleted_array='')
 	global $adb;
 	global $log;
 	$image_array=array();	
-	$log->debug("Inside getProductImageName. The image_name is ".$image_name);
 	$query = "select imagename from products where productid=".$id;
 	$result = $adb->query($query);
 	$image_name = $adb->query_result($result,0,"imagename");
 	$image_array=explode("###",$image_name);
+	$log->debug("Inside getProductImageName. The image_name is ".$image_name);
 	if($deleted_array!='')
 	{
 		$resultant_image = array();
@@ -1163,7 +1163,7 @@ function getProductImageName($id,$deleted_array='')
 		return	$imagelists;
 	}
 	else
-		return $imagename;	
+		return $image_name;	
 }
 function getContactImageName($id)
 {
