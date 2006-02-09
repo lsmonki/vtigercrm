@@ -23,16 +23,18 @@
 
 require("modules/Emails/class.phpmailer.php");
 require("include/database/PearDatabase.php");
+require_once('include/logging.php');
 require("config.php");
 
 // Get the list of activity for which reminder needs to be sent
 
 global $adb;
 global $log;
+$log =& LoggerManager::getLogger('SendReminder');
 $log->debug(" invoked SendReminder ");
 
 //modified query for recurring events -Jag
- 	$query="select crmentity.crmid,activity.*,activity_reminder.reminder_time,activity_reminder.reminder_sent,activity_reminder.recurringid,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id left outer join recurringevents on activity.activityid=recurringevents.activityid where DATE_FORMAT(activity.date_start,'%Y-%m-%d, %H:%i:%s') >= '".date('Y-m-d')."' and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0 group by activity.activityid,recurringevents.recurringid ;";
+ 	$query="select crmentity.crmid,seactivityrel.crmid as setype,activity.*,activity_reminder.reminder_time,activity_reminder.reminder_sent,activity_reminder.recurringid,recurringevents.recurringdate from activity inner join crmentity on crmentity.crmid=activity.activityid inner join activity_reminder on activity.activityid=activity_reminder.activity_id left outer join recurringevents on activity.activityid=recurringevents.activityid left outer join seactivityrel on seactivityrel.activityid = activity.activityid where DATE_FORMAT(activity.date_start,'%Y-%m-%d, %H:%i:%s') >= '".date('Y-m-d')."' and crmentity.crmid != 0 and activity.eventstatus = 'Planned' and activity_reminder.reminder_sent = 0 group by activity.activityid,recurringevents.recurringid";
 
 $result = $adb->query($query);
 
@@ -46,8 +48,14 @@ if($adb->num_rows($result) >= 1)
 	        $curr_time = strtotime(date("Y-m-d H:i"))/60;
 		$activity_id = $result_set['activityid'];
 		$activitymode = ($result_set['activitytype'] == "Task")?"Task":"Events";
+		$parent_type = $result_set['setype']; 
+		$activity_sub = $result_set['subject'];
 		$to_addr='';
 			
+		if($parent_type!='')
+		$parent_content = getParentInfo($parent_type)."\n";
+		else
+		$parent_content = "";
 		//code included for recurring events by jaguar starts	
 		$recur_id = $result_set['recurringid'];
 		$current_date=date('Y-m-d');
@@ -79,6 +87,8 @@ if($adb->num_rows($result) >= 1)
 				}
 			}
 		
+			// Selecting contacts to send reminder /*commented as the customer need not receive the mail
+			/*
 			$query_cnt="SELECT contactdetails.email,cntactivityrel.contactid,crmentity.crmid FROM cntactivityrel inner join contactdetails on contactdetails.contactid=cntactivityrel.contactid inner join crmentity on crmentity.crmid=cntactivityrel.contactid where cntactivityrel.activityid =".$activity_id." and crmentity.deleted=0"; 
 			$cnt_result = $adb->query($query_cnt);
 			if($adb->num_rows($cnt_result)>=1)
@@ -91,7 +101,7 @@ if($adb->num_rows($result) >= 1)
 					}
 				}
 			}
-			
+			*/ //Comments ends
 			// Set the preferred email id
 			$from ="reminders@localserver.com";
 			
@@ -102,7 +112,7 @@ if($adb->num_rows($result) >= 1)
 			$subject = "[Reminder:".$result_set['activitytype']." @ ".$result_set['date_start']." ".$result_set['time_start']."] ".$adb->query_result($result_main,0,'notificationsubject');
 
 			//Set the mail body/contents here
-			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n Kindly visit the link for more details on the activity <a href='".$site_URL."/index.php?action=DetailView&module=Activities&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>";
+			$contents = nl2br($adb->query_result($result_main,0,'notificationbody')) ."\n\n Subject : ".$activity_sub."\n ". $parent_content ." Date & Time : ".$date_start." ".$time_start."\n\n Kindly visit the link for more details on the activity <a href='".$site_URL."/index.php?action=DetailView&module=Activities&record=".$activity_id."&activity_mode=".$activitymode."'>Click here</a>";
 
 			if(count($to_addr) >=1)
 			{
@@ -123,6 +133,18 @@ if($adb->num_rows($result) >= 1)
 	}
 }
 
+/**
+ This function is used to assign parameters to the mail object and send it.
+ It takes the following as parameters.
+	$to as string - to address
+	$from as string - from address
+	$subject as string - subject if the mail
+	$contents as text - content of the mail
+	$mail_server as string - sendmail server name 
+	$mail_server_username as string - sendmail server username 
+	$mail_server_password as string - sendmail server password
+
+*/
 function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_username,$mail_server_password)
 {
 	global $adb;
@@ -175,6 +197,10 @@ function send_mail($to,$from,$subject,$contents,$mail_server,$mail_server_userna
 	$log->info("After executing the mail->Send() function.");
 }
 
+/**
+ This function is used to ensure mail has been sent sucessfully with out error.
+ It takes the mail object as the input and returns true if sucess else an error messaget. 
+*/
 function MailSend($mail)
 {
 	global $log;
@@ -190,6 +216,10 @@ function MailSend($mail)
 	}		
 }
 
+/**
+ This function is used to get the Parent mail id
+ It takes the input returnmodule as string and parentid as integer, returns the parent mailid as string. 
+*/
 function getParentMailId($returnmodule,$parentid)
 {
 	global $adb;
@@ -219,4 +249,39 @@ function getParentMailId($returnmodule,$parentid)
 	return $mailid;
 }
 
+/**
+ This function is used to get the Parent type and its Name
+ It takes the input integer - crmid and returns the parent type and its name as string. 
+*/
+function getParentInfo($value)
+{
+	global $adb;
+ 	$parent_module = getSalesEntityType($value);
+	if($parent_module == "Leads")
+	{
+		$sql = "select * from leaddetails where leadid=".$value;
+		$result = $adb->query($sql);
+		$first_name = $adb->query_result($result,0,"firstname");
+		$last_name = $adb->query_result($result,0,"lastname");
+
+		$parent_name = $last_name.' '.$first_name;
+	}
+	elseif($parent_module == "Accounts")
+	{
+		$sql = "select * from  account where accountid=".$value;
+		$result = $adb->query($sql);
+		$account_name = $adb->query_result($result,0,"accountname");
+
+		$parent_name =$account_name;
+	}
+	elseif($parent_module == "Potentials")
+	{
+		$sql = "select * from  potential where potentialid=".$value;
+		$result = $adb->query($sql);
+		$potentialname = $adb->query_result($result,0,"potentialname");
+
+		$parent_name =$potentialname;
+	}
+	  return $parent_module ." : ".$parent_name;
+}
 ?>
