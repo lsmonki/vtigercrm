@@ -73,8 +73,9 @@ class Lead extends CRMEntity {
   
   var $accountid;
 	var $contactid;
+	var $campaignid;
   	var $potentialid;
- 	var $campaignid; 	
+  	
 	var $module_id = "leadid";
 	//var $tab_name = Array('crmentity','account','accountbillads','accountshipads');
 
@@ -320,7 +321,8 @@ function get_history($id)
 			inner join crmentity on crmentity.crmid=activity.activityid
 			left join cntactivityrel on cntactivityrel.activityid= activity.activityid
 			left join contactdetails on contactdetails.contactid= cntactivityrel.contactid
-			left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid 
+			left join activitygrouprelation on activitygrouprelation.activityid=activity.activityid
+			left join groups on groups.groupname=activitygrouprelation.groupname 
 			left join users on crmentity.smownerid= users.id
 			where (activity.activitytype = 'Meeting' or activity.activitytype='Call' or activity.activitytype='Task')
 			and (activity.status = 'Completed' or activity.status = 'Deferred' or (activity.eventstatus != 'Planned' and activity.eventstatus != ''))
