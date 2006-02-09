@@ -1273,7 +1273,7 @@ function isPermitted($module,$actionname,$record_id='')
 	//If modules is Notes,Products,Vendors,Faq,PriceBook then no sharing			
 	if($record_id != '')
 	{
-		if($module == 'Notes' && $module == 'Products' && $module == 'Faq' && $module == 'Vendor'  && $module == 'PriceBook')
+		if($module == 'Notes' || $module == 'Products' || $module == 'Faq' || $module == 'Vendor'  || $module == 'PriceBook')
 		{
 			$permission = "yes";
 			return $permission;			
@@ -3693,6 +3693,7 @@ function getListViewSecurityParameter($module)
 	}
 	elseif($module == 'Emails')
 	{
+		echo '<BR>now<BR>'; 
 		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%') or crmentity.smownerid in(select shareduserid from tmp_read_user_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")";
 
 		//Adding crterial for account related emails sharing
@@ -3708,10 +3709,10 @@ function getListViewSecurityParameter($module)
                 {
                 	$sec_query .= "groups.groupid in".getCurrentUserGroupList()." or ";
                 }
-		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";			
+		$sec_query .= "groups.groupid in(select tmp_read_group_sharing_per.sharedgroupid from tmp_read_group_sharing_per where userid=".$current_user->id." and tabid=".$tabid.")))) ";
 	
 	}
-	if($module == 'Activities')
+	elseif($module == 'Activities')
 	{
 		$sec_query .= "and (crmentity.smownerid in($current_user->id) or crmentity.smownerid in(select user2role.userid from user2role inner join users on users.id=user2role.userid inner join role on role.roleid=user2role.roleid where role.parentrole like '".$current_user_parent_role_seq."::%')";
 
