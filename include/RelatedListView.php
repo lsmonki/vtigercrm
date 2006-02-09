@@ -68,7 +68,7 @@ function GetRelatedList($module,$relatedmodule,$focus,$query,$button,$returnset,
 		if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
         	{
         		$sec_parameter=getListViewSecurityParameter($relatedmodule);
-                	$query .= $sec_parameter;
+                	$query .= ' '.$sec_parameter;
 
         	}
 	}
@@ -273,13 +273,17 @@ function getHistory($parentmodule,$query,$id)
 	global $others_permission_id;
 	global $current_user;
 	$rel_tab_id = getTabid("Activities");
-	$defSharingPermissionData = $_SESSION['defaultaction_sharing_permission_set'];
-	$others_rel_permission_id = $defSharingPermissionData[$rel_tab_id];
-	if($others_rel_permission_id == 3) //Security fix by Don
-	{
-         	$query .= " and crmentity.smownerid in(".$current_user->id .",0)";
-	}
 
+	global $current_user;
+        require('user_privileges/user_privileges_'.$current_user->id.'.php');
+        require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+        $tab_id=getTabid('Activities');
+       if($is_admin==false && $profileGlobalPermission[1] == 1 && $profileGlobalPermission[2] == 1 && $defaultOrgSharingPermission[$tab_id] == 3)
+       {
+       		$sec_parameter=getListViewSecurityParameter('Activities');
+                $query .= ' '.$sec_parameter;
+
+        }
 	$result=$adb->query($query);
 	$noofrows = $adb->num_rows($result);
 	
