@@ -281,12 +281,23 @@ for($i=0; $i<10; $i++)
 
 }
 
+	$company_count=0;
 for($i=0; $i<10; $i++)
 {
 	$lead = new Lead();
 	$lead->column_fields["firstname"] = ucfirst(strtolower($first_name_array[$i]));
 	$lead->column_fields["lastname"] = ucfirst(strtolower($last_name_array[$i]));
-	$lead->column_fields["company"] = ucfirst(strtolower($company_name_array[$i]));
+
+	if($i<5)
+       	{
+        	$lead->column_fields["company"] = ucfirst(strtolower($company_name_array[$i]));
+       	}
+       	else
+       	{
+               	$lead->column_fields["company"] = ucfirst(strtolower($company_name_array[$company_count]));
+               	$company_count++;
+       	}
+
 	$lead->column_fields["assigned_user_id"] = $assigned_user_id;
 	
 	$lead->column_fields["email"] = strtolower($lead->column_fields["firstname"])."_".strtolower($lead->column_fields["lastname"])."@company.com";
@@ -602,11 +613,11 @@ for($i=0;$i<6;$i++)
 		$event->column_fields["activitytype"]	= "Meeting";	
 		$event->column_fields["due_date"]	= $recur_week_date;	
 	}
-	else
+	elseif($i>1) 
 	{
 		$event->column_fields["activitytype"]	= "Call";	
 	}
-
+	$event->column_fields["assigned_user_id"] = $assigned_user_id;
 	$event->save("Activities");
         $event_ids[] = $event->id;
 
