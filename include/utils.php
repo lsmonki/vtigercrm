@@ -2686,11 +2686,25 @@ function getListViewHeader($focus, $module,$sort_qry='',$sorder='',$order_by='',
                                                         {
                                                                 $lbl_name = $mod_strings[$name];
                                                         }
+                                                        //added to display currency symbol in listview header
+                                                        if($lbl_name =='Amount')
+                                                        {
+                                                        	$curr_symbol = getCurrencySymbol();
+                                                               	$lbl_name .=': (in '.$curr_symbol.')';
+                                                        }
+
+
 
                                                                 $name = "<a href='index.php?module=".$module."&action=index".$sort_qry."&order_by=".$col."&sorder=".$sorder."' class='listFormHeaderLinks'>".$lbl_name."&nbsp;".$arrow."</a>";
                                                                 $arrow = '';
                                                 }
                                         }
+					//added to display currency symbol in related listview header
+					if($name =='Amount' && $relatedlist !='' )
+					{
+						$curr_symbol = getCurrencySymbol();
+						$name .=': (in '.$curr_symbol.')';
+					}
                                         else
                                         {       if($app_strings[$name])
                                                 {
@@ -3345,8 +3359,9 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 	{
 		if($temp_val != '' && $temp_val != 0)
 		{
-			$symbol = getCurrencySymbol();
-			$value = $symbol.' '.$temp_val;  
+			//$symbol = getCurrencySymbol();
+			//$value = $symbol.' '.$temp_val;
+			$value = $temp_val;
 		}
 		else
 		{
