@@ -6,8 +6,8 @@ function showSubMenu() {
 	getObj("subMenuBg").style.width=getObj("subMenu").offsetWidth
 	getObj("subMenuBg").style.height=getObj("subMenu").offsetHeight
 	
-	for (i=0;i<selTags.length;i++)
-		selTags[i].style.visibility="hidden"
+	/*for (i=0;i<selTags.length;i++)
+		selTags[i].style.visibility="hidden"*/
 }
 function hideSubMenu(ev) {
 	if (!ev) var obj = window.event.srcElement;
