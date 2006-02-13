@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/CustomView/ListViewTop.php,v 1.7 2005/07/13 21:30:49 venkatraj Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/CustomView/ListViewTop.php,v 1.7.2.1 2005/08/08 09:12:43 venkatraj Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -65,7 +65,7 @@ $vtlog->logthis("Metrics :: Successfully build the Metrics","info");
 
 //print_r($metriclists);
 // Stick the form header out there.
-echo get_form_header("Key Metrics", '', false);
+echo get_form_header($app_strings['LBL_HOME_KEY_METRICS'], '', false);
 
 if(isset($metriclists))
 {

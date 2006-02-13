@@ -115,8 +115,8 @@ function validate() {
 }
 </script>
 <script language="JavaScript" type="text/javaScript">
-var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox')
-var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox')
+var fieldValueArr=new Array('Text','Number','Percent','Currency','Date','Email','Phone','Picklist','URL','Checkbox','TextArea')
+var fieldTypeArr=new Array('text','number','percent','currency','date','email','phone','picklist','url','checkbox','textarea')
 var currFieldIdx=0,totFieldType;
 function init() {
 	lengthLayer=getObj("lengthdetails")
@@ -178,7 +178,7 @@ function selFieldType(id,scrollLayer,bool) {
 		lengthLayer.style.display="block"
 		decimalLayer.style.display="none"
 		pickListLayer.style.display="none"
-	} else if (type=='date' || type=='email' || type=='phone' || type=='url' || type=='checkbox') {
+	} else if (type=='date' || type=='email' || type=='phone' || type=='url' || type=='checkbox' || type=='textarea') {
 		lengthLayer.style.display="none"
 		decimalLayer.style.display="none"
 		pickListLayer.style.display="none"

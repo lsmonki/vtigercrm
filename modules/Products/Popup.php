@@ -35,6 +35,7 @@ if(isset($_REQUEST['return_module']) && $_REQUEST['return_module'] !='')
 if(isset($_REQUEST['smodule']) && $_REQUEST['smodule'] !='')
 {
         $xtpl->assign("SMODULE",$_REQUEST['smodule']);
+	$smodule = $_REQUEST['smodule'];
 	$url_string = '&smodule=VENDOR';
 	$search_query .= " and vendor_id=''";
 }
@@ -161,7 +162,11 @@ $focus->list_mode="search";
 $focus->popup_type=$popuptype;
 
 if(isset($_REQUEST['curr_row']))
-$url_string .="&curr_row=".$_REQUEST['curr_row'];
+{
+	$curr_row = $_REQUEST['curr_row'];
+	$xtpl->assign("CURR_ROW", $curr_row);
+	$url_string .="&curr_row=".$_REQUEST['curr_row'];
+}
 
 $listview_header = getSearchListViewHeader($focus,"Products",$url_string,$sorder,$order_by);
 $xtpl->assign("LISTHEADER", $listview_header);
@@ -181,7 +186,7 @@ $navigationOutput = getTableHeaderNavigation($navigation_array, $url_string,"Pro
 $xtpl->assign("NAVIGATION", $navigationOutput);
 $xtpl->assign("RECORD_COUNTS", $record_string);
 
-$xtpl->assign("ALPHABETICAL",AlphabeticalSearch('Products','Popup&smodule=$smodule','productname','true','basic',$popuptype,$_REQUEST['recordid'],$_REQUEST['return_module']));
+$xtpl->assign("ALPHABETICAL",AlphabeticalSearch('Products','Popup&curr_row='.$curr_row.'&smodule=','productname','true','basic',$popuptype,$_REQUEST['recordid'],$_REQUEST['return_module']));
 $xtpl->parse("main");
 $xtpl->out("main");
 

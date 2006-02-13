@@ -38,18 +38,20 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 
 
 	$sql="select email1 from ". $srcmodule ." where id='" .$to ."'" ;
-	$vtlog->logthis("Email for assigned_user_id is selected.",'debug');
+	$vtlog->logthis("Query to select the Emailid of assigned_to user : ",'debug');
         $result = $adb->query($sql);
 
 	$mail = new PHPMailer();
 
 	if(!@$to = $adb->query_result($result,0,"email1"))
 	{
+		$vtlog->logthis("Could not get the email id of assigned_to user (to email address).",'debug');
 	//	header("Location: index.php?action=ListView&module=".$_REQUEST['return_module']."&parent_id=$parent_id&record=$return_id");
 	}
 
 	if(!@$sign = $adb->query_result($adb->query("select * from users where user_name='".$from."'"),0,"signature")){}
         $contents .= '<br><br><font color=darkgrey>'.$sign.'</font>';
+	$vtlog->logthis("Current logged in users signature is added with body of the email => ".$sign,'info');
 
 	$mail->Subject = $subject;
 	$mail->Body    = nl2br($contents);//"This is the HTML message body <b>in bold!</b>";
@@ -60,7 +62,7 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 
         $result = $adb->query($sql);
         $from = $adb->query_result($result,0,"email1");
-	$vtlog->logthis("From Email is selected.",'debug');
+	$vtlog->logthis("From Email id is selected => ".$from,'debug');
 
 	$mail->IsSMTP();                                      // set mailer to use SMTP
 	//$mail->Host = "smtp1.example.com;smtp2.example.com";  // specify main and backup server
@@ -70,6 +72,7 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 		$mailserverresult=$adb->query("select * from systems where server_type='email'");
 		$mail_server=$adb->query_result($mailserverresult,0,'server');
 		$_REQUEST['server']=$mail_server;
+		$vtlog->logthis("Mail Server is selected => ".$mail_server,'info');
 	}	
 
 	$mail->Host = $mail_server;  // specify main and backup server
@@ -78,8 +81,9 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 	$mail->Password = $mail_server_password ;//$smtp_password; // SMTP password
 	if($_REQUEST['return_module'] == 'HelpDesk')
 	{
-		$mail->From = 'support@vtiger.com';
-		$mail->FromName = 'Vtiger Support';
+		$vtlog->logthis("Return module is Helpdesk. So from id is set as your support mail id.",'info');
+		$mail->From = 'support@your-domain.com';//Specify your support email id.
+		$mail->FromName = 'Your domain Name';
 	}
 	else
 	{
@@ -94,6 +98,7 @@ function send_mail($srcmodule,$to,$from,$subject,$contents,$mail_server,$mail_se
 		for($i=0;$i<count($ccmail);$i++)
 		{
 	                $mail->AddCC($ccmail[$i]);
+			$vtlog->logthis("CC mail id is added => ".$ccmail[$i],'info');
 		}
         }
 
@@ -188,8 +193,11 @@ if($result1 != '')
 
 function MailSend($mail)
 {
+	global $vtlog;
+	$vtlog->logthis("Inside of Send Mail function.",'info');
         if(!$mail->Send())
         {
+		$vtlog->logthis("Mail could not be sent. This is error block.",'debug');
 		$msg =$mail->ErrorInfo;
 		return $msg;
         }
@@ -200,6 +208,7 @@ function MailSend($mail)
 function getParentMailId($returnmodule,$parentid)
 {
 	global $adb;
+	global $vtlog;
         if($returnmodule == 'Leads')
         {
                 $tablename = 'leaddetails';
@@ -216,6 +225,8 @@ function getParentMailId($returnmodule,$parentid)
 	{
 	        $query = 'select * from '.$tablename.' where '.$idname.' = '.$parentid;
 	        $mailid = $adb->query_result($adb->query($query),0,'email');
+		$vtlog->logthis("Return Module in send_mail page : ".$returnmodule,'info');
+		$vtlog->logthis("Email id of parent (Lead/Contact) is selected => ".$mailid,'info');
 	}
         if($mailid == '' && $returnmodule =='Contacts')
         {

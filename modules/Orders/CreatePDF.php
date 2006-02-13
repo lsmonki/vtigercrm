@@ -209,6 +209,8 @@ if($num_rows == 1)
 
 
 
+//$companyaddress = Array('AdventNet, Inc.','11 Sarathy Nagar','Velachery','Vijayanagar','Chennai - 600042');
+
 //getting the Product Data
 $query="select products.productname,products.unit_price,poproductrel.* from poproductrel inner join products on products.productid=poproductrel.productid where purchaseorderid=".$id;
 
@@ -432,5 +434,5 @@ $pdf->setAddress($bdata,$sdata);
 $pdf->setCustomerDetails($iCustHeadDtls,$iCustData);
 $pdf->setProductDetails($iHeadDtls,$iDataDtls);
 $pdf->setTotal($price_total,$conditions);
-$pdf->Output();
+$pdf->Output('POOrder.pdf','D');
 ?>

@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Accounts/ListViewTop.php,v 1.2 2005/06/02 15:04:54 indigoleopard Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Accounts/ListViewTop.php,v 1.2.2.1 2005/08/05 13:01:50 indigoleopard Exp $
  * Description:  TODO: To be written.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -29,7 +29,7 @@ global $current_user;
 $current_module_strings = return_module_language($current_language, "Accounts");
 $log = LoggerManager::getLogger('top accounts_list');
 
-$list_query = 'select account.accountid, account.accountname, sum(potential.amount) as amount from potential inner join crmentity on (potential.potentialid=crmentity.crmid) inner join account on (potential.accountid=account.accountid) where crmentity.smownerid="'.$current_user->id.'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_WON'].'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_LOST'].'" group by account.accountname order by 3 desc;';
+$list_query = 'select account.accountid, account.accountname, sum(potential.amount) as amount from potential inner join crmentity on (potential.potentialid=crmentity.crmid) inner join account on (potential.accountid=account.accountid) where crmentity.deleted=0 AND crmentity.smownerid="'.$current_user->id.'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_WON'].'" and potential.sales_stage <> "'.$app_strings['LBL_CLOSE_LOST'].'" group by account.accountname order by 3 desc;';
 $list_result=$adb->query($list_query);
 $open_accounts_list = array();
 $noofrows = min($adb->num_rows($list_result),7);

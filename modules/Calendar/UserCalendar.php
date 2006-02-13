@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Calendar/UserCalendar.php,v 1.7 2005/05/03 13:18:42 saraj Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Calendar/UserCalendar.php,v 1.7.2.1 2005/08/03 11:27:38 saraj Exp $
  * Description:  Defines the Account SugarBean Account entity with the necessary
  * methods and variables.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -45,7 +45,6 @@ class UserCalendar extends CRMEntity {
 	var $subject;
 	var $date_entered;
 	var $modified_user_id;
-	var $contact_id;
 	var $creator;
 	var $id;
 

@@ -883,7 +883,7 @@ function getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields
 
 		if($value=='')
                 {
-			if($fieldname != 'birthday')
+			if($fieldname != 'birthday' && $fieldname != 'due_date')
                         	$disp_value=getNewDisplayDate();
                 }
                 else
@@ -1732,7 +1732,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		$user_id = $col_fields[$fieldname];
 		if($user_id != 0)
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].$app_strings['LBL_USER'].' :</td>';
+			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].' '.$app_strings['LBL_USER'].' :</td>';
 			$user_name = getUserName($user_id);
 			if(is_admin($current_user))
 			{
@@ -1745,7 +1745,7 @@ function getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$
 		}
 		elseif($user_id == 0)
 		{
-			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].$app_strings['LBL_GROUP'].' :</td>';
+			$custfld .= '<td width="20%" class="dataLabel">'.$mod_strings[$fieldlabel].' '.$app_strings['LBL_GROUP'].' :</td>';
 			$id = $col_fields["record_id"];	
 			$module = $col_fields["record_module"];
 			$groupname = getGroupName($id, $module);
@@ -3525,7 +3525,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 					$temp_val = str_replace("'",'\"',$temp_val);
 			
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_specific("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "detailview")
                                 {
@@ -3538,7 +3538,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
                                 }
 				elseif($popuptype == "formname_specific")
 				{
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_formname_specific("'.$_REQUEST['form'].'", "'.$entity_id.'", "'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_formname_specific("'.$_REQUEST['form'].'", "'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_prod")
 				{
@@ -3546,7 +3546,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
 					$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory("'.$entity_id.'", "'.$temp_val.'", "'.$unitprice.'", "'.$qty_stock.'", "'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$qty_stock.'", "'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_prod_po")
 				{
@@ -3554,7 +3554,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 					$unitprice=$adb->query_result($list_result,$list_result_count,'unit_price');
 					//$qty_stock=$adb->query_result($list_result,$list_result_count,'qtyinstock');
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory_po("'.$entity_id.'", "'.$temp_val.'", "'.$unitprice.'", "'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_inventory_po("'.$entity_id.'", "'.br2nl($temp_val).'", "'.$unitprice.'", "'.$row_id.'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "inventory_pb")
 				{
@@ -3570,16 +3570,18 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 					require_once('modules/Accounts/Account.php');
 					$acct_focus = new Account();
 					$acct_focus->retrieve_entity_info($entity_id,"Accounts");
+					
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['bill_street']).'", "'.br2nl($acct_focus->column_fields['ship_street']).'", "'.br2nl($acct_focus->column_fields['bill_city']).'", "'.br2nl($acct_focus->column_fields['ship_city']).'", "'.br2nl($acct_focus->column_fields['bill_state']).'", "'.br2nl($acct_focus->column_fields['ship_state']).'", "'.br2nl($acct_focus->column_fields['bill_code']).'", "'.br2nl($acct_focus->column_fields['ship_code']).'", "'.br2nl($acct_focus->column_fields['bill_country']).'", "'.br2nl($acct_focus->column_fields['ship_country']).'"); window.close()\'>'.$temp_val.'</a>';
 
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.$temp_val.'", "'.$acct_focus->column_fields['bill_street'].'", "'.$acct_focus->column_fields['ship_street'].'", "'.$acct_focus->column_fields['bill_city'].'", "'.$acct_focus->column_fields['ship_city'].'", "'.$acct_focus->column_fields['bill_state'].'", "'.$acct_focus->column_fields['ship_state'].'", "'.$acct_focus->column_fields['bill_code'].'", "'.$acct_focus->column_fields['ship_code'].'", "'.$acct_focus->column_fields['bill_country'].'", "'.$acct_focus->column_fields['ship_country'].'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				elseif($popuptype == "specific_vendor_address")
 				{
 					require_once('modules/Products/Vendor.php');
 					$acct_focus = new Vendor();
 					$acct_focus->retrieve_entity_info($entity_id,"Vendor");
+					
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.br2nl($temp_val).'", "'.br2nl($acct_focus->column_fields['treet']).'", "'.br2nl($acct_focus->column_fields['city']).'", "'.br2nl($acct_focus->column_fields['state']).'", "'.br2nl($acct_focus->column_fields['postalcode']).'", "'.br2nl($acct_focus->column_fields['country']).'"); window.close()\'>'.$temp_val.'</a>';
 
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return_address("'.$entity_id.'", "'.$temp_val.'", "'.$acct_focus->column_fields['treet'].'", "'.$acct_focus->column_fields['city'].'", "'.$acct_focus->column_fields['state'].'", "'.$acct_focus->column_fields['postalcode'].'", "'.$acct_focus->column_fields['country'].'"); window.close()\'>'.$temp_val.'</a>';
 				}
 				else
 				{
@@ -3589,7 +3591,7 @@ function getValue($field_result, $list_result,$fieldname,$focus,$module,$entity_
 
 					$temp_val = str_replace("'",'\"',$temp_val);
 	
-					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return("'.$entity_id.'", "'.$temp_val.'"); window.close()\'>'.$temp_val.'</a>';
+					$value = '<a href="a" LANGUAGE=javascript onclick=\'set_return("'.$entity_id.'", "'.br2nl($temp_val).'"); window.close()\'>'.$temp_val.'</a>';
 				}
 			}
 			else
@@ -4245,8 +4247,8 @@ function getAssociatedProducts($module,$focus,$seid='')
 		$qty_var = 'txtQty'.$i;
 		$list_price_var = 'txtListPrice'.$i;	
 		$total_var = 'total'.$i;
-
-		if($num_rows%2 == 0)
+		
+		if($i%2 == 0)
 		{
 			$row_class = "evenListRow";
 		}
@@ -4336,6 +4338,18 @@ function getListPrice($productid,$pbid)
 	return $lp;
 }
 
+function getUnitPrice($productid)
+{
+        global $vtlog;
+        $vtlog->logthis("in getUnitPrice productid ".$productid,'info');
+
+        global $adb;
+        $query = "select unit_price from products where productid=".$productid;
+        $result = $adb->query($query);
+        $up = $adb->query_result($result,0,'unit_price');
+        return $up;
+}
+
 function getDetailAssociatedProducts($module,$focus)
 {
 	global $adb;
@@ -4346,6 +4360,8 @@ function getDetailAssociatedProducts($module,$focus)
 	$vtlog->logthis("in getDetailAssociatedProducts. Module is  ".$module,'debug');
 
 	$output = '';
+	$output .= '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formOuterBorder">';
+	$output .=  '<tr><td  class="formBorder">';
 	$output .= '<div style="padding:2 0 2 0"><strong>Product Details</strong></div> <div id="productList">';
     $output .= '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="formBorder">';
     $output .= '<tr class="moduleListTitle" height="20" id="tablehead">';
@@ -4442,9 +4458,11 @@ function getDetailAssociatedProducts($module,$focus)
 */		
 
 	}
+	$output .= '<tr id="tableheadline">';
+        $output .= '<td colspan="14" height="1" class="blackLine"><IMG SRC="'.$image_path.'blank.gif"></td></tr>';
 	$output .= '</table>';
   	$output .= '</div>';
-	$output .= '<table width="100%" border="0" cellspacing="2" cellpadding="2">';
+	$output .= '<table width="100%" border="0" cellspacing="2" cellpadding="2" bgcolor="#FFFFFF">';
         $output .= '<tr>'; 
 	$output .= '<td width="150"></td>';
       	$output .= '<td><div align="right"><b>Sub Total:</b></div></td>';
@@ -4466,6 +4484,7 @@ function getDetailAssociatedProducts($module,$focus)
       $output .= '<td width="150"><div id="grandTotal" align="right" style="border:1px solid #000;padding:2px">&nbsp;'.$focus->column_fields['hdnGrandTotal'].'</div></td>';
     $output .= '</tr>';
     $output .= '</table>';
+    $output .= '</td></tr></table>';	
 
 /*	
 		$output .= '<tr><td width="15%" class="dataLabel" colspan="4">Sub Total:</td><td width="15%" class="dataLabel">'.$focus->column_fields['hdnSubTotal'].'</td></tr>';
@@ -4663,5 +4682,19 @@ function getInventoryTotal($return_module,$id)
 	return $total;
 }
 
+function updateProductQty($product_id, $upd_qty)
+{
+	global $adb;
+	$query= "update products set qtyinstock=".$upd_qty." where productid=".$product_id;
+        $adb->query($query);
+
+}
+
+function br2nl($str) {
+   $str = preg_replace("/(\r\n)/", " ", $str);
+   $str = preg_replace("/'/", " ", $str);
+   $str = preg_replace("/\"/", " ", $str);
+   return $str;
+}
 
 ?>

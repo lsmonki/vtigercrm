@@ -78,7 +78,7 @@
 		{
 			for(j=i+1; j<account.length; j++)
 			{
-				if( account[i] == account[j])
+				if( account[i] == account[j] && account[i]!="None" && account[j] !="None") 
 				{
 					alert("Duplicate mapping for accounts!!");
 					return false;
@@ -90,7 +90,7 @@
 		{
 			for(k=i+1; k< contact.length; k++)
 			{
-				if( contact[i] == contact[k])
+				if( contact[i] == contact[k] && contact[i]!="None" && contact[k]!="None")
 				{
 					alert("Duplicate mapping for Contacts!!");
 					return false;
@@ -101,7 +101,7 @@
 		{
 			for(l=i+1; l<potential.length; l++)
 			{
-				if( potential[i] == potential[l])
+				if( potential[i] == potential[l] && potential[i]!="None" && potential[l]!="None")
 				{
 					alert("Duplicate mapping for Potential!!");
 					return false;

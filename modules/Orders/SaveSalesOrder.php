@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Orders/SaveSalesOrder.php,v 1.4 2005/07/13 15:23:03 crouchingtiger Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Orders/SaveSalesOrder.php,v 1.4.2.1 2005/08/05 15:28:36 crouchingtiger Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -65,9 +65,20 @@ if($focus->column_fields["quote_id"] != '')
 }
 
 
-
+$ext_prod_arr = Array();
 if($focus->mode == 'edit')
 {
+	$query2  = "select * from soproductrel where salesorderid=".$focus->id;
+        $result2 = $adb->query($query2);
+        $num_rows = $adb->num_rows($result2);
+        for($i=0; $i<$num_rows;$i++)
+        {
+                $pro_id = $adb->query_result($result2,$i,"productid");
+                $pro_qty = $adb->query_result($result2,$i,"quantity");
+                $ext_prod_arr[$pro_id] = $pro_qty;
+        }
+
+	
         $query1 = "delete from soproductrel where salesorderid=".$focus->id;
         //echo $query1;
         $adb->query($query1);
@@ -91,7 +102,7 @@ for($i=1; $i<=$tot_no_prod; $i++)
 
                 $query ="insert into soproductrel values(".$focus->id.",".$prod_id.",".$qty.",".$listprice.")";
                 $adb->query($query);
-		updateStk($prod_id,$qty);
+		updateStk($prod_id,$qty,$focus->mode,$ext_prod_arr);
         }
 }
 $return_id = $focus->id;
@@ -104,14 +115,62 @@ if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $
 
 $local_log->debug("Saved record with id of ".$return_id);
 
-function updateStk($product_id,$qty)
+function updateStk($product_id,$qty,$mode,$ext_prod_arr)
 {
 	global $adb;
 	global $current_user;
 	$prod_name = getProductName($product_id);
 	$qtyinstk= getPrdQtyInStck($product_id);
-	$upd_qty = $qtyinstk-$qty;
-	//Check for reorder level and send mail
+	
+	if($mode == 'edit')
+        {
+                if(array_key_exists($product_id,$ext_prod_arr))
+                {
+                        $old_qty = $ext_prod_arr[$product_id];
+                        if($old_qty > $qty)
+                        {
+
+                                $diff_qty = $old_qty - $qty;
+                                $upd_qty = $qtyinstk+$diff_qty;
+                                //Updating the Product Quantity
+                                 //updateProductQty($product_id, $upd_qty);
+                                 sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty);
+
+                        }
+                        elseif($old_qty < $qty)
+                        {
+                                $diff_qty = $qty - $old_qty;
+                                $upd_qty = $qtyinstk-$diff_qty;
+                                //updateProductQty($product_id, $upd_qty);
+                                sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty);
+
+
+                        }
+                }
+                else
+                {
+                        $upd_qty = $qtyinstk-$qty;
+                        //updateProductQty($product_id, $upd_qty);
+                        sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty);
+
+                }
+        }
+	else
+        {
+
+                        $upd_qty = $qtyinstk-$qty;
+                        //updateProductQty($product_id, $upd_qty);
+                        sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty);
+        }
+	
+}
+
+
+function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty)
+{
+        global $current_user;
+        global $adb;
+        global $vtlog;
 	$reorderlevel = getPrdReOrderLevel($product_id);
 	if($upd_qty < $reorderlevel)
 	{
@@ -138,7 +197,6 @@ function updateStk($product_id,$qty)
 		
 	}
 }
-
 
 function getPrdQtyInStck($product_id)
 {

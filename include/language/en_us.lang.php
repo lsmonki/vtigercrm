@@ -728,7 +728,13 @@ $app_strings = Array(
 'LBL_SALES_ORDER_ID'=>'Sales Order Id',
 'LBL_PURCHASE_ORDER_ID'=>'Purchase Order Id',
 'LBL_EXPORT_TO_PDF'=>'Export To PDF',
-	
+
+//Added for 4.2 Patch I
+'LBL_HOME_KEY_METRICS'=>'Key Metrics',
+'LBL_HOME_METRICS'=>'Metrics',
+'LBL_HOME_COUNT'=>'Count',
+
+
 );
 
 

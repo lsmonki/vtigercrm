@@ -125,7 +125,7 @@ else
 	}
 	if($module == 'Products' && $relatedmodule == 'PriceBook')
 	{
-		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'PriceBookEditView','DeletePriceBookProductRel');
+		$listview_entries = getListViewEntries($focus,$relatedmodule,$list_result,$navigation_array,'relatedlist',$returnset,'EditListPrice','DeletePriceBookProductRel');
 	}
 	elseif($relatedmodule == 'SalesOrder')
 	{

@@ -122,6 +122,11 @@ $contact_fields = array(
 
 */
 
+//Function added to convert line breaks to space in description during export 
+function br2nl_vt($str) {
+   $str = preg_replace("/(\r\n)/", " ", $str);
+   return $str;
+}
 
 function export_all($type)
 {
@@ -212,15 +217,18 @@ function export_all($type)
 	{
 		$new_arr = array();
 
-		foreach (array_values($val) as $value)
+		//foreach (array_values($val) as $value)
+		foreach ($val as $key => $value)
 		{
+			if($key=="description")
+			{
+				$value=br2nl_vt($value);
+			}
 			array_push($new_arr, preg_replace("/\"/","\"\"",$value));
 		}
-
 		$line = implode("\",\"",$new_arr);
 		$line = "\"" .$line;
 		$line .= "\"\r\n";
-
 		$content .= $line;
 	}
 	return $content;

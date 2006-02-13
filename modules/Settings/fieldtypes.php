@@ -78,6 +78,10 @@ $image_path=$theme_path."images/";
     <td width="20"><div align="center"><img src="<?php echo $image_path."checkbox.gif" ?>" width="20" height="20"></div></td>
     <td nowrap id="field9" class="fieldType" onClick="parent.selFieldType(9)"><?php echo $mod_strings['LBL_CHECK_BOX']; ?></td>
   </tr>
+  <tr>
+    <td width="20"><div align="center"><img src="<?php echo $image_path."text.gif" ?>" width="20" height="20"></div></td>
+    <td nowrap id="field10" class="fieldType" onClick="parent.selFieldType(10)"><?php echo $mod_strings['LBL_TEXT_AREA']; ?></td>
+  </tr>
 </table>
 </body>
 </html>

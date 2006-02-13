@@ -17,10 +17,18 @@
  ********************************************************************************/
 -->
 <!-- BEGIN: main -->
+<link rel="stylesheet" type="text/css" media="all" href="jscalendar/calendar-win2k-cold-1.css">
+
+<script type="text/javascript" src="jscalendar/calendar.js"></script>
+
+<script type="text/javascript" src="jscalendar/lang/calendar-{CALENDAR_LANG}.js"></script>
+
+<script type="text/javascript" src="jscalendar/calendar-setup.js"></script>
 <form name="EditView" method="POST" action="index.php">
   <input type="hidden" name="module" value="HelpDesk">
   <input type="hidden" name="action">
   <input type="hidden" name="record" value="{ID}">
+  <input type="hidden" name="old_smownerid" value="{OLDSMOWNERID}">
   <input type="hidden" name="mode" value="{MODE}">
   <input type="hidden" name="return_module" value="{RETURN_MODULE}">
   <input type="hidden" name="return_id" value="{RETURN_ID}">

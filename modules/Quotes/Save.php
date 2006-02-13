@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Quotes/Save.php,v 1.5 2005/07/13 20:02:12 crouchingtiger Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Quotes/Save.php,v 1.5.2.1 2005/08/05 15:27:57 crouchingtiger Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -63,8 +63,19 @@ foreach($focus->column_fields as $fieldname => $val)
 $vtlog->logthis("The Field Value Array -----> ".$focus->column_fields ,'debug');
 
 $focus->save("Quotes");
+
+$ext_prod_arr = Array();
 if($focus->mode == 'edit')
-{
+{	
+	$query2  = "select * from quotesproductrel where quoteid=".$focus->id;
+	$result2 = $adb->query($query2);
+	$num_rows = $adb->num_rows($result2);
+	for($i=0; $i<$num_rows;$i++)
+	{
+		$pro_id = $adb->query_result($result2,$i,"productid");	
+		$pro_qty = $adb->query_result($result2,$i,"quantity");
+		$ext_prod_arr[$pro_id] = $pro_qty;	
+	}
 	
 	$vtlog->logthis("Deleting from quotesproductrel table ",'debug');
 	$query1 = "delete from quotesproductrel where quoteid=".$focus->id;
@@ -94,7 +105,7 @@ for($i=1; $i<=$tot_no_prod; $i++)
 		//echo $query;
 		$adb->query($query);
 		//Checking the re-order level and sending mail	
-		updateStk($prod_id,$qty); 	
+		updateStk($prod_id,$qty,$focus->mode,$ext_prod_arr); 	
 	}	
 }
 
@@ -118,7 +129,7 @@ if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $
 
 $local_log->debug("Saved record with id of ".$return_id);
 
-function updateStk($product_id,$qty)
+function updateStk($product_id,$qty,$mode,$ext_prod_arr)
 {
 	global $vtlog;
 	global $adb;
@@ -130,38 +141,84 @@ function updateStk($product_id,$qty)
 	$prod_name = getProductName($product_id);
 	$qtyinstk= getPrdQtyInStck($product_id);
 	$vtlog->logthis("Prd Qty in Stock ".$qtyinstk,'debug');
-	$upd_qty = $qtyinstk-$qty;
-	$vtlog->logthis("Prd upd_qty ".$upd_qty,'debug');
-	//Check for reorder level and send mail
-	$reorderlevel = getPrdReOrderLevel($product_id);
-	$vtlog->logthis("Prd reorder level ".$reorderlevel,'debug');
-	if($upd_qty < $reorderlevel)
+	if($mode == 'edit')
+	{
+		if(array_key_exists($product_id,$ext_prod_arr))
+		{
+			$old_qty = $ext_prod_arr[$product_id];
+			if($old_qty > $qty)
+			{
+				
+				$diff_qty = $old_qty - $qty;
+				$upd_qty = $qtyinstk+$diff_qty;
+				//Updating the Product Quantity
+				 //updateProductQty($product_id, $upd_qty);
+	   			 sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty);
+					
+			}
+			elseif($old_qty < $qty)
+			{
+				$diff_qty = $qty - $old_qty;
+				$upd_qty = $qtyinstk-$diff_qty;
+				//updateProductQty($product_id, $upd_qty);
+				sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty);
+				
+				
+			}		
+		}
+		else
+		{
+			$upd_qty = $qtyinstk-$qty;
+			//updateProductQty($product_id, $upd_qty);
+			sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty);	
+				
+		}
+	}
+	else
 	{
 		
-		//send mail to the handler
-		$vtlog->logthis("Sending mail to handler ",'debug');
-		$handler=getPrdHandler($product_id);
-		$handler_name = getUserName($handler);
-		$vtlog->logthis("Handler Name is ".$handler_name,'debug');
-		$to_address= getUserEmail($handler);
-		$vtlog->logthis("Handler Email is ".$to_address,'debug');
-		//Get the email details from database;
-		$query = "select * from inventorynotification where notificationname='QuoteNotification'";
-		$result = $adb->query($query);
-
-		$subject = $adb->query_result($result,0,'notificationsubject');
-		$body = $adb->query_result($result,0,'notificationbody');
-
-		$subject = str_replace('{PRODUCTNAME}',$prod_name,$subject);
-		$body = str_replace('{HANDLER}',$handler_name,$body);	
-		$body = str_replace('{PRODUCTNAME}',$prod_name,$body);	
-		$body = str_replace('{CURRENTSTOCK}',$qtyinstk,$body);	
-		$body = str_replace('{QUOTEQUANTITY}',$qty,$body);	
-		$body = str_replace('{CURRENTUSER}',$current_user->user_name,$body);	
-
-		SendMailToCustomer($to_address,$current_user->id,$subject,$body);
-		
+			$upd_qty = $qtyinstk-$qty;
+			//updateProductQty($product_id, $upd_qty);
+			sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty);
 	}
+	
+}
+
+function sendPrdStckMail($product_id,$upd_qty,$prod_name,$qtyinstk,$qty)
+{
+	global $current_user;
+	global $adb;
+	global $vtlog;
+	$reorderlevel = getPrdReOrderLevel($product_id);
+        $vtlog->logthis("Prd reorder level ".$reorderlevel,'debug');
+        if($upd_qty < $reorderlevel)
+        {
+
+                //send mail to the handler
+                $vtlog->logthis("Sending mail to handler ",'debug');
+                $handler=getPrdHandler($product_id);
+                $handler_name = getUserName($handler);
+                $vtlog->logthis("Handler Name is ".$handler_name,'debug');
+                $to_address= getUserEmail($handler);
+                $vtlog->logthis("Handler Email is ".$to_address,'debug');
+                //Get the email details from database;
+                $query = "select * from inventorynotification where notificationname='QuoteNotification'";
+                $result = $adb->query($query);
+
+                $subject = $adb->query_result($result,0,'notificationsubject');
+                $body = $adb->query_result($result,0,'notificationbody');
+
+                $subject = str_replace('{PRODUCTNAME}',$prod_name,$subject);
+                $body = str_replace('{HANDLER}',$handler_name,$body);
+                $body = str_replace('{PRODUCTNAME}',$prod_name,$body);
+                $body = str_replace('{CURRENTSTOCK}',$qtyinstk,$body);
+                $body = str_replace('{QUOTEQUANTITY}',$qty,$body);
+                $body = str_replace('{CURRENTUSER}',$current_user->user_name,$body);
+
+                SendMailToCustomer($to_address,$current_user->id,$subject,$body);
+
+        }
+	
 }
 
 

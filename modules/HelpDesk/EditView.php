@@ -72,6 +72,7 @@ require_once($theme_path.'layout_utils.php');
 $xtpl=new XTemplate ('modules/HelpDesk/EditView.html');
 $xtpl->assign("MOD", $mod_strings);
 $xtpl->assign("APP", $app_strings);
+$xtpl->assign("CALENDAR_LANG", "en");
 $xtpl->assign("BLOCK1", $block_1);
 $xtpl->assign("BLOCK2", $block_2);
 $xtpl->assign("BLOCK3", $block_3);
@@ -110,6 +111,7 @@ $xtpl->assign("ID", $focus->id);
 if($focus->mode == 'edit')
 {
         $xtpl->assign("MODE", $focus->mode);
+        $xtpl->assign("OLDSMOWNERID", $focus->column_fields['assigned_user_id']);
 }
 
 if(isset($_REQUEST['return_module'])) $xtpl->assign("RETURN_MODULE", $_REQUEST['return_module']);

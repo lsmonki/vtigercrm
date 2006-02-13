@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Reports/language/en_us.lang.php,v 1.2 2005/07/15 13:58:49 venkatraj Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Reports/language/en_us.lang.php,v 1.2.2.2 2005/08/09 13:14:03 venkatraj Exp $
  * Description:  Defines the English language pack for the Account module.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
  * All Rights Reserved.
@@ -74,6 +74,9 @@ $mod_strings = Array(
 'LBL_APPLYFILTER_BUTTON'=>'Apply Filter',
 'LBL_GENERATED_REPORT'=>'Generated Report',
 'LBL_GRAND_TOTAL'=>'Grand Total',
+
+//Added for 4.2 Patch I
+'LBL_EXPORTXL_BUTTON'=>'Export To Excel',
 
 
 );

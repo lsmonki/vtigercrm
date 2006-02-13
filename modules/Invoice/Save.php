@@ -13,7 +13,7 @@
  * Contributor(s): ______________________________________.
  ********************************************************************************/
 /*********************************************************************************
- * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Invoice/Save.php,v 1.5 2005/07/13 15:39:24 crouchingtiger Exp $
+ * $Header: /cvsroot/vtigercrm/vtiger_crm/modules/Invoice/Save.php,v 1.5.2.1 2005/08/05 15:23:24 crouchingtiger Exp $
  * Description:  Saves an Account record and then redirects the browser to the 
  * defined return URL.
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
@@ -53,6 +53,7 @@ foreach($focus->column_fields as $fieldname => $val)
 		
 }
 
+//print_r($focus->column_fields);
 
 $focus->save("Invoice");
 
@@ -65,8 +66,19 @@ if($focus->column_fields["salesorder_id"] != '')
 }
 
 
+$ext_prod_arr = Array();
 if($focus->mode == 'edit')
 {
+	$query2  = "select * from invoiceproductrel where invoiceid=".$focus->id;
+	$result2 = $adb->query($query2);
+	$num_rows = $adb->num_rows($result2);
+	for($i=0; $i<$num_rows;$i++)
+	{
+		$pro_id = $adb->query_result($result2,$i,"productid");	
+		$pro_qty = $adb->query_result($result2,$i,"quantity");
+		$ext_prod_arr[$pro_id] = $pro_qty;	
+	}	
+
         $query1 = "delete from invoiceproductrel where invoiceid=".$focus->id;
         //echo $query1;
         $adb->query($query1);
@@ -88,11 +100,10 @@ for($i=1; $i<=$tot_no_prod; $i++)
         if($prod_status != 'D')
         {
 
-                $query ="insert into invoiceproductrel values(".$focus->id.",".$prod_id.",".$qty.",".$listprice
-.")";
+                $query ="insert into invoiceproductrel values(".$focus->id.",".$prod_id.",".$qty.",".$listprice.")";
                 $adb->query($query);
 		//Updating the Quantity in Stock in the Product Table
-		updateStk($prod_id,$qty);
+		updateStk($prod_id,$qty,$focus->mode,$ext_prod_arr);
         }
 }
 $return_id = $focus->id;
@@ -105,16 +116,64 @@ if(isset($_REQUEST['return_id']) && $_REQUEST['return_id'] != "") $return_id = $
 
 $local_log->debug("Saved record with id of ".$return_id);
 
-function updateStk($product_id,$qty)
+function updateStk($product_id,$qty,$mode,$ext_prod_arr)
 {
 	global $adb;
 	global $current_user;
 	$prod_name = getProductName($product_id);
 	$qtyinstk= getPrdQtyInStck($product_id);
-	$upd_qty = $qtyinstk-$qty;
-	$query= "update products set qtyinstock=".$upd_qty." where productid=".$product_id;
-	$adb->query($query);
+	if($mode == 'edit')
+	{
+		if(array_key_exists($product_id,$ext_prod_arr))
+		{
+			$old_qty = $ext_prod_arr[$product_id];
+			if($old_qty > $qty)
+			{
+				
+				$diff_qty = $old_qty - $qty;
+				$upd_qty = $qtyinstk+$diff_qty;
+				//Updating the Product Quantity
+				 updateProductQty($product_id, $upd_qty);
+	   			 sendPrdStckMail($product_id,$upd_qty,$prod_name);
+					
+			}
+			elseif($old_qty < $qty)
+			{
+				$diff_qty = $qty - $old_qty;
+				$upd_qty = $qtyinstk-$diff_qty;
+				updateProductQty($product_id, $upd_qty);
+				sendPrdStckMail($product_id,$upd_qty,$prod_name);
+				
+				
+			}		
+		}
+		else
+		{
+			$upd_qty = $qtyinstk-$qty;
+			updateProductQty($product_id, $upd_qty);
+			sendPrdStckMail($product_id,$upd_qty,$prod_name);	
+				
+		}
+	}
+	else
+	{
+		
+			$upd_qty = $qtyinstk-$qty;
+			updateProductQty($product_id, $upd_qty);
+			sendPrdStckMail($product_id,$upd_qty,$prod_name);
+	}	
+	
+
+	//$query= "update products set qtyinstock=".$upd_qty." where productid=".$product_id;
+	//$adb->query($query);
 	//Check for reorder level and send mail
+	
+}
+
+function sendPrdStckMail($product_id,$upd_qty,$prod_name)
+{
+	global $current_user;
+	global $adb;
 	$reorderlevel = getPrdReOrderLevel($product_id);
 	if($upd_qty < $reorderlevel)
 	{
