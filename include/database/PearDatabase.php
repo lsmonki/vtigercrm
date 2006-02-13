@@ -833,7 +833,7 @@ function alterTable($tablename, $flds, $oper)
 	$this->println("ADODB alterTableTable table=".$tablename." flds=".$flds." oper=".$oper);
 	//$dict = NewDataDictionary(ADONewConnection($this->dbType));
 	$this->checkConnection();
-	$dict = NewDataDictionary(&$this->database);
+	$dict = NewDataDictionary($this->database);
 	//$sqlarray = new Array(); 
 	
 	if($oper == 'Add_Column')
