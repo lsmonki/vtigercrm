@@ -148,6 +148,11 @@ class CustomView extends CRMEntity{
 				{
 					$fieldlabel = "Related to";
 				}
+                                if($fieldlabel == "Start Date & Time")
+                                {
+                                        $fieldlabel = "Start Date";
+                                }
+
                         $fieldlabel1 = str_replace(" ","_",$fieldlabel);
                         $optionvalue = $fieldtablename.":".$fieldcolname.":".$fieldname.":".$module."_".$fieldlabel1.":".$fieldtypeofdata;
                         $module_columnlist[$optionvalue] = $fieldlabel;
@@ -559,13 +564,13 @@ class CustomView extends CRMEntity{
 				if($columnname == "columnname")
 				{
 					$filtercolumn = $value;
-				}elseif($columnname = "stdfilter")
+				}elseif($columnname == "stdfilter")
 				{
 					$filtertype = $value;
-				}elseif($columnname = "startdate")
+				}elseif($columnname == "startdate")
 				{
 					$startdate = $value;
-				}elseif($columnname = "enddate")
+				}elseif($columnname == "enddate")
 				{
 					$enddate = $value;
 				}
